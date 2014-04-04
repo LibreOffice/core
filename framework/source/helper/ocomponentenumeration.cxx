@@ -132,22 +132,22 @@ void OComponentEnumeration::impl_resetObject()
 -----------------------------------------------------------------------------------------------------------------*/
 
 // An empty list is allowed ... hasMoreElements() will return false then!
-sal_Bool OComponentEnumeration::impldbg_checkParameter_OComponentEnumerationCtor( const Sequence< css::uno::Reference< XComponent > >& seqComponents )
+bool OComponentEnumeration::impldbg_checkParameter_OComponentEnumerationCtor( const Sequence< css::uno::Reference< XComponent > >& seqComponents )
 {
     // Set default return value.
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
     // Check parameter.
     if  (
             ( &seqComponents == NULL )
         )
     {
-        bOK = sal_False;
+        bOK = false;
     }
     // Return result of check.
     return bOK;
 }
 
-sal_Bool OComponentEnumeration::impldbg_checkParameter_disposing( const EventObject& aEvent )
+bool OComponentEnumeration::impldbg_checkParameter_disposing( const EventObject& aEvent )
 {
     return aEvent.Source.is();
 }

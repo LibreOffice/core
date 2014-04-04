@@ -264,7 +264,7 @@ throw( com::sun::star::lang::IllegalArgumentException )
 {
     //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     switch( nHandle )
     {

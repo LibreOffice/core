@@ -211,11 +211,11 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
         *//*-*****************************************************************************************************/
 
     private:
-        static sal_Bool impldbg_checkParameter_OFramesCtor  (   const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
+        static bool impldbg_checkParameter_OFramesCtor  (   const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
                                                                         FrameContainer*                                         pFrameContainer );
-        static sal_Bool impldbg_checkParameter_append       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
-        static sal_Bool impldbg_checkParameter_remove       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
-        static sal_Bool impldbg_checkParameter_queryFrames  (           sal_Int32                                               nSearchFlags    );
+        static bool impldbg_checkParameter_append       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
+        static bool impldbg_checkParameter_remove       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
+        static bool impldbg_checkParameter_queryFrames  (           sal_Int32                                               nSearchFlags    );
 
     //  variables
     //  (should be private everyway!)
@@ -223,7 +223,7 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
     private:
         css::uno::WeakReference< css::frame::XFrame >               m_xOwner;   /// reference to owner of this instance (Hold no hard reference!)
         FrameContainer*                                             m_pFrameContainer;   /// with owner shared list to hold all direct children of an XFramesSupplier
-        sal_Bool                                                    m_bRecursiveSearchProtection;   /// flag to protect against recursive searches of frames at parents
+        bool                                                        m_bRecursiveSearchProtection;   /// flag to protect against recursive searches of frames at parents
 
 };
 

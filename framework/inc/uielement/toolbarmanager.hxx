@@ -160,7 +160,7 @@ class ToolBarManager : public ToolbarManager_Base
         void RequestImages();
         sal_uInt16 ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModelFromFrame() const;
-        sal_Bool IsPluginMode() const;
+        bool IsPluginMode() const;
         Image QueryAddonsImage( const OUString& aCommandURL, bool bBigImages );
         long HandleClick(void ( SAL_CALL ::com::sun::star::frame::XToolbarController::*_pClick )(  ));
         void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
@@ -211,7 +211,7 @@ class ToolBarManager : public ToolbarManager_Base
         Timer                                                                                  m_aAsyncUpdateControllersTimer;
         OUString                                                                               m_sIconTheme;
         MenuDescriptionMap m_aMenuMap;
-        sal_Bool                                                                               m_bAcceleratorCfg;
+        bool                                                                               m_bAcceleratorCfg;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;

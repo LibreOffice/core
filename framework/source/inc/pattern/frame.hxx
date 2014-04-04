@@ -68,8 +68,8 @@ inline css::uno::Reference< css::frame::XModel > extractFrameModel(const css::un
     @return [bool]
             sal_True if closing failed.
  */
-inline sal_Bool closeIt(const css::uno::Reference< css::uno::XInterface >& xResource         ,
-                       sal_Bool                                     bDelegateOwnership)
+inline bool closeIt(const css::uno::Reference< css::uno::XInterface >& xResource         ,
+                       bool                                     bDelegateOwnership)
 {
     css::uno::Reference< css::util::XCloseable > xClose  (xResource, css::uno::UNO_QUERY);
     css::uno::Reference< css::lang::XComponent > xDispose(xResource, css::uno::UNO_QUERY);
@@ -82,19 +82,19 @@ inline sal_Bool closeIt(const css::uno::Reference< css::uno::XInterface >& xReso
         if (xDispose.is())
             xDispose->dispose();
         else
-            return sal_False;
+            return false;
     }
     catch(const css::util::CloseVetoException&)
-        { return sal_False; }
+        { return false; }
     catch(const css::lang::DisposedException&)
         {} // disposed is closed is ...
     catch(const css::uno::RuntimeException&)
         { throw; } // should not be suppressed!
     catch(const css::uno::Exception&)
-        { return sal_False;  } // ??? We defined to return a boolen value instead of throwing exceptions ...
+        { return false;  } // ??? We defined to return a boolen value instead of throwing exceptions ...
                                // (OK: RuntimeExceptions should not be catched inside the core ..)
 
-    return sal_True;
+    return true;
 }
 
         } // namespace frame

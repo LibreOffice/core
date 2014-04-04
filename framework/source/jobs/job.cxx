@@ -52,11 +52,11 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
     : m_aJobCfg            (xContext                     )
     , m_xContext           (xContext                     )
     , m_xFrame             (xFrame                       )
-    , m_bListenOnDesktop   (sal_False                    )
-    , m_bListenOnFrame     (sal_False                    )
-    , m_bListenOnModel     (sal_False                    )
-    , m_bPendingCloseFrame (sal_False                    )
-    , m_bPendingCloseModel (sal_False                    )
+    , m_bListenOnDesktop   (false                    )
+    , m_bListenOnFrame     (false                    )
+    , m_bListenOnModel     (false                    )
+    , m_bPendingCloseFrame (false                    )
+    , m_bPendingCloseModel (false                    )
     , m_eRunState          (E_NEW                        )
 {
 }
@@ -79,11 +79,11 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
     : m_aJobCfg            (xContext                     )
     , m_xContext           (xContext                     )
     , m_xModel             (xModel                       )
-    , m_bListenOnDesktop   (sal_False                    )
-    , m_bListenOnFrame     (sal_False                    )
-    , m_bListenOnModel     (sal_False                    )
-    , m_bPendingCloseFrame (sal_False                    )
-    , m_bPendingCloseModel (sal_False                    )
+    , m_bListenOnDesktop   (false                    )
+    , m_bListenOnFrame     (false                    )
+    , m_bListenOnModel     (false                    )
+    , m_bPendingCloseFrame (false                    )
+    , m_bPendingCloseModel (false                    )
     , m_eRunState          (E_NEW                        )
 {
 }
@@ -233,7 +233,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     // and to disable ourself!
     if (m_bPendingCloseFrame)
     {
-        m_bPendingCloseFrame = sal_False;
+        m_bPendingCloseFrame = false;
         css::uno::Reference< css::util::XCloseable > xClose(m_xFrame, css::uno::UNO_QUERY);
         if (xClose.is())
         {
@@ -247,7 +247,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
 
     if (m_bPendingCloseModel)
     {
-        m_bPendingCloseModel = sal_False;
+        m_bPendingCloseModel = false;
         css::uno::Reference< css::util::XCloseable > xClose(m_xModel, css::uno::UNO_QUERY);
         if (xClose.is())
         {
@@ -303,8 +303,8 @@ void Job::die()
     m_xDesktop           = css::uno::Reference< css::frame::XDesktop2 >();
     m_xResultListener    = css::uno::Reference< css::frame::XDispatchResultListener >();
     m_xResultSourceFake  = css::uno::Reference< css::uno::XInterface >();
-    m_bPendingCloseFrame = sal_False;
-    m_bPendingCloseModel = sal_False;
+    m_bPendingCloseFrame = false;
+    m_bPendingCloseModel = false;
 }
 
 /**
@@ -496,7 +496,7 @@ void Job::impl_startListening()
             m_xDesktop = css::frame::Desktop::create( m_xContext );
             css::uno::Reference< css::frame::XTerminateListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
             m_xDesktop->addTerminateListener(xThis);
-            m_bListenOnDesktop = sal_True;
+            m_bListenOnDesktop = true;
         }
         catch(const css::uno::Exception&)
         {
@@ -514,12 +514,12 @@ void Job::impl_startListening()
             if (xCloseable.is())
             {
                 xCloseable->addCloseListener(xThis);
-                m_bListenOnFrame = sal_True;
+                m_bListenOnFrame = true;
             }
         }
         catch(const css::uno::Exception&)
         {
-            m_bListenOnFrame = sal_False;
+            m_bListenOnFrame = false;
         }
     }
 
@@ -533,12 +533,12 @@ void Job::impl_startListening()
             if (xCloseable.is())
             {
                 xCloseable->addCloseListener(xThis);
-                m_bListenOnModel = sal_True;
+                m_bListenOnModel = true;
             }
         }
         catch(const css::uno::Exception&)
         {
-            m_bListenOnModel = sal_False;
+            m_bListenOnModel = false;
         }
     }
 }
@@ -559,7 +559,7 @@ void Job::impl_stopListening()
             css::uno::Reference< css::frame::XTerminateListener > xThis(static_cast< ::cppu::OWeakObject* >(this)   , css::uno::UNO_QUERY);
             m_xDesktop->removeTerminateListener(xThis);
             m_xDesktop.clear();
-            m_bListenOnDesktop = sal_False;
+            m_bListenOnDesktop = false;
         }
         catch(const css::uno::Exception&)
         {
@@ -576,7 +576,7 @@ void Job::impl_stopListening()
             if (xCloseable.is())
             {
                 xCloseable->removeCloseListener(xThis);
-                m_bListenOnFrame = sal_False;
+                m_bListenOnFrame = false;
             }
         }
         catch(const css::uno::Exception&)
@@ -594,7 +594,7 @@ void Job::impl_stopListening()
             if (xCloseable.is())
             {
                 xCloseable->removeCloseListener(xThis);
-                m_bListenOnModel = sal_False;
+                m_bListenOnModel = false;
             }
         }
         catch(const css::uno::Exception&)
@@ -809,17 +809,17 @@ void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent ) throw(css::
     if (m_xDesktop.is() && aEvent.Source == m_xDesktop)
     {
         m_xDesktop.clear();
-        m_bListenOnDesktop = sal_False;
+        m_bListenOnDesktop = false;
     }
     else if (m_xFrame.is() && aEvent.Source == m_xFrame)
     {
         m_xFrame = css::uno::Reference< css::frame::XFrame >();
-        m_bListenOnFrame = sal_False;
+        m_bListenOnFrame = false;
     }
     else if (m_xModel.is() && aEvent.Source == m_xModel)
     {
         m_xModel = css::uno::Reference< css::frame::XModel >();
-        m_bListenOnModel = sal_False;
+        m_bListenOnModel = false;
     }
 
     aWriteLock.clear();

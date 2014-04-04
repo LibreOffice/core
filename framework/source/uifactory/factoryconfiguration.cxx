@@ -60,7 +60,7 @@ ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( co
     m_aPropController( "Controller" ),
     m_aPropValue( "Value" ),
     m_sRoot(_sRoot),
-    m_bConfigAccessInitialized( sal_False ),
+    m_bConfigAccessInitialized( false ),
     m_bAskValue(_bAskValue)
 {
     m_xConfigProvider = configuration::theDefaultProvider::get( rxContext );
@@ -208,7 +208,7 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
         {
         }
 
-        m_bConfigAccessInitialized = sal_True;
+        m_bConfigAccessInitialized = true;
     }
 
     if ( m_xConfigAccess.is() )
@@ -264,7 +264,7 @@ void ConfigurationAccess_ControllerFactory::updateConfigurationData()
     }
 }
 
-sal_Bool ConfigurationAccess_ControllerFactory::impl_getElementProps( const Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue  ) const
+bool ConfigurationAccess_ControllerFactory::impl_getElementProps( const Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue  ) const
 {
     Reference< XPropertySet > xPropertySet;
     aElement >>= xPropertySet;
@@ -281,15 +281,15 @@ sal_Bool ConfigurationAccess_ControllerFactory::impl_getElementProps( const Any&
         }
         catch ( const com::sun::star::beans::UnknownPropertyException& )
         {
-            return sal_False;
+            return false;
         }
         catch ( const com::sun::star::lang::WrappedTargetException& )
         {
-            return sal_False;
+            return false;
         }
     }
 
-    return sal_True;
+    return true;
 }
 } // namespace framework
 

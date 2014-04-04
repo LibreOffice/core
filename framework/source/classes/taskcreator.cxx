@@ -58,7 +58,7 @@ TaskCreator::~TaskCreator()
     TODO document me
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName    ,
-                                                                         sal_Bool         bVisible )
+                                                                         bool         bVisible )
 {
     css::uno::Reference< css::lang::XSingleServiceFactory > xCreator;
     OUString sCreator = IMPLEMENTATIONNAME_FWK_TASKCREATOR;

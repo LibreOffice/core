@@ -63,12 +63,12 @@ class Wildcard
             @descr      You can use wildcards in pattern only!
             @param      "sText" is the text, in which we search given pattern.
             @param      "sPattern" is the searched pattern with includes wildcards.
-            @return     sal_True , if pattern was found.
-            @return     sal_False, if pattern don't match the text.
+            @return     true , if pattern was found.
+            @return     false, if pattern don't match the text.
         *//*-*****************************************************************************************************/
 
-        static sal_Bool match(  const   OUString&    sText       ,
-                                   const    OUString&    sPattern    );
+        static bool match(  const   OUString&    sText       ,
+                            const   OUString&    sPattern    );
 
 };      //  class Wildcard
 

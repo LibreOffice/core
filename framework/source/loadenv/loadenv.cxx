@@ -234,9 +234,9 @@ void LoadEnv::initializeLoading(const OUString&                                 
     m_nSearchFlags                  = nSearchFlags;
     m_eFeature                      = eFeature;
     m_eContentType                  = eContentType;
-    m_bCloseFrameOnError            = sal_False;
-    m_bReactivateControllerOnError  = sal_False;
-    m_bLoaded                       = sal_False;
+    m_bCloseFrameOnError            = false;
+    m_bReactivateControllerOnError  = false;
+    m_bLoaded                       = false;
 
     // try to find out, if its really a content, which can be loaded or must be "handled"
     // We use a default value for this in-parameter. Then we have to start a complex check method
@@ -367,7 +367,7 @@ void LoadEnv::startLoading()
     // Because it was made in the easiest way ... may a flat detection was made only.
     // And such simple detection can fail some times .-)
     // Use another strategy here. Try it and let it run into the case "loading not possible".
-    sal_Bool bStarted = sal_False;
+    bool bStarted = false;
     if (
         ((m_eFeature & E_ALLOW_CONTENTHANDLER) == E_ALLOW_CONTENTHANDLER) &&
         (m_eContentType                        != E_CAN_BE_SET          )   /* Attention: special feature to set existing component on a frame must ignore type detection! */
@@ -391,7 +391,7 @@ void LoadEnv::startLoading()
         First draft does not implement timeout using [ms].
         Current implementation counts yield calls only ...
 -----------------------------------------------*/
-sal_Bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
+bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
 {
     // Because its not a good idea to block the main thread
     // (and we can't be sure that we are currently not used inside the
@@ -447,7 +447,7 @@ void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::fram
 {
     osl::MutexGuard g(m_mutex);
     if (m_bWaitingResult)
-        m_pLoadEnv->impl_setResult(sal_True);
+        m_pLoadEnv->impl_setResult(true);
     m_bWaitingResult = false;
 }
 
@@ -456,7 +456,7 @@ void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::fra
 {
     osl::MutexGuard g(m_mutex);
     if (m_bWaitingResult)
-        m_pLoadEnv->impl_setResult(sal_False);
+        m_pLoadEnv->impl_setResult(false);
     m_bWaitingResult = false;
 }
 
@@ -471,15 +471,15 @@ void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResult
     switch(aEvent.State)
     {
         case css::frame::DispatchResultState::FAILURE :
-            m_pLoadEnv->impl_setResult(sal_False);
+            m_pLoadEnv->impl_setResult(false);
             break;
 
         case css::frame::DispatchResultState::SUCCESS :
-            m_pLoadEnv->impl_setResult(sal_False);
+            m_pLoadEnv->impl_setResult(false);
             break;
 
         case css::frame::DispatchResultState::DONTKNOW :
-            m_pLoadEnv->impl_setResult(sal_False);
+            m_pLoadEnv->impl_setResult(false);
             break;
     }
     m_bWaitingResult = false;
@@ -490,11 +490,11 @@ void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
 {
     osl::MutexGuard g(m_mutex);
     if (m_bWaitingResult)
-        m_pLoadEnv->impl_setResult(sal_False);
+        m_pLoadEnv->impl_setResult(false);
     m_bWaitingResult = false;
 }
 
-void LoadEnv::impl_setResult(sal_Bool bResult)
+void LoadEnv::impl_setResult(bool bResult)
 {
     osl::MutexGuard g(m_mutex);
 
@@ -823,7 +823,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     // and should trigger a special handling. Then the outside call of this method here,
     // has to know, what he is doing .-)
 
-    sal_Bool bIsOwnTemplate = sal_False;
+    bool bIsOwnTemplate = false;
     if (!sFilter.isEmpty())
     {
         css::uno::Reference< css::container::XNameAccess > xFilterCont(xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FILTERFACTORY, xContext), css::uno::UNO_QUERY_THROW);
@@ -849,7 +849,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     }
 }
 
-sal_Bool LoadEnv::impl_handleContent()
+bool LoadEnv::impl_handleContent()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
     // SAFE -> -----------------------------------
@@ -909,13 +909,13 @@ sal_Bool LoadEnv::impl_handleContent()
         css::uno::Reference< css::frame::XDispatchResultListener > xListener(static_cast< css::frame::XDispatchResultListener* >(pListener), css::uno::UNO_QUERY);
         xHandler->dispatchWithNotification(aURL, lDescriptor, xListener);
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool LoadEnv::impl_furtherDocsAllowed()
+bool LoadEnv::impl_furtherDocsAllowed()
 {
     // SAFE ->
     osl::ResettableMutexGuard aReadLock(m_mutex);
@@ -923,7 +923,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
     aReadLock.clear();
     // <- SAFE
 
-    sal_Bool bAllowed = sal_True;
+    bool bAllowed = true;
 
     try
     {
@@ -937,7 +937,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
         // NIL means: count of allowed documents = infinite !
         //     => return sal_True
         if ( ! aVal.hasValue())
-            bAllowed = sal_True;
+            bAllowed = true;
         else
         {
             sal_Int32 nMaxOpenDocuments = 0;
@@ -958,7 +958,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
         }
     }
     catch(const css::uno::Exception&)
-        { bAllowed = sal_True; } // !! internal errors are no reason to disturb the office from opening documents .-)
+        { bAllowed = true; } // !! internal errors are no reason to disturb the office from opening documents .-)
 
     if ( ! bAllowed )
     {
@@ -995,7 +995,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
     return bAllowed;
 }
 
-sal_Bool LoadEnv::impl_loadContent()
+bool LoadEnv::impl_loadContent()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
     // SAFE -> -----------------------------------
@@ -1008,8 +1008,8 @@ sal_Bool LoadEnv::impl_loadContent()
         m_xTargetFrame = impl_searchAlreadyLoaded();
         if (m_xTargetFrame.is())
         {
-            impl_setResult(sal_True);
-            return sal_True;
+            impl_setResult(true);
+            return true;
         }
         m_xTargetFrame = impl_searchRecycleTarget();
     }
@@ -1022,7 +1022,7 @@ sal_Bool LoadEnv::impl_loadContent()
            )
         {
             if (! impl_furtherDocsAllowed())
-                return sal_False;
+                return false;
             m_xTargetFrame       = m_xBaseFrame->findFrame(SPECIALTARGET_BLANK, 0);
             m_bCloseFrameOnError = m_xTargetFrame.is();
         }
@@ -1033,7 +1033,7 @@ sal_Bool LoadEnv::impl_loadContent()
             if (! m_xTargetFrame.is())
             {
                 if (! impl_furtherDocsAllowed())
-                    return sal_False;
+                    return false;
                 m_xTargetFrame       = m_xBaseFrame->findFrame(SPECIALTARGET_BLANK, 0);
                 m_bCloseFrameOnError = m_xTargetFrame.is();
             }
@@ -1075,9 +1075,9 @@ sal_Bool LoadEnv::impl_loadContent()
     // So we prevent our code against wrong using. Why?
     // It could be, that using of this progress could make trouble. e.g. He make window visible ...
     // but shouldn't do that. But if no indicator is available ... nobody has a chance to do that!
-    sal_Bool                                           bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN()         , sal_False                                           );
-    sal_Bool                                           bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED()      , sal_False                                           );
-    sal_Bool                                           bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW()        , sal_False                                           );
+    bool                                           bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN()         , sal_False                                           );
+    bool                                           bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED()      , sal_False                                           );
+    bool                                           bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW()        , sal_False                                           );
     css::uno::Reference< css::task::XStatusIndicator > xProgress  = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference< css::task::XStatusIndicator >());
 
     if (!bHidden && !bMinimized && !bPreview && !xProgress.is())
@@ -1112,23 +1112,23 @@ sal_Bool LoadEnv::impl_loadContent()
         css::uno::Reference< css::frame::XLoadEventListener > xListener(static_cast< css::frame::XLoadEventListener* >(pListener), css::uno::UNO_QUERY);
         xAsyncLoader->load(xTargetFrame, sURL, lDescriptor, xListener);
 
-        return sal_True;
+        return true;
     }
     else if (xSyncLoader.is())
     {
-        sal_Bool bResult = xSyncLoader->load(lDescriptor, xTargetFrame);
+        bool bResult = xSyncLoader->load(lDescriptor, xTargetFrame);
         // react for the result here, so the outside waiting
         // code can ask for it later.
         impl_setResult(bResult);
         // But the return value indicates a valid started(!) operation.
         // And that's true every time we reach this line :-)
-        return sal_True;
+        return true;
     }
 
     aWriteLock.clear();
     // <- SAFE
 
-    return sal_False;
+    return false;
 }
 
 css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
@@ -1326,7 +1326,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // Hidden frames are special.
             // They will be used as "last chance" if there is no visible frame pointing to the same model.
             // Safe the result but continue with current loop might be looking for other visible frames.
-            sal_Bool bIsHidden = lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), sal_False);
+            bool bIsHidden = lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), sal_False);
             if (
                 (   bIsHidden       ) &&
                 ( ! xHiddenTask.is())
@@ -1362,13 +1362,13 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             impl_jumpToMark(xResult, m_aURL);
 
         // bring it to front and make sure it's visible...
-        impl_makeFrameWindowVisible(xResult->getContainerWindow(), sal_True);
+        impl_makeFrameWindowVisible(xResult->getContainerWindow(), true);
     }
 
     return xResult;
 }
 
-sal_Bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const
+bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const
 {
     css::uno::Reference< css::document::XActionLockable > xLock(xFrame, css::uno::UNO_QUERY);
 
@@ -1376,7 +1376,7 @@ sal_Bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< c
     // Might its an external written frame implementation :-(
     // Allowing using of it ... but it can fail if its not synchronized with our processes !
     if (!xLock.is())
-        return sal_False;
+        return false;
 
     // Otherwise we have to look for any other existing lock.
     return xLock->isActionLocked();
@@ -1402,7 +1402,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
         if (!impl_isFrameAlreadyUsedForLoading(aTasksAnalyzer.m_xBackingComponent))
         {
             // bring it to front ...
-            impl_makeFrameWindowVisible(aTasksAnalyzer.m_xBackingComponent->getContainerWindow(), sal_True);
+            impl_makeFrameWindowVisible(aTasksAnalyzer.m_xBackingComponent->getContainerWindow(), true);
             return aTasksAnalyzer.m_xBackingComponent;
         }
     }
@@ -1487,7 +1487,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // OK - there is a valid target frame.
     // But may be it contains already a document.
     // Then we have to ask it, if it allows recycling of this frame .-)
-    sal_Bool bReactivateOldControllerOnError = sal_False;
+    bool bReactivateOldControllerOnError = false;
     css::uno::Reference< css::frame::XController > xOldDoc = xTask->getController();
     if (xOldDoc.is())
     {
@@ -1508,7 +1508,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // <- SAFE ..................................
 
     // bring it to front ...
-    impl_makeFrameWindowVisible(xTask->getContainerWindow(), sal_True);
+    impl_makeFrameWindowVisible(xTask->getContainerWindow(), true);
 
     return xTask;
 }
@@ -1527,8 +1527,8 @@ void LoadEnv::impl_reactForLoadingState()
         // Note: We show new created frames here only.
         // We dont hide already visible frames here ...
         css::uno::Reference< css::awt::XWindow > xWindow      = m_xTargetFrame->getContainerWindow();
-        sal_Bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), sal_False);
-        sal_Bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), sal_False);
+        bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), sal_False);
+        bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), sal_False);
 
         if (bMinimized)
         {
@@ -1542,7 +1542,7 @@ void LoadEnv::impl_reactForLoadingState()
         {
             // show frame ... if it's not still visible ...
             // But do nothing if it's already visible!
-            impl_makeFrameWindowVisible(xWindow, sal_False);
+            impl_makeFrameWindowVisible(xWindow, false);
         }
 
         // Note: Only if an existing property "FrameName" is given by this media descriptor,
@@ -1569,10 +1569,10 @@ void LoadEnv::impl_reactForLoadingState()
         m_xTargetFrame.clear();
         if (xOldDoc.is())
         {
-            sal_Bool bReactivated = xOldDoc->suspend(sal_False);
+            bool bReactivated = xOldDoc->suspend(sal_False);
             if (!bReactivated)
                 throw LoadEnvException(LoadEnvException::ID_COULD_NOT_REACTIVATE_CONTROLLER);
-            m_bReactivateControllerOnError = sal_False;
+            m_bReactivateControllerOnError = false;
         }
     }
     else if (m_bCloseFrameOnError)
@@ -1633,7 +1633,7 @@ void LoadEnv::impl_reactForLoadingState()
 }
 
 void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
-                                                sal_Bool bForceToFront)
+                                                bool bForceToFront)
 {
     // SAFE -> ----------------------------------
     osl::ClearableMutexGuard aReadLock(m_mutex);
@@ -1692,8 +1692,8 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     if (!pWindow)
         return;
 
-    sal_Bool bSystemWindow = pWindow->IsSystemWindow();
-    sal_Bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
+    bool bSystemWindow = pWindow->IsSystemWindow();
+    bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
 
     if (!bSystemWindow && !bWorkWindow)
         return;

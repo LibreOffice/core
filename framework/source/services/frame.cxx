@@ -346,7 +346,7 @@ private:
 
     // non threadsafe
     void impl_checkMenuCloser            (                                                                        );
-    void impl_setCloser                  ( const css::uno::Reference< css::frame::XFrame2 >& xFrame , sal_Bool bState );
+    void impl_setCloser                  ( const css::uno::Reference< css::frame::XFrame2 >& xFrame , bool bState );
     void impl_disposeContainerWindow     (       css::uno::Reference< css::awt::XWindow >&       xWindow          );
 
 //  debug methods
@@ -372,16 +372,16 @@ private:
 
 private:
 
-    static sal_Bool implcp_setActiveFrame                      (   const   css::uno::Reference< css::frame::XFrame >&                          xFrame              );
-    static sal_Bool implcp_addFrameActionListener              (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
-    static sal_Bool implcp_removeFrameActionListener           (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
-    static sal_Bool implcp_addEventListener                    (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           );
-    static sal_Bool implcp_removeEventListener                 (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           );
-    static sal_Bool implcp_windowResized                       (   const   css::awt::WindowEvent&                                              aEvent              );
-    static sal_Bool implcp_focusGained                         (   const   css::awt::FocusEvent&                                               aEvent              );
-    static sal_Bool implcp_windowActivated                     (   const   css::lang::EventObject&                                             aEvent              );
-    static sal_Bool implcp_windowDeactivated                   (   const   css::lang::EventObject&                                             aEvent              );
-    static sal_Bool implcp_disposing                           (   const   css::lang::EventObject&                                             aEvent              );
+    static bool implcp_setActiveFrame                      (   const   css::uno::Reference< css::frame::XFrame >&                          xFrame              );
+    static bool implcp_addFrameActionListener              (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
+    static bool implcp_removeFrameActionListener           (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
+    static bool implcp_addEventListener                    (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           );
+    static bool implcp_removeEventListener                 (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           );
+    static bool implcp_windowResized                       (   const   css::awt::WindowEvent&                                              aEvent              );
+    static bool implcp_focusGained                         (   const   css::awt::FocusEvent&                                               aEvent              );
+    static bool implcp_windowActivated                     (   const   css::lang::EventObject&                                             aEvent              );
+    static bool implcp_windowDeactivated                   (   const   css::lang::EventObject&                                             aEvent              );
+    static bool implcp_disposing                           (   const   css::lang::EventObject&                                             aEvent              );
 
 //  variables
 //  -threadsafe by SolarMutex
@@ -401,13 +401,13 @@ private:
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >      m_xDropTargetListener;       /// listen to drag & drop
     EActiveState                                                            m_eActiveState;              /// state, if i'am a member of active path in tree or i have the focus or ...
     OUString                                                                m_sName;                     /// name of this frame
-    sal_Bool                                                                m_bIsFrameTop;               /// frame has no parent or the parent is a taskor the desktop
-    sal_Bool                                                                m_bConnected;                /// due to FrameActionEvent
+    bool                                                                    m_bIsFrameTop;               /// frame has no parent or the parent is a taskor the desktop
+    bool                                                                    m_bConnected;                /// due to FrameActionEvent
     sal_Int16                                                               m_nExternalLockCount;
     css::uno::Reference< css::frame::XDispatchRecorderSupplier >            m_xDispatchRecorderSupplier; /// is used for dispatch recording and will be set/get from outside. Frame provide it only!
     SvtCommandOptions                                                       m_aCommandOptions;           /// ref counted class to support disabling commands defined by configuration file
-    sal_Bool                                                                m_bSelfClose;                /// in case of CloseVetoException on method close() wqs thrown by ourself - we must close ourself later if no internal processes are running
-    sal_Bool                                                                m_bIsHidden;                 /// indicates, if this frame is used in hidden mode or not
+    bool                                                                    m_bSelfClose;                /// in case of CloseVetoException on method close() wqs thrown by ourself - we must close ourself later if no internal processes are running
+    bool                                                                    m_bIsHidden;                 /// indicates, if this frame is used in hidden mode or not
     static css::uno::WeakReference< css::frame::XFrame2 >                   m_xCloserFrame;              /// holds the only frame, which must show the special closer menu item (can be NULL!)
     css::uno::Reference< ::css::frame::XLayoutManager2 >                    m_xLayoutManager;            /// is used to layout the child windows of the frame.
     css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper;
@@ -527,7 +527,7 @@ Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext
         :   TransactionBase             (                                                   )
         ,   PropertySetHelper           ( m_aMutex,
                                           &m_aTransactionManager,
-                                          sal_False) // sal_False => dont release shared mutex on calling us!
+                                          false) // sal_False => dont release shared mutex on calling us!
         //  init member
         ,   m_xContext                  ( xContext                                          )
         ,   m_aListenerContainer        ( m_aMutex )
@@ -537,11 +537,11 @@ Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext
         ,   m_xController               (                                                   )
         ,   m_eActiveState              ( E_INACTIVE                                        )
         ,   m_sName                     (                                                   )
-        ,   m_bIsFrameTop               ( sal_True                                          ) // I think we are top without a parent ... and there is no parent yet!
-        ,   m_bConnected                ( sal_False                                         ) // There exist no component inside of use => sal_False, we are not connected!
+        ,   m_bIsFrameTop               ( true                                          ) // I think we are top without a parent ... and there is no parent yet!
+        ,   m_bConnected                ( false                                         ) // There exist no component inside of use => sal_False, we are not connected!
         ,   m_nExternalLockCount        ( 0                                                 )
-        ,   m_bSelfClose                ( sal_False                                         ) // Important!
-        ,   m_bIsHidden                 ( sal_True                                          )
+        ,   m_bSelfClose                ( false                                         ) // Important!
+        ,   m_bIsHidden                 ( true                                          )
         ,   m_xTitleHelper              (                                                   )
         ,   m_pWindowCommandDispatch    ( 0                                                 )
         ,   m_aChildFrameContainer      (                                                   )
@@ -859,7 +859,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // if window is initially visible, we will never get a windowShowing event
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     if (pWindow && pWindow->IsVisible())
-        m_bIsHidden = sal_False;
+        m_bIsHidden = false;
 
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     css::uno::Reference< css::frame::XLayoutManager2 >  xLayoutManager = m_xLayoutManager;
@@ -1057,8 +1057,8 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
     SolarMutexResettableGuard aReadLock;
     css::uno::Reference< css::frame::XFrame >              xParent      ( m_xParent, css::uno::UNO_QUERY );
     css::uno::Reference< css::uno::XComponentContext >     xContext = m_xContext;
-    sal_Bool                                               bIsTopFrame  = m_bIsFrameTop;
-    sal_Bool                                               bIsTopWindow = WindowHelper::isTopWindow(m_xContainerWindow);
+    bool                                               bIsTopFrame  = m_bIsFrameTop;
+    bool                                               bIsTopWindow = WindowHelper::isTopWindow(m_xContainerWindow);
     aReadLock.clear();
     /* } SAFE */
 
@@ -1069,7 +1069,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
         TaskCreator aCreator(xContext);
-        xTarget = aCreator.createTask(sTargetFrameName,sal_False);
+        xTarget = aCreator.createTask(sTargetFrameName,false);
     }
 
     // I.II) "_parent"
@@ -1266,7 +1266,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
            )
         {
             TaskCreator aCreator(xContext);
-            xTarget = aCreator.createTask(sTargetFrameName,sal_False);
+            xTarget = aCreator.createTask(sTargetFrameName,false);
         }
     }
 
@@ -1542,8 +1542,8 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     css::uno::Reference< css::awt::XWindow >       xOldComponentWindow = m_xComponentWindow;
     css::uno::Reference< css::frame::XController > xOldController      = m_xController;
     Window*                                        pOwnWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-    sal_Bool                                       bHadFocus           = pOwnWindow->HasChildPathFocus();
-    sal_Bool                                       bWasConnected       = m_bConnected;
+    bool                                       bHadFocus           = pOwnWindow->HasChildPathFocus();
+    bool                                       bWasConnected       = m_bConnected;
     aReadLock.clear();
     /* } SAFE */
 
@@ -1629,7 +1629,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     m_xComponentWindow = xComponentWindow;
     m_xController      = xController;
     m_bConnected       = (m_xComponentWindow.is() || m_xController.is());
-    sal_Bool bIsConnected       = m_bConnected;
+    bool bIsConnected       = m_bConnected;
     aWriteLock.clear();
     /* } SAFE */
 
@@ -1809,7 +1809,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
         if (bDeliverOwnership)
         {
             SolarMutexGuard g;
-            m_bSelfClose = sal_True;
+            m_bSelfClose = true;
         }
 
         throw css::util::CloseVetoException("Frame in use for loading document ...",static_cast< ::cppu::OWeakObject*>(this));
@@ -1838,7 +1838,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
 
     /* SAFE { */
     SolarMutexClearableGuard aWriteLock;
-    m_bIsHidden = sal_True;
+    m_bIsHidden = true;
     aWriteLock.clear();
     /* } SAFE */
     impl_checkMenuCloser();
@@ -2132,11 +2132,11 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException, std::exception
     // and doesn't throw any DisposedExceptions we must guarantee best matching default values ...
     m_eActiveState       = E_INACTIVE;
     m_sName              = OUString();
-    m_bIsFrameTop        = sal_False;
-    m_bConnected         = sal_False;
+    m_bIsFrameTop        = false;
+    m_bConnected         = false;
     m_nExternalLockCount = 0;
-    m_bSelfClose         = sal_False;
-    m_bIsHidden          = sal_True;
+    m_bSelfClose         = false;
+    m_bIsHidden          = true;
 
     // Disable this instance for further working really!
     m_aTransactionManager.setWorkingMode( E_CLOSE );
@@ -2539,13 +2539,13 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno::RuntimeException, std::exception)
 {
-    static sal_Bool bFirstVisibleTask = sal_True;
+    static bool bFirstVisibleTask = true;
 
     /* SAFE { */
     SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::frame::XDesktop >             xDesktopCheck( m_xParent, css::uno::UNO_QUERY );
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    m_bIsHidden = sal_False;
+    m_bIsHidden = false;
     aReadLock.clear();
     /* } SAFE */
 
@@ -2555,8 +2555,8 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
     {
         /* STATIC SAFE { */
         osl::ClearableMutexGuard aStaticWriteLock( LockHelper::getGlobalLock() );
-        sal_Bool bMustBeTriggered  = bFirstVisibleTask;
-                 bFirstVisibleTask = sal_False;
+        bool bMustBeTriggered  = bFirstVisibleTask;
+                 bFirstVisibleTask = false;
         aStaticWriteLock.clear();
         /* } STATIC SAFE */
 
@@ -2573,7 +2573,7 @@ void SAL_CALL Frame::windowHidden( const css::lang::EventObject& ) throw(css::un
 {
     /* SAFE { */
     SolarMutexClearableGuard aReadLock;
-    m_bIsHidden = sal_True;
+    m_bIsHidden = true;
     aReadLock.clear();
     /* } SAFE */
 
@@ -3128,8 +3128,8 @@ void Frame::implts_checkSuicide()
     SolarMutexClearableGuard aReadLock;
     // in case of lock==0 and safed state of previous close() request m_bSelfClose
     // we must force close() again. Because we had disagreed with that before.
-    sal_Bool bSuicide = (m_nExternalLockCount==0 && m_bSelfClose);
-    m_bSelfClose = sal_False;
+    bool bSuicide = (m_nExternalLockCount==0 && m_bSelfClose);
+    m_bSelfClose = false;
     aReadLock.clear();
     /* } SAFE */
     // force close and deliver owner ship to source of possible throwed veto exception
@@ -3157,7 +3157,7 @@ void Frame::implts_checkSuicide()
  */
 
 void Frame::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::XFrame2 >& xFrame ,
-                            /*IN*/       sal_Bool                                   bState  )
+                            /*IN*/       bool                                   bState  )
 {
     // Note: If start module isnt installed - no closer has to be shown!
     if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
@@ -3254,9 +3254,9 @@ void Frame::impl_checkMenuCloser()
     if (xCloserFrame!=xNewCloserFrame)
     {
         if (xCloserFrame.is())
-            impl_setCloser(xCloserFrame, sal_False);
+            impl_setCloser(xCloserFrame, false);
         if (xNewCloserFrame.is())
-            impl_setCloser(xNewCloserFrame, sal_True);
+            impl_setCloser(xNewCloserFrame, true);
         m_xCloserFrame = xNewCloserFrame;
     }
 }
@@ -3265,52 +3265,52 @@ void Frame::impl_checkMenuCloser()
 
 // Its allowed to reset the active frame membervariable with a NULL-css::uno::Reference but not with a NULL-pointer!
 // And we accept frames only! No tasks and desktops!
-sal_Bool Frame::implcp_setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
+bool Frame::implcp_setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
     return css::uno::Reference< css::frame::XDesktop >( xFrame, css::uno::UNO_QUERY ).is();
 }
 
-sal_Bool Frame::implcp_addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
+bool Frame::implcp_addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
 {
     return !xListener.is();
 }
 
-sal_Bool Frame::implcp_removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
+bool Frame::implcp_removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
 {
     return !xListener.is();
 }
 
-sal_Bool Frame::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+bool Frame::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     return !xListener.is();
 }
 
-sal_Bool Frame::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+bool Frame::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     return !xListener.is();
 }
 
-sal_Bool Frame::implcp_windowResized( const css::awt::WindowEvent& aEvent )
+bool Frame::implcp_windowResized( const css::awt::WindowEvent& aEvent )
 {
     return !aEvent.Source.is();
 }
 
-sal_Bool Frame::implcp_focusGained( const css::awt::FocusEvent& aEvent )
+bool Frame::implcp_focusGained( const css::awt::FocusEvent& aEvent )
 {
     return !aEvent.Source.is();
 }
 
-sal_Bool Frame::implcp_windowActivated( const css::lang::EventObject& aEvent )
+bool Frame::implcp_windowActivated( const css::lang::EventObject& aEvent )
 {
     return !aEvent.Source.is();
 }
 
-sal_Bool Frame::implcp_windowDeactivated( const css::lang::EventObject& aEvent )
+bool Frame::implcp_windowDeactivated( const css::lang::EventObject& aEvent )
 {
     return !aEvent.Source.is();
 }
 
-sal_Bool Frame::implcp_disposing( const css::lang::EventObject& aEvent )
+bool Frame::implcp_disposing( const css::lang::EventObject& aEvent )
 {
     return !aEvent.Source.is();
 }

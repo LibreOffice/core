@@ -88,7 +88,7 @@ struct FileType
 
         inline void impl_clear()
         {
-            bPreferred          = sal_False;
+            bPreferred          = false;
             sName               = OUString();
             sMediaType          = OUString();
             sClipboardFormat    = OUString();
@@ -115,11 +115,11 @@ struct FileType
 
     public:
 
-        sal_Bool            bPreferred;
-        OUString     sName;
+        bool                bPreferred;
+        OUString            sName;
         OUStringHashMap     lUINames;
-        OUString     sMediaType;
-        OUString     sClipboardFormat;
+        OUString            sMediaType;
+        OUString            sClipboardFormat;
         sal_Int32           nDocumentIconID;
         OUStringList        lURLPattern;
         OUStringList        lExtensions;
@@ -386,10 +386,10 @@ class PerformanceHash   :   public  ::boost::unordered_map<    OUString         
         //  and could be used for further searches again, which should be started at next element!
         //  We stop search at the end of hash. You can start it again by setting it to the begin by himself.
 
-        inline sal_Bool findPatternKey( const OUString& sSearchValue ,
+        inline bool findPatternKey( const OUString& sSearchValue ,
                                               const_iterator&  pStepper     )
         {
-            sal_Bool bFound = sal_False;
+            bool bFound = false;
 
             // If this is the forst call - start search on first element.
             // Otherwise start search on further elements!
@@ -400,14 +400,14 @@ class PerformanceHash   :   public  ::boost::unordered_map<    OUString         
 
             while(
                     ( pStepper != end()     )   &&
-                    ( bFound   == sal_False )
+                    ( bFound   == false )
                 )
             {
                 bFound = Wildcard::match( sSearchValue, pStepper->first );
                 // If element was found - break loop by setting right return value
                 // and don't change "pStepper". He must point to found element!
                 // Otherwise step to next one.
-                if( bFound == sal_False )
+                if( bFound == false )
                     ++pStepper;
             }
             return bFound;
@@ -464,41 +464,41 @@ class DataContainer
         void        startListener();
         void        stopListener ();
 
-        sal_Bool    isModified();
+        bool        isModified();
 
         void        free();
 
-        sal_Bool isValidOrRepairable       () const;
-        sal_Bool validateAndRepair         ();
-        sal_Bool validateAndRepairTypes    ();
-        sal_Bool validateAndRepairFilter   ();
-        sal_Bool validateAndRepairDetectors();
-        sal_Bool validateAndRepairLoader   ();
-        sal_Bool validateAndRepairHandler  ();
+        bool isValidOrRepairable       () const;
+        bool validateAndRepair         ();
+        bool validateAndRepairTypes    ();
+        bool validateAndRepairFilter   ();
+        bool validateAndRepairDetectors();
+        bool validateAndRepairLoader   ();
+        bool validateAndRepairHandler  ();
 
-        sal_Bool existsType           ( const OUString& sName );
-        sal_Bool existsFilter         ( const OUString& sName );
-        sal_Bool existsDetector       ( const OUString& sName );
-        sal_Bool existsLoader         ( const OUString& sName );
-        sal_Bool existsContentHandler ( const OUString& sName );
+        bool existsType           ( const OUString& sName );
+        bool existsFilter         ( const OUString& sName );
+        bool existsDetector       ( const OUString& sName );
+        bool existsLoader         ( const OUString& sName );
+        bool existsContentHandler ( const OUString& sName );
 
-        void addType              ( const FileType&        aType    , sal_Bool bSetModified );
-        void addFilter            ( const Filter&          aFilter  , sal_Bool bSetModified );
-        void addDetector          ( const Detector&        aDetector, sal_Bool bSetModified );
-        void addLoader            ( const Loader&          aLoader  , sal_Bool bSetModified );
-        void addContentHandler    ( const ContentHandler&  aHandler , sal_Bool bSetModified );
+        void addType              ( const FileType&        aType    , bool bSetModified );
+        void addFilter            ( const Filter&          aFilter  , bool bSetModified );
+        void addDetector          ( const Detector&        aDetector, bool bSetModified );
+        void addLoader            ( const Loader&          aLoader  , bool bSetModified );
+        void addContentHandler    ( const ContentHandler&  aHandler , bool bSetModified );
 
-        void replaceType          ( const FileType&        aType    , sal_Bool bSetModified );
-        void replaceFilter        ( const Filter&          aFilter  , sal_Bool bSetModified );
-        void replaceDetector      ( const Detector&        aDetector, sal_Bool bSetModified );
-        void replaceLoader        ( const Loader&          aLoader  , sal_Bool bSetModified );
-        void replaceContentHandler( const ContentHandler&  aHandler , sal_Bool bSetModified );
+        void replaceType          ( const FileType&        aType    , bool bSetModified );
+        void replaceFilter        ( const Filter&          aFilter  , bool bSetModified );
+        void replaceDetector      ( const Detector&        aDetector, bool bSetModified );
+        void replaceLoader        ( const Loader&          aLoader  , bool bSetModified );
+        void replaceContentHandler( const ContentHandler&  aHandler , bool bSetModified );
 
-        void removeType           ( const OUString& sName    , sal_Bool bSetModified );
-        void removeFilter         ( const OUString& sName    , sal_Bool bSetModified );
-        void removeDetector       ( const OUString& sName    , sal_Bool bSetModified );
-        void removeLoader         ( const OUString& sName    , sal_Bool bSetModified );
-        void removeContentHandler ( const OUString& sName    , sal_Bool bSetModified );
+        void removeType           ( const OUString& sName    , bool bSetModified );
+        void removeFilter         ( const OUString& sName    , bool bSetModified );
+        void removeDetector       ( const OUString& sName    , bool bSetModified );
+        void removeLoader         ( const OUString& sName    , bool bSetModified );
+        void removeContentHandler ( const OUString& sName    , bool bSetModified );
 
         static void             convertFileTypeToPropertySequence          ( const FileType&                                           aSource         ,
                                                                                    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    ,
@@ -555,11 +555,11 @@ class DataContainer
         PreferredHash           m_aPreferredTypesCache;     /// assignment of extensions to preferred types for it
         Loader                  m_aGenericLoader;           /// information about our default frame loader
         OUString                m_sLocale;                  /// current set locale of configuration to handle right UIName from set of all UINames!
-        sal_Bool                m_bTypesModified;
-        sal_Bool                m_bFiltersModified;
-        sal_Bool                m_bDetectorsModified;
-        sal_Bool                m_bLoadersModified;
-        sal_Bool                m_bHandlersModified;
+        bool                    m_bTypesModified;
+        bool                    m_bFiltersModified;
+        bool                    m_bDetectorsModified;
+        bool                    m_bLoadersModified;
+        bool                    m_bHandlersModified;
 };
 
 /*-************************************************************************************************************
@@ -626,11 +626,11 @@ class FilterCFGAccess : public ::utl::ConfigItem
     //  debug checks
 
     private:
-        static sal_Bool implcp_ctor ( const OUString& sPath    ,     // methods to check incoming parameter on our interface methods!
+        static bool implcp_ctor ( const OUString& sPath    ,     // methods to check incoming parameter on our interface methods!
                                             sal_Int32        nVersion ,
                                             sal_Int16        nMode    );
-        static sal_Bool implcp_read ( const DataContainer&   rData    );
-        static sal_Bool implcp_write( const DataContainer&   rData    );
+        static bool implcp_read ( const DataContainer&   rData    );
+        static bool implcp_write( const DataContainer&   rData    );
 
     //  member
 

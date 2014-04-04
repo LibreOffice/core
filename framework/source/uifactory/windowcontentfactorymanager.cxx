@@ -79,14 +79,14 @@ private:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     css::uno::Reference< css::uno::XComponentContext >     m_xContext;
-    sal_Bool                                               m_bConfigRead;
+    bool                                               m_bConfigRead;
     ConfigurationAccess_FactoryManager*                    m_pConfigAccess;
 };
 
 WindowContentFactoryManager::WindowContentFactoryManager( const uno::Reference< uno::XComponentContext >& rxContext ) :
     WindowContentFactoryManager_BASE(m_aMutex),
     m_xContext( rxContext ),
-    m_bConfigRead( sal_False )
+    m_bConfigRead( false )
 {
     m_pConfigAccess = new ConfigurationAccess_FactoryManager( m_xContext,
             "/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories" );
@@ -168,7 +168,7 @@ throw (uno::Exception, uno::RuntimeException, std::exception)
         osl::MutexGuard g(rBHelper.rMutex);
         if ( !m_bConfigRead )
         {
-            m_bConfigRead = sal_True;
+            m_bConfigRead = true;
             m_pConfigAccess->readConfigurationData();
         }
         aImplementationName = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );

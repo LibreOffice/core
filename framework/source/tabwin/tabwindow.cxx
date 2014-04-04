@@ -83,8 +83,8 @@ DEFINE_INIT_SERVICE                     (   TabWindow, {} )
 TabWindow::TabWindow( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aMutex )
     , ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
-    , m_bInitialized( sal_False )
-    , m_bDisposed( sal_False )
+    , m_bInitialized( false )
+    , m_bDisposed( false )
     , m_nNextTabID( 1 )
     , m_aTitlePropName( "Title" )
     , m_aPosPropName( "Position" )
@@ -269,7 +269,7 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexResettableGuard aLock;
-    sal_Bool                                               bInitalized( m_bInitialized );
+    bool                                               bInitalized( m_bInitialized );
     css::uno::Reference< css::uno::XComponentContext >     xContext( m_xContext );
     aLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -341,7 +341,7 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
             {
                 /* SAFE AREA ----------------------------------------------------------------------------------------------- */
                 aLock.reset();
-                m_bInitialized = sal_True;
+                m_bInitialized = true;
                 aLock.clear();
                 /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
@@ -447,7 +447,7 @@ void SAL_CALL TabWindow::dispose() throw (css::uno::RuntimeException, std::excep
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     aLock.reset();
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
     aLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 }
@@ -802,7 +802,7 @@ throw( css::lang::IllegalArgumentException )
 {
     //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     switch( nHandle )
     {

@@ -51,15 +51,15 @@ using namespace ::com::sun::star::container;
 namespace framework
 {
 
-static sal_Bool isEnumCommand( const OUString& rCommand )
+static bool isEnumCommand( const OUString& rCommand )
 {
     INetURLObject aURL( rCommand );
 
     if (( aURL.GetProtocol() == INET_PROT_UNO ) &&
         ( aURL.GetURLPath().indexOf( '.' ) != -1))
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 static OUString getEnumCommand( const OUString& rCommand )
@@ -107,7 +107,7 @@ GenericToolbarController::GenericToolbarController( const Reference< XComponentC
     ,   m_pToolbar( pToolbar )
     ,   m_nID( nID )
     ,   m_bEnumCommand( isEnumCommand( aCommand ))
-    ,   m_bMadeInvisible( sal_False )
+    ,   m_bMadeInvisible( false )
     ,   m_aEnumCommand( getEnumCommand( aCommand ))
 {
     if ( m_bEnumCommand )
@@ -192,8 +192,8 @@ throw ( RuntimeException, std::exception )
         nItemBits &= ~TIB_CHECKABLE;
         TriState eTri = TRISTATE_FALSE;
 
-        sal_Bool        bValue = sal_Bool();
-        OUString   aStrValue;
+        bool            bValue;
+        OUString        aStrValue;
         ItemStatus      aItemState;
         Visibility      aItemVisibility;
 
@@ -212,9 +212,9 @@ throw ( RuntimeException, std::exception )
             if ( m_bEnumCommand )
             {
                 if ( aStrValue == m_aEnumCommand )
-                    bValue = sal_True;
+                    bValue = true;
                 else
-                    bValue = sal_False;
+                    bValue = false;
 
                 m_pToolbar->CheckItem( m_nID, bValue );
                 if ( bValue )
@@ -350,7 +350,7 @@ MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::Runtime
         Reference< XDispatchProvider > xDispatch;
         Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
         pMenu = new Toolbarmenu();
-        m_xMenuManager.set( new MenuBarManager( m_xContext, m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, sal_True, sal_True ) );
+        m_xMenuManager.set( new MenuBarManager( m_xContext, m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, true, true ) );
         if ( m_xMenuManager.is() )
         {
             MenuBarManager* pMgr = dynamic_cast< MenuBarManager* >( m_xMenuManager.get() );

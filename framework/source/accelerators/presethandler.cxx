@@ -386,8 +386,8 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
             sRelPathShare = sRelPathBuf.makeStringAndClear();
             sRelPathUser  = sRelPathShare;
 
-            xShare = impl_openPathIgnoringErrors(sRelPathShare, eShareMode, sal_True );
-            xUser  = impl_openPathIgnoringErrors(sRelPathUser , eUserMode , sal_False);
+            xShare = impl_openPathIgnoringErrors(sRelPathShare, eShareMode, true );
+            xUser  = impl_openPathIgnoringErrors(sRelPathUser , eUserMode , false);
         }
         break;
 
@@ -401,8 +401,8 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
             sRelPathShare = sRelPathBuf.makeStringAndClear();
             sRelPathUser  = sRelPathShare;
 
-            xShare = impl_openPathIgnoringErrors(sRelPathShare, eShareMode, sal_True );
-            xUser  = impl_openPathIgnoringErrors(sRelPathUser , eUserMode , sal_False);
+            xShare = impl_openPathIgnoringErrors(sRelPathShare, eShareMode, true );
+            xUser  = impl_openPathIgnoringErrors(sRelPathUser , eUserMode , false);
         }
         break;
 
@@ -440,18 +440,18 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     {
         // First try to find the right localized set inside share layer.
         // Fallbacks are allowed there.
-        OUString             aShareLocale( rLanguageTag.getBcp47());
-        OUString      sLocalizedSharePath(sRelPathShare);
-        sal_Bool             bAllowFallbacks    = sal_True;
-        xShare = impl_openLocalizedPathIgnoringErrors(sLocalizedSharePath, eShareMode, sal_True , aShareLocale, bAllowFallbacks);
+        OUString         aShareLocale( rLanguageTag.getBcp47());
+        OUString         sLocalizedSharePath(sRelPathShare);
+        bool             bAllowFallbacks    = true;
+        xShare = impl_openLocalizedPathIgnoringErrors(sLocalizedSharePath, eShareMode, true , aShareLocale, bAllowFallbacks);
 
         // The try to locate the right sub dir inside user layer ... without using fallbacks!
         // Normaly the corresponding sub dir should be created matching the specified locale.
         // Because we allow creation of storages inside user layer by default.
-        OUString             aUserLocale( rLanguageTag.getBcp47());
+        OUString      aUserLocale( rLanguageTag.getBcp47());
         OUString      sLocalizedUserPath(sRelPathUser);
-                             bAllowFallbacks    = sal_False;
-        xUser = impl_openLocalizedPathIgnoringErrors(sLocalizedUserPath, eUserMode , sal_False, aUserLocale, bAllowFallbacks);
+        bAllowFallbacks    = false;
+        xUser = impl_openLocalizedPathIgnoringErrors(sLocalizedUserPath, eUserMode, false, aUserLocale, bAllowFallbacks);
 
         sRelPathShare = sLocalizedSharePath;
         sRelPathUser  = sLocalizedUserPath;
@@ -568,7 +568,7 @@ void PresetHandler::copyPresetToTarget(const OUString& sPreset,
 }
 
 css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString& sPreset,
-                                                                  sal_Bool bUseNoLangGlobal)
+                                                                  bool bUseNoLangGlobal)
 {
     css::uno::Reference< css::embed::XStorage > xFolder;
     {
@@ -589,7 +589,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString
 }
 
 css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString& sTarget         ,
-                                                                        sal_Bool         bCreateIfMissing)
+                                                                        bool         bCreateIfMissing)
 {
     css::uno::Reference< css::embed::XStorage > xFolder;
     {
@@ -727,7 +727,7 @@ void PresetHandler::removeStorageListener(IStorageListener* pListener)
 
 css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoringErrors(const OUString& sPath ,
                                                                                              sal_Int32        eMode ,
-                                                                                             sal_Bool         bShare)
+                                                                                             bool         bShare)
 {
     css::uno::Reference< css::embed::XStorage > xPath;
     try
@@ -747,7 +747,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
 ::std::vector< OUString >::const_iterator PresetHandler::impl_findMatchingLocalizedValue(
         const ::std::vector< OUString >& lLocalizedValues,
         OUString& rLanguageTag,
-        sal_Bool bAllowFallbacks )
+        bool bAllowFallbacks )
 {
     ::std::vector< OUString >::const_iterator pFound = lLocalizedValues.end();
     if (bAllowFallbacks)
@@ -777,9 +777,9 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
 css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPathIgnoringErrors(
         OUString&      sPath         ,
         sal_Int32             eMode         ,
-        sal_Bool              bShare        ,
+        bool              bShare        ,
         OUString&             rLanguageTag  ,
-        sal_Bool              bAllowFallback)
+        bool              bAllowFallback)
 {
     css::uno::Reference< css::embed::XStorage >      xPath         = impl_openPathIgnoringErrors(sPath, eMode, bShare);
     ::std::vector< OUString >                 lSubFolders   = impl_getSubFolderNames(xPath);

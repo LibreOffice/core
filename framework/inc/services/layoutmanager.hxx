@@ -176,7 +176,7 @@ namespace framework
             virtual void requestLayout( Hint eHint ) SAL_OVERRIDE;
 
             /// Reading of settings - shared with ToolbarLayoutManager.
-            static sal_Bool readWindowStateData( const OUString& rName, UIElement& rElementData,
+            static bool readWindowStateData( const OUString& rName, UIElement& rElementData,
                     const css::uno::Reference< css::container::XNameAccess > &rPersistentWindowState,
                     GlobalSettings* &rGlobalSettings, bool &bInGlobalSettings,
                     const css::uno::Reference< css::uno::XComponentContext > &rComponentContext );
@@ -191,43 +191,43 @@ namespace framework
             //  menu bar
 
             void impl_clearUpMenuBar();
-            void implts_reset( sal_Bool bAttach );
+            void implts_reset( bool bAttach );
             void implts_updateMenuBarClose();
-            sal_Bool implts_resetMenuBar();
+            bool implts_resetMenuBar();
 
             //  locking
 
             void implts_lock();
-            sal_Bool implts_unlock();
+            bool implts_unlock();
 
             //  query
 
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_findElement( const OUString& aName );
 
             void implts_writeNewStateData( const OUString& aName, const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindow >& xWindow );
-            sal_Bool implts_readWindowStateData( const OUString& rName, UIElement& rElementData );
+            bool implts_readWindowStateData( const OUString& rName, UIElement& rElementData );
             void implts_writeWindowStateData( const OUString& rName, const UIElement& rElementData );
             void implts_setElementData( UIElement& rUIElement, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindow >& rDockWindow );
             void implts_sortUIElements();
             void implts_destroyElements();
-            void implts_toggleFloatingUIElementsVisibility( sal_Bool bActive );
+            void implts_toggleFloatingUIElementsVisibility( bool bActive );
             void implts_reparentChildWindows();
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createDockingWindow( const OUString& aElementName );
 
-            sal_Bool implts_isEmbeddedLayoutManager() const;
+            bool implts_isEmbeddedLayoutManager() const;
             sal_Int16 implts_getCurrentSymbolsSize();
             sal_Int16 implts_getCurrentSymbolsStyle();
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createElement( const OUString& aName );
 
             // layouting methods
-            sal_Bool implts_resizeContainerWindow( const ::com::sun::star::awt::Size& rContainerSize, const ::com::sun::star::awt::Point& rComponentPos );
+            bool implts_resizeContainerWindow( const ::com::sun::star::awt::Size& rContainerSize, const ::com::sun::star::awt::Point& rComponentPos );
             ::Size  implts_getTopBottomDockingAreaSizes();
             ::Size  implts_getContainerWindowOutputSize();
 
             void implts_setDockingAreaWindowSizes( const css::awt::Rectangle& rBorderSpace );
             ::com::sun::star::awt::Rectangle implts_calcDockingAreaSizes();
-            sal_Bool implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_Bool bOuterResize );
-            void implts_doLayout_notify( sal_Bool bOuterResize );
+            bool implts_doLayout( bool bForceRequestBorderSpace, bool bOuterResize );
+            void implts_doLayout_notify( bool bOuterResize );
 
             // internal methods to control status/progress bar
             ::Size      implts_getStatusBarSize();
@@ -236,11 +236,11 @@ namespace framework
             void        implts_createProgressBar();
             void        implts_destroyProgressBar();
             void        implts_setStatusBarPosSize( const ::Point& rPos, const ::Size& rSize );
-            sal_Bool    implts_showStatusBar( sal_Bool bStoreState=sal_False );
-            sal_Bool    implts_hideStatusBar( sal_Bool bStoreState=sal_False );
+            bool    implts_showStatusBar( bool bStoreState=false );
+            bool    implts_hideStatusBar( bool bStoreState=false );
             void        implts_readStatusBarState( const OUString& rStatusBarName );
-            sal_Bool    implts_showProgressBar();
-            sal_Bool    implts_hideProgressBar();
+            bool    implts_showProgressBar();
+            bool    implts_hideProgressBar();
             void        implts_backupProgressBarWrapper();
             void        implts_setOffset( const sal_Int32 nBottomOffset );
 
@@ -250,9 +250,9 @@ namespace framework
             void    implts_resetInplaceMenuBar()
                             throw (::com::sun::star::uno::RuntimeException);
 
-            void    implts_setVisibleState( sal_Bool bShow );
-            void    implts_updateUIElementsVisibleState( sal_Bool bShow );
-            void    implts_setCurrentUIVisibility( sal_Bool bShow );
+            void    implts_setVisibleState( bool bShow );
+            void    implts_updateUIElementsVisibleState( bool bShow );
+            void    implts_setCurrentUIVisibility( bool bShow );
             void    implts_notifyListeners( short nEvent, ::com::sun::star::uno::Any aInfoParam );
 
             DECL_LINK( OptionsChanged, void* );

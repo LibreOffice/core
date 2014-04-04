@@ -21,7 +21,7 @@
 
 namespace framework{
 
-sal_Bool TargetHelper::matchSpecialTarget(const OUString& sCheckTarget  ,
+bool TargetHelper::matchSpecialTarget(const OUString& sCheckTarget  ,
                                                 ESpecialTarget   eSpecialTarget)
 {
     switch(eSpecialTarget)
@@ -53,11 +53,11 @@ sal_Bool TargetHelper::matchSpecialTarget(const OUString& sCheckTarget  ,
         case E_HELPTASK :
             return (sCheckTarget.equals(SPECIALTARGET_HELPTASK));
         default:
-            return sal_False;
+            return false;
     }
 }
 
-sal_Bool TargetHelper::isValidNameForFrame(const OUString& sName)
+bool TargetHelper::isValidNameForFrame(const OUString& sName)
 {
     // some special targets are really special ones :-)
     // E.g. the are really used to locate one frame inside the frame tree.
@@ -66,7 +66,7 @@ sal_Bool TargetHelper::isValidNameForFrame(const OUString& sName)
         (TargetHelper::matchSpecialTarget(sName, E_HELPTASK)) ||
         (TargetHelper::matchSpecialTarget(sName, E_BEAMER)  )
        )
-        return sal_True;
+        return true;
 
     // all other names must be checked more general
     // special targets starts with a "_".

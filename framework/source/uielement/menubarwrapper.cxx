@@ -81,7 +81,7 @@ MenuBarWrapper::MenuBarWrapper(
     const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext
     )
 :    UIConfigElementWrapperBase( UIElementType::MENUBAR ),
-     m_bRefreshPopupControllerCache( sal_True ),
+     m_bRefreshPopupControllerCache( true ),
      m_xContext( rxContext )
 {
 }
@@ -158,7 +158,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             {
             }
 
-            sal_Bool bMenuOnly( sal_False );
+            bool bMenuOnly( false );
             for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
             {
                 PropertyValue aPropValue;
@@ -183,8 +183,8 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                                                                       xDispatchProvider,
                                                                       aModuleIdentifier,
                                                                       pVCLMenuBar,
-                                                                      sal_False,
-                                                                      sal_True );
+                                                                      false,
+                                                                      true );
 
                 m_xMenuBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pMenuBarManager ), UNO_QUERY );
             }
@@ -244,7 +244,7 @@ void MenuBarWrapper::fillPopupControllerCache()
         if ( pMenuBarManager )
             pMenuBarManager->GetPopupController( m_aPopupControllerCache );
         if ( !m_aPopupControllerCache.empty() )
-            m_bRefreshPopupControllerCache = sal_False;
+            m_bRefreshPopupControllerCache = false;
     }
 }
 

@@ -125,9 +125,9 @@ class ShellJob : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServic
 
             @return sal_True if command was executed successfully; sal_False otherwise.
          */
-        sal_Bool impl_execute(const OUString&                       sCommand      ,
+        bool impl_execute(const OUString&                       sCommand      ,
                                 const css::uno::Sequence< OUString >& lArguments    ,
-                                      sal_Bool                             bCheckExitCode);
+                                      bool                             bCheckExitCode);
 };
 
 } // namespace framework

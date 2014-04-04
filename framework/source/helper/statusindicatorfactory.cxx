@@ -55,9 +55,9 @@ const char PROGRESS_RESOURCE[] = "private:resource/progressbar/progressbar";
 StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext          (xContext )
     , m_pWakeUp           (0        )
-    , m_bAllowReschedule  (sal_False)
-    , m_bAllowParentShow  (sal_False)
-    , m_bDisableReschedule(sal_False)
+    , m_bAllowReschedule  (false)
+    , m_bAllowParentShow  (false)
+    , m_bDisableReschedule(false)
 {
 }
 
@@ -93,8 +93,8 @@ void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::
 
             m_xFrame             = lArgs.getUnpackedValueOrDefault("Frame"            , css::uno::Reference< css::frame::XFrame >());
             m_xPluggWindow       = lArgs.getUnpackedValueOrDefault("Window"           , css::uno::Reference< css::awt::XWindow >() );
-            m_bAllowParentShow   = lArgs.getUnpackedValueOrDefault("AllowParentShow"  , (sal_Bool)sal_False                        );
-            m_bDisableReschedule = lArgs.getUnpackedValueOrDefault("DisableReschedule", (sal_Bool)sal_False                        );
+            m_bAllowParentShow   = lArgs.getUnpackedValueOrDefault("AllowParentShow"  , sal_False                        );
+            m_bDisableReschedule = lArgs.getUnpackedValueOrDefault("DisableReschedule", sal_False                        );
        }
     }
 
@@ -114,7 +114,7 @@ void SAL_CALL StatusIndicatorFactory::update()
     throw(css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_mutex);
-    m_bAllowReschedule = sal_True;
+    m_bAllowReschedule = true;
 }
 
 void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
@@ -143,7 +143,7 @@ void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatus
         xProgress->start(sText, nRange);
 
     impl_startWakeUpThread();
-    impl_reschedule(sal_True);
+    impl_reschedule(true);
 }
 
 void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatusIndicator >& xChild)
@@ -173,7 +173,7 @@ void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatus
        )
         xProgress->reset();
 
-    impl_reschedule(sal_True);
+    impl_reschedule(true);
 }
 
 void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIndicator >& xChild)
@@ -226,7 +226,7 @@ void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIn
         impl_stopWakeUpThread();
     }
 
-    impl_reschedule(sal_True);
+    impl_reschedule(true);
 }
 
 void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
@@ -255,7 +255,7 @@ void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStat
         xProgress->setText(sText);
     }
 
-    impl_reschedule(sal_True);
+    impl_reschedule(true);
 }
 
 void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XStatusIndicator >& xChild ,
@@ -287,7 +287,7 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
         xProgress->setValue(nValue);
     }
 
-    impl_reschedule(sal_False);
+    impl_reschedule(false);
 }
 
 void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
@@ -315,7 +315,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     // Supress any setVisible() or toFront() call in case the initial show was
     // already made.
     css::uno::Reference< css::awt::XWindow2 > xVisibleCheck(xParentWindow, css::uno::UNO_QUERY);
-    sal_Bool bIsVisible = sal_False;
+    bool bIsVisible = false;
     if (xVisibleCheck.is())
         bIsVisible = xVisibleCheck->isVisible();
 
@@ -345,7 +345,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     // on saving documents. Because there is no progress set on the MediaDescriptor.
     // But that's wrong. In case the document was opened hidden, they should not use any progress .-(
     // They only possible workaround: dont show the parent window here, if the document was opened hidden.
-    sal_Bool bHiddenDoc = sal_False;
+    bool bHiddenDoc = false;
     if (xFrame.is())
     {
         css::uno::Reference< css::frame::XController > xController;
@@ -358,7 +358,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
             utl::MediaDescriptor lDocArgs(xModel->getArgs());
             bHiddenDoc = lDocArgs.getUnpackedValueOrDefault(
                 utl::MediaDescriptor::PROP_HIDDEN(),
-                (sal_Bool)sal_False);
+                sal_False);
         }
     }
 
@@ -494,7 +494,7 @@ void StatusIndicatorFactory::impl_hideProgress()
     }
 }
 
-void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
+void StatusIndicatorFactory::impl_reschedule(bool bForce)
 {
     // SAFE ->
     osl::ClearableMutexGuard aReadLock(m_mutex);
@@ -503,12 +503,12 @@ void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
     aReadLock.clear();
     // <- SAFE
 
-    sal_Bool bReschedule = bForce;
+    bool bReschedule = bForce;
     if (!bReschedule)
     {
         osl::MutexGuard g(m_mutex);
         bReschedule        = m_bAllowReschedule;
-        m_bAllowReschedule = sal_False;
+        m_bAllowReschedule = false;
     }
 
     if (!bReschedule)

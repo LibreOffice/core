@@ -55,7 +55,7 @@ class GenericToolbarController : public svt::ToolboxController
     protected:
         ToolBox*        m_pToolbar;
         sal_uInt16      m_nID;
-        sal_Bool        m_bEnumCommand : 1,
+        bool        m_bEnumCommand : 1,
                         m_bMadeInvisible : 1;
         OUString   m_aEnumCommand;
 };

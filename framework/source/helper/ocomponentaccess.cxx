@@ -90,7 +90,7 @@ sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException, std::
     SolarMutexGuard g;
 
     // Set default return value, if method failed.
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     // Try to "lock" the desktop for access to task container.
     css::uno::Reference< XFramesSupplier > xLock( m_xOwner.get(), UNO_QUERY );
@@ -181,7 +181,7 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
         But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
 
-sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   css::uno::Reference< XDesktop >&      xOwner  )
+bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   css::uno::Reference< XDesktop >&      xOwner  )
 {
     return xOwner.is();
 }

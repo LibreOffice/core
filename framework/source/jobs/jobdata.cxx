@@ -391,7 +391,7 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
 
     @return sal_True if the represented job is part of the underlying configuration package.
  */
-sal_Bool JobData::hasConfig() const
+bool JobData::hasConfig() const
 {
     SolarMutexGuard g;
     return (m_eMode==E_ALIAS || m_eMode==E_EVENT);
@@ -442,7 +442,7 @@ void JobData::disableJob()
 
 /**
  */
-sal_Bool isEnabled( const OUString& sAdminTime ,
+bool isEnabled( const OUString& sAdminTime ,
                     const OUString& sUserTime  )
 {
     /*Attention!
@@ -453,8 +453,8 @@ sal_Bool isEnabled( const OUString& sAdminTime ,
     static OUString PATTERN_ISO8601("\?\?\?\?-\?\?-\?\?*");
     WildCard aISOPattern(PATTERN_ISO8601);
 
-    sal_Bool bValidAdmin = aISOPattern.Matches(sAdminTime);
-    sal_Bool bValidUser  = aISOPattern.Matches(sUserTime );
+    bool bValidAdmin = aISOPattern.Matches(sAdminTime);
+    bool bValidUser  = aISOPattern.Matches(sUserTime );
 
     // We check for "isEnabled()" here only.
     // Note further: ISO8601 formated strings can be compared as strings directly!
@@ -484,13 +484,13 @@ void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XC
 
 /**
  */
-sal_Bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
+bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
 {
     sal_Int32 nContextLen  = m_sContext.getLength();
     sal_Int32 nModuleIdLen = rModuleIdent.getLength();
 
     if ( nContextLen == 0 )
-        return sal_True;
+        return true;
 
     if ( nModuleIdLen > 0 )
     {
@@ -502,7 +502,7 @@ sal_Bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
     }
     }
 
-    return sal_False;
+    return false;
 }
 
 /**

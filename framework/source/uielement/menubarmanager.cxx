@@ -154,7 +154,7 @@ namespace framework
 // special uno commands for window list
 #define aSpecialWindowCommand ".uno:WindowList"
 
-static sal_Int16 getImageTypeFromBools( sal_Bool bBig )
+static sal_Int16 getImageTypeFromBools( bool bBig )
 {
     sal_Int16 n( 0 );
     if ( bBig )
@@ -168,12 +168,12 @@ MenuBarManager::MenuBarManager(
     const Reference< XURLTransformer >& _xURLTransformer,
     const Reference< XDispatchProvider >& rDispatchProvider,
     const OUString& rModuleIdentifier,
-    Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ):
+    Menu* pMenu, bool bDelete, bool bDeleteChildren ):
     OWeakObject()
-    , m_bDisposed( sal_False )
-    , m_bRetrieveImages( sal_False )
-    , m_bAcceleratorCfg( sal_False )
-    , m_bModuleIdentified( sal_False )
+    , m_bDisposed( false )
+    , m_bRetrieveImages( false )
+    , m_bAcceleratorCfg( false )
+    , m_bModuleIdentified( false )
     , m_aListenerContainer( m_mutex )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
@@ -188,13 +188,13 @@ MenuBarManager::MenuBarManager(
     const Reference< XFrame >& rFrame,
     const Reference< XURLTransformer >& _xURLTransformer,
     AddonMenu* pAddonMenu,
-    sal_Bool bDelete,
-    sal_Bool bDeleteChildren ):
+    bool bDelete,
+    bool bDeleteChildren ):
     OWeakObject()
-    , m_bDisposed( sal_False )
-    , m_bRetrieveImages( sal_True )
-    , m_bAcceleratorCfg( sal_False )
-    , m_bModuleIdentified( sal_False )
+    , m_bDisposed( false )
+    , m_bRetrieveImages( true )
+    , m_bAcceleratorCfg( false )
+    , m_bModuleIdentified( false )
     , m_aListenerContainer( m_mutex )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
@@ -208,13 +208,13 @@ MenuBarManager::MenuBarManager(
     const Reference< XFrame >& rFrame,
     const Reference< XURLTransformer >& _xURLTransformer,
     AddonPopupMenu* pAddonPopupMenu,
-    sal_Bool bDelete,
-    sal_Bool bDeleteChildren ):
+    bool bDelete,
+    bool bDeleteChildren ):
     OWeakObject()
-    , m_bDisposed( sal_False )
-    , m_bRetrieveImages( sal_True )
-    , m_bAcceleratorCfg( sal_False )
-    , m_bModuleIdentified( sal_False )
+    , m_bDisposed( false )
+    , m_bRetrieveImages( true )
+    , m_bAcceleratorCfg( false )
+    , m_bModuleIdentified( false )
     , m_aListenerContainer( m_mutex )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
@@ -329,7 +329,7 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException, std::exception 
     {
         SolarMutexGuard g;
         Destroy();
-        m_bDisposed = sal_True;
+        m_bDisposed = true;
 
         if ( m_xDocImageManager.is() )
         {
@@ -397,7 +397,7 @@ throw (RuntimeException, std::exception)
         return;
 
     sal_Int16 nImageType = sal_Int16();
-    sal_Int16 nCurrentImageType = getImageTypeFromBools( sal_False );
+    sal_Int16 nCurrentImageType = getImageTypeFromBools( false );
     if (( Event.aInfo >>= nImageType ) &&
         ( nImageType == nCurrentImageType ))
         RequestImages();
@@ -454,9 +454,9 @@ throw ( RuntimeException, std::exception )
             MenuItemHandler* pMenuItemHandler = *p;
             if ( pMenuItemHandler->aMenuItemURL == aFeatureURL )
             {
-                sal_Bool            bCheckmark( sal_False );
-                sal_Bool            bMenuItemEnabled( m_pVCLMenu->IsItemEnabled( pMenuItemHandler->nItemId ));
-                sal_Bool            bEnabledItem( Event.IsEnabled );
+                bool            bCheckmark( false );
+                bool            bMenuItemEnabled( m_pVCLMenu->IsItemEnabled( pMenuItemHandler->nItemId ));
+                bool            bEnabledItem( Event.IsEnabled );
                 OUString       aItemText;
                 status::Visibility  aVisibilityStatus;
 
@@ -466,7 +466,7 @@ throw ( RuntimeException, std::exception )
                 // Note: PasteSpecial is handled specifically by calc
                 if ( pMenuItemHandler->aMenuItemURL == ".uno:Paste"
                     || pMenuItemHandler->aMenuItemURL == ".uno:PasteClipboard" )      // special for draw/impress
-                    bEnabledItem = sal_True;
+                    bEnabledItem = true;
                 #endif
 
                 // Enable/disable item
@@ -548,7 +548,7 @@ MenuBarManager::MenuItemHandler* MenuBarManager::GetMenuItemHandler( sal_uInt16 
 void MenuBarManager::RequestImages()
 {
 
-    m_bRetrieveImages = sal_True;
+    m_bRetrieveImages = true;
     const sal_uInt32 nCount = m_aMenuItemHandlerVector.size();
     for ( sal_uInt32 i = 0; i < nCount; ++i )
     {
@@ -782,10 +782,10 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                 com::sun::star::uno::getCurrentContext()));
 
         // set/unset hiding disabled menu entries
-        sal_Bool bDontHide           = SvtMenuOptions().IsEntryHidingEnabled();
+        bool bDontHide           = SvtMenuOptions().IsEntryHidingEnabled();
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        sal_Bool bShowMenuImages     = rSettings.GetUseImagesInMenus();
-        sal_Bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
+        bool bShowMenuImages     = rSettings.GetUseImagesInMenus();
+        bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
 
         SolarMutexGuard g;
 
@@ -799,7 +799,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         if ( m_bActive )
             return 0;
 
-        m_bActive = sal_True;
+        m_bActive = true;
 
         OUString aMenuCommand( m_aMenuItemCommand );
         if ( m_aMenuItemCommand == aSpecialWindowMenu || m_aMenuItemCommand == aSlotSpecialWindowMenu || aMenuCommand == aSpecialWindowCommand )
@@ -813,7 +813,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
              sIconTheme != m_sIconTheme )
         {
             m_bShowMenuImages   = bShowMenuImages;
-            m_bRetrieveImages   = sal_False;
+            m_bRetrieveImages   = false;
             m_sIconTheme     = sIconTheme;
             MenuManager::FillMenuImages( m_xFrame, pMenu, bShowMenuImages );
         }
@@ -904,7 +904,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                             else
                                 xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
-                            sal_Bool bPopupMenu( sal_False );
+                            bool bPopupMenu( false );
                             if ( !pMenuItemHandler->xPopupMenuController.is() &&
                                  m_xPopupMenuControllerFactory->hasController( aItemCommand, OUString() ))
                             {
@@ -914,7 +914,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                             {
                                 // Force update of popup menu
                                 pMenuItemHandler->xPopupMenuController->updatePopupMenu();
-                                bPopupMenu = sal_True;
+                                bPopupMenu = true;
                                 if (PopupMenu*  pThisPopup = pMenu->GetPopupMenu( pMenuItemHandler->nItemId ))
                                     pMenu->EnableItem( pMenuItemHandler->nItemId, pThisPopup->GetItemCount() ? true : false );
                             }
@@ -974,7 +974,7 @@ IMPL_LINK( MenuBarManager, Deactivate, Menu *, pMenu )
 {
     if ( pMenu == m_pVCLMenu )
     {
-        m_bActive = sal_False;
+        m_bActive = false;
         if ( pMenu->IsMenuBar() && m_xDeferedItemContainer.is() )
         {
             // Start timer to handle settings asynchronous
@@ -1081,7 +1081,7 @@ IMPL_LINK_NOARG(MenuBarManager, Highlight)
     return 0;
 }
 
-sal_Bool MenuBarManager::MustBeHidden( PopupMenu* pPopupMenu, const Reference< XURLTransformer >& rTransformer )
+bool MenuBarManager::MustBeHidden( PopupMenu* pPopupMenu, const Reference< XURLTransformer >& rTransformer )
 {
     if ( pPopupMenu )
     {
@@ -1121,7 +1121,7 @@ sal_Bool MenuBarManager::MustBeHidden( PopupMenu* pPopupMenu, const Reference< X
         return ( nCount == nHideCount );
     }
 
-    return sal_True;
+    return true;
 }
 
 OUString MenuBarManager::RetrieveLabelFromCommand(const OUString& rCmdURL)
@@ -1129,13 +1129,13 @@ OUString MenuBarManager::RetrieveLabelFromCommand(const OUString& rCmdURL)
     return framework::RetrieveLabelFromCommand(rCmdURL, m_xContext, m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Label");
 }
 
-sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandler )
+bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandler )
 {
     OUString aItemCommand( pMenuItemHandler->aMenuItemURL );
 
     // Try instanciate a popup menu controller. It is stored in the menu item handler.
     if ( !m_xPopupMenuControllerFactory.is() )
-        return sal_False;
+        return false;
 
     Sequence< Any > aSeq( 2 );
     PropertyValue aPropValue;
@@ -1159,26 +1159,26 @@ sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHa
         // Provide our awt popup menu to the popup menu controller
         pMenuItemHandler->xPopupMenuController = xPopupMenuController;
         xPopupMenuController->setPopupMenu( pMenuItemHandler->xPopupMenu );
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
-void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rFrame, const Reference< XDispatchProvider >& rDispatchProvider, const OUString& rModuleIdentifier, sal_Bool bDelete, sal_Bool bDeleteChildren )
+void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rFrame, const Reference< XDispatchProvider >& rDispatchProvider, const OUString& rModuleIdentifier, bool bDelete, bool bDeleteChildren )
 {
     m_xFrame            = rFrame;
-    m_bActive           = sal_False;
+    m_bActive           = false;
     m_bDeleteMenu       = bDelete;
     m_bDeleteChildren   = bDeleteChildren;
     m_pVCLMenu          = pMenu;
-    m_bInitialized      = sal_False;
-    m_bIsBookmarkMenu   = sal_False;
+    m_bInitialized      = false;
+    m_bIsBookmarkMenu   = false;
     m_xDispatchProvider = rDispatchProvider;
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
-    m_bRetrieveImages   = sal_False;
+    m_bRetrieveImages   = false;
 
     sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
 
@@ -1210,7 +1210,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
     }
 
     OUString    aEmpty;
-    sal_Bool    bAccessibilityEnabled( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() );
+    bool    bAccessibilityEnabled( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() );
     sal_uInt16 nItemCount = pMenu->GetItemCount();
     OUString aItemCommand;
     m_aMenuItemHandlerVector.reserve(nItemCount);
@@ -1222,7 +1222,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         if ( !rModuleIdentifier.isEmpty() )
         {
             m_aModuleIdentifier = rModuleIdentifier;
-            m_bModuleIdentified = sal_True;
+            m_bModuleIdentified = true;
         }
 
         if (( pMenu->IsMenuBar() || bAccessibilityEnabled ) &&
@@ -1327,7 +1327,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     AddonMenu* pSubMenu = dynamic_cast< AddonMenu* >( pPopup );
                     if ( pSubMenu )
                     {
-                        MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer,pSubMenu, sal_True, sal_False );
+                        MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer,pSubMenu, true, false );
                         AddMenu(pSubMenuManager,aItemCommand,nItemId);
                         pSubMenuManager->m_aMenuItemCommand = OUString();
 
@@ -1377,9 +1377,9 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     if ( !!aImage )
                         pMenu->SetItemImage( nItemId, aImage );
                     else
-                        m_bRetrieveImages = sal_True;
+                        m_bRetrieveImages = true;
                 }
-                m_bRetrieveImages = sal_True;
+                m_bRetrieveImages = true;
             }
 
             MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
@@ -1458,7 +1458,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
 {
     if ( !m_bModuleIdentified )
     {
-        m_bModuleIdentified = sal_True;
+        m_bModuleIdentified = true;
         Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
 
         try
@@ -1479,7 +1479,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
         if ( !m_bAcceleratorCfg )
         {
             // Retrieve references on demand
-            m_bAcceleratorCfg = sal_True;
+            m_bAcceleratorCfg = true;
             if ( !xDocAccelCfg.is() )
             {
                 Reference< XController > xController = m_xFrame->getController();
@@ -1618,7 +1618,7 @@ void MenuBarManager::FillMenuWithConfiguration(
                                      AddonsOptions().GetMergeMenuInstructions(),
                                      rModuleIdentifier );
 
-    sal_Bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
+    bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
     if ( bHasDisabledEntries )
     {
         sal_uInt16 nCount = pMenu->GetItemCount();
@@ -1653,8 +1653,8 @@ void MenuBarManager::FillMenu(
         OUString                   aLabel;
         OUString                   aHelpURL;
         OUString                   aModuleIdentifier( rModuleIdentifier );
-        sal_Bool                        bShow(sal_True);
-        sal_Bool                        bEnabled(sal_True);
+        bool                        bShow(true);
+        bool                        bEnabled(true);
         sal_uInt16                      nType = 0;
         Reference< XIndexAccess >       xIndexContainer;
         Reference< XDispatchProvider >  xDispatchProvider( rDispatchProvider );
@@ -1810,7 +1810,7 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
 
     if ( !m_bModuleIdentified )
     {
-        m_bModuleIdentified = sal_True;
+        m_bModuleIdentified = true;
         Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
 
         try
@@ -1852,7 +1852,7 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
 
         // Refill menu manager again
         Reference< XDispatchProvider > xDispatchProvider;
-        FillMenuManager( m_pVCLMenu, xFrame, xDispatchProvider, m_aModuleIdentifier, sal_False, sal_True );
+        FillMenuManager( m_pVCLMenu, xFrame, xDispatchProvider, m_aModuleIdentifier, false, true );
 
         // add itself as frame action listener
         m_xFrame->addFrameActionListener( Reference< XFrameActionListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
@@ -1932,15 +1932,15 @@ sal_uInt16 MenuBarManager::FillItemCommand(OUString& _rItemCommand, Menu* _pMenu
     }
     return nItemId;
 }
-void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMenu,sal_Bool bDelete,sal_Bool bDeleteChildren,bool _bHandlePopUp)
+void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMenu,bool bDelete,bool bDeleteChildren,bool _bHandlePopUp)
 {
-    m_bActive           = sal_False;
+    m_bActive           = false;
     m_bDeleteMenu       = bDelete;
     m_bDeleteChildren   = bDeleteChildren;
     m_pVCLMenu          = pAddonMenu;
     m_xFrame            = rFrame;
-    m_bInitialized      = sal_False;
-    m_bIsBookmarkMenu   = sal_True;
+    m_bInitialized      = false;
+    m_bIsBookmarkMenu   = true;
 
     OUString aModuleIdentifier;
     m_xPopupMenuControllerFactory = frame::thePopupMenuControllerFactory::get(

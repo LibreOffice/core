@@ -59,7 +59,7 @@ private:
     css::uno::Reference< css::awt::XContainerWindowProvider >       m_xWinProvider;
 
     void            CreateDialog();
-    sal_Bool        CallMethod( const OUString& rMethod );
+    bool        CallMethod( const OUString& rMethod );
 
 public:
     FwkTabPage(

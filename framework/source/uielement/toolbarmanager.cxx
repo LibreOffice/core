@@ -140,7 +140,7 @@ throw ( RuntimeException, std::exception )
         m_xReceiver->statusChanged( Event );
 }
 
-static sal_Int16 getImageTypeFromBools( sal_Bool bBig )
+static sal_Int16 getImageTypeFromBools( bool bBig )
 {
     sal_Int16 n( 0 );
     if ( bBig )
@@ -193,7 +193,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_aListenerContainer( m_mutex ),
     m_xContext( rxContext ),
     m_sIconTheme( SvtMiscOptions().GetIconTheme() ),
-    m_bAcceleratorCfg( sal_False )
+    m_bAcceleratorCfg( false )
 {
     OSL_ASSERT( m_xContext.is() );
 
@@ -303,7 +303,7 @@ ToolBox* ToolBarManager::GetToolBar() const
 void ToolBarManager::CheckAndUpdateImages()
 {
     SolarMutexGuard g;
-    sal_Bool bRefreshImages = sal_False;
+    bool bRefreshImages = false;
 
     SvtMiscOptions aMiscOptions;
     bool bCurrentSymbolsSmall = !aMiscOptions.AreCurrentSymbolsLarge();
@@ -329,7 +329,7 @@ void ToolBarManager::RefreshImages()
 {
     SolarMutexGuard g;
 
-    sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
+    bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
     for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
     {
         sal_uInt16 nId( m_pToolBar->GetItemId( nPos ) );
@@ -371,14 +371,14 @@ void ToolBarManager::UpdateImageOrientation()
             OUString aMirrorCmd = aSeqMirrorCmd[i];
             pIter = m_aCommandMap.find( aMirrorCmd );
             if ( pIter != m_aCommandMap.end() )
-                pIter->second.bMirrored = sal_True;
+                pIter->second.bMirrored = true;
         }
         for ( i = 0; i < aSeqRotateCmd.getLength(); i++ )
         {
             OUString aRotateCmd = aSeqRotateCmd[i];
             pIter = m_aCommandMap.find( aRotateCmd );
             if ( pIter != m_aCommandMap.end() )
-                pIter->second.bRotated = sal_True;
+                pIter->second.bRotated = true;
         }
     }
 
@@ -846,7 +846,7 @@ void ToolBarManager::CreateControllers()
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
 
     css::util::URL      aURL;
-    sal_Bool            bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
+    bool            bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
     SvtCommandOptions   aCmdOptions;
 
     for ( sal_uInt16 i = 0; i < m_pToolBar->GetItemCount(); i++ )
@@ -857,8 +857,8 @@ void ToolBarManager::CreateControllers()
 
         OUString                aLoadURL( ".uno:OpenUrl" );
         OUString                aCommandURL( m_pToolBar->GetItemCommand( nId ));
-        sal_Bool                     bInit( sal_True );
-        sal_Bool                     bCreate( sal_True );
+        bool                     bInit( true );
+        bool                     bCreate( true );
         Reference< XStatusListener > xController;
         CommandToInfoMap::iterator pCommandIter = m_aCommandMap.find( aCommandURL );
         sal_Int16 nWidth = ( pCommandIter != m_aCommandMap.end() ? pCommandIter->second.nWidth : 0 );
@@ -911,11 +911,11 @@ void ToolBarManager::CreateControllers()
             xController = Reference< XStatusListener >( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
                                                             aCommandURL, aArgs, m_xContext ),
                                                         UNO_QUERY );
-            bInit = sal_False; // Initialization is done through the factory service
+            bInit = false; // Initialization is done through the factory service
         }
 
         if (( aCommandURL == aLoadURL ) && ( !m_pToolBar->IsItemVisible(nId)))
-            bCreate = sal_False;
+            bCreate = false;
 
         if ( !xController.is() && bCreate )
         {
@@ -1062,7 +1062,7 @@ void ToolBarManager::CreateControllers()
         {
             try
             {
-                sal_Bool bSupportVisible = sal_True;
+                bool bSupportVisible = true;
                 Any a( xPropSet->getPropertyValue("SupportsVisible") );
                 a >>= bSupportVisible;
                 if (bSupportVisible)
@@ -1202,7 +1202,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         OUString               aTooltip;
         sal_uInt16                  nType( ::com::sun::star::ui::ItemType::DEFAULT );
         sal_uInt16                  nWidth( 0 );
-        sal_Bool                    bIsVisible( sal_True );
+        bool                    bIsVisible( true );
         sal_uInt32                  nStyle( 0 );
 
         Reference< XIndexAccess >   aMenuDesc;
@@ -1456,7 +1456,7 @@ void ToolBarManager::RequestImages()
         ++pIter;
     }
 
-    sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
+    bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
     sal_Int16 p = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge() );
 
     if ( m_xDocImageManager.is() )
@@ -1633,9 +1633,9 @@ Reference< XModel > ToolBarManager::GetModelFromFrame() const
     return xModel;
 }
 
-sal_Bool ToolBarManager::IsPluginMode() const
+bool ToolBarManager::IsPluginMode() const
 {
-    sal_Bool bPluginMode( sal_False );
+    bool bPluginMode( false );
 
     if ( m_xFrame.is() )
     {
@@ -1681,7 +1681,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     }
 
     // popup menu for quick customization
-    sal_Bool bHideDisabledEntries = !SvtMenuOptions().IsEntryHidingEnabled();
+    bool bHideDisabledEntries = !SvtMenuOptions().IsEntryHidingEnabled();
     ::PopupMenu aPopupMenu( FwkResId( POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION ));
 
     if ( m_pToolBar->IsCustomize() )
@@ -1689,7 +1689,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
         sal_uInt16      nPos( 0 );
         ::PopupMenu*  pItemMenu( aPopupMenu.GetPopupMenu( 1 ));
 
-        sal_Bool    bIsFloating( sal_False );
+        bool    bIsFloating( false );
 
         DockingManager* pDockMgr = Window::GetDockingManager();
         if ( pDockMgr )
@@ -1922,7 +1922,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                                 Sequence< PropertyValue > aProp;
                                 sal_Int32                 nVisibleIndex( -1 );
                                 OUString             aCommandURL;
-                                sal_Bool                  bVisible( sal_False );
+                                bool                  bVisible( false );
 
                                 if ( xItemContainer->getByIndex( i ) >>= aProp )
                                 {
@@ -2174,7 +2174,7 @@ bool ToolBarManager::RetrieveShortcut( const OUString& rCommandURL, OUString& rS
         if ( !m_bAcceleratorCfg )
         {
             // Retrieve references on demand
-            m_bAcceleratorCfg = sal_True;
+            m_bAcceleratorCfg = true;
             if ( !xDocAccelCfg.is() )
             {
                 Reference< XController > xController = m_xFrame->getController();

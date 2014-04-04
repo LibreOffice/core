@@ -95,10 +95,10 @@ AddonsToolBarManager::~AddonsToolBarManager()
 {
 }
 
-static sal_Bool IsCorrectContext( const OUString& rModuleIdentifier, const OUString& aContextList )
+static bool IsCorrectContext( const OUString& rModuleIdentifier, const OUString& aContextList )
 {
     if ( aContextList.isEmpty() )
-        return sal_True;
+        return true;
 
     if ( !rModuleIdentifier.isEmpty() )
     {
@@ -106,13 +106,13 @@ static sal_Bool IsCorrectContext( const OUString& rModuleIdentifier, const OUStr
         return ( nIndex >= 0 );
     }
 
-    return sal_False;
+    return false;
 }
 
 static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
                             const OUString& aImageId,
                             const OUString& aURL,
-                            sal_Bool bBigImage
+                            bool bBigImage
 )
 {
     Image aImage;
@@ -172,7 +172,7 @@ bool AddonsToolBarManager::MenuItemAllowed( sal_uInt16 nId ) const
 
 void AddonsToolBarManager::RefreshImages()
 {
-    sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
+    bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
     for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
     {
         sal_uInt16 nId( m_pToolBar->GetItemId( nPos ) );
@@ -221,7 +221,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     }
 
     sal_uInt32  nElements( 0 );
-    sal_Bool    bAppendSeparator( sal_False );
+    bool    bAppendSeparator( false );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
     for ( sal_uInt32 n = 0; n < (sal_uInt32)rAddonToolbar.getLength(); n++ )
     {
@@ -256,7 +256,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     // We have to append a separator first if the last item is not a separator
                     m_pToolBar->InsertSeparator();
                 }
-                bAppendSeparator = sal_False;
+                bAppendSeparator = false;
 
                 m_pToolBar->InsertItem( nId, aTitle );
 
@@ -271,7 +271,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
                 Reference< XStatusListener > xController;
 
-                sal_Bool bMustBeInit( sal_True );
+                bool bMustBeInit( true );
 
                 // Support external toolbar controller for add-ons!
                 if ( m_xToolbarControllerFactory.is() &&
@@ -305,7 +305,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     catch ( uno::Exception& )
                     {
                     }
-                    bMustBeInit = sal_False; // factory called init already!
+                    bMustBeInit = false; // factory called init already!
                 }
                 else
                 {

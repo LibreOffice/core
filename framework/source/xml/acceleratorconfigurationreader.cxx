@@ -56,8 +56,8 @@ namespace framework{
 
 AcceleratorConfigurationReader::AcceleratorConfigurationReader(AcceleratorCache& rContainer)
     : m_rContainer            (rContainer                   )
-    , m_bInsideAcceleratorList(sal_False                    )
-    , m_bInsideAcceleratorItem(sal_False                    )
+    , m_bInsideAcceleratorList(false                    )
+    , m_bInsideAcceleratorItem(false                    )
 {
 }
 
@@ -102,7 +102,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
             THROW_PARSEEXCEPTION("An element \"accel:item\" must be embeded into 'accel:acceleratorlist'.")
         if (m_bInsideAcceleratorItem)
             THROW_PARSEEXCEPTION("An element \"accel:item\" is not a container.")
-        m_bInsideAcceleratorItem = sal_True;
+        m_bInsideAcceleratorItem = true;
 
         OUString    sCommand;
         css::awt::KeyEvent aEvent;
@@ -173,7 +173,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
     {
         if (m_bInsideAcceleratorList)
             THROW_PARSEEXCEPTION("An element \"accel:acceleratorlist\" cannot be used recursive.")
-        m_bInsideAcceleratorList = sal_True;
+        m_bInsideAcceleratorList = true;
         return;
     }
 }
@@ -190,14 +190,14 @@ void SAL_CALL AcceleratorConfigurationReader::endElement(const OUString& sElemen
     {
         if (!m_bInsideAcceleratorItem)
             THROW_PARSEEXCEPTION("Found end element 'accel:item', but no start element.")
-        m_bInsideAcceleratorItem = sal_False;
+        m_bInsideAcceleratorItem = false;
     }
 
     if (eElement == E_ELEMENT_ACCELERATORLIST)
     {
         if (!m_bInsideAcceleratorList)
             THROW_PARSEEXCEPTION("Found end element 'accel:acceleratorlist', but no start element.")
-        m_bInsideAcceleratorList = sal_False;
+        m_bInsideAcceleratorList = false;
     }
 }
 

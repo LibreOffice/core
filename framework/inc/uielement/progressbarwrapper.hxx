@@ -43,7 +43,7 @@ class ProgressBarWrapper : public UIElementWrapperBase
         virtual ~ProgressBarWrapper();
 
         // public interfaces
-        void setStatusBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& rStatusBar, sal_Bool bOwnsInstance = sal_False );
+        void setStatusBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& rStatusBar, bool bOwnsInstance = false );
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getStatusBar() const;
 
         // wrapped methods of ::com::sun::star::task::XStatusIndicator
@@ -72,7 +72,7 @@ class ProgressBarWrapper : public UIElementWrapperBase
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >         m_xStatusBar;    // Reference to our status bar XWindow
         ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >  m_xProgressBarIfacWrapper;
-        sal_Bool                                                                   m_bOwnsInstance; // Indicator that we are owner of the XWindow
+        bool                                                                   m_bOwnsInstance; // Indicator that we are owner of the XWindow
         sal_Int32                                                                  m_nRange;
         sal_Int32                                                                  m_nValue;
         OUString                                                              m_aText;

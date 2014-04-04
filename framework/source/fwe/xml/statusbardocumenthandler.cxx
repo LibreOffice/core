@@ -169,9 +169,9 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
         }
     }
 
-    m_bStatusBarStartFound          = sal_False;
-    m_bStatusBarEndFound            = sal_False;
-    m_bStatusBarItemStartFound      = sal_False;
+    m_bStatusBarStartFound          = false;
+    m_bStatusBarEndFound            = false;
+    m_bStatusBarItemStartFound      = false;
 }
 
 OReadStatusBarDocumentHandler::~OReadStatusBarDocumentHandler()
@@ -218,7 +218,7 @@ throw(  SAXException, RuntimeException, std::exception )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_bStatusBarStartFound = sal_True;
+                m_bStatusBarStartFound = true;
             }
             break;
 
@@ -243,9 +243,9 @@ throw(  SAXException, RuntimeException, std::exception )
                 sal_Int16   nItemBits( ItemStyle::ALIGN_CENTER|ItemStyle::DRAW_IN3D );
                 sal_Int16   nWidth( 0 );
                 sal_Int16   nOffset( STATUSBAR_OFFSET );
-                sal_Bool    bCommandURL( sal_False );
+                bool    bCommandURL( false );
 
-                m_bStatusBarItemStartFound = sal_True;
+                m_bStatusBarItemStartFound = true;
                 for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                 {
                     pStatusBarEntry = m_aStatusBarMap.find( xAttribs->getNameByIndex( n ) );
@@ -255,7 +255,7 @@ throw(  SAXException, RuntimeException, std::exception )
                         {
                             case SB_ATTRIBUTE_URL:
                             {
-                                bCommandURL = sal_True;
+                                bCommandURL = true;
                                 aCommandURL = xAttribs->getValueByIndex( n );
                             }
                             break;
@@ -417,7 +417,7 @@ throw(  SAXException, RuntimeException, std::exception )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_bStatusBarStartFound = sal_False;
+                m_bStatusBarStartFound = false;
             }
             break;
 
@@ -430,7 +430,7 @@ throw(  SAXException, RuntimeException, std::exception )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_bStatusBarItemStartFound = sal_False;
+                m_bStatusBarItemStartFound = false;
             }
             break;
 

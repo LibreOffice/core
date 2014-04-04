@@ -53,8 +53,8 @@ static void lcl_ConvertSequenceToValues(
     AddonStatusbarItem &rItem )
 {
     OUString sAlignment;
-    sal_Bool bAutoSize = sal_False;
-    sal_Bool bOwnerDraw = sal_False;
+    bool bAutoSize = false;
+    bool bOwnerDraw = false;
 
     PropertyValue aPropVal;
     for ( sal_Int32 i = 0; i < rSequence.getLength(); i++ )

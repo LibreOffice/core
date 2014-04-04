@@ -112,10 +112,10 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
 {
 }
 
-sal_Bool StartModuleDispatcher::implts_isBackingModePossible ()
+bool StartModuleDispatcher::implts_isBackingModePossible()
 {
     if ( ! SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
-        return sal_False;
+        return false;
 
     css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
         css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY);
@@ -125,7 +125,7 @@ sal_Bool StartModuleDispatcher::implts_isBackingModePossible ()
         css::uno::Reference< css::frame::XFrame >(),
         FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
 
-    sal_Bool  bIsPossible    = sal_False;
+    bool  bIsPossible    = false;
     ::sal_Int32 nVisibleFrames = aCheck.m_lOtherVisibleFrames.getLength ();
 
     if (
@@ -133,13 +133,13 @@ sal_Bool StartModuleDispatcher::implts_isBackingModePossible ()
         (   nVisibleFrames < 1              )
        )
     {
-        bIsPossible = sal_True;
+        bIsPossible = true;
     }
 
     return bIsPossible;
 }
 
-sal_Bool StartModuleDispatcher::implts_establishBackingMode()
+bool StartModuleDispatcher::implts_establishBackingMode()
 {
     css::uno::Reference< css::frame::XDesktop2> xDesktop       = css::frame::Desktop::create( m_xContext );
     css::uno::Reference< css::frame::XFrame > xFrame           = xDesktop->findFrame(SPECIALTARGET_BLANK, 0);
@@ -151,7 +151,7 @@ sal_Bool StartModuleDispatcher::implts_establishBackingMode()
     xStartModule->attachFrame(xFrame);
     xContainerWindow->setVisible(sal_True);
 
-    return sal_True;
+    return true;
 }
 
 void StartModuleDispatcher::implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,

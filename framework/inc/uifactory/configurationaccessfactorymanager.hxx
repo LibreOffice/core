@@ -67,7 +67,7 @@ namespace framework {
             }
         };
 
-        sal_Bool impl_getElementProps( const ::com::sun::star::uno::Any& rElement, OUString& rType, OUString& rName, OUString& rModule, OUString& rServiceSpecifier ) const;
+        bool impl_getElementProps( const ::com::sun::star::uno::Any& rElement, OUString& rType, OUString& rName, OUString& rModule, OUString& rServiceSpecifier ) const;
 
         mutable osl::Mutex m_aMutex;
         OUString                     m_aPropType;
@@ -79,7 +79,7 @@ namespace framework {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xConfigProvider;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     m_xConfigAccess;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xConfigListener;
-        sal_Bool                          m_bConfigAccessInitialized;
+        bool                          m_bConfigAccessInitialized;
 };
 
 } // namespace framework

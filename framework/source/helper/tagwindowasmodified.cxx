@@ -84,7 +84,7 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
             return;
     }
 
-    sal_Bool bModified = xModel->isModified ();
+    bool bModified = xModel->isModified ();
 
     // SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
@@ -93,8 +93,8 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
     if ( ! pWindow)
         return;
 
-    sal_Bool bSystemWindow = pWindow->IsSystemWindow();
-    sal_Bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
+    bool bSystemWindow = pWindow->IsSystemWindow();
+    bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
     if (!bSystemWindow && !bWorkWindow)
         return;
 

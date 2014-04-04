@@ -73,7 +73,7 @@ protected:
     void createPopupMenuController();
 
     css::uno::Reference< css::uno::XComponentContext >      m_xContext;
-    sal_Bool                                                m_bHasController;
+    bool                                                m_bHasController;
     css::uno::Reference< css::awt::XPopupMenu >             m_xPopupMenu;
 
 private:
@@ -86,7 +86,7 @@ PopupMenuToolbarController::PopupMenuToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     const OUString &rPopupCommand )
     : m_xContext( xContext )
-    , m_bHasController( sal_False )
+    , m_bHasController( false )
     , m_aPopupCommand( rPopupCommand )
 {
 }
@@ -483,13 +483,13 @@ void NewToolbarController::functionExecuted( const OUString &rCommand )
     @return sal_True - if URL could be located as an item of the popup menu.
             sal_False - otherwhise.
 */
-static sal_Bool Impl_ExistURLInMenu(
+static bool Impl_ExistURLInMenu(
     const css::uno::Reference< css::awt::XPopupMenu > &rPopupMenu,
     OUString &sURL,
     OUString &sFallback,
     Image &aImage )
 {
-    sal_Bool bValidFallback( sal_False );
+    bool bValidFallback( false );
     sal_uInt16 nCount( 0 );
     if ( rPopupMenu.is() && ( nCount = rPopupMenu->getItemCount() ) != 0 && sURL.getLength() )
     {
@@ -501,7 +501,7 @@ static sal_Bool Impl_ExistURLInMenu(
             if ( !bValidFallback && aCmd.getLength() )
             {
                 sFallback = aCmd;
-                bValidFallback = sal_True;
+                bValidFallback = true;
             }
 
             // match even if the menu command is more detailed
@@ -513,7 +513,7 @@ static sal_Bool Impl_ExistURLInMenu(
                     rPopupMenu->getItemImage( nId ) );
                 if ( xGraphic.is() )
                     aImage = Image( xGraphic );
-                return sal_True;
+                return true;
             }
         }
     }
@@ -526,7 +526,7 @@ static sal_Bool Impl_ExistURLInMenu(
         sFallback = aBuffer.makeStringAndClear();
     }
 
-    return sal_False;
+    return false;
 }
 
 /** We accept URL's here only, which exist as items of our internal popup menu.
@@ -543,11 +543,11 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
     OUString sFallback;
     Image aMenuImage;
 
-    sal_Bool bValid( Impl_ExistURLInMenu( m_xPopupMenu, aURL, sFallback, aMenuImage ) );
+    bool bValid( Impl_ExistURLInMenu( m_xPopupMenu, aURL, sFallback, aMenuImage ) );
     if ( !bValid )
         aURL = sFallback;
 
-    sal_Bool bBig = SvtMiscOptions().AreCurrentSymbolsLarge();
+    bool bBig = SvtMiscOptions().AreCurrentSymbolsLarge();
 
     INetURLObject aURLObj( aURL );
     Image aImage = SvFileInformationManager::GetImageNoDefault( aURLObj, bBig );

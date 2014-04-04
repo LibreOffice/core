@@ -132,10 +132,10 @@ StatusBarManager::StatusBarManager(
     const uno::Reference< frame::XFrame >& rFrame,
     const OUString& rResourceName,
     StatusBar* pStatusBar ) :
-    m_bDisposed( sal_False ),
-    m_bFrameActionRegistered( sal_False ),
-    m_bUpdateControllers( sal_False ),
-    m_bModuleIdentified( sal_False ),
+    m_bDisposed( false ),
+    m_bFrameActionRegistered( false ),
+    m_bUpdateControllers( false ),
+    m_bModuleIdentified( false ),
     m_pStatusBar( pStatusBar ),
     m_aResourceName( rResourceName ),
     m_xFrame( rFrame ),
@@ -230,7 +230,7 @@ void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException, std::exc
             m_xFrame.clear();
             m_xContext.clear();
 
-            m_bDisposed = sal_True;
+            m_bDisposed = true;
         }
     }
 }
@@ -282,12 +282,12 @@ void StatusBarManager::UpdateControllers()
 {
     if ( !m_bUpdateControllers )
     {
-        m_bUpdateControllers = sal_True;
+        m_bUpdateControllers = true;
         std::for_each( m_aControllerMap.begin(),
                        m_aControllerMap.end(),
                        lcl_UpdateController< StatusBarControllerMap >() );
     }
-    m_bUpdateControllers = sal_False;
+    m_bUpdateControllers = false;
 }
 
 void StatusBarManager::RemoveControllers()
@@ -319,7 +319,7 @@ void StatusBarManager::CreateControllers()
             continue;
 
         OUString aCommandURL( m_pStatusBar->GetItemCommand( nId ));
-        sal_Bool bInit( sal_True );
+        bool bInit( true );
         uno::Reference< frame::XStatusbarController > xController;
         AddonStatusbarItemData *pItemData = static_cast< AddonStatusbarItemData *>( m_pStatusBar->GetItemData( nId ) );
         uno::Reference< ui::XStatusbarItem > xStatusbarItem(
@@ -369,7 +369,7 @@ void StatusBarManager::CreateControllers()
                             m_xStatusbarControllerFactory->createInstanceWithArgumentsAndContext(
                                 aCommandURL, aArgs, m_xContext ),
                             uno::UNO_QUERY );
-            bInit = sal_False; // Initialization is done through the factory service
+            bInit = false; // Initialization is done through the factory service
         }
 
         if ( !xController.is() )
@@ -415,7 +415,7 @@ void StatusBarManager::AddFrameActionListener()
 {
     if ( !m_bFrameActionRegistered && m_xFrame.is() )
     {
-        m_bFrameActionRegistered = sal_True;
+        m_bFrameActionRegistered = true;
         m_xFrame->addFrameActionListener( uno::Reference< frame::XFrameActionListener >(
             static_cast< ::cppu::OWeakObject *>( this ), uno::UNO_QUERY ));
     }

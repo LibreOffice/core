@@ -163,7 +163,7 @@ private:
                 load request and must be closed in case loading (not handling!)
                 operation failed. The default value is sal_False!
      */
-    sal_Bool m_bCloseFrameOnError;
+    bool m_bCloseFrameOnError;
 
     /** @short  it indicates, that the old document (which was located inside m_xBaseFrame
                 in combination with the m_sTarget value "_self") was suspended.
@@ -171,7 +171,7 @@ private:
                 loading (not handling!) failed, it must be reactivated.
                 The default value is sal_False!
      */
-    sal_Bool m_bReactivateControllerOnError;
+    bool m_bReactivateControllerOnError;
 
     /** @short  it holds one (!) asynchronous used contenthandler or frameloader
                 alive, till the asynchronous operation will be finished.
@@ -184,7 +184,7 @@ private:
                 (in case the micht existing old document was reactivated)
                 we must hold the result of the load process explicitly.
      */
-    sal_Bool m_bLoaded;
+    bool m_bLoaded;
 
     /** @short      holds an XActionLock on the internal used task member.
 
@@ -323,7 +323,7 @@ public:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime cant be used any longer.
      */
-    sal_Bool waitWhileLoading(sal_uInt32 nTimeout = 0);
+    bool waitWhileLoading(sal_uInt32 nTimeout = 0);
 
     /** TODO document me ... */
     css::uno::Reference< css::lang::XComponent > getTargetComponent() const;
@@ -371,7 +371,7 @@ public:
             );
 
     /** TODO document me ... */
-    void impl_setResult(sal_Bool bResult);
+    void impl_setResult(bool bResult);
 
     /** TODO document me ... */
     css::uno::Reference< css::uno::XInterface > impl_searchLoader();
@@ -445,7 +445,7 @@ private:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime cant be used any longer.
      */
-    sal_Bool impl_handleContent()
+    bool impl_handleContent()
         throw(LoadEnvException, css::uno::RuntimeException);
 
     /** @short  tries to use FrameLoader objects for loading.
@@ -464,7 +464,7 @@ private:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime cant be used any longer.
      */
-    sal_Bool impl_loadContent()
+    bool impl_loadContent()
         throw(LoadEnvException, css::uno::RuntimeException);
 
     /** @short  checks if the specified content is already loaded.
@@ -550,7 +550,7 @@ private:
                 This mode is needed by a)
      */
     void impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
-                                           sal_Bool                                  bForceToFront);
+                                           bool                                  bForceToFront);
 
     /** @short  checks whether a frame is already used for another load request or not.
 
@@ -563,7 +563,7 @@ private:
                 sal_True if this frame is already used for loading,
                 sal_False otherwise.
      */
-    sal_Bool impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const;
+    bool impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const;
 
     /** @short  try to determine the used application module
                 of this load request and applay right position and size
@@ -573,7 +573,7 @@ private:
 
     /** @short  determine if it's allowed to open new document frames.
      */
-    sal_Bool impl_furtherDocsAllowed();
+    bool impl_furtherDocsAllowed();
 
     /** @short  jumps to the requested bookmark inside a given document.
      */

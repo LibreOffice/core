@@ -142,17 +142,17 @@ class Job : public  ::cppu::WeakImplHelper3<
             The used references are not really enough to detect a valid listener connection.
             Thats why we use this additional information here too.
          */
-        sal_Bool m_bListenOnDesktop;
-        sal_Bool m_bListenOnFrame;
-        sal_Bool m_bListenOnModel;
+        bool m_bListenOnDesktop;
+        bool m_bListenOnFrame;
+        bool m_bListenOnModel;
 
         /**
             In case we got a close request from our desktop/frame/model (on which we listen) ... and
             the ownership was delivered there ... we have to close ourself and this object
             in case the internal wrapped and running job finish his work.
          */
-        sal_Bool m_bPendingCloseFrame;
-        sal_Bool m_bPendingCloseModel;
+        bool m_bPendingCloseFrame;
+        bool m_bPendingCloseModel;
 
         /**
             indicates in which state the internal job currently exist.

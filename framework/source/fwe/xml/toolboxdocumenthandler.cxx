@@ -63,7 +63,7 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue > rProp,
                                       OUString&                       rTooltip,
                                       sal_Int16&                      rStyle,
                                       sal_Int16&                      rWidth,
-                                      sal_Bool&                       rVisible,
+                                      bool&                       rVisible,
                                       sal_Int16&                      rType )
 {
     for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
@@ -179,12 +179,12 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     m_nHashCode_Style_Text  = OUString( ATTRIBUTE_ITEMSTYLE_TEXT ).hashCode();
     m_nHashCode_Style_Image  = OUString( ATTRIBUTE_ITEMSTYLE_IMAGE ).hashCode();
 
-    m_bToolBarStartFound            = sal_False;
-    m_bToolBarEndFound              = sal_False;
-    m_bToolBarItemStartFound        = sal_False;
-    m_bToolBarSpaceStartFound       = sal_False;
-    m_bToolBarBreakStartFound       = sal_False;
-    m_bToolBarSeparatorStartFound   = sal_False;
+    m_bToolBarStartFound            = false;
+    m_bToolBarEndFound              = false;
+    m_bToolBarItemStartFound        = false;
+    m_bToolBarSpaceStartFound       = false;
+    m_bToolBarBreakStartFound       = false;
+    m_bToolBarSeparatorStartFound   = false;
 }
 
 OReadToolBoxDocumentHandler::~OReadToolBoxDocumentHandler()
@@ -267,7 +267,7 @@ throw(  SAXException, RuntimeException, std::exception )
                             }
                         }
 
-                m_bToolBarStartFound = sal_True;
+                m_bToolBarStartFound = true;
             }
             break;
 
@@ -290,16 +290,16 @@ throw(  SAXException, RuntimeException, std::exception )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                sal_Bool bAttributeURL  = sal_False;
+                bool bAttributeURL  = false;
 
-                m_bToolBarItemStartFound = sal_True;
+                m_bToolBarItemStartFound = true;
                 OUString        aLabel;
                 OUString        aCommandURL;
                 OUString        aHelpURL;
                 OUString        aTooltip;
                 OUString        aBitmapName;
                 sal_uInt16      nItemBits( 0 );
-                sal_Bool        bVisible( sal_True );
+                bool        bVisible( true );
 
                 for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                 {
@@ -322,7 +322,7 @@ throw(  SAXException, RuntimeException, std::exception )
 
                             case TB_ATTRIBUTE_URL:
                             {
-                                bAttributeURL   = sal_True;
+                                bAttributeURL   = true;
                                 aCommandURL     = xAttribs->getValueByIndex( n ).intern();
                             }
                             break;
@@ -336,9 +336,9 @@ throw(  SAXException, RuntimeException, std::exception )
                             case TB_ATTRIBUTE_VISIBLE:
                             {
                                 if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
-                                    bVisible = sal_True;
+                                    bVisible = true;
                                 else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
-                                    bVisible = sal_False;
+                                    bVisible = false;
                                 else
                                 {
                                     OUString aErrorMessage = getErrorLineString();
@@ -461,7 +461,7 @@ throw(  SAXException, RuntimeException, std::exception )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_bToolBarSpaceStartFound = sal_True;
+                m_bToolBarSpaceStartFound = true;
 
                 Sequence< PropertyValue > aToolbarItemProp( 2 );
                 aToolbarItemProp[0].Name = m_aCommandURL;
@@ -486,7 +486,7 @@ throw(  SAXException, RuntimeException, std::exception )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_bToolBarBreakStartFound = sal_True;
+                m_bToolBarBreakStartFound = true;
 
                 Sequence< PropertyValue > aToolbarItemProp( 2 );
                 aToolbarItemProp[0].Name = m_aCommandURL;
@@ -511,7 +511,7 @@ throw(  SAXException, RuntimeException, std::exception )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_bToolBarSeparatorStartFound = sal_True;
+                m_bToolBarSeparatorStartFound = true;
 
                 Sequence< PropertyValue > aToolbarItemProp( 2 );
                 aToolbarItemProp[0].Name = m_aCommandURL;
@@ -549,7 +549,7 @@ throw(  SAXException, RuntimeException, std::exception )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_bToolBarStartFound = sal_False;
+                m_bToolBarStartFound = false;
             }
             break;
 
@@ -562,7 +562,7 @@ throw(  SAXException, RuntimeException, std::exception )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_bToolBarItemStartFound = sal_False;
+                m_bToolBarItemStartFound = false;
             }
             break;
 
@@ -575,7 +575,7 @@ throw(  SAXException, RuntimeException, std::exception )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_bToolBarBreakStartFound = sal_False;
+                m_bToolBarBreakStartFound = false;
             }
             break;
 
@@ -588,7 +588,7 @@ throw(  SAXException, RuntimeException, std::exception )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_bToolBarSpaceStartFound = sal_False;
+                m_bToolBarSpaceStartFound = false;
             }
             break;
 
@@ -601,7 +601,7 @@ throw(  SAXException, RuntimeException, std::exception )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_bToolBarSeparatorStartFound = sal_False;
+                m_bToolBarSeparatorStartFound = false;
             }
             break;
 
@@ -730,7 +730,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
             OUString    aLabel;
             OUString    aHelpURL;
             OUString    aTooltip;
-            sal_Bool    bVisible( sal_True );
+            bool    bVisible( true );
             sal_Int16   nType( ::com::sun::star::ui::ItemType::DEFAULT );
             sal_Int16   nWidth( 0 );
             sal_Int16   nStyle( 0 );

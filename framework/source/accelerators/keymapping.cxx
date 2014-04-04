@@ -186,14 +186,14 @@ OUString KeyMapping::mapCodeToIdentifier(sal_uInt16 nCode)
     return OUString::number(nCode);
 }
 
-sal_Bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const OUString& sIdentifier,
-                                                                    sal_uInt16&      rCode      )
+bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const OUString& sIdentifier,
+                                                                sal_uInt16&      rCode      )
 {
     sal_Int32 nCode = sIdentifier.toInt32();
     if (nCode > 0)
     {
         rCode = (sal_uInt16)nCode;
-        return sal_True;
+        return true;
     }
 
     // 0 is normaly an error of the called method toInt32() ...

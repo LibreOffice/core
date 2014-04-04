@@ -87,7 +87,7 @@ class ActionTriggerSeparatorPropertySet :   private cppu::BaseMutex,
 
         //  helper
 
-        sal_Bool impl_tryToChangeProperty(  sal_Int16                           aCurrentValue   ,
+        bool impl_tryToChangeProperty(  sal_Int16                           aCurrentValue   ,
                                             const   com::sun::star::uno::Any&   aNewValue       ,
                                             com::sun::star::uno::Any&           aOldValue       ,
                                             com::sun::star::uno::Any&           aConvertedValue ) throw( com::sun::star::lang::IllegalArgumentException );

@@ -168,12 +168,12 @@ class StorageHolder
         static css::uno::Reference< css::embed::XStorage > openSubStorageWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
                                                                                       const OUString&                             sSubStorage   ,
                                                                                             sal_Int32                                    eOpenMode     ,
-                                                                                            sal_Bool                                     bAllowFallback);
+                                                                                            bool                                     bAllowFallback);
 
         static css::uno::Reference< css::io::XStream > openSubStreamWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
                                                                                  const OUString&                             sSubStream    ,
                                                                                        sal_Int32                                    eOpenMode     ,
-                                                                                       sal_Bool                                     bAllowFallback);
+                                                                                       bool                                     bAllowFallback);
 
         // helper
         private:

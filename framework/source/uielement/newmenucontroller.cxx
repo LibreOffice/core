@@ -66,7 +66,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2      (   NewMenuController                   
 
 DEFINE_INIT_SERVICE                     (   NewMenuController, {} )
 
-void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages )
+void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
 {
     sal_uInt16 nItemCount = pPopupMenu->GetItemCount();
     Image               aImage;
@@ -79,7 +79,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
         {
             if ( bSetImages )
             {
-                sal_Bool        bImageSet( sal_False );
+                bool        bImageSet( false );
                 OUString aImageId;
 
                 AddInfoForId::const_iterator pInfo = m_aAddInfoForItem.find( nItemId );
@@ -91,7 +91,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
                     aImage = GetImageFromURL( xFrame, aImageId, false );
                     if ( !!aImage )
                     {
-                        bImageSet = sal_True;
+                        bImageSet = true;
                         pPopupMenu->SetItemImage( nItemId, aImage );
                     }
                 }
@@ -116,7 +116,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
 {
     sal_uInt16        nCount( pPopupMenu->GetItemCount() );
     sal_uInt16        nId( 0 );
-    sal_Bool      bFound( sal_False );
+    bool      bFound( false );
     OUString aCommand;
 
     if ( !m_aEmptyDocURL.isEmpty() )
@@ -132,7 +132,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
                 if ( aCommand.startsWith( m_aEmptyDocURL ) )
                 {
                     pPopupMenu->SetAccelKey( nId, rKeyCode );
-                    bFound = sal_True;
+                    bFound = true;
                     break;
                 }
             }
@@ -173,7 +173,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
         if ( !m_bAcceleratorCfg )
         {
             // Retrieve references on demand
-            m_bAcceleratorCfg = sal_True;
+            m_bAcceleratorCfg = true;
             if ( !xDocAccelCfg.is() )
             {
                 Reference< XController > xController = m_xFrame->getController();
@@ -296,10 +296,10 @@ void NewMenuController::retrieveShortcutsFromConfiguration(
 
 NewMenuController::NewMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
-    m_bShowImages( sal_True ),
-    m_bNewMenu( sal_False ),
-    m_bModuleIdentified( sal_False ),
-    m_bAcceleratorCfg( sal_False ),
+    m_bShowImages( true ),
+    m_bNewMenu( false ),
+    m_bModuleIdentified( false ),
+    m_bAcceleratorCfg( false ),
     m_aTargetFrame( "_default" ),
     m_xContext( xContext )
 {
@@ -449,7 +449,7 @@ void SAL_CALL NewMenuController::itemActivated( const css::awt::MenuEvent& ) thr
         if ( pPopupMenu )
         {
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-            sal_Bool bShowImages( rSettings.GetUseImagesInMenus() );
+            bool bShowImages( rSettings.GetUseImagesInMenus() );
 
             PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
@@ -476,7 +476,7 @@ void NewMenuController::impl_setPopupMenu()
     try
     {
         m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
-        m_bModuleIdentified = sal_True;
+        m_bModuleIdentified = true;
 
         if ( !m_aModuleIdentifier.isEmpty() )
         {
@@ -509,7 +509,7 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
 {
     osl::MutexGuard aLock( m_aMutex );
 
-    sal_Bool bInitalized( m_bInitialized );
+    bool bInitalized( m_bInitialized );
     if ( !bInitalized )
     {
         svt::PopupMenuControllerBase::initialize( aArguments );

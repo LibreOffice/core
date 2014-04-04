@@ -355,9 +355,9 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                             Reference< XIndexAccess > xContainer( aMenuCfg.CreateMenuBarConfigurationFromXML( xInputStream ));
                             RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xContainer );
                             if ( pRootItemContainer )
-                                aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
+                                aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
                             else
-                                aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( xContainer, sal_True ) ), UNO_QUERY );
+                                aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( xContainer, true ) ), UNO_QUERY );
                             return;
                         }
                         catch ( const ::com::sun::star::lang::WrappedTargetException& )
@@ -378,7 +378,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                             Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
                             ToolBoxConfiguration::LoadToolBox( m_xContext, xInputStream, xIndexContainer );
                             RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
-                            aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
+                            aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
                             return;
                         }
                         catch ( const ::com::sun::star::lang::WrappedTargetException& )
@@ -395,7 +395,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                             Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
                             StatusBarConfiguration::LoadStatusBar( m_xContext, xInputStream, xIndexContainer );
                             RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
-                            aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
+                            aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
                             return;
                         }
                         catch ( const ::com::sun::star::lang::WrappedTargetException& )

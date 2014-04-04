@@ -122,15 +122,15 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
     // b) help shows any other default page(!) => show default page for the detected module
     // c) help shows any other content         => do nothing (user travelled to any other content and leaved the set of default pages)
     OUString sCurrentHelpURL                = its_getCurrentHelpURL();
-    sal_Bool        bCurrentHelpURLIsAnyDefaultURL = its_isHelpUrlADefaultOne(sCurrentHelpURL);
-    sal_Bool        bShowIt                        = sal_False;
+    bool        bCurrentHelpURLIsAnyDefaultURL = its_isHelpUrlADefaultOne(sCurrentHelpURL);
+    bool        bShowIt                        = false;
 
     // a)
     if (sCurrentHelpURL.isEmpty())
-        bShowIt = sal_True;
+        bShowIt = true;
     // b)
     else if (bCurrentHelpURLIsAnyDefaultURL)
-        bShowIt = sal_True;
+        bShowIt = true;
 
     if (bShowIt)
     {
@@ -253,10 +253,10 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
     return sCurrentHelpURL;
 }
 
-sal_Bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
+bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
 {
     if (sHelpURL.isEmpty())
-        return sal_False;
+        return false;
 
     // SAFE ->
     osl::ClearableMutexGuard aLock(m_mutex);
@@ -267,7 +267,7 @@ sal_Bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
     // <- SAFE
 
     if (!xConfig.is())
-        return sal_False;
+        return false;
 
     // check given help url against all default ones
     const css::uno::Sequence< OUString > lModules = xConfig->getElementNames();
@@ -288,7 +288,7 @@ sal_Bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
             xModuleConfig->getByName("ooSetupFactoryHelpBaseURL") >>= sHelpBaseURL;
             OUString sHelpURLForModule = HelpOnStartup::ist_createHelpURL(sHelpBaseURL, sLocale, sSystem);
             if (sHelpURL.equals(sHelpURLForModule))
-                return sal_True;
+                return true;
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
@@ -296,7 +296,7 @@ sal_Bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
             {}
     }
 
-    return sal_False;
+    return false;
 }
 
 OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
@@ -317,7 +317,7 @@ OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
         if (xConfig.is())
             xConfig->getByName(sModule) >>= xModuleConfig;
 
-        sal_Bool bHelpEnabled = sal_False;
+        bool bHelpEnabled = false;
         if (xModuleConfig.is())
             xModuleConfig->getByName("ooSetupFactoryHelpOnOpen") >>= bHelpEnabled;
 

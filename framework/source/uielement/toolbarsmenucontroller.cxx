@@ -88,19 +88,19 @@ struct ToolBarEntry
 {
     OUString           aUIName;
     OUString           aCommand;
-    sal_Bool                bVisible;
-    sal_Bool                bContextSensitive;
+    bool                bVisible;
+    bool                bContextSensitive;
     const CollatorWrapper*  pCollatorWrapper;
 };
 
-sal_Bool CompareToolBarEntry( const ToolBarEntry& aOne, const ToolBarEntry& aTwo )
+bool CompareToolBarEntry( const ToolBarEntry& aOne, const ToolBarEntry& aTwo )
 {
     sal_Int32 nComp = aOne.pCollatorWrapper->compareString( aOne.aUIName, aTwo.aUIName );
 
     if ( nComp < 0 )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 Reference< XLayoutManager > getLayoutManagerFromFrame( const Reference< XFrame >& rFrame )
@@ -138,8 +138,8 @@ ToolbarsMenuController::ToolbarsMenuController( const ::com::sun::star::uno::Ref
     m_xContext( xContext ),
     m_aPropUIName( "UIName" ),
     m_aPropResourceURL( "ResourceURL" ),
-    m_bModuleIdentified( sal_False ),
-    m_bResetActive( sal_False ),
+    m_bModuleIdentified( false ),
+    m_bResetActive( false ),
     m_aIntlWrapper( xContext, Application::GetSettings().GetLanguageTag() )
 {
 }
@@ -333,7 +333,7 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
     return aSeq;
 }
 
-sal_Bool ToolbarsMenuController::isContextSensitiveToolbarNonVisible()
+bool ToolbarsMenuController::isContextSensitiveToolbarNonVisible()
 {
     return m_bResetActive;
 }
@@ -352,7 +352,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
     OUString aEmptyString;
     Reference< XLayoutManager > xLayoutManager( getLayoutManagerFromFrame( m_xFrame ));
 
-    m_bResetActive = sal_False;
+    m_bResetActive = false;
     if ( xLayoutManager.is() )
     {
         ToolbarHashMap aToolbarHashMap;
@@ -381,9 +381,9 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         while ( pIter != aToolbarHashMap.end() )
         {
             OUString aUIName = pIter->second;
-            sal_Bool      bHideFromMenu( sal_False );
-            sal_Bool      bContextSensitive( sal_False );
-            sal_Bool      bVisible( sal_False );
+            bool      bHideFromMenu( false );
+            bool      bContextSensitive( false );
+            bool      bVisible( false );
             if ( aUIName.isEmpty() &&
                  m_xPersistentWindowState.is() )
             {
@@ -413,7 +413,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
                 // Check if we have to enable/disable "Reset" menu item
                 if ( bContextSensitive && !bVisible )
-                    m_bResetActive = sal_True;
+                    m_bResetActive = true;
 
             }
 
@@ -482,7 +482,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 addCommand( m_xPopupMenu, OUString( CMD_FORMULABAR ), aEmptyString );
         }
 
-        sal_Bool          bAddCommand( sal_True );
+        bool          bAddCommand( true );
         SvtCommandOptions aCmdOptions;
         OUString     aConfigureToolbar( CONFIGURE_TOOLBARS );
 
@@ -490,7 +490,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         {
             if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
                                      OUString( CONFIGURE_TOOLBARS_CMD )))
-                bAddCommand = sal_False;
+                bAddCommand = false;
         }
 
         if ( bAddCommand )
@@ -545,8 +545,8 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
     OUString aFeatureURL( Event.FeatureURL.Complete );
 
     // All other status events will be processed here
-    sal_Bool bSetCheckmark      = sal_False;
-    sal_Bool bCheckmark         = sal_False;
+    bool bSetCheckmark      = false;
+    bool bCheckmark         = false;
 
     osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< css::awt::XPopupMenu > xPopupMenu( m_xPopupMenu );
@@ -572,7 +572,7 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
 
                 // Checkmark
                 if ( Event.State >>= bCheckmark )
-                    bSetCheckmark = sal_True;
+                    bSetCheckmark = true;
 
                 if ( bSetCheckmark )
                     pVCLPopupMenu->CheckItem( nId, bCheckmark );
@@ -635,8 +635,8 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
 
                                 if ( xPersistentWindowState->getByName( aElementName ) >>= aWindowState )
                                 {
-                                    sal_Bool  bVisible( sal_False );
-                                    sal_Bool  bContextSensitive( sal_False );
+                                    bool  bVisible( false );
+                                    bool  bContextSensitive( false );
                                     sal_Int32 nVisibleIndex( -1 );
                                     for ( sal_Int32 j = 0; j < aWindowState.getLength(); j++ )
                                     {
@@ -727,7 +727,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                         OUStringBuffer aBuf( STATIC_PRIVATE_TB_RESOURCE );
                         aBuf.append( aCmd.copy( nIndex+1 ));
 
-                        sal_Bool      bShow( !pVCLPopupMenu->IsItemChecked( rEvent.MenuId ));
+                        bool      bShow( !pVCLPopupMenu->IsItemChecked( rEvent.MenuId ));
                         OUString aToolBarResName( aBuf.makeStringAndClear() );
                         if ( bShow )
                         {
@@ -810,7 +810,7 @@ void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::X
 void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
 {
     osl::MutexGuard aLock( m_aMutex );
-    sal_Bool bInitalized( m_bInitialized );
+    bool bInitalized( m_bInitialized );
     if ( !bInitalized )
     {
         svt::PopupMenuControllerBase::initialize(aArguments);

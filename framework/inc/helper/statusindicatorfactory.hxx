@@ -115,7 +115,7 @@ struct IndicatorInfo
                     are not interesting then. Because mor then one child
                     indicator can use the same values ...
          */
-        sal_Bool operator==(const css::uno::Reference< css::task::XStatusIndicator >& xIndicator)
+        bool operator==(const css::uno::Reference< css::task::XStatusIndicator >& xIndicator)
         {
             return (m_xIndicator == xIndicator);
         }
@@ -179,13 +179,13 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper4<
             There we set this member m_bAllowReschedule to sal_True. Next time if our impl_reschedule()
             method is called, we know, that an Application::Reschedule() should be made.
             Because the last made Reschedule can be was taken long time ago ... may be.*/
-        sal_Bool m_bAllowReschedule;
+        bool m_bAllowReschedule;
 
         /** enable/disable automatic showing of our parent window. */
-        sal_Bool m_bAllowParentShow;
+        bool m_bAllowParentShow;
 
         /** enable/disable rescheduling. Default=enabled*/
-        sal_Bool m_bDisableReschedule;
+        bool m_bDisableReschedule;
 
         /** prevent recursive calling of Application::Reschedule(). */
         static sal_Int32 m_nInReschedule;
@@ -291,7 +291,7 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper4<
             @param  Overwrites our algorithm for Reschedule and force it to be shure
                     that our progress was painted right.
          */
-        void impl_reschedule(sal_Bool bForceUpdate);
+        void impl_reschedule(bool bForceUpdate);
 
         void impl_startWakeUpThread();
         void impl_stopWakeUpThread();

@@ -98,8 +98,8 @@ class PathSettings : private cppu::BaseMutex
                 , lInternalPaths()
                 , lUserPaths    ()
                 , sWritePath    ()
-                , bIsSinglePath (sal_False)
-                , bIsReadonly   (sal_False)
+                , bIsSinglePath (false)
+                , bIsReadonly   (false)
             {}
 
             PathInfo(const PathInfo& rCopy)
@@ -130,10 +130,10 @@ class PathSettings : private cppu::BaseMutex
             OUString sWritePath;
 
             /// indicates real single paths, which uses WritePath property only
-            sal_Bool bIsSinglePath;
+            bool bIsSinglePath;
 
             /// simple handling of finalized/mandatory states ... => we know one state READONLY only .-)
-            sal_Bool bIsReadonly;
+            bool bIsReadonly;
     };
 
     typedef BaseHash< PathSettings::PathInfo > PathHash;
@@ -172,7 +172,7 @@ private:
 
     ::cppu::OPropertyArrayHelper* m_pPropHelp;
 
-    sal_Bool m_bIgnoreEvents;
+    bool m_bIgnoreEvents;
 
 public:
 
@@ -381,7 +381,7 @@ private:
     /** reload one path directly from the new configuration schema (because
         it was updated by any external code) */
     PathSettings::EChangeOp impl_updatePath(const OUString& sPath          ,
-                                                  sal_Bool         bNotifyListener);
+                                                  bool         bNotifyListener);
 
     /** replace all might existing placeholder variables inside the given path ...
         or check if the given path value uses paths, which can be replaced with predefined
@@ -389,10 +389,10 @@ private:
      */
     void impl_subst(      OUStringList&                                          lVals   ,
                     const css::uno::Reference< css::util::XStringSubstitution >& xSubst  ,
-                          sal_Bool                                               bReSubst);
+                          bool                                               bReSubst);
 
     void impl_subst(PathSettings::PathInfo& aPath   ,
-                    sal_Bool                bReSubst);
+                    bool                bReSubst);
 
     /** converts our new string list schema to the old ";" separated schema ... */
     OUString impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath        ) const;
@@ -421,8 +421,8 @@ private:
     const PathSettings::PathInfo* impl_getPathAccessConst(sal_Int32 nHandle) const;
 
     /** it checks, if the given path value seems to be a valid URL or system path. */
-    sal_Bool impl_isValidPath(const OUString& sPath) const;
-    sal_Bool impl_isValidPath(const OUStringList&    lPath) const;
+    bool impl_isValidPath(const OUString& sPath) const;
+    bool impl_isValidPath(const OUStringList&    lPath) const;
 
     void impl_storePath(const PathSettings::PathInfo& aPath);
 
@@ -460,7 +460,7 @@ PathSettings::PathSettings( const css::uno::Reference< css::uno::XComponentConte
     , ::cppu::OPropertySetHelper(cppu::WeakComponentImplHelperBase::rBHelper)
     ,   m_xContext (xContext)
     ,   m_pPropHelp(0    )
-    ,  m_bIgnoreEvents(sal_False)
+    ,  m_bIgnoreEvents(false)
 {
 }
 
@@ -510,7 +510,7 @@ void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEven
 {
     sal_Int32 c                 = aEvent.Changes.getLength();
     sal_Int32 i                 = 0;
-    sal_Bool  bUpdateDescriptor = sal_False;
+    bool  bUpdateDescriptor = false;
 
     for (i=0; i<c; ++i)
     {
@@ -522,12 +522,12 @@ void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEven
         OUString sPath = ::utl::extractFirstFromConfigurationPath(sChanged);
         if (!sPath.isEmpty())
         {
-            PathSettings::EChangeOp eOp = impl_updatePath(sPath, sal_True);
+            PathSettings::EChangeOp eOp = impl_updatePath(sPath, true);
             if (
                 (eOp == PathSettings::E_ADDED  ) ||
                 (eOp == PathSettings::E_REMOVED)
                )
-                bUpdateDescriptor = sal_True;
+                bUpdateDescriptor = true;
         }
     }
 
@@ -571,7 +571,7 @@ void PathSettings::impl_readAll()
         for (sal_Int32 i = 0; i < c; ++i)
         {
             const OUString& sPath = lPaths[i];
-            impl_updatePath(sPath, sal_False);
+            impl_updatePath(sPath, false);
         }
     }
     catch(const css::uno::RuntimeException& )
@@ -642,12 +642,12 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
     xPath->getByName(CFGPROP_ISSINGLEPATH) >>= aPathVal.bIsSinglePath;
 
     // analyze finalized/mandatory states
-    aPathVal.bIsReadonly = sal_False;
+    aPathVal.bIsReadonly = false;
     css::uno::Reference< css::beans::XProperty > xInfo(xPath, css::uno::UNO_QUERY);
     if (xInfo.is())
     {
         css::beans::Property aInfo = xInfo->getAsProperty();
-        sal_Bool bFinalized = ((aInfo.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
+        bool bFinalized = ((aInfo.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
 
         // Note: Till we support finalized / mandatory on our API more in detail we handle
         // all states simple as READONLY ! But because all really needed paths are "mandatory" by default
@@ -660,7 +660,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
 
 void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 {
-    m_bIgnoreEvents = sal_True;
+    m_bIgnoreEvents = true;
 
     css::uno::Reference< css::container::XNameAccess > xCfgNew = fa_getCfgNew();
     css::uno::Reference< css::container::XNameAccess > xCfgOld = fa_getCfgOld();
@@ -669,7 +669,7 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
     // So an office can be moved easialy to another location without loosing
     // it's related paths.
     PathInfo aResubstPath(aPath);
-    impl_subst(aResubstPath, sal_True);
+    impl_subst(aResubstPath, true);
 
     // update new configuration
     if (! aResubstPath.bIsSinglePath)
@@ -700,7 +700,7 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
         ::comphelper::ConfigurationHelper::flush(xCfgOld);
     }
 
-    m_bIgnoreEvents = sal_False;
+    m_bIgnoreEvents = false;
 }
 
 void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
@@ -732,7 +732,7 @@ void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
 }
 
 PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath          ,
-                                                            sal_Bool         bNotifyListener)
+                                                            bool         bNotifyListener)
 {
     // SAFE ->
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -750,7 +750,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
         // Do it before these old paths will be compared against the
         // new path configuration. Otherwise some striungs uses different variables ... but substitution
         // will produce strings with same content (because some variables are redundant!)
-        impl_subst(aPath, sal_False);
+        impl_subst(aPath, false);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -768,7 +768,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
         // Do it before these old paths will be compared against the
         // new path configuration. Otherwise some striungs uses different variables ... but substitution
         // will produce strings with same content (because some variables are redundant!)
-        impl_subst(lOldVals, fa_getSubstitution(), sal_False);
+        impl_subst(lOldVals, fa_getSubstitution(), false);
         impl_mergeOldUserPaths(aPath, lOldVals);
     }
     catch(const css::uno::RuntimeException&)
@@ -959,7 +959,7 @@ void PathSettings::impl_notifyPropListener(      PathSettings::EChangeOp /*eOp*/
 
 void PathSettings::impl_subst(      OUStringList&                                          lVals   ,
                               const css::uno::Reference< css::util::XStringSubstitution >& xSubst  ,
-                                    sal_Bool                                               bReSubst)
+                                    bool                                               bReSubst)
 {
     OUStringList::iterator pIt;
 
@@ -979,7 +979,7 @@ void PathSettings::impl_subst(      OUStringList&                               
 }
 
 void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
-                              sal_Bool                bReSubst)
+                              bool                bReSubst)
 {
     css::uno::Reference< css::util::XStringSubstitution > xSubst = fa_getSubstitution();
 
@@ -1185,7 +1185,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                 OUString sVal;
                 aVal >>= sVal;
                 OUStringList lList = impl_convertOldStyle2Path(sVal);
-                impl_subst(lList, fa_getSubstitution(), sal_False);
+                impl_subst(lList, fa_getSubstitution(), false);
                 impl_purgeKnownPaths(aChangePath, lList);
                 if (! impl_isValidPath(lList))
                     throw css::lang::IllegalArgumentException();
@@ -1273,7 +1273,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
     pOrgPath->takeOver(aChangePath);
 }
 
-sal_Bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
+bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
 {
     OUStringList::const_iterator pIt;
     for (  pIt  = lPath.begin();
@@ -1282,13 +1282,13 @@ sal_Bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
     {
         const OUString& rVal = *pIt;
         if (! impl_isValidPath(rVal))
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool PathSettings::impl_isValidPath(const OUString& sPath) const
+bool PathSettings::impl_isValidPath(const OUString& sPath) const
 {
     // allow empty path to reset a path.
 // idea by LLA to support empty paths

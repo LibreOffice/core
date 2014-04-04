@@ -72,7 +72,7 @@ DEFINE_INIT_SERVICE                     (   LanguageSelectionMenuController, {} 
 
 LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
     : svt::PopupMenuControllerBase(xContext)
-    , m_bShowMenu(sal_True)
+    , m_bShowMenu(true)
     , m_nScriptType(LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX)
     , m_aLangGuessHelper(xContext)
 {
@@ -105,7 +105,7 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
     if (rBHelper.bDisposed || rBHelper.bInDispose)
         return;
 
-    m_bShowMenu = sal_True;
+    m_bShowMenu = true;
     m_nScriptType = LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX;  //set the default value
 
     Sequence< OUString > aSeq;
@@ -124,7 +124,7 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
     }
     else if ( !Event.State.hasValue() )
     {
-        m_bShowMenu = sal_False;    // no language -> no sub-menu entries -> disable menu
+        m_bShowMenu = false;    // no language -> no sub-menu entries -> disable menu
     }
 }
 
@@ -313,7 +313,7 @@ void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >
 {
     osl::MutexGuard aLock( m_aMutex );
 
-    sal_Bool bInitalized( m_bInitialized );
+    bool bInitalized( m_bInitialized );
     if ( !bInitalized )
     {
         svt::PopupMenuControllerBase::initialize(aArguments);

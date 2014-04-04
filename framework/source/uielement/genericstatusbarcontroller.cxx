@@ -49,8 +49,8 @@ GenericStatusbarController::GenericStatusbarController(
     const Reference< ui::XStatusbarItem >& rxItem,
     AddonStatusbarItemData *pItemData )
     : svt::StatusbarController( rxContext, rxFrame, OUString(), 0 )
-    , m_bEnabled( sal_False )
-    , m_bOwnerDraw( sal_False )
+    , m_bEnabled( false )
+    , m_bOwnerDraw( false )
     , m_pItemData( pItemData )
     , m_xGraphic()
 {

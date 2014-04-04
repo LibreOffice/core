@@ -63,8 +63,8 @@ class GlobalSettings
         };
 
         // settings access
-        sal_Bool HasStatesInfo( UIElementType eElementType );
-        sal_Bool GetStateInfo( UIElementType eElementType, StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue );
+        bool HasStatesInfo( UIElementType eElementType );
+        bool GetStateInfo( UIElementType eElementType, StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue );
 
     private:
         GlobalSettings();

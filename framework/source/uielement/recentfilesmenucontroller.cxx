@@ -113,12 +113,12 @@ private:
     void executeEntry( sal_Int32 nIndex );
 
     std::vector< RecentFile > m_aRecentFilesItems;
-    sal_Bool                  m_bDisabled : 1;
+    bool                  m_bDisabled : 1;
 };
 
 RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
-    m_bDisabled( sal_False )
+    m_bDisabled( false )
 {
 }
 
@@ -262,7 +262,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 
         // documents in the picklist will never be opened as templates
         aArgsList[1].Name = "AsTemplate";
-        aArgsList[1].Value = makeAny( (sal_Bool) sal_False );
+        aArgsList[1].Value = makeAny( sal_False );
 
         if (!m_aModuleName.isEmpty())
         {

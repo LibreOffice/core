@@ -106,7 +106,7 @@ class UIElementWrapperBase : private cppu::BaseMutex,
         OUString                                                       m_aResourceURL;
         com::sun::star::uno::WeakReference< com::sun::star::frame::XFrame > m_xWeakFrame;
         sal_Int16                                                           m_nType;
-        sal_Bool                                                            m_bInitialized : 1,
+        bool                                                            m_bInitialized : 1,
                                                                             m_bDisposed;
 };
 

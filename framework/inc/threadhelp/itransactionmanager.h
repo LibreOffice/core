@@ -118,7 +118,7 @@ class ITransactionManager
         *//*-*****************************************************************************************************/
         virtual EWorkingMode getWorkingMode         (                                                ) const = 0;
         virtual void         setWorkingMode         ( EWorkingMode   eMode                           )       = 0;
-        virtual sal_Bool     isCallRejected         ( ERejectReason& eReason                         ) const = 0;
+        virtual bool     isCallRejected         ( ERejectReason& eReason                         ) const = 0;
         virtual void         registerTransaction    ( EExceptionMode eMode  , ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException ) = 0;
         virtual void         unregisterTransaction  (                                                ) throw( css::uno::RuntimeException, css::lang::DisposedException ) = 0;
 

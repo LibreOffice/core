@@ -123,7 +123,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
     {
         UIConfigElementWrapperBase::initialize( aArguments );
 
-        sal_Bool bPopupMode( sal_False );
+        bool bPopupMode( false );
         for ( sal_Int32 i = 0; i < aArguments.getLength(); i++ )
         {
             PropertyValue aPropValue;
@@ -286,14 +286,14 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any&  aValue ) throw( com::sun::star::uno::Exception, std::exception )
 {
     SolarMutexResettableGuard aLock;
-    sal_Bool bNoClose( m_bNoClose );
+    bool bNoClose( m_bNoClose );
     aLock.clear();
 
     UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast( nHandle, aValue );
 
     aLock.reset();
 
-    sal_Bool bNewNoClose( m_bNoClose );
+    bool bNewNoClose( m_bNoClose );
     if ( m_xToolBarManager.is() && !m_bDisposed && ( bNewNoClose != bNoClose ))
     {
         ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );

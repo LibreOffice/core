@@ -98,7 +98,7 @@ public:
         UICommandDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext, bool  );
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > impl_createConfigAccess(const OUString& _sName);
         void impl_fillElements(const sal_Char* _pName);
-        sal_Bool                                                                            m_bConfigRead;
+        bool                                                                            m_bConfigRead;
         OUString                                                                       m_aPrivateResourceURL;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ModuleToCommandFileMap                                                              m_aModuleToCommandFileMap;

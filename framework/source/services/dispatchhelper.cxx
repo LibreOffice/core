@@ -110,7 +110,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     sal_Int32 nLength = lArguments.getLength();
     aArguments.realloc( nLength + 1 );
     aArguments[ nLength ].Name = "SynchronMode";
-    aArguments[ nLength ].Value <<= (sal_Bool) sal_True;
+    aArguments[ nLength ].Value <<= sal_True;
 
     css::uno::Any aResult;
     if (xNotifyDispatch.is())

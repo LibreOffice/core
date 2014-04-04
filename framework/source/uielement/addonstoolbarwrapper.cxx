@@ -76,7 +76,7 @@ void SAL_CALL AddonsToolBarWrapper::dispose() throw ( RuntimeException, std::exc
         m_xToolBarManager->dispose();
     m_xToolBarManager.clear();
 
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 // XInitialization

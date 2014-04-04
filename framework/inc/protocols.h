@@ -122,9 +122,9 @@ class ProtocolCheck
         It should be used instead of specifyProtocol() if only this question
         is interesting to perform the code. We must not check for all possible protocols here...
      */
-    static sal_Bool isProtocol( const OUString& sURL, EProtocol eRequired )
+    static bool isProtocol( const OUString& sURL, EProtocol eRequired )
     {
-        sal_Bool bRet = sal_False;
+        bool bRet = sal_False;
         switch(eRequired)
         {
             case E_PRIVATE:

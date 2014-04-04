@@ -44,7 +44,7 @@ class IGate
         virtual void     open    (                                   ) = 0;
         virtual void     close   (                                   ) = 0;
         virtual void     openGap (                                   ) = 0;
-        virtual sal_Bool wait    ( const TimeValue* pTimeOut = NULL  ) = 0;
+        virtual bool wait    ( const TimeValue* pTimeOut = NULL  ) = 0;
 
     protected:
         ~IGate() {}

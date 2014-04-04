@@ -98,7 +98,7 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper2<XNameAcces
         Any                       getUINameFromID( const OUString& rId );
         Any                       getUINameFromCache( const OUString& rId );
         Sequence< OUString > getAllIds();
-        sal_Bool                  fillCache();
+        bool                  fillCache();
 
     private:
         typedef ::boost::unordered_map< OUString,
@@ -106,7 +106,7 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper2<XNameAcces
                                  OUStringHash,
                                  ::std::equal_to< OUString > > IdToInfoCache;
 
-        sal_Bool initializeConfigAccess();
+        bool initializeConfigAccess();
 
         OUString                     m_aConfigCategoryAccess;
         OUString                     m_aPropUIName;
@@ -114,8 +114,8 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper2<XNameAcces
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
         Reference< XContainerListener >   m_xConfigListener;
-        sal_Bool                          m_bConfigAccessInitialized;
-        sal_Bool                          m_bCacheFilled;
+        bool                          m_bConfigAccessInitialized;
+        bool                          m_bCacheFilled;
         IdToInfoCache                     m_aIdCache;
 };
 
@@ -125,8 +125,8 @@ ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const OUString& 
     m_aConfigCategoryAccess( CONFIGURATION_ROOT_ACCESS ),
     m_aPropUIName( CONFIGURATION_PROPERTY_NAME ),
     m_xGenericUICategories( rGenericUICategories ),
-    m_bConfigAccessInitialized( sal_False ),
-    m_bCacheFilled( sal_False )
+    m_bConfigAccessInitialized( false ),
+    m_bCacheFilled( false )
 {
     // Create configuration hierachical access name
     m_aConfigCategoryAccess += aModuleName;
@@ -152,7 +152,7 @@ throw ( NoSuchElementException, WrappedTargetException, RuntimeException, std::e
     if ( !m_bConfigAccessInitialized )
     {
         initializeConfigAccess();
-        m_bConfigAccessInitialized = sal_True;
+        m_bConfigAccessInitialized = true;
         fillCache();
     }
 
@@ -191,12 +191,12 @@ throw ( RuntimeException, std::exception )
     return sal_True;
 }
 
-sal_Bool ConfigurationAccess_UICategory::fillCache()
+bool ConfigurationAccess_UICategory::fillCache()
 {
     SAL_INFO( "fwk", "framework (cd100003) ::ConfigurationAccess_UICategory::fillCache" );
 
     if ( m_bCacheFilled )
-        return sal_True;
+        return true;
 
     sal_Int32            i( 0 );
     OUString        aUIName;
@@ -222,9 +222,9 @@ sal_Bool ConfigurationAccess_UICategory::fillCache()
         }
     }
 
-    m_bCacheFilled = sal_True;
+    m_bCacheFilled = true;
 
-    return sal_True;
+    return true;
 }
 
 Any ConfigurationAccess_UICategory::getUINameFromID( const OUString& rId )
@@ -281,7 +281,7 @@ Sequence< OUString > ConfigurationAccess_UICategory::getAllIds()
     if ( !m_bConfigAccessInitialized )
     {
         initializeConfigAccess();
-        m_bConfigAccessInitialized = sal_True;
+        m_bConfigAccessInitialized = true;
         fillCache();
     }
 
@@ -320,7 +320,7 @@ Sequence< OUString > ConfigurationAccess_UICategory::getAllIds()
     return Sequence< OUString >();
 }
 
-sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
+bool ConfigurationAccess_UICategory::initializeConfigAccess()
 {
     Sequence< Any > aArgs( 1 );
     PropertyValue   aPropValue;
@@ -344,7 +344,7 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
             }
         }
 
-        return sal_True;
+        return true;
     }
     catch ( const WrappedTargetException& )
     {
@@ -353,7 +353,7 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
     {
     }
 
-    return sal_False;
+    return false;
 }
 
 // container.XContainerListener

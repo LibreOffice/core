@@ -60,7 +60,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
         ListenerHash m_lSimpleChangeListener;
         ListenerHash m_lVetoChangeListener;
 
-        sal_Bool m_bReleaseLockOnCall;
+        bool m_bReleaseLockOnCall;
 
         // hold it weak ... otherwise this helper has to be "killed" explicitly .-)
         css::uno::WeakReference< css::uno::XInterface > m_xBroadcaster;
@@ -82,7 +82,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
          */
         PropertySetHelper(      osl::Mutex & mutex,
                                 TransactionManager*                                     pExternalTransactionManager ,
-                                sal_Bool                                                bReleaseLockOnCall          );
+                                bool                                                bReleaseLockOnCall          );
 
         /** free all needed memory.
          */
@@ -200,7 +200,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
     /* internal helper */
     private:
 
-        sal_Bool impl_existsVeto(const css::beans::PropertyChangeEvent& aEvent);
+        bool impl_existsVeto(const css::beans::PropertyChangeEvent& aEvent);
 
         void impl_notifyChangeListener(const css::beans::PropertyChangeEvent& aEvent);
 };

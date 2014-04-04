@@ -146,7 +146,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
     return lDispatcher;
 }
 
-sal_Bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
+bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
 {
     return aURL.Complete == CMD_UNO_SHOWSTARTMODULE;
 }
@@ -615,7 +615,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
     @threadsafe yes
 */
-sal_Bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL )
+bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL )
 {
     LoadEnv::EContentType eType = LoadEnv::classifyContent(aURL.Complete, css::uno::Sequence< css::beans::PropertyValue >());
     return ( eType == LoadEnv::E_CAN_BE_LOADED );

@@ -68,7 +68,7 @@ class PersistentWindowState :   public  ::cppu::WeakImplHelper2<
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
 
         /// we call SetWindowState one times only for the same frame!
-        sal_Bool m_bWindowStateAlreadySet;
+        bool m_bWindowStateAlreadySet;
 
     // interface
 

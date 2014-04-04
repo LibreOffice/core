@@ -131,7 +131,7 @@ sal_Bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const c
             throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Any aRequest  = xRequest->getRequest();
-    sal_Bool      bHandleIt = sal_True;
+    bool      bHandleIt = true;
 
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);

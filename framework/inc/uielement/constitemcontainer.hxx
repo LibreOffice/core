@@ -56,7 +56,7 @@ class FWI_DLLPUBLIC ConstItemContainer : public ::cppu::WeakImplHelper4<
     public:
         ConstItemContainer();
         ConstItemContainer( const ItemContainer& rtemContainer );
-        ConstItemContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rSourceContainer, sal_Bool bFastCopy = sal_False );
+        ConstItemContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rSourceContainer, bool bFastCopy = false );
         virtual ~ConstItemContainer();
 
         // XUnoTunnel

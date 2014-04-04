@@ -68,14 +68,14 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper2<
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // settings access
-        sal_Bool HasStatesInfo( GlobalSettings::UIElementType eElementType );
-        sal_Bool GetStateInfo( GlobalSettings::UIElementType eElementType, GlobalSettings::StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue );
+        bool HasStatesInfo( GlobalSettings::UIElementType eElementType );
+        bool GetStateInfo( GlobalSettings::UIElementType eElementType, GlobalSettings::StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue );
 
     private:
-        sal_Bool impl_initConfigAccess();
+        bool impl_initConfigAccess();
 
         osl::Mutex m_mutex;
-        sal_Bool                                                                            m_bDisposed   : 1,
+        bool                                                                            m_bDisposed   : 1,
                                                                                             m_bConfigRead : 1;
         OUString                                                                       m_aConfigSettingsAccess;
         OUString                                                                       m_aNodeRefStates;
@@ -87,8 +87,8 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper2<
 };
 
 GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
-    m_bDisposed( sal_False ),
-    m_bConfigRead( sal_False ),
+    m_bDisposed( false ),
+    m_bConfigRead( false ),
     m_aConfigSettingsAccess( GLOBALSETTINGS_ROOT_ACCESS ),
     m_aNodeRefStates( GLOBALSETTINGS_NODEREF_STATES ),
     m_aPropStatesEnabled( GLOBALSETTINGS_PROPERTY_STATESENABLED ),
@@ -108,7 +108,7 @@ throw ( css::uno::RuntimeException, std::exception )
 {
     osl::MutexGuard g(m_mutex);
     m_xConfigAccess.clear();
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 void SAL_CALL GlobalSettings_Access::addEventListener( const css::uno::Reference< css::lang::XEventListener >& )
@@ -130,20 +130,20 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 // settings access
-sal_Bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eElementType )
+bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eElementType )
 {
     osl::MutexGuard g(m_mutex);
     if ( eElementType == GlobalSettings::UIELEMENT_TYPE_DOCKWINDOW )
-        return sal_False;
+        return false;
     else if ( eElementType == GlobalSettings::UIELEMENT_TYPE_STATUSBAR )
-        return sal_False;
+        return false;
 
     if ( m_bDisposed )
-        return sal_False;
+        return false;
 
     if ( !m_bConfigRead )
     {
-        m_bConfigRead = sal_True;
+        m_bConfigRead = true;
         impl_initConfigAccess();
     }
 
@@ -152,7 +152,7 @@ sal_Bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eEl
         try
         {
             css::uno::Any a;
-            sal_Bool      bValue = sal_Bool();
+            bool      bValue;
             a = m_xConfigAccess->getByName( m_aPropStatesEnabled );
             if ( a >>= bValue )
                 return bValue;
@@ -165,23 +165,23 @@ sal_Bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eEl
         }
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool GlobalSettings_Access::GetStateInfo( GlobalSettings::UIElementType eElementType, GlobalSettings::StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue )
+bool GlobalSettings_Access::GetStateInfo( GlobalSettings::UIElementType eElementType, GlobalSettings::StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue )
 {
     osl::MutexGuard g(m_mutex);
     if ( eElementType == GlobalSettings::UIELEMENT_TYPE_DOCKWINDOW )
-        return sal_False;
+        return false;
     else if ( eElementType == GlobalSettings::UIELEMENT_TYPE_STATUSBAR )
-        return sal_False;
+        return false;
 
     if ( m_bDisposed )
-        return sal_False;
+        return false;
 
     if ( !m_bConfigRead )
     {
-        m_bConfigRead = sal_True;
+        m_bConfigRead = true;
         impl_initConfigAccess();
     }
 
@@ -200,7 +200,7 @@ sal_Bool GlobalSettings_Access::GetStateInfo( GlobalSettings::UIElementType eEle
                     a = xNameAccess->getByName( m_aPropDocked );
 
                 aValue = a;
-                return sal_True;
+                return true;
             }
         }
         catch ( const css::container::NoSuchElementException& )
@@ -211,10 +211,10 @@ sal_Bool GlobalSettings_Access::GetStateInfo( GlobalSettings::UIElementType eEle
         }
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool GlobalSettings_Access::impl_initConfigAccess()
+bool GlobalSettings_Access::impl_initConfigAccess()
 {
     css::uno::Sequence< css::uno::Any > aArgs( 2 );
     css::beans::PropertyValue           aPropValue;
@@ -254,7 +254,7 @@ sal_Bool GlobalSettings_Access::impl_initConfigAccess()
     {
     }
 
-    return sal_False;
+    return false;
 }
 
 //  global class
@@ -280,24 +280,24 @@ GlobalSettings::~GlobalSettings()
 }
 
 // settings access
-sal_Bool GlobalSettings::HasStatesInfo( UIElementType eElementType )
+bool GlobalSettings::HasStatesInfo( UIElementType eElementType )
 {
     GlobalSettings_Access* pSettings( GetGlobalSettings( m_xContext ));
 
     if ( pSettings )
         return pSettings->HasStatesInfo( eElementType );
     else
-        return sal_False;
+        return false;
 }
 
-sal_Bool GlobalSettings::GetStateInfo( UIElementType eElementType, StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue )
+bool GlobalSettings::GetStateInfo( UIElementType eElementType, StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue )
 {
     GlobalSettings_Access* pSettings( GetGlobalSettings( m_xContext ));
 
     if ( pSettings )
         return pSettings->GetStateInfo( eElementType, eStateInfo, aValue );
     else
-        return sal_False;
+        return false;
 }
 
 } // namespace framework

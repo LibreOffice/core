@@ -142,7 +142,7 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
 {
     // Attention! xStorage must be accepted too, if it's NULL !
 
-    sal_Bool bForgetOldStorages;
+    bool bForgetOldStorages;
     {
         SolarMutexGuard g;
         bForgetOldStorages = m_xDocumentRoot.is();

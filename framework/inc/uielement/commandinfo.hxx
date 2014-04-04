@@ -38,7 +38,7 @@ struct CommandInfo
     sal_uInt16                  nWidth;
     ::std::vector< sal_uInt16 > aIds;
     sal_Int16               nImageInfo;
-    sal_Bool                bMirrored : 1,
+    bool                bMirrored : 1,
                             bRotated  : 1;
 };
 

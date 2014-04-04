@@ -58,11 +58,11 @@ using namespace ::cppu;
 
 const sal_uInt16 SLOTID_MDIWINDOWLIST = 5610;
 
-static sal_Bool impldbg_checkParameter_MenuDispatcher      (   const   css::uno::Reference< css::uno::XComponentContext >& xContext        ,
+static bool impldbg_checkParameter_MenuDispatcher      (   const   css::uno::Reference< css::uno::XComponentContext >& xContext        ,
                                                                const   css::uno::Reference< css::frame::XFrame >&              xOwner          );
-static sal_Bool impldbg_checkParameter_addStatusListener    (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
+static bool impldbg_checkParameter_addStatusListener    (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
                                                                 const   css::util::URL&                                         aURL            );
-static sal_Bool impldbg_checkParameter_removeStatusListener (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
+static bool impldbg_checkParameter_removeStatusListener (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
                                                                 const   css::util::URL&                                         aURL            );
 
 //  constructor
@@ -72,15 +72,15 @@ MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  
         :   m_xOwnerWeak            ( xOwner                         )
         ,   m_xContext              ( xContext                       )
         ,   m_aListenerContainer    ( m_mutex )
-        ,   m_bAlreadyDisposed      ( sal_False                      )
-        ,   m_bActivateListener     ( sal_False                      )
+        ,   m_bAlreadyDisposed      ( false                      )
+        ,   m_bActivateListener     ( false                      )
         ,   m_pMenuManager          ( NULL                           )
 {
     // Safe impossible cases
     // We need valid information about our owner for work.
     SAL_WARN_IF( !impldbg_checkParameter_MenuDispatcher( xContext, xOwner ), "fwk", "MenuDispatcher::MenuDispatcher()\nInvalid parameter detected!" );
 
-    m_bActivateListener = sal_True;
+    m_bActivateListener = true;
     xOwner->addFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
 }
 
@@ -170,9 +170,9 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
     // Safe impossible cases
     SAL_WARN_IF( m_bAlreadyDisposed, "fwk", "MenuDispatcher::disposing(): Object already disposed .. don't call it again!" );
 
-    if( m_bAlreadyDisposed == sal_False )
+    if( m_bAlreadyDisposed == false )
     {
-        m_bAlreadyDisposed = sal_True;
+        m_bAlreadyDisposed = true;
 
         if ( m_bActivateListener )
         {
@@ -180,7 +180,7 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
             if ( xFrame.is() )
             {
                 xFrame->removeFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
-                m_bActivateListener = sal_False;
+                m_bActivateListener = false;
                 if ( m_pMenuManager )
                 {
                     EventObject aEventObj;
@@ -220,7 +220,7 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
 
 //  private method
 
-sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromResource )
+bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource )
 {
     uno::Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
     if ( xFrame.is() )
@@ -274,24 +274,24 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
                 // set new menu on our system window and create new menu manager
                 if ( bMenuFromResource )
                 {
-                    m_pMenuManager = new MenuManager( m_xContext, xFrame, pMenuBar, sal_True, sal_False );
+                    m_pMenuManager = new MenuManager( m_xContext, xFrame, pMenuBar, true, false );
                 }
                 else
                 {
-                    m_pMenuManager = new MenuManager( m_xContext, xFrame, pMenuBar, sal_True, sal_True );
+                    m_pMenuManager = new MenuManager( m_xContext, xFrame, pMenuBar, true, true );
                 }
 
                 pSysWindow->SetMenuBar( pMenuBar );
             }
 
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
-static sal_Bool impldbg_checkParameter_MenuDispatcher(   const   uno::Reference< XComponentContext >&  xContext    ,
+static bool impldbg_checkParameter_MenuDispatcher(   const   uno::Reference< XComponentContext >&  xContext    ,
                                                                   const   uno::Reference< XFrame >&             xOwner      )
 {
     return xContext.is() && xOwner.is();
@@ -299,11 +299,11 @@ static sal_Bool impldbg_checkParameter_MenuDispatcher(   const   uno::Reference<
 
 // We need a valid URL. What is meaning with "register for nothing"?!
 // xControl must correct to - nobody can advised otherwise!
-static sal_Bool impldbg_checkParameter_addStatusListener( const   uno::Reference< XStatusListener >&   xControl,
+static bool impldbg_checkParameter_addStatusListener( const   uno::Reference< XStatusListener >&   xControl,
                                                           const   URL&                                 aURL    )
 {
     // Set default return value.
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
     // Check parameter.
     if  (
             ( &xControl                 ==  NULL    )   ||
@@ -311,7 +311,7 @@ static sal_Bool impldbg_checkParameter_addStatusListener( const   uno::Reference
             ( aURL.Complete.isEmpty()               )
         )
     {
-        bOK = sal_False;
+        bOK = false;
     }
     // Return result of check.
     return bOK;
@@ -319,11 +319,11 @@ static sal_Bool impldbg_checkParameter_addStatusListener( const   uno::Reference
 
 // The same goes for these case! We have added valid listener for correct URL only.
 // We can't remove invalid listener for nothing!
-static sal_Bool impldbg_checkParameter_removeStatusListener(  const   uno::Reference< XStatusListener >&   xControl,
+static bool impldbg_checkParameter_removeStatusListener(  const   uno::Reference< XStatusListener >&   xControl,
                                                               const   URL&                                 aURL    )
 {
     // Set default return value.
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
     // Check parameter.
     if  (
             ( &xControl                 ==  NULL    )   ||
@@ -331,7 +331,7 @@ static sal_Bool impldbg_checkParameter_removeStatusListener(  const   uno::Refer
             ( aURL.Complete.isEmpty()               )
         )
     {
-        bOK = sal_False;
+        bOK = false;
     }
     // Return result of check.
     return bOK;

@@ -176,7 +176,7 @@ void JobResult::operator=( const JobResult& rCopy )
 
     @return     We return true only, if any set flag of the given mask match.
 */
-sal_Bool JobResult::existPart( sal_uInt32 eParts ) const
+bool JobResult::existPart( sal_uInt32 eParts ) const
 {
     SolarMutexGuard g;
     return ((m_eParts & eParts) == eParts);

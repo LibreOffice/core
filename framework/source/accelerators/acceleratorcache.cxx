@@ -59,13 +59,13 @@ AcceleratorCache& AcceleratorCache::operator=(const AcceleratorCache& rCopy)
     return *this;
 }
 
-sal_Bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
+bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
 {
     SolarMutexGuard g;
     return (m_lKey2Commands.find(aKey) != m_lKey2Commands.end());
 }
 
-sal_Bool AcceleratorCache::hasCommand(const OUString& sCommand) const
+bool AcceleratorCache::hasCommand(const OUString& sCommand) const
 {
     SolarMutexGuard g;
     return (m_lCommand2Keys.find(sCommand) != m_lCommand2Keys.end());

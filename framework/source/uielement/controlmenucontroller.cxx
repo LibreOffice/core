@@ -235,7 +235,7 @@ private:
     void updateImagesPopupMenu( PopupMenu* pPopupMenu );
     void fillPopupMenu( uno::Reference< awt::XPopupMenu >& rPopupMenu );
 
-    sal_Bool            m_bShowMenuImages : 1;
+    bool            m_bShowMenuImages : 1;
     PopupMenu*          m_pResPopupMenu;
     UrlToDispatchMap    m_aURLToDispatchMap;
 };
@@ -381,8 +381,8 @@ void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& )
 
         // Check if some modes have changed so we have to update our menu images
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        sal_Bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
-        sal_Bool bUpdateImages      = (bShowMenuImages != m_bShowMenuImages);
+        bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
+        bool bUpdateImages      = (bShowMenuImages != m_bShowMenuImages);
 
         if ( bUpdateImages )
         {

@@ -80,11 +80,11 @@ class AcceleratorConfigurationReader : public ::cppu::WeakImplHelper1< css::xml:
 
         /** @short  used to detect if an accelerator list
                     occurs recursive inside xml. */
-        sal_Bool m_bInsideAcceleratorList;
+        bool m_bInsideAcceleratorList;
 
         /** @short  used to detect if an accelerator item
                     occurs recursive inside xml. */
-        sal_Bool m_bInsideAcceleratorItem;
+        bool m_bInsideAcceleratorItem;
 
         /** @short  is used to map key codes to its
                     string representation.

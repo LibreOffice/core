@@ -28,7 +28,7 @@ namespace framework{
 
 PropertySetHelper::PropertySetHelper(      osl::Mutex & mutex,
                                            TransactionManager*                                     pExternalTransactionManager ,
-                                           sal_Bool                                                bReleaseLockOnCall          )
+                                           bool                                                bReleaseLockOnCall          )
     : m_lSimpleChangeListener(mutex)
     , m_lVetoChangeListener  (mutex)
     , m_bReleaseLockOnCall   (bReleaseLockOnCall                   )
@@ -96,7 +96,7 @@ void SAL_CALL PropertySetHelper::impl_disablePropertySet()
     m_lProps.free();
 }
 
-sal_Bool PropertySetHelper::impl_existsVeto(const css::beans::PropertyChangeEvent& aEvent)
+bool PropertySetHelper::impl_existsVeto(const css::beans::PropertyChangeEvent& aEvent)
 {
     /*  Dont use the lock here!
         The used helper is threadsafe and it lives for the whole lifetime of
@@ -104,7 +104,7 @@ sal_Bool PropertySetHelper::impl_existsVeto(const css::beans::PropertyChangeEven
     */
     ::cppu::OInterfaceContainerHelper* pVetoListener = m_lVetoChangeListener.getContainer(aEvent.PropertyName);
     if (! pVetoListener)
-        return sal_False;
+        return false;
 
     ::cppu::OInterfaceIteratorHelper pListener(*pVetoListener);
     while (pListener.hasMoreElements())
@@ -119,10 +119,10 @@ sal_Bool PropertySetHelper::impl_existsVeto(const css::beans::PropertyChangeEven
         catch(const css::uno::RuntimeException&)
             { pListener.remove(); }
         catch(const css::beans::PropertyVetoException&)
-            { return sal_True; }
+            { return true; }
     }
 
-    return sal_False;
+    return false;
 }
 
 void PropertySetHelper::impl_notifyChangeListener(const css::beans::PropertyChangeEvent& aEvent)
@@ -180,11 +180,11 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
 
     css::beans::Property aPropInfo = pIt->second;
 
-    sal_Bool bLocked = sal_True;
+    bool bLocked = true;
     if (m_bReleaseLockOnCall)
     {
         aWriteLock.clear();
-        bLocked = sal_False;
+        bLocked = false;
         // <- SAFE
     }
 
@@ -194,10 +194,10 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
     {
         // SAFE ->
         aWriteLock.reset();
-        bLocked = sal_True;
+        bLocked = true;
     }
 
-    sal_Bool bWillBeChanged = (aCurrentValue != aValue);
+    bool bWillBeChanged = (aCurrentValue != aValue);
     if (! bWillBeChanged)
         return;
 
@@ -212,7 +212,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
     if (m_bReleaseLockOnCall)
     {
         aWriteLock.clear();
-        bLocked = sal_False;
+        bLocked = false;
         // <- SAFE
     }
 
@@ -374,7 +374,7 @@ sal_Bool SAL_CALL PropertySetHelper::hasPropertyByName(const OUString& sName)
     SolarMutexGuard g;
 
     PropertySetHelper::TPropInfoHash::iterator pIt    = m_lProps.find(sName);
-    sal_Bool                                   bExist = (pIt != m_lProps.end());
+    bool                                   bExist = (pIt != m_lProps.end());
 
     return bExist;
 }

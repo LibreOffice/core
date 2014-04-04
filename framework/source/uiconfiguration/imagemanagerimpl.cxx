@@ -146,7 +146,7 @@ static OUString getCanonicalName( const OUString& rFileName )
 }
 
 CmdImageList::CmdImageList( const uno::Reference< uno::XComponentContext >& rxContext, const OUString& aModuleIdentifier ) :
-    m_bVectorInit( sal_False ),
+    m_bVectorInit( false ),
     m_aModuleIdentifier( aModuleIdentifier ),
     m_xContext( rxContext ),
     m_sIconTheme( SvtMiscOptions().GetIconTheme() )
@@ -248,7 +248,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
             m_aCommandToImageNameMap.insert( CommandToImageNameMap::value_type( aCommandName, aImageName ));
         }
 
-        m_bVectorInit = sal_True;
+        m_bVectorInit = true;
     }
 }
 
@@ -372,7 +372,7 @@ oslInterlockedCount GlobalImageList::release()
     return m_nRefCount;
 }
 
-static sal_Bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGraphic, const uno::Reference< XGraphic >& rInGraphic, sal_Int16 nImageType )
+static bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGraphic, const uno::Reference< XGraphic >& rInGraphic, sal_Int16 nImageType )
 {
     static Size   aNormSize( IMAGE_SIZE_NORMAL, IMAGE_SIZE_NORMAL );
     static Size   aLargeSize( IMAGE_SIZE_LARGE, IMAGE_SIZE_LARGE );
@@ -380,7 +380,7 @@ static sal_Bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGra
     if ( !rInGraphic.is() )
     {
         rOutGraphic = Image().GetXGraphic();
-        return sal_False;
+        return false;
     }
 
     // Check size and scale it
@@ -402,7 +402,7 @@ static sal_Bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGra
     }
     else
         rOutGraphic = rInGraphic;
-    return sal_True;
+    return true;
 }
 
 static sal_Int16 implts_convertImageTypeToIndex( sal_Int16 nImageType )
@@ -457,7 +457,7 @@ void ImageManagerImpl::implts_initialize()
     }
 }
 
-sal_Bool ImageManagerImpl::implts_loadUserImages(
+bool ImageManagerImpl::implts_loadUserImages(
     ImageType nImageType,
     const uno::Reference< XStorage >& xUserImageStorage,
     const uno::Reference< XStorage >& xUserBitmapsStorage )
@@ -509,7 +509,7 @@ sal_Bool ImageManagerImpl::implts_loadUserImages(
                     m_pUserImageList[nImageType] = new ImageList();
                     m_pUserImageList[nImageType]->InsertFromHorizontalStrip
                         ( aUserBitmap, aUserImagesVector );
-                    return sal_True;
+                    return true;
                 }
             }
         }
@@ -534,10 +534,10 @@ sal_Bool ImageManagerImpl::implts_loadUserImages(
     delete m_pUserImageList[nImageType];
     m_pUserImageList[nImageType] = new ImageList;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool ImageManagerImpl::implts_storeUserImages(
+bool ImageManagerImpl::implts_storeUserImages(
     ImageType nImageType,
     const uno::Reference< XStorage >& xUserImageStorage,
     const uno::Reference< XStorage >& xUserBitmapsStorage )
@@ -601,7 +601,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
                     xTransaction->commit();
             }
 
-            return sal_True;
+            return true;
         }
         else
         {
@@ -635,11 +635,11 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
             if ( xTransaction.is() )
                 xTransaction->commit();
 
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 const rtl::Reference< GlobalImageList >& ImageManagerImpl::implts_getGlobalImageList()
@@ -852,7 +852,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return aImageNameSeq;
 }
 
-sal_Bool ImageManagerImpl::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
+bool ImageManagerImpl::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard g;
@@ -866,11 +866,11 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
 
     sal_Int16 nIndex = implts_convertImageTypeToIndex( nImageType );
     if ( m_bUseGlobal && implts_getGlobalImageList()->hasImage( nIndex, aCommandURL ))
-        return sal_True;
+        return true;
     else
     {
         if ( m_bUseGlobal && implts_getDefaultImageList()->hasImage( nIndex, aCommandURL ))
-            return sal_True;
+            return true;
         else
         {
             // User layer
@@ -880,7 +880,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
@@ -1294,12 +1294,12 @@ void ImageManagerImpl::store()
 
     if ( m_bModified )
     {
-        sal_Bool bWritten( sal_False );
+        bool bWritten( false );
         for ( sal_Int32 i = 0; i < ImageType_COUNT; i++ )
         {
-            sal_Bool bSuccess = implts_storeUserImages( ImageType(i), m_xUserImageStorage, m_xUserBitmapsStorage );
+            bool bSuccess = implts_storeUserImages( ImageType(i), m_xUserImageStorage, m_xUserBitmapsStorage );
             if ( bSuccess )
-                bWritten = sal_True;
+                bWritten = true;
             m_bUserImageListModified[i] = false;
         }
 
@@ -1350,14 +1350,14 @@ void ImageManagerImpl::storeToStorage( const uno::Reference< XStorage >& Storage
     }
 }
 
-sal_Bool ImageManagerImpl::isModified()
+bool ImageManagerImpl::isModified()
 throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard g;
     return m_bModified;
 }
 
-sal_Bool ImageManagerImpl::isReadOnly() throw (::com::sun::star::uno::RuntimeException)
+bool ImageManagerImpl::isReadOnly() throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard g;
     return m_bReadOnly;

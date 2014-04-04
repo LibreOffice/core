@@ -47,8 +47,8 @@ class GenericStatusbarController : public svt::StatusbarController
                                      ::sal_Int32 nStyle ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        sal_Bool m_bEnabled;
-        sal_Bool m_bOwnerDraw;
+        bool m_bEnabled;
+        bool m_bOwnerDraw;
         AddonStatusbarItemData *m_pItemData;
         ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > m_xGraphic;
 };

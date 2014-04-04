@@ -55,8 +55,8 @@ class Gate : public  IGate
             @descr      These initialize the object right as an open gate.
         *//*-*****************************************************************************************************/
         inline Gate()
-            :   m_bClosed   ( sal_False )
-            ,   m_bGapOpen  ( sal_False )
+            :   m_bClosed   ( false )
+            ,   m_bGapOpen  ( false )
         {
             open();
         }
@@ -145,18 +145,18 @@ class Gate : public  IGate
 
             @onerror    We return false.
         *//*-*****************************************************************************************************/
-        virtual sal_Bool wait( const TimeValue* pTimeOut = NULL ) SAL_OVERRIDE
+        virtual bool wait( const TimeValue* pTimeOut = NULL ) SAL_OVERRIDE
         {
             // We must safe access to our internal member!
             ::osl::ClearableMutexGuard aLock( m_aAccessLock );
             // If gate not closed - caller can pass it.
-            sal_Bool bSuccessful = sal_True;
-            if( m_bClosed == sal_True )
+            bool bSuccessful = true;
+            if( m_bClosed )
             {
                 // Otherwise first new thread must close an open gap!
-                if( m_bGapOpen == sal_True )
+                if( m_bGapOpen )
                 {
-                    m_bGapOpen = sal_False;
+                    m_bGapOpen = false;
                     m_aPassage.reset();
                 }
                 // Then we must release used access lock -
@@ -176,8 +176,8 @@ class Gate : public  IGate
 
         ::osl::Mutex        m_aAccessLock;
         ::osl::Condition    m_aPassage;
-        sal_Bool            m_bClosed;
-        sal_Bool            m_bGapOpen;
+        bool                m_bClosed;
+        bool                m_bGapOpen;
 
 };      //  class Gate
 

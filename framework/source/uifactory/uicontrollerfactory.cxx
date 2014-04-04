@@ -60,7 +60,7 @@ public:
 
 protected:
     UIControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext, const rtl::OUString &rUINode  );
-    sal_Bool                                                                         m_bConfigRead;
+    bool                                                                         m_bConfigRead;
     css::uno::Reference< css::uno::XComponentContext >     m_xContext;
     ConfigurationAccess_ControllerFactory*                                           m_pConfigAccess;
 
@@ -72,7 +72,7 @@ UIControllerFactory::UIControllerFactory(
     const Reference< XComponentContext >& xContext,
     const rtl::OUString &rConfigurationNode )
     : UIControllerFactory_BASE(m_aMutex)
-    , m_bConfigRead( sal_False )
+    , m_bConfigRead( false )
     , m_xContext( xContext )
     , m_pConfigAccess()
 {
@@ -108,7 +108,7 @@ throw (Exception, RuntimeException, std::exception)
 
     if ( !m_bConfigRead )
     {
-        m_bConfigRead = sal_True;
+        m_bConfigRead = true;
         m_pConfigAccess->readConfigurationData();
     }
 
@@ -173,7 +173,7 @@ throw (Exception, RuntimeException, std::exception)
 
         if ( !m_bConfigRead )
         {
-            m_bConfigRead = sal_True;
+            m_bConfigRead = true;
             m_pConfigAccess->readConfigurationData();
         }
 
@@ -203,7 +203,7 @@ throw (css::uno::RuntimeException, std::exception)
 
     if ( !m_bConfigRead )
     {
-        m_bConfigRead = sal_True;
+        m_bConfigRead = true;
         m_pConfigAccess->readConfigurationData();
     }
 
@@ -221,7 +221,7 @@ throw (RuntimeException, std::exception)
 
     if ( !m_bConfigRead )
     {
-        m_bConfigRead = sal_True;
+        m_bConfigRead = true;
         m_pConfigAccess->readConfigurationData();
     }
 
@@ -239,7 +239,7 @@ throw (RuntimeException, std::exception)
 
     if ( !m_bConfigRead )
     {
-        m_bConfigRead = sal_True;
+        m_bConfigRead = true;
         m_pConfigAccess->readConfigurationData();
     }
 

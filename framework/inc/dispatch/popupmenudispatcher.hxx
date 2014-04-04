@@ -136,8 +136,8 @@ class PopupMenuDispatcher :     public  ::cppu::WeakImplHelper5<
         css::uno::Reference< css::uno::XComponentContext >      m_xContext;   /// factory shared with our owner to create new services!
         osl::Mutex m_mutex;
         IMPL_ListenerHashContainer                              m_aListenerContainer;   /// hash table for listener at specified URLs
-        sal_Bool                                                m_bAlreadyDisposed;   /// Protection against multiple disposing calls.
-        sal_Bool                                                m_bActivateListener;   /// dispatcher is listener for frame activation
+        bool                                                    m_bAlreadyDisposed;   /// Protection against multiple disposing calls.
+        bool                                                    m_bActivateListener;   /// dispatcher is listener for frame activation
 
 }; //  class PopupMenuDispatcher
 

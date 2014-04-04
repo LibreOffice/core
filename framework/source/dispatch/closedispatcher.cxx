@@ -202,7 +202,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     aWriteLock.clear();
     // <- SAFE ----------------------------------
 
-    sal_Bool bIsSynchron = sal_False;
+    bool bIsSynchron = false;
     for (sal_Int32 nArgs=0; nArgs<lArguments.getLength(); nArgs++ )
     {
         if ( lArguments[nArgs].Name == "SynchronMode" )
@@ -242,10 +242,10 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     // Allow calling of XController->suspend() everytimes.
     // Dispatch is an UI functionality. We implement such dispatch object here.
     // And further XController->suspend() was designed to bring an UI ...
-    sal_Bool bAllowSuspend        = sal_True;
-    sal_Bool bControllerSuspended = sal_False;
+    bool bAllowSuspend        = true;
+    bool bControllerSuspended = false;
 
-    sal_Bool bCloseAllViewsToo;
+    bool bCloseAllViewsToo;
     EOperation                                                  eOperation;
     css::uno::Reference< css::uno::XComponentContext >          xContext;
     css::uno::Reference< css::frame::XFrame >                   xCloseFrame;
@@ -268,9 +268,9 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     if (! xCloseFrame.is())
         return 0;
 
-    sal_Bool bCloseFrame           = sal_False;
-    sal_Bool bEstablishBackingMode = sal_False;
-    sal_Bool bTerminateApp         = sal_False;
+    bool bCloseFrame           = false;
+    bool bEstablishBackingMode = false;
+    bool bTerminateApp         = false;
 
     // Analyze the environment a first time.
     // If we found some special cases, we can
@@ -285,7 +285,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     //    is responsible for closing the application or accepting closing of the application
     //    by others.
     if ( ! xCloseFrame->getCreator().is())
-        bCloseFrame = sal_True;
+        bCloseFrame = true;
 
     // b) The help window cant disagree with any request.
     //    Because it doesn't implement a controller - it uses a window only.
@@ -293,7 +293,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     //    right inside this CloseDispatcher implementation.
     //    => close it!
     else if (aCheck1.m_bReferenceIsHelp)
-        bCloseFrame = sal_True;
+        bCloseFrame = true;
 
     // c) If we are already in "backing mode", we have to terminate
     //    the application, if this special frame is closed.
@@ -301,7 +301,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     //    are open then.
     //    => terminate the application!
     else if (aCheck1.m_bReferenceIsBacking)
-        bTerminateApp = sal_True;
+        bTerminateApp = true;
 
     // d) Otherwhise we have to: close all views to the same document, close the
     //    document inside our own frame and decide then again, what has to be done!
@@ -317,7 +317,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
             //     different from our one. And its not the help!
             //     => close our frame only - nothing else.
             if (aCheck2.m_lOtherVisibleFrames.getLength()>0)
-                bCloseFrame = sal_True;
+                bCloseFrame = true;
             else
 
             // c2) if we close the current view ... but not all other views
@@ -328,7 +328,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
                 (!bCloseAllViewsToo                    ) &&
                 (aCheck2.m_lModelFrames.getLength() > 0)
                )
-                bCloseFrame = sal_True;
+                bCloseFrame = true;
 
             else
             // c3) there is no other (visible) frame open ...
@@ -338,17 +338,17 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
             //     And that depends from the dispatched URL ...
             {
                 if (eOperation == E_CLOSE_FRAME)
-                    bTerminateApp = sal_True;
+                    bTerminateApp = true;
                 else if( SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE) )
-                    bEstablishBackingMode = sal_True;
+                    bEstablishBackingMode = true;
                 else
-                    bTerminateApp = sal_True;
+                    bTerminateApp = true;
             }
         }
     }
 
     // Do it now ...
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     if (bCloseFrame)
         bSuccess = implts_closeFrame();
     else if (bEstablishBackingMode)
@@ -415,14 +415,14 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     return 0;
 }
 
-sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame                ,
-                                                              sal_Bool                                   bAllowSuspend         ,
-                                                              sal_Bool                                   bCloseAllOtherViewsToo,
-                                                              sal_Bool&                                  bControllerSuspended  )
+bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame                ,
+                                                          bool                                   bAllowSuspend         ,
+                                                          bool                                   bCloseAllOtherViewsToo,
+                                                          bool&                                  bControllerSuspended  )
 {
     // Frame already dead ... so this view is closed ... is closed ... is ... .-)
     if (! xFrame.is())
-        return sal_True;
+        return true;
 
     // Close all views to the same document ... if forced to do so.
     // But dont touch our own frame here!
@@ -443,8 +443,8 @@ sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Referenc
         sal_Int32 i = 0;
         for (i=0; i<c; ++i)
         {
-            if (!fpf::closeIt(aCheck.m_lModelFrames[i], sal_False))
-                return sal_False;
+            if (!fpf::closeIt(aCheck.m_lModelFrames[i], false))
+                return false;
         }
     }
 
@@ -457,17 +457,17 @@ sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Referenc
         {
             bControllerSuspended = xController->suspend(sal_True);
             if (! bControllerSuspended)
-                return sal_False;
+                return false;
         }
     }
 
     // dont remove the component really by e.g. calling setComponent(null, null).
     // It's enough to suspend the controller.
     // If we close the frame later this controller doesn't show the same dialog again.
-    return sal_True;
+    return true;
 }
 
-sal_Bool CloseDispatcher::implts_closeFrame()
+bool CloseDispatcher::implts_closeFrame()
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
     {
@@ -477,23 +477,23 @@ sal_Bool CloseDispatcher::implts_closeFrame()
 
     // frame already dead ? => so it's closed ... it's closed ...
     if ( ! xFrame.is() )
-        return sal_True;
+        return true;
 
     // dont deliver owner ship; our "UI user" will try it again if it failed.
     // OK - he will get an empty frame then. But normaly an empty frame
     // should be closeable always :-)
-    if (!fpf::closeIt(xFrame, sal_False))
-        return sal_False;
+    if (!fpf::closeIt(xFrame, false))
+        return false;
 
     {
         SolarMutexGuard g;
         m_xCloseFrame = css::uno::WeakReference< css::frame::XFrame >();
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool CloseDispatcher::implts_establishBackingMode()
+bool CloseDispatcher::implts_establishBackingMode()
 {
     css::uno::Reference< css::uno::XComponentContext > xContext;
     css::uno::Reference< css::frame::XFrame >          xFrame;
@@ -504,11 +504,11 @@ sal_Bool CloseDispatcher::implts_establishBackingMode()
     }
 
     if (!xFrame.is())
-        return sal_False;
+        return false;
 
     css::uno::Reference < css::document::XActionLockable > xLock( xFrame, css::uno::UNO_QUERY );
     if ( xLock.is() && xLock->isActionLocked() )
-        return sal_False;
+        return false;
 
     css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
 
@@ -521,10 +521,10 @@ sal_Bool CloseDispatcher::implts_establishBackingMode()
     xStartModule->attachFrame(xFrame);
     xContainerWindow->setVisible(sal_True);
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool CloseDispatcher::implts_terminateApplication()
+bool CloseDispatcher::implts_terminateApplication()
 {
     css::uno::Reference< css::uno::XComponentContext > xContext;
     {

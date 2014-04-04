@@ -99,7 +99,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     {
         // warnings can be ignored   => approve
         // errors must break loading => abort
-        sal_Bool bWarning = (aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK;
+        bool bWarning = (aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK;
         if (xApprove.is() && bWarning)
             xApprove->select();
         else
@@ -136,7 +136,7 @@ css::uno::Any QuietInteraction::getRequest() const
     return m_aRequest;
 }
 
-sal_Bool QuietInteraction::wasUsed() const
+bool QuietInteraction::wasUsed() const
 {
     SolarMutexGuard g;
     return m_aRequest.hasValue();

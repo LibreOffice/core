@@ -108,7 +108,7 @@ class QuietInteraction : public  ::cppu::WeakImplHelper1<
 
             @threadsafe yes
         */
-        sal_Bool wasUsed() const;
+        bool wasUsed() const;
 };
 
 } // namespace framework

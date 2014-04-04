@@ -88,7 +88,7 @@ public:
         return OUString("com.sun.star.comp.framework.LangSelectionStatusbarController");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+    virtual bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
     {
         return ServiceName == "com.sun.star.frame.StatusbarController";
@@ -120,7 +120,7 @@ private:
     LangSelectionStatusbarController(LangSelectionStatusbarController &); // not defined
     void operator =(LangSelectionStatusbarController &); // not defined
 
-    sal_Bool            m_bShowMenu;        // if the menu is to be displayed or not (depending on the selected object/text)
+    bool            m_bShowMenu;        // if the menu is to be displayed or not (depending on the selected object/text)
     sal_Int16           m_nScriptType;      // the flags for the different script types available in the selection, LATIN = 0x0001, ASIAN = 0x0002, COMPLEX = 0x0004
     OUString     m_aCurLang;         // the language of the current selection, "*" if there are more than one languages
     OUString     m_aKeyboardLang;    // the keyboard language
@@ -132,7 +132,7 @@ private:
 
 LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::Reference< uno::XComponentContext >& xContext ) :
     svt::StatusbarController( xContext, uno::Reference< frame::XFrame >(), OUString(), 0 ),
-    m_bShowMenu( sal_True ),
+    m_bShowMenu( true ),
     m_nScriptType( LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX ),
     m_aLangGuessHelper( xContext )
 {
@@ -321,7 +321,7 @@ throw ( RuntimeException, std::exception )
     if ( m_bDisposed )
         return;
 
-    m_bShowMenu = sal_True;
+    m_bShowMenu = true;
     m_nScriptType = LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX;  //set the default value
 
     if ( m_xStatusbarItem.is() )
@@ -353,7 +353,7 @@ throw ( RuntimeException, std::exception )
         else if ( !Event.State.hasValue() )
         {
             m_xStatusbarItem->setText( OUString() );
-            m_bShowMenu = sal_False;    // no language -> no menu
+            m_bShowMenu = false;    // no language -> no menu
         }
     }
 }

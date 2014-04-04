@@ -166,7 +166,7 @@ throw( IllegalArgumentException )
     //  Attention: Method "impl_tryToChangeProperty()" can throw the IllegalArgumentException !!!
     //  Initialize return value with sal_False !!!
     //  (Handle can be invalid)
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     switch( nHandle )
     {
@@ -324,7 +324,7 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
     return seqActionTriggerPropertyDescriptor;
 }
 
-sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
+bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     const   OUString&    sCurrentValue   ,
     const   Any&        aNewValue       ,
     Any&        aOldValue       ,
@@ -332,7 +332,7 @@ sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
 throw( IllegalArgumentException )
 {
     // Set default return value if method failed.
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     // Get new value from any.
     // IllegalArgumentException() can be thrown!
     OUString sValue;
@@ -345,7 +345,7 @@ throw( IllegalArgumentException )
         aOldValue       <<= sCurrentValue;
         aConvertedValue <<= sValue;
         // Return OK - "value will be change ..."
-        bReturn = sal_True;
+        bReturn = true;
     }
     else
     {
@@ -353,13 +353,13 @@ throw( IllegalArgumentException )
         aOldValue.clear         ();
         aConvertedValue.clear   ();
         // Return NOTHING - "value will not be change ..."
-        bReturn = sal_False;
+        bReturn = false;
     }
 
     return bReturn;
 }
 
-sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
+bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     const Reference< XBitmap >  aCurrentValue   ,
     const Any&                  aNewValue       ,
     Any&                        aOldValue       ,
@@ -367,7 +367,7 @@ sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
 throw( IllegalArgumentException )
 {
     // Set default return value if method failed.
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     // Get new value from any.
     // IllegalArgumentException() can be thrown!
     Reference< XBitmap > aValue;
@@ -380,7 +380,7 @@ throw( IllegalArgumentException )
         aOldValue       <<= aCurrentValue;
         aConvertedValue <<= aValue;
         // Return OK - "value will be change ..."
-        bReturn = sal_True;
+        bReturn = true;
     }
     else
     {
@@ -388,13 +388,13 @@ throw( IllegalArgumentException )
         aOldValue.clear         ();
         aConvertedValue.clear   ();
         // Return NOTHING - "value will not be change ..."
-        bReturn = sal_False;
+        bReturn = false;
     }
 
     return bReturn;
 }
 
-sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
+bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     const Reference< XInterface >   aCurrentValue   ,
     const Any&                      aNewValue       ,
     Any&                            aOldValue       ,
@@ -402,7 +402,7 @@ sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
 throw( IllegalArgumentException )
 {
     // Set default return value if method failed.
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     // Get new value from any.
     // IllegalArgumentException() can be thrown!
     Reference< XInterface > aValue;
@@ -415,7 +415,7 @@ throw( IllegalArgumentException )
         aOldValue       <<= aCurrentValue;
         aConvertedValue <<= aValue;
         // Return OK - "value will be change ..."
-        bReturn = sal_True;
+        bReturn = true;
     }
     else
     {
@@ -423,7 +423,7 @@ throw( IllegalArgumentException )
         aOldValue.clear         ();
         aConvertedValue.clear   ();
         // Return NOTHING - "value will not be change ..."
-        bReturn = sal_False;
+        bReturn = false;
     }
 
     return bReturn;

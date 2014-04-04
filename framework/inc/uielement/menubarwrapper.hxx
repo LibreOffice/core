@@ -49,7 +49,7 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
         FWK_DECLARE_XTYPEPROVIDER
 
         MenuBarManager* GetMenuBarManager() const { return static_cast< MenuBarManager* >( m_xMenuBarManager.get() ); }
-        void            InvalidatePopupControllerCache() { m_bRefreshPopupControllerCache = sal_True; }
+        void            InvalidatePopupControllerCache() { m_bRefreshPopupControllerCache = true; }
 
         // XComponent
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -76,7 +76,7 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
         virtual void impl_fillNewData() SAL_OVERRIDE;
         void fillPopupControllerCache();
 
-        sal_Bool                                                                                m_bRefreshPopupControllerCache : 1;
+        bool                                                                                m_bRefreshPopupControllerCache : 1;
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >                      m_xMenuBarManager;
         PopupControllerCache                                                                    m_aPopupControllerCache;
         com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >              m_xContext;

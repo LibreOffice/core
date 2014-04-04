@@ -121,12 +121,12 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
                 }
         };
 
-        sal_Bool                                                                        m_bToolBarStartFound : 1;
-        sal_Bool                                                                        m_bToolBarEndFound : 1;
-        sal_Bool                                                                        m_bToolBarItemStartFound : 1;
-        sal_Bool                                                                        m_bToolBarSpaceStartFound : 1;
-        sal_Bool                                                                        m_bToolBarBreakStartFound : 1;
-        sal_Bool                                                                        m_bToolBarSeparatorStartFound : 1;
+        bool                                                                        m_bToolBarStartFound : 1;
+        bool                                                                        m_bToolBarEndFound : 1;
+        bool                                                                        m_bToolBarItemStartFound : 1;
+        bool                                                                        m_bToolBarSpaceStartFound : 1;
+        bool                                                                        m_bToolBarBreakStartFound : 1;
+        bool                                                                        m_bToolBarSeparatorStartFound : 1;
         ToolBoxHashMap                                                                  m_aToolBoxMap;
         com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >    m_rItemContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >        m_xLocator;

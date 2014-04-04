@@ -211,7 +211,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBu
         if ( !sVal.isEmpty() )
         {
             const sal_Unicode* pChars = sVal.getStr();
-            sal_Bool bInString = sal_False;
+            bool bInString = false;
             for ( sal_Int32 nChar=0; nChar<sVal.getLength(); nChar ++ )
             {
                 if ( pChars[nChar] < 32 || pChars[nChar] == '"' )
@@ -221,7 +221,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBu
                     {
                         // close current string
                         aArgumentBuffer.appendAscii("\"");
-                        bInString = sal_False;
+                        bInString = false;
                     }
 
                     if ( nChar>0 )
@@ -243,7 +243,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBu
 
                         // start a new string
                         aArgumentBuffer.appendAscii("\"");
-                        bInString = sal_True;
+                        bInString = true;
                     }
 
                     aArgumentBuffer.append( pChars[nChar] );
@@ -293,7 +293,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBu
 
 void SAL_CALL DispatchRecorder::implts_recordMacro( const OUString& aURL,
                                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                                                          sal_Bool bAsComment, OUStringBuffer& aScriptBuffer )
+                                                          bool bAsComment, OUStringBuffer& aScriptBuffer )
 {
     OUStringBuffer aArgumentBuffer(1000);
     OUString       sArrayName;

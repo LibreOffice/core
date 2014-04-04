@@ -81,16 +81,16 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             const ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& _xURLTransformer,
             AddonMenu*          pAddonMenu,
-            sal_Bool            bDelete,
-            sal_Bool            bDeleteChildren );
+            bool            bDelete,
+            bool            bDeleteChildren );
 
         MenuBarManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
             const ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& _xURLTransformer,
             AddonPopupMenu*     pAddonMenu,
-            sal_Bool            bDelete,
-            sal_Bool            bDeleteChildren );
+            bool            bDelete,
+            bool            bDeleteChildren );
 
     public:
         MenuBarManager(
@@ -100,8 +100,8 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
             const OUString& aModuleIdentifier,
             Menu* pMenu,
-            sal_Bool bDelete,
-            sal_Bool bDeleteChildren );
+            bool bDelete,
+            bool bDeleteChildren );
 
         virtual ~MenuBarManager();
 
@@ -151,8 +151,8 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
                               const OUString& rModuleIdentifier,
-                              sal_Bool bDelete,
-                              sal_Bool bDeleteChildren );
+                              bool bDelete,
+                              bool bDeleteChildren );
         void SetItemContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer );
         void GetPopupController( PopupControllerCache& rPopupController );
 
@@ -165,7 +165,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         void RemoveListener();
         void RequestImages();
         void RetrieveImageManagers();
-        static sal_Bool MustBeHidden( PopupMenu* pPopupMenu, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& rTransformer );
+        static bool MustBeHidden( PopupMenu* pPopupMenu, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& rTransformer );
         OUString RetrieveLabelFromCommand(const OUString& rCmdURL);
 
     private:
@@ -178,12 +178,12 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                              ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xManager,
                              ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDispatch ) :
                              nItemId( aItemId ),
-                             bCheckHide( sal_True ),
+                             bCheckHide( true ),
                              xSubMenuManager( xManager ),
                              xMenuItemDispatch( rDispatch ) {}
 
             sal_uInt16                                                                                      nItemId;
-            sal_Bool                                                                                    bCheckHide;
+            bool                                                                                    bCheckHide;
             OUString                                                                             aTargetFrame;
             OUString                                                                             aMenuItemURL;
             OUString                                                                             aFilter;
@@ -207,22 +207,22 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         static void      MergeAddonMenus( Menu* pMenuBar, const MergeMenuInstructionContainer&, const OUString& aModuleIdentifier );
 
         MenuItemHandler* GetMenuItemHandler( sal_uInt16 nItemId );
-        sal_Bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler );
+        bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler );
         void             AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sItemCommand,sal_uInt16 _nItemId);
         sal_uInt16           FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const;
-        void             Init(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,AddonMenu* pAddonMenu,sal_Bool bDelete,sal_Bool bDeleteChildren,bool _bHandlePopUp = false);
+        void             Init(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,AddonMenu* pAddonMenu,bool bDelete,bool bDeleteChildren,bool _bHandlePopUp = false);
         void             SetHdl();
 
-        sal_Bool                                                                               m_bDisposed : 1,
+        bool                                                                               m_bDisposed : 1,
                                                                                                m_bInitialized : 1,
                                                                                                m_bDeleteMenu : 1,
                                                                                                m_bDeleteChildren : 1,
                                                                                                m_bActive : 1,
                                                                                                m_bIsBookmarkMenu : 1,
                                                                                                m_bShowMenuImages : 1;
-        sal_Bool                                                                               m_bRetrieveImages : 1,
+        bool                                                                               m_bRetrieveImages : 1,
                                                                                                m_bAcceleratorCfg : 1;
-        sal_Bool                                                                               m_bModuleIdentified;
+        bool                                                                               m_bModuleIdentified;
         OUString                                                                        m_aMenuItemCommand;
         OUString                                                                        m_aModuleIdentifier;
         Menu*                                                                                  m_pVCLMenu;

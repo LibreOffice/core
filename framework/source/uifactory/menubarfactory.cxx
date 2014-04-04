@@ -75,8 +75,8 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
     Reference< XUIConfigurationManager > xConfigSource;
     Reference< XFrame >                  xFrame;
     OUString                        aResourceURL( ResourceURL );
-    sal_Bool                             bPersistent( sal_True );
-    sal_Bool                             bExtraMode( sal_False );
+    bool                             bPersistent( true );
+    bool                             bExtraMode( false );
 
     for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
     {

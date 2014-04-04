@@ -265,7 +265,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
 
         // persistence methods
 
-        sal_Bool         implts_readWindowStateData( const OUString& aName, UIElement& rElementData );
+        bool         implts_readWindowStateData( const OUString& aName, UIElement& rElementData );
         void             implts_writeWindowStateData( const UIElement& rElementData );
 
         // members

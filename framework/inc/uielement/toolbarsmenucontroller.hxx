@@ -88,7 +88,7 @@ namespace framework
             OUString getUINameFromCommand( const OUString& rCommandURL );
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommandURL( const OUString& rCommandURL );
             void addCommand( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
-            sal_Bool isContextSensitiveToolbarNonVisible();
+            bool isContextSensitiveToolbarNonVisible();
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >                m_xContext;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                m_xPersistentWindowState;
@@ -98,8 +98,8 @@ namespace framework
             OUString                                                                               m_aModuleIdentifier;
             OUString                                                                               m_aPropUIName;
             OUString                                                                               m_aPropResourceURL;
-            sal_Bool                                                                                    m_bModuleIdentified;
-            sal_Bool                                                                                    m_bResetActive;
+            bool                                                                                    m_bModuleIdentified;
+            bool                                                                                    m_bResetActive;
             std::vector< OUString >                                                                m_aCommandVector;
             IntlWrapper                                                                                 m_aIntlWrapper;
     };

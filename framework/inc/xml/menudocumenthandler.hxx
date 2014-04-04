@@ -128,7 +128,7 @@ class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBas
 
     private:
           int       m_nElementDepth;
-          sal_Bool  m_bMenuBarMode;
+          bool  m_bMenuBarMode;
           com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuBarContainer;
           com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
 };  // OReadMenuDocumentHandler
@@ -166,7 +166,7 @@ class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
 
     private:
         int         m_nElementDepth;
-        sal_Bool    m_bMenuMode;
+        bool    m_bMenuMode;
         com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuBarContainer;
         com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
 };  // OReadMenuBarHandler
@@ -203,7 +203,7 @@ class FWE_DLLPUBLIC OReadMenuHandler : public ReadMenuDocumentHandlerBase
 
     private:
         int                 m_nElementDepth;
-        sal_Bool            m_bMenuPopupMode;
+        bool            m_bMenuPopupMode;
         com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuContainer;
         com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
 }; // OReadMenuHandler
@@ -243,7 +243,7 @@ class FWE_DLLPUBLIC OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
         enum NextElementClose { ELEM_CLOSE_NONE, ELEM_CLOSE_MENUITEM, ELEM_CLOSE_MENUSEPARATOR };
 
         int                 m_nElementDepth;
-        sal_Bool            m_bMenuMode;
+        bool            m_bMenuMode;
         com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuContainer;
         com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
         com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xComponentContext;

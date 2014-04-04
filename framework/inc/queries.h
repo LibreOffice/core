@@ -323,15 +323,15 @@ class QueryAnalyzer
         sal_uInt32 getIFlags       () const { return m_nIFlags; }
         sal_uInt32 getEFlags       () const { return m_nEFlags; }
         ESortProp  getSortProp     () const { return m_eSortProp; }
-        sal_Bool   getDescending   () const { return m_bDescending; }
-        sal_Bool   getCaseSensitive() const { return m_bCaseSensitive; }
-        sal_Bool   getUseOrder     () const { return m_bUseOrder; }
-        sal_Bool   getDefaultFirst () const { return m_bDefaultFirst; }
+        bool       getDescending   () const { return m_bDescending; }
+        bool       getCaseSensitive() const { return m_bCaseSensitive; }
+        bool       getUseOrder     () const { return m_bUseOrder; }
+        bool       getDefaultFirst () const { return m_bDefaultFirst; }
 
         // this method checks if given string match any supported query.
         // (ignore additional parameters!)
 
-        static sal_Bool isQuery( const OUString& sQuery )
+        static bool isQuery( const OUString& sQuery )
         {
             return(
                     sQuery.startsWith("_query_") ||    // new style
@@ -344,10 +344,10 @@ class QueryAnalyzer
         sal_uInt32  m_nIFlags;
         sal_uInt32  m_nEFlags;
         ESortProp   m_eSortProp;
-        sal_Bool    m_bDescending;
-        sal_Bool    m_bCaseSensitive;
-        sal_Bool    m_bUseOrder;
-        sal_Bool    m_bDefaultFirst;
+        bool        m_bDescending;
+        bool        m_bCaseSensitive;
+        bool        m_bUseOrder;
+        bool        m_bDefaultFirst;
 
 };      // class QueryAnalyzer
 

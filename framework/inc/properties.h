@@ -255,12 +255,12 @@ class PropHelper
      *  @return <True/> if value of this property will be changed; <False/> otherwise.
      */
 
-    static sal_Bool willPropertyBeChanged( const css::uno::Any& aCurrentValue ,
+    static bool willPropertyBeChanged( const css::uno::Any& aCurrentValue ,
                                            const css::uno::Any& aNewValue     ,
                                                  css::uno::Any& aOldValue     ,
                                                  css::uno::Any& aChangedValue )
     {
-        sal_Bool bChanged = sal_False;
+        bool bChanged = sal_False;
 
         // clear return parameter to be shure, to put out only valid values ...
         aOldValue.clear();

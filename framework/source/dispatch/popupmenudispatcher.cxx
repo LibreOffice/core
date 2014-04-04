@@ -61,8 +61,8 @@ PopupMenuDispatcher::PopupMenuDispatcher(
     const uno::Reference< XComponentContext >& xContext )
         :   m_xContext              ( xContext                       )
         ,   m_aListenerContainer    ( m_mutex )
-        ,   m_bAlreadyDisposed      ( sal_False                      )
-        ,   m_bActivateListener     ( sal_False                      )
+        ,   m_bAlreadyDisposed      ( false                      )
+        ,   m_bActivateListener     ( false                      )
 {
 }
 
@@ -151,7 +151,7 @@ throw( css::uno::Exception, css::uno::RuntimeException, std::exception)
             lArguments[a] >>= xFrame;
             m_xWeakFrame = xFrame;
 
-            m_bActivateListener = sal_True;
+            m_bActivateListener = true;
             uno::Reference< css::frame::XFrameActionListener > xFrameActionListener(
                 (OWeakObject *)this, css::uno::UNO_QUERY );
             xFrame->addFrameActionListener( xFrameActionListener );
@@ -283,9 +283,9 @@ void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( Runtim
     // Safe impossible cases
     SAL_WARN_IF( m_bAlreadyDisposed, "fwk", "MenuDispatcher::disposing(): Object already disposed .. don't call it again!" );
 
-    if( m_bAlreadyDisposed == sal_False )
+    if( m_bAlreadyDisposed == false )
     {
-        m_bAlreadyDisposed = sal_True;
+        m_bAlreadyDisposed = true;
 
         if ( m_bActivateListener )
         {
@@ -293,7 +293,7 @@ void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( Runtim
             if ( xFrame.is() )
             {
                 xFrame->removeFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
-                m_bActivateListener = sal_False;
+                m_bActivateListener = false;
             }
         }
 

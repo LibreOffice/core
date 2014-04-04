@@ -84,7 +84,7 @@ class ButtonToolbarController : public ::com::sun::star::frame::XStatusListener,
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        sal_Bool                                                                         m_bInitialized : 1,
+        bool                                                                         m_bInitialized : 1,
                                                                                          m_bDisposed : 1;
         OUString                                                                    m_aCommandURL;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;

@@ -131,7 +131,7 @@ FWI_DLLPUBLIC OUString RetrieveLabelFromCommand( const OUString& aCmdURL
             ,::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >&        _xUICommandLabels
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame
             ,OUString& _rModuleIdentifier
-            ,sal_Bool& _rIni
+            ,bool& _rIni
             ,const sal_Char* _pName);
 
 FWI_DLLPUBLIC void FillLangItems( std::set< OUString > &rLangItems,

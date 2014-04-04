@@ -92,7 +92,7 @@ class MailToDispatcher : public  ::cppu::WeakImplHelper3<
     /* internal */
     private:
 
-        sal_Bool implts_dispatch( const css::util::URL&                                  aURL       ,
+        bool implts_dispatch( const css::util::URL&                                  aURL       ,
                                   const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException );
 
 };      //  class MailToDispatcher

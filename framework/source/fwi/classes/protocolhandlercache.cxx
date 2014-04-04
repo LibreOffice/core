@@ -125,16 +125,16 @@ HandlerCache::~HandlerCache()
     @descr      It frees all used memory. In further implementations (may if we support write access too)
                 it's a good place to flush changes back to the configuration - but not needed yet.
  */
-sal_Bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) const
+bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) const
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     /* SAFE */{
         osl::MutexGuard g(LockHelper::getGlobalLock());
         PatternHash::const_iterator pItem = m_pPattern->findPatternKey(sURL);
         if (pItem!=m_pPattern->end())
         {
             *pReturn = (*m_pHandler)[pItem->second];
-            bFound = sal_True;
+            bFound = true;
         }
     /* SAFE */}
     return bFound;
@@ -146,7 +146,7 @@ sal_Bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) 
                 and call our other search method ...
                 It's a helper for outside code.
  */
-sal_Bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pReturn ) const
+bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pReturn ) const
 {
     return search( aURL.Complete, pReturn );
 }

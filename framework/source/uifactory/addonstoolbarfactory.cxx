@@ -81,7 +81,7 @@ public:
     // XUIElementFactory
     virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    sal_Bool hasButtonsInContext( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rPropSeq,
+    bool hasButtonsInContext( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rPropSeq,
                                   const css::uno::Reference< css::frame::XFrame >& rFrame );
 
 private:
@@ -100,10 +100,10 @@ AddonsToolBarFactory::~AddonsToolBarFactory()
 {
 }
 
-static sal_Bool IsCorrectContext( const OUString& rModuleIdentifier, const OUString& aContextList )
+static bool IsCorrectContext( const OUString& rModuleIdentifier, const OUString& aContextList )
 {
     if ( aContextList.isEmpty() )
-        return sal_True;
+        return true;
 
     if ( !rModuleIdentifier.isEmpty() )
     {
@@ -111,10 +111,10 @@ static sal_Bool IsCorrectContext( const OUString& rModuleIdentifier, const OUStr
         return ( nIndex >= 0 );
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool AddonsToolBarFactory::hasButtonsInContext(
+bool AddonsToolBarFactory::hasButtonsInContext(
     const Sequence< Sequence< PropertyValue > >& rPropSeqSeq,
     const Reference< XFrame >& rFrame )
 {
@@ -135,8 +135,8 @@ sal_Bool AddonsToolBarFactory::hasButtonsInContext(
     // the current frame context.
     for ( sal_uInt32 i = 0; i < (sal_uInt32)rPropSeqSeq.getLength(); i++ )
     {
-        sal_Bool    bIsButton( sal_True );
-        sal_Bool    bIsCorrectContext( sal_False );
+        bool    bIsButton( true );
+        bool    bIsCorrectContext( false );
         sal_uInt32  nPropChecked( 0 );
 
         const Sequence< PropertyValue >& rPropSeq = rPropSeqSeq[i];
@@ -162,10 +162,10 @@ sal_Bool AddonsToolBarFactory::hasButtonsInContext(
         }
 
         if ( bIsButton && bIsCorrectContext )
-            return sal_True;
+            return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // XUIElementFactory

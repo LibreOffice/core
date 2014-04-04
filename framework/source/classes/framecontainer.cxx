@@ -107,7 +107,7 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
 
     @threadsafe yes
  *****************************************************************************************************************/
-sal_Bool FrameContainer::exist( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
+bool FrameContainer::exist( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
 {
     SolarMutexGuard g;
     return( ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame ) != m_aContainer.end() );

@@ -226,7 +226,7 @@ void FrameListAnalyzer::impl_analyze()
             //    Add it to the list of "other frames". But look for it's
             //    visible state ... if it's allowed to do so.
 
-            sal_Bool bHidden = sal_False;
+            bool bHidden = false;
             if ((m_eDetectMode & E_HIDDEN) == E_HIDDEN )
             {
                 xSet = css::uno::Reference< css::beans::XPropertySet >(xFrame, css::uno::UNO_QUERY);

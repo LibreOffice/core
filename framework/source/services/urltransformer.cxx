@@ -307,7 +307,7 @@ OUString SAL_CALL URLTransformer::getPresentation( const css::util::URL& aURL,
 
     // Check given URL
     css::util::URL aTestURL = aURL;
-    sal_Bool bParseResult = parseSmart( aTestURL, aTestURL.Protocol );
+    bool bParseResult = parseSmart( aTestURL, aTestURL.Protocol );
     if ( bParseResult )
     {
         if ( !bWithPassword && !aTestURL.Password.isEmpty() )

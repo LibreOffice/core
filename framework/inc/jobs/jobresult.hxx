@@ -90,7 +90,7 @@ class JobResult
             But we provide this information here only.
             Doing so is part of any user of us.
          */
-        sal_Bool m_bDeactivate;
+        bool m_bDeactivate;
 
         /**
             represent the part "DispatchResult"
@@ -111,7 +111,7 @@ class JobResult
 
         void operator=( const JobResult& rCopy );
 
-        sal_Bool                                     existPart        ( sal_uInt32 eParts ) const;
+        bool                                     existPart        ( sal_uInt32 eParts ) const;
         css::uno::Sequence< css::beans::NamedValue > getArguments     (                   ) const;
         css::frame::DispatchResultEvent              getDispatchResult(                   ) const;
 };

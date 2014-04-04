@@ -89,17 +89,17 @@ class ActionTriggerPropertySet :  private cppu::BaseMutex,
 
         //  helper
 
-        sal_Bool impl_tryToChangeProperty(  const   OUString&              aCurrentValue   ,
+        bool impl_tryToChangeProperty(  const   OUString&              aCurrentValue   ,
                                             const   com::sun::star::uno::Any&   aNewValue       ,
                                             com::sun::star::uno::Any&           aOldValue       ,
                                             com::sun::star::uno::Any&           aConvertedValue ) throw( com::sun::star::lang::IllegalArgumentException );
 
-        sal_Bool impl_tryToChangeProperty(  const   com::sun::star::uno::Reference< com::sun::star::awt::XBitmap >  xBitmap,
+        bool impl_tryToChangeProperty(  const   com::sun::star::uno::Reference< com::sun::star::awt::XBitmap >  xBitmap,
                                             const   com::sun::star::uno::Any&   aNewValue       ,
                                             com::sun::star::uno::Any&           aOldValue       ,
                                             com::sun::star::uno::Any&           aConvertedValue ) throw( com::sun::star::lang::IllegalArgumentException );
 
-        sal_Bool impl_tryToChangeProperty(  const   com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xInterface,
+        bool impl_tryToChangeProperty(  const   com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xInterface,
                                             const   com::sun::star::uno::Any&   aNewValue       ,
                                             com::sun::star::uno::Any&           aOldValue       ,
                                             com::sun::star::uno::Any&           aConvertedValue ) throw( com::sun::star::lang::IllegalArgumentException );

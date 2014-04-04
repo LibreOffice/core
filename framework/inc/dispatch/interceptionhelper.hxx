@@ -145,7 +145,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
 
         /** @short it regulates, which interceptor is used first.
                    The last or the first registered one. */
-        static sal_Bool m_bPreferrFirstInterceptor;
+        static bool m_bPreferrFirstInterceptor;
 
     // native interface
 

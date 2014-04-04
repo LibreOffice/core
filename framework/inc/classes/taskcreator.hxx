@@ -55,7 +55,7 @@ class TaskCreator
         virtual ~TaskCreator(                                                                     );
 
         css::uno::Reference< css::frame::XFrame > createTask( const OUString& sName    ,
-                                                                    sal_Bool         bVisible );
+                                                                    bool         bVisible );
 
     // helper
     private:

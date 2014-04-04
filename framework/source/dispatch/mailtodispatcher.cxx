@@ -143,7 +143,7 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
     // Another reason: We can use this reference as source of sending event at the end too.
     css::uno::Reference< css::frame::XNotifyingDispatch > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
 
-    sal_Bool bState = implts_dispatch(aURL,lArguments);
+    bool bState = implts_dispatch(aURL,lArguments);
     if (xListener.is())
     {
         css::frame::DispatchResultEvent aEvent;
@@ -173,10 +173,10 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
                 belive that call was successfully.
                 <FALSE/> if necessary resource couldn't be created or an exception was thrown.
 */
-sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&                                  aURL       ,
+bool MailToDispatcher::implts_dispatch( const css::util::URL&                                  aURL       ,
                                             const css::uno::Sequence< css::beans::PropertyValue >& /*lArguments*/ ) throw( css::uno::RuntimeException )
 {
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
 
     css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute = css::system::SystemShellExecute::create( m_xContext );
 
@@ -186,7 +186,7 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
         // Because there is no notofocation about success - we use case of
         // no detected exception as SUCCESS - FAILED otherwise.
         xSystemShellExecute->execute( aURL.Complete, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
-        bSuccess = sal_True;
+        bSuccess = true;
     }
     catch (const css::lang::IllegalArgumentException&)
     {

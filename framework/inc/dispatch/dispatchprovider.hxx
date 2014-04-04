@@ -110,7 +110,7 @@ class DispatchProvider  :   private TransactionBase                     ,
                                                                                           const css::uno::Reference< css::frame::XFrame >& xOwner                        ,
                                                                                           const OUString&                           sTarget = OUString()   ,
                                                                                                 sal_Int32                                  nSearchFlags = 0              );
-        sal_Bool                                     implts_isLoadableContent           ( const css::util::URL&                            aURL                          );
+        bool                                     implts_isLoadableContent           ( const css::util::URL&                            aURL                          );
         css::uno::Reference< css::frame::XDispatch > implts_queryDesktopDispatch        ( const css::uno::Reference< css::frame::XFrame >  xDesktop                      ,
                                                                                           const css::util::URL&                            aURL                          ,
                                                                                           const OUString&                           sTargetFrameName              ,

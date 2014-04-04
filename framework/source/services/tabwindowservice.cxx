@@ -53,14 +53,14 @@ struct TTabPageInfo
 
         TTabPageInfo()
             : m_nIndex      ( -1      )
-            , m_bCreated    (sal_False)
+            , m_bCreated    (false)
             , m_pPage       ( NULL    )
             , m_lProperties (         )
         {}
 
         TTabPageInfo(::sal_Int32 nID)
             : m_nIndex      ( nID     )
-            , m_bCreated    (sal_False)
+            , m_bCreated    (false)
             , m_pPage       ( NULL    )
             , m_lProperties (         )
         {}
@@ -68,7 +68,7 @@ struct TTabPageInfo
     public:
 
         ::sal_Int32                                   m_nIndex;
-        sal_Bool                                    m_bCreated;
+        bool                                    m_bCreated;
         FwkTabPage*                                   m_pPage;
         css::uno::Sequence< css::beans::NamedValue >  m_lProperties;
 };
@@ -202,7 +202,7 @@ TabWindowService::TabWindowService()
         :   TransactionBase         (                               )
         ,   PropertySetHelper       ( m_aMutex,
                                       &m_aTransactionManager        ,
-                                      sal_False                     ) // sal_False => dont release shared mutex on calling us!
+                                      false                     ) // sal_False => dont release shared mutex on calling us!
         ,   OWeakObject             (                               )
 
         // Init member
@@ -282,7 +282,7 @@ void SAL_CALL TabWindowService::setTabProps(      ::sal_Int32                   
         if (pTabWin)
         {
             pTabWin->AddTabPage(rInfo.m_nIndex, rInfo.m_lProperties);
-            rInfo.m_bCreated = sal_True;
+            rInfo.m_bCreated = true;
         }
     }
 }

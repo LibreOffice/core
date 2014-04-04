@@ -124,9 +124,9 @@ void FwkTabPage::CreateDialog()
     }
 }
 
-sal_Bool FwkTabPage::CallMethod( const OUString& rMethod )
+bool FwkTabPage::CallMethod( const OUString& rMethod )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( m_xEventHdl.is() )
     {
         try

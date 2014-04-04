@@ -56,7 +56,7 @@ DEFINE_INIT_SERVICE                 (   MediaTypeDetectionHelper,
 sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(uno::Sequence< OUString >& rSeq)
     throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     for( sal_Int32 i = rSeq.getLength(); i--; )
     {
 
@@ -67,7 +67,7 @@ sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(uno::Sequence< OUString >
         if (!aType.isEmpty())
         {
             rUrl = aType;
-            bModified = sal_True;
+            bModified = true;
         }
     }
     return bModified;

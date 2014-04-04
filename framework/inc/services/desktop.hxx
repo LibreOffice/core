@@ -343,7 +343,7 @@ class Desktop : private cppu::BaseMutex,
          *  @see    impl_sendCancelTerminationEvent()
          */
         void impl_sendQueryTerminationEvent(TTerminateListenerList& lCalledListener,
-                                            sal_Bool&             bVeto          );
+                                            bool&             bVeto          );
 
         /** calls cancelTermination() on every termination listener
          *  where queryTermination() was called before.
@@ -383,17 +383,17 @@ class Desktop : private cppu::BaseMutex,
          *
          *  @return true if all frames could be closed; false otherwise.
          */
-        sal_Bool impl_closeFrames(sal_Bool bAllowUI);
+        bool impl_closeFrames(bool bAllowUI);
 
     //  debug methods
     //  (should be private everytime!)
 
     private:
 
-        static sal_Bool implcp_addEventListener         ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
-        static sal_Bool implcp_removeEventListener      ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
+        static bool implcp_addEventListener         ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
+        static bool implcp_removeEventListener      ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
 
-        sal_Bool m_bIsTerminated;  /// check flag to protect us against dispose before terminate!
+        bool m_bIsTerminated;  /// check flag to protect us against dispose before terminate!
                                     /// see dispose() for further information!
 
     //  variables
@@ -409,10 +409,10 @@ class Desktop : private cppu::BaseMutex,
         ELoadState                                                      m_eLoadState;             /// hold information about state of asynchron loading of component for loadComponentFromURL()!
         css::uno::Reference< css::frame::XFrame >                       m_xLastFrame;             /// last target of "loadComponentFromURL()"!
         css::uno::Any                                                   m_aInteractionRequest;
-        sal_Bool                                                        m_bSuspendQuickstartVeto; /// don't ask quickstart for a veto
+        bool                                                            m_bSuspendQuickstartVeto; /// don't ask quickstart for a veto
         SvtCommandOptions                                               m_aCommandOptions;        /// ref counted class to support disabling commands defined by configuration file
-        OUString                                                 m_sName;
-        OUString                                                 m_sTitle;
+        OUString                                                        m_sName;
+        OUString                                                        m_sTitle;
         css::uno::Reference< css::frame::XDispatchRecorderSupplier >    m_xDispatchRecorderSupplier;
 
         /** special terminate listener to close pipe and block external requests

@@ -1562,7 +1562,7 @@ void ToolbarLayoutManager::implts_destroyDockingAreaWindows()
 
 // persistence methods
 
-sal_Bool ToolbarLayoutManager::implts_readWindowStateData( const OUString& aName, UIElement& rElementData )
+bool ToolbarLayoutManager::implts_readWindowStateData( const OUString& aName, UIElement& rElementData )
 {
     return LayoutManager::readWindowStateData( aName, rElementData, m_xPersistentWindowState,
             m_pGlobalSettings, m_bGlobalSettings, m_xContext );
@@ -1600,9 +1600,9 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
             uno::Sequence< beans::PropertyValue > aWindowState( 9 );
 
             aWindowState[0].Name  = WINDOWSTATE_PROPERTY_DOCKED;
-            aWindowState[0].Value = ::uno::makeAny( sal_Bool( !rElementData.m_bFloating ));
+            aWindowState[0].Value = ::uno::makeAny( !rElementData.m_bFloating );
             aWindowState[1].Name  = WINDOWSTATE_PROPERTY_VISIBLE;
-            aWindowState[1].Value = uno::makeAny( sal_Bool( rElementData.m_bVisible ));
+            aWindowState[1].Value = uno::makeAny( rElementData.m_bVisible );
             aWindowState[2].Name  = WINDOWSTATE_PROPERTY_DOCKINGAREA;
             aWindowState[2].Value = uno::makeAny( static_cast< ui::DockingArea >( rElementData.m_aDockedData.m_nDockedArea ) );
 
@@ -2206,7 +2206,7 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
 {
     SingleRowColumnWindowData aRowColumnWindowData;
 
-    sal_Bool bHorzDockArea( isHorizontalDockingArea( eDockingArea ));
+    bool bHorzDockArea( isHorizontalDockingArea( eDockingArea ));
     implts_getDockingAreaElementInfoOnSingleRowCol( eDockingArea, nRowCol, aRowColumnWindowData );
     if ( aRowColumnWindowData.aRowColumnWindows.empty() )
         return rMovedElementRect;
@@ -2732,7 +2732,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
                     ::Rectangle aUIElementRect( aWindowRect );
                     sal_Int32   nMiddle( bHorizontalDockArea ? ( aWindowRect.Left() + aWindowRect.getWidth() / 2 ) :
                                                                ( aWindowRect.Top() + aWindowRect.getHeight() / 2 ));
-                    sal_Bool    bInsertBefore( bHorizontalDockArea ? ( rMousePos.X() < nMiddle ) : ( rMousePos.Y() < nMiddle ));
+                    bool    bInsertBefore( bHorizontalDockArea ? ( rMousePos.X() < nMiddle ) : ( rMousePos.Y() < nMiddle ));
                     if ( bInsertBefore )
                     {
                         if ( bHorizontalDockArea )

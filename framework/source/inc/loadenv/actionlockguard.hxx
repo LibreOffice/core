@@ -43,7 +43,7 @@ class ActionLockGuard
 
         /** @short  knows if a lock exists on the internal lock object
                     forced by this guard instance. */
-        sal_Bool m_bActionLocked;
+        bool m_bActionLocked;
 
     // interface
 
@@ -56,7 +56,7 @@ class ActionLockGuard
                     in a mode "use guard for more then one resources".
          */
         ActionLockGuard()
-            : m_bActionLocked(sal_False)
+            : m_bActionLocked(false)
         {
         }
 
@@ -66,7 +66,7 @@ class ActionLockGuard
                     points to the outside resource, which should be locked.
          */
         ActionLockGuard(const css::uno::Reference< css::document::XActionLockable >& xLock)
-            : m_bActionLocked(sal_False)
+            : m_bActionLocked(false)
         {
             setResource(xLock);
         }
@@ -90,18 +90,18 @@ class ActionLockGuard
             @return sal_True, if new resource could be set and locked.
                     sal_False otherwise.
          */
-        virtual sal_Bool setResource(const css::uno::Reference< css::document::XActionLockable >& xLock)
+        virtual bool setResource(const css::uno::Reference< css::document::XActionLockable >& xLock)
         {
             osl::MutexGuard g(m_mutex);
 
             if (m_bActionLocked || !xLock.is())
-                return sal_False;
+                return false;
 
             m_xActionLock = xLock;
             m_xActionLock->addActionLock();
             m_bActionLocked = m_xActionLock->isActionLocked();
 
-            return sal_True;
+            return true;
         }
 
         /** @short  set a new resource for locking at this guard.
@@ -121,10 +121,10 @@ class ActionLockGuard
             osl::ClearableMutexGuard aMutexLock(m_mutex);
 
             css::uno::Reference< css::document::XActionLockable > xLock   = m_xActionLock;
-            sal_Bool                                              bLocked = m_bActionLocked;
+            bool                                                  bLocked = m_bActionLocked;
 
             m_xActionLock.clear();
-            m_bActionLocked = sal_False;
+            m_bActionLocked = false;
 
             aMutexLock.clear();
             // <- SAFE ..........................
@@ -153,7 +153,7 @@ class ActionLockGuard
                 m_xActionLock->removeActionLock();
                 // dont check for any locks here ...
                 // May another guard use the same lock object :-(
-                m_bActionLocked = sal_False;
+                m_bActionLocked = false;
             }
         }
 };

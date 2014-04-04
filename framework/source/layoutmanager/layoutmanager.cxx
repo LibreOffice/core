@@ -224,14 +224,14 @@ void LayoutManager::implts_lock()
     ++m_nLockCount;
 }
 
-sal_Bool LayoutManager::implts_unlock()
+bool LayoutManager::implts_unlock()
 {
     SolarMutexGuard g;
     m_nLockCount = std::max( m_nLockCount-1, static_cast<sal_Int32>(0) );
     return ( m_nLockCount == 0 );
 }
 
-void LayoutManager::implts_reset( sal_Bool bAttached )
+void LayoutManager::implts_reset( bool bAttached )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aReadLock;
@@ -408,7 +408,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
     implts_unlock();
 }
 
-sal_Bool LayoutManager::implts_isEmbeddedLayoutManager() const
+bool LayoutManager::implts_isEmbeddedLayoutManager() const
 {
     SolarMutexClearableGuard aReadLock;
     Reference< XFrame > xFrame = m_xFrame;
@@ -417,9 +417,9 @@ sal_Bool LayoutManager::implts_isEmbeddedLayoutManager() const
 
     Reference< awt::XWindow > xFrameContainerWindow = xFrame->getContainerWindow();
     if ( xFrameContainerWindow == xContainerWindow )
-        return sal_False;
+        return false;
     else
-        return sal_True;
+        return true;
 }
 
 void LayoutManager::implts_destroyElements()
@@ -438,7 +438,7 @@ void LayoutManager::implts_destroyElements()
     aWriteLock.clear();
 }
 
-void LayoutManager::implts_toggleFloatingUIElementsVisibility( sal_Bool bActive )
+void LayoutManager::implts_toggleFloatingUIElementsVisibility( bool bActive )
 {
     SolarMutexClearableGuard aReadLock;
     ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
@@ -468,13 +468,13 @@ uno::Reference< ui::XUIElement > LayoutManager::implts_findElement( const OUStri
     return uno::Reference< ui::XUIElement >();
 }
 
-sal_Bool LayoutManager::implts_readWindowStateData( const OUString& aName, UIElement& rElementData )
+bool LayoutManager::implts_readWindowStateData( const OUString& aName, UIElement& rElementData )
 {
     return readWindowStateData( aName, rElementData, m_xPersistentWindowState,
             m_pGlobalSettings, m_bGlobalSettings, m_xContext );
 }
 
-sal_Bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElementData,
+bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElementData,
         const Reference< XNameAccess > &rPersistentWindowState,
         GlobalSettings* &rGlobalSettings, bool &bInGlobalSettings,
         const Reference< XComponentContext > &rComponentContext )
@@ -503,7 +503,7 @@ sal_Bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& r
             Sequence< PropertyValue > aWindowState;
             if ( xPersistentWindowState->hasByName( aName ) && (xPersistentWindowState->getByName( aName ) >>= aWindowState) )
             {
-                sal_Bool bValue( sal_False );
+                bool bValue( false );
                 for ( sal_Int32 n = 0; n < aWindowState.getLength(); n++ )
                 {
                     if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_DOCKED )
@@ -586,7 +586,6 @@ sal_Bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& r
                     aWriteLock2.clear();
 
                     uno::Any aValue;
-                    sal_Bool bValue = sal_Bool();
                     if ( pGlobalSettings->GetStateInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR,
                                                         GlobalSettings::STATEINFO_LOCKED,
                                                         aValue ))
@@ -595,20 +594,21 @@ sal_Bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& r
                                                         GlobalSettings::STATEINFO_DOCKED,
                                                         aValue ))
                     {
+                        bool bValue;
                         if ( aValue >>= bValue )
                             rElementData.m_bFloating = !bValue;
                     }
                 }
             }
 
-            return sal_True;
+            return true;
         }
         catch (const NoSuchElementException&)
         {
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UIElement& rElementData )
@@ -620,7 +620,7 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
     m_bStoreWindowState = true;
     aWriteLock.clear();
 
-    sal_Bool bPersistent( sal_False );
+    bool bPersistent( false );
     Reference< XPropertySet > xPropSet( rElementData.m_xUIElement, UNO_QUERY );
     if ( xPropSet.is() )
     {
@@ -632,7 +632,7 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
         catch (const beans::UnknownPropertyException&)
         {
             // Non-configurable elements should at least store their dimension/position
-            bPersistent = sal_True;
+            bPersistent = true;
         }
         catch (const lang::WrappedTargetException&)
         {
@@ -646,9 +646,9 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
             Sequence< PropertyValue > aWindowState( 8 );
 
             aWindowState[0].Name  = WINDOWSTATE_PROPERTY_DOCKED;
-            aWindowState[0].Value = makeAny( sal_Bool( !rElementData.m_bFloating ));
+            aWindowState[0].Value = makeAny( !rElementData.m_bFloating );
             aWindowState[1].Name  = WINDOWSTATE_PROPERTY_VISIBLE;
-            aWindowState[1].Value = makeAny( sal_Bool( rElementData.m_bVisible ));
+            aWindowState[1].Value = makeAny( rElementData.m_bVisible );
 
             aWindowState[2].Name  = WINDOWSTATE_PROPERTY_DOCKINGAREA;
             aWindowState[2].Value = makeAny( static_cast< DockingArea >( rElementData.m_aDockedData.m_nDockedArea ) );
@@ -727,7 +727,7 @@ Reference< XUIElement > LayoutManager::implts_createElement( const OUString& aNa
     return xUIElement;
 }
 
-void LayoutManager::implts_setVisibleState( sal_Bool bShow )
+void LayoutManager::implts_setVisibleState( bool bShow )
 {
     SolarMutexClearableGuard aWriteLock;
     m_aStatusBarElement.m_bMasterHide = !bShow;
@@ -736,7 +736,7 @@ void LayoutManager::implts_setVisibleState( sal_Bool bShow )
     implts_updateUIElementsVisibleState( bShow );
 }
 
-void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
+void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
 {
     // notify listeners
     uno::Any a;
@@ -794,10 +794,10 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     }
 
     if ( bMustDoLayout )
-        implts_doLayout_notify( sal_False );
+        implts_doLayout_notify( false );
 }
 
-void LayoutManager::implts_setCurrentUIVisibility( sal_Bool bShow )
+void LayoutManager::implts_setCurrentUIVisibility( bool bShow )
 {
     SolarMutexClearableGuard aWriteLock;
     if ( !bShow && m_aStatusBarElement.m_bVisible && m_aStatusBarElement.m_xUIElement.is() )
@@ -865,7 +865,7 @@ void LayoutManager::implts_createProgressBar()
     xContainerWindow = m_xContainerWindow;
     aWriteLock.clear();
 
-    sal_Bool            bRecycled = xProgressBarBackup.is();
+    bool            bRecycled = xProgressBarBackup.is();
     ProgressBarWrapper* pWrapper  = 0;
     if ( bRecycled )
         pWrapper = (ProgressBarWrapper*)xProgressBarBackup.get();
@@ -892,7 +892,7 @@ void LayoutManager::implts_createProgressBar()
             {
                 StatusBar* pStatusBar = new StatusBar( pWindow, WinBits( WB_LEFT | WB_3DLOOK ) );
                 Reference< awt::XWindow > xStatusBarWindow2( VCLUnoHelper::GetInterface( pStatusBar ));
-                pWrapper->setStatusBar( xStatusBarWindow2, sal_True );
+                pWrapper->setStatusBar( xStatusBarWindow2, true );
             }
         }
     }
@@ -927,7 +927,7 @@ void LayoutManager::implts_backupProgressBarWrapper()
     {
         ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)m_xProgressBarBackup.get();
         if ( pWrapper )
-            pWrapper->setStatusBar( Reference< awt::XWindow >(), sal_False );
+            pWrapper->setStatusBar( Reference< awt::XWindow >(), false );
     }
 
     // prevent us from dispose() the m_aProgressBarElement.m_xUIElement inside implts_reset()
@@ -982,7 +982,7 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
     }
 }
 
-sal_Bool LayoutManager::implts_showProgressBar()
+bool LayoutManager::implts_showProgressBar()
 {
     Reference< XUIElement > xStatusBar;
     Reference< XUIElement > xProgressBar;
@@ -992,7 +992,7 @@ sal_Bool LayoutManager::implts_showProgressBar()
     SolarMutexClearableGuard aWriteLock;
     xStatusBar = Reference< XUIElement >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
     xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
-    sal_Bool bVisible( m_bVisible );
+    bool bVisible( m_bVisible );
 
     m_aProgressBarElement.m_bVisible = true;
     if ( bVisible )
@@ -1019,24 +1019,24 @@ sal_Bool LayoutManager::implts_showProgressBar()
         {
             implts_setOffset( pWindow->GetSizePixel().Height() );
             pWindow->Show();
-            implts_doLayout_notify( sal_False );
+            implts_doLayout_notify( false );
         }
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool LayoutManager::implts_hideProgressBar()
+bool LayoutManager::implts_hideProgressBar()
 {
     Reference< XUIElement > xProgressBar;
     Reference< awt::XWindow > xWindow;
-    sal_Bool bHideStatusBar( sal_False );
+    bool bHideStatusBar( false );
 
     SolarMutexGuard g;
     xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
 
-    sal_Bool bInternalStatusBar( sal_False );
+    bool bInternalStatusBar( false );
     if ( xProgressBar.is() )
     {
         Reference< awt::XWindow > xStatusBar;
@@ -1057,14 +1057,14 @@ sal_Bool LayoutManager::implts_hideProgressBar()
     {
         implts_setOffset( 0 );
         pWindow->Hide();
-        implts_doLayout_notify( sal_False );
-        return sal_True;
+        implts_doLayout_notify( false );
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool LayoutManager::implts_showStatusBar( sal_Bool bStoreState )
+bool LayoutManager::implts_showStatusBar( bool bStoreState )
 {
     SolarMutexClearableGuard aWriteLock;
     Reference< ui::XUIElement > xStatusBar = m_aStatusBarElement.m_xUIElement;
@@ -1082,15 +1082,15 @@ sal_Bool LayoutManager::implts_showStatusBar( sal_Bool bStoreState )
         {
             implts_setOffset( pWindow->GetSizePixel().Height() );
             pWindow->Show();
-            implts_doLayout_notify( sal_False );
-            return sal_True;
+            implts_doLayout_notify( false );
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool LayoutManager::implts_hideStatusBar( sal_Bool bStoreState )
+bool LayoutManager::implts_hideStatusBar( bool bStoreState )
 {
     SolarMutexClearableGuard aWriteLock;
     Reference< ui::XUIElement > xStatusBar = m_aStatusBarElement.m_xUIElement;
@@ -1108,12 +1108,12 @@ sal_Bool LayoutManager::implts_hideStatusBar( sal_Bool bStoreState )
         {
             implts_setOffset( 0 );
             pWindow->Hide();
-            implts_doLayout_notify( sal_False );
-            return sal_True;
+            implts_doLayout_notify( false );
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 void LayoutManager::implts_setOffset( const sal_Int32 nBottomOffset )
@@ -1149,7 +1149,7 @@ throw (uno::RuntimeException)
             Reference< XDispatchProvider > xDispatchProvider;
 
             MenuBar* pMenuBar = new MenuBar;
-            m_pInplaceMenuBar = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, aModuleIdentifier, pMenuBar, sal_True, sal_True );
+            m_pInplaceMenuBar = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, aModuleIdentifier, pMenuBar, true, true );
             m_pInplaceMenuBar->SetItemContainer( xMergedMenuBar );
 
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
@@ -1204,7 +1204,7 @@ throw (uno::RuntimeException, std::exception)
 void SAL_CALL LayoutManager::reset()
 throw (RuntimeException, std::exception)
 {
-    implts_reset( sal_True );
+    implts_reset( true );
 }
 
 // XMenuBarMergingAcceptor
@@ -1253,7 +1253,7 @@ throw ( RuntimeException, std::exception )
     if ( !xDockingAreaAcceptor.is() )
         m_aAsyncLayoutTimer.Stop();
 
-    sal_Bool bAutomaticToolbars( m_bAutomaticToolbars );
+    bool bAutomaticToolbars( m_bAutomaticToolbars );
     std::vector< Reference< awt::XWindow > > oldDockingAreaWindows;
 
     ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
@@ -1335,7 +1335,7 @@ throw ( RuntimeException, std::exception )
             pToolbarManager->createStaticToolbars();
             unlock();
         }
-        implts_doLayout( sal_True, sal_False );
+        implts_doLayout( true, false );
     }
 }
 
@@ -1415,7 +1415,7 @@ throw (RuntimeException, std::exception)
     SolarMutexClearableGuard aReadLock;
     Reference< XFrame > xFrame = m_xFrame;
     Reference< XURLTransformer > xURLTransformer = m_xURLTransformer;
-    sal_Bool    bInPlaceMenu = m_bInplaceMenuSet;
+    bool    bInPlaceMenu = m_bInplaceMenuSet;
     aReadLock.clear();
 
     if ( !xFrame.is() )
@@ -1532,7 +1532,7 @@ throw (RuntimeException, std::exception)
     }
 
     if ( bMustBeLayouted )
-        implts_doLayout_notify( sal_True );
+        implts_doLayout_notify( true );
 
     if ( bNotify )
     {
@@ -1772,7 +1772,7 @@ throw (RuntimeException, std::exception)
     {
         SolarMutexClearableGuard aWriteLock;
         if ( m_aStatusBarElement.m_xUIElement.is() && !m_aStatusBarElement.m_bMasterHide &&
-             implts_showStatusBar( sal_True ))
+             implts_showStatusBar( true ))
         {
             aWriteLock.clear();
 
@@ -1867,7 +1867,7 @@ throw (RuntimeException, std::exception)
     {
         SolarMutexGuard g;
         if ( m_aStatusBarElement.m_xUIElement.is() && !m_aStatusBarElement.m_bMasterHide &&
-             implts_hideStatusBar( sal_True ))
+             implts_hideStatusBar( true ))
         {
             implts_writeWindowStateData( STATUS_BAR_ALIAS, m_aStatusBarElement );
             bMustLayout = true;
@@ -2242,7 +2242,7 @@ throw (RuntimeException, std::exception)
 void SAL_CALL LayoutManager::unlock()
 throw (RuntimeException, std::exception)
 {
-    sal_Bool bDoLayout( implts_unlock() );
+    bool bDoLayout( implts_unlock() );
 
     SolarMutexClearableGuard aReadLock;
     sal_Int32 nLockCount( m_nLockCount );
@@ -2267,13 +2267,13 @@ throw (RuntimeException, std::exception)
     implts_notifyListeners( frame::LayoutManagerEvents::UNLOCK, a );
 
     if ( bDoLayout )
-        implts_doLayout_notify( sal_True );
+        implts_doLayout_notify( true );
 }
 
 void SAL_CALL LayoutManager::doLayout()
 throw (RuntimeException, std::exception)
 {
-    implts_doLayout_notify( sal_True );
+    implts_doLayout_notify( true );
 }
 
 //  ILayoutNotifications
@@ -2284,14 +2284,14 @@ void LayoutManager::requestLayout( Hint eHint )
         doLayout();
 }
 
-void LayoutManager::implts_doLayout_notify( sal_Bool bOuterResize )
+void LayoutManager::implts_doLayout_notify( bool bOuterResize )
 {
     bool bLayouted = implts_doLayout( false, bOuterResize );
     if ( bLayouted )
         implts_notifyListeners( frame::LayoutManagerEvents::LAYOUT, Any() );
 }
 
-sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_Bool bOuterResize )
+bool LayoutManager::implts_doLayout( bool bForceRequestBorderSpace, bool bOuterResize )
 {
     SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::implts_doLayout" );
 
@@ -2299,7 +2299,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
     SolarMutexClearableGuard aReadLock;
 
     if ( !m_xFrame.is() || !m_bParentWindowVisible )
-        return sal_False;
+        return false;
 
     bool bPreserveContentSize( m_bPreserveContentSize );
     bool bMustDoLayout( m_bMustDoLayout );
@@ -2312,11 +2312,11 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
     aReadLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    sal_Bool bLayouted( sal_False );
+    bool bLayouted( false );
 
     if ( bNoLock && xDockingAreaAcceptor.is() && xContainerWindow.is() && xComponentWindow.is() )
     {
-        bLayouted = sal_True;
+        bLayouted = true;
 
         SolarMutexResettableGuard aWriteGuard;
         m_bDoLayout = true;
@@ -2324,7 +2324,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
 
         awt::Rectangle aDockSpace( implts_calcDockingAreaSizes() );
         awt::Rectangle aBorderSpace( aDockSpace );
-        sal_Bool       bGotRequestedBorderSpace( sal_True );
+        bool       bGotRequestedBorderSpace( true );
 
         // We have to add the height of a possible status bar
         aBorderSpace.Height += implts_getStatusBarSize().Height();
@@ -2334,19 +2334,19 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
             // we always resize the content window (instead of the complete container window) if we're not set up
             // to (attempt to) preserve the content window's size
             if ( bOuterResize && !bPreserveContentSize )
-                bOuterResize = sal_False;
+                bOuterResize = false;
 
             // maximized windows can resized their content window only, not their container window
             if ( bOuterResize && xContainerTopWindow.is() && xContainerTopWindow->getIsMaximized() )
-                bOuterResize = sal_False;
+                bOuterResize = false;
 
             // if the component window does not have a size (yet), then we can't use it to calc the container
             // window size
             awt::Rectangle aComponentRect = xComponentWindow->getPosSize();
             if ( bOuterResize && ( aComponentRect.Width == 0 ) && ( aComponentRect.Height == 0 ) )
-                bOuterResize = sal_False;
+                bOuterResize = false;
 
-            bGotRequestedBorderSpace = sal_False;
+            bGotRequestedBorderSpace = false;
             if ( bOuterResize )
             {
                 Reference< awt::XDevice > xDevice( xContainerWindow, uno::UNO_QUERY );
@@ -2410,7 +2410,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
     return bLayouted;
 }
 
-sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContainerSize,
+bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContainerSize,
                                                       const awt::Point& rComponentPos )
 {
     SolarMutexClearableGuard aReadLock;
@@ -2426,7 +2426,7 @@ sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContaine
     if (( aWorkArea.GetWidth() > 0 ) && ( aWorkArea.GetHeight() > 0 ))
     {
         if (( rContainerSize.Width > aWorkArea.GetWidth() ) || ( rContainerSize.Height > aWorkArea.GetHeight() ))
-            return sal_False;
+            return false;
         // Strictly, this is not correct. If we have a multi-screen display (css.awt.DisplayAccess.MultiDisplay == true),
         // the "effective work area" would be much larger than the work area of a single display, since we could in theory
         // position the container window across multiple screens.
@@ -2439,18 +2439,18 @@ sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContaine
     xContainerWindow->setPosSize( 0, 0, rContainerSize.Width, rContainerSize.Height, awt::PosSize::SIZE );
     // position the component window
     xComponentWindow->setPosSize( rComponentPos.X, rComponentPos.Y, 0, 0, awt::PosSize::POS );
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL LayoutManager::setVisible( sal_Bool bVisible )
 throw (uno::RuntimeException, std::exception)
 {
     SolarMutexClearableGuard aWriteLock;
-    sal_Bool bWasVisible( m_bVisible );
+    bool bWasVisible( m_bVisible );
     m_bVisible = bVisible;
     aWriteLock.clear();
 
-    if ( bWasVisible != bVisible )
+    if ( (bWasVisible ? 1 : 0) != bVisible )
         implts_setVisibleState( bVisible );
 }
 
@@ -2553,11 +2553,11 @@ void LayoutManager::implts_updateMenuBarClose()
     }
 }
 
-sal_Bool LayoutManager::implts_resetMenuBar()
+bool LayoutManager::implts_resetMenuBar()
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aWriteLock;
-    sal_Bool bMenuVisible( m_bMenuVisible );
+    bool bMenuVisible( m_bMenuVisible );
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
 
     MenuBar* pSetMenuBar = 0;
@@ -2578,10 +2578,10 @@ sal_Bool LayoutManager::implts_resetMenuBar()
     {
         pSysWindow->SetMenuBar( pSetMenuBar );
         pSetMenuBar->SetDisplayable( true );
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 IMPL_LINK_NOARG(LayoutManager, MenuBarClose)
@@ -2717,7 +2717,7 @@ void SAL_CALL LayoutManager::windowShown( const lang::EventObject& aEvent ) thro
         aWriteLock.clear();
 
         if ( bSetVisible )
-            implts_updateUIElementsVisibleState( sal_True );
+            implts_updateUIElementsVisibleState( true );
     }
 }
 
@@ -2737,7 +2737,7 @@ void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent ) thr
         aWriteLock.clear();
 
         if ( bSetInvisible )
-            implts_updateUIElementsVisibleState( sal_False );
+            implts_updateUIElementsVisibleState( false );
     }
 }
 
@@ -2757,7 +2757,7 @@ IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl)
     aReadLock.clear();
 
     implts_setDockingAreaWindowSizes( aDockingArea );
-    implts_doLayout( sal_True, sal_False );
+    implts_doLayout( true, false );
 
     return 0;
 }
@@ -2776,9 +2776,9 @@ throw ( RuntimeException, std::exception )
         m_bMustDoLayout = true;
         aWriteLock.clear();
 
-        implts_reset( sal_True );
-        implts_doLayout( sal_True, sal_False );
-        implts_doLayout( sal_True, sal_True );
+        implts_reset( true );
+        implts_doLayout( true, false );
+        implts_doLayout( true, true );
     }
     else if (( aEvent.Action == FrameAction_FRAME_UI_ACTIVATED ) || ( aEvent.Action == FrameAction_FRAME_UI_DEACTIVATING ))
     {
@@ -2798,14 +2798,14 @@ throw ( RuntimeException, std::exception )
         m_bComponentAttached = false;
         aWriteLock.clear();
 
-        implts_reset( sal_False );
+        implts_reset( false );
     }
 }
 
 void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
 throw( RuntimeException, std::exception )
 {
-    sal_Bool bDisposeAndClear( sal_False );
+    bool bDisposeAndClear( false );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aWriteLock;
@@ -2866,7 +2866,7 @@ throw( RuntimeException, std::exception )
         delete m_pGlobalSettings;
         m_pGlobalSettings = 0;
 
-        bDisposeAndClear = sal_True;
+        bDisposeAndClear = true;
     }
     else if ( rEvent.Source == Reference< XInterface >( m_xContainerWindow, UNO_QUERY ))
     {
@@ -3113,7 +3113,7 @@ void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32       n
 
         case LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY:
         {
-            sal_Bool bValue(sal_False);
+            bool bValue(false);
             if (( aValue >>= bValue ) && bValue )
             {
                 SolarMutexClearableGuard aReadLock;

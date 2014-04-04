@@ -159,7 +159,7 @@ throw( IllegalArgumentException )
     //  Attention: Method "impl_tryToChangeProperty()" can throw the IllegalArgumentException !!!
     //  Initialize return value with sal_False !!!
     //  (Handle can be invalid)
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     switch( nHandle )
     {
@@ -265,7 +265,7 @@ const Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticProp
     return seqActionTriggerPropertyDescriptor;
 }
 
-sal_Bool ActionTriggerSeparatorPropertySet::impl_tryToChangeProperty(
+bool ActionTriggerSeparatorPropertySet::impl_tryToChangeProperty(
     sal_Int16           aCurrentValue   ,
     const   Any&        aNewValue       ,
     Any&                aOldValue       ,
@@ -273,7 +273,7 @@ sal_Bool ActionTriggerSeparatorPropertySet::impl_tryToChangeProperty(
 throw( IllegalArgumentException )
 {
     // Set default return value if method failed.
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     // Get new value from any.
     // IllegalArgumentException() can be thrown!
     sal_Int16 aValue = 0;
@@ -286,7 +286,7 @@ throw( IllegalArgumentException )
         aOldValue       <<= aCurrentValue;
         aConvertedValue <<= aValue;
         // Return OK - "value will be change ..."
-        bReturn = sal_True;
+        bReturn = true;
     }
     else
     {
@@ -294,7 +294,7 @@ throw( IllegalArgumentException )
         aOldValue.clear         ();
         aConvertedValue.clear   ();
         // Return NOTHING - "value will not be change ..."
-        bReturn = sal_False;
+        bReturn = false;
     }
 
     return bReturn;

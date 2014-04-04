@@ -178,7 +178,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
 
     private:
 
-        static sal_Bool impldbg_checkParameter_OComponentAccessCtor( const css::uno::Reference< css::frame::XDesktop >& xOwner );
+        static bool impldbg_checkParameter_OComponentAccessCtor( const css::uno::Reference< css::frame::XDesktop >& xOwner );
 
     //  variables
     //  (should be private everyway!)

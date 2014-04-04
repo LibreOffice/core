@@ -42,7 +42,7 @@ namespace framework{
 
 PersistentWindowState::PersistentWindowState(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext              (xContext                     )
-    , m_bWindowStateAlreadySet(sal_False                    )
+    , m_bWindowStateAlreadySet(false                    )
 {
 }
 
@@ -83,7 +83,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
 {
     css::uno::Reference< css::uno::XComponentContext >     xContext;
     css::uno::Reference< css::frame::XFrame >              xFrame;
-    sal_Bool                                               bRestoreWindowState;
+    bool                                               bRestoreWindowState;
     {
         SolarMutexGuard g;
         xContext = m_xContext;
@@ -114,7 +114,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
                     OUString sWindowState = PersistentWindowState::implst_getWindowStateFromConfig(xContext, sModuleName);
                     PersistentWindowState::implst_setWindowStateOnWindow(xWindow,sWindowState);
                     SolarMutexGuard g;
-                    m_bWindowStateAlreadySet = sal_True;
+                    m_bWindowStateAlreadySet = true;
                 }
             }
             break;
@@ -266,8 +266,8 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
         return;
 
     // check for system and work window - its necessary to guarantee correct pointer cast!
-    sal_Bool bSystemWindow = pWindow->IsSystemWindow();
-    sal_Bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
+    bool bSystemWindow = pWindow->IsSystemWindow();
+    bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
 
     if (!bSystemWindow && !bWorkWindow)
         return;

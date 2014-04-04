@@ -60,7 +60,7 @@ class BmkMenu_Impl
         static sal_uInt16        m_nMID;
 
     public:
-        sal_Bool                 m_bInitialized;
+        bool                 m_bInitialized;
 
         BmkMenu_Impl();
         ~BmkMenu_Impl();
@@ -71,7 +71,7 @@ class BmkMenu_Impl
 sal_uInt16 BmkMenu_Impl::m_nMID = BMKMENU_ITEMID_START;
 
 BmkMenu_Impl::BmkMenu_Impl() :
-    m_bInitialized(sal_False)
+    m_bInitialized(false)
 {
 }
 
@@ -107,7 +107,7 @@ void BmkMenu::Initialize()
     if( _pImp->m_bInitialized )
         return;
 
-    _pImp->m_bInitialized = sal_True;
+    _pImp->m_bInitialized = true;
 
     Sequence< Sequence< PropertyValue > > aDynamicMenuEntries;
 
@@ -117,7 +117,7 @@ void BmkMenu::Initialize()
         aDynamicMenuEntries = SvtDynamicMenuOptions().GetMenu( E_WIZARDMENU );
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    sal_Bool bShowMenuImages = rSettings.GetUseImagesInMenus();
+    bool bShowMenuImages = rSettings.GetUseImagesInMenus();
 
     OUString aTitle;
     OUString aURL;
@@ -136,7 +136,7 @@ void BmkMenu::Initialize()
             InsertSeparator();
         else
         {
-            sal_Bool    bImageSet = sal_False;
+            bool    bImageSet = false;
             sal_uInt16      nId = CreateMenuId();
 
             if ( bShowMenuImages )
@@ -146,7 +146,7 @@ void BmkMenu::Initialize()
                     Image aImage = GetImageFromURL( m_xFrame, aImageId, false );
                     if ( !!aImage )
                     {
-                        bImageSet = sal_True;
+                        bImageSet = true;
                         InsertItem( nId, aTitle, aImage );
                     }
                 }

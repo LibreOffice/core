@@ -102,7 +102,7 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
 
     @return     <TRUE/> if it represent a valid job URL.
 */
-sal_Bool JobURL::isValid() const
+bool JobURL::isValid() const
 {
     SolarMutexGuard g;
     return (m_eRequest!=E_UNKNOWN);
@@ -124,12 +124,12 @@ sal_Bool JobURL::isValid() const
 
     @attention  The out parameter will be reseted everytime. Don't use it if method returns <FALSE/>!
 */
-sal_Bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
+bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
 {
     SolarMutexGuard g;
 
              sEvent = OUString();
-    sal_Bool bSet   = ((m_eRequest & E_EVENT) == E_EVENT);
+    bool bSet   = ((m_eRequest & E_EVENT) == E_EVENT);
     if (bSet)
         sEvent = m_sEvent;
 
@@ -152,12 +152,12 @@ sal_Bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
 
     @attention  The out parameter will be reseted everytime. Don't use it if method returns <FALSE/>!
 */
-sal_Bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
+bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
 {
     SolarMutexGuard g;
 
              sAlias = OUString();
-    sal_Bool bSet   = ((m_eRequest & E_ALIAS) == E_ALIAS);
+    bool bSet   = ((m_eRequest & E_ALIAS) == E_ALIAS);
     if (bSet)
         sAlias = m_sAlias;
 
@@ -180,12 +180,12 @@ sal_Bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
 
     @attention  The out parameter will be reseted everytime. Don't use it if method returns <FALSE/>!
 */
-sal_Bool JobURL::getService( /*OUT*/ OUString& sService ) const
+bool JobURL::getService( /*OUT*/ OUString& sService ) const
 {
     SolarMutexGuard g;
 
              sService = OUString();
-    sal_Bool bSet     = ((m_eRequest & E_SERVICE) == E_SERVICE);
+    bool bSet     = ((m_eRequest & E_SERVICE) == E_SERVICE);
     if (bSet)
         sService = m_sService;
 
@@ -217,14 +217,14 @@ sal_Bool JobURL::getService( /*OUT*/ OUString& sService ) const
     @return     <TRUE/> if the identifier could be found and the string was splitted.
                 <FALSE/> otherwise.
 */
-sal_Bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
+bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
                                /*IN*/  const sal_Char*        pPartIdentifier ,
                                /*IN*/        sal_Int32        nPartLength     ,
                                /*OUT*/       OUString& rPartValue      ,
                                /*OUT*/       OUString& rPartArguments  )
 {
     // first search for the given identifier
-    sal_Bool bPartFound = (sPart.matchIgnoreAsciiCaseAsciiL(pPartIdentifier,nPartLength,0));
+    bool bPartFound = (sPart.matchIgnoreAsciiCaseAsciiL(pPartIdentifier,nPartLength,0));
 
     // If it exist - we can split the part and return sal_True.
     // Otherwhise we do nothing and return sal_False.

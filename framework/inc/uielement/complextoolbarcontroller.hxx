@@ -89,7 +89,7 @@ class ComplexToolbarController : public svt::ToolboxController
 
         ToolBox*                                                                    m_pToolbar;
         sal_uInt16                                                                  m_nID;
-        sal_Bool                                                                    m_bMadeInvisible;
+        bool                                                                    m_bMadeInvisible;
         mutable ::com::sun::star::util::URL                                         m_aURL;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
 };

@@ -116,9 +116,9 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :
                 }
         };
 
-        sal_Bool                                                                            m_bStatusBarStartFound;
-        sal_Bool                                                                            m_bStatusBarEndFound;
-        sal_Bool                                                                            m_bStatusBarItemStartFound;
+        bool                                                                            m_bStatusBarStartFound;
+        bool                                                                            m_bStatusBarEndFound;
+        bool                                                                            m_bStatusBarItemStartFound;
         StatusBarHashMap                                                                    m_aStatusBarMap;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >    m_aStatusBarItems;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >            m_xLocator;

@@ -45,9 +45,9 @@ static Sequence< sal_Int8 > impl_getStaticIdentifier()
 
 RootActionTriggerContainer::RootActionTriggerContainer( const Menu* pMenu, const OUString* pMenuIdentifier ) :
     PropertySetContainer()
-    ,   m_bContainerCreated( sal_False )
-    ,   m_bContainerChanged( sal_False )
-    ,   m_bInContainerCreation( sal_False )
+    ,   m_bContainerCreated( false )
+    ,   m_bContainerChanged( false )
+    ,   m_bInContainerCreation( false )
     ,   m_pMenu( pMenu )
     ,   m_pMenuIdentifier( pMenuIdentifier )
 {
@@ -129,7 +129,7 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
         FillContainer();
 
     if ( !m_bInContainerCreation )
-        m_bContainerChanged = sal_True;
+        m_bContainerChanged = true;
     PropertySetContainer::insertByIndex( Index, Element );
 }
 
@@ -142,7 +142,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std
         FillContainer();
 
     if ( !m_bInContainerCreation )
-        m_bContainerChanged = sal_True;
+        m_bContainerChanged = true;
     PropertySetContainer::removeByIndex( Index );
 }
 
@@ -156,7 +156,7 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
         FillContainer();
 
     if ( !m_bInContainerCreation )
-        m_bContainerChanged = sal_True;
+        m_bContainerChanged = true;
     PropertySetContainer::replaceByIndex( Index, Element );
 }
 
@@ -284,13 +284,13 @@ Sequence< sal_Int8 > SAL_CALL RootActionTriggerContainer::getImplementationId() 
 // private implementation helper
 void RootActionTriggerContainer::FillContainer()
 {
-    m_bContainerCreated = sal_True;
-    m_bInContainerCreation = sal_True;
+    m_bContainerCreated = true;
+    m_bInContainerCreation = true;
     Reference<XIndexContainer> xXIndexContainer( (OWeakObject *)this, UNO_QUERY );
     ActionTriggerHelper::FillActionTriggerContainerFromMenu(
         xXIndexContainer,
         m_pMenu );
-    m_bInContainerCreation = sal_False;
+    m_bInContainerCreation = false;
 }
 OUString RootActionTriggerContainer::getName() throw ( RuntimeException, std::exception )
 {

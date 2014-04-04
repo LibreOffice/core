@@ -114,8 +114,8 @@ class FWI_DLLPUBLIC HandlerCache
                  HandlerCache();
         virtual ~HandlerCache();
 
-        sal_Bool search( const OUString& sURL, ProtocolHandler* pReturn ) const;
-        sal_Bool search( const css::util::URL&  aURL, ProtocolHandler* pReturn ) const;
+        bool search( const OUString& sURL, ProtocolHandler* pReturn ) const;
+        bool search( const css::util::URL&  aURL, ProtocolHandler* pReturn ) const;
 
         void takeOver(HandlerHash* pHandler, PatternHash* pPattern);
 };

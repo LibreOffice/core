@@ -125,14 +125,14 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
     }
 
     // reset states
-    m_bImageContainerStartFound     = sal_False;
-    m_bImageContainerEndFound       = sal_False;
-    m_bImagesStartFound             = sal_False;
-    m_bImagesEndFound               = sal_False;
-    m_bImageStartFound              = sal_False;
-    m_bExternalImagesStartFound     = sal_False;
-    m_bExternalImagesEndFound       = sal_False;
-    m_bExternalImageStartFound      = sal_False;
+    m_bImageContainerStartFound     = false;
+    m_bImageContainerEndFound       = false;
+    m_bImagesStartFound             = false;
+    m_bImagesEndFound               = false;
+    m_bImageStartFound              = false;
+    m_bExternalImagesStartFound     = false;
+    m_bExternalImagesEndFound       = false;
+    m_bExternalImageStartFound      = false;
 }
 
 OReadImagesDocumentHandler::~OReadImagesDocumentHandler()
@@ -182,7 +182,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_bImageContainerStartFound = sal_True;
+                m_bImageContainerStartFound = true;
             }
             break;
 
@@ -205,7 +205,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 if ( !m_aImageList.pImageList )
                     m_aImageList.pImageList = new ImageListDescriptor;
 
-                m_bImagesStartFound = sal_True;
+                m_bImagesStartFound = true;
                 m_pImages = new ImageListItemDescriptor;
 
                 for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
@@ -306,7 +306,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 if ( !m_pImages->pImageItemList )
                     m_pImages->pImageItemList = new ImageItemListDescriptor;
 
-                m_bImageStartFound = sal_True;
+                m_bImageStartFound = true;
 
                 // Create new image item descriptor
                 ImageItemDescriptor* pItem = new ImageItemDescriptor;
@@ -392,7 +392,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 }
 
                 // Create unique external image container
-                m_bExternalImagesStartFound = sal_True;
+                m_bExternalImagesStartFound = true;
                 m_pExternalImages = new ExternalImageItemListDescriptor;
             }
             break;
@@ -423,7 +423,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_bExternalImageStartFound = sal_True;
+                m_bExternalImageStartFound = true;
 
                 ExternalImageItemDescriptor* pItem = new ExternalImageItemDescriptor;
 
@@ -508,7 +508,7 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
         {
             case IMG_ELEMENT_IMAGECONTAINER:
             {
-                m_bImageContainerEndFound = sal_True;
+                m_bImageContainerEndFound = true;
             }
             break;
 
@@ -520,13 +520,13 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
                         m_aImageList.pImageList->push_back( m_pImages );
                     m_pImages = NULL;
                 }
-                m_bImagesStartFound = sal_False;
+                m_bImagesStartFound = false;
             }
             break;
 
             case IMG_ELEMENT_ENTRY:
             {
-                m_bImageStartFound = sal_False;
+                m_bImageStartFound = false;
             }
             break;
 
@@ -538,14 +538,14 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
                         m_aImageList.pExternalImageList = m_pExternalImages;
                 }
 
-                m_bExternalImagesStartFound = sal_False;
+                m_bExternalImagesStartFound = false;
                 m_pExternalImages = NULL;
             }
             break;
 
             case IMG_ELEMENT_EXTERNALENTRY:
             {
-                m_bExternalImageStartFound = sal_False;
+                m_bExternalImageStartFound = false;
             }
             break;
 

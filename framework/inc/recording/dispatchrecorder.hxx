@@ -88,7 +88,7 @@ class DispatchRecorder
     private:
         void SAL_CALL implts_recordMacro( const OUString& aURL,
                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                                                sal_Bool bAsComment, OUStringBuffer& );
+                                                bool bAsComment, OUStringBuffer& );
         void SAL_CALL AppendToBuffer( css::uno::Any aValue, OUStringBuffer& aArgumentBuffer );
 
 }; // class DispatcRecorder

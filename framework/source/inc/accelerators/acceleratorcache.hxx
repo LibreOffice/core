@@ -107,8 +107,8 @@ class AcceleratorCache
             @return [bool]
                     sal_True if the speicfied key exists inside this container.
          */
-        virtual sal_Bool hasKey(const css::awt::KeyEvent& aKey) const;
-        virtual sal_Bool hasCommand(const OUString& sCommand) const;
+        virtual bool hasKey(const css::awt::KeyEvent& aKey) const;
+        virtual bool hasCommand(const OUString& sCommand) const;
 
         /** TODO document me */
         virtual TKeyList getAllKeys() const;

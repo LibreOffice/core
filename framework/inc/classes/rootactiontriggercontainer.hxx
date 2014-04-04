@@ -103,9 +103,9 @@ class FWE_DLLPUBLIC RootActionTriggerContainer :  public PropertySetContainer,
     private:
         void FillContainer();
 
-        sal_Bool    m_bContainerCreated;
-        sal_Bool    m_bContainerChanged;
-        sal_Bool    m_bInContainerCreation;
+        bool    m_bContainerCreated;
+        bool    m_bContainerChanged;
+        bool    m_bInContainerCreation;
         const Menu* m_pMenu;
         const OUString* m_pMenuIdentifier;
 };

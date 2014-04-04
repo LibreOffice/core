@@ -162,8 +162,8 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
 
     private:
 
-        static sal_Bool impldbg_checkParameter_OComponentEnumerationCtor    (   const   css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents   );
-        static sal_Bool impldbg_checkParameter_disposing                    (   const   css::lang::EventObject&                                             aEvent          );
+        static bool impldbg_checkParameter_OComponentEnumerationCtor    (   const   css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents   );
+        static bool impldbg_checkParameter_disposing                    (   const   css::lang::EventObject&                                             aEvent          );
 
     //  variables
     //  (should be private everyway!)

@@ -101,7 +101,7 @@ ImageButtonToolbarController::ImageButtonToolbarController(
     const OUString&                          aCommand ) :
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
 {
-    sal_Bool bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
+    bool bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
 
     Image aImage = AddonsOptions().GetImageFromURL( aCommand, bBigImages, true );
 
@@ -157,7 +157,7 @@ void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star
     }
 }
 
-sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, const OUString& aImageURL, Image& aImage )
+bool ImageButtonToolbarController::ReadImageFromURL( bool bBigImage, const OUString& aImageURL, Image& aImage )
 {
     SvStream* pStream = utl::UcbStreamHelper::CreateStream( aImageURL, STREAM_STD_READ );
     if ( pStream && ( pStream->GetErrorCode() == 0 ))
@@ -179,12 +179,12 @@ sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, con
             if ( aBmpSize != aNoScaleSize )
                 aBitmapEx.Scale( aNoScaleSize, BMP_SCALE_BESTQUALITY );
             aImage = Image( aBitmapEx );
-            return sal_True;
+            return true;
         }
     }
 
     delete pStream;
-    return sal_False;
+    return false;
 }
 
 } // namespace

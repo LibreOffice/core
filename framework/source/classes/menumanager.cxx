@@ -104,17 +104,17 @@ const char UNO_COMMAND[] = ".uno:";
 
 MenuManager::MenuManager(
     const Reference< XComponentContext >& rxContext,
-    Reference< XFrame >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
+    Reference< XFrame >& rFrame, Menu* pMenu, bool bDelete, bool bDeleteChildren )
 :
     m_xContext(rxContext)
 {
-    m_bActive           = sal_False;
+    m_bActive           = false;
     m_bDeleteMenu       = bDelete;
     m_bDeleteChildren   = bDeleteChildren;
     m_pVCLMenu          = pMenu;
     m_xFrame            = rFrame;
-    m_bInitialized      = sal_False;
-    m_bIsBookmarkMenu   = sal_False;
+    m_bInitialized      = false;
+    m_bIsBookmarkMenu   = false;
     acquire();
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
@@ -164,7 +164,7 @@ MenuManager::MenuManager(
                         aItemCommand = "slot:" + OUString::number( ITEMID_ADDONLIST );
                         pPopupMenu->SetItemCommand( ITEMID_ADDONLIST, aItemCommand );
 
-                        AddMenu(pSubMenu,OUString(),nItemId,sal_True,sal_False);
+                        AddMenu(pSubMenu,OUString(),nItemId,true,false);
                         // Set image for the addon popup menu item
                         if ( bShowMenuImages && !pPopupMenu->GetItemImage( ITEMID_ADDONLIST ))
                         {
@@ -186,7 +186,7 @@ MenuManager::MenuManager(
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
 
-                AddMenu(pSubMenu,OUString(),nItemId,sal_True,sal_False);
+                AddMenu(pSubMenu,OUString(),nItemId,true,false);
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
                     Image aImage = GetImageFromURL( rFrame, aItemCommand, false );
@@ -200,7 +200,7 @@ MenuManager::MenuManager(
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
 
-                AddMenu(pSubMenu,OUString(),nItemId,sal_True,sal_False);
+                AddMenu(pSubMenu,OUString(),nItemId,true,false);
 
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
@@ -325,15 +325,15 @@ throw ( RuntimeException, std::exception )
     {
         SolarMutexGuard aSolarGuard;
         {
-            sal_Bool bSetCheckmark      = sal_False;
-            sal_Bool bCheckmark         = sal_False;
-            sal_Bool bMenuItemEnabled   = m_pVCLMenu->IsItemEnabled( pStatusChangedMenu->nItemId );
+            bool bSetCheckmark      = false;
+            bool bCheckmark         = false;
+            bool bMenuItemEnabled   = m_pVCLMenu->IsItemEnabled( pStatusChangedMenu->nItemId );
 
-            if ( Event.IsEnabled != bMenuItemEnabled )
+            if ( Event.IsEnabled != (bMenuItemEnabled ? 1 : 0) )
                 m_pVCLMenu->EnableItem( pStatusChangedMenu->nItemId, Event.IsEnabled );
 
             if ( Event.State >>= bCheckmark )
-                 bSetCheckmark = sal_True;
+                 bSetCheckmark = true;
 
             if ( bSetCheckmark )
                 m_pVCLMenu->CheckItem( pStatusChangedMenu->nItemId, bCheckmark );
@@ -713,9 +713,9 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
     if ( pMenu == m_pVCLMenu )
     {
         // set/unset hiding disabled menu entries
-        sal_Bool bDontHide          = SvtMenuOptions().IsEntryHidingEnabled();
+        bool bDontHide          = SvtMenuOptions().IsEntryHidingEnabled();
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        sal_Bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
+        bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
 
         sal_uInt16 nFlag = pMenu->GetMenuFlags();
         if ( bDontHide )
@@ -727,7 +727,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         if ( m_bActive )
             return 0;
 
-        m_bActive = sal_True;
+        m_bActive = true;
 
         OUString aCommand( m_aMenuItemCommand );
         if (m_aMenuItemCommand.matchIgnoreAsciiCase(UNO_COMMAND))
@@ -811,7 +811,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
 IMPL_LINK( MenuManager, Deactivate, Menu *, pMenu )
 {
     if ( pMenu == m_pVCLMenu )
-        m_bActive = sal_False;
+        m_bActive = false;
 
     return 1;
 }
@@ -894,7 +894,7 @@ IMPL_LINK_NOARG(MenuManager, Highlight)
     return 0;
 }
 
-void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren)
+void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const OUString& _sItemCommand,sal_uInt16 _nItemId,bool _bDelete,bool _bDeleteChildren)
 {
     MenuManager* pSubMenuManager = new MenuManager( m_xContext, m_xFrame, _pPopupMenu, _bDelete, _bDeleteChildren );
 
@@ -921,7 +921,7 @@ sal_uInt16 MenuManager::FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sa
     }
     return nItemId;
 }
-void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,sal_Bool bShowMenuImages)
+void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,bool bShowMenuImages)
 {
     AddonsOptions       aAddonOptions;
 
@@ -940,7 +940,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,sal_
 
             if ( bTmpShowMenuImages )
             {
-                sal_Bool        bImageSet = sal_False;
+                bool        bImageSet = false;
                 OUString aImageId;
 
                 ::framework::MenuConfiguration::Attributes* pMenuAttributes =
@@ -954,7 +954,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,sal_
                     Image aImage = GetImageFromURL( _xFrame, aImageId, false );
                     if ( !!aImage )
                     {
-                        bImageSet = sal_True;
+                        bImageSet = true;
                         _pMenu->SetItemImage( nId, aImage );
                     }
                 }

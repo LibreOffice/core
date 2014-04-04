@@ -50,8 +50,8 @@ class MenuManager : public ::cppu::WeakImplHelper1< css::frame::XStatusListener 
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             css::uno::Reference< css::frame::XFrame >& rFrame,
             Menu* pMenu,
-            sal_Bool bDelete,
-            sal_Bool bDeleteChildren );
+            bool bDelete,
+            bool bDeleteChildren );
 
         virtual ~MenuManager();
 
@@ -71,7 +71,7 @@ class MenuManager : public ::cppu::WeakImplHelper1< css::frame::XStatusListener 
         static void FillMenuImages(
             css::uno::Reference< css::frame::XFrame >& xFrame,
             Menu* _pMenu,
-            sal_Bool bShowMenuImages
+            bool bShowMenuImages
         );
 
     protected:
@@ -84,7 +84,7 @@ class MenuManager : public ::cppu::WeakImplHelper1< css::frame::XStatusListener 
         void UpdateSpecialWindowMenu( Menu* pMenu );
         void ClearMenuDispatch(const css::lang::EventObject& Source = css::lang::EventObject(),bool _bRemoveOnly = true);
         void SetHdl();
-        void AddMenu(PopupMenu* _pPopupMenu,const OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren);
+        void AddMenu(PopupMenu* _pPopupMenu,const OUString& _sItemCommand,sal_uInt16 _nItemId,bool _bDelete,bool _bDeleteChildren);
         sal_uInt16 FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const;
 
         struct MenuItemHandler
@@ -108,12 +108,12 @@ class MenuManager : public ::cppu::WeakImplHelper1< css::frame::XStatusListener 
 
         MenuItemHandler* GetMenuItemHandler( sal_uInt16 nItemId );
 
-        sal_Bool                            m_bInitialized;
-        sal_Bool                            m_bDeleteMenu;
-        sal_Bool                            m_bDeleteChildren;
-        sal_Bool                            m_bActive;
-        sal_Bool                            m_bIsBookmarkMenu;
-        sal_Bool                            m_bShowMenuImages;
+        bool                            m_bInitialized;
+        bool                            m_bDeleteMenu;
+        bool                            m_bDeleteChildren;
+        bool                            m_bActive;
+        bool                            m_bIsBookmarkMenu;
+        bool                            m_bShowMenuImages;
         OUString                     m_aMenuItemCommand;
         Menu*                               m_pVCLMenu;
         css::uno::Reference< css::frame::XFrame >                 m_xFrame;

@@ -120,14 +120,14 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper1< ::com::sun::s
                 }
         };
 
-        sal_Bool                                                                    m_bImageContainerStartFound;
-        sal_Bool                                                                    m_bImageContainerEndFound;
-        sal_Bool                                                                    m_bImagesStartFound;
-        sal_Bool                                                                    m_bImagesEndFound;
-        sal_Bool                                                                    m_bImageStartFound;
-        sal_Bool                                                                    m_bExternalImagesStartFound;
-        sal_Bool                                                                    m_bExternalImagesEndFound;
-        sal_Bool                                                                    m_bExternalImageStartFound;
+        bool                                                                    m_bImageContainerStartFound;
+        bool                                                                    m_bImageContainerEndFound;
+        bool                                                                    m_bImagesStartFound;
+        bool                                                                    m_bImagesEndFound;
+        bool                                                                    m_bImageStartFound;
+        bool                                                                    m_bExternalImagesStartFound;
+        bool                                                                    m_bExternalImagesEndFound;
+        bool                                                                    m_bExternalImageStartFound;
         sal_Int32                                                                   m_nHashMaskModeBitmap;
         sal_Int32                                                                   m_nHashMaskModeColor;
         ImageHashMap                                                                m_aImageMap;

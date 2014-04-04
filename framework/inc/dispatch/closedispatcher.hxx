@@ -185,10 +185,10 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
             @return [boolean]
                     sal_True if closing was successfully.
          */
-        sal_Bool implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame                ,
-                                                     sal_Bool                                   bAllowSuspend         ,
-                                                     sal_Bool                                   bCloseAllOtherViewsToo,
-                                                     sal_Bool&                                  bControllerSuspended  );
+        bool implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame                ,
+                                                     bool                                   bAllowSuspend         ,
+                                                     bool                                   bCloseAllOtherViewsToo,
+                                                     bool&                                  bControllerSuspended  );
 
         /** @short  close the member m_xCloseFrame.
 
@@ -204,7 +204,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
             @return [bool]
                     sal_True if closing was successfully.
          */
-        sal_Bool implts_closeFrame();
+        bool implts_closeFrame();
 
         /** @short  set the special BackingComponent (now StartModule)
                     as new component of our m_xCloseFrame.
@@ -212,7 +212,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
             @return [bool]
                     sal_True if operation was successfully.
          */
-        sal_Bool implts_establishBackingMode();
+        bool implts_establishBackingMode();
 
         /** @short  calls XDesktop->terminate().
 
@@ -225,7 +225,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
             @return [bool]
                     sal_True if termination of the application was started ...
          */
-        sal_Bool implts_terminateApplication();
+        bool implts_terminateApplication();
 
         /** @short  notify a DispatchResultListener.
 

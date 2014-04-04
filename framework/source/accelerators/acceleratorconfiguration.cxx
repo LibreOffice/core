@@ -127,7 +127,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
         1);
 
     SolarMutexGuard g;
-    AcceleratorCache& rCache = impl_getCFG(sal_True); // sal_True => force getting of a writeable cache!
+    AcceleratorCache& rCache = impl_getCFG(true); // sal_True => force getting of a writeable cache!
     rCache.setKeyCommandPair(aKeyEvent, sCommand);
 }
 
@@ -136,7 +136,7 @@ throw(css::container::NoSuchElementException,
       css::uno::RuntimeException, std::exception            )
 {
     SolarMutexGuard g;
-    AcceleratorCache& rCache = impl_getCFG(sal_True); // true => force using of a writeable cache
+    AcceleratorCache& rCache = impl_getCFG(true); // true => force using of a writeable cache
     if (!rCache.hasKey(aKeyEvent))
         throw css::container::NoSuchElementException(
         OUString(),
@@ -212,7 +212,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
                 0);
 
     SolarMutexGuard g;
-    AcceleratorCache& rCache = impl_getCFG(sal_True); // sal_True => force getting of a writeable cache!
+    AcceleratorCache& rCache = impl_getCFG(true); // sal_True => force getting of a writeable cache!
     if (!rCache.hasCommand(sCommand))
         throw css::container::NoSuchElementException(
                 OUString("Command does not exists inside this container."),
@@ -228,10 +228,10 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
     css::uno::Reference< css::io::XStream > xStreamNoLang;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
+        xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), true); // sal_True => open or create!
         try
         {
-            xStreamNoLang = m_aPresetHandler.openPreset(PresetHandler::PRESET_DEFAULT(), sal_True);
+            xStreamNoLang = m_aPresetHandler.openPreset(PresetHandler::PRESET_DEFAULT(), true);
         }
         catch(const css::io::IOException&) {} // does not have to exist
     }
@@ -269,7 +269,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
     css::uno::Reference< css::io::XStream > xStream;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
+        xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), true); // sal_True => open or create!
     }
 
     css::uno::Reference< css::io::XOutputStream > xOut;
@@ -297,7 +297,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
                                                             xStorage,
                                                             PresetHandler::TARGET_CURRENT(),
                                                             css::embed::ElementModes::READWRITE,
-                                                            sal_False); // False => no fallback from read/write to readonly!
+                                                            false); // False => no fallback from read/write to readonly!
     css::uno::Reference< css::io::XOutputStream > xOut;
     if (xStream.is())
         xOut = xStream->getOutputStream();
@@ -325,7 +325,7 @@ sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
     css::uno::Reference< css::io::XStream > xStream;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
+        xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), true); // sal_True => open or create!
     }
 
     css::uno::Reference< css::io::XOutputStream > xOut;
@@ -431,7 +431,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< c
 
 void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< css::io::XOutputStream >& xStream)
 {
-    sal_Bool bChanged;
+    bool bChanged;
     AcceleratorCache aCache;
     css::uno::Reference< css::uno::XComponentContext > xContext;
     {
@@ -474,7 +474,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
     }
 }
 
-AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteAccessRequested)
+AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(bool bWriteAccessRequested)
 {
     SolarMutexGuard g;
 
@@ -531,9 +531,9 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
 {
     SolarMutexGuard g;
 
-    AcceleratorCache::TKeyList lKeys  = impl_getCFG(sal_True).getAllKeys(); //get keys from PrimaryKeys set
+    AcceleratorCache::TKeyList lKeys  = impl_getCFG(true).getAllKeys(); //get keys from PrimaryKeys set
 
-    AcceleratorCache::TKeyList lSecondaryKeys = impl_getCFG(sal_False).getAllKeys(); //get keys from SecondaryKeys set
+    AcceleratorCache::TKeyList lSecondaryKeys = impl_getCFG(false).getAllKeys(); //get keys from SecondaryKeys set
     lKeys.reserve(lKeys.size()+lSecondaryKeys.size());
     AcceleratorCache::TKeyList::const_iterator pIt;
     AcceleratorCache::TKeyList::const_iterator pEnd = lSecondaryKeys.end();
@@ -549,8 +549,8 @@ OUString SAL_CALL XCUBasedAcceleratorConfiguration::getCommandByKeyEvent(const c
 {
     SolarMutexGuard g;
 
-    AcceleratorCache& rPrimaryCache   = impl_getCFG(sal_True );
-    AcceleratorCache& rSecondaryCache = impl_getCFG(sal_False);
+    AcceleratorCache& rPrimaryCache   = impl_getCFG(true );
+    AcceleratorCache& rSecondaryCache = impl_getCFG(false);
 
     if (!rPrimaryCache.hasKey(aKeyEvent) && !rSecondaryCache.hasKey(aKeyEvent))
         throw css::container::NoSuchElementException(
@@ -589,8 +589,8 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
 
     SolarMutexGuard g;
 
-    AcceleratorCache& rPrimaryCache   = impl_getCFG(sal_True, sal_True ); // sal_True => force getting of a writeable cache!
-    AcceleratorCache& rSecondaryCache = impl_getCFG(sal_False, sal_True); // sal_True => force getting of a writeable cache!
+    AcceleratorCache& rPrimaryCache   = impl_getCFG(true, true ); // sal_True => force getting of a writeable cache!
+    AcceleratorCache& rSecondaryCache = impl_getCFG(false, true); // sal_True => force getting of a writeable cache!
 
     if ( rPrimaryCache.hasKey(aKeyEvent) )
     {
@@ -651,8 +651,8 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::K
 {
     SolarMutexGuard g;
 
-    AcceleratorCache& rPrimaryCache   = impl_getCFG(sal_True, sal_True );
-    AcceleratorCache& rSecondaryCache = impl_getCFG(sal_False, sal_True);
+    AcceleratorCache& rPrimaryCache   = impl_getCFG(true, true );
+    AcceleratorCache& rSecondaryCache = impl_getCFG(false, true);
 
     if (!rPrimaryCache.hasKey(aKeyEvent) && !rSecondaryCache.hasKey(aKeyEvent))
         throw css::container::NoSuchElementException(
@@ -697,8 +697,8 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
 
     SolarMutexGuard g;
 
-    AcceleratorCache& rPrimaryCache   = impl_getCFG(sal_True );
-    AcceleratorCache& rSecondaryCache = impl_getCFG(sal_False);
+    AcceleratorCache& rPrimaryCache   = impl_getCFG(true );
+    AcceleratorCache& rSecondaryCache = impl_getCFG(false);
 
     if (!rPrimaryCache.hasCommand(sCommand) && !rSecondaryCache.hasCommand(sCommand))
         throw css::container::NoSuchElementException(
@@ -742,7 +742,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
     sal_Int32                           i              = 0;
     sal_Int32                           c              = lCommandList.getLength();
     css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // dont pack list!
-    AcceleratorCache&                   rCache         = impl_getCFG(sal_True);
+    AcceleratorCache&                   rCache         = impl_getCFG(true);
 
     for (i=0; i<c; ++i)
     {
@@ -784,8 +784,8 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
 
     SolarMutexGuard g;
 
-    AcceleratorCache& rPrimaryCache   = impl_getCFG(sal_True, sal_True );
-    AcceleratorCache& rSecondaryCache = impl_getCFG(sal_False, sal_True);
+    AcceleratorCache& rPrimaryCache   = impl_getCFG(true, true );
+    AcceleratorCache& rSecondaryCache = impl_getCFG(false, true);
 
     if (!rPrimaryCache.hasCommand(sCommand) && !rSecondaryCache.hasCommand(sCommand))
         throw css::container::NoSuchElementException(
@@ -806,10 +806,10 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
 
     SolarMutexGuard g;
 
-    sal_Bool bPreferred;
+    bool bPreferred;
     css::uno::Reference< css::container::XNameAccess > xAccess;
 
-    bPreferred = sal_True;
+    bPreferred = true;
     m_aPrimaryReadCache = AcceleratorCache();
     if (m_pPrimaryWriteCache)
     {
@@ -821,7 +821,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
     m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;
     impl_ts_load(bPreferred, xAccess); // load the preferred keys
 
-    bPreferred = sal_False;
+    bPreferred = false;
     m_aSecondaryReadCache = AcceleratorCache();
     if (m_pSecondaryWriteCache)
     {
@@ -842,18 +842,18 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::store()
 
     SolarMutexGuard g;
 
-    sal_Bool bPreferred;
+    bool bPreferred;
     css::uno::Reference< css::container::XNameAccess > xAccess;
 
-    bPreferred = sal_True;
+    bPreferred = true;
     // on-demand creation of the primary write cache
-    impl_getCFG(bPreferred, sal_True);
+    impl_getCFG(bPreferred, true);
     m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;
     impl_ts_save(bPreferred, xAccess);
 
-    bPreferred = sal_False;
+    bPreferred = false;
     // on-demand creation of the secondary write cache
-    impl_getCFG(bPreferred, sal_True);
+    impl_getCFG(bPreferred, true);
     m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;
     impl_ts_save(bPreferred, xAccess);
 }
@@ -1066,7 +1066,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeEventListener( const ::com
     // nop
 }
 
-void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg )
+void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg )
 {
     AcceleratorCache aReadCache = AcceleratorCache();
     css::uno::Reference< css::container::XNameAccess > xAccess;
@@ -1134,7 +1134,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
 
             css::uno::Sequence< OUString > sToken(4);
             const sal_Int32 nToken = 4;
-            sal_Bool bValid = sal_True;
+            bool bValid = true;
             sal_Int32 k;
             for (k=0; k<nToken; ++k)
             {
@@ -1144,7 +1144,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
                 sToken[k] = sKey.getToken(0, '_', nIndex);
                 if (sToken[k].isEmpty())
                 {
-                    bValid = sal_False;
+                    bValid = false;
                     break;
                 }
 
@@ -1158,7 +1158,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
                 else
                 {
-                    bValid = sal_False;
+                    bValid = false;
                     break;
                 }
             }
@@ -1174,7 +1174,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
         m_aSecondaryReadCache.takeOver(aReadCache);
 }
 
-void XCUBasedAcceleratorConfiguration::impl_ts_save(sal_Bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& /*xCfg*/)
+void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& /*xCfg*/)
 {
     if (bPreferred)
     {
@@ -1185,7 +1185,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(sal_Bool bPreferred, const c
         for ( pIt  = lPrimaryReadKeys.begin(); pIt != lPrimaryReadKeys.end(); ++pIt )
         {
             if (!m_pPrimaryWriteCache->hasKey(*pIt))
-                removeKeyFromConfiguration(*pIt, sal_True);
+                removeKeyFromConfiguration(*pIt, true);
         }
 
         for ( pIt  = lPrimaryWriteKeys.begin(); pIt != lPrimaryWriteKeys.end(); ++pIt )
@@ -1193,13 +1193,13 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(sal_Bool bPreferred, const c
             OUString sCommand = m_pPrimaryWriteCache->getCommandByKey(*pIt);
             if (!m_aPrimaryReadCache.hasKey(*pIt))
             {
-                insertKeyToConfiguration(*pIt, sCommand, sal_True);
+                insertKeyToConfiguration(*pIt, sCommand, true);
             }
             else
             {
                 OUString sReadCommand = m_aPrimaryReadCache.getCommandByKey(*pIt);
                 if (sReadCommand != sCommand)
-                    insertKeyToConfiguration(*pIt, sCommand, sal_True);
+                    insertKeyToConfiguration(*pIt, sCommand, true);
             }
         }
 
@@ -1223,7 +1223,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(sal_Bool bPreferred, const c
         for ( pIt  = lSecondaryReadKeys.begin(); pIt != lSecondaryReadKeys.end(); ++pIt)
         {
             if (!m_pSecondaryWriteCache->hasKey(*pIt))
-                removeKeyFromConfiguration(*pIt, sal_False);
+                removeKeyFromConfiguration(*pIt, false);
         }
 
         for ( pIt  = lSecondaryWriteKeys.begin(); pIt != lSecondaryWriteKeys.end(); ++pIt )
@@ -1231,13 +1231,13 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(sal_Bool bPreferred, const c
             OUString sCommand = m_pSecondaryWriteCache->getCommandByKey(*pIt);
             if (!m_aSecondaryReadCache.hasKey(*pIt))
             {
-                insertKeyToConfiguration(*pIt, sCommand, sal_False);
+                insertKeyToConfiguration(*pIt, sCommand, false);
             }
             else
             {
                 OUString sReadCommand = m_aSecondaryReadCache.getCommandByKey(*pIt);
                 if (sReadCommand != sCommand)
-                    insertKeyToConfiguration(*pIt, sCommand, sal_False);
+                    insertKeyToConfiguration(*pIt, sCommand, false);
             }
         }
 
@@ -1255,7 +1255,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(sal_Bool bPreferred, const c
     ::comphelper::ConfigurationHelper::flush(m_xCfg);
 }
 
-void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt::KeyEvent& aKeyEvent, const OUString& sCommand, const sal_Bool bPreferred )
+void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt::KeyEvent& aKeyEvent, const OUString& sCommand, const bool bPreferred )
 {
     css::uno::Reference< css::container::XNameAccess > xAccess;
     css::uno::Reference< css::container::XNameContainer > xContainer;
@@ -1301,7 +1301,7 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
         xCommand->replaceByName(sLocale, css::uno::makeAny(sCommand));
 }
 
-void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::awt::KeyEvent& aKeyEvent, const sal_Bool bPreferred )
+void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::awt::KeyEvent& aKeyEvent, const bool bPreferred )
 {
     css::uno::Reference< css::container::XNameAccess > xAccess;
     css::uno::Reference< css::container::XNameContainer > xContainer;
@@ -1396,7 +1396,7 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
     }
 }
 
-AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPreferred, sal_Bool bWriteAccessRequested)
+AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(bool bPreferred, bool bWriteAccessRequested)
 {
     SolarMutexGuard g;
 

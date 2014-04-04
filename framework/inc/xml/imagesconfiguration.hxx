@@ -90,12 +90,12 @@ struct ImageListsDescriptor
 class ImagesConfiguration
 {
     public:
-        static sal_Bool LoadImages(
+        static bool LoadImages(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
             ImageListsDescriptor& rItems );
 
-        static sal_Bool StoreImages(
+        static bool StoreImages(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream,
             const ImageListsDescriptor& rItems );

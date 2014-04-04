@@ -175,7 +175,7 @@ class CheckedIterator
             @return     True if internalk state E_UNKNOWN - false otherwise.
         *//*-*****************************************************************************************************/
 
-        inline sal_Bool isUninitialized()
+        inline bool isUninitialized()
         {
             return( m_eEndState == E_UNKNOWN );
         }
@@ -188,7 +188,7 @@ class CheckedIterator
             @return     True if end reached; false otherwise.
         *//*-*****************************************************************************************************/
 
-        inline sal_Bool isEnd()
+        inline bool isEnd()
         {
             // Is true if one end state is set!
             return  (
@@ -205,7 +205,7 @@ class CheckedIterator
             @return     True if end multiple reached; false otherwise.
         *//*-*****************************************************************************************************/
 
-        inline sal_Bool isAfterEnd()
+        inline bool isAfterEnd()
         {
             // Is true only, if special end state is set!
             return( m_eEndState == E_AFTEREND );

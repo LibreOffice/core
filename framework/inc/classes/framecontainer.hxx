@@ -82,7 +82,7 @@ class FrameContainer
         css::uno::Reference< css::frame::XFrame > getActive  (                                                         ) const;
 
         /// checks and free memory
-        sal_Bool exist      ( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
+        bool exist      ( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
         void     clear      (                                                         );
 
         /// deprecated IndexAccess!

@@ -86,12 +86,12 @@ class FilterCache   :   private TransactionBase
             @descr      Call this methods to get information about the state of the current cache.
         *//*-*****************************************************************************************************/
 
-        sal_Bool isValidOrRepairable() const;
-        sal_Bool hasTypes           () const;
-        sal_Bool hasFilters         () const;
-        sal_Bool hasDetectors       () const;
-        sal_Bool hasLoaders         () const;
-        sal_Bool hasContentHandlers () const;
+        bool isValidOrRepairable() const;
+        bool hasTypes           () const;
+        bool hasFilters         () const;
+        bool hasDetectors       () const;
+        bool hasLoaders         () const;
+        bool hasContentHandlers () const;
 
         /*-****************************************************************************************************
             @short      search routines to find items which match given parameter
@@ -115,27 +115,27 @@ class FilterCache   :   private TransactionBase
             @onerror    We return false.
         *//*-*****************************************************************************************************/
 
-        sal_Bool searchType                     (   const   OUString&            sURL                ,
-                                                    const   OUString&            sMediaType          ,
-                                                    const   OUString&            sClipboardFormat    ,
-                                                            CheckedTypeIterator&        aStartEntry         ,
-                                                            OUString&            sResult             ) const;
+        bool searchType                     (   const   OUString&            sURL                ,
+                                                const   OUString&            sMediaType          ,
+                                                const   OUString&            sClipboardFormat    ,
+                                                        CheckedTypeIterator&        aStartEntry         ,
+                                                        OUString&            sResult             ) const;
 
-        sal_Bool searchFilterForType            (   const   OUString&            sInternalTypeName   ,
-                                                            CheckedStringListIterator&  aStartEntry         ,
-                                                            OUString&            sResult             ) const;
+        bool searchFilterForType            (   const   OUString&            sInternalTypeName   ,
+                                                        CheckedStringListIterator&  aStartEntry         ,
+                                                        OUString&            sResult             ) const;
 
-        sal_Bool searchDetectorForType          (   const   OUString&            sInternalTypeName   ,
-                                                            CheckedStringListIterator&  aStartEntry         ,
-                                                            OUString&            sResult             ) const;
+        bool searchDetectorForType          (   const   OUString&            sInternalTypeName   ,
+                                                        CheckedStringListIterator&  aStartEntry         ,
+                                                        OUString&            sResult             ) const;
 
-        sal_Bool searchLoaderForType            (   const   OUString&            sInternalTypeName   ,
-                                                            CheckedStringListIterator&  aStartEntry         ,
-                                                            OUString&            sResult             ) const;
+        bool searchLoaderForType            (   const   OUString&            sInternalTypeName   ,
+                                                        CheckedStringListIterator&  aStartEntry         ,
+                                                        OUString&            sResult             ) const;
 
-        sal_Bool searchContentHandlerForType    (   const   OUString&            sInternalTypeName   ,
-                                                            CheckedStringListIterator&  aStartEntry         ,
-                                                            OUString&            sResult             ) const;
+        bool searchContentHandlerForType    (   const   OUString&            sInternalTypeName   ,
+                                                        CheckedStringListIterator&  aStartEntry         ,
+                                                        OUString&            sResult             ) const;
 
         /*-****************************************************************************************************
             @short      get all properties of a cache entry by given name
@@ -169,11 +169,11 @@ class FilterCache   :   private TransactionBase
         Loader                                              getLoader                       (   const   OUString&    sName   ) const;
         ContentHandler                                      getContentHandler               (   const   OUString&    sName   ) const;
 
-        sal_Bool                                            existsType                      (   const   OUString&    sName   ) const;
-        sal_Bool                                            existsFilter                    (   const   OUString&    sName   ) const;
-        sal_Bool                                            existsDetector                  (   const   OUString&    sName   ) const;
-        sal_Bool                                            existsLoader                    (   const   OUString&    sName   ) const;
-        sal_Bool                                            existsContentHandler            (   const   OUString&    sName   ) const;
+        bool                                                existsType                      (   const   OUString&    sName   ) const;
+        bool                                                existsFilter                    (   const   OUString&    sName   ) const;
+        bool                                                existsDetector                  (   const   OUString&    sName   ) const;
+        bool                                                existsLoader                    (   const   OUString&    sName   ) const;
+        bool                                                existsContentHandler            (   const   OUString&    sName   ) const;
 
         /*-****************************************************************************************************
             @short      support special query modes
@@ -237,48 +237,48 @@ class FilterCache   :   private TransactionBase
             @onerror    We return false then.
         *//*-*****************************************************************************************************/
 
-        sal_Bool addFilter    ( const OUString&                                 sName       ,
-                                const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
-                                      sal_Bool                                         bException  ) throw(css::container::ElementExistException  ,
+        bool addFilter    ( const OUString&                                 sName       ,
+                            const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
+                                  bool                                      bException  ) throw(css::container::ElementExistException  ,
                                                                                                            css::registry::InvalidRegistryException);
-        sal_Bool replaceFilter( const OUString&                                 sName       ,
-                                const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
-                                      sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
+        bool replaceFilter( const OUString&                                 sName       ,
+                            const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
+                                  bool                                      bException  ) throw(css::container::NoSuchElementException  ,
                                                                                                            css::registry::InvalidRegistryException);
-        sal_Bool removeFilter ( const OUString&                                 sName       ,
-                                      sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
-                                                                                                           css::registry::InvalidRegistryException);
-
-        sal_Bool addType      ( const OUString&                                 sName       ,
-                                const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
-                                      sal_Bool                                         bException  ) throw(css::container::ElementExistException  ,
-                                                                                                           css::registry::InvalidRegistryException);
-        sal_Bool replaceType  ( const OUString&                                 sName       ,
-                                const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
-                                      sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
-                                                                                                           css::registry::InvalidRegistryException);
-        sal_Bool removeType   ( const OUString&                                 sName       ,
-                                      sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
+        bool removeFilter ( const OUString&                                 sName       ,
+                                  bool                                      bException  ) throw(css::container::NoSuchElementException  ,
                                                                                                            css::registry::InvalidRegistryException);
 
-        sal_Bool addDetector    ( const OUString&                                 sName       ,
-                                  const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
-                                        sal_Bool                                         bException  ) throw(css::container::ElementExistException  ,
+        bool addType      ( const OUString&                                 sName       ,
+                            const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
+                                  bool                                      bException  ) throw(css::container::ElementExistException  ,
+                                                                                                           css::registry::InvalidRegistryException);
+        bool replaceType  ( const OUString&                                 sName       ,
+                            const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
+                                  bool                                      bException  ) throw(css::container::NoSuchElementException  ,
+                                                                                                           css::registry::InvalidRegistryException);
+        bool removeType   ( const OUString&                                 sName       ,
+                                  bool                                      bException  ) throw(css::container::NoSuchElementException  ,
+                                                                                                           css::registry::InvalidRegistryException);
+
+        bool addDetector    ( const OUString&                                 sName       ,
+                              const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
+                                    bool                                     bException  ) throw(css::container::ElementExistException  ,
                                                                                                              css::registry::InvalidRegistryException);
-        sal_Bool replaceDetector( const OUString&                                 sName       ,
-                                  const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
-                                        sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
+        bool replaceDetector( const OUString&                                 sName       ,
+                              const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
+                                    bool                                     bException  ) throw(css::container::NoSuchElementException  ,
                                                                                                              css::registry::InvalidRegistryException);
-        sal_Bool removeDetector ( const OUString&                                 sName       ,
-                                        sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
+        bool removeDetector ( const OUString&                                 sName       ,
+                                    bool                                      bException  ) throw(css::container::NoSuchElementException  ,
                                                                                                              css::registry::InvalidRegistryException);
 
-        sal_Bool validateAndRepair();
-        sal_Bool validateAndRepairTypes();
-        sal_Bool validateAndRepairFilter();
-        sal_Bool validateAndRepairDetectors();
-        sal_Bool validateAndRepairLoader();
-        sal_Bool validateAndRepairHandler();
+        bool validateAndRepair();
+        bool validateAndRepairTypes();
+        bool validateAndRepairFilter();
+        bool validateAndRepairDetectors();
+        bool validateAndRepairLoader();
+        bool validateAndRepairHandler();
 
     //  private variables
 

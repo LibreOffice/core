@@ -99,7 +99,7 @@ private:
 
     css::uno::Reference< css::awt::XWindow > implts_createContainerWindow( const css::uno::Reference< css::awt::XWindow >& xParentWindow ,
                                                                            const css::awt::Rectangle&                      aPosSize      ,
-                                                                                 sal_Bool                                  bTopWindow    );
+                                                                                 bool                                  bTopWindow    );
 
     void implts_applyDocStyleToWindow(const css::uno::Reference< css::awt::XWindow >& xWindow) const;
 
@@ -140,13 +140,13 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
 
     css::uno::Reference< css::frame::XFrame > xParentFrame                  = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_PARENTFRAME)                  , css::uno::Reference< css::frame::XFrame >());
     OUString                           sFrameName                    = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_FRAMENAME)                    , OUString()                          );
-    sal_Bool                                  bVisible                      = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_MAKEVISIBLE)                  , sal_False                                  );
-    sal_Bool                                  bCreateTopWindow              = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_CREATETOPWINDOW)              , sal_True                                   );
+    bool                                  bVisible                      = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_MAKEVISIBLE)                  , sal_False                                  );
+    bool                                  bCreateTopWindow              = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_CREATETOPWINDOW)              , sal_True                                   );
     // only possize=[0,0,0,0] triggers default handling of vcl !
     css::awt::Rectangle                       aPosSize                      = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_POSSIZE)                      , css::awt::Rectangle(0, 0, 0, 0)            );
     css::uno::Reference< css::awt::XWindow >  xContainerWindow              = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_CONTAINERWINDOW)              , css::uno::Reference< css::awt::XWindow >() );
-    sal_Bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE) , sal_False                                  );
-    sal_Bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_ENABLE_TITLEBARUPDATE)        , sal_True                                   );
+    bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE) , sal_False                                  );
+    bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_ENABLE_TITLEBARUPDATE)        , sal_True                                   );
 
     // We use FrameName property to set it as API name of the new created frame later.
     // But those frame names must be different from the set of special target names as e.g. _blank, _self etcpp !
@@ -162,7 +162,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
         // Parent has no own window ...
         // So we have to create a top level window always !
         if ( ! xParentWindow.is())
-            bCreateTopWindow = sal_True;
+            bCreateTopWindow = true;
 
         xContainerWindow = implts_createContainerWindow(xParentWindow, aPosSize, bCreateTopWindow);
     }
@@ -173,7 +173,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     // Note: Doing so it's no longer supported, that e.g. our wizards can use findFrame(_blank)
     // to create it's previes frames. They must do it manually by using WindowDescriptor+Toolkit!
     css::uno::Reference< css::frame::XDesktop > xDesktop(xParentFrame, css::uno::UNO_QUERY);
-    sal_Bool bTopLevelDocumentWindow = (
+    bool bTopLevelDocumentWindow = (
                                             sRightName.isEmpty() &&
                                             (
                                                 (! xParentFrame.is() )    ||
@@ -226,7 +226,7 @@ void TaskCreatorService::implts_applyDocStyleToWindow(const css::uno::Reference<
 
 css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContainerWindow( const css::uno::Reference< css::awt::XWindow >& xParentWindow ,
                                                                                            const css::awt::Rectangle&                      aPosSize      ,
-                                                                                                 sal_Bool                                  bTopWindow    )
+                                                                                                 bool                                  bTopWindow    )
 {
     // get toolkit to create task container window
     css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
@@ -236,7 +236,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     if ( ! bTopWindow)
     {
         if ( ! xParentWindow.is())
-            bTopWindow = sal_False;
+            bTopWindow = false;
         else
             xParentWindowPeer = css::uno::Reference< css::awt::XWindowPeer >(xParentWindow, css::uno::UNO_QUERY_THROW);
     }

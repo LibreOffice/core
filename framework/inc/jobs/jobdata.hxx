@@ -192,8 +192,8 @@ class JobData
         css::uno::Sequence< css::beans::NamedValue > getConfig               () const;
         css::uno::Sequence< css::beans::NamedValue > getJobConfig            () const;
 
-        sal_Bool                                     hasConfig               () const;
-        sal_Bool                                     hasCorrectContext       ( const OUString& rModuleIdent ) const;
+        bool                                     hasConfig               () const;
+        bool                                     hasCorrectContext       ( const OUString& rModuleIdent ) const;
 
         void                                         setEnvironment (       EEnvironment                                  eEnvironment );
         void                                         setAlias       ( const OUString&                              sAlias       );

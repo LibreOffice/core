@@ -45,7 +45,7 @@ namespace framework
 
 // implementation helper ( menu => ActionTrigger )
 
-sal_Bool IsSeparator( Reference< XPropertySet > xPropertySet )
+bool IsSeparator( Reference< XPropertySet > xPropertySet )
 {
     Reference< XServiceInfo > xServiceInfo( xPropertySet, UNO_QUERY );
     try
@@ -56,7 +56,7 @@ sal_Bool IsSeparator( Reference< XPropertySet > xPropertySet )
     {
     }
 
-    return sal_False;
+    return false;
 }
 
 void GetMenuItemAttributes( Reference< XPropertySet > xActionTriggerPropertySet,
@@ -149,7 +149,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
                             // handle bitmap
                             if ( xBitmap.is() )
                             {
-                                sal_Bool bImageSet = sal_False;
+                                bool bImageSet = false;
 
                                 Reference< XUnoTunnel > xUnoTunnel( xBitmap, UNO_QUERY );
                                 if ( xUnoTunnel.is() )
@@ -165,7 +165,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
                                         if ( !!aMenuImage )
                                             pSubMenu->SetItemImage( nNewItemId, aMenuImage );
 
-                                        bImageSet = sal_True;
+                                        bImageSet = true;
                                     }
                                 }
 

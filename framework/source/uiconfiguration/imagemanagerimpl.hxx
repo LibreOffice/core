@@ -73,7 +73,7 @@ namespace framework
             std::vector< OUString >& impl_getImageCommandNameVector();
 
         private:
-            sal_Bool                                                                         m_bVectorInit;
+            bool                                                                         m_bVectorInit;
             OUString                                                                    m_aModuleIdentifier;
             ImageList*                                                                       m_pImageList[ImageType_COUNT];
             CommandToImageNameMap                                                            m_aCommandToImageNameMap;
@@ -118,7 +118,7 @@ namespace framework
             // XImageManager
             void reset() throw (::com::sun::star::uno::RuntimeException);
             ::com::sun::star::uno::Sequence< OUString > getAllImageNames( ::sal_Int16 nImageType ) throw (::com::sun::star::uno::RuntimeException);
-            sal_Bool hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+            bool hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > getImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< OUString >& aCommandURLSequence ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
             void replaceImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< OUString >& aCommandURLSequence, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > >& aGraphicsSequence ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
             void removeImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< OUString >& aResourceURLSequence ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
@@ -138,8 +138,8 @@ namespace framework
                 throw (::com::sun::star::uno::Exception,
                        ::com::sun::star::uno::RuntimeException,
                        std::exception);
-            sal_Bool isModified() throw (::com::sun::star::uno::RuntimeException);
-            sal_Bool isReadOnly() throw (::com::sun::star::uno::RuntimeException);
+            bool isModified() throw (::com::sun::star::uno::RuntimeException);
+            bool isReadOnly() throw (::com::sun::star::uno::RuntimeException);
 
             void clear();
 
@@ -167,10 +167,10 @@ namespace framework
             void                                      implts_initialize();
             void                                      implts_notifyContainerListener( const ::com::sun::star::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
             ImageList*                                implts_getUserImageList( ImageType nImageType );
-            sal_Bool                                  implts_loadUserImages( ImageType nImageType,
+            bool                                  implts_loadUserImages( ImageType nImageType,
                                                                              const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserImageStorage,
                                                                              const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserBitmapsStorage );
-            sal_Bool                                  implts_storeUserImages( ImageType nImageType,
+            bool                                  implts_storeUserImages( ImageType nImageType,
                                                                               const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserImageStorage,
                                                                               const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserBitmapsStorage );
             const rtl::Reference< GlobalImageList >&  implts_getGlobalImageList();

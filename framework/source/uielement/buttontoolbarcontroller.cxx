@@ -58,8 +58,8 @@ ButtonToolbarController::ButtonToolbarController(
     ToolBox*                                            pToolBar,
     const OUString&                                aCommand ) :
     cppu::OWeakObject(),
-    m_bInitialized( sal_False ),
-    m_bDisposed( sal_False ),
+    m_bInitialized( false ),
+    m_bDisposed( false ),
     m_aCommandURL( aCommand ),
     m_xContext( rxContext ),
     m_pToolbar( pToolBar )
@@ -117,7 +117,7 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
     if ( !bInitialized )
     {
         SolarMutexGuard aSolarMutexGuard;
-        m_bInitialized = sal_True;
+        m_bInitialized = true;
 
         PropertyValue aPropValue;
         for ( int i = 0; i < aArguments.getLength(); i++ )
@@ -152,7 +152,7 @@ void SAL_CALL ButtonToolbarController::dispose() throw (::com::sun::star::uno::R
         m_xURLTransformer.clear();
         m_xFrame.clear();
         m_pToolbar = 0;
-        m_bDisposed = sal_True;
+        m_bDisposed = true;
     }
 }
 

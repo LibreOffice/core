@@ -93,15 +93,15 @@ private:
     css::uno::Reference< css::frame::XSessionManagerClient > m_rSessionManager;
 
     // restore handling
-    sal_Bool m_bRestored;
+    bool m_bRestored;
 
-    sal_Bool m_bSessionStoreRequested;
+    bool m_bSessionStoreRequested;
 
-    sal_Bool m_bAllowUserInteractionOnQuit;
-    sal_Bool m_bTerminated;
+    bool m_bAllowUserInteractionOnQuit;
+    bool m_bTerminated;
 
     // in case of synchronous call the caller should do saveDone() call himself!
-    void StoreSession( sal_Bool bAsync );
+    void StoreSession( bool bAsync );
 
     // let session quietly close the documents, remove lock files, store configuration and etc.
     void QuitSessionQuietly();
@@ -154,15 +154,15 @@ public:
     virtual void SAL_CALL statusChanged(const com::sun::star::frame::FeatureStateEvent& event)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    void doSaveImpl( sal_Bool bShutdown, sal_Bool bCancelable ) throw (css::uno::RuntimeException);
+    void doSaveImpl( bool bShutdown, bool bCancelable ) throw (css::uno::RuntimeException);
 };
 
 SessionListener::SessionListener(const css::uno::Reference< css::uno::XComponentContext >& rxContext )
         : m_xContext( rxContext )
-        , m_bRestored( sal_False )
-        , m_bSessionStoreRequested( sal_False )
-        , m_bAllowUserInteractionOnQuit( sal_False )
-        , m_bTerminated( sal_False )
+        , m_bRestored( false )
+        , m_bSessionStoreRequested( false )
+        , m_bAllowUserInteractionOnQuit( false )
+        , m_bTerminated( false )
 {
     SAL_INFO("fwk.session", "SessionListener::SessionListener");
 }
@@ -177,7 +177,7 @@ SessionListener::~SessionListener()
     }
 }
 
-void SessionListener::StoreSession( sal_Bool bAsync )
+void SessionListener::StoreSession( bool bAsync )
 {
     SAL_INFO("fwk.session", "SessionListener::StoreSession");
     osl::MutexGuard g(m_aMutex);
@@ -280,7 +280,7 @@ void SAL_CALL SessionListener::statusChanged(const frame::FeatureStateEvent& eve
    if ( event.FeatureURL.Complete == "vnd.sun.star.autorecovery:/doSessionRestore" )
     {
         if (event.FeatureDescriptor.equalsAscii("update"))
-            m_bRestored = sal_True; // a document was restored
+            m_bRestored = true; // a document was restored
 
     }
     else if ( event.FeatureURL.Complete == "vnd.sun.star.autorecovery:/doSessionSave" )
@@ -298,7 +298,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
 {
     SAL_INFO("fwk.session", "SessionListener::doRestore");
     osl::MutexGuard g(m_aMutex);
-    m_bRestored = sal_False;
+    m_bRestored = false;
     try {
         css::uno::Reference< frame::XDispatch > xDispatch = css::frame::theAutoRecovery::get( m_xContext );
 
@@ -309,7 +309,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
         Sequence< PropertyValue > args;
         xDispatch->addStatusListener(this, aURL);
         xDispatch->dispatch(aURL, args);
-        m_bRestored = sal_True;
+        m_bRestored = true;
 
     } catch (const com::sun::star::uno::Exception& e) {
         SAL_WARN("fwk.session",e.Message);
@@ -324,11 +324,11 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelabl
     SAL_INFO("fwk.session", "SessionListener::doSave");
     if (bShutdown)
     {
-        m_bSessionStoreRequested = sal_True; // there is no need to protect it with mutex
+        m_bSessionStoreRequested = true; // there is no need to protect it with mutex
         if ( m_bAllowUserInteractionOnQuit && m_rSessionManager.is() )
             m_rSessionManager->queryInteraction( static_cast< css::frame::XSessionManagerListener* >( this ) );
         else
-            StoreSession( sal_True );
+            StoreSession( true );
     }
     // we don't have anything to do so tell the session manager we're done
     else if( m_rSessionManager.is() )
@@ -348,7 +348,7 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
         try
         {
             // first of all let the session be stored to be sure that we lose no information
-            StoreSession( sal_False );
+            StoreSession( false );
 
             css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
             // honestly: how many implementations of XDesktop will we ever have?
@@ -376,7 +376,7 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
         }
         catch( const css::uno::Exception& )
         {
-            StoreSession( sal_True );
+            StoreSession( true );
             m_rSessionManager->interactionDone( this );
         }
 
@@ -385,7 +385,7 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
     }
     else
     {
-        StoreSession( sal_True );
+        StoreSession( true );
     }
 }
 
@@ -394,7 +394,7 @@ void SessionListener::shutdownCanceled()
 {
     SAL_INFO("fwk.session", "SessionListener::shutdownCanceled");
     // set the state back
-    m_bSessionStoreRequested = sal_False; // there is no need to protect it with mutex
+    m_bSessionStoreRequested = false; // there is no need to protect it with mutex
 }
 
 void SessionListener::doQuit()

@@ -103,16 +103,16 @@ class JobURL
     public:
 
                  JobURL        ( const OUString& sURL         );
-        sal_Bool isValid       (                                     ) const;
-        sal_Bool getEvent      (       OUString& sEvent       ) const;
-        sal_Bool getAlias      (       OUString& sAlias       ) const;
-        sal_Bool getService    (       OUString& sService     ) const;
+        bool isValid       (                                     ) const;
+        bool getEvent      (       OUString& sEvent       ) const;
+        bool getAlias      (       OUString& sAlias       ) const;
+        bool getService    (       OUString& sService     ) const;
 
     // private helper
 
     private:
 
-        static sal_Bool implst_split( const OUString& sPart           ,
+        static bool implst_split( const OUString& sPart           ,
                                       const sal_Char*        pPartIdentifier ,
                                             sal_Int32        nPartLength     ,
                                             OUString& rPartValue      ,

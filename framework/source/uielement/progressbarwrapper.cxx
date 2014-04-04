@@ -35,7 +35,7 @@ namespace framework{
 
 ProgressBarWrapper::ProgressBarWrapper() :
 UIElementWrapperBase( ::com::sun::star::ui::UIElementType::PROGRESSBAR )
-    ,   m_bOwnsInstance( sal_False )
+    ,   m_bOwnsInstance( false )
     ,   m_nRange( 100 )
     ,   m_nValue( 0 )
 {
@@ -46,7 +46,7 @@ ProgressBarWrapper::~ProgressBarWrapper()
 }
 
 // public interfaces
-void ProgressBarWrapper::setStatusBar( const uno::Reference< awt::XWindow >& rStatusBar, sal_Bool bOwnsInstance )
+void ProgressBarWrapper::setStatusBar( const uno::Reference< awt::XWindow >& rStatusBar, bool bOwnsInstance )
 {
     SolarMutexGuard g;
 
@@ -195,7 +195,7 @@ throw (uno::RuntimeException)
 {
     uno::Reference< awt::XWindow > xWindow;
     OUString aText;
-    sal_Bool      bSetValue( sal_False );
+    bool      bSetValue( false );
 
     {
         SolarMutexGuard g;
@@ -215,7 +215,7 @@ throw (uno::RuntimeException)
         if ( m_nValue != sal_Int32( fVal ))
         {
             m_nValue = sal_Int32( fVal );
-            bSetValue = sal_True;
+            bSetValue = true;
         }
 
         nValue   = m_nValue;
@@ -291,7 +291,7 @@ throw (uno::RuntimeException, std::exception)
         }
 
         m_xStatusBar.clear();
-        m_bDisposed = sal_True;
+        m_bDisposed = true;
     }
 }
 

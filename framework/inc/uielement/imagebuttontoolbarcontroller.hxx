@@ -50,7 +50,7 @@ class ImageButtonToolbarController : public ComplexToolbarController
         virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand ) SAL_OVERRIDE;
 
     private:
-        sal_Bool ReadImageFromURL( sal_Bool bBigImage, const OUString& aImageURL, Image& aImage );
+        bool ReadImageFromURL( bool bBigImage, const OUString& aImageURL, Image& aImage );
 };
 
 }

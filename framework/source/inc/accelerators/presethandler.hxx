@@ -335,7 +335,7 @@ class PresetHandler
             @return The opened preset stream ... or NULL if the preset does not exists.
          */
         css::uno::Reference< css::io::XStream > openPreset(const OUString& sPreset,
-                                                           sal_Bool bUseNoLangGlobal = sal_False);
+                                                           bool bUseNoLangGlobal = false);
 
         /** @short  open the specified target as stream object
                     and return it.
@@ -356,7 +356,7 @@ class PresetHandler
                     or couldnt be created as new one.
          */
         css::uno::Reference< css::io::XStream > openTarget(const OUString& sTarget         ,
-                                                                 sal_Bool         bCreateIfMissing);
+                                                                 bool         bCreateIfMissing);
 
         /** @short  do anything which is necessary to flush all changes
                     back to disk.
@@ -392,7 +392,7 @@ class PresetHandler
          */
         css::uno::Reference< css::embed::XStorage > impl_openPathIgnoringErrors(const OUString& sPath ,
                                                                                       sal_Int32        eMode ,
-                                                                                      sal_Bool         bShare);
+                                                                                      bool         bShare);
 
         /** @short  try to find the specified locale inside list of possible ones.
 
@@ -418,7 +418,7 @@ class PresetHandler
          */
         ::std::vector< OUString >::const_iterator impl_findMatchingLocalizedValue(const ::std::vector< OUString >& lLocalizedValues,
                                                                                                OUString&             rLanguageTag         ,
-                                                                                               sal_Bool                          bAllowFallbacks );
+                                                                                               bool                          bAllowFallbacks );
 
         /** @short  open a config path ignoring errors (catching exceptions).
 
@@ -449,9 +449,9 @@ class PresetHandler
          */
         css::uno::Reference< css::embed::XStorage > impl_openLocalizedPathIgnoringErrors(OUString&      sPath         ,
                                                                                          sal_Int32             eMode         ,
-                                                                                         sal_Bool              bShare        ,
+                                                                                         bool              bShare        ,
                                                                                          OUString&             rLanguageTag  ,
-                                                                                         sal_Bool              bAllowFallback);
+                                                                                         bool              bAllowFallback);
 
         /** @short  returns the names of all sub storages of specified storage.
 

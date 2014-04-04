@@ -154,7 +154,7 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
         ,   Desktop_BASE            ( m_aMutex )
         ,   cppu::OPropertySetHelper( cppu::WeakComponentImplHelperBase::rBHelper   )
         // Init member
-        ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further information!
+        ,   m_bIsTerminated         ( false                                     )   // see dispose() for further information!
         ,   m_xContext              ( xContext                                      )
         ,   m_aChildTaskContainer   (                                               )
         ,   m_aListenerContainer    ( m_aMutex )
@@ -163,7 +163,7 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
         ,   m_eLoadState            ( E_NOTSET                                      )
         ,   m_xLastFrame            (                                               )
         ,   m_aInteractionRequest   (                                               )
-        ,   m_bSuspendQuickstartVeto( sal_False                                     )
+        ,   m_bSuspendQuickstartVeto( false                                     )
         ,   m_aCommandOptions       (                                               )
         ,   m_sName                 (                                               )
         ,   m_sTitle                (                                               )
@@ -217,13 +217,13 @@ sal_Bool SAL_CALL Desktop::terminate()
     css::uno::Reference< css::frame::XTerminateListener > xSfxTerminator     = m_xSfxTerminator;
 
     css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
-    sal_Bool                                            bAskQuickStart     = !m_bSuspendQuickstartVeto;
+    bool                                                  bAskQuickStart     = !m_bSuspendQuickstartVeto;
 
     aReadLock.clear();
 
     // Ask normal terminate listener. They could stop terminate without closing any open document.
     Desktop::TTerminateListenerList lCalledTerminationListener;
-    sal_Bool                      bVeto = sal_False;
+    bool                      bVeto = false;
     impl_sendQueryTerminationEvent(lCalledTerminationListener, bVeto);
     if ( bVeto )
     {
@@ -233,8 +233,8 @@ sal_Bool SAL_CALL Desktop::terminate()
 
     // try to close all open frames.
     // Allow using of any UI ... because Desktop.terminate() was designed as UI functionality in the past.
-    sal_Bool bAllowUI      = sal_True;
-    sal_Bool bFramesClosed = impl_closeFrames(bAllowUI);
+    bool bAllowUI      = true;
+    bool bFramesClosed = impl_closeFrames(bAllowUI);
     if ( ! bFramesClosed )
     {
         impl_sendCancelTerminationEvent(lCalledTerminationListener);
@@ -257,7 +257,7 @@ sal_Bool SAL_CALL Desktop::terminate()
     // But some of them can be dangerous. E.g. it would be dangerous if we close our pipe
     // and dont terminate in real because another listener throws a veto exception .-)
 
-    sal_Bool bTerminate = sal_False;
+    bool bTerminate = false;
     try
     {
         if(
@@ -287,11 +287,11 @@ sal_Bool SAL_CALL Desktop::terminate()
             lCalledTerminationListener.push_back( xSfxTerminator );
         }
 
-        bTerminate = sal_True;
+        bTerminate = true;
     }
     catch(const css::frame::TerminationVetoException&)
     {
-        bTerminate = sal_False;
+        bTerminate = false;
     }
 
     if ( ! bTerminate )
@@ -302,7 +302,7 @@ sal_Bool SAL_CALL Desktop::terminate()
             // see dispose() for further information.
             /* SAFE AREA --------------------------------------------------------------------------------------- */
             SolarMutexClearableGuard aWriteLock;
-            m_bIsTerminated = sal_True;
+            m_bIsTerminated = true;
             aWriteLock.clear();
             /* UNSAFE AREA ------------------------------------------------------------------------------------- */
 
@@ -920,7 +920,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
         TaskCreator aCreator( m_xContext );
-        xTarget = aCreator.createTask(sTargetFrameName,sal_False);
+        xTarget = aCreator.createTask(sTargetFrameName,false);
     }
 
     // I.II) "_top"
@@ -1004,7 +1004,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
            )
         {
             TaskCreator aCreator( m_xContext );
-            xTarget = aCreator.createTask(sTargetFrameName,sal_False);
+            xTarget = aCreator.createTask(sTargetFrameName,false);
         }
     }
 
@@ -1203,7 +1203,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     css::uno::Reference< css::task::XInteractionAbort >                              xAbort;
     css::uno::Reference< css::task::XInteractionApprove >                            xApprove;
     css::uno::Reference< css::document::XInteractionFilterSelect >                   xFilterSelect;
-    sal_Bool                                                                         bAbort         = sal_False;
+    bool                                                                             bAbort         = false;
 
     sal_Int32 nCount=lContinuations.getLength();
     for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
@@ -1232,20 +1232,20 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     }
     else if( aRequest >>= aErrorCodeRequest )
     {
-        sal_Bool bWarning = ((aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
+        bool bWarning = ((aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
         if (xApprove.is() && bWarning)
             xApprove->select();
         else
         if (xAbort.is())
         {
             xAbort->select();
-            bAbort = sal_True;
+            bAbort = true;
         }
     }
     else if( xAbort.is() )
     {
         xAbort->select();
-        bAbort = sal_True;
+        bAbort = true;
     }
 
     // Ok now it's time to break yield loop of loadComponentFromURL().
@@ -1325,7 +1325,7 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
 
     //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     switch( nHandle )
     {
@@ -1595,9 +1595,9 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
 }
 
 void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lCalledListener,
-                                             sal_Bool&                      bVeto          )
+                                             bool&                      bVeto          )
 {
-    bVeto = sal_False;
+    bVeto = false;
 
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -1621,7 +1621,7 @@ void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lC
         catch( const css::frame::TerminationVetoException& )
         {
             // first veto will stop notification loop.
-            bVeto = sal_True;
+            bVeto = true;
             return;
         }
         catch( const css::uno::Exception& )
@@ -1688,7 +1688,7 @@ void Desktop::impl_sendNotifyTerminationEvent()
     }
 }
 
-sal_Bool Desktop::impl_closeFrames(sal_Bool bAllowUI)
+bool Desktop::impl_closeFrames(bool bAllowUI)
 {
     SolarMutexClearableGuard aReadLock;
     css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lFrames = m_aChildTaskContainer.getAllElements();
@@ -1706,7 +1706,7 @@ sal_Bool Desktop::impl_closeFrames(sal_Bool bAllowUI)
 
             // XController.suspend() will show an UI ...
             // Use it in case it was allowed from outside only.
-            sal_Bool                                       bSuspended = sal_False;
+            bool                                       bSuspended = false;
             css::uno::Reference< css::frame::XController > xController( xFrame->getController(), css::uno::UNO_QUERY );
             if (
                 ( bAllowUI         ) &&
@@ -1773,13 +1773,13 @@ sal_Bool Desktop::impl_closeFrames(sal_Bool bAllowUI)
 }
 
 //  We work with valid listener only.
-sal_Bool Desktop::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+bool Desktop::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     return !xListener.is();
 }
 
 //  We work with valid listener only.
-sal_Bool Desktop::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+bool Desktop::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     return !xListener.is();
 }

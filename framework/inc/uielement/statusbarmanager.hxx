@@ -99,10 +99,10 @@ class StatusBarManager : public ::cppu::WeakImplHelper3<
     protected:
         typedef std::map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusbarController > > StatusBarControllerMap;
 
-        sal_Bool                                                                                        m_bDisposed : 1,
+        bool                                                                                        m_bDisposed : 1,
                                                                                                         m_bFrameActionRegistered : 1,
                                                                                                         m_bUpdateControllers : 1;
-        sal_Bool                                                                                        m_bModuleIdentified;
+        bool                                                                                        m_bModuleIdentified;
         StatusBar*                                                                                      m_pStatusBar;
         OUString                                                                                   m_aModuleIdentifier;
         OUString                                                                                   m_aResourceName;

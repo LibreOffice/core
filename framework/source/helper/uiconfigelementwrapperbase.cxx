@@ -173,7 +173,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 {
     //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     switch( nHandle )
     {
@@ -314,7 +314,7 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
         }
         case UIELEMENT_PROPHANDLE_PERSISTENT:
         {
-            sal_Bool bBool( m_bPersistent );
+            bool bBool( m_bPersistent );
             aValue >>= bBool;
             m_bPersistent = bBool;
             break;
@@ -330,7 +330,7 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
             break;
         case UIELEMENT_PROPHANDLE_NOCLOSE:
         {
-            sal_Bool bBool( m_bNoClose );
+            bool bBool( m_bNoClose );
             aValue >>= bBool;
             m_bNoClose = bBool;
             break;

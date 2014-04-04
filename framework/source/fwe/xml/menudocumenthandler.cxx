@@ -218,7 +218,7 @@ void ReadMenuDocumentHandlerBase::initPropertyCommon(
 OReadMenuDocumentHandler::OReadMenuDocumentHandler(
     const Reference< XIndexContainer >& rMenuBarContainer )
 :   m_nElementDepth( 0 ),
-    m_bMenuBarMode( sal_False ),
+    m_bMenuBarMode( false ),
     m_xMenuBarContainer( rMenuBarContainer ),
     m_xContainerFactory( rMenuBarContainer, UNO_QUERY )
 {
@@ -256,7 +256,7 @@ throw( SAXException, RuntimeException, std::exception )
     else if ( aName == ELEMENT_MENUBAR )
     {
         ++m_nElementDepth;
-        m_bMenuBarMode = sal_True;
+        m_bMenuBarMode = true;
         m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( m_xMenuBarContainer, m_xContainerFactory ));
 
         m_xReader->startDocument();
@@ -279,7 +279,7 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
         {
             m_xReader->endDocument();
             m_xReader.clear();
-            m_bMenuBarMode = sal_False;
+            m_bMenuBarMode = false;
             if ( aName != ELEMENT_MENUBAR )
             {
                 OUString aErrorMessage = getErrorLineString();
@@ -294,7 +294,7 @@ OReadMenuBarHandler::OReadMenuBarHandler(
     const Reference< XIndexContainer >& rMenuBarContainer,
     const Reference< XSingleComponentFactory >& rFactory          )
 :   m_nElementDepth( 0 ),
-    m_bMenuMode( sal_False ),
+    m_bMenuMode( false ),
     m_xMenuBarContainer( rMenuBarContainer ),
       m_xContainerFactory( rFactory )
 {
@@ -332,7 +332,7 @@ throw( SAXException, RuntimeException, std::exception )
         OUString aLabel;
         sal_Int16 nItemBits(0);
 
-        m_bMenuMode = sal_True;
+        m_bMenuMode = true;
 
         // Container must be factory to create sub container
         Reference< XComponentContext > xComponentContext(
@@ -418,7 +418,7 @@ void OReadMenuBarHandler::endElement( const OUString& aName )
         {
             m_xReader->endDocument();
             m_xReader.clear();
-            m_bMenuMode = sal_False;
+            m_bMenuMode = false;
             if ( aName != ELEMENT_MENU )
             {
                 OUString aErrorMessage = getErrorLineString();
@@ -435,7 +435,7 @@ OReadMenuHandler::OReadMenuHandler(
     const Reference< XIndexContainer >& rMenuContainer,
     const Reference< XSingleComponentFactory >& rFactory          ) :
     m_nElementDepth( 0 ),
-    m_bMenuPopupMode( sal_False ),
+    m_bMenuPopupMode( false ),
     m_xMenuContainer( rMenuContainer ),
     m_xContainerFactory( rFactory )
 {
@@ -467,7 +467,7 @@ throw( SAXException, RuntimeException, std::exception )
     else if ( aName == ELEMENT_MENUPOPUP )
     {
         ++m_nElementDepth;
-        m_bMenuPopupMode = sal_True;
+        m_bMenuPopupMode = true;
         m_xReader = Reference< XDocumentHandler >( new OReadMenuPopupHandler( m_xMenuContainer, m_xContainerFactory ));
         m_xReader->startDocument();
     }
@@ -494,7 +494,7 @@ void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
         {
             m_xReader->endDocument();
             m_xReader.clear();
-            m_bMenuPopupMode = sal_False;
+            m_bMenuPopupMode = false;
             if ( aName != ELEMENT_MENUPOPUP )
             {
                 OUString aErrorMessage = getErrorLineString();
@@ -511,7 +511,7 @@ OReadMenuPopupHandler::OReadMenuPopupHandler(
     const Reference< XIndexContainer >& rMenuContainer,
     const Reference< XSingleComponentFactory >& rFactory          ) :
     m_nElementDepth( 0 ),
-    m_bMenuMode( sal_False ),
+    m_bMenuMode( false ),
     m_xMenuContainer( rMenuContainer ),
     m_xContainerFactory( rFactory ),
     m_xComponentContext( comphelper::getProcessComponentContext() ),
@@ -548,7 +548,7 @@ throw( SAXException, RuntimeException, std::exception )
         OUString aLabel;
         sal_Int16 nItemBits(0);
 
-        m_bMenuMode = sal_True;
+        m_bMenuMode = true;
 
         // Container must be factory to create sub container
         Reference< XIndexContainer > xSubItemContainer;
@@ -689,7 +689,7 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
         {
             m_xReader->endDocument();
             m_xReader.clear();
-            m_bMenuMode = sal_False;
+            m_bMenuMode = false;
             if ( aName != ELEMENT_MENU )
             {
                 OUString aErrorMessage = getErrorLineString();
@@ -781,7 +781,7 @@ void OWriteMenuDocumentHandler::WriteMenu( const Reference< XIndexAccess >& rMen
 throw ( SAXException, RuntimeException )
 {
     sal_Int32  nItemCount = rMenuContainer->getCount();
-    sal_Bool   bSeparator = sal_False;
+    bool   bSeparator = false;
     Any        aAny;
 
     for ( sal_Int32 nItemPos = 0; nItemPos < nItemCount; nItemPos++ )
@@ -804,7 +804,7 @@ throw ( SAXException, RuntimeException )
                     aCommandURL == AUTOPILOTMENU_CMD )
                 {
                     WriteMenuItem( aCommandURL, aLabel, aHelpURL, nItemBits );
-                    bSeparator = sal_False;
+                    bSeparator = false;
                 }
                 else if ( !aCommandURL.isEmpty() && !AddonPopupMenu::IsCommandURLPrefix( aCommandURL ))
                 {
@@ -833,7 +833,7 @@ throw ( SAXException, RuntimeException )
                     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
                     m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENU ) );
                     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                    bSeparator = sal_False;
+                    bSeparator = false;
                 }
             }
             else
@@ -842,7 +842,7 @@ throw ( SAXException, RuntimeException )
                 {
                     if ( !aCommandURL.isEmpty() )
                     {
-                        bSeparator = sal_False;
+                        bSeparator = false;
                         WriteMenuItem( aCommandURL, aLabel, aHelpURL, nItemBits );
                     }
                 }
@@ -850,7 +850,7 @@ throw ( SAXException, RuntimeException )
                 {
                     // Don't write two separators together
                     WriteMenuSeparator();
-                    bSeparator = sal_True;
+                    bSeparator = true;
                 }
             }
         }

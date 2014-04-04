@@ -122,7 +122,7 @@ ConstItemContainer::ConstItemContainer( const ItemContainer& rItemContainer )
     copyItemContainer( rItemContainer.m_aItemVector );
 }
 
-ConstItemContainer::ConstItemContainer( const Reference< XIndexAccess >& rSourceContainer, sal_Bool bFastCopy )
+ConstItemContainer::ConstItemContainer( const Reference< XIndexAccess >& rSourceContainer, bool bFastCopy )
 {
     // We also have to copy the UIName property
     try

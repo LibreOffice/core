@@ -140,7 +140,7 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
         };
 
         sal_Int32   impl_GetPageIdFromIndex( ::sal_Int32 nIndex ) const;
-        sal_Bool    impl_CheckIndex( ::sal_Int32 nIndex ) const;
+        bool        impl_CheckIndex( ::sal_Int32 nIndex ) const;
         void        implts_LayoutWindows() const;
         void        impl_SetTitle( const OUString& rTitle );
         TabControl* impl_GetTabControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xTabControlWindow ) const;
@@ -149,7 +149,7 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
 
         typedef std::vector< sal_uInt16 > PageIdVector;
 
-        sal_Bool                                                                         m_bInitialized : 1,
+        bool                                                                         m_bInitialized : 1,
                                                                                          m_bDisposed : 1;
         sal_Int32                                                                        m_nNextTabID;
         OUString                                                                  m_aTitlePropName;

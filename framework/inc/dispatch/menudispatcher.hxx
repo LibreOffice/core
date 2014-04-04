@@ -167,7 +167,7 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
         /*-****************************************************************************************************
         *//*-*****************************************************************************************************/
 
-        sal_Bool impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromResource = sal_False );
+        bool impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource = false );
 
         /*-****************************************************************************************************
         *//*-*****************************************************************************************************/
@@ -183,8 +183,8 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
         css::uno::Reference< css::uno::XComponentContext >      m_xContext;   /// factory shared with our owner to create new services!
         osl::Mutex m_mutex;
         IMPL_ListenerHashContainer                              m_aListenerContainer;   /// hash table for listener at specified URLs
-        sal_Bool                                                m_bAlreadyDisposed;   /// Protection against multiple disposing calls.
-        sal_Bool                                                m_bActivateListener;   /// dispatcher is listener for frame activation
+        bool                                                    m_bAlreadyDisposed;   /// Protection against multiple disposing calls.
+        bool                                                    m_bActivateListener;   /// dispatcher is listener for frame activation
         MenuManager*                                            m_pMenuManager;   /// menu manager controlling menu dispatches
 
 };      //  class MenuDispatcher

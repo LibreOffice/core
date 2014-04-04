@@ -123,7 +123,7 @@ class KeyMapping
             @return [boolean]
                     sal_True if conversion was successfully.
           */
-        sal_Bool impl_st_interpretIdentifierAsPureKeyCode(const OUString& sIdentifier,
+        bool impl_st_interpretIdentifierAsPureKeyCode(const OUString& sIdentifier,
                                                                 sal_uInt16&      rCode      );
 };
 

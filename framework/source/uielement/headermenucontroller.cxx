@@ -107,21 +107,21 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
 
                 sal_uInt16   nId = 2;
                 sal_uInt16  nCount = 0;
-                sal_Bool bAllOneState( sal_True );
-                sal_Bool bLastCheck( sal_True );
-                sal_Bool bFirstChecked( sal_False );
-                sal_Bool bFirstItemInserted( sal_False );
+                bool bAllOneState( true );
+                bool bLastCheck( true );
+                bool bFirstChecked( false );
+                bool bFirstItemInserted( false );
                 for ( sal_Int32 n = 0; n < aSeqNames.getLength(); n++ )
                 {
                     OUString aName = aSeqNames[n];
                     Reference< XPropertySet > xPropSet( xNameContainer->getByName( aName ), UNO_QUERY );
                     if ( xPropSet.is() )
                     {
-                        sal_Bool bIsPhysical( sal_False );
+                        bool bIsPhysical( false );
                         if (( xPropSet->getPropertyValue( aIsPhysicalStr ) >>= bIsPhysical ) && bIsPhysical )
                         {
                             OUString aDisplayName;
-                            sal_Bool      bHeaderIsOn( sal_False );
+                            bool      bHeaderIsOn( false );
                             xPropSet->getPropertyValue( aDisplayNameStr ) >>= aDisplayName;
                             xPropSet->getPropertyValue( aHeaderFooterIsOnStr ) >>= bHeaderIsOn;
 
@@ -137,7 +137,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                             pVCLPopupMenu->InsertItem( nId, aDisplayName, MIB_CHECKABLE );
                             if ( !bFirstItemInserted )
                             {
-                                bFirstItemInserted = sal_True;
+                                bFirstItemInserted = true;
                                 bFirstChecked      = bHeaderIsOn;
                             }
 
@@ -149,7 +149,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
 
                             // Check if all entries have the same state
                             if( bAllOneState && n && bHeaderIsOn != bLastCheck )
-                                bAllOneState = sal_False;
+                                bAllOneState = false;
                             bLastCheck = bHeaderIsOn;
                             ++nCount;
                         }

@@ -129,7 +129,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
 
             try
             {
-                xChild = StorageHolder::openSubStorageWithFallback(xParent, sChild, nOpenMode, sal_True); // TODO think about delegating fallback decision to our own calli!
+                xChild = StorageHolder::openSubStorageWithFallback(xParent, sChild, nOpenMode, true); // TODO think about delegating fallback decision to our own calli!
             }
             catch(const css::uno::RuntimeException&)
                 { throw; }
@@ -410,7 +410,7 @@ void StorageHolder::operator=(const StorageHolder& rCopy)
 css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
                                                                                       const OUString&                             sSubStorage   ,
                                                                                             sal_Int32                                    eOpenMode     ,
-                                                                                            sal_Bool                                     bAllowFallback)
+                                                                                            bool                                     bAllowFallback)
 {
     // a) try it first with user specified open mode
     //    ignore errors ... but save it for later use!
@@ -449,7 +449,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFal
 css::uno::Reference< css::io::XStream > StorageHolder::openSubStreamWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
                                                                                  const OUString&                             sSubStream    ,
                                                                                        sal_Int32                                    eOpenMode     ,
-                                                                                       sal_Bool                                     bAllowFallback)
+                                                                                       bool                                     bAllowFallback)
 {
     // a) try it first with user specified open mode
     //    ignore errors ... but save it for later use!

@@ -40,7 +40,7 @@ OFrames::OFrames( const   css::uno::Reference< XFrame >&              xOwner    
                             FrameContainer*                     pFrameContainer )
         :   m_xOwner                    ( xOwner                        )
         ,   m_pFrameContainer           ( pFrameContainer               )
-        ,   m_bRecursiveSearchProtection( sal_False                     )
+        ,   m_bRecursiveSearchProtection( false                     )
 {
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
@@ -120,7 +120,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
     if ( xOwner.is() )
     {
         // Work only, if search was not started here ...!
-        if( m_bRecursiveSearchProtection == sal_False )
+        if( m_bRecursiveSearchProtection == false )
         {
             // This class is a helper for services, which must implement XFrames.
             // His parent and children are MY parent and children to.
@@ -161,7 +161,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
             {
                 // Else; start a new search.
                 // Protect this instance against recursive calls from parents.
-                m_bRecursiveSearchProtection = sal_True;
+                m_bRecursiveSearchProtection = true;
                 // Ask parent of my owner for frames and append results to return list.
                 css::uno::Reference< XFramesSupplier > xParent( xOwner->getCreator(), UNO_QUERY );
                 // If a parent exist ...
@@ -172,7 +172,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                 }
                 // We have all searched information.
                 // Reset protection-mode.
-                m_bRecursiveSearchProtection = sal_False;
+                m_bRecursiveSearchProtection = false;
             }
 
             // If searched for children, step over all elements in container and collect the information.
@@ -264,7 +264,7 @@ sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException, std::exception
     SolarMutexGuard g;
 
     // Set default return value.
-    sal_Bool bHasElements = sal_False;
+    bool bHasElements = false;
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
     css::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
@@ -274,7 +274,7 @@ sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException, std::exception
         if ( m_pFrameContainer->getCount() > 0 )
         {
             // ... change this state value!
-            bHasElements = sal_True;
+            bHasElements = true;
         }
     }
     // Return result of this operation.
@@ -350,32 +350,32 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
 // An instance of this class can only work with valid initialization.
 // We share the mutex with our owner class, need a valid factory to instanciate new services and
 // use the access to our owner for some operations.
-sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   css::uno::Reference< XFrame >&              xOwner          ,
-                                                                FrameContainer*                     pFrameContainer )
+bool OFrames::impldbg_checkParameter_OFramesCtor(   const   css::uno::Reference< XFrame >&              xOwner          ,
+                                                            FrameContainer*                             pFrameContainer )
 {
     return xOwner.is() && pFrameContainer != 0;
 }
 
 // Its only allowed to add valid references to container.
 // AND - alle frames must support XFrames-interface!
-sal_Bool OFrames::impldbg_checkParameter_append( const css::uno::Reference< XFrame >& xFrame )
+bool OFrames::impldbg_checkParameter_append( const css::uno::Reference< XFrame >& xFrame )
 {
     return xFrame.is();
 }
 
 // Its only allowed to add valid references to container...
 // ... => You can only delete valid references!
-sal_Bool OFrames::impldbg_checkParameter_remove( const css::uno::Reference< XFrame >& xFrame )
+bool OFrames::impldbg_checkParameter_remove( const css::uno::Reference< XFrame >& xFrame )
 {
     return xFrame.is();
 }
 
 // A search for frames must initiate with right flags.
 // Some one are superflous and not supported yet. But here we control only the range of incoming parameter!
-sal_Bool OFrames::impldbg_checkParameter_queryFrames( sal_Int32 nSearchFlags )
+bool OFrames::impldbg_checkParameter_queryFrames( sal_Int32 nSearchFlags )
 {
     // Set default return value.
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
     // Check parameter.
     if  (
             (    nSearchFlags != FrameSearchFlag::AUTO        ) &&
@@ -389,7 +389,7 @@ sal_Bool OFrames::impldbg_checkParameter_queryFrames( sal_Int32 nSearchFlags )
             ( !( nSearchFlags &  FrameSearchFlag::GLOBAL    ) )
         )
     {
-        bOK = sal_False;
+        bOK = false;
     }
     // Return result of check.
     return bOK;

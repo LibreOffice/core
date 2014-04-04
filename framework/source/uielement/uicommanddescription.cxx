@@ -133,9 +133,9 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         void                      fillInfoFromResult( CmdToInfoMap& rCmdInfo, const OUString& aLabel );
         Any                       getUILabelFromCommand( const OUString& rCommandURL );
         Sequence< OUString > getAllCommands();
-        sal_Bool                  fillCache();
-        sal_Bool                  addGenericInfoToCache();
-        void                      impl_fill(const Reference< XNameAccess >& _xConfigAccess,sal_Bool _bPopup,
+        bool                  fillCache();
+        bool                  addGenericInfoToCache();
+        void                      impl_fill(const Reference< XNameAccess >& _xConfigAccess,bool _bPopup,
                                                 std::vector< OUString >& aImageCommandVector,
                                                 std::vector< OUString >& aImageRotateVector,
                                                 std::vector< OUString >& aImageMirrorVector);
@@ -146,7 +146,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
                                  OUStringHash,
                                  ::std::equal_to< OUString > > CommandToInfoCache;
 
-        sal_Bool initializeConfigAccess();
+        bool initializeConfigAccess();
 
         OUString                     m_aConfigCmdAccess;
         OUString                     m_aConfigPopupAccess;
@@ -170,9 +170,9 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         Sequence< OUString >         m_aCommandRotateImageList;
         Sequence< OUString >         m_aCommandMirrorImageList;
         CommandToInfoCache                m_aCmdInfoCache;
-        sal_Bool                          m_bConfigAccessInitialized;
-        sal_Bool                          m_bCacheFilled;
-        sal_Bool                          m_bGenericDataRetrieved;
+        bool                          m_bConfigAccessInitialized;
+        bool                          m_bCacheFilled;
+        bool                          m_bGenericDataRetrieved;
 };
 
 //  XInterface, XTypeProvider
@@ -188,9 +188,9 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aM
     m_aPropProperties( PROPSET_PROPERTIES ),
     m_aPrivateResourceURL( PRIVATE_RESOURCE_URL ),
     m_xGenericUICommands( rGenericUICommands ),
-    m_bConfigAccessInitialized( sal_False ),
-    m_bCacheFilled( sal_False ),
-    m_bGenericDataRetrieved( sal_False )
+    m_bConfigAccessInitialized( false ),
+    m_bCacheFilled( false ),
+    m_bGenericDataRetrieved( false )
 {
     // Create configuration hierachical access name
     m_aConfigCmdAccess += aModuleName;
@@ -223,7 +223,7 @@ Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const OUString& rComm
     if ( !m_bConfigAccessInitialized )
     {
         initializeConfigAccess();
-        m_bConfigAccessInitialized = sal_True;
+        m_bConfigAccessInitialized = true;
         fillCache();
     }
 
@@ -318,7 +318,7 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aComman
 
     return Any();
 }
-void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _xConfigAccess,sal_Bool _bPopup,
+void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _xConfigAccess,bool _bPopup,
                                                 std::vector< OUString >& aImageCommandVector,
                                                 std::vector< OUString >& aImageRotateVector,
                                                 std::vector< OUString >& aImageMirrorVector)
@@ -360,29 +360,29 @@ void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _x
         }
     }
 }
-sal_Bool ConfigurationAccess_UICommand::fillCache()
+bool ConfigurationAccess_UICommand::fillCache()
 {
 
     if ( m_bCacheFilled )
-        return sal_True;
+        return true;
 
     std::vector< OUString > aImageCommandVector;
     std::vector< OUString > aImageRotateVector;
     std::vector< OUString > aImageMirrorVector;
 
-    impl_fill(m_xConfigAccess,sal_False,aImageCommandVector,aImageRotateVector,aImageMirrorVector);
-    impl_fill(m_xConfigAccessPopups,sal_True,aImageCommandVector,aImageRotateVector,aImageMirrorVector);
+    impl_fill(m_xConfigAccess,false,aImageCommandVector,aImageRotateVector,aImageMirrorVector);
+    impl_fill(m_xConfigAccessPopups,true,aImageCommandVector,aImageRotateVector,aImageMirrorVector);
     // Create cached sequences for fast retrieving
     m_aCommandImageList       = comphelper::containerToSequence( aImageCommandVector );
     m_aCommandRotateImageList = comphelper::containerToSequence( aImageRotateVector );
     m_aCommandMirrorImageList = comphelper::containerToSequence( aImageMirrorVector );
 
-    m_bCacheFilled = sal_True;
+    m_bCacheFilled = true;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool ConfigurationAccess_UICommand::addGenericInfoToCache()
+bool ConfigurationAccess_UICommand::addGenericInfoToCache()
 {
     if ( m_xGenericUICommands.is() && !m_bGenericDataRetrieved )
     {
@@ -415,10 +415,10 @@ sal_Bool ConfigurationAccess_UICommand::addGenericInfoToCache()
         {
         }
 
-        m_bGenericDataRetrieved = sal_True;
+        m_bGenericDataRetrieved = true;
     }
 
-    return sal_True;
+    return true;
 }
 
 Any ConfigurationAccess_UICommand::getInfoFromCommand( const OUString& rCommandURL )
@@ -465,7 +465,7 @@ Sequence< OUString > ConfigurationAccess_UICommand::getAllCommands()
     if ( !m_bConfigAccessInitialized )
     {
         initializeConfigAccess();
-        m_bConfigAccessInitialized = sal_True;
+        m_bConfigAccessInitialized = true;
         fillCache();
     }
 
@@ -504,7 +504,7 @@ Sequence< OUString > ConfigurationAccess_UICommand::getAllCommands()
     return Sequence< OUString >();
 }
 
-sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
+bool ConfigurationAccess_UICommand::initializeConfigAccess()
 {
     Sequence< Any > aArgs( 1 );
     PropertyValue   aPropValue;
@@ -543,7 +543,7 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
             }
         }
 
-        return sal_True;
+        return true;
     }
     catch (const WrappedTargetException&)
     {
@@ -552,28 +552,28 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
     {
     }
 
-    return sal_False;
+    return false;
 }
 
 // container.XContainerListener
 void SAL_CALL ConfigurationAccess_UICommand::elementInserted( const ContainerEvent& ) throw(RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
-    m_bCacheFilled = sal_False;
+    m_bCacheFilled = false;
     fillCache();
 }
 
 void SAL_CALL ConfigurationAccess_UICommand::elementRemoved( const ContainerEvent& ) throw(RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
-    m_bCacheFilled = sal_False;
+    m_bCacheFilled = false;
     fillCache();
 }
 
 void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEvent& ) throw(RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
-    m_bCacheFilled = sal_False;
+    m_bCacheFilled = false;
     fillCache();
 }
 

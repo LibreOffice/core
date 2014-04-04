@@ -212,7 +212,7 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper2< XNameCo
         Any                       impl_getSequenceFromStruct( const WindowStateInfo& rWinStateInfo );
         void                      impl_fillStructFromSequence( WindowStateInfo& rWinStateInfo, const Sequence< PropertyValue >& rSeq );
         Any                       impl_getWindowStateFromResourceURL( const OUString& rResourceURL );
-        sal_Bool                  impl_initializeConfigAccess();
+        bool                  impl_initializeConfigAccess();
 
     private:
         typedef ::boost::unordered_map< OUString,
@@ -226,15 +226,15 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper2< XNameCo
         Reference< XNameAccess >          m_xConfigAccess;
         Reference< XContainerListener >   m_xConfigListener;
         ResourceURLToInfoCache            m_aResourceURLToInfoCache;
-        sal_Bool                          m_bConfigAccessInitialized : 1,
+        bool                          m_bConfigAccessInitialized : 1,
                                           m_bModified : 1;
         std::vector< OUString >           m_aPropArray;
 };
 
 ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const OUString& aModuleName, const Reference< XComponentContext >& rxContext ) :
     m_aConfigWindowAccess( "/org.openoffice.Office.UI." ),
-    m_bConfigAccessInitialized( sal_False ),
-    m_bModified( sal_False )
+    m_bConfigAccessInitialized( false ),
+    m_bModified( false )
 {
     // Create configuration hierachical access name
     m_aConfigWindowAccess += aModuleName;
@@ -288,7 +288,7 @@ throw ( RuntimeException, std::exception )
     if ( !m_bConfigAccessInitialized )
     {
         impl_initializeConfigAccess();
-        m_bConfigAccessInitialized = sal_True;
+        m_bConfigAccessInitialized = true;
     }
 
     if ( m_xConfigAccess.is() )
@@ -332,7 +332,7 @@ throw ( RuntimeException, std::exception )
     if ( !m_bConfigAccessInitialized )
     {
         impl_initializeConfigAccess();
-        m_bConfigAccessInitialized = sal_True;
+        m_bConfigAccessInitialized = true;
     }
 
     if ( m_xConfigAccess.is() )
@@ -355,7 +355,7 @@ throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::ex
     if ( !m_bConfigAccessInitialized )
     {
         impl_initializeConfigAccess();
-        m_bConfigAccessInitialized = sal_True;
+        m_bConfigAccessInitialized = true;
     }
 
     try
@@ -394,7 +394,7 @@ throw( IllegalArgumentException, ElementExistException, WrappedTargetException, 
             if ( !m_bConfigAccessInitialized )
             {
                 impl_initializeConfigAccess();
-                m_bConfigAccessInitialized = sal_True;
+                m_bConfigAccessInitialized = true;
             }
 
             // Try to ask our configuration access
@@ -456,14 +456,14 @@ throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException,
         {
             WindowStateInfo& rWinStateInfo = pIter->second;
             impl_fillStructFromSequence( rWinStateInfo, aPropSet );
-            m_bModified = sal_True;
+            m_bModified = true;
         }
         else
         {
             if ( !m_bConfigAccessInitialized )
             {
                 impl_initializeConfigAccess();
-                m_bConfigAccessInitialized = sal_True;
+                m_bConfigAccessInitialized = true;
             }
 
             // Try to ask our configuration access
@@ -474,7 +474,7 @@ throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException,
             {
                 WindowStateInfo& rWinStateInfo( impl_insertCacheAndReturnWinState( rResourceURL, xNameAccess ));
                 impl_fillStructFromSequence( rWinStateInfo, aPropSet );
-                m_bModified = sal_True;
+                m_bModified = true;
                 pIter = m_aResourceURLToInfoCache.find( rResourceURL );
             }
             else
@@ -488,7 +488,7 @@ throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException,
             {
                 WindowStateInfo aWinStateInfo( pIter->second );
                 OUString        aResourceURL( pIter->first );
-                m_bModified = sal_False;
+                m_bModified = false;
                 g.clear();
 
                 try
@@ -625,7 +625,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OU
                 case PROPERTY_SOFTCLOSE:
                 case PROPERTY_CONTEXTACTIVE:
                 {
-                    sal_Bool bValue = sal_Bool();
+                    bool bValue;
                     if ( a >>= bValue )
                     {
                         sal_Int32 nValue( 1 << i );
@@ -819,7 +819,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                 case PROPERTY_SOFTCLOSE:
                 case PROPERTY_CONTEXTACTIVE:
                 {
-                    sal_Bool bValue = sal_Bool();
+                    bool bValue;
                     if ( a >>= bValue )
                     {
                         sal_Int32 nValue( 1 << i );
@@ -976,7 +976,7 @@ Any ConfigurationAccess_WindowState::impl_getWindowStateFromResourceURL( const O
     if ( !m_bConfigAccessInitialized )
     {
         impl_initializeConfigAccess();
-        m_bConfigAccessInitialized = sal_True;
+        m_bConfigAccessInitialized = true;
     }
 
     try
@@ -1023,7 +1023,7 @@ void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateIn
                     case PROPERTY_SOFTCLOSE:
                     case PROPERTY_CONTEXTACTIVE:
                     {
-                        sal_Bool bValue = sal_Bool();
+                        bool bValue;
                         if ( rSeq[i].Value >>= bValue )
                         {
                             sal_Int32 nValue( 1 << j );
@@ -1169,21 +1169,21 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
                 switch ( i )
                 {
                     case PROPERTY_LOCKED:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Bool( rWinStateInfo.bLocked )) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bLocked ) ); break;
                     case PROPERTY_DOCKED:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Bool( rWinStateInfo.bDocked )) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bDocked ) ); break;
                     case PROPERTY_VISIBLE:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Bool( rWinStateInfo.bVisible )) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bVisible ) ); break;
                     case PROPERTY_CONTEXT:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Bool( rWinStateInfo.bContext )) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bContext ) ); break;
                     case PROPERTY_HIDEFROMMENU:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Bool( rWinStateInfo.bHideFromMenu )) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bHideFromMenu ) ); break;
                     case PROPERTY_NOCLOSE:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Bool( rWinStateInfo.bNoClose )) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bNoClose ) ); break;
                     case PROPERTY_SOFTCLOSE:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Bool( rWinStateInfo.bSoftClose )) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bSoftClose ) ); break;
                     case PROPERTY_CONTEXTACTIVE:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Bool( rWinStateInfo.bContextActive )) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bContextActive ) ); break;
                     case PROPERTY_DOCKINGAREA:
                         xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Int16( rWinStateInfo.aDockingArea ) ) ); break;
                     case PROPERTY_POS:
@@ -1235,7 +1235,7 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
     }
 }
 
-sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
+bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
 {
     Sequence< Any > aArgs( 2 );
     PropertyValue   aPropValue;
@@ -1262,7 +1262,7 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
             }
         }
 
-        return sal_True;
+        return true;
     }
     catch ( const WrappedTargetException& )
     {
@@ -1271,7 +1271,7 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
     {
     }
 
-    return sal_False;
+    return false;
 }
 
 typedef ::cppu::WeakComponentImplHelper2< css::container::XNameAccess,

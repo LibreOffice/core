@@ -48,8 +48,8 @@ UIElementWrapperBase::UIElementWrapperBase( sal_Int16 nType )
     ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
     ,   m_aListenerContainer        ( m_aMutex )
     ,   m_nType                     ( nType                                             )
-    ,   m_bInitialized              ( sal_False                                         )
-    ,   m_bDisposed                 ( sal_False                                         )
+    ,   m_bInitialized              ( false                                         )
+    ,   m_bDisposed                 ( false                                         )
 {
 }
 
@@ -106,7 +106,7 @@ throw ( Exception, RuntimeException, std::exception )
             }
         }
 
-        m_bInitialized = sal_True;
+        m_bInitialized = true;
     }
 }
 

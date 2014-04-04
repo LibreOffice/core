@@ -75,7 +75,7 @@ namespace framework
                 MODE_SetLanguageAllTextMenu
             };
 
-            sal_Bool                                                               m_bShowMenu;
+            bool                                                               m_bShowMenu;
             OUString                                                        m_aLangStatusCommandURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xLanguageDispatch;
             OUString                                                        m_aMenuCommandURL_Lang;

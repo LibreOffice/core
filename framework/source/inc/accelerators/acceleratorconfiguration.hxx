@@ -241,7 +241,7 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
         */
         css::uno::Reference< css::uno::XInterface > impl_ts_openSubStorage(const css::uno::Reference< css::embed::XStorage >& xRootStorage,
             const OUString&                             sSubStorage ,
-            sal_Bool                                     bOutStream  );
+            bool                                        bOutStream  );
 
         /** @short  returns a reference to one of our internal cache members.
 
@@ -261,7 +261,7 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
         @return [AcceleratorCache]
         c++ reference(!) to one of our internal caches.
         */
-        AcceleratorCache& impl_getCFG(sal_Bool bWriteAccessRequested = sal_False);
+        AcceleratorCache& impl_getCFG(bool bWriteAccessRequested = false);
 
 };
 
@@ -410,14 +410,14 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper4<
 
     private:
 
-        void impl_ts_load(sal_Bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg);
-        void impl_ts_save(sal_Bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg);
+        void impl_ts_load(bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg);
+        void impl_ts_save(bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg);
 
-        void insertKeyToConfiguration(const css::awt::KeyEvent& aKeyEvent, const OUString& sCommand, const sal_Bool bPreferred);
-        void removeKeyFromConfiguration(const css::awt::KeyEvent& aKeyEvent, const sal_Bool bPreferred);
+        void insertKeyToConfiguration(const css::awt::KeyEvent& aKeyEvent, const OUString& sCommand, const bool bPreferred);
+        void removeKeyFromConfiguration(const css::awt::KeyEvent& aKeyEvent, const bool bPreferred);
 
         void reloadChanged(const OUString& sPrimarySecondary, const OUString& sGlobalModules, const OUString& sModule, const OUString& sKey);
-        AcceleratorCache& impl_getCFG(sal_Bool bPreferred, sal_Bool bWriteAccessRequested = sal_False);
+        AcceleratorCache& impl_getCFG(bool bPreferred, bool bWriteAccessRequested = false);
 
 };
 

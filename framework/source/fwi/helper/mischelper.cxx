@@ -65,7 +65,7 @@ OUString RetrieveLabelFromCommand(
     uno::Reference< container::XNameAccess >& _xUICommandLabels,
     const uno::Reference< frame::XFrame >& _xFrame,
     OUString& _rModuleIdentifier,
-    sal_Bool& _rIni,
+    bool& _rIni,
     const sal_Char* _pName)
 {
     OUString aLabel;
@@ -77,7 +77,7 @@ OUString RetrieveLabelFromCommand(
         {
             if ( !_rIni )
             {
-                _rIni = sal_True;
+                _rIni = true;
                 Reference< XModuleManager2 > xModuleManager = ModuleManager::create( _xContext );
 
                 try

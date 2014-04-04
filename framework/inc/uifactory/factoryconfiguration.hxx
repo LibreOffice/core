@@ -84,7 +84,7 @@ private:
         }
     };
 
-    sal_Bool impl_getElementProps( const ::com::sun::star::uno::Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue ) const;
+    bool impl_getElementProps( const ::com::sun::star::uno::Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue ) const;
 
     mutable osl::Mutex m_mutex;
     OUString                     m_aPropCommand;
@@ -96,7 +96,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xConfigProvider;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xConfigAccess;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xConfigAccessListener;
-    sal_Bool                          m_bConfigAccessInitialized;
+    bool                          m_bConfigAccessInitialized;
     bool                              m_bAskValue;
 };
 

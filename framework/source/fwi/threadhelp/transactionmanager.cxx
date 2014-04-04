@@ -70,7 +70,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
 {
     // Safe member access.
     ::osl::ClearableMutexGuard  aAccessGuard( m_aAccessLock );
-    sal_Bool                    bWaitFor    = sal_False;
+    bool                        bWaitFor    = false;
     // Change working mode first!
     if  (
             ( m_eWorkingMode == E_INIT        && eMode == E_WORK        ) ||
@@ -82,7 +82,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
         m_eWorkingMode = eMode;
         if( m_eWorkingMode == E_BEFORECLOSE || m_eWorkingMode == E_CLOSE )
         {
-            bWaitFor = sal_True;
+            bWaitFor = true;
         }
     }
 
@@ -92,7 +92,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
     // ... and we will wait forever here!!!)
     // Don't forget to release access mutex before.
     aAccessGuard.clear();
-    if( bWaitFor == sal_True )
+    if( bWaitFor )
     {
         m_aBarrier.wait();
     }
@@ -160,7 +160,7 @@ void  TransactionManager::registerTransaction( EExceptionMode eMode, ERejectReas
     // Look for rejected calls first.
     // If call was refused we throw some exceptions or do nothing!
     // It depends from given parameter eMode.
-    if( isCallRejected( eReason ) == sal_True )
+    if( isCallRejected( eReason ) )
     {
         impl_throwExceptions( eMode, eReason );
     }
@@ -215,7 +215,7 @@ void  TransactionManager::unregisterTransaction() throw( css::uno::RuntimeExcept
 
     @onerror    We return false.
 *//*-*****************************************************************************************************/
-sal_Bool  TransactionManager::isCallRejected( ERejectReason& eReason ) const
+bool  TransactionManager::isCallRejected( ERejectReason& eReason ) const
 {
     // This call must safe access to internal member only.
     // Set "possible reason" for return and check reject-state then!

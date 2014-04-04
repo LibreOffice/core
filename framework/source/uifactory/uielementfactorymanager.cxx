@@ -70,7 +70,7 @@ ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Re
     m_aPropModule( "Module" ),
     m_aPropFactory( "FactoryImplementation" ),
     m_sRoot(_sRoot),
-    m_bConfigAccessInitialized( sal_False )
+    m_bConfigAccessInitialized( false )
 {
     m_xConfigProvider = theDefaultProvider::get( rxContext );
 }
@@ -283,7 +283,7 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
         {
         }
 
-        m_bConfigAccessInitialized = sal_True;
+        m_bConfigAccessInitialized = true;
     }
 
     if ( m_xConfigAccess.is() )
@@ -316,7 +316,7 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
     }
 }
 
-sal_Bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aElement, OUString& rType, OUString& rName, OUString& rModule, OUString& rServiceSpecifier ) const
+bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aElement, OUString& rType, OUString& rName, OUString& rModule, OUString& rServiceSpecifier ) const
 {
     Reference< XPropertySet > xPropertySet;
     aElement >>= xPropertySet;
@@ -332,15 +332,15 @@ sal_Bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aE
         }
         catch ( const com::sun::star::beans::UnknownPropertyException& )
         {
-            return sal_False;
+            return false;
         }
         catch ( const com::sun::star::lang::WrappedTargetException& )
         {
-            return sal_False;
+            return false;
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 } // framework
@@ -389,14 +389,14 @@ public:
     virtual void SAL_CALL deregisterFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    sal_Bool                                                  m_bConfigRead;
+    bool                                                  m_bConfigRead;
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
     ConfigurationAccess_FactoryManager*                       m_pConfigAccess;
 };
 
 UIElementFactoryManager::UIElementFactoryManager( const Reference< XComponentContext >& rxContext ) :
     UIElementFactoryManager_BASE(m_aMutex),
-    m_bConfigRead( sal_False ),
+    m_bConfigRead( false ),
     m_xContext(rxContext)
 {
     m_pConfigAccess = new ConfigurationAccess_FactoryManager(rxContext,
@@ -432,7 +432,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
 
     if ( !m_bConfigRead )
     {
-        m_bConfigRead = sal_True;
+        m_bConfigRead = true;
         m_pConfigAccess->readConfigurationData();
     }
 
@@ -475,7 +475,7 @@ throw ( RuntimeException, std::exception )
 
     if ( !m_bConfigRead )
     {
-        m_bConfigRead = sal_True;
+        m_bConfigRead = true;
         m_pConfigAccess->readConfigurationData();
     }
 
@@ -491,7 +491,7 @@ throw ( RuntimeException, std::exception )
 
     if ( !m_bConfigRead )
     {
-        m_bConfigRead = sal_True;
+        m_bConfigRead = true;
         m_pConfigAccess->readConfigurationData();
     }
 
@@ -524,7 +524,7 @@ throw ( ElementExistException, RuntimeException, std::exception )
 
     if ( !m_bConfigRead )
     {
-        m_bConfigRead = sal_True;
+        m_bConfigRead = true;
         m_pConfigAccess->readConfigurationData();
     }
 
@@ -540,7 +540,7 @@ throw ( NoSuchElementException, RuntimeException, std::exception )
 
     if ( !m_bConfigRead )
     {
-        m_bConfigRead = sal_True;
+        m_bConfigRead = true;
         m_pConfigAccess->readConfigurationData();
     }
 

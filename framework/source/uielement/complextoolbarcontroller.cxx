@@ -58,7 +58,7 @@ ComplexToolbarController::ComplexToolbarController(
     svt::ToolboxController( rxContext, rFrame, aCommand )
     ,   m_pToolbar( pToolbar )
     ,   m_nID( nID )
-    ,   m_bMadeInvisible( sal_False )
+    ,   m_bMadeInvisible( false )
 {
     m_xURLTransformer.set( URLTransformer::create(m_xContext) );
 }
@@ -144,8 +144,8 @@ throw ( RuntimeException, std::exception )
         nItemBits &= ~TIB_CHECKABLE;
         TriState eTri = TRISTATE_FALSE;
 
-        sal_Bool        bValue = sal_Bool();
-        OUString   aStrValue;
+        bool            bValue;
+        OUString        aStrValue;
         ItemStatus      aItemState;
         Visibility      aItemVisibility;
         ControlCommand  aControlCommand;
