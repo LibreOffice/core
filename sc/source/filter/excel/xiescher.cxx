@@ -189,6 +189,7 @@ typedef TSdrObjectPtr< SdrObject > SdrObjectPtr;
 XclImpDrawObjBase::XclImpDrawObjBase( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     mnObjId( EXC_OBJ_INVALID_ID ),
+    mnTab( 0 ),
     mnObjType( EXC_OBJTYPE_UNKNOWN ),
     mnDffShapeId( 0 ),
     mnDffFlags( 0 ),
