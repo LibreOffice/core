@@ -231,9 +231,6 @@ void OConnectionWeakWrapper::disposing()
 }
 
 // com::sun::star::lang::XUnoTunnel
-#ifdef N_DEBUG
-IMPLEMENT_FORWARD_XINTERFACE2(OConnectionWeakWrapper,OConnectionWeakWrapper_BASE,OConnectionWrapper)
-#else
 IMPLEMENT_FORWARD_REFCOUNT( OConnectionWeakWrapper, OConnectionWeakWrapper_BASE ) \
 ::com::sun::star::uno::Any SAL_CALL OConnectionWeakWrapper::queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) \
 { \
@@ -242,7 +239,6 @@ IMPLEMENT_FORWARD_REFCOUNT( OConnectionWeakWrapper, OConnectionWeakWrapper_BASE 
         aReturn = OConnectionWrapper::queryInterface( _rType ); \
     return aReturn; \
 }
-#endif
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(OConnectionWeakWrapper,OConnectionWeakWrapper_BASE,OConnectionWrapper)
 
 
