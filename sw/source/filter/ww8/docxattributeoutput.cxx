@@ -6335,6 +6335,13 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
             AddToAttrList( m_pParagraphSpacingAttrList,
                     FSNS( XML_w, XML_beforeAutospacing ), "1" );
         }
+        else if (m_bParaBeforeAutoSpacing && m_nParaBeforeSpacing == -1)
+        {
+            AddToAttrList( m_pParagraphSpacingAttrList,
+                    FSNS( XML_w, XML_beforeAutospacing ), "0" );
+            AddToAttrList( m_pParagraphSpacingAttrList,
+                    FSNS( XML_w, XML_before ), OString::number( rULSpace.GetUpper() ).getStr() );
+        }
         else
         {
             AddToAttrList( m_pParagraphSpacingAttrList,
@@ -6347,6 +6354,13 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         {
             AddToAttrList( m_pParagraphSpacingAttrList,
                     FSNS( XML_w, XML_afterAutospacing ), "1" );
+        }
+        else if (m_bParaAfterAutoSpacing && m_nParaAfterSpacing == -1)
+        {
+            AddToAttrList( m_pParagraphSpacingAttrList,
+                    FSNS( XML_w, XML_afterAutospacing ), "0" );
+            AddToAttrList( m_pParagraphSpacingAttrList,
+                                FSNS( XML_w, XML_after ), OString::number( rULSpace.GetLower()).getStr() );
         }
         else
         {
