@@ -249,7 +249,7 @@ void ScInterpreter::ScEasterSunday()
 }
 
 sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks(
-    const sal_uInt8 nParamCount, const Date& rNullDate, vector< double >& rSortArray,
+    const sal_uInt8 nParamCount, const sal_uInt32 nNullDate, vector< double >& rSortArray,
     OUString& rWeekendDays, bool bWeekendMask[ 7 ] )
 {
     sal_uInt16 nErr = 0;
@@ -258,11 +258,7 @@ sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks(
         GetSortArray( 1, rSortArray );
         size_t nMax = rSortArray.size();
         for ( size_t i = 0; i < nMax; i++ )
-        {
-            Date aTempDate( rNullDate );
-            aTempDate += ::rtl::math::approxFloor( rSortArray.at( i ) );
-            rSortArray.at( i ) = aTempDate.GetDate();
-        }
+            rSortArray.at( i ) += ::rtl::math::approxFloor( rSortArray.at( i ) + nNullDate );
     }
 
     if ( nParamCount >= 3 )
@@ -341,40 +337,36 @@ void ScInterpreter::ScNetWorkdays_MS()
         vector<double> nSortArray;
         bool bWeekendMask[ 7 ];
         OUString aWeekendDays;
-        Date aNullDate = *( pFormatter->GetNullDate() );
-        sal_uInt16 nErr = GetWeekendAndHolidayMasks( nParamCount, aNullDate,
+        sal_uInt32 nNullDate = pFormatter->GetNullDate()->GetDate();
+        sal_uInt16 nErr = GetWeekendAndHolidayMasks( nParamCount, nNullDate,
                             nSortArray , aWeekendDays, bWeekendMask );
         if ( nErr )
             PushError( nErr );
         else
         {
-            double nDate2 = GetDouble();
-            double nDate1 = GetDouble();
-            Date aDate2( aNullDate );
-            aDate2 += ( long )::rtl::math::approxFloor( nDate2 );
-            Date aDate1( aNullDate );
-            aDate1 += ( long )::rtl::math::approxFloor( nDate1 );
+            sal_uInt32 nDate2 = ( sal_uInt32 )::rtl::math::approxFloor( GetDouble() ) + nNullDate;
+            sal_uInt32 nDate1 = ( sal_uInt32 )::rtl::math::approxFloor( GetDouble() ) + nNullDate;
 
             sal_Int32 nCnt = 0;
             size_t nRef = 0;
-            bool bReverse = ( aDate1 > aDate2 );
+            bool bReverse = ( nDate1 > nDate2 );
             if ( bReverse )
             {
-                Date aTempDate( aDate1 );
-                aDate1 = aDate2;
-                aDate2 = aTempDate;
+                sal_uInt32 nTemp = nDate1;
+                nDate1 = nDate2;
+                nDate2 = nTemp;
             }
             size_t nMax = nSortArray.size();
-            while ( aDate1 <= aDate2 )
+            while ( nDate1 <= nDate2 )
             {
-                if ( !bWeekendMask[ aDate1.GetDayOfWeek() ] )
+                if ( !bWeekendMask[ GetDayOfWeek( nDate1 ) ] )
                 {
-                    while ( nRef < nMax && nSortArray.at( nRef ) < aDate1.GetDate() )
+                    while ( nRef < nMax && nSortArray.at( nRef ) < nDate1 )
                         nRef++;
-                    if ( !( nRef < nMax && nSortArray.at( nRef ) == aDate1.GetDate() ) )
+                    if ( !( nRef < nMax && nSortArray.at( nRef ) == nDate1 ) )
                         nCnt++;
                 }
-                ++aDate1;
+                ++nDate1;
             }
             PushDouble( ( double ) ( bReverse ? -nCnt : nCnt ) );
         }
@@ -390,20 +382,18 @@ void ScInterpreter::ScWorkday_MS()
         vector<double> nSortArray;
         bool bWeekendMask[ 7 ];
         OUString aWeekendDays;
-        Date aNullDate = *( pFormatter->GetNullDate() );
-        sal_uInt16 nErr = GetWeekendAndHolidayMasks( nParamCount, aNullDate,
+        sal_uInt32 nNullDate = pFormatter->GetNullDate()->GetDate();
+        sal_uInt16 nErr = GetWeekendAndHolidayMasks( nParamCount, nNullDate,
                             nSortArray , aWeekendDays, bWeekendMask );
         if ( nErr )
             PushError( nErr );
         else
         {
             sal_Int32 nDays = ::rtl::math::approxFloor( GetDouble() );
-            double nDate = GetDouble();
-            Date aDate( aNullDate );
-            aDate += ( long )::rtl::math::approxFloor( nDate );
+            sal_uInt32 nDate = ( sal_uInt32 )::rtl::math::approxFloor( GetDouble() ) + nNullDate;
 
             if ( !nDays )
-                PushDouble( ( double ) ( aDate - aNullDate ) );
+                PushDouble( ( double ) ( nDate - nNullDate ) );
             else
             {
                 size_t nMax = nSortArray.size();
@@ -412,14 +402,14 @@ void ScInterpreter::ScWorkday_MS()
                     size_t nRef = 0;
                     while ( nDays )
                     {
-                        while ( nRef < nMax && nSortArray.at( nRef ) < aDate.GetDate() )
+                        while ( nRef < nMax && nSortArray.at( nRef ) < nDate )
                             nRef++;
-                        if ( !( nRef < nMax && nSortArray.at( nRef ) == aDate.GetDate() ) || nRef >= nMax )
+                        if ( !( nRef < nMax && nSortArray.at( nRef ) == nDate ) || nRef >= nMax )
                              nDays--;
 
                         do
-                            ++aDate;
-                        while ( bWeekendMask[ aDate.GetDayOfWeek() ] ); //jump over weekend day(s)
+                            ++nDate;
+                        while ( bWeekendMask[ GetDayOfWeek( nDate ) ] ); //jump over weekend day(s)
                     }
                 }
                 else
@@ -427,17 +417,17 @@ void ScInterpreter::ScWorkday_MS()
                     sal_Int16 nRef = nMax - 1;
                     while ( nDays )
                     {
-                        while ( nRef >= 0 && nSortArray.at( nRef ) > aDate.GetDate() )
+                        while ( nRef >= 0 && nSortArray.at( nRef ) > nDate )
                             nRef--;
-                        if ( !( nRef >= 0 && nSortArray.at( nRef ) == aDate.GetDate() ) || nRef < 0 )
+                        if ( !( nRef >= 0 && nSortArray.at( nRef ) == nDate ) || nRef < 0 )
                              nDays++;
 
                         do
-                          --aDate;
-                        while ( bWeekendMask[ aDate.GetDayOfWeek() ] ); //jump over weekend day(s)
+                          --nDate;
+                        while ( bWeekendMask[ GetDayOfWeek( nDate ) ] ); //jump over weekend day(s)
                     }
                 }
-                PushDouble( ( double ) ( aDate - aNullDate ) );
+                PushDouble( ( double ) ( nDate - nNullDate ) );
             }
         }
     }
