@@ -69,6 +69,7 @@ $(eval $(call gb_Library_use_externals,ucpdav1,\
 
 $(eval $(call gb_Library_add_libs,ucpdav1,\
 	$(if $(filter $(OS),LINUX),-lpthread -ldl) \
+	$(if $(filter $(OS),MACOSX),-liconv) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
