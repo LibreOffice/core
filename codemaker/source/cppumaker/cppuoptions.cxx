@@ -34,7 +34,7 @@ using ::rtl::OString;
 #define SEPARATOR '\\'
 #endif
 
-bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
+bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
     throw( IllegalArgument )
 {
     bool    ret = true;
@@ -42,7 +42,7 @@ bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
     if (!bCmdFile)
     {
-        bCmdFile = sal_True;
+        bCmdFile = true;
 
         OString name(av[0]);
         sal_Int32 index = name.lastIndexOf(SEPARATOR);

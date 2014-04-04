@@ -47,7 +47,7 @@ public:
     Options();
     virtual ~Options();
 
-    virtual bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
+    virtual bool initOptions(int ac, char* av[], bool bCmdFile=false)
         throw( IllegalArgument ) = 0;
 
     virtual ::rtl::OString  prepareHelp() = 0;

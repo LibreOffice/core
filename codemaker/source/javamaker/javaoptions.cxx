@@ -30,7 +30,7 @@
 #define SEPARATOR '\\'
 #endif
 
-bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
+bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
     throw( IllegalArgument )
 {
     bool    ret = true;
@@ -38,7 +38,7 @@ bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
     if (!bCmdFile)
     {
-        bCmdFile = sal_True;
+        bCmdFile = true;
 
         OString name(av[0]);
         sal_Int32 index = name.lastIndexOf(SEPARATOR);

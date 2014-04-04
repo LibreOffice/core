@@ -30,7 +30,7 @@ public:
 
     virtual ~JavaOptions() {}
 
-    bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
+    bool initOptions(int ac, char* av[], bool bCmdFile=false)
             throw( IllegalArgument ) SAL_OVERRIDE;
 
     OString  prepareHelp() SAL_OVERRIDE;
