@@ -39,8 +39,14 @@ class XFormsEventConcrete : public cppu::WeakImplHelper1< XFormsEvent > {
         typedef com::sun::star::xml::dom::events::PhaseType PhaseType_t;
         typedef com::sun::star::util::Time Time_t;
 
-        inline XFormsEventConcrete( void ) : m_canceled(sal_False) {}
-        virtual ~XFormsEventConcrete( void ) {}
+        XFormsEventConcrete()
+            : m_canceled(false)
+            , m_phase(com::sun::star::xml::dom::events::PhaseType_CAPTURING_PHASE)
+            , m_bubbles(false)
+            , m_cancelable(false)
+        {
+        }
+        virtual ~XFormsEventConcrete() {}
 
         virtual OUString SAL_CALL getType() throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
         virtual XEventTarget_t SAL_CALL getTarget() throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
