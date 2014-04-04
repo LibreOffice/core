@@ -1584,16 +1584,6 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(
     if( !pOut )
         pOut = pView;
 
-#ifdef OV_CHECK_EMPH_RECTS
-    {
-        Color aXOld( pOut->GetFillColor() );
-        pOut->SetFillColor( Color( COL_GREEN ));
-        pOut->DrawRect( rTextRect );
-        pOut->DrawRect( rImageRect );
-        pOut->SetFillColor( aXOld );
-    }
-#endif
-
     const StyleSettings& rSettings = pOut->GetSettings().GetStyleSettings();
     Color aOldFillColor( pOut->GetFillColor() );
 
@@ -1714,9 +1704,6 @@ void SvxIconChoiceCtrl_Impl::PaintItem( const Rectangle& rRect,
 
 void SvxIconChoiceCtrl_Impl::PaintEntryVirtOutDev( SvxIconChoiceCtrlEntry* pEntry )
 {
-#ifdef OV_NO_VIRT_OUTDEV
-    PaintEntry( pEntry );
-#else
     if( !pEntryPaintDev )
     {
         pEntryPaintDev = new VirtualDevice( *pView );
@@ -1751,7 +1738,6 @@ void SvxIconChoiceCtrl_Impl::PaintEntryVirtOutDev( SvxIconChoiceCtrlEntry* pEntr
         Point(),
         aSize,
         *pEntryPaintDev );
-#endif
 }
 
 
@@ -1831,17 +1817,6 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
             bResetClipRegion = sal_True;
         }
     }
-
-#ifdef OV_DRAWBOUNDRECT
-    {
-        Color aXOldColor = pOut->GetLineColor();
-        pOut->SetLineColor( Color( COL_LIGHTRED ) );
-        Rectangle aXRect( pEntry->aRect );
-        aXRect.SetPos( rPos );
-        pOut->DrawRect( aXRect );
-        pOut->SetLineColor( aXOldColor );
-    }
-#endif
 
     sal_Bool bLargeIconMode = WB_ICON == ( nWinBits & (VIEWMODE_MASK) );
     sal_uInt16 nBmpPaintFlags = PAINTFLAG_VER_CENTERED;

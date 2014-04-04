@@ -2156,20 +2156,6 @@ void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
 
     nImpFlags |= SVLBOX_IS_TRAVELSELECT;
 
-#ifdef OVDEBUG
-    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
-    switch ( nCode )
-    {
-        case KEY_F1:
-        {
-            SvTreeListEntry* pEntry = First();
-            pEntry = NextVisible( pEntry );
-            SetEntryText( pEntry, "SetEntryText" );
-        }
-        break;
-    }
-#endif
-
     if( !pImp->KeyInput( rKEvt ) )
     {
         bool bHandled = HandleKeyInput( rKEvt );

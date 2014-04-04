@@ -1454,12 +1454,6 @@ sal_uInt64 SvStream::Seek(sal_uInt64 const nFilePos)
         pBufPos       = pRWBuf;
         m_nBufFilePos = SeekPos( nFilePos );
     }
-#ifdef OV_DEBUG
-    {
-        sal_uInt64 nDebugTemp = m_nBufFilePos + nBufActualPos;
-        DBG_ASSERT(Tell()==nDebugTemp,"Sync?");
-    }
-#endif
     return m_nBufFilePos + nBufActualPos;
 }
 
