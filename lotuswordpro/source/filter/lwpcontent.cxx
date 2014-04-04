@@ -78,7 +78,9 @@ void LwpHeadContent::Read()
 
 LwpContent::LwpContent(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpDLNFVList(objHdr, pStrm)
-{}
+    , m_nFlags(0)
+{
+}
 
 void LwpContent::Read()
 {
