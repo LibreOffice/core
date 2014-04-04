@@ -165,6 +165,7 @@ double Snum32ToDouble( sal_uInt32 nValue )
 }
 
 FormCache::FormCache( ScDocument* pDoc1, sal_uInt8 nNewDefaultFormat )
+    : nIndex(0)
 {   // Default-Format ist 'Default'
     nDefaultFormat = nNewDefaultFormat;
     pFormTable = pDoc1->GetFormatTable();
