@@ -36,6 +36,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include "mediamisc.hxx"
 
 using namespace ::com::sun::star;
 
@@ -50,6 +51,7 @@ struct MediaItem::Impl
     OUString                m_URL;
     OUString                m_TempFileURL;
     OUString                m_Referer;
+    OUString                m_sMimeType;
     sal_uInt32              m_nMaskSet;
     MediaState              m_eState;
     double                  m_fTime;
@@ -74,6 +76,7 @@ struct MediaItem::Impl
         : m_URL( rOther.m_URL )
         , m_TempFileURL( rOther.m_TempFileURL )
         , m_Referer( rOther.m_Referer )
+        , m_sMimeType( rOther.m_sMimeType )
         , m_nMaskSet( rOther.m_nMaskSet )
         , m_eState( rOther.m_eState )
         , m_fTime( rOther.m_fTime )
@@ -109,6 +112,7 @@ bool MediaItem::operator==( const SfxPoolItem& rItem ) const
     return m_pImpl->m_nMaskSet == rOther.m_pImpl->m_nMaskSet
         && m_pImpl->m_URL == rOther.m_pImpl->m_URL
         && m_pImpl->m_Referer == rOther.m_pImpl->m_Referer
+        && m_pImpl->m_sMimeType == rOther.m_pImpl->m_sMimeType
         && m_pImpl->m_eState == rOther.m_pImpl->m_eState
         && m_pImpl->m_fDuration == rOther.m_pImpl->m_fDuration
         && m_pImpl->m_fTime == rOther.m_pImpl->m_fTime
@@ -135,7 +139,7 @@ SfxItemPresentation MediaItem::GetPresentation( SfxItemPresentation,
 
 bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
-    uno::Sequence< uno::Any > aSeq( 9 );
+    uno::Sequence< uno::Any > aSeq( 10 );
 
     aSeq[ 0 ] <<= m_pImpl->m_URL;
     aSeq[ 1 ] <<= m_pImpl->m_nMaskSet;
@@ -146,6 +150,7 @@ bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
     aSeq[ 6 ] <<= m_pImpl->m_bLoop;
     aSeq[ 7 ] <<= m_pImpl->m_bMute;
     aSeq[ 8 ] <<= m_pImpl->m_eZoom;
+    aSeq[ 9 ] <<= m_pImpl->m_sMimeType;
 
     rVal <<= aSeq;
 
@@ -157,7 +162,7 @@ bool MediaItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
     uno::Sequence< uno::Any >   aSeq;
     bool                        bRet = false;
 
-    if( ( rVal >>= aSeq ) && ( aSeq.getLength() == 9 ) )
+    if( ( rVal >>= aSeq ) && ( aSeq.getLength() == 10 ) )
     {
         sal_Int32 nInt32 = 0;
 
@@ -171,6 +176,7 @@ bool MediaItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
         aSeq[ 6 ] >>= m_pImpl->m_bLoop;
         aSeq[ 7 ] >>= m_pImpl->m_bMute;
         aSeq[ 8 ] >>= m_pImpl->m_eZoom;
+        aSeq[ 9 ] >>= m_pImpl->m_sMimeType;
 
         bRet = true;
     }
@@ -184,6 +190,9 @@ void MediaItem::merge( const MediaItem& rMediaItem )
 
     if( AVMEDIA_SETMASK_URL & nMaskSet )
         setURL( rMediaItem.getURL(), rMediaItem.getTempURL(), rMediaItem.getReferer() );
+
+    if( AVMEDIA_SETMASK_MIME_TYPE & nMaskSet )
+        setMimeType( rMediaItem.getMimeType() );
 
     if( AVMEDIA_SETMASK_STATE & nMaskSet )
         setState( rMediaItem.getState() );
@@ -233,6 +242,17 @@ const OUString& MediaItem::getTempURL() const
 const OUString& MediaItem::getReferer() const
 {
     return m_pImpl->m_Referer;
+}
+
+void MediaItem::setMimeType( const OUString& rMimeType )
+{
+    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_MIME_TYPE;
+    m_pImpl->m_sMimeType = rMimeType;
+}
+
+OUString MediaItem::getMimeType() const
+{
+    return !m_pImpl->m_sMimeType.isEmpty() ? m_pImpl->m_sMimeType : AVMEDIA_MIMETYPE_COMMON;
 }
 
 void MediaItem::setState( MediaState eState )

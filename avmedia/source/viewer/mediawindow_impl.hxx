@@ -29,6 +29,9 @@ namespace com { namespace sun { namespace star { namespace media {
     class XPlayer;
     class XPlayerWindow;
 } } } }
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
 class BitmapEx;
 
 namespace avmedia
@@ -91,7 +94,7 @@ namespace avmedia
                             MediaWindowImpl( Window* parent, MediaWindow* pMediaWindow, bool bInternalMediaControl );
             virtual         ~MediaWindowImpl();
 
-            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer );
+            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, OUString* pMimeType = 0 );
 
             void    setURL( const OUString& rURL, OUString const& rTempURL, OUString const& rReferer );
 
@@ -158,9 +161,12 @@ namespace avmedia
 
             void            onURLChanged();
 
+            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rManagerServName, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext);
+
             OUString                                                                    maFileURL;
             OUString                                                                    mTempFileURL;
             OUString                                                                    maReferer;
+            OUString                                                                    m_sMimeType;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >        mxPlayer;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >  mxPlayerWindow;
             MediaWindow*                                                                mpMediaWindow;

@@ -205,48 +205,64 @@ MediaWindowImpl::~MediaWindowImpl()
     delete mpMediaWindowControl;
 }
 
-uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& rURL, const OUString& rReferer )
+uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& rURL, const OUString& rReferer, OUString* pMimeType )
 {
+
     uno::Reference< media::XPlayer > xPlayer;
     if (SvtSecurityOptions().isUntrustedReferer(rReferer)) {
         return xPlayer;
     }
-
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-    static const char * aServiceManagers[] = {
-        AVMEDIA_MANAGER_SERVICE_PREFERRED,
-        AVMEDIA_MANAGER_SERVICE_NAME,
+    if ( !pMimeType || *pMimeType == AVMEDIA_MIMETYPE_COMMON )
+    {
+
+        static const char * aServiceManagers[] = {
+            AVMEDIA_MANAGER_SERVICE_PREFERRED,
+            AVMEDIA_MANAGER_SERVICE_NAME,
 // a fallback path just for gstreamer which has
 // two significant versions deployed at once ...
 #ifdef AVMEDIA_MANAGER_SERVICE_NAME_OLD
-        AVMEDIA_MANAGER_SERVICE_NAME_OLD
+            AVMEDIA_MANAGER_SERVICE_NAME_OLD
 #endif
-    };
+        };
 
-    for( sal_uInt32 i = 0; !xPlayer.is() && i < SAL_N_ELEMENTS( aServiceManagers ); ++i )
-    {
-        const OUString aServiceName( aServiceManagers[ i ],
-                                          strlen( aServiceManagers[ i ] ),
-                                          RTL_TEXTENCODING_ASCII_US );
+        for( sal_uInt32 i = 0; !xPlayer.is() && i < SAL_N_ELEMENTS( aServiceManagers ); ++i )
+        {
+            const OUString aServiceName( aServiceManagers[ i ],
+                                         strlen( aServiceManagers[ i ] ),
+                                         RTL_TEXTENCODING_ASCII_US );
 
-        try {
-            uno::Reference< media::XManager > xManager (
-                    xContext->getServiceManager()->createInstanceWithContext(aServiceName, xContext),
-                    uno::UNO_QUERY );
-            if( xManager.is() )
-                xPlayer = uno::Reference< media::XPlayer >( xManager->createPlayer( rURL ),
-                                                            uno::UNO_QUERY );
-            else
-                SAL_WARN( "avmedia",
-                          "failed to create media player service " << aServiceName );
-        } catch ( const uno::Exception &e ) {
-            SAL_WARN( "avmedia",
-                      "couldn't create media player " << aServiceName
-                          << ", exception '" << e.Message << '\'');
+            xPlayer = createPlayer(rURL, aServiceName, xContext);
         }
     }
+    else if ( *pMimeType == AVMEDIA_MIMETYPE_JSON )
+    {
+        xPlayer = createPlayer(rURL, AVMEDIA_OPENGL_MANAGER_SERVICE_NAME, xContext);
+    }
 
+    return xPlayer;
+}
+
+uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer(
+    const OUString& rURL, const OUString& rManagerServName,
+    uno::Reference< uno::XComponentContext > xContext)
+{
+    uno::Reference< media::XPlayer > xPlayer;
+    try
+    {
+        uno::Reference< media::XManager > xManager (
+            xContext->getServiceManager()->createInstanceWithContext(rManagerServName, xContext),
+            uno::UNO_QUERY );
+        if( xManager.is() )
+            xPlayer = uno::Reference< media::XPlayer >( xManager->createPlayer( rURL ), uno::UNO_QUERY );
+        else
+            SAL_WARN( "avmedia", "failed to create media player service " << rManagerServName );
+    } catch ( const uno::Exception &e )
+    {
+        SAL_WARN( "avmedia", "couldn't create media player " << rManagerServName
+                              << ", exception '" << e.Message << '\'');
+    }
     return xPlayer;
 }
 
@@ -283,8 +299,7 @@ void MediaWindowImpl::setURL( const OUString& rURL,
                 maFileURL = rURL;
         }
 
-        mxPlayer = createPlayer(
-                (!mTempFileURL.isEmpty()) ? mTempFileURL : maFileURL, rReferer );
+        mxPlayer = createPlayer((!mTempFileURL.isEmpty()) ? mTempFileURL : maFileURL, rReferer, &m_sMimeType );
         onURLChanged();
     }
 }
@@ -341,7 +356,10 @@ void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
 
     // set URL first
     if( nMaskSet & AVMEDIA_SETMASK_URL )
+    {
+        m_sMimeType = rItem.getMimeType();
         setURL( rItem.getURL(), rItem.getTempURL(), rItem.getReferer() );
+    }
 
     // set different states next
     if( nMaskSet & AVMEDIA_SETMASK_TIME )

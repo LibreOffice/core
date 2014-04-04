@@ -244,10 +244,11 @@ void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /
 
 
 
-void SdrMediaObj::setURL( const OUString& rURL, const OUString& rReferer )
+void SdrMediaObj::setURL( const OUString& rURL, const OUString& rReferer, const OUString& rMimeType )
 {
     ::avmedia::MediaItem aURLItem;
-
+    if( !rMimeType.isEmpty() )
+        m_pImpl->m_MediaProperties.setMimeType(rMimeType);
     aURLItem.setURL( rURL, "", rReferer );
     setMediaProperties( aURLItem );
 }
@@ -418,6 +419,9 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
     const sal_uInt32 nMaskSet = rNewProperties.getMaskSet();
 
     // use only a subset of MediaItem properties for own own properties
+    if( AVMEDIA_SETMASK_MIME_TYPE & nMaskSet )
+        m_pImpl->m_MediaProperties.setMimeType( rNewProperties.getMimeType() );
+
     if( ( AVMEDIA_SETMASK_URL & nMaskSet ) &&
         ( rNewProperties.getURL() != getURL() ))
     {

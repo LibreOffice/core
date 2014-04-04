@@ -38,6 +38,7 @@
 #define AVMEDIA_SETMASK_VOLUMEDB    ((sal_uInt32)(0x00000020))
 #define AVMEDIA_SETMASK_ZOOM        ((sal_uInt32)(0x00000040))
 #define AVMEDIA_SETMASK_URL         ((sal_uInt32)(0x00000080))
+#define AVMEDIA_SETMASK_MIME_TYPE   ((sal_uInt32)(0x00000100))
 #define AVMEDIA_SETMASK_ALL         ((sal_uInt32)(0xffffffff))
 
 class SvStream;
@@ -111,6 +112,8 @@ public:
                                     const OUString& rReferer);
     const OUString&  getURL() const;
 
+    void                    setMimeType( const OUString& rMimeType );
+    OUString                getMimeType() const;
     const OUString&  getTempURL() const;
 
     const OUString&  getReferer() const;

@@ -3206,6 +3206,8 @@ void SdXMLPluginShapeContext::EndElement()
                     OUString("MediaURL"),
                     uno::makeAny(maHref));
 
+            xProps->setPropertyValue("MediaMimeType", uno::makeAny(maMimeType) );
+
             for( sal_Int32 nParam = 0; nParam < maParams.getLength(); ++nParam )
             {
                 const OUString& rName = maParams[ nParam ].Name;

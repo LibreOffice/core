@@ -149,7 +149,7 @@ public:
                                               const Point& rPos, const Size& rSize,
                                               bool const bLink );
 
-    SdrMediaObj*            InsertMediaObj( const OUString& rURL, sal_Int8& rAction,
+    SdrMediaObj*            InsertMediaObj( const OUString& rURL, const OUString& rMimeType, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize );
 
     bool PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, sal_uLong nPasteOptions );

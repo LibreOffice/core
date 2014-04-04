@@ -3205,15 +3205,6 @@ static void lcl_StoreJsonExternals(
     }
 }
 
-static OUString lcl_GetMimeType(const OUString& aMediaURL)
-{
-    // TODO: Find a better way to find out the mime type, maybe via propset
-    if( aMediaURL.endsWith(".json") )
-        return OUString("application/vnd.gltf+json");
-    else
-        return OUString("application/vnd.sun.star.media");
-}
-
 void XMLShapeExport::ImpExportMediaShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
@@ -3245,7 +3236,9 @@ void XMLShapeExport::ImpExportMediaShape(
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
         // export mime-type
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, lcl_GetMimeType(aMediaURL) );
+        OUString sMimeType;
+        xPropSet->getPropertyValue("MediaMimeType") >>= sMimeType;
+        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, sMimeType );
 
         // write plugin
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & SEF_EXPORT_NO_WS ), true);

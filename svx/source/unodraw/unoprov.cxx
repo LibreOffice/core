@@ -730,6 +730,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxMediaShapePropertyMap()
         { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::getCppuType((const OUString*)0),    0,  0},
         {OUString("PrivateStream"), OWN_ATTR_MEDIA_STREAM, cppu::UnoType<css::io::XInputStream>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         {OUString("PrivateTempFileURL"), OWN_ATTR_MEDIA_TEMPFILEURL, ::getCppuType((const OUString*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { OUString("MediaMimeType"), OWN_ATTR_MEDIA_MIMETYPE, ::getCppuType((const OUString*)0), 0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 

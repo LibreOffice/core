@@ -805,7 +805,8 @@ SvxMediaShape::~SvxMediaShape() throw()
 
 bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    if( (pProperty->nWID >= OWN_ATTR_MEDIA_URL) && (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM) )
+    if( ((pProperty->nWID >= OWN_ATTR_MEDIA_URL) && (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM))
+        || (pProperty->nWID == OWN_ATTR_MEDIA_MIMETYPE) )
     {
         SdrMediaObj* pMedia = static_cast< SdrMediaObj* >( mpObj.get() );
         ::avmedia::MediaItem aItem;
@@ -872,6 +873,17 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
         }
         break;
 
+        case OWN_ATTR_MEDIA_MIMETYPE:
+        {
+            OUString sMimeType;
+            if( rValue >>= sMimeType )
+            {
+                bOk = true;
+                aItem.setMimeType( sMimeType );
+            }
+        }
+        break;
+
         default:
             OSL_FAIL("SvxMediaShape::setPropertyValueImpl(), unknown argument!");
         }
@@ -897,7 +909,8 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
     if (   ((pProperty->nWID >= OWN_ATTR_MEDIA_URL) &&
             (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM))
         || (pProperty->nWID == OWN_ATTR_MEDIA_STREAM)
-        || (pProperty->nWID == OWN_ATTR_MEDIA_TEMPFILEURL))
+        || (pProperty->nWID == OWN_ATTR_MEDIA_TEMPFILEURL)
+        || (pProperty->nWID == OWN_ATTR_MEDIA_MIMETYPE))
     {
         SdrMediaObj* pMedia = static_cast< SdrMediaObj* >( mpObj.get() );
         const ::avmedia::MediaItem aItem( pMedia->getMediaProperties() );
@@ -930,6 +943,10 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
 
             case OWN_ATTR_MEDIA_TEMPFILEURL:
                 rValue <<= aItem.getTempURL();
+                break;
+
+            case OWN_ATTR_MEDIA_MIMETYPE:
+                rValue <<= aItem.getMimeType();
                 break;
 
             default:

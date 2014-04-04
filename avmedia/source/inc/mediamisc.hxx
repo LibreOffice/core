@@ -37,6 +37,13 @@ class ResMgr;
 #endif
 #endif
 
+#define AVMEDIA_OPENGL_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_OpenGL"
+
+// Mime types
+#define AVMEDIA_MIMETYPE_COMMON           "application/vnd.sun.star.media"
+#define AVMEDIA_MIMETYPE_JSON             "application/vnd.gltf+json"
+
+
 namespace avmedia
 {
     ResMgr* GetResMgr();

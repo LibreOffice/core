@@ -286,7 +286,7 @@ SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
         if (!bRet) { return 0; }
     }
 
-    return InsertMediaObj( realURL, rAction, rPos, rSize );
+    return InsertMediaObj( realURL, "application/vnd.sun.star.media", rAction, rPos, rSize );
 }
 
 SdrMediaObj* View::Insert3DModelURL(
@@ -307,10 +307,10 @@ SdrMediaObj* View::Insert3DModelURL(
         if (!bRet) { return 0; }
     }
 
-    return InsertMediaObj( sRealURL, rAction, rPos, rSize );
+    return InsertMediaObj( sRealURL, "application/vnd.gltf+json", rAction, rPos, rSize );
 }
 
-SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, sal_Int8& rAction,
+SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rMimeType, sal_Int8& rAction,
                                    const Point& rPos, const Size& rSize )
 {
     SdrEndTextEdit();
@@ -335,7 +335,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, sal_Int8& rAction,
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV && pPickObj->ISA( SdrMediaObj ) )
     {
         pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->Clone() );
-        pNewMediaObj->setURL( rMediaURL, ""/*TODO?*/ );
+        pNewMediaObj->setURL( rMediaURL, ""/*TODO?*/, rMimeType );
 
         BegUndo(SD_RESSTR(STR_UNDO_DRAGDROP));
         ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
@@ -371,7 +371,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, sal_Int8& rAction,
         if (sh != 0 && sh->HasName()) {
             referer = sh->GetMedium()->GetName();
         }
-        pNewMediaObj->setURL( rMediaURL, referer );
+        pNewMediaObj->setURL( rMediaURL, referer, rMimeType );
 
         if( pPickObj )
         {

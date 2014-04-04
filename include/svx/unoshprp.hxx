@@ -179,7 +179,8 @@
 #define OWN_ATTR_MEDIA_STREAM                   (OWN_ATTR_VALUE_START+89)
 #define OWN_ATTR_MEDIA_TEMPFILEURL              (OWN_ATTR_VALUE_START+90)
 #define OWN_ATTR_INTEROPGRABBAG                 (OWN_ATTR_VALUE_START+91)
-// ATTENTION: maximum is OWN_ATTR_VALUE_START+91, see include/svl/solar.hrc
+#define OWN_ATTR_MEDIA_MIMETYPE                 (OWN_ATTR_VALUE_START+92)
+// ATTENTION: maximum is OWN_ATTR_VALUE_START+92, see include/svl/solar.hrc
 
 // #FontWork#
 #define FONTWORK_PROPERTIES \
