@@ -170,18 +170,14 @@ ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFla
     }
 }
 
-
 // - ImageProducer -
-
-
-ImageProducer::ImageProducer() :
-    mpStm       ( NULL ),
-    mbConsInit  ( sal_False )
+ImageProducer::ImageProducer()
+    : mpStm(NULL)
+    , mnTransIndex(0)
+    , mbConsInit(sal_False)
 {
     mpGraphic = new Graphic;
 }
-
-
 
 ImageProducer::~ImageProducer()
 {
@@ -191,8 +187,6 @@ ImageProducer::~ImageProducer()
     delete mpStm;
     mpStm = NULL;
 }
-
-
 
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any ImageProducer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
