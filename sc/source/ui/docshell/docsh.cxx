@@ -2505,7 +2505,7 @@ bool ScDocShell::QuerySlotExecutable( sal_uInt16 nSlotId )
 }
 
 
-bool ScDocShell::PrepareClose( sal_Bool bUI )
+bool ScDocShell::PrepareClose( bool bUI )
 {
     if(SC_MOD()->GetCurRefDlgId()>0)
     {

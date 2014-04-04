@@ -209,7 +209,7 @@ public:
     virtual bool    Save() SAL_OVERRIDE;
     virtual bool    SaveAs( SfxMedium& rMedium ) SAL_OVERRIDE;
     virtual bool    ConvertTo( SfxMedium &rMedium ) SAL_OVERRIDE;
-    virtual bool    PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
+    virtual bool    PrepareClose( bool bUI = true ) SAL_OVERRIDE;
     virtual void    PrepareReload() SAL_OVERRIDE;
     virtual bool    IsInformationLost() SAL_OVERRIDE;
     virtual void    LoadStyles( SfxObjectShell &rSource ) SAL_OVERRIDE;

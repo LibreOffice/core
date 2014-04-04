@@ -305,7 +305,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 // Notification Close Doc
-bool SwDocShell::PrepareClose( sal_Bool bUI )
+bool SwDocShell::PrepareClose( bool bUI )
 {
     bool nRet = SfxObjectShell::PrepareClose( bUI );
 

@@ -90,7 +90,7 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     SAL_DLLPRIVATE virtual bool SaveAs( SfxMedium& rMedium ) SAL_OVERRIDE;
     SAL_DLLPRIVATE virtual bool SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;
 
-    SAL_DLLPRIVATE virtual bool     PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool     PrepareClose( bool bUI = true ) SAL_OVERRIDE;
 
     SAL_DLLPRIVATE virtual bool     InsertGeneratedStream(SfxMedium& rMedium,
             css::uno::Reference<css::text::XTextRange> const& xInsertPosition)

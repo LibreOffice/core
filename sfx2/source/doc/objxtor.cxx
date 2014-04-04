@@ -558,8 +558,8 @@ struct BoolEnv_Impl
 
 bool SfxObjectShell::PrepareClose
 (
-    sal_Bool    bUI   // sal_True: Dialog and so on is allowed
-                      // sal_False: silent-mode
+    bool bUI   // true: Dialog and so on is allowed
+               // false: silent-mode
 )
 {
     if( pImp->bInPrepareClose || pImp->bPreparedForClose )

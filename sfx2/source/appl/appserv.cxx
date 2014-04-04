@@ -286,7 +286,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     if ( !pFrame || !pFrame->GetWindow().IsReallyVisible() )
                         continue;
 
-                    if ( pObjSh->PrepareClose(2) )
+                    if (pObjSh->PrepareClose(true))
                         pObjSh->SetModified( false );
                     else
                         return;

@@ -855,7 +855,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
 
             // Cancelled by the user?
-            if ( !PrepareClose( 2 ) )
+            if (!PrepareClose(true))
             {
                 rReq.SetReturnValue( SfxBoolItem(0, false) );
                 rReq.Done();
