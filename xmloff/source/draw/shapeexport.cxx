@@ -3085,7 +3085,7 @@ void XMLShapeExport::ImpExportPluginShape(
 static void lcl_CopyStream(
         uno::Reference<io::XInputStream> const& xInStream,
         uno::Reference<embed::XStorage> const& xTarget,
-        OUString const& rPath)
+        OUString const& rPath, const OUString& rMimeType)
 {
     ::comphelper::LifecycleProxy proxy;
     uno::Reference<io::XStream> const xStream(
@@ -3104,10 +3104,7 @@ static void lcl_CopyStream(
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         xStreamProps->setPropertyValue(
             OUString("MediaType"),
-            uno::makeAny(OUString(
-            //FIXME how to detect real media type?
-            //but currently xmloff has this one hardcoded anyway...
-                    "application/vnd.sun.star.media")));
+            uno::makeAny(rMimeType));
         xStreamProps->setPropertyValue( // turn off compression
             OUString("Compressed"),
             uno::makeAny(sal_False));
@@ -3120,7 +3117,7 @@ static void lcl_CopyStream(
 static OUString
 lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
     uno::Reference<beans::XPropertySet> const& xPropSet,
-    OUString const& rURL)
+    OUString const& rURL, const OUString& rMimeType)
 {
     OUString urlPath;
     if (rURL.startsWithIgnoreAsciiCase("vnd.sun.star.Package:", &urlPath))
@@ -3140,7 +3137,7 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
                 return OUString();
             }
 
-            lcl_CopyStream(xInStream, xTarget, rURL);
+            lcl_CopyStream(xInStream, xTarget, rURL, rMimeType);
 
             return urlPath;
         }
@@ -3225,8 +3222,11 @@ void XMLShapeExport::ImpExportMediaShape(
         // export media url
         OUString aMediaURL;
         xPropSet->getPropertyValue("MediaURL") >>= aMediaURL;
+        OUString sMimeType;
+        xPropSet->getPropertyValue("MediaMimeType") >>= sMimeType;
+
         OUString const persistentURL =
-            lcl_StoreMediaAndGetURL(GetExport(), xPropSet, aMediaURL);
+            lcl_StoreMediaAndGetURL(GetExport(), xPropSet, aMediaURL, sMimeType);
         if( aMediaURL.endsWith(".json") )
             lcl_StoreJsonExternals(GetExport(), aMediaURL);
 
@@ -3236,8 +3236,6 @@ void XMLShapeExport::ImpExportMediaShape(
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
         // export mime-type
-        OUString sMimeType;
-        xPropSet->getPropertyValue("MediaMimeType") >>= sMimeType;
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, sMimeType );
 
         // write plugin
