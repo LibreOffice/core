@@ -2382,6 +2382,11 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner * pTableT
             nPageSize /= 100;
         }
     }
+    else
+    {
+        // As the table width is not relative, the TablePageSize equals its width
+        nPageSize = nTblSz;
+    }
 
     rPageSize = nPageSize;
     rRelBoxSize = bRelBoxSize;

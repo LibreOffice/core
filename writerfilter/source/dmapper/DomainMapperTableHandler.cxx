@@ -307,6 +307,20 @@ bool lcl_extractTableBorderProperty(PropertyMapPtr pTableProperties, const Prope
 
 }
 
+bool lcl_extractHoriOrient(uno::Sequence<beans::PropertyValue>& rFrameProperties, sal_Int32& nHoriOrient)
+{
+    // Shifts the frame left by the given value.
+    for (sal_Int32 i = 0; i < rFrameProperties.getLength(); ++i)
+    {
+        if (rFrameProperties[i].Name == "HoriOrient")
+        {
+            nHoriOrient = rFrameProperties[i].Value.get<sal_Int32>();
+            return true;
+        }
+    }
+    return false;
+}
+
 void lcl_DecrementHoriOrientPosition(uno::Sequence<beans::PropertyValue>& rFrameProperties, sal_Int32 nAmount)
 {
     // Shifts the frame left by the given value.
@@ -543,7 +557,9 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         sal_Int32 nHoriOrient = text::HoriOrientation::LEFT_AND_WIDTH;
-        m_aTableProperties->getValue( TablePropertyMap::HORI_ORIENT, nHoriOrient ) ;
+        // Fetch Horizontal Orientation in rFrameProperties if not set in m_aTableProperties
+        if ( !m_aTableProperties->getValue( TablePropertyMap::HORI_ORIENT, nHoriOrient ) )
+            lcl_extractHoriOrient( rFrameProperties, nHoriOrient );
         m_aTableProperties->Insert( PROP_HORI_ORIENT, uno::makeAny( sal_Int16(nHoriOrient) ) );
         //fill default value - if not available
         const PropertyMap::const_iterator aRepeatIter =
