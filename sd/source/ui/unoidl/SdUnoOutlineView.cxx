@@ -100,25 +100,18 @@ void SAL_CALL SdUnoOutlineView::removeSelectionChangeListener (
     (void)rxListener;
 }
 
-
-
-
 //----- XDrawView -------------------------------------------------------------
-
-
 void SAL_CALL SdUnoOutlineView::setCurrentPage (
     const Reference< drawing::XDrawPage >& xPage)
     throw(RuntimeException, std::exception)
 {
     SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
     SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : NULL;
+    SdPage *pSdPage = dynamic_cast<SdPage*>(pSdrPage);
 
-    if (pSdrPage != NULL)
-        mrOutlineViewShell.SetCurrentPage(dynamic_cast<SdPage*>(pSdrPage));
+    if (pSdPage != NULL)
+        mrOutlineViewShell.SetCurrentPage(pSdPage);
 }
-
-
-
 
 Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage (void)
     throw(RuntimeException, std::exception)
