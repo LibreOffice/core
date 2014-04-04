@@ -34,6 +34,7 @@
 #include <osl/mutex.h>
 #include <osl/thread.h>
 
+#include "getexecutablefile.hxx"
 #include "procimpl.h"
 #include "sockimpl.h"
 #include "file_url.h"

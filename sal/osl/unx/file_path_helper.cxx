@@ -21,6 +21,7 @@
 #include "file_path_helper.hxx"
 #include "uunxapi.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 
@@ -154,7 +155,7 @@ sal_Bool SAL_CALL osl_systemPathIsLocalOrParentDirectoryEntry(
  the specified character
  **********************************************/
 
-class path_list_iterator
+class path_list_iterator: private boost::noncopyable
 {
 public:
 
@@ -214,24 +215,6 @@ private:
     const sal_Unicode   m_separator;
     const sal_Unicode*  m_path_segment_begin;
     const sal_Unicode*  m_path_segment_end;
-
-// prevent copy and assignment
-private:
-    /******************************************
-     copy constructor
-     remember: do not simply copy m_path_begin
-     and m_path_end because they point to
-     the memory of other.m_path_list!
-     *****************************************/
-    path_list_iterator(const path_list_iterator& other);
-
-    /******************************************
-     assignment operator
-      remember: do not simply copy m_path_begin
-     and m_path_end because they point to
-     the memory of other.m_path_list!
-     *****************************************/
-    path_list_iterator& operator=(const path_list_iterator& other);
 };
 
 sal_Bool SAL_CALL osl_searchPath(

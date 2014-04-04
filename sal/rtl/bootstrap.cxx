@@ -43,6 +43,8 @@
 #include <boost/unordered_map.hpp>
 #include <list>
 
+#include "getexecutablefile.hxx"
+
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
 #endif
@@ -214,9 +216,6 @@ static bool getFromCommandLineArgs(
 
     return found;
 }
-
-extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
-    rtl_uString ** ppFileURL) SAL_THROW_EXTERN_C();
 
 inline void getExecutableFile_Impl (rtl_uString ** ppFileURL)
 {

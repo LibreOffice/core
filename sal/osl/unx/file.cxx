@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include "boost/noncopyable.hpp"
 #include "osl/file.hxx"
 #include "osl/detail/file.h"
 
@@ -147,13 +148,10 @@ struct FileHandle_Impl
 
     /** Buffer cache / allocator.
      */
-    class Allocator
+    class Allocator: private boost::noncopyable
     {
         rtl_cache_type * m_cache;
         size_t           m_bufsiz;
-
-        Allocator (Allocator const &);
-        Allocator & operator= (Allocator const &);
 
     public:
         static Allocator & get();

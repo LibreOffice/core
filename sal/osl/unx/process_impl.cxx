@@ -34,23 +34,12 @@
 #include "file_path_helper.h"
 
 #include "uunxapi.h"
+#include "getexecutablefile.hxx"
+#include "nlsupport.h"
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
 #endif
-
-/***************************************
-  osl_bootstrap_getExecutableFile_Impl().
-
-  @internal
-  @see rtl_bootstrap
-  @see #i37371#
-
- **************************************/
-
-extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
-    rtl_uString ** ppFileURL
-) SAL_THROW_EXTERN_C();
 
 #if defined(MACOSX) || defined(IOS)
 #include <mach-o/dyld.h>
@@ -457,9 +446,6 @@ static struct ProcessLocale_Impl g_process_locale =
     PTHREAD_MUTEX_INITIALIZER,
     0
 };
-
-extern "C" void _imp_getProcessLocale( rtl_Locale ** );
-extern "C" int  _imp_setProcessLocale( rtl_Locale * );
 
 /**********************************************
  osl_getProcessLocale().

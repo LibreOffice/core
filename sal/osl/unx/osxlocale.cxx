@@ -27,6 +27,8 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <postmac.h>
 
+#include <nlsupport.h>
+
 namespace
 {
     template <typename T>
@@ -61,7 +63,6 @@ namespace
 
 /** Grab current locale from system.
 */
-extern "C" {
 int macosx_getLocale(char *locale, sal_uInt32 bufferLen)
 {
     CFStringRef sref = getProcessLocale();
@@ -92,7 +93,6 @@ int macosx_getLocale(char *locale, sal_uInt32 bufferLen)
     strlcat(locale, ".UTF-8", bufferLen - strlen(locale));
 
     return noErr;
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

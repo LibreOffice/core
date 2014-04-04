@@ -402,11 +402,6 @@ static oslSocketError osl_SocketErrorFromNative(int nativeType)
 oslSocketAddr SAL_CALL osl_psz_createInetSocketAddr (
     const sal_Char* pszDottedAddr, sal_Int32 Port);
 
-oslSocketAddr SAL_CALL osl_psz_createIpxSocketAddr (
-    const sal_Char NetNumber[4],
-    const sal_Char NodeNumber[6],
-    sal_uInt32 SocketNumber);
-
 oslHostAddr SAL_CALL osl_psz_createHostAddr (
     const sal_Char *pszHostname, const oslSocketAddr Addr);
 

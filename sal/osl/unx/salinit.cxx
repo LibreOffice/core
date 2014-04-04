@@ -32,6 +32,8 @@
 #include "sal/main.h"
 #include "sal/types.h"
 
+#include <saltime.h>
+
 #if HAVE_SYSLOG_H
 #include <string.h>
 #include <syslog.h>
@@ -40,9 +42,6 @@ extern bool sal_use_syslog;
 #endif
 
 extern "C" {
-
-//From time.c
-void sal_initGlobalTimer();
 
 void sal_detail_initialize(int argc, char ** argv) {
 #if defined MACOSX && !HAVE_FEATURE_MACOSX_SANDBOX

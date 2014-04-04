@@ -21,6 +21,8 @@
 #include <osl/diagnose.h>
 #include <osl/process.h>
 
+#include "nlsupport.h"
+
 #if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
     defined(FREEBSD) || defined(MACOSX)  || defined(IOS) || defined(OPENBSD) || \
     defined(DRAGONFLY)
@@ -839,8 +841,6 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 /*****************************************************************************
  return the current process locale
  *****************************************************************************/
-
-int macosx_getLocale(char *locale, sal_uInt32 bufferLen);
 
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
