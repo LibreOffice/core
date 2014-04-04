@@ -21,6 +21,7 @@
 #include <CoreServices/CoreServices.h>
 #include <Foundation/Foundation.h>
 
+#include "GetMetadataForFile.h"
 #import "OOoSpotlightImporter.h"
 
 /* -----------------------------------------------------------------------------

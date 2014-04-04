@@ -35,6 +35,8 @@
 #include <CoreFoundation/CFPlugInCOM.h>
 #include <CoreServices/CoreServices.h>
 
+#include "GetMetadataForFile.h"
+
 // -----------------------------------------------------------------------------
 //    constants
 // -----------------------------------------------------------------------------
@@ -53,12 +55,6 @@
 // -----------------------------------------------------------------------------
 //    typedefs
 // -----------------------------------------------------------------------------
-
-// The import function to be implemented in GetMetadataForFile.c
-Boolean GetMetadataForFile(void *thisInterface,
-               CFMutableDictionaryRef attributes,
-               CFStringRef contentTypeUTI,
-               CFStringRef pathToFile);
 
 // The layout for an instance of MetaDataImporterPlugIn
 typedef struct __MetadataImporterPluginType
