@@ -2989,6 +2989,13 @@ DECLARE_OOXMLEXPORT_TEST(testFDO76163 , "fdo76163.docx")
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[2]/w:hyperlink/w:r[11]/w:fldChar", "fldCharType", "end" );
 }
 
+DECLARE_OOXMLEXPORT_TEST(test76591, "test76591.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc) return;
+    assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]", "-177165");
+}
+
 DECLARE_OOXMLEXPORT_TEST(test76317_2K10, "test76317_2K10.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

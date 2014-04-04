@@ -64,6 +64,7 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     OptValue< Int32Pair > moCoordPos;           ///< Top-left position of coordinate system for children scaling.
     OptValue< Int32Pair > moCoordSize;          ///< Size of coordinate system for children scaling.
     OUString     maPosition;             ///< Position type of the shape.
+    OUString     maZIndex;                ///< ZIndex of the shape
     OUString     maLeft;                 ///< X position of the shape bounding box (number with unit).
     OUString     maTop;                  ///< Y position of the shape bounding box (number with unit).
     OUString     maWidth;                ///< Width of the shape bounding box (number with unit).
