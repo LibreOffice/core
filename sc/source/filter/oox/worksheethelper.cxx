@@ -167,15 +167,13 @@ bool RowModel::isMergeable( const RowModel& rModel ) const
         (mbCollapsed    == rModel.mbCollapsed);
 }
 
-
-
-PageBreakModel::PageBreakModel() :
-    mnColRow( 0 ),
-    mbManual( false )
+PageBreakModel::PageBreakModel()
+    : mnColRow(0)
+    , mnMin(0)
+    , mnMax(0)
+    , mbManual(false)
 {
 }
-
-
 
 HyperlinkModel::HyperlinkModel()
 {
