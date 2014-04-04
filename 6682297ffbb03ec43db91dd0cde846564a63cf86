@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_e8b51332",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-04T12:45:40Z",
+      "side": 1,
+      "message": "This does not work with different Null dates.",
+      "revId": "6682297ffbb03ec43db91dd0cde846564a63cf86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_089b47ca",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-04T12:45:40Z",
+      "side": 1,
+      "message": "GetDate() does not return a date serial number, it returns a \"formatted\" number with YYYYMMDD, see include/tools/date.hxx how nDate is stored in init(), which is returned by GetDate().",
+      "revId": "6682297ffbb03ec43db91dd0cde846564a63cf86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_c8b84f2d",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-04T12:45:40Z",
+      "side": 1,
+      "message": "So adding that \"formatted\" date number here results in something different.",
+      "revId": "6682297ffbb03ec43db91dd0cde846564a63cf86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
