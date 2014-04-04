@@ -176,14 +176,7 @@ SvStream& ReadObjkType(SvStream& rInp, ObjkType& rObjk)
 #if defined OSL_BIGENDIAN
     SWAPOBJK(rObjk);
 #endif
-#ifdef InArbeit
-    sal_uLong nPos1=rInp.Tell();
-    if(nPos == nPos1) InfoBox( NULL, "tellg is not working" ).Execute();
-#endif
     rInp.Seek(nPos);
-#ifdef InArbeit
-    if (rInp.Tell() != nPos) InfoBox( NULL, "seekg is not working" ).Execute();
-#endif
     return rInp;
 }
 SvStream& ReadStrkType(SvStream& rInp, StrkType& rStrk)
