@@ -546,11 +546,13 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         m_aTableProperties->getValue( TablePropertyMap::HORI_ORIENT, nHoriOrient ) ;
         m_aTableProperties->Insert( PROP_HORI_ORIENT, uno::makeAny( sal_Int16(nHoriOrient) ) );
 
+
         //fill default value - if not available
         const PropertyMap::const_iterator aRepeatIter =
         m_aTableProperties->find(PROP_HEADER_ROW_COUNT);
         if( aRepeatIter == m_aTableProperties->end() )
             m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( (sal_Int32)0 ));
+
 
         rInfo.aTableProperties = m_aTableProperties->GetPropertyValues();
 
@@ -701,7 +703,9 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 const PropertyMap::iterator aDefaultRepeatIt2 = pAllCellProps->find(PROP_PARA_LINE_SPACING);
                 if ( aDefaultRepeatIt2 != pAllCellProps->end( ) )
                     pAllCellProps->erase( aDefaultRepeatIt2 );
-
+                const PropertyMap::iterator aDefaultRepeatIt3 = pAllCellProps->find(PROP_TBL_HEADER);
+                if ( aDefaultRepeatIt3 != pAllCellProps->end( ) )
+                     pAllCellProps->erase( aDefaultRepeatIt3 );
                 // Then add the cell properties
                 pAllCellProps->InsertProps(*aCellIterator);
                 aCellIterator->get( )->swap( *pAllCellProps.get( ) );
