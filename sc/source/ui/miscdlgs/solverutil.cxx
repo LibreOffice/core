@@ -20,10 +20,8 @@
 #include "solverutil.hxx"
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sheet/XSolver.hpp>
@@ -37,39 +35,6 @@ using namespace com::sun::star;
 
 #define SCSOLVER_SERVICE "com.sun.star.sheet.Solver"
 
-static uno::Reference<sheet::XSolver> lcl_CreateSolver( const uno::Reference<uno::XInterface>& xIntFac,
-                                                 const uno::Reference<uno::XComponentContext>& xCtx )
-{
-    uno::Reference<sheet::XSolver> xSolver;
-
-    uno::Reference<lang::XSingleComponentFactory> xCFac( xIntFac, uno::UNO_QUERY );
-    uno::Reference<lang::XSingleServiceFactory> xFac( xIntFac, uno::UNO_QUERY );
-    if ( xCFac.is() )
-    {
-        try
-        {
-            uno::Reference<uno::XInterface> xInterface = xCFac->createInstanceWithContext(xCtx);
-            xSolver = uno::Reference<sheet::XSolver>( xInterface, uno::UNO_QUERY );
-        }
-        catch(uno::Exception&)
-        {
-        }
-    }
-    if ( !xSolver.is() && xFac.is() )
-    {
-        try
-        {
-            uno::Reference<uno::XInterface> xInterface = xFac->createInstance();
-            xSolver = uno::Reference<sheet::XSolver>( xInterface, uno::UNO_QUERY );
-        }
-        catch(uno::Exception&)
-        {
-        }
-    }
-
-    return xSolver;
-}
-
 void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
                                        uno::Sequence<OUString>& rDescriptions )
 {
@@ -78,10 +43,9 @@ void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
 
     uno::Reference<uno::XComponentContext> xCtx(
         comphelper::getProcessComponentContext() );
-    uno::Reference<lang::XMultiServiceFactory> xMSF(
-        xCtx->getServiceManager(), uno::UNO_QUERY_THROW );
 
-    uno::Reference<container::XContentEnumerationAccess> xEnAc( xMSF, uno::UNO_QUERY );
+    uno::Reference<container::XContentEnumerationAccess> xEnAc(
+            xCtx->getServiceManager(), uno::UNO_QUERY );
     if ( xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum =
@@ -92,17 +56,18 @@ void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
             while ( xEnum->hasMoreElements() )
             {
                 uno::Any aAny = xEnum->nextElement();
-                uno::Reference<uno::XInterface> xIntFac;
-                aAny >>= xIntFac;
-                if ( xIntFac.is() )
+                uno::Reference<lang::XServiceInfo> xInfo;
+                aAny >>= xInfo;
+                if ( xInfo.is() )
                 {
-                    uno::Reference<lang::XServiceInfo> xInfo( xIntFac, uno::UNO_QUERY );
-                    if ( xInfo.is() )
+                    uno::Reference<lang::XSingleComponentFactory> xCFac( xInfo, uno::UNO_QUERY );
+                    if ( xCFac.is() )
                     {
                         OUString sName = xInfo->getImplementationName();
                         OUString sDescription;
 
-                        uno::Reference<sheet::XSolver> xSolver = lcl_CreateSolver( xIntFac, xCtx );
+                        uno::Reference<sheet::XSolver> xSolver(
+                                xCFac->createInstanceWithContext(xCtx), uno::UNO_QUERY );
                         uno::Reference<sheet::XSolverDescription> xDesc( xSolver, uno::UNO_QUERY );
                         if ( xDesc.is() )
                             sDescription = xDesc->getComponentDescription();
@@ -128,10 +93,9 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const OUString& rImplNam
 
     uno::Reference<uno::XComponentContext> xCtx(
         comphelper::getProcessComponentContext() );
-    uno::Reference<lang::XMultiServiceFactory> xMSF(
-        xCtx->getServiceManager(), uno::UNO_QUERY_THROW );
 
-    uno::Reference<container::XContentEnumerationAccess> xEnAc( xMSF, uno::UNO_QUERY );
+    uno::Reference<container::XContentEnumerationAccess> xEnAc(
+            xCtx->getServiceManager(), uno::UNO_QUERY );
     if ( xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum =
@@ -141,23 +105,23 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const OUString& rImplNam
             while ( xEnum->hasMoreElements() && !xSolver.is() )
             {
                 uno::Any aAny = xEnum->nextElement();
-                uno::Reference<uno::XInterface> xIntFac;
-                aAny >>= xIntFac;
-                if ( xIntFac.is() )
+                uno::Reference<lang::XServiceInfo> xInfo;
+                aAny >>= xInfo;
+                if ( xInfo.is() )
                 {
-                    uno::Reference<lang::XServiceInfo> xInfo( xIntFac, uno::UNO_QUERY );
-                    if ( xInfo.is() )
+                    uno::Reference<lang::XSingleComponentFactory> xCFac( xInfo, uno::UNO_QUERY );
+                    if ( xCFac.is() )
                     {
                         OUString sName = xInfo->getImplementationName();
                         if ( sName == rImplName )
-                            xSolver = lcl_CreateSolver( xIntFac, xCtx );
+                            xSolver.set( xCFac->createInstanceWithContext(xCtx), uno::UNO_QUERY );
                     }
                 }
             }
         }
     }
 
-    OSL_ENSURE( xSolver.is(), "can't get solver" );
+    SAL_WARN_IF( !xSolver.is(), "sc.ui", "can't get solver" );
     return xSolver;
 }
 

@@ -1246,10 +1246,9 @@ cppuhelper::ServiceManager::createContentEnumeration(
         } else if (impl->factory2.is()) {
             factories.push_back(css::uno::makeAny(impl->factory2));
         } else {
-            throw css::uno::DeploymentException(
-                ("Implementation " + impl->info->name
-                 + " does not provide a factory"),
-                static_cast< cppu::OWeakObject * >(this));
+            css::uno::Reference< css::lang::XSingleComponentFactory > factory(
+                    new ImplementationWrapper(this, *i));
+            factories.push_back(css::uno::makeAny(factory));
         }
     }
     return new ContentEnumeration(factories);
