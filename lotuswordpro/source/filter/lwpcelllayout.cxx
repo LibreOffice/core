@@ -75,8 +75,11 @@
 
 LwpCellLayout::LwpCellLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpMiddleLayout(objHdr, pStrm)
+    , crowid(0)
+    , ccolid(0)
     , cType(LDT_NONE)
-{}
+{
+}
 
 LwpCellLayout::~LwpCellLayout()
 {}
