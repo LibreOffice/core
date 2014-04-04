@@ -31,7 +31,8 @@ public:
     SerfPutReqProcImpl( const char* inPath,
                         const DAVRequestHeaders& inRequestHeaders,
                         const char* inData,
-                        apr_size_t inDataLen );
+                        apr_size_t inDataLen,
+                        const OUString& sToken );
 
 
     virtual ~SerfPutReqProcImpl();
@@ -49,7 +50,7 @@ protected:
 private:
     const char* mpData;
     apr_size_t mnDataLen;
-
+    OUString msToken;
 };
 
 } // namespace http_dav_ucp
