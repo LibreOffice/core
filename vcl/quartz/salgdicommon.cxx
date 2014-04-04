@@ -1601,14 +1601,19 @@ void AquaSalGraphics::ResetClipRegion()
 
 void AquaSalGraphics::SetState()
 {
+    CG_TRACE( "CGContextRestoreGState(" << mrContext << ") " << mnContextStackDepth--);
     CGContextRestoreGState( mrContext );
+    CG_TRACE( "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth );
     CGContextSaveGState( mrContext );
 
     // setup clipping
     if( mxClipPath )
     {
+        CG_TRACE( "CGContextBeginPath(" << mrContext << ")" );
         CGContextBeginPath( mrContext );            // discard any existing path
+        CG_TRACE( "CGContextAddPath(" << mrContext << "," << mxClipPath << ")" );
         CGContextAddPath( mrContext, mxClipPath );  // set the current path to the clipping path
+        CG_TRACE( "CGContextClip(" << mrContext << ")" );
         CGContextClip( mrContext );                 // use it for clipping
     }
 
@@ -1998,7 +2003,7 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
         // We will return early a few lines lower.
         // Undo the "stack initialization" done at the initial call of
         // this method, see end.
-        CG_TRACE( "CGContextRestoreGState(" << mrContext << ")" );
+        CG_TRACE( "CGContextRestoreGState(" << mrContext << ") " << mnContextStackDepth--);
         CGContextRestoreGState( mrContext );
     }
 #endif
@@ -2048,7 +2053,7 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
     }
 
     // initialize stack of CGContext states
-    CG_TRACE( "CGContextSaveGState(" << mrContext << ")" );
+    CG_TRACE( "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth );
     CGContextSaveGState( mrContext );
     SetState();
 }
