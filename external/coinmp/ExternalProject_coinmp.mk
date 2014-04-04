@@ -27,6 +27,7 @@ else
 $(call gb_ExternalProject_get_state_target,coinmp,build) :
 	+$(call gb_ExternalProject_run,build,\
 		./configure COIN_SKIP_PROJECTS="Data/Sample" \
+			--enable-dependency-linking \
 		&& $(MAKE) \
 	)
 
