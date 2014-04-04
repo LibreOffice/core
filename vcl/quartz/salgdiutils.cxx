@@ -29,6 +29,7 @@
 #include "vcl/svapp.hxx"
 
 #include "quartz/salgdi.h"
+#include "quartz/utils.h"
 #include "osx/salframe.h"
 #include "osx/saldata.hxx"
 
@@ -77,11 +78,13 @@ void AquaSalGraphics::UnsetState()
 {
     if( mrContext )
     {
+        CG_TRACE( "CGContextRestoreGState(" << mrContext << ")" );
         CGContextRestoreGState( mrContext );
         mrContext = 0;
     }
     if( mxClipPath )
     {
+        CG_TRACE( "CGPathRelease(" << mxClipPath << ")" );
         CGPathRelease( mxClipPath );
         mxClipPath = NULL;
     }
@@ -115,19 +118,27 @@ bool AquaSalGraphics::CheckContext()
             NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getNSWindow()];
             CGContextRef xCGContext = reinterpret_cast<CGContextRef>([pNSGContext graphicsPort]);
             mxLayer = CGLayerCreateWithContext( xCGContext, aLayerSize, NULL );
+            CG_TRACE( "CGLayerCreateWithContext(" << xCGContext << "," << aLayerSize << ",NULL) = " << mxLayer );
             if( mxLayer )
+            {
                 mrContext = CGLayerGetContext( mxLayer );
+                CG_TRACE( "CGLayerGetContext(" << mxLayer << ") = " << mrContext );
+            }
 
             if( mrContext )
             {
                 // copy original layer to resized layer
                 if( rReleaseLayer )
+                {
+                    CG_TRACE( "CGContextDrawLayerAtPoint(" << mrContext << "," << CGPointZero << "," << rReleaseLayer << ")" );
                     CGContextDrawLayerAtPoint( mrContext, CGPointZero, rReleaseLayer );
+                }
 
                 CGContextTranslateCTM( mrContext, 0, nHeight );
                 CGContextScaleCTM( mrContext, 1.0, -1.0 );
                 CGContextSetFillColorSpace( mrContext, GetSalData()->mxRGBSpace );
                 CGContextSetStrokeColorSpace( mrContext, GetSalData()->mxRGBSpace );
+                CG_TRACE( "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth );
                 CGContextSaveGState( mrContext );
                 SetState();
 
@@ -138,9 +149,15 @@ bool AquaSalGraphics::CheckContext()
         }
 
         if( rReleaseLayer )
+        {
+            CG_TRACE( "CGLayerRelease(" << rReleaseLayer << ")" );
             CGLayerRelease( rReleaseLayer );
+        }
         else if( rReleaseContext )
+        {
+            CG_TRACE( "CGContextRelease(" << rReleaseContext << ")" );
             CGContextRelease( rReleaseContext );
+        }
     }
 
     DBG_ASSERT( mrContext || mbPrinter, "<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!\n" );
@@ -181,17 +198,22 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
     if( (mxLayer != NULL) && (pContext != NULL) )
     {
         CGContextRef rCGContext = reinterpret_cast<CGContextRef>([pContext graphicsPort]);
+        CG_TRACE( "[[NSGraphicsContext currentContext] graphicsPort] = " << rCGContext );
 
         CGMutablePathRef rClip = mpFrame->getClipPath();
         if( rClip )
         {
             CGContextSaveGState( rCGContext );
+            CG_TRACE( "CGContextBeginPath(" << rCGContext << ")" );
             CGContextBeginPath( rCGContext );
+            CG_TRACE( "CGContextAddPath(" << rCGContext << "," << rClip << ")" );
             CGContextAddPath( rCGContext, rClip );
+            CG_TRACE( "CGContextClip(" << rCGContext << ")" );
             CGContextClip( rCGContext );
         }
 
         ApplyXorContext();
+        CG_TRACE( "CGContextDrawLayerAtPoint(" << rCGContext << "," << CGPointZero << "," << mxLayer << ")" );
         CGContextDrawLayerAtPoint( rCGContext, CGPointZero, mxLayer );
         if( rClip ) // cleanup clipping
             CGContextRestoreGState( rCGContext );
