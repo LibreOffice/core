@@ -1087,6 +1087,8 @@ public:
 
     void Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow);
     void Out_SwFmtTableBox( ww::bytes& rO, const SvxBoxItem * rBox );
+    void Out_CellRangeBorders(const SvxBoxItem * pBox, sal_uInt8 nStart,
+        sal_uInt8 nLimit);
     sal_uInt8 TransCol( const Color& rCol );
     bool TransBrush(const Color& rCol, WW8_SHD& rShd);
     WW8_BRCVer9 TranslateBorderLine(const ::editeng::SvxBorderLine& pLine,

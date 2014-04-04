@@ -1953,6 +1953,7 @@ void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTa
             TableVerticalCell( pTableTextNodeInfoInner );
             TableOrientation( pTableTextNodeInfoInner );
             TableSpacing( pTableTextNodeInfoInner );
+            TableCellBorders( pTableTextNodeInfoInner );
         }
     }
 }
@@ -2410,6 +2411,38 @@ void WW8AttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointe
 
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO,
                 pFrmFmt->GetBox().GetDistance( aBorders[i] ) );
+    }
+}
+
+void WW8AttributeOutput::TableCellBorders(
+    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+{
+    if (!m_rWW8Export.bWrtWW8)
+        return;
+
+    const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
+    const SwTableLine * pTabLine = pTabBox->GetUpper();
+    const SwTableBoxes & rTabBoxes = pTabLine->GetTabBoxes();
+    sal_uInt8 nBoxes = std::min<size_t>(rTabBoxes.size(), 255);
+    const SvxBoxItem * pLastBox = 0;
+    sal_uInt8 nSeqStart = 0; // start of sequence of cells with same borders
+
+    // Detect sequences of cells which have the same borders, and output
+    // a border description for each such cell range.
+    for ( unsigned n = 0; n <= nBoxes; ++n )
+    {
+        const SvxBoxItem * pBox = (n == nBoxes) ? 0 :
+            &rTabBoxes[n]->GetFrmFmt()->GetBox();
+        if( !pLastBox )
+            pLastBox = pBox;
+        else if( !pBox || *pLastBox != *pBox )
+        {
+            // This cell has different borders than the previous cell,
+            // so output the borders for the preceding cell range.
+            m_rWW8Export.Out_CellRangeBorders(pLastBox, nSeqStart, n);
+            nSeqStart = n;
+            pLastBox = pBox;
+        }
     }
 }
 
