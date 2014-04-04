@@ -172,9 +172,9 @@ void SbxObject::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
     }
 }
 
-sal_Bool SbxObject::IsClass( const OUString& rName ) const
+bool SbxObject::IsClass( const OUString& rName ) const
 {
-    return sal_Bool( aClassName.equalsIgnoreAsciiCase( rName ) );
+    return aClassName.equalsIgnoreAsciiCase( rName );
 }
 
 SbxVariable* SbxObject::FindUserData( sal_uInt32 nData )

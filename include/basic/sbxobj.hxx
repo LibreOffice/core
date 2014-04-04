@@ -52,7 +52,7 @@ public:
     virtual SbxClassType GetClass() const SAL_OVERRIDE;
     virtual void Clear() SAL_OVERRIDE;
 
-    virtual sal_Bool IsClass( const OUString& ) const;
+    virtual bool IsClass( const OUString& ) const;
     const OUString& GetClassName() const { return aClassName; }
     void SetClassName( const OUString &rNew ) { aClassName = rNew; }
     // Default-Property

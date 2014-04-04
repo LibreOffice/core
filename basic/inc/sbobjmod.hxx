@@ -95,7 +95,7 @@ public:
     SbUserFormModuleInstance( SbUserFormModule* pParentModule, const OUString& rName,
         const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
 
-    virtual sal_Bool IsClass( const OUString& ) const SAL_OVERRIDE;
+    virtual bool IsClass( const OUString& ) const SAL_OVERRIDE;
     virtual SbxVariable* Find( const OUString& rName, SbxClassType t ) SAL_OVERRIDE;
 };
 

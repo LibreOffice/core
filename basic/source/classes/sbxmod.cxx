@@ -2594,10 +2594,10 @@ SbUserFormModuleInstance::SbUserFormModuleInstance( SbUserFormModule* pParentMod
 {
 }
 
-sal_Bool SbUserFormModuleInstance::IsClass( const OUString& rName ) const
+bool SbUserFormModuleInstance::IsClass( const OUString& rName ) const
 {
-    sal_Bool bParentNameMatches = m_pParentModule->GetName().equalsIgnoreAsciiCase( rName );
-    sal_Bool bRet = bParentNameMatches || SbxObject::IsClass( rName );
+    bool bParentNameMatches = m_pParentModule->GetName().equalsIgnoreAsciiCase( rName );
+    bool bRet = bParentNameMatches || SbxObject::IsClass( rName );
     return bRet;
 }
 
