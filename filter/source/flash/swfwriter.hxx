@@ -39,11 +39,6 @@
 #include <stack>
 #include <map>
 
-#ifdef AUGUSTUS
-#include "lame.h"
-#include "sndfile.h"
-#endif
-
 #include <stdio.h>
 
 class GDIMetaFile;
@@ -336,11 +331,6 @@ public:
     /** inserts a doaction tag with an ActionGotoFrame */
     void gotoFrame( sal_uInt16 nFrame );
 
-#ifdef AUGUSTUS
-    /** stream out a sound.  Should make it more intelligent so it interleaves with other items.*/
-    sal_Bool streamSound( const char * filename );
-#endif
-
 private:
     Point                   map( const Point& rPoint ) const;
     Size                    map( const Size& rSize ) const;
@@ -436,10 +426,6 @@ private:
 
     SvStream* mpMovieStream;
     SvStream* mpFontsStream;
-
-#ifdef AUGUSTUS
-    lame_global_flags *m_lame_flags;
-#endif
 
     sal_uInt8 mnGlobalTransparency;
     sal_Int32 mnJPEGCompressMode;
