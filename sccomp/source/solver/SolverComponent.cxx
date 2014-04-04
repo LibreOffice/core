@@ -139,11 +139,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL SolverComponent::getPropertySet
 
 // XSolverDescription
 
-OUString SAL_CALL SolverComponent::getComponentDescription() throw (uno::RuntimeException, std::exception)
-{
-    return SolverComponent::GetResourceString( RID_SOLVER_COMPONENT );
-}
-
 OUString SAL_CALL SolverComponent::getStatusDescription() throw (uno::RuntimeException, std::exception)
 {
     return maStatus;

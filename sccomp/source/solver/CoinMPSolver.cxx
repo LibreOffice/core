@@ -44,6 +44,11 @@ private:
     {
         return OUString("com.sun.star.comp.Calc.CoinMPSolver");
     }
+    virtual OUString SAL_CALL getComponentDescription()
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        return SolverComponent::GetResourceString( RID_COINMP_SOLVER_COMPONENT );
+    }
 };
 
 void SAL_CALL CoinMPSolver::solve() throw(uno::RuntimeException, std::exception)

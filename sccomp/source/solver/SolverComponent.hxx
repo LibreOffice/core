@@ -139,7 +139,7 @@ public:
     virtual void SAL_CALL solve() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
 
                             // XSolverDescription
-    virtual OUString SAL_CALL getComponentDescription() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getComponentDescription() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
     virtual OUString SAL_CALL getStatusDescription() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getPropertyDescription( const OUString& aPropertyName )
                                 throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

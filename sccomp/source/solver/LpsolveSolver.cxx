@@ -77,6 +77,11 @@ private:
     {
         return OUString("com.sun.star.comp.Calc.LpsolveSolver");
     }
+    virtual OUString SAL_CALL getComponentDescription()
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        return SolverComponent::GetResourceString( RID_SOLVER_COMPONENT );
+    }
 };
 
 void SAL_CALL LpsolveSolver::solve() throw(uno::RuntimeException, std::exception)
