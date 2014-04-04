@@ -680,7 +680,12 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
 
 LwpConnectedCellLayout::LwpConnectedCellLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpCellLayout(objHdr, pStrm)
-{}
+    , cnumrows(0)
+    , cnumcols(0)
+    , m_nRealrowspan(0)
+    , m_nRealcolspan(0)
+{
+}
 
 LwpConnectedCellLayout::~LwpConnectedCellLayout()
 {}
