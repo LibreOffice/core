@@ -182,7 +182,9 @@ IndexedStyleSheets::HasStyleSheet(rtl::Reference< SfxStyleSheetBase > style) con
 rtl::Reference< SfxStyleSheetBase >
 IndexedStyleSheets::GetStyleSheetByPosition(unsigned pos)
 {
-    return mStyleSheets.at(pos);
+    if( pos < mStyleSheets.size() )
+        return mStyleSheets.at(pos);
+    return NULL;
 }
 
 void

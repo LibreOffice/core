@@ -655,6 +655,8 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
          it != aSheetsWithFamily.end(); ++it )
     {
         rtl::Reference< SfxStyleSheetBase > xSheet = GetStyleSheetByPositionInIndex( *it );
+        if( !xSheet.is() )
+            continue;
         rtl::OUString aName( xSheet->GetName() );
 
         // now check whether we already have a sheet with the same name
