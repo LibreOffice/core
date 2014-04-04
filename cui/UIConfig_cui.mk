@@ -165,6 +165,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/showcoldialog \
 	cui/uiconfig/ui/similaritysearchdialog \
 	cui/uiconfig/ui/slantcornertabpage \
+	cui/uiconfig/ui/smarttagoptionspage \
 	cui/uiconfig/ui/smoothdialog \
 	cui/uiconfig/ui/solarizedialog \
 	cui/uiconfig/ui/specialcharacters \

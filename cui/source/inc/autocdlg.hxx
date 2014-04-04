@@ -461,10 +461,9 @@ class OfaSmartTagOptionsTabPage : public SfxTabPage
 private:
 
     // controls
-    CheckBox                m_aMainCB;
-    SvxCheckListBox         m_aSmartTagTypesLB;
-    PushButton              m_aPropertiesPB;
-    FixedText               m_aTitleFT;
+    CheckBox*               m_pMainCB;
+    SvxCheckListBox*        m_pSmartTagTypesLB;
+    PushButton*             m_pPropertiesPB;
 
     /// construction via Create()
     OfaSmartTagOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
