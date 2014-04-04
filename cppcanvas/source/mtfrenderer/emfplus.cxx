@@ -947,7 +947,7 @@ namespace cppcanvas
             Graphic graphic;
 
 
-            void Read (SvMemoryStream &s, sal_uInt32 dataSize, sal_Bool bUseWholeStream)
+            void Read (SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream)
             {
                 sal_uInt32 header, unknown;
 
@@ -1462,7 +1462,7 @@ namespace cppcanvas
             }
         }
 
-        void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, sal_Bool bUseWholeStream)
+        void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream)
         {
             sal_uInt32 index;
 
@@ -1624,7 +1624,7 @@ namespace cppcanvas
                     if (mbMultipart) {
                         SAL_INFO("cppcanvas.emf", "EMF+ multipart record flags: " << mMFlags);
                         mMStream.Seek (0);
-                        processObjectRecord (mMStream, mMFlags, dataSize, sal_True);
+                        processObjectRecord (mMStream, mMFlags, dataSize, true);
                     }
                     mbMultipart = false;
                 }

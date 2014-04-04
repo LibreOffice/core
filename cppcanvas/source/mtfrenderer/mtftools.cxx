@@ -232,7 +232,7 @@ namespace cppcanvas
         TextLineInfo createTextLineInfo( const ::VirtualDevice&                     rVDev,
                                          const ::cppcanvas::internal::OutDevState&  rState )
         {
-            const sal_Bool bOldMode( rVDev.IsMapModeEnabled() );
+            const bool bOldMode( rVDev.IsMapModeEnabled() );
 
             // #i68512# Force metric regeneration with mapmode enabled
             // (prolly OutDev bug)
