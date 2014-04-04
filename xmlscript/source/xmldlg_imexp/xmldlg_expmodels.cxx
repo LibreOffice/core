@@ -121,9 +121,6 @@ void ElementDescriptor::readFrameModel( StyleBag * all_styles )
         title->addAttribute( XMLNS_DIALOGS_PREFIX ":value", aTitle );
         addSubElement( title );
     }
-#ifdef SCROLLABLEFRAME
-    readScrollableSettings();
-#endif
     uno::Reference< container::XNameContainer > xControlContainer( _xProps, uno::UNO_QUERY );
     if ( xControlContainer.is() && xControlContainer->getElementNames().getLength() )
     {
