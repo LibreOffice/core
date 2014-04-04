@@ -2660,6 +2660,17 @@ DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_AutoColumn,"alphabeticalIndex_Aut
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testIndexFieldFlagF,"IndexFieldFlagF.docx")
+{
+    // This test case is to verify the Index field flag '\f' with some
+    // Specific Entry Type (ex. "Syn" in our case).
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // We check the Index field flag '\f'.
+    assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[4]/w:r[2]/w:instrText[1]", " INDEX \\c \"2\"\\f \"Syn\" \" \\e \"");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testBibliography,"FDO75133.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();

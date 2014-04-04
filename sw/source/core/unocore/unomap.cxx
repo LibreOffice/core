@@ -1454,6 +1454,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     { OUString(UNO_NAME_LOCALE),            WID_IDX_LOCALE,         cppu::UnoType<css::lang::Locale>::get(), PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_SORT_ALGORITHM),    WID_IDX_SORT_ALGORITHM,  cppu::UnoType<OUString>::get(), PROPERTY_NONE,     0},
+                    { OUString(UNO_NAME_INDEX_ENTRY_TYPE), WID_INDEX_ENTRY_TYPE, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 aMapEntriesArr[nPropertyId] = aTOXIndexMap_Impl;

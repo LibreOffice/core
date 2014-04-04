@@ -362,6 +362,7 @@ enum PropertyIds
         ,PROP_SDTPR
         ,PROP_CELL_INTEROP_GRAB_BAG
         ,PROP_TABLE_INTEROP_GRAB_BAG
+        ,PROP_INDEX_ENTRY_TYPE
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier
