@@ -21,6 +21,7 @@
 
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2drangeclipper.hxx>
 #include <basegfx/range/b2dpolyrange.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

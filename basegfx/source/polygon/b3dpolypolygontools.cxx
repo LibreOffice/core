@@ -484,34 +484,6 @@ namespace basegfx
             }
         }
 
-
-        // comparators with tolerance for 3D PolyPolygons
-
-        bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB, const double& rfSmallValue)
-        {
-            const sal_uInt32 nPolygonCount(rCandidateA.count());
-
-            if(nPolygonCount != rCandidateB.count())
-                return false;
-
-            for(sal_uInt32 a(0); a < nPolygonCount; a++)
-            {
-                const B3DPolygon aCandidate(rCandidateA.getB3DPolygon(a));
-
-                if(!equal(aCandidate, rCandidateB.getB3DPolygon(a), rfSmallValue))
-                    return false;
-            }
-
-            return true;
-        }
-
-        bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB)
-        {
-            const double fSmallValue(fTools::getSmallValue());
-
-            return equal(rCandidateA, rCandidateB, fSmallValue);
-        }
-
 /// converters for com::sun::star::drawing::PolyPolygonShape3D
         B3DPolyPolygon UnoPolyPolygonShape3DToB3DPolyPolygon(
             const com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygonShape3DSource,

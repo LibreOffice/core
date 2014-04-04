@@ -295,11 +295,6 @@ public:
     {
     }
 
-    sal_uInt32 count() const
-    {
-        return maVector.size();
-    }
-
     bool operator==(const BColorArray& rCandidate) const
     {
         return (maVector == rCandidate.maVector);
@@ -457,11 +452,6 @@ public:
 
     ~NormalsArray3D()
     {
-    }
-
-    sal_uInt32 count() const
-    {
-        return maVector.size();
     }
 
     bool operator==(const NormalsArray3D& rCandidate) const
@@ -631,11 +621,6 @@ public:
 
     ~TextureCoordinate2D()
     {
-    }
-
-    sal_uInt32 count() const
-    {
-        return maVector.size();
     }
 
     bool operator==(const TextureCoordinate2D& rCandidate) const

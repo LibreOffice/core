@@ -204,38 +204,6 @@ public:
             aStart->transform(rMatrix);
         }
     }
-
-    const basegfx::B2DPoint* begin() const
-    {
-        if(maVector.empty())
-            return 0;
-        else
-            return &maVector.front();
-    }
-
-    const basegfx::B2DPoint* end() const
-    {
-        if(maVector.empty())
-            return 0;
-        else
-            return (&maVector.back())+1;
-    }
-
-    basegfx::B2DPoint* begin()
-    {
-        if(maVector.empty())
-            return 0;
-        else
-            return &maVector.front();
-    }
-
-    basegfx::B2DPoint* end()
-    {
-        if(maVector.empty())
-            return 0;
-        else
-            return (&maVector.back())+1;
-    }
 };
 
 
@@ -681,19 +649,7 @@ public:
         }
     }
 
-    ImplB2DPolygon& operator=( const ImplB2DPolygon& rToBeCopied )
-    {
-        maPoints = rToBeCopied.maPoints;
-        mpControlVector.reset();
-        mpBufferedData.reset();
-        mbIsClosed = rToBeCopied.mbIsClosed;
-
-        // complete initialization using copy
-        if(rToBeCopied.mpControlVector && rToBeCopied.mpControlVector->isUsed())
-            mpControlVector.reset( new ControlVectorArray2D(*rToBeCopied.mpControlVector) );
-
-        return *this;
-    }
+    ImplB2DPolygon& operator=( const ImplB2DPolygon& ) SAL_DELETED_FUNCTION;
 
     sal_uInt32 count() const
     {

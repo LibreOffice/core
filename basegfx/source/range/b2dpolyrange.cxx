@@ -33,29 +33,11 @@ namespace basegfx
 {
     class ImplB2DPolyRange
     {
-        void updateBounds()
-        {
-            maBounds.reset();
-            std::for_each(maRanges.begin(),
-                          maRanges.end(),
-                          boost::bind(
-                              (void (B2DRange::*)(const B2DRange&))(
-                 &B2DRange::expand),
-                              boost::ref(maBounds),
-                              _1));
-        }
-
     public:
         ImplB2DPolyRange() :
             maBounds(),
             maRanges(),
             maOrient()
-        {}
-
-        explicit ImplB2DPolyRange( const B2DRange& rRange, B2VectorOrientation eOrient ) :
-            maBounds( rRange ),
-            maRanges( 1, rRange ),
-            maOrient( 1, eOrient )
         {}
 
         bool operator==(const ImplB2DPolyRange& rRHS) const

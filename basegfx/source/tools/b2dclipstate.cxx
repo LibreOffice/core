@@ -103,16 +103,6 @@ namespace tools
                 ORIENTATION_POSITIVE);
         }
 
-        void addPolygon(B2DPolygon aPoly, Operation eOp)
-        {
-            commitPendingRanges();
-            if( mePendingOps != eOp )
-                commitPendingPolygons();
-
-            mePendingOps = eOp;
-            maPendingPolygons.append(aPoly);
-        }
-
         void addPolyPolygon(B2DPolyPolygon aPoly, Operation eOp)
         {
             commitPendingRanges();

@@ -107,14 +107,6 @@ public:
         return maPolygons.size();
     }
 
-    void setClosed(bool bNew)
-    {
-        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
-        {
-            maPolygons[a].setClosed(bNew);
-        }
-    }
-
     void flip()
     {
         std::for_each( maPolygons.begin(),
