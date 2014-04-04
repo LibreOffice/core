@@ -1309,12 +1309,8 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
          case CTRL_TAB_ITEM:
 
             w = aCtrlBoundRect.GetWidth() + 2*TAB_TEXT_OFFSET - 2*VCL_TAB_TEXT_OFFSET;
-
-#ifdef OLD_TAB_STYLE
-            h = TAB_HEIGHT_NORMAL;
-#else
             h = TAB_HEIGHT_NORMAL+2;
-#endif
+
             rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
             rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
 
