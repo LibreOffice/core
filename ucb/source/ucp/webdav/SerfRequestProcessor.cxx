@@ -203,10 +203,16 @@ bool SerfRequestProcessor::processPut( const char* inData,
                                        apr_size_t inDataLen,
                                        apr_status_t& outSerfStatus )
 {
+    // get the lock from lock store
+    const OUString sToken(
+            apr_environment::AprEnv::getAprEnv()->getSerfLockStore()->getLockToken(
+                OUString::createFromAscii(mPathStr)) );
+
     mpProcImpl = new SerfPutReqProcImpl( mPathStr,
                                        mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                        inData,
-                                       inDataLen );
+                                       inDataLen,
+                                       sToken );
     outSerfStatus = runProcessor();
 
     return outSerfStatus == APR_SUCCESS;
