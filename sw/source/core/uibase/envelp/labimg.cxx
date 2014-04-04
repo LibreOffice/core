@@ -295,35 +295,35 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
                     case  4: pValues[nProp] >>= aItem.nRows;            break;// "Format/Row",
                     case  5:
                         pValues[nProp] >>= aItem.lHDist;
-                        aItem.lHDist = MM100_TO_TWIP(aItem.lHDist);
+                        aItem.lHDist = convertMm100ToTwip(aItem.lHDist);
                     break;// "Format/HorizontalDistance",
                     case  6:
                         pValues[nProp] >>= aItem.lVDist;
-                        aItem.lVDist = MM100_TO_TWIP(aItem.lVDist);
+                        aItem.lVDist = convertMm100ToTwip(aItem.lVDist);
                     break;// "Format/VerticalDistance",
                     case  7:
                         pValues[nProp] >>= aItem.lWidth;
-                        aItem.lWidth = MM100_TO_TWIP(aItem.lWidth);
+                        aItem.lWidth = convertMm100ToTwip(aItem.lWidth);
                     break;// "Format/Width",
                     case  8:
                         pValues[nProp] >>= aItem.lHeight;
-                        aItem.lHeight = MM100_TO_TWIP(aItem.lHeight);
+                        aItem.lHeight = convertMm100ToTwip(aItem.lHeight);
                     break;// "Format/Height",
                     case  9:
                         pValues[nProp] >>= aItem.lLeft;
-                        aItem.lLeft = MM100_TO_TWIP(aItem.lLeft);
+                        aItem.lLeft = convertMm100ToTwip(aItem.lLeft);
                     break;// "Format/LeftMargin",
                     case 10:
                         pValues[nProp] >>= aItem.lUpper;
-                        aItem.lUpper = MM100_TO_TWIP(aItem.lUpper);
+                        aItem.lUpper = convertMm100ToTwip(aItem.lUpper);
                     break;// "Format/TopMargin",
                     case 11:
                         pValues[nProp] >>= aItem.lPWidth;
-                        aItem.lPWidth = MM100_TO_TWIP(aItem.lPWidth);
+                        aItem.lPWidth = convertMm100ToTwip(aItem.lPWidth);
                     break;// "Format/PageWidth",
                     case 12:
                         pValues[nProp] >>= aItem.lPHeight;
-                        aItem.lPHeight = MM100_TO_TWIP(aItem.lPHeight);
+                        aItem.lPHeight = convertMm100ToTwip(aItem.lPHeight);
                     break;// "Format/PageHeight",
                     case 13: aItem.bSynchron = *(sal_Bool*)pValues[nProp].getValue(); break;// "Option/Synchronize",
                     case 14: aItem.bPage = *(sal_Bool*)pValues[nProp].getValue(); break;// "Option/Page",
@@ -416,14 +416,14 @@ void    SwLabCfgItem::Commit()
             case  2: pValues[nProp] <<= aItem.aType;            break;// "Medium/Type",
             case  3: pValues[nProp] <<= aItem.nCols;            break;// "Format/Column",
             case  4: pValues[nProp] <<= aItem.nRows;            break;// "Format/Row",
-            case  5: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lHDist));break;// "Format/HorizontalDistance",
-            case  6: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lVDist));break;// "Format/VerticalDistance",
-            case  7: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lWidth));            break;// "Format/Width",
-            case  8: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lHeight));           break;// "Format/Height",
-            case  9: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lLeft));         break;// "Format/LeftMargin",
-            case 10: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lUpper));            break;// "Format/TopMargin",
-            case 11: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lPWidth)); break;// "Format/Page Width",
-            case 12: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(aItem.lPHeight)); break;// "Format/PageHeight",
+            case  5: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lHDist));break;// "Format/HorizontalDistance",
+            case  6: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lVDist));break;// "Format/VerticalDistance",
+            case  7: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lWidth));            break;// "Format/Width",
+            case  8: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lHeight));           break;// "Format/Height",
+            case  9: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lLeft));         break;// "Format/LeftMargin",
+            case 10: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lUpper));            break;// "Format/TopMargin",
+            case 11: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lPWidth)); break;// "Format/Page Width",
+            case 12: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lPHeight)); break;// "Format/PageHeight",
             case 13: pValues[nProp].setValue(&aItem.bSynchron, rType); break;// "Option/Synchronize",
             case 14: pValues[nProp].setValue(&aItem.bPage, rType); break;// "Option/Page",
             case 15: pValues[nProp] <<= aItem.nCol;            break;// "Option/Column",

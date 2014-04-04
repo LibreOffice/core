@@ -125,9 +125,9 @@ DECLARE_RTFIMPORT_TEST(testFdo45553, "fdo45553.rtf")
             uno::Reference<text::XTextRange> xRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
             OUString aStr = xRange->getString();
             if ( aStr == "space-before" )
-                CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(120)), getProperty<sal_Int32>(xRange, "ParaTopMargin"));
+                CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(120)), getProperty<sal_Int32>(xRange, "ParaTopMargin"));
             else if ( aStr == "space-after" )
-                CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(240)), getProperty<sal_Int32>(xRange, "ParaBottomMargin"));
+                CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(240)), getProperty<sal_Int32>(xRange, "ParaBottomMargin"));
         }
     }
 }
@@ -161,7 +161,7 @@ DECLARE_RTFIMPORT_TEST(testN695479, "n695479.rtf")
 
     // Negative ABSH should mean fixed size.
     CPPUNIT_ASSERT_EQUAL(text::SizeType::FIX, getProperty<sal_Int16>(xPropertySet, "SizeType"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(300)), getProperty<sal_Int32>(xPropertySet, "Height"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(300)), getProperty<sal_Int32>(xPropertySet, "Height"));
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
@@ -284,7 +284,7 @@ DECLARE_RTFIMPORT_TEST(testN751020, "n751020.rtf")
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(200)), getProperty<sal_Int32>(xParaEnum->nextElement(), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(200)), getProperty<sal_Int32>(xParaEnum->nextElement(), "ParaBottomMargin"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo47326, "fdo47326.rtf")
@@ -477,7 +477,7 @@ DECLARE_RTFIMPORT_TEST(testFdo49501, "fdo49501.rtf")
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
 
     CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStyle, "IsLandscape"));
-    sal_Int32 nExpected(TWIP_TO_MM100(567));
+    sal_Int32 nExpected(convertTwipToMm100(567));
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, "LeftMargin"));
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, "RightMargin"));
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, "TopMargin"));
@@ -511,7 +511,7 @@ DECLARE_RTFIMPORT_TEST(testFdo45190, "fdo45190.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
 
     // but direct one not
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(-100)), getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(-100)), getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo50539, "fdo50539.rtf")
@@ -548,7 +548,7 @@ DECLARE_RTFIMPORT_TEST(testFdo46966, "fdo46966.rtf")
      * xray ThisComponent.StyleFamilies.PageStyles.Default.TopMargin
      */
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(720)), getProperty<sal_Int32>(xPropertySet, "TopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(720)), getProperty<sal_Int32>(xPropertySet, "TopMargin"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo52066, "fdo52066.rtf")
@@ -559,7 +559,7 @@ DECLARE_RTFIMPORT_TEST(testFdo52066, "fdo52066.rtf")
      * xray ThisComponent.DrawPage(0).Size.Height
      */
     uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(19)), xShape->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(19)), xShape->getSize().Height);
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo48033, "fdo48033.rtf")
@@ -956,7 +956,7 @@ DECLARE_RTFIMPORT_TEST(testFdo59419, "fdo59419.rtf")
 DECLARE_RTFIMPORT_TEST(testFdo58076_2, "fdo58076-2.rtf")
 {
     // Position of the picture wasn't correct.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(8345)), getProperty<sal_Int32>(getShape(1), "HoriOrientPosition"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(8345)), getProperty<sal_Int32>(getShape(1), "HoriOrientPosition"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo59953, "fdo59953.rtf")
@@ -1285,7 +1285,7 @@ DECLARE_RTFIMPORT_TEST(testFdo67365, "fdo67365.rtf")
 DECLARE_RTFIMPORT_TEST(testFdo67498, "fdo67498.rtf")
 {
     // Left margin of the default page style wasn't set (was 2000).
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(5954)), getProperty<sal_Int32>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "LeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(5954)), getProperty<sal_Int32>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "LeftMargin"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo47440, "fdo47440.rtf")

@@ -95,8 +95,8 @@ bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
     bool bRet = true;
     switch(nMemberId & ~CONVERT_TWIPS)
     {
-        case MID_FTN_HEIGHT        :     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetHeight());break;
-        case MID_LINE_WEIGHT       :     rVal <<= (sal_Int16)TWIP_TO_MM100_UNSIGNED(aFtnInfo.GetLineWidth());break;
+        case MID_FTN_HEIGHT        :     rVal <<= (sal_Int32)convertTwipToMm100(aFtnInfo.GetHeight());break;
+        case MID_LINE_WEIGHT       :     rVal <<= (sal_Int16)convertTwipToMm100(aFtnInfo.GetLineWidth());break;
         case MID_LINE_COLOR        :     rVal <<= (sal_Int32)aFtnInfo.GetLineColor().GetColor();break;
         case MID_LINE_RELWIDTH     :
         {
@@ -106,8 +106,8 @@ bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         case MID_LINE_ADJUST       :     rVal <<= (sal_Int16)aFtnInfo.GetAdj();break;//text::HorizontalAdjust
-        case MID_LINE_TEXT_DIST    :     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetTopDist());break;
-        case MID_LINE_FOOTNOTE_DIST:     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetBottomDist());break;
+        case MID_LINE_TEXT_DIST    :     rVal <<= (sal_Int32)convertTwipToMm100(aFtnInfo.GetTopDist());break;
+        case MID_LINE_FOOTNOTE_DIST:     rVal <<= (sal_Int32)convertTwipToMm100(aFtnInfo.GetBottomDist());break;
         case MID_FTN_LINE_STYLE    :
         {
             switch ( aFtnInfo.GetLineStyle( ) )
@@ -144,7 +144,7 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
                     bRet = false;
                 else
                 {
-                    nSet32 = MM100_TO_TWIP(nSet32);
+                    nSet32 = convertMm100ToTwip(nSet32);
                     switch(nMemberId & ~CONVERT_TWIPS)
                     {
                         case MID_FTN_HEIGHT:            aFtnInfo.SetHeight(nSet32);    break;
@@ -158,7 +158,7 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
             sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= 0)
-                aFtnInfo.SetLineWidth(MM100_TO_TWIP(nSet));
+                aFtnInfo.SetLineWidth(convertMm100ToTwip(nSet));
             else
                 bRet = false;
         }

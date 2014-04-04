@@ -919,7 +919,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                 {
                     sal_Int32 nVal = 0;
                     aValue >>= nVal;
-                    sal_Int32 nTmp = MM100_TO_TWIP(nVal);
+                    sal_Int32 nTmp = convertMm100ToTwip(nVal);
                     if (nTmp > USHRT_MAX)
                         nTmp = USHRT_MAX;
                     aInfo.SetPosFromLeft( static_cast< sal_uInt16 >(nTmp) );
@@ -1040,7 +1040,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                     sal_uInt32 nPos = rInfo.GetPosFromLeft();
                     if(USHRT_MAX == nPos)
                         nPos = 0;
-                    aRet <<= static_cast < sal_Int32 >(TWIP_TO_MM100_UNSIGNED(nPos));
+                    aRet <<= static_cast < sal_Int32 >(convertTwipToMm100(nPos));
                 }
                 break;
                 case WID_INTERVAL   :
@@ -1395,17 +1395,17 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         //leftmargin
-        sal_Int32 nINT32 = TWIP_TO_MM100(rFmt.GetAbsLSpace());
+        sal_Int32 nINT32 = convertTwipToMm100(rFmt.GetAbsLSpace());
         pData = new PropValData((void*)&nINT32, UNO_NAME_LEFT_MARGIN, ::getCppuType((const sal_Int32*)0));
         aPropertyValues.push_back(pData);
 
         //chartextoffset
-        nINT32 = TWIP_TO_MM100(rFmt.GetCharTextDistance());
+        nINT32 = convertTwipToMm100(rFmt.GetCharTextDistance());
         pData = new PropValData((void*)&nINT32, UNO_NAME_SYMBOL_TEXT_DISTANCE, ::getCppuType((const sal_Int32*)0));
         aPropertyValues.push_back(pData);
 
         //firstlineoffset
-        nINT32 = TWIP_TO_MM100(rFmt.GetFirstLineOffset());
+        nINT32 = convertTwipToMm100(rFmt.GetFirstLineOffset());
         pData = new PropValData((void*)&nINT32, UNO_NAME_FIRST_LINE_OFFSET, ::getCppuType((const sal_Int32*)0));
         aPropertyValues.push_back(pData);
     }
@@ -1439,21 +1439,21 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
         aPropertyValues.push_back(pData);
 
         // ListtabStopPosition
-        sal_Int32 nINT32 = TWIP_TO_MM100(rFmt.GetListtabPos());
+        sal_Int32 nINT32 = convertTwipToMm100(rFmt.GetListtabPos());
         pData = new PropValData( (void*)&nINT32,
                                  UNO_NAME_LISTTAB_STOP_POSITION,
                                  ::getCppuType((const sal_Int32*)0));
         aPropertyValues.push_back(pData);
 
         // FirstLineIndent
-        nINT32 = TWIP_TO_MM100(rFmt.GetFirstLineIndent());
+        nINT32 = convertTwipToMm100(rFmt.GetFirstLineIndent());
         pData = new PropValData( (void*)&nINT32,
                                  UNO_NAME_FIRST_LINE_INDENT,
                                  ::getCppuType((const sal_Int32*)0));
         aPropertyValues.push_back(pData);
 
         // IndentAt
-        nINT32 = TWIP_TO_MM100(rFmt.GetIndentAt());
+        nINT32 = convertTwipToMm100(rFmt.GetIndentAt());
         pData = new PropValData( (void*)&nINT32,
                                  UNO_NAME_INDENT_AT,
                                  ::getCppuType((const sal_Int32*)0));
@@ -1524,7 +1524,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
              Size aSize = rFmt.GetGraphicSize();
             // #i101131#
             // adjust conversion due to type mismatch between <Size> and <awt::Size>
-            awt::Size aAwtSize(TWIP_TO_MM100(aSize.Width()), TWIP_TO_MM100(aSize.Height()));
+            awt::Size aAwtSize(convertTwipToMm100(aSize.Width()), convertTwipToMm100(aSize.Height()));
             pData = new PropValData((void*)&aAwtSize, UNO_NAME_GRAPHIC_SIZE, ::getCppuType((const awt::Size*)0));
             aPropertyValues.push_back(pData);
 
@@ -1785,7 +1785,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     sal_Int32 nValue = 0;
                     pData->aVal >>= nValue;
                     // #i23727# nValue can be negative
-                    aFmt.SetAbsLSpace((sal_uInt16) MM100_TO_TWIP(nValue));
+                    aFmt.SetAbsLSpace((sal_uInt16) convertMm100ToTwip(nValue));
                 }
                 break;
                 case 7: //UNO_NAME_SYMBOL_TEXT_DISTANCE,
@@ -1793,7 +1793,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     sal_Int32 nValue = 0;
                     pData->aVal >>= nValue;
                     if(nValue >= 0)
-                        aFmt.SetCharTextDistance((sal_uInt16) MM100_TO_TWIP(nValue));
+                        aFmt.SetCharTextDistance((sal_uInt16) convertMm100ToTwip(nValue));
                     else
                         bWrongArg = true;
                 }
@@ -1803,7 +1803,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     sal_Int32 nValue = 0;
                     pData->aVal >>= nValue;
                     // #i23727# nValue can be positive
-                    nValue = MM100_TO_TWIP(nValue);
+                    nValue = convertMm100ToTwip(nValue);
                     aFmt.SetFirstLineOffset((short)nValue);
                 }
                 break;
@@ -1851,7 +1851,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 {
                     sal_Int32 nValue = 0;
                     pData->aVal >>= nValue;
-                    nValue = MM100_TO_TWIP(nValue);
+                    nValue = convertMm100ToTwip(nValue);
                     if ( nValue >= 0 )
                     {
                         aFmt.SetListtabPos( nValue );
@@ -1866,7 +1866,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 {
                     sal_Int32 nValue = 0;
                     pData->aVal >>= nValue;
-                    nValue = MM100_TO_TWIP(nValue);
+                    nValue = convertMm100ToTwip(nValue);
                     aFmt.SetFirstLineIndent( nValue );
                 }
                 break;
@@ -1874,7 +1874,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 {
                     sal_Int32 nValue = 0;
                     pData->aVal >>= nValue;
-                    nValue = MM100_TO_TWIP(nValue);
+                    nValue = convertMm100ToTwip(nValue);
                     aFmt.SetIndentAt( nValue );
                 }
                 break;
@@ -2028,8 +2028,8 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     if(pData->aVal.getValueType() == ::getCppuType((awt::Size*)0))
                     {
                          awt::Size* pSize =  (awt::Size*)pData->aVal.getValue();
-                        pSize->Width = MM100_TO_TWIP(pSize->Width);
-                        pSize->Height = MM100_TO_TWIP(pSize->Height);
+                        pSize->Width = convertMm100ToTwip(pSize->Width);
+                        pSize->Height = convertMm100ToTwip(pSize->Height);
                         pSetSize->Width() = pSize->Width;
                         pSetSize->Height() = pSize->Height;
                     }
@@ -2389,7 +2389,7 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
     nAutoDistance = bIsAutomaticWidth ?
                         USHRT_MAX == nItemGutterWidth ? DEF_GUTTER_WIDTH : (sal_Int32)nItemGutterWidth
                         : 0;
-    nAutoDistance = TWIP_TO_MM100(nAutoDistance);
+    nAutoDistance = convertTwipToMm100(nAutoDistance);
 
     TextColumn* pColumns = aTextColumns.getArray();
     const SwColumns& rCols = rFmtCol.GetColumns();
@@ -2399,8 +2399,8 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
 
         pColumns[i].Width = pCol->GetWishWidth();
         nReference += pColumns[i].Width;
-        pColumns[i].LeftMargin =    TWIP_TO_MM100_UNSIGNED(pCol->GetLeft ());
-        pColumns[i].RightMargin =   TWIP_TO_MM100_UNSIGNED(pCol->GetRight());
+        pColumns[i].LeftMargin =    convertTwipToMm100(pCol->GetLeft ());
+        pColumns[i].RightMargin =   convertTwipToMm100(pCol->GetRight());
     }
     if(!aTextColumns.getLength())
         nReference = USHRT_MAX;
@@ -2509,7 +2509,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
             aValue >>= nTmp;
             if(nTmp < 0)
                 throw IllegalArgumentException();
-            nSepLineWidth = MM100_TO_TWIP(nTmp);
+            nSepLineWidth = convertMm100ToTwip(nTmp);
         }
         break;
         case WID_TXTCOL_LINE_COLOR:
@@ -2578,7 +2578,7 @@ Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
     switch(pEntry->nWID)
     {
         case WID_TXTCOL_LINE_WIDTH:
-            aRet <<= static_cast < sal_Int32 >(TWIP_TO_MM100(nSepLineWidth));
+            aRet <<= static_cast < sal_Int32 >(convertTwipToMm100(nSepLineWidth));
         break;
         case WID_TXTCOL_LINE_COLOR:
             aRet <<= nSepLineColor;

@@ -21,7 +21,7 @@
 
 #include <bordertest.hxx>
 
-#define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+#define convertTwipToMm100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
 class Test : public SwModelTestBase
 {
@@ -209,7 +209,7 @@ DECLARE_WW8IMPORT_TEST(testPageBorder, "page-border.doc")
 {
     // Page border was missing (LineWidth was 0), due to wrong interpretation of pgbApplyTo.
     table::BorderLine2 aBorder = getProperty<table::BorderLine2>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "TopBorder");
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(TWIP_TO_MM100(6 * 20)), aBorder.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(convertTwipToMm100(6 * 20)), aBorder.LineWidth);
 }
 
 DECLARE_WW8IMPORT_TEST(testN823651, "n823651.doc")

@@ -136,9 +136,9 @@ static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSv
     rSvxLine.SetColor(Color(rLine.Color));
 
     rSvxLine.GuessLinesWidths( table::BorderLineStyle::NONE,
-                                MM100_TO_TWIP( rLine.OuterLineWidth ),
-                                MM100_TO_TWIP( rLine.InnerLineWidth ),
-                                MM100_TO_TWIP( rLine.LineDistance ) );
+                                convertMm100ToTwip( rLine.OuterLineWidth ),
+                                convertMm100ToTwip( rLine.InnerLineWidth ),
+                                convertMm100ToTwip( rLine.LineDistance ) );
 
     bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
     return bRet;
@@ -185,7 +185,7 @@ static void lcl_SetSpecialProperty(SwFrmFmt* pFmt,
                 sal_Int32 nWidth = 0;
                 aValue >>= nWidth;
                 aSz.SetWidthPercent(0);
-                aSz.SetWidth ( MM100_TO_TWIP ( nWidth ) );
+                aSz.SetWidth ( convertMm100ToTwip ( nWidth ) );
             }
             else if(FN_TABLE_RELATIVE_WIDTH == pEntry->nWID)
             {
@@ -1419,7 +1419,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
                             sal_Int32 nHeight = 0;
                             aValue >>= nHeight;
                              Size aSz(aFrmSize.GetSize());
-                            aSz.Height() = MM100_TO_TWIP(nHeight);
+                            aSz.Height() = convertMm100ToTwip(nHeight);
                             aFrmSize.SetSize(aSz);
                         }
                         pDoc->SetAttr(aFrmSize, *pLn->ClaimFrmFmt());
@@ -1475,7 +1475,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
                         aRet.setValue(&bTmp, ::getCppuBooleanType());
                     }
                     else
-                        aRet <<= (sal_Int32)(TWIP_TO_MM100(rSize.GetSize().Height()));
+                        aRet <<= (sal_Int32)(convertTwipToMm100(rSize.GetSize().Height()));
                 }
                 break;
 
@@ -3235,7 +3235,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     aBoxInfo.SetLine(aVertLine.isEmpty() ? 0 : &aVertLine, BOXINFO_LINE_VERT);
                     aBoxInfo.SetValid(VALID_VERT, aBorder.IsVerticalLineValid);
 
-                    aBox.SetDistance((sal_uInt16)MM100_TO_TWIP(aBorder.Distance));
+                    aBox.SetDistance((sal_uInt16)convertMm100ToTwip(aBorder.Distance));
                     aBoxInfo.SetValid(VALID_DISTANCE, aBorder.IsDistanceValid);
 
                     aSet.Put(aBox);
@@ -3256,10 +3256,10 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                         !aTableBorderDistances.IsBottomDistanceValid ))
                         break;
 
-                    sal_uInt16 nLeftDistance =     MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.LeftDistance);
-                    sal_uInt16 nRightDistance =    MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.RightDistance);
-                    sal_uInt16 nTopDistance =      MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.TopDistance);
-                    sal_uInt16 nBottomDistance =   MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.BottomDistance);
+                    sal_uInt16 nLeftDistance =     convertMm100ToTwip( aTableBorderDistances.LeftDistance);
+                    sal_uInt16 nRightDistance =    convertMm100ToTwip( aTableBorderDistances.RightDistance);
+                    sal_uInt16 nTopDistance =      convertMm100ToTwip( aTableBorderDistances.TopDistance);
+                    sal_uInt16 nBottomDistance =   convertMm100ToTwip( aTableBorderDistances.BottomDistance);
                     SwDoc* pDoc = pFmt->GetDoc();
                     SwTable* pTable = SwTable::FindTable( pFmt );
                     SwTableLines &rLines = pTable->GetTabLines();
@@ -3434,7 +3434,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                         aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(VALID_HORI);
                         aTableBorder.VerticalLine           = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetVert(), true);
                         aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(VALID_VERT);
-                        aTableBorder.Distance               = TWIP_TO_MM100_UNSIGNED( rBox.GetDistance() );
+                        aTableBorder.Distance               = convertTwipToMm100( rBox.GetDistance() );
                         aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(VALID_DISTANCE);
                         aRet <<= aTableBorder;
                     }
@@ -3453,7 +3453,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                         aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(VALID_HORI);
                         aTableBorder.VerticalLine           = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetVert(), true);
                         aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(VALID_VERT);
-                        aTableBorder.Distance               = TWIP_TO_MM100_UNSIGNED( rBox.GetDistance() );
+                        aTableBorder.Distance               = convertTwipToMm100( rBox.GetDistance() );
                         aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(VALID_DISTANCE);
                         aRet <<= aTableBorder;
                     }
@@ -3483,25 +3483,25 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                             const SvxBoxItem& rBox = pBoxFmt->GetBox();
                             if( bFirst )
                             {
-                                nLeftDistance =     TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_LEFT   ));
-                                nRightDistance =    TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_RIGHT  ));
-                                nTopDistance =      TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_TOP    ));
-                                nBottomDistance =   TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_BOTTOM ));
+                                nLeftDistance =     convertTwipToMm100( rBox.GetDistance( BOX_LINE_LEFT   ));
+                                nRightDistance =    convertTwipToMm100( rBox.GetDistance( BOX_LINE_RIGHT  ));
+                                nTopDistance =      convertTwipToMm100( rBox.GetDistance( BOX_LINE_TOP    ));
+                                nBottomDistance =   convertTwipToMm100( rBox.GetDistance( BOX_LINE_BOTTOM ));
                                 bFirst = false;
                             }
                             else
                             {
                                 if( aTableBorderDistances.IsLeftDistanceValid &&
-                                    nLeftDistance != TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_LEFT   )))
+                                    nLeftDistance != convertTwipToMm100( rBox.GetDistance( BOX_LINE_LEFT   )))
                                     aTableBorderDistances.IsLeftDistanceValid = sal_False;
                                 if( aTableBorderDistances.IsRightDistanceValid &&
-                                    nRightDistance != TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_RIGHT   )))
+                                    nRightDistance != convertTwipToMm100( rBox.GetDistance( BOX_LINE_RIGHT   )))
                                     aTableBorderDistances.IsRightDistanceValid = sal_False;
                                 if( aTableBorderDistances.IsTopDistanceValid &&
-                                    nTopDistance != TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_TOP   )))
+                                    nTopDistance != convertTwipToMm100( rBox.GetDistance( BOX_LINE_TOP   )))
                                     aTableBorderDistances.IsTopDistanceValid = sal_False;
                                 if( aTableBorderDistances.IsBottomDistanceValid &&
-                                    nBottomDistance != TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_BOTTOM   )))
+                                    nBottomDistance != convertTwipToMm100( rBox.GetDistance( BOX_LINE_BOTTOM   )))
                                     aTableBorderDistances.IsBottomDistanceValid = sal_False;
                             }
 

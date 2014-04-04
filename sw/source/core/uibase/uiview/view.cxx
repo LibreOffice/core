@@ -1269,35 +1269,35 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
             if ( pValue->Name == "ViewLeft" )
             {
                pValue->Value >>= nX;
-               nX = MM100_TO_TWIP( nX );
+               nX = convertMm100ToTwip( nX );
             }
             else if ( pValue->Name == "ViewTop" )
             {
                pValue->Value >>= nY;
-               nY = MM100_TO_TWIP( nY );
+               nY = convertMm100ToTwip( nY );
             }
             else if ( pValue->Name == "VisibleLeft" )
             {
                pValue->Value >>= nLeft;
-               nLeft = MM100_TO_TWIP( nLeft );
+               nLeft = convertMm100ToTwip( nLeft );
                bGotVisibleLeft = sal_True;
             }
             else if ( pValue->Name == "VisibleTop" )
             {
                pValue->Value >>= nTop;
-               nTop = MM100_TO_TWIP( nTop );
+               nTop = convertMm100ToTwip( nTop );
                bGotVisibleTop = sal_True;
             }
             else if ( pValue->Name == "VisibleRight" )
             {
                pValue->Value >>= nRight;
-               nRight = MM100_TO_TWIP( nRight );
+               nRight = convertMm100ToTwip( nRight );
                bGotVisibleRight = sal_True;
             }
             else if ( pValue->Name == "VisibleBottom" )
             {
                pValue->Value >>= nBottom;
-               nBottom = MM100_TO_TWIP( nBottom );
+               nBottom = convertMm100ToTwip( nBottom );
                bGotVisibleBottom = sal_True;
             }
             else if ( pValue->Name == "ZoomType" )
@@ -1471,27 +1471,27 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     pValue++;nIndex++;
 
     pValue->Name = "ViewLeft";
-    pValue->Value <<= TWIP_TO_MM100 ( rRect.Left() );
+    pValue->Value <<= convertTwipToMm100 ( rRect.Left() );
     pValue++;nIndex++;
 
     pValue->Name = "ViewTop";
-    pValue->Value <<= TWIP_TO_MM100 ( rRect.Top() );
+    pValue->Value <<= convertTwipToMm100 ( rRect.Top() );
     pValue++;nIndex++;
 
     pValue->Name = "VisibleLeft";
-    pValue->Value <<= TWIP_TO_MM100 ( rVis.Left() );
+    pValue->Value <<= convertTwipToMm100 ( rVis.Left() );
     pValue++;nIndex++;
 
     pValue->Name = "VisibleTop";
-    pValue->Value <<= TWIP_TO_MM100 ( rVis.Top() );
+    pValue->Value <<= convertTwipToMm100 ( rVis.Top() );
     pValue++;nIndex++;
 
     pValue->Name = "VisibleRight";
-    pValue->Value <<= TWIP_TO_MM100 ( bBrowse ? LONG_MIN : rVis.Right() );
+    pValue->Value <<= convertTwipToMm100 ( bBrowse ? LONG_MIN : rVis.Right() );
     pValue++;nIndex++;
 
     pValue->Name = "VisibleBottom";
-    pValue->Value <<= TWIP_TO_MM100 ( bBrowse ? LONG_MIN : rVis.Bottom() );
+    pValue->Value <<= convertTwipToMm100 ( bBrowse ? LONG_MIN : rVis.Bottom() );
     pValue++;nIndex++;
 
     pValue->Name = "ZoomType";
