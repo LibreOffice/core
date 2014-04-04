@@ -21,7 +21,10 @@
 
 
 
-ScFormEditData::ScFormEditData() : formula::FormEditData()
+ScFormEditData::ScFormEditData()
+    : formula::FormEditData()
+    , pInputHandler(NULL)
+    , pScDocShell(NULL)
 {
     Reset();
 }
