@@ -357,8 +357,8 @@ namespace writerfilter {
                 OUString getFontName(int nIndex);
                 /// Return the style name of an RTF style index.
                 OUString getStyleName(int nIndex);
-                /// Return the encoding associated with a font name.
-                rtl_TextEncoding getEncoding(const OUString& aFontName);
+                /// Return the encoding associated with a font index.
+                rtl_TextEncoding getEncoding(int nFontIndex);
                 /// Get the default parser state.
                 RTFParserState& getDefaultState();
                 oox::GraphicHelper& getGraphicHelper();
@@ -422,8 +422,8 @@ namespace writerfilter {
                 /// Read by RTF_PARD.
                 RTFParserState m_aDefaultState;
                 bool m_bSkipUnknown;
-                /// Font name <-> encoding map, *not* part of the parser state
-                std::map<OUString, rtl_TextEncoding> m_aFontEncodings;
+                /// Font index <-> encoding map, *not* part of the parser state
+                std::map<int, rtl_TextEncoding> m_aFontEncodings;
                 /// Font index <-> name map.
                 std::map<int, OUString> m_aFontNames;
                 /// Maps the non-continuous font indexes to the continuous dmapper indexes.
@@ -516,7 +516,7 @@ namespace writerfilter {
                 int m_nCurrentFontIndex;
                 /// Used only during font table parsing till we don't know the font name.
                 int m_nCurrentEncoding;
-                /// Used only before font table parsing.
+                /// Raw default font index, use getFont() on it to get a real one.
                 int m_nDefaultFontIndex;
 
                 RTFReferenceTable::Entries_t m_aStyleTableEntries;

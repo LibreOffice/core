@@ -1619,6 +1619,18 @@ DECLARE_RTFIMPORT_TEST(testDprectAnchor, "dprect-anchor.rtf")
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo76628, "fdo76628.rtf")
+{
+    OUString aExpected("\xd0\x9e\xd0\x91\xd0\xa0\xd0\x90\xd0\x97\xd0\x95\xd0\xa6", 14, RTL_TEXTENCODING_UTF8);
+    // Should be 'SAMPLE' in Russian, was garbage.
+    getParagraph(1, aExpected);
+
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
+    OUString aExpectedHeader("\xd0\x9f\xd0\xbe\xd0\xb4\xd0\xb3\xd0\xbe\xd1\x82\xd0\xbe\xd0\xb2\xd0\xbb\xd0\xb5\xd0\xbd\xd0\xbe", 24, RTL_TEXTENCODING_UTF8);
+    // Should be 'prepared' in Russian, was garbage.
+    getParagraphOfText(1, xHeaderText, aExpectedHeader);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

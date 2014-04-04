@@ -380,6 +380,7 @@ void RTFDocumentImpl::resolveSubstream(sal_Size nPos, Id nId, OUString& rIgnoreF
         pImpl->setAuthorInitials(m_aAuthorInitials);
         m_aAuthorInitials = "";
     }
+    pImpl->m_nDefaultFontIndex = m_nDefaultFontIndex;
     pImpl->seek(nPos);
     SAL_INFO("writerfilter", "substream start");
     Mapper().substream(nId, pImpl);
@@ -615,17 +616,17 @@ sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
         return m_pSuperstream->getColorTable(nIndex);
 }
 
-rtl_TextEncoding RTFDocumentImpl::getEncoding(const OUString& aFontName)
+rtl_TextEncoding RTFDocumentImpl::getEncoding(int nFontIndex)
 {
     if (!m_pSuperstream)
     {
-        std::map<OUString, rtl_TextEncoding>::iterator it = m_aFontEncodings.find(aFontName);
+        std::map<int, rtl_TextEncoding>::iterator it = m_aFontEncodings.find(nFontIndex);
         if (it != m_aFontEncodings.end())
             return it->second;
         return msfilter::util::getBestTextEncodingFromLocale(Application::GetSettings().GetLanguageTag().getLocale());
     }
     else
-        return m_pSuperstream->getEncoding(aFontName);
+        return m_pSuperstream->getEncoding(nFontIndex);
 }
 
 OUString RTFDocumentImpl::getFontName(int nIndex)
@@ -1086,7 +1087,7 @@ void RTFDocumentImpl::text(OUString& rString)
                                 m_aFontNames[m_nCurrentFontIndex] = aName;
                                 if (m_nCurrentEncoding > 0)
                                 {
-                                    m_aFontEncodings[aName] = m_nCurrentEncoding;
+                                    m_aFontEncodings[m_nCurrentFontIndex] = m_nCurrentEncoding;
                                     m_nCurrentEncoding = 0;
                                 }
                                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Font_name, RTFValue::Pointer_t(new RTFValue(aName)));
@@ -2471,9 +2472,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PLAIN:
             {
                 m_aStates.top().aCharacterSprms = getDefaultState().aCharacterSprms;
-                RTFValue::Pointer_t pValue = lcl_getNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_rFonts, NS_ooxml::LN_CT_Fonts_ascii);
-                if (pValue)
-                    m_aStates.top().nCurrentEncoding = getEncoding(pValue->getString());
+                m_aStates.top().nCurrentEncoding = getEncoding(getFontIndex(m_nDefaultFontIndex));
                 m_aStates.top().aCharacterAttributes = getDefaultState().aCharacterAttributes;
             }
             break;
@@ -3142,10 +3141,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             else
             {
-                int nFontIndex = getFontIndex(nParam);
-                RTFValue::Pointer_t pValue(new RTFValue(getFontName(nFontIndex)));
+                m_nCurrentFontIndex = getFontIndex(nParam);
+                RTFValue::Pointer_t pValue(new RTFValue(getFontName(m_nCurrentFontIndex)));
                 lcl_putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_rFonts, nSprm, pValue);
-                m_aStates.top().nCurrentEncoding = getEncoding(getFontName(nFontIndex));
+                m_aStates.top().nCurrentEncoding = getEncoding(m_nCurrentFontIndex);
             }
             break;
         case RTF_RED:
