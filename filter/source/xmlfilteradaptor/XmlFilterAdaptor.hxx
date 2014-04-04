@@ -76,7 +76,10 @@ protected:
 public:
 
     XmlFilterAdaptor( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext)
-        : mxContext( rxContext ) {}
+        : mxContext(rxContext)
+        , meType(FILTER_IMPORT)
+    {
+    }
 
     virtual ~XmlFilterAdaptor() {}
 
