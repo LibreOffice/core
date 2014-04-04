@@ -1184,7 +1184,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                         case SUBCOL_SECT: pCol = &SwViewOption::GetSectionBoundColor(); break;
                     }
 
-                    if ( pOut->GetFillColor() != *pCol )
+                    if (pCol && pOut->GetFillColor() != *pCol)
                         pOut->SetFillColor( *pCol );
                     pOut->DrawRect( rLRect.SVRect() );
 
