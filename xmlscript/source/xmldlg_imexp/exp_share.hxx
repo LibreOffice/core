@@ -163,7 +163,7 @@ public:
     void readDataAwareAttr(
         OUString const & rAttrName );
     inline void addBoolAttr(
-        OUString const & rAttrName, sal_Bool bValue )
+        OUString const & rAttrName, bool bValue )
         { addAttribute( rAttrName, OUString::boolean(bValue) ); }
     void addNumberFormatAttr(
         css::uno::Reference< css::beans::XPropertySet >
@@ -254,7 +254,7 @@ inline void ElementDescriptor::read<sal_Bool>(
         _xPropState->getPropertyState( propName ))
     {
         css::uno::Any a( _xProps->getPropertyValue( propName ) );
-        sal_Bool v = sal_Bool();
+        bool v;
         if (a >>= v)
             addAttribute( attrName, OUString::boolean(v) );
         else

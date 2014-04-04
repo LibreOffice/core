@@ -1037,7 +1037,7 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
     addAttribute( XMLNS_DIALOGS_PREFIX ":id", * reinterpret_cast< const OUString * >( a.getValue() ) );
     readShortAttr( "TabIndex", XMLNS_DIALOGS_PREFIX ":tab-index" );
 
-    sal_Bool bEnabled = sal_False;
+    bool bEnabled = false;
     if (_xProps->getPropertyValue( "Enabled" ) >>= bEnabled)
     {
         if (! bEnabled)
@@ -1050,7 +1050,7 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
         SAL_WARN( "xmlscript.xmldlg", "unexpected property type for \"Enabled\": not bool!" );
     }
 
-    sal_Bool bVisible = sal_True;
+    bool bVisible = true;
     if (supportVisible) try
     {
         if (_xProps->getPropertyValue("EnableVisible" ) >>= bVisible)

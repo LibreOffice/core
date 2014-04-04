@@ -255,7 +255,7 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
     readImagePositionAttr( "ImagePosition", XMLNS_DIALOGS_PREFIX ":image-position" );
     readBoolAttr( "MultiLine", XMLNS_DIALOGS_PREFIX ":multiline" );
 
-    sal_Bool bTriState = sal_False;
+    bool bTriState = false;
     if ((readProp( "TriState" ) >>= bTriState) && bTriState)
     {
         addAttribute( XMLNS_DIALOGS_PREFIX ":tristate", "true" );
