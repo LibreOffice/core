@@ -4442,6 +4442,32 @@ void WW8Export::Out_SwFmtTableBox( ww::bytes& rO, const SvxBoxItem * pBox )
     }
 }
 
+void WW8Export::Out_CellRangeBorders( const SvxBoxItem * pBox, sal_uInt8 nStart,
+       sal_uInt8 nLimit )
+{
+    static const sal_uInt16 aBorders[] =
+    {
+        BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+    };
+
+    for( int i = 0; i < 4; ++i )
+    {
+        const SvxBorderLine* pLn = 0;
+        if (pBox != NULL)
+            pLn = pBox->GetLine( aBorders[i] );
+        if (!pLn)
+            continue;
+
+        InsUInt16( NS_sprm::LN_TSetBrc );
+        pO->push_back( 11 );
+        pO->push_back( nStart );
+        pO->push_back( nLimit );
+        pO->push_back( 1<<i );
+        WW8_BRCVer9 aBrcVer9 = TranslateBorderLine( *pLn, 0, false );
+        pO->insert( pO->end(), aBrcVer9.aBits1, aBrcVer9.aBits2+4 );
+    }
+}
+
 void WW8AttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
     // Fly um Grafik-> keine Umrandung hier, da

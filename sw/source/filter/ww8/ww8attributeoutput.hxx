@@ -471,6 +471,9 @@ protected:
     /// Output the bold etc. attributes, the Complex Text Layout version
     void OutputWW8AttributeCTL( sal_uInt8 nId, bool bVal );
 
+    void TableCellBorders(
+        ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
+
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_WW8ATTRIBUTEOUTPUT_HXX

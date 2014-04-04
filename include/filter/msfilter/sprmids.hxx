@@ -252,6 +252,7 @@ namespace NS_sprm {
     const sal_uInt16 LN_TFBiDi = 0x560b;
     const sal_uInt16 LN_THTMLProps = 0x740c;
     const sal_uInt16 LN_TSetBrc80 = 0xd620;
+    const sal_uInt16 LN_TSetBrc = 0xd62f;
     const sal_uInt16 LN_TInsert = 0x7621;
     const sal_uInt16 LN_TDelete = 0x5622;
     const sal_uInt16 LN_TDxaCol = 0x7623;
