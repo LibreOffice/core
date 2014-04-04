@@ -102,6 +102,15 @@ static void updateTilesPerSecond(UILabel *label)
     return [CATiledLayer class];
 }
 
+static bool tileMatches(const char *spec, CGRect bb)
+{
+    int x, y;
+
+    return (sscanf(spec, "%d,%d", &x, &y) == 2 &&
+            x == (int) (bb.origin.x / bb.size.width) &&
+            y == (int) (bb.origin.y / bb.size.height));
+}
+
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
     // Even if I set the CATL's tileSize to 512x512 above, this is
@@ -129,10 +138,7 @@ static void updateTilesPerSecond(UILabel *label)
     // as needed at the current zoom levels. I keep thinking about
     // "pixels" incorrectly.
 
-    volatile static int number = 0;
-    int thisTile = number++;
-
-    if (!getenv("DRAW_ONLY_TILE") || thisTile == atoi(getenv("DRAW_ONLY_TILE")))
+    if (!getenv("DRAW_ONLY_TILE") || tileMatches(getenv("DRAW_ONLY_TILE"), bb))
         touch_lo_draw_tile(ctx,
                            tileSize.width, tileSize.height,
                            CGPointMake(bb.origin.x/self.scale, bb.origin.y/self.scale),
@@ -157,10 +163,10 @@ static void updateTilesPerSecond(UILabel *label)
     }
 
     if (getenv("DRAW_TILE_NUMBERS")) {
-        // Also draw the order number of the tile;)
+        // Also draw the coordinates of the tile;)
         CGContextSaveGState(ctx);
         float scale = 1/[((View *) [self superview]) zoomScale];
-        NSString *s = [NSString stringWithFormat:@"%d", thisTile];
+        NSString *s = [NSString stringWithFormat:@"%d,%d", (int) (bb.origin.x / bb.size.width), (int) (bb.origin.y / bb.size.height)];
         CFAttributedStringRef as = CFAttributedStringCreate(NULL, (__bridge CFStringRef)(s), NULL);
         CTLineRef l = CTLineCreateWithAttributedString(as);
         CGContextTranslateCTM(ctx, bb.origin.x, bb.origin.y);
