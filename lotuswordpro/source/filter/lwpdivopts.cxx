@@ -66,7 +66,12 @@
 #include "lwpfilehdr.hxx"
 
 LwpHyphenOptions::LwpHyphenOptions()
-{}
+    : m_nFlags(0)
+    , m_nZoneBefore(0)
+    , m_nZoneAfter(0)
+    , m_nMaxLines(0)
+{
+}
 
 LwpHyphenOptions::~LwpHyphenOptions()
 {}
