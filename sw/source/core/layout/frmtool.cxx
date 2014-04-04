@@ -2362,7 +2362,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
         do
         {
             pSav = pTmp;
-            pTmp = pSav->GetUpper() ? pSav->GetUpper()->FindSctFrm() : NULL;
+            pTmp = (pSav && pSav->GetUpper()) ? pSav->GetUpper()->FindSctFrm() : NULL;
         } while ( pTmp != pSect );
     }
 
