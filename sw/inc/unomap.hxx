@@ -220,6 +220,7 @@
 #define WID_TOC_BOOKMARK                        1061
 #define WID_TOC_NEWLINE                         1062
 #define WID_TOC_PARAGRAPH_OUTLINE_LEVEL         1063
+#define WID_INDEX_ENTRY_TYPE                    1064
 
 // Text document
 #define WID_DOC_CHAR_COUNT                      1000
