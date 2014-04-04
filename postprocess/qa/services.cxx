@@ -48,7 +48,7 @@ void ServicesTest::test()
         }
         SAL_WARN(
                 "postprocess.cppunit",
-                "trying \"" << s[i] << "\"");
+                "trying (index: " << i << ") \"" << s[i] << "\"");
         Reference< XServiceTypeDescription2 > xDesc(
             xTypeManager->getByHierarchicalName(s[i]), UNO_QUERY_THROW);
         Sequence< Reference< XServiceConstructorDescription > > xseq = xDesc->getConstructors();
@@ -56,16 +56,18 @@ void ServicesTest::test()
             if (!xseq[c]->getParameters().hasElements())
                 try
                 {
-                    CPPUNIT_ASSERT_MESSAGE(
-                        OUStringToOString(s[i], RTL_TEXTENCODING_UTF8).getStr(),
-                        ((xseq[c]->isDefaultConstructor()
-                          ? (m_xContext->getServiceManager()
-                             ->createInstanceWithContext(s[i], m_xContext))
-                          : (m_xContext->getServiceManager()
-                             ->createInstanceWithArgumentsAndContext(
-                                 s[i], css::uno::Sequence<css::uno::Any>(),
-                                 m_xContext)))
-                         .is()));
+                    OString message = OUStringToOString(s[i], RTL_TEXTENCODING_UTF8);
+                    sal_Bool bDefConstructor = xseq[c]->isDefaultConstructor();
+                    Reference< css::lang::XMultiComponentFactory > serviceManager = m_xContext->getServiceManager();
+                    Reference< XInterface > instance;
+
+                    if( bDefConstructor )
+                        instance = serviceManager->createInstanceWithContext(s[i], m_xContext);
+                    else
+                        instance = serviceManager->createInstanceWithArgumentsAndContext(
+                                                    s[i], css::uno::Sequence<css::uno::Any>(), m_xContext);
+
+                    CPPUNIT_ASSERT_MESSAGE( message.getStr(), instance.is() );
                 }
                 catch(const Exception & e)
                 {
