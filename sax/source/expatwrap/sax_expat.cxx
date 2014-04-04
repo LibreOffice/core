@@ -255,7 +255,7 @@ public:
                                         const XML_Char *systemId,
                                         const XML_Char *publicId);
 
-    int static callbackExternalEntityRef(   XML_Parser parser,
+    bool static callbackExternalEntityRef(   XML_Parser parser,
                                             const XML_Char *openEntityNames,
                                             const XML_Char *base,
                                             const XML_Char *systemId,
@@ -718,7 +718,7 @@ void SaxExpatParser_Impl::parse( )
             break;
         }
 
-        sal_Bool bContinue = ( XML_Parse( getEntity().pParser ,
+        bool bContinue = ( XML_Parse( getEntity().pParser ,
                                                 (const char *) seqOut.getArray(),
                                                 nRead,
                                                 0 ) != XML_STATUS_ERROR );
@@ -874,12 +874,12 @@ void SaxExpatParser_Impl::callbackNotationDecl(
 
 
 
-int SaxExpatParser_Impl::callbackExternalEntityRef(
+bool SaxExpatParser_Impl::callbackExternalEntityRef(
     XML_Parser parser, const XML_Char *context,
     SAL_UNUSED_PARAMETER const XML_Char * /*base*/, const XML_Char *systemId,
     const XML_Char *publicId)
 {
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
     InputSource source;
     SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)XML_GetUserData( parser ));
 
@@ -895,7 +895,7 @@ int SaxExpatParser_Impl::callbackExternalEntityRef(
         catch( const SAXParseException & e )
         {
             pImpl->exception = e;
-            bOK = sal_False;
+            bOK = false;
         }
         catch( const SAXException & e )
         {
@@ -905,7 +905,7 @@ int SaxExpatParser_Impl::callbackExternalEntityRef(
                 pImpl->rDocumentLocator->getSystemId(),
                 pImpl->rDocumentLocator->getLineNumber(),
                 pImpl->rDocumentLocator->getColumnNumber() );
-            bOK = sal_False;
+            bOK = false;
         }
     }
 
@@ -913,7 +913,7 @@ int SaxExpatParser_Impl::callbackExternalEntityRef(
         entity.pParser = XML_ExternalEntityParserCreate( parser , context, 0 );
         if( ! entity.pParser )
         {
-            return sal_False;
+            return false;
         }
 
         entity.converter.setInputStream( entity.structSource.aInputStream );
@@ -925,17 +925,17 @@ int SaxExpatParser_Impl::callbackExternalEntityRef(
         catch( const SAXParseException & e )
         {
             pImpl->exception = e;
-            bOK = sal_False;
+            bOK = false;
         }
         catch( const IOException &e )
         {
             pImpl->exception.WrappedException <<= e;
-            bOK = sal_False;
+            bOK = false;
         }
         catch( const css::uno::RuntimeException &e )
         {
             pImpl->exception.WrappedException <<=e;
-            bOK = sal_False;
+            bOK = false;
         }
 
         pImpl->popEntity();

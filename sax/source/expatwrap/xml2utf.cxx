@@ -104,7 +104,7 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
                 // ( otherwise the expat-Parser will crash )
                 // This must be done after decoding !
                 // ( e.g. Files decoded in ucs-4 cannot be read properly )
-                m_bStarted = sal_True;
+                m_bStarted = true;
                 removeEncoding( seq );
             }
             nRead = seq.getLength();
@@ -170,31 +170,31 @@ void XMLFile2UTFConverter::removeEncoding( Sequence<sal_Int8> &seq )
 }
 
 // Checks, if enough data has been accumulated to recognize the encoding
-sal_Bool XMLFile2UTFConverter::isEncodingRecognizable( const Sequence< sal_Int8 > &seq)
+bool XMLFile2UTFConverter::isEncodingRecognizable( const Sequence< sal_Int8 > &seq)
 {
     const sal_Int8 *pSource = seq.getConstArray();
-    sal_Bool bCheckIfFirstClosingBracketExsists = sal_False;
+    bool bCheckIfFirstClosingBracketExsists = false;
 
     if( seq.getLength() < 8 ) {
         // no recognition possible, when less than 8 bytes are available
-        return sal_False;
+        return false;
     }
 
     if( ! strncmp( (const char * ) pSource , "<?xml" , 4 ) ) {
         // scan if the <?xml tag finishes within this buffer
-        bCheckIfFirstClosingBracketExsists = sal_True;
+        bCheckIfFirstClosingBracketExsists = true;
     }
     else if( ('<' == pSource[0] || '<' == pSource[2] ) &&
              ( ('?' == pSource[4] || '?' == pSource[6] ) ) )
     {
         // check for utf-16
-        bCheckIfFirstClosingBracketExsists = sal_True;
+        bCheckIfFirstClosingBracketExsists = true;
     }
     else if( ( '<' == pSource[1] || '<' == pSource[3] ) &&
              ( '?' == pSource[5] || '?' == pSource[7] ) )
     {
         // check for
-        bCheckIfFirstClosingBracketExsists = sal_True;
+        bCheckIfFirstClosingBracketExsists = true;
     }
 
     if( bCheckIfFirstClosingBracketExsists )
@@ -204,24 +204,24 @@ sal_Bool XMLFile2UTFConverter::isEncodingRecognizable( const Sequence< sal_Int8 
             // whole <?xml tag is valid
             if( '>' == pSource[ i ] )
             {
-                return sal_True;
+                return true;
             }
         }
-        return sal_False;
+        return false;
     }
 
     // No <? tag in front, no need for a bigger buffer
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
+bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
 {
     const sal_uInt8 *pSource = reinterpret_cast<const sal_uInt8*>( seq.getConstArray() );
-    sal_Bool bReturn = sal_True;
+    bool bReturn = true;
 
     if( seq.getLength() < 4 ) {
         // no recognition possible, when less than 4 bytes are available
-        return sal_False;
+        return false;
     }
 
     // first level : detect possible file formats
@@ -322,7 +322,7 @@ sal_Bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
     else {
         // other
         // UTF8 is directly recognized by the parser.
-        bReturn = sal_False;
+        bReturn = false;
     }
 
     return bReturn;
@@ -353,8 +353,8 @@ Text2UnicodeConverter::Text2UnicodeConverter( const OString &sEncoding )
     rtl_TextEncoding encoding = rtl_getTextEncodingFromMimeCharset( sEncoding.getStr() );
     if( RTL_TEXTENCODING_DONTKNOW == encoding )
     {
-        m_bCanContinue = sal_False;
-        m_bInitialized = sal_False;
+        m_bCanContinue = false;
+        m_bInitialized = false;
     }
     else
     {
@@ -373,8 +373,8 @@ Text2UnicodeConverter::~Text2UnicodeConverter()
 
 void Text2UnicodeConverter::init( rtl_TextEncoding encoding )
 {
-    m_bCanContinue = sal_True;
-    m_bInitialized = sal_True;
+    m_bCanContinue = true;
+    m_bInitialized = true;
 
     m_convText2Unicode  = rtl_createTextToUnicodeConverter(encoding);
     m_contextText2Unicode = rtl_createTextToUnicodeContext( m_convText2Unicode );
@@ -551,8 +551,8 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
 
 void Unicode2TextConverter::init( rtl_TextEncoding encoding )
 {
-    m_bCanContinue = sal_True;
-    m_bInitialized = sal_True;
+    m_bCanContinue = true;
+    m_bInitialized = true;
 
     m_convUnicode2Text  = rtl_createUnicodeToTextConverter( encoding );
     m_contextUnicode2Text = rtl_createUnicodeToTextContext( m_convUnicode2Text );

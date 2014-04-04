@@ -29,15 +29,15 @@ public:
     ~Text2UnicodeConverter();
 
     ::com::sun::star::uno::Sequence < sal_Unicode > convert( const ::com::sun::star::uno::Sequence<sal_Int8> & );
-    sal_Bool canContinue() {  return m_bCanContinue; }
+    bool canContinue() {  return m_bCanContinue; }
 
 private:
     void init( rtl_TextEncoding encoding );
 
     rtl_TextToUnicodeConverter  m_convText2Unicode;
     rtl_TextToUnicodeContext    m_contextText2Unicode;
-    sal_Bool                    m_bCanContinue;
-    sal_Bool                    m_bInitialized;
+    bool                    m_bCanContinue;
+    bool                    m_bInitialized;
     rtl_TextEncoding            m_rtlEncoding;
     ::com::sun::star::uno::Sequence<sal_Int8> m_seqSource;
 };
@@ -58,15 +58,15 @@ public:
             return convert( s.getStr() , s.getLength() );
         }
     ::com::sun::star::uno::Sequence<sal_Int8> convert( const sal_Unicode * , sal_Int32 nLength );
-    sal_Bool canContinue() {  return m_bCanContinue; }
+    bool canContinue() {  return m_bCanContinue; }
 
 private:
     void init( rtl_TextEncoding encoding );
 
     rtl_UnicodeToTextConverter  m_convUnicode2Text;
     rtl_UnicodeToTextContext    m_contextUnicode2Text;
-    sal_Bool                    m_bCanContinue;
-    sal_Bool                    m_bInitialized;
+    bool                    m_bCanContinue;
+    bool                    m_bInitialized;
     rtl_TextEncoding            m_rtlEncoding;
     ::com::sun::star::uno::Sequence<sal_Unicode>        m_seqSource;
 };
@@ -82,7 +82,7 @@ class XMLFile2UTFConverter
 {
 public:
     XMLFile2UTFConverter( ):
-        m_bStarted( sal_False ),
+        m_bStarted( false ),
         m_pText2Unicode( 0 ),
         m_pUnicode2Text( 0 )
         {}
@@ -107,13 +107,13 @@ private:
     // Called only on first Sequence of bytes. Tries to figure out file format and encoding information.
     // @return TRUE, when encoding information could be retrieved
     // @return FALSE, when no encoding information was found in file
-    sal_Bool scanForEncoding( ::com::sun::star::uno::Sequence<sal_Int8> &seq );
+    bool scanForEncoding( ::com::sun::star::uno::Sequence<sal_Int8> &seq );
 
     // Called only on first Sequence of bytes. Tries to figure out
     // if enough data is available to scan encoding
     // @return TRUE, when encoding is retrievable
     // @return FALSE, when more data is needed
-    sal_Bool isEncodingRecognizable( const ::com::sun::star::uno::Sequence< sal_Int8 > & seq );
+    bool isEncodingRecognizable( const ::com::sun::star::uno::Sequence< sal_Int8 > & seq );
 
     // When encoding attribute is within the text (in the first line), it is removed.
     void removeEncoding( ::com::sun::star::uno::Sequence<sal_Int8> &seq );
@@ -123,7 +123,7 @@ private:
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  m_in;
 
-    sal_Bool m_bStarted;
+    bool m_bStarted;
     OString m_sEncoding;
 
     Text2UnicodeConverter *m_pText2Unicode;

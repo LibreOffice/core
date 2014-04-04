@@ -529,7 +529,7 @@ bool Converter::convertNumber(  sal_Int32& rValue,
 {
     rValue = 0;
     sal_Int64 nNumber = 0;
-    sal_Bool bRet = convertNumber64(nNumber,rString,nMin,nMax);
+    bool bRet = convertNumber64(nNumber,rString,nMin,nMax);
     if ( bRet )
         rValue = static_cast<sal_Int32>(nNumber);
     return bRet;
