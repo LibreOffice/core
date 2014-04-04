@@ -1514,8 +1514,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
 
 void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, sal_Bool bSetFocus )
 {
-    if ( pCW->aInfo.bVisible != 42 )
-        pCW->aInfo.bVisible = sal_True;
+    pCW->aInfo.bVisible = true;
 
     SfxChildWindow *pChildWin = SfxChildWindow::CreateChildWindow( pCW->nId, pWorkWin, &GetBindings(), pCW->aInfo);
     if (pChildWin)

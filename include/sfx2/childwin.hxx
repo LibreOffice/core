@@ -50,7 +50,7 @@ class SfxChildWindowContext;
 // ChildWindow Configuration
 struct SfxChildWinInfo
 {
-    sal_Bool            bVisible; // this can be sal_True, or sal_False, or 42
+    bool                bVisible;
     Point               aPos;
     Size                aSize;
     sal_uInt16          nFlags;
