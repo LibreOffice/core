@@ -37,4 +37,3 @@ Actions=NewDocument;
 [Desktop Action NewDocument]
 Name=New Database
 Exec=${UNIXBASISROOTNAME} --base
-OnlyShowIn=Unity;

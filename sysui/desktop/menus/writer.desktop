@@ -37,4 +37,3 @@ Actions=NewDocument;
 [Desktop Action NewDocument]
 Name=New Document
 Exec=${UNIXBASISROOTNAME} --writer
-OnlyShowIn=Unity;

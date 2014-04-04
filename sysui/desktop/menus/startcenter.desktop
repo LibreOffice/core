@@ -38,31 +38,25 @@ Actions=Writer;Calc;Impress;Draw;Base;Math;
 [Desktop Action Writer]
 Name=Text Document
 Exec=${UNIXBASISROOTNAME} --writer
-OnlyShowIn=Unity;
 
 [Desktop Action Calc]
 Name=Spreadsheet
 Exec=${UNIXBASISROOTNAME} --calc
-OnlyShowIn=Unity;
 
 [Desktop Action Impress]
 Name=Presentation
 Exec=${UNIXBASISROOTNAME} --impress
-OnlyShowIn=Unity;
 
 [Desktop Action Draw]
 Name=Drawing
 Exec=${UNIXBASISROOTNAME} --draw
-OnlyShowIn=Unity;
 
 [Desktop Action Base]
 Name=Database
 Exec=${UNIXBASISROOTNAME} --base
-OnlyShowIn=Unity;
 
 [Desktop Action Math]
 Name=Formula
 Exec=${UNIXBASISROOTNAME} --math
-OnlyShowIn=Unity;
 
 ##End of actions menu
