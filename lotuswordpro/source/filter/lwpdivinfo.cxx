@@ -70,7 +70,10 @@
 
 LwpDivInfo::LwpDivInfo(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
-{}
+    , m_nFlags(0)
+    , m_nPageNoStyle(0)
+{
+}
 
 LwpDivInfo::~LwpDivInfo(){}
 
