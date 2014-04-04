@@ -19,6 +19,7 @@
 
 #include <svx/dialogs.hrc>
 #include "svx/rulritem.hxx"
+#include <tools/mapunit.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/frame/status/LeftRightMargin.hpp>
 #include <com/sun/star/frame/status/UpperLowerMargin.hpp>
@@ -43,9 +44,6 @@ OUString SvxLongLRSpaceItem::GetValueText() const
     return OUString();
 }
 
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
-
 bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -57,8 +55,8 @@ bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
         case 0:
         {
             ::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
-            aLeftRightMargin.Left = bConvert ? TWIP_TO_MM100( mlLeft ) : mlLeft;
-            aLeftRightMargin.Right = bConvert ? TWIP_TO_MM100( mlRight ) : mlRight;
+            aLeftRightMargin.Left = bConvert ? convertTwipToMm100( mlLeft ) : mlLeft;
+            aLeftRightMargin.Right = bConvert ? convertTwipToMm100( mlRight ) : mlRight;
             rVal <<= aLeftRightMargin;
             return true;
         }
@@ -75,7 +73,7 @@ bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
     }
 
     if ( bConvert )
-        nVal = TWIP_TO_MM100( nVal );
+        nVal = convertTwipToMm100( nVal );
 
     rVal <<= nVal;
     return true;
@@ -92,15 +90,15 @@ bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
         ::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
         if ( rVal >>= aLeftRightMargin )
         {
-            mlLeft  = bConvert ? MM100_TO_TWIP(aLeftRightMargin.Left) : aLeftRightMargin.Left;
-            mlRight = bConvert ? MM100_TO_TWIP(aLeftRightMargin.Right) : aLeftRightMargin.Right;
+            mlLeft  = bConvert ? convertMm100ToTwip(aLeftRightMargin.Left) : aLeftRightMargin.Left;
+            mlRight = bConvert ? convertMm100ToTwip(aLeftRightMargin.Right) : aLeftRightMargin.Right;
             return true;
         }
     }
     else if ( rVal >>= nVal )
     {
         if ( bConvert )
-            nVal = MM100_TO_TWIP( nVal );
+            nVal = convertMm100ToTwip( nVal );
 
         switch( nMemberId )
         {
@@ -200,8 +198,8 @@ bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
         case 0:
         {
             ::com::sun::star::frame::status::UpperLowerMargin aUpperLowerMargin;
-            aUpperLowerMargin.Upper = bConvert ? TWIP_TO_MM100( mlLeft )  : mlLeft;
-            aUpperLowerMargin.Lower = bConvert ? TWIP_TO_MM100( mlRight ) : mlRight;
+            aUpperLowerMargin.Upper = bConvert ? convertTwipToMm100( mlLeft )  : mlLeft;
+            aUpperLowerMargin.Lower = bConvert ? convertTwipToMm100( mlRight ) : mlRight;
             rVal <<= aUpperLowerMargin;
             return true;
         }
@@ -216,7 +214,7 @@ bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
     }
 
     if ( bConvert )
-        nVal = TWIP_TO_MM100( nVal );
+        nVal = convertTwipToMm100( nVal );
 
     rVal <<= nVal;
     return true;
@@ -233,15 +231,15 @@ bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
         ::com::sun::star::frame::status::UpperLowerMargin aUpperLowerMargin;
         if ( rVal >>= aUpperLowerMargin )
         {
-            mlLeft    = bConvert ? MM100_TO_TWIP( aUpperLowerMargin.Upper ) : aUpperLowerMargin.Upper;
-            mlRight   = bConvert ? MM100_TO_TWIP( aUpperLowerMargin.Lower ) : aUpperLowerMargin.Lower;
+            mlLeft    = bConvert ? convertMm100ToTwip( aUpperLowerMargin.Upper ) : aUpperLowerMargin.Upper;
+            mlRight   = bConvert ? convertMm100ToTwip( aUpperLowerMargin.Lower ) : aUpperLowerMargin.Lower;
             return true;
         }
     }
     else if ( rVal >>= nVal )
     {
         if ( bConvert )
-            nVal = MM100_TO_TWIP( nVal );
+            nVal = convertMm100ToTwip( nVal );
 
         switch( nMemberId )
         {

@@ -128,13 +128,13 @@ bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_DROPCAP_LINES : rVal <<= (sal_Int16)nLines; break;
         case MID_DROPCAP_COUNT : rVal <<= (sal_Int16)nChars; break;
-        case MID_DROPCAP_DISTANCE : rVal <<= (sal_Int16) TWIP_TO_MM100_UNSIGNED(nDistance); break;
+        case MID_DROPCAP_DISTANCE : rVal <<= (sal_Int16) convertTwipToMm100(nDistance); break;
         case MID_DROPCAP_FORMAT:
         {
              style::DropCapFormat aDrop;
             aDrop.Lines = nLines   ;
             aDrop.Count = nChars   ;
-            aDrop.Distance  = TWIP_TO_MM100_UNSIGNED(nDistance);
+            aDrop.Distance  = convertTwipToMm100(nDistance);
             rVal.setValue(&aDrop, ::getCppuType((const style::DropCapFormat*)0));
         }
         break;
@@ -178,7 +178,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int16 nVal = 0;
             if ( rVal >>= nVal )
-                nDistance = (sal_Int16) MM100_TO_TWIP((sal_Int32)nVal);
+                nDistance = (sal_Int16) convertMm100ToTwip((sal_Int32)nVal);
             else
                 return false;
             break;
@@ -190,7 +190,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 const style::DropCapFormat* pDrop = (const style::DropCapFormat*)rVal.getValue();
                 nLines      = pDrop->Lines;
                 nChars      = pDrop->Count;
-                nDistance   = MM100_TO_TWIP(pDrop->Distance);
+                nDistance   = convertMm100ToTwip(pDrop->Distance);
             }
             else {
             }

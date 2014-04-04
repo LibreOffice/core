@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_SWTYPES_HXX
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
+#include <tools/mapunit.hxx>
 #include <SwGetPoolIdFromName.hxx>
 
 #include <limits.h>
@@ -196,13 +197,6 @@ namespace nsSetAttrMode
     /// The inserted item is a copy -- intended for use in ndtxt.cxx.
     const SetAttrMode SETATTR_IS_COPY        = 0x0100;
 }
-
-// Conversion Twip <-> 1/100 mm for UNO
-
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
-#define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
-#define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
 
 #define SW_ISPRINTABLE( c ) ( c >= ' ' && 127 != c )
 

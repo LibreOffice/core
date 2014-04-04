@@ -958,12 +958,12 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             aLRItem.SetTxtFirstLineOfst( 0 );
             if( rCSS1PropInfo.bLeftMargin )
             {
-                nLeftSpace = static_cast< sal_uInt16 >(TWIP_TO_MM100( aLRItem.GetLeft() ));
+                nLeftSpace = static_cast< sal_uInt16 >(convertTwipToMm100( aLRItem.GetLeft() ));
                 rCSS1PropInfo.bLeftMargin = sal_False;
             }
             if( rCSS1PropInfo.bRightMargin )
             {
-                nRightSpace = static_cast< sal_uInt16 >(TWIP_TO_MM100( aLRItem.GetRight() ));
+                nRightSpace = static_cast< sal_uInt16 >(convertTwipToMm100( aLRItem.GetRight() ));
                 rCSS1PropInfo.bRightMargin = sal_False;
             }
             rCSS1ItemSet.ClearItem( RES_LR_SPACE );
@@ -988,12 +988,12 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             const SvxULSpaceItem *pULItem = (const SvxULSpaceItem *)pItem;
             if( rCSS1PropInfo.bTopMargin )
             {
-                nUpperSpace = TWIP_TO_MM100_UNSIGNED( pULItem->GetUpper() );
+                nUpperSpace = convertTwipToMm100( pULItem->GetUpper() );
                 rCSS1PropInfo.bTopMargin = sal_False;
             }
             if( rCSS1PropInfo.bBottomMargin )
             {
-                nLowerSpace = TWIP_TO_MM100_UNSIGNED( pULItem->GetLower() );
+                nLowerSpace = convertTwipToMm100( pULItem->GetLower() );
                 rCSS1PropInfo.bBottomMargin = sal_False;
             }
 
@@ -1148,8 +1148,8 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             {
                 nAnchorType = text::TextContentAnchorType_AT_PAGE;
             }
-            nXPos = TWIP_TO_MM100( rCSS1PropInfo.nLeft ) + nLeftSpace;
-            nYPos = TWIP_TO_MM100( rCSS1PropInfo.nTop ) + nUpperSpace;
+            nXPos = convertTwipToMm100( rCSS1PropInfo.nLeft ) + nLeftSpace;
+            nYPos = convertTwipToMm100( rCSS1PropInfo.nTop ) + nUpperSpace;
             bSetPos = sal_True;
 
             nSurround = text::WrapTextMode_THROUGHT;
@@ -1874,13 +1874,13 @@ void SwHTMLParser::InsertInput()
 
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.eWidthType )
     {
-        aSz.Width() = TWIP_TO_MM100( aCSS1PropInfo.nWidth );
+        aSz.Width() = convertTwipToMm100( aCSS1PropInfo.nWidth );
         aTextSz.Width() = 0;
         bMinWidth = sal_False;
     }
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.eHeightType )
     {
-        aSz.Height() = TWIP_TO_MM100( aCSS1PropInfo.nHeight );
+        aSz.Height() = convertTwipToMm100( aCSS1PropInfo.nHeight );
         aTextSz.Height() = 0;
         bMinHeight = sal_False;
     }
@@ -2150,12 +2150,12 @@ void SwHTMLParser::NewTextArea()
     Size aSz( MINFLY, MINFLY );
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.eWidthType )
     {
-        aSz.Width() = TWIP_TO_MM100( aCSS1PropInfo.nWidth );
+        aSz.Width() = convertTwipToMm100( aCSS1PropInfo.nWidth );
         aTextSz.Width() = 0;
     }
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.eHeightType )
     {
-        aSz.Height() = TWIP_TO_MM100( aCSS1PropInfo.nHeight );
+        aSz.Height() = convertTwipToMm100( aCSS1PropInfo.nHeight );
         aTextSz.Height() = 0;
     }
     if( aSz.Width() < MINFLY )
@@ -2430,13 +2430,13 @@ void SwHTMLParser::NewSelect()
     bFixSelectWidth = bFixSelectHeight = true;
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.eWidthType )
     {
-        aSz.Width() = TWIP_TO_MM100( aCSS1PropInfo.nWidth );
+        aSz.Width() = convertTwipToMm100( aCSS1PropInfo.nWidth );
         bFixSelectWidth = false;
         bMinWidth = sal_False;
     }
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.eHeightType )
     {
-        aSz.Height() = TWIP_TO_MM100( aCSS1PropInfo.nHeight );
+        aSz.Height() = convertTwipToMm100( aCSS1PropInfo.nHeight );
         aTextSz.Height() = sal_False;
         bMinHeight = sal_False;
     }

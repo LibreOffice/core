@@ -25,6 +25,7 @@
 #include <numpages.hrc>
 #include <dialmgr.hxx>
 #include <tools/shl.hxx>
+#include <tools/mapunit.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <helpid.hrc>
 #include <editeng/numitem.hxx>
@@ -2687,25 +2688,23 @@ SvxNumPositionTabPage::~SvxNumPositionTabPage()
 #if OSL_DEBUG_LEVEL > 1
 void lcl_PrintDebugOutput(FixedText& rFixed, const SvxNumberFormat& rNumFmt)
 {
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-
     OUString const sHash( " # " );
     if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
-        OUString sDebugText( OUString::number( TWIP_TO_MM100(rNumFmt.GetAbsLSpace() ) ) );
+        OUString sDebugText( OUString::number( convertTwipToMm100(rNumFmt.GetAbsLSpace() ) ) );
         sDebugText += sHash;
-        sDebugText += OUString::number( TWIP_TO_MM100(rNumFmt.GetCharTextDistance() ) );
+        sDebugText += OUString::number( convertTwipToMm100(rNumFmt.GetCharTextDistance() ) );
         sDebugText += sHash;
-        sDebugText += OUString::number( TWIP_TO_MM100(rNumFmt.GetFirstLineOffset() ) );
+        sDebugText += OUString::number( convertTwipToMm100(rNumFmt.GetFirstLineOffset() ) );
         rFixed.SetText(sDebugText);
     }
     else if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
-        OUString sDebugText( OUString::number( TWIP_TO_MM100(rNumFmt.GetListtabPos() ) ) );
+        OUString sDebugText( OUString::number( convertTwipToMm100(rNumFmt.GetListtabPos() ) ) );
         sDebugText += sHash;
-        sDebugText += OUString::number( TWIP_TO_MM100(rNumFmt.GetFirstLineIndent() ) );
+        sDebugText += OUString::number( convertTwipToMm100(rNumFmt.GetFirstLineIndent() ) );
         sDebugText += sHash;
-        sDebugText += OUString::number( TWIP_TO_MM100(rNumFmt.GetIndentAt() ) );
+        sDebugText += OUString::number( convertTwipToMm100(rNumFmt.GetIndentAt() ) );
         rFixed.SetText(sDebugText);
     }
 

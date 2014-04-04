@@ -191,16 +191,16 @@ static SwLabRec* lcl_CreateSwLabRec(const OUString& rType, const OUString& rMeas
         switch(i)
         {
             case  0 : pNewRec->bCont = sToken[0] == 'C'; break;
-            case  1 : pNewRec->lHDist    = MM100_TO_TWIP(nVal);  break;
-            case  2 : pNewRec->lVDist    = MM100_TO_TWIP(nVal);  break;
-            case  3 : pNewRec->lWidth    = MM100_TO_TWIP(nVal);  break;
-            case  4 : pNewRec->lHeight   = MM100_TO_TWIP(nVal);  break;
-            case  5 : pNewRec->lLeft     = MM100_TO_TWIP(nVal);  break;
-            case  6 : pNewRec->lUpper    = MM100_TO_TWIP(nVal);  break;
+            case  1 : pNewRec->lHDist    = convertMm100ToTwip(nVal);  break;
+            case  2 : pNewRec->lVDist    = convertMm100ToTwip(nVal);  break;
+            case  3 : pNewRec->lWidth    = convertMm100ToTwip(nVal);  break;
+            case  4 : pNewRec->lHeight   = convertMm100ToTwip(nVal);  break;
+            case  5 : pNewRec->lLeft     = convertMm100ToTwip(nVal);  break;
+            case  6 : pNewRec->lUpper    = convertMm100ToTwip(nVal);  break;
             case  7 : pNewRec->nCols     = nVal;                 break;
             case  8 : pNewRec->nRows     = nVal;                 break;
-            case  9 : pNewRec->lPWidth   = MM100_TO_TWIP(nVal);  break;
-            case 10 : pNewRec->lPHeight  = MM100_TO_TWIP(nVal);  break;
+            case  9 : pNewRec->lPWidth   = convertMm100ToTwip(nVal);  break;
+            case 10 : pNewRec->lPHeight  = convertMm100ToTwip(nVal);  break;
         }
     }
     // lines added for compatibility with custom label definitions saved before patch fdo#44516
@@ -231,16 +231,16 @@ static Sequence<PropertyValue> lcl_CreateProperties(
             {
                 rMeasure = "";
                 rMeasure += rRec.bCont ? OUString( "C" ) : OUString( "S" );      rMeasure += sColon;
-                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lHDist ) );   rMeasure += sColon;
-                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lVDist ) );   rMeasure += sColon;
-                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lWidth ) );   rMeasure += sColon;
-                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lHeight ) );  rMeasure += sColon;
-                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lLeft ) );    rMeasure += sColon;
-                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lUpper ) );   rMeasure += sColon;
+                rMeasure += OUString::number( convertTwipToMm100( rRec.lHDist ) );   rMeasure += sColon;
+                rMeasure += OUString::number( convertTwipToMm100( rRec.lVDist ) );   rMeasure += sColon;
+                rMeasure += OUString::number( convertTwipToMm100( rRec.lWidth ) );   rMeasure += sColon;
+                rMeasure += OUString::number( convertTwipToMm100( rRec.lHeight ) );  rMeasure += sColon;
+                rMeasure += OUString::number( convertTwipToMm100( rRec.lLeft ) );    rMeasure += sColon;
+                rMeasure += OUString::number( convertTwipToMm100( rRec.lUpper ) );   rMeasure += sColon;
                 rMeasure += OUString::number( rRec.nCols );                     rMeasure += sColon;
                 rMeasure += OUString::number( rRec.nRows );                     rMeasure += sColon;
-                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lPWidth ) );  rMeasure += sColon;
-                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lPHeight ) );
+                rMeasure += OUString::number( convertTwipToMm100( rRec.lPWidth ) );  rMeasure += sColon;
+                rMeasure += OUString::number( convertTwipToMm100( rRec.lPHeight ) );
                 pValues[nProp].Value <<= rMeasure;
             }
             break;

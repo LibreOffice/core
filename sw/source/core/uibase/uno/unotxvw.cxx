@@ -927,11 +927,11 @@ awt::Point SwXTextViewCursor::getPosition(void) throw( uno::RuntimeException, st
 
         const SvxULSpaceItem& rUL = rMaster.GetULSpace();
         const long nY = aCharRect.Top() - (rUL.GetUpper() + DOCUMENTBORDER);
-        aRet.Y = TWIP_TO_MM100(nY);
+        aRet.Y = convertTwipToMm100(nY);
 
         const SvxLRSpaceItem& rLR = rMaster.GetLRSpace();
         const long nX = aCharRect.Left() - (rLR.GetLeft() + DOCUMENTBORDER);
-        aRet.X = TWIP_TO_MM100(nX);
+        aRet.X = convertTwipToMm100(nX);
     }
     else
         throw uno::RuntimeException();

@@ -41,10 +41,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
+#include <tools/mapunit.hxx>
 
 #include <editeng/unonrule.hxx>
-
-#define MM100_TO_TWIP(MM100)    ((MM100*72L+63L)/127L)
 
 #define DEF_WRITER_LSPACE   500     //Standard Indentation
 #define DEF_DRAW_LSPACE     800     //Standard Indentation
@@ -619,9 +618,9 @@ SvxNumRule::SvxNumRule( sal_uLong nFeatures,
                 if ( eDefaultNumberFormatPositionAndSpaceMode ==
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFmts[i]->SetLSpace( MM100_TO_TWIP(DEF_WRITER_LSPACE) );
-                    aFmts[i]->SetAbsLSpace( MM100_TO_TWIP(DEF_WRITER_LSPACE * (i+1)) );
-                    aFmts[i]->SetFirstLineOffset(MM100_TO_TWIP(-DEF_WRITER_LSPACE));
+                    aFmts[i]->SetLSpace( convertMm100ToTwip(DEF_WRITER_LSPACE) );
+                    aFmts[i]->SetAbsLSpace( convertMm100ToTwip(DEF_WRITER_LSPACE * (i+1)) );
+                    aFmts[i]->SetFirstLineOffset(convertMm100ToTwip(-DEF_WRITER_LSPACE));
                 }
                 else if ( eDefaultNumberFormatPositionAndSpaceMode ==
                                             SvxNumberFormat::LABEL_ALIGNMENT )

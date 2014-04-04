@@ -100,10 +100,10 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
 {
     if( nWidth > 0 && nHeight > 0 )
     {
-        nWidth = MM100_TO_TWIP( nWidth );
+        nWidth = convertMm100ToTwip( nWidth );
         if( nWidth < MINFLY )
             nWidth = MINFLY;
-        nHeight = MM100_TO_TWIP( nHeight );
+        nHeight = convertMm100ToTwip( nHeight );
         if( nHeight < MINFLY )
             nHeight = MINFLY;
         rItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );

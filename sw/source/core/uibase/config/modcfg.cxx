@@ -1157,10 +1157,10 @@ void SwTableConfig::Commit()
     {
         switch(nProp)
         {
-            case 0 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(nTblHMove); break;   //"Shift/Row",
-            case 1 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(nTblVMove); break;     //"Shift/Column",
-            case 2 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(nTblHInsert); break;   //"Insert/Row",
-            case 3 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(nTblVInsert); break;   //"Insert/Column",
+            case 0 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblHMove); break;   //"Shift/Row",
+            case 1 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblVMove); break;     //"Shift/Column",
+            case 2 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblHInsert); break;   //"Insert/Row",
+            case 3 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblVInsert); break;   //"Insert/Column",
             case 4 : pValues[nProp] <<= (sal_Int32)eTblChgMode; break;   //"Change/Effect",
             case 5 : pValues[nProp].setValue(&bInsTblFormatNum, rType); break;  //"Input/NumberRecognition",
             case 6 : pValues[nProp].setValue(&bInsTblChangeNumFormat, rType); break;  //"Input/NumberFormatRecognition",
@@ -1185,10 +1185,10 @@ void SwTableConfig::Load()
                 sal_Int32 nTemp = 0;
                 switch(nProp)
                 {
-                    case 0 : pValues[nProp] >>= nTemp; nTblHMove = (sal_uInt16)MM100_TO_TWIP(nTemp); break;  //"Shift/Row",
-                    case 1 : pValues[nProp] >>= nTemp; nTblVMove = (sal_uInt16)MM100_TO_TWIP(nTemp); break;     //"Shift/Column",
-                    case 2 : pValues[nProp] >>= nTemp; nTblHInsert = (sal_uInt16)MM100_TO_TWIP(nTemp); break;   //"Insert/Row",
-                    case 3 : pValues[nProp] >>= nTemp; nTblVInsert = (sal_uInt16)MM100_TO_TWIP(nTemp); break;   //"Insert/Column",
+                    case 0 : pValues[nProp] >>= nTemp; nTblHMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;  //"Shift/Row",
+                    case 1 : pValues[nProp] >>= nTemp; nTblVMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;     //"Shift/Column",
+                    case 2 : pValues[nProp] >>= nTemp; nTblHInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Row",
+                    case 3 : pValues[nProp] >>= nTemp; nTblVInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Column",
                     case 4 : pValues[nProp] >>= nTemp; eTblChgMode = (TblChgMode)nTemp; break;   //"Change/Effect",
                     case 5 : bInsTblFormatNum = *(sal_Bool*)pValues[nProp].getValue();  break;  //"Input/NumberRecognition",
                     case 6 : bInsTblChangeNumFormat = *(sal_Bool*)pValues[nProp].getValue(); break;  //"Input/NumberFormatRecognition",

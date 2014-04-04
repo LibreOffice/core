@@ -21,12 +21,9 @@
 #include <svx/grfcrop.hxx>
 #include <editeng/itemtype.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <tools/mapunit.hxx>
 
 using namespace ::com::sun::star;
-
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
-//TYPEINIT1_FACTORY( SvxGrfCrop, SfxPoolItem , new  SvxGrfCrop(0))
 
 /******************************************************************************
  *  Implementierung     class SwCropGrf
@@ -99,10 +96,10 @@ bool SvxGrfCrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
     if( bConvert )
     {
-       aRet.Right   = TWIP_TO_MM100(aRet.Right );
-       aRet.Top     = TWIP_TO_MM100(aRet.Top );
-       aRet.Left    = TWIP_TO_MM100(aRet.Left   );
-       aRet.Bottom  = TWIP_TO_MM100(aRet.Bottom);
+       aRet.Right   = convertTwipToMm100(aRet.Right );
+       aRet.Top     = convertTwipToMm100(aRet.Top );
+       aRet.Left    = convertTwipToMm100(aRet.Left   );
+       aRet.Bottom  = convertTwipToMm100(aRet.Bottom);
     }
 
 
@@ -120,10 +117,10 @@ bool SvxGrfCrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         return false;
     if( bConvert )
     {
-       aVal.Right   = MM100_TO_TWIP(aVal.Right );
-       aVal.Top     = MM100_TO_TWIP(aVal.Top );
-       aVal.Left    = MM100_TO_TWIP(aVal.Left   );
-       aVal.Bottom  = MM100_TO_TWIP(aVal.Bottom);
+       aVal.Right   = convertMm100ToTwip(aVal.Right );
+       aVal.Top     = convertMm100ToTwip(aVal.Top );
+       aVal.Left    = convertMm100ToTwip(aVal.Left   );
+       aVal.Bottom  = convertMm100ToTwip(aVal.Bottom);
     }
 
     nLeft   = aVal.Left  ;

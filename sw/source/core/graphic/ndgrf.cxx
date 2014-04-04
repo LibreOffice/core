@@ -1136,10 +1136,10 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
     rGA.SetMirrorFlags( nMirror );
 
     const SwCropGrf& rCrop = rSet.GetCropGrf();
-    rGA.SetCrop( TWIP_TO_MM100( rCrop.GetLeft() ),
-                 TWIP_TO_MM100( rCrop.GetTop() ),
-                 TWIP_TO_MM100( rCrop.GetRight() ),
-                 TWIP_TO_MM100( rCrop.GetBottom() ));
+    rGA.SetCrop( convertTwipToMm100( rCrop.GetLeft() ),
+                 convertTwipToMm100( rCrop.GetTop() ),
+                 convertTwipToMm100( rCrop.GetRight() ),
+                 convertTwipToMm100( rCrop.GetBottom() ));
 
     const SwRotationGrf& rRotation = rSet.GetRotationGrf();
     rGA.SetRotation( rRotation.GetValue() );
