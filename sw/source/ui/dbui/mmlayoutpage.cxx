@@ -336,8 +336,9 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
             if(aItem.bIsColumn)
             {
                 OUString sConvertedColumn = aItem.sText;
-                for(sal_uInt16 nColumn = 0;
-                        nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
+                for(sal_uInt32 nColumn = 0;
+                        nColumn < rHeaders.Count() &&
+                        nColumn < static_cast<sal_uInt32>(aAssignment.getLength());
                                                                                     ++nColumn)
                 {
                     if (rHeaders.GetString(nColumn).equals(aItem.sText) &&
@@ -579,8 +580,9 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                         {
                             OUString sDB(sDBName);
                             OUString sConvertedColumn = aItem.sText;
-                            for(sal_uInt16 nColumn = 0;
-                                    nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
+                            for(sal_uInt32 nColumn = 0;
+                                    nColumn < rHeaders.Count() &&
+                                    nColumn < static_cast<sal_uInt32>(aAssignment.getLength());
                                                                                                 ++nColumn)
                             {
                                 if (rHeaders.GetString(nColumn).equals(aItem.sText) &&
