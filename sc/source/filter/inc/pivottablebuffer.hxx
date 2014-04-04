@@ -264,7 +264,6 @@ struct PTDefinitionModel : public AutoFormatModel
     bool                mbDisableFieldList;
     bool                mbShowCalcMembers;
     bool                mbVisualTotals;
-    bool                mbShowDataDropDown;
     bool                mbShowDrill;
     bool                mbPrintDrill;
     bool                mbEnableDrill;
