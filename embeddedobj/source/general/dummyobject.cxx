@@ -38,7 +38,7 @@
 using namespace ::com::sun::star;
 
 
-void ODummyEmbeddedObject::CheckInit()
+void ODummyEmbeddedObject::CheckInit_WrongState()
 {
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -48,7 +48,15 @@ void ODummyEmbeddedObject::CheckInit()
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 }
 
+void ODummyEmbeddedObject::CheckInit_Runtime()
+{
+    if ( m_bDisposed )
+        throw lang::DisposedException();
 
+    if ( m_nObjectState == -1 )
+        throw uno::RuntimeException( OUString( "The object has no persistence!\n" ),
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+}
 void ODummyEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
 {
     if ( m_pInterfaceContainer )
@@ -96,7 +104,7 @@ void SAL_CALL ODummyEmbeddedObject::changeState( sal_Int32 nNewState )
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     if ( nNewState == embed::EmbedStates::LOADED )
         return;
@@ -110,7 +118,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ODummyEmbeddedObject::getReachableStates()
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     uno::Sequence< sal_Int32 > aResult( 1 );
     aResult[0] = embed::EmbedStates::LOADED;
@@ -124,7 +132,7 @@ sal_Int32 SAL_CALL ODummyEmbeddedObject::getCurrentState()
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     return m_nObjectState;
 }
@@ -138,7 +146,7 @@ void SAL_CALL ODummyEmbeddedObject::doVerb( sal_Int32 )
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     // no supported verbs
 }
@@ -149,7 +157,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL ODummyEmbeddedObject::getSupport
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     return uno::Sequence< embed::VerbDescriptor >();
 }
@@ -161,7 +169,7 @@ void SAL_CALL ODummyEmbeddedObject::setClientSite(
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     m_xClientSite = xClient;
 }
@@ -172,7 +180,7 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL ODummyEmbeddedObject::getClien
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     return m_xClientSite;
 }
@@ -184,7 +192,7 @@ void SAL_CALL ODummyEmbeddedObject::update()
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 }
 
 
@@ -193,7 +201,7 @@ void SAL_CALL ODummyEmbeddedObject::setUpdateMode( sal_Int32 )
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 }
 
 
@@ -202,7 +210,7 @@ sal_Int64 SAL_CALL ODummyEmbeddedObject::getStatus( sal_Int64 )
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     return 0;
 }
@@ -212,7 +220,7 @@ void SAL_CALL ODummyEmbeddedObject::setContainerName( const OUString& )
         throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_Runtime();
 }
 
 
@@ -223,7 +231,7 @@ void SAL_CALL ODummyEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const 
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
@@ -244,7 +252,7 @@ awt::Size SAL_CALL ODummyEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
@@ -266,7 +274,7 @@ sal_Int32 SAL_CALL ODummyEmbeddedObject::getMapUnit( sal_Int64 nAspect )
                 uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_Runtime();
 
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
@@ -285,7 +293,7 @@ embed::VisualRepresentation SAL_CALL ODummyEmbeddedObject::getPreferredVisualRep
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     // no representation can be retrieved
     throw embed::WrongStateException( OUString( "Illegal call!\n" ),
@@ -371,7 +379,7 @@ void SAL_CALL ODummyEmbeddedObject::storeToEntry( const uno::Reference< embed::X
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
@@ -393,7 +401,7 @@ void SAL_CALL ODummyEmbeddedObject::storeAsEntry( const uno::Reference< embed::X
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
@@ -416,7 +424,7 @@ void SAL_CALL ODummyEmbeddedObject::saveCompleted( sal_Bool bUseNew )
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     // it is allowed to call saveCompleted( false ) for nonstored objects
     if ( !m_bWaitSaveCompleted && !bUseNew )
@@ -449,7 +457,7 @@ sal_Bool SAL_CALL ODummyEmbeddedObject::hasEntry()
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
@@ -468,7 +476,7 @@ OUString SAL_CALL ODummyEmbeddedObject::getEntryName()
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
@@ -486,7 +494,7 @@ void SAL_CALL ODummyEmbeddedObject::storeOwn()
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
@@ -503,7 +511,7 @@ sal_Bool SAL_CALL ODummyEmbeddedObject::isReadonly()
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
@@ -525,7 +533,7 @@ void SAL_CALL ODummyEmbeddedObject::reload(
                 uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_WrongState();
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
@@ -540,7 +548,7 @@ uno::Sequence< sal_Int8 > SAL_CALL ODummyEmbeddedObject::getClassID()
         throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_Runtime();
 
     // currently the class ID is empty
     // TODO/LATER: should a special class ID be used in this case?
@@ -572,7 +580,7 @@ uno::Reference< util::XCloseable > SAL_CALL ODummyEmbeddedObject::getComponent()
         throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    CheckInit();
+    CheckInit_Runtime();
 
     return uno::Reference< util::XCloseable >();
 }

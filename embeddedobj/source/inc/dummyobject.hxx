@@ -68,7 +68,8 @@ class ODummyEmbeddedObject : public ::cppu::WeakImplHelper2
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xNewParentStorage;
 
 protected:
-    void CheckInit();
+    void CheckInit_WrongState();    //throw WrongStateException on m_nObjectState == -1
+    void CheckInit_Runtime();       //throw RuntimeException on m_nObjectState == -1
     void PostEvent_Impl( const OUString& aEventName );
 
 public:
