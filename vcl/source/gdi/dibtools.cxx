@@ -605,7 +605,9 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
 
     if(ImplReadDIBInfoHeader(rIStm, aHeader, bTopDown) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount)
     {
-        if (aHeader.nSize > nOffset)
+        // In case ImplReadDIB() didn't call ImplReadDIBFileHeader() before
+        // this method, nOffset is 0, that's OK.
+        if (nOffset && aHeader.nSize > nOffset)
         {
             // Header size claims to extend into the image data.
             // Looks like an error.
