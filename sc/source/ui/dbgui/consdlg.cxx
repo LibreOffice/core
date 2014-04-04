@@ -42,7 +42,11 @@
 class ScAreaData
 {
 public:
-    ScAreaData()  {}
+    ScAreaData()
+        : bIsDbArea(false)
+    {
+    }
+
     ~ScAreaData() {}
 
     void Set( const OUString& rName, const OUString& rArea, sal_Bool bDb )
