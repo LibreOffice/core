@@ -2153,7 +2153,7 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     if( rStyleProps != NULL && pBorderLine && !pBorderLine->isEmpty() &&
             pBorderLine->GetBorderLineStyle() == rStyleProps->LineStyle &&
             pBorderLine->GetColor() == rStyleProps->Color &&
-            pBorderLine->GetWidth() == MM100_TO_TWIP( rStyleProps->LineWidth ) )
+            (sal_uInt32) pBorderLine->GetWidth() == MM100_TO_TWIP_UNSIGNED( rStyleProps->LineWidth ) )
         return;
 
     pAttr->add( FSNS( XML_w, XML_val ), OString( pVal ) );
