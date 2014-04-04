@@ -249,36 +249,6 @@ void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int
     endTag();
 }
 
-#ifdef THEFUTURE
-
-
-void Writer::moveShape( sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y )
-{
-    startTag( TAG_PLACEOBJECT2 );
-
-    BitStream aBits;
-    aBits.writeUB( 0, 1 );              // Has no Clip Actions
-    aBits.writeUB( 0, 1 );              // reserved
-    aBits.writeUB( 0, 1 );              // has no name
-    aBits.writeUB( 0, 1 );              // no ratio
-    aBits.writeUB( 0, 1 );              // no color transform
-    aBits.writeUB( 1, 1 );              // has a matrix
-    aBits.writeUB( 0, 1 );              // places a character
-    aBits.writeUB( 1, 1 );              // defines a character to be moved
-
-    mpTag->addBits( aBits );
-    mpTag->addUI16( nDepth );           // depth
-
-    // #i73264#
-    const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
-        _Int16(static_cast<long>(map100thmm(x)*mnDocXScale)),
-        _Int16(static_cast<long>(map100thmm(y)*mnDocYScale))));
-    mpTag->addMatrix( aMatrix );        // transformation matrix
-
-    endTag();
-}
-#endif
-
 
 
 void Writer::removeShape( sal_uInt16 nDepth )

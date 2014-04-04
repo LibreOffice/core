@@ -135,10 +135,6 @@ struct PageInfo
     PageInfo();
     ~PageInfo();
 
-#ifdef THEFUTURE
-    void addShape( ShapeInfo* pShapeInfo );
-#endif
-
 };
 
 

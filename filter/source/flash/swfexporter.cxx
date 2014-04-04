@@ -86,14 +86,6 @@ PageInfo::~PageInfo()
     }
 }
 
-#ifdef THEFUTURE
-
-
-void PageInfo::addShape( ShapeInfo* pShapeInfo )
-{
-    maShapesVector.push_back( pShapeInfo );
-}
-#endif
 
 FlashExporter::FlashExporter(
     const Reference< XComponentContext > &rxContext,
