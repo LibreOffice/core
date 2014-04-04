@@ -1725,11 +1725,11 @@ void EditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLs
     pImpEditEngine->GetCharAttribs( nPara, rLst );
 }
 
-SfxItemSet EditEngine::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib )
+SfxItemSet EditEngine::GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib )
 {
     EditSelection aSel( pImpEditEngine->
         ConvertSelection( rSel.nStartPara, rSel.nStartPos, rSel.nEndPara, rSel.nEndPos ) );
-    return pImpEditEngine->GetAttribs( aSel, bOnlyHardAttrib );
+    return pImpEditEngine->GetAttribs( aSel, nOnlyHardAttrib );
 }
 
 SfxItemSet EditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt8 nFlags ) const

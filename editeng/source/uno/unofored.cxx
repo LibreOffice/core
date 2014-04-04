@@ -61,12 +61,12 @@ OUString SvxEditEngineForwarder::GetText( const ESelection& rSel ) const
     return convertLineEnd(rEditEngine.GetText(rSel, LINEEND_LF), GetSystemLineEnd());
 }
 
-SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib ) const
+SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib ) const
 {
     if( rSel.nStartPara == rSel.nEndPara )
     {
         sal_uInt8 nFlags = 0;
-        switch( bOnlyHardAttrib )
+        switch( nOnlyHardAttrib )
         {
         case EditEngineAttribs_All:
             nFlags = GETATTRIBS_ALL;
@@ -85,7 +85,7 @@ SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, sal_Bool 
     }
     else
     {
-        return rEditEngine.GetAttribs( rSel, bOnlyHardAttrib );
+        return rEditEngine.GetAttribs( rSel, nOnlyHardAttrib );
     }
 }
 

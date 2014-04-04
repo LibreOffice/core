@@ -2433,7 +2433,7 @@ OUString SvxDummyTextSource::GetText( const ESelection& ) const
     return OUString();
 }
 
-SfxItemSet SvxDummyTextSource::GetAttribs( const ESelection&, sal_Bool ) const
+SfxItemSet SvxDummyTextSource::GetAttribs( const ESelection&, EditEngineAttribs ) const
 {
     // Very dangerous: The former implementation used a SfxItemPool created on the
     // fly which of course was deleted again ASAP. Thus, the returned SfxItemSet was using

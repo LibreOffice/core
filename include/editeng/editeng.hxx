@@ -109,12 +109,18 @@ class ParaPortionList;
 
 
 
-/** values for GetAttribs
+/** values for:
+       SfxItemSet GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs_All );
 */
-const sal_uInt8 EditEngineAttribs_All   = 0;        /// returns all attributes even when theire not set
-const sal_uInt8 EditEngineAttribs_HardAndPara = 1;  /// returns all attributes set on paragraph and on portions
-const sal_uInt8 EditEngineAttribs_OnlyHard = 2;     /// returns only attributes hard set on portions
+enum EditEngineAttribs {
+    EditEngineAttribs_All,          /// returns all attributes even when theire not set
+    EditEngineAttribs_HardAndPara,  /// returns all attributes set on paragraph and on portions
+    EditEngineAttribs_OnlyHard      /// returns only attributes hard set on portions
+};
 
+/** values for:
+       SfxItemSet  GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt8 nFlags = 0xFF ) const;
+*/
 #define GETATTRIBS_STYLESHEET   (sal_uInt8)0x01
 #define GETATTRIBS_PARAATTRIBS  (sal_uInt8)0x02
 #define GETATTRIBS_CHARATTRIBS  (sal_uInt8)0x04
@@ -297,7 +303,7 @@ public:
     void            GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     SfxItemSet      GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt8 nFlags = 0xFF ) const;
-    SfxItemSet      GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = sal_False );
+    SfxItemSet      GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs_All );
 
     bool            HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
     const SfxPoolItem&  GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich );

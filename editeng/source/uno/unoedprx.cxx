@@ -524,7 +524,7 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
     return sStr;
 }
 
-SfxItemSet SvxAccessibleTextAdapter::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib ) const
+SfxItemSet SvxAccessibleTextAdapter::GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib ) const
 {
     DBG_ASSERT(mpTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -534,8 +534,7 @@ SfxItemSet SvxAccessibleTextAdapter::GetAttribs( const ESelection& rSel, sal_Boo
     aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
     aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
 
-    return mpTextForwarder->GetAttribs( MakeEESelection(aStartIndex, aEndIndex),
-                                        bOnlyHardAttrib );
+    return mpTextForwarder->GetAttribs( MakeEESelection(aStartIndex, aEndIndex), nOnlyHardAttrib );
 }
 
 SfxItemSet SvxAccessibleTextAdapter::GetParaAttribs( sal_Int32 nPara ) const

@@ -798,7 +798,7 @@ public:
     sal_uInt32      GetParaHeight( sal_Int32 nParagraph );
 
     SfxItemSet      GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt8 nFlags = 0xFF ) const;
-    SfxItemSet      GetAttribs( EditSelection aSel, sal_Bool bOnlyHardAttrib = sal_False  );
+    SfxItemSet      GetAttribs( EditSelection aSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs_All  );
     void            SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_uInt8 nSpecial = 0 );
     void            RemoveCharAttribs( EditSelection aSel, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich = 0 );
     void            RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0, sal_Bool bRemoveFeatures = sal_False );

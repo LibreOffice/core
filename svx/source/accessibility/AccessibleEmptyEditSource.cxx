@@ -97,8 +97,8 @@ namespace accessibility
         // SvxTextForwarder
         sal_Int32          GetParagraphCount() const SAL_OVERRIDE { return 1; }
         sal_Int32          GetTextLen( sal_Int32 /*nParagraph*/ ) const SAL_OVERRIDE { return 0; }
-        OUString        GetText( const ESelection& /*rSel*/ ) const SAL_OVERRIDE { return OUString(); }
-        SfxItemSet      GetAttribs( const ESelection& /*rSel*/, sal_Bool /*bOnlyHardAttrib*/ = 0 ) const SAL_OVERRIDE
+        OUString           GetText( const ESelection& /*rSel*/ ) const SAL_OVERRIDE { return OUString(); }
+        SfxItemSet         GetAttribs( const ESelection& /*rSel*/, EditEngineAttribs /*nOnlyHardAttrib*/ = EditEngineAttribs_All ) const SAL_OVERRIDE
         {
             // AW: Very dangerous: The former implementation used a SfxItemPool created on the
             // fly which of course was deleted again ASAP. Thus, the returned SfxItemSet was using

@@ -303,7 +303,7 @@ sal_Bool ImpEditEngine::Redo( EditView* pView )
     return sal_False;
 }
 
-SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, sal_Bool bOnlyHardAttrib )
+SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnlyHardAttrib )
 {
 
     aSel.Adjust( aEditDoc );
@@ -330,14 +330,14 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, sal_Bool bOnlyHardAttr
         // First the very hard formatting ...
         aEditDoc.FindAttribs( pNode, nStartPos, nEndPos, aCurSet );
 
-        if( bOnlyHardAttrib != EditEngineAttribs_OnlyHard )
+        if( nOnlyHardAttrib != EditEngineAttribs_OnlyHard )
         {
             // and then paragraph formatting and template...
             for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
             {
                 if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
                 {
-                    if ( bOnlyHardAttrib == EditEngineAttribs_All )
+                    if ( nOnlyHardAttrib == EditEngineAttribs_All )
                     {
                         const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItem( nWhich );
                         aCurSet.Put( rItem );
@@ -351,7 +351,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, sal_Bool bOnlyHardAttr
                 else if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_ON )
                 {
                     const SfxPoolItem* pItem = NULL;
-                    if ( bOnlyHardAttrib == EditEngineAttribs_All )
+                    if ( nOnlyHardAttrib == EditEngineAttribs_All )
                     {
                         pItem = &pNode->GetContentAttribs().GetItem( nWhich );
                     }
@@ -359,7 +359,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, sal_Bool bOnlyHardAttr
                     {
                         pItem = &pNode->GetContentAttribs().GetItems().Get( nWhich );
                     }
-                    // pItem can only be NULL when bOnlyHardAttrib...
+                    // pItem can only be NULL when nOnlyHardAttrib...
                     if ( !pItem || ( *pItem != aCurSet.Get( nWhich ) ) )
                     {
                         // Problem: When Paragraph style with for example font,
@@ -377,7 +377,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, sal_Bool bOnlyHardAttr
     }
 
     // fill empty slots with defaults ...
-    if ( bOnlyHardAttrib == EditEngineAttribs_All )
+    if ( nOnlyHardAttrib == EditEngineAttribs_All )
     {
         for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++ )
         {

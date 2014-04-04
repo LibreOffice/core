@@ -996,14 +996,14 @@ OUString SmTextForwarder::GetText( const ESelection& rSel ) const
     return convertLineEnd(aRet, GetSystemLineEnd());
 }
 
-SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib ) const
+SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     OSL_ENSURE( pEditEngine, "EditEngine missing" );
     if( rSel.nStartPara == rSel.nEndPara )
     {
         sal_uInt8 nFlags = 0;
-        switch( bOnlyHardAttrib )
+        switch( nOnlyHardAttrib )
         {
         case EditEngineAttribs_All:
             nFlags = GETATTRIBS_ALL;
@@ -1022,7 +1022,7 @@ SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHa
     }
     else
     {
-        return pEditEngine->GetAttribs( rSel, bOnlyHardAttrib );
+        return pEditEngine->GetAttribs( rSel, nOnlyHardAttrib );
     }
 }
 

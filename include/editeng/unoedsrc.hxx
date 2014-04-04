@@ -30,6 +30,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/editengdllapi.h>
+#include <editeng/editeng.hxx>
 
 #include <list>
 
@@ -141,7 +142,7 @@ public:
     virtual sal_Int32   GetParagraphCount() const = 0;
     virtual sal_Int32  GetTextLen( sal_Int32 nParagraph ) const = 0;
     virtual OUString    GetText( const ESelection& rSel ) const = 0;
-    virtual SfxItemSet  GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = 0 ) const = 0;
+    virtual SfxItemSet  GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs_All ) const = 0;
     virtual SfxItemSet  GetParaAttribs( sal_Int32 nPara ) const = 0;
     virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) = 0;
     virtual void        RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich ) = 0;

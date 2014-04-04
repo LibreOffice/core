@@ -38,7 +38,7 @@ public:
     virtual sal_Int32   GetParagraphCount() const SAL_OVERRIDE;
     virtual sal_Int32   GetTextLen( sal_Int32 nParagraph ) const SAL_OVERRIDE;
     virtual OUString    GetText( const ESelection& rSel ) const SAL_OVERRIDE;
-    virtual SfxItemSet  GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = EditEngineAttribs_All ) const SAL_OVERRIDE;
+    virtual SfxItemSet  GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs_All ) const SAL_OVERRIDE;
     virtual SfxItemSet  GetParaAttribs( sal_Int32 nPara ) const SAL_OVERRIDE;
     virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual void        RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich ) SAL_OVERRIDE;

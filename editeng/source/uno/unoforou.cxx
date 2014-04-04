@@ -71,13 +71,13 @@ OUString SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
     return pEditEngine->GetText( rSel, LINEEND_LF );
 }
 
-static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib, EditEngine& rEditEngine )
+static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib, EditEngine& rEditEngine )
 {
     if( rSel.nStartPara == rSel.nEndPara )
     {
         sal_uInt8 nFlags = 0;
 
-        switch( bOnlyHardAttrib )
+        switch( nOnlyHardAttrib )
         {
         case EditEngineAttribs_All:
             nFlags = GETATTRIBS_ALL;
@@ -95,13 +95,13 @@ static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, sal_B
     }
     else
     {
-        return rEditEngine.GetAttribs( rSel, bOnlyHardAttrib );
+        return rEditEngine.GetAttribs( rSel, nOnlyHardAttrib );
     }
 }
 
-SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib ) const
+SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib ) const
 {
-    if( mpAttribsCache && ( 0 == bOnlyHardAttrib ) )
+    if( mpAttribsCache && ( EditEngineAttribs_All == nOnlyHardAttrib ) )
     {
         // have we the correct set in cache?
         if( ((SvxOutlinerForwarder*)this)->maAttribCacheSelection.IsEqual(rSel) )
@@ -121,9 +121,9 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, sal_Bool bO
     //! and why is the GetAttribs on the EditEngine not a const?
     EditEngine& rEditEngine = (EditEngine&)rOutliner.GetEditEngine();
 
-    SfxItemSet aSet( ImplOutlinerForwarderGetAttribs( rSel, bOnlyHardAttrib, rEditEngine ) );
+    SfxItemSet aSet( ImplOutlinerForwarderGetAttribs( rSel, nOnlyHardAttrib, rEditEngine ) );
 
-    if( 0 == bOnlyHardAttrib )
+    if( EditEngineAttribs_All == nOnlyHardAttrib )
     {
         mpAttribsCache = new SfxItemSet( aSet );
         maAttribCacheSelection = rSel;
