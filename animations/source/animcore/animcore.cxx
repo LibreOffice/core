@@ -299,7 +299,7 @@ private:
     Any maBegin, maDuration, maEnd, maEndSync, maRepeatCount, maRepeatDuration;
     sal_Int16 mnFill, mnFillDefault, mnRestart, mnRestartDefault;
     double mfAcceleration, mfDecelerate;
-    sal_Bool mbAutoReverse;
+    bool mbAutoReverse;
     Sequence< NamedValue > maUserData;
 
     // parent interface for XChild interface implementation
@@ -313,13 +313,13 @@ private:
     Sequence< double > maKeyTimes;
     sal_Int16 mnValueType, mnSubItem;
     sal_Int16 mnCalcMode, mnAdditive;
-    sal_Bool mbAccumulate;
+    bool mbAccumulate;
     Any maFrom, maTo, maBy;
     Sequence< TimeFilterPair > maTimeFilter;
 
     // attributes for XAnimateColor
     sal_Int16 mnColorSpace;
-    sal_Bool mbDirection;
+    bool mbDirection;
 
     // attributes for XAnimateMotion
     Any maPath, maOrigin;
@@ -330,7 +330,7 @@ private:
     // attributes for XTransitionFilter
     sal_Int16 mnTransition;
     sal_Int16 mnSubtype;
-    sal_Bool mbMode;
+    bool mbMode;
     sal_Int32 mnFadeColor;
 
     // XAudio
@@ -413,15 +413,15 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mnRestartDefault( AnimationRestart:: INHERIT ),
     mfAcceleration( 0.0 ),
     mfDecelerate( 0.0 ),
-    mbAutoReverse( sal_False ),
+    mbAutoReverse( false ),
     mpParent(0),
     mnValueType( 0 ),
     mnSubItem( 0 ),
     mnCalcMode( (nNodeType == AnimationNodeType::ANIMATEMOTION) ? AnimationCalcMode::PACED : AnimationCalcMode::LINEAR),
     mnAdditive(AnimationAdditiveMode::REPLACE),
-    mbAccumulate(sal_False),
+    mbAccumulate(false),
     mnColorSpace( AnimationColorSpace::RGB ),
-    mbDirection( sal_True ),
+    mbDirection( true ),
     mnTransformType( AnimationTransformType::TRANSLATE ),
     mnTransition(TransitionType::BARWIPE),
     mnSubtype(TransitionSubType::DEFAULT),
@@ -1096,7 +1096,7 @@ sal_Bool SAL_CALL AnimationNode::getAutoReverse() throw (RuntimeException, std::
 void SAL_CALL AnimationNode::setAutoReverse( sal_Bool _autoreverse ) throw (RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( maMutex );
-    if( _autoreverse != mbAutoReverse )
+    if( _autoreverse != (mbAutoReverse ? 1 : 0) )
     {
         mbAutoReverse = _autoreverse;
         fireChangeListener();
@@ -1363,7 +1363,7 @@ void SAL_CALL AnimationNode::setAccumulate( sal_Bool _accumulate )
     throw (RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( maMutex );
-    if( _accumulate != mbAccumulate )
+    if( _accumulate != (mbAccumulate ? 1 : 0) )
     {
         mbAccumulate = _accumulate;
         fireChangeListener();
@@ -1544,7 +1544,7 @@ sal_Bool SAL_CALL AnimationNode::getDirection() throw (RuntimeException, std::ex
 void SAL_CALL AnimationNode::setDirection( sal_Bool _direction ) throw (RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( maMutex );
-    if( _direction != mbDirection )
+    if( _direction != (mbDirection ? 1 : 0) )
     {
         mbDirection = _direction;
         fireChangeListener();
@@ -1670,7 +1670,7 @@ sal_Bool SAL_CALL AnimationNode::getMode() throw (RuntimeException, std::excepti
 void SAL_CALL AnimationNode::setMode( sal_Bool _mode ) throw (RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( maMutex );
-    if( _mode != mbMode )
+    if( _mode != (mbMode ? 1 : 0) )
     {
         mbMode = _mode;
         fireChangeListener();
