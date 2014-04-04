@@ -103,6 +103,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     case XML_txXfrm:
     {
         mpShapePtr->getTextBody()->getTextProperties().moRotation = rAttribs.getInteger( XML_rot );
+        return 0;
         break;
     }
     case XML_cNvSpPr:
@@ -119,6 +120,10 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     case XML_cNvPicPr:
         break;
     case XML_nvPicPr:
+        break;
+    case XML_relIds:
+        break;
+    case XML_nvSpPr:
         break;
     default:
         SAL_WARN("oox", "ShapeContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
