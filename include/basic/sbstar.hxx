@@ -122,7 +122,7 @@ public:
     static sal_Int32 GetErl();
 
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
-    virtual sal_Bool Call( const OUString&, SbxArray* = NULL ) SAL_OVERRIDE;
+    virtual bool Call( const OUString&, SbxArray* = NULL ) SAL_OVERRIDE;
 
     SbxArray*       GetModules() { return pModules; }
     SbxObject*      GetRtl()     { return pRtl;     }

@@ -1379,9 +1379,9 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
     return pRes;
 }
 
-sal_Bool StarBASIC::Call( const OUString& rName, SbxArray* pParam )
+bool StarBASIC::Call( const OUString& rName, SbxArray* pParam )
 {
-    sal_Bool bRes = SbxObject::Call( rName, pParam );
+    bool bRes = SbxObject::Call( rName, pParam );
     if( !bRes )
     {
         SbxError eErr = SbxBase::GetError();

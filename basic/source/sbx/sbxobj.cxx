@@ -297,7 +297,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
 // The whole thing recursive, because Call() might be overloaded
 // Qualified names are allowed
 
-sal_Bool SbxObject::Call( const OUString& rName, SbxArray* pParam )
+bool SbxObject::Call( const OUString& rName, SbxArray* pParam )
 {
     SbxVariable* pMeth = FindQualified( rName, SbxCLASS_DONTCARE);
     if( pMeth && pMeth->ISA(SbxMethod) )
@@ -309,10 +309,10 @@ sal_Bool SbxObject::Call( const OUString& rName, SbxArray* pParam )
         }
         pMeth->Broadcast( SBX_HINT_DATAWANTED );
         pMeth->SetParameters( NULL );
-        return sal_True;
+        return true;
     }
     SetError( SbxERR_NO_METHOD );
-    return sal_False;
+    return false;
 }
 
 SbxProperty* SbxObject::GetDfltProperty()
