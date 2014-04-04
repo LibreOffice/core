@@ -41,9 +41,10 @@ using namespace ::oox::core;
 
 
 ExternalSheetDataContext::ExternalSheetDataContext(
-        WorkbookFragmentBase& rFragment, const Reference< XExternalSheetCache >& rxSheetCache ) :
-    WorkbookContextBase( rFragment ),
-    mxSheetCache( rxSheetCache )
+        WorkbookFragmentBase& rFragment, const Reference< XExternalSheetCache >& rxSheetCache )
+    : WorkbookContextBase(rFragment)
+    , mxSheetCache(rxSheetCache)
+    , mnCurrType(XML_TOKEN_INVALID)
 {
     OSL_ENSURE( mxSheetCache.is(), "ExternalSheetDataContext::ExternalSheetDataContext - missing sheet cache" );
 }
