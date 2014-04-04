@@ -456,18 +456,6 @@ void Control::ImplInitSettings( const bool _bFont, const bool _bForeground )
 void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const OUString& _rStr,
     sal_uInt16 _nStyle, MetricVector* _pVector, OUString* _pDisplayText ) const
 {
-#ifdef FS_DEBUG
-    if ( !_pVector )
-    {
-        static MetricVector aCharRects;
-        static OUString sDisplayText;
-        aCharRects.clear();
-        sDisplayText = OUString();
-        _pVector = &aCharRects;
-        _pDisplayText = &sDisplayText;
-    }
-#endif
-
     if ( !mpControlData->mpReferenceDevice || ( mpControlData->mpReferenceDevice == &_rTargetDevice ) )
     {
         _io_rRect = _rTargetDevice.GetTextRect( _io_rRect, _rStr, _nStyle );
@@ -478,20 +466,6 @@ void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRec
         ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
         _io_rRect = aRenderer.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
     }
-
-#ifdef FS_DEBUG
-    _rTargetDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-    _rTargetDevice.SetLineColor( COL_LIGHTRED );
-    _rTargetDevice.SetFillColor();
-    for (   MetricVector::const_iterator cr = _pVector->begin();
-            cr != _pVector->end();
-            ++cr
-        )
-    {
-        _rTargetDevice.DrawRect( *cr );
-    }
-    _rTargetDevice.Pop();
-#endif
 }
 
 Font
