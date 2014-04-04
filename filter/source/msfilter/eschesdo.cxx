@@ -1242,28 +1242,6 @@ sal_Bool ImplEESdrObject::ImplGetPropertyValue( const sal_Unicode* rString )
     return bRetValue;
 }
 
-#ifdef USED
-sal_Bool ImplEESdrObject::ImplGetPropertyValue( const Reference< XPropertySet >& rXPropSet,
-                                            const OUString& rString )
-{
-    sal_Bool bRetValue = sal_False;
-    if( mbValid )
-    {
-        try
-        {
-            mAny = rXPropSet->getPropertyValue( rString );
-            if( 0 != mAny.get() )
-                bRetValue = sal_True;
-        }
-        catch( const ::com::sun::star::uno::Exception& )
-        {
-            bRetValue = sal_False;
-        }
-    }
-    return bRetValue;
-}
-#endif
-
 void ImplEESdrObject::SetRect( const Point& rPos, const Size& rSz )
 {
     maRect = Rectangle( rPos, rSz );
