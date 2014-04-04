@@ -66,7 +66,6 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
     mnDocXScale = (double)nTWIPWidthOutput / mnDocWidth;
     mnDocYScale = (double)nTWIPHeightOutput / mnDocHeight;
 
-#ifndef AUGUSTUS
     // define an invisible button with the size of a page
     Rectangle aRect( 0, 0, (long)( mnDocWidth * mnDocXScale ), (long)( mnDocHeight * mnDocYScale ) );
     Polygon aPoly( aRect );
@@ -95,7 +94,6 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
 
     // place a shape that clips shapes depth 2-3 to document boundaries
 //  placeShape( mnWhiteBackgroundShapeId, 1, 0, 0, 4 );
-#endif
 }
 
 
@@ -465,133 +463,6 @@ sal_uInt16 Writer::defineShape( const PolyPolygon& rPolyPoly, sal_uInt16 nLineWi
 
     return nShapeId;
 }
-
-#ifdef AUGUSTUS
-enum {NO_COMPRESSION, ADPCM_COMPRESSION, MP3_COMPRESSION } COMPRESSION_TYPE;
-sal_Bool Writer::streamSound( const char * filename )
-{
-    SF_INFO      info;
-    SNDFILE *sf = sf_open(filename, SFM_READ, &info);
-
-    if (NULL == sf)
-        return sal_False;
-    else
-    {
-        // AS: Start up lame.
-        m_lame_flags = lame_init();
-
-        // The default (if you set nothing) is a a J-Stereo, 44.1khz
-        // 128kbps CBR mp3 file at quality 5.  Override various default settings
-        // as necessary, for example:
-
-        lame_set_num_channels(m_lame_flags,1);
-        lame_set_in_samplerate(m_lame_flags,22050);
-        lame_set_brate(m_lame_flags,48);
-        lame_set_mode(m_lame_flags,MONO);
-        lame_set_quality(m_lame_flags,2);   /* 2=high  5 = medium  7=low */
-
-        // See lame.h for the complete list of options.  Note that there are
-        // some lame_set_*() calls not documented in lame.h.  These functions
-        // are experimental and for testing only.  They may be removed in
-        // the future.
-
-        //4. Set more internal configuration based on data provided above,
-        //   as well as checking for problems.  Check that ret_code >= 0.
-
-        int ret_code = lame_init_params(m_lame_flags);
-
-        if (ret_code < 0)
-            throw 0;
-
-        int samples_per_frame = 22050 / 12; // AS: (samples/sec) / (frames/sec) = samples/frame
-        int mp3buffer_size = static_cast<int>(samples_per_frame*1.25 + 7200 + 7200);
-
-
-        startTag(TAG_SOUNDSTREAMHEAD2);
-
-        mpTag->addUI8(2<<2 | 1<<1 | 0<<0);  // Preferred mixer format ??
-
-        BitStream bs;
-
-        bs.writeUB(MP3_COMPRESSION,4);
-        bs.writeUB(2, 2);  // AS: Reserved zero bits.
-        bs.writeUB(1, 1);  // AS: 16 Bit
-        bs.writeUB(0, 1);  // AS: Mono.
-
-        mpTag->addBits(bs);
-
-        mpTag->addUI16(samples_per_frame);
-        endTag();
-
-        short *sample_buff = new short[static_cast<int>(info.frames)];
-        sf_readf_short(sf, sample_buff, info.frames);
-
-        unsigned char* mp3buffer = new unsigned char[mp3buffer_size];
-
-// 5. Encode some data.  input pcm data, output (maybe) mp3 frames.
-// This routine handles all buffering, resampling and filtering for you.
-// The required mp3buffer_size can be computed from num_samples,
-// samplerate and encoding rate, but here is a worst case estimate:
-// mp3buffer_size (in bytes) = 1.25*num_samples + 7200.
-// num_samples = the number of PCM samples in each channel.  It is
-// not the sum of the number of samples in the L and R channels.
-
-// The return code = number of bytes output in mp3buffer.  This can be 0.
-// If it is <0, an error occurred.
-
-
-        for (int samples_written = 0; samples_written < info.frames; samples_written += samples_per_frame)
-        {
-            startTag(TAG_SOUNDSTREAMBLOCK);
-
-            int samples_to_write = std::min((int)info.frames - samples_written, samples_per_frame);
-
-            // AS: Since we're mono, left and right sample buffs are the same
-            //  ie, samplebuff (which is why we pass it twice).
-            int ret = lame_encode_buffer(m_lame_flags, sample_buff + samples_written,
-                                            sample_buff + samples_written,
-                                            samples_to_write, mp3buffer, mp3buffer_size);
-
-            if (ret < 0)
-                throw 0;
-
-// 6. lame_encode_flush will flush the buffers and may return a
-// final few mp3 frames.  mp3buffer should be at least 7200 bytes.
-// return code = number of bytes output to mp3buffer.  This can be 0.
-
-            if (mp3buffer_size - ret < 7200)
-                throw 0;
-
-            int ret2 = lame_encode_flush(m_lame_flags, mp3buffer + ret, mp3buffer_size - ret);
-
-            if (ret2 < 0)
-                throw 0;
-
-
-            SvMemoryStream strm(mp3buffer, ret + ret2, STREAM_READWRITE);
-
-            mpTag->addUI16(samples_to_write);
-            mpTag->addUI16(0);
-            mpTag->addStream(strm);
-
-            endTag();
-
-            showFrame();
-        }
-
-
-        delete[] mp3buffer;
-
-        delete[] sample_buff;
-        sf_close(sf);
-
-        // 8. free the internal data structures.
-        lame_close(m_lame_flags);
-    }
-
-    return sal_True;
-}
-#endif // AUGUSTUS
 
 
 

@@ -54,10 +54,6 @@ ImpSWFDialog::ImpSWFDialog( Window* pParent, Sequence< PropertyValue >& rFilterD
     mpCheckExportBackgrounds->Disable();
     mpCheckExportBackgroundObjects->Disable();
     mpCheckExportSlideContents->Disable();
-
-#ifdef AUGUSTUS
-    mpCheckExportMultipleFiles->Check();
-#endif
 }
 
 
