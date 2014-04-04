@@ -59,6 +59,7 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <oox/mathml/import.hxx>
+ #include <GraphicHelpers.hxx>
 
 #ifdef DEBUG_DOMAINMAPPER
 #include <resourcemodel/QNameToString.hxx>
@@ -1735,16 +1736,30 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
             {
                 // Extract the special "btLr text frame" mode, requested by oox, if needed.
+                // Extract vml ZOrder from FrameInteropGrabBag
                 uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xShapePropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
+                bool checkBtLrStatus = false;bool checkZOredrStatus = false;
+
                 for (int i = 0; i < aGrabBag.getLength(); ++i)
                 {
                     if (aGrabBag[i].Name == "mso-layout-flow-alt")
                     {
                         m_bFrameBtLr = aGrabBag[i].Value.get<OUString>() == "bottom-to-top";
-                        break;
+                        checkBtLrStatus = true;
                     }
+                    if (aGrabBag[i].Name == "VML-Z-ORDER")
+                    {
+                        GraphicZOrderHelper* pZOrderHelper = m_rDMapper.graphicZOrderHelper();
+                        sal_Int32 zOrder;
+                        aGrabBag[i].Value >>= zOrder;
+                        xShapePropertySet->setPropertyValue( "ZOrder", uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
+                        pZOrderHelper->addItem(xShapePropertySet, zOrder);
+                        checkZOredrStatus = true;
+                    }
+                    if(checkBtLrStatus && checkZOredrStatus)
+                        break;
                 }
 
                 uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);

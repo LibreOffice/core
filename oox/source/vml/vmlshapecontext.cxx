@@ -399,6 +399,7 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
         if( ConversionHelper::separatePair( aName, aValue, rStyle.getToken( 0, ';', nIndex ), ':' ) )
         {
                  if( aName == "position" )      mrTypeModel.maPosition = aValue;
+            else if( aName == "z-index" )        mrTypeModel.maZIndex = aValue;
             else if( aName == "left" )           mrTypeModel.maLeft = aValue;
             else if( aName == "top" )            mrTypeModel.maTop = aValue;
             else if( aName == "width" )          mrTypeModel.maWidth = aValue;

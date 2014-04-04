@@ -41,6 +41,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
+ #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -322,6 +323,19 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 PropertySet aShapeProp( xShape );
                 if( aShapeProp.hasProperty( PROP_Name ) )
                     aShapeProp.setProperty( PROP_Name, getShapeName() );
+                uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
+                if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
+                {
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    uno::Reference<beans::XPropertySet> propertySet (xShape, uno::UNO_QUERY);
+                    propertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
+                    sal_Int32 length = aGrabBag.getLength();
+
+                    aGrabBag.realloc( length+1 );
+                    aGrabBag[length].Name = "VML-Z-ORDER";
+                    aGrabBag[length].Value = uno::makeAny( maTypeModel.maZIndex.toInt32() );
+                    propertySet->setPropertyValue( "FrameInteropGrabBag", uno::makeAny(aGrabBag) );
+                }
                 Reference< XControlShape > xControlShape( xShape, uno::UNO_QUERY );
                 if ( xControlShape.is() && !getTypeModel().mbVisible )
                 {
