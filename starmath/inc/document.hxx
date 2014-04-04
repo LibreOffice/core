@@ -97,15 +97,10 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     SmParser            aInterpreter;
     OUString            aAccText;
     SmNode             *pTree;
-    SfxMenuBarManager  *pMenuMgr;
     SfxItemPool        *pEditEngineItemPool;
     EditEngine         *pEditEngine;
     SfxPrinter         *pPrinter;       //q.v. comment to SmPrinter Access!
     Printer            *pTmpPrinter;    //ditto
-    long                nLeftBorder,
-                        nRightBorder,
-                        nTopBorder,
-                        nBottomBorder;
     sal_uInt16          nModifyCount;
     bool                bIsFormulaArranged;
     SmCursor           *pCursor;
