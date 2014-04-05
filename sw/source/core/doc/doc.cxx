@@ -18,6 +18,7 @@
  */
 
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
 
@@ -33,7 +34,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
@@ -48,7 +48,6 @@
 #include <editeng/charsetcoloritem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
 #include <editeng/pbinitem.hxx>
 #include <unotools/charclass.hxx>
@@ -67,7 +66,6 @@
 #include <txtinet.hxx>
 #include <txtrfmrk.hxx>
 #include <frmatr.hxx>
-#include <linkenum.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <swtable.hxx>
@@ -79,7 +77,6 @@
 #include <UndoSplitMove.hxx>
 #include <UndoTable.hxx>
 #include <pagedesc.hxx>
-#include <breakit.hxx>
 #include <ndole.hxx>
 #include <ndgrf.hxx>
 #include <rolbck.hxx>
@@ -101,7 +98,6 @@
 #include <statstr.hrc>
 #include <comcore.hrc>
 #include <SwUndoTOXChange.hxx>
-#include <SwUndoFmt.hxx>
 #include <unocrsr.hxx>
 #include <docsh.hxx>
 #include <viewopt.hxx>
@@ -154,319 +150,44 @@ sal_Int32 SwDoc::getReferenceCount() const
 /* IDocumentSettingAccess */
 bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
 {
-    switch (id)
-    {
-        // COMPATIBILITY FLAGS START
-        case PARA_SPACE_MAX: return mbParaSpaceMax; //(n8Dummy1 & DUMMY_PARASPACEMAX);
-        case PARA_SPACE_MAX_AT_PAGES: return mbParaSpaceMaxAtPages; //(n8Dummy1 & DUMMY_PARASPACEMAX_AT_PAGES);
-        case TAB_COMPAT: return mbTabCompat; //(n8Dummy1 & DUMMY_TAB_COMPAT);
-        case ADD_FLY_OFFSETS: return mbAddFlyOffsets; //(n8Dummy2 & DUMMY_ADD_FLY_OFFSETS);
-        case ADD_EXT_LEADING: return mbAddExternalLeading; //(n8Dummy2 & DUMMY_ADD_EXTERNAL_LEADING);
-        case USE_VIRTUAL_DEVICE: return mbUseVirtualDevice; //(n8Dummy1 & DUMMY_USE_VIRTUAL_DEVICE);
-        case USE_HIRES_VIRTUAL_DEVICE: return mbUseHiResolutionVirtualDevice; //(n8Dummy2 & DUMMY_USE_HIRES_VIR_DEV);
-        case OLD_NUMBERING: return mbOldNumbering;
-        case OLD_LINE_SPACING: return mbOldLineSpacing;
-        case ADD_PARA_SPACING_TO_TABLE_CELLS: return mbAddParaSpacingToTableCells;
-        case USE_FORMER_OBJECT_POS: return mbUseFormerObjectPos;
-        case USE_FORMER_TEXT_WRAPPING: return mbUseFormerTextWrapping;
-        case CONSIDER_WRAP_ON_OBJECT_POSITION: return mbConsiderWrapOnObjPos;
-        case DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK: return mbDoNotJustifyLinesWithManualBreak;
-        case IGNORE_FIRST_LINE_INDENT_IN_NUMBERING: return mbIgnoreFirstLineIndentInNumbering;
-        case OUTLINE_LEVEL_YIELDS_OUTLINE_RULE: return mbOutlineLevelYieldsOutlineRule;
-        case TABLE_ROW_KEEP: return mbTableRowKeep;
-        case IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION: return mbIgnoreTabsAndBlanksForLineCalculation;
-        case DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE: return mbDoNotCaptureDrawObjsOnPage;
-        // #i68949#
-        case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME: return mbClipAsCharacterAnchoredWriterFlyFrames;
-        case UNIX_FORCE_ZERO_EXT_LEADING: return mbUnixForceZeroExtLeading;
-        case TABS_RELATIVE_TO_INDENT : return mbTabRelativeToIndent;
-        case PROTECT_FORM: return mbProtectForm;
-        // #i89181#
-        case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST: return mbTabAtLeftIndentForParagraphsInList;
-        case INVERT_BORDER_SPACING: return mbInvertBorderSpacing;
-        case COLLAPSE_EMPTY_CELL_PARA: return mbCollapseEmptyCellPara;
-        case SMALL_CAPS_PERCENTAGE_66: return mbSmallCapsPercentage66;
-        case TAB_OVERFLOW: return mbTabOverflow;
-        case UNBREAKABLE_NUMBERINGS: return mbUnbreakableNumberings;
-        case CLIPPED_PICTURES: return mbClippedPictures;
-        case BACKGROUND_PARA_OVER_DRAWINGS: return mbBackgroundParaOverDrawings;
-        case TAB_OVER_MARGIN: return mbTabOverMargin;
-        case SURROUND_TEXT_WRAP_SMALL: return mbSurroundTextWrapSmall;
-
-        case BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the SwViewShell has to be asked!
-        case HTML_MODE: return mbHTMLMode;
-        case GLOBAL_DOCUMENT: return mbIsGlobalDoc;
-        case GLOBAL_DOCUMENT_SAVE_LINKS: return mbGlblDocSaveLinks;
-        case LABEL_DOCUMENT: return mbIsLabelDoc;
-        case PURGE_OLE: return mbPurgeOLE;
-        case KERN_ASIAN_PUNCTUATION: return mbKernAsianPunctuation;
-        case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: return mbDoNotResetParaAttrsForNumFont;
-        case MATH_BASELINE_ALIGNMENT: return mbMathBaselineAlignment;
-        case STYLES_NODEFAULT: return mbStylesNoDefault;
-        case FLOATTABLE_NOMARGINS: return mbFloattableNomargins;
-        case EMBED_FONTS: return mEmbedFonts;
-        case EMBED_SYSTEM_FONTS: return mEmbedSystemFonts;
-        default:
-            OSL_FAIL("Invalid setting id");
-    }
-    return false;
+    return m_pDocumentSettingManager->get(id);
 }
 
 void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
 {
-    switch (id)
-    {
-        // COMPATIBILITY FLAGS START
-        case PARA_SPACE_MAX:
-            mbParaSpaceMax = value;
-            break;
-        case PARA_SPACE_MAX_AT_PAGES:
-            mbParaSpaceMaxAtPages = value;
-            break;
-        case TAB_COMPAT:
-            mbTabCompat = value;
-            break;
-        case ADD_FLY_OFFSETS:
-            mbAddFlyOffsets = value;
-            break;
-        case ADD_EXT_LEADING:
-            mbAddExternalLeading = value;
-            break;
-        case USE_VIRTUAL_DEVICE:
-            mbUseVirtualDevice = value;
-            break;
-        case USE_HIRES_VIRTUAL_DEVICE:
-            mbUseHiResolutionVirtualDevice = value;
-            break;
-        case OLD_NUMBERING:
-            if (mbOldNumbering != value)
-            {
-                mbOldNumbering = value;
-
-                const SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
-                for( sal_uInt16 n = 0; n < rNmTbl.size(); ++n )
-                    rNmTbl[n]->SetInvalidRule(sal_True);
-
-                UpdateNumRule();
-
-                if (mpOutlineRule)
-                {
-                    mpOutlineRule->Validate();
-                    // counting of phantoms depends on <IsOldNumbering()>
-                    mpOutlineRule->SetCountPhantoms( !mbOldNumbering );
-                }
-            }
-            break;
-        case OLD_LINE_SPACING:
-            mbOldLineSpacing = value;
-            break;
-        case ADD_PARA_SPACING_TO_TABLE_CELLS:
-            mbAddParaSpacingToTableCells = value;
-            break;
-        case USE_FORMER_OBJECT_POS:
-            mbUseFormerObjectPos = value;
-            break;
-        case USE_FORMER_TEXT_WRAPPING:
-            mbUseFormerTextWrapping = value;
-            break;
-        case CONSIDER_WRAP_ON_OBJECT_POSITION:
-            mbConsiderWrapOnObjPos = value;
-            break;
-        case DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK:
-            mbDoNotJustifyLinesWithManualBreak = value;
-            break;
-        case IGNORE_FIRST_LINE_INDENT_IN_NUMBERING:
-            mbIgnoreFirstLineIndentInNumbering = value;
-            break;
-
-        case OUTLINE_LEVEL_YIELDS_OUTLINE_RULE:
-            mbOutlineLevelYieldsOutlineRule = value;
-            break;
-
-        case TABLE_ROW_KEEP:
-            mbTableRowKeep = value;
-            break;
-
-        case IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION:
-            mbIgnoreTabsAndBlanksForLineCalculation = value;
-            break;
-
-        case DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE:
-            mbDoNotCaptureDrawObjsOnPage = value;
-            break;
-
-        // #i68949#
-        case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME:
-            mbClipAsCharacterAnchoredWriterFlyFrames = value;
-            break;
-
-        case UNIX_FORCE_ZERO_EXT_LEADING:
-            mbUnixForceZeroExtLeading = value;
-            break;
-
-        case PROTECT_FORM:
-            mbProtectForm = value;
-            break;
-
-        case TABS_RELATIVE_TO_INDENT:
-            mbTabRelativeToIndent = value;
-            break;
-        // #i89181#
-        case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
-            mbTabAtLeftIndentForParagraphsInList = value;
-            break;
-
-        case INVERT_BORDER_SPACING:
-            mbInvertBorderSpacing = value;
-            break;
-
-        case COLLAPSE_EMPTY_CELL_PARA:
-            mbCollapseEmptyCellPara = value;
-            break;
-
-        case SMALL_CAPS_PERCENTAGE_66:
-            mbSmallCapsPercentage66 = value;
-            break;
-
-        case TAB_OVERFLOW:
-            mbTabOverflow = value;
-            break;
-
-        case UNBREAKABLE_NUMBERINGS:
-            mbUnbreakableNumberings = value;
-            break;
-
-        case CLIPPED_PICTURES:
-            mbClippedPictures = value;
-            break;
-
-        case BACKGROUND_PARA_OVER_DRAWINGS:
-            mbBackgroundParaOverDrawings = value;
-            break;
-
-        case TAB_OVER_MARGIN:
-            mbTabOverMargin = value;
-            break;
-
-        case SURROUND_TEXT_WRAP_SMALL:
-            mbSurroundTextWrapSmall = value;
-            break;
-
-        // COMPATIBILITY FLAGS END
-
-        case BROWSE_MODE: //can be used temporary (load/save) when no SwViewShell is available
-            mbLastBrowseMode = value;
-            break;
-
-        case HTML_MODE:
-            mbHTMLMode = value;
-            break;
-
-        case GLOBAL_DOCUMENT:
-            mbIsGlobalDoc = value;
-            break;
-
-        case GLOBAL_DOCUMENT_SAVE_LINKS:
-            mbGlblDocSaveLinks = value;
-            break;
-
-        case LABEL_DOCUMENT:
-            mbIsLabelDoc = value;
-            break;
-
-        case PURGE_OLE:
-            mbPurgeOLE = value;
-            break;
-
-        case KERN_ASIAN_PUNCTUATION:
-            mbKernAsianPunctuation = value;
-            break;
-
-        case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
-            mbDoNotResetParaAttrsForNumFont = value;
-            break;
-        case MATH_BASELINE_ALIGNMENT:
-            mbMathBaselineAlignment  = value;
-            break;
-        case STYLES_NODEFAULT:
-            mbStylesNoDefault  = value;
-            break;
-        case FLOATTABLE_NOMARGINS:
-            mbFloattableNomargins = value;
-            break;
-        case EMBED_FONTS:
-            mEmbedFonts = value;
-            break;
-        case EMBED_SYSTEM_FONTS:
-            mEmbedSystemFonts = value;
-            break;
-        default:
-            OSL_FAIL("Invalid setting id");
-    }
+    m_pDocumentSettingManager->set(id,value);
 }
 
 const i18n::ForbiddenCharacters*
     SwDoc::getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const
 {
-    const i18n::ForbiddenCharacters* pRet = 0;
-    if( mxForbiddenCharsTable.is() )
-        pRet = mxForbiddenCharsTable->GetForbiddenCharacters( nLang, false );
-    if( bLocaleData && !pRet && g_pBreakIt )
-        pRet = &g_pBreakIt->GetForbidden( (LanguageType)nLang );
-    return pRet;
+    return m_pDocumentSettingManager->getForbiddenCharacters(nLang,bLocaleData);
 }
 
 void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
                                    /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rFChars )
 {
-    if( !mxForbiddenCharsTable.is() )
-    {
-        mxForbiddenCharsTable = new SvxForbiddenCharactersTable( ::comphelper::getProcessComponentContext() );
-    }
-    mxForbiddenCharsTable->SetForbiddenCharacters( nLang, rFChars );
-    if( mpDrawModel )
-    {
-        mpDrawModel->SetForbiddenCharsTable( mxForbiddenCharsTable );
-        if( !mbInReading )
-            mpDrawModel->ReformatAllTextObjects();
-    }
-
-    SwRootFrm* pTmpRoot = GetCurrentLayout();
-    if( pTmpRoot && !mbInReading )
-    {
-        pTmpRoot->StartAllAction();
-        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
-        pTmpRoot->EndAllAction();
-    }
-    SetModified();
+    m_pDocumentSettingManager->setForbiddenCharacters(nLang,rFChars);
 }
 
 rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
 {
-    if( !mxForbiddenCharsTable.is() )
-    {
-        mxForbiddenCharsTable = new SvxForbiddenCharactersTable( ::comphelper::getProcessComponentContext() );
-    }
-    return mxForbiddenCharsTable;
+    return m_pDocumentSettingManager->getForbiddenCharacterTable();
 }
 
 const rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable() const
 {
-    return mxForbiddenCharsTable;
+    return m_pDocumentSettingManager->getForbiddenCharacterTable();
 }
 
 sal_uInt16 SwDoc::getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const
 {
-    sal_uInt16 nRet = mnLinkUpdMode;
-    if( bGlobalSettings && GLOBALSETTING == nRet )
-        nRet = SW_MOD()->GetLinkUpdMode(get(IDocumentSettingAccess::HTML_MODE));
-    return nRet;
+    return m_pDocumentSettingManager->getLinkUpdateMode(bGlobalSettings);
 }
 
 void SwDoc::setLinkUpdateMode( /*[in]*/sal_uInt16 eMode )
 {
-    mnLinkUpdMode = eMode;
+    m_pDocumentSettingManager->setLinkUpdateMode(eMode);
 }
 
 sal_uInt32 SwDoc::getRsid() const
@@ -503,44 +224,22 @@ void SwDoc::setRsidRoot( sal_uInt32 nVal )
 
 SwFldUpdateFlags SwDoc::getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const
 {
-    SwFldUpdateFlags eRet = meFldUpdMode;
-    if( bGlobalSettings && AUTOUPD_GLOBALSETTING == eRet )
-        eRet = SW_MOD()->GetFldUpdateFlags(get(IDocumentSettingAccess::HTML_MODE));
-    return eRet;
+    return m_pDocumentSettingManager->getFieldUpdateFlags(bGlobalSettings);
 }
 
 void SwDoc::setFieldUpdateFlags(/*[in]*/SwFldUpdateFlags eMode )
 {
-    meFldUpdMode = eMode;
+    m_pDocumentSettingManager->setFieldUpdateFlags(eMode);
 }
 
 SwCharCompressType SwDoc::getCharacterCompressionType() const
 {
-    return meChrCmprType;
+    return m_pDocumentSettingManager->getCharacterCompressionType();
 }
 
 void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
 {
-    if( meChrCmprType != n )
-    {
-        meChrCmprType = n;
-        if( mpDrawModel )
-        {
-            mpDrawModel->SetCharCompressType( static_cast<sal_uInt16>(n) );
-            if( !mbInReading )
-                mpDrawModel->ReformatAllTextObjects();
-        }
-
-        SwRootFrm* pTmpRoot = GetCurrentLayout();
-        if( pTmpRoot && !mbInReading )
-        {
-            pTmpRoot->StartAllAction();
-            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-            std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
-            pTmpRoot->EndAllAction();
-        }
-        SetModified();
-    }
+    m_pDocumentSettingManager->setCharacterCompressionType(n);
 }
 
 /* IDocumentDeviceAccess */

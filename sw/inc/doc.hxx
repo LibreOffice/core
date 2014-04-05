@@ -208,6 +208,7 @@ namespace sw {
     class MetaFieldManager;
     class UndoManager;
     class IShellCursorSupplier;
+    class DocumentSettingManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -290,6 +291,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::mark::MarkManager> mpMarkManager;
     const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
     const ::boost::scoped_ptr< ::sw::UndoManager > m_pUndoManager;
+    const ::boost::scoped_ptr< ::sw::DocumentSettingManager > m_pDocumentSettingManager;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -400,10 +402,7 @@ private:
     sal_uInt16 mnAutoFmtRedlnCommentNo;  /**< SeqNo for conjoining of AutoFmt-Redlines.
                                          by the UI. Managed by SwAutoFmt! */
 
-    sal_uInt16  mnLinkUpdMode;       //< UpdateMode for links.
-    SwFldUpdateFlags    meFldUpdMode;//< Automatically Update Mode for fields/charts.
     RedlineMode_t meRedlineMode;     //< Current Redline Mode.
-    SwCharCompressType meChrCmprType;//< for ASIAN: compress punctuation/kana
 
     sal_uInt32  mnRsid;              //< current session ID of the document
     sal_uInt32  mnRsidRoot;          //< session ID when the document was created
@@ -441,11 +440,7 @@ private:
     bool mbInXMLImport           : 1;    //< TRUE: During xml import, attribute portion building is not necessary.
     bool mbUpdateTOX             : 1;    //< TRUE: After loading document, update TOX.
     bool mbInLoadAsynchron       : 1;    //< TRUE: Document is in the process of being loaded asynchronously.
-    bool mbHTMLMode              : 1;    //< TRUE: Document is in HTMLMode.
     bool mbInCallModified        : 1;    //< TRUE: in Set/Reset-Modified link.
-    bool mbIsGlobalDoc           : 1;    //< TRUE: It's a global document.
-    bool mbGlblDocSaveLinks      : 1;    //< TRUE: Save sections linked in global document.
-    bool mbIsLabelDoc            : 1;    //< TRUE: It's a label document.
     bool mbIsAutoFmtRedline      : 1;    //< TRUE: Redlines are recorded by Autoformat.
     bool mbOLEPrtNotifyPending   : 1;    /**< TRUE: Printer has changed. At creation of
                                                 ::com::sun::star::sdbcx::View
@@ -454,8 +449,6 @@ private:
     bool mbIsRedlineMove         : 1;    //< True: Redlines are moved into to / out of the section.
     bool mbInsOnlyTxtGlssry      : 1;    //< True: insert 'only text' glossary into doc
     bool mbContains_MSVBasic     : 1;    //< True: MS-VBasic exist is in our storage
-    bool mbPurgeOLE              : 1;    //< sal_True: Purge OLE-Objects
-    bool mbKernAsianPunctuation  : 1;    //< sal_True: kerning also for ASIAN punctuation
     bool mbReadlineChecked       : 1;    //< sal_True: if the query was already shown
     bool mbLinksUpdated          : 1;    /**< #i38810#
                                           flag indicating, that the links have been updated. */
@@ -532,53 +525,8 @@ private:
     // label is followed by a tab character.
     // mbTabAtLeftIndentForParagraphsInList     def = sal_False, hidden
 
-    bool mbParaSpaceMax                     : 1;
-    bool mbParaSpaceMaxAtPages              : 1;
-    bool mbTabCompat                        : 1;
-    bool mbUseVirtualDevice                 : 1;
-    bool mbAddFlyOffsets                    : 1;
-    bool mbAddExternalLeading               : 1;
-    bool mbUseHiResolutionVirtualDevice     : 1;
-    bool mbOldLineSpacing                   : 1;    // #i11859#
-    bool mbAddParaSpacingToTableCells       : 1;
-    bool mbUseFormerObjectPos               : 1;    // #i11860#
-    bool mbUseFormerTextWrapping            : 1;
-    bool mbConsiderWrapOnObjPos             : 1;    // #i28701#
-                                                    // sal_True: object positioning algorithm has consider the wrapping style of                                                    //       the floating screen objects as given by its attribute 'WrapInfluenceOnObjPos'
-                                                    // floating screen objects as given by its
-                                                    // attribute 'WrapInfluenceOnObjPos'.
-    bool mbMathBaselineAlignment            : 1;    // TL  2010-10-29 #i972#
-    bool mbStylesNoDefault                  : 1;
-    bool mbFloattableNomargins              : 1; //< If paragraph margins next to a floating table should be ignored.
-    bool mEmbedFonts                        : 1;  //< Whether to embed fonts used by the document when saving.
-    bool mEmbedSystemFonts                  : 1;  //< Whether to embed also system fonts.
-
     // non-ui-compatibility flags:
-    bool mbOldNumbering                             : 1;
-    bool mbIgnoreFirstLineIndentInNumbering         : 1;   // #i47448#
-    bool mbDoNotJustifyLinesWithManualBreak         : 1;   // #i49277#
-    bool mbDoNotResetParaAttrsForNumFont            : 1;   // #i53199#
-    bool mbTableRowKeep                             : 1;
-    bool mbIgnoreTabsAndBlanksForLineCalculation    : 1;   // #i3952#
-    bool mbDoNotCaptureDrawObjsOnPage               : 1;   // #i62875#
-    bool mbOutlineLevelYieldsOutlineRule            : 1;
-    bool mbClipAsCharacterAnchoredWriterFlyFrames   : 1;
-    bool mbUnixForceZeroExtLeading                  : 1;   // #i60945#
     bool mbOldPrinterMetrics                        : 1;
-    bool mbTabRelativeToIndent                      : 1;   // #i24363# tab stops relative to indent
-    bool mbProtectForm                              : 1;
-    bool mbInvertBorderSpacing                      : 1;
-    bool mbCollapseEmptyCellPara                    : 1;
-    bool mbTabAtLeftIndentForParagraphsInList;             // #i89181# - see above
-    bool mbSmallCapsPercentage66;
-    bool mbTabOverflow;
-    bool mbUnbreakableNumberings;
-    bool mbClippedPictures;
-    bool mbBackgroundParaOverDrawings;
-    bool mbTabOverMargin;
-    bool mbSurroundTextWrapSmall;
-
-    bool mbLastBrowseMode                           : 1;
 
     sal_uInt32  mn32DummyCompatabilityOptions1;
     sal_uInt32  mn32DummyCompatabilityOptions2;
@@ -2080,6 +2028,8 @@ public:
     ::sw::MetaFieldManager & GetMetaFieldManager();
     ::sw::UndoManager      & GetUndoManager();
     ::sw::UndoManager const& GetUndoManager() const;
+    ::sw::DocumentSettingManager      & GetDocumentSettingManager();
+    ::sw::DocumentSettingManager const& GetDocumentSettingManager() const;
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
 
     /**
