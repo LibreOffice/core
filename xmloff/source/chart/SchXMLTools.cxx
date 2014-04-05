@@ -424,6 +424,38 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
     return xRet;
 }
 
+Reference< chart2::data::XDataSequence > CreateDataSequenceWithoutConvert(
+        const OUString & rRange,
+        const Reference< chart2::XChartDocument >& xChartDoc )
+{
+    Reference< chart2::data::XDataSequence > xRet;
+
+    if( !xChartDoc.is() )
+    {
+        SAL_WARN("xmloff.chart", "need a chart document" );
+        return xRet;
+    }
+
+    Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
+    if( !xDataProvider.is() )
+    {
+        SAL_WARN("xmloff.chart", "need a data provider" );
+        return xRet;
+    }
+
+    try
+    {
+        xRet.set( xDataProvider->createDataSequenceByRangeRepresentation( rRange ) );
+        SchXMLTools::setXMLRangePropertyAtDataSequence( xRet, rRange );
+    }
+    catch( const lang::IllegalArgumentException & )
+    {
+        SAL_WARN("xmloff.chart", "could not create data sequence" );
+    }
+
+    return xRet;
+}
+
 void CreateCategories(
     const uno::Reference< chart2::data::XDataProvider > & xDataProvider,
     const uno::Reference< chart2::XChartDocument > & xNewDoc,

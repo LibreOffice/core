@@ -2553,6 +2553,14 @@ namespace
         //no doubles and no texts
         return false;
     }
+
+    bool isString(const OUString& rString)
+    {
+        if(rString.startsWith("\"") && rString.endsWith("\""))
+            return true;
+
+        return false;
+    }
 }
 
 void SchXMLExportHelper_Impl::exportSeries(
@@ -2720,10 +2728,21 @@ void SchXMLExportHelper_Impl::exportSeries(
                                         modifyLabelRange = true;
                                     if (modifyLabelRange)
                                         aRange = "label " + OUString::number(aRange.copy( OUString("label").getLength()).toInt32() - 1);
-                                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LABEL_CELL_ADDRESS,
-                                                           lcl_ConvertRange(
-                                                               aRange,
-                                                               xNewDoc ));
+
+                                    OUString aXMLRange = lcl_ConvertRange( aRange, xNewDoc );
+                                    if(aXMLRange.isEmpty() && !aRange.isEmpty())
+                                    {
+                                        // might just be a string
+                                        bool bIsString = isString(aRange);
+                                        if(bIsString)
+                                        {
+                                            mrExport.AddAttribute( XML_NAMESPACE_LO_EXT,
+                                                    XML_LABEL_STRING, aRange );
+                                        }
+                                    }
+                                    else
+                                        mrExport.AddAttribute( XML_NAMESPACE_CHART,
+                                                XML_LABEL_CELL_ADDRESS, aXMLRange );
                                 }
                                 if( xLabelSeq.is() || xValuesSeq.is() )
                                     aSeriesLabelValuesPair = tLabelValuesDataPair( xLabelSeq, xValuesSeq );
@@ -3138,6 +3157,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 Reference< chart2::XChartDocument > xNewDoc( mrExport.GetModel(), uno::UNO_QUERY );
                 //@todo: export data points
 
+                //TODO: moggi: same code three times
                 // open
                 if( bJapaneseCandleSticks )
                 {
