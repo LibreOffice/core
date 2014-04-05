@@ -114,7 +114,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     uno::Sequence< beans::PropertyValue > aValues(1);
     beans::PropertyValue* pValues = aValues.getArray();
     pValues[0].Name = "FilterName";
-    pValues[0].Value <<= OUString(pSfxFlt->GetFilterName());
+    pValues[0].Value <<= pSfxFlt->GetFilterName();
 
     uno::Reference< frame::XStorable > xStore( pView->GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( m_sExampleURL, aValues   );
@@ -302,14 +302,10 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         SwFldMgr aFldMgr(&rShell);
         //create a database string source.command.commandtype.column
         const SwDBData& rData = rConfigItem.GetCurrentDBData();
-        OUString sDBName(rData.sDataSource);
-        sDBName += OUString(DB_DELIM);
-        sDBName += rData.sCommand;
-        sDBName += OUString(DB_DELIM);
-        OUString sDatabaseConditionPrefix(sDBName);
-        sDatabaseConditionPrefix = sDatabaseConditionPrefix.replace(DB_DELIM, '.');
-        sDBName += OUString::number(rData.nCommandType);
-        sDBName += OUString(DB_DELIM);
+        OUString sDBName(rData.sDataSource + OUString(DB_DELIM)
+            + rData.sCommand + OUString(DB_DELIM));
+        const OUString sDatabaseConditionPrefix(sDBName.replace(DB_DELIM, '.'));
+        sDBName += OUString::number(rData.nCommandType) + OUString(DB_DELIM);
 
         // if only the country is in an address line the
         // paragraph has to be hidden depending on the
@@ -321,12 +317,13 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         bool bSpecialReplacementForCountry = (!bIncludeCountry || !rExcludeCountry.isEmpty());
 
         const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
-        OUString sCountryColumn = rHeaders.GetString(MM_PART_COUNTRY);
         Sequence< OUString> aAssignment =
                         rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
         const OUString* pAssignment = aAssignment.getConstArray();
-        if(aAssignment.getLength() > MM_PART_COUNTRY && !aAssignment[MM_PART_COUNTRY].isEmpty())
-            sCountryColumn = aAssignment[MM_PART_COUNTRY];
+        const OUString sCountryColumn(
+            (aAssignment.getLength() > MM_PART_COUNTRY && !aAssignment[MM_PART_COUNTRY].isEmpty())
+            ? aAssignment[MM_PART_COUNTRY]
+            : rHeaders.GetString(MM_PART_COUNTRY));
 
         OUString sHideParagraphsExpression;
         SwAddressIterator aIter(aBlocks[0]);
@@ -348,8 +345,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
                         break;
                     }
                 }
-                OUString sDB(sDBName);
-                sDB += sConvertedColumn;
+                const OUString sDB(sDBName + sConvertedColumn);
 
                 if(!sHideParagraphsExpression.isEmpty())
                    sHideParagraphsExpression += " AND ";
@@ -358,19 +354,18 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
                 if( bSpecialReplacementForCountry && sCountryColumn == sConvertedColumn )
                 {
                     // now insert a hidden paragraph field
-                    OUString sExpression;
                     if( !rExcludeCountry.isEmpty() )
                     {
-                        sExpression = "[" + sDatabaseConditionPrefix + sCountryColumn + "]";
-
-                        OUString sCondition = sExpression + " != \"" + rExcludeCountry + "\"";
-
-                        SwInsertFld_Data aData(TYP_CONDTXTFLD, 0, sCondition, sExpression, 0, &rShell );
+                        const OUString sExpression("[" + sDatabaseConditionPrefix + sCountryColumn + "]");
+                        SwInsertFld_Data aData(TYP_CONDTXTFLD, 0,
+                                               sExpression + " != \"" + rExcludeCountry + "\"",
+                                               sExpression,
+                                               0, &rShell );
                         aFldMgr.InsertFld( aData );
                     }
                     else
                     {
-                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sExpression, aEmptyOUStr, 0, &rShell );
+                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, "", "", 0, &rShell );
                         aFldMgr.InsertFld( aData );
                     }
                 }
@@ -462,7 +457,6 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     }
     //now insert the greeting text - if we have any?
     const sal_Bool bIndividual = rConfigItem.IsIndividualGreeting(sal_False);
-    OUString sGreeting;
     if(bIndividual)
     {
         //lock expression fields - prevents hiding of the paragraph to insert into
@@ -477,8 +471,8 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                 sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting((SwMailMergeConfigItem::Gender)eGender);
                 if( nCurrent >= 0 && nCurrent < aEntries.getLength())
                 {
-                    sGreeting = aEntries[nCurrent];
-                    rShell.Insert(sGreeting);
+                    // Greeting
+                    rShell.Insert(aEntries[nCurrent]);
                     break;
                 }
             }
@@ -490,33 +484,19 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             //are to be inserted
 
             //name of the gender column
-            OUString sGenderColumn = rConfigItem.GetAssignedColumn(MM_PART_GENDER);
-            OUString sNameColumn = rConfigItem.GetAssignedColumn(MM_PART_LASTNAME);
+            const OUString sGenderColumn = rConfigItem.GetAssignedColumn(MM_PART_GENDER);
+            const OUString sNameColumn = rConfigItem.GetAssignedColumn(MM_PART_LASTNAME);
 
             const OUString& rFemaleGenderValue = rConfigItem.GetFemaleGenderValue();
             sal_Bool bHideEmptyParagraphs = rConfigItem.IsHideEmptyParagraphs();
             const SwDBData& rData = rConfigItem.GetCurrentDBData();
-            OUString sConditionBase(rData.sDataSource);
-            sConditionBase += ".";
-            sConditionBase += rData.sCommand;
-            sConditionBase += ".";
-            //split the name column from here
-            OUString sNameColumnBase(sConditionBase);
+            const OUString sCommonBase(rData.sDataSource + "." + rData.sCommand + ".");
+            const OUString sConditionBase("[" + sCommonBase + sGenderColumn + "]");
+            const OUString sNameColumnBase("[" + sCommonBase + sNameColumn + "]");
 
-            sConditionBase += sGenderColumn;
-            sConditionBase += "]";
-            sConditionBase = "[" + sConditionBase;
-
-            sNameColumnBase += sNameColumn;
-            sNameColumnBase += "]";
-            sNameColumnBase = "[" + sNameColumnBase;
-
-            OUString sDBName(rData.sDataSource);
-            sDBName += OUString(DB_DELIM);
-            sDBName += rData.sCommand;
-            sDBName += OUString(DB_DELIM);
-            sDBName += OUString::number(rData.nCommandType);
-            sDBName += OUString(DB_DELIM);
+            const OUString sDBName(rData.sDataSource + OUString(DB_DELIM)
+                + rData.sCommand + OUString(DB_DELIM)
+                + OUString::number(rData.nCommandType) + OUString(DB_DELIM));
 
 //          Female:  [database.sGenderColumn] != "rFemaleGenderValue" && [database.NameColumn]
 //          Male:    [database.sGenderColumn] == "rFemaleGenderValue" && [database.rGenderColumn]
@@ -531,25 +511,19 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                 sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting((SwMailMergeConfigItem::Gender)eGender);
                 if( nCurrent >= 0 && nCurrent < aEntries.getLength())
                 {
-                    sGreeting = aEntries[nCurrent];
-                    OUString sCondition(sConditionBase);
+                    const OUString sGreeting = aEntries[nCurrent];
+                    OUString sCondition;
                     OUString sHideParagraphsExpression;
                     switch(eGender)
                     {
                         case  SwMailMergeConfigItem::FEMALE:
-                            sCondition += " != \"";
-                            sCondition += rFemaleGenderValue;
-                            sCondition += "\" OR NOT ";
-                            sCondition += sNameColumnBase;
-
-                            sHideParagraphsExpression += "!";
-                            sHideParagraphsExpression += sNameColumnBase;
+                            sCondition = sConditionBase + " != \"" + rFemaleGenderValue
+                                + "\" OR NOT " + sNameColumnBase;
+                            sHideParagraphsExpression = "!" + sNameColumnBase;
                         break;
                         case  SwMailMergeConfigItem::MALE:
-                            sCondition += " == \"";
-                            sCondition += rFemaleGenderValue;
-                            sCondition += "\" OR NOT ";
-                            sCondition += sNameColumnBase;
+                            sCondition = sConditionBase + " == \"" + rFemaleGenderValue
+                                + "\" OR NOT " + sNameColumnBase;
                         break;
                         case  SwMailMergeConfigItem::NEUTRAL:
                             sCondition = sNameColumnBase;
@@ -578,7 +552,6 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                         SwMergeAddressItem aItem = aIter.Next();
                         if(aItem.bIsColumn)
                         {
-                            OUString sDB(sDBName);
                             OUString sConvertedColumn = aItem.sText;
                             for(sal_uInt32 nColumn = 0;
                                     nColumn < rHeaders.Count() &&
@@ -592,8 +565,9 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                                     break;
                                 }
                             }
-                            sDB += sConvertedColumn;
-                            SwInsertFld_Data aData(TYP_DBFLD, 0, sDB, aEmptyOUStr, 0, &rShell );
+                            SwInsertFld_Data aData(TYP_DBFLD, 0,
+                                sDBName + sConvertedColumn,
+                                aEmptyOUStr, 0, &rShell );
                             aFldMgr.InsertFld( aData );
                         }
                         else
@@ -613,9 +587,9 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     {
         Sequence< OUString> aEntries = rConfigItem.GetGreetings(SwMailMergeConfigItem::NEUTRAL);
         sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting(SwMailMergeConfigItem::NEUTRAL);
-        if( nCurrent >= 0 && nCurrent < aEntries.getLength())
-            sGreeting = aEntries[nCurrent];
-        rShell.Insert(sGreeting);
+        // Greeting
+        rShell.Insert(( nCurrent >= 0 && nCurrent < aEntries.getLength() )
+            ? aEntries[nCurrent] : OUString());
     }
     // now insert a new paragraph here if necessary
     if(bSplitNode)
