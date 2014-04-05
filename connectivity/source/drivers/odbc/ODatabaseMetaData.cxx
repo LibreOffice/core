@@ -24,6 +24,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include "odbc/OFunctiondefs.hxx"
 #include "stdio.h"
 #include "TPrivilegesResultSet.hxx"
@@ -1252,8 +1253,26 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion(  ) throw(RuntimeExc
 sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
-    return nValue;
+    SQLUINTEGER nValueTranslated;
+    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DEFAULT_TXN_ISOLATION,nValue,*this);
+    switch(nValue)
+    {
+        case SQL_TXN_READ_UNCOMMITTED:
+            nValueTranslated = com::sun::star::sdbc::TransactionIsolation::READ_UNCOMMITTED;
+            break;
+        case SQL_TXN_READ_COMMITTED:
+            nValueTranslated = com::sun::star::sdbc::TransactionIsolation::READ_COMMITTED;
+            break;
+        case SQL_TXN_REPEATABLE_READ:
+            nValueTranslated = com::sun::star::sdbc::TransactionIsolation::REPEATABLE_READ;
+            break;
+        case  SQL_TXN_SERIALIZABLE:
+            nValueTranslated = com::sun::star::sdbc::TransactionIsolation::SERIALIZABLE;
+            break;
+        default:
+            nValueTranslated = 0;
+    }
+    return nValueTranslated;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeException, std::exception)
