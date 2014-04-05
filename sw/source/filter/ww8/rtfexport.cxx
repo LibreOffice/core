@@ -823,9 +823,9 @@ RtfExport::RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurren
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       m_pFilter( pFilter ),
       m_pWriter( pWriter ),
-      m_pAttrOutput( NULL ),
+      m_pAttrOutput(),
       m_pSections( NULL ),
-      m_pSdrExport( NULL ),
+      m_pSdrExport(),
       m_bOutOutlineOnly( bOutOutlineOnly ),
       eDefaultEncoding(
               rtl_getTextEncodingFromWindowsCharset(
