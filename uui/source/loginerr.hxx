@@ -48,11 +48,12 @@ private:
     bool   m_bRecommendToOpenReadonly;
 
 public:
-                    LoginErrorInfo()
-                    : m_nFlags( LOGINERROR_FLAG_MODIFY_USER_NAME ),
-                      m_nRet( ERRCODE_BUTTON_CANCEL )
-                    {
-                    }
+    LoginErrorInfo()
+        : m_nFlags(LOGINERROR_FLAG_MODIFY_USER_NAME)
+        , m_nRet(ERRCODE_BUTTON_CANCEL)
+        , m_bRecommendToOpenReadonly(false)
+    {
+    }
 
     const OUString&   GetTitle() const                    { return m_aTitle; }
     const OUString&   GetServer() const                   { return m_aServer; }
