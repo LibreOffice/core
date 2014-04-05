@@ -39,14 +39,10 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
-
-
 
 namespace {
 
@@ -168,8 +164,6 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
 
 } // namespace
 
-
-
 DataLabelConverter::DataLabelConverter( const ConverterRoot& rParent, DataLabelModel& rModel ) :
     ConverterBase< DataLabelModel >( rParent, rModel )
 {
@@ -213,8 +207,6 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     }
 }
 
-
-
 DataLabelsConverter::DataLabelsConverter( const ConverterRoot& rParent, DataLabelsModel& rModel ) :
     ConverterBase< DataLabelsModel >( rParent, rModel )
 {
@@ -243,8 +235,6 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
         aLabelConv.convertFromModel( rxDataSeries, rTypeGroup );
     }
 }
-
-
 
 ErrorBarConverter::ErrorBarConverter( const ConverterRoot& rParent, ErrorBarModel& rModel ) :
     ConverterBase< ErrorBarModel >( rParent, rModel )
@@ -346,8 +336,6 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
     }
 }
 
-// private --------------------------------------------------------------------
-
 Reference< XLabeledDataSequence > ErrorBarConverter::createLabeledDataSequence( ErrorBarModel::SourceType eSourceType )
 {
     OUString aRole;
@@ -372,8 +360,6 @@ Reference< XLabeledDataSequence > ErrorBarConverter::createLabeledDataSequence( 
     return lclCreateLabeledDataSequence( *this, mrModel.maSources.get( eSourceType ).get(), aRole );
 }
 
-
-
 TrendlineLabelConverter::TrendlineLabelConverter( const ConverterRoot& rParent, TrendlineLabelModel& rModel ) :
     ConverterBase< TrendlineLabelModel >( rParent, rModel )
 {
@@ -388,8 +374,6 @@ void TrendlineLabelConverter::convertFromModel( PropertySet& rPropSet )
     // formatting
     getFormatter().convertFormatting( rPropSet, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_TRENDLINELABEL );
 }
-
-
 
 TrendlineConverter::TrendlineConverter( const ConverterRoot& rParent, TrendlineModel& rModel ) :
     ConverterBase< TrendlineModel >( rParent, rModel )
@@ -479,8 +463,6 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     }
 }
 
-
-
 DataPointConverter::DataPointConverter( const ConverterRoot& rParent, DataPointModel& rModel ) :
     ConverterBase< DataPointModel >( rParent, rModel )
 {
@@ -518,8 +500,6 @@ void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     {
     }
 }
-
-
 
 SeriesConverter::SeriesConverter( const ConverterRoot& rParent, SeriesModel& rModel ) :
     ConverterBase< SeriesModel >( rParent, rModel )
@@ -682,8 +662,6 @@ Reference< XLabeledDataSequence > SeriesConverter::createLabeledDataSequence(
     TextModel* pTitle = bUseTextLabel ? mrModel.mxText.get() : 0;
     return lclCreateLabeledDataSequence( *this, pValues, rRole, pTitle );
 }
-
-
 
 } // namespace chart
 } // namespace drawingml
