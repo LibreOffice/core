@@ -162,7 +162,7 @@ private:
         sal_Int32 nSeriesLength );
     void exportGrouping( bool isBar = false );
     void exportTrendlines( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > xSeries );
-    void exportMarker();
+    void exportMarker( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > xSeries );
     void exportSmooth();
     void exportFirstSliceAng();
 

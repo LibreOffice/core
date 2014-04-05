@@ -55,6 +55,7 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
+#include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
@@ -1657,6 +1658,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
         Reference< chart2::data::XDataSource > xSource( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY );
         if( xSource.is())
         {
+            Reference< chart2::XDataSeries > xDataSeries( xSource, uno::UNO_QUERY );
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
                 xSource->getDataSequences());
             // search for main sequence and create a series element
@@ -1727,7 +1729,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     {
                         case chart::TYPEID_LINE:
                         {
-                            exportMarker( );
+                            exportMarker(xDataSeries);
                             break;
                         }
                         case chart::TYPEID_PIE:
@@ -1745,12 +1747,12 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                         }
                         case chart::TYPEID_SCATTER:
                         {
-                            exportMarker( );
+                            exportMarker(xDataSeries);
                             break;
                         }
                         case chart::TYPEID_RADARLINE:
                         {
-                            exportMarker( );
+                            exportMarker(xDataSeries);
                             break;
                         }
                     }
@@ -2947,48 +2949,55 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
     }
 }
 
-void ChartExport::exportMarker()
+void ChartExport::exportMarker(Reference< chart2::XDataSeries > xSeries)
 {
+    Reference< XPropertySet > xPropSet( xSeries, uno::UNO_QUERY );
+    chart2::Symbol aSymbol;
+    if( GetProperty( xPropSet, "Symbol" ) )
+        mAny >>= aSymbol;
+
+    if(aSymbol.Style != chart2::SymbolStyle_STANDARD && aSymbol.Style != chart2::SymbolStyle_AUTO)
+        return;
+
     FSHelperPtr pFS = GetFS();
     pFS->startElement( FSNS( XML_c, XML_marker ),
             FSEND );
-    Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY );
-    sal_Int32 nSymbolType = ::com::sun::star::chart::ChartSymbolType::NONE;
-    if( GetProperty( xPropSet, "SymbolType" ) )
-        mAny >>= nSymbolType;
 
+    sal_Int32 nSymbol = aSymbol.StandardSymbol;
     // TODO: more properties support for marker
     const char* pSymbolType = NULL;
-    switch( nSymbolType )
+    switch( nSymbol )
     {
-        case cssc::ChartSymbolType::NONE:
-            pSymbolType = "none";
-            break;
-        case cssc::ChartSymbolType::SYMBOL0:
+        case 0:
             pSymbolType = "square";
             break;
-        case cssc::ChartSymbolType::SYMBOL1:
+        case 1:
             pSymbolType = "diamond";
             break;
-        // map all triangle variants to the OOXML version
-        case cssc::ChartSymbolType::SYMBOL2:
-        case cssc::ChartSymbolType::SYMBOL3:
-        case cssc::ChartSymbolType::SYMBOL4:
-        case cssc::ChartSymbolType::SYMBOL5:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
             pSymbolType = "triangle";
             break;
-        case cssc::ChartSymbolType::SYMBOL6:
+        case 8:
+            pSymbolType = "circle";
+            break;
+        case 9:
+            pSymbolType = "star";
+            break;
+        case 10:
+            pSymbolType = "X";
+            break;
+        case 11:
             pSymbolType = "plus";
             break;
-        case cssc::ChartSymbolType::SYMBOL7:
-            pSymbolType = "plus";
-            break;
-        case cssc::ChartSymbolType::AUTO:
-            break;
-        case cssc::ChartSymbolType::BITMAPURL:
+        case 13:
+            pSymbolType = "dash";
             break;
         default:
-            SAL_WARN("oox", "unknown data series symbol");
+            pSymbolType = "square";
+            break;
     }
 
     if( pSymbolType )
@@ -2997,21 +3006,16 @@ void ChartExport::exportMarker()
             XML_val, pSymbolType,
             FSEND );
     }
-    if( nSymbolType != cssc::ChartSymbolType::NONE )
-    {
-        awt::Size aSymbolSize;
-        if( GetProperty( xPropSet, "SymbolSize" ) )
-        {
-            mAny >>= aSymbolSize;;
-            sal_Int32 nSize = std::max( aSymbolSize.Width, aSymbolSize.Height );
 
-            nSize = nSize/250.0*7.0; // just guessed based on some test cases
-            nSize = std::min<sal_Int32>( 72, std::max<sal_Int32>( 2, nSize ) );
-            pFS->singleElement( FSNS( XML_c, XML_size),
-                    XML_val, I32S(nSize),
-                    FSEND );
-        }
-    }
+    awt::Size aSymbolSize = aSymbol.Size;
+    sal_Int32 nSize = std::max( aSymbolSize.Width, aSymbolSize.Height );
+
+    nSize = nSize/250.0*7.0; // just guessed based on some test cases
+    nSize = std::min<sal_Int32>( 72, std::max<sal_Int32>( 2, nSize ) );
+    pFS->singleElement( FSNS( XML_c, XML_size),
+            XML_val, I32S(nSize),
+            FSEND );
+
     pFS->endElement( FSNS( XML_c, XML_marker ) );
 }
 
