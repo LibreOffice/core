@@ -588,8 +588,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
     sal_uInt16  nFormEnd;
     sal_uInt16  nDlgCtrlFlags;
 
-    // Ohne Focus-Window koennen wir auch keine Steuerung uebernehmen
-    // w/o a Focus-Window we cannot take control
+    // we cannot take over control without Focus-window
     Window* pFocusWindow = Application::GetFocusWindow();
     if ( !pFocusWindow || !ImplIsWindowOrChild( pFocusWindow ) )
         return false;
