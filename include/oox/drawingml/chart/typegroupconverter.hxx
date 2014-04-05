@@ -153,7 +153,8 @@ public:
                             sal_Int32 nAxesSetIdx, bool bSupportsVaryColorsByPoint );
 
     /** Sets the passed OOXML marker style at the passed property set. */
-    void                convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSymbol, sal_Int32 nOoxSize ) const;
+    void                convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSymbol, sal_Int32 nOoxSize,
+            ModelRef< Shape > xShapeProps ) const;
     /** Sets the passed OOXML line smoothing at the passed property set. */
     void                convertLineSmooth( PropertySet& rPropSet, bool bOoxSmooth ) const;
     /** Sets the passed OOXML bar 3D geometry at the passed property set. */

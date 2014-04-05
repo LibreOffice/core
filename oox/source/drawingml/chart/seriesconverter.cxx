@@ -481,7 +481,8 @@ void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDat
 
         // data point marker
         if( mrModel.monMarkerSymbol.differsFrom( rSeries.mnMarkerSymbol ) || mrModel.monMarkerSize.differsFrom( rSeries.mnMarkerSize ) )
-            rTypeGroup.convertMarker( aPropSet, mrModel.monMarkerSymbol.get( rSeries.mnMarkerSymbol ), mrModel.monMarkerSize.get( rSeries.mnMarkerSize ) );
+            rTypeGroup.convertMarker( aPropSet, mrModel.monMarkerSymbol.get( rSeries.mnMarkerSymbol ),
+                    mrModel.monMarkerSize.get( rSeries.mnMarkerSize ), mrModel.mxMarkerProp );
 
         // data point pie explosion
         if( mrModel.monExplosion.differsFrom( rSeries.mnExplosion ) )
@@ -578,7 +579,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     }
 
     // data point markers
-    rTypeGroup.convertMarker( aSeriesProp, mrModel.mnMarkerSymbol, mrModel.mnMarkerSize );
+    rTypeGroup.convertMarker( aSeriesProp, mrModel.mnMarkerSymbol, mrModel.mnMarkerSize, mrModel.mxMarkerProp );
 #if OOX_CHART_SMOOTHED_PER_SERIES
     // #i66858# smoothed series lines
     rTypeGroup.convertLineSmooth( aSeriesProp, mrModel.mbSmooth );

@@ -27,8 +27,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 struct DataLabelModelBase
 {
     typedef ModelRef< Shape >       ShapeRef;
@@ -51,8 +49,6 @@ struct DataLabelModelBase
                         ~DataLabelModelBase();
 };
 
-
-
 struct DataLabelModel : public DataLabelModelBase
 {
     typedef ModelRef< LayoutModel > LayoutRef;
@@ -65,8 +61,6 @@ struct DataLabelModel : public DataLabelModelBase
     explicit            DataLabelModel();
                         ~DataLabelModel();
 };
-
-
 
 struct DataLabelsModel : public DataLabelModelBase
 {
@@ -81,8 +75,6 @@ struct DataLabelsModel : public DataLabelModelBase
                         ~DataLabelsModel();
 };
 
-
-
 struct PictureOptionsModel
 {
     double              mfStackUnit;        /// Bitmap stacking unit.
@@ -94,8 +86,6 @@ struct PictureOptionsModel
     explicit            PictureOptionsModel();
                         ~PictureOptionsModel();
 };
-
-
 
 struct ErrorBarModel
 {
@@ -120,8 +110,6 @@ struct ErrorBarModel
                         ~ErrorBarModel();
 };
 
-
-
 struct TrendlineLabelModel
 {
     typedef ModelRef< Shape >       ShapeRef;
@@ -138,8 +126,6 @@ struct TrendlineLabelModel
     explicit            TrendlineLabelModel();
                         ~TrendlineLabelModel();
 };
-
-
 
 struct TrendlineModel
 {
@@ -162,8 +148,6 @@ struct TrendlineModel
                         ~TrendlineModel();
 };
 
-
-
 struct DataPointModel
 {
     typedef ModelRef< Shape >               ShapeRef;
@@ -182,8 +166,6 @@ struct DataPointModel
     explicit            DataPointModel();
                         ~DataPointModel();
 };
-
-
 
 struct SeriesModel
 {
@@ -225,8 +207,6 @@ struct SeriesModel
     explicit            SeriesModel();
                         ~SeriesModel();
 };
-
-
 
 } // namespace chart
 } // namespace drawingml

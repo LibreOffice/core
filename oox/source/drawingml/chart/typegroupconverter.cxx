@@ -452,7 +452,8 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
     }
 }
 
-void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSymbol, sal_Int32 nOoxSize ) const
+void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSymbol, sal_Int32 nOoxSize,
+       ModelRef< Shape > xShapeProps ) const
 {
     if( !isSeriesFrameFormat() )
     {
@@ -479,6 +480,9 @@ void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSym
         // symbol size (points in OOXML, 1/100 mm in Chart2)
         sal_Int32 nSize = static_cast< sal_Int32 >( nOoxSize * (2540.0 / 72.0) + 0.5 );
         aSymbol.Size.Width = aSymbol.Size.Height = nSize;
+
+        Color aFillColor = xShapeProps->getFillProperties().maFillColor;
+        aSymbol.FillColor = aFillColor.getColor(getFilter().getGraphicHelper());
 
         // set the property
         rPropSet.setProperty( PROP_Symbol, aSymbol );
