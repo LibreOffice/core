@@ -1813,6 +1813,9 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
         break;
     }
 
+    if (!pList)
+        throw css::container::NoSuchElementException();
+
     css::uno::Reference< css::container::XNameAccess > xRoot(xConfig, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNameAccess > xSet ;
     xRoot->getByName(sSet) >>= xSet;
