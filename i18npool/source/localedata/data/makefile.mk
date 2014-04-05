@@ -189,6 +189,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_mk_MK.obj	\
     $(SLO)$/localedata_mt_MT.obj	\
     $(SLO)$/localedata_nb_NO.obj	\
+    $(SLO)$/localedata_nds_DE.obj	\
     $(SLO)$/localedata_nl_BE.obj	\
     $(SLO)$/localedata_nl_NL.obj	\
     $(SLO)$/localedata_nn_NO.obj	\
@@ -198,8 +199,8 @@ SHL3OBJS=	\
     $(SLO)$/localedata_pt_BR.obj	\
     $(SLO)$/localedata_pt_PT.obj	\
     $(SLO)$/localedata_ro_RO.obj	\
-    $(SLO)$/localedata_rue_SK.obj	\
     $(SLO)$/localedata_ru_RU.obj	\
+    $(SLO)$/localedata_rue_SK.obj	\
     $(SLO)$/localedata_sc_IT.obj	\
     $(SLO)$/localedata_sh_ME.obj	\
     $(SLO)$/localedata_sh_RS.obj	\
