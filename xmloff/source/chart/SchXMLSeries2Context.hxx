@@ -64,7 +64,6 @@ private:
     OUString maGlobalChartTypeName;
     OUString maSeriesChartTypeName;
     OUString m_aSeriesRange;
-    OUString m_aSeriesLabelRange;
     bool            m_bHasDomainContext;
     tSchXMLLSequencesPerIndex & mrLSequencesPerIndex;
     tSchXMLLSequencesPerIndex maPostponedSequences;
