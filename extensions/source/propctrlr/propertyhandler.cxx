@@ -320,6 +320,11 @@ namespace pcr
         return nPropId;
     }
 
+    PropertyId PropertyHandler::impl_getPropertyId_nothrow( const OUString& _rPropertyName ) const
+    {
+        return m_pInfoService->getPropertyId( _rPropertyName );
+    }
+
     void PropertyHandler::impl_setContextDocumentModified_nothrow() const
     {
         Reference< XModifiable > xModifiable( impl_getContextDocument_nothrow(), UNO_QUERY );

@@ -146,6 +146,11 @@ namespace pcr
         */
         PropertyId impl_getPropertyId_throw( const OUString& _rPropertyName ) const;
 
+        /** retrieves the property id for a given property name
+            @returns -1
+                if the property name is not known to our ->m_pInfoService
+        */
+        PropertyId impl_getPropertyId_nothrow( const OUString& _rPropertyName ) const;
 
         // helper for implementing doDescribeSupportedProperties
         /** adds a description for the given string property to the given property vector

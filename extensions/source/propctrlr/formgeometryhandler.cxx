@@ -521,7 +521,7 @@ namespace pcr
             throw NullPointerException();
 
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nActuatingPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
+        PropertyId nActuatingPropId( impl_getPropertyId_nothrow( _rActuatingPropertyName ) );
 
         switch ( nActuatingPropId )
         {
@@ -531,6 +531,9 @@ namespace pcr
             OSL_VERIFY( _rNewValue >>= eAnchorType );
             _rxInspectorUI->enablePropertyUI( PROPERTY_POSITIONX, eAnchorType != TextContentAnchorType_AS_CHARACTER );
         }
+        break;
+        case -1:
+            throw RuntimeException();
         break;
         default:
             OSL_FAIL( "FormGeometryHandler::actuatingPropertyChanged: not registered for this property!" );
