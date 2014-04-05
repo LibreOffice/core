@@ -286,7 +286,7 @@ public:
         return m_xIndexAccess->getCount();
     }
 
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& /*not processed in this base class*/ ) throw (css::uno::RuntimeException)
+    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& /*not processed in this base class*/ ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
     {
         if ( Index1.getValueTypeClass() != css::uno::TypeClass_STRING )
         {
