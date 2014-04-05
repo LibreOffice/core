@@ -225,7 +225,7 @@ namespace pcr
         OSL_FAIL( "PropertyHandler::actuatingPropertyChanged: not implemented!" );
     }
 
-    void SAL_CALL PropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException, std::exception)
+    void SAL_CALL PropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (NullPointerException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !_rxListener.is() )
