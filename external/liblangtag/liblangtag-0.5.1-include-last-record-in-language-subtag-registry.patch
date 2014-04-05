@@ -1,0 +1,49 @@
+Upstream 6564b87c2f6dac2482e530bc43b038a3e93a0e07
+resolves #6, include last record in language-subtag-registry.xml
+
+The '%%' in language-subtag-registry is a record delimiter, not record
+end marker, it is not present on the last record at file end.
+
+(cherry picked from commit 4fff73a834f94a7ca256c086d99ea0a654a6c287)
+
+diff --git a/data/reg2xml.c b/data/reg2xml.c
+--- UnpackedTarball/langtag.orig/data/reg2xml.c
++++ UnpackedTarball/langtag/data/reg2xml.c
+@@ -48,6 +48,7 @@ _parse(const char *filename,
+ 	FILE *fp;
+ 	char buffer[1024], *range = NULL, *begin = NULL, *end = NULL;
+ 	lt_bool_t in_entry = FALSE;
++	lt_bool_t file_end = FALSE;
+ 	xmlNodePtr ent = NULL;
+ 
+ 	if ((fp = fopen(filename, "rb")) == NULL) {
+@@ -56,10 +57,13 @@ _parse(const char *filename,
+ 	}
+ 	while (1) {
+ 		fgets(buffer, 1024, fp);
+-		if (feof(fp))
+-			break;
++		if (feof(fp)) {
++            if (!in_entry)
++                break;
++            file_end = TRUE;
++        }
+ 		_drop_crlf(buffer);
+-		if (lt_strcmp0(buffer, "%%") == 0) {
++		if (lt_strcmp0(buffer, "%%") == 0 || file_end) {
+ 			if (in_entry) {
+ 				if (ent) {
+ 					if (range) {
+@@ -102,7 +106,7 @@ _parse(const char *filename,
+ 				ent = NULL;
+ 				range = NULL;
+ 			}
+-			in_entry = TRUE;
++			in_entry = !file_end;
+ 		} else {
+ 			if (!in_entry) {
+ 				/* ignore it */
+
+--------------erAck-patch-parts--
+
+

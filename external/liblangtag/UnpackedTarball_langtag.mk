@@ -22,6 +22,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 	external/liblangtag/liblangtag-0.5.1-undefined-have-sys-param-h.patch \
 	external/liblangtag/liblangtag-0.5.1-windows-do-not-prepend-dir-separator.patch \
 	external/liblangtag/liblangtag-0.5.1-unistd.patch \
+	external/liblangtag/liblangtag-0.5.1-include-last-record-in-language-subtag-registry.patch \
 ))
 
 ifeq ($(OS),WNT)
