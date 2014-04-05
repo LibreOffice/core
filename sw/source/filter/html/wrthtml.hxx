@@ -281,6 +281,7 @@ class SwHTMLWriter : public Writer
 
 protected:
     sal_uLong WriteStream() SAL_OVERRIDE;
+    void SetupFilterOptions(SfxMedium& rMedium) SAL_OVERRIDE;
 
 public:
     std::vector<OUString> aImgMapNames;     // geschriebene Image Maps
@@ -392,6 +393,9 @@ public:
     sal_Bool bPreserveForm : 1;         // die aktuelle Form beibehalten
 
     sal_Bool bCfgNetscape4 : 1;         // Netscape4 Hacks
+
+    sal_Bool mbSkipImages : 1;
+
     // 23
 
     SwHTMLWriter( const OUString& rBaseURL );

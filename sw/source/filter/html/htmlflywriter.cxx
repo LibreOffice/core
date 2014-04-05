@@ -811,6 +811,9 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
+    if (rHTMLWrt.mbSkipImages)
+        return rHTMLWrt;
+
     // ggf. ein noch offenes Attribut voruebergehend beenden
     if( !rHTMLWrt.aINetFmts.empty() )
     {

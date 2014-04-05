@@ -80,6 +80,8 @@
 
 #define MAX_INDENT_LEVEL 20
 
+using namespace css;
+
 static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
@@ -127,6 +129,24 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
 SwHTMLWriter::~SwHTMLWriter()
 {
     delete pNumRuleInfo;
+}
+
+void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
+{
+    const SfxItemSet* pSet = rMedium.GetItemSet();
+    if (pSet == NULL)
+        return;
+
+    const SfxPoolItem* pItem;
+    if (pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) != SFX_ITEM_SET)
+        return;
+
+
+    OUString sFilterOptions = ((const SfxStringItem*)pItem)->GetValue();
+    if (sFilterOptions == "IgnoreImages")
+    {
+        mbSkipImages = true;
+    }
 }
 
 sal_uLong SwHTMLWriter::WriteStream()
@@ -893,7 +913,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
     // DokumentInfo
     OString sIndent = GetIndentString();
-    using namespace ::com::sun::star;
+
     uno::Reference<document::XDocumentProperties> xDocProps;
     SwDocShell *pDocShell(pDoc->GetDocShell());
     if (pDocShell)
