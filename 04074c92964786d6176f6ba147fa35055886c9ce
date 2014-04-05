@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_087987fc",
+        "filename": "dbaccess/source/ui/dlg/detailpages.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-04-05T10:40:55Z",
+      "side": 1,
+      "message": "The translation is okay, but I do not think it belongs here. It should be at the ctor, or at the m_nControlFlags member.",
+      "revId": "04074c92964786d6176f6ba147fa35055886c9ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
