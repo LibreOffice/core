@@ -3079,14 +3079,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 // only if no position to size was hit.
                                 if (!bHitHandle)
                                 {
-                                    SdrObject* pObj;
-                                    SdrPageView* pPV;
-                                    if (pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
-                                    {
-                                        pSdrView->UnmarkAllObj();
-                                        pSdrView->MarkObj(pObj,pPV,false,false);
-                                        return;
-                                    }
                                     StartDDTimer();
                                     SwEditWin::m_nDDStartPosY = aDocPos.Y();
                                     SwEditWin::m_nDDStartPosX = aDocPos.X();
@@ -4243,6 +4235,17 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             bFrmDrag = false;
         }
         bNoInterrupt = false;
+        const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
+        if ((PixelToLogic(m_aStartPos).Y() == (aDocPos.Y())) && (PixelToLogic(m_aStartPos).X() == (aDocPos.X())))//To make sure it was not moved
+        {
+            SdrObject* pObj;
+            SdrPageView* pPV;
+            if (pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER ))
+            {
+                pSdrView->UnmarkAllObj();
+                pSdrView->MarkObj(pObj,pPV,false,false);
+            }
+        }
         ReleaseMouse();
         return;
     }
