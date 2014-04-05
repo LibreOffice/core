@@ -169,11 +169,13 @@ using namespace ::com::sun::star;
             if (pCollectionItem)
                 pCollection = pCollectionItem->getCollection();
             OSL_ENSURE(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
-
-            OUString sUrl = pCollection->getPrefix( OUString("sdbc:address:ldap:"));
-            sUrl += m_aETHostServer.GetText();
-            _rSet.Put(SfxStringItem(DSID_CONNECTURL, sUrl));
-            bChangedSomething = sal_True;
+            if (pCollection)
+            {
+                OUString sUrl = pCollection->getPrefix( OUString("sdbc:address:ldap:"));
+                sUrl += m_aETHostServer.GetText();
+                _rSet.Put(SfxStringItem(DSID_CONNECTURL, sUrl));
+                bChangedSomething = sal_True;
+            }
         }
 
         fillBool(_rSet,&m_aCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
