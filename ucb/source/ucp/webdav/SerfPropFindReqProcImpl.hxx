@@ -49,14 +49,14 @@ public:
     virtual ~SerfPropFindReqProcImpl();
 
     virtual
-    serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest );
+    serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) SAL_OVERRIDE;
 
 protected:
     virtual
-    void processChunkOfResponseData( const char* data, apr_size_t len );
+    void processChunkOfResponseData( const char* data, apr_size_t len ) SAL_OVERRIDE;
 
     virtual
-    void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket );
+    void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket ) SAL_OVERRIDE;
 
 private:
     void init( const Depth inDepth );

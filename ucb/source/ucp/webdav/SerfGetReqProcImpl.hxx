@@ -58,17 +58,17 @@ public:
     virtual ~SerfGetReqProcImpl();
 
     virtual
-    serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest );
+    serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) SAL_OVERRIDE;
 
     void processSingleResponseHeader( const char* inHeaderName,
                                       const char* inHeaderValue );
 
 protected:
     virtual
-    void processChunkOfResponseData( const char* data, apr_size_t len );
+    void processChunkOfResponseData( const char* data, apr_size_t len ) SAL_OVERRIDE;
 
     virtual
-    void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket );
+    void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket ) SAL_OVERRIDE;
 
 private:
     com::sun::star::uno::Reference< SerfInputStream > xInputStream;

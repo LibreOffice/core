@@ -55,14 +55,14 @@ class SerfInputStream : public ::com::sun::star::io::XInputStream,
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
                                         const ::com::sun::star::uno::Type & type )
-                            throw( ::com::sun::star::uno::RuntimeException );
+                            throw( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
     virtual void SAL_CALL acquire( void )
-                            throw ()
+                            throw () SAL_OVERRIDE
                                 { OWeakObject::acquire(); }
 
     virtual void SAL_CALL release( void )
-                            throw()
+                            throw() SAL_OVERRIDE
                                 { OWeakObject::release(); }
 
 
@@ -73,7 +73,7 @@ class SerfInputStream : public ::com::sun::star::io::XInputStream,
                 throw( ::com::sun::star::io::NotConnectedException,
                        ::com::sun::star::io::BufferSizeExceededException,
                        ::com::sun::star::io::IOException,
-                       ::com::sun::star::uno::RuntimeException );
+                       ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL readSomeBytes(
             ::com::sun::star::uno::Sequence< sal_Int8 > & aData,
@@ -81,37 +81,37 @@ class SerfInputStream : public ::com::sun::star::io::XInputStream,
                 throw( ::com::sun::star::io::NotConnectedException,
                        ::com::sun::star::io::BufferSizeExceededException,
                        ::com::sun::star::io::IOException,
-                       ::com::sun::star::uno::RuntimeException );
+                       ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
                 throw( ::com::sun::star::io::NotConnectedException,
                        ::com::sun::star::io::BufferSizeExceededException,
                        ::com::sun::star::io::IOException,
-                       ::com::sun::star::uno::RuntimeException );
+                       ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL available( void )
                 throw( ::com::sun::star::io::NotConnectedException,
                        ::com::sun::star::io::IOException,
-                       ::com::sun::star::uno::RuntimeException );
+                       ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
     virtual void SAL_CALL closeInput( void )
                 throw( ::com::sun::star::io::NotConnectedException,
                        ::com::sun::star::io::IOException,
-                       ::com::sun::star::uno::RuntimeException );
+                       ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
     // XSeekable
     virtual void SAL_CALL seek( sal_Int64 location )
         throw( ::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException );
+               ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
     virtual sal_Int64 SAL_CALL getPosition()
         throw( ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException );
+               ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
     virtual sal_Int64 SAL_CALL getLength()
         throw( ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException );
+               ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 };
 
 } // namespace http_dav_ucp

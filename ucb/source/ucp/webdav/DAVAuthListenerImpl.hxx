@@ -56,7 +56,7 @@ namespace http_dav_ucp
                                   OUString & inoutUserName,
                                   OUString & outPassWord,
                                   sal_Bool bCanUseSystemCredentials,
-                                  sal_Bool bUsePreviousCredentials = sal_True );
+                                  sal_Bool bUsePreviousCredentials = sal_True ) SAL_OVERRIDE;
     private:
 
         const com::sun::star::uno::Reference<
