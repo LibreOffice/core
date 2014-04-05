@@ -444,9 +444,15 @@ void TestLanguageTag::testAllTags()
     }
 
 #if USE_LIBLANGTAG
-    // 'zh-yue-HK' uses extlang and should be preferred 'yue-HK'
-    // Disable until internal vs liblangtag is sorted out.
+    // 'zh-yue-HK' uses redundant 'zh-yue' and should be preferred 'yue-HK'
 #if 0
+    /* XXX Disabled because liblangtag in lt_tag_canonicalize() after replacing
+     * 'zh-yue' with the preferred 'yue' does:
+     * "If the language tag starts with a primary language subtag that is also
+     * an extlang subtag, then the language tag is prepended with the extlang's
+     * 'Prefix'."
+     * Primary language 'yue' is also extlang 'yue' for which the prefix
+     * happens to be 'zh' ... so the result is 'zh-yue-HK' again. */
     {
         OUString s_zh_yue_HK( "zh-yue-HK" );
         LanguageTag zh_yue_HK( s_zh_yue_HK );
