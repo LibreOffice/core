@@ -2999,6 +2999,9 @@ void ChartExport::exportMarker(Reference< chart2::XDataSeries > xSeries)
             break;
     }
 
+    if( aSymbol.Style == chart2::SymbolStyle_AUTO )
+        pSymbolType = "auto";
+
     if( pSymbolType )
     {
         pFS->singleElement( FSNS( XML_c, XML_symbol ),
@@ -3014,6 +3017,11 @@ void ChartExport::exportMarker(Reference< chart2::XDataSeries > xSeries)
     pFS->singleElement( FSNS( XML_c, XML_size),
             XML_val, I32S(nSize),
             FSEND );
+
+    pFS->startElement( FSNS( XML_c, XML_spPr ),
+            FSEND );
+    WriteSolidFill(aSymbol.FillColor);
+    pFS->endElement( FSNS( XML_c, XML_spPr ) );
 
     pFS->endElement( FSNS( XML_c, XML_marker ) );
 }
