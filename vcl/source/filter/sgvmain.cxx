@@ -808,7 +808,6 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
         if (aPage.nList!=0) SkipObjkList(rInp);
     } while (aPage.Next!=0L && !rInp.GetError());
 
-//    ShowMsg("Drawingpage(n)\n");
     nCharPos=rInp.Tell();
     ReadPageType( rInp, aPage );
 
