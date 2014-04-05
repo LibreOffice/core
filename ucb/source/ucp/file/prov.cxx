@@ -84,15 +84,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
 /*                                                                          */
 /*                                                                          */
 /****************************************************************************/
-
-
-
 FileProvider::FileProvider( const Reference< XComponentContext >& rxContext )
-    : m_xContext( rxContext ),
-      m_pMyShell( 0 )
+    : m_xContext(rxContext)
+    , m_FileSystemNotation(FileSystemNotation::UNKNOWN_NOTATION)
+    , m_pMyShell(NULL)
 {
 }
-
 
 FileProvider::~FileProvider()
 {
@@ -100,10 +97,7 @@ FileProvider::~FileProvider()
         delete m_pMyShell;
 }
 
-
-
 // XInitialization
-
 void SAL_CALL FileProvider::init()
 {
     if( ! m_pMyShell )
