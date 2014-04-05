@@ -44,6 +44,7 @@ SdrTextObj::NbcSetMaxTextFrameHeight(long)
 SdrTextObj::NbcSetMaxTextFrameWidth(long)
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SfxInt64Item::SetValue(long)
+SfxVisibilityItem::GetValueCount() const
 StyleSettings::SetActiveColor2(Color const&)
 StyleSettings::SetCursorSize(long)
 StyleSettings::SetDeactiveColor2(Color const&)
