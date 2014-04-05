@@ -597,14 +597,18 @@ Reference< XAxis > AxisHelper::getAxis( sal_Int32 nDimensionIndex, sal_Int32 nAx
             , const Reference< XCoordinateSystem >& xCooSys )
 {
     Reference< XAxis > xRet;
-    try
-    {
-        if( xCooSys.is() )
-            xRet.set( xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ) );
-    }
-    catch( const uno::Exception & )
-    {
-    }
+    if(!xCooSys.is())
+        return xRet;
+
+    if(nDimensionIndex >= xCooSys->getDimension())
+        return xRet;
+
+    if(nAxisIndex > xCooSys->getMaximumAxisIndexByDimension(nDimensionIndex))
+        return xRet;
+
+    assert(nAxisIndex >= 0);
+    assert(nDimensionIndex >= 0);
+    xRet.set( xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ) );
     return xRet;
 }
 
