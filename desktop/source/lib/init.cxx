@@ -37,21 +37,24 @@
 #include <tools/resmgr.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <unotools/mediadescriptor.hxx>
 
-using namespace ::com::sun::star;
+using namespace css;
+using namespace utl;
 
 struct LibLODocument_Impl;
 struct LibLibreOffice_Impl;
 
 static LibLibreOffice_Impl *gImpl = NULL;
 
-typedef struct {
+typedef struct
+{
     const char *extn;
     const char *filterName;
 } ExtensionMap;
 
-static const ExtensionMap
-aWriterExtensionMap[] = {
+static const ExtensionMap aWriterExtensionMap[] =
+{
     { "doc",   "MS Word 97" },
     { "docx",  "MS Word 2007 XML" },
     { "fodt",  "OpenDocument Text Flat XML" },
@@ -64,8 +67,8 @@ aWriterExtensionMap[] = {
     { NULL, NULL }
 };
 
-static const ExtensionMap
-aCalcExtensionMap[] = {
+static const ExtensionMap aCalcExtensionMap[] =
+{
     { "csv",   "Text - txt - csv (StarCalc)" },
     { "fods",  "OpenDocument Spreadsheet Flat XML" },
     { "html",  "HTML (StarCalc)" },
@@ -78,8 +81,8 @@ aCalcExtensionMap[] = {
     { NULL, NULL }
 };
 
-static const ExtensionMap
-aImpressExtensionMap[] = {
+static const ExtensionMap aImpressExtensionMap[] =
+{
     { "fodp",  "OpenDocument Presentation Flat XML" },
     { "html",  "impress_html_Export" },
     { "odg",   "impress8_draw" },
@@ -97,16 +100,17 @@ aImpressExtensionMap[] = {
     { NULL, NULL }
 };
 
-static OUString getUString( const char *str )
+static OUString getUString(const char* pString)
 {
-    if( !str )
-        return OUString( "" );
-    return OStringToOUString( OString( str, strlen (str) ),
-                              RTL_TEXTENCODING_UTF8 );
+    if (pString == NULL)
+        return OUString();
+
+    OString sString(pString, strlen(pString));
+    return OStringToOUString(sString, RTL_TEXTENCODING_UTF8);
 }
 
 // Try to convert a relative URL to an absolute one
-static OUString getAbsoluteURL( const char *pURL )
+static OUString getAbsoluteURL(const char* pURL)
 {
     OUString aURL( getUString( pURL ) );
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
@@ -119,47 +123,46 @@ static OUString getAbsoluteURL( const char *pURL )
     return sAbsoluteDocUrl;
 }
 
-extern "C" {
+extern "C"
+{
 
 SAL_DLLPUBLIC_EXPORT LibreOffice *liblibreoffice_hook(void);
 
-static void doc_destroy( LibreOfficeDocument *pThis );
-static int  doc_saveAs( LibreOfficeDocument *pThis, const char *pUrl, const char *pFormat );
+static void doc_destroy(LibreOfficeDocument* pThis);
+static int  doc_saveAs(LibreOfficeDocument* pThis, const char* pUrl, const char* pFormat);
 
 struct LibLODocument_Impl : public _LibreOfficeDocument
 {
-    uno::Reference < css::lang::XComponent > mxComponent;
+    uno::Reference<css::lang::XComponent> mxComponent;
 
-    LibLODocument_Impl( const uno::Reference < css::lang::XComponent > &xComponent )
-            : mxComponent( xComponent )
+    LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
+        mxComponent( xComponent )
     {
-        nSize = sizeof( LibreOffice );
+        nSize = sizeof(LibreOffice);
 
         destroy = doc_destroy;
         saveAs = doc_saveAs;
     }
 };
 
-static void doc_destroy( LibreOfficeDocument *pThis )
+static void doc_destroy(LibreOfficeDocument *pThis)
 {
-    LibLODocument_Impl *pDocument = static_cast< LibLODocument_Impl *>( pThis );
+    LibLODocument_Impl *pDocument = static_cast<LibLODocument_Impl*>(pThis);
     delete pDocument;
 }
 
-static void                 lo_destroy       (LibreOffice *pThis);
-static int                  lo_initialize    (LibreOffice *pThis,
-                                              const char *pInstallPath);
-static LibreOfficeDocument *lo_documentLoad  (LibreOffice *pThis,
-                                              const char *pURL);
-static char *               lo_getError      (LibreOffice *pThis);
+static void                 lo_destroy       (LibreOffice* pThis);
+static int                  lo_initialize    (LibreOffice* pThis, const char* pInstallPath);
+static LibreOfficeDocument* lo_documentLoad  (LibreOffice* pThis, const char* pURL);
+static char *               lo_getError      (LibreOffice* pThis);
 
 struct LibLibreOffice_Impl : public _LibreOffice
 {
-    rtl::OUString maLastExceptionMsg;
+    OUString maLastExceptionMsg;
 
     LibLibreOffice_Impl()
     {
-        nSize = sizeof( LibreOfficeDocument );
+        nSize = sizeof(LibreOfficeDocument);
 
         destroy = lo_destroy;
         initialize = lo_initialize;
@@ -173,62 +176,60 @@ static uno::Reference<css::uno::XComponentContext> xContext;
 static uno::Reference<css::lang::XMultiServiceFactory> xSFactory;
 static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
 
-static LibreOfficeDocument *
-lo_documentLoad( LibreOffice *pThis, const char *pURL )
+static LibreOfficeDocument* lo_documentLoad(LibreOffice* pThis, const char* pURL)
 {
-    LibLibreOffice_Impl *pLib = static_cast< LibLibreOffice_Impl *>( pThis );
+    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
 
-    OUString aURL = getAbsoluteURL( pURL );
+    OUString aURL = getAbsoluteURL(pURL);
 
-    uno::Reference < css::frame::XDesktop2 > xComponentLoader =
-            css::frame::Desktop::create(xContext);
+    uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
 
     pLib->maLastExceptionMsg = "";
-    try {
-        uno::Reference < css::lang::XComponent > xComponent =
-            xComponentLoader->loadComponentFromURL(
-                aURL, OUString("_blank"), 0,
-                uno::Sequence < css::beans::PropertyValue >());
-        if( xComponentLoader.is() )
-            return new LibLODocument_Impl( xComponent );
+
+    try
+    {
+        uno::Reference<lang::XComponent> xComponent;
+        xComponent = xComponentLoader->loadComponentFromURL(
+                                            aURL, OUString("_blank"), 0,
+                                            uno::Sequence<css::beans::PropertyValue>());
+
+        if (xComponentLoader.is())
+            return new LibLODocument_Impl(xComponent);
         else
             pLib->maLastExceptionMsg = "unknown load failure";
-    } catch (const uno::Exception &ex) {
-        pLib->maLastExceptionMsg = ex.Message;
+
     }
+    catch (const uno::Exception& exception)
+    {
+        pLib->maLastExceptionMsg = exception.Message;
+    }
+
     return NULL;
 }
 
-static int
-doc_saveAs( LibreOfficeDocument *pThis,
-            const char *url, const char *format )
+static int doc_saveAs(LibreOfficeDocument* pThis, const char* sUrl, const char* pFormat)
 {
-    LibLODocument_Impl *pDocument = static_cast< LibLODocument_Impl *>( pThis );
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
-    OUString sFormat = getUString( format );
+    OUString sFormat = getUString(pFormat);
+    OUString aURL = getAbsoluteURL(sUrl);
 
-    OUString aURL = getAbsoluteURL( url );
+    try
+    {
+        uno::Reference<frame::XModel> xDocument(pDocument->mxComponent, uno::UNO_QUERY_THROW);
+        uno::Sequence<beans::PropertyValue> aSequence = xDocument->getArgs();
 
-    try {
-        uno::Reference< frame::XModel > xDocument( pDocument->mxComponent,
-                                                   uno::UNO_QUERY_THROW );
-        uno::Sequence< beans::PropertyValue > aSeq = xDocument->getArgs();
+        MediaDescriptor aMediaDescriptor(aSequence);
+        OUString sPropertyName = MediaDescriptor::PROP_DOCUMENTSERVICE();
+        OUString aDocumentService = aMediaDescriptor.getUnpackedValueOrDefault(sPropertyName, OUString());
 
-        OUString aDocumentService;
-        for( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
-        {
-            if( aSeq[i].Name == "DocumentService" )
-                aSeq[i].Value >>= aDocumentService;
-            OUString aValue;
-            aSeq[i].Value >>= aValue;
-        }
-
-        if( aDocumentService == "")
+        if (aDocumentService.isEmpty())
         {
             gImpl->maLastExceptionMsg = "Unknown document type";
             return false;
         }
-        const ExtensionMap *pMap;
+
+        const ExtensionMap* pMap;
 
         if( aDocumentService == "com.sun.star.sheet.SpreadsheetDocument" )
             pMap = (const ExtensionMap *)aCalcExtensionMap;
@@ -237,10 +238,10 @@ doc_saveAs( LibreOfficeDocument *pThis,
         else // for the sake of argument only writer documents ...
             pMap = (const ExtensionMap *)aWriterExtensionMap;
 
-        if( ! format )
+        if (pFormat == NULL)
         {
             // sniff from the extension
-            sal_Int32 idx = aURL.lastIndexOf( "." );
+            sal_Int32 idx = aURL.lastIndexOf(".");
             if( idx > 0 )
             {
                 sFormat = aURL.copy( idx + 1 );
@@ -253,71 +254,67 @@ doc_saveAs( LibreOfficeDocument *pThis,
         }
 
         OUString aFilterName;
-        for( sal_Int32 i = 0; pMap[i].extn; i++ )
+        for (sal_Int32 i = 0; pMap[i].extn; ++i)
         {
-            if( sFormat.equalsIgnoreAsciiCaseAscii( pMap[i].extn ) )
+            if (sFormat.equalsIgnoreAsciiCaseAscii(pMap[i].extn))
             {
-                aFilterName = getUString( pMap[i].filterName );
+                aFilterName = getUString(pMap[i].filterName);
                 break;
             }
         }
-        if( ! aFilterName.getLength() )
+        if (aFilterName.isEmpty())
         {
             gImpl->maLastExceptionMsg = "no output filter found for provided suffix";
             return false;
         }
 
-        aSeq.realloc(2);
-        aSeq[0].Name = "Overwrite";
-        aSeq[0].Value <<= sal_True;
-        aSeq[1].Name = "FilterName";
-        aSeq[1].Value <<= aFilterName;
+        MediaDescriptor aSaveMediaDescriptor;
+        aSaveMediaDescriptor["Overwrite"] <<= sal_True;
+        aSaveMediaDescriptor["FilterName"] <<= aFilterName;
 
-        uno::Reference< frame::XStorable > xStorable( pDocument->mxComponent,
-                                                      uno::UNO_QUERY_THROW );
-        xStorable->storeToURL( aURL, aSeq );
+        uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
+        xStorable->storeToURL(aURL, aSaveMediaDescriptor.getAsConstPropertyValueList());
 
         return true;
-    } catch (const uno::Exception &ex) {
-        gImpl->maLastExceptionMsg = "exception " + ex.Message;
-        return false;
     }
+    catch (const uno::Exception& exception)
+    {
+        gImpl->maLastExceptionMsg = "exception: " + exception.Message;
+    }
+    return false;
 }
 
-static char *
-lo_getError (LibreOffice *pThis)
+static char* lo_getError (LibreOffice *pThis)
 {
-    LibLibreOffice_Impl *pLib = static_cast< LibLibreOffice_Impl *>( pThis );
-    OString aStr = rtl::OUStringToOString( pLib->maLastExceptionMsg, RTL_TEXTENCODING_UTF8 );
-    char *pMem = (char *) malloc (aStr.getLength() + 1);
-    strcpy( pMem, aStr.getStr() );
-    return pMem;
+    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+    OString aString = OUStringToOString(pLib->maLastExceptionMsg, RTL_TEXTENCODING_UTF8);
+    char* pMemory = (char*) malloc(aString.getLength() + 1);
+    strcpy(pMemory, aString.getStr());
+    return pMemory;
 }
 
-static void
-force_c_locale( void )
+static void force_c_locale(void)
 {
     // force locale (and resource files loaded) to en-US
-    OUString aLangISO( "en-US" );
-    LanguageTag aLocale( aLangISO );
-    ResMgr::SetDefaultLocale( aLocale );
+    OUString aLangISO("en-US");
+    LanguageTag aLocale(aLangISO);
+    ResMgr::SetDefaultLocale(aLocale);
     SvtSysLocaleOptions aLocalOptions;
-    aLocalOptions.SetLocaleConfigString( aLangISO );
-    aLocalOptions.SetUILocaleConfigString( aLangISO );
+    aLocalOptions.SetLocaleConfigString(aLangISO);
+    aLocalOptions.SetUILocaleConfigString(aLangISO);
 }
 
-static void
-aBasicErrorFunc( const OUString &rErr, const OUString &rAction )
+static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
 {
-    OStringBuffer aErr( "Unexpected dialog: " );
-    aErr.append( OUStringToOString( rAction, RTL_TEXTENCODING_ASCII_US ) );
-    aErr.append( " Error: " );
-    aErr.append( OUStringToOString( rErr, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "Unexpected basic error dialog '%s'\n", aErr.getStr() );
+    OStringBuffer aBuffer("Unexpected dialog: ");
+    aBuffer.append(OUStringToOString(rAction, RTL_TEXTENCODING_ASCII_US));
+    aBuffer.append(" Error: ");
+    aBuffer.append(OUStringToOString(rError, RTL_TEXTENCODING_ASCII_US));
+
+    fprintf(stderr, "Unexpected basic error dialog '%s'\n", aBuffer.getStr());
 }
 
-static void
-initialize_uno( const OUString &aAppURL )
+static void initialize_uno(const OUString &aAppURL)
 {
     rtl::Bootstrap::setIniFilename( aAppURL + "/fundamentalrc" );
 
@@ -331,7 +328,7 @@ initialize_uno( const OUString &aAppURL )
                          );
 
     xContext = cppu::defaultBootstrap_InitialComponentContext();
-    fprintf( stderr, "Uno initialized %d\n", xContext.is() );
+    fprintf(stderr, "Uno initialized %d\n", xContext.is());
     xFactory = xContext->getServiceManager();
     xSFactory = uno::Reference<lang::XMultiServiceFactory>(xFactory, uno::UNO_QUERY_THROW);
     comphelper::setProcessServiceFactory(xSFactory);
@@ -342,57 +339,58 @@ initialize_uno( const OUString &aAppURL )
     // configmgr setup ?
 }
 
-static int
-lo_initialize( LibreOffice *pThis, const char *app_path )
+static int lo_initialize(LibreOffice* pThis, const char* pAppPath)
 {
     (void) pThis;
 
     static bool bInitialized = false;
-    if( bInitialized )
+    if (bInitialized)
         return 1;
 
-    if( !app_path )
+    if (!pAppPath)
         return 0;
 
-    OUString aAppPath( app_path, strlen( app_path ), RTL_TEXTENCODING_UTF8 );
+    OUString aAppPath(pAppPath, strlen(pAppPath), RTL_TEXTENCODING_UTF8);
     OUString aAppURL;
-    if( osl::FileBase::getFileURLFromSystemPath( aAppPath, aAppURL ) !=
-        osl::FileBase::E_None )
+    if (osl::FileBase::getFileURLFromSystemPath(aAppPath, aAppURL) != osl::FileBase::E_None)
         return 0;
 
-    try {
-        initialize_uno( aAppURL );
+    try
+    {
+        initialize_uno(aAppURL);
         force_c_locale();
 
         // Force headless
-        rtl::Bootstrap::set( "SAL_USE_VCLPLUGIN", "svp" );
+        rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "svp");
         InitVCL();
         Application::EnableHeadlessMode(true);
 
-        ErrorHandler::RegisterDisplay( aBasicErrorFunc );
+        ErrorHandler::RegisterDisplay(aBasicErrorFunc);
 
-        fprintf( stderr, "initialized\n" );
+        fprintf(stderr, "initialized\n");
         bInitialized = true;
-    } catch (css::uno::Exception & e) {
-        fprintf( stderr, "bootstrapping exception '%s'\n",
-                 OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
+    catch (css::uno::Exception& exception)
+    {
+        fprintf(stderr, "bootstrapping exception '%s'\n",
+                 OUStringToOString(exception.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
     return bInitialized;
 }
 
 LibreOffice *liblibreoffice_hook(void)
 {
-    if( !gImpl )
+    if (!gImpl)
     {
-        fprintf( stderr, "create libreoffice object\n" );
+        fprintf(stderr, "create libreoffice object\n");
         gImpl = new LibLibreOffice_Impl();
     }
-    return static_cast< LibreOffice *>( gImpl );
+    return static_cast<LibreOffice*>(gImpl);
 }
 
-static void lo_destroy (LibreOffice *pThis)
+static void lo_destroy(LibreOffice *pThis)
 {
-    LibLibreOffice_Impl *pLib = static_cast< LibLibreOffice_Impl *>( pThis );
+    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     delete pLib;
     gImpl = NULL;
 }
