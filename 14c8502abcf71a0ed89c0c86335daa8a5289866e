@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_a8223bff",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-04-05T10:03:44Z",
+      "side": 1,
+      "message": "Why are you adding whitespace?",
+      "revId": "14c8502abcf71a0ed89c0c86335daa8a5289866e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_8825770c",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-04-05T10:03:44Z",
+      "side": 1,
+      "message": "Since there is apparently need to erase more than one property from the map, it would make more sense to declare aDefaultRepeatIt as non-const and just reuse it.",
+      "revId": "14c8502abcf71a0ed89c0c86335daa8a5289866e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
