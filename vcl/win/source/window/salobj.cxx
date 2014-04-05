@@ -97,8 +97,8 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
              (pData->message != WM_KEYUP) )
             pSalData->mnSalObjWantKeyEvt = 0;
 
-        // Testen, ob wir Daten fuer ein SalObject-Fenster behandeln
-        // muessen
+
+        // check if we need to proces data for a SalObject-window
         WinSalObject* pObject;
         if ( pData->message == WM_SETFOCUS )
         {
@@ -164,7 +164,7 @@ bool ImplSalPreDispatchMsg( MSG* pMsg )
         // SysKeys are processed as WM_SYSCOMMAND
         // Char-Events are not processed, as they are not accelerator-relevant
         bool bWantedKeyCode = FALSE;
-        // A-Z, 0-9 nur in Verbindung mit Control-Taste
+        // A-Z, 0-9 only when combined with the Control-key
         if ( ((pMsg->wParam >= 65) && (pMsg->wParam <= 90)) ||
              ((pMsg->wParam >= 48) && (pMsg->wParam <= 57)) )
         {
