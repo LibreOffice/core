@@ -105,8 +105,6 @@ class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
     void*                   m_pCommandThread; // is alive only for compatibility reasons
     UcbLockBytesHandlerRef  m_xHandler;
 
-    sal_uInt32              m_nRead;
-    sal_uInt32              m_nSize;
     ErrCode                 m_nError;
 
     bool                    m_bTerminated;
