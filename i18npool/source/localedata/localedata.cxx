@@ -118,6 +118,7 @@ static const struct {
     { "no_NO",  lcl_DATA_EURO },
     { "nn_NO",  lcl_DATA_EURO },
     { "nb_NO",  lcl_DATA_EURO },
+    { "nds_DE", lcl_DATA_EURO },
     { "pl_PL",  lcl_DATA_EURO },
     { "pt_BR",  lcl_DATA_EURO },
     { "pt_PT",  lcl_DATA_EURO },
