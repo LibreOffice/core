@@ -72,7 +72,7 @@ namespace dbaui
         OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nResId, const SfxItemSet& _rCoreAttrs, sal_uInt32 nControlFlags,bool _bFreeResource = true);
     protected:
 
-            // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
+        // nControlFlags is a combination of the CBTP_xxx-constants
         virtual ~OCommonBehaviourTabPage();
 
         // must be overloaded by subclasses, but it isn't pure virtual
