@@ -1631,6 +1631,16 @@ DECLARE_RTFIMPORT_TEST(testFdo76628, "fdo76628.rtf")
     getParagraphOfText(1, xHeaderText, aExpectedHeader);
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo74823, "fdo74823.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // Cell width of C2 was too large / column separator being 3749 too small (e.g. not set, around 3/7 of total width)
+    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(5391), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[2].Position);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

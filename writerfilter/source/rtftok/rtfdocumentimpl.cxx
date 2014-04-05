@@ -258,6 +258,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_nInheritingCells(0),
     m_nNestedCurrentCellX(0),
     m_nTopLevelCurrentCellX(0),
+    m_nBackupTopLevelCurrentCellX(0),
     m_aTableBufferStack(1), // create top-level buffer already
     m_aSuperBuffer(),
     m_bHasFootnote(false),
@@ -2060,6 +2061,15 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_ROW:
             {
+                bool bRestored = false;
+                // Ending a row, but no cells defined?
+                // See if there was an invalid table row reset, so we can restore cell infos to help invalid documents.
+                if (!m_nTopLevelCurrentCellX && m_nBackupTopLevelCurrentCellX)
+                {
+                    restoreTableRowProperties();
+                    bRestored = true;
+                }
+
                 // If the right edge of the last cell (row width) is smaller than the width of some other row, mimic WW8TabDesc::CalcDefaults(): add a fake cell.
                 const int MINLAY = 23; // sw/inc/swtypes.hxx, minimal possible size of frames.
                 if ((m_nCellxMax - m_nTopLevelCurrentCellX) >= MINLAY)
@@ -2114,6 +2124,11 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 m_bNeedFinalPar = true;
                 m_aTableBufferStack.back().clear();
                 m_nTopLevelCells = 0;
+
+                if (bRestored)
+                    // We restored cell definitions, clear these now.
+                    // This is necessary, as later cell definitions want to overwrite the restored ones.
+                    resetTableRowProperties();
             }
             break;
         case RTF_COLUMN:
@@ -2210,6 +2225,34 @@ bool lcl_findPropertyName(const std::vector<beans::PropertyValue>& rProperties, 
             return true;
     }
     return false;
+}
+
+void RTFDocumentImpl::backupTableRowProperties()
+{
+    if (m_nTopLevelCurrentCellX)
+    {
+        m_aBackupTableRowSprms = m_aStates.top().aTableRowSprms;
+        m_aBackupTableRowAttributes = m_aStates.top().aTableRowAttributes;
+        m_nBackupTopLevelCurrentCellX = m_nTopLevelCurrentCellX;
+    }
+}
+
+void RTFDocumentImpl::restoreTableRowProperties()
+{
+    m_aStates.top().aTableRowSprms = m_aBackupTableRowSprms;
+    m_aStates.top().aTableRowAttributes = m_aBackupTableRowAttributes;
+    m_nTopLevelCurrentCellX = m_nBackupTopLevelCurrentCellX;
+}
+
+void RTFDocumentImpl::resetTableRowProperties()
+{
+    m_aStates.top().aTableRowSprms = m_aDefaultState.aTableRowSprms;
+    m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, RTFValue::Pointer_t(new RTFValue(-1)), false);
+    m_aStates.top().aTableRowAttributes = m_aDefaultState.aTableRowAttributes;
+    if (DESTINATION_NESTEDTABLEPROPERTIES == m_aStates.top().nDestinationState)
+        m_nNestedCurrentCellX = 0;
+    else
+        m_nTopLevelCurrentCellX = 0;
 }
 
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
@@ -2502,13 +2545,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_TROWD:
             {
-                m_aStates.top().aTableRowSprms = m_aDefaultState.aTableRowSprms;
-                m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, RTFValue::Pointer_t(new RTFValue(-1)), false);
-                m_aStates.top().aTableRowAttributes = m_aDefaultState.aTableRowAttributes;
-                if (DESTINATION_NESTEDTABLEPROPERTIES == m_aStates.top().nDestinationState)
-                    m_nNestedCurrentCellX = 0;
-                else
-                    m_nTopLevelCurrentCellX = 0;
+                // Back these up, in case later we still need this info.
+                backupTableRowProperties();
+                resetTableRowProperties();
                 // In case the table definition is in the middle of the row
                 // (invalid), make sure table definition is emitted.
                 m_bNeedPap = true;

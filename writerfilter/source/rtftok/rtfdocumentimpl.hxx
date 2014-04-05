@@ -406,6 +406,9 @@ namespace writerfilter {
                 void checkUnicode(bool bUnicode, bool bHex);
                 /// If we need a final section break at the end of the document.
                 void setNeedSect(bool bNeedSect = true);
+                void resetTableRowProperties();
+                void backupTableRowProperties();
+                void restoreTableRowProperties();
 
                 uno::Reference<uno::XComponentContext> const& m_xContext;
                 uno::Reference<io::XInputStream> const& m_xInputStream;
@@ -472,6 +475,11 @@ namespace writerfilter {
                 int m_nNestedCurrentCellX;
                 /// Current cellx value (top-level table)
                 int m_nTopLevelCurrentCellX;
+
+                // Backup of what \trowd clears, to work around invalid input.
+                RTFSprms m_aBackupTableRowSprms;
+                RTFSprms m_aBackupTableRowAttributes;
+                int m_nBackupTopLevelCurrentCellX;
 
                 /// Buffered table cells, till cell definitions are not reached.
                 /// for nested table, one buffer per table level
