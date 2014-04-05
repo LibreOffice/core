@@ -69,10 +69,10 @@ namespace dbaui
     public:
         virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs) SAL_OVERRIDE;
 
+        // nControlFlags is a combination of the CBTP_xxx-constants
         OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nResId, const SfxItemSet& _rCoreAttrs, sal_uInt32 nControlFlags,bool _bFreeResource = true);
     protected:
 
-        // nControlFlags is a combination of the CBTP_xxx-constants
         virtual ~OCommonBehaviourTabPage();
 
         // must be overloaded by subclasses, but it isn't pure virtual
