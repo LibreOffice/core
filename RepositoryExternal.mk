@@ -2032,7 +2032,7 @@ define gb_LinkTarget__use_coinmp
 $(call gb_LinkTarget_use_package,$(1),coinmp)
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,coinmp)/CoinMP/MSVisualStudio/v9/release/CoinMP.lib \
+	$(call gb_UnpackedTarball_get_dir,coinmp)/CoinMP/MSVisualStudio/v9/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/CoinMP.lib \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
