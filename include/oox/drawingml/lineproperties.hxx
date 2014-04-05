@@ -27,8 +27,6 @@
 namespace oox {
 namespace drawingml {
 
-
-
 struct LineArrowProperties
 {
     OptValue< sal_Int32 > moArrowType;
@@ -38,8 +36,6 @@ struct LineArrowProperties
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const LineArrowProperties& rSourceProps );
 };
-
-
 
 struct OOX_DLLPUBLIC LineProperties
 {
@@ -72,8 +68,6 @@ struct OOX_DLLPUBLIC LineProperties
     /** Calculates the line width attribute from the internal state of the object */
     sal_Int32           getLineWidth() const;
 };
-
-
 
 } // namespace drawingml
 } // namespace oox

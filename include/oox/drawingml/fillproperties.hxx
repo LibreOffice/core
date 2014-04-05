@@ -38,8 +38,6 @@ namespace drawingml {
 
 class ShapePropertyMap;
 
-
-
 struct GradientFillProperties
 {
     typedef ::std::map< double, Color > GradientStopMap;
@@ -57,8 +55,6 @@ struct GradientFillProperties
     void                assignUsed( const GradientFillProperties& rSourceProps );
 };
 
-
-
 struct PatternFillProperties
 {
     Color               maPattFgColor;          /// Pattern foreground color.
@@ -68,8 +64,6 @@ struct PatternFillProperties
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const PatternFillProperties& rSourceProps );
 };
-
-
 
 struct BlipFillProperties
 {
@@ -99,8 +93,6 @@ struct BlipFillProperties
     void                assignUsed( const BlipFillProperties& rSourceProps );
 };
 
-
-
 struct OOX_DLLPUBLIC FillProperties
 {
     OptValue< sal_Int32 > moFillType;           /// Fill type (OOXML token).
@@ -126,8 +118,6 @@ struct OOX_DLLPUBLIC FillProperties
                             bool bFlipV = false ) const;
 };
 
-
-
 struct GraphicProperties
 {
     BlipFillProperties      maBlipProps;            /// Properties for the graphic.
@@ -142,8 +132,6 @@ struct GraphicProperties
                             const GraphicHelper& rGraphicHelper,
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 };
-
-
 
 } // namespace drawingml
 } // namespace oox
