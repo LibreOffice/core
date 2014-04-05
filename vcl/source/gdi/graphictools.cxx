@@ -190,6 +190,7 @@ SvtGraphicFill::SvtGraphicFill() :
     maFillRule(),
     maFillType(),
     maFillTransform(),
+    mbTiling( false ),
     maHatchType(),
     maHatchColor( COL_BLACK ),
     maGradientType(),
