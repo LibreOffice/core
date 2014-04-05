@@ -12,7 +12,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,coinmp,coinmp))
 $(eval $(call gb_ExternalPackage_use_external_project,coinmp,coinmp))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_ExternalPackage_add_library_for_install,coinmp,bin/CoinMP.dll,CoinMP/MSVisualStudio/v9/release/CoinMP.dll))
+$(eval $(call gb_ExternalPackage_add_library_for_install,coinmp,bin/CoinMP.dll,CoinMP/MSVisualStudio/v9/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/CoinMP.dll))
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_library_for_install,coinmp,lib/libCbc.3.dylib,Cbc/src/.libs/libCbc.3.dylib))
 $(eval $(call gb_ExternalPackage_add_library_for_install,coinmp,lib/libCbcSolver.3.dylib,Cbc/src/.libs/libCbcSolver.3.dylib))
