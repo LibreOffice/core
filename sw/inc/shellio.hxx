@@ -421,6 +421,8 @@ public:
     virtual sal_uLong Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString* = 0, SfxMedium* = 0 );
     virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* = 0 );
 
+    virtual void SetupFilterOptions(SfxMedium& rMedium);
+
     virtual void SetVersion( const OUString&, long );
     virtual sal_Bool IsStgWriter() const;
 

@@ -32,7 +32,7 @@
 #include <numrule.hxx>
 #include <swerror.h>
 
-using namespace ::com::sun::star;
+using namespace css;
 
 namespace
 {
@@ -267,11 +267,15 @@ sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
     return nRet;
 }
 
-sal_uLong Writer::Write( SwPaM& rPam, SfxMedium& rMed, const OUString* pFileName )
+void Writer::SetupFilterOptions(SfxMedium& /*rMedium*/)
+{}
+
+sal_uLong Writer::Write( SwPaM& rPam, SfxMedium& rMedium, const OUString* pFileName )
 {
+    SetupFilterOptions(rMedium);
     // This method must be overloaded in SwXMLWriter a storage from medium will be used there.
     // The microsoft format can write to storage but the storage will be based on the stream.
-    return Write( rPam, *rMed.GetOutStream(), pFileName );
+    return Write( rPam, *rMedium.GetOutStream(), pFileName );
 }
 
 sal_uLong Writer::Write( SwPaM& /*rPam*/, SvStorage&, const OUString* )
