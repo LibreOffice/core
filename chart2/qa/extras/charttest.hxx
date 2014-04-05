@@ -35,6 +35,8 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
+#include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -211,6 +213,29 @@ Reference< chart2::XDataSeries > getDataSeriesFromDoc( uno::Reference< chart2::X
     Reference< chart2::XDataSeries > xSeries = xSeriesSequence[nDataSeries];
 
     return xSeries;
+}
+
+Reference< chart2::data::XDataSequence > getLabelDataSequenceFromDoc(
+        Reference< chart2::XChartDocument > xChartDoc,
+        sal_Int32 nDataSeries = 0, sal_Int32 nChartType = 0, sal_Int32 nCooSys = 0 )
+{
+    Reference< chart2::XDataSeries > xDataSeries =
+        getDataSeriesFromDoc( xChartDoc, nDataSeries, nChartType, nCooSys );
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference< chart2::data::XDataSource > xDataSource( xDataSeries, uno::UNO_QUERY_THROW );
+    Sequence< Reference< chart2::data::XLabeledDataSequence > > xDataSequences =
+        xDataSource->getDataSequences();
+    for(sal_Int32 i = 0; i < xDataSequences.getLength(); ++i)
+    {
+        Reference< chart2::data::XDataSequence> xLabelSeq = xDataSequences[i]->getLabel();
+        if(!xLabelSeq.is())
+            continue;
+
+        return xLabelSeq;
+    }
+
+    CPPUNIT_FAIL("no Label sequence found");
+    return Reference< chart2::data::XDataSequence > ();
 }
 
 uno::Sequence < OUString > getWriterChartColumnDescriptions( Reference< lang::XComponent > mxComponent )

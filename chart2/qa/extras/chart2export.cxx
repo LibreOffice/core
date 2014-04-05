@@ -54,6 +54,7 @@ public:
     void testPieChartRotation();
     void testEmbeddingsOleObjectGrabBag();
     void testGapWidthXLSX();
+    void testLabelStringODS();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -80,6 +81,7 @@ public:
     CPPUNIT_TEST(testPieChartRotation);
     CPPUNIT_TEST(testEmbeddingsOleObjectGrabBag);
     CPPUNIT_TEST(testGapWidthXLSX);
+    CPPUNIT_TEST(testLabelStringODS);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -770,6 +772,28 @@ void Chart2ExportTest::testGapWidthXLSX()
 
     xChartDoc = getChartDocFromSheet( 1, mxComponent );
     checkSheetForGapWidthAndOverlap(xChartDoc, 50, 30);
+}
+
+void Chart2ExportTest::testLabelStringODS()
+{
+    load("/chart2/qa/extras/data/ods/", "labelString.ods");
+
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    Reference< chart2::data::XDataSequence > xLabelSeq =
+        getLabelDataSequenceFromDoc(xChartDoc);
+    CPPUNIT_ASSERT(xLabelSeq.is());
+
+    OUString aLabelString = xLabelSeq->getSourceRangeRepresentation();
+    CPPUNIT_ASSERT_EQUAL(OUString("\"LabelName\""), aLabelString);
+
+    reload("calc8");
+
+    xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    xLabelSeq = getLabelDataSequenceFromDoc(xChartDoc);
+    CPPUNIT_ASSERT(xLabelSeq.is());
+
+    aLabelString = xLabelSeq->getSourceRangeRepresentation();
+    CPPUNIT_ASSERT_EQUAL(OUString("\"LabelName\""), aLabelString);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
