@@ -54,9 +54,11 @@ struct TempFile_Impl
     SvStream*   pStream;
     bool        bIsDirectory;
 
-                TempFile_Impl()
-                    : pStream(0)
-                    {}
+    TempFile_Impl()
+        : pStream(0)
+        , bIsDirectory(false)
+    {
+    }
 };
 
 OUString getParentName( const OUString& aFileName )
