@@ -34,7 +34,7 @@ const static OUString ITEMS( "StringItemList" );
 
 ScVbaListBox::ScVbaListBox( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< css::uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper )
     : ListBoxImpl_BASE(xParent, xContext, xControl, xModel, pGeomHelper)
-    : m_nIndex(0)
+    , m_nIndex(0)
 {
     mpListHelper.reset( new ListControlHelper( m_xProps ) );
 }
