@@ -75,7 +75,10 @@ namespace DOM { namespace events
         CTestListener(
                 const Reference< ::com::sun::star::lang::XMultiServiceFactory >&
                     rSMgr)
-            : m_factory(rSMgr){};
+            : m_factory(rSMgr)
+            , m_capture(sal_False)
+        {
+        }
 
         virtual ~CTestListener();
 
