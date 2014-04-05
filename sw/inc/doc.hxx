@@ -207,6 +207,7 @@ namespace sw {
     class MetaFieldManager;
     class UndoManager;
     class IShellCursorSupplier;
+    class DocumentSettingManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -289,6 +290,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::mark::MarkManager> mpMarkManager;
     const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
     const ::boost::scoped_ptr< ::sw::UndoManager > m_pUndoManager;
+    const ::boost::scoped_ptr< ::sw::DocumentSettingManager > m_pDocumentSettingManager;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -399,10 +401,7 @@ private:
     sal_uInt16 mnAutoFmtRedlnCommentNo;  /**< SeqNo for conjoining of AutoFmt-Redlines.
                                          by the UI. Managed by SwAutoFmt! */
 
-    sal_uInt16  mnLinkUpdMode;       //< UpdateMode for links.
-    SwFldUpdateFlags    meFldUpdMode;//< Automatically Update Mode for fields/charts.
     RedlineMode_t meRedlineMode;     //< Current Redline Mode.
-    SwCharCompressType meChrCmprType;//< for ASIAN: compress punctuation/kana
 
     sal_uInt32  mnRsid;              //< current session ID of the document
     sal_uInt32  mnRsidRoot;          //< session ID when the document was created
@@ -440,11 +439,7 @@ private:
     bool mbInXMLImport           : 1;    //< TRUE: During xml import, attribute portion building is not necessary.
     bool mbUpdateTOX             : 1;    //< TRUE: After loading document, update TOX.
     bool mbInLoadAsynchron       : 1;    //< TRUE: Document is in the process of being loaded asynchronously.
-    bool mbHTMLMode              : 1;    //< TRUE: Document is in HTMLMode.
     bool mbInCallModified        : 1;    //< TRUE: in Set/Reset-Modified link.
-    bool mbIsGlobalDoc           : 1;    //< TRUE: It's a global document.
-    bool mbGlblDocSaveLinks      : 1;    //< TRUE: Save sections linked in global document.
-    bool mbIsLabelDoc            : 1;    //< TRUE: It's a label document.
     bool mbIsAutoFmtRedline      : 1;    //< TRUE: Redlines are recorded by Autoformat.
     bool mbOLEPrtNotifyPending   : 1;    /**< TRUE: Printer has changed. At creation of
                                                 ::com::sun::star::sdbcx::View
@@ -453,8 +448,6 @@ private:
     bool mbIsRedlineMove         : 1;    //< True: Redlines are moved into to / out of the section.
     bool mbInsOnlyTxtGlssry      : 1;    //< True: insert 'only text' glossary into doc
     bool mbContains_MSVBasic     : 1;    //< True: MS-VBasic exist is in our storage
-    bool mbPurgeOLE              : 1;    //< sal_True: Purge OLE-Objects
-    bool mbKernAsianPunctuation  : 1;    //< sal_True: kerning also for ASIAN punctuation
     bool mbReadlineChecked       : 1;    //< sal_True: if the query was already shown
     bool mbLinksUpdated          : 1;    /**< #i38810#
                                           flag indicating, that the links have been updated. */
@@ -531,53 +524,8 @@ private:
     // label is followed by a tab character.
     // mbTabAtLeftIndentForParagraphsInList     def = sal_False, hidden
 
-    bool mbParaSpaceMax                     : 1;
-    bool mbParaSpaceMaxAtPages              : 1;
-    bool mbTabCompat                        : 1;
-    bool mbUseVirtualDevice                 : 1;
-    bool mbAddFlyOffsets                    : 1;
-    bool mbAddExternalLeading               : 1;
-    bool mbUseHiResolutionVirtualDevice     : 1;
-    bool mbOldLineSpacing                   : 1;    // #i11859#
-    bool mbAddParaSpacingToTableCells       : 1;
-    bool mbUseFormerObjectPos               : 1;    // #i11860#
-    bool mbUseFormerTextWrapping            : 1;
-    bool mbConsiderWrapOnObjPos             : 1;    // #i28701#
-                                                    // sal_True: object positioning algorithm has consider the wrapping style of                                                    //       the floating screen objects as given by its attribute 'WrapInfluenceOnObjPos'
-                                                    // floating screen objects as given by its
-                                                    // attribute 'WrapInfluenceOnObjPos'.
-    bool mbMathBaselineAlignment            : 1;    // TL  2010-10-29 #i972#
-    bool mbStylesNoDefault                  : 1;
-    bool mbFloattableNomargins              : 1; //< If paragraph margins next to a floating table should be ignored.
-    bool mEmbedFonts                        : 1;  //< Whether to embed fonts used by the document when saving.
-    bool mEmbedSystemFonts                  : 1;  //< Whether to embed also system fonts.
-
     // non-ui-compatibility flags:
-    bool mbOldNumbering                             : 1;
-    bool mbIgnoreFirstLineIndentInNumbering         : 1;   // #i47448#
-    bool mbDoNotJustifyLinesWithManualBreak         : 1;   // #i49277#
-    bool mbDoNotResetParaAttrsForNumFont            : 1;   // #i53199#
-    bool mbTableRowKeep                             : 1;
-    bool mbIgnoreTabsAndBlanksForLineCalculation    : 1;   // #i3952#
-    bool mbDoNotCaptureDrawObjsOnPage               : 1;   // #i62875#
-    bool mbOutlineLevelYieldsOutlineRule            : 1;
-    bool mbClipAsCharacterAnchoredWriterFlyFrames   : 1;
-    bool mbUnixForceZeroExtLeading                  : 1;   // #i60945#
     bool mbOldPrinterMetrics                        : 1;
-    bool mbTabRelativeToIndent                      : 1;   // #i24363# tab stops relative to indent
-    bool mbProtectForm                              : 1;
-    bool mbInvertBorderSpacing                      : 1;
-    bool mbCollapseEmptyCellPara                    : 1;
-    bool mbTabAtLeftIndentForParagraphsInList;             // #i89181# - see above
-    bool mbSmallCapsPercentage66;
-    bool mbTabOverflow;
-    bool mbUnbreakableNumberings;
-    bool mbClippedPictures;
-    bool mbBackgroundParaOverDrawings;
-    bool mbTabOverMargin;
-    bool mbSurroundTextWrapSmall;
-
-    bool mbLastBrowseMode                           : 1;
 
     sal_uInt32  mn32DummyCompatabilityOptions1;
     sal_uInt32  mn32DummyCompatabilityOptions2;
@@ -702,7 +650,7 @@ public:
 
     // Life cycle
     SwDoc();
-    virtual ~SwDoc();
+    ~SwDoc();
 
     bool IsInDtor() const { return mbDtor; }
 
@@ -713,123 +661,121 @@ public:
     SwNodes const& GetNodes() const { return *m_pNodes; }
 
     // IInterface
-    virtual sal_Int32 acquire() SAL_OVERRIDE;
-    virtual sal_Int32 release() SAL_OVERRIDE;
-    virtual sal_Int32 getReferenceCount() const SAL_OVERRIDE;
+    virtual sal_Int32 acquire();
+    virtual sal_Int32 release();
+    virtual sal_Int32 getReferenceCount() const;
 
     // IDocumentSettingAccess
-    virtual bool get(/*[in]*/ DocumentSettingId id) const SAL_OVERRIDE;
-    virtual void set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value) SAL_OVERRIDE;
-    virtual const com::sun::star::i18n::ForbiddenCharacters* getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const SAL_OVERRIDE;
-    virtual void setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters ) SAL_OVERRIDE;
-    virtual rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() SAL_OVERRIDE;
-    virtual const rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const SAL_OVERRIDE;
-    virtual sal_uInt16 getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const SAL_OVERRIDE;
-    virtual void setLinkUpdateMode( /*[in]*/ sal_uInt16 nMode ) SAL_OVERRIDE;
-    virtual SwFldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const SAL_OVERRIDE;
-    virtual void setFieldUpdateFlags( /*[in]*/ SwFldUpdateFlags eMode ) SAL_OVERRIDE;
-    virtual SwCharCompressType getCharacterCompressionType() const SAL_OVERRIDE;
-    virtual void setCharacterCompressionType( /*[in]*/SwCharCompressType nType ) SAL_OVERRIDE;
+    virtual bool get(/*[in]*/ DocumentSettingId id) const;
+    virtual void set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value);
+    virtual const com::sun::star::i18n::ForbiddenCharacters* getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const;
+    virtual void setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters );
+    virtual rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable();
+    virtual const rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const;
+    virtual sal_uInt16 getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const;
+    virtual void setLinkUpdateMode( /*[in]*/ sal_uInt16 nMode );
+    virtual SwFldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const;
+    virtual void setFieldUpdateFlags( /*[in]*/ SwFldUpdateFlags eMode );
+    virtual SwCharCompressType getCharacterCompressionType() const;
+    virtual void setCharacterCompressionType( /*[in]*/SwCharCompressType nType );
     virtual sal_uInt32 getRsid() const;
     virtual void setRsid( sal_uInt32 nVal );
     virtual sal_uInt32 getRsidRoot() const;
     virtual void setRsidRoot( sal_uInt32 nVal );
 
     // IDocumentDeviceAccess
-    virtual SfxPrinter* getPrinter(/*[in]*/ bool bCreate ) const SAL_OVERRIDE;
-    virtual void setPrinter(/*[in]*/ SfxPrinter* pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged ) SAL_OVERRIDE;
-    virtual VirtualDevice* getVirtualDevice(/*[in]*/ bool bCreate ) const SAL_OVERRIDE;
-    virtual void setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool bCallVirDevDataChanged ) SAL_OVERRIDE;
-    virtual OutputDevice* getReferenceDevice(/*[in]*/ bool bCreate ) const SAL_OVERRIDE;
-    virtual void setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewHiRes ) SAL_OVERRIDE;
-    virtual const JobSetup* getJobsetup() const SAL_OVERRIDE;
-    virtual void setJobsetup(/*[in]*/ const JobSetup& rJobSetup ) SAL_OVERRIDE;
-    virtual const SwPrintData & getPrintData() const SAL_OVERRIDE;
-    virtual void setPrintData(/*[in]*/ const SwPrintData& rPrtData) SAL_OVERRIDE;
+    virtual SfxPrinter* getPrinter(/*[in]*/ bool bCreate ) const;
+    virtual void setPrinter(/*[in]*/ SfxPrinter* pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged );
+    virtual VirtualDevice* getVirtualDevice(/*[in]*/ bool bCreate ) const;
+    virtual void setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool bCallVirDevDataChanged );
+    virtual OutputDevice* getReferenceDevice(/*[in]*/ bool bCreate ) const;
+    virtual void setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewHiRes );
+    virtual const JobSetup* getJobsetup() const;
+    virtual void setJobsetup(/*[in]*/ const JobSetup& rJobSetup );
+    virtual const SwPrintData & getPrintData() const;
+    virtual void setPrintData(/*[in]*/ const SwPrintData& rPrtData);
 
     // IDocumentMarkAccess
     IDocumentMarkAccess* getIDocumentMarkAccess();
     const IDocumentMarkAccess* getIDocumentMarkAccess() const;
 
     // IDocumentRedlineAccess
-    virtual RedlineMode_t GetRedlineMode() const SAL_OVERRIDE;
-    virtual void SetRedlineMode_intern(/*[in]*/RedlineMode_t eMode) SAL_OVERRIDE;
-    virtual void SetRedlineMode(/*[in]*/RedlineMode_t eMode) SAL_OVERRIDE;
-    virtual bool IsRedlineOn() const SAL_OVERRIDE;
-    virtual bool IsIgnoreRedline() const SAL_OVERRIDE;
-    virtual bool IsInRedlines(const SwNode& rNode) const SAL_OVERRIDE;
-    virtual const SwRedlineTbl& GetRedlineTbl() const SAL_OVERRIDE;
-    virtual const SwExtraRedlineTbl& GetExtraRedlineTbl() const SAL_OVERRIDE;
-    virtual SwExtraRedlineTbl& GetExtraRedlineTbl() SAL_OVERRIDE;
-    virtual bool HasExtraRedlineTbl() const SAL_OVERRIDE;
-    virtual bool AppendRedline(/*[in]*/SwRangeRedline* pPtr, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual bool AppendTableCellRedline(/*[in]*/SwTableCellRedline* pPtr, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual bool SplitRedline(const SwPaM& rPam) SAL_OVERRIDE;
-    virtual bool DeleteRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bSaveInUndo, /*[in]*/sal_uInt16 nDelType) SAL_OVERRIDE;
-    virtual bool DeleteRedline(/*[in]*/const SwStartNode& rSection, /*[in]*/bool bSaveInUndo, /*[in]*/sal_uInt16 nDelType) SAL_OVERRIDE;
-    virtual sal_uInt16 GetRedlinePos(/*[in]*/const SwNode& rNode, /*[in]*/sal_uInt16 nType) const SAL_OVERRIDE;
-    virtual void CompressRedlines() SAL_OVERRIDE;
-    virtual const SwRangeRedline* GetRedline(/*[in]*/const SwPosition& rPos, /*[in]*/sal_uInt16* pFndPos) const SAL_OVERRIDE;
-    virtual bool IsRedlineMove() const SAL_OVERRIDE;
-    virtual void SetRedlineMove(/*[in]*/bool bFlag) SAL_OVERRIDE;
-    virtual bool AcceptRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual bool AcceptRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual bool RejectRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual bool RejectRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) SAL_OVERRIDE;
-    virtual const SwRangeRedline* SelNextRedline(/*[in]*/SwPaM& rPam) const SAL_OVERRIDE;
-    virtual const SwRangeRedline* SelPrevRedline(/*[in]*/SwPaM& rPam) const SAL_OVERRIDE;
-    virtual void UpdateRedlineAttr() SAL_OVERRIDE;
-    virtual sal_uInt16 GetRedlineAuthor() SAL_OVERRIDE;
-    virtual sal_uInt16 InsertRedlineAuthor(const OUString& rAuthor) SAL_OVERRIDE;
-    virtual bool SetRedlineComment(/*[in]*/const SwPaM& rPam, /*[in]*/const OUString& rComment) SAL_OVERRIDE;
-    virtual const ::com::sun::star::uno::Sequence <sal_Int8>& GetRedlinePassword() const SAL_OVERRIDE;
-    virtual void SetRedlinePassword(/*[in]*/const ::com::sun::star::uno::Sequence <sal_Int8>& rNewPassword) SAL_OVERRIDE;
+    virtual RedlineMode_t GetRedlineMode() const;
+    virtual void SetRedlineMode_intern(/*[in]*/RedlineMode_t eMode);
+    virtual void SetRedlineMode(/*[in]*/RedlineMode_t eMode);
+    virtual bool IsRedlineOn() const;
+    virtual bool IsIgnoreRedline() const;
+    virtual bool IsInRedlines(const SwNode& rNode) const;
+    virtual const SwRedlineTbl& GetRedlineTbl() const;
+    virtual const SwExtraRedlineTbl& GetExtraRedlineTbl() const;
+    virtual bool AppendRedline(/*[in]*/SwRangeRedline* pPtr, /*[in]*/bool bCallDelete);
+    virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr, /*[in]*/bool bCallDelete);
+    virtual bool AppendTableCellRedline(/*[in]*/SwTableCellRedline* pPtr, /*[in]*/bool bCallDelete);
+    virtual bool SplitRedline(const SwPaM& rPam);
+    virtual bool DeleteRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bSaveInUndo, /*[in]*/sal_uInt16 nDelType);
+    virtual bool DeleteRedline(/*[in]*/const SwStartNode& rSection, /*[in]*/bool bSaveInUndo, /*[in]*/sal_uInt16 nDelType);
+    virtual sal_uInt16 GetRedlinePos(/*[in]*/const SwNode& rNode, /*[in]*/sal_uInt16 nType) const;
+    virtual void CompressRedlines();
+    virtual const SwRangeRedline* GetRedline(/*[in]*/const SwPosition& rPos, /*[in]*/sal_uInt16* pFndPos) const;
+    virtual bool IsRedlineMove() const;
+    virtual void SetRedlineMove(/*[in]*/bool bFlag);
+    virtual bool AcceptRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete);
+    virtual bool AcceptRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete);
+    virtual bool RejectRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete);
+    virtual bool RejectRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete);
+    virtual const SwRangeRedline* SelNextRedline(/*[in]*/SwPaM& rPam) const;
+    virtual const SwRangeRedline* SelPrevRedline(/*[in]*/SwPaM& rPam) const;
+    virtual void UpdateRedlineAttr();
+    virtual sal_uInt16 GetRedlineAuthor();
+    virtual sal_uInt16 InsertRedlineAuthor(const OUString& rAuthor);
+    virtual bool SetRedlineComment(/*[in]*/const SwPaM& rPam, /*[in]*/const OUString& rComment);
+    virtual const ::com::sun::star::uno::Sequence <sal_Int8>& GetRedlinePassword() const;
+    virtual void SetRedlinePassword(/*[in]*/const ::com::sun::star::uno::Sequence <sal_Int8>& rNewPassword);
 
     // IDocumentUndoRedo
     IDocumentUndoRedo      & GetIDocumentUndoRedo();
     IDocumentUndoRedo const& GetIDocumentUndoRedo() const;
 
     // IDocumentLinksAdministration
-    virtual bool IsVisibleLinks() const SAL_OVERRIDE;
-    virtual void SetVisibleLinks(bool bFlag) SAL_OVERRIDE;
-    virtual sfx2::LinkManager& GetLinkManager() SAL_OVERRIDE;
-    virtual const sfx2::LinkManager& GetLinkManager() const SAL_OVERRIDE;
-    virtual void UpdateLinks(bool bUI) SAL_OVERRIDE;
-    virtual bool GetData(const OUString& rItem, const OUString& rMimeType, ::com::sun::star::uno::Any& rValue) const SAL_OVERRIDE;
-    virtual bool SetData(const OUString& rItem, const OUString& rMimeType, const ::com::sun::star::uno::Any& rValue) SAL_OVERRIDE;
-    virtual ::sfx2::SvLinkSource* CreateLinkSource(const OUString& rItem) SAL_OVERRIDE;
-    virtual bool EmbedAllLinks() SAL_OVERRIDE;
-    virtual void SetLinksUpdated(const bool bNewLinksUpdated) SAL_OVERRIDE;
-    virtual bool LinksUpdated() const SAL_OVERRIDE;
+    virtual bool IsVisibleLinks() const;
+    virtual void SetVisibleLinks(bool bFlag);
+    virtual sfx2::LinkManager& GetLinkManager();
+    virtual const sfx2::LinkManager& GetLinkManager() const;
+    virtual void UpdateLinks(bool bUI);
+    virtual bool GetData(const OUString& rItem, const OUString& rMimeType, ::com::sun::star::uno::Any& rValue) const;
+    virtual bool SetData(const OUString& rItem, const OUString& rMimeType, const ::com::sun::star::uno::Any& rValue);
+    virtual ::sfx2::SvLinkSource* CreateLinkSource(const OUString& rItem);
+    virtual bool EmbedAllLinks();
+    virtual void SetLinksUpdated(const bool bNewLinksUpdated);
+    virtual bool LinksUpdated() const;
 
     // IDocumentFieldsAccess
-    virtual const SwFldTypes *GetFldTypes() const SAL_OVERRIDE;
-    virtual SwFieldType *InsertFldType(const SwFieldType &) SAL_OVERRIDE;
-    virtual SwFieldType *GetSysFldType( const sal_uInt16 eWhich ) const SAL_OVERRIDE;
-    virtual SwFieldType* GetFldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const SAL_OVERRIDE;
-    virtual void RemoveFldType(sal_uInt16 nFld) SAL_OVERRIDE;
-    virtual void UpdateFlds( SfxPoolItem* pNewHt, bool bCloseDB) SAL_OVERRIDE;
-    virtual void InsDeletedFldType(SwFieldType &) SAL_OVERRIDE;
-    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich) SAL_OVERRIDE;
-    virtual bool UpdateFld(SwTxtFld * rDstFmtFld, SwField & rSrcFld, SwMsgPoolItem * pMsgHnt, bool bUpdateTblFlds) SAL_OVERRIDE;
-    virtual void UpdateRefFlds(SfxPoolItem* pHt) SAL_OVERRIDE;
-    virtual void UpdateTblFlds(SfxPoolItem* pHt) SAL_OVERRIDE;
-    virtual void UpdateExpFlds(SwTxtFld* pFld, bool bUpdateRefFlds) SAL_OVERRIDE;
-    virtual void UpdateUsrFlds() SAL_OVERRIDE;
-    virtual void UpdatePageFlds(SfxPoolItem*) SAL_OVERRIDE;
-    virtual void LockExpFlds() SAL_OVERRIDE;
-    virtual void UnlockExpFlds() SAL_OVERRIDE;
-    virtual bool IsExpFldsLocked() const SAL_OVERRIDE;
-    virtual SwDocUpdtFld& GetUpdtFlds() const SAL_OVERRIDE;
-    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen) SAL_OVERRIDE;
-    virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime) SAL_OVERRIDE;
-    virtual void FldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) SAL_OVERRIDE;
-    virtual void FldsToCalc(SwCalc& rCalc, const _SetGetExpFld& rToThisFld) SAL_OVERRIDE;
-    virtual void FldsToExpand(SwHash**& ppTbl, sal_uInt16& rTblSize, const _SetGetExpFld& rToThisFld) SAL_OVERRIDE;
-    virtual bool IsNewFldLst() const SAL_OVERRIDE;
-    virtual void SetNewFldLst( bool bFlag) SAL_OVERRIDE;
-    virtual void InsDelFldInFldLst(bool bIns, const SwTxtFld& rFld) SAL_OVERRIDE;
+    virtual const SwFldTypes *GetFldTypes() const;
+    virtual SwFieldType *InsertFldType(const SwFieldType &);
+    virtual SwFieldType *GetSysFldType( const sal_uInt16 eWhich ) const;
+    virtual SwFieldType* GetFldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const;
+    virtual void RemoveFldType(sal_uInt16 nFld);
+    virtual void UpdateFlds( SfxPoolItem* pNewHt, bool bCloseDB);
+    virtual void InsDeletedFldType(SwFieldType &);
+    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich);
+    virtual bool UpdateFld(SwTxtFld * rDstFmtFld, SwField & rSrcFld, SwMsgPoolItem * pMsgHnt, bool bUpdateTblFlds);
+    virtual void UpdateRefFlds(SfxPoolItem* pHt);
+    virtual void UpdateTblFlds(SfxPoolItem* pHt);
+    virtual void UpdateExpFlds(SwTxtFld* pFld, bool bUpdateRefFlds);
+    virtual void UpdateUsrFlds();
+    virtual void UpdatePageFlds(SfxPoolItem*);
+    virtual void LockExpFlds();
+    virtual void UnlockExpFlds();
+    virtual bool IsExpFldsLocked() const;
+    virtual SwDocUpdtFld& GetUpdtFlds() const;
+    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen);
+    virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime);
+    virtual void FldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt);
+    virtual void FldsToCalc(SwCalc& rCalc, const _SetGetExpFld& rToThisFld);
+    virtual void FldsToExpand(SwHash**& ppTbl, sal_uInt16& rTblSize, const _SetGetExpFld& rToThisFld);
+    virtual bool IsNewFldLst() const;
+    virtual void SetNewFldLst( bool bFlag);
+    virtual void InsDelFldInFldLst(bool bIns, const SwTxtFld& rFld);
 
     /** Returns the field at a certain position.
        @param rPos position to search at
@@ -845,165 +791,165 @@ public:
     bool containsUpdatableFields();
 
     // IDocumentContentOperations
-    virtual bool CopyRange(SwPaM&, SwPosition&, const bool bCopyAll) const SAL_OVERRIDE;
-    virtual void DeleteSection(SwNode* pNode) SAL_OVERRIDE;
-    virtual bool DeleteRange(SwPaM&) SAL_OVERRIDE;
-    virtual bool DelFullPara(SwPaM&) SAL_OVERRIDE;
+    virtual bool CopyRange(SwPaM&, SwPosition&, const bool bCopyAll) const;
+    virtual void DeleteSection(SwNode* pNode);
+    virtual bool DeleteRange(SwPaM&);
+    virtual bool DelFullPara(SwPaM&);
     // Add optional parameter <bForceJoinNext>, default value <false>
     // Needed for hiding of deletion redlines
     virtual bool DeleteAndJoin( SwPaM&,
-                                const bool bForceJoinNext = false ) SAL_OVERRIDE;
-    virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags) SAL_OVERRIDE;
-    virtual bool MoveNodeRange(SwNodeRange&, SwNodeIndex&, SwMoveFlags) SAL_OVERRIDE;
-    virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags) SAL_OVERRIDE;
-    virtual bool Overwrite(const SwPaM &rRg, const OUString& rStr) SAL_OVERRIDE;
+                                const bool bForceJoinNext = false );
+    virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags);
+    virtual bool MoveNodeRange(SwNodeRange&, SwNodeIndex&, SwMoveFlags);
+    virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags);
+    virtual bool Overwrite(const SwPaM &rRg, const OUString& rStr);
     virtual bool InsertString(const SwPaM &rRg, const OUString&,
-              const enum InsertFlags nInsertMode = INS_EMPTYEXPAND ) SAL_OVERRIDE;
+              const enum InsertFlags nInsertMode = INS_EMPTYEXPAND );
     virtual bool UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal = 0 );
     virtual bool UpdateRsid( const SwPaM &rRg, sal_Int32 nLen );
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic,
-                        const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*) SAL_OVERRIDE;
+                        const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
     virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
-                        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) SAL_OVERRIDE;
+                        const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
     virtual SwDrawFrmFmt* InsertDrawObj(
         const SwPaM &rRg,
         SdrObject& rDrawObj,
-        const SfxItemSet& rFlyAttrSet ) SAL_OVERRIDE;
+        const SfxItemSet& rFlyAttrSet );
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
-                        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) SAL_OVERRIDE;
+                        const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
 
     // Add a para for the char attribute exp...
     virtual bool InsertPoolItem(
         const SwPaM &rRg,
         const SfxPoolItem&,
         const SetAttrMode nFlags,
-        const bool bExpandCharToPara=false) SAL_OVERRIDE;
+        const bool bExpandCharToPara=false);
 
     virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
-                                const SetAttrMode nFlags) SAL_OVERRIDE;
-    virtual void ReRead(SwPaM&, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj) SAL_OVERRIDE;
-    virtual void TransliterateText(const SwPaM& rPaM, utl::TransliterationWrapper&) SAL_OVERRIDE;
+                                const SetAttrMode nFlags);
+    virtual void ReRead(SwPaM&, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj);
+    virtual void TransliterateText(const SwPaM& rPaM, utl::TransliterationWrapper&);
     virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const OUString& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
-                           const SfxItemSet* pGrfAttrSet, SwFrmFmt*) SAL_OVERRIDE;
-    virtual bool SplitNode(const SwPosition &rPos, bool bChkTableStart) SAL_OVERRIDE;
-    virtual bool AppendTxtNode(SwPosition& rPos) SAL_OVERRIDE;
+                           const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
+    virtual bool SplitNode(const SwPosition &rPos, bool bChkTableStart);
+    virtual bool AppendTxtNode(SwPosition& rPos);
         virtual void SetModified(SwPaM &rPaM);
     virtual bool ReplaceRange(SwPaM& rPam, const OUString& rNewStr,
-                              const bool bRegExReplace) SAL_OVERRIDE;
-    virtual void RemoveLeadingWhiteSpace(const SwPosition & rPos ) SAL_OVERRIDE;
+                              const bool bRegExReplace);
+    virtual void RemoveLeadingWhiteSpace(const SwPosition & rPos );
 
     // IDocumentStylePoolAccess
-    virtual SwTxtFmtColl* GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) SAL_OVERRIDE;
-    virtual SwFmt* GetFmtFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
-    virtual SwFrmFmt* GetFrmFmtFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
-    virtual SwCharFmt* GetCharFmtFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
-    virtual SwPageDesc* GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) SAL_OVERRIDE;
-    virtual SwNumRule* GetNumRuleFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
-    virtual bool IsPoolTxtCollUsed( sal_uInt16 nId ) const SAL_OVERRIDE;
-    virtual bool IsPoolFmtUsed( sal_uInt16 nId ) const SAL_OVERRIDE;
-    virtual bool IsPoolPageDescUsed( sal_uInt16 nId ) const SAL_OVERRIDE;
+    virtual SwTxtFmtColl* GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage = true );
+    virtual SwFmt* GetFmtFromPool( sal_uInt16 nId );
+    virtual SwFrmFmt* GetFrmFmtFromPool( sal_uInt16 nId );
+    virtual SwCharFmt* GetCharFmtFromPool( sal_uInt16 nId );
+    virtual SwPageDesc* GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage = true );
+    virtual SwNumRule* GetNumRuleFromPool( sal_uInt16 nId );
+    virtual bool IsPoolTxtCollUsed( sal_uInt16 nId ) const;
+    virtual bool IsPoolFmtUsed( sal_uInt16 nId ) const;
+    virtual bool IsPoolPageDescUsed( sal_uInt16 nId ) const;
 
     // IDocumentLineNumberAccess
-    virtual const SwLineNumberInfo& GetLineNumberInfo() const SAL_OVERRIDE;
-    virtual void SetLineNumberInfo(const SwLineNumberInfo& rInfo) SAL_OVERRIDE;
+    virtual const SwLineNumberInfo& GetLineNumberInfo() const;
+    virtual void SetLineNumberInfo(const SwLineNumberInfo& rInfo);
 
     // IDocumentStatistics
-    virtual void DocInfoChgd() SAL_OVERRIDE;
-    virtual const SwDocStat &GetDocStat() const SAL_OVERRIDE;
-    virtual const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync = false, bool bFields = true) SAL_OVERRIDE;
-    virtual void SetDocStat(const SwDocStat& rStat) SAL_OVERRIDE;
-    virtual void UpdateDocStat(bool bCompleteAsync = false, bool bFields = true) SAL_OVERRIDE;
+    virtual void DocInfoChgd();
+    virtual const SwDocStat &GetDocStat() const;
+    virtual const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync = false, bool bFields = true);
+    virtual void SetDocStat(const SwDocStat& rStat);
+    virtual void UpdateDocStat(bool bCompleteAsync = false, bool bFields = true);
 
     // IDocumentState
-    virtual void SetModified() SAL_OVERRIDE;
-    virtual void ResetModified() SAL_OVERRIDE;
-    virtual bool IsModified() const SAL_OVERRIDE;
-    virtual bool IsLoaded() const SAL_OVERRIDE;
-    virtual bool IsUpdateExpFld() const SAL_OVERRIDE;
-    virtual bool IsNewDoc() const SAL_OVERRIDE;
-    virtual bool IsPageNums() const SAL_OVERRIDE;
-    virtual void SetPageNums(bool b) SAL_OVERRIDE;
-    virtual void SetNewDoc(bool b) SAL_OVERRIDE;
-    virtual void SetUpdateExpFldStat(bool b) SAL_OVERRIDE;
-    virtual void SetLoaded(bool b) SAL_OVERRIDE;
+    virtual void SetModified();
+    virtual void ResetModified();
+    virtual bool IsModified() const;
+    virtual bool IsLoaded() const;
+    virtual bool IsUpdateExpFld() const;
+    virtual bool IsNewDoc() const;
+    virtual bool IsPageNums() const;
+    virtual void SetPageNums(bool b);
+    virtual void SetNewDoc(bool b);
+    virtual void SetUpdateExpFldStat(bool b);
+    virtual void SetLoaded(bool b);
 
     // IDocumentDrawModelAccess
-    virtual const SdrModel* GetDrawModel() const SAL_OVERRIDE;
-    virtual SdrModel* GetDrawModel() SAL_OVERRIDE;
-    virtual SdrLayerID GetHeavenId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetHellId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetControlsId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetInvisibleHeavenId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetInvisibleHellId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetInvisibleControlsId() const SAL_OVERRIDE;
-    virtual void NotifyInvisibleLayers( SdrPageView& _rSdrPageView ) SAL_OVERRIDE;
-    virtual bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const SAL_OVERRIDE;
-    virtual SdrLayerID GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId ) SAL_OVERRIDE;
-    virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId ) SAL_OVERRIDE;
-    virtual SdrModel* _MakeDrawModel() SAL_OVERRIDE;
-    virtual SdrModel* GetOrCreateDrawModel() SAL_OVERRIDE;
+    virtual const SdrModel* GetDrawModel() const;
+    virtual SdrModel* GetDrawModel();
+    virtual SdrLayerID GetHeavenId() const;
+    virtual SdrLayerID GetHellId() const;
+    virtual SdrLayerID GetControlsId() const;
+    virtual SdrLayerID GetInvisibleHeavenId() const;
+    virtual SdrLayerID GetInvisibleHellId() const;
+    virtual SdrLayerID GetInvisibleControlsId() const;
+    virtual void NotifyInvisibleLayers( SdrPageView& _rSdrPageView );
+    virtual bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const;
+    virtual SdrLayerID GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId );
+    virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId );
+    virtual SdrModel* _MakeDrawModel();
+    virtual SdrModel* GetOrCreateDrawModel();
 
     // IDocumentLayoutAccess
-    virtual void SetCurrentViewShell( SwViewShell* pNew ) SAL_OVERRIDE;
-    virtual SwLayouter* GetLayouter() SAL_OVERRIDE;
-    virtual const SwLayouter* GetLayouter() const SAL_OVERRIDE;
-    virtual void SetLayouter( SwLayouter* pNew ) SAL_OVERRIDE;
-    virtual SwFrmFmt* MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet ) SAL_OVERRIDE;
-    virtual void DelLayoutFmt( SwFrmFmt *pFmt ) SAL_OVERRIDE;
-    virtual SwFrmFmt* CopyLayoutFmt( const SwFrmFmt& rSrc, const SwFmtAnchor& rNewAnchor, bool bSetTxtFlyAtt, bool bMakeFrms ) SAL_OVERRIDE;
-    virtual const SwViewShell *GetCurrentViewShell() const SAL_OVERRIDE;
-    virtual SwViewShell *GetCurrentViewShell() SAL_OVERRIDE; //< It must be able to communicate to a SwViewShell.This is going to be removerd later.
-    virtual const SwRootFrm *GetCurrentLayout() const SAL_OVERRIDE;
-    virtual SwRootFrm *GetCurrentLayout() SAL_OVERRIDE;
-    virtual bool HasLayout() const SAL_OVERRIDE;
+    virtual void SetCurrentViewShell( SwViewShell* pNew );
+    virtual SwLayouter* GetLayouter();
+    virtual const SwLayouter* GetLayouter() const;
+    virtual void SetLayouter( SwLayouter* pNew );
+    virtual SwFrmFmt* MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet );
+    virtual void DelLayoutFmt( SwFrmFmt *pFmt );
+    virtual SwFrmFmt* CopyLayoutFmt( const SwFrmFmt& rSrc, const SwFmtAnchor& rNewAnchor, bool bSetTxtFlyAtt, bool bMakeFrms );
+    virtual const SwViewShell *GetCurrentViewShell() const;
+    virtual SwViewShell *GetCurrentViewShell(); //< It must be able to communicate to a SwViewShell.This is going to be removerd later.
+    virtual const SwRootFrm *GetCurrentLayout() const;
+    virtual SwRootFrm *GetCurrentLayout();
+    virtual bool HasLayout() const;
     void ClearSwLayouterEntries();
 
     // IDocumentTimerAccess
-    virtual void StartIdling() SAL_OVERRIDE;
-    virtual void StopIdling() SAL_OVERRIDE;
-    virtual void BlockIdling() SAL_OVERRIDE;
-    virtual void UnblockIdling() SAL_OVERRIDE;
-    virtual void StartBackgroundJobs() SAL_OVERRIDE;
+    virtual void StartIdling();
+    virtual void StopIdling();
+    virtual void BlockIdling();
+    virtual void UnblockIdling();
+    virtual void StartBackgroundJobs();
 
     // IDocumentChartDataProviderAccess
-    virtual SwChartDataProvider * GetChartDataProvider( bool bCreate = false ) const SAL_OVERRIDE;
-    virtual void CreateChartInternalDataProviders( const SwTable *pTable ) SAL_OVERRIDE;
-    virtual SwChartLockController_Helper & GetChartControllerHelper() SAL_OVERRIDE;
+    virtual SwChartDataProvider * GetChartDataProvider( bool bCreate = false ) const;
+    virtual void CreateChartInternalDataProviders( const SwTable *pTable );
+    virtual SwChartLockController_Helper & GetChartControllerHelper();
 
     // IDocumentListItems
-    virtual void addListItem( const SwNodeNum& rNodeNum ) SAL_OVERRIDE;
-    virtual void removeListItem( const SwNodeNum& rNodeNum ) SAL_OVERRIDE;
+    virtual void addListItem( const SwNodeNum& rNodeNum );
+    virtual void removeListItem( const SwNodeNum& rNodeNum );
     virtual OUString getListItemText( const SwNodeNum& rNodeNum,
                                     const bool bWithNumber = true,
-                                    const bool bWithSpacesForLevel = false ) const SAL_OVERRIDE;
-    virtual void getListItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const SAL_OVERRIDE;
-    virtual void getNumItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const SAL_OVERRIDE;
+                                    const bool bWithSpacesForLevel = false ) const;
+    virtual void getListItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const;
+    virtual void getNumItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const;
 
     // IDocumentOutlineNodes
-    virtual sal_Int32 getOutlineNodesCount() const SAL_OVERRIDE;
-    virtual int getOutlineLevel( const sal_Int32 nIdx ) const SAL_OVERRIDE;
+    virtual sal_Int32 getOutlineNodesCount() const;
+    virtual int getOutlineLevel( const sal_Int32 nIdx ) const;
     virtual OUString getOutlineText( const sal_Int32 nIdx,
                                    const bool bWithNumber,
                                    const bool bWithSpacesForLevel,
-                                   const bool bWithFtn ) const SAL_OVERRIDE;
-    virtual SwTxtNode* getOutlineNode( const sal_Int32 nIdx ) const SAL_OVERRIDE;
-    virtual void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const SAL_OVERRIDE;
+                                   const bool bWithFtn ) const;
+    virtual SwTxtNode* getOutlineNode( const sal_Int32 nIdx ) const;
+    virtual void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const;
 
     // IDocumentListsAccess
     virtual SwList* createList( const OUString& rListId,
-                                const OUString& rDefaultListStyleName ) SAL_OVERRIDE;
-    virtual void deleteList( const OUString& rListId ) SAL_OVERRIDE;
-    virtual SwList* getListByName( const OUString& rListId ) const SAL_OVERRIDE;
-    virtual SwList* createListForListStyle( const OUString& rListStyleName ) SAL_OVERRIDE;
-    virtual SwList* getListForListStyle( const OUString& rListStyleName ) const SAL_OVERRIDE;
-    virtual void deleteListForListStyle( const OUString& rListStyleName ) SAL_OVERRIDE;
+                                const OUString& rDefaultListStyleName );
+    virtual void deleteList( const OUString& rListId );
+    virtual SwList* getListByName( const OUString& rListId ) const;
+    virtual SwList* createListForListStyle( const OUString& rListStyleName );
+    virtual SwList* getListForListStyle( const OUString& rListStyleName ) const;
+    virtual void deleteListForListStyle( const OUString& rListStyleName );
     virtual void trackChangeOfListStyleName( const OUString& rListStyleName,
-                                             const OUString& rNewListStyleName ) SAL_OVERRIDE;
+                                             const OUString& rNewListStyleName );
 
     // IDocumentExternalData
     virtual void setExternalData(::sw::tExternalDataType eType,
-                                 ::sw::tExternalDataPointer pPayload) SAL_OVERRIDE;
-    virtual ::sw::tExternalDataPointer getExternalData(::sw::tExternalDataType eType) SAL_OVERRIDE;
+                                 ::sw::tExternalDataPointer pPayload);
+    virtual ::sw::tExternalDataPointer getExternalData(::sw::tExternalDataType eType);
 
     virtual void setDocReadOnly( sal_Bool b) { mbReadOnly = b; }
     virtual sal_Bool getDocReadOnly() const { return mbReadOnly; }
@@ -1081,13 +1027,6 @@ public:
                             sal_Bool bMakeNewFrms = sal_True,
                             sal_Bool bDelRedlines = sal_True,
                             sal_Bool bCopyFlyAtFly = sal_False ) const;
-
-    //UUUU Helper that checks for unique items for DrawingLayer items of type NameOrIndex
-    // and evtl. corrects that items to ensure unique names for that type. This call may
-    // modify/correct entries inside of the given SfxItemSet, and it will apply a name to
-    // the items in question (what is essential to make the named slots associated with
-    // these items work for the UNO API and thus e.g. for ODF im/export)
-    void CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet);
 
     bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
 
@@ -1376,7 +1315,7 @@ public:
     sal_uInt16 MakePageDesc( const OUString &rName, const SwPageDesc* pCpy = 0,
                              bool bRegardLanguage = true,
                              bool bBroadcast = false);
-    void BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamily,
+    void BroadcastStyleOperation(OUString rName, SfxStyleFamily eFamily,
                                  sal_uInt16 nOp);
 
     /** The html import sometimes overwrites the
@@ -1403,7 +1342,7 @@ public:
 
     bool DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes = false );
     OUString GetUniqueTOXBaseName( const SwTOXType& rType,
-                                   const OUString& sChkStr ) const;
+                                   const OUString sChkStr ) const;
 
     bool SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName);
     void SetTOXBaseProtection(const SwTOXBase& rTOXBase, sal_Bool bProtect);
@@ -1495,18 +1434,17 @@ public:
 
     /** Accept changes of outline styles for OUtlineRule.
      re-use unused 3rd parameter
-     Optional parameter <bResetIndentAttrs> - default value false:
-      If <bResetIndentAttrs> equals true, the indent attributes "before text"
-      and "first line indent" are additionally reset at the provided PaM, if
-      the list style makes use of the new list level attributes.
-     Parameters <bCreateNewList> and <sContinuedListId>:
-      <bCreateNewList> indicates, if a new list is created by applying the given list style.
-      If <bCreateNewList> equals false, <sContinuedListId> may contain the
-      list Id of a list, which has to be continued by applying the given list style */
+     Add optional parameter <bResetIndentAttrs> - default value sal_False.
+     If <bResetIndentAttrs> equals true, the indent attributes "before text"
+     and "first line indent" are additionally reset at the provided PaM, if
+     the list style makes use of the new list level attributes.
+     introduce parameters <bCreateNewList> and <sContinuedListId>
+     <bCreateNewList> indicates, if a new list is created by applying the
+     given list style. */
     void SetNumRule( const SwPaM&,
                      const SwNumRule&,
                      const bool bCreateNewList,
-                     const OUString& sContinuedListId = OUString(),
+                     const OUString sContinuedListId = OUString(),
                      bool bSetItem = true,
                      const bool bResetIndentAttrs = false );
     void SetCounted( const SwPaM&, bool bCounted);
@@ -1516,7 +1454,7 @@ public:
     void SetNumRuleStart( const SwPosition& rPos, sal_Bool bFlag = sal_True );
     void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt );
 
-    SwNumRule* GetNumRuleAtPos( const SwPosition& rPos ) const;
+    SwNumRule* GetCurrNumRule( const SwPosition& rPos ) const;
 
     const SwNumRuleTbl& GetNumRuleTbl() const { return *mpNumRuleTbl; }
 
@@ -2033,7 +1971,7 @@ public:
      */
     OUString GetPaMDescr(const SwPaM & rPaM) const;
 
-    bool IsFirstOfNumRuleAtPos( const SwPosition & rPos );
+    bool IsFirstOfNumRule(SwPosition & rPos);
 
     // access methods for XForms model(s)
 
@@ -2056,19 +1994,19 @@ public:
     void SetDefaultPageMode(bool bSquaredPageMode);
     sal_Bool IsSquaredPageMode() const;
 
-    void Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 )
+    void Setn32DummyCompatabilityOptions1( sal_uInt32 CompatabilityOptions1 )
     {
         mn32DummyCompatabilityOptions1 = CompatabilityOptions1;
     }
-    sal_uInt32 Getn32DummyCompatabilityOptions1()
+    sal_uInt32 Getn32DummyCompatabilityOptions1( )
     {
         return mn32DummyCompatabilityOptions1;
     }
-    void Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 )
+    void Setn32DummyCompatabilityOptions2( sal_uInt32 CompatabilityOptions2 )
     {
         mn32DummyCompatabilityOptions2 = CompatabilityOptions2;
     }
-    sal_uInt32 Getn32DummyCompatabilityOptions2()
+    sal_uInt32 Getn32DummyCompatabilityOptions2( )
     {
         return mn32DummyCompatabilityOptions2;
     }
@@ -2079,6 +2017,8 @@ public:
     ::sw::MetaFieldManager & GetMetaFieldManager();
     ::sw::UndoManager      & GetUndoManager();
     ::sw::UndoManager const& GetUndoManager() const;
+    ::sw::DocumentSettingManager      & GetDocumentSettingManager();
+    ::sw::DocumentSettingManager const& GetDocumentSettingManager() const;
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
 
     /**
@@ -2104,6 +2044,8 @@ private:
     // Our own 'StatsUpdateTimer' calls the following method
     DECL_LINK( DoIdleStatsUpdate, Timer * );
 };
+
+
 
 // This method is called in Dtor of SwDoc and deletes cache of ContourObjects.
 void ClrContourCache();

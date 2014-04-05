@@ -18,6 +18,7 @@
  */
 
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx>
 #include <dcontact.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -40,7 +41,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
-#include <unotools/compatibility.hxx>
 #include <unotools/lingucfg.hxx>
 #include <svx/svdpage.hxx>
 #include <paratr.hxx>
@@ -106,8 +106,8 @@ using namespace ::com::sun::star::document;
 const sal_Char sFrmFmtStr[] = "Frameformat";
 const sal_Char sEmptyPageStr[] = "Empty Page";
 const sal_Char sColumnCntStr[] = "Columncontainer";
-const sal_Char sCharFmtStr[] = "Character style";
-const sal_Char sTxtCollStr[] = "Paragraph style";
+const sal_Char sCharFmtStr[] = "Zeichenformat";
+const sal_Char sTxtCollStr[] = "Textformatvorlage";
 const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
 
 /*
@@ -136,12 +136,12 @@ void StartGrammarChecking( SwDoc &rDoc )
     // check for a visible view
     bool bVisible = false;
     const SwDocShell *mpDocShell = rDoc.GetDocShell();
-    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( mpDocShell, false );
+    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( mpDocShell, sal_False );
     while (pFrame && !bVisible)
     {
         if (pFrame->IsVisible())
             bVisible = true;
-        pFrame = SfxViewFrame::GetNext( *pFrame, mpDocShell, false );
+        pFrame = SfxViewFrame::GetNext( *pFrame, mpDocShell, sal_False );
     }
 
     //!! only documents with visible views need to be checked
@@ -187,6 +187,7 @@ SwDoc::SwDoc()
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
     m_pUndoManager(new ::sw::UndoManager(
             boost::shared_ptr<SwNodes>(new SwNodes(this)), *this, *this, *this)),
+    m_pDocumentSettingManager(new ::sw::DocumentSettingManager(*this)),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),
@@ -240,10 +241,7 @@ SwDoc::SwDoc()
     mpListItemsList( new tImplSortedNodeNumList() ), // #i83479#
     m_pXmlIdRegistry(),
     mnAutoFmtRedlnCommentNo( 0 ),
-    mnLinkUpdMode( GLOBALSETTING ),
-    meFldUpdMode( AUTOUPD_GLOBALSETTING ),
     meRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE)),
-    meChrCmprType( CHARCOMPRESS_NONE ),
     mReferenceCount(0),
     mIdleBlockCount(0),
     mnLockExpFld( 0 ),
@@ -261,19 +259,13 @@ SwDoc::SwDoc()
     mbInXMLImport(false),
     mbUpdateTOX(false),
     mbInLoadAsynchron(false),
-    mbHTMLMode(false),
     mbInCallModified(false),
-    mbIsGlobalDoc(false),
-    mbGlblDocSaveLinks(false),
-    mbIsLabelDoc(false),
     mbIsAutoFmtRedline(false),
     mbOLEPrtNotifyPending(false),
     mbAllOLENotify(false),
     mbIsRedlineMove(false),
     mbInsOnlyTxtGlssry(false),
     mbContains_MSVBasic(false),
-    mbPurgeOLE(true),
-    mbKernAsianPunctuation(false),
     mbReadlineChecked(false),
     mbLinksUpdated( false ), //#i38810#
     mbClipBoard( false ),
@@ -286,36 +278,7 @@ SwDoc::SwDoc()
 
     // COMPATIBILITY FLAGS START
 
-    mbAddFlyOffsets(false),
-    mbUseHiResolutionVirtualDevice(true),
-    mbMathBaselineAlignment(false), // default for *old* documents is 'off'
-    mbStylesNoDefault(false),
-    mbFloattableNomargins(false),
-    mEmbedFonts(false),
-    mEmbedSystemFonts(false),
-    mbOldNumbering(false),
-    mbIgnoreFirstLineIndentInNumbering(false),
-    mbDoNotResetParaAttrsForNumFont(false),
-    mbTableRowKeep(false),
-    mbIgnoreTabsAndBlanksForLineCalculation(false),
-    mbDoNotCaptureDrawObjsOnPage(false),
-    mbOutlineLevelYieldsOutlineRule(false),
-    mbClipAsCharacterAnchoredWriterFlyFrames(false),
-    mbUnixForceZeroExtLeading(false),
     mbOldPrinterMetrics(false),
-    mbTabRelativeToIndent(true),
-    mbProtectForm(false), // i#78591#
-    mbInvertBorderSpacing (false),
-    mbCollapseEmptyCellPara(true),
-    mbTabAtLeftIndentForParagraphsInList(false), //#i89181#
-    mbSmallCapsPercentage66(false),
-    mbTabOverflow(true),
-    mbUnbreakableNumberings(false),
-    mbClippedPictures(false),
-    mbBackgroundParaOverDrawings(false),
-    mbTabOverMargin(false),
-    mbSurroundTextWrapSmall(false),
-    mbLastBrowseMode( false ),
     mn32DummyCompatabilityOptions1(0),
     mn32DummyCompatabilityOptions2(0),
 
@@ -325,27 +288,6 @@ SwDoc::SwDoc()
     mbReadOnly(false),
     meDocType(DOCTYPE_NATIVE)
 {
-    // COMPATIBILITY FLAGS START
-
-    // Note: Any non-hidden compatibility flag should obtain its default
-    // by asking SvtCompatibilityOptions, see below.
-
-    const SvtCompatibilityOptions aOptions;
-    mbParaSpaceMax                      = aOptions.IsAddSpacing();
-    mbParaSpaceMaxAtPages               = aOptions.IsAddSpacingAtPages();
-    mbTabCompat                         = !aOptions.IsUseOurTabStops();
-    mbUseVirtualDevice                  = !aOptions.IsUsePrtDevice();
-    mbAddExternalLeading                = !aOptions.IsNoExtLeading();
-    mbOldLineSpacing                    = aOptions.IsUseLineSpacing();
-    mbAddParaSpacingToTableCells        = aOptions.IsAddTableSpacing();
-    mbUseFormerObjectPos                = aOptions.IsUseObjectPositioning();
-    mbUseFormerTextWrapping             = aOptions.IsUseOurTextWrapping();
-    mbConsiderWrapOnObjPos              = aOptions.IsConsiderWrappingStyle();
-
-    mbDoNotJustifyLinesWithManualBreak      = !aOptions.IsExpandWordSpace();
-
-    // COMPATIBILITY FLAGS END
-
     /*
      * DefaultFormats and DefaultFormatCollections (FmtColl)
      * are inserted at position 0 at the respective array.
@@ -531,7 +473,7 @@ SwDoc::~SwDoc()
     mbDtor = true;
 
     delete mpRedlineTbl;
-    delete mpExtraRedlineTbl, mpExtraRedlineTbl = 0;
+    delete mpExtraRedlineTbl;
     delete mpUnoCrsrTbl;
     delete mpAutoFmtRedlnComment;
     delete mpUpdtFlds;
@@ -1033,6 +975,18 @@ SwDoc::GetUndoManager() const
     return *m_pUndoManager;
 }
 
+::sw::DocumentSettingManager &
+SwDoc::GetDocumentSettingManager()
+{
+    return *m_pDocumentSettingManager;
+}
+
+::sw::DocumentSettingManager const&
+SwDoc::GetDocumentSettingManager() const
+{
+    return *m_pDocumentSettingManager;
+}
+
 IDocumentUndoRedo &
 SwDoc::GetIDocumentUndoRedo()
 {
@@ -1061,8 +1015,6 @@ void SwDoc::InitTOXTypes()
    pNew = new SwTOXType(TOX_TABLES,                pShellRes->aTOXTablesName        );
    mpTOXTypes->push_back( pNew );
    pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
-   mpTOXTypes->push_back( pNew );
-   pNew = new SwTOXType(TOX_CITATION,           pShellRes->aTOXCitationName   );
    mpTOXTypes->push_back( pNew );
 }
 
@@ -1103,31 +1055,9 @@ void SwDoc::ReplaceCompatabilityOptions(const SwDoc& rSource)
 {
     mn32DummyCompatabilityOptions1 = rSource.mn32DummyCompatabilityOptions1;
     mn32DummyCompatabilityOptions2 = rSource.mn32DummyCompatabilityOptions2;
-    mbParaSpaceMax = rSource.mbParaSpaceMax;
-    mbParaSpaceMaxAtPages = rSource.mbParaSpaceMaxAtPages;
-    mbTabCompat = rSource.mbTabCompat;
-    mbUseVirtualDevice = rSource.mbUseVirtualDevice;
-    mbAddExternalLeading = rSource.mbAddExternalLeading;
-    mbOldLineSpacing = rSource.mbOldLineSpacing;
-    mbAddParaSpacingToTableCells = rSource.mbAddParaSpacingToTableCells;
-    mbUseFormerObjectPos = rSource.mbUseFormerObjectPos;
-    mbUseFormerTextWrapping = rSource.mbUseFormerTextWrapping;
-    mbConsiderWrapOnObjPos = rSource.mbConsiderWrapOnObjPos;
-    mbAddFlyOffsets = rSource.mbAddFlyOffsets;
-    mbOldNumbering = rSource.mbOldNumbering;
-    mbUseHiResolutionVirtualDevice = rSource.mbUseHiResolutionVirtualDevice;
-    mbIgnoreFirstLineIndentInNumbering = rSource.mbIgnoreFirstLineIndentInNumbering;
-    mbDoNotJustifyLinesWithManualBreak = rSource.mbDoNotJustifyLinesWithManualBreak;
-    mbDoNotResetParaAttrsForNumFont = rSource.mbDoNotResetParaAttrsForNumFont;
-    mbOutlineLevelYieldsOutlineRule = rSource.mbOutlineLevelYieldsOutlineRule;
-    mbTableRowKeep = rSource.mbTableRowKeep;
-    mbIgnoreTabsAndBlanksForLineCalculation = rSource.mbIgnoreTabsAndBlanksForLineCalculation;
-    mbDoNotCaptureDrawObjsOnPage = rSource.mbDoNotCaptureDrawObjsOnPage;
-    mbClipAsCharacterAnchoredWriterFlyFrames = rSource.mbClipAsCharacterAnchoredWriterFlyFrames;
-    mbUnixForceZeroExtLeading = rSource.mbUnixForceZeroExtLeading;
     mbOldPrinterMetrics = rSource.mbOldPrinterMetrics;
-    mbTabRelativeToIndent = rSource.mbTabRelativeToIndent;
-    mbTabAtLeftIndentForParagraphsInList = rSource.mbTabAtLeftIndentForParagraphsInList;
+
+    m_pDocumentSettingManager->ReplaceCompatabilityOptions(rSource.GetDocumentSettingManager());
 }
 
 SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
