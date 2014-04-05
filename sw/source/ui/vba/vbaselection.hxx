@@ -76,7 +76,8 @@ public:
     virtual void SAL_CALL setStyle( const css::uno::Any& _xStyle ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL TypeBackspace() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL GoTo( const css::uno::Any& _what, const css::uno::Any& _which, const css::uno::Any& _count, const css::uno::Any& _name ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL GoTo( const css::uno::Any& _what, const css::uno::Any& _which, const css::uno::Any& _count, const css::uno::Any& _name )
+        throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::sal_Int32 SAL_CALL getLanguageID( ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setLanguageID( ::sal_Int32 _languageid ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Any SAL_CALL Information( sal_Int32 _type ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -552,7 +552,8 @@ SwVbaSelection::TypeBackspace() throw ( uno::RuntimeException, std::exception )
     dispatchRequests( mxModel,url );
 }
 
-uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _what, const uno::Any& _which, const uno::Any& _count, const uno::Any& _name ) throw (uno::RuntimeException, std::exception)
+uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _what, const uno::Any& _which, const uno::Any& _count, const uno::Any& _name )
+    throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nWhat = 0;
     if( !( _what >>= nWhat ) )

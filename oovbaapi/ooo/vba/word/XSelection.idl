@@ -61,7 +61,7 @@ interface XSelection
     void InsertParagraphBefore();
     void InsertParagraphAfter();
     void TypeBackspace();
-    XRange GoTo( [in] any What, [in] any Which, [in] any Count, [in] any Name );
+    XRange GoTo( [in] any What, [in] any Which, [in] any Count, [in] any Name ) raises (com::sun::star::script::BasicErrorException);
     any Information( [in] long Type );
     void InsertBreak( [in] any Type );
     any ShapeRange();
