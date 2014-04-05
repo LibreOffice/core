@@ -202,10 +202,10 @@ Reference< chart2::XDataSeries > getDataSeriesFromDoc( uno::Reference< chart2::X
                                                                 sal_Int32 nDataSeries, sal_Int32 nChartType = 0, sal_Int32 nCooSys = 0 )
 {
     Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, nChartType, nCooSys );
-    Reference< chart2::XDataSeriesContainer > xDataSequenceContainer( xChartType, UNO_QUERY_THROW );
-    CPPUNIT_ASSERT ( xDataSequenceContainer.is() );
+    Reference< chart2::XDataSeriesContainer > xDataSeriesContainer( xChartType, UNO_QUERY_THROW );
+    CPPUNIT_ASSERT ( xDataSeriesContainer.is() );
 
-    Sequence< Reference< chart2::XDataSeries > > xSeriesSequence( xDataSequenceContainer->getDataSeries() );
+    Sequence< Reference< chart2::XDataSeries > > xSeriesSequence( xDataSeriesContainer->getDataSeries() );
     CPPUNIT_ASSERT( xSeriesSequence.getLength() > nDataSeries );
 
     Reference< chart2::XDataSeries > xSeries = xSeriesSequence[nDataSeries];
