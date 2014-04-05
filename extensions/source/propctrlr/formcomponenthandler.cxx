@@ -1520,7 +1520,7 @@ namespace pcr
             throw NullPointerException();
 
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nActuatingPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
+        PropertyId nActuatingPropId( impl_getPropertyId_nothrow( _rActuatingPropertyName ) );
 
         ::std::vector< PropertyId > aDependentProperties;
 
@@ -1780,7 +1780,9 @@ namespace pcr
             _rxInspectorUI->enablePropertyUI( PROPERTY_DEFAULT_STATE, bIsToggleButton );
         }
         break;
-
+        case -1:
+            throw RuntimeException();
+        break;
         default:
             OSL_FAIL( "FormComponentPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
             break;
