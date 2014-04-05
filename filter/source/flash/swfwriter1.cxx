@@ -36,6 +36,7 @@
 #include <vcl/salbtype.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace ::swf;
 using namespace ::std;
@@ -528,21 +529,20 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal
     else
     {
         Size    aNormSize;
-        sal_Int32* pOwnArray;
+        boost::scoped_array<sal_Int32> pOwnArray;
         sal_Int32* pDX;
 
         // get text sizes
         if( pDXArray )
         {
-            pOwnArray = NULL;
             aNormSize = Size( mpVDev->GetTextWidth( rText ), 0 );
             pDX = (sal_Int32*) pDXArray;
         }
         else
         {
-            pOwnArray = new sal_Int32[ nLen ];
-            aNormSize = Size( mpVDev->GetTextArray( rText, pOwnArray ), 0 );
-            pDX = pOwnArray;
+            pOwnArray.reset(new sal_Int32[ nLen ]);
+            aNormSize = Size( mpVDev->GetTextArray( rText, pOwnArray.get() ), 0 );
+            pDX = pOwnArray.get();
         }
 
         if( nLen > 1 )
@@ -720,7 +720,6 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal
         }
 
         mpVDev->SetFont( aOldFont );
-        delete[] pOwnArray;
     }
 }
 
@@ -816,33 +815,33 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     getBitmapData( bmpSource, pImageData, pAlphaData, width, height );
     sal_uInt32 raw_size = width * height * 4;
     uLongf compressed_size = raw_size + (sal_uInt32)(raw_size/100) + 12;
-    sal_uInt8 *pCompressed = new sal_uInt8[ compressed_size ];
+    boost::scoped_array<sal_uInt8> pCompressed(new sal_uInt8[ compressed_size ]);
 
 #ifdef DBG_UTIL
-    if(compress2(pCompressed, &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION) != Z_OK)
+    if(compress2(pCompressed.get(), &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION) != Z_OK)
     {
         DBG_ASSERT( false, "compress2 failed!" ); ((void)0);
     }
 #else
-    compress2(pCompressed, &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION);
+    compress2(pCompressed.get(), &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION);
 #endif
 
     // AS: SWF files let you provide an Alpha mask for JPEG images, but we have
     //  to ZLIB compress the alpha channel separately.
     uLong alpha_compressed_size = 0;
-    sal_uInt8 *pAlphaCompressed = NULL;
+    boost::scoped_array<sal_uInt8> pAlphaCompressed;
     if (bmpSource.IsAlpha() || bmpSource.IsTransparent())
     {
         alpha_compressed_size = uLongf(width * height + (sal_uInt32)(raw_size/100) + 12);
-        pAlphaCompressed = new sal_uInt8[ compressed_size ];
+        pAlphaCompressed.reset(new sal_uInt8[ compressed_size ]);
 
 #ifdef DBG_UTIL
-        if(compress2(pAlphaCompressed, &alpha_compressed_size, pAlphaData, width * height, Z_BEST_COMPRESSION) != Z_OK)
+        if(compress2(pAlphaCompressed.get(), &alpha_compressed_size, pAlphaData, width * height, Z_BEST_COMPRESSION) != Z_OK)
         {
             DBG_ASSERT( false, "compress2 failed!" ); ((void)0);
         }
 #else
-        compress2(pAlphaCompressed, &alpha_compressed_size, pAlphaData, width * height, Z_BEST_COMPRESSION);
+        compress2(pAlphaCompressed.get(), &alpha_compressed_size, pAlphaData, width * height, Z_BEST_COMPRESSION);
 #endif
     }
 
@@ -873,12 +872,10 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     //  we have to export as TAG_DEFINEBITSJPEG3 in the case that there is alpha
     //  channel data.
     if ( pJpgData && ( nJpgDataLength + alpha_compressed_size < compressed_size) )
-        Impl_writeJPEG(nBitmapId, pJpgData, nJpgDataLength, pAlphaCompressed, alpha_compressed_size );
+        Impl_writeJPEG(nBitmapId, pJpgData, nJpgDataLength, pAlphaCompressed.get(), alpha_compressed_size );
     else
-        Impl_writeBmp( nBitmapId, width, height, pCompressed, compressed_size );
+        Impl_writeBmp( nBitmapId, width, height, pCompressed.get(), compressed_size );
 
-    delete[] pCompressed;
-    delete[] pAlphaCompressed;
     delete[] pImageData;
     delete[] pAlphaData;
 

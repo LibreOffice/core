@@ -26,7 +26,7 @@
 #include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include "giflzwc.hxx"
-
+#include <boost/scoped_array.hpp>
 
 // - GIFWriter -
 
@@ -475,12 +475,12 @@ void GIFWriter::WriteAccess()
     GIFLZWCompressor    aCompressor;
     const long          nWidth = m_pAcc->Width();
     const long          nHeight = m_pAcc->Height();
-    sal_uInt8*              pBuffer = NULL;
+    boost::scoped_array<sal_uInt8> pBuffer;
     const sal_uLong         nFormat = m_pAcc->GetScanlineFormat();
     sal_Bool                bNative = ( BMP_FORMAT_8BIT_PAL == nFormat );
 
     if( !bNative )
-        pBuffer = new sal_uInt8[ nWidth ];
+        pBuffer.reset(new sal_uInt8[ nWidth ]);
 
     if( bStatus && ( 8 == m_pAcc->GetBitCount() ) && m_pAcc->HasPalette() )
     {
@@ -522,7 +522,7 @@ void GIFWriter::WriteAccess()
                 for( long nX = 0L; nX < nWidth; nX++ )
                     pBuffer[ nX ] = m_pAcc->GetPixelIndex( nY, nX );
 
-                aCompressor.Compress( pBuffer, nWidth );
+                aCompressor.Compress( pBuffer.get(), nWidth );
             }
 
             if ( m_rGIF.GetError() )
@@ -539,8 +539,6 @@ void GIFWriter::WriteAccess()
         if ( m_rGIF.GetError() )
             bStatus = sal_False;
     }
-
-    delete[] pBuffer;
 }
 
 

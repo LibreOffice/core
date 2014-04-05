@@ -36,6 +36,7 @@
 #include <svl/solar.hrc>
 #include <vcl/gdimetafiletools.hxx>
 #include <vcl/dibtools.hxx>
+#include <boost/scoped_array.hpp>
 
 // -----------------------------Field Types-------------------------------
 
@@ -567,7 +568,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     sal_uLong nBytesPerLine,i,j,nNumColors,ny,nLines;
     sal_uLong nActColMapId;
     sal_uInt16 nBitsPerPixel;
-    sal_uInt8 nbyte, * pBuf;
+    sal_uInt8 nbyte;
 
     if (bStatus==sal_False)
         return;
@@ -674,7 +675,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
         pMET->WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0x08 );
     }
 
-    pBuf=new sal_uInt8[nBytesPerLine];
+    boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[nBytesPerLine]);
     ny=0;
     while (ny<nHeight) {
 
@@ -691,21 +692,21 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
         WriteBigEndianShort(0xfe92);
         WriteBigEndianShort((sal_uInt16)(nLines*nBytesPerLine));
         for (i=0; i<nLines; i++) {
-            aTemp.Read(pBuf,nBytesPerLine);
+            aTemp.Read(pBuf.get(),nBytesPerLine);
             if (nBitsPerPixel==24) {
                 for (j=2; j<nBytesPerLine; j+=3) {
                     nbyte=pBuf[j]; pBuf[j]=pBuf[j-2]; pBuf[j-2]=nbyte;
                 }
             }
-            pMET->Write(pBuf,nBytesPerLine);
+            pMET->Write(pBuf.get(),nBytesPerLine);
             ny++;
         }
         if (aTemp.GetError() || pMET->GetError()) bStatus=sal_False;
         nActBitmapPercent=(ny+1)*100/nHeight;
         MayCallback();
-        if (bStatus==sal_False) { delete[] pBuf; return; }
+        if (bStatus==sal_False) return;
     }
-    delete[] pBuf;
+    pBuf.reset();
 
     // End Image Content:
     pMET->WriteUChar( (sal_uInt8)0x93 ).WriteUChar( (sal_uInt8)0x00 );
@@ -1932,7 +1933,6 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 const MetaStretchTextAction*    pA = (const MetaStretchTextAction*) pMA;
                 VirtualDevice                   aVDev;
                 sal_uInt16                          i;
-                sal_Int32*                  pDXAry;
                 sal_Int32                       nNormSize;
                 OUString                        aStr;
                 Polygon                         aPolyDummy(1);
@@ -1957,8 +1957,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 METSetChrAngle( nOrientation = aGDIFont.GetOrientation() );
                 METSetChrSet(FindChrSet(aGDIFont));
                 aStr = pA->GetText().copy(pA->GetIndex(),pA->GetLen());
-                pDXAry = new sal_Int32[aStr.getLength()];
-                nNormSize = aVDev.GetTextArray( aStr, pDXAry );
+                boost::scoped_array<sal_Int32> pDXAry(new sal_Int32[aStr.getLength()]);
+                nNormSize = aVDev.GetTextArray( aStr, pDXAry.get() );
 
                 for ( i = 0; i < aStr.getLength(); i++ )
                 {
@@ -1975,8 +1975,6 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     }
                     METChrStr( aPt2, OUString( aStr[ i ] ) );
                 }
-
-                delete[] pDXAry;
             }
             break;
 
