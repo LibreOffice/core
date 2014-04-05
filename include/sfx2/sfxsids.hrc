@@ -213,7 +213,7 @@
 #define SID_OVERWRITE                           (SID_SFX_START + 1634)
 #define SID_RENAME                          (SID_SFX_START + 1653)
 #define SID_PARTWIN                         (SID_SFX_START + 1640)
-#define SID_CRASH                           (SID_SFX_START + 1645)
+    // FREE (was: SID_CRASH)
 #define SID_FAIL_ON_WARNING                 (SID_SFX_START + 1646)
 #define SID_INPUTSTREAM                     (SID_SFX_START + 1648)
 #define SID_LOGOUT                          (SID_SFX_START + 1652)

@@ -564,14 +564,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
 #endif
 
-        case SID_CRASH :
-        {
-            // Provoke a crash:
-            char * crash = 0;
-            *crash = 0;
-            break;
-        }
-
         case SID_SHOW_IME_STATUS_WINDOW:
             if (pAppData_Impl->m_xImeStatusWindow->canToggle())
             {

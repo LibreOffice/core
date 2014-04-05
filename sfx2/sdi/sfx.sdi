@@ -1197,31 +1197,6 @@ SfxVoidItem Copy SID_COPY
 ]
 
 
-SfxVoidItem Crash SID_CRASH
-(SfxBoolItem Direct SID_CRASH)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-
 SfxVoidItem CreateMacro SID_BASICIDE_CREATEMACRO
 (SfxMacroInfoItem aMacroInfo SID_BASICIDE_ARG_MACROINFO)
 [
