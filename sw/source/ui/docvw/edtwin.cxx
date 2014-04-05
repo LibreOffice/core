@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <stdio.h>
 
 #include <config_features.h>
 
@@ -2775,8 +2776,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
 
-    SdrObject* pObj;
-    SdrPageView* pPV;
     // We have to check if a context menu is shown and we have an UI
     // active inplace client. In that case we have to ignore the mouse
     // button down event. Otherwise we would crash (context menu has been
@@ -3090,12 +3089,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 // only if no position to size was hit.
                                 if (!bHitHandle)
                                 {
-                                    if (pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
-                                    {
-                                        pSdrView->UnmarkAllObj();
-                                        pSdrView->MarkObj(pObj,pPV,false,false);
-                                        return;
-                                    }
                                     StartDDTimer();
                                     SwEditWin::m_nDDStartPosY = aDocPos.Y();
                                     SwEditWin::m_nDDStartPosX = aDocPos.X();
@@ -4193,6 +4186,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
  */
 void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    SdrObject* pObj;
+    SdrPageView* pPV;
     bool bCallBase = true;
 
     sal_Bool bCallShadowCrsr = m_bWasShdwCrsr;
@@ -4244,6 +4239,15 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             bFrmDrag = false;
         }
         bNoInterrupt = false;
+        const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
+        if ((PixelToLogic(m_aStartPos).Y() == (aDocPos.Y())) && (PixelToLogic(m_aStartPos).X() == (aDocPos.X())))//For the case it was not moved
+        {
+            if (pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER  | SDRSEARCH_DEEP | SDRSEARCH_WHOLEPAGE))
+            {
+                pSdrView->UnmarkAllObj();
+                pSdrView->MarkObj(pObj,pPV,false,false);
+            }
+        }
         ReleaseMouse();
         return;
     }
