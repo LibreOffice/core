@@ -86,6 +86,11 @@ namespace SchXMLTools
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument >& xChartDoc );
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > CreateDataSequenceWithoutConvert(
+        const OUString& rRange,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+
     void CreateCategories(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > & xDataProvider,
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > & xNewDoc,

@@ -1066,6 +1066,7 @@ namespace xmloff { namespace token {
         XML_LABEL_CELL_RANGE_ADDRESS,
         XML_LABEL_RANGE,
         XML_LABEL_RANGES,
+        XML_LABEL_STRING,
         XML_LAMBDA,
         XML_LANDSCAPE,
         XML_LANGUAGE,

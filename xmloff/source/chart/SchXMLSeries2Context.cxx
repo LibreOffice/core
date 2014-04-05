@@ -308,6 +308,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
     bool bHasRange = false;
     OUString aSeriesLabelRange;
+    OUString aSeriesLabelString;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -324,6 +325,9 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 break;
             case XML_TOK_SERIES_LABEL_ADDRESS:
                 aSeriesLabelRange = aValue;
+                break;
+            case XML_TOK_SERIES_LABEL_STRING:
+                aSeriesLabelString = aValue;
                 break;
             case XML_TOK_SERIES_ATTACHED_AXIS:
                 {
@@ -440,6 +444,12 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         {
             Reference< chart2::data::XDataSequence > xLabelSequence =
                 SchXMLTools::CreateDataSequence( aSeriesLabelRange, mxNewDoc );
+            xLabeledSeq->setLabel( xLabelSequence );
+        }
+        else if( !aSeriesLabelString.isEmpty() )
+        {
+            Reference< chart2::data::XDataSequence > xLabelSequence =
+                SchXMLTools::CreateDataSequenceWithoutConvert( aSeriesLabelString, mxNewDoc );
             xLabeledSeq->setLabel( xLabelSequence );
         }
 
