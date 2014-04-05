@@ -803,7 +803,7 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
     VirtualDevice aOutDev;
     OutputDevice* pOutDev;
     sal_uLong         nStdPos;
-    sal_uLong         nZchPos;
+    sal_uLong         nCharPos;
     sal_uInt16        Num;
 
     pOutDev=&aOutDev;
@@ -816,7 +816,7 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
     } while (aPage.Next!=0L && !rInp.GetError());
 
 //    ShowMsg("Drawingpage(n)\n");
-    nZchPos=rInp.Tell();
+    nCharPos=rInp.Tell();
     ReadPageType( rInp, aPage );
 
     rMtf.Record(pOutDev);
@@ -830,8 +830,8 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
       }
       ReadPageType( rInp, aPage );
       if(Num==1 && aPage.nList!=0L) DrawObjkList( rInp,*pOutDev );
-      rInp.Seek(nZchPos);
-      nZchPos=rInp.Tell();
+      rInp.Seek(nCharPos);
+      nCharPos=rInp.Tell();
       ReadPageType( rInp, aPage );
     }
     if (aPage.nList!=0L) DrawObjkList(rInp,*pOutDev );
