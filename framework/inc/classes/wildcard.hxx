@@ -28,8 +28,6 @@ namespace framework{
     @short          implement wildcard-mechanism for unicode
     @descr          This class can be used to get information about the matching of a pattern to a given text.
                     It's suitable for 8-Bit- AND 16-Bit-strings!
-    @base           -
-
     @ATTENTION      This class is'nt threadsafe!
 
     @devstatus      deprecated
@@ -47,8 +45,6 @@ class Wildcard
         /*-****************************************************************************************************
             @short      standard ctor
             @descr      We do nothing here.
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         Wildcard();
@@ -56,8 +52,6 @@ class Wildcard
         /*-****************************************************************************************************
             @short      standard dtor
             @descr      We do nothing here.
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual ~Wildcard();

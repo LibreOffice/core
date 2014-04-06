@@ -75,8 +75,6 @@ class FilterCache   :   private TransactionBase
         /*-****************************************************************************************************
             @short      standard destructor to delete instance
             @descr      This will clear the cache if last owner release it.
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual ~FilterCache();
@@ -86,8 +84,6 @@ class FilterCache   :   private TransactionBase
         /*-****************************************************************************************************
             @short      get the current state of the cache
             @descr      Call this methods to get information about the state of the current cache.
-            @param      -
-            @return     -
         *//*-*****************************************************************************************************/
 
         sal_Bool isValidOrRepairable() const;

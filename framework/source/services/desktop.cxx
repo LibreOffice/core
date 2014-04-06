@@ -181,7 +181,6 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
     @descr      This one do NOTHING! Use dispose() instaed of this.
 
     @seealso    method dispose()
-    @return     -
 *//*-*************************************************************************************************************/
 Desktop::~Desktop()
 {
@@ -778,8 +777,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getActiveFrame() thr
     @short      non implemented methods!
     @descr      Some method make no sense for our desktop! He has no window or parent or ...
                 So we should implement it empty and warn programmer, if he use it!
-    @param      -
-    @onerror    -
 */
 void SAL_CALL Desktop::initialize( const css::uno::Reference< css::awt::XWindow >& ) throw( css::uno::RuntimeException, std::exception )
 {
@@ -1093,7 +1090,6 @@ void SAL_CALL Desktop::disposing()
 
     @attention  Our container is threadsafe himeslf. So we don't need any lock here.
     @param      "xListener", reference to valid listener. We don't accept invalid values!
-    @onerror    -
     @threadsafe yes
 */
 void SAL_CALL Desktop::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException, std::exception )
@@ -1131,7 +1127,6 @@ void SAL_CALL Desktop::removeEventListener( const css::uno::Reference< css::lang
     @seealso    method loadComponentFromURL()
 
     @param      "aEvent", state event which (hopefully) valid information
-    @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
 void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& aEvent ) throw( css::uno::RuntimeException, std::exception )
@@ -1161,8 +1156,6 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
                 We are a temp. listener only and our lifetime isn't smaller then of our temp. used dispatcher.
 
     @seealso    method loadComponentFromURL()
-    @return     -
-    @threadsafe -
 *//*-*************************************************************************************************************/
 void SAL_CALL Desktop::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception )
 {
@@ -1187,7 +1180,6 @@ void SAL_CALL Desktop::disposing( const css::lang::EventObject& ) throw( css::un
     @seealso    member m_eLoadState
 
     @param      "xRequest", request for interaction - normal a wrapped target exception from bottom services
-    @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
 void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException, std::exception )
@@ -1407,7 +1399,6 @@ void SAL_CALL Desktop::setFastPropertyValue_NoBroadcast(       sal_Int32        
 
     @param      "nHandle"   handle of property to change
     @param      "aValue"    current value of property
-    @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
 void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,

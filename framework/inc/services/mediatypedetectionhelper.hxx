@@ -35,8 +35,6 @@
 namespace framework{
 
 /*-************************************************************************************************************
-    @descr          -
-
     @implements     XInterface
                     XTypeProvider
                     XServiceInfo
@@ -59,7 +57,6 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::
             @short      standard ctor
             @descr      These initialize a new instance of this class with all needed information for work.
             @param      "xFactory", reference to factory which has created ouer owner(!). We can use these to create new uno-services.
-            @onerror    -
         *//*-*****************************************************************************************************/
 
          MediaTypeDetectionHelper( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
@@ -67,8 +64,6 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::
         /*-****************************************************************************************************
             @short      standard destructor
             @descr      This method destruct an instance of this class and clear some member.
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual ~MediaTypeDetectionHelper();
@@ -80,9 +75,6 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::
         //  XStringMapping
 
         /*-****************************************************************************************************
-            @descr      -
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL mapStrings(css::uno::Sequence< OUString >& seqParameter)

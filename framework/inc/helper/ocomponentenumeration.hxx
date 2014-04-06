@@ -79,7 +79,6 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
             @seealso    interface XEventListener
 
             @param      "aEvent" describe the source of this event.
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -124,8 +123,6 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
             @descr      This method destruct an instance of this class and clear some member.
                         We make it protected, because its not supported to use this class as normal instance!
                         You must create it dynamical in memory and use a pointer.
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual ~OComponentEnumeration();
@@ -140,7 +137,6 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
 
             @seealso    method dispose()
             @seealso    destructor ~TaskEnumeration()
-            @return     -
         *//*-*****************************************************************************************************/
 
         virtual void impl_resetObject();

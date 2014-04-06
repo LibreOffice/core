@@ -55,7 +55,6 @@ class TransactionGuard : private boost::noncopyable
             @param      "rManager"  reference to transaction manager for using to register a request
             @param      "eMode"     enable/disable throwing of exceptions for rejected calls
             @param      "eReason"   returns reason for rejected calls if "eMode=E_NOEXCEPTIONS"!
-            @onerror    -
         *//*-*****************************************************************************************************/
         inline TransactionGuard( ITransactionManager& rManager, EExceptionMode eMode, ERejectReason* eReason = NULL )
             : m_pManager( &rManager )
@@ -77,8 +76,6 @@ class TransactionGuard : private boost::noncopyable
         /*-************************************************************************************************************
             @short      dtor
             @descr      We must release the transaction manager and can forget his pointer.
-            @param      -
-            @onerror    -
         *//*-*************************************************************************************************************/
         inline ~TransactionGuard()
         {
@@ -92,8 +89,6 @@ class TransactionGuard : private boost::noncopyable
             @attention  We don't support any start() method here - because it is not easy to
                         detect if a transaction already started or not!
                         (combination of EExceptionMode and ERejectReason)
-            @param      -
-            @onerror    -
         *//*-*************************************************************************************************************/
         inline void stop()
         {
@@ -114,7 +109,6 @@ class TransactionGuard : private boost::noncopyable
                         Thats why we disable it by make it private.
 
             @seealso    other ctor
-            @return     -
         *//*-*****************************************************************************************************/
         TransactionGuard();
 

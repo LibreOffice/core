@@ -603,7 +603,6 @@ void Frame::initListeners()
     @descr      This one do NOTHING! Use dispose() instaed of this.
 
     @seealso    method dispose()
-    @return     -
 *//*-*****************************************************************************************************/
 Frame::~Frame()
 {
@@ -1309,7 +1308,6 @@ sal_Bool SAL_CALL Frame::isTop() throw( css::uno::RuntimeException, std::excepti
     @seealso    method isActivate()
     @seealso    enum EActiveState
     @seealso    listener mechanism
-    @return     -
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::activate() throw( css::uno::RuntimeException, std::exception )
 {
@@ -1395,7 +1393,6 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException, std::exceptio
     @seealso    method isActivate()
     @seealso    enum EActiveState
     @seealso    listener mechanism
-    @return     -
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException, std::exception )
 {
@@ -1488,8 +1485,6 @@ sal_Bool SAL_CALL Frame::isActive() throw( css::uno::RuntimeException, std::exce
 
 /*-****************************************************************************************************
     @short      ???
-    @seealso    -
-    @return     -
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::contextChanged() throw( css::uno::RuntimeException, std::exception )
 {
@@ -2022,7 +2017,6 @@ void Frame::implts_forgetSubFrames()
 
     @seealso    method initialize()
     @seealso    baseclass FairRWLockBase!
-    @return     -
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException, std::exception )
 {
@@ -2352,7 +2346,6 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL Frame::getConfigu
     @seealso    member m_xComponentWindow
 
     @param      "aEvent" describe source of detected event
-    @onerror    -
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException, std::exception )
 {
@@ -2403,7 +2396,6 @@ void SAL_CALL Frame::focusGained( const css::awt::FocusEvent& aEvent ) throw( cs
     @seealso    member m_xComponentWindow
 
     @param      "aEvent" describe source of detected event
-    @onerror    -
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::windowActivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception )
 {
@@ -2597,7 +2589,6 @@ void SAL_CALL Frame::windowHidden( const css::lang::EventObject& ) throw(css::un
     @seealso    XWindowListener
     @seealso    XTopWindowListener
     @seealso    XFocusListener
-    @return     -
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception )
 {
@@ -2861,7 +2852,6 @@ void Frame::impl_disposeContainerWindow( css::uno::Reference< css::awt::XWindow 
     @short      send frame action event to our listener
     @descr      This method is threadsafe AND can be called by our dispose method too!
     @param      "aAction", describe the event for sending
-    @onerror    -
 *//*-*****************************************************************************************************/
 void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction )
 {
@@ -2918,8 +2908,6 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
     @descr      A frame contains 2 windows - a container ~ and a component window.
                 This method resize inner component window to full size of outer container window.
                 This method is threadsafe AND can be called by our dispose method too!
-    @param      -
-    @onerror    -
 *//*-*****************************************************************************************************/
 void Frame::implts_resizeComponentWindow()
 {
@@ -2951,8 +2939,6 @@ void Frame::implts_resizeComponentWindow()
                 too ... we should ask his optional property set first ...
 
     @seealso    method Window::SetIcon()
-    @return     -
-
     @onerror    We do nothing.
 *//*-*****************************************************************************************************/
 void Frame::implts_setIconOnWindow()
@@ -3042,8 +3028,6 @@ void Frame::implts_setIconOnWindow()
 
     @seealso    method initialize()
     @seealso    method dispose()
-    @return     -
-
     @onerror    We do nothing!
     @threadsafe yes
 *//*-*************************************************************************************************************/

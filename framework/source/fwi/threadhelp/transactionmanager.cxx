@@ -28,8 +28,6 @@ namespace framework{
 /*-************************************************************************************************************
     @short      standard ctor
     @descr      Initialize instance with right start values for correct working.
-    @param      -
-    @onerror    -
 *//*-*************************************************************************************************************/
 TransactionManager::TransactionManager()
     : m_eWorkingMode      ( E_INIT )
@@ -40,8 +38,6 @@ TransactionManager::TransactionManager()
 
 /*-************************************************************************************************************
     @short      standard dtor
-    @seealso    -
-    @return     -
 *//*-*************************************************************************************************************/
 TransactionManager::~TransactionManager()
 {
@@ -158,7 +154,6 @@ EWorkingMode TransactionManager::getWorkingMode() const
 
     @param      "eMode"     ,used to enable/disable throwing exceptions automatically for rejected calls
     @param      "eReason"   ,reason for rejected calls if eMode=E_NOEXCEPTIONS
-    @onerror    -
 *//*-*****************************************************************************************************/
 void  TransactionManager::registerTransaction( EExceptionMode eMode, ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException )
 {
@@ -192,7 +187,6 @@ void  TransactionManager::registerTransaction( EExceptionMode eMode, ERejectReas
     @descr      A guard should call this method to release current transaction.
 
     @seealso    method registerTransaction()
-    @return     -
 *//*-*****************************************************************************************************/
 void  TransactionManager::unregisterTransaction() throw( css::uno::RuntimeException, css::lang::DisposedException )
 {
@@ -253,7 +247,6 @@ sal_Bool  TransactionManager::isCallRejected( ERejectReason& eReason ) const
 
     @param      "eReason" , reason for rejected call
     @param      "eMode"   , exception mode - set by user
-    @onerror    -
 *//*-*****************************************************************************************************/
 void TransactionManager::impl_throwExceptions( EExceptionMode eMode, ERejectReason eReason ) const throw( css::uno::RuntimeException, css::lang::DisposedException )
 {

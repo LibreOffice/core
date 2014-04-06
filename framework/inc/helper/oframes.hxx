@@ -64,7 +64,6 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
                         We share framecontainer with owner implementation! It's a threadsafe container.
             @param      xOwner            , reference to ouer owner. We hold a wekreference to prevent us against cross-references!
             @param      pFrameContainer   , pointer to shared framecontainer of owner. It's valid only, if weakreference is valid!
-            @onerror    -
         *//*-*****************************************************************************************************/
          OFrames(   const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
                             FrameContainer*                                         pFrameContainer );
@@ -144,7 +143,6 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
             @short      get uno-type of all container items
             @descr      In current implementation type is fixed to XFrame!
                         (container-lock is ignored)
-            @param      -
             @return     A uno-type descriptor.
         *//*-*****************************************************************************************************/
         virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -153,7 +151,6 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
             @short      get fill state of current container
             @descr      Call these to get information about, if items exist in container or not.
                         (container-lock is ignored)
-            @param      -
             @return     sal_True, if container contains some items.
             @return     sal_False, otherwise.
 
@@ -168,8 +165,6 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
             @descr      This method destruct an instance of this class and clear some member.
                         This method is protected, because its not allowed to use this class as a member!
                         You MUST use a dynamical instance (pointer). That's the reason for a protected dtor.
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
         virtual ~OFrames();
 
@@ -182,7 +177,6 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
 
             @seealso    method dispose() (if it exist!)
             @seealso    destructor ~TaskEnumeration()
-            @return     -
         *//*-*****************************************************************************************************/
         virtual void impl_resetObject();
 

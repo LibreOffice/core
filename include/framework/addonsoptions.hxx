@@ -128,11 +128,6 @@ class AddonsOptions_Impl;
 
 /*-************************************************************************************************************
     @short          collect information about menu features
-    @descr          -
-
-    @implements     -
-    @base           -
-
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
@@ -156,11 +151,6 @@ class FWE_DLLPUBLIC AddonsOptions
 
             @seealso    member m_nRefCount
             @seealso    member m_pDataContainer
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
          AddonsOptions();
@@ -174,13 +164,7 @@ class FWE_DLLPUBLIC AddonsOptions
             @short      clears completely the addons menu
             @descr      Call this methods to clear the addons menu
                         To fill it again use AppendItem().
-
-            @seealso    -
-
             @param      "eMenu" select right menu to clear.
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         void Clear();
@@ -208,9 +192,6 @@ class FWE_DLLPUBLIC AddonsOptions
             @short      returns the  complete addons menu
             @descr      Call it to get all entries of the addon menu.
                         We return a list of all nodes with his names and properties.
-
-            @seealso    -
-
             @return     A list of menu items is returned.
 
             @onerror    We return an empty list.
@@ -220,10 +201,6 @@ class FWE_DLLPUBLIC AddonsOptions
 
         /*-****************************************************************************************************
             @short      Gets the menu bar part of all addon components registered
-            @descr      -
-
-            @seealso    -
-
             @return     A complete
 
             @onerror    We return sal_False
@@ -233,10 +210,6 @@ class FWE_DLLPUBLIC AddonsOptions
 
         /*-****************************************************************************************************
             @short      Gets a toolbar part of an single addon
-            @descr      -
-
-            @seealso    -
-
             @return     A complete
 
             @onerror    We return sal_False
@@ -246,10 +219,6 @@ class FWE_DLLPUBLIC AddonsOptions
 
         /*-****************************************************************************************************
             @short      Gets a unique toolbar resource name of an single addon
-            @descr      -
-
-            @seealso    -
-
             @return     A complete
 
             @onerror    We return sal_False
@@ -259,10 +228,6 @@ class FWE_DLLPUBLIC AddonsOptions
 
         /*-****************************************************************************************************
             @short      Retrieves all available merge instructions for the Office menu bar
-            @descr      -
-
-            @seealso    -
-
             @return     The filled MergeMenuDefinitionContaier
 
             @onerror    We return sal_False
@@ -272,10 +237,6 @@ class FWE_DLLPUBLIC AddonsOptions
 
         /*-****************************************************************************************************
             @short      Retrieves all available merge instructions for a single toolbar
-            @descr      -
-
-            @seealso    -
-
             @return     The filled
 
             @onerror    We return sal_False
@@ -284,10 +245,6 @@ class FWE_DLLPUBLIC AddonsOptions
 
         /*-****************************************************************************************************
             @short      Gets the Add-On help menu part of all addon components registered
-            @descr      -
-
-            @seealso    -
-
             @return     A complete
 
             @onerror    We return sal_False
@@ -299,9 +256,6 @@ class FWE_DLLPUBLIC AddonsOptions
         /*-****************************************************************************************************
             @short      Retrieve an image for a command URL which is defined inside the addon menu configuration
             @descr      Call it to retrieve an image for a command URL which is defined inside the addon menu configuration
-
-            @seealso    -
-
             @return     An image which was defined in the configuration for the menu item. The image can be empty
                         no bitmap was defined for the request image properties.
 
@@ -320,13 +274,7 @@ class FWE_DLLPUBLIC AddonsOptions
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
-
-            @seealso    -
-
-            @param      -
             @return     A reference to a static mutex member.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         static ::osl::Mutex& GetOwnStaticMutex();
@@ -336,13 +284,7 @@ class FWE_DLLPUBLIC AddonsOptions
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
-
-            @seealso    -
-
-            @param      -
             @return     A reference to a static mutex member.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
         DECL_STATIC_LINK( AddonsOptions, Notify, void* );
 

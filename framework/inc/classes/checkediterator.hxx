@@ -36,8 +36,6 @@ namespace framework{
 
     @Attention      If your wish to debug this inline code ...
                     under windows and msdev you can use "set ENVCFLAGS=/Ob0" to do that!
-    @base           -
-
     @devstatus      ready to use
     @threadsafe     no
 *//*-*************************************************************************************************************/
@@ -57,8 +55,6 @@ class CheckedIterator
             @descr      Set default values on members.
                         We set it internal to E_UNKNOWN to detect uninitialized instances of this class.
                         If we found one - we know: "We must call initialize first!"
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         inline CheckedIterator()
@@ -99,7 +95,6 @@ class CheckedIterator
                         We need it to return one default value if no other ones exist ...
 
             @seealso    using in class FilterCache!
-            @return     -
         *//*-*****************************************************************************************************/
 
         inline void setEnd()
@@ -114,7 +109,6 @@ class CheckedIterator
                         We need it if we don't have a container but must prevent us against further searching!
 
             @seealso    using in class FilterCache!
-            @return     -
         *//*-*****************************************************************************************************/
 
         inline void setAfterEnd()
@@ -128,7 +122,6 @@ class CheckedIterator
             @descr      It must be called on an already initialized iterator.
                         Means the member m_pContainer must be valid. Otherwise the reaction
                         isn't defined.
-            @return     -
         *//*-*****************************************************************************************************/
 
         inline void reset()
@@ -221,7 +214,6 @@ class CheckedIterator
         /*-****************************************************************************************************
             @short      support readonly access to container entry
             @descr      Use it to get the value of current container item.
-            @param      -
             @return     A reference to value of container entry.
         *//*-*****************************************************************************************************/
 

@@ -53,8 +53,6 @@ class Gate : public  IGate
         /*-****************************************************************************************************
             @short      ctor
             @descr      These initialize the object right as an open gate.
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
         inline Gate()
             :   m_bClosed   ( sal_False )
@@ -68,8 +66,6 @@ class Gate : public  IGate
             @descr      Is user forget it - we open the gate ...
                         blocked threads can running ... but I don't know
                         if it's right - we are destroyed yet!?
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
         inline virtual ~Gate()
         {
@@ -82,7 +78,6 @@ class Gate : public  IGate
             @descr      A wait() call will not block then.
 
             @seealso    method close()
-            @return     -
         *//*-*****************************************************************************************************/
         virtual void open() SAL_OVERRIDE
         {
@@ -101,7 +96,6 @@ class Gate : public  IGate
             @descr      A wait() call will block then.
 
             @seealso    method open()
-            @return     -
         *//*-*****************************************************************************************************/
         virtual void close() SAL_OVERRIDE
         {
@@ -123,7 +117,6 @@ class Gate : public  IGate
 
             @seealso    method wait()
             @seealso    method open()
-            @return     -
         *//*-*****************************************************************************************************/
         virtual void openGap() SAL_OVERRIDE
         {

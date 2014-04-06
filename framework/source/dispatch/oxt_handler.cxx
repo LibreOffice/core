@@ -61,9 +61,6 @@ Oxt_Handler::Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFac
 
 /*-************************************************************************************************************
     @short      standard dtor
-    @seealso    -
-    @return     -
-    @threadsafe -
 *//*-*************************************************************************************************************/
 Oxt_Handler::~Oxt_Handler()
 {

@@ -30,8 +30,6 @@ namespace framework{
                     you should have a look on this implementation. You must use it as the first base class
                     of your implementation - because base classes are initialized by his order and before your
                     member! Thats why ist a good place to declare this member.
-    @base           -
-
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 struct TransactionBase

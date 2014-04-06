@@ -221,7 +221,6 @@ class AddonsOptions_Impl : public ConfigItem
             @seealso    baseclass ConfigItem
 
             @param      "lPropertyNames" is the list of properties which should be updated.
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& lPropertyNames ) SAL_OVERRIDE;
@@ -232,7 +231,6 @@ class AddonsOptions_Impl : public ConfigItem
                         and should always called in our destructor to guarantee consistency of config data.
 
             @seealso    baseclass ConfigItem
-            @return     -
         *//*-*****************************************************************************************************/
 
         virtual void Commit() SAL_OVERRIDE;
@@ -243,8 +241,6 @@ class AddonsOptions_Impl : public ConfigItem
             @short      base implementation of public interface for "SvtDynamicMenuOptions"!
             @descr      These class is used as static member of "SvtDynamicMenuOptions" ...
                         => The code exist only for one time and isn't duplicated for every instance!
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         bool                                            HasAddonsMenu        () const;

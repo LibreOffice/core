@@ -88,7 +88,6 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
             @param      "rxContext"  , css::uno::Reference to servicemanager for creation of new services
             @param      "xOwner"    , css::uno::Reference to our owner, the Desktop!!!
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         MenuDispatcher(    const   css::uno::Reference< css::uno::XComponentContext >& rxContext    ,
@@ -101,7 +100,6 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
             @descr      Every dispatch create a new task. If load of URL failed task will deleted automaticly!
             @param      "aURL"          , URL to dispatch.
             @param      "seqArguments"  , list of optional arguments.
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL dispatch( const   css::util::URL&                                     aURL            ,
@@ -116,7 +114,6 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
             @param      "xControl"  , css::uno::Reference to a valid listener for state events.
             @param      "aURL"      , URL about listener will be informed, if something occurred.
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL addStatusListener(    const   css::uno::Reference< css::frame::XStatusListener >& xControl,
@@ -131,7 +128,6 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
             @param      "xControl"  , css::uno::Reference to a valid listener.
             @param      "aURL"      , URL on which listener has registered.
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL removeStatusListener( const   css::uno::Reference< css::frame::XStatusListener >& xControl,
@@ -147,7 +143,6 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
             @short      dispose current instance
             @descr      If service helper isn't required any longer call this method to release all used resources.
             @param      "aEvent", information about source of this event.
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -161,8 +156,6 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
             @descr      This method destruct an instance of this class and clear some member.
                         This method is protected, because its not allowed to use an instance of this class as a member!
                         You MUST use a pointer.
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual ~MenuDispatcher();
@@ -172,17 +165,11 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
     private:
 
         /*-****************************************************************************************************
-            @descr      -
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         sal_Bool impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromResource = sal_False );
 
         /*-****************************************************************************************************
-            @descr      -
-            @param      -
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         void impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel );
