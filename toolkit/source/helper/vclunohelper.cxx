@@ -608,9 +608,6 @@ MapUnit /* MapModeUnit */ VCLUnoHelper::ConvertToMapModeUnit(sal_Int16 /* com.su
     case com::sun::star::util::MeasureUnit::RELATIVE:
         eMode = MAP_RELATIVE;
         break;
-    case com::sun::star::util::MeasureUnit::REALAPPFONT:
-        eMode = MAP_REALAPPFONT;
-        break;
 */
 
     default:

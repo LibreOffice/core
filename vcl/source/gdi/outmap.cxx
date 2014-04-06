@@ -230,7 +230,6 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             break;
         case MAP_SYSFONT:
         case MAP_APPFONT:
-        case MAP_REALAPPFONT:
             {
             ImplSVData* pSVData = ImplGetSVData();
             if ( !pSVData->maGDIData.mnAppFontX )
@@ -244,10 +243,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
                     delete pWin;
                 }
             }
-            if ( rMapMode.GetMapUnit() == MAP_REALAPPFONT )
-                rMapRes.mnMapScNumX   = pSVData->maGDIData.mnRealAppFontX;
-            else
-                rMapRes.mnMapScNumX   = pSVData->maGDIData.mnAppFontX;
+            rMapRes.mnMapScNumX   = pSVData->maGDIData.mnAppFontX;
             rMapRes.mnMapScDenomX = nDPIX * 40;
             rMapRes.mnMapScNumY   = pSVData->maGDIData.mnAppFontY;
             rMapRes.mnMapScDenomY = nDPIY * 80;
