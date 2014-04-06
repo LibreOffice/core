@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 // date functions add in
-
-
 
 #ifndef _SCA_DATEFUNC_HXX
 #define _SCA_DATEFUNC_HXX
@@ -37,8 +33,6 @@
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
 #include <tools/resary.hxx>
-
-
 
 class ScaList
 {
@@ -81,8 +75,6 @@ inline void ScaList::Append( void* pNew )
     Grow();
     pData[ nCount++ ] = pNew;
 }
-
-
 
 
 class ScaStringList : protected ScaList
@@ -130,15 +122,11 @@ inline void ScaStringList::Append( const OUString& rNew )
 }
 
 
-
-
 class ScaResId : public ResId
 {
 public:
                                 ScaResId( sal_uInt16 nResId, ResMgr& rResMgr );
 };
-
-
 
 
 class ScaResStringLoader : public Resource
@@ -162,8 +150,6 @@ inline ScaResStringLoader::ScaResStringLoader( sal_uInt16 nResId, sal_uInt16 nSt
 }
 
 
-
-
 class ScaResStringArrLoader : public Resource
 {
 private:
@@ -175,16 +161,12 @@ public:
     inline const ResStringArray& GetStringArray() const { return aStrArray; }
 };
 
-
-
 inline ScaResStringArrLoader::ScaResStringArrLoader( sal_uInt16 nResId, sal_uInt16 nArrayId, ResMgr& rResMgr ) :
     Resource( ScaResId( nResId, rResMgr ) ),
     aStrArray( ScaResId( nArrayId, rResMgr ) )
 {
     FreeResource();
 }
-
-
 
 
 class ScaResPublisher : public Resource
@@ -199,15 +181,11 @@ public:
 };
 
 
-
-
 class ScaFuncRes : public Resource
 {
 public:
                                 ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet );
 };
-
-
 
 
 enum ScaCategory
@@ -264,8 +242,6 @@ public:
 };
 
 
-
-
 class ScaFuncDataList : private ScaList
 {
     OUString             aLastName;
@@ -301,8 +277,6 @@ inline ScaFuncData* ScaFuncDataList::Next()
 {
     return static_cast< ScaFuncData* >( ScaList::Next() );
 }
-
-
 
 
 
@@ -412,8 +386,6 @@ public:
                                     const OUString& aSrcText )
                                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
 };
-
-
 
 #endif  // _SCA_DATEFUNC_HXX
 

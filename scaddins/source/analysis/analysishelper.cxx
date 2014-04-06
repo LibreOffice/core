@@ -30,8 +30,6 @@
 
 using namespace                 ::com::sun::star;
 
-
-
 #define UNIQUE              sal_False   // function name does not exist in Calc
 #define DOUBLE              sal_True    // function name exists in Calc
 
@@ -1265,11 +1263,7 @@ double GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF )
     return -fZw;
 }
 
-
-
 // financial functions COUP***
-
-
 
 // COUPPCD: find last coupon date before settlement (can be equal to settlement)
 static void lcl_GetCouppcd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
@@ -1294,8 +1288,6 @@ double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
     return aDate.getDate( nNullDate );
 }
 
-
-
 // COUPNCD: find first coupon date after settlement (is never equal to settlement)
 static void lcl_GetCoupncd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
     throw( lang::IllegalArgumentException )
@@ -1319,8 +1311,6 @@ double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
     return aDate.getDate( nNullDate );
 }
 
-
-
 // COUPDAYBS: get day count: coupon date before settlement <-> settlement
 double GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
     throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -1333,8 +1323,6 @@ double GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
     lcl_GetCouppcd( aDate, aSettle, ScaDate( nNullDate, nMat, nBase ), nFreq );
     return ScaDate::getDiff( aDate, aSettle );
 }
-
-
 
 // COUPDAYSNC: get day count: settlement <-> coupon date after settlement
 double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
@@ -1352,8 +1340,6 @@ double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sa
     }
     return GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase ) - GetCoupdaybs( nNullDate, nSettle, nMat, nFreq, nBase );
 }
-
-
 
 // COUPDAYS: get day count: coupon date before settlement <-> coupon date after settlement
 double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
@@ -1373,8 +1359,6 @@ double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
     return static_cast< double >( GetDaysInYear( 0, 0, nBase ) ) / nFreq;
 }
 
-
-
 // COUPNUM: get count of coupon dates
 double GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
     throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -1388,10 +1372,6 @@ double GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
     sal_uInt16 nMonths = (aMat.getYear() - aDate.getYear()) * 12 + aMat.getMonth() - aDate.getMonth();
     return static_cast< double >( nMonths * nFreq / 12 );
 }
-
-
-
-
 
 
 
@@ -1409,8 +1389,6 @@ public:
 
     const ResStringArray&   GetStringArray() const { return aStrArray; }
 };
-
-
 
 
 FuncData::FuncData( const FuncDataBase& r, ResMgr& rResMgr ) :
@@ -1449,8 +1427,6 @@ sal_uInt16 FuncData::GetStrIndex( sal_uInt16 nParamNum ) const
     else
         return nParamNum * 2;
 }
-
-
 
 
 FuncDataList::FuncDataList( ResMgr& rResMgr )
@@ -1493,8 +1469,6 @@ const FuncData* FuncDataList::Get(  const OUString& aProgrammaticName ) const
 AnalysisResId::AnalysisResId( sal_uInt16 nId, ResMgr& rResMgr ) : ResId( nId, rResMgr )
 {
 }
-
-
 
 
 SortedIndividualInt32List::SortedIndividualInt32List()
@@ -1612,8 +1586,6 @@ void SortedIndividualInt32List::InsertHolidayList(
 
 
 
-
-
 void ScaDoubleList::Append(
         const uno::Sequence< uno::Sequence< double > >& rValueSeq ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -1640,8 +1612,6 @@ void ScaDoubleList::Append(
             Append( pArray[ nIndex2 ] );
     }
 }
-
-
 
 void ScaDoubleList::Append(
         const ScaAnyConverter& rAnyConv,
@@ -1682,8 +1652,6 @@ void ScaDoubleList::Append(
         Append( rAnyConv, pArray[ nIndex ], bIgnoreEmpty );
 }
 
-
-
 void ScaDoubleList::Append(
         ScaAnyConverter& rAnyConv,
         const uno::Reference< beans::XPropertySet >& xOpt,
@@ -1702,8 +1670,6 @@ sal_Bool ScaDoubleList::CheckInsert( double ) const throw( uno::RuntimeException
 
 
 
-
-
 sal_Bool ScaDoubleListGT0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( fValue < 0.0 )
@@ -1713,16 +1679,12 @@ sal_Bool ScaDoubleListGT0::CheckInsert( double fValue ) const throw( uno::Runtim
 
 
 
-
-
 sal_Bool ScaDoubleListGE0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( fValue < 0.0 )
         throw lang::IllegalArgumentException();
     return sal_True;
 }
-
-
 
 
 
@@ -2223,8 +2185,6 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
 }
 
 
-
-
 ConvertData::ConvertData( const sal_Char p[], double fC, ConvertDataClass e, sal_Bool bPrefSupport ) : aName( p, strlen( p ), RTL_TEXTENCODING_MS_1252 )
 {
     fConst = fC;
@@ -2387,8 +2347,6 @@ double ConvertData::ConvertFromBase( double f, sal_Int16 n ) const
     return ::rtl::math::pow10Exp( f * fConst, -n );
 }
 
-
-
 ConvertDataLinear::~ConvertDataLinear()
 {
 }
@@ -2424,8 +2382,6 @@ double ConvertDataLinear::ConvertFromBase( double f, sal_Int16 n ) const
 
     return f;
 }
-
-
 
 
 ConvertDataList::ConvertDataList( void )
@@ -2677,8 +2633,6 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
 
 
 
-
-
 ScaDate::ScaDate() :
     nOrigDay( 1 ),
     nDay( 1 ),
@@ -2876,8 +2830,6 @@ sal_Bool ScaDate::operator<( const ScaDate& rCmp ) const
 
 
 
-
-
 ScaAnyConverter::ScaAnyConverter( const uno::Reference< uno::XComponentContext >& xContext ) :
     bHasValidFormat( sal_False )
 {
@@ -3010,8 +2962,6 @@ sal_Int32 ScaAnyConverter::getInt32(
         nResult = nDefault;
     return nResult;
 }
-
-
 
 
 

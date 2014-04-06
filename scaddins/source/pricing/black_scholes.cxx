@@ -100,8 +100,6 @@ inline double pnorm(double x) {
     return 0.5 * ::rtl::math::erfc(-x * 0.7071067811865475);
 }
 
-
-
 // binary option cash (domestic)
 //   call - pays 1 if S_T is above strike K
 //   put  - pays 1 if S_T is below strike K
@@ -191,8 +189,6 @@ double bincash(double S, double vol, double rd, double rf,
     }
     return exp(-rd*tau)*val;
 }
-
-
 
 // binary option asset (foreign)
 //   call - pays S_T if S_T is above strike K
@@ -353,8 +349,6 @@ double binary(double S, double vol, double rd, double rf,
 
     return val;
 }
-
-
 
 // vanilla put/call option
 //   call pays (S_T-K)^+
@@ -538,8 +532,6 @@ double vanilla_trunc(double S, double vol, double rd, double rf,
 }
 
 } // namespace internal
-
-
 
 // path dependent options
 
@@ -831,8 +823,6 @@ double barrier(double S, double vol, double rd, double rf,
 } // namespace internal
 
 
-
-
 // touch/no-touch options (cash/asset or nothing payoff profile)
 double touch(double S, double vol, double rd, double rf,
              double tau, double B1, double B2, types::ForDom fd,
@@ -884,8 +874,6 @@ double barrier(double S, double vol, double rd, double rf,
     }
     return val;
 }
-
-
 
 // probability of hitting a barrier
 // this is almost the same as the price of a touch option (domestic)
@@ -948,8 +936,6 @@ double prob_in_money(double S, double vol, double mu,
     }
     return val;
 }
-
-
 
 } // namespace bs
 

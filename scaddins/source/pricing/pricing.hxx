@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 // option pricing functions add in
 
 // most parts of this files are technical UNO details which are
 // all copied from ../datefunc/datefunc.hxx
 // to avoid having to rename all classes to do with UNO
 // technicalities we use our own namespace
-
-
 
 #ifndef _SCA_PRICING_HXX
 #define _SCA_PRICING_HXX
@@ -44,8 +40,6 @@
 #include <tools/resary.hxx>
 
 #define RETURN_FINITE(d)    if( ::rtl::math::isFinite( d ) ) return d; else throw css::lang::IllegalArgumentException()
-
-
 
 
 
@@ -95,8 +89,6 @@ inline void ScaList::Append( void* pNew )
 }
 
 
-
-
 class ScaStringList : protected ScaList
 {
 public:
@@ -142,15 +134,11 @@ inline void ScaStringList::Append( const OUString& rNew )
 }
 
 
-
-
 class ScaResId : public ResId
 {
 public:
                                 ScaResId( sal_uInt16 nResId, ResMgr& rResMgr );
 };
-
-
 
 
 class ScaResStringLoader : public Resource
@@ -174,8 +162,6 @@ inline ScaResStringLoader::ScaResStringLoader( sal_uInt16 nResId, sal_uInt16 nSt
 }
 
 
-
-
 class ScaResStringArrLoader : public Resource
 {
 private:
@@ -187,16 +173,12 @@ public:
     inline const ResStringArray& GetStringArray() const { return aStrArray; }
 };
 
-
-
 inline ScaResStringArrLoader::ScaResStringArrLoader( sal_uInt16 nResId, sal_uInt16 nArrayId, ResMgr& rResMgr ) :
     Resource( ScaResId( nResId, rResMgr ) ),
     aStrArray( ScaResId( nArrayId, rResMgr ) )
 {
     FreeResource();
 }
-
-
 
 
 class ScaResPublisher : public Resource
@@ -211,15 +193,11 @@ public:
 };
 
 
-
-
 class ScaFuncRes : public Resource
 {
 public:
                                 ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet );
 };
-
-
 
 
 enum ScaCategory
@@ -276,8 +254,6 @@ public:
 };
 
 
-
-
 class ScaFuncDataList : private ScaList
 {
     OUString             aLastName;
@@ -316,8 +292,6 @@ inline ScaFuncData* ScaFuncDataList::Next()
 
 } // namespace pricing
 } // namespace sca
-
-
 
 
 

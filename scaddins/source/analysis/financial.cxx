@@ -457,8 +457,6 @@ double SAL_CALL AnalysisAddIn::getOddlyield( const css::uno::Reference< css::bea
     RETURN_FINITE( fRet );
 }
 
-
-
 // XIRR helper functions
 
 #define V_(i) (rValues.Get(i))
@@ -518,8 +516,6 @@ static double lcl_sca_XirrResult_Deriv1( const ScaDoubleList& rValues, const Sca
 #undef V_
 #undef D_
 
-
-
 // XIRR calculation
 
 double SAL_CALL AnalysisAddIn::getXirr(
@@ -560,8 +556,6 @@ double SAL_CALL AnalysisAddIn::getXirr(
         throw css::lang::IllegalArgumentException();
     RETURN_FINITE( fResultRate );
 }
-
-
 
 
 double SAL_CALL AnalysisAddIn::getXnpv(

@@ -78,8 +78,6 @@ double binasset(double S, double vol, double rd, double rf,
                 double tau, double K,
                 types::PutCall pc, types::Greeks greeks);
 
-
-
 // vanilla put/call option
 //   call pays (S_T-K)^+
 //   put  pays (K-S_T)^+
@@ -108,8 +106,6 @@ double putcalltrunc(double S, double vol, double rd, double rf,
 double putcalltrunc(double S, double vol, double rd, double rf,
                     double tau, double K, double B1, double B2,
                     types::PutCall pc, types::Greeks greek);
-
-
 
 // barrier
 // touch/no-touch options (cash/asset or nothing payoff profile)

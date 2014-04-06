@@ -160,8 +160,6 @@ const ScaFuncData* ScaFuncDataList::Get( const OUString& rProgrammaticName ) con
     return NULL;
 }
 
-
-
 ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet ) :
     Resource( rResId )
 {

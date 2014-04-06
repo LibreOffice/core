@@ -144,10 +144,6 @@ double              GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int
 
 
 
-
-
-
-
 enum FDCategory
 {
     FDCat_AddIn,
@@ -170,8 +166,6 @@ struct FuncDataBase
     sal_uInt16              nNumOfParams;       // number of named / described parameters
     FDCategory              eCat;               // function category
 };
-
-
 
 
 class FuncData
@@ -206,8 +200,6 @@ public:
 };
 
 
-
-
 class FuncDataList
 {
     OUString                aLastName;
@@ -225,15 +217,11 @@ public:
     const FuncData*         Get( const OUString& aProgrammaticName ) const;
 };
 
-
-
 class AnalysisResId : public ResId
 {
  public:
                     AnalysisResId( sal_uInt16 nId, ResMgr& rResMgr );
 };
-
-
 
 
 class AnalysisRscStrLoader : public Resource
@@ -251,8 +239,6 @@ public:
     const OUString& GetString() const { return aStr; }
 
 };
-
-
 
 
 
@@ -298,8 +284,6 @@ public:
                                     sal_Int32 nNullDate,
                                     sal_Bool bInsertOnWeekend ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
-
-
 
 
 class ScaDoubleList
@@ -359,8 +343,6 @@ public:
 };
 
 
-
-
 /// stores double values >0.0, throws exception for double values <0.0, does nothing for 0.0
 class ScaDoubleListGT0 : public ScaDoubleList
 {
@@ -370,8 +352,6 @@ public:
 };
 
 
-
-
 /// stores double values >=0.0, throws exception for double values <0.0
 class ScaDoubleListGE0 : public ScaDoubleList
 {
@@ -379,8 +359,6 @@ public:
     virtual sal_Bool            CheckInsert( double fValue ) const
                                     throw( css::uno::RuntimeException, css::lang::IllegalArgumentException ) SAL_OVERRIDE;
 };
-
-
 
 
 class Complex
@@ -430,8 +408,6 @@ public:
 };
 
 
-
-
 enum ComplListAppendHandl
 {
     AH_EmptyAsErr,
@@ -460,8 +436,6 @@ public:
 };
 
 
-
-
 enum ConvertDataClass
 {
     CDC_Mass, CDC_Length, CDC_Time, CDC_Pressure, CDC_Force, CDC_Energy, CDC_Power, CDC_Magnetism,
@@ -473,8 +447,6 @@ enum ConvertDataClass
 
 
 class ConvertDataList;
-
-
 
 
 class ConvertData
@@ -513,8 +485,6 @@ public:
 };
 
 
-
-
 class ConvertDataLinear : public ConvertData
 {
 protected:
@@ -538,8 +508,6 @@ public:
 };
 
 
-
-
 class ConvertDataList
 {
 private:
@@ -550,8 +518,6 @@ public:
 
     double                  Convert( double fVal, const OUString& rFrom, const OUString& rTo ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
-
-
 
 
 inline sal_Bool IsLeapYear( sal_uInt16 n )
@@ -706,8 +672,6 @@ inline void Complex::Add( const Complex& rAdd )
 }
 
 
-
-
 inline const Complex* ComplexList::Get( sal_uInt32 n ) const
 {
     return maVector[n];
@@ -720,14 +684,10 @@ inline void ComplexList::Append( Complex* p )
 }
 
 
-
-
 inline ConvertDataClass ConvertData::Class( void ) const
 {
     return eClass;
 }
-
-
 
 inline sal_Bool ConvertData::IsPrefixSupport( void ) const
 {
@@ -740,8 +700,6 @@ inline ConvertDataLinear::ConvertDataLinear( const sal_Char* p, double fC, doubl
     fOffs( fO )
 {
 }
-
-
 
 
 
@@ -836,8 +794,6 @@ inline void ScaDate::addYears( sal_Int32 nYearCount ) throw( css::lang::IllegalA
 }
 
 
-
-
 /// Helper class for Any->double conversion, using current language settings
 class ScaAnyConverter
 {
@@ -922,8 +878,6 @@ public:
                                     sal_Int32 nDefault )
                                 throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
-
-
 
 
 
