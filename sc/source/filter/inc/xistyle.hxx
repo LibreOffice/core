@@ -216,6 +216,10 @@ public:
 
     /** Reads a FORMAT record. */
     void                ReadFormat( XclImpStream& rStrm );
+
+    /** Read NumFmt from conditional format record */
+    sal_uInt16          ReadCFFormat( XclImpStream& rStrm, bool bIFmt );
+
     /** Creates the number formats in the Calc document. */
     void                CreateScFormats();
 

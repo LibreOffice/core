@@ -650,6 +650,25 @@ void XclImpNumFmtBuffer::ReadFormat( XclImpStream& rStrm )
     }
 }
 
+sal_uInt16 XclImpNumFmtBuffer::ReadCFFormat( XclImpStream& rStrm, bool bIFmt )
+{
+    // internal number format ?
+    if(bIFmt)
+    {
+        rStrm.Ignore(1);
+        sal_uInt8 nIndex;
+        rStrm >> nIndex;
+        return nIndex;
+    }
+    else
+    {
+        OUString aFormat = rStrm.ReadUniString();
+        InsertFormat( mnNextXclIdx, aFormat );
+        ++mnNextXclIdx;
+        return mnNextXclIdx - 1;
+    }
+}
+
 void XclImpNumFmtBuffer::CreateScFormats()
 {
     OSL_ENSURE( maIndexMap.empty(), "XclImpNumFmtBuffer::CreateScFormats - already created" );
