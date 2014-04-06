@@ -30,12 +30,8 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
-
-
 
 
 namespace {
@@ -49,8 +45,6 @@ inline bool lclNeedsRichTextFormat( const Font* pFont )
 }
 
 } // namespace
-
-
 
 RichStringPortion::RichStringPortion( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -157,15 +151,11 @@ void RichStringPortion::writeFontProperties( const Reference<XText>& rxText, con
         pFont->writeToPropertySet(aPropSet, FONT_PROPTYPE_TEXT);
 }
 
-
-
 void FontPortionModel::read( SequenceInputStream& rStrm )
 {
     mnPos = rStrm.readuInt16();
     mnFontId = rStrm.readuInt16();
 }
-
-
 
 void FontPortionModelList::appendPortion( const FontPortionModel& rPortion )
 {
@@ -195,8 +185,6 @@ void FontPortionModelList::importPortions( SequenceInputStream& rStrm )
     }
 }
 
-
-
 PhoneticDataModel::PhoneticDataModel() :
     mnFontId( -1 ),
     mnType( XML_fullwidthKatakana ),
@@ -212,8 +200,6 @@ void PhoneticDataModel::setBiffData( sal_Int32 nType, sal_Int32 nAlignment )
     static const sal_Int32 spnAlignments[] = { XML_noControl, XML_left, XML_center, XML_distributed };
     mnAlignment = STATIC_ARRAY_SELECT( spnAlignments, nAlignment, XML_left );
 }
-
-
 
 PhoneticSettings::PhoneticSettings( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -244,8 +230,6 @@ void PhoneticSettings::importStringData( SequenceInputStream& rStrm )
     maModel.setBiffData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
 }
 
-
-
 RichStringPhonetic::RichStringPhonetic( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     mnBasePos( -1 ),
@@ -270,16 +254,12 @@ void RichStringPhonetic::setBaseRange( sal_Int32 nBasePos, sal_Int32 nBaseEnd )
     mnBaseEnd = nBaseEnd;
 }
 
-
-
 void PhoneticPortionModel::read( SequenceInputStream& rStrm )
 {
     mnPos = rStrm.readuInt16();
     mnBasePos = rStrm.readuInt16();
     mnBaseLen = rStrm.readuInt16();
 }
-
-
 
 void PhoneticPortionModelList::appendPortion( const PhoneticPortionModel& rPortion )
 {
@@ -313,8 +293,6 @@ void PhoneticPortionModelList::importPortions( SequenceInputStream& rStrm )
         }
     }
 }
-
-
 
 RichString::RichString( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -499,8 +477,6 @@ void RichString::createPhoneticPortions( const OUString& rText, PhoneticPortionM
         }
     }
 }
-
-
 
 } // namespace xls
 } // namespace oox

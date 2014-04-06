@@ -22,8 +22,6 @@
 
 
 
-
-
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -160,8 +158,6 @@ IMPL_LINK( ScAutoFormatDlg, CloseHdl, PushButton *, pBtn )
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG_INLINE_START(ScAutoFormatDlg, DblClkHdl)
 {
     if ( bCoreDataChanged )
@@ -171,8 +167,6 @@ IMPL_LINK_NOARG_INLINE_START(ScAutoFormatDlg, DblClkHdl)
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(ScAutoFormatDlg, DblClkHdl)
-
-
 
 IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
@@ -202,8 +196,6 @@ IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
 
     return 0;
 }
-
-
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 {
@@ -276,8 +268,6 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 
     return 0;
 }
-
-
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl)
 {
@@ -402,8 +392,6 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl)
 {
     nIndex = m_pLbFormat->GetSelectEntryPos();
@@ -425,8 +413,6 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl)
 
     return 0;
 }
-
-
 
 OUString ScAutoFormatDlg::GetCurrFormatName()
 {

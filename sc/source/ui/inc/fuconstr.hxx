@@ -48,8 +48,6 @@ class FuConstruct : public FuDraw
     Point CurrentGridSyncOffsetAndPos( Point& rInOutPos);
 };
 
-
-
 #endif      // _SD_FUCONSTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

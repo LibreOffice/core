@@ -160,8 +160,6 @@ const ScRangeData* ScRangeManagerTable::findRangeData(const ScRangeNameLine& rLi
     return pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(rLine.aName));
 }
 
-
-
 void ScRangeManagerTable::CheckForFormulaString()
 {
     for (SvTreeListEntry* pEntry = GetFirstEntryInView(); pEntry ; pEntry = GetNextEntryInView(pEntry))

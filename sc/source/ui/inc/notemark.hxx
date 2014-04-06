@@ -65,8 +65,6 @@ public:
     void        SetGridOff( const Point& rOff ) { aGridOff = rOff; }
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

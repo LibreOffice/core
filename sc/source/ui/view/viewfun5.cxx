@@ -25,8 +25,6 @@
 #include <svx/unomodel.hxx>
 #include <unotools/streamwrap.hxx>
 
-
-
 #include <svx/fmmodel.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>
@@ -71,8 +69,6 @@
 #include <svx/dbaexchange.hxx>
 
 using namespace com::sun::star;
-
-
 
 bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,

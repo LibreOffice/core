@@ -2647,8 +2647,6 @@ void ScInterpreter::ScFormula()
     PushString( aFormula );
 }
 
-
-
 void ScInterpreter::ScIsNV()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;

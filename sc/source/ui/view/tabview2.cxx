@@ -1461,6 +1461,4 @@ void ScTabView::UpdatePageBreakData( bool bForcePaint )
     pPageBreakData = pNewData;
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

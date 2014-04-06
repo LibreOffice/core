@@ -609,8 +609,6 @@ namespace calc
         // TODO: place your code here
     }
 
-
-
 }   // namespace calc
 
 

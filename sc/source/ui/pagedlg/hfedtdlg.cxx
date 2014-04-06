@@ -22,8 +22,6 @@
 
 
 
-
-
 #include "scitems.hxx"
 #include <svl/eitem.hxx>
 
@@ -46,8 +44,6 @@
     ((SfxBoolItem&) \
         ((SvxSetItem&)(set).Get(ATTR_PAGE_FOOTERSET)).GetItemSet(). \
             Get(ATTR_PAGE_SHARED)).GetValue()
-
-
 
 ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
                           Window*           pParent,
@@ -201,16 +197,12 @@ ScHFEditActiveDlg::ScHFEditActiveDlg( SfxViewFrame*     pFrameP,
     }
 }
 
-
-
 void ScHFEditDlg::PageCreated( sal_uInt16 /* nId */, SfxTabPage& rPage )
 {
     // kann ja nur ne ScHFEditPage sein...
 
     ((ScHFEditPage&)rPage).SetNumType(eNumType);
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

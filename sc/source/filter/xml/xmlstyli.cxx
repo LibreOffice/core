@@ -646,8 +646,6 @@ sal_Int32 XMLTableStyleContext::GetNumberFormat()
     return nNumberFormat;
 }
 
-
-
 SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
@@ -1056,8 +1054,6 @@ void ScMasterPageContext::Finish( bool bOverwrite )
     if (!bContainsRightHeader)
         ClearContent(OUString(SC_UNO_PAGE_RIGHTHDRCON));
 }
-
-
 
 ScCellTextStyleContext::ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName, const uno::Reference<xml::sax::XAttributeList> & xAttrList,

@@ -31,8 +31,6 @@ class ScViewData;
 class ScDocument;
 
 
-
-
 class ScColRowNameRangesDlg : public ScAnyRefDlg
 {
 public:
@@ -94,8 +92,6 @@ private:
     DECL_LINK( LoseFocusHdl, void* );
 #endif
 };
-
-
 
 #endif // SC_CRNRDLG_HXX
 

@@ -272,8 +272,6 @@ void ScRawToken::SetExternalName( sal_uInt16 nFileId, const OUString& rName )
     extname.cName[n] = 0;
 }
 
-
-
 void ScRawToken::SetExternal( const sal_Unicode* pStr )
 {
     eOp   = ocExternal;
@@ -749,8 +747,6 @@ ScRefList* ScToken::GetRefList()
 
 
 
-
-
 const ScSingleRefData&    ScSingleRefToken::GetSingleRef() const  { return aSingleRef; }
 ScSingleRefData&          ScSingleRefToken::GetSingleRef()        { return aSingleRef; }
 bool ScSingleRefToken::operator==( const FormulaToken& r ) const
@@ -852,8 +848,6 @@ FormulaToken* ScMatrixRangeToken::Clone() const
     return new ScMatrixRangeToken(*this);
 }
 
-
-
 ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScSingleRefData& r ) :
     ScToken( svExternalSingleRef, ocPush),
     mnFileId(nFileId),
@@ -907,8 +901,6 @@ bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
 
     return maSingleRef == static_cast<const ScToken&>(r).GetSingleRef();
 }
-
-
 
 ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScComplexRefData& r ) :
     ScToken( svExternalDoubleRef, ocPush),
@@ -984,8 +976,6 @@ bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
     return maDoubleRef == static_cast<const ScToken&>(r).GetDoubleRef();
 }
 
-
-
 ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const svl::SharedString& rName ) :
     ScToken( svExternalName, ocPush),
     mnFileId(nFileId),
@@ -1022,8 +1012,6 @@ bool ScExternalNameToken::operator==( const FormulaToken& r ) const
 
     return maName.getData() == r.GetString().getData();
 }
-
-
 
 ScJumpMatrix* ScJumpMatrixToken::GetJumpMatrix() const  { return pJumpMatrix; }
 bool ScJumpMatrixToken::operator==( const FormulaToken& r ) const
@@ -1183,8 +1171,6 @@ bool ScHybridCellToken::operator==( const FormulaToken& r ) const
         mfDouble == r.GetDouble() && maString == r.GetString() &&
         maFormula == static_cast<const ScHybridCellToken &>(r).GetFormula();
 }
-
-
 
 
 
@@ -1731,8 +1717,6 @@ bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) co
 {
     return ImplGetReference(rRange, rPos, true);
 }
-
-
 
 ScTokenArray::ScTokenArray() :
     FormulaTokenArray(),

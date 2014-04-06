@@ -1689,8 +1689,6 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
 }
 
 
-
-
 const sal_Char* GetAddInName( const sal_uInt8 n )
 {
     static const sal_Char*  pNames[ 256 ] =

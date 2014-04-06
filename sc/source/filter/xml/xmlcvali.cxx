@@ -168,8 +168,6 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 };
 
-
-
 ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,

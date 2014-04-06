@@ -114,8 +114,6 @@ public:
     virtual bool doConstructOrthogonal() const;
 };
 
-
-
 #endif      // _SD_FUPOOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

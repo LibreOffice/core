@@ -39,8 +39,6 @@
 
 using namespace com::sun::star;
 
-
-
 /// Helper for sorting properties
 struct ScSolverOptionsEntry
 {
@@ -54,8 +52,6 @@ struct ScSolverOptionsEntry
         return (ScGlobal::GetCollator()->compareString( aDescription, rOther.aDescription ) < 0);
     }
 };
-
-
 
 class ScSolverOptionsString : public SvLBoxString
 {
@@ -105,8 +101,6 @@ void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, const
 
     rDev.SetFont( aOldFont );
 }
-
-
 
 ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
                         const uno::Sequence<OUString>& rImplNames,
@@ -392,8 +386,6 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl)
     return 0;
 }
 
-
-
 ScSolverIntegerDialog::ScSolverIntegerDialog(Window * pParent)
     : ModalDialog( pParent, "IntegerDialog",
         "modules/scalc/ui/integerdialog.ui" )
@@ -421,8 +413,6 @@ sal_Int32 ScSolverIntegerDialog::GetValue() const
         return SAL_MAX_INT32;
     return (sal_Int32) nValue;
 }
-
-
 
 ScSolverValueDialog::ScSolverValueDialog( Window * pParent )
     : ModalDialog( pParent, "DoubleDialog",

@@ -39,8 +39,6 @@
 using ::std::vector;
 
 
-
-
 // struct ScImportParam:
 
 ScImportParam::ScImportParam() :
@@ -114,8 +112,6 @@ ScConsolidateParam::ScConsolidateParam() :
     Clear();
 }
 
-
-
 ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r ) :
         nCol(r.nCol),nRow(r.nRow),nTab(r.nTab),
         eFunction(r.eFunction),nDataAreaCount(0),
@@ -131,14 +127,10 @@ ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r ) :
     }
 }
 
-
-
 ScConsolidateParam::~ScConsolidateParam()
 {
     ClearDataAreas();
 }
-
-
 
 void ScConsolidateParam::ClearDataAreas()
 {
@@ -152,8 +144,6 @@ void ScConsolidateParam::ClearDataAreas()
     nDataAreaCount = 0;
 }
 
-
-
 void ScConsolidateParam::Clear()
 {
     ClearDataAreas();
@@ -164,8 +154,6 @@ void ScConsolidateParam::Clear()
     bByCol = bByRow = bReferenceData    = false;
     eFunction                           = SUBTOTAL_FUNC_SUM;
 }
-
-
 
 ScConsolidateParam& ScConsolidateParam::operator=( const ScConsolidateParam& r )
 {
@@ -180,8 +168,6 @@ ScConsolidateParam& ScConsolidateParam::operator=( const ScConsolidateParam& r )
 
     return *this;
 }
-
-
 
 bool ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
 {
@@ -206,8 +192,6 @@ bool ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
     return bEqual;
 }
 
-
-
 void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, sal_uInt16 nCount )
 {
     ClearDataAreas();
@@ -228,8 +212,6 @@ ScSolveParam::ScSolveParam()
 {
 }
 
-
-
 ScSolveParam::ScSolveParam( const ScSolveParam& r )
     :   aRefFormulaCell ( r.aRefFormulaCell ),
         aRefVariableCell( r.aRefVariableCell ),
@@ -238,8 +220,6 @@ ScSolveParam::ScSolveParam( const ScSolveParam& r )
                             : NULL )
 {
 }
-
-
 
 ScSolveParam::ScSolveParam( const ScAddress& rFormulaCell,
                             const ScAddress& rVariableCell,
@@ -250,14 +230,10 @@ ScSolveParam::ScSolveParam( const ScAddress& rFormulaCell,
 {
 }
 
-
-
 ScSolveParam::~ScSolveParam()
 {
     delete pStrTargetVal;
 }
-
-
 
 ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
 {
@@ -270,8 +246,6 @@ ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
                             : NULL;
     return *this;
 }
-
-
 
 bool ScSolveParam::operator==( const ScSolveParam& r ) const
 {
@@ -305,8 +279,6 @@ ScTabOpParam::ScTabOpParam( const ScTabOpParam& r )
 {
 }
 
-
-
 ScTabOpParam::ScTabOpParam( const ScRefAddress& rFormulaCell,
                             const ScRefAddress& rFormulaEnd,
                             const ScRefAddress& rRowCell,
@@ -320,8 +292,6 @@ ScTabOpParam::ScTabOpParam( const ScRefAddress& rFormulaCell,
 {
 }
 
-
-
 ScTabOpParam& ScTabOpParam::operator=( const ScTabOpParam& r )
 {
     aRefFormulaCell  = r.aRefFormulaCell;
@@ -331,8 +301,6 @@ ScTabOpParam& ScTabOpParam::operator=( const ScTabOpParam& r )
     meMode = r.meMode;
     return *this;
 }
-
-
 
 bool ScTabOpParam::operator==( const ScTabOpParam& r ) const
 {

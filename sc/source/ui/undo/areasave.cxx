@@ -24,8 +24,6 @@
 #include "document.hxx"
 #include <documentlinkmgr.hxx>
 
-
-
 ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :
     aFileName   ( rSource.GetFile() ),
     aFilterName ( rSource.GetFilter() ),

@@ -40,8 +40,6 @@ class ScViewData;
 class ScDocument;
 
 
-
-
 //logic behind the manage names dialog
 class ScNameDlg : public ScAnyRefDlg
 {
@@ -137,8 +135,6 @@ public:
     void SetEntry(const OUString& rName, const OUString& rScope);
 
 };
-
-
 
 #endif // SC_NAMEDLG_HXX
 

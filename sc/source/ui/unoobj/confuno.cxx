@@ -81,8 +81,6 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
     return aConfigPropertyMap_Impl;
 }
 
-
-
 ScDocumentConfiguration::ScDocumentConfiguration(ScDocShell* pDocSh)
     : pDocShell(pDocSh) ,
     aPropSet ( lcl_GetConfigPropertyMap() )

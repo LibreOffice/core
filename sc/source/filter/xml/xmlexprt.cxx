@@ -184,8 +184,6 @@ using ::std::vector;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 
-
-
 namespace
 {
 OUString lcl_RangeSequenceToString(
@@ -237,8 +235,6 @@ OUString lcl_GetFormattedString( ScDocument* pDoc, const ScAddress& rPos )
 }
 
 } // anonymous namespace
-
-
 
 OUString SAL_CALL ScXMLOOoExport_getImplementationName() throw()
 {
@@ -452,8 +448,6 @@ void ScXMLShapeExport::onExport( const uno::Reference < drawing::XShape >& xShap
             GetExport().AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_BACKGROUND, XML_TRUE);
     }
 }
-
-
 
 sal_Int16 ScXMLExport::GetFieldUnit()
 {
@@ -4850,8 +4844,6 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
     }
     GetChangeTrackViewSettings(rProps);
 }
-
-
 
 
 void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& rProps)

@@ -56,8 +56,6 @@ using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 using ::com::sun::star::sheet::DataPilotFieldLayoutInfo;
 using ::com::sun::star::sheet::DataPilotFieldReference;
 
-
-
 // Pivot cache
 
 
@@ -91,8 +89,6 @@ static const sal_uInt16 spnPCItemFlags[] =
 };
 
 } // namespace
-
-
 
 XclExpPCItem::XclExpPCItem( const OUString& rText ) :
     XclExpRecord( (!rText.isEmpty()) ? EXC_ID_SXSTRING : EXC_ID_SXEMPTY, 0 ),
@@ -133,8 +129,6 @@ XclExpPCItem::XclExpPCItem( bool bValue ) :
     SetBool( bValue );
 }
 
-
-
 bool XclExpPCItem::EqualsText( const OUString& rText ) const
 {
     return rText.isEmpty() ? IsEmpty() : (GetText() && (*GetText() == rText));
@@ -154,8 +148,6 @@ bool XclExpPCItem::EqualsBool( bool bValue ) const
 {
     return GetBool() && (*GetBool() == bValue);
 }
-
-
 
 void XclExpPCItem::WriteBody( XclExpStream& rStrm )
 {
@@ -192,8 +184,6 @@ void XclExpPCItem::WriteBody( XclExpStream& rStrm )
         OSL_ENSURE( IsEmpty(), "XclExpPCItem::WriteBody - no data found" );
     }
 }
-
-
 
 XclExpPCField::XclExpPCField(
         const XclExpRoot& rRoot, const XclExpPivotCache& rPCache, sal_uInt16 nFieldIdx,
@@ -624,8 +614,6 @@ void XclExpPCField::WriteBody( XclExpStream& rStrm )
     rStrm << maFieldInfo;
 }
 
-
-
 XclExpPivotCache::XclExpPivotCache( const XclExpRoot& rRoot, const ScDPObject& rDPObj, sal_uInt16 nListIdx ) :
     XclExpRoot( rRoot ),
     mnListIdx( nListIdx ),
@@ -917,8 +905,6 @@ void XclExpPivotCache::WriteSxindexlistList( XclExpStream& rStrm ) const
 
 namespace {
 
-
-
 /** Returns a display string for a data field containing the field name and aggregation function. */
 OUString lclGetDataFieldCaption( const OUString& rFieldName, GeneralFunction eFunc )
 {
@@ -947,11 +933,7 @@ OUString lclGetDataFieldCaption( const OUString& rFieldName, GeneralFunction eFu
     return( aCaption );
 }
 
-
-
 } // namespace
-
-
 
 XclExpPTItem::XclExpPTItem( const XclExpPCField& rCacheField, sal_uInt16 nCacheIdx ) :
     XclExpRecord( EXC_ID_SXVI, 8 ),
@@ -993,8 +975,6 @@ void XclExpPTItem::WriteBody( XclExpStream& rStrm )
 {
     rStrm << maItemInfo;
 }
-
-
 
 XclExpPTField::XclExpPTField( const XclExpPivotTable& rPTable, sal_uInt16 nCacheIdx ) :
     mrPTable( rPTable ),
@@ -1240,8 +1220,6 @@ void XclExpPTField::WriteSxvdex( XclExpStream& rStrm ) const
     rStrm << maFieldExtInfo;
     rStrm.EndRecord();
 }
-
-
 
 XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& rDPObj, const XclExpPivotCache& rPCache, size_t nId ) :
     XclExpRoot( rRoot ),
@@ -1798,8 +1776,6 @@ void XclExpPivotTable::WriteSxViewEx9( XclExpStream& rStrm ) const
     }
 }
 
-
-
 namespace {
 
 const SCTAB EXC_PTMGR_PIVOTCACHES = SCTAB_MAX;
@@ -1839,8 +1815,6 @@ void XclExpPivotRecWrapper::SaveXml( XclExpXmlStream& rStrm )
 }
 
 } // namespace
-
-
 
 XclExpPivotTableManager::XclExpPivotTableManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -1949,7 +1923,5 @@ const XclExpPivotCache* XclExpPivotTableManager::CreatePivotCache( const ScDPObj
 
     return 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

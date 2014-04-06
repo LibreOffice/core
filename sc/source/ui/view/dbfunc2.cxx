@@ -24,8 +24,6 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 
-
-
 void ScDBFunc::UpdateCharts( bool bAllCharts )
 {
     sal_uInt16 nFound = 0;
@@ -42,8 +40,6 @@ void ScDBFunc::UpdateCharts( bool bAllCharts )
     if ( !nFound && !bAllCharts )
         ErrorMessage(STR_NOCHARTATCURSOR);
 }
-
-
 
 
 

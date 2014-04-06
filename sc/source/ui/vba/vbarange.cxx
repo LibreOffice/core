@@ -339,8 +339,6 @@ public:
 
 };
 
-
-
 class RangesEnumerationImpl : public EnumerationHelperImpl
 {
     bool mbIsRows;
@@ -1015,8 +1013,6 @@ public:
     }
 };
 
-
-
 class Dim2ArrayValueSetter : public ArrayVisitor
 {
     uno::Sequence< uno::Sequence< uno::Any > > aMatrix;
@@ -1276,8 +1272,6 @@ getRangeForName( const uno::Reference< uno::XComponentContext >& xContext, const
     return new ScVbaRange( xFixThisParent, xContext, xRanges );
 }
 
-
-
 namespace {
 
 template< typename RangeType >
@@ -1381,8 +1375,6 @@ util::TriState lclGetMergedState( const uno::Reference< table::XCellRange >& rxC
 }
 
 } // namespace
-
-
 
 css::uno::Reference< excel::XRange >
 ScVbaRange::getRangeObjectForName(

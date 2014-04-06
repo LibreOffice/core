@@ -126,8 +126,6 @@ private:
 
 typedef boost::shared_ptr< XclExpArray > XclExpArrayRef;
 
-
-
 /** Caches all ARRAY records. */
 class XclExpArrayBuffer : protected XclExpRoot
 {
@@ -176,8 +174,6 @@ private:
 };
 
 typedef boost::shared_ptr< XclExpShrfmla > XclExpShrfmlaRef;
-
-
 
 /** Caches all SHRFMLA records and provides functions to update their ranges. */
 class XclExpShrfmlaBuffer : protected XclExpRoot
@@ -251,8 +247,6 @@ private:
 };
 
 typedef boost::shared_ptr< XclExpTableop > XclExpTableopRef;
-
-
 
 /** Contains all created TABLEOP records and supports creating or updating them. */
 class XclExpTableopBuffer : protected XclExpRoot
@@ -370,8 +364,6 @@ private:
     sal_Size            mnContSize;     /// The size of the cell contents.
 };
 
-
-
 /** Represents a NUMBER record that describes a cell with a double value. */
 class XclExpNumberCell : public XclExpSingleCellBase
 {
@@ -389,8 +381,6 @@ private:
 private:
     double              mfValue;        /// The cell value.
 };
-
-
 
 /** Represents a BOOLERR record that describes a cell with a Boolean value. */
 class XclExpBooleanCell : public XclExpSingleCellBase
@@ -451,8 +441,6 @@ private:
     bool                mbLineBreak;    /// True = cell has automatic linebreaks enabled.
 };
 
-
-
 class ScFormulaCell;
 
 /** Represents a FORMULA record that describes a cell with a formula. */
@@ -491,8 +479,6 @@ struct XclExpMultiXFId : public XclExpXFId
     inline explicit     XclExpMultiXFId( sal_uInt32 nXFId, sal_uInt16 nCount = 1 ) :
                             XclExpXFId( nXFId ), mnCount( nCount ) {}
 };
-
-
 
 /** Base class for all cell records supporting multiple contents. */
 class XclExpMultiCellBase : public XclExpCellBase
@@ -554,8 +540,6 @@ private:
     XclExpMultiXFIdDeq  maXFIds;        /// The XF identifiers of the cell formatting.
 };
 
-
-
 /** Represents a BLANK or MULBLANK record that describes empty but formatted cells. */
 class XclExpBlankCell : public XclExpMultiCellBase
 {
@@ -580,8 +564,6 @@ private:
     virtual void        WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol ) SAL_OVERRIDE;
     virtual void        WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& rAddress, sal_uInt32 nXFId, sal_uInt16 nRelCol ) SAL_OVERRIDE;
 };
-
-
 
 /** Represents an RK or MULRK record that describes cells with a compressed double values. */
 class XclExpRkCell : public XclExpMultiCellBase
@@ -644,8 +626,6 @@ private:
     bool                mbCurrCollapse;     /// true = Collapsed group ends at current position.
 };
 
-
-
 /** The outline buffer for column outlines. */
 class XclExpColOutlineBuffer : public XclExpOutlineBuffer
 {
@@ -658,8 +638,6 @@ public:
                             { UpdateColRow( static_cast< SCCOLROW >( nScCol ) ); }
 };
 
-
-
 /** The outline buffer for row outlines. */
 class XclExpRowOutlineBuffer : public XclExpOutlineBuffer
 {
@@ -671,8 +649,6 @@ public:
     inline void         Update( SCROW nScRow )
                             { UpdateColRow( static_cast< SCCOLROW >( nScRow ) ); }
 };
-
-
 
 /** Represents a GUTS record containing the level count of row and column outlines. */
 class XclExpGuts : public XclExpRecord
@@ -689,8 +665,6 @@ private:
     sal_uInt16          mnRowLevels;    /// Number of visible row outline levels.
     sal_uInt16          mnRowWidth;     /// Width of row outline area (pixels).
 };
-
-
 
 /** Represents a DIMENSIONS record containing the used area of a sheet. */
 class XclExpDimensions : public XclExpRecord
@@ -715,8 +689,6 @@ private:
     sal_uInt16          mnFirstFreeXclCol;  /// First free column after used area.
 };
 
-
-
 /** Represents the DEFCOLWIDTH record containing the default column width of a sheet.
 
     Excel stores the default column width in entire character widths of the '0'
@@ -740,8 +712,6 @@ public:
     /** Sets the passed column width (in 1/256 character width) as default width. */
     void                SetDefWidth( sal_uInt16 nXclColWidth );
 };
-
-
 
 /** Contains the column settings for a range of columns.
 
@@ -790,8 +760,6 @@ private:
     sal_uInt16          mnLastXclCol;       /// Index to last column.
 };
 
-
-
 /** Contains COLINFO records for all columns of a Calc sheet.
 
     On construction one COLINFO record per column is created. After creating
@@ -824,8 +792,6 @@ private:
     XclExpColOutlineBuffer maOutlineBfr;    /// Buffer for column outline groups.
 };
 
-
-
 class XclExpRow;
 
 /** Contains all possible default row settings. */
@@ -843,8 +809,6 @@ struct XclExpDefaultRowData
     inline bool         IsUnsynced() const { return ::get_flag( mnFlags, EXC_DEFROW_UNSYNCED ); }
 };
 
-
-
 /** Represents a DEFROWHEIGHT record containing default format for unused rows. */
 class XclExpDefrowheight : public XclExpRecord
 {
@@ -861,8 +825,6 @@ private:
 private:
     XclExpDefaultRowData maDefData;         /// Record data.
 };
-
-
 
 /** Represents a ROW record and additionally contains all cells records of a row.
 
@@ -952,8 +914,6 @@ private:
     bool                mbAlwaysEmpty;      /// true = Do not add blank cells in Finalize().
     bool                mbEnabled;          /// true = Write this ROW record.
 };
-
-
 
 /** Collects all rows which contain all cells of a sheet.
 

@@ -25,11 +25,7 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::oox::core;
-
-
 
 
 QueryTableFragment::QueryTableFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
@@ -72,8 +68,6 @@ const RecordInfo* QueryTableFragment::getRecordInfos() const
     };
     return spRecInfos;
 }
-
-
 
 
 } // namespace xls

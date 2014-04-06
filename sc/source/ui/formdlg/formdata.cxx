@@ -19,8 +19,6 @@
 
 #include "formdata.hxx"
 
-
-
 ScFormEditData::ScFormEditData()
     : formula::FormEditData()
     , pInputHandler(NULL)
@@ -45,7 +43,5 @@ void ScFormEditData::SaveValues()
     Reset();
     pParent = pTemp;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

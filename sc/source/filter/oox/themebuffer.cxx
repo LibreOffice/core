@@ -24,11 +24,7 @@
 namespace oox {
 namespace xls {
 
-
-
 using ::oox::drawingml::ClrScheme;
-
-
 
 ThemeBuffer::ThemeBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -59,8 +55,6 @@ sal_Int32 ThemeBuffer::getColorByToken( sal_Int32 nToken ) const
     sal_Int32 nColor = 0;
     return getClrScheme().getColor( nToken, nColor ) ? nColor : API_RGB_TRANSPARENT;
 }
-
-
 
 } // namespace xls
 } // namespace oox

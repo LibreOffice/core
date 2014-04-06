@@ -43,8 +43,6 @@ class FuConstRectangle : public FuConstruct
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) SAL_OVERRIDE;
 };
 
-
-
 #endif      // _SD_FUCONREC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

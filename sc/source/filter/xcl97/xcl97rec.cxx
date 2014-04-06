@@ -90,8 +90,6 @@ using ::oox::drawingml::ShapeExport;
 using ::oox::vml::VMLExport;
 using namespace oox;
 
-
-
 sal_Int32 XclExpObjList::mnDrawingMLCount;
 sal_Int32 XclExpObjList::mnVmlCount;
 
@@ -1036,8 +1034,6 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
     pDrawing->endElement( FSNS( XML_xdr, XML_twoCellAnchor ) );
 }
 
-
-
 void ExcBof8_Base::SaveCont( XclExpStream& rStrm )
 {
     rStrm.DisableEncryption();
@@ -1132,8 +1128,6 @@ void ExcBundlesheet8::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
 }
 
-
-
 // --- class XclObproj -----------------------------------------------
 
 sal_uInt16 XclObproj::GetNum() const
@@ -1172,8 +1166,6 @@ sal_Size XclCodename::GetLen() const
     return aName.GetSize();
 }
 
-
-
 // ---- Scenarios ----------------------------------------------------
 
 ExcEScenarioCell::ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const OUString& rTxt ) :
@@ -1203,8 +1195,6 @@ void ExcEScenarioCell::SaveXml( XclExpXmlStream& rStrm ) const
             XML_val,    XclXmlUtils::ToOString( sText ).getStr(),
             FSEND );
 }
-
-
 
 
 ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
@@ -1336,8 +1326,6 @@ void ExcEScenario::SaveXml( XclExpXmlStream& rStrm )
 }
 
 
-
-
 ExcEScenarioManager::ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab ) :
         nActive( 0 )
 {
@@ -1412,8 +1400,6 @@ sal_Size ExcEScenarioManager::GetLen() const
     return 8;
 }
 
-
-
 struct XclExpTabProtectOption
 {
     ScTableProtection::Option   eOption;
@@ -1478,8 +1464,6 @@ void XclExpSheetProtectOptions::WriteBody( XclExpStream& rStrm )
     rStrm << nBytes;
 }
 
-
-
 XclExpSheetEnhancedProtection::XclExpSheetEnhancedProtection( const XclExpRoot& rRoot,
         const ScEnhancedProtection & rProt ) :
     XclExpRecord( 0x0868 ),
@@ -1521,8 +1505,6 @@ void XclExpSheetEnhancedProtection::WriteBody( XclExpStream& rStrm )
     }
 }
 
-
-
 void XclCalccount::SaveCont( XclExpStream& rStrm )
 {
     rStrm << nCount;
@@ -1553,8 +1535,6 @@ void XclCalccount::SaveXml( XclExpXmlStream& rStrm )
             XML_iterateCount, OString::number( nCount ).getStr(),
             FSEND );
 }
-
-
 
 
 void XclIteration::SaveCont( XclExpStream& rStrm )
@@ -1589,14 +1569,10 @@ void XclIteration::SaveXml( XclExpXmlStream& rStrm )
 }
 
 
-
-
 void XclDelta::SaveCont( XclExpStream& rStrm )
 {
     rStrm << fDelta;
 }
-
-
 
 XclDelta::XclDelta( const ScDocument& rDoc )
 {
@@ -1622,8 +1598,6 @@ void XclDelta::SaveXml( XclExpXmlStream& rStrm )
             XML_iterateDelta, OString::number( fDelta ).getStr(),
             FSEND );
 }
-
-
 
 XclExpFileEncryption::XclExpFileEncryption( const XclExpRoot& rRoot ) :
     XclExpRecord(0x002F, 54),
@@ -1661,8 +1635,6 @@ void XclExpFileEncryption::WriteBody( XclExpStream& rStrm )
     rStrm.SetEncrypter(xEnc);
 }
 
-
-
 XclExpInterfaceHdr::XclExpInterfaceHdr( sal_uInt16 nCodePage ) :
     XclExpUInt16Record( EXC_ID_INTERFACEHDR, nCodePage )
 {
@@ -1674,8 +1646,6 @@ void XclExpInterfaceHdr::WriteBody( XclExpStream& rStrm )
     rStrm << GetValue();
 }
 
-
-
 XclExpInterfaceEnd::XclExpInterfaceEnd() :
     XclExpRecord(0x00E2, 0) {}
 
@@ -1686,8 +1656,6 @@ void XclExpInterfaceEnd::WriteBody( XclExpStream& rStrm )
     // Don't forget to re-enable encryption.
     rStrm.EnableEncryption();
 }
-
-
 
 XclExpWriteAccess::XclExpWriteAccess() :
     XclExpRecord(0x005C, 112)
@@ -1721,8 +1689,6 @@ void XclExpWriteAccess::WriteBody( XclExpStream& rStrm )
         rStrm << aData[i];
 }
 
-
-
 XclExpFileSharing::XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPasswordHash, bool bRecommendReadOnly ) :
     XclExpRecord( EXC_ID_FILESHARING ),
     mnPasswordHash( nPasswordHash ),
@@ -1745,8 +1711,6 @@ void XclExpFileSharing::WriteBody( XclExpStream& rStrm )
     rStrm << sal_uInt16( mbRecommendReadOnly ? 1 : 0 ) << mnPasswordHash << maUserName;
 }
 
-
-
 XclExpProt4Rev::XclExpProt4Rev() :
     XclExpRecord(0x01AF, 2)
 {
@@ -1760,8 +1724,6 @@ void XclExpProt4Rev::WriteBody( XclExpStream& rStrm )
 {
     rStrm << static_cast<sal_uInt16>(0x0000);
 }
-
-
 
 XclExpProt4RevPass::XclExpProt4RevPass() :
     XclExpRecord(0x01BC, 2)
@@ -1777,8 +1739,6 @@ void XclExpProt4RevPass::WriteBody( XclExpStream& rStrm )
     rStrm << static_cast<sal_uInt16>(0x0000);
 }
 
-
-
 static const sal_uInt8 nDataRecalcId[] = {
     0xC1, 0x01, 0x00, 0x00, 0x54, 0x8D, 0x01, 0x00
 };
@@ -1787,8 +1747,6 @@ XclExpRecalcId::XclExpRecalcId() :
     XclExpDummyRecord(0x01C1, nDataRecalcId, sizeof(nDataRecalcId))
 {
 }
-
-
 
 static const sal_uInt8 nDataBookExt[] = {
     0x63, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1800,8 +1758,6 @@ XclExpBookExt::XclExpBookExt() :
     XclExpDummyRecord(0x0863, nDataBookExt, sizeof(nDataBookExt))
 {
 }
-
-
 
 XclRefmode::XclRefmode( const ScDocument& rDoc ) :
     XclExpBoolRecord( 0x000F, rDoc.GetAddressConvention() != formula::FormulaGrammar::CONV_XL_R1C1 )

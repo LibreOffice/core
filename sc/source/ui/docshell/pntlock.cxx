@@ -19,8 +19,6 @@
 
 #include "pntlock.hxx"
 
-
-
 ScPaintLockData::ScPaintLockData() :
     nLevel( 0 ),
     nDocLevel( 0 ),
@@ -41,8 +39,6 @@ void ScPaintLockData::AddRange( const ScRange& rRange, sal_uInt16 nP )
     xRangeList->Join( rRange );
     nParts |= nP;
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

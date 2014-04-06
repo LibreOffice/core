@@ -189,8 +189,6 @@ void ConverterBase::Reset()
 }
 
 
-
-
 ExcelConverterBase::ExcelConverterBase( sal_uInt16 nNewBuffer ) :
     ConverterBase( nNewBuffer )
 {
@@ -211,8 +209,6 @@ void ExcelConverterBase::Reset()
     ConverterBase::Reset();
     aEingPos.Set( 0, 0, 0 );
 }
-
-
 
 
 LotusConverterBase::LotusConverterBase( SvStream &rStr, sal_uInt16 nNewBuffer ) :

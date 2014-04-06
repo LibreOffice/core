@@ -24,8 +24,6 @@
 #include "docpool.hxx"
 #include "msgpool.hxx"
 
-
-
 static SfxItemInfo const aMsgItemInfos[] =
 {
     { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_STRING
@@ -39,8 +37,6 @@ static SfxItemInfo const aMsgItemInfos[] =
     { SID_SCUSERLISTS,           SFX_ITEM_POOLABLE },   // SCITEM_USERLIST
     { SID_PRINTER_NOTFOUND_WARN, SFX_ITEM_POOLABLE }    // SCITEM_PRINTWARN
 };
-
-
 
 ScMessagePool::ScMessagePool()
     :   SfxItemPool         ( OUString("ScMessagePool"),
@@ -103,8 +99,6 @@ SfxMapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const
     else
         return SFX_MAPUNIT_100TH_MM;
 }
-
-
 
 
 

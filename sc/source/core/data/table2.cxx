@@ -2330,8 +2330,6 @@ bool ScTable::IsSelectionEditable( const ScMarkData& rMark,
     return bIsEditable;
 }
 
-
-
 void ScTable::LockTable()
 {
     ++nLockCount;
@@ -2462,8 +2460,6 @@ void ScTable::RemoveCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex
         }
     }
 }
-
-
 
 void ScTable::ApplyStyle( SCCOL nCol, SCROW nRow, const ScStyleSheet& rStyle )
 {

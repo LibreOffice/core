@@ -556,8 +556,6 @@ struct XclPTCachedName
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTCachedName& rCachedName );
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTCachedName& rCachedName );
 
-
-
 /** Base struct for named info structs. Supports explicit naming and using the cache. */
 struct XclPTVisNameInfo
 {
@@ -747,8 +745,6 @@ struct XclPTExtInfo
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTExtInfo& rInfo );
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTExtInfo& rInfo );
-
-
 
 // Pivot table autoformat settings ==============================================
 

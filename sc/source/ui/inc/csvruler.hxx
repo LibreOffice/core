@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 #ifndef _SC_CSVRULER_HXX
 #define _SC_CSVRULER_HXX
 
@@ -28,8 +26,6 @@
 #include "scdllapi.h"
 
 class ScAccessibleCsvControl;
-
-
 
 
 /** A ruler control for the CSV import dialog. Supports setting and moving
@@ -183,8 +179,6 @@ protected:
     /** Creates a new accessible object. */
     virtual ScAccessibleCsvControl* ImplCreateAccessible() SAL_OVERRIDE;
 };
-
-
 
 
 #endif

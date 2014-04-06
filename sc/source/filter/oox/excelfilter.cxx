@@ -33,8 +33,6 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
@@ -42,8 +40,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::oox::core;
 
 using ::oox::drawingml::table::TableStyleListPtr;
-
-
 
 OUString ExcelFilter_getImplementationName()
 {
@@ -63,8 +59,6 @@ Reference< XInterface > ExcelFilter_create(
 {
     return static_cast< ::cppu::OWeakObject* >( new ExcelFilter( rxContext ) );
 }
-
-
 
 ExcelFilter::ExcelFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     XmlFilterBase( rxContext ),

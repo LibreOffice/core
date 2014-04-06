@@ -60,8 +60,6 @@
 
 using namespace com::sun::star;
 
-
-
 void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
 {
     ScDrawView* pView = pViewData->GetScDrawView();
@@ -241,8 +239,6 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
 }
 
 sal_uInt16 ScGetFontWorkId();
-
-
 
 
 //          Funktionen auf Drawing-Objekten
@@ -649,8 +645,6 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
     return 1;   // name is valid
 }
 
-
-
 void ScDrawShell::ExecFormText(SfxRequest& rReq)
 {
     ScDrawView*         pDrView     = pViewData->GetScDrawView();
@@ -666,8 +660,6 @@ void ScDrawShell::ExecFormText(SfxRequest& rReq)
         pDrView->SetAttributes(rSet);
     }
 }
-
-
 
 void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
 {
@@ -710,8 +702,6 @@ ScDrawView* ScDrawShell::GetDrawView()
 {
     return pViewData->GetView()->GetScDrawView();
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

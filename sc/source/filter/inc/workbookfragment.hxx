@@ -28,8 +28,6 @@ namespace xls {
 
 class ExternalLink;
 
-
-
 class WorkbookFragment : public WorkbookFragmentBase
 {
 public:

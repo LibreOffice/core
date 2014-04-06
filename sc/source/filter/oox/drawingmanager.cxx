@@ -36,15 +36,11 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::drawingml;
-
-
 
 
 namespace {
@@ -114,8 +110,6 @@ BiffInputStream& operator>>( BiffInputStream& rStrm, BiffObjLineModel& rModel )
     return rStrm;
 }
 
-
-
 BiffObjFillModel::BiffObjFillModel() :
     mnBackColorIdx( BIFF_OBJ_LINE_AUTOCOLOR ),
     mnPattColorIdx( BIFF_OBJ_FILL_AUTOCOLOR ),
@@ -144,8 +138,6 @@ void BiffDrawingObjectContainer::convertAndInsert( BiffDrawingBase& rDrawing, co
 {
     maObjects.forEachMem( &BiffDrawingObjectBase::convertAndInsert, ::boost::ref( rDrawing ), ::boost::cref( rxShapes ), pParentRect );
 }
-
-
 
 BiffDrawingObjectBase::BiffDrawingObjectBase( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -419,8 +411,6 @@ void BiffDrawingBase::finalizeImport()
     maRawObjs.convertAndInsert( *this, xShapes );
 }
 
-
-
 BiffSheetDrawing::BiffSheetDrawing( const WorksheetHelper& rHelper ) :
     BiffDrawingBase( rHelper, rHelper.getDrawPage() )
 {
@@ -431,8 +421,6 @@ void BiffSheetDrawing::notifyShapeInserted( const Reference< XShape >& /*rxShape
     // collect all shape positions in the WorksheetHelper base class
     extendShapeBoundingBox( rShapeRect );
 }
-
-
 
 } // namespace xls
 } // namespace oox

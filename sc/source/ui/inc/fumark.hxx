@@ -52,8 +52,6 @@ class FuMarkRect : public FuPoor
     virtual sal_uInt8 Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

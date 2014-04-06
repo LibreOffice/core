@@ -32,15 +32,11 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 using ::oox::core::CodecHelper;
-
-
 
 namespace {
 
@@ -53,8 +49,6 @@ const sal_uInt16 BIFF_SHEETPR_FITTOPAGES        = 0x0100;
 
 } // namespace
 
-
-
 SheetSettingsModel::SheetSettingsModel() :
     mbFilterMode( false ),
     mbApplyStyles( false ),
@@ -62,8 +56,6 @@ SheetSettingsModel::SheetSettingsModel() :
     mbSummaryRight( true )
 {
 }
-
-
 
 SheetProtectionModel::SheetProtectionModel() :
     mnPasswordHash( 0 ),
@@ -85,8 +77,6 @@ SheetProtectionModel::SheetProtectionModel() :
     mbSelectUnlocked( false )
 {
 }
-
-
 
 WorksheetSettings::WorksheetSettings( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -253,8 +243,6 @@ void WorksheetSettings::finalizeImport()
         aPropSet.setProperty( PROP_TabColor, nColor );
     }
 }
-
-
 
 } // namespace xls
 } // namespace oox

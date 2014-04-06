@@ -83,8 +83,6 @@ long lclGetScZoom( sal_uInt16 nXclZoom, sal_uInt16 nDefZoom )
 
 } // namespace
 
-
-
 XclImpTabViewSettings::XclImpTabViewSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
 {
@@ -292,7 +290,5 @@ void XclImpTabViewSettings::Finalize()
     if ( !maData.IsDefaultTabBgColor() )
         rDoc.SetTabBgColor(nScTab, maData.maTabBgColor);
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

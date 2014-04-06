@@ -149,8 +149,6 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
          }
     }
 
-
-
     long nPageSizeX = aPageSizeTwips.Width();
     long nPageSizeY = aPageSizeTwips.Height();
 
@@ -1245,8 +1243,6 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
         }
     }
 }
-
-
 
 
 

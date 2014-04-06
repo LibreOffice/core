@@ -98,8 +98,6 @@ public:
 };
 
 
-
-
 typedef o3tl::sorted_vector<sal_uLong> ScHTMLColOffset;
 
 struct ScHTMLTableStackEntry
@@ -149,8 +147,6 @@ struct ScHTMLAdjustStackEntry
                             {}
 };
 typedef ::std::stack< ScHTMLAdjustStackEntry* > ScHTMLAdjustStack;
-
-
 
 
 class EditEngine;
@@ -231,8 +227,6 @@ public:
 };
 
 
-
-
 // HTML DATA QUERY PARSER
 
 
@@ -245,8 +239,6 @@ typedef sal_uInt16 ScHTMLTableId;
 const ScHTMLTableId SC_HTML_GLOBAL_TABLE = 0;
 /** Used as table index for normal (non-table) entries in ScHTMLEntry structs. */
 const ScHTMLTableId SC_HTML_NO_TABLE = 0;
-
-
 
 /** A 2D cell position in an HTML table. */
 struct ScHTMLPos
@@ -281,8 +273,6 @@ inline bool operator<( const ScHTMLPos& rPos1, const ScHTMLPos& rPos2 )
     return (rPos1.mnRow < rPos2.mnRow) || ((rPos1.mnRow == rPos2.mnRow) && (rPos1.mnCol < rPos2.mnCol));
 }
 
-
-
 /** A 2D cell size in an HTML table. */
 struct ScHTMLSize
 {
@@ -305,8 +295,6 @@ inline bool operator==( const ScHTMLSize& rSize1, const ScHTMLSize& rSize2 )
 {
     return (rSize1.mnRows == rSize2.mnRows) && (rSize1.mnCols == rSize2.mnCols);
 }
-
-
 
 /** A single entry containing a line of text or representing a table. */
 struct ScHTMLEntry : public ScEEParseEntry
@@ -343,8 +331,6 @@ private:
     bool                mbImportAlways;     /// true = Always import this entry.
 };
 
-
-
 /** This struct handles creation of unique table identifiers. */
 struct ScHTMLTableAutoId
 {
@@ -354,8 +340,6 @@ struct ScHTMLTableAutoId
     /** The constructor assigns an unused identifier to member mnTableId. */
     explicit            ScHTMLTableAutoId( ScHTMLTableId& rnUnusedId );
 };
-
-
 
 class ScHTMLTableMap;
 
@@ -590,8 +574,6 @@ private:
     bool                mbPushEmptyLine:1;  /// true = Insert empty line before current entry.
 };
 
-
-
 /** The "global table" representing the entire HTML document. */
 class ScHTMLGlobalTable : public ScHTMLTable
 {
@@ -607,8 +589,6 @@ public:
     /** Recalculates sizes and resulting positions of all document entries. */
     void                Recalc();
 };
-
-
 
 /** The HTML parser for data queries. Focuses on data import, not on layout.
 
@@ -666,8 +646,6 @@ private:
     ScHTMLTableId       mnUnusedId;         /// First unused table identifier.
     bool                mbTitleOn;          /// true = Inside of <title> </title>.
 };
-
-
 
 
 #endif

@@ -31,8 +31,6 @@
 #include "drawview.hxx"
 #include "markdata.hxx"
 
-
-
 /*************************************************************************
 |*
 |* Funktion zum Aufziehen eines Rechtecks
@@ -255,8 +253,6 @@ void FuMarkRect::ForcePointer(const MouseEvent* /* pMEvt */)
 {
     pViewShell->SetActivePointer( Pointer( POINTER_CHART ) );
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

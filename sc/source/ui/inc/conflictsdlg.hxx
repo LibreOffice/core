@@ -32,8 +32,6 @@
 class ScViewData;
 
 
-
-
 enum ScConflictAction
 {
     SC_CONFLICT_ACTION_NONE,
@@ -42,8 +40,6 @@ enum ScConflictAction
 };
 
 typedef ::std::vector< sal_uLong > ScChangeActionList;
-
-
 
 // struct ScConflictsListEntry
 
@@ -59,11 +55,7 @@ struct ScConflictsListEntry
 };
 
 
-
-
 typedef ::std::vector< ScConflictsListEntry > ScConflictsList;
-
-
 
 // class ScConflictsListHelper
 
@@ -82,8 +74,6 @@ public:
     static void                     TransformConflictsList( ScConflictsList& rConflictsList,
                                         ScChangeActionMergeMap* pSharedMap, ScChangeActionMergeMap* pOwnMap );
 };
-
-
 
 // class ScConflictsFinder
 
@@ -110,8 +100,6 @@ public:
     bool                    Find();
 };
 
-
-
 // class ScConflictsResolver
 
 
@@ -128,8 +116,6 @@ public:
     void                HandleAction( ScChangeAction* pAction, bool bIsSharedAction,
                             bool bHandleContentAction, bool bHandleNonContentAction );
 };
-
-
 
 // class ScConflictsDlg
 

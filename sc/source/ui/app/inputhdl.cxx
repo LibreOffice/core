@@ -382,8 +382,6 @@ void ScInputHandler::DeleteRangeFinder()
     }
 }
 
-
-
 inline OUString GetEditText(EditEngine* pEng)
 {
     return ScEditUtil::GetSpaceDelimitedString(*pEng);
@@ -491,8 +489,6 @@ static sal_Int32 lcl_MatchParenthesis( const OUString& rStr, sal_Int32 nPos )
         return -1;
     return (sal_Int32) (p - p0);
 }
-
-
 
 ScInputHandler::ScInputHandler()
     :   pInputWin( NULL ),
@@ -2460,8 +2456,6 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
     bInOwnChange = false;
 }
 
-
-
 //  lcl_IsNumber - true, wenn nur Ziffern (dann keine Autokorrektur)
 
 static bool lcl_IsNumber(const OUString& rString)
@@ -3822,8 +3816,6 @@ void ScInputHandler::InputGetSelection( sal_Int32& rStart, sal_Int32& rEnd )
     rEnd = nFormSelEnd;
 }
 
-
-
 EditView* ScInputHandler::GetFuncEditView()
 {
     UpdateActiveView();     // wegen pTableView
@@ -3850,8 +3842,6 @@ EditView* ScInputHandler::GetFuncEditView()
     return pView;
 }
 
-
-
 void ScInputHandler::InputSetSelection( sal_Int32 nStart, sal_Int32 nEnd )
 {
     if ( nStart <= nEnd )
@@ -3871,8 +3861,6 @@ void ScInputHandler::InputSetSelection( sal_Int32 nStart, sal_Int32 nEnd )
 
     bModified = true;
 }
-
-
 
 void ScInputHandler::InputReplaceSelection( const OUString& rStr )
 {
@@ -3936,22 +3924,16 @@ ScInputHdlState::ScInputHdlState( const ScAddress& rCurPos,
 {
 }
 
-
-
 ScInputHdlState::ScInputHdlState( const ScInputHdlState& rCpy )
     :   pEditData   ( NULL )
 {
     *this = rCpy;
 }
 
-
-
 ScInputHdlState::~ScInputHdlState()
 {
     delete pEditData;
 }
-
-
 
 bool ScInputHdlState::operator==( const ScInputHdlState& r ) const
 {
@@ -3961,8 +3943,6 @@ bool ScInputHdlState::operator==( const ScInputHdlState& r ) const
              && (aString    == r.aString)
              && ScGlobal::EETextObjEqual( pEditData, r.pEditData ) );
 }
-
-
 
 ScInputHdlState& ScInputHdlState::operator=( const ScInputHdlState& r )
 {

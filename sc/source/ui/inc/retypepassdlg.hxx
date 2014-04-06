@@ -121,8 +121,6 @@ private:
     ScPasswordHash      meDesiredHash;
 };
 
-
-
 class ScRetypePassInputDlg : public ModalDialog
 {
 public:

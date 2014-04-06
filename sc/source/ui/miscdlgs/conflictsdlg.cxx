@@ -26,8 +26,6 @@
 #include "viewdata.hxx"
 #include "dbfunc.hxx"
 
-
-
 // struct ScConflictsListEntry
 
 
@@ -58,8 +56,6 @@ bool ScConflictsListEntry::HasOwnAction( sal_uLong nOwnAction ) const
 
     return false;
 }
-
-
 
 // class ScConflictsListHelper
 
@@ -146,8 +142,6 @@ void ScConflictsListHelper::TransformConflictsList( ScConflictsList& rConflictsL
         }
     }
 }
-
-
 
 // class ScConflictsFinder
 

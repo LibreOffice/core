@@ -69,8 +69,6 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
 }
 
 
-
-
 ScFilterOptionsMgr::~ScFilterOptionsMgr()
 {
     sal_uInt16 nEntries = pLbCopyArea->GetEntryCount();
@@ -79,8 +77,6 @@ ScFilterOptionsMgr::~ScFilterOptionsMgr()
     for ( i=2; i<nEntries; i++ )
         delete (OUString*)pLbCopyArea->GetEntryData( i );
 }
-
-
 
 
 void ScFilterOptionsMgr::Init()
@@ -204,8 +200,6 @@ void ScFilterOptionsMgr::Init()
         pEdCopyArea->SetText( EMPTY_OUSTRING );
 }
 
-
-
 bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
 {
     OUString aPosStr( rPosStr );
@@ -222,8 +216,6 @@ bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
 
 // Handler:
 
-
-
 IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox*, pLb )
 {
     if ( pLb == pLbCopyArea )
@@ -239,8 +231,6 @@ IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox*, pLb )
 
     return 0;
 }
-
-
 
 
 IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
@@ -274,8 +264,6 @@ IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
 
     return 0;
 }
-
-
 
 
 IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox*, pBox )

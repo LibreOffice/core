@@ -31,11 +31,7 @@
 #include "uiitems.hxx"
 
 
-
-
 class ScDocumentPool;
-
-
 
 class ScMessagePool: public SfxItemPool
 {
@@ -62,8 +58,6 @@ public:
 
     virtual SfxMapUnit              GetMetric( sal_uInt16 nWhich ) const SAL_OVERRIDE;
 };
-
-
 
 #endif
 

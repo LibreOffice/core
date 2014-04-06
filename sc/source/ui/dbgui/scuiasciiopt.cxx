@@ -58,8 +58,6 @@ using namespace com::sun::star::uno;
 #define SEP_PATH_CLPBRD     "Office.Calc/Dialogs/ClipboardTextImport"
 #define SEP_PATH_TEXT2COL   "Office.Calc/Dialogs/TextToColumnsImport"
 
-
-
 static void lcl_FillCombo( ComboBox& rCombo, const OUString& rList, sal_Unicode cSelect )
 {
     sal_Int32 i;
@@ -232,8 +230,6 @@ static void save_Separators(
 
     aItem.PutProperties(aNames, aValues);
 }
-
-
 
 ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent, const OUString& aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall ) :
@@ -463,8 +459,6 @@ ScImportAsciiDlg::~ScImportAsciiDlg()
 }
 
 
-
-
 bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )
 {
     if (nLine >= ASCIIDLG_MAXROWS || !mpDatStream)
@@ -628,8 +622,6 @@ void ScImportAsciiDlg::UpdateVertical()
     if (mpDatStream)
         mpDatStream->SetStreamCharSet(meCharSet);
 }
-
-
 
 
 IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )

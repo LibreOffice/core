@@ -58,8 +58,6 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
@@ -68,16 +66,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 
-
-
 CellModel::CellModel() :
     mnCellType( XML_TOKEN_INVALID ),
     mnXfId( -1 ),
     mbShowPhonetic( false )
 {
 }
-
-
 
 CellFormulaModel::CellFormulaModel() :
     mnFormulaType( XML_TOKEN_INVALID ),
@@ -101,8 +95,6 @@ bool CellFormulaModel::isValidSharedRef( const CellAddress& rCellAddr )
         (maFormulaRef.StartRow <= rCellAddr.Row) && (rCellAddr.Row <= maFormulaRef.EndRow);
 }
 
-
-
 DataTableModel::DataTableModel() :
     mb2dTable( false ),
     mbRowTable( false ),
@@ -110,8 +102,6 @@ DataTableModel::DataTableModel() :
     mbRef2Deleted( false )
 {
 }
-
-
 
 CellBlockBuffer::CellBlockBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -130,8 +120,6 @@ void CellBlockBuffer::setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpan
 void CellBlockBuffer::finalizeImport()
 {
 }
-
-
 
 SheetDataBuffer::SheetDataBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -563,8 +551,6 @@ bool SheetDataBuffer::MergedRange::tryExpand( const CellAddress& rAddress, sal_I
     }
     return false;
 }
-
-
 
 void SheetDataBuffer::setCellFormula( const CellAddress& rCellAddr, const ApiTokenSequence& rTokens )
 {

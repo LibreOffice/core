@@ -49,8 +49,6 @@ struct TokenId
     inline  bool        operator !=( sal_uInt16 n ) const { return nId != n; }
 };
 
-
-
 struct ScComplexRefData;
 class TokenStack;
 
@@ -72,8 +70,6 @@ enum E_TYPE
     T_ExtRefA,
     T_Error     // fuer Abfrage im Fehlerfall
 };
-
-
 
 
 class TokenPool
@@ -223,8 +219,6 @@ class TokenPool
 };
 
 
-
-
 class TokenStack
     // Stack fuer Token-Ids: Id 0 sollte reserviert bleiben als
     //  fehlerhafte Id, da z.B. Get() im Fehlerfall 0 liefert
@@ -244,8 +238,6 @@ class TokenStack
         inline bool                 HasMoreTokens() const { return nPos > 0; }
         inline const TokenId        Get( void );
 };
-
-
 
 
 inline const TokenId TokenStack::Get( void )
@@ -296,8 +288,6 @@ inline void TokenStack::Reset( void )
 {
     nPos = 0;
 }
-
-
 
 
 inline TokenPool& TokenPool::operator <<( const TokenId nId )

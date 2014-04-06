@@ -19,8 +19,6 @@
 
 
 
-
-
 #include "XMLConsolidationContext.hxx"
 #include "document.hxx"
 #include "rangeutl.hxx"
@@ -31,8 +29,6 @@
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;
-
-
 
 
 ScXMLConsolidationContext::ScXMLConsolidationContext(

@@ -41,8 +41,6 @@ class SvxSearchItem;
 class SdrUndoAction;
 class ScEditDataArray;
 
-
-
 class ScUndoInsertCells: public ScMoveUndo
 {
 public:
@@ -977,8 +975,6 @@ private:
     SvxBoxItem*     pOuter;
     SvxBoxInfoItem* pInner;
 };
-
-
 
 
 #endif

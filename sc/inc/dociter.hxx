@@ -478,8 +478,6 @@ public:
     bool            GetNext( double& rValue, sal_uInt16& rErr );
 };
 
-
-
 //  returns all areas with non-default formatting (horizontal)
 
 

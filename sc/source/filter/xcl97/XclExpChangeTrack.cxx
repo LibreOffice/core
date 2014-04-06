@@ -19,8 +19,6 @@
 
 
 
-
-
 #include <stdio.h>
 #include <sot/storage.hxx>
 #include "XclExpChangeTrack.hxx"
@@ -98,8 +96,6 @@ static inline void lcl_WriteGUID( XclExpStream& rStrm, const sal_uInt8* pGUID )
     rStrm.SetSliceSize( 0 );
 }
 
-
-
 XclExpUserBView::XclExpUserBView( const OUString& rUsername, const sal_uInt8* pGUID ) :
     sUsername( rUsername )
 {
@@ -133,8 +129,6 @@ sal_Size XclExpUserBView::GetLen() const
     return 50 + ((sUsername.Len() > 0) ? sUsername.GetSize() : 0);
 }
 
-
-
 XclExpUserBViewList::XclExpUserBViewList( const ScChangeTrack& rChangeTrack )
 {
     sal_uInt8 aGUID[ 16 ];
@@ -160,8 +154,6 @@ void XclExpUserBViewList::Save( XclExpStream& rStrm )
    for( iterator iter = aViews.begin(); iter != aViews.end(); ++iter )
         (*iter)->Save( rStrm );
 }
-
-
 
 XclExpUsersViewBegin::XclExpUsersViewBegin( const sal_uInt8* pGUID, sal_uInt32 nTab ) :
     nCurrTab( nTab )
@@ -197,8 +189,6 @@ sal_Size XclExpUsersViewBegin::GetLen() const
     return 64;
 }
 
-
-
 void XclExpUsersViewEnd::SaveCont( XclExpStream& rStrm )
 {
     rStrm << (sal_uInt16) 0x0001;
@@ -214,8 +204,6 @@ sal_Size XclExpUsersViewEnd::GetLen() const
     return 2;
 }
 
-
-
 void XclExpChTr0x0191::SaveCont( XclExpStream& rStrm )
 {
     rStrm << (sal_uInt16) 0x0000;
@@ -230,8 +218,6 @@ sal_Size XclExpChTr0x0191::GetLen() const
 {
     return 2;
 }
-
-
 
 void XclExpChTr0x0198::SaveCont( XclExpStream& rStrm )
 {
@@ -249,8 +235,6 @@ sal_Size XclExpChTr0x0198::GetLen() const
     return 4;
 }
 
-
-
 void XclExpChTr0x0192::SaveCont( XclExpStream& rStrm )
 {
     rStrm << sal_uInt16( 0x0022 );
@@ -267,8 +251,6 @@ sal_Size XclExpChTr0x0192::GetLen() const
     return 512;
 }
 
-
-
 void XclExpChTr0x0197::SaveCont( XclExpStream& rStrm )
 {
     rStrm << (sal_uInt16) 0x0000;
@@ -284,8 +266,6 @@ sal_Size XclExpChTr0x0197::GetLen() const
     return 2;
 }
 
-
-
 XclExpChTrEmpty::~XclExpChTrEmpty()
 {
 }
@@ -299,8 +279,6 @@ sal_Size XclExpChTrEmpty::GetLen() const
 {
     return 0;
 }
-
-
 
 XclExpChTr0x0195::~XclExpChTr0x0195()
 {
@@ -320,8 +298,6 @@ sal_Size XclExpChTr0x0195::GetLen() const
 {
     return 162;
 }
-
-
 
 XclExpChTr0x0194::~XclExpChTr0x0194()
 {
@@ -344,8 +320,6 @@ sal_Size XclExpChTr0x0194::GetLen() const
 {
     return 162;
 }
-
-
 
 XclExpChTrHeader::~XclExpChTrHeader()
 {
@@ -393,8 +367,6 @@ void XclExpChTrHeader::SaveXml( XclExpXmlStream& rRevisionHeadersStrm )
             FSEND );
     pHeaders->write( ">" );
 }
-
-
 
 XclExpChTrInfo::~XclExpChTrInfo()
 {
@@ -450,8 +422,6 @@ void XclExpChTrInfo::SaveXml( XclExpXmlStream& rRevisionHeadersStrm )
 
     rRevisionHeadersStrm.PushStream( pRevisionLog );
 }
-
-
 
 XclExpChTrTabIdBuffer::XclExpChTrTabIdBuffer( sal_uInt16 nCount ) :
     nBufSize( nCount ),
@@ -523,8 +493,6 @@ void XclExpChTrTabIdBuffer::Remove()
     nLastId--;
 }
 
-
-
 XclExpChTrTabId::XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer, bool bInRevisionHeaders )
     : nTabCount( rBuffer.GetBufferCount() )
     , mbInRevisionHeaders( bInRevisionHeaders )
@@ -589,8 +557,6 @@ void XclExpChTrTabId::SaveXml( XclExpXmlStream& rRevisionLogStrm )
 
     rRevisionLogStrm.PushStream( pRevisionLog );
 }
-
-
 
 // ! does not copy additional actions
 XclExpChTrAction::XclExpChTrAction( const XclExpChTrAction& rCopy ) :
@@ -694,8 +660,6 @@ sal_Size XclExpChTrAction::GetLen() const
     return GetHeaderByteCount() + GetActionByteCount();
 }
 
-
-
 XclExpChTrData::XclExpChTrData() :
     pString( NULL ),
     mpFormulaCell( NULL ),
@@ -769,8 +733,6 @@ void XclExpChTrData::Write( XclExpStream& rStrm, const XclExpChTrTabIdBuffer& rT
         break;
     }
 }
-
-
 
 XclExpChTrCellContent::XclExpChTrCellContent(
         const ScChangeActionContent& rAction,
@@ -1033,8 +995,6 @@ void XclExpChTrCellContent::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     pStream->endElement( XML_rcc );
 }
 
-
-
 XclExpChTrInsert::XclExpChTrInsert(
         const ScChangeAction& rAction,
         const XclExpRoot& rRoot,
@@ -1141,8 +1101,6 @@ void XclExpChTrInsert::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     pStream->endElement( XML_rrc );
 }
 
-
-
 XclExpChTrInsertTab::XclExpChTrInsertTab(
         const ScChangeAction& rAction,
         const XclExpRoot& rRoot,
@@ -1190,8 +1148,6 @@ void XclExpChTrInsertTab::SaveXml( XclExpXmlStream& rStrm )
             XML_sheetPosition,  OString::number(  nTab ).getStr(),
             FSEND );
 }
-
-
 
 XclExpChTrMoveRange::XclExpChTrMoveRange(
         const ScChangeActionMove& rAction,
@@ -1270,8 +1226,6 @@ void XclExpChTrMoveRange::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     pStream->endElement( XML_rm );
 }
 
-
-
 XclExpChTr0x014A::XclExpChTr0x014A( const XclExpChTrInsert& rAction ) :
     XclExpChTrInsert( rAction )
 {
@@ -1317,8 +1271,6 @@ void XclExpChTr0x014A::SaveXml( XclExpXmlStream& rStrm )
 
     pStream->endElement( XML_rfmt );
 }
-
-
 
 class ExcXmlRecord : public ExcRecord
 {

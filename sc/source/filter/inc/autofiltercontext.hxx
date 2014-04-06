@@ -29,8 +29,6 @@ class AutoFilter;
 class FilterColumn;
 class FilterSettingsBase;
 
-
-
 class FilterSettingsContext : public WorksheetContextBase
 {
 public:
@@ -46,8 +44,6 @@ protected:
 private:
     FilterSettingsBase& mrFilterSettings;
 };
-
-
 
 class FilterColumnContext : public WorksheetContextBase
 {
@@ -65,8 +61,6 @@ private:
     FilterColumn&       mrFilterColumn;
 };
 
-
-
 class AutoFilterContext : public WorksheetContextBase
 {
 public:
@@ -82,8 +76,6 @@ protected:
 private:
     AutoFilter&         mrAutoFilter;
 };
-
-
 
 } // namespace xls
 } // namespace oox

@@ -29,8 +29,6 @@
 
 using namespace formula;
 
-
-
 static bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const OUString& rName )
 {
     if (pDocSh)
@@ -255,8 +253,6 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     if ( bDataChanged && HasDataLinks() )
         SvLinkSource::NotifyDataChanged();
 }
-
-
 
 
 

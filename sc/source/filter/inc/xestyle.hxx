@@ -58,8 +58,6 @@ enum XclExpColorType
     EXC_COLOR_TABBG             /// Spreadsheet tab bg color.
 };
 
-
-
 class XclExpPaletteImpl;
 
 /** Stores all used colors in the document.
@@ -131,8 +129,6 @@ class SvxFont;
 
 const size_t EXC_FONTLIST_NOTFOUND = static_cast< size_t >( -1 );
 
-
-
 /** Static helper functions for font export. */
 class XclExpFontHelper
 {
@@ -161,8 +157,6 @@ private:
                             ~XclExpFontHelper();
 };
 
-
-
 /** Stores all data of an Excel font and provides export of FONT records. */
 class XclExpFont : public XclExpRecord, protected XclExpRoot
 {
@@ -190,8 +184,6 @@ private:
     sal_uInt32          mnHash;         /// Hash value for fast comparison.
 };
 
-
-
 /** Used as placeholder for font index 4, which is not used in Excel. */
 class XclExpBlindFont : public XclExpFont
 {
@@ -204,8 +196,6 @@ public:
     /** Skips writing this record. */
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
-
-
 
 class ScPatternAttr;
 
@@ -275,8 +265,6 @@ struct XclExpNumFmt
     void SaveXml( XclExpXmlStream& rStrm );
 };
 
-
-
 class SvNumberFormatter;
 typedef ::std::auto_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
 
@@ -333,8 +321,6 @@ struct XclExpCellProt : public XclCellProt
     void                SaveXml( XclExpXmlStream& rStrm ) const;
 };
 
-
-
 /** Extends the XclCellAlign struct for export.
     @descr  Provides functions to fill from item sets and to fill to Excel record data. */
 struct XclExpCellAlign : public XclCellAlign
@@ -353,8 +339,6 @@ struct XclExpCellAlign : public XclCellAlign
 
     void                SaveXml( XclExpXmlStream& rStrm ) const;
 };
-
-
 
 /** Extends the XclCellBorder struct for export.
     @descr  Provides functions to fill from item sets and to fill to Excel record data. */
@@ -386,8 +370,6 @@ struct XclExpCellBorder : public XclCellBorder
 
     void                SaveXml( XclExpXmlStream& rStrm ) const;
 };
-
-
 
 /** Extends the XclCellArea struct for export.
     @descr  Provides functions to fill from item sets and to fill to Excel record data. */
@@ -426,8 +408,6 @@ struct XclExpColor
     void SaveXml( XclExpXmlStream& rStrm ) const;
 };
 
-
-
 /** A combination of unique XF identifier with real Excel XF index. */
 struct XclExpXFId
 {
@@ -440,8 +420,6 @@ struct XclExpXFId
     /** Converts the XF identifier in mnXFId to an Excel XF index and stores it in mnXFIndex. */
     void                ConvertXFIndex( const XclExpRoot& rRoot );
 };
-
-
 
 class SfxStyleSheetBase;
 
@@ -538,8 +516,6 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
 
-
-
 /** Represents a default XF record. Supports methods to set attributes directly. */
 class XclExpDefaultXF : public XclExpXF
 {
@@ -551,8 +527,6 @@ public:
     /** Sets the Excel number format index. */
     void                SetNumFmt( sal_uInt16 nXclNumFmt );
 };
-
-
 
 /** Represents a STYLE record containing the data of a cell style.
     @descr  The calss is able to store built-in and user-defined styles. */
@@ -579,8 +553,6 @@ private:
     sal_uInt8           mnStyleId;      /// Built-in style identifier.
     sal_uInt8           mnLevel;        /// Outline level for RowLevel and ColLevel styles.
 };
-
-
 
 /** Stores all XF records (cell formats and cell styles) in the document.
 
@@ -763,8 +735,6 @@ private:
     boost::scoped_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
 };
 
-
-
 class XclExpXmlStyleSheet : public XclExpRecordBase, protected XclExpRoot
 {
 public:
@@ -772,8 +742,6 @@ public:
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
-
-
 
 #endif
 

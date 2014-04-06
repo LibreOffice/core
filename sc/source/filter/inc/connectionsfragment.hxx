@@ -27,8 +27,6 @@ namespace xls {
 
 class Connection;
 
-
-
 class ConnectionContext : public WorkbookContextBase
 {
 public:
@@ -45,8 +43,6 @@ private:
     Connection&         mrConnection;
 };
 
-
-
 class ConnectionsFragment : public WorkbookFragmentBase
 {
 public:
@@ -61,8 +57,6 @@ protected:
     virtual const ::oox::core::RecordInfo* getRecordInfos() const SAL_OVERRIDE;
     virtual void        finalizeImport() SAL_OVERRIDE;
 };
-
-
 
 } // namespace xls
 } // namespace oox

@@ -36,8 +36,6 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-
-
 ScVbaButtonCharacters::ScVbaButtonCharacters(
         const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,
@@ -151,8 +149,6 @@ void ScVbaButtonCharacters::setFullString( const OUString& rString ) throw (uno:
 {
     mxPropSet->setPropertyValue( "Label", uno::Any( rString ) );
 }
-
-
 
 ScVbaSheetObjectBase::ScVbaSheetObjectBase(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -291,8 +287,6 @@ void ScVbaSheetObjectBase::implSetDefaultProperties() throw (uno::RuntimeExcepti
 {
 }
 
-
-
 ScVbaControlObjectBase::ScVbaControlObjectBase(
         const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,
@@ -419,8 +413,6 @@ sal_Int32 ScVbaControlObjectBase::getModelIndexInForm() const throw (uno::Runtim
     throw uno::RuntimeException();
 }
 
-
-
 ScVbaButton::ScVbaButton(
         const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,
@@ -534,7 +526,5 @@ void ScVbaButton::implSetDefaultProperties() throw (uno::RuntimeException)
 {
     setCaption( getName() );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

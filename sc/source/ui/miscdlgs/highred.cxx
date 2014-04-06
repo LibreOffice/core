@@ -242,6 +242,4 @@ IMPL_LINK( ScHighlightChgDlg, OKBtnHdl, PushButton*, pOKBtn )
     return 0;
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

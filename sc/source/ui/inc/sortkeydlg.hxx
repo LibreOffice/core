@@ -23,8 +23,6 @@
 #include <svtools/stdctrl.hxx>
 #include <svx/langbox.hxx>
 
-
-
 struct ScSortKeyItem : public VclBuilderContainer
 {
     VclFrame*       m_pFrame;
@@ -43,8 +41,6 @@ struct ScSortKeyItem : public VclBuilderContainer
 
 typedef boost::ptr_vector<ScSortKeyItem> ScSortKeyItems;
 
-
-
 class ScSortKeyWindow
 {
 private:
@@ -62,8 +58,6 @@ public:
     sal_Int32 GetItemHeight() const { return nItemHeight; }
     sal_Int32 GetTotalHeight() const { return m_pBox->GetSizePixel().Height(); }
 };
-
-
 
 class ScSortKeyCtrl
 {

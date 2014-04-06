@@ -30,8 +30,6 @@
 
 #include "tabopdlg.hxx"
 
-
-
 //  class ScTabOpDlg
 
 
@@ -77,14 +75,10 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     Init();
 }
 
-
-
 ScTabOpDlg::~ScTabOpDlg()
 {
     Hide();
 }
-
-
 
 void ScTabOpDlg::Init()
 {
@@ -114,14 +108,10 @@ void ScTabOpDlg::Init()
     //SFX_APPWINDOW->Enable();
 }
 
-
-
 bool ScTabOpDlg::Close()
 {
     return DoClose( ScTabOpDlgWrapper::GetChildWindowId() );
 }
-
-
 
 void ScTabOpDlg::SetActive()
 {
@@ -136,8 +126,6 @@ void ScTabOpDlg::SetActive()
 
     RefInputDone();
 }
-
-
 
 void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
@@ -173,8 +161,6 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         pEdActive->SetRefString( aStr );
     }
 }
-
-
 
 void ScTabOpDlg::RaiseError( ScTabOpErr eError )
 {
@@ -222,8 +208,6 @@ void ScTabOpDlg::RaiseError( ScTabOpErr eError )
     MessageDialog(this, *pMsg, VCL_MESSAGE_ERROR, VCL_BUTTONS_OK_CANCEL).Execute();
     pEd->GrabFocus();
 }
-
-
 
 static sal_Bool lcl_Parse( const OUString& rString, ScDocument* pDoc, SCTAB nCurTab,
                 ScRefAddress& rStart, ScRefAddress& rEnd )
@@ -323,8 +307,6 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
     return 0;
 }
 
-
-
 IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )
 {
     if( (pCtrl == (Control*)m_pEdFormulaRange) || (pCtrl == (Control*)m_pRBFormulaRange) )
@@ -342,15 +324,11 @@ IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(ScTabOpDlg, LoseFocusHdl)
 {
     bDlgLostFocus = !IsActive();
     return 0;
 }
-
-
 
 
 

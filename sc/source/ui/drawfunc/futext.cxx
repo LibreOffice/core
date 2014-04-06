@@ -46,8 +46,6 @@
 //! fusel,fuconstr,futext - zusammenfassen!
 #define SC_MAXDRAGMOVE  3
 
-
-
 static void lcl_InvalidateAttribs( SfxBindings& rBindings )
 {
     rBindings.Invalidate( SID_ATTR_CHAR_WEIGHT );
@@ -567,8 +565,6 @@ void FuText::ForcePointer(const MouseEvent* /* pMEvt */)
     pViewShell->SetActivePointer( aNewPointer );
 }
 
-
-
 /*************************************************************************
 |*
 |* Tastaturereignisse bearbeiten
@@ -594,8 +590,6 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
 
     return bReturn;
 }
-
-
 
 /*************************************************************************
 |*

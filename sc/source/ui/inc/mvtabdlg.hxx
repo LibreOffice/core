@@ -28,8 +28,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 
-
-
 class ScMoveTableDlg : public ModalDialog
 {
 public:

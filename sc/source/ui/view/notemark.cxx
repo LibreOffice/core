@@ -35,8 +35,6 @@
 #define SC_NOTEMARK_TIME    800
 #define SC_NOTEMARK_SHORT   70
 
-
-
 ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
                             ScDocument* pD, ScAddress aPos, const OUString& rUser,
                             const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard ) :
@@ -188,8 +186,6 @@ void ScNoteMarker::InvalidateWin()
         }
     }
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

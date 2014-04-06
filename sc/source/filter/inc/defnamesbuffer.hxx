@@ -32,8 +32,6 @@ namespace xls {
 
 class BiffInputStreamPos;
 
-
-
 // codes for built-in names
 const sal_Unicode BIFF_DEFNAME_CONSOLIDATEAREA  = '\x00';
 const sal_Unicode BIFF_DEFNAME_AUTOOPEN         = '\x01';   // Sheet macro executed when workbook is opened.
@@ -51,8 +49,6 @@ const sal_Unicode BIFF_DEFNAME_SHEETTITLE       = '\x0C';
 const sal_Unicode BIFF_DEFNAME_FILTERDATABASE   = '\x0D';   // Sheet range autofilter or advanced filter works on.
 const sal_Unicode BIFF_DEFNAME_UNKNOWN          = '\x0E';
 
-
-
 struct DefinedNameModel
 {
     OUString     maName;         /// The original name.
@@ -66,8 +62,6 @@ struct DefinedNameModel
 
     explicit            DefinedNameModel();
 };
-
-
 
 /** Base class for defined names and external names. */
 class DefinedNameBase : public WorkbookHelper
@@ -99,8 +93,6 @@ protected:
     OUString     maCalcName;         /// Final name used in the Calc document.
     ::com::sun::star::uno::Any maRefAny;    /// Single cell/range reference.
 };
-
-
 
 class DefinedName : public DefinedNameBase
 {
@@ -158,8 +150,6 @@ private:
 
 typedef ::boost::shared_ptr< DefinedName > DefinedNameRef;
 
-
-
 class DefinedNamesBuffer : public WorkbookHelper
 {
 public:
@@ -204,8 +194,6 @@ private:
     DefNameBuiltinMap   maBuiltinMap;       /// Maps all defined names by sheet index and built-in identifier.
     DefNameTokenIdMap   maTokenIdMap;       /// Maps all defined names by API token index.
 };
-
-
 
 } // namespace xls
 } // namespace oox

@@ -213,8 +213,6 @@ ScDocument& ScHTMLParser::GetDoc()
     return *mpDoc;
 }
 
-
-
 ScHTMLLayoutParser::ScHTMLLayoutParser(
     EditEngine* pEditP, const OUString& rBaseURL, const Size& aPageSizeP,
     ScDocument* pDocP ) :
@@ -1762,8 +1760,6 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
 }
 
 
-
-
 // HTML DATA QUERY PARSER
 
 
@@ -1823,8 +1819,6 @@ void ScHTMLEntry::Strip( const EditEngine& rEditEngine )
     }
 }
 
-
-
 /** A map of ScHTMLTable objects.
 
     Organizes the tables with a unique table key. Stores nested tables inside
@@ -1872,8 +1866,6 @@ private:
                             { if( pTable ) mpCurrTable = pTable; }
 };
 
-
-
 ScHTMLTableMap::ScHTMLTableMap( ScHTMLTable& rParentTable ) :
     mrParentTable(rParentTable),
     mpCurrTable(NULL)
@@ -1913,8 +1905,6 @@ ScHTMLTable* ScHTMLTableMap::CreateTable( const ImportInfo& rInfo, bool bPreForm
     return pTable;
 }
 
-
-
 /** Simplified forward iterator for convenience.
 
     Before the iterator can be dereferenced, it must be tested with the is()
@@ -1949,16 +1939,12 @@ ScHTMLTableIterator::ScHTMLTableIterator( const ScHTMLTableMap* pTableMap ) :
     }
 }
 
-
-
 ScHTMLTableAutoId::ScHTMLTableAutoId( ScHTMLTableId& rnUnusedId ) :
     mnTableId( rnUnusedId ),
     mrnUnusedId( rnUnusedId )
 {
     ++mrnUnusedId;
 }
-
-
 
 ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const ImportInfo& rInfo, bool bPreFormText ) :
     mpParentTable( &rParentTable ),
@@ -2417,8 +2403,6 @@ SvNumberFormatter* ScHTMLTable::GetFormatTable()
     return mpParser->GetDoc().GetFormatTable();
 }
 
-
-
 bool ScHTMLTable::IsEmptyCell() const
 {
     return mpCurrEntryList && mpCurrEntryList->empty();
@@ -2709,8 +2693,6 @@ void ScHTMLTable::CalcNeededDocSize(
     SetDocSize( eOrient, nCellPos, nRealDocSize );
 }
 
-
-
 void ScHTMLTable::FillEmptyCells()
 {
     for( ScHTMLTableIterator aIter( mxNestedTables.get() ); aIter.is(); ++aIter )
@@ -2883,8 +2865,6 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
     }
 }
 
-
-
 ScHTMLGlobalTable::ScHTMLGlobalTable(
     SfxItemPool& rPool,
     EditEngine& rEditEngine,
@@ -2909,8 +2889,6 @@ void ScHTMLGlobalTable::Recalc()
     // recalc document positions of all entries in this table and in nested tables
     RecalcDocPos( GetDocPos() );
 }
-
-
 
 ScHTMLQueryParser::ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument* pDoc ) :
     ScHTMLParser( pEditEngine, pDoc ),
@@ -3273,8 +3251,6 @@ void ScHTMLQueryParser::ParseStyle(const OUString&) {}
 
 #endif
 
-
-
 IMPL_LINK( ScHTMLQueryParser, HTMLImportHdl, const ImportInfo*, pInfo )
 {
     switch( pInfo->eState )
@@ -3306,7 +3282,5 @@ IMPL_LINK( ScHTMLQueryParser, HTMLImportHdl, const ImportInfo*, pInfo )
     }
     return 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

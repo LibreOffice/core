@@ -27,11 +27,7 @@
 #include <svtools/ctrlbox.hxx>
 #include <svx/strarray.hxx>
 
-
-
 class ScViewOptions;
-
-
 
 class ScTpContentOptions : public SfxTabPage
 {
@@ -84,8 +80,6 @@ public:
 
 
 };
-
-
 
 class ScDocument;
 class ScTpLayoutOptions : public SfxTabPage

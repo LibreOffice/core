@@ -71,8 +71,6 @@ public:
     bool        Next( SCROW& rTop, SCROW& rBottom );
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

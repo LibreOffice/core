@@ -21,8 +21,6 @@
 
 using namespace ::com::sun::star;
 
-
-
 TYPEINIT1(ScAccWinFocusLostHint, SfxHint);
 
 
@@ -39,8 +37,6 @@ ScAccWinFocusLostHint::ScAccWinFocusLostHint(
 ScAccWinFocusLostHint::~ScAccWinFocusLostHint()
 {
 }
-
-
 
 TYPEINIT1(ScAccWinFocusGotHint, SfxHint);
 
@@ -77,8 +73,6 @@ ScAccGridWinFocusLostHint::ScAccGridWinFocusLostHint(ScSplitPos eOld,
 ScAccGridWinFocusLostHint::~ScAccGridWinFocusLostHint()
 {
 }
-
-
 
 TYPEINIT1(ScAccGridWinFocusGotHint, SfxHint);
 

@@ -36,8 +36,6 @@ void XclExpRecordBase::SaveXml( XclExpXmlStream& /*rStrm*/ )
 {
 }
 
-
-
 XclExpDelegatingRecord::XclExpDelegatingRecord( XclExpRecordBase* pRecord ) :
     mpRecord( pRecord )
 {
@@ -55,8 +53,6 @@ void XclExpDelegatingRecord::SaveXml( XclExpXmlStream& rStrm )
         mpRecord->SaveXml( rStrm );
 }
 
-
-
 XclExpXmlElementRecord::XclExpXmlElementRecord(sal_Int32 const nElement)
     : mnElement( nElement )
 {
@@ -65,8 +61,6 @@ XclExpXmlElementRecord::XclExpXmlElementRecord(sal_Int32 const nElement)
 XclExpXmlElementRecord::~XclExpXmlElementRecord()
 {
 }
-
-
 
 XclExpXmlStartElementRecord::XclExpXmlStartElementRecord(sal_Int32 const nElement)
     : XclExpXmlElementRecord(nElement)
@@ -85,8 +79,6 @@ void XclExpXmlStartElementRecord::SaveXml( XclExpXmlStream& rStrm )
     rStream->startElement( mnElement, FSEND );
 }
 
-
-
 XclExpXmlEndElementRecord::XclExpXmlEndElementRecord( sal_Int32 nElement )
     : XclExpXmlElementRecord( nElement )
 {
@@ -100,8 +92,6 @@ void XclExpXmlEndElementRecord::SaveXml( XclExpXmlStream& rStrm )
 {
     rStrm.GetCurrentStream()->endElement( mnElement );
 }
-
-
 
 XclExpXmlStartSingleElementRecord::XclExpXmlStartSingleElementRecord(
             sal_Int32 const nElement)
@@ -119,8 +109,6 @@ void XclExpXmlStartSingleElementRecord::SaveXml( XclExpXmlStream& rStrm )
     rStream->write( "<" )->writeId( mnElement );
 }
 
-
-
 XclExpXmlEndSingleElementRecord::XclExpXmlEndSingleElementRecord()
 {
 }
@@ -133,8 +121,6 @@ void XclExpXmlEndSingleElementRecord::SaveXml( XclExpXmlStream& rStrm )
 {
     rStrm.GetCurrentStream()->write( "/>" );
 }
-
-
 
 XclExpRecord::XclExpRecord( sal_uInt16 nRecId, sal_Size nRecSize ) :
     mnRecSize( nRecSize ),
@@ -164,8 +150,6 @@ void XclExpRecord::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 }
 
-
-
 template<>
 void XclExpValueRecord<double>::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -175,8 +159,6 @@ void XclExpValueRecord<double>::SaveXml( XclExpXmlStream& rStrm )
         mnAttribute,    OString::number( maValue ).getStr(),
         FSEND );
 }
-
-
 
 void XclExpBoolRecord::WriteBody( XclExpStream& rStrm )
 {
@@ -193,8 +175,6 @@ void XclExpBoolRecord::SaveXml( XclExpXmlStream& rStrm )
             mnAttribute, mnAttribute == XML_showObjects ? "all" : XclXmlUtils::ToPsz( mbValue ),
             FSEND );
 }
-
-
 
 XclExpDummyRecord::XclExpDummyRecord( sal_uInt16 nRecId, const void* pRecData, sal_Size nRecSize ) :
     XclExpRecord( nRecId )
@@ -230,8 +210,6 @@ void XclExpFutureRecord::Save( XclExpStream& rStrm )
     WriteBody( rStrm );
     rStrm.EndRecord();
 }
-
-
 
 XclExpSubStream::XclExpSubStream( sal_uInt16 nSubStrmType ) :
     mnSubStrmType( nSubStrmType )
@@ -280,7 +258,5 @@ void XclExpSubStream::Save( XclExpStream& rStrm )
     rStrm.StartRecord( EXC_ID_EOF, 0 );
     rStrm.EndRecord();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

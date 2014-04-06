@@ -67,8 +67,6 @@ using ::std::auto_ptr;
 using ::std::vector;
 
 
-
-
 //  former viewfunc/dbfunc methods
 
 
@@ -290,8 +288,6 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                                 true, bHasHeader );
                 aDocument.SetAnonymousDBData(nTab, pNoNameData);
             }
-
-
 
             if ( pUndoColl )
             {

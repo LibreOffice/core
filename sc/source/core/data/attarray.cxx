@@ -63,8 +63,6 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc ) :
     pData[0].pPattern = pDocument->GetDefPattern(); // no put
 }
 
-
-
 ScAttrArray::~ScAttrArray()
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -106,8 +104,6 @@ void ScAttrArray::TestData() const
     }
 }
 #endif
-
-
 
 void ScAttrArray::Reset( const ScPatternAttr* pPattern )
 {
@@ -178,8 +174,6 @@ bool ScAttrArray::Concat(SCSIZE nPos)
     }
     return bRet;
 }
-
-
 
 bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
@@ -341,8 +335,6 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
     while(nTempEndRow < nEndRow);
 
 }
-
-
 
 void ScAttrArray::SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool )
 {
@@ -970,8 +962,6 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
         while (nStart <= nEndRow);
     }
 }
-
-
 
 // assemble border
 

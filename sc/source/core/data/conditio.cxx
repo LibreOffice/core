@@ -1541,8 +1541,6 @@ void ScConditionEntry::endRendering()
     mpCache.reset();
 }
 
-
-
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         const OUString& rExpr1, const OUString& rExpr2,
                                         ScDocument* pDocument, const ScAddress& rPos,
@@ -1596,8 +1594,6 @@ ScFormatEntry* ScCondFormatEntry::Clone( ScDocument* pDoc ) const
 {
     return new ScCondFormatEntry( pDoc, *this );
 }
-
-
 
 ScCondDateFormatEntry::ScCondDateFormatEntry( ScDocument* pDoc )
     : ScFormatEntry( pDoc )
@@ -1786,8 +1782,6 @@ void ScCondDateFormatEntry::endRendering()
 {
     mpCache.reset();
 }
-
-
 
 ScConditionalFormat::ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument) :
     pDoc( pDocument ),
@@ -2090,8 +2084,6 @@ void ScConditionalFormat::endRendering()
         itr->endRendering();
     }
 }
-
-
 
 ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList)
 {

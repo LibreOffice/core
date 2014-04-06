@@ -57,8 +57,6 @@ enum FUNC_TYPE
 };
 
 
-
-
 class LotusToSc : public LotusConverterBase
 {
 private:
@@ -114,8 +112,6 @@ inline void LotusToSc::SetWK3( void )
 {
         bWK3 = true;
 }
-
-
 
 #endif
 

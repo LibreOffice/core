@@ -26,8 +26,6 @@
 namespace oox {
 namespace xls {
 
-
-
 class CommentsFragment : public WorksheetFragmentBase
 {
 public:
@@ -53,8 +51,6 @@ private:
 private:
     CommentRef          mxComment;
 };
-
-
 
 } // namespace xls
 } // namespace oox

@@ -20,8 +20,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
@@ -156,8 +154,6 @@ IMPL_LINK( ScHFEditPage, ObjectSelectHdl, ScEditWindow*, pEdit )
     return 0;
 }
 
-
-
 ScHFEditPage::~ScHFEditPage()
 {
 }
@@ -206,15 +202,11 @@ bool ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
     return true;
 }
 
-
-
 #define SET_CMD(i,id) \
     aCmd  = aDel;                           \
     aCmd += ScGlobal::GetRscString( id );   \
     aCmd += aDel;                           \
     aCmdArr[i] = aCmd;
-
-
 
 void ScHFEditPage::FillCmdArr()
 {
@@ -851,8 +843,6 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet&
                     true )
     {}
 
-
-
 SfxTabPage* ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightHeaderEditPage( pParent, rCoreSet ) ); };
 
@@ -866,8 +856,6 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& r
                     rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERLEFT ),
                     true )
     {}
-
-
 
 SfxTabPage* ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScLeftHeaderEditPage( pParent, rCoreSet ) ); };
@@ -883,8 +871,6 @@ ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet&
                     false )
     {}
 
-
-
 SfxTabPage* ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightFooterEditPage( pParent, rCoreSet ) ); };
 
@@ -898,8 +884,6 @@ ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& r
                     rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERLEFT ),
                     false )
     {}
-
-
 
 SfxTabPage* ScLeftFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScLeftFooterEditPage( pParent, rCoreSet ) ); };

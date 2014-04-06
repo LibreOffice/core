@@ -43,16 +43,12 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::Relation;
 using ::oox::core::Relations;
-
-
 
 namespace {
 
@@ -68,8 +64,6 @@ const sal_uInt16 BIFF12_EXTNAME_ICONIFIED   = 0x0020;
 
 } // namespace
 
-
-
 ExternalNameModel::ExternalNameModel() :
     mbBuiltIn( false ),
     mbNotify( false ),
@@ -79,8 +73,6 @@ ExternalNameModel::ExternalNameModel() :
     mbIconified( false )
 {
 }
-
-
 
 ExternalName::ExternalName( const ExternalLink& rParentLink ) :
     DefinedNameBase( rParentLink ),
@@ -271,8 +263,6 @@ void ExternalName::setResultSize( sal_Int32 nColumns, sal_Int32 nRows )
     maCurrIt = maResults.begin();
 }
 
-
-
 void LinkSheetRange::setDeleted()
 {
     meType = LINKSHEETRANGE_INTERNAL;
@@ -308,8 +298,6 @@ void LinkSheetRange::setExternalRange( sal_Int32 nDocLink, sal_Int32 nFirst, sal
         mnLast = ::std::max( nFirst, nLast );
     }
 }
-
-
 
 ExternalLink::ExternalLink( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -624,8 +612,6 @@ ExternalNameRef ExternalLink::createExternalName()
     return xExtName;
 }
 
-
-
 RefSheetsModel::RefSheetsModel() :
     mnExtRefId( -1 ),
     mnTabId1( -1 ),
@@ -637,8 +623,6 @@ void RefSheetsModel::readBiff12Data( SequenceInputStream& rStrm )
 {
     rStrm >> mnExtRefId >> mnTabId1 >> mnTabId2;
 }
-
-
 
 ExternalLinkBuffer::ExternalLinkBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -795,8 +779,6 @@ const RefSheetsModel* ExternalLinkBuffer::getRefSheets( sal_Int32 nRefId ) const
     return ((0 <= nRefId) && (static_cast< size_t >( nRefId ) < maRefSheets.size())) ?
         &maRefSheets[ static_cast< size_t >( nRefId ) ] : 0;
 }
-
-
 
 } // namespace xls
 } // namespace oox

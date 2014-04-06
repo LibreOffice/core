@@ -47,8 +47,6 @@ using namespace ::com::sun::star::script::vba::VBAEventId;
 using namespace ::ooo::vba;
 
 
-
-
 namespace {
 
 /** Extracts a sheet index from the specified element of the passed sequence.
@@ -109,8 +107,6 @@ uno::Reference< awt::XWindow > lclGetWindowForController( const uno::Reference< 
 }
 
 } // namespace
-
-
 
 typedef ::cppu::WeakImplHelper4< awt::XTopWindowListener, awt::XWindowListener, frame::XBorderResizeListener, util::XChangesListener > ScVbaEventListener_BASE;
 
@@ -179,8 +175,6 @@ private:
     bool                mbBorderChanged;        /// True = borders changed system event processed.
     bool                mbDisposed;
 };
-
-
 
 ScVbaEventListener::ScVbaEventListener( ScVbaEventsHelper& rVbaEvents, const uno::Reference< frame::XModel >& rxModel, ScDocShell* pDocShell ) :
     mrVbaEvents( rVbaEvents ),
@@ -510,8 +504,6 @@ IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, Window*, EMPTYARG pWind
     release();
     return 0;
 }
-
-
 
 ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs, const uno::Reference< uno::XComponentContext >& xContext ) :
     VbaEventsHelperBase( rArgs, xContext ),

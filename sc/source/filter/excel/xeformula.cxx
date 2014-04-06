@@ -63,8 +63,6 @@ struct XclExpScToken
     inline OpCode       GetOpCode() const { return mpScToken ? mpScToken->GetOpCode() : static_cast< OpCode >( ocNone ); }
 };
 
-
-
 /** Effective token class conversion types. */
 enum XclExpClassConv
 {
@@ -72,8 +70,6 @@ enum XclExpClassConv
     EXC_CLASSCONV_VAL,          /// Convert ARR tokens to VAL class (REF remains uncahnged).
     EXC_CLASSCONV_ARR           /// Convert VAL tokens to ARR class (REF remains uncahnged).
 };
-
-
 
 /** Token class conversion and position of a token in the token array. */
 struct XclExpTokenConvInfo
@@ -103,8 +99,6 @@ void XclExpOperandList::AppendOperand( sal_uInt16 nTokPos, XclFuncParamConv eCon
 typedef boost::shared_ptr< XclExpOperandList > XclExpOperandListRef;
 typedef ::std::vector< XclExpOperandListRef > XclExpOperandListVector;
 
-
-
 /** Encapsulates all data needed for a call to an external function (macro, add-in). */
 struct XclExpExtFuncData
 {
@@ -122,8 +116,6 @@ void XclExpExtFuncData::Set( const OUString& rFuncName, bool bVBasic, bool bHidd
     mbVBasic = bVBasic;
     mbHidden = bHidden;
 }
-
-
 
 /** Encapsulates all data needed to process an entire function. */
 class XclExpFuncData
@@ -261,8 +253,6 @@ static const XclExpCompConfig spConfigTable[] =
     { EXC_FMLATYPE_LISTVAL, EXC_CLASSTYPE_NAME,  true,  false, false, false }
 };
 
-
-
 /** Working data of the formula compiler. Used to push onto a stack for recursive calls. */
 struct XclExpCompData
 {
@@ -299,8 +289,6 @@ XclExpCompData::XclExpCompData( const XclExpCompConfig* pCfg ) :
 }
 
 } // namespace
-
-
 
 /** Implementation class of the export formula compiler. */
 class XclExpFmlaCompImpl : protected XclExpRoot, protected XclTokenArrayHelper
@@ -479,8 +467,6 @@ private:
     const sal_uInt16    mnMaxColMask;   /// Mask to delete invalid bits in column fields.
     const sal_uInt32    mnMaxRowMask;   /// Mask to delete invalid bits in row fields.
 };
-
-
 
 XclExpFmlaCompImpl::XclExpFmlaCompImpl( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -2552,8 +2538,6 @@ void XclExpFmlaCompImpl::AppendExt( const OUString& rString )
     lclAppend( mxData->maExtDataVec, GetRoot(), rString, (meBiff == EXC_BIFF8) ? EXC_STR_DEFAULT : EXC_STR_8BITLENGTH );
 }
 
-
-
 namespace {
 
 void lclInitOwnTab( ScSingleRefData& rRef, const ScAddress& rScPos, SCTAB nCurrScTab, bool b3DRefOnly )
@@ -2594,8 +2578,6 @@ void lclPutRangeToTokenArray( ScTokenArray& rScTokArr, const ScRange& rScRange, 
 }
 
 } // namespace
-
-
 
 XclExpFormulaCompiler::XclExpFormulaCompiler( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),

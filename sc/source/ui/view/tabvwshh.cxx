@@ -40,8 +40,6 @@
 
 using namespace com::sun::star;
 
-
-
 void ScTabViewShell::ExecuteSbx( SfxRequest& /* rReq */ )
 {
     //  SID_RANGE_OFFSET (Offset),
@@ -52,8 +50,6 @@ void ScTabViewShell::GetSbxState( SfxItemSet& /* rSet */ )
 {
     //  SID_RANGE_REGION (CurrentRegion) - removed (old Basic)
 }
-
-
 
 void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
 {
@@ -272,8 +268,6 @@ bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
     pDlg->WriteNewDataToDocument(*pDoc);
     return true;
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

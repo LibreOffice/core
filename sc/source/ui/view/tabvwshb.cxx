@@ -487,8 +487,6 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 }
 
 
-
-
 void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 {
     SfxShell* pSh = GetViewData()->GetDispatcher().GetShell(0);
@@ -580,7 +578,5 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
         nWhich = aIter.NextWhich();
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

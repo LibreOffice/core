@@ -98,8 +98,6 @@ using namespace ::com::sun::star;
 #include "sheetevents.hxx"
 #include <documentlinkmgr.hxx>
 
-
-
 #define IS_SHARE_HEADER(set) \
     ((SfxBoolItem&) \
         ((SvxSetItem&)(set).Get(ATTR_PAGE_HEADERSET)).GetItemSet(). \
@@ -112,8 +110,6 @@ using namespace ::com::sun::star;
 
 #define SC_PREVIEW_SIZE_X   10000
 #define SC_PREVIEW_SIZE_Y   12400
-
-
 
 
 void ScDocShell::Execute( SfxRequest& rReq )
@@ -1114,8 +1110,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
 }
 
 
-
-
 void UpdateAcceptChangesDialog()
 {
     //  update "accept changes" dialog
@@ -1128,8 +1122,6 @@ void UpdateAcceptChangesDialog()
             ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
     }
 }
-
-
 
 bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, bool bJustQueryIfProtected )
 {
@@ -1193,8 +1185,6 @@ bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, bool bJustQuer
         bDone = true;
     return bDone;
 }
-
-
 
 
 void ScDocShell::DoRecalc( bool bApi )
@@ -1272,8 +1262,6 @@ void ScDocShell::DoHardRecalc( bool /* bApi */ )
     PostPaintGridAll();
 }
 
-
-
 void ScDocShell::DoAutoStyle( const ScRange& rRange, const OUString& rStyle )
 {
     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
@@ -1296,8 +1284,6 @@ void ScDocShell::DoAutoStyle( const ScRange& rRange, const OUString& rStyle )
         PostPaint( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab, PAINT_GRID );
     }
 }
-
-
 
 void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 {
@@ -2198,16 +2184,12 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
     return pObj;
 }
 
-
-
 ScViewData* ScDocShell::GetViewData()
 {
     SfxViewShell* pCur = SfxViewShell::Current();
     ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,pCur);
     return pViewSh ? pViewSh->GetViewData() : NULL;
 }
-
-
 
 SCTAB ScDocShell::GetCurTab()
 {
@@ -2248,8 +2230,6 @@ SfxBindings* ScDocShell::GetViewBindings()
         return NULL;
 }
 
-
-
 ScDocShell* ScDocShell::GetShellByNum( sal_uInt16 nDocNo )      // static
 {
     ScDocShell* pFound = NULL;
@@ -2270,8 +2250,6 @@ ScDocShell* ScDocShell::GetShellByNum( sal_uInt16 nDocNo )      // static
 
     return pFound;
 }
-
-
 
 IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 {

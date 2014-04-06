@@ -65,8 +65,6 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 };
 
-
-
 class ScXMLTableProtectionContext : public SvXMLImportContext
 {
     ScXMLImport& GetScImport();

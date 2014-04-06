@@ -594,8 +594,6 @@ static const XclFunctionInfo saFuncTable_OOoLO[] =
 
 #undef EXC_FUNCENTRY_OOO
 
-
-
 XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
 {
     void (XclFunctionProvider::*pFillFunc)( const XclFunctionInfo*, const XclFunctionInfo* ) =
@@ -758,8 +756,6 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArrayRef& rxTokArr 
         rStrm << sal_uInt16( 0 );
     return rStrm;
 }
-
-
 
 XclTokenArrayIterator::XclTokenArrayIterator() :
     mppScTokenBeg( 0 ),
@@ -954,7 +950,5 @@ bool XclTokenArrayHelper::GetMultipleOpRefs(
     }
     return eState == stClose;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

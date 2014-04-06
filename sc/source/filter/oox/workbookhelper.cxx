@@ -90,8 +90,6 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
@@ -106,16 +104,12 @@ using ::oox::core::FragmentHandler;
 using ::oox::core::XmlFilterBase;
 using ::oox::drawingml::Theme;
 
-
-
 bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rName2 ) const
 {
     // there is no wrapper in OUString, TODO: compare with collator
     return ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
         rName1.getStr(), rName1.getLength(), rName2.getStr(), rName2.getLength() ) < 0;
 }
-
-
 
 class WorkbookGlobals : boost::noncopyable
 {
@@ -317,8 +311,6 @@ private:
     ScDocShell* mpDocShell;
     boost::scoped_ptr<ScDocumentImport> mxDocImport;
 };
-
-
 
 WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     mrBaseFilter( rFilter ),
@@ -707,8 +699,6 @@ void WorkbookGlobals::recalcFormulaCells()
         rDoc.CalcFormulaTree(false, true, false);
 }
 
-
-
 WorkbookHelper::~WorkbookHelper()
 {
 }
@@ -1033,8 +1023,6 @@ BiffCodecHelper& WorkbookHelper::getCodecHelper() const
 {
     return mrBookGlob.getCodecHelper();
 }
-
-
 
 } // namespace xls
 } // namespace oox

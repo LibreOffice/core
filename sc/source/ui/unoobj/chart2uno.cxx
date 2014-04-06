@@ -243,8 +243,6 @@ vector<ScTokenRef>* TokenTable::getAllRanges() const
     return pTokens.release();
 }
 
-
-
 typedef std::map<sal_uInt32, FormulaToken*> FormulaTokenMap;
 typedef std::map<sal_uInt32, FormulaTokenMap*> FormulaTokenMapMap;
 
@@ -432,8 +430,6 @@ vector<ScTokenRef>* Chart2PositionMap::getDataRowRanges(SCROW nRow) const
 {
     return maData.getRowRanges( nRow);
 }
-
-
 
 /**
  * Designed to be a drop-in replacement for ScChartPositioner, in order to
@@ -829,8 +825,6 @@ void Chart2Positioner::createPositionMap()
         delete pCol;
     }
 }
-
-
 
 /**
  * Function object to create a range string from a token list.
@@ -2970,8 +2964,6 @@ IMPL_LINK( ScChart2DataSequence, ValueListenerHdl, SfxHint*, pHint )
     return 0;
 }
 
-
-
 ScChart2DataSequence::ExternalRefListener::ExternalRefListener(
     ScChart2DataSequence& rParent, ScDocument* pDoc) :
     ScExternalRefManager::LinkListener(),
@@ -3021,8 +3013,6 @@ const boost::unordered_set<sal_uInt16>& ScChart2DataSequence::ExternalRefListene
 {
     return maFileIds;
 }
-
-
 
 uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
     throw (uno::RuntimeException, std::exception)

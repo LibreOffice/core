@@ -35,12 +35,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-
-
 namespace calc
 {
-
-
 
     //= OCellValueBinding
 

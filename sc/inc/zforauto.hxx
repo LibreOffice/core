@@ -57,8 +57,6 @@ public:
     inline LanguageType GetLanguage() const { return eLnge; }
 };
 
-
-
 #endif
 
 

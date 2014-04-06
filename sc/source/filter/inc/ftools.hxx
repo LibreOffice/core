@@ -118,8 +118,6 @@ void insert_value( Type& rnBitField, InsertType nValue, sal_uInt8 nStartBit, sal
     (rnBitField &= ~(nMask << nStartBit)) |= (nNewValue << nStartBit);
 }
 
-
-
 class Color;
 class SfxPoolItem;
 class SfxItemSet;
@@ -270,8 +268,6 @@ typedef ::std::vector< sal_Int32 >                  ScfInt32Vec;
 typedef ::std::vector< sal_uInt32 >                 ScfUInt32Vec;
 typedef ::std::vector< OUString >            ScfStringVec;
 
-
-
 class ScFormatFilterPluginImpl : public ScFormatFilterPlugin
 {
 public:
@@ -309,8 +305,6 @@ public:
 
     virtual ScOrcusFilters* GetOrcusFilters() SAL_OVERRIDE;
 };
-
-
 
 #endif
 

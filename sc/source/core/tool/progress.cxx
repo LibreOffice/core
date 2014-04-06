@@ -159,8 +159,6 @@ void ScProgress::CreateInterpretProgress( ScDocument* pDoc, bool bWait )
     }
 }
 
-
-
 void ScProgress::DeleteInterpretProgress()
 {
     if ( bAllowInterpretProgress && nInterpretProgress )
@@ -185,7 +183,5 @@ void ScProgress::DeleteInterpretProgress()
         --nInterpretProgress;
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

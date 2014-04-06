@@ -20,8 +20,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include <vcl/waitobj.hxx>
 
 #include "viewdata.hxx"
@@ -240,8 +238,6 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     }
 }
 
-
-
 void ScPivotFilterDlg::FillFieldLists()
 {
     m_pLbField1->Clear();
@@ -276,8 +272,6 @@ void ScPivotFilterDlg::FillFieldLists()
         nFieldCount = i;
     }
 }
-
-
 
 void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
 {
@@ -323,8 +317,6 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
     }
 }
 
-
-
 void ScPivotFilterDlg::ClearValueList( sal_uInt16 nList )
 {
     if ( nList>0 && nList<=3 )
@@ -337,8 +329,6 @@ void ScPivotFilterDlg::ClearValueList( sal_uInt16 nList )
     }
 }
 
-
-
 sal_uInt16 ScPivotFilterDlg::GetFieldSelPos( SCCOL nField )
 {
     if ( nField >= theQueryData.nCol1 && nField <= theQueryData.nCol2 )
@@ -346,8 +336,6 @@ sal_uInt16 ScPivotFilterDlg::GetFieldSelPos( SCCOL nField )
     else
         return 0;
 }
-
-
 
 const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
 {
@@ -517,8 +505,6 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
     return 0;
 }
 
-
-
 IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 {
     //  bei Gross-/Kleinschreibung die Werte-Listen aktualisieren
@@ -541,8 +527,6 @@ IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 
     return 0;
 }
-
-
 
 IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
 {

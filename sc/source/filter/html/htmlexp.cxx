@@ -86,8 +86,6 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
-
-
 const static sal_Char sMyBegComment[]   = "<!-- ";
 const static sal_Char sMyEndComment[]   = " -->";
 const static sal_Char sFontFamily[]     = "font-family:";
@@ -127,8 +125,6 @@ const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
 #define OUT_SP_CSTR_ASS( s )    rStrm.WriteChar( ' ').WriteCharPtr( s ).WriteChar( '=' )
 
 #define GLOBSTR(id) ScGlobal::GetRscString( id )
-
-
 
 
 
@@ -205,8 +201,6 @@ static OString lcl_makeHTMLColorTriplet(const Color& rColor)
     aStr.append('\"');
     return aStr.makeStringAndClear();
 }
-
-
 
 ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocument* pDocP,
                             const ScRange& rRangeP,
@@ -764,8 +758,6 @@ void ScHTMLExport::WriteTables()
                 TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_colgroup );
             }
         }
-
-
 
         // <TBODY> // Re-enable only when THEAD and TFOOT are exported
         // IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tbody );

@@ -62,8 +62,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-
-
 typedef std::list< uno::Reference< XAccessible > > ScXAccList;
 
 

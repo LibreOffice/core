@@ -36,8 +36,6 @@
 #define SC_RTFTWIPTOL 10        // 10 Twips tolerance when determining columns
 
 
-
-
 ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
         ScEEParser( pEditP ),
         mnCurPos(0),

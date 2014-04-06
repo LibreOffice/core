@@ -24,8 +24,6 @@
 
 using namespace com::sun::star;
 
-
-
 ScLinkTransferObj::ScLinkTransferObj()
 {
 }

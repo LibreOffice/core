@@ -21,8 +21,6 @@
 
 #include <vcl/font.hxx>
 
-
-
 /** Specifiers for sheet conversion (functions iterating over the sheet and modifying cells). */
 enum ScConversionType
 {
@@ -30,8 +28,6 @@ enum ScConversionType
     SC_CONVERSION_HANGULHANJA,      /// Hangul-Hanja converter.
     SC_CONVERSION_CHINESE_TRANSL    /// Chinese simplified/traditional converter.
 };
-
-
 
 /** Parameters for conversion. */
 class ScConversionParam
@@ -72,8 +68,6 @@ private:
     bool                mbUseTargetFont;    /// True = Use maTargetFont to change font during conversion.
     bool                mbIsInteractive;    /// True = Text conversion has (specific) dialog that may be raised.
 };
-
-
 
 #endif
 

@@ -150,8 +150,6 @@ ScFormatShell::~ScFormatShell()
 {
 }
 
-
-
 void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 {
     ScDocument*             pDoc        = GetViewData()->GetDocument();
@@ -245,8 +243,6 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 }
-
-
 
 void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 {
@@ -1252,8 +1248,6 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 }
 
 
-
-
 void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
@@ -1603,8 +1597,6 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
     }
 
 }
-
-
 
 void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 {
@@ -2149,8 +2141,6 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
     Invalidate(SID_ATTR_ALIGN_STACKED);
 }
 
-
-
 void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
@@ -2340,8 +2330,6 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 }
 
 
-
-
 void ScFormatShell::GetBorderState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
@@ -2355,8 +2343,6 @@ void ScFormatShell::GetBorderState( SfxItemSet& rSet )
     if ( rSet.GetItemState( ATTR_BORDER_INNER ) != SFX_ITEM_UNKNOWN )
         rSet.Put( aInfoItem );
 }
-
-
 
 void ScFormatShell::GetAlignState( SfxItemSet& rSet )
 {

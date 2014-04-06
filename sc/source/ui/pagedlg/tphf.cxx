@@ -22,8 +22,6 @@
 
 
 
-
-
 #define _TPHF_CXX
 #include "scitems.hxx"
 #include <sfx2/basedlgs.hxx>
@@ -43,8 +41,6 @@
 #include "scresid.hxx"
 #include "scuitphfedit.hxx"
 #undef _TPHF_CXX
-
-
 
 
 // class ScHFPage
@@ -86,21 +82,15 @@ ScHFPage::ScHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId )
         m_pBtnEdit->SetHelpId( HID_SC_FOOTER_EDIT );
 }
 
-
-
 ScHFPage::~ScHFPage()
 {
 }
-
-
 
 void ScHFPage::Reset( const SfxItemSet& rSet )
 {
     SvxHFPage::Reset( rSet );
     TurnOnHdl( 0 );
 }
-
-
 
 bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 {
@@ -120,8 +110,6 @@ bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
     return bResult;
 }
 
-
-
 void ScHFPage::ActivatePage( const SfxItemSet& rSet )
 {
     sal_uInt16          nPageWhich = GetWhich( SID_ATTR_PAGE );
@@ -138,8 +126,6 @@ void ScHFPage::ActivatePage( const SfxItemSet& rSet )
     SvxHFPage::ActivatePage( rSet );
 }
 
-
-
 int ScHFPage::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( LEAVE_PAGE == SvxHFPage::DeactivatePage( pSetP ) )
@@ -148,8 +134,6 @@ int ScHFPage::DeactivatePage( SfxItemSet* pSetP )
 
     return LEAVE_PAGE;
 }
-
-
 
 void ScHFPage::ActivatePage()
 {
@@ -174,8 +158,6 @@ IMPL_LINK_NOARG(ScHFPage, TurnOnHdl)
 
     return 0;
 }
-
-
 
 
 IMPL_LINK_NOARG(ScHFPage, BtnHdl)
@@ -273,14 +255,10 @@ ScHeaderPage::ScHeaderPage( Window* pParent, const SfxItemSet& rSet )
 {
 }
 
-
-
 SfxTabPage* ScHeaderPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScHeaderPage( pParent, rCoreSet ) );
 }
-
-
 
 sal_uInt16* ScHeaderPage::GetRanges()
 {
@@ -296,21 +274,15 @@ ScFooterPage::ScFooterPage( Window* pParent, const SfxItemSet& rSet )
 {
 }
 
-
-
 SfxTabPage* ScFooterPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScFooterPage( pParent, rCoreSet ) );
 }
 
-
-
 sal_uInt16* ScFooterPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

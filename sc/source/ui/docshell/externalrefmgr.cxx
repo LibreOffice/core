@@ -243,8 +243,6 @@ void removeRangeNamesBySrcDoc(ScRangeName& rRanges, sal_uInt16 nFileId)
 
 }
 
-
-
 ScExternalRefCache::Table::Table()
     : meReferenced( REFERENCED_MARKED )
       // Prevent accidental data loss due to lack of knowledge.
@@ -472,21 +470,15 @@ ScExternalRefCache::TokenRef ScExternalRefCache::Table::getEmptyOrNullToken(
     return TokenRef();
 }
 
-
-
 ScExternalRefCache::TableName::TableName(const OUString& rUpper, const OUString& rReal) :
     maUpperName(rUpper), maRealName(rReal)
 {
 }
 
-
-
 ScExternalRefCache::CellFormat::CellFormat() :
     mbIsSet(false), mnType(NUMBERFORMAT_ALL), mnIndex(0)
 {
 }
-
-
 
 ScExternalRefCache::ScExternalRefCache() {}
 
@@ -1228,8 +1220,6 @@ ScExternalRefCache::DocItem* ScExternalRefCache::getDocItem(sal_uInt16 nFileId) 
     return &itrDoc->second;
 }
 
-
-
 ScExternalRefLink::ScExternalRefLink(ScDocument* pDoc, sal_uInt16 nFileId, const OUString& rFilter) :
     ::sfx2::SvBaseLink(::sfx2::LINKUPDATE_ONCALL, FORMAT_FILE),
     mnFileId(nFileId),
@@ -1297,8 +1287,6 @@ IMPL_LINK_NOARG(ScExternalRefLink, ExternalRefEndEditHdl)
 {
     return 0;
 }
-
-
 
 static FormulaToken* convertToToken( ScDocument* pHostDoc, ScDocument* pSrcDoc, ScRefCellValue& rCell )
 {
@@ -1574,8 +1562,6 @@ ScExternalRefCache::TableTypeRef ScExternalRefManager::getCacheTable(
     return maRefCache.getCacheTable(nFileId, rTabName, bCreateNew, pnIndex);
 }
 
-
-
 ScExternalRefManager::LinkListener::LinkListener()
 {
 }
@@ -1583,8 +1569,6 @@ ScExternalRefManager::LinkListener::LinkListener()
 ScExternalRefManager::LinkListener::~LinkListener()
 {
 }
-
-
 
 ScExternalRefManager::ApiGuard::ApiGuard(ScDocument* pDoc) :
     mpMgr(pDoc->GetExternalRefManager()),
@@ -1599,8 +1583,6 @@ ScExternalRefManager::ApiGuard::~ApiGuard()
     // Restore old value.
     mpMgr->mbUserInteractionEnabled = mbOldInteractionEnabled;
 }
-
-
 
 void ScExternalRefManager::getAllCachedTableNames(sal_uInt16 nFileId, vector<OUString>& rTabNames) const
 {

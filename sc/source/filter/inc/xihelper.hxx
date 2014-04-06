@@ -322,8 +322,6 @@ protected:
     sal_uInt8           mnType;     /// The type of the cached value (EXC_CACHEDVAL_*).
 };
 
-
-
 /** Contains cached values in a 2-dimensional array. */
 class XclImpCachedMatrix
 {
@@ -341,8 +339,6 @@ private:
     SCSIZE              mnScCols;       /// Number of cached columns.
     SCSIZE              mnScRows;       /// Number of cached rows.
 };
-
-
 
 #endif
 

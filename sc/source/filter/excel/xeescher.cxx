@@ -245,8 +245,6 @@ void XclExpDffAnchorBase::ImplCalcAnchorRect( const Rectangle&, MapUnit )
     OSL_FAIL( "XclExpDffAnchorBase::ImplCalcAnchorRect - not implemented" );
 }
 
-
-
 XclExpDffSheetAnchor::XclExpDffSheetAnchor( const XclExpRoot& rRoot ) :
     XclExpDffAnchorBase( rRoot ),
     mnScTab( rRoot.GetCurrScTab() )
@@ -267,8 +265,6 @@ void XclExpDffSheetAnchor::ImplCalcAnchorRect( const Rectangle& rRect, MapUnit e
     maAnchor.SetRect( GetRoot(), mnScTab, rRect, eMapUnit );
 }
 
-
-
 XclExpDffEmbeddedAnchor::XclExpDffEmbeddedAnchor( const XclExpRoot& rRoot,
         const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY ) :
     XclExpDffAnchorBase( rRoot ),
@@ -288,15 +284,11 @@ void XclExpDffEmbeddedAnchor::ImplCalcAnchorRect( const Rectangle& rRect, MapUni
     maAnchor.SetRect( maPageSize, mnScaleX, mnScaleY, rRect, eMapUnit, true );
 }
 
-
-
 XclExpDffNoteAnchor::XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect ) :
     XclExpDffAnchorBase( rRoot, EXC_ESC_ANCHOR_SIZELOCKED )
 {
     maAnchor.SetRect( rRoot, rRoot.GetCurrScTab(), rRect, MAP_100TH_MM );
 }
-
-
 
 XclExpDffDropDownAnchor::XclExpDffDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rScPos ) :
     XclExpDffAnchorBase( rRoot, EXC_ESC_ANCHOR_POSLOCKED )
@@ -322,8 +314,6 @@ void XclExpMsoDrawingBase::WriteBody( XclExpStream& rStrm )
         "XclExpMsoDrawingBase::WriteBody - DFF stream position mismatch" );
     rStrm.CopyFromStream( mrEscherEx.GetStream(), mrEscherEx.GetDffFragmentSize( mnFragmentKey ) );
 }
-
-
 
 XclExpMsoDrawingGroup::XclExpMsoDrawingGroup( XclEscherEx& rEscherEx ) :
     XclExpMsoDrawingBase( rEscherEx, EXC_ID_MSODRAWINGGROUP )
@@ -355,14 +345,10 @@ XclExpMsoDrawingGroup::XclExpMsoDrawingGroup( XclEscherEx& rEscherEx ) :
     mrEscherEx.UpdateDffFragmentEnd();
 }
 
-
-
 XclExpMsoDrawing::XclExpMsoDrawing( XclEscherEx& rEscherEx ) :
     XclExpMsoDrawingBase( rEscherEx, EXC_ID_MSODRAWING )
 {
 }
-
-
 
 XclExpImgData::XclExpImgData( const Graphic& rGraphic, sal_uInt16 nRecId ) :
     maGraphic( rGraphic ),
@@ -422,8 +408,6 @@ void XclExpImgData::SaveXml( XclExpXmlStream& rStrm )
             FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( rId ).getStr(),
             FSEND );
 }
-
-
 
 XclExpControlHelper::XclExpControlHelper( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -503,8 +487,6 @@ void XclExpControlHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nS
     WriteFormula( rStrm, rTokArr );
     rStrm.EndRecord();
 }
-
-
 
 //delete for exporting OCX
 //#if EXC_EXP_OCX_CTRL
@@ -1042,8 +1024,6 @@ void XclExpTbxControlObj::WriteSbs( XclExpStream& rStrm )
 
 //#endif
 
-
-
 XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape > xShape, const Rectangle* pChildAnchor ) :
     XclObj( rObjMgr, EXC_OBJTYPE_CHART ),
     XclExpRoot( rObjMgr.GetRoot() ), mxShape( xShape )
@@ -1207,8 +1187,6 @@ void XclExpChartObj::WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, 
 
     pFS->endElementNS( XML_xdr, XML_xfrm );
 }
-
-
 
 XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
         const ScPostIt* pScNote, const OUString& rAddText ) :
@@ -1388,8 +1366,6 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
     rComments->endElement( XML_comment );
 }
 
-
-
 XclMacroHelper::XclMacroHelper( const XclExpRoot& rRoot ) :
     XclExpControlHelper( rRoot )
 {
@@ -1453,8 +1429,6 @@ void XclExpShapeObj::WriteSubRecs( XclExpStream& rStrm )
     XclObjAny::WriteSubRecs( rStrm );
     WriteMacroSubRec( rStrm );
 }
-
-
 
 XclExpComments::XclExpComments( SCTAB nTab, XclExpRecordList< XclExpNote >& rNotes )
     : mnTab( nTab ), mrNotes( rNotes )
@@ -1637,8 +1611,6 @@ void XclExpObjectManager::InitStream( bool bTempFile )
     mxDffStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 }
 
-
-
 XclExpEmbeddedObjectManager::XclExpEmbeddedObjectManager(
         const XclExpObjectManager& rParent, const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY ) :
     XclExpObjectManager( rParent ),
@@ -1652,7 +1624,5 @@ XclExpDffAnchorBase* XclExpEmbeddedObjectManager::CreateDffAnchor() const
 {
     return new XclExpDffEmbeddedAnchor( GetRoot(), maPageSize, mnScaleX, mnScaleY );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

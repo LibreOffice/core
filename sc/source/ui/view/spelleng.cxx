@@ -268,8 +268,6 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     }
 }
 
-
-
 ScSpellingEngine::ScSpellingEngine(
         SfxItemPool* pEnginePoolP, ScViewData& rViewData,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc,
@@ -335,8 +333,6 @@ Window* ScSpellingEngine::GetDialogParent()
     return mrDocShell.GetActiveDialogParent();
 }
 
-
-
 ScConversionParam::ScConversionParam( ScConversionType eConvType ) :
     meConvType( eConvType ),
     meSourceLang( LANGUAGE_NONE ),
@@ -375,8 +371,6 @@ ScConversionParam::ScConversionParam( ScConversionType eConvType,
         mnOptions = i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 }
 
-
-
 ScTextConversionEngine::ScTextConversionEngine(
         SfxItemPool* pEnginePoolP, ScViewData& rViewData,
         const ScConversionParam& rConvParam,
@@ -407,7 +401,5 @@ bool ScTextConversionEngine::NeedsConversion()
 {
     return HasConvertibleTextPortion( maConvParam.GetSourceLang() );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

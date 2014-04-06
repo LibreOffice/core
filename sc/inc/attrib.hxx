@@ -297,8 +297,6 @@ public:
                                                  const IntlWrapper* pIntl = 0 ) const SAL_OVERRIDE;
 };
 
-
-
 class ScDoubleItem : public SfxPoolItem
 {
 public:

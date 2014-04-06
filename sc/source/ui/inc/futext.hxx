@@ -26,8 +26,6 @@ class SdrObject;
 class SdrTextObj;
 class SdrOutliner;
 
-
-
 /** Base class for Text functions */
 class FuText : public FuConstruct
 {
@@ -63,8 +61,6 @@ public:
 private:
     SdrOutliner* MakeOutliner();
 };
-
-
 
 #endif
 

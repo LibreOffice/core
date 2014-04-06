@@ -39,8 +39,6 @@ public:
     bool        WasHit() const      { return bHit; }
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

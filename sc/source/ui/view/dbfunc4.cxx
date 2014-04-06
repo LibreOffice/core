@@ -25,11 +25,7 @@
 #include "drwlayer.hxx"
 #include "document.hxx"
 
-
-
 using namespace com::sun::star;
-
-
 
 sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAllCharts )
 {
@@ -72,8 +68,6 @@ sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bo
     }
     return nFound;
 }
-
-
 
 
 

@@ -1201,6 +1201,4 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
     }
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

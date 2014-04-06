@@ -24,8 +24,6 @@
 #include <svtools/stdctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 
-
-
 class ScTabPageProtection : public SfxTabPage
 {
 public:
@@ -59,8 +57,6 @@ private:
     DECL_LINK( ButtonClickHdl, TriStateBox* pBox );
     void        UpdateButtons();
 };
-
-
 
 #endif // SC_TABPAGES_HXX
 

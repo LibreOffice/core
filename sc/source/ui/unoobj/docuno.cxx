@@ -193,8 +193,6 @@ static const SfxItemPropertyMapEntry* lcl_GetRowsPropertyMap()
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
 
-
-
 #define SCMODELOBJ_SERVICE          "com.sun.star.sheet.SpreadsheetDocument"
 #define SCDOCSETTINGS_SERVICE       "com.sun.star.sheet.SpreadsheetDocumentSettings"
 #define SCDOC_SERVICE               "com.sun.star.document.OfficeDocument"
@@ -206,8 +204,6 @@ SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettingsObj, "ScSpreadsheetSettingsObj", "c
 SC_SIMPLE_SERVICE_INFO( ScTableColumnsObj, "ScTableColumnsObj", "com.sun.star.table.TableColumns" )
 SC_SIMPLE_SERVICE_INFO( ScTableRowsObj, "ScTableRowsObj", "com.sun.star.table.TableRows" )
 SC_SIMPLE_SERVICE_INFO( ScTableSheetsObj, "ScTableSheetsObj", "com.sun.star.sheet.Spreadsheets" )
-
-
 
 class ScPrintUIOptions : public vcl::PrinterOptionsHelper
 {
@@ -2381,8 +2377,6 @@ uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()
 }
 
 
-
-
 ScDrawPagesObj::ScDrawPagesObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
 {
@@ -2492,8 +2486,6 @@ sal_Bool SAL_CALL ScDrawPagesObj::hasElements() throw(uno::RuntimeException, std
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
-
-
 
 ScTableSheetsObj::ScTableSheetsObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -2900,8 +2892,6 @@ sal_Bool SAL_CALL ScTableSheetsObj::hasByName( const OUString& aName )
     return false;
 }
 
-
-
 ScTableColumnsObj::ScTableColumnsObj(ScDocShell* pDocSh, SCTAB nT, SCCOL nSC, SCCOL nEC) :
     pDocShell( pDocSh ),
     nTab     ( nT ),
@@ -3167,8 +3157,6 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const OUString& aProperty
 }
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableColumnsObj )
-
-
 
 ScTableRowsObj::ScTableRowsObj(ScDocShell* pDocSh, SCTAB nT, SCROW nSR, SCROW nER) :
     pDocShell( pDocSh ),
@@ -3454,8 +3442,6 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyNam
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableRowsObj )
 
-
-
 ScSpreadsheetSettingsObj::~ScSpreadsheetSettingsObj()
 {
     if (pDocShell)
@@ -3500,8 +3486,6 @@ uno::Any SAL_CALL ScSpreadsheetSettingsObj::getPropertyValue( const OUString& /*
 }
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScSpreadsheetSettingsObj )
-
-
 
 ScAnnotationsObj::ScAnnotationsObj(ScDocShell* pDocSh, SCTAB nT) :
     pDocShell( pDocSh ),
@@ -3632,8 +3616,6 @@ sal_Bool SAL_CALL ScAnnotationsObj::hasElements() throw(uno::RuntimeException, s
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
-
-
 
 ScScenariosObj::ScScenariosObj(ScDocShell* pDocSh, SCTAB nT) :
     pDocShell( pDocSh ),
@@ -3841,8 +3823,6 @@ sal_Bool SAL_CALL ScScenariosObj::hasByName( const OUString& aName )
     SCTAB nIndex;
     return GetScenarioIndex_Impl( aName, nIndex );
 }
-
-
 
 
 

@@ -24,8 +24,6 @@
 
 #include "scui_def.hxx"
 
-
-
 class ScSubTotalDlg : public SfxTabDialog
 {
 public:

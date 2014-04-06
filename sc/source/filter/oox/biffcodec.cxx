@@ -27,14 +27,10 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
-
-
 
 BiffDecoderBase::BiffDecoderBase() :
     mbValid( false )
@@ -68,8 +64,6 @@ void BiffDecoderBase::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData,
             memcpy( pnDestData, pnSrcData, nBytes );
     }
 }
-
-
 
 BiffDecoder_XOR::BiffDecoder_XOR( const BiffDecoder_XOR& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning
@@ -130,8 +124,6 @@ void BiffDecoder_XOR::implDecode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcD
     maCodec.decode( pnDestData, pnSrcData, nBytes );
 }
 
-
-
 namespace {
 
 /** Returns the block index of the passed stream position for RCF decryption. */
@@ -147,8 +139,6 @@ sal_Int32 lclGetRcfOffset( sal_Int64 nStreamPos )
 }
 
 } // namespace
-
-
 
 BiffDecoder_RCF::BiffDecoder_RCF( const BiffDecoder_RCF& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning
@@ -231,8 +221,6 @@ void BiffDecoder_RCF::implDecode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcD
     }
 }
 
-
-
 BiffCodecHelper::BiffCodecHelper( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
@@ -243,8 +231,6 @@ void BiffCodecHelper::cloneDecoder( BiffInputStream& rStrm )
     if( mxDecoder.get() )
         rStrm.setDecoder( BiffDecoderRef( mxDecoder->clone() ) );
 }
-
-
 
 } // namespace xls
 } // namespace oox

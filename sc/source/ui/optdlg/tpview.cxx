@@ -22,8 +22,6 @@
 
 
 
-
-
 #include "scitems.hxx"
 #include "tpview.hxx"
 #include "global.hxx"
@@ -43,8 +41,6 @@
 
 
 // STATIC DATA -----------------------------------------------------------
-
-
 
 ScTpContentOptions::ScTpContentOptions( Window*         pParent,
                              const SfxItemSet&  rArgSet ) :
@@ -308,8 +304,6 @@ void ScTpContentOptions::InitGridOpt()
 
         if ( !pColorList.is() )
             return;
-
-
 
         pColorLB->SetUpdateMode( false );
 

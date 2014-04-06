@@ -223,6 +223,4 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,8 +60,6 @@ private:
 
 typedef boost::shared_ptr< XclImpPCItem > XclImpPCItemRef;
 
-
-
 struct ScDPNumGroupInfo;
 class XclImpPivotCache;
 
@@ -145,8 +143,6 @@ private:
 
 typedef boost::shared_ptr< XclImpPCField > XclImpPCFieldRef;
 
-
-
 class XclImpPivotCache : protected XclImpRoot
 {
 public:
@@ -207,8 +203,6 @@ typedef boost::shared_ptr< XclImpPivotCache > XclImpPivotCacheRef;
 
 class XclImpPivotTable;
 
-
-
 class XclImpPTItem
 {
 public:
@@ -229,8 +223,6 @@ private:
 };
 
 typedef boost::shared_ptr< XclImpPTItem > XclImpPTItemRef;
-
-
 
 class XclImpPTField
 {
@@ -307,8 +299,6 @@ private:
 
 typedef boost::shared_ptr< XclImpPTField > XclImpPTFieldRef;
 
-
-
 class XclImpPivotTable : protected XclImpRoot
 {
 public:
@@ -350,8 +340,6 @@ public:
      *  autoformat. */
     void                ReadSxViewEx9( XclImpStream& rStrm );
 
-
-
     /** Inserts the pivot table into the Calc document. */
     void                Convert();
 
@@ -382,8 +370,6 @@ private:
 };
 
 typedef boost::shared_ptr< XclImpPivotTable > XclImpPivotTableRef;
-
-
 
 
 /** The main class for pivot table import.
@@ -432,8 +418,6 @@ public:
      *  autoformat. */
     void                ReadSxViewEx9( XclImpStream& rStrm );
 
-
-
     /** Reads all used pivot caches and creates additional sheets for external data sources. */
     void                ReadPivotCaches( XclImpStream& rStrm );
     /** Inserts all pivot tables into the Calc document. */
@@ -448,8 +432,6 @@ private:
     XclImpPivotCacheVec maPCaches;          /// List of all pivot caches.
     XclImpPivotTableVec maPTables;          /// List of all pivot tables.
 };
-
-
 
 #endif
 

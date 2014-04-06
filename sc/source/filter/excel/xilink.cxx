@@ -36,8 +36,6 @@
 
 using ::std::vector;
 
-
-
 // *** Helper classes ***
 
 
@@ -156,8 +154,6 @@ inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )
 {
     return rStrm >> rXti.mnSupbook >> rXti.mnSBTabFirst >> rXti.mnSBTabLast;
 }
-
-
 
 /** Implementation of the link manager. */
 class XclImpLinkManagerImpl : protected XclImpRoot
@@ -866,8 +862,6 @@ void XclImpLinkManagerImpl::LoadCachedValues()
         itSupbook->LoadCachedValues();
 }
 
-
-
 XclImpLinkManager::XclImpLinkManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     mxImpl( new XclImpLinkManagerImpl( rRoot ) )
@@ -938,7 +932,5 @@ const OUString& XclImpLinkManager::GetMacroName( sal_uInt16 nExtSheet, sal_uInt1
 {
     return mxImpl->GetMacroName( nExtSheet, nExtName );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

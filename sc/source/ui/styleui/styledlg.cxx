@@ -22,8 +22,6 @@
 
 
 
-
-
 #include "scitems.hxx"
 #include <svx/numinf.hxx>
 #include <sfx2/objsh.hxx>
@@ -130,8 +128,6 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
     }
 }
 
-
-
 void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
     if ( nDlgRsc == RID_SCDLG_STYLES_PAR )
@@ -180,8 +176,6 @@ void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
         }
     }
 }
-
-
 
 
 const SfxItemSet* ScStyleDlg::GetRefreshedSet()

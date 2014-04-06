@@ -25,8 +25,6 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
-
-
 class ScGroupDlg : public ModalDialog
 {
 public:

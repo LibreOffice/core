@@ -134,8 +134,6 @@ sal_uInt16 lclGetEmbeddedScale( long nPageSize, sal_Int32 nPageScale, long nPos,
 
 } // namespace
 
-
-
 XclObjAnchor::XclObjAnchor() :
     mnLX( 0 ),
     mnTY( 0 ),
@@ -206,8 +204,6 @@ void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 
         Set( 0, 0, 0, 0 );
 }
 
-
-
 XclObjLineData::XclObjLineData() :
     mnColorIdx( EXC_OBJ_LINE_AUTOCOLOR ),
     mnStyle( EXC_OBJ_LINE_SOLID ),
@@ -225,8 +221,6 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclObjLineData& rLineData )
         >> rLineData.mnAuto;
 }
 
-
-
 XclObjFillData::XclObjFillData() :
     mnBackColorIdx( EXC_OBJ_LINE_AUTOCOLOR ),
     mnPattColorIdx( EXC_OBJ_FILL_AUTOCOLOR ),
@@ -243,8 +237,6 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclObjFillData& rFillData )
         >> rFillData.mnPattern
         >> rFillData.mnAuto;
 }
-
-
 
 XclObjTextData::XclObjTextData() :
     mnTextLen( 0 ),
@@ -286,8 +278,6 @@ void XclObjTextData::ReadTxo8( XclImpStream& rStrm )
 {
     rStrm >> mnFlags >> mnOrient >> mnButtonFlags >> mnShortcut >> mnShortcutEA >> mnTextLen >> mnFormatSize;
 }
-
-
 
 Reference< XControlModel > XclControlHelper::GetControlModel( Reference< XShape > xShape )
 {
@@ -341,7 +331,5 @@ OUString XclControlHelper::ExtractFromMacroDescriptor(
         return XclTools::GetXclMacroName( rDescriptor.ScriptCode );
     return OUString();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

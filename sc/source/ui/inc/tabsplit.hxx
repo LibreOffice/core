@@ -46,8 +46,6 @@ public:
     virtual void    Paint( const Rectangle& rPaintRect ) SAL_OVERRIDE;
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

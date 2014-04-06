@@ -53,8 +53,6 @@ const sal_uInt16 SC_AREASDLG_RR_USER    = 1;
 const sal_uInt16 SC_AREASDLG_RR_OFFSET  = 2;
 
 
-
-
 #define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
 #define ERRORBOX(nId)       ErrorBox( this, WinBits(WB_OK|WB_DEF_OK), \
                             ScGlobal::GetRscString( nId ) ).Execute()
@@ -93,8 +91,6 @@ static void printAddressFlags(sal_uInt16 nFlag)
 
 
 //  class ScPrintAreasDlg
-
-
 
 ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent )
     : ScAnyRefDlg(pB, pCW, pParent, "PrintAreasDialog", "modules/scalc/ui/printareasdialog.ui")
@@ -145,8 +141,6 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
 }
 
 
-
-
 ScPrintAreasDlg::~ScPrintAreasDlg()
 {
     // Extra-Data an ListBox-Entries abraeumen
@@ -161,14 +155,10 @@ ScPrintAreasDlg::~ScPrintAreasDlg()
 }
 
 
-
-
 bool ScPrintAreasDlg::Close()
 {
     return DoClose( ScPrintAreasDlgWrapper::GetChildWindowId() );
 }
-
-
 
 
 bool ScPrintAreasDlg::IsTableLocked() const
@@ -178,8 +168,6 @@ bool ScPrintAreasDlg::IsTableLocked() const
 
     return true;
 }
-
-
 
 
 void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ )
@@ -214,8 +202,6 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ 
 }
 
 
-
-
 void ScPrintAreasDlg::AddRefEntry()
 {
     if ( pRefInputEdit == pEdPrintArea )
@@ -233,14 +219,10 @@ void ScPrintAreasDlg::AddRefEntry()
 }
 
 
-
-
 void ScPrintAreasDlg::Deactivate()
 {
     bDlgLostFocus = true;
 }
-
-
 
 
 void ScPrintAreasDlg::SetActive()
@@ -260,8 +242,6 @@ void ScPrintAreasDlg::SetActive()
 
     RefInputDone();
 }
-
-
 
 
 void ScPrintAreasDlg::Impl_Reset()
@@ -332,8 +312,6 @@ void ScPrintAreasDlg::Impl_Reset()
 }
 
 
-
-
 bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
 {
     OUString  aRangeStr = pEd->GetText();
@@ -351,8 +329,6 @@ bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
 
     return bDataChanged;
 }
-
-
 
 
 bool ScPrintAreasDlg::Impl_CheckRefStrings()
@@ -416,8 +392,6 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
 
     return bOk;
 }
-
-
 
 
 void ScPrintAreasDlg::Impl_FillLists()
@@ -492,8 +466,6 @@ void ScPrintAreasDlg::Impl_FillLists()
     }
 }
 
-
-
 // Handler:
 
 
@@ -553,8 +525,6 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
 }
 
 
-
-
 IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control*, pCtr )
 {
     if ( pCtr ==(Control *) pEdPrintArea ||
@@ -578,8 +548,6 @@ IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control*, pCtr )
 
     return 0;
 }
-
-
 
 
 IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
@@ -617,8 +585,6 @@ IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
 
     return 0;
 }
-
-
 
 
 IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
@@ -667,11 +633,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
     return 0;
 }
 
-
-
 // globale Funktionen:
-
-
 
 // TODO: It might make sense to move these functions to address.?xx. -kohei
 
@@ -853,8 +815,6 @@ static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool 
 
     return true;
 }
-
-
 
 static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr )
 {

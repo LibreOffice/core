@@ -41,13 +41,9 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
-
-
 
 
 namespace {
@@ -62,8 +58,6 @@ const sal_uInt16 BIFF_REFFLAG_COL1REL       = 0x0001;
 const sal_uInt16 BIFF_REFFLAG_ROW1REL       = 0x0002;
 const sal_uInt16 BIFF_REFFLAG_COL2REL       = 0x0004;
 const sal_uInt16 BIFF_REFFLAG_ROW2REL       = 0x0008;
-
-
 
 const sal_Char* const spcOoxPrefix = "_xlnm.";
 
@@ -183,8 +177,6 @@ Any lclConvertReference( const Any& rRefAny, const CellAddress& rBaseAddr, sal_u
 
 } // namespace
 
-
-
 DefinedNameModel::DefinedNameModel() :
     mnSheet( -1 ),
     mnFuncGroupId( -1 ),
@@ -194,8 +186,6 @@ DefinedNameModel::DefinedNameModel() :
     mbHidden( false )
 {
 }
-
-
 
 DefinedNameBase::DefinedNameBase( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -255,8 +245,6 @@ ApiTokenSequence DefinedNameBase::importBiffFormula( sal_Int16 nBaseSheet, BiffI
         getFormulaParser().importFormula( CellAddress( nBaseSheet, 0, 0 ), FORMULATYPE_DEFINEDNAME, rStrm, pnFmlaSize ) :
         getFormulaParser().convertErrorToFormula( BIFF_ERR_NAME );
 }
-
-
 
 DefinedName::DefinedName( const WorkbookHelper& rHelper ) :
     DefinedNameBase( rHelper ),
@@ -463,8 +451,6 @@ bool DefinedName::getAbsoluteRange( CellRangeAddress& orRange ) const
     return getFormulaParser().extractCellRange( orRange, aFTokenSeq, false );
 }
 
-
-
 DefinedNamesBuffer::DefinedNamesBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
@@ -537,8 +523,6 @@ DefinedNameRef DefinedNamesBuffer::createDefinedName()
     maDefNames.push_back( xDefName );
     return xDefName;
 }
-
-
 
 } // namespace xls
 } // namespace oox

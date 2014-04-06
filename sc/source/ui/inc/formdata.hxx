@@ -24,8 +24,6 @@
 class ScInputHandler;
 class ScDocShell;
 
-
-
 class ScFormEditData : public formula::FormEditData
 {
 public:
@@ -49,8 +47,6 @@ private:
     ScInputHandler*     pInputHandler;
     ScDocShell*         pScDocShell;
 };
-
-
 
 #endif // SC_CRNRDLG_HXX
 

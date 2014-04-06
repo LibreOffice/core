@@ -42,8 +42,6 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
@@ -51,8 +49,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
-
-
 
 namespace {
 
@@ -98,8 +94,6 @@ const sal_Int16 API_SPLITPANE_TOPRIGHT              = 1;        /// Top-right pa
 const sal_Int16 API_SPLITPANE_BOTTOMLEFT            = 2;        /// Bottom-left, bottom, left, or single pane.
 const sal_Int16 API_SPLITPANE_BOTTOMRIGHT           = 3;        /// Bottom-right, or right pane.
 
-
-
 /** Returns the OOXML pane identifier from the passed BIFF pane id. */
 sal_Int32 lclGetOoxPaneId( sal_Int32 nBiffPaneId, sal_Int32 nDefaultPaneId )
 {
@@ -109,14 +103,10 @@ sal_Int32 lclGetOoxPaneId( sal_Int32 nBiffPaneId, sal_Int32 nDefaultPaneId )
 
 } // namespace
 
-
-
 PaneSelectionModel::PaneSelectionModel() :
     mnActiveCellId( 0 )
 {
 }
-
-
 
 SheetViewModel::SheetViewModel() :
     mnWorkbookViewId( 0 ),
@@ -183,8 +173,6 @@ PaneSelectionModel& SheetViewModel::createPaneSelection( sal_Int32 nPaneId )
         rxPaneSel.reset( new PaneSelectionModel );
     return *rxPaneSel;
 }
-
-
 
 SheetViewSettings::SheetViewSettings( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -460,8 +448,6 @@ SheetViewModelRef SheetViewSettings::createSheetView()
     return xModel;
 }
 
-
-
 WorkbookViewModel::WorkbookViewModel() :
     mnWinX( 0 ),
     mnWinY( 0 ),
@@ -477,8 +463,6 @@ WorkbookViewModel::WorkbookViewModel() :
     mbMinimized( false )
 {
 }
-
-
 
 ViewSettings::ViewSettings( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -632,8 +616,6 @@ WorkbookViewModel& ViewSettings::createWorkbookView()
     maBookViews.push_back( xModel );
     return *xModel;
 }
-
-
 
 } // namespace xls
 } // namespace oox

@@ -48,8 +48,6 @@ extern const ScFormulaCell* pLastFormulaTreeTop;    // cellform.cxx Err527 WorkA
 
 // STATIC DATA -----------------------------------------------------------
 
-
-
 void ScDocument::StartListeningArea( const ScRange& rRange,
         SvtListener* pListener
     )
@@ -633,7 +631,5 @@ void ScDocument::SetAutoCalc( bool bNewAutoCalc )
             CalcFormulaTree( true );
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

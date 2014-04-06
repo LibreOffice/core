@@ -27,11 +27,7 @@
 
 using namespace ::com::sun::star;
 
-
-
 SC_SIMPLE_SERVICE_INFO( ScSheetEventsObj, "ScSheetEventsObj", "com.sun.star.document.Events" )
-
-
 
 ScSheetEventsObj::ScSheetEventsObj(ScDocShell* pDocSh, SCTAB nT) :
     mpDocShell( pDocSh ),
@@ -183,7 +179,5 @@ sal_Bool SAL_CALL ScSheetEventsObj::hasElements() throw(uno::RuntimeException, s
         return sal_True;
     return false;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

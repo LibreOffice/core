@@ -23,8 +23,6 @@
 #include "xiroot.hxx"
 #include <mdds/flat_segment_tree.hpp>
 
-
-
 class XclImpColRowSettings : protected XclImpRoot
 {
 public:
@@ -72,8 +70,6 @@ private:
     bool                mbHasDefHeight;     /// true = mnDefHeight and mnDefRowFlags are valid.
     bool                mbDirty;
 };
-
-
 
 
 #endif

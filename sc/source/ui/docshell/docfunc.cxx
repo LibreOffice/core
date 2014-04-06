@@ -99,8 +99,6 @@ using ::std::vector;
 
 // STATIC DATA -----------------------------------------------------------
 
-
-
 IMPL_LINK( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction )
 {
     // #i101118# if drawing layer collects the undo actions, add it there
@@ -121,8 +119,6 @@ IMPL_LINK( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction )
     return 0;
 }
 
-
-
 //  Zeile ueber dem Range painten (fuer Linien nach AdjustRowHeight)
 
 static void lcl_PaintAbove( ScDocShell& rDocShell, const ScRange& rRange )
@@ -135,8 +131,6 @@ static void lcl_PaintAbove( ScDocShell& rDocShell, const ScRange& rRange )
         rDocShell.PostPaint( ScRange(0,nRow,nTab, MAXCOL,nRow,nTab), PAINT_GRID );
     }
 }
-
-
 
 bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
 {
@@ -167,8 +161,6 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
 
     return bChanged;
 }
-
-
 
 
 bool ScDocFunc::DetectiveAddPred(const ScAddress& rPos)
@@ -565,8 +557,6 @@ void ScDocFunc::DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, vector<S
     lcl_collectAllPredOrSuccRanges(rSrcRanges, rRefTokens, rDocShell, false);
 }
 
-
-
 bool ScDocFunc::DeleteContents( const ScMarkData& rMark, sal_uInt16 nFlags,
                                     bool bRecord, bool bApi )
 {
@@ -678,8 +668,6 @@ bool ScDocFunc::DeleteContents( const ScMarkData& rMark, sal_uInt16 nFlags,
     return true;
 }
 
-
-
 bool ScDocFunc::TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
                                     bool bRecord, bool bApi )
 {
@@ -733,8 +721,6 @@ bool ScDocFunc::TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
 
     return true;
 }
-
-
 
 bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, bool bApi )
 {
@@ -1185,8 +1171,6 @@ bool ScDocFunc::SetCellText(
     return bSet;
 }
 
-
-
 bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
 {
     ScDocument& rDoc = *rDocShell.GetDocument();
@@ -1205,8 +1189,6 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
 
     return true;
 }
-
-
 
 bool ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool bApi )
 {
@@ -1236,8 +1218,6 @@ bool ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool 
 
     return true;
 }
-
-
 
 bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi )
 {
@@ -1298,8 +1278,6 @@ bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
 
     return bDone;
 }
-
-
 
 bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
                                     bool bRecord, bool bApi )
@@ -3347,8 +3325,6 @@ bool ScDocFunc::SetTabBgColor(
     return bSuccess;
 }
 
-
-
 //! SetWidthOrHeight - noch doppelt zu ViewFunc !!!!!!
 //! Probleme:
 //! - Optimale Hoehe fuer Edit-Zellen ist unterschiedlich zwischen Drucker und Bildschirm
@@ -3667,8 +3643,6 @@ bool ScDocFunc::RemovePageBreak( bool bColumn, const ScAddress& rPos,
     return true;
 }
 
-
-
 void ScDocFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -3830,8 +3804,6 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
 
     return true;
 }
-
-
 
 bool ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, bool bApi )
 {
@@ -4050,8 +4022,6 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
     return bSuccess;
 }
 
-
-
 bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         const ScTokenArray* pTokenArray, const OUString& rString, bool bApi, bool bEnglish,
         const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
@@ -4139,8 +4109,6 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
     return bSuccess;
 }
 
-
-
 bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
                             const ScTabOpParam& rParam, bool bRecord, bool bApi )
 {
@@ -4199,8 +4167,6 @@ bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
 
     return bSuccess;
 }
-
-
 
 inline ScDirection DirFromFillDir( FillDir eDir )
 {
@@ -4655,8 +4621,6 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
     return true;
 }
 
-
-
 bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bool bRecord, bool bApi )
 {
     using ::std::set;
@@ -4846,8 +4810,6 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord )
     return true;
 }
 
-
-
 bool ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab )
 {
     return SetNewRangeNames( new ScRangeName(rNewRanges), true, nTab );
@@ -4924,8 +4886,6 @@ void ScDocFunc::ModifyAllRangeNames( const boost::ptr_map<OUString, ScRangeName>
     aModificator.SetDocumentModified();
     SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }
-
-
 
 void ScDocFunc::CreateOneName( ScRangeName& rList,
                                 SCCOL nPosX, SCROW nPosY, SCTAB nTab,
@@ -5081,8 +5041,6 @@ bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, bool bApi
     return bDone;
 }
 
-
-
 bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
@@ -5193,8 +5151,6 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
     return bDone;
 }
 
-
-
 bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd, bool bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -5238,8 +5194,6 @@ bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
 
     return bRet;
 }
-
-
 
 bool ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
                                 const OUString& rOptions, const OUString& rSource,

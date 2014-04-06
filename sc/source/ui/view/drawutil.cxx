@@ -88,6 +88,4 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

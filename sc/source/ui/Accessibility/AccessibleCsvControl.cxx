@@ -64,8 +64,6 @@ using ::com::sun::star::beans::PropertyValue;
 using namespace ::com::sun::star::accessibility;
 
 
-
-
 const sal_uInt16 nRulerRole         = AccessibleRole::TEXT;
 const sal_uInt16 nGridRole          = AccessibleRole::TABLE;
 const sal_uInt16 nCellRole          = AccessibleRole::TEXT;
@@ -1604,7 +1602,5 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     return pEditSource;
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,8 +34,6 @@ extern sal_uInt16 nScFillModeMouseModifier;             // global.cxx
 // STATIC DATA -----------------------------------------------------------
 
 
-
-
 // ---  Referenz-Eingabe / Fill-Cursor
 
 
@@ -462,8 +460,6 @@ void ScTabView::InvertVertical( ScHSplitPos eWhich, long nDragPos )
         }
 }
 
-
-
 void ScTabView::InterpretVisible()
 {
     //  make sure all visible cells are interpreted,
@@ -499,8 +495,6 @@ void ScTabView::InterpretVisible()
     // #i65047# repaint during the above loop may have set the bNeedsRepaint flag
     CheckNeedsRepaint();
 }
-
-
 
 
 

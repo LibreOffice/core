@@ -85,8 +85,6 @@ static const ColorData spnDefColorTable8[] =
 #undef EXC_PALETTE_EGA_COLORS_LIGHT
 #undef EXC_PALETTE_EGA_COLORS_DARK
 
-
-
 XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     mpnColorTable( 0 ),
     mnTableSize( 0 )
@@ -168,8 +166,6 @@ namespace Awt              = ::com::sun::star::awt;
 namespace AwtFontFamily    = Awt::FontFamily;
 namespace AwtFontUnderline = Awt::FontUnderline;
 namespace AwtFontStrikeout = Awt::FontStrikeout;
-
-
 
 XclFontData::XclFontData()
 {
@@ -517,8 +513,6 @@ void XclFontData::SetApiStrikeout( sal_Int16 nApiStrikeout )
         (nApiStrikeout != AwtFontStrikeout::DONTKNOW);
 }
 
-
-
 bool operator==( const XclFontData& rLeft, const XclFontData& rRight )
 {
     return
@@ -535,8 +529,6 @@ bool operator==( const XclFontData& rLeft, const XclFontData& rRight )
         (rLeft.mbShadow    == rRight.mbShadow)    &&
         (rLeft.maName      == rRight.maName);
 }
-
-
 
 namespace {
 
@@ -613,8 +605,6 @@ void lclWriteChartFont( ScfPropertySet& rPropSet,
 }
 
 } // namespace
-
-
 
 XclFontPropSetHelper::XclFontPropSetHelper() :
     maHlpChCommon( sppcPropNamesChCommon ),
@@ -766,8 +756,6 @@ ScfPropSetHelper& XclFontPropSetHelper::GetChartHelper( sal_Int16 nScript )
 
 namespace {
 
-
-
 /** Special number format index describing a reused format. */
 const NfIndexTableOffset PRV_NF_INDEX_REUSE = NF_INDEX_TABLE_ENTRIES;
 
@@ -778,8 +766,6 @@ const LanguageType PRV_LANGUAGE_FRENCH_PRIM = LANGUAGE_FRENCH & LANGUAGE_MASK_PR
 /** Parent language identifier for Asian languages. */
 const LanguageType PRV_LANGUAGE_ASIAN_PRIM = LANGUAGE_CHINESE & LANGUAGE_MASK_PRIMARY;
 
-
-
 /** Stores the number format used in Calc for an Excel built-in number format. */
 struct XclBuiltInFormat
 {
@@ -788,8 +774,6 @@ struct XclBuiltInFormat
     NfIndexTableOffset  meOffset;       /// SvNumberFormatter format index, if mpFormat==0.
     sal_uInt16          mnXclReuseFmt;  /// Use this Excel format, if meOffset==PRV_NF_INDEX_REUSE.
 };
-
-
 
 /** Defines a literal Excel built-in number format. */
 #define EXC_NUMFMT_STRING( nXclNumFmt, pcUtf8 ) \
@@ -806,8 +790,6 @@ struct XclBuiltInFormat
 /** Terminates an Excel built-in number format table. */
 #define EXC_NUMFMT_ENDTABLE() \
     { EXC_FORMAT_NOTFOUND, 0, NF_NUMBER_STANDARD, 0 }
-
-
 
 // Currency unit characters
 #define UTF8_BAHT       "\340\270\277"
@@ -836,8 +818,6 @@ struct XclBuiltInFormat
 #define UTF8_KO_HOUR    "\354\213\234"
 #define UTF8_KO_MIN     "\353\266\204"
 #define UTF8_KO_SEC     "\354\264\210"
-
-
 
 /** Default number format table. Last parent of all other tables, used for unknown languages. */
 static const XclBuiltInFormat spBuiltInFormats_DONTKNOW[] =
@@ -1410,14 +1390,10 @@ static const XclBuiltInFormat spBuiltInFormats_THAI[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-
-
 #undef EXC_NUMFMT_ENDTABLE
 #undef EXC_NUMFMT_REUSE
 #undef EXC_NUMFMT_OFFSET
 #undef EXC_NUMFMT_STRING
-
-
 
 /** Specifies a number format table for a specific language. */
 struct XclBuiltInFormatTable
@@ -1471,11 +1447,7 @@ static const XclBuiltInFormatTable spBuiltInFormatTables[] =
     {   LANGUAGE_THAI,                  LANGUAGE_DONTKNOW,          spBuiltInFormats_THAI                   }
 };
 
-
-
 } // namespace
-
-
 
 XclNumFmtBuffer::XclNumFmtBuffer( const XclRoot& rRoot ) :
     meSysLang( rRoot.GetSysLanguage() ),
@@ -1569,8 +1541,6 @@ bool operator==( const XclCellProt& rLeft, const XclCellProt& rRight )
 {
     return (rLeft.mbLocked == rRight.mbLocked) && (rLeft.mbHidden == rRight.mbHidden);
 }
-
-
 
 XclCellAlign::XclCellAlign() :
     mnHorAlign( EXC_XF_HOR_GENERAL ),
@@ -1689,8 +1659,6 @@ bool operator==( const XclCellAlign& rLeft, const XclCellAlign& rRight )
         (rLeft.mbLineBreak == rRight.mbLineBreak) && (rLeft.mbShrink   == rRight.mbShrink);
 }
 
-
-
 XclCellBorder::XclCellBorder() :
     mnLeftColor( 0 ),
     mnRightColor( 0 ),
@@ -1718,8 +1686,6 @@ bool operator==( const XclCellBorder& rLeft, const XclCellBorder& rRight )
         (rLeft.mbDiagTLtoBR == rRight.mbDiagTLtoBR) && (rLeft.mbDiagBLtoTR  == rRight.mbDiagBLtoTR);
 }
 
-
-
 XclCellArea::XclCellArea() :
     mnForeColor( EXC_COLOR_WINDOWTEXT ),
     mnBackColor( EXC_COLOR_WINDOWBACK ),
@@ -1738,8 +1704,6 @@ bool operator==( const XclCellArea& rLeft, const XclCellArea& rRight )
         (rLeft.mnForeColor == rRight.mnForeColor) && (rLeft.mnBackColor == rRight.mnBackColor) &&
         (rLeft.mnPattern == rRight.mnPattern);
 }
-
-
 
 XclXFBase::XclXFBase( bool bCellXF ) :
     mnParent( bCellXF ? EXC_XF_DEFAULTSTYLE : EXC_XF_STYLEPARENT ),
@@ -1770,7 +1734,5 @@ bool XclXFBase::Equals( const XclXFBase& rCmp ) const
         (mbFmtUsed    == rCmp.mbFmtUsed)    && (mbAlignUsed == rCmp.mbAlignUsed) &&
         (mbBorderUsed == rCmp.mbBorderUsed) && (mbAreaUsed  == rCmp.mbAreaUsed);
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

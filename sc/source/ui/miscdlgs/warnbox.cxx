@@ -25,8 +25,6 @@
 #include "sc.hrc"
 
 
-
-
 ScCbWarningBox::ScCbWarningBox( Window* pParent, const OUString& rMsgStr, bool bDefYes ) :
     WarningBox( pParent, WB_YES_NO | (bDefYes ? WB_DEF_YES : WB_DEF_NO), rMsgStr )
 {
@@ -58,8 +56,6 @@ void ScCbWarningBox::DisableDialog()
 }
 
 
-
-
 ScReplaceWarnBox::ScReplaceWarnBox( Window* pParent ) :
     ScCbWarningBox( pParent, OUString( ScResId( STR_REPLCELLSWARN ) ), true )
 {
@@ -78,8 +74,6 @@ void ScReplaceWarnBox::DisableDialog()
     aInputOpt.SetReplaceCellsWarn( false );
     pScMod->SetInputOptions( aInputOpt );
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

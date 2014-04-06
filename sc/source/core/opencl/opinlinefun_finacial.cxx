@@ -578,8 +578,6 @@ std::string getDiff=
 "    return nDiff > 0 ? nDiff : 0;\n"
 "}\n";
 
-
-
 std::string lcl_GetcoupdaybsDecl=
 "int lcl_Getcoupdaybs(int nNullDate,int nSettle, int nMat,int nFreq,int nBase);\n";
 

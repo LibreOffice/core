@@ -28,8 +28,6 @@
 
 #include "global.hxx"
 
-
-
 class ScDeleteCellDlg : public ModalDialog
 {
 private:

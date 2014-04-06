@@ -65,8 +65,6 @@ private:
     sal_uInt16          mnPageZoom;         /// Zoom factor for pagebreak preview.
 };
 
-
-
 /** Represents an SCL record for the zoom factor of the current view of a sheet. */
 class XclExpScl : public XclExpRecord
 {
@@ -83,8 +81,6 @@ private:
     sal_uInt16          mnNum;              /// Numerator of the zoom factor.
     sal_uInt16          mnDenom;            /// Denominator of the zoom factor.
 };
-
-
 
 /** Represents a PANE record containing settings for split/frozen windows. */
 class XclExpPane : public XclExpRecord
@@ -105,8 +101,6 @@ private:
     sal_uInt8           mnActivePane;       /// Active pane (with cell cursor).
     bool                mbFrozenPanes;      /// true = "frozen" panes; false = "split" window.
 };
-
-
 
 /** Represents a SELECTION record with selection data for a pane. */
 class XclExpSelection : public XclExpRecord
@@ -166,8 +160,6 @@ private:
     XclTabViewData      maData;             /// All view settings for a sheet.
     sal_uInt32          mnGridColorId;      /// Color identifier for grid color.
 };
-
-
 
 #endif
 

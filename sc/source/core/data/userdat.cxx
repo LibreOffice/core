@@ -21,8 +21,6 @@
 #include "drwlayer.hxx"
 #include "rechead.hxx"
 
-
-
 ScDrawObjFactory::ScDrawObjFactory()
 {
     SdrObjFactory::InsertMakeUserDataHdl( LINK ( this, ScDrawObjFactory, MakeUserData ) );
@@ -52,8 +50,6 @@ IMPL_LINK_INLINE_START( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFac
 }
 IMPL_LINK_INLINE_END( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFactory )
 
-
-
 ScDrawObjData::ScDrawObjData() :
     SdrObjUserData( SC_DRAWLAYER, SC_UD_OBJDATA, 0 ),
     maStart( ScAddress::INITIALIZE_INVALID ),
@@ -66,8 +62,6 @@ ScDrawObjData* ScDrawObjData::Clone( SdrObject* ) const
 {
     return new ScDrawObjData( *this );
 }
-
-
 
 ScIMapInfo::ScIMapInfo() :
     SdrObjUserData( SC_DRAWLAYER, SC_UD_IMAPDATA, 0 )
@@ -94,8 +88,6 @@ SdrObjUserData* ScIMapInfo::Clone( SdrObject* ) const
 {
     return new ScIMapInfo( *this );
 }
-
-
 
 ScMacroInfo::ScMacroInfo() :
     SdrObjUserData( SC_DRAWLAYER, SC_UD_MACRODATA, 0 )

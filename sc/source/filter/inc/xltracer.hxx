@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 #ifndef SC_XLTRACER_HXX
 #define SC_XLTRACER_HXX
 
@@ -72,8 +70,6 @@ struct XclTracerDetails
 };
 
 
-
-
 /** This class wraps an MSFilterTracer to create trace logs for import/export filters. */
 class XclTracer
 {
@@ -111,8 +107,6 @@ private:
     /** array of flags corresponding to each entry in the XclTracerDetails table. */
     BoolVec                     maFirstTimes;
 };
-
-
 
 
 #endif

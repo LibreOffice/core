@@ -154,8 +154,6 @@ inline void ImportLotus::Skip( const sal_uInt16 n )
     pIn->SeekRel( n );
 }
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

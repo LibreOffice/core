@@ -20,15 +20,11 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include "document.hxx"
 #include "docsh.hxx"
 #include "scresid.hxx"
 
 #include "tpstat.hxx"
-
-
 
 // Dokumentinfo-Tabpage:
 
@@ -37,8 +33,6 @@ SfxTabPage* ScDocStatPage::Create( Window *pParent, const SfxItemSet& rSet )
 {
     return new ScDocStatPage( pParent, rSet );
 }
-
-
 
 ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
     :   SfxTabPage( pParent, "StatisticsInfoPage", "modules/scalc/ui/statisticsinfopage.ui", rSet )
@@ -62,26 +56,18 @@ ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
 
 }
 
-
-
 ScDocStatPage::~ScDocStatPage()
 {
 }
-
-
 
 bool ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
     return false;
 }
 
-
-
 void ScDocStatPage::Reset( const SfxItemSet& /* rSet */ )
 {
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

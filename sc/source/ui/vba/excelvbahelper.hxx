@@ -36,8 +36,6 @@ namespace ooo {
 namespace vba {
 namespace excel {
 
-
-
 // nTabs empty means apply zoom to all sheets
 void implSetZoom( const css::uno::Reference< css::frame::XModel >& xModel, sal_Int16 nZoom, std::vector< SCTAB >& nTabs );
 void implnCopy( const css::uno::Reference< css::frame::XModel>& xModel );
@@ -60,8 +58,6 @@ css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const cs
 
 ScDocShell* GetDocShellFromRange( const css::uno::Reference< css::uno::XInterface >& xRange ) throw ( css::uno::RuntimeException );
 void setUpDocumentModules( const css::uno::Reference< css::sheet::XSpreadsheetDocument >& xDoc );
-
-
 
 class ScVbaCellRangeAccess
 {

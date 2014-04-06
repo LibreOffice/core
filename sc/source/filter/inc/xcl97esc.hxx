@@ -29,8 +29,6 @@
 
 namespace utl { class TempFile; }
 
-
-
 class SvStream;
 
 class XclEscherExGlobal : public EscherExGlobal, protected XclExpRoot
@@ -48,8 +46,6 @@ private:
     ::std::auto_ptr< SvStream > mxPicStrm;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 };
-
-
 
 class XclObj;
 class XclExpDffAnchorBase;
@@ -155,8 +151,6 @@ public:
 
 
 
-
-
 // --- class XclEscherClientData -------------------------------------
 
 class XclEscherClientData : public EscherExClientRecord_Base
@@ -188,8 +182,6 @@ public:
 
     virtual void        WriteData( EscherEx& rEx ) const SAL_OVERRIDE;
 };
-
-
 
 #endif // _XCL97ESC_HXX
 

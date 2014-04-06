@@ -31,8 +31,6 @@
 #include "scmod.hxx"
 #include "validate.hxx"
 
-
-
 SFX_IMPL_MODELESSDIALOG_WITHID(ScNameDlgWrapper, FID_DEFINE_NAME )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScNameDefDlgWrapper, FID_ADD_NAME )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScSolverDlgWrapper, SID_OPENDLG_SOLVE )
@@ -230,8 +228,6 @@ void ScSimpleRefDlgWrapper::StartRefInput()
         ((ScSimpleRefDlg*)pWindow)->StartRefInput();
     }
 }
-
-
 
 
 // ScAcceptChgDlgWrapper //FIXME: should be moved into ViewShell

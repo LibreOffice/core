@@ -357,8 +357,6 @@ typedef struct _cl_image_format {
     cl_channel_type         image_channel_data_type;
 } cl_image_format;
 
-
-
 /******************************************************************************/
 
 // Error Codes

@@ -173,8 +173,6 @@ struct ScGridWindow::MouseEventState
 
 #define SC_FILTERLISTBOX_LINES  12
 
-
-
 ScGridWindow::VisibleRange::VisibleRange() :
     mnCol1(0), mnCol2(MAXCOL), mnRow1(0), mnRow2(MAXROW)
 {
@@ -196,8 +194,6 @@ bool ScGridWindow::VisibleRange::set(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
 
     return bChanged;
 }
-
-
 
 class ScFilterListBox : public ListBox
 {
@@ -236,8 +232,6 @@ public:
     void            SetListHasDates(bool b) { mbListHasDates = b; }
     bool            HasDates() const        { return mbListHasDates; }
 };
-
-
 
 //  ListBox in einem FloatingWindow (pParent)
 ScFilterListBox::ScFilterListBox( Window* pParent, ScGridWindow* pGrid,
@@ -279,8 +273,6 @@ void ScFilterListBox::LoseFocus()
     Hide();
 #endif
 }
-
-
 
 bool ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -333,8 +325,6 @@ void ScFilterListBox::SelectHdl()
     }
 }
 
-
-
 // use a System floating window for the above filter listbox
 class ScFilterFloatingWindow : public FloatingWindow
 {
@@ -359,8 +349,6 @@ Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
     // redirect keyinput in the child window
     return GetWindow(WINDOW_FIRSTCHILD) ? GetWindow(WINDOW_FIRSTCHILD)->GetPreferredKeyInputWindow() : NULL;    // will be the FilterBox
 }
-
-
 
 static sal_Bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
 {
@@ -3370,8 +3358,6 @@ void ScGridWindow::UpdateInputContext()
     SetInputContext( aContext );
 }
 
-
-
                                 // sensitiver Bereich (Pixel)
 #define SCROLL_SENSITIVE 20
 
@@ -3459,12 +3445,8 @@ static ScRange lcl_MakeDropRange( SCCOL nPosX, SCROW nPosY, SCTAB nTab, const Sc
     return ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
 }
 
-
-
 extern bool bPasteIsDrop;       // viewfun4 -> move to header
 extern bool bPasteIsMove;       // viewfun7 -> move to header
-
-
 
 sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
 {
@@ -4438,8 +4420,6 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
-
-
 void ScGridWindow::PasteSelection( const Point& rPosPixel )
 {
     Point aLogicPos = PixelToLogic( rPosPixel );
@@ -4510,8 +4490,6 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
         }
     }
 }
-
-
 
 void ScGridWindow::UpdateEditViewPos()
 {
@@ -4731,8 +4709,6 @@ void ScGridWindow::LoseFocus()
 }
 
 Point ScGridWindow::GetMousePosPixel() const  { return aCurMousePos; }
-
-
 
 bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
                                 sal_uInt16* pIndex, SCsCOL* pAddX, SCsROW* pAddY)
@@ -5114,8 +5090,6 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
     else
         pViewData->GetView()->ResetTimer();
 }
-
-
 
 bool ScGridWindow::GetEditUrl( const Point& rPos,
                                OUString* pName, OUString* pUrl, OUString* pTarget )

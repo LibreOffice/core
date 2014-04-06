@@ -38,8 +38,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::std::vector;
 
-
-
 ScDPTableData::CalcInfo::CalcInfo() :
     pInitState( NULL ),
     pColRoot( NULL ),
@@ -47,8 +45,6 @@ ScDPTableData::CalcInfo::CalcInfo() :
     bRepeatIfEmpty(false)
 {
 }
-
-
 
 ScDPTableData::ScDPTableData(ScDocument* pDoc) :
     mpDoc(pDoc)
@@ -250,8 +246,6 @@ void ScDPTableData::GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 
         rItemData.push_back( nId );
     }
 }
-
-
 
 long ScDPTableData::GetMembersCount( long nDim )
 {

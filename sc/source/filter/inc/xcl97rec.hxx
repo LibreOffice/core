@@ -25,8 +25,6 @@
 #include "xlstyle.hxx"
 #include "tabprotection.hxx"
 
-
-
 class XclObj;
 class XclExpMsoDrawing;
 class SdrCaptionObj;
@@ -384,8 +382,6 @@ public:
     void                        SaveXml( XclExpXmlStream& rStrm ) const;
 };
 
-
-
 class ExcEScenario : public ExcRecord
 {
 private:
@@ -412,8 +408,6 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
-
-
 class ExcEScenarioManager : public ExcRecord
 {
 private:
@@ -433,8 +427,6 @@ public:
     virtual sal_uInt16              GetNum() const SAL_OVERRIDE;
     virtual sal_Size            GetLen() const SAL_OVERRIDE;
 };
-
-
 
 /** Represents a FEATHDR (SHEETPROTECTION) record that stores sheet protection
     options.  Note that a sheet still needs to save its sheet protection
@@ -467,8 +459,6 @@ private:
     ScEnhancedProtection    maEnhancedProtection;
 };
 
-
-
 class XclCalccount : public ExcRecord
 {
 private:
@@ -483,8 +473,6 @@ public:
 
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
-
-
 
 
 class XclIteration : public ExcRecord
@@ -503,8 +491,6 @@ public:
 };
 
 
-
-
 class XclDelta : public ExcRecord
 {
 private:
@@ -521,8 +507,6 @@ public:
 };
 
 
-
-
 class XclRefmode : public XclExpBoolRecord
 {
 public:
@@ -530,8 +514,6 @@ public:
 
     virtual void                SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
-
-
 
 class XclExpFileEncryption : public XclExpRecord
 {
@@ -546,8 +528,6 @@ private:
     const XclExpRoot& mrRoot;
 };
 
-
-
 /** Beginning of User Interface Records */
 class XclExpInterfaceHdr : public XclExpUInt16Record
 {
@@ -557,8 +537,6 @@ public:
 private:
     virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
-
-
 
 /** End of User Interface Records */
 class XclExpInterfaceEnd : public XclExpRecord
@@ -571,8 +549,6 @@ private:
     virtual void WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
 
-
-
 /** Write Access User Name - This record contains the user name, which is
     the name you type when you install Excel. */
 class XclExpWriteAccess : public XclExpRecord
@@ -584,8 +560,6 @@ public:
 private:
     virtual void WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
-
-
 
 class XclExpFileSharing : public XclExpRecord
 {
@@ -603,8 +577,6 @@ private:
     bool                mbRecommendReadOnly;
 };
 
-
-
 class XclExpProt4Rev : public XclExpRecord
 {
 public:
@@ -614,8 +586,6 @@ public:
 private:
     virtual void WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
-
-
 
 class XclExpProt4RevPass : public XclExpRecord
 {
@@ -627,15 +597,11 @@ private:
     virtual void WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
 
-
-
 class XclExpRecalcId : public XclExpDummyRecord
 {
 public:
     explicit XclExpRecalcId();
 };
-
-
 
 class XclExpBookExt : public XclExpDummyRecord
 {

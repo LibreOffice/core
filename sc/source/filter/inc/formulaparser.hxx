@@ -89,8 +89,6 @@ private:
     ApiTokenVector      maTokens;
 };
 
-
-
 class FormulaParserImpl;
 
 /** Import formula parser for OOXML and BIFF filters.
@@ -143,8 +141,6 @@ public:
 private:
     ::std::auto_ptr< FormulaParserImpl > mxImpl;
 };
-
-
 
 } // namespace xls
 } // namespace oox

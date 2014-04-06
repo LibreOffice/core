@@ -45,8 +45,6 @@
 #include <vcl/svapp.hxx>
 
 
-
-
 class ScViewForwarder : public SvxViewForwarder
 {
     ScTabViewShell*     mpViewShell;
@@ -143,8 +141,6 @@ void ScViewForwarder::SetInvalid()
 {
     mpViewShell = NULL;
 }
-
-
 
 class ScEditObjectViewForwarder : public SvxViewForwarder
 {

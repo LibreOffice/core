@@ -219,6 +219,4 @@ FltError ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocumen
     return eRet;
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

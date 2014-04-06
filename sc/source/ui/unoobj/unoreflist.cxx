@@ -20,8 +20,6 @@
 #include "unoreflist.hxx"
 #include "document.hxx"
 
-
-
 ScUnoRefList::ScUnoRefList()
 {
 }
@@ -45,8 +43,6 @@ void ScUnoRefList::Undo( ScDocument* pDoc )
         pDoc->BroadcastUno( aHint );
     }
 }
-
-
 
 TYPEINIT1(ScUnoRefUndoHint, SfxHint);
 

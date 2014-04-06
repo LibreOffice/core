@@ -22,8 +22,6 @@
 
 #include <vcl/field.hxx>
 
-
-
 /** An edit control that contains a double precision floating-point value. */
 class ScDoubleField : public Edit
 {
@@ -35,8 +33,6 @@ public:
                             sal_Int32 nDecPlaces = 12,
                             bool bEraseTrailingDecZeros = true );
 };
-
-
 
 #endif
 

@@ -33,8 +33,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <cppuhelper/weakref.hxx>
 
-
-
 class ScHeaderEditEngine;
 class ScPatternAttr;
 class EditView;

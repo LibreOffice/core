@@ -767,8 +767,6 @@ FltError ImportExcel::Read( void )
 }
 
 
-
-
 FltError ImportExcel8::Read( void )
 {
 #ifdef EXC_INCL_DUMPER
@@ -1319,7 +1317,5 @@ FltError ImportExcel8::Read( void )
 
     return eLastErr;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

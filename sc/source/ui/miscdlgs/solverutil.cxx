@@ -31,8 +31,6 @@
 
 using namespace com::sun::star;
 
-
-
 #define SCSOLVER_SERVICE "com.sun.star.sheet.Solver"
 
 void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,

@@ -258,8 +258,6 @@ XclImpStream& operator>>( XclImpStream& rStrm, Color& rColor );
     @descr  The color has the format (all values 8-bit): Red, Green, Blue, 0. */
 XclExpStream& operator<<( XclExpStream& rStrm, const Color& rColor );
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

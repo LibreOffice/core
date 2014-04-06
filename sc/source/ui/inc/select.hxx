@@ -24,8 +24,6 @@
 
 #include "viewdata.hxx"
 
-
-
 class ScTabView;
 class ScViewData;
 
@@ -79,8 +77,6 @@ public:
 
 
 
-
-
 class ScHeaderFunctionSet : public FunctionSet          // Column / row headers
 {
 private:
@@ -114,8 +110,6 @@ class ScHeaderSelectionEngine : public SelectionEngine
 public:
                     ScHeaderSelectionEngine( Window* pWindow, ScHeaderFunctionSet* pFuncSet );
 };
-
-
 
 #endif
 

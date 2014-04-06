@@ -38,8 +38,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
-
-
 class ScFilterOptionsMgr;
 class ScViewData;
 class ScDocument;
@@ -226,8 +224,6 @@ private:
     // Hack: RefInput control
     DECL_LINK( TimeOutHdl,       Timer* );
 };
-
-
 
 #endif // SC_FILTDLG_HXX
 

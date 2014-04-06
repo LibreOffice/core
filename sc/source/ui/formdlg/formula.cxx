@@ -63,8 +63,6 @@ ScDocument* ScFormulaDlg::pDoc = NULL;
 ScAddress ScFormulaDlg::aCursorPos;
 
 
-
-
 //      Initialisierung / gemeinsame Funktionen  fuer Dialog
 
 
@@ -364,8 +362,6 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
 
     return true;
 }
-
-
 
 //  virtuelle Methoden von ScAnyRefDlg:
 void ScFormulaDlg::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )

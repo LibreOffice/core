@@ -25,8 +25,6 @@
 namespace oox {
 namespace xls {
 
-
-
 class SharedStringsFragment : public WorkbookFragmentBase
 {
 public:
@@ -41,8 +39,6 @@ protected:
     virtual const ::oox::core::RecordInfo* getRecordInfos() const SAL_OVERRIDE;
     virtual void        finalizeImport() SAL_OVERRIDE;
 };
-
-
 
 } // namespace xls
 } // namespace oox

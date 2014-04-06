@@ -109,8 +109,6 @@ protected:
     ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell,PtrTabViewShell* ppViewSh);
 };
 
-
-
 #endif // SC_CRNRDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

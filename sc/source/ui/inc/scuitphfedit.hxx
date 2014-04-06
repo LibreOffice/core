@@ -103,8 +103,6 @@ private:
     DECL_LINK( MenuHdl, ScExtIButton* );
 };
 
-
-
 class ScRightHeaderEditPage : public ScHFEditPage
 {
 public:
@@ -113,8 +111,6 @@ public:
 private:
     ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
 };
-
-
 
 class ScLeftHeaderEditPage : public ScHFEditPage
 {
@@ -125,8 +121,6 @@ private:
     ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
 };
 
-
-
 class ScRightFooterEditPage : public ScHFEditPage
 {
 public:
@@ -135,8 +129,6 @@ public:
 private:
     ScRightFooterEditPage( Window* pParent, const SfxItemSet& rSet );
 };
-
-
 
 class ScLeftFooterEditPage : public ScHFEditPage
 {

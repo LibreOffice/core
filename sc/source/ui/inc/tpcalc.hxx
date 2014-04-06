@@ -28,8 +28,6 @@
 #include <svtools/stdctrl.hxx>
 #include "editfield.hxx"
 
-
-
 class ScDocOptions;
 
 class ScTpCalcOptions : public SfxTabPage

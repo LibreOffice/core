@@ -341,8 +341,6 @@ inline SvStream& WriteXclObjAnchor( SvStream& rStrm, const XclObjAnchor& rAnchor
           .WriteUInt16( rAnchor.maLast.mnRow).WriteUInt16(rAnchor.mnBY);
 }
 
-
-
 struct XclObjLineData
 {
     sal_uInt8           mnColorIdx;
@@ -358,8 +356,6 @@ struct XclObjLineData
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclObjLineData& rLineData );
 
-
-
 struct XclObjFillData
 {
     sal_uInt8           mnBackColorIdx;
@@ -374,8 +370,6 @@ struct XclObjFillData
 };
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclObjFillData& rFillData );
-
-
 
 struct XclObjTextData
 {
@@ -402,8 +396,6 @@ struct XclObjTextData
     inline sal_uInt8    GetVerAlign() const { return ::extract_value< sal_uInt8 >( mnFlags, 4, 3 ); }
 };
 
-
-
 enum XclTbxEventType
 {
     EXC_TBX_EVENT_ACTION,       /// XActionListener.actionPerformed
@@ -412,8 +404,6 @@ enum XclTbxEventType
     EXC_TBX_EVENT_VALUE,        /// XAdjustmentListener.adjustmentValueChanged
     EXC_TBX_EVENT_CHANGE        /// XChangeListener.changed
 };
-
-
 
 /** Provides static helper functions for form controls. */
 class XclControlHelper
@@ -434,8 +424,6 @@ public:
                             const ::com::sun::star::script::ScriptEventDescriptor& rDescriptor,
                             XclTbxEventType eEventType, SfxObjectShell* pShell = NULL );
 };
-
-
 
 #endif
 

@@ -26,21 +26,15 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-
-
 ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage) :
     FmFormPage(rNewModel, bMasterPage)
 {
     SetSize( Size( LONG_MAX, LONG_MAX ) );
 }
 
-
-
 ScDrawPage::~ScDrawPage()
 {
 }
-
-
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ScDrawPage::createUnoPage()
 {

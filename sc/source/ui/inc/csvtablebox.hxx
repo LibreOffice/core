@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 #ifndef _SC_CSVTABLEBOX_HXX
 #define _SC_CSVTABLEBOX_HXX
 
@@ -142,8 +140,6 @@ protected:
     /** Creates a new accessible object. */
     virtual ScAccessibleCsvControl* ImplCreateAccessible() SAL_OVERRIDE;
 };
-
-
 
 
 #endif

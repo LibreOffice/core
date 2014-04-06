@@ -20,8 +20,6 @@
 #include "XMLEmptyContext.hxx"
 #include "xmlimprt.hxx"
 
-
-
 ScXMLEmptyContext::ScXMLEmptyContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName) :

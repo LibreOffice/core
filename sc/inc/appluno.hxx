@@ -33,8 +33,6 @@
 #include <cppuhelper/implbase4.hxx>
 #include <rtl/ustring.hxx>
 
-
-
 com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL
     ScSpreadsheetSettings_CreateInstance(
         const com::sun::star::uno::Reference<
@@ -286,8 +284,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
-
 
 #endif
 

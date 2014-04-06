@@ -27,8 +27,6 @@
 class ScXMLImport;
 
 
-
-
 class ScXMLConsolidationContext : public SvXMLImportContext
 {
 private:

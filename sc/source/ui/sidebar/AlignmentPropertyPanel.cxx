@@ -49,8 +49,6 @@ const char UNO_ALIGNVCENTER[]          = ".uno:AlignVCenter";
 
 namespace sc { namespace sidebar {
 
-
-
 AlignmentPropertyPanel::AlignmentPropertyPanel(
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame,
@@ -87,13 +85,9 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     mpFtRotate->SetBackground(Wallpaper());
 }
 
-
-
 AlignmentPropertyPanel::~AlignmentPropertyPanel()
 {
 }
-
-
 
 void AlignmentPropertyPanel::Initialize()
 {
@@ -146,8 +140,6 @@ void AlignmentPropertyPanel::Initialize()
 #endif
 }
 
-
-
 IMPL_LINK( AlignmentPropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
 {
     OUString sTmp = mpMtrAngle->GetText();
@@ -168,8 +160,6 @@ IMPL_LINK( AlignmentPropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
     return 0;
 }
 
-
-
 IMPL_LINK( AlignmentPropertyPanel, RotationHdl, void *, EMPTYARG )
 {
     sal_Int32 nTmp = mpCtrlDial->GetRotation();
@@ -181,8 +171,6 @@ IMPL_LINK( AlignmentPropertyPanel, RotationHdl, void *, EMPTYARG )
     return 0;
 }
 
-
-
 IMPL_LINK( AlignmentPropertyPanel, ClickStackHdl, void *, EMPTYARG )
 {
     bool bVertical = mpCbStacked->IsChecked() ? true : false;
@@ -191,8 +179,6 @@ IMPL_LINK( AlignmentPropertyPanel, ClickStackHdl, void *, EMPTYARG )
         SID_ATTR_ALIGN_STACKED, SFX_CALLMODE_RECORD, &aStackItem, 0L );
     return 0;
 }
-
-
 
 IMPL_LINK(AlignmentPropertyPanel, TbxHorAlignSelectHdl, ToolBox*, pToolBox)
 {
@@ -232,8 +218,6 @@ IMPL_LINK(AlignmentPropertyPanel, TbxHorAlignSelectHdl, ToolBox*, pToolBox)
     return 0;
 }
 
-
-
 IMPL_LINK(AlignmentPropertyPanel, TbxVerAlignSelectHdl, ToolBox*, pToolBox)
 {
     const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
@@ -265,8 +249,6 @@ IMPL_LINK(AlignmentPropertyPanel, TbxVerAlignSelectHdl, ToolBox*, pToolBox)
     return 0;
 }
 
-
-
 IMPL_LINK(AlignmentPropertyPanel, MFLeftIndentMdyHdl, void*, EMPTYARG)
 {
     mpCBXWrapText->EnableTriState(false);
@@ -276,8 +258,6 @@ IMPL_LINK(AlignmentPropertyPanel, MFLeftIndentMdyHdl, void*, EMPTYARG)
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_INDENT, SFX_CALLMODE_RECORD, &aItem, 0L);
     return( 0L );
 }
-
-
 
 IMPL_LINK(AlignmentPropertyPanel, CBOXMergnCellClkHdl, void*, EMPTYARG)
 {
@@ -296,8 +276,6 @@ IMPL_LINK(AlignmentPropertyPanel, CBOXMergnCellClkHdl, void*, EMPTYARG)
     return 0;
 }
 
-
-
 IMPL_LINK(AlignmentPropertyPanel, CBOXWrapTextClkHdl, void*, EMPTYARG)
 {
     bool bState = mpCBXWrapText->IsChecked();
@@ -305,8 +283,6 @@ IMPL_LINK(AlignmentPropertyPanel, CBOXWrapTextClkHdl, void*, EMPTYARG)
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_LINEBREAK, SFX_CALLMODE_RECORD, &aItem, 0L);
     return 0;
 }
-
-
 
 AlignmentPropertyPanel* AlignmentPropertyPanel::Create (
     Window* pParent,
@@ -326,15 +302,11 @@ AlignmentPropertyPanel* AlignmentPropertyPanel::Create (
         pBindings);
 }
 
-
-
 void AlignmentPropertyPanel::DataChanged(
     const DataChangedEvent& rEvent)
 {
     (void)rEvent;
 }
-
-
 
 void AlignmentPropertyPanel::HandleContextChange(
     const ::sfx2::sidebar::EnumContext aContext)
@@ -347,12 +319,8 @@ void AlignmentPropertyPanel::HandleContextChange(
 
     maContext = aContext;
 
-
-
     // todo
 }
-
-
 
 void AlignmentPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
@@ -520,14 +488,10 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     }
 }
 
-
-
 SfxBindings* AlignmentPropertyPanel::GetBindings()
 {
     return mpBindings;
 }
-
-
 
 void AlignmentPropertyPanel::FormatDegrees(double& dTmp)
 {
@@ -536,8 +500,6 @@ void AlignmentPropertyPanel::FormatDegrees(double& dTmp)
     while (dTmp > 359)  //modify
         dTmp = 359;
 }
-
-
 
 void AlignmentPropertyPanel::UpdateHorAlign()
 {
@@ -588,8 +550,6 @@ void AlignmentPropertyPanel::UpdateHorAlign()
     default:;
     }
 }
-
-
 
 void AlignmentPropertyPanel::UpdateVerAlign()
 {

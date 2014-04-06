@@ -101,8 +101,6 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
     }
 }
 
-
-
 bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
                                 const uno::Sequence<beans::PropertyValue>& aArgs )
 {
@@ -117,8 +115,6 @@ bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
 
     return true;
 }
-
-
 
 bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         const svx::ODataAccessDescriptor* pDescriptor, bool bRecord, bool bAddrInsert )
@@ -663,8 +659,6 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
     return bSuccess;
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

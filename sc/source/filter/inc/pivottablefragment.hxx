@@ -30,8 +30,6 @@ class PivotTable;
 class PivotTableField;
 class PivotTableFilter;
 
-
-
 class PivotTableFieldContext : public WorksheetContextBase
 {
 public:
@@ -48,8 +46,6 @@ protected:
 private:
     PivotTableField&    mrTableField;
 };
-
-
 
 class PivotTableFilterContext : public WorksheetContextBase
 {
@@ -68,8 +64,6 @@ private:
     PivotTableFilter&   mrTableFilter;
 };
 
-
-
 class PivotTableFragment : public WorksheetFragmentBase
 {
 public:
@@ -85,8 +79,6 @@ protected:
 private:
     PivotTable&         mrPivotTable;
 };
-
-
 
 } // namespace xls
 } // namespace oox

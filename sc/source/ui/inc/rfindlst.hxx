@@ -24,8 +24,6 @@
 #include "global.hxx"
 #include "address.hxx"
 
-
-
 struct ScRangeFindData
 {
     ScRange    aRef;
@@ -59,8 +57,6 @@ public:
 
     static ColorData GetColorName(const size_t nIndex);
 };
-
-
 
 #endif
 

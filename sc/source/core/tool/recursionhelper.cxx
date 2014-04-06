@@ -98,5 +98,3 @@ void ScRecursionHelper::Clear()
 
 
 
-
-

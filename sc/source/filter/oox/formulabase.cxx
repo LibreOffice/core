@@ -42,8 +42,6 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
@@ -118,8 +116,6 @@ void BinSingleRef2d::readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffs
     rStrm >> nRow >> nCol;
     setBiff8Data( nCol, nRow, bRelativeAsOffset );
 }
-
-
 
 void BinComplexRef2d::readBiff12Data( SequenceInputStream& rStrm, bool bRelativeAsOffset )
 {
@@ -997,8 +993,6 @@ private:
                             sal_uInt8 nMaxParam, bool bImportFilter, FilterType eFilter );
 };
 
-
-
 FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, bool bImportFilter,
         bool bCallerKnowsAboutMacroExport )
 {
@@ -1110,8 +1104,6 @@ void FunctionProviderImpl::initFuncs( const FunctionData* pBeg, const FunctionDa
             initFunc( *pIt, nMaxParam );
 }
 
-
-
 FunctionProvider::FunctionProvider( FilterType eFilter, BiffType eBiff, bool bImportFilter,
         bool bCallerKnowsAboutMacroExport ) :
     mxFuncImpl( new FunctionProviderImpl( eFilter, eBiff, bImportFilter, bCallerKnowsAboutMacroExport ) )
@@ -1193,8 +1185,6 @@ private:
     bool                initFuncOpCode( FunctionInfo& orFuncInfo, const ApiTokenMap& rFuncTokenMap );
     bool                initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, const ApiTokenMap& rExtFuncTokenMap, const FunctionInfoVector& rFuncInfos );
 };
-
-
 
 OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
         const Reference< XMultiServiceFactory >& rxModelFactory )
@@ -1449,8 +1439,6 @@ bool OpCodeProviderImpl::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, c
     return bIsValid;
 }
 
-
-
 OpCodeProvider::OpCodeProvider( const Reference< XMultiServiceFactory >& rxModelFactory,
         FilterType eFilter, BiffType eBiff, bool bImportFilter, bool bCallerKnowsAboutMacroExport ) :
     FunctionProvider( eFilter, eBiff, bImportFilter, bCallerKnowsAboutMacroExport ),
@@ -1589,16 +1577,12 @@ TokenToRangeListState lclProcessClose( sal_Int32& ornParenLevel )
 
 } // namespace
 
-
-
 FormulaProcessorBase::FormulaProcessorBase( const WorkbookHelper& rHelper ) :
     OpCodeProvider( rHelper.getBaseFilter().getModelFactory(), rHelper.getFilterType(), rHelper.getBiff(), rHelper.getBaseFilter().isImportFilter() ),
     ApiOpCodes( getOpCodes() ),
     WorkbookHelper( rHelper )
 {
 }
-
-
 
 OUString FormulaProcessorBase::generateAddress2dString( const CellAddress& rAddress, bool bAbsolute )
 {
@@ -1619,8 +1603,6 @@ OUString FormulaProcessorBase::generateAddress2dString( const BinAddress& rAddre
     aBuffer.append( static_cast< sal_Int32 >( rAddress.mnRow + 1 ) );
     return aBuffer.makeStringAndClear();
 }
-
-
 
 OUString FormulaProcessorBase::generateApiString( const OUString& rString )
 {
@@ -1657,8 +1639,6 @@ OUString FormulaProcessorBase::generateApiArray( const Matrix< Any >& rMatrix )
     aBuffer.append( API_TOKEN_ARRAY_CLOSE );
     return aBuffer.makeStringAndClear();
 }
-
-
 
 Any FormulaProcessorBase::extractReference( const ApiTokenSequence& rTokens ) const
 {
@@ -1772,8 +1752,6 @@ void FormulaProcessorBase::convertStringToStringList(
         orTokens = ContainerHelper::vectorToSequence( aNewTokens );
     }
 }
-
-
 
 } // namespace xls
 } // namespace oox

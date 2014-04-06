@@ -32,8 +32,6 @@
 #include "sc.hrc"
 
 
-
-
 void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
 {
     const SdrObject*    pObj        = NULL;
@@ -98,7 +96,5 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
         rSet.Set(aViewAttr);
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

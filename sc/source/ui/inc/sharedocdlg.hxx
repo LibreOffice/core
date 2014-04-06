@@ -28,8 +28,6 @@
 class ScViewData;
 class ScDocShell;
 
-
-
 // class ScShareDocumentDlg
 
 

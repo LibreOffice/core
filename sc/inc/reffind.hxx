@@ -48,8 +48,6 @@ public:
     void ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos );
 };
 
-
-
 #endif
 
 

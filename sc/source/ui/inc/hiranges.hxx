@@ -24,8 +24,6 @@
 #include "global.hxx"
 #include "address.hxx"
 
-
-
 struct ScHighlightEntry
 {
     ScRange     aRef;

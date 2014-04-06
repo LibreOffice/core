@@ -260,8 +260,6 @@ inline ds_status profileDevices(ds_profile* profile, const ds_evaluation_type ty
 
 #define DS_DEVICE_NATIVE_CPU_STRING  "native_cpu"
 
-
-
 typedef ds_status(* ds_score_serializer)(ds_device* device, void** serializedScore, unsigned int* serializedScoreSize);
 inline ds_status writeProfileToFile(ds_profile* profile, ds_score_serializer serializer, const char* file)
 {

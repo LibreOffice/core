@@ -48,8 +48,6 @@ TYPEINIT1(ScStyleSheet, SfxStyleSheet);
 #define TWO_CM      1134
 #define HFDIST_CM   142
 
-
-
 ScStyleSheet::ScStyleSheet( const OUString&     rName,
                             ScStyleSheetPool&   rPoolP,
                             SfxStyleFamily      eFamily,
@@ -60,28 +58,20 @@ ScStyleSheet::ScStyleSheet( const OUString&     rName,
 {
 }
 
-
-
 ScStyleSheet::ScStyleSheet( const ScStyleSheet& rStyle )
     : SfxStyleSheet ( rStyle )
     , eUsage( UNKNOWN )
 {
 }
 
-
-
 ScStyleSheet::~ScStyleSheet()
 {
 }
-
-
 
 bool ScStyleSheet::HasFollowSupport() const
 {
     return false;
 }
-
-
 
 bool ScStyleSheet::HasParentSupport () const
 {
@@ -99,8 +89,6 @@ bool ScStyleSheet::HasParentSupport () const
 
     return bHasParentSupport;
 }
-
-
 
 bool ScStyleSheet::SetParent( const OUString& rParentName )
 {
@@ -134,8 +122,6 @@ bool ScStyleSheet::SetParent( const OUString& rParentName )
 
     return bResult;
 }
-
-
 
 SfxItemSet& ScStyleSheet::GetItemSet()
 {
@@ -252,8 +238,6 @@ SfxItemSet& ScStyleSheet::GetItemSet()
     return *pSet;
 }
 
-
-
 bool ScStyleSheet::IsUsed() const
 {
     if ( GetFamily() == SFX_STYLE_FAMILY_PARA )
@@ -271,16 +255,12 @@ bool ScStyleSheet::IsUsed() const
         return true;
 }
 
-
-
 void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA(SfxSimpleHint) )
         if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
             GetItemSet().SetParent( NULL );
 }
-
-
 
 //  schmutzige Tricks, um die Standard-Vorlage immer als "Standard" zu speichern,
 //  obwohl der fuer den Benutzer sichtbare Name uebersetzt ist:
@@ -331,7 +311,5 @@ bool ScStyleSheet::SetName( const OUString& rNew )
     else
         return SfxStyleSheet::SetName( rNew );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

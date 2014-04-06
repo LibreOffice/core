@@ -68,8 +68,6 @@ namespace
 
 namespace sc { namespace sidebar {
 
-
-
 svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateFillColorPopupControl(svx::sidebar::PopupContainer* pParent)
 {
     const ScResId aResId(VS_NOFILLCOLOR);
@@ -94,8 +92,6 @@ void CellAppearancePropertyPanel::SetFillColor(
     maBackColor = aColor;
 }
 
-
-
 svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateLineColorPopupControl(svx::sidebar::PopupContainer* pParent)
 {
     return new svx::sidebar::ColorControl(
@@ -118,8 +114,6 @@ void CellAppearancePropertyPanel::SetLineColor(
     maLineColor = aColor;
 }
 
-
-
 svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent)
 {
     return new CellLineStyleControl(pParent, *this);
@@ -133,8 +127,6 @@ void CellAppearancePropertyPanel::EndCellLineStylePopupMode(void)
     }
 }
 
-
-
 svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateCellBorderStylePopupControl(svx::sidebar::PopupContainer* pParent)
 {
     return new CellBorderStyleControl(pParent, *this);
@@ -147,8 +139,6 @@ void CellAppearancePropertyPanel::EndCellBorderStylePopupMode(void)
         mpCellBorderStylePopup->Hide();
     }
 }
-
-
 
 CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     Window* pParent,
@@ -230,13 +220,9 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     Initialize();
 }
 
-
-
 CellAppearancePropertyPanel::~CellAppearancePropertyPanel()
 {
 }
-
-
 
 void CellAppearancePropertyPanel::Initialize()
 {
@@ -275,8 +261,6 @@ void CellAppearancePropertyPanel::Initialize()
     mpTBLineStyle->SetAccessibleRelationLabeledBy(mpTBLineStyle);
 }
 
-
-
 IMPL_LINK(CellAppearancePropertyPanel, TbxBKColorSelectHdl, ToolBox*, pToolBox)
 {
     const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
@@ -289,8 +273,6 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxBKColorSelectHdl, ToolBox*, pToolBox)
     return 0;
 }
 
-
-
 IMPL_LINK(CellAppearancePropertyPanel, TbxLineColorSelectHdl, ToolBox*, pToolBox)
 {
     const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
@@ -302,8 +284,6 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxLineColorSelectHdl, ToolBox*, pToolBox
     }
     return 0;
 }
-
-
 
 IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBox)
 {
@@ -327,8 +307,6 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBo
     }
     return 0;
 }
-
-
 
 IMPL_LINK(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox)
 {
@@ -354,8 +332,6 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox
     return 0;
 }
 
-
-
 IMPL_LINK(CellAppearancePropertyPanel, CBOXGridShowClkHdl, void*, EMPTYARG)
 {
     bool bState = mpCBXShowGrid->IsChecked();
@@ -363,8 +339,6 @@ IMPL_LINK(CellAppearancePropertyPanel, CBOXGridShowClkHdl, void*, EMPTYARG)
     GetBindings()->GetDispatcher()->Execute(FID_TAB_TOGGLE_GRID, SFX_CALLMODE_RECORD, &aItem, 0L);
     return 0;
 }
-
-
 
 CellAppearancePropertyPanel* CellAppearancePropertyPanel::Create (
     Window* pParent,
@@ -384,15 +358,11 @@ CellAppearancePropertyPanel* CellAppearancePropertyPanel::Create (
         pBindings);
 }
 
-
-
 void CellAppearancePropertyPanel::DataChanged(
     const DataChangedEvent& rEvent)
 {
     (void)rEvent;
 }
-
-
 
 void CellAppearancePropertyPanel::HandleContextChange(
     const ::sfx2::sidebar::EnumContext aContext)
@@ -405,12 +375,8 @@ void CellAppearancePropertyPanel::HandleContextChange(
 
     maContext = aContext;
 
-
-
     // todo
 }
-
-
 
 void CellAppearancePropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
@@ -690,14 +656,10 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
     }
 }
 
-
-
 SfxBindings* CellAppearancePropertyPanel::GetBindings()
 {
     return mpBindings;
 }
-
-
 
 void CellAppearancePropertyPanel::SetStyleIcon()
 {

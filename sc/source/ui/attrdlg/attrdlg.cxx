@@ -20,8 +20,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include "scitems.hxx"
 
 #include <sfx2/objsh.hxx>
@@ -36,8 +34,6 @@
 #include <svx/flagsdef.hxx>
 #include <editeng/flstitem.hxx>
 #include <sfx2/app.hxx>
-
-
 
 ScAttrDlg::ScAttrDlg(SfxViewFrame* pFrameP, Window* pParent, const SfxItemSet* pCellAttrs)
     : SfxTabDialog(pFrameP, pParent, "FormatCellsDialog", "modules/scalc/ui/formatcellsdialog.ui", pCellAttrs)
@@ -69,13 +65,9 @@ ScAttrDlg::ScAttrDlg(SfxViewFrame* pFrameP, Window* pParent, const SfxItemSet* p
     AddTabPage( "cellprotection" ,  ScTabPageProtection::Create,    0 );
 }
 
-
-
 ScAttrDlg::~ScAttrDlg()
 {
 }
-
-
 
 void ScAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
@@ -96,8 +88,6 @@ void ScAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
         rTabPage.PageCreated(aSet);
     }
 }
-
-
 
 IMPL_LINK_NOARG(ScAttrDlg, OkHandler)
 {

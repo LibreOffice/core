@@ -32,8 +32,6 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace xls {
 
-
-
 /** Contains data from the 'sheet' element describing a sheet in the workbook. */
 struct SheetInfoModel
 {
@@ -45,8 +43,6 @@ struct SheetInfoModel
 
     explicit            SheetInfoModel();
 };
-
-
 
 /** Stores information about all sheets in a spreadsheet document.
 
@@ -110,8 +106,6 @@ private:
     typedef RefMap< OUString, SheetInfo, IgnoreCaseCompare > SheetInfoMap;
     SheetInfoMap        maSheetInfosByName;
 };
-
-
 
 } // namespace xls
 } // namespace oox

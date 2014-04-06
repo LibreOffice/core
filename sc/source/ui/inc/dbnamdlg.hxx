@@ -33,8 +33,6 @@ class ScViewData;
 class ScDocument;
 
 
-
-
 class ScDbNameDlg : public ScAnyRefDlg
 {
 public:
@@ -101,8 +99,6 @@ private:
     DECL_LINK( NameModifyHdl, void * );
     DECL_LINK( AssModifyHdl, void * );
 };
-
-
 
 #endif // SC_DBNAMDLG_HXX
 

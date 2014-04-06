@@ -20,8 +20,6 @@
 #ifndef SC_WARNPASSWORD_HXX
 #define SC_WARNPASSWORD_HXX
 
-
-
 class SfxMedium;
 /** Static API helper functions. */
 class ScWarnPassword

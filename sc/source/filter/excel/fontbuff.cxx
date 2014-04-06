@@ -147,6 +147,4 @@ void LotusFontBuffer::MakeFont( ENTRY* pEntry )
     pEntry->pTmpName = NULL;
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

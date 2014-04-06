@@ -27,8 +27,6 @@
 namespace oox {
 namespace xls {
 
-
-
 struct CommentModel
 {
     ::com::sun::star::table::CellRangeAddress
@@ -50,8 +48,6 @@ struct CommentModel
 
     explicit            CommentModel();
 };
-
-
 
 class Comment : public WorksheetHelper
 {
@@ -77,8 +73,6 @@ private:
 
 typedef ::boost::shared_ptr< Comment > CommentRef;
 
-
-
 class CommentsBuffer : public WorksheetHelper
 {
 public:
@@ -99,8 +93,6 @@ private:
     OUStringVector      maAuthors;
     CommentVector       maComments;
 };
-
-
 
 } // namespace xls
 } // namespace oox

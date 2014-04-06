@@ -34,8 +34,6 @@ class ScRangeUtil;
 class ScAreaData;
 
 
-
-
 class ScConsolidateDlg : public ScAnyRefDlg
 {
 public:
@@ -105,8 +103,6 @@ private:
     sal_uInt16          FuncToLbPos( ScSubTotalFunc eFunc );
 #endif // _CONSDLG_CXX
 };
-
-
 
 #endif // SC_CONSDLG_HXX
 

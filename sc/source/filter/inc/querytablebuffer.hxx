@@ -26,8 +26,6 @@
 namespace oox {
 namespace xls {
 
-
-
 struct QueryTableModel : public AutoFormatModel
 {
     OUString     maDefName;          /// Defined name containing the target cell range.
@@ -49,8 +47,6 @@ struct QueryTableModel : public AutoFormatModel
     explicit            QueryTableModel();
 };
 
-
-
 class QueryTable : public WorksheetHelper
 {
 public:
@@ -68,8 +64,6 @@ private:
     QueryTableModel     maModel;
 };
 
-
-
 class QueryTableBuffer : public WorksheetHelper
 {
 public:
@@ -85,8 +79,6 @@ private:
     typedef RefVector< QueryTable > QueryTableVector;
     QueryTableVector    maQueryTables;
 };
-
-
 
 } // namespace xls
 } // namespace oox

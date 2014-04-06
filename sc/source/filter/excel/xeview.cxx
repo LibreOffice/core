@@ -131,8 +131,6 @@ void XclExpWindow2::WriteBody( XclExpStream& rStrm )
     }
 }
 
-
-
 XclExpScl::XclExpScl( sal_uInt16 nZoom ) :
     XclExpRecord( EXC_ID_SCL, 4 ),
     mnNum( nZoom ),
@@ -156,8 +154,6 @@ void XclExpScl::WriteBody( XclExpStream& rStrm )
     OSL_ENSURE_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF4 );
     rStrm << mnNum << mnDenom;
 }
-
-
 
 XclExpPane::XclExpPane( const XclTabViewData& rData ) :
     XclExpRecord( EXC_ID_PANE, 10 ),
@@ -203,8 +199,6 @@ void XclExpPane::WriteBody( XclExpStream& rStrm )
         rStrm << sal_uInt8( 0 );
 }
 
-
-
 XclExpSelection::XclExpSelection( const XclTabViewData& rData, sal_uInt8 nPane ) :
     XclExpRecord( EXC_ID_SELECTION, 15 ),
     mnPane( nPane )
@@ -246,8 +240,6 @@ void XclExpSelection::WriteBody( XclExpStream& rStrm )
     maSelData.maXclSelection.Write( rStrm, false );
 }
 
-
-
 XclExpTabBgColor::XclExpTabBgColor( const XclTabViewData& rTabViewData ) :
     XclExpRecord( EXC_ID_SHEETEXT, 18 ),
     mrTabViewData( rTabViewData )
@@ -287,8 +279,6 @@ sal_uInt16 lclGetXclZoom( long nScZoom, sal_uInt16 nDefXclZoom )
 }
 
 } // namespace
-
-
 
 XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nScTab ) :
     XclExpRoot( rRoot ),

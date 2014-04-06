@@ -19,14 +19,10 @@
 
 #include "popmenu.hxx"
 
-
-
 void ScPopupMenu::Select()
 {
     nSel = GetCurItemId();
     bHit = true;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

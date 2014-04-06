@@ -35,8 +35,6 @@
 
 #include <svx/fmview.hxx>
 
-
-
 // #i72502#
 Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
 {
@@ -248,8 +246,6 @@ void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
     if (bHad)
         DrawSelectiveObjects( nLayer );
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

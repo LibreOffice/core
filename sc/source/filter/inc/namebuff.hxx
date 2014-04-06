@@ -35,8 +35,6 @@ class ScTokenArray;
 class NameBuffer;
 
 
-
-
 class StringHashEntry
 {
 private:
@@ -91,8 +89,6 @@ inline bool StringHashEntry::operator ==( const StringHashEntry& r ) const
 {
     return ( nHash == r.nHash && aString ==  r.aString );
 }
-
-
 
 class NameBuffer : public ExcRoot
 {
@@ -218,8 +214,6 @@ inline void RangeNameBufferWK3::Add( const OUString& rName, const ScRange& aScRa
 }
 
 
-
-
 class ExtSheetBuffer : public ExcRoot
 {
 private:
@@ -271,8 +265,6 @@ inline ExtSheetBuffer::ExtSheetBuffer( RootData* p ) : ExcRoot( p )
 }
 
 
-
-
 struct ExtName
 {
     OUString          aName;
@@ -284,8 +276,6 @@ struct ExtName
     bool            IsDDE( void ) const;
     bool            IsOLE( void ) const;
 };
-
-
 
 
 class ExtNameBuff : protected XclImpRoot

@@ -60,8 +60,6 @@ struct ColRowSpan;
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 
-
-
 class ScViewFunc : public ScTabView
 {
 private:
@@ -372,8 +370,6 @@ private:
 
     void            MarkAndJumpToRanges(const ScRangeList& rRanges);
 };
-
-
 
 #endif
 

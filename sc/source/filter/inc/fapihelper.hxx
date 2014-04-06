@@ -200,8 +200,6 @@ private:
     css::uno::Reference< css::beans::XMultiPropertySet >  mxMultiPropSet;     /// The optional multi property set interface.
 };
 
-
-
 /** Generic helper class for reading from and writing to property sets.
 
     Usage:
@@ -268,8 +266,6 @@ private:
     size_t              mnNextIdx;          /// Counter for next Any to be processed.
 };
 
-
-
 template< typename Type >
 bool ScfPropSetHelper::ReadValue( Type& rValue )
 {
@@ -298,8 +294,6 @@ ScfPropSetHelper& operator<<( ScfPropSetHelper& rPropSetHelper, const Type& rVal
     rPropSetHelper.WriteValue( rValue );
     return rPropSetHelper;
 }
-
-
 
 #endif
 

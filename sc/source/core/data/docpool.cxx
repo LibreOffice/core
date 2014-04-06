@@ -185,8 +185,6 @@ static SfxItemInfo const  aItemInfos[] =
     { SID_SCATTR_PAGE_SCALETO,      SFX_ITEM_POOLABLE }     // ATTR_PAGE_SCALETO
 };
 
-
-
 ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
 
     :   SfxItemPool ( OUString("ScDocumentPool"),
@@ -596,8 +594,6 @@ void ScDocumentPool::DeleteVersionMaps()
     pVersionMap1 = 0;
 }
 
-
-
 //  Fuer die Pattern-Attribute (SetItems) kann der sal_uInt16 RefCount leicht ueberlaufen
 //  (z.B. 600 ganze Zeilen abwechselnd formatieren).
 //  Darum wird der RefCount bei SC_MAX_POOLREF festgehalten und nicht mehr hoch- oder
@@ -652,8 +648,6 @@ void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )
         SetRefCount( (SfxPoolItem&)rItem, (sal_uLong) SC_SAFE_POOLREF );
     }
 }
-
-
 
 void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
 {

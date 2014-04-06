@@ -26,8 +26,6 @@
 namespace oox {
 namespace xls {
 
-
-
 class CondFormatContext;
 
 class ColorScaleContext : public WorksheetContextBase
@@ -84,8 +82,6 @@ private:
     CondFormatRef       mxCondFmt;
     CondFormatRuleRef   mxRule;
 };
-
-
 
 } // namespace xls
 } // namespace oox

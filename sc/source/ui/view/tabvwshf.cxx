@@ -781,8 +781,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
         }
     }
 
-
-
     void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
     {
         ScViewData* pViewData   = GetViewData();
@@ -918,8 +916,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
         nWhich = aIter.NextWhich();
     }
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

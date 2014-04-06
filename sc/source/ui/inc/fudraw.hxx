@@ -57,8 +57,6 @@ class FuDraw : public FuPoor
     void    ResetModifiers();
 };
 
-
-
 #endif      // _SD_FUDRAW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

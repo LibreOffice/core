@@ -23,8 +23,6 @@
 
 using namespace com::sun::star;
 
-
-
 ScUnoListenerCalls::ScUnoListenerCalls()
 {
 }

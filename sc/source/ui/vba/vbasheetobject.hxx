@@ -31,8 +31,6 @@ namespace com { namespace sun { namespace star {
     namespace drawing { class XControlShape; }
 } } }
 
-
-
 typedef InheritedHelperInterfaceImpl1< ov::excel::XCharacters > ScVbaButtonCharacters_BASE;
 
 /** Simple implementation of the Characters symbol for drawing button objects. */
@@ -74,8 +72,6 @@ private:
     sal_Int32 mnStart;
     sal_Int32 mnLength;
 };
-
-
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XSheetObject > ScVbaSheetObject_BASE;
 
@@ -120,8 +116,6 @@ protected:
     css::uno::Reference< css::drawing::XShape > mxShape;
     css::uno::Reference< css::beans::XPropertySet > mxShapeProps;
 };
-
-
 
 typedef ::cppu::ImplInheritanceHelper1< ScVbaSheetObjectBase, ov::excel::XControlObject > ScVbaControlObject_BASE;
 
@@ -168,8 +162,6 @@ protected:
     OUString maEventMethod;
 };
 
-
-
 typedef ::cppu::ImplInheritanceHelper1< ScVbaControlObjectBase, ov::excel::XButton > ScVbaButton_BASE;
 
 class ScVbaButton : public ScVbaButton_BASE
@@ -205,8 +197,6 @@ protected:
     virtual OUString implGetBaseName() const SAL_OVERRIDE;
     virtual void implSetDefaultProperties() throw (css::uno::RuntimeException) SAL_OVERRIDE;
 };
-
-
 
 #endif
 

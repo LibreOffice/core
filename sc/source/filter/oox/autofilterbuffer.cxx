@@ -42,8 +42,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 
-
-
 namespace {
 
 const sal_uInt8 BIFF12_TOP10FILTER_TOP              = 0x01;
@@ -58,8 +56,6 @@ const sal_uInt8 BIFF_FILTER_DATATYPE_STRING         = 6;
 const sal_uInt8 BIFF_FILTER_DATATYPE_BOOLEAN        = 8;
 const sal_uInt8 BIFF_FILTER_DATATYPE_EMPTY          = 12;
 const sal_uInt8 BIFF_FILTER_DATATYPE_NOTEMPTY       = 14;
-
-
 
 bool lclGetApiOperatorFromToken( sal_Int32& rnApiOperator, sal_Int32 nToken )
 {
@@ -145,8 +141,6 @@ bool lclConvertWildcardsToRegExp( OUString& rValue )
 
 } // namespace
 
-
-
 ApiFilterSettings::ApiFilterSettings()
 {
 }
@@ -188,8 +182,6 @@ void ApiFilterSettings::appendField( bool bAnd, const std::vector<OUString>& rVa
     }
 }
 
-
-
 FilterSettingsBase::FilterSettingsBase( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
@@ -207,8 +199,6 @@ ApiFilterSettings FilterSettingsBase::finalizeImport( sal_Int32 /*nMaxCount*/ )
 {
     return ApiFilterSettings();
 }
-
-
 
 DiscreteFilter::DiscreteFilter( const WorkbookHelper& rHelper ) :
     FilterSettingsBase( rHelper ),
@@ -285,8 +275,6 @@ ApiFilterSettings DiscreteFilter::finalizeImport( sal_Int32 nMaxCount )
     return aSettings;
 }
 
-
-
 Top10Filter::Top10Filter( const WorkbookHelper& rHelper ) :
     FilterSettingsBase( rHelper ),
     mfValue( 0.0 ),
@@ -325,8 +313,6 @@ ApiFilterSettings Top10Filter::finalizeImport( sal_Int32 /*nMaxCount*/ )
     aSettings.appendField( true, nOperator, mfValue );
     return aSettings;
 }
-
-
 
 FilterCriterionModel::FilterCriterionModel() :
     mnOperator( XML_equal ),
@@ -380,8 +366,6 @@ void FilterCriterionModel::readBiffData( SequenceInputStream& rStrm )
             rStrm.skip( 8 );
     }
 }
-
-
 
 CustomFilter::CustomFilter( const WorkbookHelper& rHelper ) :
     FilterSettingsBase( rHelper ),
@@ -501,8 +485,6 @@ void CustomFilter::appendCriterion( const FilterCriterionModel& rCriterion )
         maCriteria.push_back( rCriterion );
 }
 
-
-
 FilterColumn::FilterColumn( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     mnColId( -1 ),
@@ -539,8 +521,6 @@ ApiFilterSettings FilterColumn::finalizeImport( sal_Int32 nMaxCount )
     }
     return aSettings;
 }
-
-
 
 AutoFilter::AutoFilter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -648,8 +628,6 @@ void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFil
     }
 }
 
-
-
 AutoFilterBuffer::AutoFilterBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
@@ -744,8 +722,6 @@ AutoFilter* AutoFilterBuffer::getActiveAutoFilter()
     // stick to the last imported auto filter
     return maAutoFilters.empty() ? 0 : maAutoFilters.back().get();
 }
-
-
 
 } // namespace xls
 } // namespace oox

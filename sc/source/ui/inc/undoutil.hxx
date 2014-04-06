@@ -49,8 +49,6 @@ public:
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

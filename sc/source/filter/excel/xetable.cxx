@@ -130,8 +130,6 @@ void XclExpArray::WriteBody( XclExpStream& rStrm )
     rStrm << nFlags << sal_uInt32( 0 ) << *mxTokArr;
 }
 
-
-
 XclExpArrayBuffer::XclExpArrayBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
 {
@@ -198,8 +196,6 @@ void XclExpShrfmla::WriteBody( XclExpStream& rStrm )
     WriteRangeAddress( rStrm );
     rStrm << sal_uInt8( 0 ) << mnUsedCount << *mxTokArr;
 }
-
-
 
 XclExpShrfmlaBuffer::XclExpShrfmlaBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
@@ -439,8 +435,6 @@ void XclExpTableop::WriteBody( XclExpStream& rStrm )
         rStrm << mnColInpXclRow << mnColInpXclCol << sal_uInt32( 0 );
 }
 
-
-
 XclExpTableopBuffer::XclExpTableopBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
 {
@@ -613,8 +607,6 @@ void XclExpSingleCellBase::WriteBody( XclExpStream& rStrm )
     WriteContents( rStrm );
 }
 
-
-
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpNumberCell )
 
 XclExpNumberCell::XclExpNumberCell(
@@ -658,8 +650,6 @@ void XclExpNumberCell::WriteContents( XclExpStream& rStrm )
 {
     rStrm << mfValue;
 }
-
-
 
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBooleanCell )
 
@@ -808,8 +798,6 @@ void XclExpLabelCell::WriteContents( XclExpStream& rStrm )
         default:    DBG_ERROR_BIFF();
     }
 }
-
-
 
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpFormulaCell )
 
@@ -1249,8 +1237,6 @@ void XclExpMultiCellBase::RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes 
     // The Save() function will skip all XF indexes equal to EXC_XF_NOTFOUND.
 }
 
-
-
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBlankCell )
 
 XclExpBlankCell::XclExpBlankCell( const XclAddress& rXclPos, const XclExpMultiXFId& rXFId ) :
@@ -1298,8 +1284,6 @@ void XclExpBlankCell::WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress
             XML_s,      lcl_GetStyleId( rStrm, nXFId ).getStr(),
             FSEND );
 }
-
-
 
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpRkCell )
 
@@ -1408,8 +1392,6 @@ void XclExpOutlineBuffer::UpdateColRow( SCCOLROW nScPos )
     }
 }
 
-
-
 XclExpGuts::XclExpGuts( const XclExpRoot& rRoot ) :
     XclExpRecord( EXC_ID_GUTS, 8 ),
     mnColLevels( 0 ),
@@ -1443,8 +1425,6 @@ void XclExpGuts::WriteBody( XclExpStream& rStrm )
 {
     rStrm << mnRowWidth << mnColWidth << mnRowLevels << mnColLevels;
 }
-
-
 
 XclExpDimensions::XclExpDimensions( const XclExpRoot& rRoot ) :
     mnFirstUsedXclRow( 0 ),
@@ -1502,8 +1482,6 @@ void XclExpDimensions::WriteBody( XclExpStream& rStrm )
         rStrm << sal_uInt16( 0 );
 }
 
-
-
 namespace {
 
 double lclGetCorrectedColWidth( const XclExpRoot& rRoot, sal_uInt16 nXclColWidth )
@@ -1513,8 +1491,6 @@ double lclGetCorrectedColWidth( const XclExpRoot& rRoot, sal_uInt16 nXclColWidth
 }
 
 } // namespace
-
-
 
 XclExpDefcolwidth::XclExpDefcolwidth( const XclExpRoot& rRoot ) :
     XclExpUInt16Record( EXC_ID_DEFCOLWIDTH, EXC_DEFCOLWIDTH_DEF ),
@@ -1534,8 +1510,6 @@ void XclExpDefcolwidth::SetDefWidth( sal_uInt16 nXclColWidth )
     double fNewColWidth = lclGetCorrectedColWidth( GetRoot(), nXclColWidth );
     SetValue( limit_cast< sal_uInt16 >( fNewColWidth / 256.0 + 0.5 ) );
 }
-
-
 
 XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
         SCCOL nScCol, SCROW nLastScRow, XclExpColOutlineBuffer& rOutlineBfr ) :
@@ -1626,8 +1600,6 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
             XML_width,          OString::number( (double) (mnScWidth / (double)sc::TwipsToHMM( GetCharWidth() )) ).getStr(),
             FSEND );
 }
-
-
 
 XclExpColinfoBuffer::XclExpColinfoBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -1723,8 +1695,6 @@ void XclExpColinfoBuffer::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_cols );
 }
 
-
-
 XclExpDefaultRowData::XclExpDefaultRowData() :
     mnFlags( EXC_DEFROW_DEFAULTFLAGS ),
     mnHeight( EXC_DEFROW_DEFAULTHEIGHT )
@@ -1745,8 +1715,6 @@ bool operator<( const XclExpDefaultRowData& rLeft, const XclExpDefaultRowData& r
         ((rLeft.mnHeight == rRight.mnHeight) && (rLeft.mnFlags < rRight.mnFlags));
 }
 
-
-
 XclExpDefrowheight::XclExpDefrowheight() :
     XclExpRecord( EXC_ID3_DEFROWHEIGHT, 4 )
 {
@@ -1762,8 +1730,6 @@ void XclExpDefrowheight::WriteBody( XclExpStream& rStrm )
     OSL_ENSURE_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF3 );
     rStrm << maDefData.mnFlags << maDefData.mnHeight;
 }
-
-
 
 XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
         XclExpRowOutlineBuffer& rOutlineBfr, bool bAlwaysEmpty ) :
@@ -2059,8 +2025,6 @@ void XclExpRow::SaveXml( XclExpXmlStream& rStrm )
         rWorksheet->endElement( XML_row );
     }
 }
-
-
 
 XclExpRowBuffer::XclExpRowBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -2556,7 +2520,5 @@ void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
     maRowBfr.SaveXml( rStrm );
     mxExtLst->SaveXml( rStrm );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

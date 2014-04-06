@@ -274,6 +274,4 @@ bool ScSpellDialogChildWindow::IsSelectionChanged()
     return (*mxOldRangeList != aCurrentRangeList);
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

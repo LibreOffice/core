@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 #ifndef SC_ASCIIOPT_HXX
 #define SC_ASCIIOPT_HXX
 
@@ -32,8 +30,6 @@
 #include <svx/txencbox.hxx>
 #include "csvtablebox.hxx"
 #include "i18nlangtag/lang.h"
-
-
 
 class ScAsciiOptions
 {

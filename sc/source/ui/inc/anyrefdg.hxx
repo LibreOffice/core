@@ -103,8 +103,6 @@ public:
     bool                CanInputDone( bool bForced ){   return pRefEdit && (bForced || !pRefBtn);   }
 };
 
-
-
 class SC_DLLPUBLIC ScRefHandler :
                     public IAnyRefDialog
 {
@@ -172,8 +170,6 @@ public:
     inline  bool        CanInputStart( const formula::RefEdit *pEdit );
     inline  bool        CanInputDone( bool bForced );
 };
-
-
 
 
 class ScRefHdlModalImpl : public ModalDialog, public ScRefHandler

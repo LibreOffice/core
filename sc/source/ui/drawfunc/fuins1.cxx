@@ -45,8 +45,6 @@
 
 using namespace ::com::sun::star;
 
-
-
 void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 {
     if ( !rPage.Width() || !rPage.Height() )
@@ -91,8 +89,6 @@ void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& r
     if ( bNegative )
         rPos.X() = -rPos.X() - rSize.Width();       // back to real position
 }
-
-
 
 static void lcl_InsertGraphic( const Graphic& rGraphic,
                         const OUString& rFileName, const OUString& rFilterName, sal_Bool bAsLink, sal_Bool bApi,
@@ -179,8 +175,6 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     if ( bAsLink )
         pObj->SetGraphicLink( rFileName, ""/*TODO?*/, rFilterName );
 }
-
-
 
 static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
                       ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView,

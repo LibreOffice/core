@@ -27,8 +27,6 @@
 #include "sc.hrc"
 
 
-
-
 class ScHFEditDlg : public SfxTabDialog
 {
     SvxNumType eNumType;

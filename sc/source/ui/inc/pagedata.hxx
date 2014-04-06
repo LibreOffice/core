@@ -23,8 +23,6 @@
 #include "global.hxx"
 #include "address.hxx"
 
-
-
 class ScPrintRangeData
 {
 private:
@@ -78,8 +76,6 @@ public:
 
     void                AddPages();
 };
-
-
 
 #endif
 

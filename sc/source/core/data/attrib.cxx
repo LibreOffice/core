@@ -41,8 +41,6 @@
 
 using namespace com::sun::star;
 
-
-
 TYPEINIT1(ScMergeAttr,          SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(ScProtectionAttr,     SfxPoolItem);
 TYPEINIT1(ScRangeItem,          SfxPoolItem);
@@ -52,8 +50,6 @@ TYPEINIT1(ScViewObjectModeItem, SfxEnumItem);
 TYPEINIT1(ScDoubleItem,         SfxPoolItem);
 TYPEINIT1(ScPageScaleToItem,    SfxPoolItem);
 TYPEINIT1(ScCondFormatItem,    SfxPoolItem);
-
-
 
 
 //      General Help Function
@@ -87,11 +83,7 @@ bool ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxB
     }
 }
 
-
-
 //      Item - Implementierungen
-
-
 
 // Merge
 
@@ -102,15 +94,11 @@ ScMergeAttr::ScMergeAttr():
     nRowMerge(0)
 {}
 
-
-
 ScMergeAttr::ScMergeAttr( SCsCOL nCol, SCsROW nRow):
     SfxPoolItem(ATTR_MERGE),
     nColMerge(nCol),
     nRowMerge(nRow)
 {}
-
-
 
 ScMergeAttr::ScMergeAttr(const ScMergeAttr& rItem):
     SfxPoolItem(ATTR_MERGE)
@@ -123,8 +111,6 @@ ScMergeAttr::~ScMergeAttr()
 {
 }
 
-
-
 OUString ScMergeAttr::GetValueText() const
 {
     OUString aRet = "("
@@ -135,8 +121,6 @@ OUString ScMergeAttr::GetValueText() const
     return aRet;
 }
 
-
-
 bool ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
@@ -145,14 +129,10 @@ bool ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
              && (nRowMerge == ((ScMergeAttr&)rItem).nRowMerge);
 }
 
-
-
 SfxPoolItem* ScMergeAttr::Clone( SfxItemPool * ) const
 {
     return new ScMergeAttr(*this);
 }
-
-
 
 SfxPoolItem* ScMergeAttr::Create( SvStream& rStream, sal_uInt16 /* nVer */ ) const
 {
@@ -171,8 +151,6 @@ ScMergeFlagAttr::ScMergeFlagAttr():
     SfxInt16Item(ATTR_MERGE_FLAG, 0)
 {
 }
-
-
 
 ScMergeFlagAttr::ScMergeFlagAttr(sal_Int16 nFlags):
     SfxInt16Item(ATTR_MERGE_FLAG, nFlags)
@@ -206,8 +184,6 @@ ScProtectionAttr::ScProtectionAttr():
 {
 }
 
-
-
 ScProtectionAttr::ScProtectionAttr( bool bProtect, bool bHFormula,
                                     bool bHCell, bool bHPrint):
     SfxPoolItem(ATTR_PROTECTION),
@@ -217,8 +193,6 @@ ScProtectionAttr::ScProtectionAttr( bool bProtect, bool bHFormula,
     bHidePrint(bHPrint)
 {
 }
-
-
 
 ScProtectionAttr::ScProtectionAttr(const ScProtectionAttr& rItem):
     SfxPoolItem(ATTR_PROTECTION)
@@ -232,8 +206,6 @@ ScProtectionAttr::ScProtectionAttr(const ScProtectionAttr& rItem):
 ScProtectionAttr::~ScProtectionAttr()
 {
 }
-
-
 
 bool ScProtectionAttr::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -305,8 +277,6 @@ bool ScProtectionAttr::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-
-
 OUString ScProtectionAttr::GetValueText() const
 {
     const OUString aStrYes ( ScGlobal::GetRscString(STR_YES) );
@@ -324,8 +294,6 @@ OUString ScProtectionAttr::GetValueText() const
 
     return aValue;
 }
-
-
 
 SfxItemPresentation ScProtectionAttr::GetPresentation
     (
@@ -374,8 +342,6 @@ SfxItemPresentation ScProtectionAttr::GetPresentation
     return ePres;
 }
 
-
-
 bool ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
@@ -386,14 +352,10 @@ bool ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
              && (bHidePrint == ((ScProtectionAttr&)rItem).bHidePrint);
 }
 
-
-
 SfxPoolItem* ScProtectionAttr::Clone( SfxItemPool * ) const
 {
     return new ScProtectionAttr(*this);
 }
-
-
 
 SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, sal_uInt16 /* n */ ) const
 {
@@ -410,15 +372,11 @@ SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, sal_uInt16 /* n */ ) c
     return new ScProtectionAttr(bProtect,bHFormula,bHCell,bHPrint);
 }
 
-
-
 bool ScProtectionAttr::SetProtection( bool bProtect)
 {
     bProtection =  bProtect;
     return true;
 }
-
-
 
 bool ScProtectionAttr::SetHideFormula( bool bHFormula)
 {
@@ -426,15 +384,11 @@ bool ScProtectionAttr::SetHideFormula( bool bHFormula)
     return true;
 }
 
-
-
 bool ScProtectionAttr::SetHideCell( bool bHCell)
 {
     bHideCell = bHCell;
     return true;
 }
-
-
 
 bool ScProtectionAttr::SetHidePrint( bool bHPrint)
 {
@@ -453,14 +407,10 @@ bool ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
     return ( aRange == ( (ScRangeItem&)rAttr ).aRange );
 }
 
-
-
 SfxPoolItem* ScRangeItem::Clone( SfxItemPool* ) const
 {
     return new ScRangeItem( *this );
 }
-
-
 
 SfxItemPresentation ScRangeItem::GetPresentation
     (
@@ -515,14 +465,10 @@ ScTableListItem::ScTableListItem( const ScTableListItem& rCpy )
 }
 
 
-
-
 ScTableListItem::~ScTableListItem()
 {
     delete [] pTabArr;
 }
-
-
 
 ScTableListItem& ScTableListItem::operator=( const ScTableListItem& rCpy )
 {
@@ -541,8 +487,6 @@ ScTableListItem& ScTableListItem::operator=( const ScTableListItem& rCpy )
 
     return *this;
 }
-
-
 
 bool ScTableListItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -566,14 +510,10 @@ bool ScTableListItem::operator==( const SfxPoolItem& rAttr ) const
     return bEqual;
 }
 
-
-
 SfxPoolItem* ScTableListItem::Clone( SfxItemPool* ) const
 {
     return new ScTableListItem( *this );
 }
-
-
 
 SfxItemPresentation ScTableListItem::GetPresentation
     (
@@ -617,8 +557,6 @@ SfxItemPresentation ScTableListItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-
-
 //      ScPageHFItem - Dates from the Head and Foot lines
 
 
@@ -629,8 +567,6 @@ ScPageHFItem::ScPageHFItem( sal_uInt16 nWhichP )
         pRightArea  ( NULL )
 {
 }
-
-
 
 ScPageHFItem::ScPageHFItem( const ScPageHFItem& rItem )
     :   SfxPoolItem ( rItem ),
@@ -646,16 +582,12 @@ ScPageHFItem::ScPageHFItem( const ScPageHFItem& rItem )
         pRightArea = rItem.pRightArea->Clone();
 }
 
-
-
 ScPageHFItem::~ScPageHFItem()
 {
     delete pLeftArea;
     delete pCenterArea;
     delete pRightArea;
 }
-
-
 
 bool ScPageHFItem::QueryValue( uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
 {
@@ -715,14 +647,10 @@ bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
     return true;
 }
 
-
-
 OUString ScPageHFItem::GetValueText() const
 {
     return OUString("ScPageHFItem");
 }
-
-
 
 bool ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -735,14 +663,10 @@ bool ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
            && ScGlobal::EETextObjEqual(pRightArea,  r.pRightArea);
 }
 
-
-
 SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
 {
     return new ScPageHFItem( *this );
 }
-
-
 
 static void lcl_SetSpace( OUString& rStr, const ESelection& rSel )
 {
@@ -886,23 +810,17 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
 }
 
 
-
-
 void ScPageHFItem::SetLeftArea( const EditTextObject& rNew )
 {
     delete pLeftArea;
     pLeftArea = rNew.Clone();
 }
 
-
-
 void ScPageHFItem::SetCenterArea( const EditTextObject& rNew )
 {
     delete pCenterArea;
     pCenterArea = rNew.Clone();
 }
-
-
 
 void ScPageHFItem::SetRightArea( const EditTextObject& rNew )
 {
@@ -931,20 +849,14 @@ ScViewObjectModeItem::ScViewObjectModeItem( sal_uInt16 nWhichP )
 {
 }
 
-
-
 ScViewObjectModeItem::ScViewObjectModeItem( sal_uInt16 nWhichP, ScVObjMode eMode )
     : SfxEnumItem( nWhichP, sal::static_int_cast<sal_uInt16>(eMode) )
 {
 }
 
-
-
 ScViewObjectModeItem::~ScViewObjectModeItem()
 {
 }
-
-
 
 SfxItemPresentation ScViewObjectModeItem::GetPresentation
 (
@@ -994,8 +906,6 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
     return ePres;
 }
 
-
-
 OUString ScViewObjectModeItem::GetValueText( sal_uInt16 nVal ) const
 {
     OSL_ENSURE( nVal <= VOBJ_MODE_HIDE, "enum overflow!" );
@@ -1003,28 +913,20 @@ OUString ScViewObjectModeItem::GetValueText( sal_uInt16 nVal ) const
     return ScGlobal::GetRscString( STR_VOBJ_MODE_SHOW + (nVal % 2));
 }
 
-
-
 sal_uInt16 ScViewObjectModeItem::GetValueCount() const
 {
     return 2;
 }
-
-
 
 SfxPoolItem* ScViewObjectModeItem::Clone( SfxItemPool* ) const
 {
     return new ScViewObjectModeItem( *this );
 }
 
-
-
 sal_uInt16 ScViewObjectModeItem::GetVersion( sal_uInt16 /* nFileVersion */ ) const
 {
     return 1;
 }
-
-
 
 SfxPoolItem* ScViewObjectModeItem::Create(
                                     SvStream&   rStream,
@@ -1057,22 +959,16 @@ ScDoubleItem::ScDoubleItem( sal_uInt16 nWhichP, double nVal )
 {
 }
 
-
-
 ScDoubleItem::ScDoubleItem( const ScDoubleItem& rItem )
     :   SfxPoolItem ( rItem )
 {
         nValue = rItem.nValue;
 }
 
-
-
 OUString ScDoubleItem::GetValueText() const
 {
     return OUString("ScDoubleItem");
 }
-
-
 
 bool ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -1081,14 +977,10 @@ bool ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
     return nValue == _rItem.nValue;
 }
 
-
-
 SfxPoolItem* ScDoubleItem::Clone( SfxItemPool* ) const
 {
     return new ScDoubleItem( *this );
 }
-
-
 
 SfxPoolItem* ScDoubleItem::Create( SvStream& rStream, sal_uInt16 /* nVer */ ) const
 {
@@ -1100,13 +992,9 @@ SfxPoolItem* ScDoubleItem::Create( SvStream& rStream, sal_uInt16 /* nVer */ ) co
     return pItem;
 }
 
-
-
 ScDoubleItem::~ScDoubleItem()
 {
 }
-
-
 
 
 ScPageScaleToItem::ScPageScaleToItem() :
@@ -1216,8 +1104,6 @@ bool ScPageScaleToItem::PutValue( const uno::Any& rAny, sal_uInt8 nMemberId )
     }
     return bRet;
 }
-
-
 
 ScCondFormatItem::ScCondFormatItem():
     SfxPoolItem( ATTR_CONDITIONAL )

@@ -56,6 +56,4 @@ ScRTFImport::~ScRTFImport()
     delete (ScRTFParser*) mpParser;     // vor EditEngine!
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -135,8 +135,6 @@ ScXMLExternalTabData::ScXMLExternalTabData() :
 {
 }
 
-
-
 ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
@@ -424,8 +422,6 @@ void ScXMLTableContext::EndElement()
         pSheetData->StartStreamPos( nTab, nStartOffset );
     }
 }
-
-
 
 ScXMLImport& ScXMLTableProtectionContext::GetScImport()
 {

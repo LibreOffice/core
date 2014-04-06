@@ -45,8 +45,6 @@ ScCharDlg::ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
     AddTabPage("position", RID_SVXPAGE_CHAR_POSITION);
 }
 
-
-
 void ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
@@ -65,8 +63,6 @@ void ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
 }
 
-
-
 ScParagraphDlg::ScParagraphDlg(Window* pParent, const SfxItemSet* pAttr)
     : SfxTabDialog(pParent, "ParagraphDialog",
         "modules/scalc/ui/paradialog.ui", pAttr)
@@ -82,8 +78,6 @@ ScParagraphDlg::ScParagraphDlg(Window* pParent, const SfxItemSet* pAttr)
     m_nTabPageId = AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
 }
 
-
-
 void ScParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if (nId == m_nTabPageId)
@@ -94,7 +88,5 @@ void ScParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         rPage.PageCreated(aSet);
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

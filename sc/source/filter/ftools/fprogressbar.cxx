@@ -21,8 +21,6 @@
 #include "global.hxx"
 #include "progress.hxx"
 
-
-
 ScfProgressBar::ScfProgressSegment::ScfProgressSegment( sal_Size nSize ) :
     mxProgress( 0 ),
     mnSize( nSize ),
@@ -33,8 +31,6 @@ ScfProgressBar::ScfProgressSegment::ScfProgressSegment( sal_Size nSize ) :
 ScfProgressBar::ScfProgressSegment::~ScfProgressSegment()
 {
 }
-
-
 
 ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, const OUString& rText ) :
     maText( rText )
@@ -194,8 +190,6 @@ void ScfProgressBar::Progress( sal_Size nDelta )
     ProgressAbs( mpCurrSegment ? (mpCurrSegment->mnPos + nDelta) : 0 );
 }
 
-
-
 ScfSimpleProgressBar::ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, const OUString& rText ) :
     maProgress( pDocShell, rText )
 {
@@ -236,7 +230,5 @@ void ScfStreamProgressBar::Init( SfxObjectShell* pDocShell, const OUString& rTex
     mxProgress.reset( new ScfSimpleProgressBar( nSize, pDocShell, rText ) );
     Progress();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

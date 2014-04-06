@@ -41,11 +41,7 @@
 #define ERRORBOX(rid) ErrorBox( this, WinBits( WB_OK|WB_DEF_OK),\
                                     ScGlobal::GetRscString(rid) ).Execute()
 
-
-
 //  class ScSpecialFilterDialog
-
-
 
 ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                         const SfxItemSet&   rArgSet )
@@ -101,8 +97,6 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
 }
 
 
-
-
 ScSpecialFilterDlg::~ScSpecialFilterDlg()
 {
     sal_uInt16 nEntries = pLbFilterArea->GetEntryCount();
@@ -120,8 +114,6 @@ ScSpecialFilterDlg::~ScSpecialFilterDlg()
     pTimer->Stop();
     delete pTimer;
 }
-
-
 
 
 void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
@@ -204,8 +196,6 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 }
 
 
-
-
 bool ScSpecialFilterDlg::Close()
 {
     if (pViewData)
@@ -213,8 +203,6 @@ bool ScSpecialFilterDlg::Close()
 
     return DoClose( ScSpecialFilterDlgWrapper::GetChildWindowId() );
 }
-
-
 
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 // neue Selektion im Referenz-Edit angezeigt wird.
@@ -237,8 +225,6 @@ void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         pRefInputEdit->SetRefString( aRefStr );
     }
 }
-
-
 
 
 void ScSpecialFilterDlg::SetActive()
@@ -264,8 +250,6 @@ void ScSpecialFilterDlg::SetActive()
 }
 
 
-
-
 ScQueryItem* ScSpecialFilterDlg::GetOutputItem( const ScQueryParam& rParam,
                                                 const ScRange& rSource )
 {
@@ -277,14 +261,10 @@ ScQueryItem* ScSpecialFilterDlg::GetOutputItem( const ScQueryParam& rParam,
 }
 
 
-
-
 bool ScSpecialFilterDlg::IsRefInputMode() const
 {
     return bRefInputMode;
 }
-
-
 
 // Handler:
 
@@ -406,8 +386,6 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 }
 
 
-
-
 IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
 {
     // alle 50ms nachschauen, ob RefInputMode noch stimmt
@@ -437,8 +415,6 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
 }
 
 
-
-
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
 {
     if ( pLb == pLbFilterArea )
@@ -454,8 +430,6 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
 
     return 0;
 }
-
-
 
 
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )

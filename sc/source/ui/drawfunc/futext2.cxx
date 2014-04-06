@@ -24,8 +24,6 @@
 #include "futext.hxx"
 #include "tabvwsh.hxx"
 
-
-
 SdrOutliner* FuText::MakeOutliner()
 {
     ScViewData* pViewData = pViewShell->GetViewData();
@@ -44,7 +42,5 @@ SdrOutliner* FuText::MakeOutliner()
 
     return pOutl;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

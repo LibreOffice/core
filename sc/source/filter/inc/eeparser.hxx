@@ -132,8 +132,6 @@ public:
     const ScEEParseEntry*   ListEntry( size_t index ) const { return maList[ index ]; }
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

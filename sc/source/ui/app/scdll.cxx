@@ -119,14 +119,10 @@
 
 
 
-
-
 ScResId::ScResId( sal_uInt16 nId ) :
     ResId( nId, *SC_MOD()->GetResMgr() )
 {
 }
-
-
 
 void ScDLL::Init()
 {

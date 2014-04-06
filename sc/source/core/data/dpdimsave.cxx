@@ -36,8 +36,6 @@
 
 using namespace com::sun::star;
 
-
-
 ScDPSaveGroupItem::ScDPSaveGroupItem( const OUString& rName ) :
     aGroupName(rName) {}
 
@@ -130,8 +128,6 @@ void ScDPSaveGroupItem::AddToData(ScDPGroupDimension& rDataDim) const
 
     rDataDim.AddItem(aGroup);
 }
-
-
 
 ScDPSaveGroupDimension::ScDPSaveGroupDimension( const OUString& rSource, const OUString& rName ) :
     aSourceDim( rSource ),
@@ -426,8 +422,6 @@ void ScDPSaveGroupDimension::AddToCache(ScDPCache& rCache) const
     }
 }
 
-
-
 ScDPSaveNumGroupDimension::ScDPSaveNumGroupDimension( const OUString& rName, const ScDPNumGroupInfo& rInfo ) :
     aDimensionName( rName ),
     aGroupInfo( rInfo ),
@@ -576,8 +570,6 @@ void ScDPSaveNumGroupDimension::SetDateInfo( const ScDPNumGroupInfo& rInfo, sal_
     nDatePart = nPart;
 }
 
-
-
 namespace {
 
 struct ScDPSaveGroupDimNameFunc
@@ -595,8 +587,6 @@ struct ScDPSaveGroupSourceNameFunc
 };
 
 } // namespace
-
-
 
 ScDPDimensionSaveData::ScDPDimensionSaveData()
 {
@@ -854,7 +844,5 @@ OUString ScDPDimensionSaveData::CreateDateGroupDimName(
     OSL_ENSURE(!aPartName.isEmpty(), "ScDPDimensionSaveData::CreateDateGroupDimName - invalid date part");
     return CreateGroupDimName( aPartName, rObject, bAllowSource, pDeletedNames );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

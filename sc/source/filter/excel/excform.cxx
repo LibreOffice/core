@@ -181,8 +181,6 @@ void ImportExcel::Formula(
 }
 
 
-
-
 ExcelToSc::ExcelToSc( const XclImpRoot& rRoot ) :
     ExcelConverterBase( 512 ),
     XclImpRoot( rRoot ),

@@ -119,8 +119,6 @@ FltError ExportBiff5::Write()
     return eERR_OK;
 }
 
-
-
 ExportBiff8::ExportBiff8( XclExpRootData& rExpData, SvStream& rStrm ) :
     ExportBiff5( rExpData, rStrm )
 {

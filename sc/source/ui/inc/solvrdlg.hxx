@@ -28,8 +28,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 
-
-
 enum ScSolverErr
     {
         SOLVERR_NOFORMULA,
@@ -37,8 +35,6 @@ enum ScSolverErr
         SOLVERR_INVALID_VARIABLE,
         SOLVERR_INVALID_TARGETVALUE
     };
-
-
 
 
 class ScSolverDlg : public ScAnyRefDlg

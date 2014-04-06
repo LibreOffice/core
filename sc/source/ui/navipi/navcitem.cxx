@@ -28,8 +28,6 @@
 // STATIC DATA -----------------------------------------------------------
 
 
-
-
 ScNavigatorControllerItem::ScNavigatorControllerItem( sal_uInt16          nIdP,
                                                       ScNavigatorDlg& rDlg,
                                                       SfxBindings&    rBindings )
@@ -37,8 +35,6 @@ ScNavigatorControllerItem::ScNavigatorControllerItem( sal_uInt16          nIdP,
         rNavigatorDlg       ( rDlg )
 {
 }
-
-
 
 void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemState /* eState */,
                                                           const SfxPoolItem* pItem )
@@ -103,7 +99,5 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
             break;
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

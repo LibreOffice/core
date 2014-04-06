@@ -20,8 +20,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include <comphelper/string.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -39,8 +37,6 @@
 #include "rangeutl.hxx"
 #include "docsh.hxx"
 #include "tablink.hxx"
-
-
 
 ScLinkedAreaDlg::ScLinkedAreaDlg(Window* pParent)
     : ModalDialog(pParent, "ExternalDataDialog", "modules/scalc/ui/externaldata.ui")

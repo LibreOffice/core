@@ -68,8 +68,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-
-
 /** Try to parse the given range using Calc-style syntax first, then
     Excel-style if that fails. */
 static sal_uInt16 lcl_ParseRange(ScRange& rScRange, const OUString& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
@@ -767,8 +765,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             }
             break;
 
-
-
         case FID_TAB_SELECTALL:
             SelectAllTables();
             rReq.Done();
@@ -905,8 +901,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 InvalidateSplit();
             }
             break;
-
-
 
         case FID_CHG_SHOW:
             {
@@ -1131,7 +1125,5 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

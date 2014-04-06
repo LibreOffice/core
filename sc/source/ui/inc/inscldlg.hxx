@@ -27,8 +27,6 @@
 
 #include "global.hxx"
 
-
-
 class ScInsertCellDlg : public ModalDialog
 {
 private:

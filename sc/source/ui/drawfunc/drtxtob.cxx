@@ -90,8 +90,6 @@ SFX_IMPL_INTERFACE( ScDrawTextObjectBar, SfxShell, ScResId(SCSTR_DRAWTEXTSHELL) 
 
 TYPEINIT1( ScDrawTextObjectBar, SfxShell );
 
-
-
 // abschalten der nicht erwuenschten Acceleratoren:
 
 void ScDrawTextObjectBar::StateDisableItems( SfxItemSet &rSet )
@@ -141,11 +139,7 @@ ScDrawTextObjectBar::~ScDrawTextObjectBar()
     }
 }
 
-
-
 //          Funktionen
-
-
 
 void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 {
@@ -544,11 +538,7 @@ void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
     }
 }
 
-
-
 //          Attribute
-
-
 
 void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
 {

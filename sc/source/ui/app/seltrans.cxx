@@ -39,8 +39,6 @@
 
 using namespace com::sun::star;
 
-
-
 static sal_Bool lcl_IsURLButton( SdrObject* pObject )
 {
     sal_Bool bRet = false;

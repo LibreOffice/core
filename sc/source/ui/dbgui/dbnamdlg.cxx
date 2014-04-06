@@ -33,15 +33,11 @@
 #include "dbnamdlg.hxx"
 
 
-
-
 #define ABS_SREF          SCA_VALID \
                         | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
 #define ABS_DREF          ABS_SREF \
                         | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
-
-
 
 class DBSaveData;
 
@@ -91,8 +87,6 @@ private:
 
 
 
-
-
 void DBSaveData::Save()
 {
     aArea   = rCurArea;
@@ -103,8 +97,6 @@ void DBSaveData::Save()
     bStrip  = rBtnStrip.IsChecked();
     bDirty  = sal_True;
 }
-
-
 
 
 void DBSaveData::Restore()
@@ -121,11 +113,7 @@ void DBSaveData::Restore()
     }
 }
 
-
-
 //  class ScDbNameDlg
-
-
 
 ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     ScViewData* ptrViewData)
@@ -177,14 +165,10 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 }
 
 
-
-
 ScDbNameDlg::~ScDbNameDlg()
 {
     DELETEZ( pSaveObj );
 }
-
-
 
 
 void ScDbNameDlg::Init()
@@ -308,14 +292,10 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-
-
 bool ScDbNameDlg::Close()
 {
     return DoClose( ScDbNameDlgWrapper::GetChildWindowId() );
 }
-
-
 
 void ScDbNameDlg::SetActive()
 {
@@ -327,8 +307,6 @@ void ScDbNameDlg::SetActive()
 
     RefInputDone();
 }
-
-
 
 void ScDbNameDlg::UpdateNames()
 {
@@ -357,8 +335,6 @@ void ScDbNameDlg::UpdateNames()
     m_pEdName->SetUpdateMode( true );
     m_pEdName->Invalidate();
 }
-
-
 
 void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
 {
@@ -393,8 +369,6 @@ void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
 }
 
 
-
-
 bool ScDbNameDlg::IsRefInputMode() const
 {
     return bRefInputMode;
@@ -419,16 +393,12 @@ IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl)
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG_INLINE_START(ScDbNameDlg, CancelBtnHdl)
 {
     Close();
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(ScDbNameDlg, CancelBtnHdl)
-
-
 
 IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 {
@@ -578,8 +548,6 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
 {
     OUString  theName     = m_pEdName->GetText();
@@ -643,8 +611,6 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
     }
     return 0;
 }
-
-
 
 IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
 {

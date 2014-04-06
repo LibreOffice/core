@@ -27,8 +27,6 @@
 namespace oox {
 namespace xls {
 
-
-
 struct TableModel
 {
     ::com::sun::star::table::CellRangeAddress
@@ -42,8 +40,6 @@ struct TableModel
 
     explicit            TableModel();
 };
-
-
 
 class Table : public WorkbookHelper
 {
@@ -92,8 +88,6 @@ private:
 
 typedef ::boost::shared_ptr< Table > TableRef;
 
-
-
 class TableBuffer : public WorkbookHelper
 {
 public:
@@ -124,8 +118,6 @@ private:
     TableIdMap          maIdTables;
     TableNameMap        maNameTables;
 };
-
-
 
 } // namespace xls
 } // namespace oox

@@ -29,11 +29,7 @@
 class SfxObjectShell;
 class ScProgress;
 
-
-
 const sal_Int32 SCF_INV_SEGMENT = -1;
-
-
 
 /** Progress bar for complex progress representation.
 
@@ -186,8 +182,6 @@ private:
     bool                mbInProgress;       /// true = progress bar started.
 };
 
-
-
 /** A simplified progress bar with only one segment. */
 class ScfSimpleProgressBar
 {
@@ -208,8 +202,6 @@ private:
     ScfProgressBar      maProgress;     /// The used progress bar.
 };
 
-
-
 /** A simplified progress bar based on the stream position of an existing stream. */
 class ScfStreamProgressBar
 {
@@ -229,8 +221,6 @@ private:
     ScfSimpleProgressBarPtr mxProgress; /// The used progress bar.
     SvStream&           mrStrm;         /// The used stream.
 };
-
-
 
 #endif
 

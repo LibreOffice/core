@@ -22,8 +22,6 @@
 
 #include <sfx2/styledlg.hxx>
 
-
-
 class SfxStyleSheetBase;
 
 class ScStyleDlg : public SfxStyleDialog

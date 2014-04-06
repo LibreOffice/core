@@ -25,11 +25,7 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::uno;
-
-
 
 
 namespace {
@@ -68,8 +64,6 @@ const sal_uInt8 BIFF12_WEBPR_HAS_URL                    = 0x04;
 
 } // namespace
 
-
-
 WebPrModel::WebPrModel() :
     mnHtmlFormat( XML_none ),
     mbXml( false ),
@@ -83,8 +77,6 @@ WebPrModel::WebPrModel() :
     mbHtmlTables( false )
 {
 }
-
-
 
 ConnectionModel::ConnectionModel() :
     mnId( -1 ),
@@ -109,8 +101,6 @@ WebPrModel& ConnectionModel::createWebPr()
     mxWebPr.reset( new WebPrModel );
     return *mxWebPr;
 }
-
-
 
 Connection::Connection( const WorkbookHelper& rHelper, sal_Int32 nConnId ) :
     WorkbookHelper( rHelper )
@@ -277,8 +267,6 @@ void Connection::importWebPrTable( SequenceInputStream& rStrm, sal_Int32 nRecId 
     }
 }
 
-
-
 ConnectionsBuffer::ConnectionsBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     mnUnusedId( 1 )
@@ -313,8 +301,6 @@ void ConnectionsBuffer::insertConnectionToMap( const ConnectionRef& rxConnection
         mnUnusedId = ::std::max< sal_Int32 >( mnUnusedId, nConnId + 1 );
     }
 }
-
-
 
 } // namespace xls
 } // namespace oox

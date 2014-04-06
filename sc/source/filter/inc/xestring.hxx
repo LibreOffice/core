@@ -22,8 +22,6 @@
 
 #include "xlstring.hxx"
 
-
-
 class XclExpStream;
 class XclExpXmlStream;
 
@@ -264,8 +262,6 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclExpString& rStrin
     rString.Write( rStrm );
     return rStrm;
 }
-
-
 
 #endif
 

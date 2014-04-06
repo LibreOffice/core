@@ -34,8 +34,6 @@ class ScViewData;
 class ScDocument;
 
 
-
-
 class ScSimpleRefDlg: public ScAnyRefDlg
 {
 private:
@@ -94,8 +92,6 @@ public:
 
     void            SetAutoReOpen(bool bFlag) {bAutoReOpen=bFlag;}
 };
-
-
 
 #endif // SC_DBNAMDLG_HXX
 

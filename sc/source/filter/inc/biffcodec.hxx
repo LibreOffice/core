@@ -28,11 +28,7 @@
 namespace oox {
 namespace xls {
 
-
-
 const sal_Int64 BIFF_RCF_BLOCKSIZE          = 1024;
-
-
 
 /** Base class for BIFF stream decoders. */
 class BiffDecoderBase : public ::comphelper::IDocPasswordVerifier
@@ -80,8 +76,6 @@ private:
 
 typedef ::boost::shared_ptr< BiffDecoderBase > BiffDecoderRef;
 
-
-
 /** Decodes BIFF stream contents that are encoded using the old XOR algorithm. */
 class BiffDecoder_XOR : public BiffDecoderBase
 {
@@ -110,8 +104,6 @@ private:
     sal_uInt16          mnKey;
     sal_uInt16          mnHash;
 };
-
-
 
 /** Decodes BIFF stream contents that are encoded using the RC4 algorithm. */
 class BiffDecoder_RCF : public BiffDecoderBase
@@ -142,8 +134,6 @@ private:
     ::std::vector< sal_uInt8 > maVerifierHash;
 };
 
-
-
 /** Helper for BIFF stream codecs. Holds the used codec object. */
 class BiffCodecHelper : public WorkbookHelper
 {
@@ -156,8 +146,6 @@ public:
 private:
     BiffDecoderRef      mxDecoder;          /// The decoder for import filter.
 };
-
-
 
 } // namespace xls
 } // namespace oox

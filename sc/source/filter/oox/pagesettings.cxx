@@ -47,15 +47,11 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::Relations;
-
-
 
 namespace {
 
@@ -89,8 +85,6 @@ const sal_uInt16 BIFF12_CHARTPAGESETUP_USEFIRSTPAGE = 0x0010;
 const sal_uInt16 BIFF12_CHARTPAGESETUP_DRAFTQUALITY = 0x0020;
 
 } // namespace
-
-
 
 PageSettingsModel::PageSettingsModel() :
     mfLeftMargin( OOX_MARGIN_DEFAULT_LR ),
@@ -132,8 +126,6 @@ void PageSettingsModel::setBiffPrintErrors( sal_uInt8 nPrintErrors )
     static const sal_Int32 spnErrorIds[] = { XML_displayed, XML_none, XML_dash, XML_NA };
     mnPrintErrors = STATIC_ARRAY_SELECT( spnErrorIds, nPrintErrors, XML_none );
 }
-
-
 
 PageSettings::PageSettings( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -332,8 +324,6 @@ void PageSettings::importPictureData( const Relations& rRelations, const OUStrin
 }
 
 
-
-
 enum HFPortionId
 {
     HF_LEFT,
@@ -341,8 +331,6 @@ enum HFPortionId
     HF_RIGHT,
     HF_COUNT
 };
-
-
 
 struct HFPortionInfo
 {
@@ -368,8 +356,6 @@ bool HFPortionInfo::initialize( const Reference<text::XText>& rxText )
     OSL_ENSURE( bRet, "HFPortionInfo::initialize - missing interfaces" );
     return bRet;
 }
-
-
 
 class HeaderFooterParser : public WorkbookHelper
 {
@@ -441,8 +427,6 @@ private:
     FontModel           maFontModel;            /// Font attributes of current text range.
 };
 
-
-
 namespace {
 
 // different names for bold font style (lowercase)
@@ -467,8 +451,6 @@ static const sal_Char* const sppcItalicNames[] =
 };
 
 } // namespace
-
-
 
 HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -881,8 +863,6 @@ void HeaderFooterParser::setNewPortion( HFPortionId ePortion )
 
 
 
-
-
 PageSettingsConverter::HFHelperData::HFHelperData( sal_Int32 nLeftPropId, sal_Int32 nRightPropId ) :
     mnLeftPropId( nLeftPropId ),
     mnRightPropId( nRightPropId ),
@@ -893,8 +873,6 @@ PageSettingsConverter::HFHelperData::HFHelperData( sal_Int32 nLeftPropId, sal_In
     mbDynamicHeight( false )
 {
 }
-
-
 
 PageSettingsConverter::PageSettingsConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -1062,8 +1040,6 @@ sal_Int32 PageSettingsConverter::writeHeaderFooter(
     }
     return nHeight;
 }
-
-
 
 } // namespace xls
 } // namespace oox

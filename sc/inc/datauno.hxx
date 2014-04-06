@@ -688,8 +688,6 @@ public:
                                 ::com::sun::star::lang::IndexOutOfBoundsException, std::exception) SAL_OVERRIDE;
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

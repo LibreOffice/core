@@ -27,8 +27,6 @@
 
 class ScViewData;
 
-
-
 //  initial size
 #define SC_TABBAR_DEFWIDTH      270
 
@@ -76,8 +74,6 @@ public:
 
     void            SetSheetLayoutRTL( bool bSheetRTL );
 };
-
-
 
 #endif
 

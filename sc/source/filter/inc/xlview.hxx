@@ -102,8 +102,6 @@ struct XclDocViewData
     explicit            XclDocViewData();
 };
 
-
-
 /** Contains all settings for a selection in a single pane of a sheet. */
 struct XclSelectionData
 {
@@ -115,8 +113,6 @@ struct XclSelectionData
 };
 
 typedef boost::shared_ptr< XclSelectionData > XclSelectionDataRef;
-
-
 
 /** Contains all view settings for a single sheet. */
 struct XclTabViewData
@@ -164,8 +160,6 @@ struct XclTabViewData
     /** Returns read/write access to the selection data of the specified pane. */
     XclSelectionData&   CreateSelectionData( sal_uInt8 nPane );
 };
-
-
 
 #endif
 

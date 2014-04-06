@@ -27,8 +27,6 @@ namespace xls {
 
 class QueryTable;
 
-
-
 class QueryTableFragment : public WorksheetFragmentBase
 {
 public:
@@ -45,8 +43,6 @@ protected:
 private:
     QueryTable&         mrQueryTable;
 };
-
-
 
 } // namespace xls
 } // namespace oox

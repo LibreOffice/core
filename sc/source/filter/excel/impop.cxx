@@ -416,8 +416,6 @@ void ImportExcel::Window1()
 }
 
 
-
-
 void ImportExcel::Row25( void )
 {
     sal_uInt16  nRow, nRowHeight;

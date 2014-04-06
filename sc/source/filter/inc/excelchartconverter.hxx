@@ -26,8 +26,6 @@
 namespace oox {
 namespace xls {
 
-
-
 class ExcelChartConverter : public ::oox::drawingml::chart::ChartConverter, public WorkbookHelper
 {
 public:
@@ -44,8 +42,6 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >& rxDataProvider,
                             const ::oox::drawingml::chart::DataSequenceModel& rDataSeq ) SAL_OVERRIDE;
 };
-
-
 
 } // namespace xls
 } // namespace oox

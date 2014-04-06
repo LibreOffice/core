@@ -28,8 +28,6 @@
 #include "sc.hrc"
 
 
-
-
 static void lcl_InvalidateOutliner( SfxBindings* pBindings )
 {
     if ( pBindings )
@@ -42,8 +40,6 @@ static void lcl_InvalidateOutliner( SfxBindings* pBindings )
         pBindings->Invalidate( SID_ATTR_SIZE );
     }
 }
-
-
 
 //! PaintWidthHeight zur DocShell verschieben?
 
@@ -77,8 +73,6 @@ static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
     }
     rDocShell.PostPaint( nStartCol,nStartRow,nTab, MAXCOL,MAXROW,nTab, nParts );
 }
-
-
 
 bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi )
 {
@@ -265,8 +259,6 @@ bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
     return bSuccess;
 }
 
-
-
 bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
 {
     SCCOL nStartCol = rRange.aStart.Col();
@@ -330,8 +322,6 @@ bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
 
     return true;
 }
-
-
 
 bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel,
                                     bool bRecord, bool bPaint )
@@ -425,8 +415,6 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     return true;
 }
-
-
 
 bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
 {
@@ -624,8 +612,6 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
     return bDone;
 }
 
-
-
 bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
                                     bool bRecord, bool bPaint )
 {
@@ -768,8 +754,6 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     return true;        //! immer ???
 }
-
-
 
 
 

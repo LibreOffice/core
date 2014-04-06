@@ -84,8 +84,6 @@ using ::std::auto_ptr;
 
 // Funktionen fuer den Zugriff auf das Document
 
-
-
 void ScInterpreter::ReplaceCell( ScAddress& rPos )
 {
     size_t ListSize = pDok->aTableOpList.size();
@@ -875,11 +873,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     return true;
 }
 
-
-
 // Stack operations
-
-
 
 // Also releases a TempToken if appropriate.
 
@@ -3728,8 +3722,6 @@ void ScInterpreter::ScTTT()
         Pop();
     PushError(errNoValue);
 }
-
-
 
 
 ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,

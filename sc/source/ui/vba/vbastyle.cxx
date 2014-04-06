@@ -25,8 +25,6 @@ using namespace ::com::sun::star;
 
 static OUString DISPLAYNAME("DisplayName");
 
-
-
 uno::Reference< container::XNameAccess >
 ScVbaStyle::getStylesNameContainer( const uno::Reference< frame::XModel >& xModel ) throw ( uno::RuntimeException )
 {

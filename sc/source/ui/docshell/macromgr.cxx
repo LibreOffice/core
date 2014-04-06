@@ -36,8 +36,6 @@ using ::std::list;
 using ::std::for_each;
 using ::std::pair;
 
-
-
 /**
  * A simple container to keep track of cells that depend on basic modules
  * changes.  We don't check for duplicates at insertion time; instead, we
@@ -90,8 +88,6 @@ private:
     typedef boost::unordered_map<OUString, list<ScFormulaCell*>, OUStringHash> ModuleCellMap;
     ModuleCellMap maCells;
 };
-
-
 
 
 ScMacroManager::ScMacroManager(ScDocument* pDoc) :

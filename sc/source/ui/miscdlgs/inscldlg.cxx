@@ -22,16 +22,12 @@
 
 
 
-
-
 #include "inscldlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
 
 static sal_uInt8 nInsItemChecked=0;
-
-
 
 ScInsertCellDlg::ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove) :
     ModalDialog     ( pParent, "InsertCellsDialog", "modules/scalc/ui/insertcells.ui")
@@ -66,8 +62,6 @@ ScInsertCellDlg::ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove) :
     }
 }
 
-
-
 InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
 {
     InsCellCmd nReturn = INS_NONE;
@@ -99,7 +93,5 @@ InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
 ScInsertCellDlg::~ScInsertCellDlg()
 {
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

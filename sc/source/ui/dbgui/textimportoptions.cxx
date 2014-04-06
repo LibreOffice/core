@@ -20,8 +20,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include "textimportoptions.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"

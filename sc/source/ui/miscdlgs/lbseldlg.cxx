@@ -22,15 +22,11 @@
 
 
 
-
-
 #include <vcl/msgbox.hxx>
 
 #include "lbseldlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
-
-
 
 ScSelEntryDlg::ScSelEntryDlg(Window*  pParent, const std::vector<OUString> &rEntryList)
     : ModalDialog(pParent, "SelectRangeDialog", "modules/scalc/ui/selectrange.ui")
@@ -48,14 +44,10 @@ ScSelEntryDlg::ScSelEntryDlg(Window*  pParent, const std::vector<OUString> &rEnt
         m_pLb->SelectEntryPos( 0 );
 }
 
-
-
 OUString ScSelEntryDlg::GetSelectEntry() const
 {
     return m_pLb->GetSelectEntry();
 }
-
-
 
 IMPL_LINK_NOARG_INLINE_START(ScSelEntryDlg, DblClkHdl)
 {

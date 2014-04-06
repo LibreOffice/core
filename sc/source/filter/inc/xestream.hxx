@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 #ifndef SC_XESTREAM_HXX
 #define SC_XESTREAM_HXX
 
@@ -197,8 +195,6 @@ private:
     bool                mbInRec;        /// true = currently writing inside of a record.
 };
 
-
-
 class XclExpBiff8Encrypter
 {
 public:
@@ -239,8 +235,6 @@ private:
     sal_uInt64          mnOldPos;      /// Last known stream position
     bool                mbValid;
 };
-
-
 
 
 

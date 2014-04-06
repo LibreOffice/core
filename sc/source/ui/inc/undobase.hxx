@@ -31,8 +31,6 @@ class SdrUndoAction;
 class ScRefUndoData;
 class ScDBData;
 
-
-
 class ScSimpleUndo: public SfxUndoAction
 {
     ScSimpleUndo(const ScSimpleUndo&); // disabled
@@ -62,8 +60,6 @@ protected:
     static void     ShowTable( SCTAB nTab );
     static void     ShowTable( const ScRange& rRange );
 };
-
-
 
 enum ScBlockUndoMode { SC_UNDO_SIMPLE, SC_UNDO_MANUALHEIGHT, SC_UNDO_AUTOHEIGHT };
 
@@ -110,8 +106,6 @@ protected:
     void ShowBlock();
 };
 
-
-
 // for functions that act on a database range - takes care of the unnamed database range
 // (collected separately, before the undo action, for showing dialogs etc.)
 
@@ -134,8 +128,6 @@ public:
     void            BeginRedo();
     void            EndRedo();
 };
-
-
 
 enum ScMoveUndoMode { SC_UNDO_REFFIRST, SC_UNDO_REFLAST };
 
@@ -162,8 +154,6 @@ protected:
 private:
     void            UndoRef();
 };
-
-
 
 class ScUndoWrapper: public SfxUndoAction           // for manual merging of actions
 {

@@ -25,11 +25,7 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::oox::core;
-
-
 
 
 PivotTableFieldContext::PivotTableFieldContext( WorksheetFragmentBase& rFragment, PivotTableField& rTableField ) :
@@ -110,8 +106,6 @@ void PivotTableFieldContext::onStartRecord( SequenceInputStream& rStrm )
         mrTableField.importPTField( rStrm );
 }
 
-
-
 PivotTableFilterContext::PivotTableFilterContext( WorksheetFragmentBase& rFragment, PivotTableFilter& rTableFilter ) :
     WorksheetContextBase( rFragment ),
     mrTableFilter( rTableFilter )
@@ -163,8 +157,6 @@ void PivotTableFilterContext::onStartRecord( SequenceInputStream& rStrm )
     if( isRootElement() )
         mrTableFilter.importPTFilter( rStrm );
 }
-
-
 
 PivotTableFragment::PivotTableFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     WorksheetFragmentBase( rHelper, rFragmentPath ),
@@ -281,8 +273,6 @@ const RecordInfo* PivotTableFragment::getRecordInfos() const
     };
     return spRecInfos;
 }
-
-
 
 } // namespace xls
 } // namespace oox

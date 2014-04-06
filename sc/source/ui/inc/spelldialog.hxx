@@ -23,8 +23,6 @@
 #include <memory>
 #include <svx/SpellDialogChildWindow.hxx>
 
-
-
 class ScConversionEngineBase;
 class ScSelectionState;
 class ScTabViewShell;
@@ -91,8 +89,6 @@ private:
     bool                mbNeedNextObj;
     bool                mbOldIdleEnabled;
 };
-
-
 
 #endif
 

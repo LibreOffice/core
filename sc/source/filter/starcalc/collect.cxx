@@ -24,8 +24,6 @@
 #define MAXCOLLECTIONSIZE       16384
 #define MAXDELTA                1024
 
-
-
 ScDataObject::~ScDataObject()
 {
 }
@@ -71,8 +69,6 @@ ScCollection::ScCollection(const ScCollection& rCollection)
     *this = rCollection;
 }
 
-
-
 ScCollection::~ScCollection()
 {
     lcl_DeleteScDataObjects( pItems, nCount );
@@ -80,8 +76,6 @@ ScCollection::~ScCollection()
 
 
 sal_uInt16 ScCollection::GetCount() const { return nCount; }
-
-
 
 bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
 {
@@ -106,14 +100,10 @@ bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
     return false;
 }
 
-
-
 bool ScCollection::Insert(ScDataObject* pScDataObject)
 {
     return AtInsert(nCount, pScDataObject);
 }
-
-
 
 ScDataObject* ScCollection::At(sal_uInt16 nIndex) const
 {
@@ -141,8 +131,6 @@ ScCollection& ScCollection::operator=( const ScCollection& r )
 
     return *this;
 }
-
-
 
 ScDataObject*   ScCollection::Clone() const
 {

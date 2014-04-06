@@ -26,8 +26,6 @@
 class XclImpStream;
 class XclExpStream;
 
-
-
 /** A 2D cell address struct with Excel column and row indexes. */
 struct XclAddress
 {
@@ -65,8 +63,6 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclAddress& rXclPos 
     rXclPos.Write( rStrm );
     return rStrm;
 }
-
-
 
 /** A 2D cell range address struct with Excel column and row indexes. */
 struct XclRange
@@ -116,8 +112,6 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclRange& rXclRange 
     return rStrm;
 }
 
-
-
 /** A 2D cell range address list with Excel column and row indexes. */
 class XclRangeList : public ::std::vector< XclRange >
 {
@@ -144,8 +138,6 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclRangeList& rXclRa
     return rStrm;
 }
 
-
-
 class XclTracer;
 
 /** Base class for import/export address converters. */
@@ -161,8 +153,6 @@ public:
     inline bool         IsRowTruncated() const { return mbRowTrunc; }
     /** Returns whether the "some sheets have been cut" warning box should be shown. */
     inline bool         IsTabTruncated() const { return mbTabTrunc; }
-
-
 
     /** Checks if the passed sheet index is valid.
         @param nScTab  The sheet index to check.
@@ -181,8 +171,6 @@ protected:
     bool                mbRowTrunc;     /// Flag for "rows truncated" warning box.
     bool                mbTabTrunc;     /// Flag for "tables truncated" warning box.
 };
-
-
 
 #endif
 

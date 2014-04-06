@@ -3794,8 +3794,6 @@ void ScDocument::ResetChanged( const ScRange& rRange )
 
 //  Spaltenbreiten / Zeilenhoehen   --------------------------------------
 
-
-
 void ScDocument::SetColWidth( SCCOL nCol, SCTAB nTab, sal_uInt16 nNewWidth )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -4013,8 +4011,6 @@ void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkDa
             nProgressStart += maTabs[nTab]->GetWeightedCount();
         }
 }
-
-
 
 //  Spalten-/Zeilen-Flags   ----------------------------------------------
 
@@ -5641,8 +5637,6 @@ ScDocumentPool* ScDocument::GetPool()
     return xPoolHelper->GetDocPool();
 }
 
-
-
 ScStyleSheetPool* ScDocument::GetStyleSheetPool() const
 {
     return xPoolHelper->GetStylePool();
@@ -5689,8 +5683,6 @@ void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX,
 
 
 //  Datei-Operationen
-
-
 
 void ScDocument::UpdStlShtPtrsFrmNms()
 {

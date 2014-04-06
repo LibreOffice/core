@@ -307,6 +307,4 @@ FltError ImportLotus::Read( SvStream& rIn )
     return eRet;
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

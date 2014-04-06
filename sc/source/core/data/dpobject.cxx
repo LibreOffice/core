@@ -100,8 +100,6 @@ using ::com::sun::star::beans::XPropertySet;
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
 
-
-
 #define SCDPSOURCE_SERVICE  "com.sun.star.sheet.DataPilotSource"
 
 namespace {
@@ -2657,8 +2655,6 @@ bool ScDPObject::IsOrientationAllowed( sal_uInt16 nOrient, sal_Int32 nDimFlags )
     }
     return bAllowed;
 }
-
-
 
 bool ScDPObject::HasRegisteredSources()
 {

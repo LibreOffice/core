@@ -152,8 +152,6 @@ public:
     bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

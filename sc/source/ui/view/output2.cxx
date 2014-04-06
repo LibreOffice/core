@@ -82,8 +82,6 @@ const sal_uInt16 SC_SHRINKAGAIN_MAX = 7;
 // STATIC DATA -----------------------------------------------------------
 
 
-
-
 class ScDrawStringsVars
 {
     ScOutputData*       pOutput;                // Verbindung
@@ -183,8 +181,6 @@ private:
     long        GetExpWidth();
     void        TextChanged();
 };
-
-
 
 ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     pOutput     ( pData ),
@@ -807,8 +803,6 @@ sal_uLong ScDrawStringsVars::GetResultValueFormat() const
     return nValueFormat;
 }
 
-
-
 double ScOutputData::GetStretch()
 {
     if ( mpRefDevice->IsMapMode() )
@@ -834,8 +828,6 @@ double ScOutputData::GetStretch()
         return ((double)aZoomY) / ((double)aZoomX);
     }
 }
-
-
 
 
 //  output strings
@@ -2078,8 +2070,6 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
         ScProgress::DeleteInterpretProgress();
     mpDoc->EnableIdle(bWasIdleEnabled);
 }
-
-
 
 ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()
 {
@@ -4634,8 +4624,6 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
         DrawRotated(bPixelToLogic);     //! von aussen rufen ?
 }
 
-
-
 void ScOutputData::DrawRotated(bool bPixelToLogic)
 {
     //! nRotMax speichern
@@ -5307,7 +5295,5 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
     delete pEngine;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

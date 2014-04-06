@@ -27,14 +27,10 @@
 #include "imp_op.hxx"
 
 
-
-
 struct ScCellValue;
 class ScChangeAction;
 class ScChangeTrack;
 class XclImpChTrFmlConverter;
-
-
 
 
 struct XclImpChTrRecHeader
@@ -50,8 +46,6 @@ inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpChTrRecHeader& rRecH
     rStrm >> rRecHeader.nSize >> rRecHeader.nIndex >> rRecHeader.nOpCode >> rRecHeader.nAccept;
     return rStrm;
 }
-
-
 
 class XclImpChangeTrack : protected XclImpRoot
 {
@@ -178,8 +172,6 @@ inline XclImpChTrFmlConverter::XclImpChTrFmlConverter(
     rChangeTrack( rXclChTr )
 {
 }
-
-
 
 #endif
 

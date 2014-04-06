@@ -34,8 +34,6 @@
 #include "stringutil.hxx"
 
 
-
-
 using ::com::sun::star::util::SearchOptions;
 
 namespace {

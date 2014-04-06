@@ -52,15 +52,11 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star;
-
-
 
 
 namespace {
@@ -69,8 +65,6 @@ const sal_Int32 OOX_PT_DATALAYOUTFIELD              = -2;           /// Placehol
 
 const sal_Int32 OOX_PT_PREVIOUS_ITEM                = 0x001000FC;   /// Calculation of data item result is based on previous item.
 const sal_Int32 OOX_PT_NEXT_ITEM                    = 0x001000FD;   /// Calculation of data item result is based on next item.
-
-
 
 const sal_uInt32 BIFF12_PTFIELD_DATAFIELD           = 0x00000008;
 const sal_uInt32 BIFF12_PTFIELD_DEFAULT             = 0x00000100;
@@ -158,8 +152,6 @@ const sal_uInt8 BIFF12_PTDEF_COLAXIS                = 2;
 
 } // namespace
 
-
-
 PTFieldItemModel::PTFieldItemModel() :
     mnCacheItem( -1 ),
     mnType( XML_data ),
@@ -175,8 +167,6 @@ void PTFieldItemModel::setBiffType( sal_uInt16 nType )
         XML_stdDev, XML_stdDevP, XML_var, XML_varP, XML_grand, XML_blank };
     mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_data );
 }
-
-
 
 PTFieldModel::PTFieldModel() :
     mnAxis( XML_TOKEN_INVALID ),
@@ -224,15 +214,11 @@ void PTFieldModel::setBiffAxis( sal_uInt8 nAxis )
     mnAxis = STATIC_ARRAY_SELECT( spnAxisIds, nAxis, XML_TOKEN_INVALID );
 }
 
-
-
 PTPageFieldModel::PTPageFieldModel() :
     mnField( -1 ),
     mnItem( BIFF12_PTPAGEFIELD_MULTIITEMS )
 {
 }
-
-
 
 PTDataFieldModel::PTDataFieldModel() :
     mnField( -1 ),
@@ -255,8 +241,6 @@ void PTDataFieldModel::setBiffShowDataAs( sal_Int32 nShowDataAs )
     static const sal_Int32 spnShowDataAs[] = { XML_normal, XML_difference, XML_percent, XML_percentDiff, XML_runTotal, XML_percentOfRow, XML_percentOfCol, XML_percentOfTotal, XML_index };
     mnShowDataAs = STATIC_ARRAY_SELECT( spnShowDataAs, nShowDataAs, XML_TOKEN_INVALID );
 }
-
-
 
 PivotTableField::PivotTableField( PivotTable& rPivotTable, sal_Int32 nFieldIndex ) :
     WorkbookHelper( rPivotTable ),
@@ -747,8 +731,6 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
     return xDPField;
 }
 
-
-
 PTFilterModel::PTFilterModel() :
     mfValue( 0.0 ),
     mnField( -1 ),
@@ -761,8 +743,6 @@ PTFilterModel::PTFilterModel() :
     mbTopFilter( true )
 {
 }
-
-
 
 PivotTableFilter::PivotTableFilter( const PivotTable& rPivotTable ) :
     WorkbookHelper( rPivotTable ),
@@ -865,8 +845,6 @@ void PivotTableFilter::finalizeImport()
     }
 }
 
-
-
 PTDefinitionModel::PTDefinitionModel() :
     mnCacheId( -1 ),
     mnDataPosition( 0 ),
@@ -902,8 +880,6 @@ PTDefinitionModel::PTDefinitionModel() :
 {
 }
 
-
-
 PTLocationModel::PTLocationModel() :
     mnFirstHeaderRow( 0 ),
     mnFirstDataRow( 0 ),
@@ -912,8 +888,6 @@ PTLocationModel::PTLocationModel() :
     mnColPageCount( 0 )
 {
 }
-
-
 
 PivotTable::PivotTable( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -1345,8 +1319,6 @@ void PivotTable::importFields( IndexVector& orFields, SequenceInputStream& rStrm
         orFields.push_back( rStrm.readInt32() );
 }
 
-
-
 PivotTableBuffer::PivotTableBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
@@ -1363,8 +1335,6 @@ void PivotTableBuffer::finalizeImport()
 {
     maTables.forEachMem( &PivotTable::finalizeImport );
 }
-
-
 
 } // namespace xls
 } // namespace oox

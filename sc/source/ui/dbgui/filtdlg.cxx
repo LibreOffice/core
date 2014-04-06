@@ -161,8 +161,6 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 }
 
 
-
-
 ScFilterDlg::~ScFilterDlg()
 {
     delete pOptionsMgr;
@@ -172,8 +170,6 @@ ScFilterDlg::~ScFilterDlg()
     pTimer->Stop();
     delete pTimer;
 }
-
-
 
 
 void ScFilterDlg::Init( const SfxItemSet& rArgSet )
@@ -203,8 +199,6 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     pViewData   = rQueryItem.GetViewData();
     pDoc        = pViewData ? pViewData->GetDocument() : NULL;
     nSrcTab     = pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
-
-
 
     // for easier access:
     maFieldLbArr.reserve(QUERY_ENTRY_COUNT);
@@ -389,8 +383,6 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 }
 
 
-
-
 bool ScFilterDlg::Close()
 {
     if (pViewData)
@@ -398,8 +390,6 @@ bool ScFilterDlg::Close()
 
     return DoClose( ScFilterDlgWrapper::GetChildWindowId() );
 }
-
-
 
 // Mouse-selected cell area becomes the new selection and is shown in the
 // reference text box
@@ -416,8 +406,6 @@ void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-
-
 void ScFilterDlg::SetActive()
 {
     if ( bRefInputMode )
@@ -431,8 +419,6 @@ void ScFilterDlg::SetActive()
 
     RefInputDone();
 }
-
-
 
 void ScFilterDlg::FillFieldLists()
 {
@@ -611,8 +597,6 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
     }
 }
 
-
-
 void ScFilterDlg::ClearValueList( size_t nList )
 {
     if (nList > 0 && nList <= QUERY_ENTRY_COUNT)
@@ -626,8 +610,6 @@ void ScFilterDlg::ClearValueList( size_t nList )
 }
 
 
-
-
 size_t ScFilterDlg::GetFieldSelPos( SCCOL nField )
 {
     if ( nField >= theQueryData.nCol1 && nField <= theQueryData.nCol2 )
@@ -635,8 +617,6 @@ size_t ScFilterDlg::GetFieldSelPos( SCCOL nField )
     else
         return 0;
 }
-
-
 
 ScQueryItem* ScFilterDlg::GetOutputItem()
 {
@@ -682,14 +662,10 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
 }
 
 
-
-
 bool ScFilterDlg::IsRefInputMode() const
 {
     return bRefInputMode;
 }
-
-
 
 // Handler:
 
@@ -731,8 +707,6 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(ScFilterDlg, MoreExpandedHdl)
 {
     if ( pExpander->get_expanded() )
@@ -747,8 +721,6 @@ IMPL_LINK_NOARG(ScFilterDlg, MoreExpandedHdl)
     return 0;
 }
 
-
-
 IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 {
     // Check if RefInputMode is still true every 50ms
@@ -761,8 +733,6 @@ IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 
     return 0;
 }
-
-
 
 
 IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
@@ -1020,8 +990,6 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
 }
 
 
-
-
 IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 {
     //  Column headers:
@@ -1059,8 +1027,6 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 
     return 0;
 }
-
-
 
 
 IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )

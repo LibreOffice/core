@@ -23,8 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 
-
-
 struct ScUnoAddInHelpId;
 
 /** Generates help IDs for standard Calc AddIns. */
@@ -44,8 +42,6 @@ public:
     /** @return  The help ID of the function with given built-in name or 0 if not found. */
     OString                GetHelpId( const OUString& rFuncName ) const;
 };
-
-
 
 
 #endif

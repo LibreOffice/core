@@ -28,8 +28,6 @@ namespace xls {
 class PivotCache;
 class PivotCacheField;
 
-
-
 class PivotCacheFieldContext : public WorkbookContextBase
 {
 public:
@@ -46,8 +44,6 @@ protected:
 private:
     PivotCacheField&    mrCacheField;
 };
-
-
 
 class PivotCacheDefinitionFragment : public WorkbookFragmentBase
 {
@@ -66,8 +62,6 @@ protected:
 private:
     PivotCache&         mrPivotCache;
 };
-
-
 
 class PivotCacheRecordsFragment : public WorksheetFragmentBase
 {
@@ -95,8 +89,6 @@ private:
 };
 
 
-
-
 class BiffPivotCacheFragment : public BiffWorkbookFragmentBase
 {
 public:
@@ -111,8 +103,6 @@ public:
 private:
     PivotCache&         mrPivotCache;
 };
-
-
 
 class BiffPivotCacheRecordsContext : public BiffWorksheetContextBase
 {
@@ -138,8 +128,6 @@ private:
     bool                mbHasShared;    /// True = pivot cache contains fields with shared items.
     bool                mbInRow;        /// True = a data row has been started.
 };
-
-
 
 } // namespace xls
 } // namespace oox

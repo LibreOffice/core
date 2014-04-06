@@ -79,8 +79,6 @@
 #define GET_USHORT(set,which) ((const SfxUInt16Item&)(set)->Get((which))).GetValue()
 #define GET_SHOW(set,which)   ( VOBJ_MODE_SHOW == ScVObjMode( ((const ScViewObjectModeItem&)(set)->Get((which))).GetValue()) )
 
-
-
 ScPageRowEntry::ScPageRowEntry(const ScPageRowEntry& r)
 {
     nStartRow = r.nStartRow;
@@ -160,8 +158,6 @@ size_t ScPageRowEntry::CountVisible() const
     else
         return nPagesX;
 }
-
-
 
 static long lcl_LineTotal(const ::editeng::SvxBorderLine* pLine)
 {
@@ -2587,8 +2583,6 @@ void ScPrintFunc::InitModes()               // set MapModes from  nZoom etc.
     aTwipMode = MapMode( MAP_TWIP, aTwipsOfs, aHorFract, aZoomFract );
 }
 
-
-
 void ScPrintFunc::ApplyPrintSettings()
 {
     if ( pPrinter )
@@ -2643,8 +2637,6 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
     if ( pPrinter && bDoPrint )
         ApplyPrintSettings();
 
-
-
     InitModes();
     if ( pLocationData )
     {
@@ -2653,8 +2645,6 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
     }
 
     MakeTableString();
-
-
 
     long nPageNo = 0;
     long nPrinted = 0;

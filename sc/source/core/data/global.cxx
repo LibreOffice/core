@@ -81,8 +81,6 @@
 #include "editutil.hxx"
 
 
-
-
 ScDocShellRef*  ScGlobal::pDrawClipDocShellRef = NULL;
 SvxSearchItem*  ScGlobal::pSearchItem = NULL;
 ScAutoFormat*   ScGlobal::pAutoFormat = NULL;
@@ -142,11 +140,7 @@ sal_uInt16 nScFillModeMouseModifier = 0;                //! dito
 
 void global_InitAppOptions();
 
-
-
 //      statische Funktionen
-
-
 
 bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
                                const SfxItemSet&  rOldAttrs,
@@ -155,8 +149,6 @@ bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
     bool                bInvalidate = false;
     const SfxItemState  eNewState   = rNewAttrs.GetItemState( nWhich );
     const SfxItemState  eOldState   = rOldAttrs.GetItemState( nWhich );
-
-
 
     if ( eNewState == eOldState )
     {
@@ -208,8 +200,6 @@ SvNumberFormatter* ScGlobal::GetEnglishFormatter()
     }
     return pEnglishFormatter;
 }
-
-
 
 
 bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
@@ -674,8 +664,6 @@ void ScGlobal::Clear()
     DELETEZ(pEmptyOUString);
 }
 
-
-
 rtl_TextEncoding ScGlobal::GetCharsetValue( const OUString& rCharSet )
 {
     // new TextEncoding values
@@ -698,8 +686,6 @@ rtl_TextEncoding ScGlobal::GetCharsetValue( const OUString& rCharSet )
     else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_865")) return RTL_TEXTENCODING_IBM_865;
     else return osl_getThreadTextEncoding();
 }
-
-
 
 OUString ScGlobal::GetCharsetString( rtl_TextEncoding eVal )
 {
@@ -724,8 +710,6 @@ OUString ScGlobal::GetCharsetString( rtl_TextEncoding eVal )
     return OUString::createFromAscii(pChar);
 }
 
-
-
 bool ScGlobal::HasStarCalcFunctionList()
 {
     return ( pStarCalcFunctionList != NULL );
@@ -738,8 +722,6 @@ ScFunctionList* ScGlobal::GetStarCalcFunctionList()
 
     return pStarCalcFunctionList;
 }
-
-
 
 ScFunctionMgr* ScGlobal::GetStarCalcFunctionMgr()
 {
@@ -757,8 +739,6 @@ void ScGlobal::ResetFunctionList()
     DELETEZ( pStarCalcFunctionList );
 }
 
-
-
 ScUnitConverter* ScGlobal::GetUnitConverter()
 {
     if ( !pUnitConverter )
@@ -766,8 +746,6 @@ ScUnitConverter* ScGlobal::GetUnitConverter()
 
     return pUnitConverter;
 }
-
-
 
 
 const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
@@ -783,8 +761,6 @@ const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
     }
     return NULL;
 }
-
-
 
 OUString ScGlobal::addToken(const OUString& rTokenList, const OUString& rToken,
     sal_Unicode cSep, sal_Int32 nSepCount, bool bForceSep)
@@ -877,8 +853,6 @@ const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unico
     return NULL;
 }
 
-
-
 bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
                                const EditTextObject* pObj2 )
 {
@@ -958,8 +932,6 @@ void ScGlobal::OpenURL( const OUString& rURL, const OUString& rTarget )
                                     &aNewView, &aBrowsing,
                                     0L );
 }
-
-
 
 bool ScGlobal::IsSystemRTL()
 {
@@ -1071,8 +1043,6 @@ sal_uInt16 ScGlobal::GetScriptedWhichID( sal_uInt8 nScriptType, sal_uInt16 nWhic
     return nWhich;
 }
 
-
-
 void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 {
     OSL_ENSURE( rSet.GetItemState( ATTR_LANGUAGE_FORMAT, false ) == SFX_ITEM_DEFAULT,
@@ -1095,10 +1065,6 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
             rSet.Put( SvxLanguageItem( pHardFormat->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
     }
 }
-
-
-
-
 
 
 

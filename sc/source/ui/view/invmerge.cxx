@@ -21,8 +21,6 @@
 
 #include "invmerge.hxx"
 
-
-
 ScInvertMerger::ScInvertMerger( ::std::vector< Rectangle >* pRectangles ) :
     pRects( pRectangles )
 {
@@ -162,8 +160,6 @@ void ScInvertMerger::AddRect( const Rectangle& rRect )
         }
     }
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

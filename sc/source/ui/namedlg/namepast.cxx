@@ -22,16 +22,12 @@
 
 
 
-
-
 #include "namepast.hxx"
 #include "scresid.hxx"
 #include "docsh.hxx"
 #include "miscdlgs.hrc"
 #include "rangenam.hxx"
 #include "viewdata.hxx"
-
-
 
 
 ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
@@ -76,8 +72,6 @@ ScNamePasteDlg::~ScNamePasteDlg()
     delete mpTable;
 }
 
-
-
 IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
 {
     if( pButton == m_pBtnPasteAll )
@@ -100,8 +94,6 @@ IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
     }
     return 0;
 }
-
-
 
 std::vector<OUString> ScNamePasteDlg::GetSelectedNames() const
 {

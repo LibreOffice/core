@@ -1122,6 +1122,4 @@ sal_uInt16 XclImpStream::ReadRawData( void* pData, sal_uInt16 nBytes )
     return nRet;
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

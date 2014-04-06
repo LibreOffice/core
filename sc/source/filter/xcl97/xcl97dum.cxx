@@ -74,8 +74,6 @@ const sal_uInt8 ExcDummy8_041::pMyData[] = {
 };
 const sal_Size ExcDummy8_041::nMyLen = sizeof(ExcDummy8_041::pMyData);
 
-
-
 const sal_uInt8 ExcDummy8_02::pMyData[] = {
     0x5f, 0x00, 0x02, 0x00, 0x01, 0x00                      // SAVERECALC
     };
@@ -95,8 +93,6 @@ const sal_uInt8* ExcDummy8_00a::GetData() const
     return pMyData;
 }
 
-
-
 sal_Size ExcDummy8_00b::GetLen() const
 {
     return nMyLen;
@@ -107,8 +103,6 @@ const sal_uInt8* ExcDummy8_00b::GetData() const
 {
     return pMyData;
 }
-
-
 
 sal_Size ExcDummy8_040::GetLen() const
 {
@@ -121,8 +115,6 @@ const sal_uInt8* ExcDummy8_040::GetData() const
     return pMyData;
 }
 
-
-
 sal_Size ExcDummy8_041::GetLen() const
 {
     return nMyLen;
@@ -133,8 +125,6 @@ const sal_uInt8* ExcDummy8_041::GetData() const
 {
     return pMyData;
 }
-
-
 
 sal_Size ExcDummy8_02::GetLen() const
 {

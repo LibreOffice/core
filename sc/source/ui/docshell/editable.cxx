@@ -67,8 +67,6 @@ ScEditableTester::ScEditableTester( ScViewFunc* pView ) :
     TestView( pView );
 }
 
-
-
 void ScEditableTester::TestBlock( ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
@@ -133,8 +131,6 @@ void ScEditableTester::TestView( ScViewFunc* pView )
         }
     }
 }
-
-
 
 sal_uInt16 ScEditableTester::GetMessageId() const
 {

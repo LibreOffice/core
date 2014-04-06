@@ -162,8 +162,6 @@ void ScCornerButton::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-
-
 static bool lcl_HasColOutline( const ScViewData& rViewData )
 {
     const ScOutlineTable* pTable = rViewData.GetDocument()->GetOutlineTable(rViewData.GetTabNo());

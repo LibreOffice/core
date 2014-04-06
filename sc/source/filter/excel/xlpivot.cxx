@@ -109,8 +109,6 @@ void XclPCItem::SetBool( bool bValue )
     mbValue = bValue;
 }
 
-
-
 bool XclPCItem::IsEqual( const XclPCItem& rItem ) const
 {
     if( meType == rItem.meType ) switch( meType )
@@ -412,8 +410,6 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTCachedName& rCachedNam
         rStrm << XclExpString( rCachedName.maName, EXC_STR_DEFAULT, EXC_PT_MAXSTRLEN );
     return rStrm;
 }
-
-
 
 const OUString* XclPTVisNameInfo::GetVisName() const
 {
@@ -934,8 +930,6 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTExtInfo& rInfo )
         << EXC_PT_NOSTRING              // length of table style name
         << EXC_PT_NOSTRING;             // length of vacate style name
 }
-
-
 
 // Pivot table autoformat settings ============================================
 

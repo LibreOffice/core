@@ -25,8 +25,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-
-
 #define SC_SMALL3DSHADOW    COL_BLACK
 #define SC_SIZE_NONE        65535
 const SCCOL SC_TABSTART_NONE = SCCOL_MAX;
@@ -104,8 +102,6 @@ class ScExtDocOptions;
 class ScViewData;
 class ScMarkData;
 
-
-
 class ScViewDataTable                           // per-sheet data
 {
 friend class ScViewData;
@@ -153,8 +149,6 @@ private:
 public:
     ~ScViewDataTable();
 };
-
-
 
 class SC_DLLPUBLIC ScViewData
 {
@@ -501,8 +495,6 @@ public:
 };
 
 
-
-
 inline long ScViewData::ToPixel( sal_uInt16 nTwips, double nFactor )
 {
     long nRet = (long)( nTwips * nFactor );
@@ -548,8 +540,6 @@ inline ScSplitPos Which( ScVSplitPos eVPos )
     return (eVPos==SC_SPLIT_TOP) ?
                 SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT;
 }
-
-
 
 #endif
 

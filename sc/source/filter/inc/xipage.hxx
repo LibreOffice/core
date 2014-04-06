@@ -68,8 +68,6 @@ private:
     bool                mbValidPaper;   /// true = Paper size and orientation valid.
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

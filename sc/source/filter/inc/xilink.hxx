@@ -101,8 +101,6 @@ enum XclImpExtNameType
     xlExtEuroConvert            /// An external in Excel, but internal in OO function name.
 };
 
-
-
 class XclImpCachedMatrix;
 class ScTokenArray;
 class XclImpSupbook;
@@ -224,8 +222,6 @@ private:
     typedef ::std::auto_ptr< XclImpLinkManagerImpl > XclImpLinkMgrImplPtr;
     XclImpLinkMgrImplPtr mxImpl;
 };
-
-
 
 #endif
 

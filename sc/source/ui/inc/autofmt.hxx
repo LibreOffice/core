@@ -38,11 +38,7 @@ class ScAutoFmtPreview; // s.u.
 class SvNumberFormatter;
 class ScDocument;
 
-
-
 enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
-
-
 
 class SC_DLLPUBLIC ScAutoFmtPreview : public Window
 {

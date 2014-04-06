@@ -48,8 +48,6 @@ class ScDocument;
 #define FLT_DATE_SAVE       5
 #endif
 
-
-
 class ScHighlightChgDlg : public ScAnyRefDlg
 {
 private:

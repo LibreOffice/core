@@ -40,8 +40,6 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 
-
-
 class ScXMLChangeInfoContext : public SvXMLImportContext
 {
     ScMyActionInfo                      aInfo;
@@ -69,8 +67,6 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 };
 
-
-
 class ScXMLBigRangeContext : public SvXMLImportContext
 {
     ScBigRange&         rBigRange;
@@ -92,8 +88,6 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 };
-
-
 
 class ScXMLCellContentDeletionContext : public SvXMLImportContext
 {
@@ -132,8 +126,6 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 };
 
-
-
 class ScXMLDependenceContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
@@ -155,8 +147,6 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 };
-
-
 
 class ScXMLDependingsContext : public SvXMLImportContext
 {
@@ -180,8 +170,6 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 };
 
-
-
 class ScXMLChangeDeletionContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
@@ -204,8 +192,6 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 };
 
-
-
 class ScXMLDeletionsContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
@@ -227,8 +213,6 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 };
-
-
 
 class ScXMLChangeCellContext;
 
@@ -263,8 +247,6 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 };
-
-
 
 class ScXMLChangeCellContext : public SvXMLImportContext
 {
@@ -307,8 +289,6 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 };
 
-
-
 class ScXMLPreviousContext : public SvXMLImportContext
 {
     OUString                       sFormulaAddress;
@@ -343,8 +323,6 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 };
 
-
-
 class ScXMLContentChangeContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
@@ -367,8 +345,6 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 };
 
-
-
 class ScXMLInsertionContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
@@ -389,8 +365,6 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
 };
-
-
 
 class ScXMLInsertionCutOffContext : public SvXMLImportContext
 {
@@ -413,8 +387,6 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 };
 
-
-
 class ScXMLMovementCutOffContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
@@ -435,8 +407,6 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
 };
-
-
 
 class ScXMLCutOffsContext : public SvXMLImportContext
 {
@@ -459,8 +429,6 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 };
 
-
-
 class ScXMLDeletionContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
@@ -481,8 +449,6 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
 };
-
-
 
 class ScXMLMovementContext : public SvXMLImportContext
 {
@@ -507,8 +473,6 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 };
 
-
-
 class ScXMLRejectionContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
@@ -529,8 +493,6 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
 };
-
-
 
 ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
@@ -2002,7 +1964,5 @@ void ScXMLRejectionContext::EndElement()
 {
     pChangeTrackingImportHelper->EndChangeAction();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

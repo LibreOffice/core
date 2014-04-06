@@ -48,8 +48,6 @@ class ScDPTableData;
 
 // classes to save Data Pilot settings
 
-
-
 class ScDPSaveMember
 {
 private:

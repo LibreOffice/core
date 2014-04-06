@@ -59,8 +59,6 @@ class WorksheetSettings;
 
 typedef ::std::map< OUString, void* >  ExtLst;
 
-
-
 typedef ::std::map< BinAddress, sal_Int32 > SharedFormulaMap;
 
 /** An enumeration for all types of sheets in a workbook. */
@@ -73,8 +71,6 @@ enum WorksheetType
     SHEETTYPE_MODULESHEET,          /// VB module sheet (BIFF5 only).
     SHEETTYPE_EMPTYSHEET            /// Other (unsupported) sheet type.
 };
-
-
 
 /** Stores settings and formatting data about a range of sheet columns. */
 struct ColumnModel
@@ -92,8 +88,6 @@ struct ColumnModel
     /** Returns true, if this entry can be merged with the passed column range (column settings are equal). */
     bool                isMergeable( const ColumnModel& rModel ) const;
 };
-
-
 
 /** Stores settings and formatting data about a sheet row. */
 struct RowModel
@@ -119,8 +113,6 @@ struct RowModel
     bool                isMergeable( const RowModel& rModel ) const;
 };
 
-
-
 /** Stores formatting data about a page break. */
 struct PageBreakModel
 {
@@ -132,8 +124,6 @@ struct PageBreakModel
     explicit            PageBreakModel();
 };
 
-
-
 /** Stores data about a hyperlink range. */
 struct HyperlinkModel : public ::oox::ole::StdHlinkInfo
 {
@@ -143,8 +133,6 @@ struct HyperlinkModel : public ::oox::ole::StdHlinkInfo
 
     explicit            HyperlinkModel();
 };
-
-
 
 /** Stores data about ranges with data validation settings. */
 struct ValidationModel
@@ -176,8 +164,6 @@ struct ValidationModel
 };
 
 
-
-
 class WorksheetGlobals;
 typedef ::boost::shared_ptr< WorksheetGlobals > WorksheetGlobalsRef;
 
@@ -202,8 +188,6 @@ public:
 
     // horrible accessor for hidden WorksheetGlobals ...
     static IWorksheetProgress *getWorksheetInterface( const WorksheetGlobalsRef &xRef );
-
-
 
     /** Returns the type of this sheet. */
     WorksheetType       getSheetType() const;
@@ -331,8 +315,6 @@ public:
 private:
     WorksheetGlobals&   mrSheetGlob;
 };
-
-
 
 
 } // namespace xls

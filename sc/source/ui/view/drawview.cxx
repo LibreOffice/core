@@ -58,11 +58,7 @@
 
 using namespace com::sun::star;
 
-
-
 #define SC_HANDLESIZE_BIG       9
-
-
 
 void ScDrawView::Construct()
 {
@@ -481,8 +477,6 @@ void ScDrawView::MarkListHasChanged()
             pViewSh->SetDrawShell(true);
         }
     }
-
-
 
     //  Verben anpassen
 

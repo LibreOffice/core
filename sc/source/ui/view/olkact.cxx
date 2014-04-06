@@ -28,8 +28,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-
-
 void ActivateOlk( ScViewData* /* pViewData */ )
 {
     // Browser fuer Virtual Controls fuellen
@@ -45,8 +43,6 @@ void DeActivateOlk( ScViewData* /* pViewData */ )
 
     //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
 }
-
-
 
 
 

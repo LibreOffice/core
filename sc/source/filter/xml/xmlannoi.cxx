@@ -30,8 +30,6 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-
-
 ScXMLAnnotationData::ScXMLAnnotationData() :
     mbUseShapePos( false ),
     mbShown( false )
@@ -41,8 +39,6 @@ ScXMLAnnotationData::ScXMLAnnotationData() :
 ScXMLAnnotationData::~ScXMLAnnotationData()
 {
 }
-
-
 
 ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,

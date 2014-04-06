@@ -22,15 +22,11 @@
 
 
 
-
-
 #include <vcl/msgbox.hxx>
 
 #include "shtabdlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
-
-
 
 
 ScShowTabDlg::ScShowTabDlg(Window* pParent)
@@ -44,8 +40,6 @@ ScShowTabDlg::ScShowTabDlg(Window* pParent)
     m_pLb->set_height_request(m_pLb->GetTextHeight() * 10);
     m_pLb->SetDoubleClickHdl( LINK( this, ScShowTabDlg, DblClkHdl ) );
 }
-
-
 
 void ScShowTabDlg::SetDescription(
         const OUString& rTitle, const OUString& rFixedText,

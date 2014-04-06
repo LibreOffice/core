@@ -38,8 +38,6 @@ namespace oox { namespace core {
 namespace oox {
 namespace xls {
 
-
-
 struct ExternalNameModel
 {
     bool                mbBuiltIn;          /// Name is a built-in name.
@@ -51,8 +49,6 @@ struct ExternalNameModel
 
     explicit            ExternalNameModel();
 };
-
-
 
 class ExternalLink;
 
@@ -126,8 +122,6 @@ private:
 
 typedef ::boost::shared_ptr< ExternalName > ExternalNameRef;
 
-
-
 /** Contains indexes for a range of sheets in the spreadsheet document. */
 class LinkSheetRange
 {
@@ -172,8 +166,6 @@ private:
     sal_Int32           mnLast;         /// Index of the last sheet or index of last external sheet cache.
 };
 
-
-
 enum ExternalLinkType
 {
     LINKTYPE_SELF,          /// Link refers to the current workbook.
@@ -187,8 +179,6 @@ enum ExternalLinkType
     LINKTYPE_MAYBE_DDE_OLE, /// Could be DDE or OLE link (BIFF only).
     LINKTYPE_UNKNOWN        /// Unknown or unsupported link type.
 };
-
-
 
 class ExternalLink : public WorkbookHelper
 {
@@ -290,8 +280,6 @@ private:
 
 typedef ::boost::shared_ptr< ExternalLink > ExternalLinkRef;
 
-
-
 /** Represents a REF entry in the BIFF12 EXTERNALSHEETS or in the BIFF8
     EXTERNSHEET record.
 
@@ -309,8 +297,6 @@ struct RefSheetsModel
 
     void                readBiff12Data( SequenceInputStream& rStrm );
 };
-
-
 
 class ExternalLinkBuffer : public WorkbookHelper
 {
@@ -360,8 +346,6 @@ private:
     RefSheetsModelVec   maRefSheets;        /// Sheet indexes for reference ids.
     bool                mbUseRefSheets;     /// True = use maRefSheets list (BIFF12 only).
 };
-
-
 
 } // namespace xls
 } // namespace oox

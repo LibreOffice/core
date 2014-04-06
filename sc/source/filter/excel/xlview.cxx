@@ -35,8 +35,6 @@ XclDocViewData::XclDocViewData() :
 {
 }
 
-
-
 XclTabViewData::XclTabViewData() :
     maFirstXclPos( ScAddress::UNINITIALIZED ),
     maSecondXclPos( ScAddress::UNINITIALIZED )
@@ -100,7 +98,5 @@ XclSelectionData& XclTabViewData::CreateSelectionData( sal_uInt8 nPane )
         rxSelData.reset( new XclSelectionData );
     return *rxSelData;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,8 +35,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
 
-
-
 // ScVbaGlobals
 
 
@@ -78,8 +76,6 @@ ScVbaGlobals::getExcel() throw (uno::RuntimeException, std::exception)
 {
        return getApplication();
 }
-
-
 
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException, std::exception)

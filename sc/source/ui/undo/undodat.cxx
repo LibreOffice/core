@@ -44,8 +44,6 @@
 #include "refundo.hxx"
 #include "markdata.hxx"
 
-
-
 TYPEINIT1(ScUndoDoOutline,          ScSimpleUndo);
 TYPEINIT1(ScUndoMakeOutline,        ScSimpleUndo);
 TYPEINIT1(ScUndoOutlineLevel,       ScSimpleUndo);

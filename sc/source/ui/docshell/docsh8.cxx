@@ -79,8 +79,6 @@
 using namespace com::sun::star;
 using ::std::vector;
 
-
-
 #define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
 
 //! move to a header file?
@@ -238,8 +236,6 @@ bool ScDocShell::IsDocument( const INetURLObject& rURL )
 
     return bRet;
 }
-
-
 
 #ifndef DISABLE_DBCONNECTIVITY
 

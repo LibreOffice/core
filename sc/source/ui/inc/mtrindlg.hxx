@@ -26,8 +26,6 @@
 #include <vcl/fixed.hxx>
 
 
-
-
 class ScMetricInputDlg : public ModalDialog
 {
 public:
@@ -55,8 +53,6 @@ private:
 };
 
 #endif // SC_MTRINDLG_HXX
-
-
 
 
 

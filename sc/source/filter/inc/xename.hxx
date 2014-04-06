@@ -26,8 +26,6 @@
 #include "xeroot.hxx"
 #include <boost/shared_ptr.hpp>
 
-
-
 class ScRangeList;
 class XclExpNameManagerImpl;
 
@@ -75,8 +73,6 @@ private:
     typedef boost::shared_ptr< XclExpNameManagerImpl > XclExpNameMgrImplRef;
     XclExpNameMgrImplRef mxImpl;
 };
-
-
 
 #endif
 

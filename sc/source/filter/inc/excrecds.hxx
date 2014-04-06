@@ -228,8 +228,6 @@ public:
     virtual const sal_uInt8*        GetData( void ) const SAL_OVERRIDE;
 };
 
-
-
 class ExcDummy_041 : public ExcDummyRec
 {
 private:
@@ -276,8 +274,6 @@ public:
     virtual sal_uInt16          GetNum() const SAL_OVERRIDE;
 };
 
-
-
 class ExcBundlesheet : public ExcBundlesheetBase
 {
 private:
@@ -302,8 +298,6 @@ public:
     virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
     virtual const sal_uInt8*        GetData( void ) const SAL_OVERRIDE;
 };
-
-
 
 
 /** This record contains the Windows country IDs for the UI and document language. */
@@ -354,8 +348,6 @@ public:
     explicit            XclExpFiltermode();
 };
 
-
-
 class XclExpAutofilterinfo : public XclExpUInt16Record
 {
 public:
@@ -367,8 +359,6 @@ public:
 private:
     ScAddress           maStartPos;
 };
-
-
 
 class ExcFilterCondition
 {
@@ -393,8 +383,6 @@ public:
     void                    SaveXml( XclExpXmlStream& rStrm );
     void                    SaveText( XclExpStream& rStrm );
 };
-
-
 
 class XclExpAutofilter : public XclExpRecord, protected XclExpRoot
 {
@@ -425,8 +413,6 @@ public:
     virtual void            SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
-
-
 class ExcAutoFilterRecs : public XclExpRecordBase, protected XclExpRoot
 {
 public:
@@ -454,8 +440,6 @@ private:
     ScRange                 maRef;
     bool mbAutoFilter;
 };
-
-
 
 /** Sheet filter manager. Contains auto filters or advanced filters from all sheets. */
 class XclExpFilterManager : protected XclExpRoot

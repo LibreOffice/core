@@ -49,16 +49,12 @@
 #include <sfx2/childwin.hxx>
 #include "reffact.hxx"
 
-
-
 static sal_uInt16 pValueRanges[] =
 {
     FID_VALID_MODE, FID_VALID_ERRTEXT,
     FID_VALID_LISTTYPE, FID_VALID_LISTTYPE,
     0
 };
-
-
 
 
 ScValidationDlg::ScValidationDlg(Window* pParent, const SfxItemSet* pArgSet,
@@ -165,8 +161,6 @@ ScValidationDlg::~ScValidationDlg()
     if( m_bOwnRefHdlr )
         RemoveRefDlg( false );
 }
-
-
 
 namespace {
 
@@ -300,8 +294,6 @@ bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaSt
 }
 
 } // namespace
-
-
 
 ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet ) :
     SfxTabPage( pParent, ScResId( TP_VALIDATION_VALUES ), rArgSet ),
@@ -611,8 +603,6 @@ IMPL_LINK( ScTPValidationValue, KillFocusHdl, Window *, pWnd )
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
 {
     sal_uInt16 nLbPos = maLbAllow.GetSelectEntryPos();
@@ -674,8 +664,6 @@ IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl)
 }
 
 
-
-
 // Input Help Page
 
 ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
@@ -693,35 +681,25 @@ ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
     Init();
 }
 
-
-
 ScTPValidationHelp::~ScTPValidationHelp()
 {
 }
-
-
 
 void ScTPValidationHelp::Init()
 {
     pTsbHelp->EnableTriState( false );
 }
 
-
-
 sal_uInt16* ScTPValidationHelp::GetRanges()
 {
     return pValueRanges;
 }
-
-
 
 SfxTabPage* ScTPValidationHelp::Create( Window* pParent,
                                          const SfxItemSet&  rArgSet )
 {
     return ( new ScTPValidationHelp( pParent, rArgSet ) );
 }
-
-
 
 void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
 {
@@ -743,8 +721,6 @@ void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
         pEdInputHelp->SetText( EMPTY_OUSTRING );
 }
 
-
-
 bool ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
 {
     rArgSet.Put( SfxBoolItem( FID_VALID_SHOWHELP, pTsbHelp->GetState() == TRISTATE_TRUE ) );
@@ -753,8 +729,6 @@ bool ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
 
     return true;
 }
-
-
 
 // Error Alert Page
 
@@ -776,13 +750,9 @@ ScTPValidationError::ScTPValidationError( Window*           pParent,
     Init();
 }
 
-
-
 ScTPValidationError::~ScTPValidationError()
 {
 }
-
-
 
 void ScTPValidationError::Init()
 {
@@ -795,22 +765,16 @@ void ScTPValidationError::Init()
     SelectActionHdl( NULL );
 }
 
-
-
 sal_uInt16* ScTPValidationError::GetRanges()
 {
     return pValueRanges;
 }
-
-
 
 SfxTabPage* ScTPValidationError::Create( Window*    pParent,
                                          const SfxItemSet&  rArgSet )
 {
     return ( new ScTPValidationError( pParent, rArgSet ) );
 }
-
-
 
 void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
 {
@@ -839,8 +803,6 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
     SelectActionHdl( NULL );
 }
 
-
-
 bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 {
     rArgSet.Put( SfxBoolItem( FID_VALID_SHOWERR, m_pTsbShow->GetState() == TRISTATE_TRUE ) );
@@ -850,8 +812,6 @@ bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 
     return true;
 }
-
-
 
 IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
 {
@@ -864,8 +824,6 @@ IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
 
     return( 0L );
 }
-
-
 
 IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl)
 {

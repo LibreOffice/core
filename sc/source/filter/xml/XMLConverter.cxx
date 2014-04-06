@@ -34,8 +34,6 @@ using namespace ::com::sun::star;
 using namespace xmloff::token;
 
 
-
-
 ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xModel )
 {
     if (xModel.is())
@@ -45,8 +43,6 @@ ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xMode
     }
     return NULL;
 }
-
-
 
 sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( const OUString& sFunction )
 {
@@ -103,8 +99,6 @@ ScSubTotalFunc ScXMLConverter::GetSubTotalFuncFromString( const OUString& sFunct
         return SUBTOTAL_FUNC_VARP;
     return SUBTOTAL_FUNC_NONE;
 }
-
-
 
 
 void ScXMLConverter::GetStringFromFunction(
@@ -164,8 +158,6 @@ void ScXMLConverter::GetStringFromFunction(
 }
 
 
-
-
 sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
     const OUString& rString )
 {
@@ -179,8 +171,6 @@ sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
         return sheet::DataPilotFieldOrientation_DATA;
     return sheet::DataPilotFieldOrientation_HIDDEN;
 }
-
-
 
 
 void ScXMLConverter::GetStringFromOrientation(
@@ -215,8 +205,6 @@ void ScXMLConverter::GetStringFromOrientation(
 }
 
 
-
-
 ScDetectiveObjType ScXMLConverter::GetDetObjTypeFromString( const OUString& rString )
 {
     if( IsXMLToken(rString, XML_FROM_SAME_TABLE ) )
@@ -244,8 +232,6 @@ bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const OUSt
         return false;
     return true;
 }
-
-
 
 
 void ScXMLConverter::GetStringFromDetObjType(
@@ -301,8 +287,6 @@ void ScXMLConverter::GetStringFromDetOpType(
 }
 
 
-
-
 void ScXMLConverter::ParseFormula(OUString& sFormula, const bool bIsFormula)
 {
     OUStringBuffer sBuffer(sFormula.getLength());
@@ -335,8 +319,6 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const bool bIsFormula)
 }
 
 
-
-
 void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, OUStringBuffer& sDate)
 {
     util::DateTime aAPIDateTime;
@@ -362,8 +344,6 @@ void ScXMLConverter::ConvertAPIToCoreDateTime(const util::DateTime& aDateTime, D
     DateTime aTempDateTime (aDate, aTime);
     rDateTime = aTempDateTime;
 }
-
-
 
 namespace {
 
@@ -560,8 +540,6 @@ bool lclSkipEmptyParentheses( const sal_Unicode*& rpcString, const sal_Unicode* 
 
 } // namespace
 
-
-
 void ScXMLConditionHelper::parseCondition(
         ScXMLConditionParseResult& rParseResult, const OUString& rAttribute, sal_Int32 nStartIndex )
 {
@@ -649,7 +627,5 @@ OUString ScXMLConditionHelper::getExpression( const sal_Unicode*& rpcString, con
     }
     return aExp;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

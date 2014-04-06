@@ -48,15 +48,11 @@
 #include "docuno.hxx"
 #include "docsh.hxx"
 
-
-
 //  Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
 //! fusel,fuconstr,futext - zusammenfassen!
 #define SC_MAXDRAGMOVE  3
 // Min necessary mouse motion for normal dragging
 #define SC_MINDRAGMOVE 2
-
-
 
 using namespace com::sun::star;
 

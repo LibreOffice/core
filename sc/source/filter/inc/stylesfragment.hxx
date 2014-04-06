@@ -26,8 +26,6 @@
 namespace oox {
 namespace xls {
 
-
-
 class IndexedColorsContext : public WorkbookContextBase
 {
 public:
@@ -37,8 +35,6 @@ protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
 };
-
-
 
 class FontContext : public WorkbookContextBase
 {
@@ -53,8 +49,6 @@ protected:
 private:
     FontRef             mxFont;
 };
-
-
 
 class BorderContext : public WorkbookContextBase
 {
@@ -71,8 +65,6 @@ private:
     BorderRef           mxBorder;
 };
 
-
-
 class FillContext : public WorkbookContextBase
 {
 public:
@@ -87,8 +79,6 @@ private:
     FillRef             mxFill;
     double              mfGradPos;      /// Gradient color position.
 };
-
-
 
 class XfContext : public WorkbookContextBase
 {
@@ -106,8 +96,6 @@ private:
     bool                mbCellXf;       /// True = cell XF, false = style XF.
 };
 
-
-
 class DxfContext : public WorkbookContextBase
 {
 public:
@@ -121,8 +109,6 @@ protected:
 private:
     DxfRef              mxDxf;
 };
-
-
 
 class StylesFragment : public WorkbookFragmentBase
 {
@@ -138,8 +124,6 @@ protected:
     virtual const ::oox::core::RecordInfo* getRecordInfos() const SAL_OVERRIDE;
     virtual void        finalizeImport() SAL_OVERRIDE;
 };
-
-
 
 } // namespace xls
 } // namespace oox

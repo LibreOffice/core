@@ -145,8 +145,6 @@ void ScNameDlg::Init()
         m_pLbScope->InsertEntry(aTabName);
     }
 
-
-
     if (m_pRangeManagerTable->GetSelectionCount())
     {
         SelectionChanged();

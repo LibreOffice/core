@@ -27,8 +27,6 @@
 #include "anyrefdg.hxx"
 
 
-
-
 enum ScTabOpErr
 {
     TABOPERR_NOFORMULA = 1,
@@ -39,8 +37,6 @@ enum ScTabOpErr
     TABOPERR_WRONGCOL,
     TABOPERR_NOROWFORMULA
 };
-
-
 
 class ScTabOpDlg : public ScAnyRefDlg
 {
@@ -97,7 +93,5 @@ private:
 };
 
 #endif // SC_TABOPDLG_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -54,8 +54,6 @@ typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::util::XRefreshListener > XRefreshListenerRef;
 typedef boost::ptr_vector<XRefreshListenerRef> XRefreshListenerArr_Impl;
 
-
-
 class ScSheetLinkObj : public cppu::WeakImplHelper4<
                             com::sun::star::container::XNamed,
                             com::sun::star::util::XRefreshable,

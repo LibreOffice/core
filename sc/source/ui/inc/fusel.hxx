@@ -54,8 +54,6 @@ private:
     bool                IsNoteCaptionClicked( const Point& rPos ) const;
 };
 
-
-
 #endif      // _SD_FUSEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

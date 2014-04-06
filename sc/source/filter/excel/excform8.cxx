@@ -79,8 +79,6 @@ ExcelToSc8::ExternalTabInfo::ExternalTabInfo() :
 {
 }
 
-
-
 ExcelToSc8::ExcelToSc8( const XclImpRoot& rRoot ) :
     ExcelToSc( rRoot ),
     rLinkMan( rRoot.GetLinkManager() )

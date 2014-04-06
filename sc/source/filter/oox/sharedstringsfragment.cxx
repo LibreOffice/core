@@ -25,11 +25,7 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::oox::core;
-
-
 
 
 SharedStringsFragment::SharedStringsFragment(
@@ -86,8 +82,6 @@ void SharedStringsFragment::finalizeImport()
 {
     getSharedStrings().finalizeImport();
 }
-
-
 
 } // namespace xls
 } // namespace oox

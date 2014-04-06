@@ -46,8 +46,6 @@ TokenStack::~TokenStack()
 
 
 
-
-
 // !ACHTUNG!: nach Aussen hin beginnt die Nummerierung mit 1!
 // !ACHTUNG!: SC-Token werden mit einem Offset nScTokenOff abgelegt
 //              -> Unterscheidung von anderen Token

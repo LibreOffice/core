@@ -101,8 +101,6 @@ sal_uInt16 ScTabViewShell::nInsertCtrlState = SID_INSERT_GRAPHIC;
 sal_uInt16 ScTabViewShell::nInsCellsCtrlState = 0;
 sal_uInt16 ScTabViewShell::nInsObjCtrlState = SID_INSERT_DIAGRAM;
 
-
-
 void ScTabViewShell::Activate(bool bMDI)
 {
     SfxViewShell::Activate(bMDI);
@@ -314,8 +312,6 @@ bool ScTabViewShell::PrepareClose(bool bUI)
     return SfxViewShell::PrepareClose(bUI);
 }
 
-
-
 //  Zoom fuer In-Place berechnen
 //  aus Verhaeltnis von VisArea und Fenstergroesse des GridWin
 
@@ -455,8 +451,6 @@ void ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
     rRect.SetSize( pWin->LogicToPixel( aLogicRect.GetSize() ) );
 }
 
-
-
 void ScTabViewShell::Move()
 {
     Point aNewPos = GetViewFrame()->GetWindow().OutputToScreenPixel(Point());
@@ -467,8 +461,6 @@ void ScTabViewShell::Move()
         aWinPos = aNewPos;
     }
 }
-
-
 
 void ScTabViewShell::ShowCursor(bool /* bOn */)
 {
@@ -481,8 +473,6 @@ void ScTabViewShell::ShowCursor(bool /* bOn */)
         HideAllCursors();
 */
 }
-
-
 
 void ScTabViewShell::WriteUserData(OUString& rData, bool /* bBrowse */)
 {
@@ -573,8 +563,6 @@ void ScTabViewShell::DoReadUserData( const OUString& rData )
 
     //! if ViewData has more tables than document, remove tables in ViewData
 }
-
-
 
 void ScTabViewShell::UpdateDrawShell()
 {
@@ -1056,14 +1044,10 @@ void ScTabViewShell::SetDrawTextUndo( ::svl::IUndoManager* pNewUndoMgr )
     }
 }
 
-
-
 ScTabViewShell* ScTabViewShell::GetActiveViewShell()
 {
     return PTR_CAST(ScTabViewShell,Current());
 }
-
-
 
 SfxPrinter* ScTabViewShell::GetPrinter( bool bCreate )
 {
@@ -1096,8 +1080,6 @@ void ScTabViewShell::StopEditShell()
     if ( pEditShell != NULL && !bDontSwitch )
         SetEditShell(NULL, false );
 }
-
-
 
 // close handler to ensure function of dialog:
 
@@ -1204,8 +1186,6 @@ void ScTabViewShell::StopSimpleRefDialog()
             ((SystemWindow*)pWin)->Close();     // calls abort handler
     }
 }
-
-
 
 bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
 {
@@ -1469,8 +1449,6 @@ bool ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     return TabKeyInput( rKeyEvent );
 }
 
-
-
 #define __INIT_ScTabViewShell \
     eCurOST(OST_NONE),          \
     nDrawSfxId(0),              \
@@ -1517,8 +1495,6 @@ bool ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     nCurRefDlgId(0),            \
     pAccessibilityBroadcaster(NULL), \
     mbInSwitch(false)
-
-
 
 
 void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
@@ -1722,8 +1698,6 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
 
 
 
-
-
 ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
     SfxViewShell( pViewFrame, SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
@@ -1776,8 +1750,6 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
 
 #undef __INIT_ScTabViewShell
 
-
-
 ScTabViewShell::~ScTabViewShell()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -1820,8 +1792,6 @@ ScTabViewShell::~ScTabViewShell()
     DELETEZ(pAccessibilityBroadcaster);
 }
 
-
-
 void ScTabViewShell::SetDialogDPObject( const ScDPObject* pObj )
 {
     delete pDialogDPObject;
@@ -1830,8 +1800,6 @@ void ScTabViewShell::SetDialogDPObject( const ScDPObject* pObj )
     else
         pDialogDPObject = NULL;
 }
-
-
 
 void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
 {
@@ -1859,8 +1827,6 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
     //  eNumType kennt der Dialog selber
 }
 
-
-
 void ScTabViewShell::SetChartArea( const ScRangeListRef& rSource, const Rectangle& rDest )
 {
     bChartAreaValid = true;
@@ -1883,8 +1849,6 @@ ScNavigatorSettings* ScTabViewShell::GetNavigatorSettings()
         pNavSettings = new ScNavigatorSettings;
     return pNavSettings;
 }
-
-
 
 
 void ScTabViewShell::ExecTbx( SfxRequest& rReq )

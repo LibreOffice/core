@@ -245,8 +245,6 @@ public:
     }
 };
 
-
-
 struct ProvNamesId_Type
 {
     const char *    pName;
@@ -373,8 +371,6 @@ static const sal_Char* aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_VBAGLOBALS
         "",                                         // SC_SERVICE_EXT_TIMEFIELD
     };
-
-
 
 
 
@@ -661,8 +657,6 @@ uno::Sequence<OUString> ScServiceProvider::GetAllServiceNames()
     }
     return aRet;
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

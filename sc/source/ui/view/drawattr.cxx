@@ -20,14 +20,10 @@
 #include "drawattr.hxx"
 #include "global.hxx"
 
-
-
 OUString SvxDrawToolItem::GetValueText() const
 {
     return GetValueText(GetValue());
 }
-
-
 
 OUString SvxDrawToolItem::GetValueText( sal_uInt16 nVal ) const
 {
@@ -50,14 +46,10 @@ OUString SvxDrawToolItem::GetValueText( sal_uInt16 nVal ) const
     return OUString::createFromAscii( p );
 }
 
-
-
 SfxPoolItem* SvxDrawToolItem::Clone( SfxItemPool * ) const
 {
     return new SvxDrawToolItem(*this);
 }
-
-
 
 SfxPoolItem* SvxDrawToolItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
 {
@@ -65,7 +57,5 @@ SfxPoolItem* SvxDrawToolItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
     rStream >> nVal;
     return new SvxDrawToolItem(nVal);
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

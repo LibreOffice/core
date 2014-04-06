@@ -19,21 +19,15 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include "delcodlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
-
-
 
 
 bool       ScDeleteContentsDlg::bPreviousAllCheck = false;
 sal_uInt16 ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
                                                  IDF_NOTE     | IDF_FORMULA |
                                                  IDF_VALUE);
-
-
 
 ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
                                           sal_uInt16  nCheckDefaults ) :
@@ -78,8 +72,6 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
     aBtnDelAll->SetClickHdl( LINK( this, ScDeleteContentsDlg, DelAllHdl ) );
 }
 
-
-
 sal_uInt16 ScDeleteContentsDlg::GetDelContentsCmdBits() const
 {
     ScDeleteContentsDlg::nPreviousChecks = 0;
@@ -105,8 +97,6 @@ sal_uInt16 ScDeleteContentsDlg::GetDelContentsCmdBits() const
                 ? IDF_ALL
                 : ScDeleteContentsDlg::nPreviousChecks );
 }
-
-
 
 void ScDeleteContentsDlg::DisableChecks( bool bDelAllChecked )
 {
@@ -135,16 +125,12 @@ void ScDeleteContentsDlg::DisableChecks( bool bDelAllChecked )
     }
 }
 
-
-
 void ScDeleteContentsDlg::DisableObjects()
 {
     bObjectsDisabled = true;
     aBtnDelObjects->Check(false);
     aBtnDelObjects->Disable();
 }
-
-
 
 IMPL_LINK_NOARG_INLINE_START(ScDeleteContentsDlg, DelAllHdl)
 {

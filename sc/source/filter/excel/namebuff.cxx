@@ -49,8 +49,6 @@ sal_uInt32 StringHashEntry::MakeHashCode( const OUString& r )
 }
 
 
-
-
 NameBuffer::~NameBuffer()
 {
     std::vector<StringHashEntry*>::iterator pIter;
@@ -195,8 +193,6 @@ void ExtSheetBuffer::Reset( void )
 {
     maEntries.clear();
 }
-
-
 
 
 bool ExtName::IsDDE( void ) const

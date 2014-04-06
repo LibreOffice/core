@@ -21,8 +21,6 @@
 
 #include "gridmerg.hxx"
 
-
-
 ScGridMerger::ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePixelY ) :
     pDev( pOutDev ),
     nOneX( nOnePixelX ),
@@ -156,7 +154,5 @@ void ScGridMerger::Flush()
         nCount = 0;
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,8 +27,6 @@
 /** All allowed flags for import. */
 const XclStrFlags nAllowedFlags = EXC_STR_8BITLENGTH | EXC_STR_SMARTFLAGS | EXC_STR_SEPARATEFORMATS;
 
-
-
 XclImpString::XclImpString()
 {
 }
@@ -201,7 +199,5 @@ XclImpStringIterator& XclImpStringIterator::operator++()
     }
     return *this;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

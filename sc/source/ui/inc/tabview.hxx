@@ -82,8 +82,6 @@ public:
 };
 
 
-
-
 class ScTabView : boost::noncopyable
 {
 private:
@@ -536,8 +534,6 @@ public:
     void ResetAutoSpell();
     void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
 };
-
-
 
 #endif
 

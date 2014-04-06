@@ -67,8 +67,6 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
@@ -77,15 +75,11 @@ using namespace ::oox::core;
 
 using ::oox::drawingml::ThemeFragmentHandler;
 
-
-
 namespace {
 
 const double PROGRESS_LENGTH_GLOBALS        = 0.1;      /// 10% of progress bar for globals import.
 
 } // namespace
-
-
 
 WorkbookFragment::WorkbookFragment( const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
     WorkbookFragmentBase( rHelper, rFragmentPath )

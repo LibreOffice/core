@@ -4799,8 +4799,6 @@ void OpTbillyield::GenSlidingWindowFunction(
     ss << "double tmp001;\n\t";
     ss << "double tmp002;\n\t";
 
-
-
 #ifdef ISNAN
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR0= static_cast<const

@@ -11,8 +11,6 @@
 #include "sortdlg.hxx"
 #include <vcl/layout.hxx>
 
-
-
 ScSortKeyItem::ScSortKeyItem(Window* pParent)
 {
     m_pUIBuilder = new VclBuilder(pParent, getUIRootDir(), "modules/scalc/ui/sortkey.ui");
@@ -34,14 +32,10 @@ void ScSortKeyItem::DisableField()
     m_pFrame->Disable();
 }
 
-
-
 void ScSortKeyItem::EnableField()
 {
     m_pFrame->Enable();
 }
-
-
 
 ScSortKeyWindow::ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& rSortKeyItems)
     : mrSortKeyItems(rSortKeyItems)
@@ -56,14 +50,10 @@ ScSortKeyWindow::ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& rSortKeyIt
     }
 }
 
-
-
 ScSortKeyWindow::~ScSortKeyWindow()
 {
     mrSortKeyItems.clear();
 }
-
-
 
 void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
 {
@@ -77,14 +67,10 @@ void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
     mrSortKeyItems.push_back(pSortKeyItem);
 }
 
-
-
 void ScSortKeyWindow::DoScroll(sal_Int32 nNewPos)
 {
     m_pBox->SetPosPixel(Point(0, nNewPos));
 }
-
-
 
 ScSortKeyCtrl::ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& rItems)
     : m_aSortWin(pParent, rItems)
@@ -126,8 +112,6 @@ void ScSortKeyCtrl::setScrollRange()
     checkAutoVScroll();
 }
 
-
-
 IMPL_LINK( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar )
 {
     sal_Int32 nOffset = m_aSortWin.GetItemHeight();
@@ -135,8 +119,6 @@ IMPL_LINK( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar )
     m_aSortWin.DoScroll( -nOffset );
     return 0;
 }
-
-
 
 void ScSortKeyCtrl::AddSortKey( sal_uInt16 nItem )
 {

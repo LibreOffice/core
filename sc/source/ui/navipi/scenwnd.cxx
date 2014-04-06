@@ -228,8 +228,6 @@ ScScenarioWindow::ScScenarioWindow( Window* pParent, const OUString& aQH_List,
     }
 }
 
-
-
 ScScenarioWindow::~ScScenarioWindow()
 {
 }
@@ -243,8 +241,6 @@ void ScScenarioWindow::Paint( const Rectangle& rRect )
 
     Window::Paint( rRect );
 }
-
-
 
 void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
 {
@@ -273,8 +269,6 @@ void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
     }
 }
 
-
-
 void ScScenarioWindow::SetSizePixel( const Size& rNewSize )
 {
     Size aSize( rNewSize );
@@ -288,8 +282,6 @@ void ScScenarioWindow::SetSizePixel( const Size& rNewSize )
     aSize.Height() -= 4;
     aEdComment.SetPosSizePixel( Point( 0, nHeight+4 ), aSize );
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

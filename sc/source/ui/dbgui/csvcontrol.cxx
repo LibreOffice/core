@@ -23,8 +23,6 @@
 #include "AccessibleCsvControl.hxx"
 
 
-
-
 ScCsvLayoutData::ScCsvLayoutData() :
     mnPosCount( 1 ),
     mnPosOffset( 0 ),
@@ -58,8 +56,6 @@ ScCsvDiff ScCsvLayoutData::GetDiff( const ScCsvLayoutData& rData ) const
     if( mnColCursor != rData.mnColCursor )      nRet |= CSV_DIFF_GRIDCURSOR;
     return nRet;
 }
-
-
 
 
 ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
@@ -310,8 +306,6 @@ ScCsvControl::XAccessibleRef ScCsvControl::CreateAccessible()
     mxAccessible = mpAccessible;
     return mxAccessible;
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

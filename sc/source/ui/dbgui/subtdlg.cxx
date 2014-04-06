@@ -20,13 +20,9 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include "tpsubt.hxx"
 #include "scresid.hxx"
 #include "subtdlg.hxx"
-
-
 
 
 ScSubTotalDlg::ScSubTotalDlg(Window* pParent, const SfxItemSet* pArgSet)
@@ -41,8 +37,6 @@ ScSubTotalDlg::ScSubTotalDlg(Window* pParent, const SfxItemSet* pArgSet)
     AddTabPage("options", ScTpSubTotalOptions::Create, 0);
     m_pBtnRemove->SetClickHdl( LINK( this, ScSubTotalDlg, RemoveHdl ) );
 }
-
-
 
 IMPL_LINK_INLINE_START( ScSubTotalDlg, RemoveHdl, PushButton *, pBtn )
 {

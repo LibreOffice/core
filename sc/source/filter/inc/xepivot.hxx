@@ -61,8 +61,6 @@ private:
     sal_uInt16          mnTypeFlag;         /// Data type flag.
 };
 
-
-
 class XclExpPivotCache;
 
 class XclExpPCField : public XclExpRecord, public XclPCField, protected XclExpRoot
@@ -164,8 +162,6 @@ private:
     sal_uInt16          mnTypeFlags;        /// Collected item data type flags.
 };
 
-
-
 class XclExpPivotCache : protected XclExpRoot
 {
 public:
@@ -248,8 +244,6 @@ class XclExpPivotTable;
 /** Data field position specifying the pivot table field index (first) and data info index (second). */
 typedef ::std::pair< sal_uInt16, sal_uInt16 > XclPTDataFieldPos;
 
-
-
 class XclExpPTItem : public XclExpRecord
 {
 public:
@@ -270,8 +264,6 @@ private:
     const XclExpPCItem* mpCacheItem;        /// The referred pivot cache item.
     XclPTItemInfo       maItemInfo;         /// General data for this item.
 };
-
-
 
 class XclExpPTField : public XclExpRecordBase
 {
@@ -337,8 +329,6 @@ private:
     XclPTDataFieldInfoVec maDataInfoVec;    /// List of extended data field info (SXDI records).
     XclExpPTItemList    maItemList;         /// List of all items of this field.
 };
-
-
 
 class XclExpPivotTable : public XclExpRecordBase, protected XclExpRoot
 {
@@ -425,8 +415,6 @@ private:
     size_t              mnId;               /// Stream ID
 };
 
-
-
 /** The main class for pivot table export.
 
     This class contains all pivot caches and pivot tables in a Calc document.
@@ -469,8 +457,6 @@ private:
     XclExpPivotTableList maPTableList;      /// List of all pivot tables.
     bool                mbShareCaches;      /// true = Tries to share caches between tables.
 };
-
-
 
 #endif
 

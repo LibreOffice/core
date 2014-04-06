@@ -35,14 +35,10 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
-
-
 
 ScenarioCellModel::ScenarioCellModel() :
     mnNumFmtId( 0 ),
@@ -50,15 +46,11 @@ ScenarioCellModel::ScenarioCellModel() :
 {
 }
 
-
-
 ScenarioModel::ScenarioModel() :
     mbLocked( false ),
     mbHidden( false )
 {
 }
-
-
 
 Scenario::Scenario( const WorkbookHelper& rHelper, sal_Int16 nSheet ) :
     WorkbookHelper( rHelper ),
@@ -158,15 +150,11 @@ void Scenario::finalizeImport()
     }
 }
 
-
-
 SheetScenariosModel::SheetScenariosModel() :
     mnCurrent( 0 ),
     mnShown( 0 )
 {
 }
-
-
 
 SheetScenarios::SheetScenarios( const WorkbookHelper& rHelper, sal_Int16 nSheet ) :
     WorkbookHelper( rHelper ),
@@ -210,8 +198,6 @@ void SheetScenarios::finalizeImport()
     }
 }
 
-
-
 ScenarioBuffer::ScenarioBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
@@ -229,8 +215,6 @@ void ScenarioBuffer::finalizeImport()
 {
     maSheetScenarios.forEachMem( &SheetScenarios::finalizeImport );
 }
-
-
 
 } // namespace xls
 } // namespace oox

@@ -25,8 +25,6 @@
 #include "docpool.hxx"
 #include "stlpool.hxx"
 
-
-
 ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
 :pFormTable(NULL)
 ,pEditPool(NULL)
@@ -119,8 +117,6 @@ void ScPoolHelper::SourceDocumentGone()
     if ( pFormTable )
         pFormTable->SetColorLink( Link() );
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 #ifndef _SC_ACCESSIBLECSVCONTROL_HXX
 #define _SC_ACCESSIBLECSVCONTROL_HXX
 
@@ -32,8 +30,6 @@
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
 #include "AccessibleContextBase.hxx"
-
-
 
 
 class ScCsvControl;
@@ -124,8 +120,6 @@ protected:
     /** Converts the control-relative position to an absolute screen position. */
     Point implGetAbsPos( const Point& rPos ) const;
 };
-
-
 
 
 class ScCsvRuler;
@@ -297,8 +291,6 @@ private:
     /** Returns the last character index with equal formatting as at nApiPos. */
     sal_Int32 implGetLastEqualFormatted( sal_Int32 nApiPos );
 };
-
-
 
 
 class ScCsvGrid;
@@ -544,8 +536,6 @@ private:
 };
 
 
-
-
 /** Accessible class representing a cell of the CSV grid control. */
 class ScAccessibleCsvCell : public ScAccessibleCsvControl, public accessibility::AccessibleStaticTextBase
 {
@@ -646,8 +636,6 @@ private:
     /** Creates the edit source the text helper needs. */
     ::std::auto_ptr< SvxEditSource > implCreateEditSource();
 };
-
-
 
 
 #endif

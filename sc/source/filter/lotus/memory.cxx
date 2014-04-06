@@ -21,8 +21,6 @@
 //              selbst per extern ihre Sachen besorgen!
 
 
-
-
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
 #include <editeng/justifyitem.hxx>
@@ -38,8 +36,6 @@ extern FormCache*       pValueFormCache;            // -> tool.cxx
 extern SvxHorJustifyItem    *pAttrRight, *pAttrLeft, *pAttrCenter,
                             *pAttrRepeat, *pAttrStandard;   // -> tool.cxx, fuer GetFormAttr()
 extern ScProtectionAttr*    pAttrUnprot;   // -> tool.cxx, fuer PutFormString()
-
-
 
 sal_Bool MemNew( void )
 {
@@ -67,7 +63,5 @@ void MemDelete( void )
     delete pAttrStandard;
     delete pAttrUnprot;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

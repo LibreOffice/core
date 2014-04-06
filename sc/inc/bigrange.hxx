@@ -75,8 +75,6 @@ public:
     friend inline SvStream& ReadScBigAddress( SvStream& rStream, ScBigAddress& rAdr );
 };
 
-
-
 inline void ScBigAddress::PutInOrder( ScBigAddress& r )
 {
     sal_Int32 nTmp;
@@ -244,8 +242,6 @@ inline SvStream& ReadScBigRange( SvStream& rStream, ScBigRange& rRange )
     ReadScBigAddress( rStream, rRange.aEnd );
     return rStream;
 }
-
-
 
 #endif
 

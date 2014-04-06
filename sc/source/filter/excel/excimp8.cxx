@@ -534,8 +534,6 @@ void ImportExcel8::AutoFilter( void )
         pData->ReadAutoFilter(aIn, GetDoc().GetSharedStringPool());
 }
 
-
-
 XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRange ) :
         ExcRoot( pRoot ),
         pCurrDBData(NULL),

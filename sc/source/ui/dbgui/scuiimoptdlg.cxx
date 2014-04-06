@@ -20,8 +20,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include "scuiimoptdlg.hxx"
 #include "tabvwsh.hxx"
 #include "scresid.hxx"
@@ -57,8 +55,6 @@ private:
     sal_Int32          nIter;
 };
 
-
-
 sal_uInt16 ScDelimiterTable::GetCode( const OUString& rDel ) const
 {
     sal_Unicode nCode = 0;
@@ -80,8 +76,6 @@ sal_uInt16 ScDelimiterTable::GetCode( const OUString& rDel ) const
 
     return nCode;
 }
-
-
 
 OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 {
@@ -249,15 +243,11 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         SetText( *pStrTitle );
 }
 
-
-
 ScImportOptionsDlg::~ScImportOptionsDlg()
 {
     delete pFieldSepTab;
     delete pTextSepTab;
 }
-
-
 
 void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
 {
@@ -273,8 +263,6 @@ void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
         rOptions.bSaveFormulas = m_pCbFormulas->IsChecked();
     }
 }
-
-
 
 sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 {
@@ -301,8 +289,6 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 
     return nCode;
 }
-
-
 
 IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
 {

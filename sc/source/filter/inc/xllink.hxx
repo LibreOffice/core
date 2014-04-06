@@ -79,8 +79,6 @@ enum XclSupbookType
     EXC_SBTYPE_EUROTOOL     /// SUPBOOK is uesd for EUROCONVERT.
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

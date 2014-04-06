@@ -30,8 +30,6 @@
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
-
-
 namespace {
 
 /** Date part flags in order of the list box entries. */
@@ -58,8 +56,6 @@ static const sal_uInt16 nDatePartResIds[] =
 };
 
 } // namespace
-
-
 
 ScDPGroupEditHelper::ScDPGroupEditHelper( RadioButton* pRbAuto, RadioButton* pRbMan, Edit* pEdValue ) :
     mpRbAuto( pRbAuto ),
@@ -114,8 +110,6 @@ IMPL_LINK( ScDPGroupEditHelper, ClickHdl, RadioButton*, pButton )
     return 0;
 }
 
-
-
 ScDPNumGroupEditHelper::ScDPNumGroupEditHelper(
         RadioButton* pRbAuto, RadioButton* pRbMan, ScDoubleField* pEdValue ) :
     ScDPGroupEditHelper( pRbAuto, pRbMan, pEdValue ),
@@ -132,8 +126,6 @@ void ScDPNumGroupEditHelper::ImplSetValue( double fValue )
 {
     mpEdValue->SetValue( fValue );
 }
-
-
 
 ScDPDateGroupEditHelper::ScDPDateGroupEditHelper(
         RadioButton* pRbAuto, RadioButton* pRbMan, DateField* pEdValue, const Date& rNullDate ) :
@@ -155,8 +147,6 @@ void ScDPDateGroupEditHelper::ImplSetValue( double fValue )
     aDate += static_cast< sal_Int32 >( fValue );
     mpEdValue->SetDate( aDate );
 }
-
-
 
 
 ScDPNumGroupDlg::ScDPNumGroupDlg( Window* pParent, const ScDPNumGroupInfo& rInfo ) :
@@ -206,8 +196,6 @@ ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
 
     return aInfo;
 }
-
-
 
 ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
         const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart, const Date& rNullDate ) :
@@ -338,7 +326,5 @@ IMPL_LINK( ScDPDateGroupDlg, CheckHdl, SvxCheckListBox*, pListBox )
         mpBtnOk->Enable( mpLbUnits->GetCheckedEntryCount() > 0 );
     return 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

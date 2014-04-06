@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 #ifndef _SC_CSVGRID_HXX
 #define _SC_CSVGRID_HXX
 
@@ -33,8 +31,6 @@
 #include "csvsplits.hxx"
 
 
-
-
 namespace svtools { class ColorConfig; }
 class EditEngine;
 class ScEditEngineDefaulter;
@@ -42,14 +38,10 @@ class ScAsciiOptions;
 class ScAccessibleCsvControl;
 
 
-
-
 const sal_uInt8 CSV_COLFLAG_NONE    = 0x00;         /// Nothing set.
 const sal_uInt8 CSV_COLFLAG_SELECT  = 0x01;         /// Column is selected.
 
 const sal_uInt32 CSV_COLUMN_INVALID = CSV_VEC_NOTFOUND;
-
-
 
 
 /** This struct contains the state of one table column. */
@@ -78,11 +70,7 @@ inline void ScCsvColState::Select( bool bSel )
 }
 
 
-
-
 typedef ::std::vector< ScCsvColState > ScCsvColStateVec;
-
-
 
 
 /** A data grid control for the CSV import dialog. The design of this control
@@ -345,8 +333,6 @@ protected:
     /** Creates a new accessible object. */
     virtual ScAccessibleCsvControl* ImplCreateAccessible() SAL_OVERRIDE;
 };
-
-
 
 
 #endif

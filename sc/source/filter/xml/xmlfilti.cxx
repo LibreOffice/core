@@ -521,8 +521,6 @@ void ScXMLSetItemContext::EndElement()
 {
 }
 
-
-
 ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
@@ -886,7 +884,5 @@ void ScXMLDPConditionContext::EndElement()
     }
     pFilterContext->AddFilterField(aFilterField);
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

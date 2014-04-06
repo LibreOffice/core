@@ -99,8 +99,6 @@ struct XclExpRootData : public XclRootData
     virtual             ~XclExpRootData();
 };
 
-
-
 /** Access to global data from other classes. */
 class XclExpRoot : public XclRoot
 {
@@ -172,8 +170,6 @@ private:
 private:
     XclExpRootData& mrExpData;      /// Reference to the global export data struct.
 };
-
-
 
 #endif
 

@@ -203,8 +203,6 @@ private:
     bool                mbMultipleUrls;     /// true = Multiple URL fields processed.
 };
 
-
-
 class EditEngine;
 class EditTextObject;
 class SdrTextObj;
@@ -434,8 +432,6 @@ public:
 private:
     const ScMatrix& mrMatrix;
 };
-
-
 
 #endif
 

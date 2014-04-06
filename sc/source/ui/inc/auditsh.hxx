@@ -44,8 +44,6 @@ public:
     void    GetState(SfxItemSet& rSet);
 };
 
-
-
 #endif
 
 

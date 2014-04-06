@@ -22,13 +22,9 @@
 
 
 
-
-
 #include "inscodlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
-
-
 
 
 bool       ScInsertContentsDlg::bPreviousAllCheck = false;
@@ -36,8 +32,6 @@ sal_uInt16 ScInsertContentsDlg::nPreviousChecks   = (IDF_VALUE | IDF_DATETIME | 
 sal_uInt16 ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_NOFUNC;
 sal_uInt16 ScInsertContentsDlg::nPreviousChecks2 = 0;
 sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
-
-
 
 ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
                                           sal_uInt16        nCheckDefaults,
@@ -124,8 +118,6 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
 
 }
 
-
-
 sal_uInt16 ScInsertContentsDlg::GetInsContentsCmdBits() const
 {
     ScInsertContentsDlg::nPreviousChecks = 0;
@@ -152,8 +144,6 @@ sal_uInt16 ScInsertContentsDlg::GetInsContentsCmdBits() const
                 : ScInsertContentsDlg::nPreviousChecks );
 }
 
-
-
 InsCellCmd ScInsertContentsDlg::GetMoveMode()
 {
     if ( mpRbMoveDown->IsChecked() )
@@ -163,8 +153,6 @@ InsCellCmd ScInsertContentsDlg::GetMoveMode()
 
     return INS_NONE;
 }
-
-
 
 void ScInsertContentsDlg::DisableChecks( bool bInsAllChecked )
 {
@@ -285,8 +273,6 @@ void ScInsertContentsDlg::SetCellShiftDisabled( int nDisable )
 }
 
 
-
-
 IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl)
 {
     DisableChecks( mpBtnInsAll->IsChecked() );
@@ -336,7 +322,5 @@ sal_uInt16  ScInsertContentsDlg::GetFormulaCmdBits() const
     // Bits fuer Checkboxen ausblenden
     return ScInsertContentsDlg::nPreviousFormulaChecks;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

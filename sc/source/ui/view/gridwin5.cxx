@@ -237,8 +237,6 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
     return bDone;
 }
 
-
-
 void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 {
     //To know whether to prefix STR_CTRLCLICKHYERLINK or STR_CLICKHYPERLINK

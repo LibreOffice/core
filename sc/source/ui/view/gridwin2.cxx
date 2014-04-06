@@ -57,8 +57,6 @@ using ::boost::unordered_map;
 
 // STATIC DATA -----------------------------------------------------------
 
-
-
 DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const
 {
     using namespace ::com::sun::star::sheet;
@@ -239,8 +237,6 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
     }
 }
 
-
-
 //  Data Pilot interaction
 
 
@@ -276,8 +272,6 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
 
         bTimer = sal_True;
     }
-
-
 
     SCsCOL  nPosX;
     SCsROW  nPosY;
@@ -626,8 +620,6 @@ void ScGridWindow::DPMouseButtonUp( const MouseEvent& rMEvt )
     SetPointer( Pointer( POINTER_ARROW ) );
 }
 
-
-
 void ScGridWindow::UpdateDragRect( bool bShowRange, const Rectangle& rPosRect )
 {
     SCCOL nStartX = ( rPosRect.Left()   >= 0 ) ? static_cast<SCCOL>(rPosRect.Left())   : SCCOL_MAX;
@@ -654,8 +646,6 @@ void ScGridWindow::UpdateDragRect( bool bShowRange, const Rectangle& rPosRect )
 
     UpdateDragRectOverlay();
 }
-
-
 
 //  Page-Break-Modus
 
@@ -1061,8 +1051,6 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
     else
         pViewData->GetView()->ResetTimer();
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

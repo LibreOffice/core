@@ -953,11 +953,7 @@ ScDataObject* Sc10PageData::Clone() const
     return new Sc10PageData(aPageFormat);
 }
 
-
-
 // Import
-
-
 
 Sc10Import::Sc10Import(SvStream& rStr, ScDocument* pDocument ) :
     rStream             (rStr),
@@ -1059,8 +1055,6 @@ void Sc10Import::LoadFileInfo()
     nError = rStream.GetError();
     // Achtung Info Uebertragen
 }
-
-
 
 void Sc10Import::LoadEditStateInfo()
 {
@@ -2424,15 +2418,11 @@ void Sc10Import::LoadObjects()
   }
 }
 
-
-
 FltError ScFormatFilterPluginImpl::ScImportStarCalc10( SvStream& rStream, ScDocument* pDocument )
 {
     rStream.Seek( 0UL );
     Sc10Import  aImport( rStream, pDocument );
     return ( FltError ) aImport.Import();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -614,8 +614,6 @@ public:
     void                        WriteXml( XclExpXmlStream& rStrm );
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

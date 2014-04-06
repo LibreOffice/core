@@ -38,8 +38,6 @@ class ScCsvViewForwarder;
 class ScAccessibleCell;
 
 
-
-
 class ScAccessibleTextData : public SfxListener
 {
 public:
@@ -67,8 +65,6 @@ private:
 };
 
 
-
-
 class ScAccessibleCellBaseTextData : public ScAccessibleTextData,
                                      public ScCellTextData
 {
@@ -83,8 +79,6 @@ public:
     virtual void                SetDoUpdate(bool bValue) SAL_OVERRIDE { ScCellTextData::SetDoUpdate(bValue); }
     virtual bool                IsDirty() const SAL_OVERRIDE { return ScCellTextData::IsDirty(); }
 };
-
-
 
 
 //  ScAccessibleCellTextData: shared data between sub objects of a accessible cell text object
@@ -122,8 +116,6 @@ private:
 };
 
 
-
-
 class ScAccessibleEditObjectTextData : public ScAccessibleTextData
 {
 public:
@@ -155,8 +147,6 @@ protected:
 };
 
 
-
-
 class ScAccessibleEditLineTextData : public ScAccessibleEditObjectTextData
 {
 public:
@@ -177,8 +167,6 @@ private:
 
     bool mbEditEngineCreated;
 };
-
-
 
 
 class ScAccessiblePreviewCellTextData : public ScAccessibleCellBaseTextData
@@ -206,8 +194,6 @@ private:
     using ScAccessibleCellBaseTextData::GetDocShell;
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
 };
-
-
 
 
 class ScAccessiblePreviewHeaderCellTextData : public ScAccessibleCellBaseTextData
@@ -238,8 +224,6 @@ private:
     using ScAccessibleCellBaseTextData::GetDocShell;
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
 };
-
-
 
 
 class ScAccessibleHeaderTextData : public ScAccessibleTextData
@@ -273,8 +257,6 @@ private:
 };
 
 
-
-
 class ScAccessibleNoteTextData : public ScAccessibleTextData
 {
 public:
@@ -304,8 +286,6 @@ private:
     bool                    mbMarkNote;
     bool                    mbDataValid;
 };
-
-
 
 
 class ScAccessibleCsvTextData : public ScAccessibleTextData
@@ -343,8 +323,6 @@ public:
     virtual void                SetDoUpdate( bool /* bValue */ ) SAL_OVERRIDE {}
     virtual bool                IsDirty() const SAL_OVERRIDE { return false; }
 };
-
-
 
 
 #endif

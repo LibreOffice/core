@@ -23,11 +23,7 @@
 namespace oox {
 namespace xls {
 
-
-
 using ::oox::core::ContextHandlerRef;
-
-
 
 ColorScaleContext::ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :
     WorksheetContextBase( rFragment ),
@@ -64,8 +60,6 @@ void ColorScaleContext::onStartElement( const AttributeList& rAttribs )
         break;
     }
 }
-
-
 
 DataBarContext::DataBarContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :
     WorksheetContextBase( rFragment ),
@@ -106,8 +100,6 @@ void DataBarContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
-
-
 IconSetContext::IconSetContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :
     WorksheetContextBase( rFragment ),
     mxRule( xRule )
@@ -141,8 +133,6 @@ void IconSetContext::onStartElement( const AttributeList& rAttribs )
         break;
     }
 }
-
-
 
 CondFormatContext::CondFormatContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment )
@@ -235,8 +225,6 @@ void CondFormatContext::onEndRecord()
             break;
     }
 }
-
-
 
 } // namespace xls
 } // namespace oox

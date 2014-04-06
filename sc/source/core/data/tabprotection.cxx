@@ -33,8 +33,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::std::vector;
 
-
-
 bool ScPassHashHelper::needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash1, ScPasswordHash eHash2)
 {
     if (rDoc.IsDocProtected())
@@ -83,13 +81,9 @@ ScPasswordHash ScPassHashHelper::getHashTypeFromURI(const OUString& rURI)
     return PASSHASH_UNSPECIFIED;
 }
 
-
-
 ScPassHashProtectable::~ScPassHashProtectable()
 {
 }
-
-
 
 class ScTableProtectionImpl
 {
@@ -553,8 +547,6 @@ void ScDocProtection::setOption(Option eOption, bool bEnabled)
 {
     mpImpl->setOption(eOption, bEnabled);
 }
-
-
 
 ScTableProtection::ScTableProtection() :
     mpImpl(new ScTableProtectionImpl(static_cast<SCSIZE>(ScTableProtection::NONE)))

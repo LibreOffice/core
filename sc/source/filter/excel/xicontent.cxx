@@ -214,8 +214,6 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
 
 } // namespace
 
-
-
 void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
 {
     XclRange aXclRange( ScAddress::UNINITIALIZED );
@@ -683,8 +681,6 @@ void XclImpCondFormat::Apply()
     }
 }
 
-
-
 XclImpCondFormatManager::XclImpCondFormatManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
 {
@@ -995,8 +991,6 @@ void XclImpWebQuery::Apply( ScDocument& rDoc, const OUString& rFilterName )
     }
 }
 
-
-
 XclImpWebQueryBuffer::XclImpWebQueryBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
 {
@@ -1141,8 +1135,6 @@ XclImpDecrypterRef lclReadFilepass8( XclImpStream& rStrm )
 
 } // namespace
 
-
-
 ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
 {
     XclImpDecrypterRef xDecr;
@@ -1232,8 +1224,6 @@ XclImpSheetProtectBuffer::Sheet::Sheet() :
     mnOptions(0x4400)
 {
 }
-
-
 
 XclImpSheetProtectBuffer::Sheet::Sheet(const Sheet& r) :
     mbProtected(r.mbProtected),
@@ -1358,7 +1348,5 @@ XclImpSheetProtectBuffer::Sheet* XclImpSheetProtectBuffer::GetSheetItem( SCTAB n
 
     return &itr->second;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

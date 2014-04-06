@@ -22,8 +22,6 @@
 
 
 
-
-
 #include <vcl/waitobj.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -45,14 +43,10 @@ using namespace com::sun::star;
 #include "dpsdbtab.hxx"
 
 
-
-
 //  entries in the "type" ListBox
 #define DP_TYPELIST_TABLE   0
 #define DP_TYPELIST_QUERY   1
 #define DP_TYPELIST_SQLNAT  3
-
-
 
 ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     ModalDialog(pParent, "SelectDataSourceDialog",
@@ -190,8 +184,6 @@ void ScDataPilotDatabaseDlg::FillObjects()
         OSL_FAIL("exception in database");
     }
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

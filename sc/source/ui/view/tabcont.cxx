@@ -36,8 +36,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-
-
 ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
     TabBar( pParent,
             WinBits(WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_RANGESELECT |
@@ -645,7 +643,5 @@ void ScTabControl::Mirror()
         nSelPageIdByMouse = TabBar::PAGE_NOT_FOUND;  // only once after a Select()
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,8 +32,6 @@
 
 using namespace com::sun::star;
 
-
-
 bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
     bool bRet = SfxObjectShell::InitNew( xStor );
@@ -62,8 +60,6 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     return bRet;
 }
 
-
-
 bool ScDocShell::IsEmpty() const
 {
     return bIsEmpty;
@@ -74,8 +70,6 @@ void ScDocShell::SetEmpty(bool bSet)
 {
     bIsEmpty = bSet;
 }
-
-
 
 void ScDocShell::InitItems()
 {
@@ -145,16 +139,12 @@ void ScDocShell::InitItems()
     }
 }
 
-
-
 void ScDocShell::ResetDrawObjectShell()
 {
     ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
     if (pDrawLayer)
         pDrawLayer->SetObjectShell( NULL );
 }
-
-
 
 void ScDocShell::Activate()
 {
@@ -164,8 +154,6 @@ void ScDocShell::Activate()
 void ScDocShell::Deactivate()
 {
 }
-
-
 
 
 ScDrawLayer* ScDocShell::MakeDrawLayer()

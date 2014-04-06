@@ -54,8 +54,6 @@ using sc::HMMToTwips;
 using sc::TwipsToHMM;
 using sc::TwipsToEvenHMM;
 
-
-
 void ScCellShell::Execute( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
@@ -523,8 +521,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
             }
             break;
 
-
-
         case FID_ROW_HEIGHT:
             {
                 if ( pReqArgs )
@@ -715,8 +711,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
             break;
 
 
-
-
         case SID_CELL_FORMAT_RESET:
             {
                 pTabViewShell->DeleteContents( IDF_HARDATTR | IDF_EDITATTR );
@@ -885,8 +879,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 pTabViewShell->Invalidate( nSlot );
             }
             break;
-
-
 
         case FID_INPUTLINE_STATUS:
             OSL_FAIL("Execute von InputLine-Status");

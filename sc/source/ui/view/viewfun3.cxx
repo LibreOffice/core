@@ -71,8 +71,6 @@ using namespace com::sun::star;
 // STATIC DATA ---------------------------------------------------------------
 
 
-
-
 //  GlobalName der Writer-DocShell kommt jetzt aus comphelper/classids.hxx
 
 
@@ -149,8 +147,6 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, bool bIncludeObjects )
     else
         ErrorMessage( STR_NOMULTISELECT );
 }
-
-
 
 //      C O P Y
 
@@ -687,8 +683,6 @@ bool ScViewFunc::PasteFromSystem( sal_uLong nFormatId, bool bApi )
     }
     return bRet;
 }
-
-
 
 //      P A S T E
 
@@ -1746,8 +1740,6 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
     }
     HelperNotifyChanges::Notify(*pModelObj, aChangeRanges);
 }
-
-
 
 //      D R A G   A N D   D R O P
 

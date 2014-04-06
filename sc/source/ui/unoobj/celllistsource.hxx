@@ -34,12 +34,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
-
-
 namespace calc
 {
-
-
 
     //= OCellListSource
 

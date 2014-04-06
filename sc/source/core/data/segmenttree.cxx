@@ -26,8 +26,6 @@
 
 using ::std::numeric_limits;
 
-
-
 template<typename _ValueType, typename _ExtValueType = _ValueType>
 class ScFlatSegmentsImpl
 {
@@ -236,8 +234,6 @@ bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getNext(RangeData& rData)
     return true;
 }
 
-
-
 class ScFlatUInt16SegmentsImpl : public ScFlatSegmentsImpl<sal_uInt16, sal_uInt32>
 {
 public:
@@ -246,8 +242,6 @@ public:
     {
     }
 };
-
-
 
 class ScFlatBoolSegmentsImpl : public ScFlatSegmentsImpl<bool>
 {
@@ -270,8 +264,6 @@ bool ScFlatBoolSegmentsImpl::setFalse(SCCOLROW nPos1, SCCOLROW nPos2)
 {
     return setValue(nPos1, nPos2, false);
 }
-
-
 
 ScFlatBoolRowSegments::ForwardIterator::ForwardIterator(ScFlatBoolRowSegments& rSegs) :
     mrSegs(rSegs), mnCurPos(0), mnLastPos(-1), mbCurValue(false)
@@ -304,8 +296,6 @@ SCROW ScFlatBoolRowSegments::ForwardIterator::getLastPos() const
     return mnLastPos;
 }
 
-
-
 ScFlatBoolRowSegments::RangeIterator::RangeIterator(ScFlatBoolRowSegments& rSegs) :
     mrSegs(rSegs)
 {
@@ -334,8 +324,6 @@ bool ScFlatBoolRowSegments::RangeIterator::getNext(RangeData& rRange)
     rRange.mbValue = static_cast<bool>(aData.mnValue);
     return true;
 }
-
-
 
 ScFlatBoolRowSegments::ScFlatBoolRowSegments() :
     mpImpl(new ScFlatBoolSegmentsImpl(static_cast<SCCOLROW>(MAXROW)))
@@ -400,8 +388,6 @@ SCROW ScFlatBoolRowSegments::findLastNotOf(bool bValue) const
     return static_cast<SCROW>(mpImpl->findLastNotOf(bValue));
 }
 
-
-
 ScFlatBoolColSegments::ScFlatBoolColSegments() :
     mpImpl(new ScFlatBoolSegmentsImpl(static_cast<SCCOLROW>(MAXCOL)))
 {
@@ -448,8 +434,6 @@ void ScFlatBoolColSegments::insertSegment(SCCOL nCol, SCCOL nSize, bool bSkipSta
     mpImpl->insertSegment(static_cast<SCCOLROW>(nCol), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
 }
 
-
-
 ScFlatUInt16RowSegments::ForwardIterator::ForwardIterator(ScFlatUInt16RowSegments& rSegs) :
     mrSegs(rSegs), mnCurPos(0), mnLastPos(-1), mnCurValue(0)
 {
@@ -480,8 +464,6 @@ SCROW ScFlatUInt16RowSegments::ForwardIterator::getLastPos() const
 {
     return mnLastPos;
 }
-
-
 
 ScFlatUInt16RowSegments::ScFlatUInt16RowSegments(sal_uInt16 nDefault) :
     mpImpl(new ScFlatUInt16SegmentsImpl(static_cast<SCCOLROW>(MAXROW), nDefault))

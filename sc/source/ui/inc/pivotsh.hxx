@@ -46,8 +46,6 @@ private:
     ScDPObject*     GetCurrDPObject();
 };
 
-
-
 #endif
 
 

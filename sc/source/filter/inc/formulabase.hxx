@@ -242,8 +242,6 @@ struct BinSingleRef2d
     void                readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
 };
 
-
-
 /** A 2D formula cell range reference struct with relative flags. */
 struct BinComplexRef2d
 {
@@ -472,8 +470,6 @@ enum FunctionLibraryType
     FUNCLIB_EUROTOOL            /// EuroTool add-in with EUROCONVERT function.
 };
 
-
-
 /** Represents information for a spreadsheet function.
 
     The member mpParamInfos points to a C-array of type information structures
@@ -634,8 +630,6 @@ class FormulaProcessorBase : public OpCodeProvider, protected ApiOpCodes, public
 public:
     explicit            FormulaProcessorBase( const WorkbookHelper& rHelper );
 
-
-
     /** Generates a cell address string in A1 notation from the passed cell
         address.
 
@@ -656,8 +650,6 @@ public:
                             const BinAddress& rAddress,
                             bool bAbsolute );
 
-
-
     /** Generates a string in Calc formula notation from the passed string.
 
         @param rString  The string value.
@@ -673,8 +665,6 @@ public:
         @param rMatrix  The matrix containing double values or strings.
      */
     static OUString generateApiArray( const Matrix< ::com::sun::star::uno::Any >& rMatrix );
-
-
 
     /** Tries to extract a single cell reference from a formula token sequence.
 
@@ -791,8 +781,6 @@ public:
                             sal_Unicode cStringSep,
                             bool bTrimLeadingSpaces ) const;
 };
-
-
 
 } // namespace xls
 } // namespace oox

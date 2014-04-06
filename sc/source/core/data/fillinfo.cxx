@@ -742,8 +742,6 @@ void ScDocument::FillInfo(
 
     //  bedingte Formatierung Ende
 
-
-
                 //      Daten von zusammengefassten Zellen anpassen
 
 

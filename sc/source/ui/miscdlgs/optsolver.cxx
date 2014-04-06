@@ -65,16 +65,12 @@ void ScSolverProgressDialog::SetTimeLimit( sal_Int32 nSeconds )
     m_pFtTime->SetText( aNew );
 }
 
-
-
 ScSolverNoSolutionDialog::ScSolverNoSolutionDialog( Window* pParent, const OUString& rErrorText )
     : ModalDialog(pParent, "NoSolutionDialog", "modules/scalc/ui/nosolutiondialog.ui")
 {
     get(m_pFtErrorText, "error");
     m_pFtErrorText->SetText(rErrorText);
 }
-
-
 
 ScSolverSuccessDialog::ScSolverSuccessDialog( Window* pParent, const OUString& rSolution )
     : ModalDialog(pParent, "SolverSuccessDialog", "modules/scalc/ui/solversuccessdialog.ui")
@@ -96,8 +92,6 @@ IMPL_LINK( ScSolverSuccessDialog, ClickHdl, PushButton*, pBtn )
         EndDialog(RET_CANCEL);
     return 0;
 }
-
-
 
 ScCursorRefEdit::ScCursorRefEdit( Window* pParent, Window *pLabel )
     : formula::RefEdit( pParent, pLabel )
@@ -131,8 +125,6 @@ void ScCursorRefEdit::KeyInput( const KeyEvent& rKEvt )
     else
         formula::RefEdit::KeyInput( rKEvt );
 }
-
-
 
 ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bMin, bool bValue,
                              const OUString& rTarget, const OUString& rVariable,
@@ -275,13 +267,9 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     Init( aCursorPos );
 }
 
-
-
 ScOptSolverDlg::~ScOptSolverDlg()
 {
 }
-
-
 
 void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
 {
@@ -390,8 +378,6 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     mpEdActive = m_pEdObjectiveCell;
 }
 
-
-
 void ScOptSolverDlg::ReadConditions()
 {
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
@@ -449,14 +435,10 @@ void ScOptSolverDlg::EnableButtons()
     }
 }
 
-
-
 bool ScOptSolverDlg::Close()
 {
     return DoClose( ScOptSolverDlgWrapper::GetChildWindowId() );
 }
-
-
 
 void ScOptSolverDlg::SetActive()
 {
@@ -472,8 +454,6 @@ void ScOptSolverDlg::SetActive()
     }
     RefInputDone();
 }
-
-
 
 void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
@@ -525,8 +505,6 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             m_pRbValue->Check();
     }
 }
-
-
 
 bool ScOptSolverDlg::IsRefInputMode() const
 {
@@ -581,8 +559,6 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, PushButton*, pBtn )
     return 0;
 }
 
-
-
 IMPL_LINK( ScOptSolverDlg, GetFocusHdl, Control*, pCtrl )
 {
     Edit* pEdit = NULL;
@@ -612,15 +588,11 @@ IMPL_LINK( ScOptSolverDlg, GetFocusHdl, Control*, pCtrl )
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(ScOptSolverDlg, LoseFocusHdl)
 {
     mbDlgLostFocus = !IsActive();
     return 0;
 }
-
-
 
 IMPL_LINK( ScOptSolverDlg, DelBtnHdl, PushButton*, pBtn )
 {
@@ -649,8 +621,6 @@ IMPL_LINK( ScOptSolverDlg, DelBtnHdl, PushButton*, pBtn )
 
     return 0;
 }
-
-
 
 IMPL_LINK_NOARG(ScOptSolverDlg, TargetModifyHdl)
 {
@@ -751,8 +721,6 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit*, pEdit )
     return 0;
 }
 
-
-
 void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
 {
     OUString aMessage = bCondition ? maConditionError : maInputError;
@@ -763,8 +731,6 @@ void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
         pFocus->GrabFocus();
     }
 }
-
-
 
 bool ScOptSolverDlg::ParseRef( ScRange& rRange, const OUString& rInput, bool bAllowRange )
 {

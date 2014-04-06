@@ -30,14 +30,10 @@
 #include "address.hxx"
 #include "queryparam.hxx"
 
-
-
 class ScViewData;
 class ScDocument;
 class ScQueryItem;
 class ScTypedStrData;
-
-
 
 class ScPivotFilterDlg : public ModalDialog
 {

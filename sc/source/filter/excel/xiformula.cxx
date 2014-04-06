@@ -44,8 +44,6 @@ private:
     const XclBiff       meBiff;         /// Cached BIFF version to save GetBiff() calls.
 };
 
-
-
 XclImpFmlaCompImpl::XclImpFmlaCompImpl( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     maFuncProv( rRoot ),
@@ -89,8 +87,6 @@ const ScTokenArray* XclImpFmlaCompImpl::CreateFormula(
     return pArray;
 }
 
-
-
 XclImpFormulaCompiler::XclImpFormulaCompiler( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     mxImpl( new XclImpFmlaCompImpl( rRoot ) )
@@ -113,7 +109,5 @@ const ScTokenArray* XclImpFormulaCompiler::CreateFormula(
 {
     return mxImpl->CreateFormula(eType, rXclTokArr);
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

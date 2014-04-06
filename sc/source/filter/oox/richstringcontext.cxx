@@ -24,11 +24,7 @@
 namespace oox {
 namespace xls {
 
-
-
 using ::oox::core::ContextHandlerRef;
-
-
 
 ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -89,8 +85,6 @@ void RichStringContext::onCharacters( const OUString& rChars )
                 mxPortion->setText( rChars );
     }
 }
-
-
 
 } // namespace xls
 } // namespace oox

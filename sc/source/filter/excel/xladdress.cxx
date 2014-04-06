@@ -22,8 +22,6 @@
 #include "xltracer.hxx"
 #include "xistream.hxx"
 
-
-
 void XclAddress::Read( XclImpStream& rStrm, bool bCol16Bit )
 {
     mnRow = rStrm.ReaduInt16();
@@ -41,8 +39,6 @@ void XclAddress::Write( XclExpStream& rStrm, bool bCol16Bit ) const
     else
         rStrm << static_cast< sal_uInt8 >( mnCol );
 }
-
-
 
 bool XclRange::Contains( const XclAddress& rPos ) const
 {
@@ -72,8 +68,6 @@ void XclRange::Write( XclExpStream& rStrm, bool bCol16Bit ) const
     else
         rStrm << static_cast< sal_uInt8 >( maFirst.mnCol ) << static_cast< sal_uInt8 >( maLast.mnCol );
 }
-
-
 
 XclRange XclRangeList::GetEnclosingRange() const
 {
@@ -126,8 +120,6 @@ void XclRangeList::WriteSubList( XclExpStream& rStrm, size_t nBegin, size_t nCou
         aIt->Write( rStrm, bCol16Bit );
 }
 
-
-
 XclAddressConverterBase::XclAddressConverterBase( XclTracer& rTracer, const ScAddress& rMaxPos ) :
     mrTracer( rTracer ),
     maMaxPos( rMaxPos ),
@@ -155,7 +147,5 @@ bool XclAddressConverterBase::CheckScTab( SCTAB nScTab, bool bWarn )
     }
     return bValid;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

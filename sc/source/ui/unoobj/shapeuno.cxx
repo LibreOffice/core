@@ -80,8 +80,6 @@ ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( ScShapeObj* pShape, sal_Bool bCr
         return 0;
 }
 
-
-
 namespace
 {
     void lcl_initializeNotifier( SdrObject& _rSdrObj, ::cppu::OWeakObject& _rShape )
@@ -90,8 +88,6 @@ namespace
         _rSdrObj.getShapePropertyChangeNotifier().registerProvider( ::svx::eSpreadsheetAnchor, pProvider );
     }
 }
-
-
 
 ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
       pShapePropertySet(NULL),

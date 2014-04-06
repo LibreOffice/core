@@ -1198,8 +1198,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         //  Clipboard
 
-
-
         case SID_COPY:              // for graphs in DrawShell
             {
                 WaitObject aWait( GetViewData()->GetDialogParent() );
@@ -2414,8 +2412,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ExecuteExternalSource( aFile, aFilter, aOptions, aSource, nRefresh, rReq );
             }
             break;
-
-
 
 
 

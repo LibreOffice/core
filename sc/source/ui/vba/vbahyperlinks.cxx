@@ -28,8 +28,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-
-
 namespace {
 
 /** Returns true, if every range of rxInner is contained in any range of rScOuter. */
@@ -44,8 +42,6 @@ bool lclContains( const ScRangeList& rScOuter, const uno::Reference< excel::XRan
             return false;
     return true;
 }
-
-
 
 /** Functor to decide whether the anchors of two Hyperlink objects are equal. */
 struct EqualAnchorFunctor
@@ -102,8 +98,6 @@ bool EqualAnchorFunctor::operator()( const uno::Reference< excel::XHyperlink >& 
 
 } // namespace
 
-
-
 namespace detail {
 
 class ScVbaHlinkContainer : public ::cppu::WeakImplHelper1< container::XIndexAccess >
@@ -129,8 +123,6 @@ private:
     typedef ::std::vector< uno::Reference< excel::XHyperlink > > HyperlinkVector;
     HyperlinkVector     maHlinks;
 };
-
-
 
 ScVbaHlinkContainer::ScVbaHlinkContainer() throw (uno::RuntimeException)
 {
@@ -185,8 +177,6 @@ sal_Bool SAL_CALL ScVbaHlinkContainer::hasElements() throw (uno::RuntimeExceptio
     return !maHlinks.empty();
 }
 
-
-
 ScVbaHlinkContainerMember::ScVbaHlinkContainerMember( ScVbaHlinkContainer* pContainer ) :
     mxContainer( pContainer )
 {
@@ -197,8 +187,6 @@ ScVbaHlinkContainerMember::~ScVbaHlinkContainerMember()
 }
 
 } // namespace detail
-
-
 
 ScVbaHyperlinks::ScVbaHyperlinks( const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext ) throw (uno::RuntimeException) :
@@ -280,7 +268,5 @@ uno::Any ScVbaHyperlinks::createCollectionObject( const uno::Any& rSource )
 // XHelperInterface -----------------------------------------------------------
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaHyperlinks, "ooo.vba.excel.Hyperlinks" )
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

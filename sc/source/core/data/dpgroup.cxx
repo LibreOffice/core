@@ -126,8 +126,6 @@ private:
     ScDPNumGroupInfo maNumInfo;
 };
 
-
-
 ScDPGroupDateFilter::ScDPGroupDateFilter(
     const std::vector<ScDPItemData>& rValues, const Date& rNullDate, const ScDPNumGroupInfo& rNumInfo) :
     maValues(rValues),
@@ -350,8 +348,6 @@ void ScDPGroupItem::FillGroupFilter( ScDPFilteredCache::GroupFilter& rFilter ) c
         rFilter.addMatchItem(*itr);
 }
 
-
-
 ScDPGroupDimension::ScDPGroupDimension( long nSource, const OUString& rNewName ) :
     nSourceDim( nSource ),
     nGroupDim( -1 ),
@@ -404,8 +400,6 @@ const std::vector<SCROW>& ScDPGroupDimension::GetColumnEntries(
     return maMemberEntries;
 }
 
-
-
 const ScDPGroupItem* ScDPGroupDimension::GetGroupForData( const ScDPItemData& rData ) const
 {
     for (ScDPGroupItemVec::const_iterator aIter = aItems.begin(); aIter != aItems.end(); ++aIter)
@@ -446,8 +440,6 @@ bool ScDPGroupDimension::IsDateDimension() const
 {
     return mbDateDimension;
 }
-
-
 
 ScDPNumGroupDimension::ScDPNumGroupDimension() : mbDateDimension(false) {}
 

@@ -41,8 +41,6 @@
 #include <svx/srchdlg.hxx>
 #include "document.hxx"
 
-
-
 OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
 {
     OUString aStrSelection;
@@ -118,8 +116,6 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
     return aStrSelection;
 }
 
-
-
 void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, const OUString& rTarget,
                                 sal_uInt16 nMode )
 {
@@ -152,8 +148,6 @@ void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, con
         InsertURLButton( rName, rURL, rTarget );
     }
 }
-
-
 
 static void lcl_SelectFieldAfterInsert( EditView& rView )
 {
@@ -349,10 +343,6 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 //      case FID_SEARCH_COUNT:
     }
 }
-
-
-
-
 
 
 

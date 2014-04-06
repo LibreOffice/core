@@ -40,8 +40,6 @@ class ScViewData;
 class ScDPSaveData;
 struct ScQueryParam;
 
-
-
 //  Items
 
 class ScInputStatusItem : public SfxPoolItem
@@ -174,8 +172,6 @@ private:
     ScSortParam     theSortData;
 };
 
-
-
 class SC_DLLPUBLIC ScQueryItem : public SfxPoolItem
 {
 public:
@@ -205,8 +201,6 @@ private:
     bool            bIsAdvanced;
 };
 
-
-
 class SC_DLLPUBLIC ScSubTotalItem : public SfxPoolItem
 {
 public:
@@ -232,8 +226,6 @@ private:
     ScSubTotalParam theSubTotalData;
 };
 
-
-
 class SC_DLLPUBLIC ScUserListItem : public SfxPoolItem
 {
 public:
@@ -253,8 +245,6 @@ private:
     ScUserList* pUserList;
 };
 
-
-
 class ScConsolidateItem : public SfxPoolItem
 {
 public:
@@ -273,8 +263,6 @@ public:
 private:
     ScConsolidateParam  theConsData;
 };
-
-
 
 class ScPivotItem : public SfxPoolItem
 {
@@ -299,8 +287,6 @@ private:
     bool            bNewSheet;
 };
 
-
-
 class ScSolveItem : public SfxPoolItem
 {
 public:
@@ -319,8 +305,6 @@ public:
 private:
     ScSolveParam    theSolveData;
 };
-
-
 
 class ScTabOpItem : public SfxPoolItem
 {

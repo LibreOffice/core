@@ -159,8 +159,6 @@ public:
 };
 
 
-
-
 #endif // SC_NAVIPI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

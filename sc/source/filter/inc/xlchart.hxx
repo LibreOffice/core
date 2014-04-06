@@ -753,8 +753,6 @@ struct XclChRectangle
     explicit            XclChRectangle();
 };
 
-
-
 /** Specifies the position of a data series or data point. */
 struct XclChDataPointPos
 {
@@ -767,8 +765,6 @@ struct XclChDataPointPos
 };
 
 bool operator<( const XclChDataPointPos& rL, const XclChDataPointPos& rR );
-
-
 
 /** Contains the type and context of a block of future records which are
     guarded by CHFRBLOCKBEGIN and CHFRBLOCKEND records. */
@@ -793,8 +789,6 @@ struct XclChFramePos
     explicit            XclChFramePos();
 };
 
-
-
 struct XclChLineFormat
 {
     Color               maColor;            /// Line color.
@@ -805,8 +799,6 @@ struct XclChLineFormat
     explicit            XclChLineFormat();
 };
 
-
-
 struct XclChAreaFormat
 {
     Color               maPattColor;        /// Pattern color.
@@ -816,8 +808,6 @@ struct XclChAreaFormat
 
     explicit            XclChAreaFormat();
 };
-
-
 
 class SfxItemSet;
 class EscherPropertyContainer;
@@ -834,8 +824,6 @@ struct XclChEscherFormat
                         ~XclChEscherFormat();
 };
 
-
-
 struct XclChPicFormat
 {
     sal_uInt16          mnBmpMode;          /// Bitmap mode, e.g. stretched, stacked.
@@ -844,8 +832,6 @@ struct XclChPicFormat
 
     explicit            XclChPicFormat();
 };
-
-
 
 struct XclChFrame
 {
@@ -877,8 +863,6 @@ struct XclChObjectLink
     explicit            XclChObjectLink();
 };
 
-
-
 struct XclChFrLabelProps
 {
     OUString       maSeparator;        /// Separator between label values.
@@ -886,8 +870,6 @@ struct XclChFrLabelProps
 
     explicit            XclChFrLabelProps();
 };
-
-
 
 struct XclChText
 {
@@ -916,8 +898,6 @@ struct XclChMarkerFormat
     explicit            XclChMarkerFormat();
 };
 
-
-
 struct XclCh3dDataFormat
 {
     sal_uInt8           mnBase;             /// Base form.
@@ -925,8 +905,6 @@ struct XclCh3dDataFormat
 
     explicit            XclCh3dDataFormat();
 };
-
-
 
 struct XclChDataFormat
 {
@@ -936,8 +914,6 @@ struct XclChDataFormat
 
     explicit            XclChDataFormat();
 };
-
-
 
 struct XclChSerTrendLine
 {
@@ -952,8 +928,6 @@ struct XclChSerTrendLine
     explicit            XclChSerTrendLine();
 };
 
-
-
 struct XclChSerErrorBar
 {
     double              mfValue;            /// Fixed value for several source types.
@@ -964,8 +938,6 @@ struct XclChSerErrorBar
 
     explicit            XclChSerErrorBar();
 };
-
-
 
 struct XclChSeries
 {
@@ -994,8 +966,6 @@ struct XclChType
     explicit            XclChType();
 };
 
-
-
 struct XclChChart3d
 {
     sal_uInt16          mnRotation;         /// Rotation (0...359deg).
@@ -1009,8 +979,6 @@ struct XclChChart3d
     explicit            XclChChart3d();
 };
 
-
-
 struct XclChLegend
 {
     XclChRectangle      maRect;             /// Position of the legend.
@@ -1021,8 +989,6 @@ struct XclChLegend
     explicit            XclChLegend();
 };
 
-
-
 struct XclChTypeGroup
 {
     sal_uInt16          mnFlags;            /// Additional flags.
@@ -1030,8 +996,6 @@ struct XclChTypeGroup
 
     explicit            XclChTypeGroup();
 };
-
-
 
 struct XclChProperties
 {
@@ -1053,8 +1017,6 @@ struct XclChLabelRange
     explicit            XclChLabelRange();
 };
 
-
-
 struct XclChDateRange
 {
     sal_uInt16          mnMinDate;          /// Minimum value on axis.
@@ -1070,8 +1032,6 @@ struct XclChDateRange
     explicit            XclChDateRange();
 };
 
-
-
 struct XclChValueRange
 {
     double              mfMin;              /// Minimum value on axis.
@@ -1083,8 +1043,6 @@ struct XclChValueRange
 
     explicit            XclChValueRange();
 };
-
-
 
 struct XclChTick
 {
@@ -1099,8 +1057,6 @@ struct XclChTick
     explicit            XclChTick();
 };
 
-
-
 struct XclChAxis
 {
     sal_uInt16          mnType;             /// Axis type.
@@ -1110,8 +1066,6 @@ struct XclChAxis
     /** Returns the axis dimension index used by the chart API. */
     sal_Int32           GetApiAxisDimension() const;
 };
-
-
 
 struct XclChAxesSet
 {
@@ -1197,8 +1151,6 @@ struct XclChFormatInfo
     bool                mbDeleteDefFrame;   /// true = Delete default frame formatting on export.
     bool                mbIsFrame;          /// true = Object is a frame, false = Object is a line.
 };
-
-
 
 /** Provides access to chart auto formatting for all available object types. */
 class XclChFormatInfoProvider
@@ -1294,8 +1246,6 @@ struct XclChExtTypeInfo : public XclChTypeInfo
                             { return IsSeriesFrameFormat() ? EXC_CHOBJTYPE_FILLEDSERIES : EXC_CHOBJTYPE_LINEARSERIES; }
 };
 
-
-
 /** Provides access to chart type info structs for all available chart types. */
 class XclChTypeInfoProvider
 {
@@ -1362,8 +1312,6 @@ private:
     OUString     maObjNameBase;          /// Base of names for inserted objects.
     sal_Int32           mnIndex;                /// Index to create unique identifiers.
 };
-
-
 
 struct XclFontData;
 
@@ -1458,8 +1406,6 @@ private:
     ScfPropSetHelper    maBitmapHlp;        /// Properties for bitmaps.
 };
 
-
-
 /** Base struct for internal root data structs for import and export. */
 struct XclChRootData
 {
@@ -1498,8 +1444,6 @@ struct XclChRootData
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         GetTitleShape( const XclChTextKey& rTitleKey ) const;
 };
-
-
 
 #endif
 

@@ -170,8 +170,6 @@ void XclImpPageSettings::SetPaperSize( sal_uInt16 nXclPaperSize, bool bPortrait 
     mbValidPaper = true;
 }
 
-
-
 namespace {
 
 void lclPutMarginItem( SfxItemSet& rItemSet, sal_uInt16 nRecId, double fMarginInch )
@@ -379,7 +377,5 @@ void XclImpPageSettings::Finalize()
             rDoc.SetColBreak(nScCol, nScTab, false, true);
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

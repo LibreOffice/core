@@ -26,11 +26,7 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::oox::core;
-
-
 
 
 TableFragment::TableFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
@@ -90,8 +86,6 @@ const RecordInfo* TableFragment::getRecordInfos() const
     };
     return spRecInfos;
 }
-
-
 
 } // namespace xls
 } // namespace oox

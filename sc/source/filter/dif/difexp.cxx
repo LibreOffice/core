@@ -297,6 +297,4 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

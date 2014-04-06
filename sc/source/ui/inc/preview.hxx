@@ -166,8 +166,6 @@ public:
     SC_DLLPUBLIC const ScMarkData::MarkedTabsType& GetSelectedTabs() const;
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

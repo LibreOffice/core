@@ -50,8 +50,6 @@
 #include <utility>
 
 
-
-
 namespace {
 
 const long SC_NOTECAPTION_WIDTH             =  2900;    /// Default width of note caption textbox.
@@ -61,8 +59,6 @@ const long SC_NOTECAPTION_CELLDIST          =   600;    /// Default distance of 
 const long SC_NOTECAPTION_OFFSET_Y          = -1500;    /// Default Y offset of note captions to top border of anchor cell.
 const long SC_NOTECAPTION_OFFSET_X          =  1500;    /// Default X offset of note captions to left border of anchor cell.
 const long SC_NOTECAPTION_BORDERDIST_TEMP   =   100;    /// Distance of temporary note captions to visible sheet area.
-
-
 
 /** Static helper functions for caption objects. */
 class ScCaptionUtil
@@ -79,8 +75,6 @@ public:
     /** Updates caption item set according to the passed item set while removing shadow items. */
     static void         SetCaptionItems( SdrCaptionObj& rCaption, const SfxItemSet& rItemSet );
 };
-
-
 
 void ScCaptionUtil::SetCaptionLayer( SdrCaptionObj& rCaption, bool bShown )
 {
@@ -158,8 +152,6 @@ void ScCaptionUtil::SetCaptionItems( SdrCaptionObj& rCaption, const SfxItemSet& 
     rCaption.SetSpecialTextBoxShadow();
 }
 
-
-
 /** Helper for creation and manipulation of caption drawing objects independent
     from cell annotations. */
 class ScCaptionCreator
@@ -205,8 +197,6 @@ private:
     Rectangle           maCellRect;
     bool                mbNegPage;
 };
-
-
 
 ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, bool bShown, bool bTailFront ) :
     mrDoc( rDoc ),
@@ -404,8 +394,6 @@ void ScCaptionCreator::Initialize()
     }
 }
 
-
-
 /** Helper for creation of permanent caption drawing objects for cell notes. */
 class ScNoteCaptionCreator : public ScCaptionCreator
 {
@@ -415,8 +403,6 @@ public:
     /** Manipulate an existing caption. */
     explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, SdrCaptionObj& rCaption, bool bShown );
 };
-
-
 
 ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScNoteData& rNoteData ) :
     ScCaptionCreator( rDoc, rPos )  // use helper c'tor that does not create the caption yet
@@ -458,8 +444,6 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 
 } // namespace
 
-
-
 struct ScCaptionInitData
 {
     typedef ::std::auto_ptr< SfxItemSet >           SfxItemSetPtr;
@@ -475,14 +459,10 @@ struct ScCaptionInitData
     explicit            ScCaptionInitData();
 };
 
-
-
 ScCaptionInitData::ScCaptionInitData() :
     mbDefaultPosSize( true )
 {
 }
-
-
 
 ScNoteData::ScNoteData( bool bShown ) :
     mpCaption( 0 ),
@@ -493,8 +473,6 @@ ScNoteData::ScNoteData( bool bShown ) :
 ScNoteData::~ScNoteData()
 {
 }
-
-
 
 ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, bool bShown ) :
     mrDoc( rDoc ),
@@ -790,8 +768,6 @@ void ScPostIt::RemoveCaption()
     }
     maNoteData.mpCaption = 0;
 }
-
-
 
 SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         ScDocument& rDoc, const ScAddress& rPos, SdrPage& rDrawPage,

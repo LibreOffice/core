@@ -149,8 +149,6 @@ inline void lclFillAddress( XclAddress& rXclPos, SCCOL nScCol, SCROW nScRow )
 
 } // namespace
 
-
-
 XclExpAddressConverter::XclExpAddressConverter( const XclExpRoot& rRoot ) :
     XclAddressConverterBase( rRoot.GetTracer(), rRoot.GetXclMaxPos() )
 {
@@ -286,8 +284,6 @@ OUString lclGetUrlRepresentation( const SvxURLField& rUrlField )
 
 } // namespace
 
-
-
 XclExpHyperlinkHelper::XclExpHyperlinkHelper( const XclExpRoot& rRoot, const ScAddress& rScPos ) :
     XclExpRoot( rRoot ),
     maScPos( rScPos ),
@@ -332,8 +328,6 @@ XclExpHyperlinkHelper::XclExpHyperlinkRef XclExpHyperlinkHelper::GetLinkRecord()
         return mxLinkRec;
     return XclExpHyperlinkRef();
 }
-
-
 
 namespace {
 
@@ -525,8 +519,6 @@ XclExpStringRef lclCreateFormattedString(
 }
 
 } // namespace
-
-
 
 XclExpStringRef XclExpStringHelper::CreateString(
         const XclExpRoot& rRoot, const OUString& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
@@ -962,8 +954,6 @@ OUString lclEncodeDosUrl(
 
 } // namespace
 
-
-
 OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const OUString& rAbsUrl, const OUString* pTableName )
 {
     OUString aDosUrl = INetURLObject(rAbsUrl).getFSysPath(INetURLObject::FSYS_DOS);
@@ -1063,7 +1053,5 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
         }
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -122,8 +122,6 @@ struct XclImpRootData : public XclRootData
     virtual             ~XclImpRootData();
 };
 
-
-
 /** Access to global data from other classes. */
 class XclImpRoot : public XclRoot
 {
@@ -217,8 +215,6 @@ public:
 private:
     XclImpRootData& mrImpData;      /// Reference to the global import data struct.
 };
-
-
 
 #endif
 

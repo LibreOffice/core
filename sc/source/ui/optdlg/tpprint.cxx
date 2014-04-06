@@ -29,8 +29,6 @@
 #include "sc.hrc"
 #include "optdlg.hrc"
 
-
-
 ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
                                     const SfxItemSet& rCoreAttrs )
     :   SfxTabPage      ( pParent,
@@ -59,8 +57,6 @@ int ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )
 
     return LEAVE_PAGE;
 }
-
-
 
 void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
 {
@@ -91,8 +87,6 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
     m_pForceBreaksCB->Check( aOptions.GetForceBreaks() );
     m_pForceBreaksCB->SaveValue();
 }
-
-
 
 bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {

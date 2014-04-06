@@ -38,14 +38,10 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::sheet::ReferenceFlags;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
-
-
 
 
 namespace {
@@ -572,8 +568,6 @@ private:
     WhiteSpaceVec       maOpeningSpaces;            /// List of whitespaces before opening parenthesis.
     WhiteSpaceVec       maClosingSpaces;            /// List of whitespaces before closing parenthesis.
 };
-
-
 
 FormulaParserImpl::FormulaParserImpl( const FormulaParser& rParent ) :
     FormulaFinalizer( rParent ),
@@ -1290,8 +1284,6 @@ private:
     bool                mbNeedExtRefs;      /// True = parser needs initialization of external reference info.
 };
 
-
-
 OoxFormulaParserImpl::OoxFormulaParserImpl( const FormulaParser& rParent ) :
     FormulaParserImpl( rParent ),
     maApiParser( rParent.getBaseFilter().getModelFactory(), rParent ),
@@ -1842,8 +1834,6 @@ bool lclIsValidNlrRange( const BiffNlr& rNlr, const BinRange& rRange, bool bRow 
 
 } // namespace
 
-
-
 class BiffFormulaParserImpl : public FormulaParserImpl
 {
 public:
@@ -1946,8 +1936,6 @@ private:
     sal_uInt16          mnMemFuncSize;              /// Size of tMemFunc data.
     sal_uInt16          mnRefIdSize;                /// Size of unused data following a reference identifier.
 };
-
-
 
 BiffFormulaParserImpl::BiffFormulaParserImpl( const FormulaParser& rParent ) :
     FormulaParserImpl( rParent ),
@@ -2741,8 +2729,6 @@ bool BiffFormulaParserImpl::pushBiffFunction( sal_uInt16 nFuncId, sal_uInt8 nPar
     return pushFunctionOperator( OPCODE_NONAME, nParamCount );
 }
 
-
-
 namespace {
 
 /** Extracts the reference identifier and the remaining data from a formula in
@@ -2763,8 +2749,6 @@ bool lclExtractRefId( sal_Int32& rnRefId, OUString& rRemainder, const OUString& 
 }
 
 }
-
-
 
 FormulaParser::FormulaParser( const WorkbookHelper& rHelper ) :
     FormulaProcessorBase( rHelper )
@@ -2901,8 +2885,6 @@ OUString FormulaParser::importMacroName( const OUString& rFormulaString )
     }
     return OUString();
 }
-
-
 
 } // namespace xls
 } // namespace oox

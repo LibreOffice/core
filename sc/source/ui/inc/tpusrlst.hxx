@@ -25,8 +25,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/vclmedit.hxx>
 
-
-
 class ScUserList;
 class ScDocument;
 class ScViewData;
@@ -102,8 +100,6 @@ private:
     DECL_LINK( EdEntriesModHdl, VclMultiLineEdit* );
 #endif
 };
-
-
 
 #endif // SC_TPUSRLST_HXX
 

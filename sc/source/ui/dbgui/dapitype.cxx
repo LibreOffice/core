@@ -22,16 +22,12 @@
 
 
 
-
-
 #include "dapitype.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "dapitype.hrc"
 
 using namespace com::sun::star;
-
-
 
 ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(Window* pParent, bool bEnableExternal)
     : ModalDialog( pParent, "SelectSourceDialog", "modules/scalc/ui/selectsource.ui" )
@@ -101,8 +97,6 @@ IMPL_LINK( ScDataPilotSourceTypeDlg, RadioClickHdl, RadioButton*, pBtn )
     return 0;
 }
 
-
-
 ScDataPilotServiceDlg::ScDataPilotServiceDlg( Window* pParent,
                                 const uno::Sequence<OUString>& rServices ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DAPISERVICE ) ),
@@ -162,7 +156,5 @@ OUString ScDataPilotServiceDlg::GetParPass() const
 {
     return aEdPasswd.GetText();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

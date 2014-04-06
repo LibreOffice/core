@@ -84,8 +84,6 @@ public:
         DECL_LINK(ViewHdl, PushButton*);
 };
 
-
-
 class ScTestListener : public XSelectionChangeListener, public UsrObject
 {
 private:
@@ -106,13 +104,9 @@ public:
     virtual void            selectionChanged(const EventObject& aEvent);
 };
 
-
-
 static long nBla = 0;
 
 static XCellRef xGlobalCell;
-
-
 
 ScTestListener::ScTestListener(FixedText* pF) :
     pFixedText( pF )
@@ -163,8 +157,6 @@ void ScTestListener::selectionChanged(const EventObject& aEvent)
     String aStr = OUStringToString( xCells->getAddress(), CHARSET_SYSTEM );
     pFixedText->SetText(aStr);
 }
-
-
 
 
 extern "C" Window* SAL_CALL CreateWindow( Window *pParent, const String& rParam )
@@ -246,8 +238,6 @@ MyWindow::MyWindow( Window *pParent ) :
     aViewButton.Show();
 }
 
-
-
 XSpreadsheetDocumentRef lcl_GetDocument()
 {
     XServiceManagerRef xProv = getGlobalServiceManager();
@@ -290,8 +280,6 @@ XInterfaceRef lcl_GetView()
     return xView;
 }
 
-
-
 void lcl_OutputNames( const XInterfaceRef& xSource,     // XNameAccess
                         const XSpreadsheetDocumentRef& xDoc,
                         sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nTab )
@@ -324,8 +312,6 @@ void lcl_OutputNames( const XInterfaceRef& xSource,     // XNameAccess
     }
 }
 
-
-
 void lcl_SetText( const XTextRef& xText )
 {
     if (!xText.is()) return;
@@ -352,8 +338,6 @@ void lcl_SetText( const XTextRef& xText )
     if (xProp.is())
         xProp->setPropertyValue(L"Bold", UsrAny((sal_Bool)true));
 }
-
-
 
 void lcl_DoCount()
 {
@@ -1634,8 +1618,6 @@ IMPL_LINK_NOARG(MyWindow, CountHdl)
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(MyWindow, TextHdl)
 {
     sal_uInt16 nCol = (sal_uInt16)aColField.GetValue();
@@ -1682,8 +1664,6 @@ IMPL_LINK_NOARG(MyWindow, TextHdl)
 
     return 0;
 }
-
-
 
 IMPL_LINK_NOARG(MyWindow, BlaHdl)
 {
@@ -1757,8 +1737,6 @@ IMPL_LINK_NOARG(MyWindow, BlaHdl)
 }
 
 
-
-
 IMPL_LINK_NOARG(MyWindow, TabHdl)
 {
     String aResult;
@@ -1829,8 +1807,6 @@ IMPL_LINK_NOARG(MyWindow, TabHdl)
 
     return 0;
 }
-
-
 
 void lcl_FillCells(XCellCollectionRef xColl)
 {

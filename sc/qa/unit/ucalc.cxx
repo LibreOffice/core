@@ -3966,8 +3966,6 @@ void Test::testRenameTable()
     m_pDoc->DeleteTab(1);
 }
 
-
-
 void Test::testSetBackgroundColor()
 {
     //test set background color
@@ -3997,8 +3995,6 @@ void Test::testSetBackgroundColor()
     CPPUNIT_ASSERT_MESSAGE("the correct color is not set after undo", m_pDoc->GetTabBgColor(0)== aColor);
     m_pDoc->DeleteTab(0);
 }
-
-
 
 void Test::testUpdateReference()
 {

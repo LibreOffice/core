@@ -45,8 +45,6 @@
 #include "drwtrans.hxx"
 #include "drwlayer.hxx"
 
-
-
 sal_uInt16 ScGetFontWorkId()
 {
     return SvxFontWorkChildWindow::GetChildWindowId();
@@ -266,8 +264,6 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
         rSet.Set(aViewAttr);
     }
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

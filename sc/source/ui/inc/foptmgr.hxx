@@ -25,8 +25,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 
-
-
 namespace formula
 {
     class RefButton;
@@ -34,8 +32,6 @@ namespace formula
 struct ScQueryParam;
 class ScDocument;
 class ScViewData;
-
-
 
 class ScFilterOptionsMgr
 {

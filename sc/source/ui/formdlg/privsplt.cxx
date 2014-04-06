@@ -236,8 +236,6 @@ void ScPrivatSplit::SetYRange(Range cRgeY)
     aYMovingRange=cRgeY;
 }
 
-
-
 /*************************************************************************
 #*  Member:     GetDeltaY
 #*------------------------------------------------------------------------
@@ -371,8 +369,6 @@ void ScPrivatSplit::ImplInitSettings( bool bFont, bool bForeground, bool bBackgr
     Invalidate();
 }
 
-
-
 void ScPrivatSplit::StateChanged( StateChangedType nType )
 {
     if ( (nType == STATE_CHANGE_ZOOM) ||
@@ -394,8 +390,6 @@ void ScPrivatSplit::StateChanged( StateChangedType nType )
 
     Control::StateChanged( nType );
 }
-
-
 
 void ScPrivatSplit::DataChanged( const DataChangedEvent& rDCEvt )
 {

@@ -37,8 +37,6 @@
 //! fusel,fuconstr,futext - zusammenfassen!
 #define SC_MAXDRAGMOVE  3
 
-
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -365,8 +363,6 @@ void FuConstruct::Deactivate()
 {
     FuDraw::Deactivate();
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -99,8 +99,6 @@ public:
 #define __nSize 2048
 
 
-
-
 class FormCache
 {
 private:

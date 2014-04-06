@@ -30,8 +30,6 @@ class ScDocument;
 class ScViewData;
 
 
-
-
 class ScPrintAreasDlg : public ScAnyRefDlg
 {
 public:
@@ -83,8 +81,6 @@ private:
     DECL_LINK( Impl_GetFocusHdl,    Control*    );
 #endif
 };
-
-
 
 #endif
 

@@ -28,8 +28,6 @@
 namespace oox {
 namespace xls {
 
-
-
 struct ScenarioCellModel
 {
     ::com::sun::star::table::CellAddress maPos;
@@ -39,8 +37,6 @@ struct ScenarioCellModel
 
     explicit            ScenarioCellModel();
 };
-
-
 
 struct ScenarioModel
 {
@@ -52,8 +48,6 @@ struct ScenarioModel
 
     explicit            ScenarioModel();
 };
-
-
 
 class Scenario : public WorkbookHelper
 {
@@ -81,8 +75,6 @@ private:
     sal_Int16           mnSheet;            /// Index of the sheet this scenario is based on.
 };
 
-
-
 struct SheetScenariosModel
 {
     sal_Int32           mnCurrent;          /// Selected scenario.
@@ -90,8 +82,6 @@ struct SheetScenariosModel
 
     explicit            SheetScenariosModel();
 };
-
-
 
 class SheetScenarios : public WorkbookHelper
 {
@@ -116,8 +106,6 @@ private:
     sal_Int16           mnSheet;
 };
 
-
-
 class ScenarioBuffer : public WorkbookHelper
 {
 public:
@@ -133,8 +121,6 @@ private:
     typedef RefMap< sal_Int16, SheetScenarios, ::std::greater< sal_Int16 > > SheetScenariosMap;
     SheetScenariosMap   maSheetScenarios;
 };
-
-
 
 } // namespace xls
 } // namespace oox

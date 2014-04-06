@@ -33,14 +33,10 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
-
-
 
 
 namespace {
@@ -63,8 +59,6 @@ const sal_uInt32 BIFF12_QUERYTABLE_APPLYALIGNMENT   = 0x00010000;
 const sal_uInt32 BIFF12_QUERYTABLE_APPLYBORDER      = 0x00020000;
 const sal_uInt32 BIFF12_QUERYTABLE_APPLYFILL        = 0x00040000;
 const sal_uInt32 BIFF12_QUERYTABLE_APPLYPROTECTION  = 0x00080000;
-
-
 
 void lclAppendWebQueryTableName( OUStringBuffer& rTables, const OUString& rTableName )
 {
@@ -132,8 +126,6 @@ Reference< XAreaLink > lclFindAreaLink(
 
 } // namespace
 
-
-
 QueryTableModel::QueryTableModel() :
     mnConnId( -1 ),
     mnGrowShrinkType( XML_insertDelete ),
@@ -151,8 +143,6 @@ QueryTableModel::QueryTableModel() :
     mbIntermediate( false )
 {
 }
-
-
 
 QueryTable::QueryTable( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -268,8 +258,6 @@ void QueryTable::finalizeImport()
     }
 }
 
-
-
 QueryTableBuffer::QueryTableBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
 {
@@ -286,8 +274,6 @@ void QueryTableBuffer::finalizeImport()
 {
     maQueryTables.forEachMem( &QueryTable::finalizeImport );
 }
-
-
 
 } // namespace xls
 } // namespace oox

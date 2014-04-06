@@ -48,8 +48,6 @@
 
 using namespace com::sun::star;
 
-
-
 /*
  * Since the settings on the second Tab Page (Options) effects
  * the first Tab Page, there must be a way for it to communicate with the
@@ -67,8 +65,6 @@ using namespace com::sun::star;
  *
  * This still needs to be changed!
  */
-
-
 
 // Sort Criteria Tab page
 
@@ -116,13 +112,9 @@ void ScTabPageSortFields::SetPosPixel(const Point& rAllocPos)
     maSortKeyCtrl.setScrollRange();
 }
 
-
-
 ScTabPageSortFields::~ScTabPageSortFields()
 {
 }
-
-
 
 void ScTabPageSortFields::Init()
 {
@@ -144,15 +136,11 @@ void ScTabPageSortFields::Init()
     }
 }
 
-
-
 SfxTabPage* ScTabPageSortFields::Create( Window*    pParent,
                                          const SfxItemSet&  rArgSet )
 {
     return ( new ScTabPageSortFields( pParent, rArgSet ) );
 }
-
-
 
 void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
 {
@@ -236,8 +224,6 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
         SetLastSortKey( nSortKeyCount );
 }
 
-
-
 bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 {
     ScSortParam aNewSortData = aSortData;
@@ -302,8 +288,6 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
     return true;
 }
 
-
-
 // for data exchange without dialogue detour:
 void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
 {
@@ -328,8 +312,6 @@ void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-
-
 int ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pDlg )
@@ -346,8 +328,6 @@ int ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
 
     return SfxTabPage::LEAVE_PAGE;
 }
-
-
 
 void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
 {
@@ -416,8 +396,6 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
         }
     }
 }
-
-
 
 sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
 {
@@ -542,8 +520,6 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
     m_pLbSortUser->SetAccessibleName(m_pBtnSortUser->GetText());
 }
 
-
-
 ScTabPageSortOptions::~ScTabPageSortOptions()
 {
     sal_uInt16 nEntries = m_pLbOutPos->GetEntryCount();
@@ -554,8 +530,6 @@ ScTabPageSortOptions::~ScTabPageSortOptions()
     delete pColRes;
     delete pColWrap;        //! not if from document
 }
-
-
 
 void ScTabPageSortOptions::Init()
 {
@@ -640,16 +614,12 @@ void ScTabPageSortOptions::Init()
     m_pLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 
-
-
 SfxTabPage* ScTabPageSortOptions::Create(
                                             Window*             pParent,
                                             const SfxItemSet&   rArgSet )
 {
     return ( new ScTabPageSortOptions( pParent, rArgSet ) );
 }
-
-
 
 void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
 {
@@ -718,8 +688,6 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
     }
 }
 
-
-
 bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 {
     // Create local copy of ScParam
@@ -767,8 +735,6 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
     return true;
 }
 
-
-
 // for data exchange without dialogue detour:
 void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
 {
@@ -792,8 +758,6 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
                             : aStrRowLabel );
     }
 }
-
-
 
 int ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -847,8 +811,6 @@ int ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
     return bPosInputOk ? SfxTabPage::LEAVE_PAGE : SfxTabPage::KEEP_PAGE;
 }
 
-
-
 void ScTabPageSortOptions::FillUserSortListBox()
 {
     ScUserList* pUserLists = ScGlobal::GetUserList();
@@ -895,8 +857,6 @@ IMPL_LINK( ScTabPageSortOptions, EnableHdl, CheckBox *, pBox )
     return 0;
 }
 
-
-
 IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
 {
     if (pLb == m_pLbOutPos)
@@ -912,8 +872,6 @@ IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
     return 0;
 }
 
-
-
 IMPL_LINK( ScTabPageSortOptions, SortDirHdl, RadioButton *, pBtn )
 {
     if (pBtn == m_pBtnTopDown)
@@ -926,8 +884,6 @@ IMPL_LINK( ScTabPageSortOptions, SortDirHdl, RadioButton *, pBtn )
     }
     return 0;
 }
-
-
 
 void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 {
@@ -956,8 +912,6 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
         }
     }
 }
-
-
 
 IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
 {

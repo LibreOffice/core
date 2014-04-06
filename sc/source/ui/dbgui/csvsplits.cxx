@@ -22,8 +22,6 @@
 #include <algorithm>
 
 
-
-
 bool ScCsvSplits::Insert( sal_Int32 nPos )
 {
     bool bValid = (nPos >= 0);
@@ -65,8 +63,6 @@ bool ScCsvSplits::HasSplit( sal_Int32 nPos ) const
 }
 
 
-
-
 sal_uInt32 ScCsvSplits::GetIndex( sal_Int32 nPos ) const
 {
     const_iterator aIter = ::std::lower_bound( maVec.begin(), maVec.end(), nPos );
@@ -94,14 +90,10 @@ sal_Int32 ScCsvSplits::GetPos( sal_uInt32 nIndex ) const
 }
 
 
-
-
 sal_uInt32 ScCsvSplits::GetIterIndex( const_iterator aIter ) const
 {
     return (aIter == maVec.end()) ? CSV_VEC_NOTFOUND : (aIter - maVec.begin());
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

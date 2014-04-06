@@ -33,8 +33,6 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
 
-
-
 class ScSolverOptionsDialog : public ModalDialog
 {
     ListBox* m_pLbEngine;

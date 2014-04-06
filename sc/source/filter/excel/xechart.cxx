@@ -249,8 +249,6 @@ struct XclExpChRootData : public XclChRootData
     void                FinalizeFutureRecBlock( XclExpStream& rStrm );
 };
 
-
-
 void XclExpChRootData::RegisterFutureRecBlock( const XclChFrBlock& rFrBlock )
 {
     maUnwrittenFrBlocks.push_back( rFrBlock );
@@ -296,8 +294,6 @@ void XclExpChRootData::FinalizeFutureRecBlock( XclExpStream& rStrm )
         maWrittenFrBlocks.pop_back();
     }
 }
-
-
 
 XclExpChRoot::XclExpChRoot( const XclExpRoot& rRoot, XclExpChChart& rChartData ) :
     XclExpRoot( rRoot ),
@@ -427,8 +423,6 @@ void XclExpChRoot::FinalizeFutureRecBlock( XclExpStream& rStrm )
     mxChData->FinalizeFutureRecBlock( rStrm );
 }
 
-
-
 XclExpChGroupBase::XclExpChGroupBase( const XclExpChRoot& rRoot,
         sal_uInt16 nFrType, sal_uInt16 nRecId, sal_Size nRecSize ) :
     XclExpRecord( nRecId, nRecSize ),
@@ -473,8 +467,6 @@ void XclExpChGroupBase::SetFutureRecordContext( sal_uInt16 nFrContext, sal_uInt1
     maFrBlock.mnValue2  = nFrValue2;
 }
 
-
-
 XclExpChFutureRecordBase::XclExpChFutureRecordBase( const XclExpChRoot& rRoot,
         XclFutureRecType eRecType, sal_uInt16 nRecId, sal_Size nRecSize ) :
     XclExpFutureRecord( eRecType, nRecId, nRecSize ),
@@ -501,8 +493,6 @@ void XclExpChFramePos::WriteBody( XclExpStream& rStrm )
 {
     rStrm << maData.mnTLMode << maData.mnBRMode << maData.maRect;
 }
-
-
 
 XclExpChLineFormat::XclExpChLineFormat( const XclExpChRoot& rRoot ) :
     XclExpRecord( EXC_ID_CHLINEFORMAT, (rRoot.GetBiff() == EXC_BIFF8) ? 12 : 10 ),
@@ -585,8 +575,6 @@ XclExpChLineFormatRef lclCreateLineFormat( const XclExpChRoot& rRoot,
 
 } // namespace
 
-
-
 XclExpChAreaFormat::XclExpChAreaFormat( const XclExpChRoot& rRoot ) :
     XclExpRecord( EXC_ID_CHAREAFORMAT, (rRoot.GetBiff() == EXC_BIFF8) ? 16 : 12 ),
     mnPattColorId( XclExpPalette::GetColorIdFromIndex( EXC_COLOR_CHWINDOWBACK ) ),
@@ -663,8 +651,6 @@ void XclExpChAreaFormat::WriteBody( XclExpStream& rStrm )
     }
 }
 
-
-
 XclExpChEscherFormat::XclExpChEscherFormat( const XclExpChRoot& rRoot ) :
     XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_UNKNOWN, EXC_ID_CHESCHERFORMAT ),
     mnColor1Id( XclExpPalette::GetColorIdFromIndex( EXC_COLOR_CHWINDOWBACK ) ),
@@ -739,8 +725,6 @@ void XclExpChEscherFormat::WriteBody( XclExpStream& rStrm )
     rStrm.CopyFromStream( aMemStrm );
 }
 
-
-
 XclExpChFrameBase::XclExpChFrameBase()
 {
 }
@@ -800,8 +784,6 @@ void XclExpChFrameBase::WriteFrameRecords( XclExpStream& rStrm )
     lclSaveRecord( rStrm, mxAreaFmt );
     lclSaveRecord( rStrm, mxEscherFmt );
 }
-
-
 
 XclExpChFrame::XclExpChFrame( const XclExpChRoot& rRoot, XclChObjectType eObjType ) :
     XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_FRAME, EXC_ID_CHFRAME, 4 ),
@@ -895,8 +877,6 @@ void lclAddDoubleRefData(
 }
 
 } // namespace
-
-
 
 XclExpChSourceLink::XclExpChSourceLink( const XclExpChRoot& rRoot, sal_uInt8 nDestType ) :
     XclExpRecord( EXC_ID_CHSOURCELINK ),
@@ -1113,8 +1093,6 @@ XclExpChFont::XclExpChFont( sal_uInt16 nFontIdx ) :
 {
 }
 
-
-
 XclExpChObjectLink::XclExpChObjectLink( sal_uInt16 nLinkTarget, const XclChDataPointPos& rPointPos ) :
     XclExpRecord( EXC_ID_CHOBJECTLINK, 6 )
 {
@@ -1126,8 +1104,6 @@ void XclExpChObjectLink::WriteBody( XclExpStream& rStrm )
 {
     rStrm << maData.mnTarget << maData.maPointPos.mnSeriesIdx << maData.maPointPos.mnPointIdx;
 }
-
-
 
 XclExpChFrLabelProps::XclExpChFrLabelProps( const XclExpChRoot& rRoot ) :
     XclExpChFutureRecordBase( rRoot, EXC_FUTUREREC_UNUSEDREF, EXC_ID_CHFRLABELPROPS, 4 )
@@ -1156,8 +1132,6 @@ void XclExpChFrLabelProps::WriteBody( XclExpStream& rStrm )
     rStrm << maData.mnFlags << aXclSep;
 }
 
-
-
 XclExpChFontBase::~XclExpChFontBase()
 {
 }
@@ -1182,8 +1156,6 @@ void XclExpChFontBase::ConvertRotationBase(
     sal_uInt16 nRotation = rRoot.GetChartPropSetHelper().ReadRotationProperties( rPropSet, bSupportsStacked );
     SetRotation( nRotation );
 }
-
-
 
 XclExpChText::XclExpChText( const XclExpChRoot& rRoot ) :
     XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_TEXT, EXC_ID_CHTEXT, (rRoot.GetBiff() == EXC_BIFF8) ? 32 : 26 ),
@@ -1438,8 +1410,6 @@ void XclExpChText::WriteBody( XclExpStream& rStrm )
     }
 }
 
-
-
 namespace {
 
 /** Creates and returns an Excel text object from the passed title. */
@@ -1532,8 +1502,6 @@ void XclExpChMarkerFormat::WriteBody( XclExpStream& rStrm )
     }
 }
 
-
-
 XclExpChPieFormat::XclExpChPieFormat() :
     XclExpUInt16Record( EXC_ID_CHPIEFORMAT, 0 )
 {
@@ -1545,8 +1513,6 @@ void XclExpChPieFormat::Convert( const ScfPropertySet& rPropSet )
     if( rPropSet.GetProperty( fApiDist, EXC_CHPROP_OFFSET ) )
         SetValue( limit_cast< sal_uInt16 >( fApiDist * 100.0, 0, 100 ) );
 }
-
-
 
 XclExpCh3dDataFormat::XclExpCh3dDataFormat() :
     XclExpRecord( EXC_ID_CH3DDATAFORMAT, 2 )
@@ -1588,14 +1554,10 @@ void XclExpCh3dDataFormat::WriteBody( XclExpStream& rStrm )
     rStrm << maData.mnBase << maData.mnTop;
 }
 
-
-
 XclExpChAttachedLabel::XclExpChAttachedLabel( sal_uInt16 nFlags ) :
     XclExpUInt16Record( EXC_ID_CHATTACHEDLABEL, nFlags )
 {
 }
-
-
 
 XclExpChDataFormat::XclExpChDataFormat( const XclExpChRoot& rRoot,
         const XclChDataPointPos& rPointPos, sal_uInt16 nFormatIdx ) :
@@ -1677,8 +1639,6 @@ void XclExpChDataFormat::WriteBody( XclExpStream& rStrm )
             << maData.mnFormatIdx
             << maData.mnFlags;
 }
-
-
 
 XclExpChSerTrendLine::XclExpChSerTrendLine( const XclExpChRoot& rRoot ) :
     XclExpRecord( EXC_ID_CHSERTRENDLINE, 28 ),
@@ -1773,8 +1733,6 @@ void XclExpChSerTrendLine::WriteBody( XclExpStream& rStrm )
             << maData.mfForecastBack;
 }
 
-
-
 XclExpChSerErrorBar::XclExpChSerErrorBar( const XclExpChRoot& rRoot, sal_uInt8 nBarType ) :
     XclExpRecord( EXC_ID_CHSERERRORBAR, 14 ),
     XclExpChRoot( rRoot )
@@ -1852,8 +1810,6 @@ void XclExpChSerErrorBar::WriteBody( XclExpStream& rStrm )
             << maData.mfValue
             << maData.mnValueCount;
 }
-
-
 
 namespace {
 
@@ -2268,8 +2224,6 @@ void XclExpChType::WriteBody( XclExpStream& rStrm )
     }
 }
 
-
-
 XclExpChChart3d::XclExpChChart3d() :
     XclExpRecord( EXC_ID_CHCHART3D, 14 )
 {
@@ -2322,8 +2276,6 @@ void XclExpChChart3d::WriteBody( XclExpStream& rStrm )
             << maData.mnDepthGap
             << maData.mnFlags;
 }
-
-
 
 XclExpChLegend::XclExpChLegend( const XclExpChRoot& rRoot ) :
     XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_LEGEND, EXC_ID_CHLEGEND, 20 )
@@ -2422,8 +2374,6 @@ void XclExpChLegend::WriteBody( XclExpStream& rStrm )
     rStrm << maData.maRect << maData.mnDockMode << maData.mnSpacing << maData.mnFlags;
 }
 
-
-
 XclExpChDropBar::XclExpChDropBar( const XclExpChRoot& rRoot, XclChObjectType eObjType ) :
     XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_DROPBAR, EXC_ID_CHDROPBAR, 2 ),
     meObjType( eObjType ),
@@ -2448,8 +2398,6 @@ void XclExpChDropBar::WriteBody( XclExpStream& rStrm )
 {
     rStrm << mnBarDist;
 }
-
-
 
 XclExpChTypeGroup::XclExpChTypeGroup( const XclExpChRoot& rRoot, sal_uInt16 nGroupIdx ) :
     XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_TYPEGROUP, EXC_ID_CHTYPEGROUP, 20 ),
@@ -2776,8 +2724,6 @@ void XclExpChLabelRange::WriteBody( XclExpStream& rStrm )
     rStrm << maLabelData.mnCross << maLabelData.mnLabelFreq << maLabelData.mnTickFreq << maLabelData.mnFlags;
 }
 
-
-
 XclExpChValueRange::XclExpChValueRange( const XclExpChRoot& rRoot ) :
     XclExpRecord( EXC_ID_CHVALUERANGE, 42 ),
     XclExpChRoot( rRoot )
@@ -2851,8 +2797,6 @@ void XclExpChValueRange::WriteBody( XclExpStream& rStrm )
             << maData.mfCross
             << maData.mnFlags;
 }
-
-
 
 namespace {
 
@@ -2941,8 +2885,6 @@ void XclExpChTick::WriteBody( XclExpStream& rStrm )
     if( GetBiff() == EXC_BIFF8 )
         rStrm << GetPalette().GetColorIndex( mnTextColorId ) << maData.mnRotation;
 }
-
-
 
 namespace {
 
@@ -3121,8 +3063,6 @@ void XclExpChAxis::WriteBody( XclExpStream& rStrm )
     rStrm << maData.mnType;
     rStrm.WriteZeroBytes( 16 );
 }
-
-
 
 XclExpChAxesSet::XclExpChAxesSet( const XclExpChRoot& rRoot, sal_uInt16 nAxesSetId ) :
     XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_AXESSET, EXC_ID_CHAXESSET, 18 )
@@ -3494,8 +3434,6 @@ void XclExpChChart::WriteBody( XclExpStream& rStrm )
      rStrm << maRect;
 }
 
-
-
 XclExpChartDrawing::XclExpChartDrawing( const XclExpRoot& rRoot,
         const Reference< XModel >& rxModel, const Size& rChartSize ) :
     XclExpRoot( rRoot )
@@ -3530,8 +3468,6 @@ void XclExpChartDrawing::Save( XclExpStream& rStrm )
         mxObjRecs->Save( rStrm );
 }
 
-
-
 XclExpChart::XclExpChart( const XclExpRoot& rRoot, Reference< XModel > xModel, const Rectangle& rChartRect ) :
     XclExpSubStream( EXC_BOF_CHART ),
     XclExpRoot( rRoot )
@@ -3544,7 +3480,5 @@ XclExpChart::XclExpChart( const XclExpRoot& rRoot, Reference< XModel > xModel, c
     Reference< XChartDocument > xChartDoc( xModel, UNO_QUERY );
     AppendNewRecord( new XclExpChChart( rRoot, xChartDoc, rChartRect ) );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

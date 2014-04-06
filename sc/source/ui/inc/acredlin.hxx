@@ -156,8 +156,6 @@ private:
     DECL_LINK( ReOpenTimerHdl, void*);
     DECL_LINK( ColCompareHdl, SvSortData*);
 
-
-
 protected:
 
     void            RejectFiltered();

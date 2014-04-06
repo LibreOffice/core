@@ -1827,8 +1827,6 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
     }
 }
 
-
-
 void ScAcceptChgDlg::FillInfo(SfxChildWinInfo& rInfo) const
 {
     SfxModelessDialog::FillInfo(rInfo);

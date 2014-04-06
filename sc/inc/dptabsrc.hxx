@@ -74,8 +74,6 @@ class ScDPTableData;
 
 //  implementation of DataPilotSource using ScDPTableData
 
-
-
 class ScDPDimensions;
 class ScDPDimension;
 class ScDPHierarchies;

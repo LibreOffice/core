@@ -52,8 +52,6 @@ XclImpRootData::~XclImpRootData()
 {
 }
 
-
-
 XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     XclRoot( rImpRootData ),
     mrImpData( rImpRootData )
@@ -301,7 +299,5 @@ ScDocumentImport& XclImpRoot::GetDocImport()
 {
     return *mrImpData.mxDocImport;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

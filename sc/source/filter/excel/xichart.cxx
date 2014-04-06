@@ -207,8 +207,6 @@ struct XclImpChRootData : public XclChRootData
     inline explicit     XclImpChRootData( XclImpChChart& rChartData ) : mrChartData( rChartData ) {}
 };
 
-
-
 XclImpChRoot::XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart& rChartData ) :
     XclImpRoot( rRoot ),
     mxChData( new XclImpChRootData( rChartData ) )
@@ -377,8 +375,6 @@ void XclImpChRoot::ConvertPieRotation( ScfPropertySet& rPropSet, sal_uInt16 nAng
     rPropSet.SetProperty( EXC_CHPROP_STARTINGANGLE, nApiRot );
 }
 
-
-
 XclImpChGroupBase::~XclImpChGroupBase()
 {
 }
@@ -441,8 +437,6 @@ void XclImpChFramePos::ReadChFramePos( XclImpStream& rStrm )
     maData.maRect.mnHeight = rStrm.ReadInt16(); rStrm.Ignore( 2 );
 }
 
-
-
 void XclImpChLineFormat::ReadChLineFormat( XclImpStream& rStrm )
 {
     rStrm >> maData.maColor >> maData.mnPattern >> maData.mnWeight >> maData.mnFlags;
@@ -472,8 +466,6 @@ void XclImpChLineFormat::Convert( const XclImpChRoot& rRoot,
         rRoot.ConvertLineFormat( rPropSet, maData, rFmtInfo.mePropMode );
     }
 }
-
-
 
 void XclImpChAreaFormat::ReadChAreaFormat( XclImpStream& rStrm )
 {
@@ -507,8 +499,6 @@ void XclImpChAreaFormat::Convert( const XclImpChRoot& rRoot,
         rRoot.ConvertAreaFormat( rPropSet, maData, rFmtInfo.mePropMode );
     }
 }
-
-
 
 XclImpChEscherFormat::XclImpChEscherFormat( const XclImpRoot& rRoot ) :
     mnDffFillType( mso_fillSolid )
@@ -547,8 +537,6 @@ void XclImpChEscherFormat::Convert( const XclImpChRoot& rRoot,
     const XclChFormatInfo& rFmtInfo = rRoot.GetFormatInfo( eObjType );
     rRoot.ConvertEscherFormat( rPropSet, maData, bUsePicFmt ? &maPicFmt : 0, mnDffFillType, rFmtInfo.mePropMode );
 }
-
-
 
 XclImpChFrameBase::XclImpChFrameBase( const XclChFormatInfo& rFmtInfo )
 {
@@ -624,8 +612,6 @@ void XclImpChFrameBase::ConvertFrameBase( const XclImpChRoot& rRoot,
     ConvertLineBase( rRoot, rPropSet, eObjType, nFormatIdx );
     ConvertAreaBase( rRoot, rPropSet, eObjType, nFormatIdx, bUsePicFmt );
 }
-
-
 
 XclImpChFrame::XclImpChFrame( const XclImpChRoot& rRoot, XclChObjectType eObjType ) :
     XclImpChFrameBase( rRoot.GetFormatInfo( eObjType ) ),
@@ -722,8 +708,6 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
 }
 
 } // namespace
-
-
 
 XclImpChSourceLink::XclImpChSourceLink( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot )
@@ -920,8 +904,6 @@ void XclImpChFontBase::ConvertRotationBase( const XclImpChRoot& rRoot, ScfProper
     rRoot.GetChartPropSetHelper().WriteRotationProperties( rPropSet, GetRotation(), bSupportsStacked );
 }
 
-
-
 XclImpChFont::XclImpChFont() :
     mnFontIdx( EXC_FONT_NOTFOUND )
 {
@@ -931,8 +913,6 @@ void XclImpChFont::ReadChFont( XclImpStream& rStrm )
 {
     rStrm >> mnFontIdx;
 }
-
-
 
 XclImpChText::XclImpChText( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot )
@@ -1306,8 +1286,6 @@ void XclImpChMarkerFormat::ConvertColor( const XclImpChRoot& rRoot,
     rPropSet.SetColorProperty( EXC_CHPROP_COLOR, aLineColor );
 }
 
-
-
 XclImpChPieFormat::XclImpChPieFormat() :
     mnPieDist( 0 )
 {
@@ -1324,8 +1302,6 @@ void XclImpChPieFormat::Convert( ScfPropertySet& rPropSet ) const
     rPropSet.SetProperty( EXC_CHPROP_OFFSET, fApiDist );
 }
 
-
-
 XclImpChSeriesFormat::XclImpChSeriesFormat() :
     mnFlags( 0 )
 {
@@ -1335,8 +1311,6 @@ void XclImpChSeriesFormat::ReadChSeriesFormat( XclImpStream& rStrm )
 {
     rStrm >> mnFlags;
 }
-
-
 
 void XclImpCh3dDataFormat::ReadCh3dDataFormat( XclImpStream& rStrm )
 {
@@ -1351,8 +1325,6 @@ void XclImpCh3dDataFormat::Convert( ScfPropertySet& rPropSet ) const
         ((maData.mnTop == EXC_CH3DDATAFORMAT_STRAIGHT) ? CYLINDER : CONE);
     rPropSet.SetProperty( EXC_CHPROP_GEOMETRY3D, nApiType );
 }
-
-
 
 XclImpChAttachedLabel::XclImpChAttachedLabel( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot ),
@@ -1378,8 +1350,6 @@ XclImpChTextRef XclImpChAttachedLabel::CreateDataLabel( const XclImpChText* pPar
         ::get_flag( mnFlags, EXC_CHATTLABEL_SHOWANYPERCENT ) );
     return xLabel;
 }
-
-
 
 XclImpChDataFormat::XclImpChDataFormat( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot )
@@ -1593,8 +1563,6 @@ void XclImpChDataFormat::UpdateDataLabel( const XclImpChDataFormat* pParentFmt )
         mxLabel = mxAttLabel->CreateDataLabel( pDefText );
 }
 
-
-
 XclImpChSerTrendLine::XclImpChSerTrendLine( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot )
 {
@@ -1680,8 +1648,6 @@ Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() cons
 
     return xRegCurve;
 }
-
-
 
 XclImpChSerErrorBar::XclImpChSerErrorBar( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot )
@@ -1781,8 +1747,6 @@ Reference< XPropertySet > XclImpChSerErrorBar::CreateErrorBar( const XclImpChSer
 
     return xErrorBar;
 }
-
-
 
 XclImpChSeries::XclImpChSeries( const XclImpChRoot& rRoot, sal_uInt16 nSeriesIdx ) :
     XclImpChRoot( rRoot ),
@@ -2399,8 +2363,6 @@ Reference< XChartType > XclImpChType::CreateChartType( Reference< XDiagram > xDi
     return xChartType;
 }
 
-
-
 void XclImpChChart3d::ReadChChart3d( XclImpStream& rStrm )
 {
     rStrm   >> maData.mnRotation
@@ -2479,8 +2441,6 @@ void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) con
     rPropSet.SetColorProperty( EXC_CHPROP_D3DSCENELIGHTCOLOR2, aLightColor );
     rPropSet.SetProperty( EXC_CHPROP_D3DSCENELIGHTDIR2, cssd::Direction3D( 0.2, 0.4, 1.0 ) );
 }
-
-
 
 XclImpChLegend::XclImpChLegend( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot )
@@ -2619,8 +2579,6 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
     return xLegend;
 }
 
-
-
 XclImpChDropBar::XclImpChDropBar( sal_uInt16 nDropBar ) :
     mnDropBar( nDropBar ),
     mnBarDist( 0 )
@@ -2642,8 +2600,6 @@ void XclImpChDropBar::Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropS
     }
     ConvertFrameBase( rRoot, rPropSet, eObjType );
 }
-
-
 
 XclImpChTypeGroup::XclImpChTypeGroup( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot ),
@@ -3058,8 +3014,6 @@ void XclImpChLabelRange::ConvertAxisPosition( ScfPropertySet& rPropSet, bool b3d
     }
 }
 
-
-
 XclImpChValueRange::XclImpChValueRange( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot )
 {
@@ -3134,8 +3088,6 @@ void XclImpChValueRange::ConvertAxisPosition( ScfPropertySet& rPropSet ) const
     if( bLogScale ) fCrossingPos = pow( 10.0, fCrossingPos );
     rPropSet.SetProperty( EXC_CHPROP_CROSSOVERVALUE, fCrossingPos );
 }
-
-
 
 namespace {
 
@@ -3214,8 +3166,6 @@ void XclImpChTick::Convert( ScfPropertySet& rPropSet ) const
     rPropSet.SetProperty( EXC_CHPROP_LABELPOSITION, lclGetApiLabelPosition( maData.mnLabelPos ) );
     rPropSet.SetProperty( EXC_CHPROP_MARKPOSITION, cssc::ChartAxisMarkPosition_AT_AXIS );
 }
-
-
 
 XclImpChAxis::XclImpChAxis( const XclImpChRoot& rRoot, sal_uInt16 nAxisType ) :
     XclImpChRoot( rRoot ),
@@ -3489,8 +3439,6 @@ void XclImpChAxis::CreateWallFrame()
             mxWallFrame.reset();
     }
 }
-
-
 
 XclImpChAxesSet::XclImpChAxesSet( const XclImpChRoot& rRoot, sal_uInt16 nAxesSetId ) :
     XclImpChRoot( rRoot )
@@ -4190,8 +4138,6 @@ Reference< XDiagram > XclImpChChart::CreateDiagram() const
     return xDiagram;
 }
 
-
-
 XclImpChartDrawing::XclImpChartDrawing( const XclImpRoot& rRoot, bool bOwnTab ) :
     XclImpDrawing( rRoot, bOwnTab ), // sheet charts may contain OLE objects
     mnScTab( rRoot.GetCurrScTab() ),
@@ -4251,8 +4197,6 @@ Rectangle XclImpChartDrawing::CalcAnchorRect( const XclObjAnchor& rAnchor, bool 
 void XclImpChartDrawing::OnObjectInserted( const XclImpDrawObjBase& )
 {
 }
-
-
 
 XclImpChart::XclImpChart( const XclImpRoot& rRoot, bool bOwnTab ) :
     XclImpRoot( rRoot ),
@@ -4382,7 +4326,5 @@ void XclImpChart::ReadChChart( XclImpStream& rStrm )
     mxChartData.reset( new XclImpChChart( GetRoot() ) );
     mxChartData->ReadRecordGroup( rStrm );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

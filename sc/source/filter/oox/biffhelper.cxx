@@ -31,8 +31,6 @@ namespace xls {
 
 
 
-
-
 namespace {
 
 const sal_Int32 BIFF_RK_100FLAG             = 0x00000001;
@@ -49,8 +47,6 @@ union DecodedDouble
 };
 
 } // namespace
-
-
 
 // conversion -----------------------------------------------------------------
 

@@ -76,8 +76,6 @@ using namespace com::sun::star;
 
 bool bPasteIsDrop = false;
 
-
-
 void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable )

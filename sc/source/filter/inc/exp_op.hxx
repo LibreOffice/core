@@ -50,8 +50,6 @@ public:
     virtual FltError    Write() = 0;
 };
 
-
-
 class ExportBiff5 : public ExportTyp, protected XclExpRoot
 {
 private:
@@ -65,8 +63,6 @@ public:
     virtual             ~ExportBiff5();
     FltError            Write() SAL_OVERRIDE;
 };
-
-
 
 
 class ExportBiff8 : public ExportBiff5

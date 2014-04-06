@@ -24,8 +24,6 @@
 #include <sfx2/ctrlitem.hxx>
 
 
-
-
 class ScNavigatorDlg;
 
 class ScNavigatorControllerItem : public SfxControllerItem

@@ -82,8 +82,6 @@ using ::com::sun::star::table::BorderLine2;
 namespace oox {
 namespace xls {
 
-
-
 using namespace com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
@@ -93,8 +91,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
-
-
 
 namespace {
 
@@ -206,8 +202,6 @@ const sal_uInt8 BIFF_FONTUNDERL_DOUBLE      = 2;
 const sal_uInt8 BIFF_FONTUNDERL_SINGLE_ACC  = 33;
 const sal_uInt8 BIFF_FONTUNDERL_DOUBLE_ACC  = 34;
 
-
-
 sal_Int32 lclReadRgbColor( BinaryInputStream& rStrm )
 {
     sal_uInt8 nR, nG, nB, nA;
@@ -223,8 +217,6 @@ sal_Int32 lclReadRgbColor( BinaryInputStream& rStrm )
 }
 
 } // namespace
-
-
 
 ExcelGraphicHelper::ExcelGraphicHelper( const WorkbookHelper& rHelper ) :
     GraphicHelper( rHelper.getBaseFilter().getComponentContext(), rHelper.getBaseFilter().getTargetFrame(), rHelper.getBaseFilter().getStorage() ),
@@ -243,8 +235,6 @@ sal_Int32 ExcelGraphicHelper::getPaletteColor( sal_Int32 nPaletteIdx ) const
 {
     return getStyles().getPaletteColor( nPaletteIdx );
 }
-
-
 
 void Color::setAuto()
 {
@@ -341,8 +331,6 @@ SequenceInputStream& operator>>( SequenceInputStream& rStrm, Color& orColor )
     return rStrm;
 }
 
-
-
 namespace {
 
 /** Standard EGA colors, bright. */
@@ -396,8 +384,6 @@ static const sal_Int32 spnDefColors8[] =
 #undef PALETTE_EGA_COLORS_DARK
 
 } // namespace
-
-
 
 ColorPalette::ColorPalette( const WorkbookHelper& rHelper )
     : WorkbookHelper(rHelper)
@@ -471,8 +457,6 @@ void ColorPalette::appendColor( sal_Int32 nRGBValue )
     ++mnAppendIndex;
 }
 
-
-
 namespace {
 
 void lclSetFontName( ApiScriptFontName& rFontName, const FontDescriptor& rFontDesc, bool bHasGlyphs )
@@ -491,8 +475,6 @@ void lclSetFontName( ApiScriptFontName& rFontName, const FontDescriptor& rFontDe
 }
 
 } // namespace
-
-
 
 FontModel::FontModel() :
     mnScheme( XML_none ),
@@ -544,8 +526,6 @@ void FontModel::setBiffEscapement( sal_uInt16 nEscapement )
     mnEscapement = STATIC_ARRAY_SELECT( spnEscapes, nEscapement, XML_baseline );
 }
 
-
-
 ApiFontUsedFlags::ApiFontUsedFlags( bool bAllUsed ) :
     mbNameUsed( bAllUsed ),
     mbColorUsed( bAllUsed ),
@@ -561,15 +541,11 @@ ApiFontUsedFlags::ApiFontUsedFlags( bool bAllUsed ) :
 {
 }
 
-
-
 ApiScriptFontName::ApiScriptFontName() :
     mnFamily( ::com::sun::star::awt::FontFamily::DONTKNOW ),
     mnTextEnc( RTL_TEXTENCODING_DONTKNOW )
 {
 }
-
-
 
 ApiFontData::ApiFontData() :
     maDesc(
@@ -597,8 +573,6 @@ ApiFontData::ApiFontData() :
 {
     maLatinFont.maName = maDesc.Name;
 }
-
-
 
 Font::Font( const WorkbookHelper& rHelper, bool bDxf ) :
     WorkbookHelper( rHelper ),
@@ -1118,8 +1092,6 @@ void Font::writeToPropertySet( PropertySet& rPropSet, FontPropertyType ePropType
     rPropSet.setProperties( aPropMap );
 }
 
-
-
 AlignmentModel::AlignmentModel() :
     mnHorAlign( XML_general ),
     mnVerAlign( XML_bottom ),
@@ -1146,8 +1118,6 @@ void AlignmentModel::setBiffVerAlign( sal_uInt8 nVerAlign )
         XML_top, XML_center, XML_bottom, XML_justify, XML_distributed };
     mnVerAlign = STATIC_ARRAY_SELECT( spnVerAligns, nVerAlign, XML_bottom );
 }
-
-
 
 ApiAlignmentData::ApiAlignmentData() :
     meHorJustify( ::com::sun::star::table::CellHoriJustify_STANDARD ),
@@ -1177,8 +1147,6 @@ bool operator==( const ApiAlignmentData& rLeft, const ApiAlignmentData& rRight )
         (rLeft.mbWrapText    == rRight.mbWrapText) &&
         (rLeft.mbShrink      == rRight.mbShrink);
 }
-
-
 
 Alignment::Alignment( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -1392,15 +1360,11 @@ void Alignment::writeToPropertyMap( PropertyMap& rPropMap ) const
     rPropMap.setProperty( PROP_ShrinkToFit, maApiData.mbShrink);
 }
 
-
-
 ProtectionModel::ProtectionModel() :
     mbLocked( true ),   // default in Excel and Calc
     mbHidden( false )
 {
 }
-
-
 
 ApiProtectionData::ApiProtectionData() :
     maCellProt( sal_True, sal_False, sal_False, sal_False )
@@ -1415,8 +1379,6 @@ bool operator==( const ApiProtectionData& rLeft, const ApiProtectionData& rRight
         (rLeft.maCellProt.IsHidden        == rRight.maCellProt.IsHidden) &&
         (rLeft.maCellProt.IsPrintHidden   == rRight.maCellProt.IsPrintHidden);
 }
-
-
 
 Protection::Protection( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -1451,8 +1413,6 @@ void Protection::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
     ScfTools::PutItem( rItemSet, ScProtectionAttr( maApiData.maCellProt.IsLocked, maApiData.maCellProt.IsFormulaHidden ), bSkipPoolDefs );
 }
 
-
-
 namespace {
 
 bool lcl_isBorder(const ::com::sun::star::table::BorderLine& rBorder)
@@ -1479,8 +1439,6 @@ void BorderLineModel::setBiffStyle( sal_Int32 nLineStyle )
     mnStyle = STATIC_ARRAY_SELECT( spnStyleIds, nLineStyle, XML_none );
 }
 
-
-
 BorderModel::BorderModel( bool bDxf ) :
     maLeft( bDxf ),
     maRight( bDxf ),
@@ -1491,8 +1449,6 @@ BorderModel::BorderModel( bool bDxf ) :
     mbDiagBLtoTR( false )
 {
 }
-
-
 
 ApiBorderData::ApiBorderData() :
     mbBorderUsed( false ),
@@ -1535,8 +1491,6 @@ bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight )
         (rLeft.mbDiagUsed   == rRight.mbDiagUsed);
 }
 
-
-
 namespace {
 
 inline void lclSetBorderLineWidth( BorderLine& rBorderLine,
@@ -1548,8 +1502,6 @@ inline void lclSetBorderLineWidth( BorderLine& rBorderLine,
 }
 
 } // namespace
-
-
 
 Border::Border( const WorkbookHelper& rHelper, bool bDxf ) :
     WorkbookHelper( rHelper ),
@@ -1773,8 +1725,6 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
 }
 
 
-
-
 PatternFillModel::PatternFillModel( bool bDxf ) :
     mnPattern( XML_none ),
     mbPattColorUsed( !bDxf ),
@@ -1795,8 +1745,6 @@ void PatternFillModel::setBiffPattern( sal_Int32 nPattern )
         XML_lightTrellis, XML_gray125, XML_gray0625 };
     mnPattern = STATIC_ARRAY_SELECT( spnPatternIds, nPattern, XML_none );
 }
-
-
 
 GradientFillModel::GradientFillModel() :
     mnType( XML_linear ),
@@ -1833,8 +1781,6 @@ void GradientFillModel::readGradientStop( SequenceInputStream& rStrm, bool bDxf 
         maColors[ fPosition ] = aColor;
 }
 
-
-
 ApiSolidFillData::ApiSolidFillData() :
     mnColor( API_RGB_TRANSPARENT ),
     mbTransparent( true ),
@@ -1849,8 +1795,6 @@ bool operator==( const ApiSolidFillData& rLeft, const ApiSolidFillData& rRight )
         (rLeft.mbTransparent == rRight.mbTransparent) &&
         (rLeft.mbUsed        == rRight.mbUsed);
 }
-
-
 
 namespace {
 
@@ -1868,8 +1812,6 @@ sal_Int32 lclGetMixedColor( sal_Int32 nPattColor, sal_Int32 nFillColor, sal_Int3
 }
 
 } // namespace
-
-
 
 Fill::Fill( const WorkbookHelper& rHelper, bool bDxf ) :
     WorkbookHelper( rHelper ),
@@ -2100,8 +2042,6 @@ void Fill::writeToPropertyMap( PropertyMap& rPropMap ) const
     }
 }
 
-
-
 XfModel::XfModel() :
     mnStyleXfId( -1 ),
     mnFontId( -1 ),
@@ -2117,8 +2057,6 @@ XfModel::XfModel() :
     mbAreaUsed( false )
 {
 }
-
-
 
 Xf::Xf( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -2383,8 +2321,6 @@ Xf::createPattern( bool bSkipPoolDefs )
     return *mpPattern;
 }
 
-
-
 Dxf::Dxf( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
@@ -2507,8 +2443,6 @@ void Dxf::fillToItemSet( SfxItemSet& rSet ) const
         mxFill->fillToItemSet(rSet);
 }
 
-
-
 namespace {
 
 const sal_Char* const spcStyleNamePrefix = "Excel Built-in ";
@@ -2594,8 +2528,6 @@ OUString lclCreateStyleName( const CellStyleModel& rModel )
 
 } // namespace
 
-
-
 CellStyleModel::CellStyleModel() :
     mnXfId( -1 ),
     mnBuiltinId( -1 ),
@@ -2615,8 +2547,6 @@ bool CellStyleModel::isDefaultStyle() const
 {
     return mbBuiltin && (mnBuiltinId == OOX_STYLE_NORMAL);
 }
-
-
 
 CellStyle::CellStyle( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -2696,8 +2626,6 @@ void CellStyle::finalizeImport( const OUString& rFinalName )
     if( !maModel.isBuiltin() || maModel.mbCustom )
         createCellStyle();
 }
-
-
 
 CellStyleBuffer::CellStyleBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -2868,8 +2796,6 @@ OUString CellStyleBuffer::createCellStyle( const CellStyleRef& rxCellStyle ) con
     return lclGetBuiltinStyleName( OOX_STYLE_NORMAL, OUString() );
 }
 
-
-
 AutoFormatModel::AutoFormatModel() :
     mnAutoFormatId( 0 ),
     mbApplyNumFmt( false ),
@@ -2880,8 +2806,6 @@ AutoFormatModel::AutoFormatModel() :
     mbApplyProtection( false )
 {
 }
-
-
 
 StylesBuffer::StylesBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),

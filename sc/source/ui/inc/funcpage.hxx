@@ -35,8 +35,6 @@
 
 class ScFuncDesc;
 
-
-
 #define LRU_MAX 10
 
 
@@ -50,8 +48,6 @@ protected:
 public:
                     ScListBox( Window* pParent, const ResId& rResId );
 };
-
-
 
 
 

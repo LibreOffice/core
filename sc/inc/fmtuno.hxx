@@ -143,8 +143,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
-
 class ScTableConditionalEntry : public cppu::WeakImplHelper3<
                             com::sun::star::sheet::XSheetCondition2,
                             com::sun::star::sheet::XSheetConditionalEntry,
@@ -193,8 +191,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
-
 
 class ScTableValidationObj : public cppu::WeakImplHelper5<
                             com::sun::star::sheet::XSheetCondition2,

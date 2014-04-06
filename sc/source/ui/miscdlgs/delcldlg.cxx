@@ -22,16 +22,12 @@
 
 
 
-
-
 #include "delcldlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
 
 static sal_uInt8 nDelItemChecked=0;
-
-
 
 ScDeleteCellDlg::ScDeleteCellDlg(Window* pParent, bool bDisallowCellMove)
     : ModalDialog(pParent, "DeleteCellsDialog", "modules/scalc/ui/deletecells.ui")
@@ -64,8 +60,6 @@ ScDeleteCellDlg::ScDeleteCellDlg(Window* pParent, bool bDisallowCellMove)
         }
     }
 }
-
-
 
 DelCellCmd ScDeleteCellDlg::GetDelCellCmd() const
 {

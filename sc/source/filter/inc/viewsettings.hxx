@@ -29,8 +29,6 @@
 namespace oox {
 namespace xls {
 
-
-
 /** Contains all settings for a selection in a single pane of a sheet. */
 struct PaneSelectionModel
 {
@@ -40,8 +38,6 @@ struct PaneSelectionModel
 
     explicit            PaneSelectionModel();
 };
-
-
 
 /** Contains all view settings for a single sheet. */
 struct SheetViewModel
@@ -93,8 +89,6 @@ struct SheetViewModel
 
 typedef ::boost::shared_ptr< SheetViewModel > SheetViewModelRef;
 
-
-
 class SheetViewSettings : public WorksheetHelper
 {
 public:
@@ -132,8 +126,6 @@ private:
     SheetViewModelVec   maSheetViews;
 };
 
-
-
 /** Contains all view settings for the entire document. */
 struct WorkbookViewModel
 {
@@ -154,8 +146,6 @@ struct WorkbookViewModel
 };
 
 typedef ::boost::shared_ptr< WorkbookViewModel > WorkbookViewModelRef;
-
-
 
 class ViewSettings : public WorkbookHelper
 {
@@ -202,8 +192,6 @@ private:
                         maOleSize;          /// Visible area if this is an embedded OLE object.
     bool                mbValidOleSize;     /// True = imported OLE size is a valid cell range.
 };
-
-
 
 } // namespace xls
 } // namespace oox

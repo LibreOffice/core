@@ -27,8 +27,6 @@
 
 
 
-
-
 class ScDocStatPage: public SfxTabPage
 {
 public:
@@ -47,8 +45,6 @@ private:
     FixedText*       m_pFtCells;
     FixedText*       m_pFtPages;
 };
-
-
 
 #endif
 

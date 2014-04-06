@@ -28,8 +28,6 @@
 #include <vcl/builder.hxx>
 #include "global.hxx"
 
-
-
 namespace {
 
 sal_Unicode lclGetDecSep()
@@ -74,7 +72,5 @@ void ScDoubleField::SetValue( double fValue, sal_Int32 nDecPlaces, bool bEraseTr
     SetText( ::rtl::math::doubleToUString( fValue, rtl_math_StringFormat_G,
         nDecPlaces, lclGetDecSep(), bEraseTrailingDecZeros ) );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

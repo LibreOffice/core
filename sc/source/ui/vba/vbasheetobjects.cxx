@@ -35,8 +35,6 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-
-
 namespace {
 
 template< typename Type >
@@ -133,8 +131,6 @@ private:
     const uno::Type maVbaType;
     ShapeVector maShapes;
 };
-
-
 
 ScVbaObjectContainer::ScVbaObjectContainer(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -239,8 +235,6 @@ void ScVbaObjectContainer::implOnShapeCreated( const uno::Reference< drawing::XS
 {
 }
 
-
-
 class ScVbaObjectEnumeration : public SimpleEnumerationBase
 {
 public:
@@ -250,8 +244,6 @@ public:
 private:
     ScVbaObjectContainerRef mxContainer;
 };
-
-
 
 ScVbaObjectEnumeration::ScVbaObjectEnumeration( const ScVbaObjectContainerRef& rxContainer ) :
     SimpleEnumerationBase( rxContainer->getParent(), rxContainer->getContext(), rxContainer.get() ),
@@ -263,8 +255,6 @@ uno::Any ScVbaObjectEnumeration::createCollectionObject( const uno::Any& rSource
 {
     return mxContainer->createCollectionObject( rSource );
 }
-
-
 
 ScVbaSheetObjectsBase::ScVbaSheetObjectsBase( const ScVbaObjectContainerRef& rxContainer ) throw (css::uno::RuntimeException) :
     ScVbaSheetObjects_BASE( rxContainer->getParent(), rxContainer->getContext(), rxContainer.get() ),
@@ -371,8 +361,6 @@ protected:
     sal_Int16 mnComponentType;
 };
 
-
-
 ScVbaControlContainer::ScVbaControlContainer(
         const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,
@@ -473,8 +461,6 @@ protected:
     virtual bool implCheckProperties( const uno::Reference< beans::XPropertySet >& rxModelProps ) const SAL_OVERRIDE;
 };
 
-
-
 ScVbaButtonContainer::ScVbaButtonContainer(
         const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,
@@ -501,8 +487,6 @@ bool ScVbaButtonContainer::implCheckProperties( const uno::Reference< beans::XPr
     return lclGetProperty( bToggle, rxModelProps, "Toggle" ) && !bToggle;
 }
 
-
-
 ScVbaButtons::ScVbaButtons(
         const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,
@@ -513,7 +497,5 @@ ScVbaButtons::ScVbaButtons(
 }
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaButtons, "ooo.vba.excel.Buttons" )
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

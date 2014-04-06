@@ -26,11 +26,7 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::oox::core;
-
-
 
 
 ConnectionContext::ConnectionContext( WorkbookFragmentBase& rParent, Connection& rConnection ) :
@@ -105,8 +101,6 @@ void ConnectionContext::onStartRecord( SequenceInputStream& rStrm )
         mrConnection.importConnection( rStrm );
 }
 
-
-
 ConnectionsFragment::ConnectionsFragment( const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
     WorkbookFragmentBase( rHelper, rFragmentPath )
 {
@@ -163,8 +157,6 @@ void ConnectionsFragment::finalizeImport()
 {
     getConnections().finalizeImport();
 }
-
-
 
 } // namespace xls
 } // namespace oox

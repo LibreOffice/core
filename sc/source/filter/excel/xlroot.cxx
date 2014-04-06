@@ -75,8 +75,6 @@ XclDebugObjCounter::~XclDebugObjCounter()
 }
 #endif
 
-
-
 XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
         SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc, bool bExport ) :
     meBiff( eBiff ),
@@ -159,8 +157,6 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
 XclRootData::~XclRootData()
 {
 }
-
-
 
 XclRoot::XclRoot( XclRootData& rRootData ) :
     mrData( rRootData )
@@ -407,7 +403,5 @@ XclTracer& XclRoot::GetTracer() const
 {
     return *mrData.mxTracer;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,8 +36,6 @@ class ScDPSaveData;
 struct ScDPNumGroupInfo;
 struct ScSubTotalParam;
 
-
-
 class ScDBFunc : public ScViewFunc
 {
 private:
@@ -121,8 +119,6 @@ public:
 
     static sal_uInt16   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAllCharts );
 };
-
-
 
 #endif
 

@@ -27,8 +27,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-
-
 ScMarkData::ScMarkData() :
     maTabMarked(),
     pMultiSel( NULL )
@@ -563,8 +561,6 @@ ScMarkData::const_iterator ScMarkData::end() const
 {
     return maTabMarked.end();
 }
-
-
 
 
 

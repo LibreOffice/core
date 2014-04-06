@@ -28,8 +28,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-
-
 void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     sal_Bool bDataChanged = false;
@@ -71,8 +69,6 @@ void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if (bDataChanged)
         pPreview->DataChanged(true);
 }
-
-
 
 
 

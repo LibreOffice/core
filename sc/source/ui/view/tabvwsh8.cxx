@@ -24,8 +24,6 @@
 #include "document.hxx"
 
 
-
-
 void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine )
 {
     if ( pLine )
@@ -41,8 +39,6 @@ void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine 
         pCurFrameLine = NULL;
     }
 }
-
-
 
 bool ScTabViewShell::HasSelection( bool bText ) const
 {
@@ -69,8 +65,6 @@ bool ScTabViewShell::HasSelection( bool bText ) const
     }
     return bHas;
 }
-
-
 
 void ScTabViewShell::UIDeactivated( SfxInPlaceClient* pClient )
 {

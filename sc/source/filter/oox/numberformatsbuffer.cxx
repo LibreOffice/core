@@ -43,14 +43,10 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
-
-
 
 
 namespace {
@@ -435,8 +431,6 @@ struct BuiltinFormat
 #define UTF8_KO_MIN         "\353\266\204"
 #define UTF8_KO_SEC         "\354\264\210"
 
-
-
 /** Default number format table. Last parent of all other tables, used for unknown locales. */
 static const BuiltinFormat spBuiltinFormats_BASE[] =
 {
@@ -532,8 +526,6 @@ static const BuiltinFormat spBuiltinFormats_BASE[] =
 
     NUMFMT_ENDTABLE()
 };
-
-
 
 /** Arabic, U.A.E. */
 static const BuiltinFormat spBuiltinFormats_ar_AE[] =
@@ -1634,8 +1626,6 @@ static const BuiltinFormat spBuiltinFormats_zh_TW[] =
     NUMFMT_ENDTABLE()
 };
 
-
-
 /** Specifies a built-in number format table for a specific locale. */
 struct BuiltinFormatTable
 {
@@ -1795,21 +1785,15 @@ static const BuiltinFormatTable spBuiltinFormatTables[] =
 
 } // namespace
 
-
-
 NumFmtModel::NumFmtModel() :
     mnPredefId( -1 )
 {
 }
 
-
-
 ApiNumFmtData::ApiNumFmtData() :
     mnIndex( 0 )
 {
 }
-
-
 
 namespace {
 
@@ -1861,8 +1845,6 @@ sal_Int32 lclCreateFormat( const Reference< XNumberFormats >& rxNumFmts,
     return nIndex;
 }
 
-
-
 /** Functor for converting an XML number format to an API number format index. */
 class NumberFormatFinalizer
 {
@@ -1892,8 +1874,6 @@ NumberFormatFinalizer::NumberFormatFinalizer( const WorkbookHelper& rHelper ) :
 }
 
 } // namespace
-
-
 
 NumberFormat::NumberFormat( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -1948,8 +1928,6 @@ void NumberFormat::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     rPropMap.setProperty( PROP_NumberFormat, maApiData.mnIndex);
 }
-
-
 
 NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper )
     : WorkbookHelper(rHelper)
@@ -2076,8 +2054,6 @@ void NumberFormatsBuffer::insertBuiltinFormats()
             mnHighestId = aRIt->first;
     }
 }
-
-
 
 } // namespace xls
 } // namespace oox

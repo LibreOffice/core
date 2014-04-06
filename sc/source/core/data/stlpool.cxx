@@ -56,8 +56,6 @@
 #include "patattr.hxx"
 
 
-
-
 ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPoolP,
                                     ScDocument*     pDocument )
     :   SfxStyleSheetPool( rPoolP ),
@@ -67,20 +65,14 @@ ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPoolP,
 {
 }
 
-
-
 ScStyleSheetPool::~ScStyleSheetPool()
 {
 }
-
-
 
 void ScStyleSheetPool::SetDocument( ScDocument* pDocument )
 {
     pDoc = pDocument;
 }
-
-
 
 SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
                                            SfxStyleFamily eFam, sal_uInt16 mask)
@@ -106,8 +98,6 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
     return SfxStyleSheetPool::Make(rName, eFam, mask);
 }
 
-
-
 SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
                                              SfxStyleFamily  eFamily,
                                              sal_uInt16          nMaskP )
@@ -119,15 +109,11 @@ SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
     return pSheet;
 }
 
-
-
 SfxStyleSheetBase* ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
 {
     OSL_ENSURE( rStyle.ISA(ScStyleSheet), "Invalid StyleSheet-class! :-/" );
     return new ScStyleSheet( (const ScStyleSheet&) rStyle );
 }
-
-
 
 void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
 {
@@ -140,8 +126,6 @@ void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
         SfxStyleSheetPool::Remove(pStyle);
     }
 }
-
-
 
 void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                                       const OUString& rName, SfxStyleFamily eFamily )
@@ -197,11 +181,7 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
     }
 }
 
-
-
 //                      Standard-Vorlagen
-
-
 
 #define SCSTR(id)   ScGlobal::GetRscString(id)
 
@@ -217,8 +197,6 @@ void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
     CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SFX_STYLE_FAMILY_PAGE );
     CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_REPORT),       SFX_STYLE_FAMILY_PAGE );
 }
-
-
 
 static void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, sal_uInt16 nFontType, sal_uInt16 nItemId )
 {
@@ -262,8 +240,6 @@ void ScStyleSheetPool::CreateStandardStyles()
 
 
     // Zellformatvorlagen:
-
-
 
     // 1. Standard
 
@@ -352,8 +328,6 @@ void ScStyleSheetPool::CreateStandardStyles()
 
 
     // Seitenformat-Vorlagen:
-
-
 
     // 1. Standard
 

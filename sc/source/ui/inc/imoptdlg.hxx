@@ -29,8 +29,6 @@
 #include "scdllapi.h"
 #include "global.hxx"
 
-
-
 class SC_DLLPUBLIC ScImportOptions
 {
 public:
@@ -103,7 +101,5 @@ public:
 
 
 #endif // SC_IMOPTDLG_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,8 +26,6 @@
 
 class ScRangeList;
 
-
-
 namespace detail {
 
 class ScVbaHlinkContainer;
@@ -45,8 +43,6 @@ struct ScVbaHlinkContainerMember
 };
 
 } // namespace detail
-
-
 
 class ScVbaHyperlinks;
 typedef ::rtl::Reference< ScVbaHyperlinks > ScVbaHyperlinksRef;
@@ -136,8 +132,6 @@ public:
 private:
     ScVbaHyperlinksRef mxSheetHlinks;
 };
-
-
 
 #endif
 

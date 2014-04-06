@@ -37,8 +37,6 @@
 #include "queryentry.hxx"
 #include "markdata.hxx"
 
-
-
 ScDBFunc::ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     ScViewFunc( pParent, rDocSh, pViewShell )
 {
@@ -506,7 +504,5 @@ bool ScDBFunc::ImportData( const ScImportParam& rParam, bool bRecord )
     ScDBDocFunc aDBDocFunc( *GetViewData()->GetDocShell() );
     return aDBDocFunc.DoImport( GetViewData()->GetTabNo(), rParam, NULL, bRecord );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

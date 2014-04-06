@@ -77,8 +77,6 @@
 #include "tokenarray.hxx"
 #include <rowheightcontext.hxx>
 
-
-
 static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDocShell *pDocSh )
 {
     if( pCondFmt )
@@ -90,8 +88,6 @@ static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDo
 }
 
 
-
-
 ScViewFunc::ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     ScTabView( pParent, rDocSh, pViewShell ),
     bFormatValid( false )
@@ -101,8 +97,6 @@ ScViewFunc::ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pVi
 ScViewFunc::~ScViewFunc()
 {
 }
-
-
 
 void ScViewFunc::StartFormatArea()
 {
@@ -221,8 +215,6 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
     if ( bAttrChanged )                             // value entered with number format?
         aFormatSource.Set( nCol, nRow, nTab );      // then set a new source
 }
-
-
 
 //      additional routines
 
@@ -2905,7 +2897,5 @@ void ScViewFunc::UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAt
     pTabViewShell->CellContentChanged();
     pTabViewShell->AdjustBlockHeight(false, const_cast<ScMarkData*>(&rSel));
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

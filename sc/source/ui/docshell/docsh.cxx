@@ -166,8 +166,6 @@ static const sal_Char pFilterHtml[]     = "HTML (StarCalc)";
 static const sal_Char pFilterHtmlWebQ[] = "calc_HTML_WebQuery";
 static const sal_Char pFilterRtf[]      = "Rich Text Format (StarCalc)";
 
-
-
 #define ScDocShell
 #include "scslots.hxx"
 
@@ -180,8 +178,6 @@ SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell, ScResId(SCSTR_DOCSHELL))
 SFX_IMPL_OBJECTFACTORY( ScDocShell, SvGlobalName(SO3_SC_CLASSID), SFXOBJECTSHELL_STD_NORMAL, "scalc" )
 
 TYPEINIT1( ScDocShell, SfxObjectShell ); // SfxInPlaceObject: No TypeInfo?
-
-
 
 void ScDocShell::FillClass( SvGlobalName* pClassName,
                                         sal_uInt32* pFormat,
@@ -211,8 +207,6 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
     }
 }
 
-
-
 void ScDocShell::DoEnterHandler()
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
@@ -220,8 +214,6 @@ void ScDocShell::DoEnterHandler()
         if (pViewSh->GetViewData()->GetDocShell() == this)
             SC_MOD()->InputEnterHandler();
 }
-
-
 
 SCTAB ScDocShell::GetSaveTab()
 {
@@ -2683,8 +2675,6 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     // InitItems and CalcOutputFactor are called now in Load/ConvertFrom/InitNew
 }
 
-
-
 ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     SfxObjectShell( i_nSfxCreationFlags ),
     aDocument       ( SCDOCMODE_DOCUMENT, this ),
@@ -2732,8 +2722,6 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     // InitItems and CalcOutputFactor are called now in Load/ConvertFrom/InitNew
 }
 
-
-
 ScDocShell::~ScDocShell()
 {
     ResetDrawObjectShell(); // If the Drawing Layer still tries to access it, access it
@@ -2769,8 +2757,6 @@ ScDocShell::~ScDocShell()
     delete mpCollaboration;
 #endif
 }
-
-
 
 ::svl::IUndoManager* ScDocShell::GetUndoManager()
 {

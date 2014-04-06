@@ -25,8 +25,6 @@
 class ScXMLImport;
 
 
-
-
 struct ScMyImpCellRangeSource
 {
     OUString             sSourceStr;
@@ -39,8 +37,6 @@ struct ScMyImpCellRangeSource
 
                                 ScMyImpCellRangeSource();
 };
-
-
 
 
 class ScXMLCellRangeSourceContext : public SvXMLImportContext

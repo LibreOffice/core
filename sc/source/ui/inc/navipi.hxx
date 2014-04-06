@@ -41,8 +41,6 @@ class ScNavigatorDialogWrapper;
 class ScNavigatorDlg;
 class ScNavigatorSettings;
 
-
-
 #define SC_DROPMODE_URL         0
 #define SC_DROPMODE_LINK        1
 #define SC_DROPMODE_COPY        2
@@ -150,8 +148,6 @@ private:
     SCCOL   NumToAlpha      ( SCCOL nColNo, OUString& rStr );
 };
 
-
-
 //  class RowEdit
 
 class RowEdit : public NumericField
@@ -173,8 +169,6 @@ private:
     void    ExecuteRow();
 };
 
-
-
 //  class ScDocListBox
 
 class ScDocListBox : public ListBox
@@ -189,8 +183,6 @@ protected:
 private:
     ScNavigatorDlg& rDlg;
 };
-
-
 
 //  class CommandToolBox
 
@@ -334,8 +326,6 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
-
-
 class ScNavigatorDialogWrapper: public SfxChildWindowContext
 {
 public:
@@ -351,8 +341,6 @@ public:
 private:
     ScNavigatorDlg* pNavigator;
 };
-
-
 
 #endif // SC_NAVIPI_HXX
 

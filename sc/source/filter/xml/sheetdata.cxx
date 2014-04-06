@@ -24,8 +24,6 @@
 
 #include "sheetdata.hxx"
 
-
-
 ScSheetSaveData::ScSheetSaveData() :
     mnStartTab( -1 ),
     mnStartOffset( -1 ),

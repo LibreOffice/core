@@ -35,8 +35,6 @@ class ScDocument;
 class DateTime;
 
 
-
-
 class ScXMLConverter
 {
 public:
@@ -104,8 +102,6 @@ public:
     static void         ConvertAPIToCoreDateTime(const com::sun::star::util::DateTime& aDateTime, DateTime& rDateTime);
 };
 
-
-
 enum ScXMLConditionToken
 {
     XML_COND_INVALID,                       /// Token not recognized.
@@ -124,8 +120,6 @@ enum ScXMLConditionToken
     XML_COND_ISTRUEFORMULA                  /// The 'is-true-formula' token.
 };
 
-
-
 /** Result of an attempt to parse a single condition in a 'condition' attribute
     value of e.g. conditional formatting or data validation.
  */
@@ -140,8 +134,6 @@ struct ScXMLConditionParseResult
     OUString     maOperand2;         /// Second operand of 'between' conditions.
     sal_Int32           mnEndIndex;         /// Index of first character following the condition.
 };
-
-
 
 class ScXMLConditionHelper
 {
@@ -160,8 +152,6 @@ private:
                         ScXMLConditionHelper();
                         ~ScXMLConditionHelper();
 };
-
-
 
 #endif
 

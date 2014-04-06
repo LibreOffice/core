@@ -22,8 +22,6 @@
 
 
 
-
-
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <limits.h>
@@ -38,11 +36,7 @@
 #undef _FILLDLG_CXX
 
 
-
-
 // class ScFillSeriesDlg
-
-
 
 ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
                                   ScDocument&   rDocument,
@@ -88,13 +82,9 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
 }
 
 
-
-
 ScFillSeriesDlg::~ScFillSeriesDlg()
 {
 }
-
-
 
 void ScFillSeriesDlg::SetEdStartValEnabled(bool bFlag)
 {
@@ -110,8 +100,6 @@ void ScFillSeriesDlg::SetEdStartValEnabled(bool bFlag)
        m_pEdStartVal->Disable();
     }
 }
-
-
 
 void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 {
@@ -200,8 +188,6 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 }
 
 
-
-
 bool ScFillSeriesDlg::CheckStartVal()
 {
     bool bValOk = false;
@@ -221,8 +207,6 @@ bool ScFillSeriesDlg::CheckStartVal()
 }
 
 
-
-
 bool ScFillSeriesDlg::CheckIncrementVal()
 {
     sal_uInt32 nKey = 0;
@@ -230,8 +214,6 @@ bool ScFillSeriesDlg::CheckIncrementVal()
 
     return rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fIncrement );
 }
-
-
 
 
 bool ScFillSeriesDlg::CheckEndVal()
@@ -251,8 +233,6 @@ bool ScFillSeriesDlg::CheckEndVal()
     }
     return bValOk;
 }
-
-
 
 // Handler:
 
@@ -292,8 +272,6 @@ IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
     }
     return 0;
 }
-
-
 
 
 IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl)
@@ -343,8 +321,6 @@ IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl)
 
     return 0;
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

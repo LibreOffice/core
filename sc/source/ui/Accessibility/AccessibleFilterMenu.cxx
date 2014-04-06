@@ -51,8 +51,6 @@ using ::com::sun::star::uno::RuntimeException;
 using ::std::for_each;
 using ::std::vector;
 
-
-
 namespace {
 
 class AddRemoveEventListener : public ::std::unary_function<void, Reference<XAccessible> >
@@ -81,8 +79,6 @@ private:
 };
 
 }
-
-
 
 ScAccessibleFilterMenu::ScAccessibleFilterMenu(const Reference<XAccessible>& rxParent, ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos) :
     ScAccessibleContextBase(rxParent, AccessibleRole::MENU),

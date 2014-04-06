@@ -71,8 +71,6 @@ sal_Int32 ScSheetEvents::GetVbaDocumentEventId(sal_Int32 nEvent)
     return (nSheetEventId != NO_EVENT) ? (nSheetEventId + USERDEFINED_START) : NO_EVENT;
 }
 
-
-
 ScSheetEvents::ScSheetEvents() :
     mpScriptNames(NULL)
 {

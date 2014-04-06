@@ -136,8 +136,6 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
     return false;
 }
 
-
-
 //  Functions that are disabled, depending on the selection
 //  Default:
 //      SID_DELETE,
@@ -551,8 +549,6 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     }
 }
 
-
-
 bool ScTabViewShell::IsRefInputMode() const
 {
     ScModule* pScMod = SC_MOD();
@@ -598,8 +594,6 @@ bool ScTabViewShell::IsRefInputMode() const
     return false;
 }
 
-
-
 void ScTabViewShell::ExecuteInputDirect()
 {
     if ( !IsRefInputMode() )
@@ -611,8 +605,6 @@ void ScTabViewShell::ExecuteInputDirect()
         }
     }
 }
-
-
 
 void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bStopEditing /* = sal_True */ )
 {
@@ -712,8 +704,6 @@ void ScTabViewShell::UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust )
         pHdl->UpdateCellAdjust( eJust );
 }
 
-
-
 void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
 {
     // only SID_SAVEDOC / SID_SAVEASDOC
@@ -807,8 +797,6 @@ void ScTabViewShell::GetDrawOptState( SfxItemSet& rSet )
     aBool.SetWhich( SID_HELPLINES_MOVE );
     rSet.Put( aBool );
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

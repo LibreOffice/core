@@ -34,12 +34,8 @@
 
 using namespace com::sun::star;
 
-
-
 #define SCSHEETCELLCURSOR_SERVICE   "com.sun.star.sheet.SheetCellCursor"
 #define SCCELLCURSOR_SERVICE        "com.sun.star.table.CellCursor"
-
-
 
 ScCellCursorObj::ScCellCursorObj(ScDocShell* pDocSh, const ScRange& rR) :
     ScCellRangeObj( pDocSh, rR )
@@ -484,8 +480,6 @@ uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
 
     return aTotalSeq;
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

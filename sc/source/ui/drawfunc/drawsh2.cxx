@@ -56,8 +56,6 @@ sal_uInt16 ScGetFontWorkId();       // in drtxtob
 using namespace com::sun::star;
 
 
-
-
 ScDrawShell::ScDrawShell( ScViewData* pData ) :
     SfxShell(pData->GetViewShell()),
     pViewData( pData ),
@@ -398,8 +396,6 @@ void ScDrawShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
 }
 
 
-
-
 void ScDrawShell::Activate (const bool bMDI)
 {
     (void)bMDI;
@@ -409,8 +405,6 @@ void ScDrawShell::Activate (const bool bMDI)
         ::sfx2::sidebar::EnumContext::GetContextEnum(
             GetSidebarContextName()));
 }
-
-
 
 
 ::rtl::OUString ScDrawShell::GetSidebarContextName (void)

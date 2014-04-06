@@ -76,8 +76,6 @@ public:
     virtual const css::uno::Any& getValue() const = 0;
 };
 
-
-
 class ScVbaRange : public ScVbaRange_BASE
 {
     css::uno::Reference< ov::XCollection > m_Areas;

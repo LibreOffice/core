@@ -84,8 +84,6 @@ const sal_uInt16 EXC_SETUP_NOTES_END        = 0x0200;
 const sal_uInt16 EXC_PAPERSIZE_DEFAULT      = 0;
 const sal_uInt16 EXC_PAPERSIZE_USER         = 0xFFFF;
 
-
-
 // Page settings ==============================================================
 
 class SvxBrushItem;
@@ -145,8 +143,6 @@ struct XclPageData : private boost::noncopyable
     /** Sets the Excel paper size index and paper orientation from Calc paper size (twips). */
     void                SetScPaperSize( const Size& rSize, bool bPortrait, bool bStrict = false );
 };
-
-
 
 #endif
 

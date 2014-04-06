@@ -28,8 +28,6 @@ namespace xls {
 
 struct FontModel;
 
-
-
 class ThemeBuffer : public ::oox::drawingml::Theme, public WorkbookHelper
 {
 public:
@@ -46,8 +44,6 @@ private:
     typedef ::std::auto_ptr< FontModel > FontModelPtr;
     FontModelPtr        mxDefFontModel;
 };
-
-
 
 } // namespace xls
 } // namespace oox

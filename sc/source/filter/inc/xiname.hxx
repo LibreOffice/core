@@ -30,8 +30,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
-
-
 class ScRangeData;
 class ScTokenArray;
 
@@ -77,8 +75,6 @@ private:
     boost::scoped_ptr<TokenStrmData> mpTokensData;   /// For later conversion of token array.
 };
 
-
-
 /** This buffer contains all internal defined names of the document.
     @descr  It manages the position of the names in the document, means if they are
     global or attached to a specific sheet. While inserting the names into the Calc
@@ -109,8 +105,6 @@ private:
     typedef boost::ptr_vector< XclImpName > XclImpNameList;
     XclImpNameList      maNameList;
 };
-
-
 
 #endif
 

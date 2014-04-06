@@ -57,8 +57,6 @@
 #include "clipparam.hxx"
 #include "markdata.hxx"
 
-
-
 #define ScCellShell
 #define CellMovement
 #include "scslots.hxx"
@@ -101,8 +99,6 @@ ScCellShell::~ScCellShell()
     delete pImpl->m_pRequest;
     delete pImpl;
 }
-
-
 
 void ScCellShell::GetBlockState( SfxItemSet& rSet )
 {
@@ -1065,8 +1061,6 @@ void ScCellShell::GetState(SfxItemSet &rSet)
         nWhich = aIter.NextWhich();
     } // while ( nWitch )
 }
-
-
 
 
 

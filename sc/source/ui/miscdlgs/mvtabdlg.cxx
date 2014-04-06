@@ -22,8 +22,6 @@
 
 
 
-
-
 #include <vcl/msgbox.hxx>
 
 #include "mvtabdlg.hxx"
@@ -33,8 +31,6 @@
 #include "global.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"
-
-
 
 ScMoveTableDlg::ScMoveTableDlg(Window* pParent, const OUString& rDefault)
 
@@ -70,13 +66,9 @@ ScMoveTableDlg::ScMoveTableDlg(Window* pParent, const OUString& rDefault)
     Init();
 }
 
-
-
 ScMoveTableDlg::~ScMoveTableDlg()
 {
 }
-
-
 
 sal_uInt16 ScMoveTableDlg::GetSelectedDocument () const { return nDocument;  }
 
@@ -214,8 +206,6 @@ bool ScMoveTableDlg::IsCurrentDocSelected() const
     return pLbDoc->GetSelectEntryPos() == mnCurrentDocPos;
 }
 
-
-
 void ScMoveTableDlg::Init()
 {
     pBtnOk->SetClickHdl   ( LINK( this, ScMoveTableDlg, OkHdl ) );
@@ -229,8 +219,6 @@ void ScMoveTableDlg::Init()
     InitDocListBox();
     SelHdl( pLbDoc );
 }
-
-
 
 void ScMoveTableDlg::InitDocListBox()
 {
@@ -354,7 +342,5 @@ IMPL_LINK( ScMoveTableDlg, CheckNameHdl, Edit *, pEdt )
 
     return 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

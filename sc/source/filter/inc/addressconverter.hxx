@@ -31,8 +31,6 @@ namespace xls {
 class BiffInputStream;
 
 
-
-
 /** A vector of com.sun.star.table.CellRangeAddress elements and additional
     functionality. */
 class ApiCellRangeList : public ::std::vector< ::com::sun::star::table::CellRangeAddress >
@@ -44,8 +42,6 @@ public:
     ::com::sun::star::table::CellAddress
                         getBaseAddress() const;
 };
-
-
 
 /** A 2D cell address struct for binary filters. */
 struct BinAddress
@@ -63,8 +59,6 @@ struct BinAddress
     void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
 };
-
-
 
 inline bool operator==( const BinAddress& rL, const BinAddress& rR )
 {
@@ -87,8 +81,6 @@ inline BiffInputStream& operator>>( BiffInputStream& rStrm, BinAddress& orPos )
     orPos.read( rStrm );
     return rStrm;
 }
-
-
 
 /** A 2D cell range address struct for binary filters. */
 struct BinRange
@@ -121,8 +113,6 @@ struct BinRange
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
 };
 
-
-
 inline bool operator==( const BinRange& rL, const BinRange& rR )
 {
     return (rL.maFirst == rR.maFirst) && (rL.maLast == rR.maLast);
@@ -145,8 +135,6 @@ inline BiffInputStream& operator>>( BiffInputStream& rStrm, BinRange& orRange )
     return rStrm;
 }
 
-
-
 /** A 2D cell range address list for binary filters. */
 class BinRangeList : public ::std::vector< BinRange >
 {
@@ -156,15 +144,11 @@ public:
     void                read( SequenceInputStream& rStrm );
 };
 
-
-
 inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRangeList& orRanges )
 {
     orRanges.read( rStrm );
     return rStrm;
 }
-
-
 
 /** Different target types that can be encoded in a BIFF URL. */
 enum BiffTargetType
@@ -177,16 +161,12 @@ enum BiffTargetType
 };
 
 
-
-
 /** Converter for cell addresses and cell ranges for OOXML and BIFF filters.
  */
 class AddressConverter : public WorkbookHelper
 {
 public:
     explicit            AddressConverter( const WorkbookHelper& rHelper );
-
-
 
     /** Tries to parse the passed string for a 2d cell address in A1 notation.
 
@@ -241,8 +221,6 @@ public:
                             sal_Int32 nStart = 0,
                             sal_Int32 nLength = SAL_MAX_INT32 );
 
-
-
     /** Returns the biggest valid cell address in the own Calc document. */
     inline const ::com::sun::star::table::CellAddress&
                         getMaxApiAddress() const { return maMaxApiPos; }
@@ -263,8 +241,6 @@ public:
     inline bool         isRowOverflow() const { return mbRowOverflow; }
     /** Returns the sheet overflow status. */
     inline bool         isTabOverflow() const { return mbTabOverflow; }
-
-
 
     /** Checks if the passed column index is valid.
 
@@ -292,8 +268,6 @@ public:
         @return  true = Passed sheet index is valid (no index overflow).
      */
     bool                checkTab( sal_Int16 nSheet, bool bTrackOverflow );
-
-
 
     /** Checks the passed cell address if it fits into the spreadsheet limits.
 
@@ -393,8 +367,6 @@ public:
                             const BinAddress& rBinAddress,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
-
-
 
     /** Checks the passed cell range if it fits into the spreadsheet limits.
 
@@ -528,8 +500,6 @@ public:
                             sal_Int16 nSheet,
                             bool bAllowOverflow, bool bTrackOverflow );
 
-
-
     /** Tries to restrict the passed cell range list to current sheet limits.
 
         @param orRanges  (in-out-parameter) Restricts the cell range addresses
@@ -612,8 +582,6 @@ private:
     bool                mbRowOverflow;                  /// Flag for "rows overflow".
     bool                mbTabOverflow;                  /// Flag for "tables overflow".
 };
-
-
 
 } // namespace xls
 } // namespace oox

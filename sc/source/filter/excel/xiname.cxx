@@ -267,8 +267,6 @@ void XclImpName::InsertName(const ScTokenArray* pArray)
         mpScData = pData;               // cache for later use
 }
 
-
-
 XclImpNameManager::XclImpNameManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
 {
@@ -310,7 +308,5 @@ void XclImpNameManager::ConvertAllTokens()
     for (; it != itEnd; ++it)
         it->ConvertTokens();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

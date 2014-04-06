@@ -97,15 +97,11 @@ size_t ScDPFilteredCache::GroupFilter::getMatchItemCount() const
     return maItems.size();
 }
 
-
-
 ScDPFilteredCache::Criterion::Criterion() :
     mnFieldIndex(-1),
     mpFilter(static_cast<FilterBase*>(NULL))
 {
 }
-
-
 
 ScDPFilteredCache::ScDPFilteredCache(const ScDPCache& rCache) :
     maShowByFilter(0, MAXROW+1, false), maShowByPage(0, MAXROW+1, true), mrCache(rCache)

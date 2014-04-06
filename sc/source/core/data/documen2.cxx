@@ -1136,8 +1136,6 @@ void ScDocument::SetChangeViewSettings(const ScChangeViewSettings& rNew)
     *pChangeViewSettings=rNew;
 }
 
-
-
 ScFieldEditEngine* ScDocument::CreateFieldEditEngine()
 {
     ScFieldEditEngine* pNewEditEngine = NULL;
@@ -1174,14 +1172,10 @@ void ScDocument::DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine)
     rpEditEngine = NULL;
 }
 
-
-
 ScRecursionHelper* ScDocument::CreateRecursionHelperInstance()
 {
     return new ScRecursionHelper;
 }
-
-
 
 ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
 {

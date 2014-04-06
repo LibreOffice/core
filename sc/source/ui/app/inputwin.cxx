@@ -148,8 +148,6 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
     return aInfo;
 }
 
-
-
 #define IMAGE(id) pImgMgr->SeekImage(id)
 static bool lcl_isExperimentalMode()
 {
@@ -906,8 +904,6 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
     ToolBox::MouseButtonUp( rMEvt );
 }
-
-
 
 //                  ScInputBarGroup
 
@@ -2062,8 +2058,6 @@ void ScTextWnd::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextDat
         maAccTextDatas.erase( aIt );
 }
 
-
-
 void ScTextWnd::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -2563,8 +2557,6 @@ void ScPosWnd::ReleaseFocus_Impl()
             pShellWnd->GrabFocus();
     }
 }
-
-
 
 
 

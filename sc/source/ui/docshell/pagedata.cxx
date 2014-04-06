@@ -21,8 +21,6 @@
 
 #include "pagedata.hxx"
 
-
-
 ScPrintRangeData::ScPrintRangeData()
 {
     nPagesX = nPagesY = 0;
@@ -63,8 +61,6 @@ void ScPrintRangeData::SetPagesY( size_t nCount, const SCROW* pData )
         pPageEndY = NULL;
     nPagesY = nCount;
 }
-
-
 
 ScPageBreakData::ScPageBreakData(size_t nMax)
 {
@@ -120,7 +116,5 @@ void ScPageBreakData::AddPages()
         }
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,8 +25,6 @@
 namespace oox {
 namespace xls {
 
-
-
 /** Collects all strings from the shared strings substream. */
 class SharedStringsBuffer : public WorkbookHelper
 {
@@ -46,8 +44,6 @@ private:
     typedef RefVector< RichString > StringVector;
     StringVector        maStrings;
 };
-
-
 
 } // namespace xls
 } // namespace oox

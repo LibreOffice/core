@@ -22,13 +22,9 @@
 
 
 
-
-
 #include "mtrindlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
-
-
 
 
 ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
@@ -65,8 +61,6 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
     nCurrentValue = sal::static_int_cast<long>( m_pEdValue->GetValue() );
     m_pBtnDefVal->Check( nCurrentValue == nDefaultValue );
 }
-
-
 
 long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 {
@@ -107,15 +101,11 @@ IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl)
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG_INLINE_START(ScMetricInputDlg, ModifyHdl)
 {
     m_pBtnDefVal->Check( nDefaultValue == m_pEdValue->GetValue() );
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(ScMetricInputDlg, ModifyHdl)
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

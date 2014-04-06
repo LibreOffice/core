@@ -28,8 +28,6 @@
 using namespace ::oox;
 
 
-
-
 namespace {
 
 // compare vectors
@@ -438,8 +436,6 @@ void XclExpString::WriteXml( XclExpXmlStream& rStrm ) const
     }
 }
 
-
-
 bool XclExpString::IsWriteFlags() const
 {
     return mbIsBiff8 && (!IsEmpty() || !mbSmartFlags);
@@ -559,7 +555,5 @@ void XclExpString::PrepareWrite( XclExpStream& rStrm, sal_uInt16 nBytes ) const
 {
     rStrm.SetSliceSize( nBytes + (mbIsUnicode ? 2 : 1) );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

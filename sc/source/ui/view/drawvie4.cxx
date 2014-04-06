@@ -54,8 +54,6 @@ using namespace com::sun::star;
 
 Point aDragStartDiff;
 
-
-
 void ScDrawView::CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle )
 {
     rAnyOle = rOneOle = false;

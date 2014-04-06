@@ -26,16 +26,12 @@
 #include <vcl/lstbox.hxx>
 #include "global.hxx"
 
-
-
 // +1 because one field is reserved for the "- none -" entry
 #define SC_MAXFIELDS    MAXCOLCOUNT+1
 
 class ScViewData;
 class ScDocument;
 struct ScSubTotalParam;
-
-
 
 class ScTpSubTotalGroup : public SfxTabPage
 {
@@ -77,8 +73,6 @@ private:
     DECL_LINK( CheckHdl, ListBox * );
 };
 
-
-
 class ScTpSubTotalGroup1 : public ScTpSubTotalGroup
 {
 protected:
@@ -93,8 +87,6 @@ public:
     virtual bool        FillItemSet ( SfxItemSet& rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 };
-
-
 
 class ScTpSubTotalGroup2 : public ScTpSubTotalGroup
 {
@@ -111,8 +103,6 @@ public:
     virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 };
 
-
-
 class ScTpSubTotalGroup3 : public ScTpSubTotalGroup
 {
 protected:
@@ -127,8 +117,6 @@ public:
     virtual bool        FillItemSet ( SfxItemSet& rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 };
-
-
 
 class ScTpSubTotalOptions : public SfxTabPage
 {
@@ -167,8 +155,6 @@ private:
     // Handler ------------------------
     DECL_LINK( CheckHdl, CheckBox * );
 };
-
-
 
 #endif // SC_TPSORT_HXX
 

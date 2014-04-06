@@ -248,8 +248,6 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
     }
 }
 
-
-
 void ScTabView::TabChanged( bool bSameTabButMoved )
 {
     if (pDrawView)
@@ -533,8 +531,6 @@ void ScTabView::DigitLanguageChanged()
             pGridWin[i]->SetDigitLanguage( eNewLang );
 }
 
-
-
 void ScTabView::ScrollToObject( SdrObject* pDrawObj )
 {
     if ( pDrawObj )
@@ -619,8 +615,6 @@ void ScTabView::MakeVisible( const Rectangle& rHMMRect )
         ScrollLines( nLinesX, nLinesY );                    // ausfuehren
     }
 }
-
-
 
 void ScTabView::SetBrushDocument( ScDocument* pNew, bool bLock )
 {

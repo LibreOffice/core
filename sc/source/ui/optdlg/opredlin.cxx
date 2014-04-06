@@ -22,8 +22,6 @@
 
 
 
-
-
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
@@ -43,8 +41,6 @@
 #include "globstr.hrc"
 
 #include "opredlin.hxx"
-
-
 
 ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )

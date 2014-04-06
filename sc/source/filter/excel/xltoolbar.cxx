@@ -67,8 +67,6 @@ OUString MSOExcelCommandConvertor::MSOTCIDToOOCommand( sal_Int16 key )
     return sResult;
 }
 
-
-
 CTBS::CTBS() : bSignature(0), bVersion(0), reserved1(0), reserved2(0), reserved3(0), ctb(0), ctbViews(0), ictbView(0)
 {
 }

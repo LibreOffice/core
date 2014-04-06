@@ -24,8 +24,6 @@
 
 class ScStyleDlg;
 
-
-
 class ScHFPage : public SvxHFPage
 {
 public:
@@ -62,8 +60,6 @@ private:
 #endif
 };
 
-
-
 class ScHeaderPage : public ScHFPage
 {
 public:
@@ -73,8 +69,6 @@ public:
 private:
     ScHeaderPage( Window* pParent, const SfxItemSet& rSet );
 };
-
-
 
 class ScFooterPage : public ScHFPage
 {

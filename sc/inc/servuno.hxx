@@ -104,8 +104,6 @@ public:
     static sal_uInt16       GetProviderType(const OUString& rServiceName);
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

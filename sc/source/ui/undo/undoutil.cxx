@@ -68,8 +68,6 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
                                 rRange.aEnd.Col(),   rRange.aEnd.Row(),   rRange.aEnd.Tab()   );
 }
 
-
-
 ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB nTab,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {

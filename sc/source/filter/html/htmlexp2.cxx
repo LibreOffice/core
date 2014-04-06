@@ -40,8 +40,6 @@
 
 using namespace com::sun::star;
 
-
-
 void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
         SCCOL nStartCol, SCROW nStartRow,   SCCOL nEndCol, SCROW nEndRow )
 {
@@ -236,8 +234,6 @@ void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
         rStrm.WriteChar( '>' ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() );
     }
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

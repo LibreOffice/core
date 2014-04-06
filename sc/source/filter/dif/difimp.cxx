@@ -977,6 +977,4 @@ void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )
     }
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

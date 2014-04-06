@@ -90,8 +90,6 @@ private:
     sal_uInt16          mnRecSize;      /// Current record size.
 };
 
-
-
 /** Decrypts BIFF5 stream contents. */
 class XclImpBiff5Decrypter : public XclImpDecrypter
 {
@@ -119,8 +117,6 @@ private:
     sal_uInt16          mnKey;
     sal_uInt16          mnHash;
 };
-
-
 
 /** Decrypts BIFF8 stream contents using the given document identifier. */
 class XclImpBiff8Decrypter : public XclImpDecrypter
@@ -192,8 +188,6 @@ private:
     sal_uInt16          mnRawRecLeft;   /// Bytes left in current raw record (without following CONTINUEs).
     bool                mbValid;        /// Read state: false = record overread.
 };
-
-
 
 /** This class is used to import record oriented streams.
     @descr  An instance is constructed with an SvStream. The SvStream stream is
@@ -527,8 +521,6 @@ private:
     bool                mbValidRec;     /// false = No more records to read.
     bool                mbValid;        /// false = Record overread.
 };
-
-
 
 #endif
 

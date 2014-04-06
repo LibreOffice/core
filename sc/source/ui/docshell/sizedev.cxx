@@ -25,8 +25,6 @@
 #include "scmod.hxx"
 #include "inputopt.hxx"
 
-
-
 ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
 {
     sal_Bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();

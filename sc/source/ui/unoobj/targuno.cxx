@@ -39,8 +39,6 @@
 
 using  namespace ::com::sun::star;
 
-
-
 sal_uInt16 nTypeResIds[SC_LINKTARGETTYPE_COUNT] =
 {
     SCSTR_CONTENT_TABLE,        // SC_LINKTARGETTYPE_SHEET
@@ -59,16 +57,12 @@ static const SfxItemPropertyMapEntry* lcl_GetLinkTargetMap()
     return aLinkTargetMap_Impl;
 }
 
-
-
 // service for ScLinkTargetTypeObj is not defined
 //  must not support document::LinkTarget because the target type cannot be used as a target
 
 SC_SIMPLE_SERVICE_INFO( ScLinkTargetTypesObj, "ScLinkTargetTypesObj", "com.sun.star.document.LinkTargets" )
 SC_SIMPLE_SERVICE_INFO( ScLinkTargetTypeObj,  "ScLinkTargetTypeObj",  "com.sun.star.document.LinkTargetSupplier" )
 SC_SIMPLE_SERVICE_INFO( ScLinkTargetsObj,     "ScLinkTargetsObj",     "com.sun.star.document.LinkTargets" )
-
-
 
 ScLinkTargetTypesObj::ScLinkTargetTypesObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -136,8 +130,6 @@ sal_Bool SAL_CALL ScLinkTargetTypesObj::hasElements(void) throw( uno::RuntimeExc
 {
     return sal_True;
 }
-
-
 
 ScLinkTargetTypeObj::ScLinkTargetTypeObj(ScDocShell* pDocSh, sal_uInt16 nT) :
     pDocShell( pDocSh ),
@@ -249,8 +241,6 @@ uno::Any SAL_CALL ScLinkTargetTypeObj::getPropertyValue(const OUString& Property
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScLinkTargetTypeObj )
 
-
-
 ScLinkTargetsObj::ScLinkTargetsObj( const uno::Reference< container::XNameAccess > & rColl ) :
     xCollection( rColl )
 {
@@ -295,7 +285,5 @@ sal_Bool SAL_CALL ScLinkTargetsObj::hasElements(void) throw( uno::RuntimeExcepti
 {
     return xCollection->hasElements();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

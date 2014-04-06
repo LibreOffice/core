@@ -20,8 +20,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include "tabbgcolordlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
@@ -37,8 +35,6 @@
 #include <vcl/builder.hxx>
 
 #include <boost/scoped_ptr.hpp>
-
-
 
 #define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)
 
@@ -64,8 +60,6 @@ ScTabBgColorDlg::ScTabBgColorDlg(Window* pParent, const OUString& rTitle,
     m_pTabBgColorSet->SetDoubleClickHdl( HDL(TabBgColorDblClickHdl_Impl) );
     m_pBtnOk->SetClickHdl( HDL(TabBgColorOKHdl_Impl) );
 }
-
-
 
 void ScTabBgColorDlg::GetSelectedColor( Color& rColor ) const
 {

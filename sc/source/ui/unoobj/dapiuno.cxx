@@ -87,8 +87,6 @@ using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
 
-
-
 namespace {
 
 const SfxItemPropertyMapEntry* lcl_GetDataPilotDescriptorBaseMap()
@@ -109,8 +107,6 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotDescriptorBaseMap()
     };
     return aDataPilotDescriptorBaseMap_Impl;
 }
-
-
 
 const SfxItemPropertyMapEntry* lcl_GetDataPilotFieldMap()
 {
@@ -138,8 +134,6 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotFieldMap()
     return aDataPilotFieldMap_Impl;
 }
 
-
-
 const SfxItemPropertyMapEntry* lcl_GetDataPilotItemMap()
 {
     static const SfxItemPropertyMapEntry aDataPilotItemMap_Impl[] =
@@ -151,8 +145,6 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotItemMap()
     };
     return aDataPilotItemMap_Impl;
 }
-
-
 
 inline bool lclCheckValidDouble( double fValue, sal_Bool bAuto )
 {
@@ -171,8 +163,6 @@ bool lclCheckMinMaxStep( const DataPilotFieldGroupInfo& rInfo )
 
 } // namespace
 
-
-
 SC_SIMPLE_SERVICE_INFO( ScDataPilotDescriptor, "ScDataPilotDescriptor", "stardiv::one::sheet::DataPilotDescriptor" )
 SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldObj, "ScDataPilotFieldObj", "com.sun.star.sheet.DataPilotField" )
 SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldsObj, "ScDataPilotFieldsObj", "com.sun.star.sheet.DataPilotFields" )
@@ -185,12 +175,8 @@ SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupsObj, "ScDataPilotFieldGroupsObj", 
 SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupObj, "ScDataPilotFieldGroupObj", "com.sun.star.sheet.DataPilotFieldGroup" )
 SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupItemObj, "ScDataPilotFieldGroupItemObj", "com.sun.star.sheet.DataPilotFieldGroupItem" )
 
-
-
 // name that is used in the API for the data layout field
 #define SC_DATALAYOUT_NAME  "Data"
-
-
 
 GeneralFunction ScDataPilotConversion::FirstFunc( sal_uInt16 nBits )
 {
@@ -244,8 +230,6 @@ void ScDataPilotConversion::FillGroupInfo( DataPilotFieldGroupInfo& rInfo, const
     rInfo.Step          = rGroupInfo.mfStep;
 }
 
-
-
 static ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const OUString& rName )
 {
     if (pDocShell)
@@ -295,8 +279,6 @@ static sal_Int32 lcl_GetObjectIndex( ScDPObject* pDPObj, const ScFieldIdentifier
     }
     return -1;  // none
 }
-
-
 
 ScDataPilotTablesObj::ScDataPilotTablesObj(ScDocShell* pDocSh, SCTAB nT) :
     pDocShell( pDocSh ),
@@ -592,8 +574,6 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
     }
     return false;
 }
-
-
 
 ScDataPilotDescriptorBase::ScDataPilotDescriptorBase(ScDocShell* pDocSh) :
     maPropSet( lcl_GetDataPilotDescriptorBaseMap() ),
@@ -1100,8 +1080,6 @@ ScDataPilotDescriptorBase* ScDataPilotDescriptorBase::getImplementation(
     return pRet;
 }
 
-
-
 ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN) :
     ScDataPilotDescriptorBase( pDocSh ),
     nTab( nT ),
@@ -1400,8 +1378,6 @@ void ScDataPilotTableObj::Refreshed_Impl()
         pDoc->AddUnoListenerCall( aModifyListeners[n], aEvent );
 }
 
-
-
 ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     ScDataPilotDescriptorBase( pDocSh ),
     mpDPObject(new ScDPObject(pDocSh ? pDocSh->GetDocument() : NULL) )
@@ -1465,8 +1441,6 @@ void SAL_CALL ScDataPilotDescriptor::setTag( const OUString& aNewTag )
     SolarMutexGuard aGuard;
     mpDPObject->SetTag( aNewTag );
 }
-
-
 
 ScDataPilotChildObjBase::ScDataPilotChildObjBase( ScDataPilotDescriptorBase& rParent ) :
     mrParent( rParent )
@@ -1552,8 +1526,6 @@ ScDocShell* ScDataPilotChildObjBase::GetDocShell() const
 {
     return mrParent.GetDocShell();
 }
-
-
 
 ScDataPilotFieldsObj::ScDataPilotFieldsObj( ScDataPilotDescriptorBase& rParent ) :
     ScDataPilotChildObjBase( rParent )
@@ -1816,8 +1788,6 @@ sal_Bool SAL_CALL ScDataPilotFieldsObj::hasByName( const OUString& aName )
 
     return GetObjectByName_Impl(aName) != NULL;
 }
-
-
 
 ScDataPilotFieldObj::ScDataPilotFieldObj(
         ScDataPilotDescriptorBase& rParent, const ScFieldIdentifier& rFieldId ) :
@@ -2823,8 +2793,6 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
     return xRet;
 }
 
-
-
 namespace {
 
 bool lclExtractGroupMembers( ScFieldGroupMembers& rMembers, const Any& rElement )
@@ -2866,8 +2834,6 @@ bool lclExtractGroupMembers( ScFieldGroupMembers& rMembers, const Any& rElement 
 }
 
 } // namespace
-
-
 
 ScDataPilotFieldGroupsObj::ScDataPilotFieldGroupsObj( const ScFieldGroups& rGroups ) :
     maGroups( rGroups )
@@ -3042,8 +3008,6 @@ ScFieldGroups::iterator ScDataPilotFieldGroupsObj::implFindByName( const OUStrin
     return maGroups.end();
 }
 
-
-
 namespace {
 
 OUString lclExtractMember( const Any& rElement )
@@ -3059,8 +3023,6 @@ OUString lclExtractMember( const Any& rElement )
 }
 
 } // namespace
-
-
 
 ScDataPilotFieldGroupObj::ScDataPilotFieldGroupObj( ScDataPilotFieldGroupsObj& rParent, const OUString& rGroupName ) :
     mrParent( rParent ),
@@ -3216,8 +3178,6 @@ void SAL_CALL ScDataPilotFieldGroupObj::setName( const OUString& rName ) throw(R
     maGroupName = rName;
 }
 
-
-
 ScDataPilotFieldGroupItemObj::ScDataPilotFieldGroupItemObj( ScDataPilotFieldGroupObj& rParent, const OUString& rName ) :
     mrParent( rParent ),
     maName( rName )
@@ -3245,8 +3205,6 @@ void SAL_CALL ScDataPilotFieldGroupItemObj::setName( const OUString& rName ) thr
     // if call to replaceByName() did not throw, remember the new name
     maName = rName;
 }
-
-
 
 ScDataPilotItemsObj::ScDataPilotItemsObj( ScDataPilotDescriptorBase& rParent, const ScFieldIdentifier& rFieldId ) :
     ScDataPilotChildObjBase( rParent, rFieldId )
@@ -3362,8 +3320,6 @@ sal_Bool SAL_CALL ScDataPilotItemsObj::hasElements() throw(RuntimeException, std
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
-
-
 
 ScDataPilotItemObj::ScDataPilotItemObj( ScDataPilotDescriptorBase& rParent, const ScFieldIdentifier& rFieldId, sal_Int32 nIndex ) :
     ScDataPilotChildObjBase( rParent, rFieldId ),
@@ -3547,8 +3503,6 @@ void SAL_CALL ScDataPilotItemObj::removeVetoableChangeListener(
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
-
-
 
 
 

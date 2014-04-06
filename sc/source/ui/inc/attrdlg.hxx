@@ -26,8 +26,6 @@ class Window;
 class SfxViewFrame;
 class SfxItemSet;
 
-
-
 class ScAttrDlg : public SfxTabDialog
 {
 public:

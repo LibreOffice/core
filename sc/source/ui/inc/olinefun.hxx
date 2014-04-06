@@ -26,8 +26,6 @@ class ScDocShell;
 class ScRange;
 
 
-
-
 class ScOutlineDocFunc
 {
 private:
@@ -53,8 +51,6 @@ public:
     bool        HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
                                     bool bRecord, bool bPaint );
 };
-
-
 
 #endif
 

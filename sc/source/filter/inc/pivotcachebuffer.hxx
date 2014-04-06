@@ -38,8 +38,6 @@ namespace xls {
 
 class WorksheetHelper;
 
-
-
 typedef ::std::pair< sal_Int32, OUString > IdCaptionPair;
 typedef ::std::vector< IdCaptionPair > IdCaptionPairList;
 
@@ -105,8 +103,6 @@ friend class PivotCacheItemList;
     bool                mbUnused;
 };
 
-
-
 class PivotCacheItemList : public WorkbookHelper
 {
 public:
@@ -141,8 +137,6 @@ private:
     CacheItemVector     maItems;            /// All items of this list.
 };
 
-
-
 struct PCFieldModel
 {
     OUString     maName;             /// Fixed name of the cache field.
@@ -162,8 +156,6 @@ struct PCFieldModel
     explicit            PCFieldModel();
 };
 
-
-
 struct PCSharedItemsModel
 {
     bool                mbHasSemiMixed;     /// True = has (blank|string|bool|error) item(s), maybe other types.
@@ -179,8 +171,6 @@ struct PCSharedItemsModel
 
     explicit            PCSharedItemsModel();
 };
-
-
 
 struct PCFieldGroupModel
 {
@@ -203,8 +193,6 @@ struct PCFieldGroupModel
     void                setBiffGroupBy( sal_uInt8 nGroupBy );
 };
 
-
-
 /** Helper struct for mapping original item names from/to group item names. */
 struct PivotCacheGroupItem
 {
@@ -216,8 +204,6 @@ struct PivotCacheGroupItem
 };
 
 typedef ::std::vector< PivotCacheGroupItem > PivotCacheGroupItemVector;
-
-
 
 class PivotCacheField : public WorkbookHelper
 {
@@ -337,8 +323,6 @@ private:
     PCFieldGroupModel   maFieldGroupModel;  /// Settings for item grouping.
 };
 
-
-
 struct PCDefinitionModel
 {
     OUString     maRelId;            /// Relation identifier for cache records fragment.
@@ -361,8 +345,6 @@ struct PCDefinitionModel
     explicit            PCDefinitionModel();
 };
 
-
-
 struct PCSourceModel
 {
     sal_Int32           mnSourceType;       /// Type of the source data (sheet, consolidation, scenario, external).
@@ -370,8 +352,6 @@ struct PCSourceModel
 
     explicit            PCSourceModel();
 };
-
-
 
 struct PCWorksheetSourceModel
 {
@@ -383,8 +363,6 @@ struct PCWorksheetSourceModel
 
     explicit            PCWorksheetSourceModel();
 };
-
-
 
 class PivotCache : public WorkbookHelper
 {
@@ -473,8 +451,6 @@ private:
     bool                mbDummySheet;       /// True = pivot cache is based on a dummy sheet.
 };
 
-
-
 class PivotCacheBuffer : public WorkbookHelper
 {
 public:
@@ -500,8 +476,6 @@ private:
     PivotCacheMap       maCaches;
     PivotCacheIdVector  maCacheIds;
 };
-
-
 
 } // namespace xls
 } // namespace oox

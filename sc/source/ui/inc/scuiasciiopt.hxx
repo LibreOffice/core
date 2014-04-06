@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 #ifndef SCUI_ASCIIOPT_HXX
 #define SCUI_ASCIIOPT_HXX
 
 
 #include "asciiopt.hxx"
 #include "svx/langbox.hxx"
-
-
 
 class ScImportAsciiDlg : public ModalDialog
 {

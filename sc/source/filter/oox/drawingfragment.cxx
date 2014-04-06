@@ -61,8 +61,6 @@ using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::awt::XControlModel;
 // no using's for ::oox::vml, that may clash with ::oox::drawingml types
 
-
-
 ShapeMacroAttacher::ShapeMacroAttacher( const OUString& rMacroName, const Reference< XShape >& rxShape ) :
     VbaMacroAttacherBase( rMacroName ),
     mxShape( rxShape )
@@ -86,8 +84,6 @@ void ShapeMacroAttacher::attachMacro( const OUString& rMacroUrl )
     {
     }
 }
-
-
 
 Shape::Shape( const WorksheetHelper& rHelper, const AttributeList& rAttribs, const sal_Char* pcServiceName ) :
     ::oox::drawingml::Shape( pcServiceName ),
@@ -119,8 +115,6 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
         }
     }
 }
-
-
 
 GroupShapeContext::GroupShapeContext( ContextHandler2Helper& rParent,
         const WorksheetHelper& rHelper, const ShapePtr& rxParentShape, const ShapePtr& rxShape ) :
@@ -175,8 +169,6 @@ ContextHandlerRef GroupShapeContext::onCreateContext(
     ContextHandlerRef xContext = createShapeContext( *this, *this, nElement, rAttribs, mpGroupShapePtr );
     return xContext.get() ? xContext.get() : ShapeGroupContext::onCreateContext( nElement, rAttribs );
 }
-
-
 
 DrawingFragment::DrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     WorksheetFragmentBase( rHelper, rFragmentPath ),
@@ -320,8 +312,6 @@ private:
     sal_Int32           mnRow;
 };
 
-
-
 VmlFindNoteFunc::VmlFindNoteFunc( const CellAddress& rPos ) :
     mnCol( rPos.Column ),
     mnRow( rPos.Row )
@@ -335,8 +325,6 @@ bool VmlFindNoteFunc::operator()( const ::oox::vml::ShapeBase& rShape ) const
 }
 
 } // namespace
-
-
 
 VmlControlMacroAttacher::VmlControlMacroAttacher( const OUString& rMacroName,
         const Reference< XIndexContainer >& rxCtrlFormIC, sal_Int32 nCtrlIndex, sal_Int32 nCtrlType, sal_Int32 nDropStyle ) :
@@ -400,8 +388,6 @@ void VmlControlMacroAttacher::attachMacro( const OUString& rMacroUrl )
     {
     }
 }
-
-
 
 VmlDrawing::VmlDrawing( const WorksheetHelper& rHelper ) :
     ::oox::vml::Drawing( rHelper.getOoxFilter(), rHelper.getDrawPage(), ::oox::vml::VMLDRAWING_EXCEL ),
@@ -764,8 +750,6 @@ void VmlDrawing::convertControlBackground( AxMorphDataModelBase& rAxModel, const
     }
 }
 
-
-
 VmlDrawingFragment::VmlDrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     ::oox::vml::DrawingFragment( rHelper.getOoxFilter(), rFragmentPath, rHelper.getVmlDrawing() ),
     WorksheetHelper( rHelper )
@@ -777,8 +761,6 @@ void VmlDrawingFragment::finalizeImport()
     ::oox::vml::DrawingFragment::finalizeImport();
     getVmlDrawing().convertAndInsert();
 }
-
-
 
 } // namespace xls
 } // namespace oox

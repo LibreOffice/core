@@ -31,14 +31,10 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
-
-
 
 
 namespace {
@@ -73,16 +69,12 @@ const sal_Int16 BIFF8_MAXTAB        = BIFF5_MAXTAB;
 } // namespace
 
 
-
-
 CellAddress ApiCellRangeList::getBaseAddress() const
 {
     if( empty() )
         return CellAddress();
     return CellAddress( front().Sheet, front().StartColumn, front().StartRow );
 }
-
-
 
 void BinAddress::read( SequenceInputStream& rStrm )
 {
@@ -94,8 +86,6 @@ void BinAddress::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
     mnRow = bRow32Bit ? rStrm.readInt32() : rStrm.readuInt16();
     mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
 }
-
-
 
 void BinRange::read( SequenceInputStream& rStrm )
 {
@@ -110,8 +100,6 @@ void BinRange::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
     maLast.mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
 }
 
-
-
 void BinRangeList::read( SequenceInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();
@@ -119,8 +107,6 @@ void BinRangeList::read( SequenceInputStream& rStrm )
     for( iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
         aIt->read( rStrm );
 }
-
-
 
 AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -162,8 +148,6 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
         case FILTER_UNKNOWN: break;
     }
 }
-
-
 
 bool AddressConverter::parseOoxAddress2d(
         sal_Int32& ornColumn, sal_Int32& ornRow,
@@ -309,8 +293,6 @@ bool AddressConverter::parseOoxRange2d(
     return false;
 }
 
-
-
 bool AddressConverter::checkCol( sal_Int32 nCol, bool bTrackOverflow )
 {
     bool bValid = (0 <= nCol) && (nCol <= maMaxPos.Column);
@@ -334,8 +316,6 @@ bool AddressConverter::checkTab( sal_Int16 nSheet, bool bTrackOverflow )
         mbTabOverflow |= (nSheet > maMaxPos.Sheet);  // do not warn for deleted refs (-1)
     return bValid;
 }
-
-
 
 bool AddressConverter::checkCellAddress( const CellAddress& rAddress, bool bTrackOverflow )
 {
@@ -418,8 +398,6 @@ CellAddress AddressConverter::createValidCellAddress(
     return aAddress;
 }
 
-
-
 bool AddressConverter::checkCellRange( const CellRangeAddress& rRange, bool bAllowOverflow, bool bTrackOverflow )
 {
     return
@@ -476,8 +454,6 @@ bool AddressConverter::convertToCellRange( CellRangeAddress& orRange,
     convertToCellRangeUnchecked( orRange, rBinRange, nSheet );
     return validateCellRange( orRange, bAllowOverflow, bTrackOverflow );
 }
-
-
 
 void AddressConverter::validateCellRangeList( ApiCellRangeList& orRanges, bool bTrackOverflow )
 {
@@ -543,8 +519,6 @@ void AddressConverter::initializeMaxPos(
         OSL_FAIL( "AddressConverter::AddressConverter - cannot get sheet limits" );
     }
 }
-
-
 
 } // namespace xls
 } // namespace oox

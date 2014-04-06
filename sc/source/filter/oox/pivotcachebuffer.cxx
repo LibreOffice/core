@@ -44,8 +44,6 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
@@ -53,8 +51,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 using ::oox::core::Relations;
-
-
 
 namespace {
 
@@ -102,8 +98,6 @@ const sal_uInt8 BIFF12_PCDEFINITION_SUPPORTDRILL    = 0x08;
 const sal_uInt8 BIFF12_PCDWBSOURCE_HASRELID         = 0x01;
 const sal_uInt8 BIFF12_PCDWBSOURCE_HASSHEET         = 0x02;
 
-
-
 const sal_uInt16 BIFF_PC_NOSTRING                   = 0xFFFF;
 
 const sal_uInt16 BIFF_PCDFIELD_HASITEMS             = 0x0001;
@@ -127,8 +121,6 @@ const sal_uInt16 BIFF_PCDEFINITION_OPTIMIZEMEMORY   = 0x0008;
 const sal_uInt16 BIFF_PCDEFINITION_BACKGROUNDQUERY  = 0x0010;
 const sal_uInt16 BIFF_PCDEFINITION_ENABLEREFRESH    = 0x0020;
 
-
-
 /** Adjusts the weird date format read from binary streams.
 
     Dates before 1900-Mar-01 are stored including the non-existing leap day
@@ -150,8 +142,6 @@ void lclAdjustBinDateTime( css::util::DateTime& orDateTime )
 }
 
 } // namespace
-
-
 
 PivotCacheItem::PivotCacheItem() :
     mnType( XML_m ), mbUnused( false )
@@ -305,8 +295,6 @@ OUString PivotCacheItem::getName() const
     return OUString();
 }
 
-
-
 PivotCacheItemList::PivotCacheItemList( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
@@ -424,8 +412,6 @@ void PivotCacheItemList::importArray( SequenceInputStream& rStrm )
     }
 }
 
-
-
 PCFieldModel::PCFieldModel() :
     mnNumFmtId( 0 ),
     mnSqlType( 0 ),
@@ -438,8 +424,6 @@ PCFieldModel::PCFieldModel() :
     mbMemberPropField( false )
 {
 }
-
-
 
 PCSharedItemsModel::PCSharedItemsModel() :
     mbHasSemiMixed( true ),
@@ -454,8 +438,6 @@ PCSharedItemsModel::PCSharedItemsModel() :
     mbHasLongIndexes( false )
 {
 }
-
-
 
 PCFieldGroupModel::PCFieldGroupModel() :
     mfStartValue( 0.0 ),
@@ -477,8 +459,6 @@ void PCFieldGroupModel::setBiffGroupBy( sal_uInt8 nGroupBy )
         XML_seconds, XML_minutes, XML_hours, XML_days, XML_months, XML_quarters, XML_years };
     mnGroupBy = STATIC_ARRAY_SELECT( spnGroupBy, nGroupBy, XML_range );
 }
-
-
 
 PivotCacheField::PivotCacheField( const WorkbookHelper& rHelper, bool bIsDatabaseField ) :
     WorkbookHelper( rHelper ),
@@ -1033,8 +1013,6 @@ void PivotCacheField::writeSharedItemToSourceDataCell(
         writeItemToSourceDataCell( rSheetHelper, nCol, nRow, *pCacheItem );
 }
 
-
-
 PCDefinitionModel::PCDefinitionModel() :
     mfRefreshedDate( 0.0 ),
     mnRecords( 0 ),
@@ -1053,22 +1031,16 @@ PCDefinitionModel::PCDefinitionModel() :
 {
 }
 
-
-
 PCSourceModel::PCSourceModel() :
     mnSourceType( XML_TOKEN_INVALID ),
     mnConnectionId( 0 )
 {
 }
 
-
-
 PCWorksheetSourceModel::PCWorksheetSourceModel()
 {
     maRange.StartColumn = maRange.StartRow = maRange.EndColumn = maRange.EndRow = -1;
 }
-
-
 
 PivotCache::PivotCache( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -1396,8 +1368,6 @@ void PivotCache::updateSourceDataRow( WorksheetHelper& rSheetHelper, sal_Int32 n
     }
 }
 
-
-
 PivotCacheBuffer::PivotCacheBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
@@ -1483,8 +1453,6 @@ PivotCache& PivotCacheBuffer::createPivotCache( sal_Int32 nCacheId )
     rxCache.reset( new PivotCache( *this ) );
     return *rxCache;
 }
-
-
 
 } // namespace xls
 } // namespace oox

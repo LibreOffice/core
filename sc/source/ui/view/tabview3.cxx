@@ -95,8 +95,6 @@ ScRange lcl_getSubRangeByIndex( const ScRange& rRange, sal_Int32 nIndex )
 using namespace com::sun::star;
 
 
-
-
 // ---  Public-Funktionen
 
 

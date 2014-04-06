@@ -97,8 +97,6 @@ public:
     const OUString&        GetValidationName(const sal_Int32 nIndex);
 };
 
-
-
 struct ScMyDefaultStyle
 {
     sal_Int32   nIndex;

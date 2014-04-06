@@ -33,8 +33,6 @@ namespace xls {
 
 class OOXMLFormulaParserImpl;
 
-
-
 typedef ::cppu::WeakImplHelper3<
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XInitialization,
@@ -99,8 +97,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL OOXMLFormulaParser_create(
 OUString SAL_CALL OOXMLFormulaParser_getImplementationName();
 
 css::uno::Sequence< OUString > SAL_CALL OOXMLFormulaParser_getSupportedServiceNames();
-
-
 
 } // namespace xls
 } // namespace oox

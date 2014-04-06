@@ -19,13 +19,9 @@
 
 #include "docsh.hxx"
 
-
-
 void ScDocShell::GetDrawObjState( SfxItemSet & /* rSet */ )
 {
     //  SID_SC_ACTIVEOBJECT (SelectedObject) - removed (old Basic)
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

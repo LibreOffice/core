@@ -22,8 +22,6 @@
 // STATIC DATA -----------------------------------------------------------
 
 
-
-
 // UpdateBrowser in MarkListHasChanged gerufen
 
 void ScDrawView::UpdateBrowser()
@@ -40,8 +38,6 @@ void ScDrawView::VCRemoveWin( Window* /* pWin */ )
 {
     //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
 }
-
-
 
 
 

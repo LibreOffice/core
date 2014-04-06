@@ -24,11 +24,7 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::oox::core;
-
-
 
 
 CommentsFragment::CommentsFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
@@ -142,8 +138,6 @@ void CommentsFragment::importComment( SequenceInputStream& rStrm )
     mxComment = getComments().createComment();
     mxComment->importComment( rStrm );
 }
-
-
 
 } // namespace xls
 } // namespace oox

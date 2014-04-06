@@ -23,8 +23,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-
-
 ScMarkArray::ScMarkArray() :
     nCount( 0 ),
     nLimit( 0 ),
@@ -33,14 +31,10 @@ ScMarkArray::ScMarkArray() :
     // special case "no marks" with pData = NULL
 }
 
-
-
 ScMarkArray::~ScMarkArray()
 {
     delete[] pData;
 }
-
-
 
 void ScMarkArray::Reset( bool bMarked )
 {
@@ -54,8 +48,6 @@ void ScMarkArray::Reset( bool bMarked )
     pData[0].nRow = MAXROW;
     pData[0].bMarked = bMarked;
 }
-
-
 
 bool ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
@@ -102,8 +94,6 @@ bool ScMarkArray::GetMark( SCROW nRow ) const
         return false;
 
 }
-
-
 
 void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
 {
@@ -379,8 +369,6 @@ bool ScMarkArrayIter::Next( SCROW& rTop, SCROW& rBottom )
     ++nPos;
     return true;
 }
-
-
 
 
 

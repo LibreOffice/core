@@ -196,8 +196,6 @@ public:
         ParameterFlags() : bOptional(false), bSuppress(false) {}
     };
 
-
-
     OUString      *pFuncName;              /**< Function name */
     OUString      *pFuncDesc;              /**< Description of function */
     std::vector<OUString> maDefArgNames;          /**< Parameter name(s) */

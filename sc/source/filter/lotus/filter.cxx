@@ -42,8 +42,6 @@
 // Konstanten
 const sal_uInt16        nBOF = 0x0000;
 
-
-
 // externe Variablen
 extern WKTYP        eTyp;   // Typ der gerade in bearbeitung befindlichen Datei
 WKTYP               eTyp;

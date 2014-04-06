@@ -76,8 +76,6 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
     }
 }
 
-
-
 OUString ScImportOptions::BuildString() const
 {
     OUString aResult;
@@ -97,8 +95,6 @@ OUString ScImportOptions::BuildString() const
 
     return aResult;
 }
-
-
 
 void ScImportOptions::SetTextEncoding( rtl_TextEncoding nEnc )
 {

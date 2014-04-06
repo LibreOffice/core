@@ -51,8 +51,6 @@ public:
     virtual sal_uInt16      GetId() const SAL_OVERRIDE;
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

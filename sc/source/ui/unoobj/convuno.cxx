@@ -24,8 +24,6 @@
 
 using namespace com::sun::star;
 
-
-
 //  everything is static...
 
 LanguageType ScUnoConversion::GetLanguage( const lang::Locale& rLocale )
@@ -45,7 +43,5 @@ void ScUnoConversion::FillLocale( lang::Locale& rLocale, LanguageType eLang )
 {
     rLocale = LanguageTag::convertToLocale( eLang );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

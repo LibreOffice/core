@@ -36,8 +36,6 @@ namespace xls {
 
 class PivotTable;
 
-
-
 struct PTFieldItemModel
 {
     sal_Int32           mnCacheItem;        /// Index to shared item in pivot cache.
@@ -51,8 +49,6 @@ struct PTFieldItemModel
     /** Sets item type for BIFF import. */
     void                setBiffType( sal_uInt16 nType );
 };
-
-
 
 struct PTFieldModel
 {
@@ -91,8 +87,6 @@ struct PTFieldModel
     void                setBiffAxis( sal_uInt8 nAxisFlags );
 };
 
-
-
 struct PTPageFieldModel
 {
     OUString     maName;             /// Unique name of the page field.
@@ -101,8 +95,6 @@ struct PTPageFieldModel
 
     explicit            PTPageFieldModel();
 };
-
-
 
 struct PTDataFieldModel
 {
@@ -121,8 +113,6 @@ struct PTDataFieldModel
     /** Sets the 'show data as' type for BIFF import. */
     void                setBiffShowDataAs( sal_Int32 nShowDataAs );
 };
-
-
 
 class PivotTableField : public WorkbookHelper
 {
@@ -189,8 +179,6 @@ private:
     sal_Int32           mnFieldIndex;       /// Zero-based index of this field.
 };
 
-
-
 struct PTFilterModel
 {
     OUString     maName;             /// Name of the field filter.
@@ -209,8 +197,6 @@ struct PTFilterModel
 
     explicit            PTFilterModel();
 };
-
-
 
 class PivotTableFilter : public WorkbookHelper
 {
@@ -234,8 +220,6 @@ private:
     const PivotTable&   mrPivotTable;
     PTFilterModel       maModel;
 };
-
-
 
 struct PTDefinitionModel : public AutoFormatModel
 {
@@ -285,8 +269,6 @@ struct PTDefinitionModel : public AutoFormatModel
     explicit            PTDefinitionModel();
 };
 
-
-
 struct PTLocationModel
 {
     ::com::sun::star::table::CellRangeAddress
@@ -299,8 +281,6 @@ struct PTLocationModel
 
     explicit            PTLocationModel();
 };
-
-
 
 class PivotTable : public WorkbookHelper
 {
@@ -400,8 +380,6 @@ private:
                         mxDPDescriptor;     /// Descriptor of the DataPilot object.
 };
 
-
-
 class PivotTableBuffer : public WorkbookHelper
 {
 public:
@@ -417,8 +395,6 @@ private:
     typedef RefVector< PivotTable > PivotTableVector;
     PivotTableVector    maTables;
 };
-
-
 
 } // namespace xls
 } // namespace oox

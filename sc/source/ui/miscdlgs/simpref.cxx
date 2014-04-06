@@ -28,8 +28,6 @@
 #include "simpref.hxx"
 #include "scmod.hxx"
 
-
-
 #define ABS_SREF          SCA_VALID \
                         | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
 #define ABS_DREF          ABS_SREF \
@@ -125,8 +123,6 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-
-
 bool ScSimpleRefDlg::Close()
 {
     CancelBtnHdl(m_pBtnCancel);
@@ -213,8 +209,6 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
     aUnoLink.Call( &aResult );
     return 0;
 }
-
-
 
 
 

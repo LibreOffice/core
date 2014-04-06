@@ -42,8 +42,6 @@
 
 using namespace com::sun::star;
 
-
-
 // Calc document
 extern uno::Sequence< OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw();
 extern OUString SAL_CALL ScDocument_getImplementationName() throw();
@@ -126,8 +124,6 @@ extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Settings_crea
             const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
                 throw (uno::Exception, std::exception);
 
-
-
 //  Anzahl der Funktionen, die als zuletzt benutzt gespeichert werden
 //! Define mit funcpage.hxx und dwfunctr.hxx zusammenfassen !!!
 #define LRU_MAX 10
@@ -140,8 +136,6 @@ extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Settings_crea
 
 //  Anzahl der PropertyValues in einer Function-Description
 #define SC_FUNCDESC_PROPCOUNT   5
-
-
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
@@ -172,8 +166,6 @@ static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
     return aSettingsPropertyMap_Impl;
 }
 
-
-
 #define SCFUNCTIONLISTOBJ_SERVICE       "com.sun.star.sheet.FunctionDescriptions"
 #define SCRECENTFUNCTIONSOBJ_SERVICE    "com.sun.star.sheet.RecentFunctions"
 #define SCSPREADSHEETSETTINGS_SERVICE   "com.sun.star.sheet.GlobalSheetSettings"
@@ -181,8 +173,6 @@ static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
 SC_SIMPLE_SERVICE_INFO( ScFunctionListObj, "ScFunctionListObj", SCFUNCTIONLISTOBJ_SERVICE )
 SC_SIMPLE_SERVICE_INFO( ScRecentFunctionsObj, "ScRecentFunctionsObj", SCRECENTFUNCTIONSOBJ_SERVICE )
 SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettings, "ScSpreadsheetSettings", SCSPREADSHEETSETTINGS_SERVICE )
-
-
 
 extern "C" {
 
@@ -390,8 +380,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sc_component_getFactory(
 }
 
 }   // extern C
-
-
 
 ScSpreadsheetSettings::ScSpreadsheetSettings() :
     aPropSet( lcl_GetSettingsPropertyMap() )
@@ -668,8 +656,6 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScSpreadsheetSettings )
 
-
-
 ScRecentFunctionsObj::ScRecentFunctionsObj()
 {
 }
@@ -748,8 +734,6 @@ sal_Int32 SAL_CALL ScRecentFunctionsObj::getMaxRecentFunctions() throw(uno::Runt
 {
     return LRU_MAX;
 }
-
-
 
 ScFunctionListObj::ScFunctionListObj()
 {
@@ -995,8 +979,6 @@ sal_Bool SAL_CALL ScFunctionListObj::hasByName( const OUString& aName )
     }
     return false;
 }
-
-
 
 
 

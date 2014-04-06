@@ -29,8 +29,6 @@ namespace xls {
 class ExternalLink;
 
 
-
-
 /** This class implements importing the sheetData element in external sheets.
 
     The sheetData element embedded in the externalBook element contains cached
@@ -74,8 +72,6 @@ private:
     sal_Int32           mnCurrType;                 /// Data type of current cell.
 };
 
-
-
 class ExternalLinkFragment : public WorkbookFragmentBase
 {
 public:
@@ -102,8 +98,6 @@ private:
     OUString     maResultValue;
     sal_Int32           mnResultType;
 };
-
-
 
 } // namespace xls
 } // namespace oox

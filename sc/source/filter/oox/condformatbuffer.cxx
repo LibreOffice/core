@@ -55,16 +55,12 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
-
-
 
 
 namespace {
@@ -120,8 +116,6 @@ const sal_uInt16 BIFF12_CFRULE_ABOVEAVERAGE         = 0x0004;
 const sal_uInt16 BIFF12_CFRULE_BOTTOM               = 0x0008;
 const sal_uInt16 BIFF12_CFRULE_PERCENT              = 0x0010;
 
-
-
 template< typename Type >
 void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString& rPropName, const Type& rValue )
 {
@@ -129,8 +123,6 @@ void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString&
     orProps.back().Name = rPropName;
     orProps.back().Value <<= rValue;
 }
-
-
 
 void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttribs )
 {
@@ -256,8 +248,6 @@ void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, 
     }
 }
 
-
-
 DataBarRule::DataBarRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
     mpFormat(new ScDataBarFormatData)
@@ -313,8 +303,6 @@ void DataBarRule::SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScA
     pFormat->SetDataBarData(mpFormat);
 }
 
-
-
 IconSetRule::IconSetRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
     mpFormatData( new ScIconSetFormatData )
@@ -358,8 +346,6 @@ void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScA
     pFormat->SetIconSetData(mpFormatData);
 }
 
-
-
 CondFormatRuleModel::CondFormatRuleModel() :
     mnPriority( -1 ),
     mnType( XML_TOKEN_INVALID ),
@@ -392,8 +378,6 @@ void CondFormatRuleModel::setBiff12TextType( sal_Int32 nOperator )
     static const sal_Int32 spnOperators[] = { XML_containsText, XML_notContains, XML_beginsWith, XML_endsWith };
     mnOperator = STATIC_ARRAY_SELECT( spnOperators, nOperator, XML_TOKEN_INVALID );
 }
-
-
 
 CondFormatRule::CondFormatRule( const CondFormat& rCondFormat, ScConditionalFormat* pFormat ) :
     WorksheetHelper( rCondFormat ),
@@ -956,14 +940,10 @@ IconSetRule* CondFormatRule::getIconSet()
     return mpIconSet.get();
 }
 
-
-
 CondFormatModel::CondFormatModel() :
     mbPivot( false )
 {
 }
-
-
 
 CondFormat::CondFormat( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -1037,8 +1017,6 @@ void CondFormat::insertRule( CondFormatRuleRef xRule )
         maRules[ xRule->getPriority() ] = xRule;
     }
 }
-
-
 
 CondFormatBuffer::CondFormatBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )

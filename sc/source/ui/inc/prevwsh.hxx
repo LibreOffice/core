@@ -37,8 +37,6 @@ class ScPreviewLocationData;
 class CommandEvent;
 
 
-
-
 class ScPreviewShell: public SfxViewShell
 {
     ScDocShell*     pDocShell;
@@ -121,8 +119,6 @@ public:
     ScDocument*     GetDocument();
     SC_DLLPUBLIC ScPreview*      GetPreview() { return pPreview; }
 };
-
-
 
 #endif
 

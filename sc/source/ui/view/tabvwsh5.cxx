@@ -40,8 +40,6 @@
 #include "cellvalue.hxx"
 #include "svl/sharedstring.hxx"
 
-
-
 void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (rHint.ISA(SfxSimpleHint))                       // ohne Parameter
@@ -306,8 +304,6 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     SfxViewShell::Notify( rBC, rHint );
 }
 
-
-
 SvxNumberInfoItem* ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, ScViewData* pViewData )
 {
 
@@ -379,8 +375,6 @@ SvxNumberInfoItem* ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, ScViewD
         pDoc->GetFormatTable(), static_cast<const sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO));
 }
 
-
-
 void ScTabViewShell::UpdateNumberFormatter(
                         const SvxNumberInfoItem& rInfoItem )
 {
@@ -394,8 +388,6 @@ void ScTabViewShell::UpdateNumberFormatter(
             rInfoItem.GetNumberFormatter()->DeleteEntry( pDelArr[i] );
     }
 }
-
-
 
 
 

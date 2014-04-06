@@ -45,8 +45,6 @@ SvxIMapDlg*     ScGetIMapDlg();
 const void*     ScIMapDlgGetObj( SvxIMapDlg* pDlg );
 const ImageMap& ScIMapDlgGetMap( SvxIMapDlg* pDlg );
 
-
-
 void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
 {
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -71,8 +69,6 @@ void ScTabViewShell::GetChildWinState( SfxItemSet& rSet )
         rSet.Put( SfxBoolItem( SID_GALLERY, GetViewFrame()->HasChildWindow( nId ) ) );
     }
 }
-
-
 
 void ScTabViewShell::ExecGallery( SfxRequest& rReq )
 {
@@ -106,14 +102,10 @@ void ScTabViewShell::GetGalleryState( SfxItemSet& /* rSet */ )
 {
 }
 
-
-
 ScInputHandler* ScTabViewShell::GetInputHandler() const
 {
     return pInputHandler;
 }
-
-
 
 OUString ScTabViewShell::GetDescription() const
 {
@@ -233,8 +225,6 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

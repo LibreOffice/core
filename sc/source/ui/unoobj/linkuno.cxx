@@ -50,8 +50,6 @@ using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::RuntimeException;
 using ::std::vector;
 
-
-
 //  fuer Sheet- und Area-Links benutzt:
 static const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
 {
@@ -67,16 +65,12 @@ static const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
     return aSheetLinkMap_Impl;
 }
 
-
-
 SC_SIMPLE_SERVICE_INFO( ScAreaLinkObj, "ScAreaLinkObj", "com.sun.star.sheet.CellAreaLink" )
 SC_SIMPLE_SERVICE_INFO( ScAreaLinksObj, "ScAreaLinksObj", "com.sun.star.sheet.CellAreaLinks" )
 SC_SIMPLE_SERVICE_INFO( ScDDELinkObj, "ScDDELinkObj", "com.sun.star.sheet.DDELink" )
 SC_SIMPLE_SERVICE_INFO( ScDDELinksObj, "ScDDELinksObj", "com.sun.star.sheet.DDELinks" )
 SC_SIMPLE_SERVICE_INFO( ScSheetLinkObj, "ScSheetLinkObj", "com.sun.star.sheet.SheetLink" )
 SC_SIMPLE_SERVICE_INFO( ScSheetLinksObj, "ScSheetLinksObj", "com.sun.star.sheet.SheetLinks" )
-
-
 
 ScSheetLinkObj::ScSheetLinkObj(ScDocShell* pDocSh, const OUString& rName) :
     aPropSet( lcl_GetSheetLinkMap() ),
@@ -377,8 +371,6 @@ void ScSheetLinkObj::setRefreshDelay(sal_Int32 nRefreshDelay)
     ModifyRefreshDelay_Impl( nRefreshDelay );
 }
 
-
-
 ScSheetLinksObj::ScSheetLinksObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
 {
@@ -582,8 +574,6 @@ uno::Sequence<OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(uno::R
     OSL_ENSURE( nPos==static_cast<size_t>(nLinkCount), "verzaehlt" );
     return aSeq;
 }
-
-
 
 static ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, size_t nPos )
 {
@@ -923,8 +913,6 @@ void SAL_CALL ScAreaLinkObj::setDestArea( const table::CellRangeAddress& aDestAr
     Modify_Impl( NULL, NULL, NULL, NULL, &aDestArea );
 }
 
-
-
 ScAreaLinksObj::ScAreaLinksObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
 {
@@ -1046,8 +1034,6 @@ sal_Bool SAL_CALL ScAreaLinksObj::hasElements() throw(uno::RuntimeException, std
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
-
-
 
 ScDDELinkObj::ScDDELinkObj(ScDocShell* pDocSh, const OUString& rA,
                             const OUString& rT, const OUString& rI) :
@@ -1256,8 +1242,6 @@ void ScDDELinkObj::Refreshed_Impl()
     for ( size_t n=0; n<aRefreshListeners.size(); n++ )
         aRefreshListeners[n]->refreshed( aEvent );
 }
-
-
 
 ScDDELinksObj::ScDDELinksObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
@@ -1470,8 +1454,6 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
     return xLink;
 }
 
-
-
 ScExternalSheetCacheObj::ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef pTable, size_t nIndex) :
     mpDocShell(pDocShell),
     mpTable(pTable),
@@ -1576,8 +1558,6 @@ sal_Int32 SAL_CALL ScExternalSheetCacheObj::getTokenIndex()
 {
     return static_cast< sal_Int32 >( mnIndex );
 }
-
-
 
 ScExternalDocLinkObj::ScExternalDocLinkObj(ScDocShell* pDocShell, ScExternalRefManager* pRefMgr, sal_uInt16 nFileId) :
     mpDocShell(pDocShell), mpRefMgr(pRefMgr), mnFileId(nFileId)
@@ -1712,8 +1692,6 @@ sal_Int32 SAL_CALL ScExternalDocLinkObj::getTokenIndex()
 {
     return static_cast<sal_Int32>(mnFileId);
 }
-
-
 
 ScExternalDocLinksObj::ScExternalDocLinksObj(ScDocShell* pDocShell) :
     mpDocShell(pDocShell),

@@ -33,8 +33,6 @@ namespace oox { namespace drawingml { class ShapePropertyMap; } }
 namespace oox {
 namespace xls {
 
-
-
 const sal_uInt16 BIFF_OBJ_INVALID_ID        = 0;
 
 
@@ -51,8 +49,6 @@ struct BiffObjLineModel
 
     explicit            BiffObjLineModel();
 };
-
-
 
 /** This structure contains fill formatting attributes from an OBJ record. */
 struct BiffObjFillModel
@@ -73,8 +69,6 @@ class BiffDrawingBase;
 class BiffDrawingObjectBase;
 typedef ::boost::shared_ptr< BiffDrawingObjectBase > BiffDrawingObjectRef;
 
-
-
 class BiffDrawingObjectContainer
 {
 public:
@@ -92,8 +86,6 @@ private:
     typedef RefVector< BiffDrawingObjectBase > BiffDrawingObjectVector;
     BiffDrawingObjectVector maObjects;
 };
-
-
 
 /** Base class for all BIFF drawing objects (OBJ records). */
 class BiffDrawingObjectBase : public WorksheetHelper
@@ -208,8 +200,6 @@ private:
     BiffObjIdVector     maSkipObjs;         /// Identifiers of all objects to be skipped.
 };
 
-
-
 /** Drawing manager of a single sheet. */
 class BiffSheetDrawing : public BiffDrawingBase
 {
@@ -221,8 +211,6 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) SAL_OVERRIDE;
 };
-
-
 
 } // namespace xls
 } // namespace oox

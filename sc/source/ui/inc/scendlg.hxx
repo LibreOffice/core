@@ -28,8 +28,6 @@
 #include <svtools/svmedit.hxx>
 #include <svtools/ctrlbox.hxx>
 
-
-
 class ScNewScenarioDlg : public ModalDialog
 {
 public:

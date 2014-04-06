@@ -63,11 +63,7 @@
 #include "markdata.hxx"
 
 
-
-
 //          Redraw - Benachrichtigungen
-
-
 
 void ScDocShell::PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos )
 {
@@ -216,8 +212,6 @@ void ScDocShell::UpdatePaintExt( sal_uInt16& rExtFlags, SCCOL nStartCol, SCROW n
     UpdatePaintExt( rExtFlags, ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab ) );
 }
 
-
-
 void ScDocShell::LockPaint_Impl(bool bDoc)
 {
     if ( !pPaintLockData )
@@ -337,8 +331,6 @@ void ScDocShell::UnlockDocument()
     }
 }
 
-
-
 void ScDocShell::SetInplace( bool bInplace )
 {
     if (bIsInplace != bInplace)
@@ -403,8 +395,6 @@ double ScDocShell::GetOutputFactor() const
     return nPrtToScreenFactor;
 }
 
-
-
 void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and Load
 {
     //  Einstellungen aus dem SpellCheckCfg kommen in Doc- und ViewOptions
@@ -438,8 +428,6 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
 
     aDocument.SetLanguage( (LanguageType) nDefLang, (LanguageType) nCjkLang, (LanguageType) nCtlLang );
 }
-
-
 
 Printer* ScDocShell::GetDocumentPrinter()       // fuer OLE
 {
@@ -568,8 +556,6 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlag
     return 0;
 }
 
-
-
 ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
 {
     ScChangeTrack* pTrack = GetDocument()->GetChangeTrack();
@@ -668,8 +654,6 @@ void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pP
     delete pDlg;
 }
 
-
-
 void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
 {
     ScChangeTrack* pTrack = aDocument.GetChangeTrack();
@@ -731,11 +715,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
     SetDocumentModified();
 }
 
-
-
 //              Merge (Aenderungen zusammenfuehren)
-
-
 
 static inline sal_Bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, sal_Bool bIgnore100Sec )
 {

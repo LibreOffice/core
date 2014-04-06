@@ -38,8 +38,6 @@ public:
     ScTabViewShell* GetViewShell() const { return pViewShell; }
 };
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -71,8 +71,6 @@ XclChRectangle::XclChRectangle() :
 {
 }
 
-
-
 XclChDataPointPos::XclChDataPointPos( sal_uInt16 nSeriesIdx, sal_uInt16 nPointIdx ) :
     mnSeriesIdx( nSeriesIdx ),
     mnPointIdx( nPointIdx )
@@ -84,8 +82,6 @@ bool operator<( const XclChDataPointPos& rL, const XclChDataPointPos& rR )
     return (rL.mnSeriesIdx < rR.mnSeriesIdx) ||
         ((rL.mnSeriesIdx == rR.mnSeriesIdx) && (rL.mnPointIdx < rR.mnPointIdx));
 }
-
-
 
 XclChFrBlock::XclChFrBlock( sal_uInt16 nType ) :
     mnType( nType ),
@@ -103,8 +99,6 @@ XclChFramePos::XclChFramePos() :
 {
 }
 
-
-
 XclChLineFormat::XclChLineFormat() :
     maColor( COL_BLACK ),
     mnPattern( EXC_CHLINEFORMAT_SOLID ),
@@ -112,8 +106,6 @@ XclChLineFormat::XclChLineFormat() :
     mnFlags( EXC_CHLINEFORMAT_AUTO )
 {
 }
-
-
 
 XclChAreaFormat::XclChAreaFormat() :
     maPattColor( COL_WHITE ),
@@ -123,8 +115,6 @@ XclChAreaFormat::XclChAreaFormat() :
 {
 }
 
-
-
 XclChEscherFormat::XclChEscherFormat()
 {
 }
@@ -133,16 +123,12 @@ XclChEscherFormat::~XclChEscherFormat()
 {
 }
 
-
-
 XclChPicFormat::XclChPicFormat() :
     mnBmpMode( EXC_CHPICFORMAT_NONE ),
     mnFlags( EXC_CHPICFORMAT_TOPBOTTOM | EXC_CHPICFORMAT_FRONTBACK | EXC_CHPICFORMAT_LEFTRIGHT ),
     mfScale( 0.5 )
 {
 }
-
-
 
 XclChFrame::XclChFrame() :
     mnFormat( EXC_CHFRAME_STANDARD ),
@@ -167,14 +153,10 @@ XclChObjectLink::XclChObjectLink() :
 {
 }
 
-
-
 XclChFrLabelProps::XclChFrLabelProps() :
     mnFlags( 0 )
 {
 }
-
-
 
 XclChText::XclChText() :
     maTextColor( COL_BLACK ),
@@ -198,23 +180,17 @@ XclChMarkerFormat::XclChMarkerFormat() :
 {
 };
 
-
-
 XclCh3dDataFormat::XclCh3dDataFormat() :
     mnBase( EXC_CH3DDATAFORMAT_RECT ),
     mnTop( EXC_CH3DDATAFORMAT_STRAIGHT )
 {
 }
 
-
-
 XclChDataFormat::XclChDataFormat() :
     mnFormatIdx( EXC_CHDATAFORMAT_DEFAULT ),
     mnFlags( 0 )
 {
 }
-
-
 
 XclChSerTrendLine::XclChSerTrendLine() :
     mfForecastFor( 0.0 ),
@@ -231,8 +207,6 @@ XclChSerTrendLine::XclChSerTrendLine() :
     pDouble->w32_parts.msw = pDouble->w32_parts.lsw = 0xFFFFFFFF;
 }
 
-
-
 XclChSerErrorBar::XclChSerErrorBar() :
     mfValue( 0.0 ),
     mnValueCount( 1 ),
@@ -241,8 +215,6 @@ XclChSerErrorBar::XclChSerErrorBar() :
     mnLineEnd( EXC_CHSERERR_END_TSHAPE )
 {
 }
-
-
 
 XclChSeries::XclChSeries() :
     mnCategType( EXC_CHSERIES_NUMERIC ),
@@ -267,8 +239,6 @@ XclChType::XclChType() :
 {
 }
 
-
-
 XclChChart3d::XclChChart3d() :
     mnRotation( 20 ),
     mnElevation( 15 ),
@@ -280,8 +250,6 @@ XclChChart3d::XclChChart3d() :
 {
 }
 
-
-
 XclChLegend::XclChLegend() :
     mnDockMode( EXC_CHLEGEND_RIGHT ),
     mnSpacing( EXC_CHLEGEND_MEDIUM ),
@@ -290,15 +258,11 @@ XclChLegend::XclChLegend() :
 {
 }
 
-
-
 XclChTypeGroup::XclChTypeGroup() :
     mnFlags( 0 ),
     mnGroupIdx( EXC_CHSERGROUP_NONE )
 {
 }
-
-
 
 XclChProperties::XclChProperties() :
     mnFlags( 0 ),
@@ -316,8 +280,6 @@ XclChLabelRange::XclChLabelRange() :
 {
 }
 
-
-
 XclChDateRange::XclChDateRange() :
     mnMinDate( 0 ),
     mnMaxDate( 0 ),
@@ -334,8 +296,6 @@ XclChDateRange::XclChDateRange() :
 {
 }
 
-
-
 XclChValueRange::XclChValueRange() :
     mfMin( 0.0 ),
     mfMax( 0.0 ),
@@ -348,8 +308,6 @@ XclChValueRange::XclChValueRange() :
 {
 }
 
-
-
 XclChTick::XclChTick() :
     maTextColor( COL_BLACK ),
     mnMajor( EXC_CHTICK_INSIDE | EXC_CHTICK_OUTSIDE ),
@@ -360,8 +318,6 @@ XclChTick::XclChTick() :
     mnRotation( EXC_ROT_NONE )
 {
 }
-
-
 
 XclChAxis::XclChAxis() :
     mnType( EXC_CHAXIS_NONE )
@@ -379,8 +335,6 @@ sal_Int32 XclChAxis::GetApiAxisDimension() const
     }
     return nApiAxisDim;
 }
-
-
 
 XclChAxesSet::XclChAxesSet() :
     mnAxesSetId( EXC_CHAXESSET_PRIMARY )
@@ -492,8 +446,6 @@ static const XclChFormatInfo spFmtInfos[] =
 
 }
 
-
-
 XclChFormatInfoProvider::XclChFormatInfoProvider()
 {
     const XclChFormatInfo* pEnd = STATIC_ARRAY_END( spFmtInfos );
@@ -560,8 +512,6 @@ void XclChExtTypeInfo::Set( const XclChTypeInfo& rTypeInfo, bool b3dChart, bool 
     mb3dChart = mbSupports3d && b3dChart;
     mbSpline = bSpline;
 }
-
-
 
 XclChTypeInfoProvider::XclChTypeInfoProvider()
 {
@@ -693,8 +643,6 @@ const sal_Char* const sppcHatchNamesFilled[] = { "FillStyle", "HatchName", "Colo
 const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", 0 };
 
 } // namespace
-
-
 
 XclChPropSetHelper::XclChPropSetHelper() :
     maLineHlpCommon( sppcLineNamesCommon ),
@@ -1231,8 +1179,6 @@ ScfPropSetHelper& XclChPropSetHelper::GetHatchHelper( XclChPropertyMode ePropMod
     return maHatchHlpCommon;
 }
 
-
-
 namespace {
 
 /*  The following local functions implement getting the XShape interface of all
@@ -1272,8 +1218,6 @@ EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupp
 #undef EXC_IMPLEMENT_GETTITLESHAPE
 
 } // namespace
-
-
 
 XclChRootData::XclChRootData() :
     mxTypeInfoProv( new XclChTypeInfoProvider ),
@@ -1342,7 +1286,5 @@ Reference< XShape > XclChRootData::GetTitleShape( const XclChTextKey& rTitleKey 
         xTitleShape = (aIt->second)( xChart1Doc );
     return xTitleShape;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

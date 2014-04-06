@@ -21,8 +21,6 @@
 
 #include "pagepar.hxx"
 
-
-
 // struct ScPageTableParam:
 
 ScPageTableParam::ScPageTableParam()
@@ -30,13 +28,9 @@ ScPageTableParam::ScPageTableParam()
     Reset();
 }
 
-
-
 ScPageTableParam::~ScPageTableParam()
 {
 }
-
-
 
 void ScPageTableParam::Reset()
 {
@@ -49,8 +43,6 @@ void ScPageTableParam::Reset()
     nScalePageNum = nScaleWidth = nScaleHeight = 0;
     nFirstPageNo = 1;
 }
-
-
 
 bool ScPageTableParam::operator==( const ScPageTableParam& r ) const
 {
@@ -65,13 +57,9 @@ ScPageAreaParam::ScPageAreaParam()
     Reset();
 }
 
-
-
 ScPageAreaParam::~ScPageAreaParam()
 {
 }
-
-
 
 void ScPageAreaParam::Reset()
 {
@@ -81,8 +69,6 @@ void ScPageAreaParam::Reset()
     memset( &aRepeatRow, 0, sizeof(ScRange) );
     memset( &aRepeatCol, 0, sizeof(ScRange) );
 }
-
-
 
 bool ScPageAreaParam::operator==( const ScPageAreaParam& r ) const
 {

@@ -44,8 +44,6 @@ class ScPrivatSplit : public Control
         using Control::ImplInitSettings;
         void                ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
 
-
-
     protected:
         virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

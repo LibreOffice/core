@@ -52,8 +52,6 @@
 
 #define FRAME_OFFSET 4
 
-
-
 // ScAutoFmtPreview
 
 ScAutoFmtPreview::ScAutoFmtPreview(Window* pParent)
@@ -157,8 +155,6 @@ rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Va
     }
 }
 
-
-
 sal_uInt16 ScAutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 {
     static const sal_uInt16 pnFmtMap[] =
@@ -183,8 +179,6 @@ const SvxLineItem& ScAutoFmtPreview::GetDiagItem( size_t nCol, size_t nRow, bool
     OSL_ENSURE( pCurData, "ScAutoFmtPreview::GetDiagItem - no format data found" );
     return *static_cast< const SvxLineItem* >( pCurData->GetItem( GetFormatIndex( nCol, nRow ), bTLBR ? ATTR_BORDER_TLBR : ATTR_BORDER_BLTR ) );
 }
-
-
 
 void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 {
@@ -369,16 +363,12 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 
 #undef FRAME_OFFSET
 
-
-
 void ScAutoFmtPreview::DrawStrings()
 {
     for( size_t nRow = 0; nRow < 5; ++nRow )
         for( size_t nCol = 0; nCol < 5; ++nCol )
             DrawString( nCol, nRow );
 }
-
-
 
 void ScAutoFmtPreview::DrawBackground()
 {
@@ -400,8 +390,6 @@ void ScAutoFmtPreview::DrawBackground()
         }
     }
 }
-
-
 
 void ScAutoFmtPreview::PaintCells()
 {
@@ -450,8 +438,6 @@ void ScAutoFmtPreview::CalcCellArray( bool bFitWidthP )
     aPrvSize.Width() = maArray.GetWidth() + 4;
     aPrvSize.Height() = maArray.GetHeight() + 4;
 }
-
-
 
 inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const ::editeng::SvxBorderLine* pBorder )
 {
@@ -530,8 +516,6 @@ void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
 
     aVD.SetDrawMode( nOldDrawMode );
 }
-
-
 
 void ScAutoFmtPreview::Paint( const Rectangle& rRect )
 {

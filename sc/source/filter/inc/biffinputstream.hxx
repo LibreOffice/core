@@ -29,8 +29,6 @@
 namespace oox {
 namespace xls {
 
-
-
 namespace prv {
 
 /** Buffers the contents of a raw record and encapsulates stream decoding. */
@@ -101,8 +99,6 @@ private:
 };
 
 } // namespace prv
-
-
 
 /** This class is used to read BIFF record streams.
 
@@ -335,8 +331,6 @@ private:
     bool                mbCont;             /// True = automatic CONTINUE lookup enabled.
 };
 
-
-
 class BiffInputStreamPos
 {
 public:
@@ -352,8 +346,6 @@ private:
     sal_Int64           mnRecPos;
 };
 
-
-
 /** Stores the current position of the passed stream on construction and
     restores it automatically on destruction. */
 class BiffInputStreamPosGuard : private BiffInputStreamPos
@@ -362,8 +354,6 @@ public:
     explicit            BiffInputStreamPosGuard( BiffInputStream& rStrm );
                         ~BiffInputStreamPosGuard();
 };
-
-
 
 } // namespace xls
 } // namespace oox

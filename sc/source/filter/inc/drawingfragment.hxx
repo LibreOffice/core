@@ -57,8 +57,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
 };
 
-
-
 class Shape : public ::oox::drawingml::Shape, public WorksheetHelper
 {
 public:
@@ -75,8 +73,6 @@ protected:
 private:
     OUString     maMacroName;
 };
-
-
 
 /** Context handler for creation of shapes embedded in group shapes. */
 class GroupShapeContext : public ::oox::drawingml::ShapeGroupContext, public WorksheetHelper
@@ -103,8 +99,6 @@ protected:
                             sal_Int32 nElement,
                             const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 };
-
-
 
 /** Fragment handler for a complete sheet drawing. */
 class DrawingFragment : public WorksheetFragmentBase
@@ -148,8 +142,6 @@ private:
     sal_Int32           mnCtrlType;
     sal_Int32           mnDropStyle;
 };
-
-
 
 class VmlDrawing : public ::oox::vml::Drawing, public WorksheetHelper
 {
@@ -205,8 +197,6 @@ private:
     ::oox::vml::TextFontModel maListBoxFont;
 };
 
-
-
 class VmlDrawingFragment : public ::oox::vml::DrawingFragment, public WorksheetHelper
 {
 public:
@@ -217,8 +207,6 @@ public:
 protected:
     virtual void        finalizeImport() SAL_OVERRIDE;
 };
-
-
 
 } // namespace xls
 } // namespace oox

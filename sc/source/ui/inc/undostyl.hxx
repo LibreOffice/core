@@ -26,8 +26,6 @@
 class ScDocShell;
 class SfxStyleSheetBase;
 
-
-
 class ScStyleSaveData
 {
 private:

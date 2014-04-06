@@ -95,8 +95,6 @@ inline bool ExcelToSc::IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16
     return ( ( nRow1 & 0x3FFF ) == 0x0000 ) && ( ( nRow2 & 0x3FFF ) == 0x3FFF );
 }
 
-
-
 class XclImpLinkManager;
 class XclImpExtName;
 
@@ -146,8 +144,6 @@ inline bool ExcelToSc8::IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt1
 {
     return ( nRow1 == 0x0000 ) && ( nRow2 == 0xFFFF );
 }
-
-
 
 
 

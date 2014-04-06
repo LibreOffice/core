@@ -86,8 +86,6 @@ public:
     ::rtl::OUString GetSidebarContextName (void);
 };
 
-
-
 #endif
 
 

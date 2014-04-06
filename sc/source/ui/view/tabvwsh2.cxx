@@ -49,8 +49,6 @@
 #include <svx/svdpage.hxx>
 #include <fuconcustomshape.hxx>
 
-
-
 SdrView* ScTabViewShell::GetDrawView() const
 {
     return ((ScTabViewShell*)this)->GetScDrawView();    // GetScDrawView ist nicht-const
@@ -456,7 +454,5 @@ bool ScTabViewShell::SelectObject( const OUString& rName )
 
     return bFound;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

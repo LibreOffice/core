@@ -36,8 +36,6 @@
 
 using namespace ::oox;
 
-
-
 // *** Helper classes ***
 
 
@@ -108,8 +106,6 @@ private:
     sal_uInt16          mnExtSheet;     /// The 1-based index to a global EXTERNSHEET record.
     sal_uInt16          mnXclTab;       /// The 1-based Excel sheet index for local names.
 };
-
-
 
 class ScRangeData;
 class ScDBData;
@@ -348,8 +344,6 @@ void XclExpName::WriteBody( XclExpStream& rStrm )
     if( mxTokArr )
         mxTokArr->WriteArray( rStrm );  // token array without size
 }
-
-
 
 XclExpNameManagerImpl::XclExpNameManagerImpl( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -678,8 +672,6 @@ void XclExpNameManagerImpl::CreateUserNames()
     }
 }
 
-
-
 XclExpNameManager::XclExpNameManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     mxImpl( new XclExpNameManagerImpl( rRoot ) )
@@ -760,7 +752,5 @@ void XclExpNameManager::SaveXml( XclExpXmlStream& rStrm )
 {
     mxImpl->SaveXml( rStrm );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

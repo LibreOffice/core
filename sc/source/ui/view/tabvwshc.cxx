@@ -72,8 +72,6 @@
 
 #include <config_orcus.h>
 
-
-
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 {
     //  CurRefDlgId is stored in ScModule to find if a ref dialog is open,
@@ -458,7 +456,5 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
     return pResult;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,8 +28,6 @@ class ScDocShell;
 class ScDocument;
 class SfxItemPool;
 
-
-
 /** Base class for special type of edit engines, i.e. for spell checker and text conversion. */
 class ScConversionEngineBase : public ScEditEngineDefaulter
 {
@@ -92,8 +90,6 @@ private:
     bool                mbFinished;         /// true = Entire document/selection finished.
 };
 
-
-
 /** Edit engine for spell checking. */
 class ScSpellingEngine : public ScConversionEngineBase
 {
@@ -128,8 +124,6 @@ private:
     Window*             GetDialogParent();
 };
 
-
-
 /** Edit engine for text conversion. */
 class ScTextConversionEngine : public ScConversionEngineBase
 {
@@ -154,8 +148,6 @@ protected:
 private:
     ScConversionParam   maConvParam;        /// Conversion parameters.
 };
-
-
 
 #endif
 

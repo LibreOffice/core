@@ -22,8 +22,6 @@
 
 
 
-
-
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docinsert.hxx>
@@ -40,8 +38,6 @@
 
 #define SC_INSTBDLG_CXX
 #include "instbdlg.hxx"
-
-
 
 ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )
     : ModalDialog(pParent, "InsertSheetDialog", "modules/scalc/ui/insertsheet.ui")
@@ -71,16 +67,12 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
     Init_Impl( bFromFile );
 }
 
-
-
 ScInsertTableDlg::~ScInsertTableDlg()
 {
     if (pDocShTables)
         pDocShTables->DoClose();
     delete pDocInserter;
 }
-
-
 
 void ScInsertTableDlg::Init_Impl( bool bFromFile )
 {
@@ -130,8 +122,6 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
     }
 }
 
-
-
 short ScInsertTableDlg::Execute()
 {
     // set Parent of DocumentInserter and Doc-Manager
@@ -145,8 +135,6 @@ short ScInsertTableDlg::Execute()
     Application::SetDefDialogParent( pOldDefParent );
     return nRet;
 }
-
-
 
 void ScInsertTableDlg::SetNewTable_Impl()
 {
@@ -167,8 +155,6 @@ void ScInsertTableDlg::SetNewTable_Impl()
     }
 }
 
-
-
 void ScInsertTableDlg::SetFromTo_Impl()
 {
     if (m_pBtnFromFile->IsChecked() )
@@ -183,8 +169,6 @@ void ScInsertTableDlg::SetFromTo_Impl()
         m_pBtnLink->Enable();
     }
 }
-
-
 
 void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
 {
@@ -209,8 +193,6 @@ void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
         m_pLbTables->SelectEntryPos(0);
 }
 
-
-
 const OUString* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
 {
     const OUString* pStr = NULL;
@@ -232,8 +214,6 @@ const OUString* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
     return pStr;
 }
 
-
-
 const OUString* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 {
     const OUString* pStr = NULL;
@@ -249,8 +229,6 @@ const OUString* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 
     return pStr;
 }
-
-
 
 // Handler:
 
@@ -289,8 +267,6 @@ IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl)
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(ScInsertTableDlg, BrowseHdl_Impl)
 {
     if ( pDocInserter )
@@ -301,15 +277,11 @@ IMPL_LINK_NOARG(ScInsertTableDlg, BrowseHdl_Impl)
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(ScInsertTableDlg, SelectHdl_Impl)
 {
     DoEnable_Impl();
     return 0;
 }
-
-
 
 void ScInsertTableDlg::DoEnable_Impl()
 {

@@ -90,8 +90,6 @@ enum ObjectSelectionType
 };
 
 
-
-
 class ScTabViewShell: public SfxViewShell, public ScDBFunc
 {
 private:
@@ -420,8 +418,6 @@ public:
     bool    GetForceFocusOnCurCell() const { return bForceFocusOnCurCell; }
     void SetForceFocusOnCurCell(bool bFlag) { bForceFocusOnCurCell=bFlag; }
 };
-
-
 
 
 #endif

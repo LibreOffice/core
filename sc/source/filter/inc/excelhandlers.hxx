@@ -27,8 +27,6 @@ namespace oox {
 namespace xls {
 
 
-
-
 /** Context handler derived from the WorkbookHelper helper class.
 
     Used to import contexts in global workbook fragments.
@@ -40,8 +38,6 @@ public:
     inline explicit     WorkbookContextBase( ParentType& rParent ) :
                             ::oox::core::ContextHandler2( rParent ), WorkbookHelper( rParent ) {}
 };
-
-
 
 /** Context handler derived from the WorksheetHelper helper class.
 
@@ -55,8 +51,6 @@ public:
                             ::oox::core::ContextHandler2( rParent ), WorksheetHelper( rParent ) {}
 };
 
-
-
 /** Fragment handler derived from the WorkbookHelper helper class.
 
     Used to import global workbook fragments.
@@ -69,8 +63,6 @@ public:
                             const OUString& rFragmentPath );
 };
 
-
-
 /** Fragment handler derived from the WorksheetHelper helper class.
 
     Used to import sheet fragments.
@@ -82,8 +74,6 @@ public:
                             const WorksheetHelper& rHelper,
                             const OUString& rFragmentPath );
 };
-
-
 
 
 /** Base class for all BIFF context handlers.
@@ -100,8 +90,6 @@ public:
     virtual void        importRecord( BiffInputStream& rStrm ) = 0;
 };
 
-
-
 /** Context handler derived from the WorksheetHelper helper class.
 
     Used to import contexts in sheet fragments.
@@ -111,8 +99,6 @@ class BiffWorksheetContextBase : public BiffContextHandler, public WorksheetHelp
 protected:
     explicit            BiffWorksheetContextBase( const WorksheetHelper& rHelper );
 };
-
-
 
 /** An enumeration for all types of fragments in a BIFF workbook stream. */
 enum BiffFragmentType
@@ -126,8 +112,6 @@ enum BiffFragmentType
     BIFF_FRAGMENT_WORKSPACE,    /// BIFF4 workspace/workbook globals.
     BIFF_FRAGMENT_UNKNOWN       /// Unknown fragment/error.
 };
-
-
 
 class BiffFragmentHandler
 {
@@ -167,8 +151,6 @@ private:
     BiffInputStreamRef  mxBiffStrm;
 };
 
-
-
 /** Fragment handler derived from the WorkbookHelper helper class.
 
     Used to import global workbook fragments.
@@ -181,8 +163,6 @@ protected:
                             const OUString& rStrmName,
                             bool bCloneDecoder = false );
 };
-
-
 
 } // namespace xls
 } // namespace oox

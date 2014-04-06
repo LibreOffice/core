@@ -396,6 +396,4 @@ void ScGridWindow::DrawMarkDropObj( SdrObject* pObj )
         pDrView->MarkDropObj(pObj);
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

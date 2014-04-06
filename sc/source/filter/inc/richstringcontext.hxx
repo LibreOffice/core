@@ -26,8 +26,6 @@
 namespace oox {
 namespace xls {
 
-
-
 class RichStringContext : public WorkbookContextBase
 {
 public:
@@ -45,8 +43,6 @@ private:
     FontRef             mxFont;         /// Processed font of the portion.
 };
 
-
-
 template< typename ParentType >
 RichStringContext::RichStringContext( ParentType& rParent, RichStringRef xString ) :
     WorkbookContextBase( rParent ),
@@ -54,8 +50,6 @@ RichStringContext::RichStringContext( ParentType& rParent, RichStringRef xString
 {
     OSL_ENSURE( mxString.get(), "RichStringContext::RichStringContext - missing string object" );
 }
-
-
 
 } // namespace xls
 } // namespace oox

@@ -30,8 +30,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-
-
 ScVbaHyperlink::ScVbaHyperlink( const uno::Sequence< uno::Any >& rArgs,
         const uno::Reference< uno::XComponentContext >& rxContext ) throw (lang::IllegalArgumentException) :
     HyperlinkImpl_BASE( getXSomethingFromArgs< XHelperInterface >( rArgs, 0 ), rxContext ),
@@ -232,7 +230,5 @@ extern sdecl::ServiceDecl const serviceDecl(
     "ScVbaHyperlink",
     "ooo.vba.excel.Hyperlink" );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

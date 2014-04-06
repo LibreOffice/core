@@ -29,12 +29,8 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::table;
 using namespace ::oox::drawingml;
-
-
 
 
 namespace {
@@ -53,8 +49,6 @@ inline sal_Int32 lclEmuToHmm( sal_Int64 nValue )
 
 } // namespace
 
-
-
 CellAnchorModel::CellAnchorModel() :
     mnCol( -1 ),
     mnRow( -1 ),
@@ -63,15 +57,11 @@ CellAnchorModel::CellAnchorModel() :
 {
 }
 
-
-
 AnchorClientDataModel::AnchorClientDataModel() :
     mbLocksWithSheet( true ),
     mbPrintsWithSheet( true )
 {
 }
-
-
 
 ShapeAnchor::ShapeAnchor( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -300,8 +290,6 @@ EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
 
     return aEmuPoint;
 }
-
-
 
 } // namespace xls
 } // namespace oox

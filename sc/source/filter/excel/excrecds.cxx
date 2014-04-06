@@ -186,8 +186,6 @@ sal_Size ExcBoolRecord::GetLen( void ) const
 }
 
 
-
-
 //--------------------------------------------------------- class ExcBof_Base -
 
 ExcBof_Base::ExcBof_Base() :
@@ -195,8 +193,6 @@ ExcBof_Base::ExcBof_Base() :
     nRupYear( 0x07C9 )      // copied from Excel
 {
 }
-
-
 
 //-------------------------------------------------------------- class ExcBof -
 
@@ -224,8 +220,6 @@ sal_Size ExcBof::GetLen( void ) const
     return 8;
 }
 
-
-
 //------------------------------------------------------------- class ExcBofW -
 
 ExcBofW::ExcBofW( void )
@@ -240,21 +234,15 @@ void ExcBofW::SaveCont( XclExpStream& rStrm )
     rStrm << nVers << nDocType << nRupBuild << nRupYear;
 }
 
-
-
 sal_uInt16 ExcBofW::GetNum( void ) const
 {
     return 0x0809;
 }
 
-
-
 sal_Size ExcBofW::GetLen( void ) const
 {
     return 8;
 }
-
-
 
 //-------------------------------------------------------------- class ExcEof -
 
@@ -269,8 +257,6 @@ sal_Size ExcEof::GetLen( void ) const
     return 0;
 }
 
-
-
 //--------------------------------------------------------- class ExcDummy_00 -
 
 sal_Size ExcDummy_00::GetLen( void ) const
@@ -283,8 +269,6 @@ const sal_uInt8* ExcDummy_00::GetData( void ) const
 {
     return pMyData;
 }
-
-
 
 //-------------------------------------------------------- class ExcDummy_04x -
 
@@ -300,8 +284,6 @@ const sal_uInt8* ExcDummy_040::GetData( void ) const
 }
 
 
-
-
 sal_Size ExcDummy_041::GetLen( void ) const
 {
     return nMyLen;
@@ -312,8 +294,6 @@ const sal_uInt8* ExcDummy_041::GetData( void ) const
 {
     return pMyData;
 }
-
-
 
 //------------------------------------------------------------- class Exc1904 -
 
@@ -350,8 +330,6 @@ void Exc1904::SaveXml( XclExpXmlStream& rStrm )
     }
 }
 
-
-
 //------------------------------------------------------ class ExcBundlesheet -
 
 ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, SCTAB nTabNum ) :
@@ -385,8 +363,6 @@ sal_uInt16 ExcBundlesheetBase::GetNum( void ) const
 {
     return 0x0085;
 }
-
-
 
 
 ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB _nTab ) :
@@ -568,22 +544,16 @@ void XclExpPassHash::WriteBody(XclExpStream& rStrm)
     rStrm << mnHash;
 }
 
-
-
 XclExpFiltermode::XclExpFiltermode() :
     XclExpEmptyRecord( EXC_ID_FILTERMODE )
 {
 }
-
-
 
 XclExpAutofilterinfo::XclExpAutofilterinfo( const ScAddress& rStartPos, SCCOL nScCol ) :
     XclExpUInt16Record( EXC_ID_AUTOFILTERINFO, static_cast< sal_uInt16 >( nScCol ) ),
     maStartPos( rStartPos )
 {
 }
-
-
 
 ExcFilterCondition::ExcFilterCondition() :
         nType( EXC_AFTYPE_NOTUSED ),
@@ -680,8 +650,6 @@ void ExcFilterCondition::SaveText( XclExpStream& rStrm )
         pText->WriteBuffer( rStrm );
     }
 }
-
-
 
 XclExpAutofilter::XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC ) :
     XclExpRecord( EXC_ID_AUTOFILTER, 24 ),
@@ -904,8 +872,6 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_filterColumn );
 }
 
-
-
 ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
     XclExpRoot( rRoot ),
     pFilterMode( NULL ),
@@ -1076,8 +1042,6 @@ bool ExcAutoFilterRecs::HasFilterMode() const
     return pFilterMode != NULL;
 }
 
-
-
 XclExpFilterManager::XclExpFilterManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
 {
@@ -1110,7 +1074,5 @@ bool XclExpFilterManager::HasFilterMode( SCTAB nScTab )
     }
     return false;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -49,8 +49,6 @@ struct XclDebugObjCounter
 };
 #endif
 
-
-
 class SfxMedium;
 class ScEditEngineDefaulter;
 class ScHeaderEditEngine;
@@ -117,8 +115,6 @@ struct XclRootData
                             rtl_TextEncoding eTextEnc, bool bExport );
     virtual             ~XclRootData();
 };
-
-
 
 class SfxObjectShell;
 class ScModelObj;
@@ -274,8 +270,6 @@ public:
 private:
     XclRootData& mrData;        /// Reference to the global data struct.
 };
-
-
 
 #endif
 

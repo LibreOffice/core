@@ -728,6 +728,4 @@ XclExpStream& operator<<( XclExpStream& rStrm, const Color& rColor )
     return rStrm << rColor.GetRed() << rColor.GetGreen() << rColor.GetBlue() << sal_uInt8( 0 );
 }
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

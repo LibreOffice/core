@@ -42,8 +42,6 @@ public:
     void        Flush();
 };
 
-
-
 #endif
 
 

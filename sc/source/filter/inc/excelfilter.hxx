@@ -27,8 +27,6 @@ namespace xls {
 
 class WorkbookGlobals;
 
-
-
 class ExcelFilter : public ::oox::core::XmlFilterBase
 {
 public:

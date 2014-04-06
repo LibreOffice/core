@@ -88,8 +88,6 @@ using ::std::vector;
 
 
 
-
-
 //          Outliner
 
 
@@ -362,8 +360,6 @@ void ScDBFunc::HideMarkedOutlines( bool bRecord )
     else
         ErrorMessage(STR_NOMULTISELECT);
 }
-
-
 
 
 //          Teilergebnisse

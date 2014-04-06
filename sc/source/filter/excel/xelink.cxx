@@ -68,8 +68,6 @@ private:
     sal_uInt16          mnFlags;        /// Flags for record export.
 };
 
-
-
 /** Represents an EXTERNNAME record for an add-in function name. */
 class XclExpExtNameAddIn : public XclExpExtNameBase
 {
@@ -80,8 +78,6 @@ private:
     /** Writes additional record contents. */
     virtual void        WriteAddData( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
-
-
 
 /** Represents an EXTERNNAME record for a DDE link. */
 class XclExpExtNameDde : public XclExpExtNameBase
@@ -98,8 +94,6 @@ private:
     typedef boost::shared_ptr< XclExpCachedMatrix > XclExpCachedMatRef;
     XclExpCachedMatRef  mxMatrix;       /// Cached results of the DDE link.
 };
-
-
 
 class XclExpSupbook;
 
@@ -182,8 +176,6 @@ private:
     SCCOL               mnScCol;    /// Column index of the first external cell.
     SCROW               mnScRow;    /// Row index of the external cells.
 };
-
-
 
 /** Represents the record XCT which is the header record of a CRN record list.
  */
@@ -367,8 +359,6 @@ inline bool operator==( const XclExpXti& rLeft, const XclExpXti& rRight )
         (rLeft.mnLastSBTab  == rRight.mnLastSBTab);
 }
 
-
-
 /** Contains a list of all SUPBOOK records and index arrays of external sheets. */
 class XclExpSupbookBuffer : public XclExpRecordBase, protected XclExpRoot
 {
@@ -500,8 +490,6 @@ protected:
     explicit            XclExpLinkManagerImpl( const XclExpRoot& rRoot );
 };
 
-
-
 /** Implementation of the link manager for BIFF5/BIFF7. */
 class XclExpLinkManagerImpl5 : public XclExpLinkManagerImpl
 {
@@ -570,8 +558,6 @@ private:
     XclExpCodeMap       maCodeMap;          /// Maps special external codes to EXTERNSHEET records.
 };
 
-
-
 /** Implementation of the link manager for BIFF8. */
 class XclExpLinkManagerImpl8 : public XclExpLinkManagerImpl
 {
@@ -635,8 +621,6 @@ const sal_uInt8 EXC_TABBUF_SKIPMASK = 0x0F;     /// Sheet will be skipped, if an
 const sal_uInt8 EXC_TABBUF_VISIBLE  = 0x10;     /// Sheet is visible.
 const sal_uInt8 EXC_TABBUF_SELECTED = 0x20;     /// Sheet is selected.
 const sal_uInt8 EXC_TABBUF_MIRRORED = 0x40;     /// Sheet is mirrored (right-to-left).
-
-
 
 XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -896,8 +880,6 @@ void XclExpExtNameBase::WriteAddData( XclExpStream& /*rStrm*/ )
 {
 }
 
-
-
 XclExpExtNameAddIn::XclExpExtNameAddIn( const XclExpRoot& rRoot, const OUString& rName ) :
     XclExpExtNameBase( rRoot, rName )
 {
@@ -909,8 +891,6 @@ void XclExpExtNameAddIn::WriteAddData( XclExpStream& rStrm )
     // write a #REF! error formula
     rStrm << sal_uInt16( 2 ) << EXC_TOKID_ERR << EXC_ERR_REF;
 }
-
-
 
 XclExpExtNameDde::XclExpExtNameDde( const XclExpRoot& rRoot,
         const OUString& rName, sal_uInt16 nFlags, const ScMatrix* pResults ) :
@@ -928,8 +908,6 @@ void XclExpExtNameDde::WriteAddData( XclExpStream& rStrm )
     if( mxMatrix )
         mxMatrix->Save( rStrm );
 }
-
-
 
 XclExpExtName::XclExpExtName( const XclExpRoot& rRoot, const XclExpSupbook& rSupbook,
         const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray ) :
@@ -1918,8 +1896,6 @@ XclExpLinkManagerImpl::XclExpLinkManagerImpl( const XclExpRoot& rRoot ) :
 {
 }
 
-
-
 XclExpLinkManagerImpl5::XclExpLinkManagerImpl5( const XclExpRoot& rRoot ) :
     XclExpLinkManagerImpl( rRoot )
 {
@@ -2103,8 +2079,6 @@ XclExpLinkManagerImpl5::XclExpExtSheetRef XclExpLinkManagerImpl5::FindInternal(
     return xExtSheet;
 }
 
-
-
 XclExpLinkManagerImpl8::XclExpLinkManagerImpl8( const XclExpRoot& rRoot ) :
     XclExpLinkManagerImpl( rRoot ),
     maSBBuffer( rRoot )
@@ -2249,8 +2223,6 @@ sal_uInt16 XclExpLinkManagerImpl8::InsertXti( const XclExpXti& rXti )
     return ulimit_cast< sal_uInt16 >( maXtiVec.size() - 1 );
 }
 
-
-
 XclExpLinkManager::XclExpLinkManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
 {
@@ -2347,7 +2319,5 @@ void XclExpLinkManager::Save( XclExpStream& rStrm )
 {
     mxImpl->Save( rStrm );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

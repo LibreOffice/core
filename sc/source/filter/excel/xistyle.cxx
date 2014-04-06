@@ -482,8 +482,6 @@ void XclImpFont::GuessScriptType()
     }
 }
 
-
-
 XclImpFontBuffer::XclImpFontBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     maFont4( rRoot ),
@@ -738,8 +736,6 @@ void XclImpCellProt::FillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) c
 }
 
 
-
-
 void XclImpCellAlign::FillFromXF2( sal_uInt8 nFlags )
 {
     mnHorAlign = ::extract_value< sal_uInt8 >( nFlags, 0, 3 );
@@ -823,8 +819,6 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
     // CTL text direction
     ScfTools::PutItem( rItemSet, SvxFrameDirectionItem( GetScFrameDir(), ATTR_WRITINGDIR ), bSkipPoolDefs );
 }
-
-
 
 XclImpCellBorder::XclImpCellBorder()
 {
@@ -990,8 +984,6 @@ void XclImpCellBorder::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette&
     }
 }
 
-
-
 XclImpCellArea::XclImpCellArea()
 {
     SetUsedFlags( false );
@@ -1076,8 +1068,6 @@ void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& r
         ScfTools::PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
     }
 }
-
-
 
 
 XclImpXF::XclImpXF( const XclImpRoot& rRoot ) :
@@ -1431,8 +1421,6 @@ void XclImpXF::SetUsedFlags( sal_uInt8 nUsedFlags )
     mbAreaUsed   = (mbCellXF == ::get_flag( nUsedFlags, EXC_XF_DIFF_AREA ));
 }
 
-
-
 XclImpStyle::XclImpStyle( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     mnXfId( EXC_XF_NOTFOUND ),
@@ -1524,8 +1512,6 @@ void XclImpStyle::CreateUserStyle( const OUString& rFinalName )
     if( !IsBuiltin() || mbCustom )
         CreateStyleSheet();
 }
-
-
 
 XclImpXFBuffer::XclImpXFBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
@@ -1690,8 +1676,6 @@ bool XclImpXFRange::Expand( const XclImpXFRange& rNextRange )
     return false;
 }
 
-
-
 void XclImpXFRangeColumn::SetDefaultXF( const XclImpXFIndex& rXFIndex )
 {
     // List should be empty when inserting the default column format.
@@ -1701,8 +1685,6 @@ void XclImpXFRangeColumn::SetDefaultXF( const XclImpXFIndex& rXFIndex )
     // insert a complete row range with one insert.
     maIndexList.push_back( new XclImpXFRange( 0, MAXROW, rXFIndex ) );
 }
-
-
 
 void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
 {
@@ -1853,8 +1835,6 @@ void XclImpXFRangeColumn::TryConcatPrev( sal_uLong nIndex )
     if( prevRange.Expand( nextRange ) )
         maIndexList.erase( maIndexList.begin() + nIndex );
 }
-
-
 
 XclImpXFRangeBuffer::XclImpXFRangeBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
@@ -2050,7 +2030,5 @@ void XclImpXFRangeBuffer::Finalize()
         }
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

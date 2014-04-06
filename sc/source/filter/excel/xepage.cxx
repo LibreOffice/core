@@ -411,8 +411,6 @@ void XclExpPageSettings::SaveXml( XclExpXmlStream& rStrm )
         XclExpImgData( *pGraphic, EXC_ID8_IMGDATA ).SaveXml( rStrm );
 }
 
-
-
 XclExpChartPageSettings::XclExpChartPageSettings( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
 {
@@ -427,7 +425,5 @@ void XclExpChartPageSettings::Save( XclExpStream& rStrm )
     XclExpSetup( maData ).Save( rStrm );
     XclExpUInt16Record( EXC_ID_PRINTSIZE, EXC_PRINTSIZE_FULL ).Save( rStrm );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

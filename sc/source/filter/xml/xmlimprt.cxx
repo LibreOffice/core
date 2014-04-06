@@ -238,18 +238,6 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 // NB: virtually inherit so we can multiply inherit properly
 //     in ScXMLFlatDocContext_Impl
 class ScXMLDocContext_Impl : public virtual SvXMLImportContext
@@ -2253,8 +2241,6 @@ ScXMLImport::~ScXMLImport() throw()
     delete pValidations;
     delete pDetectiveOpArray;
 }
-
-
 
 SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const sal_uInt16 nPrefix, const OUString& rLocalName,
                                                         const uno::Reference<xml::sax::XAttributeList>& xAttrList)

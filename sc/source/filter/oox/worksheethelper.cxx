@@ -81,8 +81,6 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
@@ -94,8 +92,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 
-
-
 namespace {
 
 void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, double fPosition )
@@ -105,8 +101,6 @@ void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, double f
 }
 
 } // namespace
-
-
 
 
 ColumnModel::ColumnModel() :
@@ -131,8 +125,6 @@ bool ColumnModel::isMergeable( const ColumnModel& rModel ) const
         (mbHidden               == rModel.mbHidden) &&
         (mbCollapsed            == rModel.mbCollapsed);
 }
-
-
 
 RowModel::RowModel() :
     mnRow( -1 ),
@@ -179,8 +171,6 @@ HyperlinkModel::HyperlinkModel()
 {
 }
 
-
-
 ValidationModel::ValidationModel() :
     mnType( XML_none ),
     mnOperator( XML_between ),
@@ -212,8 +202,6 @@ void ValidationModel::setBiffErrorStyle( sal_uInt8 nErrorStyle )
     static const sal_Int32 spnErrorStyles[] = { XML_stop, XML_warning, XML_information };
     mnErrorStyle = STATIC_ARRAY_SELECT( spnErrorStyles, nErrorStyle, XML_stop );
 }
-
-
 
 
 class WorksheetGlobals : public WorkbookHelper, public IWorksheetProgress
@@ -422,8 +410,6 @@ private:
     Reference< XSpreadsheet > mxSheet;      /// Reference to the current sheet.
     bool                mbHasDefWidth;      /// True = default column width is set from defaultColWidth attribute.
 };
-
-
 
 WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     WorkbookHelper( rHelper ),
@@ -1376,8 +1362,6 @@ void WorksheetGlobals::finalizeDrawings()
 }
 
 
-
-
 WorksheetHelper::WorksheetHelper( WorksheetGlobals& rSheetGlob ) :
     WorkbookHelper( rSheetGlob ),
     mrSheetGlob( rSheetGlob )
@@ -1636,8 +1620,6 @@ void WorksheetHelper::createSharedFormulaMapEntry(
 {
     getFormulaBuffer().createSharedFormulaMapEntry(rAddress, rRange, nSharedId, rTokens);
 }
-
-
 
 
 } // namespace xls

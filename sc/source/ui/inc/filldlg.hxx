@@ -28,8 +28,6 @@
 
 class ScDocument;
 
-
-
 #include "scui_def.hxx"
 
 
@@ -88,8 +86,6 @@ private:
 
     const OUString aErrMsgInvalidVal;
 
-
-
     ScDocument& rDoc;
     FillDir     theFillDir;
     FillCmd     theFillCmd;
@@ -111,8 +107,6 @@ private:
     DECL_LINK( DisableHdl, Button * );
 #endif
 };
-
-
 
 #endif // SC_FILLDLG_HXX
 

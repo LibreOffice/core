@@ -45,8 +45,6 @@
 // *** edit engine ***
 
 
-
-
 struct Func_SetType
 {
     sal_Int32                   mnType;
@@ -62,8 +60,6 @@ struct Func_Select
     inline void                 operator()( ScCsvColState& rState ) const
         { rState.Select( mbSelect ); }
 };
-
-
 
 
 ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
@@ -1363,8 +1359,6 @@ ScAccessibleCsvControl* ScCsvGrid::ImplCreateAccessible()
     pControl->Init();
     return pControl.release();
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

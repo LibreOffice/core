@@ -34,16 +34,12 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::ContextHandlerRef;
-
-
 
 namespace {
 
@@ -66,8 +62,6 @@ const sal_uInt8 BIFF12_ROW_SHOWPHONETIC     = 0x01;
 
 } // namespace
 
-
-
 SheetDataContextBase::SheetDataContextBase( const WorksheetHelper& rHelper ) :
     mrAddressConv( rHelper.getAddressConverter() ),
     mrFormulaParser( rHelper.getFormulaParser() ),
@@ -79,8 +73,6 @@ SheetDataContextBase::SheetDataContextBase( const WorksheetHelper& rHelper ) :
 SheetDataContextBase::~SheetDataContextBase()
 {
 }
-
-
 
 SheetDataContext::SheetDataContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment ),

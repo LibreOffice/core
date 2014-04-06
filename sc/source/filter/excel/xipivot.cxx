@@ -173,8 +173,6 @@ void XclImpPCItem::ReadSxempty( XclImpStream& rStrm )
     SetEmpty();
 }
 
-
-
 XclImpPCField::XclImpPCField( const XclImpRoot& rRoot, XclImpPivotCache& rPCache, sal_uInt16 nFieldIdx ) :
     XclPCField( EXC_PCFIELD_UNKNOWN, nFieldIdx ),
     XclImpRoot( rRoot ),
@@ -582,8 +580,6 @@ const sal_Int16* XclImpPCField::GetDateGroupStep() const
     return 0;
 }
 
-
-
 XclImpPivotCache::XclImpPivotCache( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     maSrcRange( ScAddress::INITIALIZE_INVALID ),
@@ -915,8 +911,6 @@ void XclImpPTItem::ConvertItem( ScDPSaveDimension& rSaveDim ) const
     }
 }
 
-
-
 XclImpPTField::XclImpPTField( const XclImpPivotTable& rPTable, sal_uInt16 nCacheIdx ) :
     mrPTable( rPTable )
 {
@@ -1191,8 +1185,6 @@ void XclImpPTField::ConvertItems( ScDPSaveDimension& rSaveDim ) const
         (*aIt)->ConvertItem( rSaveDim );
 }
 
-
-
 XclImpPivotTable::XclImpPivotTable( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     maDataOrientField( *this, EXC_SXIVD_DATA ),
@@ -1355,8 +1347,6 @@ void XclImpPivotTable::ReadSxViewEx9( XclImpStream& rStrm )
 {
     rStrm >> maPTViewEx9Info;
 }
-
-
 
 void XclImpPivotTable::Convert()
 {
@@ -1525,8 +1515,6 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
     }
 }
 
-
-
 XclImpPivotTableManager::XclImpPivotTableManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
 {
@@ -1628,8 +1616,6 @@ void XclImpPivotTableManager::ReadSxViewEx9( XclImpStream& rStrm )
         maPTables.back()->ReadSxViewEx9( rStrm );
 }
 
-
-
 void XclImpPivotTableManager::ReadPivotCaches( XclImpStream& rStrm )
 {
     for( XclImpPivotCacheVec::iterator aIt = maPCaches.begin(), aEnd = maPCaches.end(); aIt != aEnd; ++aIt )
@@ -1647,7 +1633,5 @@ void XclImpPivotTableManager::MaybeRefreshPivotTables()
     for( XclImpPivotTableVec::iterator aIt = maPTables.begin(), aEnd = maPTables.end(); aIt != aEnd; ++aIt )
         (*aIt)->MaybeRefresh();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

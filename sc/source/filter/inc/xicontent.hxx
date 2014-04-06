@@ -142,8 +142,6 @@ private:
     sal_uInt16          mnCondIndex;        /// Condition index to be inserted next.
 };
 
-
-
 /** Imports and collects all conditional formatting of a sheet. */
 class XclImpCondFormatManager : protected XclImpRoot
 {
@@ -227,8 +225,6 @@ private:
     sal_uInt16          mnRefresh;      /// Refresh time in minutes.
 };
 
-
-
 class XclImpWebQueryBuffer : protected XclImpRoot
 {
 public:
@@ -269,8 +265,6 @@ private:
         is made private */
     XclImpDecryptHelper();
 };
-
-
 
 // Document protection ========================================================
 
@@ -330,8 +324,6 @@ private:
     typedef ::std::map<SCTAB, Sheet> ProtectedSheetMap;
     ProtectedSheetMap   maProtectedSheets;
 };
-
-
 
 #endif
 

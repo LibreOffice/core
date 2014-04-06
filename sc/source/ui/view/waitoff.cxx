@@ -21,8 +21,6 @@
 
 #include "waitoff.hxx"
 
-
-
 ScWaitCursorOff::ScWaitCursorOff( Window* pWinP )
         :
         pWin( pWinP ),
@@ -49,8 +47,6 @@ ScWaitCursorOff::~ScWaitCursorOff()
         }
     }
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

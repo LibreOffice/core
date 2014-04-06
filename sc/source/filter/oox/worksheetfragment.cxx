@@ -47,13 +47,9 @@
 namespace oox {
 namespace xls {
 
-
-
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
-
-
 
 
 namespace {
@@ -79,8 +75,6 @@ const sal_uInt16 BIFF12_OLEOBJECT_LINKED    = 0x0001;
 const sal_uInt16 BIFF12_OLEOBJECT_AUTOLOAD  = 0x0002;
 
 } // namespace
-
-
 
 DataValidationsContext::DataValidationsContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment )
@@ -196,8 +190,6 @@ void DataValidationsContext::importDataValidation( SequenceInputStream& rStrm )
     // set validation data
     setValidation( aModel );
 }
-
-
 
 WorksheetFragment::WorksheetFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     WorksheetFragmentBase( rHelper, rFragmentPath )

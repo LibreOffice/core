@@ -177,8 +177,6 @@ void XclListColor::Merge( const XclListColor& rColor )
     AddWeighting( nWeight2 );
 }
 
-
-
 /** Data for each inserted original color, represented by a color ID. */
 struct XclColorIdData
 {
@@ -223,8 +221,6 @@ typedef ::std::vector< XclRemap >   XclRemapVec;
 typedef ::std::vector< XclNearest > XclNearestVec;
 
 } // namespace
-
-
 
 class XclExpPaletteImpl
 {
@@ -317,8 +313,6 @@ private:
     XclPaletteColorVec  maPalette;          /// Contains resulting colors to export.
     sal_uInt32          mnLastIdx;          /// Last insertion index for search opt.
 };
-
-
 
 const sal_uInt32 EXC_PAL_INDEXBASE          = 0xFFFF0000;
 const sal_uInt32 EXC_PAL_MAXRAWSIZE         = 1024;
@@ -762,8 +756,6 @@ sal_Int32 XclExpPaletteImpl::GetNearPaletteColors(
     return nDist1;
 }
 
-
-
 XclExpPalette::XclExpPalette( const XclExpRoot& rRoot ) :
     XclDefaultPalette( rRoot ),
     XclExpRecord( EXC_ID_PALETTE )
@@ -939,8 +931,6 @@ bool XclExpFontHelper::CheckItems( const XclExpRoot& rRoot, const SfxItemSet& rI
     return bUsed;
 }
 
-
-
 namespace {
 
 sal_uInt32 lclCalcHash( const XclFontData& rFontData )
@@ -961,8 +951,6 @@ sal_uInt32 lclCalcHash( const XclFontData& rFontData )
 }
 
 } // namespace
-
-
 
 XclExpFont::XclExpFont( const XclExpRoot& rRoot,
         const XclFontData& rFontData, XclExpColorType eColorType ) :
@@ -1022,8 +1010,6 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
             << aFontName;
 }
 
-
-
 XclExpBlindFont::XclExpBlindFont( const XclExpRoot& rRoot ) :
     XclExpFont( rRoot, XclFontData(), EXC_COLOR_CELLTEXT )
 {
@@ -1038,8 +1024,6 @@ void XclExpBlindFont::Save( XclExpStream& /*rStrm*/ )
 {
     // do nothing
 }
-
-
 
 XclExpFontBuffer::XclExpFontBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -1205,8 +1189,6 @@ struct XclExpNumFmtPred
                             { return rFormat.mnScNumFmt == mnScNumFmt; }
 };
 
-
-
 void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
@@ -1215,8 +1197,6 @@ void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm )
             XML_formatCode, OUStringToOString(maNumFmtString, RTL_TEXTENCODING_UTF8).getStr(),
             FSEND );
 }
-
-
 
 XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
@@ -1383,8 +1363,6 @@ void XclExpCellProt::SaveXml( XclExpXmlStream& rStrm ) const
             FSEND );
 }
 
-
-
 bool XclExpCellAlign::FillFromItemSet(
         const SfxItemSet& rItemSet, bool bForceLineBreak, XclBiff eBiff, bool bStyle )
 {
@@ -1541,8 +1519,6 @@ void XclExpCellAlign::SaveXml( XclExpXmlStream& rStrm ) const
             FSEND );
 }
 
-
-
 namespace {
 
 void lclGetBorderLine(
@@ -1612,8 +1588,6 @@ void lclGetBorderLine(
 }
 
 } // namespace
-
-
 
 XclExpCellBorder::XclExpCellBorder() :
     mnLeftColorId(   XclExpPalette::GetColorIdFromIndex( mnLeftColor ) ),
@@ -1794,8 +1768,6 @@ void XclExpCellBorder::SaveXml( XclExpXmlStream& rStrm ) const
     rStyleSheet->endElement( XML_border );
 }
 
-
-
 XclExpCellArea::XclExpCellArea() :
     mnForeColorId( XclExpPalette::GetColorIdFromIndex( mnForeColor ) ),
     mnBackColorId( XclExpPalette::GetColorIdFromIndex( mnBackColor ) )
@@ -1924,8 +1896,6 @@ void XclExpColor::SaveXml( XclExpXmlStream& rStrm ) const
     rStyleSheet->endElement( XML_fill );
 }
 
-
-
 XclExpXFId::XclExpXFId() :
     mnXFId( XclExpXFBuffer::GetDefCellXFId() ),
     mnXFIndex( EXC_XF_DEFAULTCELL )
@@ -1942,8 +1912,6 @@ void XclExpXFId::ConvertXFIndex( const XclExpRoot& rRoot )
 {
     mnXFIndex = rRoot.GetXFBuffer().GetXFIndex( mnXFId );
 }
-
-
 
 XclExpXF::XclExpXF(
         const XclExpRoot& rRoot, const ScPatternAttr& rPattern, sal_Int16 nScript,
@@ -2159,8 +2127,6 @@ void XclExpXF::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->endElement( XML_xf );
 }
 
-
-
 XclExpDefaultXF::XclExpDefaultXF( const XclExpRoot& rRoot, bool bCellXF ) :
     XclExpXF( rRoot, bCellXF )
 {
@@ -2177,8 +2143,6 @@ void XclExpDefaultXF::SetNumFmt( sal_uInt16 nXclNumFmt )
     mnXclNumFmt = nXclNumFmt;
     mbFmtUsed = true;
 }
-
-
 
 XclExpStyle::XclExpStyle( sal_uInt32 nXFId, const OUString& rStyleName ) :
     XclExpRecord( EXC_ID_STYLE, 4 ),
@@ -2265,8 +2229,6 @@ void XclExpStyle::SaveXml( XclExpXmlStream& rStrm )
     // OOXTODO: XML_extLst
 }
 
-
-
 namespace {
 
 const sal_uInt32 EXC_XFLIST_INDEXBASE   = 0xFFFE0000;
@@ -2282,8 +2244,6 @@ bool lclIsBuiltInStyle( const OUString& rStyleName )
 
 } // namespace
 
-
-
 XclExpXFBuffer::XclExpBuiltInInfo::XclExpBuiltInInfo() :
     mnStyleId( EXC_STYLE_USERDEF ),
     mnLevel( EXC_STYLE_NOLEVEL ),
@@ -2291,8 +2251,6 @@ XclExpXFBuffer::XclExpBuiltInInfo::XclExpBuiltInInfo() :
     mbHasStyleRec( false )
 {
 }
-
-
 
 /** Predicate for search algorithm. */
 struct XclExpBorderPred
@@ -3020,8 +2978,6 @@ void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->endElement( XML_dxfs );
 }
 
-
-
 XclExpDxf::XclExpDxf( const XclExpRoot& rRoot, XclExpCellAlign* pAlign, XclExpCellBorder* pBorder,
             XclExpFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpColor* pColor)
     : XclExpRoot( rRoot ),
@@ -3058,8 +3014,6 @@ void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->endElement( XML_dxf );
 }
 
-
-
 XclExpXmlStyleSheet::XclExpXmlStyleSheet( const XclExpRoot& rRoot )
     : XclExpRoot( rRoot )
 {
@@ -3089,7 +3043,5 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
 
     rStrm.PopStream();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
