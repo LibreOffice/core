@@ -3760,13 +3760,17 @@ void XMLAnnotationImportContext::EndElement()
                 uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
                 while (xFields->hasMoreElements())
                 {
-                    uno::Reference<beans::XPropertySet> xCurrField(xFields->nextElement(), uno::UNO_QUERY);
-                    OUString aFieldName;
-                    xCurrField->getPropertyValue(sPropertyName) >>= aFieldName;
-                    if ( aFieldName == aName )
+                    uno::Reference< beans::XPropertySet > xCurrField(xFields->nextElement(), uno::UNO_QUERY);
+                    uno::Reference< beans::XPropertySetInfo > xCurrFieldPropInfo = xCurrField->getPropertySetInfo();
+                    if ( xCurrFieldPropInfo->hasPropertyByName( sPropertyName ) )
                     {
-                        xPrevField.set( xCurrField, uno::UNO_QUERY );
-                        break;
+                        OUString aFieldName;
+                        xCurrField->getPropertyValue( sPropertyName ) >>= aFieldName;
+                        if ( aFieldName == aName )
+                        {
+                            xPrevField.set( xCurrField, uno::UNO_QUERY );
+                            break;
+                        }
                     }
                 }
             }
