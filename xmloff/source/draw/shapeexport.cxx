@@ -3213,8 +3213,9 @@ void XMLShapeExport::ImpExportMediaShape(
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         if(eShapeType == XmlShapeTypePresMediaShape)
-            ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_OBJECT) );
-
+        {
+            (void)ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_OBJECT) );
+        }
         bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, true );
