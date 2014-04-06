@@ -468,31 +468,29 @@ OUString getStandardSQLState( StandardSQLState _eState )
 {
     switch ( _eState )
     {
-        case SQL_WRONG_PARAMETER_NUMBER:    return OUString("07001");
-        case SQL_INVALID_DESCRIPTOR_INDEX:  return OUString("07009");
-        case SQL_UNABLE_TO_CONNECT:         return OUString("08001");
-        case SQL_NUMERIC_OUT_OF_RANGE:      return OUString("22003");
-        case SQL_INVALID_DATE_TIME:         return OUString("22007");
-        case SQL_INVALID_CURSOR_STATE:      return OUString("24000");
-        case SQL_TABLE_OR_VIEW_EXISTS:      return OUString("42S01");
-        case SQL_TABLE_OR_VIEW_NOT_FOUND:   return OUString("42S02");
-        case SQL_INDEX_ESISTS:              return OUString("42S11");
-        case SQL_INDEX_NOT_FOUND:           return OUString("42S12");
-        case SQL_COLUMN_EXISTS:             return OUString("42S21");
-        case SQL_COLUMN_NOT_FOUND:          return OUString("42S22");
-        case SQL_GENERAL_ERROR:             return OUString("HY000");
-        case SQL_INVALID_SQL_DATA_TYPE:     return OUString("HY004");
-        case SQL_OPERATION_CANCELED:        return OUString("HY008");
-        case SQL_FUNCTION_SEQUENCE_ERROR:   return OUString("HY010");
-        case SQL_INVALID_CURSOR_POSITION:   return OUString("HY109");
-        case SQL_INVALID_BOOKMARK_VALUE:    return OUString("HY111");
-        case SQL_FEATURE_NOT_IMPLEMENTED:   return OUString("HYC00");
-        case SQL_FUNCTION_NOT_SUPPORTED:    return OUString("IM001");
-        case SQL_CONNECTION_DOES_NOT_EXIST: return OUString("08003");
-        default:
-            break;
+    case SQL_WRONG_PARAMETER_NUMBER:    return OUString("07001");
+    case SQL_INVALID_DESCRIPTOR_INDEX:  return OUString("07009");
+    case SQL_UNABLE_TO_CONNECT:         return OUString("08001");
+    case SQL_NUMERIC_OUT_OF_RANGE:      return OUString("22003");
+    case SQL_INVALID_DATE_TIME:         return OUString("22007");
+    case SQL_INVALID_CURSOR_STATE:      return OUString("24000");
+    case SQL_TABLE_OR_VIEW_EXISTS:      return OUString("42S01");
+    case SQL_TABLE_OR_VIEW_NOT_FOUND:   return OUString("42S02");
+    case SQL_INDEX_ESISTS:              return OUString("42S11");
+    case SQL_INDEX_NOT_FOUND:           return OUString("42S12");
+    case SQL_COLUMN_EXISTS:             return OUString("42S21");
+    case SQL_COLUMN_NOT_FOUND:          return OUString("42S22");
+    case SQL_GENERAL_ERROR:             return OUString("HY000");
+    case SQL_INVALID_SQL_DATA_TYPE:     return OUString("HY004");
+    case SQL_OPERATION_CANCELED:        return OUString("HY008");
+    case SQL_FUNCTION_SEQUENCE_ERROR:   return OUString("HY010");
+    case SQL_INVALID_CURSOR_POSITION:   return OUString("HY109");
+    case SQL_INVALID_BOOKMARK_VALUE:    return OUString("HY111");
+    case SQL_FEATURE_NOT_IMPLEMENTED:   return OUString("HYC00");
+    case SQL_FUNCTION_NOT_SUPPORTED:    return OUString("IM001");
+    case SQL_CONNECTION_DOES_NOT_EXIST: return OUString("08003");
+    default:                            return OUString("HY001"); // General Error
     }
-    throw RuntimeException();
 }
 
 
