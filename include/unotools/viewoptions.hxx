@@ -277,8 +277,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
 
         /// specify which list of views in configuration is used! This can't be a static value!!!
         /// ... because we need this value to work with right static data container.
-        EViewType           m_eViewType     ;
-        OUString     m_sViewName     ;
+        EViewType           m_eViewType;
+        OUString     m_sViewName;
 
         /// - impl. data container as dynamic pointer for smaller memory requirements!
         /// - internal ref count mechanism
@@ -291,14 +291,14 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
             Do it in your source only.
          */
 
-        static SvtViewOptionsBase_Impl*    m_pDataContainer_Dialogs    ;   /// hold data for all dialogs
-        static sal_Int32                   m_nRefCount_Dialogs         ;
-        static SvtViewOptionsBase_Impl*    m_pDataContainer_TabDialogs ;   /// hold data for all tab-dialogs
-        static sal_Int32                   m_nRefCount_TabDialogs      ;
-        static SvtViewOptionsBase_Impl*    m_pDataContainer_TabPages   ;   /// hold data for all tab-pages
-        static sal_Int32                   m_nRefCount_TabPages        ;
-        static SvtViewOptionsBase_Impl*    m_pDataContainer_Windows    ;   /// hold data for all windows
-        static sal_Int32                   m_nRefCount_Windows         ;
+        static SvtViewOptionsBase_Impl*    m_pDataContainer_Dialogs;   /// hold data for all dialogs
+        static sal_Int32                   m_nRefCount_Dialogs;
+        static SvtViewOptionsBase_Impl*    m_pDataContainer_TabDialogs;   /// hold data for all tab-dialogs
+        static sal_Int32                   m_nRefCount_TabDialogs;
+        static SvtViewOptionsBase_Impl*    m_pDataContainer_TabPages;   /// hold data for all tab-pages
+        static sal_Int32                   m_nRefCount_TabPages;
+        static SvtViewOptionsBase_Impl*    m_pDataContainer_Windows;   /// hold data for all windows
+        static sal_Int32                   m_nRefCount_Windows;
 
 };      // class SvtViewOptions
 

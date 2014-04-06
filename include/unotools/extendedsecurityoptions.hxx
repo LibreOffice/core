@@ -109,8 +109,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtExtendedSecurityOptions : public utl
             Do it in your source only.
          */
 
-        static SvtExtendedSecurityOptions_Impl* m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                        m_nRefCount         ;   /// internal ref count mechanism
+        static SvtExtendedSecurityOptions_Impl* m_pDataContainer;   /// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32                        m_nRefCount;   /// internal ref count mechanism
 
 };      // class SvtExtendedSecurityOptions
 

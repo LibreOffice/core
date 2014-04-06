@@ -218,7 +218,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
          */
 
         static SvtCompatibilityOptions_Impl*    m_pDataContainer;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                        m_nRefCount     ;   /// internal ref count mechanism
+        static sal_Int32                        m_nRefCount;   /// internal ref count mechanism
 
 };      // class SvtCompatibilityOptions
 

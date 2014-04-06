@@ -77,7 +77,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
             @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
-        bool    IsAutoMnemonic  (                   ) const ;
+        bool    IsAutoMnemonic  (                   ) const;
 
         /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Localisation/DialogScale"
@@ -97,7 +97,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
             @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
-        sal_Int32   GetDialogScale(                     ) const ;
+        sal_Int32   GetDialogScale(                     ) const;
     private:
 
         /*-****************************************************************************************************
@@ -126,8 +126,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
             Do it in your source only.
          */
 
-        static SvtLocalisationOptions_Impl* m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                    m_nRefCount         ;   /// internal ref count mechanism
+        static SvtLocalisationOptions_Impl* m_pDataContainer;   /// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32                    m_nRefCount;   /// internal ref count mechanism
 
 };      // class SvtLocalisationOptions
 

@@ -128,8 +128,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtDynamicMenuOptions : public utl::det
             Do it in your source only.
          */
 
-        static SvtDynamicMenuOptions_Impl* m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32             m_nRefCount         ;   /// internal ref count mechanism
+        static SvtDynamicMenuOptions_Impl* m_pDataContainer;   /// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32             m_nRefCount;   /// internal ref count mechanism
 
 };      // class SvtDynamicMenuOptions
 

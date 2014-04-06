@@ -112,7 +112,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_uInt32  GetSize( EHistoryType eHistory                      ) const ;
+        sal_uInt32  GetSize( EHistoryType eHistory                      ) const;
 
         /*-****************************************************************************************************
             @short      clear complete sepcified list
@@ -141,7 +141,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > GetList( EHistoryType eHistory ) const ;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > GetList( EHistoryType eHistory ) const;
 
         /*-****************************************************************************************************
             @short      append a new item to specified list
@@ -193,8 +193,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
             Do it in your source only.
          */
 
-        static SvtHistoryOptions_Impl*  m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                m_nRefCount         ;   /// internal ref count mechanism
+        static SvtHistoryOptions_Impl*  m_pDataContainer;   /// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32                m_nRefCount;   /// internal ref count mechanism
 
 };      // class SvtHistoryOptions
 

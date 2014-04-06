@@ -133,7 +133,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
-        bool IsReadOnly( EOption eOption ) const ;
+        bool IsReadOnly( EOption eOption ) const;
 
         /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/SecureURL"
@@ -153,8 +153,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
-        ::com::sun::star::uno::Sequence< OUString >  GetSecureURLs(                                                                      ) const ;
-        void                                                SetSecureURLs( const ::com::sun::star::uno::Sequence< OUString >& seqURLList )       ;
+        ::com::sun::star::uno::Sequence< OUString >  GetSecureURLs(                                                                      ) const;
+        void                                                SetSecureURLs( const ::com::sun::star::uno::Sequence< OUString >& seqURLList );
 
         /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/StarOfficeBasic"
@@ -177,10 +177,10 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
-        sal_Int32           GetMacroSecurityLevel       (                   ) const ;
-        void                SetMacroSecurityLevel       ( sal_Int32 _nLevel )       ;
+        sal_Int32           GetMacroSecurityLevel       (                   ) const;
+        void                SetMacroSecurityLevel       ( sal_Int32 _nLevel );
 
-        bool            IsMacroDisabled             (                   ) const ;
+        bool            IsMacroDisabled             (                   ) const;
 
         /**
            Check whether the given uri is either no dangerous macro-execution
@@ -200,19 +200,19 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
         */
         bool isTrustedLocationUri(OUString const & uri) const;
 
-        ::com::sun::star::uno::Sequence< Certificate >  GetTrustedAuthors       (                                                                   ) const ;
-        void                                            SetTrustedAuthors       ( const ::com::sun::star::uno::Sequence< Certificate >& rAuthors    )       ;
+        ::com::sun::star::uno::Sequence< Certificate >  GetTrustedAuthors       (                                                                   ) const;
+        void                                            SetTrustedAuthors       ( const ::com::sun::star::uno::Sequence< Certificate >& rAuthors    );
 
         // for bool options only!
-        bool        IsOptionSet     ( EOption eOption                   ) const ;
-        bool        SetOption       ( EOption eOption, bool bValue      )       ;
-        bool        IsOptionEnabled ( EOption eOption                   ) const ;
+        bool        IsOptionSet     ( EOption eOption                   ) const;
+        bool        SetOption       ( EOption eOption, bool bValue      );
+        bool        IsOptionEnabled ( EOption eOption                   ) const;
 
         // xmlsec05 deprecated methods
         bool    IsExecutePlugins() const;
         void        SetExecutePlugins( bool bSet );
-        EBasicSecurityMode  GetBasicMode(                           ) const ;
-        void                SetBasicMode( EBasicSecurityMode eMode  )       ;
+        EBasicSecurityMode  GetBasicMode(                           ) const;
+        void                SetBasicMode( EBasicSecurityMode eMode  );
         bool IsWarningEnabled() const;
         void SetWarningEnabled( bool bSet );
         bool IsConfirmationEnabled() const;
@@ -250,8 +250,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             Do it in your source only.
          */
 
-        static SvtSecurityOptions_Impl* m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                m_nRefCount         ;   /// internal ref count mechanism
+        static SvtSecurityOptions_Impl* m_pDataContainer;   /// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32                m_nRefCount;   /// internal ref count mechanism
 
 };      // class SvtSecurityOptions
 
