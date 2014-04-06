@@ -35,9 +35,9 @@ public:
     }
 
     // Save as the given format, if format is NULL sniff from ext'n
-    inline bool saveAs(const char* pUrl, const char* pFormat = NULL)
+    inline bool saveAs(const char* pUrl, const char* pFormat = NULL, const char* pFilterOptions = NULL)
     {
-        return mpDoc->saveAs(mpDoc, pUrl, pFormat);
+        return mpDoc->saveAs(mpDoc, pUrl, pFormat, pFilterOptions);
     }
 };
 

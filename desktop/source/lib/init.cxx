@@ -129,7 +129,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT LibreOffice *liblibreoffice_hook(void);
 
 static void doc_destroy(LibreOfficeDocument* pThis);
-static int  doc_saveAs(LibreOfficeDocument* pThis, const char* pUrl, const char* pFormat);
+static int  doc_saveAs(LibreOfficeDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
 
 struct LibLODocument_Impl : public _LibreOfficeDocument
 {
@@ -207,7 +207,7 @@ static LibreOfficeDocument* lo_documentLoad(LibreOffice* pThis, const char* pURL
     return NULL;
 }
 
-static int doc_saveAs(LibreOfficeDocument* pThis, const char* sUrl, const char* pFormat)
+static int doc_saveAs(LibreOfficeDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
@@ -268,9 +268,12 @@ static int doc_saveAs(LibreOfficeDocument* pThis, const char* sUrl, const char* 
             return false;
         }
 
+        OUString aFilterOptions = getUString(pFilterOptions);
+
         MediaDescriptor aSaveMediaDescriptor;
         aSaveMediaDescriptor["Overwrite"] <<= sal_True;
         aSaveMediaDescriptor["FilterName"] <<= aFilterName;
+        aSaveMediaDescriptor[MediaDescriptor::PROP_FILTEROPTIONS()] <<= aFilterOptions;
 
         uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
         xStorable->storeToURL(aURL, aSaveMediaDescriptor.getAsConstPropertyValueList());

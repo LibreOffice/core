@@ -35,7 +35,8 @@ struct _LibreOfficeDocument
   void (*destroy)   (LibreOfficeDocument* pThis);
   int (*saveAs)     (LibreOfficeDocument* pThis,
                      const char *pUrl,
-                     const char *pFormat);
+                     const char *pFormat,
+                     const char *pFilterOptions);
 };
 
 LibreOffice* lo_init (const char* pInstallPath);
