@@ -34,7 +34,7 @@ class Test: public CppUnit::TestFixture
 {
 
 public:
-    virtual void setUp();
+    virtual void setUp() SAL_OVERRIDE;
     void testSingleElement();
     void testSingleElementWithAttributes();
     void testSingleElementWithContent();
