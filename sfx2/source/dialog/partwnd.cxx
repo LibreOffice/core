@@ -198,7 +198,7 @@ bool SfxPartDockWnd_Impl::Notify( NotifyEvent& rEvt )
 void SfxPartDockWnd_Impl::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     SfxDockingWindow::FillInfo( rInfo );
-    rInfo.bVisible = sal_False;
+    rInfo.bVisible = false;
 }
 
 

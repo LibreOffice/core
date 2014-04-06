@@ -225,7 +225,7 @@ bool SfxRecordingFloat_Impl::Close()
 void SfxRecordingFloat_Impl::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     SfxFloatingWindow::FillInfo( rInfo );
-    rInfo.bVisible = sal_False;
+    rInfo.bVisible = false;
 }
 
 void SfxRecordingFloat_Impl::StateChanged( StateChangedType nStateChange )
