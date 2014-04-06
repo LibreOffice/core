@@ -1253,7 +1253,7 @@ void WW8AttributeOutput::CharHidden( const SvxCharHiddenItem& rHidden )
 
 void WW8AttributeOutput::CharBorder( const SvxBorderLine* pAllBorder, const sal_uInt16 /*nDist*/, const bool bShadow )
 {
-    m_rWW8Export.Out_BorderLine( *m_rWW8Export.pO, pAllBorder, 0, NS_sprm::LN_CBrc, NS_sprm::LN_CBorder, bShadow );
+    m_rWW8Export.Out_BorderLine( *m_rWW8Export.pO, pAllBorder, 0, NS_sprm::LN_CBrc80, NS_sprm::LN_CBrc, bShadow );
 }
 
 void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
@@ -1666,13 +1666,13 @@ void WW8AttributeOutput::CharBackground( const SvxBrushItem& rBrush )
         WW8_SHD aSHD;
 
         m_rWW8Export.TransBrush( rBrush.GetColor(), aSHD );
-        // sprmCShd
-        m_rWW8Export.InsUInt16( NS_sprm::LN_CShd );
+        // sprmCShd80
+        m_rWW8Export.InsUInt16( NS_sprm::LN_CShd80 );
         m_rWW8Export.InsUInt16( aSHD.GetValue() );
 
         //Quite a few unknowns, some might be transparency or something
         //of that nature...
-        m_rWW8Export.InsUInt16( 0xCA71 );
+        m_rWW8Export.InsUInt16( NS_sprm::LN_CShd );
         m_rWW8Export.pO->push_back( 10 );
         m_rWW8Export.InsUInt32( 0xFF000000 );
         m_rWW8Export.InsUInt32( SuitableBGColor( rBrush.GetColor().GetColor() ) );
@@ -4316,8 +4316,10 @@ void WW8Export::Out_BorderLine(ww::bytes& rO, const SvxBorderLine* pLine,
 {
     OSL_ENSURE( ( nSprmNo == 0 ) ||
             ( nSprmNo >= 38 && nSprmNo <= 41 ) ||
-            ( nSprmNo >= NS_sprm::LN_PBrcTop && nSprmNo <= NS_sprm::LN_PBrcRight ) ||
-            ( nSprmNo >= NS_sprm::LN_SBrcTop && nSprmNo <= NS_sprm::LN_SBrcRight ),
+            ( nSprmNo >= NS_sprm::LN_PBrcTop80
+              && nSprmNo <= NS_sprm::LN_PBrcRight80 ) ||
+            ( nSprmNo >= NS_sprm::LN_SBrcTop80
+              && nSprmNo <= NS_sprm::LN_SBrcRight80 ),
             "Sprm for border out is of range" );
 
     WW8_BRCVer9 aBrcVer9;
@@ -4370,20 +4372,20 @@ void WW8Export::Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow)
     static const sal_uInt16 aPBrc[] =
     {
         // WW8 SPRMs
-        NS_sprm::LN_PBrcTop, NS_sprm::LN_PBrcLeft,
-        NS_sprm::LN_PBrcBottom, NS_sprm::LN_PBrcRight,
+        NS_sprm::LN_PBrcTop80, NS_sprm::LN_PBrcLeft80,
+        NS_sprm::LN_PBrcBottom80, NS_sprm::LN_PBrcRight80,
         // WW9 SPRMs
-        NS_sprm::LN_PBorderTop, NS_sprm::LN_PBorderLeft,
-        NS_sprm::LN_PBorderBottom, NS_sprm::LN_PBorderRight
+        NS_sprm::LN_PBrcTop, NS_sprm::LN_PBrcLeft,
+        NS_sprm::LN_PBrcBottom, NS_sprm::LN_PBrcRight
     };
     static const sal_uInt16 aSBrc[] =
     {
         // WW8 SPRMs
-        NS_sprm::LN_SBrcTop, NS_sprm::LN_SBrcLeft,
-        NS_sprm::LN_SBrcBottom, NS_sprm::LN_SBrcRight,
+        NS_sprm::LN_SBrcTop80, NS_sprm::LN_SBrcLeft80,
+        NS_sprm::LN_SBrcBottom80, NS_sprm::LN_SBrcRight80,
         // WW9 SPRMs
-        NS_sprm::LN_SBorderTop, NS_sprm::LN_SBorderLeft,
-        NS_sprm::LN_SBorderBottom, NS_sprm::LN_SBorderRight,
+        NS_sprm::LN_SBrcTop, NS_sprm::LN_SBrcLeft,
+        NS_sprm::LN_SBrcBottom, NS_sprm::LN_SBrcRight
     };
     static const sal_uInt16 aWW6PBrc[] =
     {

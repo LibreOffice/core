@@ -57,6 +57,7 @@
 #include <fmtrowsplt.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <numrule.hxx>
+#include <filter/msfilter/sprmids.hxx>
 #include "../inc/wwstyles.hxx"
 #include "writerhelper.hxx"
 #include "ww8struc.hxx"
@@ -1556,7 +1557,7 @@ enum wwTableSprm
     sprmTSetBrc90, sprmTDxaCol, sprmTInsert, sprmTDelete, sprmTTableHeader,
     sprmTDxaGapHalf, sprmTTableBorders, sprmTTableBorders90,
 
-    sprmTDefTableNewShd, sprmTSpacing, sprmTNewSpacing
+    sprmTDefTableNewShd, sprmTCellPadding, sprmTCellPaddingDefault
 };
 
 wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
@@ -1566,50 +1567,52 @@ wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
         case ww::eWW8:
             switch (nId)
             {
-                case 0xF614:
+                case NS_sprm::LN_TTableWidth:
                     return sprmTTableWidth;
-                case 0x7629:
+                case NS_sprm::LN_TTextFlow:
                     return sprmTTextFlow;
-                case 0x3403:
+                case NS_sprm::LN_TFCantSplit90:
+                    // FIXME this code gets the names of sprmTFCantSplit and
+                    // sprmTFCantSplit90 the wrong way around.
                     return sprmTFCantSplit;
-                case 0x3404:
+                case NS_sprm::LN_TTableHeader:
                     return sprmTTableHeader;
-                case 0x3466:
+                case NS_sprm::LN_TFCantSplit:
                     return sprmTFCantSplit90;
-                case 0x5400:
+                case NS_sprm::LN_TJc90:
                     return sprmTJc;
-                case 0x560B:
+                case NS_sprm::LN_TFBiDi:
                     return sprmTFBiDi;
-                case 0x5622:
+                case NS_sprm::LN_TDelete:
                     return sprmTDelete;
-                case 0x7621:
+                case NS_sprm::LN_TInsert:
                     return sprmTInsert;
-                case 0x7623:
+                case NS_sprm::LN_TDxaCol:
                     return sprmTDxaCol;
-                case 0x9407:
+                case NS_sprm::LN_TDyaRowHeight:
                     return sprmTDyaRowHeight;
-                case 0x9601:
+                case NS_sprm::LN_TDxaLeft:
                     return sprmTDxaLeft;
-                case 0x9602:
+                case NS_sprm::LN_TDxaGapHalf:
                     return sprmTDxaGapHalf;
-                case 0xD605:
+                case NS_sprm::LN_TTableBorders80:
                     return sprmTTableBorders;
-                case 0xD608:
+                case NS_sprm::LN_TDefTable:
                     return sprmTDefTable;
-                case 0xD609:
+                case NS_sprm::LN_TDefTableShd80:
                     return sprmTDefTableShd;
-                case 0xD612:
+                case NS_sprm::LN_TDefTableShd:
                     return sprmTDefTableNewShd;
-                case 0xD613:
+                case NS_sprm::LN_TTableBorders:
                     return sprmTTableBorders90;
-                case 0xD620:
+                case NS_sprm::LN_TSetBrc80:
                     return sprmTSetBrc;
-                case 0xD62F:
+                case NS_sprm::LN_TSetBrc:
                     return sprmTSetBrc90;
-                case 0xD632:
-                    return sprmTSpacing;
-                case 0xD634:
-                    return sprmTNewSpacing;
+                case NS_sprm::LN_TCellPadding:
+                    return sprmTCellPadding;
+                case NS_sprm::LN_TCellPaddingDefault:
+                    return sprmTCellPaddingDefault;
             }
             break;
         case ww::eWW7:
@@ -1846,10 +1849,10 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                     case sprmTDelete:
                         pNewBand->ProcessSprmTDelete(pParams);
                         break;
-                    case sprmTNewSpacing:
+                    case sprmTCellPaddingDefault:
                         pNewBand->ProcessSpacing(pParams);
                         break;
-                    case sprmTSpacing:
+                    case sprmTCellPadding:
                         pNewBand->ProcessSpecificSpacing(pParams);
                         break;
                     default:
@@ -3068,6 +3071,8 @@ void WW8TabDesc::AdjustNewBand()
     // bCantSplit: Always true for rows containing merged cells (Word <= 2000 crashes otherwise)
     // So in case bCantSplit is true, we check for bCantSplit90, which has been introduced for
     // Word versions >= 2002.
+    // FIXME the above comment is suspect because bCantSplit and bCantSplit90
+    // have been populated the wrong way around.
     bool bSetCantSplit = pActBand->bCantSplit;
     if(bSetCantSplit)
         bSetCantSplit = pActBand->bCantSplit90;
