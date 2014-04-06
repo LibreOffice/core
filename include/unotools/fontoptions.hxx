@@ -119,8 +119,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtFontOptions : public utl::detail::Op
             Do it in your source only.
          */
 
-        static SvtFontOptions_Impl*         m_pDataContainer;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                    m_nRefCount;   /// internal ref count mechanism
+        static SvtFontOptions_Impl*         m_pDataContainer;
+        static sal_Int32                    m_nRefCount;
 
 };      // class SvtFontOptions
 

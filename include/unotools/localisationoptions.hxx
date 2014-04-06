@@ -126,8 +126,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
             Do it in your source only.
          */
 
-        static SvtLocalisationOptions_Impl* m_pDataContainer;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                    m_nRefCount;   /// internal ref count mechanism
+        static SvtLocalisationOptions_Impl* m_pDataContainer;
+        static sal_Int32                    m_nRefCount;
 
 };      // class SvtLocalisationOptions
 
