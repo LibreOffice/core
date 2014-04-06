@@ -75,7 +75,6 @@ class SvtCmdOptions
             m_aCommandHashMap.insert( CommandHashMap::value_type( aCmd, 0 ) );
         }
 
-
         // convert internal list to external format
         // for using it on right menus really
         // Notice:   We build a property list with 4 entries and set it on result list then.
@@ -191,7 +190,6 @@ class SvtCommandOptions_Impl : public ConfigItem
         SvtFrameVector m_lFrames;
 };
 
-
 //  constructor
 
 SvtCommandOptions_Impl::SvtCommandOptions_Impl()
@@ -230,7 +228,6 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     EnableNotification( aNotifySeq, true );
 }
 
-
 //  destructor
 
 SvtCommandOptions_Impl::~SvtCommandOptions_Impl()
@@ -241,7 +238,6 @@ SvtCommandOptions_Impl::~SvtCommandOptions_Impl()
         Commit();
     }
 }
-
 
 //  public method
 
@@ -284,14 +280,12 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
     }
 }
 
-
 //  public method
 
 void SvtCommandOptions_Impl::Commit()
 {
     OSL_FAIL( "SvtCommandOptions_Impl::Commit()\nNot implemented yet!\n" );
 }
-
 
 //  public method
 
@@ -302,7 +296,6 @@ bool SvtCommandOptions_Impl::HasEntries( SvtCommandOptions::CmdOption eOption ) 
     else
         return false;
 }
-
 
 //  public method
 
@@ -321,7 +314,6 @@ bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption, co
     return false;
 }
 
-
 //  public method
 
 void SvtCommandOptions_Impl::EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
@@ -334,7 +326,6 @@ void SvtCommandOptions_Impl::EstablisFrameCallback(const ::com::sun::star::uno::
     if (pIt == m_lFrames.end())
         m_lFrames.push_back(xWeak);
 }
-
 
 //  private method
 
@@ -363,14 +354,12 @@ Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
     return lDisabledItems;
 }
 
-
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
 SvtCommandOptions_Impl*     SvtCommandOptions::m_pDataContainer = NULL  ;
 sal_Int32                   SvtCommandOptions::m_nRefCount      = 0     ;
-
 
 //  constructor
 
@@ -387,7 +376,6 @@ SvtCommandOptions::SvtCommandOptions()
         ItemHolder1::holdConfigItem(E_CMDOPTIONS);
     }
 }
-
 
 //  destructor
 
@@ -406,7 +394,6 @@ SvtCommandOptions::~SvtCommandOptions()
     }
 }
 
-
 //  public method
 
 bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
@@ -415,7 +402,6 @@ bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
     return m_pDataContainer->HasEntries( eOption );
 }
 
-
 //  public method
 
 bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aCommandURL ) const
@@ -423,7 +409,6 @@ bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aCommandUR
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->Lookup( eCmdOption, aCommandURL );
 }
-
 
 //  public method
 
@@ -437,7 +422,6 @@ namespace
 {
     class theCommandOptionsMutex : public rtl::Static<osl::Mutex, theCommandOptionsMutex>{};
 }
-
 
 //  private method
 

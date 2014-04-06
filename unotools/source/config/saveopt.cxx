@@ -33,7 +33,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-
 class SvtSaveOptions_Impl;
 class SvtLoadOptions_Impl;
 
@@ -389,8 +388,6 @@ Sequence< OUString > GetPropertyNames()
     return aNames;
 }
 
-
-
 SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     : ConfigItem( OUString("Office.Common/Save") )
     , nAutoSaveTime( 0 )
@@ -745,12 +742,9 @@ void SvtSaveOptions_Impl::Commit()
     batch->commit();
 }
 
-
-
 void SvtSaveOptions_Impl::Notify( const Sequence<OUString>& )
 {
 }
-
 
 class SvtLoadOptions_Impl : public utl::ConfigItem
 {
@@ -802,14 +796,12 @@ void SvtLoadOptions_Impl::Notify( const Sequence<OUString>& )
     SAL_WARN( "unotools.config", "properties have been changed" );
 }
 
-
 namespace
 {
     class LocalSingleton : public rtl::Static< osl::Mutex, LocalSingleton >
     {
     };
 }
-
 
 SvtSaveOptions::SvtSaveOptions()
 {
@@ -826,8 +818,6 @@ SvtSaveOptions::SvtSaveOptions()
    ++nRefCount;
     pImp = pOptions;
 }
-
-
 
 SvtSaveOptions::~SvtSaveOptions()
 {

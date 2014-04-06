@@ -28,14 +28,11 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-
 namespace utl
 {
 
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
-
 
     //= NodeValueAccessor
 
@@ -162,9 +159,7 @@ namespace utl
         }
     }
 
-
     //= functors on NodeValueAccessor instances
-
 
     /// base class for functors syncronizing between exchange locations and config sub nodes
     struct SubNodeAccess : public ::std::unary_function< NodeValueAccessor, void >
@@ -207,7 +202,6 @@ namespace utl
 
     typedef std::vector<NodeValueAccessor> NodeValueAccessors;
 
-
     //= OConfigurationValueContainerImpl
 
     struct OConfigurationValueContainerImpl
@@ -225,9 +219,7 @@ namespace utl
         }
     };
 
-
     //= OConfigurationValueContainer
-
 
     OConfigurationValueContainer::OConfigurationValueContainer(
             const Reference< XComponentContext >& _rxORB, ::osl::Mutex& _rAccessSafety,
@@ -246,7 +238,6 @@ namespace utl
         const sal_uInt16 _nAccessFlags, const sal_Int32 _nLevels )
     {
         DBG_ASSERT( !m_pImpl->aConfigRoot.isValid(), "OConfigurationValueContainer::implConstruct: already initialized!" );
-
 
         // create the configuration node we're about to work with
         m_pImpl->aConfigRoot = OConfigurationTreeRoot::createWithComponentContext(
@@ -344,8 +335,6 @@ namespace utl
         lcl_copyData( _rAccessor, m_pImpl->aConfigRoot.getNodeValue( _rAccessor.getPath() ), m_pImpl->rMutex );
     }
 
-
 }   // namespace utl
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

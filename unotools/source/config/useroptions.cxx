@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/useroptions.hxx>
 
 #include <unotools/configmgr.hxx>
@@ -257,7 +256,6 @@ osl::Mutex& SvtUserOptions::GetInitMutex()
     return theUserOptionsMutex::get();
 }
 
-
 OUString SvtUserOptions::GetCompany        () const { return GetToken(USER_OPT_COMPANY); }
 OUString SvtUserOptions::GetFirstName      () const { return GetToken(USER_OPT_FIRSTNAME); }
 OUString SvtUserOptions::GetLastName       () const { return GetToken(USER_OPT_LASTNAME); }
@@ -274,7 +272,6 @@ OUString SvtUserOptions::GetTelephoneWork  () const { return GetToken(USER_OPT_T
 OUString SvtUserOptions::GetFax            () const { return GetToken(USER_OPT_FAX); }
 OUString SvtUserOptions::GetEmail          () const { return GetToken(USER_OPT_EMAIL); }
 OUString SvtUserOptions::GetCustomerNumber () const { return GetToken(USER_OPT_CUSTOMERNUMBER); }
-
 
 void SvtUserOptions::SetCustomerNumber (OUString const& sToken) { SetToken(USER_OPT_CUSTOMERNUMBER, sToken); }
 

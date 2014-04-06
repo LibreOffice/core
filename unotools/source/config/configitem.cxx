@@ -159,7 +159,6 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
     }
 }
 
-
 void ConfigChangeListener_Impl::disposing( const EventObject& /*rSource*/ ) throw(RuntimeException, std::exception)
 {
     pParent->RemoveChangesListener();

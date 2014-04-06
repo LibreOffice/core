@@ -46,7 +46,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::configuration;
 
-
 /*
  * DefaultFontConfiguration
  */
@@ -339,8 +338,6 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
     return OUString(FALLBACKFONT_UI_SANS);
 }
 
-
-
 /*
  *  FontSubstConfigItem::get
  */
@@ -426,7 +423,6 @@ FontSubstConfiguration::~FontSubstConfiguration()
  *  FontSubstConfigItem::getMapName
  */
 
-
 static const char* const aImplKillLeadingList[] =
 {
     "microsoft",
@@ -449,8 +445,6 @@ static const char* const aImplKillLeadingList[] =
     "kochi",
     NULL
 };
-
-
 
 static const char* const aImplKillTrailingList[] =
 {
@@ -502,16 +496,12 @@ static const char* const aImplKillTrailingList[] =
     NULL
 };
 
-
-
 static const char* const aImplKillTrailingWithExceptionsList[] =
 {
     "ce", "monospace", "oldface", NULL,
     "ps", "caps", NULL,
     NULL
 };
-
-
 
 struct ImplFontAttrWeightSearchData
 {
@@ -538,8 +528,6 @@ static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 {   "medium",               WEIGHT_MEDIUM },
 {   NULL,                   WEIGHT_DONTKNOW },
 };
-
-
 
 struct ImplFontAttrWidthSearchData
 {
@@ -632,8 +620,6 @@ static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 {   NULL,                   0 },
 };
 
-
-
 static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
 {
     for(; *ppStr; ++ppStr )
@@ -666,8 +652,6 @@ static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
     return false;
 }
 
-
-
 static sal_Int32 ImplIsTrailing( const OUString& rName, const char* pStr )
 {
     sal_Int32 nStrLen = (sal_Int32)strlen( pStr );
@@ -683,8 +667,6 @@ static sal_Int32 ImplIsTrailing( const OUString& rName, const char* pStr )
     return nStrLen;
 }
 
-
-
 static bool ImplKillTrailing( OUString& rName, const char* const* ppStr )
 {
     for(; *ppStr; ++ppStr )
@@ -699,8 +681,6 @@ static bool ImplKillTrailing( OUString& rName, const char* const* ppStr )
 
     return false;
 }
-
-
 
 static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* ppStr )
 {
@@ -727,8 +707,6 @@ static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* 
     return false;
 }
 
-
-
 static bool ImplFindAndErase( OUString& rName, const char* pStr )
 {
     sal_Int32 nLen = (sal_Int32)strlen(pStr);
@@ -741,8 +719,6 @@ static bool ImplFindAndErase( OUString& rName, const char* pStr )
     rName = sBuff.makeStringAndClear();
     return true;
 }
-
-
 
 void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rShortName,
                                          OUString& rFamilyName, FontWeight& rWeight,
@@ -813,7 +789,6 @@ void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rSh
     }
 }
 
-
 struct StrictStringSort : public ::std::binary_function< const FontNameAttr&, const FontNameAttr&, bool >
 {
     bool operator()( const FontNameAttr& rLeft, const FontNameAttr& rRight )
@@ -861,7 +836,6 @@ struct enum_convert
     const char* pName;
     int          nEnum;
 };
-
 
 static const enum_convert pWeightNames[] =
 {

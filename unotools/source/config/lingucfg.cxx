@@ -161,7 +161,6 @@ public:
     using utl::ConfigItem::ReplaceSetProperties;
     //using utl::ConfigItem::GetReadOnlyStates;
 
-
     com::sun::star::uno::Any
             GetProperty( const OUString &rPropertyName ) const;
     com::sun::star::uno::Any
@@ -178,7 +177,6 @@ public:
     bool    IsReadOnly( sal_Int32 nPropertyHandle ) const;
 };
 
-
 SvtLinguConfigItem::SvtLinguConfigItem() :
     utl::ConfigItem( OUString("Office.Linguistic") )
 {
@@ -190,12 +188,10 @@ SvtLinguConfigItem::SvtLinguConfigItem() :
     EnableNotification( rPropertyNames );
 }
 
-
 SvtLinguConfigItem::~SvtLinguConfigItem()
 {
     //! Commit (SaveOptions) will be called by the d-tor of the base called !
 }
-
 
 void SvtLinguConfigItem::Notify( const uno::Sequence< OUString > &rPropertyNames )
 {
@@ -203,12 +199,10 @@ void SvtLinguConfigItem::Notify( const uno::Sequence< OUString > &rPropertyNames
     NotifyListeners(0);
 }
 
-
 void SvtLinguConfigItem::Commit()
 {
     SaveOptions( GetPropertyNames() );
 }
-
 
 static struct NamesToHdl
 {
@@ -257,7 +251,6 @@ static struct NamesToHdl
 
 {            NULL,                                            NULL,                                      -1}
 };
-
 
 const uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
 {
@@ -314,7 +307,6 @@ bool SvtLinguConfigItem::GetHdlByName(
     }
 }
 
-
 uno::Any SvtLinguConfigItem::GetProperty( const OUString &rPropertyName ) const
 {
     osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
@@ -322,7 +314,6 @@ uno::Any SvtLinguConfigItem::GetProperty( const OUString &rPropertyName ) const
     sal_Int32 nHdl;
     return GetHdlByName( nHdl, rPropertyName ) ? GetProperty( nHdl ) : uno::Any();
 }
-
 
 uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
 {
@@ -406,7 +397,6 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
     return aRes;
 }
 
-
 bool SvtLinguConfigItem::SetProperty( const OUString &rPropertyName, const uno::Any &rValue )
 {
     osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
@@ -417,7 +407,6 @@ bool SvtLinguConfigItem::SetProperty( const OUString &rPropertyName, const uno::
         bSucc = SetProperty( nHdl, rValue );
     return bSucc;
 }
-
 
 bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any &rValue )
 {
@@ -667,7 +656,6 @@ bool SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
     return bRes;
 }
 
-
 bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyNames )
 {
     if (!IsModified())
@@ -791,8 +779,6 @@ bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
     }
     return bReadOnly;
 }
-
-
 
 static SvtLinguConfigItem *pCfgItem = 0;
 static sal_Int32           nCfgItemRefCount = 0;
@@ -968,7 +954,6 @@ static bool lcl_GetFileUrlFromOrigin(
     return bSuccess;
 }
 
-
 bool SvtLinguConfig::GetDictionaryEntry(
     const OUString &rNodeName,
     SvtLinguConfigDictionaryEntry &rDicEntry ) const
@@ -1086,7 +1071,6 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
     return aRes;
 }
 
-
 uno::Reference< util::XChangesBatch > SvtLinguConfig::GetMainUpdateAccess() const
 {
     if (!m_xMainUpdateAccess.is())
@@ -1116,7 +1100,6 @@ uno::Reference< util::XChangesBatch > SvtLinguConfig::GetMainUpdateAccess() cons
 
     return m_xMainUpdateAccess;
 }
-
 
 OUString SvtLinguConfig::GetVendorImageUrl_Impl(
     const OUString &rServiceImplName,
@@ -1153,7 +1136,6 @@ OUString SvtLinguConfig::GetVendorImageUrl_Impl(
     return aRes;
 }
 
-
 OUString SvtLinguConfig::GetSpellAndGrammarContextSuggestionImage(
     const OUString &rServiceImplName
 ) const
@@ -1167,7 +1149,6 @@ OUString SvtLinguConfig::GetSpellAndGrammarContextSuggestionImage(
     }
     return aRes;
 }
-
 
 OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
     const OUString &rServiceImplName
@@ -1216,7 +1197,5 @@ bool SvtLinguConfig::HasGrammarChecker() const
 
     return bRes;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

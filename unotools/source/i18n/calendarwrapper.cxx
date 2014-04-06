@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <rtl/strbuf.hxx>
 #include <tools/debug.hxx>
 #include <unotools/calendarwrapper.hxx>
@@ -28,9 +27,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
-
 const double MILLISECONDS_PER_DAY = 1000.0 * 60.0 * 60.0 * 24.0;
-
 
 CalendarWrapper::CalendarWrapper(
             const Reference< uno::XComponentContext > & rxContext
@@ -45,7 +42,6 @@ CalendarWrapper::~CalendarWrapper()
 {
 }
 
-
 void CalendarWrapper::loadDefaultCalendar( const ::com::sun::star::lang::Locale& rLocale )
 {
     try
@@ -58,7 +54,6 @@ void CalendarWrapper::loadDefaultCalendar( const ::com::sun::star::lang::Locale&
         SAL_WARN( "unotools.i18n", "loadDefaultCalendar: Exception caught " << e.Message );
     }
 }
-
 
 void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const ::com::sun::star::lang::Locale& rLocale )
 {
@@ -73,7 +68,6 @@ void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const ::com::sun:
             << rUniqueID << "   Locale: " << rLocale.Language << "_" << rLocale.Country << " " << e.Message );
     }
 }
-
 
 ::com::sun::star::uno::Sequence< OUString > CalendarWrapper::getAllCalendars( const ::com::sun::star::lang::Locale& rLocale ) const
 {
@@ -90,7 +84,6 @@ void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const ::com::sun:
     return ::com::sun::star::uno::Sequence< OUString > (0);
 }
 
-
 OUString CalendarWrapper::getUniqueID() const
 {
     try
@@ -105,7 +98,6 @@ OUString CalendarWrapper::getUniqueID() const
     return OUString();
 }
 
-
 void CalendarWrapper::setDateTime( double nTimeInDays )
 {
     try
@@ -118,7 +110,6 @@ void CalendarWrapper::setDateTime( double nTimeInDays )
         SAL_WARN( "unotools.i18n", "setDateTime: Exception caught " << e.Message );
     }
 }
-
 
 double CalendarWrapper::getDateTime() const
 {
@@ -133,7 +124,6 @@ double CalendarWrapper::getDateTime() const
     }
     return 0.0;
 }
-
 
 sal_Int32 CalendarWrapper::getCombinedOffsetInMillis(
         sal_Int16 nParentFieldIndex, sal_Int16 nChildFieldIndex ) const
@@ -158,20 +148,17 @@ sal_Int32 CalendarWrapper::getCombinedOffsetInMillis(
     return nOffset;
 }
 
-
 sal_Int32 CalendarWrapper::getZoneOffsetInMillis() const
 {
     return getCombinedOffsetInMillis( CalendarFieldIndex::ZONE_OFFSET,
             CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS);
 }
 
-
 sal_Int32 CalendarWrapper::getDSTOffsetInMillis() const
 {
     return getCombinedOffsetInMillis( CalendarFieldIndex::DST_OFFSET,
             CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS);
 }
-
 
 void CalendarWrapper::setLocalDateTime( double nTimeInDays )
 {
@@ -223,7 +210,6 @@ void CalendarWrapper::setLocalDateTime( double nTimeInDays )
     }
 }
 
-
 double CalendarWrapper::getLocalDateTime() const
 {
     try
@@ -244,7 +230,6 @@ double CalendarWrapper::getLocalDateTime() const
     return 0.0;
 }
 
-
 void CalendarWrapper::setValue( sal_Int16 nFieldIndex, sal_Int16 nValue )
 {
     try
@@ -257,7 +242,6 @@ void CalendarWrapper::setValue( sal_Int16 nFieldIndex, sal_Int16 nValue )
         SAL_WARN( "unotools.i18n",  "setValue: Exception caught " << e.Message );
     }
 }
-
 
 bool CalendarWrapper::isValid() const
 {
@@ -273,7 +257,6 @@ bool CalendarWrapper::isValid() const
     return false;
 }
 
-
 sal_Int16 CalendarWrapper::getValue( sal_Int16 nFieldIndex ) const
 {
     try
@@ -288,7 +271,6 @@ sal_Int16 CalendarWrapper::getValue( sal_Int16 nFieldIndex ) const
     return 0;
 }
 
-
 void CalendarWrapper::addValue( sal_Int16 nFieldIndex, sal_Int32 nAmount )
 {
     try
@@ -301,7 +283,6 @@ void CalendarWrapper::addValue( sal_Int16 nFieldIndex, sal_Int32 nAmount )
         SAL_WARN( "unotools.i18n", "addValue: Exception caught " << e.Message );
     }
 }
-
 
 sal_Int16 CalendarWrapper::getFirstDayOfWeek() const
 {
@@ -317,7 +298,6 @@ sal_Int16 CalendarWrapper::getFirstDayOfWeek() const
     return 0;
 }
 
-
 sal_Int16 CalendarWrapper::getNumberOfMonthsInYear() const
 {
     try
@@ -331,7 +311,6 @@ sal_Int16 CalendarWrapper::getNumberOfMonthsInYear() const
     }
     return 0;
 }
-
 
 sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
 {
@@ -347,7 +326,6 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     return 0;
 }
 
-
 ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > CalendarWrapper::getMonths() const
 {
     try
@@ -361,7 +339,6 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
 }
-
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > CalendarWrapper::getDays() const
 {
@@ -377,7 +354,6 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
 }
 
-
 OUString CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const
 {
     try
@@ -391,7 +367,6 @@ OUString CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_I
     }
     return OUString();
 }
-
 
 // --- XExtendedCalendar -----------------------------------------------------
 
@@ -409,7 +384,6 @@ OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_
     return OUString();
 }
 
-
 // --- XCalendar3 ------------------------------------------------------------
 
 ::com::sun::star::i18n::Calendar2 CalendarWrapper::getLoadedCalendar() const
@@ -426,7 +400,6 @@ OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_
     return ::com::sun::star::i18n::Calendar2();
 }
 
-
 ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > CalendarWrapper::getGenitiveMonths() const
 {
     try
@@ -440,7 +413,6 @@ OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
 }
-
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > CalendarWrapper::getPartitiveMonths() const
 {

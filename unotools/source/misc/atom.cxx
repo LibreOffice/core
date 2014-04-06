@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/atom.hxx>
 
 using namespace utl;
@@ -53,8 +52,6 @@ const OUString& AtomProvider::getString( int nAtom ) const
 
     return it == m_aStringMap.end() ? aEmpty : it->second;
 }
-
-
 
 MultiAtomProvider::MultiAtomProvider()
 {

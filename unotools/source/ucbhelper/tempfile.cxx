@@ -330,7 +330,6 @@ umask(old_mode);
     }
 }
 
-
 OUString TempFile::CreateTempName( const OUString* pParent )
 {
     // get correct directory

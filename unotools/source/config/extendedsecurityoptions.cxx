@@ -136,7 +136,6 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
         ExtensionHashMap                                m_aExtensionHashMap;
 };
 
-
 //  constructor
 
 SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
@@ -186,7 +185,6 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     EnableNotification( seqNotifyNames );
 }
 
-
 //  destructor
 
 SvtExtendedSecurityOptions_Impl::~SvtExtendedSecurityOptions_Impl()
@@ -198,14 +196,12 @@ SvtExtendedSecurityOptions_Impl::~SvtExtendedSecurityOptions_Impl()
     }
 }
 
-
 //  public method
 
 void SvtExtendedSecurityOptions_Impl::Notify( const Sequence< OUString >& )
 {
     // Not implemented
 }
-
 
 //  public method
 
@@ -230,14 +226,12 @@ void SvtExtendedSecurityOptions_Impl::Commit()
     PutProperties( seqNames, seqValues );
 }
 
-
 //  public method
 
 SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions_Impl::GetOpenHyperlinkMode()
 {
     return m_eOpenHyperlinkMode;
 }
-
 
 //  private method
 
@@ -273,7 +267,6 @@ void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aH
     }
 }
 
-
 //  private method (currently not used)
 
 Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetPropertyNames()
@@ -289,14 +282,12 @@ Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
 SvtExtendedSecurityOptions_Impl*    SvtExtendedSecurityOptions::m_pDataContainer    = NULL  ;
 sal_Int32                           SvtExtendedSecurityOptions::m_nRefCount         = 0     ;
-
 
 //  constructor
 
@@ -315,7 +306,6 @@ SvtExtendedSecurityOptions::SvtExtendedSecurityOptions()
     }
 }
 
-
 //  destructor
 
 SvtExtendedSecurityOptions::~SvtExtendedSecurityOptions()
@@ -333,7 +323,6 @@ SvtExtendedSecurityOptions::~SvtExtendedSecurityOptions()
     }
 }
 
-
 //  public method
 
 SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions::GetOpenHyperlinkMode()
@@ -346,7 +335,6 @@ namespace
 {
     class theExtendedSecurityOptionsMutex : public rtl::Static<osl::Mutex, theExtendedSecurityOptionsMutex>{};
 }
-
 
 //  private method
 

@@ -20,7 +20,6 @@
 #include "unotools/readwritemutexguard.hxx"
 #include <tools/debug.hxx>
 
-
 namespace utl {
 
 ReadWriteGuard::ReadWriteGuard( ReadWriteMutex& rMutexP,
@@ -60,7 +59,6 @@ ReadWriteGuard::ReadWriteGuard( ReadWriteMutex& rMutexP,
     }
 }
 
-
 ReadWriteGuard::~ReadWriteGuard()
 {
     if ( nMode & ReadWriteGuardMode::nWrite )
@@ -78,7 +76,6 @@ ReadWriteGuard::~ReadWriteGuard()
         rMutex.pMutex->release();
     }
 }
-
 
 void ReadWriteGuard::changeReadToWrite()
 {

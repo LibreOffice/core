@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/macros.h>
 #include <unotools/ucblockbytes.hxx>
 #include <comphelper/processfactory.hxx>
@@ -62,7 +61,6 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-
 
 namespace utl
 {
@@ -160,7 +158,6 @@ public:
     { return m_xProgressHandler; }
 };
 
-
 /**
     Helper class for property change notifies when executing UCB commands
 */
@@ -230,8 +227,6 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
     }
 }
 
-
-
 class Moderator
     : public osl::Thread
 {
@@ -254,7 +249,6 @@ public:
 
     virtual ~Moderator();
 
-
     enum ResultType {
         NORESULT,
 
@@ -276,7 +270,6 @@ public:
         GENERAL
     };
 
-
     class ConditionRes
         : public salhelper::Condition
     {
@@ -295,7 +288,6 @@ public:
     private:
         Moderator& m_aModerator;
     };
-
 
     struct Result {
         ResultType        type;
@@ -341,7 +333,6 @@ public:
     void setStream(const Reference< XStream >& aStream);
     void setInputStream(const Reference<XInputStream> &rxInputStream);
 
-
 protected:
     virtual void SAL_CALL run() SAL_OVERRIDE;
     virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
@@ -364,7 +355,6 @@ private:
     Command                           m_aArg;
     ::ucbhelper::Content              m_aContent;
 };
-
 
 class ModeratorsActiveDataStreamer
     : public ::cppu::WeakImplHelper1<XActiveDataStreamer>
@@ -395,14 +385,12 @@ public:
         return m_xStream;
     }
 
-
 private:
     Moderator& m_aModerator;
 
     osl::Mutex m_aMutex;
     Reference<XStream> m_xStream;
 };
-
 
 class ModeratorsActiveDataSink
     : public ::cppu::WeakImplHelper1<XActiveDataSink>
@@ -433,20 +421,16 @@ public:
         return m_xStream;
     }
 
-
 private:
     Moderator& m_aModerator;
     osl::Mutex m_aMutex;
     Reference<XInputStream> m_xStream;
 };
 
-
-
 ModeratorsActiveDataSink::ModeratorsActiveDataSink(Moderator &theModerator)
     : m_aModerator(theModerator)
 {
 }
-
 
 ModeratorsActiveDataSink::~ModeratorsActiveDataSink()
 {
@@ -466,14 +450,12 @@ ModeratorsActiveDataSink::setInputStream (
     m_xStream = rxInputStream;
 }
 
-
 ModeratorsActiveDataStreamer::ModeratorsActiveDataStreamer(
     Moderator &theModerator
 )
     : m_aModerator(theModerator)
 {
 }
-
 
 ModeratorsActiveDataStreamer::~ModeratorsActiveDataStreamer()
 {
@@ -493,8 +475,6 @@ ModeratorsActiveDataStreamer::setStream (
     m_xStream = rxStream;
 }
 
-
-
 class ModeratorsInteractionHandler
     : public ::cppu::WeakImplHelper1<XInteractionHandler>
 {
@@ -512,7 +492,6 @@ private:
 
     Moderator& m_aModerator;
 };
-
 
 class ModeratorsProgressHandler
     : public ::cppu::WeakImplHelper1<XProgressHandler>
@@ -532,11 +511,9 @@ public:
     virtual void SAL_CALL pop(  )
         throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
-
 private:
     Moderator& m_aModerator;
 };
-
 
 ModeratorsProgressHandler::ModeratorsProgressHandler(Moderator &theModerator)
     : m_aModerator(theModerator)
@@ -547,7 +524,6 @@ ModeratorsProgressHandler::~ModeratorsProgressHandler()
 {
 }
 
-
 void SAL_CALL ModeratorsProgressHandler::push( const Any& Status )
     throw (
         RuntimeException, std::exception)
@@ -555,13 +531,11 @@ void SAL_CALL ModeratorsProgressHandler::push( const Any& Status )
     m_aModerator.push(Status);
 }
 
-
 void SAL_CALL ModeratorsProgressHandler::update( const Any& Status )
     throw (RuntimeException, std::exception)
 {
     m_aModerator.update(Status);
 }
-
 
 void SAL_CALL ModeratorsProgressHandler::pop(  )
     throw (RuntimeException, std::exception)
@@ -569,18 +543,15 @@ void SAL_CALL ModeratorsProgressHandler::pop(  )
     m_aModerator.pop();
 }
 
-
 ModeratorsInteractionHandler::ModeratorsInteractionHandler(
     Moderator &aModerator)
     : m_aModerator(aModerator)
 {
 }
 
-
 ModeratorsInteractionHandler::~ModeratorsInteractionHandler()
 {
 }
-
 
 void SAL_CALL
 ModeratorsInteractionHandler::handle(
@@ -593,9 +564,6 @@ ModeratorsInteractionHandler::handle(
     // wakes up the mainthread
     m_aModerator.handle(Request);
 }
-
-
-
 
 Moderator::Moderator(
     Reference < XContent >& xContent,
@@ -662,11 +630,9 @@ Moderator::Moderator(
         m_aArg.Argument <<= aOpenArg;
 }
 
-
 Moderator::~Moderator()
 {
 }
-
 
 Moderator::Result Moderator::getResult(const sal_uInt32 milliSec)
 {
@@ -688,13 +654,11 @@ Moderator::Result Moderator::getResult(const sal_uInt32 milliSec)
     return ret;
 }
 
-
 void Moderator::setReply(ReplyType aReplyType )
 {
     salhelper::ConditionModifier aMod(m_aRep);
     m_aReplyType = aReplyType;
 }
-
 
 void Moderator::handle( const Reference<XInteractionRequest >& Request )
 {
@@ -732,7 +696,6 @@ void Moderator::handle( const Reference<XInteractionRequest >& Request )
     } while(aReplyType != REQUESTHANDLED);
 }
 
-
 void Moderator::push( const Any& Status )
 {
     {
@@ -749,7 +712,6 @@ void Moderator::push( const Any& Status )
     if(aReplyType == EXIT)
         setReply(EXIT);
 }
-
 
 void Moderator::update( const Any& Status )
 {
@@ -768,7 +730,6 @@ void Moderator::update( const Any& Status )
         setReply(EXIT);
 }
 
-
 void Moderator::pop(  )
 {
     {
@@ -784,7 +745,6 @@ void Moderator::pop(  )
     if(aReplyType == EXIT)
         setReply(EXIT);
 }
-
 
 void Moderator::setStream(const Reference< XStream >& aStream)
 {
@@ -803,7 +763,6 @@ void Moderator::setStream(const Reference< XStream >& aStream)
         setReply(EXIT);
 }
 
-
 void Moderator::setInputStream(const Reference<XInputStream> &rxInputStream)
 {
     {
@@ -820,7 +779,6 @@ void Moderator::setInputStream(const Reference<XInputStream> &rxInputStream)
     if(aReplyType == EXIT)
         setReply(EXIT);
 }
-
 
 void SAL_CALL Moderator::run()
 {
@@ -883,7 +841,6 @@ static bool _UCBOpenContentSync(
     Reference < XInteractionHandler > xInteract,
     Reference < XProgressHandler > xProgress,
     UcbLockBytesHandlerRef xHandler );
-
 
 static bool UCBOpenContentSync(
     UcbLockBytesRef xLockBytes,
@@ -1218,13 +1175,11 @@ static bool _UCBOpenContentSync(
     if ( xControl.is() )
         xControl->terminate();
 
-
     if ( xProps.is() )
         xProps->removePropertiesChangeListener( Sequence< OUString >(), xListener );
 
     return ( bAborted || bException );
 }
-
 
 UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     : m_aExpireDate( DateTime::EMPTY )
@@ -1238,7 +1193,6 @@ UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
 {
     SetSynchronMode( true );
 }
-
 
 UcbLockBytes::~UcbLockBytes()
 {
@@ -1280,8 +1234,6 @@ Reference < XInputStream > UcbLockBytes::getInputStream()
     m_bDontClose = true;
     return m_xInputStream;
 }
-
-
 
 bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
 {
@@ -1347,7 +1299,6 @@ void UcbLockBytes::SetStreamValid_Impl()
         m_aInitialized.set();
 }
 
-
 void UcbLockBytes::terminate_Impl()
 {
     m_bTerminated = true;
@@ -1364,12 +1315,10 @@ void UcbLockBytes::terminate_Impl()
         m_xHandler->Handle( UcbLockBytesHandler::DONE, this );
 }
 
-
 void UcbLockBytes::SetSynchronMode (bool bSynchron)
 {
     SvLockBytes::SetSynchronMode (bSynchron);
 }
-
 
 ErrCode UcbLockBytes::ReadAt(sal_uInt64 const nPos,
         void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const
@@ -1439,7 +1388,6 @@ ErrCode UcbLockBytes::ReadAt(sal_uInt64 const nPos,
     return ERRCODE_NONE;
 }
 
-
 ErrCode UcbLockBytes::WriteAt(sal_uInt64 const nPos, const void *pBuffer,
         sal_uLong nCount, sal_uLong *pWritten)
 {
@@ -1479,7 +1427,6 @@ ErrCode UcbLockBytes::WriteAt(sal_uInt64 const nPos, const void *pBuffer,
     return ERRCODE_NONE;
 }
 
-
 ErrCode UcbLockBytes::Flush() const
 {
     Reference <XOutputStream > xOutputStream = getOutputStream_Impl();
@@ -1497,7 +1444,6 @@ ErrCode UcbLockBytes::Flush() const
 
     return ERRCODE_NONE;
 }
-
 
 ErrCode UcbLockBytes::SetSize (sal_uInt64 const nNewSize)
 {
@@ -1531,7 +1477,6 @@ ErrCode UcbLockBytes::SetSize (sal_uInt64 const nNewSize)
 
     return ERRCODE_NONE;
 }
-
 
 ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
 {
@@ -1568,7 +1513,6 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
 
     return ERRCODE_NONE;
 }
-
 
 IMPL_LINK_NOARG(UcbLockBytes, DataAvailHdl)
 {

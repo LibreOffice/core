@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/fontoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
@@ -126,7 +125,6 @@ class SvtFontOptions_Impl : public ConfigItem
         bool        m_bFontWYSIWYG          ;
 };
 
-
 //  constructor
 
 SvtFontOptions_Impl::SvtFontOptions_Impl()
@@ -178,7 +176,6 @@ SvtFontOptions_Impl::SvtFontOptions_Impl()
     EnableNotification( seqNames );
 }
 
-
 //  destructor
 
 SvtFontOptions_Impl::~SvtFontOptions_Impl()
@@ -189,7 +186,6 @@ SvtFontOptions_Impl::~SvtFontOptions_Impl()
         Commit();
     }
 }
-
 
 //  public method
 
@@ -227,7 +223,6 @@ void SvtFontOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     }
 }
 
-
 //  public method
 
 void SvtFontOptions_Impl::Commit()
@@ -258,14 +253,12 @@ void SvtFontOptions_Impl::Commit()
     PutProperties( seqNames, seqValues );
 }
 
-
 //  public method
 
 bool SvtFontOptions_Impl::IsFontHistoryEnabled() const
 {
     return m_bFontHistory;
 }
-
 
 //  public method
 
@@ -275,14 +268,12 @@ void SvtFontOptions_Impl::EnableFontHistory( bool bState )
     SetModified();
 }
 
-
 //  public method
 
 bool SvtFontOptions_Impl::IsFontWYSIWYGEnabled() const
 {
     return m_bFontWYSIWYG;
 }
-
 
 //  public method
 
@@ -291,7 +282,6 @@ void SvtFontOptions_Impl::EnableFontWYSIWYG( bool bState )
     m_bFontWYSIWYG = bState;
     SetModified();
 }
-
 
 //  private method
 
@@ -310,14 +300,12 @@ Sequence< OUString > SvtFontOptions_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
 SvtFontOptions_Impl*    SvtFontOptions::m_pDataContainer    = NULL  ;
 sal_Int32               SvtFontOptions::m_nRefCount         = 0     ;
-
 
 //  constructor
 
@@ -336,7 +324,6 @@ SvtFontOptions::SvtFontOptions()
     }
 }
 
-
 //  destructor
 
 SvtFontOptions::~SvtFontOptions()
@@ -354,7 +341,6 @@ SvtFontOptions::~SvtFontOptions()
     }
 }
 
-
 //  public method
 
 bool SvtFontOptions::IsFontHistoryEnabled() const
@@ -362,7 +348,6 @@ bool SvtFontOptions::IsFontHistoryEnabled() const
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsFontHistoryEnabled();
 }
-
 
 //  public method
 
@@ -372,7 +357,6 @@ void SvtFontOptions::EnableFontHistory( bool bState )
     m_pDataContainer->EnableFontHistory( bState );
 }
 
-
 //  public method
 
 bool SvtFontOptions::IsFontWYSIWYGEnabled() const
@@ -380,7 +364,6 @@ bool SvtFontOptions::IsFontWYSIWYGEnabled() const
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsFontWYSIWYGEnabled();
 }
-
 
 //  public method
 
@@ -394,7 +377,6 @@ namespace
 {
     class theFontOptionsMutex : public rtl::Static<osl::Mutex, theFontOptionsMutex> {};
 }
-
 
 //  private method
 

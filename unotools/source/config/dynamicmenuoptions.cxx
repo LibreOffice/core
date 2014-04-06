@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/configmgr.hxx>
@@ -331,9 +330,7 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
                                                     Sequence< OUString >& lDestination ,
                                               const OUString&             sSetNode     );
 
-
     //  private member
-
 
     private:
 
@@ -341,7 +338,6 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
         SvtDynMenu  m_aWizardMenu           ;
         SvtDynMenu  m_aHelpBookmarksMenu    ;
 };
-
 
 //  constructor
 
@@ -450,7 +446,6 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
 */
 }
 
-
 //  destructor
 
 SvtDynamicMenuOptions_Impl::~SvtDynamicMenuOptions_Impl()
@@ -462,14 +457,12 @@ SvtDynamicMenuOptions_Impl::~SvtDynamicMenuOptions_Impl()
     }
 }
 
-
 //  public method
 
 void SvtDynamicMenuOptions_Impl::Notify( const Sequence< OUString >& )
 {
     DBG_ASSERT( false, "SvtDynamicMenuOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
 }
-
 
 //  public method
 
@@ -559,7 +552,6 @@ void SvtDynamicMenuOptions_Impl::Commit()
     */
 }
 
-
 //  public method
 
 Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions_Impl::GetMenu( EDynamicMenuType eMenu ) const
@@ -585,7 +577,6 @@ Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions_Impl::GetMenu( EDyna
     return lReturn;
 }
 
-
 //  private method
 
 Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt32& nNewCount, sal_uInt32& nWizardCount, sal_uInt32& nHelpBookmarksCount )
@@ -609,7 +600,6 @@ Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt
     // Return result.
     return lProperties;
 }
-
 
 //  private helper
 
@@ -639,7 +629,6 @@ class SelectByPrefix
             return s.startsWith( PATHPREFIX_SETUP );
         }
 };
-
 
 //  private method
 
@@ -689,14 +678,12 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
     }
 }
 
-
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
 SvtDynamicMenuOptions_Impl*     SvtDynamicMenuOptions::m_pDataContainer = NULL  ;
 sal_Int32                       SvtDynamicMenuOptions::m_nRefCount      = 0     ;
-
 
 //  constructor
 
@@ -713,7 +700,6 @@ SvtDynamicMenuOptions::SvtDynamicMenuOptions()
         ItemHolder1::holdConfigItem(E_DYNAMICMENUOPTIONS);
     }
 }
-
 
 //  destructor
 
@@ -732,7 +718,6 @@ SvtDynamicMenuOptions::~SvtDynamicMenuOptions()
     }
 }
 
-
 //  public method
 
 Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions::GetMenu( EDynamicMenuType eMenu ) const
@@ -745,7 +730,6 @@ namespace
 {
     class theDynamicMenuOptionsMutex : public rtl::Static<osl::Mutex, theDynamicMenuOptionsMutex>{};
 }
-
 
 //  private method
 

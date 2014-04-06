@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/localisationoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
@@ -121,7 +120,6 @@ class SvtLocalisationOptions_Impl : public ConfigItem
         sal_Int32   m_nDialogScale      ;
 };
 
-
 //  constructor
 
 SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()
@@ -167,7 +165,6 @@ SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()
     EnableNotification( seqNames );
 }
 
-
 //  destructor
 
 SvtLocalisationOptions_Impl::~SvtLocalisationOptions_Impl()
@@ -178,7 +175,6 @@ SvtLocalisationOptions_Impl::~SvtLocalisationOptions_Impl()
         Commit();
     }
 }
-
 
 //  public method
 
@@ -212,7 +208,6 @@ void SvtLocalisationOptions_Impl::Notify( const Sequence< OUString >& seqPropert
     NotifyListeners(0);
 }
 
-
 //  public method
 
 void SvtLocalisationOptions_Impl::Commit()
@@ -240,14 +235,12 @@ void SvtLocalisationOptions_Impl::Commit()
     PutProperties( seqNames, seqValues );
 }
 
-
 //  public method
 
 bool SvtLocalisationOptions_Impl::IsAutoMnemonic() const
 {
     return m_bAutoMnemonic;
 }
-
 
 //  public method
 
@@ -270,14 +263,12 @@ Sequence< OUString > SvtLocalisationOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
 SvtLocalisationOptions_Impl*    SvtLocalisationOptions::m_pDataContainer    = NULL  ;
 sal_Int32                       SvtLocalisationOptions::m_nRefCount         = 0     ;
-
 
 //  constructor
 
@@ -296,7 +287,6 @@ SvtLocalisationOptions::SvtLocalisationOptions()
     }
 }
 
-
 //  destructor
 
 SvtLocalisationOptions::~SvtLocalisationOptions()
@@ -314,7 +304,6 @@ SvtLocalisationOptions::~SvtLocalisationOptions()
     }
 }
 
-
 //  public method
 
 bool SvtLocalisationOptions::IsAutoMnemonic() const
@@ -322,7 +311,6 @@ bool SvtLocalisationOptions::IsAutoMnemonic() const
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsAutoMnemonic();
 }
-
 
 //  public method
 
@@ -336,7 +324,6 @@ namespace
 {
     class theLocalisationOptionsMutex : public rtl::Static<osl::Mutex, theLocalisationOptionsMutex>{};
 }
-
 
 //  private method
 

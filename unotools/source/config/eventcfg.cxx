@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/eventcfg.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
@@ -120,7 +119,6 @@ GlobalEventConfig_Impl::GlobalEventConfig_Impl()
     EnableNotification( aNotifySeq, true );
 }
 
-
 //  destructor
 
 GlobalEventConfig_Impl::~GlobalEventConfig_Impl()
@@ -139,7 +137,6 @@ OUString GlobalEventConfig_Impl::GetEventName( sal_Int32 nIndex )
     else
         return OUString();
 }
-
 
 //  public method
 
@@ -160,7 +157,6 @@ void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& )
             xFrame->contextChanged();
     }
 }
-
 
 //  public method
 
@@ -190,7 +186,6 @@ void GlobalEventConfig_Impl::Commit()
         SetSetProperties(SETNODE_BINDINGS,seqValues);
     }
 }
-
 
 //  private method
 
@@ -310,7 +305,6 @@ bool SAL_CALL GlobalEventConfig_Impl::hasElements(  ) throw (RuntimeException)
 }
 
 // and now the wrapper
-
 
 //initialize static member
 GlobalEventConfig_Impl*     GlobalEventConfig::m_pImpl = NULL  ;

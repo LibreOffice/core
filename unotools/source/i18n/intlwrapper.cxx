@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "unotools/intlwrapper.hxx"
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <i18nlangtag/mslangid.hxx>
@@ -53,12 +52,10 @@ IntlWrapper::~IntlWrapper()
     delete pCaseCollator;
 }
 
-
 void IntlWrapper::ImplNewLocaleData() const
 {
     ((IntlWrapper*)this)->pLocaleData = new LocaleDataWrapper( m_xContext, maLanguageTag );
 }
-
 
 void IntlWrapper::ImplNewCollator( bool bCaseSensitive ) const
 {

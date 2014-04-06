@@ -25,10 +25,8 @@
 #include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
 
-
 namespace utl
 {
-
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -45,7 +43,6 @@ namespace utl
     using ::com::sun::star::util::XCloseListener;
     using ::com::sun::star::util::CloseVetoException;
     using ::com::sun::star::lang::EventObject;
-
 
     //= CloseListener_Impl
 
@@ -77,7 +74,6 @@ namespace utl
         bool    m_bHasOwnership;
     };
 
-
     void SAL_CALL CloseListener_Impl::queryClosing( const EventObject& i_source, sal_Bool i_deliverOwnership ) throw (CloseVetoException, RuntimeException, std::exception)
     {
         (void)i_source;
@@ -88,18 +84,15 @@ namespace utl
         throw CloseVetoException();
     }
 
-
     void SAL_CALL CloseListener_Impl::notifyClosing( const EventObject& i_source ) throw (RuntimeException, std::exception)
     {
         (void)i_source;
     }
 
-
     void SAL_CALL CloseListener_Impl::disposing( const EventObject& i_source ) throw (RuntimeException, std::exception)
     {
         (void)i_source;
     }
-
 
     //= CloseVeto_Data
 
@@ -108,7 +101,6 @@ namespace utl
         Reference< XCloseable >                 xCloseable;
         ::rtl::Reference< CloseListener_Impl >  pListener;
     };
-
 
     //= operations
 
@@ -123,7 +115,6 @@ namespace utl
             i_data.pListener = new CloseListener_Impl;
             i_data.xCloseable->addCloseListener( i_data.pListener.get() );
         }
-
 
         void lcl_deinit( CloseVeto_Data& i_data )
         {
@@ -146,9 +137,7 @@ namespace utl
         }
     }
 
-
     //= CloseVeto
-
 
     CloseVeto::CloseVeto( const Reference< XInterface >& i_closeable )
         :m_pData( new CloseVeto_Data )
@@ -156,14 +145,11 @@ namespace utl
         lcl_init( *m_pData, i_closeable );
     }
 
-
     CloseVeto::~CloseVeto()
     {
         lcl_deinit( *m_pData );
     }
 
-
 } // namespace utl
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configmgr.hxx>
@@ -99,7 +98,6 @@ struct FactoryInfo
             free();
         }
 
-
         // easy way to reset struct member!
         void free()
         {
@@ -118,7 +116,6 @@ struct FactoryInfo
             bChangedIcon                = false;
             bDefaultFilterReadonly      = false;
         }
-
 
         // returns list of properties, which has changed only!
         // We use given value of sNodeBase to build full qualified paths ...
@@ -184,7 +181,6 @@ struct FactoryInfo
             return lProperties;
         }
 
-
         // We must support setting AND marking of changed values.
         // That's why we can't make our member public. We must use get/set/init methods
         // to control access on it!
@@ -197,7 +193,6 @@ struct FactoryInfo
         bool            isDefaultFilterReadonly() const { return bDefaultFilterReadonly; }
         sal_Int32           getIcon             () const { return nIcon;              };
 
-
         // If you call set-methods - we check for changes of valkues and mark it.
         // But if you wish to set it without that ... you must initialize it!
         void initInstalled        ( bool               bNewInstalled        ) { bInstalled        = bNewInstalled        ; }
@@ -208,7 +203,6 @@ struct FactoryInfo
         void initDefaultFilter    ( const OUString& sNewDefaultFilter    ) { sDefaultFilter    = sNewDefaultFilter    ; }
         void setDefaultFilterReadonly( const bool bVal){bDefaultFilterReadonly = bVal;}
         void initIcon             ( sal_Int32              nNewIcon             ) { nIcon             = nNewIcon             ; }
-
 
         void initTemplateFile( const OUString& sNewTemplateFile )
         {
@@ -224,7 +218,6 @@ struct FactoryInfo
             }
         }
 
-
         void setTemplateFile( const OUString& sNewTemplateFile )
         {
             if( sTemplateFile != sNewTemplateFile )
@@ -234,7 +227,6 @@ struct FactoryInfo
             }
         };
 
-
         void setWindowAttributes( const OUString& sNewWindowAttributes )
         {
             if( sWindowAttributes != sNewWindowAttributes )
@@ -243,7 +235,6 @@ struct FactoryInfo
                 bChangedWindowAttributes = true            ;
             }
         };
-
 
         void setDefaultFilter( const OUString& sNewDefaultFilter )
         {
@@ -309,12 +300,10 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
          SvtModuleOptions_Impl();
         virtual ~SvtModuleOptions_Impl();
 
-
         //  overloaded methods of baseclass
 
         virtual void Notify( const css::uno::Sequence< OUString >& lPropertyNames ) SAL_OVERRIDE;
         virtual void Commit(                                                             ) SAL_OVERRIDE;
-
 
         //  public interface
 
@@ -334,18 +323,15 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
                                                     const OUString&              sFilter    );
         void            MakeReadonlyStatesAvailable();
 
-
     //  private methods
 
     private:
         static css::uno::Sequence< OUString > impl_ExpandSetNames ( const css::uno::Sequence< OUString >& lSetNames   );
                void                                  impl_Read           ( const css::uno::Sequence< OUString >& lSetNames   );
 
-
     //  private types
 
     private:
-
 
     //  private member
 
@@ -587,7 +573,6 @@ bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eModule
     return aRet;
 }
 
-
 OUString SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFactory ) const
 {
     OUString sName;
@@ -599,7 +584,6 @@ OUString SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFact
 
     return sName;
 }
-
 
 OUString SvtModuleOptions::GetFactoryShortName(SvtModuleOptions::EFactory eFactory)
 {
@@ -639,7 +623,6 @@ OUString SvtModuleOptions::GetFactoryShortName(SvtModuleOptions::EFactory eFacto
     return sShortName;
 }
 
-
 OUString SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EFactory eFactory ) const
 {
     OUString sFile;
@@ -651,7 +634,6 @@ OUString SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EF
 
     return sFile;
 }
-
 
 OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory eFactory ) const
 {
@@ -690,7 +672,6 @@ OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EF
     return sURL;
 }
 
-
 OUString SvtModuleOptions_Impl::GetFactoryDefaultFilter( SvtModuleOptions::EFactory eFactory ) const
 {
     OUString sDefaultFilter;
@@ -712,7 +693,6 @@ bool SvtModuleOptions_Impl::IsDefaultFilterReadonly( SvtModuleOptions::EFactory 
     return bRet;
 }
 
-
 sal_Int32 SvtModuleOptions_Impl::GetFactoryIcon( SvtModuleOptions::EFactory eFactory ) const
 {
     sal_Int32 nIcon = 0;
@@ -725,7 +705,6 @@ sal_Int32 SvtModuleOptions_Impl::GetFactoryIcon( SvtModuleOptions::EFactory eFac
     return nIcon;
 }
 
-
 void SvtModuleOptions_Impl::SetFactoryStandardTemplate(       SvtModuleOptions::EFactory eFactory   ,
                                                         const OUString&           sTemplate  )
 {
@@ -735,7 +714,6 @@ void SvtModuleOptions_Impl::SetFactoryStandardTemplate(       SvtModuleOptions::
         SetModified();
     }
 }
-
 
 void SvtModuleOptions_Impl::SetFactoryDefaultFilter(       SvtModuleOptions::EFactory eFactory,
                                                      const OUString&           sFilter )
@@ -939,7 +917,6 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< OUString >& lFa
     }
 }
 
-
 void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
 {
     if (m_bReadOnlyStatesWellKnown)
@@ -974,7 +951,6 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
     m_bReadOnlyStatesWellKnown = true;
 }
 
-
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
@@ -1007,7 +983,6 @@ SvtModuleOptions::SvtModuleOptions()
     }
 }
 
-
 SvtModuleOptions::~SvtModuleOptions()
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
@@ -1038,13 +1013,11 @@ bool SvtModuleOptions::IsModuleInstalled( EModule eModule ) const
     return m_pDataContainer->IsModuleInstalled( eModule );
 }
 
-
 OUString SvtModuleOptions::GetFactoryName( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryName( eFactory );
 }
-
 
 OUString SvtModuleOptions::GetFactoryStandardTemplate( EFactory eFactory ) const
 {
@@ -1052,13 +1025,11 @@ OUString SvtModuleOptions::GetFactoryStandardTemplate( EFactory eFactory ) const
     return m_pDataContainer->GetFactoryStandardTemplate( eFactory );
 }
 
-
 OUString SvtModuleOptions::GetFactoryEmptyDocumentURL( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryEmptyDocumentURL( eFactory );
 }
-
 
 OUString SvtModuleOptions::GetFactoryDefaultFilter( EFactory eFactory ) const
 {
@@ -1079,14 +1050,12 @@ sal_Int32 SvtModuleOptions::GetFactoryIcon( EFactory eFactory ) const
     return m_pDataContainer->GetFactoryIcon( eFactory );
 }
 
-
 bool SvtModuleOptions::ClassifyFactoryByName( const OUString& sName    ,
                                                         EFactory&        eFactory )
 {
     // We don't need any mutex here ... because we don't use any member here!
     return SvtModuleOptions_Impl::ClassifyFactoryByName( sName, eFactory );
 }
-
 
 void SvtModuleOptions::SetFactoryStandardTemplate(       EFactory         eFactory   ,
                                                    const OUString& sTemplate  )
@@ -1095,7 +1064,6 @@ void SvtModuleOptions::SetFactoryStandardTemplate(       EFactory         eFacto
     m_pDataContainer->SetFactoryStandardTemplate( eFactory, sTemplate );
 }
 
-
 void SvtModuleOptions::SetFactoryDefaultFilter(       EFactory         eFactory,
                                                 const OUString& sFilter )
 {
@@ -1103,13 +1071,11 @@ void SvtModuleOptions::SetFactoryDefaultFilter(       EFactory         eFactory,
     m_pDataContainer->SetFactoryDefaultFilter( eFactory, sFilter );
 }
 
-
 bool SvtModuleOptions::IsMath() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SMATH );
 }
-
 
 bool SvtModuleOptions::IsChart() const
 {
@@ -1117,13 +1083,11 @@ bool SvtModuleOptions::IsChart() const
     return m_pDataContainer->IsModuleInstalled( E_SCHART );
 }
 
-
 bool SvtModuleOptions::IsCalc() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SCALC );
 }
-
 
 bool SvtModuleOptions::IsDraw() const
 {
@@ -1131,20 +1095,17 @@ bool SvtModuleOptions::IsDraw() const
     return m_pDataContainer->IsModuleInstalled( E_SDRAW );
 }
 
-
 bool SvtModuleOptions::IsWriter() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SWRITER );
 }
 
-
 bool SvtModuleOptions::IsImpress() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SIMPRESS );
 }
-
 
 bool SvtModuleOptions::IsBasicIDE() const
 {

@@ -380,8 +380,6 @@ bool MediaDescriptor::isStreamReadOnly() const
     return bReadOnly;
 }
 
-
-
 css::uno::Any MediaDescriptor::getComponentDataEntry( const OUString& rName ) const
 {
     comphelper::SequenceAsHashMap::const_iterator aPropertyIter = find( PROP_COMPONENTDATA() );

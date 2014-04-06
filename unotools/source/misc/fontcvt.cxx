@@ -32,7 +32,6 @@
 //various holes in OpenSymbol which were filled by StarSymbol, i.e.
 //destination mapping points which are empty in OpenSymbol
 
-
 // note: the character mappings that are only approximations
 //       are marked (with an empty comment)
 
@@ -110,8 +109,6 @@ static const sal_Unicode aStarBatsTab[224] =
              0,         0,         0,    0xE03a
 };
 
-
-
 static const sal_Unicode aStarMathTab[224] =
 {
     // F020
@@ -185,8 +182,6 @@ static const sal_Unicode aStarMathTab[224] =
         0xe0db,     0xe0dc,   0xe0dd,    0x2115,
         0x2124,     0x211a,   0x211d,    0x2102
 };
-
-
 
 static const sal_Unicode aWingDingsTab[224] =
 {
@@ -262,8 +257,6 @@ static const sal_Unicode aWingDingsTab[224] =
         0xe4c2,    0xe4c3,    0xe4c4,    0xe4c5
 };
 
-
-
 static const sal_Unicode aWingDings2Tab[224] =
 {
     // F020
@@ -337,8 +330,6 @@ static const sal_Unicode aWingDings2Tab[224] =
         0x203b,    0x2042,         0,         0,
              0,         0,         0,         0
 };
-
-
 
 static const sal_Unicode aWingDings3Tab[224] =
 {
@@ -414,8 +405,6 @@ static const sal_Unicode aWingDings3Tab[224] =
              0,         0,         0,         0
 };
 
-
-
 static const sal_Unicode aWebDingsTab[224] =
 {
     // F020
@@ -489,8 +478,6 @@ static const sal_Unicode aWebDingsTab[224] =
         0xe3d7,    0xe3d8,    0xe3d9,    0xe3da,
         0xe3db,    0xe3dc,    0xe3dd,    0xe3de
 };
-
-
 
 static const sal_Unicode aAdobeSymbolTab[224] =
 {
@@ -567,8 +554,6 @@ static const sal_Unicode aAdobeSymbolTab[224] =
         0xe167,    0xe168,    0xe169,         0,
 };
 
-
-
 static const sal_Unicode aMonotypeSortsTab[224] =
 {
     // F020
@@ -642,8 +627,6 @@ static const sal_Unicode aMonotypeSortsTab[224] =
         0xe261,    0x27b9,    0x27ba,    0x27bb,
         0x27bc,    0x27bd,    0x27be,         0,
 };
-
-
 
 static const sal_Unicode aMTExtraTab[224] =
 {
@@ -792,8 +775,6 @@ static const sal_Unicode aAdobeSymbolToAppleSymbolTab[224] =
         0x23A0,    0x23A4,    0x23A5,    0x23A6,
         0x23AB,    0x23AC,    0x23AD,    0x00FF
 };
-
-
 
 static sal_Unicode ImplStarSymbolToStarBats( sal_Unicode c )
 {
@@ -1334,8 +1315,6 @@ StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly)
     return new StarSymbolToMSMultiFontImpl(bPerfectOnly);
 }
 
-
-
 sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
 {
     sal_Unicode cRetVal = 0;
@@ -1372,8 +1351,6 @@ sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
     return cRetVal ? cRetVal : cChar;
 }
 
-
-
 // recode the string assuming the character codes are symbol codes
 // from an traditional symbol font (i.e. U+F020..U+F0FF)
 void ConvertChar::RecodeString( OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen ) const
@@ -1399,8 +1376,6 @@ void ConvertChar::RecodeString( OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen
     }
     rStr = aTmpStr.makeStringAndClear();
 }
-
-
 
 struct RecodeTable { const char* pOrgName; ConvertChar aCvt;};
 
@@ -1433,8 +1408,6 @@ static const RecodeTable aAppleSymbolRecodeTable[] = {
 };
 
 static ConvertChar aImplStarSymbolCvt = { NULL, "StarBats", ImplStarSymbolToStarBats };
-
-
 
 const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, const OUString& rMapFontName )
 {
@@ -1480,8 +1453,6 @@ const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, con
     return pCvt;
 }
 
-
-
 FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName, sal_uLong nFlags )
 {
     const ConvertChar* pCvt = NULL;
@@ -1511,15 +1482,11 @@ FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName,
     return (FontToSubsFontConverter)pCvt;
 }
 
-
-
 void DestroyFontToSubsFontConverter(
     SAL_UNUSED_PARAMETER FontToSubsFontConverter )
 {
     //TODO: nothing to do for now, because we use static ImplCvtChars
 }
-
-
 
 sal_Unicode ConvertFontToSubsFontChar(
     FontToSubsFontConverter hConverter, sal_Unicode cChar )
@@ -1529,8 +1496,6 @@ sal_Unicode ConvertFontToSubsFontChar(
     else
         return cChar;
 }
-
-
 
 OUString GetFontToSubsFontName( FontToSubsFontConverter hConverter )
 {

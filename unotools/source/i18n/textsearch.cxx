@@ -32,10 +32,8 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-
 namespace utl
 {
-
 
 SearchParam::SearchParam( const OUString &rText,
                                 SearchType eType,
@@ -197,7 +195,6 @@ void TextSearch::SetLocale( const ::com::sun::star::util::SearchOptions& rOption
     xTextSearch = getXTextSearch( aSOpt );
 }
 
-
 TextSearch::~TextSearch()
 {
 }
@@ -237,7 +234,6 @@ bool TextSearch::SearchForward( const OUString &rStr,
     }
     return nRet;
 }
-
 
 bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
                                 sal_Int32* pEnde, SearchResult* pRes )
@@ -358,8 +354,6 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &r
     }
 }
 
-
 }   // namespace utl
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

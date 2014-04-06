@@ -48,7 +48,6 @@ OTempFileService::~OTempFileService ()
         delete mpTempFile;
 }
 
-
 // XInterface
 
 css::uno::Any SAL_CALL OTempFileService::queryInterface( css::uno::Type const & aType )
@@ -150,8 +149,6 @@ throw ( css::uno::RuntimeException, std::exception )
 
     return OUString( mpTempFile->GetFileName() );
 };
-
-
 
 // XInputStream
 
@@ -323,7 +320,6 @@ throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, cs
     }
 }
 
-
 void OTempFileService::checkError () const
 {
     if (!mpStream || mpStream->SvStream::GetError () != ERRCODE_NONE )
@@ -395,7 +391,6 @@ throw ( css::io::IOException, css::uno::RuntimeException, std::exception )
     return (sal_Int64)nEndPos;
 }
 
-
 // XStream
 
 css::uno::Reference< css::io::XInputStream > SAL_CALL OTempFileService::getInputStream()
@@ -442,8 +437,6 @@ throw ( css::uno::RuntimeException, std::exception )
 {
     return getSupportedServiceNames_Static();
 }
-
-
 
 OUString OTempFileService::getImplementationName_Static ()
 {

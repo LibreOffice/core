@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/processfactory.hxx>
@@ -30,10 +29,8 @@
 using namespace osl;
 using namespace com::sun::star;
 
-
 SvtSysLocale_Impl*  SvtSysLocale::pImpl = NULL;
 sal_Int32           SvtSysLocale::nRefCount = 0;
-
 
 class SvtSysLocale_Impl : public utl::ConfigurationListener
 {
@@ -52,8 +49,6 @@ private:
     void                        setDateAcceptancePatternsConfig();
 };
 
-
-
 SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(NULL)
 {
     pLocaleData = new LocaleDataWrapper( aSysLocaleOptions.GetRealLanguageTag() );
@@ -62,7 +57,6 @@ SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(NULL)
     // listen for further changes
     aSysLocaleOptions.AddListener( this );
 }
-
 
 SvtSysLocale_Impl::~SvtSysLocale_Impl()
 {
@@ -115,8 +109,6 @@ void SvtSysLocale_Impl::setDateAcceptancePatternsConfig()
     }
 }
 
-
-
 SvtSysLocale::SvtSysLocale()
 {
     MutexGuard aGuard( GetMutex() );
@@ -124,7 +116,6 @@ SvtSysLocale::SvtSysLocale()
         pImpl = new SvtSysLocale_Impl;
     ++nRefCount;
 }
-
 
 SvtSysLocale::~SvtSysLocale()
 {
@@ -135,7 +126,6 @@ SvtSysLocale::~SvtSysLocale()
         pImpl = NULL;
     }
 }
-
 
 // static
 Mutex& SvtSysLocale::GetMutex()
@@ -155,24 +145,20 @@ Mutex& SvtSysLocale::GetMutex()
     return *pMutex;
 }
 
-
 const LocaleDataWrapper& SvtSysLocale::GetLocaleData() const
 {
     return *(pImpl->pLocaleData);
 }
-
 
 const LocaleDataWrapper* SvtSysLocale::GetLocaleDataPtr() const
 {
     return pImpl->pLocaleData;
 }
 
-
 const CharClass& SvtSysLocale::GetCharClass() const
 {
     return *(pImpl->GetCharClass());
 }
-
 
 const CharClass* SvtSysLocale::GetCharClassPtr() const
 {
@@ -193,8 +179,6 @@ const LanguageTag& SvtSysLocale::GetUILanguageTag() const
 {
     return pImpl->aSysLocaleOptions.GetRealUILanguageTag();
 }
-
-
 
 // static
 rtl_TextEncoding SvtSysLocale::GetBestMimeEncoding()

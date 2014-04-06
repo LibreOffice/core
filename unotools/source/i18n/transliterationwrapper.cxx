@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -38,11 +37,9 @@ TransliterationWrapper::TransliterationWrapper(
 {
 }
 
-
 TransliterationWrapper::~TransliterationWrapper()
 {
 }
-
 
 OUString TransliterationWrapper::transliterate(const OUString& rStr, sal_uInt16 nLang,
                                                sal_Int32 nStart, sal_Int32 nLen,
@@ -67,7 +64,6 @@ OUString TransliterationWrapper::transliterate(const OUString& rStr, sal_uInt16 
     }
     return sRet;
 }
-
 
 OUString TransliterationWrapper::transliterate( const OUString& rStr,
                                                 sal_Int32 nStart, sal_Int32 nLen,
@@ -101,14 +97,12 @@ bool TransliterationWrapper::needLanguageForTheMode() const
            (sal_uInt32) TransliterationModulesExtra::TOGGLE_CASE   == (sal_uInt32) nType;
 }
 
-
 void TransliterationWrapper::setLanguageLocaleImpl( sal_uInt16 nLang )
 {
     if( LANGUAGE_NONE == nLang )
         nLang = LANGUAGE_SYSTEM;
     aLanguageTag.reset( nLang);
 }
-
 
 void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
 {
@@ -143,7 +137,6 @@ void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
     }
 }
 
-
 void TransliterationWrapper::loadModuleImpl() const
 {
     if ( bFirstCall )
@@ -161,7 +154,6 @@ void TransliterationWrapper::loadModuleImpl() const
 
     bFirstCall = false;
 }
-
 
 void TransliterationWrapper::loadModuleByImplName(const OUString& rModuleName,
                                                   sal_uInt16 nLang )
@@ -183,7 +175,6 @@ void TransliterationWrapper::loadModuleByImplName(const OUString& rModuleName,
 
     bFirstCall = false;
 }
-
 
 bool TransliterationWrapper::equals(
     const OUString& rStr1, sal_Int32 nPos1, sal_Int32 nCount1, sal_Int32& nMatch1,
@@ -219,7 +210,6 @@ sal_Int32 TransliterationWrapper::compareString( const OUString& rStr1, const OU
     return 0;
 }
 
-
 // --- helpers --------------------------------------------------------
 
 bool TransliterationWrapper::isEqual( const OUString& rStr1, const OUString& rStr2 ) const
@@ -230,7 +220,6 @@ bool TransliterationWrapper::isEqual( const OUString& rStr1, const OUString& rSt
         rStr2, 0, rStr2.getLength(), nMatch2 );
     return bMatch;
 }
-
 
 bool TransliterationWrapper::isMatch( const OUString& rStr1, const OUString& rStr2 ) const
 {

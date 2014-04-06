@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "sal/config.h"
 #include <unotools/options.hxx>
 
@@ -99,6 +98,5 @@ void Options::ConfigurationChanged( ConfigurationBroadcaster*, sal_uInt32 nHint 
 {
     NotifyListeners( nHint );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

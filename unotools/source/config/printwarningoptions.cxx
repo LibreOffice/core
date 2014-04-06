@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/printwarningoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
@@ -27,9 +26,7 @@
 
 #include <itemholder1.hxx>
 
-
 //  namespaces
-
 
 using namespace ::utl                   ;
 using namespace ::rtl                   ;
@@ -56,23 +53,17 @@ class SvtPrintWarningOptions_Impl : public ConfigItem
 {
 public:
 
-
 //  constructor / destructor
-
 
      SvtPrintWarningOptions_Impl();
     virtual ~SvtPrintWarningOptions_Impl();
 
-
 //  overloaded methods of baseclass
-
 
     virtual void Commit() SAL_OVERRIDE;
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 
-
 //  public interface
-
 
     bool    IsPaperSize() const { return m_bPaperSize; }
     bool    IsPaperOrientation() const { return m_bPaperOrientation; }
@@ -86,17 +77,13 @@ public:
     void        SetTransparency( bool bState ) { m_bTransparency = bState; SetModified(); }
     void        SetModifyDocumentOnPrintingAllowed( bool bState ) { m_bModifyDocumentOnPrintingAllowed = bState; SetModified(); }
 
-
 //  private methods
-
 
 private:
 
     static Sequence< OUString > impl_GetPropertyNames();
 
-
 //  private member
-
 
 private:
 
@@ -106,7 +93,6 @@ private:
     bool    m_bTransparency;
     bool    m_bModifyDocumentOnPrintingAllowed;
 };
-
 
 //  constructor
 
@@ -171,7 +157,6 @@ SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl() :
     }
 }
 
-
 //  destructor
 
 SvtPrintWarningOptions_Impl::~SvtPrintWarningOptions_Impl()
@@ -179,7 +164,6 @@ SvtPrintWarningOptions_Impl::~SvtPrintWarningOptions_Impl()
     if( IsModified() )
         Commit();
 }
-
 
 //  Commit
 
@@ -220,7 +204,6 @@ void SvtPrintWarningOptions_Impl::Notify( const Sequence< OUString >&  )
 {
 }
 
-
 //  private method
 
 Sequence< OUString > SvtPrintWarningOptions_Impl::impl_GetPropertyNames()
@@ -241,14 +224,12 @@ Sequence< OUString > SvtPrintWarningOptions_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
 SvtPrintWarningOptions_Impl*    SvtPrintWarningOptions::m_pDataContainer = NULL;
 sal_Int32                       SvtPrintWarningOptions::m_nRefCount = 0;
-
 
 //  constructor
 
@@ -265,7 +246,6 @@ SvtPrintWarningOptions::SvtPrintWarningOptions()
         ItemHolder1::holdConfigItem(E_PRINTWARNINGOPTIONS);
     }
 }
-
 
 //  destructor
 
@@ -284,7 +264,6 @@ SvtPrintWarningOptions::~SvtPrintWarningOptions()
     }
 }
 
-
 //  public method
 
 bool SvtPrintWarningOptions::IsPaperSize() const
@@ -292,7 +271,6 @@ bool SvtPrintWarningOptions::IsPaperSize() const
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsPaperSize();
 }
-
 
 //  public method
 
@@ -302,7 +280,6 @@ bool SvtPrintWarningOptions::IsPaperOrientation() const
     return m_pDataContainer->IsPaperOrientation();
 }
 
-
 //  public method
 
 bool SvtPrintWarningOptions::IsTransparency() const
@@ -310,7 +287,6 @@ bool SvtPrintWarningOptions::IsTransparency() const
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsTransparency();
 }
-
 
 //  public method
 
@@ -320,7 +296,6 @@ void SvtPrintWarningOptions::SetPaperSize( bool bState )
     m_pDataContainer->SetPaperSize( bState );
 }
 
-
 //  public method
 
 void SvtPrintWarningOptions::SetPaperOrientation( bool bState )
@@ -328,7 +303,6 @@ void SvtPrintWarningOptions::SetPaperOrientation( bool bState )
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetPaperOrientation( bState );
 }
-
 
 //  public method
 
@@ -338,14 +312,11 @@ void SvtPrintWarningOptions::SetTransparency( bool bState )
     m_pDataContainer->SetTransparency( bState );
 }
 
-
 bool SvtPrintWarningOptions::IsModifyDocumentOnPrintingAllowed() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsModifyDocumentOnPrintingAllowed();
 }
-
-
 
 void SvtPrintWarningOptions::SetModifyDocumentOnPrintingAllowed( bool bState )
 {
@@ -357,7 +328,6 @@ namespace
 {
     class thePrintWarningOptionsMutex : public rtl::Static<osl::Mutex, thePrintWarningOptionsMutex>{};
 }
-
 
 //  private method
 

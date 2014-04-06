@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/confignode.hxx>
 #include <unotools/configpaths.hxx>
 #include <tools/diagnose_ex.h>
@@ -36,10 +35,8 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-
 namespace utl
 {
-
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -48,9 +45,7 @@ namespace utl
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::configuration;
 
-
     //= OConfigurationNode
-
 
     OConfigurationNode::OConfigurationNode(const Reference< XInterface >& _rxNode )
         :m_bEscapeNames(false)
@@ -82,7 +77,6 @@ namespace utl
             setEscape(isSetNode());
     }
 
-
     OConfigurationNode::OConfigurationNode(const OConfigurationNode& _rSource)
         :OEventListenerAdapter()
         ,m_xHierarchyAccess(_rSource.m_xHierarchyAccess)
@@ -96,7 +90,6 @@ namespace utl
         if (xConfigNodeComp.is())
             startComponentListening(xConfigNodeComp);
     }
-
 
     const OConfigurationNode& OConfigurationNode::operator=(const OConfigurationNode& _rSource)
     {
@@ -116,7 +109,6 @@ namespace utl
         return *this;
     }
 
-
     void OConfigurationNode::_disposing( const EventObject& _rSource )
     {
         Reference< XComponent > xDisposingSource(_rSource.Source, UNO_QUERY);
@@ -124,7 +116,6 @@ namespace utl
         if (xDisposingSource.get() == xConfigNodeComp.get())
             clear();
     }
-
 
     OUString OConfigurationNode::getLocalName() const
     {
@@ -141,7 +132,6 @@ namespace utl
         return sLocalName;
     }
 
-
     OUString OConfigurationNode::getNodePath() const
     {
         OUString sNodePath;
@@ -156,7 +146,6 @@ namespace utl
         }
         return sNodePath;
     }
-
 
     OUString OConfigurationNode::normalizeName(const OUString& _rName, NAMEORIGIN _eOrigin) const
     {
@@ -182,7 +171,6 @@ namespace utl
         return sName;
     }
 
-
     Sequence< OUString > OConfigurationNode::getNodeNames() const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::getNodeNames: object is invalid!");
@@ -205,7 +193,6 @@ namespace utl
 
         return aReturn;
     }
-
 
     bool OConfigurationNode::removeNode(const OUString& _rName) const throw()
     {
@@ -287,7 +274,6 @@ namespace utl
         return OConfigurationNode();
     }
 
-
     OConfigurationNode OConfigurationNode::openNode(const OUString& _rPath) const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::openNode: object is invalid!");
@@ -332,12 +318,10 @@ namespace utl
         return OConfigurationNode();
     }
 
-
     void OConfigurationNode::setEscape(bool _bEnable)
     {
         m_bEscapeNames = _bEnable && Reference< XStringEscape >::query(m_xDirectAccess).is();
     }
-
 
     bool OConfigurationNode::isSetNode() const
     {
@@ -368,7 +352,6 @@ namespace utl
         return false;
     }
 
-
     bool OConfigurationNode::hasByName(const OUString& _rName) const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
@@ -383,7 +366,6 @@ namespace utl
         }
         return false;
     }
-
 
     bool OConfigurationNode::setNodeValue(const OUString& _rPath, const Any& _rValue) const throw()
     {
@@ -440,11 +422,9 @@ namespace utl
                 OSL_FAIL("OConfigurationNode::setNodeValue: could not replace the value: caught a generic Exception!");
             }
 
-
         }
         return bResult;
     }
-
 
     Any OConfigurationNode::getNodeValue(const OUString& _rPath) const throw()
     {
@@ -470,7 +450,6 @@ namespace utl
         return aReturn;
     }
 
-
     void OConfigurationNode::clear() throw()
     {
         m_xHierarchyAccess.clear();
@@ -478,7 +457,6 @@ namespace utl
         m_xReplaceAccess.clear();
         m_xContainerAccess.clear();
     }
-
 
     //= helper
 
@@ -498,7 +476,6 @@ namespace utl
             }
             return NULL;
         }
-
 
         Reference< XInterface > lcl_createConfigurationRoot( const Reference< XMultiServiceFactory >& i_rxConfigProvider,
             const OUString& i_rNodePath, const bool i_bUpdatable, const sal_Int32 i_nDepth, const bool i_bLazyWrite )
@@ -529,13 +506,11 @@ namespace utl
         }
     }
 
-
     OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference< XInterface >& _rxRootNode )
         :OConfigurationNode( _rxRootNode )
         ,m_xCommitter( _rxRootNode, UNO_QUERY )
     {
     }
-
 
     OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference<XComponentContext> & i_rContext, const OUString& i_rNodePath, const bool i_bUpdatable )
         :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext ),
@@ -549,13 +524,11 @@ namespace utl
         }
     }
 
-
     void OConfigurationTreeRoot::clear() throw()
     {
         OConfigurationNode::clear();
         m_xCommitter.clear();
     }
-
 
     bool OConfigurationTreeRoot::commit() const throw()
     {
@@ -578,7 +551,6 @@ namespace utl
         return false;
     }
 
-
     OConfigurationTreeRoot OConfigurationTreeRoot::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, bool _bLazyWrite)
     {
         Reference< XInterface > xRoot( lcl_createConfigurationRoot(
@@ -588,12 +560,10 @@ namespace utl
         return OConfigurationTreeRoot();
     }
 
-
     OConfigurationTreeRoot OConfigurationTreeRoot::createWithComponentContext( const Reference< XComponentContext >& _rxContext, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, bool _bLazyWrite )
     {
         return createWithProvider( lcl_getConfigProvider( _rxContext ), _rPath, _nDepth, _eMode, _bLazyWrite );
     }
-
 
     OConfigurationTreeRoot OConfigurationTreeRoot::tryCreateWithComponentContext( const Reference< XComponentContext >& rxContext,
         const OUString& _rPath, sal_Int32 _nDepth , CREATION_MODE _eMode , bool _bLazyWrite )
@@ -611,8 +581,6 @@ namespace utl
         return OConfigurationTreeRoot();
     }
 
-
 }   // namespace utl
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

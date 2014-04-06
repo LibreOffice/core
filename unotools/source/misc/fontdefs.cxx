@@ -320,8 +320,6 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   NULL,                   NULL },
 };
 
-
-
 void GetEnglishSearchFontName( OUString& rName )
 {
     bool        bNeedTranslation = false;
@@ -442,8 +440,6 @@ void GetEnglishSearchFontName( OUString& rName )
     }
 }
 
-
-
 OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
 {
     // check for valid start index
@@ -488,8 +484,6 @@ OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
     return OUString( rTokenStr.getStr() + nTokenStart, nTokenLen );
 }
 
-
-
 static bool ImplIsFontToken( const OUString& rName, const OUString& rToken )
 {
     OUString      aTempName;
@@ -505,8 +499,6 @@ static bool ImplIsFontToken( const OUString& rName, const OUString& rToken )
     return false;
 }
 
-
-
 static void ImplAppendFontToken( OUString& rName, const OUString& rNewToken )
 {
     if ( !rName.isEmpty() )
@@ -521,8 +513,6 @@ void AddTokenFontName( OUString& rName, const OUString& rNewToken )
     if ( !ImplIsFontToken( rName, rNewToken ) )
         ImplAppendFontToken( rName, rNewToken );
 }
-
-
 
 OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
 {
@@ -577,8 +567,6 @@ OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
 
     return aName;
 }
-
-
 
 // TODO: use a more generic String hash
 int FontNameHash::operator()( const OUString& rStr ) const

@@ -28,7 +28,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-
 #define FILTERCFG_WORD_CODE             0x0001
 #define FILTERCFG_WORD_STORAGE          0x0002
 #define FILTERCFG_EXCEL_CODE            0x0004
@@ -124,7 +123,6 @@ void    SvtAppFilterOptions_Impl::Load()
         bSaveVBA = *(sal_Bool*)pValues[1].getValue();
 }
 
-
 class SvtWriterFilterOptions_Impl : public SvtAppFilterOptions_Impl
 {
     bool                bLoadExecutable;
@@ -169,7 +167,6 @@ void SvtWriterFilterOptions_Impl::Load()
     if(pValues[0].hasValue())
         bLoadExecutable = *(sal_Bool*)pValues[0].getValue();
 }
-
 
 class SvtCalcFilterOptions_Impl : public SvtAppFilterOptions_Impl
 {
@@ -296,8 +293,6 @@ bool SvtFilterOptions_Impl::IsFlag( sal_uLong nFlag ) const
     return bRet;
 }
 
-
-
 SvtFilterOptions::SvtFilterOptions() :
     ConfigItem( "Office.Common/Filter/Microsoft" ),
     pImp(new SvtFilterOptions_Impl)
@@ -305,7 +300,6 @@ SvtFilterOptions::SvtFilterOptions() :
     EnableNotification(GetPropertyNames());
     Load();
 }
-
 
 SvtFilterOptions::~SvtFilterOptions()
 {
@@ -409,7 +403,6 @@ void SvtFilterOptions::Load()
     }
 }
 
-
 void SvtFilterOptions::SetLoadWordBasicCode( bool bFlag )
 {
     pImp->SetFlag( FILTERCFG_WORD_CODE, bFlag );
@@ -442,8 +435,6 @@ bool SvtFilterOptions::IsLoadWordBasicStorage() const
 {
     return pImp->IsFlag( FILTERCFG_WORD_STORAGE );
 }
-
-
 
 void SvtFilterOptions::SetLoadExcelBasicCode( bool bFlag )
 {
@@ -478,8 +469,6 @@ bool SvtFilterOptions::IsLoadExcelBasicStorage() const
     return pImp->IsFlag( FILTERCFG_EXCEL_STORAGE );
 }
 
-
-
 void SvtFilterOptions::SetLoadPPointBasicCode( bool bFlag )
 {
     pImp->SetFlag( FILTERCFG_PPOINT_CODE, bFlag );
@@ -502,8 +491,6 @@ bool SvtFilterOptions::IsLoadPPointBasicStorage() const
     return pImp->IsFlag( FILTERCFG_PPOINT_STORAGE );
 }
 
-
-
 bool SvtFilterOptions::IsMathType2Math() const
 {
     return pImp->IsFlag( FILTERCFG_MATH_LOAD );
@@ -525,8 +512,6 @@ void SvtFilterOptions::SetMath2MathType( bool bFlag )
     pImp->SetFlag( FILTERCFG_MATH_SAVE, bFlag );
     SetModified();
 }
-
-
 
 bool SvtFilterOptions::IsWinWord2Writer() const
 {
@@ -555,7 +540,6 @@ bool SvtFilterOptions::IsUseEnhancedFields() const
     return pImp->IsFlag( FILTERCFG_USE_ENHANCED_FIELDS );
 }
 
-
 bool SvtFilterOptions::IsExcel2Calc() const
 {
     return pImp->IsFlag( FILTERCFG_CALC_LOAD );
@@ -577,8 +561,6 @@ void SvtFilterOptions::SetCalc2Excel( bool bFlag )
     pImp->SetFlag( FILTERCFG_CALC_SAVE, bFlag );
     SetModified();
 }
-
-
 
 bool SvtFilterOptions::IsPowerPoint2Impress() const
 {
@@ -642,24 +624,19 @@ SvtFilterOptions& SvtFilterOptions::Get()
     return theFilterOptions::get();
 }
 
-
-
 bool SvtFilterOptions::IsEnablePPTPreview() const
 {
     return pImp->IsFlag( FILTERCFG_ENABLE_PPT_PREVIEW );
 }
-
 
 bool SvtFilterOptions::IsEnableCalcPreview() const
 {
     return pImp->IsFlag( FILTERCFG_ENABLE_EXCEL_PREVIEW );
 }
 
-
 bool SvtFilterOptions::IsEnableWordPreview() const
 {
     return pImp->IsFlag( FILTERCFG_ENABLE_WORD_PREVIEW );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

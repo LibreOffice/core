@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <stdio.h>
 #include <string>
@@ -95,7 +94,6 @@ LocaleDataWrapper::~LocaleDataWrapper()
 {
 }
 
-
 void LocaleDataWrapper::setLanguageTag( const LanguageTag& rLanguageTag )
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nCriticalChange );
@@ -103,20 +101,17 @@ void LocaleDataWrapper::setLanguageTag( const LanguageTag& rLanguageTag )
     invalidateData();
 }
 
-
 const LanguageTag& LocaleDataWrapper::getLanguageTag() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     return maLanguageTag;
 }
 
-
 const ::com::sun::star::lang::Locale& LocaleDataWrapper::getMyLocale() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     return maLanguageTag.getLocale();
 }
-
 
 void LocaleDataWrapper::invalidateData()
 {
@@ -145,7 +140,6 @@ void LocaleDataWrapper::invalidateData()
     cCurrZeroChar = '0';
 }
 
-
 /* FIXME-BCP47: locale data should provide a language tag instead that could be
  * passed on. */
 ::com::sun::star::i18n::LanguageCountryInfo LocaleDataWrapper::getLanguageCountryInfo() const
@@ -161,7 +155,6 @@ void LocaleDataWrapper::invalidateData()
     return ::com::sun::star::i18n::LanguageCountryInfo();
 }
 
-
 ::com::sun::star::i18n::LocaleDataItem LocaleDataWrapper::getLocaleItem() const
 {
     try
@@ -174,7 +167,6 @@ void LocaleDataWrapper::invalidateData()
     }
     return ::com::sun::star::i18n::LocaleDataItem();
 }
-
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 > LocaleDataWrapper::getAllCurrencies() const
 {
@@ -189,7 +181,6 @@ void LocaleDataWrapper::invalidateData()
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 >(0);
 }
 
-
 ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > LocaleDataWrapper::getAllFormats() const
 {
     try
@@ -202,7 +193,6 @@ void LocaleDataWrapper::invalidateData()
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement >(0);
 }
-
 
 ::com::sun::star::i18n::ForbiddenCharacters LocaleDataWrapper::getForbiddenCharacters() const
 {
@@ -217,7 +207,6 @@ void LocaleDataWrapper::invalidateData()
     return ::com::sun::star::i18n::ForbiddenCharacters();
 }
 
-
 ::com::sun::star::uno::Sequence< OUString > LocaleDataWrapper::getReservedWord() const
 {
     try
@@ -230,7 +219,6 @@ void LocaleDataWrapper::invalidateData()
     }
     return ::com::sun::star::uno::Sequence< OUString >(0);
 }
-
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > LocaleDataWrapper::getAllInstalledLocaleNames() const
 {
@@ -249,7 +237,6 @@ void LocaleDataWrapper::invalidateData()
     }
     return rInstalledLocales;
 }
-
 
 // --- Impl and helpers ----------------------------------------------------
 
@@ -355,7 +342,6 @@ const OUString& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
     return aLocaleItem[nItem];
 }
 
-
 void LocaleDataWrapper::getOneLocaleItemImpl( sal_Int16 nItem )
 {
     if ( !bLocaleDataItemValid )
@@ -421,7 +407,6 @@ void LocaleDataWrapper::getOneLocaleItemImpl( sal_Int16 nItem )
     }
 }
 
-
 void LocaleDataWrapper::getOneReservedWordImpl( sal_Int16 nWord )
 {
     if ( !bReservedWordValid )
@@ -433,7 +418,6 @@ void LocaleDataWrapper::getOneReservedWordImpl( sal_Int16 nWord )
     if ( nWord < aReservedWordSeq.getLength() )
         aReservedWord[nWord] = aReservedWordSeq[nWord];
 }
-
 
 const OUString& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
 {
@@ -451,7 +435,6 @@ const OUString& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
     return aReservedWord[nWord];
 }
 
-
 MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const OUString& rMS ) const
 {
 //! TODO: could be cached too
@@ -460,7 +443,6 @@ MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const OUString&
 //! TODO: other measurement systems? => extend enum MeasurementSystem
     return MEASURE_US;
 }
-
 
 void LocaleDataWrapper::getDefaultCalendarImpl()
 {
@@ -485,7 +467,6 @@ void LocaleDataWrapper::getDefaultCalendarImpl()
     }
 }
 
-
 const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 > LocaleDataWrapper::getDefaultCalendar() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
@@ -497,18 +478,15 @@ const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 > LocaleDataWrapper
     return xDefaultCalendar;
 }
 
-
 const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > LocaleDataWrapper::getDefaultCalendarDays() const
 {
     return getDefaultCalendar()->Days;
 }
 
-
 const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > LocaleDataWrapper::getDefaultCalendarMonths() const
 {
     return getDefaultCalendar()->Months;
 }
-
 
 // --- currencies -----------------------------------------------------
 
@@ -523,7 +501,6 @@ const OUString& LocaleDataWrapper::getCurrSymbol() const
     return aCurrSymbol;
 }
 
-
 const OUString& LocaleDataWrapper::getCurrBankSymbol() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
@@ -534,7 +511,6 @@ const OUString& LocaleDataWrapper::getCurrBankSymbol() const
     }
     return aCurrBankSymbol;
 }
-
 
 sal_uInt16 LocaleDataWrapper::getCurrPositiveFormat() const
 {
@@ -547,7 +523,6 @@ sal_uInt16 LocaleDataWrapper::getCurrPositiveFormat() const
     return nCurrPositiveFormat;
 }
 
-
 sal_uInt16 LocaleDataWrapper::getCurrNegativeFormat() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
@@ -559,7 +534,6 @@ sal_uInt16 LocaleDataWrapper::getCurrNegativeFormat() const
     return nCurrNegativeFormat;
 }
 
-
 sal_uInt16 LocaleDataWrapper::getCurrDigits() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
@@ -570,7 +544,6 @@ sal_uInt16 LocaleDataWrapper::getCurrDigits() const
     }
     return nCurrDigits;
 }
-
 
 void LocaleDataWrapper::getCurrSymbolsImpl()
 {
@@ -606,7 +579,6 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
     aCurrBankSymbol = pCurrArr[nElem].BankSymbol;
     nCurrDigits = pCurrArr[nElem].DecimalPlaces;
 }
-
 
 void LocaleDataWrapper::scanCurrFormatImpl( const OUString& rCode,
         sal_Int32 nStart, sal_Int32& nSign, sal_Int32& nPar,
@@ -829,7 +801,6 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     }
 }
 
-
 // --- date -----------------------------------------------------------
 
 DateFormat LocaleDataWrapper::getDateFormat() const
@@ -843,7 +814,6 @@ DateFormat LocaleDataWrapper::getDateFormat() const
     return (DateFormat) nDateFormat;
 }
 
-
 DateFormat LocaleDataWrapper::getLongDateFormat() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
@@ -854,7 +824,6 @@ DateFormat LocaleDataWrapper::getLongDateFormat() const
     }
     return (DateFormat) nLongDateFormat;
 }
-
 
 DateFormat LocaleDataWrapper::scanDateFormatImpl( const OUString& rCode )
 {
@@ -936,7 +905,6 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const OUString& rCode )
         return DMY;
     }
 }
-
 
 void LocaleDataWrapper::getDateFormatsImpl()
 {
@@ -1026,7 +994,6 @@ void LocaleDataWrapper::getDateFormatsImpl()
     }
 }
 
-
 // --- digit grouping -------------------------------------------------
 
 void LocaleDataWrapper::getDigitGroupingImpl()
@@ -1061,7 +1028,6 @@ void LocaleDataWrapper::getDigitGroupingImpl()
     }
 }
 
-
 const ::com::sun::star::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGrouping() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
@@ -1072,7 +1038,6 @@ const ::com::sun::star::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGr
     }
     return aGrouping;
 }
-
 
 // --- simple number formatting helpers -------------------------------
 
@@ -1103,7 +1068,6 @@ static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber )
 
     return pBuf;
 }
-
 
 static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber, int nMinLen )
 {
@@ -1138,7 +1102,6 @@ static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber, int nMin
 
     return pBuf;
 }
-
 
 static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, sal_uInt16 nNumber, bool bLeading )
 {
@@ -1200,7 +1163,6 @@ inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rStr )
     return pBuf;
 }
 
-
 inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, sal_Unicode c )
 {
     *pBuf = c;
@@ -1208,13 +1170,11 @@ inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, sal_Unicode c )
     return pBuf;
 }
 
-
 inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const sal_Unicode* pCopyBuf, sal_Int32 nLen )
 {
     memcpy( pBuf, pCopyBuf, nLen * sizeof(sal_Unicode) );
     return pBuf + nLen;
 }
-
 
 sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
         sal_Int64 nNumber, sal_uInt16 nDecimals, bool bUseThousandSep,
@@ -1323,7 +1283,6 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
     return pBuf;
 }
 
-
 // --- simple date and time formatting --------------------------------
 
 OUString LocaleDataWrapper::getDate( const Date& rDate ) const
@@ -1372,7 +1331,6 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
     return OUString(aBuf, pBuf-aBuf);
 }
 
-
 OUString LocaleDataWrapper::getTime( const Time& rTime, bool bSec, bool b100Sec ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
@@ -1400,7 +1358,6 @@ OUString LocaleDataWrapper::getTime( const Time& rTime, bool bSec, bool b100Sec 
 
     return OUString(aBuf, pBuf - aBuf);
 }
-
 
 OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
         sal_Int16 nDisplayDayOfWeek, bool bDayOfMonthWithLeadingZero,
@@ -1446,7 +1403,6 @@ OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCa
     return aStr;
 }
 
-
 OUString LocaleDataWrapper::getDuration( const Time& rTime, bool bSec, bool b100Sec ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
@@ -1477,7 +1433,6 @@ OUString LocaleDataWrapper::getDuration( const Time& rTime, bool bSec, bool b100
     return OUString(aBuf, pBuf-aBuf);
 }
 
-
 // --- simple number formatting ---------------------------------------
 
 inline size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, sal_uInt16 nDecimals )
@@ -1490,7 +1445,6 @@ inline size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, sal
         nDecimals) + rLoc.getNumDecimalSep().getLength() + 3;
     return nGuess;
 }
-
 
 OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
         bool bUseThousandSep, bool bTrailingZeros ) const
@@ -1712,7 +1666,6 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
     return aNumber;
 }
 
-
 // --- mixed ----------------------------------------------------------
 
 LanguageTag LocaleDataWrapper::getLoadedLanguageTag() const
@@ -1720,7 +1673,6 @@ LanguageTag LocaleDataWrapper::getLoadedLanguageTag() const
     LanguageCountryInfo aLCInfo = getLanguageCountryInfo();
     return LanguageTag( lang::Locale( aLCInfo.Language, aLCInfo.Country, aLCInfo.Variant ));
 }
-
 
 OUString LocaleDataWrapper::appendLocaleInfo(const OUString& rDebugMsg) const
 {
@@ -1735,13 +1687,11 @@ OUString LocaleDataWrapper::appendLocaleInfo(const OUString& rDebugMsg) const
     return aDebugMsg.makeStringAndClear();
 }
 
-
 // static
 void LocaleDataWrapper::outputCheckMessage( const OUString& rMsg )
 {
     outputCheckMessage(OUStringToOString(rMsg, RTL_TEXTENCODING_UTF8).getStr());
 }
-
 
 // static
 void LocaleDataWrapper::outputCheckMessage( const char* pStr )
@@ -1750,7 +1700,6 @@ void LocaleDataWrapper::outputCheckMessage( const char* pStr )
     fflush( stderr);
     OSL_TRACE("%s", pStr);
 }
-
 
 // static
 void LocaleDataWrapper::evaluateLocaleDataChecking()
@@ -1784,7 +1733,6 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
     }
 }
 
-
 // --- XLocaleData3 ----------------------------------------------------------
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() const
@@ -1799,7 +1747,6 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar2 >(0);
 }
-
 
 // --- XLocaleData4 ----------------------------------------------------------
 

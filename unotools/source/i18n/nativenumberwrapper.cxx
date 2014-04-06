@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/nativenumberwrapper.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/i18n/NativeNumberSupplier.hpp>
@@ -31,11 +30,9 @@ NativeNumberWrapper::NativeNumberWrapper(
     xNNS = i18n::NativeNumberSupplier::create(rxContext);
 }
 
-
 NativeNumberWrapper::~NativeNumberWrapper()
 {
 }
-
 
 OUString
 NativeNumberWrapper::getNativeNumberString(
@@ -55,7 +52,6 @@ NativeNumberWrapper::getNativeNumberString(
     return OUString();
 }
 
-
 i18n::NativeNumberXmlAttributes
 NativeNumberWrapper::convertToXmlAttributes(
                     const ::com::sun::star::lang::Locale& rLocale,
@@ -73,7 +69,6 @@ NativeNumberWrapper::convertToXmlAttributes(
     return i18n::NativeNumberXmlAttributes();
 }
 
-
 sal_Int16
 NativeNumberWrapper::convertFromXmlAttributes(
                     const i18n::NativeNumberXmlAttributes& rAttr ) const
@@ -89,6 +84,5 @@ NativeNumberWrapper::convertFromXmlAttributes(
     }
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

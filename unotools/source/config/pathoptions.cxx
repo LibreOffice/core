@@ -54,7 +54,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
 
-
 #define SEARCHPATH_DELIMITER  ';'
 #define SIGN_STARTVARIABLE    OUString( "$("  )
 #define SIGN_ENDVARIABLE      OUString( ")" )
@@ -90,7 +89,6 @@ class VarNameToEnumMap : public ::boost::unordered_map< OUString, VarNamePropert
     public:
         inline void free() { VarNameToEnumMap().swap( *this ); }
 };
-
 
 // class SvtPathOptions_Impl ---------------------------------------------
 class SvtPathOptions_Impl
@@ -306,8 +304,6 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const OUString& 
     }
 }
 
-
-
 OUString SvtPathOptions_Impl::ExpandMacros( const OUString& rPath ) const
 {
     OUString sExpanded( rPath );
@@ -319,14 +315,10 @@ OUString SvtPathOptions_Impl::ExpandMacros( const OUString& rPath ) const
     return sExpanded;
 }
 
-
-
 OUString SvtPathOptions_Impl::UsePathVariables( const OUString& rPath ) const
 {
     return m_xSubstVariables->reSubstituteVariables( rPath );
 }
-
-
 
 OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
 {
@@ -401,8 +393,6 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
     return aWorkText;
 }
 
-
-
 SvtPathOptions_Impl::SvtPathOptions_Impl() :
     m_aPathArray( (sal_Int32)SvtPathOptions::PATH_COUNT ),
     m_aLanguageTag( LANGUAGE_DONTKNOW )
@@ -455,8 +445,6 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     m_aLanguageTag.reset( ConfigManager::getLocale() );
 }
 
-
-
 // class SvtPathOptions --------------------------------------------------
 
 namespace { struct lclMutex : public rtl::Static< ::osl::Mutex, lclMutex > {}; }
@@ -474,8 +462,6 @@ SvtPathOptions::SvtPathOptions()
     pImp = pOptions;
 }
 
-
-
 SvtPathOptions::~SvtPathOptions()
 {
     // Global access, must be guarded (multithreading)
@@ -486,154 +472,110 @@ SvtPathOptions::~SvtPathOptions()
     }
 }
 
-
-
 const OUString& SvtPathOptions::GetAddinPath() const
 {
     return pImp->GetAddinPath();
 }
-
-
 
 const OUString& SvtPathOptions::GetAutoCorrectPath() const
 {
     return pImp->GetAutoCorrectPath();
 }
 
-
-
 const OUString& SvtPathOptions::GetAutoTextPath() const
 {
     return pImp->GetAutoTextPath();
 }
-
-
 
 const OUString& SvtPathOptions::GetBackupPath() const
 {
     return pImp->GetBackupPath();
 }
 
-
-
 const OUString& SvtPathOptions::GetBasicPath() const
 {
     return pImp->GetBasicPath();
 }
-
-
 
 const OUString& SvtPathOptions::GetBitmapPath() const
 {
     return pImp->GetBitmapPath();
 }
 
-
-
 const OUString& SvtPathOptions::GetConfigPath() const
 {
     return pImp->GetConfigPath();
 }
-
-
 
 const OUString& SvtPathOptions::GetDictionaryPath() const
 {
     return pImp->GetDictionaryPath();
 }
 
-
-
 const OUString& SvtPathOptions::GetFavoritesPath() const
 {
     return pImp->GetFavoritesPath();
 }
-
-
 
 const OUString& SvtPathOptions::GetFilterPath() const
 {
     return pImp->GetFilterPath();
 }
 
-
-
 const OUString& SvtPathOptions::GetGalleryPath() const
 {
     return pImp->GetGalleryPath();
 }
-
-
 
 const OUString& SvtPathOptions::GetGraphicPath() const
 {
     return pImp->GetGraphicPath();
 }
 
-
-
 const OUString& SvtPathOptions::GetHelpPath() const
 {
     return pImp->GetHelpPath();
 }
-
-
 
 const OUString& SvtPathOptions::GetLinguisticPath() const
 {
     return pImp->GetLinguisticPath();
 }
 
-
-
 const OUString& SvtPathOptions::GetFingerprintPath() const
 {
     return pImp->GetFingerprintPath();
 }
-
-
 
 const OUString& SvtPathOptions::GetModulePath() const
 {
     return pImp->GetModulePath();
 }
 
-
-
 const OUString& SvtPathOptions::GetPalettePath() const
 {
     return pImp->GetPalettePath();
 }
-
-
 
 const OUString& SvtPathOptions::GetPluginPath() const
 {
     return pImp->GetPluginPath();
 }
 
-
-
 const OUString& SvtPathOptions::GetStoragePath() const
 {
     return pImp->GetStoragePath();
 }
-
-
 
 const OUString& SvtPathOptions::GetTempPath() const
 {
     return pImp->GetTempPath();
 }
 
-
-
 const OUString& SvtPathOptions::GetTemplatePath() const
 {
     return pImp->GetTemplatePath();
 }
-
-
 
 const OUString& SvtPathOptions::GetUserConfigPath() const
 {
@@ -645,189 +587,135 @@ const OUString& SvtPathOptions::GetUIConfigPath() const
     return pImp->GetUIConfigPath();
 }
 
-
-
 const OUString& SvtPathOptions::GetWorkPath() const
 {
     return pImp->GetWorkPath();
 }
-
-
 
 void SvtPathOptions::SetAddinPath( const OUString& rPath )
 {
     pImp->SetAddinPath( rPath );
 }
 
-
-
 void SvtPathOptions::SetAutoCorrectPath( const OUString& rPath )
 {
     pImp->SetAutoCorrectPath( rPath );
 }
-
-
 
 void SvtPathOptions::SetAutoTextPath( const OUString& rPath )
 {
     pImp->SetAutoTextPath( rPath );
 }
 
-
-
 void SvtPathOptions::SetBackupPath( const OUString& rPath )
 {
     pImp->SetBackupPath( rPath );
 }
-
-
 
 void SvtPathOptions::SetBasicPath( const OUString& rPath )
 {
     pImp->SetBasicPath( rPath );
 }
 
-
-
 void SvtPathOptions::SetBitmapPath( const OUString& rPath )
 {
     pImp->SetBitmapPath( rPath );
 }
-
-
 
 void SvtPathOptions::SetConfigPath( const OUString& rPath )
 {
     pImp->SetConfigPath( rPath );
 }
 
-
-
 void SvtPathOptions::SetDictionaryPath( const OUString& rPath )
 {
     pImp->SetDictionaryPath( rPath );
 }
-
-
 
 void SvtPathOptions::SetFavoritesPath( const OUString& rPath )
 {
     pImp->SetFavoritesPath( rPath );
 }
 
-
-
 void SvtPathOptions::SetFilterPath( const OUString& rPath )
 {
     pImp->SetFilterPath( rPath );
 }
-
-
 
 void SvtPathOptions::SetGalleryPath( const OUString& rPath )
 {
     pImp->SetGalleryPath( rPath );
 }
 
-
-
 void SvtPathOptions::SetGraphicPath( const OUString& rPath )
 {
     pImp->SetGraphicPath( rPath );
 }
-
-
 
 void SvtPathOptions::SetHelpPath( const OUString& rPath )
 {
     pImp->SetHelpPath( rPath );
 }
 
-
-
 void SvtPathOptions::SetLinguisticPath( const OUString& rPath )
 {
     pImp->SetLinguisticPath( rPath );
 }
-
-
 
 void SvtPathOptions::SetModulePath( const OUString& rPath )
 {
     pImp->SetModulePath( rPath );
 }
 
-
-
 void SvtPathOptions::SetPalettePath( const OUString& rPath )
 {
     pImp->SetPalettePath( rPath );
 }
-
-
 
 void SvtPathOptions::SetPluginPath( const OUString& rPath )
 {
     pImp->SetPluginPath( rPath );
 }
 
-
-
 void SvtPathOptions::SetStoragePath( const OUString& rPath )
 {
     pImp->SetStoragePath( rPath );
 }
-
-
 
 void SvtPathOptions::SetTempPath( const OUString& rPath )
 {
     pImp->SetTempPath( rPath );
 }
 
-
-
 void SvtPathOptions::SetTemplatePath( const OUString& rPath )
 {
     pImp->SetTemplatePath( rPath );
 }
-
-
 
 void SvtPathOptions::SetUserConfigPath( const OUString& rPath )
 {
     pImp->SetUserConfigPath( rPath );
 }
 
-
-
 void SvtPathOptions::SetWorkPath( const OUString& rPath )
 {
     pImp->SetWorkPath( rPath );
 }
-
-
 
 OUString SvtPathOptions::SubstituteVariable( const OUString& rVar ) const
 {
     return pImp->SubstVar( rVar );
 }
 
-
-
 OUString SvtPathOptions::ExpandMacros( const OUString& rPath ) const
 {
     return pImp->ExpandMacros( rPath );
 }
 
-
-
 OUString SvtPathOptions::UseVariable( const OUString& rPath ) const
 {
     return pImp->UsePathVariables( rPath );
 }
-
-
 
 bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
 {
@@ -952,8 +840,6 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
 
     return bRet;
 }
-
-
 
 const LanguageTag& SvtPathOptions::GetLanguageTag() const
 {

@@ -26,10 +26,8 @@
 
 #include <list>
 
-
 namespace utl
 {
-
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -49,13 +47,11 @@ namespace utl
             ListenerAdminData() : bAlreadyTerminated( false ), bCreatedAdapter( false ) { }
         };
 
-
         ListenerAdminData& getListenerAdminData()
         {
             static ListenerAdminData s_aData;
             return s_aData;
         }
-
 
         //= OObserverImpl
 
@@ -77,16 +73,13 @@ namespace utl
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         };
 
-
         OObserverImpl::OObserverImpl()
         {
         }
 
-
         OObserverImpl::~OObserverImpl()
         {
         }
-
 
         void OObserverImpl::ensureObservation()
         {
@@ -111,7 +104,6 @@ namespace utl
             }
         }
 
-
         void SAL_CALL OObserverImpl::queryTermination( const EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException, std::exception)
         {
             Listeners aToNotify;
@@ -129,7 +121,6 @@ namespace utl
                     throw TerminationVetoException();
             }
         }
-
 
         void SAL_CALL OObserverImpl::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException, std::exception)
         {
@@ -158,7 +149,6 @@ namespace utl
             }
         }
 
-
         void SAL_CALL OObserverImpl::disposing( const EventObject& /*Event*/ ) throw (RuntimeException, std::exception)
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -169,9 +159,7 @@ namespace utl
         }
     }
 
-
     //= DesktopTerminationObserver
-
 
     void DesktopTerminationObserver::registerTerminationListener( ITerminationListener* _pListener )
     {
@@ -192,7 +180,6 @@ namespace utl
         OObserverImpl::ensureObservation();
     }
 
-
     void DesktopTerminationObserver::revokeTerminationListener( ITerminationListener* _pListener )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -210,8 +197,6 @@ namespace utl
         }
     }
 
-
 } // namespace utl
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

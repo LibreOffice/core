@@ -31,9 +31,7 @@
 
 #include <algorithm>
 
-
 //  namespaces
-
 
 using namespace ::std;
 using namespace ::utl;
@@ -76,9 +74,7 @@ using namespace ::com::sun::star::beans;
 #define OFFSET_CONSIDERWRAPPINGSTYLE    11
 #define OFFSET_EXPANDWORDSPACE          12
 
-
 //  private declarations!
-
 
 /*-****************************************************************************************************************
     @descr  struct to hold information about one compatibility entry
@@ -144,13 +140,11 @@ class SvtCompatibility
             lEntries.push_back( rEntry );
         }
 
-
         // the only way to free memory!
         void Clear()
         {
             lEntries.clear();
         }
-
 
         // convert internal list to external format
         Sequence< Sequence< PropertyValue > > GetList() const
@@ -217,21 +211,16 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
 
     //  public methods
 
-
     public:
 
-
         //  constructor / destructor
-
 
          SvtCompatibilityOptions_Impl();
         virtual ~SvtCompatibilityOptions_Impl();
 
         void SetDefault( const OUString & sName, bool bValue );
 
-
         //  overloaded methods of baseclass
-
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager
@@ -264,9 +253,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
 
         virtual void Commit() SAL_OVERRIDE;
 
-
         //  public interface
-
 
         /*-****************************************************************************************************
             @short      base implementation of public interface for "SvtCompatibilityOptions"!
@@ -309,9 +296,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         inline bool IsConsiderWrappingStyle() const { return m_aDefOptions.bConsiderWrappingStyle; }
         inline bool IsExpandWordSpace() const { return m_aDefOptions.bExpandWordSpace; }
 
-
     //  private methods
-
 
     private:
 
@@ -347,16 +332,13 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         void impl_ExpandPropertyNames( const Sequence< OUString >& lSource,
                                              Sequence< OUString >& lDestination );
 
-
     //  private member
-
 
     private:
 
         SvtCompatibility        m_aOptions;
         SvtCompatibilityEntry   m_aDefOptions;
 };
-
 
 //  constructor
 
@@ -414,7 +396,6 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
     }
 }
 
-
 //  destructor
 
 SvtCompatibilityOptions_Impl::~SvtCompatibilityOptions_Impl()
@@ -452,14 +433,12 @@ void SvtCompatibilityOptions_Impl::SetDefault( const OUString & sName, bool bVal
         m_aDefOptions.SetExpandWordSpace( bValue );
 }
 
-
 //  public method
 
 void SvtCompatibilityOptions_Impl::Notify( const Sequence< OUString >& )
 {
     DBG_ASSERT( false, "SvtCompatibilityOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
 }
-
 
 //  public method
 
@@ -509,7 +488,6 @@ void SvtCompatibilityOptions_Impl::Commit()
     }
 }
 
-
 //  public method
 
 void SvtCompatibilityOptions_Impl::Clear()
@@ -517,7 +495,6 @@ void SvtCompatibilityOptions_Impl::Clear()
     m_aOptions.Clear();
     SetModified();
 }
-
 
 //  public method
 
@@ -528,9 +505,7 @@ Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions_Impl::GetList() co
     return lReturn;
 }
 
-
 //  public method
-
 
 void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
                                                 const OUString& _sModule,
@@ -567,7 +542,6 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
     SetModified();
 }
 
-
 //  private method
 
 Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequence< OUString >& rItems )
@@ -580,7 +554,6 @@ Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequen
     // Return result.
     return lProperties;
 }
-
 
 //  private method
 
@@ -637,14 +610,12 @@ void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
     }
 }
 
-
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
 SvtCompatibilityOptions_Impl*   SvtCompatibilityOptions::m_pDataContainer = NULL;
 sal_Int32                       SvtCompatibilityOptions::m_nRefCount = 0;
-
 
 //  constructor
 
@@ -661,7 +632,6 @@ SvtCompatibilityOptions::SvtCompatibilityOptions()
         ItemHolder1::holdConfigItem(E_COMPATIBILITY);
     }
 }
-
 
 //  destructor
 
@@ -680,7 +650,6 @@ SvtCompatibilityOptions::~SvtCompatibilityOptions()
     }
 }
 
-
 //  public method
 
 void SvtCompatibilityOptions::Clear()
@@ -693,7 +662,6 @@ void SvtCompatibilityOptions::SetDefault( const OUString & sName, bool bValue )
 {
     m_pDataContainer->SetDefault( sName, bValue );
 }
-
 
 //  public method
 
@@ -795,7 +763,6 @@ namespace
 {
     class theCompatibilityOptionsMutex : public rtl::Static<osl::Mutex, theCompatibilityOptionsMutex>{};
 }
-
 
 //  private method
 

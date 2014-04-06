@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <osl/file.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/configmgr.hxx>
@@ -69,7 +68,6 @@ namespace {
     const char s_sThumbnail[] = "Thumbnail";
 }
 
-
 //  class SvtHistoryOptions_Impl
 //  redesigned
 
@@ -93,7 +91,6 @@ private:
     css::uno::Reference< css::container::XNameAccess > m_xCfg;
     css::uno::Reference< css::container::XNameAccess > m_xCommonXCU;
 };
-
 
 //  constructor
 
@@ -124,13 +121,11 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     }
 }
 
-
 //  destructor
 
 SvtHistoryOptions_Impl::~SvtHistoryOptions_Impl()
 {
 }
-
 
 //  public method
 //  Attention: We return the max. size of our internal lists - That is the capacity not the size!
@@ -171,7 +166,6 @@ sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
 
     return nSize;
 }
-
 
 void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt32 nSize )
 {
@@ -229,7 +223,6 @@ void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt
         SAL_WARN("unotools.config", "Caught unexpected: " << ex.Message);
     }
 }
-
 
 //  public method
 //  Clear specified history list
@@ -301,7 +294,6 @@ static bool lcl_fileOpenable(const OUString &rURL)
     else
         return false;
 }
-
 
 //  public method
 //  get a sequence list from the items
@@ -402,7 +394,6 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
 
     return seqReturn;
 }
-
 
 //  public method
 //  implements a deque in XML
@@ -562,14 +553,12 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
     }
 }
 
-
 // initialize static member
 // DON'T DO IT IN YOUR HEADER!
 // see definition for further information
 
 SvtHistoryOptions_Impl*  SvtHistoryOptions::m_pDataContainer = NULL ;
 sal_Int32     SvtHistoryOptions::m_nRefCount  = 0  ;
-
 
 // constructor
 
@@ -588,7 +577,6 @@ SvtHistoryOptions::SvtHistoryOptions()
     }
 }
 
-
 // destructor
 
 SvtHistoryOptions::~SvtHistoryOptions()
@@ -606,7 +594,6 @@ SvtHistoryOptions::~SvtHistoryOptions()
     }
 }
 
-
 // public method
 
 sal_uInt32 SvtHistoryOptions::GetSize( EHistoryType eHistory ) const
@@ -614,7 +601,6 @@ sal_uInt32 SvtHistoryOptions::GetSize( EHistoryType eHistory ) const
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetSize( eHistory );
 }
-
 
 // public method
 
@@ -624,7 +610,6 @@ void SvtHistoryOptions::Clear( EHistoryType eHistory )
     m_pDataContainer->Clear( eHistory );
 }
 
-
 // public method
 
 Sequence< Sequence< PropertyValue > > SvtHistoryOptions::GetList( EHistoryType eHistory ) const
@@ -632,7 +617,6 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions::GetList( EHistoryType e
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetList( eHistory );
 }
-
 
 // public method
 
@@ -648,7 +632,6 @@ namespace
 {
     class theHistoryOptionsMutex : public rtl::Static<osl::Mutex, theHistoryOptionsMutex>{};
 }
-
 
 // private method
 

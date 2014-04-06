@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/securityoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
@@ -34,9 +33,7 @@
 
 #include "itemholder1.hxx"
 
-
 //  namespaces
-
 
 using namespace ::utl                   ;
 using namespace ::rtl                   ;
@@ -73,7 +70,6 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYNAME_CONFIRMATIONENABLED "Confirmation"
 // xmlsec05 deprecated
 
-
 #define PROPERTYHANDLE_SECUREURL                    0
 
 // xmlsec05 deprecated
@@ -100,28 +96,21 @@ using namespace ::com::sun::star::uno   ;
 
 #define CFG_READONLY_DEFAULT                        false
 
-
 //  private declarations!
-
 
 class SvtSecurityOptions_Impl : public ConfigItem
 {
 
     //  public methods
 
-
     public:
 
-
         //  constructor / destructor
-
 
          SvtSecurityOptions_Impl();
         virtual ~SvtSecurityOptions_Impl();
 
-
         //  overloaded methods of baseclass
-
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager
@@ -154,9 +143,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
         virtual void Commit() SAL_OVERRIDE;
 
-
         //  public interface
-
 
         bool                IsReadOnly      ( SvtSecurityOptions::EOption eOption                   ) const ;
 
@@ -220,7 +207,6 @@ class SvtSecurityOptions_Impl : public ConfigItem
         bool                                    m_bROTrustedAuthors;
         bool                                    m_bRODisableMacros;
 
-
         // xmlsec05 deprecated
         EBasicSecurityMode      m_eBasicMode;
         bool                m_bExecutePlugins;
@@ -241,7 +227,6 @@ class SvtSecurityOptions_Impl : public ConfigItem
         EBasicSecurityMode      GetBasicMode    (                                               ) const ;
         void                    SetBasicMode    (           EBasicSecurityMode      eMode       )       ;
 };
-
 
 //  constructor
 
@@ -305,7 +290,6 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
 
     EnableNotification( seqNames );
 }
-
 
 //  destructor
 
@@ -408,7 +392,6 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
         }
         break;
 
-
         // xmlsec05 deprecated
         case PROPERTYHANDLE_STAROFFICEBASIC:
         {
@@ -437,7 +420,6 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
         }
         break;
         // xmlsec05 deprecated
-
 
         #if OSL_DEBUG_LEVEL > 1
         default:
@@ -729,7 +711,6 @@ void SvtSecurityOptions_Impl::Commit()
                             lPropertyValues[ 2 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA;
                             lPropertyValues[ 2 ].Value <<= m_seqTrustedAuthors[ i ][2];
 
-
                             SetSetProperties( PROPERTYNAME_MACRO_TRUSTEDAUTHORS, lPropertyValues );
                         }
 
@@ -748,7 +729,6 @@ void SvtSecurityOptions_Impl::Commit()
                     lValues[ nRealCount ] <<= m_bDisableMacros;
             }
             break;
-
 
             // xmlsec05 deprecated
             case PROPERTYHANDLE_STAROFFICEBASIC:
@@ -780,7 +760,6 @@ void SvtSecurityOptions_Impl::Commit()
             }
             break;
             // xmlsec05 deprecated
-
 
             default:
                 bDone = false;
@@ -854,7 +833,6 @@ bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOption ) 
             bReadonly = m_bROConfirmation;
             break;
         // xmlsec05 deprecated
-
 
         default:
             bReadonly = true;
@@ -991,7 +969,6 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
     // ... and return it.
     return seqPropertyNames;
 }
-
 
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
@@ -1146,9 +1123,6 @@ Mutex& SvtSecurityOptions::GetInitMutex()
     return theSecurityOptionsMutex::get();
 }
 
-
-
-
 // xmlsec05 deprecated
 
 EBasicSecurityMode SvtSecurityOptions_Impl::GetBasicMode() const
@@ -1210,7 +1184,6 @@ void SvtSecurityOptions_Impl::SetConfirmationEnabled( bool bSet )
         SetModified();
     }
 }
-
 
 bool SvtSecurityOptions::IsExecutePlugins() const
 {

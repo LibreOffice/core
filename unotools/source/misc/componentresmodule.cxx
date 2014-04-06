@@ -23,11 +23,8 @@
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 
-
 namespace utl
 {
-
-
 
     //= OComponentResModuleImpl
 
@@ -69,13 +66,11 @@ namespace utl
         OComponentResModuleImpl& operator=( const OComponentResModuleImpl& );   // never implemented
     };
 
-
     void OComponentResModuleImpl::freeResManager()
     {
         delete m_pResources, m_pResources = NULL;
         m_bInitialized = false;
     }
-
 
     ResMgr* OComponentResModuleImpl::getResManager()
     {
@@ -95,9 +90,7 @@ namespace utl
         return m_pResources;
     }
 
-
     //= OComponentResourceModule
-
 
     OComponentResourceModule::OComponentResourceModule( const OString& _rResFilePrefix )
         :BaseClass()
@@ -105,11 +98,9 @@ namespace utl
     {
     }
 
-
     OComponentResourceModule::~OComponentResourceModule()
     {
     }
-
 
     ResMgr* OComponentResourceModule::getResManager()
     {
@@ -117,12 +108,10 @@ namespace utl
         return m_pImpl->getResManager();
     }
 
-
     void OComponentResourceModule::onFirstClient()
     {
         BaseClass::onFirstClient();
     }
-
 
     void OComponentResourceModule::onLastClient()
     {
@@ -130,8 +119,6 @@ namespace utl
         BaseClass::onLastClient();
     }
 
-
 } // namespace utl
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

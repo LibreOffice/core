@@ -24,7 +24,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
-
 namespace
 {
     /** convert string to number with optional min and max values */
@@ -177,7 +176,6 @@ namespace
     }
 }
 
-
 namespace utl
 {
 
@@ -188,12 +186,10 @@ void typeConvert(const Date& _rDate, starutil::Date& _rOut)
     _rOut.Year = _rDate.GetYear();
 }
 
-
 void typeConvert(const starutil::Date& _rDate, Date& _rOut)
 {
     _rOut = Date(_rDate.Day, _rDate.Month, _rDate.Year);
 }
-
 
 void typeConvert(const DateTime& _rDateTime, starutil::DateTime& _rOut)
 {
@@ -206,14 +202,12 @@ void typeConvert(const DateTime& _rDateTime, starutil::DateTime& _rOut)
     _rOut.NanoSeconds = _rDateTime.GetNanoSec();
 }
 
-
 void typeConvert(const starutil::DateTime& _rDateTime, DateTime& _rOut)
 {
     Date aDate(_rDateTime.Day, _rDateTime.Month, _rDateTime.Year);
     Time aTime(_rDateTime.Hours, _rDateTime.Minutes, _rDateTime.Seconds, _rDateTime.NanoSeconds);
     _rOut = DateTime(aDate, aTime);
 }
-
 
 void extractDate(const starutil::DateTime& _rDateTime, starutil::Date& _rOut)
 {
@@ -222,7 +216,6 @@ void extractDate(const starutil::DateTime& _rDateTime, starutil::Date& _rOut)
     _rOut.Year = _rDateTime.Year;
 }
 
-
 void extractTime(const starutil::DateTime& _rDateTime, starutil::Time& _rOut)
 {
     _rOut.Hours = _rDateTime.Hours;
@@ -230,7 +223,6 @@ void extractTime(const starutil::DateTime& _rDateTime, starutil::Time& _rOut)
     _rOut.Seconds = _rDateTime.Seconds;
     _rOut.NanoSeconds = _rDateTime.NanoSeconds;
 }
-
 
 OUString toISO8601(const starutil::DateTime& rDateTime)
 {
@@ -493,6 +485,5 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
 }
 
 }   // namespace utl
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

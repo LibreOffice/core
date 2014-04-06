@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/misccfg.hxx>
 #include "rtl/instance.hxx"
 #include <unotools/configmgr.hxx>
@@ -29,7 +28,6 @@
 #include "itemholder1.hxx"
 
 using namespace com::sun::star::uno;
-
 
 namespace utl
 {

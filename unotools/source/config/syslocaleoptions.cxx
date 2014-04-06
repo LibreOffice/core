@@ -37,7 +37,6 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-
 SvtSysLocaleOptions_Impl*   SvtSysLocaleOptions::pOptions = NULL;
 sal_Int32                   SvtSysLocaleOptions::nRefCount = 0;
 namespace
@@ -102,7 +101,6 @@ public:
             const LanguageTag&  GetRealUILocale() { return m_aRealUILocale; }
 };
 
-
 #define ROOTNODE_SYSLOCALE              OUString("Setup/L10N")
 
 #define PROPERTYNAME_LOCALE             OUString("ooSetupSystemLocale")
@@ -136,8 +134,6 @@ const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
     const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     return seqPropertyNames;
 }
-
-
 
 SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     : ConfigItem( ROOTNODE_SYSLOCALE )
@@ -252,7 +248,6 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     MakeRealUILocale();
 }
 
-
 SvtSysLocaleOptions_Impl::~SvtSysLocaleOptions_Impl()
 {
     if ( IsModified() )
@@ -313,7 +308,6 @@ bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOption 
     }
     return bReadOnly;
 }
-
 
 void SvtSysLocaleOptions_Impl::Commit()
 {
@@ -394,7 +388,6 @@ void SvtSysLocaleOptions_Impl::Commit()
     PutProperties( aNames, aValues );
     ClearModified();
 }
-
 
 void SvtSysLocaleOptions_Impl::SetLocaleString( const OUString& rStr )
 {
@@ -520,8 +513,6 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNa
         NotifyListeners( nHint );
 }
 
-
-
 SvtSysLocaleOptions::SvtSysLocaleOptions()
 {
     MutexGuard aGuard( GetMutex() );
@@ -535,7 +526,6 @@ SvtSysLocaleOptions::SvtSysLocaleOptions()
     pOptions->AddListener(this);
 }
 
-
 SvtSysLocaleOptions::~SvtSysLocaleOptions()
 {
     MutexGuard aGuard( GetMutex() );
@@ -546,7 +536,6 @@ SvtSysLocaleOptions::~SvtSysLocaleOptions()
         pOptions = NULL;
     }
 }
-
 
 // static
 Mutex& SvtSysLocaleOptions::GetMutex()
@@ -566,13 +555,11 @@ Mutex& SvtSysLocaleOptions::GetMutex()
     return *pMutex;
 }
 
-
 bool SvtSysLocaleOptions::IsModified()
 {
     MutexGuard aGuard( GetMutex() );
     return pOptions->IsModified();
 }
-
 
 void SvtSysLocaleOptions::Commit()
 {
@@ -580,13 +567,11 @@ void SvtSysLocaleOptions::Commit()
     pOptions->Commit();
 }
 
-
 void SvtSysLocaleOptions::BlockBroadcasts( bool bBlock )
 {
     MutexGuard aGuard( GetMutex() );
     pOptions->BlockBroadcasts( bBlock );
 }
-
 
 const OUString& SvtSysLocaleOptions::GetLocaleConfigString() const
 {
@@ -611,7 +596,6 @@ const OUString& SvtSysLocaleOptions::GetCurrencyConfigString() const
     MutexGuard aGuard( GetMutex() );
     return pOptions->GetCurrencyString();
 }
-
 
 void SvtSysLocaleOptions::SetCurrencyConfigString( const OUString& rStr )
 {
@@ -680,7 +664,6 @@ void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( OUString& rAbbrev,
     }
 }
 
-
 // static
 OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
         const OUString& rAbbrev, LanguageType eLang )
@@ -698,7 +681,6 @@ OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
         return rAbbrev;
 }
 
-
 // static
 void SvtSysLocaleOptions::SetCurrencyChangeLink( const Link& rLink )
 {
@@ -707,14 +689,12 @@ void SvtSysLocaleOptions::SetCurrencyChangeLink( const Link& rLink )
     CurrencyChangeLink::get() = rLink;
 }
 
-
 // static
 const Link& SvtSysLocaleOptions::GetCurrencyChangeLink()
 {
     MutexGuard aGuard( GetMutex() );
     return CurrencyChangeLink::get();
 }
-
 
 void SvtSysLocaleOptions::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt32 nHint  )
 {
@@ -742,6 +722,5 @@ const LanguageTag & SvtSysLocaleOptions::GetRealUILanguageTag() const
 {
     return pOptions->GetRealUILocale();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

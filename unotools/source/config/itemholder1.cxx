@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "itemholder1.hxx"
 
 #include <comphelper/processfactory.hxx>
@@ -49,7 +48,6 @@
 #include <unotools/options.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
-
 ItemHolder1::ItemHolder1()
     : ItemHolderMutexBase()
 {
@@ -80,12 +78,10 @@ ItemHolder1::ItemHolder1()
 #endif
 }
 
-
 ItemHolder1::~ItemHolder1()
 {
     impl_releaseAllItems();
 }
-
 
 void ItemHolder1::holdConfigItem(EItem eItem)
 {
@@ -93,14 +89,12 @@ void ItemHolder1::holdConfigItem(EItem eItem)
     pHolder->impl_addItem(eItem);
 }
 
-
 void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::uno::XInterface > xSelfHold(static_cast< css::lang::XEventListener* >(this), css::uno::UNO_QUERY);
     impl_releaseAllItems();
 }
-
 
 void ItemHolder1::impl_addItem(EItem eItem)
 {
@@ -123,7 +117,6 @@ void ItemHolder1::impl_addItem(EItem eItem)
         m_lItems.push_back(aNewItem);
 }
 
-
 void ItemHolder1::impl_releaseAllItems()
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -138,7 +131,6 @@ void ItemHolder1::impl_releaseAllItems()
     }
     m_lItems.clear();
 }
-
 
 void ItemHolder1::impl_newItem(TItemInfo& rItem)
 {
@@ -249,7 +241,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             break;
     }
 }
-
 
 void ItemHolder1::impl_deleteItem(TItemInfo& rItem)
 {

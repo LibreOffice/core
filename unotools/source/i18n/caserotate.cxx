@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
 #include "unotools/caserotate.hxx"
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>

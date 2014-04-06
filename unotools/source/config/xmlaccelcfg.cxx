@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/xmlaccelcfg.hxx>
 
 #include <vector>
@@ -26,7 +25,6 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::sax;
-
 
 #define ELEMENT_ACCELERATORLIST     "acceleratorlist"
 #define ELEMENT_ACCELERATORITEM     "item"
@@ -91,7 +89,6 @@ void SAL_CALL OReadAccelatorDocumentHandler::endDocument(void)
     }
 }
 
-
 void SAL_CALL OReadAccelatorDocumentHandler::startElement(
     const OUString& aElementName, const Reference< XAttributeList > &xAttrList )
 throw( SAXException, RuntimeException, std::exception )
@@ -151,12 +148,10 @@ throw( SAXException, RuntimeException, std::exception )
     }
 }
 
-
 void SAL_CALL OReadAccelatorDocumentHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException, std::exception )
 {
 }
-
 
 void SAL_CALL OReadAccelatorDocumentHandler::endElement( const OUString& aName )
     throw( SAXException, RuntimeException, std::exception )

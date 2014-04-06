@@ -25,14 +25,11 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase1.hxx>
 
-
 namespace utl
 {
 
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
-
 
     //= OEventListenerImpl
 
@@ -55,7 +52,6 @@ namespace utl
         virtual void SAL_CALL disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
-
     OEventListenerImpl::OEventListenerImpl( OEventListenerAdapter* _pAdapter, const Reference< XComponent >& _rxComp )
         :m_pAdapter(_pAdapter)
     {
@@ -72,7 +68,6 @@ namespace utl
         m_xKeepMeAlive = xMeMyselfAndI;
     }
 
-
     void OEventListenerImpl::dispose()
     {
         if (m_xComponent.is())
@@ -83,7 +78,6 @@ namespace utl
         }
     }
 
-
     void SAL_CALL OEventListenerImpl::disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception)
     {
         Reference< XEventListener > xDeleteUponLeaving = m_xKeepMeAlive;
@@ -93,7 +87,6 @@ namespace utl
         m_pAdapter->_disposing(_rSource);
     }
 
-
     //= OEventListenerAdapterImpl
 
     struct OEventListenerAdapterImpl
@@ -102,15 +95,12 @@ namespace utl
         ::std::vector< void* >  aListeners;
     };
 
-
     //= OEventListenerAdapter
-
 
     OEventListenerAdapter::OEventListenerAdapter()
         :m_pImpl(new OEventListenerAdapterImpl)
     {
     }
-
 
     OEventListenerAdapter::~OEventListenerAdapter()
     {
@@ -118,7 +108,6 @@ namespace utl
         delete m_pImpl;
         m_pImpl = NULL;
     }
-
 
     void OEventListenerAdapter::stopComponentListening( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxComp )
     {
@@ -141,7 +130,6 @@ namespace utl
         while ( dispose != m_pImpl->aListeners.end() );
     }
 
-
     void OEventListenerAdapter::stopAllComponentListening(  )
     {
         for (   ::std::vector< void* >::const_iterator aDisposeLoop = m_pImpl->aListeners.begin();
@@ -156,7 +144,6 @@ namespace utl
         m_pImpl->aListeners.clear();
     }
 
-
     void OEventListenerAdapter::startComponentListening( const Reference< XComponent >& _rxComp )
     {
         if (!_rxComp.is())
@@ -170,8 +157,6 @@ namespace utl
         m_pImpl->aListeners.push_back(pListenerImpl);
     }
 
-
 }   // namespace utl
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

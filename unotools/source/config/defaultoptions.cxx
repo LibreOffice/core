@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/defaultoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/configitem.hxx>
@@ -35,7 +34,6 @@
 using namespace osl;
 using namespace utl;
 using namespace com::sun::star::uno;
-
 
 // define ----------------------------------------------------------------
 
@@ -214,8 +212,6 @@ OUString SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
     return aRet;
 }
 
-
-
 SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Path/Default" )
 {
     Sequence< OUString > aNames = GetDefaultPropertyNames();
@@ -324,8 +320,6 @@ SvtDefaultOptions::SvtDefaultOptions()
     pImp = pOptions;
 }
 
-
-
 SvtDefaultOptions::~SvtDefaultOptions()
 {
     // Global access, must be guarded (multithreading)
@@ -337,8 +331,6 @@ SvtDefaultOptions::~SvtDefaultOptions()
         DELETEZ( pOptions );
     }
 }
-
-
 
 OUString SvtDefaultOptions::GetDefaultPath( sal_uInt16 nId ) const
 {

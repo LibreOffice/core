@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/numberformatcodewrapper.hxx>
 #include <com/sun/star/i18n/NumberFormatMapper.hpp>
 #include <tools/debug.hxx>
@@ -25,7 +24,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
-
 
 NumberFormatCodeWrapper::NumberFormatCodeWrapper(
             const Reference< uno::XComponentContext > & rxContext,
@@ -36,17 +34,14 @@ NumberFormatCodeWrapper::NumberFormatCodeWrapper(
     xNFC = i18n::NumberFormatMapper::create( rxContext );
 }
 
-
 NumberFormatCodeWrapper::~NumberFormatCodeWrapper()
 {
 }
-
 
 void NumberFormatCodeWrapper::setLocale( const ::com::sun::star::lang::Locale& rLocale )
 {
     aLocale = rLocale;
 }
-
 
 ::com::sun::star::i18n::NumberFormatCode
 NumberFormatCodeWrapper::getFormatCode( sal_Int16 formatIndex ) const
@@ -62,7 +57,6 @@ NumberFormatCodeWrapper::getFormatCode( sal_Int16 formatIndex ) const
     return ::com::sun::star::i18n::NumberFormatCode();
 }
 
-
 ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode >
 NumberFormatCodeWrapper::getAllFormatCode( sal_Int16 formatUsage ) const
 {
@@ -76,7 +70,6 @@ NumberFormatCodeWrapper::getAllFormatCode( sal_Int16 formatUsage ) const
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > (0);
 }
-
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode >
 NumberFormatCodeWrapper::getAllFormatCodes() const

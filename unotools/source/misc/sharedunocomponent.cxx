@@ -23,10 +23,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <tools/debug.hxx>
 
-
 namespace utl
 {
-
 
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::Reference;
@@ -39,16 +37,13 @@ namespace utl
     using ::com::sun::star::util::XCloseListener;
     using ::com::sun::star::util::CloseVetoException;
 
-
     //= DisposableComponent
-
 
     DisposableComponent::DisposableComponent( const Reference< XInterface >& _rxComponent )
         :m_xComponent( _rxComponent, UNO_QUERY )
     {
         DBG_ASSERT( m_xComponent.is() || !_rxComponent.is(), "DisposableComponent::DisposableComponent: should be an XComponent!" );
     }
-
 
     DisposableComponent::~DisposableComponent()
     {
@@ -102,13 +97,11 @@ namespace utl
         */
         void    impl_nf_switchListening( bool _bListen );
 
-
     private:
         CloseableComponentImpl();                                           // never implemented
         CloseableComponentImpl( const CloseableComponentImpl& );            // never implemented
         CloseableComponentImpl& operator=( const CloseableComponentImpl& ); // never implemented
     };
-
 
     CloseableComponentImpl::CloseableComponentImpl( const Reference< XInterface >& _rxComponent )
         :m_xCloseable( _rxComponent, UNO_QUERY )
@@ -121,7 +114,6 @@ namespace utl
     {
         nf_closeComponent();
     }
-
 
     void CloseableComponentImpl::nf_closeComponent()
     {
@@ -147,7 +139,6 @@ namespace utl
         m_xCloseable.clear();
     }
 
-
     void CloseableComponentImpl::impl_nf_switchListening( bool _bListen )
     {
         if ( !m_xCloseable.is() )
@@ -166,7 +157,6 @@ namespace utl
         }
     }
 
-
     void SAL_CALL CloseableComponentImpl::queryClosing( const EventObject&
     #ifdef DBG_UTIL
     Source
@@ -178,7 +168,6 @@ namespace utl
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::queryClosing: where did this come from?" );
         throw CloseVetoException();
     }
-
 
     void SAL_CALL CloseableComponentImpl::notifyClosing( const EventObject&
     #ifdef DBG_UTIL
@@ -193,7 +182,6 @@ namespace utl
         // if this here fires, something went definitely wrong.
         OSL_FAIL( "CloseableComponentImpl::notifyClosing: unreachable!" );
     }
-
 
     void SAL_CALL CloseableComponentImpl::disposing( const EventObject&
     #ifdef DBG_UTIL
@@ -211,15 +199,12 @@ namespace utl
     {
     }
 
-
     CloseableComponent::~CloseableComponent()
     {
         // close the component, deliver ownership to anybody who wants to veto the close
         m_pImpl->nf_closeComponent();
     }
 
-
 }   // namespace utl
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

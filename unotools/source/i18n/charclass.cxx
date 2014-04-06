@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <comphelper/processfactory.hxx>
 #include <unotools/charclass.hxx>
 #include <rtl/character.hxx>
@@ -29,7 +28,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
-
 CharClass::CharClass(
             const Reference< uno::XComponentContext > & rxContext,
             const LanguageTag& rLanguageTag
@@ -40,7 +38,6 @@ CharClass::CharClass(
     xCC = CharacterClassification::create( rxContext );
 }
 
-
 CharClass::CharClass(
             const LanguageTag& rLanguageTag )
     :
@@ -49,11 +46,9 @@ CharClass::CharClass(
     xCC = CharacterClassification::create( comphelper::getProcessComponentContext() );
 }
 
-
 CharClass::~CharClass()
 {
 }
-
 
 void CharClass::setLanguageTag( const LanguageTag& rLanguageTag )
 {
@@ -61,20 +56,17 @@ void CharClass::setLanguageTag( const LanguageTag& rLanguageTag )
     maLanguageTag = rLanguageTag;
 }
 
-
 const LanguageTag& CharClass::getLanguageTag() const
 {
     ::osl::MutexGuard aGuard( aMutex );
     return maLanguageTag;
 }
 
-
 const ::com::sun::star::lang::Locale& CharClass::getMyLocale() const
 {
     ::osl::MutexGuard aGuard( aMutex );
     return maLanguageTag.getLocale();
 }
-
 
 // static
 bool CharClass::isAsciiNumeric( const OUString& rStr )
@@ -94,7 +86,6 @@ bool CharClass::isAsciiNumeric( const OUString& rStr )
     return true;
 }
 
-
 // static
 bool CharClass::isAsciiAlpha( const OUString& rStr )
 {
@@ -112,8 +103,6 @@ bool CharClass::isAsciiAlpha( const OUString& rStr )
 
     return true;
 }
-
-
 
 bool CharClass::isAlpha( const OUString& rStr, sal_Int32 nPos ) const
 {
@@ -136,8 +125,6 @@ bool CharClass::isAlpha( const OUString& rStr, sal_Int32 nPos ) const
     }
 }
 
-
-
 bool CharClass::isLetter( const OUString& rStr, sal_Int32 nPos ) const
 {
     sal_Unicode c = rStr[nPos];
@@ -159,7 +146,6 @@ bool CharClass::isLetter( const OUString& rStr, sal_Int32 nPos ) const
     }
 }
 
-
 bool CharClass::isLetter( const OUString& rStr ) const
 {
     try
@@ -175,7 +161,6 @@ bool CharClass::isLetter( const OUString& rStr ) const
         return false;
     }
 }
-
 
 bool CharClass::isDigit( const OUString& rStr, sal_Int32 nPos ) const
 {
@@ -198,7 +183,6 @@ bool CharClass::isDigit( const OUString& rStr, sal_Int32 nPos ) const
     }
 }
 
-
 bool CharClass::isNumeric( const OUString& rStr ) const
 {
     try
@@ -214,7 +198,6 @@ bool CharClass::isNumeric( const OUString& rStr ) const
         return false;
     }
 }
-
 
 bool CharClass::isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const
 {
@@ -237,7 +220,6 @@ bool CharClass::isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const
     }
 }
 
-
 bool CharClass::isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const
 {
     sal_Unicode c = rStr[nPos];
@@ -258,7 +240,6 @@ bool CharClass::isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const
         return false;
     }
 }
-
 
 bool CharClass::isLetterNumeric( const OUString& rStr ) const
 {
@@ -340,7 +321,6 @@ sal_Int16 CharClass::getType( const OUString& rStr, sal_Int32 nPos ) const
     }
 }
 
-
 sal_Int16 CharClass::getCharacterDirection( const OUString& rStr, sal_Int32 nPos ) const
 {
     try
@@ -356,7 +336,6 @@ sal_Int16 CharClass::getCharacterDirection( const OUString& rStr, sal_Int32 nPos
         return 0;
     }
 }
-
 
 sal_Int16 CharClass::getScript( const OUString& rStr, sal_Int32 nPos ) const
 {
@@ -374,7 +353,6 @@ sal_Int16 CharClass::getScript( const OUString& rStr, sal_Int32 nPos ) const
     }
 }
 
-
 sal_Int32 CharClass::getCharacterType( const OUString& rStr, sal_Int32 nPos ) const
 {
     try
@@ -391,7 +369,6 @@ sal_Int32 CharClass::getCharacterType( const OUString& rStr, sal_Int32 nPos ) co
     }
 }
 
-
 sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
 {
     try
@@ -407,7 +384,6 @@ sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_In
         return 0;
     }
 }
-
 
 ::com::sun::star::i18n::ParseResult CharClass::parseAnyToken(
             const OUString& rStr,
@@ -433,7 +409,6 @@ sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_In
     }
 }
 
-
 ::com::sun::star::i18n::ParseResult CharClass::parsePredefinedToken(
             sal_Int32 nTokenType,
             const OUString& rStr,
@@ -458,7 +433,5 @@ sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_In
         return ParseResult();
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

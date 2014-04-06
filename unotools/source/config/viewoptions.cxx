@@ -68,9 +68,7 @@
         sMsg.appendAscii("\""                                                           );                          \
     }
 
-
 //  initialization!
-
 
 SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Dialogs    =   NULL    ;
 sal_Int32                    SvtViewOptions::m_nRefCount_Dialogs         =   0       ;
@@ -81,9 +79,7 @@ sal_Int32                    SvtViewOptions::m_nRefCount_TabPages        =   0  
 SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Windows    =   NULL    ;
 sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0       ;
 
-
 //  private declarations!
-
 
 /*-************************************************************************************************************
     @descr  declare one configuration item
@@ -114,7 +110,6 @@ class IMPL_TViewData
             m_bDefault     = true            ;
         }
 
-
         // write access - with reseting of default state
         void setWindowState( const OUString& sValue )
         {
@@ -125,7 +120,6 @@ class IMPL_TViewData
             m_sWindowState = sValue;
         }
 
-
         void setUserData( const css::uno::Sequence< css::beans::NamedValue >& lValue )
         {
             m_bDefault  = (
@@ -134,7 +128,6 @@ class IMPL_TViewData
                           );
             m_lUserData = lValue;
         }
-
 
         void setPageID( sal_Int32 nValue )
         {
@@ -145,7 +138,6 @@ class IMPL_TViewData
             m_nPageID  = nValue;
         }
 
-
         void setVisible( bool bValue )
         {
             m_bDefault = (
@@ -155,13 +147,11 @@ class IMPL_TViewData
             m_bVisible = bValue;
         }
 
-
         // read access
         OUString                              getWindowState() { return m_sWindowState; }
         css::uno::Sequence< css::beans::NamedValue > getUserData   () { return m_lUserData   ; }
         sal_Int32                                    getPageID     () { return m_nPageID     ; }
         bool                                     getVisible    () { return m_bVisible    ; }
-
 
         // special operation for easy access on user data
         void setUserItem( const OUString& sName  ,
@@ -195,7 +185,6 @@ class IMPL_TViewData
             }
         }
 
-
         css::uno::Any getUserItem( const OUString& sName )
         {
             // default value - if item not exist!
@@ -212,7 +201,6 @@ class IMPL_TViewData
             }
             return aValue;
         }
-
 
         // check for default items
         bool isDefault() { return m_bDefault; }
@@ -278,11 +266,9 @@ class SvtViewOptionsBase_Impl
                                                                                   const OUString&                                sItem    ,
                                                                                   const css::uno::Any&                                  aValue   );
 
-
     private:
         css::uno::Reference< css::uno::XInterface > impl_getSetNode( const OUString& sNode           ,
                                                                            bool         bCreateIfMissing);
-
 
     private:
         OUString                                    m_sListName;
@@ -464,7 +450,6 @@ OUString SvtViewOptionsBase_Impl::GetWindowState( const OUString& sName )
     return sWindowState;
 }
 
-
 void SvtViewOptionsBase_Impl::SetWindowState( const OUString& sName  ,
                                               const OUString& sState )
 {
@@ -485,7 +470,6 @@ void SvtViewOptionsBase_Impl::SetWindowState( const OUString& sName  ,
             SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
         }
 }
-
 
 css::uno::Sequence< css::beans::NamedValue > SvtViewOptionsBase_Impl::GetUserData( const OUString& sName )
 {
@@ -526,7 +510,6 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptionsBase_Impl::GetUserDat
     return css::uno::Sequence< css::beans::NamedValue >();
 }
 
-
 void SvtViewOptionsBase_Impl::SetUserData( const OUString&                              sName  ,
                                            const css::uno::Sequence< css::beans::NamedValue >& lData  )
 {
@@ -562,7 +545,6 @@ void SvtViewOptionsBase_Impl::SetUserData( const OUString&                      
         }
 }
 
-
 css::uno::Any SvtViewOptionsBase_Impl::GetUserItem( const OUString& sName ,
                                                     const OUString& sItem )
 {
@@ -592,7 +574,6 @@ css::uno::Any SvtViewOptionsBase_Impl::GetUserItem( const OUString& sName ,
 
     return aItem;
 }
-
 
 void SvtViewOptionsBase_Impl::SetUserItem( const OUString& sName  ,
                                            const OUString& sItem  ,
@@ -624,7 +605,6 @@ void SvtViewOptionsBase_Impl::SetUserItem( const OUString& sName  ,
         }
 }
 
-
 sal_Int32 SvtViewOptionsBase_Impl::GetPageID( const OUString& sName )
 {
     #ifdef DEBUG_VIEWOPTIONS
@@ -649,7 +629,6 @@ sal_Int32 SvtViewOptionsBase_Impl::GetPageID( const OUString& sName )
     return nID;
 }
 
-
 void SvtViewOptionsBase_Impl::SetPageID( const OUString& sName ,
                                                sal_Int32        nID   )
 {
@@ -670,7 +649,6 @@ void SvtViewOptionsBase_Impl::SetPageID( const OUString& sName ,
             SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
         }
 }
-
 
 SvtViewOptionsBase_Impl::State SvtViewOptionsBase_Impl::GetVisible( const OUString& sName )
 {
@@ -700,7 +678,6 @@ SvtViewOptionsBase_Impl::State SvtViewOptionsBase_Impl::GetVisible( const OUStri
 
     return eState;
 }
-
 
 void SvtViewOptionsBase_Impl::SetVisible( const OUString& sName    ,
                                                 bool         bVisible )
@@ -758,7 +735,6 @@ css::uno::Reference< css::uno::XInterface > SvtViewOptionsBase_Impl::impl_getSet
 
     return xNode;
 }
-
 
 //  constructor
 
@@ -822,7 +798,6 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
     }
 }
 
-
 //  destructor
 
 SvtViewOptions::~SvtViewOptions()
@@ -880,7 +855,6 @@ SvtViewOptions::~SvtViewOptions()
     }
 }
 
-
 //  public method
 
 bool SvtViewOptions::Exists() const
@@ -910,7 +884,6 @@ bool SvtViewOptions::Exists() const
     }
     return bExists;
 }
-
 
 //  public method
 
@@ -942,7 +915,6 @@ bool SvtViewOptions::Delete()
     return bState;
 }
 
-
 //  public method
 
 OUString SvtViewOptions::GetWindowState() const
@@ -973,7 +945,6 @@ OUString SvtViewOptions::GetWindowState() const
     return sState;
 }
 
-
 //  public method
 
 void SvtViewOptions::SetWindowState( const OUString& sState )
@@ -1002,7 +973,6 @@ void SvtViewOptions::SetWindowState( const OUString& sState )
     }
 }
 
-
 //  public method
 
 sal_Int32 SvtViewOptions::GetPageID() const
@@ -1020,7 +990,6 @@ sal_Int32 SvtViewOptions::GetPageID() const
     return nID;
 }
 
-
 //  public method
 
 void SvtViewOptions::SetPageID( sal_Int32 nID )
@@ -1035,7 +1004,6 @@ void SvtViewOptions::SetPageID( sal_Int32 nID )
     if( m_eViewType == E_TABDIALOG )
         m_pDataContainer_TabDialogs->SetPageID( m_sViewName, nID );
 }
-
 
 //  public method
 
@@ -1055,7 +1023,6 @@ bool SvtViewOptions::IsVisible() const
     return bState;
 }
 
-
 //  public method
 
 void SvtViewOptions::SetVisible( bool bState )
@@ -1070,7 +1037,6 @@ void SvtViewOptions::SetVisible( bool bState )
     if( m_eViewType == E_WINDOW )
         m_pDataContainer_Windows->SetVisible( m_sViewName, bState );
 }
-
 
 //  public method
 
@@ -1089,7 +1055,6 @@ bool SvtViewOptions::HasVisible() const
 
     return bState;
 }
-
 
 css::uno::Sequence< css::beans::NamedValue > SvtViewOptions::GetUserData() const
 {
@@ -1119,7 +1084,6 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptions::GetUserData() const
     return lData;
 }
 
-
 void SvtViewOptions::SetUserData( const css::uno::Sequence< css::beans::NamedValue >& lData )
 {
     // Ready for multithreading
@@ -1145,7 +1109,6 @@ void SvtViewOptions::SetUserData( const css::uno::Sequence< css::beans::NamedVal
                                 break;
     }
 }
-
 
 css::uno::Any SvtViewOptions::GetUserItem( const OUString& sName ) const
 {
@@ -1174,7 +1137,6 @@ css::uno::Any SvtViewOptions::GetUserItem( const OUString& sName ) const
     }
     return aItem;
 }
-
 
 void SvtViewOptions::SetUserItem( const OUString& sName  ,
                                   const css::uno::Any&   aValue )
@@ -1207,7 +1169,6 @@ namespace
 {
     class theViewOptionsMutex : public rtl::Static<osl::Mutex, theViewOptionsMutex>{};
 }
-
 
 //  private method
 

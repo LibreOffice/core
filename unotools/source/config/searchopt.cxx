@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/searchopt.hxx>
 #include <tools/debug.hxx>
 #include <unotools/configitem.hxx>
@@ -31,9 +30,7 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
-
 #define MAX_FLAGS_OFFSET    26
-
 
 class SvtSearchOptions_Impl : public ConfigItem
 {
@@ -65,7 +62,6 @@ public:
     void            SetFlag( sal_uInt16 nOffset, bool bVal );
 };
 
-
 SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
     ConfigItem( OUString("Office.Common/SearchOptions") )
 {
@@ -74,12 +70,10 @@ SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
     SetModified( false );
 }
 
-
 SvtSearchOptions_Impl::~SvtSearchOptions_Impl()
 {
     Commit();
 }
-
 
 void SvtSearchOptions_Impl::Commit()
 {

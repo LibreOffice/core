@@ -34,20 +34,17 @@ OInputStreamWrapper::OInputStreamWrapper( SvStream& _rStream )
 {
 }
 
-
 OInputStreamWrapper::OInputStreamWrapper( SvStream* pStream, bool bOwner )
                  :m_pSvStream( pStream )
                  ,m_bSvStreamOwner( bOwner )
 {
 }
 
-
 OInputStreamWrapper::~OInputStreamWrapper()
 {
     if( m_bSvStreamOwner )
         delete m_pSvStream;
 }
-
 
 sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
                 throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception )
@@ -71,7 +68,6 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(staruno::Sequence< sal_Int8 >&
     return nRead;
 }
 
-
 sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception )
 {
     checkError();
@@ -88,7 +84,6 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(staruno::Sequence< sal_Int
         return readBytes(aData, nMaxBytesToRead);
 }
 
-
 void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -97,7 +92,6 @@ void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( star
     m_pSvStream->SeekRel(nBytesToSkip);
     checkError();
 }
-
 
 sal_Int32 SAL_CALL OInputStreamWrapper::available() throw( stario::NotConnectedException, staruno::RuntimeException, std::exception )
 {
@@ -117,7 +111,6 @@ sal_Int32 SAL_CALL OInputStreamWrapper::available() throw( stario::NotConnectedE
     return nAvailable;
 }
 
-
 void SAL_CALL OInputStreamWrapper::closeInput() throw( stario::NotConnectedException, staruno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -129,13 +122,11 @@ void SAL_CALL OInputStreamWrapper::closeInput() throw( stario::NotConnectedExcep
     m_pSvStream = NULL;
 }
 
-
 void OInputStreamWrapper::checkConnected() const
 {
     if (!m_pSvStream)
         throw stario::NotConnectedException(OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
 }
-
 
 void OInputStreamWrapper::checkError() const
 {
@@ -146,21 +137,17 @@ void OInputStreamWrapper::checkError() const
         throw stario::NotConnectedException(OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
 }
 
-
 //= OSeekableInputStreamWrapper
-
 
 OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream& _rStream)
 {
     SetStream( &_rStream, false );
 }
 
-
 OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream* _pStream, bool _bOwner)
 {
     SetStream( _pStream, _bOwner );
 }
-
 
 void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation ) throw (IllegalArgumentException, IOException, RuntimeException, std::exception)
 {
@@ -171,7 +158,6 @@ void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation ) throw (I
     checkError();
 }
 
-
 sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getPosition(  ) throw (IOException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -181,7 +167,6 @@ sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getPosition(  ) throw (IOExcepti
     checkError();
     return (sal_Int64)nPos;
 }
-
 
 sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getLength(  ) throw (IOException, RuntimeException, std::exception)
 {
@@ -200,9 +185,7 @@ sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getLength(  ) throw (IOException
     return (sal_Int64)nEndPos;
 }
 
-
 //= OOutputStreamWrapper
-
 
 OOutputStreamWrapper::OOutputStreamWrapper(SvStream& _rStream):
     rStream(_rStream)
@@ -222,18 +205,15 @@ void SAL_CALL OOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8
     }
 }
 
-
 void SAL_CALL OOutputStreamWrapper::flush() throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception )
 {
     rStream.Flush();
     checkError();
 }
 
-
 void SAL_CALL OOutputStreamWrapper::closeOutput() throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception )
 {
 }
-
 
 void OOutputStreamWrapper::checkError() const
 {
@@ -242,9 +222,7 @@ void OOutputStreamWrapper::checkError() const
         throw stario::NotConnectedException(OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
 }
 
-
 //= OSeekableOutputStreamWrapper
-
 
 OSeekableOutputStreamWrapper::OSeekableOutputStreamWrapper(SvStream& _rStream)
     :OOutputStreamWrapper(_rStream)
@@ -252,7 +230,6 @@ OSeekableOutputStreamWrapper::OSeekableOutputStreamWrapper(SvStream& _rStream)
 }
 
 OSeekableOutputStreamWrapper::~OSeekableOutputStreamWrapper() {}
-
 
 Any SAL_CALL OSeekableOutputStreamWrapper::queryInterface( const Type& _rType ) throw (RuntimeException, std::exception)
 {
@@ -262,18 +239,15 @@ Any SAL_CALL OSeekableOutputStreamWrapper::queryInterface( const Type& _rType ) 
     return aReturn;
 }
 
-
 void SAL_CALL OSeekableOutputStreamWrapper::acquire(  ) throw ()
 {
     OOutputStreamWrapper::acquire();
 }
 
-
 void SAL_CALL OSeekableOutputStreamWrapper::release(  ) throw ()
 {
     OOutputStreamWrapper::release();
 }
-
 
 void SAL_CALL OSeekableOutputStreamWrapper::seek( sal_Int64 _nLocation ) throw (IllegalArgumentException, IOException, RuntimeException, std::exception)
 {
@@ -281,14 +255,12 @@ void SAL_CALL OSeekableOutputStreamWrapper::seek( sal_Int64 _nLocation ) throw (
     checkError();
 }
 
-
 sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getPosition(  ) throw (IOException, RuntimeException, std::exception)
 {
     sal_uInt32 nPos = rStream.Tell();
     checkError();
     return (sal_Int64)nPos;
 }
-
 
 sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  ) throw (IOException, RuntimeException, std::exception)
 {
@@ -304,24 +276,20 @@ sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  ) throw (IOExceptio
     return (sal_Int64)nEndPos;
 }
 
-
 OStreamWrapper::OStreamWrapper(SvStream& _rStream)
 {
     SetStream( &_rStream, false );
 }
-
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL OStreamWrapper::getInputStream(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return this;
 }
 
-
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL OStreamWrapper::getOutputStream(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return this;
 }
-
 
 void SAL_CALL OStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception)
 {
@@ -335,7 +303,6 @@ void SAL_CALL OStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8 >& aD
     }
 }
 
-
 void SAL_CALL OStreamWrapper::flush() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception)
 {
     m_pSvStream->Flush();
@@ -343,11 +310,9 @@ void SAL_CALL OStreamWrapper::flush() throw(stario::NotConnectedException, stari
         throw stario::NotConnectedException(OUString(),static_cast<staruno::XWeak*>(this));
 }
 
-
 void SAL_CALL OStreamWrapper::closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException, std::exception)
 {
 }
-
 
 void SAL_CALL OStreamWrapper::truncate() throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
