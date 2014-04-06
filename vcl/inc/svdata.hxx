@@ -245,10 +245,10 @@ struct ImplSVHelpData
     sal_uLong                   mnLastHelpHideTime;         // ticks of last show
 };
 
-// "NWF" probably means "Native Widget Framework" and likely was the
-// term used for the idea that StarView/OOo "widgets" should *look* (and
-// feel) like the "native widgets" on each platform, even if not at
-// all implemented using them.
+// "NWF" means "Native Widget Framework" and was the term used for the
+// idea that StarView/OOo "widgets" should *look* (and feel) like the
+// "native widgets" on each platform, even if not at all implemented
+// using them. See http://people.redhat.com/dcbw/ooo-nwf.html .
 
 struct ImplSVNWFData
 {
