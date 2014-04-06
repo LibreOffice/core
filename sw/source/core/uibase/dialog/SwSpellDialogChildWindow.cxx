@@ -170,7 +170,7 @@ SwSpellDialogChildWindow::~SwSpellDialogChildWindow ()
 SfxChildWinInfo SwSpellDialogChildWindow::GetInfo (void) const
 {
     SfxChildWinInfo aInfo = svx::SpellDialogChildWindow::GetInfo();
-    aInfo.bVisible = sal_False;
+    aInfo.bVisible = false;
     return aInfo;
 }
 

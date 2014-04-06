@@ -108,7 +108,7 @@ void SwMailMergeChildWin::FillInfo(SfxChildWinInfo& rInfo) const
 {
     SfxFloatingWindow::FillInfo(rInfo);
     rInfo.aWinState = OString();
-    rInfo.bVisible = sal_False;
+    rInfo.bVisible = false;
 }
 
 struct SwSendMailDialog_Impl

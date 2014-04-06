@@ -1033,7 +1033,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if( !aFileName.isEmpty() )
                 {
-                    if( PrepareClose( sal_False ) )
+                    if( PrepareClose( false ) )
                     {
                         SwWait aWait( *this, true );
 
