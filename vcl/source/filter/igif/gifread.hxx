@@ -65,30 +65,30 @@ class GIFReader : public GraphicReader
     long                nLastPos;
     sal_uInt32          nLogWidth100;
     sal_uInt32          nLogHeight100;
-    sal_uInt16              nTimer;
-    sal_uInt16              nGlobalWidth;           // maximum imagewidth from header
-    sal_uInt16              nGlobalHeight;          // maximum imageheight from header
-    sal_uInt16              nImageWidth;            // maximum screenwidth from header
-    sal_uInt16              nImageHeight;           // maximum screenheight from header
-    sal_uInt16              nImagePosX;
-    sal_uInt16              nImagePosY;
-    sal_uInt16              nImageX;                // maximum screenwidth from header
-    sal_uInt16              nImageY;                // maximum screenheight from header
-    sal_uInt16              nLastImageY;
-    sal_uInt16              nLastInterCount;
-    sal_uInt16              nLoops;
+    sal_uInt16          nTimer;
+    sal_uInt16          nGlobalWidth;           // maximum imagewidth from header
+    sal_uInt16          nGlobalHeight;          // maximum imageheight from header
+    sal_uInt16          nImageWidth;            // maximum screenwidth from header
+    sal_uInt16          nImageHeight;           // maximum screenheight from header
+    sal_uInt16          nImagePosX;
+    sal_uInt16          nImagePosY;
+    sal_uInt16          nImageX;                // maximum screenwidth from header
+    sal_uInt16          nImageY;                // maximum screenheight from header
+    sal_uInt16          nLastImageY;
+    sal_uInt16          nLastInterCount;
+    sal_uInt16          nLoops;
     GIFAction           eActAction;
     bool                bStatus;
-    bool                bGCTransparent;             // is the image transparant, if yes:
+    bool                bGCTransparent;         // is the image transparant, if yes:
     bool                bInterlaced;
     bool                bOverreadBlock;
     bool                bImGraphicReady;
     bool                bGlobalPalette;
-    sal_uInt8               nBackgroundColor;       // backgroundcolour
-    sal_uInt8               nGCTransparentIndex;    // pixelx of this index are transparant
-    sal_uInt8               nGCDisposalMethod;      // 'Disposal Method' (see GIF docs)
-    sal_uInt8               cTransIndex1;
-    sal_uInt8               cNonTransIndex1;
+    sal_uInt8           nBackgroundColor;       // backgroundcolour
+    sal_uInt8           nGCTransparentIndex;    // pixelx of this index are transparant
+    sal_uInt8           nGCDisposalMethod;      // 'Disposal Method' (see GIF docs)
+    sal_uInt8           cTransIndex1;
+    sal_uInt8           cNonTransIndex1;
 
     void                ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount );
     void                ClearImageExtensions();
@@ -96,7 +96,7 @@ class GIFReader : public GraphicReader
     bool                ReadGlobalHeader();
     bool                ReadExtension();
     bool                ReadLocalHeader();
-    sal_uLong               ReadNextBlock();
+    sal_uLong           ReadNextBlock();
     void                FillImages( HPBYTE pBytes, sal_uLong nCount );
     void                CreateNewBitmaps();
     bool                ProcessGIF();

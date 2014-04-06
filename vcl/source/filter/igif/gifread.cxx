@@ -25,25 +25,39 @@
 
 #define NO_PENDING( rStm ) ( ( rStm ).GetError() != ERRCODE_IO_PENDING )
 
-GIFReader::GIFReader( SvStream& rStm ) :
-            aGPalette       ( 256 ),
-            aLPalette       ( 256 ),
-            rIStm           ( rStm ),
-            pDecomp         ( NULL ),
-            pAcc8           ( NULL ),
-            pAcc1           ( NULL ),
-            nYAcc           ( 0 ),
-            nLastPos        ( rStm.Tell() ),
-            nLogWidth100    ( 0UL ),
-            nLogHeight100   ( 0UL ),
-            nGlobalWidth    ( 0 ),
-            nGlobalHeight   ( 0 ),
-            nImageWidth     ( 0 ),
-            nImageHeight    ( 0 ),
-            nLoops          ( 1 ),
-            eActAction      ( GLOBAL_HEADER_READING ),
-            bGCTransparent  ( false ),
-            bImGraphicReady ( false )
+GIFReader::GIFReader( SvStream& rStm )
+    : aGPalette ( 256 )
+    , aLPalette ( 256 )
+    , rIStm ( rStm )
+    , pDecomp ( NULL )
+    , pAcc8 ( NULL )
+    , pAcc1 ( NULL )
+    , nYAcc ( 0 )
+    , nLastPos ( rStm.Tell() )
+    , nLogWidth100 ( 0UL )
+    , nLogHeight100 ( 0UL )
+    , nGlobalWidth ( 0 )
+    , nGlobalHeight ( 0 )
+    , nImageWidth ( 0 )
+    , nImageHeight ( 0 )
+    , nImagePosX ( 0 )
+    , nImagePosY ( 0 )
+    , nImageX ( 0 )
+    , nImageY ( 0 )
+    , nLastImageY ( 0 )
+    , nLastInterCount ( 0 )
+    , nLoops ( 1 )
+    , eActAction ( GLOBAL_HEADER_READING )
+    , bStatus ( false )
+    , bGCTransparent  ( false )
+    , bInterlaced ( false)
+    , bOverreadBlock ( false )
+    , bImGraphicReady ( false )
+    , bGlobalPalette ( false )
+    , nBackgroundColor ( 0 )
+    , nGCTransparentIndex ( 0 )
+    , cTransIndex1 ( 0 )
+    , cNonTransIndex1 ( 0 )
 {
     maUpperName = "SVIGIF";
     pSrcBuf = new sal_uInt8[ 256 ];
