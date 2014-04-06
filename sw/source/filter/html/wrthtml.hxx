@@ -394,7 +394,7 @@ public:
 
     sal_Bool bCfgNetscape4 : 1;         // Netscape4 Hacks
 
-    sal_Bool mbSkipImages : 1;
+    bool mbSkipImages : 1;
 
     // 23
 

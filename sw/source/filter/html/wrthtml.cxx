@@ -109,6 +109,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , bLFPossible( sal_False )
     , bPreserveForm( sal_False )
     , bCfgNetscape4( sal_False )
+    , mbSkipImages(false)
 
 {
     SetBaseURL( rBaseURL );
@@ -143,7 +144,7 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
 
 
     OUString sFilterOptions = ((const SfxStringItem*)pItem)->GetValue();
-    if (sFilterOptions == "IgnoreImages")
+    if (sFilterOptions == "SkipImages")
     {
         mbSkipImages = true;
     }
