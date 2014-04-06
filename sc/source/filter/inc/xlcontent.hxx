@@ -81,6 +81,7 @@ const sal_uInt32 EXC_CF_AREA_BGCOLOR        = 0x00040000;   /// Background color
 const sal_uInt32 EXC_CF_AREA_ALL            = 0x00070000;   /// Any area attribute modified?
 const sal_uInt32 EXC_CF_ALLDEFAULT          = 0x003FFFFF;   /// Default flags.
 const sal_uInt32 EXC_CF_BLOCK_FONT          = 0x04000000;   /// Font block present?
+const sal_uInt32 EXC_CF_BLOCK_ALIGNMENT     = 0x08000000;   /// Alignment block present?
 const sal_uInt32 EXC_CF_BLOCK_BORDER        = 0x10000000;   /// Border block present?
 const sal_uInt32 EXC_CF_BLOCK_AREA          = 0x20000000;   /// Pattern block present?
 

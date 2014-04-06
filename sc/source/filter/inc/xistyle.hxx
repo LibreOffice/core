@@ -274,6 +274,8 @@ struct XclImpCellAlign : public XclCellAlign
     void                FillFromXF5( sal_uInt16 nAlign );
     /** Fills this struct with BIFF8 XF record data. */
     void                FillFromXF8( sal_uInt16 nAlign, sal_uInt16 nMiscAttrib );
+    /** Fills this struct with CF record data. */
+    void                FillFromCF( sal_uInt16 nAlign, sal_uInt16 nMiscAttrib );
 
     /** Inserts items representing this alignment style into the item set.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */

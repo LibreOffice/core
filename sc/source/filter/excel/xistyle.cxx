@@ -758,6 +758,17 @@ void XclImpCellAlign::FillFromXF8( sal_uInt16 nAlign, sal_uInt16 nMiscAttrib )
     mnTextDir = ::extract_value< sal_uInt8 >( nMiscAttrib, 6, 2 );  // new in BIFF8
 }
 
+void XclImpCellAlign::FillFromCF( sal_uInt16 nAlign, sal_uInt16 nMiscAttrib )
+{
+    mnHorAlign = extract_value< sal_uInt8 >( nAlign, 0, 3 );
+    mbLineBreak = get_flag< sal_uInt8 >( nAlign, EXC_XF_LINEBREAK );
+    mnVerAlign = ::extract_value< sal_uInt8 >( nAlign, 4, 3 );
+    mnRotation = ::extract_value< sal_uInt8 >( nAlign, 8, 8 );
+    mnIndent = ::extract_value< sal_uInt8 >( nMiscAttrib, 0, 4 );
+    mbShrink = ::get_flag( nMiscAttrib, EXC_XF8_SHRINK );
+    mnTextDir = ::extract_value< sal_uInt8 >( nMiscAttrib, 6, 2 );
+}
+
 void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFont, bool bSkipPoolDefs ) const
 {
     // horizontal alignment
