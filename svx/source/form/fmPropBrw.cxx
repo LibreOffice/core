@@ -482,7 +482,7 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
 
 void FmPropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 {
-    rInfo.bVisible = sal_False;
+    rInfo.bVisible = false;
     rInfo.aExtraString = getCurrentPage();
 }
 

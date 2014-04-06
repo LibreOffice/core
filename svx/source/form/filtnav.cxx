@@ -1976,7 +1976,7 @@ bool FmFilterNavigatorWin::Close()
 void FmFilterNavigatorWin::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     SfxDockingWindow::FillInfo( rInfo );
-    rInfo.bVisible = sal_False;
+    rInfo.bVisible = false;
 }
 
 

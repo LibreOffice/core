@@ -420,7 +420,7 @@ void FmFieldWin::Resize()
 
 void FmFieldWin::FillInfo( SfxChildWinInfo& rInfo ) const
 {
-    rInfo.bVisible = sal_False;
+    rInfo.bVisible = false;
 }
 
 
