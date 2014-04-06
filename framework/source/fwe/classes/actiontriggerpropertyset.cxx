@@ -123,12 +123,12 @@ Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes() throw ( RuntimeEx
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static ::cppu::OTypeCollection* pTypeCollection = NULL ;
+    static ::cppu::OTypeCollection* pTypeCollection = NULL;
 
     if ( pTypeCollection == NULL )
     {
         // Ready for multithreading; get global mutex for first call of this method only! see before
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
         // Control these pointer again ... it can be, that another instance will be faster then these!
         if ( pTypeCollection == NULL )
@@ -139,14 +139,14 @@ Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes() throw ( RuntimeEx
                         ::getCppuType(( const Reference< XFastPropertySet       >*)NULL ) ,
                         ::getCppuType(( const Reference< XMultiPropertySet      >*)NULL ) ,
                         ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) ) ;
+                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) );
 
             // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection ;
+            pTypeCollection = &aTypeCollection;
         }
     }
 
-    return pTypeCollection->getTypes() ;
+    return pTypeCollection->getTypes();
 }
 
 Sequence< sal_Int8 > SAL_CALL ActionTriggerPropertySet::getImplementationId() throw ( RuntimeException, std::exception )
@@ -175,11 +175,11 @@ throw( IllegalArgumentException )
             break;
 
         case HANDLE_HELPURL:
-            bReturn = impl_tryToChangeProperty( m_aHelpURL, aValue, aOldValue, aConvertedValue ) ;
+            bReturn = impl_tryToChangeProperty( m_aHelpURL, aValue, aOldValue, aConvertedValue );
             break;
 
         case HANDLE_IMAGE:
-            bReturn = impl_tryToChangeProperty( m_xBitmap, aValue, aOldValue, aConvertedValue ) ;
+            bReturn = impl_tryToChangeProperty( m_xBitmap, aValue, aOldValue, aConvertedValue );
             break;
 
         case HANDLE_SUBCONTAINER:
@@ -187,7 +187,7 @@ throw( IllegalArgumentException )
             break;
 
         case HANDLE_TEXT:
-            bReturn = impl_tryToChangeProperty( m_aText, aValue, aOldValue, aConvertedValue ) ;
+            bReturn = impl_tryToChangeProperty( m_aText, aValue, aOldValue, aConvertedValue );
             break;
     }
 
@@ -287,7 +287,7 @@ throw ( RuntimeException, std::exception )
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
-    static Reference< XPropertySetInfo >* pInfo = NULL ;
+    static Reference< XPropertySetInfo >* pInfo = NULL;
 
     if( pInfo == NULL )
     {
@@ -321,7 +321,7 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
     const Sequence< Property > seqActionTriggerPropertyDescriptor( pActionTriggerPropertys, PROPERTYCOUNT );
 
     // Return "PropertyDescriptor"
-    return seqActionTriggerPropertyDescriptor ;
+    return seqActionTriggerPropertyDescriptor;
 }
 
 sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
@@ -335,23 +335,23 @@ throw( IllegalArgumentException )
     sal_Bool bReturn = sal_False;
     // Get new value from any.
     // IllegalArgumentException() can be thrown!
-    OUString sValue ;
+    OUString sValue;
     convertPropertyValue( sValue, aNewValue );
 
     // If value change ...
     if( sValue != sCurrentValue )
     {
         // ... set information of change.
-        aOldValue       <<= sCurrentValue   ;
-        aConvertedValue <<= sValue          ;
+        aOldValue       <<= sCurrentValue;
+        aConvertedValue <<= sValue;
         // Return OK - "value will be change ..."
         bReturn = sal_True;
     }
     else
     {
         // ... clear information of return parameter!
-        aOldValue.clear         () ;
-        aConvertedValue.clear   () ;
+        aOldValue.clear         ();
+        aConvertedValue.clear   ();
         // Return NOTHING - "value will not be change ..."
         bReturn = sal_False;
     }
@@ -370,23 +370,23 @@ throw( IllegalArgumentException )
     sal_Bool bReturn = sal_False;
     // Get new value from any.
     // IllegalArgumentException() can be thrown!
-    Reference< XBitmap > aValue ;
+    Reference< XBitmap > aValue;
     convertPropertyValue( aValue, aNewValue );
 
     // If value change ...
     if( aValue != aCurrentValue )
     {
         // ... set information of change.
-        aOldValue       <<= aCurrentValue   ;
-        aConvertedValue <<= aValue          ;
+        aOldValue       <<= aCurrentValue;
+        aConvertedValue <<= aValue;
         // Return OK - "value will be change ..."
         bReturn = sal_True;
     }
     else
     {
         // ... clear information of return parameter!
-        aOldValue.clear         () ;
-        aConvertedValue.clear   () ;
+        aOldValue.clear         ();
+        aConvertedValue.clear   ();
         // Return NOTHING - "value will not be change ..."
         bReturn = sal_False;
     }
@@ -405,23 +405,23 @@ throw( IllegalArgumentException )
     sal_Bool bReturn = sal_False;
     // Get new value from any.
     // IllegalArgumentException() can be thrown!
-    Reference< XInterface > aValue ;
+    Reference< XInterface > aValue;
     convertPropertyValue( aValue, aNewValue );
 
     // If value change ...
     if( aValue != aCurrentValue )
     {
         // ... set information of change.
-        aOldValue       <<= aCurrentValue   ;
-        aConvertedValue <<= aValue          ;
+        aOldValue       <<= aCurrentValue;
+        aConvertedValue <<= aValue;
         // Return OK - "value will be change ..."
         bReturn = sal_True;
     }
     else
     {
         // ... clear information of return parameter!
-        aOldValue.clear         () ;
-        aConvertedValue.clear   () ;
+        aOldValue.clear         ();
+        aConvertedValue.clear   ();
         // Return NOTHING - "value will not be change ..."
         bReturn = sal_False;
     }

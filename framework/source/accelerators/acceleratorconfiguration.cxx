@@ -1014,8 +1014,8 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
         // So we try to split the path into 3 parts (module isnt important here, because we already know it ... because
         // these instance is bound to a specific module configuration ... or it''s the global configuration where no module is given at all.
 
-        OUString sOrgPath ;
-        OUString sPath    ;
+        OUString sOrgPath;
+        OUString sPath;
         OUString sKey;
 
         aChange.Accessor >>= sOrgPath;

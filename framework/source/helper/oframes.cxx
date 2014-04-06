@@ -26,13 +26,13 @@
 
 namespace framework{
 
-using namespace ::com::sun::star::container     ;
-using namespace ::com::sun::star::frame         ;
-using namespace ::com::sun::star::lang          ;
-using namespace ::com::sun::star::uno           ;
-using namespace ::cppu                          ;
-using namespace ::osl                           ;
-using namespace ::std                           ;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::cppu;
+using namespace ::osl;
+using namespace ::std;
 
 //  constructor
 
@@ -389,10 +389,10 @@ sal_Bool OFrames::impldbg_checkParameter_queryFrames( sal_Int32 nSearchFlags )
             ( !( nSearchFlags &  FrameSearchFlag::GLOBAL    ) )
         )
     {
-        bOK = sal_False ;
+        bOK = sal_False;
     }
     // Return result of check.
-    return bOK ;
+    return bOK;
 }
 
 }       //  namespace framework

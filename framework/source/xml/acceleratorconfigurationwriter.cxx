@@ -65,9 +65,9 @@ void AcceleratorConfigurationWriter::flush()
 
     // TODO think about threadsafe using of cache
     AcceleratorCache::TKeyList                 lKeys = m_rContainer.getAllKeys();
-    AcceleratorCache::TKeyList::const_iterator pKey  ;
+    AcceleratorCache::TKeyList::const_iterator pKey;
     for (  pKey  = lKeys.begin();
-           pKey != lKeys.end()  ;
+           pKey != lKeys.end();
          ++pKey                 )
     {
         const css::awt::KeyEvent& rKey     = *pKey;

@@ -1270,7 +1270,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 
     // Get inspath and userpath from bootstrap mechanism in every case as file URL
     ::utl::Bootstrap::PathStatus aState;
-    OUString              sVal  ;
+    OUString              sVal;
 
     aState = utl::Bootstrap::locateUserData( sVal );
     //There can be the valid case that there is no user installation.

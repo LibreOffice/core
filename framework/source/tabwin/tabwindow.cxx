@@ -824,7 +824,7 @@ throw( css::lang::IllegalArgumentException )
     }
 
     // Return state of operation.
-    return bReturn ;
+    return bReturn;
 }
 
 void SAL_CALL TabWindow::setFastPropertyValue_NoBroadcast( sal_Int32,
@@ -857,7 +857,7 @@ void SAL_CALL TabWindow::getFastPropertyValue( css::uno::Any& aValue  ,
     if( pInfoHelper == NULL )
     {
         // Ready for multithreading
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
         // Control this pointer again, another instance can be faster then these!
         if( pInfoHelper == NULL )
@@ -884,7 +884,7 @@ throw ( css::uno::RuntimeException, std::exception )
     if( pInfo == NULL )
     {
         // Ready for multithreading
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
         // Control this pointer again, another instance can be faster then these!
         if( pInfo == NULL )
         {

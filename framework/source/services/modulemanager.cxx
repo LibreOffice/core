@@ -256,7 +256,7 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
                                                                             "/org.openoffice.Setup/Office/Factories",
                                                                             ::comphelper::ConfigurationHelper::E_STANDARD);
         css::uno::Reference< css::container::XNameAccess >  xModules (xCfg, css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::container::XNameReplace > xModule  ;
+        css::uno::Reference< css::container::XNameReplace > xModule;
 
         xModules->getByName(sName) >>= xModule;
         if (!xModule.is())
@@ -268,7 +268,7 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
 
         ::comphelper::SequenceAsHashMap::const_iterator pProp;
         for (  pProp  = lProps.begin();
-               pProp != lProps.end()  ;
+               pProp != lProps.end();
              ++pProp                  )
         {
             const OUString& sPropName  = pProp->first;

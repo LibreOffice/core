@@ -144,7 +144,7 @@ class TransactionGuard : private boost::noncopyable
 
     private:
 
-        ITransactionManager*   m_pManager   ;   /// pointer to safed transaction manager
+        ITransactionManager*   m_pManager;   /// pointer to safed transaction manager
 
 };      //  class TransactionGuard
 

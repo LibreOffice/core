@@ -46,15 +46,15 @@
 
 namespace framework{
 
-using namespace ::com::sun::star                ;
-using namespace ::com::sun::star::awt           ;
-using namespace ::com::sun::star::beans         ;
-using namespace ::com::sun::star::container     ;
-using namespace ::com::sun::star::frame         ;
-using namespace ::com::sun::star::lang          ;
-using namespace ::com::sun::star::uno           ;
-using namespace ::com::sun::star::util          ;
-using namespace ::cppu                          ;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::cppu;
 
 const sal_uInt16 SLOTID_MDIWINDOWLIST = 5610;
 
@@ -311,10 +311,10 @@ static sal_Bool impldbg_checkParameter_addStatusListener( const   uno::Reference
             ( aURL.Complete.isEmpty()               )
         )
     {
-        bOK = sal_False ;
+        bOK = sal_False;
     }
     // Return result of check.
-    return bOK ;
+    return bOK;
 }
 
 // The same goes for these case! We have added valid listener for correct URL only.
@@ -331,10 +331,10 @@ static sal_Bool impldbg_checkParameter_removeStatusListener(  const   uno::Refer
             ( aURL.Complete.isEmpty()               )
         )
     {
-        bOK = sal_False ;
+        bOK = sal_False;
     }
     // Return result of check.
-    return bOK ;
+    return bOK;
 }
 
 }       //  namespace framework

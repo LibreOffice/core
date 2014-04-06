@@ -263,9 +263,9 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
     //  (should be private everyway!)
 
     private:
-        css::uno::WeakReference< css::frame::XFrame >               m_xOwner                        ;   /// reference to owner of this instance (Hold no hard reference!)
-        FrameContainer*                                             m_pFrameContainer               ;   /// with owner shared list to hold all direct children of an XFramesSupplier
-        sal_Bool                                                    m_bRecursiveSearchProtection    ;   /// flag to protect against recursive searches of frames at parents
+        css::uno::WeakReference< css::frame::XFrame >               m_xOwner;   /// reference to owner of this instance (Hold no hard reference!)
+        FrameContainer*                                             m_pFrameContainer;   /// with owner shared list to hold all direct children of an XFramesSupplier
+        sal_Bool                                                    m_bRecursiveSearchProtection;   /// flag to protect against recursive searches of frames at parents
 
 };
 

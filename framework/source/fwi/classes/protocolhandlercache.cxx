@@ -68,7 +68,7 @@ PatternHash::iterator PatternHash::findPatternKey( const OUString& sURL )
  */
 HandlerHash* HandlerCache::m_pHandler  = NULL;
 PatternHash* HandlerCache::m_pPattern  = NULL;
-sal_Int32    HandlerCache::m_nRefCount = 0   ;
+sal_Int32    HandlerCache::m_nRefCount = 0;
 HandlerCFGAccess* HandlerCache::m_pConfig = NULL;
 
 /**
@@ -239,7 +239,7 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
 
         // register his pattern into the performance search hash
         for (OUStringList::iterator pItem =aHandler.m_lProtocols.begin();
-                                    pItem!=aHandler.m_lProtocols.end()  ;
+                                    pItem!=aHandler.m_lProtocols.end();
                                     ++pItem                             )
         {
             (**ppPattern)[*pItem] = lNames[nSource];

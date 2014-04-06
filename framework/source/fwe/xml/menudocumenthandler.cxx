@@ -78,8 +78,8 @@ static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
 // special popup menus (filled during runtime) must be saved as an empty popup menu or menuitem!!!
 static const sal_Int32 CMD_PROTOCOL_SIZE        = 5;
 static const char CMD_PROTOCOL[]                = ".uno:";
-static const char ADDDIRECT_CMD[]               = ".uno:AddDirect" ;
-static const char AUTOPILOTMENU_CMD[]           = ".uno:AutoPilotMenu" ;
+static const char ADDDIRECT_CMD[]               = ".uno:AddDirect";
+static const char AUTOPILOTMENU_CMD[]           = ".uno:AutoPilotMenu";
 
 //  using namespaces
 

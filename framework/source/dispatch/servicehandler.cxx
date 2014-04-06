@@ -186,7 +186,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     // and use it to create and start the component
     OUString sServiceAndArguments = aURL.Complete.copy(PROTOCOL_LENGTH);
     OUString sServiceName;
-    OUString sArguments  ;
+    OUString sArguments;
 
     sal_Int32 nArgStart = sServiceAndArguments.indexOf('?',0);
     if (nArgStart!=-1)

@@ -349,7 +349,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     if (xFrame.is())
     {
         css::uno::Reference< css::frame::XController > xController;
-        css::uno::Reference< css::frame::XModel >      xModel     ;
+        css::uno::Reference< css::frame::XModel >      xModel;
         xController = xFrame->getController();
         if (xController.is())
             xModel = xController->getModel();

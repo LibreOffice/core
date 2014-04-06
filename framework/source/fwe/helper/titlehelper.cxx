@@ -334,7 +334,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
         return;
 
     OUString sTitle;
-    OUString sURL  ;
+    OUString sURL;
 
     css::uno::Reference< css::frame::XStorable > xURLProvider(xModel , css::uno::UNO_QUERY);
     if (xURLProvider.is())

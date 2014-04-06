@@ -70,13 +70,13 @@ namespace framework{
     css::uno::Sequence< OUString > CLASS::impl_getStaticSupportedServiceNames()                                                                     \
     {                                                                                                                                               \
         css::uno::Sequence< OUString > seqServiceNames( 1 );                                                                                        \
-        seqServiceNames.getArray() [0] = SERVICENAME ;                                                                                              \
+        seqServiceNames.getArray() [0] = SERVICENAME;                                                                                              \
         return seqServiceNames;                                                                                                                     \
     }                                                                                                                                               \
                                                                                                                                                     \
     OUString CLASS::impl_getStaticImplementationName()                                                                                              \
     {                                                                                                                                               \
-        return IMPLEMENTATIONNAME ;                                                                                                                 \
+        return IMPLEMENTATIONNAME;                                                                                                                 \
     }
 
 #define PRIVATE_DEFINE_XSERVICEINFO_OLDSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                              \

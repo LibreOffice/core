@@ -132,11 +132,11 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
 */
 JobResult::JobResult( const JobResult& rCopy )
 {
-    m_aPureResult     = rCopy.m_aPureResult     ;
-    m_eParts          = rCopy.m_eParts          ;
-    m_lArguments      = rCopy.m_lArguments      ;
-    m_bDeactivate     = rCopy.m_bDeactivate     ;
-    m_aDispatchResult = rCopy.m_aDispatchResult ;
+    m_aPureResult     = rCopy.m_aPureResult;
+    m_eParts          = rCopy.m_eParts;
+    m_lArguments      = rCopy.m_lArguments;
+    m_bDeactivate     = rCopy.m_bDeactivate;
+    m_aDispatchResult = rCopy.m_aDispatchResult;
 }
 
 /**
@@ -158,11 +158,11 @@ JobResult::~JobResult()
 void JobResult::operator=( const JobResult& rCopy )
 {
     SolarMutexGuard g;
-    m_aPureResult     = rCopy.m_aPureResult     ;
-    m_eParts          = rCopy.m_eParts          ;
-    m_lArguments      = rCopy.m_lArguments      ;
-    m_bDeactivate     = rCopy.m_bDeactivate     ;
-    m_aDispatchResult = rCopy.m_aDispatchResult ;
+    m_aPureResult     = rCopy.m_aPureResult;
+    m_eParts          = rCopy.m_eParts;
+    m_lArguments      = rCopy.m_lArguments;
+    m_bDeactivate     = rCopy.m_bDeactivate;
+    m_aDispatchResult = rCopy.m_aDispatchResult;
 }
 
 /**

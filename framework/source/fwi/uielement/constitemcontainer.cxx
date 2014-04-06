@@ -294,7 +294,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     if( pInfo == NULL )
     {
         // Ready for multithreading
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
         // Control this pointer again, another instance can be faster then these!
         if( pInfo == NULL )
         {
@@ -370,7 +370,7 @@ throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang
     if( pInfoHelper == NULL )
     {
         // Ready for multithreading
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
         // Control this pointer again, another instance can be faster then these!
         if( pInfoHelper == NULL )

@@ -228,15 +228,15 @@ void LoadEnv::initializeLoading(const OUString&                                 
 
     // take over all new parameters.
     m_xTargetFrame.clear();
-    m_xBaseFrame                    = xBaseFrame        ;
+    m_xBaseFrame                    = xBaseFrame;
     m_lMediaDescriptor              = impl_mergeMediaDescriptorWithMightExistingModelArgs(lMediaDescriptor);
-    m_sTarget                       = sTarget           ;
-    m_nSearchFlags                  = nSearchFlags      ;
-    m_eFeature                      = eFeature          ;
-    m_eContentType                  = eContentType      ;
-    m_bCloseFrameOnError            = sal_False         ;
-    m_bReactivateControllerOnError  = sal_False         ;
-    m_bLoaded                       = sal_False         ;
+    m_sTarget                       = sTarget;
+    m_nSearchFlags                  = nSearchFlags;
+    m_eFeature                      = eFeature;
+    m_eContentType                  = eContentType;
+    m_bCloseFrameOnError            = sal_False;
+    m_bReactivateControllerOnError  = sal_False;
+    m_bLoaded                       = sal_False;
 
     // try to find out, if its really a content, which can be loaded or must be "handled"
     // We use a default value for this in-parameter. Then we have to start a complex check method
@@ -294,8 +294,8 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
                                     QuietInteraction** o_ppQuietInteraction )
 {
     css::uno::Reference< css::task::XInteractionHandler > xInteractionHandler;
-    sal_Int16                                             nMacroMode         ;
-    sal_Int16                                             nUpdateMode        ;
+    sal_Int16                                             nMacroMode;
+    sal_Int16                                             nUpdateMode;
 
     if ( i_bUIMode )
     {
@@ -594,9 +594,9 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
 
     OUString sType = xDetect->queryTypeByURL(sURL);
 
-    css::uno::Sequence< css::beans::NamedValue >           lQuery(1)   ;
+    css::uno::Sequence< css::beans::NamedValue >           lQuery(1);
     css::uno::Reference< css::frame::XLoaderFactory >      xLoaderFactory;
-    css::uno::Reference< css::container::XEnumeration >    xSet        ;
+    css::uno::Reference< css::container::XEnumeration >    xSet;
     css::uno::Sequence< OUString >                  lTypesReg(1);
 
     // (iii) If a FrameLoader service (or at least
@@ -1181,7 +1181,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
         // Ignore any loader, which makes trouble :-)
         ::comphelper::SequenceAsHashMap             lLoaderProps(xSet->nextElement());
         OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(sPROP_NAME, OUString());
-        css::uno::Reference< css::uno::XInterface > xLoader     ;
+        css::uno::Reference< css::uno::XInterface > xLoader;
         try
         {
             xLoader = xLoaderFactory->createInstance(sLoader);
@@ -1740,7 +1740,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         // read window state from the configuration
         // and apply it on the window.
         // Do nothing, if no configuration entry exists!
-        OUString sWindowState ;
+        OUString sWindowState;
         ::comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, OFFICEFACTORY_PROPNAME_WINDOWATTRIBUTES) >>= sWindowState;
         if (!sWindowState.isEmpty())
         {

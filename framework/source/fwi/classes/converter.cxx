@@ -31,7 +31,7 @@ css::uno::Sequence< css::beans::NamedValue > Converter::convert_seqPropVal2seqNa
     css::uno::Sequence< css::beans::NamedValue > lDestination(nCount);
     for (sal_Int32 nItem=0; nItem<nCount; ++nItem)
     {
-        lDestination[nItem].Name  = lSource[nItem].Name ;
+        lDestination[nItem].Name  = lSource[nItem].Name;
         lDestination[nItem].Value = lSource[nItem].Value;
     }
     return lDestination;

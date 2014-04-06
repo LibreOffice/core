@@ -89,7 +89,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
         xCreator = css::frame::TaskCreator::create(m_xContext);
 
     css::uno::Sequence< css::uno::Any > lArgs(5);
-    css::beans::NamedValue              aArg    ;
+    css::beans::NamedValue              aArg;
 
     aArg.Name    = OUString(ARGUMENT_PARENTFRAME);
     aArg.Value <<= css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY_THROW);

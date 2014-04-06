@@ -211,7 +211,7 @@ void FrameListAnalyzer::impl_analyze()
             if ((m_eDetectMode & E_MODEL) == E_MODEL)
             {
                 css::uno::Reference< css::frame::XController > xController = xFrame->getController();
-                css::uno::Reference< css::frame::XModel >      xModel      ;
+                css::uno::Reference< css::frame::XModel >      xModel;
                 if (xController.is())
                     xModel = xController->getModel();
                 if (xModel==xReferenceModel)

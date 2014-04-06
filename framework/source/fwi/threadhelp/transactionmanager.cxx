@@ -90,7 +90,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
 {
     // Safe member access.
     ::osl::ClearableMutexGuard  aAccessGuard( m_aAccessLock );
-    sal_Bool                    bWaitFor    = sal_False      ;
+    sal_Bool                    bWaitFor    = sal_False;
     // Change working mode first!
     if  (
             ( m_eWorkingMode == E_INIT        && eMode == E_WORK        ) ||
@@ -256,13 +256,13 @@ sal_Bool  TransactionManager::isCallRejected( ERejectReason& eReason ) const
     ::osl::MutexGuard aAccessGuard( m_aAccessLock );
     switch( m_eWorkingMode )
     {
-        case E_INIT        : eReason = E_UNINITIALIZED ;
+        case E_INIT        : eReason = E_UNINITIALIZED;
                                 break;
-        case E_WORK        : eReason = E_NOREASON      ;
+        case E_WORK        : eReason = E_NOREASON;
                                 break;
-        case E_BEFORECLOSE : eReason = E_INCLOSE       ;
+        case E_BEFORECLOSE : eReason = E_INCLOSE;
                                 break;
-        case E_CLOSE       : eReason = E_CLOSED        ;
+        case E_CLOSE       : eReason = E_CLOSED;
                                 break;
     }
     return( eReason!=E_NOREASON );

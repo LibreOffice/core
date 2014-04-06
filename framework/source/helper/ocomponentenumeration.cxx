@@ -23,12 +23,12 @@
 
 namespace framework{
 
-using namespace ::com::sun::star::container     ;
-using namespace ::com::sun::star::lang          ;
-using namespace ::com::sun::star::uno           ;
-using namespace ::cppu                          ;
-using namespace ::osl                           ;
-using namespace ::rtl                           ;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::cppu;
+using namespace ::osl;
+using namespace ::rtl;
 
 //  constructor
 
@@ -116,7 +116,7 @@ void OComponentEnumeration::impl_resetObject()
     // But a position of 0 in a list of 0 items is an invalid state. This constellation can't work in future.
     // End of enumeration is arrived!
     // (see hasMoreElements() for more details...)
-    m_nPosition = 0 ;
+    m_nPosition = 0;
 }
 
 //  debug methods
@@ -141,10 +141,10 @@ sal_Bool OComponentEnumeration::impldbg_checkParameter_OComponentEnumerationCtor
             ( &seqComponents == NULL )
         )
     {
-        bOK = sal_False ;
+        bOK = sal_False;
     }
     // Return result of check.
-    return bOK ;
+    return bOK;
 }
 
 sal_Bool OComponentEnumeration::impldbg_checkParameter_disposing( const EventObject& aEvent )

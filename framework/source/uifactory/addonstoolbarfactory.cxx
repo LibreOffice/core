@@ -153,7 +153,7 @@ sal_Bool AddonsToolBarFactory::hasButtonsInContext(
             {
                 OUString aURL;
                 rPropSeq[j].Value >>= aURL;
-                bIsButton = aURL != "private:separator" ;
+                bIsButton = aURL != "private:separator";
                 nPropChecked++;
             }
 

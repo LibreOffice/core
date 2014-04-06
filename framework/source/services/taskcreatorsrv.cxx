@@ -245,25 +245,25 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     css::awt::WindowDescriptor aDescriptor;
     if (bTopWindow)
     {
-        aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
+        aDescriptor.Type                =   css::awt::WindowClass_TOP;
         aDescriptor.WindowServiceName   =   "window";
-        aDescriptor.ParentIndex         =   -1                                              ;
-        aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()  ;
-        aDescriptor.Bounds              =   aPosSize                                        ;
+        aDescriptor.ParentIndex         =   -1;
+        aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >();
+        aDescriptor.Bounds              =   aPosSize;
         aDescriptor.WindowAttributes    =   css::awt::WindowAttribute::BORDER               |
                                             css::awt::WindowAttribute::MOVEABLE             |
                                             css::awt::WindowAttribute::SIZEABLE             |
                                             css::awt::WindowAttribute::CLOSEABLE            |
-                                            css::awt::VclWindowPeerAttribute::CLIPCHILDREN  ;
+                                            css::awt::VclWindowPeerAttribute::CLIPCHILDREN;
     }
     else
     {
-        aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
+        aDescriptor.Type                =   css::awt::WindowClass_TOP;
         aDescriptor.WindowServiceName   =   "dockingwindow";
-        aDescriptor.ParentIndex         =   1                                               ;
-        aDescriptor.Parent              =   xParentWindowPeer                               ;
-        aDescriptor.Bounds              =   aPosSize                                        ;
-        aDescriptor.WindowAttributes    =   css::awt::VclWindowPeerAttribute::CLIPCHILDREN  ;
+        aDescriptor.ParentIndex         =   1;
+        aDescriptor.Parent              =   xParentWindowPeer;
+        aDescriptor.Bounds              =   aPosSize;
+        aDescriptor.WindowAttributes    =   css::awt::VclWindowPeerAttribute::CLIPCHILDREN;
     }
 
     // create a new blank container window and get access to parent container to append new created task.

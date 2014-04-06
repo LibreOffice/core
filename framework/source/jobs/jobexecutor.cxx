@@ -301,7 +301,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     // step over all enabled jobs and execute it
     ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >::const_iterator pIt;
     for (  pIt  = lJobs.begin();
-           pIt != lJobs.end()  ;
+           pIt != lJobs.end();
          ++pIt                 )
     {
         rtl::Reference<Job> pJob;

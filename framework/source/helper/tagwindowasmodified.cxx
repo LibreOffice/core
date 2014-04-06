@@ -60,7 +60,7 @@ void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno
 
     {
         SolarMutexGuard g;
-        m_xFrame = xFrame ;
+        m_xFrame = xFrame;
     }
 
     xFrame->addFrameActionListener(this);
@@ -161,7 +161,7 @@ void TagWindowAsModified::impl_update (const css::uno::Reference< css::frame::XF
 
     css::uno::Reference< css::awt::XWindow >       xWindow     = xFrame->getContainerWindow ();
     css::uno::Reference< css::frame::XController > xController = xFrame->getController ();
-    css::uno::Reference< css::frame::XModel >      xModel ;
+    css::uno::Reference< css::frame::XModel >      xModel;
     if (xController.is ())
         xModel = xController->getModel ();
 
@@ -176,7 +176,7 @@ void TagWindowAsModified::impl_update (const css::uno::Reference< css::frame::XF
         // Note: frame was set as member outside ! we have to refresh connections
         // regarding window and model only here.
         m_xWindow = xWindow;
-        m_xModel  = xModel ;
+        m_xModel  = xModel;
     }
 
     css::uno::Reference< css::util::XModifyBroadcaster > xModifiable(xModel, css::uno::UNO_QUERY);

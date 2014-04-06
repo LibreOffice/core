@@ -456,7 +456,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProtocolHandler( const css::util::URL& aURL )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
-    ProtocolHandler                              aHandler   ;
+    ProtocolHandler                              aHandler;
 
     // This member is threadsafe by himself and lives if we live - we don't need any mutex here.
     if (m_aProtocolHandlerCache.search(aURL,&aHandler))

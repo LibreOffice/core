@@ -107,10 +107,10 @@ throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
     {
         // describe window properties.
         css::awt::WindowDescriptor aDescriptor;
-        aDescriptor.Type                =   css::awt::WindowClass_TOP                                           ;
-        aDescriptor.ParentIndex         =   -1                                                                  ;
-        aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()                      ;
-        aDescriptor.Bounds              =   css::awt::Rectangle(0,0,0,0)                                        ;
+        aDescriptor.Type                =   css::awt::WindowClass_TOP;
+        aDescriptor.ParentIndex         =   -1;
+        aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >();
+        aDescriptor.Bounds              =   css::awt::Rectangle(0,0,0,0);
         aDescriptor.WindowAttributes    =   css::awt::WindowAttribute::BORDER|
                                             css::awt::WindowAttribute::SIZEABLE|
                                             css::awt::WindowAttribute::MOVEABLE|

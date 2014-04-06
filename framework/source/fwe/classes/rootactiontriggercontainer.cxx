@@ -39,8 +39,8 @@ namespace framework
 static Sequence< sal_Int8 > impl_getStaticIdentifier()
 {
     static const sal_uInt8 pGUID[16] = { 0x17, 0x0F, 0xA2, 0xC9, 0xCA, 0x50, 0x4A, 0xD3, 0xA6, 0x3B, 0x39, 0x99, 0xC5, 0x96, 0x43, 0x27 };
-    static ::com::sun::star::uno::Sequence< sal_Int8 > seqID((const sal_Int8*)pGUID,16) ;
-    return seqID ;
+    static ::com::sun::star::uno::Sequence< sal_Int8 > seqID((const sal_Int8*)pGUID,16);
+    return seqID;
 }
 
 RootActionTriggerContainer::RootActionTriggerContainer( const Menu* pMenu, const OUString* pMenuIdentifier ) :
@@ -249,12 +249,12 @@ Sequence< Type > SAL_CALL RootActionTriggerContainer::getTypes() throw ( Runtime
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static ::cppu::OTypeCollection* pTypeCollection = NULL ;
+    static ::cppu::OTypeCollection* pTypeCollection = NULL;
 
     if ( pTypeCollection == NULL )
     {
         // Ready for multithreading; get global mutex for first call of this method only! see before
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
         // Control these pointer again ... it can be, that another instance will be faster then these!
         if ( pTypeCollection == NULL )
@@ -266,14 +266,14 @@ Sequence< Type > SAL_CALL RootActionTriggerContainer::getTypes() throw ( Runtime
                         ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
                         ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) ,
                         ::getCppuType(( const Reference< XUnoTunnel             >*)NULL ) ,
-                        ::getCppuType(( const Reference< XNamed                 >*)NULL )) ;
+                        ::getCppuType(( const Reference< XNamed                 >*)NULL ));
 
             // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection ;
+            pTypeCollection = &aTypeCollection;
         }
     }
 
-    return pTypeCollection->getTypes() ;
+    return pTypeCollection->getTypes();
 }
 
 Sequence< sal_Int8 > SAL_CALL RootActionTriggerContainer::getImplementationId() throw ( RuntimeException, std::exception )

@@ -116,12 +116,12 @@ Sequence< Type > SAL_CALL ActionTriggerSeparatorPropertySet::getTypes() throw ( 
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static ::cppu::OTypeCollection* pTypeCollection = NULL ;
+    static ::cppu::OTypeCollection* pTypeCollection = NULL;
 
     if ( pTypeCollection == NULL )
     {
         // Ready for multithreading; get global mutex for first call of this method only! see before
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
         // Control these pointer again ... it can be, that another instance will be faster then these!
         if ( pTypeCollection == NULL )
@@ -132,14 +132,14 @@ Sequence< Type > SAL_CALL ActionTriggerSeparatorPropertySet::getTypes() throw ( 
                         ::getCppuType(( const Reference< XFastPropertySet       >*)NULL ) ,
                         ::getCppuType(( const Reference< XMultiPropertySet      >*)NULL ) ,
                         ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) ) ;
+                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) );
 
             // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection ;
+            pTypeCollection = &aTypeCollection;
         }
     }
 
-    return pTypeCollection->getTypes() ;
+    return pTypeCollection->getTypes();
 }
 
 Sequence< sal_Int8 > SAL_CALL ActionTriggerSeparatorPropertySet::getImplementationId() throw ( RuntimeException, std::exception )
@@ -232,7 +232,7 @@ throw ( RuntimeException, std::exception )
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
-    static Reference< XPropertySetInfo >* pInfo = NULL ;
+    static Reference< XPropertySetInfo >* pInfo = NULL;
 
     if( pInfo == NULL )
     {
@@ -262,7 +262,7 @@ const Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticProp
     const Sequence< Property > seqActionTriggerPropertyDescriptor( pActionTriggerPropertys, PROPERTYCOUNT );
 
     // Return "PropertyDescriptor"
-    return seqActionTriggerPropertyDescriptor ;
+    return seqActionTriggerPropertyDescriptor;
 }
 
 sal_Bool ActionTriggerSeparatorPropertySet::impl_tryToChangeProperty(
@@ -283,16 +283,16 @@ throw( IllegalArgumentException )
     if( aValue != aCurrentValue )
     {
         // ... set information of change.
-        aOldValue       <<= aCurrentValue   ;
-        aConvertedValue <<= aValue          ;
+        aOldValue       <<= aCurrentValue;
+        aConvertedValue <<= aValue;
         // Return OK - "value will be change ..."
         bReturn = sal_True;
     }
     else
     {
         // ... clear information of return parameter!
-        aOldValue.clear         () ;
-        aConvertedValue.clear   () ;
+        aOldValue.clear         ();
+        aConvertedValue.clear   ();
         // Return NOTHING - "value will not be change ..."
         bReturn = sal_False;
     }

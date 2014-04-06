@@ -76,13 +76,13 @@ void JobData::operator=( const JobData& rCopy )
     SolarMutexGuard g;
     // Please don't copy the uno service manager reference.
     // That can change the uno context, which isn't a good idea!
-    m_eMode                = rCopy.m_eMode               ;
-    m_eEnvironment         = rCopy.m_eEnvironment        ;
-    m_sAlias               = rCopy.m_sAlias              ;
-    m_sService             = rCopy.m_sService            ;
-    m_sContext             = rCopy.m_sContext            ;
-    m_sEvent               = rCopy.m_sEvent              ;
-    m_lArguments           = rCopy.m_lArguments          ;
+    m_eMode                = rCopy.m_eMode;
+    m_eEnvironment         = rCopy.m_eEnvironment;
+    m_sAlias               = rCopy.m_sAlias;
+    m_sService             = rCopy.m_sService;
+    m_sContext             = rCopy.m_sContext;
+    m_sEvent               = rCopy.m_sEvent;
+    m_lArguments           = rCopy.m_lArguments;
     m_aLastExecutionResult = rCopy.m_aLastExecutionResult;
 }
 
@@ -252,7 +252,7 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
 
             for (sal_Int32 i=0; i<nCount; ++i)
             {
-                lNames [i] = m_lArguments[i].Name ;
+                lNames [i] = m_lArguments[i].Name;
                 lValues[i] = m_lArguments[i].Value;
             }
 

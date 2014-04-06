@@ -393,7 +393,7 @@ class Desktop : private cppu::BaseMutex,
         static sal_Bool implcp_addEventListener         ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
         static sal_Bool implcp_removeEventListener      ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
 
-        sal_Bool m_bIsTerminated ;  /// check flag to protect us against dispose before terminate!
+        sal_Bool m_bIsTerminated;  /// check flag to protect us against dispose before terminate!
                                     /// see dispose() for further information!
 
     //  variables
@@ -401,19 +401,19 @@ class Desktop : private cppu::BaseMutex,
 
     private:
 
-        css::uno::Reference< css::uno::XComponentContext >              m_xContext                  ;   /// reference to factory, which has create this instance
-        FrameContainer                                                  m_aChildTaskContainer       ;   /// array of child tasks (children of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
-        ::cppu::OMultiTypeInterfaceContainerHelper                      m_aListenerContainer        ;   /// container for ALL Listener
-        css::uno::Reference< css::frame::XFrames >                      m_xFramesHelper             ;   /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
-        css::uno::Reference< css::frame::XDispatchProvider >            m_xDispatchHelper           ;   /// helper to dispatch something for new tasks, created by "_blank"!
-        ELoadState                                                      m_eLoadState                ;   /// hold information about state of asynchron loading of component for loadComponentFromURL()!
-        css::uno::Reference< css::frame::XFrame >                       m_xLastFrame                ;   /// last target of "loadComponentFromURL()"!
-        css::uno::Any                                                   m_aInteractionRequest       ;
-        sal_Bool                                                        m_bSuspendQuickstartVeto    ;   /// don't ask quickstart for a veto
-        SvtCommandOptions                                               m_aCommandOptions           ;   /// ref counted class to support disabling commands defined by configuration file
-        OUString                                                 m_sName                     ;
-        OUString                                                 m_sTitle                    ;
-        css::uno::Reference< css::frame::XDispatchRecorderSupplier >    m_xDispatchRecorderSupplier ;
+        css::uno::Reference< css::uno::XComponentContext >              m_xContext;               /// reference to factory, which has create this instance
+        FrameContainer                                                  m_aChildTaskContainer;    /// array of child tasks (children of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
+        ::cppu::OMultiTypeInterfaceContainerHelper                      m_aListenerContainer;     /// container for ALL Listener
+        css::uno::Reference< css::frame::XFrames >                      m_xFramesHelper;          /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
+        css::uno::Reference< css::frame::XDispatchProvider >            m_xDispatchHelper;        /// helper to dispatch something for new tasks, created by "_blank"!
+        ELoadState                                                      m_eLoadState;             /// hold information about state of asynchron loading of component for loadComponentFromURL()!
+        css::uno::Reference< css::frame::XFrame >                       m_xLastFrame;             /// last target of "loadComponentFromURL()"!
+        css::uno::Any                                                   m_aInteractionRequest;
+        sal_Bool                                                        m_bSuspendQuickstartVeto; /// don't ask quickstart for a veto
+        SvtCommandOptions                                               m_aCommandOptions;        /// ref counted class to support disabling commands defined by configuration file
+        OUString                                                 m_sName;
+        OUString                                                 m_sTitle;
+        css::uno::Reference< css::frame::XDispatchRecorderSupplier >    m_xDispatchRecorderSupplier;
 
         /** special terminate listener to close pipe and block external requests
           * during/after termination process is/was running

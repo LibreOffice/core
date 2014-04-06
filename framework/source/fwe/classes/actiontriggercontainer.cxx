@@ -128,12 +128,12 @@ Sequence< Type > SAL_CALL ActionTriggerContainer::getTypes() throw ( RuntimeExce
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static ::cppu::OTypeCollection* pTypeCollection = NULL ;
+    static ::cppu::OTypeCollection* pTypeCollection = NULL;
 
     if ( pTypeCollection == NULL )
     {
         // Ready for multithreading; get global mutex for first call of this method only! see before
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
         // Control these pointer again ... it can be, that another instance will be faster then these!
         if ( pTypeCollection == NULL )
@@ -143,14 +143,14 @@ Sequence< Type > SAL_CALL ActionTriggerContainer::getTypes() throw ( RuntimeExce
                         ::getCppuType(( const Reference< XMultiServiceFactory   >*)NULL ) ,
                         ::getCppuType(( const Reference< XIndexContainer        >*)NULL ) ,
                         ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) ) ;
+                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) );
 
             // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection ;
+            pTypeCollection = &aTypeCollection;
         }
     }
 
-    return pTypeCollection->getTypes() ;
+    return pTypeCollection->getTypes();
 }
 
 Sequence< sal_Int8 > SAL_CALL ActionTriggerContainer::getImplementationId() throw ( RuntimeException, std::exception )

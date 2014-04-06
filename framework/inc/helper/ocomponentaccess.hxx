@@ -213,7 +213,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
 
     private:
 
-        css::uno::WeakReference< css::frame::XDesktop >     m_xOwner    ;   /// weak reference to the desktop object!
+        css::uno::WeakReference< css::frame::XDesktop >     m_xOwner;   /// weak reference to the desktop object!
 
 };      //  class OComponentAccess
 

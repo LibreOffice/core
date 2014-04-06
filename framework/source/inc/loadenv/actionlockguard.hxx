@@ -120,7 +120,7 @@ class ActionLockGuard
             // SAFE -> ..........................
             osl::ClearableMutexGuard aMutexLock(m_mutex);
 
-            css::uno::Reference< css::document::XActionLockable > xLock   = m_xActionLock  ;
+            css::uno::Reference< css::document::XActionLockable > xLock   = m_xActionLock;
             sal_Bool                                              bLocked = m_bActionLocked;
 
             m_xActionLock.clear();

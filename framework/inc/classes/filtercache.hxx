@@ -310,10 +310,10 @@ class FilterCache   :   private TransactionBase
 
     private:
 
-        static sal_Int32        m_nRefCount         ;
-        static DataContainer*   m_pData             ;
-        static sal_Int32        m_nVersion          ;
-        static sal_Int16        m_nMode             ;
+        static sal_Int32        m_nRefCount;
+        static DataContainer*   m_pData;
+        static sal_Int32        m_nVersion;
+        static sal_Int16        m_nMode;
 
 };      //  class FilterCache
 

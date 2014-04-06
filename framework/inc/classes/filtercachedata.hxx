@@ -88,11 +88,11 @@ struct FileType
 
         inline void impl_clear()
         {
-            bPreferred          = sal_False         ;
-            sName               = OUString() ;
-            sMediaType          = OUString() ;
-            sClipboardFormat    = OUString() ;
-            nDocumentIconID     = 0                 ;
+            bPreferred          = sal_False;
+            sName               = OUString();
+            sMediaType          = OUString();
+            sClipboardFormat    = OUString();
+            nDocumentIconID     = 0;
             lUINames.free   ();
             lURLPattern.free();
             lExtensions.free();
@@ -100,14 +100,14 @@ struct FileType
 
         inline FileType& impl_copy( const FileType& rCopy )
         {
-            bPreferred          = rCopy.bPreferred      ;
-            sName               = rCopy.sName           ;
-            lUINames            = rCopy.lUINames        ;
-            sMediaType          = rCopy.sMediaType      ;
+            bPreferred          = rCopy.bPreferred;
+            sName               = rCopy.sName;
+            lUINames            = rCopy.lUINames;
+            sMediaType          = rCopy.sMediaType;
             sClipboardFormat    = rCopy.sClipboardFormat;
-            nDocumentIconID     = rCopy.nDocumentIconID ;
-            lURLPattern         = rCopy.lURLPattern     ;
-            lExtensions         = rCopy.lExtensions     ;
+            nDocumentIconID     = rCopy.nDocumentIconID;
+            lURLPattern         = rCopy.lURLPattern;
+            lExtensions         = rCopy.lExtensions;
             return (*this);
         }
 
@@ -115,14 +115,14 @@ struct FileType
 
     public:
 
-        sal_Bool            bPreferred          ;
-        OUString     sName               ;
-        OUStringHashMap     lUINames            ;
-        OUString     sMediaType          ;
-        OUString     sClipboardFormat    ;
-        sal_Int32           nDocumentIconID     ;
-        OUStringList        lURLPattern         ;
-        OUStringList        lExtensions         ;
+        sal_Bool            bPreferred;
+        OUString     sName;
+        OUStringHashMap     lUINames;
+        OUString     sMediaType;
+        OUString     sClipboardFormat;
+        sal_Int32           nDocumentIconID;
+        OUStringList        lURLPattern;
+        OUStringList        lExtensions;
 };
 
 // These struct describe a filter which is registered for one type.
@@ -149,14 +149,14 @@ struct Filter
 
         inline void impl_clear()
         {
-            nOrder              = 0                ;
+            nOrder              = 0;
             sName               = OUString();
             sType               = OUString();
             sDocumentService    = OUString();
             sFilterService      = OUString();
             sUIComponent        = OUString();
-            nFlags              = 0                ;
-            nFileFormatVersion  = 0                ;
+            nFlags              = 0;
+            nFileFormatVersion  = 0;
             sTemplateName       = OUString();
             lUINames.free   ();
             lUserData.free  ();
@@ -164,17 +164,17 @@ struct Filter
 
         inline Filter& impl_copy( const Filter& rCopy )
         {
-            nOrder              = rCopy.nOrder              ;
-            sName               = rCopy.sName               ;
-            sType               = rCopy.sType               ;
-            lUINames            = rCopy.lUINames            ;
-            sDocumentService    = rCopy.sDocumentService    ;
-            sFilterService      = rCopy.sFilterService      ;
-            sUIComponent        = rCopy.sUIComponent        ;
-            nFlags              = rCopy.nFlags              ;
-            nFileFormatVersion  = rCopy.nFileFormatVersion  ;
-            sTemplateName       = rCopy.sTemplateName       ;
-            lUserData           = rCopy.lUserData           ;
+            nOrder              = rCopy.nOrder;
+            sName               = rCopy.sName;
+            sType               = rCopy.sType;
+            lUINames            = rCopy.lUINames;
+            sDocumentService    = rCopy.sDocumentService;
+            sFilterService      = rCopy.sFilterService;
+            sUIComponent        = rCopy.sUIComponent;
+            nFlags              = rCopy.nFlags;
+            nFileFormatVersion  = rCopy.nFileFormatVersion;
+            sTemplateName       = rCopy.sTemplateName;
+            lUserData           = rCopy.lUserData;
             return (*this);
         }
 
@@ -182,17 +182,17 @@ struct Filter
 
     public:
 
-        sal_Int32           nOrder              ;
-        OUString     sName               ;
-        OUString     sType               ;
-        OUStringHashMap     lUINames            ;
-        OUString     sDocumentService    ;
-        OUString     sFilterService      ;
-        OUString     sUIComponent        ;
-        sal_Int32           nFlags              ;
-        OUStringList        lUserData           ;
-        sal_Int32           nFileFormatVersion  ;
-        OUString     sTemplateName       ;
+        sal_Int32           nOrder;
+        OUString     sName;
+        OUString     sType;
+        OUStringHashMap     lUINames;
+        OUString     sDocumentService;
+        OUString     sFilterService;
+        OUString     sUIComponent;
+        sal_Int32           nFlags;
+        OUStringList        lUserData;
+        sal_Int32           nFileFormatVersion;
+        OUString     sTemplateName;
 };
 
 // Programmer can register his own services for an content detection of different types.
@@ -224,8 +224,8 @@ struct Detector
 
         inline Detector& impl_copy( const Detector& rCopy )
         {
-            sName  = rCopy.sName  ;
-            lTypes = rCopy.lTypes ;
+            sName  = rCopy.sName;
+            lTypes = rCopy.lTypes;
             return (*this);
         }
 
@@ -233,8 +233,8 @@ struct Detector
 
     public:
 
-        OUString     sName       ;
-        OUStringList        lTypes      ;
+        OUString     sName;
+        OUStringList        lTypes;
 };
 
 // Programmer can register his own services for loading documents in a frame.
@@ -267,9 +267,9 @@ struct Loader
 
         inline Loader& impl_copy( const Loader& rCopy )
         {
-            sName       = rCopy.sName       ;
-            lUINames    = rCopy.lUINames    ;
-            lTypes      = rCopy.lTypes      ;
+            sName       = rCopy.sName;
+            lUINames    = rCopy.lUINames;
+            lTypes      = rCopy.lTypes;
             return (*this);
         }
 
@@ -277,9 +277,9 @@ struct Loader
 
     public:
 
-        OUString sName       ;
-        OUStringHashMap lUINames    ;
-        OUStringList    lTypes      ;
+        OUString sName;
+        OUStringHashMap lUINames;
+        OUStringList    lTypes;
 };
 
 // Programmer can register his own services to handle a FileType and intercept dispatches.
@@ -310,7 +310,7 @@ struct ContentHandler
 
         inline ContentHandler& impl_copy( const ContentHandler& rCopy )
         {
-            sName  = rCopy.sName ;
+            sName  = rCopy.sName;
             lTypes = rCopy.lTypes;
             return (*this);
         }
@@ -319,8 +319,8 @@ struct ContentHandler
 
     public:
 
-        OUString     sName   ;
-        OUStringList        lTypes  ;
+        OUString     sName;
+        OUStringList        lTypes;
 };
 
 // We need different hash maps for different tables of our configuration management.
@@ -357,9 +357,9 @@ class SetNodeHash : public ::boost::unordered_map< OUString                    ,
     // member
 
     public:
-        OUStringList  lAddedItems    ;
-        OUStringList  lChangedItems  ;
-        OUStringList  lRemovedItems  ;
+        OUStringList  lAddedItems;
+        OUStringList  lChangedItems;
+        OUStringList  lRemovedItems;
 };
 
 // Use these hashes to implement different tables which assign types to frame loader or detect services.
@@ -416,19 +416,19 @@ class PerformanceHash   :   public  ::boost::unordered_map<    OUString         
 
 // Define easy usable types
 
-typedef SetNodeHash< FileType >                                     FileTypeHash                ;
-typedef SetNodeHash< Filter >                                       FilterHash                  ;
-typedef SetNodeHash< Detector >                                     DetectorHash                ;
-typedef SetNodeHash< Loader >                                       LoaderHash                  ;
-typedef SetNodeHash< ContentHandler >                               ContentHandlerHash          ;
-typedef OUStringHashMap                                             PreferredHash               ;
-typedef OUStringList                                                OrderList                   ;
+typedef SetNodeHash< FileType >                                     FileTypeHash;
+typedef SetNodeHash< Filter >                                       FilterHash;
+typedef SetNodeHash< Detector >                                     DetectorHash;
+typedef SetNodeHash< Loader >                                       LoaderHash;
+typedef SetNodeHash< ContentHandler >                               ContentHandlerHash;
+typedef OUStringHashMap                                             PreferredHash;
+typedef OUStringList                                                OrderList;
 
-typedef CheckedIterator< OUStringList >                             CheckedStringListIterator   ;
-typedef CheckedIterator< FileTypeHash >                             CheckedTypeIterator         ;
-typedef CheckedIterator< PerformanceHash >                          CheckedPerformanceIterator  ;
+typedef CheckedIterator< OUStringList >                             CheckedStringListIterator;
+typedef CheckedIterator< FileTypeHash >                             CheckedTypeIterator;
+typedef CheckedIterator< PerformanceHash >                          CheckedPerformanceIterator;
 
-typedef ::std::vector< FilterHash::const_iterator >                 FilterQuery                 ;
+typedef ::std::vector< FilterHash::const_iterator >                 FilterQuery;
 
 // Use private static data container to hold all values of configuration!
 
@@ -543,23 +543,23 @@ class DataContainer
 
     public:
 
-        FileTypeHash            m_aTypeCache                ;     /// hold all information about registered file types
-        FilterHash              m_aFilterCache              ;     /// hold all information about registered filters
-        DetectorHash            m_aDetectorCache            ;     /// hold all information about registered detect services
-        LoaderHash              m_aLoaderCache              ;     /// hold all information about registered loader services
-        ContentHandlerHash      m_aContentHandlerCache      ;     /// hold all information about registered content handler services
-        PerformanceHash         m_aFastFilterCache          ;     /// hold all registered filter for a special file type
-        PerformanceHash         m_aFastDetectorCache        ;     /// hold all registered detect services for a special file type
-        PerformanceHash         m_aFastLoaderCache          ;     /// hold all registered loader services for a special file type
-        PerformanceHash         m_aFastContentHandlerCache  ;     /// hold all registered content handler services for a special file type
-        PreferredHash           m_aPreferredTypesCache      ;     /// assignment of extensions to preferred types for it
-        Loader                  m_aGenericLoader            ;     /// information about our default frame loader
-        OUString         m_sLocale                   ;     /// current set locale of configuration to handle right UIName from set of all UINames!
-        sal_Bool                m_bTypesModified            ;
-        sal_Bool                m_bFiltersModified          ;
-        sal_Bool                m_bDetectorsModified        ;
-        sal_Bool                m_bLoadersModified          ;
-        sal_Bool                m_bHandlersModified         ;
+        FileTypeHash            m_aTypeCache;               /// hold all information about registered file types
+        FilterHash              m_aFilterCache;             /// hold all information about registered filters
+        DetectorHash            m_aDetectorCache;           /// hold all information about registered detect services
+        LoaderHash              m_aLoaderCache;             /// hold all information about registered loader services
+        ContentHandlerHash      m_aContentHandlerCache;     /// hold all information about registered content handler services
+        PerformanceHash         m_aFastFilterCache;         /// hold all registered filter for a special file type
+        PerformanceHash         m_aFastDetectorCache;       /// hold all registered detect services for a special file type
+        PerformanceHash         m_aFastLoaderCache;         /// hold all registered loader services for a special file type
+        PerformanceHash         m_aFastContentHandlerCache; /// hold all registered content handler services for a special file type
+        PreferredHash           m_aPreferredTypesCache;     /// assignment of extensions to preferred types for it
+        Loader                  m_aGenericLoader;           /// information about our default frame loader
+        OUString                m_sLocale;                  /// current set locale of configuration to handle right UIName from set of all UINames!
+        sal_Bool                m_bTypesModified;
+        sal_Bool                m_bFiltersModified;
+        sal_Bool                m_bDetectorsModified;
+        sal_Bool                m_bLoadersModified;
+        sal_Bool                m_bHandlersModified;
 };
 
 /*-************************************************************************************************************
@@ -637,15 +637,15 @@ class FilterCFGAccess : public ::utl::ConfigItem
     //  member
 
     private:
-        EFilterPackage  m_ePackage                     ;   // ... not really used yet! should split configuration in STANDARD and ADDITIONAL filter
-        sal_Int32       m_nVersion                     ;   // file format version of configuration! (necessary for "xml2xcd" transformation!)
-        sal_Int32       m_nKeyCountTypes               ;   // follow key counts present count of configuration properties for types/filters ... and depends from m_nVersion - must be set right!
-        sal_Int32       m_nKeyCountFilters             ;
-        sal_Int32       m_nKeyCountDetectors           ;
-        sal_Int32       m_nKeyCountLoaders             ;
-        sal_Int32       m_nKeyCountContentHandlers     ;
-        OUString m_sProductName                 ;
-        OUString m_sFormatVersion               ;
+        EFilterPackage  m_ePackage;   // ... not really used yet! should split configuration in STANDARD and ADDITIONAL filter
+        sal_Int32       m_nVersion;   // file format version of configuration! (necessary for "xml2xcd" transformation!)
+        sal_Int32       m_nKeyCountTypes;   // follow key counts present count of configuration properties for types/filters ... and depends from m_nVersion - must be set right!
+        sal_Int32       m_nKeyCountFilters;
+        sal_Int32       m_nKeyCountDetectors;
+        sal_Int32       m_nKeyCountLoaders;
+        sal_Int32       m_nKeyCountContentHandlers;
+        OUString m_sProductName;
+        OUString m_sFormatVersion;
 };
 
 }       //  namespace framework

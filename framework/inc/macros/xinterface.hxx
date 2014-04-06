@@ -108,7 +108,7 @@ ________________________________________________________________________________
         if ( !aReturn.hasValue() )                                                                                                                          \
         {                                                                                                                                                   \
             /* ... search in second group. (cppuhelper support 12 items only!) */                                                                           \
-            aReturn = ::cppu::queryInterface INTERFACES_SECOND ;                                                                                            \
+            aReturn = ::cppu::queryInterface INTERFACES_SECOND;                                                                                            \
             /* If searched interface not supported by this class ... */                                                                                     \
             if ( !aReturn.hasValue() )                                                                                                                      \
             {                                                                                                                                               \

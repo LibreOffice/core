@@ -203,10 +203,10 @@ class Gate : public  IGate
 
     private:
 
-        ::osl::Mutex        m_aAccessLock   ;
-        ::osl::Condition    m_aPassage      ;
-        sal_Bool            m_bClosed       ;
-        sal_Bool            m_bGapOpen      ;
+        ::osl::Mutex        m_aAccessLock;
+        ::osl::Condition    m_aPassage;
+        sal_Bool            m_bClosed;
+        sal_Bool            m_bGapOpen;
 
 };      //  class Gate
 

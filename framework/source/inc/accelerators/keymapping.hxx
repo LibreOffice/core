@@ -47,7 +47,7 @@ class KeyMapping
          */
         struct KeyIdentifierInfo
         {
-            sal_Int16       Code      ;
+            sal_Int16       Code;
             const char*     Identifier;
         };
 

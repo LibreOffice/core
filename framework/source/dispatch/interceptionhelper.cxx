@@ -247,7 +247,7 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
 
     InterceptionHelper::InterceptorList::iterator pIt;
     for (  pIt  = aCopy.begin();
-           pIt != aCopy.end()  ;
+           pIt != aCopy.end();
          ++pIt                 )
     {
         InterceptionHelper::InterceptorInfo& rInfo = *pIt;

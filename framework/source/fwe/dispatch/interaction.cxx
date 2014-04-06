@@ -95,7 +95,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
-    ::com::sun::star::uno::Any                                                                                                 m_aRequest      ;
+    ::com::sun::star::uno::Any                                                                                                 m_aRequest;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >    m_lContinuations;
     comphelper::OInteractionAbort* m_pAbort;
     ContinuationFilterSelect* m_pFilter;

@@ -204,7 +204,7 @@ throw(  SAXException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
-    StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName ) ;
+    StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName );
     if ( pStatusBarEntry != m_aStatusBarMap.end() )
     {
         switch ( pStatusBarEntry->second )
@@ -403,7 +403,7 @@ throw(  SAXException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
-    StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName ) ;
+    StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName );
     if ( pStatusBarEntry != m_aStatusBarMap.end() )
     {
         switch ( pStatusBarEntry->second )

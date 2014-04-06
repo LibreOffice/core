@@ -217,7 +217,7 @@ throw(  SAXException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
-    ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName ) ;
+    ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName );
     if ( pToolBoxEntry != m_aToolBoxMap.end() )
     {
         switch ( pToolBoxEntry->second )
@@ -535,7 +535,7 @@ throw(  SAXException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
-    ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName ) ;
+    ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName );
     if ( pToolBoxEntry != m_aToolBoxMap.end() )
     {
         switch ( pToolBoxEntry->second )

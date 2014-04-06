@@ -146,7 +146,7 @@ KeyMapping::KeyMapping()
         OUString sIdentifier = OUString::createFromAscii(KeyIdentifierMap[i].Identifier);
         sal_Int16       nCode       = KeyIdentifierMap[i].Code;
 
-        m_lIdentifierHash[sIdentifier] = nCode      ;
+        m_lIdentifierHash[sIdentifier] = nCode;
         m_lCodeHash      [nCode]       = sIdentifier;
 
         ++i;

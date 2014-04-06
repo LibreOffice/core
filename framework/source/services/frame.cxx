@@ -388,36 +388,36 @@ private:
 
 private:
 
-    css::uno::Reference< css::uno::XComponentContext >                      m_xContext                          ;   /// reference to factory, which has create this instance
-    css::uno::Reference< css::task::XStatusIndicatorFactory >               m_xIndicatorFactoryHelper           ;   /// reference to factory helper to create status indicator objects
-    css::uno::WeakReference< css::task::XStatusIndicator >                  m_xIndicatorInterception            ;   /// points to an external set progress, which should be used instead of the internal one.
-    css::uno::Reference< css::frame::XDispatchProvider >                    m_xDispatchHelper                   ;   /// helper for XDispatch/Provider and interception interfaces
-    css::uno::Reference< css::frame::XFrames >                              m_xFramesHelper                     ;   /// helper for XFrames, XIndexAccess and XElementAccess interfaces
-    ::cppu::OMultiTypeInterfaceContainerHelper                              m_aListenerContainer                ;   /// container for ALL Listener
-    css::uno::Reference< css::frame::XFramesSupplier >                      m_xParent                           ;   /// parent of this frame
-    css::uno::Reference< css::awt::XWindow >                                m_xContainerWindow                  ;   /// containerwindow of this frame for embedded components
-    css::uno::Reference< css::awt::XWindow >                                m_xComponentWindow                  ;   /// window of the actual component
-    css::uno::Reference< css::frame::XController >                          m_xController                       ;   /// controller of the actual frame
-    css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >      m_xDropTargetListener               ;   /// listen to drag & drop
-    EActiveState                                                            m_eActiveState                      ;   /// state, if i'am a member of active path in tree or i have the focus or ...
-    OUString                                                         m_sName                             ;   /// name of this frame
-    sal_Bool                                                                m_bIsFrameTop                       ;   /// frame has no parent or the parent is a taskor the desktop
-    sal_Bool                                                                m_bConnected                        ;   /// due to FrameActionEvent
-    sal_Int16                                                               m_nExternalLockCount                ;
-    css::uno::Reference< css::frame::XDispatchRecorderSupplier >            m_xDispatchRecorderSupplier         ;   /// is used for dispatch recording and will be set/get from outside. Frame provide it only!
-    SvtCommandOptions                                                       m_aCommandOptions                   ;   /// ref counted class to support disabling commands defined by configuration file
-    sal_Bool                                                                m_bSelfClose                        ;   /// in case of CloseVetoException on method close() wqs thrown by ourself - we must close ourself later if no internal processes are running
-    sal_Bool                                                                m_bIsHidden                         ;   /// indicates, if this frame is used in hidden mode or not
-    static css::uno::WeakReference< css::frame::XFrame2 >                   m_xCloserFrame                      ;   /// holds the only frame, which must show the special closer menu item (can be NULL!)
-    css::uno::Reference< ::css::frame::XLayoutManager2 >                    m_xLayoutManager                    ;   /// is used to layout the child windows of the frame.
-    css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper               ;
-    css::uno::Reference< css::frame::XTitle >                               m_xTitleHelper                      ;
+    css::uno::Reference< css::uno::XComponentContext >                      m_xContext;                  /// reference to factory, which has create this instance
+    css::uno::Reference< css::task::XStatusIndicatorFactory >               m_xIndicatorFactoryHelper;   /// reference to factory helper to create status indicator objects
+    css::uno::WeakReference< css::task::XStatusIndicator >                  m_xIndicatorInterception;    /// points to an external set progress, which should be used instead of the internal one.
+    css::uno::Reference< css::frame::XDispatchProvider >                    m_xDispatchHelper;           /// helper for XDispatch/Provider and interception interfaces
+    css::uno::Reference< css::frame::XFrames >                              m_xFramesHelper;             /// helper for XFrames, XIndexAccess and XElementAccess interfaces
+    ::cppu::OMultiTypeInterfaceContainerHelper                              m_aListenerContainer;        /// container for ALL Listener
+    css::uno::Reference< css::frame::XFramesSupplier >                      m_xParent;                   /// parent of this frame
+    css::uno::Reference< css::awt::XWindow >                                m_xContainerWindow;          /// containerwindow of this frame for embedded components
+    css::uno::Reference< css::awt::XWindow >                                m_xComponentWindow;          /// window of the actual component
+    css::uno::Reference< css::frame::XController >                          m_xController;               /// controller of the actual frame
+    css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >      m_xDropTargetListener;       /// listen to drag & drop
+    EActiveState                                                            m_eActiveState;              /// state, if i'am a member of active path in tree or i have the focus or ...
+    OUString                                                                m_sName;                     /// name of this frame
+    sal_Bool                                                                m_bIsFrameTop;               /// frame has no parent or the parent is a taskor the desktop
+    sal_Bool                                                                m_bConnected;                /// due to FrameActionEvent
+    sal_Int16                                                               m_nExternalLockCount;
+    css::uno::Reference< css::frame::XDispatchRecorderSupplier >            m_xDispatchRecorderSupplier; /// is used for dispatch recording and will be set/get from outside. Frame provide it only!
+    SvtCommandOptions                                                       m_aCommandOptions;           /// ref counted class to support disabling commands defined by configuration file
+    sal_Bool                                                                m_bSelfClose;                /// in case of CloseVetoException on method close() wqs thrown by ourself - we must close ourself later if no internal processes are running
+    sal_Bool                                                                m_bIsHidden;                 /// indicates, if this frame is used in hidden mode or not
+    static css::uno::WeakReference< css::frame::XFrame2 >                   m_xCloserFrame;              /// holds the only frame, which must show the special closer menu item (can be NULL!)
+    css::uno::Reference< ::css::frame::XLayoutManager2 >                    m_xLayoutManager;            /// is used to layout the child windows of the frame.
+    css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper;
+    css::uno::Reference< css::frame::XTitle >                               m_xTitleHelper;
 
-    WindowCommandDispatch*                                                  m_pWindowCommandDispatch            ;
+    WindowCommandDispatch*                                                  m_pWindowCommandDispatch;
 
 protected:
 
-    FrameContainer                                                          m_aChildFrameContainer              ;   /// array of child frames
+    FrameContainer                                                          m_aChildFrameContainer;   /// array of child frames
 
     inline css::uno::Reference< css::uno::XComponentContext > impl_getComponentContext()
     {
@@ -748,7 +748,7 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
     // m_aChildFrameContainer is threadsafe himself and he live if we live!!!
     // ...and our transaction is non breakable too ...
     css::uno::Reference< css::frame::XFrame > xActiveChild = m_aChildFrameContainer.getActive();
-    EActiveState                              eActiveState = m_eActiveState             ;
+    EActiveState                              eActiveState = m_eActiveState;
 
     aWriteLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -775,7 +775,7 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
         if( eActiveState == E_FOCUS )
         {
             aWriteLock.reset();
-            eActiveState   = E_ACTIVE    ;
+            eActiveState   = E_ACTIVE;
             m_eActiveState = eActiveState;
             aWriteLock.clear();
             implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_DEACTIVATING );
@@ -797,7 +797,7 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
     if( eActiveState == E_ACTIVE )
     {
         aWriteLock.reset();
-        eActiveState   = E_FOCUS     ;
+        eActiveState   = E_FOCUS;
         m_eActiveState = eActiveState;
         aWriteLock.clear();
         implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_ACTIVATED );
@@ -1357,11 +1357,11 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException, std::exceptio
     // he is threadsafe himself and live if we live.
     // We use a registered transaction to prevent us against
     // breaks during this operation!
-    css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive()                                ;
-    css::uno::Reference< css::frame::XFramesSupplier >  xParent         ( m_xParent, css::uno::UNO_QUERY )                                ;
+    css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive();
+    css::uno::Reference< css::frame::XFramesSupplier >  xParent         ( m_xParent, css::uno::UNO_QUERY );
     css::uno::Reference< css::frame::XFrame >           xThis           ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-    css::uno::Reference< css::awt::XWindow >            xComponentWindow( m_xComponentWindow, css::uno::UNO_QUERY )                       ;
-    EActiveState                                        eState          = m_eActiveState                                                  ;
+    css::uno::Reference< css::awt::XWindow >            xComponentWindow( m_xComponentWindow, css::uno::UNO_QUERY );
+    EActiveState                                        eState          = m_eActiveState;
 
     aWriteLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -1443,10 +1443,10 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException, std::except
     SolarMutexResettableGuard aWriteLock;
 
     // Copy necessary member and free the lock.
-    css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive()                                     ;
-    css::uno::Reference< css::frame::XFramesSupplier >  xParent         ( m_xParent, css::uno::UNO_QUERY )                                ;
+    css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive();
+    css::uno::Reference< css::frame::XFramesSupplier >  xParent         ( m_xParent, css::uno::UNO_QUERY );
     css::uno::Reference< css::frame::XFrame >           xThis           ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-    EActiveState                                        eState          = m_eActiveState                                                  ;
+    EActiveState                                        eState          = m_eActiveState;
 
     aWriteLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -1468,7 +1468,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException, std::except
             // Don't set ACTIVE as new state. This frame is deactivated for next time - due to activate().
             aWriteLock.reset();
             eState          = E_ACTIVE;
-            m_eActiveState  = eState  ;
+            m_eActiveState  = eState;
             aWriteLock.clear();
             implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_DEACTIVATING );
         }
@@ -1479,7 +1479,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException, std::except
             // Set new state and send message to all listener.
             aWriteLock.reset();
             eState          = E_INACTIVE;
-            m_eActiveState  = eState    ;
+            m_eActiveState  = eState;
             aWriteLock.clear();
             implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_DEACTIVATING );
         }
@@ -1676,7 +1676,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     /* SAFE { */
     SolarMutexResettableGuard aWriteLock;
     m_xComponentWindow = xComponentWindow;
-    m_xController      = xController     ;
+    m_xController      = xController;
     m_bConnected       = (m_xComponentWindow.is() || m_xController.is());
     sal_Bool bIsConnected       = m_bConnected;
     aWriteLock.clear();
@@ -2512,7 +2512,7 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
 
     css::uno::Reference< css::frame::XFrame > xParent          ( m_xParent, css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XWindow >  xContainerWindow = m_xContainerWindow;
-    EActiveState                              eActiveState     = m_eActiveState    ;
+    EActiveState                              eActiveState     = m_eActiveState;
 
     aReadLock.clear();
 
@@ -2527,7 +2527,7 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
               !css::uno::Reference< css::frame::XDesktop >( xParent, css::uno::UNO_QUERY ).is()
             )
         {
-            css::uno::Reference< css::awt::XWindow >  xParentWindow   = xParent->getContainerWindow()             ;
+            css::uno::Reference< css::awt::XWindow >  xParentWindow   = xParent->getContainerWindow();
             Window*                                   pParentWindow   = VCLUnoHelper::GetWindow( xParentWindow    );
             //#i70261#: dialogs opened from an OLE object will cause a deactivate on the frame of the OLE object
             // on Solaris/Linux at that time pFocusWindow is still NULL because the focus handling is different; right after
@@ -3151,7 +3151,7 @@ void Frame::implts_startWindowListening()
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Make snapshot of necessary member!
     SolarMutexClearableGuard aReadLock;
-    css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
+    css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow;
     css::uno::Reference< css::uno::XComponentContext >                  xContext = m_xContext;
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >  xDragDropListener   = m_xDropTargetListener;
     css::uno::Reference< css::awt::XWindowListener >                    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
@@ -3190,8 +3190,8 @@ void Frame::implts_stopWindowListening()
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Make snapshot of necessary member!
     SolarMutexClearableGuard aReadLock;
-    css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
-    css::uno::Reference< css::uno::XComponentContext >                  xContext            = m_xContext           ;
+    css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow;
+    css::uno::Reference< css::uno::XComponentContext >                  xContext            = m_xContext;
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >  xDragDropListener   = m_xDropTargetListener;
     css::uno::Reference< css::awt::XWindowListener >                    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XFocusListener >                     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );

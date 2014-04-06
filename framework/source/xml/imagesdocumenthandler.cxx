@@ -167,7 +167,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
 {
     SolarMutexGuard g;
 
-    ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName ) ;
+    ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName );
     if ( pImageEntry != m_aImageMap.end() )
     {
         switch ( pImageEntry->second )
@@ -501,7 +501,7 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
 {
     SolarMutexGuard g;
 
-    ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName ) ;
+    ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName );
     if ( pImageEntry != m_aImageMap.end() )
     {
         switch ( pImageEntry->second )

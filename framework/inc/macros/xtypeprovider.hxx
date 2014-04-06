@@ -69,7 +69,7 @@ ________________________________________________________________________________
         /* And we don't must use a mutex at every call!                 */                                                                      \
         /* For the first call; pTypeCollection is NULL -                */                                                                      \
         /* for the second call pTypeCollection is different from NULL!  */                                                                      \
-        static ::cppu::OTypeCollection* pTypeCollection = NULL ;                                                                                \
+        static ::cppu::OTypeCollection* pTypeCollection = NULL;                                                                                \
         if ( pTypeCollection == NULL )                                                                                                          \
         {                                                                                                                                       \
             /* Ready for multithreading; get global mutex for first call of this method only! see before   */                                   \
@@ -79,9 +79,9 @@ ________________________________________________________________________________
             {                                                                                                                                   \
                 /* Create a static typecollection ...           */                                                                              \
                 /* Attention: "TYPES" will expand to "(...)"!   */                                                                              \
-                static ::cppu::OTypeCollection aTypeCollection TYPES ;                                                                          \
+                static ::cppu::OTypeCollection aTypeCollection TYPES;                                                                          \
                 /* ... and set his address to static pointer! */                                                                                \
-                pTypeCollection = &aTypeCollection ;                                                                                            \
+                pTypeCollection = &aTypeCollection;                                                                                            \
             }                                                                                                                                   \
         }                                                                                                                                       \
         return pTypeCollection->getTypes();                                                                                                     \
@@ -98,7 +98,7 @@ ________________________________________________________________________________
         /* And we don't must use a mutex at every call!                 */                                                                      \
         /* For the first call; pTypeCollection is NULL -                */                                                                      \
         /* for the second call pTypeCollection is different from NULL!  */                                                                      \
-        static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >* pTypeCollection = NULL ;                                         \
+        static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >* pTypeCollection = NULL;                                         \
         if ( pTypeCollection == NULL )                                                                                                          \
         {                                                                                                                                       \
             /* Ready for multithreading; get global mutex for first call of this method only! see before   */                                   \
@@ -108,8 +108,8 @@ ________________________________________________________________________________
             {                                                                                                                                   \
                 /* Create two typecollections                           */                                                                      \
                 /* (cppuhelper support 12 items per collection only!)   */                                                                      \
-                ::cppu::OTypeCollection aTypeCollection1 TYPES_FIRST    ;                                                                       \
-                ::cppu::OTypeCollection aTypeCollection2 TYPES_SECOND   ;                                                                       \
+                ::cppu::OTypeCollection aTypeCollection1 TYPES_FIRST;                                                                       \
+                ::cppu::OTypeCollection aTypeCollection2 TYPES_SECOND;                                                                       \
                 /* Copy all items from both sequences to one result list! */                                                                    \
                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >          seqTypes1   = aTypeCollection1.getTypes();              \
                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >          seqTypes2   = aTypeCollection2.getTypes();              \
@@ -149,7 +149,7 @@ ________________________________________________________________________________
         /* And we don't must use a mutex at every call!                 */                                                                      \
         /* For the first call; pTypeCollection is NULL -                */                                                                      \
         /* for the second call pTypeCollection is different from NULL!  */                                                                      \
-        static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >* pTypeCollection = NULL ;                                         \
+        static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >* pTypeCollection = NULL;                                         \
         if ( pTypeCollection == NULL )                                                                                                          \
         {                                                                                                                                       \
             /* Ready for multithreading; get global mutex for first call of this method only! see before   */                                   \
@@ -158,7 +158,7 @@ ________________________________________________________________________________
             if ( pTypeCollection == NULL )                                                                                                      \
             {                                                                                                                                   \
                 /* Create static typecollection for my own interfaces!  */                                                                      \
-                static ::cppu::OTypeCollection aTypeCollection TYPES ;                                                                          \
+                static ::cppu::OTypeCollection aTypeCollection TYPES;                                                                          \
                 /* Copy all items from my list sequences and from my baseclass  */                                                              \
                 /* to one result list!                                          */                                                              \
                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >          seqTypes1   = aTypeCollection.getTypes();               \

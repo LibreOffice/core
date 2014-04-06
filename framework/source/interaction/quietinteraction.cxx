@@ -57,10 +57,10 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     // We need XAbort as possible continuation as minimum!
     // An optional filter selection we can handle too.
     css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
-    css::uno::Reference< css::task::XInteractionAbort >                              xAbort     ;
-    css::uno::Reference< css::task::XInteractionApprove >                            xApprove   ;
-    css::uno::Reference< css::document::XInteractionFilterSelect >                   xFilter    ;
-    css::uno::Reference< css::document::XInteractionFilterOptions >                  xFOptions  ;
+    css::uno::Reference< css::task::XInteractionAbort >                              xAbort;
+    css::uno::Reference< css::task::XInteractionApprove >                            xApprove;
+    css::uno::Reference< css::document::XInteractionFilterSelect >                   xFilter;
+    css::uno::Reference< css::document::XInteractionFilterOptions >                  xFOptions;
 
     sal_Int32 nCount=lContinuations.getLength();
     for (sal_Int32 i=0; i<nCount; ++i)
@@ -80,7 +80,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
 
     // differ between abortable interactions (error, unknown filter ...)
     // and other ones (ambigous but not unknown filter ...)
-    css::task::ErrorCodeRequest          aErrorCodeRequest     ;
+    css::task::ErrorCodeRequest          aErrorCodeRequest;
     css::document::AmbigousFilterRequest aAmbigousFilterRequest;
     css::document::LockedDocumentRequest aLockedDocumentRequest;
     css::document::FilterOptionsRequest  aFilterOptionsRequest;

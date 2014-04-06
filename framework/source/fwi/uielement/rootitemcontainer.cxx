@@ -278,7 +278,7 @@ throw( com::sun::star::lang::IllegalArgumentException )
     }
 
     // Return state of operation.
-    return bReturn ;
+    return bReturn;
 }
 
 void SAL_CALL RootItemContainer::setFastPropertyValue_NoBroadcast( sal_Int32               nHandle ,
@@ -314,7 +314,7 @@ void SAL_CALL RootItemContainer::getFastPropertyValue( com::sun::star::uno::Any&
     if( pInfoHelper == NULL )
     {
         // Ready for multithreading
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
         // Control this pointer again, another instance can be faster then these!
         if( pInfoHelper == NULL )
@@ -341,7 +341,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     if( pInfo == NULL )
     {
         // Ready for multithreading
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
         // Control this pointer again, another instance can be faster then these!
         if( pInfo == NULL )
         {

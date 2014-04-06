@@ -182,7 +182,7 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
     // on the desktop instance. Ignore e.g. life previews, which are top frames too ...
     // but not registered at this global desktop instance.
     css::uno::Reference< css::frame::XDesktop >    xDesktopCheck;
-    css::uno::Reference< css::frame::XFrame >      xFrame       ;
+    css::uno::Reference< css::frame::XFrame >      xFrame;
     css::uno::Reference< css::frame::XController > xController  = xDoc->getCurrentController();
     if (xController.is())
         xFrame = xController->getFrame();
@@ -233,8 +233,8 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
         css::uno::Reference< css::frame::XFramesSupplier >  xHelpRoot  (xHelp                 , css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XIndexAccess > xHelpChildren(xHelpRoot->getFrames(), css::uno::UNO_QUERY_THROW);
 
-        css::uno::Reference< css::frame::XFrame >      xHelpChild  ;
-        css::uno::Reference< css::frame::XController > xHelpView   ;
+        css::uno::Reference< css::frame::XFrame >      xHelpChild;
+        css::uno::Reference< css::frame::XController > xHelpView;
         css::uno::Reference< css::frame::XModel >      xHelpContent;
 
         xHelpChildren->getByIndex(0) >>= xHelpChild;

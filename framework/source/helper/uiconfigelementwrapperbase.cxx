@@ -246,7 +246,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
     }
 
     // Return state of operation.
-    return bReturn ;
+    return bReturn;
 }
 
 void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               nHandle ,
@@ -383,7 +383,7 @@ void SAL_CALL UIConfigElementWrapperBase::getFastPropertyValue( com::sun::star::
     if( pInfoHelper == NULL )
     {
         // Ready for multithreading
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
         // Control this pointer again, another instance can be faster then these!
         if( pInfoHelper == NULL )
@@ -409,7 +409,7 @@ com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CA
     if( pInfo == NULL )
     {
         // Ready for multithreading
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
         // Control this pointer again, another instance can be faster then these!
         if( pInfo == NULL )
         {

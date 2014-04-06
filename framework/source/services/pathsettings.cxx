@@ -708,7 +708,7 @@ void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
 {
     OUStringList::const_iterator pIt;
     for (  pIt  = lOld.begin();
-           pIt != lOld.end()  ;
+           pIt != lOld.end();
          ++pIt                )
     {
         const OUString& sOld = *pIt;
@@ -853,10 +853,10 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const OUSt
     // the outside cant determine the right group ... and cant fire the right events .-)
 
     css::uno::Sequence< sal_Int32 > lIDs(IDGROUP_COUNT);
-    lIDs[0] = IDGROUP_OLDSTYLE       ;
+    lIDs[0] = IDGROUP_OLDSTYLE;
     lIDs[1] = IDGROUP_INTERNAL_PATHS;
-    lIDs[2] = IDGROUP_USER_PATHS    ;
-    lIDs[3] = IDGROUP_WRITE_PATH     ;
+    lIDs[2] = IDGROUP_USER_PATHS;
+    lIDs[3] = IDGROUP_WRITE_PATH;
 
     sal_Int32 c = m_lPropDesc.getLength();
     sal_Int32 i = 0;
@@ -964,11 +964,11 @@ void PathSettings::impl_subst(      OUStringList&                               
     OUStringList::iterator pIt;
 
     for (  pIt  = lVals.begin();
-           pIt != lVals.end()  ;
+           pIt != lVals.end();
          ++pIt                 )
     {
         const OUString& sOld = *pIt;
-              OUString  sNew ;
+              OUString  sNew;
         if (bReSubst)
             sNew = xSubst->reSubstituteVariables(sOld);
         else
@@ -998,13 +998,13 @@ OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& r
     lTemp.reserve(rPath.lInternalPaths.size() + rPath.lUserPaths.size() + 1);
 
     for (  pIt  = rPath.lInternalPaths.begin();
-           pIt != rPath.lInternalPaths.end()  ;
+           pIt != rPath.lInternalPaths.end();
          ++pIt                                 )
     {
         lTemp.push_back(*pIt);
     }
     for (  pIt  = rPath.lUserPaths.begin();
-           pIt != rPath.lUserPaths.end()  ;
+           pIt != rPath.lUserPaths.end();
          ++pIt                             )
     {
         lTemp.push_back(*pIt);
@@ -1015,7 +1015,7 @@ OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& r
 
     OUStringBuffer sPathVal(256);
     for (  pIt  = lTemp.begin();
-           pIt != lTemp.end()  ;
+           pIt != lTemp.end();
                                )
     {
         sPathVal.append(*pIt);
@@ -1047,7 +1047,7 @@ void PathSettings::impl_purgeKnownPaths(const PathSettings::PathInfo& rPath,
 {
     OUStringList::const_iterator pIt;
     for (  pIt  = rPath.lInternalPaths.begin();
-           pIt != rPath.lInternalPaths.end()  ;
+           pIt != rPath.lInternalPaths.end();
          ++pIt                                 )
     {
         const OUString& rItem = *pIt;
@@ -1056,7 +1056,7 @@ void PathSettings::impl_purgeKnownPaths(const PathSettings::PathInfo& rPath,
             lList.erase(pItem);
     }
     for (  pIt  = rPath.lUserPaths.begin();
-           pIt != rPath.lUserPaths.end()  ;
+           pIt != rPath.lUserPaths.end();
          ++pIt                             )
     {
         const OUString& rItem = *pIt;
@@ -1081,7 +1081,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
 
     PathHash::const_iterator pIt;
     for (  pIt  = m_lPaths.begin();
-           pIt != m_lPaths.end()  ;
+           pIt != m_lPaths.end();
          ++pIt                     )
     {
         const PathSettings::PathInfo& rPath = pIt->second;
@@ -1202,7 +1202,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                 {
                     OUStringList::const_iterator pIt;
                     for (  pIt  = lList.begin();
-                           pIt != lList.end()  ;
+                           pIt != lList.end();
                          ++pIt                 )
                     {
                         aChangePath.lUserPaths.push_back(*pIt);
@@ -1277,7 +1277,7 @@ sal_Bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
 {
     OUStringList::const_iterator pIt;
     for (  pIt  = lPath.begin();
-           pIt != lPath.end()  ;
+           pIt != lPath.end();
          ++pIt                 )
     {
         const OUString& rVal = *pIt;

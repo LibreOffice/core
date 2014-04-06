@@ -56,7 +56,7 @@ class DispatchRecorder
     // private member
     private:
         DispatchStatementList                                  m_aStatements;
-        sal_Int32                                              m_nRecordingID ;
+        sal_Int32                                              m_nRecordingID;
         css::uno::Reference< css::script::XTypeConverter >     m_xConverter;
 
     // public interface

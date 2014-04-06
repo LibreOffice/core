@@ -97,9 +97,9 @@ struct IndicatorInfo
                             sal_Int32                                           nRange    )
         {
             m_xIndicator = xIndicator;
-            m_sText      = sText     ;
-            m_nRange     = nRange    ;
-            m_nValue     = 0         ;
+            m_sText      = sText;
+            m_nRange     = nRange;
+            m_nValue     = 0;
         }
 
         /** @short  Don't forget to free used references!

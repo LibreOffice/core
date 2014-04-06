@@ -84,7 +84,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
 
     InteractionList::iterator pIt;
     for (  pIt  = m_lInteractionRules.begin();
-           pIt != m_lInteractionRules.end()  ;
+           pIt != m_lInteractionRules.end();
          ++pIt                               )
     {
         InteractionInfo& rInfo = *pIt;
@@ -138,7 +138,7 @@ sal_Bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const c
 
     InteractionList::iterator pIt;
     for (  pIt  = m_lInteractionRules.begin();
-           pIt != m_lInteractionRules.end()  ;
+           pIt != m_lInteractionRules.end();
          ++pIt                               )
     {
         InteractionInfo& rInfo = *pIt;
@@ -191,13 +191,13 @@ void PreventDuplicateInteraction::addInteractionRule(const PreventDuplicateInter
 
     InteractionList::iterator pIt;
     for (  pIt  = m_lInteractionRules.begin();
-           pIt != m_lInteractionRules.end()  ;
+           pIt != m_lInteractionRules.end();
          ++pIt                               )
     {
         InteractionInfo& rInfo = *pIt;
         if (rInfo.m_aInteraction == aInteractionInfo.m_aInteraction)
         {
-            rInfo.m_nMaxCount  = aInteractionInfo.m_nMaxCount ;
+            rInfo.m_nMaxCount  = aInteractionInfo.m_nMaxCount;
             rInfo.m_nCallCount = aInteractionInfo.m_nCallCount;
             return;
         }
@@ -217,7 +217,7 @@ bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&      
 
     PreventDuplicateInteraction::InteractionList::const_iterator pIt;
     for (  pIt  = m_lInteractionRules.begin();
-           pIt != m_lInteractionRules.end()  ;
+           pIt != m_lInteractionRules.end();
          ++pIt                               )
     {
         const PreventDuplicateInteraction::InteractionInfo& rInfo = *pIt;

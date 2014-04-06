@@ -110,9 +110,9 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
     i1 = 0;
 
     css::uno::Sequence< css::frame::DispatchInformation >       lReturn(c1);
-    BaseHash< css::frame::DispatchInformation >::const_iterator pStepp ;
-    for (  pStepp  = lInfos.begin()          ;
-           pStepp != lInfos.end  () && i1<c1 ;
+    BaseHash< css::frame::DispatchInformation >::const_iterator pStepp;
+    for (  pStepp  = lInfos.begin();
+           pStepp != lInfos.end  () && i1<c1;
          ++pStepp, ++i1                      )
     {
         lReturn[i1] = pStepp->second;
@@ -133,7 +133,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvide
     css::uno::Reference< css::frame::XDispatchInformationProvider > xController   (xFrame->getController()                                      , css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XDispatchInformationProvider > xAppDispatcher = css::frame::AppDispatchProvider::create(m_xContext);
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider(3);
-    lProvider[0] = xController   ;
+    lProvider[0] = xController;
     lProvider[1] = xCloseDispatch;
     lProvider[2] = xAppDispatcher;
 

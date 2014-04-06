@@ -40,12 +40,12 @@
 
 //  namespaces
 
-using namespace ::std                   ;
-using namespace ::utl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::beans ;
-using namespace ::com::sun::star::lang  ;
+using namespace ::std;
+using namespace ::utl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
 #define ROOTNODE_ADDONMENU                              OUString("Office.Addons" )
@@ -258,13 +258,13 @@ class AddonsOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        bool                                            HasAddonsMenu        () const ;
-        sal_Int32                                       GetAddonsToolBarCount() const ;
-        const Sequence< Sequence< PropertyValue > >&    GetAddonsMenu        () const ;
-        const Sequence< Sequence< PropertyValue > >&    GetAddonsMenuBarPart () const ;
-        const Sequence< Sequence< PropertyValue > >&    GetAddonsToolBarPart ( sal_uInt32 nIndex ) const ;
+        bool                                            HasAddonsMenu        () const;
+        sal_Int32                                       GetAddonsToolBarCount() const;
+        const Sequence< Sequence< PropertyValue > >&    GetAddonsMenu        () const;
+        const Sequence< Sequence< PropertyValue > >&    GetAddonsMenuBarPart () const;
+        const Sequence< Sequence< PropertyValue > >&    GetAddonsToolBarPart ( sal_uInt32 nIndex ) const;
         const OUString                           GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
-        const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const ;
+        const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const;
         Image                                           GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale );
         const MergeMenuInstructionContainer&            GetMergeMenuInstructions() const;
         bool                                            GetMergeToolbarInstructions( const OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbarInstructions ) const;
@@ -1587,7 +1587,7 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const OUStrin
     Sequence< OUString > lResult( PROPERTYCOUNT_MENUITEM );
 
     // Create property names dependent from the root node name
-    lResult[OFFSET_MENUITEM_URL]             = aPropertyRootNode + m_aPropNames[ INDEX_URL          ] ;
+    lResult[OFFSET_MENUITEM_URL]             = aPropertyRootNode + m_aPropNames[ INDEX_URL          ];
     lResult[OFFSET_MENUITEM_TITLE]           = aPropertyRootNode + m_aPropNames[ INDEX_TITLE            ];
     lResult[OFFSET_MENUITEM_IMAGEIDENTIFIER] = aPropertyRootNode + m_aPropNames[ INDEX_IMAGEIDENTIFIER ];
     lResult[OFFSET_MENUITEM_TARGET]          = aPropertyRootNode + m_aPropNames[ INDEX_TARGET           ];
@@ -1669,8 +1669,8 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesImages( const OUString&
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-AddonsOptions_Impl*     AddonsOptions::m_pDataContainer = NULL  ;
-sal_Int32               AddonsOptions::m_nRefCount      = 0     ;
+AddonsOptions_Impl*     AddonsOptions::m_pDataContainer = NULL;
+sal_Int32               AddonsOptions::m_nRefCount      = 0;
 
 //  constructor
 

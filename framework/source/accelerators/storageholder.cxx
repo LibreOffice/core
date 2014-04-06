@@ -59,7 +59,7 @@ void StorageHolder::forgetCachedStorages()
     osl::MutexGuard g(m_mutex);
     TPath2StorageInfo::iterator pIt;
     for (  pIt  = m_lStorages.begin();
-           pIt != m_lStorages.end()  ;
+           pIt != m_lStorages.end();
          ++pIt                       )
     {
         TStorageInfo& rInfo = pIt->second;
@@ -93,12 +93,12 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
     aReadLock.clear();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::embed::XStorage > xChild  ;
+    css::uno::Reference< css::embed::XStorage > xChild;
     OUString                             sRelPath;
-    OUStringList::const_iterator                pIt     ;
+    OUStringList::const_iterator                pIt;
 
     for (  pIt  = lFolders.begin();
-           pIt != lFolders.end()  ;
+           pIt != lFolders.end();
          ++pIt                    )
     {
         const OUString& sChild     = *pIt;
@@ -171,13 +171,13 @@ StorageHolder::TStorageList StorageHolder::getAllPathStorages(const OUString& sP
     OUStringList    lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
 
     StorageHolder::TStorageList  lStoragesOfPath;
-    OUString              sRelPath       ;
-    OUStringList::const_iterator pIt            ;
+    OUString              sRelPath;
+    OUStringList::const_iterator pIt;
 
     osl::MutexGuard g(m_mutex);
 
     for (  pIt  = lFolders.begin();
-           pIt != lFolders.end()  ;
+           pIt != lFolders.end();
          ++pIt                    )
     {
         const OUString& sChild     = *pIt;
@@ -211,7 +211,7 @@ void StorageHolder::commitPath(const OUString& sPath)
     css::uno::Reference< css::embed::XTransactedObject > xCommit;
     StorageHolder::TStorageList::reverse_iterator pIt;
     for (  pIt  = lStorages.rbegin(); // order of commit is important ... otherwise changes are not recognized!
-           pIt != lStorages.rend()  ;
+           pIt != lStorages.rend();
          ++pIt                      )
     {
         xCommit = css::uno::Reference< css::embed::XTransactedObject >(*pIt, css::uno::UNO_QUERY);
@@ -240,10 +240,10 @@ void StorageHolder::closePath(const OUString& rPath)
         [1] = "path_2" => "path_1/path_2"
         [2] = "path_3" => "path_1/path_2/path_3"
     */
-    OUStringList::iterator pIt1       ;
+    OUStringList::iterator pIt1;
     OUString        sParentPath;
     for (  pIt1  = lFolders.begin();
-           pIt1 != lFolders.end()  ;
+           pIt1 != lFolders.end();
          ++pIt1                    )
     {
         OUString sCurrentRelPath  = sParentPath;
@@ -257,7 +257,7 @@ void StorageHolder::closePath(const OUString& rPath)
 
     OUStringList::reverse_iterator pIt2;
     for (  pIt2  = lFolders.rbegin();
-           pIt2 != lFolders.rend()  ;
+           pIt2 != lFolders.rend();
          ++pIt2                     )
     {
         OUString             sPath = *pIt2;
@@ -288,7 +288,7 @@ void StorageHolder::notifyPath(const OUString& sPath)
     TStorageInfo& rInfo = pIt1->second;
     TStorageListenerList::iterator pIt2;
     for (  pIt2  = rInfo.Listener.begin();
-           pIt2 != rInfo.Listener.end()  ;
+           pIt2 != rInfo.Listener.end();
          ++pIt2                          )
     {
         IStorageListener* pListener = *pIt2;
@@ -337,7 +337,7 @@ OUString StorageHolder::getPathOfStorage(const css::uno::Reference< css::embed::
 
     TPath2StorageInfo::const_iterator pIt;
     for (  pIt  = m_lStorages.begin();
-           pIt != m_lStorages.end()  ;
+           pIt != m_lStorages.end();
          ++pIt                       )
     {
         const TStorageInfo& rInfo = pIt->second;

@@ -136,8 +136,8 @@ class QueryBuilder
         }
 
     private:
-        OUString         m_sBase     ;
-        OUStringBuffer   m_sParams   ;
+        OUString         m_sBase;
+        OUStringBuffer   m_sParams;
 
 };      // class QueryBuilder
 
@@ -320,13 +320,13 @@ class QueryAnalyzer
         // access to additional parameter values
         // Methods return default of really set values!
 
-        sal_uInt32 getIFlags       () const { return m_nIFlags       ; }
-        sal_uInt32 getEFlags       () const { return m_nEFlags       ; }
-        ESortProp  getSortProp     () const { return m_eSortProp     ; }
-        sal_Bool   getDescending   () const { return m_bDescending   ; }
+        sal_uInt32 getIFlags       () const { return m_nIFlags; }
+        sal_uInt32 getEFlags       () const { return m_nEFlags; }
+        ESortProp  getSortProp     () const { return m_eSortProp; }
+        sal_Bool   getDescending   () const { return m_bDescending; }
         sal_Bool   getCaseSensitive() const { return m_bCaseSensitive; }
-        sal_Bool   getUseOrder     () const { return m_bUseOrder     ; }
-        sal_Bool   getDefaultFirst () const { return m_bDefaultFirst ; }
+        sal_Bool   getUseOrder     () const { return m_bUseOrder; }
+        sal_Bool   getDefaultFirst () const { return m_bDefaultFirst; }
 
         // this method checks if given string match any supported query.
         // (ignore additional parameters!)
@@ -340,14 +340,14 @@ class QueryAnalyzer
         }
 
     private:
-        EQuery      m_eQuery         ;
-        sal_uInt32  m_nIFlags        ;
-        sal_uInt32  m_nEFlags        ;
-        ESortProp   m_eSortProp      ;
-        sal_Bool    m_bDescending    ;
-        sal_Bool    m_bCaseSensitive ;
-        sal_Bool    m_bUseOrder      ;
-        sal_Bool    m_bDefaultFirst  ;
+        EQuery      m_eQuery;
+        sal_uInt32  m_nIFlags;
+        sal_uInt32  m_nEFlags;
+        ESortProp   m_eSortProp;
+        sal_Bool    m_bDescending;
+        sal_Bool    m_bCaseSensitive;
+        sal_Bool    m_bUseOrder;
+        sal_Bool    m_bDefaultFirst;
 
 };      // class QueryAnalyzer
 

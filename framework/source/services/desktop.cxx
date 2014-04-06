@@ -224,7 +224,7 @@ sal_Bool SAL_CALL Desktop::terminate()
     css::uno::Reference< css::frame::XTerminateListener > xSfxTerminator     = m_xSfxTerminator;
 
     css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
-    sal_Bool                                            bAskQuickStart     = !m_bSuspendQuickstartVeto                  ;
+    sal_Bool                                            bAskQuickStart     = !m_bSuspendQuickstartVeto;
 
     aReadLock.clear();
 
@@ -1178,7 +1178,7 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
     if( m_eLoadState != E_INTERACTION )
     {
         m_xLastFrame = css::uno::Reference< css::frame::XFrame >();
-        m_eLoadState = E_FAILED                                   ;
+        m_eLoadState = E_FAILED;
         if( aEvent.State == css::frame::DispatchResultState::SUCCESS )
         {
             css::uno::Reference < css::frame::XFrame > xFrame;
@@ -1248,9 +1248,9 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
 
     // extract continuations from request
     css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
-    css::uno::Reference< css::task::XInteractionAbort >                              xAbort         ;
-    css::uno::Reference< css::task::XInteractionApprove >                            xApprove       ;
-    css::uno::Reference< css::document::XInteractionFilterSelect >                   xFilterSelect  ;
+    css::uno::Reference< css::task::XInteractionAbort >                              xAbort;
+    css::uno::Reference< css::task::XInteractionApprove >                            xApprove;
+    css::uno::Reference< css::document::XInteractionFilterSelect >                   xFilterSelect;
     sal_Bool                                                                         bAbort         = sal_False;
 
     sal_Int32 nCount=lContinuations.getLength();
@@ -1268,7 +1268,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
 
     // differ between abortable interactions (error, unknown filter ...)
     // and other ones (ambigous but not unknown filter ...)
-    css::task::ErrorCodeRequest          aErrorCodeRequest     ;
+    css::task::ErrorCodeRequest          aErrorCodeRequest;
     css::document::AmbigousFilterRequest aAmbigousFilterRequest;
     if( aRequest >>= aAmbigousFilterRequest )
     {
@@ -1303,7 +1303,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     {
         SolarMutexGuard g;
         m_eLoadState          = E_INTERACTION;
-        m_aInteractionRequest = aRequest     ;
+        m_aInteractionRequest = aRequest;
     }
 }
 
@@ -1401,7 +1401,7 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
     }
 
     // Return state of operation.
-    return bReturn ;
+    return bReturn;
 }
 
 /*-************************************************************************************************************

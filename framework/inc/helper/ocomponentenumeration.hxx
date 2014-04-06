@@ -197,8 +197,8 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
 
     private:
 
-        sal_uInt32                                                              m_nPosition         ;   /// current position in enumeration
-        css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >      m_seqComponents     ;   /// list of current components
+        sal_uInt32                                                              m_nPosition;   /// current position in enumeration
+        css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >      m_seqComponents;   /// list of current components
 
 };      //  class OComponentEnumeration
 

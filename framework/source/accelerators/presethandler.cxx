@@ -333,10 +333,10 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
     {
         SolarMutexGuard g;
-        m_eConfigType   = eConfigType  ;
-        m_sResourceType = sResource    ;
-        m_sModule       = sModule      ;
-        m_aLanguageTag  = rLanguageTag ;
+        m_eConfigType   = eConfigType;
+        m_sResourceType = sResource;
+        m_sModule       = sModule;
+        m_aLanguageTag  = rLanguageTag;
     }
 
     css::uno::Reference< css::embed::XStorage > xShare;
@@ -442,7 +442,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         // Fallbacks are allowed there.
         OUString             aShareLocale( rLanguageTag.getBcp47());
         OUString      sLocalizedSharePath(sRelPathShare);
-        sal_Bool             bAllowFallbacks    = sal_True     ;
+        sal_Bool             bAllowFallbacks    = sal_True;
         xShare = impl_openLocalizedPathIgnoringErrors(sLocalizedSharePath, eShareMode, sal_True , aShareLocale, bAllowFallbacks);
 
         // The try to locate the right sub dir inside user layer ... without using fallbacks!
@@ -450,19 +450,19 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         // Because we allow creation of storages inside user layer by default.
         OUString             aUserLocale( rLanguageTag.getBcp47());
         OUString      sLocalizedUserPath(sRelPathUser);
-                             bAllowFallbacks    = sal_False  ;
+                             bAllowFallbacks    = sal_False;
         xUser = impl_openLocalizedPathIgnoringErrors(sLocalizedUserPath, eUserMode , sal_False, aUserLocale, bAllowFallbacks);
 
         sRelPathShare = sLocalizedSharePath;
-        sRelPathUser  = sLocalizedUserPath ;
+        sRelPathUser  = sLocalizedUserPath;
     }
 
     // read content of level 3 (presets, targets)
-          css::uno::Reference< css::container::XNameAccess > xAccess ;
-          css::uno::Sequence< OUString >              lNames  ;
-    const OUString*                                   pNames  ;
-          sal_Int32                                          c       ;
-          sal_Int32                                          i       ;
+          css::uno::Reference< css::container::XNameAccess > xAccess;
+          css::uno::Sequence< OUString >              lNames;
+    const OUString*                                   pNames;
+          sal_Int32                                          c;
+          sal_Int32                                          i;
           OUStringList                                       lPresets;
           OUStringList                                       lTargets;
 
@@ -504,9 +504,9 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
     {
         SolarMutexGuard g;
-        m_xWorkingStorageShare = xShare  ;
+        m_xWorkingStorageShare = xShare;
         m_xWorkingStorageNoLang= xNoLang;
-        m_xWorkingStorageUser  = xUser   ;
+        m_xWorkingStorageUser  = xUser;
         m_lPresets             = lPresets;
         m_lTargets             = lTargets;
         m_sRelPathShare        = sRelPathShare;
@@ -536,7 +536,7 @@ void PresetHandler::copyPresetToTarget(const OUString& sPreset,
         SolarMutexGuard g;
         xWorkingShare = m_xWorkingStorageShare;
         xWorkingNoLang= m_xWorkingStorageNoLang;
-        xWorkingUser  = m_xWorkingStorageUser ;
+        xWorkingUser  = m_xWorkingStorageUser;
     }
 
     // e.g. module without any config data ?!
@@ -763,7 +763,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     else
     {
         for (  pFound  = lLocalizedValues.begin();
-               pFound != lLocalizedValues.end()  ;
+               pFound != lLocalizedValues.end();
              ++pFound                            )
         {
             if (*pFound == rLanguageTag)

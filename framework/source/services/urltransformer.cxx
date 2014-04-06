@@ -235,7 +235,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::u
 {
     // Safe impossible cases.
     if  ( &aURL == NULL )
-        return sal_False ;
+        return sal_False;
 
     // Initialize parser.
     INetURLObject aParser;

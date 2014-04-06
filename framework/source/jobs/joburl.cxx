@@ -54,7 +54,7 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
         {
             // separate all token of "{[event=<name>],[alias=<name>],[service=<name>]}"
             OUString sToken = sURL.getToken(0, JOBURL_PART_SEPARATOR, t);
-            OUString sPartValue    ;
+            OUString sPartValue;
             OUString sPartArguments;
 
             // check for "event="
@@ -64,9 +64,9 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
                )
             {
                 // set the part value
-                m_sEvent     = sPartValue    ;
+                m_sEvent     = sPartValue;
                 m_sEventArgs = sPartArguments;
-                m_eRequest  |= E_EVENT       ;
+                m_eRequest  |= E_EVENT;
             }
             else
             // check for "alias="
@@ -76,9 +76,9 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
                )
             {
                 // set the part value
-                m_sAlias     = sPartValue    ;
+                m_sAlias     = sPartValue;
                 m_sAliasArgs = sPartArguments;
-                m_eRequest  |= E_ALIAS       ;
+                m_eRequest  |= E_ALIAS;
             }
             else
             // check for "service="
@@ -88,9 +88,9 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
                )
             {
                 // set the part value
-                m_sService     = sPartValue    ;
+                m_sService     = sPartValue;
                 m_sServiceArgs = sPartArguments;
-                m_eRequest    |= E_SERVICE     ;
+                m_eRequest    |= E_SERVICE;
             }
         }
         while(t!=-1);
@@ -235,7 +235,7 @@ sal_Bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
         // Arguments will be set to an empty string as default.
         // If we detect the right sign - we split the arguments and overwrite the default.
         OUString sValueAndArguments = sPart.copy(nPartLength);
-        OUString sValue             = sValueAndArguments     ;
+        OUString sValue             = sValueAndArguments;
         OUString sArguments;
 
         sal_Int32 nArgStart = sValueAndArguments.indexOf('?',0);
@@ -246,7 +246,7 @@ sal_Bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
             sArguments = sValueAndArguments.copy(nArgStart);
         }
 
-        rPartValue     = sValue    ;
+        rPartValue     = sValue;
         rPartArguments = sArguments;
     }
 
@@ -276,7 +276,7 @@ void JobURL::impldbg_checkIt()
     // Tab and spaces before a separator will be used as value!
     JobURL::impldbg_checkURL("vnd.sun.star.job:event=onMyEvent;alias=myAlias;service=css.Service"  , E_EVENT | E_ALIAS | E_SERVICE , "onMyEvent", "myAlias", "css.Service" , NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=css.Service;alias=myAlias"                  , E_ALIAS | E_SERVICE           , ""         , "myAlias", "css.Service" , NULL, NULL, NULL);
-    JobURL::impldbg_checkURL("vnd.sun.star.job:service=css.Service ;alias=myAlias"                 , E_ALIAS | E_SERVICE           , ""         , "myAlias", "css.Service ", NULL, NULL, NULL);
+    JobURL::impldbg_checkURL("vnd.sun.star.job:service=css.Service;alias=myAlias"                 , E_ALIAS | E_SERVICE           , ""         , "myAlias", "css.Service ", NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=css.Service; alias=myAlias"                 , E_UNKNOWN                     , ""         , ""       , ""            , NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job : event=onMyEvent"                                  , E_UNKNOWN                     , ""         , ""       , ""            , NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:event=onMyEvent;event=onMyEvent;service=css.Service", E_UNKNOWN                     , ""         , ""       , ""            , NULL, NULL, NULL);
@@ -342,11 +342,11 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
                                /*IN*/ const sal_Char*  pExpectedAliasArgs   ,
                                /*IN*/ const sal_Char*  pExpectedServiceArgs )
 {
-    OUString sEvent      ;
-    OUString sAlias      ;
-    OUString sService    ;
-    OUString sEventArgs  ;
-    OUString sAliasArgs  ;
+    OUString sEvent;
+    OUString sAlias;
+    OUString sService;
+    OUString sEventArgs;
+    OUString sAliasArgs;
     OUString sServiceArgs;
     OUString sURL    (OUString::createFromAscii(pURL));
     sal_Bool        bOK     = sal_True;

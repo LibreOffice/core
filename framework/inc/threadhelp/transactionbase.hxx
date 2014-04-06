@@ -43,7 +43,7 @@ struct TransactionBase
 
     public:
 
-        mutable TransactionManager    m_aTransactionManager    ;   /// "your" public manager-member!
+        mutable TransactionManager    m_aTransactionManager;   /// "your" public manager-member!
                                                                    /// Make it mutable for using in const functions!
 
 };      //  struct TransactionBase

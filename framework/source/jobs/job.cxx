@@ -122,7 +122,7 @@ void Job::setDispatchResultFake( /*IN*/ const css::uno::Reference< css::frame::X
         return;
     }
 
-    m_xResultListener   = xListener  ;
+    m_xResultListener   = xListener;
     m_xResultSourceFake = xSourceFake;
 }
 
@@ -363,7 +363,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     // get the configuration data from the job data container ... if possible
     // Means: if this job has any configuration data. Note: only really
     // filled lists will be set to the return structure at the end of this method.
-    css::uno::Sequence< css::beans::NamedValue > lConfigArgs   ;
+    css::uno::Sequence< css::beans::NamedValue > lConfigArgs;
     css::uno::Sequence< css::beans::NamedValue > lJobConfigArgs;
     if (eMode==JobData::E_ALIAS || eMode==JobData::E_EVENT)
     {

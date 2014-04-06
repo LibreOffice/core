@@ -99,8 +99,8 @@ class CheckedIterator
             if( m_eEndState == E_UNKNOWN )
             {
                 // Set new container and update other member.
-                m_pContainer = &rContainer          ;
-                m_eEndState  = E_BEFOREEND          ;
+                m_pContainer = &rContainer;
+                m_eEndState  = E_BEFOREEND;
                 m_pPosition  = m_pContainer->begin();
             }
         }
@@ -120,8 +120,8 @@ class CheckedIterator
 
         inline void setEnd()
         {
-            m_pContainer = NULL  ;
-            m_eEndState  = E_END ;
+            m_pContainer = NULL;
+            m_eEndState  = E_END;
         }
 
         /*-****************************************************************************************************
@@ -139,8 +139,8 @@ class CheckedIterator
 
         inline void setAfterEnd()
         {
-            m_pContainer = NULL       ;
-            m_eEndState  = E_AFTEREND ;
+            m_pContainer = NULL;
+            m_eEndState  = E_AFTEREND;
         }
 
         /*-****************************************************************************************************
@@ -293,9 +293,9 @@ class CheckedIterator
             E_AFTEREND
         };
 
-        const TContainer*           m_pContainer    ;   // pointer to current container
-        EEndState                   m_eEndState     ;   // "position state" of iterator!
-        typename TContainer::const_iterator  m_pPosition     ;   // point to actual element in container
+        const TContainer*           m_pContainer;   // pointer to current container
+        EEndState                   m_eEndState;   // "position state" of iterator!
+        typename TContainer::const_iterator  m_pPosition;   // point to actual element in container
 };
 
 }       //  namespace framework

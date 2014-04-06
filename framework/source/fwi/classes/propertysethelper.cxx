@@ -339,10 +339,10 @@ css::uno::Sequence< css::beans::Property > SAL_CALL PropertySetHelper::getProper
 
     sal_Int32                                        c     = (sal_Int32)m_lProps.size();
     css::uno::Sequence< css::beans::Property >       lProps(c);
-    PropertySetHelper::TPropInfoHash::const_iterator pIt   ;
+    PropertySetHelper::TPropInfoHash::const_iterator pIt;
 
     for (  pIt  = m_lProps.begin();
-           pIt != m_lProps.end()  ;
+           pIt != m_lProps.end();
          ++pIt                    )
     {
         lProps[--c] = pIt->second;

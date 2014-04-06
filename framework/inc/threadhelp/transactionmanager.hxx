@@ -73,10 +73,10 @@ class FWI_DLLPUBLIC TransactionManager : public  ITransactionManager
 
     private:
 
-        mutable ::osl::Mutex    m_aAccessLock           ;   /// regulate access on internal member of this instance
-        Gate                    m_aBarrier              ;   /// used to block transactions requests during change or work mode
-        EWorkingMode            m_eWorkingMode          ;   /// current working mode of object which use this manager (used to reject calls at wrong time)
-        sal_Int32               m_nTransactionCount     ;   /// every transaction request is registered by this counter
+        mutable ::osl::Mutex    m_aAccessLock;   /// regulate access on internal member of this instance
+        Gate                    m_aBarrier;   /// used to block transactions requests during change or work mode
+        EWorkingMode            m_eWorkingMode;   /// current working mode of object which use this manager (used to reject calls at wrong time)
+        sal_Int32               m_nTransactionCount;   /// every transaction request is registered by this counter
 
 };      //  class TransactionManager
 

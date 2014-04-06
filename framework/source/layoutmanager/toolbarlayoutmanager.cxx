@@ -2443,13 +2443,13 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
                 if ( isHorizontalDockingArea( nDockingArea ))
                 {
                     // Try to move this and all user elements behind with the calculated difference
-                    for ( sal_uInt32 j = i; j < nCount ; j++ )
+                    for ( sal_uInt32 j = i; j < nCount; j++ )
                         rRowColumnWindowData.aRowColumnWindowSizes[j].X += nDiff;
                 }
                 else
                 {
                     // Try to move this and all user elements behind with the calculated difference
-                    for ( sal_uInt32 j = i; j < nCount ; j++ )
+                    for ( sal_uInt32 j = i; j < nCount; j++ )
                         rRowColumnWindowData.aRowColumnWindowSizes[j].Y += nDiff;
                 }
                 nDiff = 0;

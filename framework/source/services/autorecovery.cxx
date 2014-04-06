@@ -1572,7 +1572,7 @@ void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::fr
 
     AutoRecovery::TDocumentList::iterator pIt;
     for(  pIt  = m_lDocCache.begin();
-          pIt != m_lDocCache.end()  ;
+          pIt != m_lDocCache.end();
         ++pIt                       )
     {
         AutoRecovery::TDocumentInfo&  rInfo = *pIt;
@@ -1903,10 +1903,10 @@ void AutoRecovery::implts_readConfig()
             AutoRecovery::TDocumentInfo aInfo;
             aInfo.NewTempURL = "";
             aInfo.Document   = css::uno::Reference< css::frame::XModel >();
-            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_ORIGINALURL)) >>= aInfo.OrgURL       ;
-            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TEMPURL)) >>= aInfo.OldTempURL   ;
-            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TEMPLATEURL)) >>= aInfo.TemplateURL  ;
-            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_FILTER)) >>= aInfo.RealFilter   ;
+            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_ORIGINALURL)) >>= aInfo.OrgURL;
+            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TEMPURL)) >>= aInfo.OldTempURL;
+            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TEMPLATEURL)) >>= aInfo.TemplateURL;
+            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_FILTER)) >>= aInfo.RealFilter;
             xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_DOCUMENTSTATE)) >>= aInfo.DocumentState;
             xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_MODULE)) >>= aInfo.AppModule;
             xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TITLE)) >>= aInfo.Title;
@@ -2069,7 +2069,7 @@ void AutoRecovery::implts_persistAllActiveViewNames()
     // This list will be filled with every document
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = m_lDocCache.begin();
-           pIt != m_lDocCache.end()  ;
+           pIt != m_lDocCache.end();
          ++pIt                       )
     {
         implts_collectActiveViewNames( *pIt );
@@ -2743,7 +2743,7 @@ AutoRecovery::TDocumentList::iterator AutoRecovery::impl_searchDocument(      Au
 {
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = rList.begin();
-           pIt != rList.end()  ;
+           pIt != rList.end();
          ++pIt                 )
     {
         const AutoRecovery::TDocumentInfo& rInfo = *pIt;
@@ -2824,7 +2824,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
 
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = m_lDocCache.begin();
-           pIt != m_lDocCache.end()  ;
+           pIt != m_lDocCache.end();
          ++pIt                       )
     {
         AutoRecovery::TDocumentInfo& rInfo = *pIt;
@@ -2915,7 +2915,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
     OUString                              sBackupPath(SvtPathOptions().GetBackupPath());
 
     css::uno::Reference< css::frame::XController > xActiveController;
-    css::uno::Reference< css::frame::XModel >      xActiveModel     ;
+    css::uno::Reference< css::frame::XModel >      xActiveModel;
     css::uno::Reference< css::frame::XFrame >      xActiveFrame     = xDesktop->getActiveFrame();
     if (xActiveFrame.is())
         xActiveController = xActiveFrame->getController();
@@ -2946,7 +2946,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
 
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = m_lDocCache.begin();
-           pIt != m_lDocCache.end()  ;
+           pIt != m_lDocCache.end();
          ++pIt                       )
     {
         AutoRecovery::TDocumentInfo aInfo = *pIt;
@@ -3053,7 +3053,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
     // Try to save it ... but may be it will fail !
     ::std::vector< AutoRecovery::TDocumentList::iterator >::iterator pIt2;
     for (  pIt2  = lDangerousDocs.begin();
-           pIt2 != lDangerousDocs.end()  ;
+           pIt2 != lDangerousDocs.end();
          ++pIt2                          )
     {
         pIt = *pIt2;
@@ -3219,7 +3219,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
     sal_Int32                             eJob = m_eJob;
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = m_lDocCache.begin();
-           pIt != m_lDocCache.end()  ;
+           pIt != m_lDocCache.end();
          ++pIt                       )
     {
         AutoRecovery::TDocumentInfo& rInfo = *pIt;
@@ -3280,7 +3280,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         }
 
         OUString sLoadOriginalURL;
-        OUString sLoadBackupURL  ;
+        OUString sLoadBackupURL;
 
         if (!bBackupWasTried)
             sLoadBackupURL = rInfo.OldTempURL;
@@ -3665,7 +3665,7 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
         aInfo.put( OUString(CFG_ENTRY_PROP_FACTORYURL), pInfo->FactoryURL );
         aInfo.put( OUString(CFG_ENTRY_PROP_TEMPLATEURL), pInfo->TemplateURL );
         aInfo.put( OUString(CFG_ENTRY_PROP_TEMPURL), pInfo->OldTempURL.isEmpty() ? pInfo->NewTempURL : pInfo->OldTempURL );
-        aInfo.put( OUString(CFG_ENTRY_PROP_MODULE), pInfo->AppModule) ;
+        aInfo.put( OUString(CFG_ENTRY_PROP_MODULE), pInfo->AppModule);
         aInfo.put( OUString(CFG_ENTRY_PROP_TITLE), pInfo->Title);
         aInfo.put( OUString(CFG_ENTRY_PROP_VIEWNAMES), pInfo->ViewNames);
         aInfo.put( OUString(CFG_ENTRY_PROP_DOCUMENTSTATE), pInfo->DocumentState);
@@ -3685,11 +3685,11 @@ void AutoRecovery::implts_resetHandleStates(sal_Bool /*bLoadCache*/)
 
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = m_lDocCache.begin();
-           pIt != m_lDocCache.end()  ;
+           pIt != m_lDocCache.end();
          ++pIt                       )
     {
         AutoRecovery::TDocumentInfo& rInfo = *pIt;
-        rInfo.DocumentState &= ~AutoRecovery::E_HANDLED  ;
+        rInfo.DocumentState &= ~AutoRecovery::E_HANDLED;
         rInfo.DocumentState &= ~AutoRecovery::E_POSTPONED;
 
         // } /* SAFE */
@@ -3892,7 +3892,7 @@ void AutoRecovery::implts_backupWorkingEntry(const DispatchParams& aParams)
 
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = m_lDocCache.begin();
-           pIt != m_lDocCache.end()  ;
+           pIt != m_lDocCache.end();
          ++pIt                       )
     {
         const AutoRecovery::TDocumentInfo& rInfo = *pIt;
@@ -3928,7 +3928,7 @@ void AutoRecovery::implts_cleanUpWorkingEntry(const DispatchParams& aParams)
 
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = m_lDocCache.begin();
-           pIt != m_lDocCache.end()  ;
+           pIt != m_lDocCache.end();
          ++pIt                       )
     {
         AutoRecovery::TDocumentInfo& rInfo = *pIt;

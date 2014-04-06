@@ -272,7 +272,7 @@ class PropHelper
         {
             // ... set information of change.
             aOldValue     = aCurrentValue;
-            aChangedValue = aNewValue    ;
+            aChangedValue = aNewValue;
         }
 
         return bChanged;

@@ -105,7 +105,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
         m_bInsideAcceleratorItem = sal_True;
 
         OUString    sCommand;
-        css::awt::KeyEvent aEvent  ;
+        css::awt::KeyEvent aEvent;
 
         sal_Int16 c = xAttributeList->getLength();
         sal_Int16 i = 0;
