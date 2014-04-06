@@ -1517,8 +1517,10 @@ protected:
 
 public:
     SmXMLUnderContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLSubContext_Impl(rImport,nPrefix,rLName) {}
+                           const OUString& rLName)
+        : SmXMLSubContext_Impl(rImport,nPrefix,rLName)
+        , nAttrCount( 0 )
+        {}
 
     void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) SAL_OVERRIDE;
     void EndElement() SAL_OVERRIDE;
