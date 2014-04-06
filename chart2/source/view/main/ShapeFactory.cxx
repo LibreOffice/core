@@ -747,8 +747,6 @@ drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
     drawing::PointSequence aPoints(nPointCount);
     drawing::FlagSequence  aFlags(nPointCount);
 
-
-
     //!! applying matrix to vector does ignore translation, so it is important to use a B2DPoint here instead of B2DVector
     ::basegfx::B2DPoint P0,P1,P2,P3;
 

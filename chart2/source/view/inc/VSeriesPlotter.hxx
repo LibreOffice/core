@@ -176,8 +176,6 @@ public:
     virtual long calculateTimeResolutionOnXAxis() SAL_OVERRIDE;
     virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate ) SAL_OVERRIDE;
 
-
-
     void getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximum ) const;
     void getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const;
 

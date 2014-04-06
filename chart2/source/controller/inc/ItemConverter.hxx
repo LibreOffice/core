@@ -164,8 +164,6 @@ protected:
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
         throw( ::com::sun::star::uno::Exception );
 
-
-
     /// Returns the pool
     SfxItemPool & GetItemPool() const;
 

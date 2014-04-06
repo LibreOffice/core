@@ -721,8 +721,6 @@ void BarChart::createShapes()
                         }
                         aSeriesFormerPointMap[pSeries] = FormerBarPoint(fLogicX,fUpperYValue,fLowerYValue,fLogicZ);
 
-
-
                         if( bDrawConnectionLines )
                         {
                             //store point information for connection lines

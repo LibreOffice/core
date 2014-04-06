@@ -62,8 +62,6 @@
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
 
-
-
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>

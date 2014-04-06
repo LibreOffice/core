@@ -44,8 +44,6 @@ public:
                 ::com::sun::star::drawing::XShapes >& xTarget
                 , const OUString& aName = OUString() ) SAL_OVERRIDE;
 
-
-
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
             createCube(   const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::drawing::XShapes >& xTarget
