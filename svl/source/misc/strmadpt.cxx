@@ -92,19 +92,21 @@ public:
 
 SvDataPipe_Impl::SvDataPipe_Impl(sal_uInt32 nThePageSize,
                                  sal_uInt32 nTheMinPages,
-                                 sal_uInt32 nTheMaxPages):
-    m_pFirstPage(0),
-    m_pReadPage(0),
-    m_pWritePage(0),
-    m_pReadBuffer(0),
-    m_nPageSize(std::min< sal_uInt32 >(
-                    std::max< sal_uInt32 >(nThePageSize, sal_uInt32(1)),
-                    sal_uInt32(std::numeric_limits< sal_uInt32 >::max()
-                                   - sizeof (Page) + 1))),
-    m_nMinPages(std::max< sal_uInt32 >(nTheMinPages, sal_uInt32(1))),
-    m_nMaxPages(std::max< sal_uInt32 >(nTheMaxPages, sal_uInt32(1))),
-    m_nPages(0),
-    m_bEOF(false)
+                                 sal_uInt32 nTheMaxPages)
+    : m_pFirstPage( 0 )
+    , m_pReadPage( 0 )
+    , m_pWritePage( 0 )
+    , m_pReadBuffer( 0 )
+    , m_nReadBufferSize( 0 )
+    , m_nReadBufferFilled( 0 )
+    , m_nPageSize(std::min< sal_uInt32 >(
+                          std::max< sal_uInt32 >(nThePageSize, sal_uInt32(1)),
+                          sal_uInt32(std::numeric_limits< sal_uInt32 >::max()
+                                     - sizeof (Page) + 1)))
+    , m_nMinPages(std::max< sal_uInt32 >(nTheMinPages, sal_uInt32(1)))
+    , m_nMaxPages(std::max< sal_uInt32 >(nTheMaxPages, sal_uInt32(1)))
+    , m_nPages( 0 )
+    , m_bEOF( false )
 {}
 
 inline void SvDataPipe_Impl::setReadBuffer(sal_Int8 * pBuffer,
