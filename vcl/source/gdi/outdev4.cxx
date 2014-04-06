@@ -145,13 +145,17 @@ long OutputDevice::ImplGetGradientStepCount( long nMinRect )
     return nInc;
 }
 
-long OutputDevice::ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf )
+long OutputDevice::ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex )
 {
     // calculate step count
-    long    nStepCount  = rGradient.GetSteps();
+    long nStepCount  = rGradient.GetSteps();
+    long nMinRect;
 
     // generate nStepCount, if not passed
-    long nMinRect = rRect.GetHeight();
+    if (bComplex)
+        nMinRect = std::min( rRect.GetWidth(), rRect.GetHeight() );
+    else
+        nMinRect = rRect.GetHeight();
 
     if ( !nStepCount )
     {
@@ -385,7 +389,6 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     long            nRedSteps = nEndRed - nStartRed;
     long            nGreenSteps = nEndGreen - nStartGreen;
     long            nBlueSteps = nEndBlue   - nStartBlue;
-    long            nStepCount = rGradient.GetSteps();
     sal_uInt16      nAngle = rGradient.GetAngle() % 3600;
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
@@ -393,25 +396,8 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     if ( UsePolyPolygonForComplexGradient() || bMtf )
         pPolyPoly.reset(new PolyPolygon( 2 ));
 
-    long nMinRect = std::min( aRect.GetWidth(), aRect.GetHeight() );
-
-    // calculate number of steps, if this was not passed
-    if( !nStepCount )
-    {
-        long nInc;
-
-        if ( meOutDevType != OUTDEV_PRINTER && !bMtf )
-        {
-            nInc = ( nMinRect < 50 ) ? 2 : 4;
-        }
-        else
-        {
-            // #105998# Use display-equivalent step size calculation
-            nInc = (nMinRect < 800) ? 10 : 20;
-        }
-
-        nStepCount = nMinRect / nInc;
-    }
+    // last parameter - true if complex gradient, false if linear
+    long nStepCount = ImplGetGradientSteps( rGradient, rRect, bMtf, true );
 
     // at least three steps and at most the number of colour differences
     long nSteps = std::max( nStepCount, 2L );
