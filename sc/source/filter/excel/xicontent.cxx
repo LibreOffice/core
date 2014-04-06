@@ -566,6 +566,18 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         aFont.FillToItemSet( rStyleItemSet, EXC_FONTITEM_CELL );
     }
 
+    // alignment
+    if( get_flag( nFlags, EXC_CF_BLOCK_ALIGNMENT ) )
+    {
+        XclImpCellAlign aAlign;
+        sal_uInt16 nAlign(0);
+        sal_uInt16 nAlignMisc(0);
+        rStrm >> nAlign >> nAlignMisc;
+        aAlign.FillFromCF( nAlign, nAlignMisc );
+        aAlign.FillToItemSet( rStyleItemSet, NULL );
+        rStrm.Ignore(4);
+    }
+
     // *** border block ***
 
     if( ::get_flag( nFlags, EXC_CF_BLOCK_BORDER ) )
