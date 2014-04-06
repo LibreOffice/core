@@ -60,11 +60,6 @@ class SvtHistoryOptions_Impl;
 
 /*-************************************************************************************************************
     @short          collect information about history features
-    @descr          -
-
-    @implements     -
-    @base           -
-
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
@@ -80,11 +75,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
 
             @seealso    member m_nRefCount
             @seealso    member m_pDataContainer
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
          SvtHistoryOptions();
@@ -101,15 +91,10 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
             @descr      Call this methods to get information about max. size of specified list.
                         These value lay down the max count of items in these history. If a new one
                         is add to it the oldest one is deleted automaticly!
-
-            @seealso    -
-
             @param      "eHistory" select right history.
             @param      "nSize" is the new max size of specified list. If new size smaller then the old one
                         some oldest entries will be destroyed automaticly!
             @return     Current max size of specified list.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         sal_uInt32  GetSize( EHistoryType eHistory                      ) const;
@@ -118,13 +103,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
             @short      clear complete sepcified list
             @descr      Call this methods to clear the whole list. After that GetItemCount() will return 0 ...
                         but GetSize() will return the old value!
-
-            @seealso    -
-
             @param      "eHistory" select right history.
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         void Clear( EHistoryType eHistory );
@@ -132,13 +111,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
         /*-****************************************************************************************************
             @short      return complete sepcified list
             @descr      If you will show the whole list call this method to get it completely.
-
-            @seealso    -
-
             @param      "eHistory" select right history.
             @return     A list of history items is returned.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > GetList( EHistoryType eHistory ) const;
@@ -158,9 +132,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
             @param      "sFilter" filter name to save in history
             @param      "sTitle" document title to save in history
             @param      "sPassword" password to save in history
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         void AppendItem(EHistoryType eHistory,
@@ -172,13 +143,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
         /*-****************************************************************************************************
             @short      return a reference to a static mutex
             @descr      Make these class threadsafe.
-
-            @seealso    -
-
-            @param      -
             @return     A reference to a static mutex member.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();

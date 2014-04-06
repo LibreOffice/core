@@ -77,10 +77,6 @@ class SvtCompatibilityOptions_Impl;
 /*-************************************************************************************************************
     @short          collect information about dynamic menus
     @descr          Make it possible to configure dynamic menu structures of menus like "new" or "wizard".
-
-    @implements     -
-    @base           -
-
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
@@ -102,11 +98,6 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 
             @seealso    member m_nRefCount
             @seealso    member m_pDataContainer
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
          SvtCompatibilityOptions();
@@ -117,13 +108,6 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
         /*-****************************************************************************************************
             @short      clear complete specified list
             @descr      Call this methods to clear the whole list.
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         void Clear();
@@ -134,10 +118,6 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
             @short      return complete specified list
             @descr      Call it to get all entries of compatibility options.
                         We return a list of all nodes with its names and properties.
-
-            @seealso    -
-
-            @param      -
             @return     A list of compatibility options is returned.
 
             @onerror    We return an empty list.
@@ -153,10 +133,6 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 
             @param      "sName"             Name
             @param      "sModule"           Module
-
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         void AppendItem( const OUString& sName,
@@ -194,13 +170,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
-
-            @seealso    -
-
-            @param      -
             @return     A reference to a static mutex member.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();

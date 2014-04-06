@@ -94,10 +94,6 @@ enum EViewType
                                                                 /Window_Options             [WindowType]
                                                                 ...
                                                                 /Window_<YourName>          [WindowType]
-
-    @implements     -
-    @base           -
-
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
@@ -120,8 +116,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
 
             @param      "eType" specify type of your view and is used to use right data container!
             @param      "sViewName" specify the name of your view and is the key name in data list too.
-            @return     -
-
             @onerror    An assertion is thrown in debug version. Otherwise we do nothing!
         *//*-*****************************************************************************************************/
 
@@ -132,13 +126,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         /*-****************************************************************************************************
             @short      support preload of these config item
             @descr      Sometimes we need preloading of these configuration data without real using of it.
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         static void AcquireOptions();
@@ -152,9 +139,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
                         it not already exist and work with default values!
                         If this a problem for you - you MUST call these method before and
                         you must make up your own mind about that.
-
-            @seealso    -
-
             @onerror    No error should occur.
         *//*-*****************************************************************************************************/
 
@@ -183,8 +167,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
                         parse given string!
 
             @seealso    vcl methods
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         OUString GetWindowState(                               ) const;
@@ -195,9 +177,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
             @descr      It's only supported for:    - tab-dialogs
                         If you call it for other ones you will get an assertion in debug version.
                         In a product version we do nothing!
-
-            @seealso    -
-
             @onerror    An assertion is thrown in debug version. Otherwise we do nothing!
         *//*-*****************************************************************************************************/
 
@@ -209,9 +188,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
             @descr      It's only supported for:    - windows
                         If you call it for other ones you will get an assertion in debug version.
                         In a product version we do nothing!
-
-            @seealso    -
-
             @onerror    An assertion is thrown in debug version. Otherwise we do nothing!
         *//*-*****************************************************************************************************/
 
@@ -229,9 +205,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
             @short      use it to set/get the extended user data (consisting of a set of named scalar values)
             @descr      It's supported for ALL types!
                         Every view can handle its own user defined data set.
-
-            @seealso    -
-
             @onerror    In the non-product version, an assertion is made. In a product version, errors are silently ignored.
         *//*-*****************************************************************************************************/
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetUserData(                                                                                     ) const;
@@ -241,9 +214,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
             @short      use it to set/get ONE special user data item directly
             @descr      Normaly you can work on full user data list by using "Set/GetUserData()".
                         With this function you have an access on special list entries directly without any
-
-            @seealso    -
-
             @onerror    In the non-product version, an assertion is made. In a product version, errors are silently ignored.
         *//*-*****************************************************************************************************/
 
@@ -260,13 +230,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
             @descr      These class is threadsafe.
                         We create a static mutex only for one time and use it to protect our refcount and container
                         member!
-
-            @seealso    -
-
-            @param      -
             @return     A reference to a static mutex member.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();

@@ -35,11 +35,6 @@ class SvtLocalisationOptions_Impl;
 
 /*-************************************************************************************************************
     @short          collect information about localisation features
-    @descr          -
-
-    @implements     -
-    @base           -
-
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
@@ -55,11 +50,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
 
             @seealso    member m_nRefCount
             @seealso    member m_pDataContainer
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
          SvtLocalisationOptions();
@@ -68,9 +58,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
         /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Localisation/AutoMnemonic"
             @descr      These value specifies if shortcuts should be assigned automatically.
-
-            @seealso    -
-
             @param      "bState", new value to set it in configuration.
             @return     The value which represent current state of internal variable.
 
@@ -105,13 +92,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
-
-            @seealso    -
-
-            @param      -
             @return     A reference to a static mutex member.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();

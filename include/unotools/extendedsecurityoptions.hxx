@@ -37,11 +37,6 @@ class SvtExtendedSecurityOptions_Impl;
 
 /*-************************************************************************************************************
     @short          collect information about security features
-    @descr          -
-
-    @implements     -
-    @base           -
-
     @ATTENTION      This class is partially threadsafe.
 
     @devstatus      ready to use
@@ -67,11 +62,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtExtendedSecurityOptions : public utl
 
             @seealso    member m_nRefCount
             @seealso    member m_pDataContainer
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
          SvtExtendedSecurityOptions();
@@ -86,13 +76,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtExtendedSecurityOptions : public utl
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
-
-            @seealso    -
-
-            @param      -
             @return     A reference to a static mutex member.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetInitMutex();

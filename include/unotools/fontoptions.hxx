@@ -36,11 +36,6 @@ class SvtFontOptions_Impl;
 
 /*-************************************************************************************************************
     @short          collect information about font features
-    @descr          -
-
-    @implements     -
-    @base           -
-
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
@@ -56,11 +51,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtFontOptions : public utl::detail::Op
 
             @seealso    member m_nRefCount
             @seealso    member m_pDataContainer
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
          SvtFontOptions();
@@ -79,12 +69,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtFontOptions : public utl::detail::Op
                         ..FontWYSIWYG..()       =>  With this option the names of the selectable fonts
                                                     (for example, the fonts in the Font field in the object bar)
                                                     will be formatted as the current font.
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
             @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
@@ -99,13 +83,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtFontOptions : public utl::detail::Op
             @short      return a reference to a static mutex
             @descr      These class use his own static mutex to be threadsafe.
                         We create a static mutex only for one ime and use at different times.
-
-            @seealso    -
-
-            @param      -
             @return     A reference to a static mutex member.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& impl_GetOwnStaticMutex();

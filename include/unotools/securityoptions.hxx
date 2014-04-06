@@ -49,11 +49,6 @@ enum EBasicSecurityMode
 
 /*-************************************************************************************************************
     @short          collect information about security features
-    @descr          -
-
-    @implements     -
-    @base           -
-
     @ATTENTION      This class is partially threadsafe.
 
     @devstatus      ready to use
@@ -112,11 +107,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
 
             @seealso    member m_nRefCount
             @seealso    member m_pDataContainer
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
          SvtSecurityOptions();
@@ -125,8 +115,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
         /*-****************************************************************************************************
             @short      returns readonly state
             @descr      It can be called to get information about the readonly state of a provided item.
-            @seealso    -
-
             @param      "eOption", specify, which item is queried
             @return     <TRUE/> if item is readonly; <FALSE/> otherwise
 
@@ -145,8 +133,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
                                 private:schedule        => Scripts of  the scheduler;
                                 private:searchfolder    => Scripts of the searchfolder;
                                 private:user            => Scripts that are entered in the URL field.
-            @seealso    -
-
             @param      "seqURLList", new values to set it in configuration.
             @return     The values which represent current state of internal variable.
 
@@ -227,13 +213,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
-
-            @seealso    -
-
-            @param      -
             @return     A reference to a static mutex member.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetInitMutex();

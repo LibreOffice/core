@@ -44,10 +44,6 @@ class SvtCommandOptions_Impl;
 /*-************************************************************************************************************
     @short          collect information about dynamic menus
     @descr          Make it possible to configure dynamic menu structures of menus like "new" or "wizard".
-
-    @implements     -
-    @base           -
-
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
@@ -72,11 +68,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtCommandOptions : public utl::detail:
 
             @seealso    member m_nRefCount
             @seealso    member m_pDataContainer
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
          SvtCommandOptions();
@@ -86,9 +77,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtCommandOptions : public utl::detail:
             @short      return complete specified list
             @descr      Call it to get all entries of an dynamic menu.
                         We return a list of all nodes with his names and properties.
-
-            @seealso    -
-
             @param      "eOption" select the list to retrieve.
             @return     A list of command strings is returned.
 
@@ -100,14 +88,9 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtCommandOptions : public utl::detail:
         /*-****************************************************************************************************
             @short      Lookup if a command URL is inside a given list
             @descr      Lookup if a command URL is inside a given lst
-
-            @seealso    -
-
             @param      "eOption" select right command list
             @param      "aCommandURL" a command URL that is used for the look up
             @return     "sal_True" if the command is inside the list otherwise "sal_False"
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         bool Lookup( CmdOption eOption, const OUString& aCommandURL ) const;
@@ -122,9 +105,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtCommandOptions : public utl::detail:
 
             @param      "xFrame"            points to the frame, which wish to be
                                             notified, if configuration was changed.
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         void EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
@@ -136,13 +116,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtCommandOptions : public utl::detail:
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
-
-            @seealso    -
-
-            @param      -
             @return     A reference to a static mutex member.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
