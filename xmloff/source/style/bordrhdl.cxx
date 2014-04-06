@@ -222,7 +222,7 @@ bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, co
     }
 
     // if there is no style or a different style than none but no width,
-       // then the declaration is not valid.
+    // then the declaration is not valid.
     if (!bHasStyle || (table::BorderLineStyle::NONE != nStyle && !bHasWidth))
         return false;
 
@@ -237,7 +237,7 @@ bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, co
     }
 
     // first of all, delete an empty line
-    if ((bHasStyle && table::BorderLineStyle::NONE == nStyle) ||
+    if (table::BorderLineStyle::NONE == nStyle ||
         (bHasWidth && USHRT_MAX == nNamedWidth && 0 == nWidth) )
     {
         aBorderLine.InnerLineWidth = 0;
@@ -245,7 +245,7 @@ bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, co
         aBorderLine.LineDistance   = 0;
         aBorderLine.LineWidth = 0;
     }
-    else if( bHasWidth )
+    else
     {
         if( USHRT_MAX != nNamedWidth )
         {
@@ -256,11 +256,6 @@ bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, co
             aBorderLine.LineWidth = nWidth;
             lcl_frmitems_setXMLBorderStyle( aBorderLine, nStyle );
         }
-    }
-    else
-    {
-        aBorderLine.LineWidth = 0;
-        lcl_frmitems_setXMLBorderStyle( aBorderLine, nStyle );
     }
 
     // set color
