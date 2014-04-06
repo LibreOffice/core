@@ -66,8 +66,6 @@ table::CellRangeAddress getAddressFromRangeString(const OUString& aStringAddress
 
 }
 
-
-
 void XSheetOutline::testHideDetail()
 {
 

@@ -100,8 +100,6 @@ private:
 };
 
 
-
-
 XMLDiff::XMLDiff( const char* pFileName, const char* pContent, int size, const char* pToleranceFile)
     : fileName(pFileName)
 {

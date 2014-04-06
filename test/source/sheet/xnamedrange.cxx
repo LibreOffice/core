@@ -127,8 +127,6 @@ void XNamedRange::testSetReferencePosition()
     CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position after setting it", xCellAddress.Row == 3);
 }
 
-
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
