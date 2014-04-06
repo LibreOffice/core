@@ -43,6 +43,13 @@ namespace writerfilter {
                 delete p;
         }
 
+        enum RTFOverwrite
+        {
+            OVERWRITE_YES, ///< Yes, if an existing key is found, overwrite it.
+            OVERWRITE_NO_APPEND, ///< No, always append the value to the end of the list.
+            OVERWRITE_NO_IGNORE ///< No, if the key is already in the list, then ignore, otherwise append.
+        };
+
         /// A list of RTFSprm with a copy constructor that performs a deep copy.
         class RTFSprms
         {
@@ -55,13 +62,8 @@ namespace writerfilter {
             ~RTFSprms();
             RTFSprms& operator=(const RTFSprms& rOther);
             RTFValue::Pointer_t find(Id nKeyword, bool bFirst = true);
-            /**
-             * Does the same as ->push_back(), except that it can overwrite existing entries.
-             *
-             * @param bOverwrite if existing element should be overwritten or appended.
-             * @param bAppend if not overwriting, then append or NOP.
-             */
-            void set(Id nKeyword, RTFValue::Pointer_t pValue, bool bOverwrite = true, bool bAppend = true);
+            /// Does the same as ->push_back(), except that it can overwrite or ignore existing entries.
+            void set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite = OVERWRITE_YES);
             bool erase(Id nKeyword);
             /// Removes elements, which are already in the reference set.
             void deduplicate(RTFSprms& rReference);

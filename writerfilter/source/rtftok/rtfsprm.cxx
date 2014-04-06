@@ -89,16 +89,16 @@ RTFValue::Pointer_t RTFSprms::find(Id nKeyword, bool bFirst)
     return pValue;
 }
 
-void RTFSprms::set(Id nKeyword, RTFValue::Pointer_t pValue, bool bOverwrite, bool bAppend)
+void RTFSprms::set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite)
 {
     ensureCopyBeforeWrite();
     bool bFound = false;
-    if (bOverwrite || !bAppend)
+    if (eOverwrite == OVERWRITE_YES || eOverwrite == OVERWRITE_NO_IGNORE)
     {
         for (RTFSprms::Iterator_t i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
             if (i->first == nKeyword)
             {
-                if (bOverwrite)
+                if (eOverwrite == OVERWRITE_YES)
                 {
                     i->second = pValue;
                     return;
@@ -110,7 +110,7 @@ void RTFSprms::set(Id nKeyword, RTFValue::Pointer_t pValue, bool bOverwrite, boo
                 }
             }
     }
-    if (bAppend || !bFound)
+    if (eOverwrite == OVERWRITE_NO_APPEND || !bFound)
         m_pSprms->push_back(std::make_pair(nKeyword, pValue));
 }
 
