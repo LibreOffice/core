@@ -37,12 +37,12 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-using namespace ::std     ;
-using namespace ::utl     ;
-using namespace ::rtl     ;
-using namespace ::osl     ;
-using namespace ::com::sun::star::uno ;
-using namespace ::com::sun::star::beans ;
+using namespace ::std;
+using namespace ::utl;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 
 namespace {
     static const ::sal_Int32 s_nOffsetURL               = 0;
@@ -137,7 +137,7 @@ sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
     if (!xListAccess.is())
         return 0;
 
-    sal_uInt32 nSize = 0  ;
+    sal_uInt32 nSize = 0;
 
     try
     {
@@ -262,14 +262,14 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
         if (xListAccess.is())
         {
             // clear ItemList
-            xListAccess->getByName(OUString(s_sItemList))  >>= xNode  ;
+            xListAccess->getByName(OUString(s_sItemList))  >>= xNode;
             lOrders = xNode->getElementNames();
             const sal_Int32 nLength = lOrders.getLength();
             for(sal_Int32 i=0; i<nLength; ++i)
                 xNode->removeByName(lOrders[i]);
 
             // clear OrderList
-            xListAccess->getByName(OUString(s_sOrderList)) >>= xNode ;
+            xListAccess->getByName(OUString(s_sOrderList)) >>= xNode;
             lOrders = xNode->getElementNames();
             for(sal_Int32 j=0; j<nLength; ++j)
                 xNode->removeByName(lOrders[j]);
@@ -557,8 +557,8 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
 // DON'T DO IT IN YOUR HEADER!
 // see definition for further information
 
-SvtHistoryOptions_Impl*  SvtHistoryOptions::m_pDataContainer = NULL ;
-sal_Int32     SvtHistoryOptions::m_nRefCount  = 0  ;
+SvtHistoryOptions_Impl*  SvtHistoryOptions::m_pDataContainer = NULL;
+sal_Int32     SvtHistoryOptions::m_nRefCount  = 0;
 
 // constructor
 

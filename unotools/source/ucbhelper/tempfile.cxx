@@ -205,7 +205,7 @@ void CreateTempName_Impl( OUString& rName, bool bKeep, bool bDir = true )
         u %= nMax;
         OUString aTmp( aName );
         aTmp += OUString::number(u, nRadix);
-        aTmp += ".tmp" ;
+        aTmp += ".tmp";
 
         if ( bDir )
         {
@@ -282,7 +282,7 @@ void lcl_createName(TempFile_Impl& _rImpl,const OUString& rLeadingChars, bool _b
         if ( pExtension )
             aTmp += *pExtension;
         else
-            aTmp += ".tmp" ;
+            aTmp += ".tmp";
         if ( bDirectory )
         {
             FileBase::RC err = Directory::create( aTmp );

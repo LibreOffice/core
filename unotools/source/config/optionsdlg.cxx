@@ -28,7 +28,7 @@
 #include "itemholder1.hxx"
 
 using namespace utl;
-using namespace com::sun::star::beans ;
+using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 
 #define CFG_FILENAME            OUString( "Office.OptionsDialog" )

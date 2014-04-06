@@ -32,11 +32,11 @@
 
 #include <algorithm>
 
-using namespace ::std                   ;
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::std;
+using namespace ::utl;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 #define ROOTNODE_EVENTS OUString("Office.Events/ApplicationEvents")
@@ -149,7 +149,7 @@ void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& )
     // dont forget to update all existing frames and her might cached dispatch objects!
     // But look for already killed frames. We hold weak references instead of hard ones ...
     for (FrameVector::const_iterator pIt  = m_lFrames.begin();
-                                        pIt != m_lFrames.end()  ;
+                                        pIt != m_lFrames.end();
                                       ++pIt                     )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame(pIt->get(), ::com::sun::star::uno::UNO_QUERY);
@@ -238,7 +238,7 @@ void SAL_CALL GlobalEventConfig_Impl::replaceByName( const OUString& aName, cons
     }
     OUString macroURL;
     sal_Int32 nPropCount = props.getLength();
-    for( sal_Int32 index = 0 ; index < nPropCount ; ++index )
+    for( sal_Int32 index = 0; index < nPropCount; ++index )
     {
         if ( props[ index ].Name.equalsAscii( "Script" ) )
             props[ index ].Value >>= macroURL;
@@ -307,8 +307,8 @@ bool SAL_CALL GlobalEventConfig_Impl::hasElements(  ) throw (RuntimeException)
 // and now the wrapper
 
 //initialize static member
-GlobalEventConfig_Impl*     GlobalEventConfig::m_pImpl = NULL  ;
-sal_Int32                   GlobalEventConfig::m_nRefCount      = 0     ;
+GlobalEventConfig_Impl*     GlobalEventConfig::m_pImpl = NULL;
+sal_Int32                   GlobalEventConfig::m_nRefCount      = 0;
 
 GlobalEventConfig::GlobalEventConfig()
 {

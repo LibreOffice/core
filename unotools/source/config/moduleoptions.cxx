@@ -126,7 +126,7 @@ struct FactoryInfo
             // b) add names and values of changed ones only and count it
             // c) resize return list by using count
             css::uno::Sequence< css::beans::PropertyValue > lProperties   ( 4 );
-            sal_Int8                                        nRealyChanged = 0  ;
+            sal_Int8                                        nRealyChanged = 0;
 
             if( bChangedTemplateFile )
             {
@@ -171,11 +171,11 @@ struct FactoryInfo
             }
 
             // Don't forget to reset changed flags! Otherwise we save it again and again and ...
-            bChangedTemplateFile        = false         ;
-            bChangedWindowAttributes    = false         ;
-            bChangedEmptyDocumentURL    = false         ;
-            bChangedDefaultFilter       = false         ;
-            bChangedIcon                = false         ;
+            bChangedTemplateFile        = false;
+            bChangedWindowAttributes    = false;
+            bChangedEmptyDocumentURL    = false;
+            bChangedDefaultFilter       = false;
+            bChangedIcon                = false;
 
             lProperties.realloc( nRealyChanged );
             return lProperties;
@@ -195,14 +195,14 @@ struct FactoryInfo
 
         // If you call set-methods - we check for changes of valkues and mark it.
         // But if you wish to set it without that ... you must initialize it!
-        void initInstalled        ( bool               bNewInstalled        ) { bInstalled        = bNewInstalled        ; }
-        void initFactory          ( const OUString& sNewFactory          ) { sFactory          = sNewFactory          ; }
-        void initShortName        ( const OUString& sNewShortName        ) { sShortName        = sNewShortName        ; }
-        void initWindowAttributes ( const OUString& sNewWindowAttributes ) { sWindowAttributes = sNewWindowAttributes ; }
-        void initEmptyDocumentURL ( const OUString& sNewEmptyDocumentURL ) { sEmptyDocumentURL = sNewEmptyDocumentURL ; }
-        void initDefaultFilter    ( const OUString& sNewDefaultFilter    ) { sDefaultFilter    = sNewDefaultFilter    ; }
+        void initInstalled        ( bool               bNewInstalled        ) { bInstalled        = bNewInstalled; }
+        void initFactory          ( const OUString& sNewFactory          ) { sFactory          = sNewFactory; }
+        void initShortName        ( const OUString& sNewShortName        ) { sShortName        = sNewShortName; }
+        void initWindowAttributes ( const OUString& sNewWindowAttributes ) { sWindowAttributes = sNewWindowAttributes; }
+        void initEmptyDocumentURL ( const OUString& sNewEmptyDocumentURL ) { sEmptyDocumentURL = sNewEmptyDocumentURL; }
+        void initDefaultFilter    ( const OUString& sNewDefaultFilter    ) { sDefaultFilter    = sNewDefaultFilter; }
         void setDefaultFilterReadonly( const bool bVal){bDefaultFilterReadonly = bVal;}
-        void initIcon             ( sal_Int32              nNewIcon             ) { nIcon             = nNewIcon             ; }
+        void initIcon             ( sal_Int32              nNewIcon             ) { nIcon             = nNewIcon; }
 
         void initTemplateFile( const OUString& sNewTemplateFile )
         {
@@ -223,7 +223,7 @@ struct FactoryInfo
             if( sTemplateFile != sNewTemplateFile )
             {
                 sTemplateFile        = sNewTemplateFile;
-                bChangedTemplateFile = true        ;
+                bChangedTemplateFile = true;
             }
         };
 
@@ -232,7 +232,7 @@ struct FactoryInfo
             if( sWindowAttributes != sNewWindowAttributes )
             {
                 sWindowAttributes        = sNewWindowAttributes;
-                bChangedWindowAttributes = true            ;
+                bChangedWindowAttributes = true;
             }
         };
 
@@ -241,7 +241,7 @@ struct FactoryInfo
             if( sDefaultFilter != sNewDefaultFilter )
             {
                 sDefaultFilter       = sNewDefaultFilter;
-                bChangedDefaultFilter = true         ;
+                bChangedDefaultFilter = true;
             }
         };
 
@@ -255,21 +255,21 @@ struct FactoryInfo
             return xSubstVars;
         }
 
-        bool            bInstalled                      ;
-        OUString     sFactory                        ;
-        OUString     sShortName                      ;
-        OUString     sTemplateFile                   ;
-        OUString     sWindowAttributes               ;
-        OUString     sEmptyDocumentURL               ;
-        OUString     sDefaultFilter                  ;
-        sal_Int32           nIcon                           ;
+        bool            bInstalled;
+        OUString     sFactory;
+        OUString     sShortName;
+        OUString     sTemplateFile;
+        OUString     sWindowAttributes;
+        OUString     sEmptyDocumentURL;
+        OUString     sDefaultFilter;
+        sal_Int32           nIcon;
 
-        bool            bChangedTemplateFile        :1  ;
-        bool            bChangedWindowAttributes    :1  ;
-        bool            bChangedEmptyDocumentURL    :1  ;
-        bool            bChangedDefaultFilter       :1  ;
-        bool            bChangedIcon                :1  ;
-        bool            bDefaultFilterReadonly      :1  ;
+        bool            bChangedTemplateFile        :1;
+        bool            bChangedWindowAttributes    :1;
+        bool            bChangedEmptyDocumentURL    :1;
+        bool            bChangedDefaultFilter       :1;
+        bool            bChangedIcon                :1;
+        bool            bDefaultFilterReadonly      :1;
 
         css::uno::Reference< css::util::XStringSubstitution >  xSubstVars;
 };
@@ -442,9 +442,9 @@ void SvtModuleOptions_Impl::Commit()
     // Step over all factories and get her really changed values only.
     // Build list of these ones and use it for commit.
     css::uno::Sequence< css::beans::PropertyValue > lCommitProperties( FACTORYCOUNT*PROPERTYCOUNT );
-    FactoryInfo*                                    pInfo            = NULL                        ;
-    sal_Int32                                       nRealCount       = 0                           ;
-    OUString                                 sBasePath                                      ;
+    FactoryInfo*                                    pInfo            = NULL;
+    sal_Int32                                       nRealCount       = 0;
+    OUString                                 sBasePath;
     for( sal_Int32 nFactory=0; nFactory<FACTORYCOUNT; ++nFactory )
     {
         pInfo = &(m_lFactories[nFactory]);
@@ -741,19 +741,19 @@ void SvtModuleOptions_Impl::SetFactoryDefaultFilter(       SvtModuleOptions::EFa
 *//*-*************************************************************************************************************/
 css::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const css::uno::Sequence< OUString >& lSetNames )
 {
-    sal_Int32                             nCount     = lSetNames.getLength() ;
+    sal_Int32                             nCount     = lSetNames.getLength();
     css::uno::Sequence< OUString > lPropNames ( nCount*PROPERTYCOUNT );
-    OUString*                      pPropNames = lPropNames.getArray() ;
-    sal_Int32                             nPropStart = 0                     ;
+    OUString*                      pPropNames = lPropNames.getArray();
+    sal_Int32                             nPropStart = 0;
 
     for( sal_Int32 nName=0; nName<nCount; ++nName )
     {
-        pPropNames[nPropStart+PROPERTYHANDLE_SHORTNAME       ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_SHORTNAME       ;
-        pPropNames[nPropStart+PROPERTYHANDLE_TEMPLATEFILE    ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_TEMPLATEFILE    ;
+        pPropNames[nPropStart+PROPERTYHANDLE_SHORTNAME       ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_SHORTNAME;
+        pPropNames[nPropStart+PROPERTYHANDLE_TEMPLATEFILE    ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_TEMPLATEFILE;
         pPropNames[nPropStart+PROPERTYHANDLE_WINDOWATTRIBUTES] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_WINDOWATTRIBUTES;
         pPropNames[nPropStart+PROPERTYHANDLE_EMPTYDOCUMENTURL] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_EMPTYDOCUMENTURL;
-        pPropNames[nPropStart+PROPERTYHANDLE_DEFAULTFILTER   ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_DEFAULTFILTER   ;
-        pPropNames[nPropStart+PROPERTYHANDLE_ICON            ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_ICON            ;
+        pPropNames[nPropStart+PROPERTYHANDLE_DEFAULTFILTER   ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_DEFAULTFILTER;
+        pPropNames[nPropStart+PROPERTYHANDLE_ICON            ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_ICON;
         nPropStart += PROPERTYCOUNT;
     }
 
@@ -783,60 +783,60 @@ bool SvtModuleOptions_Impl::ClassifyFactoryByName( const OUString& sName, SvtMod
 {
     bool bState;
 
-    eFactory = SvtModuleOptions::E_WRITER     ;
+    eFactory = SvtModuleOptions::E_WRITER;
     bState   = ( sName == FACTORYNAME_WRITER );
 
     if( !bState )
     {
-        eFactory = SvtModuleOptions::E_WRITERWEB     ;
+        eFactory = SvtModuleOptions::E_WRITERWEB;
         bState   = ( sName == FACTORYNAME_WRITERWEB );
     }
     // no else!
     if( !bState )
     {
-        eFactory = SvtModuleOptions::E_WRITERGLOBAL     ;
+        eFactory = SvtModuleOptions::E_WRITERGLOBAL;
         bState   = ( sName == FACTORYNAME_WRITERGLOBAL );
     }
     // no else!
     if( !bState )
     {
-        eFactory = SvtModuleOptions::E_CALC     ;
+        eFactory = SvtModuleOptions::E_CALC;
         bState   = ( sName == FACTORYNAME_CALC );
     }
     // no else!
     if( !bState )
     {
-        eFactory = SvtModuleOptions::E_DRAW     ;
+        eFactory = SvtModuleOptions::E_DRAW;
         bState   = ( sName == FACTORYNAME_DRAW );
     }
     // no else!
     if( !bState )
     {
-        eFactory = SvtModuleOptions::E_IMPRESS     ;
+        eFactory = SvtModuleOptions::E_IMPRESS;
         bState   = ( sName == FACTORYNAME_IMPRESS );
     }
     // no else!
     if( !bState )
     {
-        eFactory = SvtModuleOptions::E_MATH     ;
+        eFactory = SvtModuleOptions::E_MATH;
         bState   = ( sName == FACTORYNAME_MATH );
     }
     // no else!
     if( !bState )
     {
-        eFactory = SvtModuleOptions::E_CHART     ;
+        eFactory = SvtModuleOptions::E_CHART;
         bState   = ( sName == FACTORYNAME_CHART );
     }
     // no else!
     if( !bState )
     {
-        eFactory = SvtModuleOptions::E_DATABASE     ;
+        eFactory = SvtModuleOptions::E_DATABASE;
         bState   = ( sName == FACTORYNAME_DATABASE );
     }
     // no else!
     if( !bState )
     {
-        eFactory = SvtModuleOptions::E_STARTMODULE    ;
+        eFactory = SvtModuleOptions::E_STARTMODULE;
         bState   = ( sName == FACTORYNAME_STARTMODULE);
     }
 
@@ -881,10 +881,10 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< OUString >& lFa
     // Attention:   If a propertyset of a factory will be ignored we must step to next start position of next factory infos!
     //              see "nPropertyStart += PROPERTYCOUNT" ...
 
-    sal_Int32                   nPropertyStart  = 0                     ;
+    sal_Int32                   nPropertyStart  = 0;
     sal_Int32                   nNodeCount      = lFactories.getLength();
-    FactoryInfo*                pInfo           = NULL                  ;
-    SvtModuleOptions::EFactory  eFactory                                ;
+    FactoryInfo*                pInfo           = NULL;
+    SvtModuleOptions::EFactory  eFactory;
 
     for( sal_Int32 nSetNode=0; nSetNode<nNodeCount; ++nSetNode )
     {
@@ -939,7 +939,7 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
     for (i=0; i<c; ++i)
     {
         OUString&            rFactoryName = lFactories[i];
-        SvtModuleOptions::EFactory  eFactory                    ;
+        SvtModuleOptions::EFactory  eFactory;
 
         if (!ClassifyFactoryByName(rFactoryName, eFactory))
             continue;
@@ -955,8 +955,8 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtModuleOptions_Impl*  SvtModuleOptions::m_pDataContainer  = NULL  ;
-sal_Int32               SvtModuleOptions::m_nRefCount       = 0     ;
+SvtModuleOptions_Impl*  SvtModuleOptions::m_pDataContainer  = NULL;
+sal_Int32               SvtModuleOptions::m_nRefCount       = 0;
 
 /*-************************************************************************************************************
     @short      standard constructor and destructor
@@ -1219,7 +1219,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
     css::uno::Reference< css::container::XNameAccess > xFilterCfg;
-    css::uno::Reference< css::container::XNameAccess > xTypeCfg ;
+    css::uno::Reference< css::container::XNameAccess > xTypeCfg;
     try
     {
         xFilterCfg = css::uno::Reference< css::container::XNameAccess >(
@@ -1297,7 +1297,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::u
     const css::uno::Sequence< OUString > lServices = xInfo->getSupportedServiceNames();
     const OUString*                      pServices = lServices.getConstArray();
 
-    for (sal_Int32 i=0; i<lServices.getLength() ; ++i)
+    for (sal_Int32 i=0; i<lServices.getLength(); ++i)
     {
         SvtModuleOptions::EFactory eApp = SvtModuleOptions::ClassifyFactoryByServiceName(pServices[i]);
         if (eApp != E_UNKNOWN_FACTORY)

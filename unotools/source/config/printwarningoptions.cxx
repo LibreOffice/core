@@ -28,10 +28,10 @@
 
 //  namespaces
 
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::utl;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
 
 #define ROOTNODE_START                  OUString("Office.Common/Print")
 
@@ -321,7 +321,7 @@ bool SvtPrintWarningOptions::IsModifyDocumentOnPrintingAllowed() const
 void SvtPrintWarningOptions::SetModifyDocumentOnPrintingAllowed( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetModifyDocumentOnPrintingAllowed( bState ) ;
+    m_pDataContainer->SetModifyDocumentOnPrintingAllowed( bState );
 }
 
 namespace

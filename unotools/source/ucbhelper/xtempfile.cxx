@@ -55,7 +55,7 @@ throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aResult( OTempFileBase::queryInterface( aType ) );
     if (!aResult.hasValue())
-        aResult = cppu::PropertySetMixin< css::io::XTempFile >::queryInterface( aType ) ;
+        aResult = cppu::PropertySetMixin< css::io::XTempFile >::queryInterface( aType );
     return aResult;
 };
 void SAL_CALL OTempFileService::acquire(  )
@@ -77,7 +77,7 @@ throw ( css::uno::RuntimeException, std::exception )
     static ::cppu::OTypeCollection* pTypeCollection = NULL;
     if ( pTypeCollection == NULL )
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
         if ( pTypeCollection == NULL )
         {

@@ -200,14 +200,14 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
     // This method should be called for special ConfigItem-mode only!
     OSL_ENSURE( ((m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_packLocalizedProperties()\nWrong call of this method detected!\n" );
 
-    sal_Int32                   nSourceCounter      ;   // used to step during input lists
-    sal_Int32                   nSourceSize         ;   // marks end of loop over input lists
-    sal_Int32                   nDestinationCounter ;   // actual position in output lists
-    sal_Int32                   nPropertyCounter    ;   // counter of inner loop for Sequence< PropertyValue >
-    sal_Int32                   nPropertiesSize     ;   // marks end of inner loop
-    Sequence< OUString >        lPropertyNames      ;   // list of all locales for localized entry
-    Sequence< PropertyValue >   lProperties         ;   // localized values of an configuration entry packed for return
-    Reference< XInterface >     xLocalizedNode      ;   // if cfg entry is localized ... lInValues contains an XInterface!
+    sal_Int32                   nSourceCounter;      // used to step during input lists
+    sal_Int32                   nSourceSize;         // marks end of loop over input lists
+    sal_Int32                   nDestinationCounter; // actual position in output lists
+    sal_Int32                   nPropertyCounter;    // counter of inner loop for Sequence< PropertyValue >
+    sal_Int32                   nPropertiesSize;     // marks end of inner loop
+    Sequence< OUString >        lPropertyNames;      // list of all locales for localized entry
+    Sequence< PropertyValue >   lProperties;         // localized values of an configuration entry packed for return
+    Reference< XInterface >     xLocalizedNode;      // if cfg entry is localized ... lInValues contains an XInterface!
 
     // Optimise follow algorithm ... A LITTLE BIT :-)
     // There exist two different possibilities:
@@ -235,9 +235,9 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
             Reference< XNameContainer > xSetAccess( xLocalizedNode, UNO_QUERY );
             if( xSetAccess.is() )
             {
-                lPropertyNames  =   xSetAccess->getElementNames()   ;
-                nPropertiesSize =   lPropertyNames.getLength()      ;
-                lProperties.realloc( nPropertiesSize )              ;
+                lPropertyNames  =   xSetAccess->getElementNames();
+                nPropertiesSize =   lPropertyNames.getLength();
+                lProperties.realloc( nPropertiesSize );
 
                 for( nPropertyCounter=0; nPropertyCounter<nPropertiesSize; ++nPropertyCounter )
                 {
@@ -246,9 +246,9 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
                     OUString sPropName   = lInNames[nSourceCounter];
                     OUString sLocaleName = lPropertyNames[nPropertyCounter];
                     #endif
-                    lProperties[nPropertyCounter].Name  =   lPropertyNames[nPropertyCounter]                            ;
+                    lProperties[nPropertyCounter].Name  =   lPropertyNames[nPropertyCounter];
                     OUString sLocaleValue;
-                    xSetAccess->getByName( lPropertyNames[nPropertyCounter] ) >>= sLocaleValue  ;
+                    xSetAccess->getByName( lPropertyNames[nPropertyCounter] ) >>= sLocaleValue;
                     lProperties[nPropertyCounter].Value <<= sLocaleValue;
                 }
 
@@ -273,13 +273,13 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
     // This method should be called for special ConfigItem-mode only!
     OSL_ENSURE( ((m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_unpackLocalizedProperties()\nWrong call of this method detected!\n" );
 
-    sal_Int32                   nSourceCounter      ;   // used to step during input lists
-    sal_Int32                   nSourceSize         ;   // marks end of loop over input lists
-    sal_Int32                   nDestinationCounter ;   // actual position in output lists
-    sal_Int32                   nPropertyCounter    ;   // counter of inner loop for Sequence< PropertyValue >
-    sal_Int32                   nPropertiesSize     ;   // marks end of inner loop
-    OUString                    sNodeName           ;   // base name of node ( e.g. "UIName/" ) ... expand to locale ( e.g. "UIName/de" )
-    Sequence< PropertyValue >   lProperties         ;   // localized values of an configuration entry getted from lInValues-Any
+    sal_Int32                   nSourceCounter;      // used to step during input lists
+    sal_Int32                   nSourceSize;         // marks end of loop over input lists
+    sal_Int32                   nDestinationCounter; // actual position in output lists
+    sal_Int32                   nPropertyCounter;    // counter of inner loop for Sequence< PropertyValue >
+    sal_Int32                   nPropertiesSize;     // marks end of inner loop
+    OUString                    sNodeName;           // base name of node ( e.g. "UIName/" ) ... expand to locale ( e.g. "UIName/de" )
+    Sequence< PropertyValue >   lProperties;         // localized values of an configuration entry getted from lInValues-Any
 
     // Optimise follow algorithm ... A LITTLE BIT :-)
     // There exist two different possibilities:
@@ -318,8 +318,8 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
 
             for( nPropertyCounter=0; nPropertyCounter<nPropertiesSize; ++nPropertyCounter )
             {
-                 lOutNames [nDestinationCounter] = sNodeName + lProperties[nPropertyCounter].Name   ;
-                lOutValues[nDestinationCounter] = lProperties[nPropertyCounter].Value               ;
+                 lOutNames [nDestinationCounter] = sNodeName + lProperties[nPropertyCounter].Name;
+                lOutValues[nDestinationCounter] = lProperties[nPropertyCounter].Value;
                 ++nDestinationCounter;
             }
         }
@@ -374,7 +374,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
             }
 
             Reference< XInterface >       xNode;
-            Reference< XPropertySet >     xSet ;
+            Reference< XPropertySet >     xSet;
             Reference< XPropertySetInfo > xInfo;
             if (!sPath.isEmpty())
             {
@@ -463,11 +463,11 @@ bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
     bool bRet = xHierarchyAccess.is() && xTopNodeReplace.is();
     if(bRet)
     {
-        Sequence< OUString >    lNames          ;
-        Sequence< Any >         lValues         ;
-        const OUString*         pNames  = NULL  ;
-        const Any*              pValues = NULL  ;
-        sal_Int32               nNameCount      ;
+        Sequence< OUString >    lNames;
+        Sequence< Any >         lValues;
+        const OUString*         pNames  = NULL;
+        const Any*              pValues = NULL;
+        sal_Int32               nNameCount;
         if(( m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES )
         {
             // If ConfigItem works in "ALL_LOCALES"-mode ... we must support a Sequence< PropertyValue >
@@ -830,7 +830,7 @@ bool ConfigItem::SetSetProperties(
 
                 const sal_Int32 nSubNodeCount = aSubNodeNames.getLength();
 
-                for(sal_Int32 j = 0; j <nSubNodeCount ; j++)
+                for(sal_Int32 j = 0; j <nSubNodeCount; j++)
                 {
                     if(!xCont->hasByName(aSubNodeNames[j]))
                     {

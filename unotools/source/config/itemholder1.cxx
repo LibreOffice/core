@@ -102,7 +102,7 @@ void ItemHolder1::impl_addItem(EItem eItem)
 
     TItems::const_iterator pIt;
     for (  pIt  = m_lItems.begin();
-           pIt != m_lItems.end()  ;
+           pIt != m_lItems.end();
          ++pIt                    )
     {
         const TItemInfo& rInfo = *pIt;
@@ -123,7 +123,7 @@ void ItemHolder1::impl_releaseAllItems()
 
     TItems::iterator pIt;
     for (  pIt  = m_lItems.begin();
-           pIt != m_lItems.end()  ;
+           pIt != m_lItems.end();
          ++pIt                    )
     {
         TItemInfo& rInfo = *pIt;

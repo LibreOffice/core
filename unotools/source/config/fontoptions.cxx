@@ -27,10 +27,10 @@
 #include <rtl/instance.hxx>
 #include "itemholder1.hxx"
 
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::utl;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
 
 #define ROOTNODE_FONT                       OUString("Office.Common/Font")
 
@@ -95,11 +95,11 @@ class SvtFontOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        bool    IsFontHistoryEnabled        (                   ) const ;
-        void        EnableFontHistory           ( bool bState   )       ;
+        bool    IsFontHistoryEnabled        (                   ) const;
+        void        EnableFontHistory           ( bool bState   );
 
-        bool    IsFontWYSIWYGEnabled        (                   ) const ;
-        void        EnableFontWYSIWYG           ( bool bState   )       ;
+        bool    IsFontWYSIWYGEnabled        (                   ) const;
+        void        EnableFontWYSIWYG           ( bool bState   );
 
     private:
 
@@ -120,9 +120,9 @@ class SvtFontOptions_Impl : public ConfigItem
 
     private:
 
-        bool        m_bReplacementTable     ;
-        bool        m_bFontHistory          ;
-        bool        m_bFontWYSIWYG          ;
+        bool        m_bReplacementTable;
+        bool        m_bFontHistory;
+        bool        m_bFontWYSIWYG;
 };
 
 //  constructor
@@ -304,8 +304,8 @@ Sequence< OUString > SvtFontOptions_Impl::impl_GetPropertyNames()
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtFontOptions_Impl*    SvtFontOptions::m_pDataContainer    = NULL  ;
-sal_Int32               SvtFontOptions::m_nRefCount         = 0     ;
+SvtFontOptions_Impl*    SvtFontOptions::m_pDataContainer    = NULL;
+sal_Int32               SvtFontOptions::m_nRefCount         = 0;
 
 //  constructor
 

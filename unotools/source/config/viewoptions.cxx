@@ -70,14 +70,14 @@
 
 //  initialization!
 
-SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Dialogs    =   NULL    ;
-sal_Int32                    SvtViewOptions::m_nRefCount_Dialogs         =   0       ;
-SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_TabDialogs =   NULL    ;
-sal_Int32                    SvtViewOptions::m_nRefCount_TabDialogs      =   0       ;
-SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_TabPages   =   NULL    ;
-sal_Int32                    SvtViewOptions::m_nRefCount_TabPages        =   0       ;
-SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Windows    =   NULL    ;
-sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0       ;
+SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Dialogs    =   NULL;
+sal_Int32                    SvtViewOptions::m_nRefCount_Dialogs         =   0;
+SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_TabDialogs =   NULL;
+sal_Int32                    SvtViewOptions::m_nRefCount_TabDialogs      =   0;
+SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_TabPages   =   NULL;
+sal_Int32                    SvtViewOptions::m_nRefCount_TabPages        =   0;
+SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Windows    =   NULL;
+sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0;
 
 //  private declarations!
 
@@ -102,12 +102,12 @@ class IMPL_TViewData
         // create "default" item
         IMPL_TViewData()
         {
-            m_sWindowState = DEFAULT_WINDOWSTATE ;
-            m_lUserData    = DEFAULT_USERDATA    ;
-            m_nPageID      = DEFAULT_PAGEID      ;
-            m_bVisible     = DEFAULT_VISIBLE     ;
+            m_sWindowState = DEFAULT_WINDOWSTATE;
+            m_lUserData    = DEFAULT_USERDATA;
+            m_nPageID      = DEFAULT_PAGEID;
+            m_bVisible     = DEFAULT_VISIBLE;
 
-            m_bDefault     = true            ;
+            m_bDefault     = true;
         }
 
         // write access - with reseting of default state
@@ -149,9 +149,9 @@ class IMPL_TViewData
 
         // read access
         OUString                              getWindowState() { return m_sWindowState; }
-        css::uno::Sequence< css::beans::NamedValue > getUserData   () { return m_lUserData   ; }
-        sal_Int32                                    getPageID     () { return m_nPageID     ; }
-        bool                                     getVisible    () { return m_bVisible    ; }
+        css::uno::Sequence< css::beans::NamedValue > getUserData   () { return m_lUserData; }
+        sal_Int32                                    getPageID     () { return m_nPageID; }
+        bool                                     getVisible    () { return m_bVisible; }
 
         // special operation for easy access on user data
         void setUserItem( const OUString& sName  ,
@@ -170,7 +170,7 @@ class IMPL_TViewData
             {
                 if( m_lUserData[nStep].Name == sName )
                 {
-                    m_lUserData[nStep].Value = aValue  ;
+                    m_lUserData[nStep].Value = aValue;
                     bExist                   = true;
                     break;
                 }
@@ -180,8 +180,8 @@ class IMPL_TViewData
             if( !bExist )
             {
                 m_lUserData.realloc( nCount+1 );
-                m_lUserData[nCount].Name  = sName  ;
-                m_lUserData[nCount].Value = aValue ;
+                m_lUserData[nCount].Name  = sName;
+                m_lUserData[nCount].Value = aValue;
             }
         }
 
@@ -206,12 +206,12 @@ class IMPL_TViewData
         bool isDefault() { return m_bDefault; }
 
     private:
-        OUString                                 m_sWindowState    ;
-        css::uno::Sequence< css::beans::NamedValue >    m_lUserData       ;
-        sal_Int32                                       m_nPageID         ;
-        bool                                        m_bVisible        ;
+        OUString                                 m_sWindowState;
+        css::uno::Sequence< css::beans::NamedValue >    m_lUserData;
+        sal_Int32                                       m_nPageID;
+        bool                                        m_bVisible;
 
-        bool                                        m_bDefault        ;
+        bool                                        m_bDefault;
 };
 
 struct IMPL_TStringHashCode
@@ -276,8 +276,8 @@ class SvtViewOptionsBase_Impl
         css::uno::Reference< css::container::XNameAccess > m_xSet;
 
         #ifdef DEBUG_VIEWOPTIONS
-        sal_Int32           m_nReadCount    ;
-        sal_Int32           m_nWriteCount   ;
+        sal_Int32           m_nReadCount;
+        sal_Int32           m_nWriteCount;
         #endif
 };
 

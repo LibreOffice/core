@@ -700,7 +700,7 @@ static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* 
         else
         {
             // skip exception strings
-            while( *++ppStr ) ;
+            while( *++ppStr );
         }
     }
 

@@ -572,7 +572,7 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
             aCurrBankSymbol = aCurrSymbol;
             nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
             nCurrDigits = 2;
-            return ;
+            return;
         }
     }
     aCurrSymbol = pCurrArr[nElem].Symbol;
@@ -672,7 +672,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
-        return ;
+        return;
     }
     // find a negative code (medium preferred) and a default (medium preferred) (not necessarily the same)
     NumberFormatCode const * const pFormatArr = aFormatSeq.getArray();
@@ -920,7 +920,7 @@ void LocaleDataWrapper::getDateFormatsImpl()
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         nDateFormat = nLongDateFormat = DMY;
-        return ;
+        return;
     }
     // find the edit (21), a default (medium preferred),
     // a medium (default preferred), and a long (default preferred)
@@ -1154,7 +1154,7 @@ inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rStr )
     if ( rStr.getLength() == 1 )
         *pBuf++ = rStr[0];
     else if (rStr.isEmpty())
-        ;
+;
     else
     {
         memcpy( pBuf, rStr.getStr(), rStr.getLength() * sizeof(sal_Unicode) );
@@ -1246,7 +1246,7 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
         if (bUseThousandSep)
             aGroupPos = utl::DigitGroupingIterator::createForwardSequence(
                     nNumLen2, getDigitGrouping());
-        for ( ; i < nNumLen2; ++i )
+        for (; i < nNumLen2; ++i )
         {
             *pBuf = *pNumBuf;
             pBuf++;

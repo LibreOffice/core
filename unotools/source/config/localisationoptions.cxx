@@ -26,10 +26,10 @@
 
 #include "itemholder1.hxx"
 
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::utl;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
 
 #define ROOTNODE_LOCALISATION           OUString("Office.Common/View/Localisation")
 #define DEFAULT_AUTOMNEMONIC            false
@@ -94,8 +94,8 @@ class SvtLocalisationOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        bool    IsAutoMnemonic  (                   ) const ;
-        sal_Int32   GetDialogScale  (                   ) const ;
+        bool    IsAutoMnemonic  (                   ) const;
+        sal_Int32   GetDialogScale  (                   ) const;
 
     private:
 
@@ -116,8 +116,8 @@ class SvtLocalisationOptions_Impl : public ConfigItem
 
     private:
 
-        bool    m_bAutoMnemonic     ;
-        sal_Int32   m_nDialogScale      ;
+        bool    m_bAutoMnemonic;
+        sal_Int32   m_nDialogScale;
 };
 
 //  constructor
@@ -267,8 +267,8 @@ Sequence< OUString > SvtLocalisationOptions_Impl::GetPropertyNames()
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtLocalisationOptions_Impl*    SvtLocalisationOptions::m_pDataContainer    = NULL  ;
-sal_Int32                       SvtLocalisationOptions::m_nRefCount         = 0     ;
+SvtLocalisationOptions_Impl*    SvtLocalisationOptions::m_pDataContainer    = NULL;
+sal_Int32                       SvtLocalisationOptions::m_nRefCount         = 0;
 
 //  constructor
 

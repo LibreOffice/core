@@ -35,10 +35,10 @@
 
 //  namespaces
 
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::utl;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
 
 #define ROOTNODE_SECURITY               OUString("Office.Common/Security/Scripting")
 #define DEFAULT_SECUREURL               Sequence< OUString >()
@@ -145,21 +145,21 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
         //  public interface
 
-        bool                IsReadOnly      ( SvtSecurityOptions::EOption eOption                   ) const ;
+        bool                IsReadOnly      ( SvtSecurityOptions::EOption eOption                   ) const;
 
-        Sequence< OUString >    GetSecureURLs   (                                                       ) const ;
-        void                    SetSecureURLs   (   const   Sequence< OUString >&   seqURLList          )       ;
-        inline sal_Int32        GetMacroSecurityLevel   (                                               ) const ;
-        void                    SetMacroSecurityLevel   ( sal_Int32 _nLevel                             )       ;
+        Sequence< OUString >    GetSecureURLs   (                                                       ) const;
+        void                    SetSecureURLs   (   const   Sequence< OUString >&   seqURLList          );
+        inline sal_Int32        GetMacroSecurityLevel   (                                               ) const;
+        void                    SetMacroSecurityLevel   ( sal_Int32 _nLevel                             );
 
-        inline bool         IsMacroDisabled         (                                               ) const ;
+        inline bool         IsMacroDisabled         (                                               ) const;
 
-        Sequence< SvtSecurityOptions::Certificate > GetTrustedAuthors       (                                                                                       ) const ;
-        void                                        SetTrustedAuthors       ( const Sequence< SvtSecurityOptions::Certificate >& rAuthors                           )       ;
+        Sequence< SvtSecurityOptions::Certificate > GetTrustedAuthors       (                                                                                       ) const;
+        void                                        SetTrustedAuthors       ( const Sequence< SvtSecurityOptions::Certificate >& rAuthors                           );
 
-        bool                IsOptionSet     ( SvtSecurityOptions::EOption eOption                   ) const ;
-        bool                SetOption       ( SvtSecurityOptions::EOption eOption, bool bValue  )       ;
-        bool                IsOptionEnabled ( SvtSecurityOptions::EOption eOption                   ) const ;
+        bool                IsOptionSet     ( SvtSecurityOptions::EOption eOption                   ) const;
+        bool                SetOption       ( SvtSecurityOptions::EOption eOption, bool bValue  );
+        bool                IsOptionEnabled ( SvtSecurityOptions::EOption eOption                   ) const;
 
         /*-****************************************************************************************************
             @short      return list of key names of ouer configuration management which represent our module tree
@@ -224,8 +224,8 @@ class SvtSecurityOptions_Impl : public ConfigItem
         void SetConfirmationEnabled( bool bSet );
         bool    IsExecutePlugins() const;
         void        SetExecutePlugins( bool bSet );
-        EBasicSecurityMode      GetBasicMode    (                                               ) const ;
-        void                    SetBasicMode    (           EBasicSecurityMode      eMode       )       ;
+        EBasicSecurityMode      GetBasicMode    (                                               ) const;
+        void                    SetBasicMode    (           EBasicSecurityMode      eMode       );
 };
 
 //  constructor
@@ -280,7 +280,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
 
     // Copy values from list in right order to our internal member.
     sal_Int32               nPropertyCount = seqValues.getLength();
-    for( sal_Int32 nProperty = 0 ; nProperty < nPropertyCount ; ++nProperty )
+    for( sal_Int32 nProperty = 0; nProperty < nPropertyCount; ++nProperty )
         SetProperty( nProperty, seqValues[ nProperty ], seqRO[ nProperty ] );
 
     LoadAuthors();
@@ -309,7 +309,7 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
             rValue >>= m_seqSecureURLs;
             SvtPathOptions  aOpt;
             sal_uInt32      nCount = m_seqSecureURLs.getLength();
-            for( sal_uInt32 nItem = 0 ; nItem < nCount ; ++nItem )
+            for( sal_uInt32 nItem = 0; nItem < nCount; ++nItem )
                 m_seqSecureURLs[ nItem ] = aOpt.SubstituteVariable( m_seqSecureURLs[ nItem ] );
             m_bROSecureURLs = bRO;
         }
@@ -441,7 +441,7 @@ void SvtSecurityOptions_Impl::LoadAuthors( void )
         sal_Int32               i1;
         sal_Int32               i2;
         OUString                aSep( "/" );
-        for( i1 = 0, i2 = 0 ; i1 < c1 ; ++i1 )
+        for( i1 = 0, i2 = 0; i1 < c1; ++i1 )
         {
             lAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + lAuthors[ i1 ] + aSep + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
             ++i2;
@@ -456,7 +456,7 @@ void SvtSecurityOptions_Impl::LoadAuthors( void )
         {
             comphelper::SequenceAsVector< SvtSecurityOptions::Certificate > v;
             SvtSecurityOptions::Certificate aCert( 3 );
-            for( i1 = 0, i2 = 0 ; i1 < c1 ; ++i1 )
+            for( i1 = 0, i2 = 0; i1 < c1; ++i1 )
             {
                 lValues[ i2 ] >>= aCert[ 0 ];
                 ++i2;
@@ -579,7 +579,7 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
     DBG_ASSERT( !(seqPropertyNames.getLength()!=seqValues.getLength()), "SvtSecurityOptions_Impl::Notify()\nI miss some values of configuration keys!\n" );
     // Step over list of property names and get right value from coreesponding value list to set it on internal members!
     sal_Int32               nCount = seqPropertyNames.getLength();
-    for( sal_Int32 nProperty = 0 ; nProperty < nCount ; ++nProperty )
+    for( sal_Int32 nProperty = 0; nProperty < nCount; ++nProperty )
         SetProperty( GetHandle( seqPropertyNames[ nProperty ] ), seqValues[ nProperty ], seqRO[ nProperty ] );
 
     // read set of trusted authors separately
@@ -599,7 +599,7 @@ void SvtSecurityOptions_Impl::Commit()
 
     ClearNodeSet( PROPERTYNAME_MACRO_TRUSTEDAUTHORS );
 
-    for( sal_Int32 nProperty = 0 ; nProperty < nOrgCount ; ++nProperty )
+    for( sal_Int32 nProperty = 0; nProperty < nOrgCount; ++nProperty )
     {
         switch( nProperty )
         {
@@ -611,7 +611,7 @@ void SvtSecurityOptions_Impl::Commit()
                     Sequence< OUString >    lURLs( m_seqSecureURLs );
                     SvtPathOptions          aOpt;
                     sal_Int32               nURLsCnt = lURLs.getLength();
-                    for( sal_Int32 nItem = 0 ; nItem < nURLsCnt ; ++nItem )
+                    for( sal_Int32 nItem = 0; nItem < nURLsCnt; ++nItem )
                         lURLs[ nItem ] = aOpt.UseVariable( lURLs[ nItem ] );
                     lValues[ nRealCount ] <<= lURLs;
                 }
@@ -698,7 +698,7 @@ void SvtSecurityOptions_Impl::Commit()
                     sal_Int32   nCnt = m_seqTrustedAuthors.getLength();
                     if( nCnt )
                     {
-                        for( sal_Int32 i = 0 ; i < nCnt ; ++i )
+                        for( sal_Int32 i = 0; i < nCnt; ++i )
                         {
                             OUString aPrefix(
                                 PROPERTYNAME_MACRO_TRUSTEDAUTHORS "/a"
@@ -974,8 +974,8 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtSecurityOptions_Impl*    SvtSecurityOptions::m_pDataContainer    = NULL  ;
-sal_Int32                   SvtSecurityOptions::m_nRefCount         = 0     ;
+SvtSecurityOptions_Impl*    SvtSecurityOptions::m_pDataContainer    = NULL;
+sal_Int32                   SvtSecurityOptions::m_nRefCount         = 0;
 
 SvtSecurityOptions::SvtSecurityOptions()
 {

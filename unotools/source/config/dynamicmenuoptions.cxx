@@ -31,12 +31,12 @@
 
 #include <algorithm>
 
-using namespace ::std                   ;
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::beans ;
+using namespace ::std;
+using namespace ::utl;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 
 #define ROOTNODE_MENUS                                  OUString("Office.Common/Menus/")
 #define PATHDELIMITER                                   OUString("/")
@@ -73,18 +73,18 @@ struct SvtDynMenuEntry
                     const OUString& sNewImageIdentifier ,
                     const OUString& sNewTargetName      )
         {
-            sURL                = sNewURL               ;
-            sTitle              = sNewTitle             ;
-            sImageIdentifier    = sNewImageIdentifier   ;
-            sTargetName         = sNewTargetName        ;
+            sURL                = sNewURL;
+            sTitle              = sNewTitle;
+            sImageIdentifier    = sNewImageIdentifier;
+            sTargetName         = sNewTargetName;
         }
 
     public:
-        OUString    sName               ;
-        OUString    sURL                ;
-        OUString    sTitle              ;
-        OUString    sImageIdentifier    ;
-        OUString    sTargetName         ;
+        OUString    sName;
+        OUString    sURL;
+        OUString    sTitle;
+        OUString    sImageIdentifier;
+        OUString    sTargetName;
 };
 
 /*-****************************************************************************************************************
@@ -146,33 +146,33 @@ class SvtDynMenu
             Sequence< PropertyValue >             lProperties ( PROPERTYCOUNT );
             Sequence< Sequence< PropertyValue > > lResult     ( nSetupCount+nUserCount );
             OUString                              sSeparator  ( "private:separator" );
-            OUString                              sEmpty      ;
+            OUString                              sEmpty;
             const vector< SvtDynMenuEntry >*            pList       = &lSetupEntries;
 
-            lProperties[OFFSET_URL            ].Name = PROPERTYNAME_URL             ;
-            lProperties[OFFSET_TITLE          ].Name = PROPERTYNAME_TITLE           ;
-            lProperties[OFFSET_IMAGEIDENTIFIER].Name = PROPERTYNAME_IMAGEIDENTIFIER ;
-            lProperties[OFFSET_TARGETNAME     ].Name = PROPERTYNAME_TARGETNAME      ;
+            lProperties[OFFSET_URL            ].Name = PROPERTYNAME_URL;
+            lProperties[OFFSET_TITLE          ].Name = PROPERTYNAME_TITLE;
+            lProperties[OFFSET_IMAGEIDENTIFIER].Name = PROPERTYNAME_IMAGEIDENTIFIER;
+            lProperties[OFFSET_TARGETNAME     ].Name = PROPERTYNAME_TARGETNAME;
 
             while( pList != NULL )
             {
                 for( vector< SvtDynMenuEntry >::const_iterator pItem =pList->begin();
-                                                         pItem!=pList->end()  ;
+                                                         pItem!=pList->end();
                                                          ++pItem              )
                 {
                     if( pItem->sURL == sSeparator )
                     {
-                        lProperties[OFFSET_URL              ].Value <<= sSeparator  ;
-                        lProperties[OFFSET_TITLE            ].Value <<= sEmpty      ;
-                        lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= sEmpty      ;
-                        lProperties[OFFSET_TARGETNAME       ].Value <<= sEmpty      ;
+                        lProperties[OFFSET_URL              ].Value <<= sSeparator;
+                        lProperties[OFFSET_TITLE            ].Value <<= sEmpty;
+                        lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= sEmpty;
+                        lProperties[OFFSET_TARGETNAME       ].Value <<= sEmpty;
                     }
                     else
                     {
-                        lProperties[OFFSET_URL              ].Value <<= pItem->sURL            ;
-                        lProperties[OFFSET_TITLE            ].Value <<= pItem->sTitle          ;
+                        lProperties[OFFSET_URL              ].Value <<= pItem->sURL;
+                        lProperties[OFFSET_TITLE            ].Value <<= pItem->sTitle;
                         lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= pItem->sImageIdentifier;
-                        lProperties[OFFSET_TARGETNAME       ].Value <<= pItem->sTargetName     ;
+                        lProperties[OFFSET_TARGETNAME       ].Value <<= pItem->sTargetName;
                     }
                     lResult[nStep] = lProperties;
                     ++nStep;
@@ -193,7 +193,7 @@ class SvtDynMenu
         {
             sal_Int32 nNr = 0;
             for( vector< SvtDynMenuEntry >::const_iterator pItem =lUserEntries.begin();
-                                                     pItem!=lUserEntries.end()  ;
+                                                     pItem!=lUserEntries.end();
                                                      ++pItem                    )
             {
                 if( pItem->sName.startsWith( PATHPREFIX_USER ) )
@@ -213,7 +213,7 @@ class SvtDynMenu
 
     private:
         vector< SvtDynMenuEntry > lSetupEntries;
-        vector< SvtDynMenuEntry > lUserEntries ;
+        vector< SvtDynMenuEntry > lUserEntries;
 };
 
 class SvtDynamicMenuOptions_Impl : public ConfigItem
@@ -267,7 +267,7 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        Sequence< Sequence< PropertyValue > >   GetMenu     (           EDynamicMenuType    eMenu           ) const ;
+        Sequence< Sequence< PropertyValue > >   GetMenu     (           EDynamicMenuType    eMenu           ) const;
 
     private:
 
@@ -334,9 +334,9 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
 
     private:
 
-        SvtDynMenu  m_aNewMenu              ;
-        SvtDynMenu  m_aWizardMenu           ;
-        SvtDynMenu  m_aHelpBookmarksMenu    ;
+        SvtDynMenu  m_aNewMenu;
+        SvtDynMenu  m_aWizardMenu;
+        SvtDynMenu  m_aHelpBookmarksMenu;
 };
 
 //  constructor
@@ -384,21 +384,21 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
 
     //      ... and so on ...
 
-    sal_uInt32  nItem     = 0 ;
-    sal_uInt32  nPosition = 0 ;
+    sal_uInt32  nItem     = 0;
+    sal_uInt32  nPosition = 0;
 
     // Get names/values for new menu.
     // 4 subkeys for every item!
     for( nItem=0; nItem<nNewCount; ++nItem )
     {
-        SvtDynMenuEntry   aItem                       ;
-        lValues[nPosition] >>= aItem.sURL             ;
+        SvtDynMenuEntry   aItem;
+        lValues[nPosition] >>= aItem.sURL;
         ++nPosition;
-        lValues[nPosition] >>= aItem.sTitle           ;
+        lValues[nPosition] >>= aItem.sTitle;
         ++nPosition;
-        lValues[nPosition] >>= aItem.sImageIdentifier ;
+        lValues[nPosition] >>= aItem.sImageIdentifier;
         ++nPosition;
-        lValues[nPosition] >>= aItem.sTargetName      ;
+        lValues[nPosition] >>= aItem.sTargetName;
         ++nPosition;
         m_aNewMenu.AppendSetupEntry( aItem );
     }
@@ -409,14 +409,14 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     // 4 subkeys for every item!
     for( nItem=0; nItem<nWizardCount; ++nItem )
     {
-        SvtDynMenuEntry   aItem                       ;
-        lValues[nPosition] >>= aItem.sURL             ;
+        SvtDynMenuEntry   aItem;
+        lValues[nPosition] >>= aItem.sURL;
         ++nPosition;
-        lValues[nPosition] >>= aItem.sTitle           ;
+        lValues[nPosition] >>= aItem.sTitle;
         ++nPosition;
-        lValues[nPosition] >>= aItem.sImageIdentifier ;
+        lValues[nPosition] >>= aItem.sImageIdentifier;
         ++nPosition;
-        lValues[nPosition] >>= aItem.sTargetName      ;
+        lValues[nPosition] >>= aItem.sTargetName;
         ++nPosition;
         m_aWizardMenu.AppendSetupEntry( aItem );
     }
@@ -427,14 +427,14 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     // 4 subkeys for every item!
     for( nItem=0; nItem<nHelpBookmarksCount; ++nItem )
     {
-        SvtDynMenuEntry   aItem                       ;
-        lValues[nPosition] >>= aItem.sURL             ;
+        SvtDynMenuEntry   aItem;
+        lValues[nPosition] >>= aItem.sURL;
         ++nPosition;
-        lValues[nPosition] >>= aItem.sTitle           ;
+        lValues[nPosition] >>= aItem.sTitle;
         ++nPosition;
-        lValues[nPosition] >>= aItem.sImageIdentifier ;
+        lValues[nPosition] >>= aItem.sImageIdentifier;
         ++nPosition;
-        lValues[nPosition] >>= aItem.sTargetName      ;
+        lValues[nPosition] >>= aItem.sTargetName;
         ++nPosition;
         m_aHelpBookmarksMenu.AppendSetupEntry( aItem );
     }
@@ -476,10 +476,10 @@ void SvtDynamicMenuOptions_Impl::Commit()
     ClearNodeSet( SETNODE_WIZARDMENU );
     ClearNodeSet( SETNODE_HELPBOOKMARKS );
 
-    MenuEntry                    aItem                           ;
-    OUString                    sNode                           ;
+    MenuEntry                    aItem;
+    OUString                    sNode;
     Sequence< PropertyValue >   lPropertyValues( PROPERTYCOUNT );
-    sal_uInt32                  nItem          = 0              ;
+    sal_uInt32                  nItem          = 0;
 
     // Copy "new" menu entries to save-list!
     sal_uInt32 nNewCount = m_aNewMenu.size();
@@ -491,15 +491,15 @@ void SvtDynamicMenuOptions_Impl::Commit()
         //          ...
         sNode = SETNODE_NEWMENU + PATHDELIMITER + PATHPREFIX + OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
 
-        lPropertyValues[OFFSET_URL             ].Name  =   sNode + PROPERTYNAME_URL             ;
-        lPropertyValues[OFFSET_TITLE           ].Name  =   sNode + PROPERTYNAME_TITLE           ;
-        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Name  =   sNode + PROPERTYNAME_IMAGEIDENTIFIER ;
-        lPropertyValues[OFFSET_TARGETNAME      ].Name  =   sNode + PROPERTYNAME_TARGETNAME      ;
+        lPropertyValues[OFFSET_URL             ].Name  =   sNode + PROPERTYNAME_URL;
+        lPropertyValues[OFFSET_TITLE           ].Name  =   sNode + PROPERTYNAME_TITLE;
+        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Name  =   sNode + PROPERTYNAME_IMAGEIDENTIFIER;
+        lPropertyValues[OFFSET_TARGETNAME      ].Name  =   sNode + PROPERTYNAME_TARGETNAME;
 
-        lPropertyValues[OFFSET_URL             ].Value <<= aItem.sURL                           ;
-        lPropertyValues[OFFSET_TITLE           ].Value <<= aItem.sTitle                         ;
-        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Value <<= aItem.sImageIdentifier               ;
-        lPropertyValues[OFFSET_TARGETNAME      ].Value <<= aItem.sTargetName                    ;
+        lPropertyValues[OFFSET_URL             ].Value <<= aItem.sURL;
+        lPropertyValues[OFFSET_TITLE           ].Value <<= aItem.sTitle;
+        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Value <<= aItem.sImageIdentifier;
+        lPropertyValues[OFFSET_TARGETNAME      ].Value <<= aItem.sTargetName;
 
         SetSetProperties( SETNODE_NEWMENU, lPropertyValues );
     }
@@ -514,15 +514,15 @@ void SvtDynamicMenuOptions_Impl::Commit()
         //          ...
         sNode = SETNODE_WIZARDMENU + PATHDELIMITER + PATHPREFIX + OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
 
-        lPropertyValues[OFFSET_URL             ].Name  =   sNode + PROPERTYNAME_URL             ;
-        lPropertyValues[OFFSET_TITLE           ].Name  =   sNode + PROPERTYNAME_TITLE           ;
-        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Name  =   sNode + PROPERTYNAME_IMAGEIDENTIFIER ;
-        lPropertyValues[OFFSET_TARGETNAME      ].Name  =   sNode + PROPERTYNAME_TARGETNAME      ;
+        lPropertyValues[OFFSET_URL             ].Name  =   sNode + PROPERTYNAME_URL;
+        lPropertyValues[OFFSET_TITLE           ].Name  =   sNode + PROPERTYNAME_TITLE;
+        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Name  =   sNode + PROPERTYNAME_IMAGEIDENTIFIER;
+        lPropertyValues[OFFSET_TARGETNAME      ].Name  =   sNode + PROPERTYNAME_TARGETNAME;
 
-        lPropertyValues[OFFSET_URL             ].Value <<= aItem.sURL                           ;
-        lPropertyValues[OFFSET_TITLE           ].Value <<= aItem.sTitle                         ;
-        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Value <<= aItem.sImageIdentifier               ;
-        lPropertyValues[OFFSET_TARGETNAME      ].Value <<= aItem.sTargetName                    ;
+        lPropertyValues[OFFSET_URL             ].Value <<= aItem.sURL;
+        lPropertyValues[OFFSET_TITLE           ].Value <<= aItem.sTitle;
+        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Value <<= aItem.sImageIdentifier;
+        lPropertyValues[OFFSET_TARGETNAME      ].Value <<= aItem.sTargetName;
 
         SetSetProperties( SETNODE_WIZARDMENU, lPropertyValues );
     }
@@ -537,15 +537,15 @@ void SvtDynamicMenuOptions_Impl::Commit()
         //          ...
         sNode = SETNODE_HELPBOOKMARKS + PATHDELIMITER + PATHPREFIX + OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
 
-        lPropertyValues[OFFSET_URL             ].Name  =   sNode + PROPERTYNAME_URL             ;
-        lPropertyValues[OFFSET_TITLE           ].Name  =   sNode + PROPERTYNAME_TITLE           ;
-        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Name  =   sNode + PROPERTYNAME_IMAGEIDENTIFIER ;
-        lPropertyValues[OFFSET_TARGETNAME      ].Name  =   sNode + PROPERTYNAME_TARGETNAME      ;
+        lPropertyValues[OFFSET_URL             ].Name  =   sNode + PROPERTYNAME_URL;
+        lPropertyValues[OFFSET_TITLE           ].Name  =   sNode + PROPERTYNAME_TITLE;
+        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Name  =   sNode + PROPERTYNAME_IMAGEIDENTIFIER;
+        lPropertyValues[OFFSET_TARGETNAME      ].Name  =   sNode + PROPERTYNAME_TARGETNAME;
 
-        lPropertyValues[OFFSET_URL             ].Value <<= aItem.sURL                           ;
-        lPropertyValues[OFFSET_TITLE           ].Value <<= aItem.sTitle                         ;
-        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Value <<= aItem.sImageIdentifier               ;
-        lPropertyValues[OFFSET_TARGETNAME      ].Value <<= aItem.sTargetName                    ;
+        lPropertyValues[OFFSET_URL             ].Value <<= aItem.sURL;
+        lPropertyValues[OFFSET_TITLE           ].Value <<= aItem.sTitle;
+        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Value <<= aItem.sImageIdentifier;
+        lPropertyValues[OFFSET_TARGETNAME      ].Value <<= aItem.sTargetName;
 
         SetSetProperties( SETNODE_HELPBOOKMARKS, lPropertyValues );
     }
@@ -636,10 +636,10 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
                                                                         Sequence< OUString >& lDestination ,
                                                                   const OUString&             sSetNode     )
 {
-    OUString            sFixPath                                    ;
-    vector< OUString >  lTemp                                       ;
-    sal_Int32           nSourceCount     = lSource.getLength()      ;
-    sal_Int32           nDestinationStep = lDestination.getLength() ; // start on end of current list ...!
+    OUString            sFixPath;
+    vector< OUString >  lTemp;
+    sal_Int32           nSourceCount     = lSource.getLength();
+    sal_Int32           nDestinationStep = lDestination.getLength(); // start on end of current list ...!
 
     lDestination.realloc( (nSourceCount*PROPERTYCOUNT)+nDestinationStep ); // get enough memory for copy operations after nDestination ...
 
@@ -654,26 +654,26 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
 
     // Copy sorted entries to destination and expand every item with
     // 4 supported sub properties.
-    for( vector< OUString >::const_iterator pItem =lTemp.begin() ;
-                                            pItem!=lTemp.end()   ;
+    for( vector< OUString >::const_iterator pItem =lTemp.begin();
+                                            pItem!=lTemp.end();
                                             ++pItem              )
     {
-        sFixPath  = sSetNode       ;
-        sFixPath += PATHDELIMITER  ;
-        sFixPath += *pItem         ;
-        sFixPath += PATHDELIMITER  ;
+        sFixPath  = sSetNode;
+        sFixPath += PATHDELIMITER;
+        sFixPath += *pItem;
+        sFixPath += PATHDELIMITER;
 
-        lDestination[nDestinationStep]  = sFixPath                      ;
-        lDestination[nDestinationStep] += PROPERTYNAME_URL              ;
+        lDestination[nDestinationStep]  = sFixPath;
+        lDestination[nDestinationStep] += PROPERTYNAME_URL;
         ++nDestinationStep;
-        lDestination[nDestinationStep]  = sFixPath                      ;
-        lDestination[nDestinationStep] += PROPERTYNAME_TITLE            ;
+        lDestination[nDestinationStep]  = sFixPath;
+        lDestination[nDestinationStep] += PROPERTYNAME_TITLE;
         ++nDestinationStep;
-        lDestination[nDestinationStep]  = sFixPath                      ;
-        lDestination[nDestinationStep] += PROPERTYNAME_IMAGEIDENTIFIER  ;
+        lDestination[nDestinationStep]  = sFixPath;
+        lDestination[nDestinationStep] += PROPERTYNAME_IMAGEIDENTIFIER;
         ++nDestinationStep;
-        lDestination[nDestinationStep]  = sFixPath                      ;
-        lDestination[nDestinationStep] += PROPERTYNAME_TARGETNAME       ;
+        lDestination[nDestinationStep]  = sFixPath;
+        lDestination[nDestinationStep] += PROPERTYNAME_TARGETNAME;
         ++nDestinationStep;
     }
 }
@@ -682,8 +682,8 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtDynamicMenuOptions_Impl*     SvtDynamicMenuOptions::m_pDataContainer = NULL  ;
-sal_Int32                       SvtDynamicMenuOptions::m_nRefCount      = 0     ;
+SvtDynamicMenuOptions_Impl*     SvtDynamicMenuOptions::m_pDataContainer = NULL;
+sal_Int32                       SvtDynamicMenuOptions::m_nRefCount      = 0;
 
 //  constructor
 

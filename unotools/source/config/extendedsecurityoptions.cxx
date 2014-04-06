@@ -31,10 +31,10 @@
 
 #include "itemholder1.hxx"
 
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::utl;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
 
 #define ROOTNODE_SECURITY               OUString("Office.Security")
 
@@ -286,8 +286,8 @@ Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetPropertyNames()
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtExtendedSecurityOptions_Impl*    SvtExtendedSecurityOptions::m_pDataContainer    = NULL  ;
-sal_Int32                           SvtExtendedSecurityOptions::m_nRefCount         = 0     ;
+SvtExtendedSecurityOptions_Impl*    SvtExtendedSecurityOptions::m_pDataContainer    = NULL;
+sal_Int32                           SvtExtendedSecurityOptions::m_nRefCount         = 0;
 
 //  constructor
 

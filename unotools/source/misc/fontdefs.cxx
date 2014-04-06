@@ -377,11 +377,11 @@ void GetEnglishSearchFontName( OUString& rName )
                 // Upper to Lower
                 if ( (c >= 'A') && (c <= 'Z') )
                     c += 'a' - 'A';
-                //rName[ i ] = c ;
+                //rName[ i ] = c;
 
-                OUStringBuffer aTmpStr( rName.getStr() ) ;
-                aTmpStr[ i ] = c ;
-                rName = aTmpStr.makeStringAndClear() ;
+                OUStringBuffer aTmpStr( rName.getStr() );
+                aTmpStr[ i ] = c;
+                rName = aTmpStr.makeStringAndClear();
 
            }
             else
@@ -397,20 +397,20 @@ void GetEnglishSearchFontName( OUString& rName )
             if ( (c >= 'A') && (c <= 'Z') )
             {
                 c += 'a' - 'A';
-                //rName[ i ] = c ;
+                //rName[ i ] = c;
 
-                OUStringBuffer aTmpStr( rName.getStr() ) ;
-                aTmpStr[ i ] = c ;
-                rName = aTmpStr.makeStringAndClear() ;
+                OUStringBuffer aTmpStr( rName.getStr() );
+                aTmpStr[ i ] = c;
+                rName = aTmpStr.makeStringAndClear();
 
             }
             else if( ((c < '0') || (c > '9')) && (c != ';') ) // not 0-9 or semicolon
             {
                 // Remove white spaces and special characters
 
-                OUStringBuffer aTmpStr( rName.getStr() ) ;
+                OUStringBuffer aTmpStr( rName.getStr() );
                 aTmpStr.remove(i,1);
-                rName = aTmpStr.makeStringAndClear() ;
+                rName = aTmpStr.makeStringAndClear();
 
                 nLen--;
                 continue;
@@ -436,7 +436,7 @@ void GetEnglishSearchFontName( OUString& rName )
 
         FontNameDictionary::const_iterator it = aDictionary.find( rName );
         if( it != aDictionary.end() )
-            rName = OUString::createFromAscii ( it->second ) ;
+            rName = OUString::createFromAscii ( it->second );
     }
 }
 
@@ -503,7 +503,7 @@ static void ImplAppendFontToken( OUString& rName, const OUString& rNewToken )
 {
     if ( !rName.isEmpty() )
     {
-        rName += ";" ;
+        rName += ";";
     }
     rName += rNewToken;
 }

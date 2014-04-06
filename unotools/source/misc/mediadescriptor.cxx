@@ -638,7 +638,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
     // (if its allowed to do so).
     // But handle errors in a "hidden mode". Because
     // we try it readonly later - if read/write isnt an option.
-    css::uno::Reference< css::io::XStream >      xStream     ;
+    css::uno::Reference< css::io::XStream >      xStream;
     css::uno::Reference< css::io::XInputStream > xInputStream;
 
     bool bReadOnly = false;

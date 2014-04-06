@@ -32,12 +32,12 @@
 #include <algorithm>
 #include <boost/unordered_map.hpp>
 
-using namespace ::std                   ;
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::beans ;
+using namespace ::std;
+using namespace ::utl;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 
 #define ROOTNODE_CMDOPTIONS                             OUString("Office.Commands/Execute")
 #define PATHDELIMITER                                   OUString("/")
@@ -209,8 +209,8 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
 
     // Copy values from list in right order to ouer internal member.
     // Attention: List for names and values have an internal construction pattern!
-    sal_Int32   nItem     = 0 ;
-    OUString    sCmd          ;
+    sal_Int32   nItem     = 0;
+    OUString    sCmd;
 
     // Get names/values for disabled commands.
     for( nItem=0; nItem < lNames.getLength(); ++nItem )
@@ -255,8 +255,8 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
 
     // Copy values from list in right order to ouer internal member.
     // Attention: List for names and values have an internal construction pattern!
-    sal_Int32   nItem     = 0 ;
-    OUString    sCmd          ;
+    sal_Int32   nItem     = 0;
+    OUString    sCmd;
 
     m_aDisabledCommands.Clear();
 
@@ -271,7 +271,7 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
     // dont forget to update all existing frames and her might cached dispatch objects!
     // But look for already killed frames. We hold weak references instead of hard ones ...
     for (SvtFrameVector::const_iterator pIt  = m_lFrames.begin();
-                                        pIt != m_lFrames.end()  ;
+                                        pIt != m_lFrames.end();
                                       ++pIt                     )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame(pIt->get(), ::com::sun::star::uno::UNO_QUERY);
@@ -358,8 +358,8 @@ Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
-SvtCommandOptions_Impl*     SvtCommandOptions::m_pDataContainer = NULL  ;
-sal_Int32                   SvtCommandOptions::m_nRefCount      = 0     ;
+SvtCommandOptions_Impl*     SvtCommandOptions::m_pDataContainer = NULL;
+sal_Int32                   SvtCommandOptions::m_nRefCount      = 0;
 
 //  constructor
 
