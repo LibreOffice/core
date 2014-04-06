@@ -231,9 +231,6 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
             @seealso    baseclass ConfigItem
 
             @param      "lPropertyNames" is the list of properties which should be updated.
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& lPropertyNames ) SAL_OVERRIDE;
@@ -244,11 +241,6 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
                         and should always called in our destructor to guarantee consistency of config data.
 
             @seealso    baseclass ConfigItem
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Commit() SAL_OVERRIDE;
@@ -259,13 +251,6 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
             @short      base implementation of public interface for "SvtCompatibilityOptions"!
             @descr      These class is used as static member of "SvtCompatibilityOptions" ...
                         => The code exist only for one time and isn't duplicated for every instance!
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         void                                    Clear();
@@ -304,29 +289,18 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
             @short      return list of key names of our configuration management which represent one module tree
             @descr      These methods return the current list of key names! We need it to get needed values from our
                         configuration management and support dynamical menu item lists!
-
-            @seealso    -
-
-            @param      -
             @return     A list of configuration key names is returned.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         Sequence< OUString > impl_GetPropertyNames( Sequence< OUString >& rItems );
 
         /*-****************************************************************************************************
             @short      expand the list for all well known properties to destination
-            @descr      -
-            @attention  -
-
             @seealso    method impl_GetPropertyNames()
 
             @param      "lSource"      ,   original list
             @param      "lDestination" ,   destination of operation
             @return     A list of configuration key names is returned.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         void impl_ExpandPropertyNames( const Sequence< OUString >& lSource,

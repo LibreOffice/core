@@ -294,9 +294,6 @@ class SvtViewOptionsBase_Impl
 
     @seealso        baseclass ::utl::ConfigItem
     @seealso        method Notify()
-
-    @param          -
-    @return         -
 *//*-*************************************************************************************************************/
 SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const OUString& sList )
         :   m_sListName  ( sList )    // we must know, which view type we must support
@@ -336,9 +333,6 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const OUString& sList )
     @seealso        method IsModified()
     @seealso        method SetModified()
     @seealso        method Commit()
-
-    @param          -
-    @return         -
 *//*-*************************************************************************************************************/
 SvtViewOptionsBase_Impl::~SvtViewOptionsBase_Impl()
 {
@@ -422,9 +416,6 @@ bool SvtViewOptionsBase_Impl::Delete( const OUString& sName )
     @descr          Follow methods support read/write access to all cache view items.
 
     @seealso        member m_sList
-
-    @param          -
-    @return         -
 *//*-*************************************************************************************************************/
 OUString SvtViewOptionsBase_Impl::GetWindowState( const OUString& sName )
 {
@@ -708,7 +699,6 @@ void SvtViewOptionsBase_Impl::SetVisible( const OUString& sName    ,
     @seealso        method impl_writeDirectProp()
 
     @param          "sNode", name of new entry
-    @return         -
 *//*-*************************************************************************************************************/
 css::uno::Reference< css::uno::XInterface > SvtViewOptionsBase_Impl::impl_getSetNode( const OUString& sNode           ,
                                                                                             bool         bCreateIfMissing)

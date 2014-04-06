@@ -60,9 +60,6 @@ class SvtFontOptions_Impl : public ConfigItem
             @seealso    baseclass ConfigItem
 
             @param      "seqPropertyNames" is the list of properties which should be updated.
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames ) SAL_OVERRIDE;
@@ -73,11 +70,6 @@ class SvtFontOptions_Impl : public ConfigItem
                         and should always called in our destructor to guarantee consistency of config data.
 
             @seealso    baseclass ConfigItem
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Commit() SAL_OVERRIDE;
@@ -86,13 +78,6 @@ class SvtFontOptions_Impl : public ConfigItem
             @short      access method to get internal values
             @descr      These method give us a chance to regulate acces to ouer internal values.
                         It's not used in the moment - but it's possible for the feature!
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         bool    IsFontHistoryEnabled        (                   ) const;
@@ -107,13 +92,7 @@ class SvtFontOptions_Impl : public ConfigItem
             @short      return list of key names of ouer configuration management which represent oue module tree
             @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
-
-            @seealso    -
-
-            @param      -
             @return     A list of needed configuration keys is returned.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         static Sequence< OUString > impl_GetPropertyNames();

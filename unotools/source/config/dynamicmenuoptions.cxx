@@ -232,9 +232,6 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
             @seealso    baseclass ConfigItem
 
             @param      "lPropertyNames" is the list of properties which should be updated.
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& lPropertyNames ) SAL_OVERRIDE;
@@ -245,11 +242,6 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
                         and should always called in our destructor to guarantee consistency of config data.
 
             @seealso    baseclass ConfigItem
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Commit() SAL_OVERRIDE;
@@ -258,13 +250,6 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
             @short      base implementation of public interface for "SvtDynamicMenuOptions"!
             @descr      These class is used as static member of "SvtDynamicMenuOptions" ...
                         => The code exist only for one time and isn't duplicated for every instance!
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         Sequence< Sequence< PropertyValue > >   GetMenu     (           EDynamicMenuType    eMenu           ) const;
@@ -275,14 +260,9 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
             @short      return list of key names of our configuration management which represent oue module tree
             @descr      These methods return the current list of key names! We need it to get needed values from our
                         configuration management and support dynamical menu item lists!
-
-            @seealso    -
-
             @param      "nNewCount"     ,   returns count of menu entries for "new"
             @param      "nWizardCount"  ,   returns count of menu entries for "wizard"
             @return     A list of configuration key names is returned.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         Sequence< OUString > impl_GetPropertyNames( sal_uInt32& nNewCount, sal_uInt32& nWizardCount, sal_uInt32& nHelpBookmarksCount );
@@ -322,8 +302,6 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
             @param      "lDestination" ,   destination of operation
             @param      "sSetNode"     ,   name of configuration set to build complete path
             @return     A list of configuration key names is returned.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         void impl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource      ,

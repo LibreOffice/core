@@ -281,8 +281,6 @@ typedef FactoryInfo   FactoryInfoList[FACTORYCOUNT];
     @descr          These class is used as a static data container of class SvtModuleOptions. The hold it by using
                     a refcount and make it threadsafe by using an osl mutex. So we don't must do anything for that.
                     We can implement pure functionality to read/write configuration data only.
-
-    @implements     -
     @base           ConfigItem
 
     @devstatus      ready to use
@@ -347,11 +345,6 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
 
     @seealso    baseclass ConfigItem
     @seealso    method impl_Read()
-
-    @param      -
-    @return     -
-
-    @onerror    -
     @threadsafe no
 *//*-*************************************************************************************************************/
 SvtModuleOptions_Impl::SvtModuleOptions_Impl()
@@ -380,11 +373,6 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
                 of this class modify internal member list m_lFactories! Otherwise Commit() will never be called!!!
 
     @seealso    baseclass ConfigItem
-
-    @param      -
-    @return     -
-
-    @onerror    -
     @threadsafe no
 *//*-*************************************************************************************************************/
 SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
@@ -409,9 +397,6 @@ SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
     @seealso    method impl_Read()
 
     @param      "lNames" is the list of set node entries which should be updated.
-    @return     -
-
-    @onerror    -
     @threadsafe no
 *//*-*************************************************************************************************************/
 void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< OUString >& )
@@ -429,11 +414,6 @@ void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< OUString >& )
                 are the only and right ones.
 
     @seealso    baseclass ConfigItem
-
-    @param      -
-    @return     -
-
-    @onerror    -
     @threadsafe no
 *//*-*****************************************************************************************************/
 void SvtModuleOptions_Impl::Commit()
@@ -480,9 +460,6 @@ void SvtModuleOptions_Impl::Commit()
     @attention  Some people use any value as enum ... but we support in header specified values only!
                 We use it directly as index in our internal list. If enum value isn't right - we crash with an
                 "index out of range"!!! Please use me right - otherwise there is no guarantee.
-
-    @seealso    -
-
     @param      "eModule"  , index in list - specify module
     @param      "eFactory" , index in list - specify factory
     @param      "sTemplate", set new standard template for these factory
@@ -732,8 +709,6 @@ void SvtModuleOptions_Impl::SetFactoryDefaultFilter(       SvtModuleOptions::EFa
                 These full expanded list should be used to get values of this properties.
 
     @seealso    ctor
-
-    @param      -
     @return     List of all relative addressed properties of given set entry names.
 
     @onerror    List will be empty.
@@ -769,9 +744,6 @@ css::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const
                             If it matches with these factory - break operation and return true AND right set parameter.
                             Otherwise try next one and so on. If no factory was found return false. Out parameter eFactory
                             is set to last tried value but shouldn't be used! Because our return value is false!
-
-    @seealso    -
-
     @param      "sLongName" , long name of factory, which should be classified
     @return     "eFactory"  , right enum value, which match given long name
                 and true for successfully classification, false otherwise
@@ -853,8 +825,6 @@ bool SvtModuleOptions_Impl::ClassifyFactoryByName( const OUString& sName, SvtMod
     @seealso    method Notify()
 
     @param      "lFactories" is the list of set node entries which should be readed.
-    @return     -
-
     @onerror    We do nothing.
     @threadsafe no
 *//*-*************************************************************************************************************/
@@ -964,11 +934,6 @@ sal_Int32               SvtModuleOptions::m_nRefCount       = 0;
                 container and create a static mutex, which is used for threadsafe code in further time of this object.
 
     @seealso    method impl_GetOwnStaticMutex()
-
-    @param      -
-    @return     -
-
-    @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
 SvtModuleOptions::SvtModuleOptions()
@@ -1000,11 +965,6 @@ SvtModuleOptions::~SvtModuleOptions()
                 They are threadsafe. All calls are forwarded to impl-data-container. See there for further information!
 
     @seealso    method impl_GetOwnStaticMutex()
-
-    @param      -
-    @return     -
-
-    @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
 bool SvtModuleOptions::IsModuleInstalled( EModule eModule ) const
@@ -1127,13 +1087,7 @@ namespace
     @descr      These class is threadsafe.
                 We create a static mutex only for one time and use it to protect our refcount and container
                 member!
-
-    @seealso    -
-
-    @param      -
     @return     A reference to a static mutex member.
-
-    @onerror    -
     @threadsafe yes
 *//*-*****************************************************************************************************/
 ::osl::Mutex& SvtModuleOptions::impl_GetOwnStaticMutex()
