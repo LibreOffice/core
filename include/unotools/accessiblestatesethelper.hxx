@@ -33,14 +33,11 @@
 
 class AccessibleStateSetHelperImpl;
 
-
 //= XAccessibleStateSet helper classes
-
 
 //... namespace utl .......................................................
 namespace utl
 {
-
 
 /** @descr
         This base class provides an implementation of the
@@ -152,7 +149,6 @@ private:
     /// The implementation of this helper interface.
     AccessibleStateSetHelperImpl*   mpHelperImpl;
 };
-
 
 }
 //... namespace utl .......................................................

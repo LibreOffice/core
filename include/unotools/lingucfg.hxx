@@ -162,7 +162,6 @@ public:
     SvtLinguConfig();
     virtual ~SvtLinguConfig();
 
-
     // borrowed from utl::ConfigItem
 
     com::sun::star::uno::Sequence< OUString >

@@ -118,21 +118,15 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
         void            SetFactoryDefaultFilter   (       EFactory         eFactory   ,
                                                     const OUString& sFilter    );
 
-
-
         /** @short  return the corresponding application ID for the given
                     document service name.
          */
         static EFactory ClassifyFactoryByServiceName(const OUString& sName);
 
-
-
         /** @short  return the corresponding application ID for the given
                     short name.
          */
         static EFactory ClassifyFactoryByShortName(const OUString& sName);
-
-
 
         /** @short  return the corresponding application ID for the given properties.
 
@@ -154,8 +148,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
          */
         static EFactory ClassifyFactoryByURL(const OUString&                                                           sURL            ,
                                              const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lMediaDescriptor);
-
-
 
         /** @short  return the corresponding application ID for the given properties.
 

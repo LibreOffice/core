@@ -20,7 +20,6 @@
 #ifndef INCLUDED_UNOTOOLS_LINGUPROPS_HXX
 #define INCLUDED_UNOTOOLS_LINGUPROPS_HXX
 
-
 // UNO property names for general options
 #define UPN_IS_GERMAN_PRE_REFORM            "IsGermanPreReform"     /*! deprecated #i91949 !*/
 #define UPN_IS_USE_DICTIONARY_LIST          "IsUseDictionaryList"

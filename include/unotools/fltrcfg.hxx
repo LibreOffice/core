@@ -19,8 +19,6 @@
 #ifndef INCLUDED_UNOTOOLS_FLTRCFG_HXX
 #define INCLUDED_UNOTOOLS_FLTRCFG_HXX
 
-
-
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/configitem.hxx>
 

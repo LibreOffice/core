@@ -64,7 +64,6 @@ const sal_Int32 nCharClassNumericTypeMask =
     ::com::sun::star::i18n::KCharacterType::PRINTABLE |
     ::com::sun::star::i18n::KCharacterType::BASE_FORM;
 
-
 class UNOTOOLS_DLLPUBLIC CharClass : private boost::noncopyable
 {
     LanguageTag                 maLanguageTag;
@@ -88,7 +87,6 @@ public:
 
     /// get current Locale
     const LanguageTag& getLanguageTag() const;
-
 
     /// isdigit() on ascii values
     SAL_DEPRECATED("Use rtl::isAsciiDigit instead")
@@ -159,7 +157,6 @@ public:
             nCharClassNumericTypeMask)) == 0);
     }
 
-
     // Wrapper implementations of class CharacterClassification
 
     OUString uppercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
@@ -201,7 +198,6 @@ public:
                                     const OUString& userDefinedCharactersStart,
                                     sal_Int32 nContCharFlags,
                                     const OUString& userDefinedCharactersCont ) const;
-
 
     // Functionality of class International methods
 

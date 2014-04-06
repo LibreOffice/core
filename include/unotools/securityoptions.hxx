@@ -218,9 +218,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
         bool IsConfirmationEnabled() const;
         void SetConfirmationEnabled( bool bSet );
 
-
     //  private methods
-
 
     private:
 
@@ -240,9 +238,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
 
-
     //  private member
-
 
     private:
 

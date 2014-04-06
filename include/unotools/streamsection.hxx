@@ -74,5 +74,4 @@ public:
 
 #endif // INCLUDED_UNOTOOLS_STREAMSECTION_HXX
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

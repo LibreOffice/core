@@ -97,9 +97,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtExtendedSecurityOptions : public utl
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
 
-
     //  private member
-
 
     private:
 

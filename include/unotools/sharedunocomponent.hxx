@@ -35,8 +35,6 @@ namespace com { namespace sun { namespace star {
 namespace utl
 {
 
-
-
     //= DisposableComponent
 
     /** is a class which controls lifetime of an UNO component via ->XComponent::dispose
@@ -70,7 +68,6 @@ namespace utl
         DisposableComponent( const DisposableComponent& );              // never implemented
         DisposableComponent& operator=( const DisposableComponent& );   // never implemented
     };
-
 
     //= CloseableComponent
 
@@ -112,7 +109,6 @@ namespace utl
         CloseableComponent( const CloseableComponent& );                // never implemented
         CloseableComponent& operator=( const CloseableComponent& );     // never implemented
     };
-
 
     //= SharedUNOComponent
 
@@ -236,13 +232,11 @@ namespace utl
         }
     };
 
-
     template < class INTERFACE, class COMPONENT >
     INTERFACE* SAL_CALL SharedUNOComponent< INTERFACE, COMPONENT >::operator->() const
     {
         return m_xTypedComponent.operator->();
     }
-
 
     // assignments
     template < class INTERFACE, class COMPONENT >
@@ -251,7 +245,6 @@ namespace utl
         m_pComponent.reset( _eMode == TakeOwnership ? new COMPONENT( _rxComponent ) : NULL );
         m_xTypedComponent = _rxComponent;
     }
-
 
     // comparison operators
     template < class INTERFACE, class COMPONENT >
@@ -266,7 +259,6 @@ namespace utl
         return _rLHS.getTyped() == _rRHS;
     }
 
-
     // conversion to Any
     template < class INTERFACE, class COMPONENT >
     inline void SAL_CALL operator <<= ( ::com::sun::star::uno::Any & rAny, const SharedUNOComponent< INTERFACE, COMPONENT >& value ) SAL_THROW(())
@@ -274,13 +266,11 @@ namespace utl
         rAny <<= value.getTyped();
     }
 
-
     template < class INTERFACE, class COMPONENT >
     inline ::com::sun::star::uno::Any SAL_CALL makeAny( const SharedUNOComponent< INTERFACE, COMPONENT >& value ) SAL_THROW(())
     {
         return makeAny( value.getTyped() );
     }
-
 
     template < class INTERFACE, class COMPONENT >
     void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
@@ -288,13 +278,11 @@ namespace utl
         reset( ::com::sun::star::uno::Reference< INTERFACE >( _pInterface, _queryThrow ), TakeOwnership );
     }
 
-
     template < class INTERFACE, class COMPONENT >
     void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::BaseReference & _rRef, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
     {
         reset( ::com::sun::star::uno::Reference< INTERFACE >( _rRef, _queryThrow ), TakeOwnership );
     }
-
 
     template < class INTERFACE, class COMPONENT >
     void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
@@ -302,20 +290,17 @@ namespace utl
         reset( ::com::sun::star::uno::Reference< INTERFACE >( _rAny, _queryThrow ), TakeOwnership );
     }
 
-
     template < class INTERFACE, class COMPONENT >
     void SharedUNOComponent< INTERFACE, COMPONENT >::set( const INTERFACE* _pInterface, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
     {
         reset( ::com::sun::star::uno::Reference< INTERFACE >( _pInterface, _setThrow ), TakeOwnership );
     }
 
-
     template < class INTERFACE, class COMPONENT >
     void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::Reference< INTERFACE >& _rRef, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
     {
         reset( ::com::sun::star::uno::Reference< INTERFACE >( _rRef, _setThrow ), TakeOwnership );
     }
-
 
     template < class INTERFACE, class COMPONENT >
     void SharedUNOComponent< INTERFACE, COMPONENT >::set( const SharedUNOComponent& _rComp, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
@@ -325,14 +310,12 @@ namespace utl
         m_xTypedComponent.set( m_xTypedComponent, _setThrow );
     }
 
-
     template < class INTERFACE, class COMPONENT >
     bool SharedUNOComponent< INTERFACE, COMPONENT >::set( ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_Query _query )
     {
         reset( ::com::sun::star::uno::Reference< INTERFACE >( _pInterface, _query ) );
         return is();
     }
-
 
     template < class INTERFACE, class COMPONENT >
     bool SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::BaseReference& _rRef, ::com::sun::star::uno::UnoReference_Query _query )
@@ -341,7 +324,6 @@ namespace utl
         return is();
     }
 
-
     template < class INTERFACE, class COMPONENT >
     bool SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_Query _query )
     {
@@ -349,9 +331,7 @@ namespace utl
         return is();
     }
 
-
 }   // namespace utl
-
 
 #endif // INCLUDED_UNOTOOLS_SHAREDUNOCOMPONENT_HXX
 

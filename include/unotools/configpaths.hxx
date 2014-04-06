@@ -23,7 +23,6 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-
 namespace utl
 {
 
@@ -56,7 +55,6 @@ namespace utl
                                             OUString& _rsOutPath,
                                             OUString& _rsLocalName);
 
-
     /** extract the first nodename from a configuration path.
 
         @param _sInPath
@@ -76,7 +74,6 @@ namespace utl
     */
     UNOTOOLS_DLLPUBLIC OUString extractFirstFromConfigurationPath(
         OUString const& _sInPath, OUString* _sOutPath = 0);
-
 
     /** check whether a path is to a nested node with respect to a parent path.
 
@@ -100,7 +97,6 @@ namespace utl
     */
     bool isPrefixOfConfigurationPath(OUString const& _sNestedPath,
                                          OUString const& _sPrefixPath);
-
 
     /** get the relative path to a nested node with respect to a parent path.
 
@@ -126,7 +122,6 @@ namespace utl
     UNOTOOLS_DLLPUBLIC OUString dropPrefixFromConfigurationPath(OUString const& _sNestedPath,
                                                     OUString const& _sPrefixPath);
 
-
     /** Create a one-level relative configuration path from a set element name
         without a known set element type.
 
@@ -140,7 +135,6 @@ namespace utl
 
     */
     UNOTOOLS_DLLPUBLIC OUString wrapConfigurationElementName(OUString const& _sElementName);
-
 
     /** Create a one-level relative configuration path from a set element name
         and a known set element type.
@@ -161,9 +155,7 @@ namespace utl
     OUString wrapConfigurationElementName(OUString const& _sElementName,
                                                  OUString const& _sTypeName);
 
-
 }   // namespace utl
-
 
 #endif // INCLUDED_UNOTOOLS_CONFIGPATHS_HXX
 

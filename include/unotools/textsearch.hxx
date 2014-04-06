@@ -39,10 +39,8 @@ namespace com {
     }
 }
 
-
 namespace utl
 {
-
 
 // Utility class for searching
 class UNOTOOLS_DLLPUBLIC SearchParam
@@ -87,7 +85,6 @@ public:
     bool            IsCaseSensitive() const     { return m_bCaseSense; }
     bool            IsSrchInSelection() const   { return m_bSrchInSel; }
     bool            IsSrchWordOnly() const      { return m_bWordOnly; }
-
 
     void SetSrchStr( const OUString& rStr )     { sSrchStr = rStr; }
     void SetReplaceStr( const OUString& rStr )  { sReplaceStr = rStr; }
@@ -173,9 +170,7 @@ public:
 
 };
 
-
 }   // namespace utl
-
 
 #endif
 

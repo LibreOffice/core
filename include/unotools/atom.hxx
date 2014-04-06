@@ -51,7 +51,6 @@ namespace utl {
         const OUString& getString( int ) const;
     };
 
-
     class UNOTOOLS_DLLPUBLIC MultiAtomProvider
     {
         ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > > m_aAtomLists;

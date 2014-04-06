@@ -34,14 +34,11 @@
 
 class AccessibleRelationSetHelperImpl;
 
-
 //= XAccessibleRelationSet helper classes
-
 
 //... namespace utl .......................................................
 namespace utl
 {
-
 
 /** @descr
         This base class provides an implementation of the
@@ -144,7 +141,6 @@ private:
     /// The implementation of this helper interface.
     AccessibleRelationSetHelperImpl*    mpHelperImpl;
 };
-
 
 }
 //... namespace utl .......................................................

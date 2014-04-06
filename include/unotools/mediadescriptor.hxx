@@ -50,7 +50,6 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
 {
     public:
 
-
         /** @short  these methods can be used to get the different property names
                     as static const OUString values.
 
@@ -100,7 +99,6 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         static const OUString& PROP_VIEWONLY();
         static const OUString& PROP_DOCUMENTBASEURL();
 
-
     // interface
     public:
 
@@ -112,7 +110,6 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
          */
         MediaDescriptor();
         MediaDescriptor(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lSource);
-
 
         /** @short  it checks if the descriptor already has a valid
                     InputStream item and creates a new one, if not.
@@ -131,7 +128,6 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
          */
         bool addInputStream();
 
-
         /** @short  it checks if the descriptor already has a valid
                     InputStream item and creates a new one, if not.
 
@@ -149,7 +145,6 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
                     be created as new item. FALSE otherwise.
          */
         bool addInputStreamOwnLock();
-
 
         /** @short  it checks if the descriptor describes a readonly stream.
 
@@ -170,7 +165,6 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
          */
         bool isStreamReadOnly() const;
 
-
         /** Returns a value from the sequence contained in the property
             'ComponentData' of this media descriptor.
 
@@ -184,7 +178,6 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
          */
         ::com::sun::star::uno::Any getComponentDataEntry(
             const OUString& rName ) const;
-
 
         /** Inserts a value into the sequence contained in the property
             'ComponentData' of the media descriptor.
@@ -204,7 +197,6 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         void setComponentDataEntry(
             const OUString& rName,
             const ::com::sun::star::uno::Any& rValue );
-
 
         /** Removes a value from the sequence contained in the property
             'ComponentData' of the media descriptor.
@@ -265,10 +257,8 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             comphelper::DocPasswordRequestType eRequestType,
             const ::std::vector< OUString >* pDefaultPasswords = 0 );
 
-
     // helper
     private:
-
 
         /** @short  tries to open a stream by using the given PostData stream.
 
@@ -292,7 +282,6 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         SAL_DLLPRIVATE bool impl_openStreamWithPostData(
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& _rxPostData
             )   throw(::com::sun::star::uno::RuntimeException);
-
 
         /** @short  tries to open a stream by using the given URL.
 
@@ -319,7 +308,6 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             const OUString& sURL,
             bool bLockFile
             ) throw(::com::sun::star::uno::RuntimeException);
-
 
         /** @short  it checks if the descriptor already has a valid
                     InputStream item and creates a new one, if not.

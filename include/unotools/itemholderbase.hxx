@@ -25,7 +25,6 @@
 
 namespace utl { namespace detail { class Options; } }
 
-
 struct ItemHolderMutexBase
 {
     ::osl::Mutex m_aLock;

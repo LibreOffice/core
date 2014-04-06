@@ -26,9 +26,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <unotools/options.hxx>
 
-
 //  types, enums, ...
-
 
 enum CompatibilityOptions
 {
@@ -65,9 +63,7 @@ enum CompatibilityOptions
 
 #define COMPATIBILITY_DEFAULT_NAME                          OUString( "_default" )
 
-
 //  forward declarations
-
 
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
@@ -93,12 +89,9 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 
     //  public methods
 
-
     public:
 
-
         //  constructor / destructor
-
 
         /*-****************************************************************************************************
             @short      standard constructor and destructor
@@ -119,9 +112,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
          SvtCompatibilityOptions();
         virtual ~SvtCompatibilityOptions();
 
-
         //  interface
-
 
         /*-****************************************************************************************************
             @short      clear complete specified list
@@ -194,9 +185,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
         bool        IsConsiderWrappingStyle() const;
         bool        IsExpandWordSpace() const;
 
-
     //  private methods
-
 
     private:
 
@@ -216,9 +205,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
-
     //  private member
-
 
     private:
 

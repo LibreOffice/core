@@ -39,7 +39,6 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-
 class UNOTOOLS_DLLPUBLIC CalendarWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCalendar3 >   xC;
@@ -51,7 +50,6 @@ public:
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext
                                     );
                                 ~CalendarWrapper();
-
 
     // wrapper implementations of XCalendar
 
@@ -67,7 +65,6 @@ public:
     void setLocalDateTime( double nTimeInDays );
     /// convenience method to get local date/time
     double getLocalDateTime() const;
-
 
     // wrapper implementations of XCalendar
 
@@ -87,11 +84,9 @@ public:
         fields DST_OFFSET and DST_OFFSET_SECOND_MILLIS into account. */
     sal_Int32 getDSTOffsetInMillis() const;
 
-
     // wrapper implementations of XExtendedCalendar
 
     OUString getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) const;
-
 
     // wrapper implementations of XCalendar3
 
@@ -100,7 +95,6 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getMonths() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getGenitiveMonths() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getPartitiveMonths() const;
-
 
     // convenience methods
 

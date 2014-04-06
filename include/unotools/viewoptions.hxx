@@ -29,9 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-
 //  forward declarations
-
 
 class SvtViewOptionsBase_Impl;
 
@@ -108,12 +106,9 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
 
     //  public methods
 
-
     public:
 
-
         //  constructor / destructor
-
 
         /*-****************************************************************************************************
             @short      standard constructor and destructor
@@ -149,9 +144,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         static void AcquireOptions();
         static void ReleaseOptions();
 
-
         //  interface
-
 
         /*-****************************************************************************************************
             @short      use it to get information about existing entries in configuration
@@ -258,9 +251,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         void                       SetUserItem( const OUString&            sName  ,
                                                 const ::com::sun::star::uno::Any& aValue );
 
-
     //  private methods
-
 
     private:
 
@@ -280,9 +271,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
-
     //  private member
-
 
     private:
 

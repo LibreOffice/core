@@ -109,7 +109,6 @@ public:
 
     sal_Int32 compareString( const OUString& rStr1, const OUString& rStr2 ) const;
 
-
     // helpers
 
     /** If two strings are really equal as per this translation, and not just

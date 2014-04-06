@@ -157,7 +157,6 @@ private:
     typedef boost::unordered_set< OUString, OUStringHash > UniqueSubstHash;
     mutable UniqueSubstHash maSubstHash;
 
-
     void fillSubstVector( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
                           const OUString& rType,
                           std::vector< OUString >& rSubstVector ) const;

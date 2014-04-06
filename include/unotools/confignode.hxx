@@ -33,11 +33,8 @@ namespace comphelper
     class ComponentContext;
 }
 
-
 namespace utl
 {
-
-
 
     //= OConfigurationNode
 
@@ -178,7 +175,6 @@ namespace utl
         /// invalidate the object
         virtual void clear() throw();
 
-
         // meta information about the node
 
         /// checks whether or not the object represents a set node.
@@ -210,7 +206,6 @@ namespace utl
         };
         OUString normalizeName(const OUString& _rName, NAMEORIGIN _eOrigin) const;
     };
-
 
     //= OConfigurationTreeRoot
 
@@ -316,9 +311,7 @@ namespace utl
         virtual void clear() throw() SAL_OVERRIDE;
     };
 
-
 }   // namespace utl
-
 
 #endif // INCLUDED_UNOTOOLS_CONFIGNODE_HXX
 

@@ -48,7 +48,6 @@ public:
                                     }
 };
 
-
 namespace ReadWriteGuardMode {
 const sal_Int32 nWrite          = 0x01;
 const sal_Int32 nCriticalChange = 0x02 | nWrite;

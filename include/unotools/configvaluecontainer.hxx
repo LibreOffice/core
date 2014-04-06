@@ -23,10 +23,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/mutex.hxx>
 
-
 namespace utl
 {
-
 
 #define CVC_READONLY_ACCESS     0x0000
 #define CVC_UPDATE_ACCESS       0x0001
@@ -93,7 +91,6 @@ namespace utl
 
         /// dtor
         ~OConfigurationValueContainer();
-
 
         // registering data containers
 
@@ -174,9 +171,7 @@ namespace utl
         void    implRegisterExchangeLocation( const NodeValueAccessor& _rAccessor );
     };
 
-
 }   // namespace utl
-
 
 #endif // INCLUDED_UNOTOOLS_CONFIGVALUECONTAINER_HXX
 

@@ -28,7 +28,6 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-
 class UNOTOOLS_DLLPUBLIC NativeNumberWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XNativeNumberSupplier >   xNNS;

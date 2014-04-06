@@ -21,11 +21,8 @@
 #ifndef INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
 #define INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
 
-
 namespace utl
 {
-
-
 
     //= ITerminationListener
 
@@ -40,7 +37,6 @@ namespace utl
     protected:
         ~ITerminationListener() {}
     };
-
 
     //= DesktopTerminationObserver
 
@@ -63,9 +59,7 @@ namespace utl
         DesktopTerminationObserver();   // never implemented, only static methods
     };
 
-
 } // namespace utl
-
 
 #endif // INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
 

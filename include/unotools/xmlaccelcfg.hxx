@@ -33,7 +33,6 @@ struct SvtAcceleratorConfigItem
 #include <list>
 typedef ::std::list < SvtAcceleratorConfigItem > SvtAcceleratorItemList;
 
-
 class OReadAccelatorDocumentHandler : public ::com::sun::star::xml::sax::XDocumentHandler,
                                       public ::cppu::OWeakObject
 {

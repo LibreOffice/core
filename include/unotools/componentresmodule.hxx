@@ -28,13 +28,10 @@
 
 class ResMgr;
 
-
 namespace utl
 {
 
-
     class OComponentResModuleImpl;
-
 
     //= OComponentResourceModule
 
@@ -62,7 +59,6 @@ namespace utl
         virtual void onLastClient() SAL_OVERRIDE;
     };
 
-
     //= ModuleRes
 
     /** specialized ResId, using the resource manager provided by a given OModule
@@ -72,7 +68,6 @@ namespace utl
     public:
         ModuleRes( sal_uInt16 _nId, OComponentResourceModule& _rModule ) : ResId( _nId, *_rModule.getResManager() ) { }
     };
-
 
     //= defining a concrete module
 
@@ -140,7 +135,6 @@ namespace utl
         } \
     };
 
-
     //= implementing a concrete module
 
 #define IMPLEMENT_MODULE( ModuleClass, resprefix ) \
@@ -171,9 +165,7 @@ namespace utl
             create( CreateModuleClass(), ::osl::GetGlobalMutex() ); \
     } \
 
-
 } // namespace utl
-
 
 #endif // INCLUDED_UNOTOOLS_COMPONENTRESMODULE_HXX
 

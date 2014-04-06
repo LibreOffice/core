@@ -26,11 +26,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
-
 namespace utl
 {
-
-
 
     //= CloseVeto
 
@@ -51,9 +48,7 @@ namespace utl
         ::boost::scoped_ptr< CloseVeto_Data >   m_pData;
     };
 
-
 } // namespace dbaui
-
 
 #endif // INCLUDED_UNOTOOLS_CLOSEVETO_HXX
 

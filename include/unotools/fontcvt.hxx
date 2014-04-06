@@ -24,9 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 
-
 // - FontToSubsFont -
-
 
 #define FONTTOSUBSFONT_IMPORT                   ((sal_uLong)0x00000001)
 #define FONTTOSUBSFONT_EXPORT                   ((sal_uLong)0x00000002)
@@ -38,9 +36,7 @@ UNOTOOLS_DLLPUBLIC void                        DestroyFontToSubsFontConverter( F
 UNOTOOLS_DLLPUBLIC sal_Unicode                 ConvertFontToSubsFontChar( FontToSubsFontConverter hConverter, sal_Unicode c );
 UNOTOOLS_DLLPUBLIC OUString                    GetFontToSubsFontName( FontToSubsFontConverter hConverter );
 
-
 // - StarSymbolToMSMultiFont -
-
 
 class UNOTOOLS_DLLPUBLIC StarSymbolToMSMultiFont
 {

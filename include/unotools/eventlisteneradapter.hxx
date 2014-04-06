@@ -22,10 +22,8 @@
 #define INCLUDED_UNOTOOLS_EVENTLISTENERADAPTER_HXX
 #include <com/sun/star/lang/XComponent.hpp>
 
-
 namespace utl
 {
-
 
     struct OEventListenerAdapterImpl;
 
@@ -55,9 +53,7 @@ namespace utl
         virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) = 0;
     };
 
-
 }   // namespace utl
-
 
 #endif // INCLUDED_UNOTOOLS_EVENTLISTENERADAPTER_HXX
 

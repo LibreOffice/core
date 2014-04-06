@@ -39,19 +39,16 @@ class Date;
 class Time;
 class CalendarWrapper;
 
-
 enum DateFormat {
     MDY,
     DMY,
     YMD
 };
 
-
 enum MeasurementSystem {
     MEASURE_METRIC,
     MEASURE_US
 };
-
 
 class UNOTOOLS_DLLPUBLIC LocaleDataWrapper : private boost::noncopyable
 {
@@ -137,7 +134,6 @@ public:
 
     /// get current loaded Locale, which might differ from the requested Locale
     LanguageTag                 getLoadedLanguageTag() const;
-
 
     // Wrapper implementations of service LocaleData
 
@@ -309,7 +305,6 @@ public:
     inline  bool                isNumTrailingZeros() const
                                     { return true; }
 
-
     // reserved words
 
     const OUString&        getTrueWord() const
@@ -355,7 +350,6 @@ private:
 
     static  void                evaluateLocaleDataChecking();
 };
-
 
 #endif // INCLUDED_UNOTOOLS_LOCALEDATAWRAPPER_HXX
 

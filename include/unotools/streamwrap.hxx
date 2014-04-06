@@ -37,7 +37,6 @@ namespace utl
     namespace stario    = ::com::sun::star::io;
     namespace staruno   = ::com::sun::star::uno;
 
-
 //= OInputStreamWrapper
 
 typedef ::cppu::WeakImplHelper1 <   stario::XInputStream
@@ -74,7 +73,6 @@ protected:
     void checkError() const;
 };
 
-
 //= OSeekableInputStreamWrapper
 
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::io::XSeekable
@@ -95,7 +93,6 @@ public:
     virtual sal_Int64 SAL_CALL getPosition(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int64 SAL_CALL getLength(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 //= OOutputStreamWrapper
 
@@ -120,7 +117,6 @@ protected:
     // TODO: thread safety!
     SvStream&       rStream;
 };
-
 
 //= OSeekableOutputStreamWrapper
 

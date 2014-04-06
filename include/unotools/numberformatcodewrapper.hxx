@@ -29,7 +29,6 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-
 class UNOTOOLS_DLLPUBLIC NumberFormatCodeWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XNumberFormatCode >   xNFC;
@@ -47,13 +46,11 @@ public:
 
                                 ~NumberFormatCodeWrapper();
 
-
     /// set a new Locale
             void                setLocale( const ::com::sun::star::lang::Locale& rLocale );
 
     /// get current Locale
     const ::com::sun::star::lang::Locale& getLocale() const { return aLocale; }
-
 
     // Wrapper implementations of class NumberFormatCodeMapper
 

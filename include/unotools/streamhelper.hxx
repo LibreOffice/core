@@ -72,7 +72,6 @@ public:
 
 }   // namespace utl
 
-
 #endif // _UNOTOOLS_STREAM_WRAPPER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

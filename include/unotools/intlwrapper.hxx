@@ -27,7 +27,6 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 
-
 /**
     A wrapper of I18N wrappers. Using this is more expensive than using some
     single wrapper classes so use it only if you must pass a single pointer
@@ -57,7 +56,6 @@ private:
 
             void                ImplNewLocaleData() const;
             void                ImplNewCollator( bool bCaseSensitive ) const;
-
 
 public:
                                 IntlWrapper(
