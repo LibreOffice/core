@@ -481,8 +481,11 @@ void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSym
         sal_Int32 nSize = static_cast< sal_Int32 >( nOoxSize * (2540.0 / 72.0) + 0.5 );
         aSymbol.Size.Width = aSymbol.Size.Height = nSize;
 
-        Color aFillColor = xShapeProps->getFillProperties().maFillColor;
-        aSymbol.FillColor = aFillColor.getColor(getFilter().getGraphicHelper());
+        if(xShapeProps.is())
+        {
+            Color aFillColor = xShapeProps->getFillProperties().maFillColor;
+            aSymbol.FillColor = aFillColor.getColor(getFilter().getGraphicHelper());
+        }
 
         // set the property
         rPropSet.setProperty( PROP_Symbol, aSymbol );
