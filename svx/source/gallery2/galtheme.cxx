@@ -1459,9 +1459,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             {
                 if( SGA_OBJ_SVDRAW == pObj->eObjKind )
                 {
-                    const static OUString aBaseURLStr( "gallery/svdraw/" );
-
-                    OUString aDummyURL( aBaseURLStr );
+                    OUString aDummyURL( "gallery/svdraw/" );
                     pObj->aURL = INetURLObject( aDummyURL += aFileName, INET_PROT_PRIV_SOFFICE );
                 }
                 else

@@ -1077,14 +1077,12 @@ bool ORowSetValue::getBool()    const
             case DataType::LONGVARCHAR:
                 {
                     const OUString sValue(m_aValue.m_pString);
-                    const static OUString s_sTrue("true");
-                    const static OUString s_sFalse("false");
-                    if ( sValue.equalsIgnoreAsciiCase(s_sTrue) || (sValue == "1") )
+                    if ( sValue.equalsIgnoreAsciiCase("true") || (sValue == "1") )
                     {
                         bRet = true;
                         break;
                     }
-                    else if ( sValue.equalsIgnoreAsciiCase(s_sFalse) || (sValue == "0") )
+                    else if ( sValue.equalsIgnoreAsciiCase("false") || (sValue == "0") )
                     {
                         bRet = false;
                         break;

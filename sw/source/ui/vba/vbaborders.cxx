@@ -38,8 +38,6 @@ typedef InheritedHelperInterfaceImpl1<word::XBorder > SwVbaBorder_Base;
 // borders, the enumeration will match the order in this list
 static const sal_Int16 supportedIndexTable[] = { word::WdBorderType::wdBorderBottom, word::WdBorderType::wdBorderDiagonalDown, word::WdBorderType::wdBorderDiagonalUp, word::WdBorderType::wdBorderHorizontal, word::WdBorderType::wdBorderLeft, word::WdBorderType::wdBorderRight, word::WdBorderType::wdBorderTop, word::WdBorderType::wdBorderVertical };
 
-const static OUString sTableBorder("TableBorder");
-
 //  Equiv widths in in 1/100 mm
 const static sal_Int32 OOLineHairline = 2;
 
@@ -52,7 +50,7 @@ private:
     bool setBorderLine( table::BorderLine& rBorderLine )
     {
         table::TableBorder aTableBorder;
-        m_xProps->getPropertyValue( sTableBorder ) >>= aTableBorder;
+        m_xProps->getPropertyValue( "TableBorder" ) >>= aTableBorder;
 
         switch ( m_LineType )
         {
@@ -89,14 +87,14 @@ private:
             default:
                     return false;
         }
-        m_xProps->setPropertyValue( sTableBorder, uno::makeAny(aTableBorder) );
+        m_xProps->setPropertyValue( "TableBorder", uno::makeAny(aTableBorder) );
         return true;
     }
 
     bool getBorderLine( table::BorderLine& rBorderLine )
     {
         table::TableBorder aTableBorder;
-        m_xProps->getPropertyValue( sTableBorder ) >>= aTableBorder;
+        m_xProps->getPropertyValue( "TableBorder" ) >>= aTableBorder;
         switch ( m_LineType )
         {
             case word::WdBorderType::wdBorderLeft:

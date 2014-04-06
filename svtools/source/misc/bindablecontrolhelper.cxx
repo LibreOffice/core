@@ -41,12 +41,11 @@ using namespace ::com::sun::star;
 bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< frame::XModel >& xModel, table::CellRangeAddress& aAddress )
 {
     bool bRes = false;
-    const static OUString sNamedRanges("NamedRanges");
     uno::Reference< sheet::XCellRangeReferrer > xReferrer;
     try
     {
         uno::Reference< beans::XPropertySet > xPropSet( xModel, uno::UNO_QUERY_THROW );
-        uno::Reference< container::XNameAccess > xNamed( xPropSet->getPropertyValue( sNamedRanges ), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xNamed( xPropSet->getPropertyValue( "NamedRanges" ), uno::UNO_QUERY_THROW );
         xReferrer.set ( xNamed->getByName( sAddress ), uno::UNO_QUERY );
     }
     catch( uno::Exception& /*e*/ )

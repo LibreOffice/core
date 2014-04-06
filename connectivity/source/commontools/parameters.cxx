@@ -381,7 +381,6 @@ namespace dbtools
             // did we find links where the detail field refers to a detail column (instead of a parameter name)?
             if ( !aAdditionalFilterComponents.empty() )
             {
-                const static OUString s_sAnd( " AND " );
                 // build a conjunction of all the filter components
                 OUStringBuffer sAdditionalFilter;
                 for (   ::std::vector< OUString >::const_iterator aComponent = aAdditionalFilterComponents.begin();
@@ -390,7 +389,7 @@ namespace dbtools
                     )
                 {
                     if ( !sAdditionalFilter.isEmpty() )
-                        sAdditionalFilter.append(s_sAnd);
+                        sAdditionalFilter.append(" AND ");
 
                     sAdditionalFilter.appendAscii("( ",((sal_Int32)(sizeof("( ")-1)));
                     sAdditionalFilter.append(*aComponent);

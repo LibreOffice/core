@@ -1000,8 +1000,7 @@ OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >&
                 if ( aReportEngine.isValid() )
                 {
                     OUString sRet;
-                    const static OUString s_sService("ServiceName");
-                    aReportEngine.getNodeValue(s_sService) >>= sRet;
+                    aReportEngine.getNodeValue("ServiceName") >>= sRet;
                     return sRet;
                 }
             }
