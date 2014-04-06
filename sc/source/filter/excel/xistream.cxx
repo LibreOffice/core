@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <osl/thread.h>
@@ -27,13 +26,9 @@
 
 #include <vector>
 
-
 using namespace ::com::sun::star;
 
-
 // Decryption
-
-
 XclImpDecrypter::XclImpDecrypter() :
     mnError( EXC_ENCR_ERROR_UNSUPP_CRYPT ),
     mnOldPos( STREAM_SEEK_TO_END ),
@@ -105,8 +100,6 @@ sal_uInt16 XclImpDecrypter::Read( SvStream& rStrm, void* pData, sal_uInt16 nByte
     }
     return nRet;
 }
-
-
 
 XclImpBiff5Decrypter::XclImpBiff5Decrypter( sal_uInt16 nKey, sal_uInt16 nHash ) :
     mnKey( nKey ),
@@ -196,8 +189,6 @@ sal_uInt16 XclImpBiff5Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
     maCodec.Decode( pnData, nRet );
     return nRet;
 }
-
-
 
 XclImpBiff8Decrypter::XclImpBiff8Decrypter( sal_uInt8 pnSalt[ 16 ],
         sal_uInt8 pnVerifier[ 16 ], sal_uInt8 pnVerifierHash[ 16 ] ) :
@@ -321,10 +312,7 @@ sal_uInt16 XclImpBiff8Decrypter::GetOffset( sal_Size nStrmPos ) const
     return static_cast< sal_uInt16 >( nStrmPos % EXC_ENCR_BLOCKSIZE );
 }
 
-
 // Stream
-
-
 XclImpStreamPos::XclImpStreamPos() :
     mnPos( STREAM_SEEK_TO_BEGIN ),
     mnNextPos( STREAM_SEEK_TO_BEGIN ),
@@ -363,8 +351,6 @@ void XclImpStreamPos::Get(
     rnRawRecLeft = mnRawRecLeft;
     rbValid = mbValid;
 }
-
-
 
 XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
 {
@@ -512,8 +498,6 @@ void XclImpStream::EnableDecryption( bool bEnable )
     mbUseDecr = bEnable && HasValidDecrypter();
 }
 
-
-
 void XclImpStream::PushPosition()
 {
     maPosStack.push_back( XclImpStreamPos() );
@@ -603,8 +587,6 @@ sal_uInt16 XclImpStream::PeekRecId( sal_Size nPos )
     }
     return nRecId;
 }
-
-
 
 XclImpStream& XclImpStream::operator>>( sal_Int8& rnValue )
 {
@@ -872,8 +854,6 @@ void XclImpStream::Ignore( sal_Size nBytes )
     }
 }
 
-
-
 sal_Size XclImpStream::ReadUniStringExtHeader(
         bool& rb16Bit, bool& rbRich, bool& rbFareast,
         sal_uInt16& rnFormatRuns, sal_uInt32& rnExtInf, sal_uInt8 nFlags )
@@ -894,8 +874,6 @@ sal_Size XclImpStream::ReadUniStringExtHeader( bool& rb16Bit, sal_uInt8 nFlags )
     sal_uInt32 nExtInf;
     return ReadUniStringExtHeader( rb16Bit, bRich, bFareast, nCrun, nExtInf, nFlags );
 }
-
-
 
 OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
 {
@@ -1007,8 +985,6 @@ void XclImpStream::IgnoreUniString( sal_uInt16 nChars )
 {
     IgnoreUniString( nChars, ReaduInt8() );
 }
-
-
 
 OUString XclImpStream::ReadRawByteString( sal_uInt16 nChars )
 {
