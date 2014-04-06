@@ -211,8 +211,8 @@ public:
 
 private:
 
-    ::osl::Mutex&                                   m_aSharedMutex          ;
-    ::cppu::OMultiTypeInterfaceContainerHelper      m_aMultiTypeContainer   ;   // Container to hold listener
+    ::osl::Mutex&                                   m_aSharedMutex;
+    ::cppu::OMultiTypeInterfaceContainerHelper      m_aMultiTypeContainer;   // Container to hold listener
 
 };  // class OConnectionPointContainerHelper
 

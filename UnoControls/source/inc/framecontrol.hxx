@@ -188,7 +188,7 @@ protected:
     ) throw ( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any&   rValue  ,
-                                                sal_Int32       nHandle ) const SAL_OVERRIDE ;
+                                                sal_Int32       nHandle ) const SAL_OVERRIDE;
 
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
@@ -219,11 +219,11 @@ private:
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >        m_xFrame                    ;
-    OUString                                        m_sComponentURL             ;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_seqLoaderArguments        ;
-    ::cppu::OMultiTypeInterfaceContainerHelper      m_aInterfaceContainer       ;
-    OConnectionPointContainerHelper                 m_aConnectionPointContainer ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >        m_xFrame;
+    OUString                                        m_sComponentURL;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_seqLoaderArguments;
+    ::cppu::OMultiTypeInterfaceContainerHelper      m_aInterfaceContainer;
+    OConnectionPointContainerHelper                 m_aConnectionPointContainer;
 
 };  // class FrameControl
 

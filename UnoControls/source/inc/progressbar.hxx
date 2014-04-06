@@ -382,14 +382,14 @@ protected:
 
 private:
 
-    bool        m_bHorizontal       ;   // orientation for steps            [true=horizontal/false=vertikal]
-    ::com::sun::star::awt::Size   m_aBlockSize        ;   // width and height of a block      [>=0,0]
-    sal_Int32       m_nForegroundColor  ;   //                                  (alpha,r,g,b)
-    sal_Int32       m_nBackgroundColor  ;   //                                  (alpha,r,g,b)
-    sal_Int32       m_nMinRange         ;   // lowest value  =   0%             [long, <_nMaxRange]
-    sal_Int32       m_nMaxRange         ;   // highest value = 100%             [long, >_nMinRange]
-    double          m_nBlockValue       ;   // value for one block              [long, >0]
-    sal_Int32       m_nValue            ;   // value for progress               [long]
+    bool        m_bHorizontal;   // orientation for steps            [true=horizontal/false=vertikal]
+    ::com::sun::star::awt::Size   m_aBlockSize;   // width and height of a block      [>=0,0]
+    sal_Int32       m_nForegroundColor;   //                                  (alpha,r,g,b)
+    sal_Int32       m_nBackgroundColor;   //                                  (alpha,r,g,b)
+    sal_Int32       m_nMinRange;   // lowest value  =   0%             [long, <_nMaxRange]
+    sal_Int32       m_nMaxRange;   // highest value = 100%             [long, >_nMinRange]
+    double          m_nBlockValue;   // value for one block              [long, >0]
+    sal_Int32       m_nValue;   // value for progress               [long]
 
 };  // class ProgressBar
 

@@ -106,7 +106,7 @@ namespace unocontrols{
 struct IMPL_MutexContainer
 {
     // Is necassery to initialize "BaseControl" and make this class thread-safe.
-    ::osl::Mutex m_aMutex ;
+    ::osl::Mutex m_aMutex;
 };
 
 class BaseControl   : public ::com::sun::star::lang::XServiceInfo
@@ -431,7 +431,7 @@ public:
 
     virtual sal_Bool SAL_CALL setModel(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE = 0 ;
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE = 0;
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -1181,22 +1181,22 @@ private:
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xComponentContext     ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xDelegator            ;
-    OMRCListenerMultiplexerHelper*                  m_pMultiplexer          ;   // multiplex events
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xMultiplexer          ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xContext              ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >              m_xPeer                 ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                  m_xPeerWindow           ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >                m_xGraphicsView         ;   // graphics for ::com::sun::star::awt::XView-operations
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >                m_xGraphicsPeer         ;   // graphics for painting on a peer
-    sal_Int32                                       m_nX                    ;   // Position ...
-    sal_Int32                                       m_nY                    ;
-    sal_Int32                                       m_nWidth                ;   // ... and size of window
-    sal_Int32                                       m_nHeight               ;
-    bool                                        m_bVisible              ;   // Some state flags
-    bool                                        m_bInDesignMode         ;
-    bool                                        m_bEnable               ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xComponentContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xDelegator;
+    OMRCListenerMultiplexerHelper*                  m_pMultiplexer;   // multiplex events
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xMultiplexer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >              m_xPeer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                  m_xPeerWindow;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >                m_xGraphicsView;   // graphics for ::com::sun::star::awt::XView-operations
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >                m_xGraphicsPeer;   // graphics for painting on a peer
+    sal_Int32                                       m_nX;   // Position ...
+    sal_Int32                                       m_nY;
+    sal_Int32                                       m_nWidth;   // ... and size of window
+    sal_Int32                                       m_nHeight;
+    bool                                        m_bVisible;   // Some state flags
+    bool                                        m_bInDesignMode;
+    bool                                        m_bEnable;
 
 };  // class BaseControl
 

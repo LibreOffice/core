@@ -23,13 +23,13 @@
 
 //  namespaces
 
-using namespace ::cppu                      ;
-using namespace ::osl                       ;
-using namespace ::rtl                       ;
-using namespace ::com::sun::star::uno       ;
-using namespace ::com::sun::star::lang      ;
-using namespace ::com::sun::star::awt       ;
-using namespace ::com::sun::star::container ;
+using namespace ::cppu;
+using namespace ::osl;
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::container;
 
 namespace unocontrols{
 
@@ -52,7 +52,7 @@ Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType ) throw( Ru
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-    Any aReturn ;
+    Any aReturn;
     Reference< XInterface > xDel = BaseControl::impl_getDelegator();
     if ( xDel.is() )
     {
@@ -66,7 +66,7 @@ Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType ) throw( Ru
         aReturn = queryAggregation( rType );
     }
 
-    return aReturn ;
+    return aReturn;
 }
 
 //  XTypeProvider
@@ -76,7 +76,7 @@ Sequence< Type > SAL_CALL BaseContainerControl::getTypes() throw( RuntimeExcepti
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static OTypeCollection* pTypeCollection = NULL ;
+    static OTypeCollection* pTypeCollection = NULL;
 
     if ( pTypeCollection == NULL )
     {
@@ -92,7 +92,7 @@ Sequence< Type > SAL_CALL BaseContainerControl::getTypes() throw( RuntimeExcepti
                                                         BaseControl::getTypes()
                                                     );
             // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection ;
+            pTypeCollection = &aTypeCollection;
         }
     }
 
@@ -115,7 +115,7 @@ Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType ) throw( 
     if ( aReturn.hasValue() )
     {
         // ... return this information.
-        return aReturn ;
+        return aReturn;
     }
     else
     {
@@ -154,7 +154,7 @@ void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&  
 sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& ) throw( RuntimeException, std::exception )
 {
     // This object has NO model.
-    return sal_False ;
+    return sal_False;
 }
 
 //  XControl
@@ -162,7 +162,7 @@ sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel
 Reference< XControlModel > SAL_CALL BaseContainerControl::getModel() throw( RuntimeException, std::exception )
 {
     // This object has NO model.
-    // return (XControlModel*)this ;
+    // return (XControlModel*)this;
     return Reference< XControlModel >();
 }
 
@@ -177,7 +177,7 @@ void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException, std::exce
     MutexGuard aGuard( m_aMutex );
 
     // remove listeners
-    EventObject aObject ;
+    EventObject aObject;
 
     aObject.Source = Reference< XComponent > ( (XControlContainer*)this, UNO_QUERY );
     m_aListeners.disposeAndClear( aObject );
@@ -197,8 +197,8 @@ void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException, std::exce
 
     for ( nCount = 0; nCount < nCtrls; ++nCount )
     {
-        pCtrls [ nCount ] -> removeEventListener    ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) ) ;
-        pCtrls [ nCount ] -> dispose                (       ) ;
+        pCtrls [ nCount ] -> removeEventListener    ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) );
+        pCtrls [ nCount ] -> dispose                (       );
     }
 
     // call baseclass
@@ -223,50 +223,50 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
         return;
 
     // take memory for new item
-    IMPL_ControlInfo* pNewControl = new IMPL_ControlInfo ;
+    IMPL_ControlInfo* pNewControl = new IMPL_ControlInfo;
 
     if (pNewControl!=(IMPL_ControlInfo*)0)
     {
         // Ready for multithreading
-        MutexGuard aGuard (m_aMutex) ;
+        MutexGuard aGuard (m_aMutex);
 
         // set control
-        pNewControl->sName      = rName     ;
-        pNewControl->xControl   = rControl  ;
+        pNewControl->sName      = rName;
+        pNewControl->xControl   = rControl;
 
         // and insert in list
-        maControlInfoList.push_back( pNewControl ) ;
+        maControlInfoList.push_back( pNewControl );
 
         // initialize new control
-        pNewControl->xControl->setContext       ( (OWeakObject*)this    ) ;
-        pNewControl->xControl->addEventListener ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) ) ;
+        pNewControl->xControl->setContext       ( (OWeakObject*)this    );
+        pNewControl->xControl->addEventListener ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) );
 
         // when container has a peer ...
         if (getPeer().is())
         {
             // .. then create a peer on child
-            pNewControl->xControl->createPeer ( getPeer()->getToolkit(), getPeer() ) ;
-            impl_activateTabControllers () ;
+            pNewControl->xControl->createPeer ( getPeer()->getToolkit(), getPeer() );
+            impl_activateTabControllers ();
         }
 
         // Send message to all listener
-        OInterfaceContainerHelper* pInterfaceContainer = m_aListeners.getContainer( ::getCppuType((const Reference< XContainerListener >*)0) ) ;
+        OInterfaceContainerHelper* pInterfaceContainer = m_aListeners.getContainer( ::getCppuType((const Reference< XContainerListener >*)0) );
 
         if (pInterfaceContainer)
         {
             // Build event
-            ContainerEvent  aEvent ;
+            ContainerEvent  aEvent;
 
-            aEvent.Source   = *this     ;
-            aEvent.Element <<= rControl ;
+            aEvent.Source   = *this;
+            aEvent.Element <<= rControl;
 
             // Get all listener
-            OInterfaceIteratorHelper    aIterator (*pInterfaceContainer) ;
+            OInterfaceIteratorHelper    aIterator (*pInterfaceContainer);
 
             // Send event
             while ( aIterator.hasMoreElements() )
             {
-                ((XContainerListener*)aIterator.next())->elementInserted (aEvent) ;
+                ((XContainerListener*)aIterator.next())->elementInserted (aEvent);
             }
         }
     }
@@ -279,45 +279,45 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
     if ( rControl.is() )
     {
         // Ready for multithreading
-        MutexGuard aGuard (m_aMutex) ;
+        MutexGuard aGuard (m_aMutex);
 
         size_t nControls = maControlInfoList.size();
 
         for ( size_t n = 0; n < nControls; n++ )
         {
             // Search for right control
-            IMPL_ControlInfo* pControl = maControlInfoList[ n ] ;
+            IMPL_ControlInfo* pControl = maControlInfoList[ n ];
             if ( rControl == pControl->xControl )
             {
                 //.is it found ... remove listener from control
-                pControl->xControl->removeEventListener (static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) )) ;
-                pControl->xControl->setContext          ( Reference< XInterface >  ()   ) ;
+                pControl->xControl->removeEventListener (static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ));
+                pControl->xControl->setContext          ( Reference< XInterface >  ()   );
 
                 // ... free memory
-                delete pControl ;
+                delete pControl;
                 ::std::vector<IMPL_ControlInfo*>::iterator itr = maControlInfoList.begin();
                 ::std::advance(itr, n);
                 maControlInfoList.erase(itr);
 
                 // Send message to all other listener
-                OInterfaceContainerHelper * pInterfaceContainer = m_aListeners.getContainer( ::getCppuType((const Reference< XContainerListener >*)0) ) ;
+                OInterfaceContainerHelper * pInterfaceContainer = m_aListeners.getContainer( ::getCppuType((const Reference< XContainerListener >*)0) );
 
                 if (pInterfaceContainer)
                 {
-                    ContainerEvent  aEvent ;
+                    ContainerEvent  aEvent;
 
-                    aEvent.Source    = *this    ;
-                    aEvent.Element <<= rControl ;
+                    aEvent.Source    = *this;
+                    aEvent.Element <<= rControl;
 
-                    OInterfaceIteratorHelper    aIterator (*pInterfaceContainer) ;
+                    OInterfaceIteratorHelper    aIterator (*pInterfaceContainer);
 
                     while ( aIterator.hasMoreElements() )
                     {
-                        ((XContainerListener*)aIterator.next())->elementRemoved (aEvent) ;
+                        ((XContainerListener*)aIterator.next())->elementRemoved (aEvent);
                     }
                 }
                 // Break "for" !
-                break ;
+                break;
             }
         }
     }
@@ -328,11 +328,11 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
 void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText ) throw( RuntimeException, std::exception )
 {
     // go down to each parent
-    Reference< XControlContainer >  xContainer ( getContext(), UNO_QUERY ) ;
+    Reference< XControlContainer >  xContainer ( getContext(), UNO_QUERY );
 
     if ( xContainer.is () )
     {
-        xContainer->setStatusText ( rStatusText ) ;
+        xContainer->setStatusText ( rStatusText );
     }
 }
 
@@ -341,7 +341,7 @@ void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText 
 Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString& rName ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    MutexGuard  aGuard ( Mutex::getGlobalMutex() ) ;
+    MutexGuard  aGuard ( Mutex::getGlobalMutex() );
 
     size_t                  nControls   = maControlInfoList.size();
 
@@ -354,12 +354,12 @@ Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString
         {
             // We have found it ...
             // Break operation and return.
-            return pSearchControl->xControl ;
+            return pSearchControl->xControl;
         }
     }
 
     // We have not found it ... return NULL.
-    return Reference< XControl >  () ;
+    return Reference< XControl >  ();
 }
 
 //  XControlContainer
@@ -367,22 +367,22 @@ Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString
 Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls () throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    MutexGuard  aGuard ( Mutex::getGlobalMutex() ) ;
+    MutexGuard  aGuard ( Mutex::getGlobalMutex() );
 
     size_t                              nControls       = maControlInfoList.size();
     size_t                              nCount          = 0;
-    Sequence< Reference< XControl > >   aDescriptor     ( nControls )                   ;
-    Reference< XControl > *             pDestination    = aDescriptor.getArray ()       ;
+    Sequence< Reference< XControl > >   aDescriptor     ( nControls );
+    Reference< XControl > *             pDestination    = aDescriptor.getArray ();
 
     // Copy controls to sequence
     for( nCount = 0; nCount < nControls; ++nCount )
     {
         IMPL_ControlInfo* pCopyControl = maControlInfoList[ nCount ];
-        pDestination [ nCount ] = pCopyControl->xControl ;
+        pDestination [ nCount ] = pCopyControl->xControl;
     }
 
     // Return sequence
-    return aDescriptor ;
+    return aDescriptor;
 }
 
 //  XWindow
@@ -390,13 +390,13 @@ Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls () 
 void SAL_CALL BaseContainerControl::setVisible ( sal_Bool bVisible ) throw( RuntimeException, std::exception )
 {
     // override baseclass definition
-    BaseControl::setVisible ( bVisible ) ;
+    BaseControl::setVisible ( bVisible );
 
     // is it a top window ?
     if ( !getContext().is() && bVisible )
     {
         // then show it automaticly
-        createPeer ( Reference< XToolkit > (), Reference< XWindowPeer > () ) ;
+        createPeer ( Reference< XToolkit > (), Reference< XWindowPeer > () );
     }
 }
 
@@ -408,16 +408,16 @@ WindowDescriptor* BaseContainerControl::impl_getWindowDescriptor ( const Referen
     // - if you will change the descriptor-values, you must override thid virtuell function
     // - the caller must release the memory for this dynamical descriptor !!!
 
-    WindowDescriptor    *   aDescriptor = new WindowDescriptor ;
+    WindowDescriptor    *   aDescriptor = new WindowDescriptor;
 
-    aDescriptor->Type               = WindowClass_CONTAINER                             ;
-    aDescriptor->WindowServiceName  = "window"                                          ;
-    aDescriptor->ParentIndex        = -1                                                ;
-    aDescriptor->Parent             = rParentPeer                                       ;
-    aDescriptor->Bounds             = getPosSize ()                                     ;
-    aDescriptor->WindowAttributes   = 0                                                 ;
+    aDescriptor->Type               = WindowClass_CONTAINER;
+    aDescriptor->WindowServiceName  = "window";
+    aDescriptor->ParentIndex        = -1;
+    aDescriptor->Parent             = rParentPeer;
+    aDescriptor->Bounds             = getPosSize ();
+    aDescriptor->WindowAttributes   = 0;
 
-    return aDescriptor ;
+    return aDescriptor;
 }
 
 //  protected method
@@ -431,15 +431,15 @@ void BaseContainerControl::impl_paint ( sal_Int32 /*nX*/, sal_Int32 /*nY*/, cons
 void BaseContainerControl::impl_activateTabControllers ()
 {
     // Ready for multithreading
-    MutexGuard aGuard (m_aMutex) ;
+    MutexGuard aGuard (m_aMutex);
 
-    sal_uInt32  nMaxCount   =   m_xTabControllerList.getLength ()   ;
-    sal_uInt32  nCount      =   0                                   ;
+    sal_uInt32  nMaxCount   =   m_xTabControllerList.getLength ();
+    sal_uInt32  nCount      =   0;
 
     for ( nCount = 0; nCount < nMaxCount; ++nCount )
     {
-         m_xTabControllerList.getArray () [nCount]->setContainer        ( this  ) ;
-         m_xTabControllerList.getArray () [nCount]->activateTabOrder    (       ) ;
+         m_xTabControllerList.getArray () [nCount]->setContainer        ( this  );
+         m_xTabControllerList.getArray () [nCount]->activateTabOrder    (       );
     }
 }
 

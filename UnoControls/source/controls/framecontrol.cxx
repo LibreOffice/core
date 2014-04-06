@@ -32,15 +32,15 @@
 
 //  namespaces
 
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::cppu                  ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::lang  ;
-using namespace ::com::sun::star::beans ;
-using namespace ::com::sun::star::awt   ;
-using namespace ::com::sun::star::frame ;
-using namespace ::com::sun::star::util  ;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::cppu;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::util;
 
 namespace unocontrols{
 
@@ -65,7 +65,7 @@ Any SAL_CALL FrameControl::queryInterface( const Type& rType ) throw( RuntimeExc
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-    Any aReturn ;
+    Any aReturn;
     Reference< XInterface > xDel = BaseControl::impl_getDelegator();
     if ( xDel.is() )
     {
@@ -79,7 +79,7 @@ Any SAL_CALL FrameControl::queryInterface( const Type& rType ) throw( RuntimeExc
         aReturn = queryAggregation( rType );
     }
 
-    return aReturn ;
+    return aReturn;
 }
 
 //  XInterface
@@ -111,7 +111,7 @@ Sequence< Type > SAL_CALL FrameControl::getTypes() throw( RuntimeException, std:
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static OTypeCollection* pTypeCollection = NULL ;
+    static OTypeCollection* pTypeCollection = NULL;
 
     if ( pTypeCollection == NULL )
     {
@@ -128,7 +128,7 @@ Sequence< Type > SAL_CALL FrameControl::getTypes() throw( RuntimeException, std:
                                                         BaseControl::getTypes()
                                                     );
             // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection ;
+            pTypeCollection = &aTypeCollection;
         }
     }
 
@@ -158,7 +158,7 @@ Any SAL_CALL FrameControl::queryAggregation( const Type& aType ) throw( RuntimeE
         }
     }
 
-    return aReturn ;
+    return aReturn;
 }
 
 //  XControl
@@ -181,7 +181,7 @@ void SAL_CALL FrameControl::createPeer( const   Reference< XToolkit >&      xToo
 sal_Bool SAL_CALL FrameControl::setModel( const Reference< XControlModel >& /*xModel*/ ) throw( RuntimeException, std::exception )
 {
     // We have no model.
-    return sal_False ;
+    return sal_False;
 }
 
 //  XControl
@@ -205,7 +205,7 @@ void SAL_CALL FrameControl::dispose() throw( RuntimeException, std::exception )
 sal_Bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& /*xDevice*/ ) throw( RuntimeException, std::exception )
 {
     // it is not possible to print this control
-    return sal_False ;
+    return sal_False;
 }
 
 //  XView
@@ -257,7 +257,7 @@ const Sequence< OUString > FrameControl::impl_getStaticSupportedServiceNames()
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     Sequence< OUString > seqServiceNames( 1 );
     seqServiceNames.getArray() [0] = SERVICENAME_FRAMECONTROL;
-    return seqServiceNames ;
+    return seqServiceNames;
 }
 
 //  impl but public method to register service
@@ -274,18 +274,18 @@ sal_Bool FrameControl::convertFastPropertyValue(        Any&        rConvertedVa
                                                         sal_Int32   nHandle         ,
                                                 const   Any&        rValue          ) throw( IllegalArgumentException )
 {
-    bool bReturn = false ;
+    bool bReturn = false;
     switch (nHandle)
     {
-        case PROPERTYHANDLE_COMPONENTURL        :       rConvertedValue   = rValue                  ;
-                                                        rOldValue       <<= m_sComponentURL         ;
-                                                        bReturn           = true                ;
-                                                        break ;
+        case PROPERTYHANDLE_COMPONENTURL        :       rConvertedValue   = rValue;
+                                                        rOldValue       <<= m_sComponentURL;
+                                                        bReturn           = true;
+                                                        break;
 
-        case PROPERTYHANDLE_LOADERARGUMENTS     :       rConvertedValue   = rValue                  ;
-                                                        rOldValue       <<= m_seqLoaderArguments    ;
-                                                        bReturn           = true                ;
-                                                        break ;
+        case PROPERTYHANDLE_LOADERARGUMENTS     :       rConvertedValue   = rValue;
+                                                        rOldValue       <<= m_seqLoaderArguments;
+                                                        bReturn           = true;
+                                                        break;
     }
 
     if ( !bReturn )
@@ -293,7 +293,7 @@ sal_Bool FrameControl::convertFastPropertyValue(        Any&        rConvertedVa
         throw IllegalArgumentException();
     }
 
-    return bReturn ;
+    return bReturn;
 }
 
 //  OPropertySetHelper
@@ -303,20 +303,20 @@ void FrameControl::setFastPropertyValue_NoBroadcast(            sal_Int32   nHan
                                                         throw ( ::com::sun::star::uno::Exception, std::exception )
 {
     // this method only set the value
-    MutexGuard  aGuard (m_aMutex) ;
+    MutexGuard  aGuard (m_aMutex);
     switch (nHandle)
     {
-        case PROPERTYHANDLE_COMPONENTURL        :       rValue >>= m_sComponentURL ;
+        case PROPERTYHANDLE_COMPONENTURL        :       rValue >>= m_sComponentURL;
                                                         if (getPeer().is())
                                                         {
-                                                            impl_createFrame ( getPeer(), m_sComponentURL, m_seqLoaderArguments ) ;
+                                                            impl_createFrame ( getPeer(), m_sComponentURL, m_seqLoaderArguments );
                                                         }
-                                                        break ;
+                                                        break;
 
-        case PROPERTYHANDLE_LOADERARGUMENTS     :       rValue >>= m_seqLoaderArguments ;
-                                                        break ;
+        case PROPERTYHANDLE_LOADERARGUMENTS     :       rValue >>= m_seqLoaderArguments;
+                                                        break;
 
-        default :                                       OSL_ENSURE ( nHandle == -1, "This is an invalid property handle." ) ;
+        default :                                       OSL_ENSURE ( nHandle == -1, "This is an invalid property handle." );
     }
 }
 
@@ -325,20 +325,20 @@ void FrameControl::setFastPropertyValue_NoBroadcast(            sal_Int32   nHan
 void FrameControl::getFastPropertyValue(    Any&        rRet    ,
                                             sal_Int32   nHandle ) const
 {
-    MutexGuard  aGuard ( Mutex::getGlobalMutex() ) ;
+    MutexGuard  aGuard ( Mutex::getGlobalMutex() );
 
     switch (nHandle)
     {
-        case PROPERTYHANDLE_COMPONENTURL    :       rRet <<= m_sComponentURL ;
-                                                    break ;
+        case PROPERTYHANDLE_COMPONENTURL    :       rRet <<= m_sComponentURL;
+                                                    break;
 
-        case PROPERTYHANDLE_LOADERARGUMENTS :       rRet <<= m_seqLoaderArguments ;
-                                                    break ;
+        case PROPERTYHANDLE_LOADERARGUMENTS :       rRet <<= m_seqLoaderArguments;
+                                                    break;
 
-        case PROPERTYHANDLE_FRAME           :       rRet <<= m_xFrame ;
-                                                       break ;
+        case PROPERTYHANDLE_FRAME           :       rRet <<= m_xFrame;
+                                                       break;
 
-        default :                                   OSL_ENSURE ( nHandle == -1, "This is an invalid property handle." ) ;
+        default :                                   OSL_ENSURE ( nHandle == -1, "This is an invalid property handle." );
     }
 }
 
@@ -347,12 +347,12 @@ void FrameControl::getFastPropertyValue(    Any&        rRet    ,
 IPropertyArrayHelper& FrameControl::getInfoHelper()
 {
     // Create a table that map names to index values.
-    static OPropertyArrayHelper* pInfo ;
+    static OPropertyArrayHelper* pInfo;
 
     if (!pInfo)
     {
         // global method must be guarded
-        MutexGuard  aGuard ( Mutex::getGlobalMutex() ) ;
+        MutexGuard  aGuard ( Mutex::getGlobalMutex() );
 
         if (!pInfo)
         {
@@ -360,7 +360,7 @@ IPropertyArrayHelper& FrameControl::getInfoHelper()
         }
     }
 
-    return *pInfo ;
+    return *pInfo;
 }
 
 //  OPropertySetHelper
@@ -370,36 +370,36 @@ Reference< XPropertySetInfo > SAL_CALL FrameControl::getPropertySetInfo() throw(
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
-    static Reference< XPropertySetInfo >* pInfo = (Reference< XPropertySetInfo >*)0 ;
+    static Reference< XPropertySetInfo >* pInfo = (Reference< XPropertySetInfo >*)0;
     if ( pInfo == (Reference< XPropertySetInfo >*)0 )
     {
         // Ready for multithreading
-        MutexGuard aGuard ( Mutex::getGlobalMutex () ) ;
+        MutexGuard aGuard ( Mutex::getGlobalMutex () );
         // Control this pointer again, another instance can be faster then these!
         if ( pInfo == (Reference< XPropertySetInfo >*)0 )
         {
             // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
             // (Use method "getInfoHelper()".)
-            static Reference< XPropertySetInfo > xInfo ( createPropertySetInfo ( getInfoHelper () ) ) ;
-            pInfo = &xInfo ;
+            static Reference< XPropertySetInfo > xInfo ( createPropertySetInfo ( getInfoHelper () ) );
+            pInfo = &xInfo;
         }
     }
-    return ( *pInfo ) ;
+    return ( *pInfo );
 }
 
 //  BaseControl
 
 WindowDescriptor* FrameControl::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
 {
-    WindowDescriptor* pDescriptor   = new WindowDescriptor  ;
+    WindowDescriptor* pDescriptor   = new WindowDescriptor;
 
-    pDescriptor->Type               = WindowClass_CONTAINER ;
-    pDescriptor->ParentIndex        = -1                    ;
-    pDescriptor->Parent             = xParentPeer           ;
-    pDescriptor->Bounds             = getPosSize ()         ;
-    pDescriptor->WindowAttributes   = 0                     ;
+    pDescriptor->Type               = WindowClass_CONTAINER;
+    pDescriptor->ParentIndex        = -1;
+    pDescriptor->Parent             = xParentPeer;
+    pDescriptor->Bounds             = getPosSize ();
+    pDescriptor->WindowAttributes   = 0;
 
-    return pDescriptor ;
+    return pDescriptor;
 }
 
 //  private method
@@ -408,50 +408,50 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
                                         const   OUString&                   rURL        ,
                                         const   Sequence< PropertyValue >&  rArguments  )
 {
-    Reference< XFrame2 >     xOldFrame   ;
-    Reference< XFrame2 >     xNewFrame   ;
+    Reference< XFrame2 >     xOldFrame;
+    Reference< XFrame2 >     xNewFrame;
 
     {
-        MutexGuard  aGuard ( m_aMutex ) ;
-        xOldFrame = m_xFrame ;
+        MutexGuard  aGuard ( m_aMutex );
+        xOldFrame = m_xFrame;
     }
 
     xNewFrame = Frame::create( impl_getComponentContext() );
 
-    Reference< XWindow >  xWP ( xPeer, UNO_QUERY ) ;
-    xNewFrame->initialize ( xWP ) ;
+    Reference< XWindow >  xWP ( xPeer, UNO_QUERY );
+    xNewFrame->initialize ( xWP );
 
     //  option
     //xFrame->setName( "WhatYouWant" );
 
     Reference< XURLTransformer > xTrans = URLTransformer::create( impl_getComponentContext() );
     // load file
-    URL aURL ;
-    aURL.Complete = rURL ;
-    xTrans->parseStrict( aURL ) ;
+    URL aURL;
+    aURL.Complete = rURL;
+    xTrans->parseStrict( aURL );
 
-    Reference< XDispatch >  xDisp = xNewFrame->queryDispatch ( aURL, OUString (), FrameSearchFlag::SELF ) ;
+    Reference< XDispatch >  xDisp = xNewFrame->queryDispatch ( aURL, OUString (), FrameSearchFlag::SELF );
     if (xDisp.is())
     {
-        xDisp->dispatch ( aURL, rArguments ) ;
+        xDisp->dispatch ( aURL, rArguments );
     }
 
     // set the frame
     {
-        MutexGuard aGuard ( m_aMutex ) ;
-        m_xFrame = xNewFrame ;
+        MutexGuard aGuard ( m_aMutex );
+        m_xFrame = xNewFrame;
     }
 
     // notify the listeners
-    sal_Int32   nFrameId = PROPERTYHANDLE_FRAME ;
-    Any aNewFrame ( &xNewFrame, ::getCppuType((const Reference< XFrame >*)0) ) ;
-    Any aOldFrame ( &xOldFrame, ::getCppuType((const Reference< XFrame >*)0) ) ;
+    sal_Int32   nFrameId = PROPERTYHANDLE_FRAME;
+    Any aNewFrame ( &xNewFrame, ::getCppuType((const Reference< XFrame >*)0) );
+    Any aOldFrame ( &xOldFrame, ::getCppuType((const Reference< XFrame >*)0) );
 
-    fire ( &nFrameId, &aNewFrame, &aOldFrame, 1, sal_False ) ;
+    fire ( &nFrameId, &aNewFrame, &aOldFrame, 1, sal_False );
 
     if (xOldFrame.is())
     {
-        xOldFrame->dispose () ;
+        xOldFrame->dispose ();
     }
 }
 
@@ -494,7 +494,7 @@ const Sequence< Property > FrameControl::impl_getStaticPropertyDescriptor()
 
     static const Sequence< Property > seqPropertys( pPropertys, PROPERTY_COUNT );
 
-    return seqPropertys ;
+    return seqPropertys;
 }
 
 }   // namespace unocontrols

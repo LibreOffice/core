@@ -29,12 +29,12 @@
 #include <math.h>
 #include <limits.h>
 
-using namespace ::cppu                  ;
-using namespace ::osl                   ;
-using namespace ::rtl                   ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::lang  ;
-using namespace ::com::sun::star::awt   ;
+using namespace ::cppu;
+using namespace ::osl;
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::awt;
 
 namespace unocontrols{
 
@@ -63,7 +63,7 @@ Any SAL_CALL ProgressBar::queryInterface( const Type& rType ) throw( RuntimeExce
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-    Any aReturn ;
+    Any aReturn;
     Reference< XInterface > xDel = BaseControl::impl_getDelegator();
     if ( xDel.is() )
     {
@@ -77,7 +77,7 @@ Any SAL_CALL ProgressBar::queryInterface( const Type& rType ) throw( RuntimeExce
         aReturn = queryAggregation( rType );
     }
 
-    return aReturn ;
+    return aReturn;
 }
 
 //  XInterface
@@ -109,7 +109,7 @@ Sequence< Type > SAL_CALL ProgressBar::getTypes() throw( RuntimeException, std::
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static OTypeCollection* pTypeCollection = NULL ;
+    static OTypeCollection* pTypeCollection = NULL;
 
     if ( pTypeCollection == NULL )
     {
@@ -125,7 +125,7 @@ Sequence< Type > SAL_CALL ProgressBar::getTypes() throw( RuntimeException, std::
                                                       BaseControl::getTypes()
                                                     );
             // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection ;
+            pTypeCollection = &aTypeCollection;
         }
     }
 
@@ -151,7 +151,7 @@ Any SAL_CALL ProgressBar::queryAggregation( const Type& aType ) throw( RuntimeEx
         aReturn = BaseControl::queryAggregation( aType );
     }
 
-    return aReturn ;
+    return aReturn;
 }
 
 //  XProgressBar
@@ -159,13 +159,13 @@ Any SAL_CALL ProgressBar::queryAggregation( const Type& aType ) throw( RuntimeEx
 void SAL_CALL ProgressBar::setForegroundColor( sal_Int32 nColor ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    MutexGuard  aGuard (m_aMutex) ;
+    MutexGuard  aGuard (m_aMutex);
 
     // Safe color for later use.
-    m_nForegroundColor = nColor ;
+    m_nForegroundColor = nColor;
 
     // Repaint control
-    impl_paint ( 0, 0, impl_getGraphicsPeer() ) ;
+    impl_paint ( 0, 0, impl_getGraphicsPeer() );
 }
 
 //  XProgressBar
@@ -173,13 +173,13 @@ void SAL_CALL ProgressBar::setForegroundColor( sal_Int32 nColor ) throw( Runtime
 void SAL_CALL ProgressBar::setBackgroundColor ( sal_Int32 nColor ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    MutexGuard  aGuard (m_aMutex) ;
+    MutexGuard  aGuard (m_aMutex);
 
     // Safe color for later use.
-    m_nBackgroundColor = nColor ;
+    m_nBackgroundColor = nColor;
 
     // Repaint control
-    impl_paint ( 0, 0, impl_getGraphicsPeer() ) ;
+    impl_paint ( 0, 0, impl_getGraphicsPeer() );
 }
 
 //  XProgressBar
@@ -191,11 +191,11 @@ void SAL_CALL ProgressBar::setValue ( sal_Int32 nValue ) throw( RuntimeException
     //      2) Values <= _nMaxRange
 
     // Ready for multithreading
-    MutexGuard aGuard (m_aMutex) ;
+    MutexGuard aGuard (m_aMutex);
 
     // save impossible cases
     // This method is only defined for valid values
-    DBG_ASSERT ( (( nValue >= m_nMinRange ) && ( nValue <= m_nMaxRange )), "ProgressBar::setValue()\nNot valid value.\n" ) ;
+    DBG_ASSERT ( (( nValue >= m_nMinRange ) && ( nValue <= m_nMaxRange )), "ProgressBar::setValue()\nNot valid value.\n" );
 
     // If new value not valid ... do nothing in release version!
     if (
@@ -204,10 +204,10 @@ void SAL_CALL ProgressBar::setValue ( sal_Int32 nValue ) throw( RuntimeException
        )
     {
         // New value is ok => save this
-        m_nValue = nValue ;
+        m_nValue = nValue;
 
         // Repaint to display changes
-        impl_paint ( 0, 0, impl_getGraphicsPeer() ) ;
+        impl_paint ( 0, 0, impl_getGraphicsPeer() );
     }
 }
 
@@ -223,30 +223,30 @@ void SAL_CALL ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw( Ru
     // save impossible cases
     // This method is only defined for valid values
     // If you ignore this, the release version wil produce an error "division by zero" in "ProgressBar::setValue()"!
-    DBG_ASSERT ( ( nMin != nMax ) , "ProgressBar::setRange()\nValues for MIN and MAX are the same. This is not allowed!\n" ) ;
+    DBG_ASSERT ( ( nMin != nMax ) , "ProgressBar::setRange()\nValues for MIN and MAX are the same. This is not allowed!\n" );
 
     // Ready for multithreading
-    MutexGuard  aGuard (m_aMutex) ;
+    MutexGuard  aGuard (m_aMutex);
 
     // control the values for min and max
     if ( nMin < nMax )
     {
         // Take correct Min and Max
-        m_nMinRange = nMin  ;
-        m_nMaxRange = nMax  ;
+        m_nMinRange = nMin;
+        m_nMaxRange = nMax;
     }
     else
     {
         // Change Min and Max automaticly
-        m_nMinRange = nMax  ;
-        m_nMaxRange = nMin  ;
+        m_nMinRange = nMax;
+        m_nMaxRange = nMin;
     }
 
     // assure that m_nValue is within the range
     if (!(m_nMinRange < m_nValue  &&  m_nValue < m_nMaxRange))
         m_nValue = m_nMinRange;
 
-    impl_recalcRange () ;
+    impl_recalcRange ();
 
     // Do not repaint the control at this place!!!
     // An old "m_nValue" is set and can not be correct for this new range.
@@ -258,9 +258,9 @@ void SAL_CALL ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw( Ru
 sal_Int32 SAL_CALL ProgressBar::getValue () throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    MutexGuard aGuard (m_aMutex) ;
+    MutexGuard aGuard (m_aMutex);
 
-    return ( m_nValue ) ;
+    return ( m_nValue );
 }
 
 //  XWindow
@@ -275,8 +275,8 @@ void SAL_CALL ProgressBar::setPosSize (
 {
     // Take old size BEFORE you set the new values at baseclass!
     // You will control changes. At the other way, the values are the same!
-    Rectangle aBasePosSize = getPosSize () ;
-    BaseControl::setPosSize (nX, nY, nWidth, nHeight, nFlags) ;
+    Rectangle aBasePosSize = getPosSize ();
+    BaseControl::setPosSize (nX, nY, nWidth, nHeight, nFlags);
 
     // Do only, if size has changed.
     if (
@@ -284,8 +284,8 @@ void SAL_CALL ProgressBar::setPosSize (
         ( nHeight != aBasePosSize.Height    )
        )
     {
-        impl_recalcRange    (                           ) ;
-        impl_paint          ( 0, 0, impl_getGraphicsPeer () ) ;
+        impl_recalcRange    (                           );
+        impl_paint          ( 0, 0, impl_getGraphicsPeer () );
     }
 }
 
@@ -294,7 +294,7 @@ void SAL_CALL ProgressBar::setPosSize (
 sal_Bool SAL_CALL ProgressBar::setModel( const Reference< XControlModel >& /*xModel*/ ) throw( RuntimeException, std::exception )
 {
     // A model is not possible for this control.
-    return sal_False ;
+    return sal_False;
 }
 
 //  XControl
@@ -324,42 +324,42 @@ const OUString ProgressBar::impl_getStaticImplementationName()
 void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGraphics > & rGraphics )
 {
     // save impossible cases
-    DBG_ASSERT ( rGraphics.is(), "ProgressBar::paint()\nCalled with invalid Reference< XGraphics > ." ) ;
+    DBG_ASSERT ( rGraphics.is(), "ProgressBar::paint()\nCalled with invalid Reference< XGraphics > ." );
 
     // This paint method ist not buffered !!
     // Every request paint the completely control. ( but only, if peer exist )
      if ( rGraphics.is () )
     {
-        MutexGuard  aGuard (m_aMutex) ;
+        MutexGuard  aGuard (m_aMutex);
 
         // Clear background
         // (same color for line and fill)
-        rGraphics->setFillColor ( m_nBackgroundColor                        ) ;
-        rGraphics->setLineColor ( m_nBackgroundColor                        ) ;
-        rGraphics->drawRect     ( nX, nY, impl_getWidth(), impl_getHeight() ) ;
+        rGraphics->setFillColor ( m_nBackgroundColor                        );
+        rGraphics->setLineColor ( m_nBackgroundColor                        );
+        rGraphics->drawRect     ( nX, nY, impl_getWidth(), impl_getHeight() );
 
         // same color for line and fill for blocks
-        rGraphics->setFillColor ( m_nForegroundColor ) ;
-        rGraphics->setLineColor ( m_nForegroundColor ) ;
+        rGraphics->setFillColor ( m_nForegroundColor );
+        rGraphics->setLineColor ( m_nForegroundColor );
 
-        sal_Int32   nBlockStart     =   0                                                                           ;   // = left site of new block
-        sal_Int32   nBlockCount     =   m_nBlockValue!=0.00 ? (sal_Int32)((m_nValue-m_nMinRange)/m_nBlockValue) : 0 ;   // = number of next block
+        sal_Int32   nBlockStart     =   0;   // = left site of new block
+        sal_Int32   nBlockCount     =   m_nBlockValue!=0.00 ? (sal_Int32)((m_nValue-m_nMinRange)/m_nBlockValue) : 0;   // = number of next block
 
         // Draw horizontal progressbar
         // decision in "recalcRange()"
         if (m_bHorizontal)
         {
             // Step to left side of window
-            nBlockStart = nX ;
+            nBlockStart = nX;
 
             for ( sal_Int16 i=1; i<=nBlockCount; ++i )
             {
                 // step free field
-                nBlockStart +=  PROGRESSBAR_FREESPACE   ;
+                nBlockStart +=  PROGRESSBAR_FREESPACE;
                 // paint block
-                rGraphics->drawRect (nBlockStart, nY+PROGRESSBAR_FREESPACE, m_aBlockSize.Width, m_aBlockSize.Height) ;
+                rGraphics->drawRect (nBlockStart, nY+PROGRESSBAR_FREESPACE, m_aBlockSize.Width, m_aBlockSize.Height);
                 // step next free field
-                nBlockStart +=  m_aBlockSize.Width ;
+                nBlockStart +=  m_aBlockSize.Width;
             }
         }
         // draw vertikal progressbar
@@ -367,28 +367,28 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
         else
         {
             // step to bottom side of window
-            nBlockStart  =  nY+impl_getHeight() ;
-            nBlockStart -=  m_aBlockSize.Height ;
+            nBlockStart  =  nY+impl_getHeight();
+            nBlockStart -=  m_aBlockSize.Height;
 
             for ( sal_Int16 i=1; i<=nBlockCount; ++i )
             {
                 // step free field
-                nBlockStart -=  PROGRESSBAR_FREESPACE   ;
+                nBlockStart -=  PROGRESSBAR_FREESPACE;
                 // paint block
-                rGraphics->drawRect (nX+PROGRESSBAR_FREESPACE, nBlockStart, m_aBlockSize.Width, m_aBlockSize.Height) ;
+                rGraphics->drawRect (nX+PROGRESSBAR_FREESPACE, nBlockStart, m_aBlockSize.Width, m_aBlockSize.Height);
                 // step next free field
                 nBlockStart -=  m_aBlockSize.Height;
             }
         }
 
         // Paint shadow border around the progressbar
-        rGraphics->setLineColor ( PROGRESSBAR_LINECOLOR_SHADOW                          ) ;
-        rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               ) ;
-        rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() ) ;
+        rGraphics->setLineColor ( PROGRESSBAR_LINECOLOR_SHADOW                          );
+        rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               );
+        rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() );
 
-        rGraphics->setLineColor ( PROGRESSBAR_LINECOLOR_BRIGHT                                                              ) ;
-        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  ) ;
-        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  ) ;
+        rGraphics->setLineColor ( PROGRESSBAR_LINECOLOR_BRIGHT                                                              );
+        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  );
+        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  );
     }
 }
 
@@ -396,35 +396,35 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
 
 void ProgressBar::impl_recalcRange ()
 {
-    MutexGuard  aGuard (m_aMutex) ;
+    MutexGuard  aGuard (m_aMutex);
 
-    sal_Int32 nWindowWidth  = impl_getWidth()  ;
-    sal_Int32 nWindowHeight = impl_getHeight() ;
-    double    fBlockHeight                     ;
-    double    fBlockWidth                      ;
-    double    fMaxBlocks                       ;
+    sal_Int32 nWindowWidth  = impl_getWidth();
+    sal_Int32 nWindowHeight = impl_getHeight();
+    double    fBlockHeight;
+    double    fBlockWidth;
+    double    fMaxBlocks;
 
     if( nWindowWidth > nWindowHeight )
     {
-        m_bHorizontal = true                            ;
-        fBlockHeight  = (nWindowHeight-(2*PROGRESSBAR_FREESPACE))       ;
-        fBlockWidth   = fBlockHeight                        ;
+        m_bHorizontal = true;
+        fBlockHeight  = (nWindowHeight-(2*PROGRESSBAR_FREESPACE));
+        fBlockWidth   = fBlockHeight;
         fMaxBlocks    = nWindowWidth/(fBlockWidth+PROGRESSBAR_FREESPACE);
     }
     else
     {
-        m_bHorizontal = false                             ;
-        fBlockWidth   = (nWindowWidth-(2*PROGRESSBAR_FREESPACE))          ;
-        fBlockHeight  = fBlockWidth                           ;
+        m_bHorizontal = false;
+        fBlockWidth   = (nWindowWidth-(2*PROGRESSBAR_FREESPACE));
+        fBlockHeight  = fBlockWidth;
         fMaxBlocks    = nWindowHeight/(fBlockHeight+PROGRESSBAR_FREESPACE);
     }
 
-    double fRange       = m_nMaxRange-m_nMinRange    ;
-    double fBlockValue  = fRange/fMaxBlocks          ;
+    double fRange       = m_nMaxRange-m_nMinRange;
+    double fBlockValue  = fRange/fMaxBlocks;
 
-    m_nBlockValue       = fBlockValue            ;
+    m_nBlockValue       = fBlockValue;
     m_aBlockSize.Height = (sal_Int32)fBlockHeight;
-    m_aBlockSize.Width  = (sal_Int32)fBlockWidth ;
+    m_aBlockSize.Width  = (sal_Int32)fBlockWidth;
 }
 
 }   // namespace unocontrols

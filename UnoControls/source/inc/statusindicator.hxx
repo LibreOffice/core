@@ -506,7 +506,7 @@ private:
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >       m_xText         ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >       m_xText;
     rtl::Reference<ProgressBar> m_xProgressBar;
 
 };  // class StatusIndicator

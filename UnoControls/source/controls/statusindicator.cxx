@@ -26,13 +26,13 @@
 
 #include "progressbar.hxx"
 
-using namespace ::cppu                  ;
-using namespace ::osl                   ;
-using namespace ::rtl                   ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::lang  ;
-using namespace ::com::sun::star::awt   ;
-using namespace ::com::sun::star::task  ;
+using namespace ::cppu;
+using namespace ::osl;
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::task;
 
 namespace unocontrols{
 
@@ -43,7 +43,7 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
 {
     // Its not allowed to work with member in this method (refcounter !!!)
     // But with a HACK (++refcount) its "OK" :-(
-    ++m_refCount ;
+    ++m_refCount;
 
     // Create instances for fixedtext and progress ...
     m_xText         = css::uno::Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
@@ -62,7 +62,7 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
     // (progressbar take automaticly its own defaults)
     m_xText->setText( STATUSINDICATOR_DEFAULT_TEXT );
 
-    --m_refCount ;
+    --m_refCount;
 }
 
 StatusIndicator::~StatusIndicator() {}
@@ -73,7 +73,7 @@ Any SAL_CALL StatusIndicator::queryInterface( const Type& rType ) throw( Runtime
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-    Any aReturn ;
+    Any aReturn;
     css::uno::Reference< XInterface > xDel = BaseContainerControl::impl_getDelegator();
     if ( xDel.is() )
     {
@@ -87,7 +87,7 @@ Any SAL_CALL StatusIndicator::queryInterface( const Type& rType ) throw( Runtime
         aReturn = queryAggregation( rType );
     }
 
-    return aReturn ;
+    return aReturn;
 }
 
 //  XInterface
@@ -119,7 +119,7 @@ Sequence< Type > SAL_CALL StatusIndicator::getTypes() throw( RuntimeException, s
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static OTypeCollection* pTypeCollection = NULL ;
+    static OTypeCollection* pTypeCollection = NULL;
 
     if ( pTypeCollection == NULL )
     {
@@ -135,7 +135,7 @@ Sequence< Type > SAL_CALL StatusIndicator::getTypes() throw( RuntimeException, s
                                                       BaseContainerControl::getTypes()
                                                     );
             // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection ;
+            pTypeCollection = &aTypeCollection;
         }
     }
 
@@ -161,7 +161,7 @@ Any SAL_CALL StatusIndicator::queryAggregation( const Type& aType ) throw( Runti
         aReturn = BaseControl::queryAggregation( aType );
     }
 
-    return aReturn ;
+    return aReturn;
 }
 
 //  XStatusIndicator
@@ -175,7 +175,7 @@ void SAL_CALL StatusIndicator::start( const OUString& sText, sal_Int32 nRange ) 
     m_xText->setText( sText );
     m_xProgressBar->setRange( 0, nRange );
     // force repaint ... fixedtext has changed !
-    impl_recalcLayout ( WindowEvent(static_cast< OWeakObject* >(this),0,0,impl_getWidth(),impl_getHeight(),0,0,0,0) ) ;
+    impl_recalcLayout ( WindowEvent(static_cast< OWeakObject* >(this),0,0,impl_getWidth(),impl_getHeight(),0,0,0,0) );
 }
 
 //  XStatusIndicator
@@ -230,7 +230,7 @@ void SAL_CALL StatusIndicator::reset() throw( RuntimeException, std::exception )
 
 Size SAL_CALL StatusIndicator::getMinimumSize () throw( RuntimeException, std::exception )
 {
-    return Size (STATUSINDICATOR_DEFAULT_WIDTH, STATUSINDICATOR_DEFAULT_HEIGHT) ;
+    return Size (STATUSINDICATOR_DEFAULT_WIDTH, STATUSINDICATOR_DEFAULT_HEIGHT);
 }
 
 //  XLayoutConstrains
@@ -238,37 +238,37 @@ Size SAL_CALL StatusIndicator::getMinimumSize () throw( RuntimeException, std::e
 Size SAL_CALL StatusIndicator::getPreferredSize () throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ClearableMutexGuard aGuard ( m_aMutex ) ;
+    ClearableMutexGuard aGuard ( m_aMutex );
 
     // get information about required place of child controls
     css::uno::Reference< XLayoutConstrains >  xTextLayout ( m_xText, UNO_QUERY );
     Size                            aTextSize   = xTextLayout->getPreferredSize();
 
-    aGuard.clear () ;
+    aGuard.clear ();
 
     // calc preferred size of status indicator
-    sal_Int32 nWidth  = impl_getWidth()                 ;
-    sal_Int32 nHeight = (2*STATUSINDICATOR_FREEBORDER)+aTextSize.Height ;
+    sal_Int32 nWidth  = impl_getWidth();
+    sal_Int32 nHeight = (2*STATUSINDICATOR_FREEBORDER)+aTextSize.Height;
 
     // norm to minimum
     if ( nWidth<STATUSINDICATOR_DEFAULT_WIDTH )
     {
-        nWidth = STATUSINDICATOR_DEFAULT_WIDTH ;
+        nWidth = STATUSINDICATOR_DEFAULT_WIDTH;
     }
     if ( nHeight<STATUSINDICATOR_DEFAULT_HEIGHT )
     {
-        nHeight = STATUSINDICATOR_DEFAULT_HEIGHT ;
+        nHeight = STATUSINDICATOR_DEFAULT_HEIGHT;
     }
 
     // return to caller
-    return Size ( nWidth, nHeight ) ;
+    return Size ( nWidth, nHeight );
 }
 
 //  XLayoutConstrains
 
 Size SAL_CALL StatusIndicator::calcAdjustedSize ( const Size& /*rNewSize*/ ) throw( RuntimeException, std::exception )
 {
-    return getPreferredSize () ;
+    return getPreferredSize ();
 }
 
 //  XControl
@@ -285,8 +285,8 @@ void SAL_CALL StatusIndicator::createPeer (
         // If user forget to call "setPosSize()", we have still a correct size.
         // And a "MinimumSize" IS A "MinimumSize"!
         // We change not the position of control at this point.
-        Size aDefaultSize = getMinimumSize () ;
-        setPosSize ( 0, 0, aDefaultSize.Width, aDefaultSize.Height, PosSize::SIZE ) ;
+        Size aDefaultSize = getMinimumSize ();
+        setPosSize ( 0, 0, aDefaultSize.Width, aDefaultSize.Height, PosSize::SIZE );
     }
 }
 
@@ -295,7 +295,7 @@ void SAL_CALL StatusIndicator::createPeer (
 sal_Bool SAL_CALL StatusIndicator::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ ) throw( RuntimeException, std::exception )
 {
     // We have no model.
-    return sal_False ;
+    return sal_False;
 }
 
 //  XControl
@@ -303,8 +303,8 @@ sal_Bool SAL_CALL StatusIndicator::setModel ( const css::uno::Reference< XContro
 css::uno::Reference< XControlModel > SAL_CALL StatusIndicator::getModel () throw( RuntimeException, std::exception )
 {
     // We have no model.
-    // return (XControlModel*)this ;
-    return css::uno::Reference< XControlModel >  () ;
+    // return (XControlModel*)this;
+    return css::uno::Reference< XControlModel >  ();
 }
 
 //  XComponent
@@ -312,7 +312,7 @@ css::uno::Reference< XControlModel > SAL_CALL StatusIndicator::getModel () throw
 void SAL_CALL StatusIndicator::dispose () throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    MutexGuard aGuard ( m_aMutex ) ;
+    MutexGuard aGuard ( m_aMutex );
 
     // "removeControl()" control the state of a reference
     css::uno::Reference< XControl >  xTextControl     ( m_xText       , UNO_QUERY );
@@ -337,8 +337,8 @@ void SAL_CALL StatusIndicator::setPosSize (
     sal_Int16 nFlags
 ) throw( RuntimeException, std::exception )
 {
-    Rectangle   aBasePosSize = getPosSize () ;
-    BaseContainerControl::setPosSize (nX, nY, nWidth, nHeight, nFlags) ;
+    Rectangle   aBasePosSize = getPosSize ();
+    BaseContainerControl::setPosSize (nX, nY, nWidth, nHeight, nFlags);
 
     // if position or size changed
     if (
@@ -347,12 +347,12 @@ void SAL_CALL StatusIndicator::setPosSize (
        )
     {
         // calc new layout for controls
-        impl_recalcLayout ( WindowEvent(static_cast< OWeakObject* >(this),0,0,nWidth,nHeight,0,0,0,0) ) ;
+        impl_recalcLayout ( WindowEvent(static_cast< OWeakObject* >(this),0,0,nWidth,nHeight,0,0,0,0) );
         // clear background (!)
         // [Children were repainted in "recalcLayout" by setPosSize() automaticly!]
         getPeer()->invalidate(2);
         // and repaint the control
-        impl_paint ( 0, 0, impl_getGraphicsPeer() ) ;
+        impl_paint ( 0, 0, impl_getGraphicsPeer() );
     }
 }
 
@@ -378,15 +378,15 @@ WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const css::uno::Ref
     // - if you will change the descriptor-values, you must override this virtuell function
     // - the caller must release the memory for this dynamical descriptor !!!
 
-    WindowDescriptor* pDescriptor = new WindowDescriptor ;
+    WindowDescriptor* pDescriptor = new WindowDescriptor;
 
-    pDescriptor->Type               =   WindowClass_SIMPLE                              ;
-    pDescriptor->WindowServiceName  =   "floatingwindow"                                ;
-    pDescriptor->ParentIndex        =   -1                                              ;
-    pDescriptor->Parent             =   xParentPeer                                     ;
-    pDescriptor->Bounds             =   getPosSize ()                                   ;
+    pDescriptor->Type               =   WindowClass_SIMPLE;
+    pDescriptor->WindowServiceName  =   "floatingwindow";
+    pDescriptor->ParentIndex        =   -1;
+    pDescriptor->Parent             =   xParentPeer;
+    pDescriptor->Bounds             =   getPosSize ();
 
-    return pDescriptor ;
+    return pDescriptor;
 }
 
 //  protected method
@@ -397,7 +397,7 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::R
     // Every request paint the completely control. ( but only, if peer exist )
      if ( rGraphics.is () )
     {
-        MutexGuard  aGuard (m_aMutex) ;
+        MutexGuard  aGuard (m_aMutex);
 
         // background = gray
         css::uno::Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
@@ -430,17 +430,17 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::R
 
 void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
 {
-    sal_Int32   nX_ProgressBar          ;
-    sal_Int32   nY_ProgressBar          ;
-    sal_Int32   nWidth_ProgressBar      ;
-    sal_Int32   nHeight_ProgressBar     ;
-    sal_Int32   nX_Text                 ;
-    sal_Int32   nY_Text                 ;
-    sal_Int32   nWidth_Text             ;
-    sal_Int32   nHeight_Text            ;
+    sal_Int32   nX_ProgressBar;
+    sal_Int32   nY_ProgressBar;
+    sal_Int32   nWidth_ProgressBar;
+    sal_Int32   nHeight_ProgressBar;
+    sal_Int32   nX_Text;
+    sal_Int32   nY_Text;
+    sal_Int32   nWidth_Text;
+    sal_Int32   nHeight_Text;
 
     // Ready for multithreading
-    MutexGuard aGuard ( m_aMutex ) ;
+    MutexGuard aGuard ( m_aMutex );
 
     // get information about required place of child controls
     Size                            aWindowSize     ( aEvent.Width, aEvent.Height );
@@ -457,20 +457,20 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
     }
 
     // calc position and size of child controls
-    nX_Text             = STATUSINDICATOR_FREEBORDER                                    ;
-    nY_Text             = STATUSINDICATOR_FREEBORDER                                    ;
-    nWidth_Text         = aTextSize.Width                               ;
-    nHeight_Text        = aTextSize.Height                              ;
+    nX_Text             = STATUSINDICATOR_FREEBORDER;
+    nY_Text             = STATUSINDICATOR_FREEBORDER;
+    nWidth_Text         = aTextSize.Width;
+    nHeight_Text        = aTextSize.Height;
 
-    nX_ProgressBar      = nX_Text+nWidth_Text+STATUSINDICATOR_FREEBORDER                ;
-    nY_ProgressBar      = nY_Text                                       ;
-    nWidth_ProgressBar  = aWindowSize.Width-nWidth_Text-(3*STATUSINDICATOR_FREEBORDER)  ;
-    nHeight_ProgressBar = nHeight_Text                                  ;
+    nX_ProgressBar      = nX_Text+nWidth_Text+STATUSINDICATOR_FREEBORDER;
+    nY_ProgressBar      = nY_Text;
+    nWidth_ProgressBar  = aWindowSize.Width-nWidth_Text-(3*STATUSINDICATOR_FREEBORDER);
+    nHeight_ProgressBar = nHeight_Text;
 
     // Set new position and size on all controls
     css::uno::Reference< XWindow >  xTextWindow       ( m_xText       , UNO_QUERY );
 
-    xTextWindow->setPosSize     ( nX_Text       , nY_Text       , nWidth_Text       , nHeight_Text          , 15 ) ;
+    xTextWindow->setPosSize     ( nX_Text       , nY_Text       , nWidth_Text       , nHeight_Text          , 15 );
     m_xProgressBar->setPosSize( nX_ProgressBar, nY_ProgressBar, nWidth_ProgressBar, nHeight_ProgressBar, 15 );
 }
 

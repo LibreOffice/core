@@ -250,12 +250,12 @@ private:
 
 private:
 
-    ::osl::Mutex&                                                   m_aSharedMutex              ;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XConnectionPointContainer >   m_oContainerWeakReference   ;   // Reference to container-class!. Don't use Reference<...>
+    ::osl::Mutex&                                                   m_aSharedMutex;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XConnectionPointContainer >   m_oContainerWeakReference;   // Reference to container-class!. Don't use Reference<...>
                                                                                             // It is a ring-reference => and must be a wekreference!
-    OConnectionPointContainerHelper*                                m_pContainerImplementation  ;
-    ::com::sun::star::uno::Type                                                   m_aInterfaceType            ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >                       m_xLock                     ;
+    OConnectionPointContainerHelper*                                m_pContainerImplementation;
+    ::com::sun::star::uno::Type                                                   m_aInterfaceType;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >                       m_xLock;
 
 };  // class OConnectionPointHelper
 

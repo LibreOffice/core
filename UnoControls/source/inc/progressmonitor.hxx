@@ -89,8 +89,8 @@ class ProgressBar;
 /// Item of TextList
 struct IMPL_TextlistItem
 {
-    OUString sTopic  ;          /// Left site of textline in dialog
-    OUString sText   ;          /// Right site of textline in dialog
+    OUString sTopic;          /// Left site of textline in dialog
+    OUString sText;          /// Right site of textline in dialog
 };
 
 //  class declaration
@@ -715,16 +715,16 @@ private:
 
 private:
     ::std::vector < IMPL_TextlistItem* >        maTextlist_Top;         // Elements before progress
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xTopic_Top        ;   // (used, if parameter "beforeProgress"=sal_True in "addText, updateText, removeText")
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xText_Top         ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xTopic_Top;   // (used, if parameter "beforeProgress"=sal_True in "addText, updateText, removeText")
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xText_Top;
 
     ::std::vector < IMPL_TextlistItem* >        maTextlist_Bottom;      // Elements below of progress
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xTopic_Bottom     ;   // (used, if parameter "beforeProgress"=sal_False in "addText, updateText, removeText")
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xText_Bottom      ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xTopic_Bottom;   // (used, if parameter "beforeProgress"=sal_False in "addText, updateText, removeText")
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xText_Bottom;
 
     rtl::Reference<ProgressBar> m_xProgressBar;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton >      m_xButton           ;
-    ::com::sun::star::awt::Rectangle                          m_a3DLine           ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton >      m_xButton;
+    ::com::sun::star::awt::Rectangle                          m_a3DLine;
 
 };  // class ProgressMonitor
 

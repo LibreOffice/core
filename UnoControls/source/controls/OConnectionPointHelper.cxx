@@ -23,11 +23,11 @@
 
 //  namespaces
 
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::cppu                  ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::lang  ;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::cppu;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 
 namespace unocontrols{
 
@@ -68,7 +68,7 @@ Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType ) throw( 
         aReturn = OWeakObject::queryInterface( aType );
     }
 
-    return aReturn ;
+    return aReturn;
 }
 
 //  XInterface
@@ -108,7 +108,7 @@ Type SAL_CALL OConnectionPointHelper::getConnectionType() throw( RuntimeExceptio
     }
 
     // If container reference valid, return right type of supported interfaces of THIS connectionpoint.
-    Type aReturnType = m_aInterfaceType ;
+    Type aReturnType = m_aInterfaceType;
     // Don't forget this!
     impl_UnlockContainer();
 

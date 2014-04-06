@@ -42,8 +42,8 @@ namespace unocontrols{
 
 struct IMPL_ControlInfo
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xControl ;
-    OUString                                sName    ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xControl;
+    OUString                                sName;
 };
 
 class BaseContainerControl  : public ::com::sun::star::awt::XControlModel
@@ -415,9 +415,9 @@ private:
     ::std::vector< IMPL_ControlInfo* > maControlInfoList;
 
     // list of references of XTabController to hold tab-order in this container
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > >  m_xTabControllerList    ;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > >  m_xTabControllerList;
 
-    ::cppu::OMultiTypeInterfaceContainerHelper                          m_aListeners            ;
+    ::cppu::OMultiTypeInterfaceContainerHelper                          m_aListeners;
 
 };  // class BaseContainerControl
 

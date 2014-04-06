@@ -23,11 +23,11 @@
 
 //  namespaces
 
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::cppu                  ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::lang  ;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::cppu;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 
 namespace unocontrols{
 
@@ -63,7 +63,7 @@ Any SAL_CALL OConnectionPointContainerHelper::queryInterface( const Type& aType 
         aReturn = OWeakObject::queryInterface( aType );
     }
 
-    return aReturn ;
+    return aReturn;
 }
 
 //  XInterface
@@ -114,7 +114,7 @@ Reference< XConnectionPoint > SAL_CALL OConnectionPointContainerHelper::queryCon
         xConnectionPoint = Reference< XConnectionPoint >( (OWeakObject*)pNewConnectionPoint, UNO_QUERY );
     }
 
-    return xConnectionPoint ;
+    return xConnectionPoint;
 }
 
 //  XConnectionPointContainer

@@ -21,11 +21,11 @@
 
 #include <osl/diagnose.h>
 
-using namespace ::cppu                  ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::awt   ;
-using namespace ::com::sun::star::lang  ;
+using namespace ::cppu;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::lang;
 
 namespace unocontrols{
 
@@ -42,7 +42,7 @@ namespace unocontrols{
         EVENTTYP aLocalEvent = EVENT;                                                                                               \
         /* Remark: The control is the event source not the peer.*/                                                                  \
         /*         We must change the source of the event.      */                                                                  \
-        aLocalEvent.Source = m_xControl ;                                                                                           \
+        aLocalEvent.Source = m_xControl;                                                                                           \
         /* Is the control not destroyed? */                                                                                         \
         if( aLocalEvent.Source.is() )                                                                                               \
         {                                                                                                                           \
@@ -113,7 +113,7 @@ Any SAL_CALL OMRCListenerMultiplexerHelper::queryInterface( const Type& rType ) 
     if ( aReturn.hasValue() )
     {
         // ... return this information.
-        return aReturn ;
+        return aReturn;
     }
     else
     {
@@ -148,7 +148,7 @@ void SAL_CALL OMRCListenerMultiplexerHelper::release() throw()
 
 OMRCListenerMultiplexerHelper::operator Reference< XInterface >() const
 {
-    return ((OWeakObject*)this) ;
+    return ((OWeakObject*)this);
 }
 
 //  container method
@@ -186,8 +186,8 @@ void OMRCListenerMultiplexerHelper::setPeer( const Reference< XWindow >& xPeer )
 
 void OMRCListenerMultiplexerHelper::disposeAndClear()
 {
-    EventObject aEvent ;
-    aEvent.Source = m_xControl ;
+    EventObject aEvent;
+    aEvent.Source = m_xControl;
     m_aListenerHolder.disposeAndClear( aEvent );
 }
 

@@ -31,12 +31,12 @@
 
 //  namespaces
 
-using namespace ::cppu                  ;
-using namespace ::osl                   ;
-using namespace ::rtl                   ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::lang  ;
-using namespace ::com::sun::star::awt   ;
+using namespace ::cppu;
+using namespace ::osl;
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::awt;
 
 namespace unocontrols{
 
@@ -74,7 +74,7 @@ BaseControl::~BaseControl()
 
 Any SAL_CALL BaseControl::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
 {
-    Any aReturn ;
+    Any aReturn;
     if ( m_xDelegator.is() )
     {
         // If an delegator exist, forward question to his queryInterface.
@@ -87,7 +87,7 @@ Any SAL_CALL BaseControl::queryInterface( const Type& rType ) throw( RuntimeExce
         aReturn = queryAggregation( rType );
     }
 
-    return aReturn ;
+    return aReturn;
 }
 
 //  XInterface
@@ -119,7 +119,7 @@ Sequence< Type > SAL_CALL BaseControl::getTypes() throw( RuntimeException, std::
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static OTypeCollection* pTypeCollection = NULL ;
+    static OTypeCollection* pTypeCollection = NULL;
 
     if ( pTypeCollection == NULL )
     {
@@ -140,7 +140,7 @@ Sequence< Type > SAL_CALL BaseControl::getTypes() throw( RuntimeException, std::
                                                   );
 
             // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection ;
+            pTypeCollection = &aTypeCollection;
         }
     }
 
@@ -183,7 +183,7 @@ Any SAL_CALL BaseControl::queryAggregation( const Type& aType ) throw( RuntimeEx
     if ( aReturn.hasValue() )
     {
         // ... return this information.
-        return aReturn ;
+        return aReturn;
     }
     else
     {
@@ -273,12 +273,12 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
 
         if ( m_bVisible )
         {
-            pDescriptor->WindowAttributes |= WindowAttribute::SHOW ;
+            pDescriptor->WindowAttributes |= WindowAttribute::SHOW;
         }
 
         // very slow under remote conditions!
         // create the window on the server
-        Reference< XToolkit > xLocalToolkit = xToolkit ;
+        Reference< XToolkit > xLocalToolkit = xToolkit;
         if ( !xLocalToolkit.is() )
         {
             // but first create well known toolkit, if it not exist
@@ -288,7 +288,7 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
         m_xPeerWindow   = Reference< XWindow >( m_xPeer, UNO_QUERY );
 
         // don't forget to release the memory!
-        delete pDescriptor ;
+        delete pDescriptor;
 
         if ( m_xPeerWindow.is() )
         {
@@ -325,7 +325,7 @@ void SAL_CALL BaseControl::setContext( const Reference< XInterface >& xContext )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
-    m_xContext = xContext ;
+    m_xContext = xContext;
 }
 
 //  XControl
@@ -334,7 +334,7 @@ void SAL_CALL BaseControl::setDesignMode( sal_Bool bOn ) throw( RuntimeException
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
-    m_bInDesignMode = bOn ;
+    m_bInDesignMode = bOn;
 }
 
 //  XControl
@@ -343,7 +343,7 @@ Reference< XInterface > SAL_CALL BaseControl::getContext() throw( RuntimeExcepti
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
-    return m_xContext ;
+    return m_xContext;
 }
 
 //  XControl
@@ -352,7 +352,7 @@ Reference< XWindowPeer > SAL_CALL BaseControl::getPeer() throw( RuntimeException
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
-    return m_xPeer ;
+    return m_xPeer;
 }
 
 //  XControl
@@ -370,14 +370,14 @@ sal_Bool SAL_CALL BaseControl::isDesignMode() throw( RuntimeException, std::exce
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
-    return m_bInDesignMode ;
+    return m_bInDesignMode;
 }
 
 //  XControl
 
 sal_Bool SAL_CALL BaseControl::isTransparent() throw( RuntimeException, std::exception )
 {
-    return sal_False ;
+    return sal_False;
 }
 
 //  XWindow
@@ -393,26 +393,26 @@ void SAL_CALL BaseControl::setPosSize(  sal_Int32   nX      ,
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
 
-    bool bChanged = false ;
+    bool bChanged = false;
 
     if ( nFlags & PosSize::X )
     {
-        bChanged |= m_nX != nX, m_nX = nX ;
+        bChanged |= m_nX != nX, m_nX = nX;
     }
 
     if ( nFlags & PosSize::Y )
     {
-        bChanged |= m_nY != nY, m_nY = nY ;
+        bChanged |= m_nY != nY, m_nY = nY;
     }
 
     if ( nFlags & PosSize::WIDTH )
     {
-        bChanged |= m_nWidth != nWidth, m_nWidth  = nWidth ;
+        bChanged |= m_nWidth != nWidth, m_nWidth  = nWidth;
     }
 
     if ( nFlags & PosSize::HEIGHT )
     {
-        bChanged |= m_nHeight != nHeight, m_nHeight = nHeight  ;
+        bChanged |= m_nHeight != nHeight, m_nHeight = nHeight;
     }
 
     if ( bChanged && m_xPeerWindow.is() )
@@ -429,7 +429,7 @@ void SAL_CALL BaseControl::setVisible( sal_Bool bVisible ) throw( RuntimeExcepti
     MutexGuard aGuard( m_aMutex );
 
     // Set new state of flag
-    m_bVisible = bVisible ;
+    m_bVisible = bVisible;
 
     if ( m_xPeerWindow.is() )
     {
@@ -446,7 +446,7 @@ void SAL_CALL BaseControl::setEnable( sal_Bool bEnable ) throw( RuntimeException
     MutexGuard aGuard( m_aMutex );
 
     // Set new state of flag
-    m_bEnable = bEnable ;
+    m_bEnable = bEnable;
 
     if ( m_xPeerWindow.is() )
     {
@@ -582,17 +582,17 @@ sal_Bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevic
     // - set the graphics for an view
     // - in this class exist 2 graphics-member ... one for peer[_xGraphicsPeer] and one for view[_xGraphicsView]
     // - they are used by "windowPaint() and draw()", forwarded to "paint ()"
-    bool bReturn = false ;
+    bool bReturn = false;
     if ( xDevice.is() )
     {
         // Ready for multithreading
         MutexGuard aGuard( m_aMutex );
 
-        m_xGraphicsView = xDevice   ;
-        bReturn         = true  ;
+        m_xGraphicsView = xDevice;
+        bReturn         = true;
     }
 
-    return bReturn ;
+    return bReturn;
 }
 
 //  XView
@@ -609,7 +609,7 @@ Reference< XGraphics > SAL_CALL BaseControl::getGraphics() throw( RuntimeExcepti
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
-    return m_xGraphicsView ;
+    return m_xGraphicsView;
 }
 
 //  XView
@@ -663,8 +663,8 @@ void SAL_CALL BaseControl::windowResized( const WindowEvent& aEvent ) throw( Run
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
 
-    m_nWidth    =   aEvent.Width    ;
-    m_nHeight   =   aEvent.Height   ;
+    m_nWidth    =   aEvent.Width;
+    m_nHeight   =   aEvent.Height;
     WindowEvent aMappedEvent = aEvent;
     aMappedEvent.X = 0;
     aMappedEvent.Y = 0;
@@ -678,8 +678,8 @@ void SAL_CALL BaseControl::windowMoved( const WindowEvent& aEvent ) throw( Runti
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
 
-    m_nWidth    =   aEvent.Width    ;
-    m_nHeight   =   aEvent.Height   ;
+    m_nWidth    =   aEvent.Width;
+    m_nHeight   =   aEvent.Height;
     WindowEvent aMappedEvent = aEvent;
     aMappedEvent.X = 0;
     aMappedEvent.Y = 0;
@@ -718,35 +718,35 @@ const OUString BaseControl::impl_getStaticImplementationName()
 
 const Reference< XComponentContext > BaseControl::impl_getComponentContext()
 {
-    return m_xComponentContext ;
+    return m_xComponentContext;
 }
 
 //  protected method
 
 const Reference< XWindow > BaseControl::impl_getPeerWindow()
 {
-    return m_xPeerWindow ;
+    return m_xPeerWindow;
 }
 
 //  protected method
 
 const Reference< XGraphics > BaseControl::impl_getGraphicsPeer()
 {
-    return m_xGraphicsPeer ;
+    return m_xGraphicsPeer;
 }
 
 //  protected method
 
 const sal_Int32& BaseControl::impl_getWidth()
 {
-    return m_nWidth ;
+    return m_nWidth;
 }
 
 //  protected method
 
 const sal_Int32& BaseControl::impl_getHeight()
 {
-    return m_nHeight ;
+    return m_nHeight;
 }
 
 //  protected method
@@ -757,16 +757,16 @@ WindowDescriptor* BaseControl::impl_getWindowDescriptor( const Reference< XWindo
     // - if you will change the descriptor-values, you must override this virtuell function
     // - the caller must release the memory for this dynamical descriptor !!!
 
-    WindowDescriptor* pDescriptor = new WindowDescriptor ;
+    WindowDescriptor* pDescriptor = new WindowDescriptor;
 
-    pDescriptor->Type               = WindowClass_SIMPLE                    ;
-    pDescriptor->WindowServiceName  = "window"                              ;
-    pDescriptor->ParentIndex        = -1                                    ;
-    pDescriptor->Parent             = xParentPeer                           ;
-    pDescriptor->Bounds             = getPosSize ()                         ;
-    pDescriptor->WindowAttributes   = 0                                     ;
+    pDescriptor->Type               = WindowClass_SIMPLE;
+    pDescriptor->WindowServiceName  = "window";
+    pDescriptor->ParentIndex        = -1;
+    pDescriptor->Parent             = xParentPeer;
+    pDescriptor->Bounds             = getPosSize ();
+    pDescriptor->WindowAttributes   = 0;
 
-    return pDescriptor ;
+    return pDescriptor;
 }
 
 //  protected method
@@ -792,7 +792,7 @@ void BaseControl::impl_recalcLayout( const WindowEvent& /*aEvent*/ )
 
 Reference< XInterface > BaseControl::impl_getDelegator()
 {
-    return m_xDelegator ;
+    return m_xDelegator;
 }
 
 //  private method
@@ -830,7 +830,7 @@ OMRCListenerMultiplexerHelper* BaseControl::impl_getMultiplexer()
         m_xMultiplexer = Reference< XInterface >( (OWeakObject*)m_pMultiplexer, UNO_QUERY );
     }
 
-    return m_pMultiplexer ;
+    return m_pMultiplexer;
 }
 
 } // namespace unocontrols
