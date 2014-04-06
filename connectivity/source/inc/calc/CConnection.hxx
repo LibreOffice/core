@@ -21,6 +21,7 @@
 #define _CONNECTIVITY_CALC_CONNECTION_HXX_
 
 #include "file/FConnection.hxx"
+#include <com/sun/star/uno/DeploymentException.hpp>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     class XSpreadsheetDocument;
@@ -45,8 +46,10 @@ namespace connectivity
             virtual ~OCalcConnection();
 
             virtual void construct(const OUString& _rUrl,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo )
-                throw( ::com::sun::star::sdbc::SQLException) SAL_OVERRIDE;
+                                   const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo )
+                throw( css::sdbc::SQLException,
+                       css::uno::RuntimeException,
+                       css::uno::DeploymentException) SAL_OVERRIDE;
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();

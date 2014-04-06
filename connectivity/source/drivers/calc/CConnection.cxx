@@ -63,7 +63,7 @@ OCalcConnection::~OCalcConnection()
 }
 
 void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
-    throw(SQLException)
+    throw(SQLException, RuntimeException, DeploymentException)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::construct" );
     //  open file

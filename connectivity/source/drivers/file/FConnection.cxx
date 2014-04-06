@@ -93,7 +93,10 @@ sal_Bool OConnection::matchesExtension( const OUString& _rExt ) const
 }
 
 
-void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
+void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
+    throw( css::sdbc::SQLException,
+           css::uno::RuntimeException,
+           css::uno::DeploymentException)
 {
     osl_atomic_increment( &m_refCount );
 

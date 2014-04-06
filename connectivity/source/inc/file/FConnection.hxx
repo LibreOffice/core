@@ -28,6 +28,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
 #include "connectivity/sqlparse.hxx"
 #include "connectivity/sqliterator.hxx"
 #include "TConnection.hxx"
@@ -77,7 +78,11 @@ namespace connectivity
 
             OConnection(OFileDriver*    _pDriver);
 
-            virtual void construct(const OUString& _rUrl,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo ) throw( ::com::sun::star::sdbc::SQLException);
+            virtual void construct(const OUString& _rUrl, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo )
+                throw( css::sdbc::SQLException,
+                       css::uno::RuntimeException,
+                       css::uno::DeploymentException);
+
 
             void closeAllStatements () throw( ::com::sun::star::sdbc::SQLException);
 
