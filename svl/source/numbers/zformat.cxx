@@ -582,9 +582,16 @@ enum BracketFormatSymbolType
 };
 
 SvNumberformat::SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge )
-        : rScan(rSc)
-        , nNewStandardDefined(0)
-        , bStarFlag( false )
+    : fLimit1(0.0)
+    , fLimit2(0.0)
+    , rScan(rSc)
+    , eOp1(NUMBERFORMAT_OP_NO)
+    , eOp2(NUMBERFORMAT_OP_NO)
+    , nNewStandardDefined(0)
+    , eType(0)
+    , bStarFlag( false )
+    , bStandard( false )
+    , bIsUsed( false )
 {
     maLocale.meLanguage = eLge;
 }
