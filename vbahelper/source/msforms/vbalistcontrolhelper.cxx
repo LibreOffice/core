@@ -24,8 +24,6 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-const static OUString ITEMS( "StringItemList" );
-
 class ListPropListener : public PropListener
 {
 private:
@@ -49,13 +47,13 @@ void ListPropListener::setValueEvent( const uno::Any& value )
     if( m_pvargIndex.hasValue() || m_pvarColumn.hasValue() )
         throw uno::RuntimeException( "Bad argument" , uno::Reference< uno::XInterface >() );
 
-    m_xProps->setPropertyValue( ITEMS, value );
+    m_xProps->setPropertyValue( "StringItemList", value );
 }
 
 uno::Any ListPropListener::getValueEvent()
 {
     uno::Sequence< OUString > sList;
-    m_xProps->getPropertyValue( ITEMS ) >>= sList;
+    m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
     sal_Int16 nLength = static_cast< sal_Int16 >( sList.getLength() );
     uno::Any aRet;
     if ( m_pvargIndex.hasValue() )
@@ -87,7 +85,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
     if ( pvargItem.hasValue()  )
     {
         uno::Sequence< OUString > sList;
-        m_xProps->getPropertyValue( ITEMS ) >>= sList;
+        m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
 
         sal_Int32 nIndex = sList.getLength();
 
@@ -131,7 +129,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
 
         }
 
-        m_xProps->setPropertyValue( ITEMS, uno::makeAny( sList ) );
+        m_xProps->setPropertyValue( "StringItemList", uno::makeAny( sList ) );
 
     }
 }
@@ -144,7 +142,7 @@ ListControlHelper::removeItem( const uno::Any& index ) throw (uno::RuntimeExcept
     if ( index >>= nIndex  )
     {
         uno::Sequence< OUString > sList;
-        m_xProps->getPropertyValue( ITEMS ) >>= sList;
+        m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
         if( nIndex < 0 || nIndex > ( sList.getLength() - 1 ) )
             throw uno::RuntimeException( "Invalid index" , uno::Reference< uno::XInterface > () );
         if( sList.hasElements() )
@@ -161,7 +159,7 @@ ListControlHelper::removeItem( const uno::Any& index ) throw (uno::RuntimeExcept
             sList.realloc(  sList.getLength() - 1 );
         }
 
-        m_xProps->setPropertyValue( ITEMS, uno::makeAny( sList ) );
+        m_xProps->setPropertyValue( "StringItemList", uno::makeAny( sList ) );
     }
 }
 
@@ -170,7 +168,7 @@ ListControlHelper::Clear(  ) throw (uno::RuntimeException)
 {
     // urk, setValue doesn't seem to work !!
     //setValue( uno::makeAny( sal_Int16() ) );
-    m_xProps->setPropertyValue( ITEMS, uno::makeAny( uno::Sequence< OUString >() ) );
+    m_xProps->setPropertyValue( "StringItemList", uno::makeAny( uno::Sequence< OUString >() ) );
 }
 
 void SAL_CALL
@@ -184,7 +182,7 @@ sal_Int32 SAL_CALL
 ListControlHelper::getListCount() throw (uno::RuntimeException)
 {
     uno::Sequence< OUString > sList;
-    m_xProps->getPropertyValue( ITEMS ) >>= sList;
+    m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
     return sList.getLength();
 }
 

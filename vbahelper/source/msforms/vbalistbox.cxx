@@ -27,11 +27,6 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-const static OUString TEXT( "Text" );
-const static OUString SELECTEDITEMS( "SelectedItems" );
-const static OUString ITEMS( "StringItemList" );
-
-
 ScVbaListBox::ScVbaListBox( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< css::uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper )
     : ListBoxImpl_BASE(xParent, xContext, xControl, xModel, pGeomHelper)
     , m_nIndex(0)
@@ -53,7 +48,7 @@ uno::Any SAL_CALL
 ScVbaListBox::getListIndex() throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< sal_Int16 > sSelection;
-    m_xProps->getPropertyValue( SELECTEDITEMS ) >>= sSelection;
+    m_xProps->getPropertyValue( "SelectedItems" ) >>= sSelection;
     if ( sSelection.getLength() == 0 )
         return uno::Any( sal_Int32( -1 ) );
     return uno::Any( sSelection[ 0 ] );
@@ -64,8 +59,8 @@ ScVbaListBox::getValue() throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< sal_Int16 > sSelection;
     uno::Sequence< OUString > sItems;
-    m_xProps->getPropertyValue( SELECTEDITEMS ) >>= sSelection;
-    m_xProps->getPropertyValue( ITEMS ) >>= sItems;
+    m_xProps->getPropertyValue( "SelectedItems" ) >>= sSelection;
+    m_xProps->getPropertyValue( "StringItemList" ) >>= sItems;
     if( getMultiSelect() )
         throw uno::RuntimeException( "Attribute use invalid." , uno::Reference< uno::XInterface >() );
     uno::Any aRet;
@@ -83,7 +78,7 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException, s
     }
     OUString sValue = getAnyAsString( _value );
     uno::Sequence< OUString > sList;
-    m_xProps->getPropertyValue( ITEMS ) >>= sList;
+    m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
     sal_Int16 nLength = static_cast<sal_Int16>( sList.getLength() );
     sal_Int16 nValue = -1;
     sal_Int16 i = 0;
@@ -100,9 +95,9 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException, s
 
     uno::Sequence< sal_Int16 > nSelectedIndices(1);
     uno::Sequence< sal_Int16 > nOldSelectedIndices;
-    m_xProps->getPropertyValue( SELECTEDITEMS ) >>= nOldSelectedIndices;
+    m_xProps->getPropertyValue( "SelectedItems" ) >>= nOldSelectedIndices;
     nSelectedIndices[ 0 ] = nValue;
-    m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( nSelectedIndices ) );
+    m_xProps->setPropertyValue( "SelectedItems", uno::makeAny( nSelectedIndices ) );
     if ( nSelectedIndices != nOldSelectedIndices )
         fireClickEvent();
 }
@@ -155,7 +150,7 @@ css::uno::Any SAL_CALL
 ScVbaListBox::Selected( sal_Int32 index ) throw (css::uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > sList;
-    m_xProps->getPropertyValue( ITEMS ) >>= sList;
+    m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
     sal_Int16 nLength = static_cast< sal_Int16 >( sList.getLength() );
     // no choice but to do a horror cast as internally
     // the indices are but sal_Int16
@@ -196,7 +191,7 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
     if( !(value >>= bValue) )
         throw uno::RuntimeException( "Invalid type\n. need boolean." , uno::Reference< uno::XInterface >() );
     uno::Sequence< sal_Int16 > nList;
-    m_xProps->getPropertyValue( SELECTEDITEMS ) >>= nList;
+    m_xProps->getPropertyValue( "SelectedItems" ) >>= nList;
     sal_Int16 nLength = static_cast<sal_Int16>( nList.getLength() );
     sal_Int16 nIndex = m_nIndex;
     for( sal_Int16 i = 0; i < nLength; i++ )
@@ -214,7 +209,7 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
                 nList.realloc( nLength - 1 );
                 //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
                 fireClickEvent();
-        m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( nList ) );
+        m_xProps->setPropertyValue( "SelectedItems", uno::makeAny( nList ) );
                 return;
             }
         }
@@ -233,7 +228,7 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
         }
         //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
         fireClickEvent();
-        m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( nList ) );
+        m_xProps->setPropertyValue( "SelectedItems", uno::makeAny( nList ) );
     }
 }
 

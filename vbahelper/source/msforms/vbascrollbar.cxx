@@ -16,18 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #include "vbascrollbar.hxx"
 #include <vector>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
-
-
-const static OUString LARGECHANGE( "BlockIncrement");
-const static OUString SMALLCHANGE( "LineIncrement");
-const static OUString SCROLLVALUE( "ScrollValue");
-const static OUString SCROLLMAX( "ScrollValueMax");
-const static OUString SCROLLMIN( "ScrollValueMin");
 
 ScVbaScrollBar::ScVbaScrollBar(  const css::uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ScrollBarImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
@@ -37,54 +31,54 @@ ScVbaScrollBar::ScVbaScrollBar(  const css::uno::Reference< ov::XHelperInterface
 uno::Any SAL_CALL
 ScVbaScrollBar::getValue() throw (css::uno::RuntimeException, std::exception)
 {
-    return  m_xProps->getPropertyValue( SCROLLVALUE );
+    return  m_xProps->getPropertyValue( "ScrollValue" );
 }
 
 void SAL_CALL
 ScVbaScrollBar::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    m_xProps->setPropertyValue( SCROLLVALUE, _value );
+    m_xProps->setPropertyValue( "ScrollValue", _value );
 }
 
 ::sal_Int32 SAL_CALL
 ScVbaScrollBar::getMax() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nMax = 0;
-    m_xProps->getPropertyValue( SCROLLMAX ) >>= nMax;
+    m_xProps->getPropertyValue( "ScrollValueMax" ) >>= nMax;
     return nMax;
 }
 
 void SAL_CALL
 ScVbaScrollBar::setMax( sal_Int32 nVal ) throw (uno::RuntimeException, std::exception)
 {
-    m_xProps->setPropertyValue( SCROLLMAX, uno::makeAny( nVal ) );
+    m_xProps->setPropertyValue( "ScrollValueMax", uno::makeAny( nVal ) );
 }
 
 ::sal_Int32 SAL_CALL
 ScVbaScrollBar::getMin() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nVal = 0;
-    m_xProps->getPropertyValue( SCROLLMIN ) >>= nVal;
+    m_xProps->getPropertyValue( "ScrollValueMin" ) >>= nVal;
     return nVal;
 }
 
 void SAL_CALL
 ScVbaScrollBar::setMin( sal_Int32 nVal ) throw (uno::RuntimeException, std::exception)
 {
-    m_xProps->setPropertyValue( SCROLLMIN, uno::makeAny( nVal ) );
+    m_xProps->setPropertyValue( "ScrollValueMin", uno::makeAny( nVal ) );
 }
 
 void SAL_CALL
 ScVbaScrollBar::setLargeChange( ::sal_Int32 _largechange ) throw (uno::RuntimeException, std::exception)
 {
-    m_xProps->setPropertyValue( LARGECHANGE, uno::makeAny( _largechange ) );
+    m_xProps->setPropertyValue( "BlockIncrement", uno::makeAny( _largechange ) );
 }
 
 ::sal_Int32 SAL_CALL
 ScVbaScrollBar::getLargeChange() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nVal = 0;
-    m_xProps->getPropertyValue( LARGECHANGE ) >>= nVal;
+    m_xProps->getPropertyValue( "BlockIncrement" ) >>= nVal;
     return nVal;
 }
 
@@ -92,14 +86,14 @@ ScVbaScrollBar::getLargeChange() throw (uno::RuntimeException, std::exception)
 ScVbaScrollBar::getSmallChange() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nSmallChange = 0;
-    m_xProps->getPropertyValue( SMALLCHANGE ) >>= nSmallChange;
+    m_xProps->getPropertyValue( "LineIncrement" ) >>= nSmallChange;
     return nSmallChange;
 }
 
 void SAL_CALL
 ScVbaScrollBar::setSmallChange( ::sal_Int32 _smallchange ) throw (uno::RuntimeException, std::exception)
 {
-    m_xProps->setPropertyValue( SMALLCHANGE, uno::makeAny( _smallchange ) );
+    m_xProps->setPropertyValue( "LineIncrement", uno::makeAny( _smallchange ) );
 }
 
 OUString

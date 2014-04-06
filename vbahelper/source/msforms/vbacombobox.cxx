@@ -37,17 +37,13 @@ using namespace ooo::vba;
 //SelectedItems list of integer indexes
 //StringItemList list of items
 
-const static OUString TEXT( "Text" );
-const static OUString ITEMS( "StringItemList" );
-const static OUString CONTROLSOURCEPROP( "DataFieldProperty" );
-
 ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ComboBoxImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
     mpListHelper.reset( new ListControlHelper( m_xProps ) );
     try
     {
        // grab the default value property name
-       m_xProps->getPropertyValue( CONTROLSOURCEPROP ) >>= sSourceName;
+       m_xProps->getPropertyValue( "DataFieldProperty" ) >>= sSourceName;
     }
     catch( uno::Exception& )
     {
@@ -76,11 +72,11 @@ ScVbaComboBox::setListIndex( const uno::Any& _value ) throw (uno::RuntimeExcepti
         sal_Int32 nOldIndex = -1;
         getListIndex() >>= nOldIndex;
         uno::Sequence< OUString > sItems;
-        m_xProps->getPropertyValue( ITEMS ) >>= sItems;
+        m_xProps->getPropertyValue( "StringItemList" ) >>= sItems;
         if( ( nIndex >= 0 ) && ( sItems.getLength() > nIndex ) )
         {
             OUString sText = sItems[ nIndex ];
-            m_xProps->setPropertyValue( TEXT, uno::makeAny( sText ) );
+            m_xProps->setPropertyValue( "Text", uno::makeAny( sText ) );
 
             // fire the _Change event
             if( nOldIndex != nIndex )
@@ -93,7 +89,7 @@ uno::Any SAL_CALL
 ScVbaComboBox::getListIndex() throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > sItems;
-    m_xProps->getPropertyValue( ITEMS ) >>= sItems;
+    m_xProps->getPropertyValue( "StringItemList" ) >>= sItems;
     // should really return the item that has focus regardless of
     // it been selected
     if ( sItems.getLength() > 0 )

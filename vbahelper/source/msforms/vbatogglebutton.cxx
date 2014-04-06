@@ -23,14 +23,10 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-
-const static OUString LABEL( "Label" );
-const static OUString TOGGLE( "Toggle" );
-const static OUString STATE( "State" );
 ScVbaToggleButton::ScVbaToggleButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper ) : ToggleButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
     SAL_INFO("vbahelper", "ScVbaToggleButton(ctor)");
-    m_xProps->setPropertyValue( TOGGLE, uno::makeAny( sal_True ) );
+    m_xProps->setPropertyValue( "Toggle", uno::makeAny( sal_True ) );
 }
 
 ScVbaToggleButton::~ScVbaToggleButton()
@@ -43,21 +39,21 @@ OUString SAL_CALL
 ScVbaToggleButton::getCaption() throw (css::uno::RuntimeException, std::exception)
 {
     OUString Label;
-    m_xProps->getPropertyValue( LABEL ) >>= Label;
+    m_xProps->getPropertyValue( "Label" ) >>= Label;
     return Label;
 }
 
 void SAL_CALL
 ScVbaToggleButton::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
+    m_xProps->setPropertyValue( "Label", uno::makeAny( _caption ) );
 }
 
 uno::Any SAL_CALL
 ScVbaToggleButton::getValue() throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nState = 0;
-        m_xProps->getPropertyValue( STATE ) >>= nState;
+        m_xProps->getPropertyValue( "State" ) >>= nState;
      return uno::makeAny( nState ? sal_Int16( -1 ) : sal_Int16( 0 ) );
 }
 
@@ -76,7 +72,7 @@ ScVbaToggleButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExcepti
     SAL_INFO("vbahelper", "nState - " << nState );
     nState = ( nState == -1 ) ?  1 : 0;
     SAL_INFO("vbahelper", "nState - " << nState );
-    m_xProps->setPropertyValue( STATE, uno::makeAny(   nState ) );
+    m_xProps->setPropertyValue( "State", uno::makeAny(   nState ) );
 }
 
 sal_Bool SAL_CALL ScVbaToggleButton::getAutoSize() throw (uno::RuntimeException, std::exception)

@@ -16,16 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #include "vbaspinbutton.hxx"
 #include <vector>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
-
-
-const static OUString SPINVALUE( "SpinValue" );
-const static OUString SPINMAX( "SpinValueMax" );
-const static OUString SPINMIN( "SpinValueMin" );
 
 ScVbaSpinButton::ScVbaSpinButton(  const css::uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : SpinButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
@@ -35,41 +31,41 @@ ScVbaSpinButton::ScVbaSpinButton(  const css::uno::Reference< ov::XHelperInterfa
 uno::Any SAL_CALL
 ScVbaSpinButton::getValue() throw (css::uno::RuntimeException, std::exception)
 {
-    return  m_xProps->getPropertyValue( SPINVALUE );
+    return  m_xProps->getPropertyValue( "SpinValue" );
 }
 
 void SAL_CALL
 ScVbaSpinButton::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    m_xProps->setPropertyValue( SPINVALUE, _value );
+    m_xProps->setPropertyValue( "SpinValue", _value );
 }
 
 ::sal_Int32 SAL_CALL
 ScVbaSpinButton::getMax() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nMax = 0;
-    m_xProps->getPropertyValue( SPINMAX ) >>= nMax;
+    m_xProps->getPropertyValue( "SpinValueMax" ) >>= nMax;
     return nMax;
 }
 
 void SAL_CALL
 ScVbaSpinButton::setMax( sal_Int32 nVal ) throw (uno::RuntimeException, std::exception)
 {
-    m_xProps->setPropertyValue( SPINMAX, uno::makeAny( nVal ) );
+    m_xProps->setPropertyValue( "SpinValueMax", uno::makeAny( nVal ) );
 }
 
 ::sal_Int32 SAL_CALL
 ScVbaSpinButton::getMin() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nVal = 0;
-    m_xProps->getPropertyValue( SPINMIN ) >>= nVal;
+    m_xProps->getPropertyValue( "SpinValueMin" ) >>= nVal;
     return nVal;
 }
 
 void SAL_CALL
 ScVbaSpinButton::setMin( sal_Int32 nVal ) throw (uno::RuntimeException, std::exception)
 {
-    m_xProps->setPropertyValue( SPINMIN, uno::makeAny( nVal ) );
+    m_xProps->setPropertyValue( "SpinValueMin", uno::makeAny( nVal ) );
 }
 
 OUString

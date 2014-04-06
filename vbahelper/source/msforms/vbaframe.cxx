@@ -26,9 +26,6 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-
-const static OUString LABEL( "Label" );
-
 ScVbaFrame::ScVbaFrame(
         const uno::Reference< XHelperInterface >& xParent,
         const uno::Reference< uno::XComponentContext >& xContext,
@@ -46,13 +43,13 @@ ScVbaFrame::ScVbaFrame(
 OUString SAL_CALL ScVbaFrame::getCaption() throw (css::uno::RuntimeException, std::exception)
 {
     OUString Label;
-    m_xProps->getPropertyValue( LABEL ) >>= Label;
+    m_xProps->getPropertyValue( "Label" ) >>= Label;
     return Label;
 }
 
 void SAL_CALL ScVbaFrame::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
+    m_xProps->setPropertyValue( "Label", uno::makeAny( _caption ) );
 }
 
 sal_Int32 SAL_CALL ScVbaFrame::getSpecialEffect() throw (uno::RuntimeException, std::exception)

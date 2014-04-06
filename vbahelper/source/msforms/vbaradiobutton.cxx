@@ -23,9 +23,6 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-
-const static OUString LABEL( "Label" );
-const static OUString STATE( "State" );
 ScVbaRadioButton::ScVbaRadioButton( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : RadioButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
 }
@@ -35,21 +32,21 @@ OUString SAL_CALL
 ScVbaRadioButton::getCaption() throw (css::uno::RuntimeException, std::exception)
 {
     OUString Label;
-    m_xProps->getPropertyValue( LABEL ) >>= Label;
+    m_xProps->getPropertyValue( "Label" ) >>= Label;
     return Label;
 }
 
 void SAL_CALL
 ScVbaRadioButton::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
+    m_xProps->setPropertyValue( "Label", uno::makeAny( _caption ) );
 }
 
 uno::Any SAL_CALL
 ScVbaRadioButton::getValue() throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int16 nValue = -1;
-    m_xProps->getPropertyValue( STATE ) >>= nValue;
+    m_xProps->getPropertyValue( "State" ) >>= nValue;
     if( nValue != 0 )
         nValue = -1;
 //    return uno::makeAny( nValue );
@@ -64,7 +61,7 @@ ScVbaRadioButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExceptio
 {
     sal_Int16 nValue = 0;
     sal_Int16 nOldValue = 0;
-    m_xProps->getPropertyValue( STATE ) >>= nOldValue;
+    m_xProps->getPropertyValue( "State" ) >>= nOldValue;
 
     if( !( _value >>= nValue ) )
     {
@@ -76,7 +73,7 @@ ScVbaRadioButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExceptio
 
     if( nValue == -1)
         nValue = 1;
-    m_xProps->setPropertyValue( STATE, uno::makeAny( nValue ) );
+    m_xProps->setPropertyValue( "State", uno::makeAny( nValue ) );
     if ( nValue != nOldValue )
     {
         fireChangeEvent();

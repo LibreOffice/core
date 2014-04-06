@@ -23,8 +23,6 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-
-const static OUString LABEL( "Label" );
 VbaButton::VbaButton( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
 }
@@ -34,14 +32,14 @@ OUString SAL_CALL
 VbaButton::getCaption() throw (css::uno::RuntimeException, std::exception)
 {
     OUString Label;
-    m_xProps->getPropertyValue( LABEL ) >>= Label;
+    m_xProps->getPropertyValue( "Label" ) >>= Label;
     return Label;
 }
 
 void SAL_CALL
 VbaButton::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
+    m_xProps->setPropertyValue( "Label", uno::makeAny( _caption ) );
 }
 
 sal_Bool SAL_CALL VbaButton::getAutoSize() throw (uno::RuntimeException, std::exception)
