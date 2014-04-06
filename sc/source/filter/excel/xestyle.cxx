@@ -1665,7 +1665,6 @@ void XclExpCellBorder::SetFinalColors( const XclExpPalette& rPalette )
     mnDiagColor   = rPalette.GetColorIndex( mnDiagColorId );
 }
 
-
 void XclExpCellBorder::FillToXF5( sal_uInt32& rnBorder, sal_uInt32& rnArea ) const
 {
     ::insert_value( rnBorder, mnTopLine,      0, 3 );
@@ -1868,7 +1867,6 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
 
     rStyleSheet->endElement( XML_fill );
 }
-
 
 bool XclExpColor::FillFromItemSet( const SfxItemSet& rItemSet )
 {
@@ -2841,7 +2839,6 @@ void XclExpXFBuffer::AddBorderAndFill( const XclExpXF& rXF )
         maFills.push_back( rXF.GetAreaData() );
     }
 }
-
 
 XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     : XclExpRoot( rRoot ),
