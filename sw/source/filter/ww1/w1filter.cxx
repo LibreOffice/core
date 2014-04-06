@@ -428,7 +428,7 @@ static WWDateTime GetTimeDatePara( const OUString& rForm,
         if( pTime )
             *pTime = TF_SSMM_24;
     }
-    else if (rForm.indexOf('H') != -1)    // h    -> 24h
+    else if (rForm.indexOf('h') != -1)    // h    -> 24h
     {
         if( pTime )
             *pTime = TF_SSMM_12;
