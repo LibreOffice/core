@@ -125,13 +125,18 @@ void SmTmpDevice::SetFont(const Font &rNewFont)
 
 
 SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
+    : aNodeToken( rNodeToken )
+    , eType( eNodeType )
+    , eScaleMode( SCALE_NONE )
+    , eRectHorAlign( RHA_LEFT )
+    , nFlags( 0 )
+    , nAttributes( 0 )
+    , bIsPhantom( false )
+    , bIsDebug( false )
+    , bIsSelected( false )
+    , nAccIndex( -1 )
+    , aParentNode( NULL )
 {
-    eType      = eNodeType;
-    eScaleMode = SCALE_NONE;
-    aNodeToken = rNodeToken;
-    nAccIndex  = -1;
-    SetSelected(false);
-    aParentNode = NULL;
 }
 
 
