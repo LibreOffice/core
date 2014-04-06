@@ -616,8 +616,13 @@ struct SmXMLContext_Helper
 
     SmXMLImportContext rContext;
 
-    SmXMLContext_Helper(SmXMLImportContext &rImport) :
-        nIsBold(-1), nIsItalic(-1), nFontSize(0.0), rContext(rImport)  {}
+    SmXMLContext_Helper(SmXMLImportContext &rImport)
+        : nIsBold( -1 )
+        , nIsItalic( -1 )
+        , nFontSize( 0.0 )
+        , bFontNodeNeeded( false )
+        , rContext( rImport )
+        {}
 
     void RetrieveAttrs(const uno::Reference< xml::sax::XAttributeList > &xAttrList );
     void ApplyAttrs();
