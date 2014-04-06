@@ -1812,4 +1812,19 @@ bool Printer::UsePolyPolygonForComplexGradient()
     return true;
 }
 
+void Printer::ClipGradientToBounds ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
+{
+    const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+
+    ClipGradient ( rGradient, rPolyPoly, aBoundRect );
+}
+
+void Printer::ClipGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect )
+{
+    Push( PUSH_CLIPREGION );
+    IntersectClipRegion(Region(rPolyPoly));
+    DrawGradient( rBoundRect, rGradient );
+    Pop();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
