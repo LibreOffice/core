@@ -853,7 +853,7 @@ private:
     SAL_DLLPRIVATE void         ImplClearFontData( bool bNewFontLists );
     SAL_DLLPRIVATE void         ImplRefreshFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
-    SAL_DLLPRIVATE long         ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf );
+    SAL_DLLPRIVATE long         ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex=false );
 
     // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
     void                        DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&);
