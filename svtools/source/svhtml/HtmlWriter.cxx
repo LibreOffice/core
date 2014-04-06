@@ -25,7 +25,7 @@ void HtmlWriter::prettyPrint(bool bChoice)
     mbPrettyPrint = bChoice;
 }
 
-void HtmlWriter::start(OString aElement)
+void HtmlWriter::start(const OString &aElement)
 {
     if (mbElementOpen)
     {
@@ -49,7 +49,7 @@ void HtmlWriter::start(OString aElement)
     mbElementOpen = true;
 }
 
-void HtmlWriter::single(OString aContent)
+void HtmlWriter::single(const OString &aContent)
 {
     start(aContent);
     end();
@@ -94,7 +94,7 @@ void HtmlWriter::end()
     mbContentWritten = false;
 }
 
-void HtmlWriter::write(OString aContent)
+void HtmlWriter::write(const OString &aContent)
 {
     if (mbElementOpen)
     {
@@ -105,7 +105,7 @@ void HtmlWriter::write(OString aContent)
     mrStream.WriteOString(aContent);
 }
 
-void HtmlWriter::attribute(OString aAttribute, OString aValue)
+void HtmlWriter::attribute(const OString &aAttribute, const OString &aValue)
 {
     if (mbElementOpen && !aAttribute.isEmpty() && !aValue.isEmpty())
     {

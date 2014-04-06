@@ -32,11 +32,11 @@ public:
 
     void prettyPrint(bool bChoice);
 
-    void start(OString aElement);
+    void start(const OString &aElement);
     void end();
-    void write(OString aContent);
-    void attribute(OString aAttribute, OString aValue);
-    void single(OString aContent);
+    void write(const OString &aContent);
+    void attribute(const OString &aAttribute, const OString &aValue);
+    void single(const OString &aContent);
     void endAttribute();
 };
 

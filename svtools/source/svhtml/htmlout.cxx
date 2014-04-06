@@ -977,7 +977,7 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
     return aStrTD.makeStringAndClear();
 }
 
-void HtmlWriterHelper::applyColor(HtmlWriter& rHtmlWriter, OString aAttributeName, const Color& rColor)
+void HtmlWriterHelper::applyColor(HtmlWriter& rHtmlWriter, const OString &aAttributeName, const Color& rColor)
 {
     OStringBuffer sBuffer;
 

@@ -108,7 +108,7 @@ struct HTMLOutFuncs
 
 struct HtmlWriterHelper
 {
-    SVT_DLLPUBLIC static void applyColor( HtmlWriter& rHtmlWriter, OString aAttributeName, const Color& rColor);
+    SVT_DLLPUBLIC static void applyColor( HtmlWriter& rHtmlWriter, const OString &aAttributeName, const Color& rColor);
 };
 
 #endif
