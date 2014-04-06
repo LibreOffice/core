@@ -614,6 +614,15 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         aArea.FillToItemSet( rStyleItemSet, rPalette );
     }
 
+    if( get_flag( nFlags, EXC_CF_BLOCK_PROTECTION ) )
+    {
+        sal_uInt16 nCellProt;
+        rStrm >> nCellProt;
+        XclImpCellProt aCellProt;
+        aCellProt.FillFromXF3(nCellProt);
+        aCellProt.FillToItemSet( rStyleItemSet );
+    }
+
     // *** formulas ***
 
     const ScAddress& rPos = maRanges.front()->aStart;    // assured above that maRanges is not empty
