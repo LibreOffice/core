@@ -33,9 +33,7 @@
 #include "basecontrol.hxx"
 #include "OConnectionPointContainerHelper.hxx"
 
-
 //  namespaces
-
 
 namespace unocontrols{
 
@@ -50,9 +48,7 @@ namespace unocontrols{
 #define PROPERTYHANDLE_FRAME                            1
 #define PROPERTYHANDLE_LOADERARGUMENTS                  2
 
-
 //  class
-
 
 class FrameControl  : public ::com::sun::star::awt::XControlModel
                     , public ::com::sun::star::lang::XConnectionPointContainer
@@ -61,23 +57,17 @@ class FrameControl  : public ::com::sun::star::awt::XControlModel
                     , public ::cppu::OPropertySetHelper
 {
 
-
 //  public methods
-
 
 public:
 
-
     //  construct/destruct
-
 
     FrameControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual ~FrameControl();
 
-
     //  XInterface
-
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         const ::com::sun::star::uno::Type& aType
@@ -115,24 +105,18 @@ public:
 
     virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
-
     //  XTypeProvider
-
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XAggregation
-
 
     ::com::sun::star::uno::Any SAL_CALL queryAggregation(
         const ::com::sun::star::uno::Type& aType
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XControl
-
 
     virtual void SAL_CALL createPeer(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >&      xToolkit ,
@@ -146,15 +130,11 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XComponent
-
 
     virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XView
-
 
     virtual sal_Bool SAL_CALL setGraphics(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xDevice
@@ -163,9 +143,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > SAL_CALL getGraphics()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XConnectionPointContainer
-
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getConnectionPointTypes()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -184,23 +162,18 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&    xListener
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  impl but public methods to register service!
-
 
     static const ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
     static const OUString impl_getStaticImplementationName();
 
-
 //  protected methods
-
 
 protected:
     using OPropertySetHelper::getFastPropertyValue;
 
     //  OPropertySetHelper
-
 
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
         ::com::sun::star::uno::Any&       rConvertedValue   ,
@@ -219,24 +192,18 @@ protected:
 
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
-
     //  XPropertySet
-
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  BaseControl
-
 
     virtual ::com::sun::star::awt::WindowDescriptor* impl_getWindowDescriptor(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParentPeer
     ) SAL_OVERRIDE;
 
-
 //  private methods
-
 
 private:
 
@@ -248,10 +215,7 @@ private:
 
     static const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
 
-
-
 //  private variables
-
 
 private:
 

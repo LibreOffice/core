@@ -34,15 +34,11 @@
 
 #include "basecontrol.hxx"
 
-
 //  "namespaces"
-
 
 namespace unocontrols{
 
-
 //  structs, types, forwards
-
 
 struct IMPL_ControlInfo
 {
@@ -55,15 +51,11 @@ class BaseContainerControl  : public ::com::sun::star::awt::XControlModel
                             , public BaseControl
 {
 
-
 //  public methods
-
 
 public:
 
-
     //  construct/destruct
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -95,9 +87,7 @@ public:
 
     virtual ~BaseContainerControl();
 
-
     //  XInterface
-
 
     /**_______________________________________________________________________________________________________
         @short      give answer, if interface is supported
@@ -116,9 +106,7 @@ public:
         const ::com::sun::star::uno::Type& aType
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XTypeProvider
-
 
     /**_______________________________________________________________________________________________________
         @short      get information about supported interfaces
@@ -136,9 +124,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XAggregation
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -157,9 +143,7 @@ public:
         const ::com::sun::star::uno::Type& aType
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XControl
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -212,9 +196,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XComponent
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -231,9 +213,7 @@ public:
 
     virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XEventListener
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -250,9 +230,7 @@ public:
 
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XControlContainer
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -339,9 +317,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > SAL_CALL getControls()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XWindow
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -358,9 +334,7 @@ public:
 
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
 //  protected methods
-
 
 protected:
     using OComponentHelper::disposing;
@@ -400,9 +374,7 @@ protected:
         const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >&   xGraphics
     ) SAL_OVERRIDE;
 
-
 //  private methods
-
 
 private:
 
@@ -436,9 +408,7 @@ private:
 
     void impl_cleanMemory();
 
-
 //  private variables
-
 
 private:
     // list of pointer of "struct IMPL_ControlInfo" to hold child-controls

@@ -46,15 +46,11 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
-
 //  "namespaces"
-
 
 namespace unocontrols{
 
-
 //  class
-
 
 class OMRCListenerMultiplexerHelper : public ::com::sun::star::awt::XFocusListener
                                     , public ::com::sun::star::awt::XWindowListener
@@ -66,15 +62,11 @@ class OMRCListenerMultiplexerHelper : public ::com::sun::star::awt::XFocusListen
                                     , public ::cppu::OWeakObject
 {
 
-
 //  public methods
-
 
 public:
 
-
     //  construct/destruct
-
 
     /**_______________________________________________________________________________________________________
         @short      constructor
@@ -123,9 +115,7 @@ public:
 
     virtual ~OMRCListenerMultiplexerHelper();
 
-
     //  XInterface
-
 
     /**_______________________________________________________________________________________________________
         @short      give answer, if interface is supported
@@ -175,9 +165,7 @@ public:
 
     virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
-
     //  operator
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -209,9 +197,7 @@ public:
 
     OMRCListenerMultiplexerHelper& operator= ( const OMRCListenerMultiplexerHelper& aCopyInstance );
 
-
     //  container methods
-
 
     /**_______________________________________________________________________________________________________
         @short      Remove all listeners from the previous set peer and add the needed listeners to rPeer.
@@ -275,9 +261,7 @@ public:
     void unadvise(  const   ::com::sun::star::uno::Type&                              aType       ,
                     const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&  xListener   );
 
-
     //  XEventListener
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -296,9 +280,7 @@ public:
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& aSource)
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
-
     //  XFocusListener
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -334,9 +316,7 @@ public:
     virtual void SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
-
     //  XWindowListener
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -406,9 +386,7 @@ public:
     virtual void SAL_CALL windowHidden(const ::com::sun::star::lang::EventObject& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
-
     //  XKeyListener
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -444,9 +422,7 @@ public:
     virtual void SAL_CALL keyReleased( const ::com::sun::star::awt::KeyEvent& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
-
     //  XMouseListener
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -516,9 +492,7 @@ public:
     virtual void SAL_CALL mouseExited(const ::com::sun::star::awt::MouseEvent& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
-
     //  XMouseMotionListener
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -554,9 +528,7 @@ public:
     virtual void SAL_CALL mouseMoved(const ::com::sun::star::awt::MouseEvent& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
-
     //  XPaintListener
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -575,9 +547,7 @@ public:
     virtual void SAL_CALL windowPaint(const ::com::sun::star::awt::PaintEvent& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
-
     //  XTopWindowListener
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -698,9 +668,7 @@ public:
     virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
-
 //  protected methods
-
 
 protected:
 
@@ -738,9 +706,7 @@ protected:
     void impl_unadviseFromPeer( const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xPeer   ,
                                 const   ::com::sun::star::uno::Type&                          aType   );
 
-
 //  private variables
-
 
 private:
 

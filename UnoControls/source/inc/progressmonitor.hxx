@@ -84,9 +84,7 @@ class ProgressBar;
 #define PROGRESSMONITOR_DEFAULT_WIDTH                   350
 #define PROGRESSMONITOR_DEFAULT_HEIGHT                  100
 
-
 //  structs, types
-
 
 /// Item of TextList
 struct IMPL_TextlistItem
@@ -95,9 +93,7 @@ struct IMPL_TextlistItem
     OUString sText   ;          /// Right site of textline in dialog
 };
 
-
 //  class declaration
-
 
 class ProgressMonitor   : public ::com::sun::star::awt::XLayoutConstrains
                         , public ::com::sun::star::awt::XButton
@@ -105,15 +101,11 @@ class ProgressMonitor   : public ::com::sun::star::awt::XLayoutConstrains
                         , public BaseContainerControl
 {
 
-
 //  public methods
-
 
 public:
 
-
     //  construct/destruct
-
 
     /**_______________________________________________________________________________________________________
         @short
@@ -145,9 +137,7 @@ public:
 
     virtual ~ProgressMonitor();
 
-
     //  XInterface
-
 
     /**_______________________________________________________________________________________________________
         @short      give answer, if interface is supported
@@ -197,9 +187,7 @@ public:
 
     virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
-
     //  XTypeProvider
-
 
     /**_______________________________________________________________________________________________________
         @short      get information about supported interfaces
@@ -216,9 +204,7 @@ public:
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XAggregation
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -236,9 +222,7 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XProgressMonitor
-
 
     /**_______________________________________________________________________________________________________
         @short      add topic to dialog
@@ -303,9 +287,7 @@ public:
         sal_Bool bbeforeProgress
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XProgressBar
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -383,9 +365,7 @@ public:
 
     virtual sal_Int32 SAL_CALL getValue() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XButton
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -452,9 +432,7 @@ public:
     virtual void SAL_CALL setActionCommand( const OUString& sCommand )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XLayoutConstrains
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -502,9 +480,7 @@ public:
     virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XControl
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -556,9 +532,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XComponent
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -575,9 +549,7 @@ public:
 
     virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XWindow
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -598,9 +570,7 @@ public:
                                         sal_Int32   nHeight ,
                                         sal_Int16   nFlags  ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  BaseControl
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -632,9 +602,7 @@ public:
 
     static const OUString impl_getStaticImplementationName();
 
-
 //  protected methods
-
 
 protected:
 
@@ -655,9 +623,7 @@ protected:
                              sal_Int32 nY ,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics ) SAL_OVERRIDE;
 
-
 // private methods
-
 
 private:
     using BaseControl::impl_recalcLayout;
@@ -721,9 +687,7 @@ private:
 
     IMPL_TextlistItem* impl_searchTopic( const OUString& sTopic , bool bbeforeProgress );
 
-
 // debug methods
-
 
 private:
 
@@ -748,7 +712,6 @@ private:
     #endif
 
 // private variables
-
 
 private:
     ::std::vector < IMPL_TextlistItem* >        maTextlist_Top;         // Elements before progress

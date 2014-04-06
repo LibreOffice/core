@@ -36,9 +36,7 @@ using namespace ::com::sun::star::task  ;
 
 namespace unocontrols{
 
-
 //  construct/destruct
-
 
 StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >& rxContext )
     : BaseContainerControl  ( rxContext  )
@@ -69,9 +67,7 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
 
 StatusIndicator::~StatusIndicator() {}
 
-
 //  XInterface
-
 
 Any SAL_CALL StatusIndicator::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
 {
@@ -94,9 +90,7 @@ Any SAL_CALL StatusIndicator::queryInterface( const Type& rType ) throw( Runtime
     return aReturn ;
 }
 
-
 //  XInterface
-
 
 void SAL_CALL StatusIndicator::acquire() throw()
 {
@@ -107,9 +101,7 @@ void SAL_CALL StatusIndicator::acquire() throw()
     BaseControl::acquire();
 }
 
-
 //  XInterface
-
 
 void SAL_CALL StatusIndicator::release() throw()
 {
@@ -120,9 +112,7 @@ void SAL_CALL StatusIndicator::release() throw()
     BaseControl::release();
 }
 
-
 //  XTypeProvider
-
 
 Sequence< Type > SAL_CALL StatusIndicator::getTypes() throw( RuntimeException, std::exception )
 {
@@ -152,9 +142,7 @@ Sequence< Type > SAL_CALL StatusIndicator::getTypes() throw( RuntimeException, s
     return pTypeCollection->getTypes();
 }
 
-
 //  XAggregation
-
 
 Any SAL_CALL StatusIndicator::queryAggregation( const Type& aType ) throw( RuntimeException, std::exception )
 {
@@ -176,9 +164,7 @@ Any SAL_CALL StatusIndicator::queryAggregation( const Type& aType ) throw( Runti
     return aReturn ;
 }
 
-
 //  XStatusIndicator
-
 
 void SAL_CALL StatusIndicator::start( const OUString& sText, sal_Int32 nRange ) throw( RuntimeException, std::exception )
 {
@@ -192,9 +178,7 @@ void SAL_CALL StatusIndicator::start( const OUString& sText, sal_Int32 nRange ) 
     impl_recalcLayout ( WindowEvent(static_cast< OWeakObject* >(this),0,0,impl_getWidth(),impl_getHeight(),0,0,0,0) ) ;
 }
 
-
 //  XStatusIndicator
-
 
 void SAL_CALL StatusIndicator::end() throw( RuntimeException, std::exception )
 {
@@ -207,9 +191,7 @@ void SAL_CALL StatusIndicator::end() throw( RuntimeException, std::exception )
     setVisible( sal_False );
 }
 
-
 //  XStatusIndicator
-
 
 void SAL_CALL StatusIndicator::setText( const OUString& sText ) throw( RuntimeException, std::exception )
 {
@@ -220,9 +202,7 @@ void SAL_CALL StatusIndicator::setText( const OUString& sText ) throw( RuntimeEx
     m_xText->setText( sText );
 }
 
-
 //  XStatusIndicator
-
 
 void SAL_CALL StatusIndicator::setValue( sal_Int32 nValue ) throw( RuntimeException, std::exception )
 {
@@ -233,9 +213,7 @@ void SAL_CALL StatusIndicator::setValue( sal_Int32 nValue ) throw( RuntimeExcept
     m_xProgressBar->setValue( nValue );
 }
 
-
 //  XStatusIndicator
-
 
 void SAL_CALL StatusIndicator::reset() throw( RuntimeException, std::exception )
 {
@@ -248,18 +226,14 @@ void SAL_CALL StatusIndicator::reset() throw( RuntimeException, std::exception )
     m_xProgressBar->setValue( 0 );
 }
 
-
 //  XLayoutConstrains
-
 
 Size SAL_CALL StatusIndicator::getMinimumSize () throw( RuntimeException, std::exception )
 {
     return Size (STATUSINDICATOR_DEFAULT_WIDTH, STATUSINDICATOR_DEFAULT_HEIGHT) ;
 }
 
-
 //  XLayoutConstrains
-
 
 Size SAL_CALL StatusIndicator::getPreferredSize () throw( RuntimeException, std::exception )
 {
@@ -290,18 +264,14 @@ Size SAL_CALL StatusIndicator::getPreferredSize () throw( RuntimeException, std:
     return Size ( nWidth, nHeight ) ;
 }
 
-
 //  XLayoutConstrains
-
 
 Size SAL_CALL StatusIndicator::calcAdjustedSize ( const Size& /*rNewSize*/ ) throw( RuntimeException, std::exception )
 {
     return getPreferredSize () ;
 }
 
-
 //  XControl
-
 
 void SAL_CALL StatusIndicator::createPeer (
     const css::uno::Reference< XToolkit > & rToolkit,
@@ -320,9 +290,7 @@ void SAL_CALL StatusIndicator::createPeer (
     }
 }
 
-
 //  XControl
-
 
 sal_Bool SAL_CALL StatusIndicator::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ ) throw( RuntimeException, std::exception )
 {
@@ -330,9 +298,7 @@ sal_Bool SAL_CALL StatusIndicator::setModel ( const css::uno::Reference< XContro
     return sal_False ;
 }
 
-
 //  XControl
-
 
 css::uno::Reference< XControlModel > SAL_CALL StatusIndicator::getModel () throw( RuntimeException, std::exception )
 {
@@ -341,9 +307,7 @@ css::uno::Reference< XControlModel > SAL_CALL StatusIndicator::getModel () throw
     return css::uno::Reference< XControlModel >  () ;
 }
 
-
 //  XComponent
-
 
 void SAL_CALL StatusIndicator::dispose () throw( RuntimeException, std::exception )
 {
@@ -363,9 +327,7 @@ void SAL_CALL StatusIndicator::dispose () throw( RuntimeException, std::exceptio
     BaseContainerControl::dispose();
 }
 
-
 //  XWindow
-
 
 void SAL_CALL StatusIndicator::setPosSize (
     sal_Int32 nX,
@@ -394,27 +356,21 @@ void SAL_CALL StatusIndicator::setPosSize (
     }
 }
 
-
 //  impl but public method to register service
-
 
 const Sequence< OUString > StatusIndicator::impl_getStaticSupportedServiceNames()
 {
     return css::uno::Sequence<OUString>();
 }
 
-
 //  impl but public method to register service
-
 
 const OUString StatusIndicator::impl_getStaticImplementationName()
 {
     return OUString("stardiv.UnoControls.StatusIndicator");
 }
 
-
 //  protected method
-
 
 WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const css::uno::Reference< XWindowPeer >& xParentPeer )
 {
@@ -433,9 +389,7 @@ WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const css::uno::Ref
     return pDescriptor ;
 }
 
-
 //  protected method
-
 
 void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::Reference< XGraphics > & rGraphics )
 {
@@ -472,9 +426,7 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::R
     }
 }
 
-
 //  protected method
-
 
 void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
 {

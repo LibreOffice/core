@@ -49,28 +49,20 @@ class ProgressBar;
 #define STATUSINDICATOR_DEFAULT_WIDTH           300
 #define STATUSINDICATOR_DEFAULT_HEIGHT          25
 
-
 //  structs, types
 
-
-
 //  class declaration
-
 
 class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
                         , public ::com::sun::star::task::XStatusIndicator
                         , public BaseContainerControl
 {
 
-
     //  public methods
-
 
     public:
 
-
         //  construct/destruct
-
 
         /**_______________________________________________________________________________________________________
             @short
@@ -102,9 +94,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
 
         virtual ~StatusIndicator();
 
-
         //  XInterface
-
 
         /**_______________________________________________________________________________________________________
             @short      give answer, if interface is supported
@@ -154,9 +144,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
 
         virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
-
         //  XTypeProvider
-
 
         /**_______________________________________________________________________________________________________
             @short      get information about supported interfaces
@@ -174,9 +162,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
         //  XAggregation
-
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -194,9 +180,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType )
             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
         //  XStatusIndicator
-
 
         /*-****************************************************************************************************
             @short      -
@@ -276,9 +260,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
 
         virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
         //  XLayoutConstrains
-
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -326,9 +308,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize )
             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
         //  XControl
-
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -380,9 +360,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
         //  XComponent
-
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -399,9 +377,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
 
         virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
         //  XWindow
-
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -422,9 +398,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
                                             sal_Int32   nHeight ,
                                             sal_Int16   nFlags  ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
         //  BaseControl
-
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -456,9 +430,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
 
         static const OUString impl_getStaticImplementationName();
 
-
 //  protected methods
-
 
 protected:
 
@@ -513,9 +485,7 @@ protected:
 
         virtual void impl_recalcLayout( const ::com::sun::star::awt::WindowEvent& aEvent ) SAL_OVERRIDE;
 
-
 // debug methods
-
 
 private:
 
@@ -532,9 +502,7 @@ private:
         @onerror    -
     */
 
-
 // private variables
-
 
 private:
 

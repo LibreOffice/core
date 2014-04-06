@@ -27,29 +27,21 @@
 
 #include "OConnectionPointContainerHelper.hxx"
 
-
 //  namespaces
-
 
 namespace unocontrols{
 
-
 //  class declaration OConnectionPointHelper
-
 
 class OConnectionPointHelper    :   public  ::com::sun::star::lang::XConnectionPoint
                                 ,   public  ::cppu::OWeakObject
 {
 
-
 //  public methods
-
 
 public:
 
-
     //  construct/destruct
-
 
     /**_________________________________________________________________________________________________________
         @short
@@ -83,9 +75,7 @@ public:
 
     virtual ~OConnectionPointHelper();
 
-
     //  XInterface
-
 
     /**_______________________________________________________________________________________________________
         @short      give answer, if interface is supported
@@ -135,9 +125,7 @@ public:
 
     virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
-
     //  XConnectionPoint
-
 
     /**_________________________________________________________________________________________________________
         @short
@@ -224,9 +212,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > SAL_CALL getConnections()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
 //  private methods
-
 
 private:
 
@@ -260,9 +246,7 @@ private:
 
     void impl_UnlockContainer();
 
-
 //  private variables
-
 
 private:
 

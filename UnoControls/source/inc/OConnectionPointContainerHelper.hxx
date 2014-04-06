@@ -25,29 +25,21 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/propshlp.hxx>
 
-
 //  namespaces
-
 
 namespace unocontrols{
 
-
 //  class declaration OConnectionPointContainerHelper
-
 
 class OConnectionPointContainerHelper   :   public  ::com::sun::star::lang::XConnectionPointContainer
                                         ,   public  ::cppu::OWeakObject
 {
 
-
 //  public methods
-
 
 public:
 
-
     //  construct/destruct
-
 
     /**_________________________________________________________________________________________________________
         @short
@@ -79,9 +71,7 @@ public:
 
     virtual ~OConnectionPointContainerHelper();
 
-
     //  XInterface
-
 
     /**_______________________________________________________________________________________________________
         @short      give answer, if interface is supported
@@ -131,9 +121,7 @@ public:
 
     virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
-
     //  XConnectionPointContainer
-
 
     /**_________________________________________________________________________________________________________
         @short
@@ -219,9 +207,7 @@ public:
 
     ::cppu::OMultiTypeInterfaceContainerHelper& impl_getMultiTypeContainer();
 
-
 //  private variables
-
 
 private:
 

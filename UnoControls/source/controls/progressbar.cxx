@@ -38,9 +38,7 @@ using namespace ::com::sun::star::awt   ;
 
 namespace unocontrols{
 
-
 //  construct/destruct
-
 
 ProgressBar::ProgressBar( const Reference< XComponentContext >& rxContext )
     : BaseControl           (    rxContext                   )
@@ -59,9 +57,7 @@ ProgressBar::~ProgressBar()
 {
 }
 
-
 //  XInterface
-
 
 Any SAL_CALL ProgressBar::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
 {
@@ -84,9 +80,7 @@ Any SAL_CALL ProgressBar::queryInterface( const Type& rType ) throw( RuntimeExce
     return aReturn ;
 }
 
-
 //  XInterface
-
 
 void SAL_CALL ProgressBar::acquire() throw()
 {
@@ -97,9 +91,7 @@ void SAL_CALL ProgressBar::acquire() throw()
     BaseControl::acquire();
 }
 
-
 //  XInterface
-
 
 void SAL_CALL ProgressBar::release() throw()
 {
@@ -110,9 +102,7 @@ void SAL_CALL ProgressBar::release() throw()
     BaseControl::release();
 }
 
-
 //  XTypeProvider
-
 
 Sequence< Type > SAL_CALL ProgressBar::getTypes() throw( RuntimeException, std::exception )
 {
@@ -142,9 +132,7 @@ Sequence< Type > SAL_CALL ProgressBar::getTypes() throw( RuntimeException, std::
     return pTypeCollection->getTypes();
 }
 
-
 //  XAggregation
-
 
 Any SAL_CALL ProgressBar::queryAggregation( const Type& aType ) throw( RuntimeException, std::exception )
 {
@@ -166,9 +154,7 @@ Any SAL_CALL ProgressBar::queryAggregation( const Type& aType ) throw( RuntimeEx
     return aReturn ;
 }
 
-
 //  XProgressBar
-
 
 void SAL_CALL ProgressBar::setForegroundColor( sal_Int32 nColor ) throw( RuntimeException, std::exception )
 {
@@ -182,9 +168,7 @@ void SAL_CALL ProgressBar::setForegroundColor( sal_Int32 nColor ) throw( Runtime
     impl_paint ( 0, 0, impl_getGraphicsPeer() ) ;
 }
 
-
 //  XProgressBar
-
 
 void SAL_CALL ProgressBar::setBackgroundColor ( sal_Int32 nColor ) throw( RuntimeException, std::exception )
 {
@@ -198,9 +182,7 @@ void SAL_CALL ProgressBar::setBackgroundColor ( sal_Int32 nColor ) throw( Runtim
     impl_paint ( 0, 0, impl_getGraphicsPeer() ) ;
 }
 
-
 //  XProgressBar
-
 
 void SAL_CALL ProgressBar::setValue ( sal_Int32 nValue ) throw( RuntimeException, std::exception )
 {
@@ -229,9 +211,7 @@ void SAL_CALL ProgressBar::setValue ( sal_Int32 nValue ) throw( RuntimeException
     }
 }
 
-
 //  XProgressBar
-
 
 void SAL_CALL ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw( RuntimeException, std::exception )
 {
@@ -273,9 +253,7 @@ void SAL_CALL ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw( Ru
     // Next call of "ProgressBar::setValue()" do this.
 }
 
-
 //  XProgressBar
-
 
 sal_Int32 SAL_CALL ProgressBar::getValue () throw( RuntimeException, std::exception )
 {
@@ -285,9 +263,7 @@ sal_Int32 SAL_CALL ProgressBar::getValue () throw( RuntimeException, std::except
     return ( m_nValue ) ;
 }
 
-
 //  XWindow
-
 
 void SAL_CALL ProgressBar::setPosSize (
     sal_Int32 nX,
@@ -313,9 +289,7 @@ void SAL_CALL ProgressBar::setPosSize (
     }
 }
 
-
 //  XControl
-
 
 sal_Bool SAL_CALL ProgressBar::setModel( const Reference< XControlModel >& /*xModel*/ ) throw( RuntimeException, std::exception )
 {
@@ -323,9 +297,7 @@ sal_Bool SAL_CALL ProgressBar::setModel( const Reference< XControlModel >& /*xMo
     return sal_False ;
 }
 
-
 //  XControl
-
 
 Reference< XControlModel > SAL_CALL ProgressBar::getModel() throw( RuntimeException, std::exception )
 {
@@ -333,27 +305,21 @@ Reference< XControlModel > SAL_CALL ProgressBar::getModel() throw( RuntimeExcept
     return Reference< XControlModel >();
 }
 
-
 //  impl but public method to register service
-
 
 const Sequence< OUString > ProgressBar::impl_getStaticSupportedServiceNames()
 {
     return css::uno::Sequence<OUString>();
 }
 
-
 //  impl but public method to register service
-
 
 const OUString ProgressBar::impl_getStaticImplementationName()
 {
     return OUString("stardiv.UnoControls.ProgressBar");
 }
 
-
 //  protected method
-
 
 void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGraphics > & rGraphics )
 {
@@ -426,9 +392,7 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
     }
 }
 
-
 //  protected method
-
 
 void ProgressBar::impl_recalcRange ()
 {

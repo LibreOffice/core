@@ -21,9 +21,7 @@
 
 #include "OConnectionPointContainerHelper.hxx"
 
-
 //  namespaces
-
 
 using namespace ::rtl                   ;
 using namespace ::osl                   ;
@@ -33,9 +31,7 @@ using namespace ::com::sun::star::lang  ;
 
 namespace unocontrols{
 
-
 //  construct/destruct
-
 
 OConnectionPointHelper::OConnectionPointHelper(
     Mutex&                              aMutex                      ,
@@ -52,9 +48,7 @@ OConnectionPointHelper::~OConnectionPointHelper()
 {
 }
 
-
 //  XInterface
-
 
 Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType ) throw( RuntimeException, std::exception )
 {
@@ -77,9 +71,7 @@ Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType ) throw( 
     return aReturn ;
 }
 
-
 //  XInterface
-
 
 void SAL_CALL OConnectionPointHelper::acquire() throw()
 {
@@ -90,9 +82,7 @@ void SAL_CALL OConnectionPointHelper::acquire() throw()
     OWeakObject::acquire();
 }
 
-
 //  XInterface
-
 
 void SAL_CALL OConnectionPointHelper::release() throw()
 {
@@ -103,9 +93,7 @@ void SAL_CALL OConnectionPointHelper::release() throw()
     OWeakObject::release();
 }
 
-
 //  XConnectionPoint
-
 
 Type SAL_CALL OConnectionPointHelper::getConnectionType() throw( RuntimeException, std::exception )
 {
@@ -127,9 +115,7 @@ Type SAL_CALL OConnectionPointHelper::getConnectionType() throw( RuntimeExceptio
     return aReturnType;
 }
 
-
 //  XConnectionPoint
-
 
 Reference< XConnectionPointContainer > SAL_CALL OConnectionPointHelper::getConnectionPointContainer() throw( RuntimeException, std::exception )
 {
@@ -139,9 +125,7 @@ Reference< XConnectionPointContainer > SAL_CALL OConnectionPointHelper::getConne
     return Reference< XConnectionPointContainer >( m_oContainerWeakReference.get(), UNO_QUERY );
 }
 
-
 //  XConnectionPoint
-
 
 void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xListener ) throw( ListenerExistException      ,
                                                                                                 InvalidListenerException    ,
@@ -174,9 +158,7 @@ void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xLi
     impl_UnlockContainer();
 }
 
-
 //  XConnectionPoint
-
 
 void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& xListener ) throw( RuntimeException, std::exception )
 {
@@ -195,9 +177,7 @@ void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& x
     impl_UnlockContainer();
 }
 
-
 //  XConnectionPoint
-
 
 Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnections() throw( RuntimeException, std::exception )
 {
@@ -226,9 +206,7 @@ Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnecti
     return seqReturnConnections;
 }
 
-
 //  private method
-
 
 bool OConnectionPointHelper::impl_LockContainer()
 {
@@ -239,9 +217,7 @@ bool OConnectionPointHelper::impl_LockContainer()
     return m_xLock.is();
 }
 
-
 //  private method
-
 
 void OConnectionPointHelper::impl_UnlockContainer()
 {

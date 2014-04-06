@@ -25,9 +25,7 @@
 
 #include "basecontrol.hxx"
 
-
 //  namespaces
-
 
 namespace unocontrols{
 
@@ -48,15 +46,11 @@ class ProgressBar   : public ::com::sun::star::awt::XControlModel
                     , public BaseControl
 {
 
-
 //  public methods
-
 
 public:
 
-
     //  construct/destruct
-
 
     /**_________________________________________________________________________________________________________
         @short
@@ -88,9 +82,7 @@ public:
 
     virtual ~ProgressBar();
 
-
     //  XInterface
-
 
     /**_________________________________________________________________________________________________________
         @short
@@ -140,9 +132,7 @@ public:
 
     virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
-
     //  XTypeProvider
-
 
     /**_________________________________________________________________________________________________________
         @short
@@ -160,9 +150,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XAggregation
-
 
     /**_________________________________________________________________________________________________________
         @short
@@ -180,9 +168,7 @@ public:
     ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XProgressBar
-
 
     /**_________________________________________________________________________________________________________
         @short
@@ -264,9 +250,7 @@ public:
 
     virtual sal_Int32 SAL_CALL getValue() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XWindow
-
 
     /**_________________________________________________________________________________________________________
         @short
@@ -289,9 +273,7 @@ public:
         sal_Int16   nFlags
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XControl
-
 
     /**_________________________________________________________________________________________________________
         @short
@@ -326,9 +308,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  BaseControl
-
 
     /**_________________________________________________________________________________________________________
         @short
@@ -360,9 +340,7 @@ public:
 
     static const OUString impl_getStaticImplementationName();
 
-
 //  protected methods
-
 
 protected:
 
@@ -400,9 +378,7 @@ protected:
 
     void impl_recalcRange();
 
-
 //  private variables
-
 
 private:
 

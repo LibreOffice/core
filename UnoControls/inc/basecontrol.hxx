@@ -92,22 +92,16 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-
 //  "namespaces"
-
 
 namespace unocontrols{
 
-
 //  macros
-
 
 #define TRGB_COLORDATA(TRANSPARENCE,RED,GREEN,BLUE) \
         ((sal_Int32)(((sal_uInt32)((sal_uInt8)(BLUE))))|(((sal_uInt32)((sal_uInt8)(GREEN)))<<8)|(((sal_uInt32)((sal_uInt8)(RED)))<<16)|(((sal_uInt32)((sal_uInt8)(TRANSPARENCE)))<<24))
 
-
 //  structs
-
 
 struct IMPL_MutexContainer
 {
@@ -127,12 +121,9 @@ class BaseControl   : public ::com::sun::star::lang::XServiceInfo
 
 //  public methods
 
-
 public:
 
-
     //  construct/destruct
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -164,9 +155,7 @@ public:
 
     virtual ~BaseControl();
 
-
     //  XInterface
-
 
     /**_______________________________________________________________________________________________________
         @short      give answer, if interface is supported
@@ -217,9 +206,7 @@ public:
 
     virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
-
     //  XTypeProvider
-
 
     /**_______________________________________________________________________________________________________
         @short      get information about supported interfaces
@@ -254,9 +241,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XAggregation
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -292,9 +277,7 @@ public:
         const ::com::sun::star::uno::Type& aType
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XServiceInfo
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -345,9 +328,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XComponent
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -398,9 +379,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XControl
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -563,9 +542,7 @@ public:
 
     virtual sal_Bool SAL_CALL isTransparent() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XWindow
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -850,9 +827,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XView
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -934,9 +909,7 @@ public:
 
     virtual ::com::sun::star::awt::Size SAL_CALL getSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  ::com::sun::star::lang::XEventListener
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -955,9 +928,7 @@ public:
         const ::com::sun::star::lang::EventObject& rSource
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XPaintListener
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -976,9 +947,7 @@ public:
         const ::com::sun::star::awt::PaintEvent& rEvent
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XWindowListener
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -998,9 +967,7 @@ public:
     virtual void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL windowHidden( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  impl but public method to register service
-
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -1032,9 +999,7 @@ public:
 
     static const OUString impl_getStaticImplementationName();
 
-
 //  protected methods
-
 
 protected:
     using OComponentHelper::disposing;
@@ -1178,9 +1143,7 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > impl_getDelegator();
 
-
 //  private methods
-
 
 private:
 
@@ -1214,9 +1177,7 @@ private:
 
     OMRCListenerMultiplexerHelper* impl_getMultiplexer();
 
-
 //  private variables
-
 
 private:
 

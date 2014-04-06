@@ -29,9 +29,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-
 //  namespaces
-
 
 using namespace ::cppu                  ;
 using namespace ::osl                   ;
@@ -51,9 +49,7 @@ namespace unocontrols{
 #define DEFAULT_INDESIGNMODE                false
 #define DEFAULT_ENABLE                      true
 
-
 //  construct/destruct
-
 
 BaseControl::BaseControl( const Reference< XComponentContext >& rxContext )
     : IMPL_MutexContainer       (                       )
@@ -74,9 +70,7 @@ BaseControl::~BaseControl()
 {
 }
 
-
 //  XInterface
-
 
 Any SAL_CALL BaseControl::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
 {
@@ -96,9 +90,7 @@ Any SAL_CALL BaseControl::queryInterface( const Type& rType ) throw( RuntimeExce
     return aReturn ;
 }
 
-
 //  XInterface
-
 
 void SAL_CALL BaseControl::acquire() throw()
 {
@@ -109,9 +101,7 @@ void SAL_CALL BaseControl::acquire() throw()
     OComponentHelper::acquire();
 }
 
-
 //  XInterface
-
 
 void SAL_CALL BaseControl::release() throw()
 {
@@ -122,9 +112,7 @@ void SAL_CALL BaseControl::release() throw()
     OComponentHelper::release();
 }
 
-
 //  XTypeProvider
-
 
 Sequence< Type > SAL_CALL BaseControl::getTypes() throw( RuntimeException, std::exception )
 {
@@ -159,18 +147,14 @@ Sequence< Type > SAL_CALL BaseControl::getTypes() throw( RuntimeException, std::
     return pTypeCollection->getTypes();
 }
 
-
 //  XTypeProvider
-
 
 Sequence< sal_Int8 > SAL_CALL BaseControl::getImplementationId() throw( RuntimeException, std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-
 //  XAggregation
-
 
 void SAL_CALL BaseControl::setDelegator( const Reference< XInterface >& xDel ) throw( RuntimeException, std::exception )
 {
@@ -179,9 +163,7 @@ void SAL_CALL BaseControl::setDelegator( const Reference< XInterface >& xDel ) t
     m_xDelegator = xDel;
 }
 
-
 //  XAggregation
-
 
 Any SAL_CALL BaseControl::queryAggregation( const Type& aType ) throw( RuntimeException, std::exception )
 {
@@ -210,36 +192,28 @@ Any SAL_CALL BaseControl::queryAggregation( const Type& aType ) throw( RuntimeEx
     }
 }
 
-
 //  XServiceInfo
-
 
 OUString SAL_CALL BaseControl::getImplementationName() throw( RuntimeException, std::exception )
 {
     return impl_getStaticImplementationName();
 }
 
-
 //  XServiceInfo
-
 
 sal_Bool SAL_CALL BaseControl::supportsService( const OUString& sServiceName ) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-
 //  XServiceInfo
-
 
 Sequence< OUString > SAL_CALL BaseControl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
-
 //  XComponent
-
 
 void SAL_CALL BaseControl::dispose() throw( RuntimeException, std::exception )
 {
@@ -266,9 +240,7 @@ void SAL_CALL BaseControl::dispose() throw( RuntimeException, std::exception )
     }
 }
 
-
 //  XComponent
-
 
 void SAL_CALL BaseControl::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
 {
@@ -277,9 +249,7 @@ void SAL_CALL BaseControl::addEventListener( const Reference< XEventListener >& 
     OComponentHelper::addEventListener( xListener );
 }
 
-
 //  XComponent
-
 
 void SAL_CALL BaseControl::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
 {
@@ -288,9 +258,7 @@ void SAL_CALL BaseControl::removeEventListener( const Reference< XEventListener 
     OComponentHelper::removeEventListener( xListener );
 }
 
-
 //  XControl
-
 
 void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToolkit    ,
                                         const   Reference< XWindowPeer >&   xParentPeer ) throw( RuntimeException, std::exception )
@@ -351,9 +319,7 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
     }
 }
 
-
 //  XControl
-
 
 void SAL_CALL BaseControl::setContext( const Reference< XInterface >& xContext ) throw( RuntimeException, std::exception )
 {
@@ -362,9 +328,7 @@ void SAL_CALL BaseControl::setContext( const Reference< XInterface >& xContext )
     m_xContext = xContext ;
 }
 
-
 //  XControl
-
 
 void SAL_CALL BaseControl::setDesignMode( sal_Bool bOn ) throw( RuntimeException, std::exception )
 {
@@ -373,9 +337,7 @@ void SAL_CALL BaseControl::setDesignMode( sal_Bool bOn ) throw( RuntimeException
     m_bInDesignMode = bOn ;
 }
 
-
 //  XControl
-
 
 Reference< XInterface > SAL_CALL BaseControl::getContext() throw( RuntimeException, std::exception )
 {
@@ -384,9 +346,7 @@ Reference< XInterface > SAL_CALL BaseControl::getContext() throw( RuntimeExcepti
     return m_xContext ;
 }
 
-
 //  XControl
-
 
 Reference< XWindowPeer > SAL_CALL BaseControl::getPeer() throw( RuntimeException, std::exception )
 {
@@ -395,9 +355,7 @@ Reference< XWindowPeer > SAL_CALL BaseControl::getPeer() throw( RuntimeException
     return m_xPeer ;
 }
 
-
 //  XControl
-
 
 Reference< XView > SAL_CALL BaseControl::getView() throw( RuntimeException, std::exception )
 {
@@ -406,9 +364,7 @@ Reference< XView > SAL_CALL BaseControl::getView() throw( RuntimeException, std:
     return Reference< XView >( (OWeakObject*)this, UNO_QUERY );
 }
 
-
 //  XControl
-
 
 sal_Bool SAL_CALL BaseControl::isDesignMode() throw( RuntimeException, std::exception )
 {
@@ -417,18 +373,14 @@ sal_Bool SAL_CALL BaseControl::isDesignMode() throw( RuntimeException, std::exce
     return m_bInDesignMode ;
 }
 
-
 //  XControl
-
 
 sal_Bool SAL_CALL BaseControl::isTransparent() throw( RuntimeException, std::exception )
 {
     return sal_False ;
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::setPosSize(  sal_Int32   nX      ,
                                         sal_Int32   nY      ,
@@ -469,9 +421,7 @@ void SAL_CALL BaseControl::setPosSize(  sal_Int32   nX      ,
     }
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::setVisible( sal_Bool bVisible ) throw( RuntimeException, std::exception )
 {
@@ -488,9 +438,7 @@ void SAL_CALL BaseControl::setVisible( sal_Bool bVisible ) throw( RuntimeExcepti
     }
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::setEnable( sal_Bool bEnable ) throw( RuntimeException, std::exception )
 {
@@ -507,9 +455,7 @@ void SAL_CALL BaseControl::setEnable( sal_Bool bEnable ) throw( RuntimeException
     }
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::setFocus() throw( RuntimeException, std::exception )
 {
@@ -522,9 +468,7 @@ void SAL_CALL BaseControl::setFocus() throw( RuntimeException, std::exception )
     }
 }
 
-
 //  XWindow
-
 
 Rectangle SAL_CALL BaseControl::getPosSize() throw( RuntimeException, std::exception )
 {
@@ -533,117 +477,91 @@ Rectangle SAL_CALL BaseControl::getPosSize() throw( RuntimeException, std::excep
     return Rectangle( m_nX, m_nY , m_nWidth, m_nHeight );
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::addWindowListener( const Reference< XWindowListener >& xListener ) throw( RuntimeException, std::exception )
 {
     impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XWindowListener >*)0), xListener );
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::addFocusListener( const Reference< XFocusListener >& xListener ) throw( RuntimeException, std::exception )
 {
     impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XFocusListener >*)0), xListener );
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::addKeyListener( const Reference< XKeyListener >& xListener ) throw( RuntimeException, std::exception )
 {
     impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XKeyListener >*)0), xListener );
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::addMouseListener( const Reference< XMouseListener >& xListener ) throw( RuntimeException, std::exception )
 {
     impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XMouseListener >*)0), xListener );
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::addMouseMotionListener( const Reference< XMouseMotionListener >& xListener ) throw( RuntimeException, std::exception )
 {
     impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XMouseMotionListener >*)0), xListener );
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::addPaintListener( const Reference< XPaintListener >& xListener ) throw( RuntimeException, std::exception )
 {
     impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XPaintListener >*)0), xListener );
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::removeWindowListener( const Reference< XWindowListener >& xListener ) throw( RuntimeException, std::exception )
 {
     impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XWindowListener >*)0), xListener );
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::removeFocusListener( const Reference< XFocusListener >& xListener ) throw( RuntimeException, std::exception )
 {
     impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XFocusListener >*)0), xListener );
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::removeKeyListener( const Reference< XKeyListener >& xListener ) throw( RuntimeException, std::exception )
 {
     impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XKeyListener >*)0), xListener );
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::removeMouseListener( const Reference< XMouseListener >& xListener ) throw( RuntimeException, std::exception )
 {
     impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XMouseListener >*)0), xListener );
 }
 
-
 //  XWindow
-
 
 void  SAL_CALL BaseControl::removeMouseMotionListener( const Reference< XMouseMotionListener >& xListener ) throw( RuntimeException, std::exception )
 {
     impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XMouseMotionListener >*)0), xListener );
 }
 
-
 //  XWindow
-
 
 void SAL_CALL BaseControl::removePaintListener( const Reference< XPaintListener >& xListener ) throw( RuntimeException, std::exception )
 {
     impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XPaintListener >*)0), xListener );
 }
 
-
 //  XView
-
 
 void SAL_CALL BaseControl::draw(    sal_Int32   nX  ,
                                     sal_Int32   nY  ) throw( RuntimeException, std::exception )
@@ -657,9 +575,7 @@ void SAL_CALL BaseControl::draw(    sal_Int32   nX  ,
     impl_paint( nX, nY, m_xGraphicsView );
 }
 
-
 //  XView
-
 
 sal_Bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevice ) throw( RuntimeException, std::exception )
 {
@@ -679,9 +595,7 @@ sal_Bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevic
     return bReturn ;
 }
 
-
 //  XView
-
 
 void SAL_CALL BaseControl::setZoom( float   /*fZoomX*/  ,
                                     float   /*fZoomY*/  ) throw( RuntimeException, std::exception )
@@ -689,9 +603,7 @@ void SAL_CALL BaseControl::setZoom( float   /*fZoomX*/  ,
     // Not implemented yet
 }
 
-
 //  XView
-
 
 Reference< XGraphics > SAL_CALL BaseControl::getGraphics() throw( RuntimeException, std::exception )
 {
@@ -700,9 +612,7 @@ Reference< XGraphics > SAL_CALL BaseControl::getGraphics() throw( RuntimeExcepti
     return m_xGraphicsView ;
 }
 
-
 //  XView
-
 
 Size SAL_CALL BaseControl::getSize() throw( RuntimeException, std::exception )
 {
@@ -711,9 +621,7 @@ Size SAL_CALL BaseControl::getSize() throw( RuntimeException, std::exception )
     return Size( m_nWidth, m_nHeight );
 }
 
-
 //  XEventListener
-
 
 void SAL_CALL BaseControl::disposing( const EventObject& /*aSource*/ ) throw( RuntimeException, std::exception )
 {
@@ -735,9 +643,7 @@ void SAL_CALL BaseControl::disposing( const EventObject& /*aSource*/ ) throw( Ru
     }
 }
 
-
 //  XPaintListener
-
 
 void SAL_CALL BaseControl::windowPaint( const PaintEvent& /*aEvent*/ ) throw( RuntimeException, std::exception )
 {
@@ -750,9 +656,7 @@ void SAL_CALL BaseControl::windowPaint( const PaintEvent& /*aEvent*/ ) throw( Ru
     impl_paint( 0, 0, m_xGraphicsPeer );
 }
 
-
 //  XWindowListener
-
 
 void SAL_CALL BaseControl::windowResized( const WindowEvent& aEvent ) throw( RuntimeException, std::exception )
 {
@@ -767,9 +671,7 @@ void SAL_CALL BaseControl::windowResized( const WindowEvent& aEvent ) throw( Run
     impl_recalcLayout( aMappedEvent );
 }
 
-
 //  XWindowListener
-
 
 void SAL_CALL BaseControl::windowMoved( const WindowEvent& aEvent ) throw( RuntimeException, std::exception )
 {
@@ -784,90 +686,70 @@ void SAL_CALL BaseControl::windowMoved( const WindowEvent& aEvent ) throw( Runti
     impl_recalcLayout( aMappedEvent );
 }
 
-
 //  XWindowListener
-
 
 void SAL_CALL BaseControl::windowShown( const EventObject& /*aEvent*/ ) throw( RuntimeException, std::exception )
 {
 }
 
-
 //  XWindowListener
-
 
 void SAL_CALL BaseControl::windowHidden( const EventObject& /*aEvent*/ ) throw( RuntimeException, std::exception )
 {
 }
 
-
 //  impl but public method to register service in DLL
 //  (In this BASE-implementation not implemented! Overwrite it in derived classes.)
-
 
 const Sequence< OUString > BaseControl::impl_getStaticSupportedServiceNames()
 {
     return Sequence< OUString >();
 }
 
-
 //  impl but public method to register service in DLL
 //  (In this BASE-implementation not implemented! Overwrite it in derived classes.)
-
 
 const OUString BaseControl::impl_getStaticImplementationName()
 {
     return OUString();
 }
 
-
 //  protected method
-
 
 const Reference< XComponentContext > BaseControl::impl_getComponentContext()
 {
     return m_xComponentContext ;
 }
 
-
 //  protected method
-
 
 const Reference< XWindow > BaseControl::impl_getPeerWindow()
 {
     return m_xPeerWindow ;
 }
 
-
 //  protected method
-
 
 const Reference< XGraphics > BaseControl::impl_getGraphicsPeer()
 {
     return m_xGraphicsPeer ;
 }
 
-
 //  protected method
-
 
 const sal_Int32& BaseControl::impl_getWidth()
 {
     return m_nWidth ;
 }
 
-
 //  protected method
-
 
 const sal_Int32& BaseControl::impl_getHeight()
 {
     return m_nHeight ;
 }
 
-
 //  protected method
-
 
 WindowDescriptor* BaseControl::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
 {
@@ -887,9 +769,7 @@ WindowDescriptor* BaseControl::impl_getWindowDescriptor( const Reference< XWindo
     return pDescriptor ;
 }
 
-
 //  protected method
-
 
 void BaseControl::impl_paint(           sal_Int32               /*nX*/          ,
                                         sal_Int32               /*nY*/          ,
@@ -900,9 +780,7 @@ void BaseControl::impl_paint(           sal_Int32               /*nX*/          
     // - not used in this implementation, but its not necessary to make it pure virtual !!!
 }
 
-
 //  protected method
-
 
 void BaseControl::impl_recalcLayout( const WindowEvent& /*aEvent*/ )
 {
@@ -910,18 +788,14 @@ void BaseControl::impl_recalcLayout( const WindowEvent& /*aEvent*/ )
     // But we make it not pure virtual because it's not necessary for all derived classes!
 }
 
-
 //  protected method
-
 
 Reference< XInterface > BaseControl::impl_getDelegator()
 {
     return m_xDelegator ;
 }
 
-
 //  private method
-
 
 void BaseControl::impl_releasePeer()
 {
@@ -946,9 +820,7 @@ void BaseControl::impl_releasePeer()
     }
 }
 
-
 //  private method
-
 
 OMRCListenerMultiplexerHelper* BaseControl::impl_getMultiplexer()
 {

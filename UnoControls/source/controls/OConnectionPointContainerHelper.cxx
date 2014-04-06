@@ -21,9 +21,7 @@
 
 #include "OConnectionPointHelper.hxx"
 
-
 //  namespaces
-
 
 using namespace ::rtl                   ;
 using namespace ::osl                   ;
@@ -33,9 +31,7 @@ using namespace ::com::sun::star::lang  ;
 
 namespace unocontrols{
 
-
 //  construct/destruct
-
 
 OConnectionPointContainerHelper::OConnectionPointContainerHelper( Mutex& aMutex )
     : m_aSharedMutex        ( aMutex    )
@@ -47,9 +43,7 @@ OConnectionPointContainerHelper::~OConnectionPointContainerHelper()
 {
 }
 
-
 //  XInterface
-
 
 Any SAL_CALL OConnectionPointContainerHelper::queryInterface( const Type& aType ) throw( RuntimeException, std::exception )
 {
@@ -72,9 +66,7 @@ Any SAL_CALL OConnectionPointContainerHelper::queryInterface( const Type& aType 
     return aReturn ;
 }
 
-
 //  XInterface
-
 
 void SAL_CALL OConnectionPointContainerHelper::acquire() throw()
 {
@@ -85,9 +77,7 @@ void SAL_CALL OConnectionPointContainerHelper::acquire() throw()
     OWeakObject::acquire();
 }
 
-
 //  XInterface
-
 
 void SAL_CALL OConnectionPointContainerHelper::release() throw()
 {
@@ -98,9 +88,7 @@ void SAL_CALL OConnectionPointContainerHelper::release() throw()
     OWeakObject::release();
 }
 
-
 //  XConnectionPointContainer
-
 
 Sequence< Type > SAL_CALL OConnectionPointContainerHelper::getConnectionPointTypes() throw( RuntimeException, std::exception )
 {
@@ -108,9 +96,7 @@ Sequence< Type > SAL_CALL OConnectionPointContainerHelper::getConnectionPointTyp
     return m_aMultiTypeContainer.getContainedTypes();
 }
 
-
 //  XConnectionPointContainer
-
 
 Reference< XConnectionPoint > SAL_CALL OConnectionPointContainerHelper::queryConnectionPoint( const Type& aType ) throw( RuntimeException, std::exception )
 {
@@ -131,9 +117,7 @@ Reference< XConnectionPoint > SAL_CALL OConnectionPointContainerHelper::queryCon
     return xConnectionPoint ;
 }
 
-
 //  XConnectionPointContainer
-
 
 void SAL_CALL OConnectionPointContainerHelper::advise(  const   Type&                       aType       ,
                                                         const   Reference< XInterface >&    xListener   ) throw( RuntimeException, std::exception )
@@ -142,9 +126,7 @@ void SAL_CALL OConnectionPointContainerHelper::advise(  const   Type&           
     m_aMultiTypeContainer.addInterface( aType, xListener );
 }
 
-
 //  XConnectionPointContainer
-
 
 void SAL_CALL OConnectionPointContainerHelper::unadvise(    const   Type&                       aType       ,
                                                             const   Reference< XInterface >&    xListener   ) throw( RuntimeException, std::exception )
@@ -153,10 +135,8 @@ void SAL_CALL OConnectionPointContainerHelper::unadvise(    const   Type&       
     m_aMultiTypeContainer.removeInterface( aType, xListener );
 }
 
-
 //  public but impl method!
 //  Is necessary to get container member at OConnectionPoint-instance.
-
 
 OMultiTypeInterfaceContainerHelper& OConnectionPointContainerHelper::impl_getMultiTypeContainer()
 {
