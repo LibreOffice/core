@@ -260,10 +260,11 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     aFont.SetSize( aFontSize );
 };
 
-WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigItem* pConfigItem ) :
-    pOut                ( pWinMtfOutput ),
-    pWMF                ( &rStreamWMF ),
-    pFilterConfigItem   ( pConfigItem )
+WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigItem* pConfigItem )
+    : pOut( pWinMtfOutput )
+    , pWMF( &rStreamWMF )
+    , nEndPos( 0 )
+    , pFilterConfigItem( pConfigItem )
 {
     SvLockBytes *pLB = pWMF->GetLockBytes();
     if ( pLB )
