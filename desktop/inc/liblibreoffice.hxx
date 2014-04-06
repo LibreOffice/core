@@ -21,48 +21,67 @@
 
 class LODocument
 {
-    LibreOfficeDocument *mpDoc;
+private:
+    LibreOfficeDocument* mpDoc;
+
 public:
-    inline LODocument( LibreOfficeDocument *pDoc ) : mpDoc( pDoc ) {}
-    inline ~LODocument() { mpDoc->destroy( mpDoc ); }
+    inline LODocument(LibreOfficeDocument* pDoc) :
+        mpDoc(pDoc)
+    {}
+
+    inline ~LODocument()
+    {
+        mpDoc->destroy(mpDoc);
+    }
 
     // Save as the given format, if format is NULL sniff from ext'n
-    inline bool saveAs( const char *url, const char *format = NULL )
+    inline bool saveAs(const char* pUrl, const char* pFormat = NULL)
     {
-        return mpDoc->saveAs( mpDoc, url, format );
+        return mpDoc->saveAs(mpDoc, pUrl, pFormat);
     }
 };
 
 class LibLibreOffice
 {
-    LibreOffice *mpThis;
-public:
-    inline LibLibreOffice( LibreOffice *pThis ) : mpThis( pThis ) {}
-    inline ~LibLibreOffice() { mpThis->destroy( mpThis ); };
+private:
+    LibreOffice* mpThis;
 
-    inline bool initialize( const char *installPath )
+public:
+    inline LibLibreOffice(LibreOffice* pThis) :
+        mpThis(pThis)
+    {}
+
+    inline ~LibLibreOffice()
     {
-        return mpThis->initialize( mpThis, installPath );
+        mpThis->destroy(mpThis);
     }
 
-    inline LODocument *documentLoad( const char *url )
+    inline bool initialize(const char* pInstallPath)
     {
-        LibreOfficeDocument *pDoc = mpThis->documentLoad( mpThis, url );
-        if( !pDoc )
+        return mpThis->initialize(mpThis, pInstallPath);
+    }
+
+    inline LODocument* documentLoad(const char* pUrl)
+    {
+        LibreOfficeDocument* pDoc = mpThis->documentLoad(mpThis, pUrl);
+        if (pDoc == NULL)
             return NULL;
-        return new LODocument( pDoc );
+        return new LODocument(pDoc);
     }
 
     // return the last error as a string, free me.
-    inline char *getError() { return mpThis->getError( mpThis ); }
+    inline char* getError()
+    {
+        return mpThis->getError(mpThis);
+    }
 };
 
-inline LibLibreOffice *lo_cpp_init( const char *install_path )
+inline LibLibreOffice* lo_cpp_init(const char* pInstallPath)
 {
-    LibreOffice *pThis = lo_init( install_path );
-    if( !pThis || pThis->nSize == 0 )
+    LibreOffice* pThis = lo_init(pInstallPath);
+    if (pThis == NULL || pThis->nSize == 0)
         return NULL;
-    return new LibLibreOffice( pThis );
+    return new LibLibreOffice(pThis);
 }
 
 #endif

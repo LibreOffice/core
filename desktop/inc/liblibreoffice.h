@@ -11,32 +11,34 @@
 #define INCLUDED_DESKTOP_INC_LIBLIBREOFFICE_H
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C"
+{
 #endif
 
 typedef struct _LibreOffice LibreOffice;
 typedef struct _LibreOfficeDocument LibreOfficeDocument;
 
-struct _LibreOffice {
+struct _LibreOffice
+{
   int  nSize;
 
   void                 (*destroy)       (LibreOffice *pThis);
-  int                  (*initialize)    (LibreOffice *pThis,
-                                         const char *pInstallPath);
-  LibreOfficeDocument *(*documentLoad)  (LibreOffice *pThis,
-                                         const char *pURL);
-  char *               (*getError)      (LibreOffice *pThis);
+  int                  (*initialize)    (LibreOffice *pThis, const char *pInstallPath);
+  LibreOfficeDocument* (*documentLoad)  (LibreOffice *pThis, const char *pURL);
+  char*                (*getError)      (LibreOffice *pThis);
 };
 
-struct _LibreOfficeDocument {
+struct _LibreOfficeDocument
+{
   int  nSize;
 
-  void (*destroy)   (LibreOfficeDocument *pThis);
-  int (*saveAs)     (LibreOfficeDocument *pThis,
-                     const char *pUrl, const char *pFormat);
+  void (*destroy)   (LibreOfficeDocument* pThis);
+  int (*saveAs)     (LibreOfficeDocument* pThis,
+                     const char *pUrl,
+                     const char *pFormat);
 };
 
-LibreOffice *lo_init (const char *install_path);
+LibreOffice* lo_init (const char* pInstallPath);
 
 #ifdef __cplusplus
   }
