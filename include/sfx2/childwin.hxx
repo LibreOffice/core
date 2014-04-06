@@ -60,7 +60,7 @@ struct SfxChildWinInfo
 
                         SfxChildWinInfo()
                         {
-                            bVisible = sal_False;
+                            bVisible = false;
                             nFlags = 0;
                         }
     bool                GetExtraData_Impl( SfxChildAlignment    *pAlign,
