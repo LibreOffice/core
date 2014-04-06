@@ -88,8 +88,8 @@ class SVT_DLLPUBLIC SvtSlideSorterBarOptions: public utl::detail::Options
             \li and unresolved externals exist at linking time.
             Do it in your source only.
         */
-        static SvtSlideSorterBarOptions_Impl* m_pDataContainer    ;   ///< impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                      m_nRefCount         ;   ///< internal ref count mechanism
+        static SvtSlideSorterBarOptions_Impl* m_pDataContainer    ;
+        static sal_Int32                      m_nRefCount         ;
 
 };
 

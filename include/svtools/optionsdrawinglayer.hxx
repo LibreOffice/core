@@ -193,8 +193,8 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
             Do it in your source only.
          */
 
-        static SvtOptionsDrawinglayer_Impl*     m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                        m_nRefCount         ;   /// internal ref count mechanism
+        static SvtOptionsDrawinglayer_Impl*     m_pDataContainer    ;
+        static sal_Int32                        m_nRefCount         ;
 
 };      // class SvtOptionsDrawinglayer
 

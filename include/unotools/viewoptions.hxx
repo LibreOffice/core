@@ -244,9 +244,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         EViewType           m_eViewType;
         OUString     m_sViewName;
 
-        /// - impl. data container as dynamic pointer for smaller memory requirements!
-        /// - internal ref count mechanism
-
         /*Attention
 
             Don't initialize these static member in these header!

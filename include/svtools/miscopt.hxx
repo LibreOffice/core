@@ -141,8 +141,8 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
             Do it in your source only.
          */
 
-        static SvtMiscOptions_Impl* m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                m_nRefCount         ;   /// internal ref count mechanism
+        static SvtMiscOptions_Impl* m_pDataContainer    ;
+        static sal_Int32                m_nRefCount         ;
 
 };      // class SvtMiscOptions
 

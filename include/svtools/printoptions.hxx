@@ -89,8 +89,8 @@ class SVT_DLLPUBLIC SvtPrinterOptions : public SvtBasePrintOptions
 {
 private:
 
-    static SvtPrintOptions_Impl*    m_pStaticDataContainer; /// impl. data container as dynamic pointer for smaller memory requirements!
-    static sal_Int32                m_nRefCount;            /// internal ref count mechanism
+    static SvtPrintOptions_Impl*    m_pStaticDataContainer;
+    static sal_Int32                m_nRefCount;
 
 public:
 
@@ -106,8 +106,8 @@ class SVT_DLLPUBLIC SvtPrintFileOptions : public SvtBasePrintOptions
 {
 private:
 
-    static SvtPrintOptions_Impl*    m_pStaticDataContainer; /// impl. data container as dynamic pointer for smaller memory requirements!
-    static sal_Int32                m_nRefCount;            /// internal ref count mechanism
+    static SvtPrintOptions_Impl*    m_pStaticDataContainer;
+    static sal_Int32                m_nRefCount;
 
 public:
 

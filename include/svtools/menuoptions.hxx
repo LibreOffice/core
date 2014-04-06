@@ -119,8 +119,8 @@ class SVT_DLLPUBLIC SAL_WARN_UNUSED SvtMenuOptions: public utl::detail::Options
             Do it in your source only.
          */
 
-        static SvtMenuOptions_Impl* m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32            m_nRefCount         ;   /// internal ref count mechanism
+        static SvtMenuOptions_Impl* m_pDataContainer    ;
+        static sal_Int32            m_nRefCount         ;
 
 };      // class SvtMenuOptions
 
