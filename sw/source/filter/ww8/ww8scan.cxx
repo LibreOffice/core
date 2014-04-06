@@ -493,12 +493,12 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x4621, 2, L_FIX}, // "sprmPBrcBar10" pap.brcBar;BRC10;word;
         {0x4622, 2, L_FIX}, // "sprmPDxaFromText10" pap.dxaFromText;dxa;word;
         {0x2423, 1, L_FIX}, // "sprmPWr" pap.wr;wr
-        {0x6424, 4, L_FIX}, // "sprmPBrcTop" pap.brcTop;BRC;long;
-        {0x6425, 4, L_FIX}, // "sprmPBrcLeft" pap.brcLeft;BRC;long;
-        {0x6426, 4, L_FIX}, // "sprmPBrcBottom" pap.brcBottom;BRC;long;
-        {0x6427, 4, L_FIX}, // "sprmPBrcRight" pap.brcRight;BRC;long;
-        {0x6428, 4, L_FIX}, // "sprmPBrcBetween" pap.brcBetween;BRC;long;
-        {0x6629, 4, L_FIX}, // "sprmPBrcBar" pap.brcBar;BRC;long;
+        {0x6424, 4, L_FIX}, // "sprmPBrcTop80" pap.brcTop;BRC;long;
+        {0x6425, 4, L_FIX}, // "sprmPBrcLeft80" pap.brcLeft;BRC;long;
+        {0x6426, 4, L_FIX}, // "sprmPBrcBottom80" pap.brcBottom;BRC;long;
+        {0x6427, 4, L_FIX}, // "sprmPBrcRight80" pap.brcRight;BRC;long;
+        {0x6428, 4, L_FIX}, // "sprmPBrcBetween80" pap.brcBetween;BRC;long;
+        {0x6629, 4, L_FIX}, // "sprmPBrcBar80" pap.brcBar;BRC;long;
         {0x242A, 1, L_FIX}, // "sprmPFNoAutoHyph" pap.fNoAutoHyph;0 or 1;byte;
         {0x442B, 2, L_FIX}, // "sprmPWHeightAbs" pap.wHeightAbs;w;word;
         {0x442C, 2, L_FIX}, // "sprmPDcs" pap.dcs;DCS;short;
@@ -620,8 +620,8 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x4863, 2, L_FIX}, // "sprmCIbstRMarkDel" chp.ibstRMarkDel;index into
                             // sttbRMark;short;
         {NS_sprm::LN_CDttmRMarkDel, 4, L_FIX}, // chp.dttmRMarkDel;DTTM;long;
-        {0x6865, 4, L_FIX}, // "sprmCBrc" chp.brc;BRC;long;
-        {0x4866, 2, L_FIX}, // "sprmCShd" chp.shd;SHD;short;
+        {0x6865, 4, L_FIX}, // "sprmCBrc80" chp.brc;BRC;long;
+        {0x4866, 2, L_FIX}, // "sprmCShd80" chp.shd;SHD;short;
         {0x4867, 2, L_FIX}, // "sprmCIdslRMarkDel" chp.idslRMReasonDel;an index
                             // to a table of strings defined in Word 6.0
                             // executables;short;
@@ -635,10 +635,10 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xCE01, 0, L_VAR}, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
                             // pic.dyaCropTop pic.dxaCropRight,
                             // pic.dyaCropBottom;Complex
-        {0x6C02, 4, L_FIX}, // "sprmPicBrcTop" pic.brcTop;BRC;long;
-        {0x6C03, 4, L_FIX}, // "sprmPicBrcLeft" pic.brcLeft;BRC;long;
-        {0x6C04, 4, L_FIX}, // "sprmPicBrcBottom" pic.brcBottom;BRC;long;
-        {0x6C05, 4, L_FIX}, // "sprmPicBrcRight" pic.brcRight;BRC;long;
+        {0x6C02, 4, L_FIX}, // "sprmPicBrcTop80" pic.brcTop;BRC;long;
+        {0x6C03, 4, L_FIX}, // "sprmPicBrcLeft80" pic.brcLeft;BRC;long;
+        {0x6C04, 4, L_FIX}, // "sprmPicBrcBottom80" pic.brcBottom;BRC;long;
+        {0x6C05, 4, L_FIX}, // "sprmPicBrcRight80" pic.brcRight;BRC;long;
         {0x3000, 1, L_FIX}, // "sprmScnsPgn" sep.cnsPgn;cns;byte;
         {0x3001, 1, L_FIX}, // "sprmSiHeadingPgn" sep.iHeadingPgn;heading number
                             // level;byte;
@@ -686,17 +686,17 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x3229, 1, L_FIX}, // "sprmSFFacingCol" ;;;
         {0x322A, 1, L_FIX}, // "sprmSFRTLGutter", set to one if gutter is on
                             // right
-        {0x702B, 4, L_FIX}, // "sprmSBrcTop" sep.brcTop;BRC;long;
-        {0x702C, 4, L_FIX}, // "sprmSBrcLeft" sep.brcLeft;BRC;long;
-        {0x702D, 4, L_FIX}, // "sprmSBrcBottom" sep.brcBottom;BRC;long;
-        {0x702E, 4, L_FIX}, // "sprmSBrcRight" sep.brcRight;BRC;long;
+        {0x702B, 4, L_FIX}, // "sprmSBrcTop80" sep.brcTop;BRC;long;
+        {0x702C, 4, L_FIX}, // "sprmSBrcLeft80" sep.brcLeft;BRC;long;
+        {0x702D, 4, L_FIX}, // "sprmSBrcBottom80" sep.brcBottom;BRC;long;
+        {0x702E, 4, L_FIX}, // "sprmSBrcRight80" sep.brcRight;BRC;long;
         {0x522F, 2, L_FIX}, // "sprmSPgbProp" sep.pgbProp;;word;
         {0x7030, 4, L_FIX}, // "sprmSDxtCharSpace" sep.dxtCharSpace;dxt;long;
         {0x9031, 2, L_FIX}, // "sprmSDyaLinePitch"
                             // sep.dyaLinePitch;dya; WRONG:long; RIGHT:short; !
         {0x5032, 2, L_FIX}, // "sprmSClm" ;;;
         {0x5033, 2, L_FIX}, // "sprmSTextFlow" sep.wTextFlow;complex
-        {0x5400, 2, L_FIX}, // "sprmTJc" tap.jc;jc;word (low order byte is
+        {0x5400, 2, L_FIX}, // "sprmTJc90" tap.jc;jc;word (low order byte is
                             // significant);
         {0x9601, 2, L_FIX}, // "sprmTDxaLeft" tap.rgdxaCenter
         {0x9602, 2, L_FIX}, // "sprmTDxaGapHalf" tap.dxaGapHalf,
@@ -704,24 +704,24 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x3403, 1, L_FIX}, // "sprmTFCantSplit" tap.fCantSplit;1 or 0;byte;
         {0x3404, 1, L_FIX}, // "sprmTTableHeader" tap.fTableHeader;1 or 0;byte;
         {0x3466, 1, L_FIX}, // "sprmTFCantSplit90" tap.fCantSplit90;1 or 0;byte;
-        {0xD605, 0, L_VAR}, // "sprmTTableBorders" tap.rgbrcTable;complex
+        {0xD605, 0, L_VAR}, // "sprmTTableBorders80" tap.rgbrcTable;complex
         {0xD606, 0, L_VAR}, // "sprmTDefTable10" tap.rgdxaCenter,
                             // tap.rgtc;complex
         {0x9407, 2, L_FIX}, // "sprmTDyaRowHeight" tap.dyaRowHeight;dya;word;
         {0xD608, 0, L_VAR}, // "sprmTDefTable" tap.rgtc;complex
-        {0xD609, 0, L_VAR}, // "sprmTDefTableShd" tap.rgshd;complex
+        {0xD609, 0, L_VAR}, // "sprmTDefTableShd80" tap.rgshd;complex
         {0x740A, 4, L_FIX}, // "sprmTTlp" tap.tlp;TLP;4 bytes;
         {0x560B, 2, L_FIX}, // "sprmTFBiDi" ;;;
         {0x740C, 1, L_FIX}, // "sprmTHTMLProps" ;;;
-        {0xD620, 0, L_VAR}, // "sprmTSetBrc" tap.rgtc[].rgbrc;complex
+        {0xD620, 0, L_VAR}, // "sprmTSetBrc80" tap.rgtc[].rgbrc;complex
         {0x7621, 4, L_FIX}, // "sprmTInsert" tap.rgdxaCenter, tap.rgtc;complex
         {0x5622, 2, L_FIX}, // "sprmTDelete" tap.rgdxaCenter, tap.rgtc;complex
         {0x7623, 4, L_FIX}, // "sprmTDxaCol" tap.rgdxaCenter;complex
         {0x5624, 0, L_VAR}, // "sprmTMerge" tap.fFirstMerged, tap.fMerged;
         {0x5625, 0, L_VAR}, // "sprmTSplit" tap.fFirstMerged, tap.fMerged;
         {0xD626, 0, L_VAR}, // "sprmTSetBrc10" tap.rgtc[].rgbrc;complex
-        {0x7627, 0, L_VAR}, // "sprmTSetShd" tap.rgshd;complex
-        {0x7628, 0, L_VAR}, // "sprmTSetShdOdd" tap.rgshd;complex
+        {0x7627, 0, L_VAR}, // "sprmTSetShd80" tap.rgshd;complex
+        {0x7628, 0, L_VAR}, // "sprmTSetShdOdd80" tap.rgshd;complex
         {0x7629, 4, L_FIX}, // "sprmTTextFlow" tap.rgtc[].fVerticaltap,
                             // rgtc[].fBackwardtap, rgtc[].fRotateFont;0 or 10
                             // or 10 or 1;word;
@@ -731,8 +731,8 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {NS_sprm::LN_CFELayout, 0, L_VAR},
         {0x6649, 4, L_FIX}, // undocumented
         {0xF614, 3, L_FIX}, // undocumented
-        {0xD612, 0, L_VAR}, // undocumented, new background colours.
-        {0xD613, 0, L_VAR}, // undocumented
+        {0xD612, 0, L_VAR}, // "sprmTDefTableShd"
+        {0xD613, 0, L_VAR}, // "sprmTTableBorders"
         {0xD61A, 0, L_VAR}, // undocumented
         {0xD61B, 0, L_VAR}, // undocumented
         {0xD61C, 0, L_VAR}, // undocumented
@@ -740,11 +740,11 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xD632, 0, L_VAR}, // undocumented
         {0xD634, 0, L_VAR}, // undocumented
         {0xD238, 0, L_VAR}, // undocumented sep
-        {0xC64E, 0, L_VAR}, // "sprmPBorderTop"
-        {0xC64F, 0, L_VAR}, // "sprmPBorderLeft"
-        {0xC650, 0, L_VAR}, // "sprmPBorderBottom"
-        {0xC651, 0, L_VAR}, // "sprmPBorderRight"
-        {0xC652, 0, L_VAR}, // "sprmPBorderBetween"
+        {0xC64E, 0, L_VAR}, // "sprmPBrcTop"
+        {0xC64F, 0, L_VAR}, // "sprmPBrcLeft"
+        {0xC650, 0, L_VAR}, // "sprmPBrcBottom"
+        {0xC651, 0, L_VAR}, // "sprmPBrcRight"
+        {0xC652, 0, L_VAR}, // "sprmPBrcBetween"
         {0xF661, 3, L_FIX}, // undocumented
         {0x4873, 2, L_FIX}, // "sprmCRgLid0" chp.rglid[0];LID: for non-FE text
         {0x4874, 2, L_FIX}, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
@@ -771,7 +771,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xF617, 3, L_FIX}, // undocumented
         {0xD660, 0, L_VAR}, // undocumented, something to do with colour.
         {0xD670, 0, L_VAR}, // undocumented, something to do with colour.
-        {0xCA71, 0, L_VAR}, // undocumented, text backcolour
+        {0xCA71, 0, L_VAR}, // "sprmCShd", text backcolour
         {0x303C, 1, L_FIX}, // undocumented, sep
         {0x245B, 1, L_FIX}, // undocumented, para autobefore
         {0x245C, 1, L_FIX}, // undocumented, para autoafter

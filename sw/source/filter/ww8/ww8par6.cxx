@@ -1235,8 +1235,8 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
             sal_uInt8* pSprm[4];
 
             if( pSep->Find4Sprms(
-                    NS_sprm::LN_SBrcTop, NS_sprm::LN_SBrcLeft,
-                    NS_sprm::LN_SBrcBottom, NS_sprm::LN_SBrcRight,
+                    NS_sprm::LN_SBrcTop80, NS_sprm::LN_SBrcLeft80,
+                    NS_sprm::LN_SBrcBottom80, NS_sprm::LN_SBrcRight80,
                     pSprm[0], pSprm[1], pSprm[2], pSprm[3] ) )
             {
                 for( int i = 0; i < 4; ++i )
@@ -1244,8 +1244,8 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
             }
             // Version 9 BRCs if present will override version 8
             if( pSep->Find4Sprms(
-                    NS_sprm::LN_SBorderTop, NS_sprm::LN_SBorderLeft,
-                    NS_sprm::LN_SBorderBottom, NS_sprm::LN_SBorderRight,
+                    NS_sprm::LN_SBrcTop, NS_sprm::LN_SBrcLeft,
+                    NS_sprm::LN_SBrcBottom, NS_sprm::LN_SBrcRight,
                     pSprm[0], pSprm[1], pSprm[2], pSprm[3] ) )
             {
                 for( int i = 0; i < 4; ++i )
@@ -4760,7 +4760,7 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
             SvxBoxItem aBoxItem(RES_CHRATR_BOX);
             aBoxItem = *pBox;
             WW8_BRCVer9 aBrc;
-            int nBrcVer = (nId == NS_sprm::LN_CBorder) ? 9 : (bVer67 ? 6 : 8);
+            int nBrcVer = (nId == NS_sprm::LN_CBrc) ? 9 : (bVer67 ? 6 : 8);
 
             _SetWW8_BRC(nBrcVer, aBrc, pData);
 
@@ -5627,15 +5627,15 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x4622, 0},                                 //"sprmPDxaFromText10"
                                                      //pap.dxaFromText;dxa;word;
         {0x2423, 0},                                 //"sprmPWr" pap.wr;wr;byte;
-        {0x6424, &SwWW8ImplReader::Read_Border},     //"sprmPBrcTop" pap.brcTop;BRC;
+        {0x6424, &SwWW8ImplReader::Read_Border},     //"sprmPBrcTop80" pap.brcTop;BRC;
                                                      //long;
-        {0x6425, &SwWW8ImplReader::Read_Border},     //"sprmPBrcLeft" pap.brcLeft;
+        {0x6425, &SwWW8ImplReader::Read_Border},     //"sprmPBrcLeft80" pap.brcLeft;
                                                      //BRC;long;
-        {0x6426, &SwWW8ImplReader::Read_Border},     //"sprmPBrcBottom"
+        {0x6426, &SwWW8ImplReader::Read_Border},     //"sprmPBrcBottom80"
                                                      //pap.brcBottom;BRC;long;
-        {0x6427, &SwWW8ImplReader::Read_Border},     //"sprmPBrcRight" pap.brcRight;
+        {0x6427, &SwWW8ImplReader::Read_Border},     //"sprmPBrcRight80" pap.brcRight;
                                                      //BRC;long;
-        {0x6428, &SwWW8ImplReader::Read_Border},     //"sprmPBrcBetween"
+        {0x6428, &SwWW8ImplReader::Read_Border},     //"sprmPBrcBetween80"
                                                      //pap.brcBetween;BRC;long;
         {0x6629, 0},                                 //"sprmPBrcBar" pap.brcBar;BRC;
                                                      //long;
@@ -5858,9 +5858,9 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //sttbRMark;short;
         {NS_sprm::LN_CDttmRMarkDel, 0},
                                                      //chp.dttmRMarkDel;DTTM;long;
-        {0x6865, &SwWW8ImplReader::Read_CharBorder}, //"sprmCBrc" chp.brc;BRC;long;
-        {0xca72, &SwWW8ImplReader::Read_CharBorder}, //"sprmCBorder" chp.brc;BRC;long;
-        {0x4866, &SwWW8ImplReader::Read_CharShadow}, //"sprmCShd" chp.shd;SHD;short;
+        {0x6865, &SwWW8ImplReader::Read_CharBorder}, //"sprmCBrc80" chp.brc;BRC;long;
+        {0xca72, &SwWW8ImplReader::Read_CharBorder}, //"sprmCBrc" chp.brc;BRC;long;
+        {0x4866, &SwWW8ImplReader::Read_CharShadow}, //"sprmCShd80" chp.shd;SHD;short;
         {0x4867, 0},                                 //"sprmCIdslRMarkDel"
                                                      //chp.idslRMReasonDel;an index
                                                      //to a table of strings
@@ -5886,13 +5886,13 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //pic.dxaCropRight,
                                                      //pic.dyaCropBottom;Complex;
                                                      //length byte plus 12 bytes;
-        {0x6C02, 0},                                 //"sprmPicBrcTop" pic.brcTop;
+        {0x6C02, 0},                                 //"sprmPicBrcTop80" pic.brcTop;
                                                      //BRC;long;
-        {0x6C03, 0},                                 //"sprmPicBrcLeft" pic.brcLeft;
+        {0x6C03, 0},                                 //"sprmPicBrcLeft80" pic.brcLeft;
                                                      //BRC;long;
-        {0x6C04, 0},                                 //"sprmPicBrcBottom"
+        {0x6C04, 0},                                 //"sprmPicBrcBottom80"
                                                      //pic.brcBottom;BRC;long;
-        {0x6C05, 0},                                 //"sprmPicBrcRight"
+        {0x6C05, 0},                                 //"sprmPicBrcRight80"
                                                      //pic.brcRight;BRC;long;
         {0x3000, 0},                                 //"sprmScnsPgn" sep.cnsPgn;cns;
                                                      //byte;
@@ -5982,13 +5982,13 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
       //0x3229, ? ? ?,                               //"sprmSFFacingCol"
         {0x322A, 0},                                 //"sprmSFRTLGutter", set to 1
                                                      //if gutter is on the right.
-        {0x702B, 0},                                 //"sprmSBrcTop" sep.brcTop;BRC;
+        {0x702B, 0},                                 //"sprmSBrcTop80" sep.brcTop;BRC;
                                                      //long;
-        {0x702C, 0},                                 //"sprmSBrcLeft" sep.brcLeft;
+        {0x702C, 0},                                 //"sprmSBrcLeft80" sep.brcLeft;
                                                      //BRC;long;
-        {0x702D, 0},                                 //"sprmSBrcBottom"
+        {0x702D, 0},                                 //"sprmSBrcBottom80"
                                                      //sep.brcBottom;BRC;long;
-        {0x702E, 0},                                 //"sprmSBrcRight" sep.brcRight;
+        {0x702E, 0},                                 //"sprmSBrcRight80" sep.brcRight;
                                                      //BRC;long;
         {0x522F, 0},                                 //"sprmSPgbProp" sep.pgbProp;
                                                      //word;
@@ -6000,7 +6000,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
       //0x5032, ? ? ?,                               //"sprmSClm"
         {0x5033, 0},                                 //"sprmSTextFlow"
                                                      //sep.wTextFlow;complex ;short
-        {0x5400, 0},                                 //"sprmTJc" tap.jc;jc;word (low
+        {0x5400, 0},                                 //"sprmTJc90" tap.jc;jc;word (low
                                                      //order byte is significant);
         {0x9601, 0},                                 //"sprmTDxaLeft"
                                                      //tap.rgdxaCenter; dxa; word;
@@ -6013,7 +6013,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //tap.fTableHeader;1 or 0;byte;
         {0x3466, 0},                                 //"sprmTFCantSplit90"
                                                      //tap.fCantSplit90;1 or 0;byte;
-        {0xD605, 0},                                 //"sprmTTableBorders"
+        {0xD605, 0},                                 //"sprmTTableBorders80"
                                                      //tap.rgbrcTable;complex;
                                                      //24 bytes;
         {0xD606, 0},                                 //"sprmTDefTable10"
@@ -6024,13 +6024,13 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //tap.dyaRowHeight;dya;word;
         {0xD608, 0},                                 //"sprmTDefTable"
                                                      //tap.rgtc;complex
-        {0xD609, 0},                                 //"sprmTDefTableShd"
+        {0xD609, 0},                                 //"sprmTDefTableShd80"
                                                      //tap.rgshd;complex
         {0x740A, 0},                                 //"sprmTTlp" tap.tlp;TLP;
                                                      //4 bytes;
       //0x560B, ? ? ?,                               //"sprmTFBiDi"
       //0x740C, ? ? ?,                               //"sprmTHTMLProps"
-        {0xD620, 0},                                 //"sprmTSetBrc"
+        {0xD620, 0},                                 //"sprmTSetBrc80"
                                                      //tap.rgtc[].rgbrc;complex;
                                                      //5 bytes;
         {0x7621, 0},                                 //"sprmTInsert"
@@ -6051,9 +6051,9 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0xD626, 0},                                 //"sprmTSetBrc10"
                                                      //tap.rgtc[].rgbrc;complex;
                                                      //5 bytes;
-        {0x7627, 0},                                 //"sprmTSetShd" tap.rgshd;
+        {0x7627, 0},                                 //"sprmTSetShd80" tap.rgshd;
                                                      //complex; 4 bytes;
-        {0x7628, 0},                                 //"sprmTSetShdOdd"
+        {0x7628, 0},                                 //"sprmTSetShdOdd80"
                                                      //tap.rgshd;complex;4 bytes;
         {0x7629, 0},                                 //"sprmTTextFlow"
                                                      //tap.rgtc[].fVertical
@@ -6073,8 +6073,8 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x6649, 0},                                 //undocumented
         {0xF614, 0},                                 //"sprmTTableWidth"
                                                      //recorded as 3 bytes;
-        {0xD612, 0},                                 //undocumented
-        {0xD613, 0},                                 //undocumented
+        {0xD612, 0},                                 //"sprmTCellShd"
+        {0xD613, 0},                                 //"sprmTTableBorders"
         {0xD61A, 0},                                 //undocumented
         {0xD61B, 0},                                 //undocumented
         {0xD61C, 0},                                 //undocumented
@@ -6082,10 +6082,10 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0xD634, 0},                                 //undocumented
         {0xD632, 0},                                 //undocumented
         {0xD238, 0},                                 //undocumented sep
-        {0xC64E, &SwWW8ImplReader::Read_Border},     //"sprmPBorderTop"
-        {0xC64F, &SwWW8ImplReader::Read_Border},     //"sprmPBorderLeft"
-        {0xC650, &SwWW8ImplReader::Read_Border},     //"sprmPBorderBottom"
-        {0xC651, &SwWW8ImplReader::Read_Border},     //"sprmPBorderRight"
+        {0xC64E, &SwWW8ImplReader::Read_Border},     //"sprmPBrcTop"
+        {0xC64F, &SwWW8ImplReader::Read_Border},     //"sprmPBrcLeft"
+        {0xC650, &SwWW8ImplReader::Read_Border},     //"sprmPBrcBottom"
+        {0xC651, &SwWW8ImplReader::Read_Border},     //"sprmPBrcRight"
         {0xC652, &SwWW8ImplReader::Read_Border},     //"sprmPBorderBetween"
         {0xF661, 0},                                 //undocumented
         {0x4873, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid0" chp.rglid[0];
@@ -6120,7 +6120,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0xF617, 0},                                 //undocumented
         {0xD660, 0},                                 //undocumented
         {0xD670, 0},                                 //undocumented
-        {0xCA71, &SwWW8ImplReader::Read_TxtBackColor},//undocumented
+        {0xCA71, &SwWW8ImplReader::Read_TxtBackColor},//"sprmCShd"
         {0x303C, 0},                                 //undocumented
         {0x245B, &SwWW8ImplReader::Read_ParaAutoBefore},//undocumented, para
         {0x245C, &SwWW8ImplReader::Read_ParaAutoAfter},//undocumented, para

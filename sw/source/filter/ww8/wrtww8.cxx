@@ -2137,7 +2137,7 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
             case text::HoriOrientation::CENTER:
             case text::HoriOrientation::RIGHT:
                 if ( m_rWW8Export.bWrtWW8 )
-                    m_rWW8Export.InsUInt16( NS_sprm::LN_TJc );
+                    m_rWW8Export.InsUInt16( NS_sprm::LN_TJc90 );
                 else
                     m_rWW8Export.pO->push_back( 182 );
                 m_rWW8Export.InsUInt16( text::HoriOrientation::RIGHT == eHOri ? 2 : 1 );
@@ -2454,7 +2454,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
 
     sal_uInt8 nBoxes = rTabBoxes.size();
     if ( m_rWW8Export.bWrtWW8 )
-        m_rWW8Export.InsUInt16( NS_sprm::LN_TDefTableShd );
+        m_rWW8Export.InsUInt16( NS_sprm::LN_TDefTableShd80 );
     else
         m_rWW8Export.pO->push_back( (sal_uInt8)191 );
     m_rWW8Export.pO->push_back( (sal_uInt8)(nBoxes * 2) );  // Len
@@ -2480,7 +2480,8 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
 
     if ( m_rWW8Export.bWrtWW8 )
     {
-        sal_uInt32 aSprmIds[] = {NS_sprm::LN_TCellShd, NS_sprm::LN_TCellShadow};
+        sal_uInt32 aSprmIds[] = { NS_sprm::LN_TDefTableShd,
+                                  NS_sprm::LN_TDefTableShdRaw };
         sal_uInt8 nBoxes0 = rTabBoxes.size();
         if (nBoxes0 > 21)
             nBoxes0 = 21;
