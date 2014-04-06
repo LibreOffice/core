@@ -514,9 +514,9 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     sal_uInt8 nType(0), nOperator(0);
     sal_uInt16 nFmlaSize1(0), nFmlaSize2(0);
     sal_uInt32 nFlags(0);
+    sal_uInt16 nFlagsExtended(0);
 
-    rStrm >> nType >> nOperator >> nFmlaSize1 >> nFmlaSize2 >> nFlags;
-    rStrm.Ignore( 2 );
+    rStrm >> nType >> nOperator >> nFmlaSize1 >> nFmlaSize2 >> nFlags >> nFlagsExtended;
 
     // *** mode and comparison operator ***
 
@@ -556,6 +556,16 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     SfxItemSet& rStyleItemSet = ScfTools::MakeCellStyleSheet( GetStyleSheetPool(), aStyleName, true ).GetItemSet();
 
     const XclImpPalette& rPalette = GetPalette();
+
+    // number format
+
+    if( get_flag( nFlags, EXC_CF_BLOCK_NUMFMT ) )
+    {
+        XclImpNumFmtBuffer& rNumFmtBuffer = GetRoot().GetNumFmtBuffer();
+        bool bIFmt = get_flag( nFlags, EXC_CF_IFMT_USER );
+        sal_uInt16 nFormat = rNumFmtBuffer.ReadCFFormat( rStrm, bIFmt );
+        rNumFmtBuffer.FillToItemSet( rStyleItemSet, nFormat );
+    }
 
     // *** font block ***
 

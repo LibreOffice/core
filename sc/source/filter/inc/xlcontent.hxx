@@ -80,10 +80,12 @@ const sal_uInt32 EXC_CF_AREA_FGCOLOR        = 0x00020000;   /// Foreground color
 const sal_uInt32 EXC_CF_AREA_BGCOLOR        = 0x00040000;   /// Background color modified?
 const sal_uInt32 EXC_CF_AREA_ALL            = 0x00070000;   /// Any area attribute modified?
 const sal_uInt32 EXC_CF_ALLDEFAULT          = 0x003FFFFF;   /// Default flags.
+const sal_uInt32 EXC_CF_BLOCK_NUMFMT        = 0x02000000;   /// Font block present?
 const sal_uInt32 EXC_CF_BLOCK_FONT          = 0x04000000;   /// Font block present?
 const sal_uInt32 EXC_CF_BLOCK_ALIGNMENT     = 0x08000000;   /// Alignment block present?
 const sal_uInt32 EXC_CF_BLOCK_BORDER        = 0x10000000;   /// Border block present?
 const sal_uInt32 EXC_CF_BLOCK_AREA          = 0x20000000;   /// Pattern block present?
+const sal_uInt32 EXC_CF_IFMT_USER           = 0x1;          /// NumberFormat String or Id?
 
 const sal_uInt32 EXC_CF_FONT_STYLE          = 0x00000002;   /// Font posture or weight modified?
 const sal_uInt32 EXC_CF_FONT_STRIKEOUT      = 0x00000080;   /// Font cancellation modified?
