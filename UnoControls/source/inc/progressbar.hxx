@@ -102,15 +102,8 @@ public:
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
-        @descr      -
-
         @seealso    XInterface
         @seealso    release()
-
-        @param      -
-
-        @return     -
-
         @onerror    A RuntimeException is thrown.
     */
 
@@ -118,15 +111,8 @@ public:
 
     /**_______________________________________________________________________________________________________
         @short      decrement refcount
-        @descr      -
-
         @seealso    XInterface
         @seealso    acquire()
-
-        @param      -
-
-        @return     -
-
         @onerror    A RuntimeException is thrown.
     */
 

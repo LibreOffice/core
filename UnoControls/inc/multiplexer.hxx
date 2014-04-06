@@ -71,15 +71,8 @@ public:
     /**_______________________________________________________________________________________________________
         @short      constructor
         @descr      Create a Multiplexer of XWindowEvents.
-
-        @seealso    -
-
         @param      rControl    The control. All listeners think that this is the original broadcaster.
         @param      rPeer       The peer from which the original events are dispatched. Null is allowed.
-
-        @return     -
-
-        @onerror    -
     */
 
     OMRCListenerMultiplexerHelper(  const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xControl    ,
@@ -88,29 +81,13 @@ public:
     /**_______________________________________________________________________________________________________
         @short      copy-constructor
         @descr
-
-        @seealso    -
-
         @param      rCopyInstance   C++-Reference to instance to make copy from.
-
-        @return     -
-
-        @onerror    -
     */
 
     OMRCListenerMultiplexerHelper( const OMRCListenerMultiplexerHelper& aCopyInstance );
 
     /**_______________________________________________________________________________________________________
         @short      destructor
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ~OMRCListenerMultiplexerHelper();
@@ -135,15 +112,8 @@ public:
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
-        @descr      -
-
         @seealso    XInterface
         @seealso    release()
-
-        @param      -
-
-        @return     -
-
         @onerror    A RuntimeException is thrown.
     */
 
@@ -151,15 +121,8 @@ public:
 
     /**_______________________________________________________________________________________________________
         @short      decrement refcount
-        @descr      -
-
         @seealso    XInterface
         @seealso    acquire()
-
-        @param      -
-
-        @return     -
-
         @onerror    A RuntimeException is thrown.
     */
 
@@ -168,31 +131,11 @@ public:
     //  operator
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() const;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     OMRCListenerMultiplexerHelper& operator= ( const OMRCListenerMultiplexerHelper& aCopyInstance );
@@ -201,45 +144,19 @@ public:
 
     /**_______________________________________________________________________________________________________
         @short      Remove all listeners from the previous set peer and add the needed listeners to rPeer.
-        @descr      -
-
-        @seealso    -
-
         @param      rPeer       The peer from which the original events are dispatched. Null is allowed.
-
-        @return     -
-
-        @onerror    -
     */
 
     void setPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xPeer );
 
     /**_______________________________________________________________________________________________________
         @short      Remove all listeners and send a disposing message.
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     void disposeAndClear();
 
     /**_______________________________________________________________________________________________________
         @short      Add the specified listener to the source.
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     void advise(    const   ::com::sun::star::uno::Type&                              aType       ,
@@ -247,15 +164,6 @@ public:
 
     /**_______________________________________________________________________________________________________
         @short      Remove the specified listener from the source.
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     void unadvise(  const   ::com::sun::star::uno::Type&                              aType       ,
@@ -264,17 +172,6 @@ public:
     //  XEventListener
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& aSource)
@@ -283,34 +180,12 @@ public:
     //  XFocusListener
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& aEvent )
@@ -319,68 +194,24 @@ public:
     //  XWindowListener
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowResized(const ::com::sun::star::awt::WindowEvent& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowMoved(const ::com::sun::star::awt::WindowEvent& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowShown(const ::com::sun::star::lang::EventObject& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowHidden(const ::com::sun::star::lang::EventObject& aEvent )
@@ -389,34 +220,12 @@ public:
     //  XKeyListener
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL keyPressed( const ::com::sun::star::awt::KeyEvent& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL keyReleased( const ::com::sun::star::awt::KeyEvent& aEvent )
@@ -425,68 +234,24 @@ public:
     //  XMouseListener
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL mousePressed(const ::com::sun::star::awt::MouseEvent& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL mouseReleased(const ::com::sun::star::awt::MouseEvent& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL mouseEntered(const ::com::sun::star::awt::MouseEvent& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL mouseExited(const ::com::sun::star::awt::MouseEvent& aEvent )
@@ -495,34 +260,12 @@ public:
     //  XMouseMotionListener
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL mouseDragged(const ::com::sun::star::awt::MouseEvent& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL mouseMoved(const ::com::sun::star::awt::MouseEvent& aEvent )
@@ -531,17 +274,6 @@ public:
     //  XPaintListener
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowPaint(const ::com::sun::star::awt::PaintEvent& aEvent )
@@ -550,119 +282,42 @@ public:
     //  XTopWindowListener
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowClosing( const ::com::sun::star::lang::EventObject& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowClosed( const ::com::sun::star::lang::EventObject& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowMinimized( const ::com::sun::star::lang::EventObject& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowNormalized( const ::com::sun::star::lang::EventObject& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowActivated( const ::com::sun::star::lang::EventObject& aEvent )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& aEvent )
@@ -674,16 +329,8 @@ protected:
 
     /**_______________________________________________________________________________________________________
         @short      Remove the listener from the peer.
-        @descr      -
-
-        @seealso    -
-
         @param      xPeer   The peer from which the listener is removed.
         @param      rType   The listener type, which specify the type of the listener.
-
-        @return     -
-
-        @onerror    -
     */
 
     void impl_adviseToPeer( const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xPeer   ,
@@ -691,16 +338,8 @@ protected:
 
     /**_______________________________________________________________________________________________________
         @short      Add the listener to the peer.
-        @descr      -
-
-        @seealso    -
-
         @param      xPeer   The peer to which the listener is added.
         @param      rType   The listener type, which specify the type of the listener.
-
-        @return     -
-
-        @onerror    -
     */
 
     void impl_unadviseFromPeer( const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xPeer   ,

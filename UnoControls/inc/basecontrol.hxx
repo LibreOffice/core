@@ -126,31 +126,11 @@ public:
     //  construct/destruct
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     BaseControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ~BaseControl();
@@ -176,15 +156,8 @@ public:
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
-        @descr      -
-
         @seealso    XInterface
         @seealso    release()
-
-        @param      -
-
-        @return     -
-
         @onerror    A RuntimeException is thrown.
     */
 
@@ -192,15 +165,8 @@ public:
 
     /**_______________________________________________________________________________________________________
         @short      decrement refcount
-        @descr      -
-
         @seealso    XInterface
         @seealso    acquire()
-
-        @param      -
-
-        @return     -
-
         @onerror    A RuntimeException is thrown.
     */
 
@@ -210,12 +176,7 @@ public:
 
     /**_______________________________________________________________________________________________________
         @short      get information about supported interfaces
-        @descr      -
-
         @seealso    XTypeProvider
-
-        @param      -
-
         @return     Sequence of types of all supported interfaces
 
         @onerror    A RuntimeException is thrown.
@@ -230,9 +191,6 @@ public:
                     Another way, cache is enabled.
 
         @seealso    XTypeProvider
-
-        @param      -
-
         @return     ID as Sequence of byte
 
         @onerror    A RuntimeException is thrown.
@@ -244,16 +202,6 @@ public:
     //  XAggregation
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL setDelegator(
@@ -261,16 +209,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
@@ -280,16 +218,6 @@ public:
     //  XServiceInfo
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual sal_Bool SAL_CALL supportsService(
@@ -297,32 +225,12 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual OUString SAL_CALL getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
@@ -331,31 +239,11 @@ public:
     //  XComponent
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL addEventListener(
@@ -363,16 +251,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL removeEventListener(
@@ -382,16 +260,6 @@ public:
     //  XControl
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL createPeer(
@@ -400,16 +268,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL setContext(
@@ -417,16 +275,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual sal_Bool SAL_CALL setModel(
@@ -434,110 +282,40 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE = 0;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL setDesignMode( sal_Bool bOn ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getContext()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE = 0;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > SAL_CALL getPeer()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView > SAL_CALL getView()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual sal_Bool SAL_CALL isDesignMode() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual sal_Bool SAL_CALL isTransparent() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -545,16 +323,6 @@ public:
     //  XWindow
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL setPosSize(   sal_Int32   nX      ,
@@ -564,76 +332,26 @@ public:
                                         sal_Int16   nFlags  ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL setEnable( sal_Bool bEnable ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL setFocus() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getPosSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL addWindowListener(
@@ -641,16 +359,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL addFocusListener(
@@ -658,16 +366,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL addKeyListener(
@@ -675,16 +373,6 @@ public:
     throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL addMouseListener(
@@ -692,16 +380,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL addMouseMotionListener(
@@ -709,16 +387,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL addPaintListener(
@@ -726,16 +394,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL removeWindowListener(
@@ -743,16 +401,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL removeFocusListener(
@@ -760,16 +408,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL removeKeyListener(
@@ -777,16 +415,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL removeMouseListener(
@@ -794,16 +422,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL removeMouseMotionListener(
@@ -811,16 +429,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL removePaintListener(
@@ -830,32 +438,12 @@ public:
     //  XView
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL draw( sal_Int32   nX  ,
                                 sal_Int32   nY  ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual sal_Bool SAL_CALL setGraphics(
@@ -863,48 +451,18 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL setZoom(  float   fZoomX  ,
                                     float   fZoomY  ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > SAL_CALL getGraphics()
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::awt::Size SAL_CALL getSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -912,16 +470,6 @@ public:
     //  ::com::sun::star::lang::XEventListener
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL disposing(
@@ -931,16 +479,6 @@ public:
     //  XPaintListener
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowPaint(
@@ -950,16 +488,6 @@ public:
     //  XWindowListener
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -970,31 +498,11 @@ public:
     //  impl but public method to register service
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     static const ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     static const OUString impl_getStaticImplementationName();
@@ -1005,91 +513,31 @@ protected:
     using OComponentHelper::disposing;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > impl_getComponentContext();
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > impl_getPeerWindow();
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > impl_getGraphicsPeer();
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     const sal_Int32& impl_getWidth();
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     const sal_Int32& impl_getHeight();
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::awt::WindowDescriptor* impl_getWindowDescriptor(
@@ -1097,16 +545,6 @@ protected:
     );
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void impl_paint(        sal_Int32               nX          ,
@@ -1114,31 +552,11 @@ protected:
                             const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >&   xGraphics   );
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void impl_recalcLayout( const ::com::sun::star::awt::WindowEvent& aEvent );
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > impl_getDelegator();
@@ -1148,31 +566,11 @@ protected:
 private:
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     void impl_releasePeer();
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     OMRCListenerMultiplexerHelper* impl_getMultiplexer();

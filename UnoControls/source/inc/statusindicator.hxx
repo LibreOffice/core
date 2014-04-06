@@ -114,15 +114,8 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
 
         /**_______________________________________________________________________________________________________
             @short      increment refcount
-            @descr      -
-
             @seealso    XInterface
             @seealso    release()
-
-            @param      -
-
-            @return     -
-
             @onerror    A RuntimeException is thrown.
         */
 
@@ -130,15 +123,8 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
 
         /**_______________________________________________________________________________________________________
             @short      decrement refcount
-            @descr      -
-
             @seealso    XInterface
             @seealso    acquire()
-
-            @param      -
-
-            @return     -
-
             @onerror    A RuntimeException is thrown.
         */
 
@@ -148,12 +134,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
 
         /**_______________________________________________________________________________________________________
             @short      get information about supported interfaces
-            @descr      -
-
             @seealso    XTypeProvider
-
-            @param      -
-
             @return     Sequence of types of all supported interfaces
 
             @onerror    A RuntimeException is thrown.
@@ -165,16 +146,6 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         //  XAggregation
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType )
@@ -183,16 +154,6 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         //  XStatusIndicator
 
         /*-****************************************************************************************************
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL start(
@@ -201,61 +162,21 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL end() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL reset() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL setText( const OUString& sText ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -263,46 +184,16 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         //  XLayoutConstrains
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize )
@@ -311,16 +202,6 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         //  XControl
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         virtual void SAL_CALL createPeer(
@@ -329,32 +210,12 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         virtual sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel )
             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
@@ -363,16 +224,6 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         //  XComponent
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -380,16 +231,6 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         //  XWindow
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         virtual void SAL_CALL setPosSize(   sal_Int32   nX      ,
@@ -401,31 +242,11 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         //  BaseControl
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         static const ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         static const OUString impl_getStaticImplementationName();
@@ -435,16 +256,6 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
 protected:
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         virtual ::com::sun::star::awt::WindowDescriptor* impl_getWindowDescriptor(
@@ -452,16 +263,6 @@ protected:
         ) SAL_OVERRIDE;
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         virtual void impl_paint (
@@ -471,16 +272,6 @@ protected:
         ) SAL_OVERRIDE;
 
         /**_______________________________________________________________________________________________________
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-
-            @return     -
-
-            @onerror    -
         */
 
         virtual void impl_recalcLayout( const ::com::sun::star::awt::WindowEvent& aEvent ) SAL_OVERRIDE;
@@ -490,16 +281,6 @@ protected:
 private:
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
 // private variables

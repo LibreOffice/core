@@ -58,31 +58,11 @@ public:
     //  construct/destruct
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
        BaseContainerControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ~BaseContainerControl();
@@ -110,12 +90,7 @@ public:
 
     /**_______________________________________________________________________________________________________
         @short      get information about supported interfaces
-        @descr      -
-
         @seealso    XTypeProvider
-
-        @param      -
-
         @return     Sequence of types of all supported interfaces
 
         @onerror    A RuntimeException is thrown.
@@ -127,16 +102,6 @@ public:
     //  XAggregation
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
@@ -146,16 +111,6 @@ public:
     //  XControl
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL createPeer(
@@ -164,16 +119,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual sal_Bool SAL_CALL setModel(
@@ -181,16 +126,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
@@ -199,16 +134,6 @@ public:
     //  XComponent
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -216,16 +141,6 @@ public:
     //  XEventListener
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -233,16 +148,6 @@ public:
     //  XControlContainer
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL addControl(
@@ -251,16 +156,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception  ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL removeControl(
@@ -268,16 +163,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL setStatusText(
@@ -285,16 +170,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getControl(
@@ -302,16 +177,6 @@ public:
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > SAL_CALL getControls()
@@ -320,16 +185,6 @@ public:
     //  XWindow
 
     /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
