@@ -30,11 +30,9 @@
 namespace framework
 {
 
-
 AcceleratorCache::AcceleratorCache()
 {
 }
-
 
 AcceleratorCache::AcceleratorCache(const AcceleratorCache& rCopy)
 {
@@ -42,13 +40,11 @@ AcceleratorCache::AcceleratorCache(const AcceleratorCache& rCopy)
     m_lKey2Commands = rCopy.m_lKey2Commands;
 }
 
-
 AcceleratorCache::~AcceleratorCache()
 {
     // Dont save anything automaticly here.
     // The user has to do that explicitly!
 }
-
 
 void AcceleratorCache::takeOver(const AcceleratorCache& rCopy)
 {
@@ -57,13 +53,11 @@ void AcceleratorCache::takeOver(const AcceleratorCache& rCopy)
     m_lKey2Commands = rCopy.m_lKey2Commands;
 }
 
-
 AcceleratorCache& AcceleratorCache::operator=(const AcceleratorCache& rCopy)
 {
     takeOver(rCopy);
     return *this;
 }
-
 
 sal_Bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
 {
@@ -71,13 +65,11 @@ sal_Bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
     return (m_lKey2Commands.find(aKey) != m_lKey2Commands.end());
 }
 
-
 sal_Bool AcceleratorCache::hasCommand(const OUString& sCommand) const
 {
     SolarMutexGuard g;
     return (m_lCommand2Keys.find(sCommand) != m_lCommand2Keys.end());
 }
-
 
 AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
 {
@@ -97,7 +89,6 @@ AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
     return lKeys;
 }
 
-
 void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
                                          const OUString&    sCommand)
 {
@@ -111,7 +102,6 @@ void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
     rKeyList.push_back(aKey);
 }
 
-
 AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const OUString& sCommand) const
 {
     SolarMutexGuard g;
@@ -122,7 +112,6 @@ AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const OUString& sC
     return pCommand->second;
 }
 
-
 OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
 {
     SolarMutexGuard g;
@@ -132,7 +121,6 @@ OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
                 OUString(), css::uno::Reference< css::uno::XInterface >());
     return pKey->second;
 }
-
 
 void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
 {
@@ -155,7 +143,6 @@ void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
     // remove key from optimized command list
     m_lCommand2Keys.erase(sCommand);
 }
-
 
 void AcceleratorCache::removeCommand(const OUString& sCommand)
 {

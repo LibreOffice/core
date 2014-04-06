@@ -74,7 +74,6 @@ class ActionTriggerPropertySet :  private cppu::BaseMutex,
                                                             const com::sun::star::uno::Any& aValue          )
             throw( com::sun::star::lang::IllegalArgumentException ) SAL_OVERRIDE;
 
-
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& aValue )
             throw( com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
 
@@ -88,9 +87,7 @@ class ActionTriggerPropertySet :  private cppu::BaseMutex,
 
         static const com::sun::star::uno::Sequence< com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
 
-
         //  helper
-
 
         sal_Bool impl_tryToChangeProperty(  const   OUString&              aCurrentValue   ,
                                             const   com::sun::star::uno::Any&   aNewValue       ,
@@ -107,9 +104,7 @@ class ActionTriggerPropertySet :  private cppu::BaseMutex,
                                             com::sun::star::uno::Any&           aOldValue       ,
                                             com::sun::star::uno::Any&           aConvertedValue ) throw( com::sun::star::lang::IllegalArgumentException );
 
-
         //  members
-
 
         OUString                                                         m_aCommandURL;
         OUString                                                         m_aHelpURL;

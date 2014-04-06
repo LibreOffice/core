@@ -48,7 +48,6 @@ static const char MERGEFALLBACK_ADDLAST[]       = "AddLast";
 static const char MERGEFALLBACK_ADDFIRST[]      = "AddFirst";
 static const char MERGEFALLBACK_IGNORE[]        = "Ignore";
 
-
 static void lcl_ConvertSequenceToValues(
     const Sequence< PropertyValue > &rSequence,
     AddonStatusbarItem &rItem )
@@ -253,7 +252,6 @@ bool StatusbarMerger::ProcessMergeFallback(
 
     return false;
 }
-
 
 }
 

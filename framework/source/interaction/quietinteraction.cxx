@@ -39,14 +39,10 @@
 
 namespace framework{
 
-
-
 QuietInteraction::QuietInteraction()
     : m_aRequest         (                               )
 {
 }
-
-
 
 void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException, std::exception )
 {
@@ -134,15 +130,11 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
         xAbort->select();
 }
 
-
-
 css::uno::Any QuietInteraction::getRequest() const
 {
     SolarMutexGuard g;
     return m_aRequest;
 }
-
-
 
 sal_Bool QuietInteraction::wasUsed() const
 {

@@ -30,10 +30,7 @@
 
 #include <comphelper/attributelist.hxx>
 
-
 namespace framework{
-
-
 
 AcceleratorConfigurationWriter::AcceleratorConfigurationWriter(const AcceleratorCache&                                       rContainer,
                                                                const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig   )
@@ -42,11 +39,9 @@ AcceleratorConfigurationWriter::AcceleratorConfigurationWriter(const Accelerator
 {
 }
 
-
 AcceleratorConfigurationWriter::~AcceleratorConfigurationWriter()
 {
 }
-
 
 void AcceleratorConfigurationWriter::flush()
 {
@@ -91,7 +86,6 @@ void AcceleratorConfigurationWriter::flush()
     xExtendedCFG->ignorableWhitespace(OUString());
     xExtendedCFG->endDocument();
 }
-
 
 void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt::KeyEvent&                                     aKey    ,
                                                                  const OUString&                                        sCommand,

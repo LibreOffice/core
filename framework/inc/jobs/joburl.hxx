@@ -25,9 +25,7 @@
 
 #include <rtl/ustring.hxx>
 
-
 namespace framework{
-
 
 #define JOBURL_PROTOCOL_STR        "vnd.sun.star.job:"
 #define JOBURL_PROTOCOL_LEN        17
@@ -43,7 +41,6 @@ namespace framework{
 
 #define JOBURL_PART_SEPARATOR      ';'
 #define JOBURL_PARTARGS_SEPARATOR  ','
-
 
 /**
     @short  can be used to parse, validate and work with job URL's
@@ -76,7 +73,6 @@ class JobURL
             E_SERVICE = 4
         };
 
-
     // types
 
     private:
@@ -102,7 +98,6 @@ class JobURL
         /** holds the service arguments */
         OUString m_sServiceArgs;
 
-
     // native interface
 
     public:
@@ -113,7 +108,6 @@ class JobURL
         sal_Bool getAlias      (       OUString& sAlias       ) const;
         sal_Bool getService    (       OUString& sService     ) const;
 
-
     // private helper
 
     private:
@@ -123,7 +117,6 @@ class JobURL
                                             sal_Int32        nPartLength     ,
                                             OUString& rPartValue      ,
                                             OUString& rPartArguments  );
-
 
     // debug methods!
 

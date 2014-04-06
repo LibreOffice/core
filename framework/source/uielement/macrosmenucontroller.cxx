@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <uielement/macrosmenucontroller.hxx>
 #include <uielement/menubarmanager.hxx>
 #include "services.h"
@@ -138,7 +137,6 @@ void MacrosMenuController::impl_select(const Reference< XDispatch >& /*_xDispatc
         Application::PostUserEvent( STATIC_LINK(0, MacrosMenuController , ExecuteHdl_Impl), pExecuteInfo );
     }
 }
-
 
 IMPL_STATIC_LINK_NOINSTANCE( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {

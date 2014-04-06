@@ -22,10 +22,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 
-
 namespace framework {
-
-
 
 VCLStatusIndicator::VCLStatusIndicator(const css::uno::Reference< css::awt::XWindow >&               xParentWindow)
     : m_xParentWindow    (xParentWindow                )
@@ -39,11 +36,9 @@ VCLStatusIndicator::VCLStatusIndicator(const css::uno::Reference< css::awt::XWin
                 static_cast< css::task::XStatusIndicator* >(this));
 }
 
-
 VCLStatusIndicator::~VCLStatusIndicator()
 {
 }
-
 
 void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
                                               sal_Int32        nRange)
@@ -71,7 +66,6 @@ void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
     m_nValue = 0;
 }
 
-
 void SAL_CALL VCLStatusIndicator::reset()
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -82,7 +76,6 @@ void SAL_CALL VCLStatusIndicator::reset()
         m_pStatusBar->SetText(OUString());
     }
 }
-
 
 void SAL_CALL VCLStatusIndicator::end()
     throw(css::uno::RuntimeException, std::exception)
@@ -103,7 +96,6 @@ void SAL_CALL VCLStatusIndicator::end()
     }
 }
 
-
 void SAL_CALL VCLStatusIndicator::setText(const OUString& sText)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -112,7 +104,6 @@ void SAL_CALL VCLStatusIndicator::setText(const OUString& sText)
     if (m_pStatusBar)
         m_pStatusBar->SetText(sText);
 }
-
 
 void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
     throw(css::uno::RuntimeException, std::exception)
@@ -135,7 +126,6 @@ void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
     if (m_pStatusBar)
         m_pStatusBar->SetProgressValue(nPercent);
 }
-
 
 void VCLStatusIndicator::impl_recalcLayout(Window* pStatusBar   ,
                                            Window* pParentWindow)

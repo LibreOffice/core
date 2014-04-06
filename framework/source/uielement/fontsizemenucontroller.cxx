@@ -37,9 +37,7 @@
 #include <svtools/ctrltool.hxx>
 #include <osl/mutex.hxx>
 
-
 //  Defines
-
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

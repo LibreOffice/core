@@ -70,8 +70,6 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
         css::uno::Sequence< OUString > lURLPattern;
     };
 
-
-
     /** @short implements a list of items of type InterceptorInfo, and provides some special
                functions on it.
 
@@ -81,8 +79,6 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
     class InterceptorList : public ::std::deque< InterceptorInfo >
     {
         public:
-
-
 
             /** @short search for an interceptor inside this list using it's reference.
 
@@ -103,8 +99,6 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
                 }
                 return end();
             }
-
-
 
             /** @short search for an interceptor inside this list using it's reference.
 
@@ -133,7 +127,6 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
             }
     };
 
-
     // member
 
     private:
@@ -154,12 +147,9 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
                    The last or the first registered one. */
         static sal_Bool m_bPreferrFirstInterceptor;
 
-
     // native interface
 
     public:
-
-
 
         /** @short creates a new interception helper instance.
 
@@ -174,8 +164,6 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
 
     protected:
 
-
-
         /** @short standard destructor.
 
             @descr This method destruct an instance of this class and clear some member.
@@ -184,11 +172,9 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
          */
         virtual ~InterceptionHelper();
 
-
     // uno interface
 
     public:
-
 
         // XDispatchProvider
 
@@ -217,7 +203,6 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
                                                                                           sal_Int32        nSearchFlags    )
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
         // XDispatchProvider
 
         /** @short implements an optimized queryDispatch() for remote.
@@ -233,7 +218,6 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
          */
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
         // XDispatchProviderInterception
 
@@ -253,7 +237,6 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
         virtual void SAL_CALL registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
         // XDispatchProviderInterception
 
         /** @short      release an interceptor.
@@ -267,7 +250,6 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
             @throw      A RuntimeException if the given reference is NULL!
          */
         virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
 
         // XEventListener
 

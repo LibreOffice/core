@@ -36,7 +36,6 @@ ActionTriggerContainer::ActionTriggerContainer() :
 {
 }
 
-
 ActionTriggerContainer::~ActionTriggerContainer()
 {
 }

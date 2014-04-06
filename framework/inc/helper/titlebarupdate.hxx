@@ -62,7 +62,6 @@ class TitleBarUpdate : public  ::cppu::WeakImplHelper3<
             ::sal_Int32 nIcon;
         };
 
-
     // member
 
     private:
@@ -73,45 +72,36 @@ class TitleBarUpdate : public  ::cppu::WeakImplHelper3<
         /// reference to the frame which was created by the office himself
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
 
-
     // interface
 
     public:
-
 
         // ctor/dtor
                  TitleBarUpdate(const css::uno::Reference< css::uno::XComponentContext >& xContext);
         virtual ~TitleBarUpdate(                                                                   );
 
-
         // XInterface, XTypeProvider
-
 
         // XInitialization
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
             throw(css::uno::Exception       ,
                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
         // XFrameActionListener
         virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
         // XTitleChangeListener
         virtual void SAL_CALL titleChanged(const css::frame::TitleChangedEvent& aEvent)
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
         // XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // helper
 
     private:
-
 
         /** @short  identify the application module, which  is used behind the component
                     of our frame.
@@ -130,7 +120,6 @@ class TitleBarUpdate : public  ::cppu::WeakImplHelper3<
         sal_Bool implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
                                               TModuleInfo&                               rInfo );
 
-
         /** @short  set a new icon and title on the title bar of our connected frame window.
 
             @descr  It does not check if an update is really needed. That has to be done outside.
@@ -138,7 +127,6 @@ class TitleBarUpdate : public  ::cppu::WeakImplHelper3<
                     nothing more.
          */
         void impl_forceUpdate();
-
 
         /** @short  identify the current component (inside the connected frame)
                     and set the right module icon on the title bar.
@@ -148,7 +136,6 @@ class TitleBarUpdate : public  ::cppu::WeakImplHelper3<
                     on the window title bar.
          */
         void impl_updateIcon(const css::uno::Reference< css::frame::XFrame >& xFrame);
-
 
         /** @short  gets the current title from the frame and set it on the window.
 

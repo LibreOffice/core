@@ -23,9 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/textenc.h>
 
-
 //  generic macros
-
 
 /*_________________________________________________________________________________________________________________
     DECLARE_ASCII( SASCIIVALUE )

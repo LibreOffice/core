@@ -91,7 +91,6 @@ namespace framework {
 
 using namespace com::sun::star;
 
-
 class LoadEnvListener : public ::cppu::WeakImplHelper2< css::frame::XLoadEventListener      ,
                                                         css::frame::XDispatchResultListener >
 {
@@ -102,13 +101,11 @@ class LoadEnvListener : public ::cppu::WeakImplHelper2< css::frame::XLoadEventLi
 
     public:
 
-
         LoadEnvListener(LoadEnv* pLoadEnv)
             : m_bWaitingResult(true)
             , m_pLoadEnv(pLoadEnv)
         {
         }
-
 
         // frame.XLoadEventListener
         virtual void SAL_CALL loadFinished(const css::uno::Reference< css::frame::XFrameLoader >& xLoader)
@@ -117,17 +114,14 @@ class LoadEnvListener : public ::cppu::WeakImplHelper2< css::frame::XLoadEventLi
         virtual void SAL_CALL loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >& xLoader)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
         // frame.XDispatchResultListener
         virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& aEvent)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
         // lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
 
 LoadEnv::LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     throw(LoadEnvException, css::uno::RuntimeException)
@@ -136,11 +130,9 @@ LoadEnv::LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xCont
 {
 }
 
-
 LoadEnv::~LoadEnv()
 {
 }
-
 
 css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
                                                                            const css::uno::Reference< css::uno::XComponentContext >&     xContext  ,
@@ -203,7 +195,6 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
     return xComponent;
 }
 
-
 utl::MediaDescriptor impl_mergeMediaDescriptorWithMightExistingModelArgs(const css::uno::Sequence< css::beans::PropertyValue >& lOutsideDescriptor)
 {
     utl::MediaDescriptor lDescriptor(lOutsideDescriptor);
@@ -220,7 +211,6 @@ utl::MediaDescriptor impl_mergeMediaDescriptorWithMightExistingModelArgs(const c
 
     return lDescriptor;
 }
-
 
 void LoadEnv::initializeLoading(const OUString&                                           sURL            ,
                                 const css::uno::Sequence< css::beans::PropertyValue >&           lMediaDescriptor,
@@ -299,7 +289,6 @@ void LoadEnv::initializeLoading(const OUString&                                 
     );
 }
 
-
 void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XComponentContext >& i_rxContext,
                                     utl::MediaDescriptor& io_lMediaDescriptor, const bool i_bUIMode,
                                     QuietInteraction** o_ppQuietInteraction )
@@ -347,7 +336,6 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
     if (io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_UPDATEDOCMODE()) == io_lMediaDescriptor.end())
         io_lMediaDescriptor[utl::MediaDescriptor::PROP_UPDATEDOCMODE()] <<= nUpdateMode;
 }
-
 
 void LoadEnv::startLoading()
 {
@@ -454,7 +442,6 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
     return css::uno::Reference< css::lang::XComponent >(xModel, css::uno::UNO_QUERY);
 }
 
-
 void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::frame::XFrameLoader >&)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -464,7 +451,6 @@ void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::fram
     m_bWaitingResult = false;
 }
 
-
 void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >&)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -473,7 +459,6 @@ void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::fra
         m_pLoadEnv->impl_setResult(sal_False);
     m_bWaitingResult = false;
 }
-
 
 void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResultEvent& aEvent)
     throw(css::uno::RuntimeException, std::exception)
@@ -500,7 +485,6 @@ void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResult
     m_bWaitingResult = false;
 }
 
-
 void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -509,7 +493,6 @@ void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
         m_pLoadEnv->impl_setResult(sal_False);
     m_bWaitingResult = false;
 }
-
 
 void LoadEnv::impl_setResult(sal_Bool bResult)
 {
@@ -554,7 +537,6 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     {
         return E_UNSUPPORTED_CONTENT;
     }
-
 
     // (ii) Some special URLs indicates a given input stream,
     //      a full featured document model directly or
@@ -617,8 +599,6 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     css::uno::Reference< css::container::XEnumeration >    xSet        ;
     css::uno::Sequence< OUString >                  lTypesReg(1);
 
-
-
     // (iii) If a FrameLoader service (or at least
     //      a Filter) can be found, which supports
     //      this URL - it must be a loadable content.
@@ -644,7 +624,6 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     if (xSet->hasMoreElements())
         return E_CAN_BE_LOADED;
 
-
     // (iv) Some URL protocols are supported by special services.
     //      E.g. ContentHandler.
     //      Such contents can be handled ... but not loaded.
@@ -659,14 +638,12 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     if (xSet->hasMoreElements())
         return E_CAN_BE_HANDLED;
 
-
     // (v) Last but not least the UCB is used inside office to
     //     load contents. He has a special configuration to know
     //     which URL schemata can be used inside office.
     css::uno::Reference< css::ucb::XUniversalContentBroker > xUCB(css::ucb::UniversalContentBroker::create(xContext));
     if (xUCB->queryContentProvider(sURL).is())
         return E_CAN_BE_LOADED;
-
 
     // (TODO) At this point, we have no idea .-)
     //        But it seems to be better, to break all
@@ -872,7 +849,6 @@ void LoadEnv::impl_detectTypeAndFilter()
     }
 }
 
-
 sal_Bool LoadEnv::impl_handleContent()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
@@ -938,7 +914,6 @@ sal_Bool LoadEnv::impl_handleContent()
 
     return sal_False;
 }
-
 
 sal_Bool LoadEnv::impl_furtherDocsAllowed()
 {
@@ -1019,7 +994,6 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
 
     return bAllowed;
 }
-
 
 sal_Bool LoadEnv::impl_loadContent()
     throw(LoadEnvException, css::uno::RuntimeException)
@@ -1157,7 +1131,6 @@ sal_Bool LoadEnv::impl_loadContent()
     return sal_False;
 }
 
-
 css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
 {
     // SAFE -> -----------------------------------
@@ -1224,7 +1197,6 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     return css::uno::Reference< css::uno::XInterface >();
 }
 
-
 void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& xFrame,
                               const css::util::URL&                            aURL  )
 {
@@ -1255,7 +1227,6 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
     lArgs[OUString("Bookmark")] <<= aURL.Mark;
     xDispatcher->dispatch(aCmd, lArgs.getAsConstPropertyValueList());
 }
-
 
 css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     throw(LoadEnvException, css::uno::RuntimeException)
@@ -1397,7 +1368,6 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     return xResult;
 }
 
-
 sal_Bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const
 {
     css::uno::Reference< css::document::XActionLockable > xLock(xFrame, css::uno::UNO_QUERY);
@@ -1411,7 +1381,6 @@ sal_Bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< c
     // Otherwise we have to look for any other existing lock.
     return xLock->isActionLocked();
 }
-
 
 css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     throw(LoadEnvException, css::uno::RuntimeException)
@@ -1544,7 +1513,6 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     return xTask;
 }
 
-
 void LoadEnv::impl_reactForLoadingState()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
@@ -1664,7 +1632,6 @@ void LoadEnv::impl_reactForLoadingState()
     // <- SAFE ----------------------------------
 }
 
-
 void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
                                                 sal_Bool bForceToFront)
 {
@@ -1700,7 +1667,6 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
             pWindow->Show(true, (bForceFrontAndFocus || bForceToFront) ? SHOW_FOREGROUNDTASK : 0 );
     }
 }
-
 
 void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {

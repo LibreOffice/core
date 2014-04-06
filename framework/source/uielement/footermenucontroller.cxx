@@ -37,9 +37,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <rtl/ustrbuf.hxx>
 
-
 //  Defines
-
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

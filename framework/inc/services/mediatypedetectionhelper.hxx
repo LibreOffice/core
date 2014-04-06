@@ -32,7 +32,6 @@
 
 //  namespaces
 
-
 namespace framework{
 
 /*-************************************************************************************************************
@@ -53,12 +52,9 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::
 
     //  public methods
 
-
     public:
 
-
         //  constructor / destructor
-
 
         /*-****************************************************************************************************
             @short      standard ctor
@@ -88,15 +84,11 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::
 
         virtual ~MediaTypeDetectionHelper();
 
-
         //  XInterface, XTypeProvider, XServiceInfo
-
 
         DECLARE_XSERVICEINFO
 
-
         //  XStringMapping
-
 
         /*-****************************************************************************************************
             @short      -
@@ -113,10 +105,8 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::
         virtual sal_Bool SAL_CALL mapStrings(css::uno::Sequence< OUString >& seqParameter)
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //  variables
     //  should be private every time
-
 
     private:
 

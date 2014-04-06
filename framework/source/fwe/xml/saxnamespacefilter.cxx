@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 /** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
                with solaris headers ...
 */
@@ -35,7 +34,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
 namespace framework{
-
 
 SaxNamespaceFilter::SaxNamespaceFilter( Reference< XDocumentHandler >& rSax1DocumentHandler ) :
      m_xLocator( 0 ),

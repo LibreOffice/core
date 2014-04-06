@@ -49,11 +49,9 @@ MenuConfiguration::MenuConfiguration(
 {
 }
 
-
 MenuConfiguration::~MenuConfiguration()
 {
 }
-
 
 Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
     Reference< XInputStream >& rInputStream )
@@ -65,7 +63,6 @@ throw ( WrappedTargetException )
     InputSource aInputSource;
 
     aInputSource.aInputStream = rInputStream;
-
 
     // create menu bar
     Reference< XIndexContainer > xItemContainer( static_cast< cppu::OWeakObject *>( new RootItemContainer()), UNO_QUERY );

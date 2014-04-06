@@ -81,7 +81,6 @@ ToolbarLayoutManager::~ToolbarLayoutManager()
     delete m_pAddonOptions;
 }
 
-
 //  XInterface
 
 void SAL_CALL ToolbarLayoutManager::acquire() throw()
@@ -1561,9 +1560,7 @@ void ToolbarLayoutManager::implts_destroyDockingAreaWindows()
     xBottomDockingWindow->dispose();
 }
 
-
 // persistence methods
-
 
 sal_Bool ToolbarLayoutManager::implts_readWindowStateData( const OUString& aName, UIElement& rElementData )
 {
@@ -2118,7 +2115,6 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
                 nSpace = 0;
 
             nLastPos = rElement.m_aDockedData.m_aPos.X + aPosSize.Width;
-
 
             rRowColumnWindowData.aRowColumnWindowSizes.push_back(
                 awt::Rectangle( rElement.m_aDockedData.m_aPos.X, rElement.m_aDockedData.m_aPos.Y,
@@ -3206,7 +3202,6 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
     }
 }
 
-
 //  XWindowListener
 
 void SAL_CALL ToolbarLayoutManager::windowResized( const awt::WindowEvent& aEvent )
@@ -3273,7 +3268,6 @@ void SAL_CALL ToolbarLayoutManager::windowHidden( const lang::EventObject& /*aEv
 throw( uno::RuntimeException, std::exception )
 {
 }
-
 
 //  XDockableWindowListener
 
@@ -3347,7 +3341,6 @@ throw (uno::RuntimeException, std::exception)
     uno::Reference< awt::XWindow >         xBottomDockingWindow( m_xDockAreaWindows[ui::DockingArea_DOCKINGAREA_BOTTOM] );
     uno::Reference< awt::XWindow2 >        xContainerWindow( m_xContainerWindow );
     UIElement                              aUIDockingElement( m_aDockUIElement );
-
 
     DockingOperation                       eDockingOperation( DOCKOP_ON_COLROW );
     bool                                   bDockingInProgress( m_bDockingInProgress );
@@ -3441,7 +3434,6 @@ throw (uno::RuntimeException, std::exception)
 
                 ::Rectangle aNewDockingRect( aTrackingRect );
 
-
                 implts_calcDockingPosSize( aUIDockingElement, eDockingOperation, aNewDockingRect, aMousePos );
 
                 ::Point aScreenPos = pContainerWindow->OutputToScreenPixel( aNewDockingRect.TopLeft() );
@@ -3493,7 +3485,6 @@ throw (uno::RuntimeException, std::exception)
             if ( !aDockingData.bFloating )
             {
                 m_aDockUIElement.m_aDockedData = aUIDockingElement.m_aDockedData;
-
 
                 m_eDockOperation               = eDockingOperation;
             }
@@ -3828,7 +3819,6 @@ void SAL_CALL ToolbarLayoutManager::endPopupMode( const awt::EndPopupModeEvent& 
 throw (uno::RuntimeException, std::exception)
 {
 }
-
 
 //  XUIConfigurationListener
 

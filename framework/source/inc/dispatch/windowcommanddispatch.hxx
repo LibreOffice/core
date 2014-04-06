@@ -59,12 +59,9 @@ class WindowCommandDispatch
         /// knows the VCL window (where the hard coded commands occurred) as weak XWindow reference
         css::uno::WeakReference< css::awt::XWindow > m_xWindow;
 
-
     // native interface
 
     public:
-
-
 
         /** @short  creates a new instance and initialize it with all necessary parameters.
 
@@ -81,18 +78,13 @@ class WindowCommandDispatch
         WindowCommandDispatch(const css::uno::Reference< css::uno::XComponentContext >&     xContext ,
                               const css::uno::Reference< css::frame::XFrame >&              xFrame);
 
-
-
         /** @short  used to free internal resources.
          */
         virtual ~WindowCommandDispatch();
 
-
     // implementation
 
     private:
-
-
 
         /** @short  establish all listener connections we need.
 
@@ -107,13 +99,9 @@ class WindowCommandDispatch
          */
         void impl_stopListening();
 
-
-
         /** @short  callback from VCL to notify new commands
          */
         DECL_LINK( impl_notifyCommand, void* );
-
-
 
         /** @short  dispatch right command URLs into our frame context.
 

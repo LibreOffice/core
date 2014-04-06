@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "classes/fwkresid.hxx"
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -40,8 +39,6 @@ ResMgr* FwkResId::GetResManager()
 
     return pResMgr;
 }
-
-
 
 FwkResId::FwkResId( sal_uInt16 nId ) :
     ResId( nId, *FwkResId::GetResManager() )

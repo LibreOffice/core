@@ -29,7 +29,6 @@
 
 namespace framework{
 
-
 // XInterface, XTypeProvider, XServiceInfo
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(MailToDispatcher                   ,
@@ -47,8 +46,6 @@ DEFINE_INIT_SERVICE(MailToDispatcher,
                     }
                    )
 
-
-
 /**
     @short      standard ctor
     @descr      These initialize a new instance of ths class with needed information for work.
@@ -61,8 +58,6 @@ MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::uno::XCompon
 {
 }
 
-
-
 /**
     @short      standard dtor
     @descr      -
@@ -70,8 +65,6 @@ MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::uno::XCompon
 MailToDispatcher::~MailToDispatcher()
 {
 }
-
-
 
 /**
     @short      decide if this dispatch implementation can be used for requested URL or not
@@ -92,8 +85,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL MailToDispatcher::queryDis
     return xDispatcher;
 }
 
-
-
 /**
     @short      do the same like dispatch() but for multiple requests at the same time
     @descr      -
@@ -111,8 +102,6 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Mail
     }
     return lDispatcher;
 }
-
-
 
 /**
     @short      dispatch URL with arguments
@@ -134,8 +123,6 @@ void SAL_CALL MailToDispatcher::dispatch( const css::util::URL&                 
     implts_dispatch(aURL,lArguments);
     // No notification for status listener!
 }
-
-
 
 /**
     @short      dispatch with guaranteed notifications about success
@@ -171,8 +158,6 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
         xListener->dispatchFinished( aEvent );
     }
 }
-
-
 
 /**
     @short      threadsafe helper for dispatch calls
@@ -215,8 +200,6 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
     return bSuccess;
 }
 
-
-
 /**
     @short      add/remove listener for state events
     @descr      Because we use an external process to forward such mail URLs, and this process doesn't
@@ -233,8 +216,6 @@ void SAL_CALL MailToDispatcher::addStatusListener( const css::uno::Reference< cs
 {
     // not supported yet
 }
-
-
 
 void SAL_CALL MailToDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                       const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException, std::exception )

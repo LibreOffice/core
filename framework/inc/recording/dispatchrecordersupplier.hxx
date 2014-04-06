@@ -53,7 +53,6 @@ class DispatchRecorderSupplier  :   public  ::cppu::WeakImplHelper2<
 
     private:
 
-
         /** provided dispatch recorder of this supplier instance
 
             @life   Is controled from outside. Because this variable is setted
@@ -62,16 +61,13 @@ class DispatchRecorderSupplier  :   public  ::cppu::WeakImplHelper2<
          */
         css::uno::Reference< css::frame::XDispatchRecorder > m_xDispatchRecorder;
 
-
     // uno interface
 
     public:
 
-
         // XInterface, XTypeProvider, XServiceInfo
 
         DECLARE_XSERVICEINFO
-
 
         // XDispatchRecorderSupplier
 
@@ -80,7 +76,6 @@ class DispatchRecorderSupplier  :   public  ::cppu::WeakImplHelper2<
         virtual void                                                 SAL_CALL dispatchAndRecord  ( const css::util::URL&                                       aURL        ,
                                                                                                    const css::uno::Sequence< css::beans::PropertyValue >&      lArguments  ,
                                                                                                    const css::uno::Reference< css::frame::XDispatch >&         xDispatcher ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // native interface
 

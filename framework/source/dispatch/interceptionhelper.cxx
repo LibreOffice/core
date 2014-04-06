@@ -23,13 +23,9 @@
 
 #include <vcl/svapp.hxx>
 
-
 namespace framework{
 
-
 sal_Bool InterceptionHelper::m_bPreferrFirstInterceptor = sal_True;
-
-
 
 InterceptionHelper::InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
                                        const css::uno::Reference< css::frame::XDispatchProvider >& xSlave)

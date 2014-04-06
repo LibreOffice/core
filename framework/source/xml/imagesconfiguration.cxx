@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <xml/imagesconfiguration.hxx>
 #include <services.h>
 
@@ -37,7 +36,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
-
 
 namespace framework
 {

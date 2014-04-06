@@ -30,7 +30,6 @@
 namespace framework
 {
 
-
 /**
     can be used to map key identifier to the
     corresponding key codes ...
@@ -42,7 +41,6 @@ class KeyMapping
 
     private:
 
-
         /** @short  is used to map a key code
                     to the right key identifier, which is
                     used to make the xml file "human readable"
@@ -53,10 +51,8 @@ class KeyMapping
             const char*     Identifier;
         };
 
-
         /** @short  hash structure to map identifier to key codes. */
         typedef BaseHash< sal_Int16 > Identifier2CodeHash;
-
 
         /** @short  hash structure to map key codes to identifier. */
         typedef ::boost::unordered_map< sal_Int16                    ,
@@ -64,21 +60,17 @@ class KeyMapping
                                  ShortHashCode                ,
                                  ::std::equal_to< sal_Int16 > > Code2IdentifierHash;
 
-
     // member
 
     private:
 
         static KeyIdentifierInfo KeyIdentifierMap[];
 
-
         /** @short  hash to map identifier to key codes. */
         Identifier2CodeHash m_lIdentifierHash;
 
-
         /** @short  hash to map key codes to identifier. */
         Code2IdentifierHash m_lCodeHash;
-
 
     // interface
 
@@ -86,7 +78,6 @@ class KeyMapping
 
                  KeyMapping();
         virtual ~KeyMapping();
-
 
         /** @short  return a suitable key code
                     for the specified key identifier.
@@ -105,7 +96,6 @@ class KeyMapping
         virtual sal_uInt16 mapIdentifierToCode(const OUString& sIdentifier)
             throw(css::lang::IllegalArgumentException);
 
-
         /** @short  return a suitable key identifier
                     for the specified key code.
 
@@ -116,18 +106,15 @@ class KeyMapping
          */
         virtual OUString mapCodeToIdentifier(sal_uInt16 nCode);
 
-
     // helper
 
     private:
-
 
         /** @short  check if the given string describe a numeric
                     value ... and convert it.
 
             @param  sIdentifier
                     the string value, which should be converted.
-
 
             @param  rCode
                     contains the converted code, but is defined only

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 
 #include <xml/imagesdocumenthandler.hxx>
@@ -98,7 +97,6 @@ ImageXMLEntryProperty ImagesEntries[OReadImagesDocumentHandler::IMG_XML_ENTRY_CO
     { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_HIGHCONTRASTURL       },
     { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_HIGHCONTRASTMASKURL   }
 };
-
 
 OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aItems ) :
     m_aImageList( aItems ),
@@ -595,10 +593,7 @@ OUString OReadImagesDocumentHandler::getErrorLineString()
         return OUString();
 }
 
-
-
 //  OWriteImagesDocumentHandler
-
 
 OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     const ImageListsDescriptor& aItems,
@@ -670,9 +665,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
     m_xWriteDocumentHandler->endDocument();
 }
 
-
 //  protected member functions
-
 
 void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor* pImageList ) throw
 ( SAXException, RuntimeException )
@@ -815,8 +808,5 @@ void OWriteImagesDocumentHandler::WriteExternalImage( const ExternalImageItemDes
 }
 
 } // namespace framework
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,13 +26,10 @@
 
 namespace framework{
 
-
-
 WakeUpThread::WakeUpThread(const css::uno::Reference< css::util::XUpdatable >& xListener)
     : m_xListener   (xListener)
 {
 }
-
 
 void SAL_CALL WakeUpThread::run()
 {
@@ -52,7 +49,6 @@ void SAL_CALL WakeUpThread::run()
             xListener->update();
     }
 }
-
 
 void SAL_CALL WakeUpThread::onTerminated()
 {

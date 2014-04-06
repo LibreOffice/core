@@ -175,7 +175,6 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css
     return sal_False;
 }
 
-
 //  XURLTransformer
 
 sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
@@ -230,7 +229,6 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
             return sal_False;
     }
 }
-
 
 //  XURLTransformer
 sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::uno::RuntimeException, std::exception )
@@ -292,7 +290,6 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::u
 
     return sal_False;
 }
-
 
 //  XURLTransformer
 

@@ -38,9 +38,7 @@
 #include <algorithm>
 #include <vector>
 
-
 //  namespaces
-
 
 using namespace ::std                   ;
 using namespace ::utl                   ;
@@ -152,7 +150,6 @@ using namespace ::com::sun::star;
 #define OFFSET_STATUSBARITEM_OWNERDRAW                  5
 #define OFFSET_STATUSBARITEM_WIDTH                      6
 
-
 // The following order is mandatory. Please add properties at the end!
 #define PROPERTYCOUNT_IMAGES                            8
 #define PROPERTYCOUNT_EMBEDDED_IMAGES                   4
@@ -192,9 +189,7 @@ using namespace ::com::sun::star;
 
 #define EXPAND_PROTOCOL                                 "vnd.sun.star.expand:"
 
-
 //  private declarations!
-
 
 /*-****************************************************************************************************************
     @descr  struct to hold information about one menu entry.
@@ -208,18 +203,14 @@ class AddonsOptions_Impl : public ConfigItem
 
     //  public methods
 
-
     public:
 
         //  constructor / destructor
 
-
          AddonsOptions_Impl();
         virtual ~AddonsOptions_Impl();
 
-
         //  overloaded methods of baseclass
-
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager
@@ -252,9 +243,7 @@ class AddonsOptions_Impl : public ConfigItem
 
         virtual void Commit() SAL_OVERRIDE;
 
-
         //  public interface
-
 
         /*-****************************************************************************************************
             @short      base implementation of public interface for "SvtDynamicMenuOptions"!
@@ -282,9 +271,7 @@ class AddonsOptions_Impl : public ConfigItem
         const MergeStatusbarInstructionContainer&       GetMergeStatusbarInstructions() const;
         void                                            ReadConfigurationData();
 
-
     //  private methods
-
 
     private:
         enum ImageSize
@@ -310,7 +297,6 @@ class AddonsOptions_Impl : public ConfigItem
         typedef boost::unordered_map< OUString, sal_uInt32, OUStringHash, ::std::equal_to< OUString > > StringToIndexMap;
         typedef std::vector< Sequence< Sequence< PropertyValue > > > AddonToolBars;
         typedef ::boost::unordered_map< OUString, MergeToolbarInstructionContainer, OUStringHash, ::std::equal_to< OUString > > ToolbarMergingInstructions;
-
 
         /*-****************************************************************************************************
             @short      return list of key names of our configuration management which represent oue module tree
@@ -360,9 +346,7 @@ class AddonsOptions_Impl : public ConfigItem
         Sequence< OUString > GetPropertyNamesImages( const OUString& aPropertyRootNode ) const;
         bool                 CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
 
-
     //  private member
-
 
     private:
         ImageEntry* ReadOptionalImageData( const OUString& aMenuNodeName );
@@ -398,7 +382,6 @@ void AddonsOptions_Impl::ImageEntry::addImage(ImageSize eSize,
     aImage[(int)eSize] = rImage;
     aURL[(int)eSize] = rURL;
 }
-
 
 //  constructor
 
@@ -470,7 +453,6 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     EnableNotification( aNotifySeq );
 }
 
-
 //  destructor
 
 AddonsOptions_Impl::~AddonsOptions_Impl()
@@ -508,14 +490,12 @@ void AddonsOptions_Impl::ReadConfigurationData()
     ReadStatusbarMergeInstructions( m_aCachedStatusbarMergingInstructions );
 }
 
-
 //  public method
 
 void AddonsOptions_Impl::Notify( const Sequence< OUString >& /*lPropertyNames*/ )
 {
     Application::PostUserEvent( STATIC_LINK( 0, AddonsOptions, Notify ) );
 }
-
 
 //  public method
 
@@ -524,14 +504,12 @@ void AddonsOptions_Impl::Commit()
     OSL_FAIL( "AddonsOptions_Impl::Commit()\nNot implemented yet!\n" );
 }
 
-
 //  public method
 
 bool AddonsOptions_Impl::HasAddonsMenu() const
 {
     return ( m_aCachedMenuProperties.getLength() > 0 );
 }
-
 
 //  public method
 
@@ -540,7 +518,6 @@ sal_Int32 AddonsOptions_Impl::GetAddonsToolBarCount() const
     return m_aCachedToolBarPartProperties.size();
 }
 
-
 //  public method
 
 const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsMenu() const
@@ -548,14 +525,12 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsMenu()
     return m_aCachedMenuProperties;
 }
 
-
 //  public method
 
 const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsMenuBarPart() const
 {
     return m_aCachedMenuBarPartProperties;
 }
-
 
 //  public method
 
@@ -567,7 +542,6 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsToolBa
         return m_aEmptyAddonToolBar;
 }
 
-
 //  public method
 
 const OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
@@ -578,7 +552,6 @@ const OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nInd
         return OUString();
 }
 
-
 //  public method
 
 const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsHelpMenu  () const
@@ -586,14 +559,12 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsHelpMe
     return m_aCachedHelpMenuProperties;
 }
 
-
 //  public method
 
 const MergeMenuInstructionContainer& AddonsOptions_Impl::GetMergeMenuInstructions() const
 {
     return m_aCachedMergeMenuInsContainer;
 }
-
 
 //  public method
 
@@ -615,7 +586,6 @@ const MergeStatusbarInstructionContainer& AddonsOptions_Impl::GetMergeStatusbarI
 {
     return m_aCachedStatusbarMergingInstructions;
 }
-
 
 //  public method
 
@@ -678,7 +648,6 @@ Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, bool bBig, bool
     return aImage;
 }
 
-
 //  private method
 
 bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& rAddonMenuSeq )
@@ -717,7 +686,6 @@ bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >
     return ( rAddonMenuSeq.getLength() > 0 );
 }
 
-
 //  private method
 
 bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeHelpMenuSeq )
@@ -755,7 +723,6 @@ bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > 
 
     return ( rAddonOfficeHelpMenuSeq.getLength() > 0 );
 }
-
 
 //  private method
 
@@ -812,7 +779,6 @@ bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue
     return ( rAddonOfficeMenuBarSeq.getLength() > 0 );
 }
 
-
 //  private method
 
 bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames )
@@ -834,8 +800,6 @@ bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBa
 
     return ( !rAddonOfficeToolBars.empty() );
 }
-
-
 
 //  private method
 
@@ -923,9 +887,7 @@ void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
     }
 }
 
-
 //  private method
-
 
 OUString AddonsOptions_Impl::GeneratePrefixURL()
 {
@@ -939,9 +901,7 @@ OUString AddonsOptions_Impl::GeneratePrefixURL()
     return aPopupMenuURL;
 }
 
-
 //  private method
-
 
 bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )
 {
@@ -1009,7 +969,6 @@ bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContaine
     return true;
 }
 
-
 //  private method
 
 bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu )
@@ -1025,7 +984,6 @@ bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructi
 
     return ReadSubMenuEntries( aSubMenuNodeNames, rMergeMenu );
 }
-
 
 //  private method
 
@@ -1101,7 +1059,6 @@ bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruction
     return true;
 }
 
-
 //  private method
 
 bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
@@ -1113,7 +1070,6 @@ bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonInstru
 
     return ReadToolBarItemSet( aMergeToolbarBaseNode, rMergeToolbarItems );
 }
-
 
 bool AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& aContainer )
 {
@@ -1249,7 +1205,6 @@ bool AddonsOptions_Impl::ReadStatusBarItem(
     return bResult;
 }
 
-
 //  private method
 
 bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< PropertyValue >& aMenuItem, bool bIgnoreSubMenu )
@@ -1323,7 +1278,6 @@ bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< 
     return bResult;
 }
 
-
 //  private method
 
 bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu )
@@ -1364,7 +1318,6 @@ bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequ
     return bResult;
 }
 
-
 //  private method
 
 bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu )
@@ -1384,7 +1337,6 @@ bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopu
 
     return true;
 }
-
 
 //  private method
 
@@ -1442,7 +1394,6 @@ bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, 
     return bResult;
 }
 
-
 //  private method
 
 bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenuSeq )
@@ -1472,7 +1423,6 @@ bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSubMen
     return true;
 }
 
-
 //  private method
 
 bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
@@ -1481,7 +1431,6 @@ bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
     ImageManager::const_iterator pIter = m_aImageManager.find( aURL );
     return ( pIter != m_aImageManager.end() );
 }
-
 
 //  private method
 
@@ -1498,7 +1447,6 @@ void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
         aURL = m_xMacroExpander->expandMacros( macro );
     }
 }
-
 
 //  private method
 
@@ -1533,7 +1481,6 @@ Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
     return aImage;
 }
 
-
 //  private method
 
 void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId )
@@ -1560,7 +1507,6 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
 
     m_aImageManager.insert( ImageManager::value_type( aURL, aImageEntry ));
 }
-
 
 //  private method
 
@@ -1610,7 +1556,6 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUStrin
     return pEntry;
 }
 
-
 //  private method
 
 bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const
@@ -1652,7 +1597,6 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const OUStrin
     return lResult;
 }
 
-
 //  private method
 
 Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUString& aPropertyRootNode ) const
@@ -1667,7 +1611,6 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUStri
 
     return lResult;
 }
-
 
 //  private method
 
@@ -1703,7 +1646,6 @@ Sequence< ::rtl::OUString > AddonsOptions_Impl::GetPropertyNamesStatusbarItem(
     return lResult;
 }
 
-
 //  private method
 
 Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesImages( const OUString& aPropertyRootNode ) const
@@ -1723,14 +1665,12 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesImages( const OUString&
     return lResult;
 }
 
-
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
 //  see definition for further information
 
 AddonsOptions_Impl*     AddonsOptions::m_pDataContainer = NULL  ;
 sal_Int32               AddonsOptions::m_nRefCount      = 0     ;
-
 
 //  constructor
 
@@ -1746,7 +1686,6 @@ AddonsOptions::AddonsOptions()
         m_pDataContainer = new AddonsOptions_Impl;
     }
 }
-
 
 //  destructor
 
@@ -1765,7 +1704,6 @@ AddonsOptions::~AddonsOptions()
     }
 }
 
-
 //  public method
 
 bool AddonsOptions::HasAddonsMenu() const
@@ -1774,16 +1712,13 @@ bool AddonsOptions::HasAddonsMenu() const
     return m_pDataContainer->HasAddonsMenu();
 }
 
-
 //  public method
-
 
 sal_Int32 AddonsOptions::GetAddonsToolBarCount() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetAddonsToolBarCount();
 }
-
 
 //  public method
 
@@ -1793,7 +1728,6 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsMenu() cons
     return m_pDataContainer->GetAddonsMenu();
 }
 
-
 //  public method
 
 const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsMenuBarPart() const
@@ -1801,7 +1735,6 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsMenuBarPart
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetAddonsMenuBarPart();
 }
-
 
 //  public method
 
@@ -1811,7 +1744,6 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsToolBarPart
     return m_pDataContainer->GetAddonsToolBarPart( nIndex );
 }
 
-
 //  public method
 
 const OUString AddonsOptions::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
@@ -1819,7 +1751,6 @@ const OUString AddonsOptions::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) 
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetAddonsToolbarResourceName( nIndex );
 }
-
 
 //  public method
 
@@ -1829,7 +1760,6 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsHelpMenu() 
     return m_pDataContainer->GetAddonsHelpMenu();
 }
 
-
 //  public method
 
 const MergeMenuInstructionContainer& AddonsOptions::GetMergeMenuInstructions() const
@@ -1837,7 +1767,6 @@ const MergeMenuInstructionContainer& AddonsOptions::GetMergeMenuInstructions() c
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetMergeMenuInstructions();
 }
-
 
 //  public method
 
@@ -1856,7 +1785,6 @@ const MergeStatusbarInstructionContainer& AddonsOptions::GetMergeStatusbarInstru
     return m_pDataContainer->GetMergeStatusbarInstructions();
 }
 
-
 //  public method
 
 Image AddonsOptions::GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale ) const
@@ -1865,14 +1793,12 @@ Image AddonsOptions::GetImageFromURL( const OUString& aURL, bool bBig, bool bNoS
     return m_pDataContainer->GetImageFromURL( aURL, bBig, bNoScale );
 }
 
-
 //  public method
 
 Image AddonsOptions::GetImageFromURL( const OUString& aURL, bool bBig ) const
 {
     return GetImageFromURL( aURL, bBig, false );
 }
-
 
 //  private method
 
@@ -1897,7 +1823,6 @@ Mutex& AddonsOptions::GetOwnStaticMutex()
     // Return new created or already existing mutex object.
     return *pMutex;
 }
-
 
 //  private method
 

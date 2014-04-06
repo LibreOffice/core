@@ -65,9 +65,6 @@ AddonMenu::~AddonMenu()
     }
 }
 
-
-
-
 // Check if command URL string has the unique prefix to identify addon popup menus
 bool AddonPopupMenu::IsCommandURLPrefix( const OUString& aCmdURL )
 {
@@ -85,8 +82,6 @@ AddonPopupMenu::~AddonPopupMenu()
 {
 }
 
-
-
 static Reference< XModel > GetModelFromFrame( const Reference< XFrame >& rFrame )
 {
     // Query for the model to get check the context information
@@ -100,8 +95,6 @@ static Reference< XModel > GetModelFromFrame( const Reference< XFrame >& rFrame 
 
     return xModel;
 }
-
-
 
 bool AddonMenuManager::HasAddonMenuElements()
 {
@@ -150,7 +143,6 @@ sal_uInt16 AddonMenuManager::GetNextPos( sal_uInt16 nPos )
     return ( nPos == MENU_APPEND ) ? MENU_APPEND : ( nPos+1 );
 }
 
-
 static sal_uInt16 FindMenuId( Menu* pMenu, const OUString& aCommand )
 {
     sal_uInt16 nPos = 0;
@@ -165,7 +157,6 @@ static sal_uInt16 FindMenuId( Menu* pMenu, const OUString& aCommand )
 
     return USHRT_MAX;
 }
-
 
 // Merge the Add-Ons help menu items into the given menu bar at a defined pos
 void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, MenuBar* pMergeMenuBar )

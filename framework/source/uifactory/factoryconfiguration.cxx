@@ -32,7 +32,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 
-
 //  Defines
 
 using namespace com::sun::star;
@@ -41,9 +40,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-
 //  Namespace
-
 
 namespace framework
 {
@@ -54,7 +51,6 @@ OUString getHashKeyFromStrings( const OUString& aCommandURL, const OUString& aMo
     aKey.append( aModuleName );
     return aKey.makeStringAndClear();
 }
-
 
 //  XInterface, XTypeProvider
 
@@ -116,7 +112,6 @@ OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( const
 
     return OUString();
 }
-
 
 void ConfigurationAccess_ControllerFactory::addServiceToCommandModule(
     const OUString& rCommandURL,

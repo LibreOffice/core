@@ -52,7 +52,6 @@ ConfigAccess::ConfigAccess( /*IN*/ const css::uno::Reference< css::uno::XCompone
 {
 }
 
-
 /**
     @short  last chance to close an open configuration access point
     @descr  In case our user forgot to close this configuration point
@@ -63,7 +62,6 @@ ConfigAccess::~ConfigAccess()
 {
     close();
 }
-
 
 /**
     @short  return the internal mode of this instance
@@ -77,7 +75,6 @@ ConfigAccess::EOpenMode ConfigAccess::getMode() const
     osl::MutexGuard g(m_mutex);
     return m_eMode;
 }
-
 
 /**
     @short  open the configuration access in the specified mode
@@ -141,7 +138,6 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
     }
 }
 
-
 /**
     @short  close the internal opened configuration access and flush all changes
     @descr  It checks, if the given access is valid and react in the right way.
@@ -160,7 +156,6 @@ void ConfigAccess::close()
         m_eMode   = E_CLOSED;
     }
 }
-
 
 /**
     @short  provides an access to the internal wrapped configuration access

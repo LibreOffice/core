@@ -40,12 +40,10 @@
 
 class SvtLanguageTable;
 
-
 // flags for script types in use within selection
 #define LS_SCRIPT_LATIN     0x0001
 #define LS_SCRIPT_ASIAN     0x0002
 #define LS_SCRIPT_COMPLEX   0x0004
-
 
 namespace framework
 {
@@ -82,7 +80,6 @@ enum LangMenuIDs
     MID_LANG_PARA_RESET,
     MID_LANG_PARA_MORE,
 };
-
 
 inline bool IsScriptTypeMatchingToLanguage( sal_Int16 nScriptType, LanguageType nLang )
 {
@@ -314,7 +311,6 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper1<com::sun::star:
 
         }
 };
-
 
 } // namespace framework
 

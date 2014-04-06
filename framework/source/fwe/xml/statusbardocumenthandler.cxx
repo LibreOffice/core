@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 
 #include <xml/statusbardocumenthandler.hxx>
@@ -142,7 +141,6 @@ StatusBarEntryProperty StatusBarEntries[OReadStatusBarDocumentHandler::SB_XML_EN
     { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_OFFSET        },
     { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_HELPURL       }
 };
-
 
 OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
     const Reference< XIndexContainer >& rStatusBarItems ) :
@@ -482,10 +480,7 @@ OUString OReadStatusBarDocumentHandler::getErrorLineString()
         return OUString();
 }
 
-
-
 //  OWriteStatusBarDocumentHandler
-
 
 OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
     const Reference< XIndexAccess >& aStatusBarItems,
@@ -567,9 +562,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
     m_xWriteDocumentHandler->endDocument();
 }
 
-
 //  protected member functions
-
 
 void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     const OUString& rCommandURL,

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <framework/sfxhelperfunctions.hxx>
 
 #include <tools/diagnose_ex.h>
@@ -28,8 +27,6 @@ static pfunc_getRefreshToolbars            pRefreshToolbars            = NULL;
 static pfunc_createDockingWindow           pCreateDockingWindow        = NULL;
 static pfunc_isDockingWindowVisible        pIsDockingWindowVisible     = NULL;
 static pfunc_activateToolPanel             pActivateToolPanel          = NULL;
-
-
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

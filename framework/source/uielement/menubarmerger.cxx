@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <uielement/menubarmerger.hxx>
 #include <framework/addonsoptions.hxx>
 
@@ -32,7 +31,6 @@ static const char MERGECOMMAND_REMOVE[]            = "Remove";
 
 static const char MERGEFALLBACK_ADDPATH[]           = "AddPath";
 static const char MERGEFALLBACK_IGNORE[]            = "Ignore";
-
 
 namespace framework
 {

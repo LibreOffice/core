@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "uielement/imagebuttontoolbarcontroller.hxx"
 
 #include <framework/addonsoptions.hxx>
@@ -60,8 +59,6 @@ namespace framework
 
 static uno::WeakReference< util::XMacroExpander > m_xMacroExpander;
 
-
-
 uno::Reference< util::XMacroExpander > GetMacroExpander()
 {
     uno::Reference< util::XMacroExpander > xMacroExpander( m_xMacroExpander );
@@ -96,8 +93,6 @@ static void SubstituteVariables( OUString& aURL )
     }
 }
 
-
-
 ImageButtonToolbarController::ImageButtonToolbarController(
     const Reference< XComponentContext >&    rxContext,
     const Reference< XFrame >&               rFrame,
@@ -114,13 +109,9 @@ ImageButtonToolbarController::ImageButtonToolbarController(
     m_pToolbar->SetItemImage( m_nID, aImage );
 }
 
-
-
 ImageButtonToolbarController::~ImageButtonToolbarController()
 {
 }
-
-
 
 void SAL_CALL ImageButtonToolbarController::dispose()
 throw ( RuntimeException, std::exception )
@@ -128,8 +119,6 @@ throw ( RuntimeException, std::exception )
     SolarMutexGuard aSolarMutexGuard;
     ComplexToolbarController::dispose();
 }
-
-
 
 void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {

@@ -63,13 +63,11 @@ class FWI_DLLPUBLIC TransactionManager : public  ITransactionManager
         virtual void               registerTransaction          ( EExceptionMode eMode, ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException ) SAL_OVERRIDE;
         virtual void               unregisterTransaction        (                                              ) throw( css::uno::RuntimeException, css::lang::DisposedException ) SAL_OVERRIDE;
 
-
     //  private methods
 
     private:
 
         void impl_throwExceptions( EExceptionMode eMode, ERejectReason eReason ) const throw( css::uno::RuntimeException, css::lang::DisposedException );
-
 
     //  private member
 

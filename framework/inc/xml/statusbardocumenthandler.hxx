@@ -33,7 +33,6 @@
 
 namespace framework{
 
-
 // Hash code function for using in all hash maps of follow implementation.
 
 class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :

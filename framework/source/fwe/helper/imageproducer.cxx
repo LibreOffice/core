@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <framework/imageproducer.hxx>
 
 namespace framework
@@ -32,7 +31,6 @@ pfunc_getImage SAL_CALL SetImageProducer( pfunc_getImage pNewGetImageFunc )
 
     return pOldFunc;
 }
-
 
 Image SAL_CALL GetImageFromURL(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,

@@ -49,12 +49,10 @@ class ModuleManager:
 {
 private:
 
-
     /** the global uno service manager.
         Must be used to create own needed services.
      */
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
 
     /** points to the underlying configuration.
         This ModuleManager does not cache - it calls directly the
@@ -120,7 +118,6 @@ public:
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-
 
     /** @short  makes the real identification of the module.
 

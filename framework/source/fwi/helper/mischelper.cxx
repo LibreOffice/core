@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -34,15 +33,12 @@
 #include <helper/mischelper.hxx>
 #include <services.h>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-
-
 
 namespace framework
 {
@@ -62,7 +58,6 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
     }
     return m_xLanguageGuesser;
 }
-
 
 OUString RetrieveLabelFromCommand(
     const OUString& aCmdURL,
@@ -134,7 +129,6 @@ OUString RetrieveLabelFromCommand(
 
     return aLabel;
 }
-
 
 void FillLangItems( std::set< OUString > &rLangItems,
         const SvtLanguageTable &    rLanguageTable,
@@ -220,6 +214,5 @@ void FillLangItems( std::set< OUString > &rLangItems,
 }
 
 } // namespace framework
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATOR_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATOR_HXX
 
-
 // include files of own module
 
 #include <helper/statusindicatorfactory.hxx>
@@ -28,19 +27,14 @@
 #include <macros/xtypeprovider.hxx>
 #include <macros/generic.hxx>
 
-
 // include UNO interfaces
 #include <com/sun/star/task/XStatusIndicator.hpp>
-
 
 // include all others
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
 
-
 namespace framework{
-
-
 
 /**
     @short          implement a status indicator object
@@ -74,10 +68,8 @@ class StatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIndic
          */
         css::uno::WeakReference< css::task::XStatusIndicatorFactory > m_xFactory;
 
-
     // c++ interface
     public:
-
 
         /** @short  initialize new instance of this class.
 
@@ -86,15 +78,12 @@ class StatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIndic
          */
         StatusIndicator(StatusIndicatorFactory* pFactory);
 
-
         /** @short  does nothing real ....
          */
         virtual ~StatusIndicator();
 
-
     // uno interface
     public:
-
 
         // XStatusIndicator
         virtual void SAL_CALL start(const OUString& sText ,

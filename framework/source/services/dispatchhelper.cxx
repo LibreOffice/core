@@ -28,7 +28,6 @@
 
 namespace framework{
 
-
 // XInterface, XTypeProvider, XServiceInfo
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(DispatchHelper                   ,
@@ -37,8 +36,6 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2(DispatchHelper                   ,
                                  IMPLEMENTATIONNAME_DISPATCHHELPER)
 
 DEFINE_INIT_SERVICE( DispatchHelper, {} )
-
-
 
 /** ctor.
 
@@ -49,15 +46,11 @@ DispatchHelper::DispatchHelper( const css::uno::Reference< css::uno::XComponentC
 {
 }
 
-
-
 /** dtor.
 */
 DispatchHelper::~DispatchHelper()
 {
 }
-
-
 
 /** capsulate all steps of a dispatch request and provide so an easy way for dispatches.
 
@@ -147,8 +140,6 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     return aResult;
 }
 
-
-
 /** callback for started dispatch with guaranteed notifications.
 
     We must save the result, so the method executeDispatch() can return it.
@@ -166,8 +157,6 @@ void SAL_CALL DispatchHelper::dispatchFinished( const css::frame::DispatchResult
     m_aBlock.set();
     m_xBroadcaster.clear();
 }
-
-
 
 /** we has to realease our broadcaster reference.
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <uiconfiguration/moduleimagemanager.hxx>
 #include <xml/imagesconfiguration.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
@@ -47,9 +46,7 @@
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
 
-
 //  namespaces
-
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;

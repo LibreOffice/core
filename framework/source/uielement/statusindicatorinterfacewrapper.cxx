@@ -31,7 +31,6 @@ using namespace com::sun::star::beans;
 namespace framework
 {
 
-
 StatusIndicatorInterfaceWrapper::StatusIndicatorInterfaceWrapper(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rStatusIndicatorImpl ) :
     m_xStatusIndicatorImpl( rStatusIndicatorImpl )
@@ -41,7 +40,6 @@ StatusIndicatorInterfaceWrapper::StatusIndicatorInterfaceWrapper(
 StatusIndicatorInterfaceWrapper::~StatusIndicatorInterfaceWrapper()
 {
 }
-
 
 void SAL_CALL StatusIndicatorInterfaceWrapper::start(
     const OUString& sText,

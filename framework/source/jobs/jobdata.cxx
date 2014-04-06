@@ -31,7 +31,6 @@
 #include <unotools/configpaths.hxx>
 #include <vcl/svapp.hxx>
 
-
 namespace framework{
 
 /**
@@ -50,7 +49,6 @@ JobData::JobData( const css::uno::Reference< css::uno::XComponentContext >& rxCo
     impl_reset();
 }
 
-
 /**
     @short  copy ctor
     @descr  Sometimes such job data container must be moved from one using place
@@ -64,7 +62,6 @@ JobData::JobData( const JobData& rCopy )
     // use the copy operator to share the same code
     *this = rCopy;
 }
-
 
 /**
     @short  operator for coping JobData instances
@@ -89,7 +86,6 @@ void JobData::operator=( const JobData& rCopy )
     m_aLastExecutionResult = rCopy.m_aLastExecutionResult;
 }
 
-
 /**
     @short  let this instance die
     @descr  There is no chance any longer to work. We have to
@@ -99,7 +95,6 @@ JobData::~JobData()
 {
     impl_reset();
 }
-
 
 /**
     @short      initalize this instance as a job with configuration
@@ -168,7 +163,6 @@ void JobData::setAlias( const OUString& sAlias )
     aConfig.close();
 }
 
-
 /**
     @short      initalize this instance as a job without configuration
     @descr      This job has no configuration data. We have to forget all old information
@@ -186,7 +180,6 @@ void JobData::setService( const OUString& sService )
     m_sService = sService;
     m_eMode    = E_SERVICE;
 }
-
 
 /**
     @short      initialize this instance with new job values.
@@ -217,7 +210,6 @@ void JobData::setEvent( const OUString& sEvent ,
     m_sEvent = sEvent;
     m_eMode  = E_EVENT;
 }
-
 
 /**
     @short      set the new job specific arguments
@@ -270,7 +262,6 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
     }
 }
 
-
 /**
     @short      set a new excution result
     @descr      Every executed job can have returned a result.
@@ -295,7 +286,6 @@ void JobData::setResult( const JobResult& aResult )
     // from outside! Here we save this information only.
 }
 
-
 /**
     @short  set a new environment descriptor for this job
     @descr  It must(!) be done everytime this container is initialized
@@ -308,7 +298,6 @@ void JobData::setEnvironment( EEnvironment eEnvironment )
     m_eEnvironment = eEnvironment;
 }
 
-
 /**
     @short      these functions provides access to our internal members
     @descr      These member represent any information about the job
@@ -320,15 +309,11 @@ JobData::EMode JobData::getMode() const
     return m_eMode;
 }
 
-
-
 JobData::EEnvironment JobData::getEnvironment() const
 {
     SolarMutexGuard g;
     return m_eEnvironment;
 }
-
-
 
 OUString JobData::getEnvironmentDescriptor() const
 {
@@ -353,15 +338,11 @@ OUString JobData::getEnvironmentDescriptor() const
     return sDescriptor;
 }
 
-
-
 OUString JobData::getService() const
 {
     SolarMutexGuard g;
     return m_sService;
 }
-
-
 
 OUString JobData::getEvent() const
 {
@@ -369,15 +350,11 @@ OUString JobData::getEvent() const
     return m_sEvent;
 }
 
-
-
 css::uno::Sequence< css::beans::NamedValue > JobData::getJobConfig() const
 {
     SolarMutexGuard g;
     return m_lArguments;
 }
-
-
 
 css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
 {
@@ -403,7 +380,6 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
     return lConfig;
 }
 
-
 /**
     @short  return information, if this job is part of the global configuration package
             org.openoffice.Office.Jobs
@@ -420,7 +396,6 @@ sal_Bool JobData::hasConfig() const
     SolarMutexGuard g;
     return (m_eMode==E_ALIAS || m_eMode==E_EVENT);
 }
-
 
 /**
     @short      mark a job as non startable for further requests
@@ -465,7 +440,6 @@ void JobData::disableJob()
     aConfig.close();
 }
 
-
 /**
  */
 sal_Bool isEnabled( const OUString& sAdminTime ,
@@ -491,7 +465,6 @@ sal_Bool isEnabled( const OUString& sAdminTime ,
            );
 }
 
-
 /**
  */
 void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
@@ -508,7 +481,6 @@ void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XC
         lJobs.push_back(aBinding);
     }
 }
-
 
 /**
  */
@@ -532,7 +504,6 @@ sal_Bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
 
     return sal_False;
 }
-
 
 /**
  */
@@ -603,7 +574,6 @@ css::uno::Sequence< OUString > JobData::getEnabledJobsForEvent( const css::uno::
 
     return lEnabledJobs;
 }
-
 
 /**
     @short      reset all internal structures

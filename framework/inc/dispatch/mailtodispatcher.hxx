@@ -37,7 +37,6 @@
 
 #include <cppuhelper/implbase3.hxx>
 
-
 namespace framework{
 
 /**

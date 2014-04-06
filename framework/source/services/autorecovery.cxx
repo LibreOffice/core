@@ -104,7 +104,6 @@ using namespace framework;
 
 namespace {
 
-
 /** @short  hold all needed information for an asynchronous dispatch alive.
 
     @descr  Because some operations are forced to be executed asynchronously
@@ -127,7 +126,6 @@ public:
 
 public:
 
-
     /** @short  can be set from outside and is provided to
                 our internal started operations.
 
@@ -139,15 +137,12 @@ public:
      */
     css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
 
-
     /** TODO document me */
     OUString m_sSavePath;
-
 
     /** @short  define the current cache entry, which should be used for current
                 backup or cleanUp operation ... which is may be done asynchronous */
     sal_Int32 m_nWorkingEntryID;
-
 
     /** @short  used for asyncoperations, to prevent us from dying.
 
@@ -159,7 +154,6 @@ public:
      */
     css::uno::Reference< css::uno::XInterface > m_xHoldRefForAsyncOpAlive;
 };
-
 
 /**
     implements the functionality of AutoSave and AutoRecovery
@@ -264,12 +258,10 @@ public:
         E_USER_AUTO_SAVE            = 2048
     };
 
-
     /** @short  combine different information about one office document. */
     struct TDocumentInfo
     {
         public:
-
 
             TDocumentInfo()
                 : DocumentState   (E_UNKNOWN)
@@ -279,10 +271,8 @@ public:
                 , ID              (-1       )
             {}
 
-
             /** @short  points to the document. */
             css::uno::Reference< css::frame::XModel > Document;
-
 
             /** @short  knows, if the document is really modified since the last autosave,
                         or  was postponed, because it was an active one etcpp...
@@ -296,13 +286,11 @@ public:
              */
             sal_Int32 DocumentState;
 
-
             /** Because our applications not ready for concurrent save requests at the same time,
                 we have supress our own AutoSave for the moment, a document will be already saved
                 by others.
              */
             sal_Bool UsedForSaving;
-
 
             /** For every user action, which modifies a document (e.g. key input) we get
                 a notification as XModifyListener. That seems to be a "performance issue" .-)
@@ -311,7 +299,6 @@ public:
             */
             sal_Bool ListenForModify;
 
-
             /** For SessionSave we must close all open documents by ourself.
                 But because we are listen for documents events, we get some ...
                 and deregister these documents from our configuration.
@@ -319,7 +306,6 @@ public:
                 ignore these "OnUnload" or disposing() events .-)
             */
             sal_Bool IgnoreClosing;
-
 
             /** TODO: document me */
             OUString OrgURL;
@@ -341,21 +327,17 @@ public:
             sal_Int32 ID;
     };
 
-
     /** @short  used to know every currently open document. */
     typedef ::std::vector< TDocumentInfo > TDocumentList;
-
 
 // member
 
 private:
 
-
     /** @short  the global uno service manager.
         @descr  Must be used to create own needed services.
      */
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
 
     /** @short  points to the underlying recovery configuration.
         @descr  This instance does not cache - it calls directly the
@@ -363,12 +345,10 @@ private:
       */
     css::uno::Reference< css::container::XNameAccess > m_xRecoveryCFG;
 
-
     /** @short  proxy weak binding to forward Events to ourself without
                 an ownership cycle
       */
     css::uno::Reference< css::util::XChangesListener > m_xRecoveryCFGListener;
-
 
     /** @short  points to the used configuration package or.openoffice.Setup
         @descr  This instance does not cache - it calls directly the
@@ -376,18 +356,15 @@ private:
       */
     css::uno::Reference< css::container::XNameAccess > m_xModuleCFG;
 
-
     /** @short  holds the global event broadcaster alive,
                 where we listen for new created documents.
       */
     css::uno::Reference< css::frame::XGlobalEventBroadcaster > m_xNewDocBroadcaster;
 
-
     /** @short  proxy weak binding to forward Events to ourself without
                 an ownership cycle
       */
     css::uno::Reference< css::document::XEventListener > m_xNewDocBroadcasterListener;
-
 
     /** @short  because we stop/restart listening sometimes, it's a good idea to know
                 if we already registered as listener .-)
@@ -395,49 +372,40 @@ private:
     sal_Bool m_bListenForDocEvents;
     sal_Bool m_bListenForConfigChanges;
 
-
     /** @short  specify the time intervall between two save actions.
         @descr  Time is measured in [min].
      */
     sal_Int32 m_nAutoSaveTimeIntervall;
-
 
     /** @short  for an asynchronous operation we must know, if there is
                 at least one running job (may be asynchronous!).
      */
     sal_Int32 m_eJob;
 
-
     /** @short  the timer, which is used to be informed about the next
                 saving time ...
      */
     Timer m_aTimer;
 
-
     /** @short  make our dispatch asynchronous ... if required to do so! */
     ::vcl::EventPoster m_aAsyncDispatcher;
-
 
     /** @see    DispatchParams
      */
     DispatchParams m_aDispatchParams;
-
 
     /** @short  indicates, which time period is currently used by the
                 internal timer.
      */
     ETimerType m_eTimerType;
 
-
     /** @short  this cache is used to hold all information about
                 recovery/emergency save documents alive.
      */
     TDocumentList m_lDocCache;
 
-
     // TODO document me
     sal_Int32 m_nIdPool;
-
 
     /** @short  contains all status listener registered at this instance.
      */
@@ -466,7 +434,6 @@ private:
     sal_Int32 m_nMinSpaceDocSave;
     sal_Int32 m_nMinSpaceConfigSave;
 
-
     /** @short  special debug option to make testing faster.
 
         @descr  We dont interpret the timer unit as [min] ...
@@ -477,10 +444,8 @@ private:
     sal_Bool m_dbg_bMakeItFaster;
     #endif
 
-
     // HACK ... TODO
     css::uno::Reference< css::task::XStatusIndicator > m_xExternalProgress;
-
 
 // interface
 
@@ -522,7 +487,6 @@ public:
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // css.frame.XDispatch
     virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
                                    const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
@@ -535,7 +499,6 @@ public:
     virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                                const css::util::URL&                                     aURL     )
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // css.document.XEventListener
     /** @short  informs about created/opened documents.
@@ -550,23 +513,19 @@ public:
     virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // css.util.XChangesListener
     virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& aEvent)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // css.util.XModifyListener
     virtual void SAL_CALL modified(const css::lang::EventObject& aEvent)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // css.lang.XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-
 
     // OPropertySetHelper
 
@@ -591,7 +550,6 @@ protected:
 private:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-
     /** @short  open the underlying configuration.
 
         @descr  This method must be called every time
@@ -610,7 +568,6 @@ private:
       */
     css::uno::Reference< css::container::XNameAccess > implts_openConfig();
 
-
     /** @short  read the underlying configuration.
 
         @descr  After that we know the initial state - means:
@@ -625,7 +582,6 @@ private:
       */
     void implts_readConfig();
 
-
     /** @short  read the underlying configuration...
 
         @descr  ... but only keys related to the AutoSave mechanism.
@@ -639,21 +595,17 @@ private:
       */
     void implts_readAutoSaveConfig();
 
-
     // TODO document me
     void implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rInfo                ,
                                       sal_Bool                     bRemoveIt = sal_False);
-
 
     // TODO document me
     void implts_startListening();
     void implts_startModifyListeningOnDoc(AutoRecovery::TDocumentInfo& rInfo);
 
-
     // TODO document me
     void implts_stopListening();
     void implts_stopModifyListeningOnDoc(AutoRecovery::TDocumentInfo& rInfo);
-
 
     /** @short  stops and may be(!) restarts the timer.
 
@@ -669,7 +621,6 @@ private:
      */
     void implts_updateTimer();
 
-
     /** @short  stop the timer.
 
         @descr  Double calls will be ignored - means we do
@@ -682,20 +633,16 @@ private:
      */
     void implts_stopTimer();
 
-
     /** @short  callback of our internal timer.
      */
     DECL_LINK(implts_timerExpired, void*);
-
 
     /** @short  makes our dispatch() method asynchronous!
      */
     DECL_LINK(implts_asyncDispatch, void*);
 
-
     /** @short  implements the dispatch real. */
     void implts_dispatch(const DispatchParams& aParams);
-
 
     /** @short  validate new detected document and add it into the internal
                 document list.
@@ -711,7 +658,6 @@ private:
         @threadsafe
      */
     void implts_registerDocument(const css::uno::Reference< css::frame::XModel >& xDocument);
-
 
     /** @short  remove the specified document from our internal document list.
 
@@ -729,23 +675,18 @@ private:
     void implts_deregisterDocument(const css::uno::Reference< css::frame::XModel >& xDocument                ,
                                          sal_Bool                                   bStopListening = sal_True);
 
-
     // TODO document me
     void implts_markDocumentModifiedAgainstLastBackup(const css::uno::Reference< css::frame::XModel >& xDocument);
 
-
     // TODO document me
     void implts_updateModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument);
-
 
     // TODO document me
     void implts_updateDocumentUsedForSavingState(const css::uno::Reference< css::frame::XModel >& xDocument      ,
                                                        sal_Bool                                   bSaveInProgress);
 
-
     // TODO document me
     void implts_markDocumentAsSaved(const css::uno::Reference< css::frame::XModel >& xDocument);
-
 
     /** @short  search a document inside given list.
 
@@ -765,11 +706,9 @@ private:
     static TDocumentList::iterator impl_searchDocument(      AutoRecovery::TDocumentList&               rList    ,
                                                        const css::uno::Reference< css::frame::XModel >& xDocument);
 
-
     /** TODO document me */
     void implts_changeAllDocVisibility(sal_Bool bVisible);
     void implts_prepareSessionShutdown();
-
 
     /** @short  save all current opened documents to a specific
                 backup directory.
@@ -810,7 +749,6 @@ private:
                                                    sal_Bool        bRemoveLockFiles,
                                              const DispatchParams* pParams        = 0);
 
-
     /** @short  save one of the current documents to a specific
                 backup directory.
 
@@ -848,7 +786,6 @@ private:
                                  AutoRecovery::TDocumentInfo&                        rInfo            ,
                            const css::uno::Reference< css::task::XStatusIndicator >& xExternalProgress);
 
-
     /** @short  recovery all documents, which was saved during
                 a crash before.
 
@@ -858,18 +795,15 @@ private:
      */
     AutoRecovery::ETimerType implts_openDocs(const DispatchParams& aParams);
 
-
     // TODO document me
     void implts_openOneDoc(const OUString&               sURL       ,
                                  utl::MediaDescriptor& lDescriptor,
                                  AutoRecovery::TDocumentInfo&   rInfo      );
 
-
     // TODO document me
     void implts_generateNewTempURL(const OUString&               sBackupPath     ,
                                          utl::MediaDescriptor& rMediaDescriptor,
                                          AutoRecovery::TDocumentInfo&   rInfo           );
-
 
     /** @short  notifies all interested listener about the current state
                 of the currently running operation.
@@ -889,7 +823,6 @@ private:
       */
     void implts_informListener(      sal_Int32                      eJob  ,
                                const css::frame::FeatureStateEvent& aEvent);
-
 
     /** short   create a feature event struct, which can be send
                 to any interested listener.
@@ -913,7 +846,6 @@ private:
                                                                         const OUString&             sEventType,
                                                                               AutoRecovery::TDocumentInfo* pInfo     );
 
-
     class ListenerInformer
     {
     private:
@@ -933,15 +865,11 @@ private:
         }
     };
 
-
-
     // TODO document me
     void implts_resetHandleStates(sal_Bool bLoadCache);
 
-
     // TODO document me
     void implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocumentInfo& rInfo);
-
 
     // TODO document me
     void implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo& rInfo);
@@ -956,38 +884,29 @@ private:
     */
     void implts_persistAllActiveViewNames();
 
-
     // TODO document me
     void implts_prepareEmergencySave();
-
 
     // TODO document me
     void implts_doEmergencySave(const DispatchParams& aParams);
 
-
     // TODO document me
     void implts_doRecovery(const DispatchParams& aParams);
-
 
     // TODO document me
     void implts_doSessionSave(const DispatchParams& aParams);
 
-
     // TODO document me
     void implts_doSessionQuietQuit(const DispatchParams& aParams);
-
 
     // TODO document me
     void implts_doSessionRestore(const DispatchParams& aParams);
 
-
     // TODO document me
     void implts_backupWorkingEntry(const DispatchParams& aParams);
 
-
     // TODO document me
     void implts_cleanUpWorkingEntry(const DispatchParams& aParams);
-
 
     /** try to make sure that all changed config items (not our used
         config access only) will be flushed back to disc.
@@ -999,12 +918,10 @@ private:
      */
     void impl_flushALLConfigChanges();
 
-
     // TODO document me
     AutoRecovery::EFailureSafeResult implts_copyFile(const OUString& sSource    ,
                                                      const OUString& sTargetPath,
                                                      const OUString& sTargetName);
-
 
     /** @short  converts m_eJob into a job description, which
                 can be used to inform an outside listener
@@ -1019,7 +936,6 @@ private:
                     vnd.sun.star.autorecovery:/do...
      */
     static OUString implst_getJobDescription(sal_Int32 eJob);
-
 
     /** @short  mape the given URL to an internal int representation.
 
@@ -1041,7 +957,6 @@ private:
 
     /// TODO document me
     static void impl_showFullDiscError();
-
 
     /** @short  try to create/use a progress and set it inside the
                 environment.
@@ -1074,7 +989,6 @@ private:
                                    utl::MediaDescriptor&             rArgs    ,
                              const css::uno::Reference< css::frame::XFrame >& xNewFrame);
 
-
     /** try to remove the specified file from disc.
 
         Every URL supported by our UCB component can be used here.
@@ -1092,7 +1006,6 @@ private:
      */
     void st_impl_removeFile(const OUString& sURL);
 
-
     /** try to remove ".lock" file from disc if office will be terminated
         not using the offical way .-)
 
@@ -1101,8 +1014,6 @@ private:
      */
     void st_impl_removeLockFile();
 };
-
-
 
 // recovery.xcu
 static const char CFG_PACKAGE_RECOVERY[] = "org.openoffice.Office.Recovery/";
@@ -1206,7 +1117,6 @@ static const sal_Int32       GIVE_UP_RETRY                          =   1; // in
 // force "return sal_False" for the method impl_enoughDiscSpace().
 // #define SIMULATE_FULL_DISC
 
-
 class CacheLockGuard
 {
     private:
@@ -1237,7 +1147,6 @@ class CacheLockGuard
         void unlock();
 };
 
-
 CacheLockGuard::CacheLockGuard(AutoRecovery* pOwner                      ,
                                osl::Mutex&   rMutex                      ,
                                sal_Int32&    rCacheLock                  ,
@@ -1250,13 +1159,11 @@ CacheLockGuard::CacheLockGuard(AutoRecovery* pOwner                      ,
     lock(bLockForAddRemoveVectorItems);
 }
 
-
 CacheLockGuard::~CacheLockGuard()
 {
     unlock();
     m_xOwner.clear();
 }
-
 
 void CacheLockGuard::lock(sal_Bool bLockForAddRemoveVectorItems)
 {
@@ -1292,7 +1199,6 @@ void CacheLockGuard::lock(sal_Bool bLockForAddRemoveVectorItems)
     } /* SAFE */
 }
 
-
 void CacheLockGuard::unlock()
 {
     /* SAFE */ {
@@ -1314,12 +1220,10 @@ void CacheLockGuard::unlock()
     } /* SAFE */
 }
 
-
 DispatchParams::DispatchParams()
     : m_nWorkingEntryID(-1)
 {
 };
-
 
 DispatchParams::DispatchParams(const ::comphelper::SequenceAsHashMap&             lArgs ,
                                const css::uno::Reference< css::uno::XInterface >& xOwner)
@@ -1330,7 +1234,6 @@ DispatchParams::DispatchParams(const ::comphelper::SequenceAsHashMap&           
     m_xHoldRefForAsyncOpAlive = xOwner;
 };
 
-
 DispatchParams::DispatchParams(const DispatchParams& rCopy)
 {
     m_xProgress               = rCopy.m_xProgress;
@@ -1339,10 +1242,8 @@ DispatchParams::DispatchParams(const DispatchParams& rCopy)
     m_xHoldRefForAsyncOpAlive = rCopy.m_xHoldRefForAsyncOpAlive;
 };
 
-
 DispatchParams::~DispatchParams()
 {};
-
 
 DispatchParams& DispatchParams::operator=(const DispatchParams& rCopy)
 {
@@ -1353,7 +1254,6 @@ DispatchParams& DispatchParams::operator=(const DispatchParams& rCopy)
     return *this;
 }
 
-
 void DispatchParams::forget()
 {
     m_sSavePath       = "";
@@ -1361,7 +1261,6 @@ void DispatchParams::forget()
     m_xProgress.clear();
     m_xHoldRefForAsyncOpAlive.clear();
 };
-
 
 AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : AutoRecovery_BASE         (m_aMutex)
@@ -1397,7 +1296,6 @@ void AutoRecovery::initListeners()
     m_aTimer.SetTimeoutHdl(LINK(this, AutoRecovery, implts_timerExpired));
 }
 
-
 AutoRecovery::~AutoRecovery()
 {
     disposing();
@@ -1423,7 +1321,6 @@ Sequence< css::uno::Type > SAL_CALL AutoRecovery::getTypes(  ) throw(css::uno::R
         ::cppu::OPropertySetHelper::getTypes()
     );
 }
-
 
 void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                                  aURL      ,
                                      const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
@@ -1520,7 +1417,6 @@ void AutoRecovery::ListenerInformer::stop()
         AutoRecovery::implst_createFeatureStateEvent(m_eJob, OPERATION_STOP, NULL));
     m_bStopped = true;
 }
-
 
 void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
 {
@@ -1659,7 +1555,6 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         implts_startListening();
 }
 
-
 void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                               const css::util::URL&                                     aURL     )
     throw(css::uno::RuntimeException, std::exception)
@@ -1693,7 +1588,6 @@ void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::fr
     } /* SAFE */
 }
 
-
 void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                                  const css::util::URL&                                     aURL     )
     throw(css::uno::RuntimeException, std::exception)
@@ -1703,7 +1597,6 @@ void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css:
     // container is threadsafe by using a shared mutex!
     m_lListener.removeInterface(aURL.Complete, xListener);
 }
-
 
 void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent)
     throw(css::uno::RuntimeException, std::exception)
@@ -1773,7 +1666,6 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
     }
 }
 
-
 void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -1827,7 +1719,6 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
     implts_updateTimer();
 }
 
-
 void SAL_CALL AutoRecovery::modified(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -1837,7 +1728,6 @@ void SAL_CALL AutoRecovery::modified(const css::lang::EventObject& aEvent)
 
     implts_markDocumentModifiedAgainstLastBackup(xDocument);
 }
-
 
 void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException, std::exception)
@@ -1869,7 +1759,6 @@ void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
 
     } /* SAFE */
 }
-
 
 css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConfig()
 {
@@ -1923,7 +1812,6 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
     return xCFG;
 }
 
-
 void AutoRecovery::implts_readAutoSaveConfig()
 {
     css::uno::Reference< css::container::XHierarchicalNameAccess > xCommonRegistry(implts_openConfig(), css::uno::UNO_QUERY);
@@ -1968,7 +1856,6 @@ void AutoRecovery::implts_readAutoSaveConfig()
     m_nAutoSaveTimeIntervall = nTimeIntervall;
     } /* SAFE */
 }
-
 
 void AutoRecovery::implts_readConfig()
 {
@@ -2056,7 +1943,6 @@ void AutoRecovery::implts_readConfig()
     implts_updateTimer();
 }
 
-
 void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocumentInfo& rInfo)
 {
     if (rInfo.AppModule.isEmpty())
@@ -2119,7 +2005,6 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
     }
 }
 
-
 void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo& rInfo)
 {
     ENSURE_OR_THROW2(
@@ -2136,7 +2021,6 @@ void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo
     lModuleDescription[OUString(CFG_ENTRY_PROP_EMPTYDOCUMENTURL)] >>= rInfo.FactoryURL;
     lModuleDescription[OUString(CFG_ENTRY_PROP_FACTORYSERVICE)] >>= rInfo.FactoryService;
 }
-
 
 void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i_rInfo )
 {
@@ -2178,7 +2062,6 @@ void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i
     ::std::copy( aViewNames.begin(), aViewNames.end(), i_rInfo.ViewNames.getArray() );
 }
 
-
 void AutoRecovery::implts_persistAllActiveViewNames()
 {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -2193,7 +2076,6 @@ void AutoRecovery::implts_persistAllActiveViewNames()
         implts_flushConfigItem( *pIt );
     }
 }
-
 
 void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rInfo, sal_Bool bRemoveIt)
 {
@@ -2300,7 +2182,6 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
     while(nRetry>0);
 }
 
-
 void AutoRecovery::implts_startListening()
 {
     css::uno::Reference< css::util::XChangesNotifier > xCFG;
@@ -2346,7 +2227,6 @@ void AutoRecovery::implts_startListening()
     }
 }
 
-
 void AutoRecovery::implts_stopListening()
 {
     css::uno::Reference< css::util::XChangesNotifier > xCFG;
@@ -2379,7 +2259,6 @@ void AutoRecovery::implts_stopListening()
     }
 }
 
-
 void AutoRecovery::implts_startModifyListeningOnDoc(AutoRecovery::TDocumentInfo& rInfo)
 {
     if (rInfo.ListenForModify)
@@ -2394,7 +2273,6 @@ void AutoRecovery::implts_startModifyListeningOnDoc(AutoRecovery::TDocumentInfo&
     }
 }
 
-
 void AutoRecovery::implts_stopModifyListeningOnDoc(AutoRecovery::TDocumentInfo& rInfo)
 {
     if (! rInfo.ListenForModify)
@@ -2408,7 +2286,6 @@ void AutoRecovery::implts_stopModifyListeningOnDoc(AutoRecovery::TDocumentInfo& 
         rInfo.ListenForModify = sal_False;
     }
 }
-
 
 void AutoRecovery::implts_updateTimer()
 {
@@ -2449,7 +2326,6 @@ void AutoRecovery::implts_updateTimer()
     } /* SAFE */
 }
 
-
 void AutoRecovery::implts_stopTimer()
 {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -2458,7 +2334,6 @@ void AutoRecovery::implts_stopTimer()
         return;
     m_aTimer.Stop();
 }
-
 
 IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
 {
@@ -2556,7 +2431,6 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
     return 0;
 }
 
-
 IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch)
 {
     DispatchParams aParams;
@@ -2576,7 +2450,6 @@ IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch)
     }
     return 0;
 }
-
 
 void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame::XModel >& xDocument)
 {
@@ -2700,7 +2573,6 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     aCacheLock.unlock();
 }
 
-
 void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::frame::XModel >& xDocument     ,
                                                    sal_Bool                                   bStopListening)
 {
@@ -2748,7 +2620,6 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     implts_flushConfigItem(aInfo, sal_True); // sal_True => remove it from config
 }
 
-
 void AutoRecovery::implts_markDocumentModifiedAgainstLastBackup(const css::uno::Reference< css::frame::XModel >& xDocument)
 {
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
@@ -2769,7 +2640,6 @@ void AutoRecovery::implts_markDocumentModifiedAgainstLastBackup(const css::uno::
 
     } /* SAFE */
 }
-
 
 void AutoRecovery::implts_updateModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument)
 {
@@ -2801,7 +2671,6 @@ void AutoRecovery::implts_updateModifiedState(const css::uno::Reference< css::fr
     } /* SAFE */
 }
 
-
 void AutoRecovery::implts_updateDocumentUsedForSavingState(const css::uno::Reference< css::frame::XModel >& xDocument      ,
                                                                  sal_Bool                                   bSaveInProgress)
 {
@@ -2818,7 +2687,6 @@ void AutoRecovery::implts_updateDocumentUsedForSavingState(const css::uno::Refer
 
     } /* SAFE */
 }
-
 
 void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::frame::XModel >& xDocument)
 {
@@ -2870,7 +2738,6 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
     AutoRecovery::st_impl_removeFile(sRemoveURL2);
 }
 
-
 AutoRecovery::TDocumentList::iterator AutoRecovery::impl_searchDocument(      AutoRecovery::TDocumentList&               rList    ,
                                                                         const css::uno::Reference< css::frame::XModel >& xDocument)
 {
@@ -2885,7 +2752,6 @@ AutoRecovery::TDocumentList::iterator AutoRecovery::impl_searchDocument(      Au
     }
     return pIt;
 }
-
 
 namespace
 {
@@ -2913,13 +2779,11 @@ namespace
     }
 }
 
-
 void AutoRecovery::implts_changeAllDocVisibility(sal_Bool bVisible)
 {
     css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create(m_xContext), css::uno::UNO_QUERY);
     lcl_changeVisibility( xDesktop, bVisible );
 }
-
 
 /* Currently the document is not closed in case of crash,
    so the lock file must be removed explicitly
@@ -2947,8 +2811,6 @@ void lc_removeLockFile(AutoRecovery::TDocumentInfo& rInfo)
     }
 #endif
 }
-
-
 
 void AutoRecovery::implts_prepareSessionShutdown()
 {
@@ -3014,7 +2876,6 @@ void AutoRecovery::implts_prepareSessionShutdown()
     } /* SAFE */
 }
 
-
 /* TODO WORKAROUND:
 
         #i64599#
@@ -3041,7 +2902,6 @@ sal_Bool lc_checkIfSaveForbiddenByArguments(AutoRecovery::TDocumentInfo& rInfo)
 
     return bNoAutoSave;
 }
-
 
 AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAllowUserIdleLoop,
                                                              sal_Bool        bRemoveLockFiles,
@@ -3215,7 +3075,6 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
     return eTimer;
 }
 
-
 void AutoRecovery::implts_saveOneDoc(const OUString&                                    sBackupPath      ,
                                            AutoRecovery::TDocumentInfo&                        rInfo            ,
                                      const css::uno::Reference< css::task::XStatusIndicator >& xExternalProgress)
@@ -3347,7 +3206,6 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
 
     AutoRecovery::st_impl_removeFile(sRemoveFile);
 }
-
 
 AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aParams)
 {
@@ -3543,7 +3401,6 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
     return eTimer;
 }
 
-
 void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
                                            utl::MediaDescriptor& lDescriptor,
                                            AutoRecovery::TDocumentInfo&   rInfo      )
@@ -3663,7 +3520,6 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
     }
 }
 
-
 void AutoRecovery::implts_generateNewTempURL(const OUString&               sBackupPath     ,
                                                    utl::MediaDescriptor& /*rMediaDescriptor*/,
                                                    AutoRecovery::TDocumentInfo&   rInfo           )
@@ -3699,7 +3555,6 @@ void AutoRecovery::implts_generateNewTempURL(const OUString&               sBack
     rInfo.NewTempURL = aTempFile.GetURL();
 }
 
-
 void AutoRecovery::implts_informListener(      sal_Int32                      eJob  ,
                                          const css::frame::FeatureStateEvent& aEvent)
 {
@@ -3726,7 +3581,6 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
         }
     }
 }
-
 
 OUString AutoRecovery::implst_getJobDescription(sal_Int32 eJob)
 {
@@ -3764,7 +3618,6 @@ OUString AutoRecovery::implst_getJobDescription(sal_Int32 eJob)
     return sFeature.makeStringAndClear();
 }
 
-
 sal_Int32 AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
 {
     if ( aURL.Protocol == CMD_PROTOCOL )
@@ -3795,7 +3648,6 @@ sal_Int32 AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
     return AutoRecovery::E_NO_JOB;
 }
 
-
 css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(      sal_Int32                    eJob      ,
                                                                            const OUString&             sEventType,
                                                                                  AutoRecovery::TDocumentInfo* pInfo     )
@@ -3824,7 +3676,6 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
     return aEvent;
 }
 
-
 void AutoRecovery::implts_resetHandleStates(sal_Bool /*bLoadCache*/)
 {
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
@@ -3850,7 +3701,6 @@ void AutoRecovery::implts_resetHandleStates(sal_Bool /*bLoadCache*/)
     } /* SAFE */
 }
 
-
 void AutoRecovery::implts_prepareEmergencySave()
 {
     // Be sure to know all open documents really .-)
@@ -3859,7 +3709,6 @@ void AutoRecovery::implts_prepareEmergencySave()
     // hide all docs, so the user cant disturb our emergency save .-)
     implts_changeAllDocVisibility(sal_False);
 }
-
 
 void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
 {
@@ -3909,7 +3758,6 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     AutoRecovery::st_impl_removeLockFile();
 }
 
-
 void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
 {
     AutoRecovery::ETimerType eSuggestedTimer = AutoRecovery::E_DONT_START_TIMER;
@@ -3935,7 +3783,6 @@ void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
         css::uno::makeAny(sal_False),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 }
-
 
 void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
 {
@@ -3975,7 +3822,6 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
     impl_flushALLConfigChanges();
 }
 
-
 void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
 {
     SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_doSessionQuietQuit()");
@@ -4005,8 +3851,6 @@ void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
     // flush config cached back to disc.
     impl_flushALLConfigChanges();
 }
-
-
 
 void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
 {
@@ -4041,7 +3885,6 @@ void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
 
     SAL_INFO("fwk.autorecovery", "... AutoRecovery::implts_doSessionRestore()");
 }
-
 
 void AutoRecovery::implts_backupWorkingEntry(const DispatchParams& aParams)
 {
@@ -4079,7 +3922,6 @@ void AutoRecovery::implts_backupWorkingEntry(const DispatchParams& aParams)
     }
 }
 
-
 void AutoRecovery::implts_cleanUpWorkingEntry(const DispatchParams& aParams)
 {
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_ADD_REMOVE);
@@ -4101,7 +3943,6 @@ void AutoRecovery::implts_cleanUpWorkingEntry(const DispatchParams& aParams)
         break; /// !!! pIt is not defined any longer ... further this function has finished it's work
     }
 }
-
 
 AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const OUString& sSource    ,
                                                                const OUString& sTargetPath,
@@ -4142,7 +3983,6 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const OUString& s
     return AutoRecovery::E_COPIED;
 }
 
-
 sal_Bool SAL_CALL AutoRecovery::convertFastPropertyValue(      css::uno::Any& /*aConvertedValue*/,
                                                                css::uno::Any& /*aOldValue*/      ,
                                                                sal_Int32      /*nHandle*/        ,
@@ -4153,14 +3993,12 @@ sal_Bool SAL_CALL AutoRecovery::convertFastPropertyValue(      css::uno::Any& /*
     return sal_False;
 }
 
-
 void SAL_CALL AutoRecovery::setFastPropertyValue_NoBroadcast(      sal_Int32      /*nHandle*/,
                                                              const css::uno::Any& /*aValue*/ )
     throw(css::uno::Exception, std::exception)
 {
     // not needed currently
 }
-
 
 void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                                                  sal_Int32      nHandle) const
@@ -4208,7 +4046,6 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
     }
 }
 
-
 const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor()
 {
     const css::beans::Property pPropertys[] =
@@ -4220,7 +4057,6 @@ const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescripto
     const css::uno::Sequence< css::beans::Property > lPropertyDescriptor(pPropertys, AUTORECOVERY_PROPCOUNT);
     return lPropertyDescriptor;
 }
-
 
 ::cppu::IPropertyArrayHelper& SAL_CALL AutoRecovery::getInfoHelper()
 {
@@ -4237,7 +4073,6 @@ const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescripto
 
     return (*pInfoHelper);
 }
-
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL AutoRecovery::getPropertySetInfo()
     throw(css::uno::RuntimeException, std::exception)
@@ -4256,7 +4091,6 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL AutoRecovery::getPr
 
     return (*pInfo);
 }
-
 
 void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
 {
@@ -4330,7 +4164,6 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
     SAL_INFO("fwk.autorecovery", "... AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()");
 }
 
-
 sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 {
 #ifdef SIMULATE_FULL_DISC
@@ -4359,7 +4192,6 @@ sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 #endif // SIMULATE_FULL_DISC
 }
 
-
 void AutoRecovery::impl_showFullDiscError()
 {
     OUString sBtn(FWK_RESSTR(STR_FULL_DISC_RETRY_BUTTON));
@@ -4378,7 +4210,6 @@ void AutoRecovery::impl_showFullDiscError()
     dlgError.SetButtonText(dlgError.GetButtonId(0), sBtn);
     dlgError.Execute();
 }
-
 
 void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
                                                 utl::MediaDescriptor&             rArgs    ,
@@ -4445,7 +4276,6 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     rArgs.createItemIfMissing(utl::MediaDescriptor::PROP_STATUSINDICATOR(), xInternalProgress);
 }
 
-
 void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
                                              utl::MediaDescriptor&             rArgs    ,
                                        const css::uno::Reference< css::frame::XFrame >& xNewFrame)
@@ -4480,7 +4310,6 @@ void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&       
     }
 }
 
-
 void AutoRecovery::impl_flushALLConfigChanges()
 {
     try
@@ -4503,7 +4332,6 @@ void AutoRecovery::impl_flushALLConfigChanges()
     }
 }
 
-
 void AutoRecovery::st_impl_removeFile(const OUString& sURL)
 {
     if ( sURL.isEmpty())
@@ -4518,7 +4346,6 @@ void AutoRecovery::st_impl_removeFile(const OUString& sURL)
     {
     }
 }
-
 
 void AutoRecovery::st_impl_removeLockFile()
 {

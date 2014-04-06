@@ -121,9 +121,7 @@ public:
         return aSeq;
     }
 
-
     //  XSimpleTabController
-
 
     virtual sal_Int32 SAL_CALL insertTab() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL removeTab( sal_Int32 nID ) throw ( css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -134,9 +132,7 @@ public:
     virtual void SAL_CALL addTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL removeTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  XComponent
-
 
     virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -200,8 +196,6 @@ DEFINE_XTYPEPROVIDER_6              (   TabWindowService               ,
                                         css::beans::XPropertySetInfo
                                     )
 
-
-
 //  constructor
 
 TabWindowService::TabWindowService()
@@ -227,7 +221,6 @@ void TabWindowService::initProperties()
     m_aTransactionManager.setWorkingMode( E_WORK );
 }
 
-
 //  destructor
 
 TabWindowService::~TabWindowService()
@@ -236,7 +229,6 @@ TabWindowService::~TabWindowService()
     if (m_pTabWin)
         m_pTabWin->RemoveEventListener( LINK( this, TabWindowService, EventListener ) );
 }
-
 
 //  XSimpleTabController
 
@@ -252,7 +244,6 @@ TabWindowService::~TabWindowService()
 
     return nID;
 }
-
 
 //  XSimpleTabController
 
@@ -270,7 +261,6 @@ void SAL_CALL TabWindowService::removeTab(::sal_Int32 nID)
     if (pTabWin)
         pTabWin->RemovePage(nID);
 }
-
 
 //  XSimpleTabController
 
@@ -297,7 +287,6 @@ void SAL_CALL TabWindowService::setTabProps(      ::sal_Int32                   
     }
 }
 
-
 //  XSimpleTabController
 
 css::uno::Sequence< css::beans::NamedValue > SAL_CALL TabWindowService::getTabProps(::sal_Int32 nID)
@@ -312,7 +301,6 @@ css::uno::Sequence< css::beans::NamedValue > SAL_CALL TabWindowService::getTabPr
 
     return rInfo.m_lProperties;
 }
-
 
 //  XSimpleTabController
 
@@ -331,7 +319,6 @@ void SAL_CALL TabWindowService::activateTab(::sal_Int32 nID)
         pTabWin->ActivatePage(nID);
 }
 
-
 //  XSimpleTabController
 
 ::sal_Int32 SAL_CALL TabWindowService::getActiveTabID()
@@ -341,7 +328,6 @@ void SAL_CALL TabWindowService::activateTab(::sal_Int32 nID)
     return m_nCurrentPageIndex;
 }
 
-
 //  XSimpleTabController
 
 void SAL_CALL TabWindowService::addTabListener(const css::uno::Reference< css::awt::XTabListener >& xListener)
@@ -350,7 +336,6 @@ void SAL_CALL TabWindowService::addTabListener(const css::uno::Reference< css::a
     m_lListener.addInterface(::getCppuType((const css::uno::Reference< css::awt::XTabListener >*)NULL), xListener);
 }
 
-
 //  XSimpleTabController
 
 void SAL_CALL TabWindowService::removeTabListener(const css::uno::Reference< css::awt::XTabListener >& xListener)
@@ -358,7 +343,6 @@ void SAL_CALL TabWindowService::removeTabListener(const css::uno::Reference< css
 {
     m_lListener.removeInterface(::getCppuType((const css::uno::Reference< css::awt::XTabListener >*)NULL), xListener);
 }
-
 
 //  XComponent
 
@@ -379,7 +363,6 @@ void SAL_CALL TabWindowService::dispose()
     m_xTabWin.clear();
 }
 
-
 //  XComponent
 
 void SAL_CALL TabWindowService::addEventListener(const css::uno::Reference< css::lang::XEventListener >& xListener)
@@ -388,7 +371,6 @@ void SAL_CALL TabWindowService::addEventListener(const css::uno::Reference< css:
     m_lListener.addInterface(::getCppuType((const css::uno::Reference< css::lang::XEventListener >*)NULL), xListener);
 }
 
-
 //  XComponent
 
 void SAL_CALL TabWindowService::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener)
@@ -396,7 +378,6 @@ void SAL_CALL TabWindowService::removeEventListener( const css::uno::Reference< 
 {
     m_lListener.removeInterface(::getCppuType((const css::uno::Reference< css::lang::XEventListener >*)NULL), xListener);
 }
-
 
 void TabWindowService::impl_initializePropInfo()
 {
@@ -410,14 +391,12 @@ void TabWindowService::impl_initializePropInfo()
             css::beans::PropertyAttribute::TRANSIENT));
 }
 
-
 void SAL_CALL TabWindowService::impl_setPropertyValue(const OUString& /*sProperty*/,
                                                               sal_Int32        /*nHandle  */,
                                                         const css::uno::Any&   /*aValue   */)
 
 {
 }
-
 
 css::uno::Any SAL_CALL TabWindowService::impl_getPropertyValue(const OUString& /*sProperty*/,
                                                                        sal_Int32        nHandle      )
@@ -440,7 +419,6 @@ css::uno::Any SAL_CALL TabWindowService::impl_getPropertyValue(const OUString& /
 
     return aValue;
 }
-
 
 //  TabWindowService
 
@@ -510,7 +488,6 @@ IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
     return 0;
 }
 
-
 //  TabWindowService
 
 void TabWindowService::impl_checkTabIndex (::sal_Int32 nID)
@@ -526,7 +503,6 @@ void TabWindowService::impl_checkTabIndex (::sal_Int32 nID)
                 css::uno::Reference< css::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY ));
     }
 }
-
 
 //  TabWindowService
 

@@ -173,7 +173,6 @@ private:
                           bDefaultLayer( false ),
                           nElementType( css::ui::UIElementType::UNKNOWN ) {}
 
-
         bool                                                              bModified;
         bool                                                              bLoaded;
         bool                                                              bDefaultLayer;
@@ -1002,7 +1001,6 @@ void SAL_CALL ModuleUIConfigurationManager::removeConfigurationListener( const R
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< ui::XUIConfigurationListener >* ) NULL ), xListener );
 }
-
 
 // XUIConfigurationManager
 void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno::RuntimeException, std::exception)

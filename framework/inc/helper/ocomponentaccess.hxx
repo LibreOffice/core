@@ -59,12 +59,9 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
 
     //  public methods
 
-
     public:
 
-
         //  constructor / destructor
-
 
         /*-****************************************************************************************************
             @short      constructor to initialize this instance
@@ -83,9 +80,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
 
         OComponentAccess( const css::uno::Reference< css::frame::XDesktop >& xOwner );
 
-
         //  XEnumerationAccess
-
 
         /*-****************************************************************************************************
             @short      create a new enumeration of components
@@ -104,9 +99,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
 
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
         //  XElementAccess
-
 
         /*-****************************************************************************************************
             @short      get the type of elements in enumeration
@@ -138,9 +131,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
 
         virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  protected methods
-
 
     protected:
 
@@ -161,9 +152,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
 
         virtual ~OComponentAccess();
 
-
     //  private methods
-
 
     private:
 
@@ -198,10 +187,8 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
 
         css::uno::Reference< css::lang::XComponent > impl_getFrameComponent( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
 
-
     //  debug methods
     //  (should be private everyway!)
-
 
         /*-****************************************************************************************************
             @short      debug-method to check incoming parameter of some other mehods of this class
@@ -221,10 +208,8 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
 
         static sal_Bool impldbg_checkParameter_OComponentAccessCtor( const css::uno::Reference< css::frame::XDesktop >& xOwner );
 
-
     //  variables
     //  (should be private everyway!)
-
 
     private:
 

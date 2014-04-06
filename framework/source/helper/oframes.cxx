@@ -34,8 +34,6 @@ using namespace ::cppu                          ;
 using namespace ::osl                           ;
 using namespace ::std                           ;
 
-
-
 //  constructor
 
 OFrames::OFrames( const   css::uno::Reference< XFrame >&              xOwner          ,
@@ -49,7 +47,6 @@ OFrames::OFrames( const   css::uno::Reference< XFrame >&              xOwner    
     SAL_WARN_IF( !impldbg_checkParameter_OFramesCtor( xOwner, pFrameContainer ), "fwk", "OFrames::OFrames(): Invalid parameter detected!" );
 }
 
-
 //  (proteced!) destructor
 
 OFrames::~OFrames()
@@ -57,7 +54,6 @@ OFrames::~OFrames()
     // Reset instance, free memory ....
     impl_resetObject();
 }
-
 
 //  XFrames
 void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException, std::exception )
@@ -82,7 +78,6 @@ void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) thr
     SAL_WARN_IF( !xOwner.is(), "fwk", "OFrames::append():Our owner is dead - you can't append any frames ...!" );
 }
 
-
 //  XFrames
 void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException, std::exception )
 {
@@ -106,7 +101,6 @@ void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) thr
     // Else; Do nothing! Ouer owner is dead.
     SAL_WARN_IF( !xOwner.is(), "fwk", "OFrames::remove(): Our owner is dead - you can't remove any frames ...!" );
 }
-
 
 //  XFrames
 Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearchFlags ) throw( RuntimeException, std::exception )
@@ -133,17 +127,14 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
             // All searchflags are supported by this implementation!
             // If some flags should not be supported - don't call me with this flags!!!
 
-
             // Search with AUTO-flag is not supported yet!
             // We think about right implementation.
             SAL_WARN_IF( (nSearchFlags & FrameSearchFlag::AUTO), "fwk", "OFrames::queryFrames(): Search with AUTO-flag is not supported yet!" );
-
 
             // Search for ALL and GLOBAL is superflous!
             // We support all necessary flags, from which these two flags are derived.
             //      ALL     = PARENT + SELF  + CHILDREN + SIBLINGS
             //      GLOBAL  = ALL    + TASKS
-
 
             // Add parent to list ... if any exist!
             if( nSearchFlags & FrameSearchFlag::PARENT )
@@ -157,7 +148,6 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                 }
             }
 
-
             // Add owner to list if SELF is searched.
             if( nSearchFlags & FrameSearchFlag::SELF )
             {
@@ -165,7 +155,6 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                 seqSelf[0] = xOwner;
                 impl_appendSequence( seqFrames, seqSelf );
             }
-
 
             // Add SIBLINGS to list.
             if( nSearchFlags & FrameSearchFlag::SIBLINGS )
@@ -185,7 +174,6 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                 // Reset protection-mode.
                 m_bRecursiveSearchProtection = sal_False;
             }
-
 
             // If searched for children, step over all elements in container and collect the information.
             if ( nSearchFlags & FrameSearchFlag::CHILDREN )
@@ -212,7 +200,6 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
     return seqFrames;
 }
 
-
 //  XIndexAccess
 sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException, std::exception )
 {
@@ -233,7 +220,6 @@ sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException, std::exception )
     // Return result.
     return nCount;
 }
-
 
 //  XIndexAccess
 
@@ -265,14 +251,12 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
     return aReturnValue;
 }
 
-
 //  XElementAccess
 Type SAL_CALL OFrames::getElementType() throw( RuntimeException, std::exception )
 {
     // This "container" support XFrame-interfaces only!
     return ::getCppuType( (const css::uno::Reference< XFrame >*)NULL );
 }
-
 
 //  XElementAccess
 sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException, std::exception )
@@ -297,7 +281,6 @@ sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException, std::exception
     return bHasElements;
 }
 
-
 //  proteced method
 
 void OFrames::impl_resetObject()
@@ -313,7 +296,6 @@ void OFrames::impl_resetObject()
     // Reset pointer to shared container to!
     m_pFrameContainer = NULL;
 }
-
 
 //  private method
 
@@ -353,9 +335,7 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
     seqDestination = seqResult;
 }
 
-
 //  debug methods
-
 
 /*-----------------------------------------------------------------------------------------------------------------
     The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
@@ -367,7 +347,6 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
         But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
 
-
 // An instance of this class can only work with valid initialization.
 // We share the mutex with ouer owner class, need a valid factory to instanciate new services and
 // use the access to ouer owner for some operations.
@@ -377,7 +356,6 @@ sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   css::uno::Refere
     return xOwner.is() && pFrameContainer != 0;
 }
 
-
 // Its only allowed to add valid references to container.
 // AND - alle frames must support XFrames-interface!
 sal_Bool OFrames::impldbg_checkParameter_append( const css::uno::Reference< XFrame >& xFrame )
@@ -385,14 +363,12 @@ sal_Bool OFrames::impldbg_checkParameter_append( const css::uno::Reference< XFra
     return xFrame.is();
 }
 
-
 // Its only allowed to add valid references to container...
 // ... => You can only delete valid references!
 sal_Bool OFrames::impldbg_checkParameter_remove( const css::uno::Reference< XFrame >& xFrame )
 {
     return xFrame.is();
 }
-
 
 // A search for frames must initiate with right flags.
 // Some one are superflous and not supported yet. But here we control only the range of incoming parameter!

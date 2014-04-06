@@ -35,7 +35,6 @@ namespace framework{
 #define PROTOCOL_VALUE      "systemexecute:"
 #define PROTOCOL_LENGTH     14
 
-
 // XInterface, XTypeProvider, XServiceInfo
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(SystemExec                   ,
@@ -53,20 +52,14 @@ DEFINE_INIT_SERVICE(SystemExec,
                     }
                    )
 
-
-
 SystemExec::SystemExec( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
         : m_xContext    ( rxContext                     )
 {
 }
 
-
-
 SystemExec::~SystemExec()
 {
 }
-
-
 
 css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch( const css::util::URL&  aURL    ,
                                                                                  const OUString&,
@@ -77,8 +70,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch(
         xDispatcher = this;
     return xDispatcher;
 }
-
-
 
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL SystemExec::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException, std::exception )
 {
@@ -94,15 +85,11 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Syst
     return lDispatcher;
 }
 
-
-
 void SAL_CALL SystemExec::dispatch( const css::util::URL&                                  aURL       ,
                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException, std::exception )
 {
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
-
-
 
 void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                     const css::uno::Sequence< css::beans::PropertyValue >&,
@@ -136,23 +123,17 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
         }
 }
 
-
-
 void SAL_CALL SystemExec::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
                                              const css::util::URL& ) throw( css::uno::RuntimeException, std::exception )
 {
     // not supported yet
 }
 
-
-
 void SAL_CALL SystemExec::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
                                                 const css::util::URL& ) throw( css::uno::RuntimeException, std::exception )
 {
     // not supported yet
 }
-
-
 
 void SystemExec::impl_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                            const sal_Int16                                                   nState   )

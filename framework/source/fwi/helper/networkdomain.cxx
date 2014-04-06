@@ -23,7 +23,6 @@
 
 //  Windows
 
-
 #define UNICODE
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -51,9 +50,7 @@ static OUString GetUserDomain()
         return OUString();
 }
 
-
 //  Windows
-
 
 namespace framework
 {
@@ -77,15 +74,11 @@ OUString NetworkDomain::GetNTDomainName()
 #include <errno.h>
 #include <osl/thread.h>
 
-
 //  Unix
-
 
 #if defined( SOLARIS )
 
-
 //  Solaris
-
 
 #include <sys/systeminfo.h>
 #include <sal/alloca.h>
@@ -129,9 +122,7 @@ static rtl_uString *getDomainName()
 
 #elif defined( LINUX ) /* endif SOLARIS */
 
-
 //  Linux
-
 
 #include <unistd.h>
 #include <string.h>
@@ -170,9 +161,7 @@ static rtl_uString *getDomainName()
 
 #else /* LINUX */
 
-
 //  Other Unix
-
 
 static rtl_uString *getDomainName()
 {
@@ -181,9 +170,7 @@ static rtl_uString *getDomainName()
 
 #endif
 
-
 //  Unix
-
 
 namespace framework
 {
@@ -206,9 +193,7 @@ OUString NetworkDomain::GetNTDomainName()
 
 #else /* UNIX */
 
-
 //  Other operating systems (non-Windows and non-Unix)
-
 
 namespace framework
 {

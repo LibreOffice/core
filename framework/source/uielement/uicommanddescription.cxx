@@ -46,9 +46,7 @@ using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
-
 //  Namespace
-
 
 struct ModuleToCommands
 {
@@ -78,9 +76,7 @@ const sal_Int32   COMMAND_PROPERTY_MIRROR               = 4;
 namespace framework
 {
 
-
 //  Configuration access class for PopupMenuControllerFactory implementation
-
 
 class ConfigurationAccess_UICommand : // Order is necessary for right initialization!
                                         public  ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
@@ -179,7 +175,6 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         sal_Bool                          m_bGenericDataRetrieved;
 };
 
-
 //  XInterface, XTypeProvider
 
 ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XComponentContext>& rxContext ) :
@@ -218,7 +213,6 @@ ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
     if ( xContainer.is() )
         xContainer->removeContainerListener(m_xConfigAccessListener);
 }
-
 
 // XNameAccess
 Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const OUString& rCommandURL )

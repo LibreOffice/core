@@ -89,7 +89,6 @@ class QueryBuilder
             resetAll();
         }
 
-
         // returns full query as copy of internal set values
 
         OUString getQuery()
@@ -99,14 +98,12 @@ class QueryBuilder
             return sCopy.makeStringAndClear();
         }
 
-
         // set new or change existing base query part
 
         void setBase( const OUString& sBase )
         {
             m_sBase = sBase;
         }
-
 
         // add new parameter (with optional value) to param list
 
@@ -121,7 +118,6 @@ class QueryBuilder
             }
         }
 
-
         // forget all setted params and start with empty ones
         // Attention: base of query isn't changed!
 
@@ -130,7 +126,6 @@ class QueryBuilder
             m_sParams.makeStringAndClear();
             m_sParams.ensureCapacity( 256 );
         }
-
 
         // start with new empty query
 
@@ -153,7 +148,6 @@ class QueryAnalyzer
 {
     public:
 
-
         // it's will not perform to compare strings as query type ...
         // so we convert it into these enum values.
         // default = E_ALL!
@@ -172,7 +166,6 @@ class QueryAnalyzer
             E_GRAPHICS
         };
 
-
         // these are valid values for param "sort_prop".
         // other ones are not supported!
         // default = E_NAME
@@ -182,7 +175,6 @@ class QueryAnalyzer
             E_NAME      ,
             E_UINAME
         };
-
 
         // analyze given query and split it into his different parts; <base>:<param1>:<param2=value>...
 
@@ -320,12 +312,10 @@ class QueryAnalyzer
             }
         }
 
-
         // return type of query. User can decide then, which action should be started.
         // For faster work we converted query string into corresponding enum value!
 
         EQuery getQueryType() const { return m_eQuery; }
-
 
         // access to additional parameter values
         // Methods return default of really set values!
@@ -337,7 +327,6 @@ class QueryAnalyzer
         sal_Bool   getCaseSensitive() const { return m_bCaseSensitive; }
         sal_Bool   getUseOrder     () const { return m_bUseOrder     ; }
         sal_Bool   getDefaultFirst () const { return m_bDefaultFirst ; }
-
 
         // this method checks if given string match any supported query.
         // (ignore additional parameters!)

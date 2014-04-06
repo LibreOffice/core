@@ -55,7 +55,6 @@
 
 #include <cppuhelper/implbase3.hxx>
 
-
 namespace framework
 {
 
@@ -136,17 +135,14 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         // child window notifications
         long childWindowEvent( VclSimpleEvent* pEvent );
 
-
         // XInterface
 
         virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
         virtual void SAL_CALL release() throw() SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
 
         // XWindowListener
         virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -197,7 +193,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
             sal_Int32                                                                         nRowColumn;
         };
 
-
         // internal helper methods
 
         bool             implts_isParentWindowVisible() const;
@@ -207,7 +202,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         OUString    implts_generateGenericAddonToolbarTitle( sal_Int32 nNumber ) const;
         void             implts_setElementData( UIElement& rUIElement, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindow >& rDockWindow );
         void             implts_destroyDockingAreaWindows();
-
 
         // layout methods
 
@@ -222,7 +216,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         void             implts_setLayoutInProgress( bool bInProgress = true );
         bool             implts_isLayoutInProgress() const { return m_bLayoutInProgress; }
 
-
         // lookup/container methods
 
         UIElement        implts_findToolbar( const OUString& aName );
@@ -234,7 +227,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         void             implts_setToolbar( const UIElement& rUIElement );
         ::Size           implts_getTopBottomDockingAreaSizes();
         void             implts_getUIElementVectorCopy( UIElementVector& rCopy );
-
 
         // internal docking methods
 
@@ -259,7 +251,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         void             implts_findNextDockingPos( ::com::sun::star::ui::DockingArea DockingArea, const ::Size& aUIElementSize, ::com::sun::star::awt::Point& rVirtualPos, ::Point& rPixelPos );
         void             implts_setTrackingRect( ::com::sun::star::ui::DockingArea eDockingArea, const ::Point& rMousePos, ::Rectangle& rTrackingRect );
 
-
         // creation methods
 
         void             implts_createAddonsToolBars();
@@ -272,12 +263,10 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         void             implts_setToolbarCreation( bool bStart = true );
         bool             implts_isToolbarCreationActive();
 
-
         // persistence methods
 
         sal_Bool         implts_readWindowStateData( const OUString& aName, UIElement& rElementData );
         void             implts_writeWindowStateData( const UIElement& rElementData );
-
 
         // members
 

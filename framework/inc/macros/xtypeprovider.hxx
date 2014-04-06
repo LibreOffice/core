@@ -49,7 +49,6 @@ namespace framework{
 
 _________________________________________________________________________________________________________________*/
 
-
 //  private
 //  implementation of XTypeProvider::getImplementationId()
 
@@ -58,7 +57,6 @@ ________________________________________________________________________________
     {                                                                                                                                           \
         return css::uno::Sequence<sal_Int8>();                                                                                                  \
     }
-
 
 //  private
 //  implementation of XTypeProvider::getTypes() with max. 12 interfaces!
@@ -88,7 +86,6 @@ ________________________________________________________________________________
         }                                                                                                                                       \
         return pTypeCollection->getTypes();                                                                                                     \
     }
-
 
 //  private
 //  implementation of XTypeProvider::getTypes() with more then 12 interfaces!
@@ -141,7 +138,6 @@ ________________________________________________________________________________
         return *pTypeCollection;                                                                                                                \
     }
 
-
 //  private
 //  implementation of XTypeProvider::getTypes() with using max. 12 interfaces + baseclass!
 
@@ -191,7 +187,6 @@ ________________________________________________________________________________
         }                                                                                                                                       \
         return *pTypeCollection;                                                                                                                \
     }
-
 
 //  private
 //  help macros to replace TYPES in getTypes() [see before]
@@ -243,7 +238,6 @@ ________________________________________________________________________________
     PRIVATE_DEFINE_TYPE_11( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11 ),                                    \
     ::getCppuType(( const ::com::sun::star::uno::Reference< TYPE12 >*)NULL )
 
-
 //  private
 //  complete implementation of XTypeProvider
 
@@ -263,14 +257,12 @@ ________________________________________________________________________________
     PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                               \
     PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES_BASECLASS( CLASS, BASECLASS, TYPES )
 
-
 //  public
 //  declaration of XTypeProvider
 
 #define FWK_DECLARE_XTYPEPROVIDER                                                                                                                               \
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes           () throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;\
     virtual ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
 
 //  public
 //  implementation of XTypeProvider

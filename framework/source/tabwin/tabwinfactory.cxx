@@ -29,9 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 
-
 //  Defines
-
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -40,7 +38,6 @@ using namespace com::sun::star::util;
 
 namespace framework
 {
-
 
 //  XInterface, XTypeProvider, XServiceInfo
 

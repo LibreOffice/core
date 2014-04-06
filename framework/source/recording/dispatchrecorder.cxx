@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <recording/dispatchrecorder.hxx>
 #include <com/sun/star/frame/DispatchStatement.hpp>
 #include <com/sun/star/script/Converter.hpp>
@@ -32,9 +31,7 @@ namespace framework{
 // used to mark a dispatch as comment (mostly it indicates an error) Changing of this wdefine will impact all using of such comments ...
 #define REM_AS_COMMENT    "rem "
 
-
 //  XInterface, XTypeProvider, XServiceInfo
-
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(
     DispatchRecorder,
@@ -49,7 +46,6 @@ DEFINE_INIT_SERVICE(
 )
 
 #include <typelib/typedescription.h>
-
 
 void flatten_struct_members(
     ::std::vector< Any > * vec, void const * data,
@@ -98,18 +94,15 @@ Sequence< Any > make_seq_out_of_struct(
     return Sequence< Any >( &vec[ 0 ], vec.size() );
 }
 
-
 DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : m_nRecordingID(0)
     , m_xConverter(css::script::Converter::create(xContext))
 {
 }
 
-
 DispatchRecorder::~DispatchRecorder()
 {
 }
-
 
 // generate header
 void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::frame::XFrame >& ) throw( css::uno::RuntimeException, std::exception )
@@ -117,7 +110,6 @@ void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::
     /* SAFE{ */
     /* } */
 }
-
 
 void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
                                                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException, std::exception )
@@ -127,7 +119,6 @@ void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
     com::sun::star::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, sal_False );
     m_aStatements.push_back( aStatement );
 }
-
 
 void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& aURL,
                                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException, std::exception )
@@ -171,7 +162,6 @@ OUString SAL_CALL DispatchRecorder::getRecordedMacro() throw( css::uno::RuntimeE
     OUString sScript = aScriptBuffer.makeStringAndClear();
     return sScript;
 }
-
 
 void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBuffer& aArgumentBuffer )
 {

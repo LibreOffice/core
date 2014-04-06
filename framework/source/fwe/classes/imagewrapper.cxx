@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <classes/imagewrapper.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -40,16 +39,13 @@ static Sequence< sal_Int8 > impl_getStaticIdentifier()
     return seqID ;
 }
 
-
 ImageWrapper::ImageWrapper( const Image& aImage ) : m_aImage( aImage )
 {
 }
 
-
 ImageWrapper::~ImageWrapper()
 {
 }
-
 
 Sequence< sal_Int8 > ImageWrapper::GetUnoTunnelId()
 {

@@ -42,12 +42,9 @@ class Wildcard
 
     //  public methods
 
-
     public:
 
-
         //  constructor / destructor
-
 
         /*-****************************************************************************************************
             @short      standard ctor
@@ -77,9 +74,7 @@ class Wildcard
 
         virtual ~Wildcard();
 
-
         //  interface
-
 
         /*-****************************************************************************************************
             @short      try to find an agreement between given text and searchpattern

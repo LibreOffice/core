@@ -31,9 +31,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <vcl/status.hxx>
 
-
 namespace framework {
-
 
 // declaration
 
@@ -65,7 +63,6 @@ class VCLStatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIn
         /** knows the current value of the progress. */
         sal_Int32 m_nValue;
 
-
     // interface
 
     public:
@@ -92,7 +89,6 @@ class VCLStatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIn
 
         virtual void SAL_CALL setValue(sal_Int32 nValue)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // helper
 

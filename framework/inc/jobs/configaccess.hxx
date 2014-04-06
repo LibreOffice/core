@@ -30,8 +30,6 @@
 
 namespace framework{
 
-
-
 /**
     @short  implements a simple configuration access
     @descr  Sometimes it's better to have direct config access
@@ -40,7 +38,6 @@ namespace framework{
  */
 class FWI_DLLPUBLIC ConfigAccess
 {
-
 
     public:
 
@@ -54,7 +51,6 @@ class FWI_DLLPUBLIC ConfigAccess
             /// config access is open for reading/writing data
             E_READWRITE
         };
-
 
     // member
 
@@ -75,7 +71,6 @@ class FWI_DLLPUBLIC ConfigAccess
 
         /** represent the current open mode */
         EOpenMode m_eMode;
-
 
     // native interface methods
 

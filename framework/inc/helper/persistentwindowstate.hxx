@@ -70,32 +70,26 @@ class PersistentWindowState :   public  ::cppu::WeakImplHelper2<
         /// we call SetWindowState one times only for the same frame!
         sal_Bool m_bWindowStateAlreadySet;
 
-
     // interface
 
     public:
 
-
         // ctor/dtor
                  PersistentWindowState(const css::uno::Reference< css::uno::XComponentContext >& xContext);
         virtual ~PersistentWindowState(                                                                   );
-
 
         // XInitialization
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
             throw(css::uno::Exception       ,
                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
         // XFrameActionListener
         virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
         // XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // helper
 
@@ -116,7 +110,6 @@ class PersistentWindowState :   public  ::cppu::WeakImplHelper2<
         static OUString implst_identifyModule(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                      const css::uno::Reference< css::frame::XFrame >&              xFrame);
 
-
         /** @short  retrieve the window state from the configuration.
 
             @param  rxContext
@@ -132,7 +125,6 @@ class PersistentWindowState :   public  ::cppu::WeakImplHelper2<
         static OUString implst_getWindowStateFromConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext      ,
                                                                const OUString&                                    sModuleName);
 
-
         /** @short  retrieve the window state from the container window.
 
             @param  xWindow
@@ -144,7 +136,6 @@ class PersistentWindowState :   public  ::cppu::WeakImplHelper2<
                     contains the information about position and size.
          */
         static OUString implst_getWindowStateFromWindow(const css::uno::Reference< css::awt::XWindow >& xWindow);
-
 
         /** @short  restore the position and size on the container window.
 
@@ -161,7 +152,6 @@ class PersistentWindowState :   public  ::cppu::WeakImplHelper2<
         static void implst_setWindowStateOnConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                   const OUString&                                    sModuleName   ,
                                                   const OUString&                                    sWindowState  );
-
 
         /** @short  restore the position and size on the container window.
 

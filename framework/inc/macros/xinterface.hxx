@@ -45,7 +45,6 @@ namespace framework{
 
 _________________________________________________________________________________________________________________*/
 
-
 //  private
 //  implementation of   XInterface::aquire()
 //                      XInterface::release()
@@ -63,7 +62,6 @@ ________________________________________________________________________________
         BASECLASS::release();                                                                                                                               \
     }
 
-
 //  private
 //  implementation of XInterface::queryInterface() without any other interfaces!
 
@@ -75,7 +73,6 @@ ________________________________________________________________________________
         /* ... ask baseclass for interfaces!                                                */                                                              \
         return BASECLASS::queryInterface( aType );                                                                                                          \
     }
-
 
 //  private
 //  implementation of XInterface::queryInterface() with max. 12 other interfaces!
@@ -96,7 +93,6 @@ ________________________________________________________________________________
         /* Return result of this search. */                                                                                                                 \
         return aReturn;                                                                                                                                     \
     }
-
 
 //  private
 //  implementation of XInterface::queryInterface() with more then 12 other interfaces!
@@ -124,7 +120,6 @@ ________________________________________________________________________________
         return aReturn;                                                                                                                                     \
     }
 
-
 //  private
 //  complete implementation of XInterface for different use cases
 
@@ -139,7 +134,6 @@ ________________________________________________________________________________
 #define PRIVATE_DEFINE_XINTERFACE_LARGE( CLASS, BASECLASS, INTERFACES_FIRST, INTERFACES_SECOND )                                                            \
     PRIVATE_DEFINE_XINTERFACE_AQUIRE_RELEASE( CLASS, BASECLASS )                                                                                            \
     PRIVATE_DEFINE_XINTERFACE_QUERYINTERFACE_LARGE( CLASS, BASECLASS, INTERFACES_FIRST, INTERFACES_SECOND )
-
 
 //  private
 //  help macros to replace INTERFACES in queryInterface() [see before]
@@ -195,10 +189,8 @@ ________________________________________________________________________________
     PRIVATE_DEFINE_INTERFACE_10( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8, INTERFACE9, INTERFACE10 ),                                             \
     INTERFACE11
 
-
 //  public
 //  help macros for follow XInterface definitions
-
 
 //  Use it as parameter for DEFINE_XINTERFACE_X(), if you CAN use an interface directly in queryInterface()!
 #define DIRECT_INTERFACE( INTERFACE ) \
@@ -209,7 +201,6 @@ ________________________________________________________________________________
 #define DERIVED_INTERFACE( BASEINTERFACE, DERIVEDINTERFACE ) \
     static_cast< BASEINTERFACE* >( static_cast< DERIVEDINTERFACE* >( this ) )
 
-
 //  public
 //  declaration of XInterface
 
@@ -218,10 +209,8 @@ ________________________________________________________________________________
     virtual void                        SAL_CALL acquire       (                                            ) throw() SAL_OVERRIDE;  \
     virtual void                        SAL_CALL release       (                                            ) throw() SAL_OVERRIDE;
 
-
 //  public
 //  implementation of XInterface
-
 
 //  implementation of XInterface with 0 additional interface for queryInterface()
 #define DEFINE_XINTERFACE_0( CLASS, BASECLASS )                                                                     \

@@ -33,16 +33,13 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
-
 // namespaces
 
 namespace framework{
 
-
 class WindowHelper
 {
     public:
-
 
 static OUString getWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
@@ -67,7 +64,6 @@ static OUString getWindowState(const css::uno::Reference< css::awt::XWindow >& x
 
     return OStringToOUString(sWindowState,RTL_TEXTENCODING_UTF8);
 }
-
 
 static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
                            const OUString&                          sWindowState)
@@ -98,7 +94,6 @@ static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWind
 
     // <- SOLAR SAFE ----------------------------
 }
-
 
 static sal_Bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {

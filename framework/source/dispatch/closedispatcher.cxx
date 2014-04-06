@@ -40,7 +40,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/processfactory.hxx>
 
-
 using namespace com::sun::star;
 
 namespace framework{
@@ -53,8 +52,6 @@ namespace fpf = ::framework::pattern::frame;
 const char URL_CLOSEDOC[] = ".uno:CloseDoc";
 const char URL_CLOSEWIN[] = ".uno:CloseWin";
 const char URL_CLOSEFRAME[] = ".uno:CloseFrame";
-
-
 
 CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponentContext >& rxContext ,
                                  const css::uno::Reference< css::frame::XFrame >&          xFrame ,
@@ -78,11 +75,9 @@ CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponent
     }
 }
 
-
 CloseDispatcher::~CloseDispatcher()
 {
 }
-
 
 void SAL_CALL CloseDispatcher::dispatch(const css::util::URL&                                  aURL      ,
                                         const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
@@ -90,7 +85,6 @@ void SAL_CALL CloseDispatcher::dispatch(const css::util::URL&                   
 {
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
-
 
 css::uno::Sequence< sal_Int16 > SAL_CALL CloseDispatcher::getSupportedCommandGroups()
     throw(css::uno::RuntimeException, std::exception)
@@ -100,7 +94,6 @@ css::uno::Sequence< sal_Int16 > SAL_CALL CloseDispatcher::getSupportedCommandGro
     lGroups[1] = css::frame::CommandGroup::DOCUMENT;
     return lGroups;
 }
-
 
 css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
     throw(css::uno::RuntimeException, std::exception)
@@ -126,20 +119,17 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::
     return css::uno::Sequence< css::frame::DispatchInformation >();
 }
 
-
 void SAL_CALL CloseDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                  const css::util::URL&                                     /*aURL*/     )
     throw(css::uno::RuntimeException, std::exception)
 {
 }
 
-
 void SAL_CALL CloseDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                     const css::util::URL&                                     /*aURL*/     )
     throw(css::uno::RuntimeException, std::exception)
 {
 }
-
 
 void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                         const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
@@ -227,7 +217,6 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     else
         m_aAsyncCallback.Post(0);
 }
-
 
 /**
     @short      asynchronous callback
@@ -426,7 +415,6 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     return 0;
 }
 
-
 sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame                ,
                                                               sal_Bool                                   bAllowSuspend         ,
                                                               sal_Bool                                   bCloseAllOtherViewsToo,
@@ -479,7 +467,6 @@ sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Referenc
     return sal_True;
 }
 
-
 sal_Bool CloseDispatcher::implts_closeFrame()
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
@@ -505,7 +492,6 @@ sal_Bool CloseDispatcher::implts_closeFrame()
 
     return sal_True;
 }
-
 
 sal_Bool CloseDispatcher::implts_establishBackingMode()
 {
@@ -538,7 +524,6 @@ sal_Bool CloseDispatcher::implts_establishBackingMode()
     return sal_True;
 }
 
-
 sal_Bool CloseDispatcher::implts_terminateApplication()
 {
     css::uno::Reference< css::uno::XComponentContext > xContext;
@@ -551,7 +536,6 @@ sal_Bool CloseDispatcher::implts_terminateApplication()
 
     return xDesktop->terminate();
 }
-
 
 void CloseDispatcher::implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                         sal_Int16                                                   nState   ,
@@ -567,7 +551,6 @@ void CloseDispatcher::implts_notifyResultListener(const css::uno::Reference< css
 
     xListener->dispatchFinished(aEvent);
 }
-
 
 css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRightTargetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame ,
                                                                                               const OUString&                           sTarget)

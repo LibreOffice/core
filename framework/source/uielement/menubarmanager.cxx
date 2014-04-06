@@ -240,18 +240,15 @@ Any SAL_CALL MenuBarManager::queryInterface( const Type & rType ) throw ( Runtim
     return OWeakObject::queryInterface( rType );
 }
 
-
 void SAL_CALL MenuBarManager::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
-
 void SAL_CALL MenuBarManager::release() throw()
 {
     OWeakObject::release();
 }
-
 
 Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw (RuntimeException, std::exception)
 {
@@ -708,7 +705,6 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
         m_xModuleImageManager.clear();
 }
 
-
 void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
 {
 
@@ -745,9 +741,7 @@ static void lcl_CheckForChildren(Menu* pMenu, sal_uInt16 nItemId)
         pMenu->EnableItem( nItemId, pThisPopup->GetItemCount() ? true : false );
 }
 
-
 // vcl handler
-
 
 namespace {
 
@@ -976,7 +970,6 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
     return 1;
 }
 
-
 IMPL_LINK( MenuBarManager, Deactivate, Menu *, pMenu )
 {
     if ( pMenu == m_pVCLMenu )
@@ -1083,7 +1076,6 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
     return 1;
 }
 
-
 IMPL_LINK_NOARG(MenuBarManager, Highlight)
 {
     return 0;
@@ -1136,7 +1128,6 @@ OUString MenuBarManager::RetrieveLabelFromCommand(const OUString& rCmdURL)
 {
     return framework::RetrieveLabelFromCommand(rCmdURL, m_xContext, m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Label");
 }
-
 
 sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandler )
 {

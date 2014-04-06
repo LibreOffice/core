@@ -30,7 +30,6 @@
 namespace framework
 {
 
-
 //  XInterface, XTypeProvider, XServiceInfo
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2 (    UriAbbreviation                                                         ,
@@ -64,9 +63,5 @@ OUString SAL_CALL UriAbbreviation::abbreviateString(const css::uno::Reference< c
 }
 
 } // namespace framework
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

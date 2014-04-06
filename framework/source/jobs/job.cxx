@@ -34,7 +34,6 @@
 
 namespace framework{
 
-
 /**
     @short      standard ctor
     @descr      It initialize this new instance. But it set some generic parameters here only.
@@ -61,7 +60,6 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
     , m_eRunState          (E_NEW                        )
 {
 }
-
 
 /**
     @short      standard ctor
@@ -90,7 +88,6 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
 {
 }
 
-
 /**
     @short  superflous!
     @descr  Releasing of memory and reference must be done inside die() call.
@@ -99,7 +96,6 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
 Job::~Job()
 {
 }
-
 
 /**
     @short  set (or delete) a listener for sending dispatch result events
@@ -143,7 +139,6 @@ void Job::setJobData( const JobData& aData )
 
     m_aJobCfg = aData;
 }
-
 
 /**
     @short  runs the job
@@ -271,7 +266,6 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     die();
 }
 
-
 /**
     @short  kill this job
     @descr  It doesn't matter if this request is called from inside or
@@ -312,7 +306,6 @@ void Job::die()
     m_bPendingCloseFrame = sal_False;
     m_bPendingCloseModel = sal_False;
 }
-
 
 /**
     @short  generates list of arguments for job execute
@@ -414,7 +407,6 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     return lAllArgs;
 }
 
-
 /**
     @short  analyze the given job result and change the job configuration
     @descr  Note: Some results can be handled only, if this job has a valid configuration!
@@ -475,7 +467,6 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
         m_xResultListener->dispatchFinished(aEvent);
     }
 }
-
 
 /**
     @short  starts listening for office shutdown and closing of our
@@ -552,7 +543,6 @@ void Job::impl_startListening()
     }
 }
 
-
 /**
     @short  release listener connection for office shutdown
     @descr  see description of impl_startListening()
@@ -613,7 +603,6 @@ void Job::impl_stopListening()
     }
 }
 
-
 /**
     @short  callback from any asynchronous executed job
 
@@ -653,7 +642,6 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
     m_aAsyncWait.set();
 }
 
-
 /**
     @short  prevent internal wrapped job against office termination
     @descr  This event is broadcasted by the desktop instance and ask for an office termination.
@@ -692,8 +680,6 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
     }
 }
 
-
-
 /**
     @short  inform us about office termination
     @descr  Instead of the method queryTermination(), here is no chance to disagree with that.
@@ -712,7 +698,6 @@ void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& ) thr
     die();
     // Do nothing else here. Our internal resources was released ...
 }
-
 
 /**
     @short  prevent internal wrapped job against frame closing
@@ -794,7 +779,6 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
     // call us back. We must give him the chance to finish it's work successfully.
 }
 
-
 /**
     @short  inform us about frame closing
     @descr  Instead of the method queryClosing(), here is no chance to disagree with that.
@@ -808,7 +792,6 @@ void SAL_CALL Job::notifyClosing( const css::lang::EventObject& ) throw(css::uno
     die();
     // Do nothing else here. Our internal resources was released ...
 }
-
 
 /**
     @short      shouldn't be called normaly

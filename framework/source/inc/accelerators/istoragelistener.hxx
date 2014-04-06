@@ -23,13 +23,10 @@
 #include <general.h>
 #include <stdtypes.h>
 
-
-
 // definition
 
 namespace framework
 {
-
 
 /**
     TODO document me
@@ -37,7 +34,6 @@ namespace framework
 class IStorageListener
 {
     public:
-
 
         /** @short  TODO */
         virtual void changesOccurred(const OUString& sPath) = 0;

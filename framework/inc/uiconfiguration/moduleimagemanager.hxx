@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UICONFIGURATION_MODULEIMAGEMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_UICONFIGURATION_MODULEIMAGEMANAGER_HXX
 
-
 /** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
                with solaris headers ...
 */

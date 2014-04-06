@@ -23,14 +23,10 @@
 #include <stdtypes.h>
 #include <general.h>
 
-
 #include <rtl/ustring.hxx>
 #include <fwidllapi.h>
 
-
 namespace framework{
-
-
 
 /**
     @short  defines all constant values used within a job environment.

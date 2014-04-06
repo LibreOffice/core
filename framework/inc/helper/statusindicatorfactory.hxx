@@ -24,7 +24,6 @@
 // with solaris headers ...
 #include <vector>
 
-
 // include files of own module
 #include <helper/wakeupthread.hxx>
 #include <macros/xinterface.hxx>
@@ -32,7 +31,6 @@
 #include <macros/xserviceinfo.hxx>
 #include <macros/generic.hxx>
 #include <general.h>
-
 
 // include uno interfaces
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -54,10 +52,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <osl/thread.hxx>
 
-
 namespace framework{
-
-
 
 /**
     @descr  This struct hold some information about all currently running progress proccesses.
@@ -83,10 +78,8 @@ struct IndicatorInfo
         /** @short  the last set value for this indicator */
         sal_Int32 m_nValue;
 
-
     // interface
     public:
-
 
         /** @short  initialize new instance of this class
 
@@ -109,14 +102,12 @@ struct IndicatorInfo
             m_nValue     = 0         ;
         }
 
-
         /** @short  Don't forget to free used references!
          */
         ~IndicatorInfo()
         {
             m_xIndicator.clear();
         }
-
 
         /** @short  Used to locate an info struct inside a stl structure ...
 
@@ -130,10 +121,8 @@ struct IndicatorInfo
         }
 };
 
-
 /** @descr  Define a lits of child indicator objects and her data. */
 typedef ::std::vector< IndicatorInfo > IndicatorStack;
-
 
 /** @short          implement a factory service to create new status indicator objects
 
@@ -201,7 +190,6 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper4<
         /** prevent recursive calling of Application::Reschedule(). */
         static sal_Int32 m_nInReschedule;
 
-
     // interface
 
     public:
@@ -227,22 +215,18 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper4<
             return aSeq;
         }
 
-
         // XInitialization
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
             throw(css::uno::Exception       ,
                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
         // XStatusIndicatorFactory
         virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator()
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
         // XUpdatable
         virtual void SAL_CALL update()
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
         // similar (XStatusIndicator)
         virtual void start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
@@ -259,20 +243,17 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper4<
         virtual void SAL_CALL setValue(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                              sal_Int32                                           nValue);
 
-
     // specials
 
     protected:
 
         virtual ~StatusIndicatorFactory();
 
-
     // helper
     private:
 
         /** @short  show the parent window of this progress ...
                     if it's allowed to do so.
-
 
             @descr  By default we show the parent window automaticly
                     if this progress is used.

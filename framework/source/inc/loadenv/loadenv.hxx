@@ -19,7 +19,6 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_LOADENV_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_LOADENV_HXX
 
-
 #include <loadenv/loadenvexception.hxx>
 #include <loadenv/actionlockguard.hxx>
 
@@ -37,7 +36,6 @@
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase2.hxx>
-
 
 namespace framework {
 
@@ -305,8 +303,6 @@ public:
      */
     void startLoading();
 
-
-
     /** @short  wait for an alreay running load request (started by calling
                 startLoading() before).
 
@@ -328,7 +324,6 @@ public:
                 the whole runtime cant be used any longer.
      */
     sal_Bool waitWhileLoading(sal_uInt32 nTimeout = 0);
-
 
     /** TODO document me ... */
     css::uno::Reference< css::lang::XComponent > getTargetComponent() const;
@@ -380,8 +375,6 @@ public:
 
     /** TODO document me ... */
     css::uno::Reference< css::uno::XInterface > impl_searchLoader();
-
-
 
     /** @short  it means; show the frame, bring it to front,
                 might set the right icon etcpp. in case loading was

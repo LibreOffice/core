@@ -74,10 +74,7 @@
 #include <boost/bind.hpp>
 #include <svtools/acceleratorexecute.hxx>
 
-
 //  namespaces
-
-
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
@@ -143,8 +140,6 @@ throw ( RuntimeException, std::exception )
         m_xReceiver->statusChanged( Event );
 }
 
-
-
 static sal_Int16 getImageTypeFromBools( sal_Bool bBig )
 {
     sal_Int16 n( 0 );
@@ -177,9 +172,7 @@ static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager
     return xLayoutManager;
 }
 
-
 //  XInterface, XTypeProvider, XServiceInfo
-
 
 ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
                                 const Reference< XFrame >& rFrame,
@@ -475,7 +468,6 @@ void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::
          {
          }
 
-
     }
     m_bUpdateControllers = false;
 }
@@ -749,7 +741,6 @@ void ToolBarManager::RemoveControllers()
         return;
 
     m_aSubToolBarControllerMap.clear();
-
 
     // i90033
     // Remove item window pointers from the toolbar. They were
@@ -2257,7 +2248,5 @@ bool ToolBarManager::RetrieveShortcut( const OUString& rCommandURL, OUString& rS
 }
 
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

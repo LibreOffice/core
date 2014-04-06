@@ -236,7 +236,6 @@ void MenuBarWrapper::impl_fillNewData()
         pMenuBarManager->SetItemContainer( m_xConfigData );
 }
 
-
 void MenuBarWrapper::fillPopupControllerCache()
 {
     if ( m_bRefreshPopupControllerCache )

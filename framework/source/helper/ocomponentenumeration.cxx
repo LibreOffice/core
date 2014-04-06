@@ -30,7 +30,6 @@ using namespace ::cppu                          ;
 using namespace ::osl                           ;
 using namespace ::rtl                           ;
 
-
 //  constructor
 
 OComponentEnumeration::OComponentEnumeration( const Sequence< css::uno::Reference< XComponent > >& seqComponents )
@@ -42,7 +41,6 @@ OComponentEnumeration::OComponentEnumeration( const Sequence< css::uno::Referenc
     SAL_WARN_IF( !impldbg_checkParameter_OComponentEnumerationCtor( seqComponents ), "fwk", "OComponentEnumeration::OComponentEnumeration(): Invalid parameter detected!" );
 }
 
-
 //  destructor
 
 OComponentEnumeration::~OComponentEnumeration()
@@ -50,7 +48,6 @@ OComponentEnumeration::~OComponentEnumeration()
     // Reset instance, free memory ....
     impl_resetObject();
 }
-
 
 //  XEventListener
 void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) throw( RuntimeException, std::exception )
@@ -66,7 +63,6 @@ void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) thro
     impl_resetObject();
 }
 
-
 //  XEnumeration
 sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeException, std::exception )
 {
@@ -78,7 +74,6 @@ sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeExcepti
     // => We have more elements if current position less then the length of the list!
     return ( m_nPosition < (sal_uInt32)(m_seqComponents.getLength()) );
 }
-
 
 //  XEnumeration
 
@@ -105,7 +100,6 @@ Any SAL_CALL OComponentEnumeration::nextElement() throw(    NoSuchElementExcepti
     return aComponent;
 }
 
-
 //  proteced method
 
 void OComponentEnumeration::impl_resetObject()
@@ -125,9 +119,7 @@ void OComponentEnumeration::impl_resetObject()
     m_nPosition = 0 ;
 }
 
-
 //  debug methods
-
 
 /*-----------------------------------------------------------------------------------------------------------------
     The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
@@ -138,7 +130,6 @@ void OComponentEnumeration::impl_resetObject()
         If you miss a test for one of this parameters, contact the autor or add it himself !(?)
         But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
-
 
 // An empty list is allowed ... hasMoreElements() will return false then!
 sal_Bool OComponentEnumeration::impldbg_checkParameter_OComponentEnumerationCtor( const Sequence< css::uno::Reference< XComponent > >& seqComponents )
@@ -155,7 +146,6 @@ sal_Bool OComponentEnumeration::impldbg_checkParameter_OComponentEnumerationCtor
     // Return result of check.
     return bOK ;
 }
-
 
 sal_Bool OComponentEnumeration::impldbg_checkParameter_disposing( const EventObject& aEvent )
 {

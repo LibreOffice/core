@@ -33,10 +33,7 @@
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
-
 namespace framework{
-
-
 
 /** @short  implements a job component, which handle the special
             feature to show a suitable help page for every (visible!)
@@ -54,34 +51,27 @@ class HelpOnStartup : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XS
         /** @short  reference to an uno service manager. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-
         /** @short  such module manager is used to classify new opened documents. */
         css::uno::Reference< css::frame::XModuleManager2 > m_xModuleManager;
-
 
         /** @short  is needed to locate a might open help frame. */
         css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
 
-
         /** @short  provides read access to the underlying configuration. */
         css::uno::Reference< css::container::XNameAccess > m_xConfig;
-
 
         /** @short  knows the current locale of this office session,
                     which is needed to build complete help URLs.
          */
         OUString m_sLocale;
 
-
         /** @short  knows the current operating system of this office session,
                     which is needed to build complete help URLs.
          */
         OUString m_sSystem;
 
-
     // native interface
     public:
-
 
         /** @short  create new instance of this class.
 
@@ -91,7 +81,6 @@ class HelpOnStartup : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XS
          */
         HelpOnStartup(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-
         /** @short  does nothing real ...
 
             @descr  But it should exists as virtual function,
@@ -100,10 +89,8 @@ class HelpOnStartup : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XS
          */
         virtual ~HelpOnStartup();
 
-
     // uno interface
     public:
-
 
         // css.lang.XServiceInfo
         DECLARE_XSERVICEINFO
@@ -118,10 +105,8 @@ class HelpOnStartup : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XS
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // helper
     private:
-
 
         /** @short  analyze the given job arguments, try to locate a model reference
                     and try to classify this model.
@@ -138,7 +123,6 @@ class HelpOnStartup : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XS
          */
         OUString its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments);
 
-
         /** @short  tries to locate the open help module and return
                     the url of the currently shown help content.
 
@@ -149,7 +133,6 @@ class HelpOnStartup : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XS
                     or an empty value if the help isnt still open.
          */
         OUString its_getCurrentHelpURL();
-
 
         /** @short  checks if the given help url match to a default help url
                     of any office module.
@@ -162,7 +145,6 @@ class HelpOnStartup : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XS
                     sal_False otherwise.
          */
         sal_Bool its_isHelpUrlADefaultOne(const OUString& sHelpURL);
-
 
         /** @short  checks, if the help module should be shown automaticly for the
                     currently opened office module.
@@ -179,7 +161,6 @@ class HelpOnStartup : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XS
                     an empty value if such automatism was disabled for the specified office module.
          */
         OUString its_checkIfHelpEnabledAndGetURL(const OUString& sModule);
-
 
         /** @short  create a help URL for the given parameters.
 

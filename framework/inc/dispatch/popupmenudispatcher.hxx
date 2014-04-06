@@ -57,7 +57,6 @@ namespace framework{
 typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString         ,
                                                         OUStringHash > IMPL_ListenerHashContainer;
 
-
 /*-************************************************************************************************************
     @short          helper for desktop only(!) to create new tasks on demand for dispatches
     @descr          Use this class as member only! Never use it as baseclass.
@@ -113,7 +112,6 @@ class PopupMenuDispatcher :     public  ::cppu::WeakImplHelper5<
 
         virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl,
                                                     const css::util::URL&                                     aURL  ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
 
         //   XFrameActionListener
         virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& aEvent ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

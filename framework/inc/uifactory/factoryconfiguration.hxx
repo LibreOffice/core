@@ -34,13 +34,10 @@
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
 
-
 //  Namespace
-
 
 namespace framework
 {
-
 
 //  Configuration access class for PopupMenuControllerFactory implementation
 

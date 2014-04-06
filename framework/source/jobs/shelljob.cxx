@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 // include own header
 
 #include <jobs/shelljob.hxx>
 #include <jobs/jobconst.hxx>
 #include <services.h>
-
 
 // include others
 
@@ -35,15 +32,12 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-
 // include interfaces
 
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 
-
 namespace framework{
-
 
 /** address job configuration inside argument set provided on method execute(). */
 static const OUString PROP_JOBCONFIG("JobConfig");
@@ -60,8 +54,6 @@ static const OUString PROP_DEACTIVATEJOBIFDONE("DeactivateJobIfDone");
 /** address job configuration property "CheckExitCode". */
 static const OUString PROP_CHECKEXITCODE("CheckExitCode");
 
-
-
 DEFINE_XSERVICEINFO_MULTISERVICE_2(ShellJob                   ,
                                    ::cppu::OWeakObject        ,
                                    SERVICENAME_JOB            ,
@@ -77,17 +69,14 @@ DEFINE_INIT_SERVICE(ShellJob,
                     }
                    )
 
-
 ShellJob::ShellJob(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext    (xContext)
 {
 }
 
-
 ShellJob::~ShellJob()
 {
 }
-
 
 css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::NamedValue >& lJobArguments)
     throw(css::lang::IllegalArgumentException,
@@ -126,7 +115,6 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
     return css::uno::Any();
 }
 
-
 css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 {
     css::uno::Sequence< css::beans::NamedValue > aAnswer(1);
@@ -135,7 +123,6 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 
     return css::uno::makeAny(aAnswer);
 }
-
 
 OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
 {
@@ -152,7 +139,6 @@ OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
 
     return OUString();
 }
-
 
 sal_Bool ShellJob::impl_execute(const OUString&                       sCommand      ,
                                   const css::uno::Sequence< OUString >& lArguments    ,

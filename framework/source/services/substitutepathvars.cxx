@@ -394,9 +394,7 @@ static const FixedVariable aFixedVarTable[] =
     { RTL_CONSTASCII_STRINGPARAM("$(brandbaseurl)"),PREDEFVAR_BRANDBASEURL, true  }
 };
 
-
 //      Implementation helper classes
-
 
 OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystemFromString( const OUString& aOSString )
 {
@@ -488,10 +486,7 @@ void SubstitutePathVariables_Impl::Commit()
 {
 }
 
-
-
 //      private methods
-
 
 OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystem()
 {
@@ -823,9 +818,7 @@ throw ( NoSuchElementException, RuntimeException, std::exception )
     return impl_getSubstituteVariableValue( aVariable );
 }
 
-
 //      protected methods
-
 
 IMPL_LINK_NOARG(SubstitutePathVariables, implts_ConfigurationNotify)
 {

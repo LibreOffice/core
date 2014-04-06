@@ -98,13 +98,11 @@ void Desktop::constructorInit()
     OFrames* pFramesHelper = new OFrames( this, &m_aChildTaskContainer );
     m_xFramesHelper = css::uno::Reference< css::frame::XFrames >( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
 
-
     // Initialize a new dispatchhelper-object to handle dispatches.
     // We use these helper as slave for our interceptor helper ... not directly!
     // But he is event listener on THIS instance!
     DispatchProvider* pDispatchHelper = new DispatchProvider( m_xContext, this );
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
-
 
     // Initialize a new interception helper object to handle dispatches and implement an interceptor mechanism.
     // Set created dispatch provider as slowest slave of it.
@@ -213,7 +211,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL Desktop::getTypes(  ) throw(css::u
     );
 }
 
-
 sal_Bool SAL_CALL Desktop::terminate()
     throw( css::uno::RuntimeException, std::exception )
 {
@@ -231,7 +228,6 @@ sal_Bool SAL_CALL Desktop::terminate()
 
     aReadLock.clear();
 
-
     // Ask normal terminate listener. They could stop terminate without closing any open document.
     Desktop::TTerminateListenerList lCalledTerminationListener;
     sal_Bool                      bVeto = sal_False;
@@ -242,7 +238,6 @@ sal_Bool SAL_CALL Desktop::terminate()
         return sal_False;
     }
 
-
     // try to close all open frames.
     // Allow using of any UI ... because Desktop.terminate() was designed as UI functionality in the past.
     sal_Bool bAllowUI      = sal_True;
@@ -252,7 +247,6 @@ sal_Bool SAL_CALL Desktop::terminate()
         impl_sendCancelTerminationEvent(lCalledTerminationListener);
         return sal_False;
     }
-
 
     // Normal listener had no problem ...
     // all frames was closed ...
@@ -375,7 +369,6 @@ bool SAL_CALL Desktop::terminateQuickstarterToo()
     return terminate();
 }
 
-
 void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
     throw( css::uno::RuntimeException, std::exception )
 {
@@ -413,7 +406,6 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
     // No lock required ... container is threadsafe by itself.
     m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
 }
-
 
 void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
     throw( css::uno::RuntimeException, std::exception )
@@ -719,7 +711,6 @@ void SAL_CALL Desktop::registerDispatchProviderInterceptor( const css::uno::Refe
     xInterceptionHelper->registerDispatchProviderInterceptor( xInterceptor );
 }
 
-
 void SAL_CALL Desktop::releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
     throw( css::uno::RuntimeException, std::exception)
 {
@@ -871,7 +862,6 @@ sal_Bool SAL_CALL Desktop::isActive() throw( css::uno::RuntimeException, std::ex
     return sal_True;
 }
 
-
 sal_Bool SAL_CALL Desktop::setComponent( const css::uno::Reference< css::awt::XWindow >&       /*xComponentWindow*/ ,
                                          const css::uno::Reference< css::frame::XController >& /*xController*/      ) throw( css::uno::RuntimeException, std::exception )
 {
@@ -895,7 +885,6 @@ void SAL_CALL Desktop::contextChanged() throw( css::uno::RuntimeException, std::
 void SAL_CALL Desktop::addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& ) throw( css::uno::RuntimeException, std::exception )
 {
 }
-
 
 //   css::frame::XFrame
 void SAL_CALL Desktop::removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& ) throw( css::uno::RuntimeException, std::exception )
@@ -934,7 +923,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
 {
     css::uno::Reference< css::frame::XFrame > xTarget;
 
-
     // 0) Ignore wrong parameter!
     //    We don't support search for following special targets.
     //    If we reject this requests - we mustnt check for such names
@@ -952,11 +940,8 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         return NULL;
     }
 
-
     // I) check for special defined targets first which must be handled exclusive.
     //    force using of "if() else if() ..."
-
-
 
     // I.I) "_blank"
     //  create a new task as child of this desktop instance
@@ -968,7 +953,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         xTarget = aCreator.createTask(sTargetFrameName,sal_False);
     }
 
-
     // I.II) "_top"
     //  We are top by definition
 
@@ -976,7 +960,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
     {
         xTarget = this;
     }
-
 
     // I.III) "_self", ""
     //  This mean this "frame" in every case.
@@ -999,8 +982,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         //  TASK and CREATE are handled special.
         //  But note: Such flags are not valid for the desktop - especialy SIBLINGS or PARENT.
 
-
-
         // II.I) SELF
         //  Check for right name. If it's the searched one return ourself - otherwise
         //  ignore this flag.
@@ -1012,7 +993,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         {
             xTarget = this;
         }
-
 
         // II.II) TASKS
         //  This is a special flag. Normaly it regulate search inside tasks and forbid access to parent trees.
@@ -1030,7 +1010,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
             xTarget = m_aChildTaskContainer.searchOnDirectChildrens(sTargetFrameName);
         }
 
-
         // II.III) CHILDREN
         //  Search on all children for the given target name.
         //  An empty name value can't occur here - because it must be already handled as "_self"
@@ -1044,7 +1023,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         {
             xTarget = m_aChildTaskContainer.searchOnAllChildrens(sTargetFrameName);
         }
-
 
         // II.IV) CREATE
         //  If we haven't found any valid target frame by using normal flags - but user allowed us to create
@@ -1329,7 +1307,6 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     }
 }
 
-
 ::sal_Int32 SAL_CALL Desktop::leaseNumber( const css::uno::Reference< css::uno::XInterface >& xComponent )
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException, std::exception         )
@@ -1337,7 +1314,6 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     return m_xTitleNumberGenerator->leaseNumber (xComponent);
 }
-
 
 void SAL_CALL Desktop::releaseNumber( ::sal_Int32 nNumber )
     throw (css::lang::IllegalArgumentException,
@@ -1347,7 +1323,6 @@ void SAL_CALL Desktop::releaseNumber( ::sal_Int32 nNumber )
     m_xTitleNumberGenerator->releaseNumber (nNumber);
 }
 
-
 void SAL_CALL Desktop::releaseNumberForComponent( const css::uno::Reference< css::uno::XInterface >& xComponent )
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException, std::exception         )
@@ -1355,7 +1330,6 @@ void SAL_CALL Desktop::releaseNumberForComponent( const css::uno::Reference< css
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     m_xTitleNumberGenerator->releaseNumberForComponent (xComponent);
 }
-
 
 OUString SAL_CALL Desktop::getUntitledPrefix()
     throw (css::uno::RuntimeException, std::exception)
@@ -1685,7 +1659,6 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
     return lPropertyDescriptor;
 }
 
-
 void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lCalledListener,
                                              sal_Bool&                      bVeto          )
 {
@@ -1726,7 +1699,6 @@ void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lC
     }
 }
 
-
 void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerList& lCalledListener)
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -1750,7 +1722,6 @@ void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerL
         {}
     }
 }
-
 
 void Desktop::impl_sendNotifyTerminationEvent()
 {
@@ -1781,7 +1752,6 @@ void Desktop::impl_sendNotifyTerminationEvent()
         }
     }
 }
-
 
 sal_Bool Desktop::impl_closeFrames(sal_Bool bAllowUI)
 {

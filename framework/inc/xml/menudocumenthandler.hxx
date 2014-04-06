@@ -96,7 +96,6 @@ class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase :
         ::com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > m_aItemProp;
 };
 
-
 class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase
 {
     public:
@@ -133,7 +132,6 @@ class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBas
           com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuBarContainer;
           com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
 };  // OReadMenuDocumentHandler
-
 
 class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
 {
@@ -173,7 +171,6 @@ class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
         com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
 };  // OReadMenuBarHandler
 
-
 class FWE_DLLPUBLIC OReadMenuHandler : public ReadMenuDocumentHandlerBase
 {
     public:
@@ -210,7 +207,6 @@ class FWE_DLLPUBLIC OReadMenuHandler : public ReadMenuDocumentHandlerBase
         com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuContainer;
         com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
 }; // OReadMenuHandler
-
 
 class FWE_DLLPUBLIC OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
 {
@@ -253,7 +249,6 @@ class FWE_DLLPUBLIC OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
         com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xComponentContext;
         NextElementClose    m_nNextElementExpected;
 }; // OReadMenuPopupHandler
-
 
 class FWE_DLLPUBLIC OWriteMenuDocumentHandler
 {

@@ -32,10 +32,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
-
 namespace framework{
-
-
 
 /** @short  implements a job component which can be used
             to execute system shell commands.
@@ -54,14 +51,11 @@ class ShellJob : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServic
     // member
     private:
 
-
         /** @short  reference to an uno service manager. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-
     // native interface
     public:
-
 
         /** @short  create new instance of this class.
 
@@ -71,7 +65,6 @@ class ShellJob : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServic
          */
         ShellJob(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-
         /** @short  does nothing real ...
 
             @descr  But it should exists as virtual function,
@@ -80,10 +73,8 @@ class ShellJob : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServic
          */
         virtual ~ShellJob();
 
-
     // uno interface
     public:
-
 
         // css.lang.XServiceInfo
         DECLARE_XSERVICEINFO
@@ -94,10 +85,8 @@ class ShellJob : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServic
                   css::uno::Exception                ,
                   css::uno::RuntimeException, std::exception         ) SAL_OVERRIDE;
 
-
     // helper
     private:
-
 
         /** generate a return value for method execute()
             which will force deactivation of this job for further requests.
@@ -105,7 +94,6 @@ class ShellJob : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServic
             @return an Any following the job protocol for deactivation.
          */
         static css::uno::Any impl_generateAnswer4Deactivation();
-
 
         /** substitute all might existing placeholder variables
             within the configured command.
@@ -121,7 +109,6 @@ class ShellJob : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServic
             @return the substituted command.
          */
         OUString impl_substituteCommandVariables(const OUString& sCommand);
-
 
         /** executes the command.
 

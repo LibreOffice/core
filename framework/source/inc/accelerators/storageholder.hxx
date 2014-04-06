@@ -26,11 +26,8 @@
 
 #include <com/sun/star/embed/XStorage.hpp>
 
-
 namespace framework
 {
-
-
 
 /**
     TODO document me
@@ -64,7 +61,6 @@ class StorageHolder
                                  OUStringHash                ,
                                  ::std::equal_to< OUString > > TPath2StorageInfo;
 
-
     // member
     private:
         mutable osl::Mutex m_mutex;
@@ -75,35 +71,28 @@ class StorageHolder
         /** @short  TODO */
         TPath2StorageInfo m_lStorages;
 
-
     // interface
     public:
-
 
         /** @short  TODO
          */
         StorageHolder();
 
-
         /** @short  TODO
          */
         virtual ~StorageHolder();
-
 
         /** @short  TODO
          */
         virtual void forgetCachedStorages();
 
-
         /** @short  TODO
          */
         virtual void setRootStorage(const css::uno::Reference< css::embed::XStorage >& xRoot);
 
-
         /** @short  TODO
          */
         virtual css::uno::Reference< css::embed::XStorage > getRootStorage() const;
-
 
         /** @short  TODO
                     open or get!
@@ -111,58 +100,47 @@ class StorageHolder
         virtual css::uno::Reference< css::embed::XStorage > openPath(const OUString& sPath    ,
                                                                            sal_Int32        nOpenMode);
 
-
         /** @short  TODO
          */
         virtual StorageHolder::TStorageList getAllPathStorages(const OUString& sPath);
-
 
         /** @short  TODO
          */
         virtual void commitPath(const OUString& sPath);
 
-
         /** @short  TODO
          */
         virtual void closePath(const OUString& sPath);
 
-
         /** @short  TODO
          */
         virtual void notifyPath(const OUString& sPath);
-
 
         /** @short  TODO
          */
         virtual void addStorageListener(      IStorageListener* pListener,
                                         const OUString&  sPath    );
 
-
         /** @short  TODO
          */
         virtual void removeStorageListener(      IStorageListener* pListener,
                                            const OUString&  sPath    );
 
-
         /** @short  TODO
          */
         virtual OUString getPathOfStorage(const css::uno::Reference< css::embed::XStorage >& xStorage);
-
 
         /** @short  TODO
          */
         virtual css::uno::Reference< css::embed::XStorage > getParentStorage(const css::uno::Reference< css::embed::XStorage >& xChild);
 
-
         /** @short  TODO
          */
         virtual css::uno::Reference< css::embed::XStorage > getParentStorage(const OUString& sChildPath);
 
-
         /** @short  TODO
          */
         void operator=(const StorageHolder& rCopy);
-
 
         /** @short  opens a sub element of the specified base storage.
 
@@ -197,15 +175,12 @@ class StorageHolder
                                                                                        sal_Int32                                    eOpenMode     ,
                                                                                        sal_Bool                                     bAllowFallback);
 
-
         // helper
         private:
-
 
             /** @short  TODO
              */
             static OUString impl_st_normPath(const OUString& sPath);
-
 
             /** @short  TODO
              */

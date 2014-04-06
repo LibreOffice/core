@@ -87,7 +87,6 @@ class MenuManager : public ::cppu::WeakImplHelper1< css::frame::XStatusListener 
         void AddMenu(PopupMenu* _pPopupMenu,const OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren);
         sal_uInt16 FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const;
 
-
         struct MenuItemHandler
         {
             MenuItemHandler( sal_uInt16 aItemId, MenuManager* pManager, css::uno::Reference< css::frame::XDispatch >& rDispatch ) :

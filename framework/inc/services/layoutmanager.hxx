@@ -107,7 +107,6 @@ namespace framework
                 return aSeq;
             }
 
-
             // XLayoutManager
             virtual void SAL_CALL attachFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual void SAL_CALL reset() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -147,7 +146,6 @@ namespace framework
                                                        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual void SAL_CALL removeMergedMenuBar(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
             //  XWindowListener
             virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
             virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -161,7 +159,6 @@ namespace framework
             using cppu::OPropertySetHelper::disposing;
             virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
             //  XUIConfigurationListener
             virtual void SAL_CALL elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual void SAL_CALL elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -173,7 +170,6 @@ namespace framework
 
             DECL_LINK(MenuBarClose, void *);
             DECL_LINK( WindowEventListener, VclSimpleEvent* );
-
 
             //  ILayoutNotifications
 
@@ -192,8 +188,6 @@ namespace framework
 
             //  helper
 
-
-
             //  menu bar
 
             void impl_clearUpMenuBar();
@@ -201,12 +195,10 @@ namespace framework
             void implts_updateMenuBarClose();
             sal_Bool implts_resetMenuBar();
 
-
             //  locking
 
             void implts_lock();
             sal_Bool implts_unlock();
-
 
             //  query
 
@@ -265,7 +257,6 @@ namespace framework
 
             DECL_LINK( OptionsChanged, void* );
             DECL_LINK( SettingsChanged, void* );
-
 
             //  OPropertySetHelper
 

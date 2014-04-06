@@ -39,7 +39,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-
 static const ::sal_Int32 ID_CORRUPT_UICONFIG_SHARE   = 1;
 static const ::sal_Int32 ID_CORRUPT_UICONFIG_USER    = 2;
 static const ::sal_Int32 ID_CORRUPT_UICONFIG_GENERAL = 3;
@@ -47,42 +46,35 @@ static const ::sal_Int32 ID_CORRUPT_UICONFIG_GENERAL = 3;
 namespace framework
 {
 
-
 OUString PresetHandler::PRESET_DEFAULT()
 {
     return OUString("default");
 }
-
 
 OUString PresetHandler::TARGET_CURRENT()
 {
     return OUString("current");
 }
 
-
 OUString PresetHandler::RESOURCETYPE_MENUBAR()
 {
     return OUString("menubar");
 }
-
 
 OUString PresetHandler::RESOURCETYPE_TOOLBAR()
 {
     return OUString("toolbar");
 }
 
-
 OUString PresetHandler::RESOURCETYPE_ACCELERATOR()
 {
     return OUString("accelerator");
 }
 
-
 OUString PresetHandler::RESOURCETYPE_STATUSBAR()
 {
     return OUString("statusbar");
 }
-
 
 PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext(xContext)
@@ -92,7 +84,6 @@ PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentCont
     , m_aLanguageTag(LANGUAGE_USER_PRIV_NOTRANSLATE)
 {
 }
-
 
 PresetHandler::PresetHandler(const PresetHandler& rCopy)
     : m_aLanguageTag( rCopy.m_aLanguageTag)
@@ -112,7 +103,6 @@ PresetHandler::PresetHandler(const PresetHandler& rCopy)
     m_sRelPathNoLang        = rCopy.m_sRelPathNoLang;
     m_sRelPathUser          = rCopy.m_sRelPathUser;
 }
-
 
 PresetHandler::~PresetHandler()
 {
@@ -139,7 +129,6 @@ PresetHandler::~PresetHandler()
      */
     m_lDocumentStorages.forgetCachedStorages();
 }
-
 
 void PresetHandler::forgetCachedStorages()
 {
@@ -253,7 +242,6 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     return xStorage;
 }
 
-
 css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorageUser()
 {
     css::uno::Reference< css::embed::XStorage > xRoot = m_aSharedStorages->m_lStoragesUser.getRootStorage();
@@ -301,20 +289,17 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     return xStorage;
 }
 
-
 css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageShare()
 {
     SolarMutexGuard g;
     return m_xWorkingStorageShare;
 }
 
-
 css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageUser()
 {
     SolarMutexGuard g;
     return m_xWorkingStorageUser;
 }
-
 
 css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
 {
@@ -327,7 +312,6 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare
     return m_aSharedStorages->m_lStoragesShare.getParentStorage(xWorking);
 }
 
-
 css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
 {
     css::uno::Reference< css::embed::XStorage > xWorking;
@@ -338,7 +322,6 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(
 
     return m_aSharedStorages->m_lStoragesUser.getParentStorage(xWorking);
 }
-
 
 void PresetHandler::connectToResource(      PresetHandler::EConfigType                   eConfigType  ,
                                       const OUString&                             sResource    ,
@@ -540,7 +523,6 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     }
 }
 
-
 void PresetHandler::copyPresetToTarget(const OUString& sPreset,
                                        const OUString& sTarget)
 {
@@ -585,7 +567,6 @@ void PresetHandler::copyPresetToTarget(const OUString& sPreset,
     commitUserChanges();
 }
 
-
 css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString& sPreset,
                                                                   sal_Bool bUseNoLangGlobal)
 {
@@ -606,7 +587,6 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString
     css::uno::Reference< css::io::XStream > xStream = xFolder->openStreamElement(sFile, css::embed::ElementModes::READ);
     return xStream;
 }
-
 
 css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString& sTarget         ,
                                                                         sal_Bool         bCreateIfMissing)
@@ -648,7 +628,6 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString
     return xStream;
 }
 
-
 void PresetHandler::commitUserChanges()
 {
     css::uno::Reference< css::embed::XStorage > xWorking;
@@ -686,7 +665,6 @@ void PresetHandler::commitUserChanges()
     }
 }
 
-
 void PresetHandler::addStorageListener(IStorageListener* pListener)
 {
     OUString sRelPath;
@@ -716,7 +694,6 @@ void PresetHandler::addStorageListener(IStorageListener* pListener)
         break;
     }
 }
-
 
 void PresetHandler::removeStorageListener(IStorageListener* pListener)
 {
@@ -748,7 +725,6 @@ void PresetHandler::removeStorageListener(IStorageListener* pListener)
     }
 }
 
-
 css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoringErrors(const OUString& sPath ,
                                                                                              sal_Int32        eMode ,
                                                                                              sal_Bool         bShare)
@@ -767,7 +743,6 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
         { xPath.clear(); }
     return xPath;
 }
-
 
 ::std::vector< OUString >::const_iterator PresetHandler::impl_findMatchingLocalizedValue(
         const ::std::vector< OUString >& lLocalizedValues,
@@ -798,7 +773,6 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
 
     return pFound;
 }
-
 
 css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPathIgnoringErrors(
         OUString&      sPath         ,
@@ -839,7 +813,6 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     return xLocalePath;
 }
 
-
 ::std::vector< OUString > PresetHandler::impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder)
 {
     css::uno::Reference< css::container::XNameAccess > xAccess(xFolder, css::uno::UNO_QUERY);
@@ -867,7 +840,6 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
 
     return lSubFolders;
 }
-
 
 } // namespace framework
 

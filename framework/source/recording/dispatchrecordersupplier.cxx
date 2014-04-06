@@ -26,9 +26,7 @@
 
 namespace framework{
 
-
 //  XInterface, XTypeProvider
-
 
 DEFINE_XSERVICEINFO_MULTISERVICE(
     DispatchRecorderSupplier,
@@ -47,7 +45,6 @@ DEFINE_INIT_SERVICE(
     }
 )
 
-
 /**
     @short  standard constructor to create instance
     @descr  Because an instance will be initialized by her interface methods
@@ -57,7 +54,6 @@ DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< c
         : m_xDispatchRecorder( NULL                          )
 {
 }
-
 
 /**
     @short  standard destructor
@@ -69,7 +65,6 @@ DispatchRecorderSupplier::~DispatchRecorderSupplier()
 {
     m_xDispatchRecorder = NULL;
 }
-
 
 /**
     @short      set a new dispatch recorder on this supplier
@@ -113,7 +108,6 @@ css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL DispatchRecorderSu
     SolarMutexGuard g;
     return m_xDispatchRecorder;
 }
-
 
 /**
     @short      execute a dispatch request and record it

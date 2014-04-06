@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <xml/xmlnamespaces.hxx>
 
 using namespace ::com::sun::star::xml::sax;

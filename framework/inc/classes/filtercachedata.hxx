@@ -65,7 +65,6 @@ enum EFilterPackage
     E_ADDITIONAL
 };
 
-
 // These struct define a type, which present the type of a file.
 // He is used for easy filter detection without file stream detection!
 // The internal name is the keyname of an item with these structure in our hash map or our configuration set!
@@ -82,7 +81,6 @@ struct FileType
         inline              ~FileType   (                               ) { impl_clear();               }
         inline FileType&    operator=   (   const   FileType&   rCopy   ) { return impl_copy( rCopy );  }
         inline void         free        (                               ) { impl_clear();               }
-
 
     // private methods
 
@@ -113,7 +111,6 @@ struct FileType
             return (*this);
         }
 
-
     // public member
 
     public:
@@ -127,7 +124,6 @@ struct FileType
         OUStringList        lURLPattern         ;
         OUStringList        lExtensions         ;
 };
-
 
 // These struct describe a filter which is registered for one type.
 // He hold information about services which present the document himself (like a item) and a filter service which
@@ -146,7 +142,6 @@ struct Filter
         inline          ~Filter     (                           ) { impl_clear();               }
         inline Filter&  operator=   (   const   Filter& rCopy   ) { return impl_copy( rCopy );  }
         inline void     free        (                           ) { impl_clear();               }
-
 
     // private methods
 
@@ -183,7 +178,6 @@ struct Filter
             return (*this);
         }
 
-
     // public member
 
     public:
@@ -200,7 +194,6 @@ struct Filter
         sal_Int32           nFileFormatVersion  ;
         OUString     sTemplateName       ;
 };
-
 
 // Programmer can register his own services for an content detection of different types.
 // The implementation or service name of these is the keyname of an item with these structure
@@ -219,7 +212,6 @@ struct Detector
         inline Detector&    operator=   (   const   Detector&   rCopy   ) { return impl_copy( rCopy );  }
         inline void         free        (                               ) { impl_clear();               }
 
-
     // private methods
 
     private:
@@ -237,7 +229,6 @@ struct Detector
             return (*this);
         }
 
-
     // public member
 
     public:
@@ -245,7 +236,6 @@ struct Detector
         OUString     sName       ;
         OUStringList        lTypes      ;
 };
-
 
 // Programmer can register his own services for loading documents in a frame.
 // The implementation or service name of these is the keyname of an item with these structure
@@ -263,7 +253,6 @@ struct Loader
         inline          ~Loader     (                           ) { impl_clear();               }
         inline Loader&  operator=   (   const   Loader& rCopy   ) { return impl_copy( rCopy );  }
         inline void     free        (                           ) { impl_clear();               }
-
 
     // private methods
 
@@ -284,7 +273,6 @@ struct Loader
             return (*this);
         }
 
-
     // public member
 
     public:
@@ -293,7 +281,6 @@ struct Loader
         OUStringHashMap lUINames    ;
         OUStringList    lTypes      ;
 };
-
 
 // Programmer can register his own services to handle a FileType and intercept dispatches.
 // Don't forget: It's not a FrameLoader - it's a ContentHandler! (normaly without any UI)
@@ -310,7 +297,6 @@ struct ContentHandler
         inline                  ~ContentHandler(                              ) { impl_clear();               }
         inline ContentHandler&   operator=     ( const ContentHandler& rCopy  ) { return impl_copy( rCopy );  }
         inline void              free          (                              ) { impl_clear();               }
-
 
     // private methods
 
@@ -329,7 +315,6 @@ struct ContentHandler
             return (*this);
         }
 
-
     // public member
 
     public:
@@ -337,7 +322,6 @@ struct ContentHandler
         OUString     sName   ;
         OUStringList        lTypes  ;
 };
-
 
 // We need different hash maps for different tables of our configuration management.
 // Follow maps convert <names> to <properties> of type, filter, detector, loader ...
@@ -364,13 +348,11 @@ class SetNodeHash : public ::boost::unordered_map< OUString                    ,
             lRemovedItems.free();
         }
 
-
         // Append changed, added or removed items to special lists
         // Necessary for saving changes
 
         void appendChange( const OUString& sName  ,
                                  EModifyState     eState );
-
 
     // member
 
@@ -379,7 +361,6 @@ class SetNodeHash : public ::boost::unordered_map< OUString                    ,
         OUStringList  lChangedItems  ;
         OUStringList  lRemovedItems  ;
 };
-
 
 // Use these hashes to implement different tables which assign types to frame loader or detect services.
 // It's an optimism to find registered services faster!
@@ -398,7 +379,6 @@ class PerformanceHash   :   public  ::boost::unordered_map<    OUString         
         {
             PerformanceHash().swap( *this );
         }
-
 
         //  normaly a complete string must match our hash key values ...
         //  But sometimes we need a search by using these key values as pattern!
@@ -434,7 +414,6 @@ class PerformanceHash   :   public  ::boost::unordered_map<    OUString         
         }
 };
 
-
 // Define easy usable types
 
 typedef SetNodeHash< FileType >                                     FileTypeHash                ;
@@ -450,7 +429,6 @@ typedef CheckedIterator< FileTypeHash >                             CheckedTypeI
 typedef CheckedIterator< PerformanceHash >                          CheckedPerformanceIterator  ;
 
 typedef ::std::vector< FilterHash::const_iterator >                 FilterQuery                 ;
-
 
 // Use private static data container to hold all values of configuration!
 
@@ -626,7 +604,6 @@ class FilterCFGAccess : public ::utl::ConfigItem
         void             setProductName                             (       OUStringHashMap&                                       lUINames        );
         void             resetProductName                           (       OUStringHashMap&                                       lUINames        );
 
-
     //  internal helper
 
     private:
@@ -648,7 +625,6 @@ class FilterCFGAccess : public ::utl::ConfigItem
         void impl_saveLoaders          ( DataContainer&             rData           );
         void impl_saveContentHandlers  ( DataContainer&             rData           );
 
-
     //  debug checks
 
     private:
@@ -657,7 +633,6 @@ class FilterCFGAccess : public ::utl::ConfigItem
                                             sal_Int16        nMode    );
         static sal_Bool implcp_read ( const DataContainer&   rData    );
         static sal_Bool implcp_write( const DataContainer&   rData    );
-
 
     //  member
 

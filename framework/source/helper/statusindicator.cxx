@@ -19,23 +19,18 @@
 
 #include <config_features.h>
 
-
 #include <helper/statusindicator.hxx>
 
 namespace framework{
-
-
 
 StatusIndicator::StatusIndicator(StatusIndicatorFactory* pFactory)
     : m_xFactory         (pFactory)
 {
 }
 
-
 StatusIndicator::~StatusIndicator()
 {
 }
-
 
 void SAL_CALL StatusIndicator::start(const OUString& sText ,
                                            sal_Int32        nRange)
@@ -54,7 +49,6 @@ void SAL_CALL StatusIndicator::start(const OUString& sText ,
 #endif
 }
 
-
 void SAL_CALL StatusIndicator::end()
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -68,7 +62,6 @@ void SAL_CALL StatusIndicator::end()
 #endif
 }
 
-
 void SAL_CALL StatusIndicator::reset()
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -81,7 +74,6 @@ void SAL_CALL StatusIndicator::reset()
     }
 #endif
 }
-
 
 void SAL_CALL StatusIndicator::setText(const OUString& sText)
     throw(css::uno::RuntimeException, std::exception)
@@ -97,7 +89,6 @@ void SAL_CALL StatusIndicator::setText(const OUString& sText)
     }
 #endif
 }
-
 
 void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
     throw(css::uno::RuntimeException, std::exception)

@@ -452,7 +452,6 @@ void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAc
 {
     SolarMutexClearableGuard aLock;
 
-
     if ( xSettings.is() )
     {
         // Create a copy of the data if the container is not const
@@ -490,7 +489,6 @@ void UIConfigElementWrapperBase::impl_fillNewData()
 Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_Bool bWriteable ) throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard g;
-
 
     if ( bWriteable )
         return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( m_xConfigData ) ), UNO_QUERY );

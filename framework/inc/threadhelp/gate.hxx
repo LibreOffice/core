@@ -199,7 +199,6 @@ class Gate : public  IGate
             return bSuccessful;
         }
 
-
     //  private member
 
     private:

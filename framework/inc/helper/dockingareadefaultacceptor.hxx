@@ -33,16 +33,11 @@
 
 namespace framework{
 
-
-
-
 class DockingAreaDefaultAcceptor    :   public ::cppu::WeakImplHelper1< ::com::sun::star::ui::XDockingAreaAcceptor >
 {
     public:
 
-
         //  constructor / destructor
-
 
         /*-****************************************************************************************************
             @short      constructor to initialize this instance
@@ -62,19 +57,14 @@ class DockingAreaDefaultAcceptor    :   public ::cppu::WeakImplHelper1< ::com::s
          DockingAreaDefaultAcceptor(    const css::uno::Reference< css::frame::XFrame >& xOwner );
         virtual ~DockingAreaDefaultAcceptor();
 
-
         //  XDockingAreaAcceptor
-
 
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getContainerWindow() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL setDockingAreaSpace( const css::awt::Rectangle& BorderSpace ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
-
     //  variables
     //  (should be private everyway!)
-
 
     private:
 

@@ -57,9 +57,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 
-
 //  namespaces
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;

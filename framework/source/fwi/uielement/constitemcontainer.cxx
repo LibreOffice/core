@@ -66,7 +66,6 @@ public:
     virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
 /**
  * Create an object that implements XPropertySetInfo IPropertyArrayHelper.
  */

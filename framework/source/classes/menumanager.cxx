@@ -121,7 +121,6 @@ MenuManager::MenuManager(
 
     sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
 
-
     sal_uInt16 nItemCount = pMenu->GetItemCount();
     m_aMenuItemHandlerVector.reserve(nItemCount);
     OUString aItemCommand;
@@ -203,7 +202,6 @@ MenuManager::MenuManager(
 
                 AddMenu(pSubMenu,OUString(),nItemId,sal_True,sal_False);
 
-
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
                     Image aImage = GetImageFromURL( rFrame, aItemCommand, false );
@@ -260,7 +258,6 @@ MenuManager::MenuManager(
     SetHdl();
 }
 
-
 void MenuManager::SetHdl()
 {
     m_pVCLMenu->SetHighlightHdl( LINK( this, MenuManager, Highlight ));
@@ -288,7 +285,6 @@ MenuManager::~MenuManager()
         delete m_pVCLMenu;
 }
 
-
 MenuManager::MenuItemHandler* MenuManager::GetMenuItemHandler( sal_uInt16 nItemId )
 {
     SolarMutexGuard g;
@@ -303,7 +299,6 @@ MenuManager::MenuItemHandler* MenuManager::GetMenuItemHandler( sal_uInt16 nItemI
 
     return 0;
 }
-
 
 void SAL_CALL MenuManager::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException, std::exception )
@@ -365,7 +360,6 @@ throw ( RuntimeException, std::exception )
     }
 }
 
-
 void MenuManager::RemoveListener()
 {
     SolarMutexGuard g;
@@ -401,7 +395,6 @@ void MenuManager::ClearMenuDispatch(const EventObject& Source,bool _bRemoveOnly)
         }
     }
 }
-
 
 void SAL_CALL MenuManager::disposing( const EventObject& Source ) throw ( RuntimeException, std::exception )
 {
@@ -442,7 +435,6 @@ void SAL_CALL MenuManager::disposing( const EventObject& Source ) throw ( Runtim
         }
     }
 }
-
 
 void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
 {
@@ -676,7 +668,6 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XCompone
     }
 }
 
-
 void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList, const MenuItemHandler* pMenuItemHandler )
 {
     int NUM_OF_PICKLIST_ARGS = 3;
@@ -715,10 +706,7 @@ void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList,
     aArgsList[NUM_OF_PICKLIST_ARGS-1].Value = a;
 }
 
-
-
 // vcl handler
-
 
 IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
 {
@@ -820,7 +808,6 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
     return 1;
 }
 
-
 IMPL_LINK( MenuManager, Deactivate, Menu *, pMenu )
 {
     if ( pMenu == m_pVCLMenu )
@@ -828,7 +815,6 @@ IMPL_LINK( MenuManager, Deactivate, Menu *, pMenu )
 
     return 1;
 }
-
 
 IMPL_LINK( MenuManager, Select, Menu *, pMenu )
 {
@@ -902,7 +888,6 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
 
     return 1;
 }
-
 
 IMPL_LINK_NOARG(MenuManager, Highlight)
 {

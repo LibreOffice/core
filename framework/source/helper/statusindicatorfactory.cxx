@@ -49,10 +49,8 @@
 
 namespace framework{
 
-
 sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for rescheduling
 const char PROGRESS_RESOURCE[] = "private:resource/progressbar/progressbar";
-
 
 StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext          (xContext )
@@ -63,12 +61,10 @@ StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::u
 {
 }
 
-
 StatusIndicatorFactory::~StatusIndicatorFactory()
 {
     impl_stopWakeUpThread();
 }
-
 
 void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
@@ -105,7 +101,6 @@ void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::
     impl_createProgress();
 }
 
-
 css::uno::Reference< css::task::XStatusIndicator > SAL_CALL StatusIndicatorFactory::createStatusIndicator()
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -115,14 +110,12 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL StatusIndicatorFacto
     return xIndicator;
 }
 
-
 void SAL_CALL StatusIndicatorFactory::update()
     throw(css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_mutex);
     m_bAllowReschedule = sal_True;
 }
-
 
 void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                    const OUString&                                    sText ,
@@ -153,7 +146,6 @@ void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatus
     impl_reschedule(sal_True);
 }
 
-
 void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatusIndicator >& xChild)
 {
     // SAFE -> ----------------------------------
@@ -183,7 +175,6 @@ void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatus
 
     impl_reschedule(sal_True);
 }
-
 
 void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIndicator >& xChild)
 {
@@ -238,7 +229,6 @@ void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIn
     impl_reschedule(sal_True);
 }
 
-
 void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                      const OUString&                                    sText )
 {
@@ -267,7 +257,6 @@ void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStat
 
     impl_reschedule(sal_True);
 }
-
 
 void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XStatusIndicator >& xChild ,
                                              sal_Int32                                           nValue )
@@ -300,7 +289,6 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
 
     impl_reschedule(sal_False);
 }
-
 
 void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
 {
@@ -394,7 +382,6 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
 
 }
 
-
 void StatusIndicatorFactory::impl_createProgress()
 {
     // SAFE -> ----------------------------------
@@ -441,7 +428,6 @@ void StatusIndicatorFactory::impl_createProgress()
     m_xProgress = xProgress;
 }
 
-
 void StatusIndicatorFactory::impl_showProgress()
 {
     // SAFE -> ----------------------------------
@@ -483,7 +469,6 @@ void StatusIndicatorFactory::impl_showProgress()
     }
 }
 
-
 void StatusIndicatorFactory::impl_hideProgress()
 {
     // SAFE -> ----------------------------------
@@ -508,7 +493,6 @@ void StatusIndicatorFactory::impl_hideProgress()
         }
     }
 }
-
 
 void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
 {
@@ -550,7 +534,6 @@ void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
     }
 }
 
-
 void StatusIndicatorFactory::impl_startWakeUpThread()
 {
     osl::MutexGuard g(m_mutex);
@@ -564,7 +547,6 @@ void StatusIndicatorFactory::impl_startWakeUpThread()
         m_pWakeUp->create();
     }
 }
-
 
 void StatusIndicatorFactory::impl_stopWakeUpThread()
 {

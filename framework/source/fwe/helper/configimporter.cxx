@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <framework/configimporter.hxx>
 #include <framework/toolboxconfiguration.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>

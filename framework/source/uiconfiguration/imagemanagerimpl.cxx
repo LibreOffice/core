@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <imagemanagerimpl.hxx>
 #include <xml/imagesconfiguration.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
@@ -145,8 +144,6 @@ static OUString getCanonicalName( const OUString& rFileName )
     }
     return aBuf.makeStringAndClear();
 }
-
-
 
 CmdImageList::CmdImageList( const uno::Reference< uno::XComponentContext >& rxContext, const OUString& aModuleIdentifier ) :
     m_bVectorInit( sal_False ),
@@ -318,8 +315,6 @@ bool CmdImageList::hasImage( sal_Int16 /*nImageType*/, const OUString& rCommandU
 {
     return impl_getImageCommandNameVector();
 }
-
-
 
 GlobalImageList::GlobalImageList( const uno::Reference< uno::XComponentContext >& rxContext ) :
     CmdImageList( rxContext, OUString() ),
@@ -1135,7 +1130,6 @@ throw ( ::com::sun::star::container::ElementExistException,
     replaceImages(nImageType,aCommandURLSequence,aGraphicSequence);
 }
 
-
 // XUIConfigurationPersistence
 void ImageManagerImpl::reload()
 throw ( ::com::sun::star::uno::Exception,
@@ -1389,7 +1383,6 @@ throw (::com::sun::star::uno::RuntimeException)
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_aListenerContainer.removeInterface( ::getCppuType( ( const uno::Reference< XUIConfigurationListener >* ) NULL ), xListener );
 }
-
 
 void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent& aEvent, NotifyOp eOp )
 {

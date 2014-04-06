@@ -55,12 +55,9 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
 
     //  public methods
 
-
     public:
 
-
         //  constructor / destructor
-
 
         /*-****************************************************************************************************
             @short      constructor to initialize this enumeration
@@ -77,9 +74,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
 
          OComponentEnumeration( const css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents );
 
-
         //  XEventListener
-
 
         /*-****************************************************************************************************
             @short      last chance to release all references and free memory
@@ -96,9 +91,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
 
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
         //  XEnumeration
-
 
         /*-****************************************************************************************************
             @short      check count of accessible elements of enumeration
@@ -133,9 +126,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
                                                              css::lang::WrappedTargetException      ,
                                                             css::uno::RuntimeException, std::exception              ) SAL_OVERRIDE;
 
-
     //  protected methods
-
 
     protected:
 
@@ -175,16 +166,12 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
 
         virtual void impl_resetObject();
 
-
     //  private methods
-
 
     private:
 
-
     //  debug methods
     //  (should be private everyway!)
-
 
         /*-****************************************************************************************************
             @short      debug-method to check incoming parameter of some other mehods of this class
@@ -205,10 +192,8 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
         static sal_Bool impldbg_checkParameter_OComponentEnumerationCtor    (   const   css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents   );
         static sal_Bool impldbg_checkParameter_disposing                    (   const   css::lang::EventObject&                                             aEvent          );
 
-
     //  variables
     //  (should be private everyway!)
-
 
     private:
 

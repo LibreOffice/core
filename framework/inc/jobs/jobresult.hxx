@@ -28,10 +28,7 @@
 
 #include <rtl/ustring.hxx>
 
-
 namespace framework{
-
-
 
 /**
     @short  represent a result of a finished job execution
@@ -61,7 +58,6 @@ class JobResult
             E_DEACTIVATE        =   2,
             E_DISPATCHRESULT    =   4
         };
-
 
     // member
 
@@ -103,7 +99,6 @@ class JobResult
             it to his registered result listener directly.
          */
         css::frame::DispatchResultEvent m_aDispatchResult;
-
 
     // native interface
 

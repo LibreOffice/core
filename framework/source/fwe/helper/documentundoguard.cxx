@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "framework/documentundoguard.hxx"
 
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
@@ -26,10 +25,8 @@
 #include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
 
-
 namespace framework
 {
-
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -46,7 +43,6 @@ namespace framework
     using ::com::sun::star::document::XUndoManagerListener;
     using ::com::sun::star::document::UndoManagerEvent;
     using ::com::sun::star::lang::EventObject;
-
 
     //= UndoManagerContextListener
 
@@ -110,13 +106,11 @@ namespace framework
         bool                            m_documentDisposed;
     };
 
-
     void SAL_CALL UndoManagerContextListener::undoActionAdded( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception)
     {
         (void)i_event;
         // not interested in
     }
-
 
     void SAL_CALL UndoManagerContextListener::actionUndone( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception)
     {
@@ -124,13 +118,11 @@ namespace framework
         // not interested in
     }
 
-
     void SAL_CALL UndoManagerContextListener::actionRedone( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception)
     {
         (void)i_event;
         // not interested in
     }
-
 
     void SAL_CALL UndoManagerContextListener::allActionsCleared( const EventObject& i_event ) throw (RuntimeException, std::exception)
     {
@@ -138,13 +130,11 @@ namespace framework
         // not interested in
     }
 
-
     void SAL_CALL UndoManagerContextListener::redoActionsCleared( const EventObject& i_event ) throw (RuntimeException, std::exception)
     {
         (void)i_event;
         // not interested in
     }
-
 
     void SAL_CALL UndoManagerContextListener::resetAll( const EventObject& i_event ) throw (RuntimeException, std::exception)
     {
@@ -152,13 +142,11 @@ namespace framework
         m_nRelativeContextDepth = 0;
     }
 
-
     void SAL_CALL UndoManagerContextListener::enteredContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception)
     {
         (void)i_event;
         osl_atomic_increment( &m_nRelativeContextDepth );
     }
-
 
     void SAL_CALL UndoManagerContextListener::enteredHiddenContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception)
     {
@@ -166,13 +154,11 @@ namespace framework
         osl_atomic_increment( &m_nRelativeContextDepth );
     }
 
-
     void SAL_CALL UndoManagerContextListener::leftContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception)
     {
         (void)i_event;
         osl_atomic_decrement( &m_nRelativeContextDepth );
     }
-
 
     void SAL_CALL UndoManagerContextListener::leftHiddenContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception)
     {
@@ -180,20 +166,17 @@ namespace framework
         osl_atomic_decrement( &m_nRelativeContextDepth );
     }
 
-
     void SAL_CALL UndoManagerContextListener::cancelledContext( const UndoManagerEvent& i_event ) throw (RuntimeException, std::exception)
     {
         (void)i_event;
         osl_atomic_decrement( &m_nRelativeContextDepth );
     }
 
-
     void SAL_CALL UndoManagerContextListener::disposing( const EventObject& i_event ) throw (RuntimeException, std::exception)
     {
         (void)i_event;
         m_documentDisposed = true;
     }
-
 
     //= DocumentUndoGuard_Data
 
@@ -223,7 +206,6 @@ namespace framework
             }
         }
 
-
         void lcl_restore( DocumentUndoGuard_Data& i_data )
         {
             try
@@ -239,9 +221,7 @@ namespace framework
         }
     }
 
-
     //= DocumentUndoGuard
-
 
     DocumentUndoGuard::DocumentUndoGuard( const Reference< XInterface >& i_undoSupplierComponent )
         :m_pData( new DocumentUndoGuard_Data )
@@ -254,8 +234,6 @@ namespace framework
         lcl_restore( *m_pData );
     }
 
-
 } // namespace framework
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

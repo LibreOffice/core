@@ -31,7 +31,6 @@ namespace framework{
 #define PROTOCOL_VALUE      "service:"
 #define PROTOCOL_LENGTH     8
 
-
 // XInterface, XTypeProvider, XServiceInfo
 
 DEFINE_XSERVICEINFO_MULTISERVICE(ServiceHandler                   ,
@@ -49,8 +48,6 @@ DEFINE_INIT_SERVICE(ServiceHandler,
                     }
                    )
 
-
-
 /**
     @short      standard ctor
     @descr      These initialize a new instance of ths class with needed information for work.
@@ -63,8 +60,6 @@ ServiceHandler::ServiceHandler( const css::uno::Reference< css::lang::XMultiServ
 {
 }
 
-
-
 /**
     @short      standard dtor
     @descr      -
@@ -72,8 +67,6 @@ ServiceHandler::ServiceHandler( const css::uno::Reference< css::lang::XMultiServ
 ServiceHandler::~ServiceHandler()
 {
 }
-
-
 
 /**
     @short      decide if this dispatch implementation can be used for requested URL or not
@@ -94,8 +87,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL ServiceHandler::queryDispa
     return xDispatcher;
 }
 
-
-
 /**
     @short      do the same like dispatch() but for multiple requests at the same time
     @descr      -
@@ -113,8 +104,6 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Serv
     }
     return lDispatcher;
 }
-
-
 
 /**
     @short      dispatch URL with arguments
@@ -135,8 +124,6 @@ void SAL_CALL ServiceHandler::dispatch( const css::util::URL&                   
     implts_dispatch(aURL,lArguments);
     // No notification for status listener!
 }
-
-
 
 /**
     @short      dispatch with guaranteed notifications about success
@@ -173,8 +160,6 @@ void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&   
         xListener->dispatchFinished( aEvent );
     }
 }
-
-
 
 /**
     @short      threadsafe helper for dispatch calls
@@ -245,8 +230,6 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     return xService;
 }
 
-
-
 /**
     @short      add/remove listener for state events
     @descr      We use an internal container to hold such registered listener. This container lives if we live.
@@ -263,8 +246,6 @@ void SAL_CALL ServiceHandler::addStatusListener( const css::uno::Reference< css:
 {
     // not supported yet
 }
-
-
 
 void SAL_CALL ServiceHandler::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                     const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException, std::exception )

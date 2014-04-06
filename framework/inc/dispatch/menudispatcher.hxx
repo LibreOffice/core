@@ -55,7 +55,6 @@ namespace framework{
 typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString         ,
                                                         OUStringHash > IMPL_ListenerHashContainer;
 
-
 /*-************************************************************************************************************
     @short          helper for desktop only(!) to create new tasks on demand for dispatches
     @descr          Use this class as member only! Never use it as baseclass.
@@ -77,12 +76,9 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
     //  public methods
 
-
     public:
 
-
         //  constructor / destructor
-
 
         /*-****************************************************************************************************
             @short      standard ctor
@@ -100,9 +96,7 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
         MenuDispatcher(    const   css::uno::Reference< css::uno::XComponentContext >& rxContext    ,
                             const   css::uno::Reference< css::frame::XFrame >&              xOwner      );
 
-
         //  XDispatch
-
 
         /*-****************************************************************************************************
             @short      dispatch URL with arguments
@@ -154,16 +148,11 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
         virtual void SAL_CALL removeStatusListener( const   css::uno::Reference< css::frame::XStatusListener >& xControl,
                                                     const   css::util::URL&                                     aURL    ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
-
         //   XFrameActionListener
-
 
         virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& aEvent ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
         //   XEventListener
-
 
         /*-****************************************************************************************************
             @short      dispose current instance
@@ -179,9 +168,7 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
         void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
     //  protected methods
-
 
     protected:
 
@@ -201,9 +188,7 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
         virtual ~MenuDispatcher();
 
-
     //  private methods
-
 
     private:
 
@@ -235,10 +220,8 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
         void impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel );
 
-
     //  variables
     //  (should be private everyway!)
-
 
     private:
 

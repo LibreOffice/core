@@ -160,7 +160,6 @@ throw ( RuntimeException, std::exception )
     }
 }
 
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

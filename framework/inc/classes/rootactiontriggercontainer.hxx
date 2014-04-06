@@ -31,7 +31,6 @@
 
 #define IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER   "com.sun.star.comp.ui.RootActionTriggerContainer"
 
-
 namespace framework
 {
 

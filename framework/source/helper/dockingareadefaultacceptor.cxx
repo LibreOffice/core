@@ -34,7 +34,6 @@ using namespace ::com::sun::star::uno           ;
 using namespace ::cppu                          ;
 using namespace ::osl                           ;
 
-
 //  constructor
 
 DockingAreaDefaultAcceptor::DockingAreaDefaultAcceptor( const   css::uno::Reference< XFrame >&      xOwner  )
@@ -42,13 +41,11 @@ DockingAreaDefaultAcceptor::DockingAreaDefaultAcceptor( const   css::uno::Refere
 {
 }
 
-
 //  destructor
 
 DockingAreaDefaultAcceptor::~DockingAreaDefaultAcceptor()
 {
 }
-
 
 //  XDockingAreaAcceptor
 css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::getContainerWindow() throw (css::uno::RuntimeException, std::exception)

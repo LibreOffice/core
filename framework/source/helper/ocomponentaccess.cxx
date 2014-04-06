@@ -34,7 +34,6 @@ using namespace ::cppu                          ;
 using namespace ::osl                           ;
 using namespace ::rtl                           ;
 
-
 //  constructor
 
 OComponentAccess::OComponentAccess( const css::uno::Reference< XDesktop >& xOwner )
@@ -44,13 +43,11 @@ OComponentAccess::OComponentAccess( const css::uno::Reference< XDesktop >& xOwne
     SAL_WARN_IF( !impldbg_checkParameter_OComponentAccessCtor( xOwner ), "fwk", "OComponentAccess::OComponentAccess(): Invalid parameter detected!" );
 }
 
-
 //  destructor
 
 OComponentAccess::~OComponentAccess()
 {
 }
-
 
 //  XEnumerationAccess
 css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration() throw( RuntimeException, std::exception )
@@ -79,7 +76,6 @@ css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration
     return xReturn;
 }
 
-
 //  XElementAccess
 Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException, std::exception )
 {
@@ -87,7 +83,6 @@ Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException, std::e
     // Return the uno-type of XComponent.
     return ::getCppuType((const css::uno::Reference< XComponent >*)NULL);
 }
-
 
 //  XElementAccess
 sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException, std::exception )
@@ -108,7 +103,6 @@ sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException, std::
     // Return result of this operation.
     return bReturn;
 }
-
 
 //  private method
 
@@ -143,7 +137,6 @@ void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Refere
     // ... otherwise break a recursive path and go back at current stack!
 }
 
-
 //  private method
 
 css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( const css::uno::Reference< XFrame >& xFrame ) const
@@ -176,9 +169,7 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
     return xComponent;
 }
 
-
 //  debug methods
-
 
 /*-----------------------------------------------------------------------------------------------------------------
     The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
@@ -189,7 +180,6 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
         If you miss a test for one of this parameters, contact the autor or add it himself !(?)
         But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
-
 
 sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   css::uno::Reference< XDesktop >&      xOwner  )
 {

@@ -42,7 +42,6 @@ class StatusIndicatorInterfaceWrapper :   public ::cppu::WeakImplHelper1< ::com:
         StatusIndicatorInterfaceWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rStatusIndicatorImpl );
         virtual ~StatusIndicatorInterfaceWrapper();
 
-
         //  XStatusIndicator
 
         virtual void SAL_CALL start   ( const OUString& sText  ,

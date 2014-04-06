@@ -64,7 +64,6 @@ static OUString getHashKeyFromStrings( const OUString& aType, const OUString& aN
     return aKey.makeStringAndClear();
 }
 
-
 ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Reference< XComponentContext >& rxContext, const OUString& _sRoot ) :
     m_aPropType( "Type" ),
     m_aPropName( "Name" ),
@@ -135,7 +134,6 @@ void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( co
     else
         m_aFactoryManagerMap.insert( FactoryManagerMap::value_type( aHashKey, rServiceSpecifier ));
 }
-
 
 void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule )
 {

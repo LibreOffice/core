@@ -35,8 +35,6 @@ namespace framework{
     namespace pattern{
         namespace frame{
 
-
-
 inline css::uno::Reference< css::frame::XModel > extractFrameModel(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     css::uno::Reference< css::frame::XModel >      xModel;
@@ -47,7 +45,6 @@ inline css::uno::Reference< css::frame::XModel > extractFrameModel(const css::un
         xModel = xController->getModel();
     return xModel;
 }
-
 
 /** @short  close (or dispose) the given resource.
 

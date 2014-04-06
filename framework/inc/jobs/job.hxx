@@ -40,11 +40,7 @@
 #include <osl/conditn.hxx>
 #include <rtl/ustring.hxx>
 
-
 namespace framework{
-
-
-
 
 /**
     @short  it represent a job; execute it and control it's lifetime
@@ -74,7 +70,6 @@ class Job : public  ::cppu::WeakImplHelper3<
         E_STOPPED_OR_FINISHED,
         E_DISPOSED
     };
-
 
     // member
 
@@ -168,7 +163,6 @@ class Job : public  ::cppu::WeakImplHelper3<
          */
         ERunState m_eRunState;
 
-
     // native interface
 
     public:
@@ -192,11 +186,9 @@ class Job : public  ::cppu::WeakImplHelper3<
         void                                         impl_startListening   (                                                                  );
         void                                         impl_stopListening    (                                                                  );
 
-
     // uno interface
 
     public:
-
 
         // XJobListener
         virtual void SAL_CALL jobFinished( const css::uno::Reference< css::task::XAsyncJob >& xJob,

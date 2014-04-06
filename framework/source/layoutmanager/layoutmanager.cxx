@@ -1207,7 +1207,6 @@ throw (RuntimeException, std::exception)
     implts_reset( sal_True );
 }
 
-
 // XMenuBarMergingAcceptor
 
 sal_Bool SAL_CALL LayoutManager::setMergedMenuBar(
@@ -2277,7 +2276,6 @@ throw (RuntimeException, std::exception)
     implts_doLayout_notify( sal_True );
 }
 
-
 //  ILayoutNotifications
 
 void LayoutManager::requestLayout( Hint eHint )
@@ -2528,7 +2526,6 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangle& /*rB
     }
 }
 
-
 //      XMenuCloser
 
 void LayoutManager::implts_updateMenuBarClose()
@@ -2614,7 +2611,6 @@ IMPL_LINK_NOARG(LayoutManager, SettingsChanged)
     return 1;
 }
 
-
 //  XLayoutManagerEventBroadcaster
 
 void SAL_CALL LayoutManager::addLayoutManagerEventListener( const uno::Reference< frame::XLayoutManagerListener >& xListener )
@@ -2649,7 +2645,6 @@ void LayoutManager::implts_notifyListeners( short nEvent, uno::Any aInfoParam )
         }
     }
 }
-
 
 //      XWindowListener
 
@@ -2767,7 +2762,6 @@ IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl)
     return 0;
 }
 
-
 //      XFrameActionListener
 
 void SAL_CALL LayoutManager::frameAction( const FrameActionEvent& aEvent )
@@ -2807,8 +2801,6 @@ throw ( RuntimeException, std::exception )
         implts_reset( sal_False );
     }
 }
-
-
 
 void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
 throw( RuntimeException, std::exception )
@@ -3096,7 +3088,6 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
             doLayout();
     }
 }
-
 
 //      OPropertySetHelper
 

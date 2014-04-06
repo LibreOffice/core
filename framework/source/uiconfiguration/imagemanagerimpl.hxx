@@ -176,7 +176,6 @@ namespace framework
             const rtl::Reference< GlobalImageList >&  implts_getGlobalImageList();
             CmdImageList*                             implts_getDefaultImageList();
 
-
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserConfigStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserImageStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserBitmapsStorage;

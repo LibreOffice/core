@@ -40,13 +40,10 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-
 namespace framework
 {
 
-
 // implementation helper ( menu => ActionTrigger )
-
 
 sal_Bool IsSeparator( Reference< XPropertySet > xPropertySet )
 {
@@ -237,10 +234,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
     }
 }
 
-
-
 // implementation helper ( ActionTrigger => menu )
-
 
 Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* pMenu, const Reference< XIndexContainer >& rActionTriggerContainer ) throw ( RuntimeException )
 {

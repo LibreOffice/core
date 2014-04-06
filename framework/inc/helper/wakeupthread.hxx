@@ -20,27 +20,21 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_WAKEUPTHREAD_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_WAKEUPTHREAD_HXX
 
-
 // include files of own module
 
 #include <macros/generic.hxx>
 
 #include <general.h>
 
-
 // include UNO interfaces
 
 #include <com/sun/star/util/XUpdatable.hpp>
-
 
 // include all others
 #include <cppuhelper/weakref.hxx>
 #include <osl/thread.hxx>
 
-
 namespace framework{
-
-
 
 /** @short  implements a "sleeping" thread, which try to sleep
             without a using cpu consumption :-) */
@@ -53,7 +47,6 @@ class WakeUpThread : public ::osl::Thread
         /** @short  this listener will be notified if this thread
                     waked up. */
         css::uno::WeakReference< css::util::XUpdatable > m_xListener;
-
 
     // interface
     public:

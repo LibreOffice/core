@@ -42,7 +42,6 @@ JobResult::JobResult()
     m_eParts = E_NOPART;
 }
 
-
 /**
     @short      special ctor
     @descr      It initialize this new instance with a pure job execution result
@@ -127,7 +126,6 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
     }
 }
 
-
 /**
     @short      copy dtor
     @descr      -
@@ -141,7 +139,6 @@ JobResult::JobResult( const JobResult& rCopy )
     m_aDispatchResult = rCopy.m_aDispatchResult ;
 }
 
-
 /**
     @short      standard dtor
     @descr      Free all internally used resources at the end of living.
@@ -150,7 +147,6 @@ JobResult::~JobResult()
 {
     // Nothing really to do here.
 }
-
 
 /**
     @short      =operator
@@ -168,7 +164,6 @@ void JobResult::operator=( const JobResult& rCopy )
     m_bDeactivate     = rCopy.m_bDeactivate     ;
     m_aDispatchResult = rCopy.m_aDispatchResult ;
 }
-
 
 /**
     @short      checks for existing parts of the analyzed result
@@ -188,7 +183,6 @@ sal_Bool JobResult::existPart( sal_uInt32 eParts ) const
     return ((m_eParts & eParts) == eParts);
 }
 
-
 /**
     @short      provides access to our internal members
     @descr      The return value will be valid only in case a call of
@@ -202,8 +196,6 @@ css::uno::Sequence< css::beans::NamedValue > JobResult::getArguments() const
     SolarMutexGuard g;
     return m_lArguments;
 }
-
-
 
 css::frame::DispatchResultEvent JobResult::getDispatchResult() const
 {

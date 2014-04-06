@@ -83,7 +83,6 @@ class UIElementWrapperBase : private cppu::BaseMutex,
         virtual  ::sal_Int16 SAL_CALL getType() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
 
-
     //  protected methods
 
     protected:

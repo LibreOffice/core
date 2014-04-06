@@ -33,7 +33,6 @@
 #define SERVICENAME_ACTIONTRIGGERSEPARATOR          "com.sun.star.ui.ActionTriggerSeparator"
 #define IMPLEMENTATIONNAME_ACTIONTRIGGERSEPARATOR   "com.sun.star.comp.ui.ActionTriggerSeparator"
 
-
 namespace framework
 {
 
@@ -73,7 +72,6 @@ class ActionTriggerSeparatorPropertySet :   private cppu::BaseMutex,
                                                             const com::sun::star::uno::Any& aValue          )
             throw( com::sun::star::lang::IllegalArgumentException ) SAL_OVERRIDE;
 
-
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& aValue )
             throw( com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
 
@@ -87,18 +85,14 @@ class ActionTriggerSeparatorPropertySet :   private cppu::BaseMutex,
 
         static const com::sun::star::uno::Sequence< com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
 
-
         //  helper
-
 
         sal_Bool impl_tryToChangeProperty(  sal_Int16                           aCurrentValue   ,
                                             const   com::sun::star::uno::Any&   aNewValue       ,
                                             com::sun::star::uno::Any&           aOldValue       ,
                                             com::sun::star::uno::Any&           aConvertedValue ) throw( com::sun::star::lang::IllegalArgumentException );
 
-
         //  members
-
 
         sal_Int16   m_nSeparatorType;
 };

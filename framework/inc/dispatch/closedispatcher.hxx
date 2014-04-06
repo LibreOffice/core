@@ -39,11 +39,9 @@
 #include <cppuhelper/implbase2.hxx>
 #include <vcl/evntpost.hxx>
 
-
 class SystemWindow;
 
 namespace framework{
-
 
 /**
     @short          helper to dispatch the URLs ".uno:CloseDoc"/".uno:CloseWin"/".uno:CloseFrame"
@@ -64,7 +62,6 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
 
     private:
 
-
         /** @short  describe, which request must be done here.
         @descr      The incoming URLs {.uno:CloseDoc/CloseWin and CloseFrame
                     can be classified so and checked later performant.}*/
@@ -75,53 +72,43 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
             E_CLOSE_WIN
         };
 
-
     // member
 
     private:
-
 
         /** @short reference to an uno service manager,
                    which can be used to create own needed
                    uno resources. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-
         /** @short  reference to the target frame, which should be
                     closed by this dispatch. */
         css::uno::WeakReference< css::frame::XFrame > m_xCloseFrame;
-
 
         /** @short  used for asynchronous callbacks within the main thread.
             @descr  Internally we work asynchronous. Because our callis
                     are not aware, that her request can kill its own environment ... */
         ::vcl::EventPoster m_aAsyncCallback;
 
-
         /** @short  used inside asyncronous callback to decide,
                     which operation must be executed. */
         EOperation m_eOperation;
 
-
         /** @short  for asynchronous operations we must hold us self alive! */
         css::uno::Reference< css::uno::XInterface > m_xSelfHold;
-
 
         /** @short  list of registered status listener */
         osl::Mutex m_mutex;
         ListenerHash m_lStatusListener;
-
 
         /** @short  holded alive for internally asynchronous operations! */
         css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
 
         SystemWindow* m_pSysWindow;
 
-
     // native interface
 
     public:
-
 
         /** @short  connect a new CloseDispatcher instance to its frame.
             @descr  One CloseDispatcher instance is bound to onw frame only.
@@ -142,21 +129,17 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
                         const css::uno::Reference< css::frame::XFrame >&          xFrame ,
                         const OUString&                                           sTarget);
 
-
         /** @short  does nothing real. */
         virtual ~CloseDispatcher();
-
 
     // uno interface
 
     public:
 
-
         // XNotifyingDispatch
         virtual void SAL_CALL dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                         const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                         const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
         // XDispatch
         virtual void SAL_CALL dispatch            ( const css::util::URL&                                     aURL      ,
@@ -166,16 +149,13 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
         virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
                                                     const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
         // XDispatchInformationProvider
         virtual css::uno::Sequence< sal_Int16 >                       SAL_CALL getSupportedCommandGroups         (                         ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     // internal helper
 
     private:
-
 
         /** @short  a callback for asynchronous started operations.
 
@@ -184,7 +164,6 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
                     during they call us ...
         */
         DECL_LINK( impl_asyncCallback, void* );
-
 
         /** @short  prepare m_xCloseFrame so it should be closeable without problems.
 
@@ -211,7 +190,6 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
                                                      sal_Bool                                   bCloseAllOtherViewsToo,
                                                      sal_Bool&                                  bControllerSuspended  );
 
-
         /** @short  close the member m_xCloseFrame.
 
             @descr  This method does not look for any document
@@ -228,7 +206,6 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
          */
         sal_Bool implts_closeFrame();
 
-
         /** @short  set the special BackingComponent (now StartModule)
                     as new component of our m_xCloseFrame.
 
@@ -236,7 +213,6 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
                     sal_True if operation was successfully.
          */
         sal_Bool implts_establishBackingMode();
-
 
         /** @short  calls XDesktop->terminate().
 
@@ -250,7 +226,6 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
                     sal_True if termination of the application was started ...
          */
         sal_Bool implts_terminateApplication();
-
 
         /** @short  notify a DispatchResultListener.
 
@@ -270,7 +245,6 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
         void implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                sal_Int16                                                   nState   ,
                                          const css::uno::Any&                                              aResult  );
-
 
         /** @short  try to find the right target frame where this close request
                     must be really done.

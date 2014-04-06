@@ -394,7 +394,6 @@ private:
     void impl_subst(PathSettings::PathInfo& aPath   ,
                     sal_Bool                bReSubst);
 
-
     /** converts our new string list schema to the old ";" separated schema ... */
     OUString impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath        ) const;
     OUStringList    impl_convertOldStyle2Path(const OUString&        sOldStylePath) const;
@@ -434,7 +433,6 @@ private:
                                        const PathSettings::PathInfo* pPathOld,
                                        const PathSettings::PathInfo* pPathNew);
 
-
     //  OPropertySetHelper
     virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any&  aConvertedValue,
             css::uno::Any& aOldValue,
@@ -457,7 +455,6 @@ private:
     css::uno::Reference< css::container::XNameAccess >    fa_getCfgNew();
 };
 
-
 PathSettings::PathSettings( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : PathSettings_BASE(m_aMutex)
     , ::cppu::OPropertySetHelper(cppu::WeakComponentImplHelperBase::rBHelper)
@@ -466,7 +463,6 @@ PathSettings::PathSettings( const css::uno::Reference< css::uno::XComponentConte
     ,  m_bIgnoreEvents(sal_False)
 {
 }
-
 
 PathSettings::~PathSettings()
 {
@@ -491,7 +487,6 @@ void SAL_CALL PathSettings::disposing()
     m_pPropHelp = 0;
 }
 
-
 css::uno::Any SAL_CALL PathSettings::queryInterface( const css::uno::Type& _rType )
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -501,7 +496,6 @@ css::uno::Any SAL_CALL PathSettings::queryInterface( const css::uno::Type& _rTyp
     return aRet;
 }
 
-
 css::uno::Sequence< css::uno::Type > SAL_CALL PathSettings::getTypes(  )
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -510,7 +504,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL PathSettings::getTypes(  )
         ::cppu::OPropertySetHelper::getTypes()
     );
 }
-
 
 void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEvent)
     throw (css::uno::RuntimeException, std::exception)
@@ -542,7 +535,6 @@ void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEven
         impl_rebuildPropertyDescriptor();
 }
 
-
 void SAL_CALL PathSettings::disposing(const css::lang::EventObject& aSource)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -551,7 +543,6 @@ void SAL_CALL PathSettings::disposing(const css::lang::EventObject& aSource)
     if (aSource.Source == m_xCfgNew)
         m_xCfgNew.clear();
 }
-
 
 OUString PathSettings::getStringProperty(const OUString& p1)
     throw(css::uno::RuntimeException)
@@ -562,13 +553,11 @@ OUString PathSettings::getStringProperty(const OUString& p1)
     return s;
 }
 
-
 void PathSettings::setStringProperty(const OUString& p1, const OUString& p2)
     throw(css::uno::RuntimeException)
 {
     ::cppu::OPropertySetHelper::setPropertyValue(p1, css::uno::Any(p2));
 }
-
 
 void PathSettings::impl_readAll()
 {
@@ -591,7 +580,6 @@ void PathSettings::impl_readAll()
 
     impl_rebuildPropertyDescriptor();
 }
-
 
 // NO substitution here ! It's done outside ...
 OUStringList PathSettings::impl_readOldFormat(const OUString& sPath)
@@ -618,7 +606,6 @@ OUStringList PathSettings::impl_readOldFormat(const OUString& sPath)
 
     return aPathVal;
 }
-
 
 // NO substitution here ! It's done outside ...
 PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
@@ -671,7 +658,6 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
     return aPathVal;
 }
 
-
 void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 {
     m_bIgnoreEvents = sal_True;
@@ -717,7 +703,6 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
     m_bIgnoreEvents = sal_False;
 }
 
-
 void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
                                           const OUStringList&           lOld )
 {
@@ -745,7 +730,6 @@ void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
         }
     }
 }
-
 
 PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath          ,
                                                             sal_Bool         bNotifyListener)
@@ -853,7 +837,6 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
     return eOp;
 }
 
-
 css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const OUString& sPath)
 {
     OUString sOldStyleProp = sPath;
@@ -896,7 +879,6 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const OUSt
 
     return lIDs;
 }
-
 
 void PathSettings::impl_notifyPropListener(      PathSettings::EChangeOp /*eOp*/     ,
                                            const OUString&        sPath   ,
@@ -975,7 +957,6 @@ void PathSettings::impl_notifyPropListener(      PathSettings::EChangeOp /*eOp*/
     }
 }
 
-
 void PathSettings::impl_subst(      OUStringList&                                          lVals   ,
                               const css::uno::Reference< css::util::XStringSubstitution >& xSubst  ,
                                     sal_Bool                                               bReSubst)
@@ -997,7 +978,6 @@ void PathSettings::impl_subst(      OUStringList&                               
     }
 }
 
-
 void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
                               sal_Bool                bReSubst)
 {
@@ -1010,7 +990,6 @@ void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
     else
         aPath.sWritePath = xSubst->substituteVariables(aPath.sWritePath, sal_False);
 }
-
 
 OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath) const
 {
@@ -1048,7 +1027,6 @@ OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& r
     return sPathVal.makeStringAndClear();
 }
 
-
 OUStringList PathSettings::impl_convertOldStyle2Path(const OUString& sOldStylePath) const
 {
     OUStringList lList;
@@ -1063,7 +1041,6 @@ OUStringList PathSettings::impl_convertOldStyle2Path(const OUString& sOldStylePa
 
     return lList;
 }
-
 
 void PathSettings::impl_purgeKnownPaths(const PathSettings::PathInfo& rPath,
                                                OUStringList&           lList)
@@ -1092,7 +1069,6 @@ void PathSettings::impl_purgeKnownPaths(const PathSettings::PathInfo& rPath,
     if (pItem != lList.end())
         lList.erase(pItem);
 }
-
 
 void PathSettings::impl_rebuildPropertyDescriptor()
 {
@@ -1153,7 +1129,6 @@ void PathSettings::impl_rebuildPropertyDescriptor()
     // <- SAFE
 }
 
-
 css::uno::Any PathSettings::impl_getPathValue(sal_Int32 nID) const
 {
     const PathSettings::PathInfo* pPath = impl_getPathAccessConst(nID);
@@ -1191,7 +1166,6 @@ css::uno::Any PathSettings::impl_getPathValue(sal_Int32 nID) const
 
     return aVal;
 }
-
 
 void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                                      const css::uno::Any& aVal)
@@ -1299,7 +1273,6 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
     pOrgPath->takeOver(aChangePath);
 }
 
-
 sal_Bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
 {
     OUStringList::const_iterator pIt;
@@ -1315,7 +1288,6 @@ sal_Bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
     return sal_True;
 }
 
-
 sal_Bool PathSettings::impl_isValidPath(const OUString& sPath) const
 {
     // allow empty path to reset a path.
@@ -1327,7 +1299,6 @@ sal_Bool PathSettings::impl_isValidPath(const OUString& sPath) const
 
     return (! INetURLObject(sPath).HasError());
 }
-
 
 OUString impl_extractBaseFromPropName(const OUString& sPropName)
 {
@@ -1343,7 +1314,6 @@ OUString impl_extractBaseFromPropName(const OUString& sPropName)
 
     return sPropName;
 }
-
 
 PathSettings::PathInfo* PathSettings::impl_getPathAccess(sal_Int32 nHandle)
 {
@@ -1364,7 +1334,6 @@ PathSettings::PathInfo* PathSettings::impl_getPathAccess(sal_Int32 nHandle)
     // <- SAFE
 }
 
-
 const PathSettings::PathInfo* PathSettings::impl_getPathAccessConst(sal_Int32 nHandle) const
 {
     // SAFE ->
@@ -1384,7 +1353,6 @@ const PathSettings::PathInfo* PathSettings::impl_getPathAccessConst(sal_Int32 nH
     // <- SAFE
 }
 
-
 sal_Bool SAL_CALL PathSettings::convertFastPropertyValue(      css::uno::Any& aConvertedValue,
                                                                css::uno::Any& aOldValue      ,
                                                                sal_Int32      nHandle        ,
@@ -1401,7 +1369,6 @@ sal_Bool SAL_CALL PathSettings::convertFastPropertyValue(      css::uno::Any& aC
                 aConvertedValue);
 }
 
-
 void SAL_CALL PathSettings::setFastPropertyValue_NoBroadcast(      sal_Int32      nHandle,
                                                              const css::uno::Any& aValue )
     throw(css::uno::Exception, std::exception)
@@ -1410,19 +1377,16 @@ void SAL_CALL PathSettings::setFastPropertyValue_NoBroadcast(      sal_Int32    
     impl_setPathValue(nHandle, aValue);
 }
 
-
 void SAL_CALL PathSettings::getFastPropertyValue(css::uno::Any& aValue ,
                                                  sal_Int32      nHandle) const
 {
     aValue = impl_getPathValue(nHandle);
 }
 
-
 ::cppu::IPropertyArrayHelper& SAL_CALL PathSettings::getInfoHelper()
 {
     return *m_pPropHelp;
 }
-
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL PathSettings::getPropertySetInfo()
     throw(css::uno::RuntimeException, std::exception)
@@ -1430,7 +1394,6 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL PathSettings::getPr
     return css::uno::Reference< css::beans::XPropertySetInfo >(
             ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper()));
 }
-
 
 css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubstitution()
 {
@@ -1456,7 +1419,6 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
 
     return xSubst;
 }
-
 
 css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 {
@@ -1485,7 +1447,6 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 
     return xCfg;
 }
-
 
 css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <framework/toolboxconfiguration.hxx>
 #include <xml/toolboxdocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
@@ -37,7 +36,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::container;
-
 
 namespace framework
 {
@@ -79,7 +77,6 @@ bool ToolBoxConfiguration::LoadToolBox(
         return false;
     }
 }
-
 
 bool ToolBoxConfiguration::StoreToolBox(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,

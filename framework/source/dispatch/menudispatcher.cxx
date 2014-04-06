@@ -84,7 +84,6 @@ MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  
     xOwner->addFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
 }
 
-
 //  destructor
 
 MenuDispatcher::~MenuDispatcher()
@@ -94,14 +93,12 @@ MenuDispatcher::~MenuDispatcher()
     // and a dtor isn't the best place to do that!
 }
 
-
 //  XDispatch
 
 void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        /*aURL*/            ,
                                             const   Sequence< PropertyValue >&  /*seqProperties*/   ) throw( RuntimeException, std::exception )
 {
 }
-
 
 //  XDispatch
 
@@ -116,7 +113,6 @@ void SAL_CALL MenuDispatcher::addStatusListener(   const   uno::Reference< XStat
     m_aListenerContainer.addInterface( aURL.Complete, xControl );
 }
 
-
 //  XDispatch
 
 void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< XStatusListener >&   xControl,
@@ -130,9 +126,7 @@ void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< X
     m_aListenerContainer.removeInterface( aURL.Complete, xControl );
 }
 
-
 //   XFrameActionListener
-
 
 void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) throw ( RuntimeException, std::exception )
 {
@@ -168,7 +162,6 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
             impl_setMenuBar( NULL );
     }
 }
-
 
 //   XEventListener
 void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeException, std::exception )
@@ -206,7 +199,6 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
     }
 }
 
-
 //  private method
 
 void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel )
@@ -225,7 +217,6 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
         }
     }
 }
-
 
 //  private method
 
@@ -306,7 +297,6 @@ static sal_Bool impldbg_checkParameter_MenuDispatcher(   const   uno::Reference<
     return xContext.is() && xOwner.is();
 }
 
-
 // We need a valid URL. What is meaning with "register for nothing"?!
 // xControl must correct to - nobody can advised otherwise!
 static sal_Bool impldbg_checkParameter_addStatusListener( const   uno::Reference< XStatusListener >&   xControl,
@@ -326,7 +316,6 @@ static sal_Bool impldbg_checkParameter_addStatusListener( const   uno::Reference
     // Return result of check.
     return bOK ;
 }
-
 
 // The same goes for these case! We have added valid listener for correct URL only.
 // We can't remove invalid listener for nothing!

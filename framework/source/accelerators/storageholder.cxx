@@ -37,27 +37,22 @@
 
 #include <com/sun/star/io/XSeekable.hpp>
 
-
 #define PATH_SEPARATOR_ASCII        "/"
 #define PATH_SEPARATOR_UNICODE      ((sal_Unicode)'/')
 #define PATH_SEPARATOR              OUString(PATH_SEPARATOR_ASCII)
 
-
 namespace framework
 {
-
 
 StorageHolder::StorageHolder()
 {
 }
-
 
 StorageHolder::~StorageHolder()
 {
     // TODO implement me
     // dispose/clear etcpp.
 }
-
 
 void StorageHolder::forgetCachedStorages()
 {
@@ -74,20 +69,17 @@ void StorageHolder::forgetCachedStorages()
     m_lStorages.clear();
 }
 
-
 void StorageHolder::setRootStorage(const css::uno::Reference< css::embed::XStorage >& xRoot)
 {
     osl::MutexGuard g(m_mutex);
     m_xRoot = xRoot;
 }
 
-
 css::uno::Reference< css::embed::XStorage > StorageHolder::getRootStorage() const
 {
     osl::MutexGuard g(m_mutex);
     return m_xRoot;
 }
-
 
 css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUString& sPath    ,
                                                                           sal_Int32        nOpenMode)
@@ -173,7 +165,6 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
     return xChild;
 }
 
-
 StorageHolder::TStorageList StorageHolder::getAllPathStorages(const OUString& sPath)
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
@@ -213,7 +204,6 @@ StorageHolder::TStorageList StorageHolder::getAllPathStorages(const OUString& sP
     return lStoragesOfPath;
 }
 
-
 void StorageHolder::commitPath(const OUString& sPath)
 {
     StorageHolder::TStorageList lStorages = getAllPathStorages(sPath);
@@ -239,7 +229,6 @@ void StorageHolder::commitPath(const OUString& sPath)
     if (xCommit.is())
         xCommit->commit();
 }
-
 
 void StorageHolder::closePath(const OUString& rPath)
 {
@@ -286,7 +275,6 @@ void StorageHolder::closePath(const OUString& rPath)
     }
 }
 
-
 void StorageHolder::notifyPath(const OUString& sPath)
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
@@ -309,7 +297,6 @@ void StorageHolder::notifyPath(const OUString& sPath)
     }
 }
 
-
 void StorageHolder::addStorageListener(      IStorageListener* pListener,
                                        const OUString&  sPath    )
 {
@@ -327,7 +314,6 @@ void StorageHolder::addStorageListener(      IStorageListener* pListener,
         rInfo.Listener.push_back(pListener);
 }
 
-
 void StorageHolder::removeStorageListener(      IStorageListener* pListener,
                                           const OUString&  sPath    )
 {
@@ -344,7 +330,6 @@ void StorageHolder::removeStorageListener(      IStorageListener* pListener,
     if (pIt2 != rInfo.Listener.end())
         rInfo.Listener.erase(pIt2);
 }
-
 
 OUString StorageHolder::getPathOfStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
 {
@@ -366,13 +351,11 @@ OUString StorageHolder::getPathOfStorage(const css::uno::Reference< css::embed::
     return pIt->first;
 }
 
-
 css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(const css::uno::Reference< css::embed::XStorage >& xChild)
 {
     OUString sChildPath = getPathOfStorage(xChild);
     return getParentStorage(sChildPath);
 }
-
 
 css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(const OUString& sChildPath)
 {
@@ -417,14 +400,12 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
     return css::uno::Reference< css::embed::XStorage >();
 }
 
-
 void StorageHolder::operator=(const StorageHolder& rCopy)
 {
     osl::MutexGuard g(m_mutex);
     m_xRoot     = rCopy.m_xRoot;
     m_lStorages = rCopy.m_lStorages;
 }
-
 
 css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
                                                                                       const OUString&                             sSubStorage   ,
@@ -465,7 +446,6 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFal
     return css::uno::Reference< css::embed::XStorage >();
 }
 
-
 css::uno::Reference< css::io::XStream > StorageHolder::openSubStreamWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
                                                                                  const OUString&                             sSubStream    ,
                                                                                        sal_Int32                                    eOpenMode     ,
@@ -505,7 +485,6 @@ css::uno::Reference< css::io::XStream > StorageHolder::openSubStreamWithFallback
     return css::uno::Reference< css::io::XStream >();
 }
 
-
 OUString StorageHolder::impl_st_normPath(const OUString& sPath)
 {
     // path must start without "/" but end with "/"!
@@ -527,7 +506,6 @@ OUString StorageHolder::impl_st_normPath(const OUString& sPath)
     return sNormedPath;
 }
 
-
 OUStringList StorageHolder::impl_st_parsePath(const OUString& sPath)
 {
     OUStringList lToken;
@@ -541,7 +519,6 @@ OUStringList StorageHolder::impl_st_parsePath(const OUString& sPath)
     }
     return lToken;
 }
-
 
 } // namespace framework
 

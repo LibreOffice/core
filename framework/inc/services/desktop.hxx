@@ -104,7 +104,6 @@ class Desktop : private cppu::BaseMutex,
     // internal used types, const etcpp.
     private:
 
-
         /** used temporary to know which listener was already called or not. */
         typedef ::std::vector< css::uno::Reference< css::frame::XTerminateListener > > TTerminateListenerList;
 
@@ -137,7 +136,6 @@ class Desktop : private cppu::BaseMutex,
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
         /**
             @interface  XDesktop
 
@@ -169,7 +167,6 @@ class Desktop : private cppu::BaseMutex,
         virtual sal_Bool SAL_CALL terminate()
             throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
         /**
             @interface  XDesktop
 
@@ -191,7 +188,6 @@ class Desktop : private cppu::BaseMutex,
          */
         virtual void SAL_CALL addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
             throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
 
         /**
             @interface  XDesktop
@@ -322,14 +318,12 @@ class Desktop : private cppu::BaseMutex,
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper                   (                                       ) SAL_OVERRIDE;
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo              (                                       ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     //  private methods
 
     private:
 
         css::uno::Reference< css::lang::XComponent >            impl_getFrameComponent          ( const css::uno::Reference< css::frame::XFrame >&  xFrame          ) const;
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor(                                                                   );
-
 
         /** calls queryTermination() on every registered termination listener.
          *
@@ -351,7 +345,6 @@ class Desktop : private cppu::BaseMutex,
         void impl_sendQueryTerminationEvent(TTerminateListenerList& lCalledListener,
                                             sal_Bool&             bVeto          );
 
-
         /** calls cancelTermination() on every termination listener
          *  where queryTermination() was called before.
          *
@@ -367,7 +360,6 @@ class Desktop : private cppu::BaseMutex,
          */
         void impl_sendCancelTerminationEvent(const TTerminateListenerList& lCalledListener);
 
-
         /** calls notifyTermination() on every registered termination listener.
          *
          *  Note: Only normal termination listener (registered in list m_aListenerContainer
@@ -375,7 +367,6 @@ class Desktop : private cppu::BaseMutex,
          *        has to be handled explicitly !
          */
         void impl_sendNotifyTerminationEvent();
-
 
         /** try to close all open frames.
          *
@@ -394,7 +385,6 @@ class Desktop : private cppu::BaseMutex,
          */
         sal_Bool impl_closeFrames(sal_Bool bAllowUI);
 
-
     //  debug methods
     //  (should be private everytime!)
 
@@ -405,7 +395,6 @@ class Desktop : private cppu::BaseMutex,
 
         sal_Bool m_bIsTerminated ;  /// check flag to protect us against dispose before terminate!
                                     /// see dispose() for further information!
-
 
     //  variables
     //  (should be private everytime!)
@@ -426,12 +415,10 @@ class Desktop : private cppu::BaseMutex,
         OUString                                                 m_sTitle                    ;
         css::uno::Reference< css::frame::XDispatchRecorderSupplier >    m_xDispatchRecorderSupplier ;
 
-
         /** special terminate listener to close pipe and block external requests
           * during/after termination process is/was running
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xPipeTerminator;
-
 
         /** special terminate listener shown inside system tray (quick starter)
           * Will hinder the office on shutdown ... but wish to allow closing
@@ -439,7 +426,6 @@ class Desktop : private cppu::BaseMutex,
           * it has to be handled special .-)
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xQuickLauncher;
-
 
         /** special terminate listener which loads images asynchronous for current open documents.
           * Because internally it uses blocking system APIs ... it cant be guaranteed that
@@ -449,7 +435,6 @@ class Desktop : private cppu::BaseMutex,
           * So these implementation must be a special terminate listener too .-(
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xSWThreadManager;
-
 
         /** special terminate listener shuting down the SfxApplication.
           * Because these desktop instance closes documents and informs listener

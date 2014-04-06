@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "uielement/dropdownboxtoolbarcontroller.hxx"
 
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -45,8 +44,6 @@ using namespace ::com::sun::star::util;
 
 namespace framework
 {
-
-
 
 // Wrapper class to notify controller about events from ListBox.
 // Unfortunaltly the events are notifed through virtual methods instead
@@ -118,8 +115,6 @@ bool ListBoxControl::PreNotify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-
-
 DropdownToolbarController::DropdownToolbarController(
     const Reference< XComponentContext >&    rxContext,
     const Reference< XFrame >&               rFrame,
@@ -143,13 +138,9 @@ DropdownToolbarController::DropdownToolbarController(
     m_pListBoxControl->SetDropDownLineCount( 5 );
 }
 
-
-
 DropdownToolbarController::~DropdownToolbarController()
 {
 }
-
-
 
 void SAL_CALL DropdownToolbarController::dispose()
 throw ( RuntimeException, std::exception )
@@ -164,7 +155,6 @@ throw ( RuntimeException, std::exception )
     m_pListBoxControl = 0;
 }
 
-
 Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
@@ -177,8 +167,6 @@ Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyM
     aArgs[1].Value <<= aSelectedText;
     return aArgs;
 }
-
-
 
 void DropdownToolbarController::Select()
 {
@@ -209,8 +197,6 @@ bool DropdownToolbarController::PreNotify( NotifyEvent& /*rNEvt*/ )
 {
     return false;
 }
-
-
 
 void DropdownToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <sal/macros.h>
 
@@ -33,7 +32,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/attributelist.hxx>
-
 
 #define XMLNS_MENU                  "http://openoffice.org/2001/menu"
 
@@ -83,9 +81,7 @@ static const char CMD_PROTOCOL[]                = ".uno:";
 static const char ADDDIRECT_CMD[]               = ".uno:AddDirect" ;
 static const char AUTOPILOTMENU_CMD[]           = ".uno:AutoPilotMenu" ;
 
-
 //  using namespaces
-
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -108,7 +104,6 @@ MenuStyleItem MenuItemStyles[ ] = {
     { ::com::sun::star::ui::ItemStyle::TEXT, ATTRIBUTE_ITEMSTYLE_TEXT },
     { ::com::sun::star::ui::ItemStyle::RADIO_CHECK, ATTRIBUTE_ITEMSTYLE_RADIO }
 };
-
 
 sal_Int32 nMenuStyleItemEntries = (sizeof (MenuItemStyles) / sizeof (MenuItemStyles[0]));
 
@@ -149,8 +144,6 @@ static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
         }
     }
 }
-
-
 
 // Base class implementation
 
@@ -222,8 +215,6 @@ void ReadMenuDocumentHandlerBase::initPropertyCommon(
     rProps[5].Value <<= ::com::sun::star::ui::ItemType::DEFAULT;
 }
 
-
-
 OReadMenuDocumentHandler::OReadMenuDocumentHandler(
     const Reference< XIndexContainer >& rMenuBarContainer )
 :   m_nElementDepth( 0 ),
@@ -237,12 +228,10 @@ OReadMenuDocumentHandler::~OReadMenuDocumentHandler()
 {
 }
 
-
 void SAL_CALL OReadMenuDocumentHandler::startDocument(void)
     throw ( SAXException, RuntimeException, std::exception )
 {
 }
-
 
 void SAL_CALL OReadMenuDocumentHandler::endDocument(void)
     throw( SAXException, RuntimeException, std::exception )
@@ -254,7 +243,6 @@ void SAL_CALL OReadMenuDocumentHandler::endDocument(void)
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
-
 
 void SAL_CALL OReadMenuDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttrList )
@@ -275,12 +263,10 @@ throw( SAXException, RuntimeException, std::exception )
     }
 }
 
-
 void SAL_CALL OReadMenuDocumentHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException, std::exception )
 {
 }
-
 
 void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
     throw( SAXException, RuntimeException, std::exception )
@@ -304,9 +290,6 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
     }
 }
 
-
-
-
 OReadMenuBarHandler::OReadMenuBarHandler(
     const Reference< XIndexContainer >& rMenuBarContainer,
     const Reference< XSingleComponentFactory >& rFactory          )
@@ -317,23 +300,19 @@ OReadMenuBarHandler::OReadMenuBarHandler(
 {
 }
 
-
 OReadMenuBarHandler::~OReadMenuBarHandler()
 {
 }
-
 
 void SAL_CALL OReadMenuBarHandler::startDocument(void)
     throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
-
 void SAL_CALL OReadMenuBarHandler::endDocument(void)
     throw( SAXException, RuntimeException, std::exception )
 {
 }
-
 
 void SAL_CALL OReadMenuBarHandler::startElement(
     const OUString& rName, const Reference< XAttributeList > &xAttrList )
@@ -424,12 +403,10 @@ throw( SAXException, RuntimeException, std::exception )
     }
 }
 
-
 void SAL_CALL OReadMenuBarHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException, std::exception )
 {
 }
-
 
 void OReadMenuBarHandler::endElement( const OUString& aName )
     throw( SAXException, RuntimeException, std::exception )
@@ -454,10 +431,6 @@ void OReadMenuBarHandler::endElement( const OUString& aName )
     }
 }
 
-
-
-
-
 OReadMenuHandler::OReadMenuHandler(
     const Reference< XIndexContainer >& rMenuContainer,
     const Reference< XSingleComponentFactory >& rFactory          ) :
@@ -468,23 +441,19 @@ OReadMenuHandler::OReadMenuHandler(
 {
 }
 
-
 OReadMenuHandler::~OReadMenuHandler()
 {
 }
-
 
 void SAL_CALL OReadMenuHandler::startDocument(void)
     throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
-
 void SAL_CALL OReadMenuHandler::endDocument(void)
     throw( SAXException, RuntimeException, std::exception)
 {
 }
-
 
 void SAL_CALL OReadMenuHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttrList )
@@ -510,12 +479,10 @@ throw( SAXException, RuntimeException, std::exception )
     }
 }
 
-
 void SAL_CALL OReadMenuHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException, std::exception )
 {
 }
-
 
 void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
     throw( SAXException, RuntimeException, std::exception )
@@ -540,10 +507,6 @@ void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
     }
 }
 
-
-
-
-
 OReadMenuPopupHandler::OReadMenuPopupHandler(
     const Reference< XIndexContainer >& rMenuContainer,
     const Reference< XSingleComponentFactory >& rFactory          ) :
@@ -556,17 +519,14 @@ OReadMenuPopupHandler::OReadMenuPopupHandler(
 {
 }
 
-
 OReadMenuPopupHandler::~OReadMenuPopupHandler()
 {
 }
-
 
 void SAL_CALL OReadMenuPopupHandler::startDocument(void)
     throw ( SAXException, RuntimeException, std::exception )
 {
 }
-
 
 void SAL_CALL OReadMenuPopupHandler::endDocument(void)
     throw( SAXException, RuntimeException, std::exception)
@@ -714,12 +674,10 @@ throw( SAXException, RuntimeException, std::exception )
     }
 }
 
-
 void SAL_CALL OReadMenuPopupHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException, std::exception )
 {
 }
-
 
 void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
     throw( SAXException, RuntimeException, std::exception )
@@ -767,9 +725,7 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
     }
 }
 
-
 // --------------------------------- Write XML ---------------------------------
-
 
 OWriteMenuDocumentHandler::OWriteMenuDocumentHandler(
     const Reference< XIndexAccess >& rMenuBarContainer,
@@ -782,11 +738,9 @@ OWriteMenuDocumentHandler::OWriteMenuDocumentHandler(
     m_aAttributeType =  OUString( ATTRIBUTE_TYPE_CDATA );
 }
 
-
 OWriteMenuDocumentHandler::~OWriteMenuDocumentHandler()
 {
 }
-
 
 void OWriteMenuDocumentHandler::WriteMenuDocument()
 throw ( SAXException, RuntimeException )
@@ -822,7 +776,6 @@ throw ( SAXException, RuntimeException )
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endDocument();
 }
-
 
 void OWriteMenuDocumentHandler::WriteMenu( const Reference< XIndexAccess >& rMenuContainer )
 throw ( SAXException, RuntimeException )
@@ -904,7 +857,6 @@ throw ( SAXException, RuntimeException )
     }
 }
 
-
 void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, sal_Int16 nStyle )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
@@ -951,7 +903,6 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENUITEM ) );
 }
-
 
 void OWriteMenuDocumentHandler::WriteMenuSeparator()
 {

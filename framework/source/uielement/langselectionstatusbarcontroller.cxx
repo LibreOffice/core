@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <classes/fwkresid.hxx>
 #include <services.h>
 #include <classes/resource.hrc>
@@ -120,7 +119,6 @@ private:
     virtual ~LangSelectionStatusbarController() {}
     LangSelectionStatusbarController(LangSelectionStatusbarController &); // not defined
     void operator =(LangSelectionStatusbarController &); // not defined
-
 
     sal_Bool            m_bShowMenu;        // if the menu is to be displayed or not (depending on the selected object/text)
     sal_Int16           m_nScriptType;      // the flags for the different script types available in the selection, LATIN = 0x0001, ASIAN = 0x0002, COMPLEX = 0x0004
@@ -228,7 +226,6 @@ throw (css::uno::RuntimeException)
     xPopupMenu->insertSeparator( MID_LANG_PARA_SEPARATOR );
     xPopupMenu->insertItem( MID_LANG_PARA_STRING, FWK_RESSTR(STR_SET_LANGUAGE_FOR_PARAGRAPH), 0, MID_LANG_PARA_STRING );
     xPopupMenu->setPopupMenu( MID_LANG_PARA_STRING, subPopupMenu );
-
 
     // now display the popup menu and execute every command ...
 

@@ -79,8 +79,6 @@ struct KeyEventEqualsFunc
     }
 };
 
-
-
 /**
     Basic string list based on a std::vector()
     It implements some additional funtionality which can be useful but
@@ -114,16 +112,12 @@ class OUStringList : public ::comphelper::SequenceAsVector< OUString >
         }
 };
 
-
-
 /**
     Basic string queue based on a std::queue()
     It implements some additional funtionality which can be useful but
     is missing at the normal std implementation.
 */
 typedef ::std::queue< OUString > OUStringQueue;
-
-
 
 /**
     Basic hash based on a boost::unordered_map() which provides key=[OUString] and value=[template type] pairs
@@ -145,15 +139,11 @@ class BaseHash : public ::boost::unordered_map< OUString                    ,
         }
 };
 
-
-
 /**
     Basic OUString hash.
     Key and values are OUStrings.
 */
 typedef BaseHash< OUString > OUStringHashMap;
-
-
 
 /**
     It can be used to map names (e.g. of properties) to her corresponding handles.
@@ -161,8 +151,6 @@ typedef BaseHash< OUString > OUStringHashMap;
     Mapping between these two parts of a property should be done in the fastest way :-)
 */
 typedef BaseHash< sal_Int32 > NameToHandleHash;
-
-
 
 /**
     Sometimes we need this template to implement listener container ...

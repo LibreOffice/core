@@ -50,12 +50,9 @@ class CheckedIterator
 
     //  public methods
 
-
     public:
 
-
         // constructor / destructor
-
 
         /*-****************************************************************************************************
             @short      standard constructor
@@ -77,9 +74,7 @@ class CheckedIterator
         {
         }
 
-
         // interface methods
-
 
         /*-****************************************************************************************************
             @short      initialize instance with valid container
@@ -285,9 +280,7 @@ class CheckedIterator
             return m_pPosition;
         }
 
-
     //  private member
-
 
     private:
 

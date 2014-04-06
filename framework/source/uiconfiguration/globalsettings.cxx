@@ -33,16 +33,11 @@
 #include <rtl/instance.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-
 //  Defines
-
 
 using namespace ::com::sun::star;
 
-
-
 //  Namespace
-
 
 static const char GLOBALSETTINGS_ROOT_ACCESS[]              = "/org.openoffice.Office.UI.GlobalSettings/Toolbars";
 
@@ -54,9 +49,7 @@ static const char GLOBALSETTINGS_PROPERTY_STATESENABLED[]   = "StatesEnabled";
 namespace framework
 {
 
-
 //  Configuration access class for WindowState supplier implementation
-
 
 class GlobalSettings_Access : public ::cppu::WeakImplHelper2<
                                   ::com::sun::star::lang::XComponent,
@@ -92,9 +85,6 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper2<
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xConfigAccess;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>         m_xContext;
 };
-
-
-
 
 GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
     m_bDisposed( sal_False ),
@@ -267,9 +257,7 @@ sal_Bool GlobalSettings_Access::impl_initConfigAccess()
     return sal_False;
 }
 
-
 //  global class
-
 
 struct mutexGlobalSettings : public rtl::Static< osl::Mutex, mutexGlobalSettings > {};
 static GlobalSettings_Access* pStaticSettings = 0;

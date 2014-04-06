@@ -22,7 +22,6 @@
 
 #include <general.h>
 
-
 namespace framework{
 
 #define DOCTYPE_ACCELERATORS            DECLARE_ASCII("<!DOCTYPE accel:acceleratorlist PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"accelerator.dtd\">")

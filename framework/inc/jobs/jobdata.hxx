@@ -34,9 +34,6 @@
 
 namespace framework{
 
-
-
-
 /**
     @short  holds all necessary information about a job and
             handle it's configuration (if any exist!)
@@ -100,7 +97,6 @@ class JobData
                 , m_sDocEvent(sDocEvent)
             {}
         };
-
 
     // member
 
@@ -178,7 +174,6 @@ class JobData
          */
         JobResult m_aLastExecutionResult;
 
-
     // native interface
 
     public:
@@ -215,7 +210,6 @@ class JobData
         static void appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
                                                const OUString&                                                 sEvent ,
                                                      ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >& lJobs  );
-
 
     // private helper
 

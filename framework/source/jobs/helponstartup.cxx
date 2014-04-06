@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 // include own header
 #include <jobs/helponstartup.hxx>
 #include <loadenv/targethelper.hxx>
 #include <services.h>
-
 
 // include others
 #include <comphelper/configurationhelper.hxx>
@@ -33,13 +30,11 @@
 #include <vcl/help.hxx>
 #include <rtl/ustrbuf.hxx>
 
-
 // include interfaces
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-
 
 namespace framework{
 
@@ -98,17 +93,14 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                     }
                    )
 
-
 HelpOnStartup::HelpOnStartup(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext    (xContext)
 {
 }
 
-
 HelpOnStartup::~HelpOnStartup()
 {
 }
-
 
 // css.task.XJob
 css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
@@ -157,7 +149,6 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
     return css::uno::Any();
 }
 
-
 void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -169,7 +160,6 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     else if (aEvent.Source == m_xConfig)
         m_xConfig.clear();
 }
-
 
 OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
 {
@@ -222,7 +212,6 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
     return sModuleId;
 }
 
-
 OUString HelpOnStartup::its_getCurrentHelpURL()
 {
     // SAFE ->
@@ -263,7 +252,6 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
 
     return sCurrentHelpURL;
 }
-
 
 sal_Bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
 {
@@ -311,7 +299,6 @@ sal_Bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
     return sal_False;
 }
 
-
 OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
 {
     // SAFE ->
@@ -348,7 +335,6 @@ OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
 
     return sHelpURL;
 }
-
 
 OUString HelpOnStartup::ist_createHelpURL(const OUString& sBaseURL,
                                                  const OUString& sLocale ,

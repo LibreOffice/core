@@ -23,9 +23,7 @@
 #include <macros/generic.hxx>
 #include <general.h>
 
-
 namespace framework{
-
 
 /** properties for "Frame" class */
 
@@ -52,7 +50,6 @@ namespace framework{
 
 #define FRAME_PROPCOUNT                                 5
 
-
 /** properties for "Desktop" class */
 
 #define DESKTOP_PROPNAME_ASCII_ACTIVEFRAME              "ActiveFrame"
@@ -77,7 +74,6 @@ namespace framework{
 #define DESKTOP_PROPHANDLE_TITLE                        4
 
 #define DESKTOP_PROPCOUNT                               5
-
 
 /** properties for "PathSettings" class */
 
@@ -161,7 +157,6 @@ namespace framework{
 
 #define PATHSETTINGS_PROPCOUNT                          24
 
-
 /** properties for "LayoutManager" class */
 
 #define LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER          "MenuBarCloser"
@@ -185,7 +180,6 @@ namespace framework{
 #define LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT              4
 #define LAYOUTMANAGER_PROPHANDLE_PRESERVE_CONTENT_SIZE  5
 
-
 /** properties for "UICommandDescription" class */
 #define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST        "private:resource/image/commandimagelist"
 #define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST  "private:resource/image/commandrotateimagelist"
@@ -198,7 +192,6 @@ namespace framework{
 #define UICOMMANDDESCRIPTION_PROPERTIES_IMAGE_MIRRORED          2
 #define UICOMMANDDESCRIPTION_PROPERTIES_IMAGE_ROTATED           4
 #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON            8
-
 
 /** properties for "AutoRecovery" class */
 
@@ -216,13 +209,11 @@ namespace framework{
 
 #define AUTORECOVERY_PROPCOUNT                          3
 
-
 /** properties for Filter config */
 
 #define FILTER_PROPNAME_ASCII_DOCUMENTSERVICE           "DocumentService"
 
 #define FILTER_PROPNAME_DOCUMENTSERVICE                 OUString( FILTER_PROPNAME_ASCII_DOCUMENTSERVICE )
-
 
 /** properties for office module config (Setup.xcu) */
 
@@ -233,7 +224,6 @@ namespace framework{
 #define OFFICEFACTORY_PROPNAME_WINDOWATTRIBUTES         OUString( OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES )
 #define OFFICEFACTORY_PROPNAME_UINAME                   OUString( OFFICEFACTORY_PROPNAME_ASCII_UINAME )
 #define OFFICEFACTORY_PROPNAME_ICON                     OUString( OFFICEFACTORY_PROPNAME_ASCII_ICON )
-
 
 /** properties for tab window (old) */
 #define TABWINDOW_PROPNAME_ASCII_PARENTWINDOW           "ParentWindow"
@@ -248,14 +238,11 @@ namespace framework{
 #define TABWINDOWSERVICE_PROPHANDLE_WINDOW              0
 #define TABWINDOWSERVICE_PROPCOUNT                      1
 
-
 /** provides some helper methods to implement property sets. */
 
 class PropHelper
 {
     public:
-
-
 
     /** checks if given property will be changed by this settings.
      *  We compare the content of the given any values. If they are different we return sal_True - sal_False otherwise.

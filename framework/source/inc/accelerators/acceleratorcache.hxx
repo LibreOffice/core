@@ -27,12 +27,10 @@
 
 #include <comphelper/sequenceasvector.hxx>
 
-
 // definition
 
 namespace framework
 {
-
 
 /**
     @short  implements a cache for any accelerator configuration.
@@ -50,13 +48,11 @@ class AcceleratorCache
 
     public:
 
-
         /** TODO document me
             commands -> keys
         */
         typedef ::comphelper::SequenceAsVector< css::awt::KeyEvent > TKeyList;
         typedef BaseHash< TKeyList > TCommand2Keys;
-
 
         /** TODO document me
             keys -> commands
@@ -66,39 +62,31 @@ class AcceleratorCache
                                  KeyEventHashCode   ,
                                  KeyEventEqualsFunc > TKey2Commands;
 
-
     // member
 
     private:
-
 
         /** map commands to keys in relation 1:n.
             First key is interpreted as preferred one! */
         TCommand2Keys m_lCommand2Keys;
 
-
         /** map keys to commands in relation 1:1. */
         TKey2Commands m_lKey2Commands;
-
 
     // interface
 
     public:
 
-
         /** @short  creates a new - but empty - cache instance. */
         AcceleratorCache();
-
 
         /** @short  make a copy of this cache.
             @descr  Used for the copy-on-write feature.
         */
         AcceleratorCache(const AcceleratorCache& rCopy);
 
-
         /** @short  does nothing real. */
         virtual ~AcceleratorCache();
-
 
         /** @short  write changes back to the original container.
 
@@ -108,10 +96,8 @@ class AcceleratorCache
           */
         virtual void takeOver(const AcceleratorCache& rCopy);
 
-
         /** TODO document me */
         AcceleratorCache& operator=(const AcceleratorCache& rCopy);
-
 
         /** @short  checks if the specified key exists.
 
@@ -124,10 +110,8 @@ class AcceleratorCache
         virtual sal_Bool hasKey(const css::awt::KeyEvent& aKey) const;
         virtual sal_Bool hasCommand(const OUString& sCommand) const;
 
-
         /** TODO document me */
         virtual TKeyList getAllKeys() const;
-
 
         /** @short  add a new or change an existing key-command pair
                     of this container.
@@ -141,7 +125,6 @@ class AcceleratorCache
         virtual void setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
                                        const OUString&    sCommand);
 
-
         /** @short  returns the list of keys, which are registered
                     for this command.
 
@@ -153,10 +136,8 @@ class AcceleratorCache
           */
         virtual TKeyList getKeysByCommand(const OUString& sCommand) const;
 
-
         /** TODO */
         virtual OUString getCommandByKey(const css::awt::KeyEvent& aKey) const;
-
 
         /** TODO */
         virtual void removeKey(const css::awt::KeyEvent& aKey);

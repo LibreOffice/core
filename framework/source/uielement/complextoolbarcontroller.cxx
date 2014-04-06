@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "uielement/complextoolbarcontroller.hxx"
 
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -50,8 +49,6 @@ using namespace ::com::sun::star::util;
 namespace framework
 {
 
-
-
 ComplexToolbarController::ComplexToolbarController(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >&            rFrame,
@@ -66,13 +63,9 @@ ComplexToolbarController::ComplexToolbarController(
     m_xURLTransformer.set( URLTransformer::create(m_xContext) );
 }
 
-
-
 ComplexToolbarController::~ComplexToolbarController()
 {
 }
-
-
 
 void SAL_CALL ComplexToolbarController::dispose()
 throw ( RuntimeException, std::exception )
@@ -86,7 +79,6 @@ throw ( RuntimeException, std::exception )
     m_pToolbar = 0;
     m_nID = 0;
 }
-
 
 Sequence<PropertyValue> ComplexToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
@@ -135,8 +127,6 @@ throw ( RuntimeException, std::exception )
         Application::PostUserEvent( STATIC_LINK(0, ComplexToolbarController , ExecuteHdl_Impl), pExecuteInfo );
     }
 }
-
-
 
 void ComplexToolbarController::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException, std::exception )
@@ -206,8 +196,6 @@ throw ( RuntimeException, std::exception )
     }
 }
 
-
-
 IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
@@ -226,8 +214,6 @@ IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, ExecuteHdl_Impl, ExecuteI
    delete pExecuteInfo;
    return 0;
 }
-
-
 
 IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, Notify_Impl, NotifyInfo*, pNotifyInfo )
 {
@@ -251,8 +237,6 @@ IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, Notify_Impl, NotifyInfo*,
    delete pNotifyInfo;
    return 0;
 }
-
-
 
 void ComplexToolbarController::addNotifyInfo(
     const OUString&                      aEventName,
@@ -282,7 +266,6 @@ void ComplexToolbarController::addNotifyInfo(
     }
 }
 
-
 sal_Int32 ComplexToolbarController::getFontSizePixel( const Window* pWindow )
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
@@ -293,8 +276,6 @@ sal_Int32 ComplexToolbarController::getFontSizePixel( const Window* pWindow )
     ::Size aPixelSize = pWindow->LogicToPixel( ::Size( 0, nHeight ), MAP_APPFONT );
     return aPixelSize.Height();
 }
-
-
 
 uno::Reference< frame::XDispatch > ComplexToolbarController::getDispatchFromCommand( const OUString& aCommand ) const
 {
@@ -309,8 +290,6 @@ uno::Reference< frame::XDispatch > ComplexToolbarController::getDispatchFromComm
 
     return xDispatch;
 }
-
-
 
 const ::com::sun::star::util::URL& ComplexToolbarController::getInitializedURL()
 {

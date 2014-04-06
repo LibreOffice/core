@@ -100,7 +100,6 @@ private:
     sal_Bool m_bAllowUserInteractionOnQuit;
     sal_Bool m_bTerminated;
 
-
     // in case of synchronous call the caller should do saveDone() call himself!
     void StoreSession( sal_Bool bAsync );
 
@@ -294,7 +293,6 @@ void SAL_CALL SessionListener::statusChanged(const frame::FeatureStateEvent& eve
     }
 }
 
-
 sal_Bool SAL_CALL SessionListener::doRestore()
     throw (RuntimeException, std::exception)
 {
@@ -319,7 +317,6 @@ sal_Bool SAL_CALL SessionListener::doRestore()
 
     return m_bRestored;
 }
-
 
 void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelable*/ )
     throw (RuntimeException, std::exception)

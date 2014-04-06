@@ -31,9 +31,7 @@
 
 namespace framework{
 
-
 //  XInterface, XTypeProvider, XServiceInfo
-
 
 DEFINE_XSERVICEINFO_MULTISERVICE    (   Oxt_Handler                                                ,
                                         ::cppu::OWeakObject                                        ,

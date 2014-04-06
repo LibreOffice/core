@@ -38,8 +38,6 @@ namespace framework{
 #define SETNAME_HANDLER                             DECLARE_ASCII("HandlerSet"                                      )   /// name of configuration set inside package
 #define PROPERTY_PROTOCOLS                          DECLARE_ASCII("Protocols"                                       )   /// properties of a protocol handler
 
-
-
 /**
     Programmer can register his own services to handle different protocols.
     Don't forget: It doesn't mean "handling of documents" ... these services could handle protocols ...
@@ -58,8 +56,6 @@ struct FWI_DLLPUBLIC ProtocolHandler
         OUStringList m_lProtocols;
 };
 
-
-
 /**
     This hash use registered pattern of all protocol handlers as keys and provide her
     uno implementation names as value. Overloading of the index operator makes it possible
@@ -73,14 +69,10 @@ class FWI_DLLPUBLIC PatternHash : public BaseHash< OUString >
         PatternHash::iterator findPatternKey( const OUString& sURL );
 };
 
-
-
 /**
     This hash holds protocol handler structs by her names.
 */
 typedef BaseHash< ProtocolHandler > HandlerHash;
-
-
 
 /**
     @short          this hash makes it easy to find a protocol handler by using his uno implementation name.
@@ -127,8 +119,6 @@ class FWI_DLLPUBLIC HandlerCache
 
         void takeOver(HandlerHash* pHandler, PatternHash* pPattern);
 };
-
-
 
 /**
     @short          implements configuration access for handler configuration

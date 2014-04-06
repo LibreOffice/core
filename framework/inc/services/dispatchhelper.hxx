@@ -48,7 +48,6 @@ namespace framework{
 class DispatchHelper : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,::com::sun::star::frame::XDispatchHelper,::com::sun::star::frame::XDispatchResultListener >
 {
 
-
     // member
 
     private:
@@ -66,22 +65,18 @@ class DispatchHelper : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::X
 
         css::uno::Reference< css::uno::XInterface > m_xBroadcaster;
 
-
     // interface
 
     public:
-
 
         // ctor/dtor
 
                  DispatchHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~DispatchHelper(                                                                    );
 
-
         // XInterface, XTypeProvider, XServiceInfo
 
         DECLARE_XSERVICEINFO
-
 
         // XDispatchHelper
         virtual css::uno::Any SAL_CALL executeDispatch(
@@ -92,12 +87,10 @@ class DispatchHelper : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::X
                                         const css::uno::Sequence< css::beans::PropertyValue >&      lArguments        )
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
         // XDispatchResultListener
         virtual void SAL_CALL dispatchFinished(
                                 const css::frame::DispatchResultEvent& aResult )
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
         // XEventListener
         virtual void SAL_CALL disposing(

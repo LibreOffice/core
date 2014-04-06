@@ -189,8 +189,6 @@ void JobExecutor::disposing() {
     }
 }
 
-
-
 /**
     @short  implementation of XJobExecutor interface
     @descr  We use the given event to locate any registered job inside our configuration
@@ -246,8 +244,6 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
        pJob->execute(css::uno::Sequence< css::beans::NamedValue >());
     }
 }
-
-
 
 void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception)
 {
@@ -336,8 +332,6 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     }
 }
 
-
-
 void SAL_CALL JobExecutor::elementInserted( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException, std::exception)
 {
     OUString sValue;
@@ -372,8 +366,6 @@ void SAL_CALL JobExecutor::elementReplaced( const css::container::ContainerEvent
 {
     // I'm not interested on changed items :-)
 }
-
-
 
 /** @short  the used cfg changes notifier wish to be released in its reference.
 

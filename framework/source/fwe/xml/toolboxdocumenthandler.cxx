@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 
 #include <xml/toolboxdocumenthandler.hxx>
@@ -41,7 +40,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
-
 
 #define TOOLBAR_DOCTYPE             "<!DOCTYPE toolbar:toolbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"toolbar.dtd\">"
 
@@ -653,10 +651,7 @@ OUString OReadToolBoxDocumentHandler::getErrorLineString()
         return OUString();
 }
 
-
-
 //  OWriteToolBoxDocumentHandler
-
 
 OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
     const Reference< XIndexAccess >& rItemAccess,
@@ -758,9 +753,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
     m_xWriteDocumentHandler->endDocument();
 }
 
-
 //  protected member functions
-
 
 void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
     const OUString& rCommandURL,

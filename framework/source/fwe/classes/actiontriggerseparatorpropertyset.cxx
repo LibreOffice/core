@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <classes/actiontriggerseparatorpropertyset.hxx>
 #include <threadhelp/lockhelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -25,7 +24,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
-
 
 using namespace cppu;
 using namespace com::sun::star::uno;

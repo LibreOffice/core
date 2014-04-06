@@ -176,10 +176,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
         return NULL;
     }
 
-
     // I) handle special cases which not right for using findFrame() first
-
-
 
     // I.I) "_blank"
     //  It's not the right place to create a new task here - because we are queried for a dispatch object
@@ -193,7 +190,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
             xDispatcher = implts_getOrCreateDispatchHelper( E_BLANKDISPATCHER, xDesktop );
     }
 
-
     // I.II) "_default"
     //  This is a combination of search an empty task for recycling - or create a new one.
 
@@ -205,7 +201,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
         if (lcl_isStartModuleDispatch(aURL))
             xDispatcher = implts_getOrCreateDispatchHelper( E_STARTMODULEDISPATCHER, xDesktop );
     }
-
 
     // I.III) "_self", "", "_top"
     //  The desktop can't load any document - but he can handle some special protocols like "uno", "slot" ...
@@ -220,7 +215,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     {
         xDispatcher = implts_searchProtocolHandler(aURL);
     }
-
 
     // I.IV) no further special targets exist
     //  Now we have to search for the right target frame by calling findFrame() - but should provide our code
@@ -248,8 +242,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     return xDispatcher;
 }
 
-
-
 css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrameDispatch( const css::uno::Reference< css::frame::XFrame > xFrame           ,
                                                                                           const css::util::URL&                           aURL             ,
                                                                                           const OUString&                          sTargetFrameName ,
@@ -257,17 +249,12 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
 
-
     // 0) Some URLs are dispatched in a generic way (e.g. by the menu) using the default target "".
     //    But they are specified to use her own fix target. Detect such URLs here and use the correct target.
 
-
     OUString sTargetName = sTargetFrameName;
 
-
     // I) handle special cases which not right for using findFrame() first
-
-
 
     // I.I) "_blank", "_default"
     //  It's not the right place to create a new task here. Only the desktop can do that.
@@ -284,7 +271,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
             xDispatcher = xParent->queryDispatch(aURL, sTargetName, 0); // it's a special target - ignore search flags
     }
 
-
     // I.II) "_menubar"
     //  Special mode on frame or task to receive the local menu. Not supported by findFrame()
 
@@ -292,7 +278,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     {
         xDispatcher = implts_getOrCreateDispatchHelper( E_MENUDISPATCHER, xFrame );
     }
-
 
     // I.IV) "_beamer"
     //  Special sub frame of a top frame only. Search or create it. ... OK it's currently a little bit HACKI.
@@ -315,7 +300,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         }
     }
 
-
     // I.V) "_parent"
     //  Our parent frame (if it exist) should handle this URL.
 
@@ -326,7 +310,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
             // SELF => we must address the parent directly... and not his parent or any other parent!
             xDispatcher = xParent->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
     }
-
 
     // I.VI) "_top"
     //  This request must be forwarded to any parent frame, till we reach a top frame.
@@ -350,7 +333,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
                 xDispatcher = xParent->queryDispatch(aURL, SPECIALTARGET_TOP, 0);
         }
     }
-
 
     // I.VII) "_self", ""
     //  Our owner frame should handle this URL. But we can't do it for all of them.
@@ -412,7 +394,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         }
     }
 
-
     // I.VI) no further special handlings exist
     //  Now we have to search for the right target frame by calling findFrame() - but should provide our code
     //  against creation of a new task if no frame could be found.
@@ -457,8 +438,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 
     return xDispatcher;
 }
-
-
 
 /**
     @short      search for a registered protocol handler and ask him for a dispatch object
@@ -523,8 +502,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
 
     return xDispatcher;
 }
-
-
 
 /**
     @short      get or create new dispatch helper
@@ -625,8 +602,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
     return xDispatchHelper;
 }
-
-
 
 /**
     @short      check URL for support by our used loader or handler

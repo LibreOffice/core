@@ -201,7 +201,6 @@ public:
         return aSeq;
     }
 
-
     // XPopupMenuController
     virtual void SAL_CALL updatePopupMenu() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

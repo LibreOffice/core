@@ -20,9 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_ACTIONLOCKGUARD_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_ACTIONLOCKGUARD_HXX
 
-
 #include <com/sun/star/document/XActionLockable.hpp>
-
 
 namespace framework{
 
@@ -47,11 +45,9 @@ class ActionLockGuard
                     forced by this guard instance. */
         sal_Bool m_bActionLocked;
 
-
     // interface
 
     public:
-
 
         /** @short  default ctor to initialize a "non working guard".
 
@@ -64,7 +60,6 @@ class ActionLockGuard
         {
         }
 
-
         /** @short  initialize new guard instance and lock the given resource immediately.
 
             @param  xLock
@@ -76,7 +71,6 @@ class ActionLockGuard
             setResource(xLock);
         }
 
-
         /** @short  release this guard instance and make shure, that no lock
                     will exist afterwards on the internal wrapped resource.
          */
@@ -84,7 +78,6 @@ class ActionLockGuard
         {
             unlock();
         }
-
 
         /** @short  set a new resource for locking at this guard.
 
@@ -110,7 +103,6 @@ class ActionLockGuard
 
             return sal_True;
         }
-
 
         /** @short  set a new resource for locking at this guard.
 
@@ -141,7 +133,6 @@ class ActionLockGuard
                 xLock->removeActionLock();
         }
 
-
         /** @short  lock the internal wrapped resource, if its not already done. */
         virtual void lock()
         {
@@ -152,7 +143,6 @@ class ActionLockGuard
                 m_bActionLocked = m_xActionLock->isActionLocked();
             }
         }
-
 
         /** @short  unlock the internal wrapped resource, if its not already done. */
         virtual void unlock()

@@ -122,7 +122,6 @@ class TransactionGuard : private boost::noncopyable
             }
         }
 
-
     //  private methods
 
     private:
@@ -140,7 +139,6 @@ class TransactionGuard : private boost::noncopyable
             @onerror    -
         *//*-*****************************************************************************************************/
         TransactionGuard();
-
 
     //  private member
 

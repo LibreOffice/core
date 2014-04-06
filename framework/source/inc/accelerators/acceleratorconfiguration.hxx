@@ -50,7 +50,6 @@
 #include <cppuhelper/implbase4.hxx>
 #include <salhelper/singletonref.hxx>
 
-
 // definition
 
 namespace framework
@@ -63,7 +62,6 @@ const char CFG_ENTRY_MODULES[] = "Modules";
 /** "global" type to make accelerator presets unique, so they can be used
     in combination with the salhelper::SingletonRef mechanism! */
 typedef PresetHandler AcceleratorPresets;
-
 
 /**
     implements a read/write access to the accelerator configuration.
@@ -80,11 +78,9 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
 
     protected:
 
-
         /** the global uno service manager.
         Must be used to create own needed services. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
 
         /** used to:
         i  ) copy configuration files from the share to the user layer
@@ -93,14 +89,11 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
         iv ) provide commit for changes. */
         PresetHandler m_aPresetHandler;
 
-
         /** contains the cached configuration data */
         AcceleratorCache m_aReadCache;
 
-
         /** used to implement the copy on write pattern! */
         AcceleratorCache* m_pWriteCache;
-
 
         // native interface!
 
@@ -108,7 +101,6 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
 
         XMLBasedAcceleratorConfiguration( const css::uno::Reference< css::uno::XComponentContext >& xContext);
         virtual ~XMLBasedAcceleratorConfiguration(                                                                    );
-
 
         // uno interface!
 
@@ -192,11 +184,9 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
         // IStorageListener
         virtual void changesOccurred(const OUString& sPath) SAL_OVERRIDE;
 
-
         // helper for derived classes
 
     protected:
-
 
         /** @short  return the current office locale.
 
@@ -208,11 +198,9 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
         */
         OUString impl_ts_getLocale() const;
 
-
         // helper
 
     private:
-
 
         /** @short  load a configuration set, using the given stream.
 
@@ -221,14 +209,12 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
         */
         void impl_ts_load(const css::uno::Reference< css::io::XInputStream >& xStream);
 
-
         /** @short  save a configuration set, using the given stream.
 
         @param  xStream
         the XML structure can be written there.
         */
         void impl_ts_save(const css::uno::Reference< css::io::XOutputStream >& xStream);
-
 
         /** @short  try to locate and open a sub storage.
 
@@ -256,7 +242,6 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
         css::uno::Reference< css::uno::XInterface > impl_ts_openSubStorage(const css::uno::Reference< css::embed::XStorage >& xRootStorage,
             const OUString&                             sSubStorage ,
             sal_Bool                                     bOutStream  );
-
 
         /** @short  returns a reference to one of our internal cache members.
 
@@ -293,7 +278,6 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper4<
 
     protected:
 
-
         /** the global uno service manager.
         Must be used to create own needed services. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -309,14 +293,12 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper4<
 
         ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;
 
-
         // native interface!
 
     public:
 
         XCUBasedAcceleratorConfiguration( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~XCUBasedAcceleratorConfiguration(                                                           );
-
 
         // uno interface!
 
@@ -410,11 +392,9 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper4<
         virtual  void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual  void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
         // helper for derived classes
 
     protected:
-
 
         /** @short  return the current office locale.
 
@@ -425,7 +405,6 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper4<
         The current office locale as BCP47 string.
         */
         OUString impl_ts_getLocale() const;
-
 
         // helper
 

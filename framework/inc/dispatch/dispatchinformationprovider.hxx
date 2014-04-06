@@ -47,7 +47,6 @@ class DispatchInformationProvider : public  ::cppu::WeakImplHelper1< css::frame:
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
 
-
     // interface
     public:
 
@@ -61,7 +60,6 @@ class DispatchInformationProvider : public  ::cppu::WeakImplHelper1< css::frame:
 
         virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
 
     // helper
     private:

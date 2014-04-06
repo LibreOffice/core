@@ -38,11 +38,9 @@ PropertySetContainer::PropertySetContainer()
 {
 }
 
-
 PropertySetContainer::~PropertySetContainer()
 {
 }
-
 
 // XInterface
 void SAL_CALL PropertySetContainer::acquire() throw ()

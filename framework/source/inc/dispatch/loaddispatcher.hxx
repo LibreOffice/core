@@ -59,7 +59,6 @@ class LoadDispatcher : public  ::cppu::WeakImplHelper2< css::frame::XNotifyingDi
         /** @short  TODO document me */
         LoadEnv m_aLoader;
 
-
     // native interface
 
     public:
@@ -88,12 +87,9 @@ class LoadDispatcher : public  ::cppu::WeakImplHelper2< css::frame::XNotifyingDi
                        const OUString&                                           sTargetName ,
                              sal_Int32                                           nSearchFlags);
 
-
-
         /** @short  used to free internal resources.
          */
         virtual ~LoadDispatcher();
-
 
     // uno interface
 

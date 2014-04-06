@@ -33,7 +33,6 @@
 
 namespace framework{
 
-
 // Hash code function for using in all hash maps of follow implementation.
 
 class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >

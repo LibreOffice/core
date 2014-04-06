@@ -24,9 +24,7 @@
 
 namespace framework{
 
-
 //  Values for special frame search ... sTargetFrameName of findFrame() or queryDispatch() or loadComponentFromURL()
-
 
 #define SPECIALTARGET_ASCII_SELF            "_self"                             // The frame himself is searched.
 #define SPECIALTARGET_ASCII_PARENT          "_parent"                           // The direct parent frame is searched.

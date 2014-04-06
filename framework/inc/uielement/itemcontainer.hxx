@@ -48,7 +48,6 @@ class FWI_DLLPUBLIC ItemContainer :   public ::cppu::WeakImplHelper1< ::com::sun
         ItemContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rItemAccessContainer, const ShareableMutex& rMutex );
         virtual ~ItemContainer();
 
-
         //  XInterface, XTypeProvider
 
         // XUnoTunnel

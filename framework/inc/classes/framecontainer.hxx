@@ -67,7 +67,6 @@ class FrameContainer
         /// one container item can be the current active frame. Its necessary for Desktop or Frame implementation.
         css::uno::Reference< css::frame::XFrame > m_xActiveFrame;
 
-
     // interface
 
     public:

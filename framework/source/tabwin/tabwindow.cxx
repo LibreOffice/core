@@ -34,15 +34,12 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-
 //  Defines
-
 
 using namespace com::sun::star;
 
 namespace framework
 {
-
 
 //  XInterface, XTypeProvider, XServiceInfo
 
@@ -100,9 +97,7 @@ TabWindow::~TabWindow()
 {
 }
 
-
 // Helper
-
 
 void TabWindow::implts_LayoutWindows() const
 {
@@ -229,9 +224,7 @@ void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID, con
     }
 }
 
-
 // Links
-
 
 IMPL_LINK( TabWindow, Activate, TabControl*, pTabControl )
 {
@@ -263,9 +256,7 @@ IMPL_LINK( TabWindow, Deactivate, TabControl*, pTabControl )
     return 1;
 }
 
-
 // XInitilization
-
 
 void SAL_CALL TabWindow::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
@@ -420,7 +411,6 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
     }
 }
 
-
 //  XComponent
 
 void SAL_CALL TabWindow::dispose() throw (css::uno::RuntimeException, std::exception)
@@ -488,14 +478,12 @@ throw (css::uno::RuntimeException, std::exception)
     m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), xListener );
 }
 
-
 // XEventListener
 
 void SAL_CALL TabWindow::disposing( const css::lang::EventObject& )
 throw( css::uno::RuntimeException, std::exception )
 {
 }
-
 
 // XWindowListener
 
@@ -543,7 +531,6 @@ throw( css::uno::RuntimeException, std::exception )
         pTabControl->Hide();
 }
 
-
 // XTopWindowListener
 
 void SAL_CALL TabWindow::windowOpened( const css::lang::EventObject& )
@@ -584,9 +571,7 @@ throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-
 //  XSimpleTabController
-
 
 ::sal_Int32 SAL_CALL TabWindow::insertTab()
 throw (css::uno::RuntimeException, std::exception)
@@ -806,9 +791,7 @@ throw (css::uno::RuntimeException, std::exception)
         ::getCppuType( ( const css::uno::Reference< css::awt::XTabListener >* ) NULL ), xListener );
 }
 
-
 //  OPropertySetHelper
-
 
 // XPropertySet helper
 sal_Bool SAL_CALL TabWindow::convertFastPropertyValue( css::uno::Any&       aConvertedValue ,

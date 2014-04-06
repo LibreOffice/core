@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <uielement/langselectionmenucontroller.hxx>
 
 #include "services.h"
@@ -51,7 +50,6 @@
 #include <map>
 #include <set>
 
-
 //  Defines
 
 using namespace ::com::sun::star;
@@ -60,7 +58,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
-
 
 namespace framework
 {
@@ -276,7 +273,6 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     pPopupMenu->InsertItem( nItemId, FwlResId(STR_LANGSTATUS_MORE).toString());
     pPopupMenu->SetItemCommand( nItemId, aCmd_Dialog );
 }
-
 
 void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {

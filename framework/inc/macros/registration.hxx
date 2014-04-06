@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_MACROS_REGISTRATION_HXX
 #define INCLUDED_FRAMEWORK_INC_MACROS_REGISTRATION_HXX
 
-
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -36,7 +35,6 @@
 
 _________________________________________________________________________________________________________________*/
 
-
 //  public
 //  use it as parameter for COMPONENT_GETFACTORY( IFFACTORIES )
 
@@ -49,7 +47,6 @@ ________________________________________________________________________________
         /* xFactory and xServiceManager are local variables of method which use this macro. */                                          \
         xFactory = CLASS::impl_createFactory( xServiceManager );                                                                        \
     }
-
 
 //  public
 //  define method to instanciate new services

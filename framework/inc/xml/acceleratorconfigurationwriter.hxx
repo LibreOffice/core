@@ -38,15 +38,12 @@ class AcceleratorConfigurationWriter
 
     private:
 
-
         /** @short  needed to write the xml configuration. */
         css::uno::Reference< css::xml::sax::XDocumentHandler > m_xConfig;
-
 
         /** @short  reference to the outside container, where this
                     writer must work on. */
         const AcceleratorCache& m_rContainer;
-
 
         /** @short  is used to map key codes to its
                     string representation.
@@ -56,11 +53,9 @@ class AcceleratorConfigurationWriter
                     alive forever ...*/
         ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;
 
-
     // interface
 
     public:
-
 
         /** @short  connect this new writer instance
                     to an outside container, which should be
@@ -75,19 +70,15 @@ class AcceleratorConfigurationWriter
         AcceleratorConfigurationWriter(const AcceleratorCache&                                       rContainer,
                                        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig   );
 
-
         /** @short  does nothing real ... */
         virtual ~AcceleratorConfigurationWriter();
-
 
         /** @short  TODO */
         virtual void flush();
 
-
     // helper
 
     private:
-
 
         /** @short  TODO */
         void impl_ts_writeKeyCommandPair(const css::awt::KeyEvent&                                     aKey    ,

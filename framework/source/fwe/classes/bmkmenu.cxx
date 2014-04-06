@@ -70,7 +70,6 @@ class BmkMenu_Impl
 
 sal_uInt16 BmkMenu_Impl::m_nMID = BMKMENU_ITEMID_START;
 
-
 BmkMenu_Impl::BmkMenu_Impl() :
     m_bInitialized(sal_False)
 {
@@ -87,8 +86,6 @@ sal_uInt16 BmkMenu_Impl::GetMID()
         m_nMID = BMKMENU_ITEMID_START;
     return m_nMID;
 }
-
-
 
 BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType )
     :AddonMenu(xFrame)

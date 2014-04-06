@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "uielement/comboboxtoolbarcontroller.hxx"
 
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -46,8 +45,6 @@ using namespace ::com::sun::star::util;
 
 namespace framework
 {
-
-
 
 // Wrapper class to notify controller about events from combobox.
 // Unfortunaltly the events are notifed through virtual methods instead
@@ -135,8 +132,6 @@ bool ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-
-
 ComboboxToolbarController::ComboboxToolbarController(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >&            rFrame,
@@ -159,13 +154,9 @@ ComboboxToolbarController::ComboboxToolbarController(
     m_pToolbar->SetItemWindow( m_nID, m_pComboBox );
 }
 
-
-
 ComboboxToolbarController::~ComboboxToolbarController()
 {
 }
-
-
 
 void SAL_CALL ComboboxToolbarController::dispose()
 throw ( RuntimeException, std::exception )
@@ -180,7 +171,6 @@ throw ( RuntimeException, std::exception )
     m_pComboBox = 0;
 }
 
-
 Sequence<PropertyValue> ComboboxToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
@@ -193,8 +183,6 @@ Sequence<PropertyValue> ComboboxToolbarController::getExecuteArgs(sal_Int16 KeyM
     aArgs[1].Value <<= aSelectedText;
     return aArgs;
 }
-
-
 
 void ComboboxToolbarController::Select()
 {
@@ -258,8 +246,6 @@ bool ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
     }
     return false;
 }
-
-
 
 void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "uielement/togglebuttontoolbarcontroller.hxx"
 
 #include <framework/addonsoptions.hxx>
@@ -54,8 +53,6 @@ using namespace ::com::sun::star::util;
 namespace framework
 {
 
-
-
 ToggleButtonToolbarController::ToggleButtonToolbarController(
     const Reference< XComponentContext >&    rxContext,
     const Reference< XFrame >&               rFrame,
@@ -72,13 +69,9 @@ ToggleButtonToolbarController::ToggleButtonToolbarController(
         m_pToolbar->SetItemBits( m_nID, TIB_DROPDOWN | m_pToolbar->GetItemBits( m_nID ) );
 }
 
-
-
 ToggleButtonToolbarController::~ToggleButtonToolbarController()
 {
 }
-
-
 
 void SAL_CALL ToggleButtonToolbarController::dispose()
 throw ( RuntimeException, std::exception )
@@ -86,7 +79,6 @@ throw ( RuntimeException, std::exception )
     SolarMutexGuard aSolarMutexGuard;
     ComplexToolbarController::dispose();
 }
-
 
 Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
@@ -99,8 +91,6 @@ Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 
     aArgs[1].Value <<= m_aCurrentSelection;
     return aArgs;
 }
-
-
 
 uno::Reference< awt::XWindow > SAL_CALL ToggleButtonToolbarController::createPopupWindow()
 throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -132,8 +122,6 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 
     return xWindow;
 }
-
-
 
 void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {

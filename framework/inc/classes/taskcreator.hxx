@@ -48,7 +48,6 @@ class TaskCreator
 
         css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
-
     // interface
     public:
 
@@ -57,7 +56,6 @@ class TaskCreator
 
         css::uno::Reference< css::frame::XFrame > createTask( const OUString& sName    ,
                                                                     sal_Bool         bVisible );
-
 
     // helper
     private:

@@ -34,7 +34,6 @@ namespace framework{
 class TargetHelper
 {
 
-
     public:
 
         /** @short  its used at the following interfaces to classify
@@ -54,12 +53,9 @@ class TargetHelper
             E_HELPTASK
         };
 
-
     // interface
 
     public:
-
-
 
         /** @short  it checks the given unknown target name,
                     if it's the expected special one.
@@ -77,8 +73,6 @@ class TargetHelper
          */
         static sal_Bool matchSpecialTarget(const OUString& sCheckTarget  ,
                                                  ESpecialTarget   eSpecialTarget);
-
-
 
         /** @short  it checks, if the given name can be used
                     to set it at a frame using XFrame.setName() method.

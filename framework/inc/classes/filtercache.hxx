@@ -65,15 +65,11 @@ class FilterCache   :   private TransactionBase
 {
     public:
 
-
     //  public methods
-
 
     public:
 
-
         //  constructor / destructor
-
 
         FilterCache( sal_Int32 nVersion = DEFAULT_FILTERCACHE_VERSION,
                      sal_Int16 nMode    = DEFAULT_FILTERCACHE_MODE   );
@@ -309,7 +305,6 @@ class FilterCache   :   private TransactionBase
         sal_Bool validateAndRepairDetectors();
         sal_Bool validateAndRepairLoader();
         sal_Bool validateAndRepairHandler();
-
 
     //  private variables
 

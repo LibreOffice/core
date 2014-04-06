@@ -26,7 +26,6 @@
 
 namespace framework{
 
-
 /**
     some protocols must be checked during loading or dispatching URLs manually
     It can be necessary to decide, if a URL represent a non visible content or
@@ -58,7 +57,6 @@ class ProtocolCheck
 {
     public:
 
-
     /**
         enums for well known protocols
      */
@@ -76,7 +74,6 @@ class ProtocolCheck
         E_MAILTO            ,
         E_NEWS
     };
-
 
     /**
         it checks, if the given URL string match one of the well known protocols.
@@ -119,7 +116,6 @@ class ProtocolCheck
         else
             return E_UNKNOWN_PROTOCOL;
     }
-
 
     /**
         it checks if given URL match the required protocol only

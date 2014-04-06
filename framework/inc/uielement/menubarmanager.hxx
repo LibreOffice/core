@@ -170,8 +170,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
 
     private:
 
-
-
         void Destroy();
 
         struct MenuItemHandler
