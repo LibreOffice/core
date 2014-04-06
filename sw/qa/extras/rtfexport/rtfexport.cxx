@@ -611,6 +611,14 @@ DECLARE_RTFEXPORT_TEST(testRelsize, "relsize.rtf")
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xShape, "RelativeHeightRelation"));
 }
 
+DECLARE_RTFEXPORT_TEST(testLineNumbering, "linenumbering.rtf")
+{
+    uno::Reference<text::XLineNumberingProperties> xLineNumberingProperties(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet = xLineNumberingProperties->getLineNumberingProperties();
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xPropertySet, "IsOn")));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), getProperty<sal_Int32>(xPropertySet, "Interval"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
