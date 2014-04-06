@@ -33,6 +33,8 @@
 #include "doc.hxx"
 #include "frmfmt.hxx"
 
+using namespace css;
+
 SwHTMLPosFlyFrm::SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
                                   const SdrObject *pSdrObj,
                                   sal_uInt8 nOutMode ) :
