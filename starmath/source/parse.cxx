@@ -2366,7 +2366,12 @@ void SmParser::Error(SmParseError eError)
 
 
 SmParser::SmParser()
-    : m_aDotLoc( LanguageTag::convertToLocale( LANGUAGE_ENGLISH_US ) )
+    : m_nCurError( 0 )
+    , m_nBufferIndex( 0 )
+    , m_nTokenIndex( 0 )
+    , m_Row( 0 )
+    , m_nColOff( 0 )
+    , m_aDotLoc( LanguageTag::convertToLocale( LANGUAGE_ENGLISH_US ) )
 {
     bImportSymNames = m_bExportSymNames = false;
     m_nLang = Application::GetSettings().GetUILanguageTag().getLanguageType();
