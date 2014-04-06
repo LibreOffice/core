@@ -604,6 +604,8 @@ SfxMultiRecordReader::SfxMultiRecordReader( SvStream *pStream, sal_uInt16 nTag )
     , _nContentSize(0)
     , _nContentCount(0)
     , _nContentNo(0)
+    , _nContentTag( 0 )
+    , _nContentVer( 0 )
 {
     // Position im Stream merken, um im Fehlerfall zur"uck-seeken zu k"onnen
     _nStartPos = pStream->Tell();
