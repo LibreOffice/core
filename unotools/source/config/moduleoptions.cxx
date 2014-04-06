@@ -703,7 +703,7 @@ void SvtModuleOptions_Impl::SetFactoryDefaultFilter(       SvtModuleOptions::EFa
 }
 
 /*-************************************************************************************************************
-    @short      return list of key names of ouer configuration management which represent our module tree
+    @short      return list of key names of our configuration management which represent our module tree
     @descr      You give use a list of current existing set node names .. and we expand it for all
                 well known properties which are necessary for this implementation.
                 These full expanded list should be used to get values of this properties.

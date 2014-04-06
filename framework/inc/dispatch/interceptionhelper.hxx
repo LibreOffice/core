@@ -45,7 +45,7 @@ namespace framework{
                 master/slave functionality AND using of optional features like registration of URL pattern!
 
     @attention  Don't use this class as direct member - use it dynamicly. Do not derive from this class.
-                We hold a weakreference to ouer owner not to ouer superclass.
+                We hold a weakreference to our owner not to our superclass.
  */
 class InterceptionHelper : public  ::cppu::WeakImplHelper3<
                                      css::frame::XDispatchProvider,

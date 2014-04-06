@@ -154,7 +154,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
         bool                IsOptionEnabled ( SvtSecurityOptions::EOption eOption                   ) const;
 
         /*-****************************************************************************************************
-            @short      return list of key names of ouer configuration management which represent our module tree
+            @short      return list of key names of our configuration management which represent our module tree
             @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
             @return     A list of needed configuration keys is returned.
@@ -967,9 +967,9 @@ SvtSecurityOptions::SvtSecurityOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetInitMutex() );
-    // Increase ouer refcount ...
+    // Increase our refcount ...
     ++m_nRefCount;
-    // ... and initialize ouer data container only if it not already exist!
+    // ... and initialize our data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
         m_pDataContainer = new SvtSecurityOptions_Impl;
@@ -982,10 +982,10 @@ SvtSecurityOptions::~SvtSecurityOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetInitMutex() );
-    // Decrease ouer refcount.
+    // Decrease our refcount.
     --m_nRefCount;
     // If last instance was deleted ...
-    // we must destroy ouer static data container!
+    // we must destroy our static data container!
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;

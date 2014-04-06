@@ -30,7 +30,7 @@ namespace framework{
 
 /*-************************************************************************************************************
     @short          These values describe our supported queries for type, filter ... properties.
-                    They are used by our FilterFactory or ouer TypeDetection to return
+                    They are used by our FilterFactory or our TypeDetection to return
                     subsets of our cached configuration.
 *//*-*************************************************************************************************************/
 #define BASE_QUERY_ALL                                  DECLARE_ASCII("_query_all"     )

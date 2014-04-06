@@ -28,7 +28,7 @@ namespace framework{
 
 #define SPECIALTARGET_ASCII_SELF            "_self"                             // The frame himself is searched.
 #define SPECIALTARGET_ASCII_PARENT          "_parent"                           // The direct parent frame is searched.
-#define SPECIALTARGET_ASCII_TOP             "_top"                              // Search at ouer parents for the first task (if any exist) or a frame without a parent.
+#define SPECIALTARGET_ASCII_TOP             "_top"                              // Search at our parents for the first task (if any exist) or a frame without a parent.
 #define SPECIALTARGET_ASCII_BLANK           "_blank"                            // Create a new task.
 #define SPECIALTARGET_ASCII_DEFAULT         "_default"                          // Create a new task or recycle an existing one
 #define SPECIALTARGET_ASCII_BEAMER          "_beamer"                           // special frame in hierarchy

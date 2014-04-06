@@ -120,7 +120,7 @@ class OnewayExecutor extends Thread
      * implements the thread function
      * Here we call the internal set link object back and
      * give him all necessary parameters.
-     * After that we die by ouerself ...
+     * After that we die by ourselves ...
      */
     public void run()
     {

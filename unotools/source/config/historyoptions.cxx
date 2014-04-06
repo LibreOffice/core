@@ -566,9 +566,9 @@ SvtHistoryOptions::SvtHistoryOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase ouer refcount ...
+    // Increase our refcount ...
     ++m_nRefCount;
-    // ... and initialize ouer data container only if it not already exist!
+    // ... and initialize our data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
         m_pDataContainer = new SvtHistoryOptions_Impl;
@@ -583,10 +583,10 @@ SvtHistoryOptions::~SvtHistoryOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease ouer refcount.
+    // Decrease our refcount.
     --m_nRefCount;
     // If last instance was deleted ...
-    // we must destroy ouer static data container!
+    // we must destroy our static data container!
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;

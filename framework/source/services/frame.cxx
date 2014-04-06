@@ -676,19 +676,19 @@ css::uno::Reference< css::frame::XFrames > SAL_CALL Frame::getFrames() throw( cs
 
     SolarMutexGuard g;
     // Return access to all child frames to caller.
-    // Ouer childframe container is implemented in helper class OFrames and used as a reference m_xFramesHelper!
+    // Our childframe container is implemented in helper class OFrames and used as a reference m_xFramesHelper!
     return m_xFramesHelper;
 }
 
 /*-****************************************************************************************************
     @short      get the current active child frame
     @descr      It must be a frameto. Direct children of a frame are frames only! No task or desktop is accepted.
-                We don't save this information directly in this class. We use ouer container-helper
+                We don't save this information directly in this class. We use our container-helper
                 to do that.
 
     @seealso    class OFrameContainer
     @seealso    method setActiveFrame()
-    @return     A reference to ouer current active childframe, if anyone exist.
+    @return     A reference to our current active childframe, if anyone exist.
     @return     A null reference, if nobody is active.
 
     @onerror    A null reference is returned.
@@ -708,7 +708,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::getActiveFrame() throw
 /*-****************************************************************************************************
     @short      set the new active direct child frame
     @descr      It must be a frame to. Direct children of frame are frames only! No task or desktop is accepted.
-                We don't save this information directly in this class. We use ouer container-helper
+                We don't save this information directly in this class. We use our container-helper
                 to do that.
 
     @seealso    class OFrameContainer
@@ -1295,7 +1295,7 @@ sal_Bool SAL_CALL Frame::isTop() throw( css::uno::RuntimeException, std::excepti
 
     SolarMutexGuard g;
     // This information is set in setCreator().
-    // We are top, if ouer parent is a task or the desktop or if no parent exist!
+    // We are top, if our parent is a task or the desktop or if no parent exist!
     return m_bIsFrameTop;
 }
 
@@ -1365,7 +1365,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException, std::exceptio
     }
 
     //  2)  I was active before or current activated and there is a path from here to bottom, who CAN be active.
-    //      But ouer direct child of path is not active yet.
+    //      But our direct child of path is not active yet.
     //      (It can be, if activation occur in the middle of a current path!)
     //      In these case we activate path to bottom to set focus on right frame!
     if ( eState == E_ACTIVE && xActiveChild.is() && !xActiveChild->isActive() )
@@ -1448,11 +1448,11 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException, std::except
         //  4)  If there is a path from here to my parent ...
         //      ... I'am on the top or in the middle of deactivated subtree and action was started here.
         //      I must deactivate all frames from here to top, which are members of current path.
-        //      Stop, if THESE frame not the active frame of ouer parent!
+        //      Stop, if THESE frame not the active frame of our parent!
         if ( xParent.is() && xParent->getActiveFrame() == xThis )
         {
-            // We MUST break the path - otherwise we will get the focus - not ouer parent! ...
-            // Attention: Ouer parent don't call us again - WE ARE NOT ACTIVE YET!
+            // We MUST break the path - otherwise we will get the focus - not our parent! ...
+            // Attention: Our parent don't call us again - WE ARE NOT ACTIVE YET!
             // [ see step 3 and condition "if ( m_eActiveState!=INACTIVE ) ..." in this method! ]
             xParent->deactivate();
         }

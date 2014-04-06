@@ -37,9 +37,9 @@ namespace framework{
 
 /*-************************************************************************************************************
     @short          implement XFrames, XIndexAccess and XElementAccess interfaces as helper for services
-    @descr          Use this class as helper for these interfaces. We share mutex and framecontainer with ouer owner.
+    @descr          Use this class as helper for these interfaces. We share mutex and framecontainer with our owner.
                     The framecontainer is a member of it from type "FrameContainer". That means;
-                    we have the same information as ouer owner. In current implementation we use mutex and lock-mechanism
+                    we have the same information as our owner. In current implementation we use mutex and lock-mechanism
                     to prevent against compete access. In future we plan support of semaphore!
 
     @devstatus      deprecated
@@ -50,7 +50,7 @@ namespace framework{
     @base           OWeakObject
 
     @ATTENTION      Don't use this class as direct member - use it dynamicly. Do not derive from this class.
-                    We hold a weakreference to ouer owner not to ouer superclass.
+                    We hold a weakreference to our owner not to our superclass.
 
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
@@ -62,7 +62,7 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
             @short      standard ctor
             @descr      These initialize a new instance of this class with all needed information for work.
                         We share framecontainer with owner implementation! It's a threadsafe container.
-            @param      xOwner            , reference to ouer owner. We hold a wekreference to prevent us against cross-references!
+            @param      xOwner            , reference to our owner. We hold a wekreference to prevent us against cross-references!
             @param      pFrameContainer   , pointer to shared framecontainer of owner. It's valid only, if weakreference is valid!
         *//*-*****************************************************************************************************/
          OFrames(   const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
@@ -72,7 +72,7 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
 
         /*-****************************************************************************************************
             @short      append frame to container
-            @descr      We share the container with ouer owner. We can do this only, if no lock is set on container.
+            @descr      We share the container with our owner. We can do this only, if no lock is set on container.
                         Valid references are accepted only!
 
             @seealso    class FrameContainer

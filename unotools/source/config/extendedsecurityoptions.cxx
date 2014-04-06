@@ -92,7 +92,7 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
     private:
 
         /*-****************************************************************************************************
-            @short      return list of key names of ouer configuration management which represent oue module tree
+            @short      return list of key names of our configuration management which represent oue module tree
             @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
             @return     A list of needed configuration keys is returned.
@@ -159,7 +159,7 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     }
 
     // Enable notification mechanism of our baseclass.
-    // We need it to get information about changes outside these class on ouer used configuration keys!
+    // We need it to get information about changes outside these class on our used configuration keys!
     Sequence< OUString > seqNotifyNames( 1 );
     seqNotifyNames[0] = m_aSecureExtensionsSetName;
     EnableNotification( seqNotifyNames );
@@ -275,9 +275,9 @@ SvtExtendedSecurityOptions::SvtExtendedSecurityOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetInitMutex() );
-    // Increase ouer refcount ...
+    // Increase our refcount ...
     ++m_nRefCount;
-    // ... and initialize ouer data container only if it not already exist!
+    // ... and initialize our data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
        m_pDataContainer = new SvtExtendedSecurityOptions_Impl;
@@ -292,10 +292,10 @@ SvtExtendedSecurityOptions::~SvtExtendedSecurityOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetInitMutex() );
-    // Decrease ouer refcount.
+    // Decrease our refcount.
     --m_nRefCount;
     // If last instance was deleted ...
-    // we must destroy ouer static data container!
+    // we must destroy our static data container!
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;

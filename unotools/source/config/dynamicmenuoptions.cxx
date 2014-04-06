@@ -339,7 +339,7 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     // Follow assignment use order of values in relation to our list of key names!
     DBG_ASSERT( !(lNames.getLength()!=lValues.getLength()), "SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    // Copy values from list in right order to ouer internal member.
+    // Copy values from list in right order to our internal member.
     // Attention: List for names and values have an internal construction pattern!
 
     // first "New" menu ...
@@ -418,8 +418,8 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     }
 
 /*TODO: Not used in the moment! see Notify() ...
-    // Enable notification mechanism of ouer baseclass.
-    // We need it to get information about changes outside these class on ouer used configuration keys!
+    // Enable notification mechanism of our baseclass.
+    // We need it to get information about changes outside these class on our used configuration keys!
     EnableNotification( lNames );
 */
 }
@@ -669,9 +669,9 @@ SvtDynamicMenuOptions::SvtDynamicMenuOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase ouer refcount ...
+    // Increase our refcount ...
     ++m_nRefCount;
-    // ... and initialize ouer data container only if it not already exist!
+    // ... and initialize our data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
         m_pDataContainer = new SvtDynamicMenuOptions_Impl;
@@ -685,10 +685,10 @@ SvtDynamicMenuOptions::~SvtDynamicMenuOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease ouer refcount.
+    // Decrease our refcount.
     --m_nRefCount;
     // If last instance was deleted ...
-    // we must destroy ouer static data container!
+    // we must destroy our static data container!
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;

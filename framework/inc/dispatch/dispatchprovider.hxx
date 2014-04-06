@@ -66,7 +66,7 @@ enum EDispatchHelper
                             - a normal frame never can create a new one by himself
 
     @attention      Use this class as member only! Never use it as baseclass.
-                    XInterface will be ambigous and we hold a weakreference to ouer OWNER - not to ouer SUPERCLASS!
+                    XInterface will be ambigous and we hold a weakreference to our OWNER - not to our SUPERCLASS!
 
     @base           OWeakObject
                         provides ref count and weak mechanism

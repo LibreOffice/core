@@ -75,7 +75,7 @@ class SvtLocalisationOptions_Impl : public ConfigItem
 
         /*-****************************************************************************************************
             @short      access method to get internal values
-            @descr      These method give us a chance to regulate acces to ouer internal values.
+            @descr      These method give us a chance to regulate acces to our internal values.
                         It's not used in the moment - but it's possible for the feature!
         *//*-*****************************************************************************************************/
 
@@ -85,7 +85,7 @@ class SvtLocalisationOptions_Impl : public ConfigItem
     private:
 
         /*-****************************************************************************************************
-            @short      return list of key names of ouer configuration management which represent oue module tree
+            @short      return list of key names of our configuration management which represent oue module tree
             @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
             @return     A list of needed configuration keys is returned.
@@ -139,8 +139,8 @@ SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()
         }
     }
 
-    // Enable notification mechanism of ouer baseclass.
-    // We need it to get information about changes outside these class on ouer used configuration keys!
+    // Enable notification mechanism of our baseclass.
+    // We need it to get information about changes outside these class on our used configuration keys!
     EnableNotification( seqNames );
 }
 
@@ -255,9 +255,9 @@ SvtLocalisationOptions::SvtLocalisationOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase ouer refcount ...
+    // Increase our refcount ...
     ++m_nRefCount;
-    // ... and initialize ouer data container only if it not already exist!
+    // ... and initialize our data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
         m_pDataContainer = new SvtLocalisationOptions_Impl;
@@ -272,10 +272,10 @@ SvtLocalisationOptions::~SvtLocalisationOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease ouer refcount.
+    // Decrease our refcount.
     --m_nRefCount;
     // If last instance was deleted ...
-    // we must destroy ouer static data container!
+    // we must destroy our static data container!
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;

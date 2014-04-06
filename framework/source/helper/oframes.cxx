@@ -74,7 +74,7 @@ void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) thr
         // Set owner of this instance as parent of the new frame in container!
         xFrame->setCreator( xOwner );
     }
-    // Else; Do nothing! Ouer owner is dead.
+    // Else; Do nothing! Our owner is dead.
     SAL_WARN_IF( !xOwner.is(), "fwk", "OFrames::append():Our owner is dead - you can't append any frames ...!" );
 }
 
@@ -98,7 +98,7 @@ void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) thr
         // This must do the caller of this method himself.
         // See documentation of interface XFrames for further information.
     }
-    // Else; Do nothing! Ouer owner is dead.
+    // Else; Do nothing! Our owner is dead.
     SAL_WARN_IF( !xOwner.is(), "fwk", "OFrames::remove(): Our owner is dead - you can't remove any frames ...!" );
 }
 
@@ -193,7 +193,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
             }
         }
     }
-    // Else; Do nothing! Ouer owner is dead.
+    // Else; Do nothing! Our owner is dead.
     SAL_WARN_IF( !xOwner.is(), "fwk", "OFrames::queryFrames(): Our owner is dead - you can't query for frames ...!" );
 
     // Resturn result of this operation.
@@ -348,8 +348,8 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
 -----------------------------------------------------------------------------------------------------------------*/
 
 // An instance of this class can only work with valid initialization.
-// We share the mutex with ouer owner class, need a valid factory to instanciate new services and
-// use the access to ouer owner for some operations.
+// We share the mutex with our owner class, need a valid factory to instanciate new services and
+// use the access to our owner for some operations.
 sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   css::uno::Reference< XFrame >&              xOwner          ,
                                                                 FrameContainer*                     pFrameContainer )
 {

@@ -39,7 +39,7 @@
 #define HISTORY_PROPERTYNAME_THUMBNAIL      OUString("Thumbnail")
 
 /*-************************************************************************************************************
-    @descr          You can use these enum values to specify right history if you call ouer interface methods.
+    @descr          You can use these enum values to specify right history if you call our interface methods.
 *//*-*************************************************************************************************************/
 
 enum EHistoryType
