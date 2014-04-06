@@ -844,6 +844,12 @@ protected:
     virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                        DrawInvisiblePolygon( const PolyPolygon& rPolyPoly );
 
+    virtual void                ClipGradientToBounds( Gradient &rGradient, const PolyPolygon &rPolyPoly );
+    void                        ClipGradient( Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect );
+    void                        XORClipGradient( Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect );
+
+    virtual void                ClipGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect );
+
 private:
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
 
