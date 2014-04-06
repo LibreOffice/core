@@ -247,8 +247,6 @@ const sal_uInt8 EXC_STYLEEXT_BUILTIN        = 0x01;
 const sal_uInt8 EXC_STYLEEXT_HIDDEN         = 0x02;
 const sal_uInt8 EXC_STYLEEXT_CUSTOM         = 0x04;
 
-// Structs and classes ========================================================
-
 // Color data =================================================================
 
 /** Stores all default colors for a specific BIFF version. */
@@ -391,8 +389,6 @@ struct XclFontData
 
 bool operator==( const XclFontData& rLeft, const XclFontData& rRight );
 
-
-
 /** Enumerates different types of Which-IDs for font items. */
 enum XclFontItemType
 {
@@ -408,8 +404,6 @@ enum XclFontPropSetType
     EXC_FONTPROPSET_CHART,          /// All text objects in charts.
     EXC_FONTPROPSET_CONTROL         /// Text formatting in form controls.
 };
-
-
 
 /** Helper class for usage of property sets. */
 class XclFontPropSetHelper
@@ -454,8 +448,6 @@ struct XclNumFmt
     LanguageType        meLanguage;     /// Language type to be set with the number format.
 };
 
-
-
 class XclNumFmtBuffer
 {
 public:
@@ -498,8 +490,6 @@ struct XclCellProt
 
 bool operator==( const XclCellProt& rLeft, const XclCellProt& rRight );
 
-
-
 /** Contains all cell alignment attributes. */
 struct XclCellAlign
 {
@@ -535,8 +525,6 @@ struct XclCellAlign
 
 bool operator==( const XclCellAlign& rLeft, const XclCellAlign& rRight );
 
-
-
 /** Contains color and line style for each cell border line. */
 struct XclCellBorder
 {
@@ -558,8 +546,6 @@ struct XclCellBorder
 
 bool operator==( const XclCellBorder& rLeft, const XclCellBorder& rRight );
 
-
-
 /** Contains background colors and pattern for a cell. */
 struct XclCellArea
 {
@@ -574,8 +560,6 @@ struct XclCellArea
 };
 
 bool operator==( const XclCellArea& rLeft, const XclCellArea& rRight );
-
-
 
 /** Contains base members for XF record import/export.
     @descr  In detail this class stores the XF type (cell/style), the index to the
@@ -611,8 +595,6 @@ protected:
     bool                mbBorderUsed;       /// true = border data used.
     bool                mbAreaUsed;         /// true = area data used.
 };
-
-
 
 #endif
 
