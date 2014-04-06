@@ -158,8 +158,6 @@ private:
     bool                mbShadowUsed;   /// true = Shadowed used.
 };
 
-
-
 /** Stores the data of all fonts occurred in an Excel file. */
 class XclImpFontBuffer : protected XclImpRoot, private boost::noncopyable
 {
@@ -262,8 +260,6 @@ struct XclImpCellProt : public XclCellProt
     void                FillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 };
 
-
-
 /** Extends the XclCellAlign struct for import.
     @descr  Provides functions to fill from Excel record data and to fill to item sets. */
 struct XclImpCellAlign : public XclCellAlign
@@ -283,8 +279,6 @@ struct XclImpCellAlign : public XclCellAlign
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
     void                FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFont, bool bSkipPoolDefs = false ) const;
 };
-
-
 
 /** Extends the XclCellBorder struct for import.
     @descr  Provides functions to fill from Excel record data and to fill to item sets. */
@@ -324,8 +318,6 @@ struct XclImpCellBorder : public XclCellBorder
                             bool bSkipPoolDefs = false ) const;
 };
 
-
-
 /** Extends the XclCellArea struct for import.
     @descr  Provides functions to fill from Excel record data and to fill to item sets. */
 struct XclImpCellArea : public XclCellArea
@@ -359,8 +351,6 @@ struct XclImpCellArea : public XclCellArea
                             bool bSkipPoolDefs = false ) const;
 };
 
-
-
 /** Represents an XF record index with additional information. */
 class XclImpXFIndex
 {
@@ -381,8 +371,6 @@ inline bool operator==( const XclImpXFIndex& rLeft, const XclImpXFIndex& rRight 
 
 inline bool operator!=( const XclImpXFIndex& rLeft, const XclImpXFIndex& rRight )
 { return !(rLeft == rRight); }
-
-
 
 /** Contains all data of a XF record and a Calc item set. */
 class XclImpXF : public XclXFBase, protected XclImpRoot, private boost::noncopyable
@@ -447,8 +435,6 @@ private:
     sal_uInt16          mnXclFont;          /// Index to font record.
 };
 
-
-
 /** Contains all data of a cell style associated with an XF record. */
 class XclImpStyle : protected XclImpRoot
 {
@@ -482,8 +468,6 @@ private:
     OUString            maFinalName;        /// Final name used in the Calc document.
     ScStyleSheet*       mpStyleSheet;       /// Calc cell style sheet.
 };
-
-
 
 /** Contains all XF records occurred in the file.
     @descr  This class is able to read XF records (BIFF2 - BIFF8) and STYLE records (BIFF8). */
@@ -571,8 +555,6 @@ inline bool XclImpXFRange::Contains( SCROW nScRow ) const
     return (mnScRow1 <= nScRow) && (nScRow <= mnScRow2);
 }
 
-
-
 /** Contains the XF indexes for every used cell in a column. */
 class XclImpXFRangeColumn : private boost::noncopyable
 {
@@ -610,8 +592,6 @@ private:
 private:
     IndexList maIndexList;    /// The list of XF index range.
 };
-
-
 
 /** Contains the XF indexes for every used cell in a single sheet. */
 class XclImpXFRangeBuffer : protected XclImpRoot, private boost::noncopyable
@@ -676,8 +656,6 @@ private:
     XclImpHyperlinkList maHyperlinks;       /// Maps URLs to hyperlink cells.
     ScRangeList         maMergeList;        /// List of merged cell ranges.
 };
-
-
 
 #endif
 
