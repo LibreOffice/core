@@ -53,12 +53,7 @@ class Gate : public  IGate
         /*-****************************************************************************************************
             @short      ctor
             @descr      These initialize the object right as an open gate.
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
         inline Gate()
@@ -73,12 +68,7 @@ class Gate : public  IGate
             @descr      Is user forget it - we open the gate ...
                         blocked threads can running ... but I don't know
                         if it's right - we are destroyed yet!?
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
         inline virtual ~Gate()
@@ -92,11 +82,7 @@ class Gate : public  IGate
             @descr      A wait() call will not block then.
 
             @seealso    method close()
-
-            @param      -
             @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
         virtual void open() SAL_OVERRIDE
         {
@@ -115,11 +101,7 @@ class Gate : public  IGate
             @descr      A wait() call will block then.
 
             @seealso    method open()
-
-            @param      -
             @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
         virtual void close() SAL_OVERRIDE
         {
@@ -141,11 +123,7 @@ class Gate : public  IGate
 
             @seealso    method wait()
             @seealso    method open()
-
-            @param      -
             @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
         virtual void openGap() SAL_OVERRIDE
         {

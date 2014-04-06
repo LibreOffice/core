@@ -79,8 +79,6 @@ class QuietInteraction : public  ::cppu::WeakImplHelper1<
     public:
         /**
             @short      ctor to guarantee right initialized instances of this class
-            @descr      -
-
             @threadsafe not necessary
         */
         QuietInteraction();

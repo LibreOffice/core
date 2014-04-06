@@ -62,7 +62,6 @@ ServiceHandler::ServiceHandler( const css::uno::Reference< css::lang::XMultiServ
 
 /**
     @short      standard dtor
-    @descr      -
 */
 ServiceHandler::~ServiceHandler()
 {
@@ -89,7 +88,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL ServiceHandler::queryDispa
 
 /**
     @short      do the same like dispatch() but for multiple requests at the same time
-    @descr      -
 */
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL ServiceHandler::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException, std::exception )
 {

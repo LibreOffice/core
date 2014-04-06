@@ -147,8 +147,6 @@ void Desktop::constructorInit()
 
     @param      "xFactory" is the multi service manager, which create this instance.
                 The value must be different from NULL!
-    @return     -
-
     @onerror    We throw an ASSERT in debug version or do nothing in relaese version.
 *//*-*************************************************************************************************************/
 Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xContext )
@@ -183,11 +181,7 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
     @descr      This one do NOTHING! Use dispose() instaed of this.
 
     @seealso    method dispose()
-
-    @param      -
     @return     -
-
-    @onerror    -
 *//*-*************************************************************************************************************/
 Desktop::~Desktop()
 {
@@ -455,8 +449,6 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
 
     @seealso    class TasksAccess
     @seealso    class TasksEnumeration
-
-    @param      -
     @return     A reference to an XEnumerationAccess-object.
 
     @onerror    We return a null-reference.
@@ -482,8 +474,6 @@ css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getC
 
     @seealso    method getCurrentFrame()
     @seealso    method impl_getFrameComponent()
-
-    @param      -
     @return     A reference to the component.
 
     @onerror    We return a null-reference.
@@ -518,8 +508,6 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::getCurrentCompone
                 a direct child of us and should be a part(!) of an active path.
 
     @seealso    method getActiveFrame()
-
-    @param      -
     @return     A valid reference, if there is an active frame.
                 A null reference , otherwise.
 
@@ -554,9 +542,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getCurrentFrame() th
     @descr      You can give us some information about the content, which you will load into a frame.
                 We search or create this target for you, make a type detection of given URL and try to load it.
                 As result of this operation we return the new created component or nothing, if loading failed.
-
-    @seealso    -
-
     @param      "sURL"              , URL, which represant the content
     @param      "sTargetFrameName"  , name of target frame or special value like "_self", "_blank" ...
     @param      "nSearchFlags"      , optional arguments for frame search, if target isn't a special one
@@ -599,8 +584,6 @@ But; Don't forget - you will be the owner of returned object and must release it
     @attention  Normaly we don't need any lock here. We don't work on internal member!
 
     @seealso    class TasksAccess
-
-    @param      -
     @return     A reference to an accessobject, which can create enumerations of ouer childtasks.
 
     @onerror    A null reference is returned.
@@ -623,8 +606,6 @@ css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getT
                 b)  We don't need any lock here. Our container is threadsafe himself and live, if we live!
 
     @seealso    method getCurrentFrame()
-
-    @param      -
     @return     A reference to ouer current active taskchild.
 
     @onerror    A null reference is returned.
@@ -730,8 +711,6 @@ void SAL_CALL Desktop::releaseDispatchProviderInterceptor ( const css::uno::Refe
     @attention  Helper is threadsafe himself. So we don't need any lock here.
 
     @seealso    class OFrames
-
-    @param      -
     @return     A reference to the helper.
 
     @onerror    A null reference is returned.
@@ -799,14 +778,8 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getActiveFrame() thr
     @short      non implemented methods!
     @descr      Some method make no sense for our desktop! He has no window or parent or ...
                 So we should implement it empty and warn programmer, if he use it!
-
-    @seealso    -
-
     @param      -
-    @return     -
-
     @onerror    -
-    @threadsafe -
 */
 void SAL_CALL Desktop::initialize( const css::uno::Reference< css::awt::XWindow >& ) throw( css::uno::RuntimeException, std::exception )
 {
@@ -1119,12 +1092,7 @@ void SAL_CALL Desktop::disposing()
                 You must releas ethis listener reference during your own disposing() method.
 
     @attention  Our container is threadsafe himeslf. So we don't need any lock here.
-
-    @seealso    -
-
     @param      "xListener", reference to valid listener. We don't accept invalid values!
-    @return     -
-
     @onerror    -
     @threadsafe yes
 */
@@ -1163,8 +1131,6 @@ void SAL_CALL Desktop::removeEventListener( const css::uno::Reference< css::lang
     @seealso    method loadComponentFromURL()
 
     @param      "aEvent", state event which (hopefully) valid information
-    @return     -
-
     @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
@@ -1195,11 +1161,7 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
                 We are a temp. listener only and our lifetime isn't smaller then of our temp. used dispatcher.
 
     @seealso    method loadComponentFromURL()
-
-    @param      -
     @return     -
-
-    @onerror    -
     @threadsafe -
 *//*-*************************************************************************************************************/
 void SAL_CALL Desktop::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception )
@@ -1225,8 +1187,6 @@ void SAL_CALL Desktop::disposing( const css::lang::EventObject& ) throw( css::un
     @seealso    member m_eLoadState
 
     @param      "xRequest", request for interaction - normal a wrapped target exception from bottom services
-    @return     -
-
     @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
@@ -1415,8 +1375,6 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
 
     @param      "nHandle"   handle of property to change
     @param      "aValue"    new value of property
-    @return     -
-
     @onerror    An exception is thrown.
     @threadsafe yes
 *//*-*************************************************************************************************************/
@@ -1449,8 +1407,6 @@ void SAL_CALL Desktop::setFastPropertyValue_NoBroadcast(       sal_Int32        
 
     @param      "nHandle"   handle of property to change
     @param      "aValue"    current value of property
-    @return     -
-
     @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
@@ -1486,11 +1442,7 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
                 So we could have two different mutex/lock mechanism at the same object.
 
     @seealso    class OPropertySetHelper
-
-    @param      -
     @return     structure with property-information
-
-    @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
 ::cppu::IPropertyArrayHelper& SAL_CALL Desktop::getInfoHelper()
@@ -1534,11 +1486,7 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
     @seealso    class OPropertySetHelper
     @seealso    interface XPropertySet
     @seealso    interface XMultiPropertySet
-
-    @param      -
     @return     reference to object with information [XPropertySetInfo]
-
-    @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Desktop::getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -1629,11 +1577,7 @@ css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( co
 
     @seealso    class OPropertySetHelper
     @seealso    method getInfoHelper()
-
-    @param      -
     @return     Static table with information about properties.
-
-    @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
 const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticPropertyDescriptor()

@@ -35,7 +35,6 @@
 namespace framework{
 
 /*-************************************************************************************************************
-    @short          -
     @descr          -
 
     @implements     XInterface
@@ -59,12 +58,7 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::
         /*-****************************************************************************************************
             @short      standard ctor
             @descr      These initialize a new instance of this class with all needed information for work.
-
-            @seealso    -
-
             @param      "xFactory", reference to factory which has created ouer owner(!). We can use these to create new uno-services.
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -73,12 +67,7 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::
         /*-****************************************************************************************************
             @short      standard destructor
             @descr      This method destruct an instance of this class and clear some member.
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -91,14 +80,8 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::
         //  XStringMapping
 
         /*-****************************************************************************************************
-            @short      -
             @descr      -
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 

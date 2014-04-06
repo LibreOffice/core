@@ -28,8 +28,6 @@ namespace framework{
     @short          implement wildcard-mechanism for unicode
     @descr          This class can be used to get information about the matching of a pattern to a given text.
                     It's suitable for 8-Bit- AND 16-Bit-strings!
-
-    @implements     -
     @base           -
 
     @ATTENTION      This class is'nt threadsafe!
@@ -49,12 +47,7 @@ class Wildcard
         /*-****************************************************************************************************
             @short      standard ctor
             @descr      We do nothing here.
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -63,12 +56,7 @@ class Wildcard
         /*-****************************************************************************************************
             @short      standard dtor
             @descr      We do nothing here.
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -79,15 +67,10 @@ class Wildcard
         /*-****************************************************************************************************
             @short      try to find an agreement between given text and searchpattern
             @descr      You can use wildcards in pattern only!
-
-            @seealso    -
-
             @param      "sText" is the text, in which we search given pattern.
             @param      "sPattern" is the searched pattern with includes wildcards.
             @return     sal_True , if pattern was found.
             @return     sal_False, if pattern don't match the text.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         static sal_Bool match(  const   OUString&    sText       ,

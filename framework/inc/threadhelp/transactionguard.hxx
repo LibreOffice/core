@@ -36,9 +36,6 @@ namespace framework{
                     transaction requests ... e.g. interface call for already disposed objects.
 
     @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
-
-    @implements     -
-
     @devstatus      draft
 *//*-*************************************************************************************************************/
 class TransactionGuard : private boost::noncopyable
@@ -55,14 +52,9 @@ class TransactionGuard : private boost::noncopyable
 
             @attention  It's not necessary to lock any mutex here! Because a ctor should not be called
                         from different threads at the same time ... this class use no refcount mechanism!
-
-            @seealso    -
-
             @param      "rManager"  reference to transaction manager for using to register a request
             @param      "eMode"     enable/disable throwing of exceptions for rejected calls
             @param      "eReason"   returns reason for rejected calls if "eMode=E_NOEXCEPTIONS"!
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
         inline TransactionGuard( ITransactionManager& rManager, EExceptionMode eMode, ERejectReason* eReason = NULL )
@@ -85,12 +77,7 @@ class TransactionGuard : private boost::noncopyable
         /*-************************************************************************************************************
             @short      dtor
             @descr      We must release the transaction manager and can forget his pointer.
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*************************************************************************************************************/
         inline ~TransactionGuard()
@@ -105,12 +92,7 @@ class TransactionGuard : private boost::noncopyable
             @attention  We don't support any start() method here - because it is not easy to
                         detect if a transaction already started or not!
                         (combination of EExceptionMode and ERejectReason)
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*************************************************************************************************************/
         inline void stop()
@@ -132,11 +114,7 @@ class TransactionGuard : private boost::noncopyable
                         Thats why we disable it by make it private.
 
             @seealso    other ctor
-
-            @param      -
             @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
         TransactionGuard();
 

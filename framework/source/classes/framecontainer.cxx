@@ -99,8 +99,6 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
 
 /**-***************************************************************************************************************
     @short      check if the given frame currently exist inside the container
-    @descr      -
-
     @param      xFrame
                     reference to the queried frame
 
@@ -117,8 +115,6 @@ sal_Bool FrameContainer::exist( const css::uno::Reference< css::frame::XFrame >&
 
 /**-***************************************************************************************************************
     @short      delete all existing items of the container
-    @descr      -
-
     @threadsafe yes
  *****************************************************************************************************************/
 void FrameContainer::clear()
@@ -134,8 +130,6 @@ void FrameContainer::clear()
 
 /**-***************************************************************************************************************
     @short      returns count of all current existing frames
-    @descr      -
-
     @deprecated This value can't be guaranteed for multithreading environments.
                 So it will be marked as deprecated and should be replaced by "getAllElements()".
 
@@ -151,8 +145,6 @@ sal_uInt32 FrameContainer::getCount() const
 
 /**-***************************************************************************************************************
     @short      returns one item of this container
-    @descr      -
-
     @deprecated This value can't be guaranteed for multithreading environments.
                 So it will be marked as deprecatedf and should be replaced by "getAllElements()".
 

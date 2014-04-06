@@ -60,7 +60,6 @@ MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::uno::XCompon
 
 /**
     @short      standard dtor
-    @descr      -
 */
 MailToDispatcher::~MailToDispatcher()
 {
@@ -87,7 +86,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL MailToDispatcher::queryDis
 
 /**
     @short      do the same like dispatch() but for multiple requests at the same time
-    @descr      -
 */
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL MailToDispatcher::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException, std::exception )
 {

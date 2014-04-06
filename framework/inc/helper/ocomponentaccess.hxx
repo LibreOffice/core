@@ -73,8 +73,6 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
             @seealso    class OComponentEnumeration
 
             @param      "xOwner" is a reference to ouer owner and must be the desktop!
-            @return     -
-
             @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
@@ -89,12 +87,8 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
             @seealso    interface XEnumerationAccess
             @seealso    interface XEnumeration
             @seealso    class Desktop
-
-            @param      -
             @return     If the desktop and some components exist => a valid reference to an enumeration<BR>
                         An NULL-reference, other way.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -103,30 +97,18 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
 
         /*-****************************************************************************************************
             @short      get the type of elements in enumeration
-            @descr      -
-
             @seealso    interface XElementAccess
             @seealso    class OComponentEnumeration
-
-            @param      -
             @return     The uno-type XComponent.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      get state of componentlist of enumeration.
-            @descr      -
-
             @seealso    interface XElementAccess
-
-            @param      -
             @return     sal_True  ,if more then 0 elements exist.
             @return     sal_False ,otherwise.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -143,11 +125,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
                         Thats the reason for a protected dtor.
 
             @seealso    class Desktop
-
-            @param      -
             @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual ~OComponentAccess();
@@ -165,8 +143,6 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
             @param      "xNode"        , root of subtree and start point of search
             @param      "seqComponents", result list of search. We cant use a return value, we search recursive
                                          and must collect all information.
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -200,8 +176,6 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
             @param      references to checking variables
             @return     sal_False ,on invalid parameter.
             @return     sal_True  ,otherwise
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
     private:

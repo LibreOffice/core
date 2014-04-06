@@ -128,7 +128,6 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
 
 /**
     @short      copy dtor
-    @descr      -
 */
 JobResult::JobResult( const JobResult& rCopy )
 {

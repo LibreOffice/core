@@ -63,12 +63,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
             @short      constructor to initialize this enumeration
             @descr      An enumeration is a list with oneway-access! You can get every member only for one time.
                         This method allow to initialize this oneway list with values.
-
-            @seealso    -
-
             @param      "seqComponents" is a sequence of interfaces, which are components.
-            @return     -
-
             @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
@@ -84,8 +79,6 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
             @seealso    interface XEventListener
 
             @param      "aEvent" describe the source of this event.
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -99,8 +92,6 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
                         Elements you have already getted are not accessible!
 
             @seealso    interface XEnumeration
-
-            @param      -
             @return     sal_True  = if more elements accessible<BR>
                         sal_False = other way
 
@@ -115,8 +106,6 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
             @descr      If a call "hasMoreElements()" return true, you can get the next element of list.
 
             @seealso    interface XEnumeration
-
-            @param      -
             @return     A Reference to a component, safed in an Any-structure.
 
             @onerror    If end of enumeration is arrived or there are no elements in list => a NoSuchElementException is thrown.
@@ -135,12 +124,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
             @descr      This method destruct an instance of this class and clear some member.
                         We make it protected, because its not supported to use this class as normal instance!
                         You must create it dynamical in memory and use a pointer.
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -156,12 +140,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
 
             @seealso    method dispose()
             @seealso    destructor ~TaskEnumeration()
-
-            @param      -
-
             @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void impl_resetObject();
@@ -183,8 +162,6 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
             @param      references to checking variables
             @return     sal_False on invalid parameter<BR>
                         sal_True  otherway
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
     private:

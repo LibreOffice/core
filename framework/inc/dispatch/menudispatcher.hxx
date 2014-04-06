@@ -88,8 +88,6 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
             @param      "rxContext"  , css::uno::Reference to servicemanager for creation of new services
             @param      "xOwner"    , css::uno::Reference to our owner, the Desktop!!!
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -101,13 +99,8 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
         /*-****************************************************************************************************
             @short      dispatch URL with arguments
             @descr      Every dispatch create a new task. If load of URL failed task will deleted automaticly!
-
-            @seealso    -
-
             @param      "aURL"          , URL to dispatch.
             @param      "seqArguments"  , list of optional arguments.
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -123,8 +116,6 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
             @param      "xControl"  , css::uno::Reference to a valid listener for state events.
             @param      "aURL"      , URL about listener will be informed, if something occurred.
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -140,8 +131,6 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
             @param      "xControl"  , css::uno::Reference to a valid listener.
             @param      "aURL"      , URL on which listener has registered.
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -157,12 +146,7 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
         /*-****************************************************************************************************
             @short      dispose current instance
             @descr      If service helper isn't required any longer call this method to release all used resources.
-
-            @seealso    -
-
             @param      "aEvent", information about source of this event.
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -177,12 +161,7 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
             @descr      This method destruct an instance of this class and clear some member.
                         This method is protected, because its not allowed to use an instance of this class as a member!
                         You MUST use a pointer.
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -193,28 +172,16 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
     private:
 
         /*-****************************************************************************************************
-            @short      -
             @descr      -
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
         sal_Bool impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromResource = sal_False );
 
         /*-****************************************************************************************************
-            @short      -
             @descr      -
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 

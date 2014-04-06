@@ -36,8 +36,6 @@ namespace framework{
 
     @Attention      If your wish to debug this inline code ...
                     under windows and msdev you can use "set ENVCFLAGS=/Ob0" to do that!
-
-    @implements     -
     @base           -
 
     @devstatus      ready to use
@@ -59,12 +57,7 @@ class CheckedIterator
             @descr      Set default values on members.
                         We set it internal to E_UNKNOWN to detect uninitialized instances of this class.
                         If we found one - we know: "We must call initialize first!"
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -81,12 +74,7 @@ class CheckedIterator
             @descr      Set new container at an instance of this class. The other member will set automaticly!
                         m_pPosition = first element in container
                         m_eEndState = BEFOREEND
-
-            @seealso    -
-
             @param      "rContainer", must be a valid reference to an existing container.
-            @return     -
-
             @onerror    An assertion is thrown.
         *//*-*****************************************************************************************************/
 
@@ -111,11 +99,7 @@ class CheckedIterator
                         We need it to return one default value if no other ones exist ...
 
             @seealso    using in class FilterCache!
-
-            @param      -
             @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         inline void setEnd()
@@ -130,11 +114,7 @@ class CheckedIterator
                         We need it if we don't have a container but must prevent us against further searching!
 
             @seealso    using in class FilterCache!
-
-            @param      -
             @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         inline void setAfterEnd()
@@ -148,11 +128,7 @@ class CheckedIterator
             @descr      It must be called on an already initialized iterator.
                         Means the member m_pContainer must be valid. Otherwise the reaction
                         isn't defined.
-
-            @param      -
             @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         inline void reset()
@@ -170,11 +146,7 @@ class CheckedIterator
 
             @seealso    method isEnd()
             @seealso    method isAfterEnd()
-
-            @param      -
             @return     A reference to our changed object himself.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         inline CheckedIterator& operator++()
@@ -207,11 +179,7 @@ class CheckedIterator
             @descr      These will be true, if use start a new search by using these iterator mechanism!
 
             @seealso    class FilterCache
-
-            @param      -
             @return     True if internalk state E_UNKNOWN - false otherwise.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         inline sal_Bool isUninitialized()
@@ -224,11 +192,7 @@ class CheckedIterator
             @descr      These will be true if you step to the end of internal container.
 
             @seealso    method isAfterEnd()
-
-            @param      -
             @return     True if end reached; false otherwise.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         inline sal_Bool isEnd()
@@ -245,11 +209,7 @@ class CheckedIterator
             @descr      These indicate, that end already reached but you call operator++ again and again!
 
             @seealso    method isEnd()
-
-            @param      -
             @return     True if end multiple reached; false otherwise.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         inline sal_Bool isAfterEnd()
@@ -261,13 +221,8 @@ class CheckedIterator
         /*-****************************************************************************************************
             @short      support readonly access to container entry
             @descr      Use it to get the value of current container item.
-
-            @seealso    -
-
             @param      -
             @return     A reference to value of container entry.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         inline typename TContainer::const_iterator getEntry()

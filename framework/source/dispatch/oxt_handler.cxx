@@ -51,8 +51,6 @@ DEFINE_INIT_SERVICE                 (   Oxt_Handler,
     @seealso    using at owner
 
     @param      "xFactory", reference to service manager for creation of new services
-    @return     -
-
     @onerror    Show an assertion and do nothing else.
     @threadsafe yes
 *//*-*************************************************************************************************************/
@@ -63,14 +61,8 @@ Oxt_Handler::Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFac
 
 /*-************************************************************************************************************
     @short      standard dtor
-    @descr      -
-
     @seealso    -
-
-    @param      -
     @return     -
-
-    @onerror    -
     @threadsafe -
 *//*-*************************************************************************************************************/
 Oxt_Handler::~Oxt_Handler()
@@ -101,8 +93,6 @@ Oxt_Handler::~Oxt_Handler()
 
     @param      "aURL"      , URL to dispatch.
     @param      "lArguments", list of optional arguments.
-    @return     -
-
     @onerror    We do nothing.
     @threadsafe yes
 *//*-*************************************************************************************************************/
@@ -154,9 +144,6 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
                    Another reason to do so ... We are a listener on our internal ma_Player object.
                    If you would call "IsSoundFile()" on this instance, he would call us back and
                    we make some unnecessary things ...
-
-    @seealso    -
-
     @param      "lDescriptor", description of file to detect
     @return     Internal type name which match this file ... or nothing if it is unknown.
 

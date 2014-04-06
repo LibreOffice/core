@@ -569,8 +569,6 @@ class DataContainer
                     We set a data container pointer for filling or reading ... this class use it temp.
                     After successfully calling of read(), we can use filled container directly or merge it with an existing one.
                     After successfully calling of write() all values of given data container are flushed to our configuration.
-
-    @implements     -
     @base           ConfigItem
 
     @devstatus      ready to use

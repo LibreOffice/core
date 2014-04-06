@@ -53,8 +53,6 @@ namespace framework{
     @short          cache for all filter and type information
     @descr          Frameloader - and filterfactory need some information about our current registered filters and types.
                     For better performance its necessary to cache all needed values.
-
-    @implements     -
     @base           TransactionBase
 
     @devstatus      ready to use
@@ -77,12 +75,7 @@ class FilterCache   :   private TransactionBase
         /*-****************************************************************************************************
             @short      standard destructor to delete instance
             @descr      This will clear the cache if last owner release it.
-
-            @seealso    -
-
             @param      -
-            @return     -
-
             @onerror    -
         *//*-*****************************************************************************************************/
 
@@ -93,14 +86,8 @@ class FilterCache   :   private TransactionBase
         /*-****************************************************************************************************
             @short      get the current state of the cache
             @descr      Call this methods to get information about the state of the current cache.
-
-            @seealso    -
-
             @param      -
             @return     -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         sal_Bool isValidOrRepairable() const;
@@ -125,9 +112,6 @@ class FilterCache   :   private TransactionBase
                         returned filter name is an internal name
                         returned loader name is an implementation name of a service
                         returned detector name is an implementation name of a service
-
-            @seealso    -
-
             @param      "sResult", name of found type, filter, ...
             @return     true, if search was successful,
                         false, otherwise.
@@ -162,9 +146,6 @@ class FilterCache   :   private TransactionBase
             @descr      If you need additional information about our internal cache values
                         you can use these methods to get a list of all cached config values
                         and subkeys of specified entry.
-
-            @seealso    -
-
             @param      "sName", name of suspected entry in cache
             @return     A structure with valid information if item exists! An empty Any otherwise.
 
@@ -253,9 +234,6 @@ class FilterCache   :   private TransactionBase
                             PropertyValue.Name                  PropertyValue.Value                 Description
                             ---------------------------------------------------------------------------------------
                             ...
-
-            @seealso    -
-
             @param      "sName"         , name of type, filter ...
             @param      "lProperties"   , values of new type, filter
             @return     state of operation as bool

@@ -49,8 +49,6 @@ class DockingAreaDefaultAcceptor    :   public ::cppu::WeakImplHelper1< ::com::s
 
             @param      "xOwner" is a reference to ouer owner and must be the desktop!
             @param      "pTasks" is a pointer to the taskcontainer of the desktop. We need it to create a new enumeration.
-            @return     -
-
             @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 

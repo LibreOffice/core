@@ -28,12 +28,7 @@ namespace framework{
 /*-************************************************************************************************************
     @short      standard ctor
     @descr      Initialize instance with right start values for correct working.
-
-    @seealso    -
-
     @param      -
-    @return     -
-
     @onerror    -
 *//*-*************************************************************************************************************/
 TransactionManager::TransactionManager()
@@ -45,14 +40,8 @@ TransactionManager::TransactionManager()
 
 /*-************************************************************************************************************
     @short      standard dtor
-    @descr      -
-
     @seealso    -
-
-    @param      -
     @return     -
-
-    @onerror    -
 *//*-*************************************************************************************************************/
 TransactionManager::~TransactionManager()
 {
@@ -78,12 +67,7 @@ TransactionManager::~TransactionManager()
 
                     E_CLOSE       :  Object is already dead! All further requests will be refused.
                                         It's your decision to react in a right way.
-
-    @seealso    -
-
     @param      "eMode", is the new mode - but we don't accept setting mode in wrong order!
-    @return     -
-
     @onerror    We do nothing.
 *//*-*****************************************************************************************************/
 void  TransactionManager::setWorkingMode( EWorkingMode eMode )
@@ -151,8 +135,6 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
                             }
 
     @seealso    method setWorkingMode()
-
-    @param      -
     @return     Current set mode.
 
     @onerror    No error should occur.
@@ -176,8 +158,6 @@ EWorkingMode TransactionManager::getWorkingMode() const
 
     @param      "eMode"     ,used to enable/disable throwing exceptions automatically for rejected calls
     @param      "eReason"   ,reason for rejected calls if eMode=E_NOEXCEPTIONS
-    @return     -
-
     @onerror    -
 *//*-*****************************************************************************************************/
 void  TransactionManager::registerTransaction( EExceptionMode eMode, ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException )
@@ -212,11 +192,7 @@ void  TransactionManager::registerTransaction( EExceptionMode eMode, ERejectReas
     @descr      A guard should call this method to release current transaction.
 
     @seealso    method registerTransaction()
-
-    @param      -
     @return     -
-
-    @onerror    -
 *//*-*****************************************************************************************************/
 void  TransactionManager::unregisterTransaction() throw( css::uno::RuntimeException, css::lang::DisposedException )
 {
@@ -240,9 +216,6 @@ void  TransactionManager::unregisterTransaction() throw( css::uno::RuntimeExcept
     @short      look for rejected calls
     @descr      Sometimes user need a possibility to get information about rejected calls
                 without starting a transaction!
-
-    @seealso    -
-
     @param      "eReason" returns reason of a rejected call
     @return     true if call was rejected, false otherwise
 
@@ -280,8 +253,6 @@ sal_Bool  TransactionManager::isCallRejected( ERejectReason& eReason ) const
 
     @param      "eReason" , reason for rejected call
     @param      "eMode"   , exception mode - set by user
-    @return     -
-
     @onerror    -
 *//*-*****************************************************************************************************/
 void TransactionManager::impl_throwExceptions( EExceptionMode eMode, ERejectReason eReason ) const throw( css::uno::RuntimeException, css::lang::DisposedException )
