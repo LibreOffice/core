@@ -29,7 +29,9 @@
 #include <comphelper/string.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/cjkoptions.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 
 IMPL_LINK_NOARG(SwWordCountFloatDlg, CloseHdl)
 {
@@ -48,23 +50,23 @@ SwWordCountFloatDlg::~SwWordCountFloatDlg()
 
 namespace
 {
-    void setValue(FixedText *pWidget, sal_uLong nValue)
+    void setValue(FixedText *pWidget, sal_uLong nValue, const LocaleDataWrapper& rLocaleData)
     {
-        OUString sValue(OUString::number(nValue));
-        pWidget->SetText(sValue);
+        pWidget->SetText(rLocaleData.getNum(nValue, 0));
     }
 }
 
 void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
 {
-    setValue(m_pCurrentWordFT, rCurrent.nWord);
-    setValue(m_pCurrentCharacterFT, rCurrent.nChar);
-    setValue(m_pCurrentCharacterExcludingSpacesFT, rCurrent.nCharExcludingSpaces);
-    setValue(m_pCurrentCjkcharsFT, rCurrent.nAsianWord);
-    setValue(m_pDocWordFT, rDoc.nWord);
-    setValue(m_pDocCharacterFT, rDoc.nChar);
-    setValue(m_pDocCharacterExcludingSpacesFT, rDoc.nCharExcludingSpaces);
-    setValue(m_pDocCjkcharsFT, rDoc.nAsianWord);
+    const LocaleDataWrapper& rLocaleData = GetSettings().GetUILocaleDataWrapper();
+    setValue(m_pCurrentWordFT, rCurrent.nWord, rLocaleData);
+    setValue(m_pCurrentCharacterFT, rCurrent.nChar, rLocaleData);
+    setValue(m_pCurrentCharacterExcludingSpacesFT, rCurrent.nCharExcludingSpaces, rLocaleData);
+    setValue(m_pCurrentCjkcharsFT, rCurrent.nAsianWord, rLocaleData);
+    setValue(m_pDocWordFT, rDoc.nWord, rLocaleData);
+    setValue(m_pDocCharacterFT, rDoc.nChar, rLocaleData);
+    setValue(m_pDocCharacterExcludingSpacesFT, rDoc.nCharExcludingSpaces, rLocaleData);
+    setValue(m_pDocCjkcharsFT, rDoc.nAsianWord, rLocaleData);
 
     bool bShowCJK = (SvtCJKOptions().IsAnyEnabled() || rDoc.nAsianWord);
     bool bToggleCJK = m_pCurrentCjkcharsFT->IsVisible() != bShowCJK;
