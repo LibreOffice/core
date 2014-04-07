@@ -23,7 +23,7 @@
 
 #include <osl/diagnose.h>
 
-#define REG_ENSURE(c, m)   _REG_ENSURE(c, OSL_THIS_FILE, __LINE__, m)
+#define REG_ENSURE(c, m)   _REG_ENSURE(c, __FILE__, __LINE__, m)
 
 #define _REG_ENSURE(c, f, l, m) \
     do \
