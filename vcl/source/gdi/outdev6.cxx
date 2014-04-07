@@ -386,11 +386,7 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
 
         if( !bDrawn )
         {
-#ifdef IOS
-            VirtualDevice   aVDev( *this, 8 );
-#else
             VirtualDevice   aVDev( *this, 1 );
-#endif
             const Size      aDstSz( aDstRect.GetSize() );
             const sal_uInt8     cTrans = (sal_uInt8) MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 );
 
