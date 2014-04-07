@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 #include <tools/stream.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include "mtnotification.hxx"
 #include "oleembobj.hxx"
@@ -48,6 +49,17 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
     // produces sequence with data in requested format and returns it in aResult
     if ( pBuf )
     {
+        // First, in case the buffer is already in the requested format, then avoid a conversion.
+        SvMemoryStream aMemoryStream(pBuf, nBufSize, STREAM_READ);
+        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+        sal_uInt16 nRetFormat = 0;
+        if (rFilter.CanImportGraphic(OUString(), aMemoryStream, GRFILTER_FORMAT_DONTKNOW, &nRetFormat) == GRFILTER_OK &&
+                rFilter.GetImportFormatMediaType(nRetFormat) == aMimeType)
+        {
+            aResult <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemoryStream.GetData() ), aMemoryStream.Seek( STREAM_SEEK_TO_END ) );
+            return sal_True;
+        }
+
         uno::Sequence < sal_Int8 > aData( (sal_Int8*)pBuf, nBufSize );
         uno::Reference < io::XInputStream > xIn = new comphelper::SequenceInputStream( aData );
         try
