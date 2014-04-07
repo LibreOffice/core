@@ -48,15 +48,7 @@ namespace comphelper {
 class AbortContinuation : public ::cppu::WeakImplHelper1< XInteractionAbort >
 {
 public:
-    inline explicit     AbortContinuation() : mbSelected( false ) {}
-
-    inline bool     isSelected() const { return mbSelected; }
-    inline void         reset() { mbSelected = false; }
-
-    virtual void SAL_CALL select() throw( RuntimeException, std::exception ) SAL_OVERRIDE { mbSelected = true; }
-
-private:
-    bool            mbSelected;
+    virtual void SAL_CALL select() throw( RuntimeException, std::exception ) SAL_OVERRIDE {}
 };
 
 
@@ -67,7 +59,6 @@ public:
     inline explicit     PasswordContinuation() : mbReadOnly( false ), mbSelected( false ) {}
 
     inline bool     isSelected() const { return mbSelected; }
-    inline void         reset() { mbSelected = false; }
 
     virtual void SAL_CALL select() throw( RuntimeException, std::exception ) SAL_OVERRIDE { mbSelected = true; }
 

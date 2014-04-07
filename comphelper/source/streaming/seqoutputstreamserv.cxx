@@ -17,10 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
 #include "comphelper_module.hxx"
+#include "comphelper_services.hxx"
 
-#include <sal/config.h>
+#include <boost/noncopyable.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -37,7 +39,8 @@ using namespace ::com::sun::star;
 namespace {
 
 class SequenceOutputStreamService:
-public ::cppu::WeakImplHelper2 < lang::XServiceInfo, io::XSequenceOutputStream >
+    public cppu::WeakImplHelper2<lang::XServiceInfo, io::XSequenceOutputStream>,
+    private boost::noncopyable
 {
 public:
     explicit SequenceOutputStreamService();
@@ -61,9 +64,6 @@ public:
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL getWrittenBytes(  ) throw ( io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    SequenceOutputStreamService( SequenceOutputStreamService & ); //not defined
-    void operator =( SequenceOutputStreamService & ); //not defined
-
     virtual ~SequenceOutputStreamService() {};
 
 

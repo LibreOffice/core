@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper_module.hxx>
+#include <comphelper_services.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "officerestartmanager.hxx"
 

@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// MARKER( update_precomp.py ): autogen include statement, do not remove
+#include <sal/config.h>
 
 #include "comphelper_module.hxx"
+#include "comphelper_services.hxx"
 
-#include <sal/config.h>
+#include <boost/noncopyable.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -43,7 +44,8 @@ class SequenceInputStreamService:
     public ::cppu::WeakImplHelper3<
         lang::XServiceInfo,
         io::XSeekableInputStream,
-        lang::XInitialization>
+        lang::XInitialization>,
+    private boost::noncopyable
 {
 public:
     explicit SequenceInputStreamService();
@@ -74,9 +76,6 @@ public:
     virtual void SAL_CALL initialize( const uno::Sequence< ::com::sun::star::uno::Any > & aArguments ) throw ( uno::RuntimeException, uno::Exception, std::exception ) SAL_OVERRIDE;
 
 private:
-    SequenceInputStreamService( SequenceInputStreamService & ); // not defined
-    void operator =( SequenceInputStreamService & ); // not defined
-
     virtual ~SequenceInputStreamService() {}
 
 

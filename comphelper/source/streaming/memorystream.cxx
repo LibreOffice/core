@@ -19,6 +19,7 @@
 
 
 #include "comphelper_module.hxx"
+#include "comphelper_services.hxx"
 
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekableInputStream.hpp>

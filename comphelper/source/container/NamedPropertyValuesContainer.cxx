@@ -19,6 +19,7 @@
 
 
 #include "comphelper_module.hxx"
+#include "comphelper_services.hxx"
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/Sequence.h>

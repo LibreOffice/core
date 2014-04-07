@@ -65,18 +65,12 @@ struct AttachedObject_Impl
     Reference< XInterface >                 xTarget;
     Sequence< Reference< XEventListener > > aAttachedListenerSeq;
     Any                                     aHelper;
-
-    bool    operator<( const AttachedObject_Impl & ) const;
-    bool    operator==( const AttachedObject_Impl & ) const;
 };
 
 struct AttacherIndex_Impl
 {
     ::std::deque< ScriptEventDescriptor > aEventList;
     ::std::deque< AttachedObject_Impl > aObjList;
-
-    bool    operator<( const AttacherIndex_Impl & ) const;
-    bool    operator==( const AttacherIndex_Impl & ) const;
 };
 
 

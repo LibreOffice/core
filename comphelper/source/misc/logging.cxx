@@ -65,7 +65,6 @@ namespace comphelper
         }
 
         inline bool isValid() const { return m_xLogger.is(); }
-        inline const OUString&  getName() const { return m_sLoggerName; }
         inline const Reference< XLogger >& getLogger() const { return m_xLogger; }
         inline Reference< XComponentContext > getContext() const { return m_aContext; }
 

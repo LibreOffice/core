@@ -19,6 +19,7 @@
 
 
 #include "comphelper_module.hxx"
+#include "comphelper_services.hxx"
 #include "comphelper/anytostring.hxx"
 #include "comphelper/anycompare.hxx"
 #include "comphelper/componentbase.hxx"
@@ -38,6 +39,7 @@
 #include <typelib/typedescription.hxx>
 
 #include <map>
+#include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
 
@@ -111,7 +113,7 @@ namespace comphelper
         {
         }
     private:
-        MapData& operator=( const MapData& _source );   // not implemented
+        MapData& operator=( const MapData& _source ) SAL_DELETED_FUNCTION;
     };
 
 
@@ -252,7 +254,8 @@ namespace comphelper
 
     //= MapEnumerator
 
-    class MapEnumerator : public IMapModificationListener
+    class MapEnumerator:
+        public IMapModificationListener, private boost::noncopyable
     {
     public:
         MapEnumerator( ::cppu::OWeakObject& _rParent, MapData& _mapData, const EnumerationType _type )
@@ -292,11 +295,6 @@ namespace comphelper
         const EnumerationType       m_eType;
         KeyedValues::const_iterator m_mapPos;
         bool                        m_disposed;
-
-    private:
-        MapEnumerator();                                    // not implemented
-        MapEnumerator( const MapEnumerator& );              // not implemented
-        MapEnumerator& operator=( const MapEnumerator& );   // not implemented
     };
 
 

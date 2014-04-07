@@ -20,6 +20,7 @@
 
 #include "opropertybag.hxx"
 #include "comphelper_module.hxx"
+#include "comphelper_services.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

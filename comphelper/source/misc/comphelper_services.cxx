@@ -19,23 +19,9 @@
 
 
 #include "comphelper_module.hxx"
+#include "comphelper_services.hxx"
 
 #include <rtl/instance.hxx>
-
-
-extern void createRegistryInfo_OPropertyBag();
-extern void createRegistryInfo_SequenceOutputStream();
-extern void createRegistryInfo_SequenceInputStream();
-extern void createRegistryInfo_UNOMemoryStream();
-extern void createRegistryInfo_IndexedPropertyValuesContainer();
-extern void createRegistryInfo_NamedPropertyValuesContainer();
-extern void createRegistryInfo_AnyCompareFactory();
-extern void createRegistryInfo_OfficeInstallationDirectories();
-extern void createRegistryInfo_OInstanceLocker();
-extern void createRegistryInfo_Map();
-extern void createRegistryInfo_OSimpleLogRing();
-extern void createRegistryInfo_OOfficeRestartManager();
-
 
 namespace comphelper { namespace module
 {

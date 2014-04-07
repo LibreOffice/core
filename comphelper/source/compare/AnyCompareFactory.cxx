@@ -18,6 +18,7 @@
  */
 
 #include "comphelper_module.hxx"
+#include "comphelper_services.hxx"
 
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/i18n/Collator.hpp>

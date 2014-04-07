@@ -18,6 +18,7 @@
  */
 
 #include "comphelper_module.hxx"
+#include "comphelper_services.hxx"
 
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/uno/Sequence.h>

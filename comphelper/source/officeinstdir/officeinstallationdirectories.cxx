@@ -20,6 +20,7 @@
 #include <config_folders.h>
 
 #include "comphelper_module.hxx"
+#include "comphelper_services.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
 /**************************************************************************

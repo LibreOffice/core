@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <comphelper_module.hxx>
+#include <comphelper_services.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "documentiologring.hxx"
