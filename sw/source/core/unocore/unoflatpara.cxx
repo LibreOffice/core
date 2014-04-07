@@ -92,6 +92,10 @@ uno::Any SAL_CALL SwXFlatParagraph::queryInterface( const uno::Type& rType ) thr
     {
         return uno::makeAny( uno::Reference < text::XFlatParagraph >(this) );
     }
+    else if (rType == ::getCppuType((uno::Reference< beans::XPropertySet>*)0))
+    {
+        return uno::makeAny( uno::Reference<beans::XPropertySet>(this) );
+    }
     else
         return SwXTextMarkup::queryInterface( rType );
 }
@@ -110,6 +114,94 @@ const SwTxtNode* SwXFlatParagraph::getTxtNode() const
 {
     return mpTxtNode;
 }
+
+// XPropertySet
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+SwXFlatParagraph::getPropertySetInfo()
+throw (uno::RuntimeException, std::exception)
+{
+    throw uno::RuntimeException("SwXFlatParagraph::getPropertySetInfo(): "
+            "not implemented", 0/*static_cast< ::cppu::OWeakObject*>(this)*/);
+}
+
+void SAL_CALL
+SwXFlatParagraph::setPropertyValue(const OUString&, const uno::Any&)
+throw (beans::UnknownPropertyException, beans::PropertyVetoException,
+        lang::IllegalArgumentException, lang::WrappedTargetException,
+        uno::RuntimeException, std::exception)
+{
+    throw lang::IllegalArgumentException("no values can be set",
+            0/*static_cast< ::cppu::OWeakObject*>(this)*/, 0);
+}
+
+uno::Any SAL_CALL
+SwXFlatParagraph::getPropertyValue(const OUString& rPropertyName)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+        uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard g;
+
+    if (rPropertyName == "FieldPositions")
+    {
+        uno::Sequence<sal_Int32> ret(maConversionMap.getFieldPositions().size());
+        std::copy(maConversionMap.getFieldPositions().begin(),
+                maConversionMap.getFieldPositions().end(), ret.begin());
+        return uno::makeAny(ret);
+    }
+    else if (rPropertyName == "FootnotePositions")
+    {
+        uno::Sequence<sal_Int32> ret(maConversionMap.getFootnotePositions().size());
+        std::copy(maConversionMap.getFootnotePositions().begin(),
+                maConversionMap.getFootnotePositions().end(), ret.begin());
+        return uno::makeAny(ret);
+    }
+    return uno::Any();
+}
+
+void SAL_CALL
+SwXFlatParagraph::addPropertyChangeListener(
+        const OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+    uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno",
+        "SwXFlatParagraph::addPropertyChangeListener(): not implemented");
+}
+
+void SAL_CALL
+SwXFlatParagraph::removePropertyChangeListener(
+        const OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+    uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno",
+        "SwXFlatParagraph::removePropertyChangeListener(): not implemented");
+}
+
+void SAL_CALL
+SwXFlatParagraph::addVetoableChangeListener(
+        const OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+    uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno",
+        "SwXFlatParagraph::addVetoableChangeListener(): not implemented");
+}
+
+void SAL_CALL
+SwXFlatParagraph::removeVetoableChangeListener(
+        const OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+        uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno",
+        "SwXFlatParagraph::removeVetoableChangeListener(): not implemented");
+}
+
 
 css::uno::Reference< css::container::XStringKeyMap > SAL_CALL SwXFlatParagraph::getMarkupInfoContainer() throw (css::uno::RuntimeException, std::exception)
 {

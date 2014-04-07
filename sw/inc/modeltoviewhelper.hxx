@@ -66,6 +66,8 @@ class SwTxtNode;
 #define EXPANDFOOTNOTE 0x0002
 #define HIDEINVISIBLE  0x0004
 #define HIDEREDLINED   0x0008
+/// do not expand to content, but replace with ZWSP
+#define REPLACEMODE    0x0010
 
 class ModelToViewHelper
 {
@@ -77,8 +79,12 @@ class ModelToViewHelper
     */
     typedef std::pair< sal_Int32 , sal_Int32 > ConversionMapEntry;
     typedef std::vector< ConversionMapEntry > ConversionMap;
+    typedef std::vector<sal_Int32> Positions;
 
     ConversionMap m_aMap;
+    /// store positions of fields and footnotes for grammar checkers
+    Positions m_FieldPositions;
+    Positions m_FootnotePositions;
 
     OUString m_aRetText;
 
@@ -99,7 +105,9 @@ public:
         ModelPosition() : mnPos(0), mnSubPos(0), mbIsField(false) {}
     };
 
-    ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode = EXPANDFIELDS | EXPANDFOOTNOTE);
+    ModelToViewHelper(const SwTxtNode &rNode,
+            // defaults are appropriate for spell/grammar checking
+            sal_uInt16 eMode = EXPANDFIELDS | EXPANDFOOTNOTE | REPLACEMODE);
     ModelToViewHelper() //pass through filter, view == model
     {
     }
@@ -135,6 +143,8 @@ public:
     ModelPosition ConvertToModelPosition( sal_Int32 nViewPos ) const;
 
     OUString getViewText() const { return m_aRetText; }
+    Positions const& getFieldPositions() const { return m_FieldPositions; }
+    Positions const& getFootnotePositions() const { return m_FootnotePositions;}
 };
 
 #endif

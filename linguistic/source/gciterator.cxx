@@ -489,6 +489,20 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
     return xRes;
 }
 
+static uno::Sequence<beans::PropertyValue>
+lcl_makeProperties(uno::Reference<text::XFlatParagraph> const& xFlatPara)
+{
+    uno::Sequence<beans::PropertyValue> ret(2);
+    uno::Reference<beans::XPropertySet> const xProps(
+            xFlatPara, uno::UNO_QUERY_THROW);
+    ret[0] = beans::PropertyValue("FieldPositions", -1,
+        xProps->getPropertyValue("FieldPositions"),
+        beans::PropertyState_DIRECT_VALUE);
+    ret[1] = beans::PropertyValue("FootnotePositions", -1,
+        xProps->getPropertyValue("FootnotePositions"),
+        beans::PropertyState_DIRECT_VALUE);
+    return ret;
+}
 
 void GrammarCheckingIterator::DequeueAndCheck()
 {
@@ -548,8 +562,10 @@ void GrammarCheckingIterator::DequeueAndCheck()
                     if (xGC.is())
                     {
                         aGuard.clear();
-                        uno::Sequence< beans::PropertyValue > aEmptyProps;
-                        aRes = xGC->doProofreading( aCurDocId, aCurTxt, aCurLocale, nStartPos, nSuggestedEnd, aEmptyProps );
+                        uno::Sequence<beans::PropertyValue> const aProps(
+                                lcl_makeProperties(xFlatPara));
+                        aRes = xGC->doProofreading( aCurDocId, aCurTxt,
+                                aCurLocale, nStartPos, nSuggestedEnd, aProps );
 
                         //!! work-around to prevent looping if the grammar checker
                         //!! failed to properly identify the sentence end
@@ -696,8 +712,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             sal_Int32 nEndPos = -1;
             if (xGC.is())
             {
-                uno::Sequence< beans::PropertyValue > aEmptyProps;
-                aTmpRes = xGC->doProofreading( aDocId, rText, aCurLocale, nStartPos, nSuggestedEndOfSentencePos, aEmptyProps );
+                uno::Sequence<beans::PropertyValue> const aProps(
+                        lcl_makeProperties(xFlatPara));
+                aTmpRes = xGC->doProofreading( aDocId, rText,
+                    aCurLocale, nStartPos, nSuggestedEndOfSentencePos, aProps );
 
                 //!! work-around to prevent looping if the grammar checker
                 //!! failed to properly identify the sentence end

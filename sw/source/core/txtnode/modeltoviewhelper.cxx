@@ -37,6 +37,7 @@ struct FieldResult
 {
     sal_Int32 m_nFieldPos;
     OUString m_sExpand;
+    enum { FIELD, FOOTNOTE } m_eType;
 };
 
 class sortfieldresults :
@@ -144,9 +145,11 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
                         case RES_TXTATR_ANNOTATION:
                             if (eMode & EXPANDFIELDS)
                             {
-                                aFieldResult.m_sExpand =
-                                    static_cast<SwTxtFld const*>(pAttr)->GetFmtFld().GetField()
-                                        ->ExpandField(true);
+                                aFieldResult.m_sExpand = (eMode & REPLACEMODE)
+                                    ? OUString(CHAR_ZWSP)
+                                    : static_cast<SwTxtFld const*>(pAttr)->
+                                      GetFmtFld().GetField()->ExpandField(true);
+                                aFieldResult.m_eType = FieldResult::FIELD;
                             }
                             break;
                         case RES_TXTATR_FTN:
@@ -154,7 +157,10 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
                             {
                                 const SwFmtFtn& rFtn = static_cast<SwTxtFtn const*>(pAttr)->GetFtn();
                                 const SwDoc *pDoc = rNode.GetDoc();
-                                aFieldResult.m_sExpand = rFtn.GetViewNumStr(*pDoc);
+                                aFieldResult.m_sExpand = (eMode & REPLACEMODE)
+                                    ? OUString(CHAR_ZWSP)
+                                    : rFtn.GetViewNumStr(*pDoc);
+                                aFieldResult.m_eType = FieldResult::FOOTNOTE;
                             }
                             break;
                         default:
@@ -186,7 +192,10 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
                 {
                     FieldResult aFieldResult;
                     aFieldResult.m_nFieldPos = nDummyCharPos;
-                    aFieldResult.m_sExpand = sw::mark::ExpandFieldmark(pMark);
+                    aFieldResult.m_sExpand = (eMode & REPLACEMODE)
+                        ? OUString(CHAR_ZWSP)
+                        : sw::mark::ExpandFieldmark(pMark);
+                    aFieldResult.m_eType = FieldResult::FIELD;
                     aFind->m_aAttrs.insert(aFieldResult);
                 }
             }
@@ -209,8 +218,18 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
         {
             for (FieldResultSet::iterator j = i->m_aAttrs.begin(); j != i->m_aAttrs.end(); ++j)
             {
-                m_aRetText = m_aRetText.replaceAt( nOffset + j->m_nFieldPos, 1, j->m_sExpand );
-                m_aMap.push_back( ConversionMapEntry( j->m_nFieldPos, nOffset + j->m_nFieldPos ) );
+                sal_Int32 const viewPos(nOffset + j->m_nFieldPos);
+                m_aRetText = m_aRetText.replaceAt(viewPos, 1, j->m_sExpand);
+                m_aMap.push_back( ConversionMapEntry(j->m_nFieldPos, viewPos) );
+                switch (j->m_eType)
+                {
+                    case FieldResult::FIELD:
+                        m_FieldPositions.push_back(viewPos);
+                    break;
+                    case FieldResult::FOOTNOTE:
+                        m_FootnotePositions.push_back(viewPos);
+                    break;
+                }
                 nOffset += j->m_sExpand.getLength() - 1;
             }
         }

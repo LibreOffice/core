@@ -1455,7 +1455,7 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, sal_Int32 /*nActPos*/ 
     if ( nBegin < nEnd )
     {
         // Expand the string:
-        const ModelToViewHelper aConversionMap(*pNode);
+        const ModelToViewHelper aConversionMap(*pNode /*TODO - replace or expand fields for smart tags?*/);
         OUString aExpandText = aConversionMap.getViewText();
 
         // Ownership ov ConversionMap is passed to SwXTextMarkup object!

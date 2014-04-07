@@ -269,12 +269,45 @@ void SwDocTest::testModelToViewHelper()
             CPPUNIT_ASSERT_EQUAL(
                 OUString("AAAAA BBBBB foo CCCCC foo DDDDD"), sViewText);
         }
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode,
+                    EXPANDFIELDS | EXPANDFOOTNOTE | REPLACEMODE);
+            OUString sViewText = aModelToViewHelper.getViewText();
+            CPPUNIT_ASSERT_EQUAL(
+                OUString("AAAAA BBBBB " + OUString(CHAR_ZWSP) + " CCCCC " + OUString(CHAR_ZWSP) + " DDDDD"),
+                sViewText);
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
+                aModelToViewHelper.getFootnotePositions().size());
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12),
+                aModelToViewHelper.getFootnotePositions()[0]);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(20),
+                aModelToViewHelper.getFootnotePositions()[1]);
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+                aModelToViewHelper.getFieldPositions().size());
+        }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT_EQUAL(
                 OUString("AAAAA BBBBB  CCCCC  DDDDD"), sViewText);
+        }
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode,
+                EXPANDFIELDS | REPLACEMODE);
+            OUString sViewText = aModelToViewHelper.getViewText();
+            CPPUNIT_ASSERT_EQUAL(OUString("AAAAA BBBBB  CCCCC  DDDDD"),
+                sViewText);
+            // ??? is it a problem that we get the positions without
+            // EXPANDFOOTNOTE when it's completely removed?
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
+                aModelToViewHelper.getFootnotePositions().size());
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12),
+                aModelToViewHelper.getFootnotePositions()[0]);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(19),
+                aModelToViewHelper.getFootnotePositions()[1]);
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+                aModelToViewHelper.getFieldPositions().size());
         }
 
         {
@@ -298,12 +331,42 @@ void SwDocTest::testModelToViewHelper()
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT_EQUAL(OUString("AAAAA CCCCC foo DDDDD"), sViewText);
         }
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode,
+                EXPANDFIELDS | HIDEINVISIBLE | EXPANDFOOTNOTE | REPLACEMODE);
+            OUString sViewText = aModelToViewHelper.getViewText();
+            CPPUNIT_ASSERT_EQUAL(
+                OUString("AAAAA CCCCC " + OUString(CHAR_ZWSP) + " DDDDD"),
+                sViewText);
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+                aModelToViewHelper.getFootnotePositions().size());
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12),
+                aModelToViewHelper.getFootnotePositions()[0]);
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+                aModelToViewHelper.getFieldPositions().size());
+        }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEREDLINED | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT_EQUAL(
                 OUString("AAAABB foo CCCCC foo DDDDD"), sViewText);
+        }
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode,
+                EXPANDFIELDS | HIDEREDLINED | EXPANDFOOTNOTE | REPLACEMODE);
+            OUString sViewText = aModelToViewHelper.getViewText();
+            CPPUNIT_ASSERT_EQUAL(
+               OUString("AAAABB " + OUString(CHAR_ZWSP) + " CCCCC " + OUString(CHAR_ZWSP) + " DDDDD"),
+               sViewText);
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
+                aModelToViewHelper.getFootnotePositions().size());
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7),
+                aModelToViewHelper.getFootnotePositions()[0]);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15),
+                aModelToViewHelper.getFootnotePositions()[1]);
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+                aModelToViewHelper.getFieldPositions().size());
         }
 
         {
@@ -320,6 +383,19 @@ void SwDocTest::testModelToViewHelper()
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT_EQUAL(OUString("AAAACCCCC foo DDDDD"), sViewText);
+        }
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode,
+                EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED | EXPANDFOOTNOTE | REPLACEMODE);
+            OUString sViewText = aModelToViewHelper.getViewText();
+            CPPUNIT_ASSERT_EQUAL(sViewText,
+                OUString("AAAACCCCC " + OUString(CHAR_ZWSP) + " DDDDD"));
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+                aModelToViewHelper.getFootnotePositions().size());
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10),
+                aModelToViewHelper.getFootnotePositions()[0]);
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+                aModelToViewHelper.getFieldPositions().size());
         }
 
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
@@ -340,6 +416,20 @@ void SwDocTest::testModelToViewHelper()
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT_EQUAL(OUString("AAAAABBBBBCCCCC"), sViewText);
+        }
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode,
+                EXPANDFIELDS | EXPANDFOOTNOTE | REPLACEMODE);
+            OUString sViewText = aModelToViewHelper.getViewText();
+            CPPUNIT_ASSERT_EQUAL(
+                OUString("AAAAA" + OUString(CHAR_ZWSP) + "CCCCC"),
+                sViewText);
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+                aModelToViewHelper.getFootnotePositions().size());
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+                aModelToViewHelper.getFieldPositions().size());
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5),
+                aModelToViewHelper.getFieldPositions()[0]);
         }
     }
 }
