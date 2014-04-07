@@ -150,6 +150,10 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
         break;
         default:; //prevent warning
     }
+
+    if (!pMark)
+        return;
+
     pSh->StartAllAction();
     pSh->SwEditShell::Insert(*pMark);
     pSh->EndAllAction();
