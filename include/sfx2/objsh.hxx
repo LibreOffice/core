@@ -720,8 +720,51 @@ public:
 SV_DECL_REF(SfxObjectShell)
 #endif
 
-SV_DECL_LOCK(SfxObjectShell)
-SV_IMPL_LOCK(SfxObjectShell)
+class SfxObjectShellLock
+{
+protected:
+    SfxObjectShell * pObj;
+public:
+    inline               SfxObjectShellLock() { pObj = 0; }
+    inline               SfxObjectShellLock( const SfxObjectShellLock & rObj );
+    inline               SfxObjectShellLock( SfxObjectShell * pObjP );
+    inline void          Clear();
+    inline               ~SfxObjectShellLock();
+    inline SfxObjectShellLock & operator = ( const SfxObjectShellLock & rObj );
+    inline SfxObjectShellLock & operator = ( SfxObjectShell * pObj );
+    inline bool        Is() const { return pObj != NULL; }
+    inline SfxObjectShell *     operator &  () const { return pObj; }
+    inline SfxObjectShell *     operator -> () const { return pObj; }
+    inline SfxObjectShell &     operator *  () const { return *pObj; }
+    inline operator SfxObjectShell * () const { return pObj; }
+};
+inline SfxObjectShellLock::SfxObjectShellLock( const SfxObjectShellLock & rObj )
+    { pObj = rObj.pObj; if( pObj ) { pObj->OwnerLock( true ); } }
+inline SfxObjectShellLock::SfxObjectShellLock( SfxObjectShell * pObjP )
+{ pObj = pObjP; if( pObj ) { pObj->OwnerLock( true ); } }
+inline void SfxObjectShellLock::Clear()
+{
+    if( pObj )
+    {
+        SfxObjectShell* const pRefObj = pObj;
+        pObj = 0;
+        pRefObj->OwnerLock( false );
+    }
+}
+inline SfxObjectShellLock::~SfxObjectShellLock()
+{ if( pObj ) { pObj->OwnerLock( false ); } }
+inline SfxObjectShellLock & SfxObjectShellLock::
+            operator = ( const SfxObjectShellLock & rObj )
+{
+    if( rObj.pObj ) rObj.pObj->OwnerLock( true );
+    SfxObjectShell* const pRefObj = pObj;
+    pObj = rObj.pObj;
+    if( pRefObj ) { pRefObj->OwnerLock( false ); }
+    return *this;
+}
+inline SfxObjectShellLock & SfxObjectShellLock::operator = ( SfxObjectShell * pObjP )
+{ return *this = SfxObjectShellLock( pObjP ); }
+
 SV_IMPL_REF(SfxObjectShell)
 
 class AutoReloadTimer_Impl : public Timer

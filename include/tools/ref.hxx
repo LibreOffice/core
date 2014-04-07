@@ -22,35 +22,10 @@
 #include <tools/toolsdllapi.h>
 #include <vector>
 
-#define PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef, AddNextRef, ReleaseRef, pRefbase ) \
-inline ClassName##Ref::ClassName##Ref( const ClassName##Ref & rObj )        \
-    { pObj = rObj.pObj; if( pObj ) { pRefbase->AddNextRef; } }              \
-inline ClassName##Ref::ClassName##Ref( ClassName * pObjP )                  \
-{ pObj = pObjP; if( pObj ) { pRefbase->AddRef; } }                          \
-inline void ClassName##Ref::Clear()                                         \
-{                                                                           \
-    if( pObj )                                                              \
-    {                                                                       \
-        ClassName* const pRefObj = pRefbase;                                \
-        pObj = 0;                                                           \
-        pRefObj->ReleaseRef;                                                \
-    }                                                                       \
-}                                                                           \
-inline ClassName##Ref::~ClassName##Ref()                                    \
-{ if( pObj ) { pRefbase->ReleaseRef; } }                                    \
-inline ClassName##Ref & ClassName##Ref::                                    \
-            operator = ( const ClassName##Ref & rObj )                      \
-{                                                                           \
-    if( rObj.pObj ) rObj.pRefbase->AddNextRef;                              \
-    ClassName* const pRefObj = pRefbase;                                    \
-    pObj = rObj.pObj;                                                       \
-    if( pRefObj ) { pRefObj->ReleaseRef; }                                  \
-    return *this;                                                           \
-}                                                                           \
-inline ClassName##Ref & ClassName##Ref::operator = ( ClassName * pObjP )    \
-{ return *this = ClassName##Ref( pObjP ); }
-
-#define PRV_SV_DECL_REF_LOCK(ClassName, Ref)    \
+#define SV_DECL_REF( ClassName )                \
+class ClassName;                                \
+class ClassName##Ref                            \
+{                                               \
 protected:                                      \
     ClassName * pObj;                           \
 public:                                         \
@@ -65,33 +40,36 @@ public:                                         \
     inline ClassName *     operator &  () const { return pObj; }        \
     inline ClassName *     operator -> () const { return pObj; }        \
     inline ClassName &     operator *  () const { return *pObj; }       \
-    inline operator ClassName * () const { return pObj; }
-
-#define PRV_SV_DECL_REF( ClassName )            \
-PRV_SV_DECL_REF_LOCK( ClassName, Ref )
-
-#define SV_DECL_REF( ClassName )                \
-class ClassName;                                \
-class ClassName##Ref                            \
-{                                               \
-    PRV_SV_DECL_REF( ClassName )                \
-};
-
-#define SV_DECL_LOCK( ClassName )               \
-class ClassName;                                \
-class ClassName##Lock                           \
-{                                               \
-    PRV_SV_DECL_REF_LOCK( ClassName, Lock )     \
+    inline operator ClassName * () const { return pObj; }               \
 };
 
 #define SV_IMPL_REF( ClassName )                                \
-PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef(), AddNextRef(),\
-                          ReleaseReference(), pObj )
-
-#define SV_IMPL_LOCK( ClassName )                                   \
-PRV_SV_IMPL_REF_COUNTERS( ClassName, Lock, OwnerLock( true ),       \
-                          OwnerLock( true ), OwnerLock( false ),    \
-                          pObj )
+inline ClassName##Ref::ClassName##Ref( const ClassName##Ref & rObj )        \
+    { pObj = rObj.pObj; if( pObj ) { pObj->AddNextRef(); } }                \
+inline ClassName##Ref::ClassName##Ref( ClassName * pObjP )                  \
+{ pObj = pObjP; if( pObj ) { pObj->AddRef(); } }                            \
+inline void ClassName##Ref::Clear()                                         \
+{                                                                           \
+    if( pObj )                                                              \
+    {                                                                       \
+        ClassName* const pRefObj = pObj;                                    \
+        pObj = 0;                                                           \
+        pRefObj->ReleaseReference();                                        \
+    }                                                                       \
+}                                                                           \
+inline ClassName##Ref::~ClassName##Ref()                                    \
+{ if( pObj ) { pObj->ReleaseReference(); } }                                \
+inline ClassName##Ref & ClassName##Ref::                                    \
+            operator = ( const ClassName##Ref & rObj )                      \
+{                                                                           \
+    if( rObj.pObj ) rObj.pObj->AddNextRef();                                \
+    ClassName* const pRefObj = pObj;                                        \
+    pObj = rObj.pObj;                                                       \
+    if( pRefObj ) { pRefObj->ReleaseReference(); }                          \
+    return *this;                                                           \
+}                                                                           \
+inline ClassName##Ref & ClassName##Ref::operator = ( ClassName * pObjP )    \
+{ return *this = ClassName##Ref( pObjP ); }
 
 #define SV_DECL_IMPL_REF(ClassName)             \
     SV_DECL_REF(ClassName)                      \
