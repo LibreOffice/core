@@ -62,7 +62,7 @@ extern int DBG_DRAW_ROUNDS, DBG_DRAW_COUNTER, DBG_DRAW_DEPTH;
 
 #else
 
-#define DBG_DRAW_OPERATION(s) /* empty */
+#define DBG_DRAW_OPERATION(s,v) /* empty */
 #define DBG_DRAW_OPERATION_EXIT(s) /* empty */
 
 #endif
