@@ -43,7 +43,7 @@ static void lcl_FillGreetingsBox(ListBox& rBox,
     const Sequence< OUString> rEntries = rConfig.GetGreetings(eType);
     for(sal_Int32 nEntry = 0; nEntry < rEntries.getLength(); ++nEntry)
         rBox.InsertEntry(rEntries[nEntry]);
-    rBox.SelectEntryPos((sal_uInt16)rConfig.GetCurrentGreeting(eType));
+    rBox.SelectEntryPos(rConfig.GetCurrentGreeting(eType));
 }
 
 static void lcl_FillGreetingsBox(ComboBox& rBox,
@@ -53,7 +53,7 @@ static void lcl_FillGreetingsBox(ComboBox& rBox,
     const Sequence< OUString> rEntries = rConfig.GetGreetings(eType);
     for(sal_Int32 nEntry = 0; nEntry < rEntries.getLength(); ++nEntry)
         rBox.InsertEntry(rEntries[nEntry]);
-    rBox.SelectEntryPos((sal_uInt16)rConfig.GetCurrentGreeting(eType));
+    rBox.SelectEntryPos(rConfig.GetCurrentGreeting(eType));
 }
 
 static void lcl_StoreGreetingsBox(ListBox& rBox,
