@@ -62,9 +62,7 @@ using namespace ::com::sun::star;
 
 ImpPDFTabDialog::ImpPDFTabDialog(Window* pParent, Sequence< PropertyValue >& rFilterData,
     const Reference< XComponent >& rxDoc)
-    : SfxTabDialog(pParent, "PdfOptionsDialog","filter/ui/pdfoptionsdialog.ui",
-        0, false),
-
+    : SfxTabDialog(pParent, "PdfOptionsDialog","filter/ui/pdfoptionsdialog.ui"),
     maConfigItem( "Office.Common/Filter/PDF/Export/", &rFilterData ),
     maConfigI18N( "Office.Common/I18N/CTL/" ),
     mnSigningPageId(0),

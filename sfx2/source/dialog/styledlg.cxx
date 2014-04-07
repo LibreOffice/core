@@ -42,15 +42,15 @@ SfxStyleDialog::SfxStyleDialog
     Constructor: Add Manage TabPage, set ExampleSet from style.
 */
 
-    : SfxTabDialog( pParent, rID, rUIXMLDescription,
-                  rStyle.GetItemSet().Clone(),
-                  // return TRUE also without ParentSupport , but extended
-                  // to suppress the standardButton
-                  rStyle.HasParentSupport() ? sal_True : 2 )
-
+    : SfxTabDialog(pParent, rID, rUIXMLDescription,
+                  rStyle.GetItemSet().Clone(), true)
     , pStyle( &rStyle )
 
 {
+    // without ParentSupport suppress the standardButton
+    if (!rStyle.HasParentSupport())
+        RemoveStandardButton();
+
     m_nOrganizerId = AddTabPage("organizer", SfxManageStyleSheetPage::Create, 0);
 
     // With new template always set the management page as the current page

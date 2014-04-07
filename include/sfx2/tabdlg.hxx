@@ -93,7 +93,7 @@ friend class SfxTabDialogController;
     sal_uInt16*         pRanges;
     sal_uInt16          nAppPageId;
     bool                bItemsReset;
-    sal_Bool            bFmt; // sal_True, sal_False or 2(some kind of hack)
+    bool                bStandardPushed;
 
     DECL_DLLPRIVATE_LINK( ActivatePageHdl, TabControl * );
     DECL_DLLPRIVATE_LINK( DeactivatePageHdl, TabControl * );
@@ -102,7 +102,7 @@ friend class SfxTabDialogController;
     DECL_DLLPRIVATE_LINK(BaseFmtHdl, void *);
     DECL_DLLPRIVATE_LINK(UserHdl, void *);
     DECL_DLLPRIVATE_LINK(CancelHdl, void *);
-    SAL_DLLPRIVATE void Init_Impl( sal_Bool bFmtFlag, const OUString* pUserButtonText, const ResId* pResId );
+    SAL_DLLPRIVATE void Init_Impl(bool bFmtFlag, const OUString* pUserButtonText, const ResId* pResId);
 
 protected:
     virtual short               Ok();
@@ -128,12 +128,12 @@ protected:
     void SavePosAndId();
 
 public:
-    SfxTabDialog( Window* pParent,
-                  const OString& rID, const OUString& rUIXMLDescription,
-                  const SfxItemSet * = 0, sal_Bool bEditFmt = sal_False );
-    SfxTabDialog( SfxViewFrame *pViewFrame, Window* pParent,
-                  const OString& rID, const OUString& rUIXMLDescription,
-                  const SfxItemSet * = 0, sal_Bool bEditFmt = sal_False );
+    SfxTabDialog(Window* pParent,
+                 const OString& rID, const OUString& rUIXMLDescription,
+                 const SfxItemSet * = 0, bool bEditFmt = false);
+    SfxTabDialog(SfxViewFrame *pViewFrame, Window* pParent,
+                 const OString& rID, const OUString& rUIXMLDescription,
+                 const SfxItemSet * = 0, bool bEditFmt = false);
     virtual ~SfxTabDialog();
 
     sal_uInt16          AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
@@ -198,7 +198,6 @@ public:
     const sal_uInt16*       GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
-    sal_Bool            IsFormat() const { return bFmt; }
 
     const PushButton&   GetOKButton() const { return *m_pOKBtn; }
     PushButton&         GetOKButton() { return *m_pOKBtn; }
@@ -210,6 +209,7 @@ public:
     const PushButton*   GetUserButton() const { return m_pUserBtn; }
     PushButton*         GetUserButton() { return m_pUserBtn; }
     void                RemoveResetButton();
+    void                RemoveStandardButton();
 
     short               Execute() SAL_OVERRIDE;
     void                StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;

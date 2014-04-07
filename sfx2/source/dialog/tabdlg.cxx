@@ -397,8 +397,7 @@ SfxTabDialog::SfxTabDialog
     const OString& rID, const OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
     const SfxItemSet* pItemSet,   // Itemset with the data;
                                   // can be NULL, when Pages are onDemand
-    sal_Bool bEditFmt             // Flag: templates are processed
-                                  // when yes -> additional Button for standard
+    bool bEditFmt                 // when yes -> additional Button for standard
 )
     : TabDialog(pParent, rID, rUIXMLDescription)
     , pFrame(pViewFrame)
@@ -407,10 +406,10 @@ SfxTabDialog::SfxTabDialog
     , pRanges(0)
     , nAppPageId(USHRT_MAX)
     , bItemsReset(false)
-    , bFmt(bEditFmt)
+    , bStandardPushed(false)
     , pExampleSet(0)
 {
-    Init_Impl( bFmt, NULL, NULL );
+    Init_Impl(bEditFmt, NULL, NULL);
 }
 
 
@@ -427,8 +426,7 @@ SfxTabDialog::SfxTabDialog
     const OString& rID, const OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
     const SfxItemSet* pItemSet,   // Itemset with the data;
                                   // can be NULL, when Pages are onDemand
-    sal_Bool bEditFmt             // Flag: templates are processed
-                                  // when yes -> additional Button for standard
+    bool bEditFmt                 // when yes -> additional Button for standard
 )
     : TabDialog(pParent, rID, rUIXMLDescription)
     , pFrame(0)
@@ -437,10 +435,10 @@ SfxTabDialog::SfxTabDialog
     , pRanges(0)
     , nAppPageId(USHRT_MAX)
     , bItemsReset(false)
-    , bFmt(bEditFmt)
+    , bStandardPushed(false)
     , pExampleSet(0)
 {
-    Init_Impl(bFmt, NULL, NULL);
+    Init_Impl(bEditFmt, NULL, NULL);
     DBG_WARNING( "Please use the Construtor with the ViewFrame" );
 }
 
@@ -510,7 +508,7 @@ SfxTabDialog::~SfxTabDialog()
 
 
 
-void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const OUString* pUserButtonText, const ResId *pResId )
+void SfxTabDialog::Init_Impl(bool bFmtFlag, const OUString* pUserButtonText, const ResId *pResId)
 
 /*  [Description]
 
@@ -607,22 +605,12 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const OUString* pUserButtonText
         m_pUserBtn->Show();
     }
 
-    /* TODO: Check what is up with bFmt/bFmtFlag. Comment below suggests a
-             different behavior than implemented!! */
     if ( bFmtFlag )
     {
         m_pBaseFmtBtn->SetText( SfxResId( STR_STANDARD_SHORTCUT ).toString() );
         m_pBaseFmtBtn->SetClickHdl( LINK( this, SfxTabDialog, BaseFmtHdl ) );
         m_pBaseFmtBtn->SetHelpId( HID_TABDLG_STANDARD_BTN );
-
-        // bFmt = temporary Flag passed on in the Constructor(),
-        // if bFmt == 2, then also sal_True,
-        // additional suppression of the standard button,
-        // after the Initializing set to sal_True again
-        if ( bFmtFlag != 2 )
-            m_pBaseFmtBtn->Show();
-        else
-            bFmtFlag = sal_True;
+        m_pBaseFmtBtn->Show();
     }
 
     if ( pSet )
@@ -632,15 +620,16 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const OUString* pUserButtonText
     }
 }
 
-
-
 void SfxTabDialog::RemoveResetButton()
 {
     m_pResetBtn->Hide();
     pImpl->bHideResetBtn = true;
 }
 
-
+void SfxTabDialog::RemoveStandardButton()
+{
+    m_pBaseFmtBtn->Hide();
+}
 
 short SfxTabDialog::Execute()
 {
@@ -922,7 +911,6 @@ short SfxTabDialog::Ok()
     RET_OK:       if at least one page has returned from FillItemSet,
                   otherwise RET_CANCEL.
 */
-
 {
     SavePosAndId(); //See fdo#38828 "Apply" resetting window position
 
@@ -966,12 +954,10 @@ short SfxTabDialog::Ok()
     if ( pImpl->bModified || ( pOutSet && pOutSet->Count() > 0 ) )
         bModified |= true;
 
-    if ( bFmt == 2 )
+    if (bStandardPushed)
         bModified |= true;
     return bModified ? RET_OK : RET_CANCEL;
 }
-
-
 
 IMPL_LINK_NOARG(SfxTabDialog, CancelHdl)
 {
@@ -1145,10 +1131,11 @@ IMPL_LINK_NOARG(SfxTabDialog, BaseFmtHdl)
 */
 
 {
+    bStandardPushed = true;
+
     const sal_uInt16 nId = m_pTabCtrl->GetCurPageId();
     Data_Impl* pDataObject = Find( pImpl->aData, nId );
     DBG_ASSERT( pDataObject, "Id not known" );
-    bFmt = 2;
 
     if ( pDataObject->fnGetRanges )
     {

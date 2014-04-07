@@ -94,7 +94,7 @@ void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
                                 SwNewDBMgr* pDBMgr, sal_Bool bLabel)
     : SfxTabDialog(pParent, "LabelDialog",
-        "modules/swriter/ui/labeldialog.ui", &rSet, false)
+        "modules/swriter/ui/labeldialog.ui", &rSet)
     , pNewDBMgr(pDBMgr)
     , pPrtPage(0)
     , aTypeIds(50, 10)

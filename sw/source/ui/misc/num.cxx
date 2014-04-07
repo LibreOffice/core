@@ -915,7 +915,7 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(Window* pParent,
                     const SfxItemSet* pSwItemSet, SwWrtShell & rSh)
     : SfxTabDialog(pParent, "BulletsAndNumberingDialog",
         "modules/swriter/ui/bulletsandnumbering.ui",
-        pSwItemSet, sal_False)
+        pSwItemSet)
     , rWrtSh(rSh)
 {
     GetUserButton()->SetClickHdl(LINK(this, SwSvxNumBulletTabDialog, RemoveNumberingHdl));

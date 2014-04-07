@@ -1202,7 +1202,7 @@ void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
 SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool&,
     const SfxItemSet* pItemSet, SwWrtShell* pSh)
     : SfxTabDialog(0, pParent, "TablePropertiesDialog",
-        "modules/swriter/ui/tableproperties.ui", pItemSet, 0)
+        "modules/swriter/ui/tableproperties.ui", pItemSet)
     , pShell(pSh)
     , m_nHtmlMode(::GetHtmlMode(pSh->GetView().GetDocShell()))
 {
