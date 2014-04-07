@@ -239,6 +239,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
             break;
         default:
             OSL_ENSURE(!this, "Unknown grid type");
+            //fall-through
         case 3:
             eType = GRID_LINES_CHARS;
             aGrid.SetSnapToChars(sal_True);
