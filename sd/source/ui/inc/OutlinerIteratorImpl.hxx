@@ -199,9 +199,6 @@ public:
     virtual void Reverse (void) SAL_OVERRIDE;
 
 protected:
-    /// Number of pages in the view that is specified by <member>maPosition</member>.
-    sal_Int32 mnPageCount;
-
     /** Initialize this iterator with respect to the given location.  After
         this call the object looks like newly constructed.
     */
@@ -252,6 +249,7 @@ public:
     virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const SAL_OVERRIDE;
 
 private:
+    /// Number of pages in the view that is specified by <member>maPosition</member>.
     sal_Int32 mnPageCount;
 
     // Don't use this operator.
