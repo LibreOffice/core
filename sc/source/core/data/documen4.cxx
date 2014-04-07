@@ -559,17 +559,6 @@ void ScDocument::CompileDBFormula( bool bCreateFormulaString )
     }
 }
 
-void ScDocument::CompileNameFormula( bool bCreateFormulaString )
-{
-    sc::CompileFormulaContext aCxt(this);
-    TableContainer::iterator it = maTabs.begin();
-    for (;it != maTabs.end(); ++it)
-    {
-        if (*it)
-            (*it)->CompileNameFormula(aCxt, bCreateFormulaString);
-    }
-}
-
 void ScDocument::CompileColRowNameFormula()
 {
     sc::CompileFormulaContext aCxt(this);
