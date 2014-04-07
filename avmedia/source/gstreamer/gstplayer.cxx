@@ -64,7 +64,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     GstPlayer_BASE( m_aMutex ),
     mxMgr( rxMgr ),
     mpPlaybin( NULL ),
-    mbFakeVideo (sal_False ),
+    mbFakeVideo (false ),
     mnUnmutedVolume( 0 ),
     mbPlayPending ( false ),
     mbMuted( false ),
@@ -547,7 +547,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
     DBG( "set mute: %d muted: %d unmuted volume: %lf", bSet, mbMuted, mnUnmutedVolume );
 
     // change the volume to 0 or the unmuted volume
-    if(  mpPlaybin && mbMuted != bSet )
+    if(  mpPlaybin && (mbMuted ? 1 : 0) != bSet )
     {
         double nVolume = mnUnmutedVolume;
         if( bSet )

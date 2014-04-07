@@ -84,13 +84,13 @@ protected:
 
     // Add elements and pipeline here
     GstElement*             mpPlaybin;  // the playbin is also a pipeline
-    sal_Bool                mbFakeVideo;
+    bool                mbFakeVideo;
 
     gdouble                 mnUnmutedVolume;
-    sal_Bool                mbPlayPending;
-    sal_Bool                mbMuted;
-    sal_Bool                mbLooping;
-    sal_Bool                mbInitialized;
+    bool                mbPlayPending;
+    bool                mbMuted;
+    bool                mbLooping;
+    bool                mbInitialized;
 
     long                    mnWindowID;
     GstVideoOverlay*        mpXOverlay;
