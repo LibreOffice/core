@@ -34,6 +34,9 @@
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
 
+#include <unotools/localedatawrapper.hxx>
+#include <vcl/settings.hxx>
+
 SfxTabPage *  SwDocStatPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwDocStatPage(pParent, rSet);
@@ -88,14 +91,15 @@ void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)
 // Description: update / set data
 void SwDocStatPage::SetData(const SwDocStat &rStat)
 {
-    m_pTableNo->SetText(OUString::number( rStat.nTbl ));
-    m_pGrfNo->SetText(OUString::number( rStat.nGrf ));
-    m_pOLENo->SetText(OUString::number( rStat.nOLE ));
-    m_pPageNo->SetText(OUString::number( rStat.nPage ));
-    m_pParaNo->SetText(OUString::number( rStat.nPara ));
-    m_pWordNo->SetText(OUString::number( rStat.nWord ));
-    m_pCharNo->SetText(OUString::number( rStat.nChar ));
-    m_pCharExclSpacesNo->SetText(OUString::number( rStat.nCharExcludingSpaces ));
+    const LocaleDataWrapper& rLocaleData = GetSettings().GetUILocaleDataWrapper();
+    m_pTableNo->SetText(rLocaleData.getNum(rStat.nTbl, 0));
+    m_pGrfNo->SetText(rLocaleData.getNum(rStat.nGrf, 0));
+    m_pOLENo->SetText(rLocaleData.getNum(rStat.nOLE, 0));
+    m_pPageNo->SetText(rLocaleData.getNum(rStat.nPage, 0));
+    m_pParaNo->SetText(rLocaleData.getNum(rStat.nPara, 0));
+    m_pWordNo->SetText(rLocaleData.getNum(rStat.nWord, 0));
+    m_pCharNo->SetText(rLocaleData.getNum(rStat.nChar, 0));
+    m_pCharExclSpacesNo->SetText(rLocaleData.getNum(rStat.nCharExcludingSpaces, 0));
 }
 
 // Description: update statistics

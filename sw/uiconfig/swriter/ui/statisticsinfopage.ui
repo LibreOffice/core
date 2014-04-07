@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="StatisticsInfoPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -157,8 +158,9 @@
       <object class="GtkLabel" id="nopages">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="hexpand">True</property>
-        <property name="xalign">0</property>
+        <property name="xalign">1</property>
         <property name="width_chars">10</property>
       </object>
       <packing>
@@ -172,8 +174,9 @@
       <object class="GtkLabel" id="notables">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="hexpand">True</property>
-        <property name="xalign">0</property>
+        <property name="xalign">1</property>
         <property name="width_chars">10</property>
       </object>
       <packing>
@@ -187,8 +190,9 @@
       <object class="GtkLabel" id="nogrfs">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="hexpand">True</property>
-        <property name="xalign">0</property>
+        <property name="xalign">1</property>
         <property name="width_chars">10</property>
       </object>
       <packing>
@@ -202,8 +206,9 @@
       <object class="GtkLabel" id="nooles">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="hexpand">True</property>
-        <property name="xalign">0</property>
+        <property name="xalign">1</property>
         <property name="width_chars">10</property>
       </object>
       <packing>
@@ -217,8 +222,9 @@
       <object class="GtkLabel" id="noparas">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="hexpand">True</property>
-        <property name="xalign">0</property>
+        <property name="xalign">1</property>
         <property name="width_chars">10</property>
       </object>
       <packing>
@@ -232,8 +238,9 @@
       <object class="GtkLabel" id="nowords">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="hexpand">True</property>
-        <property name="xalign">0</property>
+        <property name="xalign">1</property>
         <property name="width_chars">10</property>
       </object>
       <packing>
@@ -247,8 +254,9 @@
       <object class="GtkLabel" id="nochars">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="hexpand">True</property>
-        <property name="xalign">0</property>
+        <property name="xalign">1</property>
         <property name="width_chars">10</property>
       </object>
       <packing>
@@ -262,8 +270,9 @@
       <object class="GtkLabel" id="nocharsexspaces">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="hexpand">True</property>
-        <property name="xalign">0</property>
+        <property name="xalign">1</property>
         <property name="width_chars">10</property>
       </object>
       <packing>
@@ -292,8 +301,9 @@
       <object class="GtkLabel" id="nolines">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="hexpand">True</property>
-        <property name="xalign">0</property>
+        <property name="xalign">1</property>
         <property name="label">...</property>
         <property name="width_chars">10</property>
       </object>
