@@ -114,12 +114,6 @@
 #define OSL_POSTCOND(c, m)  OSL_ENSURE(c, m)
 
 
-#ifdef __cplusplus
-#define _OSL_GLOBAL ::
-#else
-#define _OSL_GLOBAL
-#endif  /* __cplusplus */
-
 /* the macro OSL_THIS_FUNC is intended to be an office internal macro for now */
 /* copied from boost/current_function.hpp to make it usable from C
  * sources as well
