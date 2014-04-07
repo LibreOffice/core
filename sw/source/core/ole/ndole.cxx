@@ -357,7 +357,6 @@ bool SwOLENode::SavePersistentData()
             }
 
             pCnt->RemoveEmbeddedObject( aOLEObj.aName, false, bKeepObjectToTempStorage );
-            // modify end
 
             // TODO/LATER: aOLEObj.aName has no meaning here, since the undo container contains the object
             // by different name, in future it might makes sence that the name is transported here.
