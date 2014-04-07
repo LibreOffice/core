@@ -85,7 +85,7 @@ const sal_uInt32 EXC_CF_BLOCK_FONT          = 0x04000000;   /// Font block prese
 const sal_uInt32 EXC_CF_BLOCK_ALIGNMENT     = 0x08000000;   /// Alignment block present?
 const sal_uInt32 EXC_CF_BLOCK_BORDER        = 0x10000000;   /// Border block present?
 const sal_uInt32 EXC_CF_BLOCK_AREA          = 0x20000000;   /// Pattern block present?
-const sal_uInt32 EXC_CF_BLOCK_PROTECTION    = 0x20000000;   /// Protection block present?
+const sal_uInt32 EXC_CF_BLOCK_PROTECTION    = 0x40000000;   /// Protection block present?
 const sal_uInt32 EXC_CF_IFMT_USER           = 0x1;          /// NumberFormat String or Id?
 
 const sal_uInt32 EXC_CF_FONT_STYLE          = 0x00000002;   /// Font posture or weight modified?
