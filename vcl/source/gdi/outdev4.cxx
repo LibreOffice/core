@@ -812,10 +812,6 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
     if( mbOutputClipped )
         return;
 
-    if( !mpGraphics )
-        if( !ImplGetGraphics() )
-            return;
-
     if( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
     {
         if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
