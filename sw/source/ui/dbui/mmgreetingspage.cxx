@@ -133,9 +133,7 @@ void    SwGreetingsHandler::UpdatePreview()
 
 IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, PushButton*, pButton)
 {
-    OUString sPreview = m_pFemaleLB->GetSelectEntry();
-    sPreview += "\n";
-    sPreview += m_pMaleLB->GetSelectEntry();
+    const OUString sPreview(m_pFemaleLB->GetSelectEntry() + "\n" + m_pMaleLB->GetSelectEntry());
     boost::scoped_ptr<SwAssignFieldsDialog> pDlg(
             new SwAssignFieldsDialog(pButton, m_pWizard->GetConfigItem(), sPreview, false));
     if(RET_OK == pDlg->Execute())
@@ -160,8 +158,8 @@ void SwMailMergeGreetingsPage::UpdatePreview()
     bool bNoValue = !m_pFemaleColumnLB->IsEnabled();
     if( !bNoValue )
     {
-        OUString sFemaleValue = m_pFemaleFieldCB->GetText();
-        OUString sFemaleColumn = m_pFemaleColumnLB->GetSelectEntry();
+        const OUString sFemaleValue = m_pFemaleFieldCB->GetText();
+        const OUString sFemaleColumn = m_pFemaleColumnLB->GetSelectEntry();
         Reference< sdbcx::XColumnsSupplier > xColsSupp( m_pWizard->GetConfigItem().GetResultSet(), UNO_QUERY);
         Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
         if(!sFemaleValue.isEmpty() && !sFemaleColumn.isEmpty() &&
@@ -176,19 +174,18 @@ void SwMailMergeGreetingsPage::UpdatePreview()
             {
                 try
                 {
-                    OUString sFemaleColumnValue = xColumn->getString();
-                    bFemale = sFemaleColumnValue == sFemaleValue;
+                    bFemale = xColumn->getString() == sFemaleValue;
                     if( !bNoValue )
                     {
                         //no last name value marks the greeting also als neutral
                         SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
-                        OUString sLastNameColumn = rConfig.GetAssignedColumn(MM_PART_LASTNAME);
+                        const OUString sLastNameColumn =
+                            rConfig.GetAssignedColumn(MM_PART_LASTNAME);
                         if ( xColAccess->hasByName(sLastNameColumn) )
                         {
                             aCol = xColAccess->getByName(sLastNameColumn);
                             aCol >>= xColumn;
-                            OUString sLastNameColumnValue = xColumn->getString();
-                            bNoValue = sLastNameColumnValue.isEmpty();
+                            bNoValue = xColumn->getString().isEmpty();
                         }
                     }
                 }
@@ -200,8 +197,8 @@ void SwMailMergeGreetingsPage::UpdatePreview()
         }
     }
 
-    OUString sPreview = bFemale ? OUString(m_pFemaleLB->GetSelectEntry()) :
-        bNoValue ? m_pNeutralCB->GetText() : OUString(m_pMaleLB->GetSelectEntry());
+    OUString sPreview = bFemale ? m_pFemaleLB->GetSelectEntry() :
+        bNoValue ? m_pNeutralCB->GetText() : m_pMaleLB->GetSelectEntry();
 
     sPreview = SwAddressPreview::FillData(sPreview, m_pWizard->GetConfigItem());
     m_pPreviewWIN->SetAddress(sPreview);
@@ -313,8 +310,7 @@ void SwMailMergeGreetingsPage::ActivatePage()
             m_pFemaleColumnLB->InsertEntry(aColumns[nName]);
     }
 
-    OUString sGenderColumn = rConfig.GetAssignedColumn(MM_PART_GENDER);
-    m_pFemaleColumnLB->SelectEntry(sGenderColumn);
+    m_pFemaleColumnLB->SelectEntry(rConfig.GetAssignedColumn(MM_PART_GENDER));
     m_pFemaleColumnLB->SaveValue();
 
     m_pFemaleFieldCB->SetText(rConfig.GetFemaleGenderValue());
@@ -483,8 +479,7 @@ SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard)
             m_aFemaleColumnLB.InsertEntry(aColumns[nName]);
     }
 
-    OUString sGenderColumn = rConfig.GetAssignedColumn(MM_PART_GENDER);
-    m_aFemaleColumnLB.SelectEntry(sGenderColumn);
+    m_aFemaleColumnLB.SelectEntry(rConfig.GetAssignedColumn(MM_PART_GENDER));
     m_aFemaleColumnLB.SaveValue();
 
     m_aFemaleFieldCB.SetText(rConfig.GetFemaleGenderValue());
