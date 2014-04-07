@@ -848,6 +848,15 @@ void ScColorScale2FrmtEntry::SetInactive()
 
 IMPL_LINK( ScColorScale2FrmtEntry, EntryTypeHdl, ListBox*, pBox )
 {
+    Edit* pEd = NULL;
+    if (pBox == &maLbEntryTypeMin)
+        pEd = &maEdMin;
+    else if (pBox == &maLbEntryTypeMax)
+        pEd = &maEdMax;
+
+    if (!pEd)
+        return 0;
+
     bool bEnableEdit = true;
     sal_Int32 nPos = pBox->GetSelectEntryPos();
     if(nPos < 2)
@@ -855,13 +864,7 @@ IMPL_LINK( ScColorScale2FrmtEntry, EntryTypeHdl, ListBox*, pBox )
         bEnableEdit = false;
     }
 
-    Edit* pEd = NULL;
-    if(pBox == &maLbEntryTypeMin)
-        pEd = &maEdMin;
-    else if(pBox == &maLbEntryTypeMax)
-        pEd = &maEdMax;
-
-    if(bEnableEdit)
+    if (bEnableEdit)
         pEd->Enable();
     else
         pEd->Disable();
