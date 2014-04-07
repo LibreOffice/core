@@ -124,6 +124,7 @@ protected:
     static const OUString& getNameFromId(sal_uInt16 nId, const OUString &rName,
                                          bool bProgName);
     static const NameToIdHash& getHashTable ( SwGetPoolIdFromName, bool bProgName );
+    static void testNameTable( SwGetPoolIdFromName const nFamily, sal_uInt16 const nStartIndex, sal_uInt16 const nEndIndex );
 
 public:
     // This gets the UI Name from the programmatic name
