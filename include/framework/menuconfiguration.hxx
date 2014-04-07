@@ -89,10 +89,8 @@ class FWE_DLLPUBLIC MenuConfiguration
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream )
             throw ( ::com::sun::star::lang::WrappedTargetException );
 
-        PopupMenu* CreateBookmarkMenu(
-                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                const OUString& aURL )
-            throw ( ::com::sun::star::lang::WrappedTargetException );
+        PopupMenu* CreateBookmarkMenu(css::uno::Reference<css::frame::XFrame >& rFrame, const OUString& aURL)
+            throw (css::lang::WrappedTargetException, css::uno::RuntimeException);
 
         ToolBox* CreateToolBoxFromConfiguration(
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream )

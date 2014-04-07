@@ -100,10 +100,9 @@ throw ( WrappedTargetException )
     }
 }
 
-PopupMenu* MenuConfiguration::CreateBookmarkMenu(
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    const OUString& aURL )
-throw ( ::com::sun::star::lang::WrappedTargetException )
+PopupMenu* MenuConfiguration::CreateBookmarkMenu(css::uno::Reference<css::frame::XFrame >& rFrame, const OUString& aURL)
+    throw (css::lang::WrappedTargetException,
+           css::uno::RuntimeException)
 {
     if ( aURL == BOOKMARK_NEWMENU )
         return new BmkMenu( rFrame, BmkMenu::BMK_NEWMENU );
