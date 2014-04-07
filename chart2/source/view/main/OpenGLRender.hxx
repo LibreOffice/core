@@ -67,7 +67,7 @@ public:
     OpenGLRender(com::sun::star::uno::Reference<
             com::sun::star::drawing::XShape > xTarget );
     ~OpenGLRender();
-    int InitOpenGL(GLWindow);
+    int InitOpenGL();
     int MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale);
     void SetSize(int width, int height);
     void Release();
@@ -140,8 +140,6 @@ private:
     int m_iWidth;
 
     int m_iHeight;
-
-    GLWindow glWin;
 
     Line2DPointList m_Line2DPointList;
 

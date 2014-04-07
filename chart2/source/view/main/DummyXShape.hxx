@@ -404,7 +404,6 @@ public:
 private:
 
     TextCache maTextCache;
-    OpenGLContext m_aGLContext;
 
 public:
     OpenGLRender m_GLRender;

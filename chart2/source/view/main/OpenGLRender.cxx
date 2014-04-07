@@ -232,10 +232,10 @@ GLfloat texCoords[] = {
 
 }
 
-int OpenGLRender::InitOpenGL(GLWindow aWindow)
+int OpenGLRender::InitOpenGL()
 {
-    glWin = aWindow;
-    mbArbMultisampleSupported = glWin.bMultiSampleSupported;
+    //TODO: moggi: get the information from the context
+    mbArbMultisampleSupported = true;
     if(!bGlewInit)
     {
         glewExperimental = GL_TRUE;
@@ -636,21 +636,6 @@ void OpenGLRender::Release()
     glDeleteRenderbuffers(1, &m_RboID);
     glDeleteRenderbuffers(1, &m_renderBufferColorMS);
     glDeleteRenderbuffers(1, &m_renderBufferDepthMS);
-#if defined( WNT )
-    wglMakeCurrent(NULL, NULL);
-#elif defined( MACOSX )
-
-#elif defined( UNX )
-
-    glXMakeCurrent(glWin.dpy, None, NULL);
-    if( glGetError() != GL_NO_ERROR ) {
-        SAL_INFO("chart2.opengl", "glError: " << (char *)gluErrorString(glGetError()));
-    }
-    glXDestroyContext(glWin.dpy, glWin.ctx);
-    glWin.ctx = NULL;
-    glWin.win = 0;
-
-#endif
 }
 
 OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget)

@@ -1147,8 +1147,7 @@ DummyChart::DummyChart(uno::Reference< drawing::XShape > xTarget):
 {
     SAL_INFO("chart2.opengl", "DummyXShape::DummyChart()-----test: ");
     setName("com.sun.star.chart2.shapes");
-    m_aGLContext.init();
-    m_GLRender.InitOpenGL(m_aGLContext.getOpenGLWindow());
+    m_GLRender.InitOpenGL();
 }
 
 void SAL_CALL DummyChart::setPosition( const awt::Point& aPosition )
@@ -1167,7 +1166,6 @@ void SAL_CALL DummyChart::setSize( const awt::Size& aSize )
     SAL_INFO("chart2.opengl", "DummyChart::setSize()---aSize.Width = " << aSize.Width << ", aSize.Height = " << aSize.Height);
     int width = aSize.Width / OPENGL_SCALE_VALUE;
     int height = aSize.Height / OPENGL_SCALE_VALUE;
-    m_aGLContext.setWinSize(Size(width, height));
     DummyXShape::setSize(awt::Size(0,0));
     m_GLRender.SetSize(width, height);
     SAL_INFO("chart2.opengl", "DummyChart::GLRender.Width = " << width << ", GLRender.Height = " << height);
