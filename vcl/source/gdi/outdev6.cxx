@@ -262,9 +262,7 @@ bool OutputDevice::DrawTransparentNatively ( const PolyPolygon& rPolyPoly,
 
     if( !pDisableNative
         && mpGraphics->supportsOperation( OutDevSupport_B2DDraw )
-// Should iOS be included? Android? Or does this code even get invoked
-// ever for those?
-#if defined UNX && ! defined MACOSX
+#if defined UNX && ! defined MACOSX && ! defined IOS
             && GetBitCount() > 8
 #endif
 #ifdef WIN32
