@@ -164,7 +164,7 @@ namespace /* private */
         HANDLE hThread = reinterpret_cast<HANDLE>(
             _beginthreadex(0, 0, ThreadProc, &gfnp, 0, &id));
 
-        OSL_POSTCOND(hThread, "could not create STA thread");
+        SAL_WARN_IF( !hThread, "fpicker", "could not create STA thread");
 
         WaitForSingleObject(hThread, INFINITE);
         CloseHandle(hThread);

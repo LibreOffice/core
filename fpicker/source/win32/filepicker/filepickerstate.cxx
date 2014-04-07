@@ -509,7 +509,7 @@ OUString SAL_CALL CExecuteFilePickerState::getLabel( sal_Int16 aControlId )
 
 Sequence< OUString > SAL_CALL CExecuteFilePickerState::getFiles( CFileOpenDialog* aFileOpenDialog )
 {
-    OSL_POSTCOND( aFileOpenDialog, "invalid parameter" );
+    SAL_WARN_IF( !aFileOpenDialog, "fpicker", "invalid parameter" );
 
     Sequence< OUString > aFilePathList;
     OUString aFilePathURL;
@@ -545,7 +545,7 @@ Sequence< OUString > SAL_CALL CExecuteFilePickerState::getFiles( CFileOpenDialog
 
 OUString SAL_CALL CExecuteFilePickerState::getDisplayDirectory( CFileOpenDialog* aFileOpenDialog )
 {
-    OSL_POSTCOND( aFileOpenDialog, "invalid parameter" );
+    SAL_WARN_IF( !aFileOpenDialog, "fpicker", "invalid parameter" );
 
     OUString pathURL;
     OUString displayDir;

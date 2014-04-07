@@ -84,12 +84,9 @@ CDIBPreview::CDIBPreview(HINSTANCE instance,HWND parent,sal_Bool bShowWindow) :
                      // instance of this class
     );
 
-    bool bSuccess = IsWindow(m_Hwnd);
-
-    OSL_POSTCOND(bSuccess,"Coud not create preview window");
-
-    if (!bSuccess)
+    if (!IsWindow(m_Hwnd))
     {
+        SAL_WARN("fpicker","Coud not create preview window");
         UnregisterDibPreviewWindowClass();
         throw std::runtime_error("Could not create preview window");
     }
@@ -401,12 +398,11 @@ ATOM SAL_CALL CDIBPreview::RegisterDibPreviewWindowClass()
         //     Win2000 - the window class must be unregistered manually
         //               if the dll is unloaded
         s_ClassAtom = RegisterClassEx(&wndClsEx);
-
-        OSL_POSTCOND(s_ClassAtom,"Could  not register preview window class");
-
         if (0 == s_ClassAtom)
+        {
+            SAL_WARN("fpicker", "Could not register preview window class");
             throw std::runtime_error("Preview window class could not be registered");
-    }
+        }
 
     // increment the register class counter
     // so that we keep track of the number

@@ -73,7 +73,7 @@ CFilePicker::CFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xSer
     m_aAsyncEventNotifier(rBHelper)
 {
     HINSTANCE hInstance = GetModuleHandle(FILE_PICKER_DLL_NAME);
-    OSL_POSTCOND( hInstance, "The name of the service dll must have changed" );
+    SAL_WARN_IF( !hInstance, "fpicker", "The name of the service dll must have changed" );
 
     // create a default FileOpen dialog without any additional ui elements
     m_pImpl = std::auto_ptr< CWinFileOpenImpl >(
@@ -677,7 +677,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
     }
 
     HINSTANCE hInstance = GetModuleHandle( FILE_PICKER_DLL_NAME );
-    OSL_POSTCOND( hInstance, "The name of the service dll must have changed" );
+    SAL_WARN_IF( !hInstance, "fpicker", The name of the service dll must have changed" );
 
     // create a new impl-class here based on the
     // given string, if the given string is empty
