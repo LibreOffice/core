@@ -113,15 +113,18 @@ struct PropEntry
 
 class PropItem : public SvMemoryStream
 {
-        sal_uInt16      mnTextEnc;
+    sal_uInt16      mnTextEnc;
 
-    public :
-                        PropItem(){};
-        void            Clear();
+public:
+    PropItem()
+        : mnTextEnc(RTL_TEXTENCODING_DONTKNOW)
+    {
+    }
+    void            Clear();
 
-        void            SetTextEncoding( sal_uInt16 nTextEnc ){ mnTextEnc = nTextEnc; };
-        sal_Bool        Read( OUString& rString, sal_uInt32 nType = VT_EMPTY, sal_Bool bDwordAlign = sal_True );
-        PropItem&       operator=( PropItem& rPropItem );
+    void            SetTextEncoding( sal_uInt16 nTextEnc ){ mnTextEnc = nTextEnc; };
+    sal_Bool        Read( OUString& rString, sal_uInt32 nType = VT_EMPTY, sal_Bool bDwordAlign = sal_True );
+    PropItem&       operator=( PropItem& rPropItem );
 
     using SvStream::Read;
 };
