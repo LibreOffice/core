@@ -506,6 +506,7 @@ void TableRowUndo::getData( Data& rData )
 TableStyleUndo::TableStyleUndo( const SdrTableObj& rTableObj )
     : SdrUndoAction( *rTableObj.GetModel() )
     , mxObjRef( const_cast< sdr::table::SdrTableObj*>( &rTableObj ) )
+    , mbHasRedoData(false)
 {
     getData( maUndoData );
 }
