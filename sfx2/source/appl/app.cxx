@@ -190,7 +190,7 @@ SfxApplication::SfxApplication()
 
     SAL_INFO( "sfx.appl", "{ initialize DDE" );
 
-    sal_Bool bOk = InitializeDde();
+    bool bOk = InitializeDde();
 
 #ifdef DBG_UTIL
     if( !bOk )
@@ -327,7 +327,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         // DocWinActivate : both frames belong to the same TopWindow
         // TopWinActivate : both frames belong to different TopWindows
 
-        sal_Bool bTaskActivate = pOldContainerFrame != pNewContainerFrame;
+        bool bTaskActivate = pOldContainerFrame != pNewContainerFrame;
 
         if ( pOldContainerFrame )
         {

@@ -82,7 +82,7 @@ public:
     /** checks if any modules in the SfxLibraryContainer exceed the binary
         limits.
     */
-    sal_Bool LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< OUString >& sModules );
+    bool LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< OUString >& sModules );
 
 
 private:

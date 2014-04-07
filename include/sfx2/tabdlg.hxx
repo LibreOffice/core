@@ -198,7 +198,7 @@ public:
     const sal_uInt16*       GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
-    bool                IsFormat() const { return bFmt; }
+    sal_Bool            IsFormat() const { return bFmt; }
 
     const PushButton&   GetOKButton() const { return *m_pOKBtn; }
     PushButton&         GetOKButton() { return *m_pOKBtn; }

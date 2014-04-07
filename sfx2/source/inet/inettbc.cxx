@@ -78,7 +78,7 @@ SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 
 
 
-void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, sal_Bool /*bNew*/ ) const
+void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, bool /*bNew*/ ) const
 {
     OUString aName;
     OUString aFilter;
@@ -167,7 +167,7 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, SelectHdl)
     OUString aName( pURLBox->GetURL() );
 
     if ( !pURLBox->IsTravelSelect() && !aName.isEmpty() )
-        OpenURL( aName, sal_False );
+        OpenURL( aName, false );
 
     return 1L;
 }

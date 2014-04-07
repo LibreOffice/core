@@ -47,12 +47,12 @@ private:
     sal_uInt16          nId;
     sal_uInt16          nCount;
     sal_uInt16          nLocks;
-    sal_Bool            bResCtor : 1; // SV Menu created from resource
-    sal_Bool            bOLE : 1;     // InPlaceMenu
-    sal_Bool            bHelpInitialized : 1;
-    sal_Bool            bIsActive : 1;
-    sal_Bool            bControllersUnBound : 1;
-    sal_Bool            bIsAddonPopupMenu : 1;
+    bool            bResCtor : 1; // SV Menu created from resource
+    bool            bOLE : 1;     // InPlaceMenu
+    bool            bHelpInitialized : 1;
+    bool            bIsActive : 1;
+    bool            bControllersUnBound : 1;
+    bool            bIsAddonPopupMenu : 1;
 
 private:
     void            Construct_Impl();
@@ -65,8 +65,8 @@ private:
     void            BindControllers();
 
 protected:
-    SfxVirtualMenu( sal_uInt16 nOwnId, SfxVirtualMenu* pParent, Menu& rMenu, sal_Bool bWithHelp,
-                        SfxBindings &rBind, sal_Bool bOLEServer=sal_False, sal_Bool bRes=sal_False, sal_Bool bIsAddonMenu=sal_False );
+    SfxVirtualMenu( sal_uInt16 nOwnId, SfxVirtualMenu* pParent, Menu& rMenu, bool bWithHelp,
+                        SfxBindings &rBind, bool bOLEServer=false, bool bRes=false, bool bIsAddonMenu=false );
 
     void            CreateFromSVMenu();
     DECL_LINK( Highlight, void * );
@@ -81,10 +81,10 @@ protected:
 
 public:
                     ~SfxVirtualMenu();
-                    SfxVirtualMenu( Menu *pStarViewMenu, sal_Bool bWithHelp,
-                        SfxBindings &rBind, sal_Bool bOLEServer=sal_False, sal_Bool bRes=sal_False, sal_Bool bIsAddonMenu=sal_False );
-    void            CheckItem( sal_uInt16 nItemId, sal_Bool bCheck );
-    void            EnableItem( sal_uInt16 nItemId, sal_Bool bEnable );
+                    SfxVirtualMenu( Menu *pStarViewMenu, bool bWithHelp,
+                        SfxBindings &rBind, bool bOLEServer=false, bool bRes=false, bool bIsAddonMenu=false );
+    void            CheckItem( sal_uInt16 nItemId, bool bCheck );
+    void            EnableItem( sal_uInt16 nItemId, bool bEnable );
     void            SetItemText( sal_uInt16 nItemId, const OUString& rText );
 
     sal_uInt16          GetItemCount() const;
@@ -98,9 +98,9 @@ public:
                     { pParent = pNewParent; }
 
     void            SetPopupMenu( sal_uInt16 nId, PopupMenu *pMenu );
-    sal_Bool            IsFromResource() const
+    bool            IsFromResource() const
                     { return bResCtor; }
-    void            InitPopup(sal_uInt16 nPos, sal_Bool bOLE = sal_True);
+    void            InitPopup(sal_uInt16 nPos, bool bOLE = true);
     void            InitializeHelp();
     void            SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
     ResMgr*         GetResMgr() { return pResMgr; }

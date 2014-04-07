@@ -337,13 +337,13 @@ sal_Bool SAL_CALL SfxGlobalEvents_Impl::has(const uno::Any& aElement)
     uno::Reference< frame::XModel > xDoc;
     aElement >>= xDoc;
 
-    sal_Bool bHas = sal_False;
+    bool bHas = false;
 
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
     TModelList::iterator pIt = impl_searchDoc(xDoc);
     if (pIt != m_lModels.end())
-        bHas = sal_True;
+        bHas = true;
     aLock.clear();
     // <- SAFE
 

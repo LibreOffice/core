@@ -348,8 +348,8 @@ void SfxShell::PutItem
             SfxStateCache* pCache = pBindings->GetStateCache( nSlotId );
             if ( pCache )
             {
-                pCache->SetState( SFX_ITEM_AVAILABLE, pItem->Clone(), sal_True );
-                pCache->SetCachedState( sal_True );
+                pCache->SetState( SFX_ITEM_AVAILABLE, pItem->Clone(), true );
+                pCache->SetCachedState( true );
             }
         }
         return;

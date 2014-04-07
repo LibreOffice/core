@@ -573,7 +573,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
         TypeId aType( TYPE(SfxObjectShell) );
 
-        sal_Bool bFirst = sal_True;
+        bool bFirst = true;
         SfxObjectShell* pShell = pLinkMgr->GetPersist();
         if( pShell && pShell->GetMedium() )
         {
@@ -587,7 +587,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
         if ( !pShell )
         {
-            bFirst = sal_False;
+            bFirst = false;
             pShell = SfxObjectShell::GetFirst( &aType, false );
         }
 
@@ -610,7 +610,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
             if( bFirst )
             {
-                bFirst = sal_False;
+                bFirst = false;
                 pShell = SfxObjectShell::GetFirst( &aType, false );
             }
             else

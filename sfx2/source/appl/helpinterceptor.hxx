@@ -81,8 +81,8 @@ public:
 
     const com::sun::star::uno::Any&     GetViewData()const {return m_aViewData;}
 
-    sal_Bool                HasHistoryPred() const;     // is there a predecessor for the current in the history
-    sal_Bool                HasHistorySucc() const;     // is there a successor for the current in the history
+    bool                HasHistoryPred() const;     // is there a predecessor for the current in the history
+    bool                HasHistorySucc() const;     // is there a successor for the current in the history
 
     // XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL

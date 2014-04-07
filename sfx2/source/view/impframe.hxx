@@ -41,12 +41,12 @@ public:
     SfxViewFrame*             pCurrentViewFrame;
     SfxFrameDescriptor*       pDescr;
     sal_uInt16                nLocks;
-    sal_Bool                  bClosing : 1;
-    sal_Bool                  bPrepClosing : 1;
-    sal_Bool                  bInCancelTransfers : 1;
-    sal_Bool                  bOwnsBindings : 1;
-    sal_Bool                  bReleasingComponent : 1;
-    sal_Bool                  bInPlace : 1;
+    bool                  bClosing : 1;
+    bool                  bPrepClosing : 1;
+    bool                  bInCancelTransfers : 1;
+    bool                  bOwnsBindings : 1;
+    bool                  bReleasingComponent : 1;
+    bool                  bInPlace : 1;
     SfxFrame*                 pFrame;
     SfxWorkWindow*            pWorkWin;
     SvBorder                  aBorder;
@@ -62,12 +62,12 @@ public:
         ,pCurrentViewFrame( NULL )
         ,pDescr( NULL )
         ,nLocks( 0 )
-        ,bClosing(sal_False)
-        ,bPrepClosing(sal_False)
-        ,bInCancelTransfers( sal_False )
-        ,bOwnsBindings( sal_False )
-        ,bReleasingComponent( sal_False )
-        ,bInPlace( sal_False )
+        ,bClosing(false)
+        ,bPrepClosing(false)
+        ,bInCancelTransfers( false )
+        ,bOwnsBindings( false )
+        ,bReleasingComponent( false )
+        ,bInPlace( false )
         ,pFrame( pAntiImplP )
         ,pWorkWin( 0 )
         ,pExternalContainerWindow( NULL )

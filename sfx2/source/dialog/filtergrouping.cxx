@@ -537,7 +537,7 @@ namespace sfx2
         FilterGroupEntryReferrer::mapped_type aLookingFor;
         FindGroupEntry( FilterGroupEntryReferrer::mapped_type _rLookingFor ) : aLookingFor( _rLookingFor ) { }
 
-        sal_Bool operator() ( const MapGroupEntry2GroupEntry::value_type& _rMapEntry )
+        bool operator() ( const MapGroupEntry2GroupEntry::value_type& _rMapEntry )
         {
             return _rMapEntry.first == aLookingFor ? sal_True : sal_False;
         }
@@ -753,7 +753,7 @@ namespace sfx2
             void operator() ( const FilterDescriptor& _rFilterEntry )
             {
                 OUString sDisplayText = m_bAddExtension
-                    ? addExtension( _rFilterEntry.First, _rFilterEntry.Second, sal_True, *m_pFileDlgImpl )
+                    ? addExtension( _rFilterEntry.First, _rFilterEntry.Second, true, *m_pFileDlgImpl )
                     : _rFilterEntry.First;
                 m_xFilterManager->appendFilter( sDisplayText, _rFilterEntry.Second );
             }
@@ -764,9 +764,9 @@ namespace sfx2
 
 
 
-    sal_Bool lcl_hasAllFilesFilter( TSortedFilterList& _rFilterMatcher, OUString& /* [out] */ _rAllFilterName )
+    bool lcl_hasAllFilesFilter( TSortedFilterList& _rFilterMatcher, OUString& /* [out] */ _rAllFilterName )
     {
-        sal_Bool        bHasAll = sal_False;
+        bool        bHasAll = false;
         _rAllFilterName = SfxResId( STR_SFX_FILTERNAME_ALL ).toString();
 
 
@@ -774,7 +774,7 @@ namespace sfx2
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter && !bHasAll; pFilter = _rFilterMatcher.Next() )
         {
             if ( pFilter->GetUIName() == _rAllFilterName )
-                bHasAll = sal_True;
+                bHasAll = true;
         }
         return bHasAll;
     }
@@ -838,7 +838,7 @@ namespace sfx2
                             StringPair* pFilters = aFilters.getArray();
                             StringPair* pEnd = pFilters + aFilters.getLength();
                             for ( ; pFilters != pEnd; ++pFilters )
-                                pFilters->First = addExtension( pFilters->First, pFilters->Second, sal_True, *m_pFileDlgImpl );
+                                pFilters->First = addExtension( pFilters->First, pFilters->Second, true, *m_pFileDlgImpl );
                         }
                         m_xFilterGroupManager->appendFilterGroup( OUString(), aFilters );
                     }
@@ -928,7 +928,7 @@ namespace sfx2
         // (and always the first if there are more than one)
         using comphelper::string::getToken;
         sExtension = getToken(pDefaultFilter->GetWildcard().getGlob(), 0, ';');
-        sUIName = addExtension( pDefaultFilter->GetUIName(), sExtension, sal_False, _rFileDlgImpl );
+        sUIName = addExtension( pDefaultFilter->GetUIName(), sExtension, false, _rFileDlgImpl );
         try
         {
             _rxFilterManager->appendFilter( sUIName, sExtension );
@@ -948,7 +948,7 @@ namespace sfx2
             // Only use one extension (#i32434#)
             // (and always the first if there are more than one)
             sExtension = getToken(pFilter->GetWildcard().getGlob(), 0, ';');
-            sUIName = addExtension( pFilter->GetUIName(), sExtension, sal_False, _rFileDlgImpl );
+            sUIName = addExtension( pFilter->GetUIName(), sExtension, false, _rFileDlgImpl );
             try
             {
                 _rxFilterManager->appendFilter( sUIName, sExtension );
@@ -1054,7 +1054,7 @@ namespace sfx2
                 {
                     aFilters[i].First   = addExtension( aImportantFilterGroup[i].aUIName,
                                                         aImportantFilterGroup[i].aWildcard,
-                                                        sal_False, _rFileDlgImpl );
+                                                        false, _rFileDlgImpl );
                     aFilters[i].Second  = aImportantFilterGroup[i].aWildcard;
                 }
 
@@ -1074,7 +1074,7 @@ namespace sfx2
                 {
                     aFilters[i].First   = addExtension( aFilterGroup[i].aUIName,
                                                         aFilterGroup[i].aWildcard,
-                                                        sal_False, _rFileDlgImpl );
+                                                        false, _rFileDlgImpl );
                     aFilters[i].Second  = aFilterGroup[i].aWildcard;
                 }
 
@@ -1098,7 +1098,7 @@ namespace sfx2
                 {
                     OUString aUIName = addExtension( aImportantFilterGroup[n].aUIName,
                                                           aImportantFilterGroup[n].aWildcard,
-                                                          sal_False, _rFileDlgImpl );
+                                                          false, _rFileDlgImpl );
                     _rxFilterManager->appendFilter( aUIName, aImportantFilterGroup[n].aWildcard  );
                     if ( _rFirstNonEmpty.isEmpty() )
                         _rFirstNonEmpty = sUIName;
@@ -1116,7 +1116,7 @@ namespace sfx2
                 {
                     OUString aUIName = addExtension( aFilterGroup[n].aUIName,
                                                           aFilterGroup[n].aWildcard,
-                                                          sal_False, _rFileDlgImpl );
+                                                          false, _rFileDlgImpl );
                     _rxFilterManager->appendFilter( aUIName, aFilterGroup[n].aWildcard );
                     if ( _rFirstNonEmpty.isEmpty() )
                         _rFirstNonEmpty = sUIName;
@@ -1175,7 +1175,7 @@ namespace sfx2
 
     OUString addExtension( const OUString& _rDisplayText,
                                   const OUString& _rExtension,
-                                  sal_Bool _bForOpen, FileDialogHelper_Impl& _rFileDlgImpl )
+                                  bool _bForOpen, FileDialogHelper_Impl& _rFileDlgImpl )
     {
         static OUString sAllFilter( "(*.*)" );
         static OUString sOpenBracket( " ("  );

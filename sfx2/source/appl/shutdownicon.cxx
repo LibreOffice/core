@@ -479,7 +479,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
 
                     // Set readonly flag
 
-                    sal_Bool    bReadOnly = sal_False;
+                    bool    bReadOnly = false;
 
 
                     xPickerControls->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 ) >>= bReadOnly;
@@ -707,7 +707,7 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
     // third argument only sets veto, everything else will be ignored!
     if (aArguments.getLength() > 2)
     {
-        sal_Bool bVeto = ::cppu::any2bool(aArguments[2]);
+        bool bVeto = ::cppu::any2bool(aArguments[2]);
         m_bVeto = bVeto;
         return;
     }
@@ -718,7 +718,7 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
         {
             try
             {
-                sal_Bool bQuickstart = ::cppu::any2bool( aArguments[0] );
+                bool bQuickstart = ::cppu::any2bool( aArguments[0] );
                 if( !bQuickstart && !GetAutostart() )
                     return;
                 aGuard.clear();
@@ -738,7 +738,7 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
     }
     if ( aArguments.getLength() > 1 )
     {
-            sal_Bool bAutostart = ::cppu::any2bool( aArguments[1] );
+            bool bAutostart = ::cppu::any2bool( aArguments[1] );
             if (bAutostart && !GetAutostart())
                 SetAutostart( true );
             if (!bAutostart && GetAutostart())
@@ -930,7 +930,7 @@ void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32             
         case PROPHANDLE_TERMINATEVETOSTATE :
              {
                 // use new value in case it's a valid information only
-                sal_Bool bState( sal_False );
+                bool bState( false );
                 if (! (aValue >>= bState))
                     return;
 

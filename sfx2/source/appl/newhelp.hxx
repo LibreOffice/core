@@ -148,12 +148,12 @@ public:
     inline OUString     GetFactory() const { return sFactory; }
     OUString            GetSelectEntry() const;
     inline void         SetFocusOnBox() { m_pIndexCB->GrabFocus(); }
-    inline sal_Bool     HasFocusOnEdit() const { return m_pIndexCB->HasChildPathFocus(); }
+    inline bool     HasFocusOnEdit() const { return m_pIndexCB->HasChildPathFocus(); }
 
     inline void         SetKeywordHdl( const Link& rLink ) { aKeywordLink = rLink; }
     void                SetKeyword( const OUString& rKeyword );
-    sal_Bool            HasKeyword() const;
-    sal_Bool            HasKeywordIgnoreCase();
+    bool            HasKeyword() const;
+    bool            HasKeywordIgnoreCase();
     void                OpenKeyword();
 
     inline void         SelectExecutableEntry() { m_pIndexCB->SelectExecutableEntry(); }
@@ -224,10 +224,10 @@ public:
     OUString            GetSelectEntry() const;
     void                ClearPage();
     inline void         SetFocusOnBox() { m_pResultsLB->GrabFocus(); }
-    inline sal_Bool     HasFocusOnEdit() const { return m_pSearchED->HasChildPathFocus(); }
+    inline bool     HasFocusOnEdit() const { return m_pSearchED->HasChildPathFocus(); }
     inline OUString     GetSearchText() const { return m_pSearchED->GetText(); }
-    inline sal_Bool     IsFullWordSearch() const { return m_pFullWordsCB->IsChecked(); }
-    sal_Bool            OpenKeyword( const OUString& rKeyword );
+    inline bool     IsFullWordSearch() const { return m_pFullWordsCB->IsChecked(); }
+    bool            OpenKeyword( const OUString& rKeyword );
 };
 
 // class BookmarksTabPage_Impl -------------------------------------------
@@ -318,7 +318,7 @@ public:
 
     void                SetDoubleClickHdl( const Link& rLink );
     inline void         SetSelectFactoryHdl( const Link& rLink ) { aSelectFactoryLink = rLink; }
-    void                SetFactory( const OUString& rFactory, sal_Bool bActive );
+    void                SetFactory( const OUString& rFactory, bool bActive );
     inline OUString     GetFactory() const { return pIPage->GetFactory(); }
     OUString            GetSelectEntry() const;
     void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
@@ -327,9 +327,9 @@ public:
     inline void         UpdateTabControl() { aTabCtrl.Invalidate(); }
     void                ClearSearchPage();
     void                GrabFocusBack();
-    sal_Bool            HasFocusOnEdit() const;
+    bool            HasFocusOnEdit() const;
     OUString            GetSearchText() const;
-    sal_Bool            IsFullWordSearch() const;
+    bool            IsFullWordSearch() const;
     void                OpenKeyword( const OUString& rKeyword );
     void                SelectExecutableEntry();
     inline bool         WasCursorLeftOrRight();
@@ -424,12 +424,12 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                             xConfiguration;
     long                    nMinPos;
-    sal_Bool                bIsDebug;
-    sal_Bool                bIsIndexOn;
-    sal_Bool                bIsInClose;
-    sal_Bool                bIsFullWordSearch;
+    bool                bIsDebug;
+    bool                bIsIndexOn;
+    bool                bIsInClose;
+    bool                bIsFullWordSearch;
 
-    sal_Bool                HasSelection() const;
+    bool                HasSelection() const;
     void                    InitToolBoxImages();
     void                    InitOnStartupBox( bool bOnlyText );
     void                    SetOnStartupBoxPosition();
@@ -459,8 +459,8 @@ public:
                             getFrame() const { return xFrame; }
 
     inline void             SetSelectHdl( const Link& rLink ) { aToolBox.SetSelectHdl( rLink ); }
-    void                    ToggleIndex( sal_Bool bOn );
-    void                    SelectSearchText( const OUString& rSearchText, sal_Bool _bIsFullWordSearch );
+    void                    ToggleIndex( bool bOn );
+    void                    SelectSearchText( const OUString& rSearchText, bool _bIsFullWordSearch );
     void                    SetPageStyleHeaderOff() const;
     inline ToolBox&         GetToolBox() { return aToolBox; }
      void                   CloseFrame();
@@ -493,8 +493,8 @@ friend class SfxHelpIndexWindow_Impl;
     sal_Int32           nHeight;
     long                nIndexSize;
     long                nTextSize;
-    sal_Bool            bIndex;
-    sal_Bool            bGrabFocusToToolBox;
+    bool            bIndex;
+    bool            bGrabFocusToToolBox;
     Point               aWinPos;
     OUString            sTitle;
     OUString            sKeyword;
@@ -537,19 +537,19 @@ public:
     inline void         OpenKeyword( const OUString& rKeyword ) { pIndexWin->OpenKeyword( rKeyword ); }
     inline OUString     GetFactory() const { return pIndexWin->GetFactory(); }
 
-    sal_Bool            HasHistoryPredecessor() const;      // forward to interceptor
-    sal_Bool            HasHistorySuccessor() const;        // forward to interceptor
+    bool            HasHistoryPredecessor() const;      // forward to interceptor
+    bool            HasHistorySuccessor() const;        // forward to interceptor
 
     void                openDone(const OUString& sURL    ,
-                                       sal_Bool         bSuccess);
+                                       bool         bSuccess);
 
     static OUString  buildHelpURL(const OUString& sFactory        ,
                                          const OUString& sContent        ,
                                          const OUString& sAnchor         ,
-                                               sal_Bool         bUseQuestionMark);
+                                               bool         bUseQuestionMark);
 
     void                loadHelpContent(const OUString& sHelpURL                ,
-                                              sal_Bool         bAddToHistory = sal_True);
+                                              bool         bAddToHistory = true);
 };
 
 class SfxAddHelpBookmarkDialog_Impl : public ModalDialog
@@ -557,14 +557,14 @@ class SfxAddHelpBookmarkDialog_Impl : public ModalDialog
 private:
     Edit* m_pTitleED;
 public:
-    SfxAddHelpBookmarkDialog_Impl( Window* pParent, sal_Bool bRename = sal_True );
+    SfxAddHelpBookmarkDialog_Impl( Window* pParent, bool bRename = true );
 
     void SetTitle( const OUString& rTitle );
     OUString GetTitle() const { return m_pTitleED->GetText(); }
 };
 
 /// Appends ?Language=xy&System=abc to the help URL in rURL
-void AppendConfigToken(OUStringBuffer& rURL, sal_Bool bQuestionMark, const OUString &rLang = OUString());
+void AppendConfigToken(OUStringBuffer& rURL, bool bQuestionMark, const OUString &rLang = OUString());
 
 #endif // INCLUDED_SFX2_SOURCE_APPL_NEWHELP_HXX
 

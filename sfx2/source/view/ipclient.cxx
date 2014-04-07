@@ -70,10 +70,10 @@ using namespace com::sun::star;
 // SfxEmbedResizeGuard
 class SfxBooleanFlagGuard
 {
-    sal_Bool& m_rFlag;
-    sal_Bool m_bLifeValue;
+    bool& m_rFlag;
+    bool  m_bLifeValue;
 public:
-    SfxBooleanFlagGuard( sal_Bool& bFlag, sal_Bool bLifeValue )
+    SfxBooleanFlagGuard( bool& bFlag, bool bLifeValue )
     : m_rFlag( bFlag )
     , m_bLifeValue( bLifeValue )
     {
@@ -104,9 +104,9 @@ public:
     SfxInPlaceClient*               m_pClient;
     sal_Int64                       m_nAspect;              // ViewAspect that is assigned from the container
     Rectangle                       m_aLastObjAreaPixel;    // area of object in coordinate system of the container (without scaling)
-    sal_Bool                        m_bStoreObject;
-    sal_Bool                        m_bUIActive;            // set and cleared when notification for UI (de)activation is sent
-    sal_Bool                        m_bResizeNoScale;
+    bool                            m_bStoreObject;
+    bool                            m_bUIActive;            // set and cleared when notification for UI (de)activation is sent
+    bool                            m_bResizeNoScale;
 
     uno::Reference < embed::XEmbeddedObject > m_xObject;
     uno::Reference < embed::XEmbeddedClient > m_xClient;
@@ -115,9 +115,9 @@ public:
     SfxInPlaceClient_Impl()
     : m_pClient( NULL )
     , m_nAspect( 0 )
-    , m_bStoreObject( sal_True )
-    , m_bUIActive( sal_False )
-    , m_bResizeNoScale( sal_False )
+    , m_bStoreObject( true )
+    , m_bUIActive( false )
+    , m_bResizeNoScale( false )
     {}
 
     virtual ~SfxInPlaceClient_Impl();
@@ -359,7 +359,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingUI()
         throw uno::RuntimeException();
 
     m_pClient->GetViewShell()->ResetAllClients_Impl(m_pClient);
-    m_bUIActive = sal_True;
+    m_bUIActive = true;
     m_pClient->GetViewShell()->UIActivating( m_pClient );
 }
 
@@ -383,7 +383,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
         throw uno::RuntimeException();
 
     m_pClient->GetViewShell()->UIDeactivated( m_pClient );
-    m_bUIActive = sal_False;
+    m_bUIActive = false;
 }
 
 
@@ -504,7 +504,7 @@ void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPo
     {
         // the calculation of the object area has not changed the object size
         // it should be done here then
-        SfxBooleanFlagGuard aGuard( m_bResizeNoScale, sal_True );
+        SfxBooleanFlagGuard aGuard( m_bResizeNoScale, true );
 
         // new size of the object area without scaling
         Size aNewObjSize( Fraction( aNewLogicRect.GetWidth() ) / m_aScaleWidth,
@@ -629,7 +629,7 @@ SfxInPlaceClient::~SfxInPlaceClient()
     m_pViewSh->IPClientGone_Impl(this);
 
     // deleting the client before storing the object means discarding all changes
-    m_pImp->m_bStoreObject = sal_False;
+    m_pImp->m_bStoreObject = false;
     SetObject(0);
 
     m_pImp->m_pClient = NULL;
@@ -880,7 +880,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 
     if ( m_pImp->m_xObject.is() )
     {
-        sal_Bool bSaveCopyAs = sal_False;
+        bool bSaveCopyAs = false;
         if ( nVerb == -8 ) // "Save Copy as..."
         {
             svt::EmbeddedObjectRef::TryRunningState( m_pImp->m_xObject );
@@ -888,19 +888,19 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
             uno::Reference< frame::XModel > xEmbModel( m_pImp->m_xObject->getComponent(), uno::UNO_QUERY );
             if ( xEmbModel.is() )
             {
-                bSaveCopyAs = sal_True;
+                bSaveCopyAs = true;
 
                 try
                 {
                     SfxStoringHelper aHelper;
                     uno::Sequence< beans::PropertyValue > aDispatchArgs( 1 );
                     aDispatchArgs[0].Name = "SaveTo";
-                    aDispatchArgs[0].Value <<= (sal_Bool)sal_True;
+                    aDispatchArgs[0].Value <<= true;
 
                     aHelper.GUIStoreModel( xEmbModel,
                                             "SaveAs",
                                             aDispatchArgs,
-                                            sal_False,
+                                            false,
                                             "" );
                 }
                 catch( const task::ErrorCodeIOException& aErrorEx )
@@ -1033,8 +1033,8 @@ void SfxInPlaceClient::DeactivateObject()
     {
         try
         {
-            m_pImp->m_bUIActive = sal_False;
-            sal_Bool bHasFocus = sal_False;
+            m_pImp->m_bUIActive = false;
+            bool bHasFocus = false;
             uno::Reference< frame::XModel > xModel( m_pImp->m_xObject->getComponent(), uno::UNO_QUERY );
             if ( xModel.is() )
             {
@@ -1080,7 +1080,7 @@ void SfxInPlaceClient::ResetObject()
     {
         try
         {
-            m_pImp->m_bUIActive = sal_False;
+            m_pImp->m_bUIActive = false;
             if ( m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
                 m_pImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
             else

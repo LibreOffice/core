@@ -159,9 +159,9 @@ void SfxPartDockWnd_Impl::Resize()
 
 
 
-sal_Bool SfxPartDockWnd_Impl::QueryClose()
+bool SfxPartDockWnd_Impl::QueryClose()
 {
-    sal_Bool bClose = sal_True;
+    bool bClose = true;
     SfxChildWindow* pChild = GetChildWindow_Impl();
     if( pChild )
     {

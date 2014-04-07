@@ -64,7 +64,7 @@ class SfxVersionDialog : public SfxModalDialog
     void                        Open_Impl();
 
 public:
-                                SfxVersionDialog ( SfxViewFrame* pFrame, sal_Bool );
+                                SfxVersionDialog ( SfxViewFrame* pFrame, bool );
     virtual                     ~SfxVersionDialog ();
     bool                        IsSaveVersionOnClose() const { return m_bIsSaveVersionOnClose; }
 };
@@ -102,7 +102,7 @@ class SfxCmisVersionsDialog : public SfxModalDialog
     void                        LoadVersions();
 
 public:
-                                SfxCmisVersionsDialog ( SfxViewFrame* pFrame, sal_Bool );
+                                SfxCmisVersionsDialog ( SfxViewFrame* pFrame, bool );
     virtual                     ~SfxCmisVersionsDialog ();
 };
 

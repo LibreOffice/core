@@ -130,7 +130,7 @@ void PrepareListener_Impl::disposing(const css::lang::EventObject& /*rEvent*/) t
 
 static const char       PDF_DOCUMENT_TYPE[]   = "pdf_Portable_Document_Format";
 
-sal_Bool HasDocumentValidSignature( const css::uno::Reference< css::frame::XModel >& xModel )
+bool HasDocumentValidSignature( const css::uno::Reference< css::frame::XModel >& xModel )
 {
     try
     {
@@ -138,7 +138,7 @@ sal_Bool HasDocumentValidSignature( const css::uno::Reference< css::frame::XMode
         if ( xPropSet.is() )
         {
             Any a = xPropSet->getPropertyValue("HasValidSignatures");
-            sal_Bool bReturn = sal_Bool();
+            bool bReturn;
             if ( a >>= bReturn )
                 return bReturn;
         }
@@ -151,7 +151,7 @@ sal_Bool HasDocumentValidSignature( const css::uno::Reference< css::frame::XMode
     {
     }
 
-    return sal_False;
+    return false;
 }
 
 SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
@@ -660,7 +660,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 // We need 1:1 copy of the document to preserve an added signature.
                 aArgs.realloc( ++nNumArgs );
                 aArgs[nNumArgs-1].Name = "CopyStreamIfPossible";
-                aArgs[nNumArgs-1].Value = css::uno::makeAny( (sal_Bool)sal_True );
+                aArgs[nNumArgs-1].Value = css::uno::makeAny( true );
 
                 try
                 {
@@ -864,11 +864,11 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                 }
                 xSimpleMailMessage->setAttachement( aAttachmentSeq );
 
-                sal_Bool bSend( sal_False );
+                bool bSend( false );
                 try
                 {
                     xSimpleMailClient->sendSimpleMailMessage( xSimpleMailMessage, nSendFlags );
-                    bSend = sal_True;
+                    bSend = true;
                 }
                 catch ( IllegalArgumentException& )
                 {
@@ -877,7 +877,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                 {
                 }
 
-                if ( bSend == sal_False )
+                if ( bSend == false )
                 {
                     css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
 

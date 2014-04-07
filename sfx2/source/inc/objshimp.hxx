@@ -63,7 +63,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     sal_uInt16          nVisualDocumentNumber;
     sal_Int16           nDocumentSignatureState;
     sal_Int16           nScriptingSignatureState;
-    sal_Bool            bInList:1,          // if reachable by First/Next
+    bool            bInList:1,          // if reachable by First/Next
                         bClosing:1,         // sal_True while Close(), to prevent recurrences Notification
                         bIsSaving:1,
                         bPasswd:1,
@@ -101,40 +101,40 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     MarkData_Impl*      pMarkData;
     sal_uInt16              nLoadedFlags;
     sal_uInt16              nFlagsInProgress;
-    sal_Bool                bModalMode;
-    sal_Bool                bRunningMacro;
-    sal_Bool                bReloadAvailable;
+    bool                bModalMode;
+    bool                bRunningMacro;
+    bool                bReloadAvailable;
     sal_uInt16              nAutoLoadLocks;
     SfxModule*              pModule;
     SfxObjectShellFlags     eFlags;
-    sal_Bool                bReadOnlyUI;
+    bool                bReadOnlyUI;
     SvRefBaseRef            xHeaderAttributes;
     ::rtl::Reference< SfxBaseModel >
                             pBaseModel;
     sal_uInt16              nStyleFilter;
-    sal_Bool                bDisposing;
+    bool                bDisposing;
 
-    sal_Bool                m_bEnableSetModified;
-    sal_Bool                m_bIsModified;
+    bool                m_bEnableSetModified;
+    bool                m_bIsModified;
 
     Rectangle               m_aVisArea;
     MapUnit                 m_nMapUnit;
 
-    sal_Bool                m_bCreateTempStor;
+    bool                m_bCreateTempStor;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xDocStorage;
 
-    sal_Bool                m_bIsInit;
+    bool                m_bIsInit;
 
     OUString         m_aSharedFileURL;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::logging::XSimpleLogRing > m_xLogRing;
 
-    sal_Bool                m_bIncomplEncrWarnShown;
+    bool                m_bIncomplEncrWarnShown;
 
     // TODO/LATER: m_aModifyPasswordInfo should completely replace m_nModifyPasswordHash in future
     sal_uInt32              m_nModifyPasswordHash;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aModifyPasswordInfo;
-    sal_Bool                m_bModifyPasswordEntered;
+    bool                m_bModifyPasswordEntered;
 
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
     virtual ~SfxObjectShell_Impl();

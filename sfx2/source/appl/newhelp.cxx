@@ -174,7 +174,7 @@ namespace sfx2
 {
 
 
-    void HandleTaskPaneList( Window* pWindow, sal_Bool bAddToList )
+    void HandleTaskPaneList( Window* pWindow, bool bAddToList )
     {
         Window* pParent = pWindow->GetParent();
         DBG_ASSERT( pParent, "HandleTaskPaneList(): every window here should have a parent" );
@@ -250,10 +250,10 @@ namespace sfx2
 
 struct IndexEntry_Impl
 {
-    sal_Bool        m_bSubEntry;
+    bool        m_bSubEntry;
     OUString        m_aURL;
 
-    IndexEntry_Impl( const OUString& rURL, sal_Bool bSubEntry ) :
+    IndexEntry_Impl( const OUString& rURL, bool bSubEntry ) :
         m_bSubEntry( bSubEntry ), m_aURL( rURL ) {}
 };
 
@@ -262,9 +262,9 @@ struct IndexEntry_Impl
 struct ContentEntry_Impl
 {
     OUString    aURL;
-    sal_Bool    bIsFolder;
+    bool    bIsFolder;
 
-    ContentEntry_Impl( const OUString& rURL, sal_Bool bFolder ) :
+    ContentEntry_Impl( const OUString& rURL, bool bFolder ) :
         aURL( rURL ), bIsFolder( bFolder ) {}
 };
 
@@ -328,7 +328,7 @@ void ContentListBox_Impl::InitRoot()
         bool bIsFolder = ( '1' == cFolder );
         SvTreeListEntry* pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, NULL, true );
         if ( bIsFolder )
-            pEntry->SetUserData( new ContentEntry_Impl( aURL, sal_True ) );
+            pEntry->SetUserData( new ContentEntry_Impl( aURL, true ) );
     }
 }
 
@@ -371,7 +371,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
                     if ( bIsFolder )
                     {
                         pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, pParent, true );
-                        pEntry->SetUserData( new ContentEntry_Impl( aURL, sal_True ) );
+                        pEntry->SetUserData( new ContentEntry_Impl( aURL, true ) );
                     }
                     else
                     {
@@ -379,7 +379,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
                         Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, OUString("TargetURL"  ) ) );
                         OUString aTargetURL;
                         if ( aAny >>= aTargetURL )
-                            pEntry->SetUserData( new ContentEntry_Impl( aTargetURL, sal_False ) );
+                            pEntry->SetUserData( new ContentEntry_Impl( aTargetURL, false ) );
                     }
                 }
             }
@@ -611,7 +611,7 @@ void IndexTabPage_Impl::InitializeIndex()
     {
         OUStringBuffer aURL = HELP_URL;
         aURL.append(sFactory);
-        AppendConfigToken(aURL, sal_True);
+        AppendConfigToken(aURL, true);
 
         Content aCnt( aURL.makeStringAndClear(), Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
@@ -635,7 +635,7 @@ void IndexTabPage_Impl::InitializeIndex()
             if ( ( aAnySeq[0] >>= aKeywordList ) && ( aAnySeq[1] >>= aKeywordRefList ) &&
                  ( aAnySeq[2] >>= aAnchorRefList ) && ( aAnySeq[3] >>= aTitleRefList ) )
             {
-                sal_Bool insert;
+                bool insert;
                 sal_uInt16 nPos;
                 int ndx,tmp;
                 OUString aIndex, aTempString;
@@ -804,9 +804,9 @@ void IndexTabPage_Impl::SetKeyword( const OUString& rKeyword )
 
 
 
-sal_Bool IndexTabPage_Impl::HasKeyword() const
+bool IndexTabPage_Impl::HasKeyword() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( !sKeyword.isEmpty() )
     {
         sal_Int32 nPos = m_pIndexCB->GetEntryPos( sKeyword );
@@ -818,9 +818,9 @@ sal_Bool IndexTabPage_Impl::HasKeyword() const
 
 
 
-sal_Bool IndexTabPage_Impl::HasKeywordIgnoreCase()
+bool IndexTabPage_Impl::HasKeywordIgnoreCase()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( !sKeyword.isEmpty() )
     {
         sal_Int32 nEntries = m_pIndexCB->GetEntryCount();
@@ -832,7 +832,7 @@ sal_Bool IndexTabPage_Impl::HasKeywordIgnoreCase()
             if (rI18nHelper.MatchString( sIndexItem, sKeyword ))
             {
                 sKeyword = sIndexItem;
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }
@@ -865,14 +865,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSearchBox(Window *pParent,
 
 bool SearchBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     if ( !IsInDropDown() &&
          rNEvt.GetWindow() == GetSubEdit() &&
          rNEvt.GetType() == EVENT_KEYINPUT &&
          KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
     {
         aSearchLink.Call( NULL );
-        bHandled = sal_True;
+        bHandled = true;
     }
     return bHandled || ComboBox::PreNotify( rNEvt );
 }
@@ -946,7 +946,7 @@ SearchTabPage_Impl::SearchTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl*
         Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
         if ( aUserItem >>= aUserData )
         {
-            sal_Bool bChecked = ( 1 == aUserData.getToken(0, ';').toInt32() ) ? sal_True : sal_False;
+            bool bChecked = ( 1 == aUserData.getToken(0, ';').toInt32() ) ? sal_True : sal_False;
             m_pFullWordsCB->Check( bChecked );
             bChecked = ( 1 == aUserData.getToken(1, ';').toInt32() ) ? sal_True : sal_False;
             m_pScopeCB->Check( bChecked );
@@ -1031,7 +1031,7 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
         if ( !m_pFullWordsCB->IsChecked() )
             aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
         aSearchURL.append(aSearchText);
-        AppendConfigToken(aSearchURL, sal_False);
+        AppendConfigToken(aSearchURL, false);
         if ( m_pScopeCB->IsChecked() )
             aSearchURL.append("&Scope=Heading");
         std::vector< OUString > aFactories = SfxContentHelper::GetResultSet(aSearchURL.makeStringAndClear());
@@ -1107,9 +1107,9 @@ void SearchTabPage_Impl::ClearPage()
 
 
 
-sal_Bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
+bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     m_pSearchED->SetText( rKeyword );
     SearchHdl( NULL );
     if ( m_pResultsLB->GetEntryCount() > 0 )
@@ -1117,7 +1117,7 @@ sal_Bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
         // found keyword -> open it
         m_pResultsLB->SelectEntryPos(0);
         OpenHdl( NULL );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -1190,7 +1190,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
             sal_Int32 nPos = GetSelectEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
-                SfxAddHelpBookmarkDialog_Impl aDlg( this, sal_True );
+                SfxAddHelpBookmarkDialog_Impl aDlg( this, true );
                 aDlg.SetTitle( GetEntry( nPos ) );
                 if ( aDlg.Execute() == RET_OK )
                 {
@@ -1337,7 +1337,7 @@ void BookmarksTabPage_Impl::AddBookmarks( const OUString& rTitle, const OUString
 OUString SfxHelpWindow_Impl::buildHelpURL(const OUString& sFactory        ,
                                                  const OUString& sContent        ,
                                                  const OUString& sAnchor         ,
-                                                       sal_Bool         bUseQuestionMark)
+                                                       bool         bUseQuestionMark)
 {
     OUStringBuffer sHelpURL(256);
     sHelpURL.append(HELP_URL);
@@ -1349,7 +1349,7 @@ OUString SfxHelpWindow_Impl::buildHelpURL(const OUString& sFactory        ,
     return sHelpURL.makeStringAndClear();
 }
 
-void SfxHelpWindow_Impl::loadHelpContent(const OUString& sHelpURL, sal_Bool bAddToHistory)
+void SfxHelpWindow_Impl::loadHelpContent(const OUString& sHelpURL, bool bAddToHistory)
 {
     Reference< XComponentLoader > xLoader(getTextFrame(), UNO_QUERY);
     if (!xLoader.is())
@@ -1372,7 +1372,7 @@ void SfxHelpWindow_Impl::loadHelpContent(const OUString& sHelpURL, sal_Bool bAdd
 
     if ( !IsWait() )
         EnterWait();
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
 // TODO implement locale fallback ... see below    while(true)
     {
         try
@@ -1380,7 +1380,7 @@ void SfxHelpWindow_Impl::loadHelpContent(const OUString& sHelpURL, sal_Bool bAdd
             Reference< XComponent > xContent = xLoader->loadComponentFromURL(sHelpURL, "_self", 0, Sequence< PropertyValue >());
             if (xContent.is())
             {
-                bSuccess = sal_True;
+                bSuccess = true;
             }
         }
         catch(const RuntimeException&)
@@ -1461,7 +1461,7 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 void SfxHelpIndexWindow_Impl::Initialize()
 {
     OUStringBuffer aHelpURL(HELP_URL);
-    AppendConfigToken(aHelpURL, sal_True);
+    AppendConfigToken(aHelpURL, true);
     std::vector<OUString> aFactories = SfxContentHelper::GetResultSet(aHelpURL.makeStringAndClear());
     for (size_t i = 0, n = aFactories.size(); i < n; ++i )
     {
@@ -1585,7 +1585,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl)
     OUString* pFactory = (OUString*)(sal_uIntPtr)aActiveLB.GetEntryData( aActiveLB.GetSelectEntryPos() );
     if ( pFactory )
     {
-        SetFactory( OUString( *pFactory ).toAsciiLowerCase(), sal_False );
+        SetFactory( OUString( *pFactory ).toAsciiLowerCase(), false );
         aSelectFactoryLink.Call( this );
     }
 
@@ -1597,7 +1597,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl)
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl)
 {
     // keyword found on index?
-    sal_Bool bIndex = pIPage->HasKeyword();
+    bool bIndex = pIPage->HasKeyword();
 
     if( !bIndex)
         bIndex = pIPage->HasKeywordIgnoreCase();
@@ -1658,8 +1658,8 @@ bool SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             sal_uInt16 nPageId = 0;
             HelpTabPage_Impl* pCurPage = GetCurrentPage( nPageId );
             Control* pControl = pCurPage->GetLastFocusControl();
-            sal_Bool bShift = rKeyCode.IsShift();
-            sal_Bool bCtrl = rKeyCode.IsMod1();
+            bool bShift = rKeyCode.IsShift();
+            bool bCtrl = rKeyCode.IsMod1();
             if ( !bCtrl && bShift && aActiveLB.HasChildPathFocus() )
             {
                 pControl->GrabFocus();
@@ -1722,7 +1722,7 @@ void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
 
 
 
-void SfxHelpIndexWindow_Impl::SetFactory( const OUString& rFactory, sal_Bool bActive )
+void SfxHelpIndexWindow_Impl::SetFactory( const OUString& rFactory, bool bActive )
 {
     if ( !rFactory.isEmpty() )
     {
@@ -1811,9 +1811,9 @@ void SfxHelpIndexWindow_Impl::GrabFocusBack()
 
 
 
-sal_Bool SfxHelpIndexWindow_Impl::HasFocusOnEdit() const
+bool SfxHelpIndexWindow_Impl::HasFocusOnEdit() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_INDEX && pIPage )
         bRet = pIPage->HasFocusOnEdit();
     else if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_SEARCH && pSPage )
@@ -1833,9 +1833,9 @@ OUString SfxHelpIndexWindow_Impl::GetSearchText() const
 
 
 
-sal_Bool SfxHelpIndexWindow_Impl::IsFullWordSearch() const
+bool SfxHelpIndexWindow_Impl::IsFullWordSearch() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_SEARCH && pSPage )
         bRet = pSPage->IsFullWordSearch();
     return bRet;
@@ -1900,10 +1900,10 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     pTextWin            ( new TextWin_Impl( this ) ),
     pSrchDlg            ( NULL ),
     nMinPos             ( 0 ),
-    bIsDebug            ( sal_False ),
-    bIsIndexOn          ( sal_False ),
-    bIsInClose          ( sal_False ),
-    bIsFullWordSearch   ( sal_False )
+    bIsDebug            ( false ),
+    bIsIndexOn          ( false ),
+    bIsInClose          ( false ),
+    bIsFullWordSearch   ( false )
 
 {
     sfx2::AddToTaskPaneList( &aToolBox );
@@ -1942,7 +1942,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     char* pEnv = getenv( "help_debug" );
     if ( pEnv )
-        bIsDebug = sal_True;
+        bIsDebug = true;
 
     SvtMiscOptions().AddListenerLink( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
 
@@ -1956,17 +1956,17 @@ SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
 {
     sfx2::RemoveFromTaskPaneList( &aToolBox );
 
-    bIsInClose = sal_True;
+    bIsInClose = true;
     SvtMiscOptions().RemoveListenerLink( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
     delete pSrchDlg;
 }
 
 
 
-sal_Bool SfxHelpTextWindow_Impl::HasSelection() const
+bool SfxHelpTextWindow_Impl::HasSelection() const
 {
     // is there any selection in the text and not only a cursor?
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     Reference < XTextRange > xRange = getCursor();
     if ( xRange.is() )
     {
@@ -1982,7 +1982,7 @@ sal_Bool SfxHelpTextWindow_Impl::HasSelection() const
 
 void SfxHelpTextWindow_Impl::InitToolBoxImages()
 {
-    sal_Bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
+    bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
 
     aIndexOnImage  = Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_INDEX_ON  : IMG_HELP_TOOLBOX_INDEX_ON  ) );
     aIndexOffImage = Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_INDEX_OFF : IMG_HELP_TOOLBOX_INDEX_OFF ) );
@@ -2039,7 +2039,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
     // 2) We read sal_True/sal_False => check box must be shown and enabled/disabled
 
     bool bHideBox = true;
-    sal_Bool bHelpAtStartup = sal_False;
+    bool bHelpAtStartup = false;
     try
     {
         xConfiguration = ConfigurationHelper::openConfig(
@@ -2206,11 +2206,9 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl)
             {
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
-                xSrchDesc->setPropertyValue( "SearchRegularExpression",
-                                            makeAny( sal_Bool( sal_True ) ) );
+                xSrchDesc->setPropertyValue( "SearchRegularExpression", makeAny( true ) );
                 if ( bIsFullWordSearch )
-                    xSrchDesc->setPropertyValue( "SearchWords",
-                                                makeAny( sal_Bool( sal_True ) ) );
+                    xSrchDesc->setPropertyValue( "SearchWords", makeAny( true ) );
 
                 OUString sSearchString = sfx2::PrepareSearchString( aSearchText, GetBreakIterator(), false );
                 xSrchDesc->setSearchString( sSearchString );
@@ -2267,9 +2265,9 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
             {
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
-                xSrchDesc->setPropertyValue( "SearchWords", makeAny( sal_Bool( pDlg->IsOnlyWholeWords() != false ) ) );
-                xSrchDesc->setPropertyValue( "SearchCaseSensitive", makeAny( sal_Bool( pDlg->IsMarchCase() != false ) ) );
-                xSrchDesc->setPropertyValue( "SearchBackwards", makeAny( sal_Bool( pDlg->IsSearchBackwards() != false ) ) );
+                xSrchDesc->setPropertyValue( "SearchWords", makeAny( pDlg->IsOnlyWholeWords() != false ) );
+                xSrchDesc->setPropertyValue( "SearchCaseSensitive", makeAny( pDlg->IsMarchCase() != false ) );
+                xSrchDesc->setPropertyValue( "SearchBackwards", makeAny( pDlg->IsSearchBackwards() != false ) );
                 xSrchDesc->setSearchString( sSearchText );
                 Reference< XInterface > xSelection;
                 Reference< XTextRange > xCursor = getCursor();
@@ -2346,7 +2344,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, CheckBox*, pBox )
 {
     if ( xConfiguration.is() )
     {
-        sal_Bool bChecked = pBox->IsChecked();
+        bool bChecked = pBox->IsChecked();
         OUString sPath( PATH_OFFICE_FACTORIES );
         sPath += sCurrentFactory;
         try
@@ -2448,7 +2446,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 Reference<XStatusListener>xStateListener = pStateListener =
                                         new HelpStatusListener_Impl(xDisp, aURL );
                 FeatureStateEvent rEvent = pStateListener->GetStateEvent();
-                sal_Bool bCheck = sal_False;
+                bool bCheck = false;
                 rEvent.State >>= bCheck;
                 aMenu.CheckItem(TBI_SELECTIONMODE, bCheck);
             }
@@ -2540,7 +2538,7 @@ void SfxHelpTextWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
 
 
-void SfxHelpTextWindow_Impl::ToggleIndex( sal_Bool bOn )
+void SfxHelpTextWindow_Impl::ToggleIndex( bool bOn )
 {
     bIsIndexOn = bOn;
     if ( bIsIndexOn )
@@ -2557,7 +2555,7 @@ void SfxHelpTextWindow_Impl::ToggleIndex( sal_Bool bOn )
 
 
 
-void SfxHelpTextWindow_Impl::SelectSearchText( const OUString& rSearchText, sal_Bool _bIsFullWordSearch )
+void SfxHelpTextWindow_Impl::SelectSearchText( const OUString& rSearchText, bool _bIsFullWordSearch )
 {
     aSearchText = rSearchText;
     bIsFullWordSearch = _bIsFullWordSearch;
@@ -2569,7 +2567,7 @@ void SfxHelpTextWindow_Impl::SelectSearchText( const OUString& rSearchText, sal_
 void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
 {
 #ifdef DBG_UTIL
-    sal_Bool bSetOff = sal_False;
+    bool bSetOff = false;
 #endif
     // set off the pagestyle header to prevent print output of the help URL
     try
@@ -2598,13 +2596,12 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
                             if ( xContainer->getByName( sStyleName ) >>= xStyle )
                             {
                                 Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
-                                xPropSet->setPropertyValue( "HeaderIsOn",
-                                                            makeAny( sal_Bool( sal_False ) ) );
+                                xPropSet->setPropertyValue( "HeaderIsOn",  makeAny( false ) );
 
                                 Reference< XModifiable > xReset(xStyles, UNO_QUERY);
                                 xReset->setModified(sal_False);
 #ifdef DBG_UTIL
-                                bSetOff = sal_True;
+                                bSetOff = true;
 #endif
                             }
                         }
@@ -2630,7 +2627,7 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
 
 void SfxHelpTextWindow_Impl::CloseFrame()
 {
-    bIsInClose = sal_True;
+    bIsInClose = true;
     try
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > xCloseable  ( xFrame, ::com::sun::star::uno::UNO_QUERY );
@@ -2685,23 +2682,23 @@ void SfxHelpWindow_Impl::Split()
     nIndexSize = GetItemSize( INDEXWIN_ID );
     nTextSize = GetItemSize( TEXTWIN_ID );
 
-    sal_Bool        bMod = sal_False;
+    bool        bMod = false;
     if( nIndexSize < nMinSplitSize )
     {
         nIndexSize = nMinSplitSize;
         nTextSize = nMaxSplitSize;
 
-        bMod = sal_True;
+        bMod = true;
     }
     else if( nTextSize < nMinSplitSize )
     {
         nTextSize = nMinSplitSize;
         nIndexSize = nMaxSplitSize;
 
-        bMod = sal_True;
+        bMod = true;
     }
     else
-        bMod = sal_False;
+        bMod = false;
 
     if( bMod )
     {
@@ -2870,7 +2867,7 @@ void SfxHelpWindow_Impl::ShowStartPage()
     OUString sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(),
                                                                 "/start",
                                                                 OUString(),
-                                                                sal_True);
+                                                                true);
     loadHelpContent(sHelpURL);
 }
 
@@ -2921,7 +2918,7 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl)
         sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(),
                                                     aEntry,
                                                     aAnchor,
-                                                    sal_True);
+                                                    true);
     }
 
     loadHelpContent(sHelpURL);
@@ -2960,7 +2957,7 @@ IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
 
 
 void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
-                                        sal_Bool         bSuccess)
+                                        bool         bSuccess)
 {
     INetURLObject aObj( sURL );
     if ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
@@ -2970,7 +2967,7 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
     if ( bGrabFocusToToolBox )
     {
         pTextWin->GetToolBox().GrabFocus();
-        bGrabFocusToToolBox = sal_False;
+        bGrabFocusToToolBox = false;
     }
     else
         pIndexWin->GrabFocusBack();
@@ -2985,14 +2982,13 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
                 Reference < XViewSettingsSupplier > xSettings( xController, UNO_QUERY );
                 Reference < XPropertySet > xViewProps = xSettings->getViewSettings();
                 Reference< XPropertySetInfo > xInfo = xViewProps->getPropertySetInfo();
-                Any aBoolAny = makeAny( sal_Bool( sal_True ) );
-                xViewProps->setPropertyValue( "ShowContentTips", makeAny( sal_Bool( sal_False ) ) );
-                xViewProps->setPropertyValue( "ShowGraphics", aBoolAny );
-                xViewProps->setPropertyValue( "ShowTables", aBoolAny );
+                xViewProps->setPropertyValue( "ShowContentTips", makeAny( false ) );
+                xViewProps->setPropertyValue( "ShowGraphics", makeAny( true ) );
+                xViewProps->setPropertyValue( "ShowTables", makeAny( true ) );
                 xViewProps->setPropertyValue( "HelpURL", makeAny( OUString("HID:SFX2_HID_HELP_ONHELP") ) );
                 OUString sProperty( "IsExecuteHyperlinks" );
                 if ( xInfo->hasPropertyByName( sProperty ) )
-                    xViewProps->setPropertyValue( sProperty, aBoolAny );
+                    xViewProps->setPropertyValue( sProperty, makeAny( true ) );
                 xController->restoreViewData(pHelpInterceptor->GetViewData());
             }
         }
@@ -3029,8 +3025,8 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     nHeight             ( 0 ),
     nIndexSize          ( 40 ),
     nTextSize           ( 60 ),
-    bIndex              ( sal_True ),
-    bGrabFocusToToolBox ( sal_False ),
+    bIndex              ( true ),
+    bGrabFocusToToolBox ( false ),
     aWinPos             ( 0, 0 ),
     sTitle              ( pParent->GetText() )
 {
@@ -3069,7 +3065,7 @@ SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 
 bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         // Backward == <ALT><LEFT> or <BACKSPACE> Forward == <ALT><RIGHT>
@@ -3079,13 +3075,13 @@ bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
              ( !rKeyCode.GetModifier() && KEY_BACKSPACE == nKey && !pIndexWin->HasFocusOnEdit() ) )
         {
             DoAction( rKeyCode.GetCode() == KEY_RIGHT ? TBI_FORWARD : TBI_BACKWARD );
-            bHandled = sal_True;
+            bHandled = true;
         }
         else if ( rKeyCode.IsMod1() && ( KEY_F4 == nKey || KEY_W == nKey ) )
         {
             // <CTRL><F4> or <CTRL><W> -> close top frame
             CloseWindow();
-            bHandled = sal_True;
+            bHandled = true;
         }
     }
     return bHandled || Window::PreNotify( rNEvt );
@@ -3103,7 +3099,7 @@ void SfxHelpWindow_Impl::setContainerWindow( Reference < ::com::sun::star::awt::
 
 void SfxHelpWindow_Impl::SetFactory( const OUString& rFactory )
 {
-    pIndexWin->SetFactory( rFactory, sal_True );
+    pIndexWin->SetFactory( rFactory, true );
 }
 
 
@@ -3196,7 +3192,7 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
                         if ( aAny >>= aValue )
                         {
                             OUString aTitle( aValue );
-                            SfxAddHelpBookmarkDialog_Impl aDlg( this, sal_False );
+                            SfxAddHelpBookmarkDialog_Impl aDlg( this, false );
                             aDlg.SetTitle( aTitle );
                             if ( aDlg.Execute() == RET_OK )
                             {
@@ -3253,21 +3249,21 @@ void SfxHelpWindow_Impl::UpdateToolbox()
 
 
 
-sal_Bool SfxHelpWindow_Impl::HasHistoryPredecessor() const
+bool SfxHelpWindow_Impl::HasHistoryPredecessor() const
 {
     return pHelpInterceptor->HasHistoryPred();
 }
 
 
 
-sal_Bool SfxHelpWindow_Impl::HasHistorySuccessor() const
+bool SfxHelpWindow_Impl::HasHistorySuccessor() const
 {
     return pHelpInterceptor->HasHistorySucc();
 }
 
 // class SfxAddHelpBookmarkDialog_Impl -----------------------------------
 
-SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl(Window* pParent, sal_Bool bRename)
+SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl(Window* pParent, bool bRename)
     : ModalDialog( pParent, "BookmarkDialog", "sfx/ui/bookmarkdialog.ui")
 {
     get(m_pTitleED, "entry");

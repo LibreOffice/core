@@ -114,10 +114,10 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* )
     , pInterfaces( 0 )
     , nDocNo(0)
     , nInterfaces( 0 )
-    , bDowning( sal_True )
-    , bInQuit( sal_False )
-    , bInvalidateOnUnlock( sal_False )
-    , bODFVersionWarningLater( sal_False )
+    , bDowning( true )
+    , bInQuit( false )
+    , bInvalidateOnUnlock( false )
+    , bODFVersionWarningLater( false )
 
 {
 #ifndef DISABLE_SCRIPTING

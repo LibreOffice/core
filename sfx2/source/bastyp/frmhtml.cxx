@@ -57,7 +57,7 @@ void SfxFrameHTMLParser::ParseFrameOptions(
     // Netscape does however not allow for a direct
     // seting to 0, while IE4.0 does
     // We will not mimic that bug !
-    sal_Bool bMarginWidth = sal_False, bMarginHeight = sal_False;
+    bool bMarginWidth = false, bMarginHeight = false;
 
     for (size_t i = 0, n = rOptions.size(); i < n; ++i)
     {
@@ -84,14 +84,14 @@ void SfxFrameHTMLParser::ParseFrameOptions(
 
             if( !bMarginHeight )
                 aMargin.Height() = 0;
-            bMarginWidth = sal_True;
+            bMarginWidth = true;
             break;
         case HTML_O_MARGINHEIGHT:
             aMargin.Height() = aOption.GetNumber();
 
             if( !bMarginWidth )
                 aMargin.Width() = 0;
-            bMarginHeight = sal_True;
+            bMarginHeight = true;
             break;
         case HTML_O_SCROLLING:
             pFrame->SetScrollingMode(
@@ -101,10 +101,10 @@ void SfxFrameHTMLParser::ParseFrameOptions(
         case HTML_O_FRAMEBORDER:
         {
             OUString aStr = aOption.GetString();
-            sal_Bool bBorder = sal_True;
+            bool bBorder = true;
             if ( aStr.equalsIgnoreAsciiCase("NO") ||
                  aStr.equalsIgnoreAsciiCase("0") )
-                bBorder = sal_False;
+                bBorder = false;
             pFrame->SetFrameBorder( bBorder );
             break;
         }
@@ -115,17 +115,17 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             if (aOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_READONLY))
             {
                 OUString aStr = aOption.GetString();
-                sal_Bool bReadonly = sal_True;
+                bool bReadonly = true;
                 if ( aStr.equalsIgnoreAsciiCase("FALSE") )
-                    bReadonly = sal_False;
+                    bReadonly = false;
                 pFrame->SetReadOnly( bReadonly );
             }
             else if (aOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_EDIT))
             {
                 OUString aStr = aOption.GetString();
-                sal_Bool bEdit = sal_True;
+                bool bEdit = true;
                 if ( aStr.equalsIgnoreAsciiCase("FALSE") )
-                    bEdit = sal_False;
+                    bEdit = false;
                 pFrame->SetEditable( bEdit );
             }
 

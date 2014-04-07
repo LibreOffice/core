@@ -225,7 +225,7 @@ void SfxVersionsTabListBox_Impl::setColSizes()
     SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
 }
 
-SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, sal_Bool bIsSaveVersionOnClose )
+SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersionOnClose )
     : SfxModalDialog(NULL, "VersionsOfDialog", "sfx/ui/versionsofdialog.ui")
     , pViewFrame(pVwFrame)
     , m_pTable(NULL)
@@ -342,7 +342,7 @@ void SfxVersionDialog::Init_Impl()
 
     m_pSaveCheckBox->Check( m_bIsSaveVersionOnClose );
 
-    sal_Bool bEnable = !pObjShell->IsReadOnly();
+    bool bEnable = !pObjShell->IsReadOnly();
     m_pSaveButton->Enable( bEnable );
     m_pSaveCheckBox->Enable( bEnable );
 
@@ -536,7 +536,7 @@ IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton)
     return 0L;
 }
 
-SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame, sal_Bool bIsSaveVersionOnClose )
+SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersionOnClose )
     : SfxModalDialog(NULL, "VersionsCmisDialog", "sfx/ui/versionscmis.ui")
     , pViewFrame(pVwFrame)
     , m_pTable(NULL)

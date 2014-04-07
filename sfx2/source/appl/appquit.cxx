@@ -87,7 +87,7 @@ void SfxApplication::Deinitialize()
     SaveBasicAndDialogContainer();
 #endif
 
-    pAppData_Impl->bDowning = sal_True; // due to Timer from DecAliveCount and QueryExit
+    pAppData_Impl->bDowning = true; // due to Timer from DecAliveCount and QueryExit
 
     DELETEZ( pAppData_Impl->pTemplates );
 
@@ -95,14 +95,14 @@ void SfxApplication::Deinitialize()
     // this method. Therefore this call makes no sense and is the source of
     // some stack traces, which we don't understand.
     // For more information see:
-    pAppData_Impl->bDowning = sal_False;
+    pAppData_Impl->bDowning = false;
     DBG_ASSERT( !SfxViewFrame::GetFirst(),
                 "existing SfxViewFrame after Execute" );
     DBG_ASSERT( !SfxObjectShell::GetFirst(),
                 "existing SfxObjectShell after Execute" );
     pAppData_Impl->pAppDispat->Pop( *this, SFX_SHELL_POP_UNTIL );
     pAppData_Impl->pAppDispat->Flush();
-    pAppData_Impl->bDowning = sal_True;
+    pAppData_Impl->bDowning = true;
     pAppData_Impl->pAppDispat->DoDeactivate_Impl( true, NULL );
 
     // call derived application-exit

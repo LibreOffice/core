@@ -1263,7 +1263,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
 
         uno::Sequence< beans::PropertyValue > aAddProps( 2 );
         aAddProps[0].Name = "RepairPackage";
-        aAddProps[0].Value <<= (sal_Bool)true;
+        aAddProps[0].Value <<= true;
         aAddProps[1].Name = "StatusIndicator";
         aAddProps[1].Value <<= xProgressHandler;
 

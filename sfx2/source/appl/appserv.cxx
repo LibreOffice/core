@@ -194,7 +194,7 @@ namespace
 }
 /// Find the correct location of the document (LICENSE.fodt, etc.), and return
 /// it in rURL if found.
-static sal_Bool checkURL( const char *pName, const char *pExt, OUString &rURL )
+static bool checkURL( const char *pName, const char *pExt, OUString &rURL )
 {
     using namespace osl;
     DirectoryItem aDirItem;
@@ -206,7 +206,7 @@ static sal_Bool checkURL( const char *pName, const char *pExt, OUString &rURL )
     if (!rURL.isEmpty())
         return DirectoryItem::get( rURL, aDirItem ) == DirectoryItem::E_None;
     else
-        return sal_False;
+        return false;
 }
 
 /// Displays CREDITS or LICENSE in any of the available version
@@ -312,16 +312,16 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
 
             // block reentrant calls
-            pAppData_Impl->bInQuit = sal_True;
+            pAppData_Impl->bInQuit = true;
             Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
 
             rReq.ForgetAllArgs();
 
             // if terminate() failed, pAppData_Impl->bInQuit will now be sal_False, allowing further calls of SID_QUITAPP
-            sal_Bool bTerminated = xDesktop->terminate();
+            bool bTerminated = xDesktop->terminate();
             if (!bTerminated)
                 // if terminate() was successful, SfxApplication is now dead!
-                pAppData_Impl->bInQuit = sal_False;
+                pAppData_Impl->bInQuit = false;
 
             // Set return value, terminate if possible
             rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bTerminated ) );
@@ -404,7 +404,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
             while( true );
 
-            sal_Bool bOk = ( n == 0);
+            bool bOk = ( n == 0);
             rReq.SetReturnValue( SfxBoolItem( 0, bOk ) );
             bDone = true;
             break;
@@ -412,7 +412,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_SAVEDOCS:
         {
-            sal_Bool bOK = sal_True;
+            bool bOK = true;
             for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
                   pObjSh;
                   pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
@@ -423,7 +423,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     pObjSh->ExecuteSlot( aReq );
                     SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, aReq.GetReturnValue() );
                     if ( !pItem || !pItem->GetValue() )
-                        bOK = sal_False;
+                        bOK = false;
                 }
             }
 
@@ -666,7 +666,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                     // Evaluate Parameter
                     OUString aToolbarName( aBuf.makeStringAndClear() );
-                    sal_Bool bShow( !xLayoutManager->isElementVisible( aToolbarName ));
+                    bool bShow( !xLayoutManager->isElementVisible( aToolbarName ));
 
                     if ( bShow )
                     {
@@ -763,14 +763,14 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_SAVEDOCS:
                 {
-                    sal_Bool bModified = sal_False;
+                    bool bModified = false;
                     for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
                           pObjSh;
                           pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
                     {
                         if ( pObjSh->IsModified() )
                         {
-                            bModified = sal_True;
+                            bModified = true;
                             break;
                         }
                     }
@@ -845,7 +845,7 @@ extern "C" void basicide_macro_organizer( sal_Int16 );
 
 #endif
 
-OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, sal_Bool bChooseOnly, const OUString& rMacroDesc = OUString() )
+OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChooseOnly, const OUString& rMacroDesc = OUString() )
 {
 #ifndef DISABLE_DYNLOADING
     // get basctl dllname
@@ -1128,15 +1128,15 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
-            sal_Bool bChooseOnly = sal_False;
+            bool bChooseOnly = false;
             Reference< XModel > xLimitToModel;
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_RECORDMACRO, false, &pItem) )
             {
-                sal_Bool bRecord = ((SfxBoolItem*)pItem)->GetValue();
+                bool bRecord = ((SfxBoolItem*)pItem)->GetValue();
                 if ( bRecord )
                 {
                     // !Hack
-                    bChooseOnly = sal_False;
+                    bChooseOnly = false;
                     SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
                     OSL_ENSURE( pCurrentShell, "macro recording outside an SFX document?" );
                     if ( pCurrentShell )
@@ -1254,12 +1254,12 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_OFFICE_CHECK_PLZ:
         {
-            sal_Bool bRet = sal_False;
+            bool bRet = false;
             SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, rReq.GetSlot(), false);
 
             if ( pStringItem )
             {
-                bRet = sal_True /*!!!SfxIniManager::CheckPLZ( aPLZ )*/;
+                bRet = true /*!!!SfxIniManager::CheckPLZ( aPLZ )*/;
             }
 #ifndef DISABLE_SCRIPTING
             else
@@ -1309,7 +1309,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
             Any aResult = xHelper->executeDispatch( xProv, aCmd, OUString(), 0, aSeq );
             frame::DispatchResultEvent aEvent;
-            sal_Bool bSuccess = (aResult >>= aEvent) &&
+            bool bSuccess = (aResult >>= aEvent) &&
                                 (aEvent.State == frame::DispatchResultState::SUCCESS);
             rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bSuccess ) );
         }
@@ -1329,7 +1329,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
             Any aResult = xHelper->executeDispatch( xProv, aCmd, OUString(), 0, aSeq );
             frame::DispatchResultEvent aEvent;
-            sal_Bool bSuccess = (aResult >>= aEvent) &&
+            bool bSuccess = (aResult >>= aEvent) &&
                                 (aEvent.State == frame::DispatchResultState::SUCCESS);
             rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bSuccess ) );
         }

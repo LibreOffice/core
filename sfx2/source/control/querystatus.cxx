@@ -63,7 +63,7 @@ class SfxQueryStatus_Impl : public ::cppu::WeakImplHelper1< css::frame::XStatusL
         SfxQueryStatus_Impl();
         SfxQueryStatus_Impl& operator=( const SfxQueryStatus& );
 
-        sal_Bool                                                                   m_bQueryInProgress;
+        bool                                                                   m_bQueryInProgress;
         SfxItemState                                                               m_eState;
         SfxPoolItem*                                                               m_pItem;
         sal_uInt16                                                                     m_nSlotID;
@@ -73,7 +73,7 @@ class SfxQueryStatus_Impl : public ::cppu::WeakImplHelper1< css::frame::XStatusL
 };
 
 SfxQueryStatus_Impl::SfxQueryStatus_Impl( const Reference< XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& rCommand ) :
-    m_bQueryInProgress( sal_False ),
+    m_bQueryInProgress( false ),
     m_eState( SFX_ITEM_DISABLED ),
     m_pItem( 0 ),
     m_nSlotID( nSlotId )
@@ -112,7 +112,7 @@ throw( RuntimeException, std::exception )
 
         if ( pType == ::getBooleanCppuType() )
         {
-            sal_Bool bTemp = false;
+            bool bTemp = false;
             rEvent.State >>= bTemp ;
             m_pItem = new SfxBoolItem( m_nSlotID, bTemp );
         }
@@ -182,7 +182,7 @@ SfxItemState SfxQueryStatus_Impl::QueryState( SfxPoolItem*& rpPoolItem )
             try
             {
                 m_aCondition.reset();
-                m_bQueryInProgress = sal_True;
+                m_bQueryInProgress = true;
                 m_xDispatch->addStatusListener( Reference< XStatusListener >( static_cast< cppu::OWeakObject* >( this ), UNO_QUERY ),
                                                 m_aCommand );
             }
@@ -197,7 +197,7 @@ SfxItemState SfxQueryStatus_Impl::QueryState( SfxPoolItem*& rpPoolItem )
 
     m_aCondition.wait();
 
-    m_bQueryInProgress = sal_False;
+    m_bQueryInProgress = false;
     rpPoolItem = m_pItem;
     return m_eState;
 }

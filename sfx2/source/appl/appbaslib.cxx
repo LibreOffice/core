@@ -141,8 +141,7 @@ void SfxBasicManagerHolder::impl_releaseContainers()
     mxDialogContainer.clear();
 }
 
-sal_Bool
-SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< OUString >& sModules )
+bool SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< OUString >& sModules )
 {
 #ifdef DISABLE_SCRIPTING
     (void) sModules;
@@ -150,7 +149,7 @@ SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< OUString >& sMo
     if ( mpBasicManager )
         return mpBasicManager->LegacyPsswdBinaryLimitExceeded( sModules );
 #endif
-    return sal_True;
+    return true;
 }
 
 

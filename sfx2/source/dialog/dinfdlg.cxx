@@ -506,9 +506,9 @@ bool SfxDocumentInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
 {
     OUString aValue;
     sal_Int32 nValue = 0;
-    sal_Bool bValue = sal_False;
-    sal_Bool bIsInt = sal_False;
-    sal_Bool bIsString = sal_False;
+    bool bValue = false;
+    bool bIsInt = false;
+    bool bIsString = false;
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -522,31 +522,31 @@ bool SfxDocumentInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
             bValue = isAutoloadEnabled();
             break;
         case MID_DOCINFO_AUTOLOADSECS:
-            bIsInt = sal_True;
+            bIsInt = true;
             nValue = getAutoloadDelay();
             break;
         case MID_DOCINFO_AUTOLOADURL:
-            bIsString = sal_True;
+            bIsString = true;
             aValue = getAutoloadURL();
             break;
         case MID_DOCINFO_DEFAULTTARGET:
-            bIsString = sal_True;
+            bIsString = true;
             aValue = getDefaultTarget();
             break;
         case MID_DOCINFO_DESCRIPTION:
-            bIsString = sal_True;
+            bIsString = true;
             aValue = getDescription();
             break;
         case MID_DOCINFO_KEYWORDS:
-            bIsString = sal_True;
+            bIsString = true;
             aValue = getKeywords();
             break;
         case MID_DOCINFO_SUBJECT:
-            bIsString = sal_True;
+            bIsString = true;
             aValue = getSubject();
             break;
         case MID_DOCINFO_TITLE:
-            bIsString = sal_True;
+            bIsString = true;
             aValue = getTitle();
             break;
         default:
@@ -567,7 +567,7 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
 {
     OUString aValue;
     sal_Int32 nValue=0;
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     bool bRet = false;
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -653,10 +653,10 @@ SfxTabPage *SfxDocumentDescPage::Create(Window *pParent, const SfxItemSet &rItem
 bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
 {
     // Test whether a change is present
-    const sal_Bool bTitleMod = m_pTitleEd->IsModified();
-    const sal_Bool bThemeMod = m_pThemaEd->IsModified();
-    const sal_Bool bKeywordsMod = m_pKeywordsEd->IsModified();
-    const sal_Bool bCommentMod = m_pCommentEd->IsModified();
+    const bool bTitleMod = m_pTitleEd->IsModified();
+    const bool bThemeMod = m_pThemaEd->IsModified();
+    const bool bKeywordsMod = m_pKeywordsEd->IsModified();
+    const bool bCommentMod = m_pCommentEd->IsModified();
     if ( !( bTitleMod || bThemeMod || bKeywordsMod || bCommentMod ) )
     {
         return false;
@@ -955,7 +955,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
         if ( pExpSet && SFX_ITEM_SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         {
             SfxDocumentInfoItem* m_pInfoItem = (SfxDocumentInfoItem*)pItem;
-            sal_Bool bUseData = ( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
+            bool bUseData = ( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
             m_pInfoItem->SetUseUserData( bUseData );
             rSet.Put( SfxDocumentInfoItem( *m_pInfoItem ) );
             bRet = true;
@@ -969,7 +969,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
         if ( pExpSet && SFX_ITEM_SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         {
             SfxDocumentInfoItem* m_pInfoItem = (SfxDocumentInfoItem*)pItem;
-            sal_Bool bUseAuthor = bEnableUseUserData && m_pUseUserDataCB->IsChecked();
+            bool bUseAuthor = bEnableUseUserData && m_pUseUserDataCB->IsChecked();
             SfxDocumentInfoItem newItem( *m_pInfoItem );
             newItem.resetUserData( bUseAuthor
                 ? SvtUserOptions().GetFullName()
@@ -1094,7 +1094,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         m_pFileValFt->SetText( aURL.GetPartBeforeLastName() );
 
     // handle access data
-    sal_Bool m_bUseUserData = m_pInfoItem->IsUseUserData();
+    bool m_bUseUserData = m_pInfoItem->IsUseUserData();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     m_pCreateValFt->SetText( ConvertDateTime_Impl( m_pInfoItem->getAuthor(),
         m_pInfoItem->getCreationDate(), rLocaleWrapper ) );
@@ -1875,7 +1875,7 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
                 double nValue = 0;
                 sal_uInt32 nIndex = const_cast< SvNumberFormatter& >(
                     m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
-                sal_Bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
+                bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
                     IsNumberFormat( pLine->m_aValueEdit.GetText(), nIndex, nValue );
                 if ( bIsNum )
                     aPropertiesSeq[i].Value <<= makeAny( nValue );
@@ -2383,7 +2383,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                 {
                     double dValue = 0.0;
                     OUString sValue( (*it)->m_aValueEdit->GetText() );
-                    sal_Bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
+                    bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
                     IsNumberFormat( sValue, nIndex, dValue );
                     if ( bIsNum )
                         seqValue[k] = dValue;
@@ -2401,7 +2401,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                 {
                     double dValue = 0;
                     OUString sValue( (*it)->m_aValueEdit->GetText() );
-                    sal_Bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
+                    bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
                     IsNumberFormat( sValue, nIndex, dValue );
                     if ( bIsNum )
                         seqValue[k] = (sal_Int64) dValue;

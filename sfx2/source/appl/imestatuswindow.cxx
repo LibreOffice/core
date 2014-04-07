@@ -93,11 +93,8 @@ void ImeStatusWindow::init()
     if (Application::CanToggleImeStatusWindow())
         try
         {
-            sal_Bool bShow = sal_Bool();
-            if (getConfig()->getPropertyValue(
-                    OUString(
-                                      "ShowStatusWindow"))
-                >>= bShow)
+            bool bShow;
+            if (getConfig()->getPropertyValue(OUString("ShowStatusWindow")) >>= bShow)
                 Application::ShowImeStatusWindow(bShow);
         }
         catch (css::uno::Exception &)
@@ -112,10 +109,8 @@ bool ImeStatusWindow::isShowing()
 {
     try
     {
-        sal_Bool bShow = sal_Bool();
-        if (getConfig()->getPropertyValue(
-                OUString("ShowStatusWindow"))
-            >>= bShow)
+        bool bShow;
+        if (getConfig()->getPropertyValue(OUString("ShowStatusWindow")) >>= bShow)
             return bShow;
     }
     catch (css::uno::Exception &)
@@ -134,7 +129,7 @@ void ImeStatusWindow::show(bool bShow)
         css::uno::Reference< css::beans::XPropertySet > xConfig(getConfig());
         xConfig->setPropertyValue(
             OUString("ShowStatusWindow"),
-            css::uno::makeAny(static_cast< sal_Bool >(bShow)));
+            css::uno::makeAny(bShow));
         css::uno::Reference< css::util::XChangesBatch > xCommit(
             xConfig, css::uno::UNO_QUERY);
         // Degrade gracefully by not saving the settings permanently:

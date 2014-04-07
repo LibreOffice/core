@@ -72,16 +72,16 @@ struct SvLinkSource_Entry_Impl
     SvBaseLinkRef       xSink;
     OUString            aDataMimeType;
     sal_uInt16          nAdviseModes;
-    sal_Bool            bIsDataSink;
+    bool            bIsDataSink;
 
     SvLinkSource_Entry_Impl( SvBaseLink* pLink, const OUString& rMimeType,
                                 sal_uInt16 nAdvMode )
         : xSink( pLink ), aDataMimeType( rMimeType ),
-            nAdviseModes( nAdvMode ), bIsDataSink( sal_True )
+            nAdviseModes( nAdvMode ), bIsDataSink( true )
     {}
 
     SvLinkSource_Entry_Impl( SvBaseLink* pLink )
-        : xSink( pLink ), nAdviseModes( 0 ), bIsDataSink( sal_False )
+        : xSink( pLink ), nAdviseModes( 0 ), bIsDataSink( false )
     {}
 
     ~SvLinkSource_Entry_Impl();
@@ -122,7 +122,7 @@ public:
     SvLinkSource_Entry_Impl* Curr()
                             { return nPos < aArr.size() ? aArr[ nPos ] : 0; }
     SvLinkSource_Entry_Impl* Next();
-    sal_Bool IsValidCurrValue( SvLinkSource_Entry_Impl* pEntry );
+    bool IsValidCurrValue( SvLinkSource_Entry_Impl* pEntry );
 };
 
 SvLinkSource_EntryIter_Impl::SvLinkSource_EntryIter_Impl(
@@ -135,7 +135,7 @@ SvLinkSource_EntryIter_Impl::~SvLinkSource_EntryIter_Impl()
     aArr.clear();
 }
 
-sal_Bool SvLinkSource_EntryIter_Impl::IsValidCurrValue( SvLinkSource_Entry_Impl* pEntry )
+bool SvLinkSource_EntryIter_Impl::IsValidCurrValue( SvLinkSource_Entry_Impl* pEntry )
 {
     return ( nPos < aArr.size() && aArr[nPos] == pEntry
        && std::find( rOrigArr.begin(), rOrigArr.end(), pEntry ) != rOrigArr.end() );
@@ -176,7 +176,7 @@ struct SvLinkSource_Impl
     sal_uIntPtr             nTimeout;
     css::uno::Reference<css::io::XInputStream>
                            m_xInputStreamToLoadFrom;
-    sal_Bool               m_bIsReadOnly;
+    bool               m_bIsReadOnly;
 
     SvLinkSource_Impl()
         : pTimer(0)

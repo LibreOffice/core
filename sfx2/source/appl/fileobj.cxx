@@ -121,7 +121,7 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                 // If the native format is reqested, has to be reset at the
                 // end of the flag. Is solely in the sw/ndgrf.cxx used when
                 // the link is removed form GraphicNode.
-                sal_Bool bOldNativFormat = bNativFormat;
+                bool bOldNativFormat = bNativFormat;
 
                 // If about to print, waiting for the data to be available
                 if( bGetSynchron )
@@ -137,7 +137,7 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                             Application::Reschedule();
 
                         xMed = xTmpMed;
-                        bClearMedium = sal_True;
+                        bClearMedium = true;
                     }
                 }
 
@@ -202,7 +202,7 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                 if( xMed.Is() && !bSynchron && bClearMedium )
                 {
                     xMed.Clear();
-                    bClearMedium = sal_False;
+                    bClearMedium = false;
                 }
             }
         }
@@ -263,11 +263,11 @@ bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
     return true;
 }
 
-sal_Bool SvFileObject::LoadFile_Impl()
+bool SvFileObject::LoadFile_Impl()
 {
     // We are still at Loading!!
     if( bWaitForData || !bLoadAgain || xMed.Is() || pDownLoadData )
-        return sal_False;
+        return false;
 
     // at the moment on the current DocShell
     xMed = new SfxMedium( sFileNm, sReferer, STREAM_STD_READ );
@@ -279,13 +279,13 @@ sal_Bool SvFileObject::LoadFile_Impl()
 
     if( !bSynchron )
     {
-        bLoadAgain = bDataReady = bInNewData = sal_False;
-        bWaitForData = sal_True;
+        bLoadAgain = bDataReady = bInNewData = false;
+        bWaitForData = true;
 
         SfxMediumRef xTmpMed = xMed;
-        bInCallDownLoad = sal_True;
+        bInCallDownLoad = true;
         xMed->DownLoad( STATIC_LINK( this, SvFileObject, LoadGrfReady_Impl ) );
-        bInCallDownLoad = sal_False;
+        bInCallDownLoad = false;
 
         bClearMedium = !xMed.Is();
         if( bClearMedium )
@@ -293,20 +293,20 @@ sal_Bool SvFileObject::LoadFile_Impl()
         return bDataReady;
     }
 
-    bWaitForData = sal_True;
-    bDataReady = bInNewData = sal_False;
+    bWaitForData = true;
+    bDataReady = bInNewData = false;
     xMed->DownLoad();
     bLoadAgain = !xMed->IsRemote();
-    bWaitForData = sal_False;
+    bWaitForData = false;
 
     // Graphic is finished, also send DataChanged of the Status change:
     SendStateChg_Impl( xMed->GetInStream() && xMed->GetInStream()->GetError()
                         ? sfx2::LinkManager::STATE_LOAD_ERROR : sfx2::LinkManager::STATE_LOAD_OK );
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
+bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
 {
     GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
 
@@ -348,8 +348,8 @@ sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
             if( !pDownLoadData->aGrf.GetContext() )
             {
                 delete pDownLoadData, pDownLoadData = 0;
-                bDataReady = sal_True;
-                bWaitForData = sal_False;
+                bDataReady = true;
+                bWaitForData = false;
             }
         }
     }
@@ -503,14 +503,14 @@ void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& r
 IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
 {
     // When we come form here there it can not be an error no more.
-    pThis->bLoadError = sal_False;
-    pThis->bWaitForData = sal_False;
-    pThis->bInCallDownLoad = sal_False;
+    pThis->bLoadError = false;
+    pThis->bWaitForData = false;
+    pThis->bInCallDownLoad = false;
 
     if( !pThis->bInNewData && !pThis->bDataReady )
     {
         // Graphic is finished, also send DataChanged from Status change
-        pThis->bDataReady = sal_True;
+        pThis->bDataReady = true;
         pThis->SendStateChg_Impl( sfx2::LinkManager::STATE_LOAD_OK );
 
         // and then send the data again
@@ -519,7 +519,7 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
 
     if( pThis->bDataReady )
     {
-        pThis->bLoadAgain = sal_True;
+        pThis->bLoadAgain = true;
         if( pThis->xMed.Is() )
         {
             pThis->xMed->SetDoneLink( Link() );
@@ -614,8 +614,8 @@ void SvFileObject::CancelTransfers()
     if( !bDataReady )
     {
         // Do not set-up again
-        bLoadAgain = sal_False;
-        bDataReady = bLoadError = bWaitForData = sal_True;
+        bLoadAgain = false;
+        bDataReady = bLoadError = bWaitForData = true;
         SendStateChg_Impl( sfx2::LinkManager::STATE_LOAD_ABORT );
     }
 }
@@ -629,7 +629,7 @@ void SvFileObject::SendStateChg_Impl( sfx2::LinkManager::LinkState nState )
         aAny <<= OUString::number( nState );
         DataChanged( SotExchange::GetFormatName(
                         sfx2::LinkManager::RegisterStatusInfoId()), aAny );
-        bStateChangeCalled = sal_True;
+        bStateChangeCalled = true;
     }
 }
 

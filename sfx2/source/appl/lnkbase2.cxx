@@ -71,7 +71,7 @@ struct ImplBaseLinkData
         // applies for all links
         sal_uIntPtr nCntntType; // Update Format
         // Not Ole-Links
-        sal_Bool    bIntrnlLnk;  // It is an internal link
+        bool    bIntrnlLnk;  // It is an internal link
         sal_uInt16  nUpdateMode; // UpdateMode
     };
 
@@ -87,7 +87,7 @@ struct ImplBaseLinkData
     ImplBaseLinkData()
     {
         ClientType.nCntntType = 0;
-        ClientType.bIntrnlLnk = sal_False;
+        ClientType.bIntrnlLnk = false;
         ClientType.nUpdateMode = 0;
         DDEType.pItem = NULL;
     }
@@ -99,12 +99,12 @@ class ImplDdeItem : public DdeGetPutItem
     SvBaseLink* pLink;
     DdeData aData;
     Sequence< sal_Int8 > aSeq;  // Datacontainer for DdeData !!!
-    sal_Bool bIsValidData : 1;
-    sal_Bool bIsInDTOR : 1;
+    bool bIsValidData : 1;
+    bool bIsInDTOR : 1;
 public:
     ImplDdeItem( SvBaseLink& rLink, const OUString& rStr )
-        : DdeGetPutItem( rStr ), pLink( &rLink ), bIsValidData( sal_False ),
-        bIsInDTOR( sal_False )
+        : DdeGetPutItem( rStr ), pLink( &rLink ), bIsValidData( false ),
+        bIsInDTOR( false )
     {}
     virtual ~ImplDdeItem();
 
@@ -114,11 +114,11 @@ public:
 
     void Notify()
     {
-        bIsValidData = sal_False;
+        bIsValidData = false;
         DdeGetPutItem::NotifyClient();
     }
 
-    sal_Bool IsInDTOR() const { return bIsInDTOR; }
+    bool IsInDTOR() const { return bIsInDTOR; }
 };
 
 
@@ -147,7 +147,7 @@ SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
     // It it going to be a Ole-Link,
     pImplData->ClientType.nUpdateMode = nUpdateMode;
     pImplData->ClientType.nCntntType = nContentType;
-    pImplData->ClientType.bIntrnlLnk = sal_False;
+    pImplData->ClientType.bIntrnlLnk = false;
 }
 
 
@@ -367,12 +367,12 @@ void SvBaseLink::_GetRealObject( bool bConnect)
             nObjType = OBJECT_INTERN;
             xObj = pImpl->m_pLinkMgr->CreateObj( this );
 
-            pImplData->ClientType.bIntrnlLnk = sal_True;
+            pImplData->ClientType.bIntrnlLnk = true;
             nObjType = OBJECT_CLIENT_DDE;  // so we know what it once was!
         }
         else
         {
-            pImplData->ClientType.bIntrnlLnk = sal_False;
+            pImplData->ClientType.bIntrnlLnk = false;
             xObj = pImpl->m_pLinkMgr->CreateObj( this );
         }
     }
@@ -536,7 +536,7 @@ FileDialogHelper & SvBaseLink::GetInsertFileDialog(const OUString& rFactory) con
 
 ImplDdeItem::~ImplDdeItem()
 {
-    bIsInDTOR = sal_True;
+    bIsInDTOR = true;
     // So that no-one gets the idea to delete the pointer when Disconnecting!
     SvBaseLinkRef aRef( pLink );
     aRef->Disconnect();
@@ -558,13 +558,13 @@ DdeData* ImplDdeItem::Get( sal_uIntPtr nFormat )
             {
                 aData = DdeData( (const char *)aSeq.getConstArray(), aSeq.getLength(), nFormat );
 
-                bIsValidData = sal_True;
+                bIsValidData = true;
                 return &aData;
             }
         }
     }
     aSeq.realloc( 0 );
-    bIsValidData = sal_False;
+    bIsValidData = false;
     return 0;
 }
 

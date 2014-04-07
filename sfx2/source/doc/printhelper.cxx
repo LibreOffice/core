@@ -598,7 +598,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     SfxViewShell* pView = pViewFrm->GetViewShell();
     if ( !pView )
         return;
-    sal_Bool bMonitor = sal_False;
+    bool bMonitor = false;
     // We need this information at the end of this method, if we start the vcl printer
     // by executing the slot. Because if it is a ucb relevant URL we must wait for
     // finishing the print job and move the temporary local file by using the ucb
@@ -610,7 +610,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
     uno::Sequence < beans::PropertyValue > aCheckedArgs( rOptions.getLength() );
     sal_Int32 nProps = 0;
-    sal_Bool  bWaitUntilEnd = sal_False;
+    bool  bWaitUntilEnd = false;
     sal_Int16 nDuplexMode = ::com::sun::star::view::DuplexMode::UNKNOWN;
     for ( int n = 0; n < rOptions.getLength(); ++n )
     {
@@ -708,7 +708,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         else if ( rProp.Name.equalsAscii( "Collate" ) ||
                   rProp.Name.equalsAscii( "Sort" ) )
         {
-            sal_Bool bTemp = sal_Bool();
+            bool bTemp;
             if ( rProp.Value >>= bTemp )
             {
                 aCheckedArgs[nProps].Name = "Collate";

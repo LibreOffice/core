@@ -268,7 +268,7 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
             }
         }
 
-        sal_Bool bIsReadonly = pCurDocShell->IsReadOnly();
+        bool bIsReadonly = pCurDocShell->IsReadOnly();
         if (pCurDocShell->HasSecurityOptOpenReadOnly() && !bIsHTMLDoc)
         {
             m_pOpenReadonlyCB->Check( pCurDocShell->IsSecurityOptOpenReadOnly() );

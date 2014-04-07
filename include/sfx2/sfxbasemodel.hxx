@@ -1334,7 +1334,7 @@ public:
     virtual sal_Bool SAL_CALL canCancelCheckOut( ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL canCheckIn( ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    sal_Bool getBoolPropertyValue( const OUString& rName ) throw ( css::uno::RuntimeException );
+    bool getBoolPropertyValue( const OUString& rName ) throw ( css::uno::RuntimeException );
 
 
     //  SfxListener

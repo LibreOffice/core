@@ -144,15 +144,15 @@ SFX_IMPL_INTERFACE(SfxObjectShell,SfxShell,SfxResId(0))
 
 class SfxClosePreventer_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
 {
-    sal_Bool m_bGotOwnership;
-    sal_Bool m_bPreventClose;
+    bool m_bGotOwnership;
+    bool m_bPreventClose;
 
 public:
     SfxClosePreventer_Impl();
 
-    sal_Bool HasOwnership() { return m_bGotOwnership; }
+    bool HasOwnership() { return m_bGotOwnership; }
 
-    void SetPreventClose( sal_Bool bPrevent ) { m_bPreventClose = bPrevent; }
+    void SetPreventClose( bool bPrevent ) { m_bPreventClose = bPrevent; }
 
     virtual void SAL_CALL queryClosing( const lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
         throw ( uno::RuntimeException, util::CloseVetoException, std::exception ) SAL_OVERRIDE;
@@ -164,8 +164,8 @@ public:
 } ;
 
 SfxClosePreventer_Impl::SfxClosePreventer_Impl()
-: m_bGotOwnership( sal_False )
-, m_bPreventClose( sal_True )
+: m_bGotOwnership( false )
+, m_bPreventClose( true )
 {
 }
 
@@ -201,12 +201,12 @@ public:
 
     ~SfxInstanceCloseGuard_Impl();
 
-    sal_Bool Init_Impl( const uno::Reference< util::XCloseable >& xCloseable );
+    bool Init_Impl( const uno::Reference< util::XCloseable >& xCloseable );
 };
 
-sal_Bool SfxInstanceCloseGuard_Impl::Init_Impl( const uno::Reference< util::XCloseable >& xCloseable )
+bool SfxInstanceCloseGuard_Impl::Init_Impl( const uno::Reference< util::XCloseable >& xCloseable )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     // do not allow reinit after the successful init
     if ( xCloseable.is() && !m_xCloseable.is() )
@@ -217,7 +217,7 @@ sal_Bool SfxInstanceCloseGuard_Impl::Init_Impl( const uno::Reference< util::XClo
             m_xPreventer = uno::Reference< util::XCloseListener >( m_pPreventer );
             xCloseable->addCloseListener( m_xPreventer );
             m_xCloseable = xCloseable;
-            bResult = sal_True;
+            bResult = true;
         }
         catch( uno::Exception& )
         {
@@ -244,7 +244,7 @@ SfxInstanceCloseGuard_Impl::~SfxInstanceCloseGuard_Impl()
         {
             if ( m_pPreventer )
             {
-                m_pPreventer->SetPreventClose( sal_False );
+                m_pPreventer->SetPreventClose( false );
 
                 if ( m_pPreventer->HasOwnership() )
                     m_xCloseable->close( sal_True ); // TODO: do it asynchronously
@@ -390,7 +390,7 @@ void SfxObjectShell::CheckIn( )
         if ( checkinDlg.Execute( ) == RET_OK )
         {
             OUString sComment = checkinDlg.GetComment( );
-            sal_Bool bMajor = checkinDlg.IsMajor( );
+            bool bMajor = checkinDlg.IsMajor( );
             xCmisDoc->checkIn( bMajor, sComment );
             uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
             if ( xModifiable.is( ) )
@@ -443,7 +443,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     // this guard is created here to have it destruction at the end of the method
     SfxInstanceCloseGuard_Impl aModelGuard;
 
-    sal_Bool bIsPDFExport = sal_False;
+    bool bIsPDFExport = false;
     switch(nId)
     {
         case SID_VERSION:
@@ -484,7 +484,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             else
             {
                 // no argument containing DocInfo; check optional arguments
-                sal_Bool bReadOnly = IsReadOnly();
+                bool bReadOnly = IsReadOnly();
                 SFX_REQUEST_ARG(rReq, pROItem, SfxBoolItem, SID_DOC_READONLY, false);
                 if ( pROItem )
                     // override readonly attribute of document
@@ -558,7 +558,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
         case SID_EXPORTDOCASPDF:
         case SID_DIRECTEXPORTDOCASPDF:
-            bIsPDFExport = sal_True;
+            bIsPDFExport = true;
         case SID_EXPORTDOC:
         case SID_SAVEASDOC:
         case SID_SAVEDOC:
@@ -660,11 +660,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
 
 
-                sal_Bool bPreselectPassword = sal_False;
+                bool bPreselectPassword = false;
                 SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
                 SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldPasswordItem, SfxStringItem, SID_PASSWORD, false );
                 if ( pOldEncryptionDataItem || pOldPasswordItem )
-                    bPreselectPassword = sal_True;
+                    bPreselectPassword = true;
 
                 uno::Sequence< beans::PropertyValue > aDispatchArgs;
                 if ( rReq.GetArgs() )
@@ -724,7 +724,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             // by default versions should be preserved always except in case of an explicit
             // SaveAs via GUI, so the flag must be reset to guarantee this
-            pImp->bPreserveVersions = sal_True;
+            pImp->bPreserveVersions = true;
             sal_uIntPtr lErr=GetErrorCode();
 
             if ( !lErr && nErrorCode )
@@ -794,7 +794,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 return;
             }
 
-            sal_Bool bInFrameSet = sal_False;
+            bool bInFrameSet = false;
             sal_uInt16 nFrames=0;
             pFrame = SfxViewFrame::GetFirst( this );
             while ( pFrame )
@@ -804,7 +804,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     // In this document there still exists a view that is
                     // in a FrameSet , which of course may not be closed
                     // geclosed werden
-                    bInFrameSet = sal_True;
+                    bInFrameSet = true;
                 }
                 else
                     nFrames++;
@@ -951,7 +951,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     {
                         // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
                         bool bIsGoogleFile = false;
-                        sal_Bool bCheckedOut = sal_False;
+                        bool bCheckedOut = false;
                         for ( sal_Int32 i = 0; i < aCmisProperties.getLength(); ++i )
                         {
                             if ( aCmisProperties[i].Id == "cmis:isVersionSeriesCheckedOut" )
@@ -987,7 +987,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     {
                         // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
                         bool bFoundCheckedout = false;
-                        sal_Bool bCheckedOut = sal_False;
+                        bool bCheckedOut = false;
                         for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
                         {
                             if ( aCmisProperties[i].Id == "cmis:isVersionSeriesCheckedOut" )
@@ -1311,7 +1311,7 @@ void SfxObjectShell::StateView_Impl(SfxItemSet& /*rSet*/)
 
 sal_uInt16 SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequence< security::DocumentSignatureInformation >& aInfos )
 {
-    sal_Bool bCertValid = sal_True;
+    bool bCertValid = true;
     sal_uInt16 nResult = SIGNATURESTATE_NOSIGNATURES;
     int nInfos = aInfos.getLength();
     bool bCompleteSignature = true;
@@ -1427,7 +1427,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
     // check whether the document is signed
     ImplGetSignatureState( false ); // document signature
     ImplGetSignatureState( true ); // script signature
-    sal_Bool bHasSign = ( pImp->nScriptingSignatureState != SIGNATURESTATE_NOSIGNATURES || pImp->nDocumentSignatureState != SIGNATURESTATE_NOSIGNATURES );
+    bool bHasSign = ( pImp->nScriptingSignatureState != SIGNATURESTATE_NOSIGNATURES || pImp->nDocumentSignatureState != SIGNATURESTATE_NOSIGNATURES );
 
     // the target ODF version on saving
     SvtSaveOptions aSaveOpt;
@@ -1511,7 +1511,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
         // We sign only ODF1.2, that means that if this point has been reached,
         // the ODF1.2 signing process should be used.
         // This code still might be called to show the signature of ODF1.1 document.
-        sal_Bool bSigned = GetMedium()->SignContents_Impl(
+        bool bSigned = GetMedium()->SignContents_Impl(
             bScriptingContent,
             aODFVersion,
             pImp->nDocumentSignatureState == SIGNATURESTATE_SIGNATURES_OK
@@ -1532,7 +1532,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
             else
                 pImp->nDocumentSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
 
-            pImp->bSignatureErrorIsShown = sal_False;
+            pImp->bSignatureErrorIsShown = false;
 
             Invalidate( SID_SIGNATURE );
             Invalidate( SID_MACRO_SIGNATURE );

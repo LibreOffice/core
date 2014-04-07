@@ -543,7 +543,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                 }
                 else if ( pType == ::getBooleanCppuType() )
                 {
-                    sal_Bool bTemp = false;
+                    bool bTemp = false;
                     rEvent.State >>= bTemp ;
                     pItem = new SfxBoolItem( nSlotId, bTemp );
                 }
@@ -1089,7 +1089,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                 }
                 else if ( pType == ::getBooleanCppuType() )
                 {
-                    sal_Bool bTemp = false;
+                    bool bTemp = false;
                     rEvent.State >>= bTemp ;
                     pItem = new SfxBoolItem( nSlotId, bTemp );
                 }

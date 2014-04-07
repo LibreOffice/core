@@ -62,7 +62,7 @@ class SfxMenuImageControl_Impl : public SfxControllerItem
 {
     SfxVirtualMenu*     pMenu;
     long                lRotation;
-    sal_Bool                bIsMirrored;
+    bool                bIsMirrored;
 
 protected:
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -71,7 +71,7 @@ public:
                             : SfxControllerItem( nSlotId, rBindings )
                             , pMenu( pVMenu )
                             , lRotation( 0 )
-                            , bIsMirrored( sal_False )
+                            , bIsMirrored( false )
                         {}
     void                Update();
 };
@@ -139,7 +139,7 @@ static Image RetrieveAddOnImage( Reference< com::sun::star::frame::XFrame >& rFr
     if the OLE server application exist or not.
 */
 
-sal_Bool IsItemHidden_Impl( sal_uInt16 nItemId, int bOleServer, int bMac )
+bool IsItemHidden_Impl( sal_uInt16 nItemId, int bOleServer, int bMac )
 {
     return ( bMac &&
              ( nItemId == SID_MINIMIZED ) ) ||
@@ -167,8 +167,8 @@ void SfxVirtualMenu::Construct_Impl()
 
 
 SfxVirtualMenu::SfxVirtualMenu( sal_uInt16 nOwnId,
-                SfxVirtualMenu* pOwnParent, Menu& rMenu, sal_Bool bWithHelp,
-                SfxBindings &rBindings, sal_Bool bOLEServer, sal_Bool bRes, sal_Bool bIsAddonMenu ):
+                SfxVirtualMenu* pOwnParent, Menu& rMenu, bool bWithHelp,
+                SfxBindings &rBindings, bool bOLEServer, bool bRes, bool bIsAddonMenu ):
     pItems(0),
        pImageControl(0),
     pBindings(&rBindings),
@@ -188,19 +188,19 @@ SfxVirtualMenu::SfxVirtualMenu( sal_uInt16 nOwnId,
     pWindowMenu = NULL;
     pPickMenu = NULL;
     pAddonsMenu = NULL;
-    bIsActive = sal_False;
-    bControllersUnBound = sal_False;
+    bIsActive = false;
+    bControllersUnBound = false;
     CreateFromSVMenu();
     Construct_Impl();
-    bHelpInitialized = sal_False;
+    bHelpInitialized = false;
 }
 
 
 
 // creates a virtual menu from a StarView MenuBar or PopupMenu
 
-SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, sal_Bool bWithHelp,
-                    SfxBindings &rBindings, sal_Bool bOLEServer, sal_Bool bRes, sal_Bool bIsAddonMenu ):
+SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, bool bWithHelp,
+                    SfxBindings &rBindings, bool bOLEServer, bool bRes, bool bIsAddonMenu ):
     pItems(0),
        pImageControl(0),
     pBindings(&rBindings),
@@ -221,11 +221,11 @@ SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, sal_Bool bWithHelp,
     pWindowMenu = NULL;
     pPickMenu = NULL;
     pAddonsMenu = NULL;
-    bIsActive = sal_False;
-    bControllersUnBound = sal_False;
+    bIsActive = false;
+    bControllersUnBound = false;
     CreateFromSVMenu();
     Construct_Impl();
-    bHelpInitialized = sal_False;
+    bHelpInitialized = false;
 }
 
 
@@ -243,7 +243,7 @@ SfxVirtualMenu::~SfxVirtualMenu()
 
     if ( bIsActive )
     {
-        pBindings->LEAVEREGISTRATIONS(); --nLocks; bIsActive = sal_False;
+        pBindings->LEAVEREGISTRATIONS(); --nLocks; bIsActive = false;
     }
 
     if (pItems)
@@ -497,7 +497,7 @@ IMPL_LINK_NOARG(SfxVirtualMenu, SettingsChanged)
 {
     sal_uInt16 nItemCount = pSVMenu->GetItemCount();
     SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
-    sal_Bool bIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
+    bool bIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
     Reference<com::sun::star::frame::XFrame> xFrame( pViewFrame->GetFrame().GetFrameInterface() );
 
     if ( !bIsAddonPopupMenu )
@@ -568,7 +568,7 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
 
     framework::AddonsOptions    aAddonOptions;
 
-    sal_Bool bIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
+    bool bIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
     if ( bIcons )
     {
         sal_uInt16          nItemCount          = pMenu->GetItemCount();
@@ -641,7 +641,7 @@ bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
             // Only a binded Menu-Controller as already an Id!
             if ( !rCtrl.GetId() )
             {
-                bIsAddonPopupMenu = sal_False;
+                bIsAddonPopupMenu = false;
                 DBG_ASSERT( !pSubMenu, "Popup already exists!");
 
                 // Check if the popup is an Add-On popup menu
@@ -651,12 +651,12 @@ bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
                      ( nSID == SID_ADDONHELP ) ||
                      (( (sal_uInt32)aCommand.getLength() > nAddonsPopupPrefixLen ) &&
                       ( aCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX ) ) ) )
-                    bIsAddonPopupMenu = sal_True;
+                    bIsAddonPopupMenu = true;
 
                 // Create VirtualMenu for Sub-Menu
-                sal_Bool bRes = bResCtor;
+                bool bRes = bResCtor;
                 pSubMenu = new SfxVirtualMenu( nSID, this,
-                        *pMenu, sal_False, *pBindings, bOLE, bRes, bIsAddonPopupMenu );
+                        *pMenu, false, *pBindings, bOLE, bRes, bIsAddonPopupMenu );
 
                 SAL_INFO("sfx", "New VirtualMenu " << pSubMenu << " created");
 
@@ -706,7 +706,7 @@ void SfxVirtualMenu::BindControllers()
     }
 
     pBindings->LEAVEREGISTRATIONS();
-    bControllersUnBound = sal_False;
+    bControllersUnBound = false;
 }
 
 void SfxVirtualMenu::UnbindControllers()
@@ -733,7 +733,7 @@ void SfxVirtualMenu::UnbindControllers()
     }
 
     pBindings->LEAVEREGISTRATIONS();
-    bControllersUnBound = sal_True;
+    bControllersUnBound = true;
 }
 
 
@@ -790,7 +790,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 
     if ( pMenu )
     {
-        sal_Bool bDontHide = SvtMenuOptions().IsEntryHidingEnabled();
+        bool bDontHide = SvtMenuOptions().IsEntryHidingEnabled();
         sal_uInt16 nFlag = pMenu->GetMenuFlags();
         if ( bDontHide )
             nFlag &= ~MENU_FLAG_HIDEDISABLEDENTRIES;
@@ -895,7 +895,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         pBindings->Update( SID_IMAGE_ORIENTATION );
 
         // Supress the Status updates until Deactivate
-        pBindings->ENTERREGISTRATIONS(); ++nLocks; bIsActive = sal_True;
+        pBindings->ENTERREGISTRATIONS(); ++nLocks; bIsActive = true;
 
         return sal_True;
     }
@@ -926,7 +926,7 @@ IMPL_LINK( SfxVirtualMenu, Deactivate, Menu *, pMenu )
         // when the menu is disabled (= closed)
         if ( pParent )
             UnbindControllers();
-        pBindings->LEAVEREGISTRATIONS(); --nLocks; bIsActive = sal_False;
+        pBindings->LEAVEREGISTRATIONS(); --nLocks; bIsActive = false;
     }
     return sal_True;
 }
@@ -995,7 +995,7 @@ Menu* SfxVirtualMenu::GetSVMenu() const
 
 // set the checkmark of the specified item
 
-void SfxVirtualMenu::CheckItem( sal_uInt16 nItemId, sal_Bool bCheck )
+void SfxVirtualMenu::CheckItem( sal_uInt16 nItemId, bool bCheck )
 {
     DBG_ASSERT( this != 0, "");
     DBG_ASSERT( pSVMenu != 0, "" );
@@ -1006,7 +1006,7 @@ void SfxVirtualMenu::CheckItem( sal_uInt16 nItemId, sal_Bool bCheck )
 
 // set the enabled-state of the specified item
 
-void SfxVirtualMenu::EnableItem( sal_uInt16 nItemId, sal_Bool bEnable )
+void SfxVirtualMenu::EnableItem( sal_uInt16 nItemId, bool bEnable )
 {
     DBG_ASSERT( this != 0, "");
     DBG_ASSERT( pSVMenu != 0, "" );
@@ -1046,7 +1046,7 @@ void SfxVirtualMenu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu *pMenu )
 
 // Forces the initialization, which is otherwise only happens in Activate
 
-void SfxVirtualMenu::InitPopup( sal_uInt16 nPos, sal_Bool /*bOLE*/ )
+void SfxVirtualMenu::InitPopup( sal_uInt16 nPos, bool /*bOLE*/ )
 {
 
     sal_uInt16 nSID = pSVMenu->GetItemId(nPos);
@@ -1058,9 +1058,9 @@ void SfxVirtualMenu::InitPopup( sal_uInt16 nPos, sal_Bool /*bOLE*/ )
     if ( !rCtrl.GetId() )
     {
         // Generate VirtualMenu for Sub-Menu
-        sal_Bool bRes = bResCtor;
+        bool bRes = bResCtor;
         SfxVirtualMenu *pSubMenu =
-            new SfxVirtualMenu(nSID, this, *pMenu, sal_False, *pBindings, bOLE, bRes);
+            new SfxVirtualMenu(nSID, this, *pMenu, false, *pBindings, bOLE, bRes);
 
         SAL_INFO("sfx", "New VirtualMenu " << pSubMenu << " created");
 
@@ -1076,7 +1076,7 @@ void SfxVirtualMenu::InitializeHelp()
         SfxMenuControl &rCtrl = pItems[nPos];
         if ( nSlotId && !rCtrl.GetId() )
         {
-            InitPopup( nPos, sal_True );
+            InitPopup( nPos, true );
         }
 
         SfxVirtualMenu *pSubMenu = rCtrl.GetPopupMenu();
@@ -1084,7 +1084,7 @@ void SfxVirtualMenu::InitializeHelp()
             pSubMenu->InitializeHelp();
     }
 
-    bHelpInitialized = sal_True;
+    bHelpInitialized = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

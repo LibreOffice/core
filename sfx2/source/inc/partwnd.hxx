@@ -70,7 +70,7 @@ public:
                                   WinBits nBits );
 
                             virtual ~SfxPartDockWnd_Impl();
-    sal_Bool                    QueryClose();
+    bool                    QueryClose();
     virtual void            FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > ForgetFrame();
 };

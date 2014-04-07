@@ -38,16 +38,16 @@ public:
 
     static void* getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, const Size& aMetaSize );
 
-    static sal_Bool supportsMetaFileHandle_Impl();
+    static bool supportsMetaFileHandle_Impl();
 
-    static sal_Bool getThumbnailFormatFromGDI_Impl(
+    static bool getThumbnailFormatFromGDI_Impl(
             GDIMetaFile* pMetaFile,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
 
     static sal_uInt16 getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName,
-                                                                    sal_Bool bIsTemplate );
+                                                                    bool bIsTemplate );
 
-    static sal_Bool getThumbnailReplacement_Impl(
+    static bool getThumbnailReplacement_Impl(
             sal_Int32 nResID,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
 

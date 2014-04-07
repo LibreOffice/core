@@ -50,7 +50,7 @@ struct SfxObjectBar_Impl
     sal_uInt16        nMode; // special visibility flags
     sal_uInt16        nPos;
     sal_uInt16        nIndex;
-    sal_Bool          bDestroy;
+    bool          bDestroy;
     OUString          aName;
     SfxInterface*     pIFace;
 
@@ -59,7 +59,7 @@ struct SfxObjectBar_Impl
         nMode(0),
         nPos(0),
         nIndex(0),
-        bDestroy(sal_False),
+        bDestroy(false),
         pIFace(0)
     {}
 };
@@ -70,13 +70,13 @@ struct SfxObjectBar_Impl
 struct SfxStatBar_Impl
 {
     sal_uInt16                  nId;
-    sal_Bool                    bOn;
-    sal_Bool                    bTemp;
+    bool                    bOn;
+    bool                    bTemp;
 
     SfxStatBar_Impl() :
         nId(0),
-        bOn(sal_True),
-        bTemp(sal_False)
+        bOn(true),
+        bTemp(false)
     {}
 };
 
@@ -94,14 +94,14 @@ struct SfxChild_Impl
     Size                            aSize;
     SfxChildAlignment               eAlign;
     sal_uInt16                          nVisible;
-    sal_Bool                            bResize;
-    sal_Bool                            bCanGetFocus;
-    sal_Bool                            bSetFocus;
+    bool                            bResize;
+    bool                            bCanGetFocus;
+    bool                            bSetFocus;
 
     SfxChild_Impl( Window& rChild, const Size& rSize,
-                   SfxChildAlignment eAlignment, sal_Bool bIsVisible ):
-        pWin(&rChild), aSize(rSize), eAlign(eAlignment), bResize(sal_False),
-        bCanGetFocus( sal_False ), bSetFocus( sal_False )
+                   SfxChildAlignment eAlignment, bool bIsVisible ):
+        pWin(&rChild), aSize(rSize), eAlign(eAlignment), bResize(false),
+        bCanGetFocus( false ), bSetFocus( false )
     {
         nVisible = bIsVisible ? CHILD_VISIBLE : CHILD_NOT_VISIBLE;
     }
@@ -113,23 +113,23 @@ struct SfxChildWin_Impl
     sal_uInt16                         nInterfaceId;  // the current context
     sal_uInt16                         nId;           // current Id
     SfxChildWindow*                 pWin;
-    sal_Bool                            bCreate;
+    bool                            bCreate;
     SfxChildWinInfo                 aInfo;
     SfxChild_Impl*                 pCli;          // != 0 at direct Children
     sal_uInt16                          nVisibility;
-    sal_Bool                            bEnable;
-    sal_Bool                            bDisabled;
+    bool                            bEnable;
+    bool                            bDisabled;
 
     SfxChildWin_Impl( sal_uInt32 nID ) :
         nSaveId((sal_uInt16) (nID & 0xFFFF) ),
         nInterfaceId((sal_uInt16) (nID >> 16)),
         nId(nSaveId),
         pWin(0),
-        bCreate(sal_False),
+        bCreate(false),
         pCli(0),
         nVisibility( sal_False ),
-        bEnable( sal_True ),
-        bDisabled( sal_False )
+        bEnable( true ),
+        bDisabled( false )
     {}
 };
 
@@ -200,7 +200,7 @@ class LayoutManagerListener : public ::cppu::WeakImplHelper2<
         virtual void SAL_CALL layoutEvent( const ::com::sun::star::lang::EventObject& aSource, ::sal_Int16 eLayoutEvent, const ::com::sun::star::uno::Any& aInfo ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        sal_Bool                                                                m_bHasFrame;
+        bool                                                                m_bHasFrame;
         SfxWorkWindow*                                                          m_pWrkWin;
         ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > m_xFrame;
         OUString                                                           m_aLayoutManagerPropName;
@@ -227,12 +227,12 @@ protected:
     sal_uInt16                  nUpdateMode;
     sal_uInt16                  nChildren;
     sal_uInt16                  nOrigMode;
-    sal_Bool                    bSorted : 1;
-    sal_Bool                    bDockingAllowed : 1;
-    sal_Bool                    bInternalDockingAllowed : 1;
-    sal_Bool                    bAllChildrenVisible : 1;
-    sal_Bool                    bIsFullScreen : 1;
-    sal_Bool                    bShowStatusBar : 1;
+    bool                    bSorted : 1;
+    bool                    bDockingAllowed : 1;
+    bool                    bInternalDockingAllowed : 1;
+    bool                    bAllChildrenVisible : 1;
+    bool                    bIsFullScreen : 1;
+    bool                    bShowStatusBar : 1;
     sal_Int32               m_nLock;
     OUString           m_aStatusBarResName;
     OUString           m_aLayoutManagerPropName;
@@ -241,15 +241,15 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xLayoutManagerListener;
 
 protected:
-    void                    CreateChildWin_Impl(SfxChildWin_Impl*,sal_Bool);
+    void                    CreateChildWin_Impl(SfxChildWin_Impl*,bool);
     void                    RemoveChildWin_Impl(SfxChildWin_Impl*);
     void                    Sort_Impl();
     SfxChild_Impl*          FindChild_Impl( const Window& rWindow ) const;
-    virtual sal_Bool            RequestTopToolSpacePixel_Impl( SvBorder aBorder );
+    virtual bool            RequestTopToolSpacePixel_Impl( SvBorder aBorder );
     virtual Rectangle       GetTopRect_Impl();
     SvBorder                Arrange_Impl();
     virtual void            SaveStatus_Impl(SfxChildWindow*, const SfxChildWinInfo&);
-    static sal_Bool         IsPluginMode( SfxObjectShell* pObjShell );
+    static bool         IsPluginMode( SfxObjectShell* pObjShell );
 
 public:
                             SfxWorkWindow( Window *pWin, SfxBindings& rBindings, SfxWorkWindow* pParent = NULL);
@@ -258,14 +258,14 @@ public:
                             { return *pBindings; }
     Window*                 GetWindow() const
                             { return pWorkWin; }
-    Rectangle               GetFreeArea( sal_Bool bAutoHide ) const;
-    void                    SetDockingAllowed(sal_Bool bSet)
+    Rectangle               GetFreeArea( bool bAutoHide ) const;
+    void                    SetDockingAllowed(bool bSet)
                             { bDockingAllowed = bSet; }
-    void                    SetInternalDockingAllowed(sal_Bool bSet)
+    void                    SetInternalDockingAllowed(bool bSet)
                             { bInternalDockingAllowed = bSet; }
-    sal_Bool                    IsDockingAllowed() const
+    bool                    IsDockingAllowed() const
                             { return bDockingAllowed; }
-    sal_Bool                    IsInternalDockingAllowed() const
+    bool                    IsInternalDockingAllowed() const
                             { return bInternalDockingAllowed; }
     SfxWorkWindow*          GetParent_Impl() const
                             { return pParent; }
@@ -273,21 +273,21 @@ public:
     // Methods for all Child windows
     void                    DataChanged_Impl( const DataChangedEvent& rDCEvt );
     void                    ReleaseChild_Impl( Window& rWindow );
-    SfxChild_Impl*          RegisterChild_Impl( Window& rWindow, SfxChildAlignment eAlign, sal_Bool bCanGetFocus=sal_False );
+    SfxChild_Impl*          RegisterChild_Impl( Window& rWindow, SfxChildAlignment eAlign, bool bCanGetFocus=false );
     void                    ShowChildren_Impl();
     void                    HideChildren_Impl();
-    sal_Bool                    PrepareClose_Impl();
+    bool                    PrepareClose_Impl();
     virtual void            ArrangeChildren_Impl( sal_Bool bForce = sal_True );
     void                    DeleteControllers_Impl();
-    void                    HidePopups_Impl(sal_Bool bHide, sal_Bool bParent=sal_False, sal_uInt16 nId=0);
+    void                    HidePopups_Impl(bool bHide, bool bParent=false, sal_uInt16 nId=0);
     void                    ConfigChild_Impl(SfxChildIdentifier,
                                              SfxDockingConfig, sal_uInt16);
-    void                    MakeChildrenVisible_Impl( sal_Bool bVis );
+    void                    MakeChildrenVisible_Impl( bool bVis );
     void                    ArrangeAutoHideWindows( SfxSplitWindow *pSplit );
-    sal_Bool                    IsAutoHideMode( const SfxSplitWindow *pSplit );
+    bool                    IsAutoHideMode( const SfxSplitWindow *pSplit );
     void                    EndAutoShow_Impl( Point aPos );
-    void                    SetFullScreen_Impl( sal_Bool bSet ) { bIsFullScreen = bSet; }
-    sal_Bool                    IsFullScreen_Impl() const { return bIsFullScreen; }
+    void                    SetFullScreen_Impl( bool bSet ) { bIsFullScreen = bSet; }
+    bool                    IsFullScreen_Impl() const { return bIsFullScreen; }
 
     // Methods for Objectbars
     virtual void            UpdateObjectBars_Impl();
@@ -295,29 +295,29 @@ public:
     void                    SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
                                     SfxInterface *pIFace, const OUString* pName=0 );
     bool                    KnowsObjectBar_Impl( sal_uInt16 nPos ) const;
-    sal_Bool                    IsVisible_Impl();
-    void                    MakeVisible_Impl( sal_Bool );
+    bool                    IsVisible_Impl();
+    void                    MakeVisible_Impl( bool );
     void                    SetObjectBarVisibility_Impl( sal_uInt16 nVis );
-    sal_Bool                    IsContainer_Impl() const;
-    void                    Lock_Impl( sal_Bool );
+    bool                    IsContainer_Impl() const;
+    void                    Lock_Impl( bool );
 
     // Methods for ChildWindows
     void                    UpdateChildWindows_Impl();
     void                    ResetChildWindows_Impl();
-    void                    SetChildWindowVisible_Impl( sal_uInt32, sal_Bool, sal_uInt16 );
-    void                    ToggleChildWindow_Impl(sal_uInt16,sal_Bool);
-    sal_Bool                    HasChildWindow_Impl(sal_uInt16);
-    sal_Bool                    KnowsChildWindow_Impl(sal_uInt16);
-    void                    ShowChildWindow_Impl(sal_uInt16, sal_Bool bVisible, sal_Bool bSetFocus);
-    void                    SetChildWindow_Impl(sal_uInt16, sal_Bool bOn, sal_Bool bSetFocus);
+    void                    SetChildWindowVisible_Impl( sal_uInt32, bool, sal_uInt16 );
+    void                    ToggleChildWindow_Impl(sal_uInt16,bool);
+    bool                    HasChildWindow_Impl(sal_uInt16);
+    bool                    KnowsChildWindow_Impl(sal_uInt16);
+    void                    ShowChildWindow_Impl(sal_uInt16, bool bVisible, bool bSetFocus);
+    void                    SetChildWindow_Impl(sal_uInt16, bool bOn, bool bSetFocus);
     SfxChildWindow*         GetChildWindow_Impl(sal_uInt16);
     virtual void            InitializeChild_Impl(SfxChildWin_Impl*);
     SfxSplitWindow*         GetSplitWindow_Impl(SfxChildAlignment);
 
-    sal_Bool                    IsVisible_Impl( sal_uInt16 nMode ) const;
-    sal_Bool                    IsFloating( sal_uInt16 nId );
+    bool                    IsVisible_Impl( sal_uInt16 nMode ) const;
+    bool                    IsFloating( sal_uInt16 nId );
     void                    SetActiveChild_Impl( Window *pChild );
-    virtual sal_Bool            ActivateNextChild_Impl( sal_Bool bForward = sal_True );
+    virtual bool            ActivateNextChild_Impl( sal_Bool bForward = sal_True );
     bool                    AllowChildWindowCreation_Impl( const SfxChildWin_Impl& i_rCW ) const;
 
     // Methods for StatusBar

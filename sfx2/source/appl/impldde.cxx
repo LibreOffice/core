@@ -228,7 +228,7 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
        // then the server is up, it just does not know the topic!
         if( sTopic.equalsIgnoreAsciiCase( "SYSTEM" ) )
         {
-            sal_Bool bSysTopic;
+            bool bSysTopic;
             {
                 DdeConnection aTmp(sServer, OUString("SYSTEM"));
                 bSysTopic = !aTmp.GetError();
@@ -314,7 +314,7 @@ void SvDDEObject::Edit( Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link
     }
 }
 
-sal_Bool SvDDEObject::ImplHasOtherFormat( DdeTransaction& rReq )
+bool SvDDEObject::ImplHasOtherFormat( DdeTransaction& rReq )
 {
     sal_uInt16 nFmt = 0;
     switch( rReq.GetFormat() )
@@ -400,7 +400,7 @@ IMPL_LINK( SvDDEObject, ImplGetDDEData, DdeData*, pData )
 
 IMPL_LINK( SvDDEObject, ImplDoneDDEData, void*, pData )
 {
-    sal_Bool bValid = (sal_Bool)(sal_uIntPtr)pData;
+    bool bValid = (sal_Bool)(sal_uIntPtr)pData;
     if( !bValid && ( pRequest || pLink ))
     {
         DdeTransaction* pReq = 0;

@@ -518,7 +518,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_BIGSIZE), true, &pItem) )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        sal_Bool bBigSize = ( (const SfxBoolItem*)pItem )->GetValue();
+        bool bBigSize = ( (const SfxBoolItem*)pItem )->GetValue();
         aMiscOptions.SetSymbolsSize(
             sal::static_int_cast< sal_Int16 >(
                 bBigSize ? SFX_SYMBOLS_SIZE_LARGE : SFX_SYMBOLS_SIZE_SMALL ) );
@@ -633,7 +633,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_WELCOMESCREEN_RESET ), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        sal_Bool bReset = ((const SfxBoolItem *)pItem)->GetValue();
+        bool bReset = ((const SfxBoolItem *)pItem)->GetValue();
         if ( bReset )
         {
             OSL_FAIL( "Not implemented, may be EOL!" );

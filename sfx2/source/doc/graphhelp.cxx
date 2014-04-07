@@ -195,21 +195,21 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
 
 
 // static
-sal_Bool GraphicHelper::supportsMetaFileHandle_Impl()
+bool GraphicHelper::supportsMetaFileHandle_Impl()
 {
 #ifdef WNT
     return sal_True;
 #else
-    return sal_False;
+    return false;
 #endif
 }
 
 
 // static
-sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile,
+bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile,
                                                         const uno::Reference< io::XStream >& xStream )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     SvStream* pStream = NULL;
 
     if ( xStream.is() )
@@ -233,9 +233,9 @@ sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile,
 }
 
 // static
-sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const uno::Reference< io::XStream >& xStream )
+bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const uno::Reference< io::XStream >& xStream )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     if ( nResID && xStream.is() )
     {
         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -259,7 +259,7 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
                 aStoreProps[1].Value <<= OUString("image/png");
 
                 xGraphProvider->storeGraphic( xGraphic, aStoreProps );
-                bResult = sal_True;
+                bResult = true;
             }
         }
         catch(const uno::Exception&)
@@ -272,7 +272,7 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
 
 
 // static
-sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName, sal_Bool /*bIsTemplate*/ )
+sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName, bool /*bIsTemplate*/ )
 {
     sal_uInt16 nResult = 0;
 

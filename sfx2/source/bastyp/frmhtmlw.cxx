@@ -287,7 +287,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
                 .append('=').append(nVal);
         }
 
-        sal_Bool bVal = sal_True;
+        bool bVal = true;
         aAny = xSet->getPropertyValue("FrameIsAutoScroll");
         if ( (aAny >>= bVal) && !bVal )
         {

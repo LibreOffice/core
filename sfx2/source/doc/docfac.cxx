@@ -68,7 +68,7 @@ struct SfxObjectFactory_Impl
     SfxModule*                  pModule;
     sal_uInt16                  nImageId;
     OUString                    aStandardTemplate;
-    sal_Bool                    bTemplateInitialized;
+    bool                    bTemplateInitialized;
     SvGlobalName                aClassName;
 
     SfxObjectFactory_Impl() :
@@ -76,7 +76,7 @@ struct SfxObjectFactory_Impl
         pFilterContainer    ( NULL ),
         pModule             ( NULL ),
         nImageId            ( 0 ),
-        bTemplateInitialized( sal_False )
+        bTemplateInitialized( false )
         {}
 };
 
@@ -216,7 +216,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
 
             OUString aActualFilter;
             ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, CONF_PATH, PROP_ACTUAL_FILTER ) >>= aActualFilter;
-            sal_Bool bChanged(sal_False);
+            bool bChanged(false);
             ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, CONF_PATH, PROP_DEF_TEMPL_CHANGED ) >>= bChanged;
 
             uno::Reference< container::XNameAccess > xFilterFactory(

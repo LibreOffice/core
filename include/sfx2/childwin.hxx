@@ -208,7 +208,7 @@ public:
     void                SetHideNotDelete( bool bOn );
     bool                IsHideNotDelete() const;
     bool                IsHideAtToggle() const;
-    sal_Bool                IsVisible() const;
+    bool                IsVisible() const;
     void                SetWantsFocus( bool );
     bool                WantsFocus() const;
 
@@ -217,7 +217,7 @@ public:
     void                SetFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & );
 
     SAL_DLLPRIVATE static void InitializeChildWinFactory_Impl(sal_uInt16, SfxChildWinInfo&);
-    SAL_DLLPRIVATE void SetVisible_Impl( sal_Bool bVis );
+    SAL_DLLPRIVATE void SetVisible_Impl( bool bVis );
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
     SAL_DLLPRIVATE void Activate_Impl();
     SAL_DLLPRIVATE void Deactivate_Impl();
@@ -281,7 +281,7 @@ public:
     public  :   \
         static  SfxChildWindow* CreateImpl(::Window *pParent, sal_uInt16 nId, \
                     SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
-        static  void RegisterChildWindow (sal_Bool bVisible=sal_False, SfxModule *pMod=NULL, sal_uInt16 nFlags=0); \
+        static  void RegisterChildWindow (bool bVisible=false, SfxModule *pMod=NULL, sal_uInt16 nFlags=0); \
         virtual SfxChildWinInfo GetInfo() const SAL_OVERRIDE
 
 #define SFX_DECL_CHILDWINDOW_WITHID(Class) \
@@ -301,7 +301,7 @@ public:
                     SfxChildWindow *pWin = new Class(pParent, nId, pBindings, pInfo);\
                     return pWin; \
                 } \
-        void    Class::RegisterChildWindow (sal_Bool bVis, SfxModule *pMod, sal_uInt16 nFlags)   \
+        void    Class::RegisterChildWindow (bool bVis, SfxModule *pMod, sal_uInt16 nFlags)   \
                 {   \
                     SfxChildWinFactory *pFact = new SfxChildWinFactory( \
                         Class::CreateImpl, MyID, Pos );   \

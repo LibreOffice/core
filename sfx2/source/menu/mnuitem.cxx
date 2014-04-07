@@ -172,7 +172,7 @@ void SfxMenuControl::StateChanged
 
 #ifdef UNIX
     if (nSID == SID_PASTE)
-        pOwnMenu->EnableItem( GetId(), sal_True );
+        pOwnMenu->EnableItem( GetId(), true );
     else
 #endif
         pOwnMenu->EnableItem( GetId(), bIsObjMenu
@@ -183,7 +183,7 @@ void SfxMenuControl::StateChanged
     {
         // check only for non-Object Menus
         if ( !bIsObjMenu )
-            pOwnMenu->CheckItem( GetId(), sal_False );
+            pOwnMenu->CheckItem( GetId(), false );
 
         if ( pOwnMenu->GetSVMenu()->GetItemText( GetId() ) != GetTitle() )
         {

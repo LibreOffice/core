@@ -73,13 +73,13 @@ namespace sfx2
     struct DocumentMacroMode_Data
     {
         IMacroDocumentAccess&       m_rDocumentAccess;
-        sal_Bool                    m_bMacroDisabledMessageShown;
-        sal_Bool                    m_bDocMacroDisabledMessageShown;
+        bool                    m_bMacroDisabledMessageShown;
+        bool                    m_bDocMacroDisabledMessageShown;
 
         DocumentMacroMode_Data( IMacroDocumentAccess& rDocumentAccess )
             :m_rDocumentAccess( rDocumentAccess )
-            ,m_bMacroDisabledMessageShown( sal_False )
-            ,m_bDocMacroDisabledMessageShown( sal_False )
+            ,m_bMacroDisabledMessageShown( false )
+            ,m_bDocMacroDisabledMessageShown( false )
         {
         }
     };
@@ -90,7 +90,7 @@ namespace sfx2
     namespace
     {
 
-        void lcl_showGeneralSfxErrorOnce( const Reference< XInteractionHandler >& rxHandler, const sal_Int32 nSfxErrorCode, sal_Bool& rbAlreadyShown )
+        void lcl_showGeneralSfxErrorOnce( const Reference< XInteractionHandler >& rxHandler, const sal_Int32 nSfxErrorCode, bool& rbAlreadyShown )
         {
             if ( rbAlreadyShown )
                 return;
@@ -99,17 +99,17 @@ namespace sfx2
             aErrorCodeRequest.ErrCode = nSfxErrorCode;
 
             SfxMedium::CallApproveHandler( rxHandler, makeAny( aErrorCodeRequest ), false );
-            rbAlreadyShown = sal_True;
+            rbAlreadyShown = true;
         }
 
 
-        void lcl_showMacrosDisabledError( const Reference< XInteractionHandler >& rxHandler, sal_Bool& rbAlreadyShown )
+        void lcl_showMacrosDisabledError( const Reference< XInteractionHandler >& rxHandler, bool& rbAlreadyShown )
         {
             lcl_showGeneralSfxErrorOnce( rxHandler, ERRCODE_SFX_MACROS_SUPPORT_DISABLED, rbAlreadyShown );
         }
 
 
-        void lcl_showDocumentMacrosDisabledError( const Reference< XInteractionHandler >& rxHandler, sal_Bool& rbAlreadyShown )
+        void lcl_showDocumentMacrosDisabledError( const Reference< XInteractionHandler >& rxHandler, bool& rbAlreadyShown )
         {
 #ifdef MACOSX
             lcl_showGeneralSfxErrorOnce( rxHandler, ERRCODE_SFX_DOCUMENT_MACRO_DISABLED_MAC, rbAlreadyShown );
@@ -119,7 +119,7 @@ namespace sfx2
         }
 
 
-        sal_Bool lcl_showMacroWarning( const Reference< XInteractionHandler >& rxHandler,
+        bool lcl_showMacroWarning( const Reference< XInteractionHandler >& rxHandler,
             const OUString& rDocumentLocation )
         {
             DocumentMacroConfirmationRequest aRequest;
@@ -243,7 +243,7 @@ namespace sfx2
             if ( nMacroExecutionMode != MacroExecMode::FROM_LIST )
             {
                 // the trusted macro check will also retrieve the signature state ( small optimization )
-                sal_Bool bHasTrustedMacroSignature = m_pData->m_rDocumentAccess.hasTrustedScriptingSignature( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN );
+                bool bHasTrustedMacroSignature = m_pData->m_rDocumentAccess.hasTrustedScriptingSignature( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN );
 
                 sal_uInt16 nSignatureState = m_pData->m_rDocumentAccess.getScriptingSignatureState();
                 if ( nSignatureState == SIGNATURESTATE_SIGNATURES_BROKEN )
@@ -290,7 +290,7 @@ namespace sfx2
         }
 
         // conformation is required
-        sal_Bool bSecure = sal_False;
+        bool bSecure = false;
 
         if ( eAutoConfirm == eNoAutoConfirm )
         {

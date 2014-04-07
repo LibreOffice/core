@@ -366,7 +366,7 @@ SfxMapUnit SfxControllerItem::GetCoreMetric() const
 
             // invalidate slot and its message|slot server as 'global' information
             // about the validated message|slot server is not made available
-            pCache->Invalidate( sal_True );
+            pCache->Invalidate( true );
 
             return rPool.GetMetric( nWhich );
         }

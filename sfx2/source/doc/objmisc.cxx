@@ -171,7 +171,7 @@ sal_uInt16 const aTitleMap_Impl[3][2] =
 
 void SfxObjectShell::AbortImport()
 {
-    pImp->bIsAbortingImport = sal_True;
+    pImp->bIsAbortingImport = true;
 }
 
 
@@ -274,7 +274,7 @@ bool SfxObjectShell::IsTemplate() const
 void SfxObjectShell::EnableSetModified( bool bEnable )
 {
 #ifdef DBG_UTIL
-    if ( (bEnable ? 1 : 0) == pImp->m_bEnableSetModified )
+    if ( bEnable == pImp->m_bEnableSetModified )
         DBG_WARNING( "SFX_PERSIST: EnableSetModified 2x called with the same value" );
 #endif
     pImp->m_bEnableSetModified = bEnable;
@@ -339,7 +339,7 @@ void SfxObjectShell::SetModified( bool bModifiedP )
     if( !IsEnableSetModified() )
         return;
 
-    if( pImp->m_bIsModified != (bModifiedP ? 1 : 0) )
+    if( pImp->m_bIsModified != bModifiedP )
     {
         pImp->m_bIsModified = bModifiedP;
         ModifyChanged();
@@ -411,7 +411,7 @@ void SfxObjectShell::SetReadOnlyUI( bool bReadOnly )
 */
 
 {
-    if ( (bReadOnly ? 1 : 0) != pImp->bReadOnlyUI )
+    if ( bReadOnly != pImp->bReadOnlyUI )
     {
         pImp->bReadOnlyUI = bReadOnly;
         Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
@@ -639,7 +639,7 @@ void SfxObjectShell::FreeSharedFile( const OUString& aTempFileURL )
         }
 
         // the cleaning is forbidden only once
-        pImp->m_bAllowShareControlFileClean = sal_True;
+        pImp->m_bAllowShareControlFileClean = true;
 
         // now remove the temporary file the document is based currently on
         ::utl::UCBContentHelper::Kill( aTempFileURL );
@@ -651,7 +651,7 @@ void SfxObjectShell::FreeSharedFile( const OUString& aTempFileURL )
 
 void SfxObjectShell::DoNotCleanShareControlFile()
 {
-    pImp->m_bAllowShareControlFileClean = sal_False;
+    pImp->m_bAllowShareControlFileClean = false;
 }
 
 
@@ -727,7 +727,7 @@ void SfxObjectShell::SetTitle
     if ( pImp->bIsNamedVisible && USHRT_MAX != pImp->nVisualDocumentNumber )
     {
         pSfxApp->ReleaseIndex(pImp->nVisualDocumentNumber);
-        pImp->bIsNamedVisible = 0;
+        pImp->bIsNamedVisible = false;
     }
 
     // Set Title
@@ -963,7 +963,7 @@ void SfxObjectShell::SetNamedVisibility_Impl()
 {
     if ( !pImp->bIsNamedVisible )
     {
-        pImp->bIsNamedVisible = sal_True;
+        pImp->bIsNamedVisible = true;
         if ( !HasName() && USHRT_MAX == pImp->nVisualDocumentNumber && pImp->aTitle.isEmpty() )
         {
             pImp->nVisualDocumentNumber = SFX_APP()->GetFreeIndex();
@@ -1106,7 +1106,7 @@ void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteract
                 aErrorCode.ErrCode = ERRCODE_SFX_INCOMPLETE_ENCRYPTION;
 
                 SfxMedium::CallApproveHandler( xHandler, uno::makeAny( aErrorCode ), false );
-                pImp->m_bIncomplEncrWarnShown = sal_True;
+                pImp->m_bIncomplEncrWarnShown = true;
             }
 
             // broken signatures imply no macro execution at all
@@ -1182,7 +1182,7 @@ void SfxObjectShell::InitOwnModel_Impl()
             impl_addToModelCollection(xModel);
         }
 
-        pImp->bModelInitialized = sal_True;
+        pImp->bModelInitialized = true;
     }
 }
 
@@ -1195,7 +1195,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
     {
         pImp->nFlagsInProgress |= SFX_LOADED_MAINDOCUMENT;
         ((SfxHeaderAttributes_Impl*)GetHeaderAttributes())->SetAttributes();
-        pImp->bImportDone = sal_True;
+        pImp->bImportDone = true;
         if( !IsAbortingImport() )
             PositionView_Impl();
 
@@ -1605,7 +1605,7 @@ void SfxHeaderAttributes_Impl::SetAttributes()
 {
     bAlert = true;
     SvKeyValue aPair;
-    for( sal_Bool bCont = xIter->GetFirst( aPair ); bCont;
+    for( bool bCont = xIter->GetFirst( aPair ); bCont;
          bCont = xIter->GetNext( aPair ) )
         SetAttribute( aPair );
 }
@@ -2007,7 +2007,7 @@ void SfxObjectShell_Impl::showBrokenSignatureWarning( const uno::Reference< task
     if  ( !bSignatureErrorIsShown )
     {
         SfxObjectShell::UseInteractionToHandleError( _rxInteraction, ERRCODE_SFX_BROKENSIGNATURE );
-        const_cast< SfxObjectShell_Impl* >( this )->bSignatureErrorIsShown = sal_True;
+        const_cast< SfxObjectShell_Impl* >( this )->bSignatureErrorIsShown = true;
     }
 }
 

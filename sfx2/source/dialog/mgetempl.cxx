@@ -267,7 +267,7 @@ void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
     if ( pBox->IsEnabled() )
     {
         // it is the current entry, which name was modified
-        const sal_Bool bSelect = pBox->GetSelectEntry() == aBuf;
+        const bool bSelect = pBox->GetSelectEntry() == aBuf;
         pBox->RemoveEntry( aBuf );
         pBox->InsertEntry( rNew );
 

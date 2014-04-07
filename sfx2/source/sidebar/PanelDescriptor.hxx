@@ -30,7 +30,7 @@ class PanelDescriptor
 {
 public:
     ::rtl::OUString msTitle;
-    sal_Bool mbIsTitleBarOptional;
+    bool mbIsTitleBarOptional;
     ::rtl::OUString msId;
     ::rtl::OUString msDeckId;
     ::rtl::OUString msTitleBarIconURL;

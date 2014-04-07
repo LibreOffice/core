@@ -1097,10 +1097,10 @@ void Theme::ProcessNewValue (
         }
         case PT_Boolean:
         {
-            sal_Bool nValue (0);
+            bool nValue (false);
             if (rValue >>= nValue)
             {
-                maBooleans[nIndex] = (nValue==sal_True);
+                maBooleans[nIndex] = nValue;
                 if (eItem == Bool_IsHighContrastModeActive)
                 {
                     mbIsHighContrastModeSetManually = true;

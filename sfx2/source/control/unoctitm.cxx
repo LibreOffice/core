@@ -143,7 +143,7 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame:
 
             if ( pType == ::getBooleanCppuType() )
             {
-                sal_Bool bTemp = false;
+                bool bTemp = false;
                 rEvent.State >>= bTemp ;
                 pItem = new SfxBoolItem( pCtrlItem->GetId(), bTemp );
             }
@@ -620,7 +620,6 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         sal_Int32   nMarkArg = -1;
 
         // Filter arguments which shouldn't be part of the sequence property value
-        sal_Bool    bTemp = sal_Bool();
         sal_uInt16  nModifier(0);
         std::vector< ::com::sun::star::beans::PropertyValue > aAddArgs;
         for( sal_Int32 n=0; n<nCount; n++ )
@@ -628,7 +627,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             const ::com::sun::star::beans::PropertyValue& rProp = aArgs[n];
             if( rProp.Name == "SynchronMode" )
             {
-                if( rProp.Value >>=bTemp )
+                bool    bTemp;
+                if( rProp.Value >>= bTemp )
                     nCall = bTemp ? SFX_CALLMODE_SYNCHRON : SFX_CALLMODE_ASYNCHRON;
             }
             else if( rProp.Name == "Bookmark" )
@@ -675,7 +675,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 xFrameRef = pViewFrame->GetFrame().GetFrameInterface();
         }
 
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
         const SfxPoolItem* pItem = NULL;
         SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
 
@@ -848,12 +848,12 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     // Bindings instance notifies controller about a state change, listeners must be notified also
     // Don't cache visibility state changes as they are volatile. We need our real state to send it
     // to our controllers after visibility is set to true.
-    sal_Bool bNotify = sal_True;
+    bool bNotify = true;
     if ( pState && !IsInvalidItem( pState ) )
     {
         if ( !pState->ISA( SfxVisibilityItem ) )
         {
-            sal_Bool bBothAvailable = pLastState && !IsInvalidItem(pLastState);
+            bool bBothAvailable = pLastState && !IsInvalidItem(pLastState);
             if ( bBothAvailable )
                 bNotify = pState->Type() != pLastState->Type() || *pState != *pLastState;
             if ( pLastState && !IsInvalidItem( pLastState ) )

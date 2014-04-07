@@ -164,7 +164,7 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
                 while ( xResultSet->next() )
                 {
                     OUString aTitle( xRow->getString(1) );
-                    sal_Bool bFolder = xRow->getBoolean(2);
+                    bool bFolder = xRow->getBoolean(2);
                     OUString aRow = aTitle;
                     aRow += "\t";
                     aRow += xContentAccess->queryContentIdentifierString();

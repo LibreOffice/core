@@ -360,23 +360,23 @@ void SwDLL::RegisterControls()
 
     SwTableOptimizeCtrl::RegisterControl(FN_OPTIMIZE_TABLE, pMod);
 
-    SvxIMapDlgChildWindow::RegisterChildWindow( sal_False, pMod );
-    SvxSearchDialogWrapper::RegisterChildWindow( sal_False, pMod );
-    SvxHlinkDlgWrapper::RegisterChildWindow( sal_False, pMod );
-    SvxFontWorkChildWindow::RegisterChildWindow( sal_False, pMod );
-    SwFldDlgWrapper::RegisterChildWindow( sal_False, pMod );
-    SwFldDataOnlyDlgWrapper::RegisterChildWindow( sal_False, pMod );
-    SvxContourDlgChildWindow::RegisterChildWindow( sal_False, pMod );
+    SvxIMapDlgChildWindow::RegisterChildWindow( false, pMod );
+    SvxSearchDialogWrapper::RegisterChildWindow( false, pMod );
+    SvxHlinkDlgWrapper::RegisterChildWindow( false, pMod );
+    SvxFontWorkChildWindow::RegisterChildWindow( false, pMod );
+    SwFldDlgWrapper::RegisterChildWindow( false, pMod );
+    SwFldDataOnlyDlgWrapper::RegisterChildWindow( false, pMod );
+    SvxContourDlgChildWindow::RegisterChildWindow( false, pMod );
     SwNavigationChild::RegisterChildWindowContext( pMod );
-    SwInputChild::RegisterChildWindow( sal_False, pMod, SFX_CHILDWIN_FORCEDOCK );
-    SwRedlineAcceptChild::RegisterChildWindow( sal_False, pMod );
-    SwSyncChildWin::RegisterChildWindow( sal_True, pMod );
-    SwMailMergeChildWindow::RegisterChildWindow( sal_False, pMod );
-    SwInsertIdxMarkWrapper::RegisterChildWindow( sal_False, pMod );
-    SwInsertAuthMarkWrapper::RegisterChildWindow( sal_False, pMod );
-    SwWordCountWrapper::RegisterChildWindow( sal_False, pMod );
-    SvxRubyChildWindow::RegisterChildWindow( sal_False, pMod);
-    SwSpellDialogChildWindow::RegisterChildWindow(sal_False, pMod);
+    SwInputChild::RegisterChildWindow( false, pMod, SFX_CHILDWIN_FORCEDOCK );
+    SwRedlineAcceptChild::RegisterChildWindow( false, pMod );
+    SwSyncChildWin::RegisterChildWindow( true, pMod );
+    SwMailMergeChildWindow::RegisterChildWindow( false, pMod );
+    SwInsertIdxMarkWrapper::RegisterChildWindow( false, pMod );
+    SwInsertAuthMarkWrapper::RegisterChildWindow( false, pMod );
+    SwWordCountWrapper::RegisterChildWindow( false, pMod );
+    SvxRubyChildWindow::RegisterChildWindow( false, pMod);
+    SwSpellDialogChildWindow::RegisterChildWindow(false, pMod);
 
     SvxGrafRedToolBoxControl::RegisterControl( SID_ATTR_GRAF_RED, pMod );
     SvxGrafGreenToolBoxControl::RegisterControl( SID_ATTR_GRAF_GREEN, pMod );
@@ -395,14 +395,14 @@ void SwDLL::RegisterControls()
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_LEFT_TO_RIGHT, pMod);
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_RIGHT_TO_LEFT, pMod);
 
-    GalleryChildWindow::RegisterChildWindow(0, pMod);
+    GalleryChildWindow::RegisterChildWindow(false, pMod);
 
     ::avmedia::MediaToolBoxControl::RegisterControl(SID_AVMEDIA_TOOLBOX, pMod);
-    ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
+    ::avmedia::MediaPlayer::RegisterChildWindow(false, pMod);
 
     SvxSmartTagsControl::RegisterControl(SID_OPEN_SMARTTAGMENU, pMod);
-    ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(0, pMod);
-    ::sfx2::TaskPaneWrapper::RegisterChildWindow(0, pMod);
+    ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
+    ::sfx2::TaskPaneWrapper::RegisterChildWindow(false, pMod);
 }
 
 /*************************************************************************

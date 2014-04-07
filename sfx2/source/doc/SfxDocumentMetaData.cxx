@@ -1891,7 +1891,7 @@ SfxDocumentMetaData::loadFromStorage(
 
     sal_uInt64 version = SotStorage::GetVersion( xStorage );
     // Oasis is also the default (0)
-    sal_Bool bOasis = ( version > SOFFICE_FILEFORMAT_60 || version == 0 );
+    bool bOasis = ( version > SOFFICE_FILEFORMAT_60 || version == 0 );
     const sal_Char *pServiceName = bOasis
         ? "com.sun.star.document.XMLOasisMetaImporter"
         : "com.sun.star.document.XMLMetaImporter";
@@ -1960,10 +1960,10 @@ SfxDocumentMetaData::storeToStorage(
         css::uno::makeAny(OUString("text/xml")));
     xStreamProps->setPropertyValue(
         OUString("Compressed"),
-        css::uno::makeAny(static_cast<sal_Bool> (sal_False)));
+        css::uno::makeAny(false));
     xStreamProps->setPropertyValue(
         OUString("UseCommonStoragePasswordEncryption"),
-        css::uno::makeAny(static_cast<sal_Bool> (sal_False)));
+        css::uno::makeAny(false));
     css::uno::Reference<css::io::XOutputStream> xOutStream =
         xStream->getOutputStream();
     if (!xOutStream.is()) throw css::uno::RuntimeException();
@@ -1975,7 +1975,7 @@ SfxDocumentMetaData::storeToStorage(
 
     const sal_uInt64 version = SotStorage::GetVersion( xStorage );
     // Oasis is also the default (0)
-    const sal_Bool bOasis = ( version > SOFFICE_FILEFORMAT_60 || version == 0 );
+    const bool bOasis = ( version > SOFFICE_FILEFORMAT_60 || version == 0 );
     const sal_Char *pServiceName = bOasis
         ? "com.sun.star.document.XMLOasisMetaExporter"
         : "com.sun.star.document.XMLMetaExporter";
@@ -2081,7 +2081,7 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
     storeToStorage(xStorage, md.getAsConstPropertyValueList());
 
 
-    const sal_Bool bOk = aMedium.Commit();
+    const bool bOk = aMedium.Commit();
     aMedium.Close();
     if ( !bOk ) {
         sal_uInt32 nError = aMedium.GetError();

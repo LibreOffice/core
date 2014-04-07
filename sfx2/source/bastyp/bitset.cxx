@@ -256,13 +256,13 @@ BitSet& BitSet::operator|=( sal_uInt16 nBit )
 
 // determines if the bit is set (may be the only one)
 
-sal_Bool BitSet::Contains( sal_uInt16 nBit ) const
+bool BitSet::Contains( sal_uInt16 nBit ) const
 {
     sal_uInt16 nBlock = nBit / 32;
     sal_uIntPtr nBitVal = 1L << (nBit % 32);
 
     if ( nBlock >= nBlocks )
-        return sal_False;
+        return false;
     return ( nBitVal & *(pBitmap+nBlock) ) == nBitVal;
 }
 
@@ -270,17 +270,17 @@ sal_Bool BitSet::Contains( sal_uInt16 nBit ) const
 
 // determines if the bitsets are equal
 
-sal_Bool BitSet::operator==( const BitSet& rSet ) const
+bool BitSet::operator==( const BitSet& rSet ) const
 {
     if ( nBlocks != rSet.nBlocks )
-        return sal_False;
+        return false;
 
     sal_uInt16 nBlock = nBlocks;
     while ( nBlock-- > 0 )
         if ( *(pBitmap+nBlock) != *(rSet.pBitmap+nBlock) )
-            return sal_False;
+            return false;
 
-    return sal_True;
+    return true;
 }
 
 

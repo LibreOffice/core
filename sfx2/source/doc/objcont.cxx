@@ -559,14 +559,14 @@ bool SfxObjectShell::IsUseUserData() const
 
 void SfxObjectShell::SetQueryLoadTemplate( bool bNew )
 {
-    if ( pImp->bQueryLoadTemplate != (bNew ? 1 : 0) )
+    if ( pImp->bQueryLoadTemplate != bNew )
         SetModified( true );
     pImp->bQueryLoadTemplate = bNew;
 }
 
 void SfxObjectShell::SetUseUserData( bool bNew )
 {
-    if ( pImp->bUseUserData != (bNew ? 1 : 0) )
+    if ( pImp->bUseUserData != bNew )
         SetModified( true );
     pImp->bUseUserData = bNew;
 }
@@ -583,14 +583,14 @@ bool SfxObjectShell::IsSaveVersionOnClose() const
 
 void SfxObjectShell::SetLoadReadonly( bool bNew )
 {
-    if ( pImp->bLoadReadonly != (bNew ? 1 : 0) )
+    if ( pImp->bLoadReadonly != bNew )
         SetModified( true );
     pImp->bLoadReadonly = bNew;
 }
 
 void SfxObjectShell::SetSaveVersionOnClose( bool bNew )
 {
-    if ( pImp->bSaveVersionOnClose != (bNew ? 1 : 0) )
+    if ( pImp->bSaveVersionOnClose != bNew )
         SetModified( true );
     pImp->bSaveVersionOnClose = bNew;
 }

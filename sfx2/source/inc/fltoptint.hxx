@@ -51,7 +51,7 @@ public:
     RequestFilterOptions( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > rModel,
                               ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > rProperties );
 
-    sal_Bool    isAbort() { return m_pAbort->wasSelected(); }
+    bool    isAbort() { return m_pAbort->wasSelected(); }
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getFilterOptions()
     {

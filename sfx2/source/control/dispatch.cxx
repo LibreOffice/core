@@ -764,7 +764,7 @@ void SfxDispatcher::DoActivate_Impl( bool bMDI, SfxViewFrame* /* pOld */ )
             pBind = pBind->GetSubBindings_Impl();
         }
 
-        pImp->pFrame->GetFrame().GetWorkWindow_Impl()->HidePopups_Impl( sal_False, sal_False, 1 );
+        pImp->pFrame->GetFrame().GetWorkWindow_Impl()->HidePopups_Impl( false, false, 1 );
     }
 
     if(!pImp->aToDoStack.empty())
@@ -858,7 +858,7 @@ void SfxDispatcher::DoDeactivate_Impl( bool bMDI, SfxViewFrame* pNew )
             pBind = pBind->GetSubBindings_Impl();
         }
 
-        pImp->pFrame->GetFrame().GetWorkWindow_Impl()->HidePopups_Impl( sal_True, sal_False, 1 );
+        pImp->pFrame->GetFrame().GetWorkWindow_Impl()->HidePopups_Impl( true, false, 1 );
     }
 
     Flush();
@@ -1541,7 +1541,7 @@ void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
             }
 
             if ( bUIActive || bIsActive )
-                pWorkWin->SetChildWindowVisible_Impl( nId, sal_True, nMode );
+                pWorkWin->SetChildWindowVisible_Impl( nId, true, nMode );
             if ( bUIActive || bIsActive || !pWorkWin->IsFloating( (sal_uInt16) ( nId & 0xFFFF ) ) )
                 pImp->aChildWins.push_back( nId );
         }
@@ -1832,7 +1832,7 @@ sal_Bool SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const
         return sal_True;
 
     // search
-    sal_Bool bFound = 0 != bsearch( &nSID, pImp->pFilterSIDs, pImp->nFilterCount,
+    bool bFound = 0 != bsearch( &nSID, pImp->pFilterSIDs, pImp->nFilterCount,
                                 sizeof(sal_uInt16), SfxCompareSIDs_Impl );
 
     // even if ReadOnlyDoc

@@ -32,7 +32,7 @@
 #include <sfx2/printopt.hxx>
 
 static sal_uInt16   aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
-static sal_Bool     bOutputForPrinter = sal_True;
+static bool     bOutputForPrinter = true;
 
 #define DPI_COUNT (sizeof(aDPIArray)/sizeof(aDPIArray[0 ]))
 
@@ -248,7 +248,7 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, CheckBox*, pBox )
 {
     (void)pBox; //unused
-    const sal_Bool bReduceTransparency = m_pReduceTransparencyCB->IsChecked();
+    const bool bReduceTransparency = m_pReduceTransparencyCB->IsChecked();
 
     m_pReduceTransparencyAutoRB->Enable( bReduceTransparency );
     m_pReduceTransparencyNoneRB->Enable( bReduceTransparency );
@@ -261,7 +261,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, CheckBox*
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, CheckBox*, pBox )
 {
     (void)pBox; //unused
-    const sal_Bool bEnable = m_pReduceGradientsCB->IsChecked();
+    const bool bEnable = m_pReduceGradientsCB->IsChecked();
 
     m_pReduceGradientsStripesRB->Enable( bEnable );
     m_pReduceGradientsColorRB->Enable( bEnable );
@@ -275,7 +275,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, CheckBox*, p
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, CheckBox*, pBox )
 {
     (void)pBox; //unused
-    const sal_Bool bEnable = m_pReduceBitmapsCB->IsChecked();
+    const bool bEnable = m_pReduceBitmapsCB->IsChecked();
 
     m_pReduceBitmapsOptimalRB->Enable( bEnable );
     m_pReduceBitmapsNormalRB->Enable( bEnable );
@@ -291,7 +291,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, CheckBox*, pBo
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, RadioButton*, pButton )
 {
     (void)pButton; //unused
-    const sal_Bool bEnable = m_pReduceGradientsCB->IsChecked() && m_pReduceGradientsStripesRB->IsChecked();
+    const bool bEnable = m_pReduceGradientsCB->IsChecked() && m_pReduceGradientsStripesRB->IsChecked();
 
     m_pReduceGradientsStepCountNF->Enable( bEnable );
 
@@ -301,7 +301,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, Radi
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl, RadioButton*, pButton )
 {
     (void)pButton; //unused
-    const sal_Bool bEnable = m_pReduceBitmapsCB->IsChecked() && m_pReduceBitmapsResolutionRB->IsChecked();
+    const bool bEnable = m_pReduceBitmapsCB->IsChecked() && m_pReduceBitmapsResolutionRB->IsChecked();
 
     m_pReduceBitmapsResolutionLB->Enable( bEnable );
 
@@ -313,7 +313,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioButton*,
     if( pButton->IsChecked() )
     {
         ImplUpdateControls( &maPrinterOptions );
-        bOutputForPrinter = sal_True;
+        bOutputForPrinter = true;
     }
     else
         ImplSaveControls( &maPrinterOptions );
@@ -326,7 +326,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton
     if( pButton->IsChecked() )
     {
         ImplUpdateControls( &maPrintFileOptions );
-        bOutputForPrinter = sal_False;
+        bOutputForPrinter = false;
         m_pPDFCB->Disable();
     }
     else

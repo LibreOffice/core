@@ -193,24 +193,24 @@ void SdDLL::RegisterControllers()
     SdTbxCtlDiaPages::RegisterControl( SID_PAGES_PER_ROW, pMod );
     SdTbxCtlGlueEscDir::RegisterControl( SID_GLUE_ESCDIR, pMod );
 
-    ::sd::AnimationChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::AnimationChildWindow::RegisterChildWindow(false, pMod);
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( (sal_uInt16) ::sd::DrawViewShell::GetInterfaceId(), pMod );
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( (sal_uInt16) ::sd::GraphicViewShell::GetInterfaceId(), pMod );
-    ::sd::LayerDialogChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::LayerDialogChildWindow::RegisterChildWindow(false, pMod);
 
-    Svx3DChildWindow::RegisterChildWindow(0, pMod);
-    SvxFontWorkChildWindow::RegisterChildWindow(0, pMod);
-    SvxColorChildWindow::RegisterChildWindow(0, pMod, SFX_CHILDWIN_TASK);
-    SvxSearchDialogWrapper::RegisterChildWindow(0, pMod);
-    SvxBmpMaskChildWindow::RegisterChildWindow(0, pMod);
-    GalleryChildWindow::RegisterChildWindow(0, pMod);
-    SvxIMapDlgChildWindow::RegisterChildWindow(0, pMod);
-    SvxHlinkDlgWrapper::RegisterChildWindow(0, pMod);
-    ::sd::SpellDialogChildWindow::RegisterChildWindow(0, pMod);
-    ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
-    ::sd::LeftPaneImpressChildWindow::RegisterChildWindow(0, pMod);
-    ::sd::LeftPaneDrawChildWindow::RegisterChildWindow(0, pMod);
-    ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(0, pMod);
+    Svx3DChildWindow::RegisterChildWindow(false, pMod);
+    SvxFontWorkChildWindow::RegisterChildWindow(false, pMod);
+    SvxColorChildWindow::RegisterChildWindow(false, pMod, SFX_CHILDWIN_TASK);
+    SvxSearchDialogWrapper::RegisterChildWindow(false, pMod);
+    SvxBmpMaskChildWindow::RegisterChildWindow(false, pMod);
+    GalleryChildWindow::RegisterChildWindow(false, pMod);
+    SvxIMapDlgChildWindow::RegisterChildWindow(false, pMod);
+    SvxHlinkDlgWrapper::RegisterChildWindow(false, pMod);
+    ::sd::SpellDialogChildWindow::RegisterChildWindow(false, pMod);
+    ::avmedia::MediaPlayer::RegisterChildWindow(false, pMod);
+    ::sd::LeftPaneImpressChildWindow::RegisterChildWindow(false, pMod);
+    ::sd::LeftPaneDrawChildWindow::RegisterChildWindow(false, pMod);
+    ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
 
     SvxFillToolBoxControl::RegisterControl(0, pMod);
     SvxLineStyleToolBoxControl::RegisterControl(0, pMod);

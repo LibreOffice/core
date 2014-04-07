@@ -142,7 +142,7 @@ private:
                             const SfxFilterMatcher& rMatcher
                         ) const;
 
-    sal_Bool            impl_createNewDocWithSlotParam(
+    bool            impl_createNewDocWithSlotParam(
                             const sal_uInt16 _nSlotID,
                             const css::uno::Reference< css::frame::XFrame >& i_rxFrame,
                             const bool i_bHidden
@@ -323,14 +323,14 @@ OUString SfxFrameLoader_Impl::impl_askForFilter_nothrow( const Reference< XInter
 
 namespace
 {
-    sal_Bool lcl_getDispatchResult( const SfxPoolItem* _pResult )
+    bool lcl_getDispatchResult( const SfxPoolItem* _pResult )
     {
         if ( !_pResult )
-            return sal_False;
+            return false;
 
         // default must be set to true, because some return values
         // cant be checked, but nonetheless indicate "success"!
-        sal_Bool bSuccess = sal_True;
+        bool bSuccess = true;
 
         // On the other side some special slots return a boolean state,
         // which can be set to FALSE.
@@ -343,7 +343,7 @@ namespace
 }
 
 
-sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const sal_uInt16 _nSlotID, const Reference< XFrame >& i_rxFrame,
+bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const sal_uInt16 _nSlotID, const Reference< XFrame >& i_rxFrame,
                                                               const bool i_bHidden )
 {
     SfxRequest aRequest( _nSlotID, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
@@ -394,7 +394,7 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
         // add property "AsTemplate" to descriptor. But suppress this step
         // if such property already exists.
         if ( pFilter->IsOwnTemplateFormat() && !io_rDescriptor.has( "AsTemplate" ) )
-            io_rDescriptor.put( "AsTemplate", sal_Bool( sal_True ) );
+            io_rDescriptor.put( "AsTemplate", true );
 
         // The DocumentService property will finally be used to determine the document type to create, so
         // override it with the service name as indicated by the found filter.
@@ -502,7 +502,7 @@ void SfxFrameLoader_Impl::impl_handleCaughtError_nothrow( const Any& i_rCaughtEr
 
         const Reference< XInteractionHandler2 > xHandler( xInteraction, UNO_QUERY );
     #if OSL_DEBUG_LEVEL > 0
-        const sal_Bool bHandled =
+        const bool bHandled =
     #endif
         xHandler.is() && xHandler->handleInteractionRequest( pRequest.get() );
 
@@ -669,7 +669,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         aDescriptor.put( "FileName", aDescriptor.get( "URL" ) );
     }
 
-    sal_Bool bLoadSuccess = sal_False;
+    bool bLoadSuccess = false;
     try
     {
         // extract view releant arguments from the loader args
@@ -726,7 +726,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
         // plug the document into the frame
         impl_createDocumentView( xModel, _rTargetFrame, aViewCreationArgs, sViewName );
-        bLoadSuccess = sal_True;
+        bLoadSuccess = true;
     }
     catch ( Exception& )
     {

@@ -30,7 +30,7 @@ public:
     BitSet operator<<( sal_uInt16 nOffset ) const;
     BitSet operator>>( sal_uInt16 nOffset ) const;
     static sal_uInt16 CountBits( sal_uIntPtr nBits );
-    sal_Bool operator!() const;
+    bool operator!() const;
     BitSet();
     BitSet( const BitSet& rOrig );
     ~BitSet();
@@ -51,20 +51,20 @@ public:
     BitSet operator^( sal_uInt16 nBit ) const;
     BitSet& operator^=( const BitSet& rSet );
     BitSet& operator^=( sal_uInt16 nBit );
-    sal_Bool IsRealSubSet( const BitSet& rSet ) const;
-    sal_Bool IsSubSet( const BitSet& rSet ) const;
-    sal_Bool IsRealSuperSet( const BitSet& rSet ) const;
-    sal_Bool Contains( sal_uInt16 nBit ) const;
-    sal_Bool IsSuperSet( const BitSet& rSet ) const;
-    sal_Bool operator==( const BitSet& rSet ) const;
-    sal_Bool operator==( sal_uInt16 nBit ) const;
-    sal_Bool operator!=( const BitSet& rSet ) const;
-    sal_Bool operator!=( sal_uInt16 nBit ) const;
+    bool IsRealSubSet( const BitSet& rSet ) const;
+    bool IsSubSet( const BitSet& rSet ) const;
+    bool IsRealSuperSet( const BitSet& rSet ) const;
+    bool Contains( sal_uInt16 nBit ) const;
+    bool IsSuperSet( const BitSet& rSet ) const;
+    bool operator==( const BitSet& rSet ) const;
+    bool operator==( sal_uInt16 nBit ) const;
+    bool operator!=( const BitSet& rSet ) const;
+    bool operator!=( sal_uInt16 nBit ) const;
 
 };
 
 // returns sal_True if the set is empty
-inline sal_Bool BitSet::operator!() const
+inline bool BitSet::operator!() const
 {
     return nCount == 0;
 }
@@ -145,43 +145,43 @@ inline BitSet& BitSet::operator^=( sal_uInt16 )
 #endif
 
 // determines if the other bitset is a real superset
-inline sal_Bool BitSet::IsRealSubSet( const BitSet& ) const
+inline bool BitSet::IsRealSubSet( const BitSet& ) const
 {
-    return sal_False;
+    return false;
 }
 
 // determines if the other bitset is a superset or equal
-inline sal_Bool BitSet::IsSubSet( const BitSet& ) const
+inline bool BitSet::IsSubSet( const BitSet& ) const
 {
-    return sal_False;
+    return false;
 }
 
 // determines if the other bitset is a real subset
-inline sal_Bool BitSet::IsRealSuperSet( const BitSet& ) const
+inline bool BitSet::IsRealSuperSet( const BitSet& ) const
 {
-    return sal_False;
+    return false;
 }
 
 // determines if the other bitset is a subset or equal
-inline sal_Bool BitSet::IsSuperSet( const BitSet& ) const
+inline bool BitSet::IsSuperSet( const BitSet& ) const
 {
-    return sal_False;
+    return false;
 }
 
 // determines if the bit is the only one in the bitset
-inline sal_Bool BitSet::operator==( sal_uInt16 ) const
+inline bool BitSet::operator==( sal_uInt16 ) const
 {
-    return sal_False;
+    return false;
 }
 
 // determines if the bitsets aren't equal
-inline sal_Bool BitSet::operator!=( const BitSet& rSet ) const
+inline bool BitSet::operator!=( const BitSet& rSet ) const
 {
     return !( *this == rSet );
 }
 
 // determines if the bitset doesn't contain only this bit
-inline sal_Bool BitSet::operator!=( sal_uInt16 nBit ) const
+inline bool BitSet::operator!=( sal_uInt16 nBit ) const
 {
     return !( *this == nBit );
 }

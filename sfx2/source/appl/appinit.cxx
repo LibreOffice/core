@@ -260,7 +260,7 @@ bool SfxApplication::Initialize_Impl()
     Registrations_Impl();
 
     // Subklasse initialisieren
-    pAppData_Impl->bDowning = sal_False;
+    pAppData_Impl->bDowning = false;
     Init();
 
     // get CHAOS item pool...

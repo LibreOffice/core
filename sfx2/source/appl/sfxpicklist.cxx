@@ -296,12 +296,12 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
 {
     ::osl::MutexGuard aGuard( thePickListMutex::get() );
 
-    static sal_Bool bPickListMenuInitializing = sal_False;
+    static bool bPickListMenuInitializing = false;
 
     if ( bPickListMenuInitializing ) // method is not reentrant!
         return;
 
-    bPickListMenuInitializing = sal_True;
+    bPickListMenuInitializing = true;
     CreatePickListEntries();
 
     for ( sal_uInt16 nId = START_ITEMID_PICKLIST; nId <= END_ITEMID_PICKLIST; ++nId )
@@ -324,7 +324,7 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
         CreatePicklistMenuTitle( pMenu, (sal_uInt16)(START_ITEMID_PICKLIST + i), pEntry->aName, i );
     }
 
-    bPickListMenuInitializing = sal_False;
+    bPickListMenuInitializing = false;
 }
 
 void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
@@ -383,7 +383,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case SFX_EVENT_CREATEDOC:
             {
-                sal_Bool bAllowModif = pDocSh->IsEnableSetModified();
+                bool bAllowModif = pDocSh->IsEnableSetModified();
                 if ( bAllowModif )
                     pDocSh->EnableSetModified( false );
 

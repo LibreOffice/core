@@ -47,7 +47,7 @@ struct SfxChildWindow_Impl
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      xListener;
     SfxChildWinFactory* pFact;
     bool                bHideNotDelete;
-    sal_Bool                bVisible;
+    bool                bVisible;
     bool                bHideAtToggle;
     bool                bWantsFocus;
     SfxModule*          pContextModule;
@@ -154,7 +154,7 @@ SfxChildWindow::SfxChildWindow(Window *pParentWindow, sal_uInt16 nId)
     pImp->bHideNotDelete = false;
     pImp->bHideAtToggle = false;
     pImp->bWantsFocus = true;
-    pImp->bVisible = sal_True;
+    pImp->bVisible = true;
     pImp->pContextModule = NULL;
     pImp->pWorkWin = NULL;
 
@@ -632,12 +632,12 @@ bool SfxChildWinInfo::GetExtraData_Impl
     return false;
 }
 
-sal_Bool SfxChildWindow::IsVisible() const
+bool SfxChildWindow::IsVisible() const
 {
     return pImp->bVisible;
 }
 
-void SfxChildWindow::SetVisible_Impl( sal_Bool bVis )
+void SfxChildWindow::SetVisible_Impl( bool bVis )
 {
     pImp->bVisible = bVis;
 }

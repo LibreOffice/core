@@ -110,9 +110,9 @@ SvxOpenGraphicDialog::~SvxOpenGraphicDialog()
 short SvxOpenGraphicDialog::Execute()
 {
     sal_uInt16  nImpRet;
-    sal_Bool    bQuitLoop(sal_False);
+    bool    bQuitLoop(false);
 
-    while( bQuitLoop == sal_False &&
+    while( bQuitLoop == false &&
            mpImpl->aFileDlg.Execute() == ERRCODE_NONE )
     {
         if( !GetPath().isEmpty() )

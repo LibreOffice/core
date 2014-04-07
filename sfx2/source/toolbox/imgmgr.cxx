@@ -129,7 +129,7 @@ static ImageList* GetImageList( bool bBig )
     return rpList;
 }
 
-static sal_Int16 impl_convertBools( sal_Bool bLarge )
+static sal_Int16 impl_convertBools( bool bLarge )
 {
     sal_Int16 nIndex( 0 );
     if ( bLarge  )
@@ -199,7 +199,7 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
     if ( nNewSymbolsSize != m_nSymbolsSize )
     {
         m_nSymbolsSize = nNewSymbolsSize;
-        sal_Bool bLarge( m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
+        bool bLarge( m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
 
         for ( sal_uInt32 n=0; n < m_aToolBoxes.size(); n++ )
         {
@@ -331,7 +331,7 @@ Image SfxImageManager::GetImage( sal_uInt16 nId, bool bBig ) const
 
 Image SfxImageManager::GetImage( sal_uInt16 nId ) const
 {
-    sal_Bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
+    bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
     return GetImage( nId, bLarge );
 }
 
@@ -339,7 +339,7 @@ Image SfxImageManager::GetImage( sal_uInt16 nId ) const
 
 Image SfxImageManager::SeekImage( sal_uInt16 nId, bool bBig ) const
 {
-    sal_Bool bGlobal = ( pImp->m_pModule == 0 );
+    bool bGlobal = ( pImp->m_pModule == 0 );
     ImageList* pImageList = pImp->GetImageList( bBig );
     if ( pImageList && pImageList->HasImageAtPos( nId ) )
         return pImageList->GetImage( nId );
@@ -356,7 +356,7 @@ Image SfxImageManager::SeekImage( sal_uInt16 nId, bool bBig ) const
 
 Image SfxImageManager::SeekImage( sal_uInt16 nId ) const
 {
-    sal_Bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
+    bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
     return SeekImage( nId, bLarge );
 }
 

@@ -31,13 +31,13 @@ private:
     sal_uInt16 nRange;
     sal_uInt16 nOffset;
 public:
-    sal_Bool Lock( const BitSet& rLockSet );
-    sal_Bool IsLocked( sal_uInt16 nId ) const;
+    bool Lock( const BitSet& rLockSet );
+    bool IsLocked( sal_uInt16 nId ) const;
     IdPool( sal_uInt16 nMin = 1, sal_uInt16 nMax = USHRT_MAX );
     sal_uInt16 Get();
-    sal_Bool Put( sal_uInt16 nId );
-    sal_Bool Lock( const Range& rRange );
-    sal_Bool Lock( sal_uInt16 nId );
+    bool Put( sal_uInt16 nId );
+    bool Lock( const Range& rRange );
+    bool Lock( sal_uInt16 nId );
 
 };
 
@@ -45,7 +45,7 @@ public:
 
 // returns sal_True if the id is locked
 
-inline sal_Bool IdPool::IsLocked( sal_uInt16 nId ) const
+inline bool IdPool::IsLocked( sal_uInt16 nId ) const
 {
     return ( this->Contains(nId-nOffset) );
 }

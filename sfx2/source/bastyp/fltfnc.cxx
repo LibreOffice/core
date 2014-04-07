@@ -116,7 +116,7 @@ namespace
 }
 
 static SfxFilterList_Impl* pFilterArr = 0;
-static sal_Bool bFirstRead = sal_True;
+static bool bFirstRead = true;
 
 static void CreateFilterArr()
 {
@@ -565,7 +565,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
 
     const SfxFilter* pFilter = pOldFilter;
 
-    sal_Bool bPreview = rMedium.IsPreview_Impl();
+    bool bPreview = rMedium.IsPreview_Impl();
     SFX_ITEMSET_ARG(rMedium.GetItemSet(), pReferer, SfxStringItem, SID_REFERER, false);
     if ( bPreview && rMedium.IsRemote() && ( !pReferer || !pReferer->GetValue().match("private:searchfolder:") ) )
         return ERRCODE_ABORT;
@@ -602,14 +602,14 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
         }
     }
 
-    sal_Bool bHidden = bPreview;
+    bool bHidden = bPreview;
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pFlags, SfxStringItem, SID_OPTIONS, false);
     if ( !bHidden && pFlags )
     {
         OUString aFlags( pFlags->GetValue() );
         aFlags = aFlags.toAsciiUpperCase();
         if( -1 != aFlags.indexOf( 'H' ) )
-            bHidden = sal_True;
+            bHidden = true;
     }
     *ppFilter = pFilter;
 
@@ -1130,7 +1130,7 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
     if ( !pFilterArr )
         CreateFilterArr();
 
-    bFirstRead = sal_False;
+    bFirstRead = false;
     SfxFilterList_Impl& rList = *pFilterArr;
 
     try

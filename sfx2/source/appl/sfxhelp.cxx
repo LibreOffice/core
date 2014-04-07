@@ -144,7 +144,7 @@ static OUString HelpLocaleString()
     return aLocaleStr;
 }
 
-void AppendConfigToken( OUStringBuffer& rURL, sal_Bool bQuestionMark, const OUString &rLang )
+void AppendConfigToken( OUStringBuffer& rURL, bool bQuestionMark, const OUString &rLang )
 {
     OUString aLocaleStr( rLang );
     if ( aLocaleStr.isEmpty() )
@@ -167,9 +167,9 @@ void AppendConfigToken( OUStringBuffer& rURL, sal_Bool bQuestionMark, const OUSt
     rURL.append(utl::ConfigManager::getProductVersion());
 }
 
-sal_Bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
+bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     OUString sAnchor;
 
     try
@@ -183,7 +183,7 @@ sal_Bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
             if ( !sAnchor.isEmpty() )
             {
                 _rAnchor = sAnchor;
-                bRet = sal_True;
+                bRet = true;
             }
         }
         else
@@ -355,7 +355,7 @@ OUString SfxHelp::CreateHelpURL_Impl( const OUString& aCommandURL, const OUStrin
 {
     // build up the help URL
     OUStringBuffer aHelpURL("vnd.sun.star.help://");
-    sal_Bool bHasAnchor = sal_False;
+    bool bHasAnchor = false;
     OUString aAnchor;
 
     OUString aModuleName( rModuleName );
@@ -375,11 +375,11 @@ OUString SfxHelp::CreateHelpURL_Impl( const OUString& aCommandURL, const OUStrin
                                               RTL_TEXTENCODING_UTF8));
 
         OUStringBuffer aTempURL = aHelpURL;
-        AppendConfigToken( aTempURL, sal_True );
+        AppendConfigToken( aTempURL, true );
         bHasAnchor = GetHelpAnchor_Impl(aTempURL.makeStringAndClear(), aAnchor);
     }
 
-    AppendConfigToken( aHelpURL, sal_True );
+    AppendConfigToken( aHelpURL, true );
 
     if ( bHasAnchor )
     {
@@ -488,7 +488,7 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const Window* pWindo
 static bool impl_hasHelpInstalled( const OUString &rLang = OUString() )
 {
     OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
-    AppendConfigToken(aHelpRootURL, sal_True, rLang);
+    AppendConfigToken(aHelpRootURL, true, rLang);
     std::vector< OUString > aFactories = SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
 
     return !aFactories.empty();
@@ -531,7 +531,7 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const OUString& rKeyword)
 {
     OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
-    AppendConfigToken(aHelpRootURL, sal_True);
+    AppendConfigToken(aHelpRootURL, true);
     SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
 
     /* rURL may be

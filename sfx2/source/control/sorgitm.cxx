@@ -90,7 +90,7 @@ bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uIn
 bool SfxScriptOrganizerItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     OUString aValue;
-    sal_Bool bRet = false;
+    bool bRet = false;
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {

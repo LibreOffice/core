@@ -83,11 +83,11 @@ struct StringList_Impl : private Resource
     ResId aResId;
 
     StringList_Impl( const ResId& rErrIdP,  sal_uInt16 nId)
-        : Resource( rErrIdP ),aResId(nId, *rErrIdP.GetResMgr()){}
+        : Resource( rErrIdP ), aResId(nId, *rErrIdP.GetResMgr()) {}
     ~StringList_Impl() { FreeResource(); }
 
-    OUString GetString(){ return aResId.toString(); }
-    operator sal_Bool(){return IsAvailableRes(aResId.SetRT(RSC_STRING));}
+    OUString GetString() { return aResId.toString(); }
+    operator bool()      { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
 
 };
 

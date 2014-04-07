@@ -118,20 +118,20 @@ using namespace ::sfx2;
 class SfxOpenDocStatusListener_Impl : public WeakImplHelper1< XDispatchResultListener >
 {
 public:
-    sal_Bool    bFinished;
-    sal_Bool    bSuccess;
+    bool    bFinished;
+    bool    bSuccess;
     virtual void SAL_CALL   dispatchFinished( const DispatchResultEvent& Event ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   disposing( const EventObject& Source ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
                             SfxOpenDocStatusListener_Impl()
-                                : bFinished( sal_False )
-                                , bSuccess( sal_False )
+                                : bFinished( false )
+                                , bSuccess( false )
                             {}
 };
 
 void SAL_CALL SfxOpenDocStatusListener_Impl::dispatchFinished( const DispatchResultEvent& aEvent ) throw(RuntimeException, std::exception)
 {
     bSuccess = ( aEvent.State == DispatchResultState::SUCCESS );
-    bFinished = sal_True;
+    bFinished = true;
 }
 
 void SAL_CALL SfxOpenDocStatusListener_Impl::disposing( const EventObject& ) throw(RuntimeException, std::exception)
@@ -234,7 +234,7 @@ sal_uInt32 CheckPasswd_Impl
             uno::Reference< beans::XPropertySet > xStorageProps( xStorage, uno::UNO_QUERY );
             if ( xStorageProps.is() )
             {
-                sal_Bool bIsEncrypted = sal_False;
+                bool bIsEncrypted = false;
                 try {
                     xStorageProps->getPropertyValue("HasEncryptedEntries")
                         >>= bIsEncrypted;
@@ -483,11 +483,11 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     SfxObjectShellLock xDoc;
 
     OUString  aTemplateRegion, aTemplateName, aTemplateFileName;
-    sal_Bool    bDirect = sal_False; // through FileName instead of Region/Template
+    bool    bDirect = false; // through FileName instead of Region/Template
     SfxErrorContext aEc(ERRCTX_SFX_NEWDOC);
     if ( !pTemplNameItem && !pTemplFileNameItem )
     {
-        sal_Bool bNewWin = sal_False;
+        bool bNewWin = false;
         Window* pTopWin = GetTopWindow();
 
         SfxTemplateManagerDlg aTemplDlg;
@@ -499,7 +499,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
             {
                 // the dialogue opens a document -> a new TopWindow appears
                 pTopWin = GetTopWindow();
-                bNewWin = sal_True;
+                bNewWin = true;
             }
         }
 
@@ -524,7 +524,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         if ( pTemplFileNameItem )
         {
             aTemplateFileName = pTemplFileNameItem->GetValue();
-            bDirect = sal_True;
+            bDirect = true;
         }
     }
 
@@ -758,7 +758,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         pURLList.clear();
     }
 
-    sal_Bool bHyperlinkUsed = sal_False;
+    bool bHyperlinkUsed = false;
 
     if ( SID_OPENURL == nSID )
     {
@@ -781,7 +781,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         rReq.SetSlot( SID_OPENDOC );
         nSID = SID_OPENDOC;
-        bHyperlinkUsed = sal_True;
+        bHyperlinkUsed = true;
     }
 
     // no else here! It's optional ...
@@ -916,20 +916,20 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         }
                     }
 
-                    sal_Bool bFound = sal_False;
+                    bool bFound = false;
                     for ( sal_Int32 nProt=0; nProt<aProtocols.getLength(); nProt++ )
                     {
                         WildCard aPattern(aProtocols[nProt]);
                         if ( aPattern.Matches( aURL.Complete ) )
                         {
-                            bFound = sal_True;
+                            bFound = true;
                             break;
                         }
                     }
 
                     if ( !bFound )
                     {
-                        sal_Bool bLoadInternal = sal_False;
+                        bool bLoadInternal = false;
                         try
                         {
                             sfx2::openUriExternally(
@@ -939,7 +939,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         {
                             rReq.RemoveItem( SID_TARGETNAME );
                             rReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_default") ) );
-                            bLoadInternal = sal_True;
+                            bLoadInternal = true;
                         }
                         if ( !bLoadInternal )
                             return;
@@ -989,7 +989,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     rReq.RemoveItem( SID_DONELINK );
 
     // check if the view must be hidden
-    sal_Bool bHidden = sal_False;
+    bool bHidden = false;
     SFX_REQUEST_ARG(rReq, pHidItem, SfxBoolItem, SID_HIDDEN, false);
     if ( pHidItem )
         bHidden = pHidItem->GetValue();

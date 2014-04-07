@@ -1680,7 +1680,7 @@ void SfxViewFrame::GetDocNumber_Impl()
 
 void SfxViewFrame::Enable( bool bEnable )
 {
-    if ( (bEnable ? 1 : 0) != pImp->bEnabled )
+    if ( bEnable != pImp->bEnabled )
     {
         pImp->bEnabled = bEnable;
 
@@ -1761,7 +1761,7 @@ bool SfxViewFrame::IsVisible() const
 
 void SfxViewFrame::LockObjectShell_Impl( bool bLock )
 {
-    DBG_ASSERT( pImp->bObjLocked != (bLock ? 1 : 0), "Wrong Locked status!" );
+    DBG_ASSERT( pImp->bObjLocked != bLock, "Wrong Locked status!" );
 
     DBG_ASSERT( GetObjectShell(), "No Document!" );
     GetObjectShell()->OwnerLock(bLock);

@@ -193,7 +193,7 @@ protected:
     sal_uInt16                      nActFilter; // FilterIdx
     sal_uInt16                      nAppFilter; // Filter, which has set the application (for automatic)
 
-    sal_Bool                        bDontUpdate             :1,
+    bool                        bDontUpdate             :1,
                                 bIsWater                :1,
                                 bEnabled                :1,
                                 bUpdate                 :1,
@@ -218,14 +218,14 @@ protected:
     DECL_LINK( TimeOut, Timer * );
 
 
-    virtual void        EnableItem( sal_uInt16 /*nMesId*/, sal_Bool /*bCheck*/ = sal_True ) {}
-    virtual void        CheckItem( sal_uInt16 /*nMesId*/, sal_Bool /*bCheck*/ = sal_True ) {}
-    virtual sal_Bool        IsCheckedItem( sal_uInt16 /*nMesId*/ ) { return sal_True; }
+    virtual void        EnableItem( sal_uInt16 /*nMesId*/, bool /*bCheck*/ = true ) {}
+    virtual void        CheckItem( sal_uInt16 /*nMesId*/, bool /*bCheck*/ = true ) {}
+    virtual bool        IsCheckedItem( sal_uInt16 /*nMesId*/ ) { return true; }
     virtual void        LoadedFamilies() {}
     virtual void        Update() { UpdateStyles_Impl(UPDATE_FAMILY_LIST); }
     virtual void        InvalidateBindings();
     virtual void        InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pIten ) = 0;
-    virtual void        EnableFamilyItem( sal_uInt16 nId, sal_Bool bEnabled = sal_True ) = 0;
+    virtual void        EnableFamilyItem( sal_uInt16 nId, bool bEnabled = true ) = 0;
     virtual void        ClearFamilyList() = 0;
     virtual void        ReplaceUpdateButtonByMenu();
 
@@ -235,24 +235,24 @@ protected:
     void                HideHdl( void* );
     void                ShowHdl( void* );
 
-    sal_Bool                Execute_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
+    bool                Execute_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
                                       sal_uInt16 nFamily, sal_uInt16 nMask = 0,
                                       sal_uInt16* pIdx = NULL, const sal_uInt16* pModifier = NULL );
 
     void                        UpdateStyles_Impl(sal_uInt16 nFlags);
     const SfxStyleFamilyItem*   GetFamilyItem_Impl() const;
-    sal_Bool                    IsInitialized() const { return nActFamily != 0xffff; }
+    bool                    IsInitialized() const { return nActFamily != 0xffff; }
     void                        ResetFocus();
     void                        EnableDelete();
     void                        Initialize();
     void                        EnableHierarchical(bool);
 
-    void                FilterSelect( sal_uInt16 nFilterIdx, sal_Bool bForce = sal_False );
+    void                FilterSelect( sal_uInt16 nFilterIdx, bool bForce = false );
     void                SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
     void                SetWaterCanState( const SfxBoolItem* pItem );
 
     void                SelectStyle( const OUString& rStyle );
-    sal_Bool            HasSelectedStyle() const;
+    bool            HasSelectedStyle() const;
     SfxStyleSheetBase  *GetSelectedStyle() const;
     void                FillTreeBox();
     void                Update_Impl();
@@ -280,29 +280,29 @@ public:
 
     DECL_LINK( MenuSelectHdl, Menu * );
 
-    virtual void        EnableEdit( sal_Bool b = sal_True ) { bCanEdit = b; }
-    virtual void        EnableDel( sal_Bool b = sal_True )  { bCanDel = b; }
-    virtual void        EnableNew( sal_Bool b = sal_True )  { bCanNew = b; }
-    virtual void        EnableHide( sal_Bool b = sal_True )  { bCanHide = b; }
-    virtual void        EnableShow( sal_Bool b = sal_True )  { bCanShow = b; }
+    virtual void        EnableEdit( bool b = true ) { bCanEdit = b; }
+    virtual void        EnableDel( bool b = true )  { bCanDel = b; }
+    virtual void        EnableNew( bool b = true )  { bCanNew = b; }
+    virtual void        EnableHide( bool b = true )  { bCanHide = b; }
+    virtual void        EnableShow( bool b = true )  { bCanShow = b; }
 
     ISfxTemplateCommon* GetISfxTemplateCommon() { return &aISfxTemplateCommon; }
     Window*             GetWindow() { return pWindow; }
 
-    void                EnableTreeDrag( sal_Bool b = sal_True );
+    void                EnableTreeDrag( bool b = true );
     void                ExecuteContextMenu_Impl( const Point& rPos, Window* pWin );
-    void                EnableExample_Impl( sal_uInt16 nId, sal_Bool bEnable );
+    void                EnableExample_Impl( sal_uInt16 nId, bool bEnable );
     SfxStyleFamily      GetActualFamily() const;
     OUString            GetSelectedEntry() const;
     SfxObjectShell*     GetObjectShell() const { return pCurObjShell; }
 
     virtual void        PrepareDeleteAction();  // disable buttons, change button text, etc. when del is going to happen
 
-    inline sal_Bool         CanEdit( void ) const   { return bCanEdit; }
-    inline sal_Bool         CanDel( void ) const    { return bCanDel; }
-    inline sal_Bool         CanNew( void ) const    { return bCanNew; }
-    inline sal_Bool         CanHide( void ) const    { return bCanHide; }
-    inline sal_Bool         CanShow( void ) const    { return bCanShow; }
+    inline bool         CanEdit( void ) const   { return bCanEdit; }
+    inline bool         CanDel( void ) const    { return bCanDel; }
+    inline bool         CanNew( void ) const    { return bCanNew; }
+    inline bool         CanHide( void ) const    { return bCanHide; }
+    inline bool         CanShow( void ) const    { return bCanShow; }
 
     // normaly for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
     virtual PopupMenu*  CreateContextMenu( void );
@@ -334,7 +334,7 @@ private:
     friend class SfxTemplatePanelControl;
 
     Window* m_pFloat;
-    sal_Bool            m_bZoomIn;
+    bool            m_bZoomIn;
     DropToolBox_Impl    m_aActionTbL;
     ToolBox             m_aActionTbR;
 
@@ -345,13 +345,13 @@ private:
 
 protected:
     virtual void    Command( const CommandEvent& rMEvt );
-    virtual void    EnableEdit( sal_Bool = sal_True ) SAL_OVERRIDE;
-    virtual void    EnableItem( sal_uInt16 nMesId, sal_Bool bCheck = sal_True ) SAL_OVERRIDE;
-    virtual void    CheckItem( sal_uInt16 nMesId, sal_Bool bCheck = sal_True ) SAL_OVERRIDE;
-    virtual sal_Bool    IsCheckedItem( sal_uInt16 nMesId ) SAL_OVERRIDE;
+    virtual void    EnableEdit( bool = true ) SAL_OVERRIDE;
+    virtual void    EnableItem( sal_uInt16 nMesId, bool bCheck = true ) SAL_OVERRIDE;
+    virtual void    CheckItem( sal_uInt16 nMesId, bool bCheck = true ) SAL_OVERRIDE;
+    virtual bool    IsCheckedItem( sal_uInt16 nMesId ) SAL_OVERRIDE;
     virtual void    LoadedFamilies() SAL_OVERRIDE;
     virtual void    InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pIten ) SAL_OVERRIDE;
-    virtual void    EnableFamilyItem( sal_uInt16 nId, sal_Bool bEnabled = sal_True ) SAL_OVERRIDE;
+    virtual void    EnableFamilyItem( sal_uInt16 nId, bool bEnabled = true ) SAL_OVERRIDE;
     virtual void    ClearFamilyList() SAL_OVERRIDE;
     virtual void    ReplaceUpdateButtonByMenu() SAL_OVERRIDE;
 

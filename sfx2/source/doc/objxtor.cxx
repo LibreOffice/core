@@ -214,63 +214,63 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,nVisualDocumentNumber( USHRT_MAX)
     ,nDocumentSignatureState( SIGNATURESTATE_UNKNOWN )
     ,nScriptingSignatureState( SIGNATURESTATE_UNKNOWN )
-    ,bInList( sal_False)
-    ,bClosing( sal_False)
-    ,bIsSaving( sal_False)
-    ,bPasswd( sal_False)
-    ,bIsNamedVisible( sal_False)
-    ,bIsTemplate(sal_False)
-    ,bIsAbortingImport ( sal_False)
-    ,bImportDone ( sal_False)
-    ,bInPrepareClose( sal_False )
-    ,bPreparedForClose( sal_False )
-    ,bForbidReload( sal_False )
-    ,bBasicInitialized( sal_False )
-    ,bIsPrintJobCancelable( sal_True )
-    ,bOwnsStorage( sal_True )
-    ,bNoBaseURL( sal_False )
-    ,bInitialized( sal_False )
-    ,bSignatureErrorIsShown( sal_False )
-    ,bModelInitialized( sal_False )
-    ,bPreserveVersions( sal_True )
-    ,m_bMacroSignBroken( sal_False )
-    ,m_bNoBasicCapabilities( sal_False )
-    ,m_bDocRecoverySupport( sal_True )
-    ,bQueryLoadTemplate( sal_True )
-    ,bLoadReadonly( sal_False )
-    ,bUseUserData( sal_True )
-    ,bSaveVersionOnClose( sal_False )
-    ,m_bSharedXMLFlag( sal_False )
-    ,m_bAllowShareControlFileClean( sal_True )
-    ,m_bConfigOptionsChecked( sal_False )
+    ,bInList( false)
+    ,bClosing( false)
+    ,bIsSaving( false)
+    ,bPasswd( false)
+    ,bIsNamedVisible( false)
+    ,bIsTemplate(false)
+    ,bIsAbortingImport ( false)
+    ,bImportDone ( false)
+    ,bInPrepareClose( false )
+    ,bPreparedForClose( false )
+    ,bForbidReload( false )
+    ,bBasicInitialized( false )
+    ,bIsPrintJobCancelable( true )
+    ,bOwnsStorage( true )
+    ,bNoBaseURL( false )
+    ,bInitialized( false )
+    ,bSignatureErrorIsShown( false )
+    ,bModelInitialized( false )
+    ,bPreserveVersions( true )
+    ,m_bMacroSignBroken( false )
+    ,m_bNoBasicCapabilities( false )
+    ,m_bDocRecoverySupport( true )
+    ,bQueryLoadTemplate( true )
+    ,bLoadReadonly( false )
+    ,bUseUserData( true )
+    ,bSaveVersionOnClose( false )
+    ,m_bSharedXMLFlag( false )
+    ,m_bAllowShareControlFileClean( true )
+    ,m_bConfigOptionsChecked( false )
     ,lErr(ERRCODE_NONE)
     ,nEventId ( 0)
     ,pReloadTimer ( 0)
     ,pMarkData( 0 )
     ,nLoadedFlags ( SFX_LOADED_ALL )
     ,nFlagsInProgress( 0 )
-    ,bModalMode( sal_False )
-    ,bRunningMacro( sal_False )
-    ,bReloadAvailable( sal_False )
+    ,bModalMode( false )
+    ,bRunningMacro( false )
+    ,bReloadAvailable( false )
     ,nAutoLoadLocks( 0 )
     ,pModule( 0 )
     ,eFlags( SFXOBJECTSHELL_UNDEFINED )
-    ,bReadOnlyUI( sal_False )
+    ,bReadOnlyUI( false )
     ,nStyleFilter( 0 )
-    ,bDisposing( sal_False )
-    ,m_bEnableSetModified( sal_True )
-    ,m_bIsModified( sal_False )
+    ,bDisposing( false )
+    ,m_bEnableSetModified( true )
+    ,m_bIsModified( false )
     ,m_nMapUnit( MAP_100TH_MM )
-    ,m_bCreateTempStor( sal_False )
-    ,m_bIsInit( sal_False )
-    ,m_bIncomplEncrWarnShown( sal_False )
+    ,m_bCreateTempStor( false )
+    ,m_bIsInit( false )
+    ,m_bIncomplEncrWarnShown( false )
     ,m_nModifyPasswordHash( 0 )
-    ,m_bModifyPasswordEntered( sal_False )
+    ,m_bModifyPasswordEntered( false )
 {
     SfxObjectShell* pDoc = &_rDocShell;
     SfxObjectShellArr_Impl &rArr = SFX_APP()->GetObjectShells_Impl();
     rArr.push_back( pDoc );
-    bInList = sal_True;
+    bInList = true;
 }
 
 
@@ -297,7 +297,7 @@ SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
 
     const bool bDocRecovery = ( i_nCreationFlags & SFXMODEL_DISABLE_DOCUMENT_RECOVERY ) == 0;
     if ( !bDocRecovery )
-        pImp->m_bDocRecoverySupport = sal_False;
+        pImp->m_bDocRecoverySupport = false;
 }
 
 
@@ -441,7 +441,7 @@ bool SfxObjectShell::Close()
         if ( !pImp->bDisposing && GetProgress() )
             return false;
 
-        pImp->bClosing = sal_True;
+        pImp->bClosing = true;
         Reference< util::XCloseable > xCloseable( GetBaseModel(), UNO_QUERY );
 
         if ( xCloseable.is() )
@@ -452,7 +452,7 @@ bool SfxObjectShell::Close()
             }
             catch (const Exception&)
             {
-                pImp->bClosing = sal_False;
+                pImp->bClosing = false;
             }
         }
 
@@ -464,7 +464,7 @@ bool SfxObjectShell::Close()
             SfxObjectShellArr_Impl::iterator it = std::find( rDocs.begin(), rDocs.end(), this );
             if ( it != rDocs.end() )
                 rDocs.erase( it );
-            pImp->bInList = sal_False;
+            pImp->bInList = false;
         }
     }
 
@@ -551,8 +551,8 @@ struct BoolEnv_Impl
 {
     SfxObjectShell_Impl* pImp;
     BoolEnv_Impl( SfxObjectShell_Impl* pImpP) : pImp( pImpP )
-    { pImpP->bInPrepareClose = sal_True; }
-    ~BoolEnv_Impl() { pImp->bInPrepareClose = sal_False; }
+    { pImpP->bInPrepareClose = true; }
+    ~BoolEnv_Impl() { pImp->bInPrepareClose = false; }
 };
 
 
@@ -592,7 +592,7 @@ bool SfxObjectShell::PrepareClose
 
     if( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
-        pImp->bPreparedForClose = sal_True;
+        pImp->bPreparedForClose = true;
         return true;
     }
 
@@ -643,7 +643,7 @@ bool SfxObjectShell::PrepareClose
             return false;
     }
 
-    pImp->bPreparedForClose = sal_True;
+    pImp->bPreparedForClose = true;
     return true;
 }
 
@@ -702,7 +702,7 @@ BasicManager* SfxObjectShell::GetBasicManager() const
 
 void SfxObjectShell::SetHasNoBasic()
 {
-    pImp->m_bNoBasicCapabilities = sal_True;
+    pImp->m_bNoBasicCapabilities = true;
 }
 
 
@@ -841,7 +841,7 @@ void SfxObjectShell::InitBasicManager_Impl()
     DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Lokaler BasicManager bereits vorhanden");
     pImp->pBasicManager->reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
     DBG_ASSERT( pImp->pBasicManager->isValid(), "SfxObjectShell::InitBasicManager_Impl: did not get a BasicManager!" );
-    pImp->bBasicInitialized = sal_True;
+    pImp->bBasicInitialized = true;
 #endif
 }
 
@@ -1118,7 +1118,7 @@ SfxObjectShell* SfxObjectShell::GetShellFromComponent( const Reference<lang::XCo
 
 void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
 {
-    pImp->bInitialized = sal_True;
+    pImp->bInitialized = true;
     if ( i_fromInitNew )
     {
         SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );

@@ -127,7 +127,7 @@ bool SfxFrame::DoClose()
     bool bRet = false;
     if ( !pImp->bClosing )
     {
-        pImp->bClosing = sal_True;
+        pImp->bClosing = true;
         CancelTransfers();
 
         // now close frame; it will be deleted if this call is successful, so don't use any members after that!
@@ -148,7 +148,7 @@ bool SfxFrame::DoClose()
         }
         catch( ::com::sun::star::util::CloseVetoException& )
         {
-            pImp->bClosing = sal_False;
+            pImp->bClosing = false;
             bRet = false;
         }
         catch( ::com::sun::star::lang::DisposedException& )
@@ -199,7 +199,7 @@ bool SfxFrame::PrepareClose_Impl( bool bUI )
     // prevent recursive calls
     if( !pImp->bPrepClosing )
     {
-        pImp->bPrepClosing = sal_True;
+        pImp->bPrepClosing = true;
 
         SfxObjectShell* pCur = GetCurrentDocument() ;
         if( pCur )
@@ -230,7 +230,7 @@ bool SfxFrame::PrepareClose_Impl( bool bUI )
                 nRet = (*pChildArr)[ nPos ]->PrepareClose_Impl( bUI );
         }
 
-        pImp->bPrepClosing = sal_False;
+        pImp->bPrepClosing = false;
     }
 
     if ( nRet && pImp->pWorkWin )
@@ -276,7 +276,7 @@ bool SfxFrame::IsClosing_Impl() const
 
 void SfxFrame::SetIsClosing_Impl()
 {
-    pImp->bClosing = sal_True;
+    pImp->bClosing = true;
 }
 
 sal_uInt16 SfxFrame::GetChildFrameCount() const
@@ -288,7 +288,7 @@ void SfxFrame::CancelTransfers( bool /*bCancelLoadEnv*/ )
 {
     if( !pImp->bInCancelTransfers )
     {
-        pImp->bInCancelTransfers = sal_True;
+        pImp->bInCancelTransfers = true;
         SfxObjectShell* pObj = GetCurrentDocument();
         if( pObj ) //&& !( pObj->Get_Impl()->nLoadedFlags & SFX_LOADED_ALL ))
         {
@@ -312,7 +312,7 @@ void SfxFrame::CancelTransfers( bool /*bCancelLoadEnv*/ )
         //  Check if StarOne-Loader should be canceled
         SfxFrameWeak wFrame( this );
         if (wFrame.Is())
-            pImp->bInCancelTransfers = sal_False;
+            pImp->bInCancelTransfers = false;
     }
 }
 

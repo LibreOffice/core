@@ -135,11 +135,11 @@ public:
     sal_uInt16                      nDocNo;             // current Doc-Number (AutoName)
     sal_uInt16                      nInterfaces;
 
-    sal_Bool                        bDispatcherLocked:1;    // do nothing
-    sal_Bool                        bDowning:1;   // sal_True on Exit and afterwards
-    sal_Bool                        bInQuit : 1;
-    sal_Bool                        bInvalidateOnUnlock : 1;
-    sal_Bool                        bODFVersionWarningLater : 1;
+    bool                        bDispatcherLocked:1;    // do nothing
+    bool                        bDowning:1;   // sal_True on Exit and afterwards
+    bool                        bInQuit : 1;
+    bool                        bInvalidateOnUnlock : 1;
+    bool                        bODFVersionWarningLater : 1;
 
                                 SfxAppData_Impl( SfxApplication* );
                                 ~SfxAppData_Impl();

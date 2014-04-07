@@ -57,15 +57,15 @@ private:
 public:
     SfxStoringHelper();
 
-    sal_Bool GUIStoreModel(
+    bool GUIStoreModel(
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel,
                     const OUString& aSlotName,
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsSequence,
-                    sal_Bool bPreselectPassword,
+                    bool bPreselectPassword,
                     const OUString& aUserSelectedName,
                     sal_uInt16 nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES );
 
-    static sal_Bool CheckFilterOptionsAppearence(
+    static bool CheckFilterOptionsAppearence(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xFilterCFG,
                     const OUString& aFilterName );
 
@@ -74,13 +74,13 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::document::XDocumentProperties>& i_xOldDocInfo,
-        sal_Bool bNoModify );
+        bool bNoModify );
 
-    static sal_Bool WarnUnacceptableFormat(
+    static bool WarnUnacceptableFormat(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
                                     const OUString& aOldUIName,
                                     const OUString& aDefUIName,
-                                    sal_Bool bCanProceedFurther );
+                                    bool bCanProceedFurther );
 
     static Window* GetModelWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
 

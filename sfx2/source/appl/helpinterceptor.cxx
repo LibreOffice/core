@@ -36,7 +36,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 
-extern void AppendConfigToken_Impl( OUString& rURL, sal_Bool bQuestionMark ); // sfxhelp.cxx
+extern void AppendConfigToken_Impl( OUString& rURL, bool bQuestionMark ); // sfxhelp.cxx
 
 // class HelpInterceptor_Impl --------------------------------------------
 
@@ -118,12 +118,12 @@ void HelpInterceptor_Impl::setInterception( Reference< XFrame > xFrame )
 
 
 
-sal_Bool HelpInterceptor_Impl::HasHistoryPred() const
+bool HelpInterceptor_Impl::HasHistoryPred() const
 {
     return m_pHistory && ( m_nCurPos > 0 );
 }
 
-sal_Bool HelpInterceptor_Impl::HasHistorySucc() const
+bool HelpInterceptor_Impl::HasHistorySucc() const
 {
     return m_pHistory && ( m_nCurPos < ( m_pHistory->size() - 1 ) );
 }
@@ -143,7 +143,7 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
     if ( m_xSlaveDispatcher.is() )
         xResult = m_xSlaveDispatcher->queryDispatch( aURL, aTargetFrameName, nSearchFlags );
 
-    sal_Bool bHelpURL = aURL.Complete.toAsciiLowerCase().match("vnd.sun.star.help",0);
+    bool bHelpURL = aURL.Complete.toAsciiLowerCase().match("vnd.sun.star.help",0);
 
     if ( bHelpURL )
     {
@@ -234,7 +234,7 @@ Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 void SAL_CALL HelpInterceptor_Impl::dispatch(
     const URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue >& ) throw( RuntimeException, std::exception )
 {
-    sal_Bool bBack = ( OUString( ".uno:Backward" ) == aURL.Complete );
+    bool bBack = ( OUString( ".uno:Backward" ) == aURL.Complete );
     if ( bBack || OUString( ".uno:Forward" ) == aURL.Complete )
     {
         if ( m_pHistory )
@@ -260,7 +260,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
             {
                 HelpHistoryEntry_Impl* pEntry = m_pHistory->at( nPos );
                 if ( pEntry )
-                    m_pWindow->loadHelpContent(pEntry->aURL, sal_False); // false => dont add item to history again!
+                    m_pWindow->loadHelpContent(pEntry->aURL, false); // false => dont add item to history again!
             }
 
             m_pWindow->UpdateToolbox();

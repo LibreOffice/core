@@ -41,15 +41,15 @@ struct SfxViewFrame_Impl
     Window*             pFocusWin;
     sal_uInt16          nDocViewNo;
     sal_uInt16          nCurViewId;
-    sal_Bool            bResizeInToOut:1;
-    sal_Bool            bDontOverwriteResizeInToOut:1;
-    sal_Bool            bObjLocked:1;
-    sal_Bool            bReloading:1;
-    sal_Bool            bIsDowning:1;
-    sal_Bool            bModal:1;
-    sal_Bool            bEnabled:1;
-    sal_Bool            bWindowWasEnabled:1;
-    sal_Bool            bActive;
+    bool            bResizeInToOut:1;
+    bool            bDontOverwriteResizeInToOut:1;
+    bool            bObjLocked:1;
+    bool            bReloading:1;
+    bool            bIsDowning:1;
+    bool            bModal:1;
+    bool            bEnabled:1;
+    bool            bWindowWasEnabled:1;
+    bool            bActive;
     OUString            aFactoryName;
     ::boost::optional< bool >
                         aHasToolPanels;
@@ -60,8 +60,8 @@ struct SfxViewFrame_Impl
                         , pWindow( 0 )
                         , pActiveChild(0)
                         , pFocusWin(0)
-                        , bWindowWasEnabled(sal_True)
-                        , bActive( sal_False )
+                        , bWindowWasEnabled(true)
+                        , bActive( false )
                         {
                         }
 

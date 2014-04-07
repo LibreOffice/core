@@ -1303,7 +1303,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                     pViewFrame->LockAdjustPosSizePixel();
 
                 if ( nPluginMode == 3 )
-                    rFrame.GetWorkWindow_Impl()->SetInternalDockingAllowed( sal_False );
+                    rFrame.GetWorkWindow_Impl()->SetInternalDockingAllowed( false );
 
                 if ( !rFrame.IsInPlace() )
                     pViewFrame->GetDispatcher()->Update_Impl();

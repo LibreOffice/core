@@ -50,7 +50,7 @@ class SfxModelessDialog_Impl : public SfxListener
 public:
     OString aWinState;
     SfxChildWindow* pMgr;
-    sal_Bool            bConstructed;
+    bool            bConstructed;
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     Timer           aMoveTimer;
@@ -74,7 +74,7 @@ class SfxFloatingWindow_Impl : public SfxListener
 public:
     OString aWinState;
     SfxChildWindow* pMgr;
-    sal_Bool            bConstructed;
+    bool            bConstructed;
     Timer           aMoveTimer;
 
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
@@ -253,7 +253,7 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
             }
         }
 
-        pImp->bConstructed = sal_True;
+        pImp->bConstructed = true;
     }
 
     ModelessDialog::StateChanged( nStateChange );
@@ -343,7 +343,7 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
     pBindings = pBindinx;
     pImp = new SfxModelessDialog_Impl;
     pImp->pMgr = pCW;
-    pImp->bConstructed = sal_False;
+    pImp->bConstructed = false;
     SetUniqueId( GetHelpId() );
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
@@ -485,7 +485,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImp( new SfxFloatingWindow_Impl )
 {
     pImp->pMgr = pCW;
-    pImp->bConstructed = sal_False;
+    pImp->bConstructed = false;
     SetUniqueId( GetHelpId() );
     SetHelpId("");
     if ( pBindinx )
@@ -505,7 +505,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImp( new SfxFloatingWindow_Impl )
 {
     pImp->pMgr = pCW;
-    pImp->bConstructed = sal_False;
+    pImp->bConstructed = false;
     SetUniqueId( GetHelpId() );
     SetHelpId("");
     if ( pBindinx )
@@ -608,7 +608,7 @@ void SfxFloatingWindow::StateChanged( StateChangedType nStateChange )
         // FloatingWindows are not centered by default
         if ( !pImp->aWinState.isEmpty() )
             SetWindowState( pImp->aWinState );
-        pImp->bConstructed = sal_True;
+        pImp->bConstructed = true;
     }
 
     FloatingWindow::StateChanged( nStateChange );
@@ -669,7 +669,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
     {
         CreateOutputItemSet( *GetInputItemSet() );
     }
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     if ( pImpl->m_pSfxPage->HasExchangeSupport() )
     {

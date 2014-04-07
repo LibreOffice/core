@@ -108,18 +108,18 @@ public:
 class IFrameWindow_Impl : public Window
 {
     uno::Reference < frame::XFrame2 > mxFrame;
-    sal_Bool                bBorder;
+    bool                bBorder;
 
 public:
     IFrameWindow_Impl( Window *pParent,
-                       sal_Bool bHasBorder,
+                       bool bHasBorder,
                        WinBits nWinBits = 0 );
 
 public:
-    sal_Bool        HasBorder() const { return bBorder; }
+    bool        HasBorder() const { return bBorder; }
 };
 
-IFrameWindow_Impl::IFrameWindow_Impl( Window *pParent, sal_Bool bHasBorder, WinBits nWinBits )
+IFrameWindow_Impl::IFrameWindow_Impl( Window *pParent, bool bHasBorder, WinBits nWinBits )
     : Window( pParent, nWinBits | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_DOCKBORDER )
     , bBorder(bHasBorder)
 {
@@ -208,7 +208,7 @@ throw( uno::RuntimeException, std::exception )
         aProps[0].Name = "PluginMode";
         aProps[0].Value <<= (sal_Int16) 2;
         aProps[1].Name = "ReadOnly";
-        aProps[1].Value <<= (sal_Bool) sal_True;
+        aProps[1].Value <<= true;
         uno::Reference < frame::XDispatch > xDisp = mxFrame->queryDispatch( aTargetURL, "_self", 0 );
         if ( xDisp.is() )
             xDisp->dispatch( aTargetURL, aProps );
@@ -280,31 +280,31 @@ void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, cons
     break;
     case WID_FRAME_IS_AUTO_SCROLL:
     {
-        sal_Bool bIsAutoScroll = sal_Bool();
+        bool bIsAutoScroll;
         if ( (aAny >>= bIsAutoScroll) && bIsAutoScroll )
             maFrmDescr.SetScrollingMode( ScrollingAuto );
     }
     break;
     case WID_FRAME_IS_SCROLLING_MODE:
     {
-        sal_Bool bIsScroll = sal_Bool();
+        bool bIsScroll;
         if ( aAny >>= bIsScroll )
             maFrmDescr.SetScrollingMode( bIsScroll ? ScrollingYes : ScrollingNo );
     }
     break;
     case WID_FRAME_IS_BORDER:
     {
-        sal_Bool bIsBorder = sal_Bool();
+        bool bIsBorder;
         if ( aAny >>= bIsBorder )
             maFrmDescr.SetFrameBorder( bIsBorder );
     }
     break;
     case WID_FRAME_IS_AUTO_BORDER:
     {
-        sal_Bool bIsAutoBorder = sal_Bool();
+        bool bIsAutoBorder;
         if ( (aAny >>= bIsAutoBorder) )
         {
-            sal_Bool bBorder = maFrmDescr.IsFrameBorderOn();
+            bool bBorder = maFrmDescr.IsFrameBorderOn();
             maFrmDescr.ResetBorder();
             if ( bIsAutoBorder )
                 maFrmDescr.SetFrameBorder( bBorder );
@@ -358,25 +358,25 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
     break;
     case WID_FRAME_IS_AUTO_SCROLL:
     {
-        sal_Bool bIsAutoScroll = ( maFrmDescr.GetScrollingMode() == ScrollingAuto );
+        bool bIsAutoScroll = ( maFrmDescr.GetScrollingMode() == ScrollingAuto );
         aAny <<= bIsAutoScroll;
     }
     break;
     case WID_FRAME_IS_SCROLLING_MODE:
     {
-        sal_Bool bIsScroll = ( maFrmDescr.GetScrollingMode() == ScrollingYes );
+        bool bIsScroll = ( maFrmDescr.GetScrollingMode() == ScrollingYes );
         aAny <<= bIsScroll;
     }
     break;
     case WID_FRAME_IS_BORDER:
     {
-        sal_Bool bIsBorder = maFrmDescr.IsFrameBorderOn();
+        bool bIsBorder = maFrmDescr.IsFrameBorderOn();
         aAny <<= bIsBorder;
     }
     break;
     case WID_FRAME_IS_AUTO_BORDER:
     {
-        sal_Bool bIsAutoBorder = !maFrmDescr.IsFrameBorderSet();
+        bool bIsAutoBorder = !maFrmDescr.IsFrameBorderSet();
         aAny <<= bIsAutoBorder;
     }
     break;

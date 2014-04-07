@@ -141,7 +141,7 @@ void SearchDialog::SetFocusOnEdit()
 
 bool SearchDialog::Close()
 {
-    sal_Bool bRet = ModelessDialog::Close();
+    bool bRet = ModelessDialog::Close();
     m_aCloseHdl.Call( this );
     return bRet;
 }

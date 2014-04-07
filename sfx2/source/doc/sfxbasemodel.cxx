@@ -887,7 +887,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
         // but _only_ before load() or initNew() methods
         if ( m_pData->m_pObjectShell.Is() && !m_pData->m_pObjectShell->GetMedium() )
         {
-            sal_Bool bEmb(sal_False);
+            bool bEmb(false);
             if ( ( rArgs[0].Value >>= bEmb ) && bEmb )
                 m_pData->m_pObjectShell->SetCreateMode_Impl( SFX_CREATE_MODE_EMBEDDED );
         }
@@ -911,7 +911,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
             pObjectShell->SetVisArea( aVisArea );
         }
 
-        sal_Bool bBreakMacroSign = sal_False;
+        bool bBreakMacroSign = false;
         if ( aArgs.get( "BreakMacroSignature" ) >>= bBreakMacroSign )
         {
             pObjectShell->BreakMacroSign_Impl( bBreakMacroSign );
@@ -1282,7 +1282,7 @@ sal_Bool SAL_CALL SfxBaseModel::disableSetModified() throw (RuntimeException, st
     if ( !m_pData->m_pObjectShell.Is() )
         throw RuntimeException();
 
-    sal_Bool bResult = m_pData->m_pObjectShell->IsEnableSetModified();
+    bool bResult = m_pData->m_pObjectShell->IsEnableSetModified();
     m_pData->m_pObjectShell->EnableSetModified( false );
 
     return bResult;
@@ -1295,7 +1295,7 @@ sal_Bool SAL_CALL SfxBaseModel::enableSetModified() throw (RuntimeException, std
     if ( !m_pData->m_pObjectShell.Is() )
         throw RuntimeException();
 
-    sal_Bool bResult = m_pData->m_pObjectShell->IsEnableSetModified();
+    bool bResult = m_pData->m_pObjectShell->IsEnableSetModified();
     m_pData->m_pObjectShell->EnableSetModified( true );
 
     return bResult;
@@ -1533,7 +1533,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "storeSelf"  ) );
         SfxSaveGuard aSaveGuard(this, m_pData, false);
 
-        sal_Bool bCheckIn = sal_False;
+        bool bCheckIn = false;
         for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
         {
             // check that only acceptable parameters are provided here
@@ -1581,7 +1581,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
 
         SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOC, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOC), m_pData->m_pObjectShell ) );
 
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
 
         // TODO/LATER: let the embedded case of saving be handled more careful
         if ( m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
@@ -1773,7 +1773,7 @@ void SAL_CALL SfxBaseModel::initNew()
         if( m_pData->m_pObjectShell->GetMedium() )
             throw frame::DoubleInitializationException();
 
-        sal_Bool bRes = m_pData->m_pObjectShell->DoInitNew( NULL );
+        bool bRes = m_pData->m_pObjectShell->DoInitNew( NULL );
         sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetError() ?
                                     m_pData->m_pObjectShell->GetError() : ERRCODE_IO_CANTCREATE;
         m_pData->m_pObjectShell->ResetError();
@@ -1854,7 +1854,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     }
 
     SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false );
-    sal_Bool bSalvage = pSalvageItem ? sal_True : sal_False;
+    bool bSalvage = pSalvageItem ? sal_True : sal_False;
 
     // load document
     if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
@@ -2593,9 +2593,9 @@ uno::Sequence< document::CmisVersion > SAL_CALL SfxBaseModel::getAllVersions( ) 
     return aVersions;
 }
 
-sal_Bool SfxBaseModel::getBoolPropertyValue( const OUString& rName ) throw ( RuntimeException )
+bool SfxBaseModel::getBoolPropertyValue( const OUString& rName ) throw ( RuntimeException )
 {
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     if ( m_pData->m_pObjectShell )
     {
         SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
@@ -2615,7 +2615,7 @@ sal_Bool SfxBaseModel::getBoolPropertyValue( const OUString& rName ) throw ( Run
             catch ( const Exception & )
             {
                 // Simply ignore it: it's likely the document isn't versionable in that case
-                bValue = sal_False;
+                bValue = false;
             }
         }
     }
@@ -2926,7 +2926,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
     if( sURL.isEmpty() )
         throw frame::IllegalArgumentIOException();
 
-    sal_Bool bSaved = sal_False;
+    bool bSaved = false;
     if ( !bSaveTo && m_pData->m_pObjectShell && !sURL.isEmpty()
       && !sURL.startsWith( "private:stream" )
       && ::utl::UCBContentHelper::EqualURLs( getLocation(), sURL ) )
@@ -2961,7 +2961,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                         try
                         {
                             storeSelf( aArgHash.getAsConstPropertyValueList() );
-                            bSaved = sal_True;
+                            bSaved = true;
                         }
                         catch( const lang::IllegalArgumentException& )
                         {
@@ -3046,7 +3046,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         // since saving a document modifies its DocumentProperties, the current
         // DocumentProperties must be saved on "SaveTo", so it can be restored
         // after saving
-        sal_Bool bCopyTo =  bSaveTo ||
+        bool bCopyTo =  bSaveTo ||
             m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
         Reference<document::XDocumentProperties> xOldDocProps;
         if ( bCopyTo )
@@ -3059,7 +3059,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             m_pData->m_xDocumentProperties = xNewDocProps;
         }
 
-        sal_Bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl( sURL, aParams );
+        bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl( sURL, aParams );
 
         if ( bCopyTo )
         {
@@ -3232,7 +3232,7 @@ Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() throw
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell ); pFrame;
                 pFrame = SfxViewFrame::GetNext( *pFrame, m_pData->m_pObjectShell ) )
         {
-            sal_Bool bIsActive = ( pFrame == pActFrame );
+            bool bIsActive = ( pFrame == pActFrame );
             pFrame->GetViewShell()->WriteUserDataSequence( aSeq );
             aAny <<= aSeq;
             xCont->insertByIndex( bIsActive ? 0 : nCount, aAny );
@@ -3382,7 +3382,7 @@ Sequence< OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
     SfxModelGuard aGuard( *this );
 
     Sequence< OUString > aResult;
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     if ( m_pData->m_pObjectShell.Is() )
     {
         Reference < embed::XStorage > xStorage = m_pData->m_pObjectShell->GetStorage();
@@ -3400,7 +3400,7 @@ Sequence< OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
                 }
             }
 
-            bSuccess = sal_True;
+            bSuccess = true;
         }
     }
 
@@ -3584,7 +3584,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
                 Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
                 Sequence< Reference< container::XIndexContainer > > rToolbars;
 
-                sal_Bool bImported = framework::UIConfigurationImporterOOo1x::ImportCustomToolbars(
+                bool bImported = framework::UIConfigurationImporterOOo1x::ImportCustomToolbars(
                                         xNewUIConfMan, rToolbars, xContext, xOOo1ConfigStorage );
                 if ( bImported )
                 {
@@ -3744,9 +3744,9 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const Reference< embed::XStorage >&
     pMedium->UseInteractionHandler( true );
 
     SFX_ITEMSET_ARG( &aSet, pTemplateItem, SfxBoolItem, SID_TEMPLATE, false);
-    sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
+    bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
     m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
-    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = sal_False;
+    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = false;
 
     // load document
     if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
@@ -3787,7 +3787,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
             nVersion = pFilter->GetVersion();
     }
 
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     if ( xStorage == m_pData->m_pObjectShell->GetStorage() )
     {
         // storing to the own storage
@@ -3853,7 +3853,7 @@ void SAL_CALL SfxBaseModel::switchToStorage( const Reference< embed::XStorage >&
             getUIConfigurationManager2()->setStorage( xStorage );
         }
     }
-    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = sal_False;
+    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = false;
 }
 
 Reference< embed::XStorage > SAL_CALL SfxBaseModel::getDocumentStorage()
@@ -4319,8 +4319,8 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
 
         SfxFrame& rFrame = pViewFrame->GetFrame();
         // MBA: layoutmanager of inplace frame starts locked and invisible
-        rFrame.GetWorkWindow_Impl()->MakeVisible_Impl( sal_False );
-        rFrame.GetWorkWindow_Impl()->Lock_Impl( sal_True );
+        rFrame.GetWorkWindow_Impl()->MakeVisible_Impl( false );
+        rFrame.GetWorkWindow_Impl()->Lock_Impl( true );
 
         rFrame.GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
         pViewFrame->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );

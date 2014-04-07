@@ -44,7 +44,7 @@ class SvDDEObject : public SvLinkSource
     sal_uInt8 nError       : 7;  // Error code for dialogue
 
 
-    sal_Bool ImplHasOtherFormat( DdeTransaction& );
+    bool ImplHasOtherFormat( DdeTransaction& );
     DECL_LINK( ImplGetDDEData, DdeData* );
     DECL_LINK( ImplDoneDDEData, void* );
 

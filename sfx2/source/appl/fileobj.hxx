@@ -39,19 +39,19 @@ class SvFileObject : public sfx2::SvLinkSource
 
     sal_uInt8 nType;
 
-    sal_Bool bLoadAgain : 1;
-    sal_Bool bSynchron : 1;
-    sal_Bool bLoadError : 1;
-    sal_Bool bWaitForData : 1;
-    sal_Bool bInNewData : 1;
-    sal_Bool bDataReady : 1;
-    sal_Bool bNativFormat : 1;
-    sal_Bool bClearMedium : 1;
-    sal_Bool bStateChangeCalled : 1;
-    sal_Bool bInCallDownLoad : 1;
+    bool bLoadAgain : 1;
+    bool bSynchron : 1;
+    bool bLoadError : 1;
+    bool bWaitForData : 1;
+    bool bInNewData : 1;
+    bool bDataReady : 1;
+    bool bNativFormat : 1;
+    bool bClearMedium : 1;
+    bool bStateChangeCalled : 1;
+    bool bInCallDownLoad : 1;
 
-    sal_Bool GetGraphic_Impl( Graphic&, SvStream* pStream = 0 );
-    sal_Bool LoadFile_Impl();
+    bool GetGraphic_Impl( Graphic&, SvStream* pStream = 0 );
+    bool LoadFile_Impl();
     void SendStateChg_Impl( sfx2::LinkManager::LinkState nState );
 
     DECL_STATIC_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef* );

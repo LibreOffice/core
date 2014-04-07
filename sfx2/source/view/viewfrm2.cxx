@@ -164,7 +164,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
         case SID_SHOWPOPUPS :
         {
             SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, SID_SHOWPOPUPS, false);
-            sal_Bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
+            bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
             SFX_REQUEST_ARG(rReq, pIdItem, SfxUInt16Item, SID_CONFIGITEMID, false);
             sal_uInt16 nId = pIdItem ? pIdItem->GetValue() : 0;
 
@@ -188,7 +188,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                     pBind = pBind->GetSubBindings_Impl();
                 }
 
-                pWorkWin->HidePopups_Impl( !bShow, sal_True, nId );
+                pWorkWin->HidePopups_Impl( !bShow, true, nId );
                 pWorkWin->MakeChildrenVisible_Impl( bShow );
             }
 
@@ -249,22 +249,22 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                     bOther = (pFrame != this);
 
                 // Document only needs to be queried, if no other View present.
-                sal_Bool bClosed = sal_False;
-                sal_Bool bUI = sal_True;
+                bool bClosed = false;
+                bool bUI = true;
                 if ( ( bOther || pDocSh->PrepareClose( bUI ) ) )
                 {
                     if ( !bOther )
                         pDocSh->SetModified( false );
                     rReq.Done(); // Must call this before Close()!
-                    bClosed = sal_False;
+                    bClosed = false;
                     try
                     {
                         xTask->close(sal_True);
-                        bClosed = sal_True;
+                        bClosed = true;
                     }
                     catch( CloseVetoException& )
                     {
-                        bClosed = sal_False;
+                        bClosed = false;
                     }
                 }
 
@@ -379,8 +379,8 @@ void SfxViewFrame::INetState_Impl( SfxItemSet &rItemSet )
 
     // Add/SaveToBookmark at BASIC-IDE, QUERY-EDITOR etc. disable
     SfxObjectShell *pDocSh = GetObjectShell();
-    sal_Bool bPseudo = pDocSh && !( pDocSh->GetFactory().GetFlags() & SFXOBJECTSHELL_HASOPENDOC );
-    sal_Bool bEmbedded = pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
+    bool bPseudo = pDocSh && !( pDocSh->GetFactory().GetFlags() & SFXOBJECTSHELL_HASOPENDOC );
+    bool bEmbedded = pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
     if ( !pDocSh || bPseudo || bEmbedded || !pDocSh->HasName() )
         rItemSet.DisableItem( SID_CREATELINK );
 }
@@ -394,7 +394,7 @@ void SfxViewFrame::Activate( bool bMDI )
 {
     DBG_ASSERT(GetViewShell(), "No Shell");
     if ( bMDI )
-        pImp->bActive = sal_True;
+        pImp->bActive = true;
 //(mba): here maybe as in Beanframe NotifyEvent ?!
 }
 
@@ -402,7 +402,7 @@ void SfxViewFrame::Deactivate( bool bMDI )
 {
     DBG_ASSERT(GetViewShell(), "No Shell");
     if ( bMDI )
-        pImp->bActive = sal_False;
+        pImp->bActive = false;
 //(mba): here maybe as in Beanframe NotifyEvent ?!
 }
 

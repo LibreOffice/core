@@ -268,7 +268,7 @@ void RecentDocsView::OpenItem( const ThumbnailViewItem *pItem )
 
     // documents will never be opened as templates
     aArgsList[1].Name = "AsTemplate";
-    aArgsList[1].Value = makeAny( (sal_Bool) sal_False );
+    aArgsList[1].Value = makeAny( false );
 
     xDispatch = xDispatchProvider->queryDispatch( aTargetURL, "_default", 0 );
 

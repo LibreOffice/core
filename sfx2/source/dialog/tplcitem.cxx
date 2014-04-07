@@ -75,7 +75,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
                 DBG_ASSERT(pStateItem != 0, "SfxTemplateItem expected");
                 rTemplateDlg.SetFamilyState( GetId(), pStateItem );
             }
-            sal_Bool bDisable = eState == SFX_ITEM_DISABLED;
+            bool bDisable = eState == SFX_ITEM_DISABLED;
             // Disable Familly
             sal_uInt16 nFamily = 0;
             switch( GetId())

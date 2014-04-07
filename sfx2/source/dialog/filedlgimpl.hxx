@@ -106,19 +106,19 @@ namespace sfx2
         void                    addFilter( const OUString& rFilterName,
                                            const OUString& rExtension );
         void                    addGraphicFilter();
-        void                    enablePasswordBox( sal_Bool bInit );
+        void                    enablePasswordBox( bool bInit );
         void                    updateFilterOptionsBox();
         void                    updateExportButton();
         void                    updateSelectionBox();
         void                    updateVersions();
-        void                    updatePreviewState( sal_Bool _bUpdatePreviewWindow = sal_True );
+        void                    updatePreviewState( bool _bUpdatePreviewWindow = true );
         void                    dispose();
 
         void                    loadConfig();
         void                    saveConfig();
 
         const SfxFilter*        getCurentSfxFilter();
-        sal_Bool                updateExtendedControl( sal_Int16 _nExtendedControlId, sal_Bool _bEnable );
+        bool                updateExtendedControl( sal_Int16 _nExtendedControlId, bool _bEnable );
 
         ErrCode                 getGraphic( const OUString& rURL, Graphic& rGraphic ) const;
         void                    setDefaultValues();
@@ -132,9 +132,9 @@ namespace sfx2
 
         void                    setControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId );
 
-        sal_Bool                CheckFilterOptionsCapability( const SfxFilter* _pFilter );
+        bool                CheckFilterOptionsCapability( const SfxFilter* _pFilter );
 
-        sal_Bool                isInOpenMode() const;
+        bool                isInOpenMode() const;
         OUString                getCurrentFilterUIName() const;
 
         void                    LoadLastUsedFilter( const OUString& _rContextIdentifier );
@@ -208,7 +208,7 @@ namespace sfx2
         ErrCode                 getGraphic( Graphic& rGraphic ) const;
         void                    createMatcher( const OUString& rFactory );
 
-        sal_Bool                isShowFilterExtensionEnabled() const;
+        bool                isShowFilterExtensionEnabled() const;
         void                    addFilterPair( const OUString& rFilter,
                                                const OUString& rFilterWithExtension );
         OUString         getFilterName( const OUString& rFilterWithExtension ) const;
@@ -216,8 +216,8 @@ namespace sfx2
 
         void                    SetContext( FileDialogHelper::Context _eNewContext );
 
-        inline sal_Bool         isSystemFilePicker() const { return mbSystemPicker; }
-        inline sal_Bool         isPasswordEnabled() const { return mbIsPwdEnabled; }
+        inline bool         isSystemFilePicker() const { return mbSystemPicker; }
+        inline bool         isPasswordEnabled() const { return mbIsPwdEnabled; }
     };
 
 }   // end of namespace sfx2

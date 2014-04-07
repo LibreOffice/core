@@ -119,7 +119,7 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBase
     sal_uInt16 nShape = IMAP_OBJ_RECTANGLE;
     std::vector<sal_uInt32> aCoords;
     OUString aName, aHRef, aAlt, aTarget, sEmpty;
-    sal_Bool bNoHRef = sal_False;
+    bool bNoHRef = false;
     SvxMacroTableDtor aMacroTbl;
 
     for (size_t i = rOptions.size(); i; )
@@ -142,7 +142,7 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBase
             aHRef = INetURLObject::GetAbsURL( rBaseURL, rOption.GetString() );
             break;
         case HTML_O_NOHREF:
-            bNoHRef = sal_True;
+            bNoHRef = true;
             break;
         case HTML_O_ALT:
             aAlt = rOption.GetString();
@@ -181,7 +181,7 @@ IMAPOBJ_SETEVENT:
     if( bNoHRef )
         aHRef = "";
 
-    sal_Bool bNewArea = sal_True;
+    bool bNewArea = true;
     switch( nShape )
     {
     case IMAP_OBJ_RECTANGLE:
@@ -222,7 +222,7 @@ IMAPOBJ_SETEVENT:
         }
         break;
     default:
-        bNewArea = sal_False;
+        bNewArea = false;
     }
 
     return bNewArea;
@@ -270,7 +270,7 @@ void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )
     if( pHTTPHeader )
     {
         SvKeyValue aKV;
-        for( sal_Bool bCont = pHTTPHeader->GetFirst( aKV ); bCont;
+        for( bool bCont = pHTTPHeader->GetFirst( aKV ); bCont;
              bCont = pHTTPHeader->GetNext( aKV ) )
         {
             if( aKV.GetKey().equalsIgnoreAsciiCase(

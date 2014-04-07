@@ -64,7 +64,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
     if ( !xTargetStream.is() )
         throw io::IOException(); // TODO/LATER
 
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     ::ucbhelper::Content aContent;
     if( ::ucbhelper::Content::create( aFolderUrl, xComEnv, comphelper::getProcessComponentContext(), aContent ) )
     {
@@ -111,7 +111,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
                     if ( pTempStream->GetError() )
                         throw io::IOException();
 
-                    bSuccess = sal_True;
+                    bSuccess = true;
                 }
             }
         }

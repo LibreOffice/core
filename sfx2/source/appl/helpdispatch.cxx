@@ -58,7 +58,7 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
     DBG_ASSERT( m_xRealDispatch.is(), "invalid dispatch" );
 
     // search for a keyword (dispatch from the basic ide)
-    sal_Bool bHasKeyword = sal_False;
+    bool bHasKeyword = false;
     OUString sKeyword;
     const PropertyValue* pBegin = aArgs.getConstArray();
     const PropertyValue* pEnd   = pBegin + aArgs.getLength();

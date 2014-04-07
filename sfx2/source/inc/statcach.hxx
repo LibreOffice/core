@@ -56,7 +56,7 @@ public:
 
     void                    Release();
     const ::com::sun::star::frame::FeatureStateEvent& GetStatus() const;
-    void                    Dispatch( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aProps, sal_Bool bForceSynchron = sal_False );
+    void                    Dispatch( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aProps, bool bForceSynchron = false );
 };
 
 class SfxStateCache
@@ -70,14 +70,14 @@ friend class BindDispatch_Impl;
     SfxSlotServer           aSlotServ;      // SlotServer, SlotPtr = 0 -> not on Stack
     SfxPoolItem*            pLastItem;      // Last sent Item, never -1
     SfxItemState            eLastState;     // Last sent State
-    sal_Bool                bCtrlDirty:1;   // Update Controller?
-    sal_Bool                bSlotDirty:1;   // Present Funktion, must be updated
-    sal_Bool                bItemVisible:1; // item visibility
-    sal_Bool                bItemDirty;     // Validity of pLastItem
+    bool                bCtrlDirty:1;   // Update Controller?
+    bool                bSlotDirty:1;   // Present Funktion, must be updated
+    bool                bItemVisible:1; // item visibility
+    bool                bItemDirty;     // Validity of pLastItem
 
 private:
                             SfxStateCache( const SfxStateCache& rOrig ); // inward
-    void                    SetState_Impl( SfxItemState, const SfxPoolItem*, sal_Bool bMaybeDirty=sal_False );
+    void                    SetState_Impl( SfxItemState, const SfxPoolItem*, bool bMaybeDirty=false );
 
 public:
                             SfxStateCache( sal_uInt16 nFuncId );
@@ -89,17 +89,17 @@ public:
     const SfxSlotServer*    GetSlotServer( SfxDispatcher &rDispat )
                             { return GetSlotServer( rDispat, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > () ); }
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >          GetDispatch() const;
-    void                    Dispatch( const SfxItemSet* pSet, sal_Bool bForceSynchron = sal_False );
-    sal_Bool                    IsControllerDirty() const
+    void                    Dispatch( const SfxItemSet* pSet, bool bForceSynchron = false );
+    bool                    IsControllerDirty() const
                             { return bCtrlDirty ? sal_True : sal_False; }
     SfxPoolItem*            GetItem() const { return pLastItem; }
     void                    ClearCache();
 
-    void                    SetState( SfxItemState, const SfxPoolItem*, sal_Bool bMaybeDirty=sal_False );
-    void                    SetCachedState(sal_Bool bAlways = sal_False);
+    void                    SetState( SfxItemState, const SfxPoolItem*, bool bMaybeDirty=false );
+    void                    SetCachedState(bool bAlways = false);
     void                    DeleteFloatingWindows();
-    void                    Invalidate( sal_Bool bWithSlot );
-    void                    SetVisibleState( sal_Bool bShow=sal_True );
+    void                    Invalidate( bool bWithSlot );
+    void                    SetVisibleState( bool bShow=true );
 
     SfxControllerItem*      ChangeItemLink( SfxControllerItem* pNewBinding );
     SfxControllerItem*      GetItemLink() const;
@@ -120,7 +120,7 @@ public:
 
 inline void SfxStateCache::ClearCache()
 {
-    bItemDirty = sal_True;
+    bItemDirty = true;
 }
 
 
@@ -133,8 +133,8 @@ inline SfxControllerItem* SfxStateCache::ChangeItemLink( SfxControllerItem* pNew
     pController = pNewBinding;
     if ( pNewBinding )
     {
-        bCtrlDirty = sal_True;
-        bItemDirty = sal_True;
+        bCtrlDirty = true;
+        bItemDirty = true;
     }
     return pOldBinding;
 }

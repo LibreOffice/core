@@ -177,7 +177,7 @@ throw( RuntimeException, std::exception )
         }
         else if ( pType == ::getBooleanCppuType() )
         {
-            sal_Bool bTemp = false;
+            bool bTemp = false;
             rEvent.State >>= bTemp ;
             pItem = new SfxBoolItem( m_nSlotID, bTemp );
         }

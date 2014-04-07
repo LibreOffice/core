@@ -83,7 +83,7 @@ namespace sfx2
     OUString addExtension(
         const OUString& _rDisplayText,
         const OUString& _rExtension,
-        sal_Bool _bForOpen,
+        bool _bForOpen,
         FileDialogHelper_Impl& _rFileDlgImpl
     );
 

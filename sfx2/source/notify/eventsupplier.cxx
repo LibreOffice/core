@@ -283,12 +283,12 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent )
     OUString aName   = aEvent.EventName;
     long        nCount  = maEventNames.getLength();
     long        nIndex  = 0;
-    sal_Bool    bFound  = sal_False;
+    bool    bFound  = false;
 
     while ( !bFound && ( nIndex < nCount ) )
     {
         if ( maEventNames[nIndex] == aName )
-            bFound = sal_True;
+            bFound = true;
         else
             nIndex += 1;
     }
@@ -341,7 +341,7 @@ SfxEvents_Impl::~SfxEvents_Impl()
 }
 
 
-SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShell* pObjShell, sal_Bool bNormalizeMacro )
+SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShell* pObjShell, bool bNormalizeMacro )
 {
     SvxMacro* pMacro = NULL;
     uno::Sequence < beans::PropertyValue > aProperties;

@@ -133,7 +133,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     FrameSearchFlags /*eSearchFlags*/ ) throw( RuntimeException, std::exception )
 {
     sal_uInt16                  nId( 0 );
-    sal_Bool                bMasterCommand( sal_False );
+    bool                bMasterCommand( false );
     Reference < XDispatch > xDisp;
     const SfxSlot* pSlot = 0;
     SfxDispatcher* pAppDisp = SFX_APP()->GetAppDispatcher_Impl();

@@ -1374,7 +1374,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     storeMetadataToStorage(xStorage);
 
     if (sfx) {
-        const sal_Bool bOk = aMedium.Commit();
+        const bool bOk = aMedium.Commit();
         aMedium.Close();
         if ( !bOk ) {
             sal_uInt32 nError = aMedium.GetError();

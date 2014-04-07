@@ -218,7 +218,7 @@ SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()
 
 bool SfxRecordingFloat_Impl::Close()
 {
-    sal_Bool bRet = SfxFloatingWindow::Close();
+    bool bRet = SfxFloatingWindow::Close();
     return bRet;
 }
 

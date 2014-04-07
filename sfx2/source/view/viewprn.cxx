@@ -64,10 +64,10 @@ class SfxPrinterController : public vcl::PrinterController, public SfxListener
     mutable Reference<awt::XDevice>         mxDevice;
     SfxViewShell*                           mpViewShell;
     SfxObjectShell*                         mpObjectShell;
-    sal_Bool        m_bOrigStatus;
-    sal_Bool        m_bNeedsChange;
-    sal_Bool        m_bApi;
-    sal_Bool        m_bTempPrinter;
+    bool        m_bOrigStatus;
+    bool        m_bNeedsChange;
+    bool        m_bApi;
+    bool        m_bTempPrinter;
     util::DateTime  m_aLastPrinted;
     OUString m_aLastPrintedBy;
 
@@ -80,7 +80,7 @@ public:
                           const Any& i_rSelection,
                           const Any& i_rViewProp,
                           const Reference< view::XRenderable >& i_xRender,
-                          sal_Bool i_bApi, sal_Bool i_bDirect,
+                          bool i_bApi, bool i_bDirect,
                           SfxViewShell* pView,
                           const uno::Sequence< beans::PropertyValue >& rProps
                         );
@@ -100,7 +100,7 @@ SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_
                                             const Any& i_rSelection,
                                             const Any& i_rViewProp,
                                             const Reference< view::XRenderable >& i_xRender,
-                                            sal_Bool i_bApi, sal_Bool i_bDirect,
+                                            bool i_bApi, bool i_bDirect,
                                             SfxViewShell* pView,
                                             const uno::Sequence< beans::PropertyValue >& rProps
                                           )
@@ -111,8 +111,8 @@ SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_
     , mpLastPrinter( NULL )
     , mpViewShell( pView )
     , mpObjectShell(0)
-    , m_bOrigStatus( sal_False )
-    , m_bNeedsChange( sal_False )
+    , m_bOrigStatus( false )
+    , m_bNeedsChange( false )
     , m_bApi(i_bApi)
     , m_bTempPrinter( i_rPrinter.get() != NULL )
 {
@@ -190,7 +190,7 @@ const Any& SfxPrinterController::getSelectionObject() const
     const beans::PropertyValue* pVal = getValue( OUString( "PrintSelectionOnly"  ) );
     if( pVal )
     {
-        sal_Bool bSel = sal_False;
+        bool bSel = false;
         pVal->Value >>= bSel;
         return bSel ? maSelection : maCompleteSelection;
     }
@@ -301,7 +301,7 @@ void SfxPrinterController::jobStarted()
         if ( m_bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
         {
             mpObjectShell->EnableSetModified( false );
-            m_bNeedsChange = sal_True;
+            m_bNeedsChange = true;
         }
 
         // refresh document info
@@ -415,7 +415,7 @@ private:
     SfxViewShell*           _pViewSh;
     PrinterSetupDialog*     _pSetupParent;
     SfxItemSet*             _pOptions;
-    sal_Bool                _bHelpDisabled;
+    bool                _bHelpDisabled;
 
     DECL_LINK( Execute, void * );
 
@@ -425,7 +425,7 @@ public:
 
     Link                GetLink() const { return LINK( this, SfxDialogExecutor_Impl, Execute); }
     const SfxItemSet*   GetOptions() const { return _pOptions; }
-    void                DisableHelp() { _bHelpDisabled = sal_True; }
+    void                DisableHelp() { _bHelpDisabled = true; }
 };
 
 SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSetupDialog* pParent ) :
@@ -433,7 +433,7 @@ SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSe
     _pViewSh        ( pViewSh ),
     _pSetupParent   ( pParent ),
     _pOptions       ( NULL ),
-    _bHelpDisabled  ( sal_False )
+    _bHelpDisabled  ( false )
 
 {
 }
@@ -494,8 +494,8 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     Size aNewPgSz = pNewPrinter->GetPaperSizePixel();
 
     // Determine the changes in page format
-    sal_Bool bOriChg = (eOldOri != eNewOri) && bOriToDoc;
-    sal_Bool bPgSzChg = ( aOldPgSz.Height() !=
+    bool bOriChg = (eOldOri != eNewOri) && bOriToDoc;
+    bool bPgSzChg = ( aOldPgSz.Height() !=
             ( bOriChg ? aNewPgSz.Width() : aNewPgSz.Height() ) ||
             aOldPgSz.Width() !=
             ( bOriChg ? aNewPgSz.Height() : aNewPgSz.Width() ) ) &&
@@ -635,7 +635,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     bool                    bSilent = false;
 
     // does the function have been called by the user interface or by an API call
-    sal_Bool bIsAPI = rReq.GetArgs() && rReq.GetArgs()->Count();
+    bool bIsAPI = rReq.GetArgs() && rReq.GetArgs()->Count();
     if ( bIsAPI )
     {
         // the function have been called by the API
@@ -652,7 +652,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     OUString aHelpFilterName( "writer_web_HTML_help" );
     SfxMedium* pMedium = GetViewFrame()->GetObjectShell()->GetMedium();
     const SfxFilter* pFilter = pMedium ? pMedium->GetFilter() : NULL;
-    sal_Bool bPrintOnHelp = ( pFilter && pFilter->GetFilterName() == aHelpFilterName );
+    bool bPrintOnHelp = ( pFilter && pFilter->GetFilterName() == aHelpFilterName );
 
     const sal_uInt16 nId = rReq.GetSlot();
     switch( nId )
@@ -674,10 +674,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
             // should we print only the selection or the whole document
             SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, false);
-            sal_Bool bSelection = ( pSelectItem != NULL && pSelectItem->GetValue() );
+            bool bSelection = ( pSelectItem != NULL && pSelectItem->GetValue() );
             // detect non api call from writer ( that adds SID_SELECTION ) and reset bIsAPI
             if ( pSelectItem && rReq.GetArgs()->Count() == 1 )
-                bIsAPI = sal_False;
+                bIsAPI = false;
 
             uno::Sequence < beans::PropertyValue > aProps;
             if ( bIsAPI )
@@ -710,16 +710,16 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     else if ( aProps[nProp].Name == "Asynchron" )
                     {
                         aProps[nProp]. Name = "Wait";
-                        sal_Bool bAsynchron = sal_False;
+                        bool bAsynchron = false;
                         aProps[nProp].Value >>= bAsynchron;
-                        aProps[nProp].Value <<= (sal_Bool) (!bAsynchron);
+                        aProps[nProp].Value <<= (!bAsynchron);
                     }
                     else if ( aProps[nProp].Name == "Silent" )
                     {
                         aProps[nProp]. Name = "MonitorVisible";
-                        sal_Bool bPrintSilent = sal_False;
+                        bool bPrintSilent = false;
                         aProps[nProp].Value >>= bPrintSilent;
-                        aProps[nProp].Value <<= (sal_Bool) (!bPrintSilent);
+                        aProps[nProp].Value <<= (!bPrintSilent);
                     }
                 }
             }

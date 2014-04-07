@@ -188,7 +188,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
             try
             {
                 Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
-                sal_Bool bPassWord = sal_False;
+                bool bPassWord = false;
                 if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
                     // ask for the password
@@ -215,7 +215,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
             try
             {
                 Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
-                sal_Bool bSelection = sal_False;
+                bool bSelection = false;
                 if ( aValue >>= bSelection )
                     m_pItemSet->Put( SfxBoolItem( SID_SELECTION, bSelection ) );
             }
@@ -236,7 +236,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
                 try
                 {
                     Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 );
-                    sal_Bool bReadOnly = sal_False;
+                    bool bReadOnly = false;
                     if ( ( aValue >>= bReadOnly ) && bReadOnly )
                         m_pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
                 }
