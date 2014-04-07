@@ -66,10 +66,12 @@ struct ConnectedComponents
 
 typedef ::std::list< ConnectedComponents > ConnectedComponentsList;
 
+namespace {
+
 /** \#i10613# Extracted from Printer::GetPreparedMetaFile. Returns true
     if given action requires special transparency handling
 */
-bool OutputDevice::IsTransparentAction( const MetaAction& rAct )
+bool IsTransparentAction( const MetaAction& rAct )
 {
     switch( rAct.GetType() )
     {
@@ -98,7 +100,7 @@ bool OutputDevice::IsTransparentAction( const MetaAction& rAct )
   (i.e. when painted on white background, does the action still look
   correct)?
  */
-bool OutputDevice::DoesActionHandleTransparency( const MetaAction& rAct )
+bool DoesActionHandleTransparency( const MetaAction& rAct )
 {
     // META_FLOATTRANSPARENT_ACTION can contain a whole metafile,
     // which is to be rendered with the given transparent gradient. We
@@ -123,7 +125,7 @@ bool OutputDevice::DoesActionHandleTransparency( const MetaAction& rAct )
 /** Check whether rCurrRect rectangle fully covers io_rPrevRect - if
     yes, return true and update o_rBgColor
  */
-static bool checkRect( Rectangle&       io_rPrevRect,
+bool checkRect( Rectangle&       io_rPrevRect,
                        Color&           o_rBgColor,
                        const Rectangle& rCurrRect,
                        OutputDevice&    rMapModeVDev )
@@ -150,7 +152,7 @@ static bool checkRect( Rectangle&       io_rPrevRect,
     @param o_rMtf
     Add converted actions to this metafile
 */
-static void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
+void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
                                           const MetaAction&   rAct,
                                           const OutputDevice& rStateOutDev,
                                           Color               aBgColor )
@@ -278,7 +280,7 @@ static void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
 
 // #i10613# Extracted from ImplCheckRect::ImplCreate
 // Returns true, if given action creates visible (i.e. non-transparent) output
-static bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rOut )
+bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rOut )
 {
     const bool  bLineTransparency( rOut.IsLineColor() ? rOut.GetLineColor().GetTransparency() == 255 : true );
     const bool  bFillTransparency( rOut.IsFillColor() ? rOut.GetFillColor().GetTransparency() == 255 : true );
@@ -391,7 +393,7 @@ static bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rO
 }
 
 // #i10613# Extracted from ImplCheckRect::ImplCreate
-static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevice& rOut )
+Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevice& rOut )
 {
     Rectangle aActionBounds;
 
@@ -647,6 +649,8 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
     else
         return Rectangle();
 }
+
+} // end anon namespace
 
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
                                                      long nMaxBmpDPIX, long nMaxBmpDPIY,

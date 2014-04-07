@@ -867,9 +867,6 @@ private:
 
     bool                        DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
 
-    bool                        DoesActionHandleTransparency( const MetaAction& rAct );
-    bool                        IsTransparentAction( const MetaAction& rAct );
-
     Color                       GetSingleColorGradientFill();
     void                        SetGrayscaleColors( Gradient &rGradient );
 
