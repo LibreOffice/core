@@ -47,6 +47,8 @@
 #include "xename.hxx"
 #include <rtl/uuid.h>
 
+#include <svl/intitem.hxx>
+
 using namespace ::oox;
 
 using ::com::sun::star::uno::Reference;
@@ -578,6 +580,7 @@ private:
     const ScCondFormatEntry& mrFormatEntry; /// Calc conditional format entry.
     XclFontData         maFontData;         /// Font formatting attributes.
     XclExpCellBorder    maBorder;           /// Border formatting attributes.
+    XclExpCellAlign     maAlign;            /// Alignment formatting attributes
     XclExpCellArea      maArea;             /// Pattern formatting attributes.
     XclTokenArrayRef    mxTokArr1;          /// Formula for first condition.
     XclTokenArrayRef    mxTokArr2;          /// Formula for second condition.
@@ -585,6 +588,8 @@ private:
     sal_uInt8           mnType;             /// Type of the condition (cell/formula).
     sal_uInt8           mnOperator;         /// Comparison operator for cell type.
     sal_Int32           mnPriority;         /// Priority of this entry; needed for oox export
+    OUString            maFormat;
+    bool                mbNumFmtUsed;
     bool                mbFontUsed;         /// true = Any font attribute used.
     bool                mbHeightUsed;       /// true = Font height used.
     bool                mbWeightUsed;       /// true = Font weight used.
@@ -593,6 +598,7 @@ private:
     bool                mbItalicUsed;       /// true = Font posture used.
     bool                mbStrikeUsed;       /// true = Font strikeout used.
     bool                mbBorderUsed;       /// true = Border attribute used.
+    bool                mbAlignUsed;         /// true = Alignment attributes used
     bool                mbPattUsed;         /// true = Pattern attribute used.
 };
 
@@ -603,6 +609,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
     mnType( EXC_CF_TYPE_CELL ),
     mnOperator( EXC_CF_CMP_NONE ),
     mnPriority( nPriority ),
+    mbNumFmtUsed( false ),
     mbFontUsed( false ),
     mbHeightUsed( false ),
     mbWeightUsed( false ),
@@ -611,6 +618,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
     mbItalicUsed( false ),
     mbStrikeUsed( false ),
     mbBorderUsed( false ),
+    mbAlignUsed( false ),
     mbPattUsed( false )
 {
     /*  Get formatting attributes here, and not in WriteBody(). This is needed to
@@ -619,6 +627,21 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
     if( SfxStyleSheetBase* pStyleSheet = GetDoc().GetStyleSheetPool()->Find( mrFormatEntry.GetStyle(), SFX_STYLE_FAMILY_PARA ) )
     {
         const SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+
+        //number format
+        bool bNumFmtUsed = ScfTools::CheckItem( rItemSet, ATTR_VALUE_FORMAT, true );
+        if( bNumFmtUsed )
+        {
+            const SfxPoolItem *pPoolItem = NULL;
+            if( rItemSet.GetItemState( ATTR_VALUE_FORMAT, true, &pPoolItem ) == SFX_ITEM_SET )
+            {
+                sal_uLong nScNumFmt = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
+                maFormat = XclExpNumFmt::GetNumberFormatCode( *this, nScNumFmt,
+                        GetRoot().GetNumFmtBuffer().getFormatter(), GetRoot().GetNumFmtBuffer().getKeywordTable() );
+            }
+            else
+                bNumFmtUsed = false;
+        }
 
         // font
         mbHeightUsed = ScfTools::CheckItem( rItemSet, ATTR_FONT_HEIGHT,     true );
@@ -640,6 +663,8 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
         mbBorderUsed = ScfTools::CheckItem( rItemSet, ATTR_BORDER, true );
         if( mbBorderUsed )
             maBorder.FillFromItemSet( rItemSet, GetPalette(), GetBiff() );
+
+        mbAlignUsed = maAlign.FillFromItemSet( rItemSet, false, GetBiff() );
 
         // pattern
         mbPattUsed = ScfTools::CheckItem( rItemSet, ATTR_BACKGROUND, true );
@@ -694,19 +719,31 @@ void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
 
     // *** formatting blocks ***
 
-    if( mbFontUsed || mbBorderUsed || mbPattUsed )
+    if( mbNumFmtUsed || mbFontUsed || mbBorderUsed ||
+            mbPattUsed )
     {
         sal_uInt32 nFlags = EXC_CF_ALLDEFAULT;
 
+        ::set_flag( nFlags, EXC_CF_BLOCK_NUMFMT, mbNumFmtUsed );
         ::set_flag( nFlags, EXC_CF_BLOCK_FONT,   mbFontUsed );
         ::set_flag( nFlags, EXC_CF_BLOCK_BORDER, mbBorderUsed );
+        ::set_flag( nFlags, EXC_CF_BLOCK_ALIGNMENT, mbAlignUsed );
         ::set_flag( nFlags, EXC_CF_BLOCK_AREA,   mbPattUsed );
 
         // attributes used -> set flags to 0.
         ::set_flag( nFlags, EXC_CF_BORDER_ALL, !mbBorderUsed );
         ::set_flag( nFlags, EXC_CF_AREA_ALL,   !mbPattUsed );
 
-        rStrm << nFlags << sal_uInt16( 0 );
+        sal_uInt16 nExtendedFlags = 1;
+
+        rStrm << nFlags << nExtendedFlags;
+
+        if( mbNumFmtUsed )
+        {
+            XclExpString aNumFmtString;
+            aNumFmtString.Assign(maFormat);
+            aNumFmtString.WriteBuffer( rStrm );
+        }
 
         if( mbFontUsed )
         {
@@ -748,6 +785,14 @@ void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
             maBorder.SetFinalColors( GetPalette() );
             maBorder.FillToCF8( nLineStyle, nLineColor );
             rStrm << nLineStyle << nLineColor << sal_uInt16( 0 );
+        }
+
+        if( mbAlignUsed )
+        {
+            sal_uInt16 nAlign = 0;
+            sal_uInt16 nMiscFlags = 0;
+            maAlign.FillToXF8(nAlign, nMiscFlags);
+            rStrm << nAlign << nMiscFlags;
         }
 
         if( mbPattUsed )

@@ -1288,9 +1288,17 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, const XclExpNum
     WriteFormatRecord( rStrm, rFormat.mnXclNumFmt, GetFormatCode( rFormat.mnScNumFmt ) );
 }
 
-namespace {
+NfKeywordTable* XclExpNumFmtBuffer::getKeywordTable()
+{
+    return mpKeywordTable.get();
+}
 
-OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumberFormatter* xFormatter, NfKeywordTable* pKeywordTable)
+SvNumberFormatter* XclExpNumFmtBuffer::getFormatter()
+{
+    return mxFormatter.get();
+}
+
+OUString XclExpNumFmt::GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumberFormatter* xFormatter, NfKeywordTable* pKeywordTable)
 {
     OUString aFormatStr;
 
@@ -1334,11 +1342,9 @@ OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumbe
     return( aFormatStr );
 }
 
-}
-
 OUString XclExpNumFmtBuffer::GetFormatCode( sal_uInt16 nScNumFmt )
 {
-    return GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() );
+    return XclExpNumFmt::GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() );
 }
 
 // XF, STYLE record - Cell formatting =========================================
@@ -2938,7 +2944,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         {
                             sal_uLong nScNumFmt = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
                             sal_Int32 nXclNumFmt = GetRoot().GetNumFmtBuffer().Insert(nScNumFmt);
-                            pNumFormat = new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() ));
+                            pNumFormat = new XclExpNumFmt( nScNumFmt, nXclNumFmt, XclExpNumFmt::GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() ));
                         }
 
                         maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, pFont, pNumFormat, pCellProt, pColor ));

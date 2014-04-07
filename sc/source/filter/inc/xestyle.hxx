@@ -273,12 +273,15 @@ struct XclExpNumFmt
                             mnScNumFmt( nScNumFmt ), mnXclNumFmt( nXclNumFmt ), maNumFmtString( rFrmt ) {}
 
     void SaveXml( XclExpXmlStream& rStrm );
+
+    static OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt,
+            SvNumberFormatter* xFormatter, NfKeywordTable* pKeywoardTable );
 };
 
 
 
 class SvNumberFormatter;
-typedef ::std::auto_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
+typedef boost::scoped_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
 
 /** Stores all number formats used in the document. */
 class XclExpNumFmtBuffer : public XclExpRecordBase, protected XclExpRoot
@@ -298,6 +301,9 @@ public:
     /** Writes all FORMAT records contained in this buffer. */
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+
+    NfKeywordTable*     getKeywordTable();
+    SvNumberFormatter*  getFormatter();
 
 private:
     /** Writes the FORMAT record with index nXclIx and format string rFormatStr. */
