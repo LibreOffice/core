@@ -82,8 +82,6 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper1<com::sun::star::util::
 
     @param          "sFactory"  , short name of module which contains filter container
     @param          "pContainer", pointer to filter container which will be informed
-    @return         -
-
     @onerror        We show some assertions in non product version.
                     Otherwise we do nothing!
     @threadsafe     yes

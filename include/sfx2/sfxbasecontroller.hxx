@@ -84,33 +84,7 @@ public:
     //  constructor/destructor
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     SfxBaseController( SfxViewShell* pView ) ;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual ~SfxBaseController() ;
 
@@ -129,108 +103,17 @@ public:
     //  XController
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual sal_Bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     css::uno::Any SAL_CALL getViewData() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     void SAL_CALL restoreViewData( const css::uno::Any& aValue ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     css::uno::Reference< css::frame::XModel > SAL_CALL getModel() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
@@ -238,35 +121,9 @@ public:
     //  XDispatchProvider
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(  const   css::util::URL &    aURL            ,
                                                                                   const   OUString &   sTargetFrameName,
                                                                                   FrameSearchFlags            eSearchFlags    ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
@@ -283,48 +140,9 @@ public:
     //  XComponent
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
     virtual void SAL_CALL registerContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

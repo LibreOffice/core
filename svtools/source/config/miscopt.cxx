@@ -105,9 +105,6 @@ class SvtMiscOptions_Impl : public ConfigItem
             @seealso    baseclass ConfigItem
 
             @param      "seqPropertyNames" is the list of properties which should be updated.
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames ) SAL_OVERRIDE;
@@ -124,11 +121,6 @@ class SvtMiscOptions_Impl : public ConfigItem
                         and should always called in our destructor to guarantee consistency of config data.
 
             @seealso    baseclass ConfigItem
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Commit() SAL_OVERRIDE;
@@ -253,13 +245,7 @@ class SvtMiscOptions_Impl : public ConfigItem
             @short      return list of key names of our configuration management which represent oue module tree
             @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
-
-            @seealso    -
-
-            @param      -
             @return     A list of needed configuration keys is returned.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         static Sequence< OUString > GetPropertyNames();

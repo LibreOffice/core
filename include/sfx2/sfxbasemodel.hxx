@@ -109,10 +109,6 @@ namespace sfx { namespace intern {
 
 
 /**_______________________________________________________________________________________________________
-    @short      -
-
-    @descr      -
-
     @implements XChild
                 XComponent
                 document::XDocumentPropertiesSupplier
@@ -182,33 +178,7 @@ public:
     //  constructor/destructor
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     SfxBaseModel( SfxObjectShell *pObjectShell = NULL ) ;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual ~SfxBaseModel() ;
 
@@ -233,15 +203,8 @@ public:
 
     /**___________________________________________________________________________________________________
         @short      increment refcount
-        @descr      -
-
         @seealso    XInterface
         @seealso    release()
-
-        @param      -
-
-        @return     -
-
         @onerror    A RuntimeException is thrown.
     */
 
@@ -249,15 +212,8 @@ public:
 
     /**___________________________________________________________________________________________________
         @short      decrement refcount
-        @descr      -
-
         @seealso    XInterface
         @seealso    acquire()
-
-        @param      -
-
-        @return     -
-
         @onerror    A RuntimeException is thrown.
     */
 
@@ -269,12 +225,7 @@ public:
 
     /**___________________________________________________________________________________________________
         @short      get information about supported interfaces
-        @descr      -
-
         @seealso    XTypeProvider
-
-        @param      -
-
         @return     Sequence of types of all supported interfaces
 
         @onerror    A RuntimeException is thrown.
@@ -288,9 +239,6 @@ public:
                     Another way, cache is enabled.
 
         @seealso    XTypeProvider
-
-        @param      -
-
         @return     ID as Sequence of byte
 
         @onerror    A RuntimeException is thrown.
@@ -334,33 +282,7 @@ public:
     //  XChild
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& xParent ) throw(css::lang::NoSupportException,
                                                                                         css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -369,48 +291,9 @@ public:
     //  XComponent
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL addEventListener(const css::uno::Reference< css::lang::XEventListener >& aListener) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual void SAL_CALL removeEventListener(const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -423,190 +306,34 @@ public:
     //  XEventListener
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     //  XModel
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual sal_Bool SAL_CALL attachResource(const OUString& sURL,
                                              const css::uno::Sequence< css::beans::PropertyValue >& aArgs)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual OUString SAL_CALL getURL() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getArgs() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL connectController( const css::uno::Reference< css::frame::XController >& xController ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual void SAL_CALL disconnectController( const css::uno::Reference< css::frame::XController >& xController ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL lockControllers() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual void SAL_CALL unlockControllers() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual sal_Bool SAL_CALL hasControllersLocked() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual css::uno::Reference< css::frame::XController > SAL_CALL getCurrentController() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL setCurrentController( const css::uno::Reference< css::frame::XController >& xController )
         throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getCurrentSelection() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -639,64 +366,12 @@ public:
     virtual sal_Bool SAL_CALL enableSetModified(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL isSetModifiedEnabled(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual sal_Bool SAL_CALL isModified() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual void SAL_CALL setModified( sal_Bool bModified )
         throw (css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& xListener ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual void SAL_CALL removeModifyListener(const css::uno::Reference< css::util::XModifyListener > & xListener) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
@@ -724,49 +399,10 @@ public:
     //  XPrintable
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPrinter() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual void SAL_CALL setPrinter( const css::uno::Sequence< css::beans::PropertyValue >& seqPrinter )
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL print( const css::uno::Sequence< css::beans::PropertyValue >& seqOptions )
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -781,95 +417,17 @@ public:
     //  XStorable
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual sal_Bool SAL_CALL hasLocation() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual OUString SAL_CALL getLocation() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual sal_Bool SAL_CALL isReadonly() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL store() throw (css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual void SAL_CALL storeAsURL(   const   OUString& sURL,
                                         const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
         throw (css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual void SAL_CALL storeToURL(   const   OUString& sURL,
                                         const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
@@ -881,37 +439,11 @@ public:
     //  XLoadable
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL initNew()
         throw (css::frame::DoubleInitializationException,
                css::io::IOException,
                css::uno::RuntimeException,
                css::uno::Exception, std::exception) SAL_OVERRIDE;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual void SAL_CALL load( const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments )
         throw (css::frame::DoubleInitializationException,
@@ -1007,53 +539,13 @@ public:
     //  XTransferable
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor )
         throw (css::datatransfer::UnsupportedFlavorException,
                css::io::IOException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
-
     virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor )
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1064,16 +556,9 @@ public:
 
 
     /**___________________________________________________________________________________________________
-        @short      -
         @descr      -   offers a list of event handlers which are be bound to events of
                         this object.
-        @seealso    -
-
-        @param      -
-
         @return     -   an Events object.
-
-        @onerror    -
     */
 
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -1098,31 +583,13 @@ public:
 
 
     /**___________________________________________________________________________________________________
-        @short      -
         @descr      -   registers the given XEventListener.
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::document::XEventListener >& xListener ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**___________________________________________________________________________________________________
-        @short      -
         @descr      -   unregisters the given XEventListener.
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
     */
 
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::document::XEventListener >& xListener ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -1340,19 +807,6 @@ public:
     //  SfxListener
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     void Notify(            SfxBroadcaster& aBC     ,
                     const   SfxHint&        aHint   ) SAL_OVERRIDE ;
 
@@ -1360,33 +814,7 @@ public:
     //  public IMPL?
 
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     void changing() ;
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     SfxObjectShell* GetObjectShell() const ;
 
@@ -1424,19 +852,6 @@ protected:
 
 
 private:
-
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
 
     css::uno::Reference< css::ui::XUIConfigurationManager2 > getUIConfigurationManager2() throw ( css::uno::RuntimeException );
     bool impl_getPrintHelper();

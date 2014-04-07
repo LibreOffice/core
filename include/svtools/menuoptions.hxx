@@ -37,11 +37,6 @@ class SvtMenuOptions_Impl;
 
 /*-************************************************************************************************************
     @short          collect information about menu features
-    @descr          -
-
-    @implements     -
-    @base           -
-
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
@@ -58,11 +53,6 @@ class SVT_DLLPUBLIC SAL_WARN_UNUSED SvtMenuOptions: public utl::detail::Options
 
             @seealso    member m_nRefCount
             @seealso    member m_pDataContainer
-
-            @param      -
-            @return     -
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
          SvtMenuOptions();
@@ -98,13 +88,7 @@ class SVT_DLLPUBLIC SAL_WARN_UNUSED SvtMenuOptions: public utl::detail::Options
             @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
-
-            @seealso    -
-
-            @param      -
             @return     A reference to a static mutex member.
-
-            @onerror    -
         *//*-*****************************************************************************************************/
 
         SVT_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();

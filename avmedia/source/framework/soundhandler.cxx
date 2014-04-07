@@ -177,8 +177,6 @@ void SAL_CALL SoundHandler::impl_initService()
     @seealso    using at owner
 
     @param      "xFactory", reference to service manager for creation of new services
-    @return     -
-
     @onerror    Show an assertion and do nothing else.
     @threadsafe yes
 *//*-*************************************************************************************************************/
@@ -195,15 +193,6 @@ SoundHandler::SoundHandler( const css::uno::Reference< css::lang::XMultiServiceF
 
 /*-************************************************************************************************************
     @short      standard dtor
-    @descr      -
-
-    @seealso    -
-
-    @param      -
-    @return     -
-
-    @onerror    -
-    @threadsafe -
 *//*-*************************************************************************************************************/
 SoundHandler::~SoundHandler()
 {
@@ -233,8 +222,6 @@ SoundHandler::~SoundHandler()
 
     @param      "aURL"      , URL to dispatch.
     @param      "lArguments", list of optional arguments.
-    @return     -
-
     @onerror    We do nothing.
     @threadsafe yes
 *//*-*************************************************************************************************************/
@@ -310,9 +297,6 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
                    Another reason to do so ... We are a listener on our internal ma_Player object.
                    If you would call "IsSoundFile()" on this instance, he would call us back and
                    we make some unnecessary things ...
-
-    @seealso    -
-
     @param      "lDescriptor", description of file to detect
     @return     Internal type name which match this file ... or nothing if it is unknown.
 
@@ -353,11 +337,7 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
                 We use this information to callback our might existing listener.
 
     @seealso    method dispatchWithNotification()
-
-    @param      -
     @return     0 everytime ... it doesn't matter for us.
-
-    @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
 IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify)

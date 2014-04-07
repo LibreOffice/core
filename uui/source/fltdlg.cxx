@@ -46,9 +46,6 @@ namespace uui
 
     @param      "pParentWindow"  , parent window for dialog
     @param      "pResMgr"        , resource manager
-    @return     -
-
-    @onerror    -
     @threadsafe no
 *//*-*************************************************************************************************************/
 FilterDialog::FilterDialog( Window* pParentWindow ,
@@ -67,13 +64,7 @@ FilterDialog::FilterDialog( Window* pParentWindow ,
 /*-************************************************************************************************************
     @short      set file name on dialog control
     @descr      We convert given URL (it must be an URL!) into valid file name and show it on our dialog.
-
-    @seealso    -
-
     @param      "sURL", URL for showing
-    @return     -
-
-    @onerror    -
     @threadsafe no
 *//*-*************************************************************************************************************/
 void FilterDialog::SetURL( const OUString& sURL )
@@ -96,8 +87,6 @@ void FilterDialog::SetURL( const OUString& sURL )
     @seealso    method AskForFilter()
 
     @param      "pFilterNames", pointer to list of filter names, which should be used for later operations.
-    @return     -
-
     @onerror    We clear list box and forget our currently set filter information completely!
     @threadsafe no
 *//*-*************************************************************************************************************/
@@ -166,11 +155,6 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
 
     @seealso    method OutputDevice::GetTextWidth()
     @seealso    method InetURLObject::getAbbreviated()
-
-    @param      -
-    @return     -
-
-    @onerror    -
     @threadsafe no
 *//*-*************************************************************************************************************/
 class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
