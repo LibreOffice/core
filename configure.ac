@@ -783,6 +783,11 @@ AC_ARG_ENABLE(ext-wiki-publisher,
         [Enable the Wiki Publisher extension.])
 )
 
+AC_ARG_ENABLE(lpsolve,
+    AS_HELP_STRING([--disable-lpsolve],
+        [Disable compilation of the lp solve solver ])
+)
+
 AC_ARG_ENABLE(pdfimport,
     AS_HELP_STRING([--disable-pdfimport],
         [Disable building the PDF import feature.])
