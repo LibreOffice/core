@@ -816,7 +816,11 @@ sal_Bool SVGFilter::implExportDocument()
                 implEmbedBulletGlyphs();
                 implExportTextEmbeddedBitmaps();
             }
-            implExportMasterPages( mMasterPageTargets, 0, mMasterPageTargets.getLength() - 1 );
+
+            bool bSelection = mbSinglePage && maShapeSelection.is() && maShapeSelection->getCount();
+            // #i124608# export a given object selection, so no MasterPage export at all
+            if (!bSelection)
+                implExportMasterPages( mMasterPageTargets, 0, mMasterPageTargets.getLength() - 1 );
             implExportDrawPages( mSelectedPages, 0, nLastPage );
 
             if( !mbSinglePage )
@@ -1401,7 +1405,7 @@ sal_Bool SVGFilter::implExportMasterPages( const SVGFilter::XDrawPageSequence & 
                                            sal_Int32 nFirstPage, sal_Int32 nLastPage )
 {
     DBG_ASSERT( nFirstPage <= nLastPage,
-                "SVGFilter::implExportPages: nFirstPage > nLastPage" );
+                "SVGFilter::implExportMasterPages: nFirstPage > nLastPage" );
 
     // When the exported slides are more than one we wrap master page elements
     // with a svg <defs> element.
@@ -1434,7 +1438,7 @@ sal_Bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rx
                                            sal_Int32 nFirstPage, sal_Int32 nLastPage )
 {
     DBG_ASSERT( nFirstPage <= nLastPage,
-                "SVGFilter::implExportPages: nFirstPage > nLastPage" );
+                "SVGFilter::implExportDrawPages: nFirstPage > nLastPage" );
 
     // We wrap all slide in a group element with class name "SlideGroup".
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "SlideGroup" );
@@ -1443,7 +1447,17 @@ sal_Bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rx
     sal_Bool bRet = sal_False;
     for( sal_Int32 i = nFirstPage; i <= nLastPage; ++i )
     {
-        Reference< XShapes > xShapes( rxPages[i], UNO_QUERY );
+        Reference< XShapes > xShapes;
+
+        if (maShapeSelection.is() && maShapeSelection->getCount())
+        {
+            // #i124608# export a given object selection
+            xShapes = maShapeSelection;
+        }
+        else
+        {
+            xShapes = Reference< XShapes >( rxPages[i], UNO_QUERY );
+        }
 
         if( xShapes.is() )
         {
@@ -1780,6 +1794,17 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
 
 sal_Bool SVGFilter::implCreateObjects()
 {
+    if (maShapeSelection.is() && maShapeSelection->getCount())
+    {
+        // #i124608# export a given object selection
+        if (mSelectedPages.getLength() && mSelectedPages[0].is())
+        {
+            implCreateObjectsFromShapes(mSelectedPages[0], maShapeSelection);
+            return sal_True;
+        }
+        return sal_False;
+    }
+
     sal_Int32 i, nCount;
 
     for( i = 0, nCount = mMasterPageTargets.getLength(); i < nCount; ++i )

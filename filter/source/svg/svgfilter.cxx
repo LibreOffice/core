@@ -66,7 +66,6 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mpDefaultSdrPage( NULL ),
     mpSdrModel( NULL ),
     mbPresentation( sal_False ),
-    mbExportAll( sal_False ),
     mbSinglePage( sal_False ),
     mnVisiblePage( -1 ),
     mpObjects( NULL )
@@ -97,13 +96,27 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 #ifndef DISABLE_EXPORT
     else if( mxSrcDoc.is() )
     {
-        if( !mbExportAll && !mSelectedPages.hasElements() )
+        // #i124608# detext selection
+        sal_Bool bSelectionOnly = sal_False;
+        bool bGotSelection(false);
+
+        // #i124608# extract Single selection wanted from dialog return values
+        for ( sal_Int32 nInd = 0; nInd < rDescriptor.getLength(); nInd++ )
         {
-            uno::Reference< frame::XDesktop2 >                           xDesktop(frame::Desktop::create(mxContext));
-            uno::Reference< frame::XFrame >                              xFrame(xDesktop->getCurrentFrame(),
-                                                                                uno::UNO_QUERY_THROW);
-            uno::Reference<frame::XController >                          xController(xFrame->getController(),
+            if ( rDescriptor[nInd].Name == "SelectionOnly" )
+            {
+                rDescriptor[nInd].Value >>= bSelectionOnly;
+            }
+        }
+
+        uno::Reference< frame::XDesktop2 >                           xDesktop(frame::Desktop::create(mxContext));
+        uno::Reference< frame::XFrame >                              xFrame(xDesktop->getCurrentFrame(),
+                                                                            uno::UNO_QUERY_THROW);
+        uno::Reference<frame::XController >                          xController(xFrame->getController(),
                                                                                      uno::UNO_QUERY_THROW);
+
+        if( !mSelectedPages.hasElements() )
+        {
             uno::Reference<drawing::XDrawView >                          xDrawView(xController,
                                                                                    uno::UNO_QUERY_THROW);
             uno::Reference<drawing::framework::XControllerManager>       xManager(xController,
@@ -211,6 +224,31 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             }
         }
 
+        if (bSelectionOnly)
+        {
+            // #i124608# when selection only is wanted, get the current object selection
+            // from the DrawView
+            Reference< view::XSelectionSupplier > xSelection (xController, UNO_QUERY);
+
+            if (xSelection.is())
+            {
+                uno::Any aSelection;
+
+                if (xSelection->getSelection() >>= aSelection)
+                {
+                    bGotSelection = (sal_True == ( aSelection >>= maShapeSelection ));
+                }
+            }
+        }
+
+        if(bSelectionOnly && bGotSelection && 0 == maShapeSelection->getCount())
+        {
+            // #i124608# export selection, got maShapeSelection but no shape selected -> nothing
+            // to export, we are done (maybe return true, but a hint that nothing was done
+            // may be useful; it may have happened by error)
+            bRet = sal_False;
+        }
+        else {
         /*
          *  We get all master page that are targeted by at least one draw page.
          *  The master page are put in an unordered set.
@@ -234,6 +272,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
         }
 
         bRet = implExport( rDescriptor );
+        }
     }
 #endif
     else

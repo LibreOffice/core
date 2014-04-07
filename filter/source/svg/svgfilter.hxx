@@ -242,7 +242,6 @@ private:
     SdrPage*                            mpDefaultSdrPage;
     SdrModel*                           mpSdrModel;
     sal_Bool                            mbPresentation;
-    sal_Bool                            mbExportAll;
     sal_Bool                            mbSinglePage;
     sal_Int32                           mnVisiblePage;
     PagePropertySet                     mVisiblePagePropSet;
@@ -259,6 +258,8 @@ private:
     Reference< XComponent >             mxDstDoc;
     Reference< XDrawPage >              mxDefaultPage;
     Sequence< PropertyValue >           maFilterData;
+    // #i124608# explicit ShapeSelection for export when export of the selection is wanted
+    Reference< XShapes >                maShapeSelection;
     XDrawPageSequence                   mSelectedPages;
     XDrawPageSequence                   mMasterPageTargets;
 
