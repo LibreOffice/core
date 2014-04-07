@@ -260,43 +260,50 @@ void SwDocTest::testModelToViewHelper()
             ModelToViewHelper aModelToViewHelper(*pTxtNode, PASSTHROUGH);
             OUString sViewText = aModelToViewHelper.getViewText();
             OUString sModelText = pTxtNode->GetTxt();
-            CPPUNIT_ASSERT(sViewText == sModelText);
+            CPPUNIT_ASSERT_EQUAL(sModelText, sViewText);
         }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT(sViewText == "AAAAA BBBBB foo CCCCC foo DDDDD");
+            CPPUNIT_ASSERT_EQUAL(
+                OUString("AAAAA BBBBB foo CCCCC foo DDDDD"), sViewText);
         }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS);
             OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT(sViewText == "AAAAA BBBBB  CCCCC  DDDDD");
+            CPPUNIT_ASSERT_EQUAL(
+                OUString("AAAAA BBBBB  CCCCC  DDDDD"), sViewText);
         }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE);
             OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT(sViewText == "AAAAA CCCCC " + OUString(CH_TXTATR_BREAKWORD) + " DDDDD");
+            CPPUNIT_ASSERT_EQUAL(
+                OUString("AAAAA CCCCC " + OUString(CH_TXTATR_BREAKWORD) + " DDDDD"),
+                sViewText);
         }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEREDLINED);
             OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT(sViewText == "AAAABB " + OUString(CH_TXTATR_BREAKWORD) + " CCCCC " + OUString(CH_TXTATR_BREAKWORD) + " DDDDD");
+            CPPUNIT_ASSERT_EQUAL(
+                OUString("AAAABB " + OUString(CH_TXTATR_BREAKWORD) + " CCCCC " + OUString(CH_TXTATR_BREAKWORD) + " DDDDD"),
+                sViewText);
         }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT(sViewText == "AAAAA CCCCC foo DDDDD");
+            CPPUNIT_ASSERT_EQUAL(OUString("AAAAA CCCCC foo DDDDD"), sViewText);
         }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEREDLINED | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT(sViewText == "AAAABB foo CCCCC foo DDDDD");
+            CPPUNIT_ASSERT_EQUAL(
+                OUString("AAAABB foo CCCCC foo DDDDD"), sViewText);
         }
 
         {
@@ -306,13 +313,13 @@ void SwDocTest::testModelToViewHelper()
             aBuffer.append("AAAACCCCC ");
             aBuffer.append(CH_TXTATR_BREAKWORD);
             aBuffer.append(" DDDDD");
-            CPPUNIT_ASSERT(sViewText == aBuffer.makeStringAndClear());
+            CPPUNIT_ASSERT_EQUAL(aBuffer.makeStringAndClear(), sViewText);
         }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT(sViewText == "AAAACCCCC foo DDDDD");
+            CPPUNIT_ASSERT_EQUAL(OUString("AAAACCCCC foo DDDDD"), sViewText);
         }
 
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
@@ -327,13 +334,12 @@ void SwDocTest::testModelToViewHelper()
         (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(sal_Int32(0));
         m_pDoc->InsertString(aPaM, OUString("CCCCC"));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
-        CPPUNIT_ASSERT(pTxtNode->GetTxt().getLength() == 11);
+        CPPUNIT_ASSERT_EQUAL(11, pTxtNode->GetTxt().getLength());
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
-            fprintf(stderr, "string is %s\n", OUStringToOString(sViewText, RTL_TEXTENCODING_UTF8).getStr());
-            CPPUNIT_ASSERT(sViewText == "AAAAABBBBBCCCCC");
+            CPPUNIT_ASSERT_EQUAL(OUString("AAAAABBBBBCCCCC"), sViewText);
         }
     }
 }
