@@ -82,6 +82,20 @@ static void updateTilesPerSecond(UILabel *label)
     }
 }
 
+static int DBG_DRAW_DELAY = 10;
+int DBG_DRAW_ROUNDS = -1;
+int DBG_DRAW_COUNTER = 0;
+int DBG_DRAW_ROUNDS_MAX = INT_MAX;
+
+- (void)redraw
+{
+    DBG_DRAW_ROUNDS++;
+    DBG_DRAW_COUNTER = 0;
+    [self setNeedsDisplay];
+    if (DBG_DRAW_ROUNDS < DBG_DRAW_ROUNDS_MAX)
+        [NSTimer scheduledTimerWithTimeInterval:DBG_DRAW_DELAY target:self selector:@selector(redraw) userInfo:nil repeats:NO];
+}
+
 - (id)initWithFrame:(CGRect)frame scale:(CGFloat)scale maxZoom:(int)maxZoom
 {
     self = [super initWithFrame:frame];
@@ -93,6 +107,13 @@ static void updateTilesPerSecond(UILabel *label)
         catl.levelsOfDetailBias = catl.levelsOfDetail - 1;
 
         [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateTilesPerSecond) userInfo:nil repeats:YES];
+        if (getenv("DRAW_INCREMENTALLY_FROM")) {
+            DBG_DRAW_ROUNDS = atoi(getenv("DRAW_INCREMENTALLY_FROM"));
+            if (getenv("DRAW_INCREMENTALLY_DELAY") &&
+                atoi(getenv("DRAW_INCREMENTALLY_DELAY")) > 1)
+                DBG_DRAW_DELAY = atoi(getenv("DRAW_INCREMENTALLY_DELAY"));
+            [NSTimer scheduledTimerWithTimeInterval:DBG_DRAW_DELAY target:self selector:@selector(redraw) userInfo:nil repeats:NO];
+        }
     }
     return self;
 }
@@ -138,12 +159,13 @@ static bool tileMatches(const char *spec, CGRect bb)
     // as needed at the current zoom levels. I keep thinking about
     // "pixels" incorrectly.
 
-    if (!getenv("DRAW_ONLY_TILE") || tileMatches(getenv("DRAW_ONLY_TILE"), bb))
+    if (!getenv("DRAW_ONLY_TILE") || tileMatches(getenv("DRAW_ONLY_TILE"), bb)) {
+        fprintf(stderr, "+++ rendering to context %p\n", ctx);
         touch_lo_draw_tile(ctx,
                            tileSize.width, tileSize.height,
                            CGPointMake(bb.origin.x/self.scale, bb.origin.y/self.scale),
                            CGSizeMake(bb.size.width/self.scale, bb.size.height/self.scale));
-    else {
+    } else {
         CGContextSetRGBFillColor(ctx, 1, 1, 1, 1);
         CGContextFillRect(ctx, CGRectMake(0, 0, bb.size.width, bb.size.height));
     }
