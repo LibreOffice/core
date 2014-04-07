@@ -1812,14 +1812,14 @@ bool Printer::UsePolyPolygonForComplexGradient()
     return true;
 }
 
-void Printer::ClipGradientToBounds ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
+void Printer::ClipAndDrawGradientToBounds ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
 {
     const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
 
-    ClipGradient ( rGradient, rPolyPoly, aBoundRect );
+    ClipAndDrawGradient ( rGradient, rPolyPoly, aBoundRect );
 }
 
-void Printer::ClipGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect )
+void Printer::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect )
 {
     Push( PUSH_CLIPREGION );
     IntersectClipRegion(Region(rPolyPoly));

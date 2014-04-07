@@ -675,7 +675,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
     }
 }
 
-void OutputDevice::ClipGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect )
+void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect )
 {
     const bool  bOldOutput = IsOutputEnabled();
 
@@ -692,17 +692,17 @@ void OutputDevice::ClipGradientMetafile ( const Gradient &rGradient, const PolyP
     EnableOutput( bOldOutput );
 }
 
-void OutputDevice::ClipGradientToBounds ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
+void OutputDevice::ClipAndDrawGradientToBounds ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
 {
     const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
 
     if( ImplGetSVData()->maGDIData.mbNoXORClipping )
-        ClipGradient ( rGradient, rPolyPoly, aBoundRect );
+        ClipAndDrawGradient ( rGradient, rPolyPoly, aBoundRect );
     else
-        XORClipGradient ( rGradient, rPolyPoly, aBoundRect );
+        XORClipAndDrawGradient ( rGradient, rPolyPoly, aBoundRect );
 }
 
-void OutputDevice::ClipGradient ( Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect )
+void OutputDevice::ClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect )
 {
     if( !Rectangle( PixelToLogic( Point() ), GetOutputSize() ).IsEmpty() )
     {
@@ -745,7 +745,7 @@ void OutputDevice::ClipGradient ( Gradient &rGradient, const PolyPolygon &rPolyP
     }
 }
 
-void OutputDevice::XORClipGradient ( Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect )
+void OutputDevice::XORClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect )
 {
     const PolyPolygon   aPolyPoly( LogicToPixel( rPolyPoly ) );
     Point aPoint;
@@ -847,7 +847,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
             mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
 
-            ClipGradientMetafile ( rGradient, rPolyPoly, aBoundRect );
+            ClipAndDrawGradientMetafile ( rGradient, rPolyPoly, aBoundRect );
 
             mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );
         }
@@ -884,7 +884,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             aGradient.SetEndColor( aEndCol );
         }
 
-        ClipGradientToBounds ( aGradient, rPolyPoly );
+        ClipAndDrawGradientToBounds ( aGradient, rPolyPoly );
     }
 
     if( mpAlphaVDev )
