@@ -452,7 +452,11 @@ namespace svt
             bool               bDown;
 
         public:
-            BrowserMouseEventPtr():pEvent(NULL){}
+            BrowserMouseEventPtr()
+                : pEvent(NULL)
+                , bDown(false)
+            {
+            }
             ~BrowserMouseEventPtr(){Clear();}
 
             bool Is() const {return pEvent != NULL;}
