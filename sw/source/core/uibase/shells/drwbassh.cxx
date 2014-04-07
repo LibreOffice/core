@@ -202,27 +202,18 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         if (bCaption)
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                            if ( pFact )
-                            {
-                                AbstractSvxCaptionDialog* pCaptionDlg =
-                                        pFact->CreateCaptionDialog( NULL, pSdrView, nAllowedAnchors );
-                                pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
-                                pDlg = pCaptionDlg;
-                                OSL_ENSURE(pDlg, "Dialogdiet fail!");
-                            }
+                            AbstractSvxCaptionDialog* pCaptionDlg =
+                                    pFact->CreateCaptionDialog( NULL, pSdrView, nAllowedAnchors );
+                            pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
+                            pDlg = pCaptionDlg;
                         }
                         else
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                            if ( pFact )
-                            {
-
-                                AbstractSvxTransformTabDialog* pTransform =
-                                            pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView, nAllowedAnchors );
-                                pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
-                                pDlg = pTransform;
-                                OSL_ENSURE(pDlg, "Dialogdiet fail!");
-                            }
+                            AbstractSvxTransformTabDialog* pTransform =
+                                        pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView, nAllowedAnchors );
+                            pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
+                            pDlg = pTransform;
                         }
                         SfxItemSet aNewAttr(pSdrView->GetGeoAttrFromMarked());
 
