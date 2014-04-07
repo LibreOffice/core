@@ -109,7 +109,7 @@ bool ImeStatusWindow::isShowing()
 {
     try
     {
-        bool bShow;
+        bool bShow(0);
         if (getConfig()->getPropertyValue(OUString("ShowStatusWindow")) >>= bShow)
             return bShow;
     }
