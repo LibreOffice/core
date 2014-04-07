@@ -32,6 +32,8 @@
 #include <svl/zformat.hxx>
 #include <svl/itemprop.hxx>
 
+#include <registerservices.hxx>
+
 using namespace com::sun::star;
 
 #define PROPERTYNAME_FMTSTR     "FormatString"

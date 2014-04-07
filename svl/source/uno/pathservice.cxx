@@ -25,8 +25,7 @@
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-
-
+#include <registerservices.hxx>
 
 class PathService : public ::cppu::WeakImplHelper2< css::frame::XConfigManager, css::lang::XServiceInfo >
 {

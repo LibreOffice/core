@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <string.h>
 
+#include <boost/noncopyable.hpp>
 #include "rtl/instance.hxx"
 #include "rtl/crc.h"
 #include <tools/solar.h>
@@ -50,7 +51,7 @@ IMPL_PTRHINT (INetURLHistoryHint, const INetURLObject);
  * INetURLHistory_Impl interface.
  *
  *======================================================================*/
-class INetURLHistory_Impl
+class INetURLHistory_Impl: private boost::noncopyable
 {
     /** head_entry.
     */
@@ -93,15 +94,6 @@ class INetURLHistory_Impl
 
         /** Comparison.
         */
-        bool operator== (const hash_entry &rOther) const
-        {
-            return (m_nHash == rOther.m_nHash);
-        }
-        bool operator< (const hash_entry &rOther) const
-        {
-            return (m_nHash < rOther.m_nHash);
-        }
-
         bool operator== (sal_uInt32 nHash) const
         {
             return (m_nHash == nHash);
@@ -188,11 +180,6 @@ class INetURLHistory_Impl
         rThis.m_nNext = nThis;
         rThis.m_nPrev = nThis;
     }
-
-    /** Not implemented.
-    */
-    INetURLHistory_Impl (const INetURLHistory_Impl&);
-    INetURLHistory_Impl& operator= (const INetURLHistory_Impl&);
 
 public:
     INetURLHistory_Impl (void);

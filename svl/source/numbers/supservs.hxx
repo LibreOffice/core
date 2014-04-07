@@ -26,6 +26,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
 
+#include <registerservices.hxx>
+
 /**
  * SvNumberFormatsSupplierServiceObject - a number formats supplier which
  * - can be instantiated as an service

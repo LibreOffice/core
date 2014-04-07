@@ -28,6 +28,8 @@
 #include <svl/strmadpt.hxx>
 #include <svl/instrm.hxx>
 
+#include <registerservices.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
