@@ -858,7 +858,7 @@ void OutputDevice::DrawTransformedBitmapEx(
             {
                 // parts will be uncovered, extend aTransformed with a mask bitmap
                 const Bitmap aContent(aTransformed.GetBitmap());
-#if defined(MACOSX)
+#if defined(MACOSX) || defined(IOS)
                 AlphaMask aMaskBmp(aContent.GetSizePixel());
                 aMaskBmp.Erase(0);
 #else
