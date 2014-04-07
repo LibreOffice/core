@@ -2765,7 +2765,7 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
     {
         ScDocShellModificator aModificator( *pDocSh );
 
-        pDoc->CompileNameFormula( true );   // CreateFormulaString
+        pDoc->PreprocessRangeNameUpdate();
 
         // input available yet? Then remove beforehand (=change)
         ScRangeData* pData = pList->findByUpperName(ScGlobal::pCharClass->uppercase(rName));
@@ -2779,7 +2779,8 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
             bOk = true;
         pNewEntry = NULL;   // never delete, insert took ownership
 
-        pDoc->CompileNameFormula( false );  // CompileFormulaString
+        pDoc->PostprocessRangeNameUpdate();
+
         aModificator.SetDocumentModified();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
     }

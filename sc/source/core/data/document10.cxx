@@ -14,6 +14,8 @@
 #include <table.hxx>
 #include <tokenarray.hxx>
 #include <editutil.hxx>
+#include <listenercontext.hxx>
+#include <tokenstringcontext.hxx>
 
 // Add totally brand-new methods to this source file.
 
@@ -38,6 +40,30 @@ void ScDocument::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const 
         pTab->DeleteBeforeCopyFromClip(rCxt, *rClipTabs[nClipTab]);
 
         nClipTab = (nClipTab+1) % nClipTabCount;
+    }
+}
+
+void ScDocument::PreprocessRangeNameUpdate()
+{
+    sc::EndListeningContext aEndListenCxt(*this);
+    sc::CompileFormulaContext aCompileCxt(this);
+
+    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScTable* p = *it;
+        p->PreprocessRangeNameUpdate(aEndListenCxt, aCompileCxt);
+    }
+}
+
+void ScDocument::PostprocessRangeNameUpdate()
+{
+    sc::CompileFormulaContext aCompileCxt(this);
+    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScTable* p = *it;
+        p->PostprocessRangeNameUpdate(aCompileCxt);
     }
 }
 
