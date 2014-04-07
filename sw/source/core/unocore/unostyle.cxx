@@ -3940,6 +3940,10 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         default:
             ;
     }
+
+    if( !pPropSet)
+        throw uno::RuntimeException();
+
     SwAttrSet aSet( pDocShell->GetDoc()->GetAttrPool(), pRange );
     const beans::PropertyValue* pSeq = Values.getConstArray();
     sal_Int32 nLen = Values.getLength();
