@@ -165,6 +165,7 @@ void wwSection::SetDirection()
     {
         default:
             OSL_ENSURE(!this, "Unknown layout type");
+            //fall-through
         case 0:
             meDir=FRMDIR_HORI_LEFT_TOP;
             break;
