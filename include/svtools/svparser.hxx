@@ -84,8 +84,13 @@ protected:
         bool        bTokenHasValue;
         int         nTokenId;
 
-        inline TokenStackType() { nTokenId = 0; }
-        inline ~TokenStackType() { }
+        TokenStackType()
+            : nTokenValue(0)
+            , bTokenHasValue(0)
+            , nTokenId(0)
+        {
+        }
+        ~TokenStackType() { }
     };
 
     // Methoden fuer Token-Stack
