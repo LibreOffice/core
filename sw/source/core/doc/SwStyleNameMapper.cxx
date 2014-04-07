@@ -388,7 +388,25 @@ static void lcl_CheckSuffixAndDelete(OUString & rString)
         rString = rString.copy(0, rString.getLength() - 7);
     }
 }
+}
 
+void SwStyleNameMapper::testNameTable( SwGetPoolIdFromName const nFamily, sal_uInt16 const nStartIndex, sal_uInt16 const nEndIndex )
+{
+    sal_uInt16 nIndex;
+    sal_uInt16 nId;
+
+    for ( nIndex = 0, nId = nStartIndex ; nId < nEndIndex ; nId++,nIndex++ )
+    {
+        OUString aString, bString;
+        FillUIName ( nId, aString );
+        bString = GetProgName ( nFamily, aString );
+        sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nFamily );
+        FillProgName ( nNewId, aString );
+        bString = GetUIName ( aString, nFamily );
+        nNewId = GetPoolIdFromUIName ( aString, nFamily );
+        if ( nNewId != nId )
+            abort();
+    }
 }
 
 const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlags, bool bProgName )
@@ -512,153 +530,24 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
         }
         break;
     }
+
 #ifdef _NEED_TO_DEBUG_MAPPING
     static bool bTested = false;
     if ( !bTested )
     {
         bTested = true;
-        {
-            for ( sal_uInt16 nIndex = 0, nId = RES_POOLCOLL_TEXT_BEGIN ; nId < RES_POOLCOLL_TEXT_END ; nId++,nIndex++ )
-            {
-                OUString aString, bString;
-                FillUIName ( nId, aString );
-                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                if ( nNewId != nId )
-                    abort();
-            }
-            for ( nIndex = 0, nId = RES_POOLCOLL_LISTS_BEGIN ; nId < RES_POOLCOLL_LISTS_END ; nId++,nIndex++ )
-            {
-                OUString aString, bString;
-                FillUIName ( nId, aString );
-                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                if ( nNewId != nId )
-                    abort();
-            }
-            for ( nIndex = 0, nId = RES_POOLCOLL_EXTRA_BEGIN ; nId < RES_POOLCOLL_EXTRA_END ; nId++,nIndex++ )
-            {
-                OUString aString, bString;
-                FillUIName ( nId, aString );
-                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                if ( nNewId != nId )
-                    abort();
-            }
-            for ( nIndex = 0, nId = RES_POOLCOLL_REGISTER_BEGIN ; nId < RES_POOLCOLL_REGISTER_END ; nId++,nIndex++ )
-            {
-                OUString aString, bString;
-                FillUIName ( nId, aString );
-                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                if ( nNewId != nId )
-                    abort();
-            }
-            for ( nIndex = 0, nId = RES_POOLCOLL_DOC_BEGIN ; nId < RES_POOLCOLL_DOC_END ; nId++,nIndex++ )
-            {
-                OUString aString, bString;
-                FillUIName ( nId, aString );
-                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                if ( nNewId != nId )
-                    abort();
-            }
-            for ( nIndex = 0, nId = RES_POOLCOLL_HTML_BEGIN ; nId < RES_POOLCOLL_HTML_END ; nId++,nIndex++ )
-            {
-                OUString aString, bString;
-                FillUIName ( nId, aString );
-                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                if ( nNewId != nId )
-                    abort();
-            }
-        }
-        {
-            for ( sal_uInt16 nIndex = 0, nId = RES_POOLCHR_NORMAL_BEGIN ; nId < RES_POOLCHR_NORMAL_END ; nId++,nIndex++ )
-            {
-                OUString aString, bString;
-                FillUIName ( nId, aString );
-                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                if ( nNewId != nId )
-                    abort();
-            }
-            for ( nIndex = 0, nId = RES_POOLCHR_HTML_BEGIN ; nId < RES_POOLCHR_HTML_END ; nId++,nIndex++ )
-            {
-                OUString aString, bString;
-                FillUIName ( nId, aString );
-                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                if ( nNewId != nId )
-                    abort();
-            }
-        }
-        {
-            for ( sal_uInt16 nIndex=0,nId = RES_POOLFRM_BEGIN ; nId < RES_POOLFRM_END ; nId++,nIndex++ )
-            {
-                OUString aString, bString;
-                FillUIName ( nId, aString );
-                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                if ( nNewId != nId )
-                    abort();
-            }
-        }
-        {
-            for ( sal_uInt16 nIndex=0,nId = RES_POOLPAGE_BEGIN ; nId < RES_POOLPAGE_END ; nId++,nIndex++ )
-            {
-                OUString aString, bString;
-                FillUIName ( nId, aString );
-                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                if ( nNewId != nId )
-                    abort();
-            }
-        }
-        {
-            for ( sal_uInt16 nIndex=0,nId = RES_POOLNUMRULE_BEGIN ; nId < RES_POOLNUMRULE_END ; nId++,nIndex++ )
-            {
-                OUString aString, bString;
-                FillUIName ( nId, aString );
-                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                if ( nNewId != nId )
-                    abort();
-            }
-        }
+
+        testNameTable( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, RES_POOLCOLL_TEXT_BEGIN, RES_POOLCOLL_TEXT_END );
+        testNameTable( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, RES_POOLCOLL_LISTS_BEGIN, RES_POOLCOLL_LISTS_END );
+        testNameTable( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, RES_POOLCOLL_EXTRA_BEGIN, RES_POOLCOLL_EXTRA_END );
+        testNameTable( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, RES_POOLCOLL_REGISTER_BEGIN, RES_POOLCOLL_REGISTER_END );
+        testNameTable( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, RES_POOLCOLL_DOC_BEGIN, RES_POOLCOLL_DOC_END );
+        testNameTable( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, RES_POOLCOLL_HTML_BEGIN, RES_POOLCOLL_HTML_END );
+        testNameTable( nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, RES_POOLCHR_NORMAL_BEGIN, RES_POOLCHR_NORMAL_END );
+        testNameTable( nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, RES_POOLCHR_HTML_BEGIN, RES_POOLCHR_HTML_END );
+        testNameTable( nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, RES_POOLFRM_BEGIN, RES_POOLFRM_END );
+        testNameTable( nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, RES_POOLPAGE_BEGIN, RES_POOLPAGE_END );
+        testNameTable( nsSwGetPoolIdFromName::GET_POOLID_NUMRULE, RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END );
     }
 #endif
     return *pHash;
