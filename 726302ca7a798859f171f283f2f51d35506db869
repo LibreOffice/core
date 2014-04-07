@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_68176352",
+        "filename": "desktop/source/deployment/misc/dp_dependencies.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-04-07T07:15:05Z",
+      "side": 1,
+      "message": "break early",
+      "revId": "726302ca7a798859f171f283f2f51d35506db869",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
