@@ -265,6 +265,8 @@ SalInstance *CreateSalInstance()
     IosSalInstance* pInstance = new IosSalInstance( new SalYieldMutex() );
     new IosSalData( pInstance );
     pInstance->AcquireYieldMutex(1);
+    ImplGetSVData()->maGDIData.mbNoXORClipping = true;
+    ImplGetSVData()->maWinData.mbNoSaveBackground = true;
     return pInstance;
 }
 
