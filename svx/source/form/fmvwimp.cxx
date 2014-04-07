@@ -1717,10 +1717,13 @@ void FmXFormView::startMarkListWatching()
 {
     if ( !m_pWatchStoredList )
     {
-        m_pWatchStoredList = new ObjectRemoveListener( this );
         FmFormModel* pModel = GetFormShell() ? GetFormShell()->GetFormModel() : NULL;
         DBG_ASSERT( pModel != NULL, "FmXFormView::startMarkListWatching: shell has no model!" );
-        m_pWatchStoredList->StartListening( *static_cast< SfxBroadcaster* >( pModel ) );
+        if (pModel)
+        {
+            m_pWatchStoredList = new ObjectRemoveListener( this );
+            m_pWatchStoredList->StartListening( *static_cast< SfxBroadcaster* >( pModel ) );
+        }
     }
     else
     {
