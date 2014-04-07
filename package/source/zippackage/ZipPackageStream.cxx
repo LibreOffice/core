@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// MARKER( update_precomp.py ): autogen include statement, do not remove
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>

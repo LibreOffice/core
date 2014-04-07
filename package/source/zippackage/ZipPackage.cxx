@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// MARKER( update_precomp.py ): autogen include statement, do not remove
 #include <ZipPackage.hxx>
 #include <ZipPackageSink.hxx>
 #include <ZipEnumeration.hxx>
