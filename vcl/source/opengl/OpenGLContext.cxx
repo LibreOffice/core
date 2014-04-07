@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <GL/glew.h>
 #include <vcl/OpenGLContext.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
@@ -446,6 +447,19 @@ bool OpenGLContext::init( Window* pParent )
     }
 
 #endif
+
+    static bool bGlewInit = false;
+    if(!bGlewInit)
+    {
+        glewExperimental = GL_TRUE;
+        if (glewInit() != GLEW_OK)
+        {
+            SAL_WARN("vcl.opengl", "Failed to initialize GLEW");
+            return false;
+        }
+        else
+            bGlewInit = true;
+    }
 
     SAL_INFO("vcl.opengl", "OpenGLContext::init----end");
     mbInitialized = true;
