@@ -426,9 +426,9 @@ int SAL_CALL main (int argc, char **argv)
         eErrCode = aFile.symlink (
             aPath,      OUString("000000/"),
             OUString(), aPath);
-        OSL_POSTCOND(
-            ((eErrCode == store_E_None         ) ||
-             (eErrCode == store_E_AlreadyExists)    ),
+        SAL_WARN_IF(
+            eErrCode != store_E_None && eErrCode != store_E_AlreadyExists,
+            "store",
             "t_store::main(): store_symlink() failed");
 
         // Create symlink to file.
@@ -437,9 +437,9 @@ int SAL_CALL main (int argc, char **argv)
         eErrCode = aFile.symlink (
             aPath, aLinkName,
             aPath, OUString("demostor-1.dat"));
-        OSL_POSTCOND(
-            ((eErrCode == store_E_None         ) ||
-             (eErrCode == store_E_AlreadyExists)    ),
+        SAL_WARN_IF(
+            eErrCode != store_E_None && eErrCode != store_E_AlreadyExists,
+            "store",
             "t_store::main(): store_symlink() failed");
         if ((eErrCode == store_E_None         ) ||
             (eErrCode == store_E_AlreadyExists)    )
@@ -449,9 +449,9 @@ int SAL_CALL main (int argc, char **argv)
             eErrCode = aFile.rename (
                 aPath, aLinkName,
                 aPath, aShortcut);
-            OSL_POSTCOND(
-                ((eErrCode == store_E_None         ) ||
-                 (eErrCode == store_E_AlreadyExists)    ),
+            SAL_WARN_IF(
+                eErrCode != store_E_None && eErrCode != store_E_AlreadyExists,
+                "store",
                 "t_store::main(): store_rename() failed");
         }
 
@@ -461,12 +461,9 @@ int SAL_CALL main (int argc, char **argv)
 
         eErrCode = aDir.create (
             aFile, aPath, aDirName, store_AccessReadCreate);
-        OSL_POSTCOND(
-            (eErrCode == store_E_None),
+        SAL_WARN_IF(
+            eErrCode != store_E_None,
             "t_store::main(): store_createDirectory() failed");
-        if (eErrCode == store_E_None)
-        {
-        }
     }
 
     // Directory iteration.

@@ -54,7 +54,7 @@ public:
 
         pBuff = new sal_Unicode[size];
 
-        OSL_POSTCOND(pBuff,"Could not allocate path buffer");
+        SAL_WARN_IF(!pBuff, "fpicker", "Could not allocate path buffer");
     }
 
     ~CAutoPathBuff( )

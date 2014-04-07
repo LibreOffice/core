@@ -382,7 +382,7 @@ Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(voi
         {
             const Reference< XNameAccess > xColNames( static_cast< XNameAccess* >( m_pColumns ), UNO_SET_THROW );
             const Sequence< OUString > aNames( xColNames->getElementNames() );
-            OSL_POSTCOND( aNames.getLength() == nColCount,
+            SAL_WARN_IF( aNames.getLength() != nColCount, "dbaccess",
                 "OResultSet::getColumns: invalid column count!" );
             for (   const OUString* pName = aNames.getConstArray();
                     pName != aNames.getConstArray() + aNames.getLength();
@@ -392,7 +392,7 @@ Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(voi
                 Reference< XPropertySet > xColProps( xColNames->getByName( *pName ), UNO_QUERY_THROW );
                 OUString sName;
                 OSL_VERIFY( xColProps->getPropertyValue( PROPERTY_NAME ) >>= sName );
-                OSL_POSTCOND( sName == *pName, "OResultSet::getColumns: invalid column name!" );
+                SAL_WARN_IF( sName != *pName, "dbaccess", "OResultSet::getColumns: invalid column name!" );
             }
 
         }

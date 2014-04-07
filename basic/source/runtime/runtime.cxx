@@ -923,11 +923,11 @@ void SbiRuntime::Error( SbError _errCode, const OUString& _details )
     if ( _errCode )
     {
         // Not correct for class module usage, remove for now
-        //OSL_ENSURE( pInst->pRun == this, "SbiRuntime::Error: can't propagate the error message details!" );
+        //OSL_WARN_IF( pInst->pRun != this, "basic", "SbiRuntime::Error: can't propagate the error message details!" );
         if ( pInst->pRun == this )
         {
             pInst->Error( _errCode, _details );
-            //OSL_POSTCOND( nError == _errCode, "SbiRuntime::Error: the instance is expecte to propagate the error code back to me!" );
+            //OSL_WARN_IF( nError != _errCode, "basic", "SbiRuntime::Error: the instance is expecte to propagate the error code back to me!" );
         }
         else
         {

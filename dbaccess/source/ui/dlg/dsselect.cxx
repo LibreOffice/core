@@ -110,7 +110,7 @@ IMPL_LINK_NOARG(ODatasourceSelectDialog, ManageClickHdl)
     m_pCancel->Disable();
     m_pManageDatasources->Disable();
 
-    OSL_POSTCOND( m_pODBCManagement->isRunning(), "ODatasourceSelectDialog::ManageClickHdl: success, but not running - you were *fast*!" );
+    SAL_WARN_IF( !m_pODBCManagement->isRunning(), "dbaccess.ui", "ODatasourceSelectDialog::ManageClickHdl: success, but not running - you were *fast*!" );
     return 0L;
 }
 

@@ -20,6 +20,7 @@
 #include "storpage.hxx"
 
 #include "sal/types.h"
+#include "sal/log.hxx"
 #include "rtl/string.h"
 #include "rtl/ref.hxx"
 #include "osl/diagnose.h"
@@ -128,7 +129,7 @@ storeError OStorePageManager::find_lookup (
 
     // Greater or Equal.
     PageHolderObject< page > xPage (rNode.get());
-    OSL_POSTCOND(rIndex < xPage->usageCount(), "store::PageManager::find_lookup(): logic error");
+    SAL_WARN_IF(rIndex >= xPage->usageCount(), "store", "store::PageManager::find_lookup(): logic error");
     entry e (xPage->m_pData[rIndex]);
 
     // Check for exact match.
@@ -200,8 +201,9 @@ storeError OStorePageManager::remove_Impl (entry & rEntry)
         result = rEntry.compare (xPage->m_pData[i]);
     }
 
-    OSL_POSTCOND(
-        result != entry::COMPARE_LESS,
+    SAL_WARN_IF(
+        result == entry::COMPARE_LESS,
+        "store",
         "OStorePageManager::remove(): find failed");
 
     // Check entry comparison.

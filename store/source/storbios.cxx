@@ -25,6 +25,7 @@
 
 #include "sal/types.h"
 #include "sal/macros.h"
+#include "sal/log.hxx"
 
 #include "rtl/alloc.h"
 #include "rtl/ref.hxx"
@@ -258,9 +259,10 @@ storeError SuperBlockPage::unusedHead (OStorePageBIOS & rBIOS, PageData & rPageH
 
     // Verify page is unused.
     sal_uInt32 const nAddr = rPageHead.m_aUnused.location();
-    OSL_POSTCOND(nAddr != STORE_PAGE_NULL, "store::SuperBlock::unusedHead(): page not free");
     if (nAddr == STORE_PAGE_NULL)
     {
+        SAL_WARN("store", "store::SuperBlock::unusedHead(): page not free");
+
         // Page in use.
         rPageHead.location (STORE_PAGE_NULL);
 
