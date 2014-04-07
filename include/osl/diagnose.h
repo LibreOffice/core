@@ -36,8 +36,8 @@
     steps taken while executing some protocol) should use the facilities
     provided by (C++ only) sal/log.hxx.
 
-    Because the assertion macros (OSL_ASSERT, OSL_ENSURE, OSL_FAIL, OSL_PRECOND,
-    and OSL_POSTCOND) have been used for true assertions as well as for logged
+    Because the assertion macros (OSL_ASSERT, OSL_ENSURE, OSL_FAIL, OSL_PRECOND)
+    have been used for true assertions as well as for logged
     warnings, they map to SAL_WARN instead of standard assert.  OSL_TRACE maps
     to SAL_INFO.
 
@@ -58,9 +58,8 @@
         Reports an error with message msg unconditionally.
 
     OSL_PRECOND(cond, msg)
-    OSL_POSTCOND(cond, msg)
-        These two are functionally equivalent to OSL_ENSURE(cond, msg). They are
-        intended to be used for checking pre- and postconditions of functions.
+        This functionally is equivalent to OSL_ENSURE(cond, msg). This is
+        intended to be used for checking preconditions of functions.
 
     Traces:
     OSL_TRACE(fmt, args...)
@@ -111,8 +110,6 @@
 
 #define OSL_VERIFY(c) do { if (!(c)) OSL_ASSERT(0); } while (0)
 #define OSL_PRECOND(c, m)   OSL_ENSURE(c, m)
-#define OSL_POSTCOND(c, m)  OSL_ENSURE(c, m)
-
 
 #ifdef __cplusplus
 #define _OSL_GLOBAL ::

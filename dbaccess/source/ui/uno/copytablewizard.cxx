@@ -862,7 +862,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
     if ( xConnection.is() )
     {
         xInteractionHandler = lcl_getInteractionHandler_throw( xConnection.getTyped(), m_xInteractionHandler );
-        OSL_POSTCOND( xInteractionHandler.is(), "CopyTableWizard::impl_extractConnection_throw: lcl_getInteractionHandler_throw returned nonsense!" );
+        SAL_WARN_IF( !xInteractionHandler.is(), "dbaccess.ui", "CopyTableWizard::impl_extractConnection_throw: lcl_getInteractionHandler_throw returned nonsense!" );
         break;
     }
 
@@ -885,7 +885,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
     {
         // first, try connecting with completion
         xInteractionHandler = lcl_getInteractionHandler_throw( xDataSource, m_xInteractionHandler );
-        OSL_POSTCOND( xInteractionHandler.is(), "CopyTableWizard::impl_extractConnection_throw: lcl_getInteractionHandler_throw returned nonsense!" );
+        SAL_WARN_IF( !xInteractionHandler.is(), "dbaccess.ui", "CopyTableWizard::impl_extractConnection_throw: lcl_getInteractionHandler_throw returned nonsense!" );
         if ( xInteractionHandler.is() )
         {
             Reference< XCompletedConnection > xInteractiveConnection( xDataSource, UNO_QUERY );

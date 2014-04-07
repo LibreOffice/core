@@ -132,7 +132,7 @@ bool SAL_CALL CAsyncEventNotifier::startup(bool bCreateSuspended)
             m_bRun = true;
     }
 
-    OSL_POSTCOND(m_bRun,"Could not start event notifier!");
+    SAL_WARN_IF( !m_bRun, "fpicker", "Could not start event notifier!");
 
     return m_bRun;
 }

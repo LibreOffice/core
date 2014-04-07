@@ -190,6 +190,7 @@ certain functionality.
 
 @section fpicker
 
+@li @c fpicker
 @li @c fpicker.aqua
 @li @c fpicker.office
 
@@ -474,6 +475,7 @@ certain functionality.
 @li @c sax
 @li @c shell
 @li @c stoc
+@li @c store
 @li @c svg
 @li @c test
 @li @c ucbhelper

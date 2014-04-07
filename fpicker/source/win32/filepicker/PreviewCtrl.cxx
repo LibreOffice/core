@@ -282,7 +282,7 @@ CFilePreview::~CFilePreview( )
     sal_Bool bRet = UnregisterClass(
         (LPCTSTR)(DWORD_PTR)MAKELONG( m_atomPrevWndClass, 0 ),
         m_hInstance );
-    OSL_POSTCOND( bRet, "Unregister preview window class failed" );
+    SAL_WARN_IF( !bRet, "fpicker", "Unregister preview window class failed" );
 }
 
 
