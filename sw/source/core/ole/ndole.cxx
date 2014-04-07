@@ -340,27 +340,28 @@ sal_Bool SwOLENode::SavePersistentData()
             if ( xChild.is() )
                 xChild->setParent( 0 );
 
-          // pCnt->RemoveEmbeddedObject( aOLEObj.aName, sal_False );
            /* #i119941: When cut or move the chart, SwUndoFlyBase::DelFly will call SaveSection to store the comtent to strorage.
            In this step, chart filter functions will be called. And chart filter will call chart core functions to create the chart again.
            Then chart core function will call the class ExplicitCategoryProvider to create data source.
-           In this step, when SW data source provider create the data source, it will create a new SwFlyFrm.
+           In this step, when SW
+           source provider create the data source, an UnoActionRemoveContext
+           will mess with the layout and create a new SwFlyFrm.
            But later in SwUndoFlyBase::DelFly, it will clear anchor related attributes of SwFlyFrm. Then finally null pointer occur.
            Resolution:
            In pCnt->RemoveEmbeddedObject in SaveSection process of table chart, only remove the object from the object container,
            without removing it's storage and graphic stream. The chart already removed from formatter.> */
-           sal_Bool bChartWithInternalProvider = sal_False;
            sal_Bool bKeepObjectToTempStorage = sal_True;
            uno::Reference < embed::XEmbeddedObject > xIP = GetOLEObj().GetOleRef();
-           if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
+           if (IsChart() && !sChartTblName.isEmpty()
+               && svt::EmbeddedObjectRef::TryRunningState(xIP))
            {
                uno::Reference< chart2::XChartDocument > xChart( xIP->getComponent(), UNO_QUERY );
-               if ( xChart.is() && xChart->hasInternalDataProvider() )
-                   bChartWithInternalProvider = sal_True;
+                if (xChart.is() && !xChart->hasInternalDataProvider())
+                {
+                    bKeepObjectToTempStorage = sal_False;
+                }
            }
 
-           if ( IsChart() && !sChartTblName.isEmpty() && !bChartWithInternalProvider )
-               bKeepObjectToTempStorage = sal_False;
            pCnt->RemoveEmbeddedObject( aOLEObj.aName, sal_False, bKeepObjectToTempStorage );
            // modify end
 
