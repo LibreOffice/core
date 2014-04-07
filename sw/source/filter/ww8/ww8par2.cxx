@@ -1552,11 +1552,10 @@ enum wwTableSprm
 {
     sprmNil,
 
-    sprmTTableWidth,sprmTTextFlow, sprmTFCantSplit, sprmTFCantSplit90,sprmTJc, sprmTFBiDi, sprmTDefTable,
-    sprmTDyaRowHeight, sprmTDefTableShd, sprmTDxaLeft, sprmTSetBrc,
-    sprmTSetBrc90, sprmTDxaCol, sprmTInsert, sprmTDelete, sprmTTableHeader,
-    sprmTDxaGapHalf, sprmTTableBorders, sprmTTableBorders90,
-
+    sprmTTableWidth, sprmTTextFlow, sprmTFCantSplit, sprmTJc, sprmTFBiDi,
+    sprmTDefTable, sprmTDyaRowHeight, sprmTDefTableShd, sprmTDxaLeft,
+    sprmTSetBrc, sprmTSetBrc90, sprmTDxaCol, sprmTInsert, sprmTDelete,
+    sprmTTableHeader, sprmTDxaGapHalf, sprmTTableBorders, sprmTTableBorders90,
     sprmTDefTableNewShd, sprmTCellPadding, sprmTCellPaddingDefault
 };
 
@@ -1571,14 +1570,10 @@ wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
                     return sprmTTableWidth;
                 case NS_sprm::LN_TTextFlow:
                     return sprmTTextFlow;
-                case NS_sprm::LN_TFCantSplit90:
-                    // FIXME this code gets the names of sprmTFCantSplit and
-                    // sprmTFCantSplit90 the wrong way around.
-                    return sprmTFCantSplit;
                 case NS_sprm::LN_TTableHeader:
                     return sprmTTableHeader;
                 case NS_sprm::LN_TFCantSplit:
-                    return sprmTFCantSplit90;
+                    return sprmTFCantSplit;
                 case NS_sprm::LN_TJc90:
                     return sprmTJc;
                 case NS_sprm::LN_TFBiDi:
@@ -1778,10 +1773,6 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         break;
                     case sprmTFCantSplit:
                         pNewBand->bCantSplit = *pParams;
-                        bClaimLineFmt = true;
-                        break;
-                    case sprmTFCantSplit90:
-                        pNewBand->bCantSplit90 = *pParams;
                         bClaimLineFmt = true;
                         break;
                     case sprmTTableBorders:
@@ -3068,15 +3059,7 @@ void WW8TabDesc::AdjustNewBand()
 
     //Word stores 1 for bCantSplit if the row cannot be split, we set true if
     //we can split the row
-    // bCantSplit: Always true for rows containing merged cells (Word <= 2000 crashes otherwise)
-    // So in case bCantSplit is true, we check for bCantSplit90, which has been introduced for
-    // Word versions >= 2002.
-    // FIXME the above comment is suspect because bCantSplit and bCantSplit90
-    // have been populated the wrong way around.
     bool bSetCantSplit = pActBand->bCantSplit;
-    if(bSetCantSplit)
-        bSetCantSplit = pActBand->bCantSplit90;
-
     pTabLine->GetFrmFmt()->SetFmtAttr(SwFmtRowSplit(!bSetCantSplit));
 
     short i;    // SW-Index
