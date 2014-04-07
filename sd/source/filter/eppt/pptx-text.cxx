@@ -68,15 +68,23 @@ PortionObj::PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star
     ImplGetPortionValues( rFontCollection, sal_False );
 }
 
-PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRange,
-                            sal_Bool bLast, FontCollection& rFontCollection ) :
-    mnCharAttrHard          ( 0 ),
-    mnCharAttr              ( 0 ),
-    mnFont                  ( 0 ),
-    mnAsianOrComplexFont    ( 0xffff ),
-    mbLastPortion           ( bLast ),
-    mpText                  ( NULL ),
-    mpFieldEntry            ( NULL )
+PortionObj::PortionObj(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRange,
+                           sal_Bool bLast, FontCollection& rFontCollection)
+    : meCharColor(css::beans::PropertyState_AMBIGUOUS_VALUE)
+    , meCharHeight(css::beans::PropertyState_AMBIGUOUS_VALUE)
+    , meFontName(css::beans::PropertyState_AMBIGUOUS_VALUE)
+    , meAsianOrComplexFont(css::beans::PropertyState_AMBIGUOUS_VALUE)
+    , meCharEscapement(css::beans::PropertyState_AMBIGUOUS_VALUE)
+    , mnCharAttrHard(0)
+    , mnCharColor(0)
+    , mnCharAttr(0)
+    , mnCharHeight(0)
+    , mnFont(0)
+    , mnAsianOrComplexFont(0xffff)
+    , mnCharEscapement(0)
+    , mbLastPortion(bLast)
+    , mpText(NULL)
+    , mpFieldEntry(NULL)
 {
     OUString aString( rXTextRange->getString() );
     OUString aURL;
