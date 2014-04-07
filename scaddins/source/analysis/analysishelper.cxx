@@ -1430,6 +1430,7 @@ sal_uInt16 FuncData::GetStrIndex( sal_uInt16 nParamNum ) const
 
 
 FuncDataList::FuncDataList( ResMgr& rResMgr )
+    : nLast(0)
 {
     for( sal_uInt16 n = 0 ; n < SAL_N_ELEMENTS(pFuncDatas) ; n++ )
         Append( new FuncData( pFuncDatas[ n ], rResMgr ) );
