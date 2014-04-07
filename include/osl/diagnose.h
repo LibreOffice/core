@@ -111,12 +111,6 @@
 #define OSL_VERIFY(c) do { if (!(c)) OSL_ASSERT(0); } while (0)
 #define OSL_PRECOND(c, m)   OSL_ENSURE(c, m)
 
-#ifdef __cplusplus
-#define _OSL_GLOBAL ::
-#else
-#define _OSL_GLOBAL
-#endif  /* __cplusplus */
-
 #if OSL_DEBUG_LEVEL > 0
 
 #define _OSL_DEBUG_ONLY(f)  (f)
