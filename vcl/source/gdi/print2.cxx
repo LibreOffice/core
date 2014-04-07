@@ -667,7 +667,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
              pCurrAct && !bTransparent;
              pCurrAct = ( (GDIMetaFile&) rInMtf ).NextAction() )
         {
-            // #i10613# determine if the action is a transparency capable
+            // #i10613# determine if the action is transparency capable
 
             // #107169# Also examine metafiles with masked bitmaps in
             // detail. Further down, this is optimized in such a way
