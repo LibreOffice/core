@@ -398,7 +398,9 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
 static void DrawPattern50( void*, CGContextRef rContext )
 {
     static const CGRect aRects[2] = { { {0,0}, { 2, 2 } }, { { 2, 2 }, { 2, 2 } } };
+    CG_TRACE( "CGContextAddRects(" << rContext << ",aRects,2 )" );
     CGContextAddRects( rContext, aRects, 2 );
+    CG_TRACE( "CGContextFillPath(" << rContext << ")" );
     CGContextFillPath( rContext );
 }
 
@@ -890,6 +892,7 @@ bool AquaSalGraphics::drawPolyLine(
     AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true );
 
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
+    CG_TRACE( "CGPathGetBoundingBox(" << xPath << ") = " << aRefreshRect );
     // #i97317# workaround for Quartz having problems with drawing small polygons
     if( ! ((aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125)) )
     {
