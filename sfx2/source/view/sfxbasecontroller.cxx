@@ -198,6 +198,9 @@ public:
                             SfxStatusIndicator(SfxBaseController* pController, SfxWorkWindow* pWork)
                                 : xOwner( pController )
                                 , pWorkWindow( pWork )
+                                , _nRange(0)
+                                , _nValue(0)
+                                , _nStartTime(0)
                             {
                                 ++m_refCount;
                                 Reference< lang::XComponent > xComponent(
