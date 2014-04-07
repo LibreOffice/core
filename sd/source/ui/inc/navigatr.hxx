@@ -60,7 +60,12 @@ class SdPageNameControllerItem;
 class NavDocInfo
 {
 public:
-            NavDocInfo() { mpDocShell = NULL; }
+    NavDocInfo()
+        : bName(false)
+        , bActive(false)
+        , mpDocShell(NULL)
+    {
+    }
 
     sal_Bool    HasName() { return( (sal_Bool) bName ); }
     sal_Bool    IsActive() { return( (sal_Bool) bActive ); }
