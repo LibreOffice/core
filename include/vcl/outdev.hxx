@@ -730,10 +730,6 @@ public:
     SAL_DLLPRIVATE void         ImplDrawBitmapEx     ( const Point& rDestPt, const Size& rDestSize,
                                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                                        const BitmapEx& rBitmapEx, const sal_uLong nAction );
-    SAL_DLLPRIVATE void         ImplDrawMask         ( const Point& rDestPt, const Size& rDestSize,
-                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                                       const Bitmap& rBitmap, const Color& rMaskColor,
-                                                       const sal_uLong nAction );
     SAL_DLLPRIVATE void         ImplDrawAlpha        ( const Bitmap& rBmp, const AlphaMask& rAlpha,
                                                        const Point& rDestPt, const Size& rDestSize,
                                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel );
@@ -1104,7 +1100,8 @@ public:
                                           const Bitmap& rBitmap, const Color& rMaskColor );
     void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
                                           const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                          const Bitmap& rBitmap, const Color& rMaskColor );
+                                          const Bitmap& rBitmap, const Color& rMaskColor,
+                                          sal_uLong nAction );
 
     void                        DrawImage( const Point& rPos,
                                            const Image& rImage, sal_uInt16 nStyle = 0 );

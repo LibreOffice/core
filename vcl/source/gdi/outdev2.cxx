@@ -1146,83 +1146,23 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
 void OutputDevice::DrawMask( const Point& rDestPt,
                              const Bitmap& rBitmap, const Color& rMaskColor )
 {
-    if( ImplIsRecordLayout() )
-        return;
-
     const Size aSizePix( rBitmap.GetSizePixel() );
-    ImplDrawMask( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, rMaskColor, META_MASK_ACTION );
-
-    if( mpAlphaVDev )
-    {
-        const Bitmap& rMask( rBitmap.CreateMask( rMaskColor ) );
-
-        // #i25167# Restrict mask painting to _opaque_ areas
-        // of the mask, otherwise we spoil areas where no
-        // bitmap content was ever visible. Interestingly
-        // enough, this can be achieved by taking the mask as
-        // the transparency mask of itself
-        mpAlphaVDev->DrawBitmapEx( rDestPt,
-                                   PixelToLogic( aSizePix ),
-                                   BitmapEx( rMask, rMask ) );
-    }
+    DrawMask( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, rMaskColor, META_MASK_ACTION );
 }
 
 void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
                              const Bitmap& rBitmap, const Color& rMaskColor )
 {
-    if( ImplIsRecordLayout() )
-        return;
-
-    ImplDrawMask( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, rMaskColor, META_MASKSCALE_ACTION );
-
-    // TODO: Use mask here
-    if( mpAlphaVDev )
-    {
-        const Bitmap& rMask( rBitmap.CreateMask( rMaskColor ) );
-
-        // #i25167# Restrict mask painting to _opaque_ areas
-        // of the mask, otherwise we spoil areas where no
-        // bitmap content was ever visible. Interestingly
-        // enough, this can be achieved by taking the mask as
-        // the transparency mask of itself
-        mpAlphaVDev->DrawBitmapEx( rDestPt,
-                                   rDestSize,
-                                   BitmapEx( rMask, rMask ) );
-    }
+    DrawMask( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, rMaskColor, META_MASKSCALE_ACTION );
 }
 
 void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
                              const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                             const Bitmap& rBitmap, const Color& rMaskColor )
+                             const Bitmap& rBitmap, const Color& rMaskColor,
+                             const sal_uLong nAction )
 {
     if( ImplIsRecordLayout() )
         return;
-
-    ImplDrawMask( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap, rMaskColor, META_MASKSCALEPART_ACTION );
-
-    // TODO: Use mask here
-    if( mpAlphaVDev )
-    {
-        const Bitmap& rMask( rBitmap.CreateMask( rMaskColor ) );
-
-        // #i25167# Restrict mask painting to _opaque_ areas
-        // of the mask, otherwise we spoil areas where no
-        // bitmap content was ever visible. Interestingly
-        // enough, this can be achieved by taking the mask as
-        // the transparency mask of itself
-        mpAlphaVDev->DrawBitmapEx( rDestPt,
-                                   rDestSize,
-                                   rSrcPtPixel,
-                                   rSrcSizePixel,
-                                   BitmapEx( rMask, rMask ) );
-    }
-}
-
-void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
-                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                 const Bitmap& rBitmap, const Color& rMaskColor,
-                                 const sal_uLong nAction )
-{
 
     if( ROP_INVERT == meRasterOp )
     {
@@ -1292,6 +1232,23 @@ void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
                                       ImplColorToSal( rMaskColor ), this );
 
         }
+    }
+
+    // TODO: Use mask here
+    if( mpAlphaVDev )
+    {
+        const Bitmap& rMask( rBitmap.CreateMask( rMaskColor ) );
+
+        // #i25167# Restrict mask painting to _opaque_ areas
+        // of the mask, otherwise we spoil areas where no
+        // bitmap content was ever visible. Interestingly
+        // enough, this can be achieved by taking the mask as
+        // the transparency mask of itself
+        mpAlphaVDev->DrawBitmapEx( rDestPt,
+                                   rDestSize,
+                                   rSrcPtPixel,
+                                   rSrcSizePixel,
+                                   BitmapEx( rMask, rMask ) );
     }
 }
 

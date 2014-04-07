@@ -1917,7 +1917,7 @@ MetaMaskScalePartAction::MetaMaskScalePartAction( const Point& rDstPt, const Siz
 
 void MetaMaskScalePartAction::Execute( OutputDevice* pOut )
 {
-    pOut->DrawMask( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmp, maColor );
+    pOut->DrawMask( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmp, maColor, META_MASKSCALE_ACTION );
 }
 
 MetaAction* MetaMaskScalePartAction::Clone()
