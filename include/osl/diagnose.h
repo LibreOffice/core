@@ -86,8 +86,6 @@
 #define OSL_DEBUG_LEVEL 0
 #endif
 
-#define OSL_THIS_FILE       __FILE__
-
 /* the macro OSL_LOG_PREFIX is intended to be an office internal macro for now
 
    it is deprecated and superseded by (C++ only) SAL_WHERE
