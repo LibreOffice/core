@@ -17,17 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_VCL_INC_SVMAIN_HXX
+#define INCLUDED_VCL_INC_SVMAIN_HXX
+
 #include <sal/config.h>
 
-#include <svmain.hxx>
-
-#ifndef MACOSX
-// MacOSX implementation of ImplSVMainHook is in osx/salinst.cxx
-
-bool ImplSVMainHook( int * )
-{
-    return false;   // indicate that ImplSVMainHook is not implemented
-}
+// #i47888# allow for alternative initialization as required for e.g. MacOSX
+bool ImplSVMainHook( int* );
 
 #endif
 

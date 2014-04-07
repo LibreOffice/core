@@ -52,6 +52,7 @@
 #include "salinst.hxx"
 #include "salwtype.hxx"
 #include "svdata.hxx"
+#include "svmain.hxx"
 #include "dbggui.hxx"
 #include "accmgr.hxx"
 #include "idlemgr.hxx"
@@ -180,9 +181,6 @@ int ImplSVMain()
 
 int SVMain()
 {
-    // #i47888# allow for alternative initialization as required for e.g. MacOSX
-    extern bool ImplSVMainHook( int* );
-
     int nRet;
     if( !Application::IsConsoleOnly() && ImplSVMainHook( &nRet ) )
         return nRet;
