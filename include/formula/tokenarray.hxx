@@ -26,6 +26,8 @@
 #include <tools/solar.h>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 
+#include <boost/unordered_set.hpp>
+
 namespace formula
 {
 
@@ -123,6 +125,16 @@ public:
     bool    HasOpCodeRPN( OpCode ) const;
     /// Token of type svIndex or opcode ocColRowName
     bool    HasNameOrColRowName() const;
+
+    /**
+     * Check if the token array contains any of specified opcode tokens.
+     *
+     * @param rOpCodes collection of opcodes to check against.
+     *
+     * @return true if the token array contains at least one of the specified
+     *         opcode tokens, false otherwise.
+     */
+    bool HasOpCodes( const boost::unordered_set<OpCode>& rOpCodes ) const;
 
     FormulaToken** GetArray() const  { return pCode; }
     FormulaToken** GetCode()  const  { return pRPN; }

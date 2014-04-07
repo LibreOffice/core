@@ -601,8 +601,6 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
         mpDoc->EnableAdjustHeight(true);
         // disable automatic update of linked sheets and DDE links
         mpDoc->EnableExecuteLink(false);
-        // #i79890# disable automatic update of defined names
-        mpDoc->CompileNameFormula(true);
 
         mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScGlobal::GetRscString(STR_LOAD_DOC) ) );
         mxFmlaParser.reset( new FormulaParser( *this ) );
@@ -637,8 +635,6 @@ void WorkbookGlobals::finalize()
     {
         // #i74668# do not insert default sheets
         mpDocShell->SetEmpty(false);
-        // #i79890# Compile named ranges before re-enabling row height adjustment. (no idea why).
-        mpDoc->CompileNameFormula(false);
         // enable automatic update of linked sheets and DDE links
         mpDoc->EnableExecuteLink(true);
         // #i79826# enable updating automatic row height after loading the document

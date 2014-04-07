@@ -76,6 +76,7 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
     void scheduleCompilation();
 
     void setCode( const ScTokenArray& rCode );
+    void setCode( ScTokenArray* pCode );
     void compileCode(
         ScDocument& rDoc, const ScAddress& rPos, formula::FormulaGrammar::Grammar eGram );
     void compileOpenCLKernel();
@@ -303,11 +304,12 @@ public:
     ScTokenArray* GetCode();
     const ScTokenArray* GetCode() const;
 
+    void SetCode( ScTokenArray* pNew );
+
     bool            IsRunning() const;
     void            SetRunning( bool bVal );
     void CompileDBFormula( sc::CompileFormulaContext& rCxt );
     void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
-    void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
     ScFormulaCell*  GetPrevious() const;
     ScFormulaCell*  GetNext() const;
@@ -343,6 +345,8 @@ public:
         for performance reasons.*/
     void SetHybridFormula(
         const OUString& r, const formula::FormulaGrammar::Grammar eGrammar );
+
+    OUString GetHybridFormula() const;
 
     void SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
 
@@ -392,6 +396,8 @@ public:
     SCROW GetSharedLength() const;
     ScTokenArray* GetSharedCode();
     const ScTokenArray* GetSharedCode() const;
+
+    void SyncSharedCode();
 
     bool IsPostponedDirty() const;
 };

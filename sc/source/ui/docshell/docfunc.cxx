@@ -4865,13 +4865,13 @@ bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTA
     sal_Bool bCompile = ( !pDoc->IsImportingXML() && pDoc->GetNamedRangesLockCount() == 0 );
 
     if ( bCompile )
-        pDoc->CompileNameFormula( sal_True );   // CreateFormulaString
+        pDoc->PreprocessRangeNameUpdate();
     if (nTab >= 0)
         pDoc->SetRangeName( nTab, pNewRanges ); // takes ownership
     else
         pDoc->SetRangeName( pNewRanges );       // takes ownership
     if ( bCompile )
-        pDoc->CompileNameFormula( false );  // CompileFormulaString
+        pDoc->PostprocessRangeNameUpdate();
 
     if (bModifyDoc)
     {
@@ -4895,12 +4895,9 @@ void ScDocFunc::ModifyAllRangeNames( const boost::ptr_map<OUString, ScRangeName>
                 new ScUndoAllRangeNames(&rDocShell, aOldRangeMap, rRangeMap));
     }
 
-    pDoc->CompileNameFormula(true);
-
-    // set all range names
+    pDoc->PreprocessRangeNameUpdate();
     pDoc->SetAllRangeNames(rRangeMap);
-
-    pDoc->CompileNameFormula(false);
+    pDoc->PostprocessRangeNameUpdate();
 
     aModificator.SetDocumentModified();
     SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));

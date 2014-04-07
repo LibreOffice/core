@@ -3199,21 +3199,6 @@ public:
     }
 };
 
-class CompileNameFormulaHandler
-{
-    sc::CompileFormulaContext& mrCxt;
-    bool mbCreateFormulaString;
-
-public:
-    CompileNameFormulaHandler( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString) :
-        mrCxt(rCxt), mbCreateFormulaString(bCreateFormulaString) {}
-
-    void operator() (size_t, ScFormulaCell* p)
-    {
-        p->CompileNameFormula(mrCxt, mbCreateFormulaString);
-    }
-};
-
 struct CompileColRowNameFormulaHandler
 {
     sc::CompileFormulaContext& mrCxt;
@@ -3240,12 +3225,6 @@ void ScColumn::CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFo
     CompileDBFormula2Handler aFunc(rCxt, bCreateFormulaString);
     sc::ProcessFormula(maCells, aFunc);
     RegroupFormulaCells();
-}
-
-void ScColumn::CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString )
-{
-    CompileNameFormulaHandler aFunc(rCxt, bCreateFormulaString);
-    sc::ProcessFormula(maCells, aFunc);
 }
 
 void ScColumn::CompileColRowNameFormula( sc::CompileFormulaContext& rCxt )

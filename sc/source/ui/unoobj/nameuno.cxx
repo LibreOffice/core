@@ -745,13 +745,13 @@ sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const OUString& aName )
 /** called from the XActionLockable interface methods on initial locking */
 void ScNamedRangesObj::lock()
 {
-    pDocShell->GetDocument()->CompileNameFormula( sal_True ); // CreateFormulaString
+    pDocShell->GetDocument()->PreprocessRangeNameUpdate();
 }
 
 /** called from the XActionLockable interface methods on final unlock */
 void ScNamedRangesObj::unlock()
 {
-    pDocShell->GetDocument()->CompileNameFormula( false ); // CompileFormulaString
+    pDocShell->GetDocument()->PostprocessRangeNameUpdate();
 }
 
 // document::XActionLockable
