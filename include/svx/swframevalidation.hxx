@@ -56,6 +56,11 @@ struct SvxSwFrameValidation
     Size    aPercentSize;   // Size for 100% value
 
     SvxSwFrameValidation() :
+        nAnchorType(0),
+        nHoriOrient(0),
+        nVertOrient(0),
+        nHRelOrient(0),
+        nVRelOrient(0),
         bAutoHeight(false),
         bAutoWidth(false),
         bMirror(false),
