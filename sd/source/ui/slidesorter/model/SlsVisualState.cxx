@@ -62,17 +62,7 @@ void VisualState::UpdateVisualState (const PageDescriptor& rDescriptor)
         SetVisualState(VS_Selected);
     else
         SetVisualState(VS_None);
-
-    SetMouseOverState(rDescriptor.HasState(PageDescriptor::ST_MouseOver));
 }
-
-
-void VisualState::SetMouseOverState (const bool bIsMouseOver)
-{
-    mbOldMouseOverState = mbCurrentMouseOverState;
-    mbCurrentMouseOverState = bIsMouseOver;
-}
-
 
 Point VisualState::GetLocationOffset (void) const
 {

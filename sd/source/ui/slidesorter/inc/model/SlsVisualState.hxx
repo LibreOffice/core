@@ -49,8 +49,6 @@ public:
 
     void UpdateVisualState (const PageDescriptor& rDescriptor);
 
-    void SetMouseOverState (const bool bIsMouseOver);
-
     Point GetLocationOffset (void) const;
     bool SetLocationOffset (const Point& rPoint);
 
@@ -60,8 +58,6 @@ private:
     State meCurrentVisualState;
     State meOldVisualState;
     sal_Int32 mnStateAnimationId;
-    bool mbOldMouseOverState;
-    bool mbCurrentMouseOverState;
 
     Point maLocationOffset;
     sal_Int32 mnLocationAnimationId;
