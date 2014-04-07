@@ -2021,7 +2021,7 @@ namespace
 
 OUString DbNumericField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter, Color** /*ppColor*/)
 {
-    return lcl_setFormattedNumeric_nothrow( *dynamic_cast< DoubleNumericField* >( m_pPainter ), *this, _rxField, _rxFormatter );
+    return lcl_setFormattedNumeric_nothrow(dynamic_cast<DoubleNumericField&>(*m_pPainter), *this, _rxField, _rxFormatter);
 }
 
 
