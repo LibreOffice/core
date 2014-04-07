@@ -63,51 +63,14 @@ CreateFlatParagraphIterator(SwDoc & rDoc, sal_Int32 const nTextMarkupType,
  * SwXFlatParagraph
  ******************************************************************************/
 
-SwXFlatParagraph::SwXFlatParagraph( SwTxtNode& rTxtNode, const OUString& aExpandText, const ModelToViewHelper& rMap ) :
-    SwXTextMarkup( rTxtNode, rMap ),
-    maExpandText( aExpandText )
+SwXFlatParagraph::SwXFlatParagraph( SwTxtNode& rTxtNode, const OUString& aExpandText, const ModelToViewHelper& rMap )
+    : SwXFlatParagraph_Base(& rTxtNode, rMap)
+    , maExpandText(aExpandText)
 {
 }
 
 SwXFlatParagraph::~SwXFlatParagraph()
 {
-}
-
-uno::Sequence< uno::Type > SwXFlatParagraph::getTypes(  ) throw(uno::RuntimeException, std::exception)
-{
-    uno::Sequence< uno::Type > aTypes = SwXTextMarkup::getTypes();
-    aTypes.realloc( aTypes.getLength() + 1 );
-    aTypes[aTypes.getLength()-1] = ::getCppuType((uno::Reference< text::XFlatParagraph >*)0);
-    return aTypes;
-}
-
-uno::Sequence< sal_Int8 > SwXFlatParagraph::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-uno::Any SAL_CALL SwXFlatParagraph::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)
-{
-    if ( rType == ::getCppuType((uno::Reference< text::XFlatParagraph >*)0) )
-    {
-        return uno::makeAny( uno::Reference < text::XFlatParagraph >(this) );
-    }
-    else if (rType == ::getCppuType((uno::Reference< beans::XPropertySet>*)0))
-    {
-        return uno::makeAny( uno::Reference<beans::XPropertySet>(this) );
-    }
-    else
-        return SwXTextMarkup::queryInterface( rType );
-}
-
-void SAL_CALL SwXFlatParagraph::acquire() throw()
-{
-    SwXTextMarkup::acquire();
-}
-
-void SAL_CALL SwXFlatParagraph::release() throw()
-{
-    SwXTextMarkup::release();
 }
 
 const SwTxtNode* SwXFlatParagraph::getTxtNode() const
@@ -121,7 +84,7 @@ SwXFlatParagraph::getPropertySetInfo()
 throw (uno::RuntimeException, std::exception)
 {
     throw uno::RuntimeException("SwXFlatParagraph::getPropertySetInfo(): "
-            "not implemented", 0/*static_cast< ::cppu::OWeakObject*>(this)*/);
+            "not implemented", static_cast< ::cppu::OWeakObject*>(this));
 }
 
 void SAL_CALL
@@ -131,7 +94,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         uno::RuntimeException, std::exception)
 {
     throw lang::IllegalArgumentException("no values can be set",
-            0/*static_cast< ::cppu::OWeakObject*>(this)*/, 0);
+            static_cast< ::cppu::OWeakObject*>(this), 0);
 }
 
 uno::Any SAL_CALL

@@ -51,7 +51,8 @@ class SwXTextMarkup:
     public SwClient
 {
 public:
-    SwXTextMarkup( SwTxtNode& rTxtNode, const ModelToViewHelper& rConversionMap );
+    SwXTextMarkup(SwTxtNode *const rTxtNode,
+            const ModelToViewHelper& rConversionMap);
     virtual ~SwXTextMarkup();
 
     // ::com::sun::star::text::XTextMarkup:

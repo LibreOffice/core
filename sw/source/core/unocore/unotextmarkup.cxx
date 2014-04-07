@@ -43,8 +43,10 @@ using namespace ::com::sun::star;
 /*
  * SwXTextMarkup
  */
-SwXTextMarkup::SwXTextMarkup( SwTxtNode& rTxtNode, const ModelToViewHelper& rMap )
-    : mpTxtNode( &rTxtNode ), maConversionMap( rMap )
+SwXTextMarkup::SwXTextMarkup(
+        SwTxtNode *const pTxtNode, const ModelToViewHelper& rMap)
+    : mpTxtNode(pTxtNode)
+    , maConversionMap(rMap)
 {
     // FME 2007-07-16 #i79641# SwXTextMarkup is allowed to be removed ...
     SetIsAllowedToBeRemovedInModifyCall(true);

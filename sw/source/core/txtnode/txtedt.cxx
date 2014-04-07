@@ -1459,8 +1459,8 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, sal_Int32 /*nActPos*/ 
         OUString aExpandText = aConversionMap.getViewText();
 
         // Ownership ov ConversionMap is passed to SwXTextMarkup object!
-        com::sun::star::uno::Reference< com::sun::star::text::XTextMarkup > xTextMarkup =
-             new SwXTextMarkup( *pNode, aConversionMap );
+        uno::Reference<text::XTextMarkup> const xTextMarkup =
+             new SwXTextMarkup(pNode, aConversionMap);
 
         com::sun::star::uno::Reference< ::com::sun::star::frame::XController > xController = pNode->GetDoc()->GetDocShell()->GetController();
 

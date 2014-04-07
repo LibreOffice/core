@@ -48,25 +48,19 @@ class SwDoc;
  * SwXFlatParagraph
  ******************************************************************************/
 
-class SwXFlatParagraph:
-    public ::cppu::WeakImplHelper3
-    <
-        css::beans::XPropertySet,
-        css::text::XFlatParagraph,
-        css::lang::XUnoTunnel
-    >,
-    public SwXTextMarkup
+typedef ::cppu::ImplInheritanceHelper3
+<   SwXTextMarkup
+,   css::beans::XPropertySet
+,   css::text::XFlatParagraph
+,   css::lang::XUnoTunnel
+> SwXFlatParagraph_Base;
+
+class SwXFlatParagraph
+    :   public SwXFlatParagraph_Base
 {
 public:
     SwXFlatParagraph( SwTxtNode& rTxtNode, const OUString& aExpandText, const ModelToViewHelper& rConversionMap );
     virtual ~SwXFlatParagraph();
-
-    virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire(  ) throw() SAL_OVERRIDE;
-    virtual void SAL_CALL release(  ) throw() SAL_OVERRIDE;
-
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference<
