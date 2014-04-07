@@ -259,7 +259,7 @@ void SectRepr::SetFilter( const OUString& rFilter )
 void SectRepr::SetSubRegion(const OUString& rSubRegion)
 {
     OUString sNewFile;
-    sal_Int32 n;
+    sal_Int32 n(0);
     const OUString sLinkFileName(m_SectionData.GetLinkFileName());
     const OUString sOldFileName( sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n ) );
     const OUString sFilter( sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n ) );
