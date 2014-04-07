@@ -217,7 +217,6 @@ Reference< XConnection > SAL_CALL MysqlCDriver::connect(const OUString& url, con
     if ( !cppDriver )
     {
         impl_initCppConn_lck_throw();
-        SAL_WARN_IF( !cppDriver, "mysqlc", "MySQLCDriver::connect: internal error." );
         if ( !cppDriver )
             throw RuntimeException("MySQLCDriver::connect: internal error.", *this );
     }
