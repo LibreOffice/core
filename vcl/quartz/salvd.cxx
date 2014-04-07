@@ -244,6 +244,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 #endif
                 mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
                                                          8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
+                CG_TRACE( "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << mxBitmapContext );
                 xCGContext = mxBitmapContext;
             }
         }
@@ -260,7 +261,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 #endif
         mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
                                                  8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
-        CG_TRACE( "CGBitmapContextCreate(" << nDX << "x" << nDY << "x8) = " << mxBitmapContext );
+        CG_TRACE( "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << mxBitmapContext );
         xCGContext = mxBitmapContext;
 #endif
     }
