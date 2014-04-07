@@ -41,4 +41,17 @@ void ScTable::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScT
     SetStreamValid(false);
 }
 
+void ScTable::PreprocessRangeNameUpdate(
+    sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt )
+{
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].PreprocessRangeNameUpdate(rEndListenCxt, rCompileCxt);
+}
+
+void ScTable::PostprocessRangeNameUpdate( sc::CompileFormulaContext& rCompileCxt )
+{
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].PostprocessRangeNameUpdate(rCompileCxt);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
