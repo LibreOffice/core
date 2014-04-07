@@ -909,7 +909,6 @@ bool AquaSalGraphics::drawPolyLine(
         CGContextSetAlpha( mrContext, 1.0 - fTransparency );
         CGContextSetLineJoin( mrContext, aCGLineJoin );
         CGContextSetLineCap( mrContext, aCGLineCap );
-        CG_TRACE( "CGContextSetLineWidth(" << mrContext << "," << rLineWidths.getX() << ")" );
         CGContextSetLineWidth( mrContext, rLineWidths.getX() );
         CG_TRACE( "CGContextDrawPath(" << mrContext << ",kCGPathStroke)" );
         CGContextDrawPath( mrContext, kCGPathStroke );
