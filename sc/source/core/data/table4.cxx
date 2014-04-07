@@ -2184,12 +2184,6 @@ void ScTable::CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFor
         aCol[i].CompileDBFormula(rCxt, bCreateFormulaString);
 }
 
-void ScTable::CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString )
-{
-    for (SCCOL i = 0; i <= MAXCOL; ++i)
-        aCol[i].CompileNameFormula(rCxt, bCreateFormulaString);
-}
-
 void ScTable::CompileColRowNameFormula( sc::CompileFormulaContext& rCxt )
 {
     for (SCCOL i = 0; i <= MAXCOL; ++i)

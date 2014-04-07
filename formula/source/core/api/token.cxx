@@ -616,6 +616,19 @@ bool FormulaTokenArray::HasNameOrColRowName() const
     return false;
 }
 
+bool FormulaTokenArray::HasOpCodes( const boost::unordered_set<OpCode>& rOpCodes ) const
+{
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        OpCode eOp = (*p)->GetOpCode();
+        if (rOpCodes.count(eOp) > 0)
+            return true;
+    }
+
+    return false;
+}
 
 FormulaTokenArray::FormulaTokenArray() :
     pCode(NULL),

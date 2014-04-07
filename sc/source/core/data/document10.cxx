@@ -237,4 +237,24 @@ const ScCalcConfig& ScDocument::GetCalcConfig() const
     return maCalcConfig;
 }
 
+void ScDocument::PreprocessRangeNameUpdate()
+{
+    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScTable* p = *it;
+        p->PreprocessRangeNameUpdate();
+    }
+}
+
+void ScDocument::PostprocessRangeNameUpdate()
+{
+    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScTable* p = *it;
+        p->PostprocessRangeNameUpdate();
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

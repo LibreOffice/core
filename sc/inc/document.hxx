@@ -516,6 +516,16 @@ public:
     void SetRangeName( ScRangeName* pNewRangeName );
 
     /**
+     * Call this immediately before updating all named ranges.
+     */
+    SC_DLLPUBLIC void PreprocessRangeNameUpdate();
+
+    /**
+     * Call this immediately after all named ranges have been updated.
+     */
+    SC_DLLPUBLIC void PostprocessRangeNameUpdate();
+
+    /**
      * Insert a new named expression to the global scope.
      *
      * @param rName name for the expression.
@@ -1967,7 +1977,6 @@ public:
 
     void            CompileDBFormula();
     void            CompileDBFormula( bool bCreateFormulaString );
-    SC_DLLPUBLIC void CompileNameFormula( bool bCreateFormulaString );
     void            CompileColRowNameFormula();
 
     /** Maximum string length of a column, e.g. for dBase export.

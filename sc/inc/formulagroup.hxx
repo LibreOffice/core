@@ -24,8 +24,26 @@
 
 class ScDocument;
 class ScTokenArray;
+class ScFormulaCell;
 
 namespace sc {
+
+struct FormulaGroupEntry
+{
+    union
+    {
+        ScFormulaCell* mpCell;   // non-shared formula cell
+        ScFormulaCell** mpCells; // pointer to the top formula cell in a shared group.
+    };
+
+    size_t mnRow;
+    size_t mnLength;
+    bool mbShared;
+
+    FormulaGroupEntry( ScFormulaCell** pCells, size_t nRow, size_t nLength );
+
+    FormulaGroupEntry( ScFormulaCell* pCell, size_t nRow );
+};
 
 struct FormulaGroupContext : boost::noncopyable
 {

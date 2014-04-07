@@ -847,6 +847,9 @@ public:
     void SetRangeName(ScRangeName* pNew);
     ScRangeName* GetRangeName() const;
 
+    void PreprocessRangeNameUpdate();
+    void PostprocessRangeNameUpdate();
+
     ScConditionalFormatList* GetCondFormList();
     const ScConditionalFormatList* GetCondFormList() const;
     void SetCondFormList( ScConditionalFormatList* pList );
@@ -1025,7 +1028,6 @@ private:
     bool        TestTabRefAbs(SCTAB nTable) const;
     void CompileDBFormula( sc::CompileFormulaContext& rCxt );
     void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
-    void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
 
     void        StartListening( const ScAddress& rAddress, SvtListener* pListener );

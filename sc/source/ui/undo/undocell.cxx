@@ -992,7 +992,7 @@ OUString ScUndoRangeNames::GetComment() const
 void ScUndoRangeNames::DoChange( bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->CompileNameFormula( true );   // CreateFormulaString
+    pDoc->PreprocessRangeNameUpdate();
 
     if ( bUndo )
     {
@@ -1009,7 +1009,7 @@ void ScUndoRangeNames::DoChange( bool bUndo )
             pDoc->SetRangeName( new ScRangeName( *pNewRanges ) );
     }
 
-    pDoc->CompileNameFormula( false );  // CompileFormulaString
+    pDoc->PostprocessRangeNameUpdate();
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
 }

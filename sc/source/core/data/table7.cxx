@@ -80,4 +80,16 @@ void ScTable::CopyCellValuesFrom( SCCOL nCol, SCROW nRow, const sc::CellValues& 
     aCol[nCol].CopyCellValuesFrom(nRow, rSrc);
 }
 
+void ScTable::PreprocessRangeNameUpdate()
+{
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].PreprocessRangeNameUpdate();
+}
+
+void ScTable::PostprocessRangeNameUpdate()
+{
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].PostprocessRangeNameUpdate();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

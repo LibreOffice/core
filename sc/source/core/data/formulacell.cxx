@@ -477,6 +477,14 @@ void ScFormulaCellGroup::setCode( const ScTokenArray& rCode )
     mpCode->GenHash();
 }
 
+void ScFormulaCellGroup::setCode( ScTokenArray* pCode )
+{
+    delete mpCode;
+    mpCode = pCode; // takes ownership of the token array.
+    mbInvariant = mpCode->IsInvariant();
+    mpCode->GenHash();
+}
+
 void ScFormulaCellGroup::compileCode(
     ScDocument& rDoc, const ScAddress& rPos, FormulaGrammar::Grammar eGram )
 {
@@ -2107,6 +2115,11 @@ void ScFormulaCell::SetHybridFormula( const OUString& r,
     aResult.SetHybridFormula( r); eTempGrammar = eGrammar;
 }
 
+OUString ScFormulaCell::GetHybridFormula() const
+{
+    return aResult.GetHybridFormula();
+}
+
 // Dynamically create the URLField on a mouse-over action on a hyperlink() cell.
 void ScFormulaCell::GetURLResult( OUString& rURL, OUString& rCellText )
 {
@@ -3372,6 +3385,13 @@ const ScTokenArray* ScFormulaCell::GetCode() const
     return pCode;
 }
 
+void ScFormulaCell::SetCode( ScTokenArray* pNew )
+{
+    assert(!mxGroup); // Don't call this if it's shared.
+    delete pCode;
+    pCode = pNew; // takes ownership.
+}
+
 bool ScFormulaCell::IsRunning() const
 {
     return bRunning;
@@ -3421,53 +3441,6 @@ void ScFormulaCell::CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCre
                 break;
                 default:
                     ; // nothing
-            }
-        }
-        if ( bRecompile )
-        {
-            OUString aFormula = GetFormula(rCxt);
-            if ( GetMatrixFlag() != MM_NONE && !aFormula.isEmpty() )
-            {
-                if ( aFormula[ aFormula.getLength()-1 ] == '}' )
-                    aFormula = aFormula.copy( 0, aFormula.getLength()-1 );
-                if ( aFormula[0] == '{' )
-                    aFormula = aFormula.copy( 1 );
-            }
-            EndListeningTo( pDocument );
-            pDocument->RemoveFromFormulaTree( this );
-            pCode->Clear();
-            SetHybridFormula(aFormula, rCxt.getGrammar());
-        }
-    }
-    else if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
-    {
-        rCxt.setGrammar(eTempGrammar);
-        Compile(rCxt, aResult.GetHybridFormula(), false);
-        aResult.SetToken( NULL);
-        SetDirty();
-    }
-}
-
-void ScFormulaCell::CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString )
-{
-    // Two phases must be called after each other
-    // 1. Formula String with old generated names
-    // 2. Formula String with new generated names
-    if ( bCreateFormulaString )
-    {
-        bool bRecompile = false;
-        pCode->Reset();
-        for ( FormulaToken* p = pCode->First(); p && !bRecompile; p = pCode->Next() )
-        {
-            switch ( p->GetOpCode() )
-            {
-                case ocBad:             // in case RangeName goes bad
-                case ocColRowName:      // in case the names are the same
-                    bRecompile = true;
-                break;
-                default:
-                    if ( p->GetType() == svIndex )
-                        bRecompile = true;  // RangeName
             }
         }
         if ( bRecompile )
@@ -4051,6 +4024,15 @@ ScTokenArray* ScFormulaCell::GetSharedCode()
 const ScTokenArray* ScFormulaCell::GetSharedCode() const
 {
     return mxGroup ? mxGroup->mpCode : NULL;
+}
+
+void ScFormulaCell::SyncSharedCode()
+{
+    if (!mxGroup)
+        // Not a shared formula cell.
+        return;
+
+    pCode = mxGroup->mpCode;
 }
 
 bool ScFormulaCell::IsPostponedDirty() const

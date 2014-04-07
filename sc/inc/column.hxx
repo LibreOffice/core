@@ -40,6 +40,7 @@ namespace formula { struct VectorRefArray; }
 namespace sc {
 
 struct FormulaGroupContext;
+struct FormulaGroupEntry;
 class StartListeningContext;
 class EndListeningContext;
 class CopyFromClipContext;
@@ -371,6 +372,9 @@ public:
     void        SetTabNo(SCTAB nNewTab);
     void        FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<sal_uInt16>& rIndexes) const;
 
+    void PreprocessRangeNameUpdate();
+    void PostprocessRangeNameUpdate();
+
     const SfxPoolItem*      GetAttr( SCROW nRow, sal_uInt16 nWhich ) const;
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
@@ -470,7 +474,6 @@ public:
 
     void CompileDBFormula( sc::CompileFormulaContext& rCxt );
     void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
-    void CompileNameFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
 
     sal_Int32   GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eCharSet ) const;
@@ -599,6 +602,12 @@ private:
     void DeleteCells(
         sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, sal_uInt16 nDelFlag,
         std::vector<SCROW>& rDeleted );
+
+    /**
+     * Get all non-grouped formula cells and formula cell groups in the whole
+     * column.
+     */
+    std::vector<sc::FormulaGroupEntry> GetFormulaGroupEntries();
 };
 
 #endif

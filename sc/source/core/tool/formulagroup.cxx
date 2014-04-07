@@ -43,6 +43,12 @@ extern "C" void getOpenCLDeviceInfo(size_t*, size_t*);
 
 namespace sc {
 
+FormulaGroupEntry::FormulaGroupEntry( ScFormulaCell** pCells, size_t nRow, size_t nLength ) :
+    mpCells(pCells), mnRow(nRow), mnLength(nLength), mbShared(true) {}
+
+FormulaGroupEntry::FormulaGroupEntry( ScFormulaCell* pCell, size_t nRow ) :
+    mpCell(pCell), mnRow(nRow), mnLength(0), mbShared(false) {}
+
 size_t FormulaGroupContext::ColKey::Hash::operator ()( const FormulaGroupContext::ColKey& rKey ) const
 {
     return rKey.mnTab * MAXCOLCOUNT + rKey.mnCol;

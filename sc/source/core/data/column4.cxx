@@ -16,17 +16,22 @@
 #include <cellvalues.hxx>
 #include <columnspanset.hxx>
 #include <listenercontext.hxx>
+#include <tokenstringcontext.hxx>
 #include <mtvcellfunc.hxx>
 #include <clipcontext.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>
 #include <docpool.hxx>
 #include <conditio.hxx>
+#include <formulagroup.hxx>
+#include <tokenarray.hxx>
 
 #include <svl/sharedstringpool.hxx>
 
 #include <vector>
 #include <cassert>
+
+#include <boost/shared_ptr.hpp>
 
 bool ScColumn::IsMerged( SCROW nRow ) const
 {
@@ -542,6 +547,152 @@ void ScColumn::GetNotesInRange(SCROW nStartRow, SCROW nEndRow,
     sc::CellNoteStoreType::const_iterator itEnd = aEndPos.first;
 
     std::for_each(it, itEnd, NoteEntryCollector(rNotes, nTab, nCol, nStartRow, nEndRow));
+}
+
+namespace {
+
+class PreRangeNameUpdateHandler
+{
+    ScDocument* mpDoc;
+    boost::shared_ptr<sc::EndListeningContext> mpEndListenCxt;
+    boost::shared_ptr<sc::CompileFormulaContext> mpCompileFormulaCxt;
+
+public:
+    PreRangeNameUpdateHandler( ScDocument* pDoc ) :
+        mpDoc(pDoc),
+        mpEndListenCxt(new sc::EndListeningContext(*pDoc)),
+        mpCompileFormulaCxt(new sc::CompileFormulaContext(pDoc)) {}
+
+    void operator() ( sc::FormulaGroupEntry& rEntry )
+    {
+        // Perform end listening, remove from formula tree, and set them up
+        // for re-compilation.
+
+        ScFormulaCell* pTop = NULL;
+
+        if (rEntry.mbShared)
+        {
+            // Only inspect the code from the top cell.
+            pTop = *rEntry.mpCells;
+        }
+        else
+            pTop = rEntry.mpCell;
+
+        ScTokenArray* pCode = pTop->GetCode();
+
+        boost::unordered_set<OpCode> aOps;
+        aOps.insert(ocBad);
+        aOps.insert(ocColRowName);
+        aOps.insert(ocName);
+        bool bRecompile = pCode->HasOpCodes(aOps);
+
+        if (bRecompile)
+        {
+            // Get the formula string.
+            OUString aFormula = pTop->GetFormula(*mpCompileFormulaCxt);
+            sal_Int32 n = aFormula.getLength();
+            if (pTop->GetMatrixFlag() != MM_NONE && n > 0)
+            {
+                if (aFormula[0] == '{' && aFormula[n-1] == '}')
+                    aFormula = aFormula.copy(1, n-2);
+            }
+
+            if (rEntry.mbShared)
+            {
+                ScFormulaCell** pp = rEntry.mpCells;
+                ScFormulaCell** ppEnd = pp + rEntry.mnLength;
+                for (; pp != ppEnd; ++pp)
+                {
+                    ScFormulaCell* p = *pp;
+                    p->EndListeningTo(*mpEndListenCxt);
+                    mpDoc->RemoveFromFormulaTree(p);
+                }
+            }
+            else
+            {
+                rEntry.mpCell->EndListeningTo(*mpEndListenCxt);
+                mpDoc->RemoveFromFormulaTree(rEntry.mpCell);
+            }
+
+            pCode->Clear();
+            pTop->SetHybridFormula(aFormula, mpDoc->GetGrammar());
+        }
+    }
+};
+
+class PostRangeNameUpdateHandler
+{
+    ScDocument* mpDoc;
+    boost::shared_ptr<sc::CompileFormulaContext> mpCompileFormulaCxt;
+
+public:
+    PostRangeNameUpdateHandler( ScDocument* pDoc ) :
+        mpDoc(pDoc),
+        mpCompileFormulaCxt(new sc::CompileFormulaContext(pDoc)) {}
+
+    void operator() ( sc::FormulaGroupEntry& rEntry )
+    {
+        if (rEntry.mbShared)
+        {
+            ScFormulaCell* pTop = *rEntry.mpCells;
+            OUString aFormula = pTop->GetHybridFormula();
+
+            // Create a new token array from the hybrid formula string, and
+            // set it to the group.
+            ScCompiler aComp(*mpCompileFormulaCxt, pTop->aPos);
+            ScTokenArray* pNewCode = aComp.CompileString(aFormula);
+            ScFormulaCellGroupRef xGroup = pTop->GetCellGroup();
+            assert(xGroup);
+            xGroup->setCode(pNewCode);
+            xGroup->compileCode(*mpDoc, pTop->aPos, mpDoc->GetGrammar());
+
+            // Propagate the new token array to all formula cells in the group.
+            ScFormulaCell** pp = rEntry.mpCells;
+            ScFormulaCell** ppEnd = pp + rEntry.mnLength;
+            for (; pp != ppEnd; ++pp)
+            {
+                ScFormulaCell* p = *pp;
+                p->SyncSharedCode();
+                p->SetDirty();
+            }
+        }
+        else
+        {
+            ScFormulaCell* pCell = rEntry.mpCell;
+            OUString aFormula = pCell->GetHybridFormula();
+
+            // Create token array from formula string.
+            ScCompiler aComp(*mpCompileFormulaCxt, pCell->aPos);
+            ScTokenArray* pNewCode = aComp.CompileString(aFormula);
+
+            // Generate RPN tokens.
+            ScCompiler aComp2(mpDoc, pCell->aPos, *pNewCode);
+            aComp2.CompileTokenArray();
+
+            pCell->SetCode(pNewCode);
+            pCell->SetDirty();
+        }
+    }
+};
+
+}
+
+void ScColumn::PreprocessRangeNameUpdate()
+{
+    // Collect all formula groups.
+    std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
+
+    PreRangeNameUpdateHandler aFunc(pDocument);
+    std::for_each(aGroups.begin(), aGroups.end(), aFunc);
+}
+
+void ScColumn::PostprocessRangeNameUpdate()
+{
+    // Collect all formula groups.
+    std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
+
+    PostRangeNameUpdateHandler aFunc(pDocument);
+    std::for_each(aGroups.begin(), aGroups.end(), aFunc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

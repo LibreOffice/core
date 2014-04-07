@@ -44,6 +44,7 @@
 #include <listenercontext.hxx>
 #include <refhint.hxx>
 #include <stlalgorithm.hxx>
+#include <formulagroup.hxx>
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
@@ -2339,23 +2340,6 @@ void ScColumn::MarkSubTotalCells( sc::ColumnSpanSet& rSet, SCROW nRow1, SCROW nR
 
 namespace {
 
-struct FormulaGroup
-{
-    struct {
-        ScFormulaCell* mpCell;   // non-shared formula cell
-        ScFormulaCell** mpCells; // pointer to the top formula cell in a shared group.
-    };
-    size_t mnRow;
-    size_t mnLength;
-    bool mbShared;
-
-    FormulaGroup( ScFormulaCell** pCells, size_t nRow, size_t nLength ) :
-        mpCells(pCells), mnRow(nRow), mnLength(nLength), mbShared(true) {}
-
-    FormulaGroup( ScFormulaCell* pCell, size_t nRow ) :
-        mpCell(pCell), mnRow(nRow), mnLength(0), mbShared(false) {}
-};
-
 class SharedTopFormulaCellPicker : std::unary_function<sc::CellStoreType::value_type, void>
 {
 public:
@@ -2430,7 +2414,7 @@ public:
     }
 };
 
-class UpdateRefOnNonCopy : std::unary_function<FormulaGroup, void>
+class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
 {
     SCCOL mnCol;
     SCROW mnTab;
@@ -2438,7 +2422,7 @@ class UpdateRefOnNonCopy : std::unary_function<FormulaGroup, void>
     ScDocument* mpUndoDoc;
     bool mbUpdated;
 
-    void updateRefOnShift( FormulaGroup& rGroup )
+    void updateRefOnShift( sc::FormulaGroupEntry& rGroup )
     {
         if (!rGroup.mbShared)
         {
@@ -2500,7 +2484,7 @@ class UpdateRefOnNonCopy : std::unary_function<FormulaGroup, void>
         }
     }
 
-    void updateRefOnMove( FormulaGroup& rGroup )
+    void updateRefOnMove( sc::FormulaGroupEntry& rGroup )
     {
         if (!rGroup.mbShared)
         {
@@ -2611,7 +2595,7 @@ public:
         mnCol(nCol), mnTab(nTab), mpCxt(pCxt),
         mpUndoDoc(pUndoDoc), mbUpdated(false) {}
 
-    void operator() ( FormulaGroup& rGroup )
+    void operator() ( sc::FormulaGroupEntry& rGroup )
     {
         switch (mpCxt->meMode)
         {
@@ -2669,21 +2653,21 @@ public:
 
 class FormulaGroupPicker : public SharedTopFormulaCellPicker
 {
-    std::vector<FormulaGroup>& mrGroups;
+    std::vector<sc::FormulaGroupEntry>& mrGroups;
 
 public:
-    FormulaGroupPicker( std::vector<FormulaGroup>& rGroups ) : mrGroups(rGroups) {}
+    FormulaGroupPicker( std::vector<sc::FormulaGroupEntry>& rGroups ) : mrGroups(rGroups) {}
 
     virtual ~FormulaGroupPicker() {}
 
     virtual void processNonShared( ScFormulaCell* pCell, size_t nRow ) SAL_OVERRIDE
     {
-        mrGroups.push_back(FormulaGroup(pCell, nRow));
+        mrGroups.push_back(sc::FormulaGroupEntry(pCell, nRow));
     }
 
     virtual void processSharedTop( ScFormulaCell** ppCells, size_t nRow, size_t nLength ) SAL_OVERRIDE
     {
-        mrGroups.push_back(FormulaGroup(ppCells, nRow, nLength));
+        mrGroups.push_back(sc::FormulaGroupEntry(ppCells, nRow, nLength));
     }
 };
 
@@ -2756,8 +2740,7 @@ bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc
     sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
 
     // Collect all formula groups.
-    std::vector<FormulaGroup> aGroups;
-    std::for_each(maCells.begin(), maCells.end(), FormulaGroupPicker(aGroups));
+    std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
 
     // Process all collected formula groups.
     UpdateRefOnNonCopy aHandler(nCol, nTab, &rCxt, pUndoDoc);
@@ -2766,6 +2749,13 @@ bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc
         rCxt.maRegroupCols.set(nTab, nCol);
 
     return aHandler.isUpdated();
+}
+
+std::vector<sc::FormulaGroupEntry> ScColumn::GetFormulaGroupEntries()
+{
+    std::vector<sc::FormulaGroupEntry> aGroups;
+    std::for_each(maCells.begin(), maCells.end(), FormulaGroupPicker(aGroups));
+    return aGroups;
 }
 
 namespace {
