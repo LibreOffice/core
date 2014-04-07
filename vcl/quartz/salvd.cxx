@@ -189,6 +189,10 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         const int nBytesPerRow = (mnBitmapDepth * nDX + 7) / 8;
 
         void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
+#ifdef DBG_UTIL
+        for (ssize_t i = 0; i < nBytesPerRow * nDY; i++)
+            ((sal_uInt8*)pRawData)[i] = (i & 0xFF);
+#endif
         mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
                                                  mnBitmapDepth, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
         CG_TRACE( "CGBitmapContextCreate(" << nDX << "x" << nDY << "x" << mnBitmapDepth << ") = " << mxBitmapContext );
@@ -234,6 +238,10 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
                 const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
 
                 void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
+#ifdef DBG_UTIL
+                for (ssize_t i = 0; i < nBytesPerRow * nDY; i++)
+                    ((sal_uInt8*)pRawData)[i] = (i & 0xFF);
+#endif
                 mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
                                                          8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
                 xCGContext = mxBitmapContext;
@@ -246,6 +254,10 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
 
         void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
+#ifdef DBG_UTIL
+        for (ssize_t i = 0; i < nBytesPerRow * nDY; i++)
+            ((sal_uInt8*)pRawData)[i] = (i & 0xFF);
+#endif
         mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
                                                  8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
         CG_TRACE( "CGBitmapContextCreate(" << nDX << "x" << nDY << "x8) = " << mxBitmapContext );
