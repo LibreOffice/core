@@ -74,20 +74,19 @@ TYPEINIT1( FuDraw, FuPoor );
  * Base-class for all drawmodul-specific functions
  */
 FuDraw::FuDraw(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
-               SdDrawDocument* pDoc, SfxRequest& rReq) :
-    FuPoor(pViewSh, pWin, pView, pDoc, rReq),
-    bMBDown(sal_False),
-    bDragHelpLine(sal_False),
-    bPermanent(sal_False)
+               SdDrawDocument* pDoc, SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    , bMBDown(sal_False)
+    , bDragHelpLine(sal_False)
+    , nHelpLine(0)
+    , bPermanent(sal_False)
 {
 }
-
 
 FuDraw::~FuDraw()
 {
     mpView->BrkAction();
 }
-
 
 sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
