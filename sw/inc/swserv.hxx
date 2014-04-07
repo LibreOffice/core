@@ -78,7 +78,7 @@ public:
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
 #define SW_DECL_SWSERVEROBJECT_DEFINED
-SV_DECL_REF( SwServerObject )
+typedef tools::SvRef<SwServerObject> SwServerObjectRef;
 #endif
 
 #endif // INCLUDED_SW_INC_SWSERV_HXX

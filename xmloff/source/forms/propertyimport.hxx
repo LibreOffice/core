@@ -146,7 +146,7 @@ namespace xmloff
             m_aGenericValues.push_back(_rProp);
         }
     };
-    SV_DECL_IMPL_REF( OPropertyImport )
+    typedef tools::SvRef<OPropertyImport> OPropertyImportRef;
 
     //= OPropertyElementsContext
     /** helper class for importing the &lt;form:properties&gt; element

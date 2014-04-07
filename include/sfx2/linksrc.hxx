@@ -113,7 +113,7 @@ public:
     void clearStreamToLoadFrom();
 };
 
-SV_DECL_IMPL_REF(SvLinkSource);
+typedef tools::SvRef<SvLinkSource> SvLinkSourceRef;
 
 }
 #endif

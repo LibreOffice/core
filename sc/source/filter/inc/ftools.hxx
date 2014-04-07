@@ -24,6 +24,7 @@
 #include <map>
 #include <limits>
 #include <sal/macros.h>
+#include <sot/storage.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <oox/helper/helper.hxx>
@@ -123,8 +124,6 @@ class SfxPoolItem;
 class SfxItemSet;
 class ScStyleSheet;
 class ScStyleSheetPool;
-class SotStorageRef;
-class SotStorageStreamRef;
 class SvStream;
 
 /** Contains static methods used anywhere in the filters. */

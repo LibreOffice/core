@@ -41,7 +41,7 @@ public:
     SbModule* GetModule() { return pMod; }
 };
 
-SV_DECL_IMPL_REF(SbProperty)
+typedef tools::SvRef<SbProperty> SbPropertyRef;
 
 class BASIC_DLLPUBLIC SbProcedureProperty : public SbxProperty
 {

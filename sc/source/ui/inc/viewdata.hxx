@@ -20,6 +20,7 @@
 #define SC_VIEWDATA_HXX
 
 #include <sfx2/zoomitem.hxx>
+#include "rangelst.hxx"
 #include "scdllapi.h"
 #include "viewopti.hxx"
 
@@ -97,7 +98,6 @@ class SfxObjectShell;
 class SfxBindings;
 class SfxDispatcher;
 class ScPatternAttr;
-class ScRangeListRef;
 class ScExtDocOptions;
 class ScViewData;
 class ScMarkData;

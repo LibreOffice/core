@@ -24,6 +24,7 @@
 #include <tools/globname.hxx>
 #include <tools/gen.hxx>
 #include <sot/formats.hxx>
+#include <sot/storage.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
@@ -44,7 +45,6 @@ class BitmapEx;
 class GDIMetaFile;
 class Graphic;
 class ImageMap;
-class SotStorageStreamRef;
 class INetBookmark;
 class INetImage;
 class FileList;

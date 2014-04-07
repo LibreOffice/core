@@ -89,7 +89,7 @@ public:
     virtual void        WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
                                     HelpIdTable& rTable );
 };
-SV_DECL_IMPL_REF(SvMetaModule)
+typedef tools::SvRef<SvMetaModule> SvMetaModuleRef;
 
 class SvMetaModuleMemberList : public SvDeclPersistList<SvMetaModule *> {};
 

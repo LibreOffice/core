@@ -433,7 +433,6 @@ struct ScImportParam
 
 class ScDocument;
 class ScDocShell;
-class ScDocShellRef;
 class SvxSearchItem;
 class ScAutoFormat;
 class FuncCollection;
@@ -550,7 +549,7 @@ public:
     SC_DLLPUBLIC static double              nScreenPPTX;
     SC_DLLPUBLIC static double              nScreenPPTY;
 
-    static ScDocShellRef*   pDrawClipDocShellRef;
+    static tools::SvRef<ScDocShell>*   pDrawClipDocShellRef;
 
     static sal_uInt16           nDefFontHeight;
     SC_DLLPUBLIC static sal_uInt16           nStdRowHeight;

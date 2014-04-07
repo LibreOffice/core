@@ -74,13 +74,6 @@ class FormattedField;
 
 namespace svt
 {
-
-
-    class CellControllerRef;
-
-
-    //= CellController
-
     class SVT_DLLPUBLIC CellController : public SvRefBase
     {
         friend class EditBrowseBox;
@@ -116,7 +109,7 @@ namespace svt
         virtual bool WantMouseEvent() const;
     };
 
-    SV_DECL_IMPL_REF(CellController);
+    typedef tools::SvRef<CellController> CellControllerRef;
 
 
     //= IEditImplementation

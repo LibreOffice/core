@@ -72,7 +72,7 @@ namespace dbaui
         ///< @attention recovers only valid data if 1. CTOR has been used
     };
 
-    SV_DECL_IMPL_REF( OHTMLReader );
+    typedef tools::SvRef<OHTMLReader> OHTMLReaderRef;
 }
 #endif
 

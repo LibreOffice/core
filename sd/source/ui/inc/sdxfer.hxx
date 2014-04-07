@@ -38,7 +38,6 @@ class DrawDocShell;
 class View;
 }
 
-class SfxObjectShellRef;
 class SdTransferable : public TransferableHelper, public SfxListener
 {
 public:

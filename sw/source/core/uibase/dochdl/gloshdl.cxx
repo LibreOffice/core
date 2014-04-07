@@ -70,7 +70,6 @@ struct TextBlockInfo_Impl
     OUString sGroupName;
 };
 typedef boost::ptr_vector<TextBlockInfo_Impl> TextBlockInfoArr;
-SV_IMPL_REF( SwDocShell )
 
 // Dialog for edit templates
 void SwGlossaryHdl::GlossaryDlg()

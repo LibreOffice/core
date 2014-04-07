@@ -88,9 +88,8 @@ public:
 
 #ifndef SOT_DECL_SOTSTORAGESTREAM_DEFINED
 #define SOT_DECL_SOTSTORAGESTREAM_DEFINED
-SV_DECL_REF(SotStorageStream)
+typedef tools::SvRef<SotStorageStream> SotStorageStreamRef;
 #endif
-SV_IMPL_REF(SotStorageStream)
 
 namespace ucbhelper
 {
@@ -224,9 +223,8 @@ public:
 
 #ifndef SOT_DECL_SOTSTORAGE_DEFINED
 #define SOT_DECL_SOTSTORAGE_DEFINED
-SV_DECL_REF(SotStorage)
+typedef tools::SvRef<SotStorage> SotStorageRef;
 #endif
-SV_IMPL_REF(SotStorage)
 
 #define SvStorage SotStorage
 #define SvStorageRef SotStorageRef

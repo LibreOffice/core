@@ -105,7 +105,7 @@ public:
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc);
     void SetStylesToRanges(const OUString* pStyleName, ScXMLImport& rImport);
 };
-SV_DECL_IMPL_REF( ScMyStyleRanges );
+typedef tools::SvRef<ScMyStyleRanges> ScMyStyleRangesRef;
 
 struct ScMyStyle
 {

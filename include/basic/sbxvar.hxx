@@ -270,12 +270,12 @@ class SbxInfo;
 
 #ifndef SBX_ARRAY_DECL_DEFINED
 #define SBX_ARRAY_DECL_DEFINED
-SV_DECL_REF(SbxArray)
+typedef tools::SvRef<SbxArray> SbxArrayRef;
 #endif
 
 #ifndef SBX_INFO_DECL_DEFINED
 #define SBX_INFO_DECL_DEFINED
-SV_DECL_REF(SbxInfo)
+typedef tools::SvRef<SbxInfo> SbxInfoRef;
 #endif
 
 class SfxBroadcaster;
@@ -349,7 +349,7 @@ public:
     static sal_uInt16 MakeHashCode( const OUString& rName );
 };
 
-SV_DECL_REF(SbxVariable)
+typedef tools::SvRef<SbxVariable> SbxVariableRef;
 
 #endif // INCLUDED_BASIC_SBXVAR_HXX
 

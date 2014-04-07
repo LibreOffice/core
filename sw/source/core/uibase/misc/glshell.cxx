@@ -194,8 +194,6 @@ bool SwWebGlosDocShell::Save()
     }
 }
 
-SV_IMPL_REF ( SwDocShell )
-
 SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString& rShortName, sal_Bool bShow )
 {
     SwDocShellRef xDocSh;

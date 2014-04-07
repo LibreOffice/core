@@ -74,8 +74,7 @@ public:
     sal_uInt16 getCount() const;
 };
 
-SV_DECL_REF( SvXMLItemMapEntries )
-SV_IMPL_REF( SvXMLItemMapEntries )
+typedef tools::SvRef<SvXMLItemMapEntries> SvXMLItemMapEntriesRef;
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLITMAP_HXX
 

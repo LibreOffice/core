@@ -272,7 +272,7 @@ public:
     static sal_uInt32   CreatePasswordToModifyHash( const OUString& aPasswd, bool bWriter );
 };
 
-SV_DECL_IMPL_REF( SfxMedium )
+typedef tools::SvRef<SfxMedium> SfxMediumRef;
 
 typedef ::std::vector< SfxMedium* > SfxMediumList;
 

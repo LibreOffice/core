@@ -116,7 +116,7 @@ DECL_OBJHINT( SfxStringHint, OUString );
 
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED
 #define SFX_DECL_OBJECTSHELL_DEFINED
-SV_DECL_REF(SfxObjectShell)
+typedef tools::SvRef<SfxObjectShell> SfxObjectShellRef;
 #endif
 
 class SfxObjectShellLock;

@@ -174,11 +174,8 @@ public:
 
 #ifndef GOODIES_DECL_SVPARSER_DEFINED
 #define GOODIES_DECL_SVPARSER_DEFINED
-SV_DECL_REF(SvParser)
+typedef tools::SvRef<SvParser> SvParserRef;
 #endif
-SV_IMPL_REF(SvParser)
-
-
 
 inline sal_uLong SvParser::SetLineNr( sal_uLong nlNum )
 {   sal_uLong nlOld = nlLineNr; nlLineNr = nlNum; return nlOld; }
@@ -200,8 +197,6 @@ inline sal_uInt16 SvParser::GetCharSize() const
  * SvKeyValue.
  *
  *======================================================================*/
-
-SV_DECL_REF(SvKeyValueIterator)
 
 class SvKeyValue
 {
@@ -271,7 +266,7 @@ public:
     virtual void Append   (const SvKeyValue &rKeyVal);
 };
 
-SV_IMPL_REF(SvKeyValueIterator);
+typedef tools::SvRef<SvKeyValueIterator> SvKeyValueIteratorRef;
 
 #endif // INCLUDED_SVTOOLS_SVPARSER_HXX
 

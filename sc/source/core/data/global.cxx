@@ -81,7 +81,7 @@
 #include "editutil.hxx"
 
 
-ScDocShellRef*  ScGlobal::pDrawClipDocShellRef = NULL;
+tools::SvRef<ScDocShell>*  ScGlobal::pDrawClipDocShellRef = NULL;
 SvxSearchItem*  ScGlobal::pSearchItem = NULL;
 ScAutoFormat*   ScGlobal::pAutoFormat = NULL;
 FuncCollection* ScGlobal::pFuncCollection = NULL;

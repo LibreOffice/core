@@ -176,7 +176,7 @@ public:
         GetModelFromBasic( SbxObject* pBasic );
 };
 
-SV_DECL_IMPL_REF(StarBASIC)
+typedef tools::SvRef<StarBASIC> StarBASICRef;
 
 #endif
 

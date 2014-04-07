@@ -106,7 +106,7 @@ public:
     static SbxObject* CreateObject( const OUString& );
 };
 
-SV_DECL_REF(SbxBase)
+typedef tools::SvRef<SbxBase> SbxBaseRef;
 
 inline void SbxBase::SetFlags( sal_uInt16 n )
 { nFlags = n; }

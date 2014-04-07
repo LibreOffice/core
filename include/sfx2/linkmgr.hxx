@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/linksrc.hxx>
+#include <sfx2/lnkbase.hxx>
 #include <set>
 #include <vector>
 
@@ -42,9 +43,6 @@ namespace sfx2
     // will be loaded the FileObject sends a SvData, which contains the
     // FormatID "RegisterStatusInfoId" and a string as the data container.
     // This contains the following enum.
-
-class SvBaseLink;
-class SvBaseLinkRef;
 
 typedef std::vector<SvBaseLinkRef*> SvBaseLinks;
 

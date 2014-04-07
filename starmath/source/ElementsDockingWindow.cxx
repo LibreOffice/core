@@ -28,8 +28,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 
-SV_DECL_REF(SmDocShell)
-SV_IMPL_REF(SmDocShell)
+typedef tools::SvRef<SmDocShell> SmDocShellRef;
 
 SmElement::SmElement(SmNodePointer pNode, const OUString& aText, const OUString& aHelpText) :
     mpNode(pNode),

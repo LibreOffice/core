@@ -717,7 +717,7 @@ public:
 
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED
 #define SFX_DECL_OBJECTSHELL_DEFINED
-SV_DECL_REF(SfxObjectShell)
+typedef tools::SvRef<SfxObjectShell> SfxObjectShellRef;
 #endif
 
 class SfxObjectShellLock
@@ -764,8 +764,6 @@ inline SfxObjectShellLock & SfxObjectShellLock::
 }
 inline SfxObjectShellLock & SfxObjectShellLock::operator = ( SfxObjectShell * pObjP )
 { return *this = SfxObjectShellLock( pObjP ); }
-
-SV_IMPL_REF(SfxObjectShell)
 
 class AutoReloadTimer_Impl : public Timer
 {

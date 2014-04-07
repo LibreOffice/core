@@ -12,6 +12,7 @@
 
 #include "scdllapi.h"
 #include "debughelper.hxx"
+#include "docsh.hxx"
 #include "address.hxx"
 
 #include <test/bootstrapfixture.hxx>
@@ -168,9 +169,6 @@ struct assertion_traits<ScRange>
 };
 
 }
-
-class ScDocShellRef;
-class ScDocShell;
 
 class SCQAHELPER_DLLPUBLIC ScBootstrapFixture : public test::BootstrapFixture
 {

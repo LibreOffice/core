@@ -36,8 +36,7 @@ public:
     virtual SbxClassType GetClass() const SAL_OVERRIDE;
 };
 
-SV_DECL_REF(SbxProperty)
-SV_IMPL_REF(SbxProperty)
+typedef tools::SvRef<SbxProperty> SbxPropertyRef;
 
 #endif
 

@@ -31,14 +31,14 @@ class SfxObjectShell;
 
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED
 #define SFX_DECL_OBJECTSHELL_DEFINED
-SV_DECL_REF(SfxObjectShell)
+typedef tools::SvRef<SfxObjectShell> SfxObjectShellRef;
 #endif
 
 class SfxDocTemplate_Impl;
 
 #ifndef SFX_DECL_DOCTEMPLATES_DEFINED
 #define SFX_DECL_DOCTEMPLATES_DEFINED
-SV_DECL_REF(SfxDocTemplate_Impl)
+typedef tools::SvRef<SfxDocTemplate_Impl> SfxDocTemplate_ImplRef;
 #endif
 
 // class SfxDocumentTemplates --------------------------------------------

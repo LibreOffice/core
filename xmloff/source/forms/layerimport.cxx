@@ -53,8 +53,6 @@
 #include <rtl/strbuf.hxx>
 #include <algorithm>
 
-SV_IMPL_REF( SvXMLStylesContext );
-
 namespace xmloff
 {
 

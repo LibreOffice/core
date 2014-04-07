@@ -92,7 +92,7 @@ public:
         }
 };
 
-SV_DECL_IMPL_REF(SvStringHashEntry)
+typedef tools::SvRef<SvStringHashEntry> SvStringHashEntryRef;
 
 typedef ::std::vector< SvStringHashEntry* > SvStringHashList;
 

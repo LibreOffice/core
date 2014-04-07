@@ -27,6 +27,7 @@
 #include <map>
 #include <rtl/ustring.hxx>
 #include <IMark.hxx>
+#include <swserv.hxx>
 
 namespace com {
     namespace sun {

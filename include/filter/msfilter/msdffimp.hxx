@@ -53,7 +53,6 @@ class Graphic;
 class SvStream;
 class SdrObject;
 class SdrOle2Obj;
-class SotStorageRef;
 class Polygon;
 class PolyPolygon;
 class FmFormModel;

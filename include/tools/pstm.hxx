@@ -51,7 +51,7 @@ class TOOLS_DLLPUBLIC SvRttiBase : public SvRefBase
 public:
             TYPEINFO();
 };
-SV_DECL_IMPL_REF(SvRttiBase)
+typedef tools::SvRef<SvRttiBase> SvRttiBaseRef;
 
 #define SV_DECL_PERSIST( Class, CLASS_ID )                          \
     TYPEINFO_OVERRIDE();                                                     \
@@ -98,7 +98,7 @@ public:
     TOOLS_DLLPUBLIC friend SvPersistStream& operator >> ( SvPersistStream & rStm,
                                           SvPersistBase *& rpObj );
 };
-SV_DECL_IMPL_REF(SvPersistBase)
+typedef tools::SvRef<SvPersistBase> SvPersistBaseRef;
 
 class SvPersistListWriteable
 {

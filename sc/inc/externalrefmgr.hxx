@@ -44,7 +44,6 @@
 
 class ScDocument;
 class ScTokenArray;
-class SfxObjectShellRef;
 class Window;
 class ScFormulaCell;
 

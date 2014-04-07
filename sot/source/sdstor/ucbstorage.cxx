@@ -459,7 +459,7 @@ public:
     void                        PrepareCachedForReopen( StreamMode nMode );
 };
 
-SV_DECL_IMPL_REF( UCBStorageStream_Impl );
+typedef tools::SvRef<UCBStorageStream_Impl> UCBStorageStream_ImplRef;
 
 struct UCBStorageElement_Impl;
 typedef ::std::vector< UCBStorageElement_Impl* > UCBStorageElementList_Impl;
@@ -536,7 +536,7 @@ public:
     void                        SetError( long nError );
 };
 
-SV_DECL_IMPL_REF( UCBStorage_Impl );
+typedef tools::SvRef<UCBStorage_Impl> UCBStorage_ImplRef;
 
 // this struct contains all necessary information on an element inside a UCBStorage
 struct UCBStorageElement_Impl

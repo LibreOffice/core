@@ -49,7 +49,7 @@ class ViewShell;
 class DrawDocShell;
 #ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED
 #define SV_DECL_DRAW_DOC_SHELL_DEFINED
-SV_DECL_REF(DrawDocShell)
+typedef ::tools::SvRef<DrawDocShell> DrawDocShellRef;
 #endif
 }
 

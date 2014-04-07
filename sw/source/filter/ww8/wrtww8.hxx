@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WRTWW8_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_WRTWW8_HXX
 
+#include <sot/storage.hxx>
 #include <tools/solar.h>
 #include <tools/gen.hxx>
 #include <editeng/editdata.hxx>
@@ -115,7 +116,6 @@ namespace com { namespace sun { namespace star { namespace embed {
 class XEmbeddedObject;
 } } } }
 typedef std::map<const com::sun::star::embed::XEmbeddedObject*, sal_Int32> WW8OleMap;
-class SvStorageRef;
 struct WW8_PdAttrDesc;
 class SvxBrushItem;
 

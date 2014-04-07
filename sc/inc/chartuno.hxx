@@ -21,6 +21,7 @@
 #define SC_CHARTUNO_HXX
 
 #include "address.hxx"
+#include "rangelst.hxx"
 #include <svl/lstner.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
@@ -37,7 +38,6 @@
 
 
 class ScDocShell;
-class ScRangeListRef;
 class ScChartObj;
 
 

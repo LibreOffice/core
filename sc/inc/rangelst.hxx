@@ -96,7 +96,7 @@ private:
     typedef std::vector<ScRange*>::iterator iterator;
     typedef std::vector<ScRange*>::const_iterator const_iterator;
 };
-SV_DECL_IMPL_REF( ScRangeList );
+typedef tools::SvRef<ScRangeList> ScRangeListRef;
 
 
 // RangePairList:
@@ -132,7 +132,7 @@ public:
 private:
     ::std::vector< ScRangePair* > maPairs;
 };
-SV_DECL_IMPL_REF( ScRangePairList );
+typedef tools::SvRef<ScRangePairList> ScRangePairListRef;
 
 extern "C"
 int SAL_CALL ScRangePairList_QsortNameCompare( const void*, const void* );

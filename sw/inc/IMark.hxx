@@ -27,11 +27,6 @@
 #include <map>
 #include "swdll.hxx"
 
-#ifndef SW_DECL_SWSERVEROBJECT_DEFINED
-#define SW_DECL_SWSERVEROBJECT_DEFINED
-SV_DECL_REF( SwServerObject )
-#endif
-
 struct SwPosition;
 
 namespace sw { namespace mark

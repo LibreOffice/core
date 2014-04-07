@@ -77,8 +77,7 @@ public:
     const EditSelection&    GetCurSelection() const { return aCurSel; }
 };
 
-SV_DECL_REF( EditHTMLParser )
-SV_IMPL_REF( EditHTMLParser );
+typedef tools::SvRef<EditHTMLParser> EditHTMLParserRef;
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_EEHTML_HXX
 

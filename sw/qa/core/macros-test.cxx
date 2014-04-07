@@ -39,8 +39,7 @@
 #include <doc.hxx>
 #include "docsh.hxx"
 
-SV_DECL_REF(SwDocShell)
-SV_IMPL_REF(SwDocShell)
+typedef tools::SvRef<SwDocShell> SwDocShellRef;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

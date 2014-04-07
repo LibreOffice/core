@@ -90,7 +90,7 @@ public:
     bool    IsModified() const { return m_eStatus == GRS_MODIFIED; }
 };
 
-SV_DECL_REF(DbGridRow)
+typedef tools::SvRef<DbGridRow> DbGridRowRef;
 
 
 // DbGridControl
@@ -596,10 +596,6 @@ protected:
 private:
     using BrowseBox::InsertHandleColumn;
 };
-
-
-SV_IMPL_REF(DbGridRow);
-
 
 #endif // INCLUDED_SVX_GRIDCTRL_HXX
 

@@ -27,8 +27,7 @@
 
 #include <sfx2/zoomitem.hxx>
 
-SV_DECL_REF(SmDocShell)
-SV_IMPL_REF(SmDocShell)
+typedef tools::SvRef<SmDocShell> SmDocShellRef;
 
 using namespace ::com::sun::star;
 

@@ -22,58 +22,54 @@
 #include <tools/toolsdllapi.h>
 #include <vector>
 
-#define SV_DECL_REF( ClassName )                \
-class ClassName;                                \
-class ClassName##Ref                            \
-{                                               \
-protected:                                      \
-    ClassName * pObj;                           \
-public:                                         \
-    inline               ClassName##Ref() { pObj = 0; }                 \
-    inline               ClassName##Ref( const ClassName##Ref & rObj ); \
-    inline               ClassName##Ref( ClassName * pObjP );           \
-    inline void          Clear();                                       \
-    inline               ~ClassName##Ref();                             \
-    inline ClassName##Ref & operator = ( const ClassName##Ref & rObj ); \
-    inline ClassName##Ref & operator = ( ClassName * pObj );            \
-    inline bool        Is() const { return pObj != NULL; }          \
-    inline ClassName *     operator &  () const { return pObj; }        \
-    inline ClassName *     operator -> () const { return pObj; }        \
-    inline ClassName &     operator *  () const { return *pObj; }       \
-    inline operator ClassName * () const { return pObj; }               \
+namespace tools {
+
+template<typename T> class SvRef {
+public:
+    SvRef(): pObj(0) {}
+
+    SvRef(SvRef const & rObj): pObj(rObj.pObj)
+    { if (pObj != 0) pObj->AddNextRef(); }
+
+    SvRef(T * pObjP): pObj(pObjP) { if (pObj != 0) pObj->AddRef(); }
+
+    ~SvRef() { if (pObj != 0) pObj->ReleaseReference(); }
+
+    void Clear() {
+        if (pObj != 0) {
+            T * pRefObj = pObj;
+            pObj = 0;
+            pRefObj->ReleaseReference();
+        }
+    }
+
+    SvRef & operator =(SvRef const & rObj) {
+        if (rObj.pObj != 0) {
+            rObj.pObj->AddNextRef();
+        }
+        T * pRefObj = pObj;
+        pObj = rObj.pObj;
+        if (pRefObj != 0) {
+            pRefObj->ReleaseReference();
+        }
+        return *this;
+    }
+
+    bool Is() const { return pObj != 0; }
+
+    T * operator &() const { return pObj; }
+
+    T * operator ->() const { return pObj; }
+
+    T & operator *() const { return *pObj; }
+
+    operator T *() const { return pObj; }
+
+protected:
+    T * pObj;
 };
 
-#define SV_IMPL_REF( ClassName )                                \
-inline ClassName##Ref::ClassName##Ref( const ClassName##Ref & rObj )        \
-    { pObj = rObj.pObj; if( pObj ) { pObj->AddNextRef(); } }                \
-inline ClassName##Ref::ClassName##Ref( ClassName * pObjP )                  \
-{ pObj = pObjP; if( pObj ) { pObj->AddRef(); } }                            \
-inline void ClassName##Ref::Clear()                                         \
-{                                                                           \
-    if( pObj )                                                              \
-    {                                                                       \
-        ClassName* const pRefObj = pObj;                                    \
-        pObj = 0;                                                           \
-        pRefObj->ReleaseReference();                                        \
-    }                                                                       \
-}                                                                           \
-inline ClassName##Ref::~ClassName##Ref()                                    \
-{ if( pObj ) { pObj->ReleaseReference(); } }                                \
-inline ClassName##Ref & ClassName##Ref::                                    \
-            operator = ( const ClassName##Ref & rObj )                      \
-{                                                                           \
-    if( rObj.pObj ) rObj.pObj->AddNextRef();                                \
-    ClassName* const pRefObj = pObj;                                        \
-    pObj = rObj.pObj;                                                       \
-    if( pRefObj ) { pRefObj->ReleaseReference(); }                          \
-    return *this;                                                           \
-}                                                                           \
-inline ClassName##Ref & ClassName##Ref::operator = ( ClassName * pObjP )    \
-{ return *this = ClassName##Ref( pObjP ); }
-
-#define SV_DECL_IMPL_REF(ClassName)             \
-    SV_DECL_REF(ClassName)                      \
-    SV_IMPL_REF(ClassName)
+}
 
 template<typename T>
 class SvRefMemberList : private std::vector<T>
@@ -174,7 +170,7 @@ public:
     sal_uIntPtr     GetRefCount() const { return nRefCount; }
 };
 
-SV_DECL_IMPL_REF(SvRefBase)
+typedef tools::SvRef<SvRefBase> SvRefBaseRef;
 
 class SvCompatWeakHdl : public SvRefBase
 {
@@ -187,7 +183,7 @@ public:
     void* GetObj() { return _pObj; }
 };
 
-SV_DECL_IMPL_REF( SvCompatWeakHdl )
+typedef tools::SvRef<SvCompatWeakHdl> SvCompatWeakHdlRef;
 
 class SvCompatWeakBase
 {

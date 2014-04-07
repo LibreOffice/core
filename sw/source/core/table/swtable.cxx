@@ -72,8 +72,6 @@ TYPEINIT1( SwTableFmt, SwFrmFmt );
 TYPEINIT1( SwTableBoxFmt, SwFrmFmt );
 TYPEINIT1( SwTableLineFmt, SwFrmFmt );
 
-SV_IMPL_REF( SwServerObject )
-
 #define COLFUZZY 20
 
 void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,

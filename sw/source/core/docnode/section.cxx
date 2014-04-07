@@ -60,8 +60,6 @@
 
 using namespace ::com::sun::star;
 
-SV_IMPL_REF( SwServerObject )
-
 class SwIntrnlSectRefLink : public SwBaseLink
 {
     SwSectionFmt& rSectFmt;

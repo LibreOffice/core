@@ -72,7 +72,7 @@ public:
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                 WriteType, WriteAttribute = 0 );
 };
-SV_DECL_IMPL_REF(SvMetaObject)
+typedef tools::SvRef<SvMetaObject> SvMetaObjectRef;
 
 class SvMetaObjectMemberList : public SvDeclPersistList<SvMetaObject *> {};
 
@@ -141,12 +141,12 @@ public:
                                        WriteType, WriteAttribute = 0) SAL_OVERRIDE;
     void                WriteDescription( SvStream& rOutStm );
 };
-SV_DECL_IMPL_REF(SvMetaName)
+typedef tools::SvRef<SvMetaName> SvMetaNameRef;
 
 class SvMetaNameMemberList : public SvDeclPersistList<SvMetaName *> {};
 
-
-SV_DECL_REF(SvMetaReference)
+class SvMetaReference;
+typedef tools::SvRef<SvMetaReference> SvMetaReferenceRef;
 class SvMetaReference : public SvMetaName
 {
 protected:
@@ -190,7 +190,6 @@ public:
     void                SetRef( SvMetaReference * pRef  )
                         { aRef = pRef; }
 };
-SV_IMPL_REF(SvMetaReference)
 
 class SvMetaReferenceMemberList : public SvDeclPersistList<SvMetaReference *> {};
 
@@ -225,7 +224,7 @@ protected:
     virtual void        WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                           WriteType, WriteAttribute = 0) SAL_OVERRIDE;
 };
-SV_DECL_IMPL_REF(SvMetaExtern)
+typedef tools::SvRef<SvMetaExtern> SvMetaExternRef;
 
 class SvMetaExternMemberList : public SvDeclPersistList<SvMetaExtern *> {};
 

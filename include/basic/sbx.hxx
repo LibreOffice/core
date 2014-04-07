@@ -116,7 +116,6 @@ public:
 // declared datatype, if they are not SbxVARIANT.
 
 class SbxVarRefs;
-class SbxVariableRef;
 
 class BASIC_DLLPUBLIC SbxArray : public SbxBase
 {
@@ -256,24 +255,17 @@ public:
     const OUString& GetElementClass() const { return aElemClass; }
 };
 
-SV_IMPL_REF(SbxBase)
-
-SV_IMPL_REF(SbxVariable)
-
 #ifndef SBX_ARRAY_DECL_DEFINED
 #define SBX_ARRAY_DECL_DEFINED
-SV_DECL_REF(SbxArray)
+typedef tools::SvRef<SbxArray> SbxArrayRef;
 #endif
-SV_IMPL_REF(SbxArray)
 
 #ifndef SBX_INFO_DECL_DEFINED
 #define SBX_INFO_DECL_DEFINED
-SV_DECL_REF(SbxInfo)
+typedef tools::SvRef<SbxInfo> SbxInfoRef;
 #endif
-SV_IMPL_REF(SbxInfo)
 
-SV_DECL_REF(SbxDimArray)
-SV_IMPL_REF(SbxDimArray)
+typedef tools::SvRef<SbxDimArray> SbxDimArrayRef;
 
 #endif
 

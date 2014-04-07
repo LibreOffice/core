@@ -253,7 +253,7 @@ public:
                                   HelpIdTable& rIdTable ) SAL_OVERRIDE;
     virtual void        WriteCSV( SvIdlDataBase&, SvStream& ) SAL_OVERRIDE;
 };
-SV_DECL_IMPL_REF(SvMetaSlot)
+typedef tools::SvRef<SvMetaSlot> SvMetaSlotRef;
 
 class SvMetaSlotMemberList : public SvDeclPersistList<SvMetaSlot *> {};
 

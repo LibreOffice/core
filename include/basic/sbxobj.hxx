@@ -88,8 +88,7 @@ public:
     void Dump( SvStream&, bool bDumpAll=false );
 };
 
-SV_DECL_REF(SbxObject)
-SV_IMPL_REF(SbxObject)
+typedef tools::SvRef<SbxObject> SbxObjectRef;
 
 #endif // INCLUDED_BASIC_SBXOBJ_HXX
 

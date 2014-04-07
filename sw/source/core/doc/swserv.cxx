@@ -33,8 +33,6 @@
 
 using namespace ::com::sun::star;
 
-SV_IMPL_REF( SwServerObject )
-
 SwServerObject::~SwServerObject()
 {
 }

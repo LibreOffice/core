@@ -439,10 +439,8 @@ public:
 
 void UpdateAcceptChangesDialog();
 
-
-SV_DECL_REF(ScDocShell)
-SV_IMPL_REF(ScDocShell)
-
+class ScDocShell;
+typedef tools::SvRef<ScDocShell> ScDocShellRef;
 
 /** Create before modifications of the document and destroy thereafter.
     Call SetDocumentModified() at an instance of this class instead of at

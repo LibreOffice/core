@@ -39,7 +39,7 @@ typedef std::vector< SvSlotElement* > SvSlotElementList;
 class SvMetaClass;
 typedef ::std::vector< SvMetaClass* > SvMetaClassList;
 
-SV_DECL_REF(SvMetaClass)
+typedef tools::SvRef<SvMetaClass> SvMetaClassRef;
 class SvClassElement : public SvPersistBase
 {
     SvBOOL                      aAutomation;
@@ -65,7 +65,7 @@ public:
                     { return xClass; }
 };
 
-SV_DECL_IMPL_REF(SvClassElement)
+typedef tools::SvRef<SvClassElement> SvClassElementRef;
 
 class SvClassElementMemberList : public SvDeclPersistList<SvClassElement *> {};
 
@@ -134,8 +134,6 @@ public:
     virtual void        WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
                                 HelpIdTable& rTable );
 };
-SV_IMPL_REF(SvMetaClass)
-
 
 #endif // _OBJECT_HXX
 

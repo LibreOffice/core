@@ -96,9 +96,7 @@ public:
     virtual void onDemandRescueUsefulDataFromTemporary( const SvXMLImportContext& rCandidate );
 };
 
-SV_DECL_REF( SvXMLImportContext )
-SV_IMPL_REF( SvXMLImportContext )
-
+typedef tools::SvRef<SvXMLImportContext> SvXMLImportContextRef;
 
 #endif // INCLUDED_XMLOFF_XMLICTXT_HXX
 

@@ -112,9 +112,7 @@ public:
     EditPaM     GetCurPaM() const                   { return aCurSel.Max(); }
 };
 
-SV_DECL_REF( EditRTFParser )
-SV_IMPL_REF( EditRTFParser );
-
+typedef tools::SvRef<EditRTFParser> EditRTFParserRef;
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_EERTFPAR_HXX
 

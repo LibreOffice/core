@@ -73,7 +73,6 @@ class SvxForbiddenCharactersTable;
 class SvNumberFormatter;
 class SotStorage;
 class SdrOutlinerCache;
-class SotStorageRef;
 class SdrUndoFactory;
 class ImageMap;
 namespace comphelper

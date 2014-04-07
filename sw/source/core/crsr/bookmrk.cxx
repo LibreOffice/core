@@ -31,8 +31,6 @@
 #include <rtl/random.h>
 #include <xmloff/odffields.hxx>
 
-SV_IMPL_REF( SwServerObject )
-
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

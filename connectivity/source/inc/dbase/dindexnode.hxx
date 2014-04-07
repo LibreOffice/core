@@ -86,7 +86,8 @@ namespace connectivity
 
         // Index Page Pointer
 
-        SV_DECL_REF(ONDXPage) // Base class - because we need to store additional information
+        class ONDXPage;
+        typedef tools::SvRef<ONDXPage> ONDXPageRef; // Base class - because we need to store additional information
 
 
         class ONDXPagePtr : public ONDXPageRef
@@ -187,8 +188,6 @@ namespace connectivity
             void PrintPage();
 #endif
         };
-
-        SV_IMPL_REF(ONDXPage);
 
         SvStream& WriteONDXPagePtr(SvStream &rStream, const ONDXPagePtr&);
         SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);

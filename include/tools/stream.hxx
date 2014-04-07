@@ -134,7 +134,7 @@ public:
     virtual ErrCode Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const;
 };
 
-SV_DECL_IMPL_REF(SvLockBytes);
+typedef tools::SvRef<SvLockBytes> SvLockBytesRef;
 
 // SvOpenLockBytes
 
@@ -157,7 +157,7 @@ public:
     virtual void    Terminate() = 0;
 };
 
-SV_DECL_IMPL_REF(SvOpenLockBytes);
+typedef tools::SvRef<SvOpenLockBytes> SvOpenLockBytesRef;
 
 // SvAsyncLockBytes
 
@@ -187,7 +187,7 @@ public:
     virtual void    Terminate() SAL_OVERRIDE { m_bTerminated = true; }
 };
 
-SV_DECL_IMPL_REF(SvAsyncLockBytes);
+typedef tools::SvRef<SvAsyncLockBytes> SvAsyncLockBytesRef;
 
 // SvStream
 

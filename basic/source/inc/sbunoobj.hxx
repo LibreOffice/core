@@ -97,7 +97,7 @@ public:
     ::com::sun::star::uno::Any getUnoAny();
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
 };
-SV_DECL_IMPL_REF(SbUnoStructRefObject);
+typedef tools::SvRef<SbUnoStructRefObject> SbUnoStructRefObjectRef;
 
 class SbUnoObject: public SbxObject
 {
@@ -143,7 +143,7 @@ public:
     bool isNativeCOMObject( void )
         { return bNativeCOMObject; }
 };
-SV_DECL_IMPL_REF(SbUnoObject);
+typedef tools::SvRef<SbUnoObject> SbUnoObjectRef;
 
 // #67781 delete return values of the uno-methods
 void clearUnoMethods( void );
@@ -240,7 +240,7 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >& getUnoClass( void ) { return m_xClass; }
 
 };
-SV_DECL_IMPL_REF(SbUnoClass);
+typedef tools::SvRef<SbUnoClass> SbUnoClassRef;
 
 
 // function to find a global identifier in
@@ -267,7 +267,7 @@ public:
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
 };
-SV_DECL_IMPL_REF(SbUnoService);
+typedef tools::SvRef<SbUnoService> SbUnoServiceRef;
 
 SbUnoService* findUnoService( const OUString& rName );
 
@@ -307,7 +307,7 @@ public:
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
 };
-SV_DECL_IMPL_REF(SbUnoSingleton);
+typedef tools::SvRef<SbUnoSingleton> SbUnoSingletonRef;
 
 SbUnoSingleton* findUnoSingleton( const OUString& rName );
 

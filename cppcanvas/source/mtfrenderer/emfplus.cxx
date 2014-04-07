@@ -1686,7 +1686,7 @@ namespace cppcanvas
                             SAL_INFO("cppcanvas.emf", "EMF+ adjusted angles: start " <<
                                      (360.0*startAngle/M_PI) << ", end: " << (360.0*endAngle/M_PI));
 
-                            B2DPolygon polygon = tools::createPolygonFromEllipseSegment (mappedCenter, mappedSize.getX (), mappedSize.getY (), startAngle, endAngle);
+                            B2DPolygon polygon = basegfx::tools::createPolygonFromEllipseSegment (mappedCenter, mappedSize.getX (), mappedSize.getY (), startAngle, endAngle);
                             polygon.append (mappedCenter);
                             polygon.setClosed (true);
 

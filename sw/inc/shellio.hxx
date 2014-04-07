@@ -464,9 +464,8 @@ public:
 
 #ifndef SW_DECL_WRITER_DEFINED
 #define SW_DECL_WRITER_DEFINED
-SV_DECL_REF(Writer)
+typedef tools::SvRef<Writer> WriterRef;
 #endif
-SV_IMPL_REF(Writer)
 
 // Base class for all storage writers.
 class SW_DLLPUBLIC StgWriter : public Writer

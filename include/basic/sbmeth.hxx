@@ -67,7 +67,7 @@ public:
     virtual void    Broadcast( sal_uIntPtr nHintId ) SAL_OVERRIDE;
 };
 
-SV_DECL_IMPL_REF(SbMethod)
+typedef tools::SvRef<SbMethod> SbMethodRef;
 
 class BASIC_DLLPUBLIC SbIfaceMapperMethod : public SbMethod
 {

@@ -168,7 +168,7 @@ public:
     FileDialogHelper & GetInsertFileDialog(const OUString& rFactory) const;
 };
 
-SV_DECL_IMPL_REF(SvBaseLink);
+typedef tools::SvRef<SvBaseLink> SvBaseLinkRef;
 
 }
 

@@ -34,7 +34,6 @@
 namespace com { namespace sun { namespace star { namespace accessibility {
            class XAccessible; } } } }
 
-class SfxObjectShellRef;
 class SwDoc;
 class IDocumentSettingAccess;
 class IDocumentDeviceAccess;

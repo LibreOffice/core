@@ -138,7 +138,7 @@ private:
 };
 
 //==================class SotObjectRef======================================
-SV_DECL_IMPL_REF(SotObject)
+typedef tools::SvRef<SotObject> SotObjectRef;
 
 #endif // _IFACE_HXX
 

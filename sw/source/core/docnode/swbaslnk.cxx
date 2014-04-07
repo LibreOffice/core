@@ -55,8 +55,6 @@ static bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pG
 
 TYPEINIT1( SwBaseLink, ::sfx2::SvBaseLink );
 
-SV_IMPL_REF( SwServerObject )
-
 static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 {
     //call fist all not SwNoTxtFrames, then the SwNoTxtFrames.

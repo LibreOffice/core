@@ -31,8 +31,7 @@
 #include "shellres.hxx"
 #include "docufld.hxx"
 
-SV_DECL_REF(SwDocShell)
-SV_IMPL_REF(SwDocShell)
+typedef tools::SvRef<SwDocShell> SwDocShellRef;
 
 using namespace ::com::sun::star;
 

@@ -61,7 +61,7 @@ public:
 
 
 
-SV_DECL_IMPL_REF(SfxHintPoster);
+typedef tools::SvRef<SfxHintPoster> SfxHintPosterRef;
 
 #endif
 

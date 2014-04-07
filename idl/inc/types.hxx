@@ -31,10 +31,8 @@ typedef std::vector< SvSlotElement* > SvSlotElementList;
 class SvMetaSlot;
 typedef std::map<sal_uLong, SvMetaSlot*> HelpIdTable;
 
-SV_DECL_REF(SvMetaType)
-SV_DECL_REF(SvMetaAttribute)
-
-class SvMetaAttributeMemberList : public SvDeclPersistList<SvMetaAttribute *> {};
+class SvMetaType;
+typedef tools::SvRef<SvMetaType> SvMetaTypeRef;
 
 class SvMetaAttribute : public SvMetaReference
 {
@@ -120,8 +118,10 @@ public:
     void                FillIDTable(HelpIdTable& rIDTable);
     OString        Compare( SvMetaAttribute *pAttr );
 };
-SV_IMPL_REF(SvMetaAttribute)
 
+typedef tools::SvRef<SvMetaAttribute> SvMetaAttributeRef;
+
+class SvMetaAttributeMemberList : public SvDeclPersistList<SvMetaAttribute *> {};
 
 enum { CALL_VALUE, CALL_POINTER, CALL_REFERENCE };
 enum { TYPE_METHOD, TYPE_STRUCT, TYPE_BASE, TYPE_ENUM, TYPE_UNION,
@@ -236,7 +236,6 @@ public:
     void                WriteParamNames( SvIdlDataBase & rBase, SvStream & rOutStm,
                                         const OString& rChief );
 };
-SV_IMPL_REF(SvMetaType)
 
 class SvMetaTypeMemberList : public SvDeclPersistList<SvMetaType *> {};
 
@@ -246,7 +245,7 @@ public:
             SV_DECL_META_FACTORY1( SvMetaTypeString, SvMetaType, 19 )
             SvMetaTypeString();
 };
-SV_DECL_IMPL_REF(SvMetaTypeString)
+typedef tools::SvRef<SvMetaTypeString> SvMetaTypeStringRef;
 
 class SvMetaTypeStringMemberList : public SvDeclPersistList<SvMetaTypeString *> {};
 
@@ -262,7 +261,7 @@ public:
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
 };
-SV_DECL_IMPL_REF(SvMetaEnumValue)
+typedef tools::SvRef<SvMetaEnumValue> SvMetaEnumValueRef;
 
 class SvMetaEnumValueMemberList : public SvDeclPersistList<SvMetaEnumValue *> {};
 
@@ -293,7 +292,7 @@ public:
                                 sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
 };
-SV_DECL_IMPL_REF(SvMetaTypeEnum)
+typedef tools::SvRef<SvMetaTypeEnum> SvMetaTypeEnumRef;
 
 class SvMetaTypeEnumMemberList : public SvDeclPersistList<SvMetaTypeEnum *> {};
 
@@ -303,7 +302,7 @@ public:
             SV_DECL_META_FACTORY1( SvMetaTypevoid, SvMetaName, 22 )
             SvMetaTypevoid();
 };
-SV_DECL_IMPL_REF(SvMetaTypevoid)
+typedef tools::SvRef<SvMetaTypevoid> SvMetaTypevoidRef;
 class SvMetaTypevoidMemberList : public SvDeclPersistList<SvMetaTypevoid *> {};
 
 

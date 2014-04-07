@@ -61,7 +61,7 @@ namespace dbaui
         virtual void            release() SAL_OVERRIDE;
     };
 
-    SV_DECL_IMPL_REF( ORTFReader );
+    typedef tools::SvRef<ORTFReader> ORTFReaderRef;
 }
 #endif
 

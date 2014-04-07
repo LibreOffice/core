@@ -61,7 +61,8 @@ struct Parm;
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
 #define SW_DECL_SWSERVEROBJECT_DEFINED
-SV_DECL_REF( SwServerObject )
+class SwServerObject;
+typedef tools::SvRef<SwServerObject> SwServerObjectRef;
 #endif
 
 class SwTableLines : public std::vector<SwTableLine*> {

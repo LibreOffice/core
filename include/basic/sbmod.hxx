@@ -139,7 +139,7 @@ public:
     OUString GetKeywordCase( const OUString& sKeyword ) const;
 };
 
-SV_DECL_IMPL_REF(SbModule)
+typedef tools::SvRef<SbModule> SbModuleRef;
 
 // Object class for instances of class modules
 class BASIC_DLLPUBLIC SbClassModuleObject : public SbModule

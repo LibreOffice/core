@@ -65,7 +65,8 @@ namespace com
 
 namespace utl
 {
-SV_DECL_REF( UcbLockBytes )
+class UcbLockBytes;
+typedef tools::SvRef<UcbLockBytes> UcbLockBytesRef;
 
 class UcbLockBytesHandler : public SvRefBase
 {
@@ -87,7 +88,7 @@ public:
     bool            IsActive() const { return m_bActive; }
 };
 
-SV_DECL_IMPL_REF( UcbLockBytesHandler )
+typedef tools::SvRef<UcbLockBytesHandler> UcbLockBytesHandlerRef;
 
 class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
 {
@@ -187,8 +188,6 @@ public:
     void                    SetExpireDate_Impl( const DateTime& rDateTime )  { m_aExpireDate = rDateTime; }
     void                    SetStreamValid_Impl();
 };
-
-SV_IMPL_REF( UcbLockBytes );
 
 }
 

@@ -264,12 +264,8 @@ public:
 
 #ifndef SFX_DECL_DOCTEMPLATES_DEFINED
 #define SFX_DECL_DOCTEMPLATES_DEFINED
-SV_DECL_REF(SfxDocTemplate_Impl)
+typedef tools::SvRef<SfxDocTemplate_Impl> SfxDocTemplate_ImplRef;
 #endif
-
-SV_IMPL_REF(SfxDocTemplate_Impl)
-
-
 
 SfxDocTemplate_Impl *gpTemplateData = 0;
 
