@@ -356,11 +356,7 @@ namespace drawinglayer
         OSL_ENSURE(mpContent, "impBufferDevice: No content, check isVisible() before accessing (!)");
         if(!mpMask)
         {
-#ifdef IOS
-            mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 8);
-#else
             mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 1);
-#endif
             mpMask->SetMapMode(mpContent->GetMapMode());
 
             // do NOT copy AA flag for mask!
