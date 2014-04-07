@@ -62,29 +62,29 @@ class XMLValueImportHelper
     OUString sDefault;   /// default (see bStringDefault/bFormulaDef.)
     bool bIsDefaultLanguage;/// format (of nFormatKey) has system language?
 
-    sal_Bool bStringType;       /// is this a string (or a float) type?
-    sal_Bool bFormatOK;         /// have we read a style:data-style-name attr.?
-    sal_Bool bTypeOK;           /// have we read a value-type attribute?
-    sal_Bool bStringValueOK;    /// have we read a string-value attr.?
-    sal_Bool bFloatValueOK;     /// have we read any of the float attr.s?
-    sal_Bool bFormulaOK;        /// have we read the formula attribute?
+    bool bStringType;       /// is this a string (or a float) type?
+    bool bFormatOK;         /// have we read a style:data-style-name attr.?
+    bool bTypeOK;           /// have we read a value-type attribute?
+    bool bStringValueOK;    /// have we read a string-value attr.?
+    bool bFloatValueOK;     /// have we read any of the float attr.s?
+    bool bFormulaOK;        /// have we read the formula attribute?
 
-    const sal_Bool bSetType;    /// should PrepareField set the SetExp subtype?
-    const sal_Bool bSetValue;   /// should PrepareField set content/value?
-    const sal_Bool bSetStyle;   /// should PrepareField set NumberFormat?
-    const sal_Bool bSetFormula; /// should PrepareField set Formula?
+    const bool bSetType;    /// should PrepareField set the SetExp subtype?
+    const bool bSetValue;   /// should PrepareField set content/value?
+    const bool bSetStyle;   /// should PrepareField set NumberFormat?
+    const bool bSetFormula; /// should PrepareField set Formula?
 
-    const sal_Bool bStringDefault;  /// default: string-value = content
-    const sal_Bool bFormulaDefault; /// default: formula = content
+    const bool bStringDefault;  /// default: string-value = content
+    const bool bFormulaDefault; /// default: formula = content
 
 public:
     XMLValueImportHelper(
         SvXMLImport& rImprt,                    /// XML Import
         XMLTextImportHelper& rHlp,              /// text import helper
-        sal_Bool bType,                         /// process type (PrepareField)
-        sal_Bool bStyle,                        /// process data style (P.F.)
-        sal_Bool bValue,                        /// process value (Prep.Field)
-        sal_Bool bFormula);                     /// process formula (Prep.F.)
+        bool bType,                         /// process type (PrepareField)
+        bool bStyle,                        /// process data style (P.F.)
+        bool bValue,                        /// process value (Prep.Field)
+        bool bFormula);                     /// process formula (Prep.F.)
 
     virtual ~XMLValueImportHelper();
 
@@ -98,10 +98,10 @@ public:
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 
     /// is value a string (rather than double)?
-    inline sal_Bool IsStringValue() { return bStringType; }
+    inline bool IsStringValue() { return bStringType; }
 
     /// has format been read?
-    inline sal_Bool IsFormatOK() { return bFormatOK; }
+    inline bool IsFormatOK() { return bFormatOK; }
 
     inline void SetDefault(const OUString& sStr) { sDefault = sStr; }
 };
@@ -150,24 +150,24 @@ private:
     OUString sHelp;              /// help text
     OUString sHint;              /// hint
     XMLValueImportHelper aValueHelper;  /// value, value-type, and style
-    sal_Bool bDisplayFormula;           /// display formula?(rather than value)
-    sal_Bool bDisplayNone;              /// hide field?
+    bool bDisplayFormula;           /// display formula?(rather than value)
+    bool bDisplayNone;              /// hide field?
 
-    sal_Bool bNameOK;                   /// sName was set
-    sal_Bool bFormulaOK;                /// sFormula was set
-    sal_Bool bDescriptionOK;            /// sDescription was set
-    sal_Bool bHelpOK;                   /// sHelp was set
-    sal_Bool bHintOK;                   /// sHint was set
-    sal_Bool bDisplayOK;                /// sDisplayFormula/-None were set
+    bool bNameOK;                   /// sName was set
+    bool bFormulaOK;                /// sFormula was set
+    bool bDescriptionOK;            /// sDescription was set
+    bool bHelpOK;                   /// sHelp was set
+    bool bHintOK;                   /// sHint was set
+    bool bDisplayOK;                /// sDisplayFormula/-None were set
 
-    sal_Bool bSetFormula;               /// set Formula property
-    sal_Bool bSetFormulaDefault;        /// use content as default for formula
-    sal_Bool bSetDescription;           /// set sDescription with Hint-property
-    sal_Bool bSetHelp;
-    sal_Bool bSetHint;
-    sal_Bool bSetVisible;               /// set IsVisible
-    sal_Bool bSetDisplayFormula;        /// set DisplayFormula (sub type???)
-    sal_Bool bSetPresentation;          /// set presentation frm elem. content?
+    bool bSetFormula;               /// set Formula property
+    bool bSetFormulaDefault;        /// use content as default for formula
+    bool bSetDescription;           /// set sDescription with Hint-property
+    bool bSetHelp;
+    bool bSetHint;
+    bool bSetVisible;               /// set IsVisible
+    bool bSetDisplayFormula;        /// set DisplayFormula (sub type???)
+    bool bSetPresentation;          /// set presentation frm elem. content?
 
 public:
 
@@ -181,17 +181,17 @@ public:
         sal_uInt16 nPrfx,               /// namespace prefix
         const OUString& rLocalName,  /// element name w/o prefix
         // config variables for PrepareField behavior:
-        sal_Bool bFormula,              /// set Formula property
-        sal_Bool bFormulaDefault,       /// use content as default for formula
-        sal_Bool bDescription,          /// set sDescription with Hint-property
-        sal_Bool bHelp,
-        sal_Bool bHint,
-        sal_Bool bVisible,              /// set IsVisible (display attr)
-        sal_Bool bDisplayFormula,       /// set ??? (display attr.)
-        sal_Bool bType,                 /// set value type with ???-property
-        sal_Bool bStyle,                /// set data style (NumberFormat-Prop.)
-        sal_Bool bValue,                /// set value with Content/Value-Prop.
-        sal_Bool bPresentation);        /// set presentation from elem. content
+        bool bFormula,              /// set Formula property
+        bool bFormulaDefault,       /// use content as default for formula
+        bool bDescription,          /// set sDescription with Hint-property
+        bool bHelp,
+        bool bHint,
+        bool bVisible,              /// set IsVisible (display attr)
+        bool bDisplayFormula,       /// set ??? (display attr.)
+        bool bType,                 /// set value type with ???-property
+        bool bStyle,                /// set data style (NumberFormat-Prop.)
+        bool bValue,                /// set value with Content/Value-Prop.
+        bool bPresentation);        /// set presentation from elem. content
 
 protected:
     /// process attribute values
@@ -205,11 +205,11 @@ protected:
 
     // various accessor methods:
     inline OUString GetName()    { return sName; }
-    inline sal_Bool IsStringValue()     { return aValueHelper.IsStringValue();}
-    inline sal_Bool IsNameOK()          { return bNameOK; }
-    inline sal_Bool IsFormulaOK()       { return bFormulaOK; }
-    inline sal_Bool IsDescriptionOK()   { return bDescriptionOK; }
-    inline sal_Bool IsDisplayOK()       { return bDisplayOK; }
+    inline bool IsStringValue()     { return aValueHelper.IsStringValue();}
+    inline bool IsNameOK()          { return bNameOK; }
+    inline bool IsFormulaOK()       { return bFormulaOK; }
+    inline bool IsDescriptionOK()   { return bDescriptionOK; }
+    inline bool IsDisplayOK()       { return bDisplayOK; }
 };
 
 
@@ -308,17 +308,17 @@ public:
         // for finding appropriate field master (see EndElement())
         VarType eVarType,               /// variable type
         // config variables:
-        sal_Bool bFormula,              /// see XMLTextFieldImportContext
-        sal_Bool bFormulaDefault,       /// see XMLTextFieldImportContext
-        sal_Bool bDescription,          /// see XMLTextFieldImportContext
-        sal_Bool bHelp,                 /// see XMLTextFieldImportContext
-        sal_Bool bHint,                 /// see XMLTextFieldImportContext
-        sal_Bool bVisible,              /// see XMLTextFieldImportContext
-        sal_Bool bDisplayFormula,       /// see XMLTextFieldImportContext
-        sal_Bool bType,                 /// see XMLTextFieldImportContext
-        sal_Bool bStyle,                /// see XMLTextFieldImportContext
-        sal_Bool bValue,                /// see XMLTextFieldImportContext
-        sal_Bool bPresentation);        /// see XMLTextFieldImportContext
+        bool bFormula,              /// see XMLTextFieldImportContext
+        bool bFormulaDefault,       /// see XMLTextFieldImportContext
+        bool bDescription,          /// see XMLTextFieldImportContext
+        bool bHelp,                 /// see XMLTextFieldImportContext
+        bool bHint,                 /// see XMLTextFieldImportContext
+        bool bVisible,              /// see XMLTextFieldImportContext
+        bool bDisplayFormula,       /// see XMLTextFieldImportContext
+        bool bType,                 /// see XMLTextFieldImportContext
+        bool bStyle,                /// see XMLTextFieldImportContext
+        bool bValue,                /// see XMLTextFieldImportContext
+        bool bPresentation);        /// see XMLTextFieldImportContext
 
 protected:
 
@@ -327,7 +327,7 @@ protected:
     virtual void EndElement() SAL_OVERRIDE;
 
     /// find appropriate field master
-    sal_Bool FindFieldMaster(
+    bool FindFieldMaster(
         ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xMaster);
 };
@@ -431,7 +431,7 @@ class XMLSequenceFieldImportContext : public XMLSetVarFieldImportContext
     OUString sNumFormatSync;
     OUString sRefName;
 
-    sal_Bool bRefNameOK;
+    bool bRefNameOK;
 
 public:
 
@@ -518,7 +518,7 @@ public:
         enum VarType eVarType);                 /// variable type
 
     /// get field master for name and rename if appropriate
-    static sal_Bool FindFieldMaster(::com::sun::star::uno::Reference<
+    static bool FindFieldMaster(::com::sun::star::uno::Reference<
                                     ::com::sun::star::beans::XPropertySet> & xMaster,
                                     SvXMLImport& rImport,
                                     XMLTextImportHelper& rHelper,
@@ -540,7 +540,7 @@ class XMLTableFormulaImportContext : public XMLTextFieldImportContext
 
     OUString sFormula;
 
-    sal_Bool bIsShowFormula;
+    bool bIsShowFormula;
 
 public:
 
@@ -578,10 +578,10 @@ class XMLDatabaseDisplayImportContext : public XMLDatabaseFieldImportContext
     XMLValueImportHelper aValueHelper;
 
     OUString sColumnName;
-    sal_Bool bColumnOK;
+    bool bColumnOK;
 
-    sal_Bool bDisplay;
-    sal_Bool bDisplayOK;
+    bool bDisplay;
+    bool bDisplayOK;
 
 public:
 

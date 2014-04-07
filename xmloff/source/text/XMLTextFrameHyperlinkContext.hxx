@@ -36,7 +36,7 @@ class XMLTextFrameHyperlinkContext : public SvXMLImportContext
     OUString              sTargetFrameName;
     ::com::sun::star::text::TextContentAnchorType eDefaultAnchorType;
     SvXMLImportContextRef       xFrameContext;
-    sal_Bool                    bMap;
+    bool                    bMap;
 
 public:
 

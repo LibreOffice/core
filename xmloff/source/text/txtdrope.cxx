@@ -43,7 +43,7 @@ XMLTextDropCapExport::~XMLTextDropCapExport()
 }
 
 void XMLTextDropCapExport::exportXML( const Any& rAny,
-                                      sal_Bool bWholeWord,
+                                      bool bWholeWord,
                                       const OUString& rStyleName )
 {
     DropCapFormat aFormat;

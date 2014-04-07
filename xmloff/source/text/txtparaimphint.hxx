@@ -67,10 +67,10 @@ public:
     // We don't use virtual methods to differ between the sub classes,
     // because this seems to be to expensive if compared to inline methods.
     sal_uInt8 GetType() const { return nType; }
-    sal_Bool IsStyle() { return XML_HINT_STYLE==nType; }
-    sal_Bool IsReference() { return XML_HINT_REFERENCE==nType; }
-    sal_Bool IsHyperlink() { return XML_HINT_HYPERLINK==nType; }
-    sal_Bool IsIndexMark() { return XML_HINT_INDEX_MARK==nType; }
+    bool IsStyle() { return XML_HINT_STYLE==nType; }
+    bool IsReference() { return XML_HINT_REFERENCE==nType; }
+    bool IsHyperlink() { return XML_HINT_HYPERLINK==nType; }
+    bool IsIndexMark() { return XML_HINT_INDEX_MARK==nType; }
 };
 
 class XMLStyleHint_Impl : public XMLHint_Impl
@@ -229,9 +229,9 @@ public:
         return xShape;
     }
 
-    sal_Bool IsBoundAtChar() const
+    bool IsBoundAtChar() const
     {
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
         SvXMLImportContext *pContext = &xContext;
         if( pContext->ISA( XMLTextFrameContext ) )
             bRet = css::text::TextContentAnchorType_AT_CHARACTER ==

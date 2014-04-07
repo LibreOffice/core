@@ -141,32 +141,32 @@ public:
 
     XMLMutableAttributeList *ProcessAttrList( ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList >& rAttrList,
-                         sal_uInt16 nActionMap, sal_Bool bClone );
+                         sal_uInt16 nActionMap, bool bClone );
 
-    static sal_Bool ReplaceSingleInchWithIn( OUString& rValue );
-    static sal_Bool ReplaceSingleInWithInch( OUString& rValue );
-    static sal_Bool ReplaceInchWithIn( OUString& rValue );
-    static sal_Bool ReplaceInWithInch( OUString& rValue );
+    static bool ReplaceSingleInchWithIn( OUString& rValue );
+    static bool ReplaceSingleInWithInch( OUString& rValue );
+    static bool ReplaceInchWithIn( OUString& rValue );
+    static bool ReplaceInWithInch( OUString& rValue );
 
-    sal_Bool EncodeStyleName( OUString& rName ) const;
-    static sal_Bool DecodeStyleName( OUString& rName );
-    static sal_Bool NegPercent( OUString& rValue );
+    bool EncodeStyleName( OUString& rName ) const;
+    static bool DecodeStyleName( OUString& rName );
+    static bool NegPercent( OUString& rValue );
 
-    sal_Bool AddNamespacePrefix( OUString& rName,
+    bool AddNamespacePrefix( OUString& rName,
                                  sal_uInt16 nPrefix ) const;
-    sal_Bool RemoveNamespacePrefix( OUString& rName,
+    bool RemoveNamespacePrefix( OUString& rName,
                                     sal_uInt16 nPrefixOnly=0xffffU ) const;
 
-    sal_Bool ConvertURIToOASIS( OUString& rURI,
-                                sal_Bool bSupportPackage=sal_False ) const;
-    sal_Bool ConvertURIToOOo( OUString& rURI,
-                                sal_Bool bSupportPackage=sal_False ) const;
+    bool ConvertURIToOASIS( OUString& rURI,
+                                bool bSupportPackage=false ) const;
+    bool ConvertURIToOOo( OUString& rURI,
+                                bool bSupportPackage=false ) const;
 
     /** renames the given rOutAttributeValue if one of the parameters contains a
         matching token in its lower 16 bits.  The value is converted to the
         token that is given in the upper 16 bits of the matching parameter.
      */
-    sal_Bool RenameAttributeValue( OUString& rOutAttributeValue,
+    bool RenameAttributeValue( OUString& rOutAttributeValue,
                                    sal_Int32 nParam1,
                                    sal_Int32 nParam2,
                                    sal_Int32 nParam3 );

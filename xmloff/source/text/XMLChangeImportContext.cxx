@@ -37,9 +37,9 @@ XMLChangeImportContext::XMLChangeImportContext(
     SvXMLImport& rImport,
     sal_Int16 nPrefix,
     const OUString& rLocalName,
-    sal_Bool bStart,
-    sal_Bool bEnd,
-    sal_Bool bOutsideOfParagraph) :
+    bool bStart,
+    bool bEnd,
+    bool bOutsideOfParagraph) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
         bIsStart(bStart),
         bIsEnd(bEnd),

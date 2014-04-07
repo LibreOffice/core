@@ -135,7 +135,7 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext(
                     sal_Int32 nNewLen = aMedDescr.getLength() + 1;
                     aMedDescr.realloc( nNewLen );
                     aMedDescr[nNewLen-1].Name = "BreakMacroSignature";
-                    aMedDescr[nNewLen-1].Value <<= (sal_Bool)sal_True;
+                    aMedDescr[nNewLen-1].Value <<= true;
                     m_xModel->attachResource( m_xModel->getURL(), aMedDescr );
 
                     pContext = new XMLScriptChildContext( GetImport(), nPrefix, rLName, m_xModel, aLanguage );

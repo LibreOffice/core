@@ -197,7 +197,7 @@ enum XMLActionKind
 struct XMLEffectHint
 {
     XMLActionKind   meKind;
-    sal_Bool        mbTextEffect;
+    bool        mbTextEffect;
     Reference<XShape> mxShape;
 
     XMLEffect       meEffect;
@@ -207,16 +207,16 @@ struct XMLEffectHint
     AnimationSpeed  meSpeed;
 	sal_Int32		maDimColor;
     OUString        maSoundURL;
-    sal_Bool        mbPlayFull;
+    bool        mbPlayFull;
     sal_Int32       mnPresId;
     sal_Int32       mnPathShapeId;
 
     bool operator<(const XMLEffectHint& rComp) const { return mnPresId < rComp.mnPresId; }
 
     XMLEffectHint()
-    :   meKind( XMLE_SHOW ), mbTextEffect( sal_False ),
+    :   meKind( XMLE_SHOW ), mbTextEffect( false ),
         meEffect( EK_none ), meDirection( ED_none ), mnStartScale( -1 ),
-        meSpeed( AnimationSpeed_SLOW ), maDimColor(0), mbPlayFull( sal_False ),
+        meSpeed( AnimationSpeed_SLOW ), maDimColor(0), mbPlayFull( false ),
         mnPresId( 0 ), mnPathShapeId( -1 )
         {}
 };
@@ -327,7 +327,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
             xProps->getPropertyValue( mpImpl->msSpeed ) >>= aEffect.meSpeed;
 
 
-            sal_Bool bIsAnimation = false;
+            bool bIsAnimation = false;
             xProps->getPropertyValue( mpImpl->msIsAnimation ) >>= bIsAnimation;
             if( bIsAnimation )
             {
@@ -380,7 +380,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
                     bool bIn = true;
                     SdXMLImplSetEffect( eEffect, aEffect.meEffect, aEffect.meDirection, aEffect.mnStartScale, bIn );
                     aEffect.meKind = bIn ? XMLE_SHOW : XMLE_HIDE;
-                    aEffect.mbTextEffect = sal_True;
+                    aEffect.mbTextEffect = true;
 
                     if( !aEffect.mxShape.is() )
                     {
@@ -389,12 +389,12 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
                     }
 
                     mpImpl->maEffects.push_back( aEffect );
-                    aEffect.mbTextEffect = sal_False;
+                    aEffect.mbTextEffect = false;
                     aEffect.maSoundURL = aEmptyStr;
                 }
 
-                sal_Bool bDimPrev = false;
-                sal_Bool bDimHide = false;
+                bool bDimPrev = false;
+                bool bDimHide = false;
                 xProps->getPropertyValue( mpImpl->msDimPrev ) >>= bDimPrev;
                 xProps->getPropertyValue( mpImpl->msDimHide ) >>= bDimHide;
                 if( bDimPrev || bDimHide )

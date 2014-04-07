@@ -120,9 +120,9 @@ protected:
     OUStringBuffer sDescriptionBuffer;
     OUStringBuffer sTitleBuffer;
     OUString sNam;
-    sal_Bool bIsActive;
+    bool bIsActive;
 
-    sal_Bool bValid;
+    bool bValid;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -180,8 +180,8 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
         sTarget("Target"),
         sURL("URL"),
         xImageMap(xMap),
-        bIsActive(sal_True),
-        bValid(sal_False)
+        bIsActive(true),
+        bValid(false)
 {
     DBG_ASSERT(NULL != pServiceName,
                "Please supply the image map object service name");
@@ -313,10 +313,10 @@ class XMLImageMapRectangleContext : public XMLImageMapObjectContext
 {
     awt::Rectangle aRectangle;
 
-    sal_Bool bXOK;
-    sal_Bool bYOK;
-    sal_Bool bWidthOK;
-    sal_Bool bHeightOK;
+    bool bXOK;
+    bool bYOK;
+    bool bWidthOK;
+    bool bHeightOK;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -351,10 +351,10 @@ XMLImageMapRectangleContext::XMLImageMapRectangleContext(
     Reference<XIndexContainer> xMap) :
         XMLImageMapObjectContext(rImport, nPrefix, rLocalName, xMap,
                                  "com.sun.star.image.ImageMapRectangleObject"),
-        bXOK(sal_False),
-        bYOK(sal_False),
-        bWidthOK(sal_False),
-        bHeightOK(sal_False)
+        bXOK(false),
+        bYOK(false),
+        bWidthOK(false),
+        bHeightOK(false)
 {
 }
 
@@ -374,7 +374,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
                                                                    rValue))
             {
                 aRectangle.X = nTmp;
-                bXOK = sal_True;
+                bXOK = true;
             }
             break;
         case XML_TOK_IMAP_Y:
@@ -382,7 +382,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
                                                                    rValue))
             {
                 aRectangle.Y = nTmp;
-                bYOK = sal_True;
+                bYOK = true;
             }
             break;
         case XML_TOK_IMAP_WIDTH:
@@ -390,7 +390,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
                                                                    rValue))
             {
                 aRectangle.Width = nTmp;
-                bWidthOK = sal_True;
+                bWidthOK = true;
             }
             break;
         case XML_TOK_IMAP_HEIGHT:
@@ -398,7 +398,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
                                                                    rValue))
             {
                 aRectangle.Height = nTmp;
-                bHeightOK = sal_True;
+                bHeightOK = true;
             }
             break;
         default:
@@ -425,8 +425,8 @@ class XMLImageMapPolygonContext : public XMLImageMapObjectContext
     OUString sViewBoxString;
     OUString sPointsString;
 
-    sal_Bool bViewBoxOK;
-    sal_Bool bPointsOK;
+    bool bViewBoxOK;
+    bool bPointsOK;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -461,8 +461,8 @@ XMLImageMapPolygonContext::XMLImageMapPolygonContext(
     Reference<XIndexContainer> xMap) :
         XMLImageMapObjectContext(rImport, nPrefix, rLocalName, xMap,
                                  "com.sun.star.image.ImageMapPolygonObject"),
-        bViewBoxOK(sal_False),
-        bPointsOK(sal_False)
+        bViewBoxOK(false),
+        bPointsOK(false)
 {
 }
 
@@ -478,11 +478,11 @@ void XMLImageMapPolygonContext::ProcessAttribute(
     {
         case XML_TOK_IMAP_POINTS:
             sPointsString = rValue;
-            bPointsOK = sal_True;
+            bPointsOK = true;
             break;
         case XML_TOK_IMAP_VIEWBOX:
             sViewBoxString = rValue;
-            bViewBoxOK = sal_True;
+            bViewBoxOK = true;
             break;
         default:
             XMLImageMapObjectContext::ProcessAttribute(eToken, rValue);
@@ -522,9 +522,9 @@ class XMLImageMapCircleContext : public XMLImageMapObjectContext
     awt::Point aCenter;
     sal_Int32 nRadius;
 
-    sal_Bool bXOK;
-    sal_Bool bYOK;
-    sal_Bool bRadiusOK;
+    bool bXOK;
+    bool bYOK;
+    bool bRadiusOK;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -580,7 +580,7 @@ void XMLImageMapCircleContext::ProcessAttribute(
                                                                    rValue))
             {
                 aCenter.X = nTmp;
-                bXOK = sal_True;
+                bXOK = true;
             }
             break;
         case XML_TOK_IMAP_CENTER_Y:
@@ -588,7 +588,7 @@ void XMLImageMapCircleContext::ProcessAttribute(
                                                                    rValue))
             {
                 aCenter.Y = nTmp;
-                bYOK = sal_True;
+                bYOK = true;
             }
             break;
         case XML_TOK_IMAP_RADIUS:
@@ -596,7 +596,7 @@ void XMLImageMapCircleContext::ProcessAttribute(
                                                                    rValue))
             {
                 nRadius = nTmp;
-                bRadiusOK = sal_True;
+                bRadiusOK = true;
             }
             break;
         default:

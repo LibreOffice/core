@@ -53,9 +53,9 @@ public:
     TYPEINFO();
 
     const OUString& GetQName() const { return m_aQName; }
-    sal_Bool HasQName( sal_uInt16 nPrefix,
+    bool HasQName( sal_uInt16 nPrefix,
                        ::xmloff::token::XMLTokenEnum eToken ) const;
-    sal_Bool HasNamespace( sal_uInt16 nPrefix ) const;
+    bool HasNamespace( sal_uInt16 nPrefix ) const;
 
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.
@@ -93,7 +93,7 @@ public:
 
     // Is the current context a persistent one (i.e. one that saves is content
     // rather than exporting it directly?
-    virtual sal_Bool IsPersistent() const;
+    virtual bool IsPersistent() const;
 
     // Export the whole element. By default, nothing is done here
     virtual void Export();

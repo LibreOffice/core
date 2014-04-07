@@ -58,16 +58,16 @@ class XMLTextNumRuleInfo
     OUString     msListId;
     sal_Int16           mnListStartValue;
     sal_Int16           mnListLevel;
-    sal_Bool            mbIsNumbered;
-    sal_Bool            mbIsRestart;
+    bool            mbIsNumbered;
+    bool            mbIsRestart;
 
     // numbering rules' attributes
     sal_Int16           mnListLevelStartValue;
 
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
-    sal_Bool mbOutlineStyleAsNormalListStyle;
+    bool mbOutlineStyleAsNormalListStyle;
 
-    sal_Bool mbContinueingPreviousSubTree;
+    bool mbContinueingPreviousSubTree;
     OUString msListLabelString;
 
 public:
@@ -78,9 +78,9 @@ public:
 
     void Set( const ::com::sun::star::uno::Reference <
                         ::com::sun::star::text::XTextContent > & rTextContnt,
-              const sal_Bool bOutlineStyleAsNormalListStyle,
+              const bool bOutlineStyleAsNormalListStyle,
               const XMLTextListAutoStylePool& rListAutoPool,
-              const sal_Bool bExportTextNumberElement );
+              const bool bExportTextNumberElement );
     inline void Reset();
 
     inline const OUString& GetNumRulesName() const
@@ -107,7 +107,7 @@ public:
         return mnListLevel;
     }
 
-    inline sal_Bool HasStartValue() const
+    inline bool HasStartValue() const
     {
         return mnListStartValue != -1;
     }
@@ -116,23 +116,23 @@ public:
         return mnListStartValue;
     }
 
-    inline sal_Bool IsNumbered() const
+    inline bool IsNumbered() const
     {
         return mbIsNumbered;
     }
-    inline sal_Bool IsRestart() const
+    inline bool IsRestart() const
     {
         return mbIsRestart;
     }
 
-    sal_Bool BelongsToSameList( const XMLTextNumRuleInfo& rCmp ) const;
+    bool BelongsToSameList( const XMLTextNumRuleInfo& rCmp ) const;
 
-    inline sal_Bool HasSameNumRules( const XMLTextNumRuleInfo& rCmp ) const
+    inline bool HasSameNumRules( const XMLTextNumRuleInfo& rCmp ) const
     {
         return rCmp.msNumRulesName == msNumRulesName;
     }
 
-    inline sal_Bool IsContinueingPreviousSubTree() const
+    inline bool IsContinueingPreviousSubTree() const
     {
         return mbContinueingPreviousSubTree;
     }
@@ -169,8 +169,8 @@ inline void XMLTextNumRuleInfo::Reset()
     mnListLevel = 0;
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     mbIsNumbered = mbIsRestart =
-    mbOutlineStyleAsNormalListStyle = sal_False;
-    mbContinueingPreviousSubTree = sal_False;
+    mbOutlineStyleAsNormalListStyle = false;
+    mbContinueingPreviousSubTree = false;
     msListLabelString = "";
 }
 #endif // INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTNUMRULEINFO_HXX

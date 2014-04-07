@@ -231,7 +231,7 @@ class XMLShapeExportPropertyMapper : public SvXMLExportPropertyMapper
 {
 private:
     SvxXMLNumRuleExport maNumRuleExp;
-    sal_Bool mbIsInAutoStyles;
+    bool mbIsInAutoStyles;
 
     const OUString msCDATA;
     const OUString msTrue;
@@ -255,7 +255,7 @@ public:
                             sal_uInt32 nIdx = 0
                             ) const SAL_OVERRIDE;
 
-    void SetAutoStyles( sal_Bool bIsInAutoStyles ) { mbIsInAutoStyles = bIsInAutoStyles; }
+    void SetAutoStyles( bool bIsInAutoStyles ) { mbIsInAutoStyles = bIsInAutoStyles; }
 
     virtual void handleSpecialItem(
             SvXMLAttributeList& rAttrList,

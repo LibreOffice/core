@@ -102,7 +102,7 @@ class XMLVersionContext: public SvXMLImportContext
 private:
     XMLVersionListImport&  rLocalRef;
 
-    static sal_Bool         ParseISODateTimeString(
+    static bool         ParseISODateTimeString(
                                 const OUString& rString,
                                 com::sun::star::util::DateTime& rDateTime );
 

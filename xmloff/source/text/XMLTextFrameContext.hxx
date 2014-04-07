@@ -51,10 +51,10 @@ class XMLTextFrameContext : public SvXMLImportContext, public MultiImageImportHe
        of the object. All Draw objects have an automatic style without a parent style.
        (#i51726#)
     */
-    sal_Bool m_HasAutomaticStyleWithoutParentStyle;
-    sal_Bool m_bSupportsReplacement;
+    bool m_HasAutomaticStyleWithoutParentStyle;
+    bool m_bSupportsReplacement;
 
-    sal_Bool CreateIfNotThere( ::com::sun::star::uno::Reference <
+    bool CreateIfNotThere( ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet >& rPropSet );
 
 protected:
@@ -84,7 +84,7 @@ public:
     void SetHyperlink( const OUString& rHRef,
                        const OUString& rName,
                        const OUString& rTargetFrameName,
-                       sal_Bool bMap );
+                       bool bMap );
 
     ::com::sun::star::text::TextContentAnchorType GetAnchorType() const;
 

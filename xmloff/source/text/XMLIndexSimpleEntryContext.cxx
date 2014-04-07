@@ -46,7 +46,7 @@ XMLIndexSimpleEntryContext::XMLIndexSimpleEntryContext(
     const OUString& rLocalName )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
 ,   rEntryType(rEntry)
-,   bCharStyleNameOK(sal_False)
+,   bCharStyleNameOK(false)
 ,   rTemplateContext(rTemplate)
 ,   nValues(1)
 {
@@ -77,9 +77,9 @@ void XMLIndexSimpleEntryContext::StartElement(
             const Reference < ::com::sun::star::container::XNameContainer > & rStyles =
                 GetImport().GetTextImport()->GetTextStyles();
             if( rStyles.is() && rStyles->hasByName( sDisplayStyleName ) )
-                bCharStyleNameOK = sal_True;
+                bCharStyleNameOK = true;
             else
-                bCharStyleNameOK = sal_False;
+                bCharStyleNameOK = false;
         }
     }
 

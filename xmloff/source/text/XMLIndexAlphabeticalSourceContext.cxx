@@ -67,7 +67,7 @@ XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet)
-:   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, sal_False)
+:   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, false)
 ,   sMainEntryCharacterStyleName(sAPI_MainEntryCharacterStyleName)
 ,   sUseAlphabeticalSeparators(sAPI_UseAlphabeticalSeparators)
 ,   sUseCombinedEntries(sAPI_UseCombinedEntries)
@@ -79,15 +79,15 @@ XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
 ,   sIsCommaSeparated("IsCommaSeparated")
 ,   sSortAlgorithm(sAPI_SortAlgorithm)
 ,   sLocale(sAPI_Locale)
-,   bMainEntryStyleNameOK(sal_False)
-,   bSeparators(sal_False)
-,   bCombineEntries(sal_True)
-,   bCaseSensitive(sal_True)
-,   bEntry(sal_False)
-,   bUpperCase(sal_False)
-,   bCombineDash(sal_False)
-,   bCombinePP(sal_True)
-,   bCommaSeparated(sal_False)
+,   bMainEntryStyleNameOK(false)
+,   bSeparators(false)
+,   bCombineEntries(true)
+,   bCaseSensitive(true)
+,   bEntry(false)
+,   bUpperCase(false)
+,   bCombineDash(false)
+,   bCombinePP(true)
+,   bCommaSeparated(false)
 {
 }
 

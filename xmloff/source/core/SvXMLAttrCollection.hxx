@@ -24,25 +24,25 @@ public:
     std::vector<SvXMLAttr> aAttrs;
 
     bool operator==(const SvXMLAttrCollection &rCmp) const;
-    sal_Bool AddAttr( const OUString& rLName,
+    bool AddAttr( const OUString& rLName,
                       const OUString& rValue );
-    sal_Bool AddAttr( const OUString& rPrefix,
+    bool AddAttr( const OUString& rPrefix,
                       const OUString& rNamespace,
                       const OUString& rLName,
                       const OUString& rValue );
-    sal_Bool AddAttr( const OUString& rPrefix,
+    bool AddAttr( const OUString& rPrefix,
                       const OUString& rLName,
                       const OUString& rValue );
 
-    sal_Bool SetAt( size_t i,
+    bool SetAt( size_t i,
                     const OUString& rLName,
                     const OUString& rValue );
-    sal_Bool SetAt( size_t i,
+    bool SetAt( size_t i,
                     const OUString& rPrefix,
                     const OUString& rNamespace,
                     const OUString& rLName,
                     const OUString& rValue );
-    sal_Bool SetAt( size_t i,
+    bool SetAt( size_t i,
                     const OUString& rPrefix,
                     const OUString& rLName,
                     const OUString& rValue );

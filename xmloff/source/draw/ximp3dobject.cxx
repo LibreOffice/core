@@ -45,9 +45,9 @@ SdXML3DObjectContext::SdXML3DObjectContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mbSetTransform( sal_False )
+    mbSetTransform( false )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -112,12 +112,12 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maMinEdge(-2500.0, -2500.0, -2500.0),
     maMaxEdge(2500.0, 2500.0, 2500.0),
-    mbMinEdgeUsed(sal_False),
-    mbMaxEdgeUsed(sal_False)
+    mbMinEdgeUsed(false),
+    mbMaxEdgeUsed(false)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -138,7 +138,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
                 if(aNewVec != maMinEdge)
                 {
                     maMinEdge = aNewVec;
-                    mbMinEdgeUsed = sal_True;
+                    mbMinEdgeUsed = true;
                 }
                 break;
             }
@@ -150,7 +150,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
                 if(aNewVec != maMaxEdge)
                 {
                     maMaxEdge = aNewVec;
-                    mbMaxEdgeUsed = sal_True;
+                    mbMaxEdgeUsed = true;
                 }
                 break;
             }
@@ -214,12 +214,12 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maCenter(0.0, 0.0, 0.0),
     maSize(5000.0, 5000.0, 5000.0),
-    mbCenterUsed(sal_False),
-    mbSizeUsed(sal_False)
+    mbCenterUsed(false),
+    mbSizeUsed(false)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -240,7 +240,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                 if(aNewVec != maCenter)
                 {
                     maCenter = aNewVec;
-                    mbCenterUsed = sal_True;
+                    mbCenterUsed = true;
                 }
                 break;
             }
@@ -252,7 +252,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                 if(aNewVec != maSize)
                 {
                     maSize = aNewVec;
-                    mbSizeUsed = sal_True;
+                    mbSizeUsed = true;
                 }
                 break;
             }
@@ -313,7 +313,7 @@ SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -400,7 +400,7 @@ SdXML3DLatheObjectShapeContext::SdXML3DLatheObjectShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
 }
@@ -435,7 +435,7 @@ SdXML3DExtrudeObjectShapeContext::SdXML3DExtrudeObjectShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
 }

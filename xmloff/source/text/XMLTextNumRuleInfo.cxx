@@ -50,10 +50,10 @@ XMLTextNumRuleInfo::XMLTextNumRuleInfo()
     , msListId()
     , mnListStartValue( -1 )
     , mnListLevel( 0 )
-    , mbIsNumbered( sal_False )
-    , mbIsRestart( sal_False )
+    , mbIsNumbered( false )
+    , mbIsRestart( false )
     , mnListLevelStartValue( -1 )
-    , mbOutlineStyleAsNormalListStyle( sal_False )
+    , mbOutlineStyleAsNormalListStyle( false )
 {
     Reset();
 }
@@ -62,9 +62,9 @@ XMLTextNumRuleInfo::XMLTextNumRuleInfo()
 void XMLTextNumRuleInfo::Set(
         const ::com::sun::star::uno::Reference <
                         ::com::sun::star::text::XTextContent > & xTextContent,
-        const sal_Bool bOutlineStyleAsNormalListStyle,
+        const bool bOutlineStyleAsNormalListStyle,
         const XMLTextListAutoStylePool& rListAutoPool,
-        const sal_Bool bExportTextNumberElement )
+        const bool bExportTextNumberElement )
 {
     Reset();
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
@@ -114,7 +114,7 @@ void XMLTextNumRuleInfo::Set(
     {
         if ( !mbOutlineStyleAsNormalListStyle )
         {
-            sal_Bool bIsOutline = sal_False;
+            bool bIsOutline = false;
             Reference<XPropertySet> xNumRulesProps(mxNumRules, UNO_QUERY);
             if ( xNumRulesProps.is() &&
                  xNumRulesProps->getPropertySetInfo()->
@@ -149,19 +149,19 @@ void XMLTextNumRuleInfo::Set(
             xPropSet->getPropertyValue( msPropNameListId ) >>= msListId;
         }
 
-        mbContinueingPreviousSubTree = sal_False;
+        mbContinueingPreviousSubTree = false;
         if( xPropSetInfo->hasPropertyByName( msContinueingPreviousSubTree ) )
         {
             xPropSet->getPropertyValue( msContinueingPreviousSubTree ) >>= mbContinueingPreviousSubTree;
         }
 
-        mbIsNumbered = sal_True;
+        mbIsNumbered = true;
         if( xPropSetInfo->hasPropertyByName( msNumberingIsNumber ) )
         {
             if( !(xPropSet->getPropertyValue( msNumberingIsNumber ) >>= mbIsNumbered ) )
             {
                 OSL_FAIL( "numbered paragraph without number info" );
-                mbIsNumbered = sal_False;
+                mbIsNumbered = false;
             }
         }
 
@@ -216,9 +216,9 @@ void XMLTextNumRuleInfo::Set(
     }
 }
 
-sal_Bool XMLTextNumRuleInfo::BelongsToSameList( const XMLTextNumRuleInfo& rCmp ) const
+bool XMLTextNumRuleInfo::BelongsToSameList( const XMLTextNumRuleInfo& rCmp ) const
 {
-    sal_Bool bRet( sal_True );
+    bool bRet( true );
     // Currently only the text documents support <ListId>.
     if ( !rCmp.msListId.isEmpty() || !msListId.isEmpty() )
     {

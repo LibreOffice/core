@@ -70,7 +70,7 @@ void XMLLabelSeparatorContext::EndElement()
     {
         // aProp is a member of XMLElementPropertyContext
         aProp.maValue <<= m_aSeparator;
-        SetInsert( sal_True );
+        SetInsert( true );
     }
 
     XMLElementPropertyContext::EndElement();

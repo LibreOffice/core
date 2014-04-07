@@ -39,7 +39,7 @@ class XMLFormPropOOoTransformerContext : public XMLTransformerContext
     ::xmloff::token::XMLTokenEnum m_eValueToken;
     ::xmloff::token::XMLTokenEnum m_eValueTypeToken;
 
-    sal_Bool m_bIsList;
+    bool m_bIsList;
 
 public:
     TYPEINFO_OVERRIDE();

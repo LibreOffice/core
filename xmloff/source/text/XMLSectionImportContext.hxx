@@ -65,15 +65,15 @@ class XMLSectionImportContext : public SvXMLImportContext
     OUString sName;
     OUString sCond;
     ::com::sun::star::uno::Sequence<sal_Int8> aSequence;
-    sal_Bool bProtect;
-    sal_Bool bCondOK;
-    sal_Bool bIsVisible;
-    sal_Bool bValid;
-    sal_Bool bSequenceOK;
-    sal_Bool bIsCurrentlyVisible;
-    sal_Bool bIsCurrentlyVisibleOK;
+    bool bProtect;
+    bool bCondOK;
+    bool bIsVisible;
+    bool bValid;
+    bool bSequenceOK;
+    bool bIsCurrentlyVisible;
+    bool bIsCurrentlyVisibleOK;
 
-    sal_Bool bHasContent;
+    bool bHasContent;
 
 public:
 

@@ -41,11 +41,11 @@ class XMLIndexObjectSourceContext : public XMLIndexSourceBaseContext
     const OUString sCreateFromStarMath;
     const OUString sCreateFromOtherEmbeddedObjects;
 
-    sal_Bool bUseCalc;
-    sal_Bool bUseChart;
-    sal_Bool bUseDraw;
-    sal_Bool bUseMath;
-    sal_Bool bUseOtherObjects;
+    bool bUseCalc;
+    bool bUseChart;
+    bool bUseDraw;
+    bool bUseMath;
+    bool bUseOtherObjects;
 
 public:
 

@@ -41,9 +41,9 @@ class XMLTextHeaderFooterContext: public SvXMLImportContext
     const OUString sTextFirst;
     const OUString sTextLeft;
 
-    sal_Bool    bInsertContent : 1;
-    sal_Bool    bLeft : 1;
-    sal_Bool    bFirst : 1;
+    bool    bInsertContent : 1;
+    bool    bLeft : 1;
+    bool    bFirst : 1;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -54,7 +54,7 @@ public:
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const ::com::sun::star::uno::Reference <
                        ::com::sun::star::beans::XPropertySet > & rPageStylePropSet,
-               sal_Bool bFooter, sal_Bool bLft, sal_Bool bFrst );
+               bool bFooter, bool bLft, bool bFrst );
 
     virtual ~XMLTextHeaderFooterContext();
 

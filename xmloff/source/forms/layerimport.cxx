@@ -116,51 +116,51 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
 
     // boolean properties which are exported as attributes
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED), PROPERTY_STATE, sal_False);
+        OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED), PROPERTY_STATE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_DISABLED), PROPERTY_ENABLED, sal_False, sal_True);
+        OAttributeMetaData::getCommonControlAttributeName(CCA_DISABLED), PROPERTY_ENABLED, false, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_DROPDOWN), PROPERTY_DROPDOWN, sal_False);
+        OAttributeMetaData::getCommonControlAttributeName(CCA_DROPDOWN), PROPERTY_DROPDOWN, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_PRINTABLE), PROPERTY_PRINTABLE, sal_True);
+        OAttributeMetaData::getCommonControlAttributeName(CCA_PRINTABLE), PROPERTY_PRINTABLE, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_READONLY), PROPERTY_READONLY, sal_False);
+        OAttributeMetaData::getCommonControlAttributeName(CCA_READONLY), PROPERTY_READONLY, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED), PROPERTY_DEFAULT_STATE, sal_False);
+        OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED), PROPERTY_DEFAULT_STATE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_TAB_STOP), PROPERTY_TABSTOP, sal_True);
+        OAttributeMetaData::getCommonControlAttributeName(CCA_TAB_STOP), PROPERTY_TABSTOP, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, sal_False);
+        OAttributeMetaData::getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_VALIDATION), PROPERTY_STRICTFORMAT, sal_False);
+        OAttributeMetaData::getSpecialAttributeName(SCA_VALIDATION), PROPERTY_STRICTFORMAT, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_MULTI_LINE), PROPERTY_MULTILINE, sal_False);
+        OAttributeMetaData::getSpecialAttributeName(SCA_MULTI_LINE), PROPERTY_MULTILINE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_AUTOMATIC_COMPLETION), PROPERTY_AUTOCOMPLETE, sal_False);
+        OAttributeMetaData::getSpecialAttributeName(SCA_AUTOMATIC_COMPLETION), PROPERTY_AUTOCOMPLETE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_MULTIPLE), PROPERTY_MULTISELECTION, sal_False);
+        OAttributeMetaData::getSpecialAttributeName(SCA_MULTIPLE), PROPERTY_MULTISELECTION, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_DEFAULT_BUTTON), PROPERTY_DEFAULTBUTTON, sal_False);
+        OAttributeMetaData::getSpecialAttributeName(SCA_DEFAULT_BUTTON), PROPERTY_DEFAULTBUTTON, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_IS_TRISTATE), PROPERTY_TRISTATE, sal_False);
+        OAttributeMetaData::getSpecialAttributeName(SCA_IS_TRISTATE), PROPERTY_TRISTATE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getFormAttributeName(faAllowDeletes), PROPERTY_ALLOWDELETES, sal_True);
+        OAttributeMetaData::getFormAttributeName(faAllowDeletes), PROPERTY_ALLOWDELETES, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getFormAttributeName(faAllowInserts), PROPERTY_ALLOWINSERTS, sal_True);
+        OAttributeMetaData::getFormAttributeName(faAllowInserts), PROPERTY_ALLOWINSERTS, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getFormAttributeName(faAllowUpdates), PROPERTY_ALLOWUPDATES, sal_True);
+        OAttributeMetaData::getFormAttributeName(faAllowUpdates), PROPERTY_ALLOWUPDATES, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getFormAttributeName(faApplyFilter), PROPERTY_APPLYFILTER, sal_False);
+        OAttributeMetaData::getFormAttributeName(faApplyFilter), PROPERTY_APPLYFILTER, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getFormAttributeName(faEscapeProcessing), PROPERTY_ESCAPEPROCESSING, sal_True);
+        OAttributeMetaData::getFormAttributeName(faEscapeProcessing), PROPERTY_ESCAPEPROCESSING, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getFormAttributeName(faIgnoreResult), PROPERTY_IGNORERESULT, sal_False);
+        OAttributeMetaData::getFormAttributeName(faIgnoreResult), PROPERTY_IGNORERESULT, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName( SCA_TOGGLE ), PROPERTY_TOGGLE, sal_False );
+        OAttributeMetaData::getSpecialAttributeName( SCA_TOGGLE ), PROPERTY_TOGGLE, false );
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName( SCA_FOCUS_ON_CLICK ), PROPERTY_FOCUS_ON_CLICK, sal_True );
+        OAttributeMetaData::getSpecialAttributeName( SCA_FOCUS_ON_CLICK ), PROPERTY_FOCUS_ON_CLICK, true );
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getDatabaseAttributeName( DA_INPUT_REQUIRED ), PROPERTY_INPUT_REQUIRED, sal_False );
+        OAttributeMetaData::getDatabaseAttributeName( DA_INPUT_REQUIRED ), PROPERTY_INPUT_REQUIRED, false );
 
     // the int16 attributes
     m_aAttributeMetaData.addInt16Property(

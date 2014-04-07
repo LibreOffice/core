@@ -293,7 +293,7 @@ namespace xmloff
                 :public OControlElement
                 ,public OElementExport
     {
-        sal_Bool m_bCreateConnectionResourceElement;
+        bool m_bCreateConnectionResourceElement;
     public:
         /** constructs an object capable of exporting controls
         */

@@ -27,9 +27,9 @@
  *  Register subset of UNO services from XML Office library. This is necessary when
  *  linking against the static "xol.lib".
  *
- *  @return returns sal_False if at least one component could not be registered.
+ *  @return returns false if at least one component could not be registered.
  */
-sal_Bool XMLRegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ); /// [all] ServiceProvider to register in.
+bool XMLRegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ); /// [all] ServiceProvider to register in.
 
 #endif // INCLUDED_XMLOFF_XMLREG_HXX
 

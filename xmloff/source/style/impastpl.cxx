@@ -261,9 +261,9 @@ XMLAutoStylePoolParent::~XMLAutoStylePoolParent()
 // Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) to list
 // if not added, yet.
 
-sal_Bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek )
+bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek )
 {
-    sal_Bool bAdded = sal_False;
+    bool bAdded = false;
     XMLAutoStylePoolProperties *pProperties = 0;
     sal_Int32 nProperties = rProperties.size();
     size_t i = 0;
@@ -291,7 +291,7 @@ sal_Bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vec
         PropertiesListType::iterator it = maPropertiesList.begin();
         ::std::advance( it, i );
         maPropertiesList.insert( it, pProperties );
-        bAdded = sal_True;
+        bAdded = true;
     }
 
     rName = pProperties->GetName();
@@ -305,9 +305,9 @@ sal_Bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vec
 // the same properties exists, a new one is added (like with bDontSeek).
 
 
-sal_Bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, const OUString& rName )
+bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, const OUString& rName )
 {
-    sal_Bool bAdded = sal_False;
+    bool bAdded = false;
     sal_Int32 nProperties = rProperties.size();
     size_t i = 0;
     for (size_t n = maPropertiesList.size(); i < n; ++i)
@@ -332,7 +332,7 @@ sal_Bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, cons
         PropertiesListType::iterator it = maPropertiesList.begin();
         ::std::advance( it, i );
         maPropertiesList.insert( it, pProperties );
-        bAdded = sal_True;
+        bAdded = true;
     }
 
     return bAdded;
@@ -391,11 +391,11 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
         const OUString& rStrName,
         const UniReference < SvXMLExportPropertyMapper > & rMapper,
            const OUString& rStrPrefix,
-        sal_Bool bAsFamily )
+        bool bAsFamily )
 {
     // store family in a list if not already stored
     sal_uInt16 nExportFlags = GetExport().getExportFlags();
-    sal_Bool bStylesOnly = (nExportFlags & EXPORT_STYLES) != 0 && (nExportFlags & EXPORT_CONTENT) == 0;
+    bool bStylesOnly = (nExportFlags & EXPORT_STYLES) != 0 && (nExportFlags & EXPORT_CONTENT) == 0;
 
     OUString aPrefix( rStrPrefix );
     if( bStylesOnly )

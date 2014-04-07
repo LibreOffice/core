@@ -83,24 +83,24 @@ class XMLTextFrameContextHyperlink_Impl
     OUString sHRef;
     OUString sName;
     OUString sTargetFrameName;
-    sal_Bool bMap;
+    bool bMap;
 
 public:
 
     inline XMLTextFrameContextHyperlink_Impl( const OUString& rHRef,
                        const OUString& rName,
                        const OUString& rTargetFrameName,
-                       sal_Bool bMap );
+                       bool bMap );
 
     const OUString& GetHRef() const { return sHRef; }
     const OUString& GetName() const { return sName; }
     const OUString& GetTargetFrameName() const { return sTargetFrameName; }
-    sal_Bool GetMap() const { return bMap; }
+    bool GetMap() const { return bMap; }
 };
 
 inline XMLTextFrameContextHyperlink_Impl::XMLTextFrameContextHyperlink_Impl(
     const OUString& rHRef, const OUString& rName,
-    const OUString& rTargetFrameName, sal_Bool bM ) :
+    const OUString& rTargetFrameName, bool bM ) :
     sHRef( rHRef ),
     sName( rName ),
     sTargetFrameName( rTargetFrameName ),
@@ -178,7 +178,7 @@ XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     OUString sName, sValue;
-    sal_Bool bFoundValue = sal_False; // to allow empty values
+    bool bFoundValue = false; // to allow empty values
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -192,7 +192,7 @@ XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
                if( IsXMLToken(aLocalName, XML_VALUE) )
             {
                 sValue = rValue;
-                bFoundValue=sal_True;
+                bFoundValue=true;
             }
             else if( IsXMLToken(aLocalName, XML_NAME) )
             {
@@ -216,7 +216,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const Reference < XPropertySet >& rPropSet,
-            sal_Bool bPath );
+            bool bPath );
     virtual ~XMLTextFrameContourContext_Impl();
 };
 
@@ -227,12 +227,12 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         const Reference < XPropertySet >& rPropSet,
-        sal_Bool bPath ) :
+        bool bPath ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xPropSet( rPropSet )
 {
     OUString sD, sPoints, sViewBox;
-    sal_Bool bPixelWidth = sal_False, bPixelHeight = sal_False;
+    bool bPixelWidth = false, bPixelHeight = false;
     sal_Bool bAuto = sal_False;
     sal_Int32 nWidth = 0;
     sal_Int32 nHeight = 0;
@@ -265,14 +265,14 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
             break;
         case XML_TOK_TEXT_CONTOUR_WIDTH:
             if (::sax::Converter::convertMeasurePx(nWidth, rValue))
-                bPixelWidth = sal_True;
+                bPixelWidth = true;
             else
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
                         nWidth, rValue);
             break;
         case XML_TOK_TEXT_CONTOUR_HEIGHT:
             if (::sax::Converter::convertMeasurePx(nHeight, rValue))
-                bPixelHeight = sal_True;
+                bPixelHeight = true;
             else
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
                         nHeight, rValue);
@@ -418,21 +418,21 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     sal_uInt16 nType;
     ::com::sun::star::text::TextContentAnchorType   eAnchorType;
 
-    sal_Bool    bMayScript : 1;
-    sal_Bool    bMinWidth : 1;
-    sal_Bool    bMinHeight : 1;
-    sal_Bool    bSyncWidth : 1;
-    sal_Bool    bSyncHeight : 1;
-    sal_Bool    bCreateFailed : 1;
-    sal_Bool    bOwnBase64Stream : 1;
+    bool    bMayScript : 1;
+    bool    bMinWidth : 1;
+    bool    bMinHeight : 1;
+    bool    bSyncWidth : 1;
+    bool    bSyncHeight : 1;
+    bool    bCreateFailed : 1;
+    bool    bOwnBase64Stream : 1;
 
-    void Create( sal_Bool bHRefOrBase64 );
+    void Create( bool bHRefOrBase64 );
 
 public:
 
     TYPEINFO_OVERRIDE();
 
-    sal_Bool CreateIfNotThere();
+    bool CreateIfNotThere();
     const OUString& GetHRef() const { return sHRef; }
 
     XMLTextFrameContext_Impl( SvXMLImport& rImport,
@@ -458,7 +458,7 @@ public:
     void SetHyperlink( const OUString& rHRef,
                        const OUString& rName,
                        const OUString& rTargetFrameName,
-                       sal_Bool bMap );
+                       bool bMap );
 
     // Implement Title/Description Elements UI (#i73249#)
     void SetTitle( const OUString& rTitle );
@@ -475,7 +475,7 @@ public:
 
 TYPEINIT1( XMLTextFrameContext_Impl, SvXMLImportContext );
 
-void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
+void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
 {
     UniReference < XMLTextImportHelper > xTextImportHelper =
         GetImport().GetTextImport();
@@ -578,7 +578,7 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
 
     if( !xPropSet.is() )
     {
-        bCreateFailed = sal_True;
+        bCreateFailed = true;
         return;
     }
 
@@ -721,7 +721,7 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
             GetImport().GetTextImport();
         if( !sHRef.isEmpty() )
         {
-            sal_Bool bForceLoad = xTxtImport->IsInsertMode() ||
+            bool bForceLoad = xTxtImport->IsInsertMode() ||
                                   xTxtImport->IsBlockMode() ||
                                   xTxtImport->IsStylesOnlyMode() ||
                                   xTxtImport->IsOrganizerMode();
@@ -827,7 +827,7 @@ OUString XMLTextFrameContext::getGraphicURLFromImportContext(const SvXMLImportCo
     return aRetval;
 }
 
-sal_Bool XMLTextFrameContext_Impl::CreateIfNotThere()
+bool XMLTextFrameContext_Impl::CreateIfNotThere()
 {
     if( !xPropSet.is() &&
         ( XML_TEXT_FRAME_OBJECT_OLE == nType ||
@@ -836,7 +836,7 @@ sal_Bool XMLTextFrameContext_Impl::CreateIfNotThere()
     {
         if( bOwnBase64Stream )
             xBase64Stream->closeOutput();
-        Create( sal_True );
+        Create( true );
     }
 
     return xPropSet.is();
@@ -886,14 +886,14 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
     nRotation = 0;
     nRelWidth = 0;
     nRelHeight = 0;
-    bMayScript = sal_False;
+    bMayScript = false;
 
-    bMinHeight = sal_False;
-    bMinWidth = sal_False;
-    bSyncWidth = sal_False;
-    bSyncHeight = sal_False;
-    bCreateFailed = sal_False;
-    bOwnBase64Stream = sal_False;
+    bMinHeight = false;
+    bMinWidth = false;
+    bSyncWidth = false;
+    bSyncHeight = false;
+    bCreateFailed = false;
+    bOwnBase64Stream = false;
 
     UniReference < XMLTextImportHelper > xTxtImport =
         GetImport().GetTextImport();
@@ -975,7 +975,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         case XML_TOK_TEXT_FRAME_REL_WIDTH:
             if( IsXMLToken(rValue, XML_SCALE) )
             {
-                bSyncWidth = sal_True;
+                bSyncWidth = true;
             }
             else
             {
@@ -996,7 +996,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
                         nWidth, rValue, 0 );
             }
-            bMinWidth = sal_True;
+            bMinWidth = true;
             break;
         case XML_TOK_TEXT_FRAME_HEIGHT:
             // relative heights are obsolete since SRC617. Remove them some day!
@@ -1015,12 +1015,12 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         case XML_TOK_TEXT_FRAME_REL_HEIGHT:
             if( IsXMLToken( rValue, XML_SCALE ) )
             {
-                bSyncHeight = sal_True;
+                bSyncHeight = true;
             }
             else if( IsXMLToken( rValue, XML_SCALE_MIN ) )
             {
-                bSyncHeight = sal_True;
-                bMinHeight = sal_True;
+                bSyncHeight = true;
+                bMinHeight = true;
             }
             else
             {
@@ -1041,7 +1041,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
                         nHeight, rValue, 0 );
             }
-            bMinHeight = sal_True;
+            bMinHeight = true;
             break;
         case XML_TOK_TEXT_FRAME_Z_INDEX:
             ::sax::Converter::convertNumber( nZIndex, rValue, -1 );
@@ -1105,7 +1105,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
           sHRef.isEmpty() && sMimeType.isEmpty() ) )
         return; // no URL: no image or OLE object
 
-    Create( sal_True );
+    Create( true );
 }
 
 XMLTextFrameContext_Impl::~XMLTextFrameContext_Impl()
@@ -1188,7 +1188,7 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
             sFilterService = pEContext->GetFilterServiceName();
             if( !sFilterService.isEmpty() )
             {
-                Create( sal_False );
+                Create( false );
                 if( xPropSet.is() )
                 {
                     Reference < XEmbeddedObjectSupplier > xEOS( xPropSet,
@@ -1235,7 +1235,7 @@ void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
                         GetImport().GetStreamForEmbeddedObjectURLFromBase64();
                 }
                 if( xBase64Stream.is() )
-                    bOwnBase64Stream = sal_True;
+                    bOwnBase64Stream = true;
             }
             if( bOwnBase64Stream && xBase64Stream.is() )
             {
@@ -1264,7 +1264,7 @@ void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
 void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
                        const OUString& rName,
                        const OUString& rTargetFrameName,
-                       sal_Bool bMap )
+                       bool bMap )
 {
     static OUString s_HyperLinkURL("HyperLinkURL");
     static OUString s_HyperLinkName("HyperLinkName");
@@ -1351,7 +1351,7 @@ void XMLTextFrameContext_Impl::SetDesc( const OUString& rDesc )
 
 TYPEINIT1( XMLTextFrameContext, SvXMLImportContext );
 
-sal_Bool XMLTextFrameContext::CreateIfNotThere( ::com::sun::star::uno::Reference <
+bool XMLTextFrameContext::CreateIfNotThere( ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet >& rPropSet )
 {
     SvXMLImportContext *pContext = &m_xImplContext;
@@ -1379,8 +1379,8 @@ XMLTextFrameContext::XMLTextFrameContext(
 ,   m_sDesc()
 ,   m_eDefaultAnchorType( eATyp )
     // Shapes in Writer cannot be named via context menu (#i51726#)
-,   m_HasAutomaticStyleWithoutParentStyle( sal_False )
-,   m_bSupportsReplacement( sal_False )
+,   m_HasAutomaticStyleWithoutParentStyle( false )
+,   m_bSupportsReplacement( false )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1404,7 +1404,7 @@ XMLTextFrameContext::XMLTextFrameContext(
                 pStyle = xTxtImport->FindAutoFrameStyle( aStyleName );
                 if ( pStyle && pStyle->GetParentName().isEmpty() )
                 {
-                    m_HasAutomaticStyleWithoutParentStyle = sal_True;
+                    m_HasAutomaticStyleWithoutParentStyle = true;
                 }
             }
         }
@@ -1537,7 +1537,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                 else if( XML_TEXT_FRAME_OBJECT == nFrameType ||
                          XML_TEXT_FRAME_OBJECT_OLE == nFrameType )
                 {
-                    m_bSupportsReplacement = sal_True;
+                    m_bSupportsReplacement = true;
                 }
                 else if(XML_TEXT_FRAME_GRAPHIC == nFrameType)
                 {
@@ -1628,13 +1628,13 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             {
                 if( CreateIfNotThere( xPropSet ) )
                     pContext = new XMLTextFrameContourContext_Impl( GetImport(), p_nPrefix, rLocalName,
-                                                  xAttrList, xPropSet, sal_False );
+                                                  xAttrList, xPropSet, false );
             }
             else if( IsXMLToken( rLocalName, XML_CONTOUR_PATH ) )
             {
                 if( CreateIfNotThere( xPropSet ) )
                     pContext = new XMLTextFrameContourContext_Impl( GetImport(), p_nPrefix, rLocalName,
-                                                  xAttrList, xPropSet, sal_True );
+                                                  xAttrList, xPropSet, true );
             }
             else if( IsXMLToken( rLocalName, XML_IMAGE_MAP ) )
             {
@@ -1680,7 +1680,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,
                        const OUString& rName,
                        const OUString& rTargetFrameName,
-                       sal_Bool bMap )
+                       bool bMap )
 {
     OSL_ENSURE( !m_pHyperlink, "recursive SetHyperlink call" );
     delete m_pHyperlink;

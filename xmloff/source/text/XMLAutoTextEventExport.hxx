@@ -76,7 +76,7 @@ protected:
         enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID ) SAL_OVERRIDE;
 
     /// does the document have any events ?
-    sal_Bool hasEvents();
+    bool hasEvents();
 
     /// export the events element
     void exportEvents();

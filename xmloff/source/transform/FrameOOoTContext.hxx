@@ -45,7 +45,7 @@ public:
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 
-    virtual sal_Bool IsPersistent() const SAL_OVERRIDE;
+    virtual bool IsPersistent() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_FRAMEOOOTCONTEXT_HXX

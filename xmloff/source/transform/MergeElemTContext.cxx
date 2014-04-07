@@ -84,7 +84,7 @@ XMLTransformerContext *XMLParagraphTransformerContext::CreateChildContext(
     XMLTransformerContext *pContext = 0;
 
     pContext = new XMLIgnoreTransformerContext( GetTransformer(),
-                                                rQName, sal_True );
+                                                rQName, true );
 
     return pContext;
 }
@@ -156,7 +156,7 @@ void XMLMergeElemTransformerContext::ExportStartElement()
     }
     XMLTransformerContext::StartElement( m_xAttrList );
 
-    m_bStartElementExported = sal_True;
+    m_bStartElementExported = true;
 }
 
 XMLMergeElemTransformerContext::XMLMergeElemTransformerContext(
@@ -165,7 +165,7 @@ XMLMergeElemTransformerContext::XMLMergeElemTransformerContext(
        sal_uInt16 nActionMap ) :
     XMLTransformerContext( rImp, rQName ),
     m_nActionMap( nActionMap ),
-    m_bStartElementExported( sal_False )
+    m_bStartElementExported( false )
 {
 }
 
@@ -177,7 +177,7 @@ void XMLMergeElemTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {
     XMLMutableAttributeList *pMutableAttrList =
-        new XMLMutableAttributeList( rAttrList, sal_True );
+        new XMLMutableAttributeList( rAttrList, true );
     m_xAttrList = pMutableAttrList;
 
     sal_Int16 nAttrCount = m_xAttrList.is() ? m_xAttrList->getLength() : 0;
@@ -188,17 +188,17 @@ void XMLMergeElemTransformerContext::StartElement(
         sal_uInt16 nPrefix =
             GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                                 &aLocalName );
-        sal_Bool bRemove = sal_True;
+        bool bRemove = true;
         if( XML_NAMESPACE_OFFICE == nPrefix)
         {
             if (IsXMLToken( aLocalName, XML_DISPLAY ) )
-                bRemove = sal_False;
+                bRemove = false;
             else if (IsXMLToken( aLocalName, XML_AUTHOR ) )
-                bRemove = sal_False;
+                bRemove = false;
             else if (IsXMLToken( aLocalName, XML_CREATE_DATE ) )
-                bRemove = sal_False;
+                bRemove = false;
             else if (IsXMLToken( aLocalName, XML_CREATE_DATE_STRING ) )
-                bRemove = sal_False;
+                bRemove = false;
         }
         if (bRemove)
         {

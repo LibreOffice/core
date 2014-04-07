@@ -33,7 +33,7 @@ namespace xmloff
             m_aLists.push_back(_rxList);
     }
 
-    sal_Bool OAttribListMerger::seekToIndex(sal_Int16 _nGlobalIndex, Reference< xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex)
+    bool OAttribListMerger::seekToIndex(sal_Int16 _nGlobalIndex, Reference< xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex)
     {
         sal_Int16 nLeftOver = _nGlobalIndex;
         AttributeListArray::const_iterator aLookupSublist = m_aLists.begin();
@@ -46,14 +46,14 @@ namespace xmloff
         if (aLookupSublist == m_aLists.end())
         {
             OSL_FAIL("OAttribListMerger::seekToIndex: invalid index!");
-            return sal_False;
+            return false;
         }
         _rSubList = *aLookupSublist;
         _rLocalIndex = nLeftOver;
-        return sal_True;
+        return true;
     }
 
-    sal_Bool OAttribListMerger::seekToName(const OUString& _rName, Reference< xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex)
+    bool OAttribListMerger::seekToName(const OUString& _rName, Reference< xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex)
     {
         for (   AttributeListArray::const_iterator aLookupSublist = m_aLists.begin();
                 aLookupSublist != m_aLists.end();
@@ -64,11 +64,11 @@ namespace xmloff
                 {
                     _rSubList = *aLookupSublist;
                     _rLocalIndex = i;
-                    return sal_True;
+                    return true;
                 }
 
         OSL_FAIL("OAttribListMerger::seekToName: did not find the name!");
-        return sal_False;
+        return false;
     }
 
     sal_Int16 SAL_CALL OAttribListMerger::getLength(  ) throw(RuntimeException, std::exception)

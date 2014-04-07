@@ -240,7 +240,7 @@ bool XMLBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const
 {
     bool bValue(false);
     bool const bRet = ::sax::Converter::convertBool( bValue, rStrImpValue );
-    rValue <<= sal_Bool(bValue);
+    rValue <<= bValue;
 
     return bRet;
 }
@@ -248,11 +248,11 @@ bool XMLBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const
 bool XMLBoolPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
-      OUStringBuffer aOut;
-    sal_Bool bValue = sal_Bool();
+    bool bValue;
 
     if (rValue >>= bValue)
     {
+        OUStringBuffer aOut;
         ::sax::Converter::convertBool( aOut, bValue );
         rStrExpValue = aOut.makeStringAndClear();
 
@@ -273,7 +273,7 @@ bool XMLNBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, cons
 {
     bool bValue(false);
     bool const bRet = ::sax::Converter::convertBool( bValue, rStrImpValue );
-    rValue <<= sal_Bool(!bValue);
+    rValue <<= !bValue;
 
     return bRet;
 }
@@ -281,11 +281,11 @@ bool XMLNBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, cons
 bool XMLNBoolPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
-      OUStringBuffer aOut;
-    sal_Bool bValue = sal_Bool();
+    bool bValue;
 
     if (rValue >>= bValue)
     {
+        OUStringBuffer aOut;
         ::sax::Converter::convertBool( aOut, !bValue );
         rStrExpValue = aOut.makeStringAndClear();
 
@@ -693,8 +693,8 @@ XMLIsTransparentPropHdl::~XMLIsTransparentPropHdl()
 
 bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bValue = (sal_Bool) ( (bool) (rStrImpValue == sTransparent) == bTransPropValue);
-    rValue.setValue( &bValue, ::getBooleanCppuType() );
+    bool bValue = ( (bool) (rStrImpValue == sTransparent) == bTransPropValue);
+    rValue <<= bValue;
 
     return true;
 }
@@ -706,7 +706,7 @@ bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& rVal
     // MIB: This looks a bit strange, because bTransPropValue == bValue should
     // do the same, but this only applies if 'true' is represented by the same
     // 8 bit value in bValue and bTransPropValue. Who will ensure this?
-    sal_Bool bValue = *(sal_Bool *)rValue.getValue();
+    bool bValue = *(sal_Bool *)rValue.getValue();
     bool bIsTrans = bTransPropValue ? bValue : !bValue;
 
     if( bIsTrans )

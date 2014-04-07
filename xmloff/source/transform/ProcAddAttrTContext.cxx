@@ -55,7 +55,7 @@ void XMLProcAddAttrTransformerContext::StartElement(
     Reference< XAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList *pMutableAttrList =
         GetTransformer().ProcessAttrList( xAttrList, GetActionMap(),
-                                          sal_False );
+                                          false );
     if( !pMutableAttrList )
     {
         pMutableAttrList = new XMLMutableAttributeList;

@@ -45,7 +45,7 @@ using ::com::sun::star::style::NumberingType::ARABIC;
 
 void XMLSectionFootnoteConfigExport::exportXML(
     SvXMLExport& rExport,
-    sal_Bool bEndnote,
+    bool bEndnote,
     const vector<XMLPropertyState> *pProperties,
     sal_uInt32
     #ifdef DBG_UTIL
@@ -55,13 +55,13 @@ void XMLSectionFootnoteConfigExport::exportXML(
     const UniReference<XMLPropertySetMapper> & rMapper)
 {
     // store and initialize the values
-    sal_Bool bNumOwn = sal_False;
-    sal_Bool bNumRestart = sal_False;
+    bool bNumOwn = false;
+    bool bNumRestart = false;
     sal_Int16 nNumRestartAt = 0;
     sal_Int16 nNumberingType = ARABIC;
     OUString sNumPrefix;
     OUString sNumSuffix;
-    sal_Bool bEnd = sal_False;
+    bool bEnd = false;
 
     // find entries in property states vector
     sal_uInt32 nCount = pProperties->size();

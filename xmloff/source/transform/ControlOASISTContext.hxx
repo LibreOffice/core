@@ -25,14 +25,14 @@
 class XMLControlOASISTransformerContext : public XMLTransformerContext
 {
     OUString m_aElemQName;
-    sal_Bool m_bCreateControl;
+    bool m_bCreateControl;
 
 public:
     TYPEINFO_OVERRIDE();
 
     XMLControlOASISTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
-                              sal_Bool bCreateControl );
+                              bool bCreateControl );
 
     virtual ~XMLControlOASISTransformerContext();
 

@@ -40,7 +40,7 @@ public:
             const OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles,
-            sal_Bool bDefaultStyle=sal_False);
+            bool bDefaultStyle=false);
     virtual ~PageStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(

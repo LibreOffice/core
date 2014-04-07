@@ -79,7 +79,7 @@ void XMLReplacementImageContext::EndElement()
     OUString sHRef;
     if( !m_sHRef.isEmpty() )
     {
-        sal_Bool bForceLoad = xTxtImport->IsInsertMode() ||
+        bool bForceLoad = xTxtImport->IsInsertMode() ||
                               xTxtImport->IsBlockMode() ||
                               xTxtImport->IsStylesOnlyMode() ||
                               xTxtImport->IsOrganizerMode();

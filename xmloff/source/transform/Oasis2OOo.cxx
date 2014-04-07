@@ -1247,7 +1247,7 @@ void XMLTableTransformerContext_Impl::EndElement()
 
 class XMLBodyOASISTransformerContext_Impl : public XMLTransformerContext
 {
-    sal_Bool m_bFirstChild;
+    bool m_bFirstChild;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -1272,7 +1272,7 @@ XMLBodyOASISTransformerContext_Impl::XMLBodyOASISTransformerContext_Impl(
         XMLTransformerBase& rImp,
         const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName ),
-    m_bFirstChild( sal_False )
+    m_bFirstChild( false )
 {
 }
 
@@ -1292,7 +1292,7 @@ XMLTransformerContext* XMLBodyOASISTransformerContext_Impl::CreateChildContext( 
 {
     if (!m_bFirstChild)
     {
-        m_bFirstChild = sal_True;
+        m_bFirstChild = true;
         XMLTransformerContext::StartElement(xAttrList);
     }
 
@@ -1439,9 +1439,9 @@ void XMLTabStopOASISTContext_Impl::StartElement(
 class XMLConfigItemTContext_Impl : public XMLTransformerContext
 {
     OUString m_aContent;
-    sal_Bool m_bIsRedlineProtectionKey;
-    sal_Bool m_bIsCursorX;
-    sal_Bool m_bIsCursorY;
+    bool m_bIsRedlineProtectionKey;
+    bool m_bIsCursorX;
+    bool m_bIsCursorY;
 
 public:
 
@@ -1464,9 +1464,9 @@ XMLConfigItemTContext_Impl::XMLConfigItemTContext_Impl(
         XMLTransformerBase& rImp,
         const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName ),
-    m_bIsRedlineProtectionKey( sal_False ),
-    m_bIsCursorX( sal_False ),
-    m_bIsCursorY( sal_False )
+    m_bIsRedlineProtectionKey( false ),
+    m_bIsCursorX( false ),
+    m_bIsCursorY( false )
 {
 }
 
@@ -1496,11 +1496,11 @@ void XMLConfigItemTContext_Impl::StartElement(
                 const sal_Char sCursorX[] = "CursorPositionX";
                 const sal_Char sCursorY[] = "CursorPositionY";
                 if( rValue.equalsAsciiL( sRedlineProtectionKey, sizeof(sRedlineProtectionKey)-1 ) )
-                    m_bIsRedlineProtectionKey = sal_True;
+                    m_bIsRedlineProtectionKey = true;
                 else if( rValue.equalsAsciiL( sCursorX, sizeof(sCursorX)-1 ) )
-                    m_bIsCursorX = sal_True;
+                    m_bIsCursorX = true;
                 else if( rValue.equalsAsciiL( sCursorY, sizeof(sCursorY)-1 ) )
-                    m_bIsCursorY = sal_True;
+                    m_bIsCursorY = true;
 
                 break;
             }

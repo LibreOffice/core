@@ -143,7 +143,7 @@ public:
         @return If none of the two interfaces is supported or using them both
             fails then sal_False is returned.  Else True is returned.
     */
-    inline  sal_Bool    GetProperties   (void);
+    inline  bool    GetProperties   (void);
 
 private:
     /** @descr  Try to use the XMultiPropertySet interface to get the property
@@ -152,7 +152,7 @@ private:
             containing the properties names.
         @return True if values could be derived.
     */
-    inline  sal_Bool    MultiGet    (const ::com::sun::star::uno::Sequence<
+    inline  bool    MultiGet    (const ::com::sun::star::uno::Sequence<
         OUString> & rNameList);
 
     /** @descr  Try to use the XPropertySet interface to get the property
@@ -161,7 +161,7 @@ private:
             containing the properties names.
         @return True if values could be derived.
     */
-    inline  sal_Bool    SingleGet   (const ::com::sun::star::uno::Sequence<
+    inline  bool    SingleGet   (const ::com::sun::star::uno::Sequence<
         OUString> & rNameList);
 
     /** @descr  STL map that maps from property names to polymorphic instances of
@@ -187,7 +187,7 @@ MultiPropertySetHandler::~MultiPropertySetHandler (void)
         delete I->second;
 }
 
-sal_Bool    MultiPropertySetHandler::GetProperties  (void)
+bool    MultiPropertySetHandler::GetProperties  (void)
 {
     ::std::map< OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
     ::com::sun::star::uno::Sequence< OUString> aNameList (aPropertyList.size());
@@ -196,11 +196,11 @@ sal_Bool    MultiPropertySetHandler::GetProperties  (void)
         aNameList[i++] = I->second->msName;
     if ( ! MultiGet(aNameList))
         if ( ! SingleGet(aNameList))
-            return sal_False;
-    return sal_True;
+            return false;
+    return true;
 }
 
-sal_Bool    MultiPropertySetHandler::MultiGet   (const ::com::sun::star::uno::Sequence<
+bool    MultiPropertySetHandler::MultiGet   (const ::com::sun::star::uno::Sequence<
     OUString> & rNameList)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet> xMultiSet (
@@ -217,15 +217,15 @@ sal_Bool    MultiPropertySetHandler::MultiGet   (const ::com::sun::star::uno::Se
         }
         catch (const ::com::sun::star::beans::UnknownPropertyException&)
         {
-            return sal_False;
+            return false;
         }
     else
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool    MultiPropertySetHandler::SingleGet  (const ::com::sun::star::uno::Sequence<
+bool    MultiPropertySetHandler::SingleGet  (const ::com::sun::star::uno::Sequence<
     OUString> & rNameList)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xSingleSet (
@@ -240,12 +240,12 @@ sal_Bool    MultiPropertySetHandler::SingleGet  (const ::com::sun::star::uno::Se
         }
         catch (const ::com::sun::star::beans::UnknownPropertyException&)
         {
-            return sal_False;
+            return false;
         }
     else
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 #endif

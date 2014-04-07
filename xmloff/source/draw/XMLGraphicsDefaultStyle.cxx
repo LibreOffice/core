@@ -99,7 +99,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     if( !xDefaults.is() )
         return;
                                             // SJ: #i114750#
-    sal_Bool bWordWrapDefault = sal_True;   // initializing with correct ODF fo:wrap-option default
+    bool bWordWrapDefault = true;   // initializing with correct ODF fo:wrap-option default
     sal_Int32 nUPD( 0 );
     sal_Int32 nBuild( 0 );
     const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
@@ -110,7 +110,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
         ||
         ((nUPD > 300) && (nUPD <= 330))
     ) )
-        bWordWrapDefault = sal_False;
+        bWordWrapDefault = false;
 
     const OUString sTextWordWrap( "TextWordWrap" );
     Reference< XPropertySetInfo > xInfo( xDefaults->getPropertySetInfo() );

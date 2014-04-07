@@ -171,7 +171,7 @@ void GetB3DVector( std::vector< com::sun::star::beans::PropertyValue >& rDest,
     }
 }
 
-sal_Bool GetEquationName( const OUString& rEquation, const sal_Int32 nStart, OUString& rEquationName )
+bool GetEquationName( const OUString& rEquation, const sal_Int32 nStart, OUString& rEquationName )
 {
     sal_Int32 nIndex = nStart;
     while( nIndex < rEquation.getLength() )
@@ -188,32 +188,32 @@ sal_Bool GetEquationName( const OUString& rEquation, const sal_Int32 nStart, OUS
         else
             break;
     }
-    sal_Bool bValid = ( nIndex - nStart ) != 0;
+    bool bValid = ( nIndex - nStart ) != 0;
     if ( bValid )
         rEquationName = rEquation.copy( nStart, nIndex - nStart );
     return bValid;
 }
 
-sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter, sal_Int32& nIndex, const OUString& rParaString )
+bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter, sal_Int32& nIndex, const OUString& rParaString )
 {
     if ( nIndex >= rParaString.getLength() )
-        return sal_False;
+        return false;
 
-    sal_Bool bValid = sal_True;
-    sal_Bool bNumberRequired = sal_True;
-    sal_Bool bMustBePositiveWholeNumbered = sal_False;
+    bool bValid = true;
+    bool bNumberRequired = true;
+    bool bMustBePositiveWholeNumbered = false;
 
     rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL;
     if ( rParaString[ nIndex ] == '$' )
     {
         rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT;
-        bMustBePositiveWholeNumbered = sal_True;
+        bMustBePositiveWholeNumbered = true;
         nIndex++;
     }
     else if ( rParaString[ nIndex ] == '?' )
     {
         nIndex++;
-        bNumberRequired = sal_False;
+        bNumberRequired = false;
         OUString aEquationName;
         bValid = GetEquationName( rParaString, nIndex, aEquationName );
         if ( bValid )
@@ -225,7 +225,7 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
     }
     else if ( rParaString[ nIndex ] > '9' )
     {
-        bNumberRequired = sal_False;
+        bNumberRequired = false;
         if ( rParaString.matchIgnoreAsciiCaseAsciiL( "left", 4, nIndex ) )
         {
             rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT;
@@ -287,7 +287,7 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
             nIndex += 9;
         }
         else
-            bValid = sal_False;
+            bValid = false;
     }
     if ( bValid )
     {
@@ -296,10 +296,10 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
             sal_Int32 nStartIndex = nIndex;
             sal_Int32 nEIndex = 0;  // index of "E" in double
 
-            sal_Bool bE = sal_False;    // set if a double is including a "E" statement
-            sal_Bool bENum = sal_False; // there is at least one number after "E"
-            sal_Bool bDot = sal_False;  // set if there is a dot included
-            sal_Bool bEnd = sal_False;  // set for each value that can not be part of a double/integer
+            bool bE = false;    // set if a double is including a "E" statement
+            bool bENum = false; // there is at least one number after "E"
+            bool bDot = false;  // set if there is a dot included
+            bool bEnd = false;  // set for each value that can not be part of a double/integer
 
             while( ( nIndex < rParaString.getLength() ) && bValid )
             {
@@ -308,32 +308,32 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                     case '.' :
                     {
                         if ( bMustBePositiveWholeNumbered )
-                            bValid = sal_False;
+                            bValid = false;
                         else
                         {
                             if ( bDot )
-                                bValid = sal_False;
+                                bValid = false;
                             else
-                                bDot = sal_True;
+                                bDot = true;
                         }
                     }
                     break;
                     case '-' :
                     {
                         if ( bMustBePositiveWholeNumbered )
-                            bValid = sal_False;
+                            bValid = false;
                         else
                         {
                             if ( nStartIndex == nIndex )
-                               bValid = sal_True;
+                               bValid = true;
                             else if ( bE )
                             {
                                 if ( nEIndex + 1 == nIndex )
-                                    bValid = sal_True;
+                                    bValid = true;
                                 else if ( bENum )
-                                    bEnd = sal_True;
+                                    bEnd = true;
                                 else
-                                    bValid = sal_False;
+                                    bValid = false;
                             }
                         }
                     }
@@ -343,16 +343,16 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                     case 'E' :
                     {
                         if ( bMustBePositiveWholeNumbered )
-                            bEnd = sal_True;
+                            bEnd = true;
                         else
                         {
                             if ( !bE )
                             {
-                                bE = sal_True;
+                                bE = true;
                                 nEIndex = nIndex;
                             }
                             else
-                                bEnd = sal_True;
+                                bEnd = true;
                         }
                     }
                     break;
@@ -368,11 +368,11 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                     case '9' :
                     {
                         if ( bE && ! bENum )
-                            bENum = sal_True;
+                            bENum = true;
                     }
                     break;
                     default:
-                        bEnd = sal_True;
+                        bEnd = true;
                 }
                 if ( !bEnd )
                     nIndex++;
@@ -380,7 +380,7 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                     break;
             }
             if ( nIndex == nStartIndex )
-                bValid = sal_False;
+                bValid = false;
             if ( bValid )
             {
                 OUString aNumber( rParaString.copy( nStartIndex, nIndex - nStartIndex ) );
@@ -390,7 +390,7 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                     if (::sax::Converter::convertDouble(fAttrDouble, aNumber))
                         rParameter.Value <<= fAttrDouble;
                     else
-                        bValid = sal_False;
+                        bValid = false;
                 }
                 else
                 {
@@ -398,7 +398,7 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                     if (::sax::Converter::convertNumber(nValue, aNumber))
                         rParameter.Value <<= nValue;
                     else
-                        bValid = sal_False;
+                        bValid = false;
                 }
             }
         }
@@ -613,7 +613,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
     sal_Int32 nParametersNeeded = 1;
     sal_Int16 nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
 
-    sal_Bool bValid = sal_True;
+    bool bValid = true;
 
     while( bValid && ( nIndex < rValue.getLength() ) )
     {
@@ -795,7 +795,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
                     nParameterCount++;
                 }
                 else
-                    bValid = sal_False;
+                    bValid = false;
             }
             break;
             default:
@@ -1171,7 +1171,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 break;
                 case EAS_text_path_scale :
                 {
-                    sal_Bool bScaleX = IsXMLToken( rValue, XML_SHAPE );
+                    bool bScaleX = IsXMLToken( rValue, XML_SHAPE );
                     beans::PropertyValue aProp;
                     aProp.Name = EASGet( EAS_ScaleX );
                     aProp.Value <<= bScaleX;

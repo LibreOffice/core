@@ -58,7 +58,7 @@ namespace xmloff
 
     void OFormsRootImport::implImportBool(const Reference< XAttributeList >& _rxAttributes, OfficeFormsAttributes _eAttribute,
             const Reference< XPropertySet >& _rxProps, const Reference< XPropertySetInfo >& _rxPropInfo,
-            const OUString& _rPropName, sal_Bool _bDefault)
+            const OUString& _rPropName, bool _bDefault)
     {
         // the complete attribute name to look for
         OUString sCompleteAttributeName = GetImport().GetNamespaceMap().GetQNameByIndex(
@@ -92,8 +92,8 @@ namespace xmloff
                 if (xDocProperties.is())
                     xDocPropInfo = xDocProperties->getPropertySetInfo();
 
-                implImportBool(_rxAttrList, ofaAutomaticFocus, xDocProperties, xDocPropInfo, PROPERTY_AUTOCONTROLFOCUS, sal_False);
-                implImportBool(_rxAttrList, ofaApplyDesignMode, xDocProperties, xDocPropInfo, PROPERTY_APPLYDESIGNMODE, sal_True);
+                implImportBool(_rxAttrList, ofaAutomaticFocus, xDocProperties, xDocPropInfo, PROPERTY_AUTOCONTROLFOCUS, false);
+                implImportBool(_rxAttrList, ofaApplyDesignMode, xDocProperties, xDocPropInfo, PROPERTY_APPLYDESIGNMODE, true);
             }
         }
         catch(Exception&)
@@ -124,10 +124,10 @@ namespace xmloff
 
     void OFormsRootExport::implExportBool(SvXMLExport& _rExp, OfficeFormsAttributes _eAttribute,
         const Reference< XPropertySet >& _rxProps, const Reference< XPropertySetInfo >& _rxPropInfo,
-        const OUString& _rPropName, sal_Bool _bDefault)
+        const OUString& _rPropName, bool _bDefault)
     {
         // retrieve the property value
-        sal_Bool bValue = _bDefault;
+        bool bValue = _bDefault;
         if (_rxPropInfo->hasPropertyByName(_rPropName))
             bValue = ::cppu::any2bool(_rxProps->getPropertyValue(_rPropName));
 
@@ -154,8 +154,8 @@ namespace xmloff
                 if (xDocProperties.is())
                     xDocPropInfo = xDocProperties->getPropertySetInfo();
 
-                implExportBool(_rExp, ofaAutomaticFocus, xDocProperties, xDocPropInfo, PROPERTY_AUTOCONTROLFOCUS, sal_False);
-                implExportBool(_rExp, ofaApplyDesignMode, xDocProperties, xDocPropInfo, PROPERTY_APPLYDESIGNMODE, sal_True);
+                implExportBool(_rExp, ofaAutomaticFocus, xDocProperties, xDocPropInfo, PROPERTY_AUTOCONTROLFOCUS, false);
+                implExportBool(_rExp, ofaApplyDesignMode, xDocProperties, xDocPropInfo, PROPERTY_APPLYDESIGNMODE, true);
             }
         }
         catch(Exception&)

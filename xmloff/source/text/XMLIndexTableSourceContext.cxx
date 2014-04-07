@@ -59,14 +59,14 @@ XMLIndexTableSourceContext::XMLIndexTableSourceContext(
     SvXMLImport& rImport, sal_uInt16 nPrfx,
     const OUString& rLocalName, Reference<XPropertySet> & rPropSet)
     : XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
-                                  rPropSet, sal_False)
+                                  rPropSet, false)
     , sCreateFromLabels(sAPI_CreateFromLabels)
     , sLabelCategory(sAPI_LabelCategory)
     , sLabelDisplayType(sAPI_LabelDisplayType)
     , nDisplayFormat(0)
-    , bSequenceOK(sal_False)
-    , bDisplayFormatOK(sal_False)
-    , bUseCaption(sal_True)
+    , bSequenceOK(false)
+    , bDisplayFormatOK(false)
+    , bUseCaption(true)
 {
 }
 
@@ -105,7 +105,7 @@ void XMLIndexTableSourceContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_SEQUENCE_NAME:
             sSequence = rValue;
-            bSequenceOK = sal_True;
+            bSequenceOK = true;
             break;
 
         case XML_TOK_INDEXSOURCE_SEQUENCE_FORMAT:
@@ -115,7 +115,7 @@ void XMLIndexTableSourceContext::ProcessAttribute(
                                                  lcl_aReferenceTypeTokenMap))
             {
                  nDisplayFormat = nTmp;
-                 bDisplayFormatOK = sal_True;
+                 bDisplayFormatOK = true;
              }
             break;
         }

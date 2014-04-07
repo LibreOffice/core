@@ -53,7 +53,7 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
 {
     Reference< XAttributeList > xAttrList( rAttrList );
 
-    sal_Bool bMimeFound = sal_False;
+    bool bMimeFound = false;
     OUString aClass;
     OUString aClassQName(
                     GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -97,7 +97,7 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
             }
             pMutableAttrList->SetValueByIndex( i, aClass );
             pMutableAttrList->RenameAttributeByIndex(i, aClassQName );
-            bMimeFound = sal_True;
+            bMimeFound = true;
             break;
         }
     }

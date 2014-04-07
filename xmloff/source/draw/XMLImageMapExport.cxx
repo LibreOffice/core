@@ -71,7 +71,7 @@ XMLImageMapExport::XMLImageMapExport(SvXMLExport& rExp) :
     msURL("URL"),
     msTitle("Title"),
     mrExport(rExp),
-    mbWhiteSpace(sal_True)
+    mbWhiteSpace(true)
 {
 }
 

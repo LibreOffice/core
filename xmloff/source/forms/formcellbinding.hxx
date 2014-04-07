@@ -48,7 +48,7 @@ namespace xmloff
             <p>If this method returns <FALSE/>, you cannot instantiate a CellBindingHelper with
             this model, since then no of it's functionality will be available.</p>
         */
-        static  sal_Bool    livesInSpreadsheetDocument(
+        static  bool    livesInSpreadsheetDocument(
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel
                             );
 

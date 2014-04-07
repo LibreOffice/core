@@ -282,7 +282,7 @@ namespace xmloff
     {
         sal_Int16   m_nImagePosition;
         sal_Int16   m_nImageAlign;
-        sal_Bool    m_bHaveImagePosition;
+        bool    m_bHaveImagePosition;
 
     public:
         OImagePositionImport(
@@ -481,8 +481,8 @@ namespace xmloff
         sal_Int32       m_nEmptyListItems;      /// number of empty list items encountered during reading
         sal_Int32       m_nEmptyValueItems;     /// number of empty value items encountered during reading
 
-        sal_Bool        m_bEncounteredLSAttrib;
-        sal_Bool        m_bLinkWithIndexes;     /** <TRUE/> if and only if we should use a cell value binding
+        bool        m_bEncounteredLSAttrib;
+        bool        m_bLinkWithIndexes;     /** <TRUE/> if and only if we should use a cell value binding
                                                     which exchanges the selection index (instead of the selection text
                                                 */
 

@@ -44,9 +44,9 @@ TYPEINIT1( XMLNotesTransformerContext, XMLPersElemContentTContext );
 XMLNotesTransformerContext::XMLNotesTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName,
-        XMLTokenEnum eToken, sal_Bool bPersistent ) :
+        XMLTokenEnum eToken, bool bPersistent ) :
     XMLPersElemContentTContext( rImp, rQName ),
-    m_bEndNote( sal_False ),
+    m_bEndNote( false ),
     m_bPersistent( bPersistent ),
     m_eTypeToken( eToken )
 {
@@ -95,7 +95,7 @@ void XMLNotesTransformerContext::StartElement(
                     }
                     else if( IsXMLToken( rAttrValue, XML_ENDNOTE ) )
                     {
-                        m_bEndNote = sal_True;
+                        m_bEndNote = true;
                     }
                     pMutableAttrList->RemoveAttributeByIndex( i );
                     --i;
@@ -211,7 +211,7 @@ XMLTransformerContext *XMLNotesTransformerContext::CreateChildContext(
     return pContext;
 }
 
-sal_Bool XMLNotesTransformerContext::IsPersistent() const
+bool XMLNotesTransformerContext::IsPersistent() const
 {
     return m_bPersistent;
 }

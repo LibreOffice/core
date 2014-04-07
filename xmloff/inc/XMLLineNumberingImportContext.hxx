@@ -70,10 +70,10 @@ class XMLLineNumberingImportContext : public SvXMLStyleContext
     sal_Int16 nNumberPosition;
     sal_Int16 nIncrement;
     sal_Int16 nSeparatorIncrement;
-    sal_Bool bNumberLines;
-    sal_Bool bCountEmptyLines;
-    sal_Bool bCountInFloatingFrames;
-    sal_Bool bRestartNumbering;
+    bool bNumberLines;
+    bool bCountEmptyLines;
+    bool bCountInFloatingFrames;
+    bool bRestartNumbering;
 
 public:
 

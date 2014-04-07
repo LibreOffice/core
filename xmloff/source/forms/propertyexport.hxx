@@ -213,7 +213,7 @@ namespace xmloff
             const OUString& _rPropertyName,
             const SvXMLEnumMapEntry* _pValueMap,
             const sal_Int32 _nDefault,
-            const sal_Bool _bVoidDefault = sal_False);
+            const bool _bVoidDefault = false);
 
         // some very special methods for some very special attribute/property pairs
 

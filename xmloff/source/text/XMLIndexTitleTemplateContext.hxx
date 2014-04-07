@@ -43,7 +43,7 @@ class XMLIndexTitleTemplateContext : public SvXMLImportContext
 
     // paragraph style
     OUString sStyleName;
-    sal_Bool bStyleNameOK;
+    bool bStyleNameOK;
 
     // content
     OUStringBuffer sContent;

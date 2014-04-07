@@ -83,7 +83,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
     sal_Int16 eAdjust = HoriOrientation::LEFT;
     OUString sPrefix, sSuffix;
     OUString sTextStyleName;
-    sal_Bool bHasColor = sal_False;
+    bool bHasColor = false;
     sal_Int32 nColor = 0;
     sal_Int32 nSpaceBefore = 0, nMinLabelWidth = 0, nMinLabelDist = 0;
 
@@ -166,7 +166,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         else if( rProp.Name == "BulletColor" )
         {
             rProp.Value >>= nColor;
-            bHasColor = sal_True;
+            bHasColor = true;
         }
         else  if( rProp.Name == "StartWith" )
         {
@@ -675,7 +675,7 @@ void SvxXMLNumRuleExport::exportNumberingRule(
         GetExport( ).AddAttribute( XML_NAMESPACE_STYLE, XML_HIDDEN, "true" );
 
     // text:consecutive-numbering="..."
-    sal_Bool bContNumbering = sal_False;
+    bool bContNumbering = false;
     if( xPropSetInfo.is() &&
         xPropSetInfo->hasPropertyByName( sIsContinuousNumbering ) )
     {
@@ -718,7 +718,7 @@ bool SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
 
     OUString sName = rStyle->getName();
 
-    sal_Bool bHidden = sal_False;
+    bool bHidden = false;
     if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
     {
         aAny = xPropSet->getPropertyValue( "Hidden" );

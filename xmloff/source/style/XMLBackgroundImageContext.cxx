@@ -201,7 +201,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                 sal_uInt16 nTmp;
                 SvXMLTokenEnumerator aTokenEnum( rValue );
                 OUString aToken;
-                sal_Bool bHori = sal_False, bVert = sal_False;
+                bool bHori = false, bVert = false;
                 bool bOK = true;
                 while( bOK && aTokenEnum.getNextToken( aToken ) )
                 {
@@ -220,7 +220,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                                     ? GraphicLocation_LEFT_TOP
                                     : (nPrc < 75 ? GraphicLocation_MIDDLE_MIDDLE
                                                 : GraphicLocation_RIGHT_BOTTOM);
-                                bHori = sal_True;
+                                bHori = true;
                             }
                             else
                             {
@@ -229,7 +229,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                                     : (nPrc < 75 ? GraphicLocation_LEFT_MIDDLE
                                                  : GraphicLocation_LEFT_BOTTOM);
                                 lcl_xmlbic_MergeVertPos( eNewPos, eTmp );
-                                bVert = sal_True;
+                                bVert = true;
                             }
                         }
                         else
@@ -259,7 +259,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                             eNewPos = (GraphicLocation)nTmp;
                         else
                             bOK = false;
-                        bHori = sal_True;
+                        bHori = true;
                     }
                     else if( SvXMLUnitConverter::convertEnum( nTmp, aToken,
                                                          psXML_BrushVertPos ) )
@@ -271,7 +271,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                             eNewPos = (GraphicLocation)nTmp;
                         else
                             bOK = false;
-                        bVert = sal_True;
+                        bVert = true;
                     }
                     else
                     {
@@ -394,7 +394,7 @@ void XMLBackgroundImageContext::EndElement()
     aFilterProp.maValue <<= sFilter;
     aTransparencyProp.maValue <<= nTransparency;
 
-    SetInsert( sal_True );
+    SetInsert( true );
     XMLElementPropertyContext::EndElement();
 
     if( -1 != aPosProp.mnIndex )

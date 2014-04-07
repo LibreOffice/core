@@ -38,7 +38,7 @@ protected:
     // the shape group this object should be created inside
 
     com::sun::star::drawing::HomogenMatrix mxHomMat;
-    sal_Bool                        mbSetTransform;
+    bool                        mbSetTransform;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -48,7 +48,7 @@ public:
         const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXML3DObjectContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
@@ -61,8 +61,8 @@ class SdXML3DCubeObjectShapeContext : public SdXML3DObjectContext
 {
     ::basegfx::B3DVector    maMinEdge;
     ::basegfx::B3DVector    maMaxEdge;
-    sal_Bool                    mbMinEdgeUsed;
-    sal_Bool                    mbMaxEdgeUsed;
+    bool                    mbMinEdgeUsed;
+    bool                    mbMaxEdgeUsed;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -71,7 +71,7 @@ public:
         const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXML3DCubeObjectShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
@@ -84,8 +84,8 @@ class SdXML3DSphereObjectShapeContext : public SdXML3DObjectContext
 {
     ::basegfx::B3DVector    maCenter;
     ::basegfx::B3DVector    maSize;
-    sal_Bool                    mbCenterUsed;
-    sal_Bool                    mbSizeUsed;
+    bool                    mbCenterUsed;
+    bool                    mbSizeUsed;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -94,7 +94,7 @@ public:
         const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXML3DSphereObjectShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
@@ -115,7 +115,7 @@ public:
         const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXML3DPolygonBasedShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
@@ -133,7 +133,7 @@ public:
         const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXML3DLatheObjectShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
@@ -151,7 +151,7 @@ public:
         const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXML3DExtrudeObjectShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;

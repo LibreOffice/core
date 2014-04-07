@@ -84,17 +84,17 @@ namespace
 }
 
 Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun::star::uno::Type& _rExpectedType,
-    const OUString& _rReadCharacters, const SvXMLEnumMapEntry* _pEnumMap, const sal_Bool _bInvertBoolean )
+    const OUString& _rReadCharacters, const SvXMLEnumMapEntry* _pEnumMap, const bool _bInvertBoolean )
 {
     Any aReturn;
-    sal_Bool bEnumAsInt = sal_False;
+    bool bEnumAsInt = false;
     switch (_rExpectedType.getTypeClass())
     {
         case TypeClass_BOOLEAN:     // sal_Bool
         {
             bool bValue;
         #if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
+            bool bSuccess =
         #endif
             ::sax::Converter::convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
@@ -110,7 +110,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
             {   // it's a real int32/16 property
                 sal_Int32 nValue(0);
         #if OSL_DEBUG_LEVEL > 0
-                sal_Bool bSuccess =
+                bool bSuccess =
         #endif
                 ::sax::Converter::convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
@@ -123,13 +123,13 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
                     aReturn <<= (sal_Int32)nValue;
                 break;
             }
-            bEnumAsInt = sal_True;
+            bEnumAsInt = true;
             // NO BREAK! handle it as enum
         case TypeClass_ENUM:
         {
             sal_uInt16 nEnumValue(0);
         #if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
+            bool bSuccess =
         #endif
             _rImporter.GetMM100UnitConverter().convertEnum(nEnumValue, _rReadCharacters, _pEnumMap);
             OSL_ENSURE(bSuccess, "PropertyConversion::convertString: could not convert to an enum value!");
@@ -151,7 +151,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
         {
             double nValue;
         #if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
+            bool bSuccess =
         #endif
             ::sax::Converter::convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
@@ -179,7 +179,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
                 // first extract the double
                 double nValue = 0;
             #if OSL_DEBUG_LEVEL > 0
-                sal_Bool bSuccess =
+                bool bSuccess =
             #endif
                 ::sax::Converter::convertDouble(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
@@ -258,7 +258,7 @@ Type PropertyConversion::xmlTypeToUnoType( const OUString& _rType )
 OPropertyImport::OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 _nPrefix, const OUString& _rName)
     :SvXMLImportContext(_rImport.getGlobalContext(), _nPrefix, _rName)
     ,m_rContext(_rImport)
-    ,m_bTrackAttributes(sal_False)
+    ,m_bTrackAttributes(false)
 {
 }
 
@@ -305,7 +305,7 @@ void OPropertyImport::StartElement(const Reference< XAttributeList >& _rxAttrLis
     // default
 }
 
-sal_Bool OPropertyImport::encounteredAttribute(const OUString& _rAttributeName) const
+bool OPropertyImport::encounteredAttribute(const OUString& _rAttributeName) const
 {
     OSL_ENSURE(m_bTrackAttributes, "OPropertyImport::encounteredAttribute: attribute tracking not enabled!");
     return m_aEncounteredAttributes.end() != m_aEncounteredAttributes.find(_rAttributeName);

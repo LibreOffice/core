@@ -51,7 +51,7 @@ class XMLChangedRegionImportContext : public SvXMLImportContext
     OUString sID;
 
     /// merge-last-paragraph flag
-    sal_Bool bMergeLastPara;
+    bool bMergeLastPara;
 
 public:
 

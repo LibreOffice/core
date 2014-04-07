@@ -80,8 +80,8 @@ private:
     bool m_bHasSizeHeight;
     bool m_bHasPositionX;
     bool m_bHasPositionY;
-    sal_Bool m_bAutoSize;
-    sal_Bool m_bAutoPosition;
+    bool m_bAutoSize;
+    bool m_bAutoPosition;
 };
 
 class SchXMLPlotAreaContext : public SvXMLImportContext
@@ -93,9 +93,9 @@ public:
                            OUString& rCategoriesAddress,
                            OUString& rChartAddress,
                            bool& bHasRangeAtPlotArea,
-                           sal_Bool & rAllRangeAddressesAvailable,
-                           sal_Bool & rColHasLabels,
-                           sal_Bool & rRowHasLabels,
+                           bool & rAllRangeAddressesAvailable,
+                           bool & rColHasLabels,
+                           bool & rRowHasLabels,
                            ::com::sun::star::chart::ChartDataRowSource & rDataRowSource,
                            SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
                            const OUString& aChartTypeServiceName,
@@ -118,7 +118,7 @@ private:
     OUString& mrCategoriesAddress;
     SeriesDefaultsAndStyles& mrSeriesDefaultsAndStyles;
     sal_Int32 mnNumOfLinesProp;
-    sal_Bool  mbStockHasVolume;
+    bool  mbStockHasVolume;
     sal_Int32 mnSeries;
     GlobalSeriesImportInfo m_aGlobalSeriesImportInfo;
 
@@ -131,8 +131,8 @@ private:
     const OUString& m_rXLinkHRefAttributeToIndicateDataProvider;
     OUString& mrChartAddress;
     bool& m_rbHasRangeAtPlotArea;
-    sal_Bool & mrColHasLabels;
-    sal_Bool & mrRowHasLabels;
+    bool & mrColHasLabels;
+    bool & mrRowHasLabels;
     ::com::sun::star::chart::ChartDataRowSource & mrDataRowSource;
     OUString maChartTypeServiceName;
 

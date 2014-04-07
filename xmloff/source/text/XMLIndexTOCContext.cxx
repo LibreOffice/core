@@ -101,7 +101,7 @@ XMLIndexTOCContext::XMLIndexTOCContext(SvXMLImport& rImport,
     , sIsProtected("IsProtected")
     , sName("Name")
     , eIndexType(TEXT_INDEX_UNKNOWN)
-    , bValid(sal_False)
+    , bValid(false)
 {
     if (XML_NAMESPACE_TEXT == nPrfx)
     {
@@ -115,7 +115,7 @@ XMLIndexTOCContext::XMLIndexTOCContext(SvXMLImport& rImport,
                        "service and source element maps must be same size");
 
             eIndexType = static_cast<IndexTypeEnum>(nTmp);
-            bValid = sal_True;
+            bValid = true;
         }
     }
 }

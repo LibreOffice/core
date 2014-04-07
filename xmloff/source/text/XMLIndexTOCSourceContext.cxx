@@ -54,16 +54,16 @@ XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet)
-:   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, sal_True)
+:   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, true)
 ,   sCreateFromMarks(sAPI_CreateFromMarks)
 ,   sLevel(sAPI_Level)
 ,   sCreateFromOutline(sAPI_CreateFromOutline)
 ,   sCreateFromLevelParagraphStyles(sAPI_CreateFromLevelParagraphStyles)
     // use all chapters by default
 ,   nOutlineLevel(rImport.GetTextImport()->GetChapterNumbering()->getCount())
-,   bUseOutline(sal_True)
-,   bUseMarks(sal_True)
-,   bUseParagraphStyles(sal_False)
+,   bUseOutline(true)
+,   bUseMarks(true)
+,   bUseParagraphStyles(false)
 {
 }
 
@@ -83,7 +83,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
                 // #104651# use OUTLINE_LEVEL and USE_OUTLINE_LEVEL instead of
                 // OUTLINE_LEVEL with values none|1..10. For backwards
                 // compatibility, 'none' must still be read.
-                bUseOutline = sal_False;
+                bUseOutline = false;
             }
             else
             {
@@ -92,7 +92,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
                     nTmp, rValue, 1, GetImport().GetTextImport()->
                     GetChapterNumbering()->getCount()))
                 {
-                    bUseOutline = sal_True;
+                    bUseOutline = true;
                     nOutlineLevel = nTmp;
                 }
             }
@@ -170,7 +170,7 @@ SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
                                            aSvLevelNameTOCMap,
                                            XML_OUTLINE_LEVEL,
                                            aLevelStylePropNameTOCMap,
-                                           aAllowedTokenTypesTOC, sal_True );
+                                           aAllowedTokenTypesTOC, true );
     }
     else
     {

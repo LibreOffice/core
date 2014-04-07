@@ -127,7 +127,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         return;
 
     Any aAny;
-    sal_Bool bNew = sal_False;
+    bool bNew = false;
     if( xPageStyles->hasByName( sDisplayName ) )
     {
         aAny = xPageStyles->getByName( sDisplayName );
@@ -141,7 +141,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
 
         aAny <<= xStyle;
         xPageStyles->insertByName( sDisplayName, aAny );
-        bNew = sal_True;
+        bNew = true;
     }
 
     Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
@@ -183,38 +183,38 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateChildContext(
     const SvXMLTokenMap& rTokenMap =
         GetImport().GetTextImport()->GetTextMasterPageElemTokenMap();
 
-    sal_Bool bInsert = sal_False, bFooter = sal_False, bLeft = sal_False, bFirst = sal_False;
+    bool bInsert = false, bFooter = false, bLeft = false, bFirst = false;
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
     case XML_TOK_TEXT_MP_HEADER:
         if( bInsertHeader && !bHeaderInserted )
         {
-            bInsert = sal_True;
+            bInsert = true;
             bHeaderInserted = true;
         }
         break;
     case XML_TOK_TEXT_MP_FOOTER:
         if( bInsertFooter && !bFooterInserted )
         {
-            bInsert = bFooter = sal_True;
+            bInsert = bFooter = true;
             bFooterInserted = true;
         }
         break;
     case XML_TOK_TEXT_MP_HEADER_LEFT:
         if( bInsertHeaderLeft && bHeaderInserted && !bHeaderLeftInserted )
-            bInsert = bLeft = sal_True;
+            bInsert = bLeft = true;
         break;
     case XML_TOK_TEXT_MP_FOOTER_LEFT:
         if( bInsertFooterLeft && bFooterInserted && !bFooterLeftInserted )
-            bInsert = bFooter = bLeft = sal_True;
+            bInsert = bFooter = bLeft = true;
         break;
     case XML_TOK_TEXT_MP_HEADER_FIRST:
         if( bInsertHeaderFirst && bHeaderInserted && !bHeaderFirstInserted )
-            bInsert = bFirst = sal_True;
+            bInsert = bFirst = true;
         break;
     case XML_TOK_TEXT_MP_FOOTER_FIRST:
         if( bInsertFooterFirst && bFooterInserted && !bFooterFirstInserted )
-            bInsert = bFooter = bFirst = sal_True;
+            bInsert = bFooter = bFirst = true;
         break;
     }
 

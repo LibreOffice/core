@@ -33,7 +33,7 @@ using namespace ::com::sun::star::xml::sax;
 
 TYPEINIT0( XMLTransformerContext );
 
-sal_Bool XMLTransformerContext::HasQName( sal_uInt16 nPrefix,
+bool XMLTransformerContext::HasQName( sal_uInt16 nPrefix,
                        ::xmloff::token::XMLTokenEnum eToken ) const
 {
     OUString aLocalName;
@@ -42,7 +42,7 @@ sal_Bool XMLTransformerContext::HasQName( sal_uInt16 nPrefix,
            ::xmloff::token::IsXMLToken( aLocalName, eToken );
 }
 
-sal_Bool XMLTransformerContext::HasNamespace( sal_uInt16 nPrefix ) const
+bool XMLTransformerContext::HasNamespace( sal_uInt16 nPrefix ) const
 {
     return GetTransformer().GetNamespaceMap().GetKeyByAttrName( m_aQName ) == nPrefix;
 }
@@ -82,9 +82,9 @@ void XMLTransformerContext::Characters( const OUString& rChars )
     m_rTransformer.GetDocHandler()->characters( rChars );
 }
 
-sal_Bool XMLTransformerContext::IsPersistent() const
+bool XMLTransformerContext::IsPersistent() const
 {
-    return sal_False;
+    return false;
 }
 
 void XMLTransformerContext::Export()

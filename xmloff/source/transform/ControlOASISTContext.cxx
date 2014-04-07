@@ -35,7 +35,7 @@ TYPEINIT1( XMLControlOASISTransformerContext, XMLTransformerContext );
 XMLControlOASISTransformerContext::XMLControlOASISTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName,
-        sal_Bool bCreateControl ) :
+        bool bCreateControl ) :
     XMLTransformerContext( rImp, rQName ),
     m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_FORM,
                             ::xmloff::token::GetXMLToken( XML_CONTROL ) ) ),
@@ -127,7 +127,7 @@ void XMLControlOASISTransformerContext::StartElement(
                 {
                     OUString aAttrValue( rAttrValue );
                     if( GetTransformer().ConvertURIToOOo( aAttrValue,
-                           static_cast< sal_Bool >((*aIter).second.m_nParam1)) )
+                           static_cast< bool >((*aIter).second.m_nParam1)) )
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
                 break;

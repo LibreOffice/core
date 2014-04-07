@@ -39,9 +39,9 @@ namespace com { namespace sun { namespace star {
  */
 class XMLChangeImportContext : public SvXMLImportContext
 {
-    sal_Bool bIsStart;
-    sal_Bool bIsEnd;
-    sal_Bool bIsOutsideOfParagraph;
+    bool bIsStart;
+    bool bIsEnd;
+    bool bIsOutsideOfParagraph;
 
 public:
 
@@ -58,11 +58,11 @@ public:
         SvXMLImport& rImport,
         sal_Int16 nPrefix,
         const OUString& rLocalName,
-        sal_Bool bIsStart,  /// mark start of a change
-        sal_Bool bIsEnd,    /// mark end of a change
+        bool bIsStart,  /// mark start of a change
+        bool bIsEnd,    /// mark end of a change
         /// true if change mark is encountered outside of a paragraph
         /// (usually before a section or table)
-        sal_Bool bIsOutsideOfParagraph = sal_False);
+        bool bIsOutsideOfParagraph = false);
 
     virtual ~XMLChangeImportContext();
 

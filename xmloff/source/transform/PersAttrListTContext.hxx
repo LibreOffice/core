@@ -91,7 +91,7 @@ public:
     // current element.
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 
-    virtual sal_Bool IsPersistent() const SAL_OVERRIDE;
+    virtual bool IsPersistent() const SAL_OVERRIDE;
     virtual void Export() SAL_OVERRIDE;
     virtual void ExportContent() SAL_OVERRIDE;
 

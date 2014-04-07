@@ -38,9 +38,9 @@ XMLBase64Export::XMLBase64Export( SvXMLExport& rExp ) :
     rExport( rExp ){
 }
 
-sal_Bool XMLBase64Export::exportXML( const Reference < XInputStream> & rIn )
+bool XMLBase64Export::exportXML( const Reference < XInputStream> & rIn )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     try
     {
         Sequence < sal_Int8 > aInBuff( INPUT_BUFFER_SIZE );
@@ -61,13 +61,13 @@ sal_Bool XMLBase64Export::exportXML( const Reference < XInputStream> & rIn )
     }
     catch( ... )
     {
-        bRet = sal_False;
+        bRet = false;
     }
 
     return bRet;
 }
 
-sal_Bool XMLBase64Export::exportElement(
+bool XMLBase64Export::exportElement(
             const Reference < XInputStream > & rIn,
             sal_uInt16 nNamespace,
             enum ::xmloff::token::XMLTokenEnum eName )
@@ -76,7 +76,7 @@ sal_Bool XMLBase64Export::exportElement(
     return exportXML( rIn );
 }
 
-sal_Bool XMLBase64Export::exportOfficeBinaryDataElement(
+bool XMLBase64Export::exportOfficeBinaryDataElement(
             const Reference < XInputStream > & rIn )
 {
     return exportElement( rIn, XML_NAMESPACE_OFFICE,

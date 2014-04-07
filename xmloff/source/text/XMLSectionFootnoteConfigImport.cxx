@@ -71,7 +71,7 @@ void XMLSectionFootnoteConfigImport::StartElement(
     sal_Bool bEnd = sal_True;   // we're inside the element, so this is true
     sal_Bool bNumOwn = sal_False;
     sal_Bool bNumRestart = sal_False;
-    sal_Bool bEndnote = sal_False;
+    bool bEndnote = false;
     sal_Int16 nNumRestartAt = 0;
     OUString sNumPrefix;
     OUString sNumSuffix;
@@ -102,7 +102,7 @@ void XMLSectionFootnoteConfigImport::StartElement(
             else if( IsXMLToken( sLocalName, XML_NOTE_CLASS ) )
             {
                 if( IsXMLToken( sAttrValue, XML_ENDNOTE ) )
-                    bEndnote = sal_True;
+                    bEndnote = true;
             }
         }
         else if (XML_NAMESPACE_STYLE == nPrefix)

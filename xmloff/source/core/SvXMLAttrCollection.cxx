@@ -16,75 +16,75 @@ bool SvXMLAttrCollection::operator ==( const SvXMLAttrCollection& rCmp ) const
            (rCmp.aAttrs == aAttrs);
 }
 
-sal_Bool SvXMLAttrCollection::AddAttr( const OUString& rLName,
+bool SvXMLAttrCollection::AddAttr( const OUString& rLName,
                                        const OUString& rValue )
 {
     aAttrs.push_back( SvXMLAttr(rLName, rValue) );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvXMLAttrCollection::AddAttr( const OUString& rPrefix,
+bool SvXMLAttrCollection::AddAttr( const OUString& rPrefix,
                                        const OUString& rNamespace,
                                        const OUString& rLName,
                                        const OUString& rValue )
 {
     sal_uInt16 nPos = aNamespaceMap.Add( rPrefix, rNamespace );
     aAttrs.push_back( SvXMLAttr(nPos, rLName, rValue) );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvXMLAttrCollection::AddAttr( const OUString& rPrefix,
+bool SvXMLAttrCollection::AddAttr( const OUString& rPrefix,
                                        const OUString& rLName,
                                        const OUString& rValue )
 {
     sal_uInt16 nPos = aNamespaceMap.GetIndexByPrefix( rPrefix );
     if( USHRT_MAX == nPos )
-        return sal_False;
+        return false;
     aAttrs.push_back( SvXMLAttr(nPos, rLName, rValue) );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvXMLAttrCollection::SetAt( size_t i,
+bool SvXMLAttrCollection::SetAt( size_t i,
                                      const OUString& rLName,
                                      const OUString& rValue )
 {
     if( i >= GetAttrCount() )
-        return sal_False;
+        return false;
     aAttrs[i] = SvXMLAttr(rLName, rValue);
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvXMLAttrCollection::SetAt( size_t i,
+bool SvXMLAttrCollection::SetAt( size_t i,
                                      const OUString& rPrefix,
                                      const OUString& rNamespace,
                                      const OUString& rLName,
                                      const OUString& rValue )
 {
     if( i >= GetAttrCount() )
-        return sal_False;
+        return false;
 
     sal_uInt16 nPos = aNamespaceMap.Add( rPrefix, rNamespace );
     if( USHRT_MAX == nPos )
-        return sal_False;
+        return false;
 
     aAttrs[i] = SvXMLAttr(nPos, rLName, rValue);
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvXMLAttrCollection::SetAt( size_t i,
+bool SvXMLAttrCollection::SetAt( size_t i,
                                      const OUString& rPrefix,
                                      const OUString& rLName,
                                      const OUString& rValue )
 {
     if( i >= GetAttrCount() )
-        return sal_False;
+        return false;
 
     sal_uInt16 nPos = aNamespaceMap.GetIndexByPrefix( rPrefix );
     if( USHRT_MAX == nPos )
-        return sal_False;
+        return false;
 
     aAttrs[i] = SvXMLAttr(nPos, rLName, rValue);
-    return sal_True;
+    return true;
 }
 
 void SvXMLAttrCollection::Remove( size_t i )

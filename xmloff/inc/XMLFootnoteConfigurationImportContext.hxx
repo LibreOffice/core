@@ -60,8 +60,8 @@ class XMLFootnoteConfigurationImportContext : public SvXMLStyleContext
 
     sal_Int16 nOffset;
     sal_Int16 nNumbering;
-    sal_Bool bPosition;
-    sal_Bool bIsEndnote;
+    bool bPosition;
+    bool bIsEndnote;
 
 public:
 

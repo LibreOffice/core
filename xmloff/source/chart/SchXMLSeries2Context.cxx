@@ -260,7 +260,7 @@ SchXMLSeries2Context::SchXMLSeries2Context(
     ::std::list< DataRowPointStyle >& rStyleList,
     ::std::list< RegressionStyle >& rRegressionStyleList,
     sal_Int32 nSeriesIndex,
-    sal_Bool bStockHasVolume,
+    bool bStockHasVolume,
     GlobalSeriesImportInfo& rGlobalSeriesImportInfo,
     const OUString & aGlobalChartTypeName,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
@@ -374,7 +374,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     {
         SAL_WARN_IF( !mxNewDoc.is(), "xmloff.chart", "mxNewDoc is NULL");
         if( m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable && ! bHasRange )
-            m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable = sal_False;
+            m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable = false;
 
         bool bIsCandleStick = maGlobalChartTypeName == "com.sun.star.chart2.CandleStickChartType";
         if( !maSeriesChartTypeName.isEmpty() )

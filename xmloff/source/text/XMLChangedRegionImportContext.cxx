@@ -47,7 +47,7 @@ XMLChangedRegionImportContext::XMLChangedRegionImportContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
-        bMergeLastPara(sal_True)
+        bMergeLastPara(true)
 {
 }
 

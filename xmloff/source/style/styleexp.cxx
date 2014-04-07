@@ -124,7 +124,7 @@ bool XMLStyleExport::exportStyle(
     if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
     {
         aAny = xPropSet->getPropertyValue( "Hidden" );
-        sal_Bool bHidden = sal_False;
+        bool bHidden = false;
         if ( ( aAny >>= bHidden ) && bHidden && GetExport( ).getDefaultVersion( ) == SvtSaveOptions::ODFVER_LATEST )
             GetExport( ).AddAttribute( XML_NAMESPACE_STYLE, XML_HIDDEN, "true" );
     }
@@ -396,7 +396,7 @@ void XMLStyleExport::exportStyleFamily(
     // the next style may be unused but has to be exported, too. In this case
     // the names of all exported styles are remembered.
     boost::scoped_ptr<std::set<OUString> > pExportedStyles(0);
-    sal_Bool bFirstStyle = sal_True;
+    bool bFirstStyle = true;
 
     const uno::Sequence< OUString> aSeq = xStyleCont->getElementNames();
     const OUString* pIter = aSeq.getConstArray();
@@ -422,7 +422,7 @@ void XMLStyleExport::exportStyleFamily(
         {
             if( !bUsed || xStyle->isInUse() )
             {
-                sal_Bool bExported = exportStyle( xStyle, rXMLFamily, rPropMapper,
+                bool bExported = exportStyle( xStyle, rXMLFamily, rPropMapper,
                                               xStyleCont,pPrefix );
                 if( bUsed && bFirstStyle && bExported  )
                 {
@@ -434,7 +434,7 @@ void XMLStyleExport::exportStyleFamily(
 
                     if( xPropSetInfo->hasPropertyByName( sFollowStyle ) )
                         pExportedStyles.reset(new std::set<OUString>());
-                    bFirstStyle = sal_False;
+                    bFirstStyle = false;
                 }
 
                 if( pExportedStyles && bExported )

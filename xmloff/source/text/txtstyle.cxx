@@ -110,7 +110,7 @@ void XMLTextParagraphExport::exportNumStyles( bool bUsed )
 
 void XMLTextParagraphExport::exportTextStyles( bool bUsed, bool bProg )
 {
-    sal_Bool bOldProg = bProgress;
+    bool bOldProg = bProgress;
     bProgress = bProg;
 
     Reference < lang::XMultiServiceFactory > xFactory (GetExport().GetModel(), UNO_QUERY);

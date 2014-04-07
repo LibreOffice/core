@@ -44,7 +44,7 @@ public:
     XMLMutableAttributeList();
     XMLMutableAttributeList( const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList> & rAttrList,
-           sal_Bool bClone=sal_False );
+           bool bClone=false );
     virtual ~XMLMutableAttributeList();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();

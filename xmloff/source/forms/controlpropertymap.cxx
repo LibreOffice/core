@@ -87,7 +87,7 @@ namespace xmloff
 
     struct XMLPropertyMapEntryLess
     {
-        sal_Bool operator()(const XMLPropertyMapEntry& _rLeft, const XMLPropertyMapEntry& _rRight)
+        bool operator()(const XMLPropertyMapEntry& _rLeft, const XMLPropertyMapEntry& _rRight)
         {
             return strcmp(_rLeft.msApiName, _rRight.msApiName) < 0;
         }
@@ -104,11 +104,11 @@ namespace xmloff
 
     void initializePropertyMaps()
     {
-        static sal_Bool bSorted = sal_False;
+        static bool bSorted = false;
         if (!bSorted)
         {
             implSortMap(getControlStylePropertyMap_Access());
-            bSorted = sal_True;
+            bSorted = true;
         }
     }
 

@@ -150,7 +150,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 
         if(xDrawPage.is() && xMasterPages.is())
         {
-            sal_Bool bDone(sal_False);
+            bool bDone(false);
             OUString sDisplayName( rImport.GetStyleDisplayName(
                             XML_STYLE_FAMILY_MASTER_PAGE, maMasterPageName ) );
 
@@ -169,7 +169,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                         if(!sMasterPageName.isEmpty() && sMasterPageName.equals(sDisplayName))
                         {
                             xDrawPage->setMasterPage(xMasterPage);
-                            bDone = sal_True;
+                            bDone = true;
                         }
                     }
                 }

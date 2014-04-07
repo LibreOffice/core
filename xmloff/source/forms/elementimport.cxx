@@ -76,7 +76,7 @@ namespace xmloff
 
     struct PropertyValueLess
     {
-        sal_Bool operator()(const PropertyValue& _rLeft, const PropertyValue& _rRight)
+        bool operator()(const PropertyValue& _rLeft, const PropertyValue& _rRight)
         {
             return _rLeft.Name < _rRight.Name;
         }
@@ -242,7 +242,7 @@ namespace xmloff
 
         // set the properties
         const Reference< XMultiPropertySet > xMultiProps(m_xElement, UNO_QUERY);
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
         if (xMultiProps.is())
         {
             // translate our properties so that the XMultiPropertySet can handle them
@@ -271,7 +271,7 @@ namespace xmloff
             try
             {
                 xMultiProps->setPropertyValues(aNames, aValues);
-                bSuccess = sal_True;
+                bSuccess = true;
             }
             catch(const Exception&)
             {
@@ -350,7 +350,7 @@ namespace xmloff
 
                 // determine the type of the value (source for the following conversion)
                 TypeClass eValueTypeClass = aPropValues->Value.getValueTypeClass();
-                const sal_Bool bValueIsSequence = TypeClass_SEQUENCE == eValueTypeClass;
+                const bool bValueIsSequence = TypeClass_SEQUENCE == eValueTypeClass;
                 if ( bValueIsSequence )
                 {
                     uno::Type aSimpleType( getSequenceElementType( aPropValues->Value.getValueType() ) );
@@ -360,7 +360,7 @@ namespace xmloff
                 // determine the type of the property (target for the following conversion)
                 const Property aProperty( m_xInfo->getPropertyByName( aPropValues->Name ) );
                 TypeClass ePropTypeClass = aProperty.Type.getTypeClass();
-                const sal_Bool bPropIsSequence = TypeClass_SEQUENCE == ePropTypeClass;
+                const bool bPropIsSequence = TypeClass_SEQUENCE == ePropTypeClass;
                 if( bPropIsSequence )
                 {
                     uno::Type aSimpleType( ::comphelper::getSequenceElementType( aProperty.Type ) );
@@ -823,8 +823,8 @@ namespace xmloff
             const sal_Char* pMinValueProperty = NULL;
             const sal_Char* pMaxValueProperty = NULL;
 
-            sal_Bool bRetrievedValues = sal_False;
-            sal_Bool bRetrievedValueLimits = sal_False;
+            bool bRetrievedValues = false;
+            bool bRetrievedValueLimits = false;
 
             // get the class id of our element
             sal_Int16 nClassId = FormComponentType::CONTROL;
@@ -853,7 +853,7 @@ namespace xmloff
                                 break;
                             }
 
-                            bRetrievedValues = sal_True;
+                            bRetrievedValues = true;
                         }
                         if ( PROPID_VALUE == aValueProps->Handle && !pValueProperty )
                         {
@@ -888,7 +888,7 @@ namespace xmloff
                                 break;
                             }
 
-                            bRetrievedValueLimits = sal_True;
+                            bRetrievedValueLimits = true;
                         }
                         OSL_ENSURE((PROPID_MIN_VALUE != aValueProps->Handle) || pMinValueProperty,
                             "OControlImport::StartElement: the control does not have a value property!");
@@ -927,7 +927,7 @@ namespace xmloff
         // the untranslated string value as read in handleAttribute
         OUString sValue;
     #if OSL_DEBUG_LEVEL > 0
-        sal_Bool bSuccess =
+        bool bSuccess =
     #endif
         _rPropValue.Value >>= sValue;
         OSL_ENSURE(bSuccess, "OControlImport::implTranslateValueProperty: supposed to be called with non-translated string values!");
@@ -971,7 +971,7 @@ namespace xmloff
         // the DefaultText, which can happen for other value/default-value property names),
         // this means that the Text (the value property) is incorrectly imported.
 
-        sal_Bool bRestoreValuePropertyValue = sal_False;
+        bool bRestoreValuePropertyValue = false;
         Any aValuePropertyValue;
 
         sal_Int16 nClassId = FormComponentType::CONTROL;
@@ -991,7 +991,7 @@ namespace xmloff
         getRuntimeValuePropertyNames(m_eElementType, nClassId, pValueProperty, pDefaultValueProperty);
         if ( pDefaultValueProperty && pValueProperty )
         {
-            sal_Bool bNonDefaultValuePropertyValue = sal_False;
+            bool bNonDefaultValuePropertyValue = false;
                 // is the "value property" part of the sequence?
 
             // look up this property in our sequence
@@ -1002,10 +1002,10 @@ namespace xmloff
                 )
             {
                 if ( aCheck->Name.equalsAscii( pDefaultValueProperty ) )
-                    bRestoreValuePropertyValue = sal_True;
+                    bRestoreValuePropertyValue = true;
                 else if ( aCheck->Name.equalsAscii( pValueProperty ) )
                 {
-                    bNonDefaultValuePropertyValue = sal_True;
+                    bNonDefaultValuePropertyValue = true;
                     // we need to restore the value property we found here, nothing else
                     aValuePropertyValue = aCheck->Value;
                 }
@@ -1115,7 +1115,7 @@ namespace xmloff
         :OControlImport( _rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType )
         ,m_nImagePosition( -1 )
         ,m_nImageAlign( 0 )
-        ,m_bHaveImagePosition( sal_False )
+        ,m_bHaveImagePosition( false )
     {
     }
 
@@ -1128,7 +1128,7 @@ namespace xmloff
                 m_rContext.getGlobalContext(), ::getCppuType( &m_nImagePosition ),
                 _rValue, OEnumMapper::getEnumMap( OEnumMapper::epImagePosition )
             ) >>= m_nImagePosition );
-            m_bHaveImagePosition = sal_True;
+            m_bHaveImagePosition = true;
             return true;
         }
 
@@ -1273,7 +1273,7 @@ namespace xmloff
         // need to make the URL absolute if
         // * it's the image-data attribute
         // * it's the target-location attribute, and we're dealign with an object which has the respective property
-        sal_Bool bMakeAbsolute =
+        bool bMakeAbsolute =
                 _rLocalName.equalsAscii( s_pImageDataAttributeName )
             ||  (   _rLocalName.equalsAscii( s_pTargetLocationAttributeName )
                 &&  (   ( OControlElement::BUTTON == m_eElementType )
@@ -1451,12 +1451,12 @@ namespace xmloff
 
             // additionally, we need to set the "RichText" property of our element to sal_True
             // (the presence of the text:p is used as indicator for the value of the RichText property)
-            sal_Bool bHasRichTextProperty = sal_False;
+            bool bHasRichTextProperty = false;
             if ( m_xInfo.is() )
                 bHasRichTextProperty = m_xInfo->hasPropertyByName( PROPERTY_RICH_TEXT );
             OSL_ENSURE( bHasRichTextProperty, "OTextLikeImport::EndElement: text:p, but no rich text control?" );
             if ( bHasRichTextProperty )
-                m_xElement->setPropertyValue( PROPERTY_RICH_TEXT, makeAny( (sal_Bool)sal_True ) );
+                m_xElement->setPropertyValue( PROPERTY_RICH_TEXT, makeAny( true ) );
         }
         // Note that we do *not* set the RichText property (in case our element has one) to sal_False here
         // since this is the default of this property, anyway.
@@ -1535,8 +1535,8 @@ namespace xmloff
         :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
         ,m_nEmptyListItems( 0 )
         ,m_nEmptyValueItems( 0 )
-        ,m_bEncounteredLSAttrib( sal_False )
-        ,m_bLinkWithIndexes( sal_False )
+        ,m_bEncounteredLSAttrib( false )
+        ,m_bLinkWithIndexes( false )
     {
         if (OControlElement::COMBOBOX == m_eElementType)
             enableTrackAttributes();
@@ -1561,7 +1561,7 @@ namespace xmloff
 
     void OListAndComboImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
-        m_bLinkWithIndexes = sal_False;
+        m_bLinkWithIndexes = false;
 
         OControlImport::StartElement(_rxAttrList);
 
@@ -1644,7 +1644,7 @@ namespace xmloff
             aListSource.Name = PROPERTY_LISTSOURCE;
 
             // it's the ListSource attribute
-            m_bEncounteredLSAttrib = sal_True;
+            m_bEncounteredLSAttrib = true;
             if ( OControlElement::COMBOBOX == m_eElementType )
             {
                 aListSource.Value <<= _rValue;
@@ -1755,11 +1755,11 @@ namespace xmloff
 
         // the label attribute
         OUString sValue = _rxAttrList->getValueByName(sLabelAttribute);
-        sal_Bool bNonexistentAttribute = sal_False;
+        bool bNonexistentAttribute = false;
         if (sValue.isEmpty())
             if (_rxAttrList->getTypeByName(sLabelAttribute).isEmpty())
                 // this attribute does not really exist
-                bNonexistentAttribute = sal_True;
+                bNonexistentAttribute = true;
 
         if (bNonexistentAttribute)
             m_xListBoxImport->implEmptyLabelFound();
@@ -1768,11 +1768,11 @@ namespace xmloff
 
         // the value attribute
         sValue = _rxAttrList->getValueByName(sValueAttribute);
-        bNonexistentAttribute = sal_False;
+        bNonexistentAttribute = false;
         if (sValue.isEmpty())
             if (_rxAttrList->getTypeByName(sValueAttribute).isEmpty())
                 // this attribute does not really exist
-                bNonexistentAttribute = sal_True;
+                bNonexistentAttribute = true;
 
         if (bNonexistentAttribute)
             m_xListBoxImport->implEmptyValueFound();

@@ -148,7 +148,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
 
         vector< Reference<XTextSection> > aNewStack;
         aCurrent.set(rNextSection);
-        sal_Bool bMute = sal_False;
+        bool bMute = false;
         while(aCurrent.is())
         {
             // if we have a mute section, ignore all its children
@@ -156,7 +156,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             if (pSectionExport->IsMuteSection(aCurrent))
             {
                 aNewStack.clear();
-                bMute = sal_True;
+                bMute = true;
             }
 
             aNewStack.push_back(aCurrent);
@@ -188,7 +188,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             {
                 if ( !bAutoStyles && (NULL != pRedlineExport) )
                     pRedlineExport->ExportStartOrEndRedline(*aOldForward,
-                                                                sal_False);
+                                                                false);
                 pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
                 ++aOldForward;
             }
@@ -196,7 +196,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             {
                 if ( !bAutoStyles && (NULL != pRedlineExport) )
                     pRedlineExport->ExportStartOrEndRedline(*aOldForward,
-                                                            sal_False);
+                                                            false);
                 pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
             }
         }
@@ -206,7 +206,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         while (aNew != aNewStack.rend())
         {
             if ( !bAutoStyles && (NULL != pRedlineExport) )
-                pRedlineExport->ExportStartOrEndRedline(*aNew, sal_True);
+                pRedlineExport->ExportStartOrEndRedline(*aNew, true);
             pSectionExport->ExportSectionStart(*aNew, bAutoStyles);
             ++aNew;
         }

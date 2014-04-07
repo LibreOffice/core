@@ -37,7 +37,7 @@ XMLTokenEnum XMLFormPropOASISTransformerContext::GetValueType(
                 const OUString& rValue )
 {
     XMLTokenEnum eRet = XML_DOUBLE;
-    sal_Bool bNeg = sal_False;
+    bool bNeg = false;
     sal_uInt32 nVal = 0;
 
     sal_Int32 nPos = 0;
@@ -49,7 +49,7 @@ XMLTokenEnum XMLFormPropOASISTransformerContext::GetValueType(
 
     if( nPos < nLen && '-' == rValue[nPos] )
     {
-        bNeg = sal_True;
+        bNeg = true;
         nPos++;
     }
 
@@ -112,7 +112,7 @@ void XMLFormPropOASISTransformerContext::StartElement(
 
     sal_Int16 nValueTypeAttr = -1;
     OUString aValue;
-    sal_Bool bIsVoid = sal_False;
+    bool bIsVoid = false;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -140,7 +140,7 @@ void XMLFormPropOASISTransformerContext::StartElement(
                     {
                         pMutableAttrList->SetValueByIndex( i,
                                 GetXMLToken( XML_SHORT ) );
-                        bIsVoid = sal_True;
+                        bIsVoid = true;
                     }
                 }
                 {

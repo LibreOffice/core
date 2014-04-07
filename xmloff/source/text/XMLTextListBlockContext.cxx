@@ -49,14 +49,14 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
-        const sal_Bool bRestartNumberingAtSubList )
+        const bool bRestartNumberingAtSubList )
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   mrTxtImport( rTxtImp )
 ,   msListStyleName()
 ,   mxParentListBlock( )
 ,   mnLevel( 0 )
-,   mbRestartNumbering( sal_False )
-,   mbSetDefaults( sal_False )
+,   mbRestartNumbering( false )
+,   mbSetDefaults( false )
 ,   msListId()
 ,   msContinueListId()
 {
@@ -174,7 +174,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                          !mbRestartNumbering &&
                          rTextListsHelper.IsListProcessed( msListId ) )
                     {
-                        mbRestartNumbering = sal_True;
+                        mbRestartNumbering = true;
                     }
                 }
             }
@@ -263,11 +263,11 @@ SvXMLImportContext *XMLTextListBlockContext::CreateChildContext(
 
     const SvXMLTokenMap& rTokenMap =
                         mrTxtImport.GetTextListBlockElemTokenMap();
-    sal_Bool bHeader = sal_False;
+    bool bHeader = false;
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
     case XML_TOK_TEXT_LIST_HEADER:
-        bHeader = sal_True;
+        bHeader = true;
         //fall-through
     case XML_TOK_TEXT_LIST_ITEM:
         pContext = new XMLTextListItemContext( GetImport(), mrTxtImport,

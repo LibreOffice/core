@@ -51,7 +51,7 @@ public:
         const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXML3DSceneShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;

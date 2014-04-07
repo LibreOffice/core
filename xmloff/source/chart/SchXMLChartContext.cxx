@@ -225,9 +225,9 @@ SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
         mrImportHelper( rImpHelper ),
         m_bHasRangeAtPlotArea( false ),
         m_bHasTableElement( false ),
-        mbAllRangeAddressesAvailable( sal_True ),
-        mbColHasLabels( sal_False ),
-        mbRowHasLabels( sal_False ),
+        mbAllRangeAddressesAvailable( true ),
+        mbColHasLabels( false ),
+        mbRowHasLabels( false ),
         meDataRowSource( chart::ChartDataRowSource_COLUMNS ),
         mbIsStockChart( false )
 {
@@ -594,9 +594,9 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
     if( !xNewDia.is() || !xDataProvider.is() )
         return;
 
-    sal_Bool bFirstCellAsLabel =
+    bool bFirstCellAsLabel =
         (eDataRowSource==chart::ChartDataRowSource_COLUMNS)? bRowHasLabels : bColHasLabels;
-    sal_Bool bHasCateories =
+    bool bHasCateories =
         (eDataRowSource==chart::ChartDataRowSource_COLUMNS)? bColHasLabels : bRowHasLabels;
 
     if( bSwitchOnLabelsAndCategoriesForOwnData )
@@ -992,9 +992,6 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    static const sal_Bool bTrue = sal_True;
-    static const uno::Any aTrueBool( &bTrue, ::getBooleanCppuType());
-
     SvXMLImportContext* pContext = 0;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetChartElemTokenMap();
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
@@ -1019,7 +1016,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
             {
                 if( xProp.is())
                 {
-                    xProp->setPropertyValue("HasMainTitle", aTrueBool );
+                    xProp->setPropertyValue("HasMainTitle", uno::makeAny(true) );
                 }
                 uno::Reference< drawing::XShape > xTitleShape( xDoc->getTitle(), uno::UNO_QUERY );
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
@@ -1032,7 +1029,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
             {
                 if( xProp.is())
                 {
-                    xProp->setPropertyValue("HasSubTitle", aTrueBool );
+                    xProp->setPropertyValue("HasSubTitle", uno::makeAny(true) );
                 }
                 uno::Reference< drawing::XShape > xTitleShape( xDoc->getSubTitle(), uno::UNO_QUERY );
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),

@@ -224,12 +224,12 @@ class XMLPropertiesOOoTContext_Impl : public XMLTransformerContext
 
     XMLPropTypes m_aPropTypes;
 
-    sal_Bool m_bPersistent;
+    bool m_bPersistent;
 
     XMLTypedPropertiesOOoTContext_Impl *GetPropContextAndAction(
             TransformerAction_Impl& rAction,
             sal_uInt16 nPrefix, const OUString& rLocalName,
-            sal_Bool bElem );
+            bool bElem );
 
     XMLTypedPropertiesOOoTContext_Impl *GetPropContext(
             XMLPropType eType );
@@ -241,7 +241,7 @@ public:
     XMLPropertiesOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                                const XMLPropTypes& rTypes,
-                               sal_Bool bPersistent );
+                               bool bPersistent );
 
     virtual ~XMLPropertiesOOoTContext_Impl();
 
@@ -259,7 +259,7 @@ public:
 
     virtual void Export() SAL_OVERRIDE;
 
-    virtual sal_Bool IsPersistent() const SAL_OVERRIDE;
+    virtual bool IsPersistent() const SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLPropertiesOOoTContext_Impl, XMLTransformerContext );
@@ -298,7 +298,7 @@ XMLTypedPropertiesOOoTContext_Impl
     *XMLPropertiesOOoTContext_Impl::GetPropContextAndAction(
             TransformerAction_Impl& rAction,
             sal_uInt16 nPrefix, const OUString& rLocalName,
-            sal_Bool bElem )
+            bool bElem )
 {
     rAction.m_nActionType = XML_ATACTION_COPY;
     sal_uInt16 nIndex = 0;
@@ -373,7 +373,7 @@ XMLPropertiesOOoTContext_Impl::XMLPropertiesOOoTContext_Impl(
     XMLTransformerBase& rImp,
     const OUString& rQName,
     const XMLPropTypes& rTypes,
-    sal_Bool bPersistent    ) :
+    bool bPersistent    ) :
     XMLTransformerContext( rImp, rQName ),
     m_bPersistent( bPersistent )
 {
@@ -395,7 +395,7 @@ XMLTransformerContext *XMLPropertiesOOoTContext_Impl::CreateChildContext(
             const Reference< XAttributeList >& rAttrList )
 {
     TransformerAction_Impl aAction;
-    return GetPropContextAndAction( aAction, nPrefix, rLocalName, sal_True )
+    return GetPropContextAndAction( aAction, nPrefix, rLocalName, true )
                 ->CreateChildContext( nPrefix, rLocalName, rQName, rAttrList );
 }
 
@@ -407,8 +407,8 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
     XMLTypedPropertiesOOoTContext_Impl * pIntervalMinorDivisorContext = 0;
     double fIntervalMajor = 0.0;
     double fIntervalMinor = 0.0;
-    sal_Bool bMoveProtect = sal_False;
-    sal_Bool bSizeProtect = sal_False;
+    bool bMoveProtect = false;
+    bool bSizeProtect = false;
     OUString aProtectAttrValue;
     XMLTypedPropertiesOOoTContext_Impl * pProtectContext = 0;
 
@@ -416,9 +416,9 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
        The filter from OpenDocument file format to OpenOffice.org file format
        produces styles with both attributes. (#i49139#)
     */
-    sal_Bool bExistStyleMirror( sal_False );
+    bool bExistStyleMirror( false );
     OUString aStyleMirrorAttrValue;
-    sal_Bool bExistDrawMirror( sal_False );
+    bool bExistDrawMirror( false );
     OUString aDrawMirrorAttrValue;
     XMLTypedPropertiesOOoTContext_Impl* pMirrorContext( 0L );
 
@@ -433,7 +433,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                                                                  &aLocalName );
         TransformerAction_Impl aAction;
         XMLTypedPropertiesOOoTContext_Impl *pContext =
-            GetPropContextAndAction( aAction, nPrefix, aLocalName, sal_False );
+            GetPropContextAndAction( aAction, nPrefix, aLocalName, false );
         switch( aAction.m_nActionType )
         {
         case XML_ATACTION_REMOVE:
@@ -545,7 +545,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         case XML_PTACTION_UNDERLINE:
             {
                 XMLTokenEnum eToken = GetTransformer().GetToken( sAttrValue );
-                sal_Bool bBold = sal_False, bDouble = sal_False;
+                bool bBold = false, bDouble = false;
                 switch( eToken )
                 {
                 case XML_SINGLE:
@@ -553,43 +553,43 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                     break;
                 case XML_DOUBLE:
                     eToken = XML_SOLID;
-                    bDouble = sal_True;
+                    bDouble = true;
                     break;
                 case XML_BOLD:
                     eToken = XML_SOLID;
-                    bBold = sal_True;
+                    bBold = true;
                     break;
                 case XML_BOLD_DOTTED:
                     eToken = XML_DOTTED;
-                    bBold = sal_True;
+                    bBold = true;
                     break;
                 case XML_BOLD_DASH:
                     eToken = XML_DASH;
-                    bBold = sal_True;
+                    bBold = true;
                     break;
                 case XML_BOLD_LONG_DASH:
                     eToken = XML_LONG_DASH;
-                    bBold = sal_True;
+                    bBold = true;
                     break;
                 case XML_BOLD_DOT_DASH:
                     eToken = XML_DOT_DASH;
-                    bBold = sal_True;
+                    bBold = true;
                     break;
                 case XML_BOLD_DOT_DOT_DASH:
                     eToken = XML_DOT_DOT_DASH;
-                    bBold = sal_True;
+                    bBold = true;
                     break;
                 case XML_BOLD_WAVE:
                     eToken = XML_WAVE;
-                    bBold = sal_True;
+                    bBold = true;
                     break;
                 case XML_DOUBLE_WAVE:
                     eToken = XML_WAVE;
-                    bDouble = sal_True;
+                    bDouble = true;
                     break;
                 case XML_NONE:
                     eToken = XML_NONE;
-                    bDouble = sal_False;
+                    bDouble = false;
                     break;
                 default:
                     OSL_FAIL( "xmloff::XMLPropertiesOOoTContext_Impl::StartElement(), unknown underline token!" );
@@ -618,7 +618,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         case XML_PTACTION_LINETHROUGH:
             {
                 XMLTokenEnum eToken = GetTransformer().GetToken( sAttrValue );
-                sal_Bool bBold = sal_False, bDouble = sal_False;
+                bool bBold = false, bDouble = false;
                 sal_Unicode c = 0;
                 switch( eToken )
                 {
@@ -627,11 +627,11 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                     break;
                 case XML_DOUBLE_LINE:
                     eToken = XML_SOLID;
-                    bDouble = sal_True;
+                    bDouble = true;
                     break;
                 case XML_THICK_LINE:
                     eToken = XML_SOLID;
-                    bBold = sal_True;
+                    bBold = true;
                     break;
                 case XML_SLASH:
                     eToken = XML_SOLID;
@@ -824,7 +824,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                         XML_NAMESPACE_CHART, GetXMLToken( XML_SYMBOL_IMAGE )));
 
                 OUString aAttrValue( sAttrValue );
-                if( GetTransformer().ConvertURIToOASIS( aAttrValue, sal_True ))
+                if( GetTransformer().ConvertURIToOASIS( aAttrValue, true ))
                 {
                     pSymbolImageContext->AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aAttrValue );
                     pContext->AddContent( pSymbolImageContext );
@@ -897,7 +897,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 aDrawMirrorAttrValue =
                                 GetXMLToken( IsXMLToken( sAttrValue, XML_TRUE )
                                              ? XML_HORIZONTAL : XML_NONE );
-                bExistDrawMirror = sal_True;
+                bExistDrawMirror = true;
                 pMirrorContext = pContext;
             }
             break;
@@ -926,7 +926,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                         aStyleMirrorAttrValue += aToken;
                     }
                 }
-                bExistStyleMirror = sal_True;
+                bExistStyleMirror = true;
                 pMirrorContext = pContext;
             }
             break;
@@ -1044,7 +1044,7 @@ void XMLPropertiesOOoTContext_Impl::Export()
     }
 }
 
-sal_Bool XMLPropertiesOOoTContext_Impl::IsPersistent() const
+bool XMLPropertiesOOoTContext_Impl::IsPersistent() const
 {
     return m_bPersistent;
 }
@@ -1054,7 +1054,7 @@ TYPEINIT1( XMLStyleOOoTContext, XMLPersElemContentTContext );
 XMLStyleOOoTContext::XMLStyleOOoTContext( XMLTransformerBase& rImp,
                                             const OUString& rQName,
                                                 XMLFamilyType eT,
-                                             sal_Bool bPersistent ) :
+                                             bool bPersistent ) :
     XMLPersElemContentTContext( rImp, rQName ),
     m_eFamily( eT ),
     m_bPersistent( bPersistent )
@@ -1067,7 +1067,7 @@ XMLStyleOOoTContext::XMLStyleOOoTContext(
         XMLFamilyType eT,
         sal_uInt16 nPrefix,
         ::xmloff::token::XMLTokenEnum eToken,
-           sal_Bool bPersistent ) :
+           bool bPersistent ) :
     XMLPersElemContentTContext( rImp, rQName, nPrefix, eToken ),
     m_eFamily( eT ),
     m_bPersistent( bPersistent )
@@ -1177,7 +1177,7 @@ void XMLStyleOOoTContext::StartElement(
             {
             case XML_ATACTION_STYLE_FAMILY:
                 {
-                    sal_Bool bControl = sal_False;
+                    bool bControl = false;
                     if( XML_FAMILY_TYPE_END == m_eFamily )
                     {
                         if( IsXMLToken( sAttrValue, XML_GRAPHICS ) )
@@ -1207,7 +1207,7 @@ void XMLStyleOOoTContext::StartElement(
                         else if( IsXMLToken( sAttrValue, XML_CONTROL) )
                         {
                             m_eFamily = XML_FAMILY_TYPE_PARAGRAPH;
-                            bControl = sal_True;
+                            bControl = true;
                         }
                     }
                     if( XML_FAMILY_TYPE_GRAPHIC == m_eFamily )
@@ -1264,7 +1264,7 @@ void XMLStyleOOoTContext::StartElement(
                 {
                     OUString aAttrValue( sAttrValue );
                     if( GetTransformer().ConvertURIToOASIS( aAttrValue,
-                            static_cast< sal_Bool >((*aIter).second.m_nParam1)))
+                            static_cast< bool >((*aIter).second.m_nParam1)))
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
                 break;
@@ -1296,7 +1296,7 @@ void XMLStyleOOoTContext::Characters( const OUString& )
     // element content only:
 }
 
-sal_Bool XMLStyleOOoTContext::IsPersistent() const
+bool XMLStyleOOoTContext::IsPersistent() const
 {
     return m_bPersistent;
 }

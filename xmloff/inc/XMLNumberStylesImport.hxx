@@ -33,8 +33,8 @@ class SdXMLNumberFormatImportContext : public SvXMLNumFormatContext
 private:
     friend class SdXMLNumberFormatMemberImportContext;
 
-    sal_Bool    mbTimeStyle;
-    sal_Bool    mbAutomatic;
+    bool    mbTimeStyle;
+    bool    mbAutomatic;
     sal_uInt8   mnElements[16];
     sal_Int16   mnIndex;
 
@@ -43,7 +43,7 @@ private:
     bool compareStyle( const SdXMLFixedDataStyle* pStyle, sal_Int16& nIndex ) const;
 
 protected:
-    void add( OUString& rNumberStyle, sal_Bool bLong, sal_Bool bTextual, sal_Bool  bDecimal02, OUString& rText );
+    void add( OUString& rNumberStyle, bool bLong, bool bTextual, bool  bDecimal02, OUString& rText );
 
 public:
     TYPEINFO_OVERRIDE();

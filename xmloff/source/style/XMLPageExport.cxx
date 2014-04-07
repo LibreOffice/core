@@ -114,7 +114,7 @@ bool XMLPageExport::exportStyle(
         if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
         {
             uno::Any aValue = xPropSet->getPropertyValue( "Hidden" );
-            sal_Bool bHidden = sal_False;
+            bool bHidden = false;
             if ( ( aValue >>= bHidden ) && bHidden && GetExport( ).getDefaultVersion( ) == SvtSaveOptions::ODFVER_LATEST )
                 GetExport( ).AddAttribute( XML_NAMESPACE_STYLE, XML_HIDDEN, "true" );
         }
@@ -231,7 +231,7 @@ void XMLPageExport::exportDefaultStyle()
             ::std::vector< XMLPropertyState > xPropStates =
                 xPageMasterExportPropMapper->FilterDefaults( xPropSet );
 
-            sal_Bool bExport = sal_False;
+            bool bExport = false;
             UniReference < XMLPropertySetMapper > aPropMapper(xPageMasterExportPropMapper->getPropertySetMapper());
             for( ::std::vector< XMLPropertyState >::iterator aIter = xPropStates.begin(); aIter != xPropStates.end(); ++aIter )
             {
@@ -239,7 +239,7 @@ void XMLPageExport::exportDefaultStyle()
                 sal_Int16 nContextId    = aPropMapper->GetEntryContextId( pProp->mnIndex );
                 if( nContextId == CTF_PM_STANDARD_MODE )
                 {
-                    bExport = sal_True;
+                    bExport = true;
                     break;
                 }
             }

@@ -35,8 +35,8 @@ class XMLFormPropValueTContext_Impl : public XMLTransformerContext
 {
     OUString m_aAttrQName;
     OUString m_aCharacters;
-    sal_Bool m_bPersistent;
-    sal_Bool m_bIsVoid;
+    bool m_bPersistent;
+    bool m_bIsVoid;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -57,9 +57,9 @@ public:
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 
-    virtual sal_Bool IsPersistent() const SAL_OVERRIDE;
+    virtual bool IsPersistent() const SAL_OVERRIDE;
 
-    sal_Bool IsVoid() const { return m_bIsVoid; }
+    bool IsVoid() const { return m_bIsVoid; }
     const OUString& GetTextContent() const { return m_aCharacters; }
 };
 
@@ -69,8 +69,8 @@ XMLFormPropValueTContext_Impl::XMLFormPropValueTContext_Impl(
         XMLTransformerBase& rTransformer,
         const OUString& rQName ) :
     XMLTransformerContext( rTransformer, rQName ),
-    m_bPersistent( sal_True ),
-    m_bIsVoid( sal_False )
+    m_bPersistent( true ),
+    m_bIsVoid( false )
 {
 }
 
@@ -82,8 +82,8 @@ XMLFormPropValueTContext_Impl::XMLFormPropValueTContext_Impl(
     XMLTransformerContext( rTransformer, rQName ),
     m_aAttrQName( rTransformer.GetNamespaceMap().GetQNameByKey(
                     nAttrPrefix, GetXMLToken(eAttrToken) ) ),
-    m_bPersistent( sal_True ),
-    m_bIsVoid( sal_False )
+    m_bPersistent( true ),
+    m_bIsVoid( false )
 {
 }
 
@@ -105,7 +105,7 @@ void XMLFormPropValueTContext_Impl::StartElement(
         if( XML_NAMESPACE_FORM == nPrefix &&
             IsXMLToken( aLocalName, XML_PROPERTY_IS_VOID ) &&
              IsXMLToken( rAttrList->getValueByIndex( i ), XML_TRUE ) )
-            m_bIsVoid = sal_True;
+            m_bIsVoid = true;
     }
 }
 
@@ -132,7 +132,7 @@ void XMLFormPropValueTContext_Impl::Characters( const OUString& rChars )
     m_aCharacters += rChars;
 }
 
-sal_Bool XMLFormPropValueTContext_Impl::IsPersistent() const
+bool XMLFormPropValueTContext_Impl::IsPersistent() const
 {
     return m_bPersistent;
 }
@@ -147,7 +147,7 @@ XMLFormPropOOoTransformerContext::XMLFormPropOOoTransformerContext(
     m_nValueTypeAttr( -1 ),
     m_eValueToken( XML_VALUE ),
     m_eValueTypeToken( XML_TOKEN_END ),
-    m_bIsList( sal_False )
+    m_bIsList( false )
 {
 }
 
@@ -184,7 +184,7 @@ XMLTransformerContext *XMLFormPropOOoTransformerContext::CreateChildContext(
     // default is ignore
     if( !pContext )
         pContext = new XMLIgnoreTransformerContext( GetTransformer(), rQName,
-                                             sal_True, sal_True );
+                                             true, true );
     return pContext;
 }
 
@@ -197,7 +197,7 @@ void XMLFormPropOOoTransformerContext::StartElement(
     OSL_ENSURE( pActions, "go no actions" );
 
     XMLMutableAttributeList *pMutableAttrList =
-        new XMLMutableAttributeList( rAttrList, sal_True );
+        new XMLMutableAttributeList( rAttrList, true );
     m_xAttrList = pMutableAttrList;
 
     OUString aValueType;
@@ -238,7 +238,7 @@ void XMLFormPropOOoTransformerContext::StartElement(
                     m_aElemQName =
                         GetTransformer().GetNamespaceMap().GetQNameByKey(
                         XML_NAMESPACE_FORM, GetXMLToken( XML_LIST_PROPERTY ) );
-                    m_bIsList = sal_True;
+                    m_bIsList = true;
                 }
                 pMutableAttrList->RemoveAttributeByIndex( i );
                 --i;

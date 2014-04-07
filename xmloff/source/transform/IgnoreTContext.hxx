@@ -25,10 +25,10 @@
 
 class XMLIgnoreTransformerContext : public XMLTransformerContext
 {
-    sal_Bool m_bIgnoreCharacters;
-    sal_Bool m_bIgnoreElements;
-    sal_Bool m_bAllowCharactersRecursive;
-    sal_Bool m_bRecursiveUse;
+    bool m_bIgnoreCharacters;
+    bool m_bIgnoreElements;
+    bool m_bAllowCharactersRecursive;
+    bool m_bRecursiveUse;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -39,15 +39,15 @@ public:
     // StartElement instead if this is required.
     XMLIgnoreTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
-                              sal_Bool bIgnoreCharacters,
-                              sal_Bool bIgnoreElements  );
+                              bool bIgnoreCharacters,
+                              bool bIgnoreElements  );
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
     XMLIgnoreTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
-                              sal_Bool bAllowCharactersRecursive );
+                              bool bAllowCharactersRecursive );
 
     // A contexts destructor does anything that is required if an element
     // ends. By default, nothing is done.

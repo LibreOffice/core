@@ -54,7 +54,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >& _rxPropInfo,
             const OUString& _rPropName,
-            sal_Bool _bDefault
+            bool _bDefault
             );
     };
 
@@ -77,7 +77,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >& _rxPropInfo,
             const OUString& _rPropName,
-            sal_Bool _bDefault
+            bool _bDefault
             );
     };
 

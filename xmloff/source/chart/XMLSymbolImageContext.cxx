@@ -133,7 +133,7 @@ void XMLSymbolImageContext::EndElement()
     {
         // aProp is a member of XMLElementPropertyContext
         aProp.maValue <<= sResolvedURL;
-        SetInsert( sal_True );
+        SetInsert( true );
     }
 
     XMLElementPropertyContext::EndElement();

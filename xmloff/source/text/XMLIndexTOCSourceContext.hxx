@@ -42,9 +42,9 @@ class XMLIndexTOCSourceContext : public XMLIndexSourceBaseContext
     const OUString sCreateFromLevelParagraphStyles;
 
     sal_Int32 nOutlineLevel;
-    sal_Bool bUseOutline;
-    sal_Bool bUseMarks;
-    sal_Bool bUseParagraphStyles;
+    bool bUseOutline;
+    bool bUseMarks;
+    bool bUseParagraphStyles;
 
 public:
 

@@ -188,7 +188,7 @@ public:
 class SdXMLStylesContext : public SvXMLStylesContext
 {
     UniReference< SvXMLImportPropertyMapper > xPresImpPropMapper;
-    sal_Bool                    mbIsAutoStyle;
+    bool                    mbIsAutoStyle;
     SvXMLNumFmtHelper*          mpNumFmtHelper;
     SvNumberFormatter*          mpNumFormatter;
 
@@ -225,7 +225,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
-        sal_Bool bIsAutoStyle);
+        bool bIsAutoStyle);
     virtual ~SdXMLStylesContext();
 
     virtual sal_uInt16 GetFamily( const OUString& rFamily ) const SAL_OVERRIDE;
@@ -280,7 +280,7 @@ private:
     OUString maStrName;
     OUString maStrText;
     OUString maStrDateTimeFormat;
-    sal_Bool        mbFixed;
+    bool        mbFixed;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSTYL_HXX

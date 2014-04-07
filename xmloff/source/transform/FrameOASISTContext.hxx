@@ -31,7 +31,7 @@ class XMLFrameOASISTransformerContext : public XMLTransformerContext
 
     bool m_bIgnoreElement;
 
-    sal_Bool IsLinkedEmbeddedObject(
+    bool IsLinkedEmbeddedObject(
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList >& rAttrList );

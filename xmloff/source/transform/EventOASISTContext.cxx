@@ -246,7 +246,7 @@ void XMLEventOASISTransformerContext::StartElement(
                     // <form:button><form:event-listeners><form:event-listener>
                     const XMLTransformerContext *pObjContext =
                         GetTransformer().GetAncestorContext( 1 );
-                    sal_Bool bForm = pObjContext &&
+                    bool bForm = pObjContext &&
 
                         pObjContext->HasNamespace(XML_NAMESPACE_FORM );
                     pMutableAttrList->SetValueByIndex( i,

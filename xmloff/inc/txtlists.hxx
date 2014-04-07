@@ -62,7 +62,7 @@ class XMLTextListsHelper : private boost::noncopyable
                                   const OUString& sContinueListId,
                                   const OUString& sListStyleDefaultListId = OUString() );
 
-        sal_Bool IsListProcessed( const OUString& sListId ) const;
+        bool IsListProcessed( const OUString& sListId ) const;
         OUString GetListStyleOfProcessedList(
                                         const OUString& sListId ) const;
         OUString GetContinueListIdOfProcessedList(
@@ -85,7 +85,7 @@ class XMLTextListsHelper : private boost::noncopyable
         void PushListOnStack( const OUString& sListId,
                               const OUString& sListStyleName );
         void PopListFromStack();
-        sal_Bool EqualsToTopListStyleOnStack( const OUString& sListId ) const;
+        bool EqualsToTopListStyleOnStack( const OUString& sListId ) const;
 
         /** for importing numbered-paragraph
             note that the ID namespace for numbered-paragraph and regular list
@@ -120,8 +120,8 @@ class XMLTextListsHelper : private boost::noncopyable
             const OUString& i_ParentStyleName,
             const OUString& i_StyleName,
             sal_Int16 & io_rLevel,
-            sal_Bool* o_pRestartNumbering = 0,
-            sal_Bool* io_pSetDefaults = 0);
+            bool* o_pRestartNumbering = 0,
+            bool* io_pSetDefaults = 0);
 
     private:
 

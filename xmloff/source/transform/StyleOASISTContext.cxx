@@ -244,7 +244,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                     break;
                 case XML_OPTACTION_LINE_MODE:
                     {
-                        sal_Bool bWordMode =
+                        bool bWordMode =
                             IsXMLToken( rAttrValue, XML_SKIP_WHITE_SPACE );
                         OUString aAttrQName(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -607,7 +607,7 @@ void XMLPropertiesTContext_Impl::StartElement(
     {
         if( !m_xAttrList.is() )
         {
-            m_xAttrList = new XMLMutableAttributeList( rAttrList, sal_True );
+            m_xAttrList = new XMLMutableAttributeList( rAttrList, true );
         }
         else
         {
@@ -744,7 +744,7 @@ OUString XMLPropertiesTContext_Impl::MergeLineThrough(
 TYPEINIT1( XMLStyleOASISTContext, XMLPersElemContentTContext );
 
 XMLStyleOASISTContext::XMLStyleOASISTContext(XMLTransformerBase& rImp,
-    const OUString& rQName, sal_Bool bPersistent)
+    const OUString& rQName, bool bPersistent)
     : XMLPersElemContentTContext(rImp, rQName)
     , m_bPersistent(bPersistent)
     , m_bControlStyle(false)
@@ -754,7 +754,7 @@ XMLStyleOASISTContext::XMLStyleOASISTContext(XMLTransformerBase& rImp,
 XMLStyleOASISTContext::XMLStyleOASISTContext(
     XMLTransformerBase& rImp, const OUString& rQName,
     sal_uInt16 nPrefix, ::xmloff::token::XMLTokenEnum eToken,
-    sal_Bool bPersistent)
+    bool bPersistent)
     : XMLPersElemContentTContext(rImp, rQName, nPrefix, eToken)
     , m_bPersistent(bPersistent)
     , m_bControlStyle(false)
@@ -890,7 +890,7 @@ void XMLStyleOASISTContext::StartElement(
                 {
                     OUString aAttrValue( rAttrValue );
                     if( GetTransformer().ConvertURIToOOo( aAttrValue,
-                            static_cast< sal_Bool >((*aIter).second.m_nParam1)))
+                            static_cast< bool >((*aIter).second.m_nParam1)))
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
                 break;
@@ -941,7 +941,7 @@ void XMLStyleOASISTContext::ExportContent()
     XMLPersElemContentTContext::ExportContent();
 }
 
-sal_Bool XMLStyleOASISTContext::IsPersistent() const
+bool XMLStyleOASISTContext::IsPersistent() const
 {
     return m_bPersistent;
 }

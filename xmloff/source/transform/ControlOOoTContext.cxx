@@ -47,7 +47,7 @@ XMLControlOOoTransformerContext::~XMLControlOOoTransformerContext()
 void XMLControlOOoTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {
-    m_xAttrList = new XMLMutableAttributeList( rAttrList, sal_True );
+    m_xAttrList = new XMLMutableAttributeList( rAttrList, true );
 }
 
 XMLTransformerContext *XMLControlOOoTransformerContext::CreateChildContext(
@@ -62,13 +62,13 @@ XMLTransformerContext *XMLControlOOoTransformerContext::CreateChildContext(
     {
         pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                     rQName,
-                                                    sal_False, sal_False );
+                                                    false, false );
         m_aElemQName = rQName;
         static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
                 ->AppendAttributeList( rAttrList );
         GetTransformer().ProcessAttrList( m_xAttrList,
                                           OOO_FORM_CONTROL_ACTIONS,
-                                          sal_False );
+                                          false );
         GetTransformer().GetDocHandler()->startElement( m_aElemQName,
                                                         m_xAttrList );
     }
@@ -76,7 +76,7 @@ XMLTransformerContext *XMLControlOOoTransformerContext::CreateChildContext(
     {
         pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                     rQName,
-                                                    sal_True, sal_True );
+                                                    true, true );
     }
     return pContext;
 }

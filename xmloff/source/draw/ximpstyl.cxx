@@ -790,7 +790,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXMLGenericPageContext( rImport, nPrfx, rLName, xAttrList, rShapes )
 {
-    const sal_Bool bHandoutMaster = IsXMLToken( rLName, XML_HANDOUT_MASTER );
+    const bool bHandoutMaster = IsXMLToken( rLName, XML_HANDOUT_MASTER );
 
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -959,7 +959,7 @@ SdXMLStylesContext::SdXMLStylesContext(
     sal_uInt16 nPrfx,
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-    sal_Bool bIsAutoStyle)
+    bool bIsAutoStyle)
 :   SvXMLStylesContext(rImport, nPrfx, rLName, xAttrList),
     mbIsAutoStyle(bIsAutoStyle)
 {
@@ -1273,7 +1273,7 @@ static bool canSkipReset(const OUString &rName, const XMLPropStyleContext* pProp
     bool bCanSkipReset = false;
     if (pPropStyle && rName == "TextAutoGrowHeight")
     {
-        sal_Bool bOldStyleTextAutoGrowHeight(sal_False);
+        bool bOldStyleTextAutoGrowHeight(false);
         rPropSet->getPropertyValue("TextAutoGrowHeight") >>= bOldStyleTextAutoGrowHeight;
 
         sal_Int32 nIndexStyle = rPrMap->GetEntryIndex(XML_NAMESPACE_DRAW, "auto-grow-height", 0);
@@ -1286,7 +1286,7 @@ static bool canSkipReset(const OUString &rName, const XMLPropStyleContext* pProp
                 sal_Int32 nIdx = property->mnIndex;
                 if (nIdx == nIndexStyle)
                 {
-                    sal_Bool bNewStyleTextAutoGrowHeight(sal_False);
+                    bool bNewStyleTextAutoGrowHeight(false);
                     property->maValue >>= bNewStyleTextAutoGrowHeight;
                     if (bNewStyleTextAutoGrowHeight == bOldStyleTextAutoGrowHeight)
                         bCanSkipReset = true;;

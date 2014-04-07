@@ -64,7 +64,7 @@ class XMLIndexTOCContext : public SvXMLImportContext
 
     enum IndexTypeEnum eIndexType;
 
-    sal_Bool bValid;
+    bool bValid;
 
     SvXMLImportContextRef xBodyContextRef;
 

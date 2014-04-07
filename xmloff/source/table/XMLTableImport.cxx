@@ -54,7 +54,7 @@ using namespace ::com::sun::star::container;
 struct ColumnInfo
 {
     OUString msStyleName;
-    sal_Bool mbVisibility;
+    bool mbVisibility;
     OUString msDefaultCellStyleName;
 };
 

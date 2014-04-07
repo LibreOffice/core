@@ -39,8 +39,8 @@ class XMLTextListBlockContext : public SvXMLImportContext
     SvXMLImportContextRef   mxParentListBlock;
 
     sal_Int16               mnLevel;
-    sal_Bool                mbRestartNumbering;
-    sal_Bool                mbSetDefaults;
+    bool                mbRestartNumbering;
+    bool                mbSetDefaults;
 
     // text:id property of <list> element, only valid for root <list> element
     OUString msListId;
@@ -59,7 +59,7 @@ public:
                 const OUString& rLName,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-                const sal_Bool bRestartNumberingAtSubList = sal_False );
+                const bool bRestartNumberingAtSubList = false );
     virtual ~XMLTextListBlockContext();
 
     virtual void EndElement() SAL_OVERRIDE;
@@ -71,8 +71,8 @@ public:
 
     const OUString& GetListStyleName() const { return msListStyleName; }
     sal_Int16 GetLevel() const { return mnLevel; }
-    sal_Bool IsRestartNumbering() const { return mbRestartNumbering; }
-    void ResetRestartNumbering() { mbRestartNumbering = sal_False; }
+    bool IsRestartNumbering() const { return mbRestartNumbering; }
+    void ResetRestartNumbering() { mbRestartNumbering = false; }
 
     const ::com::sun::star::uno::Reference <
         ::com::sun::star::container::XIndexReplace >& GetNumRules() const

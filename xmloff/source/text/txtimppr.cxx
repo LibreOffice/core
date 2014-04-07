@@ -47,7 +47,7 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int32 nIndex = rProperty.mnIndex;
     switch( getPropertySetMapper()->GetEntryContextId( nIndex  ) )
     {
@@ -94,7 +94,7 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
                             rProperty.mnIndex+1, rProperty.mnIndex+2,
                             rProperty.mnIndex+3, rProperty.mnIndex+4,
                             rProperty.mnIndex+5 );
-            bRet = sal_False; // the property hasn't been filled
+            bRet = false; // the property hasn't been filled
         }
         break;
 
@@ -115,7 +115,7 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
                                                   rUnitConverter );
         if( SvXMLImport::OOo_2x == GetImport().getGeneratorVersion() )
         {
-            sal_Bool bHidden;
+            bool bHidden;
             rProperty.maValue >>= bHidden;
             bHidden = !bHidden;
             rProperty.maValue <<= bHidden;
@@ -339,10 +339,10 @@ void XMLTextImportPropertyMapper::finished(
             ::std::vector< XMLPropertyState >& rProperties,
             sal_Int32 /*nStartIndex*/, sal_Int32 /*nEndIndex*/ ) const
 {
-    sal_Bool bHasAnyHeight = sal_False;
-    sal_Bool bHasAnyMinHeight = sal_False;
-    sal_Bool bHasAnyWidth = sal_False;
-    sal_Bool bHasAnyMinWidth = sal_False;
+    bool bHasAnyHeight = false;
+    bool bHasAnyMinHeight = false;
+    bool bHasAnyWidth = false;
+    bool bHasAnyMinWidth = false;
 
     XMLPropertyState* pFontFamilyName = 0;
     XMLPropertyState* pFontStyleName = 0;
@@ -469,19 +469,19 @@ void XMLTextImportPropertyMapper::finished(
         case CTF_FRAMEHEIGHT_MIN_ABS:
         case CTF_FRAMEHEIGHT_MIN_REL:
 //      case CTF_SYNCHEIGHT_MIN:
-                                        bHasAnyMinHeight = sal_True;
+                                        bHasAnyMinHeight = true;
                                         // no break here!
         case CTF_FRAMEHEIGHT_ABS:
         case CTF_FRAMEHEIGHT_REL:
 //      case CTF_SYNCHEIGHT:
-                                        bHasAnyHeight = sal_True; break;
+                                        bHasAnyHeight = true; break;
         case CTF_FRAMEWIDTH_MIN_ABS:
         case CTF_FRAMEWIDTH_MIN_REL:
-                                        bHasAnyMinWidth = sal_True;
+                                        bHasAnyMinWidth = true;
                                         // no break here!
         case CTF_FRAMEWIDTH_ABS:
         case CTF_FRAMEWIDTH_REL:
-                                        bHasAnyWidth = sal_True; break;
+                                        bHasAnyWidth = true; break;
         case CTF_BACKGROUND_TRANSPARENCY: pBackTransparency = property; break;
         case CTF_BACKGROUND_TRANSPARENT:  pBackTransparent = property; break;
         case CTF_PARAMARGINALL:

@@ -73,7 +73,7 @@ XMLIndexMarkExport::~XMLIndexMarkExport()
 
 void XMLIndexMarkExport::ExportIndexMark(
     const Reference<XPropertySet> & rPropSet,
-    sal_Bool bAutoStyles)
+    bool bAutoStyles)
 {
     /// index marks have no styles!
     if (!bAutoStyles)
@@ -205,7 +205,7 @@ static void lcl_ExportPropertyBool( SvXMLExport& rExport,
 {
     rAny = rPropSet->getPropertyValue( sProperty );
 
-    sal_Bool bValue = sal_Bool();
+    bool bValue;
     if( rAny >>= bValue )
     {
         if( bValue )

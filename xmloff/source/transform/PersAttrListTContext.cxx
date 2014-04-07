@@ -120,7 +120,7 @@ XMLTransformerContext *XMLPersAttrListTContext::CreateChildContext(
 {
     // ignore all child elements
     return  new XMLIgnoreTransformerContext( GetTransformer(),
-                                             rQName, sal_True, sal_True );
+                                             rQName, true, true );
 }
 
 void XMLPersAttrListTContext::StartElement(
@@ -133,7 +133,7 @@ void XMLPersAttrListTContext::StartElement(
     {
         pMutableAttrList =
             GetTransformer().ProcessAttrList( xAttrList, m_nActionMap,
-                                                 sal_True );
+                                                 true );
     }
 
     if( m_xAttrList.is() )
@@ -147,7 +147,7 @@ void XMLPersAttrListTContext::StartElement(
     }
     else
     {
-        m_xAttrList = new XMLMutableAttributeList( rAttrList, sal_True );
+        m_xAttrList = new XMLMutableAttributeList( rAttrList, true );
     }
 }
 
@@ -160,9 +160,9 @@ void XMLPersAttrListTContext::Characters( const OUString& )
 {
 }
 
-sal_Bool XMLPersAttrListTContext::IsPersistent() const
+bool XMLPersAttrListTContext::IsPersistent() const
 {
-    return sal_True;
+    return true;
 }
 
 void XMLPersAttrListTContext::Export()

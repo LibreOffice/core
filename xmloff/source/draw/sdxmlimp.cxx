@@ -267,26 +267,26 @@ uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno:
     return (cppu::OWeakObject*)new SdXMLImport( comphelper::getComponentContext(rSMgr), implementationname, draw, flags ); \
 }
 
-SERVICE( XMLImpressImportOasis, "com.sun.star.comp.Impress.XMLOasisImporter", "XMLImpressImportOasis", sal_False, IMPORT_ALL )
-SERVICE( XMLDrawImportOasis, "com.sun.star.comp.Draw.XMLOasisImporter", "XMLDrawImportOasis", sal_True, IMPORT_ALL )
+SERVICE( XMLImpressImportOasis, "com.sun.star.comp.Impress.XMLOasisImporter", "XMLImpressImportOasis", false, IMPORT_ALL )
+SERVICE( XMLDrawImportOasis, "com.sun.star.comp.Draw.XMLOasisImporter", "XMLDrawImportOasis", true, IMPORT_ALL )
 
-SERVICE( XMLImpressStylesImportOasis, "com.sun.star.comp.Impress.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", sal_False, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES )
-SERVICE( XMLDrawStylesImportOasis, "com.sun.star.comp.Draw.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", sal_True, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES )
+SERVICE( XMLImpressStylesImportOasis, "com.sun.star.comp.Impress.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", false, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES )
+SERVICE( XMLDrawStylesImportOasis, "com.sun.star.comp.Draw.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", true, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES )
 
-SERVICE( XMLImpressContentImportOasis, "com.sun.star.comp.Impress.XMLOasisContentImporter", "XMLImpressContentImportOasis", sal_False, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS )
-SERVICE( XMLDrawContentImportOasis, "com.sun.star.comp.Draw.XMLOasisContentImporter", "XMLImpressContentImportOasis", sal_True, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS )
+SERVICE( XMLImpressContentImportOasis, "com.sun.star.comp.Impress.XMLOasisContentImporter", "XMLImpressContentImportOasis", false, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS )
+SERVICE( XMLDrawContentImportOasis, "com.sun.star.comp.Draw.XMLOasisContentImporter", "XMLImpressContentImportOasis", true, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS )
 
-SERVICE( XMLImpressMetaImportOasis, "com.sun.star.comp.Impress.XMLOasisMetaImporter", "XMLImpressMetaImportOasis", sal_False, IMPORT_META )
-SERVICE( XMLDrawMetaImportOasis, "com.sun.star.comp.Draw.XMLOasisMetaImporter", "XMLImpressMetaImportOasis", sal_True, IMPORT_META )
+SERVICE( XMLImpressMetaImportOasis, "com.sun.star.comp.Impress.XMLOasisMetaImporter", "XMLImpressMetaImportOasis", false, IMPORT_META )
+SERVICE( XMLDrawMetaImportOasis, "com.sun.star.comp.Draw.XMLOasisMetaImporter", "XMLImpressMetaImportOasis", true, IMPORT_META )
 
-SERVICE( XMLImpressSettingsImportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", sal_False, IMPORT_SETTINGS )
-SERVICE( XMLDrawSettingsImportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", sal_True, IMPORT_SETTINGS )
+SERVICE( XMLImpressSettingsImportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", false, IMPORT_SETTINGS )
+SERVICE( XMLDrawSettingsImportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", true, IMPORT_SETTINGS )
 
 // #110680#
 SdXMLImport::SdXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
     OUString const & implementationName,
-    sal_Bool bIsDraw, sal_uInt16 nImportFlags )
+    bool bIsDraw, sal_uInt16 nImportFlags )
 :   SvXMLImport( xContext, implementationName, nImportFlags ),
     mpMasterStylesContext(0L),
     mpDocElemTokenMap(0L),
@@ -303,8 +303,8 @@ SdXMLImport::SdXMLImport(
     mnNewPageCount(0L),
     mnNewMasterPageCount(0L),
     mbIsDraw(bIsDraw),
-    mbLoadDoc(sal_True),
-    mbPreview(sal_False),
+    mbLoadDoc(true),
+    mbPreview(false),
     msPageLayouts(  "PageLayouts"  ),
     msPreview(  "Preview"  )
 {
@@ -405,7 +405,7 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
             "OrganizerMode");
         if (xInfoSetInfo->hasPropertyByName(sOrganizerMode))
         {
-            sal_Bool bStyleOnly(sal_False);
+            bool bStyleOnly(false);
             if (xInfoSet->getPropertyValue(sOrganizerMode) >>= bStyleOnly)
             {
                 mbLoadDoc = !bStyleOnly;
@@ -715,7 +715,7 @@ SvXMLStylesContext *SdXMLImport::CreateStylesContext(const OUString& rLocalName,
         return GetShapeImport()->GetStylesContext();
 
     GetShapeImport()->SetStylesContext(new SdXMLStylesContext(
-        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, sal_False));
+        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, false));
 
     return GetShapeImport()->GetStylesContext();
 }
@@ -727,7 +727,7 @@ SvXMLStylesContext *SdXMLImport::CreateAutoStylesContext(const OUString& rLocalN
         return GetShapeImport()->GetAutoStylesContext();
 
     GetShapeImport()->SetAutoStylesContext(new SdXMLStylesContext(
-        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, sal_True));
+        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, true));
 
     return GetShapeImport()->GetAutoStylesContext();
 }
@@ -904,7 +904,7 @@ void SdXMLImport::AddFooterDecl( const OUString& rName, const OUString& rText )
         maFooterDeclsMap[rName] = rText;
 }
 
-void SdXMLImport::AddDateTimeDecl( const OUString& rName, const OUString& rText, sal_Bool bFixed, const OUString& rDateTimeFormat )
+void SdXMLImport::AddDateTimeDecl( const OUString& rName, const OUString& rText, bool bFixed, const OUString& rDateTimeFormat )
 {
     if( !rName.isEmpty() && (!rText.isEmpty() || !bFixed) )
     {
@@ -936,7 +936,7 @@ OUString SdXMLImport::GetFooterDecl( const OUString& rName ) const
     return aRet;
 }
 
-OUString SdXMLImport::GetDateTimeDecl( const OUString& rName, sal_Bool& rbFixed, OUString& rDateTimeFormat )
+OUString SdXMLImport::GetDateTimeDecl( const OUString& rName, bool& rbFixed, OUString& rDateTimeFormat )
 {
     DateTimeDeclContextImpl aDecl;
 

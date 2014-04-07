@@ -24,8 +24,8 @@
 
 class XMLNotesTransformerContext : public XMLPersElemContentTContext
 {
-    sal_Bool m_bEndNote;
-    sal_Bool m_bPersistent;
+    bool m_bEndNote;
+    bool m_bPersistent;
     ::xmloff::token::XMLTokenEnum m_eTypeToken;
 
 public:
@@ -34,7 +34,7 @@ public:
     XMLNotesTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                               ::xmloff::token::XMLTokenEnum m_eToken,
-                              sal_Bool bPersistent  );
+                              bool bPersistent  );
 
     virtual ~XMLNotesTransformerContext();
 
@@ -46,7 +46,7 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
 
-    virtual sal_Bool IsPersistent() const SAL_OVERRIDE;
+    virtual bool IsPersistent() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_NOTESTCONTEXT_HXX

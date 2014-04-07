@@ -365,7 +365,7 @@ public:
     AnimImpImpl*    mpImpl;
 
     XMLActionKind   meKind;
-    sal_Bool        mbTextEffect;
+    bool        mbTextEffect;
     OUString        maShapeId;
 
     XMLEffect       meEffect;
@@ -375,7 +375,7 @@ public:
     AnimationSpeed  meSpeed;
     sal_Int32       maDimColor;
     OUString        maSoundURL;
-    sal_Bool        mbPlayFull;
+    bool        mbPlayFull;
     OUString        maPathShapeId;
 
 public:
@@ -447,9 +447,9 @@ TYPEINIT1( XMLAnimationsEffectContext, SvXMLImportContext );
 XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, AnimImpImpl* pImpl )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
     mpImpl( pImpl ),
-    meKind( XMLE_SHOW ), mbTextEffect( sal_False ),
+    meKind( XMLE_SHOW ), mbTextEffect( false ),
     meEffect( EK_none ), meDirection( ED_none ), mnStartScale( 100 ),
-    meSpeed( AnimationSpeed_MEDIUM ), maDimColor(0), mbPlayFull( sal_False )
+    meSpeed( AnimationSpeed_MEDIUM ), maDimColor(0), mbPlayFull( false )
 {
     if( IsXMLToken( rLocalName, XML_SHOW_SHAPE ) )
     {
@@ -458,7 +458,7 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
     else if( IsXMLToken( rLocalName, XML_SHOW_TEXT ) )
     {
         meKind = XMLE_SHOW;
-        mbTextEffect = sal_True;
+        mbTextEffect = true;
     }
     else if( IsXMLToken( rLocalName, XML_HIDE_SHAPE ) )
     {
@@ -467,7 +467,7 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
     else if( IsXMLToken( rLocalName, XML_HIDE_TEXT ) )
     {
         meKind = XMLE_HIDE;
-        mbTextEffect = sal_True;
+        mbTextEffect = true;
     }
     else if( IsXMLToken( rLocalName, XML_DIM ) )
     {
@@ -585,7 +585,7 @@ void XMLAnimationsEffectContext::EndElement()
             {
                 if( meKind == XMLE_DIM )
                 {
-                    aAny <<= (sal_Bool)sal_True;
+                    aAny <<= true;
                     xSet->setPropertyValue( mpImpl->msDimPrev, aAny );
 
                     aAny <<= maDimColor;
@@ -593,7 +593,7 @@ void XMLAnimationsEffectContext::EndElement()
                 }
                 else if( meKind == XMLE_PLAY )
                 {
-                    aAny <<= (sal_Bool)sal_True;
+                    aAny <<= true;
                     xSet->setPropertyValue( mpImpl->msIsAnimation, aAny );
 
                     // #i42894# speed is not supported for the old group animation fallback, so no need to set it

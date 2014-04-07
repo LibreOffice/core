@@ -122,7 +122,7 @@ protected:
     OUString sServicePrefix;
 
     // data members for use in subclasses
-    sal_Bool bValid;                 /// whether this field is valid ?
+    bool bValid;                 /// whether this field is valid ?
 
 public:
     TYPEINFO_OVERRIDE();
@@ -175,7 +175,7 @@ protected:
         ::com::sun::star::beans::XPropertySet> & xPropertySet) = 0;
 
     /// create field from ServiceName
-    sal_Bool CreateField(::com::sun::star::uno::Reference<
+    bool CreateField(::com::sun::star::uno::Reference<
                          ::com::sun::star::beans::XPropertySet> & xField,
                          const OUString& sServiceName);
 
@@ -198,7 +198,7 @@ class XMLSenderFieldImportContext : public XMLTextFieldImportContext
 
 protected:
     // variables for access in subclass
-    sal_Bool bFixed;
+    bool bFixed;
     sal_uInt16 nElementToken;   /// token for this elment field
 
 public:
@@ -230,7 +230,7 @@ protected:
 /** inherit sender field because of fixed attribute in ProcessAttributes */
 class XMLAuthorFieldImportContext : public XMLSenderFieldImportContext
 {
-    sal_Bool bAuthorFullName;
+    bool bAuthorFullName;
     const OUString sServiceAuthor;
     const OUString sPropertyAuthorFullName;
     const OUString sPropertyFixed;
@@ -304,10 +304,10 @@ protected:
     ::com::sun::star::util::DateTime aDateTimeValue;
     sal_Int32 nAdjust;
     sal_Int32 nFormatKey;
-    sal_Bool bTimeOK;
-    sal_Bool bFormatOK;
-    sal_Bool bFixed;
-    sal_Bool bIsDate;           // is this a date?
+    bool bTimeOK;
+    bool bFormatOK;
+    bool bFixed;
+    bool bIsDate;           // is this a date?
                                 // (for XMLDateFieldImportContext, really)
     bool     bIsDefaultLanguage;
 
@@ -358,7 +358,7 @@ class XMLPageContinuationImportContext : public XMLTextFieldImportContext
     OUString sString;            /// continuation string
     com::sun::star::text::PageNumberType eSelectPage;   /// previous, current
                                                         /// or next page
-    sal_Bool sStringOK;                 /// continuation string encountered?
+    bool sStringOK;                 /// continuation string encountered?
 
 public:
     TYPEINFO_OVERRIDE();
@@ -391,7 +391,7 @@ class XMLPageNumberImportContext : public XMLTextFieldImportContext
     sal_Int16 nPageAdjust;
     com::sun::star::text::PageNumberType eSelectPage;   /// previous, current
                                                         /// or next page
-    sal_Bool sNumberFormatOK;
+    bool sNumberFormatOK;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -427,17 +427,17 @@ class XMLDatabaseFieldImportContext : public XMLTextFieldImportContext
     OUString sTableName;
 
     sal_Int32 nCommandType;
-    sal_Bool bCommandTypeOK;
+    bool bCommandTypeOK;
 
-    sal_Bool bDisplay;
+    bool bDisplay;
     bool bDisplayOK;
     bool bUseDisplay;
 
 protected:
-    sal_Bool bDatabaseOK;
-    sal_Bool bDatabaseNameOK;
-    sal_Bool bDatabaseURLOK;
-    sal_Bool bTableOK;
+    bool bDatabaseOK;
+    bool bDatabaseNameOK;
+    bool bDatabaseURLOK;
+    bool bTableOK;
 
     /// protected constructor: only for subclasses
     XMLDatabaseFieldImportContext(SvXMLImport& rImport,
@@ -489,7 +489,7 @@ class XMLDatabaseNextImportContext : public XMLDatabaseFieldImportContext
     const OUString sPropertyCondition;
     const OUString sTrue;
     OUString sCondition;
-    sal_Bool bConditionOK;
+    bool bConditionOK;
 
 protected:
     // for use in child classes
@@ -522,7 +522,7 @@ class XMLDatabaseSelectImportContext : public XMLDatabaseNextImportContext
 {
     const OUString sPropertySetNumber;
     sal_Int32 nNumber;
-    sal_Bool bNumberOK;
+    bool bNumberOK;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -550,7 +550,7 @@ class XMLDatabaseNumberImportContext : public XMLDatabaseFieldImportContext
     OUString sNumberFormat;
     OUString sNumberSync;
     sal_Int32 nValue;
-    sal_Bool bValueOK;
+    bool bValueOK;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -579,9 +579,9 @@ class XMLSimpleDocInfoImportContext : public XMLTextFieldImportContext
     const OUString sPropertyCurrentPresentation;
 
 protected:
-    sal_Bool bFixed;
-    sal_Bool bHasAuthor;
-    sal_Bool bHasContent;
+    bool bFixed;
+    bool bHasAuthor;
+    bool bHasContent;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -591,8 +591,8 @@ public:
                                   sal_uInt16 nPrfx,
                                   const OUString& sLocalName,
                                   sal_uInt16 nToken,
-                                  sal_Bool bContent,
-                                  sal_Bool bAuthor);
+                                  bool bContent,
+                                  bool bAuthor);
 
 protected:
     /// process attribute values
@@ -615,9 +615,9 @@ class XMLDateTimeDocInfoImportContext : public XMLSimpleDocInfoImportContext
     const OUString sPropertyIsFixedLanguage;
 
     sal_Int32 nFormat;
-    sal_Bool bFormatOK;
-    sal_Bool bIsDate;
-    sal_Bool bHasDateTime;
+    bool bFormatOK;
+    bool bIsDate;
+    bool bHasDateTime;
     bool     bIsDefaultLanguage;
 
 public:
@@ -669,7 +669,7 @@ class XMLUserDocInfoImportContext : public XMLSimpleDocInfoImportContext
     const OUString sPropertyNumberFormat;
     const OUString sPropertyIsFixedLanguage;
     sal_Int32   nFormat;
-    sal_Bool    bFormatOK;
+    bool    bFormatOK;
     bool        bIsDefaultLanguage;
 
 public:
@@ -697,7 +697,7 @@ class XMLHiddenParagraphImportContext : public XMLTextFieldImportContext
     const OUString sPropertyIsHidden;
 
     OUString sCondition;
-    sal_Bool bIsHidden;
+    bool bIsHidden;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -731,10 +731,10 @@ class XMLConditionalTextImportContext : public XMLTextFieldImportContext
     OUString sTrueContent;
     OUString sFalseContent;
 
-    sal_Bool bConditionOK;
-    sal_Bool bTrueOK;
-    sal_Bool bFalseOK;
-    sal_Bool bCurrentValue;
+    bool bConditionOK;
+    bool bTrueOK;
+    bool bFalseOK;
+    bool bCurrentValue;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -765,9 +765,9 @@ class XMLHiddenTextImportContext : public XMLTextFieldImportContext
     OUString sCondition;
     OUString sString;
 
-    sal_Bool bConditionOK;
-    sal_Bool bStringOK;
-    sal_Bool bIsHidden;
+    bool bConditionOK;
+    bool bStringOK;
+    bool bIsHidden;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -796,7 +796,7 @@ class XMLFileNameImportContext : public XMLTextFieldImportContext
     const OUString sPropertyCurrentPresentation;
 
     sal_Int16 nFormat;
-    sal_Bool bFixed;
+    bool bFixed;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -879,7 +879,7 @@ class XMLCountFieldImportContext : public XMLTextFieldImportContext
     OUString sNumberFormat;
     OUString sLetterSync;
 
-    sal_Bool bNumberFormatOK;
+    bool bNumberFormatOK;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -911,7 +911,7 @@ class XMLPageVarGetFieldImportContext : public XMLTextFieldImportContext
     OUString sNumberFormat;
     OUString sLetterSync;
 
-    sal_Bool bNumberFormatOK;
+    bool bNumberFormatOK;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -939,7 +939,7 @@ class XMLPageVarSetFieldImportContext : public XMLTextFieldImportContext
     const OUString sPropertyOffset;
 
     sal_Int16 nAdjust;
-    sal_Bool bActive;
+    bool bActive;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -973,7 +973,7 @@ class XMLMacroFieldImportContext : public XMLTextFieldImportContext
 
     OUString sMacro; // macro for old documents (pre 638i)
 
-    sal_Bool bDescriptionOK;
+    bool bDescriptionOK;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -1014,8 +1014,8 @@ class XMLReferenceFieldImportContext : public XMLTextFieldImportContext
     sal_Int16 nSource;
     sal_Int16 nType;
 
-    sal_Bool bNameOK;
-    sal_Bool bTypeOK;
+    bool bNameOK;
+    bool bTypeOK;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -1146,7 +1146,7 @@ class XMLUrlFieldImportContext : public XMLTextFieldImportContext
 
     OUString sURL;
     OUString sFrame;
-    sal_Bool bFrameOK;
+    bool bFrameOK;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -1258,8 +1258,8 @@ class XMLScriptImportContext : public XMLTextFieldImportContext
     OUString sContent;
     OUString sScriptType;
 
-    sal_Bool bContentOK;
-    sal_Bool bScriptTypeOK;
+    bool bContentOK;
+    bool bScriptTypeOK;
 
 public:
     TYPEINFO_OVERRIDE();

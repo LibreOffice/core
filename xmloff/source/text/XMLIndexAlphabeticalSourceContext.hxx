@@ -53,16 +53,16 @@ class XMLIndexAlphabeticalSourceContext : public XMLIndexSourceBaseContext
     OUString sAlgorithm;
 
     OUString sMainEntryStyleName;
-    sal_Bool bMainEntryStyleNameOK;
+    bool bMainEntryStyleNameOK;
 
-    sal_Bool bSeparators;
-    sal_Bool bCombineEntries;
-    sal_Bool bCaseSensitive;
-    sal_Bool bEntry;
-    sal_Bool bUpperCase;
-    sal_Bool bCombineDash;
-    sal_Bool bCombinePP;
-    sal_Bool bCommaSeparated;
+    bool bSeparators;
+    bool bCombineEntries;
+    bool bCaseSensitive;
+    bool bEntry;
+    bool bUpperCase;
+    bool bCombineDash;
+    bool bCombinePP;
+    bool bCommaSeparated;
 
 public:
 

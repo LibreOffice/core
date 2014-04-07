@@ -58,7 +58,7 @@ void XMLFrameOOoTransformerContext::StartElement(
     Reference< XAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList *pMutableAttrList =
         GetTransformer().ProcessAttrList( xAttrList, OOO_SHAPE_ACTIONS,
-                                          sal_True );
+                                          true );
     if( !pMutableAttrList )
         pMutableAttrList = new XMLMutableAttributeList( rAttrList );
     xAttrList = pMutableAttrList;
@@ -153,11 +153,11 @@ void XMLFrameOOoTransformerContext::Characters( const OUString& rChars )
     XMLTransformerContext::Characters( rChars );
 }
 
-sal_Bool XMLFrameOOoTransformerContext::IsPersistent() const
+bool XMLFrameOOoTransformerContext::IsPersistent() const
 {
     // this context stores some of its child elements, but is not persistent
     // itself.
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

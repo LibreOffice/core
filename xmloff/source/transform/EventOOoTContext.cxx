@@ -88,7 +88,7 @@ TYPEINIT1( XMLEventOOoTransformerContext, XMLPersElemContentTContext );
 XMLEventOOoTransformerContext::XMLEventOOoTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName,
-        sal_Bool bPersistent ) :
+        bool bPersistent ) :
     XMLPersElemContentTContext( rImp, rQName,
         rImp.GetNamespaceMap().GetKeyByAttrName( rQName ), XML_EVENT_LISTENER ),
     m_bPersistent( bPersistent )
@@ -239,7 +239,7 @@ XMLTransformerContext * XMLEventOOoTransformerContext::CreateChildContext(
         return XMLTransformerContext::CreateChildContext(nPrefix, rLocalName, rQName, xAttrList);
 }
 
-sal_Bool XMLEventOOoTransformerContext::IsPersistent() const
+bool XMLEventOOoTransformerContext::IsPersistent() const
 {
     return m_bPersistent;
 }

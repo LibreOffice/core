@@ -160,7 +160,7 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
     return 0;
 }
 
-sal_Bool XMLAutoTextEventExport::hasEvents()
+bool XMLAutoTextEventExport::hasEvents()
 {
     // TODO: provide full implementation that check for presence of events
     return xEvents.is();

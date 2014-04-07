@@ -61,7 +61,7 @@ XMLIndexUserSourceContext::XMLIndexUserSourceContext(
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet) :
         XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
-                                  rPropSet, sal_True),
+                                  rPropSet, true),
         sCreateFromEmbeddedObjects(sAPI_CreateFromEmbeddedObjects),
         sCreateFromGraphicObjects(sAPI_CreateFromGraphicObjects),
         sCreateFromMarks(sAPI_CreateFromMarks),
@@ -70,13 +70,13 @@ XMLIndexUserSourceContext::XMLIndexUserSourceContext(
         sUseLevelFromSource(sAPI_UseLevelFromSource),
         sCreateFromLevelParagraphStyles(sAPI_CreateFromLevelParagraphStyles),
         sUserIndexName(sAPI_UserIndexName),
-        bUseObjects(sal_False),
-        bUseGraphic(sal_False),
-        bUseMarks(sal_False),
-        bUseTables(sal_False),
-        bUseFrames(sal_False),
-        bUseLevelFromSource(sal_False),
-        bUseLevelParagraphStyles(sal_False)
+        bUseObjects(false),
+        bUseGraphic(false),
+        bUseMarks(false),
+        bUseTables(false),
+        bUseFrames(false),
+        bUseLevelFromSource(false),
+        bUseLevelParagraphStyles(false)
 {
 }
 

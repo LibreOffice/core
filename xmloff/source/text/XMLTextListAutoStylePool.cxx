@@ -41,7 +41,7 @@ class XMLTextListAutoStylePoolEntry_Impl
     OUString    sInternalName;
     Reference < XIndexReplace > xNumRules;
     sal_uInt32  nPos;
-    sal_Bool    bIsNamed;
+    bool    bIsNamed;
 
 
 public:
@@ -57,13 +57,13 @@ public:
             const Reference < XIndexReplace > & rNumRules ) :
         xNumRules( rNumRules ),
         nPos( 0 ),
-        bIsNamed( sal_False )
+        bIsNamed( false )
     {
         Reference < XNamed > xNamed( xNumRules, UNO_QUERY );
         if( xNamed.is() )
         {
             sInternalName = xNamed->getName();
-            bIsNamed = sal_True;
+            bIsNamed = true;
         }
     }
 
@@ -71,7 +71,7 @@ public:
             const OUString& rInternalName ) :
         sInternalName( rInternalName ),
         nPos( 0 ),
-        bIsNamed( sal_True )
+        bIsNamed( true )
     {
     }
 
@@ -79,7 +79,7 @@ public:
     const OUString& GetInternalName() const { return sInternalName; }
     const Reference < XIndexReplace > & GetNumRules() const { return xNumRules; }
     sal_uInt32 GetPos() const { return nPos; }
-    sal_Bool IsNamed() const { return bIsNamed; }
+    bool IsNamed() const { return bIsNamed; }
 };
 
 XMLTextListAutoStylePoolEntry_Impl::XMLTextListAutoStylePoolEntry_Impl(
@@ -90,13 +90,13 @@ XMLTextListAutoStylePoolEntry_Impl::XMLTextListAutoStylePoolEntry_Impl(
         sal_uInt32& rName ) :
     xNumRules( rNumRules ),
     nPos( nP ),
-    bIsNamed( sal_False )
+    bIsNamed( false )
 {
     Reference < XNamed > xNamed( xNumRules, UNO_QUERY );
     if( xNamed.is() )
     {
         sInternalName = xNamed->getName();
-        bIsNamed = sal_True;
+        bIsNamed = true;
     }
 
     // create a name that hasn't been used before. The created name has not
@@ -146,7 +146,7 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
     if( xCompareFac.is() )
         mxNumRuleCompare = xCompareFac->createAnyCompareByName( OUString( "NumberingRules" ) );
     sal_uInt16 nExportFlags = rExport.getExportFlags();
-    sal_Bool bStylesOnly = (nExportFlags & EXPORT_STYLES) != 0 && (nExportFlags & EXPORT_CONTENT) == 0;
+    bool bStylesOnly = (nExportFlags & EXPORT_STYLES) != 0 && (nExportFlags & EXPORT_CONTENT) == 0;
     if( bStylesOnly )
         sPrefix = "ML";
 

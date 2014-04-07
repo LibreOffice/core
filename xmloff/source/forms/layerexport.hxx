@@ -151,7 +151,7 @@ namespace xmloff
             @see
                 getControlId
         */
-        sal_Bool    seekPage(
+        bool    seekPage(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
 
         /** get the id of the given control.
@@ -232,7 +232,7 @@ namespace xmloff
         void exportAutoStyles();
 
     protected:
-        sal_Bool impl_isFormPageContainingForms(
+        bool impl_isFormPageContainingForms(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage,
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxForms);
 
@@ -240,14 +240,14 @@ namespace xmloff
 
             @return <TRUE/> if there already were structures for the given page
         */
-        sal_Bool implMoveIterators(
+        bool implMoveIterators(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage,
-            sal_Bool _bClear);
+            bool _bClear);
 
         /** check the object given if it's a control, if so, examine it.
             @return <TRUE/> if the object has been handled
         */
-        sal_Bool checkExamineControl(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
+        bool checkExamineControl(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
 
         /** examines the control's number format, so later the format style can be referred
 

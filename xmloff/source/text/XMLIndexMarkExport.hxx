@@ -71,7 +71,7 @@ public:
     void ExportIndexMark(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
-        sal_Bool bAutoStyles);
+        bool bAutoStyles);
 
 protected:
 

@@ -89,8 +89,8 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
         UniReference< XMLPropertySetMapper > aPropertyMapper = rPropExp.getPropertySetMapper();
         DBG_ASSERT(aPropertyMapper.is(), "SvXMLAutoStylePoolP::exportStyleAttributes: invalid property set mapper!");
 
-        sal_Bool bFoundControlShapeDataStyle = sal_False;
-        sal_Bool bFoundNumberingRulesName = sal_False;
+        bool bFoundControlShapeDataStyle = false;
+        bool bFoundNumberingRulesName = false;
 
         for (   vector< XMLPropertyState >::const_iterator pProp = rProperties.begin();
                 pProp != rProperties.end();
@@ -114,7 +114,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
                         lcl_exportDataStyle( GetExport(), aPropertyMapper, *pProp );
 
                         // check if there is another property with the special context id we're handling here
-                        bFoundControlShapeDataStyle = sal_True;
+                        bFoundControlShapeDataStyle = true;
                         break;
                     }
                 case CTF_SD_NUMBERINGRULES_NAME:
@@ -135,7 +135,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
                             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_LIST_STYLE_NAME, GetExport().EncodeStyleName( sName ) );
                         }
 
-                        bFoundNumberingRulesName = sal_True;
+                        bFoundNumberingRulesName = true;
                         break;
                     }
                 }
@@ -188,10 +188,10 @@ void SvXMLAutoStylePoolP::exportStyleContent(
         sal_Int32       nHeaderEndIndex(-1);
         sal_Int32       nFooterStartIndex(-1);
         sal_Int32       nFooterEndIndex(-1);
-        sal_Bool        bHeaderStartIndex(sal_False);
-        sal_Bool        bHeaderEndIndex(sal_False);
-        sal_Bool        bFooterStartIndex(sal_False);
-        sal_Bool        bFooterEndIndex(sal_False);
+        bool        bHeaderStartIndex(false);
+        bool        bHeaderEndIndex(false);
+        bool        bFooterStartIndex(false);
+        bool        bFooterEndIndex(false);
 
         UniReference< XMLPropertySetMapper > aPropMapper = rPropExp.getPropertySetMapper();
 
@@ -205,12 +205,12 @@ void SvXMLAutoStylePoolP::exportStyleContent(
                     if (!bHeaderStartIndex)
                     {
                         nHeaderStartIndex = nIndex;
-                        bHeaderStartIndex = sal_True;
+                        bHeaderStartIndex = true;
                     }
                     if (bFooterStartIndex && !bFooterEndIndex)
                     {
                         nFooterEndIndex = nIndex;
-                        bFooterEndIndex = sal_True;
+                        bFooterEndIndex = true;
                     }
                 }
                 break;
@@ -219,12 +219,12 @@ void SvXMLAutoStylePoolP::exportStyleContent(
                     if (!bFooterStartIndex)
                     {
                         nFooterStartIndex = nIndex;
-                        bFooterStartIndex = sal_True;
+                        bFooterStartIndex = true;
                     }
                     if (bHeaderStartIndex && !bHeaderEndIndex)
                     {
                         nHeaderEndIndex = nIndex;
-                        bHeaderEndIndex = sal_True;
+                        bHeaderEndIndex = true;
                     }
                 }
                 break;

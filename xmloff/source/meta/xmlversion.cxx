@@ -219,11 +219,11 @@ XMLVersionContext::XMLVersionContext( XMLVersionListImport& rImport,
 XMLVersionContext::~XMLVersionContext( void )
 {}
 
-sal_Bool XMLVersionContext::ParseISODateTimeString(
+bool XMLVersionContext::ParseISODateTimeString(
                                 const OUString& rString,
                                 util::DateTime& rDateTime )
 {
-    sal_Bool bSuccess = sal_True;
+    bool bSuccess = true;
 
     OUString aDateStr, aTimeStr;
     sal_Int32 nPos = rString.indexOf( (sal_Unicode) 'T' );
@@ -251,23 +251,23 @@ sal_Bool XMLVersionContext::ParseISODateTimeString(
         pStr++;
     }
     if ( nDateTokens > 3 || aDateStr.isEmpty() )
-        bSuccess = sal_False;
+        bSuccess = false;
     else
     {
         sal_Int32 n = 0;
         nYear = aDateStr.getToken( 0, '-', n ).toInt32();
         if ( nYear > 9999 )
-            bSuccess = sal_False;
+            bSuccess = false;
         else if ( nDateTokens >= 2 )
         {
             nMonth = aDateStr.getToken( 0, '-', n ).toInt32();
             if ( nMonth > 12 )
-                bSuccess = sal_False;
+                bSuccess = false;
             else if ( nDateTokens >= 3 )
             {
                 nDay = aDateStr.getToken( 0, '-', n ).toInt32();
                 if ( nDay > 31 )
-                    bSuccess = sal_False;
+                    bSuccess = false;
             }
         }
     }
@@ -283,23 +283,23 @@ sal_Bool XMLVersionContext::ParseISODateTimeString(
             pStr++;
         }
         if ( nTimeTokens > 3 )
-            bSuccess = sal_False;
+            bSuccess = false;
         else
         {
             sal_Int32 n = 0;
             nHour = aTimeStr.getToken( 0, ':', n ).toInt32();
             if ( nHour > 23 )
-                bSuccess = sal_False;
+                bSuccess = false;
             else if ( nTimeTokens >= 2 )
             {
                 nMin = aTimeStr.getToken( 0, ':', n ).toInt32();
                 if ( nMin > 59 )
-                    bSuccess = sal_False;
+                    bSuccess = false;
                 else if ( nTimeTokens >= 3 )
                 {
                     nSec = aTimeStr.getToken( 0, ':', n ).toInt32();
                     if ( nSec > 59 )
-                        bSuccess = sal_False;
+                        bSuccess = false;
                 }
             }
         }

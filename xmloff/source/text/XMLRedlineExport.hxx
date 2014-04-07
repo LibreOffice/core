@@ -107,16 +107,16 @@ public:
         /// PropertySet of RedlinePortion
         const ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet> & rPropSet,
-        sal_Bool bAutoStyle);
+        bool bAutoStyle);
 
     /// export the list of changes (complete list minus recorded changed)
-    void ExportChangesList(sal_Bool bAutoStyles);
+    void ExportChangesList(bool bAutoStyles);
 
     /// export the list of changes (recorded changes for this XText only)
     void ExportChangesList(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XText> & rText,
-        sal_Bool bAutoStyles);
+        bool bAutoStyles);
 
     /// set the current XText for which changes should be recorded.
     /// An empty XText means: don't record changes
@@ -133,21 +133,21 @@ public:
     void ExportStartOrEndRedline(
         const ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet> & rPropSet,
-        sal_Bool bStart);   /// start or end of text entity (e.g. paragraph)?
+        bool bStart);   /// start or end of text entity (e.g. paragraph)?
 
     /// convenience method, calls XPropertySet-version of this method
     void ExportStartOrEndRedline(
         /// XTextContent; must also be an XPropertySet
         const ::com::sun::star::uno::Reference<
                     ::com::sun::star::text::XTextContent> & rContent,
-        sal_Bool bStart);
+        bool bStart);
 
     /// convenience method, calls XPropertySet-version of this method
     void ExportStartOrEndRedline(
         /// XTextSection; must also be an XPropertySet
         const ::com::sun::star::uno::Reference<
                     ::com::sun::star::text::XTextSection> & rSection,
-        sal_Bool bStart);
+        bool bStart);
 
 private:
 

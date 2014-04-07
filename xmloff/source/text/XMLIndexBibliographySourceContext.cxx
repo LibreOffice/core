@@ -50,7 +50,7 @@ XMLIndexBibliographySourceContext::XMLIndexBibliographySourceContext(
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet) :
         XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
-                                  rPropSet, sal_False)
+                                  rPropSet, false)
 {
 }
 

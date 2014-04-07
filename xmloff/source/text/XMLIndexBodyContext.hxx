@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star {
  */
 class XMLIndexBodyContext : public SvXMLImportContext
 {
-    sal_Bool bHasContent;
+    bool bHasContent;
 
 public:
 
@@ -51,7 +51,7 @@ public:
     virtual ~XMLIndexBodyContext();
 
     /// return whether any content elements were encountered
-    inline sal_Bool HasContent();
+    inline bool HasContent();
 
 protected:
 
@@ -62,7 +62,7 @@ protected:
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
 };
 
-inline sal_Bool XMLIndexBodyContext::HasContent()
+inline bool XMLIndexBodyContext::HasContent()
 {
     return bHasContent;
 }

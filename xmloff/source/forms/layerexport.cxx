@@ -102,30 +102,30 @@ namespace xmloff
     {
     }
 
-    sal_Bool OFormLayerXMLExport_Impl::impl_isFormPageContainingForms(const Reference< XDrawPage >& _rxDrawPage, Reference< XIndexAccess >& _rxForms)
+    bool OFormLayerXMLExport_Impl::impl_isFormPageContainingForms(const Reference< XDrawPage >& _rxDrawPage, Reference< XIndexAccess >& _rxForms)
     {
         Reference< XFormsSupplier2 > xFormsSupp(_rxDrawPage, UNO_QUERY);
         OSL_ENSURE(xFormsSupp.is(), "OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid draw page (no XFormsSupplier)! Doin' nothing!");
         if (!xFormsSupp.is())
-            return sal_False;
+            return false;
 
         if ( !xFormsSupp->hasForms() )
             // nothing to do at all
-            return sal_False;
+            return false;
 
         _rxForms = Reference< XIndexAccess >(xFormsSupp->getForms(), UNO_QUERY);
         Reference< XServiceInfo > xSI(_rxForms, UNO_QUERY); // order is important!
         OSL_ENSURE(xSI.is(), "OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (must not be NULL and must have a ServiceInfo)!");
         if (!xSI.is())
-            return sal_False;
+            return false;
 
         if (!xSI->supportsService("com.sun.star.form.Forms"))
         {
             OSL_FAIL("OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (is no com.sun.star.form.Forms)!");
             // nothing to do
-            return sal_False;
+            return false;
         }
-        return sal_True;
+        return true;
     }
 
     void OFormLayerXMLExport_Impl::exportGridColumn(const Reference< XPropertySet >& _rxColumn,
@@ -275,9 +275,9 @@ namespace xmloff
         }
 
 #if OSL_DEBUG_LEVEL > 0
-        sal_Bool bPageIsKnown =
+        bool bPageIsKnown =
 #endif
-            implMoveIterators(_rxDrawPage, sal_False);
+            implMoveIterators(_rxDrawPage, false);
         OSL_ENSURE(bPageIsKnown, "OFormLayerXMLExport_Impl::exportForms: exporting a page which has not been examined!");
 
         // export forms collection
@@ -306,12 +306,12 @@ namespace xmloff
         return xForms.is() && xForms->hasElements();
     }
 
-    sal_Bool OFormLayerXMLExport_Impl::implMoveIterators(const Reference< XDrawPage >& _rxDrawPage, sal_Bool _bClear)
+    bool OFormLayerXMLExport_Impl::implMoveIterators(const Reference< XDrawPage >& _rxDrawPage, bool _bClear)
     {
         if (!_rxDrawPage.is())
             return false;
 
-        sal_Bool bKnownPage = sal_False;
+        bool bKnownPage = false;
 
         // the one for the ids
         m_aCurrentPageIds = m_aControlIds.find(_rxDrawPage);
@@ -322,7 +322,7 @@ namespace xmloff
         }
         else
         {
-            bKnownPage = sal_True;
+            bKnownPage = true;
             if (_bClear && !m_aCurrentPageIds->second.empty() )
                 m_aCurrentPageIds->second.clear();
         }
@@ -336,18 +336,18 @@ namespace xmloff
         }
         else
         {
-            bKnownPage = sal_True;
+            bKnownPage = true;
             if (_bClear && !m_aCurrentPageReferring->second.empty() )
                 m_aCurrentPageReferring->second.clear();
         }
         return bKnownPage;
     }
 
-    sal_Bool OFormLayerXMLExport_Impl::seekPage(const Reference< XDrawPage >& _rxDrawPage)
+    bool OFormLayerXMLExport_Impl::seekPage(const Reference< XDrawPage >& _rxDrawPage)
     {
-        sal_Bool bKnownPage = implMoveIterators( _rxDrawPage, sal_False );
+        bool bKnownPage = implMoveIterators( _rxDrawPage, false );
         if ( bKnownPage )
-            return sal_True;
+            return true;
 
         // if the page is not yet known, this does not automatically mean that it has
         // not been examined. Instead, examineForms returns silently and successfully
@@ -359,11 +359,11 @@ namespace xmloff
         // page was not yet known
         Reference< XFormsSupplier2 > xFormsSupp( _rxDrawPage, UNO_QUERY );
         if ( xFormsSupp.is() && !xFormsSupp->hasForms() )
-            return sal_True;
+            return true;
 
         // anything else means that the page has not been examined before, or it's no
         // valid form page. Both cases are Bad (TM).
-        return sal_False;
+        return false;
     }
 
     OUString OFormLayerXMLExport_Impl::getControlId(const Reference< XPropertySet >& _rxControl)
@@ -414,9 +414,9 @@ namespace xmloff
 
         // move the iterator which specify the currently handled page
 #if OSL_DEBUG_LEVEL > 0
-        sal_Bool bPageIsKnown =
+        bool bPageIsKnown =
 #endif
-            implMoveIterators(_rxDrawPage, sal_True);
+            implMoveIterators(_rxDrawPage, true);
         OSL_ENSURE(!bPageIsKnown, "OFormLayerXMLExport_Impl::examineForms: examining a page twice!");
 
         ::std::stack< Reference< XIndexAccess > >   aContainerHistory;
@@ -507,12 +507,12 @@ namespace xmloff
         }
     }
 
-    sal_Bool OFormLayerXMLExport_Impl::checkExamineControl(const Reference< XPropertySet >& _rxObject)
+    bool OFormLayerXMLExport_Impl::checkExamineControl(const Reference< XPropertySet >& _rxObject)
     {
         Reference< XPropertySetInfo > xCurrentInfo = _rxObject->getPropertySetInfo();
         OSL_ENSURE(xCurrentInfo.is(), "OFormLayerXMLExport_Impl::checkExamineControl: no property set info");
 
-        sal_Bool bIsControl = xCurrentInfo->hasPropertyByName( PROPERTY_CLASSID );
+        bool bIsControl = xCurrentInfo->hasPropertyByName( PROPERTY_CLASSID );
         if (bIsControl)
         {
             // generate a new control id

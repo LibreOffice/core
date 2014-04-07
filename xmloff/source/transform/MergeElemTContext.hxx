@@ -33,7 +33,7 @@ class XMLMergeElemTransformerContext : public XMLTransformerContext
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
     XMLPersTextContentTContextVector m_aChildContexts;
     sal_uInt16 m_nActionMap;
-    sal_Bool m_bStartElementExported;
+    bool m_bStartElementExported;
 
     void ExportStartElement();
 

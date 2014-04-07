@@ -30,7 +30,7 @@ class XMLStyleOASISTContext : public XMLPersElemContentTContext
 {
     ::rtl::Reference< XMLPropertiesTContext_Impl > m_xPropContext;
 
-    sal_Bool m_bPersistent;
+    bool m_bPersistent;
     bool m_bControlStyle;
 
     OUString m_aStyleFamily;
@@ -39,12 +39,12 @@ public:
 
     XMLStyleOASISTContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
-                              sal_Bool bPersistent=sal_False );
+                              bool bPersistent=false );
     XMLStyleOASISTContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken,
-                              sal_Bool bPersistent=sal_False );
+                              bool bPersistent=false );
 
     virtual ~XMLStyleOASISTContext();
 
@@ -59,7 +59,7 @@ public:
 
     virtual void ExportContent() SAL_OVERRIDE;
 
-    virtual sal_Bool IsPersistent() const SAL_OVERRIDE;
+    virtual bool IsPersistent() const SAL_OVERRIDE;
 
     static XMLTransformerActions *CreateTransformerActions( sal_uInt16 nType );
 };

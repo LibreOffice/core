@@ -34,7 +34,7 @@ public:
     ~XMLTextDropCapExport();
 
     void exportXML( const ::com::sun::star::uno::Any& rAny,
-                    sal_Bool bWholeWord,
+                    bool bWholeWord,
                     const OUString& rStyleName );
 };
 

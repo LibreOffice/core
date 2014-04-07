@@ -38,10 +38,10 @@ class XMLIndexChapterInfoEntryContext : public XMLIndexSimpleEntryContext
 {
     // chapter format
     sal_Int16 nChapterInfo;
-    sal_Bool bChapterInfoOK;
-    sal_Bool bTOC;
+    bool bChapterInfoOK;
+    bool bTOC;
     sal_Int16 nOutlineLevel;
-    sal_Bool bOutlineLevelOK;
+    bool bOutlineLevelOK;
 
 public:
 
@@ -52,7 +52,7 @@ public:
         XMLIndexTemplateContext& rTemplate,
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
-        sal_Bool bTOC );
+        bool bTOC );
 
     virtual ~XMLIndexChapterInfoEntryContext();
 

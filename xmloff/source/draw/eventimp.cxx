@@ -83,8 +83,8 @@ public:
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,    const Reference< XAttributeList>& xAttrList ) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
 
-    sal_Bool mbValid;
-    sal_Bool mbScript;
+    bool mbValid;
+    bool mbScript;
     ClickAction meClickAction;
     XMLEffect meEffect;
     XMLEffectDirection meDirection;
@@ -92,7 +92,7 @@ public:
     AnimationSpeed meSpeed;
     sal_Int32 mnVerb;
     OUString msSoundURL;
-    sal_Bool mbPlayFull;
+    bool mbPlayFull;
     OUString msMacroName;
     OUString msBookmark;
     OUString msLanguage;
@@ -150,21 +150,21 @@ TYPEINIT1( SdXMLEventContext, SvXMLImportContext );
 
 SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, const Reference< XShape >& rxShape )
     : SvXMLImportContext(rImp, nPrfx, rLocalName)
-    , mxShape(rxShape), mbValid(false), mbScript(sal_False)
+    , mxShape(rxShape), mbValid(false), mbScript(false)
     , meClickAction(ClickAction_NONE), meEffect(EK_none)
     , meDirection(ED_none), mnStartScale(100), meSpeed(AnimationSpeed_MEDIUM)
-    , mnVerb(0), mbPlayFull(sal_False)
+    , mnVerb(0), mbPlayFull(false)
 {
     static const OUString sXMLClickName( "click" );
 
     if( nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_EVENT_LISTENER ) )
     {
-        mbValid = sal_True;
+        mbValid = true;
     }
     else if( nPrfx == XML_NAMESPACE_SCRIPT && IsXMLToken( rLocalName, XML_EVENT_LISTENER ) )
     {
-        mbScript = sal_True;
-        mbValid = sal_True;
+        mbScript = true;
+        mbValid = true;
     }
     else
     {

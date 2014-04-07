@@ -37,12 +37,12 @@ bool XMLTextOrientationHdl::importXML(
 
     if( IsXMLToken( rStrImpValue, XML_LTR ))
     {
-        rValue <<= static_cast< sal_Bool >( sal_False );
+        rValue <<= false;
         bRetval = true;
     }
     else if( IsXMLToken( rStrImpValue, XML_TTB ))
     {
-        rValue <<= static_cast< sal_Bool >( sal_True );
+        rValue <<= true;
         bRetval = true;
     }
 
@@ -54,7 +54,7 @@ bool XMLTextOrientationHdl::exportXML(
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    sal_Bool bVal (sal_False );
+    bool bVal (false );
     bool bRetval( false );
 
     if( rValue >>= bVal )

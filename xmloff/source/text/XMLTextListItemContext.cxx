@@ -43,7 +43,7 @@ XMLTextListItemContext::XMLTextListItemContext(
                         const sal_uInt16 nPrfx,
                         const OUString& rLName,
                         const Reference< xml::sax::XAttributeList > & xAttrList,
-                        const sal_Bool bIsHeader )
+                        const bool bIsHeader )
     : SvXMLImportContext( rImport, nPrfx, rLName ),
       rTxtImport( rTxtImp ),
       nStartValue( -1 ),

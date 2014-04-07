@@ -54,7 +54,7 @@ PageStyleContext::PageStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles,
-        sal_Bool bDefaultStyle) :
+        bool bDefaultStyle) :
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, XML_STYLE_FAMILY_PAGE_MASTER, bDefaultStyle),
     sPageUsage()
 {
@@ -75,7 +75,7 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
         ((IsXMLToken(rLocalName, XML_HEADER_STYLE )) ||
          (IsXMLToken(rLocalName, XML_FOOTER_STYLE )) ) )
     {
-        sal_Bool bHeader = IsXMLToken(rLocalName, XML_HEADER_STYLE);
+        bool bHeader = IsXMLToken(rLocalName, XML_HEADER_STYLE);
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )

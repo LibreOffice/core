@@ -152,13 +152,13 @@ XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet,
-    sal_Bool bLevelFormats)
+    bool bLevelFormats)
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
 ,   sCreateFromChapter(sAPI_CreateFromChapter)
 ,   sIsRelativeTabstops(sAPI_IsRelativeTabstops)
 ,   bUseLevelFormats(bLevelFormats)
-,   bChapterIndex(sal_False)
-,   bRelativeTabs(sal_True)
+,   bChapterIndex(false)
+,   bRelativeTabs(true)
 ,   rIndexPropertySet(rPropSet)
 {
 }
@@ -197,7 +197,7 @@ void XMLIndexSourceBaseContext::ProcessAttribute(
         case XML_TOK_INDEXSOURCE_INDEX_SCOPE:
             if ( IsXMLToken( rValue, XML_CHAPTER ) )
             {
-                bChapterIndex = sal_True;
+                bChapterIndex = true;
             }
             break;
 

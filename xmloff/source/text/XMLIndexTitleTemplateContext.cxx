@@ -43,7 +43,7 @@ XMLIndexTitleTemplateContext::XMLIndexTitleTemplateContext(
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
 ,   sTitle("Title")
 ,   sParaStyleHeading("ParaStyleHeading")
-,   bStyleNameOK(sal_False)
+,   bStyleNameOK(false)
 ,   rTOCPropertySet(rPropSet)
 {
 }

@@ -47,7 +47,7 @@ public:
             const OUString& rLName,
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            const sal_Bool bIsHeader = sal_False );
+            const bool bIsHeader = false );
     virtual ~XMLTextListItemContext();
 
     virtual void EndElement() SAL_OVERRIDE;
@@ -57,10 +57,10 @@ public:
                  const ::com::sun::star::uno::Reference<
                      ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    sal_Bool HasStartValue() const { return -1 != nStartValue; }
+    bool HasStartValue() const { return -1 != nStartValue; }
     sal_Int16 GetStartValue() const { return nStartValue; }
 
-    inline sal_Bool HasNumRulesOverride() const
+    inline bool HasNumRulesOverride() const
     {
         return mxNumRulesOverride.is();
     }

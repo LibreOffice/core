@@ -62,10 +62,10 @@ class XMLPropertyBackpatcher
      OUString sPropertyName;
 
     /// should a default value be set for unresolved properties
-    sal_Bool bDefaultHandling;
+    bool bDefaultHandling;
 
     /// should the sPreservePropertyName be preserved
-    sal_Bool bPreserveProperty;
+    bool bPreserveProperty;
 
     /// name of the property to preserve
     OUString sPreservePropertyName;

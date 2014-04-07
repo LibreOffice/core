@@ -61,7 +61,7 @@ public:
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 
-    sal_Bool SetComponent(
+    bool SetComponent(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& rComp );
 

@@ -132,7 +132,7 @@ public:
      *
      * May only be called after hasProperties() was called.
      */
-    inline sal_Bool hasProperty( sal_Int16 nIndex );
+    inline bool hasProperty( sal_Int16 nIndex );
 
     /**
      * Get a value from the XPropertySet on demand.
@@ -182,7 +182,7 @@ const ::com::sun::star::uno::Any& MultiPropertySetHelper::getValue(
     return ( nIndex != -1 ) ? pValues[ nIndex ] : aEmptyAny;
 }
 
-sal_Bool MultiPropertySetHelper::hasProperty( sal_Int16 nValueNo )
+bool MultiPropertySetHelper::hasProperty( sal_Int16 nValueNo )
 {
     DBG_ASSERT( pSequenceIndex != NULL,
                 "called getValue() without calling hasProperties() before" );

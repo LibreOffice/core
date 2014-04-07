@@ -46,7 +46,7 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
         TextContentAnchorType eATyp ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     eDefaultAnchorType( eATyp ),
-    bMap( sal_False )
+    bMap( false )
 {
     OUString sShow;
     const SvXMLTokenMap& rTokenMap =

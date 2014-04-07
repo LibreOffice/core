@@ -38,7 +38,7 @@ class XMLTextCharStyleNamesElementExport
 public:
 
     XMLTextCharStyleNamesElementExport(
-                        SvXMLExport& rExp, sal_Bool bDoSomething, sal_Bool bAllStyles,
+                        SvXMLExport& rExp, bool bDoSomething, bool bAllStyles,
                         const ::com::sun::star::uno::Reference <
                             ::com::sun::star::beans::XPropertySet > & rPropSet,
                             const OUString& rPropName );

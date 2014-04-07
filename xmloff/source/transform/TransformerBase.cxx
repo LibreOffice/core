@@ -92,8 +92,8 @@ XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
         switch( nActionType )
         {
         case XML_ETACTION_COPY_CONTENT:
-            return new XMLIgnoreTransformerContext( *this, rQName, sal_False,
-                                                sal_False );
+            return new XMLIgnoreTransformerContext( *this, rQName, false,
+                                                false );
         case XML_ETACTION_COPY:
             return new XMLTransformerContext( *this, rQName );
         case XML_ETACTION_RENAME_ELEM:
@@ -503,7 +503,7 @@ static sal_Int16 lcl_getUnit( const OUString& rValue )
 
 XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
         Reference< XAttributeList >& rAttrList, sal_uInt16 nActionMap,
-           sal_Bool bClone  )
+           bool bClone  )
 {
     XMLMutableAttributeList *pMutableAttrList = 0;
     XMLTransformerActions *pActions = GetUserDefinedActions( nActionMap );
@@ -532,11 +532,11 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                 }
 
                 sal_uInt32 nAction = (*aIter).second.m_nActionType;
-                sal_Bool bRename = sal_False;
+                bool bRename = false;
                 switch( nAction )
                 {
                 case XML_ATACTION_RENAME:
-                    bRename = sal_True;
+                    bRename = true;
                     break;
                 case XML_ATACTION_COPY:
                     break;
@@ -547,7 +547,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     --nAttrCount;
                     break;
                 case XML_ATACTION_RENAME_IN2INCH:
-                    bRename = sal_True;
+                    bRename = true;
                 case XML_ATACTION_IN2INCH:
                     {
                         OUString aAttrValue( rAttrValue );
@@ -563,7 +563,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     }
                     break;
                 case XML_ATACTION_RENAME_INCH2IN:
-                    bRename = sal_True;
+                    bRename = true;
                 case XML_ATACTION_INCH2IN:
                     {
                         OUString aAttrValue( rAttrValue );
@@ -610,7 +610,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     }
                     break;
                 case XML_ATACTION_RENAME_DECODE_STYLE_NAME_REF:
-                    bRename = sal_True;
+                    bRename = true;
                 case XML_ATACTION_DECODE_STYLE_NAME:
                 case XML_ATACTION_DECODE_STYLE_NAME_REF:
                     {
@@ -636,7 +636,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     }
                     break;
                 case XML_ATACTION_RENAME_ENCODE_STYLE_NAME_REF:
-                    bRename = sal_True;
+                    bRename = true;
                 case XML_ATACTION_ENCODE_STYLE_NAME_REF:
                     {
                         OUString aAttrValue( rAttrValue );
@@ -645,7 +645,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     }
                     break;
                 case XML_ATACTION_RENAME_NEG_PERCENT:
-                    bRename = sal_True;
+                    bRename = true;
                 case XML_ATACTION_NEG_PERCENT:
                     {
                         OUString aAttrValue( rAttrValue );
@@ -654,7 +654,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     }
                     break;
                 case XML_ATACTION_RENAME_ADD_NAMESPACE_PREFIX:
-                    bRename = sal_True;
+                    bRename = true;
                 case XML_ATACTION_ADD_NAMESPACE_PREFIX:
                     {
                         OUString aAttrValue( rAttrValue );
@@ -680,7 +680,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     }
                     break;
                 case XML_ATACTION_RENAME_REMOVE_NAMESPACE_PREFIX:
-                    bRename = sal_True;
+                    bRename = true;
                 case XML_ATACTION_REMOVE_NAMESPACE_PREFIX:
                     {
                         OUString aAttrValue( rAttrValue );
@@ -703,7 +703,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     {
                         OUString aAttrValue( rAttrValue );
                         if( ConvertURIToOASIS( aAttrValue,
-                            static_cast< sal_Bool >((*aIter).second.m_nParam1)))
+                            static_cast< bool >((*aIter).second.m_nParam1)))
                             pMutableAttrList->SetValueByIndex( i, aAttrValue );
                     }
                     break;
@@ -711,7 +711,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     {
                         OUString aAttrValue( rAttrValue );
                         if( ConvertURIToOOo( aAttrValue,
-                            static_cast< sal_Bool >((*aIter).second.m_nParam1)))
+                            static_cast< bool >((*aIter).second.m_nParam1)))
                             pMutableAttrList->SetValueByIndex( i, aAttrValue );
                     }
                     break;
@@ -738,7 +738,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         OUString aAttrValue( rAttrValue );
                         if( ConvertRNGDateTimeToISO( aAttrValue ))
                             pMutableAttrList->SetValueByIndex( i, aAttrValue );
-                        bRename = sal_True;
+                        bRename = true;
                     }
                     break;
                 case XML_ATACTION_IN2TWIPS:
@@ -867,7 +867,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             NegPercent(aAttrValue);
                             pMutableAttrList->SetValueByIndex( i, aAttrValue );
                         }
-                        bRename = sal_True;
+                        bRename = true;
                     }
                     break;
                 case XML_ATACTION_SHAPEID:
@@ -900,9 +900,9 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
     return pMutableAttrList;
 }
 
-sal_Bool XMLTransformerBase::ReplaceSingleInchWithIn( OUString& rValue )
+bool XMLTransformerBase::ReplaceSingleInchWithIn( OUString& rValue )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int32 nPos = rValue.getLength();
     while( nPos && rValue[nPos-1] <= ' ' )
         --nPos;
@@ -911,15 +911,15 @@ sal_Bool XMLTransformerBase::ReplaceSingleInchWithIn( OUString& rValue )
         ('h'==rValue[nPos-1] || 'H'==rValue[nPos-1]) )
     {
         rValue =rValue.copy( 0, nPos-2 );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
 }
 
-sal_Bool XMLTransformerBase::ReplaceInchWithIn( OUString& rValue )
+bool XMLTransformerBase::ReplaceInchWithIn( OUString& rValue )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int32 nPos = 1;
     while( nPos < rValue.getLength()-3 )
     {
@@ -941,7 +941,7 @@ sal_Bool XMLTransformerBase::ReplaceInchWithIn( OUString& rValue )
                             rValue = rValue.replaceAt( nPos,
                                 4, GetXMLToken(XML_UNIT_INCH) );
                             nPos += 2;
-                            bRet = sal_True;
+                            bRet = true;
                             continue;
                         }
                     }
@@ -954,9 +954,9 @@ sal_Bool XMLTransformerBase::ReplaceInchWithIn( OUString& rValue )
     return bRet;
 }
 
-sal_Bool XMLTransformerBase::ReplaceSingleInWithInch( OUString& rValue )
+bool XMLTransformerBase::ReplaceSingleInWithInch( OUString& rValue )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     sal_Int32 nPos = rValue.getLength();
     while( nPos && rValue[nPos-1] <= ' ' )
@@ -970,15 +970,15 @@ sal_Bool XMLTransformerBase::ReplaceSingleInWithInch( OUString& rValue )
         nPos -= 2;
         rValue = rValue.replaceAt( nPos, rValue.getLength() - nPos,
                                            GetXMLToken(XML_INCH) );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
 }
 
-sal_Bool XMLTransformerBase::ReplaceInWithInch( OUString& rValue )
+bool XMLTransformerBase::ReplaceInWithInch( OUString& rValue )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int32 nPos = 1;
     while( nPos < rValue.getLength()-1 )
     {
@@ -994,7 +994,7 @@ sal_Bool XMLTransformerBase::ReplaceInWithInch( OUString& rValue )
                     rValue = rValue.replaceAt( nPos,
                                     2, GetXMLToken(XML_INCH) );
                     nPos += 4;
-                    bRet = sal_True;
+                    bRet = true;
                     continue;
                 }
             }
@@ -1005,11 +1005,11 @@ sal_Bool XMLTransformerBase::ReplaceInWithInch( OUString& rValue )
     return bRet;
 }
 
-sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
+bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
 {
     static const sal_Char aHexTab[] = "0123456789abcdef";
 
-    sal_Bool bEncoded = sal_False;
+    bool bEncoded = false;
 
     sal_Int32 nLen = rName.getLength();
     OUStringBuffer aBuffer( nLen );
@@ -1017,7 +1017,7 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
     for( sal_Int32 i = 0; i < nLen; i++ )
     {
         sal_Unicode c = rName[i];
-        sal_Bool bValidChar = sal_False;
+        bool bValidChar = false;
         if( c < 0x00ffU )
         {
             bValidChar =
@@ -1034,12 +1034,12 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
             if( (c >= 0xf900U && c <= 0xfffeU) ||
                  (c >= 0x20ddU && c <= 0x20e0U))
             {
-                bValidChar = sal_False;
+                bValidChar = false;
             }
             else if( (c >= 0x02bbU && c <= 0x02c1U) || c == 0x0559 ||
                      c == 0x06e5 || c == 0x06e6 )
             {
-                bValidChar = sal_True;
+                bValidChar = true;
             }
             else if( c == 0x0387 )
             {
@@ -1061,7 +1061,7 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
                 case UnicodeType::TITLECASE_LETTER:     // Lt
                 case UnicodeType::OTHER_LETTER:         // Lo
                 case UnicodeType::LETTER_NUMBER:        // Nl
-                    bValidChar = sal_True;
+                    bValidChar = true;
                     break;
                 case UnicodeType::NON_SPACING_MARK:     // Ms
                 case UnicodeType::ENCLOSING_MARK:       // Me
@@ -1092,26 +1092,26 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
             aBuffer.append( static_cast< sal_Unicode >(
                         aHexTab[ c & 0x0f ] ) );
             aBuffer.append( '_' );
-            bEncoded = sal_True;
+            bEncoded = true;
         }
     }
 
     if( aBuffer.getLength() > (1<<15)-1 )
-        bEncoded = sal_False;
+        bEncoded = false;
 
     if( bEncoded )
         rName = aBuffer.makeStringAndClear();
     return bEncoded;
 }
 
-sal_Bool XMLTransformerBase::DecodeStyleName( OUString& rName )
+bool XMLTransformerBase::DecodeStyleName( OUString& rName )
 {
-    sal_Bool bEncoded = sal_False;
+    bool bEncoded = false;
 
     sal_Int32 nLen = rName.getLength();
     OUStringBuffer aBuffer( nLen );
 
-    sal_Bool bWithinHex = sal_False;
+    bool bWithinHex = false;
     sal_Unicode cEnc = 0;
     for( sal_Int32 i = 0; i < nLen; i++ )
     {
@@ -1125,7 +1125,7 @@ sal_Bool XMLTransformerBase::DecodeStyleName( OUString& rName )
             }
             else
             {
-                bEncoded = sal_True;
+                bEncoded = true;
             }
             bWithinHex = !bWithinHex;
         }
@@ -1147,7 +1147,7 @@ sal_Bool XMLTransformerBase::DecodeStyleName( OUString& rName )
             else
             {
                 // error
-                bEncoded = sal_False;
+                bEncoded = false;
                 break;
             }
             cEnc = (cEnc << 4) + cDigit;
@@ -1163,10 +1163,10 @@ sal_Bool XMLTransformerBase::DecodeStyleName( OUString& rName )
     return bEncoded;
 }
 
-sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
+bool XMLTransformerBase::NegPercent( OUString& rValue )
 {
-    sal_Bool bRet = sal_False;
-    sal_Bool bNeg = sal_False;
+    bool bRet = false;
+    bool bNeg = false;
     double nVal = 0;
 
     sal_Int32 nPos = 0;
@@ -1178,7 +1178,7 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
 
     if( nPos < nLen && '-' == rValue[nPos] )
     {
-        bNeg = sal_True;
+        bNeg = true;
         nPos++;
     }
 
@@ -1222,26 +1222,26 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
 
         rValue = OUString::number(nIntVal) + "%";
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
 }
 
-sal_Bool XMLTransformerBase::AddNamespacePrefix( OUString& rName,
+bool XMLTransformerBase::AddNamespacePrefix( OUString& rName,
                              sal_uInt16 nPrefix ) const
 {
     rName = GetNamespaceMap().GetQNameByKey( nPrefix, rName, false );
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLTransformerBase::RemoveNamespacePrefix( OUString& rName,
+bool XMLTransformerBase::RemoveNamespacePrefix( OUString& rName,
                             sal_uInt16 nPrefixOnly ) const
 {
     OUString aLocalName;
     sal_uInt16 nPrefix =
         GetNamespaceMap()._GetKeyByAttrName( rName, &aLocalName, false );
-    sal_Bool bRet = XML_NAMESPACE_UNKNOWN != nPrefix &&
+    bool bRet = XML_NAMESPACE_UNKNOWN != nPrefix &&
                     (USHRT_MAX == nPrefixOnly || nPrefix == nPrefixOnly);
     if( bRet )
         rName = aLocalName;
@@ -1249,13 +1249,13 @@ sal_Bool XMLTransformerBase::RemoveNamespacePrefix( OUString& rName,
     return bRet;
 }
 
-sal_Bool XMLTransformerBase::ConvertURIToOASIS( OUString& rURI,
-                                        sal_Bool bSupportPackage ) const
+bool XMLTransformerBase::ConvertURIToOASIS( OUString& rURI,
+                                        bool bSupportPackage ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( !m_aExtPathPrefix.isEmpty() && !rURI.isEmpty() )
     {
-        sal_Bool bRel = sal_False;
+        bool bRel = false;
         switch( rURI[0] )
         {
         case '#':
@@ -1264,7 +1264,7 @@ sal_Bool XMLTransformerBase::ConvertURIToOASIS( OUString& rURI,
             if( bSupportPackage )
             {
                 rURI = rURI.copy( 1 );
-                bRet = sal_True;
+                bRet = true;
             }
             break;
         case '/':
@@ -1272,17 +1272,17 @@ sal_Bool XMLTransformerBase::ConvertURIToOASIS( OUString& rURI,
             break;
         case '.':
             // a rel path; to keep URI simple, remove './', if there
-            bRel = sal_True;
+            bRel = true;
             if( rURI.getLength() > 1 && '/' == rURI[1] )
             {
                 rURI = rURI.copy( 2 );
-                bRet = sal_True;
+                bRet = true;
             }
             break;
         default:
             // check for a RFC2396 schema
             {
-                bRel = sal_True;
+                bRel = true;
                 sal_Int32 nPos = 1;
                 sal_Int32 nLen = rURI.getLength();
                 while( nPos < nLen )
@@ -1295,7 +1295,7 @@ sal_Bool XMLTransformerBase::ConvertURIToOASIS( OUString& rURI,
                         break;
                     case ':':
                         // a schema
-                        bRel = sal_False;
+                        bRel = false;
                         nPos = nLen;    // leave loop
                         break;
                     default:
@@ -1312,20 +1312,20 @@ sal_Bool XMLTransformerBase::ConvertURIToOASIS( OUString& rURI,
             OUString sTmp( m_aExtPathPrefix );
             sTmp += rURI;
             rURI = sTmp;
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
     return bRet;
 }
 
-sal_Bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
-                                        sal_Bool bSupportPackage ) const
+bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
+                                        bool bSupportPackage ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( !rURI.isEmpty() )
     {
-        sal_Bool bPackage = sal_False;
+        bool bPackage = false;
         switch( rURI[0] )
         {
         case '/':
@@ -1337,17 +1337,17 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
             {
                 // an external URI; remove '../'
                 rURI = rURI.copy( m_aExtPathPrefix.getLength() );
-                bRet = sal_True;
+                bRet = true;
             }
             else
             {
-                bPackage = sal_True;
+                bPackage = true;
             }
             break;
         default:
             // check for a RFC2396 schema
             {
-                bPackage = sal_True;
+                bPackage = true;
                 sal_Int32 nPos = 1;
                 sal_Int32 nLen = rURI.getLength();
                 while( nPos < nLen )
@@ -1360,7 +1360,7 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
                         break;
                     case ':':
                         // a schema
-                        bPackage = sal_False;
+                        bPackage = false;
                         nPos = nLen;    // leave loop
                         break;
                     default:
@@ -1379,14 +1379,14 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
                 rURI = rURI.copy( 2 );
             sTmp += rURI;
             rURI = sTmp;
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
     return bRet;
 }
 
-sal_Bool XMLTransformerBase::RenameAttributeValue(
+bool XMLTransformerBase::RenameAttributeValue(
     OUString& rOutAttributeValue,
     sal_Int32 nParam1,
     sal_Int32 nParam2,

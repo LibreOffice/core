@@ -41,7 +41,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
                        const uno::Reference<
                             xml::sax::XAttributeList > &,
                         const Reference < XPropertySet > & rPageStylePropSet,
-                       sal_Bool bFooter, sal_Bool bLft, sal_Bool bFrst ) :
+                       bool bFooter, bool bLft, bool bFrst ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xPropSet( rPageStylePropSet ),
     sOn( bFooter ? OUString("FooterIsOn") : OUString("HeaderIsOn") ),
@@ -50,7 +50,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
     sText( bFooter ? OUString("FooterText") : OUString("HeaderText") ),
     sTextFirst(bFooter ? OUString("FooterTextFirst") : OUString("HeaderTextFirst")),
     sTextLeft( bFooter ?  OUString("FooterTextLeft") : OUString("HeaderTextLeft") ),
-    bInsertContent( sal_True ),
+    bInsertContent( true ),
     bLeft( bLft ),
     bFirst( bFrst )
 {
@@ -60,7 +60,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
         Any aAny;
 
         aAny = xPropSet->getPropertyValue( sOn );
-        sal_Bool bOn = *(sal_Bool *)aAny.getValue();
+        bool bOn = *(sal_Bool *)aAny.getValue();
 
         if( bOn )
         {
@@ -93,7 +93,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
         {
             // If headers or footers are switched off, no content must be
             // inserted.
-            bInsertContent = sal_False;
+            bInsertContent = false;
         }
     }
 }
@@ -112,7 +112,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
     {
         if( !xOldTextCursor.is() )
         {
-            sal_Bool bRemoveContent = sal_True;
+            bool bRemoveContent = true;
             Any aAny;
             if( bLeft || bFirst )
             {
@@ -137,7 +137,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
 
                     // The content has not to be removed, because the header
                     // or footer is empty already.
-                    bRemoveContent = sal_False;
+                    bRemoveContent = false;
                 }
 
                 // If a header or footer is not shared, share it now.

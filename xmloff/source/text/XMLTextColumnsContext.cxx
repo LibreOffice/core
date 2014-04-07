@@ -290,7 +290,7 @@ XMLTextColumnsContext::XMLTextColumnsContext(
 ,   pColumnAttrTokenMap( new SvXMLTokenMap(aColAttrTokenMap) )
 ,   pColumnSepAttrTokenMap( new SvXMLTokenMap(aColSepAttrTokenMap) )
 ,   nCount( 0 )
-,   bAutomatic( sal_False )
+,   bAutomatic( false )
 ,   nAutomaticDistance( 0 )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -494,7 +494,7 @@ void XMLTextColumnsContext::EndElement( )
 
     aProp.maValue <<= xColumns;
 
-    SetInsert( sal_True );
+    SetInsert( true );
     XMLElementPropertyContext::EndElement();
 
 }

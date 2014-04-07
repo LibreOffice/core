@@ -1578,7 +1578,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 // TODO: property missing
                 if (xPropSetInfo->hasPropertyByName(s_ParaIsNumberingRestart))
                 {
-                    sal_Bool bTmp = sal_True;
+                    bool bTmp = true;
                     xPropSet->setPropertyValue(s_ParaIsNumberingRestart,
                                                makeAny(bTmp) );
                 }
@@ -2287,7 +2287,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             rImport, nPrefix, rLocalName,
             (XML_TOK_TEXT_CHANGE_END != nToken),
             (XML_TOK_TEXT_CHANGE_START != nToken),
-            sal_True);
+            true);
         break;
 
     case XML_TOK_TEXT_FORMS:

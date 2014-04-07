@@ -31,7 +31,7 @@ class XMLStyleOOoTContext : public XMLPersElemContentTContext
 {
        XMLFamilyType m_eFamily;
 
-    sal_Bool m_bPersistent;
+    bool m_bPersistent;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -39,13 +39,13 @@ public:
     XMLStyleOOoTContext( XMLTransformerBase& rTransformer,
                         const OUString& rQName,
                            XMLFamilyType eType,
-                           sal_Bool bPersistent );
+                           bool bPersistent );
     XMLStyleOOoTContext( XMLTransformerBase& rTransformer,
                         const OUString& rQName,
                            XMLFamilyType eType,
                            sal_uInt16 nPrefix,
                            ::xmloff::token::XMLTokenEnum eToken,
-                           sal_Bool bPersistent );
+                           bool bPersistent );
 
     virtual ~XMLStyleOOoTContext();
 
@@ -57,7 +57,7 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
-    virtual sal_Bool IsPersistent() const SAL_OVERRIDE;
+    virtual bool IsPersistent() const SAL_OVERRIDE;
 
     static XMLTransformerActions *CreateTransformerActions( sal_uInt16 nType );
 

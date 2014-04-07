@@ -28,15 +28,15 @@ class SvXMLImport;
 
 class XMLElementPropertyContext : public SvXMLImportContext
 {
-    sal_Bool        bInsert;
+    bool        bInsert;
 
 protected:
 
     ::std::vector< XMLPropertyState > &rProperties;
     XMLPropertyState aProp;
 
-    sal_Bool IsInsert() const { return bInsert; }
-    void SetInsert( sal_Bool bIns ) { bInsert = bIns; }
+    bool IsInsert() const { return bInsert; }
+    void SetInsert( bool bIns ) { bInsert = bIns; }
 
 public:
     TYPEINFO_OVERRIDE();

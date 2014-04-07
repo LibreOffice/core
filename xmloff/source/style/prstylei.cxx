@@ -235,7 +235,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
         if( !xFamilies.is() )
             return;
 
-        sal_Bool bNew = sal_False;
+        bool bNew = false;
         if( xFamilies->hasByName( rName ) )
         {
             Any aAny = xFamilies->getByName( rName );
@@ -250,7 +250,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
             Any aAny;
             aAny <<= mxStyle;
             xFamilies->insertByName( rName, aAny );
-            bNew = sal_True;
+            bNew = true;
         }
 
         Reference < XPropertySet > xPropSet( mxStyle, UNO_QUERY );

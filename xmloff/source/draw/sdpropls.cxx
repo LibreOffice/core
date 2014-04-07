@@ -785,14 +785,14 @@ private:
 
 bool XMLMoveSizeProtectHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    const sal_Bool bValue = rStrImpValue.indexOf( GetXMLToken( mnType == XML_SD_TYPE_MOVE_PROTECT ? XML_POSITION : XML_SIZE ) ) != -1;
+    const bool bValue = rStrImpValue.indexOf( GetXMLToken( mnType == XML_SD_TYPE_MOVE_PROTECT ? XML_POSITION : XML_SIZE ) ) != -1;
     rValue <<= bValue;
     return true;
 }
 
 bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bValue = sal_Bool();
+    bool bValue;
     if( !(rValue >>= bValue ) )
         return false;
 
@@ -828,7 +828,7 @@ bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
     // #i38644#
     // attributes with this type where saved with VISIBLE|HIDDEN prior
     // to src680m67. So we have to import that correctly
-    const sal_Bool bBool = IsXMLToken(rStrImpValue, XML_TRUE) || IsXMLToken(rStrImpValue, XML_VISIBLE);
+    const bool bBool = IsXMLToken(rStrImpValue, XML_TRUE) || IsXMLToken(rStrImpValue, XML_VISIBLE);
     rValue <<= bBool;
     return bBool || IsXMLToken(rStrImpValue, XML_FALSE) || IsXMLToken(rStrImpValue, XML_HIDDEN);
 }
@@ -839,8 +839,8 @@ bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
-      OUStringBuffer aOut;
-    sal_Bool bValue = sal_Bool();
+    OUStringBuffer aOut;
+    bool bValue;
 
     if (rValue >>= bValue)
     {
@@ -1176,7 +1176,7 @@ XMLShapePropertySetMapper::~XMLShapePropertySetMapper()
 XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport )
 : SvXMLExportPropertyMapper( rMapper )
 , maNumRuleExp( rExport )
-, mbIsInAutoStyles( sal_True )
+, mbIsInAutoStyles( true )
 , msCDATA( GetXMLToken(XML_CDATA))
 , msTrue( GetXMLToken(XML_TRUE))
 , msFalse( GetXMLToken(XML_FALSE))
@@ -1345,14 +1345,14 @@ void XMLShapeExportPropertyMapper::ContextFilter(
 
             case CTF_SD_MOVE_PROTECT:
                 {
-                    sal_Bool bProtected = sal_Bool();
+                    bool bProtected;
                     if( (property->maValue >>= bProtected) && !bProtected )
                         property->mnIndex = -1;
                 }
                 break;
             case CTF_SD_SIZE_PROTECT:
                 {
-                    sal_Bool bProtected = sal_Bool();
+                    bool bProtected;
                     if( (property->maValue >>= bProtected) && !bProtected )
                         property->mnIndex = -1;
                 }
@@ -1381,7 +1381,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     // do not export visual area for internal ole objects
     if( pOLEIsInternal )
     {
-        sal_Bool bInternal = sal_Bool();
+        bool bInternal;
         if( (pOLEIsInternal->maValue >>= bInternal) && !bInternal )
         {
             try
@@ -1489,7 +1489,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
 
     if( pCaptionIsEscRel )
     {
-        sal_Bool bIsRel = false;
+        bool bIsRel = false;
         pCaptionIsEscRel->maValue >>= bIsRel;
 
         if( bIsRel )
@@ -1630,7 +1630,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 break;
             case CTF_PAGE_TRANSITION_DIRECTION:
                 {
-                    sal_Bool bDirection = sal_Bool();
+                    bool bDirection;
                     if( ((mrExport.getExportFlags() & EXPORT_OASIS) == 0) ||
                         (((*property).maValue >>= bDirection) && bDirection) )
                             (*property).mnIndex = -1;
@@ -1651,7 +1651,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 break;
             case CTF_PAGE_VISIBLE:
                 {
-                    sal_Bool bVisible = false;
+                    bool bVisible = false;
                     (*property).maValue >>= bVisible;
                     if( bVisible )
                         (*property).mnIndex = -1;
@@ -1686,7 +1686,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
 
     if( pDateTimeFormat && pDateTimeUpdate )
     {
-        sal_Bool bIsFixed = false;
+        bool bIsFixed = false;
         pDateTimeUpdate->maValue >>= bIsFixed;
         if( bIsFixed )
             pDateTimeFormat->mnIndex = -1;

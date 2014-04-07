@@ -176,11 +176,11 @@ void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
     }
 }
 
-sal_Bool XMLTextListsHelper::IsListProcessed( const OUString& sListId ) const
+bool XMLTextListsHelper::IsListProcessed( const OUString& sListId ) const
 {
     if ( mpProcessedLists == 0 )
     {
-        return sal_False;
+        return false;
     }
 
     return mpProcessedLists->find( sListId ) != mpProcessedLists->end();
@@ -339,7 +339,7 @@ void XMLTextListsHelper::PopListFromStack()
     }
 }
 
-sal_Bool XMLTextListsHelper::EqualsToTopListStyleOnStack( const OUString& sListId ) const
+bool XMLTextListsHelper::EqualsToTopListStyleOnStack( const OUString& sListId ) const
 {
     return mpListStack != 0
            ? sListId == mpListStack->back().second
@@ -447,8 +447,8 @@ XMLTextListsHelper::MakeNumRule(
     const OUString& i_ParentStyleName,
     const OUString& i_StyleName,
     sal_Int16 & io_rLevel,
-    sal_Bool* o_pRestartNumbering,
-    sal_Bool* io_pSetDefaults)
+    bool* o_pRestartNumbering,
+    bool* io_pSetDefaults)
 {
     static OUString s_NumberingRules( "NumberingRules");
     uno::Reference<container::XIndexReplace> xNumRules(i_rNumRule);
@@ -486,7 +486,7 @@ XMLTextListsHelper::MakeNumRule(
         }
     }
 
-    sal_Bool bSetDefaults(io_pSetDefaults ? *io_pSetDefaults : sal_False);
+    bool bSetDefaults(io_pSetDefaults ? *io_pSetDefaults : sal_False);
     if ( !xNumRules.is() )
     {
         // If no style name has been specified for this style and for any
@@ -500,8 +500,8 @@ XMLTextListsHelper::MakeNumRule(
             return xNumRules;
 
         // Because it is a new num rule, numbering must not be restarted.
-        if (o_pRestartNumbering) *o_pRestartNumbering = sal_False;
-        bSetDefaults = sal_True;
+        if (o_pRestartNumbering) *o_pRestartNumbering = false;
+        bSetDefaults = true;
         if (io_pSetDefaults) *io_pSetDefaults = bSetDefaults;
     }
 

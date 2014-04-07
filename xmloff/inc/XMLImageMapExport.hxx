@@ -49,7 +49,7 @@ class XMLImageMapExport
 
     SvXMLExport& mrExport;
 
-    sal_Bool mbWhiteSpace;  /// use whitespace between image map elements?
+    bool mbWhiteSpace;  /// use whitespace between image map elements?
 
 public:
     XMLImageMapExport(SvXMLExport& rExport);

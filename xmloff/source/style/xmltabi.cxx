@@ -249,7 +249,7 @@ void SvxXMLTabStopImportContext::EndElement( )
         {
             SvxXMLTabStopContext_Impl *pTabStopContext = (*mpTabStops)[i];
             const style::TabStop& rTabStop = pTabStopContext->getTabStop();
-            sal_Bool bDflt = style::TabAlign_DEFAULT == rTabStop.Alignment;
+            bool bDflt = style::TabAlign_DEFAULT == rTabStop.Alignment;
             if( !bDflt || 0==i )
             {
                 *pTabStops++ = pTabStopContext->getTabStop();
@@ -264,7 +264,7 @@ void SvxXMLTabStopImportContext::EndElement( )
     }
     aProp.maValue <<= aSeq;
 
-    SetInsert( sal_True );
+    SetInsert( true );
     XMLElementPropertyContext::EndElement();
 
 }

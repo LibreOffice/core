@@ -137,7 +137,7 @@ class XMLSectionExport
     SvXMLExport& rExport;
     XMLTextParagraphExport& rParaExport;
 
-    sal_Bool bHeadingDummiesExported;
+    bool bHeadingDummiesExported;
 
 public:
     XMLSectionExport(SvXMLExport& rExp,
@@ -151,7 +151,7 @@ public:
     void ExportSectionStart(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rSection,
-        sal_Bool bAutoStyles);
+        bool bAutoStyles);
 
     /**
      * export section or index end elements
@@ -159,13 +159,13 @@ public:
     void ExportSectionEnd(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rSection,
-        sal_Bool bAutoStyles);
+        bool bAutoStyles);
 
     /**
      * Should the content of this section be exported?
      * (E.g. linked sections in global documents are not always exported)
      */
-    sal_Bool IsMuteSection(
+    bool IsMuteSection(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rSection) const;
 
@@ -173,23 +173,23 @@ public:
      * XTextContent-version of IsMuteSection(Reference<XTextSection>&)
      * returns *true* for all non-section elements
      */
-    sal_Bool IsMuteSection(
+    bool IsMuteSection(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rSection,
         /// return value if this content doesn't support the section property
-        sal_Bool bDefault) const;
+        bool bDefault) const;
 
     /**
      * Determine whether rContent is contained in rEnclosingSection. If the
      * current section of rContent can not be determined, return bDefault.
      */
-    sal_Bool IsInSection(
+    bool IsInSection(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rEnclosingSection,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rContent,
         /// return value if this content doesn't support the section property
-        sal_Bool bDefault);
+        bool bDefault);
 
     /**
      * Export the configuration element for bibliography indices.
@@ -275,7 +275,7 @@ protected:
      * return sal_False: regular section
      * return sal_True, xIndex is empty: index header section
      * return sal_True, xIndex is set: index section */
-    sal_Bool GetIndex(
+    bool GetIndex(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rSection,
         ::com::sun::star::uno::Reference <
@@ -324,7 +324,7 @@ protected:
             ::com::sun::star::beans::XPropertySet > & rSection);
 
     /// export one template for the specific index type
-    sal_Bool ExportIndexTemplate(
+    bool ExportIndexTemplate(
         SectionTypeEnum eType,                /// index type
         sal_Int32 nLevel,                     /// outline level (if applicable)
         const ::com::sun::star::uno::Reference<
@@ -351,8 +351,8 @@ protected:
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         const OUString& sPropertyName,
         enum ::xmloff::token::XMLTokenEnum eAttributeName,
-        sal_Bool bDefault,
-        sal_Bool bInvert = sal_False);
+        bool bDefault,
+        bool bInvert = false);
 };
 
 #endif

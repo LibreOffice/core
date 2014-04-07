@@ -127,14 +127,14 @@ struct SchXMLAxis
 
 struct GlobalSeriesImportInfo
 {
-    GlobalSeriesImportInfo( sal_Bool& rAllRangeAddressesAvailable )
+    GlobalSeriesImportInfo( bool& rAllRangeAddressesAvailable )
         : rbAllRangeAddressesAvailable( rAllRangeAddressesAvailable )
         , nCurrentDataIndex( 0 )
         , nFirstFirstDomainIndex( -1 )
         , nFirstSecondDomainIndex( -1 )
     {}
 
-    sal_Bool& rbAllRangeAddressesAvailable;
+    bool& rbAllRangeAddressesAvailable;
 
     sal_Int32 nCurrentDataIndex;
 

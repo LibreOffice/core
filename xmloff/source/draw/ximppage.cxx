@@ -303,7 +303,7 @@ void SdXMLGenericPageContext::EndElement()
                 const OUString aStrDateTimeTextProp( "DateTimeText" );
                 if( xInfo->hasPropertyByName( aStrDateTimeTextProp ) )
                 {
-                    sal_Bool bFixed;
+                    bool bFixed;
                     OUString aDateTimeFormat;
                     const OUString aText( GetSdImport().GetDateTimeDecl( maUseDateTimeDeclName, bFixed, aDateTimeFormat ) );
 

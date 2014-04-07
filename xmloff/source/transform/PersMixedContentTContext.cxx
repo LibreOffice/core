@@ -42,7 +42,7 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 
-    virtual sal_Bool IsPersistent() const SAL_OVERRIDE;
+    virtual bool IsPersistent() const SAL_OVERRIDE;
     virtual void Export() SAL_OVERRIDE;
 };
 
@@ -81,9 +81,9 @@ void XMLPersTextTContext_Impl::EndElement()
     OSL_ENSURE( !this, "illegal call to EndElement" );
 }
 
-sal_Bool XMLPersTextTContext_Impl::IsPersistent() const
+bool XMLPersTextTContext_Impl::IsPersistent() const
 {
-    return sal_True;
+    return true;
 }
 
 void XMLPersTextTContext_Impl::Characters( const OUString& rChars )

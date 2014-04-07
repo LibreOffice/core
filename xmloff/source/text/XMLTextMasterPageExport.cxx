@@ -125,17 +125,17 @@ void XMLTextMasterPageExport::exportMasterPageContent(
     else
     {
         aAny = rPropSet->getPropertyValue( sHeaderOn );
-        sal_Bool bHeader = sal_False;
+        bool bHeader = false;
         aAny >>= bHeader;
 
-        sal_Bool bHeaderFirstShared = sal_False;
+        bool bHeaderFirstShared = false;
         if( bHeader )
         {
             aAny = rPropSet->getPropertyValue( sFirstShareContent );
             aAny >>= bHeaderFirstShared;
         }
 
-        sal_Bool bHeaderLeftShared = sal_False;
+        bool bHeaderLeftShared = false;
         if( bHeader )
         {
             aAny = rPropSet->getPropertyValue( sHeaderShareContent );
@@ -173,17 +173,17 @@ void XMLTextMasterPageExport::exportMasterPageContent(
         }
 
         aAny = rPropSet->getPropertyValue( sFooterOn );
-        sal_Bool bFooter = sal_False;
+        bool bFooter = false;
         aAny >>= bFooter;
 
-        sal_Bool bFooterFirstShared = sal_False;
+        bool bFooterFirstShared = false;
         if( bFooter )
         {
             aAny = rPropSet->getPropertyValue( sFirstShareContent );
             aAny >>= bFooterFirstShared;
         }
 
-        sal_Bool bFooterLeftShared = sal_False;
+        bool bFooterLeftShared = false;
         if( bFooter )
         {
             aAny = rPropSet->getPropertyValue( sFooterShareContent );

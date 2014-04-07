@@ -104,7 +104,7 @@ public:
             ::com::sun::star::text::XTextRange> & rRange,
         const OUString& i_rXmlId = OUString());
 
-    sal_Bool FindName(
+    bool FindName(
         SvXMLImport& rImport,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList);

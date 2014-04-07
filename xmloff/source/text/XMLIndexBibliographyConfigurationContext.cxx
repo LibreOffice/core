@@ -67,8 +67,8 @@ XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationConte
         sPrefix(),
         sAlgorithm(),
         maLanguageTagODF(),
-        bNumberedEntries(sal_False),
-        bSortByPosition(sal_True)
+        bNumberedEntries(false),
+        bSortByPosition(true)
 {
 }
 
@@ -233,7 +233,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
     if( xFactory.is() )
     {
         Sequence<OUString> aServices = xFactory->getAvailableServiceNames();
-        sal_Bool bFound(sal_False);
+        bool bFound(false);
         sal_Int32 i(0);
         sal_Int32 nServiceCount(aServices.getLength());
         while (i < nServiceCount && !bFound)
@@ -241,7 +241,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
             if (aServices[i].equals(sFieldMaster_Bibliography))
             // here we should use a method which compares in reverse order if available
             // #85282#
-                bFound = sal_True;
+                bFound = true;
             else
                 i++;
         }

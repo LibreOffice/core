@@ -26,14 +26,14 @@ class XMLTransformerOOoEventMap_Impl;
 
 class XMLEventOOoTransformerContext : public XMLPersElemContentTContext
 {
-    sal_Bool m_bPersistent;
+    bool m_bPersistent;
 
 public:
     TYPEINFO_OVERRIDE();
 
     XMLEventOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
-                              sal_Bool bPersistent = sal_False  );
+                              bool bPersistent = false  );
     virtual ~XMLEventOOoTransformerContext();
 
     static XMLTransformerOOoEventMap_Impl *CreateEventMap();
@@ -49,7 +49,7 @@ public:
                                    const OUString& rQName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 
-    virtual sal_Bool IsPersistent() const SAL_OVERRIDE;
+    virtual bool IsPersistent() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_EVENTOOOTCONTEXT_HXX

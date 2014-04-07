@@ -414,7 +414,7 @@ void FieldParamExporter::Export()
         }
         else if(aValueType == aBoolType)
         {
-            sal_Bool bValue = false;
+            bool bValue = false;
             aValue >>= bValue;
             ExportParameter(*pCurrent, (bValue ? OUString("true" ) : OUString("false")) );
         }
@@ -506,7 +506,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                     OUString sName;
                     if( xNamed.is() )
                         sName = xNamed->getName();
-                    sal_Bool bAdd = sName.isEmpty();
+                    bool bAdd = sName.isEmpty();
                     if( !bAdd )
                     {
                         Reference < XPropertySet > xNumPropSet( xNumRule,
@@ -528,7 +528,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                         }
                         else
                         {
-                            bAdd = sal_True;
+                            bAdd = true;
                         }
                     }
                     if( bAdd )
@@ -623,7 +623,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             OUString sName;
             if( xNamed.is() )
                 sName = xNamed->getName();
-            sal_Bool bAdd = sName.isEmpty();
+            bool bAdd = sName.isEmpty();
             if( !bAdd )
             {
                 Reference < XPropertySet > xNumPropSet( xNumRule,
@@ -645,7 +645,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                 }
                 else
                 {
-                    bAdd = sal_True;
+                    bAdd = true;
                 }
             }
             if( bAdd )
@@ -1625,7 +1625,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
                 OUString sName;
                 if( xNamed.is() )
                     sName = xNamed->getName();
-                sal_Bool bAdd = sName.isEmpty();
+                bool bAdd = sName.isEmpty();
                 if( !bAdd )
                 {
                     Reference < XPropertySet > xNumPropSet( xNumRule,
@@ -1646,7 +1646,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
                     }
                     else
                     {
-                        bAdd = sal_True;
+                        bAdd = true;
                     }
                 }
                 if( bAdd )
@@ -1711,11 +1711,11 @@ void XMLTextParagraphExport::exportText(
     // #96530# Export redlines at start & end of XText before & after
     // exporting the text content enumeration
     if( !bAutoStyles && (pRedlineExport != NULL) )
-        pRedlineExport->ExportStartOrEndRedline( xPropertySet, sal_True );
+        pRedlineExport->ExportStartOrEndRedline( xPropertySet, true );
     exportTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection,
                                   bIsProgress, bExportParagraph, 0, bExportLevels );
     if( !bAutoStyles && (pRedlineExport != NULL) )
-        pRedlineExport->ExportStartOrEndRedline( xPropertySet, sal_False );
+        pRedlineExport->ExportStartOrEndRedline( xPropertySet, false );
 }
 
 void XMLTextParagraphExport::exportText(
@@ -1741,12 +1741,12 @@ void XMLTextParagraphExport::exportText(
     if( !bAutoStyles && (pRedlineExport != NULL) )
     {
         xPropertySet.set(rText, uno::UNO_QUERY );
-        pRedlineExport->ExportStartOrEndRedline( xPropertySet, sal_True );
+        pRedlineExport->ExportStartOrEndRedline( xPropertySet, true );
     }
     exportTextContentEnumeration( xParaEnum, bAutoStyles, rBaseSection,
                                   bIsProgress, bExportParagraph );
     if( !bAutoStyles && (pRedlineExport != NULL) )
-        pRedlineExport->ExportStartOrEndRedline( xPropertySet, sal_False );
+        pRedlineExport->ExportStartOrEndRedline( xPropertySet, false );
 }
 
 bool XMLTextParagraphExport::exportTextContentEnumeration(
@@ -1827,7 +1827,7 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
 
                 while (rContEnum->hasMoreElements() &&
                        pSectionExport->IsInSection( xCurrentTextSection,
-                                                    xTxtCntnt, sal_True ))
+                                                    xTxtCntnt, true ))
                 {
                     xTxtCntnt.set(rContEnum->nextElement(), uno::UNO_QUERY);
                     aPropSetHelper.resetValues();
@@ -1836,7 +1836,7 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
                 // the first non-mute element still needs to be processed
                 bHoldElement =
                     ! pSectionExport->IsInSection( xCurrentTextSection,
-                                                   xTxtCntnt, sal_False );
+                                                   xTxtCntnt, false );
             }
             else
                 exportParagraph( xTxtCntnt, bAutoStyles, bIsProgress,
@@ -1858,12 +1858,12 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
             {
                 // export start + end redlines (for wholly redlined tables)
                 if ((! bAutoStyles) && (NULL != pRedlineExport))
-                    pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, sal_True);
+                    pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, true);
 
                 exportTable( xTxtCntnt, bAutoStyles, bIsProgress  );
 
                 if ((! bAutoStyles) && (NULL != pRedlineExport))
-                    pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, sal_False);
+                    pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, false);
             }
             else if( !bAutoStyles )
             {
@@ -2686,7 +2686,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
             GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
                                       sValue.makeStringAndClear() );
     }
-    sal_Bool bSyncWidth = sal_False;
+    bool bSyncWidth = false;
     if( xPropSetInfo->hasPropertyByName( sIsSyncWidthToHeight ) )
     {
         bSyncWidth = *(sal_Bool *)rPropSet->getPropertyValue( sIsSyncWidthToHeight ).getValue();
@@ -2714,7 +2714,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     {
         rPropSet->getPropertyValue( sSizeType ) >>= nSizeType;
     }
-    sal_Bool bSyncHeight = sal_False;
+    bool bSyncHeight = false;
     if( xPropSetInfo->hasPropertyByName( sIsSyncHeightToWidth ) )
     {
         bSyncHeight = *(sal_Bool *)rPropSet->getPropertyValue( sIsSyncHeightToWidth ).getValue();
@@ -2829,7 +2829,7 @@ void XMLTextParagraphExport::exportAnyTextFrame(
         Reference< XPropertySetInfo > xPropSetInfo(xPropSet->getPropertySetInfo());
         Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
         {
-            sal_Bool bAddCharStyles = pRangePropSet &&
+            bool bAddCharStyles = pRangePropSet &&
                 lcl_txtpara_isBoundAsChar( xPropSet, xPropSetInfo );
 
             bool bIsUICharStyle;
@@ -3043,7 +3043,7 @@ void XMLTextParagraphExport::exportContour(
 
     if( rPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
     {
-        sal_Bool bTmp = *(sal_Bool *)rPropSet->getPropertyValue(
+        bool bTmp = *(sal_Bool *)rPropSet->getPropertyValue(
                                             sIsAutomaticContour ).getValue();
         GetExport().AddAttribute( XML_NAMESPACE_DRAW,
                       XML_RECREATE_ON_EDIT, bTmp ? XML_TRUE : XML_FALSE );
@@ -3229,9 +3229,9 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
     const Reference< XPropertyState > & rPropState,
     const Reference< XPropertySetInfo > & rPropSetInfo )
 {
-    sal_Bool bExport = sal_False;
+    bool bExport = false;
     OUString sHRef, sName, sTargetFrame, sUStyleName, sVStyleName;
-    sal_Bool bServerMap = sal_False;
+    bool bServerMap = false;
 
     if( rPropSetInfo->hasPropertyByName( sHyperLinkURL ) &&
         ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
@@ -3240,7 +3240,7 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
         rPropSet->getPropertyValue( sHyperLinkURL ) >>= sHRef;
 
         if( !sHRef.isEmpty() )
-            bExport = sal_True;
+            bExport = true;
     }
 
     if ( sHRef.isEmpty() )
@@ -3256,7 +3256,7 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
     {
         rPropSet->getPropertyValue( sHyperLinkName ) >>= sName;
         if( !sName.isEmpty() )
-            bExport = sal_True;
+            bExport = true;
     }
 
     if ( rPropSetInfo->hasPropertyByName( sHyperLinkTarget )
@@ -3265,7 +3265,7 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
     {
         rPropSet->getPropertyValue( sHyperLinkTarget ) >>= sTargetFrame;
         if( !sTargetFrame.isEmpty() )
-            bExport = sal_True;
+            bExport = true;
     }
 
     if ( rPropSetInfo->hasPropertyByName( sServerMap )
@@ -3274,7 +3274,7 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
     {
         bServerMap = *(sal_Bool *) rPropSet->getPropertyValue( sServerMap ).getValue();
         if ( bServerMap )
-            bExport = sal_True;
+            bExport = true;
     }
 
     if ( rPropSetInfo->hasPropertyByName( sUnvisitedCharStyleName )
@@ -3283,7 +3283,7 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
     {
         rPropSet->getPropertyValue( sUnvisitedCharStyleName ) >>= sUStyleName;
         if( !sUStyleName.isEmpty() )
-            bExport = sal_True;
+            bExport = true;
     }
 
     if ( rPropSetInfo->hasPropertyByName( sVisitedCharStyleName )
@@ -3292,7 +3292,7 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
     {
         rPropSet->getPropertyValue( sVisitedCharStyleName ) >>= sVStyleName;
         if( !sVStyleName.isEmpty() )
-            bExport = sal_True;
+            bExport = true;
     }
 
     if ( bExport )
@@ -3653,7 +3653,7 @@ void XMLTextParagraphExport::exportRuby(
         return;
 
     // start value ?
-    sal_Bool bStart = (*(sal_Bool*)rPropSet->getPropertyValue(sIsStart).getValue());
+    bool bStart = (*(sal_Bool*)rPropSet->getPropertyValue(sIsStart).getValue());
 
     if (bAutoStyles)
     {
@@ -3797,7 +3797,7 @@ void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
             Reference<XTextContent> xTextContent( xControlShape, UNO_QUERY );
             if( xTextContent.is() )
             {
-                if( pSectionExport->IsMuteSection( xTextContent, sal_False ) )
+                if( pSectionExport->IsMuteSection( xTextContent, false ) )
                 {
                     // Ah, we've found a shape that
                     // 1) is a control shape

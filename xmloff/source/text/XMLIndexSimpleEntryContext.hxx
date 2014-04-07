@@ -43,7 +43,7 @@ class XMLIndexSimpleEntryContext : public SvXMLImportContext
 protected:
     // character style
     OUString sCharStyleName;
-    sal_Bool bCharStyleNameOK;
+    bool bCharStyleNameOK;
 
     // surrounding template
     XMLIndexTemplateContext& rTemplateContext;

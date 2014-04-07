@@ -33,13 +33,13 @@ using namespace ::xmloff::token;
 
 TYPEINIT1( XMLFrameOASISTransformerContext, XMLTransformerContext );
 
-sal_Bool XMLFrameOASISTransformerContext::IsLinkedEmbeddedObject(
+bool XMLFrameOASISTransformerContext::IsLinkedEmbeddedObject(
             const OUString& rLocalName,
             const Reference< XAttributeList >& rAttrList )
 {
     if( !(IsXMLToken( rLocalName, XML_OBJECT ) ||
           IsXMLToken( rLocalName, XML_OBJECT_OLE)  ) )
-        return sal_False;
+        return false;
 
     sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -57,14 +57,14 @@ sal_Bool XMLFrameOASISTransformerContext::IsLinkedEmbeddedObject(
             {
                 // When the href is empty then the object is not linked but
                 // a placeholder.
-                return sal_False;
+                return false;
             }
-            GetTransformer().ConvertURIToOOo( sHRef, sal_True );
+            GetTransformer().ConvertURIToOOo( sHRef, true );
             return !(!sHRef.isEmpty() && '#'==sHRef[0]);
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -83,7 +83,7 @@ XMLFrameOASISTransformerContext::~XMLFrameOASISTransformerContext()
 void XMLFrameOASISTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {
-    m_xAttrList = new XMLMutableAttributeList( rAttrList, sal_True );
+    m_xAttrList = new XMLMutableAttributeList( rAttrList, true );
 
     sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -119,7 +119,7 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
         // do not export the frame element and all of its children
         pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                                 rQName,
-                                                                sal_True, sal_True );
+                                                                true, true );
     }
     else
     {
@@ -139,13 +139,13 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
                 {
                     pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                                 rQName,
-                                                                sal_False, sal_False );
+                                                                false, false );
                     m_aElemQName = rQName;
                     static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
                         ->AppendAttributeList( rAttrList );
                     GetTransformer().ProcessAttrList( m_xAttrList,
                                                       OASIS_SHAPE_ACTIONS,
-                                                      sal_False );
+                                                      false );
                     GetTransformer().GetDocHandler()->startElement( m_aElemQName,
                                                                     m_xAttrList );
                 }
@@ -153,7 +153,7 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
                 {
                     pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                                 rQName,
-                                                                sal_True, sal_True );
+                                                                true, true );
                 }
                 break;
             default:

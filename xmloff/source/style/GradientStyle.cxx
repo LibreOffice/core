@@ -98,10 +98,10 @@ bool XMLGradientStyleImport::importXML(
         XML_TOKEN_MAP_END
     };
 
-    sal_Bool bHasName       = sal_False;
-    sal_Bool bHasStyle      = sal_False;
-    sal_Bool bHasStartColor = sal_False;
-    sal_Bool bHasEndColor   = sal_False;
+    bool bHasName       = false;
+    bool bHasStyle      = false;
+    bool bHasStartColor = false;
+    bool bHasEndColor   = false;
     OUString aDisplayName;
 
     awt::Gradient aGradient;
@@ -130,7 +130,7 @@ bool XMLGradientStyleImport::importXML(
         case XML_TOK_GRADIENT_NAME:
             {
                 rStrName = rStrValue;
-                bHasName = sal_True;
+                bHasName = true;
             }
             break;
         case XML_TOK_GRADIENT_DISPLAY_NAME:
@@ -144,7 +144,7 @@ bool XMLGradientStyleImport::importXML(
                 if( SvXMLUnitConverter::convertEnum( eValue, rStrValue, pXML_GradientStyle_Enum ) )
                 {
                     aGradient.Style = (awt::GradientStyle) eValue;
-                    bHasStyle = sal_True;
+                    bHasStyle = true;
                 }
             }
             break;

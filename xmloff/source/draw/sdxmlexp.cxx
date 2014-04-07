@@ -103,7 +103,7 @@ class ImpXMLEXPPageMasterInfo
 
 public:
     ImpXMLEXPPageMasterInfo(const SdXMLExport& rExp, const Reference<XDrawPage>& xPage);
-    sal_Bool operator==(const ImpXMLEXPPageMasterInfo& rInfo) const;
+    bool operator==(const ImpXMLEXPPageMasterInfo& rInfo) const;
     void SetName(const OUString& rStr);
 
     const OUString& GetName() const { return msName; }
@@ -173,7 +173,7 @@ ImpXMLEXPPageMasterInfo::ImpXMLEXPPageMasterInfo(
     }
 }
 
-sal_Bool ImpXMLEXPPageMasterInfo::operator==(const ImpXMLEXPPageMasterInfo& rInfo) const
+bool ImpXMLEXPPageMasterInfo::operator==(const ImpXMLEXPPageMasterInfo& rInfo) const
 {
     return ((mnBorderBottom == rInfo.mnBorderBottom)
         && (mnBorderLeft == rInfo.mnBorderLeft)
@@ -204,7 +204,7 @@ class ImpXMLAutoLayoutInfo
 public:
     ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterInfo* pInf);
 
-    sal_Bool operator==(const ImpXMLAutoLayoutInfo& rInfo) const;
+    bool operator==(const ImpXMLAutoLayoutInfo& rInfo) const;
 
     sal_uInt16 GetLayoutType() const { return mnType; }
     sal_Int32 GetGapX() const { return mnGapX; }
@@ -216,19 +216,19 @@ public:
     const Rectangle& GetTitleRectangle() const { return maTitleRect; }
     const Rectangle& GetPresRectangle() const { return maPresRect; }
 
-    static sal_Bool IsCreateNecessary(sal_uInt16 nTyp);
+    static bool IsCreateNecessary(sal_uInt16 nTyp);
 };
 
-sal_Bool ImpXMLAutoLayoutInfo::IsCreateNecessary(sal_uInt16 nTyp)
+bool ImpXMLAutoLayoutInfo::IsCreateNecessary(sal_uInt16 nTyp)
 {
     if(nTyp == 5 /* AUTOLAYOUT_ORG */
         || nTyp == 20 /* AUTOLAYOUT_NONE */
         || nTyp >= IMP_AUTOLAYOUT_INFO_MAX)
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
-sal_Bool ImpXMLAutoLayoutInfo::operator==(const ImpXMLAutoLayoutInfo& rInfo) const
+bool ImpXMLAutoLayoutInfo::operator==(const ImpXMLAutoLayoutInfo& rInfo) const
 {
     return ((mnType == rInfo.mnType
         && mpPageMasterInfo == rInfo.mpPageMasterInfo));
@@ -392,7 +392,7 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
 SdXMLExport::SdXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
     OUString const & implementationName,
-    sal_Bool bIsDraw, sal_uInt16 nExportFlags )
+    bool bIsDraw, sal_uInt16 nExportFlags )
 :   SvXMLExport( util::MeasureUnit::CM, xContext, implementationName,
         (bIsDraw) ? XML_GRAPHICS : XML_PRESENTATION, nExportFlags ),
     mnDocMasterPageCount(0L),
@@ -408,8 +408,8 @@ SdXMLExport::SdXMLExport(
     mpPropertySetMapper(0L),
     mpPresPagePropsMapper(0L),
     mbIsDraw(bIsDraw),
-    mbFamilyGraphicUsed(sal_False),
-    mbFamilyPresentationUsed(sal_False),
+    mbFamilyGraphicUsed(false),
+    mbFamilyPresentationUsed(false),
     msZIndex( GetXMLToken(XML_ZINDEX) ),
     msEmptyPres( "IsEmptyPresentationObject" ),
     msModel( "Model" ),
@@ -752,10 +752,10 @@ void SdXMLExport::ImpPrepAutoLayoutInfos()
     }
 }
 
-sal_Bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUString& rName)
+bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUString& rName)
 {
     rName = "";
-    sal_Bool bRetval(sal_False);
+    bool bRetval(false);
 
     Reference <beans::XPropertySet> xPropSet(xPage, UNO_QUERY);
     if(xPropSet.is())
@@ -788,7 +788,7 @@ sal_Bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, O
 
                 // create entry and look for existance
                 ImpXMLAutoLayoutInfo* pNew = new ImpXMLAutoLayoutInfo(nType, pInfo);
-                sal_Bool bDidExist(sal_False);
+                bool bDidExist(false);
 
                 for( size_t nCnt = 0; !bDidExist && nCnt < mpAutoLayoutInfoList->size(); nCnt++)
                 {
@@ -796,7 +796,7 @@ sal_Bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, O
                     {
                         delete pNew;
                         pNew = mpAutoLayoutInfoList->at( nCnt );
-                        bDidExist = sal_True;
+                        bDidExist = true;
                     }
                 }
 
@@ -811,7 +811,7 @@ sal_Bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, O
                 }
 
                 rName = pNew->GetLayoutName();
-                bRetval = sal_True;
+                bRetval = true;
             }
         }
     }
@@ -1458,7 +1458,7 @@ static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUStri
     return aStr;
 }
 
-static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, const OUString& rText, sal_Bool bFixed, sal_Int32 nFormat, const sal_Char* pPrefix )
+static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, const OUString& rText, bool bFixed, sal_Int32 nFormat, const sal_Char* pPrefix )
 {
     // search rVector if there is already a DateTimeDeclImpl with rText,bFixed and nFormat
     std::vector< DateTimeDeclImpl >::iterator aIter;
@@ -1524,7 +1524,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
         const OUString aStrDateTimeTextProp( "DateTimeText" );
         if( xInfo->hasPropertyByName( aStrDateTimeTextProp ) )
         {
-            sal_Bool bFixed = false;
+            bool bFixed = false;
             sal_Int32 nFormat = 0;
             xSet->getPropertyValue( aStrDateTimeTextProp ) >>= aStrText;
             xSet->getPropertyValue("IsDateTimeFixed") >>= bFixed;
@@ -1967,9 +1967,9 @@ void SdXMLExport::exportPresentationSettings()
         if( !xPresProps.is() )
             return;
 
-        sal_Bool bHasAttr = sal_False;
+        bool bHasAttr = false;
 
-        sal_Bool bTemp = false;
+        bool bTemp = false;
 
         // export range
         xPresProps->getPropertyValue("IsShowAll") >>= bTemp;
@@ -1980,7 +1980,7 @@ void SdXMLExport::exportPresentationSettings()
             if( !aFirstPage.isEmpty() )
             {
                 AddAttribute(XML_NAMESPACE_PRESENTATION, XML_START_PAGE, aFirstPage );
-                bHasAttr = sal_True;
+                bHasAttr = true;
             }
             else
             {
@@ -1989,7 +1989,7 @@ void SdXMLExport::exportPresentationSettings()
                 if( !aCustomShow.isEmpty() )
                 {
                     AddAttribute(XML_NAMESPACE_PRESENTATION, XML_SHOW, aCustomShow );
-                    bHasAttr = sal_True;
+                    bHasAttr = true;
                 }
             }
         }
@@ -1998,7 +1998,7 @@ void SdXMLExport::exportPresentationSettings()
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_ENDLESS, XML_TRUE );
-            bHasAttr = sal_True;
+            bHasAttr = true;
 
             sal_Int32 nPause = 0;
             xPresProps->getPropertyValue("Pause") >>= nPause;
@@ -2015,63 +2015,63 @@ void SdXMLExport::exportPresentationSettings()
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_ANIMATIONS, XML_DISABLED );
-            bHasAttr = sal_True;
+            bHasAttr = true;
         }
 
         xPresProps->getPropertyValue("IsAlwaysOnTop") >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STAY_ON_TOP, XML_TRUE );
-            bHasAttr = sal_True;
+            bHasAttr = true;
         }
 
         xPresProps->getPropertyValue("IsAutomatic") >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_FORCE_MANUAL, XML_TRUE );
-            bHasAttr = sal_True;
+            bHasAttr = true;
         }
 
         xPresProps->getPropertyValue("IsFullScreen") >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_FULL_SCREEN, XML_FALSE );
-            bHasAttr = sal_True;
+            bHasAttr = true;
         }
 
         xPresProps->getPropertyValue("IsMouseVisible") >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_VISIBLE, XML_FALSE );
-            bHasAttr = sal_True;
+            bHasAttr = true;
         }
 
         xPresProps->getPropertyValue("StartWithNavigator") >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_START_WITH_NAVIGATOR, XML_TRUE );
-            bHasAttr = sal_True;
+            bHasAttr = true;
         }
 
         xPresProps->getPropertyValue("UsePen") >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_AS_PEN, XML_TRUE );
-            bHasAttr = sal_True;
+            bHasAttr = true;
         }
 
         xPresProps->getPropertyValue("IsTransitionOnClick") >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_TRANSITION_ON_CLICK, XML_DISABLED );
-            bHasAttr = sal_True;
+            bHasAttr = true;
         }
 
         xPresProps->getPropertyValue("IsShowLogo") >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_SHOW_LOGO, XML_TRUE );
-            bHasAttr = sal_True;
+            bHasAttr = true;
         }
 
         Reference< container::XNameContainer > xShows;
@@ -2141,7 +2141,7 @@ void SdXMLExport::exportPresentationSettings()
 
 void SdXMLExport::_ExportStyles(bool bUsed)
 {
-    GetPropertySetMapper()->SetAutoStyles( sal_False );
+    GetPropertySetMapper()->SetAutoStyles( false );
 
     // export fill styles
     SvXMLExport::_ExportStyles( bUsed );
@@ -2190,7 +2190,7 @@ void SdXMLExport::_ExportAutoStyles()
         }
     }
 
-    GetPropertySetMapper()->SetAutoStyles( sal_True );
+    GetPropertySetMapper()->SetAutoStyles( true );
 
     if( getExportFlags() & EXPORT_STYLES )
     {
@@ -2750,32 +2750,32 @@ uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno:
     return (cppu::OWeakObject*)new SdXMLExport( comphelper::getComponentContext(rSMgr), implementationname, draw, flags ); \
 }
 
-SERVICE( XMLImpressExportOasis, "com.sun.star.comp.Impress.XMLOasisExporter", "XMLImpressExportOasis", sal_False, EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-SERVICE( XMLImpressStylesExportOasis, "com.sun.star.comp.Impress.XMLOasisStylesExporter", "XMLImpressStylesExportOasis", sal_False, EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS );
-SERVICE( XMLImpressContentExportOasis, "com.sun.star.comp.Impress.XMLOasisContentExporter", "XMLImpressContentExportOasis", sal_False, EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
-SERVICE( XMLImpressMetaExportOasis, "com.sun.star.comp.Impress.XMLOasisMetaExporter", "XMLImpressMetaExportOasis", sal_False, EXPORT_OASIS|EXPORT_META );
-SERVICE( XMLImpressSettingsExportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsExporter", "XMLImpressSettingsExportOasis", sal_False, EXPORT_OASIS|EXPORT_SETTINGS );
+SERVICE( XMLImpressExportOasis, "com.sun.star.comp.Impress.XMLOasisExporter", "XMLImpressExportOasis", false, EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
+SERVICE( XMLImpressStylesExportOasis, "com.sun.star.comp.Impress.XMLOasisStylesExporter", "XMLImpressStylesExportOasis", false, EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS );
+SERVICE( XMLImpressContentExportOasis, "com.sun.star.comp.Impress.XMLOasisContentExporter", "XMLImpressContentExportOasis", false, EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
+SERVICE( XMLImpressMetaExportOasis, "com.sun.star.comp.Impress.XMLOasisMetaExporter", "XMLImpressMetaExportOasis", false, EXPORT_OASIS|EXPORT_META );
+SERVICE( XMLImpressSettingsExportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsExporter", "XMLImpressSettingsExportOasis", false, EXPORT_OASIS|EXPORT_SETTINGS );
 
-SERVICE( XMLImpressExportOOO, "com.sun.star.comp.Impress.XMLExporter", "XMLImpressExportOOO", sal_False, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-SERVICE( XMLImpressStylesExportOOO, "com.sun.star.comp.Impress.XMLStylesExporter", "XMLImpressStylesExportOOO", sal_False, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS );
-SERVICE( XMLImpressContentExportOOO, "com.sun.star.comp.Impress.XMLContentExporter", "XMLImpressContentExportOOO", sal_False, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
-SERVICE( XMLImpressMetaExportOOO, "com.sun.star.comp.Impress.XMLMetaExporter", "XMLImpressMetaExportOOO", sal_False, EXPORT_META );
-SERVICE( XMLImpressSettingsExportOOO, "com.sun.star.comp.Impress.XMLSettingsExporter", "XMLImpressSettingsExportOOO", sal_False, EXPORT_SETTINGS );
+SERVICE( XMLImpressExportOOO, "com.sun.star.comp.Impress.XMLExporter", "XMLImpressExportOOO", false, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
+SERVICE( XMLImpressStylesExportOOO, "com.sun.star.comp.Impress.XMLStylesExporter", "XMLImpressStylesExportOOO", false, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS );
+SERVICE( XMLImpressContentExportOOO, "com.sun.star.comp.Impress.XMLContentExporter", "XMLImpressContentExportOOO", false, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
+SERVICE( XMLImpressMetaExportOOO, "com.sun.star.comp.Impress.XMLMetaExporter", "XMLImpressMetaExportOOO", false, EXPORT_META );
+SERVICE( XMLImpressSettingsExportOOO, "com.sun.star.comp.Impress.XMLSettingsExporter", "XMLImpressSettingsExportOOO", false, EXPORT_SETTINGS );
 
-SERVICE( XMLDrawExportOasis, "com.sun.star.comp.Draw.XMLOasisExporter", "XMLDrawExportOasis", sal_True, EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-SERVICE( XMLDrawStylesExportOasis, "com.sun.star.comp.Draw.XMLOasisStylesExporter", "XMLDrawStylesExportOasis", sal_True, EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS );
-SERVICE( XMLDrawContentExportOasis, "com.sun.star.comp.Draw.XMLOasisContentExporter", "XMLDrawContentExportOasis", sal_True, EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
-SERVICE( XMLDrawMetaExportOasis, "com.sun.star.comp.Draw.XMLOasisMetaExporter", "XMLDrawMetaExportOasis", sal_True, EXPORT_OASIS|EXPORT_META );
-SERVICE( XMLDrawSettingsExportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsExporter", "XMLDrawSettingsExportOasis", sal_True, EXPORT_OASIS|EXPORT_SETTINGS );
+SERVICE( XMLDrawExportOasis, "com.sun.star.comp.Draw.XMLOasisExporter", "XMLDrawExportOasis", true, EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
+SERVICE( XMLDrawStylesExportOasis, "com.sun.star.comp.Draw.XMLOasisStylesExporter", "XMLDrawStylesExportOasis", true, EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS );
+SERVICE( XMLDrawContentExportOasis, "com.sun.star.comp.Draw.XMLOasisContentExporter", "XMLDrawContentExportOasis", true, EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
+SERVICE( XMLDrawMetaExportOasis, "com.sun.star.comp.Draw.XMLOasisMetaExporter", "XMLDrawMetaExportOasis", true, EXPORT_OASIS|EXPORT_META );
+SERVICE( XMLDrawSettingsExportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsExporter", "XMLDrawSettingsExportOasis", true, EXPORT_OASIS|EXPORT_SETTINGS );
 
-SERVICE( XMLDrawExportOOO, "com.sun.star.comp.Draw.XMLExporter", "XMLDrawExportOOO", sal_True, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-SERVICE( XMLDrawStylesExportOOO, "com.sun.star.comp.Draw.XMLStylesExporter", "XMLDrawStylesExportOOO", sal_True, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS );
-SERVICE( XMLDrawContentExportOOO, "com.sun.star.comp.Draw.XMLContentExporter", "XMLDrawContentExportOOO", sal_True, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
-SERVICE( XMLDrawMetaExportOOO, "com.sun.star.comp.Draw.XMLMetaExporter", "XMLDrawMetaExportOOO", sal_True, EXPORT_META );
-SERVICE( XMLDrawSettingsExportOOO, "com.sun.star.comp.Draw.XMLSettingsExporter", "XMLDrawSettingsExportOOO", sal_True, EXPORT_SETTINGS );
+SERVICE( XMLDrawExportOOO, "com.sun.star.comp.Draw.XMLExporter", "XMLDrawExportOOO", true, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
+SERVICE( XMLDrawStylesExportOOO, "com.sun.star.comp.Draw.XMLStylesExporter", "XMLDrawStylesExportOOO", true, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS );
+SERVICE( XMLDrawContentExportOOO, "com.sun.star.comp.Draw.XMLContentExporter", "XMLDrawContentExportOOO", true, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
+SERVICE( XMLDrawMetaExportOOO, "com.sun.star.comp.Draw.XMLMetaExporter", "XMLDrawMetaExportOOO", true, EXPORT_META );
+SERVICE( XMLDrawSettingsExportOOO, "com.sun.star.comp.Draw.XMLSettingsExporter", "XMLDrawSettingsExportOOO", true, EXPORT_SETTINGS );
 
-SERVICE( XMLDrawingLayerExport, "com.sun.star.comp.DrawingLayer.XMLExporter", "XMLDrawingLayerExport", sal_True, EXPORT_OASIS|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-SERVICE( XMLImpressClipboardExport, "com.sun.star.comp.Impress.XMLClipboardExporter", "XMLImpressClipboardExport", sal_False, EXPORT_OASIS|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
+SERVICE( XMLDrawingLayerExport, "com.sun.star.comp.DrawingLayer.XMLExporter", "XMLDrawingLayerExport", true, EXPORT_OASIS|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
+SERVICE( XMLImpressClipboardExport, "com.sun.star.comp.Impress.XMLClipboardExporter", "XMLImpressClipboardExport", false, EXPORT_OASIS|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
 
 XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
 {

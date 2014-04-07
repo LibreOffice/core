@@ -1508,7 +1508,7 @@ void XMLTableOOoTransformerContext_Impl::StartElement(
     // Perform OOO_STYLE_REF_ACTIONS for all applications (#i50521#)
     Reference< XAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList* pMutableAttrList =
-        GetTransformer().ProcessAttrList( xAttrList, OOO_STYLE_REF_ACTIONS, sal_False );
+        GetTransformer().ProcessAttrList( xAttrList, OOO_STYLE_REF_ACTIONS, false );
     if( rAttrList->getLength() && IsXMLToken( GetTransformer().GetClass(), XML_SPREADSHEET  ) )
     {
         bool bPrintRanges(false);

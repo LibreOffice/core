@@ -153,7 +153,7 @@ public:
      */
     void exportChart( com::sun::star::uno::Reference<
                           com::sun::star::chart::XChartDocument > rChartDoc,
-                      sal_Bool bIncludeTable );
+                      bool bIncludeTable );
 
     UniReference< XMLPropertySetMapper > GetPropertySetMapper() const;
 
@@ -185,19 +185,19 @@ public:
     /// if bExportContent is false the auto-styles are collected
     void parseDocument( com::sun::star::uno::Reference<
                             com::sun::star::chart::XChartDocument >& rChartDoc,
-                        sal_Bool bExportContent,
-                        sal_Bool bIncludeTable = sal_False );
+                        bool bExportContent,
+                        bool bIncludeTable = false );
     void exportTable();
     void exportPlotArea(
         com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > xDiagram,
         com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > xNewDiagram,
         const ::com::sun::star::awt::Size & rPageSize,
-        sal_Bool bExportContent,
-        sal_Bool bIncludeTable );
+        bool bExportContent,
+        bool bIncludeTable );
     void exportCoordinateRegion( const com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram );
     void exportAxes( const com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > & xDiagram,
                                     const com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > & xNewDiagram,
-                                    sal_Bool bExportContent );
+                                    bool bExportContent );
     void exportAxis( enum XMLTokenEnum eDimension, enum XMLTokenEnum eAxisName,
                     const Reference< beans::XPropertySet > xAxisProps, const Reference< chart2::XAxis >& xChart2Axis,
                     const OUString& rCategoriesRanges,
@@ -209,8 +209,8 @@ public:
     void exportSeries(
         const com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > & xNewDiagram,
         const ::com::sun::star::awt::Size & rPageSize,
-        sal_Bool bExportContent,
-        sal_Bool bHasTwoYAxes );
+        bool bExportContent,
+        bool bHasTwoYAxes );
 
     void exportPropertyMapping(
         const com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataSource > & xSource,
@@ -222,20 +222,20 @@ public:
                 ::com::sun::star::chart2::XDataSeries > > & aSeriesSeq,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram > & xDiagram,
-        sal_Bool bJapaneseCandleSticks,
-        sal_Bool bExportContent );
+        bool bJapaneseCandleSticks,
+        bool bExportContent );
     void exportDataPoints(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & xSeriesProperties,
         sal_Int32 nSeriesLength,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram > & xDiagram,
-        sal_Bool bExportContent );
+        bool bExportContent );
 
     void exportRegressionCurve(
         const com::sun::star::uno::Reference<com::sun::star::chart2::XDataSeries>& xSeries,
         const com::sun::star::awt::Size& rPageSize,
-        sal_Bool bExportContent );
+        bool bExportContent );
 
     void exportErrorBar (
         const ::com::sun::star::uno::Reference<beans::XPropertySet> &xSeriesProp, bool bYError,
@@ -261,9 +261,9 @@ public:
     OUString msString;
 
     // members filled by InitRangeSegmentationProperties (retrieved from DataProvider)
-    sal_Bool mbHasSeriesLabels;
-    sal_Bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
-    sal_Bool mbRowSourceColumns;
+    bool mbHasSeriesLabels;
+    bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
+    bool mbRowSourceColumns;
     OUString msChartAddress;
     OUString msTableNumberList;
     ::com::sun::star::uno::Sequence< sal_Int32 > maSequenceMapping;
@@ -415,7 +415,7 @@ Reference< chart2::data::XLabeledDataSequence >
     return aNoResult;
 }
 
-Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( const Reference< chart2::XChartDocument >& xChartDoc, sal_Bool& rOutSourceHasCategoryLabels )
+Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( const Reference< chart2::XChartDocument >& xChartDoc, bool& rOutSourceHasCategoryLabels )
 {
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aLabeledSeqVector;
 
@@ -424,7 +424,7 @@ Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( c
     Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( xDiagram ) );
     if( xCategories.is() )
         aLabeledSeqVector.push_back( xCategories );
-    rOutSourceHasCategoryLabels = sal_Bool(xCategories.is());
+    rOutSourceHasCategoryLabels = xCategories.is();
 
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeriesSeqVector(
             lcl_getAllSeriesSequences( xChartDoc ) );
@@ -1046,9 +1046,9 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
     SvXMLAutoStylePoolP& rASPool ) :
         mrExport( rExport ),
         mrAutoStylePool( rASPool ),
-        mbHasSeriesLabels( sal_False ),
-        mbHasCategoryLabels( sal_False ),
-        mbRowSourceColumns( sal_True ),
+        mbHasSeriesLabels( false ),
+        mbHasCategoryLabels( false ),
+        mbRowSourceColumns( true ),
         msCLSID( OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName()))
 {
     msTableName = "local-table";
@@ -1090,13 +1090,13 @@ SchXMLExportHelper_Impl::~SchXMLExportHelper_Impl()
 
 void SchXMLExportHelper_Impl::collectAutoStyles( Reference< chart::XChartDocument > rChartDoc )
 {
-    parseDocument( rChartDoc, sal_False );
+    parseDocument( rChartDoc, false );
 }
 
 void SchXMLExportHelper_Impl::exportChart( Reference< chart::XChartDocument > rChartDoc,
-                                      sal_Bool bIncludeTable )
+                                      bool bIncludeTable )
 {
-    parseDocument( rChartDoc, sal_True, bIncludeTable );
+    parseDocument( rChartDoc, true, bIncludeTable );
     SAL_WARN_IF( !maAutoStyleNameQueue.empty(), "xmloff.chart", "There are still remaining autostyle names in the queue" );
 }
 
@@ -1125,8 +1125,8 @@ static OUString lcl_GetStringFromNumberSequence( const ::com::sun::star::uno::Se
 
 /// if bExportContent is false the auto-styles are collected
 void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >& rChartDoc,
-                                        sal_Bool bExportContent,
-                                        sal_Bool bIncludeTable )
+                                        bool bExportContent,
+                                        bool bIncludeTable )
 {
     Reference< chart2::XChartDocument > xNewDoc( rChartDoc, uno::UNO_QUERY );
     if( !rChartDoc.is() || !xNewDoc.is() )
@@ -1154,9 +1154,9 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     }
 
     // get Properties of ChartDocument
-    sal_Bool bHasMainTitle = sal_False;
-    sal_Bool bHasSubTitle = sal_False;
-    sal_Bool bHasLegend = sal_False;
+    bool bHasMainTitle = false;
+    bool bHasSubTitle = false;
+    bool bHasLegend = false;
     util::DateTime aNullDate(0,0,0,0,30,12,1899, false);
 
     std::vector< XMLPropertyState > aPropertyStates;
@@ -1849,8 +1849,8 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     Reference< chart::XDiagram > xDiagram,
     Reference< chart2::XDiagram > xNewDiagram,
     const awt::Size & rPageSize,
-    sal_Bool bExportContent,
-    sal_Bool bIncludeTable )
+    bool bExportContent,
+    bool bIncludeTable )
 {
     SAL_WARN_IF( !xDiagram.is(), "xmloff.chart", "Invalid XDiagram as parameter" );
     if( ! xDiagram.is())
@@ -1860,7 +1860,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     Reference< beans::XPropertySet > xPropSet;
     std::vector< XMLPropertyState > aPropertyStates;
 
-    sal_Bool bIs3DChart = sal_False;
+    bool bIs3DChart = false;
     drawing::HomogenMatrix aTransMatrix;
 
     msStringBuffer.setLength( 0 );
@@ -1894,7 +1894,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                 if( xDocProp.is())
                 {
                     Any aAny;
-                    sal_Bool bFirstCol = false, bFirstRow = false;
+                    bool bFirstCol = false, bFirstRow = false;
 
                     try
                     {
@@ -2354,29 +2354,29 @@ void SchXMLExportHelper_Impl::exportAxis(
 void SchXMLExportHelper_Impl::exportAxes(
     const Reference< chart::XDiagram > & xDiagram,
     const Reference< chart2::XDiagram > & xNewDiagram,
-    sal_Bool bExportContent )
+    bool bExportContent )
 {
     SAL_WARN_IF( !xDiagram.is(), "xmloff.chart", "Invalid XDiagram as parameter" );
     if( ! xDiagram.is())
         return;
 
     // get some properties from document first
-    sal_Bool bHasXAxis = sal_False,
-        bHasYAxis = sal_False,
-        bHasZAxis = sal_False,
-        bHasSecondaryXAxis = sal_False,
-        bHasSecondaryYAxis = sal_False;
-    sal_Bool bHasXAxisTitle = sal_False,
-        bHasYAxisTitle = sal_False,
-        bHasZAxisTitle = sal_False,
-        bHasSecondaryXAxisTitle = sal_False,
-        bHasSecondaryYAxisTitle = sal_False;
-    sal_Bool bHasXAxisMajorGrid = sal_False,
-        bHasXAxisMinorGrid = sal_False,
-        bHasYAxisMajorGrid = sal_False,
-        bHasYAxisMinorGrid = sal_False,
-        bHasZAxisMajorGrid = sal_False,
-        bHasZAxisMinorGrid = sal_False;
+    bool bHasXAxis = false,
+        bHasYAxis = false,
+        bHasZAxis = false,
+        bHasSecondaryXAxis = false,
+        bHasSecondaryYAxis = false;
+    bool bHasXAxisTitle = false,
+        bHasYAxisTitle = false,
+        bHasZAxisTitle = false,
+        bHasSecondaryXAxisTitle = false,
+        bHasSecondaryYAxisTitle = false;
+    bool bHasXAxisMajorGrid = false,
+        bHasXAxisMinorGrid = false,
+        bHasYAxisMajorGrid = false,
+        bHasYAxisMinorGrid = false,
+        bHasZAxisMajorGrid = false,
+        bHasZAxisMinorGrid = false;
 
     // get multiple properties using XMultiPropertySet
     MultiPropertySetHandler aDiagramProperties (xDiagram);
@@ -2563,8 +2563,8 @@ namespace
 void SchXMLExportHelper_Impl::exportSeries(
     const Reference< chart2::XDiagram > & xNewDiagram,
     const awt::Size & rPageSize,
-    sal_Bool bExportContent,
-    sal_Bool bHasTwoYAxes )
+    bool bExportContent,
+    bool bHasTwoYAxes )
 {
     Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( xNewDiagram, uno::UNO_QUERY );
     if( ! xBCooSysCnt.is())
@@ -2600,7 +2600,7 @@ void SchXMLExportHelper_Impl::exportSeries(
             // special export for stock charts
             if ( aChartType == "com.sun.star.chart2.CandleStickChartType" )
             {
-                sal_Bool bJapaneseCandleSticks = sal_False;
+                bool bJapaneseCandleSticks = false;
                 Reference< beans::XPropertySet > xCTProp( aCTSeq[nCTIdx], uno::UNO_QUERY );
                 if( xCTProp.is())
                     xCTProp->getPropertyValue("Japanese") >>= bJapaneseCandleSticks;
@@ -2623,7 +2623,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                     sal_Int32 nMainSequenceIndex = -1;
                     sal_Int32 nSeriesLength = 0;
                     sal_Int32 nAttachedAxis = chart::ChartAxisAssign::PRIMARY_Y;
-                    sal_Bool bHasMeanValueLine = false;
+                    bool bHasMeanValueLine = false;
                     Reference< beans::XPropertySet > xPropSet;
                     tLabelValuesDataPair aSeriesLabelValuesPair;
 
@@ -2919,7 +2919,7 @@ void SchXMLExportHelper_Impl::exportPropertyMapping(
 void SchXMLExportHelper_Impl::exportRegressionCurve(
     const Reference< chart2::XDataSeries >& xSeries,
     const awt::Size& rPageSize,
-    sal_Bool bExportContent )
+    bool bExportContent )
 {
     OSL_ASSERT( mxExpPropMapper.is());
 
@@ -3126,8 +3126,8 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
 void SchXMLExportHelper_Impl::exportCandleStickSeries(
     const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
     const Reference< chart2::XDiagram > & xDiagram,
-    sal_Bool bJapaneseCandleSticks,
-    sal_Bool bExportContent )
+    bool bJapaneseCandleSticks,
+    bool bExportContent )
 {
 
     for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
@@ -3237,7 +3237,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     const uno::Reference< beans::XPropertySet > & xSeriesProperties,
     sal_Int32 nSeriesLength,
     const uno::Reference< chart2::XDiagram > & xDiagram,
-    sal_Bool bExportContent )
+    bool bExportContent )
 {
     // data-points
 
@@ -3611,7 +3611,7 @@ void SchXMLExport::_ExportContent()
     if( xChartDoc.is())
     {
         // determine if data comes from the outside
-        sal_Bool bIncludeTable = sal_True;
+        bool bIncludeTable = true;
 
         Reference< chart2::XChartDocument > xNewDoc( xChartDoc, uno::UNO_QUERY );
         if( xNewDoc.is())
@@ -3622,7 +3622,7 @@ void SchXMLExport::_ExportContent()
             Reference< lang::XServiceInfo > xDPServiceInfo( xNewDoc->getDataProvider(), uno::UNO_QUERY );
             if( ! (xDPServiceInfo.is() && xDPServiceInfo->getImplementationName() == "com.sun.star.comp.chart.InternalDataProvider" ))
             {
-                bIncludeTable = sal_False;
+                bIncludeTable = false;
             }
         }
         else

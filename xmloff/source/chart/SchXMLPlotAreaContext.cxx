@@ -133,10 +133,10 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     const OUString& rXLinkHRefAttributeToIndicateDataProvider,
     OUString& rCategoriesAddress,
     OUString& rChartAddress,
-    bool& rbHasRangeAtPlotArea,
-    sal_Bool & rAllRangeAddressesAvailable,
-    sal_Bool & rColHasLabels,
-    sal_Bool & rRowHasLabels,
+    bool & rbHasRangeAtPlotArea,
+    bool & rAllRangeAddressesAvailable,
+    bool & rColHasLabels,
+    bool & rRowHasLabels,
     chart::ChartDataRowSource & rDataRowSource,
     SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
     const OUString& aChartTypeServiceName,
@@ -147,7 +147,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
         mrCategoriesAddress( rCategoriesAddress ),
         mrSeriesDefaultsAndStyles( rSeriesDefaultsAndStyles ),
         mnNumOfLinesProp( 0 ),
-        mbStockHasVolume( sal_False ),
+        mbStockHasVolume( false ),
         mnSeries( 0 ),
         m_aGlobalSeriesImportInfo( rAllRangeAddressesAvailable ),
         maSceneImportHelper( rImport ),
@@ -181,7 +181,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
 
     // turn off all axes initially
     uno::Any aFalseBool;
-    aFalseBool <<= (sal_Bool)(sal_False);
+    aFalseBool <<= false;
 
     uno::Reference< lang::XServiceInfo > xInfo( mxDiagram, uno::UNO_QUERY );
     uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
@@ -265,11 +265,11 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
             case XML_TOK_PA_DS_HAS_LABELS:
                 {
                     if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_BOTH )))
-                        mrColHasLabels = mrRowHasLabels = sal_True;
+                        mrColHasLabels = mrRowHasLabels = true;
                     else if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_ROW )))
-                        mrRowHasLabels = sal_True;
+                        mrRowHasLabels = true;
                     else if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_COLUMN )))
-                        mrColHasLabels = sal_True;
+                        mrColHasLabels = true;
                 }
                 break;
             case XML_TOK_PA_TRANSFORM:
@@ -296,12 +296,12 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
             try
             {
                 uno::Any aAny;
-                aAny <<= (sal_Bool)(mrColHasLabels);
+                aAny <<= mrColHasLabels;
                 xDocProp->setPropertyValue(
                     OUString( "DataSourceLabelsInFirstColumn" ),
                     aAny );
 
-                aAny <<= (sal_Bool)(mrRowHasLabels);
+                aAny <<= mrRowHasLabels;
                 xDocProp->setPropertyValue(
                     OUString( "DataSourceLabelsInFirstRow" ),
                     aAny );
@@ -558,7 +558,7 @@ void SchXMLPlotAreaContext::EndElement()
     uno::Reference< beans::XPropertySet > xDiaProp( mxDiagram, uno::UNO_QUERY );
     if( xDiaProp.is())
     {
-        sal_Bool bIsThreeDim = sal_False;
+        bool bIsThreeDim = false;
         uno::Any aAny = xDiaProp->getPropertyValue("Dim3D");
         aAny >>= bIsThreeDim;
 

@@ -409,11 +409,11 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
     return 0;
 }
 
-sal_Bool XMLTextMarkImportContext::FindName(
+bool XMLTextMarkImportContext::FindName(
     SvXMLImport& rImport,
     const Reference<XAttributeList> & xAttrList)
 {
-    sal_Bool bNameOK = sal_False;
+    bool bNameOK = false;
 
     // find name attribute first
     const sal_Int16 nLength = xAttrList->getLength();
@@ -428,7 +428,7 @@ sal_Bool XMLTextMarkImportContext::FindName(
              IsXMLToken(sLocalName, XML_NAME)   )
         {
             m_sBookmarkName = xAttrList->getValueByIndex(nAttr);
-            bNameOK = sal_True;
+            bNameOK = true;
         }
         else if ( (XML_NAMESPACE_XML == nPrefix) &&
              IsXMLToken(sLocalName, XML_ID)   )

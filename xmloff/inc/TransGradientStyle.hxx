@@ -41,7 +41,7 @@ public:
     XMLTransGradientStyleImport( SvXMLImport& rImport );
     ~XMLTransGradientStyleImport();
 
-    sal_Bool importXML(
+    bool importXML(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
         ::com::sun::star::uno::Any& rValue,
@@ -56,7 +56,7 @@ public:
     XMLTransGradientStyleExport( SvXMLExport& rExport );
     ~XMLTransGradientStyleExport();
 
-    sal_Bool exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue );
+    bool exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue );
 };
 
 #endif // INCLUDED_XMLOFF_INC_TRANSGRADIENTSTYLE_HXX

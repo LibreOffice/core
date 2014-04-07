@@ -39,7 +39,7 @@ XMLChangeElementImportContext::XMLChangeElementImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    sal_Bool bAccContent,
+    bool bAccContent,
     XMLChangedRegionImportContext& rParent) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
         bAcceptContent(bAccContent),

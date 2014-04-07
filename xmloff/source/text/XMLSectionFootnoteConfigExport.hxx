@@ -42,7 +42,7 @@ class XMLSectionFootnoteConfigExport
 public:
     static void exportXML(
         SvXMLExport& rExport,
-        sal_Bool bEndnote,
+        bool bEndnote,
         const ::std::vector<XMLPropertyState> * pProperties,
         sal_uInt32 nIdx,
         const UniReference<XMLPropertySetMapper> & rMapper);    /// used only for debugging

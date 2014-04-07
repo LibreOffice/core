@@ -85,7 +85,7 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
 
     if( mpImpl->mxPresProps.is() )
     {
-        sal_Bool bAll = sal_True;
+        bool bAll = true;
         uno::Any aAny;
 
         // read attributes
@@ -104,12 +104,12 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
                 {
                     aAny <<= sValue;
                     mpImpl->mxPresProps->setPropertyValue("FirstPage", aAny );
-                    bAll = sal_False;
+                    bAll = false;
                 }
                 else if( IsXMLToken( aLocalName, XML_SHOW ) )
                 {
                     mpImpl->maCustomShowName = sValue;
-                    bAll = sal_False;
+                    bAll = false;
                 }
                 else if( IsXMLToken( aLocalName, XML_PAUSE ) )
                 {

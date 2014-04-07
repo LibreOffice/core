@@ -47,7 +47,7 @@ namespace xmloff
             const ::com::sun::star::uno::Type& _rExpectedType,
             const OUString& _rReadCharacters,
             const SvXMLEnumMapEntry* _pEnumMap = NULL,
-            const sal_Bool _bInvertBoolean = sal_False
+            const bool _bInvertBoolean = false
         );
 
         static ::com::sun::star::uno::Type xmlTypeToUnoType( const OUString& _rType );
@@ -76,7 +76,7 @@ namespace xmloff
 
         OFormLayerXMLImport_Impl&       m_rContext;
 
-        sal_Bool                    m_bTrackAttributes;
+        bool                    m_bTrackAttributes;
 
         // TODO: think about the restriction that the class does not know anything about the object it is importing.
         // Perhaps this object should be known to the class, so setting the properties ('normal' ones as well as
@@ -116,19 +116,19 @@ namespace xmloff
             <p>Please be aware of the fact that the name given must be a local name, i.e. not contain a namespace.
             All form relevant attributes are in the same namespace, so this would be an redundant information.</p>
         */
-        sal_Bool    encounteredAttribute(const OUString& _rAttributeName) const;
+        bool    encounteredAttribute(const OUString& _rAttributeName) const;
 
         /** determine if the element imported by the object had an given attribute.
             <p>Please be aware of the fact that the name given must be a local name, i.e. not contain a namespace.
             All form relevant attributes are in the same namespace, so this would be an redundant information.</p>
         */
-        sal_Bool    encounteredAttribute(const sal_Char* _pAttributeName) const { return encounteredAttribute(OUString::createFromAscii(_pAttributeName)); }
+        bool    encounteredAttribute(const sal_Char* _pAttributeName) const { return encounteredAttribute(OUString::createFromAscii(_pAttributeName)); }
 
         /** enables the tracking of the encountered attributes
             <p>The tracking will raise the import costs a little bit, but it's cheaper than
             derived classes tracking this themself.</p>
         */
-        void        enableTrackAttributes() { m_bTrackAttributes = sal_True; }
+        void        enableTrackAttributes() { m_bTrackAttributes = true; }
 
         inline void implPushBackPropertyValue(const ::com::sun::star::beans::PropertyValue& _rProp)
         {

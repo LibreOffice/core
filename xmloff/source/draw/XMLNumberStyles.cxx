@@ -34,33 +34,33 @@ using namespace ::xmloff::token;
 struct SdXMLDataStyleNumber
 {
     enum XMLTokenEnum meNumberStyle;
-    sal_Bool    mbLong;
-    sal_Bool    mbTextual;
-    sal_Bool    mbDecimal02;
+    bool    mbLong;
+    bool    mbTextual;
+    bool    mbDecimal02;
     const char* mpText;
 }
     aSdXMLDataStyleNumbers[] =
 {
-    { XML_DAY,          sal_False,      sal_False,      sal_False,      NULL },
-    { XML_DAY,          sal_True,       sal_False,      sal_False,      NULL },
-    { XML_MONTH,        sal_True,       sal_False,      sal_False,      NULL },
-    { XML_MONTH,        sal_False,      sal_True,       sal_False,      NULL },
-    { XML_MONTH,        sal_True,       sal_True,       sal_False,      NULL },
-    { XML_YEAR,         sal_False,      sal_False,      sal_False,      NULL },
-    { XML_YEAR,         sal_True,       sal_False,      sal_False,      NULL },
-    { XML_DAY_OF_WEEK,  sal_False,      sal_False,      sal_False,      NULL },
-    { XML_DAY_OF_WEEK,  sal_True,       sal_False,      sal_False,      NULL },
-    { XML_TEXT,         sal_False,      sal_False,      sal_False,      "."  },
-    { XML_TEXT,         sal_False,      sal_False,      sal_False,      " "  },
-    { XML_TEXT,         sal_False,      sal_False,      sal_False,      ", " },
-    { XML_TEXT,         sal_False,      sal_False,      sal_False,      ". " },
-    { XML_HOURS,        sal_False,      sal_False,      sal_False,      NULL },
-    { XML_MINUTES,      sal_False,      sal_False,      sal_False,      NULL },
-    { XML_TEXT,         sal_False,      sal_False,      sal_False,      ":"  },
-    { XML_AM_PM,        sal_False,      sal_False,      sal_False,      NULL },
-    { XML_SECONDS,      sal_False,      sal_False,      sal_False,      NULL },
-    { XML_SECONDS,      sal_False,      sal_False,      sal_True,       NULL },
-    { XML_TOKEN_INVALID,        0,              0,             0,       NULL  }
+    { XML_DAY,          false,      false,      false,      NULL },
+    { XML_DAY,          true,       false,      false,      NULL },
+    { XML_MONTH,        true,       false,      false,      NULL },
+    { XML_MONTH,        false,      true,       false,      NULL },
+    { XML_MONTH,        true,       true,       false,      NULL },
+    { XML_YEAR,         false,      false,      false,      NULL },
+    { XML_YEAR,         true,       false,      false,      NULL },
+    { XML_DAY_OF_WEEK,  false,      false,      false,      NULL },
+    { XML_DAY_OF_WEEK,  true,       false,      false,      NULL },
+    { XML_TEXT,         false,      false,      false,      "."  },
+    { XML_TEXT,         false,      false,      false,      " "  },
+    { XML_TEXT,         false,      false,      false,      ", " },
+    { XML_TEXT,         false,      false,      false,      ". " },
+    { XML_HOURS,        false,      false,      false,      NULL },
+    { XML_MINUTES,      false,      false,      false,      NULL },
+    { XML_TEXT,         false,      false,      false,      ":"  },
+    { XML_AM_PM,        false,      false,      false,      NULL },
+    { XML_SECONDS,      false,      false,      false,      NULL },
+    { XML_SECONDS,      false,      false,      true,       NULL },
+    { XML_TOKEN_INVALID,        false,              false,             false,       NULL  }
 };
 
 // date
@@ -88,14 +88,14 @@ struct SdXMLDataStyleNumber
 struct SdXMLFixedDataStyle
 {
     const char* mpName;
-    sal_Bool    mbAutomatic;
-    sal_Bool    mbDateStyle;
+    bool    mbAutomatic;
+    bool    mbDateStyle;
     sal_uInt8   mpFormat[8];
 };
 
 const SdXMLFixedDataStyle aSdXML_Standard_Short =
 {
-    "D1", sal_True, sal_True,
+    "D1", true, true,
     {
         DATA_STYLE_NUMBER_DAY_LONG,
         DATA_STYLE_NUMBER_TEXT_POINT,
@@ -108,7 +108,7 @@ const SdXMLFixedDataStyle aSdXML_Standard_Short =
 
 const SdXMLFixedDataStyle aSdXML_Standard_Long =
 {
-    "D2", sal_True, sal_True,
+    "D2", true, true,
     {
         DATA_STYLE_NUMBER_DAYOFWEEK_LONG,
         DATA_STYLE_NUMBER_TEXT_COMMASPACE,
@@ -123,7 +123,7 @@ const SdXMLFixedDataStyle aSdXML_Standard_Long =
 
 const SdXMLFixedDataStyle aSdXML_DateStyle_1 =
 {
-    "D3", sal_False, sal_True,
+    "D3", false, true,
     {
         DATA_STYLE_NUMBER_DAY_LONG,
         DATA_STYLE_NUMBER_TEXT_POINT,
@@ -136,7 +136,7 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_1 =
 
 const SdXMLFixedDataStyle aSdXML_DateStyle_2 =
 {
-    "D4", sal_False, sal_True,
+    "D4", false, true,
     {
         DATA_STYLE_NUMBER_DAY_LONG,
         DATA_STYLE_NUMBER_TEXT_POINT,
@@ -149,7 +149,7 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_2 =
 
 const SdXMLFixedDataStyle aSdXML_DateStyle_3 =
 {
-    "D5", sal_False, sal_True,
+    "D5", false, true,
     {
         DATA_STYLE_NUMBER_DAY,
         DATA_STYLE_NUMBER_TEXT_POINTSPACE,
@@ -162,7 +162,7 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_3 =
 
 const SdXMLFixedDataStyle aSdXML_DateStyle_4 =
 {
-    "D6", sal_False, sal_True,
+    "D6", false, true,
     {
         DATA_STYLE_NUMBER_DAY,
         DATA_STYLE_NUMBER_TEXT_POINTSPACE,
@@ -175,7 +175,7 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_4 =
 
 const SdXMLFixedDataStyle aSdXML_DateStyle_5 =
 {
-    "D7", sal_False, sal_True,
+    "D7", false, true,
     {
         DATA_STYLE_NUMBER_DAYOFWEEK,
         DATA_STYLE_NUMBER_TEXT_COMMASPACE,
@@ -190,7 +190,7 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_5 =
 
 const SdXMLFixedDataStyle aSdXML_DateStyle_6 =
 {
-    "D8", sal_False, sal_True,
+    "D8", false, true,
     {
         DATA_STYLE_NUMBER_DAYOFWEEK_LONG,
         DATA_STYLE_NUMBER_TEXT_COMMASPACE,
@@ -204,7 +204,7 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_6 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_1 =
-{   "T1", sal_True, sal_False,
+{   "T1", true, false,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -217,7 +217,7 @@ const SdXMLFixedDataStyle aSdXML_TimeStyle_1 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_2 =
-{   "T2", sal_False, sal_False,
+{   "T2", false, false,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -227,7 +227,7 @@ const SdXMLFixedDataStyle aSdXML_TimeStyle_2 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_3 =
-{   "T3", sal_False, sal_False,
+{   "T3", false, false,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -239,7 +239,7 @@ const SdXMLFixedDataStyle aSdXML_TimeStyle_3 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_4 =
-{   "T4", sal_False, sal_False,
+{   "T4", false, false,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -251,7 +251,7 @@ const SdXMLFixedDataStyle aSdXML_TimeStyle_4 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_5 =
-{   "T5", sal_False, sal_False,
+{   "T5", false, false,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -262,7 +262,7 @@ const SdXMLFixedDataStyle aSdXML_TimeStyle_5 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_6 =
-{   "T6", sal_False, sal_False,
+{   "T6", false, false,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -275,7 +275,7 @@ const SdXMLFixedDataStyle aSdXML_TimeStyle_6 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_7 =
-{   "T7", sal_False, sal_False,
+{   "T7", false, false,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -482,9 +482,9 @@ private:
     SdXMLNumberFormatImportContext* mpParent;
 
     OUString maNumberStyle;
-    sal_Bool mbLong;
-    sal_Bool mbTextual;
-    sal_Bool mbDecimal02;
+    bool mbLong;
+    bool mbTextual;
+    bool mbDecimal02;
     OUString maText;
     boost::shared_ptr< SvXMLImportContext > mpSlaveContext;
 
@@ -518,9 +518,9 @@ SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXM
     maNumberStyle( rLocalName ),
     mpSlaveContext( pSlaveContext )
 {
-    mbLong = sal_False;
-    mbTextual = sal_False;
-    mbDecimal02 = sal_False;
+    mbLong = false;
+    mbTextual = false;
+    mbDecimal02 = false;
 
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -583,7 +583,7 @@ TYPEINIT1( SdXMLNumberFormatImportContext, SvXMLImportContext );
 
 SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, SvXMLNumImpData* pNewData, sal_uInt16 nNewType, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
 :   SvXMLNumFormatContext(rImport, nPrfx, rLocalName, pNewData, nNewType, xAttrList, rStyles),
-    mbAutomatic( sal_False ),
+    mbAutomatic( false ),
     mnIndex(0),
     mnKey( -1 )
 {
@@ -611,7 +611,7 @@ SdXMLNumberFormatImportContext::~SdXMLNumberFormatImportContext()
 {
 }
 
-void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, sal_Bool bLong, sal_Bool bTextual, sal_Bool   bDecimal02, OUString& rText )
+void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, bool bLong, bool bTextual, bool   bDecimal02, OUString& rText )
 {
     if( mnIndex == -1 || mnIndex == 16 )
     {

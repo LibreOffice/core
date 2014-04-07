@@ -138,7 +138,7 @@ XMLTextDropCapImportContext::~XMLTextDropCapImportContext()
 
 void XMLTextDropCapImportContext::EndElement()
 {
-    SetInsert( sal_True );
+    SetInsert( true );
     XMLElementPropertyContext::EndElement();
 
     if( -1 != aWholeWordProp.mnIndex )

@@ -55,7 +55,7 @@ bool PageMasterImportPropertyMapper::handleSpecialItem(
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int16 nContextID =
             getPropertySetMapper()->GetEntryContextId(rProperty.mnIndex);
 
@@ -68,7 +68,7 @@ bool PageMasterImportPropertyMapper::handleSpecialItem(
         if( xParaStyles.is() && xParaStyles->hasByName( sDisplayName ) )
         {
             rProperty.maValue <<= sDisplayName;
-            bRet = sal_True;
+            bRet = true;
         }
     }
     else

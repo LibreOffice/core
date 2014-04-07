@@ -52,7 +52,7 @@ XMLTrackedChangesImportContext::~XMLTrackedChangesImportContext()
 void XMLTrackedChangesImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList )
 {
-    sal_Bool bTrackChanges = sal_True;
+    bool bTrackChanges = true;
 
     // scan for text:track-changes and text:protection-key attributes
     sal_Int16 nLength = xAttrList->getLength();

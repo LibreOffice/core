@@ -45,15 +45,15 @@ XMLWordWrapPropertyHdl::~XMLWordWrapPropertyHdl()
 bool XMLWordWrapPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRetValue = false;
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     if( rStrImpValue == GetXMLToken( xmloff::token::XML_WRAP ) )
     {
-        bValue = sal_True;
+        bValue = true;
         bRetValue = true;
     }
     if( rStrImpValue == GetXMLToken( xmloff::token::XML_NO_WRAP ) )
     {
-        bValue = sal_False;
+        bValue = false;
         bRetValue = true;
     }
     if ( bRetValue && mpImport )

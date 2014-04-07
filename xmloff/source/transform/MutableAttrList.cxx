@@ -49,7 +49,7 @@ XMLMutableAttributeList::XMLMutableAttributeList() :
 }
 
 XMLMutableAttributeList::XMLMutableAttributeList( const Reference<
-        XAttributeList> & rAttrList, sal_Bool bClone ) :
+        XAttributeList> & rAttrList, bool bClone ) :
     m_xAttrList( rAttrList.is() ? rAttrList : new SvXMLAttributeList ),
     m_pMutableAttrList( 0 )
 {

@@ -136,7 +136,7 @@ void SvXMLImportPropertyMapper::importXML(
         // Otherwise GetEntryIndex will start with the next position specified.
         sal_Int32 nIndex =  nStartIdx - 1;
         sal_uInt32 nFlags = 0;  // flags of actual property map entry
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
 
         // for better error reporting: this should be set true if no
         // warning is needed
@@ -236,7 +236,7 @@ void SvXMLImportPropertyMapper::importXML(
                             }
                         }
                     }
-                    bFound = sal_True;
+                    bFound = true;
                     continue;
                 }
             }

@@ -576,9 +576,9 @@ void AnimationsExporterImpl::exportTransitionNode()
         Any aSound( mxPageProps->getPropertyValue("Sound") );
         OUString sSoundURL;
         aSound >>= sSoundURL;
-        sal_Bool bStopSound = sal_False;
+        bool bStopSound = false;
         if( !(aSound >>= bStopSound) )
-            bStopSound = sal_False;
+            bStopSound = false;
 
 
         OUStringBuffer sTmp;
@@ -598,7 +598,7 @@ void AnimationsExporterImpl::exportTransitionNode()
             if( nTransition != 0 )
             {
                 sal_Int16 nSubtype = 0;
-                sal_Bool bDirection = sal_False;
+                bool bDirection = false;
                 sal_Int32 nFadeColor = 0;
                 double fDuration = 0.0;
                 mxPageProps->getPropertyValue("TransitionSubtype") >>= nSubtype;
@@ -639,7 +639,7 @@ void AnimationsExporterImpl::exportTransitionNode()
             {
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, mrExport.GetRelativeReference( sSoundURL ) );
 
-                sal_Bool bLoopSound = sal_False;
+                bool bLoopSound = false;
                 mxPageProps->getPropertyValue("LoopSound") >>= bLoopSound;
 
                 if( bLoopSound )
@@ -657,7 +657,7 @@ void AnimationsExporterImpl::prepareTransitionNode()
         sal_Int16 nTransition = 0;
         mxPageProps->getPropertyValue("TransitionType") >>= nTransition;
 
-        sal_Bool bStopSound = sal_False;
+        bool bStopSound = false;
         OUString sSoundURL;
 
         if( nTransition == 0 )
@@ -666,7 +666,7 @@ void AnimationsExporterImpl::prepareTransitionNode()
             aSound >>= sSoundURL;
 
             if( !(aSound >>= bStopSound) )
-                bStopSound = sal_False;
+                bStopSound = false;
         }
 
         if( (nTransition != 0) || !sSoundURL.isEmpty() || bStopSound )
@@ -852,7 +852,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DECELERATE, sTmp.makeStringAndClear() );
         }
 
-        sal_Bool bTemp = xNode->getAutoReverse();
+        bool bTemp = xNode->getAutoReverse();
         if( bTemp )
         {
             ::sax::Converter::convertBool( sTmp, bTemp );
@@ -1102,7 +1102,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
 
         OUStringBuffer sTmp;
         sal_Int32 nTemp;
-        sal_Bool bTemp;
+        bool bTemp;
 
         Any aTemp( xAnimate->getTarget() );
         if( aTemp.hasValue() )

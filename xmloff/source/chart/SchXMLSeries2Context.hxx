@@ -53,7 +53,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > m_xSeries;
     sal_Int32 mnSeriesIndex;
     sal_Int32 mnDataPointIndex;
-    sal_Bool m_bStockHasVolume;
+    bool m_bStockHasVolume;
 
     GlobalSeriesImportInfo& m_rGlobalSeriesImportInfo;
 
@@ -80,7 +80,7 @@ public:
                           ::std::list< DataRowPointStyle >& rStyleList,
                           ::std::list< RegressionStyle >& rRegressionStyleList,
                           sal_Int32 nSeriesIndex,
-                          sal_Bool bStockHasVolume,
+                          bool bStockHasVolume,
                           GlobalSeriesImportInfo& rGlobalSeriesImportInfo,
                           const OUString & aGlobalChartTypeName,
                           tSchXMLLSequencesPerIndex & rLSequencesPerIndex,

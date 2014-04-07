@@ -245,7 +245,7 @@ namespace xmloff
 
     void OAttribute2Property::addBooleanProperty(
         const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-        const sal_Bool _bAttributeDefault, const sal_Bool _bInverseSemantics)
+        const bool _bAttributeDefault, const bool _bInverseSemantics)
     {
         OUStringBuffer aDefault;
         ::sax::Converter::convertBool(aDefault, _bAttributeDefault);

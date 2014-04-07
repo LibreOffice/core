@@ -64,9 +64,9 @@ public:
 
     void AddContent( XMLTransformerContext *pContent );
 
-    sal_Bool HasElementContent() const
+    bool HasElementContent() const
     {
-        return static_cast<sal_Bool>( !m_aChildContexts.empty() );
+        return !m_aChildContexts.empty();
     }
 
     virtual void ExportContent() SAL_OVERRIDE;

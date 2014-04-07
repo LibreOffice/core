@@ -42,9 +42,9 @@ class XMLIndexTableSourceContext : public XMLIndexSourceBaseContext
     OUString sSequence;
     sal_Int16 nDisplayFormat;
 
-    sal_Bool bSequenceOK;
-    sal_Bool bDisplayFormatOK;
-    sal_Bool bUseCaption;
+    bool bSequenceOK;
+    bool bDisplayFormatOK;
+    bool bUseCaption;
 
 public:
 

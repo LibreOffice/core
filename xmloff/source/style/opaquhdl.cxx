@@ -38,8 +38,8 @@ bool XMLOpaquePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, con
 {
     bool bRet = true;
 
-    sal_Bool bValue = IsXMLToken( rStrImpValue, XML_OPAQUE_FOREGROUND );
-    rValue <<= sal_Bool(bValue);
+    bool bValue = IsXMLToken( rStrImpValue, XML_OPAQUE_FOREGROUND );
+    rValue <<= bValue;
 
     return bRet;
 }
@@ -47,7 +47,7 @@ bool XMLOpaquePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, con
 bool XMLOpaquePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
-    sal_Bool bValue = sal_Bool();
+    bool bValue;
 
     if (rValue >>= bValue)
     {

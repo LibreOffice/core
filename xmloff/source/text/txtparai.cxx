@@ -166,7 +166,7 @@ public:
         XMLHints_Impl& rHnts,
         const Reference<xml::sax::XAttributeList> & xAttrList);
 
-    static sal_Bool FindName(
+    static bool FindName(
         SvXMLImport& rImport,
         const Reference<xml::sax::XAttributeList> & xAttrList,
         OUString& rName);
@@ -196,12 +196,12 @@ XMLStartReferenceContext_Impl::XMLStartReferenceContext_Impl(
     }
 }
 
-sal_Bool XMLStartReferenceContext_Impl::FindName(
+bool XMLStartReferenceContext_Impl::FindName(
     SvXMLImport& rImport,
     const Reference<xml::sax::XAttributeList> & xAttrList,
     OUString& rName)
 {
-    sal_Bool bNameOK( sal_False );
+    bool bNameOK( false );
 
     // find name attribute first
     const sal_Int16 nLength( xAttrList->getLength() );
@@ -216,7 +216,7 @@ sal_Bool XMLStartReferenceContext_Impl::FindName(
              IsXMLToken(sLocalName, XML_NAME)   )
         {
             rName = xAttrList->getValueByIndex(nAttr);
-            bNameOK = sal_True;
+            bNameOK = true;
         }
     }
 
@@ -1044,7 +1044,7 @@ protected:
     static void GetServiceName(OUString& sServiceName,
                                enum XMLTextPElemTokens nToken);
 
-    sal_Bool CreateMark(Reference<beans::XPropertySet>& rPropSet,
+    bool CreateMark(Reference<beans::XPropertySet>& rPropSet,
                         const OUString& rServiceName);
 };
 
@@ -1261,7 +1261,7 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
     }
 }
 
-sal_Bool XMLIndexMarkImportContext_Impl::CreateMark(
+bool XMLIndexMarkImportContext_Impl::CreateMark(
     Reference<beans::XPropertySet>& rPropSet,
     const OUString& rServiceName)
 {
@@ -1273,10 +1273,10 @@ sal_Bool XMLIndexMarkImportContext_Impl::CreateMark(
         Reference<beans::XPropertySet> xPropSet( xFactory->createInstance(rServiceName), UNO_QUERY );
         if (xPropSet.is())
             rPropSet = xPropSet;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 class XMLTOCMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
@@ -1489,7 +1489,7 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
         }
         else if ( IsXMLToken( sLocalName, XML_MAIN_ENTRY ) )
         {
-            sal_Bool bMainEntry = sal_False;
+            bool bMainEntry = false;
             bool bTmp(false);
 
             if (::sax::Converter::convertBool(bTmp, sValue))
@@ -1752,7 +1752,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             rImport, nPrefix, rLocalName,
             (nToken != XML_TOK_TEXTP_CHANGE_END),
             (nToken != XML_TOK_TEXTP_CHANGE_START),
-            sal_False);
+            false);
         break;
 
     case XML_TOK_TEXT_META:
@@ -1840,7 +1840,7 @@ XMLParaContext::XMLParaContext(
     nOutlineLevel( IsXMLToken( rLName, XML_H ) ? 1 : -1 ),
     pHints( 0 ),
     // Lost outline numbering in master document (#i73509#)
-    mbOutlineLevelAttrFound( sal_False ),
+    mbOutlineLevelAttrFound( false ),
     bIgnoreLeadingSpace( true ),
     bHeading( bHead ),
     bIsListHeader( false ),
@@ -1905,7 +1905,7 @@ XMLParaContext::XMLParaContext(
                     nOutlineLevel = (sal_Int8)nTmp;
                 }
                 // Lost outline numbering in master document (#i73509#)
-                mbOutlineLevelAttrFound = sal_True;
+                mbOutlineLevelAttrFound = true;
             }
             break;
         case XML_TOK_TEXT_P_IS_LIST_HEADER:

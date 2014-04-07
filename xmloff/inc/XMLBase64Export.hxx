@@ -37,13 +37,13 @@ public:
 
     XMLBase64Export( SvXMLExport& rExport );
 
-    sal_Bool exportXML( const ::com::sun::star::uno::Reference <
+    bool exportXML( const ::com::sun::star::uno::Reference <
             ::com::sun::star::io::XInputStream > & rIn );
-    sal_Bool exportElement( const ::com::sun::star::uno::Reference <
+    bool exportElement( const ::com::sun::star::uno::Reference <
             ::com::sun::star::io::XInputStream > & rIn,
             sal_uInt16 nNamespace,
             enum ::xmloff::token::XMLTokenEnum eName );
-    sal_Bool exportOfficeBinaryDataElement(
+    bool exportOfficeBinaryDataElement(
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::io::XInputStream > & rIn );
 };

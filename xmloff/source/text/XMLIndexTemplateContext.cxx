@@ -71,15 +71,15 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
     enum XMLTokenEnum eLevelAttrName,
     const sal_Char** pLevelStylePropMap,
     const sal_Bool* pAllowedTokenTypes,
-    sal_Bool bT )
+    bool bT )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
 ,   pOutlineLevelNameMap(pLevelNameMap)
 ,   eOutlineLevelAttrName(eLevelAttrName)
 ,   pOutlineLevelStylePropMap(pLevelStylePropMap)
 ,   pAllowedTokenTypesMap(pAllowedTokenTypes)
 ,   nOutlineLevel(1)    // all indices have level 1 (0 is for header)
-,   bStyleNameOK(sal_False)
-,   bOutlineLevelOK(sal_False)
+,   bStyleNameOK(false)
+,   bOutlineLevelOK(false)
 ,   bTOC( bT )
 ,   rPropertySet(rPropSet)
 ,   sTokenEntryNumber(sAPI_TokenEntryNumber)
@@ -115,7 +115,7 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
     if (NULL == pLevelNameMap)
     {
         nOutlineLevel = 1;
-        bOutlineLevelOK = sal_True;
+        bOutlineLevelOK = true;
     }
 }
 
@@ -148,7 +148,7 @@ void XMLIndexTemplateContext::StartElement(
             {
                 // style name
                 sStyleName = xAttrList->getValueByIndex(nAttr);
-                bStyleNameOK = sal_True;
+                bStyleNameOK = true;
             }
             else if (eOutlineLevelAttrName != XML_TOKEN_INVALID)
             {
@@ -162,7 +162,7 @@ void XMLIndexTemplateContext::StartElement(
                         pOutlineLevelNameMap))
                     {
                         nOutlineLevel = nTmp;
-                        bOutlineLevelOK = sal_True;
+                        bOutlineLevelOK = true;
                     }
                     // else: illegal value -> ignore
                 }

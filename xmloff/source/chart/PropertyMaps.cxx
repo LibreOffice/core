@@ -253,7 +253,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
             {
                 try
                 {
-                    sal_Bool bAuto = false;
+                    bool bAuto = false;
                     uno::Any aAny = rPropSet->getPropertyValue( aAutoPropName );
                     aAny >>= bAuto;
                     if( bAuto )

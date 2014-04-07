@@ -99,9 +99,9 @@ private:
     OUString m_aXLinkHRefAttributeToIndicateDataProvider;
     bool m_bHasRangeAtPlotArea;
     bool m_bHasTableElement;
-    sal_Bool mbAllRangeAddressesAvailable;
-    sal_Bool mbColHasLabels;
-    sal_Bool mbRowHasLabels;
+    bool mbAllRangeAddressesAvailable;
+    bool mbColHasLabels;
+    bool mbRowHasLabels;
     ::com::sun::star::chart::ChartDataRowSource meDataRowSource;
     bool mbIsStockChart;
 

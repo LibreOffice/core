@@ -135,7 +135,7 @@ namespace xmloff
                 Type aExportType;
 
                 // is it a sequence
-                sal_Bool bIsSequence = TypeClass_SEQUENCE == aValue.getValueTypeClass();
+                bool bIsSequence = TypeClass_SEQUENCE == aValue.getValueTypeClass();
                 // the type of the property, maybe reduced to the element type of a sequence
                 if (bIsSequence)
                     aExportType = getSequenceElementType( aValue.getValueType() );
@@ -275,11 +275,11 @@ namespace xmloff
         // no check of the property value type: this method is allowed to be called with any interger properties
         // (e.g. sal_Int32, sal_uInt16 etc)
 
-        sal_Bool bDefault = (BOOLATTR_DEFAULT_TRUE == (BOOLATTR_DEFAULT_MASK & _nBooleanAttributeFlags));
-        sal_Bool bDefaultVoid = (BOOLATTR_DEFAULT_VOID == (BOOLATTR_DEFAULT_MASK & _nBooleanAttributeFlags));
+        bool bDefault = (BOOLATTR_DEFAULT_TRUE == (BOOLATTR_DEFAULT_MASK & _nBooleanAttributeFlags));
+        bool bDefaultVoid = (BOOLATTR_DEFAULT_VOID == (BOOLATTR_DEFAULT_MASK & _nBooleanAttributeFlags));
 
         // get the value
-        sal_Bool bCurrentValue = bDefault;
+        bool bCurrentValue = bDefault;
         Any aCurrentValue = m_xProps->getPropertyValue( _rPropertyName );
         if (aCurrentValue.hasValue())
         {
@@ -355,7 +355,7 @@ namespace xmloff
     void OPropertyExport::exportEnumPropertyAttribute(
             const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
             const OUString &rPropertyName, const SvXMLEnumMapEntry* _pValueMap,
-            const sal_Int32 _nDefault, const sal_Bool _bVoidDefault)
+            const sal_Int32 _nDefault, const bool _bVoidDefault)
     {
         // get the value
         sal_Int32 nCurrentValue(_nDefault);
@@ -487,7 +487,7 @@ namespace xmloff
         // unfortunately the OUString can't append single sal_Unicode characters ...
         const OUString sQuote(&_aQuoteCharacter, 1);
         const OUString sSeparator(&_aListSeparator, 1);
-        const sal_Bool bQuote = !sQuote.isEmpty();
+        const bool bQuote = !sQuote.isEmpty();
 
         // concatenate the string items
         const OUString* pItems = aItems.getConstArray();

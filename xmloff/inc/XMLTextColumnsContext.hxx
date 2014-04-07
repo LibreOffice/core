@@ -44,7 +44,7 @@ class XMLTextColumnsContext :public XMLElementPropertyContext
     SvXMLTokenMap            *pColumnAttrTokenMap;
     SvXMLTokenMap            *pColumnSepAttrTokenMap;
     sal_Int16                nCount;
-    sal_Bool                 bAutomatic;
+    bool                 bAutomatic;
     sal_Int32                nAutomaticDistance;
 
 public:

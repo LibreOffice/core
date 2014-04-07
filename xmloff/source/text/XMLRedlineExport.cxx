@@ -105,7 +105,7 @@ XMLRedlineExport::~XMLRedlineExport()
 
 void XMLRedlineExport::ExportChange(
     const Reference<XPropertySet> & rPropSet,
-    sal_Bool bAutoStyle)
+    bool bAutoStyle)
 {
     if (bAutoStyle)
     {
@@ -126,7 +126,7 @@ void XMLRedlineExport::ExportChange(
 }
 
 
-void XMLRedlineExport::ExportChangesList(sal_Bool bAutoStyles)
+void XMLRedlineExport::ExportChangesList(bool bAutoStyles)
 {
     if (bAutoStyles)
     {
@@ -141,7 +141,7 @@ void XMLRedlineExport::ExportChangesList(sal_Bool bAutoStyles)
 
 void XMLRedlineExport::ExportChangesList(
     const Reference<XText> & rText,
-    sal_Bool bAutoStyles)
+    bool bAutoStyles)
 {
     // in the header/footer case, auto styles are collected from the
     // inline change elements.
@@ -216,7 +216,7 @@ void XMLRedlineExport::ExportChangesListElements()
         Reference<XPropertySet> aDocPropertySet( rExport.GetModel(),
                                                  uno::UNO_QUERY );
         // redlining enabled?
-        sal_Bool bEnabled = *(sal_Bool*)aDocPropertySet->getPropertyValue(
+        bool bEnabled = *(sal_Bool*)aDocPropertySet->getPropertyValue(
                                                 sRecordChanges ).getValue();
 
         // only export if we have redlines or attributes
@@ -334,8 +334,8 @@ void XMLRedlineExport::ExportChangeInline(
     // determine element name (depending on collapsed, start/end)
     enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
     Any aAny = rPropSet->getPropertyValue(sIsCollapsed);
-    sal_Bool bCollapsed = *(sal_Bool *)aAny.getValue();
-    sal_Bool bStart = sal_True; // ignored if bCollapsed = sal_True
+    bool bCollapsed = *(sal_Bool *)aAny.getValue();
+    bool bStart = true; // ignored if bCollapsed = sal_True
     if (bCollapsed)
     {
         eElement = XML_CHANGE;
@@ -549,7 +549,7 @@ void XMLRedlineExport::ExportChangeInfo(
 
 void XMLRedlineExport::ExportStartOrEndRedline(
     const Reference<XPropertySet> & rPropSet,
-    sal_Bool bStart)
+    bool bStart)
 {
     if( ! rPropSet.is() )
         return;
@@ -571,17 +571,17 @@ void XMLRedlineExport::ExportStartOrEndRedline(
     const PropertyValue* pValues = aValues.getConstArray();
 
     // seek for redline properties
-    sal_Bool bIsCollapsed = sal_False;
-    sal_Bool bIsStart = sal_True;
+    bool bIsCollapsed = false;
+    bool bIsStart = true;
     OUString sId;
-    sal_Bool bIdOK = sal_False; // have we seen an ID?
+    bool bIdOK = false; // have we seen an ID?
     sal_Int32 nLength = aValues.getLength();
     for(sal_Int32 i = 0; i < nLength; i++)
     {
         if (sRedlineIdentifier.equals(pValues[i].Name))
         {
             pValues[i].Value >>= sId;
-            bIdOK = sal_True;
+            bIdOK = true;
         }
         else if (sIsCollapsed.equals(pValues[i].Name))
         {
@@ -616,7 +616,7 @@ void XMLRedlineExport::ExportStartOrEndRedline(
 
 void XMLRedlineExport::ExportStartOrEndRedline(
     const Reference<XTextContent> & rContent,
-    sal_Bool bStart)
+    bool bStart)
 {
     Reference<XPropertySet> xPropSet(rContent, uno::UNO_QUERY);
     if (xPropSet.is())
@@ -631,7 +631,7 @@ void XMLRedlineExport::ExportStartOrEndRedline(
 
 void XMLRedlineExport::ExportStartOrEndRedline(
     const Reference<XTextSection> & rSection,
-    sal_Bool bStart)
+    bool bStart)
 {
     Reference<XPropertySet> xPropSet(rSection, uno::UNO_QUERY);
     if (xPropSet.is())

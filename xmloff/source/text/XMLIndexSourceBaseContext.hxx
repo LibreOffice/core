@@ -78,10 +78,10 @@ class XMLIndexSourceBaseContext : public SvXMLImportContext
     const OUString sCreateFromChapter;
     const OUString sIsRelativeTabstops;
 
-    sal_Bool bUseLevelFormats;
+    bool bUseLevelFormats;
 
-    sal_Bool bChapterIndex;     /// chapter-wise or document index?
-    sal_Bool bRelativeTabs;     /// tab stops relative to margin or indent?
+    bool bChapterIndex;     /// chapter-wise or document index?
+    bool bRelativeTabs;     /// tab stops relative to margin or indent?
 
 protected:
 
@@ -99,7 +99,7 @@ public:
         const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
-        sal_Bool bLevelFormats);
+        bool bLevelFormats);
 
     virtual ~XMLIndexSourceBaseContext();
 

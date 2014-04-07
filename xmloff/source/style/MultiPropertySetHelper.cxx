@@ -84,7 +84,7 @@ void MultiPropertySetHelper::hasProperties(
     for( i = 0; i < nLength; i++ )
     {
         // ask for property
-        sal_Bool bHasProperty =
+        bool bHasProperty =
             rInfo->hasPropertyByName( pPropertyNames[i] );
 
         // set index and increment (if appropriate)

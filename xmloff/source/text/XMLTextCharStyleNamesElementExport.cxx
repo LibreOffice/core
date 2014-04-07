@@ -32,8 +32,8 @@ using namespace ::xmloff::token;
 
 XMLTextCharStyleNamesElementExport::XMLTextCharStyleNamesElementExport(
     SvXMLExport& rExp,
-    sal_Bool bDoSth,
-    sal_Bool bAllStyles,
+    bool bDoSth,
+    bool bAllStyles,
     const Reference < XPropertySet > & rPropSet,
     const OUString& rPropName ) :
     rExport( rExp ),

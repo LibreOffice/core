@@ -52,7 +52,7 @@ class XMLChangeElementImportContext : public SvXMLImportContext
      *
      * So if bAcceptContent is true, we are importing a <text:deletion> element
      */
-    sal_Bool bAcceptContent;
+    bool bAcceptContent;
 
     /// context of enclosing <text:changed-region> element
     XMLChangedRegionImportContext& rChangedRegion;
@@ -66,7 +66,7 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         /// accept text content (paragraphs) in element as redline content?
-        sal_Bool bAcceptContent,
+        bool bAcceptContent,
         /// context of enclosing <text:changed-region> element
         XMLChangedRegionImportContext& rParent);
 

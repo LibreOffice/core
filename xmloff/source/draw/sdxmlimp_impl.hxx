@@ -160,10 +160,10 @@ class SdXMLMasterStylesContext;
 struct DateTimeDeclContextImpl
 {
     OUString maStrText;
-    sal_Bool mbFixed;
+    bool mbFixed;
     OUString maStrDateTimeFormat;
 
-    DateTimeDeclContextImpl() : mbFixed(sal_True) {}
+    DateTimeDeclContextImpl() : mbFixed(true) {}
 };
 
 typedef std::map<OUString, OUString> HeaderFooterDeclMap;
@@ -196,9 +196,9 @@ class SdXMLImport: public SvXMLImport
     sal_Int32                   mnNewPageCount;
     sal_Int32                   mnNewMasterPageCount;
 
-    sal_Bool                    mbIsDraw;
-    sal_Bool                    mbLoadDoc;
-    sal_Bool                    mbPreview;
+    bool                    mbIsDraw;
+    bool                    mbLoadDoc;
+    bool                    mbPreview;
 
     DrawPageIdMap               maDrawPageIds;
 
@@ -221,7 +221,7 @@ public:
     SdXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         OUString const & implementationName,
-        sal_Bool bIsDraw, sal_uInt16 nImportFlags );
+        bool bIsDraw, sal_uInt16 nImportFlags );
     virtual ~SdXMLImport() throw ();
 
     // XImporter
@@ -254,7 +254,7 @@ public:
     const SdXMLMasterStylesContext* GetMasterStylesContext() const { return mpMasterStylesContext; }
 
     sal_uInt16 GetStyleFamilyMask() const { return mnStyleFamilyMask; }
-    sal_Bool IsStylesOnlyMode() const { return !mbLoadDoc; }
+    bool IsStylesOnlyMode() const { return !mbLoadDoc; }
 
     const SvXMLTokenMap& GetDocElemTokenMap();
     const SvXMLTokenMap& GetBodyElemTokenMap();
@@ -282,22 +282,22 @@ public:
 
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getPageLayouts() const { return mxPageLayouts; }
 
-    sal_Bool IsDraw() const { return mbIsDraw; }
-    sal_Bool IsImpress() const { return !mbIsDraw; }
+    bool IsDraw() const { return mbIsDraw; }
+    bool IsImpress() const { return !mbIsDraw; }
 
     // #80365#
     virtual void SetStatistics(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats) SAL_OVERRIDE;
 
-    sal_Bool IsPreview() const { return mbPreview; }
+    bool IsPreview() const { return mbPreview; }
 
     void AddHeaderDecl( const OUString& rName, const OUString& rText );
     void AddFooterDecl( const OUString& rName, const OUString& rText );
-    void AddDateTimeDecl( const OUString& rName, const OUString& rText, sal_Bool bFixed, const OUString& rDateTimeFormat );
+    void AddDateTimeDecl( const OUString& rName, const OUString& rText, bool bFixed, const OUString& rDateTimeFormat );
 
     OUString GetHeaderDecl( const OUString& rName ) const;
     OUString GetFooterDecl( const OUString& rName ) const;
-    OUString GetDateTimeDecl( const OUString& rName, sal_Bool& rbFixed, OUString& rDateTimeFormat );
+    OUString GetDateTimeDecl( const OUString& rName, bool& rbFixed, OUString& rDateTimeFormat );
 
     virtual void NotifyEmbeddedFontRead() SAL_OVERRIDE;
 };

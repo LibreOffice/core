@@ -39,10 +39,10 @@ class XMLIndexTabStopEntryContext : public XMLIndexSimpleEntryContext
 {
     OUString sLeaderChar;    /// fill ("leader") character
     sal_Int32 nTabPosition;         /// tab position
-    sal_Bool bTabPositionOK;        /// is tab right aligned?
-    sal_Bool bTabRightAligned;      /// is nTabPosition valid?
-    sal_Bool bLeaderCharOK;         /// is sLeaderChar valid?
-    sal_Bool bWithTab;              /// is tab char present? #i21237#
+    bool bTabPositionOK;        /// is tab right aligned?
+    bool bTabRightAligned;      /// is nTabPosition valid?
+    bool bLeaderCharOK;         /// is sLeaderChar valid?
+    bool bWithTab;              /// is tab char present? #i21237#
 
 public:
 

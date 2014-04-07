@@ -102,14 +102,14 @@ XMLSectionImportContext::XMLSectionImportContext(
 ,   sProtectionKey(sAPI_ProtectionKey)
 ,   sIsProtected(sAPI_IsProtected)
 ,   sIsCurrentlyVisible(sAPI_IsCurrentlyVisible)
-,   bProtect(sal_False)
-,   bCondOK(sal_False)
-,   bIsVisible(sal_True)
-,   bValid(sal_False)
-,   bSequenceOK(sal_False)
-,   bIsCurrentlyVisible(sal_True)
-,   bIsCurrentlyVisibleOK(sal_False)
-,   bHasContent(sal_False)
+,   bProtect(false)
+,   bCondOK(false)
+,   bIsVisible(true)
+,   bValid(false)
+,   bSequenceOK(false)
+,   bIsCurrentlyVisible(true)
+,   bIsCurrentlyVisibleOK(false)
+,   bHasContent(false)
 {
 }
 
@@ -124,10 +124,10 @@ void XMLSectionImportContext::StartElement(
     ProcessAttributes(xAttrList);
 
     // process index headers:
-    sal_Bool bIsIndexHeader = IsXMLToken( GetLocalName(), XML_INDEX_TITLE );
+    bool bIsIndexHeader = IsXMLToken( GetLocalName(), XML_INDEX_TITLE );
     if (bIsIndexHeader)
     {
-        bValid = sal_True;
+        bValid = true;
     }
 
     UniReference<XMLTextImportHelper> rHelper = GetImport().GetTextImport();
@@ -271,7 +271,7 @@ void XMLSectionImportContext::ProcessAttributes(
                 break;
             case XML_TOK_SECTION_NAME:
                 sName = sAttr;
-                bValid = sal_True;
+                bValid = true;
                 break;
             case XML_TOK_SECTION_CONDITION:
                 {
@@ -281,7 +281,7 @@ void XMLSectionImportContext::ProcessAttributes(
                     if( XML_NAMESPACE_OOOW == nPrefix )
                     {
                         sCond = sTmp;
-                        bCondOK = sal_True;
+                        bCondOK = true;
                     }
                     else
                         sCond = sAttr;
@@ -290,12 +290,12 @@ void XMLSectionImportContext::ProcessAttributes(
             case XML_TOK_SECTION_DISPLAY:
                 if (IsXMLToken(sAttr, XML_TRUE))
                 {
-                    bIsVisible = sal_True;
+                    bIsVisible = true;
                 }
                 else if ( IsXMLToken(sAttr, XML_NONE) ||
                           IsXMLToken(sAttr, XML_CONDITION) )
                 {
-                    bIsVisible = sal_False;
+                    bIsVisible = false;
                 }
                 // else: ignore
                 break;
@@ -305,13 +305,13 @@ void XMLSectionImportContext::ProcessAttributes(
                     if (::sax::Converter::convertBool(bTmp, sAttr))
                     {
                         bIsCurrentlyVisible = !bTmp;
-                        bIsCurrentlyVisibleOK = sal_True;
+                        bIsCurrentlyVisibleOK = true;
                     }
                 }
                 break;
             case XML_TOK_SECTION_PROTECTION_KEY:
                 ::sax::Converter::decodeBase64(aSequence, sAttr);
-                bSequenceOK = sal_True;
+                bSequenceOK = true;
                 break;
             case XML_TOK_SECTION_PROTECT:
             {
@@ -387,7 +387,7 @@ SvXMLImportContext* XMLSectionImportContext::CreateChildContext(
                                                nPrefix, rLocalName );
         }
         else
-            bHasContent = sal_True;
+            bHasContent = true;
     }
 
     return pContext;

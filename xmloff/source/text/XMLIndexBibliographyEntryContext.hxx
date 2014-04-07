@@ -41,7 +41,7 @@ class XMLIndexBibliographyEntryContext : public XMLIndexSimpleEntryContext
 {
     // bibliography info
     sal_Int16 nBibliographyInfo;
-    sal_Bool bBibliographyInfoOK;
+    bool bBibliographyInfoOK;
 
 public:
 

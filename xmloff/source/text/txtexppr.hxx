@@ -32,7 +32,7 @@ class XMLTextExportPropertySetMapper: public SvXMLExportPropertyMapper
     SvXMLExport& rExport;
 
     OUString sDropCharStyle;
-    sal_Bool bDropWholeWord;
+    bool bDropWholeWord;
 
     void ContextFontFilter(
                 bool bEnableFoFontFamily,

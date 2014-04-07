@@ -34,7 +34,7 @@ XMLIndexBodyContext::XMLIndexBodyContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName ) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
-        bHasContent(sal_False)
+        bHasContent(false)
 {
 }
 
@@ -57,7 +57,7 @@ SvXMLImportContext* XMLIndexBodyContext::CreateChildContext(
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
     else
-        bHasContent = sal_True;
+        bHasContent = true;
 
     return pContext;
 }

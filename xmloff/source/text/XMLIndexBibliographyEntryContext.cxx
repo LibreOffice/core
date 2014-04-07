@@ -51,7 +51,7 @@ XMLIndexBibliographyEntryContext::XMLIndexBibliographyEntryContext(
                                    rTemplate,
                                    nPrfx, rLocalName),
         nBibliographyInfo(BibliographyDataField::IDENTIFIER),
-        bBibliographyInfoOK(sal_False)
+        bBibliographyInfoOK(false)
 {
 }
 
@@ -113,7 +113,7 @@ void XMLIndexBibliographyEntryContext::StartElement(
             if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
             {
                 sCharStyleName = xAttrList->getValueByIndex(nAttr);
-                bCharStyleNameOK = sal_True;
+                bCharStyleNameOK = true;
             }
             else if ( IsXMLToken( sLocalName, XML_BIBLIOGRAPHY_DATA_FIELD ) )
             {
@@ -123,7 +123,7 @@ void XMLIndexBibliographyEntryContext::StartElement(
                     aBibliographyDataFieldMap))
                 {
                     nBibliographyInfo = nTmp;
-                    bBibliographyInfoOK = sal_True;
+                    bBibliographyInfoOK = true;
                 }
             }
         }

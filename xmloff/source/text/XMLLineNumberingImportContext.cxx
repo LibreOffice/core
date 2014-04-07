@@ -67,10 +67,10 @@ XMLLineNumberingImportContext::XMLLineNumberingImportContext(
 ,   nNumberPosition(style::LineNumberPosition::LEFT)
 ,   nIncrement(-1)
 ,   nSeparatorIncrement(-1)
-,   bNumberLines(sal_True)
-,   bCountEmptyLines(sal_True)
-,   bCountInFloatingFrames(sal_False)
-,   bRestartNumbering(sal_False)
+,   bNumberLines(true)
+,   bCountEmptyLines(true)
+,   bCountInFloatingFrames(false)
+,   bRestartNumbering(false)
 {
 }
 

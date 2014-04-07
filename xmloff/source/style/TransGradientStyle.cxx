@@ -75,14 +75,14 @@ XMLTransGradientStyleImport::~XMLTransGradientStyleImport()
 {
 }
 
-sal_Bool XMLTransGradientStyleImport::importXML(
+bool XMLTransGradientStyleImport::importXML(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     uno::Any& rValue,
     OUString& rStrName )
 {
-    sal_Bool bRet           = sal_False;
-    sal_Bool bHasName       = sal_False;
-    sal_Bool bHasStyle      = sal_False;
+    bool bRet           = false;
+    bool bHasName       = false;
+    bool bHasStyle      = false;
     OUString aDisplayName;
 
     awt::Gradient aGradient;
@@ -126,7 +126,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
         case XML_TOK_GRADIENT_NAME:
             {
                 rStrName = rStrValue;
-                bHasName = sal_True;
+                bHasName = true;
             }
             break;
         case XML_TOK_GRADIENT_DISPLAY_NAME:
@@ -140,7 +140,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
                 if( SvXMLUnitConverter::convertEnum( eValue, rStrValue, pXML_GradientStyle_Enum ) )
                 {
                     aGradient.Style = (awt::GradientStyle) eValue;
-                    bHasStyle = sal_True;
+                    bHasStyle = true;
                 }
             }
             break;
@@ -221,11 +221,11 @@ XMLTransGradientStyleExport::~XMLTransGradientStyleExport()
 {
 }
 
-sal_Bool XMLTransGradientStyleExport::exportXML(
+bool XMLTransGradientStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     awt::Gradient aGradient;
 
     if( !rStrName.isEmpty() )
@@ -238,7 +238,7 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
             // Style
             if( !SvXMLUnitConverter::convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
             {
-                bRet = sal_False;
+                bRet = false;
             }
             else
             {

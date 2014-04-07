@@ -44,13 +44,13 @@ class XMLIndexUserSourceContext : public XMLIndexSourceBaseContext
     const OUString sCreateFromLevelParagraphStyles;
     const OUString sUserIndexName;
 
-    sal_Bool bUseObjects;
-    sal_Bool bUseGraphic;
-    sal_Bool bUseMarks;
-    sal_Bool bUseTables;
-    sal_Bool bUseFrames;
-    sal_Bool bUseLevelFromSource;
-    sal_Bool bUseLevelParagraphStyles;
+    bool bUseObjects;
+    bool bUseGraphic;
+    bool bUseMarks;
+    bool bUseTables;
+    bool bUseFrames;
+    bool bUseLevelFromSource;
+    bool bUseLevelParagraphStyles;
     OUString sIndexName;
 
 public:

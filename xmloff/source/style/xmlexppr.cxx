@@ -107,7 +107,7 @@ void XMLPropertyStates_Impl::AddPropertyState(
         const XMLPropertyState& rPropState)
 {
     XMLPropertyStateList_Impl::iterator aItr = aPropStates.begin();
-    sal_Bool bInserted(sal_False);
+    bool bInserted(false);
     if (nCount)
     {
         if (aLastItr->mnIndex < rPropState.mnIndex)
@@ -119,13 +119,13 @@ void XMLPropertyStates_Impl::AddPropertyState(
         if (aItr == aPropStates.end())
         {
             aLastItr = aPropStates.insert(aPropStates.end(), rPropState);
-            bInserted = sal_True;
+            bInserted = true;
             nCount++;
         }
         else if (aItr->mnIndex > rPropState.mnIndex)
         {
             aLastItr = aPropStates.insert(aItr, rPropState);
-            bInserted = sal_True;
+            bInserted = true;
             nCount++;
         }
     }
@@ -156,7 +156,7 @@ public:
     std::list<sal_uInt32>& GetIndexes() { return aIndexes; }
 
     // for sort
-    sal_Bool operator< ( const FilterPropertyInfo_Impl& rArg ) const
+    bool operator< ( const FilterPropertyInfo_Impl& rArg ) const
     {
         return (GetApiName() < rArg.GetApiName());
     }
@@ -190,7 +190,7 @@ public:
             vector< XMLPropertyState >& rPropStates,
             const Reference< XPropertySet >& xPropSet,
             const UniReference< XMLPropertySetMapper >& maPropMapper,
-            const sal_Bool bDefault = sal_False);
+            const bool bDefault = false);
     sal_uInt32 GetPropertyCount() const { return nCount; }
 };
 
@@ -278,7 +278,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
         vector< XMLPropertyState >& rPropStates,
         const Reference< XPropertySet >& rPropSet,
         const UniReference< XMLPropertySetMapper >& rPropMapper,
-        const sal_Bool bDefault )
+        const bool bDefault )
 {
     XMLPropertyStates_Impl aPropStates;
 
@@ -458,12 +458,12 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
             FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
             for(sal_uInt32 i = 0; i < nCount; ++i)
             {
-                sal_Bool bDirectValue =
+                bool bDirectValue =
                     !pStates || *pStates == PropertyState_DIRECT_VALUE;
                 if( bDirectValue || bDefault )
                 {
                     // The value is stored in the PropertySet itself, add to list.
-                    sal_Bool bGotValue = sal_False;
+                    bool bGotValue = false;
                     XMLPropertyState aNewProperty( -1 );
                     for( std::list<sal_uInt32>::const_iterator aIndexItr =
                             aItr->GetIndexes().begin();
@@ -480,7 +480,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                                 {
                                     aNewProperty.maValue =
                                         rPropSet->getPropertyValue( aItr->GetApiName() );
-                                    bGotValue = sal_True;
+                                    bGotValue = true;
                                 }
                                 aNewProperty.mnIndex = *aIndexItr;
                                 aPropStates.AddPropertyState( aNewProperty );
@@ -587,7 +587,7 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
     if (aIter != mpImpl->maCache.end())
         pFilterInfo = (*aIter).second;
 
-    sal_Bool bDelInfo = sal_False;
+    bool bDelInfo = false;
     if( !pFilterInfo )
     {
         pFilterInfo = new FilterPropertiesInfo_Impl;
@@ -908,12 +908,12 @@ void SvXMLExportPropertyMapper::_exportXML(
                     sal_uInt16 nKey = pNamespaceMap->GetKeyByPrefix( sPrefix );
                     if( USHRT_MAX == nKey || pNamespaceMap->GetNameByKey( nKey ) != sNamespace )
                     {
-                        sal_Bool bAddNamespace = sal_False;
+                        bool bAddNamespace = false;
                         if( USHRT_MAX == nKey )
                         {
                             // The prefix is unused, so it is sufficient
                             // to add it to the namespace map.
-                            bAddNamespace = sal_True;
+                            bAddNamespace = true;
                         }
                         else
                         {
@@ -935,7 +935,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                                 }
                                 while( nKey != USHRT_MAX );
 
-                                bAddNamespace = sal_True;
+                                bAddNamespace = true;
                             }
                             else
                             {
@@ -984,11 +984,11 @@ void SvXMLExportPropertyMapper::_exportXML(
             mpImpl->mxPropMapper->GetEntryNameSpace(rProperty.mnIndex),
             mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
 
-        sal_Bool bRemove = sal_False;
+        bool bRemove = false;
         if ((mpImpl->mxPropMapper->GetEntryFlags( rProperty.mnIndex ) & MID_FLAG_MERGE_ATTRIBUTE) != 0)
         {
             aValue = rAttrList.getValueByName( sName );
-            bRemove = sal_True;
+            bRemove = true;
         }
 
         if (mpImpl->mxPropMapper->exportXML(aValue, rProperty, rUnitConverter))
@@ -1008,7 +1008,7 @@ void SvXMLExportPropertyMapper::exportElementItems(
 {
     const sal_uInt16 nCount = rIndexArray.size();
 
-    sal_Bool bItemsExported = sal_False;
+    bool bItemsExported = false;
     for( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
     {
         const sal_uInt16 nElement = rIndexArray[nIndex];
@@ -1020,7 +1020,7 @@ void SvXMLExportPropertyMapper::exportElementItems(
         rExport.IgnorableWhitespace();
         handleElementItem( rExport, rProperties[nElement],
                            nFlags, &rProperties, nElement );
-        bItemsExported = sal_True;
+        bItemsExported = true;
     }
 
     if( bItemsExported )

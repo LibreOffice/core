@@ -184,14 +184,14 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
     sal_Int32           nFirstLineIndent;
     sal_Int32           nIndentAt;
 
-    sal_Bool            bBullet : 1;
-    sal_Bool            bImage : 1;
-    sal_Bool            bNum : 1;
-    sal_Bool            bHasColor : 1;
+    bool            bBullet : 1;
+    bool            bImage : 1;
+    bool            bNum : 1;
+    bool            bHasColor : 1;
 
     void SetRelSize( sal_Int16 nRel ) { nRelSize = nRel; }
     void SetColor( sal_Int32 nColor )
-        { m_nColor = nColor; bHasColor = sal_True; }
+        { m_nColor = nColor; bHasColor = true; }
     void SetSpaceBefore( sal_Int32 nSet ) { nSpaceBefore = nSet; }
     void SetMinLabelWidth( sal_Int32 nSet ) { nMinLabelWidth = nSet; }
     void SetMinLabelDist( sal_Int32 nSet ) { nMinLabelDist = nSet; }
@@ -278,18 +278,18 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
 ,   nListtabStopPosition( 0 )
 ,   nFirstLineIndent( 0 )
 ,   nIndentAt( 0 )
-,   bBullet( sal_False )
-,   bImage( sal_False )
-,   bNum( sal_False )
-,   bHasColor( sal_False )
+,   bBullet( false )
+,   bImage( false )
+,   bNum( false )
+,   bHasColor( false )
 {
     if( IsXMLToken( rLName, XML_LIST_LEVEL_STYLE_NUMBER ) ||
         IsXMLToken( rLName, XML_OUTLINE_LEVEL_STYLE )        )
-        bNum = sal_True;
+        bNum = true;
     else if( IsXMLToken( rLName, XML_LIST_LEVEL_STYLE_BULLET ) )
-        bBullet = sal_True;
+        bBullet = true;
     else if( IsXMLToken( rLName, XML_LIST_LEVEL_STYLE_IMAGE ) )
-        bImage = sal_True;
+        bImage = true;
 
     SvXMLTokenMap aTokenMap( lcl_getLevelAttrTokenMap() );
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -512,16 +512,16 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                 aFDesc.Pitch = eBulletFontPitch;
                 aFDesc.CharSet = eBulletFontEncoding;
                 aFDesc.Weight = WEIGHT_DONTKNOW;
-                sal_Bool bStarSymbol = sal_False;
+                bool bStarSymbol = false;
                 if( aFDesc.Name.equalsIgnoreAsciiCase( sStarBats ) )
                 {
                     cBullet = GetImport().ConvStarBatsCharToStarSymbol( cBullet );
-                    bStarSymbol = sal_True;
+                    bStarSymbol = true;
                 }
                 else if( aFDesc.Name.equalsIgnoreAsciiCase( sStarMath ) )
                 {
                     cBullet = GetImport().ConvStarMathCharToStarSymbol( cBullet );
-                    bStarSymbol = sal_True;
+                    bStarSymbol = true;
                 }
                 if( bStarSymbol )
                     aFDesc.Name = "StarSymbol" ;
@@ -1166,7 +1166,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
             return;
         }
 
-        sal_Bool bNew = sal_False;
+        bool bNew = false;
         if( rNumStyles->hasByName( rName ) )
         {
             Any aAny = rNumStyles->getByName( rName );
@@ -1191,7 +1191,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
             Any aAny;
             aAny <<= xStyle;
             rNumStyles->insertByName( rName, aAny );
-            bNew = sal_True;
+            bNew = true;
         }
 
         Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );

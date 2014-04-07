@@ -1600,7 +1600,7 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
             // the check should be done only for OASIS format
             if (!IsOOoXML())
             {
-                sal_Bool bRepairPackage = sal_False;
+                bool bRepairPackage = false;
                 try
                 {
                     xStorProps->getPropertyValue( "RepairPackage" )
@@ -1627,7 +1627,7 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
 
                     if ( bResult )
                     {
-                        sal_Bool bInconsistent = sal_False;
+                        bool bInconsistent = false;
                         xStorProps->getPropertyValue( "IsInconsistent" )
                             >>= bInconsistent;
                         bResult = !bInconsistent;

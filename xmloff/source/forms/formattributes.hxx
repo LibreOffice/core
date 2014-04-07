@@ -241,9 +241,9 @@ namespace xmloff
 
             // entries which are special to some value types
             const SvXMLEnumMapEntry*        pEnumMap;               // the enum map, if appliable
-            sal_Bool                        bInverseSemantics;      // for booleanss: attribute and property value have the same or an inverse semantics?
+            bool                        bInverseSemantics;      // for booleanss: attribute and property value have the same or an inverse semantics?
 
-            AttributeAssignment() : pEnumMap(NULL), bInverseSemantics(sal_False) { }
+            AttributeAssignment() : pEnumMap(NULL), bInverseSemantics(false) { }
         };
 
     protected:
@@ -292,7 +292,7 @@ namespace xmloff
         */
         void    addBooleanProperty(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const sal_Bool _bAttributeDefault, const sal_Bool _bInverseSemantics = sal_False);
+            const bool _bAttributeDefault, const bool _bInverseSemantics = false);
 
         /** add a attribute assignment referring to an int16 property to the map
 

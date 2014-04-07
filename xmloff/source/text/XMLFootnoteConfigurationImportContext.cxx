@@ -140,8 +140,8 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
 ,   pAttrTokenMap(NULL)
 ,   nOffset(0)
 ,   nNumbering(FootnoteNumbering::PER_PAGE)
-,   bPosition(sal_False)
-,   bIsEndnote(sal_False)
+,   bPosition(false)
+,   bIsEndnote(false)
 {
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
@@ -156,7 +156,7 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
             const OUString& rValue = xAttrList->getValueByIndex( nAttr );
             if( IsXMLToken( rValue, XML_ENDNOTE ) )
             {
-                bIsEndnote = sal_True;
+                bIsEndnote = true;
                 SetFamily( XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG );
             }
             break;

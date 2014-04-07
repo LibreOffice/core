@@ -61,7 +61,7 @@ void XMLProcAttrTransformerContext::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
     Reference< XAttributeList > xAttrList( rAttrList );
-    GetTransformer().ProcessAttrList( xAttrList, m_nActionMap, sal_False );
+    GetTransformer().ProcessAttrList( xAttrList, m_nActionMap, false );
     GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
 }
 

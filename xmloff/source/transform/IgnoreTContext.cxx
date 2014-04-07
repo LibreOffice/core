@@ -29,25 +29,25 @@ TYPEINIT1( XMLIgnoreTransformerContext, XMLTransformerContext );
 XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName,
-        sal_Bool bIgnoreChars,
-        sal_Bool bIgnoreElems ) :
+        bool bIgnoreChars,
+        bool bIgnoreElems ) :
     XMLTransformerContext( rImp, rQName ),
     m_bIgnoreCharacters( bIgnoreChars ),
     m_bIgnoreElements( bIgnoreElems ),
     m_bAllowCharactersRecursive( false ),
-    m_bRecursiveUse( sal_False )
+    m_bRecursiveUse( false )
 {
 }
 
 XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
         XMLTransformerBase& rTransformer,
         const OUString& rQName,
-        sal_Bool bAllowCharactersRecursive ) :
+        bool bAllowCharactersRecursive ) :
     XMLTransformerContext( rTransformer, rQName ),
-    m_bIgnoreCharacters( sal_False ),
-    m_bIgnoreElements( sal_False ),
+    m_bIgnoreCharacters( false ),
+    m_bIgnoreElements( false ),
     m_bAllowCharactersRecursive( bAllowCharactersRecursive ),
-    m_bRecursiveUse( sal_True )
+    m_bRecursiveUse( true )
 {
 }
 
@@ -64,8 +64,8 @@ XMLTransformerContext *XMLIgnoreTransformerContext::CreateChildContext(
     XMLTransformerContext *pContext = 0;
     if( m_bIgnoreElements )
         pContext = new XMLIgnoreTransformerContext( GetTransformer(),
-                                                    rQName, sal_True,
-                                                    sal_True );
+                                                    rQName, true,
+                                                    true );
     else if (m_bRecursiveUse)
         pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                     rQName, m_bAllowCharactersRecursive );

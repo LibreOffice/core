@@ -58,8 +58,8 @@ class XMLIndexBibliographyConfigurationContext : public SvXMLStyleContext
     OUString sPrefix;
     OUString sAlgorithm;
     LanguageTagODF maLanguageTagODF;
-    sal_Bool bNumberedEntries;
-    sal_Bool bSortByPosition;
+    bool bNumberedEntries;
+    bool bSortByPosition;
 
     ::std::vector< ::com::sun::star::uno::Sequence<
                         ::com::sun::star::beans::PropertyValue> > aSortKeys;

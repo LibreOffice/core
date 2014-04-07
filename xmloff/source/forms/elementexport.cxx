@@ -429,7 +429,7 @@ namespace xmloff
                 // if we act as rich text control, we need to export some text:p elements
                 if ( xControlText.is() )
                 {
-                    sal_Bool bActingAsRichText = sal_False;
+                    bool bActingAsRichText = false;
                     if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_RICH_TEXT ) )
                     {
                         OSL_VERIFY(m_xProps->getPropertyValue( PROPERTY_RICH_TEXT ) >>= bActingAsRichText );
@@ -1501,7 +1501,7 @@ namespace xmloff
                         else
                         {
                             // if the MultiLine property is sal_True, it is a TextArea
-                            sal_Bool bMultiLine = sal_False;
+                            bool bMultiLine = false;
                             if (m_xPropertyInfo->hasPropertyByName(PROPERTY_MULTILINE))
                                 // grid columns do not have this property ....
                                 bMultiLine = ::cppu::any2bool(m_xProps->getPropertyValue(PROPERTY_MULTILINE));
@@ -1613,7 +1613,7 @@ namespace xmloff
                     // a sequence of pairs which is build from the StringItemList and the ValueList
                     ListSourceType eListSourceType = ListSourceType_VALUELIST;
                 #if OSL_DEBUG_LEVEL > 0
-                    sal_Bool bSuccess =
+                    bool bSuccess =
                 #endif
                     m_xProps->getPropertyValue(PROPERTY_LISTSOURCETYPE) >>= eListSourceType;
                     OSL_ENSURE(bSuccess, "OControlExport::examineControl: could not retrieve the ListSourceType!");
@@ -2043,7 +2043,7 @@ namespace xmloff
     OFormExport::OFormExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxForm,
         const Sequence< ScriptEventDescriptor >& _rEvents)
         :OElementExport(_rContext, _rxForm, _rEvents)
-        ,m_bCreateConnectionResourceElement(sal_False)
+        ,m_bCreateConnectionResourceElement(false)
     {
         OSL_ENSURE(m_xProps.is(), "OFormExport::OFormExport: invalid arguments!");
     }

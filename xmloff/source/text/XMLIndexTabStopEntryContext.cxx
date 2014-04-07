@@ -53,10 +53,10 @@ XMLIndexTabStopEntryContext::XMLIndexTabStopEntryContext(
                                    rTemplate, nPrfx, rLocalName),
         sLeaderChar(),
         nTabPosition(0),
-        bTabPositionOK(sal_False),
-        bTabRightAligned(sal_False),
-        bLeaderCharOK(sal_False),
-        bWithTab(sal_True) // #i21237#
+        bTabPositionOK(false),
+        bTabRightAligned(false),
+        bLeaderCharOK(false),
+        bWithTab(true) // #i21237#
 {
 }
 
@@ -92,7 +92,7 @@ void XMLIndexTabStopEntryContext::StartElement(
                                         convertMeasureToCore(nTmp, sAttr))
                 {
                     nTabPosition = nTmp;
-                    bTabPositionOK = sal_True;
+                    bTabPositionOK = true;
                 }
             }
             else if ( IsXMLToken( sLocalName, XML_LEADER_CHAR ) )

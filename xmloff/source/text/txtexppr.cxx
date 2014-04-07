@@ -55,7 +55,7 @@ void XMLTextExportPropertySetMapper::handleElementItem(
     case CTF_DROPCAPFORMAT:
         pThis->maDropCapExport.exportXML( rProperty.maValue, bDropWholeWord,
                                           sDropCharStyle );
-        pThis->bDropWholeWord = sal_False;
+        pThis->bDropWholeWord = false;
         pThis->sDropCharStyle = OUString();
         break;
 
@@ -106,13 +106,13 @@ void XMLTextExportPropertySetMapper::handleElementItem(
         break;
 
     case CTF_SECTION_FOOTNOTE_END:
-        XMLSectionFootnoteConfigExport::exportXML(rExp, sal_False,
+        XMLSectionFootnoteConfigExport::exportXML(rExp, false,
                                                   pProperties, nIdx,
                                                   getPropertySetMapper());
         break;
 
     case CTF_SECTION_ENDNOTE_END:
-        XMLSectionFootnoteConfigExport::exportXML(rExp, sal_True,
+        XMLSectionFootnoteConfigExport::exportXML(rExp, true,
                                                   pProperties, nIdx,
                                                   getPropertySetMapper());
         break;
@@ -177,7 +177,7 @@ XMLTextExportPropertySetMapper::XMLTextExportPropertySetMapper(
         SvXMLExport& rExp ) :
     SvXMLExportPropertyMapper( rMapper ),
     rExport( rExp ),
-    bDropWholeWord( sal_False ),
+    bDropWholeWord( false ),
     maDropCapExport( rExp ),
     maTabStopExport( rExp ),
     maTextColumnsExport( rExp ),
@@ -657,7 +657,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pRepeatOffsetX = NULL;
     XMLPropertyState* pRepeatOffsetY = NULL;
 
-    sal_Bool bNeedsAnchor = sal_False;
+    bool bNeedsAnchor = false;
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != rProperties.end();
@@ -739,31 +739,31 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_WRAP_PARAGRAPH_ONLY:   pWrapParagraphOnlyState = propertie; break;
         case CTF_ANCHORTYPE:            pAnchorTypeState = propertie; break;
 
-        case CTF_HORIZONTALPOS:             pHoriOrientState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_HORIZONTALPOS_MIRRORED:    pHoriOrientMirroredState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_HORIZONTALREL:             pHoriOrientRelState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_HORIZONTALREL_FRAME:       pHoriOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_HORIZONTALMIRROR:          pHoriOrientMirrorState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_HORIZONTALPOS:             pHoriOrientState = propertie; bNeedsAnchor = true; break;
+        case CTF_HORIZONTALPOS_MIRRORED:    pHoriOrientMirroredState = propertie; bNeedsAnchor = true; break;
+        case CTF_HORIZONTALREL:             pHoriOrientRelState = propertie; bNeedsAnchor = true; break;
+        case CTF_HORIZONTALREL_FRAME:       pHoriOrientRelFrameState = propertie; bNeedsAnchor = true; break;
+        case CTF_HORIZONTALMIRROR:          pHoriOrientMirrorState = propertie; bNeedsAnchor = true; break;
         case CTF_RELWIDTHREL:               pRelWidthRel = propertie; break;
-        case CTF_VERTICALPOS:           pVertOrientState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALPOS_ATCHAR:    pVertOrientAtCharState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALREL:           pVertOrientRelState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALREL_PAGE:      pVertOrientRelPageState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALREL_FRAME:     pVertOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsCharState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_VERTICALPOS:           pVertOrientState = propertie; bNeedsAnchor = true; break;
+        case CTF_VERTICALPOS_ATCHAR:    pVertOrientAtCharState = propertie; bNeedsAnchor = true; break;
+        case CTF_VERTICALREL:           pVertOrientRelState = propertie; bNeedsAnchor = true; break;
+        case CTF_VERTICALREL_PAGE:      pVertOrientRelPageState = propertie; bNeedsAnchor = true; break;
+        case CTF_VERTICALREL_FRAME:     pVertOrientRelFrameState = propertie; bNeedsAnchor = true; break;
+        case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsCharState = propertie; bNeedsAnchor = true; break;
         case CTF_RELHEIGHTREL:          pRelHeightRel = propertie; break;
 
         // Handle new CTFs for shape positioning properties (#i28749#)
-        case CTF_SHAPE_HORIZONTALPOS:             pShapeHoriOrientState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_SHAPE_HORIZONTALPOS_MIRRORED:    pShapeHoriOrientMirroredState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_SHAPE_HORIZONTALREL:             pShapeHoriOrientRelState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_SHAPE_HORIZONTALREL_FRAME:       pShapeHoriOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_SHAPE_HORIZONTALMIRROR:          pShapeHoriOrientMirrorState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_SHAPE_VERTICALPOS:           pShapeVertOrientState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_SHAPE_VERTICALPOS_ATCHAR:    pShapeVertOrientAtCharState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_SHAPE_VERTICALREL:           pShapeVertOrientRelState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_SHAPE_VERTICALREL_PAGE:      pShapeVertOrientRelPageState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_SHAPE_VERTICALREL_FRAME:     pShapeVertOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_SHAPE_HORIZONTALPOS:             pShapeHoriOrientState = propertie; bNeedsAnchor = true; break;
+        case CTF_SHAPE_HORIZONTALPOS_MIRRORED:    pShapeHoriOrientMirroredState = propertie; bNeedsAnchor = true; break;
+        case CTF_SHAPE_HORIZONTALREL:             pShapeHoriOrientRelState = propertie; bNeedsAnchor = true; break;
+        case CTF_SHAPE_HORIZONTALREL_FRAME:       pShapeHoriOrientRelFrameState = propertie; bNeedsAnchor = true; break;
+        case CTF_SHAPE_HORIZONTALMIRROR:          pShapeHoriOrientMirrorState = propertie; bNeedsAnchor = true; break;
+        case CTF_SHAPE_VERTICALPOS:           pShapeVertOrientState = propertie; bNeedsAnchor = true; break;
+        case CTF_SHAPE_VERTICALPOS_ATCHAR:    pShapeVertOrientAtCharState = propertie; bNeedsAnchor = true; break;
+        case CTF_SHAPE_VERTICALREL:           pShapeVertOrientRelState = propertie; bNeedsAnchor = true; break;
+        case CTF_SHAPE_VERTICALREL_PAGE:      pShapeVertOrientRelPageState = propertie; bNeedsAnchor = true; break;
+        case CTF_SHAPE_VERTICALREL_FRAME:     pShapeVertOrientRelFrameState = propertie; bNeedsAnchor = true; break;
         case CTF_FONTNAME:              pFontNameState = propertie; break;
         case CTF_FONTFAMILYNAME:        pFontFamilyNameState = propertie; break;
         case CTF_FONTSTYLENAME:         pFontStyleNameState = propertie; break;
@@ -854,7 +854,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
                                  pCharDiffHeightCTLState  );
     if( pUnderlineColorState || pUnderlineHasColorState )
     {
-        sal_Bool bClear = !pUnderlineState;
+        bool bClear = !pUnderlineState;
         if( !bClear )
         {
             sal_Int16 nUnderline = 0;

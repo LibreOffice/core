@@ -137,14 +137,14 @@ XMLSectionExport::XMLSectionExport(
 
 ,   rExport(rExp)
 ,   rParaExport(rParaExp)
-,   bHeadingDummiesExported( sal_False )
+,   bHeadingDummiesExported( false )
 {
 }
 
 
 void XMLSectionExport::ExportSectionStart(
     const Reference<XTextSection> & rSection,
-    sal_Bool bAutoStyles)
+    bool bAutoStyles)
 {
     Reference<XPropertySet> xPropertySet(rSection, UNO_QUERY);
 
@@ -188,12 +188,12 @@ void XMLSectionExport::ExportSectionStart(
     }
 }
 
-sal_Bool XMLSectionExport::GetIndex(
+bool XMLSectionExport::GetIndex(
     const Reference<XTextSection> & rSection,
     Reference<XDocumentIndex> & rIndex) const
 {
     // first, reset result
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     rIndex = NULL;
 
     // get section Properties
@@ -220,7 +220,7 @@ sal_Bool XMLSectionExport::GetIndex(
             if (rSection == xEnclosingSection)
             {
                 rIndex = xDocumentIndex;
-                bRet = sal_True;
+                bRet = true;
             }
             // else: index header or regular section
 
@@ -232,7 +232,7 @@ sal_Bool XMLSectionExport::GetIndex(
             // if the enclosing section is "our" section, then we are an index!
             if (rSection == xEnclosingSection)
             {
-                bRet = sal_True;
+                bRet = true;
             }
             // else: regular section
         }
@@ -246,7 +246,7 @@ sal_Bool XMLSectionExport::GetIndex(
 
 void XMLSectionExport::ExportSectionEnd(
     const Reference<XTextSection> & rSection,
-    sal_Bool bAutoStyles)
+    bool bAutoStyles)
 {
     // no end section for styles
     if (!bAutoStyles)
@@ -579,15 +579,15 @@ void XMLSectionExport::ExportTableOfContentStart(
 
         // use outline level
         ExportBoolean(rPropertySet, sCreateFromOutline,
-                          XML_USE_OUTLINE_LEVEL, sal_True);
+                          XML_USE_OUTLINE_LEVEL, true);
 
         // use index marks
         ExportBoolean(rPropertySet, sCreateFromMarks,
-                      XML_USE_INDEX_MARKS, sal_True);
+                      XML_USE_INDEX_MARKS, true);
 
         // use level styles
         ExportBoolean(rPropertySet, sCreateFromLevelParagraphStyles,
-                      XML_USE_INDEX_SOURCE_STYLES, sal_False);
+                      XML_USE_INDEX_SOURCE_STYLES, false);
 
         ExportBaseIndexSource(TEXT_SECTION_TYPE_TOC, rPropertySet);
     }
@@ -604,15 +604,15 @@ void XMLSectionExport::ExportObjectIndexStart(
     // scope for index source element
     {
         ExportBoolean(rPropertySet, sCreateFromOtherEmbeddedObjects,
-                      XML_USE_OTHER_OBJECTS, sal_False);
+                      XML_USE_OTHER_OBJECTS, false);
         ExportBoolean(rPropertySet, sCreateFromStarCalc,
-                      XML_USE_SPREADSHEET_OBJECTS, sal_False);
+                      XML_USE_SPREADSHEET_OBJECTS, false);
         ExportBoolean(rPropertySet, sCreateFromStarChart,
-                      XML_USE_CHART_OBJECTS, sal_False);
+                      XML_USE_CHART_OBJECTS, false);
         ExportBoolean(rPropertySet, sCreateFromStarDraw,
-                      XML_USE_DRAW_OBJECTS, sal_False);
+                      XML_USE_DRAW_OBJECTS, false);
         ExportBoolean(rPropertySet, sCreateFromStarMath,
-                      XML_USE_MATH_OBJECTS, sal_False);
+                      XML_USE_MATH_OBJECTS, false);
 
         ExportBaseIndexSource(TEXT_SECTION_TYPE_OBJECT, rPropertySet);
     }
@@ -677,21 +677,21 @@ void XMLSectionExport::ExportAlphabeticalIndexStart(
 
         // other (boolean) attributes
         ExportBoolean(rPropertySet, sIsCaseSensitive, XML_IGNORE_CASE,
-                      sal_False, sal_True);
+                      false, true);
         ExportBoolean(rPropertySet, sUseAlphabeticalSeparators,
-                      XML_ALPHABETICAL_SEPARATORS, sal_False);
+                      XML_ALPHABETICAL_SEPARATORS, false);
         ExportBoolean(rPropertySet, sUseCombinedEntries, XML_COMBINE_ENTRIES,
-                      sal_True);
+                      true);
         ExportBoolean(rPropertySet, sUseDash, XML_COMBINE_ENTRIES_WITH_DASH,
-                      sal_False);
+                      false);
         ExportBoolean(rPropertySet, sUseKeyAsEntry, XML_USE_KEYS_AS_ENTRIES,
-                      sal_False);
+                      false);
         ExportBoolean(rPropertySet, sUsePP, XML_COMBINE_ENTRIES_WITH_PP,
-                      sal_True);
+                      true);
         ExportBoolean(rPropertySet, sUseUpperCase, XML_CAPITALIZE_ENTRIES,
-                      sal_False);
+                      false);
         ExportBoolean(rPropertySet, sIsCommaSeparated, XML_COMMA_SEPARATED,
-                      sal_False);
+                      false);
 
         // sort algorithm
         aAny = rPropertySet->getPropertyValue(sSortAlgorithm);
@@ -725,19 +725,19 @@ void XMLSectionExport::ExportUserIndexStart(
     {
         // bool attributes
         ExportBoolean(rPropertySet, sCreateFromEmbeddedObjects,
-                      XML_USE_OBJECTS, sal_False);
+                      XML_USE_OBJECTS, false);
         ExportBoolean(rPropertySet, sCreateFromGraphicObjects,
-                      XML_USE_GRAPHICS, sal_False);
+                      XML_USE_GRAPHICS, false);
         ExportBoolean(rPropertySet, sCreateFromMarks,
-                      XML_USE_INDEX_MARKS, sal_False);
+                      XML_USE_INDEX_MARKS, false);
         ExportBoolean(rPropertySet, sCreateFromTables,
-                      XML_USE_TABLES, sal_False);
+                      XML_USE_TABLES, false);
         ExportBoolean(rPropertySet, sCreateFromTextFrames,
-                      XML_USE_FLOATING_FRAMES, sal_False);
+                      XML_USE_FLOATING_FRAMES, false);
         ExportBoolean(rPropertySet, sUseLevelFromSource,
-                      XML_COPY_OUTLINE_LEVELS, sal_False);
+                      XML_COPY_OUTLINE_LEVELS, false);
         ExportBoolean(rPropertySet, sCreateFromLevelParagraphStyles,
-                      XML_USE_INDEX_SOURCE_STYLES, sal_False);
+                      XML_USE_INDEX_SOURCE_STYLES, false);
 
         Any aAny = rPropertySet->getPropertyValue( sUserIndexName );
         OUString sIndexName;
@@ -881,7 +881,7 @@ void XMLSectionExport::ExportBaseIndexSource(
         aAny >>= aTemplateSequence;
 
         // export the sequence (abort export if an error occurred; #91214#)
-        sal_Bool bResult =
+        bool bResult =
             ExportIndexTemplate(eType, i, rPropertySet, aTemplateSequence);
         if ( !bResult )
             break;
@@ -1036,7 +1036,7 @@ static const XMLTokenEnum aTypeElementNameMap[] =
 };
 
 
-sal_Bool XMLSectionExport::ExportIndexTemplate(
+bool XMLSectionExport::ExportIndexTemplate(
     SectionTypeEnum eType,
     sal_Int32 nOutlineLevel,
     const Reference<XPropertySet> & rPropertySet,
@@ -1065,7 +1065,7 @@ sal_Bool XMLSectionExport::ExportIndexTemplate(
         if ( XML_TOKEN_INVALID == eLevelName )
         {
             // output level not found? Then end of templates! #91214#
-            return sal_False;
+            return false;
         }
 
         // output level name
@@ -1111,7 +1111,7 @@ sal_Bool XMLSectionExport::ExportIndexTemplate(
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -1217,38 +1217,38 @@ void XMLSectionExport::ExportIndexTemplateElement(
 
     // char style
     OUString sCharStyle;
-    sal_Bool bCharStyleOK = sal_False;
+    bool bCharStyleOK = false;
 
     // text
     OUString sText;
-    sal_Bool bTextOK = sal_False;
+    bool bTextOK = false;
 
     // tab position
-    sal_Bool bRightAligned = sal_False;
+    bool bRightAligned = false;
 
     // tab position
     sal_Int32 nTabPosition = 0;
-    sal_Bool bTabPositionOK = sal_False;
+    bool bTabPositionOK = false;
 
     // fill character
     OUString sFillChar;
-    sal_Bool bFillCharOK = sal_False;
+    bool bFillCharOK = false;
 
     // chapter format
     sal_Int16 nChapterFormat = 0;
-    sal_Bool bChapterFormatOK = sal_False;
+    bool bChapterFormatOK = false;
 
     // outline max level
     sal_Int16 nLevel = 0;
-    sal_Bool bLevelOK = sal_False;
+    bool bLevelOK = false;
 
     // Bibliography Data
     sal_Int16 nBibliographyData = 0;
-    sal_Bool bBibliographyDataOK = sal_False;
+    bool bBibliographyDataOK = false;
 
     // With Tab Stop #i21237#
-    sal_Bool bWithTabStop = sal_False;
-    sal_Bool bWithTabStopOK = sal_False;
+    bool bWithTabStop = false;
+    bool bWithTabStopOK = false;
 
     //i90246, the ODF version being written to is:
     const SvtSaveOptions::ODFDefaultVersion aODFVersion = rExport.getDefaultVersion();
@@ -1292,7 +1292,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
 
                 case TOK_TPARAM_TEXT:
                     rValues[i].Value >>= sText;
-                    bTextOK = sal_True;
+                    bTextOK = true;
                     break;
 
                 case TOK_TPARAM_TAB_RIGHT_ALIGNED:
@@ -1302,32 +1302,32 @@ void XMLSectionExport::ExportIndexTemplateElement(
 
                 case TOK_TPARAM_TAB_POSITION:
                     rValues[i].Value >>= nTabPosition;
-                    bTabPositionOK = sal_True;
+                    bTabPositionOK = true;
                     break;
 
                 // #i21237#
                 case TOK_TPARAM_TAB_WITH_TAB:
                     bWithTabStop = *(sal_Bool *)rValues[i].Value.getValue();
-                    bWithTabStopOK = sal_True;
+                    bWithTabStopOK = true;
                     break;
 
                 case TOK_TPARAM_TAB_FILL_CHAR:
                     rValues[i].Value >>= sFillChar;
-                    bFillCharOK = sal_True;
+                    bFillCharOK = true;
                     break;
 
                 case TOK_TPARAM_CHAPTER_FORMAT:
                     rValues[i].Value >>= nChapterFormat;
-                    bChapterFormatOK = sal_True;
+                    bChapterFormatOK = true;
                     break;
 //---> i53420
                 case TOK_TPARAM_CHAPTER_LEVEL:
                     rValues[i].Value >>= nLevel;
-                    bLevelOK = sal_True;
+                    bLevelOK = true;
                     break;
                 case TOK_TPARAM_BIBLIOGRAPHY_DATA:
                     rValues[i].Value >>= nBibliographyData;
-                    bBibliographyDataOK = sal_True;
+                    bBibliographyDataOK = true;
                     break;
             }
         }
@@ -1385,7 +1385,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
     if( aODFVersion == SvtSaveOptions::ODFVER_011
         || aODFVersion == SvtSaveOptions::ODFVER_010)
     {
-        bLevelOK = sal_False;
+        bLevelOK = false;
         if (TOK_TTYPE_CHAPTER_INFO == nTokenType)
         {
             //if we are emitting for ODF 1.1 or 1.0, this information can be used for alphabetical index only
@@ -1429,7 +1429,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
             // ' ChapterFormat::DIGIT', forced to 'none, since the
             // 'value allowed in ODF 1.1 and 1.0 is 'number' the default
             // this can be obtained by simply disabling the chapter format
-            bChapterFormatOK = sal_False;
+            bChapterFormatOK = false;
         }
     }
 
@@ -1598,18 +1598,17 @@ void XMLSectionExport::ExportBoolean(
     const Reference<XPropertySet> & rPropSet,
     const OUString& sPropertyName,
     enum XMLTokenEnum eAttributeName,
-    sal_Bool bDefault,
-    sal_Bool bInvert)
+    bool bDefault,
+    bool bInvert)
 {
     OSL_ENSURE(eAttributeName != XML_TOKEN_INVALID, "Need attribute name");
 
     Any aAny = rPropSet->getPropertyValue(sPropertyName);
-    sal_Bool bTmp = *(sal_Bool*)aAny.getValue();
+    bool bTmp = *(sal_Bool*)aAny.getValue();
 
     // value = value ^ bInvert
     // omit if value == default
-    // negate forces sal_Bool to 0/1, making them comparable
-    if ((!(bTmp ^ bInvert)) != (!bDefault))
+    if ( (bTmp != bInvert) == bDefault )
     {
         // export non-default value (since default is omitted)
         GetExport().AddAttribute(XML_NAMESPACE_TEXT,
@@ -1727,7 +1726,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
                     else if (rValue.Name.equalsAsciiL(sAPI_IsSortAscending,
                                             sizeof(sAPI_IsSortAscending)-1))
                     {
-                        sal_Bool bTmp = *(sal_Bool*)rValue.Value.getValue();
+                        bool bTmp = *(sal_Bool*)rValue.Value.getValue();
                         rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                              XML_SORT_ASCENDING,
                                              bTmp ? XML_TRUE : XML_FALSE);
@@ -1743,10 +1742,10 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
 }
 
 
-sal_Bool XMLSectionExport::IsMuteSection(
+bool XMLSectionExport::IsMuteSection(
     const Reference<XTextSection> & rSection) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // a section is mute if
     // 1) it exists
@@ -1772,7 +1771,7 @@ sal_Bool XMLSectionExport::IsMuteSection(
                     Reference<XDocumentIndex> xIndex;
                     if (! GetIndex(rSection, xIndex))
                     {
-                        bRet = sal_True;
+                        bRet = true;
 
                         // early out if result is known
                         break;
@@ -1787,12 +1786,12 @@ sal_Bool XMLSectionExport::IsMuteSection(
     return bRet;
 }
 
-sal_Bool XMLSectionExport::IsMuteSection(
+bool XMLSectionExport::IsMuteSection(
     const Reference<XTextContent> & rSection,
-    sal_Bool bDefault) const
+    bool bDefault) const
 {
     // default: like default argument
-    sal_Bool bRet = bDefault;
+    bool bRet = bDefault;
 
     Reference<XPropertySet> xPropSet(rSection->getAnchor(), UNO_QUERY);
     if (xPropSet.is())
@@ -1812,13 +1811,13 @@ sal_Bool XMLSectionExport::IsMuteSection(
     return bRet;
 }
 
-sal_Bool XMLSectionExport::IsInSection(
+bool XMLSectionExport::IsInSection(
     const Reference<XTextSection> & rEnclosingSection,
     const Reference<XTextContent> & rContent,
-    sal_Bool bDefault)
+    bool bDefault)
 {
     // default: like default argument
-    sal_Bool bRet = bDefault;
+    bool bRet = bDefault;
     OSL_ENSURE(rEnclosingSection.is(), "enclosing section expected");
 
     Reference<XPropertySet> xPropSet(rContent, UNO_QUERY);
@@ -1841,7 +1840,7 @@ sal_Bool XMLSectionExport::IsInSection(
                 while (!bRet && xSection.is());
             }
             else
-                bRet = sal_False;   // no section -> can't be inside
+                bRet = false;   // no section -> can't be inside
         }
         // else: no TextSection property -> return default
     }
@@ -1894,7 +1893,7 @@ void XMLSectionExport::ExportMasterDocHeadingDummies()
         }
     }
 
-    bHeadingDummiesExported  = sal_True;
+    bHeadingDummiesExported  = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

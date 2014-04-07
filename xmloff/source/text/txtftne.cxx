@@ -77,7 +77,7 @@ void XMLTextParagraphExport::exportTextFootnote(
 
     // are we an endnote?
     Reference<XServiceInfo> xServiceInfo( xFootnote, UNO_QUERY );
-    sal_Bool bIsEndnote = xServiceInfo->supportsService(sTextEndnoteService);
+    bool bIsEndnote = xServiceInfo->supportsService(sTextEndnoteService);
 
     if (bAutoStyles)
     {

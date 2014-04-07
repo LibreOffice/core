@@ -53,16 +53,16 @@ XMLIndexChapterInfoEntryContext::XMLIndexChapterInfoEntryContext(
     XMLIndexTemplateContext& rTemplate,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    sal_Bool bT ) :
+    bool bT ) :
         XMLIndexSimpleEntryContext(rImport,
                                    (bT ? rTemplate.sTokenEntryNumber
                                           : rTemplate.sTokenChapterInfo),
                                    rTemplate, nPrfx, rLocalName),
         nChapterInfo(ChapterFormat::NAME_NUMBER),
-        bChapterInfoOK(sal_False),
+        bChapterInfoOK(false),
         bTOC( bT ),
         nOutlineLevel( 0 ),
-        bOutlineLevelOK(sal_False)
+        bOutlineLevelOK(false)
 {
 }
 
@@ -98,7 +98,7 @@ void XMLIndexChapterInfoEntryContext::StartElement(
             if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
             {
                 sCharStyleName = xAttrList->getValueByIndex(nAttr);
-                bCharStyleNameOK = sal_True;
+                bCharStyleNameOK = true;
             }
             else if ( IsXMLToken( sLocalName, XML_DISPLAY ) )//i53420, always true, in TOC as well
             {
@@ -108,7 +108,7 @@ void XMLIndexChapterInfoEntryContext::StartElement(
                     aChapterDisplayMap))
                 {
                     nChapterInfo = nTmp;
-                    bChapterInfoOK = sal_True;
+                    bChapterInfoOK = true;
                 }
             }
             else if ( IsXMLToken( sLocalName, XML_OUTLINE_LEVEL ) )
@@ -119,7 +119,7 @@ void XMLIndexChapterInfoEntryContext::StartElement(
                 {
 //control on range is carried out in the UNO level
                     nOutlineLevel = static_cast<sal_uInt16>(nTmp);
-                    bOutlineLevelOK = sal_True;
+                    bOutlineLevelOK = true;
                 }
             }
         }

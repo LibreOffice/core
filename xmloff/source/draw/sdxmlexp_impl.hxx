@@ -71,7 +71,7 @@ struct HeaderFooterPageSettingsImpl
 struct DateTimeDeclImpl
 {
     OUString maStrText;
-    sal_Bool mbFixed;
+    bool mbFixed;
     sal_Int32 mnFormat;
 };
 
@@ -114,9 +114,9 @@ class SdXMLExport : public SvXMLExport
     SdXMLFormatMap  maUsedDateStyles;           // this is a vector with the used formatings for date fields
     SdXMLFormatMap  maUsedTimeStyles;           // this is a vector with the used formatings for time fields
 
-    sal_Bool                    mbIsDraw;
-    sal_Bool                    mbFamilyGraphicUsed;
-    sal_Bool                    mbFamilyPresentationUsed;
+    bool                    mbIsDraw;
+    bool                    mbFamilyGraphicUsed;
+    bool                    mbFamilyPresentationUsed;
 
     const OUString         msZIndex;
     const OUString         msEmptyPres;
@@ -146,7 +146,7 @@ class SdXMLExport : public SvXMLExport
     void ImpWritePresentationStyles();
     OUString ImpCreatePresPageStyleName( com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage, bool bExportBackground = true );
 
-    sal_Bool ImpPrepAutoLayoutInfo(const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xPage, OUString& rName);
+    bool ImpPrepAutoLayoutInfo(const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xPage, OUString& rName);
     void ImpWriteAutoLayoutInfos();
     void ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectangle& rRect);
     void ImpWriteHeaderFooterDecls();
@@ -172,7 +172,7 @@ public:
     SdXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         OUString const & implementationName,
-        sal_Bool bIsDraw, sal_uInt16 nExportFlags = EXPORT_ALL );
+        bool bIsDraw, sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SdXMLExport();
 
     void SetProgress(sal_Int32 nProg);
@@ -185,13 +185,13 @@ public:
     XMLShapeExportPropertyMapper* GetPropertySetMapper() const { return mpPropertySetMapper; }
     XMLPageExportPropertyMapper* GetPresPagePropsMapper() const { return mpPresPagePropsMapper; }
 
-    sal_Bool IsDraw() const { return mbIsDraw; }
-    sal_Bool IsImpress() const { return !mbIsDraw; }
+    bool IsDraw() const { return mbIsDraw; }
+    bool IsImpress() const { return !mbIsDraw; }
 
-    sal_Bool IsFamilyGraphicUsed() const { return mbFamilyGraphicUsed; }
-    void SetFamilyGraphicUsed() { mbFamilyGraphicUsed = sal_True; }
-    sal_Bool IsFamilyPresentationUsed() const { return mbFamilyPresentationUsed; }
-    void SetFamilyPresentationUsed() { mbFamilyPresentationUsed = sal_True; }
+    bool IsFamilyGraphicUsed() const { return mbFamilyGraphicUsed; }
+    void SetFamilyGraphicUsed() { mbFamilyGraphicUsed = true; }
+    bool IsFamilyPresentationUsed() const { return mbFamilyPresentationUsed; }
+    void SetFamilyPresentationUsed() { mbFamilyPresentationUsed = true; }
 
     virtual void addDataStyle(const sal_Int32 nNumberFormat, bool bTimeFormat = false ) SAL_OVERRIDE;
     virtual void exportDataStyles() SAL_OVERRIDE;

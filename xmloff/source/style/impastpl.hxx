@@ -111,9 +111,9 @@ public:
 
     ~XMLAutoStylePoolParent();
 
-    sal_Bool Add( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek = false );
+    bool Add( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek = false );
 
-    sal_Bool AddNamed( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, const OUString& rName );
+    bool AddNamed( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, const OUString& rName );
 
     OUString Find( const XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties ) const;
 
@@ -146,7 +146,7 @@ public:
 
     void AddFamily( sal_Int32 nFamily, const OUString& rStrName,
         const UniReference < SvXMLExportPropertyMapper > & rMapper,
-        const OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
+        const OUString& rStrPrefix, bool bAsFamily = true );
     void SetFamilyPropSetMapper( sal_Int32 nFamily,
         const UniReference < SvXMLExportPropertyMapper > & rMapper );
     void RegisterName( sal_Int32 nFamily, const OUString& rName );

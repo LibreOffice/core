@@ -76,9 +76,9 @@ class XMLIndexTemplateContext : public SvXMLImportContext
     const sal_Bool* pAllowedTokenTypesMap;
 
     sal_Int32 nOutlineLevel;
-    sal_Bool bStyleNameOK;
-    sal_Bool bOutlineLevelOK;
-    sal_Bool bTOC;
+    bool bStyleNameOK;
+    bool bOutlineLevelOK;
+    bool bTOC;
 
     // PropertySet of current index
     ::com::sun::star::uno::Reference<
@@ -124,7 +124,7 @@ public:
         enum ::xmloff::token::XMLTokenEnum eLevelAttrName,
         const sal_Char** aLevelStylePropNameMap,
         const sal_Bool* aAllowedTokenTypes,
-        sal_Bool bTOC=sal_False);
+        bool bTOC=false);
 
     virtual ~XMLIndexTemplateContext();
 

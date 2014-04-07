@@ -170,7 +170,7 @@ public:
     /// To be called for every field in the document body.
     void ExportField(const ::com::sun::star::uno::Reference <
                         ::com::sun::star::text::XTextField > & rTextField,
-                     sal_Bool bProgress );
+                     bool bProgress );
 
     /// collect styles (character styles, data styles, ...) for this field
     /// (if appropriate).
@@ -178,7 +178,7 @@ public:
     /// to be called for every field during style export.
     void ExportFieldAutoStyle(const ::com::sun::star::uno::Reference <
                         ::com::sun::star::text::XTextField > & rTextField,
-                 const sal_Bool bProgress, const sal_Bool bRecursive );
+                 const bool bProgress, const bool bRecursive );
 
     /// export field declarations.
     /// to be called once at beginning of document body.
@@ -194,7 +194,7 @@ public:
     /// export all field declarations, or only those that have been used?
     /// Calling this method will reset the list of used field declataions.
     void SetExportOnlyUsedFieldDeclarations(
-        sal_Bool bExportOnlyUsed = sal_True);
+        bool bExportOnlyUsed = true);
 
     // determine element or attribute names
     // (public, because they may be useful in related XML export classes)
@@ -229,17 +229,17 @@ protected:
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet> & rRangePropSet,
         enum FieldIdEnum nToken,
-        sal_Bool bProgress );
+        bool bProgress );
 
     /// export an empty element
     void ExportElement(enum ::xmloff::token::XMLTokenEnum eElement, /// element token
-                       sal_Bool bAddSpace = sal_False); /// add blanks around
+                       bool bAddSpace = false); /// add blanks around
                                                         /// element?
 
     /// export an element with string content
     void ExportElement(enum ::xmloff::token::XMLTokenEnum eElement, /// element token
                        const OUString& sContent, /// element content
-                       sal_Bool bAddSpace = sal_False); /// add blanks around
+                       bool bAddSpace = false); /// add blanks around
                                                         /// element?
 
     /// export a macro (as used in the macro field)
@@ -250,13 +250,13 @@ protected:
     /// export text:meta-field (RDF metadata)
     void ExportMetaField( const ::com::sun::star::uno::Reference<
                               ::com::sun::star::beans::XPropertySet> & i_xMeta,
-                          bool i_bAutoStyles, sal_Bool i_bProgress );
+                          bool i_bAutoStyles, bool i_bProgress );
 
     /// export a boolean attribute
     void ProcessBoolean(
         enum ::xmloff::token::XMLTokenEnum eXmlName,    /// attribute token (namespace text)
-        sal_Bool bBool,     /// attribute value
-        sal_Bool bDefault); /// attribute default; omit, if attribute differs
+        bool bBool,     /// attribute value
+        bool bDefault); /// attribute default; omit, if attribute differs
 
     /// export an integer attribute
     void ProcessInteger(
@@ -273,7 +273,7 @@ protected:
     void ProcessString(
         enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
         const OUString& sValue,  /// attribute value
-        sal_Bool bOmitEmpty = sal_False, /// omit attribute, if value is empty
+        bool bOmitEmpty = false, /// omit attribute, if value is empty
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a string attribute that gets a QName value
@@ -281,7 +281,7 @@ protected:
         enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
         sal_uInt16 nValuePrefix,
         const OUString& sValue,  /// attribute value
-        sal_Bool bOmitEmpty = sal_False, /// omit attribute, if value is empty
+        bool bOmitEmpty = false, /// omit attribute, if value is empty
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
 
@@ -304,7 +304,7 @@ protected:
     void ProcessString(
         enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
         enum ::xmloff::token::XMLTokenEnum eValue,          /// attribute token
-        sal_Bool bOmitEmpty = sal_False, /// omit attribute, if value is empty
+        bool bOmitEmpty = false, /// omit attribute, if value is empty
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a string attribute, omit if default
@@ -324,46 +324,46 @@ protected:
         sal_Int16 nNumberingType);      /// numbering type key
 
     /// export display attribute (value, formula, none)
-    void ProcessDisplay(sal_Bool bIsVisible,    /// is visible?
-                        sal_Bool bIsCommand,    /// is show command/show name?
-                        sal_Bool bDefault = sal_True);  /// omit, if default
+    void ProcessDisplay(bool bIsVisible,    /// is visible?
+                        bool bIsCommand,    /// is show command/show name?
+                        bool bDefault = true);  /// omit, if default
 
     /// export all data-style related attributes
     void ProcessValueAndType(
-        sal_Bool bIsString,     /// do we process a string or a number?
+        bool bIsString,     /// do we process a string or a number?
         sal_Int32 nFormatKey,   /// format key for NumberFormatter; possibly -1
         const OUString& sContent, /// string content; possibly invalid
         const OUString& sDefault, /// default string
         double fValue,          /// float content; possibly invalid
-        sal_Bool bExportValue,  /// export value attribute?
-        sal_Bool bExportValueType,  /// export value-type attribute?
-        sal_Bool bExportStyle,  /// export style-sttribute?
-        sal_Bool bForceSystemLanguage, /// no style language export
-        sal_Bool bTimeStyle = sal_False); /// exporting a time style?
+        bool bExportValue,  /// export value attribute?
+        bool bExportValueType,  /// export value-type attribute?
+        bool bExportStyle,  /// export style-sttribute?
+        bool bForceSystemLanguage, /// no style language export
+        bool bTimeStyle = false); /// exporting a time style?
 
     /// export times, dates and durations according to ISO 8601
     void ProcessDateTime(
         enum ::xmloff::token::XMLTokenEnum eXMLName,    /// attribute token
         double dValue,              /// date/time value
-        sal_Bool bIsDate,           /// export as date (rather than date/time)?
-        sal_Bool bIsDuration = sal_False,           /// export as duration
-        sal_Bool bOmitDurationIfZero = sal_True,    /// omit zero-length durat.
+        bool bIsDate,           /// export as date (rather than date/time)?
+        bool bIsDuration = false,           /// export as duration
+        bool bOmitDurationIfZero = true,    /// omit zero-length durat.
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a date, time, or duration
     void ProcessDateTime(
         enum ::xmloff::token::XMLTokenEnum eXMLName,    /// attribute token
         sal_Int32 nMinutes,             /// date/time value in minutes
-        sal_Bool bIsDate,           /// export as date?
-        sal_Bool bIsDuration,       /// export as duration?
-        sal_Bool bOmitDurationIfZero,   /// omit zero-length durations
+        bool bIsDate,           /// export as date?
+        bool bIsDuration,       /// export as duration?
+        bool bOmitDurationIfZero,   /// omit zero-length durations
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export times, dates and durations according to ISO 8601
     void ProcessDateTime(
         enum ::xmloff::token::XMLTokenEnum eXMLName,    /// attribute token
         const ::com::sun::star::util::DateTime& rTime,      /// date/time value
-        sal_Bool bIsDate,           /// export as date (rather than date/time)?
+        bool bIsDate,           /// export as date (rather than date/time)?
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export time or dateTime
@@ -404,7 +404,7 @@ protected:
                          ::com::sun::star::text::XTextField > & rTextField);
 
     /// get PropertySet of (any) DependentTextField for this FieldMaster
-    sal_Bool GetDependentFieldPropertySet(
+    bool GetDependentFieldPropertySet(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xmaster,
         ::com::sun::star::uno::Reference<
@@ -423,13 +423,13 @@ protected:
                             ::com::sun::star::beans::XPropertySet> & xPropSet);
 
     /// determine, whether field has string or numeric content
-    sal_Bool IsStringField(FieldIdEnum nFieldType,  /// field ID
+    bool IsStringField(FieldIdEnum nFieldType,  /// field ID
                            const ::com::sun::star::uno::Reference <
                            ::com::sun::star::beans::XPropertySet > & xPropSet);
 
 
     /// explode a field master name into field type and field name
-    sal_Bool ExplodeFieldMasterName(
+    bool ExplodeFieldMasterName(
         const OUString& sMasterName, /// name as returned by SO API
         OUString& sFieldType,        /// out: field type
         OUString& sVarName);         /// out: variable name

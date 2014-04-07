@@ -562,9 +562,9 @@ void XMLConfigItemContext::EndElement()
     {
         if (IsXMLToken(msType, XML_BOOLEAN))
         {
-            sal_Bool bValue(sal_False);
+            bool bValue(false);
             if (IsXMLToken(msValue, XML_TRUE))
-                bValue = sal_True;
+                bValue = true;
             mrAny <<= bValue;
         }
         else if (IsXMLToken(msType, XML_BYTE))

@@ -107,7 +107,7 @@ FormCellBindingHelper::FormCellBindingHelper( const Reference< XPropertySet >& _
     OSL_ENSURE( m_xDocument.is(), "FormCellBindingHelper::FormCellBindingHelper: Did not find the spreadsheet document!" );
 }
 
-sal_Bool FormCellBindingHelper::livesInSpreadsheetDocument( const Reference< XPropertySet >& _rxControlModel )
+bool FormCellBindingHelper::livesInSpreadsheetDocument( const Reference< XPropertySet >& _rxControlModel )
 {
     Reference< XSpreadsheetDocument > xDocument( getDocument( _rxControlModel ), UNO_QUERY );
     return xDocument.is();
