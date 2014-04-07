@@ -291,7 +291,7 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
     lcl_FillGreetingsBox(*m_pMaleLB, rConfig, SwMailMergeConfigItem::MALE);
     lcl_FillGreetingsBox(*m_pNeutralCB, rConfig, SwMailMergeConfigItem::NEUTRAL);
 
-    m_pDocumentIndexFI->SetText(m_sDocument.replaceFirst("%1", OUString::number(1)));
+    m_pDocumentIndexFI->SetText(m_sDocument.replaceFirst("%1", "1"));
 }
 
 SwMailMergeGreetingsPage::~SwMailMergeGreetingsPage()
