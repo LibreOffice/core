@@ -2679,6 +2679,22 @@ ExtensionsTabPage::~ExtensionsTabPage()
 {
     Hide();
     DeactivatePage();
+
+    if ( m_xPage.is() )
+    {
+        Reference< XComponent > xComponent( m_xPage, UNO_QUERY );
+        if ( xComponent.is() )
+        {
+            try
+            {
+                xComponent->dispose();
+            }
+            catch ( const Exception & )
+            {
+            }
+        }
+        m_xPage.clear();
+    }
 }
 
 // -----------------------------------------------------------------------
