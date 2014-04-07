@@ -22,24 +22,21 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::container::XIndexAccess;
 
-GroupTable::GroupTable() :
-    mnCurrentGroupEntry ( 0 ),
-    mnMaxGroupEntry     ( 0 ),
-    mnGroupsClosed      ( 0 ),
-    mpGroupEntry        ( NULL )
+GroupTable::GroupTable()
+    : mnIndex(0)
+    , mnCurrentGroupEntry(0)
+    , mnMaxGroupEntry(0)
+    , mnGroupsClosed(0)
+    , mpGroupEntry(NULL)
 {
     ImplResizeGroupTable( 32 );
 }
-
-
 
 GroupTable::~GroupTable()
 {
     for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; delete mpGroupEntry[ i++ ] ) ;
     delete[] mpGroupEntry;
 }
-
-
 
 void GroupTable::ImplResizeGroupTable( sal_uInt32 nEntrys )
 {
