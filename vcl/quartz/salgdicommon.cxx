@@ -899,6 +899,8 @@ bool AquaSalGraphics::drawPolyLine(
         // use the path to prepare the graphics context
         CG_TRACE( "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth );
         CGContextSaveGState( mrContext );
+        CG_TRACE( "CGContextBeginPath(" << mrContext << ")" );
+        CGContextBeginPath( mrContext );
         CG_TRACE( "CGContextAddPath(" << mrContext << "," << xPath << ")" );
         CGContextAddPath( mrContext, xPath );
         // draw path with antialiased line
