@@ -429,6 +429,14 @@ void PortionObj::ImplClear()
 
 void PortionObj::ImplConstruct( const PortionObj& rPortionObj )
 {
+    meCharColor = rPortionObj.meCharColor;
+    meCharHeight = rPortionObj.meCharHeight;
+    meFontName = rPortionObj.meFontName;
+    meAsianOrComplexFont = rPortionObj.meAsianOrComplexFont;
+    meCharEscapement = rPortionObj.meCharEscapement;
+    meCharLocale = rPortionObj.meCharLocale;
+    mnCharAttrHard = rPortionObj.mnCharAttrHard;
+
     mbLastPortion = rPortionObj.mbLastPortion;
     mnTextSize = rPortionObj.mnTextSize;
     mnCharColor = rPortionObj.mnCharColor;
