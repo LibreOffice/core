@@ -684,8 +684,9 @@ SAL_CALL osl_createFileHandleFromOSHandle (
     if (!(uFlags & osl_File_OpenFlag_Write))
         pImpl->m_state &= ~FileHandle_Impl::STATE_WRITEABLE;
 
-    OSL_POSTCOND(
-        (uFlags & osl_File_OpenFlag_Read) || (uFlags & osl_File_OpenFlag_Write),
+    SAL_WARN_IF(
+        !((uFlags & osl_File_OpenFlag_Read) || (uFlags & osl_File_OpenFlag_Write)),
+        "sal.osl",
         "osl_createFileHandleFromOSHandle(): missing read/write access flags");
     return (oslFileHandle)(pImpl);
 }

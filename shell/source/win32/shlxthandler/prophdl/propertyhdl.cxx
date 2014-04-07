@@ -32,6 +32,7 @@
 #include <propkey.h>
 #include <propvarutil.h>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 
 #include <malloc.h>
 #include <strsafe.h>
@@ -380,10 +381,11 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
     if ( CLSID_PROPERTY_HANDLER == m_Clsid )
         pUnk = static_cast<IPropertyStore*>( new CPropertyHdl() );
 
-    OSL_POSTCOND(pUnk != 0, "Could not create COM object");
-
     if (0 == pUnk)
+    {
+        SAL_WARN("shell", "Could not create COM object");
         return E_OUTOFMEMORY;
+    }
 
     HRESULT hr = pUnk->QueryInterface( riid, ppvObject );
 

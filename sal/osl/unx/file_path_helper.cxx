@@ -50,8 +50,9 @@ void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
             pustrPath->buffer[pustrPath->length] = (sal_Unicode)'\0';
         }
 
-        OSL_POSTCOND((0 == pustrPath->length) || (1 == pustrPath->length) || \
-                     (pustrPath->length > 1 && pustrPath->buffer[pustrPath->length - 1] != FPH_CHAR_PATH_SEPARATOR), \
+        SAL_WARN_IF( !((0 == pustrPath->length) || (1 == pustrPath->length) ||
+                     (pustrPath->length > 1 && pustrPath->buffer[pustrPath->length - 1] != FPH_CHAR_PATH_SEPARATOR)),
+                     "sal.osl",
                      "osl_systemPathRemoveSeparator: Post condition failed");
     }
 }
@@ -71,7 +72,8 @@ void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
             rtl_uString_assign(ppustrPath, path.pData);
         }
 
-        OSL_POSTCOND(path.endsWith(FPH_PATH_SEPARATOR()), \
+        SAL_WARN_IF( !path.endsWith(FPH_PATH_SEPARATOR()),
+                     "sal.osl",
                      "osl_systemPathEnsureSeparator: Post condition failed");
     }
 }

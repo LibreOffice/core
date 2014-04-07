@@ -53,7 +53,8 @@ void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath)
         rtl_uString_assign(ppustrPath, path.pData);
     }
 
-    OSL_POSTCOND(path.endsWith(BACKSLASH), \
+    SAL_WARN_IF( !path.endsWith(BACKSLASH),
+                 "sal.osl",
                  "osl_systemPathEnsureSeparator: Post condition failed");
 }
 

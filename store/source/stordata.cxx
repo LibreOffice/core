@@ -20,6 +20,7 @@
 #include "stordata.hxx"
 
 #include "sal/types.h"
+#include "sal/log.hxx"
 #include "osl/diagnose.h"
 
 #include "store/types.h"
@@ -624,9 +625,11 @@ OStoreDirectoryPageObject::scope (
 
         // Verify reduction.
         n = index1 * nCapacity + index0;
-        OSL_POSTCOND(n == nPage, "wrong math on indirect indices");
         if (n != nPage)
+        {
+            SAL_WARN("store", "wrong math on indirect indices");
             return page::SCOPE_UNKNOWN;
+        }
 
         // Setup LinkDescriptor indices.
         rDescr.m_nIndex0 = (sal_uInt16)(index0 & 0xffff);
@@ -656,9 +659,11 @@ OStoreDirectoryPageObject::scope (
         // Verify reduction.
         n = index2 * nCapacity * nCapacity +
             index1 * nCapacity + index0;
-        OSL_POSTCOND(n == nPage, "wrong math on double indirect indices");
         if (n != nPage)
+        {
+            SAL_WARN("store", "wrong math on double indirect indices");
             return page::SCOPE_UNKNOWN;
+        }
 
         // Setup LinkDescriptor indices.
         rDescr.m_nIndex0 = (sal_uInt16)(index0 & 0xffff);
@@ -694,9 +699,11 @@ OStoreDirectoryPageObject::scope (
         n = index3 * nCapacity * nCapacity * nCapacity +
             index2 * nCapacity * nCapacity +
             index1 * nCapacity + index0;
-        OSL_POSTCOND(n == nPage, "wrong math on triple indirect indices");
         if (n != nPage)
+        {
+            SAL_WARN("store", "wrong math on triple indirect indices");
             return page::SCOPE_UNKNOWN;
+        }
 
         // Setup LinkDescriptor indices.
         rDescr.m_nIndex0 = (sal_uInt16)(index0 & 0xffff);
