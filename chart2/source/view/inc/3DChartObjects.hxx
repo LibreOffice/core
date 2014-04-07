@@ -12,6 +12,8 @@
 #include <tools/color.hxx>
 #include <vcl/bitmapex.hxx>
 
+#include <vcl/OpenGLContext.hxx>
+
 namespace chart {
 
 namespace opengl3D {
@@ -63,6 +65,21 @@ private:
     Color maColor; // RGBA fill color
     Color maLineColor; // RGBA line color
 };
+
+namespace temporary {
+
+class TemporaryContext
+{
+public:
+
+    void init();
+    void render();
+
+private:
+    OpenGLContext maContext;
+};
+
+}
 
 }
 

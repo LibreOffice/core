@@ -9,15 +9,16 @@
 
 #include "3DBarChart.hxx"
 
-#include "3DChartObjects.hxx"
-
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+
+#include "3DChartObjects.hxx"
 
 namespace chart {
 
 Bar3DChart::Bar3DChart(const std::vector<VDataSeries*>& rDataSeries):
-    maDataSeries(rDataSeries)
+    maDataSeries(rDataSeries),
+    mxContext(new opengl3D::temporary::TemporaryContext())
 {
 }
 
@@ -57,12 +58,13 @@ void Bar3DChart::create3DShapes()
 
 void Bar3DChart::render()
 {
-    maContext.init();
+    mxContext->init();
     for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = maShapes.begin(),
             itrEnd = maShapes.end(); itr != itrEnd; ++itr)
     {
         itr->render();
     }
+    mxContext->render();
 }
 
 }

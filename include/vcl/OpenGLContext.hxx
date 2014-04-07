@@ -10,6 +10,8 @@
 #ifndef VCL_OPENGL_CONTEXT_HXX
 #define VCL_OPENGL_CONTEXT_HXX
 
+#include <GL/glew.h>
+
 #if defined( MACOSX )
 #elif defined( UNX )
 #  include <prex.h>
@@ -20,8 +22,6 @@
 #  include "windows.h"
 #  include "postwin.h"
 #endif
-
-#include <GL/glew.h>
 
 #if defined( _WIN32 )
 #include <GL/glext.h>

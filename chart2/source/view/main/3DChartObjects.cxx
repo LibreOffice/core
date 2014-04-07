@@ -18,6 +18,20 @@ Bar::Bar(const glm::mat4& rPosition):
 {
 }
 
+namespace temporary {
+
+void TemporaryContext::init()
+{
+    maContext.init();
+}
+
+void TemporaryContext::render()
+{
+
+}
+
+}
+
 }
 
 }

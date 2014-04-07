@@ -19,7 +19,11 @@ namespace opengl3D {
 
 class Renderable3DObject;
 
-}
+namespace temporary {
+
+class TemporaryContext;
+
+} }
 
 class Bar3DChart
 {
@@ -36,7 +40,7 @@ private:
     std::vector<VDataSeries*> maDataSeries;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
-    OpenGLContext maContext;
+    boost::scoped_ptr<opengl3D::temporary::TemporaryContext> mxContext;
 };
 
 }

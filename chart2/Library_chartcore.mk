@@ -29,6 +29,7 @@ $(eval $(call gb_Library_use_externals,chartcore,\
 	boost_headers \
 	mdds_headers \
 	glm_headers \
+	glew \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,chartcore,\
@@ -56,6 +57,7 @@ $(eval $(call gb_Library_use_libraries,chartcore,\
     ucbhelper \
     utl \
     vcl \
+    vclopengl \
 	$(gb_UWINAPI) \
 ))
 
