@@ -178,7 +178,6 @@ void SwMailMergeGreetingsPage::UpdatePreview()
                 {
                     OUString sFemaleColumnValue = xColumn->getString();
                     bFemale = sFemaleColumnValue == sFemaleValue;
-                    //bNoValue = !sFemaleColumnValue.getLength();
                     if( !bNoValue )
                     {
                         //no last name value marks the greeting also als neutral
