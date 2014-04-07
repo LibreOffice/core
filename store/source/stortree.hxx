@@ -312,7 +312,7 @@ private:
     /** testInvariant.
      *  Precond: root node page loaded.
      */
-    bool testInvariant (char const * message);
+    void testInvariant (char const * message);
 
     /** change (Root).
      *

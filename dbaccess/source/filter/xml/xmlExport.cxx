@@ -978,7 +978,7 @@ void ODBExport::exportFilter(XPropertySet* _xProp
         AddAttribute(XML_NAMESPACE_DB, XML_COMMAND,sCommand);
         SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, _eStatementType, true, true);
     }
-    OSL_POSTCOND(!GetAttrList().getLength(),"Invalid attribute length!");
+    SAL_WARN_IF(GetAttrList().getLength(), "dbaccess", "Invalid attribute length!");
 }
 
 void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)

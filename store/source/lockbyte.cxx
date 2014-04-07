@@ -798,7 +798,7 @@ storeError MemoryLockBytes::writeAt_Impl (sal_uInt32 nOffset, const void * pBuff
         if (eErrCode != store_E_None)
             return eErrCode;
     }
-    OSL_POSTCOND(dst_size <= m_nSize, "store::MemoryLockBytes::setSize_Impl() contract violation");
+    SAL_WARN_IF(dst_size > m_nSize, "store", "store::MemoryLockBytes::setSize_Impl() contract violation");
 
     sal_uInt8 * dst_lo = m_pData + nOffset;
     if (dst_lo >= m_pData + m_nSize)

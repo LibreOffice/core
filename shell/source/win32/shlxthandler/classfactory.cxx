@@ -21,6 +21,7 @@
 
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include "internal/global.hxx"
 #include "classfactory.hxx"
@@ -119,10 +120,11 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
     else if (CLSID_THUMBVIEWER_HANDLER == m_Clsid)
         pUnk = static_cast<IExtractImage*>(new CThumbviewer());
 
-    OSL_POSTCOND(pUnk != 0, "Could not create COM object");
-
     if (0 == pUnk)
+    {
+        SAL_WARN("shell", "Could not create COM object");
         return E_OUTOFMEMORY;
+    }
 
     HRESULT hr = pUnk->QueryInterface(riid, ppvObject);
 
