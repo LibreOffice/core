@@ -32,6 +32,7 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XDesktop.hdl>
 #include <com/sun/star/frame/XController.hdl>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #define SVG_FILTER_SERVICE_NAME         "com.sun.star.comp.Draw.SVGFilter"
 #define SVG_FILTER_IMPLEMENTATION_NAME  SVG_FILTER_SERVICE_NAME
@@ -86,6 +87,20 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 #endif
     if( mxSrcDoc.is() )
     {
+        // #124608# detext selection
+        sal_Bool bSelectionOnly = sal_False;
+        bool bGotSelection(false);
+        Reference< drawing::XShapes > xShapes;
+
+        // #124608# extract Single selection wanted from dialog return values
+        for ( sal_Int32 nInd = 0; nInd < rDescriptor.getLength(); nInd++ )
+        {
+            if ( rDescriptor[nInd].Name.equalsAscii( "SelectionOnly" ) )
+            {
+                rDescriptor[nInd].Value >>= bSelectionOnly;
+            }
+        }
+
         uno::Reference< frame::XDesktop > xDesktop( mxMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
                                                     uno::UNO_QUERY);
         if( xDesktop.is() )
@@ -110,22 +125,66 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                                 getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Number" ) ) ) >>= nCurrentPageNumber;
                         }
                     }
+
+                    if(bSelectionOnly)
+                    {
+                        // #124608# when selection only is wanted, get the current object selection
+                        // from the DrawView
+                        Reference< view::XSelectionSupplier > xSelection (xController, UNO_QUERY);
+
+                        if (xSelection.is())
+                        {
+                            uno::Any aSelection;
+
+                            if(xSelection->getSelection() >>= aSelection)
+                            {
+                                bGotSelection = (sal_True == ( aSelection >>= xShapes ));
+                            }
+                        }
+                    }
                 }
             }
         }
 
-        Sequence< PropertyValue > aNewDescriptor( rDescriptor );
-
-        if( nCurrentPageNumber > 0 )
+        if(bSelectionOnly && bGotSelection && 0 == xShapes->getCount())
         {
-            const sal_uInt32    nOldLength = rDescriptor.getLength();
-
-            aNewDescriptor.realloc( nOldLength + 1 );
-            aNewDescriptor[ nOldLength ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagePos" ) );
-            aNewDescriptor[ nOldLength ].Value <<= static_cast< sal_Int16 >( nCurrentPageNumber - 1 );
+            // #124608# export selection, got xShapes but no shape selected -> nothing
+            // to export, we are done (maybe return true, but a hint that nothing was done
+            // may be useful; it may have happened by error)
+            bRet = sal_False;
         }
+        else
+        {
+            Sequence< PropertyValue > aNewDescriptor(rDescriptor);
+            const bool bSinglePage(nCurrentPageNumber > 0);
 
-        bRet = implExport( aNewDescriptor );
+            if(bSinglePage || bGotSelection)
+            {
+                const sal_uInt32 nOldLength = rDescriptor.getLength();
+                sal_uInt32 nInsert(nOldLength);
+
+                aNewDescriptor.realloc(nOldLength + (bSinglePage ? 1 : 0) + (bGotSelection ? 1 : 0));
+
+                if(bSinglePage)
+                {
+                    aNewDescriptor[nInsert].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PagePos"));
+                    aNewDescriptor[nInsert].Value <<= static_cast<sal_Int16>(nCurrentPageNumber - 1);
+                    nInsert++;
+                }
+
+                if(bGotSelection)
+                {
+                    // #124608# add retrieved ShapeSelection if export of only selected shapes is wanted
+                    // so that the filter implementation can use it
+                    aNewDescriptor[nInsert].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShapeSelection"));
+                    aNewDescriptor[nInsert].Value <<= xShapes;
+                    // reactivate this when you add other properties to aNewDescriptor
+                    // nInsert++;
+                }
+            }
+
+            bRet = implExport(aNewDescriptor);
+        }
     }
     else
         bRet = sal_False;

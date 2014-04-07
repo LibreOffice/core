@@ -213,6 +213,11 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         {
             pValue[ i ].Value >>= maFilterData;
         }
+        else if( pValue[ i ].Name.equalsAscii( "ShapeSelection" ) )
+        {
+            // #124608# read selection if given
+            pValue[ i ].Value >>= maShapeSelection;
+        }
     }
 
     // if no filter data is given use stored/prepared ones
@@ -507,8 +512,17 @@ sal_Bool SVGFilter::implExportDocument( const Reference< XDrawPages >& rxMasterP
 
     if( -1 != nVisible )
     {
-        if( bSinglePage )
-            implExportPages( rxMasterPages, nVisibleMaster, nVisibleMaster, nVisibleMaster, sal_True );
+        if(bSinglePage)
+        {
+            if(maShapeSelection.is() && maShapeSelection->getCount())
+            {
+                // #124608# export a given object selection, so no MasterPage export at all
+            }
+            else
+            {
+                implExportPages(rxMasterPages,nVisibleMaster,nVisibleMaster,nVisibleMaster,sal_True);
+            }
+        }
         else
         {
             implGenerateMetaData( rxMasterPages, rxDrawPages );
@@ -623,7 +637,17 @@ sal_Bool SVGFilter::implExportPages( const Reference< XDrawPages >& rxPages,
 
         if( xDrawPage.is() )
         {
-            Reference< XShapes > xShapes( xDrawPage, UNO_QUERY );
+            Reference< XShapes > xShapes;
+
+            if(maShapeSelection.is() && maShapeSelection->getCount())
+            {
+                // #124608# export a given object selection
+                xShapes = maShapeSelection;
+            }
+            else
+            {
+                xShapes = Reference< XShapes >( xDrawPage, UNO_QUERY );
+            }
 
             if( xShapes.is() )
             {
@@ -860,6 +884,7 @@ sal_Bool SVGFilter::implCreateObjects( const Reference< XDrawPages >& rxMasterPa
 {
     if( SVG_EXPORT_ALLPAGES == nPageToExport )
     {
+        // export the whole document
         sal_Int32 i, nCount;
 
         for( i = 0, nCount = rxMasterPages->getCount(); i < nCount; ++i )
@@ -899,34 +924,43 @@ sal_Bool SVGFilter::implCreateObjects( const Reference< XDrawPages >& rxMasterPa
         DBG_ASSERT( nPageToExport >= 0 && nPageToExport < rxDrawPages->getCount(),
                     "SVGFilter::implCreateObjects: invalid page number to export" );
 
-        Reference< XDrawPage > xDrawPage;
+        if(maShapeSelection.is() && maShapeSelection->getCount())
+        {
+            // #124608# export a given object selection
+            implCreateObjectsFromShapes(maShapeSelection);
+        }
+        else
+        {
+            // export a given xDrawPage
+            Reference< XDrawPage > xDrawPage;
 
-          rxDrawPages->getByIndex( nPageToExport ) >>= xDrawPage;
+            rxDrawPages->getByIndex(nPageToExport) >>= xDrawPage;
 
-          if( xDrawPage.is() )
-          {
-            Reference< XMasterPageTarget > xMasterTarget( xDrawPage, UNO_QUERY );
-
-            if( xMasterTarget.is() )
+            if(xDrawPage.is())
             {
-                Reference< XDrawPage > xMasterPage( xMasterTarget->getMasterPage() );
+                Reference< XMasterPageTarget > xMasterTarget(xDrawPage,UNO_QUERY);
 
-                if( xMasterPage.is() )
+                if(xMasterTarget.is())
                 {
-                    Reference< XShapes > xShapes( xMasterPage, UNO_QUERY );
+                    Reference< XDrawPage > xMasterPage(xMasterTarget->getMasterPage());
 
-                    implCreateObjectsFromBackground( xMasterPage );
+                    if(xMasterPage.is())
+                    {
+                        Reference< XShapes > xShapes(xMasterPage,UNO_QUERY);
 
-                    if( xShapes.is() )
-                        implCreateObjectsFromShapes( xShapes );
+                        implCreateObjectsFromBackground(xMasterPage);
+
+                        if(xShapes.is())
+                            implCreateObjectsFromShapes(xShapes);
+                    }
                 }
+
+                Reference< XShapes > xShapes(xDrawPage,UNO_QUERY);
+
+                if(xShapes.is())
+                    implCreateObjectsFromShapes(xShapes);
             }
-
-            Reference< XShapes > xShapes( xDrawPage, UNO_QUERY );
-
-              if( xShapes.is() )
-                  implCreateObjectsFromShapes( xShapes );
-          }
+        }
     }
 
     return sal_True;
