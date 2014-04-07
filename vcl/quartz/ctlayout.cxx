@@ -17,12 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/types.h>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include "tools/debug.hxx"
 
 #include "ctfonts.hxx"
+#include "CTRunData.hxx"
 
-class CTLayout
-:   public SalLayout
+
+class CTLayout : public SalLayout
 {
 public:
     explicit        CTLayout( const CoreTextStyle* );
@@ -52,6 +55,7 @@ private:
     void            drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, const CoreTextStyle* const pStyle) const;
     CGPoint         GetTextDrawPosition(void) const;
     double          GetWidth(void) const;
+    bool            CacheGlyphLayout(void) const;
 
     const CoreTextStyle* const    mpTextStyle;
 
@@ -70,6 +74,10 @@ private:
     // x-offset relative to layout origin
     // currently only used in RTL-layouts
     mutable double  mfBaseAdv;
+
+    mutable bool  bLayouted; // true if the glyph layout information are cached and current;
+    mutable boost::ptr_vector<CTRunData> m_vRunData;
+
 };
 
 CTLayout::CTLayout( const CoreTextStyle* pTextStyle )
@@ -81,6 +89,7 @@ CTLayout::CTLayout( const CoreTextStyle* pTextStyle )
     , mfTrailingSpaceWidth( 0.0 )
     , mfCachedWidth( -1 )
     , mfBaseAdv( 0 )
+    , bLayouted( false )
 {
 }
 
@@ -94,6 +103,9 @@ CTLayout::~CTLayout()
 
 bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
+    m_vRunData.release();
+    bLayouted = false;
+
     if( mpAttrString )
         CFRelease( mpAttrString );
     mpAttrString = NULL;
@@ -226,7 +238,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 // any unforeseen side effects.
 CGPoint CTLayout::GetTextDrawPosition(void) const
 {
-    float fPosX, fPosY;
+    CGFloat fPosX, fPosY;
 
     if (mnLayoutFlags & SAL_LAYOUT_RIGHT_ALIGN)
     {
@@ -335,125 +347,123 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
     drawCTLine(rAquaGraphics, mpCTLine, mpTextStyle);
 }
 
+bool CTLayout::CacheGlyphLayout(void) const // eew!
+{
+    m_vRunData.release();
+    if(!mpCTLine)
+    {
+        return false;
+    }
+    CFArrayRef aRuns = CTLineGetGlyphRuns( mpCTLine );
+    const int nRun = CFArrayGetCount( aRuns );
+    int nPos = 0;
+
+    for( int i = 0; i < nRun; ++i )
+    {
+        CTRunRef pRun = (CTRunRef)CFArrayGetValueAtIndex( aRuns, i );
+        CTRunData* pRunData = new CTRunData(pRun, nPos);
+        m_vRunData.push_back(pRunData);
+        nPos += pRunData->m_nGlyphs;
+    }
+    bLayouted = true;
+    return true;
+}
+
 int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int& nStart,
                              sal_Int32* pGlyphAdvances, int* pCharIndexes,
                              const PhysicalFontFace** pFallbackFonts ) const
 {
     if( !mpCTLine )
-        return 0;
-
-    if( nStart < 0 ) // first glyph requested?
-        nStart = 0;
-    nLen = 1; // TODO: handle nLen>1 below
-
-    // prepare to iterate over the glyph runs
-    int nCount = 0;
-    int nSubIndex = nStart;
-
-    typedef std::vector<CGGlyph> CGGlyphVector;
-    typedef std::vector<CGPoint> CGPointVector;
-    typedef std::vector<CGSize>  CGSizeVector;
-    typedef std::vector<CFIndex> CFIndexVector;
-    CGGlyphVector aCGGlyphVec;
-    CGPointVector aCGPointVec;
-    CGSizeVector  aCGSizeVec;
-    CFIndexVector aCFIndexVec;
-
-    // TODO: iterate over cached layout
-    CFArrayRef aGlyphRuns = CTLineGetGlyphRuns( mpCTLine );
-    const int nRunCount = CFArrayGetCount( aGlyphRuns );
-
-    for( int nRunIndex = 0; nRunIndex < nRunCount; ++nRunIndex )
     {
-        CTRunRef pGlyphRun = (CTRunRef)CFArrayGetValueAtIndex( aGlyphRuns, nRunIndex );
-        const CFIndex nGlyphsInRun = CTRunGetGlyphCount( pGlyphRun );
-        // skip to the first glyph run of interest
-        if( nSubIndex >= nGlyphsInRun )
-        {
-            nSubIndex -= nGlyphsInRun;
-            continue;
-        }
-        const CFRange aFullRange = CFRangeMake( 0, nGlyphsInRun );
-
-        // get glyph run details
-        const CGGlyph* pCGGlyphIdx = CTRunGetGlyphsPtr( pGlyphRun );
-        if( !pCGGlyphIdx )
-        {
-            aCGGlyphVec.reserve( nGlyphsInRun );
-            CTRunGetGlyphs( pGlyphRun, aFullRange, &aCGGlyphVec[0] );
-            pCGGlyphIdx = &aCGGlyphVec[0];
-        }
-        const CGPoint* pCGGlyphPos = CTRunGetPositionsPtr( pGlyphRun );
-        if( !pCGGlyphPos )
-        {
-            aCGPointVec.reserve( nGlyphsInRun );
-            CTRunGetPositions( pGlyphRun, aFullRange, &aCGPointVec[0] );
-            pCGGlyphPos = &aCGPointVec[0];
-        }
-
-        const CGSize* pCGGlyphAdvs = NULL;
-        if( pGlyphAdvances)
-        {
-            pCGGlyphAdvs = CTRunGetAdvancesPtr( pGlyphRun );
-            if( !pCGGlyphAdvs)
-            {
-                aCGSizeVec.reserve( nGlyphsInRun );
-                CTRunGetAdvances( pGlyphRun, aFullRange, &aCGSizeVec[0] );
-                pCGGlyphAdvs = &aCGSizeVec[0];
-            }
-        }
-
-        const CFIndex* pCGGlyphStrIdx = NULL;
-        if( pCharIndexes)
-        {
-            pCGGlyphStrIdx = CTRunGetStringIndicesPtr( pGlyphRun );
-            if( !pCGGlyphStrIdx)
-            {
-                aCFIndexVec.reserve( nGlyphsInRun );
-                CTRunGetStringIndices( pGlyphRun, aFullRange, &aCFIndexVec[0] );
-                pCGGlyphStrIdx = &aCFIndexVec[0];
-            }
-        }
-
-        const PhysicalFontFace* pFallbackFont = NULL;
-        if( pFallbackFonts )
-        {
-            CFDictionaryRef pRunAttributes = CTRunGetAttributes( pGlyphRun );
-            CTFontRef pRunFont = (CTFontRef)CFDictionaryGetValue( pRunAttributes, kCTFontAttributeName );
-
-            CFDictionaryRef pAttributes = mpTextStyle->GetStyleDict();
-            CTFontRef pFont = (CTFontRef)CFDictionaryGetValue( pAttributes, kCTFontAttributeName );
-            if ( !CFEqual( pRunFont,  pFont ) )
-            {
-                CTFontDescriptorRef pFontDesc = CTFontCopyFontDescriptor( pRunFont );
-                ImplDevFontAttributes rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, NULL );
-                pFallbackFont = new CoreTextFontData( rDevFontAttr, (sal_IntPtr)pFontDesc );
-            }
-        }
-
-        // get the details for each interesting glyph
-        // TODO: handle nLen>1
-        for(; (--nLen >= 0) && (nSubIndex < nGlyphsInRun); ++nSubIndex, ++nStart )
-        {
-            // convert glyph details for VCL
-            *(pOutGlyphIds++) = pCGGlyphIdx[ nSubIndex ];
-            if( pGlyphAdvances )
-                *(pGlyphAdvances++) = lrint(pCGGlyphAdvs[ nSubIndex ].width);
-            if( pCharIndexes )
-                *(pCharIndexes++) = pCGGlyphStrIdx[ nSubIndex] + mnMinCharPos;
-            if( pFallbackFonts )
-                *(pFallbackFonts++) = pFallbackFont;
-            if( !nCount++ )
-            {
-                const CGPoint& rCurPos = pCGGlyphPos[ nSubIndex ];
-                rPos = GetDrawPosition( Point( rCurPos.x, rCurPos.y) );
-            }
-        }
-        nSubIndex = 0; // prepare for the next glyph run
-        break; // TODO: handle nLen>1
+        return 0;
+    }
+    if(!bLayouted)
+    {
+        CacheGlyphLayout();
     }
 
-    return nCount;
+    if( nStart < 0 ) // first glyph requested?
+    {
+        nStart = 0;
+    }
+    const PhysicalFontFace* pFallbackFont = NULL;
+    CTFontRef pFont = NULL;
+    CTFontDescriptorRef pFontDesc = NULL;
+    ImplDevFontAttributes rDevFontAttr;
+
+    boost::ptr_vector<CTRunData>::const_iterator iter = m_vRunData.begin();
+
+    while(iter != m_vRunData.end() && iter->m_EndPos <= nStart)
+    {
+        iter++;
+    }
+    if(iter == m_vRunData.end())
+    {
+        return 0;
+    }
+    else
+    {
+        if( pFallbackFonts )
+        {
+            pFont = (CTFontRef)CFDictionaryGetValue( mpTextStyle->GetStyleDict(), kCTFontAttributeName );
+            pFontDesc = CTFontCopyFontDescriptor( iter->m_pFont );
+            rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, NULL );
+        }
+    }
+    int i = nStart;
+    int count = 0;
+    while( i < nStart + nLen )
+    {
+            // convert glyph details for VCL
+        int j = i - iter->m_StartPos;
+        *(pOutGlyphIds++) = iter->m_pGlyphs[ j ];
+        if( pGlyphAdvances )
+        {
+            *(pGlyphAdvances++) = lrint(iter->m_pAdvances[ j ].width);
+        }
+        if( pCharIndexes )
+        {
+            *(pCharIndexes++) = iter->m_pStringIndices[ j ] + mnMinCharPos;
+        }
+        if( pFallbackFonts )
+        {
+            if ( !CFEqual( iter->m_pFont,  pFont ) )
+            {
+                pFallbackFont = new CoreTextFontData( rDevFontAttr, (sal_IntPtr)pFontDesc );
+                *(pFallbackFonts++) = pFallbackFont;
+            }
+            else
+            {
+                *(pFallbackFonts++) = NULL;
+            }
+        }
+        if( i == nStart )
+        {
+            const CGPoint& rFirstPos = iter->m_pPositions[ j ];
+            rPos = GetDrawPosition( Point( rFirstPos.x, rFirstPos.y) );
+        }
+        i += 1;
+        count += 1;
+        if(i == iter->m_EndPos)
+        {
+            // note: we assume that we do not have empty runs in the middle of things
+            ++iter;
+            if( iter == m_vRunData.end())
+            {
+                break;
+            }
+            if( pFallbackFonts )
+            {
+                pFont = (CTFontRef)CFDictionaryGetValue( mpTextStyle->GetStyleDict(), kCTFontAttributeName );
+                pFontDesc = CTFontCopyFontDescriptor( iter->m_pFont );
+                rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, NULL );
+            }
+        }
+    }
+    nStart = i;
+
+    return count;
+
 }
 
 double CTLayout::GetWidth() const
@@ -476,58 +486,55 @@ long CTLayout::GetTextWidth() const
 
 long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
 {
+    long nPixWidth = GetTextWidth();
     // short circuit requests which don't need full details
     if( !pDXArray )
-        return GetTextWidth();
+        return nPixWidth;
 
-    long nPixWidth = GetTextWidth();
-    if( pDXArray )
+    // prepare the sub-pixel accurate logical-width array
+    ::std::vector<double> aWidthVector( mnCharCount );
+    if( mnTrailingSpaceCount && (mfTrailingSpaceWidth > 0.0) )
     {
-        // prepare the sub-pixel accurate logical-width array
-        ::std::vector<float> aWidthVector( mnCharCount );
-        if( mnTrailingSpaceCount && (mfTrailingSpaceWidth > 0.0) )
+        const double fOneWidth = mfTrailingSpaceWidth / mnTrailingSpaceCount;
+        ::std::fill_n(aWidthVector.begin() + (mnCharCount - mnTrailingSpaceCount),
+                      mnTrailingSpaceCount,
+                      fOneWidth);
+    }
+
+    // handle each glyph run
+    CFArrayRef aGlyphRuns = CTLineGetGlyphRuns( mpCTLine );
+    const int nRunCount = CFArrayGetCount( aGlyphRuns );
+    typedef std::vector<CGSize> CGSizeVector;
+    CGSizeVector aSizeVec;
+    typedef std::vector<CFIndex> CFIndexVector;
+    CFIndexVector aIndexVec;
+
+    for( int nRunIndex = 0; nRunIndex < nRunCount; ++nRunIndex )
+    {
+        CTRunRef pGlyphRun = (CTRunRef)CFArrayGetValueAtIndex( aGlyphRuns, nRunIndex );
+        const CFIndex nGlyphCount = CTRunGetGlyphCount( pGlyphRun );
+        const CFRange aFullRange = CFRangeMake( 0, nGlyphCount );
+
+        aSizeVec.resize( nGlyphCount );
+        aIndexVec.resize( nGlyphCount );
+        CTRunGetAdvances( pGlyphRun, aFullRange, &aSizeVec[0] );
+        CTRunGetStringIndices( pGlyphRun, aFullRange, &aIndexVec[0] );
+
+        for( int i = 0; i != nGlyphCount; ++i )
         {
-            const double fOneWidth = mfTrailingSpaceWidth / mnTrailingSpaceCount;
-            ::std::fill_n(aWidthVector.begin() + (mnCharCount - mnTrailingSpaceCount),
-                          mnTrailingSpaceCount,
-                          fOneWidth);
+            const int nRelIdx = aIndexVec[i];
+            aWidthVector[nRelIdx] += aSizeVec[i].width;
         }
+    }
 
-        // handle each glyph run
-        CFArrayRef aGlyphRuns = CTLineGetGlyphRuns( mpCTLine );
-        const int nRunCount = CFArrayGetCount( aGlyphRuns );
-        typedef std::vector<CGSize> CGSizeVector;
-        CGSizeVector aSizeVec;
-        typedef std::vector<CFIndex> CFIndexVector;
-        CFIndexVector aIndexVec;
-
-        for( int nRunIndex = 0; nRunIndex < nRunCount; ++nRunIndex )
-        {
-            CTRunRef pGlyphRun = (CTRunRef)CFArrayGetValueAtIndex( aGlyphRuns, nRunIndex );
-            const CFIndex nGlyphCount = CTRunGetGlyphCount( pGlyphRun );
-            const CFRange aFullRange = CFRangeMake( 0, nGlyphCount );
-
-            aSizeVec.resize( nGlyphCount );
-            aIndexVec.resize( nGlyphCount );
-            CTRunGetAdvances( pGlyphRun, aFullRange, &aSizeVec[0] );
-            CTRunGetStringIndices( pGlyphRun, aFullRange, &aIndexVec[0] );
-
-            for( int i = 0; i != nGlyphCount; ++i )
-            {
-                const int nRelIdx = aIndexVec[i];
-                aWidthVector[nRelIdx] += aSizeVec[i].width;
-            }
-        }
-
-        // convert the sub-pixel accurate array into classic pDXArray integers
-        float fWidthSum = 0.0;
-        sal_Int32 nOldDX = 0;
-        for( int i = 0; i < mnCharCount; ++i)
-        {
-            const sal_Int32 nNewDX = rint( fWidthSum += aWidthVector[i]);
-            pDXArray[i] = nNewDX - nOldDX;
-            nOldDX = nNewDX;
-        }
+    // convert the sub-pixel accurate array into classic pDXArray integers
+    double fWidthSum = 0.0;
+    sal_Int32 nOldDX = 0;
+    for( int i = 0; i < mnCharCount; ++i)
+    {
+        const sal_Int32 nNewDX = rint( fWidthSum += aWidthVector[i]);
+        pDXArray[i] = nNewDX - nOldDX;
+        nOldDX = nNewDX;
     }
 
     return nPixWidth;
