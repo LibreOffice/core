@@ -29,6 +29,7 @@
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/wall.hxx>
+#include <vcl/metaact.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <tools/poly.hxx>
 #include <basegfx/vector/b2enums.hxx>
@@ -865,6 +866,9 @@ private:
     void                        DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&);
 
     bool                        DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
+
+    bool                        DoesActionHandleTransparency( const MetaAction& rAct );
+    bool                        IsTransparentAction( const MetaAction& rAct );
 
     Color                       GetSingleColorGradientFill();
     void                        SetGrayscaleColors( Gradient &rGradient );

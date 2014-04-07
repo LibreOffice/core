@@ -97,20 +97,20 @@ private:
     OUString                   maDriver;
     OUString                   maLocation;
     OUString                   maComment;
-    sal_uInt32                  mnStatus;
-    sal_uInt32                  mnJobs;
+    sal_uInt32                 mnStatus;
+    sal_uInt32                 mnJobs;
 
 public:
-                                QueueInfo();
-                                QueueInfo( const QueueInfo& rInfo );
-                                ~QueueInfo();
+                               QueueInfo();
+                               QueueInfo( const QueueInfo& rInfo );
+                               ~QueueInfo();
 
     const OUString&            GetPrinterName() const { return maPrinterName; }
     const OUString&            GetDriver() const { return maDriver; }
     const OUString&            GetLocation() const { return maLocation; }
     const OUString&            GetComment() const { return maComment; }
-    sal_uInt32                  GetStatus() const { return mnStatus; }
-    sal_uInt32                  GetJobs() const { return mnJobs; }
+    sal_uInt32                 GetStatus() const { return mnStatus; }
+    sal_uInt32                 GetJobs() const { return mnJobs; }
 
     bool operator==( const QueueInfo& rInfo ) const;
 

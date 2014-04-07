@@ -67,10 +67,9 @@ struct ConnectedComponents
 typedef ::std::list< ConnectedComponents > ConnectedComponentsList;
 
 /** \#i10613# Extracted from Printer::GetPreparedMetaFile. Returns true
-    if given action requires special handling (usually because of
-    transparency)
+    if given action requires special transparency handling
 */
-static bool ImplIsActionSpecial( const MetaAction& rAct )
+bool OutputDevice::IsTransparentAction( const MetaAction& rAct )
 {
     switch( rAct.GetType() )
     {
@@ -88,6 +87,33 @@ static bool ImplIsActionSpecial( const MetaAction& rAct )
 
         case META_BMPEXSCALEPART_ACTION:
             return static_cast<const MetaBmpExScalePartAction&>(rAct).GetBitmapEx().IsTransparent();
+
+        default:
+            return false;
+    }
+}
+
+
+/** Determines whether the action can handle transparency correctly
+  (i.e. when painted on white background, does the action still look
+  correct)?
+ */
+bool OutputDevice::DoesActionHandleTransparency( const MetaAction& rAct )
+{
+    // META_FLOATTRANSPARENT_ACTION can contain a whole metafile,
+    // which is to be rendered with the given transparent gradient. We
+    // currently cannot emulate transparent painting on a white
+    // background reliably.
+
+    // the remainder can handle printing itself correctly on a uniform
+    // white background.
+    switch( rAct.GetType() )
+    {
+        case META_TRANSPARENT_ACTION:
+        case META_BMPEX_ACTION:
+        case META_BMPEXSCALE_ACTION:
+        case META_BMPEXSCALEPART_ACTION:
+            return true;
 
         default:
             return false;
@@ -622,28 +648,6 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         return Rectangle();
 }
 
-static bool ImplIsActionHandlingTransparency( const MetaAction& rAct )
-{
-    // META_FLOATTRANSPARENT_ACTION can contain a whole metafile,
-    // which is to be rendered with the given transparent gradient. We
-    // currently cannot emulate transparent painting on a white
-    // background reliably.
-
-    // the remainder can handle printing itself correctly on a uniform
-    // white background.
-    switch( rAct.GetType() )
-    {
-        case META_TRANSPARENT_ACTION:
-        case META_BMPEX_ACTION:
-        case META_BMPEXSCALE_ACTION:
-        case META_BMPEXSCALEPART_ACTION:
-            return true;
-
-        default:
-            return false;
-    }
-}
-
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
                                                      long nMaxBmpDPIX, long nMaxBmpDPIY,
                                                      bool bReduceTransparency, bool bTransparencyAutoMode,
@@ -663,7 +667,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
              pCurrAct && !bTransparent;
              pCurrAct = ( (GDIMetaFile&) rInMtf ).NextAction() )
         {
-            // #i10613# Extracted "specialness" predicate into extra method
+            // #i10613# determine if the action is a transparency capable
 
             // #107169# Also examine metafiles with masked bitmaps in
             // detail. Further down, this is optimized in such a way
@@ -672,7 +676,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             // of uniform opacity): if a masked bitmap is printed over
             // empty background, we convert to a plain bitmap with
             // white background.
-            if( ImplIsActionSpecial( *pCurrAct ) )
+            if( IsTransparentAction( *pCurrAct ) )
             {
                 bTransparent = true;
             }
@@ -994,7 +998,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 // prev component(s) special -> this one, too
                 aTotalComponents.bIsSpecial = true;
             }
-            else if( !ImplIsActionSpecial( *pCurrAct ) )
+            else if( !IsTransparentAction( *pCurrAct ) )
             {
                 // added action and none of prev components special ->
                 // this one normal, too
@@ -1008,7 +1012,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 // can the action handle transparency correctly
                 // (i.e. when painted on white background, does the
                 // action still look correct)?
-                if( !ImplIsActionHandlingTransparency( *pCurrAct ) )
+                if( !DoesActionHandleTransparency( *pCurrAct ) )
                 {
                     // no, action cannot handle its transparency on
                     // a printer device, render to bitmap
@@ -1294,7 +1298,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 // are the first (or sole) action in their bounds
                 // list. Note that we previously ensured that no
                 // fully-transparent objects are before us here.
-                if( ImplIsActionHandlingTransparency( *pCurrAct ) &&
+                if( DoesActionHandleTransparency( *pCurrAct ) &&
                     pCurrAssociatedComponent->aComponentList.begin()->first == pCurrAct )
                 {
                     // convert actions, where masked-out parts are of
