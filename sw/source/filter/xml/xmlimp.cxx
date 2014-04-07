@@ -864,19 +864,19 @@ void SwXMLImport::endDocument( void )
     delete pSttNdIdx;
     pSttNdIdx = 0;
 
-    if( (getImportFlags() == IMPORT_ALL ) )
-    {
-        // Notify math objects. If we are in the package filter this will
-        // be done by the filter object itself
-        if( IsInsertMode() )
-            pDoc->PrtOLENotify( sal_False );
-        else if ( pDoc->IsOLEPrtNotifyPending() )
-            pDoc->PrtOLENotify( sal_True );
-    }
-
     // SJ: #i49801# -> now permitting repaints
     if ( pDoc )
     {
+        if( (getImportFlags() == IMPORT_ALL ) )
+        {
+            // Notify math objects. If we are in the package filter this will
+            // be done by the filter object itself
+            if( IsInsertMode() )
+                pDoc->PrtOLENotify( sal_False );
+            else if ( pDoc->IsOLEPrtNotifyPending() )
+                pDoc->PrtOLENotify( sal_True );
+        }
+
         SdrModel* pDrawModel = pDoc->GetDrawModel();
         if ( pDrawModel )
             pDrawModel->setLock(false);
