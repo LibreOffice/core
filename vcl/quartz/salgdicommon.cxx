@@ -969,6 +969,9 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
         }
         else
         {
+            SAL_WARN( "vcl.quartz", "Neither pen nor brush visible" );
+            CG_TRACE( "CGPathRelease(" << xPath << ")" );
+            CGPathRelease( xPath );
             return true;
         }
 
