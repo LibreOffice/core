@@ -40,6 +40,7 @@ InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
       mpInsertionIndicatorOverlay(new view::InsertionIndicatorOverlay(rSlideSorter)),
       maInsertPosition(),
       meMode(MoveMode),
+      mbIsInsertionTrivial(false),
       mbIsActive(false),
       mbIsReadOnly(mrSlideSorter.GetModel().IsReadOnly()),
       mbIsOverSourceView(true),
