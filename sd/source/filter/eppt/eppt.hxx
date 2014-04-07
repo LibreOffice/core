@@ -127,9 +127,11 @@ struct PPTExOleObjEntry
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >    xControlModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       xShape;
 
-    PPTExOleObjEntry( PPTExOleObjEntryType eT, sal_uInt32 nOfs ) :
-        eType   ( eT ),
-        nOfsA   ( nOfs ) {};
+    PPTExOleObjEntry(PPTExOleObjEntryType eT, sal_uInt32 nOfs)
+        : eType(eT)
+        , nOfsA(nOfs)
+        , nOfsB(0)
+    {}
 };
 
 struct TextRuleEntry
