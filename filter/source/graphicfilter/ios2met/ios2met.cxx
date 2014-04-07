@@ -25,6 +25,7 @@
 #include <vcl/lineinfo.hxx>
 
 #include <math.h>
+#include <boost/scoped_array.hpp>
 
 class FilterConfigItem;
 
@@ -944,7 +945,6 @@ void OS2METReader::ReadChrStr(sal_Bool bGivenPos, sal_Bool bMove, sal_Bool bExtr
 {
     Point aP0;
     sal_uInt16 i, nLen;
-    char * pChr;
     OSFont * pF;
     Font aFont;
     Size aSize;
@@ -978,11 +978,11 @@ void OS2METReader::ReadChrStr(sal_Bool bGivenPos, sal_Bool bMove, sal_Bool bExtr
         else
             nLen = nOrderLen-4;
     }
-    pChr = new char[nLen+1];
+    boost::scoped_array<char> pChr(new char[nLen+1]);
     for (i=0; i<nLen; i++)
         pOS2MET->ReadChar( pChr[i] );
     pChr[nLen] = 0;
-    OUString aStr( (const sal_Char*)pChr, strlen(pChr), osl_getThreadTextEncoding() );
+    OUString aStr( (const sal_Char*)pChr.get(), strlen(pChr.get()), osl_getThreadTextEncoding() );
     SetRasterOp(aAttr.eChrMix);
     if (pVirDev->GetFont()!=aFont)
         pVirDev->SetFont(aFont);
@@ -1010,7 +1010,6 @@ void OS2METReader::ReadChrStr(sal_Bool bGivenPos, sal_Bool bMove, sal_Bool bExtr
         aCalcBndRect.Union( Rectangle( aDummyPoly.GetPoint( 0 ), aDummyPoly.GetPoint( 3 ) ) );
         aCalcBndRect.Union( Rectangle( aDummyPoly.GetPoint( 1 ), aDummyPoly.GetPoint( 2 ) ) );
     }
-    delete[] pChr;
 }
 
 void OS2METReader::ReadArc(sal_Bool bGivenPos)
@@ -2189,8 +2188,8 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
             }
             // OK, now the map data is beeing pushed. Unfortunatly OS2 and BMP
             // do habe a different RGB ordering when using 24-bit
-            sal_uInt8 * pBuf=new sal_uInt8[nDataLen];
-            pOS2MET->Read(pBuf,nDataLen);
+            boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[nDataLen]);
+            pOS2MET->Read(pBuf.get(),nDataLen);
             if (p->nBitsPerPixel==24) {
                 sal_uLong i, j, nAlign, nBytesPerLine;
                 sal_uInt8 nTemp;
@@ -2208,9 +2207,8 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
                     }
                 }
             }
-            p->pBMP->Write(pBuf,nDataLen);
+            p->pBMP->Write(pBuf.get(),nDataLen);
             p->nMapPos+=nDataLen;
-            delete[] pBuf;
             break;
         }
         case 0x0093:   // End Image Content
@@ -2505,10 +2503,9 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                 pOrdFile = new SvMemoryStream;
                 pOrdFile->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
             }
-            sal_uInt8 * pBuf; pBuf = new sal_uInt8[nFieldSize];
-            pOS2MET->Read(pBuf,nFieldSize);
-            pOrdFile->Write(pBuf,nFieldSize);
-            delete[] pBuf;
+            boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[nFieldSize]);
+            pOS2MET->Read(pBuf.get(),nFieldSize);
+            pOrdFile->Write(pBuf.get(),nFieldSize);
             break;
         }
         case MapCodFntMagic:

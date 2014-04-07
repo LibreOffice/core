@@ -21,6 +21,7 @@
 #include "bundles.hxx"
 
 #include <tools/stream.hxx>
+#include <boost/scoped_array.hpp>
 
 Bundle& Bundle::operator=( Bundle& rSource )
 {
@@ -191,13 +192,13 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
         pFontEntry = aFontEntryList[ nFontNameCount ];
     }
     nFontNameCount++;
-    sal_Int8* pBuf = new sal_Int8[ nSize ];
-    memcpy( pBuf, pSource, nSize );
-    sal_Int8* pFound = ImplSearchEntry( pBuf, (sal_Int8*)"ITALIC", nSize, 6 );
+    boost::scoped_array<sal_Int8> pBuf(new sal_Int8[ nSize ]);
+    memcpy( pBuf.get(), pSource, nSize );
+    sal_Int8* pFound = ImplSearchEntry( pBuf.get(), (sal_Int8*)"ITALIC", nSize, 6 );
     if ( pFound )
     {
         pFontEntry->nFontType |= 1;
-        sal_uInt32 nPrev = ( pFound - pBuf );
+        sal_uInt32 nPrev = ( pFound - pBuf.get() );
         sal_uInt32 nToCopyOfs = 6;
         if ( nPrev && ( pFound[ -1 ] == '-' || pFound[ -1 ] == ' ' ) )
         {
@@ -212,12 +213,12 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
         }
         nSize -= nToCopyOfs;
     }
-    pFound = ImplSearchEntry( pBuf, (sal_Int8*)"BOLD", nSize, 4 );
+    pFound = ImplSearchEntry( pBuf.get(), (sal_Int8*)"BOLD", nSize, 4 );
     if ( pFound )
     {
         pFontEntry->nFontType |= 2;
 
-        sal_uInt32 nPrev = ( pFound - pBuf );
+        sal_uInt32 nPrev = ( pFound - pBuf.get() );
         sal_uInt32 nToCopyOfs = 4;
         if ( nPrev && ( pFound[ -1 ] == '-' || pFound[ -1 ] == ' ' ) )
         {
@@ -234,8 +235,7 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
     }
     pFontEntry->pFontName = new sal_Int8[ nSize + 1 ];
     pFontEntry->pFontName[ nSize ] = 0;
-    memcpy( pFontEntry->pFontName, pBuf, nSize );
-    delete[] pBuf;
+    memcpy( pFontEntry->pFontName, pBuf.get(), nSize );
 }
 
 

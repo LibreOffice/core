@@ -37,6 +37,7 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <boost/scoped_array.hpp>
 
 // PictWriter
 struct PictWriterAttrStackMember {
@@ -871,7 +872,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
     sal_uLong   nWidth, nHeight, nDstRowBytes, nx, nc, ny, nCount, nColTabSize, i;
     sal_uLong   nDstRowPos, nSrcRowBytes, nEqu3, nPos, nDstMapPos;
     sal_uInt16  nBitsPerPixel, nPackType;
-    sal_uInt8   *pComp[4], *pPix, *pTemp;
+    sal_uInt8   *pComp[4], *pTemp;
     sal_uInt8    nEquData = 0;
     sal_uInt8    nFlagCounterByte, nRed, nGreen, nBlue;
 
@@ -1141,7 +1142,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         pPict->WriteUInt16( (sal_uInt16)0 );            // (?)
 
         // allocate memory for a row:
-        pPix = new sal_uInt8[ nSrcRowBytes ];
+        boost::scoped_array<sal_uInt8> pPix(new sal_uInt8[ nSrcRowBytes ]);
 
         // remember position of the map-data in the target:
         nDstMapPos=pPict->Tell();
@@ -1153,13 +1154,13 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
             switch ( nBitsPerPixel )
             {
                 case 1 :
-                    for ( pTemp = pPix, i = 0; i < nSrcRowBytes; i++ )
+                    for ( pTemp = pPix.get(), i = 0; i < nSrcRowBytes; i++ )
                         *pTemp++ = (sal_uInt8)0;
                     for ( i = 0; i < nWidth; i++ )
                         pPix[ ( i >> 3 ) ] |= (pAcc->GetPixelIndex( ny, i ) & 1) << ((i & 7) ^ 7);
                     break;
                 case 4 :
-                    for ( pTemp = pPix, i = 0; i < nSrcRowBytes; i++ )
+                    for ( pTemp = pPix.get(), i = 0; i < nSrcRowBytes; i++ )
                         *pTemp++ = (sal_uInt8)0;
                     for ( i = 0; i < nWidth; i++ )
                         pPix[ ( i >> 1 ) ] |= (pAcc->GetPixelIndex( ny, i ) & 15) << ((i & 1) << 2);
@@ -1172,7 +1173,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
 
             if ( nPackType == 1 )
             {   // don't pack
-                pPict->Write( pPix, nDstRowBytes );
+                pPict->Write( pPix.get(), nDstRowBytes );
             }
             else
             {   // Ppacking (nPackType==0)
@@ -1256,8 +1257,6 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
             if ( pPict->GetError() )
                 bStatus = sal_False;
         }
-        // cleaning up:
-        delete[] pPix;
     }
 
     // Map-Data has to be an even number of bytes:
@@ -1744,8 +1743,8 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 Point                           aPt( pA->GetPoint() );
                 OUString                        aStr = pA->GetText().copy( pA->GetIndex(),pA->GetLen() );
                 VirtualDevice                   aVirDev;
-                sal_Int32*                      pDXAry = new sal_Int32[ aStr.getLength() ];
-                sal_Int32                       nNormSize( aVirDev.GetTextArray( aStr,pDXAry ) );
+                boost::scoped_array<sal_Int32>  pDXAry(new sal_Int32[ aStr.getLength() ]);
+                sal_Int32                       nNormSize( aVirDev.GetTextArray( aStr,pDXAry.get() ) );
                 sal_uInt16                          i;
 
                 if (aSrcFont.GetAlign()!=ALIGN_BASELINE)
@@ -1760,8 +1759,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                     pDXAry[ i ] = pDXAry[ i ] * ( (long)pA->GetWidth() ) / nNormSize;
 
                 SetAttrForText();
-                WriteTextArray( aPt, aStr, pDXAry );
-                delete[] pDXAry;
+                WriteTextArray( aPt, aStr, pDXAry.get() );
             }
             break;
 

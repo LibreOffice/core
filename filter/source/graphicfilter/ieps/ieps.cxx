@@ -36,6 +36,7 @@
 #include <unotools/tempfile.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
+#include <boost/scoped_array.hpp>
 
 class FilterConfigItem;
 
@@ -367,19 +368,17 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
                     .WriteUInt32( nTPos ).WriteUInt32( nSizeTIFF );
         if ( nSizeWMF )
         {
-            sal_uInt8* pBuf = new sal_uInt8[ nSizeWMF ];
+            boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nSizeWMF ]);
             rStrm.Seek( nOrigPos + nPosWMF );
-            rStrm.Read( pBuf, nSizeWMF );
-            aReplacement.Write( pBuf, nSizeWMF );
-            delete[] pBuf;
+            rStrm.Read( pBuf.get(), nSizeWMF );
+            aReplacement.Write( pBuf.get(), nSizeWMF );
         }
         if ( nSizeTIFF )
         {
-            sal_uInt8* pBuf = new sal_uInt8[ nSizeTIFF ];
+            boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nSizeTIFF ]);
             rStrm.Seek( nOrigPos + nPosTIFF );
-            rStrm.Read( pBuf, nSizeTIFF );
-            aReplacement.Write( pBuf, nSizeTIFF );
-            delete[] pBuf;
+            rStrm.Read( pBuf.get(), nSizeTIFF );
+            aReplacement.Write( pBuf.get(), nSizeTIFF );
         }
         rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, (const sal_uInt8*)aReplacement.GetData(), aReplacement.Tell() ) ) );
     }
