@@ -1022,13 +1022,6 @@ void ScColorScale3FrmtEntry::SetInactive()
 
 IMPL_LINK( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox*, pBox )
 {
-    bool bEnableEdit = true;
-    sal_Int32 nPos = pBox->GetSelectEntryPos();
-    if(nPos < 2)
-    {
-        bEnableEdit = false;
-    }
-
     Edit* pEd = NULL;
     if(pBox == &maLbEntryTypeMin)
         pEd = &maEdMin;
@@ -1036,6 +1029,16 @@ IMPL_LINK( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox*, pBox )
         pEd = &maEdMiddle;
     else if(pBox == &maLbEntryTypeMax)
         pEd = &maEdMax;
+
+    if (!pEd)
+        return 0;
+
+    bool bEnableEdit = true;
+    sal_Int32 nPos = pBox->GetSelectEntryPos();
+    if(nPos < 2)
+    {
+        bEnableEdit = false;
+    }
 
     if(bEnableEdit)
         pEd->Enable();
