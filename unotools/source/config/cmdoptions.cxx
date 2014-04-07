@@ -75,38 +75,9 @@ class SvtCmdOptions
             m_aCommandHashMap.insert( CommandHashMap::value_type( aCmd, 0 ) );
         }
 
-        // convert internal list to external format
-        // for using it on right menus really
-        // Notice:   We build a property list with 4 entries and set it on result list then.
-        //           The while-loop starts with pointer on internal member list lSetupEntries, change to
-        //           lUserEntries then and stop after that with NULL!
-        //           Separator entries will be packed in another way then normal entries! We define
-        //           special strings "sEmpty" and "sSeparator" to perform too ...
-        Sequence< OUString > GetList() const
-        {
-            sal_Int32               nCount = (sal_Int32)m_aCommandHashMap.size();
-            sal_Int32               nIndex = 0;
-            Sequence< OUString >    aList( nCount );
-
-            CommandHashMap::const_iterator pEntry = m_aCommandHashMap.begin();
-            while ( pEntry != m_aCommandHashMap.end() )
-                aList[nIndex++] = pEntry->first;
-
-            return aList;
-        }
-
     private:
-        class CommandHashMap : public ::boost::unordered_map< OUString      ,
-                                                        sal_Int32           ,
-                                                        OUStringHash        ,
-                                                        ::std::equal_to< OUString >  >
-        {
-            public:
-                inline void free()
-                {
-                    CommandHashMap().swap( *this );
-                }
-        };
+        typedef boost::unordered_map<OUString, sal_Int32, OUStringHash>
+            CommandHashMap;
 
         CommandHashMap m_aCommandHashMap;
 };

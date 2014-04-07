@@ -19,6 +19,7 @@
 
 #include <unotools/componentresmodule.hxx>
 
+#include <boost/noncopyable.hpp>
 #include <tools/resmgr.hxx>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
@@ -32,7 +33,7 @@ namespace utl
 
         not threadsafe!
     */
-    class OComponentResModuleImpl
+    class OComponentResModuleImpl: private boost::noncopyable
     {
     private:
         ResMgr*         m_pResources;
@@ -59,11 +60,6 @@ namespace utl
         /** retrieves our resource manager
         */
         ResMgr* getResManager();
-
-    private:
-        OComponentResModuleImpl();                                              // never implemented
-        OComponentResModuleImpl( const OComponentResModuleImpl& );              // never implemented
-        OComponentResModuleImpl& operator=( const OComponentResModuleImpl& );   // never implemented
     };
 
     void OComponentResModuleImpl::freeResManager()

@@ -186,9 +186,7 @@ struct FactoryInfo
         // to control access on it!
         bool            getInstalled        () const { return bInstalled;         };
         OUString     getFactory          () const { return sFactory;           };
-        OUString     getShortName        () const { return sShortName;         };
         OUString     getTemplateFile     () const { return sTemplateFile;      };
-        OUString     getWindowAttributes () const { return sWindowAttributes;  };
         OUString     getDefaultFilter    () const { return sDefaultFilter;     };
         bool            isDefaultFilterReadonly() const { return bDefaultFilterReadonly; }
         sal_Int32           getIcon             () const { return nIcon;              };
@@ -224,15 +222,6 @@ struct FactoryInfo
             {
                 sTemplateFile        = sNewTemplateFile;
                 bChangedTemplateFile = true;
-            }
-        };
-
-        void setWindowAttributes( const OUString& sNewWindowAttributes )
-        {
-            if( sWindowAttributes != sNewWindowAttributes )
-            {
-                sWindowAttributes        = sNewWindowAttributes;
-                bChangedWindowAttributes = true;
             }
         };
 

@@ -78,8 +78,6 @@ public:
                                     { return m_aLocaleString; }
             void                SetLocaleString( const OUString& rStr );
 
-            const OUString&     GetUILocaleString() const
-                                    { return m_aUILocaleString; }
             void                SetUILocaleString( const OUString& rStr );
 
             const OUString&     GetCurrencyString() const

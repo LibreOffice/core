@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <unotools/sharedunocomponent.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -63,7 +66,8 @@ namespace utl
 
     typedef ::cppu::WeakImplHelper1 <   XCloseListener
                                     >   CloseableComponentImpl_Base;
-    class CloseableComponentImpl : public CloseableComponentImpl_Base
+    class CloseableComponentImpl:
+        public CloseableComponentImpl_Base, private boost::noncopyable
     {
     private:
         Reference< XCloseable > m_xCloseable;
@@ -96,11 +100,6 @@ namespace utl
         @nofail
         */
         void    impl_nf_switchListening( bool _bListen );
-
-    private:
-        CloseableComponentImpl();                                           // never implemented
-        CloseableComponentImpl( const CloseableComponentImpl& );            // never implemented
-        CloseableComponentImpl& operator=( const CloseableComponentImpl& ); // never implemented
     };
 
     CloseableComponentImpl::CloseableComponentImpl( const Reference< XInterface >& _rxComponent )

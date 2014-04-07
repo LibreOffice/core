@@ -44,11 +44,6 @@
 #define PROPERTY_VISIBLE                        "Visible"
 #define PROPERTY_USERDATA                       "UserData"
 
-#define DEFAULT_WINDOWSTATE                     OUString()
-#define DEFAULT_USERDATA                        css::uno::Sequence< css::beans::NamedValue >()
-#define DEFAULT_PAGEID                          0
-#define DEFAULT_VISIBLE                         false
-
 //#define DEBUG_VIEWOPTIONS
 
 #ifdef DEBUG_VIEWOPTIONS
@@ -70,162 +65,14 @@
 
 //  initialization!
 
-SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Dialogs    =   NULL;
-sal_Int32                    SvtViewOptions::m_nRefCount_Dialogs         =   0;
-SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_TabDialogs =   NULL;
-sal_Int32                    SvtViewOptions::m_nRefCount_TabDialogs      =   0;
-SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_TabPages   =   NULL;
-sal_Int32                    SvtViewOptions::m_nRefCount_TabPages        =   0;
-SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Windows    =   NULL;
-sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0;
-
-//  private declarations!
-
-/*-************************************************************************************************************
-    @descr  declare one configuration item
-            These struct hold information about one view item. But not all member are used for all entries!
-            User must decide which information are useful and which not. We are a container iztem only and doesn't
-            know anything about the context.
-            But; we support a feature:
-                decision between items with default values (should not really exist in configuration!)
-                and items with real values - changed by user. So user can suppress saving of really unused items
-                to disk - because; defaulted items could be restored on runtime without reading from disk!!!
-                And if only items with valid information was written to cfg - we mustn't read so much and save time.
-            So we start with an member m_bDefault=True and reset it to False after first set-call.
-            Deficiencies of these solution - we cant allow direct read/write access to our member. We must
-            support it by set/get-methods ...
-*//*-*************************************************************************************************************/
-class IMPL_TViewData
-{
-    public:
-
-        // create "default" item
-        IMPL_TViewData()
-        {
-            m_sWindowState = DEFAULT_WINDOWSTATE;
-            m_lUserData    = DEFAULT_USERDATA;
-            m_nPageID      = DEFAULT_PAGEID;
-            m_bVisible     = DEFAULT_VISIBLE;
-
-            m_bDefault     = true;
-        }
-
-        // write access - with reseting of default state
-        void setWindowState( const OUString& sValue )
-        {
-            m_bDefault     = (
-                                m_bDefault    &&
-                                ( sValue     == DEFAULT_WINDOWSTATE )
-                             );
-            m_sWindowState = sValue;
-        }
-
-        void setUserData( const css::uno::Sequence< css::beans::NamedValue >& lValue )
-        {
-            m_bDefault  = (
-                            m_bDefault    &&
-                            ( lValue     == DEFAULT_USERDATA )
-                          );
-            m_lUserData = lValue;
-        }
-
-        void setPageID( sal_Int32 nValue )
-        {
-            m_bDefault = (
-                           m_bDefault    &&
-                           ( nValue     == DEFAULT_PAGEID )
-                         );
-            m_nPageID  = nValue;
-        }
-
-        void setVisible( bool bValue )
-        {
-            m_bDefault = (
-                           m_bDefault    &&
-                           ( bValue     == DEFAULT_VISIBLE )
-                         );
-            m_bVisible = bValue;
-        }
-
-        // read access
-        OUString                              getWindowState() { return m_sWindowState; }
-        css::uno::Sequence< css::beans::NamedValue > getUserData   () { return m_lUserData; }
-        sal_Int32                                    getPageID     () { return m_nPageID; }
-        bool                                     getVisible    () { return m_bVisible; }
-
-        // special operation for easy access on user data
-        void setUserItem( const OUString& sName  ,
-                          const css::uno::Any&   aValue )
-        {
-            // we change UserData in every case!
-            //    a) we change already existing item
-            // or b) we add a new one
-            m_bDefault = false;
-
-            bool  bExist = false;
-            sal_Int32 nCount = m_lUserData.getLength();
-
-            // change it, if it already exist ...
-            for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
-            {
-                if( m_lUserData[nStep].Name == sName )
-                {
-                    m_lUserData[nStep].Value = aValue;
-                    bExist                   = true;
-                    break;
-                }
-            }
-
-            // ... or create new list item
-            if( !bExist )
-            {
-                m_lUserData.realloc( nCount+1 );
-                m_lUserData[nCount].Name  = sName;
-                m_lUserData[nCount].Value = aValue;
-            }
-        }
-
-        css::uno::Any getUserItem( const OUString& sName )
-        {
-            // default value - if item not exist!
-            css::uno::Any aValue;
-
-            sal_Int32 nCount = m_lUserData.getLength();
-            for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
-            {
-                if( m_lUserData[nStep].Name == sName )
-                {
-                    aValue = m_lUserData[nStep].Value;
-                    break;
-                }
-            }
-            return aValue;
-        }
-
-        // check for default items
-        bool isDefault() { return m_bDefault; }
-
-    private:
-        OUString                                 m_sWindowState;
-        css::uno::Sequence< css::beans::NamedValue >    m_lUserData;
-        sal_Int32                                       m_nPageID;
-        bool                                        m_bVisible;
-
-        bool                                        m_bDefault;
-};
-
-struct IMPL_TStringHashCode
-{
-    size_t operator()(const OUString& sString) const
-    {
-        return sString.hashCode();
-    }
-};
-
-typedef ::boost::unordered_map< OUString                    ,
-                         IMPL_TViewData                     ,
-                         IMPL_TStringHashCode               ,
-                         ::std::equal_to< OUString > > IMPL_TViewHash;
+SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Dialogs    =   NULL    ;
+sal_Int32                    SvtViewOptions::m_nRefCount_Dialogs         =   0       ;
+SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_TabDialogs =   NULL    ;
+sal_Int32                    SvtViewOptions::m_nRefCount_TabDialogs      =   0       ;
+SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_TabPages   =   NULL    ;
+sal_Int32                    SvtViewOptions::m_nRefCount_TabPages        =   0       ;
+SvtViewOptionsBase_Impl*     SvtViewOptions::m_pDataContainer_Windows    =   NULL    ;
+sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0       ;
 
 /*-************************************************************************************************************
     @descr          Implement base data container for view options elements.

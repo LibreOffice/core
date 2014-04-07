@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <unotools/searchopt.hxx>
 #include <tools/debug.hxx>
 #include <unotools/configitem.hxx>
@@ -32,14 +35,10 @@ using namespace com::sun::star::i18n;
 
 #define MAX_FLAGS_OFFSET    26
 
-class SvtSearchOptions_Impl : public ConfigItem
+class SvtSearchOptions_Impl: public ConfigItem, private boost::noncopyable
 {
     sal_Int32   nFlags;
     bool    bModified;
-
-    // disallow copy-constructor and assignment-operator for now
-    SvtSearchOptions_Impl( const SvtSearchOptions_Impl & );
-    SvtSearchOptions_Impl & operator = ( const SvtSearchOptions_Impl & );
 
 protected:
     bool            IsModified() const { return bModified; }

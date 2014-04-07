@@ -64,7 +64,6 @@ namespace utl
         const Type&             getDataType( ) const    { return aDataType; }
 
         bool operator == ( const NodeValueAccessor& rhs ) const;
-        bool operator != ( const NodeValueAccessor& rhs ) const { return !operator == ( rhs ); }
     };
 
     NodeValueAccessor::NodeValueAccessor( const OUString& _rNodePath )

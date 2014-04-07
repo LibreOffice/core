@@ -58,28 +58,12 @@ using namespace ::com::sun::star::beans;
 #define OFFSET_TARGETNAME                               3
 
 #define PATHPREFIX_SETUP                                OUString("m")
-#define PATHPREFIX_USER                                 OUString("u")
 
 /*-****************************************************************************************************************
     @descr  struct to hold information about one menu entry.
 ****************************************************************************************************************-*/
 struct SvtDynMenuEntry
 {
-    public:
-        SvtDynMenuEntry() {};
-
-        SvtDynMenuEntry(  const OUString& sNewURL             ,
-                    const OUString& sNewTitle           ,
-                    const OUString& sNewImageIdentifier ,
-                    const OUString& sNewTargetName      )
-        {
-            sURL                = sNewURL;
-            sTitle              = sNewTitle;
-            sImageIdentifier    = sNewImageIdentifier;
-            sTargetName         = sNewTargetName;
-        }
-
-    public:
         OUString    sName;
         OUString    sURL;
         OUString    sTitle;
@@ -105,30 +89,6 @@ class SvtDynMenu
             {
                 lSetupEntries.push_back( rEntry );
             }
-        }
-
-        // append user specific menu entry
-        // We must find unique name for it by using special prefix
-        // and next count of user setted entries!
-        // Look for double menu entries here too ... may be some separator items are supeflous ...
-        void AppendUserEntry( SvtDynMenuEntry& rEntry )
-        {
-            if(
-                ( lUserEntries.size()         <  1           )  ||
-                ( lUserEntries.rbegin()->sURL != rEntry.sURL )
-              )
-            {
-                rEntry.sName  = PATHPREFIX_USER;
-                rEntry.sName += OUString::number( impl_getNextUserEntryNr() );
-                lUserEntries.push_back( rEntry );
-            }
-        }
-
-        // the only way to free memory!
-        void Clear()
-        {
-            lSetupEntries.clear();
-            lUserEntries.clear();
         }
 
         // convert internal list to external format
@@ -183,32 +143,6 @@ class SvtDynMenu
                     pList = NULL;
             }
             return lResult;
-        }
-
-    private:
-
-        // search for an entry named "ux" with x=[0..i] inside our menu
-        // which has set highest number x. So we can add another user entry.
-        sal_Int32 impl_getNextUserEntryNr() const
-        {
-            sal_Int32 nNr = 0;
-            for( vector< SvtDynMenuEntry >::const_iterator pItem =lUserEntries.begin();
-                                                     pItem!=lUserEntries.end();
-                                                     ++pItem                    )
-            {
-                if( pItem->sName.startsWith( PATHPREFIX_USER ) )
-                {
-                    OUString  sNr      = pItem->sName.copy( 1, pItem->sName.getLength()-1 );
-                    sal_Int32 nCheckNr = sNr.toInt32();
-                    if( nCheckNr > nNr )
-                        nNr = nCheckNr;
-                }
-            }
-            // Attention: Code isn't prepared for recyling of unused fragmented numbers!
-            // If we reach end of sal_Int32 range ... we must stop further working ...
-            // But I think nobody expand a menu to more then 1000 ... 100000 ... entries ... or?
-            DBG_ASSERT( !(nNr>0x7fffffff), "Menu::impl_getNextUserEntryNr()\nUser count can be out of range next time ...\n" );
-            return nNr;
         }
 
     private:

@@ -72,23 +72,12 @@ enum VarNameProperty
     VAR_NEEDS_FILEURL
 };
 
-class NameToHandleMap : public ::boost::unordered_map<  OUString, sal_Int32, OUStringHash, ::std::equal_to< OUString > >
-{
-    public:
-        inline void free() { NameToHandleMap().swap( *this ); }
-};
+typedef boost::unordered_map<OUString, sal_Int32, OUStringHash> NameToHandleMap;
 
-class EnumToHandleMap : public ::boost::unordered_map< sal_Int32, sal_Int32, boost::hash< sal_Int32 >, std::equal_to< sal_Int32 > >
-{
-    public:
-        inline void free() { EnumToHandleMap().swap( *this ); }
-};
+typedef boost::unordered_map<sal_Int32, sal_Int32> EnumToHandleMap;
 
-class VarNameToEnumMap : public ::boost::unordered_map< OUString, VarNameProperty, OUStringHash, ::std::equal_to< OUString > >
-{
-    public:
-        inline void free() { VarNameToEnumMap().swap( *this ); }
-};
+typedef boost::unordered_map<OUString, VarNameProperty, OUStringHash>
+    VarNameToEnumMap;
 
 // class SvtPathOptions_Impl ---------------------------------------------
 class SvtPathOptions_Impl

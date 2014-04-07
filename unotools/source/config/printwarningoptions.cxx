@@ -67,13 +67,11 @@ public:
 
     bool    IsPaperSize() const { return m_bPaperSize; }
     bool    IsPaperOrientation() const { return m_bPaperOrientation; }
-    bool    IsNotFound() const { return m_bNotFound; }
     bool    IsTransparency() const { return m_bTransparency; }
     bool    IsModifyDocumentOnPrintingAllowed() const { return m_bModifyDocumentOnPrintingAllowed; }
 
     void        SetPaperSize( bool bState ) { m_bPaperSize = bState; SetModified(); }
     void        SetPaperOrientation( bool bState ) { m_bPaperOrientation = bState; SetModified(); }
-    void        SetNotFound( bool bState ) { m_bNotFound = bState; SetModified(); }
     void        SetTransparency( bool bState ) { m_bTransparency = bState; SetModified(); }
     void        SetModifyDocumentOnPrintingAllowed( bool bState ) { m_bModifyDocumentOnPrintingAllowed = bState; SetModified(); }
 

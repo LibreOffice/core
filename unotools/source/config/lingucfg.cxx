@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -132,13 +135,9 @@ SvtLinguOptions::SvtLinguOptions()
 
 }
 
-class SvtLinguConfigItem : public utl::ConfigItem
+class SvtLinguConfigItem: public utl::ConfigItem, private boost::noncopyable
 {
     SvtLinguOptions     aOpt;
-
-    // disallow copy-constructor and assignment-operator for now
-    SvtLinguConfigItem( const SvtLinguConfigItem & );
-    SvtLinguConfigItem & operator = ( const SvtLinguConfigItem & );
 
     static bool GetHdlByName( sal_Int32 &rnHdl, const OUString &rPropertyName, bool bFullPropName = false );
     static const uno::Sequence< OUString > GetPropertyNames();

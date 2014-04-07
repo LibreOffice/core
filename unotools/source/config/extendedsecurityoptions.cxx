@@ -47,17 +47,8 @@ using namespace ::com::sun::star::uno;
 
 #define PROPERTYCOUNT                   1
 
-class ExtensionHashMap : public ::boost::unordered_map< OUString,
-                                                 sal_Int32,
-                                                 OUStringHash,
-                                                 ::std::equal_to< OUString > >
-{
-    public:
-        inline void free()
-        {
-            ExtensionHashMap().swap( *this );
-        }
-};
+typedef boost::unordered_map<OUString, sal_Int32, OUStringHash>
+    ExtensionHashMap;
 
 class SvtExtendedSecurityOptions_Impl : public ConfigItem
 {
