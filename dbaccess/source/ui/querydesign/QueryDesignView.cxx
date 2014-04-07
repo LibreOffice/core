@@ -2184,8 +2184,8 @@ namespace
                         if ( nColumnRefPos >= 0 && static_cast<sal_uInt32>(nColumnRefPos) < pColumnRef->count() )
                             pParamRef = pColumnRef->getChild(nColumnRefPos);
 
-                        if (    SQL_ISRULE(pColumnRef,general_set_fct)
-                            &&  SQL_ISRULE(pParamRef,column_ref) )
+                        if ( SQL_ISRULE(pColumnRef,general_set_fct)
+                            && pParamRef &&  SQL_ISRULE(pParamRef,column_ref) )
                         {
                             // Check the parameters for Column references
                             InsertColumnRef(_pView,pParamRef,aColumnName,aColumnAlias,aTableRange,aInfo,pTabList);
