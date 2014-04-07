@@ -97,7 +97,7 @@ public:
     // the set has to support the sdb::ResultSet service
     virtual ~FmRecordCountListener();
 
-    //  DECLARE_UNO3_AGG_DEFAULTS(FmPropertyListener, UsrObject);
+    //  DECLARE_UNO3_AGG_DEFAULTS(FmPropertyListener, UsrObject)
     //  virtual sal_Bool queryInterface(::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rOut);
 
     // ::com::sun::star::lang::XEventListener

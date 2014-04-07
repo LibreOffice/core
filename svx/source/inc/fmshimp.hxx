@@ -258,7 +258,7 @@ public:
     FmXFormShell(FmFormShell& _rShell, SfxViewFrame* _pViewFrame);
 
     // UNO Anbindung
-    DECLARE_UNO3_DEFAULTS(FmXFormShell, FmXFormShell_BASE);
+    DECLARE_UNO3_DEFAULTS(FmXFormShell, FmXFormShell_BASE)
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:

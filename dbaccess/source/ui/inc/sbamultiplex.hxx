@@ -69,7 +69,7 @@ namespace dbaui
     public:                                                                                 \
         classname( ::cppu::OWeakObject& rSource,                                            \
             ::osl::Mutex& rMutex);                                                          \
-        DECLARE_UNO3_DEFAULTS(classname, OSbaWeakSubObject);                                    \
+        DECLARE_UNO3_DEFAULTS(classname, OSbaWeakSubObject)                                     \
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(                        \
             const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
                                                                                             \
@@ -190,7 +190,7 @@ namespace dbaui
                                                                                             \
     public:                                                                                 \
         classname( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );                    \
-        DECLARE_UNO3_DEFAULTS(classname, OSbaWeakSubObject);                                    \
+        DECLARE_UNO3_DEFAULTS(classname, OSbaWeakSubObject)                                     \
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(                        \
             const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
                                                                                             \

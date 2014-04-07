@@ -83,7 +83,7 @@ namespace frm
     public:
         OFilterControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );
 
-        DECLARE_UNO3_AGG_DEFAULTS(OFilterControl,OWeakAggObject);
+        DECLARE_UNO3_AGG_DEFAULTS(OFilterControl,OWeakAggObject)
         ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual OUString GetComponentServiceName() SAL_OVERRIDE;

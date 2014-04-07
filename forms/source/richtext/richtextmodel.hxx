@@ -103,7 +103,7 @@ namespace frm
         DECLARE_DEFAULT_LEAF_XTOR( ORichTextModel );
 
         // UNO
-        DECLARE_UNO3_AGG_DEFAULTS( ORichTextModel, OControlModel );
+        DECLARE_UNO3_AGG_DEFAULTS( ORichTextModel, OControlModel )
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo

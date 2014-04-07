@@ -223,7 +223,7 @@ public:
     virtual ~ODatabaseForm();
 
     // UNO binding
-    DECLARE_UNO3_AGG_DEFAULTS(ODatabaseForm, OFormComponents);
+    DECLARE_UNO3_AGG_DEFAULTS(ODatabaseForm, OFormComponents)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTypeProvider

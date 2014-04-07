@@ -91,7 +91,7 @@ namespace frm
         DECLARE_DEFAULT_XTOR( OClickableImageBaseModel );
 
         // UNO Anbindung
-        DECLARE_UNO3_AGG_DEFAULTS(OClickableImageBaseModel, OControlModel);
+        DECLARE_UNO3_AGG_DEFAULTS(OClickableImageBaseModel, OControlModel)
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
@@ -209,7 +209,7 @@ namespace frm
 
     protected:
         // UNO Anbindung
-        DECLARE_UNO3_AGG_DEFAULTS(OClickableImageBaseControl, OControl);
+        DECLARE_UNO3_AGG_DEFAULTS(OClickableImageBaseControl, OControl)
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // OComponentHelper

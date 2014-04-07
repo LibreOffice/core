@@ -56,7 +56,7 @@ class OFormattedModel
 
     protected:
         // XInterface
-        DECLARE_UNO3_AGG_DEFAULTS( OFormattedModel, OEditBaseModel );
+        DECLARE_UNO3_AGG_DEFAULTS( OFormattedModel, OEditBaseModel )
 
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
@@ -151,7 +151,7 @@ class OFormattedModel
         OFormattedControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
         virtual ~OFormattedControl();
 
-        DECLARE_UNO3_AGG_DEFAULTS(OFormattedControl, OBoundControl);
+        DECLARE_UNO3_AGG_DEFAULTS(OFormattedControl, OBoundControl)
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;

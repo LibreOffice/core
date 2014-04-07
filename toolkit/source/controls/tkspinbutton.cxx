@@ -78,7 +78,7 @@ public:
                                 UnoSpinButtonControl();
     OUString             GetComponentServiceName() SAL_OVERRIDE;
 
-    DECLARE_UNO3_AGG_DEFAULTS( UnoSpinButtonControl, UnoControlBase );
+    DECLARE_UNO3_AGG_DEFAULTS( UnoSpinButtonControl, UnoControlBase )
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

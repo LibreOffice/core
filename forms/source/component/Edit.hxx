@@ -138,7 +138,7 @@ public:
     OEditControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
     virtual ~OEditControl();
 
-    DECLARE_UNO3_AGG_DEFAULTS(OEditControl, OBoundControl);
+    DECLARE_UNO3_AGG_DEFAULTS(OEditControl, OBoundControl)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;

@@ -47,7 +47,7 @@ public:
     virtual ~SvxFmDrawPage() throw ();
 
     // UNO connection
-    DECLARE_UNO3_AGG_DEFAULTS(SvxFmDrawPage, SvxDrawPage);
+    DECLARE_UNO3_AGG_DEFAULTS(SvxFmDrawPage, SvxDrawPage)
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

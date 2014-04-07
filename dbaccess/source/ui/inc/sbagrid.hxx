@@ -67,7 +67,7 @@ namespace dbaui
         virtual ~SbaXGridControl();
 
         // UNO
-        DECLARE_UNO3_DEFAULTS(SbaXGridControl, FmXGridControl);
+        DECLARE_UNO3_DEFAULTS(SbaXGridControl, FmXGridControl)
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XTypeProvider

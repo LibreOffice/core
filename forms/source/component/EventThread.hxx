@@ -87,7 +87,7 @@ protected:
 public:
 
     // UNO Anbindung
-    DECLARE_UNO3_DEFAULTS(OComponentEventThread, OWeakObject);
+    DECLARE_UNO3_DEFAULTS(OComponentEventThread, OWeakObject)
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     OComponentEventThread(::cppu::OComponentHelper* pCompImpl);

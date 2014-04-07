@@ -90,7 +90,7 @@ namespace dxcanvas
         //                                    Classname   Base doing refcounting    Base implementing the XComponent interface
         //                                       |                 |                            |
         //                                       V                 V                            V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( Canvas, GraphicDeviceBase1_Base, ::cppu::WeakComponentImplHelperBase );
+        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( Canvas, GraphicDeviceBase1_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceName
         virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -149,7 +149,7 @@ namespace dxcanvas
         //                                    Classname   Base doing refcounting    Base implementing the XComponent interface
         //                                       |                 |                            |
         //                                       V                 V                            V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( BitmapCanvas, GraphicDeviceBase2_Base, ::cppu::WeakComponentImplHelperBase );
+        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( BitmapCanvas, GraphicDeviceBase2_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceName
         virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);

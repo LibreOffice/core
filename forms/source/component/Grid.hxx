@@ -103,7 +103,7 @@ public:
     DECLARE_DEFAULT_LEAF_XTOR( OGridControlModel );
 
     // UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OControlModel);
+    DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OControlModel)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XChild

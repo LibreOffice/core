@@ -110,7 +110,7 @@ protected:
 
 public:
     OTimeControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
-    DECLARE_UNO3_AGG_DEFAULTS(OTimeControl, OBoundControl);
+    DECLARE_UNO3_AGG_DEFAULTS(OTimeControl, OBoundControl)
 
     // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OTimeControl);

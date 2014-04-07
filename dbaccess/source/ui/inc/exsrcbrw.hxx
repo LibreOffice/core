@@ -50,7 +50,7 @@ namespace dbaui
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
         // UNO
-        DECLARE_UNO3_DEFAULTS(SbaExternalSourceBrowser, OGenericUnoController);
+        DECLARE_UNO3_DEFAULTS(SbaExternalSourceBrowser, OGenericUnoController)
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > >  getIdlClasses(void);
 

@@ -120,7 +120,7 @@ namespace cairocanvas
         //                                    Classname     Base doing refcounting        Base implementing the XComponent interface
         //                                       |                 |                            |
         //                                       V                 V                            V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase );
+        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XBufferController (partial)
         virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

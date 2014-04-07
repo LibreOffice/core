@@ -299,7 +299,7 @@ public:
     OFormComponents( const OFormComponents& _cloneSource );
     virtual ~OFormComponents();
 
-    DECLARE_UNO3_AGG_DEFAULTS(OFormComponents, FormComponentsBase);
+    DECLARE_UNO3_AGG_DEFAULTS(OFormComponents, FormComponentsBase)
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

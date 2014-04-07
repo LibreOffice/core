@@ -73,7 +73,7 @@ public:
         throw(::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
 
     // UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OImageControlModel, OBoundControlModel);
+    DECLARE_UNO3_AGG_DEFAULTS(OImageControlModel, OBoundControlModel)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
@@ -162,7 +162,7 @@ public:
     OImageControlControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
 
     // UNO
-    DECLARE_UNO3_AGG_DEFAULTS( OImageControlControl, OBoundControl );
+    DECLARE_UNO3_AGG_DEFAULTS( OImageControlControl, OBoundControl )
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener

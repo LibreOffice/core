@@ -145,7 +145,7 @@ namespace dbaui
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-        DECLARE_UNO3_DEFAULTS(SbaTableQueryBrowser,SbaXDataBrowserController);
+        DECLARE_UNO3_DEFAULTS(SbaTableQueryBrowser,SbaXDataBrowserController)
         // late construction
         virtual bool Construct(Window* pParent) SAL_OVERRIDE;
         // XInterface

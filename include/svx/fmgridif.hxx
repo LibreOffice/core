@@ -78,7 +78,7 @@ class FmXModifyMultiplexer  :public OWeakSubObject
 {
 public:
     FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
-    DECLARE_UNO3_DEFAULTS(FmXModifyMultiplexer,OWeakSubObject);
+    DECLARE_UNO3_DEFAULTS(FmXModifyMultiplexer,OWeakSubObject)
     virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // ::com::sun::star::lang::XEventListener
@@ -101,7 +101,7 @@ class FmXUpdateMultiplexer : public OWeakSubObject,
 {
 public:
     FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
-    DECLARE_UNO3_DEFAULTS(FmXUpdateMultiplexer,OWeakSubObject);
+    DECLARE_UNO3_DEFAULTS(FmXUpdateMultiplexer,OWeakSubObject)
 
     virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -126,7 +126,7 @@ class FmXSelectionMultiplexer   :public OWeakSubObject
 {
 public:
     FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
-    DECLARE_UNO3_DEFAULTS(FmXSelectionMultiplexer, OWeakSubObject);
+    DECLARE_UNO3_DEFAULTS(FmXSelectionMultiplexer, OWeakSubObject)
 
     virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -150,7 +150,7 @@ class FmXGridControlMultiplexer :public OWeakSubObject
 {
 public:
     FmXGridControlMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
-    DECLARE_UNO3_DEFAULTS( FmXGridControlMultiplexer, OWeakSubObject );
+    DECLARE_UNO3_DEFAULTS( FmXGridControlMultiplexer, OWeakSubObject )
 
     virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -174,7 +174,7 @@ class FmXContainerMultiplexer : public OWeakSubObject,
 {
 public:
     FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
-    DECLARE_UNO3_DEFAULTS(FmXContainerMultiplexer,OWeakSubObject);
+    DECLARE_UNO3_DEFAULTS(FmXContainerMultiplexer,OWeakSubObject)
     virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // ::com::sun::star::lang::XEventListener
@@ -226,7 +226,7 @@ public:
     virtual ~FmXGridControl();
 
     // UNO connection
-    DECLARE_UNO3_AGG_DEFAULTS(FmXGridControl, UnoControl);
+    DECLARE_UNO3_AGG_DEFAULTS(FmXGridControl, UnoControl)
     virtual ::com::sun::star::uno::Any  SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XTypeProvider
@@ -379,7 +379,7 @@ public:
     void Create(Window* pParent, WinBits nStyle);
 
 // UNO connection
-    DECLARE_UNO3_DEFAULTS(FmXGridPeer, VCLXWindow);
+    DECLARE_UNO3_DEFAULTS(FmXGridPeer, VCLXWindow)
     virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XTypeProvider

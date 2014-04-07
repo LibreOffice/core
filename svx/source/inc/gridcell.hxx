@@ -758,7 +758,7 @@ public:
     FmXGridCell( DbGridColumn* pColumn, DbCellControl* pControl );
     void init();
 
-    DECLARE_UNO3_AGG_DEFAULTS(FmXGridCell, OComponentHelper);
+    DECLARE_UNO3_AGG_DEFAULTS(FmXGridCell, OComponentHelper)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void SetTextLineColor();
@@ -909,7 +909,7 @@ protected:
 public:
     FmXEditCell( DbGridColumn* pColumn, DbCellControl& _rControl );
 
-    DECLARE_UNO3_AGG_DEFAULTS(FmXEditCell, FmXTextCell);
+    DECLARE_UNO3_AGG_DEFAULTS(FmXEditCell, FmXTextCell)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XTypeProvider
@@ -966,7 +966,7 @@ public:
     FmXCheckBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl );
 
 // UNO
-    DECLARE_UNO3_AGG_DEFAULTS(FmXCheckBoxCell, FmXDataCell);
+    DECLARE_UNO3_AGG_DEFAULTS(FmXCheckBoxCell, FmXDataCell)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1009,7 +1009,7 @@ protected:
 public:
     FmXListBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl );
 
-    DECLARE_UNO3_AGG_DEFAULTS(FmXListBoxCell, FmXTextCell);
+    DECLARE_UNO3_AGG_DEFAULTS(FmXListBoxCell, FmXTextCell)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1064,7 +1064,7 @@ protected:
 public:
     FmXComboBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl );
 
-    DECLARE_UNO3_AGG_DEFAULTS(FmXListBoxCell, FmXTextCell);
+    DECLARE_UNO3_AGG_DEFAULTS(FmXListBoxCell, FmXTextCell)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1105,7 +1105,7 @@ public:
     FmXFilterCell(DbGridColumn* pColumn = NULL, DbCellControl* pControl = NULL);
 
 
-    DECLARE_UNO3_AGG_DEFAULTS(FmXFilterCell, FmXGridCell);
+    DECLARE_UNO3_AGG_DEFAULTS(FmXFilterCell, FmXGridCell)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

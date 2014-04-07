@@ -43,7 +43,7 @@ protected:
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OFileControlModel );
 
-    DECLARE_UNO3_AGG_DEFAULTS(OFileControlModel, OControlModel);
+    DECLARE_UNO3_AGG_DEFAULTS(OFileControlModel, OControlModel)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo

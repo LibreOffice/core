@@ -78,7 +78,7 @@ namespace frm
 
     protected:
         // UNO
-        DECLARE_UNO3_AGG_DEFAULTS( ONavigationBarModel, OControlModel );
+        DECLARE_UNO3_AGG_DEFAULTS( ONavigationBarModel, OControlModel )
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo

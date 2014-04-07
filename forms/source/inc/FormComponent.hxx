@@ -221,7 +221,7 @@ protected:
     void    doResetDelegator();
 
 // UNO
-    DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper);
+    DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XTypeProvider
@@ -298,7 +298,7 @@ public:
 
     virtual ~OBoundControl();
 
-    DECLARE_UNO3_AGG_DEFAULTS(OBoundControl, OControl);
+    DECLARE_UNO3_AGG_DEFAULTS(OBoundControl, OControl)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XBoundControl
@@ -405,7 +405,7 @@ protected:
     ::com::sun::star::uno::Sequence< OUString > getAggregateServiceNames();
 
 public:
-    DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper);
+    DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XTypeProvider
@@ -1022,7 +1022,7 @@ public:
 
 public:
     // UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OBoundControlModel, OControlModel);
+    DECLARE_UNO3_AGG_DEFAULTS(OBoundControlModel, OControlModel)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OComponentHelper
