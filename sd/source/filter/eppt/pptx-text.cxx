@@ -1206,6 +1206,16 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
 
 void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
 {
+    mbIsBullet = rParagraphObj.mbIsBullet;
+    meBullet = rParagraphObj.meBullet;
+    meTextAdjust = rParagraphObj.meTextAdjust;
+    meLineSpacing = rParagraphObj.meLineSpacing;
+    meLineSpacingTop = rParagraphObj.meLineSpacingTop;
+    meLineSpacingBottom = rParagraphObj.meLineSpacingBottom;
+    meForbiddenRules = rParagraphObj.meForbiddenRules;
+    meParagraphPunctation = rParagraphObj.meParagraphPunctation;
+    meBiDi =rParagraphObj.meBiDi;
+    mbFixedLineSpacing = rParagraphObj.mbFixedLineSpacing;
     mnTextSize = rParagraphObj.mnTextSize;
     mnTextAdjust = rParagraphObj.mnTextAdjust;
     mnLineSpacing = rParagraphObj.mnLineSpacing;
