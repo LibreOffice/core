@@ -705,7 +705,7 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const OUString& rTxt,
     : rNode( rNd )
     , aPreDashReplacementText(rTxt)
     , pLanguage( pLang )
-    , rConversionMap( rConvMap )
+    , m_ModelToView( rConvMap )
     , nLen( 0 )
     , nOverriddenDashCount( 0 )
     , nWordType( nType )
@@ -746,7 +746,8 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const OUString& rTxt,
     }
     else
     {
-        ModelToViewHelper::ModelPosition aModelBeginPos = rConversionMap.ConvertToModelPosition( nBegin );
+        ModelToViewHelper::ModelPosition aModelBeginPos =
+            m_ModelToView.ConvertToModelPosition( nBegin );
         aCurrLang = rNd.GetLang( aModelBeginPos.mnPos );
     }
 }
@@ -807,7 +808,8 @@ sal_Bool SwScanner::NextWord()
                 if ( !pLanguage )
                 {
                     const sal_uInt16 nNextScriptType = g_pBreakIt->GetBreakIter()->getScriptType( aText, nBegin );
-                    ModelToViewHelper::ModelPosition aModelBeginPos = rConversionMap.ConvertToModelPosition( nBegin );
+                    ModelToViewHelper::ModelPosition aModelBeginPos =
+                        m_ModelToView.ConvertToModelPosition( nBegin );
                     aCurrLang = rNode.GetLang( aModelBeginPos.mnPos, 1, nNextScriptType );
                 }
 

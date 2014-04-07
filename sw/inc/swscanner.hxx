@@ -38,7 +38,7 @@ class SwScanner
     const OUString aPreDashReplacementText;
     OUString aText;
     const LanguageType* pLanguage;
-    const ModelToViewHelper rConversionMap;
+    const ModelToViewHelper m_ModelToView;
     sal_Int32 nStartPos;
     sal_Int32 nEndPos;
     sal_Int32 nBegin;
