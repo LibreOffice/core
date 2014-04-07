@@ -1,1 +1,5 @@
-Streams, mmaps, etc.
+The legacy .rdb format.
+
+Originally used for services and types .rdb files, before the former were
+replaced with XML files and the latter with the new binaryurp format, but still
+needed for backwards compatibility.
