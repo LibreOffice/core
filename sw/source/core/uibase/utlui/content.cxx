@@ -2483,7 +2483,7 @@ DragDropMode SwContentTree::NotifyStartDrag(
 }
 // After the drag the current paragraph will be moved  w i t h  the children.
 
-sal_Bool  SwContentTree::NotifyMoving( SvTreeListEntry*  pTarget,
+TriState SwContentTree::NotifyMoving( SvTreeListEntry*  pTarget,
         SvTreeListEntry*  pEntry, SvTreeListEntry*& , sal_uLong& )
 {
     if(!bDocChgdInDragging)
@@ -2515,12 +2515,12 @@ sal_Bool  SwContentTree::NotifyMoving( SvTreeListEntry*  pTarget,
         Display(true);
     }
     //TreeListBox will be reloaded from the document
-    return sal_False;
+    return TRISTATE_FALSE;
 }
 
 // After the drag the current paragraph will be moved  w i t h o u t  the children.
 
-sal_Bool  SwContentTree::NotifyCopying( SvTreeListEntry*  pTarget,
+TriState SwContentTree::NotifyCopying( SvTreeListEntry*  pTarget,
         SvTreeListEntry*  pEntry, SvTreeListEntry*& , sal_uLong& )
 {
     if(!bDocChgdInDragging)
@@ -2551,7 +2551,7 @@ sal_Bool  SwContentTree::NotifyCopying( SvTreeListEntry*  pTarget,
         aActiveContentArr[CONTENT_TYPE_OUTLINE]->Invalidate();
         Display(true);
     }
-    return sal_False;
+    return TRISTATE_FALSE;
 }
 
 // No drop before the first entry - it's a SwContentType

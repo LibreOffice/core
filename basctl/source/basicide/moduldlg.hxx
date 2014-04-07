@@ -103,11 +103,11 @@ protected:
     virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData, SvTreeListEntry* pEntry ) SAL_OVERRIDE;
     virtual bool            NotifyAcceptDrop( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
 
-    virtual sal_Bool    NotifyMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+    virtual TriState    NotifyMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos ) SAL_OVERRIDE;
-    virtual sal_Bool    NotifyCopying( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+    virtual TriState    NotifyCopying( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos ) SAL_OVERRIDE;
-    sal_Bool            NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+    TriState            NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove );
 
 public:

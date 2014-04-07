@@ -103,7 +103,7 @@ protected:
     virtual bool    DoubleClickHdl() SAL_OVERRIDE;
     virtual bool    ExpandingHdl() SAL_OVERRIDE;
     virtual void    ExpandedHdl() SAL_OVERRIDE;
-    virtual sal_Bool    NotifyMoving(SvTreeListEntry*  pTarget,
+    virtual TriState NotifyMoving(SvTreeListEntry*  pTarget,
                                      SvTreeListEntry*  pEntry,
                                      SvTreeListEntry*& rpNewParent,
                                      sal_uIntPtr&        rNewChildPos) SAL_OVERRIDE;

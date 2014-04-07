@@ -561,14 +561,14 @@ void SvTreeListBox::NotifyRemoving( SvTreeListEntry* )
         - entry is inserted at the end of the target childlist
 */
 #ifdef DBG_UTIL
-sal_Bool SvTreeListBox::NotifyMoving(
+TriState SvTreeListBox::NotifyMoving(
     SvTreeListEntry*  pTarget,       // D&D dropping position in this->GetModel()
     SvTreeListEntry*  pEntry,        // entry that we want to move, from
                                  // GetSourceListBox()->GetModel()
     SvTreeListEntry*& rpNewParent,   // new target parent
     sal_uLong&        rNewChildPos)  // position in childlist of target parent
 #else
-sal_Bool SvTreeListBox::NotifyMoving(
+TriState SvTreeListBox::NotifyMoving(
     SvTreeListEntry*  pTarget,       // D&D dropping position in this->GetModel()
     SvTreeListEntry*,                // entry that we want to move, from
                                  // GetSourceListBox()->GetModel()
@@ -581,7 +581,7 @@ sal_Bool SvTreeListBox::NotifyMoving(
     {
         rpNewParent = 0;
         rNewChildPos = 0;
-        return true;
+        return TRISTATE_TRUE;
     }
     if ( !pTarget->HasChildren() && !pTarget->HasChildrenOnDemand() )
     {
@@ -600,10 +600,10 @@ sal_Bool SvTreeListBox::NotifyMoving(
         else
             rNewChildPos = TREELIST_APPEND;
     }
-    return true;
+    return TRISTATE_TRUE;
 }
 
-sal_Bool SvTreeListBox::NotifyCopying(
+TriState SvTreeListBox::NotifyCopying(
     SvTreeListEntry*  pTarget,       // D&D dropping position in this->GetModel()
     SvTreeListEntry*  pEntry,        // entry that we want to move, from
                                  // GetSourceListBox()->GetModel()
@@ -655,8 +655,8 @@ bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTar
         pSourceEntry = *it;
         SvTreeListEntry* pNewParent = 0;
         sal_uLong nInsertionPos = TREELIST_APPEND;
-        sal_Bool bOk=NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
-        if ( bOk )
+        TriState nOk = NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
+        if ( nOk )
         {
             if ( bClone )
             {
@@ -673,7 +673,7 @@ bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTar
         else
             bSuccess = false;
 
-        if( bOk == (sal_Bool)2 )  // HACK: make visible moved entry?
+        if (nOk == TRISTATE_INDET)  // HACK: make visible moved entry
             MakeVisible( pSourceEntry );
     }
     pModel->SetCloneLink( aCloneLink );
@@ -712,15 +712,15 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
 
         SvTreeListEntry* pNewParent = 0;
         sal_uLong nInsertionPos = TREELIST_APPEND;
-        sal_Bool bOk = NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
-        sal_Bool bCopyOk = bOk;
-        if ( !bOk && bAllowCopyFallback )
+        TriState nOk = NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
+        TriState nCopyOk = nOk;
+        if ( !nOk && bAllowCopyFallback )
         {
             nInsertionPos = TREELIST_APPEND;
-            bCopyOk = NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
+            nCopyOk = NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         }
 
-        if ( bOk || bCopyOk )
+        if ( nOk || nCopyOk )
         {
             if ( bClone )
             {
@@ -730,7 +730,7 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
             }
             else
             {
-                if ( bOk )
+                if ( nOk )
                     pModel->Move(pSourceEntry, pNewParent, nInsertionPos);
                 else
                     pModel->Copy(pSourceEntry, pNewParent, nInsertionPos);
@@ -739,7 +739,7 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
         else
             bSuccess = false;
 
-        if( bOk == (sal_Bool)2 )  // HACK: make moved entry visible?
+        if (nOk == TRISTATE_INDET)  // HACK: make moved entry visible
             MakeVisible( pSourceEntry );
     }
     pModel->SetCloneLink( aCloneLink );

@@ -1455,10 +1455,7 @@ bool SdPageObjsTLB::PageBelongsToCurrentShow (const SdPage* pPage) const
     return bBelongsToShow;
 }
 
-
-
-
-sal_Bool SdPageObjsTLB::NotifyMoving(
+TriState SdPageObjsTLB::NotifyMoving(
     SvTreeListEntry* pTarget,
     SvTreeListEntry* pEntry,
     SvTreeListEntry*& rpNewParent,
@@ -1499,14 +1496,11 @@ sal_Bool SdPageObjsTLB::NotifyMoving(
             rNewChildPos += nCurEntrySelPos;
             nCurEntrySelPos++;
         }
-        return sal_True;
+        return TRISTATE_TRUE;
     }
     else
-        return sal_False;
+        return TRISTATE_FALSE;
 }
-
-
-
 
 SvTreeListEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
 {

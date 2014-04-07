@@ -53,17 +53,17 @@ bool ScPivotLayoutTreeListBase::NotifyAcceptDrop(SvTreeListEntry* /*pEntry*/)
     return true;
 }
 
-sal_Bool ScPivotLayoutTreeListBase::NotifyMoving(SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
+TriState ScPivotLayoutTreeListBase::NotifyMoving(SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
                                                 SvTreeListEntry*& /*rpNewParent*/, sal_uLong& /*rNewChildPos*/)
 {
     InsertEntryForSourceTarget(pSource, pTarget);
-    return sal_False;
+    return TRISTATE_FALSE;
 }
 
-sal_Bool ScPivotLayoutTreeListBase::NotifyCopying(SvTreeListEntry* /*pTarget*/, SvTreeListEntry* /*pSource*/,
+TriState ScPivotLayoutTreeListBase::NotifyCopying(SvTreeListEntry* /*pTarget*/, SvTreeListEntry* /*pSource*/,
                                                  SvTreeListEntry*& /*rpNewParent*/, sal_uLong& /*rNewChildPos*/)
 {
-    return sal_False;
+    return TRISTATE_FALSE;
 }
 
 bool ScPivotLayoutTreeListBase::HasEntry(SvTreeListEntry* pEntry)

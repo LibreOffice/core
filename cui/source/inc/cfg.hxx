@@ -328,10 +328,10 @@ public:
 
     virtual bool        NotifyAcceptDrop( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
 
-    virtual sal_Bool        NotifyMoving( SvTreeListEntry*, SvTreeListEntry*,
+    virtual TriState    NotifyMoving( SvTreeListEntry*, SvTreeListEntry*,
                                       SvTreeListEntry*&, sal_uLong& ) SAL_OVERRIDE;
 
-    virtual sal_Bool        NotifyCopying( SvTreeListEntry*, SvTreeListEntry*,
+    virtual TriState    NotifyCopying( SvTreeListEntry*, SvTreeListEntry*,
                                        SvTreeListEntry*&, sal_uLong&) SAL_OVERRIDE;
 
     virtual DragDropMode    NotifyStartDrag(
@@ -553,10 +553,10 @@ public:
     Size            GetCheckBoxPixelSize() const
         { return m_aCheckBoxImageSizePixel; }
 
-    virtual sal_Bool    NotifyMoving(
+    virtual TriState NotifyMoving(
         SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong& ) SAL_OVERRIDE;
 
-    virtual sal_Bool    NotifyCopying(
+    virtual TriState NotifyCopying(
         SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong&) SAL_OVERRIDE;
 
     void            KeyInput( const KeyEvent& rKeyEvent ) SAL_OVERRIDE;

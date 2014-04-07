@@ -247,17 +247,16 @@ bool ExtTreeListBox::NotifyAcceptDrop( SvTreeListEntry* pEntry )
     return bValid;
 }
 
-sal_Bool ExtTreeListBox::NotifyMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+TriState ExtTreeListBox::NotifyMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
     return NotifyCopyingMoving( pTarget, pEntry,
                                     rpNewParent, rNewChildPos, true );
 }
 
-sal_Bool ExtTreeListBox::NotifyCopying( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+TriState ExtTreeListBox::NotifyCopying( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
-//  return false;   // how do I copy an SBX?!
     return NotifyCopyingMoving( pTarget, pEntry,
                                     rpNewParent, rNewChildPos, false );
 }
@@ -318,8 +317,7 @@ void Shell::CopyDialogResources(
     }
 }
 
-
-sal_Bool ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove )
 {
     (void)pEntry;
@@ -460,14 +458,10 @@ sal_Bool ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
         }
     }
 
-    return 2;   // open...
+    return TRISTATE_INDET;   // open...
 }
 
-
 // OrganizeDialog
-
-
-
 OrganizeDialog::OrganizeDialog(Window* pParent, sal_Int16 tabId,
     EntryDescriptor& rDesc )
     : TabDialog( pParent, "OrganizeDialog",

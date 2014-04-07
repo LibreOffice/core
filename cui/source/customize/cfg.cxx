@@ -1434,7 +1434,7 @@ bool SvxMenuEntriesListBox::NotifyAcceptDrop( SvTreeListEntry* )
     return true;
 }
 
-sal_Bool SvxMenuEntriesListBox::NotifyMoving(
+TriState SvxMenuEntriesListBox::NotifyMoving(
     SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
     SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos)
 {
@@ -1445,11 +1445,11 @@ sal_Bool SvxMenuEntriesListBox::NotifyMoving(
         {
             SvTreeListBox::NotifyMoving(
                 pTarget, pSource, rpNewParent, rNewChildPos );
-            return sal_True;
+            return TRISTATE_TRUE;
         }
         else
         {
-            return sal_False;
+            return TRISTATE_FALSE;
         }
     }
     else
@@ -1458,7 +1458,7 @@ sal_Bool SvxMenuEntriesListBox::NotifyMoving(
     }
 }
 
-sal_Bool SvxMenuEntriesListBox::NotifyCopying(
+TriState SvxMenuEntriesListBox::NotifyCopying(
     SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
     SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos)
 {
@@ -1471,13 +1471,13 @@ sal_Bool SvxMenuEntriesListBox::NotifyCopying(
         // if the target is NULL then add function to the start of the list
         pPage->AddFunction( pTarget, pTarget == NULL );
 
-        // AddFunction already adds the listbox entry so return FALSE
+        // AddFunction already adds the listbox entry so return TRISTATE_FALSE
         // to stop another listbox entry being added
-        return sal_False;
+        return TRISTATE_FALSE;
     }
 
     // Copying is only allowed from external controls, not within the listbox
-    return sal_False;
+    return TRISTATE_FALSE;
 }
 
 void SvxMenuEntriesListBox::KeyInput( const KeyEvent& rKeyEvent )
@@ -4660,11 +4660,11 @@ void SvxToolbarEntriesListBox::KeyInput( const KeyEvent& rKeyEvent )
     }
 }
 
-sal_Bool SvxToolbarEntriesListBox::NotifyMoving(
+TriState SvxToolbarEntriesListBox::NotifyMoving(
     SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
     SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos)
 {
-    bool result = SvxMenuEntriesListBox::NotifyMoving(
+    TriState result = SvxMenuEntriesListBox::NotifyMoving(
         pTarget, pSource, rpNewParent, rNewChildPos );
 
     if ( result )
@@ -4682,7 +4682,7 @@ sal_Bool SvxToolbarEntriesListBox::NotifyMoving(
     return result;
 }
 
-sal_Bool SvxToolbarEntriesListBox::NotifyCopying(
+TriState SvxToolbarEntriesListBox::NotifyCopying(
     SvTreeListEntry*  pTarget,
     SvTreeListEntry*  pSource,
     SvTreeListEntry*& rpNewParent,
@@ -4706,13 +4706,13 @@ sal_Bool SvxToolbarEntriesListBox::NotifyCopying(
             pSaveInData->ApplyToolbar( pToolbar );
         }
 
-        // AddFunction already adds the listbox entry so return FALSE
+        // AddFunction already adds the listbox entry so return TRISTATE_FALSE
         // to stop another listbox entry being added
-        return sal_False;
+        return TRISTATE_FALSE;
     }
 
     // Copying is only allowed from external controls, not within the listbox
-    return sal_False;
+    return TRISTATE_FALSE;
 }
 
 SvxNewToolbarDialog::SvxNewToolbarDialog(Window* pWindow, const OUString& rName)

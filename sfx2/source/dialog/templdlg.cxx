@@ -563,7 +563,7 @@ bool StyleTreeListBox_Impl::Notify( NotifyEvent& rNEvt )
 
 
 
-sal_Bool StyleTreeListBox_Impl::NotifyMoving(SvTreeListEntry*  pTarget,
+TriState StyleTreeListBox_Impl::NotifyMoving(SvTreeListEntry*  pTarget,
                                          SvTreeListEntry*  pEntry,
                                          SvTreeListEntry*& rpNewParent,
                                          sal_uIntPtr& lPos)
@@ -574,7 +574,7 @@ sal_Bool StyleTreeListBox_Impl::NotifyMoving(SvTreeListEntry*  pTarget,
 */
 {
     if(!pTarget || !pEntry)
-        return sal_False;
+        return TRISTATE_FALSE;
     aParent = GetEntryText(pTarget);
     aStyle  = GetEntryText(pEntry);
     const bool bRet = (bool)aDropLink.Call(this);
@@ -587,10 +587,8 @@ sal_Bool StyleTreeListBox_Impl::NotifyMoving(SvTreeListEntry*  pTarget,
             GetEntryText(pTmpEntry),GetEntryText(pEntry)) < 0;
         pTmpEntry=NextSibling(pTmpEntry),lPos++) ;
 
-    return bRet ? (sal_Bool)2 : sal_False;
+    return bRet ? TRISTATE_INDET : TRISTATE_FALSE;
 }
-
-
 
 bool  StyleTreeListBox_Impl::ExpandingHdl()
 

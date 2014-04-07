@@ -936,7 +936,7 @@ bool SwGlTreeListBox::NotifyAcceptDrop( SvTreeListEntry* pEntry)
 
 }
 
-sal_Bool  SwGlTreeListBox::NotifyMoving(   SvTreeListEntry*  pTarget,
+TriState SwGlTreeListBox::NotifyMoving(   SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
                                     SvTreeListEntry*& /*rpNewParent*/,
                                     sal_uLong&        /*rNewChildPos*/
@@ -945,7 +945,7 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvTreeListEntry*  pTarget,
     return NotifyCopyingOrMoving(pTarget, pEntry, true);
 }
 
-sal_Bool  SwGlTreeListBox::NotifyCopying(   SvTreeListEntry*  pTarget,
+TriState SwGlTreeListBox::NotifyCopying(   SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
                                     SvTreeListEntry*& /*rpNewParent*/,
                                     sal_uLong&        /*rNewChildPos*/
@@ -954,7 +954,7 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvTreeListEntry*  pTarget,
     return NotifyCopyingOrMoving(pTarget, pEntry, false);
 }
 
-sal_Bool SwGlTreeListBox::NotifyCopyingOrMoving(
+TriState SwGlTreeListBox::NotifyCopyingOrMoving(
     SvTreeListEntry*  pTarget,
     SvTreeListEntry*  pEntry,
     bool              bIsMove)
@@ -1001,7 +1001,7 @@ sal_Bool SwGlTreeListBox::NotifyCopyingOrMoving(
             }
         }
     }
-    return sal_False; // otherwise the entry is being set automatically
+    return TRISTATE_FALSE; // otherwise the entry is being set automatically
 }
 
 OUString SwGlossaryDlg::GetCurrGrpName() const

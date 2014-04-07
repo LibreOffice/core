@@ -118,12 +118,12 @@ protected:
                                         SvTreeListEntry* ) SAL_OVERRIDE;
     virtual bool    NotifyAcceptDrop( SvTreeListEntry* ) SAL_OVERRIDE;
 
-    virtual sal_Bool    NotifyMoving(   SvTreeListEntry*  pTarget,
+    virtual TriState NotifyMoving(   SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
                                     SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos
                                 ) SAL_OVERRIDE;
-    virtual sal_Bool    NotifyCopying(  SvTreeListEntry*  pTarget,
+    virtual TriState NotifyCopying(  SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
                                     SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos
@@ -260,12 +260,12 @@ protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* ) SAL_OVERRIDE;
-    virtual sal_Bool    NotifyMoving(   SvTreeListEntry*  pTarget,
+    virtual TriState NotifyMoving(   SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
                                     SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos
                                 ) SAL_OVERRIDE;
-    virtual sal_Bool    NotifyCopying(  SvTreeListEntry*  pTarget,
+    virtual TriState NotifyCopying(  SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
                                     SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos

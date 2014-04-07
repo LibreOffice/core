@@ -173,7 +173,7 @@ protected:
         reorders both the involved shapes in their page as well as the
         associated list box entries.
     */
-    virtual sal_Bool NotifyMoving(
+    virtual TriState NotifyMoving(
         SvTreeListEntry*  pTarget,
         SvTreeListEntry*  pEntry,
         SvTreeListEntry*& rpNewParent,

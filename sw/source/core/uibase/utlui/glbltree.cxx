@@ -533,7 +533,7 @@ sal_IntPtr SwGlobalTree::GetTabPos( SvTreeListEntry*, SvLBoxTab* pTab)
     return pTab->GetPos() - GLBL_TABPOS_SUB;
 }
 
-sal_Bool     SwGlobalTree::NotifyMoving(   SvTreeListEntry*  pTarget,
+TriState SwGlobalTree::NotifyMoving(   SvTreeListEntry*  pTarget,
                                         SvTreeListEntry*  pSource,
                                         SvTreeListEntry*&,
                                         sal_uLong&
@@ -547,16 +547,17 @@ sal_Bool     SwGlobalTree::NotifyMoving(   SvTreeListEntry*  pTarget,
             *pSwGlblDocContents, nSource, nSource + 1, nDest ) &&
             Update( sal_False ))
         Display();
-    return sal_False;
+
+    return TRISTATE_FALSE;
 }
 
-sal_Bool     SwGlobalTree::NotifyCopying(  SvTreeListEntry*  /*pTarget*/,
+TriState SwGlobalTree::NotifyCopying(  SvTreeListEntry*  /*pTarget*/,
                                         SvTreeListEntry*  /*pEntry*/,
                                         SvTreeListEntry*& /*rpNewParent*/,
                                         sal_uLong&        /*rNewChildPos*/
                                     )
 {
-    return sal_False;
+    return TRISTATE_FALSE;
 }
 
 bool SwGlobalTree::NotifyAcceptDrop( SvTreeListEntry* pEntry)

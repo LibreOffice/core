@@ -473,15 +473,15 @@ public:
     virtual SvTreeListEntry* CloneEntry( SvTreeListEntry* pSource );
     virtual SvTreeListEntry* CreateEntry() const; // To create new Entries
 
-    // Return value: sal_True == Ok, sal_False == Cancel, 2==some hack
-    virtual sal_Bool    NotifyMoving(
+    // Return value: TRISTATE_TRUE == Ok, TRISTATE_FALSE == Cancel, TRISTATE_INDET == Ok and Make visible moved entry
+    virtual TriState NotifyMoving(
         SvTreeListEntry*  pTarget,       // D'n'D DropPosition in this->GetModel()
         SvTreeListEntry*  pEntry,        // Entry to be moved from GetSourceListBox()->GetModel()
         SvTreeListEntry*& rpNewParent,   // New TargetParent
         sal_uLong&        rNewChildPos); // The TargetParent's position in Childlist
 
-    // Return value: sal_True == Ok, sal_False == Cancel, 2==some hack
-    virtual sal_Bool    NotifyCopying(
+    // Return value: TRISTATE_TRUE == Ok, TRISTATE_FALSE == Cancel, TRISTATE_INDET == Ok and Make visible moved entry
+    virtual TriState    NotifyCopying(
         SvTreeListEntry*  pTarget,       // D'n'D DropPosition in this->GetModel()
         SvTreeListEntry*  pEntry,        // Entry to be copied from GetSourceListBox()->GetModel()
         SvTreeListEntry*& rpNewParent,   // New TargetParent
