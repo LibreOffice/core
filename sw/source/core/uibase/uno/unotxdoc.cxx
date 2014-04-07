@@ -1468,7 +1468,8 @@ void    SwXTextDocument::InitNewDoc()
 
         }
         OSL_ENSURE(pNumFmt, "No number formatter available");
-        pNumFmt->SetNumberFormatter(0);
+        if (pNumFmt)
+            pNumFmt->SetNumberFormatter(0);
     }
 
     if(pxXTextFieldTypes)
