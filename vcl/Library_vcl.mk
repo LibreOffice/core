@@ -349,6 +349,7 @@ vcl_quartz_code= \
     vcl/quartz/salvd \
 
 vcl_coretext_code= \
+    vcl/quartz/CTRunData \
     vcl/quartz/ctfonts \
     vcl/quartz/ctlayout \
     vcl/quartz/salgdi \
