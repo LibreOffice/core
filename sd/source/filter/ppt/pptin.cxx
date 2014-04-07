@@ -165,13 +165,16 @@ SdPPTImport::~SdPPTImport()
 }
 
 ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage_, SfxMedium& rMedium, PowerPointImportParam& rParam )
-:   SdrPowerPointImport     ( rParam, rMedium.GetBaseURL() )
-,   mrMed                   ( rMedium )
-,   mrStorage               ( rStorage_ )
-,   mbDocumentFound         ( sal_False )
-,   mnFilterOptions         ( 0 )
+    : SdrPowerPointImport(rParam, rMedium.GetBaseURL())
+    , mrMed(rMedium)
+    , mrStorage(rStorage_)
+    , mbDocumentFound(sal_False)
+    , mnFilterOptions(0)
+    , mpDoc(pDocument)
+    , mePresChange(PRESCHANGE_MANUAL)
+    , mnBackgroundLayerID(0)
+    , mnBackgroundObjectsLayerID(0)
 {
-    mpDoc = pDocument;
     if ( bOk )
     {
         mbDocumentFound = SeekToDocument( &maDocHd );                           // maDocHd = the latest DocumentHeader
