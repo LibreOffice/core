@@ -5285,6 +5285,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                         else
                             appendName( rWidget.m_aValue, aValue );
                     }
+                    // fall-through
                 case PDFWriter::PushButton:
                     aLine.append( "Btn" );
                     break;
