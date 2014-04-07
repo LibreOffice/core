@@ -481,7 +481,7 @@ namespace dbaccess
             break;
         }
 
-        OSL_POSTCOND( m_eType != UNKNOWN,
+        SAL_WARN_IF( m_eType == UNKNOWN, "dbaccess",
             "SubComponentRecovery::impl_identifyComponent_throw: couldn't classify the component!" );
     }
 

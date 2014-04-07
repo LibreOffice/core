@@ -166,8 +166,9 @@ namespace /* private */
             }
         }
 
-        OSL_POSTCOND(puncc->server_.isPresent() && puncc->share_.isPresent(), \
-        "Postcondition violated: Invalid UNC path detected");
+        SAL_WARN_IF(!puncc->server_.isPresent() || !puncc->share_.isPresent(),
+            "sal.osl",
+            "Postcondition violated: Invalid UNC path detected");
     }
 
     void parse_UNC_path(const rtl::OUString& path, UNCComponents* puncc)

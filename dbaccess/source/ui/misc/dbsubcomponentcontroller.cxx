@@ -263,7 +263,7 @@ namespace dbaui
                 // (take the indirection through XDataSource to ensure we have a correct object ....)
                 m_pImpl->m_aDataSource = xDS;
             }
-            OSL_POSTCOND( m_pImpl->m_aDataSource.is(), "DBSubComponentController::initializeConnection: unable to obtain the data source object!" );
+            SAL_WARN_IF( !m_pImpl->m_aDataSource.is(), "dbaccess.ui", "DBSubComponentController::initializeConnection: unable to obtain the data source object!" );
 
             if ( m_pImpl->m_bNotAttached )
             {

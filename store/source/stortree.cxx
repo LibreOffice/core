@@ -20,6 +20,7 @@
 #include "stortree.hxx"
 
 #include "sal/types.h"
+#include "sal/log.hxx"
 #include "osl/diagnose.h"
 
 #include "store/types.h"
@@ -293,12 +294,11 @@ storeError OStoreBTreeNodeObject::remove (
  * testInvariant.
  * Precond: root node page loaded.
  */
-bool OStoreBTreeRootObject::testInvariant (char const * message)
+void OStoreBTreeRootObject::testInvariant (char const * message)
 {
     OSL_PRECOND(m_xPage.get() != 0, "OStoreBTreeRootObject::testInvariant(): Null pointer");
     bool result = ((m_xPage->location() - m_xPage->size()) == 0);
-    OSL_POSTCOND(result, message); (void) message;
-    return result;
+    SAL_WARN_IF( !result, "store", message);
 }
 
 /*
@@ -321,7 +321,7 @@ storeError OStoreBTreeRootObject::loadOrCreate (
         return eErrCode;
 
     // Notify caller of the creation.
-    (void) testInvariant("OStoreBTreeRootObject::loadOrCreate(): leave");
+    testInvariant("OStoreBTreeRootObject::loadOrCreate(): leave");
     return store_E_Pending;
 }
 
@@ -333,7 +333,7 @@ storeError OStoreBTreeRootObject::change (
     OStorePageBIOS &           rBIOS)
 {
     PageHolderObject< page > xPage (m_xPage);
-    (void) testInvariant("OStoreBTreeRootObject::change(): enter");
+    testInvariant("OStoreBTreeRootObject::change(): enter");
 
     // Save root location.
     sal_uInt32 const nRootAddr = xPage->location();
@@ -362,7 +362,7 @@ storeError OStoreBTreeRootObject::change (
 
     // Save this as new root and finish.
     eErrCode = rBIOS.saveObjectAt (*this, nRootAddr);
-    (void) testInvariant("OStoreBTreeRootObject::change(): leave");
+    testInvariant("OStoreBTreeRootObject::change(): leave");
     return eErrCode;
 }
 
@@ -377,7 +377,7 @@ storeError OStoreBTreeRootObject::find_lookup (
     OStorePageBIOS &        rBIOS)
 {
     // Init node w/ root page.
-    (void) testInvariant("OStoreBTreeRootObject::find_lookup(): enter");
+    testInvariant("OStoreBTreeRootObject::find_lookup(): enter");
     {
         PageHolder tmp (m_xPage);
         tmp.swap (rNode.get());
@@ -422,12 +422,14 @@ storeError OStoreBTreeRootObject::find_lookup (
 
     // Compare entry.
     T::CompareResult eResult = entry.compare(rPage.m_pData[rIndex]);
-    OSL_POSTCOND(eResult != T::COMPARE_LESS, "store::BTreeRoot::find_lookup(): sort error");
     if (eResult == T::COMPARE_LESS)
+    {
+        SAL_WARN("store", "store::BTreeRoot::find_lookup(): sort error");
         return store_E_Unknown;
+    }
 
     // Greater or Equal.
-    (void) testInvariant("OStoreBTreeRootObject::find_lookup(): leave");
+    testInvariant("OStoreBTreeRootObject::find_lookup(): leave");
     return store_E_None;
 }
 
@@ -441,7 +443,7 @@ storeError OStoreBTreeRootObject::find_insert (
     OStorePageKey const &   rKey,
     OStorePageBIOS &        rBIOS)
 {
-    (void) testInvariant("OStoreBTreeRootObject::find_insert(): enter");
+    testInvariant("OStoreBTreeRootObject::find_insert(): enter");
 
     // Check for RootNode split.
     PageHolderObject< page > xRoot (m_xPage);
@@ -522,16 +524,18 @@ storeError OStoreBTreeRootObject::find_insert (
     {
         // Compare entry.
         T::CompareResult result = entry.compare (rPage.m_pData[rIndex]);
-        OSL_POSTCOND(result != T::COMPARE_LESS, "store::BTreeRoot::find_insert(): sort error");
         if (result == T::COMPARE_LESS)
+        {
+            SAL_WARN("store", "store::BTreeRoot::find_insert(): sort error");
             return store_E_Unknown;
+        }
 
         if (result == T::COMPARE_EQUAL)
             return store_E_AlreadyExists;
     }
 
     // Greater or not (yet) existing.
-    (void) testInvariant("OStoreBTreeRootObject::find_insert(): leave");
+    testInvariant("OStoreBTreeRootObject::find_insert(): leave");
     return store_E_None;
 }
 
