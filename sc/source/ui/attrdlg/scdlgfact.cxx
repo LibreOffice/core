@@ -919,9 +919,6 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScAttrDlg(SfxViewFram
     return new ScAbstractTabDialog_Impl(pDlg);
 }
 
-#undef SfxTabDialog
-#undef ScAbstractTabDialog_Impl
-
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewFrame*       pFrame,
                                                                         Window*         pParent,
                                                                         const SfxItemSet&   rCoreSet,
@@ -1023,9 +1020,6 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg(Window* pPa
     SfxTabDialog* pDlg = new ScSortDlg( pParent, pArgSet );
     return new ScAbstractTabDialog_Impl( pDlg );
 }
-
-#undef SfxTabDialog
-#undef ScAbstractTabDialog_Impl
 
 //------------------ Factories for TabPages--------------------
 CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId )
