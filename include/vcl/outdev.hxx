@@ -866,6 +866,9 @@ private:
 
     bool                        DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
 
+    Color                       GetSingleColorGradientFill();
+    void                        SetGrayscaleColors( Gradient &rGradient );
+
 public:
     virtual                     ~OutputDevice();
 

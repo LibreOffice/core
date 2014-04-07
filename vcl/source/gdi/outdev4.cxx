@@ -549,6 +549,60 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     }
 }
 
+Color OutputDevice::GetSingleColorGradientFill()
+{
+    Color aColor;
+
+    // we should never call on this function if any of these aren't set!
+    assert( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) );
+
+    if ( mnDrawMode & DRAWMODE_BLACKGRADIENT )
+        aColor = Color( COL_BLACK );
+    else if ( mnDrawMode & DRAWMODE_WHITEGRADIENT )
+        aColor = Color( COL_WHITE );
+    else if ( mnDrawMode & DRAWMODE_SETTINGSGRADIENT )
+        aColor = GetSettings().GetStyleSettings().GetWindowColor();
+
+    if ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT )
+    {
+        aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80,
+                        ( aColor.GetGreen() >> 1 ) | 0x80,
+                        ( aColor.GetBlue() >> 1 ) | 0x80 );
+    }
+
+    return aColor;
+}
+
+void OutputDevice::SetGrayscaleColors( Gradient &rGradient )
+{
+    // this should only be called with the drawing mode is for grayscale or ghosted gradients
+    assert ( mnDrawMode & ( DRAWMODE_GRAYGRADIENT | DRAWMODE_GHOSTEDGRADIENT ) );
+
+    Color aStartCol( rGradient.GetStartColor() );
+    Color aEndCol( rGradient.GetEndColor() );
+
+    if ( mnDrawMode & DRAWMODE_GRAYGRADIENT )
+    {
+        sal_uInt8 cStartLum = aStartCol.GetLuminance(), cEndLum = aEndCol.GetLuminance();
+        aStartCol = Color( cStartLum, cStartLum, cStartLum );
+        aEndCol = Color( cEndLum, cEndLum, cEndLum );
+    }
+
+    if ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT )
+    {
+        aStartCol = Color( ( aStartCol.GetRed() >> 1 ) | 0x80,
+                           ( aStartCol.GetGreen() >> 1 ) | 0x80,
+                           ( aStartCol.GetBlue() >> 1 ) | 0x80 );
+
+        aEndCol = Color( ( aEndCol.GetRed() >> 1 ) | 0x80,
+                         ( aEndCol.GetGreen() >> 1 ) | 0x80,
+                         ( aEndCol.GetBlue() >> 1 ) | 0x80 );
+    }
+
+    rGradient.SetStartColor( aStartCol );
+    rGradient.SetEndColor( aEndCol );
+}
+
 void OutputDevice::DrawGradient( const Rectangle& rRect,
                                  const Gradient& rGradient )
 {
@@ -559,21 +613,8 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
     }
     else if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
     {
-        Color aColor;
 
-        if ( mnDrawMode & DRAWMODE_BLACKGRADIENT )
-            aColor = Color( COL_BLACK );
-        else if ( mnDrawMode & DRAWMODE_WHITEGRADIENT )
-            aColor = Color( COL_WHITE );
-        else if ( mnDrawMode & DRAWMODE_SETTINGSGRADIENT )
-            aColor = GetSettings().GetStyleSettings().GetWindowColor();
-
-        if ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT )
-        {
-            aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80,
-                            ( aColor.GetGreen() >> 1 ) | 0x80,
-                            ( aColor.GetBlue() >> 1 ) | 0x80 );
-        }
+        Color aColor = GetSingleColorGradientFill();
 
         Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
         SetLineColor( aColor );
@@ -587,29 +628,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 
     if ( mnDrawMode & ( DRAWMODE_GRAYGRADIENT | DRAWMODE_GHOSTEDGRADIENT ) )
     {
-        Color aStartCol( aGradient.GetStartColor() );
-        Color aEndCol( aGradient.GetEndColor() );
-
-        if ( mnDrawMode & DRAWMODE_GRAYGRADIENT )
-        {
-            sal_uInt8 cStartLum = aStartCol.GetLuminance(), cEndLum = aEndCol.GetLuminance();
-            aStartCol = Color( cStartLum, cStartLum, cStartLum );
-            aEndCol = Color( cEndLum, cEndLum, cEndLum );
-        }
-
-        if ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT )
-        {
-            aStartCol = Color( ( aStartCol.GetRed() >> 1 ) | 0x80,
-                               ( aStartCol.GetGreen() >> 1 ) | 0x80,
-                               ( aStartCol.GetBlue() >> 1 ) | 0x80 );
-
-            aEndCol = Color( ( aEndCol.GetRed() >> 1 ) | 0x80,
-                             ( aEndCol.GetGreen() >> 1 ) | 0x80,
-                             ( aEndCol.GetBlue() >> 1 ) | 0x80 );
-        }
-
-        aGradient.SetStartColor( aStartCol );
-        aGradient.SetEndColor( aEndCol );
+        SetGrayscaleColors( aGradient );
     }
 
     if( mpMetaFile )
@@ -816,21 +835,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
     {
         if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
         {
-            Color aColor;
-
-            if ( mnDrawMode & DRAWMODE_BLACKGRADIENT )
-                aColor = Color( COL_BLACK );
-            else if ( mnDrawMode & DRAWMODE_WHITEGRADIENT )
-                aColor = Color( COL_WHITE );
-            else if ( mnDrawMode & DRAWMODE_SETTINGSGRADIENT )
-                aColor = GetSettings().GetStyleSettings().GetWindowColor();
-
-            if ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT )
-            {
-                aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80,
-                                ( aColor.GetGreen() >> 1 ) | 0x80,
-                                ( aColor.GetBlue() >> 1 ) | 0x80 );
-            }
+            Color aColor = GetSingleColorGradientFill();
 
             Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
             SetLineColor( aColor );
@@ -859,29 +864,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
         if ( mnDrawMode & ( DRAWMODE_GRAYGRADIENT | DRAWMODE_GHOSTEDGRADIENT ) )
         {
-            Color aStartCol( aGradient.GetStartColor() );
-            Color aEndCol( aGradient.GetEndColor() );
-
-            if ( mnDrawMode & DRAWMODE_GRAYGRADIENT )
-            {
-                sal_uInt8 cStartLum = aStartCol.GetLuminance(), cEndLum = aEndCol.GetLuminance();
-                aStartCol = Color( cStartLum, cStartLum, cStartLum );
-                aEndCol = Color( cEndLum, cEndLum, cEndLum );
-            }
-
-            if ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT )
-            {
-                aStartCol = Color( ( aStartCol.GetRed() >> 1 ) | 0x80,
-                                   ( aStartCol.GetGreen() >> 1 ) | 0x80,
-                                   ( aStartCol.GetBlue() >> 1 ) | 0x80 );
-
-                aEndCol = Color( ( aEndCol.GetRed() >> 1 ) | 0x80,
-                                 ( aEndCol.GetGreen() >> 1 ) | 0x80,
-                                 ( aEndCol.GetBlue() >> 1 ) | 0x80 );
-            }
-
-            aGradient.SetStartColor( aStartCol );
-            aGradient.SetEndColor( aEndCol );
+            SetGrayscaleColors( aGradient );
         }
 
         ClipAndDrawGradientToBounds ( aGradient, rPolyPoly );
