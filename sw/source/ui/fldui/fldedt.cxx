@@ -183,9 +183,13 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
 
     }
 
-    static_cast<SwFldPage*>(pTabPage)->SetWrtShell(pSh);
+    assert(pTabPage);
 
-    SetTabPage(pTabPage);
+    if (pTabPage)
+    {
+        static_cast<SwFldPage*>(pTabPage)->SetWrtShell(pSh);
+        SetTabPage(pTabPage);
+    }
 
     return pTabPage;
 }
