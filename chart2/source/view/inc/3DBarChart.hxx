@@ -11,6 +11,8 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "VDataSeries.hxx"
 
+#include <vcl/OpenGLContext.hxx>
+
 namespace chart {
 
 namespace opengl3D {
@@ -34,6 +36,7 @@ private:
     std::vector<VDataSeries*> maDataSeries;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
+    OpenGLContext maContext;
 };
 
 }

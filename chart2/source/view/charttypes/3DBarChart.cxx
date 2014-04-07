@@ -57,6 +57,7 @@ void Bar3DChart::create3DShapes()
 
 void Bar3DChart::render()
 {
+    maContext.init();
     for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = maShapes.begin(),
             itrEnd = maShapes.end(); itr != itrEnd; ++itr)
     {
