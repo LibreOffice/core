@@ -28,6 +28,7 @@ $(eval $(call gb_Library_use_libraries,emboleobj,\
 	sal \
 	tl \
 	utl \
+	vcl \
 	$(gb_UWINAPI) \
 ))
 
