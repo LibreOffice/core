@@ -136,6 +136,7 @@ public:
 
 // load Default-settings
 SdPublishingDesign::SdPublishingDesign()
+    : m_bCreated(sal_False)
 {
     m_eMode = PUBLISH_HTML;
     m_bContentPage = sal_True;
