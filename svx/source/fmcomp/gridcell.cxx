@@ -2304,7 +2304,7 @@ namespace
 
 OUString DbDateField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
-     return lcl_setFormattedDate_nothrow( *dynamic_cast< DateField* >( m_pPainter ), _rxField );
+     return lcl_setFormattedDate_nothrow(dynamic_cast<DateField&>(*m_pPainter), _rxField);
 }
 
 
