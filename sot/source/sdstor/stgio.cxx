@@ -153,12 +153,6 @@ public:
     ~EasyFat() { delete[] pFat; delete[] pFree; }
 
     sal_Int32 GetPageSize() { return nPageSize; }
-    sal_Int32 Count() { return nPages; }
-    sal_Int32 operator[]( sal_Int32 nOffset )
-    {
-        OSL_ENSURE( nOffset >= 0 && nOffset < nPages, "Unexpected offset!" );
-        return nOffset >= 0 && nOffset < nPages ? pFat[ nOffset ] : -2;
-    }
 
     sal_uLong Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect );
     bool HasUnrefChains();
