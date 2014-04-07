@@ -554,7 +554,9 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 {
 
     if ( mnDrawMode & DRAWMODE_NOGRADIENT )
-        return;
+    {
+        return;     // nothing to draw!
+    }
     else if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
     {
         Color aColor;
@@ -801,6 +803,8 @@ void OutputDevice::XORClipAndDrawGradient ( Gradient &rGradient, const PolyPolyg
 void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                                  const Gradient& rGradient )
 {
+    if ( mnDrawMode & DRAWMODE_NOGRADIENT )
+        return;     // nothing to draw!
 
     if( mbInitClipRegion )
         ImplInitClipRegion();
@@ -812,7 +816,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
         if( !ImplGetGraphics() )
             return;
 
-    if( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() && !( mnDrawMode & DRAWMODE_NOGRADIENT ) )
+    if( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
     {
         if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
         {
