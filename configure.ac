@@ -9155,14 +9155,18 @@ serf)
                              ["-I${WORKDIR}/UnpackedTarball/apr/include -I${WORKDIR}/UnpackedTarball/apr_util/include"],
                              ["-L${WORKDIR}/UnpackedTarball/apr/.libs -lapr-1 -L${WORKDIR}/UnpackedTarball/apr_util/.libs -laprutil-1"])
     if test "$COM" = "MSC"; then
-        APR_LIBS="${WORKDIR}/UnpackedTarball/apr/LibR/apr-1.lib ${WORKDIR}/UnpackedTarball/apr_util/LibR/aprutil-1.lib"
+        APR_LIB_DIR="LibR"
+        test -n "MSVC_USE_DEBUG_RUNTIME" && APR_LIB_DIR="LibD"
+        APR_LIBS="${WORKDIR}/UnpackedTarball/apr/${APR_LIB_DIR}/apr-1.lib ${WORKDIR}/UnpackedTarball/apr_util/${APR_LIB_DIR}/aprutil-1.lib"
     fi
 
     # Check for system serf
     libo_CHECK_SYSTEM_MODULE([serf],[SERF],[serf-1 >= 1.1.0],["-I${WORKDIR}/UnpackedTarball/serf"],
                              ["-L${WORKDIR}/UnpackedTarball/serf/.libs -lserf-1"])
     if test "$COM" = "MSC"; then
-        SERF_LIBS="${WORKDIR}/UnpackedTarball/serf/Release/serf-1.lib"
+        SERF_LIB_DIR="Release"
+        test -n "MSVC_USE_DEBUG_RUNTIME" && SERF_LIB_DIR="Debug"
+        SERF_LIBS="${WORKDIR}/UnpackedTarball/serf/${SERF_LIB_DIR}/serf-1.lib"
     fi
     ;;
 neon)
