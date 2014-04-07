@@ -1768,11 +1768,10 @@ OUString SdrUndoPageRemoveMasterPage::GetComment() const
     return aStr;
 }
 
-
-
 SdrUndoPageChangeMasterPage::SdrUndoPageChangeMasterPage(SdrPage& rChangedPage)
-:   SdrUndoPageMasterPage(rChangedPage),
-    mbNewHadMasterPage(false)
+    : SdrUndoPageMasterPage(rChangedPage)
+    , mbNewHadMasterPage(false)
+    , maNewMasterPageNumber(0)
 {
 }
 
