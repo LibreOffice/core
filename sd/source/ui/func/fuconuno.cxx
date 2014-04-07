@@ -53,6 +53,8 @@ FuConstructUnoControl::FuConstructUnoControl (
     SdDrawDocument* pDoc,
     SfxRequest&     rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
+    , nInventor(0)
+    , nIdentifier(0)
 {
 }
 
