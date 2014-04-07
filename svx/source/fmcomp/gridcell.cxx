@@ -2027,7 +2027,7 @@ OUString DbNumericField::GetFormatText(const Reference< ::com::sun::star::sdb::X
 
 void DbNumericField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter)
 {
-    lcl_setFormattedNumeric_nothrow( *dynamic_cast< DoubleNumericField* >( m_pWindow ), *this, _rxField, _rxFormatter );
+    lcl_setFormattedNumeric_nothrow(dynamic_cast<DoubleNumericField&>(*m_pWindow), *this, _rxField, _rxFormatter);
 }
 
 
