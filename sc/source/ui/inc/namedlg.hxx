@@ -41,7 +41,7 @@ class ScDocument;
 
 
 //logic behind the manage names dialog
-class ScNameDlg : public ScAnyRefDlg
+class ScNameDlg : public ScAnyRefDlg, public ScRangeManagerTable::InitListener
 {
 private:
     Edit*               m_pEdName;
@@ -131,9 +131,10 @@ public:
     virtual void    SetActive() SAL_OVERRIDE;
     virtual bool    Close() SAL_OVERRIDE;
 
+    virtual void tableInitialized() SAL_OVERRIDE;
+
     void GetRangeNames(boost::ptr_map<OUString, ScRangeName>& rRangeMap);
     void SetEntry(const OUString& rName, const OUString& rScope);
-
 };
 
 #endif // SC_NAMEDLG_HXX

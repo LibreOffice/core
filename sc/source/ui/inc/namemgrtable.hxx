@@ -35,6 +35,14 @@ struct ScRangeNameLine
 //Need some sort of a filter to handle several range names
 class SC_DLLPUBLIC ScRangeManagerTable : public SvSimpleTable
 {
+public:
+    class InitListener
+    {
+    public:
+        virtual ~InitListener();
+        virtual void tableInitialized() = 0;
+    };
+
 private:
     OUString maGlobalString;
 
@@ -45,6 +53,8 @@ private:
     // we would calculate all formula strings during opening
     std::map<SvTreeListEntry*, bool> maCalculatedFormulaEntries;
     const ScAddress maPos;
+
+    InitListener* mpInitListener;
 
     void GetLine(ScRangeNameLine& aLine, SvTreeListEntry* pEntry);
     void Init();
@@ -59,6 +69,8 @@ public:
 
     virtual void Resize() SAL_OVERRIDE;
     virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+
+    void setInitListener( InitListener* pListener );
 
     void addEntry( const ScRangeNameLine& rLine, bool bSetCurEntry = true );
     void DeleteSelectedEntries();
