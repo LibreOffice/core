@@ -481,7 +481,7 @@ void SfxBindings::Update
             if ( bInternalUpdate )
             {
                 // Query Status
-                const SfxSlotServer* pMsgServer = pCache->GetSlotServer(*pDispatcher, pImp->xProv);
+                const SfxSlotServer* pMsgServer = pDispatcher ? pCache->GetSlotServer(*pDispatcher, pImp->xProv) : NULL;
                 if ( !pCache->IsControllerDirty() &&
                     ( !pMsgServer ||
                     !pMsgServer->GetSlot()->IsMode(SFX_SLOT_VOLATILE) ) )
