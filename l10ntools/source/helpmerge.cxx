@@ -260,7 +260,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
                 SAL_WARN(
                     "l10ntools",
                     "Can't find GID=" << pResData->sGId.getStr() << " LID="
-                        << pResData->sId.getStr() << " TYP=" << pResData->sResTyp.getStr() << "\n");
+                        << pResData->sId.getStr() << " TYP=" << pResData->sResTyp.getStr());
             }
             pXMLElement->ChangeLanguageTag(sCur);
         }
