@@ -10,9 +10,13 @@
 #ifndef VCL_OPENGL_CONTEXT_HXX
 #define VCL_OPENGL_CONTEXT_HXX
 
+#include <string.h>
+
 #include <GL/glew.h>
 
 #if defined( MACOSX )
+#elif defined( IOS )
+#elif defined( ANDROID )
 #elif defined( UNX )
 #  include <prex.h>
 #  include "GL/glxew.h"
@@ -27,6 +31,8 @@
 #include <GL/glext.h>
 #include <GL/wglext.h>
 #elif defined( MACOSX )
+#elif defined( IOS )
+#elif defined( ANDROID )
 #elif defined( UNX )
 #include <GL/glext.h>
 #define GLX_GLXEXT_PROTOTYPES 1
@@ -43,11 +49,50 @@
 /// Holds the information of our new child window
 struct GLWindow
 {
+    // Copy of gluCheckExtension(), from the Apache-licensed
+    // https://code.google.com/p/glues/source/browse/trunk/glues/source/glues_registry.c
+    static GLboolean checkExtension(const GLubyte* extName, const GLubyte* extString)
+    {
+      GLboolean flag=GL_FALSE;
+      char* word;
+      char* lookHere;
+      char* deleteThis;
+
+      if (extString==NULL)
+      {
+         return GL_FALSE;
+      }
+
+      deleteThis=lookHere=(char*)malloc(strlen((const char*)extString)+1);
+      if (lookHere==NULL)
+      {
+         return GL_FALSE;
+      }
+
+      /* strtok() will modify string, so copy it somewhere */
+      strcpy(lookHere,(const char*)extString);
+
+      while ((word=strtok(lookHere, " "))!=NULL)
+      {
+         if (strcmp(word,(const char*)extName)==0)
+         {
+            flag=GL_TRUE;
+            break;
+         }
+         lookHere=NULL; /* get next token */
+      }
+      free((void*)deleteThis);
+
+      return flag;
+    }
+
 #if defined( _WIN32 )
     HWND                    hWnd;
     HDC                     hDC;
     HGLRC                   hRC;
 #elif defined( MACOSX )
+#elif defined( IOS )
+#elif defined( ANDROID )
 #elif defined( UNX )
     Display*           dpy;
     int                     screen;
@@ -58,7 +103,7 @@ struct GLWindow
     XVisualInfo*       vi;
     GLXContext         ctx;
 
-    bool HasGLXExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, (const GLubyte*) GLXExtensions ); }
+    bool HasGLXExtension( const char* name ) { return checkExtension( (const GLubyte*) name, (const GLubyte*) GLXExtensions ); }
     const char*             GLXExtensions;
 #endif
     unsigned int            bpp;
@@ -67,12 +112,14 @@ struct GLWindow
     const GLubyte*          GLExtensions;
     bool bMultiSampleSupported;
 
-    bool HasGLExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, GLExtensions ); }
+    bool HasGLExtension( const char* name ) { return checkExtension( (const GLubyte*) name, GLExtensions ); }
 
     GLWindow()
         :
 #if defined( _WIN32 )
 #elif defined( MACOSX )
+#elif defined( IOS )
+#elif defined( ANDROID )
 #elif defined( UNX )
         dpy(NULL),
         screen(0),
