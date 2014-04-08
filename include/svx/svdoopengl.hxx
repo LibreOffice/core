@@ -24,7 +24,7 @@ public:
 
     OpenGLContext& getOpenGLContext();
 
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
 
 private:
 
