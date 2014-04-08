@@ -143,9 +143,15 @@ void WorksheetSettings::importProtectedRange( const AttributeList& rAttribs )
     aProt.maSecurityDescriptorXML = rAttribs.getString( XML_securityDescriptor, OUString());
     /* XXX ECMA-376/OOXML or ISO/IEC 29500 do not even mention a 'password'
      * attribute here (or anywhere else), but this is what Excel2013 writes,
-     * similar to BIFF. OOXML XMLschema and ISO/IEC 29500 instead define
-     * 'algorithmName', 'hashValue', 'saltValue' and 'spinCount'. */
+     * similar to BIFF, if the original file was a BIFF file. OOXML XMLschema
+     * and ISO/IEC 29500 instead define 'algorithmName', 'hashValue',
+     * 'saltValue' and 'spinCount' that are written if the protection was newly
+     * created. */
     aProt.mnPasswordVerifier = rAttribs.getIntegerHex( XML_password, 0);
+    aProt.maAlgorithmName = rAttribs.getString( XML_algorithmName, OUString());
+    aProt.maHashValue = rAttribs.getString( XML_hashValue, OUString());
+    aProt.maSaltValue = rAttribs.getString( XML_saltValue, OUString());
+    aProt.mnSpinCount = rAttribs.getUnsigned( XML_spinCount, 0);
     OUString aRefs( rAttribs.getString( XML_sqref, OUString()));
     if (!aRefs.isEmpty())
     {

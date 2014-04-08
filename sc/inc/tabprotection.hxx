@@ -121,8 +121,13 @@ struct ScEnhancedProtection
     OUString                    maTitle;
     ::std::vector< sal_uInt8 >  maSecurityDescriptor;       // imported as raw BIFF data
     OUString                    maSecurityDescriptorXML;    // imported from OOXML
+    // OOXML password definitions
+    OUString                    maAlgorithmName;
+    OUString                    maHashValue;
+    OUString                    maSaltValue;
+    sal_uInt32                  mnSpinCount;
 
-    ScEnhancedProtection() : mnAreserved(0), mnPasswordVerifier(0) {}
+    ScEnhancedProtection() : mnAreserved(0), mnPasswordVerifier(0), mnSpinCount(0) {}
 
     bool hasSecurityDescriptor() const
     {
