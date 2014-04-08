@@ -1451,4 +1451,4 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, float , float , sal_Int3
     return 0;
 }
 
-/* iim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
