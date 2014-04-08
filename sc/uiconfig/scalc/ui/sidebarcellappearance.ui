@@ -215,7 +215,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="tooltip_text" translatable="yes">Show the grid lines of the cells in the entire spreadsheet.</property>
+            <property name="tooltip_text" translatable="yes">Show the grid lines of the cells.</property>
             <property name="action_name">.uno:ToggleSheetGrid</property>
             <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
