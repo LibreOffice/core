@@ -821,16 +821,13 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
 
     const double aPositionX(x-originX);
     const double aPositionY(y-originY);
-    // TODO(F2): use leading here, when set
-    const double nWidth(dx != 0.0 ? dx : fFontSize);
-    const double nHeight(dy != 0.0 ? dy : fFontSize);
 
     const double* pTextMat=state->getTextMat();
     printf( "drawChar %f %f %f %f %f %f %f %f ",
             normalize(aPositionX),
             normalize(aPositionY),
-            normalize(aPositionX+nWidth),
-            normalize(aPositionY-nHeight),
+            normalize(aPositionX + dx),
+            normalize(aPositionY + dy),
             normalize(pTextMat[0]),
             normalize(pTextMat[2]),
             normalize(pTextMat[1]),

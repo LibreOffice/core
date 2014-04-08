@@ -127,11 +127,12 @@ namespace pdfi
     {
     protected:
         GraphicalElement( Element* pParent, sal_Int32 nGCId )
-        : Element( pParent ), GCId( nGCId ), MirrorVertical( false ) {}
+        : Element( pParent ), GCId( nGCId ), MirrorVertical( false ), IsForText (false) {}
 
     public:
         sal_Int32 GCId;
         bool      MirrorVertical;
+        bool      IsForText;
     };
 
     struct DrawElement : public GraphicalElement

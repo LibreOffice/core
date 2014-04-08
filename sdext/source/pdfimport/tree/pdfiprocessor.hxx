@@ -66,9 +66,8 @@ namespace pdfi
     public:
         com::sun::star::uno::Reference<
             com::sun::star::uno::XComponentContext >  m_xContext;
-        double fYPrevTextPosition;
-        double fXPrevTextPosition;
-        double fPrevTextWidth;
+        basegfx::B2DHomMatrix prevTextMatrix;
+        double prevCharWidth;
         enum DocumentTextDirecion { LrTb, RlTb, TbLr };
 
         explicit PDFIProcessor( const com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >& xStat,
@@ -102,19 +101,6 @@ namespace pdfi
 
     private:
         void processGlyphLine();
-
-        void drawGlyphLine( const OUString&                               rGlyphs,
-                            const ::com::sun::star::geometry::RealRectangle2D& rRect,
-                            const ::com::sun::star::geometry::Matrix2D&        rFontMatrix  );
-
-        void drawCharGlyphs( OUString&             rGlyphs,
-                             ::com::sun::star::geometry::RealRectangle2D&  rRect,
-                             const GraphicsContext& aGC,
-                             ParagraphElement* pPara,
-                             FrameElement* pFrame,
-                             bool bSpaceFlag );
-
-        GraphicsContext& getTransformGlyphContext( CharGlyph& rGlyph );
 
         // ContentSink interface implementation
 
@@ -226,24 +212,24 @@ namespace pdfi
     class CharGlyph
     {
         public:
-            CharGlyph(Element* pCurElement, const GraphicsContext& rCurrentContext, const com::sun::star::geometry::Matrix2D& rFontMatrix,
-               const com::sun::star::geometry::RealRectangle2D& rRect, const OUString& rGlyphs  )
+            CharGlyph(Element* pCurElement, const GraphicsContext& rCurrentContext,
+                double width, double prevSpaceWidth, const OUString& rGlyphs  )
                : m_pCurElement(pCurElement), m_rCurrentContext(rCurrentContext),
-                 m_rFontMatrix(rFontMatrix), m_rRect(rRect), m_rGlyphs(rGlyphs) {};
+                 m_Width(width), m_PrevSpaceWidth(prevSpaceWidth), m_rGlyphs(rGlyphs) {};
 
             virtual ~CharGlyph(){};
             OUString& getGlyph(){ return m_rGlyphs; }
-            com::sun::star::geometry::RealRectangle2D& getRect(){ return m_rRect; }
-            com::sun::star::geometry::Matrix2D&  getFontMatrix(){ return m_rFontMatrix; }
+            double getWidth(){ return m_Width; }
+            double getPrevSpaceWidth(){ return m_PrevSpaceWidth; }
             GraphicsContext&  getGC(){ return m_rCurrentContext; }
             Element*  getCurElement(){ return m_pCurElement; }
 
         private:
             Element*                    m_pCurElement ;
             GraphicsContext             m_rCurrentContext ;
-            com::sun::star::geometry::Matrix2D          m_rFontMatrix ;
-            com::sun::star::geometry::RealRectangle2D   m_rRect ;
-            OUString               m_rGlyphs ;
+            double                      m_Width ;
+            double                      m_PrevSpaceWidth ;
+            OUString                    m_rGlyphs ;
     };
 }
 
