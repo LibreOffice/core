@@ -86,7 +86,7 @@ protected:
 
         TokenStackType()
             : nTokenValue(0)
-            , bTokenHasValue(0)
+            , bTokenHasValue(false)
             , nTokenId(0)
         {
         }
