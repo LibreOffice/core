@@ -25,5 +25,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 ))
 endif
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_UnpackedTarball_add_patches,glew,\
+	external/glew/glew-macosx-install-name.patch.1 \
+))
+endif
 
 # vim: set noet sw=4 ts=4:

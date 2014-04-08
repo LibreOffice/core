@@ -12,6 +12,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,glew,glew))
 $(eval $(call gb_ExternalPackage_use_external_project,glew,glew))
 
 ifeq ($(OS),MACOSX)
+$(eval $(call gb_ExternalPackage_add_file,glew,$(LIBO_LIB_FOLDER)/libGLEW.1.10.0.dylib,lib/libGLEW.1.10.0.dylib))
 else ifeq ($(OS)-$(COM),WNT-GCC)
 else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_files,glew,$(LIBO_LIB_FOLDER), \

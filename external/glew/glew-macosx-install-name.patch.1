@@ -1,0 +1,13 @@
+-*- Mode:Diff -*-
+diff -ur glew.org/build/glew.rc glew/build/glew.rc
+--- glew/config/Makefile.darwin
++++ glew/config/Makefile.darwin
+@@ -20,7 +20,7 @@
+ LIB.DEVLNK    = lib$(NAME).dylib
+ LIB.SHARED    = lib$(NAME).$(SO_VERSION).dylib
+ LIB.STATIC    = lib$(NAME).a
+-LDFLAGS.SO    = -dynamiclib -install_name $(GLEW_DEST)/lib/$(LIB.SHARED) -current_version $(SO_VERSION) -compatibility_version $(SO_MAJOR)
++LDFLAGS.SO    = -dynamiclib -install_name @__________________________________________________OOO/$(LIB.SHARED) -current_version $(SO_VERSION) -compatibility_version $(SO_MAJOR)
+ LIB.SONAME.MX = lib$(NAME)mx.$(SO_MAJOR).dylib
+ LIB.DEVLNK.MX = lib$(NAME)mx.dylib
+ LIB.SHARED.MX = lib$(NAME)mx.$(SO_VERSION).dylib
