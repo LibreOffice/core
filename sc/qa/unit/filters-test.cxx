@@ -511,6 +511,8 @@ void ScFiltersTest::testEnhancedProtectionXLS()
     CPPUNIT_ASSERT(  pProt->isBlockEditable( ScRange( 0, 1, 0, 0, 1, 0)));  // editable without password
     CPPUNIT_ASSERT(  pProt->isBlockEditable( ScRange( 0, 2, 0, 0, 2, 0)));  // editable without password
     CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 3, 0, 0, 3, 0)));  // editable with password "foo"
+    CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 4, 0, 0, 4, 0)));  // editable with descriptor
+    CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 5, 0, 0, 5, 0)));  // editable with descriptor and password "foo"
     CPPUNIT_ASSERT(  pProt->isBlockEditable( ScRange( 0, 1, 0, 0, 2, 0)));  // union of two different editables
     CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 0, 0, 0, 1, 0)));  // union of locked and editable
     CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 2, 0, 0, 3, 0)));  // union of editable and password editable
