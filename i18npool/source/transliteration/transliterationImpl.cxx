@@ -199,6 +199,10 @@ TransliterationImpl::loadModule( TransliterationModules modType, const Locale& r
             if (loadModuleByName(OUString("ignoreDiacritics_CTL"), bodyCascade[numCascade], rLocale))
                 numCascade++;
         }
+        if (modType & TransliterationModulesExtra::ignoreKashida_CTL)
+            if (loadModuleByName(OUString("ignoreKashida_CTL"), bodyCascade[numCascade], rLocale))
+                numCascade++;
+
     } else if (modType&TransliterationModules_NON_IGNORE_MASK) {
         for (sal_Int16 i = 0; TMlist[i].tm; i++) {
             if (TMlist[i].tm == modType) {

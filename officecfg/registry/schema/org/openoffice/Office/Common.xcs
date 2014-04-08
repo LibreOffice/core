@@ -5925,6 +5925,15 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="IsIgnoreKashida_CTL" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: -->
+        <!-- OldLocation: -->
+        <!-- UIHints: Edit/Find & Replace -->
+        <info>
+          <desc>Specifies search with the use of CTL option.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="IsUseAsianOptions" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->

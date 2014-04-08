@@ -1394,6 +1394,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     {
         SvtSearchOptions aOpt;
         aOpt.SetIgnoreDiacritics_CTL (true);
+        aOpt.SetIgnoreKashida_CTL (true);
         pLangConfig->aLanguageOptions.SetCTLFontEnabled( m_pCTLSupportCB->IsChecked() );
 
         const sal_uInt16 STATE_COUNT = 1;

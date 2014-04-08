@@ -67,7 +67,6 @@ published enum TransliterationModules
     IGNORE_KANA                    = 0x00000200, // ja_JP
     /// Ignore full width and half width character when comparing strings by transliteration service
     IGNORE_WIDTH                   = 0x00000400, // ja_JP
-    // not used yet                = 0x00000800,
     /// Ignore Japanese traditional Kanji character in Japanese fuzzy search
     ignoreTraditionalKanji_ja_JP   = 0x00001000,
     /// Ignore Japanese traditional Katakana and Hiragana character in Japanese fuzzy search

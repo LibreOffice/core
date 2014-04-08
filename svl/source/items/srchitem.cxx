@@ -84,7 +84,8 @@ static Sequence< OUString > lcl_GetNotifyNames()
         "Japanese/IsIgnoreWhitespace",          // 16
         "Japanese/IsIgnoreProlongedSoundMark",  // 17
         "Japanese/IsIgnoreMiddleDot",           // 18
-        "IsIgnoreDiacritics_CTL"                // 19
+        "IsIgnoreDiacritics_CTL",               // 19
+        "IsIgnoreKashida_CTL"                   // 20
     };
 
     const int nCount = SAL_N_ELEMENTS( aTranslitNames );
@@ -145,6 +146,8 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
         rFlags |= TransliterationModules_IGNORE_WIDTH;
     if ( aOpt.IsIgnoreDiacritics_CTL())
         rFlags |= TransliterationModulesExtra::ignoreDiacritics_CTL ;
+    if ( aOpt.IsIgnoreKashida_CTL())
+        rFlags |= TransliterationModulesExtra::ignoreKashida_CTL ;
     if ( bAsianOptions )
     {
         if ( aOpt.IsMatchHiraganaKatakana())

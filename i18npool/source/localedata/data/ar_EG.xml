@@ -466,6 +466,7 @@
     <Transliteration unoid="TOGGLE_CASE"/>
     <Transliteration unoid="IGNORE_CASE"/>
     <Transliteration unoid="ignoreDiacritics_CTL"/>
+    <Transliteration unoid="ignoreKashida_CTL"/>
   </LC_TRANSLITERATION>
   <LC_MISC>
     <ReservedWords>

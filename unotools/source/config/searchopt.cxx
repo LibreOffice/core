@@ -33,7 +33,7 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
-#define MAX_FLAGS_OFFSET    26
+#define MAX_FLAGS_OFFSET    27
 
 class SvtSearchOptions_Impl: public ConfigItem, private boost::noncopyable
 {
@@ -143,7 +143,8 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames() const
         "Japanese/IsIgnoreProlongedSoundMark",      // 23
         "Japanese/IsIgnoreMiddleDot",           // 24
         "IsNotes",                              // 25
-        "IsIgnoreDiacritics_CTL"                // 26
+        "IsIgnoreDiacritics_CTL",               // 26
+        "IsIgnoreKashida_CTL"                   // 27
     };
 
     const int nCount = SAL_N_ELEMENTS( aPropNames );
@@ -287,6 +288,8 @@ sal_Int32 SvtSearchOptions::GetTransliterationFlags() const
         nRes |= TransliterationModules_ignoreMiddleDot_ja_JP;
     if ( IsIgnoreDiacritics_CTL())
         nRes |= TransliterationModulesExtra::ignoreDiacritics_CTL;
+    if ( IsIgnoreKashida_CTL())
+        nRes |= TransliterationModulesExtra::ignoreKashida_CTL;
     return nRes;
 }
 
@@ -553,6 +556,16 @@ bool SvtSearchOptions::IsIgnoreDiacritics_CTL() const
 void SvtSearchOptions::SetIgnoreDiacritics_CTL( bool bVal )
 {
     pImpl->SetFlag( 26, bVal );
+}
+
+bool SvtSearchOptions::IsIgnoreKashida_CTL() const
+{
+    return pImpl->GetFlag( 27 );
+}
+
+void SvtSearchOptions::SetIgnoreKashida_CTL( bool bVal )
+{
+    pImpl->SetFlag( 27, bVal );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

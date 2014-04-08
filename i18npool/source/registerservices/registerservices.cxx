@@ -156,6 +156,7 @@ IMPL_CREATEINSTANCE( ignoreProlongedSoundMark_ja_JP)
 IMPL_CREATEINSTANCE( ignoreMiddleDot_ja_JP)
 IMPL_CREATEINSTANCE( ignoreSpace_ja_JP)
 IMPL_CREATEINSTANCE( ignoreDiacritics_CTL)
+IMPL_CREATEINSTANCE( ignoreKashida_CTL)
 
 IMPL_CREATEINSTANCE( TextToChuyin_zh_TW )
 IMPL_CREATEINSTANCE( TextToPinyin_zh_CN )
@@ -381,6 +382,7 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (TextToPinyin_zh_CN),
     IMPL_TRANSLITERATION_ITEM (TextToChuyin_zh_TW),
     IMPL_TRANSLITERATION_ITEM( ignoreDiacritics_CTL),
+    IMPL_TRANSLITERATION_ITEM (ignoreKashida_CTL),
 
     IMPL_TRANSLITERATION_ITEM (NumToCharUpper_zh_CN),
     IMPL_TRANSLITERATION_ITEM (NumToCharLower_zh_CN),

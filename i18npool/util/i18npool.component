@@ -492,4 +492,7 @@
   <implementation name="com.sun.star.i18n.Transliteration.ignoreDiacritics_CTL">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreKashida_CTL">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
 </component>

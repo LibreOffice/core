@@ -80,6 +80,7 @@ public:
     bool    IsIgnoreProlongedSoundMark() const;
     bool    IsIgnoreMiddleDot() const;
     bool    IsIgnoreDiacritics_CTL() const;
+    bool    IsIgnoreKashida_CTL() const;
 
     void    SetMatchFullHalfWidthForms( bool bVal );
     void    SetMatchHiraganaKatakana( bool bVal );
@@ -100,6 +101,7 @@ public:
     void    SetIgnoreProlongedSoundMark( bool bVal );
     void    SetIgnoreMiddleDot( bool bVal );
     void    SetIgnoreDiacritics_CTL( bool bVal );
+    void    SetIgnoreKashida_CTL( bool bVal );
 };
 
 #endif
