@@ -175,7 +175,7 @@ namespace
 
                 // create BitmapEx
                 Bitmap aMainBitmap = aVirtualDevice.GetBitmap(Point(), aVirtualDevice.GetOutputSizePixel());
-#if defined(MACOSX)
+#if defined(MACOSX) || defined(IOS)
                 AlphaMask aMaskBitmap( aVirtualDeviceMask.GetBitmap( Point(), aVirtualDeviceMask.GetOutputSizePixel()));
 #else
                 Bitmap aMaskBitmap = aVirtualDeviceMask.GetBitmap( Point(), aVirtualDeviceMask.GetOutputSizePixel());
