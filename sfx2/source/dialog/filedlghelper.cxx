@@ -1224,7 +1224,7 @@ void FileDialogHelper_Impl::preExecute()
 #else
     // However, the Mac OS X implementation's pickers run modally in execute and so the event doesn't
     // get through in time... so we call the methods directly
-    enablePasswordBox( sal_True );
+    enablePasswordBox( true );
     updateFilterOptionsBox( );
     updateSelectionBox( );
 #endif
