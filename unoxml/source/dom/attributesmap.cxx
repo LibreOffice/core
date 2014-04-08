@@ -157,7 +157,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL
     CAttributesMap::removeNamedItem(OUString const& name)
-    throw (RuntimeException, std::exception)
+    throw (DOMException, RuntimeException, std::exception)
     {
         // no MutexGuard needed: m_pElement is const
         Reference< XAttr > const xAttr(m_pElement->getAttributeNode(name));
@@ -178,7 +178,7 @@ namespace DOM
     Reference< XNode > SAL_CALL
     CAttributesMap::removeNamedItemNS(
             OUString const& namespaceURI, OUString const& localName)
-    throw (RuntimeException, std::exception)
+    throw (DOMException, RuntimeException, std::exception)
     {
         // no MutexGuard needed: m_pElement is const
         Reference< XAttr > const xAttr(
@@ -199,7 +199,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL
     CAttributesMap::setNamedItem(Reference< XNode > const& xNode)
-    throw (RuntimeException, std::exception)
+    throw (DOMException, RuntimeException, std::exception)
     {
         Reference< XAttr > const xAttr(xNode, UNO_QUERY);
         if (!xNode.is()) {
@@ -219,7 +219,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL
     CAttributesMap::setNamedItemNS(Reference< XNode > const& xNode)
-    throw (RuntimeException, std::exception)
+    throw (DOMException, RuntimeException, std::exception)
     {
         Reference< XAttr > const xAttr(xNode, UNO_QUERY);
         if (!xNode.is()) {

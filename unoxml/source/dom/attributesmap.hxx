@@ -77,28 +77,28 @@ namespace DOM
         */
         virtual Reference< XNode > SAL_CALL
             removeNamedItem(OUString const& name)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (DOMException, RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         // Removes a node specified by local name and namespace URI.
         */
         virtual Reference< XNode > SAL_CALL removeNamedItemNS(
                 OUString const& namespaceURI, OUString const& localName)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (DOMException, RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         // Adds a node using its nodeName attribute.
         */
         virtual Reference< XNode > SAL_CALL
             setNamedItem(Reference< XNode > const& arg)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (DOMException, RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Adds a node using its namespaceURI and localName.
         */
         virtual Reference< XNode > SAL_CALL
             setNamedItemNS(Reference< XNode > const& arg)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (DOMException, RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 
