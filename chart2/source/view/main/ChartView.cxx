@@ -145,7 +145,7 @@ void debugGL3DOutput( ChartModel& rModel )
         bool bRoundedEdge = false;
         xPropSet->getPropertyValue(CHART_UNONAME_ROUNDED_EDGE) >>= bRoundedEdge;
 
-        fprintf(stdout, "GL3D: rounded edge = %d\n", bRoundedEdge);
+        SAL_INFO("chart2.barchart3D", "GL3D: rounded edge = " << bRoundedEdge);
     }
     catch (...) {}
 }
