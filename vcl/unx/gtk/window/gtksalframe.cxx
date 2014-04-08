@@ -2835,6 +2835,7 @@ SalFrame::SalIndicatorState GtkSalFrame::GetIndicatorState()
     aState.mnState = GetGtkSalData()->GetGtkDisplay()->GetIndicatorState();
 #else
     g_warning ("missing get indicator state");
+    aState.mnState = 0;
 #endif
     return aState;
 }
