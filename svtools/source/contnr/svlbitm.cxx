@@ -39,6 +39,8 @@ struct SvLBoxButtonData_Impl
 
 void SvLBoxButtonData::InitData( bool bImagesFromDefault, bool _bRadioBtn, const Control* pCtrl )
 {
+    nWidth = nHeight = 0;
+
     pImpl = new SvLBoxButtonData_Impl;
 
     bDataOk = false;
