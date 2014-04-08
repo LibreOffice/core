@@ -467,10 +467,6 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
         {
             nType = OBJ_OLE2;
         }
-        else if( aTypeName.startsWith( "TableShape" ) )
-        {
-            nType = OBJ_OLE2;
-        }
         else if( aTypeName.startsWith( "OrgChartShape" ) )
         {
             nType = OBJ_OLE2;
