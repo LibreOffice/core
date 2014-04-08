@@ -997,7 +997,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             /**********************************************************************
             * MASTERPAGE
             **********************************************************************/
-            SdrPageView* pPageView = mpDrawView->GetSdrPageView();
+            SdrPageView* pPageView = mpDrawView ? mpDrawView->GetSdrPageView() : NULL;
 
             if (pPageView)
             {
