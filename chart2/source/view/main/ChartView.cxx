@@ -3116,7 +3116,6 @@ void ChartView::createShapes3D()
         return;
 
     uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-    sal_Int32 nGlobalSeriesIndex = 0;//for automatic symbols
     std::vector<VDataSeries*> aDataSeries;
     for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
     {
