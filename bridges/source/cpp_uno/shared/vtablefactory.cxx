@@ -35,6 +35,7 @@
 #include "sal/types.h"
 #include "typelib/typedescription.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <boost/unordered_map.hpp>
 #include <new>
 #include <vector>
@@ -120,7 +121,9 @@ extern "C" void SAL_CALL freeExec(
 
 }
 
-class VtableFactory::GuardedBlocks: public std::vector< Block > {
+class VtableFactory::GuardedBlocks:
+    public std::vector<Block>, private boost::noncopyable
+{
 public:
     GuardedBlocks(VtableFactory const & factory):
         m_factory(factory), m_guarded(true) {}
@@ -130,9 +133,6 @@ public:
     void unguard() { m_guarded = false; }
 
 private:
-    GuardedBlocks(GuardedBlocks &); // not implemented
-    void operator =(GuardedBlocks); // not implemented
-
     VtableFactory const & m_factory;
     bool m_guarded;
 };

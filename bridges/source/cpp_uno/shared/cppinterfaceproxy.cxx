@@ -39,8 +39,8 @@
 static bridges::cpp_uno::shared::VtableFactory * pInstance;
 
 #if defined(__GNUG__) && !defined(__MINGW32__)
-void dso_init(void) __attribute__((constructor));
-void dso_exit(void) __attribute__((destructor));
+extern "C" void dso_init(void) __attribute__((constructor));
+extern "C" void dso_exit(void) __attribute__((destructor));
 #endif
 
 void dso_init(void) {
