@@ -1,12 +1,17 @@
 -*- Mode:Diff -*-
 --- glew/include/GL/glew.h
 +++ glew/include/GL/glew.h
-@@ -1180,6 +1180,10 @@
+@@ -1180,6 +1180,15 @@
  
  /* ---------------------------------- GLU ---------------------------------- */
  
-+#if !defined(GLEW_NO_GLU) && defined(__APPLE__) && defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
-+#define GLEW_NO_GLU
++#ifndef GLEW_NO_GLU
++#  ifdef __APPLE__
++#    include <Availability.h>
++#    if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
++#      define GLEW_NO_GLU
++#    endif
++#  endif
 +#endif
 +
  #ifndef GLEW_NO_GLU
