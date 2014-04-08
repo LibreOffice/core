@@ -314,7 +314,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             pTempSet.reset( new SfxItemSet(*pDlg->GetOutputItemSet()) );
     }
 
-    if( pTempSet.get() )
+    if (pTempSet.get() && pStyleSheet)
     {
         pStyleSheet->AdjustToFontHeight(*pTempSet);
 
