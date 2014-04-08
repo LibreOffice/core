@@ -155,7 +155,15 @@ typedef ::std::map<sal_uInt32, PageInfo> PageInfoMap;
 class FlashExporter
 {
 public:
-    FlashExporter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF, sal_Int32 nJPEGCompressMode = -1, sal_Bool bExportOLEAsJPEG = false);
+    FlashExporter(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF,
+
+        // #56084# variables for selection export
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxSelectedShapes,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxSelectedDrawPage,
+
+        sal_Int32 nJPEGCompressMode = -1,
+        sal_Bool bExportOLEAsJPEG = false);
     ~FlashExporter();
 
     void Flush();
@@ -176,6 +184,12 @@ public:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
+
+    // #56084# variables for selection export
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxSelectedShapes;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > mxSelectedDrawPage;
+    bool mbExportSelection;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter > mxGraphicExporter;
 
     PageInfoMap maPagesMap;
@@ -183,9 +197,9 @@ private:
     sal_uInt16 exportDrawPageBackground(sal_uInt16 nPage, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage);
     sal_uInt16 exportMasterPageObjects(sal_uInt16 nPage, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xMasterPage);
 
-    void exportDrawPageContents( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage, bool bStream, bool bMaster  );
-    void exportShapes( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes, bool bStream, bool bMaster );
-    void exportShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, bool bMaster);
+    void exportDrawPageContents( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage, bool bStream, bool bMaster  );
+    void exportShapes( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes, bool bStream, bool bMaster );
+    void exportShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, bool bMaster);
 
     sal_uInt32 ActionSummer(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape);
     sal_uInt32 ActionSummer(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes);
