@@ -35,6 +35,7 @@ void Bar3DChart::create3DShapes()
     const float nBarDistanceX = nBarSizeX / 2;
     const float nBarDistanceY = nBarSizeY / 2;
 
+    maShapes.clear();
     maShapes.push_back(new opengl3D::Camera());
     sal_Int32 nSeriesIndex = 0;
     for(std::vector<VDataSeries*>::const_iterator itr = maDataSeries.begin(),
