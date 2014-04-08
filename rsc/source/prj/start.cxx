@@ -33,6 +33,8 @@
 #include <dos.h>
 
 #endif // UNX
+
+#include <gui.hxx>
 #include <rsctools.hxx>
 #include <rscerror.h>
 #include <sal/main.h>
@@ -44,7 +46,6 @@ extern "C"
 {
     int rscpp_main(int, char**);
 }
-int rsc2_main(int, char**);
 
 static bool CallPrePro( const OString& rInput,
                         const OString& rOutput, RscPtrPtr * pCmdLine,

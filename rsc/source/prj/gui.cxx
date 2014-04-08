@@ -20,6 +20,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+
+#include <gui.hxx>
 #include <rscrsc.hxx>
 #include <rscdb.hxx>
 
