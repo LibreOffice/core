@@ -131,7 +131,7 @@ namespace ftp {
             throw(curl_exception);
 
         void mkdir(bool ReplaceExisting) const
-            throw(curl_exception);
+            throw(curl_exception, malformed_exception);
 
         OUString ren(const OUString& NewTitle)
             throw(curl_exception);

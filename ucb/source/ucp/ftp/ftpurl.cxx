@@ -675,7 +675,7 @@ void FTPURL::insert(bool replaceExisting,void* stream) const
 
 
 void FTPURL::mkdir(bool ReplaceExisting) const
-    throw(curl_exception)
+    throw (curl_exception, malformed_exception)
 {
     OString title;
     if(!m_aPathSegmentVec.empty()) {
