@@ -94,10 +94,21 @@ void PageInfo::addShape( ShapeInfo* pShapeInfo )
 }
 #endif
 
+FlashExporter::FlashExporter(
+    const Reference< XComponentContext > &rxContext,
 
+    // #i56084# variables for selection export
+    const Reference< XShapes >& rxSelectedShapes,
+    const Reference< XDrawPage >& rxSelectedDrawPage,
 
-FlashExporter::FlashExporter(const Reference< XComponentContext > &rxContext, sal_Int32 nJPEGCompressMode, sal_Bool bExportOLEAsJPEG)
+    sal_Int32 nJPEGCompressMode,
+    sal_Bool bExportOLEAsJPEG)
     : mxContext(rxContext)
+    // #i56084# variables for selection export
+    , mxSelectedShapes(rxSelectedShapes)
+    , mxSelectedDrawPage(rxSelectedDrawPage)
+    , mbExportSelection(false)
+
     , mpWriter(NULL)
     , mnDocWidth(0)
     , mnDocHeight(0)
@@ -106,6 +117,11 @@ FlashExporter::FlashExporter(const Reference< XComponentContext > &rxContext, sa
     , mbPresentation(true)
     , mnPageNumber(-1)
 {
+    if(mxSelectedDrawPage.is() && mxSelectedShapes.is() && mxSelectedShapes->getCount())
+    {
+        // #i56084# determine export selection
+        mbExportSelection = true;
+    }
 }
 
 
@@ -145,7 +161,16 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
         return sal_False;
 
     Reference< XDrawPage > xDrawPage;
-    xDrawPages->getByIndex(0) >>= xDrawPage;
+
+    // #i56084# set xDrawPage directly when exporting selection
+    if(mbExportSelection)
+    {
+        xDrawPage = mxSelectedDrawPage;
+    }
+    else
+    {
+        xDrawPages->getByIndex(0) >>= xDrawPage;
+    }
 
     Reference< XPropertySet > xProp( xDrawPage, UNO_QUERY );
     try
@@ -164,17 +189,29 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
         return false; // no writer, no cookies
     }
 
-    const sal_Int32 nPageCount = xDrawPages->getCount();
+    // #i56084# nPageCount is 1 when exporting selection
+    const sal_Int32 nPageCount = mbExportSelection ? 1 : xDrawPages->getCount();
     sal_uInt16 nPage;
+
     if ( xStatusIndicator.is() )
-        xStatusIndicator->start( "Macromedia Flash (SWF)", nPageCount);
+    {
+        xStatusIndicator->start("Macromedia Flash (SWF)", nPageCount);
+    }
+
     for( nPage = 0; nPage < nPageCount; nPage++)
     {
+        // #i56084# keep PageNumber? We could determine the PageNumber of the single to-be-eported page
+        // when exporting the selection, but this is only used for swf internal, so no need to do so (AFAIK)
         mnPageNumber = nPage + 1;
 
         if ( xStatusIndicator.is() )
             xStatusIndicator->setValue( nPage );
-        xDrawPages->getByIndex(nPage) >>= xDrawPage;
+
+        // #i56084# get current xDrawPage when not exporting selection; else alraedy set above
+        if(!mbExportSelection)
+        {
+            xDrawPages->getByIndex(nPage) >>= xDrawPage;
+        }
 
         if( !xDrawPage.is())
             continue;
@@ -188,11 +225,25 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
                 continue;
         }
 
-        exportBackgrounds( xDrawPage, nPage, false );
-        exportBackgrounds( xDrawPage, nPage, true );
+        // #i56084# no background when exporting selection
+        if(!mbExportSelection)
+        {
+            exportBackgrounds( xDrawPage, nPage, false );
+            exportBackgrounds( xDrawPage, nPage, true );
+        }
 
         maPagesMap[nPage].mnForegroundID = mpWriter->startSprite();
-        exportDrawPageContents( xDrawPage, false, false );
+
+        // #i56084# directly export selection in export selection mode
+        if(mbExportSelection)
+        {
+            exportShapes( mxSelectedShapes, false, false );
+        }
+        else
+        {
+            exportDrawPageContents( xDrawPage, false, false );
+        }
+
         mpWriter->endSprite();
 
         // AS: If the background is different than the previous slide,
@@ -467,7 +518,7 @@ sal_uInt16 FlashExporter::exportMasterPageObjects(sal_uInt16 nPage, Reference< X
 
 /** export's the definition of the shapes inside this drawing page and adds the
     shape infos to the current PageInfo */
-void FlashExporter::exportDrawPageContents( Reference< XDrawPage >& xPage, bool bStream, bool bMaster )
+void FlashExporter::exportDrawPageContents( const Reference< XDrawPage >& xPage, bool bStream, bool bMaster )
 {
     Reference< XShapes > xShapes( xPage, UNO_QUERY );
     exportShapes(xShapes, bStream, bMaster);
@@ -477,7 +528,7 @@ void FlashExporter::exportDrawPageContents( Reference< XDrawPage >& xPage, bool 
 
 /** export's the definition of the shapes inside this XShapes container and adds the
     shape infos to the current PageInfo */
-void FlashExporter::exportShapes( Reference< XShapes >& xShapes, bool bStream, bool bMaster )
+void FlashExporter::exportShapes( const Reference< XShapes >& xShapes, bool bStream, bool bMaster )
 {
     OSL_ENSURE( (xShapes->getCount() <= 0xffff), "overflow in FlashExporter::exportDrawPageContents()" );
 
@@ -509,7 +560,7 @@ void FlashExporter::exportShapes( Reference< XShapes >& xShapes, bool bStream, b
 
 
 /** export this shape definition and adds it's info to the current PageInfo */
-void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
+void FlashExporter::exportShape( const Reference< XShape >& xShape, bool bMaster )
 {
     Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
     if( !xPropSet.is() )

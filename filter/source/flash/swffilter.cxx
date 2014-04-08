@@ -29,6 +29,13 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XController.hdl>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -45,6 +52,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::view;
 
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::beans::PropertyValue;
@@ -144,6 +152,11 @@ class FlashExportFilter : public cppu::WeakImplHelper4
     Reference< XComponentContext > mxContext;
     Reference< XStatusIndicator> mxStatusIndicator;
 
+    // #i56084# variables for selection export
+    Reference< XShapes > mxSelectedShapes;
+    Reference< XDrawPage > mxSelectedDrawPage;
+    bool mbExportSelection;
+
 public:
     FlashExportFilter( const Reference< XComponentContext > &rxContext);
 
@@ -167,15 +180,15 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
-
 FlashExportFilter::FlashExportFilter(const Reference< XComponentContext > &rxContext)
-:   mxContext( rxContext )
+    : mxDoc()
+    , mxContext(rxContext)
+    , mxStatusIndicator()
+    , mxSelectedShapes()
+    , mxSelectedDrawPage()
+    , mbExportSelection(false)
 {
 }
-
-
-
 
 OUString exportBackground(FlashExporter &aFlashExporter, Reference< XDrawPage > xDrawPage, const OUString& sPath, sal_uInt32 nPage, const char* suffix)
 {
@@ -228,7 +241,56 @@ sal_Bool SAL_CALL FlashExportFilter::filter( const ::com::sun::star::uno::Sequen
     Sequence< PropertyValue > aFilterData;
     aFilterData = findPropertyValue<Sequence< PropertyValue > >(aDescriptor, "FilterData", aFilterData);
 
-    if (findPropertyValue<sal_Bool>(aFilterData, "ExportMultipleFiles", false ))
+    // #i56084# check if selection shall be exported only; if yes, get the selected page and the selection itself
+    if(findPropertyValue<sal_Bool>(aDescriptor, "SelectionOnly", sal_False))
+    {
+        Reference< XDesktop2 > xDesktop(Desktop::create(mxContext));
+
+        if(xDesktop.is())
+        {
+            Reference< XFrame > xFrame(xDesktop->getCurrentFrame());
+
+            if(xFrame.is())
+            {
+                Reference< XController > xController(xFrame->getController());
+
+                if(xController.is())
+                {
+                    Reference< XDrawView > xDrawView(xController, UNO_QUERY);
+
+                    if(xDrawView.is())
+                    {
+                        mxSelectedDrawPage = xDrawView->getCurrentPage();
+                    }
+
+                    if(mxSelectedDrawPage.is())
+                    {
+                        Reference< XSelectionSupplier > xSelection(xController, UNO_QUERY);
+
+                        if(xSelection.is())
+                        {
+                            Any aSelection;
+
+                            if(xSelection->getSelection() >>= aSelection)
+                            {
+                                aSelection >>= mxSelectedShapes;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if(mxSelectedDrawPage.is() && mxSelectedShapes.is() && mxSelectedShapes->getCount())
+    {
+        // #i56084# to export selection we need the selected page and the selected shapes.
+        // There must be shapes selected, else fallback to regular export (export all)
+        mbExportSelection = true;
+    }
+
+    // #i56084# no multiple files (suppress) when selection since selection can only export a single page
+    if (!mbExportSelection && findPropertyValue<sal_Bool>(aFilterData, "ExportMultipleFiles", false ))
     {
         ExportAsMultipleFiles(aDescriptor);
     }
@@ -327,8 +389,12 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
     // TODO: check for errors
     (void) err;
 
-    FlashExporter aFlashExporter( mxContext, findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
-                                         findPropertyValue<sal_Bool>(aFilterData, "ExportOLEAsJPEG", false));
+    FlashExporter aFlashExporter(
+        mxContext,
+        mxSelectedShapes,
+        mxSelectedDrawPage,
+        findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
+        findPropertyValue<sal_Bool>(aFilterData, "ExportOLEAsJPEG", false));
 
     const sal_Int32 nPageCount = xDrawPages->getCount();
     if ( mxStatusIndicator.is() )
@@ -400,8 +466,12 @@ sal_Bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& 
         return sal_False;
     }
 
-    FlashExporter aFlashExporter( mxContext, findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
-                                         findPropertyValue<sal_Bool>(aFilterData, "ExportOLEAsJPEG", false));
+    FlashExporter aFlashExporter(
+        mxContext,
+        mxSelectedShapes,
+        mxSelectedDrawPage,
+        findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
+        findPropertyValue<sal_Bool>(aFilterData, "ExportOLEAsJPEG", false));
 
     return aFlashExporter.exportAll( mxDoc, xOutputStream, mxStatusIndicator );
 }
