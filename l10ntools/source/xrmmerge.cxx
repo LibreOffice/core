@@ -26,6 +26,7 @@
 #include "common.hxx"
 #include "export.hxx"
 #include "po.hxx"
+#include "xrmlex.hxx"
 #include "xrmmerge.hxx"
 #include "tokens.h"
 #include "helper.hxx"
@@ -36,7 +37,6 @@
 using namespace std;
 
 void yyerror( const char * );
-void YYWarning( const char * );
 
 // set of global variables
 bool bMergeMode;
@@ -78,7 +78,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     }
 }
 
-int InitXrmExport( char*, char* pFilename)
+int InitXrmExport( const char* pFilename)
 {
     // instanciate Export
     OString sFilename( pFilename );

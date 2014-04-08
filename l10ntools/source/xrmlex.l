@@ -37,6 +37,7 @@
 
 /* table of possible token ids */
 #include "tokens.h"
+#include "xrmlex.hxx"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -52,18 +53,6 @@
 #pragma warning(push, 1)
 #endif
 #define YY_NO_UNISTD_H
-
-/* external functions (C++ code, declared as extern "C" */
-extern "C" int WorkOnTokenSet( int, char* );
-extern "C" int Argument( char * );
-extern "C" int InitXrmExport( char * , char * );
-extern "C" int EndXrmExport();
-extern "C" int GetError();
-extern "C" int SetError();
-extern "C" char *GetOutputFile( int argc, char* argv[]);
-extern "C" FILE *GetXrmFile();
-extern "C" int isQuiet();
-extern "C" char* getFilename();
 
 /* forwards */
 void YYWarning();
@@ -226,7 +215,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 		return 1;
 	}
 	pFile = GetXrmFile();
-	InitXrmExport( pOutput , getFilename() );
+	InitXrmExport( getFilename() );
 
     if ( !pFile )
 		return 1;
