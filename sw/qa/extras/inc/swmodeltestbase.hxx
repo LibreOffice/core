@@ -124,7 +124,7 @@ public:
     {
         return maFilterOptions;
     }
-    void setFilterOptions(OUString rFilterOptions)
+    void setFilterOptions(const OUString &rFilterOptions)
     {
         maFilterOptions = rFilterOptions;
     }
