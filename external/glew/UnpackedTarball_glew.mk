@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,glew,0))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,glew,\
 	Makefile \
+	include/GL/glew.h \
 ))
 
 ifeq ($(OS)$(COM),WNTMSC)
@@ -32,6 +33,12 @@ endif
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 	external/glew/glew-macosx-install-name.patch.1 \
+))
+endif
+
+ifeq ($(OS),IOS)
+$(eval $(call gb_UnpackedTarball_add_patches,glew,\
+	external/glew/glew-ios.patch.1 \
 ))
 endif
 
