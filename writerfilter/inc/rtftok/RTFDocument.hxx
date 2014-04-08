@@ -21,7 +21,7 @@ namespace writerfilter
 namespace rtftok
 {
 /// The RTFDocument opens and resolves the RTF document.
-class WRITERFILTER_RTFTOK_DLLPUBLIC RTFDocument
+class RTFDocument
     : public writerfilter::Reference<Stream>
 {
 public:
@@ -38,7 +38,7 @@ public:
 };
 
 /// Interface to create an RTFDocument instance.
-class WRITERFILTER_RTFTOK_DLLPUBLIC RTFDocumentFactory
+class RTFDocumentFactory
 {
 public:
     static RTFDocument::Pointer_t
