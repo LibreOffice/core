@@ -228,7 +228,10 @@ endef
 
 endif # SYSTEM_CPPUNIT
 
-ifneq ($(SYSTEM_GLEW),)
+ifeq ($(filter FREEBSD LINUX MACOSX WNT,$(OS)),)
+gb_LinkTarget__use_glew :=
+
+else ifneq ($(SYSTEM_GLEW),)
 
 define gb_LinkTarget__use_glew
 $(call gb_LinkTarget_set_include,$(1),\
