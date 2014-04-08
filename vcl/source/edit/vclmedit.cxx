@@ -67,15 +67,11 @@ public:
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
 
-    bool            IsAutoFocusHide() const { return mbFocusSelectionHide; }
     void            SetAutoFocusHide( bool bAutoHide ) { mbFocusSelectionHide = bAutoHide; }
 
-    bool            IsIgnoreTab() const { return mbIgnoreTab; }
     void            SetIgnoreTab( bool bIgnore ) { mbIgnoreTab = bIgnore; }
 
     void            DisableSelectionOnFocus() { mbSelectOnTab = false; }
-
-    void            SetTextSelectable( bool bTextSelectable ) { mbTextSelectable = bTextSelectable; }
 };
 
 class ImpVclMEdit : public SfxListener
@@ -114,8 +110,6 @@ public:
     sal_Int32   GetMaxTextLen() const;
 
     void        SetMaxTextWidth( sal_uLong nMaxWidth );
-
-    bool        IsInsertMode() const;
 
     void        InsertText( const OUString& rStr );
     OUString    GetSelected() const;

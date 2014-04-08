@@ -554,7 +554,6 @@ public:
     sal_uInt16          GetHighlightedItem() const { return nHighlightedItem; }
 
     void            SetPosInParent( sal_uInt16 nPos ) { nPosInParent = nPos; }
-    sal_uInt16          GetPosInParent() const { return nPosInParent; }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 };
@@ -743,7 +742,6 @@ public:
 
     void            SetMenu( MenuBar* pMenu );
     void            KillActivePopup();
-    PopupMenu*      GetActivePopup() const  { return pActivePopup; }
     void            PopupClosed( Menu* pMenu );
     sal_uInt16          GetHighlightedItem() const { return nHighlightedItem; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;

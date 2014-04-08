@@ -25,32 +25,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/dllapi.h>
 
+#include <factory.hxx>
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-
-// service implementation
-extern Sequence< OUString > SAL_CALL vcl_session_getSupportedServiceNames();
-extern OUString SAL_CALL vcl_session_getImplementationName();
-extern Reference< XInterface > SAL_CALL vcl_session_createInstance( const Reference< XMultiServiceFactory > & );
-
-namespace vcl
-{
-extern Sequence< OUString > SAL_CALL FontIdentificator_getSupportedServiceNames();
-extern OUString SAL_CALL FontIdentificator_getImplementationName();
-extern Reference< XInterface > SAL_CALL FontIdentificator_createInstance( const Reference< XMultiServiceFactory > & );
-
-extern OUString SAL_CALL Clipboard_getImplementationName();
-extern Reference< XSingleServiceFactory > SAL_CALL Clipboard_createFactory( const Reference< XMultiServiceFactory > & );
-
-extern Sequence< OUString > SAL_CALL DragSource_getSupportedServiceNames();
-extern OUString SAL_CALL DragSource_getImplementationName();
-extern Reference< XInterface > SAL_CALL DragSource_createInstance( const Reference< XMultiServiceFactory > & );
-
-extern Sequence< OUString > SAL_CALL DropTarget_getSupportedServiceNames();
-extern OUString SAL_CALL DropTarget_getImplementationName();
-extern Reference< XInterface > SAL_CALL DropTarget_createInstance( const Reference< XMultiServiceFactory > & );
-
-}
 
 extern "C" {
 

@@ -987,18 +987,18 @@ struct PDFNewJobParameters
                          sal_uInt16 i_nPaperBin = 0xffff )
     : maPageSize( i_rSize ), mnPaperBin( i_nPaperBin ) {}
 
-    bool operator!=(const PDFNewJobParameters& rComp ) const
+    bool operator==(const PDFNewJobParameters& rComp ) const
     {
         Size aCompLSSize( rComp.maPageSize.Height(), rComp.maPageSize.Width() );
         return
-            (maPageSize != rComp.maPageSize && maPageSize != aCompLSSize)
-        ||  mnPaperBin != rComp.mnPaperBin
+            (maPageSize == rComp.maPageSize || maPageSize == aCompLSSize)
+        &&  mnPaperBin == rComp.mnPaperBin
         ;
     }
 
-    bool operator==(const PDFNewJobParameters& rComp) const
+    bool operator!=(const PDFNewJobParameters& rComp) const
     {
-        return ! this->operator!=(rComp);
+        return ! this->operator==(rComp);
     }
 };
 

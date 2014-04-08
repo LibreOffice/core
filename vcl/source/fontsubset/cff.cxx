@@ -332,7 +332,6 @@ public:
 
     // used by charstring converter
     void    setCharStringType( int);
-    void    fakeLocalSubrCount( int nLocalSubrs ) { maCffLocal[0].mnLocalSubrCount=nLocalSubrs;}
 protected:
     int     convert2Type1Ops( CffLocal*, const U8* pType2Ops, int nType2Len, U8* pType1Ops);
 private:
@@ -372,7 +371,6 @@ private:
     const char* getGlyphName( int nGlyphIndex);
 
     void    read2push( void);
-    void    pop2write( void);
     void    writeType1Val( ValType);
     void    writeTypeOp( int nTypeOp);
     void    writeTypeEsc( int nTypeOp);
@@ -385,19 +383,13 @@ public: // TODO: is public really needed?
     // TODO: add more checks
     void    push( ValType nVal) { mnValStack[ mnStackIdx++] = nVal;}
     ValType popVal( void) { return ((mnStackIdx>0) ? mnValStack[ --mnStackIdx] : 0);}
-    ValType peekVal( void) const { return ((mnStackIdx>0) ? mnValStack[ mnStackIdx-1] : 0);}
     ValType getVal( int nIndex) const { return mnValStack[ nIndex];}
     int     popInt( void);
-    int     peekInt( void) const;
-    int     getInt( int nIndex) const;
     int     size( void) const { return mnStackIdx;}
-    bool    empty( void) const { return !mnStackIdx;}
     void    clear( void) { mnStackIdx = 0;}
 
     // accessing the charstring hints
     void    addHints( bool bVerticalHints);
-    int     getHorzHintCount( void) const { return (mnHorzHintSize/2);}
-    int     getVertHintCount( void) const { return (mnHintSize-mnHorzHintSize)/2;}
 
     // accessing other charstring specifics
     bool    hasCharWidth( void) const { return (maCharWidth > 0);}
@@ -440,22 +432,6 @@ CffSubsetterContext::~CffSubsetterContext( void)
 inline int CffSubsetterContext::popInt( void)
 {
     const ValType aVal = popVal();
-    const int nInt = static_cast<int>(aVal);
-    assert( nInt == aVal);
-    return nInt;
-}
-
-inline int CffSubsetterContext::peekInt( void) const
-{
-    const ValType aVal = peekVal();
-    const int nInt = static_cast<int>(aVal);
-    assert( nInt == aVal);
-    return nInt;
-}
-
-inline int CffSubsetterContext::getInt( int nIndex) const
-{
-    const ValType aVal = getVal( nIndex);
     const int nInt = static_cast<int>(aVal);
     assert( nInt == aVal);
     return nInt;
@@ -721,12 +697,6 @@ void CffSubsetterContext::writeType1Val( ValType aVal)
     }
 
     mpWritePtr = pOut;
-}
-
-inline void CffSubsetterContext::pop2write( void)
-{
-    const ValType aVal = popVal();
-    writeType1Val( aVal);
 }
 
 inline void CffSubsetterContext::writeTypeOp( int nTypeOp)

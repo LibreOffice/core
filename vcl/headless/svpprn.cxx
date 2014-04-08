@@ -58,8 +58,6 @@ static OUString getPdfDir( const PrinterInfo& rInfo )
 
 inline int PtTo10Mu( int nPoints ) { return (int)((((double)nPoints)*35.27777778)+0.5); }
 
-inline int TenMuToPt( int nUnits ) { return (int)((((double)nUnits)/35.27777778)+0.5); }
-
 static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 {
     pJobSetup->meOrientation    = (Orientation)(rData.m_eOrientation == orientation::Landscape ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT);

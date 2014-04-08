@@ -61,7 +61,6 @@ class ImplFontCache;
 class HelpTextWindow;
 class ImplTBDragMgr;
 class ImplIdleMgr;
-class DbgWindow;
 class FloatingWindow;
 class AllSettings;
 class KeyCode;

@@ -27,6 +27,7 @@
 
 #include <vcl/svapp.hxx>
 
+#include <factory.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
 #include <salsession.hxx>

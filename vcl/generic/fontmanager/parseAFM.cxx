@@ -110,11 +110,6 @@ class FileInputStream
         if( m_nPos > 0 )
             m_nPos--;
     }
-    unsigned int tell() const { return m_nPos; }
-    void seek( unsigned int nPos )
-    // NOTE: do not check input data since only results of tell()
-    // get seek()ed in this file
-    { m_nPos = nPos; }
 };
 
 FileInputStream::FileInputStream( const char* pFilename ) :

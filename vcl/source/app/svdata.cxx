@@ -235,37 +235,6 @@ BlendFrameCache* ImplGetBlendFrameCache()
     return pSVData->mpBlendFrameCache;
 }
 
-class AccessBridgeCurrentContext: public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >
-{
-public:
-    AccessBridgeCurrentContext(
-        const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > &context ) :
-        m_prevContext( context ) {}
-
-    // XCurrentContext
-    virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-private:
-    com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_prevContext;
-};
-
-com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const OUString & Name )
-    throw (com::sun::star::uno::RuntimeException, std::exception)
-{
-    com::sun::star::uno::Any ret;
-    if ( Name == "java-vm.interaction-handler" )
-    {
-        // Currently, for accessbility no interaction handler shall be offered.
-        // There may be introduced later on a handler using native toolkits
-        // jbu->obr: Instantiate here your interaction handler
-    }
-    else if( m_prevContext.is() )
-    {
-        ret = m_prevContext->getValueByName( Name );
-    }
-    return ret;
-}
-
 #ifdef _WIN32
 bool HasAtHook();
 #endif

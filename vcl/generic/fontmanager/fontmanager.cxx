@@ -97,16 +97,6 @@ inline sal_uInt16 getUInt16BE( const sal_uInt8*& pBuffer )
     return nRet;
 }
 
-inline sal_uInt32 getUInt32BE( const sal_uInt8*& pBuffer )
-{
-    sal_uInt32 nRet = (((sal_uInt32)pBuffer[0]) << 24) |
-                      (((sal_uInt32)pBuffer[1]) << 16) |
-                      (((sal_uInt32)pBuffer[2]) << 8)  |
-                      (((sal_uInt32)pBuffer[3]) );
-    pBuffer += 4;
-    return nRet;
-}
-
 static FontWeight parseWeight( const OString& rWeight )
 {
     FontWeight eWeight = WEIGHT_DONTKNOW;

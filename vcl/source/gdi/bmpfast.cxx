@@ -34,7 +34,6 @@ public:
     void    SetRawPtr( PIXBYTE* pRawPtr )               { mpPixel = pRawPtr; }
     PIXBYTE* GetRawPtr( void ) const                    { return mpPixel; }
     void    AddByteOffset( int nByteOffset )            { mpPixel += nByteOffset; }
-    bool    operator<( const BasePixelPtr& rCmp ) const { return (mpPixel < rCmp.mpPixel); }
 
 protected:
    PIXBYTE* mpPixel;

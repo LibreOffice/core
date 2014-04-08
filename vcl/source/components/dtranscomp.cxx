@@ -21,6 +21,7 @@
 
 #include "vcl/svapp.hxx"
 
+#include "factory.hxx"
 #include "svdata.hxx"
 #include "salinst.hxx"
 
@@ -60,9 +61,6 @@ class GenericClipboard :
     Reference< ::com::sun::star::datatransfer::XTransferable >              m_aContents;
     Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner > m_aOwner;
     std::list< Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener > > m_aListeners;
-
-    void fireChangedContentsEvent();
-    void clearContents();
 
 public:
 
@@ -291,6 +289,7 @@ public:
     // XInitialization
     virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
 
+#if !defined UNX
     static Sequence< OUString > getSupportedServiceNames_static()
     {
         Sequence< OUString > aRet( 1 );
@@ -302,6 +301,7 @@ public:
     {
         return OUString("com.sun.star.datatransfer.dnd.VclGenericDragSource");
     }
+#endif
 };
 
 GenericDragSource::~GenericDragSource()
@@ -401,6 +401,7 @@ public:
     virtual sal_Int8    SAL_CALL getDefaultActions() throw(std::exception) SAL_OVERRIDE;
     virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) throw(std::exception) SAL_OVERRIDE;
 
+#if !defined UNX
     static Sequence< OUString > getSupportedServiceNames_static()
     {
         Sequence< OUString > aRet( 1 );
@@ -412,6 +413,7 @@ public:
     {
         return OUString("com.sun.star.datatransfer.dnd.VclGenericDropTarget");
     }
+#endif
 };
 
 GenericDropTarget::~GenericDropTarget()

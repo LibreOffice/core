@@ -64,8 +64,6 @@ private:
     sal_uInt32      mnOffset;
     sal_Char        mpFileBuffer[nBufferSize + 16];
 
-                    HexEncoder (); /* dont use */
-
 public:
 
     HexEncoder (osl::File* pFile);
@@ -134,8 +132,6 @@ private:
     sal_uInt32      mnColumn;
     sal_uInt32      mnOffset;
     sal_Char        mpFileBuffer[nBufferSize + 16];
-
-    Ascii85Encoder (); /* dont use */
 
     inline void     PutByte (sal_uInt8 nByte);
     inline void     PutEOD ();
@@ -286,7 +282,6 @@ private:
     sal_uInt32      mnOffset;
     sal_uInt32      mdwShift;
 
-    LZWEncoder ();
     void            WriteBits (sal_uInt16 nCode, sal_uInt16 nCodeLen);
 
 public:

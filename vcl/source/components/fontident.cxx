@@ -20,6 +20,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/font.hxx"
 
+#include "factory.hxx"
 #include "svdata.hxx"
 
 #include <com/sun/star/lang/XServiceInfo.hpp>

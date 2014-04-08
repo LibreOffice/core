@@ -107,7 +107,9 @@ GtkSalSystem::countScreenMonitors()
 
 // Including gdkx.h kills us with the Window / XWindow conflict
 extern "C" {
+#if GTK_CHECK_VERSION(3,0,0)
     GType gdk_x11_display_get_type (void);
+#endif
     int   gdk_x11_screen_get_screen_number (GdkScreen *screen);
 }
 

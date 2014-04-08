@@ -36,6 +36,7 @@
 #include <i18nlangtag/lang.h>
 
 #include <tools/debug.hxx>
+#include <vcl/svapp.hxx>
 
 #include <limits.h>
 

@@ -50,16 +50,6 @@ extern "C" char * XSetIMValues(XIM im, ...);
 // kinput2 IME needs special key handling since key release events are filtered in
 // preeditmode and XmbResetIC does not work
 
-bool
-IMServerKinput2 ()
-{
-    const static char* p_xmodifiers = getenv ("XMODIFIERS");
-    const static bool  b_kinput2    =    (p_xmodifiers != NULL)
-                                      && (strcmp(p_xmodifiers, "@im=kinput2") == 0);
-
-    return b_kinput2;
-}
-
 class XKeyEventOp : XKeyEvent
 {
     private:
@@ -425,84 +415,6 @@ SalI18N_InputMethod::HandleDestroyIM()
 {
     mbUseable       = False;
     maMethod        = NULL;
-}
-
-// add a connection watch into the SalXLib yieldTable to allow iiimp
-// connection processing: soffice waits in select() not in XNextEvent(), so
-// there may be requests pending on the iiimp internal connection that will
-// not be processed until XNextEvent is called the next time. If we do not
-// have the focus because the atok12 lookup choice aux window has it we stay
-// deaf and dump otherwise.
-
-int
-InputMethod_HasPendingEvent(int nFileDescriptor, void *pData)
-{
-    if (pData == NULL)
-        return 0;
-
-    struct pollfd aFileDescriptor;
-    #ifdef SOLARIS
-    nfds_t        nNumDescriptor = 1;
-    #else
-    unsigned int      nNumDescriptor = 1;
-    #endif
-    aFileDescriptor.fd      = nFileDescriptor;
-    aFileDescriptor.events  = POLLRDNORM;
-    aFileDescriptor.revents = 0;
-
-    int nPoll = poll (&aFileDescriptor, nNumDescriptor, 0 /* timeout */ );
-
-    if (nPoll > 0)
-    {
-        /* at least some conditions in revent are set */
-        if (   (aFileDescriptor.revents & POLLHUP)
-            || (aFileDescriptor.revents & POLLERR)
-            || (aFileDescriptor.revents & POLLNVAL))
-            return 0; /* oops error condition set */
-
-        if (aFileDescriptor.revents & POLLRDNORM)
-            return 1; /* success */
-    }
-
-    /* nPoll == 0 means timeout, nPoll < 0 means error */
-    return 0;
-}
-
-int
-InputMethod_IsEventQueued(int nFileDescriptor, void *pData)
-{
-    return InputMethod_HasPendingEvent (nFileDescriptor, pData);
-}
-
-int
-InputMethod_HandleNextEvent(int nFileDescriptor, void *pData)
-{
-    if (pData != NULL)
-        XProcessInternalConnection((Display*)pData, nFileDescriptor);
-
-    return 0;
-}
-
-extern "C" void
-InputMethod_ConnectionWatchProc (Display *pDisplay, XPointer pClientData,
-    int nFileDescriptor, Bool bOpening, XPointer*)
-{
-    SalXLib *pConnectionHandler = (SalXLib*)pClientData;
-
-    if (pConnectionHandler == NULL)
-        return;
-
-    if (bOpening)
-    {
-        pConnectionHandler->Insert (nFileDescriptor, pDisplay,
-                                    InputMethod_HasPendingEvent,
-                                    InputMethod_IsEventQueued,
-                                    InputMethod_HandleNextEvent);
-    }
-    else
-    {
-        pConnectionHandler->Remove (nFileDescriptor);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

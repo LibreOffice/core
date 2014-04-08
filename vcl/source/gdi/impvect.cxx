@@ -84,20 +84,7 @@ struct ImplColorSet
     BitmapColor maColor;
     sal_uInt16      mnIndex;
     bool        mbSet;
-
-    bool        operator<( const ImplColorSet& rSet ) const;
-    bool        operator>( const ImplColorSet& rSet ) const;
 };
-
-inline bool ImplColorSet::operator<( const ImplColorSet& rSet ) const
-{
-    return( mbSet && ( !rSet.mbSet || ( maColor.GetLuminance() > rSet.maColor.GetLuminance() ) ) );
-}
-
-inline bool ImplColorSet::operator>( const ImplColorSet& rSet ) const
-{
-    return( !mbSet || ( rSet.mbSet && maColor.GetLuminance() < rSet.maColor.GetLuminance() ) );
-}
 
 extern "C" int SAL_CALL ImplColorSetCmpFnc( const void* p1, const void* p2 )
 {
@@ -196,8 +183,6 @@ private:
     Scanline*       mpScan;
     long            mnWidth;
     long            mnHeight;
-
-                    ImplVectMap() {};
 
 public:
 

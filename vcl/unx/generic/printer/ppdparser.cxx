@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <boost/noncopyable.hpp>
 #include <boost/unordered_map.hpp>
 
 #include <comphelper/string.hxx>
@@ -267,15 +268,11 @@ namespace
     struct thePPDCache : public rtl::Static<PPDCache, thePPDCache> {};
 }
 
-class PPDDecompressStream
+class PPDDecompressStream: private boost::noncopyable
 {
     SvFileStream*       mpFileStream;
     SvMemoryStream*     mpMemStream;
     OUString       maFileName;
-
-    // forbid copying
-    PPDDecompressStream( const PPDDecompressStream& );
-    PPDDecompressStream& operator=(const PPDDecompressStream& );
 
     public:
     PPDDecompressStream( const OUString& rFile );

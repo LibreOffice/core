@@ -100,7 +100,6 @@ private:
     sal_uInt16          mnLineMode;
     sal_uInt16          mnStartLines;
     void*           mpCustomizeData;
-    bool            mbCustomizeMode;
     bool            mbResizeMode;
     bool            mbShowDragRect;
 
@@ -133,9 +132,6 @@ public:
     void            HideDragRect() { if ( mbShowDragRect ) mpDragBox->HideTracking(); }
     void            UpdateDragRect();
                     DECL_LINK( SelectHdl, Accelerator* );
-
-    bool            IsCustomizeMode() { return mbCustomizeMode; }
-    bool            IsResizeMode() { return mbResizeMode; }
 };
 
 static ImplTBDragMgr* ImplGetTBDragMgr()
@@ -1131,7 +1127,6 @@ ImplTBDragMgr::ImplTBDragMgr()
     , mnLineMode(0)
     , mnStartLines(0)
     , mpCustomizeData(NULL)
-    , mbCustomizeMode(false)
     , mbResizeMode(false)
     , mbShowDragRect(false)
 {

@@ -60,16 +60,11 @@ class SalPolyLine
             XPoint              Points_[STATIC_POINTS];
             XPoint             *pFirst_;
 public:
-    inline                      SalPolyLine( sal_uLong nPoints );
     inline                      SalPolyLine( sal_uLong nPoints, const SalPoint *p );
     inline                      ~SalPolyLine();
     inline  XPoint             &operator [] ( sal_uLong n ) const
                                 { return pFirst_[n]; }
 };
-
-inline SalPolyLine::SalPolyLine( sal_uLong nPoints )
-    : pFirst_( nPoints+1 > STATIC_POINTS ? new XPoint[nPoints+1] : Points_ )
-{}
 
 inline SalPolyLine::SalPolyLine( sal_uLong nPoints, const SalPoint *p )
     : pFirst_( nPoints+1 > STATIC_POINTS ? new XPoint[nPoints+1] : Points_ )

@@ -72,8 +72,6 @@ private:
     sal_uInt32          ColorOf (BitmapColor& rColor) const;
     sal_uInt8           GrayOf  (BitmapColor& rColor) const;
 
-    SalPrinterBmp ();
-
     public:
 
                             SalPrinterBmp (BitmapBuffer* pBitmap);
@@ -568,7 +566,6 @@ public:
     virtual sal_IntPtr      GetFontId() const SAL_OVERRIDE { return mnFontId; }
     virtual PhysicalFontFace*   Clone() const SAL_OVERRIDE { return new ImplPspFontData( *this ); }
     virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const SAL_OVERRIDE;
-    static bool             CheckFontData( const PhysicalFontFace& r ) { return r.CheckMagic( PSPFD_MAGIC ); }
 };
 
 ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )

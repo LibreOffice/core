@@ -80,8 +80,6 @@ public:
     virtual void    PopupModeEnd() SAL_OVERRIDE;
     virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
     virtual bool    Close() SAL_OVERRIDE;
-
-    sal_uLong GetLastTicks() const { return mnLastTicks; }
 };
 
 ImplDockFloatWin::ImplDockFloatWin( Window* pParent, WinBits nWinBits,

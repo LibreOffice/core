@@ -31,11 +31,6 @@
 
 #define BUFFER_SIZE  4096
 
-void* GetScanline( void* pJPEGWriter, long nY )
-{
-    return ( (JPEGWriter*) pJPEGWriter )->GetScanline( nY );
-}
-
 struct DestinationManagerStruct
 {
     jpeg_destination_mgr pub;         /* public fields */

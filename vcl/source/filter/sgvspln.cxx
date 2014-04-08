@@ -22,6 +22,8 @@
 #include <tools/poly.hxx>
 #include <boost/scoped_array.hpp>
 
+#include <sgvspln.hxx>
+
 extern "C" {
 
 /*.pn 277 */

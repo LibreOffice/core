@@ -2528,11 +2528,6 @@ LanguageType X11SalFrame::GetInputLanguage()
 
 // Settings
 
-inline Color getColorFromLong( long nColor )
-{
-    return Color( (nColor & 0xff), (nColor & 0xff00)>>8, (nColor & 0xff0000)>>16);
-}
-
 void X11SalFrame::UpdateSettings( AllSettings& rSettings )
 {
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();

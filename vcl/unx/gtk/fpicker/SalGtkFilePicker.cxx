@@ -377,8 +377,6 @@ public:
     {
     }
 
-    FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters );
-
     OUString     getTitle() const { return m_sTitle; }
     OUString     getFilter() const { return m_sFilter; }
 
@@ -395,12 +393,6 @@ public:
     const UnoFilterEntry*   beginSubFilters() const { return m_aSubFilters.getConstArray(); }
     const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
 };
-
-FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters )
-    :m_sTitle( _rTitle )
-    ,m_aSubFilters( _rSubFilters )
-{
-}
 
 bool FilterEntry::hasSubFilters() const
 {

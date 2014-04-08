@@ -19,6 +19,7 @@
 
 #include "JpegReader.hxx"
 #include "JpegWriter.hxx"
+#include "jpeg.hxx"
 
 #include <vcl/bmpacc.hxx>
 #include <vcl/FilterConfigItem.hxx>

@@ -166,10 +166,12 @@ struct ImplPostEventData
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maKeyEvent( rKeyEvent ) {}
        ImplPostEventData( sal_uLong nEvent, const Window* pWin, const MouseEvent& rMouseEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maMouseEvent( rMouseEvent ) {}
+#if !HAVE_FEATURE_DESKTOP
        ImplPostEventData( sal_uLong nEvent, const Window* pWin, const ZoomEvent& rZoomEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maZoomEvent( rZoomEvent ) {}
        ImplPostEventData( sal_uLong nEvent, const Window* pWin, const ScrollEvent& rScrollEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maScrollEvent( rScrollEvent ) {}
+#endif
 
     ~ImplPostEventData() {}
 };

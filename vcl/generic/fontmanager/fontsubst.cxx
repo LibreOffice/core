@@ -37,12 +37,6 @@
 
 // platform specific font substitution hooks
 
-struct FontSelectPatternAttributesHash
-{
-    size_t operator()(const FontSelectPatternAttributes& rAttributes) const
-        { return rAttributes.hashCode(); }
-};
-
 class FcPreMatchSubstititution
 :   public ImplPreMatchFontSubstitution
 {

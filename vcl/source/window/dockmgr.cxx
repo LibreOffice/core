@@ -68,8 +68,6 @@ public:
     virtual void    setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
                                      sal_uInt16 nFlags = WINDOW_POSSIZE_ALL ) SAL_OVERRIDE;
-
-    sal_uLong GetLastTicks() const { return mnLastTicks; }
 };
 
 ImplDockFloatWin2::ImplDockFloatWin2( Window* pParent, WinBits nWinBits,
