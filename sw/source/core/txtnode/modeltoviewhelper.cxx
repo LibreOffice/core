@@ -37,7 +37,10 @@ struct FieldResult
 {
     sal_Int32 m_nFieldPos;
     OUString m_sExpand;
-    enum { FIELD, FOOTNOTE } m_eType;
+    enum { NONE, FIELD, FOOTNOTE } m_eType;
+    explicit FieldResult(sal_Int32 const nPos)
+        : m_nFieldPos(nPos), m_eType(NONE)
+    { }
 };
 
 class sortfieldresults :
@@ -137,8 +140,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
                     aBlocks.end(), containsPos(nDummyCharPos));
                 if (aFind != aBlocks.end())
                 {
-                    FieldResult aFieldResult;
-                    aFieldResult.m_nFieldPos = nDummyCharPos;
+                    FieldResult aFieldResult(nDummyCharPos);
                     switch (pAttr->Which())
                     {
                         case RES_TXTATR_FIELD:
@@ -190,8 +192,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
                     containsPos(nDummyCharPos));
                 if (aFind != aBlocks.end())
                 {
-                    FieldResult aFieldResult;
-                    aFieldResult.m_nFieldPos = nDummyCharPos;
+                    FieldResult aFieldResult(nDummyCharPos);
                     aFieldResult.m_sExpand = (eMode & REPLACEMODE)
                         ? OUString(CHAR_ZWSP)
                         : sw::mark::ExpandFieldmark(pMark);
@@ -228,6 +229,8 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
                     break;
                     case FieldResult::FOOTNOTE:
                         m_FootnotePositions.push_back(viewPos);
+                    break;
+                    case FieldResult::NONE: /*ignore*/
                     break;
                 }
                 nOffset += j->m_sExpand.getLength() - 1;

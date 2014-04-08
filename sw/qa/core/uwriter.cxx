@@ -298,14 +298,8 @@ void SwDocTest::testModelToViewHelper()
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT_EQUAL(OUString("AAAAA BBBBB  CCCCC  DDDDD"),
                 sViewText);
-            // ??? is it a problem that we get the positions without
-            // EXPANDFOOTNOTE when it's completely removed?
-            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
                 aModelToViewHelper.getFootnotePositions().size());
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12),
-                aModelToViewHelper.getFootnotePositions()[0]);
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(19),
-                aModelToViewHelper.getFootnotePositions()[1]);
             CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
                 aModelToViewHelper.getFieldPositions().size());
         }
