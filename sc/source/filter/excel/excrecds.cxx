@@ -520,6 +520,33 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
             XML_pivotTables, pTabProtect->isOptionEnabled( ScTableProtection::PIVOT_TABLES ) ? XclXmlUtils::ToPsz( false ) : NULL,
             XML_selectUnlockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_UNLOCKED_CELLS ) ? NULL : XclXmlUtils::ToPsz( true ),
             FSEND );
+
+        const ::std::vector<ScEnhancedProtection>& rProts( pTabProtect->getEnhancedProtection());
+        if (!rProts.empty())
+        {
+            rWorksheet->startElement( XML_protectedRanges, FSEND);
+            for (::std::vector<ScEnhancedProtection>::const_iterator it( rProts.begin()), end( rProts.end());
+                    it != end; ++it)
+            {
+                SAL_WARN_IF( (*it).maSecurityDescriptorXML.isEmpty() && !(*it).maSecurityDescriptor.empty(),
+                        "sc.filter", "XclExpSheetProtection::SaveXml: loosing BIFF security descriptor");
+                rWorksheet->singleElement( XML_protectedRange,
+                        XML_name, (*it).maTitle.isEmpty() ? NULL : XclXmlUtils::ToOString( (*it).maTitle).getStr(),
+                        XML_securityDescriptor, (*it).maSecurityDescriptorXML.isEmpty() ? NULL : XclXmlUtils::ToOString( (*it).maSecurityDescriptorXML).getStr(),
+                        /* XXX 'password' is not part of OOXML, but Excel2013
+                         * writes it if loaded from BIFF, in which case
+                         * 'algorithmName', 'hashValue', 'saltValue' and
+                         * 'spinCount' are absent; so do we if it was present. */
+                        XML_password, (*it).mnPasswordVerifier ? OString::number( (*it).mnPasswordVerifier, 16).getStr() : NULL,
+                        XML_algorithmName, (*it).maAlgorithmName.isEmpty() ? NULL : XclXmlUtils::ToOString( (*it).maAlgorithmName).getStr(),
+                        XML_hashValue, (*it).maHashValue.isEmpty() ? NULL : XclXmlUtils::ToOString( (*it).maHashValue).getStr(),
+                        XML_saltValue, (*it).maSaltValue.isEmpty() ? NULL : XclXmlUtils::ToOString( (*it).maSaltValue).getStr(),
+                        XML_spinCount, (*it).mnSpinCount ? OString::number( (*it).mnSpinCount).getStr() : NULL,
+                        XML_sqref, (*it).maRangeList.Is() ? XclXmlUtils::ToOString( *(*it).maRangeList).getStr() : NULL,
+                        FSEND);
+            }
+            rWorksheet->endElement( XML_protectedRanges);
+        }
     }
 }
 
