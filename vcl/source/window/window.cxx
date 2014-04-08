@@ -854,6 +854,23 @@ static bool ImplDoTiledRendering()
 #endif
 }
 
+static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
+{
+    sal_Int32 nResult = 1;
+
+#ifndef MACOSX
+    // Setting of HiDPI is unfortunately all only a heuristic; and to add
+    // insult to an injury, the system is constantly lying to us about
+    // the DPI and whatnot
+    // eg. fdo#77059 - set the value from which we do consider the
+    // screen hi-dpi to greater than 168
+    if (nDPI > 168)
+        nResult = std::max(sal_Int32(1), (nDPI) / 96);
+#endif
+
+    return nResult;
+}
+
 void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
     DBG_ASSERT( mpWindowImpl->mbFrame || pParent, "Window::Window(): pParent == NULL" );
@@ -1108,11 +1125,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
     }
 
     // setup the scale factor for Hi-DPI displays
-#ifdef MACOSX
-    mnDPIScaleFactor = 1;
-#else
-    mnDPIScaleFactor = std::max((sal_Int32)1, (mpWindowImpl->mpFrameData->mnDPIY + 48) / 96);
-#endif
+    mnDPIScaleFactor = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
+
     const StyleSettings& rStyleSettings = mxSettings->GetStyleSettings();
     sal_uInt16 nScreenZoom = rStyleSettings.GetScreenZoom();
     mnDPIX          = (mpWindowImpl->mpFrameData->mnDPIX*nScreenZoom)/100;
@@ -1810,11 +1824,7 @@ void Window::ImplInitResolutionSettings()
         mnDPIY = (mpWindowImpl->mpFrameData->mnDPIY*nScreenZoom)/100;
 
         // setup the scale factor for Hi-DPI displays
-#ifdef MACOSX
-        mnDPIScaleFactor = 1;
-#else
-        mnDPIScaleFactor = std::max((sal_Int32)1, (mpWindowImpl->mpFrameData->mnDPIY + 48) / 96);
-#endif
+        mnDPIScaleFactor = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
         SetPointFont( rStyleSettings.GetAppFont() );
     }
     else if ( mpWindowImpl->mpParent )
