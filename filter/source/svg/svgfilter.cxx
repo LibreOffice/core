@@ -236,7 +236,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 
                 if (xSelection->getSelection() >>= aSelection)
                 {
-                    bGotSelection = (sal_True == ( aSelection >>= maShapeSelection ));
+                    bGotSelection = ( aSelection >>= maShapeSelection );
                 }
             }
         }
