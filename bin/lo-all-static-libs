@@ -45,6 +45,7 @@ echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $foolibs \
      $WORKDIR/LinkTarget/StaticLibrary/lib*.a \
      $androidlibs \
+     $WORKDIR/UnpackedTarball/glew/lib/*.a \
      $WORKDIR/UnpackedTarball/icu/source/lib/*.a \
      $WORKDIR/UnpackedTarball/lcms2/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/libabw/src/lib/.libs/*.a \
