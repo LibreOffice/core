@@ -37,11 +37,14 @@ String createEntryString(const ScRangeNameLine& rLine)
     return aRet;
 }
 
+ScRangeManagerTable::InitListener::~InitListener() {}
+
 ScRangeManagerTable::ScRangeManagerTable( SvxSimpleTableContainer& rParent, boost::ptr_map<OUString, ScRangeName>& rRangeMap, const ScAddress& rPos ):
     SvxSimpleTable( rParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
     maGlobalString( ScGlobal::GetRscString(STR_GLOBAL_SCOPE)),
     mrRangeMap( rRangeMap ),
-    maPos( rPos )
+    maPos( rPos ),
+    mpInitListener(NULL)
 {
     static long aStaticTabs[] = {3, 0, 0, 0 };
     SetTabs( &aStaticTabs[0], MAP_PIXEL );
@@ -84,6 +87,9 @@ void ScRangeManagerTable::StateChanged( StateChangedType nStateChange )
             SetCurEntry(GetEntryOnPos(0));
             CheckForFormulaString();
         }
+
+        if (mpInitListener)
+            mpInitListener->tableInitialized();
     }
 }
 
@@ -105,6 +111,11 @@ void ScRangeManagerTable::setColWidths()
 ScRangeManagerTable::~ScRangeManagerTable()
 {
     Clear();
+}
+
+void ScRangeManagerTable::setInitListener( InitListener* pListener )
+{
+    mpInitListener = pListener;
 }
 
 void ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry)
@@ -181,7 +192,6 @@ void ScRangeManagerTable::CheckForFormulaString()
             SetEntryText(aFormulaString, pEntry, 1);
             maCalculatedFormulaEntries.insert( std::pair<SvTreeListEntry*, bool>(pEntry, true) );
         }
-
     }
 }
 
