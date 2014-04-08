@@ -91,7 +91,6 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,openssl,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
-	external/openssl/CVE-2014-0160.patch \
 	$(if $(filter LINUX FREEBSD ANDROID,$(OS)),external/openssl/openssllnx.patch) \
 	$(if $(filter WNTGCC,$(OS)$(COM)),external/openssl/opensslmingw.patch) \
 	$(if $(filter MSC,$(COM)),external/openssl/opensslwnt.patch) \
