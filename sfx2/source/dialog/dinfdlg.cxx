@@ -2101,10 +2101,14 @@ bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
     }
 
     bModified = true; //!!!
-    if ( bModified )
-        rSet.Put( *pInfo );
-    if ( bMustDelete )
-        delete pInfo;
+
+    if (pInfo)
+    {
+        if ( bModified )
+            rSet.Put( *pInfo );
+        if ( bMustDelete )
+            delete pInfo;
+    }
     return bModified;
 }
 
