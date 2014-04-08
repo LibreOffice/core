@@ -85,14 +85,17 @@ struct SOParagraph
 
 class PropStateValue : public PropValue
 {
-    protected :
+public:
+    PropStateValue()
+        : PropValue()
+        , ePropState(css::beans::PropertyState_AMBIGUOUS_VALUE)
+    {
+    }
+protected:
+    css::beans::PropertyState ePropState;
+    css::uno::Reference < css::beans::XPropertyState > mXPropState;
 
-        ::com::sun::star::beans::PropertyState                  ePropState;
-        ::com::sun::star::uno::Reference
-            < ::com::sun::star::beans::XPropertyState >         mXPropState;
-
-        sal_Bool    ImplGetPropertyValue( const OUString& rString, sal_Bool bGetPropertyState = sal_True );
-
+    sal_Bool    ImplGetPropertyValue( const OUString& rString, sal_Bool bGetPropertyState = sal_True );
 };
 
 struct FieldEntry
