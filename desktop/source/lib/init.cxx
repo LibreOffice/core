@@ -360,6 +360,7 @@ static int lo_initialize(LibreOffice* pThis, const char* pAppPath)
 
     try
     {
+        osl_setCommandArgs(0, NULL);
         initialize_uno(aAppURL);
         force_c_locale();
 
