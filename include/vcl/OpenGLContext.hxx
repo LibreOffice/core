@@ -103,6 +103,8 @@ public:
     void setWinSize(const Size& rSize);
     GLWindow& getOpenGLWindow();
 
+    void renderToFile();
+
 private:
     SAL_DLLPRIVATE bool initWindow();
 

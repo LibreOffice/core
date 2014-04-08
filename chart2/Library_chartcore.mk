@@ -249,6 +249,4 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/XMLRangeHelper \
 ))
 
-
-
 # vim: set noet sw=4 ts=4:

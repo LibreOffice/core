@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <GL/glew.h>
+
 #include "3DBarChart.hxx"
 
 #include <glm/glm.hpp>

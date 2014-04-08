@@ -20,14 +20,21 @@ Bar::Bar(const glm::mat4& rPosition):
 
 namespace temporary {
 
+TemporaryContext::TemporaryContext():
+    miWidth(200),
+    miHeight(200)
+{
+}
+
 void TemporaryContext::init()
 {
     maContext.init();
+    maContext.setWinSize(Size(miWidth, miHeight));
 }
 
 void TemporaryContext::render()
 {
-
+    maContext.renderToFile();
 }
 
 }

@@ -11,6 +11,12 @@
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
+#include <boost/scoped_array.hpp>
+#include <vcl/pngwrite.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/bitmapex.hxx>
+
 using namespace com::sun::star;
 
 OpenGLContext::OpenGLContext():
@@ -470,11 +476,58 @@ void OpenGLContext::setWinSize(const Size& rSize)
     if(m_pWindow)
         m_pWindow->SetSizePixel(rSize);
     m_pChildWindow->SetSizePixel(rSize);
+
+    m_aGLWin.Width = rSize.Width();
+    m_aGLWin.Height = rSize.Height();
 }
 
 GLWindow& OpenGLContext::getOpenGLWindow()
 {
     return m_aGLWin;
+}
+
+void OpenGLContext::renderToFile()
+{
+    int iWidth = m_aGLWin.Width;
+    int iHeight = m_aGLWin.Height;
+    boost::scoped_array<sal_uInt8> buf(new sal_uInt8[iWidth * iHeight * 4]);
+    glReadPixels(0, 0, iWidth, iHeight, GL_BGRA, GL_UNSIGNED_BYTE, buf.get());
+
+    Bitmap aBitmap( Size(iWidth, iHeight), 24 );
+    AlphaMask aAlpha( Size(iWidth, iHeight) );
+
+    {
+        Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+        AlphaMask::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
+
+        size_t nCurPos = 0;
+        for( int y = 0; y < iHeight; ++y)
+        {
+            Scanline pScan = pWriteAccess->GetScanline(y);
+            Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
+            for( int x = 0; x < iWidth; ++x )
+            {
+                *pScan++ = buf[nCurPos];
+                *pScan++ = buf[nCurPos+1];
+                *pScan++ = buf[nCurPos+2];
+
+                nCurPos += 3;
+                *pAlphaScan++ = static_cast<sal_uInt8>( 255 - buf[nCurPos++] );
+            }
+        }
+    }
+
+    BitmapEx aBmp(aBitmap, aAlpha);
+    static int nIdx = 0;
+    OUString aName = OUString( "file:///home/moggi/Documents/work/text" ) + OUString::number( nIdx++ ) + ".png";
+    try {
+        vcl::PNGWriter aWriter( aBmp );
+        SvFileStream sOutput( aName, STREAM_WRITE );
+        aWriter.Write( sOutput );
+        sOutput.Close();
+    } catch (...) {
+        SAL_WARN("chart2.opengl", "Error writing png to " << aName);
+    }
 }
 
 #if defined( WNT )

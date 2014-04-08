@@ -32,6 +32,7 @@ $(eval $(call gb_Library_use_libraries,vclopengl,\
     cppu \
     cppuhelper \
     sal \
+	tl \
     vcl \
     $(gb_UWINAPI) \
 ))

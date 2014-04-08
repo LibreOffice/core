@@ -71,12 +71,16 @@ namespace temporary {
 class TemporaryContext
 {
 public:
+    TemporaryContext();
 
     void init();
     void render();
 
 private:
     OpenGLContext maContext;
+
+    int miWidth;
+    int miHeight;
 };
 
 }
