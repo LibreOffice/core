@@ -410,7 +410,8 @@ void SwDocTest::testModelToViewHelper()
         (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(sal_Int32(0));
         m_pDoc->InsertString(aPaM, OUString("CCCCC"));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
-        CPPUNIT_ASSERT_EQUAL(11, pTxtNode->GetTxt().getLength());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11),
+                pTxtNode->GetTxt().getLength());
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | EXPANDFOOTNOTE);
