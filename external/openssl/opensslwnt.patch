@@ -96,7 +96,7 @@
 --- misc/openssl-0.9.8v/util/pl/VC-32.pl	2010-02-04 02:10:24.000000000 +0100
 +++ build/openssl-0.9.8v/util/pl/VC-32.pl	2010-03-26 12:04:20.977172300 +0100
 @@ -32,7 +32,7 @@
- $l_flags =~ s/-L(\S+)/\/libpath:$1/g;
+ my $ff = "";
  
  # C compiler stuff
 -$cc='cl';
@@ -104,7 +104,7 @@
  if ($FLAVOR =~ /WIN64/)
      {
      # Note that we currently don't have /WX on Win64! There is a lot of
-@@ -103,21 +103,21 @@
+@@ -103,22 +103,22 @@
      }
  
      $cc='$(CC)';
@@ -125,10 +125,11 @@
 +    $base_cflags= " $mf_cflag";
 -    my $f = $shlib || $fips ?' /MD':' /MT';
 -    $lib_cflag='/Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
--    $opt_cflags=$f.' /Ox /O2 /Ob2';
--    $dbg_cflags=$f.'d /Od -DDEBUG -D_DEBUG';
 +    my $f = $shlib || $fips ? (($ENV{MSVC_USE_DEBUG_RUNTIME} eq "TRUE") ? ' -MDd' : ' -MD' ):' -MT';
 +    $lib_cflag='-Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
+     $ff = "/fixed";
+-    $opt_cflags=$f.' /Ox /O2 /Ob2';
+-    $dbg_cflags=$f.'d /Od -DDEBUG -D_DEBUG';
 +    $opt_cflags=$f.' -Ox -O2 -Ob2';
 +    $dbg_cflags=$f.'d -Od -DDEBUG -D_DEBUG';
      $lflags="/nologo /subsystem:console /opt:ref";
