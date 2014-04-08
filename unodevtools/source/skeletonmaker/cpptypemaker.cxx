@@ -413,33 +413,6 @@ void printSetPropertyMixinBody(
     o  << "}\n\n";
 }
 
-void generateXPropertySetBodies(std::ostream& o,
-                                const OString & classname,
-                                const OString & interfaceName);
-void generateXFastPropertySetBodies(std::ostream& o,
-                                    const OString & classname,
-                                    const OString & interfaceName);
-void generateXPropertyAccessBodies(std::ostream& o,
-                                   const OString & classname,
-                                   const OString & interfaceName);
-
-void generateXAddInBodies(std::ostream& o, const OString & classname);
-
-void generateXLocalizable(std::ostream& o, const OString & classname);
-
-void generateXCompatibilityNamesBodies(std::ostream& o, const OString & classname);
-
-void generateXInitialization(std::ostream& o, const OString & classname);
-
-void generateXDispatch(std::ostream& o,
-                       const OString & classname,
-                       const ProtocolCmdMap & protocolCmdMap);
-
-void generateXDispatchProvider(std::ostream& o,
-                               const OString & classname,
-                               const ProtocolCmdMap & protocolCmdMap);
-
-
 void printMethods(std::ostream & o,
     ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     OUString const & name, codemaker::GeneratedTypeSet & generated,

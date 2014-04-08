@@ -410,10 +410,6 @@ void printSetPropertyMixinBody(
     o  << indentation << "}\n\n";
 }
 
-void generateXPropertySetBodies(std::ostream& o);
-void generateXFastPropertySetBodies(std::ostream& o);
-void generateXPropertyAccessBodies(std::ostream& o);
-
 void printMethods(std::ostream & o,
     ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     OUString const & name,
@@ -625,10 +621,6 @@ void printConstructors(
         o << ";\n";
     }
 }
-
-void generateDocumentation(std::ostream & o,
-    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    OString const & type);
 
 void printServiceMembers(
     std::ostream & o, ProgramOptions const & options,

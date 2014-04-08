@@ -48,6 +48,10 @@ void generateDocumentation(std::ostream & o,
 
 void generateSkeleton(ProgramOptions const & options, rtl::Reference< TypeManager > const & manager, std::vector< OString > const & types);
 
+void generateXPropertySetBodies(std::ostream& o);
+void generateXFastPropertySetBodies(std::ostream& o);
+void generateXPropertyAccessBodies(std::ostream& o);
+
 } }
 
 #endif // INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONJAVA_HXX

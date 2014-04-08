@@ -63,6 +63,32 @@ void generateCalcAddin(ProgramOptions const & options,
                        rtl::Reference< TypeManager > const & manager,
                        std::vector< OString > const & types);
 
+void generateXPropertySetBodies(std::ostream& o,
+                                const OString & classname,
+                                const OString & interfaceName);
+void generateXFastPropertySetBodies(std::ostream& o,
+                                    const OString & classname,
+                                    const OString & interfaceName);
+void generateXPropertyAccessBodies(std::ostream& o,
+                                   const OString & classname,
+                                   const OString & interfaceName);
+
+void generateXAddInBodies(std::ostream& o, const OString & classname);
+
+void generateXLocalizable(std::ostream& o, const OString & classname);
+
+void generateXCompatibilityNamesBodies(std::ostream& o, const OString & classname);
+
+void generateXInitialization(std::ostream& o, const OString & classname);
+
+void generateXDispatch(std::ostream& o,
+                       const OString & classname,
+                       const ProtocolCmdMap & protocolCmdMap);
+
+void generateXDispatchProvider(std::ostream& o,
+                               const OString & classname,
+                               const ProtocolCmdMap & protocolCmdMap);
+
 } }
 
 #endif // INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCPP_HXX
