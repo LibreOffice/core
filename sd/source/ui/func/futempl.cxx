@@ -255,7 +255,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         {
             if( !SD_MOD()->GetWaterCan() )
             {
-                if( pArgs->GetItemState( nSId ) == SFX_ITEM_SET )
+                if (pArgs && pArgs->GetItemState( nSId ) == SFX_ITEM_SET)
                 {
                     aStyleName = ( ( (const SfxStringItem &) pArgs->Get( nSId ) ).GetValue() );
                     SD_MOD()->SetWaterCan( sal_True );
