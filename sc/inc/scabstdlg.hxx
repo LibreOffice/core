@@ -493,7 +493,7 @@ public:
 
     // for tabpage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
-    virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) = 0;
+    virtual GetTabPageRanges            GetTabPageRangesFunc() = 0;
 
 protected:
     ~ScAbstractDialogFactory() {}

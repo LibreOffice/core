@@ -56,7 +56,6 @@
 #include "subtdlg.hxx"
 #include "textdlgs.hxx"
 #include "validate.hxx"
-#include "validate.hrc"
 #include "sortdlg.hxx"
 #include "textimportoptions.hxx"
 #include "opredlin.hxx"
@@ -1061,18 +1060,9 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
     return 0;
 }
 
-GetTabPageRanges ScAbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nId )
+GetTabPageRanges ScAbstractDialogFactory_Impl::GetTabPageRangesFunc()
 {
-    switch ( nId )
-    {
-    case TP_VALIDATION_VALUES :
-            return ScTPValidationValue::GetRanges;
-            //break;
-        default:
-            break;
-    }
-
-    return 0;
+    return ScTPValidationValue::GetRanges;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

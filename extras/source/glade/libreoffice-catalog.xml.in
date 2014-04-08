@@ -532,13 +532,13 @@
     <glade-widget-class title="Glossary Tree List" name="swuilo-SwGlTreeListBox"
                         generic-name="Glossary Tree List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Pivot Table List" name="scuilo-ScPivotLayoutTreeList"
+    <glade-widget-class title="Pivot Table List" name="sclo-ScPivotLayoutTreeList"
                         generic-name="Pivot Table List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Pivot Table Label List" name="scuilo-ScPivotLayoutTreeListLabel"
+    <glade-widget-class title="Pivot Table Label List" name="sclo-ScPivotLayoutTreeListLabel"
                         generic-name="Pivot Table Label List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Pivot Table Data List" name="scuilo-ScPivotLayoutTreeListData"
+    <glade-widget-class title="Pivot Table Data List" name="sclo-ScPivotLayoutTreeListData"
                         generic-name="Pivot Table Data List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Dial Control" name="svxlo-DialControl"
@@ -584,6 +584,10 @@
 
     <glade-widget-class title="Reference Button" name="foruilo-RefButton"
                         generic-name="Reference Button" parent="GtkButton"
+                        icon-name="widget-gtk-button"/>
+
+    <glade-widget-class title="Extended Reference Button" name="scuilo-ScRefButtonEx"
+                        generic-name="Extended Reference Button" parent="foruilo-RefButton"
                         icon-name="widget-gtk-button"/>
 
     <glade-widget-class title="Reference Edit" name="foruilo-RefEdit"
@@ -664,27 +668,6 @@
     <glade-widget-class title="ScCondFormatList" name="sclo-ScCondFormatList"
                         generic-name="CondFormatList" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-
-    <glade-widget-class title="ScDPPageFieldControl" name="sclo-ScDPPageFieldControl"
-                        generic-name="ScDPPageFieldControl" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="ScDPColFieldControl" name="sclo-ScDPColFieldControl"
-                        generic-name="ScDPColFieldControl" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="ScDPRowFieldControl" name="sclo-ScDPRowFieldControl"
-                        generic-name="ScDPRowFieldControl" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="ScDPDataFieldControl" name="sclo-ScDPDataFieldControl"
-                        generic-name="ScDPDataFieldControl" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="ScDPSelectFieldControl" name="sclo-ScDPSelectFieldControl"
-                        generic-name="ScDPSelectFieldControl" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-
-
-
-
-
 
     <glade-widget-class title="ScDPFunctionListBox" name="scuilo-ScDPFunctionListBox"
                         generic-name="DPFunctionListBox" parent="GtkTreeView"

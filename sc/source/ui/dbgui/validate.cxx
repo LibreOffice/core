@@ -38,7 +38,6 @@
 
 #include "stringutil.hxx"
 #include "validat.hxx"
-#include "validate.hrc"
 #include "validate.hxx"
 #include "compiler.hxx"
 #include "formula/opcode.hxx"
@@ -48,6 +47,31 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/childwin.hxx>
 #include "reffact.hxx"
+
+/*  Position indexes for "Allow" list box.
+    They do not map directly to ScValidationMode and can safely be modified to
+    change the order of the list box entries. */
+#define SC_VALIDDLG_ALLOW_ANY       0
+#define SC_VALIDDLG_ALLOW_WHOLE     1
+#define SC_VALIDDLG_ALLOW_DECIMAL   2
+#define SC_VALIDDLG_ALLOW_DATE      3
+#define SC_VALIDDLG_ALLOW_TIME      4
+#define SC_VALIDDLG_ALLOW_RANGE     5
+#define SC_VALIDDLG_ALLOW_LIST      6
+#define SC_VALIDDLG_ALLOW_TEXTLEN   7
+
+/*  Position indexes for "Data" list box.
+    They do not map directly to ScConditionMode and can safely be modified to
+    change the order of the list box entries. */
+#define SC_VALIDDLG_DATA_EQUAL        0
+#define SC_VALIDDLG_DATA_LESS         1
+#define SC_VALIDDLG_DATA_GREATER      2
+#define SC_VALIDDLG_DATA_EQLESS       3
+#define SC_VALIDDLG_DATA_EQGREATER    4
+#define SC_VALIDDLG_DATA_NOTEQUAL     5
+#define SC_VALIDDLG_DATA_VALIDRANGE   6
+#define SC_VALIDDLG_DATA_INVALIDRANGE 7
+
 
 static sal_uInt16 pValueRanges[] =
 {
@@ -97,44 +121,35 @@ void ScTPValidationValue:: SetActiveHdl()
         }
 }
 
-void            ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdit, formula::RefButton* pButton )
+void ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
     {
         Window *pNewParent = pValidationDlg->get_refinput_shrink_parent();
         if( pEdit == m_pRefEdit && m_pRefEdit->GetParent() != pNewParent )
         {
-            maRefEditPos = m_pRefEdit->GetPosPixel();
-            maRefEditSize = m_pRefEdit->GetSizePixel();
             m_pRefEdit->SetParent(pNewParent);
         }
 
-        if( pButton == &m_btnRef && m_btnRef.GetParent() != pNewParent )
+        if( pButton == m_pBtnRef && m_pBtnRef->GetParent() != pNewParent )
         {
-            maBtnRefPos = m_btnRef.GetPosPixel();
-            maBtnRefSize = m_btnRef.GetSizePixel();
-            m_btnRef.SetParent(pNewParent);
+            m_pBtnRef->SetParent(pNewParent);
         }
 
         pNewParent->Show();
     }
 }
 
-void            ScTPValidationValue::RefInputDonePostHdl()
+void ScTPValidationValue::RefInputDonePostHdl()
 {
-    if( m_pRefEdit && m_pRefEdit->GetParent()!= this )
+    if( m_pRefEdit && m_pRefEdit->GetParent() != m_pRefGrid )
     {
-        m_pRefEdit->SetParent( this );
-        m_pRefEdit->SetPosSizePixel( maRefEditPos, maRefEditSize );
-
-        m_btnRef.SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to anthor window and restore parent later in order to restore the tab order
+        m_pRefEdit->SetParent( m_pRefGrid );
+        m_pBtnRef->SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to anthor window and restore parent later in order to restore the tab order
     }
 
-    if( m_btnRef.GetParent()!=this )
-    {
-        m_btnRef.SetParent( this );
-        m_btnRef.SetPosSizePixel( maBtnRefPos, maBtnRefSize );
-    }
+    if( m_pBtnRef->GetParent() != m_pRefGrid )
+        m_pBtnRef->SetParent( m_pRefGrid );
 
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
         pValidationDlg->get_refinput_shrink_parent()->Hide();
@@ -143,7 +158,6 @@ void            ScTPValidationValue::RefInputDonePostHdl()
         m_pRefEdit->GrabFocus();
 
 }
-
 
 bool ScValidationDlg::Close()
 {
@@ -295,57 +309,66 @@ bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaSt
 
 } // namespace
 
-ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet ) :
-    SfxTabPage( pParent, ScResId( TP_VALIDATION_VALUES ), rArgSet ),
-    maFtAllow ( this, ScResId( FT_ALLOW ) ),
-    maLbAllow ( this, ScResId( LB_ALLOW ) ),
-    maCbAllow ( this, ScResId( TSB_ALLOW_BLANKS ) ),
-    maCbShow  ( this, ScResId( CB_SHOWLIST ) ),
-    maCbSort  ( this, ScResId( CB_SORTLIST ) ),
-    maFtValue ( this, ScResId( FT_VALUE ) ),
-    maLbValue ( this, ScResId( LB_VALUE ) ),
-    maFtMin   ( this, ScResId( FT_MIN ) ),
-    maEdMin   ( this, NULL, &maFtMin, ScResId( EDT_MIN ) ),
-    maEdList  ( this, ScResId( EDT_LIST ) ),
-    maFtMax   ( this, ScResId( FT_MAX ) ),
-    maEdMax   ( this, NULL, &maFtMax, ScResId( EDT_MAX ) ),
-    maFtHint  ( this, ScResId( FT_SOURCEHINT ) ),
-    maStrMin  ( ScResId( SCSTR_VALID_MINIMUM ) ),
-    maStrMax  ( ScResId( SCSTR_VALID_MAXIMUM ) ),
-    maStrValue( ScResId( SCSTR_VALID_VALUE ) ),
-    maStrRange( ScResId( SCSTR_VALID_RANGE ) ),
-    maStrList ( ScResId( SCSTR_VALID_LIST ) ),
-    m_btnRef( this, ScResId( RB_VALIDITY_REF ) )
+ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet )
+    : SfxTabPage( pParent, "ValidationCriteriaPage",
+        "modules/scalc/ui/validationcriteriapage.ui", rArgSet)
+    , maStrMin(ScResId(SCSTR_VALID_MINIMUM))
+    , maStrMax(ScResId(SCSTR_VALID_MAXIMUM))
+    , maStrValue(ScResId(SCSTR_VALID_VALUE))
+    , maStrRange(ScResId(SCSTR_VALID_RANGE))
+    , maStrList(ScResId(SCSTR_VALID_LIST))
 {
+    get(m_pLbAllow, "allow");
+    get(m_pCbAllow, "allowempty");
+    get(m_pCbShow, "showlist");
+    get(m_pCbSort, "sortascend");
+    get(m_pFtValue, "valueft");
+    get(m_pLbValue, "data");
+    get(m_pFtMin, "minft");
+    get(m_pMinGrid, "mingrid");
+    get(m_pEdMin, "min");
+    m_pEdMin->SetReferences(NULL, m_pFtMin);
+    get(m_pEdList, "minlist");
+    Size aSize(LogicToPixel(Size(174, 105), MAP_APPFONT));
+    m_pEdList->set_width_request(aSize.Width());
+    m_pEdList->set_height_request(aSize.Height());
+    get(m_pFtMax, "maxft");
+    get(m_pEdMax, "max");
+    m_pEdMax->SetReferences(NULL, m_pFtMax);
+    get(m_pFtHint, "hintft");
+    get(m_pBtnRef, "validref");
+    m_pBtnRef->SetParentPage(this);
+    get(m_pRefGrid, "refgrid");
+
+    //lock in the max size initial config
+    aSize = get_preferred_size();
+    set_width_request(aSize.Width());
+    set_height_request(aSize.Height());
+
     Init();
-    FreeResource();
 
     // list separator in formulas
     OUString aListSep = ::ScCompiler::GetNativeSymbol( ocSep );
     OSL_ENSURE( aListSep.getLength() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
     mcFmlaSep = aListSep.getLength() ? aListSep[0] : ';';
-    m_btnRef.Hide(); // cell range picker
-}
-
-ScTPValidationValue::~ScTPValidationValue()
-{
+    m_pBtnRef->Hide(); // cell range picker
 }
 
 void ScTPValidationValue::Init()
 {
-    maLbAllow.SetSelectHdl( LINK( this, ScTPValidationValue, SelectHdl ) );
-    maLbValue.SetSelectHdl( LINK( this, ScTPValidationValue, SelectHdl ) );
-    maCbShow.SetClickHdl( LINK( this, ScTPValidationValue, CheckHdl ) );
+    m_pLbAllow->SetSelectHdl( LINK( this, ScTPValidationValue, SelectHdl ) );
+    m_pLbValue->SetSelectHdl( LINK( this, ScTPValidationValue, SelectHdl ) );
+    m_pCbShow->SetClickHdl( LINK( this, ScTPValidationValue, CheckHdl ) );
 
     // cell range picker
-    maEdMin.SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
-    maEdMin.SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
-    maEdMax.SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
-    m_btnRef.SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
-    maEdMax.SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
+    m_pEdMin->SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
+    m_pEdMin->SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
+    m_pEdMax->SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
+    m_pBtnRef->SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
+    m_pEdMax->SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
 
-    maLbAllow.SelectEntryPos( SC_VALIDDLG_ALLOW_ANY );
-    maLbValue.SelectEntryPos( SC_VALIDDLG_DATA_EQUAL );
+    m_pLbAllow->SelectEntryPos( SC_VALIDDLG_ALLOW_ANY );
+    m_pLbValue->SelectEntryPos( SC_VALIDDLG_DATA_EQUAL );
 
     SelectHdl( NULL );
     CheckHdl( NULL );
@@ -369,25 +392,25 @@ void ScTPValidationValue::Reset( const SfxItemSet& rArgSet )
     if( rArgSet.GetItemState( FID_VALID_MODE, true, &pItem ) == SFX_ITEM_SET )
         nLbPos = lclGetPosFromValMode( static_cast< ScValidationMode >(
             static_cast< const SfxAllEnumItem* >( pItem )->GetValue() ) );
-    maLbAllow.SelectEntryPos( nLbPos );
+    m_pLbAllow->SelectEntryPos( nLbPos );
 
     nLbPos = SC_VALIDDLG_DATA_EQUAL;
     if( rArgSet.GetItemState( FID_VALID_CONDMODE, true, &pItem ) == SFX_ITEM_SET )
         nLbPos = lclGetPosFromCondMode( static_cast< ScConditionMode >(
             static_cast< const SfxAllEnumItem* >( pItem )->GetValue() ) );
-    maLbValue.SelectEntryPos( nLbPos );
+    m_pLbValue->SelectEntryPos( nLbPos );
 
     // *** check boxes ***
     sal_Bool bCheck = sal_True;
     if( rArgSet.GetItemState( FID_VALID_BLANK, true, &pItem ) == SFX_ITEM_SET )
         bCheck = static_cast< const SfxBoolItem* >( pItem )->GetValue();
-    maCbAllow.Check( bCheck );
+    m_pCbAllow->Check( bCheck );
 
     sal_Int32 nListType = ValidListType::UNSORTED;
     if( rArgSet.GetItemState( FID_VALID_LISTTYPE, true, &pItem ) == SFX_ITEM_SET )
         nListType = static_cast< const SfxInt16Item* >( pItem )->GetValue();
-    maCbShow.Check( nListType != ValidListType::INVISIBLE );
-    maCbSort.Check( nListType == ValidListType::SORTEDASCENDING );
+    m_pCbShow->Check( nListType != ValidListType::INVISIBLE );
+    m_pCbSort->Check( nListType == ValidListType::SORTEDASCENDING );
 
     // *** formulas ***
     OUString aFmlaStr;
@@ -406,17 +429,17 @@ void ScTPValidationValue::Reset( const SfxItemSet& rArgSet )
 
 bool ScTPValidationValue::FillItemSet( SfxItemSet& rArgSet )
 {
-    sal_Int16 nListType = maCbShow.IsChecked() ?
-        (maCbSort.IsChecked() ? ValidListType::SORTEDASCENDING : ValidListType::UNSORTED) :
+    sal_Int16 nListType = m_pCbShow->IsChecked() ?
+        (m_pCbSort->IsChecked() ? ValidListType::SORTEDASCENDING : ValidListType::UNSORTED) :
         ValidListType::INVISIBLE;
 
     rArgSet.Put( SfxAllEnumItem( FID_VALID_MODE, sal::static_int_cast<sal_uInt16>(
-                    lclGetValModeFromPos( maLbAllow.GetSelectEntryPos() ) ) ) );
+                    lclGetValModeFromPos( m_pLbAllow->GetSelectEntryPos() ) ) ) );
     rArgSet.Put( SfxAllEnumItem( FID_VALID_CONDMODE, sal::static_int_cast<sal_uInt16>(
-                    lclGetCondModeFromPos( maLbValue.GetSelectEntryPos() ) ) ) );
+                    lclGetCondModeFromPos( m_pLbValue->GetSelectEntryPos() ) ) ) );
     rArgSet.Put( SfxStringItem( FID_VALID_VALUE1, GetFirstFormula() ) );
     rArgSet.Put( SfxStringItem( FID_VALID_VALUE2, GetSecondFormula() ) );
-    rArgSet.Put( SfxBoolItem( FID_VALID_BLANK, maCbAllow.IsChecked() ) );
+    rArgSet.Put( SfxBoolItem( FID_VALID_BLANK, m_pCbAllow->IsChecked() ) );
     rArgSet.Put( SfxInt16Item( FID_VALID_LISTTYPE, nListType ) );
     return true;
 }
@@ -424,40 +447,40 @@ bool ScTPValidationValue::FillItemSet( SfxItemSet& rArgSet )
 OUString ScTPValidationValue::GetFirstFormula() const
 {
     OUString aFmlaStr;
-    if( maLbAllow.GetSelectEntryPos() == SC_VALIDDLG_ALLOW_LIST )
-        lclGetFormulaFromStringList( aFmlaStr, maEdList.GetText(), mcFmlaSep );
+    if( m_pLbAllow->GetSelectEntryPos() == SC_VALIDDLG_ALLOW_LIST )
+        lclGetFormulaFromStringList( aFmlaStr, m_pEdList->GetText(), mcFmlaSep );
     else
-        aFmlaStr = maEdMin.GetText();
+        aFmlaStr = m_pEdMin->GetText();
     return aFmlaStr;
 }
 
 OUString ScTPValidationValue::GetSecondFormula() const
 {
-    return maEdMax.GetText();
+    return m_pEdMax->GetText();
 }
 
 void ScTPValidationValue::SetFirstFormula( const OUString& rFmlaStr )
 {
     // try if formula is a string list, validation mode must already be set
     OUString aStringList;
-    if( (maLbAllow.GetSelectEntryPos() == SC_VALIDDLG_ALLOW_RANGE) &&
+    if( (m_pLbAllow->GetSelectEntryPos() == SC_VALIDDLG_ALLOW_RANGE) &&
         lclGetStringListFromFormula( aStringList, rFmlaStr, mcFmlaSep ) )
     {
-        maEdList.SetText( aStringList );
-        maEdMin.SetText( EMPTY_OUSTRING );
+        m_pEdList->SetText( aStringList );
+        m_pEdMin->SetText( EMPTY_OUSTRING );
         // change validation mode to string list
-        maLbAllow.SelectEntryPos( SC_VALIDDLG_ALLOW_LIST );
+        m_pLbAllow->SelectEntryPos( SC_VALIDDLG_ALLOW_LIST );
     }
     else
     {
-        maEdMin.SetText( rFmlaStr );
-        maEdList.SetText( EMPTY_OUSTRING );
+        m_pEdMin->SetText( rFmlaStr );
+        m_pEdList->SetText( EMPTY_OUSTRING );
     }
 }
 
 void ScTPValidationValue::SetSecondFormula( const OUString& rFmlaStr )
 {
-    maEdMax.SetText( rFmlaStr );
+    m_pEdMax->SetText( rFmlaStr );
 }
 
 ScValidationDlg * ScTPValidationValue::GetValidationDlg()
@@ -484,15 +507,15 @@ void ScTPValidationValue::SetupRefDlg()
 
             Window *pLabel = NULL;
 
-            if ( maEdMax.IsVisible() )
+            if ( m_pEdMax->IsVisible() )
             {
-                m_pRefEdit = &maEdMax;
-                pLabel = &maFtMax;
+                m_pRefEdit = m_pEdMax;
+                pLabel = m_pFtMax;
             }
-            else if ( maEdMin.IsVisible() )
+            else if ( m_pEdMin->IsVisible() )
             {
-                m_pRefEdit = &maEdMin;
-                pLabel = &maFtMin;
+                m_pRefEdit = m_pEdMin;
+                pLabel = m_pFtMin;
             }
 
             if( m_pRefEdit && !m_pRefEdit->HasFocus() )
@@ -501,7 +524,7 @@ void ScTPValidationValue::SetupRefDlg()
             if( m_pRefEdit )
                 m_pRefEdit->SetReferences( pValidationDlg, pLabel );
 
-            m_btnRef.SetReferences( pValidationDlg, m_pRefEdit );
+            m_pBtnRef->SetReferences( pValidationDlg, m_pRefEdit );
         }
     }
 }
@@ -522,65 +545,14 @@ void ScTPValidationValue::RemoveRefDlg()
                 m_pRefEdit->SetReferences( NULL, NULL );
             m_pRefEdit = NULL;
 
-            m_btnRef.SetReferences( NULL, NULL );
-
-#if ! defined( WNT ) && !defined( _MSC_VER )
-            TidyListBoxes();
-#endif
-        }
-    }
-}
-
-void ScTPValidationValue::TidyListBoxes()
-{
-    if ( Window *pWnd = GetChild( 0 ) )
-    {
-        bool bFindLst = false;
-        std::list<Window*> alstOrder;
-
-        do{
-            if( pWnd->GetParent() == this )
-            {
-                if ( !bFindLst )
-                {
-                    try{
-                        if( dynamic_cast<ListBox*>(pWnd)||dynamic_cast<ListBox*>(pWnd->GetWindow(WINDOW_CLIENT) ) )
-                            bFindLst = true;
-                    }
-                    catch( ... )
-                    {
-                        if ( *(void**)pWnd == *(void**)&maLbValue )
-                            bFindLst = true;
-                        else if ( Window *pClient = pWnd->GetWindow( WINDOW_CLIENT ) )
-                            if ( *(void**)pClient == *(void**)&maLbValue )
-                                bFindLst = true;
-                    }
-                }
-
-                if ( bFindLst )
-                    alstOrder.push_back( pWnd->GetWindow( WINDOW_CLIENT ) );
-            }
-        }while( NULL != ( pWnd = pWnd->GetWindow( WINDOW_NEXT  ) ) );
-
-        pWnd = GetChild(0);
-
-        while( std::find( alstOrder.begin(), alstOrder.end(), pWnd ) != alstOrder.end() && NULL != ( pWnd = pWnd->GetWindow( WINDOW_NEXT) ) ) ;
-
-        if ( pWnd )
-        {
-            for ( std::list<Window*>::iterator i = alstOrder.begin(); i!=alstOrder.end(); ++i )
-            {
-                Window *pParent = (*i)->GetParent();
-                (*i)->SetParent( pWnd );
-                (*i)->SetParent( pParent );
-            }
+            m_pBtnRef->SetReferences( NULL, NULL );
         }
     }
 }
 
 IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl)
 {
-    sal_uInt16  nPos=maLbAllow.GetSelectEntryPos();
+    sal_uInt16  nPos=m_pLbAllow->GetSelectEntryPos();
 
     if ( nPos == SC_VALIDDLG_ALLOW_RANGE )
     {
@@ -592,10 +564,10 @@ IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl)
 
 IMPL_LINK( ScTPValidationValue, KillFocusHdl, Window *, pWnd )
 {
-    if( pWnd == m_pRefEdit || pWnd == &m_btnRef )
+    if( pWnd == m_pRefEdit || pWnd == m_pBtnRef )
         if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
             if ( (pValidationDlg->IsActive() || pValidationDlg->IsChildFocus() ) && !pValidationDlg->IsRefInputting() )
-                if( ( !m_pRefEdit || !m_pRefEdit->HasFocus()) && !m_btnRef.HasFocus() )
+                if( ( !m_pRefEdit || !m_pRefEdit->HasFocus()) && !m_pBtnRef->HasFocus() )
                 {
                     RemoveRefDlg();
                 }
@@ -605,61 +577,69 @@ IMPL_LINK( ScTPValidationValue, KillFocusHdl, Window *, pWnd )
 
 IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
 {
-    sal_uInt16 nLbPos = maLbAllow.GetSelectEntryPos();
+    sal_uInt16 nLbPos = m_pLbAllow->GetSelectEntryPos();
     bool bEnable = (nLbPos != SC_VALIDDLG_ALLOW_ANY);
     bool bRange = (nLbPos == SC_VALIDDLG_ALLOW_RANGE);
     bool bList = (nLbPos == SC_VALIDDLG_ALLOW_LIST);
 
-    maCbAllow.Enable( bEnable );   // Empty cell
-    maFtValue.Enable( bEnable );
-    maLbValue.Enable( bEnable );
-    maFtMin.Enable( bEnable );
-    maEdMin.Enable( bEnable );
-    maEdList.Enable( bEnable );
-    maFtMax.Enable( bEnable );
-    maEdMax.Enable( bEnable );
+    m_pCbAllow->Enable( bEnable );   // Empty cell
+    m_pFtValue->Enable( bEnable );
+    m_pLbValue->Enable( bEnable );
+    m_pFtMin->Enable( bEnable );
+    m_pEdMin->Enable( bEnable );
+    m_pEdList->Enable( bEnable );
+    m_pFtMax->Enable( bEnable );
+    m_pEdMax->Enable( bEnable );
 
     bool bShowMax = false;
     if( bRange )
-        maFtMin.SetText( maStrRange );
+        m_pFtMin->SetText( maStrRange );
     else if( bList )
-        maFtMin.SetText( maStrList );
+        m_pFtMin->SetText( maStrList );
     else
     {
-        switch( maLbValue.GetSelectEntryPos() )
+        switch( m_pLbValue->GetSelectEntryPos() )
         {
             case SC_VALIDDLG_DATA_EQUAL:
-            case SC_VALIDDLG_DATA_NOTEQUAL:     maFtMin.SetText( maStrValue );  break;
+            case SC_VALIDDLG_DATA_NOTEQUAL:     m_pFtMin->SetText( maStrValue );  break;
 
             case SC_VALIDDLG_DATA_LESS:
-            case SC_VALIDDLG_DATA_EQLESS:       maFtMin.SetText( maStrMax );    break;
+            case SC_VALIDDLG_DATA_EQLESS:       m_pFtMin->SetText( maStrMax );    break;
 
             case SC_VALIDDLG_DATA_VALIDRANGE:
             case SC_VALIDDLG_DATA_INVALIDRANGE:   bShowMax = true;    // fall through
             case SC_VALIDDLG_DATA_GREATER:
-            case SC_VALIDDLG_DATA_EQGREATER:    maFtMin.SetText( maStrMin );    break;
+            case SC_VALIDDLG_DATA_EQGREATER:    m_pFtMin->SetText( maStrMin );    break;
 
             default:
                 OSL_FAIL( "ScTPValidationValue::SelectHdl - unknown condition mode" );
         }
     }
 
-    maCbShow.Show( bRange || bList );
-    maCbSort.Show( bRange || bList );
-    maFtValue.Show( !bRange && !bList );
-    maLbValue.Show( !bRange && !bList );
-    maEdMin.Show( !bList );
-    maEdList.Show( bList );
-    maFtMax.Show( bShowMax );
-    maEdMax.Show( bShowMax );
-    maFtHint.Show( bRange );
-    m_btnRef.Show( bRange );  // cell range picker
+    m_pCbShow->Show( bRange || bList );
+    m_pCbSort->Show( bRange || bList );
+    m_pFtValue->Show( !bRange && !bList );
+    m_pLbValue->Show( !bRange && !bList );
+    m_pEdMin->Show( !bList );
+    m_pEdList->Show( bList );
+    m_pMinGrid->set_vexpand( bList );
+    WinBits nBits = m_pFtMin->GetStyle();
+    nBits &= ~(WB_TOP | WB_VCENTER | WB_BOTTOM);
+    if (bList)
+        nBits |= WB_TOP;
+    else
+        nBits |= WB_VCENTER;
+    m_pFtMin->SetStyle( nBits );
+    m_pFtMax->Show( bShowMax );
+    m_pEdMax->Show( bShowMax );
+    m_pFtHint->Show( bRange );
+    m_pBtnRef->Show( bRange );  // cell range picker
     return 0;
 }
 
 IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl)
 {
-    maCbSort.Enable( maCbShow.IsChecked() );
+    m_pCbSort->Enable( m_pCbShow->IsChecked() );
     return 0;
 }
 
@@ -921,9 +901,14 @@ bool ScValidationDlg::RemoveRefDlg( bool bRestoreModal /* = true */ )
     return true;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScRefButtonEx(Window *pParent, VclBuilder::stringmap &)
+{
+    return new ScTPValidationValue::ScRefButtonEx(pParent, 0);
+}
+
 void ScTPValidationValue::ScRefButtonEx::Click()
 {
-    if( ScTPValidationValue *pParent = dynamic_cast< ScTPValidationValue*>( GetParent() ) )
+    if( ScTPValidationValue *pParent = GetParentPage() )
         pParent->OnClick( this );
 
     formula::RefButton::Click();
@@ -931,7 +916,7 @@ void ScTPValidationValue::ScRefButtonEx::Click()
 
 void ScTPValidationValue::OnClick( Button *pBtn )
 {
-    if( pBtn == &m_btnRef )
+    if( pBtn == m_pBtnRef )
         SetupRefDlg();
 }
 

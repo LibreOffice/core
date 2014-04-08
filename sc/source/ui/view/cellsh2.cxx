@@ -52,7 +52,6 @@
 #include "validat.hxx"
 #include "scresid.hxx"
 
-#include "validate.hrc"
 #include "scui_def.hxx"
 #include "scabstdlg.hxx"
 #include "impex.hxx"
@@ -787,7 +786,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-                    ::GetTabPageRanges ScTPValidationValueGetRanges = pFact->GetTabPageRangesFunc(TP_VALIDATION_VALUES);
+                    ::GetTabPageRanges ScTPValidationValueGetRanges = pFact->GetTabPageRangesFunc();
                     OSL_ENSURE(ScTPValidationValueGetRanges, "TabPage create fail!");
                     SfxItemSet aArgSet( GetPool(), (*ScTPValidationValueGetRanges)() );
                     ScValidationMode eMode = SC_VALID_ANY;

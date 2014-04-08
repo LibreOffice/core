@@ -119,7 +119,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="scuilo-ScPivotLayoutTreeList" id="listbox-column">
+                          <object class="sclo-ScPivotLayoutTreeList" id="listbox-column">
                             <property name="width_request">200</property>
                             <property name="height_request">100</property>
                             <property name="visible">True</property>
@@ -173,7 +173,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="scuilo-ScPivotLayoutTreeListData" id="listbox-data">
+                          <object class="sclo-ScPivotLayoutTreeListData" id="listbox-data">
                             <property name="width_request">240</property>
                             <property name="height_request">120</property>
                             <property name="visible">True</property>
@@ -225,7 +225,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="scuilo-ScPivotLayoutTreeList" id="listbox-row">
+                          <object class="sclo-ScPivotLayoutTreeList" id="listbox-row">
                             <property name="width_request">180</property>
                             <property name="height_request">100</property>
                             <property name="visible">True</property>
@@ -276,7 +276,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="scuilo-ScPivotLayoutTreeList" id="listbox-page">
+                          <object class="sclo-ScPivotLayoutTreeList" id="listbox-page">
                             <property name="width_request">200</property>
                             <property name="height_request">100</property>
                             <property name="visible">True</property>
@@ -338,7 +338,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="scuilo-ScPivotLayoutTreeListLabel" id="listbox-fields">
+                      <object class="sclo-ScPivotLayoutTreeListLabel" id="listbox-fields">
                         <property name="width_request">180</property>
                         <property name="height_request">150</property>
                         <property name="visible">True</property>

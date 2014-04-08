@@ -49,7 +49,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/styleui/scstyles.src \
     sc/source/ui/dbgui/pvfundlg.src \
     sc/source/ui/dbgui/dapitype.src \
-    sc/source/ui/dbgui/validate.src \
     sc/source/ui/drawfunc/drformsh.src \
     sc/source/ui/drawfunc/objdraw.src \
     sc/source/ui/miscdlgs/retypepassdlg.src \

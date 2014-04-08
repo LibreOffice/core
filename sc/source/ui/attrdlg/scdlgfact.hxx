@@ -562,7 +562,7 @@ public:
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) SAL_OVERRIDE;
 
-    virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) SAL_OVERRIDE;
+    virtual GetTabPageRanges            GetTabPageRangesFunc() SAL_OVERRIDE;
 
 };
 
