@@ -2581,12 +2581,25 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
     All views of a document are in the ring of the shell.
 */
 SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
-    : SwViewShell( rShell, pInitWin ),
-    SwModify( 0 ), m_pCrsrStk( 0 ), m_pBlockCrsr( 0 ), m_pTblCrsr( 0 ),
-    m_pBoxIdx( 0 ), m_pBoxPtr( 0 ), m_nCrsrMove( 0 ), m_nBasicActionCnt( 0 ),
-    m_eMvState( MV_NONE ),
-    m_sMarkedListId(),
-    m_nMarkedListLevel( 0 ), m_oldColFrm(0)
+    : SwViewShell( rShell, pInitWin )
+    , SwModify( 0 )
+    , m_pCrsrStk( 0 )
+    , m_pBlockCrsr( 0 )
+    , m_pTblCrsr( 0 )
+    , m_pBoxIdx( 0 )
+    , m_pBoxPtr( 0 )
+    , m_nUpDownX(0)
+    , m_nLeftFrmPos(0)
+    , m_nAktNode(0)
+    , m_nAktCntnt(0)
+    , m_nAktNdTyp(0)
+    , m_bAktSelection(false)
+    , m_nCrsrMove( 0 )
+    , m_nBasicActionCnt( 0 )
+    , m_eMvState( MV_NONE )
+    , m_sMarkedListId()
+    , m_nMarkedListLevel( 0 )
+    , m_oldColFrm(0)
 {
     SET_CURR_SHELL( this );
     // only keep the position of the current cursor of the copy shell
@@ -2610,12 +2623,25 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
 /// default constructor
 SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
                             const SwViewOption *pInitOpt )
-    : SwViewShell( rDoc, pInitWin, pInitOpt ),
-    SwModify( 0 ), m_pCrsrStk( 0 ), m_pBlockCrsr( 0 ), m_pTblCrsr( 0 ),
-    m_pBoxIdx( 0 ), m_pBoxPtr( 0 ), m_nCrsrMove( 0 ), m_nBasicActionCnt( 0 ),
-    m_eMvState( MV_NONE ), // state for crsr-travelling - GetCrsrOfst
-    m_sMarkedListId(),
-    m_nMarkedListLevel( 0 ), m_oldColFrm(0)
+    : SwViewShell( rDoc, pInitWin, pInitOpt )
+    , SwModify( 0 )
+    , m_pCrsrStk( 0 )
+    , m_pBlockCrsr( 0 )
+    , m_pTblCrsr( 0 )
+    , m_pBoxIdx( 0 )
+    , m_pBoxPtr( 0 )
+    , m_nUpDownX(0)
+    , m_nLeftFrmPos(0)
+    , m_nAktNode(0)
+    , m_nAktCntnt(0)
+    , m_nAktNdTyp(0)
+    , m_bAktSelection(false)
+    , m_nCrsrMove( 0 )
+    , m_nBasicActionCnt( 0 )
+    , m_eMvState( MV_NONE ) // state for crsr-travelling - GetCrsrOfst
+    , m_sMarkedListId()
+    , m_nMarkedListLevel( 0 )
+    , m_oldColFrm(0)
 {
     SET_CURR_SHELL( this );
     // create initial cursor and set it to first content position
