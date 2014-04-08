@@ -80,16 +80,17 @@ void ScTable::CopyCellValuesFrom( SCCOL nCol, SCROW nRow, const sc::CellValues& 
     aCol[nCol].CopyCellValuesFrom(nRow, rSrc);
 }
 
-void ScTable::PreprocessRangeNameUpdate()
+void ScTable::PreprocessRangeNameUpdate(
+    sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt )
 {
     for (SCCOL i = 0; i <= MAXCOL; ++i)
-        aCol[i].PreprocessRangeNameUpdate();
+        aCol[i].PreprocessRangeNameUpdate(rEndListenCxt, rCompileCxt);
 }
 
-void ScTable::PostprocessRangeNameUpdate()
+void ScTable::PostprocessRangeNameUpdate( sc::CompileFormulaContext& rCompileCxt )
 {
     for (SCCOL i = 0; i <= MAXCOL; ++i)
-        aCol[i].PostprocessRangeNameUpdate();
+        aCol[i].PostprocessRangeNameUpdate(rCompileCxt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -372,8 +372,10 @@ public:
     void        SetTabNo(SCTAB nNewTab);
     void        FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<sal_uInt16>& rIndexes) const;
 
-    void PreprocessRangeNameUpdate();
-    void PostprocessRangeNameUpdate();
+    void PreprocessRangeNameUpdate(
+        sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt );
+
+    void PostprocessRangeNameUpdate( sc::CompileFormulaContext& rCompileCxt );
 
     const SfxPoolItem*      GetAttr( SCROW nRow, sal_uInt16 nWhich ) const;
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;

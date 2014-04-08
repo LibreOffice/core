@@ -847,8 +847,10 @@ public:
     void SetRangeName(ScRangeName* pNew);
     ScRangeName* GetRangeName() const;
 
-    void PreprocessRangeNameUpdate();
-    void PostprocessRangeNameUpdate();
+    void PreprocessRangeNameUpdate(
+        sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt );
+
+    void PostprocessRangeNameUpdate( sc::CompileFormulaContext& rCompileCxt );
 
     ScConditionalFormatList* GetCondFormList();
     const ScConditionalFormatList* GetCondFormList() const;

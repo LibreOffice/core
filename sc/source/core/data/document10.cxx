@@ -14,6 +14,8 @@
 #include <table.hxx>
 #include <tokenarray.hxx>
 #include <editutil.hxx>
+#include <listenercontext.hxx>
+#include <tokenstringcontext.hxx>
 
 // Add totally brand-new methods to this source file.
 
@@ -239,21 +241,25 @@ const ScCalcConfig& ScDocument::GetCalcConfig() const
 
 void ScDocument::PreprocessRangeNameUpdate()
 {
+    sc::EndListeningContext aEndListenCxt(*this);
+    sc::CompileFormulaContext aCompileCxt(this);
+
     TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
     for (; it != itEnd; ++it)
     {
         ScTable* p = *it;
-        p->PreprocessRangeNameUpdate();
+        p->PreprocessRangeNameUpdate(aEndListenCxt, aCompileCxt);
     }
 }
 
 void ScDocument::PostprocessRangeNameUpdate()
 {
+    sc::CompileFormulaContext aCompileCxt(this);
     TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
     for (; it != itEnd; ++it)
     {
         ScTable* p = *it;
-        p->PostprocessRangeNameUpdate();
+        p->PostprocessRangeNameUpdate(aCompileCxt);
     }
 }
 

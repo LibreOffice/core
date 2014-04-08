@@ -554,14 +554,14 @@ namespace {
 class PreRangeNameUpdateHandler
 {
     ScDocument* mpDoc;
-    boost::shared_ptr<sc::EndListeningContext> mpEndListenCxt;
-    boost::shared_ptr<sc::CompileFormulaContext> mpCompileFormulaCxt;
+    sc::EndListeningContext& mrEndListenCxt;
+    sc::CompileFormulaContext& mrCompileFormulaCxt;
 
 public:
-    PreRangeNameUpdateHandler( ScDocument* pDoc ) :
+    PreRangeNameUpdateHandler( ScDocument* pDoc, sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt ) :
         mpDoc(pDoc),
-        mpEndListenCxt(new sc::EndListeningContext(*pDoc)),
-        mpCompileFormulaCxt(new sc::CompileFormulaContext(pDoc)) {}
+        mrEndListenCxt(rEndListenCxt),
+        mrCompileFormulaCxt(rCompileCxt) {}
 
     void operator() ( sc::FormulaGroupEntry& rEntry )
     {
@@ -589,7 +589,7 @@ public:
         if (bRecompile)
         {
             // Get the formula string.
-            OUString aFormula = pTop->GetFormula(*mpCompileFormulaCxt);
+            OUString aFormula = pTop->GetFormula(mrCompileFormulaCxt);
             sal_Int32 n = aFormula.getLength();
             if (pTop->GetMatrixFlag() != MM_NONE && n > 0)
             {
@@ -604,13 +604,13 @@ public:
                 for (; pp != ppEnd; ++pp)
                 {
                     ScFormulaCell* p = *pp;
-                    p->EndListeningTo(*mpEndListenCxt);
+                    p->EndListeningTo(mrEndListenCxt);
                     mpDoc->RemoveFromFormulaTree(p);
                 }
             }
             else
             {
-                rEntry.mpCell->EndListeningTo(*mpEndListenCxt);
+                rEntry.mpCell->EndListeningTo(mrEndListenCxt);
                 mpDoc->RemoveFromFormulaTree(rEntry.mpCell);
             }
 
@@ -623,12 +623,12 @@ public:
 class PostRangeNameUpdateHandler
 {
     ScDocument* mpDoc;
-    boost::shared_ptr<sc::CompileFormulaContext> mpCompileFormulaCxt;
+    sc::CompileFormulaContext& mrCompileFormulaCxt;
 
 public:
-    PostRangeNameUpdateHandler( ScDocument* pDoc ) :
+    PostRangeNameUpdateHandler( ScDocument* pDoc, sc::CompileFormulaContext& rCompileCxt ) :
         mpDoc(pDoc),
-        mpCompileFormulaCxt(new sc::CompileFormulaContext(pDoc)) {}
+        mrCompileFormulaCxt(rCompileCxt) {}
 
     void operator() ( sc::FormulaGroupEntry& rEntry )
     {
@@ -639,7 +639,7 @@ public:
 
             // Create a new token array from the hybrid formula string, and
             // set it to the group.
-            ScCompiler aComp(*mpCompileFormulaCxt, pTop->aPos);
+            ScCompiler aComp(mrCompileFormulaCxt, pTop->aPos);
             ScTokenArray* pNewCode = aComp.CompileString(aFormula);
             ScFormulaCellGroupRef xGroup = pTop->GetCellGroup();
             assert(xGroup);
@@ -662,7 +662,7 @@ public:
             OUString aFormula = pCell->GetHybridFormula();
 
             // Create token array from formula string.
-            ScCompiler aComp(*mpCompileFormulaCxt, pCell->aPos);
+            ScCompiler aComp(mrCompileFormulaCxt, pCell->aPos);
             ScTokenArray* pNewCode = aComp.CompileString(aFormula);
 
             // Generate RPN tokens.
@@ -677,21 +677,22 @@ public:
 
 }
 
-void ScColumn::PreprocessRangeNameUpdate()
+void ScColumn::PreprocessRangeNameUpdate(
+    sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt )
 {
     // Collect all formula groups.
     std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
 
-    PreRangeNameUpdateHandler aFunc(pDocument);
+    PreRangeNameUpdateHandler aFunc(pDocument, rEndListenCxt, rCompileCxt);
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
 }
 
-void ScColumn::PostprocessRangeNameUpdate()
+void ScColumn::PostprocessRangeNameUpdate( sc::CompileFormulaContext& rCompileCxt )
 {
     // Collect all formula groups.
     std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
 
-    PostRangeNameUpdateHandler aFunc(pDocument);
+    PostRangeNameUpdateHandler aFunc(pDocument, rCompileCxt);
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
 }
 
