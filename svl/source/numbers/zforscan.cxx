@@ -68,6 +68,9 @@ namespace
 }
 
 ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
+    : eNewLnge(LANGUAGE_DONTKNOW)
+    , eTmpLnge(LANGUAGE_DONTKNOW)
+    , nCurrPos(-1)
 {
     pFormatter = pFormatterP;
     bConvertMode = false;
