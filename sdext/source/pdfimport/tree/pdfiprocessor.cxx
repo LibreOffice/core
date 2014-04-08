@@ -56,9 +56,7 @@ namespace pdfi
             com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >  xContext) :
 
     m_xContext(xContext),
-    fYPrevTextPosition(-10000.0),
-    fXPrevTextPosition(0.0),
-    fPrevTextWidth(0.0),
+    prevCharWidth(0),
     m_pElFactory( new ElementFactory() ),
     m_pDocument( m_pElFactory->createDocumentElement() ),
     m_pCurPage(0),
@@ -224,9 +222,7 @@ void PDFIProcessor::processGlyphLine()
 
         if ((ch == 0x20) || (ch == 0xa0))
         {
-            double spaceWidth =
-                m_GlyphsList[i].getRect().X2 -
-                m_GlyphsList[i].getRect().X1;
+            double spaceWidth = m_GlyphsList[i].getWidth();
             spaceDetectBoundary = spaceWidth * 0.5;
             break;
         }
@@ -237,129 +233,89 @@ void PDFIProcessor::processGlyphLine()
     {
         double avgGlyphWidth = 0.0;
         for (size_t i = 0; i < m_GlyphsList.size(); i++)
-        {
-            avgGlyphWidth +=
-                m_GlyphsList[i].getRect().X2 -
-                m_GlyphsList[i].getRect().X1;
-        }
+            avgGlyphWidth += m_GlyphsList[i].getWidth();
         avgGlyphWidth /= m_GlyphsList.size();
         spaceDetectBoundary = avgGlyphWidth * 0.2;
     }
 
-    FrameElement* frame = m_pElFactory->createFrameElement(m_GlyphsList[0].getCurElement(),
-        getGCId(getTransformGlyphContext(m_GlyphsList[0])));
+    FrameElement* frame = m_pElFactory->createFrameElement(
+        m_GlyphsList[0].getCurElement(),
+        getGCId(m_GlyphsList[0].getGC()));
     frame->ZOrder = m_nNextZOrder++;
+    frame->IsForText = true;
     ParagraphElement* para = m_pElFactory->createParagraphElement(frame);
 
     for (size_t i = 0; i < m_GlyphsList.size(); i++)
     {
         bool prependSpace = false;
-        if (i != 0)
+        TextElement* text = m_pElFactory->createTextElement(
+            para,
+            getGCId(m_GlyphsList[i].getGC()),
+            m_GlyphsList[i].getGC().FontId);
+        if (i == 0)
         {
-            double spaceSize =
-                m_GlyphsList[i].getRect().X1 -
-                m_GlyphsList[i - 1].getRect().X2;
+            text->x = m_GlyphsList[0].getGC().Transformation.get(0, 2);
+            text->y = m_GlyphsList[0].getGC().Transformation.get(1, 2);
+            text->w = 0;
+            text->h = 0;
+            para->updateGeometryWith(text);
+            frame->updateGeometryWith(para);
+        }
+        else
+        {
+            double spaceSize = m_GlyphsList[i].getPrevSpaceWidth();
             prependSpace = spaceSize > spaceDetectBoundary;
         }
-        drawCharGlyphs(m_GlyphsList[i].getGlyph(),
-                       m_GlyphsList[i].getRect(),
-                       m_GlyphsList[i].getGC(),
-                       para,
-                       frame,
-                       prependSpace);
+        if (prependSpace)
+            text->Text.append(" ");
+        text->Text.append(m_GlyphsList[i].getGlyph());
     }
 
     m_GlyphsList.clear();
-}
-
-void PDFIProcessor::drawGlyphLine( const OUString&             rGlyphs,
-                                   const geometry::RealRectangle2D& rRect,
-                                   const geometry::Matrix2D&        rFontMatrix )
-{
-    ::basegfx::B2DPoint point1(rRect.X1, rRect.Y1);
-    ::basegfx::B2DPoint point2(rRect.X2, rRect.Y2);
-    point1 *= getCurrentContext().Transformation;
-    point2 *= getCurrentContext().Transformation;
-
-    if ((fYPrevTextPosition != point1.getY()) ||
-        (fXPrevTextPosition > point2.getX()) ||
-        ((fXPrevTextPosition + fPrevTextWidth * 1.3) < point1.getX()))
-    {
-        processGlyphLine();
-    }
-
-    CharGlyph aGlyph(m_pCurElement, getCurrentContext(), rFontMatrix, rRect, rGlyphs);
-
-    getGCId(getCurrentContext());
-
-    m_GlyphsList.push_back(aGlyph);
-
-    fYPrevTextPosition  = point1.getY();
-    fXPrevTextPosition  = point2.getX();
-    fPrevTextWidth      = point2.getX() - point1.getX();
-}
-
-GraphicsContext& PDFIProcessor::getTransformGlyphContext( CharGlyph& rGlyph )
-{
-    geometry::RealRectangle2D   rRect = rGlyph.getRect();
-    geometry::Matrix2D          rFontMatrix = rGlyph.getFontMatrix();
-
-    basegfx::B2DHomMatrix aFontMatrix;
-    basegfx::unotools::homMatrixFromMatrix(
-        aFontMatrix,
-        rFontMatrix );
-
-    FontAttributes aFontAttrs = m_aIdToFont[ rGlyph.getGC().FontId ];
-
-    // add transformation to GC
-    basegfx::B2DHomMatrix aFontTransform(basegfx::tools::createTranslateB2DHomMatrix(-rRect.X1, -rRect.Y1));
-    aFontTransform *= aFontMatrix;
-    aFontTransform.translate( rRect.X1, rRect.Y1 );
-
-
-    rGlyph.getGC().Transformation = rGlyph.getGC().Transformation * aFontTransform;
-    getGCId(rGlyph.getGC());
-
-    return rGlyph.getGC();
-}
-
-void PDFIProcessor::drawCharGlyphs( OUString&             rGlyphs,
-                                    geometry::RealRectangle2D& rRect,
-                                    const GraphicsContext& aGC,
-                                    ParagraphElement* pPara,
-                                    FrameElement* pFrame,
-                                    bool bSpaceFlag )
-{
-    OUString tempStr( 32 );
-
-    // check whether there was a previous draw frame
-    TextElement* pText = m_pElFactory->createTextElement( pPara,
-                                                          getGCId(aGC),
-                                                          aGC.FontId );
-    if( bSpaceFlag )
-        pText->Text.append( tempStr );
-
-    pText->Text.append( rGlyphs );
-
-    ::basegfx::B2DPoint point(rRect.X1, rRect.Y1);
-    point *= aGC.Transformation;
-
-    pText->x = point.getX();
-    pText->y = point.getY();
-    pText->w = 0.0001; // hack for solving of size auto-grow problem
-    pText->h = 0.0001;
-
-    pPara->updateGeometryWith( pText );
-
-    if( pFrame )
-      pFrame->updateGeometryWith( pPara );
 }
 
 void PDFIProcessor::drawGlyphs( const OUString&             rGlyphs,
                                 const geometry::RealRectangle2D& rRect,
                                 const geometry::Matrix2D&        rFontMatrix )
 {
-     drawGlyphLine( rGlyphs, rRect, rFontMatrix );
+    basegfx::B2DHomMatrix totalTextMatrix1(
+        rFontMatrix.m00, rFontMatrix.m01, rRect.X1,
+        rFontMatrix.m10, rFontMatrix.m11, rRect.Y1);
+    basegfx::B2DHomMatrix totalTextMatrix2(
+        rFontMatrix.m00, rFontMatrix.m01, rRect.X2,
+        rFontMatrix.m10, rFontMatrix.m11, rRect.Y2);
+    totalTextMatrix1 *= getCurrentContext().Transformation;
+    totalTextMatrix2 *= getCurrentContext().Transformation;
+
+    basegfx::B2DHomMatrix invMatrix(totalTextMatrix1);
+    basegfx::B2DHomMatrix invPrevMatrix(prevTextMatrix);
+    invMatrix.invert();
+    invPrevMatrix.invert();
+    basegfx::B2DHomMatrix offsetMatrix1(totalTextMatrix1);
+    basegfx::B2DHomMatrix offsetMatrix2(totalTextMatrix2);
+    offsetMatrix1 *= invPrevMatrix;
+    offsetMatrix2 *= invMatrix;
+
+    double charWidth = offsetMatrix2.get(0, 2);
+    double prevSpaceWidth = offsetMatrix1.get(0, 2) - prevCharWidth;
+
+    if ((totalTextMatrix1.get(0, 0) != prevTextMatrix.get(0, 0)) ||
+        (totalTextMatrix1.get(0, 1) != prevTextMatrix.get(0, 1)) ||
+        (totalTextMatrix1.get(1, 0) != prevTextMatrix.get(1, 0)) ||
+        (totalTextMatrix1.get(1, 1) != prevTextMatrix.get(1, 1)) ||
+        (offsetMatrix1.get(0, 2) < 0.0) ||
+        (prevSpaceWidth > prevCharWidth * 1.3) ||
+        (!basegfx::fTools::equalZero(offsetMatrix1.get(1, 2), 0.0001)))
+    {
+        processGlyphLine();
+    }
+
+    CharGlyph aGlyph(m_pCurElement, getCurrentContext(), charWidth, prevSpaceWidth, rGlyphs);
+    aGlyph.getGC().Transformation = totalTextMatrix1;
+    m_GlyphsList.push_back(aGlyph);
+
+    prevCharWidth = charWidth;
+    prevTextMatrix = totalTextMatrix1;
 }
 
 void PDFIProcessor::endText()

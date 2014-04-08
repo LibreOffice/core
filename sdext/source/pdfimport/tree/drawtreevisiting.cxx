@@ -222,6 +222,15 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
         if( rElem.MirrorVertical )
             fRotate += M_PI;
 
+        // First check here is to skip image frame case
+        if (rElem.IsForText &&
+            (aScale.getX() < 0) &&
+            (aScale.getY() > 0) &&
+            (basegfx::fTools::equalZero(aScale.getX() + aScale.getY(), 0.0001)))
+        {
+            fRotate += M_PI;
+        }
+
         // build transformation string
         if( fShearX != 0.0 )
         {
