@@ -1752,7 +1752,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                     if (aGrabBag[i].Name == "VML-Z-ORDER")
                     {
                         GraphicZOrderHelper* pZOrderHelper = m_rDMapper.graphicZOrderHelper();
-                        sal_Int32 zOrder;
+                        sal_Int32 zOrder(0);
                         aGrabBag[i].Value >>= zOrder;
                         xShapePropertySet->setPropertyValue( "ZOrder", uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
                         pZOrderHelper->addItem(xShapePropertySet, zOrder);
