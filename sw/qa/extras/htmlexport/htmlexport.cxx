@@ -16,13 +16,37 @@
 #include <swmodule.hxx>
 #include <usrpref.hxx>
 
+#include <libxml/HTMLparser.h>
+#include <libxml/HTMLtree.h>
+
 class Test : public SwModelTestBase
 {
+private:
+    FieldUnit m_eUnit;
+
 public:
-    Test()
-        : SwModelTestBase("/sw/qa/extras/htmlexport/data/", "HTML (StarWriter)"),
+    Test() :
+        SwModelTestBase("/sw/qa/extras/htmlexport/data/", "HTML (StarWriter)"),
         m_eUnit(FUNIT_NONE)
+    {}
+
+protected:
+    htmlDocPtr parseHtml()
     {
+        SvFileStream aFileStream(m_aTempFile.GetURL(), STREAM_READ);
+        aFileStream.Seek(STREAM_SEEK_TO_END);
+        sal_Size nSize = aFileStream.Tell();
+        aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
+        OStringBuffer aDocument(nSize);
+
+        char cCharacter;
+        for (sal_Size i = 0; i<nSize; ++i)
+        {
+            aFileStream.ReadChar(cCharacter);
+            aDocument.append(cCharacter);
+        }
+
+        return htmlParseDoc((xmlChar*)aDocument.getStr(), NULL);
     }
 
 private:
@@ -38,6 +62,11 @@ private:
 
     void preTest(const char* filename) SAL_OVERRIDE
     {
+        if (getTestName() == "testExportOfImagesWithSkipImageEnabled")
+            setFilterOptions("SkipImages");
+        else
+            setFilterOptions("");
+
         if (OString(filename) == "charborder.odt" && SW_MOD())
         {
             // FIXME if padding-top gets exported as inches, not cms, we get rounding errors.
@@ -55,19 +84,17 @@ private:
             pPref->SetMetric(m_eUnit);
         }
     }
-
-    FieldUnit m_eUnit;
 };
 
-#define DECLARE_HTMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
+#define DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 
-DECLARE_HTMLEXPORT_TEST(testFdo62336, "fdo62336.docx")
+DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testFdo62336, "fdo62336.docx")
 {
     // The problem was essentially a crash during table export as docx/rtf/html
     // If either of no-calc-layout or no-test-import is enabled, the crash does not occur
 }
 
-DECLARE_HTMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
+DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testCharacterBorder, "charborder.odt")
 {
 
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
@@ -88,6 +115,28 @@ DECLARE_HTMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
     }
 
     // No shadow
+}
+
+#define DECLARE_HTMLEXPORT_TEST(TestName, filename) DECLARE_SW_EXPORT_TEST(TestName, filename, Test)
+
+DECLARE_HTMLEXPORT_TEST(testExportOfImages, "textAndImage.docx")
+{
+    htmlDocPtr pDoc = parseHtml();
+    if (pDoc)
+    {
+        assertXPath(pDoc, "/html/body", 1);
+        assertXPath(pDoc, "/html/body/p/img", 1);
+    }
+}
+
+DECLARE_HTMLEXPORT_TEST(testExportOfImagesWithSkipImageEnabled, "textAndImage.docx")
+{
+    htmlDocPtr pDoc = parseHtml();
+    if (pDoc)
+    {
+        assertXPath(pDoc, "/html/body", 1);
+        assertXPath(pDoc, "/html/body/p/img", 0);
+    }
 }
 
 #endif
