@@ -90,7 +90,9 @@ struct TItemInfo
 {
     TItemInfo()
         : pItem(0)
-    {}
+        , eItem(E_USEROPTIONS)
+    {
+    }
 
     utl::detail::Options * pItem;
     EItem eItem;
