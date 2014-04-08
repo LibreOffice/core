@@ -71,6 +71,7 @@ public:
     void testSharedFormulaXLSX();
     void testLegacyCellAnchoredRotatedShape();
     void testEnhancedProtectionXLS();
+    void testEnhancedProtectionXLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
@@ -85,6 +86,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
     CPPUNIT_TEST(testEnhancedProtectionXLS);
+    CPPUNIT_TEST(testEnhancedProtectionXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -499,12 +501,8 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
     }
 }
 
-void ScFiltersTest::testEnhancedProtectionXLS()
+void testEnhancedProtectionImpl( ScDocument* pDoc )
 {
-    ScDocShellRef xDocSh = loadDoc("enhanced-protection.", XLS);
-    CPPUNIT_ASSERT(xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
-
     const ScTableProtection* pProt = pDoc->GetTabProtection(0);
 
     CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 0, 0, 0, 0, 0)));  // locked
@@ -516,6 +514,26 @@ void ScFiltersTest::testEnhancedProtectionXLS()
     CPPUNIT_ASSERT(  pProt->isBlockEditable( ScRange( 0, 1, 0, 0, 2, 0)));  // union of two different editables
     CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 0, 0, 0, 1, 0)));  // union of locked and editable
     CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 2, 0, 0, 3, 0)));  // union of editable and password editable
+}
+
+void ScFiltersTest::testEnhancedProtectionXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("enhanced-protection.", XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    testEnhancedProtectionImpl( pDoc);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testEnhancedProtectionXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("enhanced-protection.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    testEnhancedProtectionImpl( pDoc);
 
     xDocSh->DoClose();
 }
