@@ -8663,7 +8663,7 @@ serf)
                              ["-L${WORKDIR}/UnpackedTarball/apr/.libs -lapr-1 -L${WORKDIR}/UnpackedTarball/apr_util/.libs -laprutil-1"])
     if test "$COM" = "MSC"; then
         APR_LIB_DIR="LibR"
-        test -n "MSVC_USE_DEBUG_RUNTIME" && APR_LIB_DIR="LibD"
+        test -n "${MSVC_USE_DEBUG_RUNTIME}" && APR_LIB_DIR="LibD"
         APR_LIBS="${WORKDIR}/UnpackedTarball/apr/${APR_LIB_DIR}/apr-1.lib ${WORKDIR}/UnpackedTarball/apr_util/${APR_LIB_DIR}/aprutil-1.lib"
     fi
 
@@ -8672,7 +8672,7 @@ serf)
                              ["-L${WORKDIR}/UnpackedTarball/serf/.libs -lserf-1"])
     if test "$COM" = "MSC"; then
         SERF_LIB_DIR="Release"
-        test -n "MSVC_USE_DEBUG_RUNTIME" && SERF_LIB_DIR="Debug"
+        test -n "${MSVC_USE_DEBUG_RUNTIME}" && SERF_LIB_DIR="Debug"
         SERF_LIBS="${WORKDIR}/UnpackedTarball/serf/${SERF_LIB_DIR}/serf-1.lib"
     fi
     ;;
