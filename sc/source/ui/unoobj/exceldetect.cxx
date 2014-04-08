@@ -145,41 +145,41 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
             return OUString();
 
         aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= isTemplate(aType) ? OUString("MS Excel 97 Vorlage/Template") : OUString("MS Excel 97");
-        return aType;
     }
 
-    if (aType == "calc_MS_Excel_95" || aType == "calc_MS_Excel_95_VorlageTemplate")
+    else if (aType == "calc_MS_Excel_95" || aType == "calc_MS_Excel_95_VorlageTemplate")
     {
         // See if this stream is a Excel 95 (BIFF5) stream.
         if (!hasStream(xInStream, "Book"))
             return OUString();
 
         aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= isTemplate(aType) ? OUString("MS Excel 95 Vorlage/Template") : OUString("MS Excel 95");
-        return aType;
     }
 
-    if (aType == "calc_MS_Excel_5095" || aType == "calc_MS_Excel_5095_VorlageTemplate")
+    else if (aType == "calc_MS_Excel_5095" || aType == "calc_MS_Excel_5095_VorlageTemplate")
     {
         // See if this stream is a Excel 5.0/95 stream.
         if (!hasStream(xInStream, "Book"))
             return OUString();
 
         aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= isTemplate(aType) ? OUString("MS Excel 5.0/95 Vorlage/Template") : OUString("MS Excel 5.0/95");
-        return aType;
     }
 
-    if (aType == "calc_MS_Excel_40" || aType == "calc_MS_Excel_40_VorlageTemplate")
+    else if (aType == "calc_MS_Excel_40" || aType == "calc_MS_Excel_40_VorlageTemplate")
     {
         // See if this stream is a Excel 4.0 stream.
         if (!isExcel40(xInStream))
             return OUString();
 
         aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= isTemplate(aType) ? OUString("MS Excel 4.0 Vorlage/Template") : OUString("MS Excel 4.0");
-        return aType;
     }
 
-    // failed!
-    return OUString();
+    else
+        // Nothing to detect.
+        return OUString();
+
+    aMediaDesc >> lDescriptor;
+    return aType;
 }
 
 uno::Sequence<OUString> ScExcelBiffDetect::impl_getStaticSupportedServiceNames()
