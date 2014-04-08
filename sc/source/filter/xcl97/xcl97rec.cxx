@@ -1492,7 +1492,7 @@ void XclExpSheetEnhancedProtection::WriteBody( XclExpStream& rStrm )
     rStrm << maEnhancedProtection.mnAreserved;              // 1 bit A and 31 bits reserved
     rStrm << maEnhancedProtection.mnPasswordVerifier;       // wPassword
     rStrm << XclExpString( maEnhancedProtection.maTitle);   // stTitle
-    bool bSDContainer = ((maEnhancedProtection.mnAreserved & 0x80000000) == 0x80000000);
+    bool bSDContainer = ((maEnhancedProtection.mnAreserved & 0x00000001) == 0x00000001);
     sal_uInt32 nCbSD = maEnhancedProtection.maSecurityDescriptor.size();
     SAL_WARN_IF( bSDContainer && nCbSD < 20, "sc.filter",
             "XclExpSheetEnhancedProtection A flag indicates container but cbSD < 20");

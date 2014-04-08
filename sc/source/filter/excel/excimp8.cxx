@@ -371,7 +371,7 @@ void ImportExcel8::Feat( void )
     aProt.mnAreserved = aIn.ReaduInt32();
     aProt.mnPasswordVerifier = aIn.ReaduInt32();
     aProt.maTitle = aIn.ReadUniString();
-    if ((aProt.mnAreserved & 0x80000000) == 0x80000000)
+    if ((aProt.mnAreserved & 0x00000001) == 0x00000001)
     {
         sal_uInt32 nCbSD = aIn.ReaduInt32();
         // TODO: could here be some sanity check applied to not allocate 4GB?
