@@ -361,6 +361,7 @@ lo_initialize( LibreOffice *pThis, const char *app_path )
         return 0;
 
     try {
+        osl_setCommandArgs(0, NULL);
         initialize_uno( aAppURL );
         force_c_locale();
 
