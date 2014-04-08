@@ -442,7 +442,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
         if (nSecondPlayFullSet == ATTR_SET)
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, bSecondPlayFull));
-        else if (nPlayFullSet == ATTR_MIXED)
+        else if (nSecondPlayFullSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ACTION_PLAYFULL);
         else
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
