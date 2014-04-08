@@ -246,7 +246,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 ))
 
 define gb_LinkTarget__use_glew
-$(call gb_LinkTarget_use_external_project,$(1),glew)
+$(call gb_LinkTarget_use_package,$(1),glew)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,glew/include) \
 	$$(INCLUDE) \
