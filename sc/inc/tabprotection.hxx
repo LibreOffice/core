@@ -133,6 +133,11 @@ struct ScEnhancedProtection
     {
         return !maSecurityDescriptor.empty() || !maSecurityDescriptorXML.isEmpty();
     }
+
+    bool hasPassword() const
+    {
+        return mnPasswordVerifier != 0 || !maHashValue.isEmpty();
+    }
 };
 
 /** sheet protection state container
