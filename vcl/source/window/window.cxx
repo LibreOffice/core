@@ -866,6 +866,8 @@ static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
     // screen hi-dpi to greater than 168
     if (nDPI > 168)
         nResult = std::max(sal_Int32(1), (nDPI + 48) / 96);
+#else
+    (void)nDPI;
 #endif
 
     return nResult;
