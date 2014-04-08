@@ -129,7 +129,8 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT LibreOffice *liblibreoffice_hook(void);
 
 static void doc_destroy(LibreOfficeDocument* pThis);
-static int  doc_saveAs(LibreOfficeDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
+static int  doc_saveAs(LibreOfficeDocument* pThis, const char* pUrl, const char* pFormat);
+static int  doc_saveAsWithOptions(LibreOfficeDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
 
 struct LibLODocument_Impl : public _LibreOfficeDocument
 {
@@ -142,6 +143,7 @@ struct LibLODocument_Impl : public _LibreOfficeDocument
 
         destroy = doc_destroy;
         saveAs = doc_saveAs;
+        saveAsWithOptions = doc_saveAsWithOptions;
     }
 };
 
@@ -207,7 +209,12 @@ static LibreOfficeDocument* lo_documentLoad(LibreOffice* pThis, const char* pURL
     return NULL;
 }
 
-static int doc_saveAs(LibreOfficeDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
+static int doc_saveAs(LibreOfficeDocument* pThis, const char* sUrl, const char* pFormat)
+{
+    return doc_saveAsWithOptions(pThis, sUrl, pFormat, NULL);
+}
+
+static int doc_saveAsWithOptions(LibreOfficeDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
