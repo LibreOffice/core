@@ -358,9 +358,21 @@ void ScOrcusSheet::set_shared_formula(os::row_t row, os::col_t col, size_t sinde
 }
 
 void ScOrcusSheet::set_array_formula(
-    os::row_t /*row*/, os::col_t /*col*/, os::formula_grammar_t /*grammar*/,
-    const char* /*p*/, size_t /*n*/, os::row_t /*array_rows*/, os::col_t /*array_cols*/)
+    os::row_t row, os::col_t col, os::formula_grammar_t grammar,
+    const char* p, size_t n, os::row_t array_rows, os::col_t array_cols)
 {
+    formula::FormulaGrammar::Grammar eGrammar = getCalcGrammarFromOrcus( grammar );
+    OUString aFormula(p, n, RTL_TEXTENCODING_UTF8);
+
+    ScRange aRange(col, row, mnTab, col+array_cols, row + array_rows, mnTab);
+
+    ScCompiler aComp(&mrDoc.getDoc(), aRange.aStart);
+    aComp.SetGrammar(eGrammar);
+    boost::scoped_ptr<ScTokenArray> pArray(aComp.CompileString(aFormula));
+    if (!pArray)
+        return;
+
+    mrDoc.setMatrixCells(aRange, *pArray, eGrammar);
 }
 
 void ScOrcusSheet::set_array_formula(
