@@ -59,6 +59,7 @@ certain functionality.
 
 @li @c chart2
 @li @c chart2.areachart
+@li @c chart2.barchart3D
 @li @c chart2.opengl
 @li @c chart2.tools
 
