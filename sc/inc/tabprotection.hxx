@@ -119,9 +119,15 @@ struct ScEnhancedProtection
     sal_uInt32                  mnAreserved;
     sal_uInt32                  mnPasswordVerifier;
     OUString                    maTitle;
-    ::std::vector< sal_uInt8 >  maSecurityDescriptor;   // raw data
+    ::std::vector< sal_uInt8 >  maSecurityDescriptor;       // imported as raw BIFF data
+    OUString                    maSecurityDescriptorXML;    // imported from OOXML
 
     ScEnhancedProtection() : mnAreserved(0), mnPasswordVerifier(0) {}
+
+    bool hasSecurityDescriptor() const
+    {
+        return !maSecurityDescriptor.empty() || !maSecurityDescriptorXML.isEmpty();
+    }
 };
 
 /** sheet protection state container

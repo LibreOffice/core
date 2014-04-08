@@ -396,7 +396,7 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
     for (::std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
             itEnd(maEnhancedProtection.end()); it != itEnd; ++it)
     {
-        if ((*it).maSecurityDescriptor.empty() && (*it).maRangeList.Is())
+        if (!(*it).hasSecurityDescriptor() && (*it).maRangeList.Is())
         {
             if ((*it).maRangeList->In( rRange))
             {
@@ -416,7 +416,7 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
     for (::std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
             itEnd(maEnhancedProtection.end()); it != itEnd; ++it)
     {
-        if ((*it).maSecurityDescriptor.empty() && (*it).maRangeList.Is())
+        if (!(*it).hasSecurityDescriptor() && (*it).maRangeList.Is())
         {
             ScRangeList aList( (*it).maRangeList->GetIntersectedRange( rRange));
             if (aList.size() == 1 && *aList[0] == rRange)
@@ -437,7 +437,7 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
     for (::std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
             itEnd(maEnhancedProtection.end()); it != itEnd; ++it)
     {
-        if ((*it).maSecurityDescriptor.empty() && (*it).maRangeList.Is())
+        if (!(*it).hasSecurityDescriptor() && (*it).maRangeList.Is())
         {
             // Ranges are editable if no password is assigned.
             if (!(*it).mnPasswordVerifier)
