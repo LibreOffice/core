@@ -80,6 +80,13 @@ typedef struct tagAFID_CACHE
     unsigned long LinkedFileTime;               /* 0 if not linked */
     long Width;                             /* -1 if not present */
     long Height;                                /* -1 if not present */
+    tagAFID_CACHE()
+        : LinkedFileSize(0)
+        , LinkedFileTime(0)
+        , Width(0)
+        , Height(0)
+    {
+    }
 } AFID_CACHE,  * PAFID_CACHE;
 
 /* Maximum string sizes - includes space for null terminator */
