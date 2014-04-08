@@ -1509,12 +1509,12 @@ void SfxBindings::UpdateControllers_Impl
                     continue;
                 }
 
-                if ( SFX_ITEM_DISABLED == eState || !pEnumItem->IsEnabled( pSlave->GetSlotId()) )
+                if ( SFX_ITEM_DISABLED == eState || (pEnumItem && !pEnumItem->IsEnabled( pSlave->GetSlotId())) )
                 {
                     // disabled
                     pEnumCache->SetState(SFX_ITEM_DISABLED, 0);
                 }
-                else if ( SFX_ITEM_AVAILABLE == eState )
+                else if ( SFX_ITEM_AVAILABLE == eState && pEnumItem )
                 {
                     // Determine enum value
                     sal_uInt16 nValue = pEnumItem->GetEnumValue();
