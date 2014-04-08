@@ -66,6 +66,16 @@ private:
     Color maLineColor; // RGBA line color
 };
 
+class Camera : public Renderable3DObject
+{
+public:
+    Camera();
+private:
+
+    glm::vec3 maPos;
+    glm::vec3 maDirection;
+};
+
 namespace temporary {
 
 class TemporaryContext

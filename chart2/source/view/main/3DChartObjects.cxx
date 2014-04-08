@@ -18,6 +18,12 @@ Bar::Bar(const glm::mat4& rPosition):
 {
 }
 
+Camera::Camera():
+    maPos(10,10,-10),
+    maDirection(glm::vec3(0,0,0)-maPos)
+{
+}
+
 namespace temporary {
 
 TemporaryContext::TemporaryContext():
