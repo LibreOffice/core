@@ -1,0 +1,12 @@
+-*- Mode:Diff -*-
+--- glew/Makefile
++++ glew/Makefile
+@@ -93,7 +93,7 @@
+ LIB.SOBJS.MX       := $(addprefix tmp/$(SYSTEM)/mx/shared/,$(LIB.SRCS.NAMES))
+ LIB.SOBJS.MX       := $(LIB.SOBJS.MX:.c=.o)
+ 
+-glew.lib: lib lib/$(LIB.SHARED) lib/$(LIB.STATIC) glew.pc
++glew.lib: lib lib/$(LIB.STATIC)
+ 
+ lib:
+ 	mkdir lib

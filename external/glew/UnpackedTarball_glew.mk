@@ -13,6 +13,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,glew,$(GLEW_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,glew,0))
 
+$(eval $(call gb_UnpackedTarball_fix_end_of_line,glew,\
+	Makefile \
+))
+
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_UnpackedTarball_set_patchflags,glew,--binary))
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
@@ -28,6 +32,18 @@ endif
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 	external/glew/glew-macosx-install-name.patch.1 \
+))
+endif
+
+ifeq ($(OS),IOS)
+$(eval $(call gb_UnpackedTarball_add_patches,glew,\
+	external/glew/glew-ios.patch.1 \
+))
+endif
+
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+$(eval $(call gb_UnpackedTarball_add_patches,glew,\
+	external/glew/glew-static-only.patch.1 \
 ))
 endif
 

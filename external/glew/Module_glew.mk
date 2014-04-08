@@ -9,14 +9,10 @@
 
 $(eval $(call gb_Module_Module,glew))
 
-ifeq ($(CROSS_COMPILING),)
-
 $(eval $(call gb_Module_add_targets,glew,\
 	ExternalProject_glew \
 	UnpackedTarball_glew \
 	ExternalPackage_glew \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:

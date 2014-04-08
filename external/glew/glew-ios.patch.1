@@ -1,0 +1,12 @@
+-*- Mode:Diff -*-
+--- glew/config/Makefile.darwin
++++ glew/config/Makefile.darwin
+@@ -8,7 +8,7 @@
+ CFLAGS.EXTRA += -I/usr/X11R6/include -D'GLEW_APPLE_GLX'
+ LDFLAGS.GL = -L/usr/X11R6/lib -lGL -lX11
+ else
+-LDFLAGS.GL = -framework AGL -framework OpenGL
++LDFLAGS.GL = -framework OpenGLES
+ endif
+ LDFLAGS.STATIC =
+ LDFLAGS.DYNAMIC =
