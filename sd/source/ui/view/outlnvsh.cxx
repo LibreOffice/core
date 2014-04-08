@@ -633,7 +633,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         case SID_TRANSLITERATE_HIRAGANA:
         case SID_TRANSLITERATE_KATAGANA:
         {
-            OutlinerView* pOLV = pOlView->GetViewByWindow( GetActiveWindow() );
+            OutlinerView* pOLV = pOlView ? pOlView->GetViewByWindow( GetActiveWindow() ) : 0;
             if( pOLV )
             {
                 using namespace ::com::sun::star::i18n;
