@@ -118,6 +118,7 @@ void ScNameDlg::Init()
     pCtrl->set_height_request(pCtrl->GetTextHeight()*12);
 
     m_pRangeManagerTable = new ScRangeManagerTable(*pCtrl, maRangeMap, maCursorPos);
+    m_pRangeManagerTable->setInitListener(this);
     m_pRangeManagerTable->SetSelectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
     m_pRangeManagerTable->SetDeselectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
 
@@ -145,15 +146,7 @@ void ScNameDlg::Init()
         m_pLbScope->InsertEntry(aTabName);
     }
 
-
-
-    if (m_pRangeManagerTable->GetSelectionCount())
-    {
-        SelectionChanged();
-    }
-
     CheckForEmptyTable();
-
 }
 
 sal_Bool ScNameDlg::IsRefInputMode() const
@@ -185,6 +178,12 @@ sal_Bool ScNameDlg::Close()
     if (mbDataChanged && !mbCloseWithoutUndo)
         mpViewData->GetDocFunc().ModifyAllRangeNames(maRangeMap);
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
+}
+
+void ScNameDlg::tableInitialized()
+{
+    if (m_pRangeManagerTable->GetSelectionCount())
+        SelectionChanged();
 }
 
 void ScNameDlg::CheckForEmptyTable()
@@ -418,8 +417,6 @@ void ScNameDlg::NameModified()
 
 void ScNameDlg::SelectionChanged()
 {
-
-
     //don't update if we have just modified due to user input
     if (!mbNeedUpdate)
     {
