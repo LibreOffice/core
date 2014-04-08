@@ -28,6 +28,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -39,7 +40,7 @@
 #include <libxml/xpathInternals.h>
 #include <libxml/parserInternals.h>
 
-using namespace com::sun::star;
+using namespace css;
 
 #define DEFAULT_STYLE "Default Style"
 #define EMU_TO_MM100(EMU) (EMU / 360)
@@ -58,6 +59,8 @@ using namespace com::sun::star;
  */
 #define DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, BaseClass) \
     class TestName : public BaseClass { \
+        protected:\
+    virtual OUString getTestName() { return OUString::createFromAscii(#TestName); }\
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Import); \
@@ -77,6 +80,8 @@ using namespace com::sun::star;
 
 #define DECLARE_SW_IMPORT_TEST(TestName, filename, BaseClass) \
     class TestName : public BaseClass { \
+        protected:\
+    virtual OUString getTestName() { return OUString::createFromAscii(#TestName); }\
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Import); \
@@ -90,22 +95,50 @@ using namespace com::sun::star;
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
+#define DECLARE_SW_EXPORT_TEST(TestName, filename, BaseClass) \
+    class TestName : public BaseClass { \
+        protected:\
+    virtual OUString getTestName() { return OUString::createFromAscii(#TestName); }\
+        public:\
+    CPPUNIT_TEST_SUITE(TestName); \
+    CPPUNIT_TEST(Import_Export); \
+    CPPUNIT_TEST_SUITE_END(); \
+    \
+    void Import_Export() {\
+        executeImportExport(filename);\
+    }\
+    void verify() SAL_OVERRIDE;\
+    }; \
+    CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
+    void TestName::verify()
+
 /// Base class for filter tests loading or roundtriping a document, then asserting the document model.
 class SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
 {
+    OUString maFilterOptions;
+protected:
+    virtual OUString getTestName() { return OUString(); }
+
 public:
+    OUString& getFilterOptions()
+    {
+        return maFilterOptions;
+    }
+    void setFilterOptions(OUString rFilterOptions)
+    {
+        maFilterOptions = rFilterOptions;
+    }
+
     SwModelTestBase(const char* pTestDocumentPath = "", const char* pFilter = "")
         : mpXmlBuffer(0),
         mpTestDocumentPath(pTestDocumentPath),
         mpFilter(pFilter),
         m_nStartTime(0),
         m_bExported(false)
-    {
-    }
+    {}
 
     virtual ~SwModelTestBase()
-    {
-    }
+    {}
 
     virtual void setUp() SAL_OVERRIDE
     {
@@ -152,6 +185,23 @@ protected:
         preTest(filename);
         load(mpTestDocumentPath, filename);
         reload(mpFilter, filename);
+        postTest(filename);
+        verify();
+        finish();
+    }
+
+    /**
+     * Helper func used by each unit test to test the 'export' code.
+     * (Loads the requested file for document base (this represents
+     * the initial document condition), exports with the desired
+     * export filter and then calls 'verify' method)
+     */
+    void executeImportExport(const char* filename)
+    {
+        header();
+        preTest(filename);
+        load(mpTestDocumentPath, filename);
+        save(OUString::createFromAscii(mpFilter), m_aTempFile);
         postTest(filename);
         verify();
         finish();
@@ -443,12 +493,13 @@ protected:
     void reload(const char* pFilter, const char* filename)
     {
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aArgs(1);
-        aArgs[0].Name = "FilterName";
         OUString aFilterName = OUString::createFromAscii(pFilter);
-        aArgs[0].Value <<= aFilterName;
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= aFilterName;
+        if (!maFilterOptions.isEmpty())
+            aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
         m_aTempFile.EnableKillingFile();
-        xStorable->storeToURL(m_aTempFile.GetURL(), aArgs);
+        xStorable->storeToURL(m_aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
         xComponent->dispose();
         m_bExported = true;
@@ -474,14 +525,15 @@ protected:
     }
 
     /// Save the loaded document to a tempfile. Can be used to check the resulting docx/odt directly as a ZIP file.
-    void save(const OUString& aFilter, utl::TempFile& rTempFile)
+    void save(const OUString& aFilterName, utl::TempFile& rTempFile)
     {
         rTempFile.EnableKillingFile();
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aFilterArgs(1);
-        aFilterArgs[0].Name = "FilterName";
-        aFilterArgs[0].Value <<= aFilter;
-        xStorable->storeToURL(rTempFile.GetURL(), aFilterArgs);
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= aFilterName;
+        if (!maFilterOptions.isEmpty())
+            aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
+        xStorable->storeToURL(rTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     }
 
     void finish()
