@@ -606,87 +606,93 @@ void OutputDevice::SetGrayscaleColors( Gradient &rGradient )
 void OutputDevice::DrawGradient( const Rectangle& rRect,
                                  const Gradient& rGradient )
 {
-
     if ( mnDrawMode & DRAWMODE_NOGRADIENT )
-    {
         return;     // nothing to draw!
-    }
-    else if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
-    {
 
-        Color aColor = GetSingleColorGradientFill();
+    if ( mbInitClipRegion )
+        ImplInitClipRegion();
 
-        Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-        SetLineColor( aColor );
-        SetFillColor( aColor );
-        DrawRect( rRect );
-        Pop();
-        return;
-    }
-
-    Gradient aGradient( rGradient );
-
-    if ( mnDrawMode & ( DRAWMODE_GRAYGRADIENT | DRAWMODE_GHOSTEDGRADIENT ) )
-    {
-        SetGrayscaleColors( aGradient );
-    }
-
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaGradientAction( rRect, aGradient ) );
-
-    if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
+    if ( mbOutputClipped )
         return;
 
-    // convert rectangle to pixels
-    Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
-    aRect.Justify();
-
-    // do nothing if the rectangle is empty
-    if ( !aRect.IsEmpty() )
+    if ( !rRect.IsEmpty() )
     {
-        // Clip Region sichern
-        Push( PUSH_CLIPREGION );
-        IntersectClipRegion( rRect );
-
-        // because we draw with no border line, we have to expand gradient
-        // rect to avoid missing lines on the right and bottom edge
-        aRect.Left()--;
-        aRect.Top()--;
-        aRect.Right()++;
-        aRect.Bottom()++;
-
-        // we need a graphics
-        if ( !mpGraphics )
+        if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
         {
-            if ( !ImplGetGraphics() )
-                return;
+            Color aColor = GetSingleColorGradientFill();
+
+            Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            SetLineColor( aColor );
+            SetFillColor( aColor );
+            DrawRect( rRect );
+            Pop();
+            return;
         }
 
-        if ( mbInitClipRegion )
-            ImplInitClipRegion();
+        Gradient aGradient( rGradient );
 
-        if ( !mbOutputClipped )
+        if( mpMetaFile )
+            mpMetaFile->AddAction( new MetaGradientAction( rRect, aGradient ) );
+
+        if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
+            return;
+
+        if ( mnDrawMode & ( DRAWMODE_GRAYGRADIENT | DRAWMODE_GHOSTEDGRADIENT ) )
         {
-            // gradients are drawn without border
-            if ( mbLineColor || mbInitLineColor )
+            SetGrayscaleColors( aGradient );
+        }
+
+        if ( !Rectangle( PixelToLogic( Point() ), GetOutputSize() ).IsEmpty() )
+        {
+            // convert rectangle to pixels
+            Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
+            aRect.Justify();
+
+            // do nothing if the rectangle is empty
+            if ( !aRect.IsEmpty() )
             {
-                mpGraphics->SetLineColor();
-                mbInitLineColor = true;
+                // we need a graphics
+                if ( !mpGraphics && !ImplGetGraphics() )
+                    return;
+
+                // secure clip region
+                Push( PUSH_CLIPREGION );
+                IntersectClipRegion( rRect );
+
+                // because we draw with no border line, we have to expand gradient
+                // rect to avoid missing lines on the right and bottom edge
+                aRect.Left()--;
+                aRect.Top()--;
+                aRect.Right()++;
+                aRect.Bottom()++;
+
+                if ( mbInitClipRegion )
+                    ImplInitClipRegion();
+
+                if ( !mbOutputClipped )
+                {
+                    // gradients are drawn without border
+                    if ( mbLineColor || mbInitLineColor )
+                    {
+                        mpGraphics->SetLineColor();
+                        mbInitLineColor = true;
+                    }
+
+                    mbInitFillColor = true;
+
+                    // calculate step count if necessary
+                    if ( !aGradient.GetSteps() )
+                        aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
+
+                    if( aGradient.GetStyle() == GradientStyle_LINEAR || aGradient.GetStyle() == GradientStyle_AXIAL )
+                        ImplDrawLinearGradient( aRect, rGradient, false, NULL );
+                    else
+                        ImplDrawComplexGradient( aRect, rGradient, false, NULL );
+                }
+
+                Pop();
             }
-
-            mbInitFillColor = true;
-
-            // calculate step count if necessary
-            if ( !aGradient.GetSteps() )
-                aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
-
-            if( aGradient.GetStyle() == GradientStyle_LINEAR || aGradient.GetStyle() == GradientStyle_AXIAL )
-                ImplDrawLinearGradient( aRect, rGradient, false, NULL );
-            else
-                ImplDrawComplexGradient( aRect, rGradient, false, NULL );
         }
-
-        Pop();
     }
 
     if( mpAlphaVDev )
