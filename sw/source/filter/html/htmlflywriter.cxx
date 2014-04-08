@@ -809,7 +809,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                        const sal_Char *pMarkType,
                        const ImageMap *pAltImgMap )
 {
-    SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter &rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     if (rHTMLWrt.mbSkipImages)
         return rHTMLWrt;
@@ -1439,6 +1439,11 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
 static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                        sal_Bool /*bInCntnr*/ )
 {
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+
+    if (rHTMLWrt.mbSkipImages)
+        return rWrt;
+
     ImageMap aIMap;
     Graphic aGraphic( ((SwFrmFmt &)rFrmFmt).MakeGraphic( &aIMap ) );
     Size aSz( 0, 0 );
@@ -1452,7 +1457,10 @@ static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                       sal_Bool bInCntnr )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+
+    if (rHTMLWrt.mbSkipImages)
+        return rWrt;
 
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
     sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;

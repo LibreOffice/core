@@ -1247,7 +1247,10 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                   sal_Bool bInCntnr )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+
+    if (rHTMLWrt.mbSkipImages)
+        return rWrt;
 
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
     sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
@@ -1257,14 +1260,12 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     if( !pOLENd )
         return rWrt;
 
-    {
-        Graphic aGraphic( *pOLENd->GetGraphic() );
-        sal_uLong nFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
-                                  : HTML_FRMOPTS_GENIMG;
-        OutHTML_Image( rWrt, rFrmFmt, aGraphic,
-                       pOLENd->GetTitle(), pOLENd->GetTwipSize(),
-                       nFlags, "ole" );
-    }
+    Graphic aGraphic( *pOLENd->GetGraphic() );
+    sal_uLong nFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
+        : HTML_FRMOPTS_GENIMG;
+    OutHTML_Image( rWrt, rFrmFmt, aGraphic,
+            pOLENd->GetTitle(), pOLENd->GetTwipSize(),
+            nFlags, "ole" );
 
     return rWrt;
 }
