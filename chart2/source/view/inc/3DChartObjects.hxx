@@ -32,10 +32,8 @@ class Bar : public Renderable3DObject
 public:
     Bar( const glm::mat4& rPosition );
 private:
-    bool mbRoundedCorners;
     glm::mat4 maPos;
     Color maColor; // RGBA fill color
-    sal_Int32 nUniqueId;
 };
 
 class Line : public Renderable3DObject
@@ -44,7 +42,6 @@ private:
     glm::vec3 maPosBegin;
     glm::vec3 maPosEnd;
     Color maLineColor; // RGBA line color
-    sal_Int32 nUniqueId;
 };
 
 class Text : public Renderable3DObject
@@ -53,7 +50,6 @@ private:
     BitmapEx maText;
     glm::vec3 maTopLeft;
     glm::vec3 maBottomRight;
-    sal_Int32 nUniqueId;
 };
 
 class Rectangle : public Renderable3DObject
@@ -61,7 +57,6 @@ class Rectangle : public Renderable3DObject
 private:
     glm::vec3 maTopLeft;
     glm::vec3 maBottomRight;
-    sal_Int32 nUniqueId;
     Color maColor; // RGBA fill color
     Color maLineColor; // RGBA line color
 };
