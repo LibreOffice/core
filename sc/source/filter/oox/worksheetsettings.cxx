@@ -28,6 +28,7 @@
 #include "workbooksettings.hxx"
 #include "tabprotection.hxx"
 #include "document.hxx"
+#include "convuno.hxx"
 
 namespace oox {
 namespace xls {
@@ -126,6 +127,42 @@ void WorksheetSettings::importSheetProtection( const AttributeList& rAttribs )
     maSheetProt.mbAutoFilter       = rAttribs.getBool( XML_autoFilter, true );
     maSheetProt.mbPivotTables      = rAttribs.getBool( XML_pivotTables, true );
     maSheetProt.mbSelectUnlocked   = rAttribs.getBool( XML_selectUnlockedCells, false );
+}
+
+void WorksheetSettings::importProtectedRanges( const AttributeList& rAttribs )
+{
+    (void)rAttribs; // no attribs known (yet?)
+}
+
+void WorksheetSettings::importProtectedRange( const AttributeList& rAttribs )
+{
+    ScEnhancedProtection aProt;
+    /* XXX ECMA-376/OOXML XMLSchema and ISO/IEC 29500 say 'securityDescriptor'
+     * would be an element, but Excel2013 stores it as attribute. */
+    aProt.maSecurityDescriptorXML = rAttribs.getString( XML_securityDescriptor, OUString());
+    /* XXX ECMA-376/OOXML or ISO/IEC 29500 do not even mention a 'password'
+     * attribute here (or anywhere else), but this is what Excel2013 writes,
+     * similar to BIFF. OOXML XMLschema and ISO/IEC 29500 instead define
+     * 'algorithmName', 'hashValue', 'saltValue' and 'spinCount'. */
+    aProt.mnPasswordVerifier = rAttribs.getIntegerHex( XML_password, 0);
+    aProt.maTitle = rAttribs.getString( XML_name, OUString());
+    OUString aRefs( rAttribs.getString( XML_sqref, OUString()));
+    if (!aRefs.isEmpty())
+    {
+        ApiCellRangeList aRangeList;
+        getAddressConverter().convertToCellRangeList( aRangeList, aRefs, getSheetIndex(), true );
+        if (!aRangeList.empty())
+        {
+            ScRangeList* pRangeList = aProt.maRangeList = new ScRangeList;
+            for (ApiCellRangeList::const_iterator itr( aRangeList.begin()), end( aRangeList.end()); itr != end; ++itr)
+            {
+                ScRange aRange;
+                ScUnoConversion::FillScRange( aRange, *itr);
+                pRangeList->Append( aRange);
+            }
+        }
+    }
+    maSheetProt.maEnhancedProtections.push_back( aProt);
 }
 
 void WorksheetSettings::importChartProtection( const AttributeList& rAttribs )
@@ -228,6 +265,8 @@ void WorksheetSettings::finalizeImport()
         aProtect.setOption( ScTableProtection::AUTOFILTER, !maSheetProt.mbAutoFilter );
         aProtect.setOption( ScTableProtection::PIVOT_TABLES, !maSheetProt.mbPivotTables );
         aProtect.setOption( ScTableProtection::SELECT_UNLOCKED_CELLS, !maSheetProt.mbSelectUnlocked );
+
+        aProtect.setEnhancedProtection( maSheetProt.maEnhancedProtections);
 
         getScDocument().SetTabProtection( getSheetIndex(), &aProtect );
     }

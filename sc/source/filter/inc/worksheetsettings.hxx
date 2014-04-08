@@ -22,6 +22,7 @@
 
 #include "richstring.hxx"
 #include "worksheethelper.hxx"
+#include "tabprotection.hxx"
 
 namespace oox {
 namespace xls {
@@ -60,6 +61,8 @@ struct SheetProtectionModel
     bool                mbPivotTables;          /// True = pivot tables locked.
     bool                mbSelectUnlocked;       /// True = select unlocked cells locked.
 
+    ::std::vector< ScEnhancedProtection >   maEnhancedProtections;
+
     explicit            SheetProtectionModel();
 };
 
@@ -78,6 +81,10 @@ public:
     void                importOutlinePr( const AttributeList& rAttribs );
     /** Imports protection settings from the sheetProtection element. */
     void                importSheetProtection( const AttributeList& rAttribs );
+    /** Imports enhanced protection settings from the protectedRanges element. */
+    void                importProtectedRanges( const AttributeList& rAttribs );
+    /** Imports enhanced protection settings from the protectedRange element. */
+    void                importProtectedRange( const AttributeList& rAttribs );
     /** Imports protection settings from the sheetProtection element of a chart sheet. */
     void                importChartProtection( const AttributeList& rAttribs );
     /** Imports phonetic settings from the phoneticPr element. */

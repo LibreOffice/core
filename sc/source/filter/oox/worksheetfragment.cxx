@@ -245,6 +245,7 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
                 case XLS_TOKEN( dimension ):        importDimension( rAttribs );                                    break;
                 case XLS_TOKEN( sheetFormatPr ):    importSheetFormatPr( rAttribs );                                break;
                 case XLS_TOKEN( sheetProtection ):  getWorksheetSettings().importSheetProtection( rAttribs );       break;
+                case XLS_TOKEN( protectedRanges ):  getWorksheetSettings().importProtectedRanges( rAttribs );       return this;
                 case XLS_TOKEN( phoneticPr ):       getWorksheetSettings().importPhoneticPr( rAttribs );            break;
                 case XLS_TOKEN( printOptions ):     getPageSettings().importPrintOptions( rAttribs );               break;
                 case XLS_TOKEN( pageMargins ):      getPageSettings().importPageMargins( rAttribs );                break;
@@ -293,6 +294,13 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
         break;
         case XLS_TOKEN( colBreaks ):
             if( nElement == XLS_TOKEN( brk ) ) importBrk( rAttribs, false );
+        break;
+
+        case XLS_TOKEN( protectedRanges ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( protectedRange ):   getWorksheetSettings().importProtectedRange( rAttribs );    return this;
+            }
         break;
 
         case XLS_TOKEN( headerFooter ):
