@@ -137,6 +137,7 @@ void WorksheetSettings::importProtectedRanges( const AttributeList& rAttribs )
 void WorksheetSettings::importProtectedRange( const AttributeList& rAttribs )
 {
     ScEnhancedProtection aProt;
+    aProt.maTitle = rAttribs.getString( XML_name, OUString());
     /* XXX ECMA-376/OOXML XMLSchema and ISO/IEC 29500 say 'securityDescriptor'
      * would be an element, but Excel2013 stores it as attribute. */
     aProt.maSecurityDescriptorXML = rAttribs.getString( XML_securityDescriptor, OUString());
@@ -145,7 +146,6 @@ void WorksheetSettings::importProtectedRange( const AttributeList& rAttribs )
      * similar to BIFF. OOXML XMLschema and ISO/IEC 29500 instead define
      * 'algorithmName', 'hashValue', 'saltValue' and 'spinCount'. */
     aProt.mnPasswordVerifier = rAttribs.getIntegerHex( XML_password, 0);
-    aProt.maTitle = rAttribs.getString( XML_name, OUString());
     OUString aRefs( rAttribs.getString( XML_sqref, OUString()));
     if (!aRefs.isEmpty())
     {
