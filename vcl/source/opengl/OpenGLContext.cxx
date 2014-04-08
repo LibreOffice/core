@@ -308,7 +308,7 @@ debug_callback(GLenum source, GLenum type, GLuint id,
 
 #endif
 
-#if defined UNX && !defined MACOSX
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
 
 namespace {
 
@@ -341,6 +341,10 @@ bool OpenGLContext::init( Window* pParent )
 #if defined( WNT )
     m_aGLWin.hDC = GetDC(m_aGLWin.hWnd);
 #elif defined( MACOSX )
+
+#elif defined( IOS )
+
+#elif defined( ANDROID )
 
 #elif defined( UNX )
     m_aGLWin.ctx = glXCreateContext(m_aGLWin.dpy,
@@ -393,6 +397,10 @@ bool OpenGLContext::init( Window* pParent )
     wglMakeCurrent(m_aGLWin.hDC,m_aGLWin.hRC);
 
 #elif defined( MACOSX )
+
+#elif defined( IOS )
+
+#elif defined( ANDROID )
 
 #elif defined( UNX )
     if( !glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ) )
@@ -554,7 +562,7 @@ bool OpenGLContext::initWindow()
     return true;
 }
 
-#elif defined( MACOSX )
+#elif defined( MACOSX ) || defined( IOS) || defined( ANDROID )
 
 bool OpenGLContext::initWindow()
 {

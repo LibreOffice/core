@@ -25,7 +25,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
 		StaticLibrary_vclmain \
 		Executable_ui-previewer) \
-	$(if $(filter FREEBSD LINUX MACOSX WNT,$(OS)), \
+	$(if $(filter FREEBSD IOS LINUX MACOSX WNT,$(OS)), \
 		Library_vclopengl \
 	) \
 ))
