@@ -28,13 +28,21 @@
 
 // MOVE
 SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
-    : SwUndo( UNDO_MOVE ), SwUndRng( rRange ),
-    nMvDestNode( rMvPos.nNode.GetIndex() ),
-    nMvDestCntnt( rMvPos.nContent.GetIndex() ),
-    bMoveRedlines( false )
+    : SwUndo( UNDO_MOVE )
+    , SwUndRng( rRange )
+    , nDestSttNode(0)
+    , nDestEndNode(0)
+    , nInsPosNode(0)
+    , nMvDestNode(rMvPos.nNode.GetIndex())
+    , nDestSttCntnt(0)
+    , nDestEndCntnt(0)
+    , nInsPosCntnt(0)
+    , nMvDestCntnt(rMvPos.nContent.GetIndex())
+    , bJoinNext(false)
+    , bJoinPrev(false)
+    , bMoveRange(false)
+    , bMoveRedlines(false)
 {
-    bMoveRange = bJoinNext = bJoinPrev = sal_False;
-
     // get StartNode from footnotes before delete!
     SwDoc* pDoc = rRange.GetDoc();
     SwTxtNode* pTxtNd = pDoc->GetNodes()[ nSttNode ]->GetTxtNode();
