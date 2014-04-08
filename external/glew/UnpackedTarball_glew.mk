@@ -35,12 +35,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 ))
 endif
 
-ifeq ($(OS),IOS)
-$(eval $(call gb_UnpackedTarball_add_patches,glew,\
-	external/glew/glew-ios.patch.1 \
-))
-endif
-
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 	external/glew/glew-static-only.patch.1 \
