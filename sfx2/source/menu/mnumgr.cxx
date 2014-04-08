@@ -219,11 +219,16 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
         }
     }
 
-    if ( !aCommand.isEmpty() )
+    if (!aCommand.isEmpty() && pBindings)
     {
         pBindings->ExecuteCommand_Impl( aCommand );
+        return sal_True;
     }
-    else if ( pBindings->IsBound(nId) )
+
+    if (!pBindings)
+        return sal_True;
+
+    if ( pBindings->IsBound(nId) )
         // normal function
         pBindings->Execute( nId );
     else
