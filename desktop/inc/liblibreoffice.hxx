@@ -42,6 +42,10 @@ public:
 
     inline bool saveAsWithOptions(const char* pUrl, const char* pFormat = NULL, const char* pFilterOptions = NULL)
     {
+        // available since LibreOffice 4.3
+        if (!mpDoc->saveAsWithOptions)
+            return false;
+
         return mpDoc->saveAsWithOptions(mpDoc, pUrl, pFormat, pFilterOptions);
     }
 };
