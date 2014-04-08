@@ -165,6 +165,9 @@ void FuPage::Deactivate()
 
 const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 {
+    if (!mpDrawViewShell)
+        return NULL;
+
     PageKind ePageKind = mpDrawViewShell->GetPageKind();
 
     SfxItemSet aNewAttr(mpDoc->GetPool(),
