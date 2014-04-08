@@ -476,7 +476,6 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
             OUString sTemplate("internal/idxexample.odt");
 
             SvtPathOptions aOpt;
-            aOpt.SetTemplatePath(OUString(LIBO_SHARE_FOLDER "/template/common"));
             bool bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 
             if(!bExist)
