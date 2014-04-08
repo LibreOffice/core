@@ -49,6 +49,7 @@ class Text : public Renderable3DObject
 private:
     BitmapEx maText;
     glm::vec3 maTopLeft;
+    glm::vec3 maTopRight;
     glm::vec3 maBottomRight;
 };
 
@@ -56,6 +57,7 @@ class Rectangle : public Renderable3DObject
 {
 private:
     glm::vec3 maTopLeft;
+    glm::vec3 maTopRight;
     glm::vec3 maBottomRight;
     Color maColor; // RGBA fill color
     Color maLineColor; // RGBA line color
@@ -66,7 +68,6 @@ class Camera : public Renderable3DObject
 public:
     Camera();
 private:
-
     glm::vec3 maPos;
     glm::vec3 maDirection;
 };
