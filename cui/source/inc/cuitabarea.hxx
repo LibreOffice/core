@@ -722,7 +722,7 @@ private:
     DECL_LINK( SelectColorLBHdl_Impl, void * );
     DECL_LINK( SelectValSetHdl_Impl, void * );
     DECL_LINK( SelectColorModelHdl_Impl, void * );
-    long ChangeColorHdl_Impl( void* p );
+    void ChangeColor(const Color &rNewColor);
     DECL_LINK( ModifiedHdl_Impl, void * );
 
     long CheckChanges_Impl();
