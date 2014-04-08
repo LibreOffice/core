@@ -30,6 +30,7 @@ $(eval $(call gb_Library_use_externals,chartcore,\
 	mdds_headers \
 	glm_headers \
 	glew \
+	mesa_headers \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,chartcore,\
