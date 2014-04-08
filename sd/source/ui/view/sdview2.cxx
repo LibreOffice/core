@@ -198,7 +198,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
     if( pSdrOleObj )
         SvEmbedTransferHelper::FillTransferableObjectDescriptor( aObjDesc, pSdrOleObj->GetObjRef(), pSdrOleObj->GetGraphic(), pSdrOleObj->GetAspect() );
-    else
+    else if (mpDocSh)
         mpDocSh->FillTransferableObjectDescriptor( aObjDesc );
 
     aObjDesc.maSize = GetAllMarkedRect().GetSize();
