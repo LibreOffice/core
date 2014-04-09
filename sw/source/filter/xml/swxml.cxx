@@ -676,6 +676,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     *pArgs++ <<= aLateInitSettings;
 
     Sequence<Any> aEmptyArgs( 3 );
+    // cppcheck-suppress redundantAssignment
     pArgs = aEmptyArgs.getArray();
     *pArgs++ <<= xInfoSet;
     *pArgs++ <<= xStatusIndicator;

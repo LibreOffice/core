@@ -1206,6 +1206,8 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
                .WriteUChar( (sal_uInt8)GetStoreCharSet( ::osl_getThreadTextEncoding() ) );
 
         bRet = 0 == rStream.GetError();
+        if (!bRet)
+            return sal_False;
 
         // Write this version number for all attributes
         m_pImpl->m_AutoFormats[0].GetBoxFmt(0).SaveVersionNo(
