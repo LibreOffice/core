@@ -631,16 +631,16 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 
         Gradient aGradient( rGradient );
 
+        if ( mnDrawMode & ( DRAWMODE_GRAYGRADIENT | DRAWMODE_GHOSTEDGRADIENT ) )
+        {
+            SetGrayscaleColors( aGradient );
+        }
+
         if( mpMetaFile )
             mpMetaFile->AddAction( new MetaGradientAction( rRect, aGradient ) );
 
         if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
             return;
-
-        if ( mnDrawMode & ( DRAWMODE_GRAYGRADIENT | DRAWMODE_GHOSTEDGRADIENT ) )
-        {
-            SetGrayscaleColors( aGradient );
-        }
 
         if ( !Rectangle( PixelToLogic( Point() ), GetOutputSize() ).IsEmpty() )
         {
@@ -685,9 +685,9 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
                         aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
                     if( aGradient.GetStyle() == GradientStyle_LINEAR || aGradient.GetStyle() == GradientStyle_AXIAL )
-                        ImplDrawLinearGradient( aRect, rGradient, false, NULL );
+                        ImplDrawLinearGradient( aRect, aGradient, false, NULL );
                     else
-                        ImplDrawComplexGradient( aRect, rGradient, false, NULL );
+                        ImplDrawComplexGradient( aRect, aGradient, false, NULL );
                 }
 
                 Pop();
