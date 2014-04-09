@@ -281,7 +281,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
     ImplFrameData* pWinFrameData = pWindow->ImplGetFrameData();
     sal_uInt16      nOldCode = pWinFrameData->mnMouseCode;
 
-    // we need a mousemove event, befor we get a mousebuttondown or a
+    // we need a mousemove event, before we get a mousebuttondown or a
     // mousebuttonup event
     if ( (nSVEvent == EVENT_MOUSEBUTTONDOWN) || (nSVEvent == EVENT_MOUSEBUTTONUP) )
     {

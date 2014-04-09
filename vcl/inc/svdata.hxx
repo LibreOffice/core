@@ -232,7 +232,7 @@ struct ImplSVHelpData
     bool                    mbContextHelp       : 1;    // is ContextHelp enabled
     bool                    mbExtHelp           : 1;    // is ExtendedHelp enabled
     bool                    mbExtHelpMode       : 1;    // is in ExtendedHelp Mode
-    bool                    mbOldBalloonMode    : 1;    // BallonMode, befor ExtHelpMode started
+    bool                    mbOldBalloonMode    : 1;    // BallonMode, before ExtHelpMode started
     bool                    mbBalloonHelp       : 1;    // is BalloonHelp enabled
     bool                    mbQuickHelp         : 1;    // is QuickHelp enabled
     bool                    mbSetKeyboardHelp   : 1;    // tiphelp was activated by keyboard

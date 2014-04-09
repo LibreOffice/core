@@ -1117,7 +1117,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeSizeProtectHdl)
 
         // Note: this works only as long as the dialog is open.  When
         // the user closes the dialog, there is no way to remember
-        // whether size was enabled or disabled befor pos protect was
+        // whether size was enabled or disabled before pos protect was
         // clicked. Thus, if pos protect is selected, the dialog is
         // closed and reopened again, unchecking pos protect will
         // always uncheck size protect, too. That's life.

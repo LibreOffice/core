@@ -636,12 +636,12 @@ void DbgDialogTest( Window* pWindow )
                     {
                         SAL_WARN_IF(
                             !cAccel, "vcl.app",
-                            "Labels befor Fields (Edit,ListBox,...) should have a mnemonic char (~): "
+                            "Labels before Fields (Edit,ListBox,...) should have a mnemonic char (~): "
                                 << aErrorText);
                         SAL_WARN_IF(
                             !pTempChild->IsEnabled() && pChild->IsEnabled(),
                             "vcl.app",
-                            "Labels befor Fields (Edit,ListBox,...) should be disabled, when the field is disabled: "
+                            "Labels before Fields (Edit,ListBox,...) should be disabled, when the field is disabled: "
                                 << aErrorText);
                     }
                 }

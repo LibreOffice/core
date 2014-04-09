@@ -1273,7 +1273,7 @@ void ImplEdgePointFilter::LastPoint()
 
 void Polygon::Clip( const Rectangle& rRect, bool bPolygon )
 {
-    // #105251# Justify rect befor edge filtering
+    // #105251# Justify rect before edge filtering
     Rectangle               aJustifiedRect( rRect );
     aJustifiedRect.Justify();
 

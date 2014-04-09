@@ -145,7 +145,7 @@ private:
 
     std::vector<OString> aLanguages;
 
-    bool WriteData( ResData *pResData, bool bCreateNew = false ); ///< called befor dest. cur ResData
+    bool WriteData( ResData *pResData, bool bCreateNew = false ); ///< called before dest. cur ResData
     bool WriteExportList( ResData *pResData, ExportList& rExportList, const sal_uInt16 nTyp );
 
     OString MergePairedList( OString const & sLine , OString const & sText );

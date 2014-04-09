@@ -2053,7 +2053,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException, std::exception
     // So we can release our container window later without problems.
     // Because this container window is the parent of the component window ...
     // Note: Dispose it hard - because suspending must be done inside close() call!
-    // But try to dispose the controller first befor you destroy the window.
+    // But try to dispose the controller first before you destroy the window.
     // Because the window is used by the controller too ...
     if (m_xController.is())
     {

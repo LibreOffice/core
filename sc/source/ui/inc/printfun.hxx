@@ -123,7 +123,7 @@ private:
     OutputDevice*       pDev;
     FmFormView*         pDrawView;
 
-    MapMode             aOldPrinterMode;    //  MapMode befor the call
+    MapMode             aOldPrinterMode;    //  MapMode before the call
 
     Point               aSrcOffset;         //  Paper-1/100 mm
     Point               aOffset;            //  scaled by a factor of page size
