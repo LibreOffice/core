@@ -24,7 +24,6 @@
 #include <sfx2/linkmgr.hxx>
 
 class Graphic;
-struct Impl_DownLoadData;
 namespace sfx2 { class FileDialogHelper; }
 
 class SvFileObject : public sfx2::SvLinkSource
@@ -34,7 +33,6 @@ class SvFileObject : public sfx2::SvLinkSource
     OUString            sReferer;
     Link                aEndEditLink;
     SfxMediumRef        xMed;
-    Impl_DownLoadData*  pDownLoadData;
     Window*             pOldParent;
 
     sal_uInt8 nType;

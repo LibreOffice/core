@@ -46,26 +46,8 @@
 #define FILETYPE_GRF        2
 #define FILETYPE_OBJECT     3
 
-struct Impl_DownLoadData
-{
-    Graphic aGrf;
-    Timer aTimer;
-
-    Impl_DownLoadData( const Link& rLink )
-    {
-        aTimer.SetTimeout( 100 );
-        aTimer.SetTimeoutHdl( rLink  );
-        aGrf.SetDefaultType();
-    }
-    ~Impl_DownLoadData()
-    {
-        aTimer.Stop();
-    }
-};
-
 SvFileObject::SvFileObject()
-    : pDownLoadData(NULL)
-    , pOldParent(NULL)
+    : pOldParent(NULL)
     , nType(FILETYPE_TEXT)
     , bLoadAgain(true)
     , bSynchron(false)
@@ -87,7 +69,6 @@ SvFileObject::~SvFileObject()
         xMed->SetDoneLink( Link() );
         xMed.Clear();
     }
-    delete pDownLoadData;
 }
 
 
@@ -141,9 +122,8 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                     }
                 }
 
-                if( pDownLoadData ||
-                    ( !bWaitForData && ( xMed.Is() ||  // was loaded as URL
-                        ( bSynchron && LoadFile_Impl() && xMed.Is() ) )) )
+                if( !bWaitForData && ( xMed.Is() ||  // was loaded as URL
+                      ( bSynchron && LoadFile_Impl() && xMed.Is() ) ) )
                 {
                     // If it was loaded from the Internet, do not retry
                     if( !bGetSynchron )
@@ -266,7 +246,7 @@ bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
 bool SvFileObject::LoadFile_Impl()
 {
     // We are still at Loading!!
-    if( bWaitForData || !bLoadAgain || xMed.Is() || pDownLoadData )
+    if( bWaitForData || !bLoadAgain || xMed.Is() )
         return false;
 
     // at the moment on the current DocShell
@@ -314,11 +294,10 @@ bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
                             ? rGF.GetImportFormatNumber( sFilter )
                             : GRFILTER_FORMAT_DONTKNOW;
 
-    OUString aEmptyStr;
     int nRes;
 
     // To avoid that a native link is created
-    if( ( !pStream || !pDownLoadData ) && !rGrf.IsLink() &&
+    if( !rGrf.IsLink() &&
         !rGrf.GetContext() && !bNativFormat )
         rGrf.SetLink( GfxLink() );
 
@@ -326,32 +305,12 @@ bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
         nRes = xMed.Is() ? GRFILTER_OPENERROR
                          : rGF.ImportGraphic( rGrf, INetURLObject(sFileNm),
                             nFilter );
-    else if( !pDownLoadData )
+    else
     {
         pStream->Seek( STREAM_SEEK_TO_BEGIN );
 
         // #i123042# for e.g. SVG the path is needed, see same TaskID in svx for more info
         nRes = rGF.ImportGraphic( rGrf, sFileNm, *pStream, nFilter );
-    }
-    else
-    {
-        nRes = rGF.ImportGraphic( pDownLoadData->aGrf, aEmptyStr,
-                                    *pStream, nFilter );
-
-        if( pDownLoadData )
-        {
-            rGrf = pDownLoadData->aGrf;
-            if( GRAPHIC_NONE == rGrf.GetType() )
-                rGrf.SetDefaultType();
-
-
-            if( !pDownLoadData->aGrf.GetContext() )
-            {
-                delete pDownLoadData, pDownLoadData = 0;
-                bDataReady = true;
-                bWaitForData = false;
-            }
-        }
     }
 
     if( pStream && ERRCODE_IO_PENDING == pStream->GetError() )
@@ -529,8 +488,6 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
                         new SfxMediumRef( pThis->xMed ));
             pThis->xMed.Clear();
         }
-        if( pThis->pDownLoadData )
-            delete pThis->pDownLoadData, pThis->pDownLoadData = 0;
     }
 
     return 0;
@@ -580,8 +537,7 @@ IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 */
 bool SvFileObject::IsPending() const
 {
-    return FILETYPE_GRF == nType && !bLoadError &&
-            ( pDownLoadData || bWaitForData );
+    return FILETYPE_GRF == nType && !bLoadError && bWaitForData;
 }
 
 bool SvFileObject::IsDataComplete() const
@@ -589,7 +545,7 @@ bool SvFileObject::IsDataComplete() const
     bool bRet = false;
     if( FILETYPE_GRF != nType )
         bRet = true;
-    else if( !bLoadError && ( !bWaitForData && !pDownLoadData ))
+    else if( !bLoadError && !bWaitForData )
     {
         SvFileObject* pThis = (SvFileObject*)this;
         if( bDataReady ||
