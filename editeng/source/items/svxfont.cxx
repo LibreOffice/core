@@ -182,7 +182,6 @@ public:
                      const sal_Int32 nIdx, const sal_Int32 nLen,
                      const sal_Bool bUpper ) = 0;
 
-    OutputDevice *GetOut() { return pOut; }
     const OUString &GetTxt() const { return rTxt; }
     sal_Int32 GetIdx() const { return nIdx; }
     sal_Int32 GetLen() const { return nLen; }

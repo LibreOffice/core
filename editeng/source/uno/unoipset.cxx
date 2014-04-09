@@ -34,15 +34,6 @@ using namespace ::rtl;
 
 using ::std::vector;
 
-
-
-struct SfxItemPropertyMapEntryHash
-{
-    size_t operator()(const SfxItemPropertyMapEntry* pMap) const { return (size_t)pMap; }
-};
-
-
-
 struct SvxIDPropertyCombine
 {
     sal_uInt16  nWID;

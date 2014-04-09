@@ -45,6 +45,7 @@
 #include <editeng/unofield.hxx>
 #include <editeng/editeng.hxx>
 #include "editsource.hxx"
+#include "editxml.hxx"
 #include <editeng/unonrule.hxx>
 #include <editeng/unoipset.hxx>
 

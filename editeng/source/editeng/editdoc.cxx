@@ -54,6 +54,7 @@
 #include <editdbg.hxx>
 #include <editeng/eerdll.hxx>
 #include <eerdll2.hxx>
+#include <impedit.hxx>
 
 #include <rtl/ustrbuf.hxx>
 

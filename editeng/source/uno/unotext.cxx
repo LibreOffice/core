@@ -1551,21 +1551,6 @@ sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionEnds( const uno::Reference<
     }
 }
 
-
-// class SvxUnoTextRange
-
-
-uno::Reference< uno::XInterface > SvxUnoTextRange_NewInstance()
-{
-    SvxUnoText aText;
-    uno::Reference< text::XTextRange > xRange( new SvxUnoTextRange( aText ) );
-#ifndef _MSC_VER
-    return xRange;
-#else
-    return (uno::Reference< uno::XInterface >)xRange;
-#endif
-}
-
 SvxUnoTextRange::SvxUnoTextRange( const SvxUnoTextBase& rParent, bool bPortion /* = false */ ) throw()
 :SvxUnoTextRangeBase( rParent.GetEditSource(), bPortion ? ImplGetSvxTextPortionSvxPropertySet() : rParent.getPropertySet() ),
  mbPortion( bPortion )
@@ -2331,11 +2316,6 @@ SvxUnoText::SvxUnoText( const SvxUnoText& rText ) throw()
 
 SvxUnoText::~SvxUnoText() throw()
 {
-}
-
-uno::Sequence< uno::Type > SAL_CALL getStaticTypes() throw()
-{
-    return SvxUnoTextBase::getStaticTypes();
 }
 
 // uno::XInterface

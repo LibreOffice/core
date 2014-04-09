@@ -456,18 +456,6 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
     return uno::makeAny( xRange );
 }
 
-
-// class SvxUnoTextCursor
-
-
-uno::Reference< uno::XInterface > SvxUnoTextCursor_NewInstance()
-{
-    SvxUnoText aText;
-    uno::Reference< text::XText > xText( (text::XText*)new SvxUnoTextCursor( aText ) );
-    uno::Reference< uno::XInterface > xInt( xText, uno::UNO_QUERY );
-    return xInt;
-}
-
 SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextBase& rText ) throw()
 :   SvxUnoTextRangeBase(rText),
     mxParentText( const_cast<SvxUnoTextBase*>(&rText) )

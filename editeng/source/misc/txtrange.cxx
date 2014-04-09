@@ -142,7 +142,6 @@ public:
     sal_Bool IsClosed() const { return bClosed; }
     void SetConcat( const sal_Bool bNew ){ bConcat = bNew; }
     sal_Bool IsConcat() const { return bConcat; }
-    sal_uInt8 GetAct() const { return nAct; }
 };
 
 SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, LongDqPtr pLong,
