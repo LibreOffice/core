@@ -504,20 +504,4 @@ int main( int argc, char **argv)
     return 0;
 }
 
-#ifdef __GNUC__
-extern "C" {
-    void __pure_virtual()
-    {}
-
-    void* __builtin_new( int nBytes )
-    { return malloc(nBytes); }
-    void* __builtin_vec_new( int nBytes )
-    { return malloc(nBytes); }
-    void __builtin_delete( char* pMem )
-    { free(pMem); }
-    void __builtin_vec_delete( char* pMem )
-    { free(pMem); }
-}
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
