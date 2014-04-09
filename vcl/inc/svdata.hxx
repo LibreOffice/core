@@ -175,7 +175,6 @@ struct ImplSVGDIData
     long                    mnAppFontY;         // AppFont Y-Numenator for 80/tel Height
     bool                    mbFontSubChanged;   // true: FontSubstitution was changed between Begin/End
     bool                    mbNativeFontConfig; // true: do not override UI font
-    bool                    mbNoXORClipping;    // true: do not use XOR to achieve clipping effects
 };
 
 struct ImplSVWinData
