@@ -2278,7 +2278,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 
     ::std::vector<std::pair<OUString,OUString> > aStrArr;
     typedef ::std::vector<std::pair<OUString,OUString> >::iterator myiter;
-    WW8Fib& rFib = *rWrt.pFib;              // n+1-te CP-Pos nach Handbuch
+    WW8Fib& rFib = *rWrt.pFib;              // n+1-th CP-Pos according to the manual
     sal_uInt16 i;
     bool bWriteCP = true;
 
@@ -2490,7 +2490,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
         for ( i = 0; i < nLen; i++ )
             SwWW8Writer::WriteLong( *rWrt.pTableStrm, aCps[ i ] );
 
-        // n+1-te CP-Pos nach Handbuch
+        // n+1-th CP-Pos according to the manual
         SwWW8Writer::WriteLong( *rWrt.pTableStrm,
                 rFib.ccpText + rFib.ccpFtn + rFib.ccpHdr + rFib.ccpEdn +
                 rFib.ccpTxbx + rFib.ccpHdrTxbx + 1 );
