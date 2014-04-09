@@ -13,7 +13,7 @@ $(eval $(call gb_Package_add_files,extras_autocorr,$(LIBO_SHARE_FOLDER)/autocorr
 	acor_af-ZA.dat \
 	acor_bg-BG.dat \
 	acor_cs-CZ.dat \
-	acor_ca.dat \
+	acor_ca-ES.dat \
 	acor_da-DK.dat \
 	acor_de-DE.dat \
 	acor_en-AU.dat \
