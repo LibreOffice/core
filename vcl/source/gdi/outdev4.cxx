@@ -862,12 +862,20 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
         if( mpMetaFile )
         {
-            mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
-            mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
+            if ( rPolyPoly.IsRect() )
+            {
+                const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+                mpMetaFile->AddAction( new MetaGradientAction( aBoundRect, aGradient ) );
+            }
+            else
+            {
+                mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
+                mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
 
-            ClipAndDrawGradientMetafile ( rGradient, rPolyPoly );
+                ClipAndDrawGradientMetafile ( rGradient, rPolyPoly );
 
-            mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );
+                mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );
+            }
         }
 
         if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
