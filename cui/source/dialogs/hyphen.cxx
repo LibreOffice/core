@@ -118,7 +118,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
     // the rightmost valid hyphenation position according to 1)
 
     // Example:
-    // If the possible hyphenation position in 'multi-line-editor' are to eb marked
+    // If the possible hyphenation position in 'multi-line-editor' are to be marked
     // by '=' then the text will look like this 'mul=ti-line-ed=it=or'.
     // If now the first line is only large enough for 'multi-line-edi' we need to discard
     // the last possible hyphnation point because of 1). The right most valid
