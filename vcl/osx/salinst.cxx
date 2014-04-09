@@ -336,7 +336,6 @@ SalInstance* CreateSalInstance()
     ImplGetSVData()->maNWFData.mbProgressNeedsErase = true;
     ImplGetSVData()->maNWFData.mbCheckBoxNeedsErase = true;
     ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset = 10;
-    ImplGetSVData()->maGDIData.mbNoXORClipping = true;
     ImplGetSVData()->maWinData.mbNoSaveBackground = true;
 
     return pInst;
