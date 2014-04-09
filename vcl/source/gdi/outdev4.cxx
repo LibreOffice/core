@@ -722,10 +722,7 @@ void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, cons
 
 void OutputDevice::ClipAndDrawGradientToBounds ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
 {
-    if( ImplGetSVData()->maGDIData.mbNoXORClipping )
-        ClipAndDrawGradient ( rGradient, rPolyPoly );
-    else
-        XORClipAndDrawGradient ( rGradient, rPolyPoly );
+    ClipAndDrawGradient ( rGradient, rPolyPoly );
 }
 
 void OutputDevice::ClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
@@ -769,60 +766,6 @@ void OutputDevice::ClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon 
                 else
                     ImplDrawComplexGradient( aRect, rGradient, false, &aClipPolyPoly );
             }
-        }
-    }
-}
-
-void OutputDevice::XORClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
-{
-    const PolyPolygon   aPolyPoly( LogicToPixel( rPolyPoly ) );
-    const Rectangle     aBoundRect( rPolyPoly.GetBoundRect() );
-    Point aPoint;
-    Rectangle           aDstRect( aPoint, GetOutputSizePixel() );
-
-    aDstRect.Intersection( aBoundRect );
-
-    ClipToPaintRegion( aDstRect );
-
-    if( !aDstRect.IsEmpty() )
-    {
-        boost::scoped_ptr<VirtualDevice> pVDev;
-        const Size      aDstSize( aDstRect.GetSize() );
-
-        if( HasAlpha() )
-        {
-            // #110958# Pay attention to alpha VDevs here, otherwise,
-            // background will be wrong: Temp VDev has to have alpha, too.
-            pVDev.reset(new VirtualDevice( *this, 0, GetAlphaBitCount() > 1 ? 0 : 1 ));
-        }
-        else
-        {
-            // nothing special here. Plain VDev
-            pVDev.reset(new VirtualDevice());
-        }
-
-        if( pVDev->SetOutputSizePixel( aDstSize) )
-        {
-            MapMode         aVDevMap;
-            const bool      bOldMap = mbMap;
-
-            EnableMapMode( false );
-
-            pVDev->DrawOutDev( Point(), aDstSize, aDstRect.TopLeft(), aDstSize, *this );
-            pVDev->SetRasterOp( ROP_XOR );
-            aVDevMap.SetOrigin( Point( -aDstRect.Left(), -aDstRect.Top() ) );
-            pVDev->SetMapMode( aVDevMap );
-            pVDev->DrawGradient( aBoundRect, rGradient );
-            pVDev->SetFillColor( COL_BLACK );
-            pVDev->SetRasterOp( ROP_0 );
-            pVDev->DrawPolyPolygon( aPolyPoly );
-            pVDev->SetRasterOp( ROP_XOR );
-            pVDev->DrawGradient( aBoundRect, rGradient );
-            aVDevMap.SetOrigin( Point() );
-            pVDev->SetMapMode( aVDevMap );
-            DrawOutDev( aDstRect.TopLeft(), aDstSize, Point(), aDstSize, *pVDev );
-
-            EnableMapMode( bOldMap );
         }
     }
 }
