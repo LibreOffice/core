@@ -853,6 +853,13 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             return;
         }
 
+        Gradient aGradient( rGradient );
+
+        if ( mnDrawMode & ( DRAWMODE_GRAYGRADIENT | DRAWMODE_GHOSTEDGRADIENT ) )
+        {
+            SetGrayscaleColors( aGradient );
+        }
+
         if( mpMetaFile )
         {
             mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
@@ -865,13 +872,6 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
         if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
             return;
-
-        Gradient aGradient( rGradient );
-
-        if ( mnDrawMode & ( DRAWMODE_GRAYGRADIENT | DRAWMODE_GHOSTEDGRADIENT ) )
-        {
-            SetGrayscaleColors( aGradient );
-        }
 
         ClipAndDrawGradientToBounds ( aGradient, rPolyPoly );
     }
