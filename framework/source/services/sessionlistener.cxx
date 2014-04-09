@@ -153,8 +153,6 @@ public:
     // XStatusListener
     virtual void SAL_CALL statusChanged(const com::sun::star::frame::FeatureStateEvent& event)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    void doSaveImpl( bool bShutdown, bool bCancelable ) throw (css::uno::RuntimeException);
 };
 
 SessionListener::SessionListener(const css::uno::Reference< css::uno::XComponentContext >& rxContext )

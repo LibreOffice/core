@@ -309,7 +309,6 @@ class AddonsOptions_Impl : public ConfigItem
         bool                 AppendPopupMenu( Sequence< PropertyValue >& aTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu );
         bool                 ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem );
         bool                 ReadStatusBarItem( const OUString& aStatusbarItemNodeName, Sequence< PropertyValue >& aStatusbarItem );
-        bool                 ReadImagesItem( const OUString& aImagesItemNodeName, Sequence< PropertyValue >& aImagesItem );
         ImageEntry*          ReadImageData( const OUString& aImagesNodeName );
         void                 ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId );
         Image                ReadImageFromURL( const OUString& aURL );
@@ -329,8 +328,6 @@ class AddonsOptions_Impl : public ConfigItem
     //  private member
 
     private:
-        ImageEntry* ReadOptionalImageData( const OUString& aMenuNodeName );
-
         sal_Int32                                         m_nRootAddonPopupMenuId;
         OUString                                   m_aPropNames[PROPERTYCOUNT_INDEX];
         OUString                                   m_aPropImagesNames[PROPERTYCOUNT_IMAGES];

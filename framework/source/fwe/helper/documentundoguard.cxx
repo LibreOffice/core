@@ -63,10 +63,6 @@ namespace framework
             osl_atomic_decrement( &m_refCount );
         }
 
-        UndoManagerContextListener():m_nRelativeContextDepth(0), m_documentDisposed(false)
-        {
-        }
-
         void finish()
         {
             OSL_ENSURE( m_nRelativeContextDepth >= 0, "UndoManagerContextListener: more contexts left than entered?" );

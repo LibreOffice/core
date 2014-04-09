@@ -119,20 +119,6 @@ static const sal_Int32 LEN_DESCRIPTOR_ENABLED          = 7;
 
 const sal_uInt16 ADDONMENU_MERGE_ITEMID_START = 1500;
 
-class StringLength : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
-{
-    public:
-        StringLength() {}
-        virtual ~StringLength() {}
-
-        // XStringWidth
-        sal_Int32 SAL_CALL queryStringWidth( const OUString& aString )
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
-        {
-            return aString.getLength();
-        }
-};
-
 namespace framework
 {
 

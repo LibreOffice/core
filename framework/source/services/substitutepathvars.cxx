@@ -107,24 +107,8 @@ struct SubstituteRule
     EnvironmentType          aEnvType;
 };
 
-struct SubstitutePathNotify
-{
-    SubstitutePathNotify() {};
-
-    const com::sun::star::uno::Sequence<OUString> aPropertyNames;
-};
-
-class SubstituteVariables : public ::boost::unordered_map< OUString,
-                                                    SubstituteRule,
-                                                    OUStringHash,
-                                                    ::std::equal_to< OUString > >
-{
-    public:
-        inline void free()
-        {
-            SubstituteVariables().swap( *this );
-        }
-};
+typedef boost::unordered_map<OUString, SubstituteRule, OUStringHash>
+    SubstituteVariables;
 
 typedef std::vector< SubstituteRule > SubstituteRuleVector;
 class SubstitutePathVariables_Impl : public utl::ConfigItem
@@ -298,16 +282,8 @@ protected:
         throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    class VarNameToIndexMap : public boost::unordered_map< OUString,
-                                                    PreDefVariable,
-                                                    OUStringHash,
-                                                    ::std::equal_to< OUString > >
-    {
-        inline void free()
-        {
-            VarNameToIndexMap().swap( *this );
-        }
-    };
+    typedef boost::unordered_map<OUString, PreDefVariable, OUStringHash>
+        VarNameToIndexMap;
 
     VarNameToIndexMap            m_aPreDefVarMap;         // Mapping from pre-def variable names to enum for array access
     SubstituteVariables          m_aSubstVarMap;          // Active rule set map indexed by variable name!

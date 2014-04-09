@@ -338,11 +338,8 @@ private:
     void implts_setIconOnWindow          (                                                                        );
     void implts_startWindowListening     (                                                                        );
     void implts_stopWindowListening      (                                                                        );
-    void implts_saveWindowAttributes     (                                                                        );
     void implts_checkSuicide             (                                                                        );
     void implts_forgetSubFrames          (                                                                        );
-    DECL_LINK( implts_windowClosing, void* );
-    css::uno::Reference< css::awt::XTopWindow >             impl_searchTopWindow            ( const css::uno::Reference< css::awt::XWindow >&       xWindow          );
 
     // non threadsafe
     void impl_checkMenuCloser            (                                                                        );
@@ -418,36 +415,6 @@ private:
 protected:
 
     FrameContainer                                                          m_aChildFrameContainer;   /// array of child frames
-
-    inline css::uno::Reference< css::uno::XComponentContext > impl_getComponentContext()
-    {
-        SolarMutexGuard g;
-        return m_xContext;
-    }
-
-    inline OUString impl_getName()
-    {
-        SolarMutexGuard g;
-        return m_sName;
-    }
-
-    inline css::uno::Reference< css::awt::XWindow > impl_getContainerWindow()
-    {
-        SolarMutexGuard g;
-        return m_xContainerWindow;
-    }
-
-    inline css::uno::Reference< css::frame::XDispatchProvider > impl_getDispatchHelper()
-    {
-        SolarMutexGuard g;
-        return m_xDispatchHelper;
-    }
-
-    inline css::uno::Reference< css::frame::XFramesSupplier > impl_getParent()
-    {
-        SolarMutexGuard g;
-        return m_xParent;
-    }
 };
 
 css::uno::WeakReference< css::frame::XFrame2 > Frame::m_xCloserFrame = css::uno::WeakReference< css::frame::XFrame2 >();

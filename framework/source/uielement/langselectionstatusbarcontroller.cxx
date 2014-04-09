@@ -26,6 +26,7 @@
 #include <vcl/status.hxx>
 #include <toolkit/helper/convert.hxx>
 
+#include <boost/noncopyable.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/awt/PopupMenu.hpp>
@@ -76,7 +77,8 @@ class SvtLanguageTable;
 
 namespace {
 
-class LangSelectionStatusbarController : public svt::StatusbarController
+class LangSelectionStatusbarController:
+    public svt::StatusbarController, private boost::noncopyable
 {
 public:
     explicit LangSelectionStatusbarController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
@@ -117,8 +119,6 @@ public:
 
 private:
     virtual ~LangSelectionStatusbarController() {}
-    LangSelectionStatusbarController(LangSelectionStatusbarController &); // not defined
-    void operator =(LangSelectionStatusbarController &); // not defined
 
     bool            m_bShowMenu;        // if the menu is to be displayed or not (depending on the selected object/text)
     sal_Int16           m_nScriptType;      // the flags for the different script types available in the selection, LATIN = 0x0001, ASIAN = 0x0002, COMPLEX = 0x0004

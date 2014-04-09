@@ -131,7 +131,6 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         Any                       getSequenceFromCache( const OUString& aCommandURL );
         Any                       getInfoFromCommand( const OUString& rCommandURL );
         void                      fillInfoFromResult( CmdToInfoMap& rCmdInfo, const OUString& aLabel );
-        Any                       getUILabelFromCommand( const OUString& rCommandURL );
         Sequence< OUString > getAllCommands();
         bool                  fillCache();
         bool                  addGenericInfoToCache();
