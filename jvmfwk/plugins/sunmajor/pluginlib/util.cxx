@@ -31,6 +31,7 @@
 #include "rtl/instance.hxx"
 #include "salhelper/linkhelper.hxx"
 #include "salhelper/thread.hxx"
+#include "boost/noncopyable.hpp"
 #include "boost/scoped_array.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include <utility>
@@ -124,8 +125,11 @@ namespace jfw_plugin
 {
 extern VendorSupportMapEntry gVendorMap[];
 
+#if defined WNT
 bool getSDKInfoFromRegistry(vector<OUString> & vecHome);
 bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);
+#endif
+
 bool decodeOutput(const OString& s, OUString* out);
 
 
@@ -179,7 +183,7 @@ rtl::Bootstrap * getBootstrap()
 
 
 
-class FileHandleGuard
+class FileHandleGuard: private boost::noncopyable
 {
 public:
     inline FileHandleGuard(oslFileHandle & rHandle) SAL_THROW(()):
@@ -191,9 +195,6 @@ public:
 
 private:
     oslFileHandle & m_rHandle;
-
-    FileHandleGuard(FileHandleGuard &); // not implemented
-    void operator =(FileHandleGuard); // not implemented
 };
 
 inline FileHandleGuard::~FileHandleGuard() SAL_THROW(())
