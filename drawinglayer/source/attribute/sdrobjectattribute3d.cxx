@@ -71,21 +71,6 @@ namespace drawinglayer
             {
             }
 
-            ImpSdr3DObjectAttribute()
-            :   maNormalsKind(::com::sun::star::drawing::NormalsKind_SPECIFIC),
-                maTextureProjectionX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC),
-                maTextureProjectionY(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC),
-                maTextureKind(::com::sun::star::drawing::TextureKind2_LUMINANCE),
-                maTextureMode(::com::sun::star::drawing::TextureMode_REPLACE),
-                maMaterial(MaterialAttribute3D()),
-                mbNormalsInvert(false),
-                mbDoubleSided(false),
-                mbShadow3D(false),
-                mbTextureFilter(false),
-                mbReducedLineGeometry(false)
-            {
-            }
-
             // data read access
             ::com::sun::star::drawing::NormalsKind getNormalsKind() const { return maNormalsKind; }
             ::com::sun::star::drawing::TextureProjectionMode getTextureProjectionX() const { return maTextureProjectionX; }

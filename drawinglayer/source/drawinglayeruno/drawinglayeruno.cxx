@@ -26,22 +26,9 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
 
-
+#include <xprimitive2drenderer.hxx>
 
 using namespace ::com::sun::star;
-
-
-// predefines
-
-namespace drawinglayer
-{
-    namespace unorenderer
-    {
-        extern uno::Sequence< OUString > SAL_CALL XPrimitive2DRenderer_getSupportedServiceNames();
-        extern OUString SAL_CALL XPrimitive2DRenderer_getImplementationName();
-        extern uno::Reference< uno::XInterface > SAL_CALL XPrimitive2DRenderer_createInstance( const uno::Reference< lang::XMultiServiceFactory > & );
-    } // end of namespace unorenderer
-} // end of namespace drawinglayer
 
 extern "C"
 {

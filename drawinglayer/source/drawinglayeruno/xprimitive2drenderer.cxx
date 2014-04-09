@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/graphic/XPrimitive2DRenderer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
@@ -33,7 +36,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
-
+#include <xprimitive2drenderer.hxx>
 
 using namespace ::com::sun::star;
 
@@ -43,13 +46,11 @@ namespace drawinglayer
 {
     namespace unorenderer
     {
-        class XPrimitive2DRenderer : public ::cppu::WeakAggImplHelper2< graphic::XPrimitive2DRenderer, lang::XServiceInfo >
+        class XPrimitive2DRenderer:
+            public cppu::WeakAggImplHelper2<
+                css::graphic::XPrimitive2DRenderer, css::lang::XServiceInfo>,
+            private boost::noncopyable
         {
-        private:
-            XPrimitive2DRenderer(const XPrimitive2DRenderer&);
-            XPrimitive2DRenderer& operator=(const XPrimitive2DRenderer&);
-
-        protected:
         public:
             XPrimitive2DRenderer();
             virtual ~XPrimitive2DRenderer();

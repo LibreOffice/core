@@ -48,13 +48,6 @@ namespace drawinglayer
             {
             }
 
-            ImpSdr3DLightAttribute()
-            :   maColor(basegfx::BColor()),
-                maDirection(basegfx::B3DVector()),
-                mbSpecular(false)
-            {
-            }
-
             // data read access
             const basegfx::BColor& getColor() const { return maColor; }
             const basegfx::B3DVector& getDirection() const { return maDirection; }

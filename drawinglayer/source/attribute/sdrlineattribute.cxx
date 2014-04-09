@@ -57,17 +57,6 @@ namespace drawinglayer
             {
             }
 
-            explicit ImpSdrLineAttribute(const basegfx::BColor& rColor)
-            :   meJoin(basegfx::B2DLINEJOIN_NONE),
-                mfWidth(0.0),
-                mfTransparence(0.0),
-                maColor(rColor),
-                meCap(com::sun::star::drawing::LineCap_BUTT),
-                maDotDashArray(),
-                mfFullDotDashLen(0.0)
-            {
-            }
-
             ImpSdrLineAttribute()
             :   meJoin(basegfx::B2DLINEJOIN_ROUND),
                 mfWidth(0.0),
