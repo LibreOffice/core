@@ -3102,6 +3102,15 @@ DECLARE_OOXMLEXPORT_TEST(testFDO76586, "fdo76586.docx")
     assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[2]", "w", "7843");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO76587 , "fdo76587.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:styles/w:style[8]/w:pPr/w:spacing", "line", "240");
+    assertXPath(pXmlDoc, "/w:styles/w:style[8]/w:pPr/w:spacing", "lineRule", "auto");
+}
+
 DECLARE_OOXMLEXPORT_TEST(test76734_2K7, "test76734_2K7.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
