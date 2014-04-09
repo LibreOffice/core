@@ -44,8 +44,8 @@
     <Markers>
       <QuotationStart>‘</QuotationStart>
       <QuotationEnd>’</QuotationEnd>
-      <DoubleQuotationStart>“</DoubleQuotationStart>
-      <DoubleQuotationEnd>”</DoubleQuotationEnd>
+      <DoubleQuotationStart>«</DoubleQuotationStart>
+      <DoubleQuotationEnd>»</DoubleQuotationEnd>
     </Markers>
     <TimeAM>AM</TimeAM>
     <TimePM>PM</TimePM>
