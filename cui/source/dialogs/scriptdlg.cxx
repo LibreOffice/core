@@ -837,7 +837,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
             aNewStdName = "Macro" ;
             nMode = INPUTMODE_NEWMACRO;
         }
-        //do we need L10N for this? ie somethng like:
+        //do we need L10N for this? ie something like:
         //String aNewStdName( ResId( STR_STDMODULENAME ) );
         sal_Bool bValid = sal_False;
         sal_Int32 i = 1;
