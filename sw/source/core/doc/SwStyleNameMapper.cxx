@@ -411,124 +411,84 @@ void SwStyleNameMapper::testNameTable( SwGetPoolIdFromName const nFamily, sal_uI
 
 const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlags, bool bProgName )
 {
-    NameToIdHash *pHash = 0;
-    const ::std::vector<OUString> *pStrings = 0;
+    // pHashPointer is a pointer to a pointer which stores the UI/prog name array
+    NameToIdHash **pHashPointer = 0;
+    // Stores tuples representing (index start, index end, pointer to function which returns ref to name array)
+    ::std::vector< ::std::tuple<sal_uInt16, sal_uInt16, const ::std::vector<OUString>& (*)() >> vIndexes;
+    sal_uInt16 nIndex;
+    sal_uInt16 nId;
 
     switch ( eFlags )
     {
         case nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL:
         {
-            sal_uInt16 nIndex;
-            sal_uInt16 nId;
-
-            pHash = bProgName ? pParaProgMap : pParaUIMap;
-            if ( !pHash )
-            {
-                pHash = new NameToIdHash ( RES_POOLCOLL_TEXT_END - RES_POOLCOLL_TEXT_BEGIN +
-                                           RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN +
-                                           RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN +
-                                           RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN +
-                                           RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN +
-                                           RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN );
-                pStrings = bProgName ? &GetTextProgNameArray() : &GetTextUINameArray();
-                for ( nIndex = 0, nId = RES_POOLCOLL_TEXT_BEGIN ; nId < RES_POOLCOLL_TEXT_END ; nId++,nIndex++ )
-                    (*pHash)[((*pStrings)[nIndex])] = nId;
-                pStrings = bProgName ? &GetListsProgNameArray() : &GetListsUINameArray();
-                for ( nIndex = 0, nId = RES_POOLCOLL_LISTS_BEGIN ; nId < RES_POOLCOLL_LISTS_END ; nId++,nIndex++ )
-                    (*pHash)[((*pStrings)[nIndex])] = nId;
-                pStrings = bProgName ? &GetExtraProgNameArray() : &GetExtraUINameArray();
-                for ( nIndex = 0, nId = RES_POOLCOLL_EXTRA_BEGIN ; nId < RES_POOLCOLL_EXTRA_END ; nId++,nIndex++ )
-                    (*pHash)[((*pStrings)[nIndex])] = nId;
-                pStrings = bProgName ? &GetRegisterProgNameArray() : &GetRegisterUINameArray();
-                for ( nIndex = 0, nId = RES_POOLCOLL_REGISTER_BEGIN ; nId < RES_POOLCOLL_REGISTER_END ; nId++,nIndex++ )
-                    (*pHash)[((*pStrings)[nIndex])] = nId;
-                pStrings = bProgName ? &GetDocProgNameArray() : &GetDocUINameArray();
-                for ( nIndex = 0, nId = RES_POOLCOLL_DOC_BEGIN ; nId < RES_POOLCOLL_DOC_END ; nId++,nIndex++ )
-                    (*pHash)[((*pStrings)[nIndex])] = nId;
-                pStrings = bProgName ? &GetHTMLProgNameArray() : &GetHTMLUINameArray();
-                for ( nIndex = 0, nId = RES_POOLCOLL_HTML_BEGIN ; nId < RES_POOLCOLL_HTML_END ; nId++,nIndex++ )
-                    (*pHash)[((*pStrings)[nIndex])] = nId;
-
-                if ( bProgName )
-                    pParaProgMap = pHash;
-                else
-                    pParaUIMap = pHash;
-            }
+            pHashPointer = bProgName ? &pParaProgMap : &pParaUIMap;
+            vIndexes.push_back( ::std::make_tuple(RES_POOLCOLL_TEXT_BEGIN, RES_POOLCOLL_TEXT_END, bProgName ? &GetTextProgNameArray : &GetTextUINameArray));
+            vIndexes.push_back( ::std::make_tuple(RES_POOLCOLL_LISTS_BEGIN, RES_POOLCOLL_LISTS_END, bProgName ? &GetListsProgNameArray : &GetListsUINameArray));
+            vIndexes.push_back( ::std::make_tuple(RES_POOLCOLL_EXTRA_BEGIN, RES_POOLCOLL_EXTRA_END, bProgName ? &GetExtraProgNameArray : &GetExtraUINameArray));
+            vIndexes.push_back( ::std::make_tuple(RES_POOLCOLL_REGISTER_BEGIN, RES_POOLCOLL_REGISTER_END, bProgName ? &GetRegisterProgNameArray : &GetRegisterUINameArray));
+            vIndexes.push_back( ::std::make_tuple(RES_POOLCOLL_DOC_BEGIN, RES_POOLCOLL_DOC_END, bProgName ? &GetDocProgNameArray : &GetDocUINameArray));
+            vIndexes.push_back( ::std::make_tuple(RES_POOLCOLL_HTML_BEGIN, RES_POOLCOLL_HTML_END, bProgName ? &GetHTMLProgNameArray : &GetHTMLUINameArray));
         }
         break;
         case nsSwGetPoolIdFromName::GET_POOLID_CHRFMT:
         {
-            pHash = bProgName ? pCharProgMap : pCharUIMap;
-            if ( !pHash )
-            {
-                sal_uInt16 nIndex;
-                sal_uInt16 nId;
-
-                pHash = new NameToIdHash ( RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN +
-                                           RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN );
-                pStrings = bProgName ? &GetChrFmtProgNameArray() : &GetChrFmtUINameArray();
-                for ( nIndex = 0, nId = RES_POOLCHR_NORMAL_BEGIN ; nId < RES_POOLCHR_NORMAL_END ; nId++,nIndex++ )
-                    (*pHash)[((*pStrings)[nIndex])] = nId;
-                pStrings = bProgName ? &GetHTMLChrFmtProgNameArray() : &GetHTMLChrFmtUINameArray();
-                for ( nIndex = 0, nId = RES_POOLCHR_HTML_BEGIN ; nId < RES_POOLCHR_HTML_END ; nId++,nIndex++ )
-                    (*pHash)[((*pStrings)[nIndex])] = nId;
-                if (bProgName )
-                    pCharProgMap = pHash;
-                else
-                    pCharUIMap = pHash;
-            }
+            pHashPointer = bProgName ? &pCharProgMap : &pCharUIMap;
+            vIndexes.push_back( ::std::make_tuple(RES_POOLCHR_NORMAL_BEGIN, RES_POOLCHR_NORMAL_END, bProgName ? &GetChrFmtProgNameArray : &GetChrFmtUINameArray));
+            vIndexes.push_back( ::std::make_tuple(RES_POOLCHR_HTML_BEGIN, RES_POOLCHR_HTML_END, bProgName ? &GetHTMLChrFmtProgNameArray : &GetHTMLChrFmtUINameArray));
         }
         break;
         case nsSwGetPoolIdFromName::GET_POOLID_FRMFMT:
         {
-            pHash = bProgName ? pFrameProgMap : pFrameUIMap;
-            if ( !pHash )
-            {
-                pHash = new NameToIdHash ( RES_POOLFRM_END - RES_POOLFRM_BEGIN );
-                pStrings = bProgName ? &GetFrmFmtProgNameArray() : &GetFrmFmtUINameArray();
-                for ( sal_uInt16 nIndex=0,nId = RES_POOLFRM_BEGIN ; nId < RES_POOLFRM_END ; nId++,nIndex++ )
-                    (*pHash)[((*pStrings)[nIndex])] = nId;
-                if ( bProgName )
-                    pFrameProgMap = pHash;
-                else
-                    pFrameUIMap = pHash;
-            }
+            pHashPointer = bProgName ? &pFrameProgMap : &pFrameUIMap;
+            vIndexes.push_back( ::std::make_tuple(RES_POOLFRM_BEGIN, RES_POOLFRM_END, bProgName ? &GetFrmFmtProgNameArray : &GetFrmFmtUINameArray));
         }
         break;
         case nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC:
         {
-            pHash = bProgName ? pPageProgMap : pPageUIMap;
-            if ( !pHash )
-            {
-                pHash = new NameToIdHash ( RES_POOLPAGE_END - RES_POOLPAGE_BEGIN );
-                pStrings = bProgName ? &GetPageDescProgNameArray() : &GetPageDescUINameArray();
-                for ( sal_uInt16 nIndex=0,nId = RES_POOLPAGE_BEGIN ; nId < RES_POOLPAGE_END ; nId++,nIndex++ )
-                    (*pHash)[((*pStrings)[nIndex])] = nId;
-                if ( bProgName )
-                    pPageProgMap = pHash;
-                else
-                    pPageUIMap = pHash;
-            }
+            pHashPointer = bProgName ? &pPageProgMap : &pPageUIMap;
+            vIndexes.push_back( ::std::make_tuple(RES_POOLPAGE_BEGIN, RES_POOLPAGE_END, bProgName ? &GetPageDescProgNameArray : &GetPageDescUINameArray));
         }
         break;
         case nsSwGetPoolIdFromName::GET_POOLID_NUMRULE:
         {
-            pHash = bProgName ? pNumRuleProgMap : pNumRuleUIMap;
-            if ( !pHash )
-            {
-                pHash = new NameToIdHash ( RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN );
-                pStrings = bProgName ? &GetNumRuleProgNameArray() : &GetNumRuleUINameArray();
-                for ( sal_uInt16 nIndex=0,nId = RES_POOLNUMRULE_BEGIN ; nId < RES_POOLNUMRULE_END ; nId++,nIndex++ )
-                {
-                    (*pHash)[((*pStrings)[nIndex])] = nId;
-                }
-                if ( bProgName )
-                    pNumRuleProgMap = pHash;
-                else
-                    pNumRuleUIMap = pHash;
-            }
+            pHashPointer = bProgName ? &pNumRuleProgMap : &pNumRuleUIMap;
+            vIndexes.push_back( ::std::make_tuple(RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END, bProgName ? &GetNumRuleProgNameArray : &GetNumRuleUINameArray));
         }
         break;
+        default:
+        {
+            // TODO: Is there a better way of failing here?
+            *pHashPointer = new NameToIdHash( 0 );
+            return **pHashPointer;
+        }
+        break;
+    }
+
+    // Proceed if we have a pointer to a hash, and the hash hasn't already been populated
+    if ( pHashPointer && !*pHashPointer )
+    {
+        // Compute the size of the hash we need to build
+        sal_uInt16 nSize = std::accumulate(vIndexes.begin(), vIndexes.end(), 0,
+                []( sal_uInt16 nSum, ::std::tuple<sal_uInt16, sal_uInt16, const ::std::vector<OUString>& (*)() > tuple ){
+                    return nSum + ::std::get<1>( tuple ) - ::std::get<0>( tuple );
+                });
+
+        NameToIdHash *pHash = new NameToIdHash( nSize );
+
+        for ( auto entry : vIndexes )
+        {
+            // Get a pointer to the function which will populate pStrings
+            const ::std::vector<OUString>& (*pStringsFetchFunc)() = ::std::get<2>( entry );
+            if ( pStringsFetchFunc )
+            {
+                const ::std::vector<OUString>& pStrings = pStringsFetchFunc();
+                for ( nIndex = 0, nId = ::std::get<0>( entry ) ; nId < ::std::get<1>( entry ) ; nId++, nIndex++ )
+                    (*pHash)[pStrings[nIndex]] = nId;
+            }
+        }
+
+        *pHashPointer = pHash;
     }
 
 #ifdef _NEED_TO_DEBUG_MAPPING
@@ -550,7 +510,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
         testNameTable( nsSwGetPoolIdFromName::GET_POOLID_NUMRULE, RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END );
     }
 #endif
-    return *pHash;
+    return **pHashPointer;
 }
 
 // This gets the UI name from the programmatic name
