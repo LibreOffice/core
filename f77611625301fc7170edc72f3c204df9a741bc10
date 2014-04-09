@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a80dd14_c7bd9e04",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1501,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-09T08:05:35Z",
+      "side": 1,
+      "message": "Oh, and also this name is misleading IMHO: what it does is counting text frames, and it\u0027s a local function, so \"lcl_countTextFrames\" would be far better.",
+      "revId": "f77611625301fc7170edc72f3c204df9a741bc10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a80dd14_47ca8ea2",
         "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
         "patchSetId": 1
