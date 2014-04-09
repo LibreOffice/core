@@ -113,22 +113,6 @@ void GetDouble( std::vector< com::sun::star::beans::PropertyValue >& rDest,
     }
 }
 
-void GetDistance( std::vector< com::sun::star::beans::PropertyValue >& rDest,
-                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
-{
-    double fAttrDouble;
-    sal_Int16 const eSrcUnit( ::sax::Converter::GetUnitFromString(
-                rValue, util::MeasureUnit::MM_100TH) );
-    if (::sax::Converter::convertDouble(fAttrDouble, rValue, eSrcUnit,
-                util::MeasureUnit::MM_100TH))
-    {
-        beans::PropertyValue aProp;
-        aProp.Name = EASGet( eDestProp );
-        aProp.Value <<= fAttrDouble;
-        rDest.push_back( aProp );
-    }
-}
-
 void GetString( std::vector< com::sun::star::beans::PropertyValue >& rDest,
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {

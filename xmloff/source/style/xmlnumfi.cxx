@@ -69,8 +69,6 @@ struct SvXMLEmbeddedElement
     SvXMLEmbeddedElement( sal_Int32 nFP, const OUString& rT ) :
         nFormatPos(nFP), aText(rT) {}
 
-    //  comparison operators for PTRARR sorting - sorted by position
-    bool operator ==( const SvXMLEmbeddedElement& r ) const { return nFormatPos == r.nFormatPos; }
     bool operator < ( const SvXMLEmbeddedElement& r ) const { return nFormatPos <  r.nFormatPos; }
 };
 

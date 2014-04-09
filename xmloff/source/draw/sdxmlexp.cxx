@@ -60,6 +60,7 @@
 #include "sdpropls.hxx"
 #include <xmloff/xmlexppr.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include "facreg.hxx"
 #include "xexptran.hxx"
 
 #include <cppuhelper/implbase1.hxx>

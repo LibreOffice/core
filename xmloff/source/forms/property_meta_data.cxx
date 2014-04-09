@@ -18,6 +18,7 @@
  */
 
 #include "property_description.hxx"
+#include "property_meta_data.hxx"
 #include "forms/form_handler_factory.hxx"
 #include "strings.hxx"
 #include <xmloff/xmltoken.hxx>

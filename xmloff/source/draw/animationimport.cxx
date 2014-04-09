@@ -62,6 +62,7 @@
 #include <osl/mutex.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "anim.hxx"
+#include "facreg.hxx"
 
 #include "animations.hxx"
 #include "animationimport.hxx"
@@ -124,7 +125,6 @@ public:
     Sequence< double > convertKeyTimes( const OUString& rValue );
     Sequence< TimeFilterPair > convertTimeFilter( const OUString& rValue );
 
-    bool convertAnimationValue( XMLTokenEnum eAttributeName, Any& rValue );
     const OUString mastrHSL;
 };
 

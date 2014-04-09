@@ -21,6 +21,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <xmloff/xmlscripti.hxx>
+#include "facreg.hxx"
 #include "sdxmlimp_impl.hxx"
 #include "ximpbody.hxx"
 
@@ -52,8 +53,6 @@ using namespace ::xmloff::token;
 
 class SdXMLBodyContext_Impl : public SvXMLImportContext
 {
-    const SdXMLImport& GetSdImport() const
-        { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
 public:
@@ -92,7 +91,6 @@ SvXMLImportContext *SdXMLBodyContext_Impl::CreateChildContext(
 class SdXMLDocContext_Impl : public virtual SvXMLImportContext
 {
 protected:
-    const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
 public:

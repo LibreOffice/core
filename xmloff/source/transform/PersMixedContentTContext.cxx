@@ -44,7 +44,6 @@ public:
 
     virtual sal_Bool IsPersistent() const SAL_OVERRIDE;
     virtual void Export() SAL_OVERRIDE;
-    const OUString& GetText() const { return m_aCharacters; }
 };
 
 TYPEINIT1( XMLPersTextTContext_Impl, XMLTransformerContext );

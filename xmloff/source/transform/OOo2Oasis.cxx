@@ -38,6 +38,7 @@
 #include "PropertyActionsOOo.hxx"
 #include "TransformerActions.hxx"
 #include "OOo2Oasis.hxx"
+#include "XMLFilterRegistration.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::xmloff::token;

@@ -36,26 +36,6 @@
 
 using namespace ::com::sun::star;
 
-// Defines
-
-#define BORDER_INTEGERS_ARE_EQUAL       (4)
-
-// Predeclarations
-
-void Imp_SkipDouble(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen);
-void Imp_CalcVectorValues(::basegfx::B2DVector& aVec1, ::basegfx::B2DVector& aVec2, bool& bSameLength, bool& bSameDirection)
-{
-    const sal_Int32 nLen1(FRound(aVec1.getLength()));
-    const sal_Int32 nLen2(FRound(aVec2.getLength()));
-    aVec1.normalize();
-    aVec2.normalize();
-    aVec1 += aVec2;
-    const sal_Int32 nLen3(FRound(aVec1.getLength() * ((nLen1 + nLen2) / 2.0)));
-
-    bSameLength = (abs(nLen1 - nLen2) <= BORDER_INTEGERS_ARE_EQUAL);
-    bSameDirection = (nLen3 <= BORDER_INTEGERS_ARE_EQUAL);
-}
-
 // parsing help functions for simple chars
 void Imp_SkipSpaces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
@@ -87,18 +67,6 @@ void Imp_SkipSpacesAndClosingBraces(const OUString& rStr, sal_Int32& rPos, const
 
 // parsing help functions for integer numbers
 
-bool Imp_IsOnNumberChar(const OUString& rStr, const sal_Int32 nPos, bool bSignAllowed = true)
-{
-    sal_Unicode aChar(rStr[nPos]);
-
-    if(('0' <= aChar && '9' >= aChar)
-        || (bSignAllowed && '+' == aChar)
-        || (bSignAllowed && '-' == aChar)
-    )
-        return true;
-    return false;
-}
-
 bool Imp_IsOnUnitChar(const OUString& rStr, const sal_Int32 nPos)
 {
     sal_Unicode aChar(rStr[nPos]);
@@ -109,78 +77,6 @@ bool Imp_IsOnUnitChar(const OUString& rStr, const sal_Int32 nPos)
     )
         return true;
     return false;
-}
-
-void Imp_SkipNumber(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
-{
-    bool bSignAllowed(true);
-
-    while(rPos < nLen && Imp_IsOnNumberChar(rStr, rPos, bSignAllowed))
-    {
-        bSignAllowed = false;
-        rPos++;
-    }
-}
-
-void Imp_SkipNumberAndSpacesAndCommas(const OUString& rStr, sal_Int32& rPos,
-    const sal_Int32 nLen)
-{
-    Imp_SkipNumber(rStr, rPos, nLen);
-    Imp_SkipSpacesAndCommas(rStr, rPos, nLen);
-}
-
-void Imp_PutNumberChar(OUString& rStr, sal_Int32 nValue)
-{
-    OUStringBuffer sStringBuffer;
-    ::sax::Converter::convertNumber(sStringBuffer, nValue);
-    rStr += OUString(sStringBuffer.makeStringAndClear());
-}
-
-void Imp_PutNumberCharWithSpace(OUString& rStr, sal_Int32 nValue)
-{
-    const sal_Int32 aLen(rStr.getLength());
-    if(aLen)
-        if(Imp_IsOnNumberChar(rStr, aLen - 1, false) && nValue >= 0)
-            rStr += OUString(' ');
-    Imp_PutNumberChar(rStr, nValue);
-}
-
-// parsing help functions for double numbers
-
-void Imp_SkipDouble(const OUString& rStr, sal_Int32& rPos, const sal_Int32)
-{
-    sal_Unicode aChar(rStr[rPos]);
-
-    if('+' == aChar || '-' == aChar)
-    {
-        ++rPos;
-        aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
-    }
-
-    while(('0' <= aChar && '9' >= aChar)
-        || '.' == aChar)
-    {
-        ++rPos;
-        aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
-    }
-
-    if('e' == aChar || 'E' == aChar)
-    {
-        ++rPos;
-        aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
-
-        if('+' == aChar || '-' == aChar)
-        {
-            ++rPos;
-            aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
-        }
-
-        while('0' <= aChar && '9' >= aChar)
-        {
-            ++rPos;
-            aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
-        }
-    }
 }
 
 double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen,

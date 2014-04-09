@@ -127,54 +127,6 @@ OUString XMLEventOASISTransformerContext::GetEventName(
         return (*aIter).second;
 }
 
-bool ParseURLAsString(
-    const OUString& rAttrValue,
-    OUString* pName, OUString* pLocation )
-{
-    OUString SCHEME( "vnd.sun.star.script:"  );
-
-    sal_Int32 params = rAttrValue.indexOf( '?' );
-    if ( rAttrValue.indexOf( SCHEME ) != 0 || params < 0 )
-    {
-        return false;
-    }
-
-    sal_Int32 start = SCHEME.getLength();
-    *pName = rAttrValue.copy( start, params - start );
-
-    OUString aToken;
-    OUString aLanguage;
-    params++;
-    do
-    {
-        aToken = rAttrValue.getToken( 0, '&', params );
-        sal_Int32 dummy = 0;
-
-        if ( aToken.match( GetXMLToken( XML_LANGUAGE ) ) )
-        {
-            aLanguage = aToken.getToken( 1, '=', dummy );
-        }
-        else if ( aToken.match( GetXMLToken( XML_LOCATION ) ) )
-        {
-            OUString tmp = aToken.getToken( 1, '=', dummy );
-            if ( tmp.equalsIgnoreAsciiCase( GetXMLToken( XML_DOCUMENT ) ) )
-            {
-                *pLocation = GetXMLToken( XML_DOCUMENT );
-            }
-            else
-            {
-                *pLocation = GetXMLToken( XML_APPLICATION );
-            }
-        }
-    } while ( params >= 0 );
-
-    if ( aLanguage.equalsIgnoreAsciiCase("basic") )
-    {
-        return true;
-    }
-    return false;
-}
-
 bool ParseURL(
     const OUString& rAttrValue,
     OUString* pName, OUString* pLocation )

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmlprmap.hxx>
@@ -26,6 +29,7 @@
 #include "ColorPropertySet.hxx"
 #include "SchXMLTools.hxx"
 #include "SchXMLEnumConverter.hxx"
+#include "facreg.hxx"
 
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
@@ -114,7 +118,7 @@ using ::std::vector;
 
 // class SchXMLExportHelper_Impl
 
-class SchXMLExportHelper_Impl
+class SchXMLExportHelper_Impl: private boost::noncopyable
 {
 public:
     // first: data sequence for label, second: data sequence for values.
@@ -243,15 +247,8 @@ public:
     /// add svg size as attribute for current element
     void addSize( const ::com::sun::star::awt::Size & rSize, bool bIsOOoNamespace = false );
     void addSize( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape, bool bIsOOoNamespace = false  );
-    /// fills the member msString with the appropriate String (i.e. "A3")
-    void getCellAddress( sal_Int32 nCol, sal_Int32 nRow );
     /// exports a string as a paragraph element
     void exportText( const OUString& rText, bool bConvertTabsLFs = false );
-    void exportErrorBarRanges();
-
-private:
-    SchXMLExportHelper_Impl(SchXMLExportHelper_Impl &); // not defined
-    SchXMLExportHelper_Impl operator =(SchXMLExportHelper_Impl &); // not defined
 
 public:
     SvXMLExport& mrExport;

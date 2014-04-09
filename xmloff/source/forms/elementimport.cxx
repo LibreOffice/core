@@ -82,18 +82,6 @@ namespace xmloff
         }
     };
 
-    struct PropertyValueCompare : public ::std::binary_function< PropertyValue, OUString, bool>
-    {
-        bool operator() (const PropertyValue& lhs, const OUString& rhs) const
-        {
-            return lhs.Name == rhs;
-        }
-        bool operator() (const OUString& lhs, const PropertyValue& rhs) const
-        {
-            return lhs == rhs.Name;
-        }
-    };
-
     template <class ELEMENT>
     void pushBackSequenceElement(Sequence< ELEMENT >& _rContainer, const ELEMENT& _rElement)
     {

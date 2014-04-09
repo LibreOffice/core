@@ -267,11 +267,6 @@ public:
 
     size_t GetStyleCount() const { return aStyles.size(); }
 
-    const SvXMLStyleContext *GetStyle( size_t i ) const
-    {
-        return i < aStyles.size() ? aStyles[ i ] : 0;
-    }
-
     SvXMLStyleContext *GetStyle( size_t i )
     {
         return i < aStyles.size() ? aStyles[ i ] : 0;

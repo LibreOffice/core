@@ -21,47 +21,12 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
 
-using namespace ::com::sun::star;
+#include <XMLFilterRegistration.hxx>
 
-#define DECLARE_SERVICE( classname )    \
-    extern OUString SAL_CALL classname##_getImplementationName() throw();   \
-    extern uno::Sequence< OUString > SAL_CALL classname##_getSupportedServiceNames() throw();   \
-    extern uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(   \
-            const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception );
+using namespace ::com::sun::star;
 
 #define ENUMERATE_SERVICE( classname ) \
     { classname##_getImplementationName, classname##_getSupportedServiceNames, classname##_createInstance }
-
-DECLARE_SERVICE( OOo2OasisTransformer )
-DECLARE_SERVICE( Oasis2OOoTransformer )
-
-DECLARE_SERVICE( XMLAutoTextEventImportOOO )
-DECLARE_SERVICE( XMLMetaImportOOO )
-DECLARE_SERVICE( XMLMathSettingsImportOOO )
-DECLARE_SERVICE( XMLMathMetaImportOOO )
-DECLARE_SERVICE( XMLCalcSettingsImportOOO )
-DECLARE_SERVICE( XMLCalcMetaImportOOO )
-DECLARE_SERVICE( XMLCalcContentImportOOO )
-DECLARE_SERVICE( XMLCalcStylesImportOOO )
-DECLARE_SERVICE( XMLCalcImportOOO )
-DECLARE_SERVICE( XMLWriterSettingsImportOOO )
-DECLARE_SERVICE( XMLWriterMetaImportOOO )
-DECLARE_SERVICE( XMLWriterContentImportOOO )
-DECLARE_SERVICE( XMLWriterStylesImportOOO )
-DECLARE_SERVICE( XMLWriterImportOOO )
-DECLARE_SERVICE( XMLChartContentImportOOO )
-DECLARE_SERVICE( XMLChartStylesImportOOO )
-DECLARE_SERVICE( XMLChartImportOOO )
-DECLARE_SERVICE( XMLDrawSettingsImportOOO )
-DECLARE_SERVICE( XMLDrawMetaImportOOO )
-DECLARE_SERVICE( XMLDrawContentImportOOO )
-DECLARE_SERVICE( XMLDrawStylesImportOOO )
-DECLARE_SERVICE( XMLDrawImportOOO )
-DECLARE_SERVICE( XMLImpressSettingsImportOOO )
-DECLARE_SERVICE( XMLImpressMetaImportOOO )
-DECLARE_SERVICE( XMLImpressContentImportOOO )
-DECLARE_SERVICE( XMLImpressStylesImportOOO )
-DECLARE_SERVICE( XMLImpressImportOOO )
 
 namespace
 {

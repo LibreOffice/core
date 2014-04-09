@@ -47,12 +47,6 @@ public:
         nToken( rEntry.nToken )
     {}
 
-    bool operator==( const SvXMLTokenMapEntry_Impl& r ) const
-    {
-        return nPrefixKey == r.nPrefixKey &&
-               sLocalName == r.sLocalName;
-    }
-
     bool operator<( const SvXMLTokenMapEntry_Impl& r ) const
     {
         return nPrefixKey < r.nPrefixKey ||

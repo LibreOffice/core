@@ -33,7 +33,6 @@ using namespace ::xmloff::token;
 
 struct SvXMLTagAttribute_Impl
 {
-    SvXMLTagAttribute_Impl(){}
     SvXMLTagAttribute_Impl( const OUString &rName,
                          const OUString &rValue )
         : sName(rName),
