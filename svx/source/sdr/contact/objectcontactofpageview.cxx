@@ -89,7 +89,7 @@ namespace sdr
             }
         }
 
-        // From baseclass Timer, the timeout call triggered by te LazyInvalidate mechanism
+        // From baseclass Timer, the timeout call triggered by the LazyInvalidate mechanism
         void ObjectContactOfPageView::Timeout()
         {
             // stop the timer

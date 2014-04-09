@@ -60,7 +60,7 @@ namespace sdr
             // original OC
             virtual void setLazyInvalidate(ViewObjectContact& rVOC) SAL_OVERRIDE;
 
-            // From baseclass Timer, the timeout call triggered by te LazyInvalidate mechanism
+            // From baseclass Timer, the timeout call triggered by the LazyInvalidate mechanism
             virtual void Timeout() SAL_OVERRIDE;
 
             // get primitive visualization
@@ -108,7 +108,7 @@ namespace sdr
             Start();
         }
 
-        // From baseclass Timer, the timeout call triggered by te LazyInvalidate mechanism
+        // From baseclass Timer, the timeout call triggered by the LazyInvalidate mechanism
         void PagePrimitiveExtractor::Timeout()
         {
             // stop the timer

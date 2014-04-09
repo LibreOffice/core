@@ -1373,7 +1373,7 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                         {
                             GrabFocus();
                                 // necessary : a conn may be selected even if a tab win has the focus, in this case
-                                // the next travel would select the same conn again if we would not reset te focus ...
+                                // the next travel would select the same conn again if we would not reset the focus ...
                             SelectConn(pNextConn);
                         }
                     }

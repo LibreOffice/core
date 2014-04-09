@@ -496,7 +496,7 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
             {
                 /* TODO
                     Hack -->
-                        The default frame loader cant be located inside te normal set of frame loaders.
+                        The default frame loader cant be located inside the normal set of frame loaders.
                         Its an atomic property inside the misc cfg package. So we cant retrieve the information
                         about FINALIZED and MANDATORY very easy ... :-(
                         => set it to readonly/required everytimes :-)

@@ -39,7 +39,7 @@ namespace drawinglayer
             sal_uInt32                          mnRefCount;
 
             // all-text attributes. The SdrText itself and a copy
-            // of te OPO
+            // of the OPO
             const SdrText*                      mpSdrText;
             const OutlinerParaObject*           mpOutlinerParaObject;
 
