@@ -113,6 +113,16 @@ const sal_uInt32 EmfPlusLineJoinTypeBevel = 0x00000001;
 const sal_uInt32 EmfPlusLineJoinTypeRound = 0x00000002;
 const sal_uInt32 EmfPlusLineJoinTypeMiterClipped = 0x00000003;
 
+enum EmfPlusCombineMode
+{
+    EmfPlusCombineModeReplace = 0x00000000,
+    EmfPlusCombineModeIntersect = 0x00000001,
+    EmfPlusCombineModeUnion = 0x00000002,
+    EmfPlusCombineModeXOR = 0x00000003,
+    EmfPlusCombineModeExclude = 0x00000004,
+    EmfPlusCombineModeComplement = 0x00000005
+};
+
 using namespace ::com::sun::star;
 using namespace ::basegfx;
 
@@ -2151,7 +2161,19 @@ namespace cppcanvas
                             ::basegfx::B2DPolyPolygon& clipPoly (path.GetPolygon (*this));
 
                             clipPoly.transform (rState.mapModeTransform);
-                            updateClipping (clipPoly, rFactoryParms, combineMode == 1);
+                            switch (combineMode)
+                            {
+                            case EmfPlusCombineModeReplace:
+                            case EmfPlusCombineModeIntersect:
+                            case EmfPlusCombineModeUnion: // Is this, EmfPlusCombineModeXOR and EmfPlusCombineModeComplement correct?
+                            case EmfPlusCombineModeXOR:
+                            case EmfPlusCombineModeComplement:
+                                updateClipping (clipPoly, rFactoryParms, combineMode == 1);
+                                break;
+                            case EmfPlusCombineModeExclude:
+                                // Not doing anything is better then including exactly what we wanted to exclude.
+                                break;
+                            }
 
                             break;
                         }
