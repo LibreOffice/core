@@ -178,7 +178,7 @@ namespace svx
             (return argument if GetUseBothDirections is true) */
         editeng::HangulHanjaConversion::ConversionDirection GetDirection( editeng::HangulHanjaConversion::ConversionDirection eDefaultDirection ) const;
 
-        /// enables or disbales the checkboxes for ruby formatted replacements
+        /// enables or disables the checkboxes for ruby formatted replacements
         void            EnableRubySupport( bool bVal );
 
     private:
