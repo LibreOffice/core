@@ -10,8 +10,12 @@
 #define CTRunData_Included
 
 #include "premac.h"
+#if defined(MACOSX) && MACOSX_SDK_VERSION < 1080
+#include <ApplicationServices/ApplicationServices.h>
+#else
 #include <CoreGraphics/CoreGraphics.h>
 #include <CoreText/CoreText.h>
+#endif
 #include "postmac.h"
 
 class CTRunData
