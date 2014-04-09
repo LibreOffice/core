@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_47ca8ea2",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-09T07:58:48Z",
+      "side": 1,
+      "message": "I see the motivation, but the condition should be \"rInfo.getPropertyValue(\"HoriOrientRelation\") \u003d\u003d text::RelOrientation::PAGE_FRAME\", FRAME is exactly the paragraph/column-anchored situation where we want to convert. Also, VertOrientation doesn\u0027t matter, we just compare width here.",
+      "revId": "f77611625301fc7170edc72f3c204df9a741bc10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
