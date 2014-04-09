@@ -375,6 +375,7 @@ namespace sdr
                 // with the content which is the placeholder graphic
                 xRetval = createVIP2DSForPresObj(aObjectMatrix, aAttribute);
             }
+#ifndef IOS // Enforce swap-in for tiled rendering for now, while we have no delayed updating mechanism
             else if(visualisationUsesDraft())
             {
                 // #i102380# The graphic is swapped out. To not force a swap-in here, there is a mechanism
@@ -384,6 +385,7 @@ namespace sdr
                 // (non-blocking) processing here and thus in the effect e.g. fast scrolling through pages
                 xRetval = createVIP2DSForDraft(aObjectMatrix, aAttribute);
             }
+#endif
             else
             {
                 // create primitive. Info: Calling the copy-constructor of GraphicObject in this
