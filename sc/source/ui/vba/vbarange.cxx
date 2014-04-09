@@ -714,7 +714,6 @@ class CellValueSetter : public ValueSetter
 {
 protected:
     uno::Any maValue;
-    uno::TypeClass mTypeClass;
 public:
     CellValueSetter( const uno::Any& aValue );
     virtual bool processValue( const uno::Any& aValue,  const uno::Reference< table::XCell >& xCell ) SAL_OVERRIDE;
@@ -722,7 +721,7 @@ public:
 
 };
 
-CellValueSetter::CellValueSetter( const uno::Any& aValue ): maValue( aValue ), mTypeClass( aValue.getValueTypeClass() ) {}
+CellValueSetter::CellValueSetter( const uno::Any& aValue ): maValue( aValue ) {}
 
 void
 CellValueSetter::visitNode( sal_Int32 /*i*/, sal_Int32 /*j*/, const uno::Reference< table::XCell >& xCell )
@@ -810,7 +809,6 @@ class CellValueGetter : public ValueGetter
 {
 protected:
     uno::Any maValue;
-    uno::TypeClass mTypeClass;
 public:
     CellValueGetter() {}
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) SAL_OVERRIDE;
