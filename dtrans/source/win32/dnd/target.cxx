@@ -608,7 +608,7 @@ void DropTarget::_rejectDrag( const Reference<XDropTargetDragContext>& context)
     }
 }
 
-// This function determines the action dependend on the pressed
+// This function determines the action dependent on the pressed
 // key modifiers ( CTRL, SHIFT, ALT, Right Mouse Button). The result
 // is then checked against the allowed actions which can be set through
 // XDropTarget::setDefaultActions. Only those values which are also

@@ -55,6 +55,6 @@ class MyUnoObject implements com.sun.star.uno.XInterface
         }
         System.out.println( "leaving" );
 
-        // It is java VM dependend, whether the finalizer was called or not
+        // It is java VM dependent, whether the finalizer was called or not
     }
 }

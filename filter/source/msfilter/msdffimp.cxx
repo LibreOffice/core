@@ -6501,7 +6501,7 @@ bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile &
 
     Impl_OlePres aEle( FORMAT_GDIMETAFILE );
     // Convert the size in 1/100 mm
-    // If a not applicable MapUnit (device dependend) is used,
+    // If a not applicable MapUnit (device dependent) is used,
     // SV tries to guess a best match for the right value
     Size aSize = rMtf.GetPrefSize();
     MapMode aMMSrc = rMtf.GetPrefMapMode();

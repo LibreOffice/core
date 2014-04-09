@@ -1444,7 +1444,7 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
     InitAccCfg();
 
     // change the description of the radio button, which switch to the module
-    // dependend accelerator configuration
+    // dependent accelerator configuration
     OUString sButtonText = m_pModuleButton->GetText();
     sButtonText = sButtonText.replaceFirst("$(MODULE)", m_sModuleUIName);
     m_pModuleButton->SetText(sButtonText);

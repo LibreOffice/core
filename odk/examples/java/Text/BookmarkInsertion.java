@@ -114,7 +114,7 @@ public class BookmarkInsertion {
             xDocMSF = UnoRuntime.queryInterface(
                 com.sun.star.lang.XMultiServiceFactory.class, xTextDocument);
 
-            // the bookmark service is a context dependend service, you need
+            // the bookmark service is a context dependent service, you need
             // the MultiServiceFactory from the document
             Object xObject = xDocMSF.createInstance("com.sun.star.text.Bookmark");
 

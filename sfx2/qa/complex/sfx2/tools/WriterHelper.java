@@ -79,7 +79,7 @@ public class WriterHelper {
     private XTextDocument xLocalDoc = null;
     /** a TextDocument is opened by pressing a button in a dialog given by uno-URL
      * @param url the uno-URL of the dialog to be opened
-     * @param createButton the language dependend label of the button to be pressed
+     * @param createButton the language dependent label of the button to be pressed
      * @param destroyLocal if true the document that has been opened to dispatch the dialog is closed before the method returns,
      * otherwise this document remains open
      * @return returns the created Textdocument

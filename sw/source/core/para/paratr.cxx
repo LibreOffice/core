@@ -94,7 +94,7 @@ void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
         else if( pDefinedIn->GetDepends() &&
                 !pDefinedIn->IsModifyLocked() )
         {
-            // Notify those who are dependend on the format on our own.
+            // Notify those who are dependent on the format on our own.
             // The format itself wouldn't pass on the notify as it does not get past the check.
             pDefinedIn->ModifyBroadcast( this, this );
         }

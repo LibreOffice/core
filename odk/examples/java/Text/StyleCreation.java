@@ -57,7 +57,7 @@ public class StyleCreation {
             com.sun.star.text.XTextDocument xTextDocument = null;
             xTextDocument = createTextdocument(xDesktop);
 
-            // the service '..ParagraphStyle' is context dependend, you need
+            // the service '..ParagraphStyle' is context dependent, you need
             // the multi service factory from the document to use the service
             com.sun.star.lang.XMultiServiceFactory xDocMSF =
                 UnoRuntime.queryInterface(

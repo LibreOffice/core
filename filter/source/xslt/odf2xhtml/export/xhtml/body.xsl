@@ -2766,7 +2766,7 @@
 	</xsl:template>
 
 
-	<!-- Hidden text dependend on Office variables:
+	<!-- Hidden text dependent on Office variables:
 		 The text is not shown, if condition is 'true'.
 		 Implemented solely for conditons as '<VARIABLE>==0' or '<VARIABLE>==1'
 	-->

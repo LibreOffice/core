@@ -170,7 +170,7 @@ public:
         return static_cast< RC >( osl_getAbsoluteFileURL( ustrBaseDirectoryURL.pData, ustrRelativeFileURL.pData, &ustrAbsoluteFileURL.pData ) );
     }
 
-    /** Convert a file URL into a system dependend path.
+    /** Convert a file URL into a system dependent path.
 
         @param ustrFileURL [in]
         A File URL.
@@ -190,7 +190,7 @@ public:
         return static_cast< RC >( osl_getSystemPathFromFileURL( ustrFileURL.pData, &ustrSystemPath.pData ) );
     }
 
-    /** Convert a system dependend path into a file URL.
+    /** Convert a system dependent path into a file URL.
 
         @param ustrSystemPath [in]
         A System dependent path of a file or directory.
@@ -217,7 +217,7 @@ public:
 
         @param ustrSearchPath [in]
         A list of system paths, in which a given file has to be searched. The Notation of a path list is
-        system dependend, e.g. on UNIX system "/usr/bin:/bin" and on Windows "C:\BIN;C:\BATCH".
+        system dependent, e.g. on UNIX system "/usr/bin:/bin" and on Windows "C:\BIN;C:\BATCH".
         These paths are only for the search of a file or a relative path, otherwise it will be ignored.
         If ustrSearchPath is NULL or while using the search path the search failed, the function searches for
         a matching file in all system directories and in the directories listed in the PATH environment

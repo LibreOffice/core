@@ -535,7 +535,7 @@ public:
         const OUString& aUser, const DateTime& aDateTime,
         const OUString &sComment, const ScChangeActionType eType,
         const SCsCOLROW nD, ScChangeTrack* pTrack); // only to use in the XML import
-                                            // which of nDx and nDy is set is dependend on the type
+                                            // which of nDx and nDy is set is dependent on the type
 
     // is the last in a row (or single)
     bool IsBaseDelete() const;

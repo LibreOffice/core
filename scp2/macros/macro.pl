@@ -272,7 +272,7 @@ sub args_require_build
 
 sub usage
 {
-    print STDERR "Generate language dependend macros use in *.scp files\n";
+    print STDERR "Generate language dependent macros use in *.scp files\n";
     print STDERR "perl $0 -o <outputfile> -c <config_stamp_file>\n";
     exit  1;
 }

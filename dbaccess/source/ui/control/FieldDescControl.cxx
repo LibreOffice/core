@@ -249,7 +249,7 @@ OUString OFieldDescControl::BoolStringPersistent(const OUString& rUIString) cons
 
 OUString OFieldDescControl::BoolStringUI(const OUString& rPersistentString) const
 {
-    // Older versions may store a language dependend string as a default
+    // Older versions may store a language dependent string as a default
     if (rPersistentString == aYes || rPersistentString == aNo)
         return rPersistentString;
 

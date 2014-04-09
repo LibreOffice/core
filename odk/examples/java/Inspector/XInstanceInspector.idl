@@ -43,7 +43,7 @@ module org {  module openoffice {
     interface XInstanceInspector {
         /**
          * For a given instance this method displays all services, interfaces,
-         * methods, attributes, and contents in a tree. All dependend
+         * methods, attributes, and contents in a tree. All dependent
          * instances are also inspected and displayed, so the user could browse
          * the tree. If you press the key "F1", the API-documentation from
          * www.openoffice.org for the current instance will be displayed in a

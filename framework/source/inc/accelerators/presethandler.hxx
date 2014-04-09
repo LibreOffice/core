@@ -69,7 +69,7 @@ class PresetHandler
         /** @short  this handler can provide different
                     types of configuration.
 
-            @descr  Means: a global or a module dependend
+            @descr  Means: a global or a module dependent
                     or ... configuration.
          */
         enum EConfigType
@@ -126,7 +126,7 @@ class PresetHandler
         OUString m_sResourceType;
 
         /** @short  specify the application module for a module
-                    dependend configuration.
+                    dependent configuration.
 
             @descr  Will be used only, if m_sResourceType is set to
                     "module". Further it must be a valid module identifier
@@ -261,13 +261,13 @@ class PresetHandler
                     work on a new type of configuration sets.
 
             @param  eConfigType
-                    differ between global or module dependend configuration.
+                    differ between global or module dependent configuration.
 
             @param  sResourceType
                     differ between menubar/toolbar/accelerator/... configuration.
 
             @param  sModule
-                    if sResourceType is set to a module dependend configuration,
+                    if sResourceType is set to a module dependent configuration,
                     it address the current application module.
 
             @param  xDocumentRoot

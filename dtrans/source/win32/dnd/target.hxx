@@ -170,7 +170,7 @@ public:
     void _rejectDrag( const Reference<XDropTargetDragContext>& context);
 
 protected:
-    // Gets the current action dependend on the pressed modifiers, the effects
+    // Gets the current action dependent on the pressed modifiers, the effects
     // supported by the drop source (IDropSource) and the default actions of the
     // drop target (XDropTarget, this class))
     inline sal_Int8 getFilteredActions( DWORD grfKeyState, DWORD sourceActions);

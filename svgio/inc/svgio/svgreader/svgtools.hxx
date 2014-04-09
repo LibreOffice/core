@@ -37,7 +37,7 @@ namespace svgio
         void myAssert(const OUString& rMessage);
 #endif
 
-// recommended value for this devise dependend unit, see CSS2 section 4.3.2 Lengths
+// recommended value for this devise dependent unit, see CSS2 section 4.3.2 Lengths
 #define F_SVG_PIXEL_PER_INCH  90.0
 
         // common non-token strings

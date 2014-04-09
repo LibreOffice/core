@@ -1398,7 +1398,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getAbsoluteFileURL(
     rtl_uString **ppustrAbsoluteFileURL );
 
 
-/** Convert a system dependend path into a file URL.
+/** Convert a system dependent path into a file URL.
 
     @param pustrSystemPath [in]
     A System dependent path of a file or directory.
@@ -1424,7 +1424,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileURLFromSystemPath(
 
     @param pustrSearchPath [in]
     A list of system paths, in which a given file has to be searched. The Notation of a path list is
-    system dependend, e.g. on UNIX system "/usr/bin:/bin" and on Windows "C:\BIN;C:\BATCH".
+    system dependent, e.g. on UNIX system "/usr/bin:/bin" and on Windows "C:\BIN;C:\BATCH".
     These paths are only for the search of a file or a relative path, otherwise it will be ignored.
     If pustrSearchPath is NULL or while using the search path the search failed, the function searches for
     a matching file in all system directories and in the directories listed in the PATH environment
@@ -1449,7 +1449,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_searchFileURL(
         rtl_uString *pustrFileName, rtl_uString *pustrSearchPath, rtl_uString **ppustrFileURL );
 
 
-/** Convert a file URL into a system dependend path.
+/** Convert a file URL into a system dependent path.
 
     @param pustrFileURL [in]
     A File URL.

@@ -44,7 +44,7 @@ namespace {
 
 /**
     implements a read/write access to a module
-    dependend accelerator configuration.
+    dependent accelerator configuration.
  */
 typedef ::cppu::ImplInheritanceHelper1<
             XCUBasedAcceleratorConfiguration,
@@ -123,7 +123,7 @@ ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
 
     if (m_sModule.isEmpty())
         throw css::uno::RuntimeException(
-                OUString("The module dependend accelerator configuration service was initialized with an empty module identifier!"),
+                OUString("The module dependent accelerator configuration service was initialized with an empty module identifier!"),
                 static_cast< ::cppu::OWeakObject* >(this));
 }
 

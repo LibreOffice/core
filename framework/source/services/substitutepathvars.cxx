@@ -837,7 +837,7 @@ OUString SubstitutePathVariables::GetWorkVariableValue() const
     boost::optional<OUString> x(officecfg::Office::Paths::Variables::Work::get(m_xContext));
     if (!x)
     {
-        // fallback to $HOME in case platform dependend config layer does not return
+        // fallback to $HOME in case platform dependent config layer does not return
         // an usuable work dir value.
         osl::Security aSecurity;
         aSecurity.getHomeDir( aWorkPath );

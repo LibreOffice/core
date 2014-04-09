@@ -645,7 +645,7 @@ public class OfficeProvider implements AppProvider
 
     /**
      * converts directory without 'file:///' prefix.
-     * and System dependend file separator
+     * and System dependent file separator
      * @param dir
      * @return
      */

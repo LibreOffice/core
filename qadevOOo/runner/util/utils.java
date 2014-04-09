@@ -402,7 +402,7 @@ public class utils {
 
     /**
      * Gets StarOffice temp directory without 'file:///' prefix.
-     * and System dependend file separator
+     * and System dependent file separator
      */
     public static String getOfficeTempDirSys(XMultiServiceFactory msf) {
 
