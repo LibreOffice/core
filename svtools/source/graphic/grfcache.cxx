@@ -46,8 +46,6 @@ private:
     sal_uInt32  mnID3;
     sal_uInt32  mnID4;
 
-                GraphicID();
-
 public:
 
 
@@ -160,7 +158,6 @@ private:
     SvgDataPtr          maSvgData;
 
     bool                ImplInit( const GraphicObject& rObj );
-    bool                ImplMatches( const GraphicObject& rObj ) const { return( GraphicID( rObj ) == maID ); }
     void                ImplFillSubstitute( Graphic& rSubstitute );
 
 public:
@@ -449,12 +446,8 @@ public:
 
                                 ~GraphicDisplayCacheEntry();
 
-    const GraphicAttr&          GetAttr() const { return maAttr; }
-    const Size&                 GetOutputSizePixel() const { return maOutSizePix; }
     sal_uLong                   GetCacheSize() const { return mnCacheSize; }
     const GraphicCacheEntry*    GetReferencedCacheEntry() const { return mpRefCacheEntry; }
-    sal_uLong                   GetOutDevDrawMode() const { return mnOutDevDrawMode; }
-    sal_uInt16              GetOutDevBitCount() const { return mnOutDevBitCount; }
 
     void                        SetReleaseTime( const ::salhelper::TTimeValue& rReleaseTime ) { maReleaseTime = rReleaseTime; }
     const ::salhelper::TTimeValue&    GetReleaseTime() const { return maReleaseTime; }

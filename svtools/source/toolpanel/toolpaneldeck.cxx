@@ -88,7 +88,6 @@ namespace svt
         void                SetLayouter( const PDeckLayouter& i_pNewLayouter );
 
         Window&             GetPanelWindowAnchor()       { return m_aPanelAnchor; }
-        const Window&       GetPanelWindowAnchor() const { return m_aPanelAnchor; }
 
         bool                IsDead() const { return m_bInDtor; }
 

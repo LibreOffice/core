@@ -131,29 +131,8 @@ class SvtMenuOptions_Impl : public ConfigItem
         bool        IsEntryHidingEnabled() const
                     { return m_bDontHideDisabledEntries; }
 
-        bool        IsFollowMouseEnabled() const
-                    { return m_bFollowMouse; }
-
         TriState    GetMenuIconsState() const
                     { return m_eMenuIcons; }
-
-        void        SetEntryHidingState ( bool bState )
-                    {
-                        m_bDontHideDisabledEntries = bState;
-                        SetModified();
-                        for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
-                            iter->Call( this );
-                        Commit();
-                    }
-
-        void        SetFollowMouseState ( bool bState )
-                    {
-                        m_bFollowMouse = bState;
-                        SetModified();
-                        for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
-                            iter->Call( this );
-                        Commit();
-                    }
 
         void        SetMenuIconsState(TriState eState)
                     {

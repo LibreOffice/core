@@ -141,7 +141,6 @@ namespace svt
         TemplateContent( const INetURLObject& _rURL );
 
         // attribute access
-        inline OUString                 getName( ) const                            { return m_sLocalName; }
         inline OUString                 getURL( ) const                             { return m_aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ); }
         inline void                     setModDate( const util::DateTime& _rDate )  { m_aLastModified = _rDate; }
         inline const util::DateTime&    getModDate( ) const                         { return m_aLastModified; }
@@ -149,7 +148,6 @@ namespace svt
         inline TemplateFolderContent&   getSubContents()            { return m_aSubContents; }
         inline const TemplateFolderContent& getSubContents() const  { return m_aSubContents; }
 
-                inline ConstFolderIterator              begin() const   { return m_aSubContents.begin(); }
                 inline ConstFolderIterator              end() const             { return m_aSubContents.end(); }
         inline TemplateFolderContent::size_type
                                         size() const    { return m_aSubContents.size(); }
@@ -289,24 +287,6 @@ namespace svt
             m_rStorage.WriteUniOrByteString( _rString, m_rStorage.GetStreamCharSet() );
         }
     };
-
-
-    /// functor which stores the local name of a TemplateContent
-    struct StoreLocalContentName
-            :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
-            ,public StoreString
-    {
-        StoreLocalContentName( SvStream& _rStorage ) : StoreString( _rStorage ) { }
-
-        void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
-        {
-            SAL_WARN( "svtools.misc", "This method must not be used, the whole URL must be stored!" );
-
-            // use the base class operator with the local name of the content
-            StoreString::operator() ( _rxContent->getName() );
-        }
-    };
-
 
     struct StoreContentURL
             :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >

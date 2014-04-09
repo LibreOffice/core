@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <boost/noncopyable.hpp>
 #include <svtools/contextmenuhelper.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
@@ -53,7 +55,8 @@ namespace svt
 
 // internal helper class to retrieve status updates
 class StateEventHelper : public ::com::sun::star::frame::XStatusListener,
-                         public ::cppu::OWeakObject
+                         public ::cppu::OWeakObject,
+                         private boost::noncopyable
 {
     public:
         StateEventHelper( const uno::Reference< frame::XDispatchProvider >& xDispatchProvider,
@@ -75,10 +78,6 @@ class StateEventHelper : public ::com::sun::star::frame::XStatusListener,
         virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& Event) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
-        StateEventHelper();
-        StateEventHelper( const StateEventHelper& );
-        StateEventHelper& operator=( const StateEventHelper& );
-
         bool                                       m_bCurrentCommandEnabled;
         OUString                            m_aCommandURL;
         uno::Reference< frame::XDispatchProvider > m_xDispatchProvider;

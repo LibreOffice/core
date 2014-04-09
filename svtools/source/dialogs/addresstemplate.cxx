@@ -259,7 +259,6 @@ public:
                         getProperty(const sal_Char* _pLocalName) const;
 
         OUString getStringProperty(const sal_Char* _pLocalName) const;
-        sal_Int32       getInt32Property(const sal_Char* _pLocalName) const;
 
         OUString getStringProperty(const OUString& _rLocalName) const;
 
@@ -360,14 +359,6 @@ void AssignmentPersistentData::Commit()
         OUString sReturn;
         getProperty( _pLocalName ) >>= sReturn;
         return sReturn;
-    }
-
-
-    sal_Int32 AssignmentPersistentData::getInt32Property(const sal_Char* _pLocalName) const
-    {
-        sal_Int32 nReturn = 0;
-        getProperty( _pLocalName ) >>= nReturn;
-        return nReturn;
     }
 
 

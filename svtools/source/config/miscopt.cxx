@@ -162,16 +162,10 @@ class SvtMiscOptions_Impl : public ConfigItem
         inline bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
 
-        inline bool IsPluginsEnabledReadOnly() const
-        { return m_bIsPluginsEnabledRO; }
-
         inline sal_Int16 GetSymbolsSize()
         { return m_nSymbolsSize; }
 
         void SetSymbolsSize( sal_Int16 nSet );
-
-        inline bool IsGetSymbolsSizeReadOnly()
-        { return m_bIsSymbolsSizeRO; }
 
         OUString GetIconTheme() const;
 
@@ -200,9 +194,6 @@ class SvtMiscOptions_Impl : public ConfigItem
          */
         void SetIconThemeAutomatically(SetModifiedFlag = SET_MODIFIED);
 
-        inline bool IsGetSymbolsStyleReadOnly()
-        { return m_bIsSymbolsStyleRO; }
-
         // translate to VCL settings ( "0" = 3D, "1" = FLAT )
         inline sal_Int16 GetToolboxStyle()
         { return m_nToolboxStyle ? VCL_TOOLBOX_STYLE_FLAT : 0; }
@@ -210,17 +201,11 @@ class SvtMiscOptions_Impl : public ConfigItem
         // translate from VCL settings
         void SetToolboxStyle( sal_Int16 nStyle, bool _bSetModified );
 
-        inline bool IsGetToolboxStyleReadOnly()
-        { return m_bIsToolboxStyleRO; }
-
         inline bool UseSystemPrintDialog() const
         { return m_bUseSystemPrintDialog; }
 
         inline void SetUseSystemPrintDialog( bool bSet )
         {  m_bUseSystemPrintDialog = bSet; SetModified(); }
-
-        inline bool IsUseSystemPrintDialogReadOnly() const
-        { return m_bIsUseSystemPrintDialogRO; }
 
         inline bool ShowLinkWarningDialog() const
         { return m_bShowLinkWarningDialog; }
@@ -249,10 +234,6 @@ class SvtMiscOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         static Sequence< OUString > GetPropertyNames();
-
-    private:
-        // The unittests fail if we call SetModified during initialization in the constructor.
-        void ImplSetSymbolsStyleWithoutSettingModifiedFlag( bool bValue, sal_Int16 nSet, const OUString &rName );
 };
 
 

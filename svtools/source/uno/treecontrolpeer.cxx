@@ -111,7 +111,6 @@ public:
                     UnoTreeListItem();
     virtual         ~UnoTreeListItem();
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
-    Image           GetImage() const;
     void            SetImage( const Image& rImage );
     OUString        GetGraphicURL() const;
     void            SetGraphicURL( const OUString& rGraphicURL );

@@ -251,6 +251,7 @@ namespace svt
     }
 
 
+#if defined WNT
     //= NWFTabItemRenderer - declaration
 
     class NWFTabItemRenderer : public ITabBarRenderer
@@ -335,7 +336,7 @@ namespace svt
         (void)i_rItemRect;
         (void)i_nItemFlags;
     }
-
+#endif
 
     //= PanelTabBar_Impl
 

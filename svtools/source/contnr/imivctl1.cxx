@@ -50,14 +50,6 @@
 #define EVENTID_SHOW_CURSOR             ((void*)1)
 #define EVENTID_ADJUST_SCROLLBARS       ((void*)2)
 
-struct SvxIconChoiceCtrlEntry_Impl
-{
-    SvxIconChoiceCtrlEntry* _pEntry;
-    Point           _aPos;
-                    SvxIconChoiceCtrlEntry_Impl( SvxIconChoiceCtrlEntry* pEntry, const Rectangle& rBoundRect )
-                    : _pEntry( pEntry), _aPos( rBoundRect.TopLeft()) {}
-};
-
 static sal_Bool bEndScrollInvalidate = sal_True;
 
 class IcnViewEdit_Impl : public MultiLineEdit

@@ -269,11 +269,6 @@ namespace svt { namespace table
 
 #ifdef DBG_UTIL
 
-    const char* TableControl_Impl_checkInvariants( const void* _pInstance )
-    {
-        return static_cast< const TableControl_Impl* >( _pInstance )->impl_checkInvariants();
-    }
-
     namespace
     {
         template< typename SCALAR_TYPE >

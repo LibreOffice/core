@@ -79,7 +79,6 @@ struct TransferableObjectDescriptor
         , mbCanLink(false)
     {}
 
-    SVT_DLLPUBLIC friend SvStream&  ReadTransferableObjectDescriptor( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc );
     SVT_DLLPUBLIC friend SvStream&  WriteTransferableObjectDescriptor( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc );
 };
 

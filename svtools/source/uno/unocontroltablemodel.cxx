@@ -127,12 +127,6 @@ namespace svt { namespace table
     //= UnoControlTableModel
 
 #ifdef DBG_UTIL
-    const char* UnoControlTableModel_checkInvariants( const void* _pInstance )
-    {
-        return static_cast< const UnoControlTableModel* >( _pInstance )->checkInvariants();
-    }
-
-
     const char* UnoControlTableModel::checkInvariants() const
     {
         Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );

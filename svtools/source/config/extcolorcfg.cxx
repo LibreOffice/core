@@ -116,8 +116,6 @@ public:
     void                            SetColorConfigValue(const OUString& _sName,
                                                             const ExtendedColorConfigValue& rValue );
 
-    const OUString&            GetLoadedScheme() const {return m_sLoadedScheme;}
-
     sal_Bool                        AddScheme(const OUString& rNode);
     sal_Bool                        RemoveScheme(const OUString& rNode);
     void                            SetModified(){ConfigItem::SetModified();}

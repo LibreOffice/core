@@ -27,30 +27,6 @@
 
 namespace svt
 {
-
-
-
-    //= FontChanger
-
-    class FontChanger
-    {
-    protected:
-        OutputDevice*   m_pDev;
-
-    public:
-        FontChanger( OutputDevice* _pDev, const Font& _rNewFont )
-            :m_pDev( _pDev )
-        {
-            m_pDev->Push( PUSH_FONT );
-            m_pDev->SetFont( _rNewFont );
-        }
-
-        ~FontChanger()
-        {
-            m_pDev->Pop( );
-        }
-    };
-
     class HyperLabelImpl
     {
     public:

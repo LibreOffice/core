@@ -50,7 +50,7 @@ private:
     Size                        maTextSize;         /// The size the text will take in the current output device.
 
                                 /** Assignment operator not implemented to prevent usage. */
-    SvtScriptedTextHelper_Impl& operator=( const SvtScriptedTextHelper_Impl& );
+    SvtScriptedTextHelper_Impl& operator=( const SvtScriptedTextHelper_Impl& ) SAL_DELETED_FUNCTION;
 
                                 /** Gets the font of the given script type. */
     const Font&                 GetFont( sal_uInt16 _nScript ) const;

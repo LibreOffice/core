@@ -18,6 +18,8 @@
  */
 
 #include "svtaccessiblefactory.hxx"
+
+#include <boost/noncopyable.hpp>
 #include <osl/module.h>
 
 // #define UNLOAD_ON_LAST_CLIENT_DYING
@@ -58,7 +60,8 @@ namespace svt
 
         //= AccessibleDummyFactory
 
-        class AccessibleDummyFactory : public IAccessibleFactory
+        class AccessibleDummyFactory:
+            public IAccessibleFactory, private boost::noncopyable
         {
         public:
             AccessibleDummyFactory();
@@ -67,9 +70,6 @@ namespace svt
             virtual ~AccessibleDummyFactory();
 
         private:
-            AccessibleDummyFactory( const AccessibleDummyFactory& );            // never implemented
-            AccessibleDummyFactory& operator=( const AccessibleDummyFactory& ); // never implemented
-
             oslInterlockedCount m_refCount;
 
         public:

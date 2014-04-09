@@ -78,42 +78,6 @@ using namespace ::com::sun::star::datatransfer::dnd;
 #define TOD_SIG1 0x01234567
 #define TOD_SIG2 0x89abcdef
 
-SvStream& operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc )
-{
-    sal_uInt32  nSize, nViewAspect, nSig1, nSig2;
-    //#fdo39428 Remove SvStream operator>>(long&)
-    sal_Int32 nTmp(0);
-
-    rIStm.ReadUInt32( nSize );
-    rIStm >> rObjDesc.maClassName;
-    rIStm.ReadUInt32( nViewAspect );
-    rIStm.ReadInt32( nTmp );
-    rObjDesc.maSize.Width() = nTmp;
-    rIStm.ReadInt32( nTmp );
-    rObjDesc.maSize.Height() = nTmp;
-    rIStm.ReadInt32( nTmp );
-    rObjDesc.maDragStartPos.X() = nTmp;
-    rIStm.ReadInt32( nTmp );
-    rObjDesc.maDragStartPos.Y() = nTmp;
-    rObjDesc.maTypeName = rIStm.ReadUniOrByteString(osl_getThreadTextEncoding());
-    rObjDesc.maDisplayName = rIStm.ReadUniOrByteString(osl_getThreadTextEncoding());
-
-    rIStm.ReadUInt32( nSig1 ).ReadUInt32( nSig2 );
-
-    rObjDesc.mnViewAspect = static_cast< sal_uInt16 >( nViewAspect );
-
-    // don't use width/height info from external objects
-    if( ( TOD_SIG1 != nSig1 ) || ( TOD_SIG2 != nSig2 ) )
-    {
-        rObjDesc.maSize.Width() = 0;
-        rObjDesc.maSize.Height() = 0;
-    }
-
-    return rIStm;
-}
-
-
-
 SvStream& WriteTransferableObjectDescriptor( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc )
 {
     const sal_uInt32    nFirstPos = rOStm.Tell(), nViewAspect = rObjDesc.mnViewAspect;

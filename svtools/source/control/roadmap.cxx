@@ -50,32 +50,6 @@ namespace svt
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     };
 
-
-    //= ColorChanger
-
-    class ColorChanger
-    {
-    protected:
-        OutputDevice*   m_pDev;
-
-    public:
-        ColorChanger( OutputDevice* _pDev, const Color& _rNewLineColor, const Color& _rNewFillColor )
-            :m_pDev( _pDev )
-        {
-            m_pDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-            m_pDev->SetLineColor( _rNewLineColor );
-            m_pDev->SetFillColor( _rNewFillColor );
-        }
-
-        ~ColorChanger()
-        {
-            m_pDev->Pop();
-        }
-    };
-
-
-    //= RoadmapItem
-
     class RoadmapItem : public RoadmapTypes
     {
     private:
@@ -141,10 +115,7 @@ namespace svt
 
         RoadmapItem* InCompleteHyperLabel;
 
-        void                addHyperLabel( RoadmapItem*  _rRoadmapStep ) { m_aRoadmapSteps.push_back(_rRoadmapStep); }
-
         HL_Vector&          getHyperLabels() { return m_aRoadmapSteps; }
-        const HL_Vector&    getHyperLabels() const { return m_aRoadmapSteps; }
 
         void                insertHyperLabel( ItemIndex _Index, RoadmapItem* _rRoadmapStep ) { m_aRoadmapSteps.insert( m_aRoadmapSteps.begin() + _Index, _rRoadmapStep ); }
 

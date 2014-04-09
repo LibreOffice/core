@@ -80,11 +80,6 @@ struct ImplTabBarItem
         return maTabBgColor == Color(COL_AUTO);
     }
 
-    bool IsDefaultTabTextColor() const
-    {
-        return maTabTextColor == Color(COL_AUTO);
-    }
-
     bool IsSelected(ImplTabBarItem* pCurItem) const
     {
         return mbSelect || (pCurItem == this);

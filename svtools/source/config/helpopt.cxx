@@ -75,7 +75,6 @@ public:
 
     void            SetWelcomeScreen( bool b )          { bWelcomeScreen = b; SetModified(); }
     bool            IsWelcomeScreen() const                 { return bWelcomeScreen; }
-    OUString        GetLocale() const                       { return aLocale; }
     OUString        GetSystem() const                       { return aSystem; }
 
     const OUString& GetHelpStyleSheet()const{return sHelpStyleSheet;}

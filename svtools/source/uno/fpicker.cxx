@@ -27,6 +27,8 @@
 
 #include "vcl/svapp.hxx"
 
+#include <fpicker.hxx>
+
 using css::uno::Reference;
 using css::uno::Sequence;
 

@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <boost/noncopyable.hpp>
 #include <svtools/itemdel.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/errcode.hxx>
@@ -31,14 +33,13 @@
 
 
 
-class SfxItemDesruptor_Impl
+class SfxItemDesruptor_Impl: private boost::noncopyable
 {
     SfxPoolItem *pItem;
     Link         aLink;
 
 private:
     DECL_LINK( Delete, void* );
-    SfxItemDesruptor_Impl( const SfxItemDesruptor_Impl& ); // n.i.
 
 public:
     SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt );

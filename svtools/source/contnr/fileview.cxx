@@ -226,14 +226,11 @@ protected:
 public:
     inline                  HashedEntry( const OUString& rName );
     inline                  HashedEntry( const INetURLObject& rURL );
-    inline                  HashedEntry( const HashedEntry& rCopy );
     virtual                 ~HashedEntry();
 
     inline bool operator    ==( const HashedEntry& rRef ) const;
     inline bool operator    !=( const HashedEntry& rRef ) const;
     inline bool operator    <( const HashedEntry& rRef ) const;
-
-    inline const OUString&  GetName() const;
 };
 
 inline HashedEntry::HashedEntry( const OUString& rName ): maName( rName ), mnHashCode( rName.hashCode() )
@@ -243,10 +240,6 @@ inline HashedEntry::HashedEntry( const OUString& rName ): maName( rName ), mnHas
 inline HashedEntry::HashedEntry( const INetURLObject& rURL ):
     maName( rURL.GetMainURL( INetURLObject::NO_DECODE ) ),
     mnHashCode( maName.hashCode() )
-{
-}
-
-inline HashedEntry::HashedEntry( const HashedEntry& r ): maName( r.maName ), mnHashCode( r.mnHashCode )
 {
 }
 
@@ -272,11 +265,6 @@ inline bool HashedEntry::operator <( const HashedEntry& rRef ) const
        return mnHashCode < rRef.mnHashCode;
 }
 
-inline const OUString& HashedEntry::GetName() const
-{
-    return maName;
-}
-
 // class HashedEntryList ----------------------------------------------
 // provides a list of _unique_ Entries
 class HashedEntryList : public boost::ptr_set<HashedEntry> {};
@@ -288,17 +276,10 @@ class NameTranslationEntry : public HashedEntry
 protected:
     OUString                maTranslatedName;
 public:
-    inline                  NameTranslationEntry( const OUString& rOriginalName, const OUString& rTranslatedName );
     inline                  NameTranslationEntry( const OString& rOriginalName, const OString& rTranslatedName );
 
     inline const OUString&  GetTranslation() const;
 };
-
-inline NameTranslationEntry::NameTranslationEntry( const OUString& rOrg, const OUString& rTrans ):
-    HashedEntry( rOrg ),
-    maTranslatedName( rTrans )
-{
-}
 
 inline NameTranslationEntry::NameTranslationEntry( const OString& rOrg, const OString& rTrans )
     : HashedEntry(OStringToOUString(rOrg, RTL_TEXTENCODING_ASCII_US))
@@ -331,13 +312,10 @@ public:
 
     using HashedEntryList::operator==;
     using HashedEntryList::operator!=;
-    inline bool operator       ==( const HashedEntry& rRef ) const;
     inline bool operator       !=( const HashedEntry& rRef ) const;
 
     const OUString*             Translate( const OUString& rName ) const;
                                             // returns NULL, if rName can't be found
-
-    inline void                 Update();   // clears list and init
 
     inline const OUString&      GetTransTableFileName() const;
                                             // returns the name for the file, which contains the translation strings
@@ -385,11 +363,6 @@ NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
     Init();
 }
 
-inline bool NameTranslationList::operator ==( const HashedEntry& rRef ) const
-{
-    return maHashedURL == rRef;
-}
-
 inline bool NameTranslationList::operator !=( const HashedEntry& rRef ) const
 {
     return maHashedURL != rRef;
@@ -406,12 +379,6 @@ const OUString* NameTranslationList::Translate( const OUString& rName ) const
         }
 
     return pSearch ? &pSearch->GetTranslation() : NULL;
-}
-
-inline void NameTranslationList::Update()
-{
-    clear();
-    Init();
 }
 
 // class NameTranslator_Impl ------------------------------------------
@@ -522,8 +489,6 @@ public:
 
     inline bool             EnableNameReplacing( bool bEnable = true ); // returns false, if action wasn't possible
     void                    SetActualFolder( const INetURLObject& rActualFolder );
-
-    bool                    GetDocTitle( const OUString& rTargetURL, OUString& rDocTitle ) const;
 
     void                    SetSelectHandler( const Link& _rHdl );
 
