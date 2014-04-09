@@ -20,6 +20,7 @@
 
 #include "sal/config.h"
 
+#include "boost/noncopyable.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/uno/Any.hxx"
@@ -49,14 +50,14 @@
 namespace {
 
 namespace ttb = ::test::testtools::bridgetest;
-class Impl: public ::cppu::WeakImplHelper1< css::lang::XInitialization > {
+class Impl:
+    public cppu::WeakImplHelper1<css::lang::XInitialization>,
+    private boost::noncopyable
+{
 public:
     Impl() {}
 
 private:
-    Impl(Impl &); // not defined
-    void operator =(Impl &); // not defined
-
     virtual ~Impl() {}
 
     virtual void SAL_CALL initialize(

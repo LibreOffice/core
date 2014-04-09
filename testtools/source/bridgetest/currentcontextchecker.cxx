@@ -22,6 +22,7 @@
 
 #include "currentcontextchecker.hxx"
 
+#include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -43,7 +44,8 @@ static char const VALUE[] = "good";
 
 class CurrentContext:
     public ::osl::DebugBase< CurrentContext >,
-    public ::cppu::WeakImplHelper1< css::uno::XCurrentContext >
+    public ::cppu::WeakImplHelper1< css::uno::XCurrentContext >,
+    private boost::noncopyable
 {
 public:
     CurrentContext();
@@ -52,10 +54,6 @@ public:
 
     virtual css::uno::Any SAL_CALL getValueByName(OUString const & Name)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-private:
-    CurrentContext(CurrentContext &); // not defined
-    void operator =(CurrentContext &); // not defined
 };
 
 CurrentContext::CurrentContext() {}

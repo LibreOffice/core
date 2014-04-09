@@ -16,6 +16,8 @@ $(eval $(call gb_Executable_set_include,testtools_constructors,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_external,testtools_constructors,boost_headers))
+
 $(eval $(call gb_Library_use_internal_api,testtools_constructors,\
     bridgetest \
 ))
