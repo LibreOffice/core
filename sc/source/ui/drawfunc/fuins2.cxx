@@ -443,6 +443,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         // get range
         OUString aRangeString;
         ScRange aPositionRange;             // cell range for chart positioning
+        ScMarkData aMark = pViewSh->GetViewData()->GetMarkData();
         if( pReqArgs )
         {
             const SfxPoolItem* pItem;
@@ -453,15 +454,14 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         }
         else
         {
-            ScMarkData& rMark = pViewSh->GetViewData()->GetMarkData();
             bool bAutomaticMark = false;
-            if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
+            if ( !aMark.IsMarked() && !aMark.IsMultiMarked() )
             {
                 pViewSh->GetViewData()->GetView()->MarkDataArea( true );
                 bAutomaticMark = true;
             }
 
-            ScMarkData aMultiMark( rMark );
+            ScMarkData aMultiMark( aMark );
             aMultiMark.MarkToMulti();
 
             ScRangeList aRanges;
@@ -730,6 +730,10 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
                             // leave the draw shell
                             pViewShell->SetDrawShell( false );
+
+                            // reset marked cell area
+
+                            pViewSh->GetViewData()->GetViewShell()->SetMarkData(aMark);
                         }
                         else
                         {
