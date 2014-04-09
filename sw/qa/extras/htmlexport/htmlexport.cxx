@@ -13,11 +13,15 @@
 
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <rtl/byteseq.hxx>
+
 #include <swmodule.hxx>
 #include <usrpref.hxx>
 
 #include <libxml/HTMLparser.h>
 #include <libxml/HTMLtree.h>
+
+using namespace rtl;
 
 class Test : public SwModelTestBase
 {
@@ -34,19 +38,13 @@ protected:
     htmlDocPtr parseHtml()
     {
         SvFileStream aFileStream(m_aTempFile.GetURL(), STREAM_READ);
-        aFileStream.Seek(STREAM_SEEK_TO_END);
-        sal_Size nSize = aFileStream.Tell();
-        aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
-        OStringBuffer aDocument(nSize);
+        sal_Size nSize = aFileStream.remainingSize();
 
-        char cCharacter;
-        for (sal_Size i = 0; i<nSize; ++i)
-        {
-            aFileStream.ReadChar(cCharacter);
-            aDocument.append(cCharacter);
-        }
+        ByteSequence aBuffer(nSize + 1);
+        aFileStream.Read(aBuffer.getArray(), nSize);
 
-        return htmlParseDoc((xmlChar*)aDocument.getStr(), NULL);
+        aBuffer[nSize] = 0;
+        return htmlParseDoc(reinterpret_cast<xmlChar*>(aBuffer.getArray()), NULL);
     }
 
 private:
