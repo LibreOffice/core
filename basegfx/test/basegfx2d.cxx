@@ -47,13 +47,12 @@
 #include <iostream>
 #include <fstream>
 
-using namespace ::basegfx;
+#include <boxclipper.hxx>
 
+using namespace ::basegfx;
 
 namespace basegfx2d
 {
-    extern double getRandomOrdinal( const ::std::size_t n );
-
 class b2dsvgdimpex : public CppUnit::TestFixture
 {
 private:

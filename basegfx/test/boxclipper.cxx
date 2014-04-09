@@ -36,9 +36,9 @@
 
 #include <boost/bind.hpp>
 
-using namespace ::basegfx;
+#include <boxclipper.hxx>
 
-extern double getRandomOrdinal( const ::std::size_t n );
+using namespace ::basegfx;
 
 namespace basegfx2d
 {
