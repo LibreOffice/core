@@ -12,7 +12,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,extras/source/autotext))
 extras_AUTOCORR_LANGS := \
 	af-ZA:af-ZA \
 	bg:bg-BG \
-	ca:ca \
+	ca:ca-ES \
 	cs:cs-CZ \
 	da:da-DK \
 	de:de-DE \
