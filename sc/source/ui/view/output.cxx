@@ -168,6 +168,8 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     pViewShell( NULL ),
     pDrawView( NULL ), // #114135#
     bEditMode( false ),
+    nEditCol( 0 ),
+    nEditRow( 0 ),
     bMetaFile( false ),
     bSingleGrid( false ),
     bPagebreakMode( false ),
