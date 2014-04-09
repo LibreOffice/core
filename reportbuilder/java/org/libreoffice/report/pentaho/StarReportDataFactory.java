@@ -91,7 +91,7 @@ public class StarReportDataFactory implements ReportDataFactory, Cloneable
     }
 
     /**
-     * Derives a freshly initialized report data factory, which is independend of
+     * Derives a freshly initialized report data factory, which is independent of
      * the original data factory. Opening or Closing one data factory must not
      * affect the other factories.
      *

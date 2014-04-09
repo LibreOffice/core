@@ -49,7 +49,7 @@
  This file contains the part that handles File URLs.
 
  File URLs as scheme specific notion of URIs
- (RFC2396) may be handled platform independend, but
+ (RFC2396) may be handled platform independent, but
  will not in osl which is considered wrong.
  Future version of osl should handle File URLs this
  way. In rtl/uri there is already an URI parser etc.

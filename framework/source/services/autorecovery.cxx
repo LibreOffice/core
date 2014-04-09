@@ -1354,7 +1354,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     }
 
     // disable/enable AutoSave for this office session only
-    // independend from the configuration entry.
+    // independent from the configuration entry.
     if ((eNewJob & AutoRecovery::E_SET_AUTOSAVE_STATE) == AutoRecovery::E_SET_AUTOSAVE_STATE)
     {
         bool bOn = lArgs.getUnpackedValueOrDefault(PROP_AUTOSAVE_STATE, sal_True);

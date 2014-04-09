@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module io {
     <p>Every time createInputStream() is called a new input stream
     is returned, always pointing to the begin of the same data. All
     input streams returned by createInputStream()
-    are completely independend from each other.</p>
+    are completely independent from each other.</p>
 */
 published interface XInputStreamProvider : com::sun::star::uno::XInterface
 {

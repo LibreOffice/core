@@ -571,7 +571,7 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 }
 
 // This function gets the driver data and puts it into pJobSetup
-// If pJobSetup->mpDriverData is NOT NULL, then the independend
+// If pJobSetup->mpDriverData is NOT NULL, then the independent
 // data should be merged into the driver data
 // If pJobSetup->mpDriverData IS NULL, then the driver defaults
 // should be merged into the independent data
