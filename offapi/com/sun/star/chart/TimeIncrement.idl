@@ -45,7 +45,7 @@ published struct TimeIncrement
     /** if the any contains a constant of type ::com::sun::star::chart::TimeUnit
         this is the smallest time unit that is displayed on the date-time axis.
         Otherwise, if the any is empty or contains an incompatible type,
-        the resolution is choosen automatically by the application.
+        the resolution is chosen automatically by the application.
      */
     any     TimeResolution;
 };

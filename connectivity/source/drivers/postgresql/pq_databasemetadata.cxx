@@ -1797,7 +1797,7 @@ static void columnMetaData2DatabaseTypeDescription(
         // unfortunately, postgresql does not allow array of variable size in
         // WHERE clauses (in the default installation), so we have to choose
         // this expensive and somewhat ugly way
-        // annotation: postgresql shouldn't have choosen an array here, instead they
+        // annotation: postgresql shouldn't have chosen an array here, instead they
         //             should have multiple rows per table
         // LEM: to transform an array into several rows, see unnest;
         //      it is as simple as "SELECT foo, bar, unnest(qux) FROM ..."

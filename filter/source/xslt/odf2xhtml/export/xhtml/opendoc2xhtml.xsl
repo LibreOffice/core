@@ -90,7 +90,7 @@
 	<xsl:param name="targetURL" select="'./'" />
 
 	<!-- OPTIONAL: (MANDATORY: for input document with relative internal links)
-		 To access contents of a office file (content like the meta.xml, styles.xml file or  graphics) a URL could be choosen.
+		 To access contents of a office file (content like the meta.xml, styles.xml file or  graphics) a URL could be chosen.
 	 This could be even a JAR URL. The sourceBase of the content URL "jar:file:/C:/temp/Test.sxw!/content.xml" would be
 	 "jar:file:/C:/temp/Test.sxw!/" for example.
 		 When working with OpenOffice API a Package-URL encoded over HTTP can be used to access the jared contents of the jared document. -->

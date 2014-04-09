@@ -1391,7 +1391,7 @@ void SmCursor::FinishEdit(SmNodeList* pLineList,
         //and RSUB to the last eleent in pLineList. But how should this act
         //for CSUP and CSUB ???
         //For this reason and because brackets was faster to implement, this solution
-        //have been choosen. It might be worth working on the other solution later...
+        //have been chosen. It might be worth working on the other solution later...
     }
 
     //Set pStartLine if NULL

@@ -1569,7 +1569,7 @@
 
 		B)
 		Since OASIS Open Document XML (implemented in OOo2.0) only one parent type exists for list items
-		the 'text:list' element. The XHTML element 'ol', 'ul' will be choosen upon the list style type.
+		the 'text:list' element. The XHTML element 'ol', 'ul' will be chosen upon the list style type.
 
 		C)
 		An Office list may be spread over the whole document. Linked by their style and text:continue-numbering='true'.

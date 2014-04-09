@@ -449,7 +449,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     // If the given range ends at an outlined text node we have to decide if it has to be a part of
     // the moving range or not. Normally it will be a sub outline of our chapter
     // and has to be moved, too. But if the chapter ends with a table(or a section end),
-    // the next text node will be choosen and this could be the next outline of the same level.
+    // the next text node will be chosen and this could be the next outline of the same level.
     // The criteria has to be the outline level: sub level => incorporate, same/higher level => no.
     if( GetNodes().GetOutLineNds().Seek_Entry( pEndSrch, &nTmpPos ) )
     {

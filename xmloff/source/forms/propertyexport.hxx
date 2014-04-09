@@ -282,7 +282,7 @@ namespace xmloff
         /** exports a property value, which is a string sequence, as attribute
 
             <p>The elements of the string sequence given are quoted and concatenated, with the characters used for
-            this to be choosen by the caller</p>
+            this to be chosen by the caller</p>
 
             <p>If you use the quote character, no check (except assertions) is made if one of the list items
             containes the quote character</p>

@@ -303,7 +303,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
 // A. Type Information
 
 // With the help of type information the kind of parameter can be exactly determined
-// and an appropriate conversion can be choosen. A problem arises if a method expects
+// and an appropriate conversion can be chosen. A problem arises if a method expects
 // an Any. Then the type info does not tell what the type of the value, that is kept
 // by the any, should be. In this situation the decision wheter the param is a
 // sequence or an object is made upon the fact if the object has a property "0"

@@ -1948,7 +1948,7 @@ void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
         }
 
         const sal_Int32 nCount = m_pImpl->m_xChapterNumbering->getCount();
-        /* First collect all paragraph styles choosen for assignment to each
+        /* First collect all paragraph styles chosen for assignment to each
            list level of the outline style, then perform the intrinsic assignment.
            Reason: The assignment of a certain paragraph style to a list level
                    of the outline style causes side effects on the children

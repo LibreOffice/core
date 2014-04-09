@@ -31,7 +31,7 @@ module chart
 */
 published constants ChartAxisType
 {
-    /** the type of the axis is choosen automatically dependent on the chart type, the dimension and the underlying data
+    /** the type of the axis is chosen automatically dependent on the chart type, the dimension and the underlying data
      */
     const long AUTOMATIC = 0;
 

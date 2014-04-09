@@ -46,7 +46,7 @@ struct InteractionRequest_Impl;
   * request contains an exception describing the error and a number of
   * interaction continuations describing the possible "answers" for the request.
   * After the request was passed to XInteractionHandler::handle(...) the method
-  * getSelection() returns the continuation choosen by the interaction handler.
+  * getSelection() returns the continuation chosen by the interaction handler.
   *
   * The typical usage of this class would be:
   *
@@ -121,9 +121,9 @@ public:
 
     /**
       * After passing this request to XInteractionHandler::handle, this method
-      * returns the continuation that was choosen by the interaction handler.
+      * returns the continuation that was chosen by the interaction handler.
       *
-      * @return the continuation choosen by an interaction handler or an empty
+      * @return the continuation chosen by an interaction handler or an empty
       *         reference, if the request was not (yet) handled.
       */
     rtl::Reference< InteractionContinuation > getSelection() const;

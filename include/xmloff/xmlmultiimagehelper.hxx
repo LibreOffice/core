@@ -40,7 +40,7 @@ public:
     MultiImageImportHelper();
     virtual ~MultiImageImportHelper();
 
-    /// solve multiple imported images. The most valuable one is choosen,
+    /// solve multiple imported images. The most valuable one is chosen,
     /// see imlementation for evtl. changing weights and/or adding filetypes.
     ///
     /// @returns import context of the selected image

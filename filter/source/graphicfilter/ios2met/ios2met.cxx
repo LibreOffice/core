@@ -1043,7 +1043,7 @@ void OS2METReader::ReadArc(sal_Bool bGivenPos)
     r=sqrt(q*q*(x1-cx)*(x1-cx)+p*p*(y1-cy)*(y1-cy));
     rx=r/q; ry=r/p;
     // We now have to find out how the the starting and the end point
-    // have to be choosen so that point no. 2 lies inside the drawn arc:
+    // have to be chosen so that point no. 2 lies inside the drawn arc:
     w1=fmod((atan2(x1-cx,y1-cy)-atan2(x2-cx,y2-cy)),6.28318530718); if (w1<0) w1+=6.28318530718;
     w3=fmod((atan2(x3-cx,y3-cy)-atan2(x2-cx,y2-cy)),6.28318530718); if (w3<0) w3+=6.28318530718;
     if (w3<w1) {

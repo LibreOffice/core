@@ -30,7 +30,7 @@
 // Each band contains all rectangles between upper and lower border.
 // For Union, Intersect, Xor and Exclude operations rectangles of
 // equal height are evaluated. The borders of the bands should always
-// be choosen such that this is possible.
+// be chosen such that this is possible.
 
 // If possible, rectangles within the bands are condensed.
 

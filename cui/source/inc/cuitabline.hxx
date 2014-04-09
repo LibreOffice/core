@@ -125,7 +125,7 @@ private:
         The list position is to be used cyclic. */
     SdrObjList*         pSymbolList;
     bool                bNewSize;
-    /// a graphic to be displayed in the preview in case that an automatic symbol is choosen
+    /// a graphic to be displayed in the preview in case that an automatic symbol is chosen
     Graphic             aAutoSymbolGraphic;
     long                nNumMenuGalleryItems;
     long                nSymbolType;

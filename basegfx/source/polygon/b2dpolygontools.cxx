@@ -685,13 +685,13 @@ namespace basegfx
                 {
                     if(fTools::moreOrEqual(fDistance, fEdgeLength))
                     {
-                        // end point of choosen edge
+                        // end point of chosen edge
                         const sal_uInt32 nNextIndex((nIndex + 1) % nPointCount);
                         aRetval = rCandidate.getB2DPoint(nNextIndex);
                     }
                     else if(fTools::equalZero(fDistance))
                     {
-                        // start point of choosen edge
+                        // start point of chosen edge
                         aRetval = aRetval;
                     }
                     else

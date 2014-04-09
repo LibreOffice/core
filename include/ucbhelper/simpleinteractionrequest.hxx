@@ -75,9 +75,9 @@ public:
 
     /**
       * After passing this request to XInteractionHandler::handle, this method
-      * returns the continuation that was choosen by the interaction handler.
+      * returns the continuation that was chosen by the interaction handler.
       *
-      * @return the continuation choosen by an interaction handler or
+      * @return the continuation chosen by an interaction handler or
       *         CONTINUATION_UNKNOWN, if the request was not (yet) handled.
       */
     sal_Int32 getResponse() const;
