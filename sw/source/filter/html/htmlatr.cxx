@@ -1076,7 +1076,7 @@ enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // unsupported Attribute
                       HTML_ON_VALUE,        // Attribute is On-Tag
                       HTML_OFF_VALUE,       // Attribute is Off-Tag
                       HTML_CHRFMT_VALUE,    // Attribute for character format
-                      HTML_COLOR_VALUE,     // Attribute for forground color
+                      HTML_COLOR_VALUE,     // Attribute for foreground color
                       HTML_STYLE_VALUE,     // Attribute must be exported as style
                       HTML_DROPCAP_VALUE,   // DropCap-Attribute
                       HTML_AUTOFMT_VALUE }; // Attribute for automatic character styles
