@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_c754becc",
+        "filename": "vcl/source/gdi/outdev4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-04-09T08:51:12Z",
+      "side": 1,
+      "message": "We should just make this ClipAndDrawGradient, there is no point having this in its own function. Also - I have a patch in gerrit that will remove the need to pass in the bounds rectangle, which was a mistake. \n\nI\u0027ll get this fixed.",
+      "revId": "cfc270d7cc1cab119d221e6e9e8a65ae2d380249",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
