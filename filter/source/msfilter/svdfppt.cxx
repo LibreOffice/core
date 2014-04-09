@@ -119,6 +119,7 @@
 #include <set>
 #include <rtl/strbuf.hxx>
 #include <tools/time.hxx>
+#include <boost/scoped_array.hpp>
 
 // PPT ColorScheme Slots
 #define PPT_COLSCHEME                       (0x08000000)
@@ -671,8 +672,8 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
                 }
                 if ( nGlobalColorsChanged || nFillColorsChanged )
                 {
-                    Color* pSearchColors = new Color[ nGlobalColorsChanged ];
-                    Color* pReplaceColors = new Color[ nGlobalColorsChanged ];
+                    boost::scoped_array<Color> pSearchColors(new Color[ nGlobalColorsChanged ]);
+                    boost::scoped_array<Color> pReplaceColors(new Color[ nGlobalColorsChanged ]);
 
                     for ( j = 0; j < nGlobalColorsChanged; j++ )
                     {
@@ -688,12 +689,9 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
                         pReplaceColors[ j ].SetBlue( (sal_uInt8)( nReplace >> 16 ) );
                     }
                     GDIMetaFile aGdiMetaFile( rGraphic.GetGDIMetaFile() );
-                    aGdiMetaFile.ReplaceColors( pSearchColors, pReplaceColors,
+                    aGdiMetaFile.ReplaceColors( pSearchColors.get(), pReplaceColors.get(),
                         nGlobalColorsChanged, NULL );
                     rGraphic = aGdiMetaFile;
-
-                    delete[] pSearchColors;
-                    delete[] pReplaceColors;
                 }
             }
         }
@@ -1738,14 +1736,13 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& 
 bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uInt32 nInputSize )
 {
     sal_uInt32 nOldPos = rInput.Tell();
-    char* pBuf = new char[ nInputSize ];
-    rInput.Read( pBuf, nInputSize );
+    boost::scoped_array<char> pBuf(new char[ nInputSize ]);
+    rInput.Read( pBuf.get(), nInputSize );
     ZCodec aZCodec( 0x8000, 0x8000 );
     aZCodec.BeginCompression();
-    SvMemoryStream aSource( pBuf, nInputSize, STREAM_READ );
+    SvMemoryStream aSource( pBuf.get(), nInputSize, STREAM_READ );
     aZCodec.Decompress( aSource, rOutput );
     const bool bSuccess(0L != aZCodec.EndCompression());
-    delete[] pBuf;
     rInput.Seek( nOldPos );
     return bSuccess;
 }
@@ -2030,17 +2027,16 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
 
                                                                 sal_uInt32 nToCopy, nBufSize;
                                                                 nToCopy = pHd->nRecLen;
-                                                                sal_uInt8* pBuf = new sal_uInt8[ 0x40000 ]; // 256KB Buffer
+                                                                boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ 0x40000 ]); // 256KB Buffer
                                                                 if ( pBuf )
                                                                 {
                                                                     while ( nToCopy )
                                                                     {
                                                                         nBufSize = ( nToCopy >= 0x40000 ) ? 0x40000 : nToCopy;
-                                                                        rStCtrl.Read( pBuf, nBufSize );
-                                                                        xOriginal->Write( pBuf, nBufSize );
+                                                                        rStCtrl.Read( pBuf.get(), nBufSize );
+                                                                        xOriginal->Write( pBuf.get(), nBufSize );
                                                                         nToCopy -= nBufSize;
                                                                     }
-                                                                    delete[] pBuf;
                                                                 }
                                                             }
                                                         }
@@ -2214,7 +2210,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
             if ( ! ( nTextSize & 0xffff0000 ) )
             {
                 PPTPortionObj* pPortion;
-                sal_Unicode* pParaText = new sal_Unicode[ nTextSize ];
+                boost::scoped_array<sal_Unicode> pParaText(new sal_Unicode[ nTextSize ]);
                 sal_Int32 nCurrentIndex = 0;
                 for ( pPortion = pPara->First(); pPortion; pPortion = pPara->Next() )
                 {
@@ -2224,7 +2220,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                     {
                         sal_Int32 nCharacters = pPortion->Count();
                         const sal_Unicode* pSource = pPortion->maString.getStr();
-                        sal_Unicode* pDest = pParaText + nCurrentIndex;
+                        sal_Unicode* pDest = pParaText.get() + nCurrentIndex;
 
                         sal_uInt32 nFont;
                         pPortion->GetAttrib( PPT_CharAttr_Font, nFont, pTextObj->GetInstance() );
@@ -2250,7 +2246,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
 
                 ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
                 rOutliner.Insert( OUString(), nParaIndex, pPara->pParaSet->mnDepth );
-                rOutliner.QuickInsertText( OUString(pParaText, nCurrentIndex), aSelection );
+                rOutliner.QuickInsertText( OUString(pParaText.get(), nCurrentIndex), aSelection );
                 rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
                 if ( pS )
                     rOutliner.SetStyleSheet( nParaIndex, pS );
@@ -2309,7 +2305,6 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 }
                 aSelection.nStartPos = 0;
                 rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
-                delete[] pParaText;
             }
         }
         OutlinerParaObject* pNewText = rOutliner.CreateParaObject();
@@ -5071,11 +5066,12 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
     if( aTextHd.nRecType == PPT_PST_TextCharsAtom )
     {
         sal_uInt32 i;
-        sal_Unicode nChar,*pBuf = new sal_Unicode[ ( nMaxLen >> 1 ) + 1 ];
-        rIn.Read( pBuf, nMaxLen );
+        sal_Unicode nChar;
+        boost::scoped_array<sal_Unicode> pBuf(new sal_Unicode[ ( nMaxLen >> 1 ) + 1 ]);
+        rIn.Read( pBuf.get(), nMaxLen );
         nMaxLen >>= 1;
         pBuf[ nMaxLen ] = 0;
-        sal_Unicode* pPtr = pBuf;
+        sal_Unicode* pPtr = pBuf.get();
 #ifdef OSL_BIGENDIAN
         sal_Unicode nTemp;
         for ( i = 0; i < nMaxLen; i++ )
@@ -5083,7 +5079,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
             nTemp = *pPtr;
             *pPtr++ = ( nTemp << 8 ) | ( nTemp >> 8 );
         }
-        pPtr = pBuf;
+        pPtr = pBuf.get();
 #endif
 
         for ( i = 0; i < nMaxLen; pPtr++, i++ )
@@ -5102,15 +5098,14 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
             }
         }
         if ( i )
-            aString = OUString(pBuf, i);
-        delete[] pBuf;
+            aString = OUString(pBuf.get(), i);
     }
     else if( aTextHd.nRecType == PPT_PST_TextBytesAtom )
     {
-        sal_Char *pBuf = new sal_Char[ nMaxLen + 1 ];
+        boost::scoped_array<sal_Char> pBuf(new sal_Char[ nMaxLen + 1 ]);
         pBuf[ nMaxLen ] = 0;
-        rIn.Read( pBuf, nMaxLen );
-        sal_Char* pPtr = pBuf;
+        rIn.Read( pBuf.get(), nMaxLen );
+        sal_Char* pPtr = pBuf.get();
         for (;;)
         {
             sal_Char cLo = *pPtr;
@@ -5121,14 +5116,13 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
                 if ( nInstance == TSS_TYPE_PAGETITLE )
                     *pPtr = 0xb;
                 else
-                    aSpecMarkerList.push_back( (sal_uInt32)( (pPtr - pBuf) | PPT_SPEC_NEWLINE ) );
+                    aSpecMarkerList.push_back( (sal_uInt32)( (pPtr - pBuf.get()) | PPT_SPEC_NEWLINE ) );
             }
             pPtr++;
         }
-        sal_Int32 nLen = pPtr - pBuf;
+        sal_Int32 nLen = pPtr - pBuf.get();
         if ( nLen )
-            aString = OUString( pBuf, nLen, RTL_TEXTENCODING_MS_1252 );
-        delete[] pBuf;
+            aString = OUString( pBuf.get(), nLen, RTL_TEXTENCODING_MS_1252 );
     }
     else
     {
@@ -7455,7 +7449,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                 CreateTableColumns( xTable->getColumns(), aColumns, pGroup->GetSnapRect().Right() );
 
                 sal_Int32 nCellCount = aRows.size() * aColumns.size();
-                sal_Int32 *pMergedCellIndexTable = new sal_Int32[ nCellCount ];
+                boost::scoped_array<sal_Int32> pMergedCellIndexTable(new sal_Int32[ nCellCount ]);
                 for ( sal_Int32 i = 0; i < nCellCount; i++ )
                     pMergedCellIndexTable[ i ] = i;
 
@@ -7520,7 +7514,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                         ApplyCellLineAttributes( pObj, xTable, vPositions, aColumns.size() );
                     }
                 }
-                delete[] pMergedCellIndexTable;
+                pMergedCellIndexTable.reset();
 
                 // we are replacing the whole group object by a single table object, so
                 // possibly connections to the group object have to be removed.

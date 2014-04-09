@@ -90,6 +90,7 @@
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -4260,7 +4261,7 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
         {
             sal_uInt32 i, nBlipSize, nOldPos = pMergePicStreamBSE->Tell();
             const sal_uInt32 nBuf = 0x40000;    // 256KB buffer
-            sal_uInt8* pBuf = new sal_uInt8[ nBuf ];
+            boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nBuf ]);
 
             for ( i = 0; i < mnBlibEntrys; i++ )
             {
@@ -4290,12 +4291,11 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
                 while ( nBlipSize )
                 {
                     sal_uInt32 nBytes = ( nBlipSize > nBuf ? nBuf : nBlipSize );
-                    pMergePicStreamBSE->Read( pBuf, nBytes );
-                    rSt.Write( pBuf, nBytes );
+                    pMergePicStreamBSE->Read( pBuf.get(), nBytes );
+                    rSt.Write( pBuf.get(), nBytes );
                     nBlipSize -= nBytes;
                 }
             }
-            delete[] pBuf;
             pMergePicStreamBSE->Seek( nOldPos );
         }
         else
@@ -5134,7 +5134,6 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
 void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
 {
     sal_uInt32  nSize, nType, nSource, nBufSize, nToCopy, nCurPos = mpOutStrm->Tell();
-    sal_uInt8*  pBuf;
 
     // adjust persist table
     for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
@@ -5173,18 +5172,17 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
     mpOutStrm->Seek( STREAM_SEEK_TO_END );
     nSource = mpOutStrm->Tell();
     nToCopy = nSource - nCurPos;                        // increase the size of the tream by nBytes
-    pBuf = new sal_uInt8[ 0x40000 ];                            // 256KB Buffer
+    boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ 0x40000 ]); // 256KB Buffer
     while ( nToCopy )
     {
         nBufSize = ( nToCopy >= 0x40000 ) ? 0x40000 : nToCopy;
         nToCopy -= nBufSize;
         nSource -= nBufSize;
         mpOutStrm->Seek( nSource );
-        mpOutStrm->Read( pBuf, nBufSize );
+        mpOutStrm->Read( pBuf.get(), nBufSize );
         mpOutStrm->Seek( nSource + nBytes );
-        mpOutStrm->Write( pBuf, nBufSize );
+        mpOutStrm->Write( pBuf.get(), nBufSize );
     }
-    delete[] pBuf;
     mpOutStrm->Seek( nCurPos );
 }
 

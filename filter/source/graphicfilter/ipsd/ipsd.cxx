@@ -21,6 +21,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/outdev.hxx>
+#include <boost/scoped_array.hpp>
 
 class FilterConfigItem;
 
@@ -577,7 +578,7 @@ sal_Bool PSDReader::ImplReadBody()
             if ( mpFileHeader->nMode == PSD_CMYK )
             {
                 sal_uInt32  nBlack, nBlackMax = 0;
-                sal_uInt8*  pBlack = new sal_uInt8[ mpFileHeader->nRows * mpFileHeader->nColumns ];
+                boost::scoped_array<sal_uInt8> pBlack(new sal_uInt8[ mpFileHeader->nRows * mpFileHeader->nColumns ]);
                 nY = 0;
                 while ( nY < mpFileHeader->nRows )
                 {
@@ -654,7 +655,6 @@ sal_Bool PSDReader::ImplReadBody()
                         mpWriteAcc->SetPixel( nY, nX, BitmapColor( cR, cG, cB ) );
                     }
                 }
-                delete[] pBlack;
             }
         }
         break;

@@ -6360,11 +6360,10 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
                     sal_Int32 nDbgLen = nLength - nSkip;
                     if ( nDbgLen )
                     {
-                        sal_Char* pDat = new sal_Char[ nDbgLen ];
-                        pGrStream->Read( pDat, nDbgLen );
-                        pDbgOut->Write( pDat, nDbgLen );
+                        boost::scoped_array<sal_Char> pDat(new sal_Char[ nDbgLen ]);
+                        pGrStream->Read( pDat.get(), nDbgLen );
+                        pDbgOut->Write( pDat.get(), nDbgLen );
                         pGrStream->SeekRel( -nDbgLen );
-                        delete[] pDat;
                     }
                 }
 
@@ -6658,7 +6657,6 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
     sal_uInt32 nDummy0;
     sal_uInt32 nDummy1;
     sal_uInt32 nDataLen;
-    sal_uInt8 * pData;
     sal_uInt32 nBytesRead = 0;
     do
     {
@@ -6669,10 +6667,9 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
         {
             if( 0x10000L > nStrLen )
             {
-                sal_Char * pBuf = new sal_Char[ nStrLen ];
-                rStm.Read( pBuf, nStrLen );
-                aSvrName = OUString( pBuf, (sal_uInt16) nStrLen-1, osl_getThreadTextEncoding() );
-                delete[] pBuf;
+                boost::scoped_array<sal_Char> pBuf(new sal_Char[ nStrLen ]);
+                rStm.Read( pBuf.get(), nStrLen );
+                aSvrName = OUString( pBuf.get(), (sal_uInt16) nStrLen-1, osl_getThreadTextEncoding() );
             }
             else
                 break;
@@ -6687,15 +6684,15 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
         {
             if( xOle10Stm.Is() )
             {
-                pData = new sal_uInt8[ nDataLen ];
+                boost::scoped_array<sal_uInt8> pData(new sal_uInt8[ nDataLen ]);
                 if( !pData )
                     return false;
 
-                rStm.Read( pData, nDataLen );
+                rStm.Read( pData.get(), nDataLen );
 
                 // write to ole10 stream
                 xOle10Stm->WriteUInt32( nDataLen );
-                xOle10Stm->Write( pData, nDataLen );
+                xOle10Stm->Write( pData.get(), nDataLen );
                 xOle10Stm = SotStorageStreamRef();
 
                 // set the compobj stream
@@ -6718,8 +6715,6 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
                     sal_uLong nCbFmt = SotExchange::RegisterFormatName( aSvrName );
                     rDest->SetClass( SvGlobalName(), nCbFmt, aSvrName );
                 }
-
-                delete[] pData;
             }
             else if( nRecType == 5 && !pMtf )
             {

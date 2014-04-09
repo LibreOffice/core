@@ -27,6 +27,7 @@
 #include <math.h>
 
 #include "shape.hxx"
+#include <boost/scoped_array.hpp>
 
 class FilterConfigItem;
 
@@ -1007,7 +1008,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, sal_Bool bBaseAddr, sal_Bo
         {
             if ( ( nCmpCount == 3 ) || ( nCmpCount == 4 ) )
             {
-                sal_uInt8* pScanline = new sal_uInt8[ nWidth * nCmpCount ];
+                boost::scoped_array<sal_uInt8> pScanline(new sal_uInt8[ nWidth * nCmpCount ]);
                 for ( ny = 0; ny < nHeight; ny++ )
                 {
                     nSrcBitsPos = pPict->Tell();
@@ -1047,7 +1048,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, sal_Bool bBaseAddr, sal_Bo
                                 pScanline[ i++ ] = nDat;
                         }
                     }
-                    sal_uInt8* pTmp = pScanline;
+                    sal_uInt8* pTmp = pScanline.get();
                     if ( nCmpCount == 4 )
                         pTmp += nWidth;
                     for ( nx = 0; nx < nWidth; pTmp++ )
@@ -1055,7 +1056,6 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, sal_Bool bBaseAddr, sal_Bo
                     nDataSize += (sal_uLong)nByteCount;
                     pPict->Seek( nSrcBitsPos + (sal_uLong)nByteCount );
                 }
-                delete[] pScanline;
             }
         }
     }
