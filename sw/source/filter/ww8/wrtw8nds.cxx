@@ -2885,32 +2885,15 @@ void AttributeOutputBase::OutputFlyFrame( const sw::Frame& rFmt )
         return;
 
     const SwCntntNode &rNode = *rFmt.GetCntntNode();
-    Point aNdPos, aPgPos;
-    Point* pLayPos;
-    bool bValidNdPos = false, bValidPgPos = false;
+    Point aLayPos;
 
+    // get the Layout Node-Position
     if (FLY_AT_PAGE == rFmt.GetFrmFmt().GetAnchor().GetAnchorId())
-    {
-        // get the Layout Node-Position.
-        if ( !bValidPgPos )
-        {
-            aPgPos = rNode.FindPageFrmRect(false, &aPgPos).Pos();
-            bValidPgPos = true;
-        }
-        pLayPos = &aPgPos;
-    }
+        aLayPos = rNode.FindPageFrmRect().Pos();
     else
-    {
-        // get the Layout Node-Position.
-        if ( !bValidNdPos )
-        {
-            aNdPos = rNode.FindLayoutRect(false, &aNdPos).Pos();
-            bValidNdPos = true;
-        }
-        pLayPos = &aNdPos;
-    }
+        aLayPos = rNode.FindLayoutRect().Pos();
 
-    OutputFlyFrame_Impl( rFmt, *pLayPos );
+    OutputFlyFrame_Impl( rFmt, aLayPos );
 }
 
 // write data of any redline
