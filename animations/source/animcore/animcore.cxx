@@ -57,6 +57,8 @@
 #include <algorithm>
 #include <string.h>
 
+#include <factreg.hxx>
+
 using ::osl::Mutex;
 using ::osl::Guard;
 using ::cppu::OInterfaceContainerHelper;
