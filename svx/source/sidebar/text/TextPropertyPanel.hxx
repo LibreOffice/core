@@ -28,7 +28,6 @@
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 
-#include <boost/scoped_ptr.hpp>
 #include "TextCharacterSpacingPopup.hxx"
 #include "TextUnderlinePopup.hxx"
 #include <svx/sidebar/PanelLayout.hxx>
