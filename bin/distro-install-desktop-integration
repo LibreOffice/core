@@ -184,6 +184,10 @@ if test "$WITH_COMPAT_OOWRAPPERS" = "TRUE" ; then
     test -f $DESTDIR/gid_Module_Root_Brand && echo "/etc/bash_completion.d/ooffice.sh" >>$DESTDIR/gid_Module_Root_Brand
 fi
 
+# install bluez 5 policy files
+mkdir -p $DESTDIR/etc/dbus-1/system.d
+cp sysui/desktop/dbus/org.libreoffice.bluez.profile1.conf $DESTDIR/etc/dbus-1/system.d/org.libreoffice.bluez.profile1.conf
+
 echo "Install $OOINSTDIR/basis$VERSION/program/java-set-classpath";
 mkdir -p $DESTDIR$INSTALLDIR/program
 sed -e "s|@INSTALLDIR@|$INSTALLDIR|g" bin/java-set-classpath.in >| "$DESTDIR$INSTALLDIR/program/java-set-classpath" || exit 1;
