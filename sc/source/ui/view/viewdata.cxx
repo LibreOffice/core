@@ -89,6 +89,8 @@ ScViewDataTable::ScViewDataTable() :
                 nFixPosY( 0 ),
                 nCurX( 0 ),
                 nCurY( 0 ),
+                nOldCurX( 0 ),
+                nOldCurY( 0 ),
                 bShowGrid( true ),
                 mbOldCursorValid( false )
 {
