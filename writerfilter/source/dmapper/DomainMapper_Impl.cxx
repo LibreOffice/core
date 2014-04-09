@@ -130,7 +130,8 @@ struct FieldConversion
 typedef ::std::map< OUString, FieldConversion>
             FieldConversionMap_t;
 
-uno::Any FloatingTableInfo::getPropertyValue(OUString propertyName){
+uno::Any FloatingTableInfo::getPropertyValue(const OUString &propertyName)
+{
 
     beans::PropertyValue* pFrameProperties = m_aFrameProperties.getArray();
     for( int i = 0 ; i < m_aFrameProperties.getLength(); i++ )
