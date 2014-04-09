@@ -631,7 +631,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 {
     sal_uInt16              nDialogRet = RET_CANCEL;
     SfxPrinter*             pPrinter = 0;
-    SfxDialogExecutor_Impl* pExecutor = 0;
     bool                    bSilent = false;
 
     // does the function have been called by the user interface or by an API call
@@ -815,6 +814,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
                 // execute PrinterSetupDialog
                 PrinterSetupDialog* pPrintSetupDlg = new PrinterSetupDialog( GetWindow() );
+                SfxDialogExecutor_Impl* pExecutor = 0;
 
                 if (pImp->m_bHasPrintOptions && HasPrintOptionsPage())
                 {
@@ -841,6 +841,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 }
 
                 DELETEZ( pPrintSetupDlg );
+                delete pExecutor;
 
                 // no recording of PrinterSetup except printer name (is printer dependent)
                 rReq.Ignore();
