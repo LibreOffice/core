@@ -49,7 +49,8 @@ private:
 }
 
 class InteractionRequest::RetryContinuation:
-    public cppu::WeakImplHelper1< css::task::XInteractionRetry >
+    public cppu::WeakImplHelper1<css::task::XInteractionRetry>,
+    private boost::noncopyable
 {
 public:
     inline RetryContinuation(): m_bSelected(false) {}
@@ -59,9 +60,6 @@ public:
     bool isSelected() const;
 
 private:
-    RetryContinuation(RetryContinuation &); // not implemented
-    void operator =(RetryContinuation); // not implemented
-
     virtual inline ~RetryContinuation() {}
 
     mutable osl::Mutex m_aMutex;
