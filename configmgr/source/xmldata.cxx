@@ -46,6 +46,7 @@
 #include "propertynode.hxx"
 #include "setnode.hxx"
 #include "type.hxx"
+#include "xmldata.hxx"
 
 namespace configmgr {
 
