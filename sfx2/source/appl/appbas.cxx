@@ -65,7 +65,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include "appdata.hxx"
-#include "appbas.hxx"
 #include <sfx2/sfxhelp.hxx>
 #include <basic/basmgr.hxx>
 #include <svtools/svtools.hrc>
@@ -93,30 +92,6 @@ sal_uInt16 SfxApplication::SaveBasicAndDialogContainer() const
         pAppData_Impl->pBasicManager->storeAllLibraries();
     return 0;
 }
-
-
-
-SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
-           const char *pName, sal_uInt32 nSID, SbxDataType eType, SbxClassType eClassType )
-{
-#ifdef DISABLE_SCRIPTING
-    (void) pBas;
-    (void) pObject;
-    (void) pName;
-    (void) nSID;
-    (void) eType;
-    (void) eClassType;
-    return 0;
-#else
-    SbxVariable *pVar = pBas->Make( OUString::createFromAscii(pName), eClassType, eType ); //SbxCLASS_PROPERTY
-    pVar->SetUserData( nSID );
-    pVar->SetFlag( SBX_DONTSTORE );
-    pObject->StartListening( pVar->GetBroadcaster() );
-    return pVar;
-#endif
-}
-
-
 
 BasicManager* SfxApplication::GetBasicManager()
 {

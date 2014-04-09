@@ -81,7 +81,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxresid.hxx>
 #include "objshimp.hxx"
-#include "appbas.hxx"
 #include "sfxtypes.hxx"
 #include <sfx2/evntconf.hxx>
 #include <sfx2/request.hxx>

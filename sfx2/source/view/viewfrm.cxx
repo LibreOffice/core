@@ -119,7 +119,6 @@ using ::com::sun::star::container::XIndexContainer;
 #include <sfx2/docfac.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "appbas.hxx"
 #include <sfx2/objitem.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/event.hxx>
