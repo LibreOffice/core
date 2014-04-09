@@ -391,6 +391,10 @@ void ScViewUtil::SetFullScreen( SfxViewShell& rViewShell, bool bSet )
 
 
 ScUpdateRect::ScUpdateRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
+    : nNewStartX(0)
+    , nNewStartY(0)
+    , nNewEndX(0)
+    , nNewEndY(0)
 {
     PutInOrder( nX1, nX2 );
     PutInOrder( nY1, nY2 );
