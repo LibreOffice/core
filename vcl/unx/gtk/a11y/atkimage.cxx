@@ -81,7 +81,11 @@ image_get_image_position( AtkImage     *image,
 {
     *x = *y = 0;
     if( ATK_IS_COMPONENT( image ) )
+    {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         atk_component_get_position( ATK_COMPONENT( image ), x, y, coord_type );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+    }
     else
         g_warning( "FIXME: no image position information" );
 }
