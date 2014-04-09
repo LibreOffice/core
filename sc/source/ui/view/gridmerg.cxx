@@ -21,12 +21,16 @@
 
 #include "gridmerg.hxx"
 
-ScGridMerger::ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePixelY ) :
-    pDev( pOutDev ),
-    nOneX( nOnePixelX ),
-    nOneY( nOnePixelY ),
-    nCount( 0 ),
-    bVertical( false )
+ScGridMerger::ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePixelY )
+    : pDev(pOutDev)
+    , nOneX(nOnePixelX)
+    , nOneY(nOnePixelY)
+    , nFixStart(0)
+    , nFixEnd(0)
+    , nVarStart(0)
+    , nVarDiff(0)
+    , nCount(0)
+    , bVertical(false)
 {
     //  optimize (DrawGrid) only for pixel MapMode,
     //  to avoid rounding errors
