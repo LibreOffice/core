@@ -15,6 +15,7 @@ OPENSYMBOL_PACKAGE="ttf-opensymbol-lhm"
 OPENSYMBOL_PATH="${LO_BASE_PATH}/share/fonts/truetype/${OPENSYMBOL_FONT}"
 LO_PATHS_XCU="${LO_BASE_PATH}/share/registry/data/org/libreoffice/Office/Paths.xcu"
 LO_MAIN_XCD="${LO_BASE_PATH}/share/registry/main.xcd"
+ICONS_HICOLOR_PATH="usr/share/icons/hicolor"
 
 function usage {
 	echo "    $1"
@@ -431,6 +432,16 @@ EOF
 	fi
 }
 
+function patch_icon_symlinks {
+	# libreoffice-*.png instead of libreoffice$VERSION-*.png is needed to correctly
+	# display the window icon (TRAC: #12093)
+	for filename in package-data/${ICONS_HICOLOR_PATH}/*/apps/libreoffice${LO_BASE_VERSION}-*.png; do
+		if [ -f "$filename" ]; then
+			ln -s $(basename $filename) $(dirname $filename)/$(basename $filename | sed 's/[0-9]\.[0-9]-/-/')
+		fi
+	done
+}
+
 #
 # $1 = Package
 # $2 = Source package
@@ -461,6 +472,7 @@ function patch_deb {
 		patch_tmp_path
                 patch_template_path
 		#patch_opensymbol_lhm
+		patch_icon_symlinks
 
 		echo "Packaging ${NEW_BASE} ..."
 		fakeroot mkdir -p "${NEW_DIR}"
