@@ -66,10 +66,6 @@ namespace cppcanvas
                 virtual sal_Int32 getActionCount() const SAL_OVERRIDE;
 
             private:
-                // default: disabled copy/assignment
-                PointAction(const PointAction&);
-                PointAction& operator = ( const PointAction& );
-
                 ::basegfx::B2DPoint                         maPoint;
                 CanvasSharedPtr                             mpCanvas;
                 ::com::sun::star::rendering::RenderState    maState;
