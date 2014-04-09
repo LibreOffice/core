@@ -20,6 +20,7 @@
 
 #include <sal/macros.h>
 #include "lngopt.hxx"
+#include "lngreg.hxx"
 #include "linguistic/lngprops.hxx"
 #include "linguistic/misc.hxx"
 #include <tools/debug.hxx>

@@ -751,16 +751,6 @@ sal_Bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry > x
     return bRes;
 }
 
-
-uno::Reference< XInterface > SAL_CALL DictionaryNeo_CreateInstance(
-            const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
-        throw(Exception)
-{
-    uno::Reference< XInterface > xService =
-            (cppu::OWeakObject*) new DictionaryNeo;
-    return xService;
-}
-
 OUString SAL_CALL DictionaryNeo::getName(  )
         throw(RuntimeException, std::exception)
 {

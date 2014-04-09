@@ -22,45 +22,11 @@
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
+#include <lngreg.hxx>
+
 using namespace com::sun::star::lang;
 
 using namespace com::sun::star::registry;
-
-extern void * SAL_CALL LngSvcMgr_getFactory
-(
-    const sal_Char * pImplName,
-    XMultiServiceFactory * pServiceManager,
-    void * /*pRegistryKey*/
-);
-
-extern void * SAL_CALL DicList_getFactory
-(
-    const sal_Char * pImplName,
-    XMultiServiceFactory * pServiceManager,
-    void *
-);
-
-void * SAL_CALL LinguProps_getFactory
-(
-    const sal_Char * pImplName,
-    XMultiServiceFactory * pServiceManager,
-    void *
-);
-
-extern void * SAL_CALL ConvDicList_getFactory
-(
-    const sal_Char * pImplName,
-    XMultiServiceFactory * pServiceManager,
-    void *
-);
-
-extern void * SAL_CALL GrammarCheckingIterator_getFactory
-(
-    const sal_Char * pImplName,
-    XMultiServiceFactory * pServiceManager,
-    void *
-);
-
 
 extern "C"
 {

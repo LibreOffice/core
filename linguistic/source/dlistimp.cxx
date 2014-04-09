@@ -41,6 +41,7 @@
 #include "dlistimp.hxx"
 #include "dicimp.hxx"
 #include "lngopt.hxx"
+#include "lngreg.hxx"
 
 using namespace osl;
 using namespace com::sun::star;

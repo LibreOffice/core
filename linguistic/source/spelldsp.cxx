@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
@@ -53,15 +55,11 @@ using namespace linguistic;
 // Removing entries is done by assigning the empty string.
 // The sequence is constructed from all non empty strings in the original
 // while maintaining the order.
-class ProposalList
+class ProposalList: private boost::noncopyable
 {
     std::vector< OUString > aVec;
 
     sal_Bool    HasEntry( const OUString &rText ) const;
-
-    // make copy c-tor and assignment operator private
-    ProposalList( const ProposalList & );
-    ProposalList & operator = ( const ProposalList & );
 
 public:
     ProposalList()  {}

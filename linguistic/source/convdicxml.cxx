@@ -92,11 +92,6 @@ public:
     {
     }
 
-    const ConvDicXMLImport & GetConvDicImport() const
-    {
-        return (const ConvDicXMLImport &) GetImport();
-    }
-
     ConvDicXMLImport & GetConvDicImport()
     {
         return (ConvDicXMLImport &) GetImport();
@@ -126,9 +121,6 @@ public:
     // SvXMLImportContext
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) SAL_OVERRIDE;
-
-    sal_Int16       GetLanguage() const         { return nLanguage; }
-    sal_Int16   GetConversionType() const   { return nConversionType; }
 };
 
 
@@ -152,8 +144,6 @@ public:
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) SAL_OVERRIDE;
 
     const OUString &    GetLeftText() const { return aLeftText; }
-    sal_Int16           GetPropertyType() const { return nPropertyType; }
-    void                SetPropertyType( sal_Int16 nVal )   { nPropertyType = nVal; }
 };
 
 

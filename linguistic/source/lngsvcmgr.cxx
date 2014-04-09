@@ -35,9 +35,11 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <boost/checked_delete.hpp>
+#include <boost/noncopyable.hpp>
 
 #include "lngsvcmgr.hxx"
 #include "lngopt.hxx"
+#include "lngreg.hxx"
 #include "linguistic/misc.hxx"
 #include "spelldsp.hxx"
 #include "hyphdsp.hxx"
@@ -178,7 +180,8 @@ class LngSvcMgrListenerHelper :
     <
         linguistic2::XLinguServiceEventListener,
         linguistic2::XDictionaryListEventListener
-    >
+    >,
+    private boost::noncopyable
 {
     LngSvcMgr  &rMyManager;
 
@@ -187,10 +190,6 @@ class LngSvcMgrListenerHelper :
     uno::Reference< linguistic2::XSearchableDictionaryList >           xDicList;
 
     sal_Int16   nCombinedLngSvcEvt;
-
-    // disallow copy-constructor and assignment-operator for now
-    LngSvcMgrListenerHelper(const LngSvcMgrListenerHelper &);
-    LngSvcMgrListenerHelper & operator = (const LngSvcMgrListenerHelper &);
 
     void    LaunchEvent( sal_Int16 nLngSvcEvtFlags );
 

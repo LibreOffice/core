@@ -64,6 +64,7 @@
 #include "linguistic/misc.hxx"
 #include "defs.hxx"
 #include "lngopt.hxx"
+#include "lngreg.hxx"
 
 #include "gciterator.hxx"
 

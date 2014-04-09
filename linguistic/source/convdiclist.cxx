@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
@@ -41,6 +44,7 @@
 #include "convdiclist.hxx"
 #include "defs.hxx"
 #include "hhconvdic.hxx"
+#include "lngreg.hxx"
 #include "linguistic/misc.hxx"
 
 using namespace osl;
@@ -81,19 +85,15 @@ class ConvDicNameContainer :
     public cppu::WeakImplHelper1
     <
         ::com::sun::star::container::XNameContainer
-    >
+    >,
+    private boost::noncopyable
 {
     uno::Sequence< uno::Reference< XConversionDictionary > >   aConvDics;
-    ConvDicList     &rConvDicList;
-
-    // disallow copy-constructor and assignment-operator for now
-    ConvDicNameContainer(const ConvDicNameContainer &);
-    ConvDicNameContainer & operator = (const ConvDicNameContainer &);
 
     sal_Int32 GetIndexByName_Impl( const OUString& rName );
 
 public:
-    ConvDicNameContainer( ConvDicList &rMyConvDicList );
+    ConvDicNameContainer();
     virtual ~ConvDicNameContainer();
 
     // XElementAccess
@@ -128,8 +128,7 @@ public:
     }
 };
 
-ConvDicNameContainer::ConvDicNameContainer( ConvDicList &rMyConvDicList ) :
-    rConvDicList( rMyConvDicList )
+ConvDicNameContainer::ConvDicNameContainer()
 {
 }
 
@@ -403,7 +402,7 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
 {
     if (!pNameContainer)
     {
-        pNameContainer = new ConvDicNameContainer( *this );
+        pNameContainer = new ConvDicNameContainer;
         pNameContainer->AddConvDics( GetDictionaryWriteablePath(), OUString(CONV_DIC_EXT)  );
         xNameContainer = pNameContainer;
 
