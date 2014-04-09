@@ -67,13 +67,6 @@ struct ImplPropertyInfo
     sal_Int16                       nAttribs;
     bool                        bDependsOnOthers;   // eg. VALUE depends on MIN/MAX and must be set after MIN/MAX.
 
-    ImplPropertyInfo()
-     {
-         nPropId = 0;
-        nAttribs = 0;
-           bDependsOnOthers = false;
-     }
-
     ImplPropertyInfo( OUString const & theName, sal_uInt16 nId, const ::com::sun::star::uno::Type& rType,
                         sal_Int16 nAttrs, bool bDepends = false )
      : aName( theName )
@@ -310,10 +303,6 @@ struct ImplPropertyInfoCompareFunctor : ::std::binary_function<ImplPropertyInfo,
     inline bool operator()(const ImplPropertyInfo& lhs,const OUString& rhs)  const
     {
         return lhs.aName.compareTo(rhs) < 0;
-    }
-    inline bool operator()(const OUString& lhs,const ImplPropertyInfo& rhs)  const
-    {
-        return lhs.compareTo(rhs.aName) < 0;
     }
 };
 

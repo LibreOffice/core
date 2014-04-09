@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
+
 #include <toolkit/helper/accessibilityclient.hxx>
 #include <toolkit/helper/accessiblefactory.hxx>
 #include <osl/module.h>
@@ -61,7 +65,8 @@ namespace toolkit
 
     //= AccessibleDummyFactory
 
-    class AccessibleDummyFactory : public IAccessibleFactory
+    class AccessibleDummyFactory:
+        public IAccessibleFactory, private boost::noncopyable
     {
     public:
         AccessibleDummyFactory();
@@ -70,9 +75,6 @@ namespace toolkit
         virtual ~AccessibleDummyFactory();
 
     private:
-        AccessibleDummyFactory( const AccessibleDummyFactory& );            // never implemented
-        AccessibleDummyFactory& operator=( const AccessibleDummyFactory& ); // never implemented
-
         oslInterlockedCount m_refCount;
 
     public:

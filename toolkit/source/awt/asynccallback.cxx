@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <boost/noncopyable.hpp>
 #include "vcl/svapp.hxx"
 #include "osl/mutex.hxx"
 #include "sal/config.h"
@@ -34,7 +36,8 @@ namespace {
 class AsyncCallback:
     public ::cppu::WeakImplHelper2<
         css::lang::XServiceInfo,
-        css::awt::XRequestCallback>
+        css::awt::XRequestCallback>,
+    private boost::noncopyable
 {
 public:
     AsyncCallback() {}
@@ -59,9 +62,6 @@ private:
     };
 
     DECL_STATIC_LINK( AsyncCallback, Notify_Impl, CallbackData* );
-
-    AsyncCallback(AsyncCallback &); // not defined
-    void operator =(AsyncCallback &); // not defined
 
     virtual ~AsyncCallback() {}
 };

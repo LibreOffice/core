@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
@@ -92,7 +95,7 @@ static Sequence< OUString> lcl_ImplGetPropertyNames( const Reference< XMultiProp
 }
 
 
-class VclListenerLock
+class VclListenerLock: private boost::noncopyable
 {
 private:
     VCLXWindow*  m_pLockWindow;
@@ -109,11 +112,6 @@ public:
         if ( m_pLockWindow )
             m_pLockWindow->resumeVclEventListening( );
     }
-
-private:
-    VclListenerLock();                                      // never implemented
-    VclListenerLock( const VclListenerLock& );              // never implemented
-    VclListenerLock& operator=( const VclListenerLock& );   // never implemented
 };
 
 typedef ::std::map< OUString, sal_Int32 >    MapString2Int;

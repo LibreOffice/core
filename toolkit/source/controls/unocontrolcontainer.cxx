@@ -84,10 +84,6 @@ public:
     */
     ControlIdentifier   addControl( const uno::Reference< awt::XControl >& _rxControl, const OUString* _pName );
 
-    /** returns the number of controls in the list
-    */
-    inline size_t       size() const { return maControls.size(); }
-
     /** determines whether or not the list is empty
     */
     inline bool         empty() const { return maControls.empty(); }
