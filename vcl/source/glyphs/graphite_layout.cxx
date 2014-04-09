@@ -598,7 +598,7 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
         static com::sun::star::uno::Reference< com::sun::star::i18n::XCharacterClassification > xCharClass;
         if ( !xCharClass.is() )
             xCharClass = vcl::unohelper::CreateCharacterClassification();
-        int numchars2 = rArgs.mnEndCharPos - mnSegCharOffset; // fdo#52540, fdo#68313, fdo#70666 avoid bad ligature replacement
+        size_t numchars2 = rArgs.mnEndCharPos - mnSegCharOffset; // fdo#52540, fdo#68313, fdo#70666 avoid bad ligature replacement
         if (numchars > numchars2 && xCharClass->getType(rArgs.mpStr, numchars2 + 1) == ::com::sun::star::i18n::UnicodeType::LOWERCASE_LETTER)
             numchars = numchars2;
         if (mpFeatures)
