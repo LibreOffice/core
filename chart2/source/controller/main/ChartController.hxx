@@ -24,11 +24,8 @@
 #include "CommandDispatchContainer.hxx"
 #include "SelectionHelper.hxx"
 
-// header for enum SdrDragMode
 #include <svx/svdtypes.hxx>
-// header for class Timer
 #include <vcl/timer.hxx>
-// header for class MouseEvent
 #include <vcl/event.hxx>
 
 #include <cppuhelper/implbase12.hxx>
@@ -135,9 +132,6 @@ class ChartController   : public ::cppu::WeakImplHelper12 <
         ,::com::sun::star::ui::XContextMenuInterception //(optional interface)
         ,::com::sun::star::util::XCloseListener         //(needed for communication with XModel)
         ,::com::sun::star::lang::XServiceInfo
-    //  ,public ::com::sun::star::uno::XWeak            // implemented by WeakImplHelper(optional interface)
-    //  ,public ::com::sun::star::uno::XInterface       // implemented by WeakImplHelper(optional interface)
-    //  ,public ::com::sun::star::lang::XTypeProvider   // implemented by WeakImplHelper
         ,::com::sun::star::frame::XDispatch
         ,::com::sun::star::awt::XWindow //this is the Window Controller part of this Controller, that will be given to a Frame via setComponent
         ,::com::sun::star::lang::XMultiServiceFactory
