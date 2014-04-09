@@ -21,16 +21,20 @@ namespace opengl3D {
 class Renderable3DObject
 {
 public:
+    Renderable3DObject(sal_uInt32 nId);
 
     virtual ~Renderable3DObject() {};
 
-    virtual void render() {}
+    virtual void render();
+
+protected:
+    sal_uInt32 mnUniqueId;
 };
 
 class Bar : public Renderable3DObject
 {
 public:
-    Bar( const glm::mat4& rPosition );
+    Bar( const glm::mat4& rPosition, sal_uInt32 nId );
 private:
     glm::mat4 maPos;
     Color maColor; // RGBA fill color
@@ -38,6 +42,9 @@ private:
 
 class Line : public Renderable3DObject
 {
+public:
+    Line( sal_uInt32 nId );
+
 private:
     glm::vec3 maPosBegin;
     glm::vec3 maPosEnd;
@@ -46,6 +53,8 @@ private:
 
 class Text : public Renderable3DObject
 {
+public:
+    Text( sal_uInt32 nId );
 private:
     BitmapEx maText;
     glm::vec3 maTopLeft;
@@ -55,6 +64,8 @@ private:
 
 class Rectangle : public Renderable3DObject
 {
+public:
+    Rectangle( sal_uInt32 nId );
 private:
     glm::vec3 maTopLeft;
     glm::vec3 maTopRight;

@@ -13,12 +13,39 @@ namespace chart {
 
 namespace opengl3D {
 
-Bar::Bar(const glm::mat4& rPosition):
+Renderable3DObject::Renderable3DObject(sal_uInt32 nId):
+    mnUniqueId(nId)
+{
+}
+
+void Renderable3DObject::render()
+{
+    (void) mnUniqueId;
+}
+
+Bar::Bar(const glm::mat4& rPosition, sal_uInt32 nId):
+    Renderable3DObject(nId),
     maPos(rPosition)
 {
 }
 
+Line::Line(sal_uInt32 nId):
+    Renderable3DObject(nId)
+{
+}
+
+Text::Text(sal_uInt32 nId):
+    Renderable3DObject(nId)
+{
+}
+
+Rectangle::Rectangle(sal_uInt32 nId):
+    Renderable3DObject(nId)
+{
+}
+
 Camera::Camera():
+    Renderable3DObject(0),
     maPos(10,10,-10),
     maDirection(glm::vec3(0,0,0)-maPos)
 {

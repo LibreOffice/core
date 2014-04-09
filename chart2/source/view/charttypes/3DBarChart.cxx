@@ -38,6 +38,7 @@ void Bar3DChart::create3DShapes()
     maShapes.clear();
     maShapes.push_back(new opengl3D::Camera());
     sal_Int32 nSeriesIndex = 0;
+    sal_uInt32 nId = 1;
     for(std::vector<VDataSeries*>::const_iterator itr = maDataSeries.begin(),
             itrEnd = maDataSeries.end(); itr != itrEnd; ++itr)
     {
@@ -53,7 +54,7 @@ void Bar3DChart::create3DShapes()
             glm::scale(aBarPosition, nBarSizeX, nBarSizeY, nVal);
             glm::translate(aBarPosition, nXPos, nYPos, nVal/2);
 
-            maShapes.push_back(new opengl3D::Bar(aBarPosition));
+            maShapes.push_back(new opengl3D::Bar(aBarPosition, nId++));
         }
 
         ++nSeriesIndex;
