@@ -30,9 +30,6 @@
 
 namespace accessibility
 {
-    ::sal_Int32 getSelectionType(::sal_Int32 nNewFirstPara, ::sal_Int32 nNewFirstPos, ::sal_Int32 nNewLastPara, ::sal_Int32 nNewLastPos);
-    void sendEvent(::sal_Int32 start, ::sal_Int32 end, ::sal_Int16 nEventId);
-
 void SfxListenerGuard::startListening(::SfxBroadcaster & rNotifier)
 {
     OSL_ENSURE(m_pNotifier == 0, "called more than once");
