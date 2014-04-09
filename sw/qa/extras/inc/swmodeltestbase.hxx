@@ -26,6 +26,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/byteseq.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -575,16 +576,11 @@ protected:
         pStream->Seek(STREAM_SEEK_TO_END);
         sal_Size nSize = pStream->Tell();
         pStream->Seek(0);
-        OStringBuffer aDocument(nSize);
-        char ch;
-        for (sal_Size i = 0; i < nSize; ++i)
-        {
-            pStream->ReadChar( ch );
-            aDocument.append(ch);
-        }
+        rtl::ByteSequence aBuffer(nSize + 1);
+        pStream->Read(aBuffer.getArray(), nSize);
 
         // Parse the XML.
-        return xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
+        return xmlParseMemory(reinterpret_cast<const char*>(aBuffer.getArray()), aBuffer.getLength());
     }
 
     /**
