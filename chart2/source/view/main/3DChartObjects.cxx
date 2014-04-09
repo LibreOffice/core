@@ -29,6 +29,11 @@ Bar::Bar(const glm::mat4& rPosition, sal_uInt32 nId):
 {
 }
 
+void Bar::render()
+{
+    (void) mbRoundedCorners;
+}
+
 Line::Line(sal_uInt32 nId):
     Renderable3DObject(nId)
 {

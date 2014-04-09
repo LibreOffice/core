@@ -35,7 +35,10 @@ class Bar : public Renderable3DObject
 {
 public:
     Bar( const glm::mat4& rPosition, sal_uInt32 nId );
+
+    virtual void render() SAL_OVERRIDE;
 private:
+    bool mbRoundedCorners;
     glm::mat4 maPos;
     Color maColor; // RGBA fill color
 };
