@@ -1102,7 +1102,6 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
         pCurrPor = pFollow;
     }
 
-    nLastLeft = nOldRealWidth - nQuoWidth;
     Right( Right() - nQuoWidth );
 
     SWAP_IF_NOT_SWAPPED( pFrm )

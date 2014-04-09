@@ -1156,10 +1156,9 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields, SwPageFrm
 SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
 {
     SwRootFrm *pRoot = (SwRootFrm*)pPrevPage->GetUpper();
-    SwPageFrm *pSibling = (SwPageFrm*)pRoot->GetLower();
-    SwPageDesc *pDesc = pSibling->GetPageDesc();
+    SwPageFrm *pSibling = (SwPageFrm*)pPrevPage->GetNext();
+    SwPageDesc *pDesc = 0;
 
-    pSibling = (SwPageFrm*)pPrevPage->GetNext();
     // insert right (odd) or left (even) page?
     bool bNextOdd = !pPrevPage->OnRightPage();
     bool bWishedOdd = bNextOdd;
@@ -1167,7 +1166,6 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
     // Which PageDesc is relevant?
     // For CntntFrm take the one from format if provided,
     // otherwise from the Follow of the PrevPage
-    pDesc = 0;
     if ( IsFlowFrm() && !SwFlowFrm::CastFlowFrm( this )->IsFollow() )
     {   SwFmtPageDesc &rDesc = (SwFmtPageDesc&)GetAttrSet()->GetPageDesc();
         pDesc = rDesc.GetPageDesc();
