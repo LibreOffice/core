@@ -14,6 +14,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppu_qa_reference, \
 	cppu/qa/test_reference \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,cppu_qa_reference,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_libraries,cppu_qa_reference, \
 	cppu \
 	sal \

@@ -43,6 +43,7 @@
 #include "Struct2.hpp"
 #include "Struct2a.hpp"
 #include "Struct2b.hpp"
+#include "boost/noncopyable.hpp"
 #include "boost/type_traits/is_same.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
@@ -59,7 +60,7 @@
 
 namespace {
 
-class Base {
+class Base: private boost::noncopyable {
 public:
     Base(): m_count(0) {}
 
@@ -79,9 +80,6 @@ protected:
     virtual ~Base() {}
 
 private:
-    Base(Base &); // not declared
-    void operator =(Base &); // not declared
-
     oslInterlockedCount m_count;
 };
 

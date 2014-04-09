@@ -19,6 +19,7 @@
 
 #include <sal/types.h>
 
+#include <boost/noncopyable.hpp>
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestCase.h>
@@ -39,7 +40,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::UNO_SET_THROW;
 
-class Foo: public Interface1
+class Foo: public Interface1, private boost::noncopyable
 {
 public:
     Foo()
@@ -82,20 +83,20 @@ protected:
     }
 
 private:
-    Foo(Foo &); // not declared
-    Foo& operator =(const Foo&); // not declared
-
-private:
     oslInterlockedCount m_refCount;
 };
 
 // Check that the up-casting Reference conversion constructor catches the
 // intended cases:
 
-struct Base1: public css::uno::XInterface { virtual ~Base1() = 0; };
-struct Base2: public Base1 {};
-struct Base3: public Base1 {};
-struct Derived: public Base2, public Base3 {};
+struct Base1: public css::uno::XInterface {
+    virtual ~Base1() SAL_DELETED_FUNCTION;
+};
+struct Base2: public Base1 { virtual ~Base2() SAL_DELETED_FUNCTION; };
+struct Base3: public Base1 { virtual ~Base3() SAL_DELETED_FUNCTION; };
+struct Derived: public Base2, public Base3 {
+    virtual ~Derived() SAL_DELETED_FUNCTION;
+};
 
 // The special case using the conversion operator instead:
 css::uno::Reference< css::uno::XInterface > testUpcast1(
