@@ -420,6 +420,13 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 
 bool checkUnoObjectType( SbUnoObject* refVal, const OUString& aClass );
 
+SbUnoObject* createOLEObject_Impl( const OUString& aType );
+
+// #55226 ship additional information
+bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal );
+
+void registerComListenerVariableForBasic( SbxVariable* pVar, StarBASIC* pBasic );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

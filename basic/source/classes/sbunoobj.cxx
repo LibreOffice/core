@@ -70,6 +70,8 @@
 #include <com/sun/star/script/XAutomationInvocation.hpp>
 #include <basic/codecompletecache.hxx>
 
+#include <rtlproto.hxx>
+
 using com::sun::star::uno::Reference;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -468,8 +470,6 @@ struct ObjectItem
 {
     SbxObjectRef    m_xNativeObj;
 
-    ObjectItem( void )
-    {}
     ObjectItem( SbxObject* pNativeObj )
         : m_xNativeObj( pNativeObj )
     {}

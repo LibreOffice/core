@@ -46,7 +46,7 @@
 #include "sbunoobj.hxx"
 #include "propacc.hxx"
 #include <sal/log.hxx>
-
+#include <eventatt.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -1606,11 +1606,6 @@ RTLFUNC(EqualUnoObjects)
 
     RTL_Impl_EqualUnoObjects( pBasic, rPar, bWrite );
 }
-
-// Instantiate "com.sun.star.awt.UnoControlDialog" on basis
-// of a DialogLibrary entry: Convert from XML-ByteSequence
-// and attach events. Implemented in classes\eventatt.cxx
-void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
 
 RTLFUNC(CreateUnoDialog)
 {

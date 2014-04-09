@@ -34,20 +34,10 @@ using namespace cppu;
 
 struct SbCompare_UString_PropertyValue_Impl
 {
-   bool operator() (const OUString& lhs, PropertyValue const & rhs)
-   {
-      return lhs.compareTo(rhs.Name) < 0;
-   }
    bool operator() (PropertyValue const & lhs, const OUString& rhs)
    {
       return lhs.Name.compareTo(rhs) < 0;
    }
-#ifdef DBG_UTIL
-   bool operator() (PropertyValue const & lhs, const PropertyValue& rhs)
-   {
-       return lhs.Name.compareTo(rhs.Name) < 0;
-   }
-#endif
 };
 
 extern "C" int SAL_CALL SbCompare_UString_Property_Impl( const void *arg1, const void *arg2 )

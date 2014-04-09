@@ -63,6 +63,7 @@
 #include "opcodes.hxx"
 #include "runtime.hxx"
 #include "sb.hrc"
+#include "sb.hxx"
 #include "sbintern.hxx"
 #include "sbunoobj.hxx"
 #include <basic/codecompletecache.hxx>
@@ -4494,10 +4495,6 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         refRedimpArray = NULL;
     }
 }
-
-// create object from user-type  (+StringID+StringID)
-
-SbxObject* createUserTypeImpl( const OUString& rClassName );  // sb.cxx
 
 void SbiRuntime::StepTCREATE( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {

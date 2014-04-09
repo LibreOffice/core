@@ -19,6 +19,7 @@
 
 #include "scriptcont.hxx"
 #include "sbmodule.hxx"
+#include "sbservices.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>

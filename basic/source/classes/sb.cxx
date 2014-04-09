@@ -459,8 +459,6 @@ SbxBase* SbOLEFactory::Create( sal_uInt16, sal_uInt32 )
     return NULL;
 }
 
-SbUnoObject* createOLEObject_Impl( const OUString& aType );  // sbunoobj.cxx
-
 SbxObject* SbOLEFactory::CreateObject( const OUString& rClassName )
 {
     SbxObject* pRet = createOLEObject_Impl( rClassName );

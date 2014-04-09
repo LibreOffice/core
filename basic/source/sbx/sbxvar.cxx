@@ -21,8 +21,10 @@
 #include <svl/brdcst.hxx>
 
 #include <basic/sbx.hxx>
+#include "runtime.hxx"
 #include "sbxres.hxx"
 #include "sbxconv.hxx"
+#include "sbunoobj.hxx"
 #include <math.h>
 #include <ctype.h>
 
@@ -66,8 +68,6 @@ SbxVariable::SbxVariable() : SbxValue()
     nHash = 0;
 }
 
-void registerComListenerVariableForBasic( SbxVariable* pVar, StarBASIC* pBasic );
-
 SbxVariable::SbxVariable( const SbxVariable& r )
     : SvRefBase( r ),
       SbxValue( r ),
@@ -109,8 +109,6 @@ SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
     nUserData = 0;
     nHash = 0;
 }
-
-void removeDimAsNewRecoverItem( SbxVariable* pVar );
 
 SbxVariable::~SbxVariable()
 {

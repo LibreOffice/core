@@ -56,7 +56,7 @@
 #include <basic/sbuno.hxx>
 #include <runtime.hxx>
 #include <sbintern.hxx>
-
+#include <eventatt.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 using namespace ::com::sun::star;

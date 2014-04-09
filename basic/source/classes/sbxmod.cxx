@@ -20,6 +20,7 @@
 
 #include <list>
 
+#include <boost/noncopyable.hpp>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 #include <svl/brdcst.hxx>
@@ -455,10 +456,10 @@ bool getDefaultVBAMode( StarBASIC* pb )
     return xVBACompat.is() && xVBACompat->getVBACompatibilityMode();
 }
 
-class AsyncQuitHandler
+class AsyncQuitHandler: private boost::noncopyable
 {
     AsyncQuitHandler() {}
-    AsyncQuitHandler( const AsyncQuitHandler&);
+
 public:
     static AsyncQuitHandler& instance()
     {
@@ -2265,7 +2266,8 @@ typedef ::cppu::WeakImplHelper3<
     awt::XWindowListener,
     document::XEventListener > FormObjEventListener_BASE;
 
-class FormObjEventListenerImpl : public FormObjEventListener_BASE
+class FormObjEventListenerImpl:
+    public FormObjEventListener_BASE, private boost::noncopyable
 {
     SbUserFormModule* mpUserForm;
     uno::Reference< lang::XComponent > mxComponent;
@@ -2274,9 +2276,6 @@ class FormObjEventListenerImpl : public FormObjEventListener_BASE
     bool mbOpened;
     bool mbActivated;
     bool mbShowing;
-
-    FormObjEventListenerImpl(const FormObjEventListenerImpl&); // not defined
-    FormObjEventListenerImpl& operator=(const FormObjEventListenerImpl&); // not defined
 
 public:
     FormObjEventListenerImpl( SbUserFormModule* pUserForm, const uno::Reference< lang::XComponent >& xComponent, const uno::Reference< frame::XModel >& xModel ) :

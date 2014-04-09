@@ -22,6 +22,7 @@
 #include <tools/stream.hxx>
 
 #include <basic/sbx.hxx>
+#include "sbunoobj.hxx"
 #include "sbxconv.hxx"
 #include "runtime.hxx"
 
@@ -231,9 +232,6 @@ SbxValue* SbxValue::TheRealValue() const
 {
     return TheRealValue( true );
 }
-
-// #55226 ship additional information
-bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal );    // sbunoobj.cxx
 
 SbxValue* SbxValue::TheRealValue( bool bObjInObjError ) const
 {

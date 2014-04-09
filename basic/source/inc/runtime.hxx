@@ -460,6 +460,8 @@ void implStepRenameUCB( const OUString& aSource, const OUString& aDest );
 void implStepRenameOSL( const OUString& aSource, const OUString& aDest );
 bool IsBaseIndexOne();
 
+void removeDimAsNewRecoverItem( SbxVariable* pVar );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

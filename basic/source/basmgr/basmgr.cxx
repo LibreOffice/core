@@ -393,7 +393,6 @@ private:
 public:
     BasicLibInfo();
 
-    bool              IsReference() const     { return bReference; }
     bool&             IsReference()           { return bReference; }
 
     bool              IsExtern() const        { return ! aStorageName.equalsAscii(szImbedded); }
@@ -424,7 +423,6 @@ public:
     const OUString&   GetPassword() const                 { return aPassword; }
     void              SetPassword( const OUString& rNewPassword )
                                                         { aPassword = rNewPassword; }
-    bool              IsPasswordVerified() const          { return bPasswordVerified; }
     void              SetPasswordVerified()               { bPasswordVerified = true; }
 
     static BasicLibInfo*    Create( SotStorageStream& rSStream );
