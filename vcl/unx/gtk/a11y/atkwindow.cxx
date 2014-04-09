@@ -44,7 +44,11 @@ init_from_window( AtkObject *accessible, Window *pWindow )
     // Special role for sub-menu and combo-box popups that are exposed directly
     // by their parents already.
     if( aDefaultRole == ATK_ROLE_INVALID )
+    {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         aDefaultRole = atk_role_register( "redundant object" );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+    }
 
     AtkRole role = aDefaultRole;
 

@@ -176,7 +176,11 @@ static inline AtkRole registerRole( const gchar * name )
 {
     AtkRole ret = atk_role_for_name( name );
     if( ATK_ROLE_INVALID == ret )
+    {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ret = atk_role_register( name );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+    }
 
     return ret;
 }

@@ -657,7 +657,9 @@ text_wrapper_get_character_extents( AtkText          *text,
             if( coords == ATK_XY_SCREEN )
             {
                 g_return_if_fail( ATK_IS_COMPONENT( text ) );
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 atk_component_get_position( ATK_COMPONENT( text ), &origin_x, &origin_y, coords);
+                SAL_WNODEPRECATED_DECLARATIONS_POP
             }
 
             *x = aRect.X + origin_x;
@@ -713,7 +715,9 @@ text_wrapper_get_offset_at_point (AtkText     *text,
             if( coords == ATK_XY_SCREEN )
             {
                 g_return_val_if_fail( ATK_IS_COMPONENT( text ), -1 );
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 atk_component_get_position( ATK_COMPONENT( text ), &origin_x, &origin_y, coords);
+                SAL_WNODEPRECATED_DECLARATIONS_POP
             }
 
             return pText->getIndexAtPoint( awt::Point(x - origin_x, y - origin_y) );
