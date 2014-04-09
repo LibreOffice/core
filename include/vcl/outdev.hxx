@@ -843,7 +843,6 @@ protected:
 
     virtual void                ClipAndDrawGradientToBounds( Gradient &rGradient, const PolyPolygon &rPolyPoly );
     void                        ClipAndDrawGradient( Gradient &rGradient, const PolyPolygon &rPolyPoly );
-    void                        XORClipAndDrawGradient( Gradient &rGradient, const PolyPolygon &rPolyPoly );
 
     virtual void                ClipAndDrawGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly );
 
