@@ -1848,165 +1848,165 @@ bool ChartController::impl_DragDataPoint( const OUString & rCID, double fAdditio
 void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
 {
     SolarMutexGuard aGuard;
-    if( m_pDrawViewWrapper && m_pChartWindow )
+
+    if (!m_pDrawViewWrapper || !m_pChartWindow)
+        return;
+
+    Point aMousePos( m_pChartWindow->PixelToLogic( rEvent.GetPosPixel()));
+    sal_uInt16 nModifier = rEvent.GetModifier();
+    sal_Bool bLeftDown = rEvent.IsLeft();
+
+    if ( m_pDrawViewWrapper->IsTextEdit() )
     {
-        Point aMousePos( m_pChartWindow->PixelToLogic( rEvent.GetPosPixel()));
-        sal_uInt16 nModifier = rEvent.GetModifier();
-        sal_Bool bLeftDown = rEvent.IsLeft();
-
-        if ( m_pDrawViewWrapper->IsTextEdit() )
+        if( m_pDrawViewWrapper->IsTextEditHit( aMousePos, HITPIX) )
         {
-            if( m_pDrawViewWrapper->IsTextEditHit( aMousePos, HITPIX) )
-            {
-                m_pChartWindow->SetPointer( m_pDrawViewWrapper->GetPreferredPointer(
-                    aMousePos, m_pChartWindow, nModifier, bLeftDown ) );
-                return;
-            }
+            m_pChartWindow->SetPointer( m_pDrawViewWrapper->GetPreferredPointer(
+                aMousePos, m_pChartWindow, nModifier, bLeftDown ) );
+            return;
         }
-        else if( m_pDrawViewWrapper->IsAction() )
+    }
+    else if( m_pDrawViewWrapper->IsAction() )
+    {
+        return;//don't change pointer during running action
+    }
+
+    SdrHdl* pHitSelectionHdl = 0;
+    if( m_aSelection.isResizeableObjectSelected() )
+        pHitSelectionHdl = m_pDrawViewWrapper->PickHandle( aMousePos );
+
+    if( pHitSelectionHdl )
+    {
+        Pointer aPointer = m_pDrawViewWrapper->GetPreferredPointer(
+            aMousePos, m_pChartWindow, nModifier, bLeftDown );
+        bool bForceArrowPointer = false;
+
+        ObjectIdentifier aOID( m_aSelection.getSelectedOID() );
+
+        switch( aPointer.GetStyle())
         {
-            return;//don't change pointer during running action
-        }
-
-        SdrHdl* pHitSelectionHdl = 0;
-        if( m_aSelection.isResizeableObjectSelected() )
-            pHitSelectionHdl = m_pDrawViewWrapper->PickHandle( aMousePos );
-
-        if( pHitSelectionHdl )
-        {
-
-            Pointer aPointer = m_pDrawViewWrapper->GetPreferredPointer(
-                aMousePos, m_pChartWindow, nModifier, bLeftDown );
-            bool bForceArrowPointer = false;
-
-            ObjectIdentifier aOID( m_aSelection.getSelectedOID() );
-
-            switch( aPointer.GetStyle())
-            {
-                case POINTER_NSIZE:
-                case POINTER_SSIZE:
-                case POINTER_WSIZE:
-                case POINTER_ESIZE:
-                case POINTER_NWSIZE:
-                case POINTER_NESIZE:
-                case POINTER_SWSIZE:
-                case POINTER_SESIZE:
-                    if( ! m_aSelection.isResizeableObjectSelected() )
-                        bForceArrowPointer = true;
-                    break;
-                case POINTER_MOVE:
-                    if ( !aOID.isDragableObject() )
-                        bForceArrowPointer = true;
-                    break;
-                case POINTER_MOVEPOINT:
-                case POINTER_MOVEBEZIERWEIGHT:
-                    // there is no point-editing in a chart
-                    // the POINTER_MOVEBEZIERWEIGHT appears in 3d data points
+            case POINTER_NSIZE:
+            case POINTER_SSIZE:
+            case POINTER_WSIZE:
+            case POINTER_ESIZE:
+            case POINTER_NWSIZE:
+            case POINTER_NESIZE:
+            case POINTER_SWSIZE:
+            case POINTER_SESIZE:
+                if( ! m_aSelection.isResizeableObjectSelected() )
                     bForceArrowPointer = true;
-                    break;
-                default:
-                    break;
-            }
-
-            if( bForceArrowPointer )
-                m_pChartWindow->SetPointer( Pointer( POINTER_ARROW ));
-            else
-                m_pChartWindow->SetPointer( aPointer );
+                break;
+            case POINTER_MOVE:
+                if ( !aOID.isDragableObject() )
+                    bForceArrowPointer = true;
+                break;
+            case POINTER_MOVEPOINT:
+            case POINTER_MOVEBEZIERWEIGHT:
+                // there is no point-editing in a chart
+                // the POINTER_MOVEBEZIERWEIGHT appears in 3d data points
+                bForceArrowPointer = true;
+                break;
+            default:
+                break;
         }
+
+        if( bForceArrowPointer )
+            m_pChartWindow->SetPointer( Pointer( POINTER_ARROW ));
+        else
+            m_pChartWindow->SetPointer( aPointer );
+
+        return;
+    }
+
+    // #i12587# support for shapes in chart
+    if ( m_eDrawMode == CHARTDRAW_INSERT &&
+         ( !m_pDrawViewWrapper->IsMarkedHit( aMousePos ) || !m_aSelection.isDragableObjectSelected() ) )
+    {
+        PointerStyle ePointerStyle = POINTER_DRAW_RECT;
+        SdrObjKind eKind = static_cast< SdrObjKind >( m_pDrawViewWrapper->GetCurrentObjIdentifier() );
+        switch ( eKind )
+        {
+            case OBJ_LINE:
+                {
+                    ePointerStyle = POINTER_DRAW_LINE;
+                }
+                break;
+            case OBJ_RECT:
+            case OBJ_CUSTOMSHAPE:
+                {
+                    ePointerStyle = POINTER_DRAW_RECT;
+                }
+                break;
+            case OBJ_CIRC:
+                {
+                    ePointerStyle = POINTER_DRAW_ELLIPSE;
+                }
+                break;
+            case OBJ_FREELINE:
+                {
+                    ePointerStyle = POINTER_DRAW_POLYGON;
+                }
+                break;
+            case OBJ_TEXT:
+                {
+                    ePointerStyle = POINTER_DRAW_TEXT;
+                }
+                break;
+            case OBJ_CAPTION:
+                {
+                    ePointerStyle = POINTER_DRAW_CAPTION;
+                }
+                break;
+            default:
+                {
+                    ePointerStyle = POINTER_DRAW_RECT;
+                }
+                break;
+        }
+        m_pChartWindow->SetPointer( Pointer( ePointerStyle ) );
+        return;
+    }
+
+    OUString aHitObjectCID(
+        SelectionHelper::getHitObjectCID(
+            aMousePos, *m_pDrawViewWrapper, true /*bGetDiagramInsteadOf_Wall*/ ));
+
+    if( m_pDrawViewWrapper->IsTextEdit() )
+    {
+        if( aHitObjectCID.equals(m_aSelection.getSelectedCID()) )
+        {
+            m_pChartWindow->SetPointer( Pointer( POINTER_ARROW ));
+            return;
+        }
+    }
+
+    if( aHitObjectCID.isEmpty() )
+    {
+        //additional shape was hit
+        m_pChartWindow->SetPointer( POINTER_MOVE );
+    }
+    else if( ObjectIdentifier::isDragableObject( aHitObjectCID ) )
+    {
+        if( (m_eDragMode == SDRDRAG_ROTATE)
+            && SelectionHelper::isRotateableObject( aHitObjectCID
+                , getModel() ) )
+            m_pChartWindow->SetPointer( Pointer( POINTER_ROTATE ) );
         else
         {
-            // #i12587# support for shapes in chart
-            if ( m_eDrawMode == CHARTDRAW_INSERT &&
-                 ( !m_pDrawViewWrapper->IsMarkedHit( aMousePos ) || !m_aSelection.isDragableObjectSelected() ) )
+            ObjectType eHitObjectType = ObjectIdentifier::getObjectType( aHitObjectCID );
+            if( eHitObjectType == OBJECTTYPE_DATA_POINT )
             {
-                PointerStyle ePointerStyle = POINTER_DRAW_RECT;
-                SdrObjKind eKind = static_cast< SdrObjKind >( m_pDrawViewWrapper->GetCurrentObjIdentifier() );
-                switch ( eKind )
-                {
-                    case OBJ_LINE:
-                        {
-                            ePointerStyle = POINTER_DRAW_LINE;
-                        }
-                        break;
-                    case OBJ_RECT:
-                    case OBJ_CUSTOMSHAPE:
-                        {
-                            ePointerStyle = POINTER_DRAW_RECT;
-                        }
-                        break;
-                    case OBJ_CIRC:
-                        {
-                            ePointerStyle = POINTER_DRAW_ELLIPSE;
-                        }
-                        break;
-                    case OBJ_FREELINE:
-                        {
-                            ePointerStyle = POINTER_DRAW_POLYGON;
-                        }
-                        break;
-                    case OBJ_TEXT:
-                        {
-                            ePointerStyle = POINTER_DRAW_TEXT;
-                        }
-                        break;
-                    case OBJ_CAPTION:
-                        {
-                            ePointerStyle = POINTER_DRAW_CAPTION;
-                        }
-                        break;
-                    default:
-                        {
-                            ePointerStyle = POINTER_DRAW_RECT;
-                        }
-                        break;
-                }
-                m_pChartWindow->SetPointer( Pointer( ePointerStyle ) );
-                return;
-            }
-
-            OUString aHitObjectCID(
-                SelectionHelper::getHitObjectCID(
-                    aMousePos, *m_pDrawViewWrapper, true /*bGetDiagramInsteadOf_Wall*/ ));
-
-            if( m_pDrawViewWrapper->IsTextEdit() )
-            {
-                if( aHitObjectCID.equals(m_aSelection.getSelectedCID()) )
+                if( !ObjectIdentifier::areSiblings(aHitObjectCID,m_aSelection.getSelectedCID())
+                    && !ObjectIdentifier::areIdenticalObjects(aHitObjectCID,m_aSelection.getSelectedCID()) )
                 {
                     m_pChartWindow->SetPointer( Pointer( POINTER_ARROW ));
                     return;
                 }
             }
-
-            if( aHitObjectCID.isEmpty() )
-            {
-                //additional shape was hit
-                m_pChartWindow->SetPointer( POINTER_MOVE );
-            }
-            else if( ObjectIdentifier::isDragableObject( aHitObjectCID ) )
-            {
-                if( (m_eDragMode == SDRDRAG_ROTATE)
-                    && SelectionHelper::isRotateableObject( aHitObjectCID
-                        , getModel() ) )
-                    m_pChartWindow->SetPointer( Pointer( POINTER_ROTATE ) );
-                else
-                {
-                    ObjectType eHitObjectType = ObjectIdentifier::getObjectType( aHitObjectCID );
-                    if( eHitObjectType == OBJECTTYPE_DATA_POINT )
-                    {
-                        if( !ObjectIdentifier::areSiblings(aHitObjectCID,m_aSelection.getSelectedCID())
-                            && !ObjectIdentifier::areIdenticalObjects(aHitObjectCID,m_aSelection.getSelectedCID()) )
-                        {
-                            m_pChartWindow->SetPointer( Pointer( POINTER_ARROW ));
-                            return;
-                        }
-                    }
-                    m_pChartWindow->SetPointer( POINTER_MOVE );
-                }
-            }
-            else
-                m_pChartWindow->SetPointer( Pointer( POINTER_ARROW ));
+            m_pChartWindow->SetPointer( POINTER_MOVE );
         }
     }
+    else
+        m_pChartWindow->SetPointer( Pointer( POINTER_ARROW ));
 }
 
 } //namespace chart
