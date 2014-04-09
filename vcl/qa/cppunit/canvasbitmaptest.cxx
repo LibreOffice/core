@@ -52,10 +52,6 @@ bool operator==( const RGBColor& rLHS, const ARGBColor& rRHS )
 {
     return rLHS.Red == rRHS.Red && rLHS.Green == rRHS.Green && rLHS.Blue == rRHS.Blue;
 }
-bool operator==( const ARGBColor& rLHS, const RGBColor& rRHS )
-{
-    return rLHS.Red == rRHS.Red && rLHS.Green == rRHS.Green && rLHS.Blue == rRHS.Blue;
-}
 
 } } } }
 
