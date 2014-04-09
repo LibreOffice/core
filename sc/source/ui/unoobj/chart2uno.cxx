@@ -451,6 +451,8 @@ public:
         mrRefTokens(rRefTokens),
         mpPositionMap(NULL),
         meGlue(GLUETYPE_NA),
+        mnStartCol(0),
+        mnStartRow(0),
         mpDoc(pDoc),
         mbColHeaders(false),
         mbRowHeaders(false),
