@@ -199,13 +199,6 @@ namespace svl { namespace undo { namespace impl
 
     struct SVL_DLLPRIVATE NotifyUndoListener : public ::std::unary_function< SfxUndoListener*, void >
     {
-        NotifyUndoListener()
-            :m_notificationMethod( NULL )
-            ,m_altNotificationMethod( NULL )
-            ,m_sActionComment()
-        {
-        }
-
         NotifyUndoListener( UndoListenerVoidMethod i_notificationMethod )
             :m_notificationMethod( i_notificationMethod )
             ,m_altNotificationMethod( NULL )
