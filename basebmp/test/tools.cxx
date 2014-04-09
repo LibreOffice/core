@@ -25,6 +25,8 @@
 #include <basebmp/color.hxx>
 #include <basebmp/bitmapdevice.hxx>
 
+#include <tools.hxx>
+
 using namespace ::basebmp;
 
 int countPixel( const BitmapDeviceSharedPtr& rDevice,
