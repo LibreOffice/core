@@ -2359,7 +2359,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                         mpFrmMap->find( aFrmOrObj.GetSwFrm() );
                     if( aIter != mpFrmMap->end() )
                     {
-                        // If there is an accesible object already it is
+                        // If there is an accessible object already it is
                         // notified directly.
                         uno::Reference < XAccessible > xAcc( (*aIter).second );
                         xAccImpl =

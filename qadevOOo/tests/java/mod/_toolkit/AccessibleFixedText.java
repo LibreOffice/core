@@ -42,7 +42,7 @@ import util.utils;
 
 
 /**
- * Test for object which is represented by accesible component
+ * Test for object which is represented by accessible component
  * of the fixed text label in 'Hyperlink' Dialog. <p>
  *
  * Object implements the following interfaces :

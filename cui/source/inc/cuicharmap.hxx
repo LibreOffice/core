@@ -61,7 +61,7 @@ private:
 };
 
 /** The main purpose of this dialog is to enable the use of characters
-    that are not easily accesible from the keyboard. */
+    that are not easily accessible from the keyboard. */
 class SvxCharacterMap : public SfxModalDialog
 {
 private:

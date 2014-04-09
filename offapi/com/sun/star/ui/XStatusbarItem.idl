@@ -91,7 +91,7 @@ interface XStatusbarItem
      */
     [attribute] string QuickHelpText;
 
-    /** the accesible name of the status bar item
+    /** the accessible name of the status bar item
      */
     [attribute] string AccessibleName;
 

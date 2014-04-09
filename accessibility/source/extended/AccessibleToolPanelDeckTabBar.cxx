@@ -315,7 +315,7 @@ namespace accessibility
             Reference< XAccessibleContext > xScrollButtonContext( xScrollButtonAccessible->getAccessibleContext() );
             ENSURE_OR_RETURN( xScrollButtonContext.is(), "AccessibleToolPanelTabBar::getAccessibleChild: invalid button accessible context!", xScrollButtonAccessible );
             OSL_ENSURE( xScrollButtonContext->getAccessibleParent() == m_pImpl->getOwnAccessible(),
-                "AccessibleToolPanelTabBar::getAccessibleChild: wrong parent at the button's accesible!" );
+                "AccessibleToolPanelTabBar::getAccessibleChild: wrong parent at the button's accessible!" );
         #endif
             return xScrollButtonAccessible;
         }
