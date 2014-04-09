@@ -36,8 +36,6 @@
 
 #ifdef IOS
 #include "saldatabasic.hxx"
-#include "headless/svpbmp.hxx"
-#include <basegfx/range/b2ibox.hxx>
 #endif
 
 #if defined(IOS) && defined(DBG_UTIL)
