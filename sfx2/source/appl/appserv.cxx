@@ -873,27 +873,6 @@ OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChoose
 #endif
 }
 
-void MacroOrganizer( sal_Int16 nTabId )
-{
-#ifndef DISABLE_DYNLOADING
-    // get basctl dllname
-    static OUString aLibName( SVLIBRARY( "basctl"  ) );
-
-    // load module
-    oslModule handleMod = osl_loadModuleRelative(
-        &thisModule, aLibName.pData, 0 );
-
-    // get symbol
-    OUString aSymbol( "basicide_macro_organizer"  );
-    basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getFunctionSymbol( handleMod, aSymbol.pData );
-    // call basicide_macro_organizer in basctl
-    pSymbol( nTabId );
-#else
-    basicide_macro_organizer( nTabId );
-#endif
-
-}
-
 #endif
 
 
