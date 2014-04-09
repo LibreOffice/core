@@ -57,7 +57,6 @@ struct tolerance
     xmlChar* attribName;
     bool relative;
     double value;
-    bool operator==(const tolerance& rTol) const { return xmlStrEqual(elementName, rTol.elementName) && xmlStrEqual(attribName, rTol.attribName); }
     bool operator<(const tolerance& rTol) const
     {
         int cmp = xmlStrcmp(elementName, rTol.elementName);
