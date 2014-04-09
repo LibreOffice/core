@@ -89,14 +89,14 @@ using namespace editeng;
 
 // Some helper functions
 // char
-inline const SvxEscapementItem& GetEscapement(const SfxItemSet& rSet,sal_uInt16 nId,sal_Bool bInP=sal_True)
+inline const SvxEscapementItem& GetEscapement(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP=true)
     { return (const SvxEscapementItem&)rSet.Get( nId,bInP); }
-inline const SvxLineSpacingItem& GetLineSpacing(const SfxItemSet& rSet,sal_uInt16 nId,sal_Bool bInP=sal_True)
+inline const SvxLineSpacingItem& GetLineSpacing(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP=true)
     { return (const SvxLineSpacingItem&)rSet.Get( nId,bInP); }
 // frm
-inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,sal_uInt16 nId,sal_Bool bInP=sal_True)
+inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP=true)
     { return (const SvxLRSpaceItem&)rSet.Get( nId,bInP); }
-inline const SvxULSpaceItem& GetULSpace(const SfxItemSet& rSet,sal_uInt16 nId,sal_Bool bInP=sal_True)
+inline const SvxULSpaceItem& GetULSpace(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP=true)
     { return (const SvxULSpaceItem&)rSet.Get( nId,bInP); }
 
 #define PARDID      ((RTFPardAttrMapIds*)&aPardMap[0])
@@ -438,7 +438,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 {
                     // then switches to multi-line!
                     SvxLineSpacingItem aLSpace( GetLineSpacing( *pSet,
-                                                PARDID->nLinespacing, sal_False ));
+                                                PARDID->nLinespacing, false ));
 
                     // how much do you get from the line height value?
 
@@ -580,7 +580,7 @@ SET_FONTALIGNMENT:
                         nTokenValue = 6;
                     if( IsCalcValue() )
                         CalcValue();
-                    const SvxEscapementItem& rOld = GetEscapement( *pSet, nEsc, sal_False );
+                    const SvxEscapementItem& rOld = GetEscapement( *pSet, nEsc, false );
                     short nEs;
                     sal_uInt8 nProp;
                     if( DFLT_ESC_AUTO_SUPER == rOld.GetEsc() )
@@ -927,7 +927,7 @@ ATTR_SETOVERLINE:
                         nTokenValue = 6;
                     if( IsCalcValue() )
                         CalcValue();
-                    const SvxEscapementItem& rOld = GetEscapement( *pSet, nEsc, sal_False );
+                    const SvxEscapementItem& rOld = GetEscapement( *pSet, nEsc, false );
                     short nEs;
                     sal_uInt8 nProp;
                     if( DFLT_ESC_AUTO_SUB == rOld.GetEsc() )
@@ -1820,7 +1820,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
         return;
 
     SfxItemSet aTmp( *pAttrPool, &aWhichMap[0] );
-    sal_Bool bOldFlag = bIsLeftToRightDef;
+    bool bOldFlag = bIsLeftToRightDef;
     bIsLeftToRightDef = true;
     switch( nToken )
     {

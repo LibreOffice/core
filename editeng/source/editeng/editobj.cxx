@@ -1055,7 +1055,7 @@ bool EditTextObjectImpl::ChangeStyleSheets(
                     const OUString& rOldName, SfxStyleFamily eOldFamily,
                     const OUString& rNewName, SfxStyleFamily eNewFamily)
 {
-    sal_Bool bChanges = ImpChangeStyleSheets( rOldName, eOldFamily, rNewName, eNewFamily );
+    bool bChanges = ImpChangeStyleSheets( rOldName, eOldFamily, rNewName, eNewFamily );
     if ( bChanges )
         ClearPortionInfo();
 
@@ -1094,7 +1094,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
     sal_uInt16 nVer = 602;
     rOStream.WriteUInt16( nVer );
 
-    rOStream.WriteUChar( static_cast<sal_Bool>(bOwnerOfPool) );
+    rOStream.WriteUChar( bOwnerOfPool );
 
     // First store the pool, later only the Surregate
     if ( bOwnerOfPool )
@@ -1237,10 +1237,10 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
     rOStream.WriteUInt16( nUserType );
     rOStream.WriteUInt32( nObjSettings );
 
-    rOStream.WriteUChar( static_cast<sal_Bool>(bVertical) );
+    rOStream.WriteUChar( bVertical );
     rOStream.WriteUInt16( nScriptType );
 
-    rOStream.WriteUChar( static_cast<sal_Bool>(bStoreUnicodeStrings) );
+    rOStream.WriteUChar( bStoreUnicodeStrings );
     if ( bStoreUnicodeStrings )
     {
         for ( size_t nPara = 0; nPara < nParagraphs_Stream; nPara++ )
@@ -1266,9 +1266,9 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
     // The text object was first created with the current setting of
     // pTextObjectPool.
-    sal_Bool bOwnerOfCurrent = bOwnerOfPool;
-    sal_Bool b;
-    rIStream.ReadUChar( b );
+    bool bOwnerOfCurrent = bOwnerOfPool;
+    bool b;
+    rIStream.ReadCharAsBool( b );
     bOwnerOfPool = b;
 
     if ( bOwnerOfCurrent && !bOwnerOfPool )
@@ -1361,7 +1361,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         // But check for paragraph and character symbol attribs here,
         // FinishLoad will not be called in OpenOffice Calc, no StyleSheets...
 
-        sal_Bool bSymbolPara = false;
+        bool bSymbolPara = false;
         if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
         {
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
@@ -1473,8 +1473,8 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
     if ( nVersion >= 601 )
     {
-        sal_Bool bTmp;
-        rIStream.ReadUChar( bTmp );
+        bool bTmp;
+        rIStream.ReadCharAsBool( bTmp );
         bVertical = bTmp;
     }
 
@@ -1482,8 +1482,8 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
     {
         rIStream.ReadUInt16( nScriptType );
 
-        sal_Bool bUnicodeStrings;
-        rIStream.ReadUChar( bUnicodeStrings );
+        bool bUnicodeStrings;
+        rIStream.ReadCharAsBool( bUnicodeStrings );
         if ( bUnicodeStrings )
         {
             for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )

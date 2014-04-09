@@ -284,7 +284,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
     return aDebStr.makeStringAndClear();
 }
 
-void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, sal_Bool bSearchInParent, sal_Bool bShowALL )
+void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, bool bSearchInParent, bool bShowALL )
 {
     for ( sal_uInt16 nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
     {
@@ -305,7 +305,7 @@ void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, sal_Bool bSearchInParent, 
     }
 }
 
-void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
+void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
 {
 #if defined UNX
     FILE* fp = fopen( "/tmp/debug.log", "w" );
@@ -334,10 +334,10 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         if ( pStyle )
             fprintf( fp, " %s", OUStringToOString( pStyle->GetName(), RTL_TEXTENCODING_UTF8).getStr() );
         fprintf( fp, "\nParagraph attribute:" );
-        DbgOutItemSet( fp, pPPortion->GetNode()->GetContentAttribs().GetItems(), sal_False, sal_False );
+        DbgOutItemSet( fp, pPPortion->GetNode()->GetContentAttribs().GetItems(), false, false );
 
         fprintf( fp, "\nCharacter attribute:" );
-        sal_Bool bZeroAttr = sal_False;
+        bool bZeroAttr = false;
         sal_uInt16 z;
         for ( z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
         {
@@ -352,7 +352,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
             aCharAttribs.append('\t');
             aCharAttribs.append(static_cast<sal_Int32>(rAttr.GetEnd()));
             if ( rAttr.IsEmpty() )
-                bZeroAttr = sal_True;
+                bZeroAttr = true;
             fprintf(fp, "%s => ", aCharAttribs.getStr());
 
             OString aDebStr = DbgOutItem( rPool, *rAttr.GetItem() );
@@ -429,7 +429,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
             fprintf( fp, "\nTemplate:   %s", OUStringToOString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).getStr() );
             fprintf( fp, "\nParent:    %s", OUStringToOString( pStyle->GetParent(), RTL_TEXTENCODING_ASCII_US ).getStr() );
             fprintf( fp, "\nFollow:    %s", OUStringToOString( pStyle->GetFollow(), RTL_TEXTENCODING_ASCII_US ).getStr() );
-            DbgOutItemSet( fp, pStyle->GetItemSet(), sal_False, sal_False );
+            DbgOutItemSet( fp, pStyle->GetItemSet(), false, false );
             fprintf( fp, "\n----------------------------------" );
 
             pStyle = aIter.Next();
@@ -439,7 +439,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
     fprintf( fp, "\n\n================================================================================" );
     fprintf( fp, "\n==================   Defaults   ================================================" );
     fprintf( fp, "\n================================================================================" );
-    DbgOutItemSet( fp, pEE->pImpEditEngine->GetEmptyItemSet(), sal_True, sal_True );
+    DbgOutItemSet( fp, pEE->pImpEditEngine->GetEmptyItemSet(), true, true );
 
     fprintf( fp, "\n\n================================================================================" );
     fprintf( fp, "\n==================   EditEngine & Views   ======================================" );
@@ -468,7 +468,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         fprintf( fp, "\n\n================================================================================" );
         fprintf( fp, "\n==================   Current View   ===========================================" );
         fprintf( fp, "\n================================================================================" );
-        DbgOutItemSet( fp, pEE->GetActiveView()->GetAttribs(), sal_True, sal_False );
+        DbgOutItemSet( fp, pEE->GetActiveView()->GetAttribs(), true, false );
     }
     fclose( fp );
     if ( bInfoBox )

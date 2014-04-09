@@ -29,12 +29,12 @@ class SfxItemPool;
 class SfxPoolItem;
 
 OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem);
-void        DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, sal_Bool bSearchInParent, sal_Bool bShowALL );
+void        DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, bool bSearchInParent, bool bShowALL );
 
 class EditDbg
 {
 public:
-    static void         ShowEditEngineData( EditEngine* pEditEngine, sal_Bool bInfoBox = sal_True );
+    static void         ShowEditEngineData( EditEngine* pEditEngine, bool bInfoBox = true );
 };
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_EDITDBG_HXX

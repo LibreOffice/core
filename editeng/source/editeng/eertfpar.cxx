@@ -122,12 +122,12 @@ SvParserState EditRTFParser::CallParser()
     }
     EditPaM aEnd2PaM( aCurSel.Max() );
     //AddRTFDefaultValues( aStart2PaM, aEnd2PaM );
-    sal_Bool bOnlyOnePara = ( aEnd2PaM.GetNode() == aStart2PaM.GetNode() );
+    bool bOnlyOnePara = ( aEnd2PaM.GetNode() == aStart2PaM.GetNode() );
     // Paste the chunk again ...
     // Problem: Paragraph attributes may not possibly be taken over
     // => Do Character attributes.
 
-    sal_Bool bSpecialBackward = aStart1PaM.GetNode()->Len() ? sal_False : sal_True;
+    bool bSpecialBackward = aStart1PaM.GetNode()->Len() ? sal_False : sal_True;
     if ( bOnlyOnePara || aStart1PaM.GetNode()->Len() )
         mpEditEngine->ParaAttribsToCharAttribs( aStart2PaM.GetNode() );
     aCurSel.Min() = mpEditEngine->ConnectParagraphs(
@@ -500,8 +500,8 @@ void EditRTFParser::ReadField()
 {
     // From SwRTFParser::ReadField()
     int _nOpenBrakets = 1;      // the first was already detected earlier
-    sal_Bool bFldInst = sal_False;
-    sal_Bool bFldRslt = sal_False;
+    bool bFldInst = false;
+    bool bFldRslt = false;
     OUString aFldInst;
     OUString aFldRslt;
 
@@ -514,8 +514,8 @@ void EditRTFParser::ReadField()
                 _nOpenBrakets--;
                 if ( _nOpenBrakets == 1 )
                 {
-                    bFldInst = sal_False;
-                    bFldRslt = sal_False;
+                    bFldInst = false;
+                    bFldRslt = false;
                 }
             }
             break;
@@ -526,10 +526,10 @@ void EditRTFParser::ReadField()
             case RTF_FIELD:     SkipGroup();
                                 break;
 
-            case RTF_FLDINST:   bFldInst = sal_True;
+            case RTF_FLDINST:   bFldInst = true;
                                 break;
 
-            case RTF_FLDRSLT:   bFldRslt = sal_True;
+            case RTF_FLDRSLT:   bFldRslt = true;
                                 break;
 
             case RTF_TEXTTOKEN:

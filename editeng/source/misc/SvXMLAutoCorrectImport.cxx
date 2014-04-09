@@ -125,7 +125,7 @@ SvXMLWordContext::SvXMLWordContext(
     if (sWrong.isEmpty() || sRight.isEmpty())
         return;
 
-    sal_Bool bOnlyTxt = sRight != sWrong;
+    bool bOnlyTxt = sRight != sWrong;
     if( !bOnlyTxt )
     {
         const OUString sLongSave( sRight );
@@ -133,7 +133,7 @@ SvXMLWordContext::SvXMLWordContext(
             !sLongSave.isEmpty() )
         {
             sRight = sLongSave;
-            bOnlyTxt = sal_True;
+            bOnlyTxt = true;
         }
     }
     rLocalRef.pAutocorr_List->LoadEntry( sWrong, sRight, bOnlyTxt );

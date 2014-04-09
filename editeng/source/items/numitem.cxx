@@ -683,7 +683,7 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
     for (sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
         rStream.ReadUInt16( nTmp16 );
-        sal_Bool hasNumberingFormat = nTmp16 & 1;
+        bool hasNumberingFormat = nTmp16 & 1;
         aFmtsSet[i] = nTmp16 & 2; // fdo#68648 reset flag
         if ( hasNumberingFormat ){
             aFmts[i] = new SvxNumberFormat( rStream );
@@ -708,7 +708,7 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
     rStream.WriteUInt16( (sal_uInt16)eNumberingType );
 
     FontToSubsFontConverter pConverter = 0;
-    sal_Bool bConvertBulletFont = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_50 ) && ( rStream.GetVersion() );
+    bool bConvertBulletFont = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_50 ) && ( rStream.GetVersion() );
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
         sal_uInt16 nSetFlag(aFmtsSet[i] ? 2 : 0); // fdo#68648 store that too
@@ -879,13 +879,13 @@ OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum, bool bInclStrings ) 
                     continue;
                 }
 
-                sal_Bool bDot = sal_True;
+                bool bDot = true;
                 if( rNum.GetLevelVal()[ i ] )
                 {
                     if(SVX_NUM_BITMAP != rNFmt.GetNumberingType())
                         aStr += rNFmt.GetNumStr( rNum.GetLevelVal()[ i ], aLocale );
                     else
-                        bDot = sal_False;
+                        bDot = false;
                 }
                 else
                     aStr += "0";       // all 0-levels are a 0
@@ -905,7 +905,7 @@ OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum, bool bInclStrings ) 
 // changes linked to embedded bitmaps
 bool SvxNumRule::UnLinkGraphics()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     for(sal_uInt16 i = 0; i < GetLevelCount(); i++)
     {
         SvxNumberFormat aFmt(GetLevel(i));
@@ -922,7 +922,7 @@ bool SvxNumRule::UnLinkGraphics()
                 aTempItem.SetGraphic(*pGraphic);
                 sal_Int16    eOrient = aFmt.GetVertOrient();
                 aFmt.SetGraphicBrush( &aTempItem, &aFmt.GetGraphicSize(), &eOrient );
-                bRet = sal_True;
+                bRet = true;
             }
         }
         else if((SVX_NUM_BITMAP|LINK_TOKEN) == aFmt.GetNumberingType())

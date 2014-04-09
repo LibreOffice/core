@@ -309,7 +309,7 @@ void EditView::SetOutputArea( const Rectangle& rRect )
     pImpEditView->CalcAnchorPoint();
     if ( PIMPEE->GetStatus().AutoPageSize() )
         pImpEditView->RecalcOutputArea();
-    pImpEditView->ShowCursor( sal_False, sal_False );
+    pImpEditView->ShowCursor( false, false );
 }
 
 const Rectangle& EditView::GetOutputArea() const
@@ -495,7 +495,7 @@ sal_uInt32 EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFor
 void EditView::Cut()
 {
     Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
-    pImpEditView->CutCopy( aClipBoard, sal_True );
+    pImpEditView->CutCopy( aClipBoard, true );
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > EditView::GetTransferable()
@@ -508,19 +508,19 @@ void EditView::Cut()
 void EditView::Copy()
 {
     Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
-    pImpEditView->CutCopy( aClipBoard, sal_False );
+    pImpEditView->CutCopy( aClipBoard, false );
 }
 
 void EditView::Paste()
 {
     Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
-    pImpEditView->Paste( aClipBoard, sal_False );
+    pImpEditView->Paste( aClipBoard, false );
 }
 
 void EditView::PasteSpecial()
 {
     Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
-    pImpEditView->Paste(aClipBoard, sal_True );
+    pImpEditView->Paste(aClipBoard, true );
 }
 
 Point EditView::GetWindowPosTopLeft( sal_Int32 nParagraph )
@@ -616,7 +616,7 @@ void EditView::SetEditEngineUpdateMode( bool bUpdate )
 
 void EditView::ForceUpdate()
 {
-    PIMPEE->SetUpdateMode( true, this, sal_True );
+    PIMPEE->SetUpdateMode( true, this, true );
 }
 
 SfxStyleSheet* EditView::GetStyleSheet()
@@ -744,7 +744,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
     EditPaM aPaM = pImpEditView->pEditEngine->GetPaM(aPos, false);
     Reference< linguistic2::XSpellChecker1 >  xSpeller( PIMPEE->GetSpeller() );
     ESelection aOldSel = GetSelection();
-    if ( xSpeller.is() && pImpEditView->IsWrongSpelledWord( aPaM, sal_True ) )
+    if ( xSpeller.is() && pImpEditView->IsWrongSpelledWord( aPaM, true ) )
     {
         PopupMenu aPopupMenu( EditResId( RID_MENU_SPELL ) );
         PopupMenu *pAutoMenu = aPopupMenu.GetPopupMenu( MN_AUTOCORR );
@@ -910,7 +910,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         sal_uInt16 nId = aPopupMenu.Execute( pImpEditView->GetWindow(), aTempRect, POPUPMENU_NOMOUSEUPCLOSE );
         if ( nId == MN_IGNORE )
         {
-            OUString aWord = pImpEditView->SpellIgnoreOrAddWord( sal_False );
+            OUString aWord = pImpEditView->SpellIgnoreOrAddWord( false );
             if ( pCallBack )
             {
                 SpellCallbackInfo aInf( SPELLCMD_IGNOREWORD, aWord );
@@ -957,7 +957,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                 pImpEditView->SetEditSelection( EditSelection( aCursor, aCursor ) );
                 pImpEditView->DrawSelection();
                 // Crashes when no SfxApp
-                PIMPEE->Spell( this, sal_False );
+                PIMPEE->Spell( this, false );
             }
             else
             {

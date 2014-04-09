@@ -1292,11 +1292,11 @@ namespace accessibility
         for (sal_Int32 i = 0;  i < nRes;  ++i)
         {
             beans::PropertyValue &rRes = pRes[i];
-            sal_Bool bIsDirectVal = sal_False;
+            bool bIsDirectVal = false;
             for (sal_Int32 k = 0;  k < nRunAttribs && !bIsDirectVal;  ++k)
             {
                 if (rRes.Name == pRunAttrib[k].Name)
-                    bIsDirectVal = sal_True;
+                    bIsDirectVal = true;
             }
             rRes.Handle = -1;
             rRes.State  = bIsDirectVal ? PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;
@@ -1670,7 +1670,7 @@ namespace accessibility
             if (rRes.Name == "NumberingRules")
             {
                 SfxItemSet aAttribs = rCacheTF.GetParaAttribs( static_cast< sal_uInt16 >(GetParagraphIndex()) );
-                sal_Bool bVis = ((const SfxUInt16Item&)aAttribs.Get( EE_PARA_BULLETSTATE )).GetValue() ? sal_True : sal_False;
+                bool bVis = ((const SfxUInt16Item&)aAttribs.Get( EE_PARA_BULLETSTATE )).GetValue() ? sal_True : sal_False;
                 if(bVis)
                 {
                     rRes.Value <<= (sal_Int16)-1;
@@ -2038,7 +2038,7 @@ namespace accessibility
 
                 // get previous word
 
-                sal_Bool bWord = sal_False;
+                bool bWord = false;
 
                 //while ( preWordStart > 0 && aBoundary.startPos == curWordStart)
                 while ( (preWordStart >= 0 && !bWord ) || ( aBoundary.endPos > curWordStart ) )
@@ -2156,7 +2156,7 @@ namespace accessibility
                 sal_Int32 nLength = sText.getLength();
 
                 // get word at index
-                sal_Bool bWord = implGetWordBoundary( aBoundary, nIndex );
+                bool bWord = implGetWordBoundary( aBoundary, nIndex );
 
                 // real current world
                 sal_Int32 nextWord = nIndex;
@@ -2210,7 +2210,7 @@ namespace accessibility
             GetTextForwarder();                                         // MUST be after GetEditViewForwarder(), see method docs
             #endif
 
-            sal_Bool aRetVal;
+            bool aRetVal;
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                        "AccessibleEditableTextPara::copyText: index value overflow");
@@ -2341,7 +2341,7 @@ namespace accessibility
                 return sal_False; // non-editable area selected
 
             //sal_Bool bRet = rCacheTF.Delete( MakeSelection(nStartIndex, nEndIndex) );
-            sal_Bool bRet = rCacheTF.Delete( aSelection );
+            bool bRet = rCacheTF.Delete( aSelection );
 
             GetEditSource().UpdateData();
 
@@ -2380,7 +2380,7 @@ namespace accessibility
                 return sal_False; // non-editable area selected
 
             // #104400# insert given text at empty selection (=> cursor)
-            sal_Bool bRet = rCacheTF.InsertText( sText, MakeCursor(nIndex + nBulletLen) );
+            bool bRet = rCacheTF.InsertText( sText, MakeCursor(nIndex + nBulletLen) );
 
             rCacheTF.QuickFormatDoc();
             GetEditSource().UpdateData();
@@ -2423,7 +2423,7 @@ namespace accessibility
 
             // insert given text into given range => replace
             //sal_Bool bRet = rCacheTF.InsertText( sReplacement, MakeSelection(nStartIndex, nEndIndex) );
-            sal_Bool bRet = rCacheTF.InsertText( sReplacement, aSelection );
+            bool bRet = rCacheTF.InsertText( sReplacement, aSelection );
 
             rCacheTF.QuickFormatDoc();
             GetEditSource().UpdateData();

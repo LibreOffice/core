@@ -225,7 +225,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOri
         aStartPos.X() += GetPaperSize().Width();
         aStartPos = Rotate( aStartPos, nOrientation, rStartPos );
     }
-    pImpEditEngine->Paint( pOutDev, aBigRect, aStartPos, sal_False, nOrientation );
+    pImpEditEngine->Paint( pOutDev, aBigRect, aStartPos, false, nOrientation );
     if( pOutDev->GetConnectMetaFile() )
         pOutDev->Pop();
 }
@@ -240,7 +240,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
 
 #if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
     if ( bDebugPaint )
-        EditDbg::ShowEditEngineData( this, sal_False );
+        EditDbg::ShowEditEngineData( this, false );
 #endif
 
     // Align to the pixel boundary, so that it becomes exactly the same
@@ -1092,7 +1092,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, W
 
                     if ( aCurSel.HasRange() ) {
                         Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(pEditView->GetWindow()->GetPrimarySelection());
-                        pEditView->pImpEditView->CutCopy( aSelection, sal_False );
+                        pEditView->pImpEditView->CutCopy( aSelection, false );
                     }
 
                     bMoved = true;
@@ -1280,7 +1280,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, W
                     }
                     else
                     {
-                        aCurSel = pImpEditEngine->InsertText( (const EditSelection&)aCurSel, nCharCode, !pEditView->IsInsertMode(), sal_True );
+                        aCurSel = pImpEditEngine->InsertText( (const EditSelection&)aCurSel, nCharCode, !pEditView->IsInsertMode(), true );
                     }
                     // AutoComplete ???
                     if ( pImpEditEngine->GetStatus().DoAutoComplete() && ( nCharCode != ' ' ) )
@@ -1392,7 +1392,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, W
     else if ( bMoved )
     {
         bool bGotoCursor = pEditView->pImpEditView->DoAutoScroll();
-        pEditView->pImpEditView->ShowCursor( bGotoCursor, sal_True );
+        pEditView->pImpEditView->ShowCursor( bGotoCursor, true );
         pImpEditEngine->CallStatusHdl();
     }
 
@@ -1414,7 +1414,7 @@ sal_uInt32 EditEngine::GetTextHeight() const
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
-    sal_uInt32 nHeight = !IsVertical() ? pImpEditEngine->GetTextHeight() : pImpEditEngine->CalcTextWidth( sal_True );
+    sal_uInt32 nHeight = !IsVertical() ? pImpEditEngine->GetTextHeight() : pImpEditEngine->CalcTextWidth( true );
     return nHeight;
 }
 
@@ -1425,7 +1425,7 @@ sal_uInt32 EditEngine::GetTextHeightNTP() const
         pImpEditEngine->FormatDoc();
 
     if ( IsVertical() )
-        return pImpEditEngine->CalcTextWidth( sal_True );
+        return pImpEditEngine->CalcTextWidth( true );
 
     return pImpEditEngine->GetTextHeightNTP();
 }
@@ -1436,7 +1436,7 @@ sal_uInt32 EditEngine::CalcTextWidth()
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
-    sal_uInt32 nWidth = !IsVertical() ? pImpEditEngine->CalcTextWidth( sal_True ) : pImpEditEngine->GetTextHeight();
+    sal_uInt32 nWidth = !IsVertical() ? pImpEditEngine->CalcTextWidth( true ) : pImpEditEngine->GetTextHeight();
      return nWidth;
 }
 
@@ -1627,12 +1627,12 @@ Link EditEngine::GetModifyHdl() const
 
 void EditEngine::ClearModifyFlag()
 {
-    pImpEditEngine->SetModifyFlag( sal_False );
+    pImpEditEngine->SetModifyFlag( false );
 }
 
 void EditEngine::SetModified()
 {
-    pImpEditEngine->SetModifyFlag( sal_True );
+    pImpEditEngine->SetModifyFlag( true );
 }
 
 bool EditEngine::IsModified() const
@@ -1767,7 +1767,7 @@ void EditEngine::StripPortions()
         aBigRect.Right() = 0;
         aBigRect.Left() = -0x7FFFFFFF;
     }
-    pImpEditEngine->Paint( &aTmpDev, aBigRect, Point(), sal_True );
+    pImpEditEngine->Paint( &aTmpDev, aBigRect, Point(), true );
 }
 
 void EditEngine::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList )
@@ -1966,7 +1966,7 @@ bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
 
     if ( ( aDocPos.Y() > 0  ) && ( aDocPos.Y() < (long)pImpEditEngine->GetTextHeight() ) )
     {
-        EditPaM aPaM = pImpEditEngine->GetPaM( aDocPos, sal_False );
+        EditPaM aPaM = pImpEditEngine->GetPaM( aDocPos, false );
         if ( aPaM.GetNode() )
         {
             const ParaPortion* pParaPortion = pImpEditEngine->FindParaPortion( aPaM.GetNode() );
@@ -2038,7 +2038,7 @@ void EditEngine::QuickMarkToBeRepainted( sal_Int32 nPara )
 {
     ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
     if ( pPortion )
-        pPortion->SetMustRepaint( sal_True );
+        pPortion->SetMustRepaint( true );
 }
 
 void EditEngine::QuickInsertLineBreak( const ESelection& rSel )
@@ -2359,7 +2359,7 @@ EPosition EditEngine::FindDocPosition( const Point& rDocPos ) const
 {
     EPosition aPos;
     // From the point of the API, this is const....
-    EditPaM aPaM = ((EditEngine*)this)->pImpEditEngine->GetPaM( rDocPos, sal_False );
+    EditPaM aPaM = ((EditEngine*)this)->pImpEditEngine->GetPaM( rDocPos, false );
     if ( aPaM.GetNode() )
     {
         aPos.nPara = pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );

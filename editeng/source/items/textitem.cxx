@@ -368,7 +368,7 @@ SfxPoolItem* SvxFontItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    sal_Bool bToBats = IsStarSymbol( GetFamilyName() );
+    bool bToBats = IsStarSymbol( GetFamilyName() );
 
     rStrm.WriteUChar( (sal_uInt8) GetFamily() ).WriteUChar( (sal_uInt8) GetPitch() )
          .WriteUChar( (sal_uInt8)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding(GetCharSet())) );
@@ -820,7 +820,7 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     //  In StarOne is the uno::Any always 1/100mm. Through the MemberId it is
     //  controlled if the value in the Item should be 1/100mm or Twips.
 
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -916,7 +916,7 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 }
 
 // Calculate the relative deviation from the expected height.
-static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, SfxMapUnit eProp, sal_Bool bCoreInTwip)
+static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, SfxMapUnit eProp, bool bCoreInTwip)
 {
     sal_uInt32 nRet = nHeight;
     short nDiff = 0;
@@ -951,7 +951,7 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, S
 
 bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -1384,7 +1384,7 @@ bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch(nMemberId)
     {
     case MID_TEXTLINED:
@@ -1394,7 +1394,7 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         sal_Int32 nValue = 0;
         if(!(rVal >>= nValue))
-            bRet = sal_False;
+            bRet = false;
         else
             SetValue((sal_Int16)nValue);
     }
@@ -1403,7 +1403,7 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         sal_Int32 nCol = 0;
         if( !( rVal >>= nCol ) )
-            bRet = sal_False;
+            bRet = false;
         else
         {
             // Keep transparence, because it contains the information
@@ -1760,7 +1760,7 @@ SfxPoolItem* SvxWordLineModeItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxWordLineModeItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_Bool) GetValue() );
+    rStrm.WriteUChar( GetValue() );
     return rStrm;
 }
 
@@ -1768,8 +1768,8 @@ SvStream& SvxWordLineModeItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersio
 
 SfxPoolItem* SvxWordLineModeItem::Create(SvStream& rStrm, sal_uInt16) const
 {
-    sal_Bool bValue;
-    rStrm.ReadUChar( bValue );
+    bool bValue;
+    rStrm.ReadCharAsBool( bValue );
     return new SvxWordLineModeItem( bValue, Which() );
 }
 
@@ -1821,7 +1821,7 @@ SfxPoolItem* SvxContourItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxContourItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_Bool) GetValue() );
+    rStrm.WriteUChar( GetValue() );
     return rStrm;
 }
 
@@ -1829,8 +1829,8 @@ SvStream& SvxContourItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
 
 SfxPoolItem* SvxContourItem::Create(SvStream& rStrm, sal_uInt16) const
 {
-    sal_Bool bValue;
-    rStrm.ReadUChar( bValue );
+    bool bValue;
+    rStrm.ReadCharAsBool( bValue );
     return new SvxContourItem( bValue, Which() );
 }
 
@@ -2503,7 +2503,7 @@ bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_AUTO_ESC:
         {
-            sal_Bool bVal = Any2Bool(rVal);
+            bool bVal = Any2Bool(rVal);
             if(bVal)
             {
                 if(nEsc < 0)
@@ -2652,7 +2652,7 @@ SfxPoolItem* SvxNoLinebreakItem::Clone( SfxItemPool* ) const
 
 SvStream& SvxNoLinebreakItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_Bool)GetValue() );
+    rStrm.WriteUChar( GetValue() );
     return rStrm;
 }
 
@@ -2660,8 +2660,8 @@ SvStream& SvxNoLinebreakItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion
 
 SfxPoolItem* SvxNoLinebreakItem::Create(SvStream& rStrm, sal_uInt16) const
 {
-    sal_Bool bValue;
-    rStrm.ReadUChar( bValue );
+    bool bValue;
+    rStrm.ReadCharAsBool( bValue );
     return new SvxNoLinebreakItem( bValue, Which() );
 }
 
@@ -2697,7 +2697,7 @@ SfxPoolItem* SvxNoHyphenItem::Clone( SfxItemPool* ) const
 
 SvStream& SvxNoHyphenItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_Bool) GetValue() );
+    rStrm.WriteUChar( GetValue() );
     return rStrm;
 }
 
@@ -2705,8 +2705,8 @@ SvStream& SvxNoHyphenItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ 
 
 SfxPoolItem* SvxNoHyphenItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
-    sal_Bool bValue;
-    rStrm.ReadUChar( bValue );
+    bool bValue;
+    rStrm.ReadCharAsBool( bValue );
     return new SvxNoHyphenItem( bValue, Which() );
 }
 
@@ -2928,7 +2928,7 @@ bool SvxEmphasisMarkItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) cons
 bool SvxEmphasisMarkItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = true;
+    bool bRet = true;
     switch( nMemberId )
     {
     case MID_EMPHASIS:
@@ -3006,7 +3006,7 @@ bool SvxTwoLinesItem::QueryValue( com::sun::star::uno::Any& rVal,
                                 sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = true;
+    bool bRet = true;
     switch( nMemberId )
     {
     case MID_TWOLINES:
@@ -3039,26 +3039,26 @@ bool SvxTwoLinesItem::PutValue( const com::sun::star::uno::Any& rVal,
                                     sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     OUString s;
     switch( nMemberId )
     {
     case MID_TWOLINES:
         bOn = Any2Bool( rVal );
-        bRet = sal_True;
+        bRet = true;
         break;
     case MID_START_BRACKET:
         if( rVal >>= s )
         {
             cStartBracket = s.isEmpty() ? 0 : s[ 0 ];
-            bRet = sal_True;
+            bRet = true;
         }
         break;
     case MID_END_BRACKET:
         if( rVal >>= s )
         {
             cEndBracket = s.isEmpty() ? 0 : s[ 0 ];
-            bRet = sal_True;
+            bRet = true;
         }
         break;
     }
@@ -3097,9 +3097,9 @@ SfxItemPresentation SvxTwoLinesItem::GetPresentation( SfxItemPresentation ePres,
 
 SfxPoolItem* SvxTwoLinesItem::Create( SvStream & rStrm, sal_uInt16 /*nVer*/) const
 {
-    sal_Bool _bOn;
+    bool _bOn;
     sal_Unicode cStart, cEnd;
-    rStrm.ReadUChar( _bOn ).ReadUInt16( cStart ).ReadUInt16( cEnd );
+    rStrm.ReadCharAsBool( _bOn ).ReadUInt16( cStart ).ReadUInt16( cEnd );
     return new SvxTwoLinesItem( _bOn, cStart, cEnd, Which() );
 }
 
@@ -3139,14 +3139,14 @@ SfxPoolItem* SvxCharRotateItem::Clone( SfxItemPool* ) const
 SfxPoolItem* SvxCharRotateItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
-    sal_Bool b;
-    rStrm.ReadUInt16( nVal ).ReadUChar( b );
+    bool b;
+    rStrm.ReadUInt16( nVal ).ReadCharAsBool( b );
     return new SvxCharRotateItem( nVal, b, Which() );
 }
 
 SvStream& SvxCharRotateItem::Store( SvStream & rStrm, sal_uInt16 ) const
 {
-    sal_Bool bFlag = IsFitToLine();
+    bool bFlag = IsFitToLine();
     rStrm.WriteUInt16( GetValue() ).WriteUChar( bFlag );
     return rStrm;
 }

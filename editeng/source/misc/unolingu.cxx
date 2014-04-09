@@ -170,7 +170,7 @@ sal_Bool SAL_CALL
         return xThes->hasLocale( rLocale );
     else if (!pLocaleSeq)       // if not already loaded save startup time by avoiding loading them now
         GetCfgLocales();
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     sal_Int32 nLen = pLocaleSeq->getLength();
     const Locale *pLocale = pLocaleSeq->getConstArray();
     const Locale *pEnd = pLocale + nLen;
@@ -263,7 +263,7 @@ sal_Bool SAL_CALL
         throw(uno::RuntimeException, std::exception)
 {
     GetSpell_Impl();
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (xSpell.is())
         bRes = xSpell->hasLanguage( nLanguage );
     return bRes;
@@ -277,7 +277,7 @@ sal_Bool SAL_CALL
               uno::RuntimeException, std::exception)
 {
     GetSpell_Impl();
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
     if (xSpell.is())
         bRes = xSpell->isValid( rWord, nLanguage, rProperties );
     return bRes;
@@ -374,7 +374,7 @@ sal_Bool SAL_CALL
         throw(uno::RuntimeException, std::exception)
 {
     GetHyph_Impl();
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (xHyph.is())
         bRes = xHyph->hasLocale( rLocale );
     return bRes;

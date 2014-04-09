@@ -59,7 +59,7 @@ private:
     struct ParaRestartData
     {
         sal_Int16       mnNumberingStartValue;
-        sal_Bool        mbParaIsNumberingRestart;
+        bool        mbParaIsNumberingRestart;
     };
 
     ParaRestartData maUndoData;
@@ -69,7 +69,7 @@ private:
 public:
     OutlinerUndoChangeParaNumberingRestart( Outliner* pOutliner, sal_Int32 nPara,
         sal_Int16 nOldNumberingStartValue, sal_Int16 mnNewNumberingStartValue,
-        sal_Bool  nOldbParaIsNumberingRestart, sal_Bool nbNewParaIsNumberingRestart );
+        bool  nOldbParaIsNumberingRestart, bool nbNewParaIsNumberingRestart );
 
     virtual void    Undo() SAL_OVERRIDE;
     virtual void    Redo() SAL_OVERRIDE;
@@ -116,7 +116,7 @@ public:
 class OLUndoExpand : public EditUndo
 {
     using SfxUndoAction::Repeat;
-    void Restore( sal_Bool bUndo );
+    void Restore( bool bUndo );
 public:
     OLUndoExpand( Outliner* pOut, sal_uInt16 nId );
     virtual ~OLUndoExpand();

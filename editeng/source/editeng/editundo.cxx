@@ -241,7 +241,7 @@ void EditUndoConnectParas::Undo()
     // For SplitContent ParagraphInserted can not be called yet because the
     // Outliner relies on the attributes to initialize the depth
 
-    sal_Bool bCall = GetEditEngine()->IsCallParaInsertedOrDeleted();
+    bool bCall = GetEditEngine()->IsCallParaInsertedOrDeleted();
     GetEditEngine()->SetCallParaInsertedOrDeleted(false);
 
     EditPaM aPaM = GetEditEngine()->SplitContent(nNode, nSepPos);
@@ -495,8 +495,8 @@ EditUndoSetAttribs::EditUndoSetAttribs(EditEngine* pEE, const ESelection& rESel,
     // When EditUndoSetAttribs actually is a RemoveAttribs this could be
     // /recognize by the empty itemset, but then it would have to be caught in
     // its own place, which possible a setAttribs does with an empty itemset.
-    bSetIsRemove = sal_False;
-    bRemoveParaAttribs = sal_False;
+    bSetIsRemove = false;
+    bRemoveParaAttribs = false;
     nRemoveWhich = 0;
     nSpecial = 0;
 }

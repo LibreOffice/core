@@ -92,10 +92,10 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
         aFont.SetSize( aSize );
     }
 
-    sal_Bool bTemp;
-    rStream.ReadUChar( bTemp ); aFont.SetOutline( bTemp );
-    rStream.ReadUChar( bTemp ); aFont.SetShadow( bTemp );
-    rStream.ReadUChar( bTemp ); aFont.SetTransparent( bTemp );
+    bool bTemp;
+    rStream.ReadCharAsBool( bTemp ); aFont.SetOutline( bTemp );
+    rStream.ReadCharAsBool( bTemp ); aFont.SetShadow( bTemp );
+    rStream.ReadCharAsBool( bTemp ); aFont.SetTransparent( bTemp );
     return aFont;
 }
 
@@ -127,7 +127,7 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
         const sal_Size    nOldPos = rStrm.Tell();
         // Ignore Errorcode when reading Bitmap,
         // see comment in SvxBulletItem::Store()
-        sal_Bool bOldError = rStrm.GetError() ? sal_True : sal_False;
+        bool bOldError = rStrm.GetError() ? sal_True : sal_False;
         ReadDIB(aBmp, rStrm, true);
 
         if ( !bOldError && rStrm.GetError() )

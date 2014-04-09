@@ -221,8 +221,8 @@ private:
     InfoArrayType       aPrevAttribs;
 
     sal_uInt8               nSpecial;
-    sal_Bool                bSetIsRemove;
-    sal_Bool                bRemoveParaAttribs;
+    bool                bSetIsRemove;
+    bool                bRemoveParaAttribs;
     sal_uInt16              nRemoveWhich;
 
     void                ImpSetSelection( EditView* pView );
@@ -235,8 +235,8 @@ public:
     SfxItemSet&         GetNewAttribs()     { return aNewAttribs; }
 
     void                SetSpecial( sal_uInt8 n )           { nSpecial = n; }
-    void                SetRemoveAttribs( sal_Bool b )      { bSetIsRemove = b; }
-    void                SetRemoveParaAttribs( sal_Bool b )  { bRemoveParaAttribs = b; }
+    void                SetRemoveAttribs( bool b )      { bSetIsRemove = b; }
+    void                SetRemoveParaAttribs( bool b )  { bRemoveParaAttribs = b; }
     void                SetRemoveWhich( sal_uInt16 n )      { nRemoveWhich = n; }
 
     virtual void        Undo() SAL_OVERRIDE;

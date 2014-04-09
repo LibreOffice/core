@@ -290,7 +290,7 @@ void EditCharAttribOutline::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribTab::EditCharAttribTab( const SfxVoidItem& rAttr, sal_uInt16 nPos )
     : EditCharAttrib( rAttr, nPos, nPos+1 )
 {
-    SetFeature( sal_True );
+    SetFeature( true );
 }
 
 void EditCharAttribTab::SetFont( SvxFont&, OutputDevice* )
@@ -303,7 +303,7 @@ void EditCharAttribTab::SetFont( SvxFont&, OutputDevice* )
 EditCharAttribLineBreak::EditCharAttribLineBreak( const SfxVoidItem& rAttr, sal_uInt16 nPos )
     : EditCharAttrib( rAttr, nPos, nPos+1 )
 {
-    SetFeature( sal_True );
+    SetFeature( true );
 }
 
 void EditCharAttribLineBreak::SetFont( SvxFont&, OutputDevice* )
@@ -316,7 +316,7 @@ void EditCharAttribLineBreak::SetFont( SvxFont&, OutputDevice* )
 EditCharAttribField::EditCharAttribField( const SvxFieldItem& rAttr, sal_uInt16 nPos )
     : EditCharAttrib( rAttr, nPos, nPos+1 )
 {
-    SetFeature( sal_True ); // !!!
+    SetFeature( true ); // !!!
     pTxtColor = 0;
     pFldColor = 0;
 }

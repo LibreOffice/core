@@ -59,14 +59,14 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
             case text::textfield::Type::EXTENDED_TIME:
             case text::textfield::Type::DATE:
                 {
-                    sal_Bool bIsDate = false;
+                    bool bIsDate = false;
                     xPropSet->getPropertyValue(UNO_TC_PROP_IS_DATE) >>= bIsDate;
 
                     if (bIsDate)
                     {
                         util::DateTime aDateTime = xPropSet->getPropertyValue(UNO_TC_PROP_DATE_TIME).get<util::DateTime>();
                         Date aDate(aDateTime.Day, aDateTime.Month, aDateTime.Year);
-                        sal_Bool bIsFixed = false;
+                        bool bIsFixed = false;
                         xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
 
                         SvxDateField* pData = new SvxDateField(aDate, bIsFixed ? SVXDATETYPE_FIX : SVXDATETYPE_VAR);
@@ -83,7 +83,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                         util::DateTime aDateTime = xPropSet->getPropertyValue(UNO_TC_PROP_DATE_TIME).get<util::DateTime>();
                         Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
 
-                        sal_Bool bIsFixed = false;
+                        bool bIsFixed = false;
                         xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
 
                         SvxExtTimeField* pData = new SvxExtTimeField(aTime, bIsFixed ? SVXTIMETYPE_FIX : SVXTIMETYPE_VAR);
@@ -128,7 +128,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
             case text::textfield::Type::EXTENDED_FILE:
                 {
                     OUString aPresentation;
-                    sal_Bool bIsFixed = false;
+                    bool bIsFixed = false;
                     sal_Int16 nFmt = text::FilenameDisplayFormat::FULL;
                     xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
                     xPropSet->getPropertyValue(UNO_TC_PROP_CURRENT_PRESENTATION) >>= aPresentation;
@@ -149,8 +149,8 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                 }
             case text::textfield::Type::AUTHOR:
                 {
-                    sal_Bool bIsFixed = false;
-                    sal_Bool bFullName = false;
+                    bool bIsFixed = false;
+                    bool bFullName = false;
                     sal_Int16 nFmt = -1;
                     OUString aPresentation, aContent, aFirstName, aLastName;
                     xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;

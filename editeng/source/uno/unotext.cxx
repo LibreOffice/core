@@ -444,7 +444,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyNa
         if ( pMap )
         {
             ESelection aSel( GetSelection() );
-            sal_Bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
+            bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
 
             if( nPara == -1 && !bParaAttrib )
             {
@@ -561,7 +561,7 @@ bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const SfxIt
             SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : NULL;
             if(pForwarder && pSelection)
             {
-                sal_Bool bParaIsNumberingRestart = sal_False;
+                bool bParaIsNumberingRestart = false;
                 if( aValue >>= bParaIsNumberingRestart )
                 {
                     pForwarder->SetParaIsNumberingRestart( pSelection->nStartPara, bParaIsNumberingRestart );
@@ -572,7 +572,7 @@ bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const SfxIt
         break;
     case EE_PARA_BULLETSTATE:
         {
-            sal_Bool bBullet = sal_True;
+            bool bBullet = true;
             if( aValue >>= bBullet )
             {
                 SfxBoolItem aItem( EE_PARA_BULLETSTATE, bBullet );
@@ -738,7 +738,7 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxIt
 
     case EE_PARA_BULLETSTATE:
         {
-            sal_Bool bState = sal_False;
+            bool bState = false;
             if( rSet.GetItemState( EE_PARA_BULLETSTATE, true ) & (SFX_ITEM_SET|SFX_ITEM_DEFAULT))
             {
                 SfxBoolItem* pItem = (SfxBoolItem*)rSet.GetItem( EE_PARA_BULLETSTATE, true );
@@ -804,7 +804,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUSt
 
             if( pMap )
             {
-                sal_Bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
+                bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
 
                 if( (nPara == -1) && !bParaAttrib )
                 {
@@ -850,7 +850,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUSt
             }
         }
 
-        sal_Bool bNeedsUpdate = sal_False;
+        bool bNeedsUpdate = false;
 
         if( pNewParaSet )
         {
@@ -863,7 +863,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUSt
                     pForwarder->SetParaAttribs( nTempPara, aSet );
                     nTempPara++;
                 }
-                bNeedsUpdate = sal_True;
+                bNeedsUpdate = true;
             }
 
             delete pNewParaSet;
@@ -875,7 +875,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUSt
             if( pNewAttrSet->Count() )
             {
                 pForwarder->QuickSetAttribs( *pNewAttrSet, GetSelection() );
-                bNeedsUpdate = sal_True;
+                bNeedsUpdate = true;
             }
             delete pNewAttrSet;
             delete pOldAttrSet;
@@ -1083,13 +1083,13 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
             pSet = new SfxItemSet( pForwarder->GetAttribs( aSel, EditEngineAttribs_OnlyHard ) );
         }
 
-        sal_Bool bUnknownPropertyFound = sal_False;
+        bool bUnknownPropertyFound = false;
         for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
         {
             const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry( *pNames++ );
             if( NULL == pMap )
             {
-                bUnknownPropertyFound = sal_True;
+                bUnknownPropertyFound = true;
                 break;
             }
             bUnknownPropertyFound = !_getOnePropertyStates(pSet, pMap, *pState++);
@@ -1287,7 +1287,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
                 return uno::Any( (sal_Int16)-1 );
 
             case WID_PARAISNUMBERINGRESTART:
-                return uno::Any( (sal_Bool)sal_False );
+                return uno::Any( false );
 
             default:
                 {
@@ -2104,7 +2104,7 @@ void SvxPropertyValuesToItemSet(
             {
                 if( pForwarder )
                 {
-                    sal_Bool bParaIsNumberingRestart = sal_False;
+                    bool bParaIsNumberingRestart = false;
                     if( !(pProps[i].Value >>= bParaIsNumberingRestart) )
                         throw lang::IllegalArgumentException();
 

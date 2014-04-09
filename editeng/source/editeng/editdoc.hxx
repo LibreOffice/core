@@ -46,7 +46,7 @@ class SvxTabStop;
 
 void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent = true, short nScriptType = 0 );
 sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, short nScriptType );
-sal_Bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType );
+bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType );
 
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE );
 
@@ -62,17 +62,17 @@ struct EPaM
     EPaM( sal_Int32 nP, sal_Int32 nI ) : nPara(nP), nIndex(nI) {}
     EPaM( const EPaM& r) : nPara(r.nPara), nIndex(r.nIndex) {}
     EPaM& operator = ( const EPaM& r )  { nPara = r.nPara; nIndex = r.nIndex; return *this; }
-    inline sal_Bool operator == ( const EPaM& r ) const;
-    inline sal_Bool operator < ( const EPaM& r ) const;
+    inline bool operator == ( const EPaM& r ) const;
+    inline bool operator < ( const EPaM& r ) const;
 };
 
-inline sal_Bool EPaM::operator < ( const EPaM& r ) const
+inline bool EPaM::operator < ( const EPaM& r ) const
 {
     return ( ( nPara < r.nPara ) ||
              ( ( nPara == r.nPara ) && nIndex < r.nIndex ) ) ? sal_True : sal_False;
 }
 
-inline sal_Bool EPaM::operator == ( const EPaM& r ) const
+inline bool EPaM::operator == ( const EPaM& r ) const
 {
     return ( ( nPara == r.nPara ) && ( nIndex == r.nIndex ) ) ? sal_True : sal_False;
 }
@@ -274,9 +274,9 @@ public:
     void            ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNewChars, SfxItemPool& rItemPool );
     void            CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDelChars, SfxItemPool& rItemPool );
     void            AppendAttribs( ContentNode* pNextNode );
-    void            CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool, sal_Bool bKeepEndingAttribs );
+    void            CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool, bool bKeepEndingAttribs );
 
-    void            SetStyleSheet( SfxStyleSheet* pS, sal_Bool bRecalcFont = sal_True );
+    void            SetStyleSheet( SfxStyleSheet* pS, bool bRecalcFont = true );
     void            SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyle );
     SfxStyleSheet*  GetStyleSheet() { return aContentAttribs.GetStyleSheet(); }
     const SfxStyleSheet* GetStyleSheet() const { return aContentAttribs.GetStyleSheet(); }
@@ -363,8 +363,8 @@ struct ExtraPortionInfo
     sal_uInt16  nMaxCompression100thPercent;
 
     sal_uInt8    nAsianCompressionTypes;
-    sal_Bool    bFirstCharIsRightPunktuation;
-    sal_Bool    bCompressed;
+    bool    bFirstCharIsRightPunktuation;
+    bool    bCompressed;
 
     sal_Int32*    pOrgDXArray;
     ::std::vector< sal_Int32 > lineBreaksList;
@@ -434,12 +434,12 @@ public:
 
     void        SetRightToLeft( sal_uInt8 b )    { nRightToLeft = b; }
     sal_uInt8        GetRightToLeft() const      { return nRightToLeft; }
-    sal_Bool        IsRightToLeft() const       { return (nRightToLeft&1); }
+    bool        IsRightToLeft() const       { return (nRightToLeft&1); }
 
     sal_Unicode GetExtraValue() const       { return nExtraValue; }
     void        SetExtraValue( sal_Unicode n )  { nExtraValue = n; }
 
-    sal_Bool        HasValidSize() const        { return aOutSz.Width() != (-1); }
+    bool        HasValidSize() const        { return aOutSz.Width() != (-1); }
 
     ExtraPortionInfo*   GetExtraInfos() const { return pExtraInfos; }
     void                SetExtraInfos( ExtraPortionInfo* p ) { delete pExtraInfos; pExtraInfos = p; }
@@ -502,10 +502,10 @@ public:
                     EditLine( const EditLine& );
                     ~EditLine();
 
-    sal_Bool            IsIn( sal_Int32 nIndex ) const
+    bool            IsIn( sal_Int32 nIndex ) const
                         { return ( (nIndex >= nStart ) && ( nIndex < nEnd ) ); }
 
-    sal_Bool            IsIn( sal_Int32 nIndex, sal_Bool bInclEnd ) const
+    bool            IsIn( sal_Int32 nIndex, bool bInclEnd ) const
                         { return ( ( nIndex >= nStart ) && ( bInclEnd ? ( nIndex <= nEnd ) : ( nIndex < nEnd ) ) ); }
 
     void            SetStart( sal_Int32 n )            { nStart = n; }
@@ -549,7 +549,7 @@ public:
     void            SetInvalid()                    { bInvalid = true; }
     void            SetValid()                      { bInvalid = false; }
 
-    sal_Bool            IsEmpty() const                 { return (nEnd > nStart) ? sal_False : sal_True; }
+    bool            IsEmpty() const                 { return (nEnd > nStart) ? sal_False : sal_True; }
 
     CharPosArrayType& GetCharPosArray();
     const CharPosArrayType& GetCharPosArray() const;
@@ -557,8 +557,8 @@ public:
     EditLine*       Clone() const;
 
     EditLine&   operator = ( const EditLine& rLine );
-    friend sal_Bool operator == ( const EditLine& r1,  const EditLine& r2  );
-    friend sal_Bool operator != ( const EditLine& r1,  const EditLine& r2  );
+    friend bool operator == ( const EditLine& r1,  const EditLine& r2  );
+    friend bool operator != ( const EditLine& r1,  const EditLine& r2  );
 };
 
 
@@ -605,10 +605,10 @@ private:
     sal_uInt16             nBulletX;
     sal_Int32              nInvalidDiff;
 
-    sal_Bool                bInvalid            : 1;
-    sal_Bool                bSimple             : 1;    // only linear Tap
-    sal_Bool                bVisible            : 1;    // Belongs to the node!
-    sal_Bool                bForceRepaint       : 1;
+    bool                bInvalid            : 1;
+    bool                bSimple             : 1;    // only linear Tap
+    bool                bVisible            : 1;    // Belongs to the node!
+    bool                bForceRepaint       : 1;
 
                         ParaPortion( const ParaPortion& );
 
@@ -621,12 +621,12 @@ public:
     EditLineList&       GetLines()                  { return aLineList; }
     const EditLineList& GetLines() const { return aLineList; }
 
-    sal_Bool                IsInvalid() const           { return bInvalid; }
-    sal_Bool                IsSimpleInvalid()   const   { return bSimple; }
-    void                SetValid()                  { bInvalid = sal_False; bSimple = sal_True;}
+    bool                IsInvalid() const           { return bInvalid; }
+    bool                IsSimpleInvalid()   const   { return bSimple; }
+    void                SetValid()                  { bInvalid = false; bSimple = true;}
 
-    sal_Bool                MustRepaint() const         { return bForceRepaint; }
-    void                SetMustRepaint( sal_Bool bRP )  { bForceRepaint = bRP; }
+    bool                MustRepaint() const         { return bForceRepaint; }
+    void                SetMustRepaint( bool bRP )  { bForceRepaint = bRP; }
 
     sal_uInt16              GetBulletX() const          { return nBulletX; }
     void                SetBulletX( sal_uInt16 n )      { nBulletX = n; }
@@ -634,10 +634,10 @@ public:
     void                MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff);
     void                MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 nEnd );
 
-    void                SetVisible( sal_Bool bVisible );
+    void                SetVisible( bool bVisible );
     bool                IsVisible() const { return bVisible; }
 
-    sal_Bool            IsEmpty() { return GetTextPortions().Count() == 1 && GetTextPortions()[0]->GetLen() == 0; }
+    bool            IsEmpty() { return GetTextPortions().Count() == 1 && GetTextPortions()[0]->GetLen() == 0; }
 
     long                GetHeight() const           { return ( bVisible ? nHeight : 0 ); }
     sal_Int32           GetFirstLineOffset() const  { return ( bVisible ? nFirstLineOffset : 0 ); }
@@ -778,7 +778,7 @@ public:
     void            SetModifyHdl( const Link& rLink ) { aModifyHdl = rLink; }
     Link            GetModifyHdl() const { return aModifyHdl; }
 
-    void            CreateDefFont( sal_Bool bUseStyles );
+    void            CreateDefFont( bool bUseStyles );
     const SvxFont&  GetDefFont() { return aDefFont; }
 
     void            SetDefTab( sal_uInt16 nTab )    { nDefTab = nTab ? nTab : DEFTAB; }
@@ -794,7 +794,7 @@ public:
     EditPaM         RemoveText();
     EditPaM         RemoveChars( EditPaM aPaM, sal_Int32 nChars );
     EditPaM         InsertText( EditPaM aPaM, const OUString& rStr );
-    EditPaM         InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs );
+    EditPaM         InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs );
     EditPaM         InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem );
     EditPaM         ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight );
 
@@ -815,8 +815,8 @@ public:
     void            InsertAttrib( const SfxPoolItem& rItem, ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd );
     void            InsertAttrib( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, const SfxPoolItem& rPoolItem );
     void            InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, const SfxPoolItem& rPoolItem );
-    sal_Bool            RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt16 nWhich = 0 );
-    sal_Bool            RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich = 0 );
+    bool            RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt16 nWhich = 0 );
+    bool            RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich = 0 );
     void            FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos, SfxItemSet& rCurSet );
 
     sal_Int32 GetPos(const ContentNode* pNode) const;
@@ -847,7 +847,7 @@ bool CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart);
 class EditEngineItemPool : public SfxItemPool
 {
 public:
-                        EditEngineItemPool( sal_Bool bPersistenRefCounts );
+                        EditEngineItemPool( bool bPersistenRefCounts );
 protected:
                         virtual ~EditEngineItemPool();
 public:

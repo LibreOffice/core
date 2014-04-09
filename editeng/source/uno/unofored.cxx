@@ -190,8 +190,8 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
         // get list of char attribs
         rEditEngine.GetCharAttribs( nPara, aAttribs );
 
-        sal_Bool bEmpty = sal_True;     // we found no item inside the selection of this paragraph
-        sal_Bool bGaps  = sal_False;    // we found items but theire gaps between them
+        bool bEmpty = true;     // we found no item inside the selection of this paragraph
+        bool bGaps  = false;    // we found items but theire gaps between them
         sal_Int32 nLastEnd = nPos;
 
         const SfxPoolItem* pParaItem = NULL;
@@ -200,7 +200,7 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
         {
             DBG_ASSERT(i->pAttr, "GetCharAttribs gives corrupt data");
 
-            const sal_Bool bEmptyPortion = i->nStart == i->nEnd;
+            const bool bEmptyPortion = i->nStart == i->nEnd;
             if((!bEmptyPortion && i->nStart >= nEndPos) ||
                (bEmptyPortion && i->nStart > nEndPos))
                 break;  // break if we are already behind our selection
@@ -223,16 +223,16 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
                 pParaItem = i->pAttr;
 
             if( bEmpty )
-                bEmpty = sal_False;
+                bEmpty = false;
 
             if(!bGaps && i->nStart > nLastEnd)
-                bGaps = sal_True;
+                bGaps = true;
 
             nLastEnd = i->nEnd;
         }
 
         if( !bEmpty && !bGaps && nLastEnd < ( nEndPos - 1 ) )
-            bGaps = sal_True;
+            bGaps = true;
 
         if( bEmpty )
             eParaState = SFX_ITEM_DEFAULT;

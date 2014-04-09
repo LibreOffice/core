@@ -29,12 +29,12 @@
 
 OUString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, const IntlWrapper* pIntl )
 {
-    sal_Bool bNeg = sal_False;
+    bool bNeg = false;
     sal_Int32 nRet = 0;
 
     if ( nVal < 0 )
     {
-        bNeg = sal_True;
+        bNeg = true;
         nVal *= -1;
     }
 

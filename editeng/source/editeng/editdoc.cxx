@@ -103,9 +103,9 @@ sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, short nScriptType )
     return nId;
 }
 
-sal_Bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType )
+bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType )
 {
-    sal_Bool bValid = sal_True;
+    bool bValid = true;
 
     switch ( nItemId )
     {
@@ -531,8 +531,8 @@ ExtraPortionInfo::ExtraPortionInfo()
 , nPortionOffsetX(0)
 , nMaxCompression100thPercent(0)
 , nAsianCompressionTypes(0)
-, bFirstCharIsRightPunktuation(sal_False)
-, bCompressed(sal_False)
+, bFirstCharIsRightPunktuation(false)
+, bCompressed(false)
 , pOrgDXArray(NULL)
 , lineBreaksList()
 {
@@ -555,10 +555,10 @@ ParaPortion::ParaPortion( ContentNode* pN )
 {
 
     pNode               = pN;
-    bInvalid            = sal_True;
-    bVisible            = sal_True;
-    bSimple             = sal_False;
-    bForceRepaint       = sal_False;
+    bInvalid            = true;
+    bVisible            = true;
+    bSimple             = false;
+    bForceRepaint       = false;
     nInvalidPosStart    = 0;
     nInvalidDiff        = 0;
     nHeight             = 0;
@@ -572,7 +572,7 @@ ParaPortion::~ParaPortion()
 
 void ParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
 {
-    if ( bInvalid == sal_False )
+    if ( bInvalid == false )
     {
 //      nInvalidPosEnd = nStart;    // ??? => CreateLines
         nInvalidPosStart = ( nDiff >= 0 ) ? nStart : ( nStart + nDiff );
@@ -598,17 +598,17 @@ void ParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
             DBG_ASSERT( ( nDiff >= 0 ) || ( (nStart+nDiff) >= 0 ), "MarkInvalid: Diff out of Range" );
             nInvalidPosStart = std::min( nInvalidPosStart, ( nDiff < 0 ? nStart+nDiff : nDiff ) );
             nInvalidDiff = 0;
-            bSimple = sal_False;
+            bSimple = false;
         }
     }
-    bInvalid = sal_True;
+    bInvalid = true;
     aScriptInfos.clear();
     aWritingDirectionInfos.clear();
 }
 
 void ParaPortion::MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 /* nEnd */ )
 {
-    if ( bInvalid == sal_False )
+    if ( bInvalid == false )
     {
         nInvalidPosStart = nStart;
 //      nInvalidPosEnd = nEnd;
@@ -619,8 +619,8 @@ void ParaPortion::MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 /* nEnd */ )
 //      nInvalidPosEnd = pNode->Len();
     }
     nInvalidDiff = 0;
-    bInvalid = sal_True;
-    bSimple = sal_False;
+    bInvalid = true;
+    bSimple = false;
     aScriptInfos.clear();
     aWritingDirectionInfos.clear();
 }
@@ -641,7 +641,7 @@ sal_Int32 ParaPortion::GetLineNumber( sal_Int32 nIndex ) const
     return (aLineList.Count()-1);
 }
 
-void ParaPortion::SetVisible( sal_Bool bMakeVisible )
+void ParaPortion::SetVisible( bool bMakeVisible )
 {
     bVisible = bMakeVisible;
 }
@@ -1026,21 +1026,21 @@ EditLine* EditLine::Clone() const
     return pL;
 }
 
-sal_Bool operator == ( const EditLine& r1,  const EditLine& r2  )
+bool operator == ( const EditLine& r1,  const EditLine& r2  )
 {
     if ( r1.nStart != r2.nStart )
-        return sal_False;
+        return false;
 
     if ( r1.nEnd != r2.nEnd )
-        return sal_False;
+        return false;
 
     if ( r1.nStartPortion != r2.nStartPortion )
-        return sal_False;
+        return false;
 
     if ( r1.nEndPortion != r2.nEndPortion )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 EditLine& EditLine::operator = ( const EditLine& r )
@@ -1053,7 +1053,7 @@ EditLine& EditLine::operator = ( const EditLine& r )
 }
 
 
-sal_Bool operator != ( const EditLine& r1,  const EditLine& r2  )
+bool operator != ( const EditLine& r1,  const EditLine& r2  )
 {
     return !( r1 == r2 );
 }
@@ -1510,7 +1510,7 @@ void ContentNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemP
 #endif
 }
 
-void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool, sal_Bool bKeepEndingAttribs )
+void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool, bool bKeepEndingAttribs )
 {
     DBG_ASSERT( pPrevNode, "Copy of attributes to a null pointer?" );
 
@@ -1640,7 +1640,7 @@ void ContentNode::SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyl
         GetContentAttribs().GetItems(), pS == NULL );
 }
 
-void ContentNode::SetStyleSheet( SfxStyleSheet* pS, sal_Bool bRecalcFont )
+void ContentNode::SetStyleSheet( SfxStyleSheet* pS, bool bRecalcFont )
 {
     aContentAttribs.SetStyleSheet( pS );
     if ( bRecalcFont )
@@ -1770,7 +1770,7 @@ SvxTabStop ContentAttribs::FindTabStop( sal_Int32 nCurPos, sal_uInt16 nDefTab )
 
 void ContentAttribs::SetStyleSheet( SfxStyleSheet* pS )
 {
-    sal_Bool bStyleChanged = ( pStyle != pS );
+    bool bStyleChanged = ( pStyle != pS );
     pStyle = pS;
     // Only when other style sheet, not when current style sheet modified
     if ( pStyle && bStyleChanged )
@@ -1969,7 +1969,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, s
         rFont = aPrevFont;  // => The same ImpPointer for IsSameInstance
 }
 
-void EditDoc::CreateDefFont( sal_Bool bUseStyles )
+void EditDoc::CreateDefFont( bool bUseStyles )
 {
     SfxItemSet aTmpSet( GetItemPool(), EE_PARA_START, EE_CHAR_END );
     CreateFont( aDefFont, aTmpSet );
@@ -2234,7 +2234,7 @@ EditPaM EditDoc::InsertText( EditPaM aPaM, const OUString& rStr )
     return aPaM;
 }
 
-EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs )
+EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
 {
     DBG_ASSERT( aPaM.GetNode(), "Blinder PaM in EditDoc::InsertParaBreak" );
     ContentNode* pCurNode = aPaM.GetNode();
@@ -2361,14 +2361,14 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal
     SetModified(true);
 }
 
-sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt16 nWhich )
+bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt16 nWhich )
 {
     EditCharAttrib* pStarting;
     EditCharAttrib* pEnding;
     return RemoveAttribs( pNode, nStart, nEnd, pStarting, pEnding, nWhich );
 }
 
-sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich )
+bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich )
 {
 
     DBG_ASSERT( pNode, "What to do with the attribute?" );
@@ -2993,7 +2993,7 @@ SvxColorItem* SvxColorList::GetObject( sal_Int32 nIndex )
     return ( nIndex >= (sal_Int32)aColorList.size() ) ? NULL : aColorList[ nIndex ];
 }
 
-EditEngineItemPool::EditEngineItemPool( sal_Bool bPersistenRefCounts )
+EditEngineItemPool::EditEngineItemPool( bool bPersistenRefCounts )
     : SfxItemPool( "EditEngineItemPool", EE_ITEMS_START, EE_ITEMS_END,
                     aItemInfos, 0, bPersistenRefCounts )
 {
@@ -3021,7 +3021,7 @@ SvStream& EditEngineItemPool::Store( SvStream& rStream ) const
     // stored until then...
 
     long nVersion = rStream.GetVersion();
-    sal_Bool b31Format = ( nVersion && ( nVersion <= SOFFICE_FILEFORMAT_31 ) )
+    bool b31Format = ( nVersion && ( nVersion <= SOFFICE_FILEFORMAT_31 ) )
                         ? sal_True : sal_False;
 
     EditEngineItemPool* pThis = (EditEngineItemPool*)this;

@@ -59,10 +59,10 @@ public:
         mnEEIndex(0),
         mnFieldOffset(0),
         mnFieldLen(0),
-        mbInField(sal_False),
+        mbInField(false),
         mnBulletOffset(0),
         mnBulletLen(0),
-        mbInBullet(sal_False) {};
+        mbInBullet(false) {};
     ~SvxAccessibleTextIndex() {};
 
     // Get/Set current paragraph
@@ -102,17 +102,17 @@ public:
     void SetFieldOffset( sal_Int32 nOffset, sal_Int32 nLen ) { mnFieldOffset = nOffset; mnFieldLen = nLen; }
     sal_Int32 GetFieldOffset() const { return mnFieldOffset; }
     sal_Int32 GetFieldLen() const { return mnFieldLen; }
-    void AreInField( sal_Bool bInField = sal_True ) { mbInField = bInField; }
-    sal_Bool InField() const { return mbInField; }
+    void AreInField( bool bInField = true ) { mbInField = bInField; }
+    bool InField() const { return mbInField; }
 
     void SetBulletOffset( sal_Int32 nOffset, sal_Int32 nLen ) { mnBulletOffset = nOffset; mnBulletLen = nLen; }
     sal_Int32 GetBulletOffset() const { return mnBulletOffset; }
     sal_Int32 GetBulletLen() const { return mnBulletLen; }
-    void AreInBullet( sal_Bool bInBullet = sal_True ) { mbInBullet = bInBullet; }
-    sal_Bool InBullet() const { return mbInBullet; }
+    void AreInBullet( bool bInBullet = true ) { mbInBullet = bInBullet; }
+    bool InBullet() const { return mbInBullet; }
 
     /// returns false if the given range is non-editable (e.g. contains bullets or _parts_ of fields)
-    sal_Bool IsEditableRange( const SvxAccessibleTextIndex& rEnd ) const;
+    bool IsEditableRange( const SvxAccessibleTextIndex& rEnd ) const;
 
 private:
     sal_Int32 mnPara;
@@ -120,10 +120,10 @@ private:
     sal_Int32 mnEEIndex;
     sal_Int32 mnFieldOffset;
     sal_Int32 mnFieldLen;
-    sal_Bool  mbInField;
+    bool  mbInField;
     sal_Int32 mnBulletOffset;
     sal_Int32 mnBulletLen;
-    sal_Bool  mbInBullet;
+    bool  mbInBullet;
 };
 
 ESelection MakeEESelection( const SvxAccessibleTextIndex& rStart, const SvxAccessibleTextIndex& rEnd )
@@ -177,10 +177,10 @@ void SvxAccessibleTextIndex::SetEEIndex( sal_uInt16 nEEIndex, const SvxTextForwa
 {
     // reset
     mnFieldOffset = 0;
-    mbInField = sal_False;
+    mbInField = false;
     mnFieldLen = 0;
     mnBulletOffset = 0;
-    mbInBullet = sal_False;
+    mbInBullet = false;
     mnBulletLen = 0;
 
     // set known values
@@ -223,10 +223,10 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
 {
     // reset
     mnFieldOffset = 0;
-    mbInField = sal_False;
+    mbInField = false;
     mnFieldLen = 0;
     mnBulletOffset = 0;
-    mbInBullet = sal_False;
+    mbInBullet = false;
     mnBulletLen = 0;
 
     // set known values
@@ -283,21 +283,21 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
     }
 }
 
-sal_Bool SvxAccessibleTextIndex::IsEditableRange( const SvxAccessibleTextIndex& rEnd ) const
+bool SvxAccessibleTextIndex::IsEditableRange( const SvxAccessibleTextIndex& rEnd ) const
 {
     if( GetIndex() > rEnd.GetIndex() )
         return rEnd.IsEditableRange( *this );
 
     if( InBullet() || rEnd.InBullet() )
-        return sal_False;
+        return false;
 
     if( InField() && GetFieldOffset() )
-        return sal_False; // within field
+        return false; // within field
 
     if( rEnd.InField() && rEnd.GetFieldOffset() >= rEnd.GetFieldLen() - 1 )
-        return sal_False; // within field
+        return false; // within field
 
-    return sal_True;
+    return true;
 }
 
 

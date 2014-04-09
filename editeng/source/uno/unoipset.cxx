@@ -85,9 +85,9 @@ void SvxItemPropertySet::ClearAllUsrAny()
 
 
 
-sal_Bool SvxUnoCheckForPositiveValue( const uno::Any& rVal )
+bool SvxUnoCheckForPositiveValue( const uno::Any& rVal )
 {
-    sal_Bool bConvert = sal_True; // the default is that all metric items must be converted
+    bool bConvert = true; // the default is that all metric items must be converted
     sal_Int32 nValue = 0;
     if( rVal >>= nValue )
         bConvert = (nValue > 0);

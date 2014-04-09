@@ -105,7 +105,7 @@ void Paragraph::SetParaIsNumberingRestart( bool bParaIsNumberingRestart )
         mnNumberingStartValue = -1;
 }
 
-void ParagraphList::Clear( sal_Bool bDestroyParagraphs )
+void ParagraphList::Clear( bool bDestroyParagraphs )
 {
     if ( bDestroyParagraphs )
     {
@@ -173,21 +173,21 @@ void ParagraphList::MoveParagraphs( sal_Int32 nStart, sal_Int32 nDest, sal_Int32
     }
 }
 
-sal_Bool ParagraphList::HasChildren( Paragraph* pParagraph ) const
+bool ParagraphList::HasChildren( Paragraph* pParagraph ) const
 {
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
     return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) ) ? sal_True : sal_False;
 }
 
-sal_Bool ParagraphList::HasHiddenChildren( Paragraph* pParagraph ) const
+bool ParagraphList::HasHiddenChildren( Paragraph* pParagraph ) const
 {
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
     return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && !pNext->IsVisible() ) ? sal_True : sal_False;
 }
 
-sal_Bool ParagraphList::HasVisibleChildren( Paragraph* pParagraph ) const
+bool ParagraphList::HasVisibleChildren( Paragraph* pParagraph ) const
 {
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );

@@ -175,13 +175,13 @@ namespace accessibility
         void                        CorrectTextSegment( TextSegment&    aTextSegment,
                                                         int             nPara   ) const;
 
-        sal_Bool                    SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
+        bool                    SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                   sal_Int32 nEndPara, sal_Int32 nEndIndex );
-        sal_Bool                    CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
+        bool                    CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                               sal_Int32 nEndPara, sal_Int32 nEndIndex );
 
         Rectangle                   GetParagraphBoundingBox() const;
-        sal_Bool                    RemoveLineBreakCount( sal_Int32& rIndex );
+        bool                    RemoveLineBreakCount( sal_Int32& rIndex );
 
     private:
 
@@ -380,12 +380,12 @@ namespace accessibility
                                               mxThis);
     }
 
-    sal_Bool AccessibleStaticTextBase_Impl::SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
+    bool AccessibleStaticTextBase_Impl::SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                           sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
 
         if( !mpTextParagraph )
-            return sal_False;
+            return false;
 
         try
         {
@@ -394,22 +394,22 @@ namespace accessibility
         }
         catch( const uno::RuntimeException& )
         {
-            return sal_False;
+            return false;
         }
     }
 
-    sal_Bool AccessibleStaticTextBase_Impl::CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
+    bool AccessibleStaticTextBase_Impl::CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                       sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
 
         if( !mpTextParagraph )
-            return sal_False;
+            return false;
 
         try
         {
             SvxEditViewForwarder& rCacheVF = mpTextParagraph->GetEditViewForwarder( true );
             mpTextParagraph->GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
-            sal_Bool aRetVal;
+            bool aRetVal;
 
             // save current selection
             ESelection aOldSelection;
@@ -423,7 +423,7 @@ namespace accessibility
         }
         catch( const uno::RuntimeException& )
         {
-            return sal_False;
+            return false;
         }
     }
 
@@ -444,14 +444,14 @@ namespace accessibility
     //the input argument is the index(including "\n" ) in the string.
     //the function will calculate the actual index(not including "\n") in the string.
     //and return true if the index is just at a "\n"
-    sal_Bool AccessibleStaticTextBase_Impl::RemoveLineBreakCount( sal_Int32& rIndex )
+    bool AccessibleStaticTextBase_Impl::RemoveLineBreakCount( sal_Int32& rIndex )
     {
         // get the total char number inside the cell.
         sal_Int32 i, nCount, nParas;
         for( i=0, nCount=0, nParas=GetParagraphCount(); i<nParas; ++i )
             nCount += GetParagraph(i).getCharacterCount();
         nCount = nCount + (nParas-1);
-        if( nCount == 0 &&  rIndex == 0) return sal_False;
+        if( nCount == 0 &&  rIndex == 0) return false;
 
 
         sal_Int32 nCurrPara, nCurrCount;
@@ -473,24 +473,24 @@ namespace accessibility
                 if ( (nCurrPara+1) == nParaCount )
                 {
                     rIndex++;
-                    return sal_False;
+                    return false;
                 }
                 else
                 {
-                    return sal_True;
+                    return true;
                 }
             }
             else if ( rIndex < nLineBreakPos )
             {
                 rIndex -= nLineBreakCount;
-                return sal_False;
+                return false;
             }
             else
             {
                 nLineBreakCount++;
             }
         }
-        return sal_False;
+        return false;
     }
 
 
@@ -827,7 +827,7 @@ namespace accessibility
         {
             return OUString();
         }
-        sal_Bool bStart = mpImpl->RemoveLineBreakCount( nStartIndex );
+        bool bStart = mpImpl->RemoveLineBreakCount( nStartIndex );
         //if the start index is just at a "\n", we need to begin from the next char
         if ( bStart )
         {
@@ -836,13 +836,13 @@ namespace accessibility
         //we need to find out whether the previous position of the current endindex is at "\n" or not
         //if yes we need to mark it and add "\n" at the end of the result
         sal_Int32 nTemp = nEndIndex - 1;
-        sal_Bool bEnd = mpImpl->RemoveLineBreakCount( nTemp );
-        sal_Bool bTemp = mpImpl->RemoveLineBreakCount( nEndIndex );
+        bool bEnd = mpImpl->RemoveLineBreakCount( nTemp );
+        bool bTemp = mpImpl->RemoveLineBreakCount( nEndIndex );
         //if the below condition is true it indicates an empty paragraph with just a "\n"
         //so we need to set one "\n" flag to avoid duplication.
         if ( bStart && bEnd && ( nStartIndex == nEndIndex) )
         {
-            bEnd = sal_False;
+            bEnd = false;
         }
         //if the current endindex is at a "\n", we need to increase endindex by 1 to make sure
         //the char before "\n" is included. Because string returned by this function will not include
@@ -903,7 +903,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        sal_Bool bLineBreak = mpImpl->RemoveLineBreakCount( nIndex );
+        bool bLineBreak = mpImpl->RemoveLineBreakCount( nIndex );
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
         ::com::sun::star::accessibility::TextSegment aResult;
@@ -955,7 +955,7 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         sal_Int32 nOldIdx = nIndex;
-        sal_Bool bLineBreak =  mpImpl->RemoveLineBreakCount( nIndex );
+        bool bLineBreak =  mpImpl->RemoveLineBreakCount( nIndex );
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
         ::com::sun::star::accessibility::TextSegment aResult;
@@ -1001,7 +1001,7 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         sal_Int32 nTemp = nIndex+1;
-        sal_Bool bLineBreak = mpImpl->RemoveLineBreakCount( nTemp );
+        bool bLineBreak = mpImpl->RemoveLineBreakCount( nTemp );
         mpImpl->RemoveLineBreakCount( nIndex );
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 

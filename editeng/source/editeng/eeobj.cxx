@@ -92,11 +92,11 @@ uno::Sequence< datatransfer::DataFlavor > EditDataObject::getTransferDataFlavors
 
 sal_Bool EditDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException, std::exception)
 {
-    sal_Bool bSupported = sal_False;
+    bool bSupported = false;
 
     sal_uLong nT = SotExchange::GetFormat( rFlavor );
     if ( ( nT == SOT_FORMAT_STRING ) || ( nT == SOT_FORMAT_RTF ) || ( nT == SOT_FORMATSTR_ID_EDITENGINE ) )
-        bSupported = sal_True;
+        bSupported = true;
 
     return bSupported;
 }

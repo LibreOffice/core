@@ -111,7 +111,7 @@ bool SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
 */
 bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     style::LineSpacing aLSp;
@@ -156,13 +156,13 @@ bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     // fill with current data
     style::LineSpacing aLSp;
     uno::Any aAny;
-    sal_Bool bRet = QueryValue( aAny, bConvert ? CONVERT_TWIPS : 0 ) && ( aAny >>= aLSp );
+    bool bRet = QueryValue( aAny, bConvert ? CONVERT_TWIPS : 0 ) && ( aAny >>= aLSp );
 
     // get new data
     switch ( nMemberId )
@@ -932,7 +932,7 @@ SvxTabStopItem& SvxTabStopItem::operator=( const SvxTabStopItem& rTSI )
 
 bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -973,7 +973,7 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -1103,7 +1103,7 @@ SfxItemPresentation SvxTabStopItem::GetPresentation
 
     if ( ePres > SFX_ITEM_PRESENTATION_NONE )
     {
-        sal_Bool bComma = sal_False;
+        bool bComma = false;
 
         for ( sal_uInt16 i = 0; i < Count(); ++i )
         {
@@ -1117,7 +1117,7 @@ SfxItemPresentation SvxTabStopItem::GetPresentation
                 {
                     rText += " " + EE_RESSTR(GetMetricId(ePresUnit));
                 }
-                bComma = sal_True;
+                bComma = true;
             }
         }
     }
@@ -1302,7 +1302,7 @@ bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMe
 
     switch ( nMemberId )
     {
-        case MID_AUTO: rVal <<= (sal_Bool) bAuto; break;
+        case MID_AUTO: rVal <<= bAuto; break;
         case MID_NAME: rVal <<= OUString( GetValue() ); break;
         default: OSL_FAIL("Wrong MemberId!"); return false;
     }
@@ -1313,7 +1313,7 @@ bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMe
 bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet;
+    bool bRet;
     OUString aStr;
     switch ( nMemberId )
     {
@@ -1371,8 +1371,8 @@ SfxPoolItem* SvxScriptSpaceItem::Clone( SfxItemPool * ) const
 
 SfxPoolItem* SvxScriptSpaceItem::Create(SvStream & rStrm, sal_uInt16) const
 {
-    sal_Bool bFlag;
-    rStrm.ReadUChar( bFlag );
+    bool bFlag;
+    rStrm.ReadCharAsBool( bFlag );
     return new SvxScriptSpaceItem( bFlag, Which() );
 }
 
@@ -1424,8 +1424,8 @@ SfxPoolItem* SvxHangingPunctuationItem::Clone( SfxItemPool * ) const
 
 SfxPoolItem* SvxHangingPunctuationItem::Create(SvStream & rStrm, sal_uInt16) const
 {
-    sal_Bool nValue;
-    rStrm.ReadUChar( nValue );
+    bool nValue;
+    rStrm.ReadCharAsBool( nValue );
     return new SvxHangingPunctuationItem( nValue, Which() );
 }
 
@@ -1477,8 +1477,8 @@ SfxPoolItem* SvxForbiddenRuleItem::Clone( SfxItemPool * ) const
 
 SfxPoolItem* SvxForbiddenRuleItem::Create(SvStream & rStrm, sal_uInt16) const
 {
-    sal_Bool nValue;
-    rStrm.ReadUChar( nValue );
+    bool nValue;
+    rStrm.ReadCharAsBool( nValue );
     return new SvxForbiddenRuleItem( nValue, Which() );
 }
 
@@ -1619,8 +1619,8 @@ SfxPoolItem* SvxParaGridItem::Clone( SfxItemPool * ) const
 
 SfxPoolItem* SvxParaGridItem::Create(SvStream & rStrm, sal_uInt16) const
 {
-    sal_Bool bFlag;
-    rStrm.ReadUChar( bFlag );
+    bool bFlag;
+    rStrm.ReadCharAsBool( bFlag );
     return new SvxParaGridItem( bFlag, Which() );
 }
 

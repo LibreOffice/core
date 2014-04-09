@@ -28,7 +28,7 @@
     Description:    Is the printer valid
  --------------------------------------------------------------------*/
 
-inline sal_Bool IsValidPrinter( const Printer* pPtr )
+inline bool IsValidPrinter( const Printer* pPtr )
 {
     return pPtr->GetName().isEmpty() ? sal_False : sal_True;
 }

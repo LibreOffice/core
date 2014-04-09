@@ -210,7 +210,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
 
     // #108210#
     // Test if string length differ between original and CaseMapped
-    sal_Bool bCaseMapLengthDiffers(aTxt.getLength() != rTxt.getLength());
+    bool bCaseMapLengthDiffers(aTxt.getLength() != rTxt.getLength());
 
     const LanguageType eLang = LANGUAGE_DONTKNOW == GetLanguage()
                              ? LANGUAGE_SYSTEM : GetLanguage();
@@ -360,7 +360,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
     {
         // #108210#
         const OUString aNewText = CalcCaseMap(rTxt);
-        sal_Bool bCaseMapLengthDiffers(aNewText.getLength() != rTxt.getLength());
+        bool bCaseMapLengthDiffers(aNewText.getLength() != rTxt.getLength());
         sal_Int32 nWidth(0L);
 
         if(bCaseMapLengthDiffers)
@@ -543,7 +543,7 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
         {
             // #108210#
             const OUString aNewText = CalcCaseMap(rTxt);
-            sal_Bool bCaseMapLengthDiffers(aNewText.getLength() != rTxt.getLength());
+            bool bCaseMapLengthDiffers(aNewText.getLength() != rTxt.getLength());
 
             if(bCaseMapLengthDiffers)
             {
@@ -675,8 +675,8 @@ void SvxDoDrawCapital::DoSpace( const sal_Bool bDraw )
         sal_uLong nDiff = (sal_uLong)(aPos.X() - aSpacePos.X());
         if ( nDiff )
         {
-            sal_Bool bWordWise = pFont->IsWordLineMode();
-            sal_Bool bTrans = pFont->IsTransparent();
+            bool bWordWise = pFont->IsWordLineMode();
+            bool bTrans = pFont->IsTransparent();
             pFont->SetWordLineMode( false );
             pFont->SetTransparent( true );
             pFont->SetPhysFont( pOut );

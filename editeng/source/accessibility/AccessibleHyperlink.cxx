@@ -63,11 +63,11 @@ namespace accessibility
 
     sal_Bool SAL_CALL AccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex  ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
     {
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
         if ( isValid() && ( nIndex == 0 ) )
         {
             rTA.FieldClicked( *pFld, nPara, nRealIdx );
-            bRet = sal_True;
+            bRet = true;
         }
         return bRet;
     }

@@ -72,7 +72,7 @@ void OutlinerUndoChangeParaFlags::ImplChangeFlags( sal_uInt16 nFlags )
 
 OutlinerUndoChangeParaNumberingRestart::OutlinerUndoChangeParaNumberingRestart( Outliner* pOutliner, sal_Int32 nPara,
         sal_Int16 nOldNumberingStartValue, sal_Int16 nNewNumberingStartValue,
-        sal_Bool  bOldParaIsNumberingRestart, sal_Bool bNewParaIsNumberingRestart )
+        bool  bOldParaIsNumberingRestart, bool bNewParaIsNumberingRestart )
 : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
 {
     mnPara = nPara;
@@ -166,16 +166,16 @@ OLUndoExpand::~OLUndoExpand()
 }
 
 
-void OLUndoExpand::Restore( sal_Bool bUndo )
+void OLUndoExpand::Restore( bool bUndo )
 {
     DBG_ASSERT(pOutliner,"Undo:No Outliner");
     DBG_ASSERT(pOutliner->pEditEngine,"Outliner already deleted");
     Paragraph* pPara;
 
-    sal_Bool bExpand = sal_False;
+    bool bExpand = false;
     sal_uInt16 _nId = GetId();
     if((_nId == OLUNDO_EXPAND && !bUndo) || (_nId == OLUNDO_COLLAPSE && bUndo))
-        bExpand = sal_True;
+        bExpand = true;
     if( !pParas )
     {
         pPara = pOutliner->GetParagraph( nCount );
@@ -200,13 +200,13 @@ void OLUndoExpand::Restore( sal_Bool bUndo )
 
 void OLUndoExpand::Undo()
 {
-    Restore( sal_True );
+    Restore( true );
 }
 
 
 void OLUndoExpand::Redo()
 {
-    Restore( sal_False );
+    Restore( false );
 }
 
 

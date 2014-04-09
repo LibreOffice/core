@@ -55,8 +55,8 @@ using namespace ::com::sun::star;
 class SvxUnoFieldData_Impl
 {
 public:
-    sal_Bool    mbBoolean1;
-    sal_Bool    mbBoolean2;
+    bool    mbBoolean1;
+    bool    mbBoolean2;
     sal_Int32   mnInt32;
     sal_Int16   mnInt16;
     OUString    msString1;
@@ -252,15 +252,15 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
     switch( nServiceId )
     {
     case text::textfield::Type::DATE:
-        mpImpl->mbBoolean2 = sal_True;
+        mpImpl->mbBoolean2 = true;
         mpImpl->mnInt32 = SVXDATEFORMAT_STDSMALL;
-        mpImpl->mbBoolean1 = sal_False;
+        mpImpl->mbBoolean1 = false;
         break;
 
     case text::textfield::Type::EXTENDED_TIME:
     case text::textfield::Type::TIME:
-        mpImpl->mbBoolean2 = sal_False;
-        mpImpl->mbBoolean1 = sal_False;
+        mpImpl->mbBoolean2 = false;
+        mpImpl->mbBoolean1 = false;
         mpImpl->mnInt32 = SVXTIMEFORMAT_STANDARD;
         break;
 
@@ -269,14 +269,14 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
         break;
 
     case text::textfield::Type::EXTENDED_FILE:
-        mpImpl->mbBoolean1 = sal_False;
+        mpImpl->mbBoolean1 = false;
         mpImpl->mnInt16 = text::FilenameDisplayFormat::FULL;
         break;
 
     case text::textfield::Type::AUTHOR:
         mpImpl->mnInt16 = SVXAUTHORFORMAT_FULLNAME;
-        mpImpl->mbBoolean1 = sal_False;
-        mpImpl->mbBoolean2 = sal_True;
+        mpImpl->mbBoolean1 = false;
+        mpImpl->mbBoolean2 = true;
         break;
 
     case text::textfield::Type::MEASURE:
@@ -284,8 +284,8 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
         break;
 
     default:
-        mpImpl->mbBoolean1 = sal_False;
-        mpImpl->mbBoolean2 = sal_False;
+        mpImpl->mbBoolean1 = false;
+        mpImpl->mbBoolean2 = false;
         mpImpl->mnInt32 = 0;
         mpImpl->mnInt16 = 0;
 
@@ -314,10 +314,10 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
             {
             case text::textfield::Type::DATE:
                 {
-                    mpImpl->mbBoolean2 = sal_True;
+                    mpImpl->mbBoolean2 = true;
                     // #i35416# for variable date field, don't use invalid "0000-00-00" date,
                     // use current date instead
-                    sal_Bool bFixed = ((SvxDateField*)pData)->GetType() == SVXDATETYPE_FIX;
+                    bool bFixed = ((SvxDateField*)pData)->GetType() == SVXDATETYPE_FIX;
                     mpImpl->maDateTime = getDate( bFixed ?
                                             ((SvxDateField*)pData)->GetFixDate() :
                                             Date( Date::SYSTEM ).GetDate() );
@@ -327,13 +327,13 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                 break;
 
             case text::textfield::Type::TIME:
-                mpImpl->mbBoolean2 = sal_False;
-                mpImpl->mbBoolean1 = sal_False;
+                mpImpl->mbBoolean2 = false;
+                mpImpl->mbBoolean1 = false;
                 mpImpl->mnInt32 = SVXTIMEFORMAT_STANDARD;
                 break;
 
             case text::textfield::Type::EXTENDED_TIME:
-                mpImpl->mbBoolean2 = sal_False;
+                mpImpl->mbBoolean2 = false;
                 mpImpl->maDateTime = getTime( ((SvxExtTimeField*)pData)->GetFixTime() );
                 mpImpl->mbBoolean1 = ((SvxExtTimeField*)pData)->GetType() == SVXTIMETYPE_FIX;
                 mpImpl->mnInt32 = ((SvxExtTimeField*)pData)->GetFormat();

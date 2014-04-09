@@ -70,8 +70,8 @@ protected:
 
     sal_uInt16              nStart;
     sal_uInt16              nEnd;
-    sal_Bool                bFeature    :1;
-    sal_Bool                bEdge       :1;
+    bool                bFeature    :1;
+    bool                bEdge       :1;
 
 public:
     EditCharAttrib( const SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
@@ -96,18 +96,18 @@ public:
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 
-    sal_Bool    IsIn( sal_uInt16 nIndex ) const
+    bool    IsIn( sal_uInt16 nIndex ) const
                 { return ( ( nStart <= nIndex ) && ( nEnd >= nIndex ) ); }
-    sal_Bool    IsInside( sal_uInt16 nIndex ) const
+    bool    IsInside( sal_uInt16 nIndex ) const
                 { return ( ( nStart < nIndex ) && ( nEnd > nIndex ) ); }
     bool        IsEmpty() const
                 { return nStart == nEnd; }
 
     bool    IsFeature() const   { return bFeature; }
-    void    SetFeature( sal_Bool b) { bFeature = b; }
+    void    SetFeature( bool b) { bFeature = b; }
 
-    sal_Bool    IsEdge() const      { return bEdge; }
-    void    SetEdge( sal_Bool b )   { bEdge = b; }
+    bool    IsEdge() const      { return bEdge; }
+    void    SetEdge( bool b )   { bEdge = b; }
 };
 
 inline sal_uInt16 EditCharAttrib::GetLen() const
