@@ -702,39 +702,40 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
     }
 }
 
-void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect )
+void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly )
 {
+    const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
     const bool  bOldOutput = IsOutputEnabled();
 
     EnableOutput( false );
     Push( PUSH_RASTEROP );
     SetRasterOp( ROP_XOR );
-    DrawGradient( rBoundRect, rGradient );
+    DrawGradient( aBoundRect, rGradient );
     SetFillColor( COL_BLACK );
     SetRasterOp( ROP_0 );
     DrawPolyPolygon( rPolyPoly );
     SetRasterOp( ROP_XOR );
-    DrawGradient( rBoundRect, rGradient );
+    DrawGradient( aBoundRect, rGradient );
     Pop();
     EnableOutput( bOldOutput );
 }
 
 void OutputDevice::ClipAndDrawGradientToBounds ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
 {
-    const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
-
     if( ImplGetSVData()->maGDIData.mbNoXORClipping )
-        ClipAndDrawGradient ( rGradient, rPolyPoly, aBoundRect );
+        ClipAndDrawGradient ( rGradient, rPolyPoly );
     else
-        XORClipAndDrawGradient ( rGradient, rPolyPoly, aBoundRect );
+        XORClipAndDrawGradient ( rGradient, rPolyPoly );
 }
 
-void OutputDevice::ClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect )
+void OutputDevice::ClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
 {
+    const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+
     if( !Rectangle( PixelToLogic( Point() ), GetOutputSize() ).IsEmpty() )
     {
         // convert rectangle to pixels
-        Rectangle aRect( ImplLogicToDevicePixel( rBoundRect ) );
+        Rectangle aRect( ImplLogicToDevicePixel( aBoundRect ) );
         aRect.Justify();
 
         // do nothing if the rectangle is empty
@@ -772,13 +773,14 @@ void OutputDevice::ClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon 
     }
 }
 
-void OutputDevice::XORClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect )
+void OutputDevice::XORClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
 {
     const PolyPolygon   aPolyPoly( LogicToPixel( rPolyPoly ) );
+    const Rectangle     aBoundRect( rPolyPoly.GetBoundRect() );
     Point aPoint;
     Rectangle           aDstRect( aPoint, GetOutputSizePixel() );
 
-    aDstRect.Intersection( rBoundRect );
+    aDstRect.Intersection( aBoundRect );
 
     ClipToPaintRegion( aDstRect );
 
@@ -810,12 +812,12 @@ void OutputDevice::XORClipAndDrawGradient ( Gradient &rGradient, const PolyPolyg
             pVDev->SetRasterOp( ROP_XOR );
             aVDevMap.SetOrigin( Point( -aDstRect.Left(), -aDstRect.Top() ) );
             pVDev->SetMapMode( aVDevMap );
-            pVDev->DrawGradient( rBoundRect, rGradient );
+            pVDev->DrawGradient( aBoundRect, rGradient );
             pVDev->SetFillColor( COL_BLACK );
             pVDev->SetRasterOp( ROP_0 );
             pVDev->DrawPolyPolygon( aPolyPoly );
             pVDev->SetRasterOp( ROP_XOR );
-            pVDev->DrawGradient( rBoundRect, rGradient );
+            pVDev->DrawGradient( aBoundRect, rGradient );
             aVDevMap.SetOrigin( Point() );
             pVDev->SetMapMode( aVDevMap );
             DrawOutDev( aDstRect.TopLeft(), aDstSize, Point(), aDstSize, *pVDev );
@@ -853,12 +855,10 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
         if( mpMetaFile )
         {
-            const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
-
             mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
             mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
 
-            ClipAndDrawGradientMetafile ( rGradient, rPolyPoly, aBoundRect );
+            ClipAndDrawGradientMetafile ( rGradient, rPolyPoly );
 
             mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );
         }

@@ -275,7 +275,7 @@ public:
 protected:
     long                        ImplGetGradientStepCount( long nMinRect ) SAL_OVERRIDE;
     virtual void                ClipAndDrawGradientToBounds( Gradient &rGradient, const PolyPolygon &rPolyPoly ) SAL_OVERRIDE;
-    virtual void                ClipAndDrawGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly, const Rectangle &rBoundRect ) SAL_OVERRIDE;
+    virtual void                ClipAndDrawGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly ) SAL_OVERRIDE;
     virtual bool                UsePolyPolygonForComplexGradient() SAL_OVERRIDE;
 
     void                        ScaleBitmap ( Bitmap&, SalTwoRect& ) SAL_OVERRIDE { };
