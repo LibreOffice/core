@@ -34,8 +34,6 @@ using namespace ::com::sun::star::xml::sax;
 namespace sax_expatwrap {
 struct TagAttribute
 {
-    TagAttribute()
-        {}
     TagAttribute( const OUString &aName, const OUString &aType , const OUString &aValue )
     {
         this->sName     = aName;

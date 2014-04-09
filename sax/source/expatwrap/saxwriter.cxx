@@ -953,8 +953,6 @@ public: // XServiceInfo
     sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) SAL_OVERRIDE;
 
 private:
-
-    void writeSequence( const Sequence<sal_Int8> & seq );
     sal_Int32 getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurrence ) throw();
 
     Reference< XOutputStream >  m_out;

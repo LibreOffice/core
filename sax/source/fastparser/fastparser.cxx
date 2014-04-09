@@ -243,9 +243,6 @@ private:
     sal_Int32 GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const sal_Char* pName, int nNameLen );
     void DefineNamespace( const OString& rPrefix, const sal_Char* pNamespaceURL );
 
-    void pushContext();
-    void popContext();
-
     void splitName( const XML_Char *pwName, const XML_Char *&rpPrefix, sal_Int32 &rPrefixLen, const XML_Char *&rpName, sal_Int32 &rNameLen );
 
 private:
