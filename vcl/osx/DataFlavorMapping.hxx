@@ -64,20 +64,20 @@ public:
   ~DataFlavorMapper();
 
   /* Map a system data flavor to an OpenOffice data flavor.
-     Return an empty string if there is not suiteable
+     Return an empty string if there is not suitable
      mapping from a system data flavor to a OpenOffice data
      flavor.
   */
   com::sun::star::datatransfer::DataFlavor systemToOpenOfficeFlavor( const NSString* systemDataFlavor) const;
 
   /* Map an OpenOffice data flavor to a system data flavor.
-     If there is no suiteable mapping available NULL will
+     If there is no suitable mapping available NULL will
      be returned.
   */
   const NSString* openOfficeToSystemFlavor(const com::sun::star::datatransfer::DataFlavor& oooDataFlavor, bool& rbInternal) const;
 
   /* Select the best available image data type
-     If there is no suiteable mapping available NULL will
+     If there is no suitable mapping available NULL will
      be returned.
   */
   NSString* openOfficeImageToSystemFlavor(NSPasteboard* pPasteboard) const;

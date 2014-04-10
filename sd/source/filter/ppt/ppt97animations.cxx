@@ -615,7 +615,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
     ::sd::CustomAnimationPresetPtr pPreset( rPresets.getEffectDescriptor( this->GetPresetId() ) );
     if( !pPreset.get() )
     {
-        OSL_FAIL("no suiteable preset found for ppt import");
+        OSL_FAIL("no suitable preset found for ppt import");
         return;
     }
 
@@ -625,7 +625,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
     ::sd::CustomAnimationEffectPtr pEffect( new ::sd::CustomAnimationEffect( pPreset->create( this->GetPresetSubType() ) ) );
     if( !pEffect.get() )
     {
-        DBG_ASSERT(pEffect.get(),"no suiteable effect found");
+        DBG_ASSERT(pEffect.get(),"no suitable effect found");
         return;
     }
 

@@ -652,7 +652,7 @@ void BarChart::createShapes()
 
                     //@todo iterate through all subsystems to create partial points
                     {
-                        //@todo select a suiteable PositionHelper for this subsystem
+                        //@todo select a suitable PositionHelper for this subsystem
                         BarPositionHelper* pSubPosHelper = pPosHelper;
 
                         double fUnclippedUpperYValue = fUpperYValue;
