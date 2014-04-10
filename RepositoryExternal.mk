@@ -3120,6 +3120,20 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 )
 endef
 
+define gb_LinkTarget__use_opencollada_parser
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,opencollada)/COLLADABaseUtils/include \
+	-I$(call gb_UnpackedTarball_get_dir,opencollada)/COLLADAFramework/include \
+	-I$(call gb_UnpackedTarball_get_dir,opencollada)/COLLADASaxFrameworkLoader/include \
+	-I$(call gb_UnpackedTarball_get_dir,opencollada)/GeneratedSaxParser/include \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	opencollada_parser \
+)
+endef
+
 endif
 
 ### Jars ############################################################
