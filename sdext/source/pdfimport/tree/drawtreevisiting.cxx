@@ -908,9 +908,23 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::co
     aFontProps[ "fo:font-size" ]            = aFSize;
     aFontProps[ "style:font-size-asian" ]   = aFSize;
     aFontProps[ "style:font-size-complex" ] = aFSize;
+
     // color
     const GraphicsContext& rGC = m_rProcessor.getGraphicsContext( elem.GCId );
-    aFontProps[ "fo:color" ]                 =  getColorString( rFont.isOutline ? rGC.LineColor : rGC.FillColor );
+    aFontProps[ "fo:color" ] = getColorString( rFont.isOutline ? rGC.LineColor : rGC.FillColor );
+
+    // scale
+    double fRotate, fShearX;
+    basegfx::B2DTuple aScale, aTranslation;
+    rGC.Transformation.decompose(aScale, aTranslation, fRotate, fShearX);
+    double textScale = -100 * aScale.getX() / aScale.getY();
+    if (((textScale >= 1) && (textScale <= 99)) ||
+        ((textScale >= 101) && (textScale <= 999)))
+    {
+        aBuf.append(textScale);
+        aBuf.appendAscii("%");
+        aFontProps[ "style:text-scale" ] = aBuf.makeStringAndClear();
+    }
 
     StyleContainer::Style aStyle( "style:style", aProps );
     StyleContainer::Style aSubStyle( "style:text-properties", aFontProps );
