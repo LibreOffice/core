@@ -353,9 +353,11 @@ SvXMLGraphicHelper::SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode ) :
     Init( NULL, eCreateMode, false );
 }
 
-SvXMLGraphicHelper::SvXMLGraphicHelper() :
-    ::cppu::WeakComponentImplHelper2< ::com::sun::star::document::XGraphicObjectResolver,
+SvXMLGraphicHelper::SvXMLGraphicHelper()
+    : ::cppu::WeakComponentImplHelper2< ::com::sun::star::document::XGraphicObjectResolver,
                                       ::com::sun::star::document::XBinaryStreamResolver >( maMutex )
+    , meCreateMode(GRAPHICHELPER_MODE_READ)
+    , mbDirect(false)
 {
 }
 
