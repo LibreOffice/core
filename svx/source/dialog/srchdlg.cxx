@@ -1228,9 +1228,9 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
             nFlags &= (TransliterationModules_IGNORE_CASE |
                        TransliterationModules_IGNORE_WIDTH );
         if (GetCheckBoxValue(m_pIgnoreDiacritics))
-            nFlags |= TransliterationModulesExtra::ignoreDiacritics_CTL;
+            nFlags |= TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
         if (GetCheckBoxValue(m_pIgnoreKashida))
-            nFlags |= TransliterationModulesExtra::ignoreKashida_CTL;
+            nFlags |= TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
         pSearchItem->SetTransliterationFlags( nFlags );
 
         if ( !bWriter )
@@ -2182,9 +2182,9 @@ void SvxSearchDialog::SaveToModule_Impl()
         nFlags &= (TransliterationModules_IGNORE_CASE |
                    TransliterationModules_IGNORE_WIDTH );
     if (GetCheckBoxValue(m_pIgnoreDiacritics))
-        nFlags |= TransliterationModulesExtra::ignoreDiacritics_CTL;
+        nFlags |= TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
     if (GetCheckBoxValue(m_pIgnoreKashida))
-        nFlags |= TransliterationModulesExtra::ignoreKashida_CTL;
+        nFlags |= TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
     pSearchItem->SetTransliterationFlags( nFlags );
 
     if ( !bWriter )

@@ -145,9 +145,9 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     if ( aOpt.IsMatchFullHalfWidthForms())
         rFlags |= TransliterationModules_IGNORE_WIDTH;
     if ( aOpt.IsIgnoreDiacritics_CTL())
-        rFlags |= TransliterationModulesExtra::ignoreDiacritics_CTL ;
+        rFlags |= TransliterationModulesExtra::IGNORE_DIACRITICS_CTL ;
     if ( aOpt.IsIgnoreKashida_CTL())
-        rFlags |= TransliterationModulesExtra::ignoreKashida_CTL ;
+        rFlags |= TransliterationModulesExtra::IGNORE_KASHIDA_CTL ;
     if ( bAsianOptions )
     {
         if ( aOpt.IsMatchHiraganaKatakana())

@@ -287,9 +287,9 @@ sal_Int32 SvtSearchOptions::GetTransliterationFlags() const
     if ( IsIgnoreMiddleDot())
         nRes |= TransliterationModules_ignoreMiddleDot_ja_JP;
     if ( IsIgnoreDiacritics_CTL())
-        nRes |= TransliterationModulesExtra::ignoreDiacritics_CTL;
+        nRes |= TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
     if ( IsIgnoreKashida_CTL())
-        nRes |= TransliterationModulesExtra::ignoreKashida_CTL;
+        nRes |= TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
     return nRes;
 }
 

@@ -194,12 +194,12 @@ TransliterationImpl::loadModule( TransliterationModules modType, const Locale& r
                     numCascade++;
         }
         // additional transliterations from TranslationModuleExtra (we cannot extend TransliterationModule)
-        if (modType & TransliterationModulesExtra::ignoreDiacritics_CTL)
+        if (modType & TransliterationModulesExtra::IGNORE_DIACRITICS_CTL)
         {
             if (loadModuleByName(OUString("ignoreDiacritics_CTL"), bodyCascade[numCascade], rLocale))
                 numCascade++;
         }
-        if (modType & TransliterationModulesExtra::ignoreKashida_CTL)
+        if (modType & TransliterationModulesExtra::IGNORE_KASHIDA_CTL)
             if (loadModuleByName(OUString("ignoreKashida_CTL"), bodyCascade[numCascade], rLocale))
                 numCascade++;
 
