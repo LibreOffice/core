@@ -513,7 +513,7 @@ private:
 
     /** Activate or deactivate the search in the current selection.  Call
         this method whenever the selection has changed.  This method creates
-        a copy of the current selection and reassings the object iterator to
+        a copy of the current selection and reassigns the object iterator to
         the current() iterator.
     */
     void HandleChangedSelection (void);
