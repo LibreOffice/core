@@ -1977,7 +1977,7 @@ KSHORT SwTxtFrm::GetParHeight() const
 
     // FME, OD 08.01.2004 #i11859# - refactoring and improve code
     const SwLineLayout* pLineLayout = GetPara();
-    KSHORT nHeight = pLineLayout->GetRealHeight();
+    KSHORT nHeight = pLineLayout ? pLineLayout->GetRealHeight() : 0;
     if( GetOfst() && !IsFollow() )  // Ist dieser Absatz gescrollt? Dann ist unsere
         nHeight *= 2;               // bisherige Hoehe mind. eine Zeilenhoehe zu gering
     // OD 2004-03-04 #115793#
