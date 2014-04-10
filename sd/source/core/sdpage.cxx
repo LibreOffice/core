@@ -432,7 +432,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
                     aTempAttr.Put(SdrTextAutoGrowHeightItem(false));
             }
 
-            // check if we need another vertical adjustement than the default
+            // check if we need another vertical adjustment than the default
             SdrTextVertAdjust eV = SDRTEXTVERTADJUST_TOP;
 
             if( (eObjKind == PRESOBJ_FOOTER) && (mePageKind != PK_STANDARD) )
