@@ -694,7 +694,7 @@ void SdDrawDocument::UpdateAllLinks()
     }
 }
 
-/** this loops over the presentation objectes of a page and repairs some new settings
+/** this loops over the presentation objects of a page and repairs some new settings
     from old binary files and resets all default strings for empty presentation objects.
 */
 void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool )
