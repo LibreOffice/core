@@ -1792,21 +1792,23 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                                 }
                             }
                         }
-                        // #i29199# - It is possible, that
-                        // the anchor doesn't exist - E.g., reordering the
-                        // sub-documents in a master document.
-                        // Note: The anchor will be inserted later.
-                        if ( !pModify )
-                        {
-                            // break to end of the current switch case.
-                            break;
-                        }
                     }
                     else
                     {
                         pModify = pAnch->GetCntntAnchor()->nNode.GetNode().GetCntntNode();
                     }
                 }
+
+                // #i29199# - It is possible, that
+                // the anchor doesn't exist - E.g., reordering the
+                // sub-documents in a master document.
+                // Note: The anchor will be inserted later.
+                if ( !pModify )
+                {
+                    // break to end of the current switch case.
+                    break;
+                }
+
                 SwIterator<SwFrm,SwModify> aIter( *pModify );
                 SwFrm* pAnchorFrmOfMaster = 0;
                 for( SwFrm *pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
