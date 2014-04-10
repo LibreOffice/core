@@ -18,8 +18,8 @@
  */
 
 #include <tools/wldcrd.hxx>
+#include <tools/inettype.hxx>
 #include <rtl/instance.hxx>
-#include <svl/inettype.hxx>
 #include <svl/svl.hrc>
 
 #include <boost/ptr_container/ptr_map.hpp>
@@ -651,7 +651,7 @@ OUString INetContentTypes::GetPresentation(INetContentType eTypeID,
         else
             return aPresentation;
     }
-    return svl::getStringResource(nResID, aLocale);
+    return tools::getStringResource(nResID, aLocale);
 }
 
 //static

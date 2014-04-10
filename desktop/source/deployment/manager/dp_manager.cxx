@@ -38,7 +38,7 @@
 #include "comphelper/servicedecl.hxx"
 #include "comphelper/sequence.hxx"
 #include "xmlscript/xml_helper.hxx"
-#include "svl/inettype.hxx"
+#include "tools/inettype.hxx"
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"

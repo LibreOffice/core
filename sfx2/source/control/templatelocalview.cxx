@@ -13,7 +13,7 @@
 #include <sfx2/doctempl.hxx>
 #include <sfx2/templatecontaineritem.hxx>
 #include <sfx2/templateviewitem.hxx>
-#include <svl/inettype.hxx>
+#include <tools/inettype.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/builder.hxx>

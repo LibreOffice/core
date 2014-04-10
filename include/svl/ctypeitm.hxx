@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_CTYPEITM_HXX
 #define INCLUDED_SVL_CTYPEITM_HXX
 
-#include <svl/inettype.hxx>
+#include <tools/inettype.hxx>
 #include <svl/custritm.hxx>
 
 

@@ -43,8 +43,8 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/lckbitem.hxx>
-#include <svl/inettype.hxx>
 #include <svl/rectitem.hxx>
+#include <tools/inettype.hxx>
 
 #include <sot/storage.hxx>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>

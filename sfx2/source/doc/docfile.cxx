@@ -89,10 +89,10 @@
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <tools/inetmime.hxx>
+#include <tools/inettype.hxx>
 #include <unotools/ucblockbytes.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/asynclink.hxx>
-#include <svl/inettype.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>

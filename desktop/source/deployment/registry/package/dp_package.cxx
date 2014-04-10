@@ -31,7 +31,7 @@
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/supportsservice.hxx"
 #include "ucbhelper/content.hxx"
-#include "svl/inettype.hxx"
+#include "tools/inettype.hxx"
 #include "comphelper/anytostring.hxx"
 #include "comphelper/makesequence.hxx"
 #include "comphelper/sequence.hxx"

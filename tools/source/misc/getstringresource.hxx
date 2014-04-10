@@ -28,7 +28,7 @@ namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;
 } } } }
 
-namespace svl {
+namespace tools {
 
 OUString getStringResource(
     sal_uInt16 id, LanguageTag const & locale);

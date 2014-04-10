@@ -33,7 +33,7 @@
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <unotools/confignode.hxx>
-#include "svl/inettype.hxx"
+#include "tools/inettype.hxx"
 #include "asyncfilepicker.hxx"
 #include "OfficeControlAccess.hxx"
 #include "fpsmartcontent.hxx"

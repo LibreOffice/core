@@ -377,7 +377,6 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/filenotation.hxx>
-#include <svl/inettype.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
@@ -433,6 +432,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/inetmime.hxx>
+#include <tools/inettype.hxx>
 #include <tools/multisel.hxx>
 #include <tools/rcid.h>
 #include <tools/resmgr.hxx>

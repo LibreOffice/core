@@ -91,8 +91,8 @@ using namespace ::com::sun::star::container;
 #include <unotools/pathoptions.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <tools/inetmime.hxx>
+#include <tools/inettype.hxx>
 #include <tools/urlobj.hxx>
-#include <svl/inettype.hxx>
 #include <svl/sharecontrolfile.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>

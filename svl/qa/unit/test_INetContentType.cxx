@@ -17,7 +17,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <rtl/ustring.hxx>
-#include <svl/inettype.hxx>
+#include <tools/inettype.hxx>
 #include <tools/inetmime.hxx>
 
 namespace {

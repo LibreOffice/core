@@ -653,7 +653,6 @@
 #include <svl/grabbagitem.hxx>
 #include <svl/imageitm.hxx>
 #include <svl/inethist.hxx>
-#include <svl/inettype.hxx>
 #include <svl/intitem.hxx>
 #include <svl/isethint.hxx>
 #include <svl/itemiter.hxx>
@@ -737,6 +736,7 @@
 #include <tools/helpers.hxx>
 #include <tools/inetmime.hxx>
 #include <tools/inetmsg.hxx>
+#include <tools/inettype.hxx>
 #include <tools/link.hxx>
 #include <tools/rc.hxx>
 #include <tools/rcid.h>

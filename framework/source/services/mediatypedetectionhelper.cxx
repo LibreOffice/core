@@ -19,7 +19,7 @@
 
 #include <services/mediatypedetectionhelper.hxx>
 #include <services.h>
-#include <svl/inettype.hxx>
+#include <tools/inettype.hxx>
 
 namespace framework
 {

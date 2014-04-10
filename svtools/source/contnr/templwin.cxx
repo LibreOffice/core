@@ -27,7 +27,6 @@
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <vcl/xtextedt.hxx>
-#include <svl/inettype.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/templatefoldercache.hxx>
@@ -72,6 +71,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <vcl/waitobj.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/inettype.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
 #include <vcl/svapp.hxx>

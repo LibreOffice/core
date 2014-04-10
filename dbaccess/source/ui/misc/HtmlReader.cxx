@@ -51,7 +51,7 @@
 #include "QEnumTypes.hxx"
 #include "WCPage.hxx"
 #include <tools/inetmime.hxx>
-#include <svl/inettype.hxx>
+#include <tools/inettype.hxx>
 #include <rtl/tencinfo.h>
 #include "UITools.hxx"
 #include <vcl/svapp.hxx>

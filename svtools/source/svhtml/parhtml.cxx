@@ -29,7 +29,7 @@
 
 #include <tools/tenccvt.hxx>
 #include <tools/datetime.hxx>
-#include <svl/inettype.hxx>
+#include <tools/inettype.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 

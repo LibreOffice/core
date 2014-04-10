@@ -63,7 +63,7 @@ SimpleResMgr * ResMgrMap::get(LanguageTag const & locale) {
     Map::iterator i(map_.find(code));
     if (i == map_.end()) {
         boost::scoped_ptr< SimpleResMgr > mgr(
-            new SimpleResMgr("svl", locale));
+            new SimpleResMgr("tools", locale));
         i = map_.insert(Map::value_type(code, mgr.get())).first;
         mgr.reset();
     }
@@ -74,7 +74,7 @@ struct theResMgrMap: public rtl::Static< ResMgrMap, theResMgrMap > {};
 
 }
 
-namespace svl {
+namespace tools {
 
 OUString getStringResource(sal_uInt16 id, LanguageTag const & locale)
 {

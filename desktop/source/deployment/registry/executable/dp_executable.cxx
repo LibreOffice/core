@@ -26,7 +26,7 @@
 #include "osl/file.hxx"
 #include "ucbhelper/content.hxx"
 #include "comphelper/servicedecl.hxx"
-#include "svl/inettype.hxx"
+#include "tools/inettype.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "dp_executablebackenddb.hxx"
 

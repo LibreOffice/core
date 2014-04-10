@@ -104,9 +104,7 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
         svl/source/misc/documentlockfile) \
     svl/source/misc/filenotation \
     svl/source/misc/fstathelper \
-    svl/source/misc/getstringresource \
     svl/source/misc/inethist \
-    svl/source/misc/inettype \
     svl/source/misc/lngmisc \
     svl/source/misc/lockfilecommon \
     svl/source/misc/ownlist \

@@ -27,7 +27,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "comphelper/servicedecl.hxx"
-#include "svl/inettype.hxx"
+#include "tools/inettype.hxx"
 #include "com/sun/star/util/XUpdatable.hpp"
 #include "com/sun/star/script/XLibraryContainer3.hpp"
 #include <com/sun/star/util/XMacroExpander.hpp>
