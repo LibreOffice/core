@@ -312,7 +312,7 @@ private:
     /// The position when the search started.  Corresponds largely to the
     /// m?Start* members.
     ::sd::outliner::Iterator maSearchStartPosition;
-    /** The last valid position desribes where the last text object has been
+    /** The last valid position describes where the last text object has been
         found.  This position is restored when some dialogs are shown.  The
         position is initially set to the where the search begins.
     */
