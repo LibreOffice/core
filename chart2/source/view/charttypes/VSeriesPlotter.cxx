@@ -51,7 +51,6 @@
 #include "CandleStickChart.hxx"
 #include "BubbleChart.hxx"
 #include "NetChart.hxx"
-#include "GL3DBarChart.hxx"
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
@@ -2443,8 +2442,6 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
         pRet = new AreaChart(xChartTypeModel,nDimensionCount,false,true);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
         pRet = new BubbleChart(xChartTypeModel,nDimensionCount);
-    else if (aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR))
-        pRet = new GL3DBarChart(xChartTypeModel);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
         pRet = new PieChart(xChartTypeModel,nDimensionCount, bExcludingPositioning );
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
