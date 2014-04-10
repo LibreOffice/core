@@ -300,7 +300,7 @@ public:
       *
       * Note that the implementation of this ctor registers itself at its
       * content provider. The provider implementation inserts the content
-      * in a hash map. So it easyly can be found and reused when the provider
+      * in a hash map. So it easily can be found and reused when the provider
       * is asked for a content.
       *
       * @param rxContext is a Service Manager.

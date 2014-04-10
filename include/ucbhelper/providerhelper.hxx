@@ -206,7 +206,7 @@ public:
 
     /**
       * This method returns a mutex, which protects the content list of the
-      * provider. So you can prevent modifications of that list easyly.
+      * provider. So you can prevent modifications of that list easily.
       *
       * @return the mutex.
       */

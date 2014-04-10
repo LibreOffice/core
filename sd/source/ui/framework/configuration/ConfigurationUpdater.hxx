@@ -176,7 +176,7 @@ private:
 
     /** This method sets the mbUpdateBeingProcessed member that is used to
         prevent reentrance problems.  This method allows function objects
-        easyly and safely to modify the variable.
+        easily and safely to modify the variable.
     */
     void SetUpdateBeingProcessed (bool bValue);
 

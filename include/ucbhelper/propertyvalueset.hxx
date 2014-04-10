@@ -49,7 +49,7 @@ class PropertyValues;
   * This class implements the interface XRow. After construction of a valueset
   * the user can append properties ( incl. its values ) to the set. This class
   * is useful when implementing the command "getPropertyValues", because the
-  * values to return can easyly appended to a valueset object. That object can
+  * values to return can easily appended to a valueset object. That object can
   * directly be returned by the implementation of the command.
   */
 class UCBHELPER_DLLPUBLIC PropertyValueSet :
