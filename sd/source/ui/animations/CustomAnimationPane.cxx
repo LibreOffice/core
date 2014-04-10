@@ -1406,7 +1406,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
     {
         // we need to do a second pass for text grouping options
         // since changing them can cause effects to be removed
-        // or replaced, we do this after we aplied all other options
+        // or replaced, we do this after we applied all other options
         // above
 
         sal_Int32 nTextGrouping = 0;
