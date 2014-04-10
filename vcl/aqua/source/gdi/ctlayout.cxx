@@ -52,9 +52,8 @@ public:
     virtual void    Simplify( bool bIsBase );
 
 private:
-    const CTTextStyle* const    mpTextStyle;
-
     // CoreText specific objects
+    CFMutableDictionaryRef mpStyleDict;
     CFAttributedStringRef mpAttrString;
     CTLineRef mpCTLine;
 
@@ -66,6 +65,9 @@ private:
     // font requests get size limited by downscaling huge fonts
     // in these cases the font scale becomes something bigger than 1.0
     float mfFontScale; // TODO: does CoreText have a font size limit?
+
+    CGFloat mfFontRotation; // text direction angle (in radians)
+    CGFloat mfFontStretch;  <1.0: font is squeezed, >1.0 font is stretched
 
     // cached details about the resulting layout
     // mutable members since these details are all lazy initialized
@@ -79,17 +81,19 @@ private:
 // =======================================================================
 
 CTLayout::CTLayout( const CTTextStyle* pTextStyle )
-:   mpTextStyle( pTextStyle )
+:   mpStyleDict( pTextStyle->GetStyleDict() )
 ,   mpAttrString( NULL )
 ,   mpCTLine( NULL )
 ,   mnCharCount( 0 )
 ,   mnTrailingSpaceCount( 0 )
 ,   mfTrailingSpaceWidth( 0.0 )
 ,   mfFontScale( pTextStyle->mfFontScale )
+,   mfFontRotation( pTextStyle->mfFontRotation )
+,   mfFontStretch( pTextStyle->mfFontStretch )
 ,   mfCachedWidth( -1 )
 ,   mnBaseAdv( 0 )
 {
-    CFRetain( mpTextStyle->GetStyleDict() );
+    CFRetain( mpStyleDict );
 }
 
 // -----------------------------------------------------------------------
@@ -100,7 +104,7 @@ CTLayout::~CTLayout()
         CFRelease( mpCTLine );
     if( mpAttrString )
         CFRelease( mpAttrString );
-    CFRelease( mpTextStyle->GetStyleDict() );
+    CFRelease( mpStyleDict );
 }
 
 // -----------------------------------------------------------------------
@@ -131,7 +135,7 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     // create the CoreText line layout using the requested text style
-    mpAttrString = CFAttributedStringCreate( NULL, aCFText, mpTextStyle->GetStyleDict() );
+    mpAttrString = CFAttributedStringCreate( NULL, aCFText, mpStyleDict );
     mpCTLine = CTLineCreateWithAttributedString( mpAttrString );
     CFRelease( aCFText);
 
@@ -201,7 +205,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         CFRelease( mpCTLine );
         CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL, rArgs.mpStr + mnMinCharPos,
             mnCharCount - mnTrailingSpaceCount, kCFAllocatorNull );
-        CFAttributedStringRef pAttrStr = CFAttributedStringCreate( NULL, aCFText, mpTextStyle->GetStyleDict() );
+        CFAttributedStringRef pAttrStr = CFAttributedStringCreate( NULL, aCFText, mpStyleDict );
         mpCTLine = CTLineCreateWithAttributedString( pAttrStr );
         CFRelease( aCFText);
         CFRelease( pAttrStr );
@@ -249,12 +253,11 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
     const Point aVclPos = GetDrawPosition( Point(mnBaseAdv,0) );
     CGPoint aTextPos = { +aVclPos.X()/mfFontScale, -aVclPos.Y()/mfFontScale };
 
-    if( mpTextStyle->mfFontRotation != 0.0 )
+    if( mfFontRotation != 0.0 )
     {
-        const CGFloat fRadians = mpTextStyle->mfFontRotation;
-        CGContextRotateCTM( rAquaGraphics.mrContext, +fRadians );
+        CGContextRotateCTM( rAquaGraphics.mrContext, +mfFontRotation );
 
-        const CGAffineTransform aInvMatrix = CGAffineTransformMakeRotation( -fRadians );
+        const CGAffineTransform aInvMatrix = CGAffineTransformMakeRotation( -mfFontRotation );
         aTextPos = CGPointApplyAffineTransform( aTextPos, aInvMatrix );
     }
 
@@ -353,12 +356,12 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
             // convert glyph details for VCL
             *(pOutGlyphIds++) = pCGGlyphIdx[ nSubIndex ];
             if( pGlyphAdvances )
-                *(pGlyphAdvances++) = pCGGlyphAdvs[ nSubIndex ].width;
+                *(pGlyphAdvances++) = mfFontStretch * pCGGlyphAdvs[ nSubIndex ].width;
             if( pCharIndexes )
                 *(pCharIndexes++) = pCGGlyphStrIdx[ nSubIndex] + mnMinCharPos;
             if( !nCount++ ) {
                 const CGPoint& rCurPos = pCGGlyphPos[ nSubIndex ];
-                rPos = GetDrawPosition( Point( mfFontScale * rCurPos.x, mfFontScale * rCurPos.y) );
+                rPos = GetDrawPosition( Point( mfFontScale * mfFontStretch * rCurPos.x, mfFontScale * rCurPos.y) );
             }
         }
         nSubIndex = 0; // prepare for the next glyph run
