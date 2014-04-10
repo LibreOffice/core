@@ -23,6 +23,7 @@
 #include "svgscript.hxx"
 #include "impsvgdialog.hxx"
 
+#include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -46,6 +47,8 @@
 
 #include <boost/preprocessor/repetition/repeat.hpp>
 
+using namespace ::com::sun::star::graphic;
+using namespace ::com::sun::star::geometry;
 using namespace ::com::sun::star;
 
 
@@ -694,6 +697,7 @@ sal_Bool SVGFilter::implLookForFirstVisiblePage()
 sal_Bool SVGFilter::implExportDocument()
 {
     OUString         aAttr;
+    sal_Int32        nDocX = 0, nDocY = 0; // #i124608#
     sal_Int32        nDocWidth = 0, nDocHeight = 0;
     sal_Bool         bRet = sal_False;
     sal_Int32        nLastPage = mSelectedPages.getLength() - 1;
@@ -707,10 +711,58 @@ sal_Bool SVGFilter::implExportDocument()
     const Reference< XPropertySet >             xDefaultPagePropertySet( mxDefaultPage, UNO_QUERY );
     const Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
-    if( xDefaultPagePropertySet.is() )
+    // #i124608#
+    mbExportSelection = mbSinglePage && maShapeSelection.is() && maShapeSelection->getCount();
+
+    if(xDefaultPagePropertySet.is())
     {
         xDefaultPagePropertySet->getPropertyValue( "Width" ) >>= nDocWidth;
         xDefaultPagePropertySet->getPropertyValue( "Height" ) >>= nDocHeight;
+    }
+
+    if(mbExportSelection)
+    {
+        // #i124608# create BoundRange and set nDocX, nDocY, nDocWidth and nDocHeight
+        basegfx::B2DRange aShapeRange;
+
+        uno::Reference< XPrimitiveFactory2D > xPrimitiveFactory = PrimitiveFactory2D::create( mxContext );
+
+        // use XPrimitiveFactory2D and go the way over getting the primitives; this
+        // will give better precision (doubles) and be based on the true object
+        // geometry. If needed aViewInformation may be expanded to carry a view
+        // resolution for which to prepare the geometry.
+        if(xPrimitiveFactory.is())
+        {
+            Reference< XShape > xShapeCandidate;
+            const Sequence< PropertyValue > aViewInformation;
+            const Sequence< PropertyValue > aParams;
+
+            for(sal_Int32 a(0); a < maShapeSelection->getCount(); a++)
+            {
+                if((maShapeSelection->getByIndex(a) >>= xShapeCandidate) && xShapeCandidate.is())
+                {
+                    const Sequence< Reference< XPrimitive2D > > aPrimitiveSequence(
+                        xPrimitiveFactory->createPrimitivesFromXShape( xShapeCandidate, aParams ));
+                    const sal_Int32 nCount(aPrimitiveSequence.getLength());
+
+                    for(sal_Int32 nIndex = 0; nIndex < nCount; nIndex++)
+                    {
+                        const RealRectangle2D aRect(aPrimitiveSequence[nIndex]->getRange(aViewInformation));
+
+                        aShapeRange.expand(basegfx::B2DTuple(aRect.X1, aRect.Y1));
+                        aShapeRange.expand(basegfx::B2DTuple(aRect.X2, aRect.Y2));
+                    }
+                }
+            }
+        }
+
+        if(!aShapeRange.isEmpty())
+        {
+            nDocX = basegfx::fround(aShapeRange.getMinX());
+            nDocY = basegfx::fround(aShapeRange.getMinY());
+            nDocWidth  = basegfx::fround(aShapeRange.getWidth());
+            nDocHeight = basegfx::fround(aShapeRange.getHeight());
+        }
     }
 
     if( xExtDocHandler.is() && !mpSVGExport->IsUseTinyProfile() )
@@ -738,8 +790,17 @@ sal_Bool SVGFilter::implExportDocument()
     }
     #endif
 
+    // #i124608# set viewBox explicitely to the exported content
+    if (mbExportSelection)
+    {
+        aAttr = OUString::number(nDocX) + " " + OUString::number(nDocY) + " ";
+    }
+    else
+    {
+        aAttr = "0 0 ";
+    }
 
-    aAttr = "0 0 " + OUString::number( nDocWidth ) + " " + OUString::number( nDocHeight );
+    aAttr += OUString::number(nDocWidth) + " " + OUString::number(nDocHeight);
 
     msClipPathId = "presentation_clip_path";
     OUString sClipPathAttrValue = "url(#" + msClipPathId + ")";
@@ -817,9 +878,8 @@ sal_Bool SVGFilter::implExportDocument()
                 implExportTextEmbeddedBitmaps();
             }
 
-            bool bSelection = mbSinglePage && maShapeSelection.is() && maShapeSelection->getCount();
             // #i124608# export a given object selection, so no MasterPage export at all
-            if (!bSelection)
+            if (!mbExportSelection)
                 implExportMasterPages( mMasterPageTargets, 0, mMasterPageTargets.getLength() - 1 );
             implExportDrawPages( mSelectedPages, 0, nLastPage );
 
@@ -1449,7 +1509,7 @@ sal_Bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rx
     {
         Reference< XShapes > xShapes;
 
-        if (maShapeSelection.is() && maShapeSelection->getCount())
+        if (mbExportSelection)
         {
             // #i124608# export a given object selection
             xShapes = maShapeSelection;
@@ -1794,7 +1854,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
 
 sal_Bool SVGFilter::implCreateObjects()
 {
-    if (maShapeSelection.is() && maShapeSelection->getCount())
+    if (mbExportSelection)
     {
         // #i124608# export a given object selection
         if (mSelectedPages.getLength() && mSelectedPages[0].is())

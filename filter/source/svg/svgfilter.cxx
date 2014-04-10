@@ -68,7 +68,14 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mbPresentation( sal_False ),
     mbSinglePage( sal_False ),
     mnVisiblePage( -1 ),
-    mpObjects( NULL )
+    mpObjects( NULL ),
+    mxSrcDoc(),
+    mxDstDoc(),
+    mxDefaultPage(),
+    maFilterData(),
+    maShapeSelection(),
+    mbExportSelection(false),
+    maOldFieldHdl()
 {
 }
 
