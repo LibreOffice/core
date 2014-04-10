@@ -1049,7 +1049,7 @@ ImageMap* SdDrawDocument::GetImageMapForObject(SdrObject* pObj)
     return NULL;
 }
 
-/** this method enforces that the masterpages are in the currect order,
+/** this method enforces that the masterpages are in the correct order,
     that is at position 1 is a PK_STANDARD masterpage followed by a
     PK_NOTES masterpage and so on. #
 */
