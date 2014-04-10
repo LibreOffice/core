@@ -1,0 +1,11 @@
+diff -ur collada2gltf.org/GLTF/GLTF.h collada2gltf/GLTF/GLTF.h
+--- GLTF/GLTF.h	2014-05-13 11:05:42.797410456 +0200
++++ GLTF/GLTF.h	2014-05-13 11:05:58.989410647 +0200
+@@ -40,7 +40,6 @@
+ #include <vector>
+ #include "assert.h"
+ #include <cstddef>
+-#include <cstdint>
+ 
+ #if (defined(WIN32) || defined(_LIBCPP_VERSION) || __cplusplus > 199711L)
+ #include <memory>
