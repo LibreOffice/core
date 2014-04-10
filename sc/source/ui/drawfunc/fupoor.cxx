@@ -133,7 +133,7 @@ IMPL_LINK_NOARG_INLINE_START(FuPoor, ScrollHdl)
     Point aPosPixel = pWindow->GetPointerPosPixel();
 
     // use remembered MouseButton state to create correct
-    // MouseEvents for this artifical MouseMove.
+    // MouseEvents for this artificial MouseMove.
     MouseMove(MouseEvent(aPosPixel, 1, 0, GetMouseButtonCode()));
 
     return 0;

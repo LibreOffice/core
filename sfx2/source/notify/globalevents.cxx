@@ -292,7 +292,7 @@ void SAL_CALL SfxGlobalEvents_Impl::notifyDocumentEvent( const OUString& /*_Even
         const uno::Reference< frame::XController2 >& /*_ViewController*/, const uno::Any& /*_Supplement*/ )
         throw (lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException, std::exception)
 {
-    // we're a multiplexer only, no chance to generate artifical events here
+    // we're a multiplexer only, no chance to generate artificial events here
     throw lang::NoSupportException(OUString(), *this);
 }
 

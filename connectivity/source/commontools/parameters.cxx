@@ -474,7 +474,7 @@ namespace dbtools
 
         // for the master-detail links, where the detail field denoted a column name, we created an additional ("artificial")
         // filter, and *appended* it to all other (potentially) existing filters of the row set. This means that the indexes
-        // for the parameters resulting from the artifical filter should be larger than any other parameter index, and this
+        // for the parameters resulting from the artificial filter should be larger than any other parameter index, and this
         // is what the assertion checks.
         // If the assertion fails, then we would need another handling for the "parameters visited" flags, since they're based
         // on parameter indexes *without* the artificial filter (because this filter is not visible from the outside).
