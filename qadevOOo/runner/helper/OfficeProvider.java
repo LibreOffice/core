@@ -53,7 +53,7 @@ public class OfficeProvider implements AppProvider
     private static boolean debug = false;
 
     /**
-     * copy the user layer to a safe place, usualy to $TMP/user_backup$USER
+     * copy the user layer to a safe place, usually to $TMP/user_backup$USER
      * @param param
      * @param msf
      */

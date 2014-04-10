@@ -721,7 +721,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                .WriteUInt32( (sal_uInt32)4 )                                // flags - only bit 3 used, if set then slide contains shapes other than placeholders
                .WriteInt32( (sal_Int32)0 )                                     // numberTexts - number of placeholder texts stored with the persist object.  Allows to display outline view without loading the slide persist objects
                .WriteInt32( (sal_Int32)i + 0x100 )                             // slideId - Unique slide identifier, used for OLE link monikers for example
-               .WriteUInt32( (sal_uInt32)0 );                               // reserved, usualy 0
+               .WriteUInt32( (sal_uInt32)0 );                               // reserved, usually 0
 
         if ( !GetPageByIndex( i, NORMAL ) )                     // very exciting: once again through all pages
             return sal_False;
