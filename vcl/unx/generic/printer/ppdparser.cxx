@@ -935,8 +935,10 @@ void PPDParser::parse( ::std::list< OString >& rLines )
             OUString aUniKey(OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
             keyit = m_aKeys.find( aUniKey );
             if(keyit != m_aKeys.end())
+            {
                 pKey = keyit->second;
-            pKey->insertValue("Custom", eInvocation, true);
+                pKey->insertValue("Custom", eInvocation, true);
+            }
             continue;
         }
 
