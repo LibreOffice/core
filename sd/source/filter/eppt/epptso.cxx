@@ -2724,7 +2724,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     if ( mnTextSize )                                       // graphic object or area fill
                     {
                         /* SJ #i34951#: because M. documents are not allowing GraphicObjects containing text, we
-                        have to create a simpe Rectangle with fill bitmap instead (while not allowing BitmapMode_Repeat).
+                        have to create a simple Rectangle with fill bitmap instead (while not allowing BitmapMode_Repeat).
                         */
                         ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa00, aSolverContainer );       // Flags: Connector | HasSpt
                         if ( aPropOpt.CreateGraphicProperties( mXPropSet, OUString( "GraphicURL" ), true, true, false ) )
