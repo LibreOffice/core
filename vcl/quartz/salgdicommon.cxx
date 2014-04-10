@@ -58,10 +58,13 @@ extern int DBG_DRAW_ROUNDS, DBG_DRAW_COUNTER, DBG_DRAW_DEPTH;
             SAL_DEBUG("<=== " << s << " " << DBG_DRAW_COUNTER); \
     } while (false)
 
+#define DBG_DRAW_OPERATION_EXIT_EARLY(s) DBG_DRAW_OPERATION_EXIT(s << " exit early " << __LINE__)
+
 #else
 
 #define DBG_DRAW_OPERATION(s,v) /* empty */
 #define DBG_DRAW_OPERATION_EXIT(s) /* empty */
+#define DBG_DRAW_OPERATION_EXIT_EARLY(s) /* empty */
 
 #endif
 
@@ -569,7 +572,7 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     // An image mask can't have a depth > 8 bits (should be 1 to 8 bits)
     if( rAlphaBmp.GetBitCount() > 8 )
     {
-        DBG_DRAW_OPERATION_EXIT("drawAlphaBitmap");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawAlphaBitmap");
         return false;
     }
 
@@ -577,7 +580,7 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     // horizontal/vertical mirroring not implemented yet
     if( rTR.mnDestWidth < 0 || rTR.mnDestHeight < 0 )
     {
-        DBG_DRAW_OPERATION_EXIT("drawAlphaBitmap");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawAlphaBitmap");
         return false;
     }
 
@@ -588,7 +591,7 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
                                                          rTR.mnSrcHeight );
     if( !xMaskedImage )
     {
-        DBG_DRAW_OPERATION_EXIT("drawAlphaBitmap");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawAlphaBitmap");
         return false;
     }
 
@@ -615,7 +618,7 @@ bool AquaSalGraphics::drawTransformedBitmap(
 
     if( !CheckContext() )
     {
-        DBG_DRAW_OPERATION_EXIT("drawTransformedBitmap");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawTransformedBitmap");
         return true;
     }
 
@@ -630,7 +633,7 @@ bool AquaSalGraphics::drawTransformedBitmap(
         xImage = rSrcSalBmp.CreateWithMask( *pMaskSalBmp, 0, 0, (int)aSize.Width(), (int)aSize.Height() );
     if( !xImage )
     {
-        DBG_DRAW_OPERATION_EXIT("drawTransformedBitmap");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawTransformedBitmap");
         return false;
     }
 
@@ -672,7 +675,7 @@ bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
 
     if( !CheckContext() )
     {
-        DBG_DRAW_OPERATION_EXIT("drawAlphaRect");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawAlphaRect");
         return true;
     }
 
@@ -711,7 +714,7 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
 
     if( !CheckContext() )
     {
-        DBG_DRAW_OPERATION_EXIT("drawBitmap");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawBitmap");
         return;
     }
 
@@ -720,7 +723,7 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
                                                     (int)rPosAry.mnSrcWidth, (int)rPosAry.mnSrcHeight );
     if( !xImage )
     {
-        DBG_DRAW_OPERATION_EXIT("drawBitmap");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawBitmap");
         return;
     }
 
@@ -747,7 +750,7 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
 
     if( !CheckContext() )
     {
-        DBG_DRAW_OPERATION_EXIT("drawBitmap");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawBitmap");
         return;
     }
 
@@ -757,7 +760,7 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
                                                      rPosAry.mnSrcWidth, rPosAry.mnSrcHeight ) );
     if( !xMaskedImage )
     {
-        DBG_DRAW_OPERATION_EXIT("drawBitmap");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawBitmap");
         return;
     }
 
@@ -832,13 +835,13 @@ void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
         // #i109453# platform independent code expects at least one pixel to be drawn
         drawPixel( nX1, nY1 );
 
-        DBG_DRAW_OPERATION_EXIT("drawLine");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawLine");
         return;
     }
 
     if( !CheckContext() )
     {
-        DBG_DRAW_OPERATION_EXIT("drawLine");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawLine");
         return;
     }
 
@@ -864,7 +867,7 @@ void AquaSalGraphics::drawMask( const SalTwoRect& rPosAry, const SalBitmap& rSal
 
     if( !CheckContext() )
     {
-        DBG_DRAW_OPERATION_EXIT("drawMask");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawMask");
         return;
     }
 
@@ -874,7 +877,7 @@ void AquaSalGraphics::drawMask( const SalTwoRect& rPosAry, const SalBitmap& rSal
                                                  nMaskColor );
     if( !xImage )
     {
-        DBG_DRAW_OPERATION_EXIT("drawMask");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawMask");
         return;
     }
 
@@ -913,21 +916,21 @@ bool AquaSalGraphics::drawPolyLine(
     const int nPointCount = rPolyLine.count();
     if( nPointCount <= 0 )
     {
-        DBG_DRAW_OPERATION_EXIT("drawPolyLine");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
         return true;
     }
 
     // reject requests that cannot be handled yet
     if( rLineWidths.getX() != rLineWidths.getY() )
     {
-        DBG_DRAW_OPERATION_EXIT("drawPolyLine");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
         return false;
     }
 
 #ifdef IOS
     if( !CheckContext() )
     {
-        DBG_DRAW_OPERATION_EXIT("drawPolyLine");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
         return false;
     }
 #endif
@@ -938,7 +941,7 @@ bool AquaSalGraphics::drawPolyLine(
     if( (basegfx::B2DLINEJOIN_NONE == eLineJoin) &&
         (rLineWidths.getX() > 1.3) )
     {
-        DBG_DRAW_OPERATION_EXIT("drawPolyLine");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
         return false;
     }
 
@@ -1029,14 +1032,14 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
     const int nPolyCount = rPolyPoly.count();
     if( nPolyCount <= 0 )
     {
-        DBG_DRAW_OPERATION_EXIT("drawPolyPolygon");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyPolygon");
         return true;
     }
 
     // ignore invisible polygons
     if( (fTransparency >= 1.0) || (fTransparency < 0) )
     {
-        DBG_DRAW_OPERATION_EXIT("drawPolyPolygon");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyPolygon");
         return true;
     }
 
@@ -1073,7 +1076,7 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
             SAL_WARN( "vcl.quartz", "Neither pen nor brush visible" );
             CG_TRACE( "CGPathRelease(" << xPath << ")" );
             CGPathRelease( xPath );
-            DBG_DRAW_OPERATION_EXIT("drawPolyPolygon");
+            DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyPolygon");
             return true;
         }
 
@@ -1111,13 +1114,13 @@ void AquaSalGraphics::drawPolyPolygon( sal_uInt32 nPolyCount, const sal_uInt32 *
 
     if( nPolyCount <= 0 )
     {
-        DBG_DRAW_OPERATION_EXIT("drawPolyPolygon");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyPolygon");
         return;
     }
 
     if( !CheckContext() )
     {
-        DBG_DRAW_OPERATION_EXIT("drawPolyPolygon");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyPolygon");
         return;
     }
 
@@ -1165,7 +1168,7 @@ void AquaSalGraphics::drawPolyPolygon( sal_uInt32 nPolyCount, const sal_uInt32 *
     else
     {
         SAL_WARN( "vcl.quartz", "Neither pen nor brush visible" );
-        DBG_DRAW_OPERATION_EXIT("drawPolyPolygon");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyPolygon");
         return;
     }
 
@@ -1238,13 +1241,13 @@ void AquaSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint *pPtAry )
 
     if( nPoints <= 1 )
     {
-        DBG_DRAW_OPERATION_EXIT("drawPolygon");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolygon");
         return;
     }
 
     if( !CheckContext() )
     {
-        DBG_DRAW_OPERATION_EXIT("drawPolygon");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolygon");
         return;
     }
 
@@ -1325,7 +1328,7 @@ void AquaSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 
     if( !CheckContext() )
     {
-        DBG_DRAW_OPERATION_EXIT("drawRect");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawRect");
         return;
     }
 
@@ -1359,13 +1362,13 @@ void AquaSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
 
     if( nPoints < 1 )
     {
-        DBG_DRAW_OPERATION_EXIT("drawPolyLine");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
         return;
     }
 
     if( !CheckContext() )
     {
-        DBG_DRAW_OPERATION_EXIT("drawPolyLine");
+        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
         return;
     }
 
