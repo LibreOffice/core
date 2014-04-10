@@ -3515,7 +3515,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
             nSpaceChars++;
         rPrevCharIsSpace = bCurrCharIsSpace;
 
-        // If the currect character is not exported as text, the start
+        // If the current character is not exported as text, the start
         // position for text is the position behind the current position.
         if( !bExpCharAsText )
         {

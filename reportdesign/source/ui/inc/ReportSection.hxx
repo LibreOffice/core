@@ -154,7 +154,7 @@ namespace rptui
         void createDefault(const OUString& _sType,SdrObject* _pObj);
         void stopScrollTimer();
 
-        /** deactivate the currect active ole object if any
+        /** deactivate the current active ole object if any
         */
         void    deactivateOle();
 
