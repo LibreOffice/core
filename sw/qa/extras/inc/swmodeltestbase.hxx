@@ -572,11 +572,11 @@ protected:
         // Read the XML stream we're interested in.
         uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
         uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
+
         boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-        pStream->Seek(STREAM_SEEK_TO_END);
-        sal_Size nSize = pStream->Tell();
-        pStream->Seek(0);
-        rtl::ByteSequence aBuffer(nSize + 1);
+        sal_Size nSize = pStream->remainingSize();
+
+        rtl::ByteSequence aBuffer(nSize);
         pStream->Read(aBuffer.getArray(), nSize);
 
         // Parse the XML.
