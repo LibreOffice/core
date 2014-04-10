@@ -252,7 +252,7 @@ namespace toolkit
         // positioned/sized for painting only), and that calculation of our position is expensive
 
         // what we know (or can obtain from somewhere):
-        // * the PosSize of our peer, relative to it's parent window
+        // * the PosSize of our peer, relative to its parent window
         // * the parent window which the PosSize is relative to
         // * our foreign controlled accessible parent
         // from this info, we can determine the position of our peer relative to the foreign parent

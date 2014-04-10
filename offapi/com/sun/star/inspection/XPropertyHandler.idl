@@ -415,7 +415,7 @@ interface XPropertyHandler
         <p>A XPropertyHandler is used by a XObjectInspector instance,
         which implements the XController interface. By definition, a XObjectInspector always forwards
         all suspend requests (com::sun::star::frame::XController::suspend()) to
-        all it's handlers.</p>
+        all its handlers.</p>
 
         <p>The usual use case for this method are non-modal user interface components used
         for property value input. Such a component might have been opened during

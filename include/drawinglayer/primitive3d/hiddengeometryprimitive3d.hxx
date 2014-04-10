@@ -39,7 +39,7 @@ namespace drawinglayer
         // to 'if neither filled nor lines' creation criteria. The whole primitive
         // decomposes to nothing, so no one not knowing it will be influenced. Only
         // helper processors for hit test (and maybe BoundRect extractors) will
-        // use it and it's children subcontent.
+        // use it and its children subcontent.
         class DRAWINGLAYER_DLLPUBLIC HiddenGeometryPrimitive3D : public GroupPrimitive3D
         {
         public:

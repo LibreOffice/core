@@ -102,7 +102,7 @@ public class ConfigExamples
             else
                 System.out.println( "ERROR: Cannot connect - no remote component context available." );
 
-            // Create an instance of the class and call it's run method
+            // Create an instance of the class and call its run method
             ConfigExamples aExample = new ConfigExamples(xContext);
             aExample.run( );
 

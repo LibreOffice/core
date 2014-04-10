@@ -318,7 +318,7 @@ Reference< XFormController >  FormViewPageWindowAdapter::getController( const Re
         if ((XTabControllerModel*)(*i)->getModel().get() == (XTabControllerModel*)xModel.get())
             return *i;
 
-        // the current-round controller isn't the right one. perhaps one of it's children ?
+        // the current-round controller isn't the right one. perhaps one of its children ?
         Reference< XFormController >  xChildSearch = getControllerSearchChildren(Reference< XIndexAccess > (*i, UNO_QUERY), xModel);
         if (xChildSearch.is())
             return xChildSearch;

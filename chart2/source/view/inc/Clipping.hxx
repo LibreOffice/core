@@ -40,7 +40,7 @@ class Clipping
 public:
     /** @descr  The intersection between an open polygon and a rectangle is
             calculated and the resulting lines are placed into the poly-polygon aResult.
-        @param  rPolygon    The polygon is required to be open, ie. it's start and end point
+        @param  rPolygon    The polygon is required to be open, ie. its start and end point
             have different coordinates and that it is continuous, ie. has no holes.
         @param  rRectangle  The clipping area.
         @param  aResult The resulting lines that are the parts of the given polygon lying inside

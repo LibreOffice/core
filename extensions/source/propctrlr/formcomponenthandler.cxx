@@ -1979,7 +1979,7 @@ namespace pcr
                 Reference< XConnection > xConnection;
                 bool bAllowEmptyDS = ::dbtools::isEmbeddedInDatabase( m_xComponent, xConnection );
 
-                // both our current form, and it's parent form, need to have a valid
+                // both our current form, and its parent form, need to have a valid
                 // data source signature
                 bool bDoEnableMasterDetailFields =
                         impl_hasValidDataSourceSignature_nothrow( m_xComponent, bAllowEmptyDS )

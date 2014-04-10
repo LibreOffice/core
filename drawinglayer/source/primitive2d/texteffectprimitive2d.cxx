@@ -214,7 +214,7 @@ namespace drawinglayer
         basegfx::B2DRange TextEffectPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             // get range of content and grow by used fDiscreteSize. That way it is not necessary to ask
-            // the whole decomposition for it's ranges (which may be expensive with outline mode which
+            // the whole decomposition for its ranges (which may be expensive with outline mode which
             // then will ask 9 times at nearly the same content. This may even be refined here using the
             // TextEffectStyle information, e.g. for TEXTEFFECTSTYLE2D_RELIEF the grow needs only to
             // be in two directions

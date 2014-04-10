@@ -43,7 +43,7 @@ namespace comphelper
 
     //= OModuleImpl
 
-    /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by it's owner
+    /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by its owner
     */
     class OModuleImpl
     {

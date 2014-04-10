@@ -61,7 +61,7 @@ service BindableControlModel
 
         <p>In both cases, explicit changes of the model's property are ignored if they would relax
         the restriction imposed by the binding.<br/>
-        For instance, if the binding declares it's value to
+        For instance, if the binding declares its value to
         be read-only (indicated by ValueBinding::ReadOnly being `TRUE`), then
         any attempt to set the <code>ReadOnly</code> property of the control model to `FALSE` will
         fail. However, if the binding's value is not read-only, then the <code>ReadOnly</code>

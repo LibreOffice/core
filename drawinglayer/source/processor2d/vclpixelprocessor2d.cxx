@@ -902,7 +902,7 @@ namespace drawinglayer
 
                                             // do no tallow by default - problem is that self-overlapping parts of this geometry will
                                             // not be in a all-same transparency but will already alpha-cover themselves with blending.
-                                            // This is not what the UnifiedTransparencePrimitive2D defines: It requires all it's
+                                            // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
                                             // content to be uniformely transparent.
                                             // For hairline the effect is pretty minimal, but still not correct.
                                             static bool bAllowed(false);
@@ -918,7 +918,7 @@ namespace drawinglayer
 
                                             // do no tallow by default - problem is that self-overlapping parts of this geometry will
                                             // not be in a all-same transparency but will already alpha-cover themselves with blending.
-                                            // This is not what the UnifiedTransparencePrimitive2D defines: It requires all it's
+                                            // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
                                             // content to be uniformely transparent.
                                             // To check, acitvate and draw a wide transparent self-crossing line/curve
                                             static bool bAllowed(false);

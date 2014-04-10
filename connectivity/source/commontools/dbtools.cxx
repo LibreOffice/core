@@ -375,7 +375,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
             break;
         }
 
-        // build a connection with it's current settings (4. data source name, or 5. URL)
+        // build a connection with its current settings (4. data source name, or 5. URL)
 
         const OUString sUserProp( "User" );
         OUString sDataSourceName;

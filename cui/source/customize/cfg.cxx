@@ -3901,7 +3901,7 @@ void ToolbarSaveInData::Reset()
     SvxEntries::const_iterator toolbars = GetEntries()->begin();
     SvxEntries::const_iterator end = GetEntries()->end();
 
-    // reset each toolbar by calling removeSettings for it's toolbar URL
+    // reset each toolbar by calling removeSettings for its toolbar URL
     for ( ; toolbars != end; ++toolbars )
     {
         SvxConfigEntry* pToolbar = *toolbars;

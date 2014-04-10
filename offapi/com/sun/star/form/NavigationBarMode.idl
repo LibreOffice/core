@@ -53,7 +53,7 @@ published enum NavigationBarMode
 
         <p>This options is usually used for forms containing an grid control only.
         In such a form, the control has it's own navigation elements, so there is
-        no need to use the navigation bar for the form, but rather for it's parent.
+        no need to use the navigation bar for the form, but rather for its parent.
         </p>
      */
     PARENT

@@ -40,7 +40,7 @@ namespace drawinglayer
             This primitive encapsulates these and the VCLPdfRenderer uses it
             to apply the needed infos directly to the pdf export in a compatible
             way.
-            If a renderer ignores this, it just decomposes to it's child
+            If a renderer ignores this, it just decomposes to its child
             content.
          */
         class DRAWINGLAYER_DLLPUBLIC StructureTagPrimitive2D : public GroupPrimitive2D

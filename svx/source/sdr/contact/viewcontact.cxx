@@ -213,7 +213,7 @@ namespace sdr
         void ViewContact::ActionChildInserted(ViewContact& rChild)
         {
             // propagate change to all exsisting visualisations which
-            // will force a VOC for the new child and invalidate it's range
+            // will force a VOC for the new child and invalidate its range
             const sal_uInt32 nCount(maViewObjectContactVector.size());
 
             for(sal_uInt32 a(0); a < nCount; a++)

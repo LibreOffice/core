@@ -122,9 +122,9 @@ interface XReportComponent
         /** is used for subreports and contains the names of columns of the parent report.
     <p> These columns are typically the foreign key fields of the parent report.
     The values of theses columns are used to identify the data for the subreport.
-    Each time the parent report changes it's current row, the subreport requeries
+    Each time the parent report changes its current row, the subreport requeries
     it's data based on the values of the master fields.</p>
-    <p>If the report is no sub report (e.g. it's parent is not a report itself), this
+    <p>If the report is no sub report (e.g. its parent is not a report itself), this
     property is not evaluated.</p>
 
     */
@@ -153,7 +153,7 @@ interface XReportComponent
     </p>
     <p>The columns specified herein typically represent a part of the primary key
     fields or their aliases of the detail report.</p>
-    <p>If the report is no sub report (e.g. it's parent is not a report itself), this
+    <p>If the report is no sub report (e.g. its parent is not a report itself), this
     property is not evaluated.</p>
     *
     */

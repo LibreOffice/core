@@ -948,7 +948,7 @@ namespace frm
             bSuccess = true;
             if ( xCurrentControl.is() && !bControlIsLocked )
             {
-                // both the control and it's model can be committable, so try both
+                // both the control and its model can be committable, so try both
                 Reference< XBoundComponent > xBound( xCurrentControl, UNO_QUERY );
                 if ( !xBound.is() )
                     xBound = xBound.query( xCurrentControl->getModel() );

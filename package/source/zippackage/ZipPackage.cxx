@@ -167,7 +167,7 @@ ZipPackage::~ZipPackage( void )
     // All folders and streams contain pointers to their parents, when a parent diappeares
     // it should disconnect all the children from itself during destruction automatically.
     // So there is no need in explicit m_pRootFolder->releaseUpwardRef() call here any more
-    // since m_pRootFolder has no parent and cleaning of it's children will be done automatically
+    // since m_pRootFolder has no parent and cleaning of its children will be done automatically
     // during m_pRootFolder dieing by refcount.
 }
 

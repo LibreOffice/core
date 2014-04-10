@@ -157,7 +157,7 @@ struct PropertySetInfo
 
     AllProperties   aProps;                 // all properties of this set which we know so far
     sal_Bool            bHasEmptyControlSource; // sal_True -> the set has a DataField property, and the current value is an empty string
-                                            // sal_False -> the set has _no_ such property or it's value isn't empty
+                                            // sal_False -> the set has _no_ such property or its value isn't empty
 };
 
 typedef std::map<Reference< XPropertySet >, PropertySetInfo> PropertySetInfoCache;

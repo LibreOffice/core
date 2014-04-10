@@ -98,7 +98,7 @@ public class _XRecentFunctions extends MultiMethodTest {
     * functions, sets list of maximum size. <p>
     * Has <b> OK </b> status if length of recent function list is equal to zero
     * after list was set to empty, if length of list is equal to maximum size
-    * after list was set to it's maximum size and no exception were thrown. <p>
+    * after list was set to its maximum size and no exception were thrown. <p>
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> getMaxRecentFunctions() </code> : to have the maximum number

@@ -1363,7 +1363,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
     {
         try
         {
-            // get the table column and it's name
+            // get the table column and its name
             _xNames->getByIndex(i) >>= xTableColumn;
             OSL_ENSURE(xTableColumn.is(), "OResultSet::setBoundedColumns: invalid table column!");
             if (xTableColumn.is())

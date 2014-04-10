@@ -121,7 +121,7 @@ interface XSection
     };
 
     /** Specifies that elements with dynamic state will be expanded vertically when then content of the element is larger than it's container.
-        If this property is disabled the content will be truncated when it's size is larger than the container.
+        If this property is disabled the content will be truncated when its size is larger than the container.
     */
     [attribute,bound] boolean CanGrow
     {

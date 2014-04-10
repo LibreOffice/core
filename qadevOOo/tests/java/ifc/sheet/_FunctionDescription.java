@@ -129,7 +129,7 @@ public class _FunctionDescription extends MultiMethodTest {
             }
             else {
                log.println( "Property '" + name +
-                    "' changes it's value : Failed !" );
+                    "' changes its value : Failed !" );
                tRes.tested( name, false );
             }
         }

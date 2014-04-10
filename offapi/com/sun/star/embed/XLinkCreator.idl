@@ -42,7 +42,7 @@ published interface XLinkCreator: com::sun::star::uno::XInterface
         and initializes it as a link.
 
         <p>
-        In case the entry exists already all it's contents will be ignored and
+        In case the entry exists already all its contents will be ignored and
         rewritten on storing of the object.
         </p>
 

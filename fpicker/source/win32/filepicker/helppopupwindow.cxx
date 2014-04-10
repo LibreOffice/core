@@ -96,7 +96,7 @@ CHelpPopupWindow::~CHelpPopupWindow( )
 {
     // remember: we don't have to destroy the
     // preview window because it will be destroyed
-    // by it's parent window (the FileOpen dialog)
+    // by its parent window (the FileOpen dialog)
     // but we have to unregister the window class
     if ( m_bWndClassRegistered )
         UnregisterWindowClass( );

@@ -342,7 +342,7 @@ SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddr(
 
 /** Create an oslHostAddr by resolving the given strHostname.
     Successful name resolution should result in the fully qualified
-    domain name (FQDN) and it's address as hostname and socket address
+    domain name (FQDN) and its address as hostname and socket address
     members of the resulting oslHostAddr.
     @param[in] strHostname The hostname to be resolved.
     @return The resulting address or 0 upon failure.
@@ -352,7 +352,7 @@ SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHost
 
 /** Create an oslHostAddr by reverse resolution of the given Addr.
     Successful name resolution should result in the fully qualified
-    domain name (FQDN) and it's address as hostname and socket address
+    domain name (FQDN) and its address as hostname and socket address
     members of the resulting oslHostAddr.
     @param[in] Addr The socket address to be reverse resolved.
     @return The resulting address or 0 upon failure.

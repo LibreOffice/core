@@ -229,7 +229,7 @@ namespace svt
     {
         BrowseBox::GetFocus();
 
-        // This should handle the case that the BrowseBox (or one of it's children)
+        // This should handle the case that the BrowseBox (or one of its children)
         // gets the focus from outside by pressing Tab
         if (IsEditing() && Controller()->GetWindow().IsVisible())
             Controller()->GetWindow().GrabFocus();

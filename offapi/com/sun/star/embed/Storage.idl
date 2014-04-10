@@ -227,10 +227,10 @@ published service Storage
 
         <p>
         If a storage is commited all changes made to it will be integrated to
-        it's parent storage. This is recursive process, so the last commited
+        its parent storage. This is recursive process, so the last commited
         storage should be the root one. For the package based storages commit
         of a root storage also means flashing to the related medium. If
-        a storage is not commited, no changes for it or it's child elements
+        a storage is not commited, no changes for it or its child elements
         will be stored.
         </p>
      */

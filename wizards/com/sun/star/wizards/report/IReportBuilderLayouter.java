@@ -99,7 +99,7 @@ public interface IReportBuilderLayouter
     public void insertSortingNames(String[][] _aSortFieldNames);
 
     /**
-     * This method redraws the whole layout with all it's content
+     * This method redraws the whole layout with all its content
      */
     public void layout();
 

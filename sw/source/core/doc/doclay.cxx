@@ -1275,7 +1275,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 // Always transfer the anchor, which is a hard attribute anyways.
                 pNewSet->Put( pOldFmt->GetAnchor() );
 
-                // The new one should be changeable in it's height.
+                // The new one should be changeable in its height.
                 SwFmtFrmSize aFrmSize( pOldFmt->GetFrmSize() );
                 aFrmSize.SetHeightSizeType( ATT_MIN_SIZE );
                 pNewSet->Put( aFrmSize );
@@ -1569,7 +1569,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
     pNewSet->Put( pOldFmt->GetAnchor() );
 
-    // The new one should be variable in it's height!
+    // The new one should be variable in its height!
      Size aSz( rSdrObj.GetCurrentBoundRect().GetSize() );
     SwFmtFrmSize aFrmSize( ATT_MIN_SIZE, aSz.Width(), aSz.Height() );
     pNewSet->Put( aFrmSize );

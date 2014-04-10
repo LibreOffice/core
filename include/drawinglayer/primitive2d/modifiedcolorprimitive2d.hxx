@@ -36,7 +36,7 @@ namespace drawinglayer
         /** ModifiedColorPrimitive2D class
 
             This primitive is a grouping primitive and allows to define
-            how the colors of it's child content shall be modified for
+            how the colors of its child content shall be modified for
             visualisation. This can be (and is) used e.g. for generic shadow
             visualisation by forcing all color usages of the contained
             sub-content to the shadow color.

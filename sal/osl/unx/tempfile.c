@@ -166,7 +166,7 @@ static oslFileError osl_setup_base_directory_impl_(
 
 /*****************************************************************
  * Create a unique file in the specified directory and return
- * it's name
+ * its name
  ****************************************************************/
 
 static oslFileError osl_create_temp_file_impl_(

@@ -71,7 +71,7 @@ protected:
     enum AGGREGATE_ACTION { NONE, SETTING_PROPERTIES, FLUSHING };
     AGGREGATE_ACTION    m_eDoingCurrently;
 
-    /** a class which automatically resets m_eDoingCurrently in it's destructor
+    /** a class which automatically resets m_eDoingCurrently in its destructor
     */
     class OAutoActionReset; // just for the following friend declaration
     friend class OAutoActionReset;

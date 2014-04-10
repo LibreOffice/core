@@ -421,7 +421,7 @@ namespace pcr
         OUString* pReturn = aReturn.getArray();
 
         // SvxMacroAssignDlg has a weird API: It expects a XNameReplace, means a container whose
-        // main access method is by name. In it's UI, it shows the possible events in exactly the
+        // main access method is by name. In its UI, it shows the possible events in exactly the
         // order in which XNameAccess::getElementNames returns them.
         // However, SvxMacroAssignDlg *also* takes an index for the initial selection, which is
         // relative to the sequence returned by XNameAccess::getElementNames.
@@ -935,7 +935,7 @@ namespace pcr
         Reference< XChild > xChild( m_xComponent, UNO_QUERY_THROW );
         Reference< XIndexAccess > xParentAsIndexAccess( xChild->getParent(), UNO_QUERY_THROW );
 
-        // get the index of the inspected object within it's parent container
+        // get the index of the inspected object within its parent container
         sal_Int32 nElements = xParentAsIndexAccess->getCount();
         for ( sal_Int32 i=0; i<nElements; ++i )
         {

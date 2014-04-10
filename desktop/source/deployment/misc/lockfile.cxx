@@ -44,7 +44,7 @@ static OString impl_getHostname()
     OString aHost;
 #ifdef WNT
     /*
-       prevent windows from connecting to the net to get it's own
+       prevent windows from connecting to the net to get its own
        hostname by using the netbios name
        */
     sal_Int32 sz = MAX_COMPUTERNAME_LENGTH + 1;

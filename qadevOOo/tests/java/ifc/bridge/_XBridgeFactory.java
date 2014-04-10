@@ -204,7 +204,7 @@ public class _XBridgeFactory extends MultiMethodTest {
     * <li> <code>getExestingBridges</code> : to have some bridge name
     *    to retrieve </li>
     * </ul> <p>
-    * Has <b>OK</b> status if bridge successfully returned and it's name
+    * Has <b>OK</b> status if bridge successfully returned and its name
     * equals to name passed as parameter.
     */
     public void _getBridge() {

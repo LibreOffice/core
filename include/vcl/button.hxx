@@ -338,7 +338,7 @@ protected:
     inline void             SetStateRect( const Rectangle& _rStateRect )    { maStateRect = _rStateRect; }
     inline const Rectangle& GetStateRect( ) const                           { return maStateRect; }
 
-    // draws the radio button (the knob image), in it's current state (pressed/checked)
+    // draws the radio button (the knob image), in its current state (pressed/checked)
     // at the usual location, which can be overridden with SetStateRect
     void            DrawRadioButtonState( );
 

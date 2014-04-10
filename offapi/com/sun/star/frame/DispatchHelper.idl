@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module frame {
     Normally a complete dispatch is split into different parts:
     - converting and parsing the URL
     - searching for a valid dispatch object available on a dispatch provider
-    - dispatching of the URL and it's parameters
+    - dispatching of the URL and its parameters
     </p>
 
     @see DispatchProvider

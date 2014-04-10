@@ -75,7 +75,7 @@ published service PropertyBrowserController
 {
     /** contains the object to inspect.
 
-        <p>Changing this property from outside causes the controller to update it's view
+        <p>Changing this property from outside causes the controller to update its view
         with the data of the new object</p>
     */
     [property] com::sun::star::beans::XPropertySet IntrospectedObject;

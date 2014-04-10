@@ -1385,7 +1385,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
             // now if the form where we inserted the new model is already loaded, notify the model of this
             // Note that this implementation below is a HACK as it relies on the fact that the model adds itself
-            // as load listener to it's parent, which is an implementation detail of the model.
+            // as load listener to its parent, which is an implementation detail of the model.
             //
             // the better solution would be the following:
             // in the current scenario, we insert a control model into a form. This results in the control model

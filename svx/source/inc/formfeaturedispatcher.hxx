@@ -108,7 +108,7 @@ namespace svx
 
             @precond
                 our Mutex is locked - else calling the method would not make sense, since
-                it's result could be out-of-date as soon as it's returned to the caller.
+                its result could be out-of-date as soon as it's returned to the caller.
         */
         void    checkAlive() const SAL_THROW((::com::sun::star::lang::DisposedException));
 

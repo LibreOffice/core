@@ -242,7 +242,7 @@ namespace accessibility
 
             This can be used if the owner of this object has children
             handled by itself. Setting an offset different from 0
-            leads to this object mimicking that all it's children are
+            leads to this object mimicking that all its children are
             within the range [nOffset, GetChildCount()+nOffset). That
             means, GetChild() also expects the index to be in this
             range.

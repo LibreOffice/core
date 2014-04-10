@@ -339,7 +339,7 @@ public class ReportDesignerTest extends ComplexTestCase {
                 // }
                 // else
                 // {
-                //     assure("Can't identify the document no 'writer' nor 'calc' in it's name given.", false);
+                //     assure("Can't identify the document no 'writer' nor 'calc' in its name given.", false);
                 // }
             }
             catch (AssureException e)

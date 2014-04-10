@@ -260,7 +260,7 @@ class SwChartDataSequence :
     OUString  aRowLabelText;
     OUString  aColLabelText;
 
-    // holds a reference to the data-provider to guarantee it's lifetime last as
+    // holds a reference to the data-provider to guarantee its lifetime last as
     // long as the pointer may be used.
     ::com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataProvider >    xDataProvider;
     SwChartDataProvider *                   pDataProvider;

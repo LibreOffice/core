@@ -1765,7 +1765,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         }
                         aFmt.SetCharFmt( pCharFmt );
                         // #i51842#
-                        // If the character format has been found it's name should not be in the
+                        // If the character format has been found its name should not be in the
                         // char style names array
                         m_sNewCharStyleNames[(sal_uInt16)nIndex] = OUString();
                      }

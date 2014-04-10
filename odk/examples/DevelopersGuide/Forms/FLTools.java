@@ -123,7 +123,7 @@ public class FLTools
     }
 
     /* ------------------------------------------------------------------ */
-    /** retrieves the index of a form component within it's parent
+    /** retrieves the index of a form component within its parent
     */
     static public int getIndexInParent( Object aContainer, Object aElement ) throws com.sun.star.uno.Exception
     {

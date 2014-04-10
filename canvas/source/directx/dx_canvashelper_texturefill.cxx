@@ -221,7 +221,7 @@ namespace dxcanvas
             // scale focus according to aspect ratio: for wider-than-tall
             // bounds (nAspectRatio > 1.0), the focus must have non-zero
             // width. Specifically, a bound rect twice as wide as tall has
-            // a focus of half it's width.
+            // a focus of half its width.
             if( !::rtl::math::approxEqual(rValues.mnAspectRatio,
                                           1.0) )
             {
@@ -294,7 +294,7 @@ namespace dxcanvas
                 // wider-than-tall bounds (nAspectRatio > 1.0), the inner
                 // polygon, representing the gradient focus, must have
                 // non-zero width. Specifically, a bound rect twice as wide as
-                // tall has a focus polygon of half it's width.
+                // tall has a focus polygon of half its width.
                 const double nAspectRatio( rValues.mnAspectRatio );
                 if( nAspectRatio > 1.0 )
                 {

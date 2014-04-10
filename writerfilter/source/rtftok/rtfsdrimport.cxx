@@ -341,7 +341,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         else if ( i->first == "pVerticies" )
         {
             uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
-            sal_Int32 nSize = 0; // Size of a token (it's value is hardwired in the exporter)
+            sal_Int32 nSize = 0; // Size of a token (its value is hardwired in the exporter)
             sal_Int32 nCount = 0; // Number of tokens
             sal_Int32 nCharIndex = 0; // Character index
             sal_Int32 nIndex = 0; // Array index

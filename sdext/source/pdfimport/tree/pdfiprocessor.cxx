@@ -211,7 +211,7 @@ void PDFIProcessor::processGlyphLine()
 
     double spaceDetectBoundary = 0.0;
 
-    // Try to find space glyph and it's width
+    // Try to find space glyph and its width
     for (size_t i = 0; i < m_GlyphsList.size(); i++)
     {
         OUString& glyph = m_GlyphsList[i].getGlyph();

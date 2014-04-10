@@ -34,7 +34,7 @@ namespace drawinglayer
         /** ModifiedColorPrimitive3D class
 
             This primitive is a grouping primitive and allows to define
-            how the colors of it's child content shall be modified for
+            how the colors of its child content shall be modified for
             visualisation. Please see the ModifiedColorPrimitive2D
             description for more info.
          */

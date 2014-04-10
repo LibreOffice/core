@@ -2612,7 +2612,7 @@ void OReportController::shrinkSectionBottom(uno::Reference<report::XSection> _xS
     sal_Int32 nMaxPositionY = 0;
     uno::Reference< report::XReportComponent> xReportComponent;
 
-    // for every component get it's Y-position and compare it to the current Y-position
+    // for every component get its Y-position and compare it to the current Y-position
     for (int i=0;i<nElements;i++)
     {
         xReportComponent.set(_xSection->getByIndex(i), uno::UNO_QUERY);
@@ -2644,7 +2644,7 @@ void OReportController::shrinkSectionTop(uno::Reference<report::XSection> _xSect
     sal_Int32 nMinPositionY = nSectionHeight;
     uno::Reference< report::XReportComponent> xReportComponent;
 
-    // for every component get it's Y-position and compare it to the current Y-position
+    // for every component get its Y-position and compare it to the current Y-position
     for (int i=0;i<nElements;i++)
     {
         xReportComponent.set(_xSection->getByIndex(i), uno::UNO_QUERY);

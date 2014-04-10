@@ -363,7 +363,7 @@ namespace
         if (!rTransferIfAvailable.getLength())
             return; // nothing to do
 
-        // check for the index of the model within it's parent
+        // check for the index of the model within its parent
         Reference< XIndexAccess> xParentIndex(xModelChild->getParent(), UNO_QUERY);
         if (!xParentIndex.is())
             return; // nothing to do

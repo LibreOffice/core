@@ -786,7 +786,7 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
         0);
 
     // call the parent function to center the
-    // dialog to it's parent
+    // dialog to its parent
     CFileOpenDialog::onInitDone();
 }
 

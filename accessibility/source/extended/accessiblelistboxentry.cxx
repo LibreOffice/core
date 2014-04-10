@@ -338,7 +338,7 @@ namespace accessibility
                     xParent = getListBox()->GetAccessible( );
             }
             else
-            {   // we have a entry as parent -> get it's accessible
+            {   // we have a entry as parent -> get its accessible
 
                 // shorten our access path by one
                 ::std::deque< sal_Int32 > aParentPath( m_aEntryPath );
@@ -353,7 +353,7 @@ namespace accessibility
                 if ( pParentEntry )
                     xParent = new AccessibleListBoxEntry( *getListBox(), pParentEntry, NULL );
                     // note that we pass NULL here as parent-accessible:
-                    // this is allowed, as the AccessibleListBoxEntry class will create it's parent
+                    // this is allowed, as the AccessibleListBoxEntry class will create its parent
                     // when needed
             }
         }

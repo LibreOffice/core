@@ -63,7 +63,7 @@
       </info>
       <set oor:name="ItemList" oor:node-type="HistoryItem">
         <info>
-          <desc>Contains all items identified by it's URL.</desc>
+          <desc>Contains all items identified by its URL.</desc>
         </info>
       </set>
       <set oor:name="OrderList" oor:node-type="HistoryOrder">

@@ -53,10 +53,10 @@ namespace drawinglayer
             /// the geometric definition
             basegfx::B2DHomMatrix                       maTransform;
 
-            /// the GraphicObject with all it's content possibilities
+            /// the GraphicObject with all its content possibilities
             GraphicObject                               maGraphicObject;
 
-            /// The GraphicAttr with all it's modification possibilities
+            /// The GraphicAttr with all its modification possibilities
             GraphicAttr                                 maGraphicAttr;
 
         protected:

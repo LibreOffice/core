@@ -42,7 +42,7 @@ published service ExtendedTypeDetectionFactory
     /** factory interface to create and initialize extended type detection components.
 
         <p>
-        A detection component must be specified by it's UNO implementation name and will be crated then.
+        A detection component must be specified by its UNO implementation name and will be crated then.
         Every new created component can be initialized with it's own configuration data
         and may given optional arguments of the corresponding createInstanceWithArguments() request. To do so the
         service must support the optional interface com::sun::star::lang::XInitialization.

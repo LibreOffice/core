@@ -244,7 +244,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
 
                     bSuccess = true;
 
-                    // now that we removed the element, care for all it's child elements
+                    // now that we removed the element, care for all its child elements
                     // which may also be a part of the list
                     // #i33353#
                     OSL_ENSURE( aThisRound->getLength() - 1 >= 0, "OApplicationController::deleteObjects: empty name?" );

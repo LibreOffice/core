@@ -2423,7 +2423,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
         else if(pParent)
         {
 /*
-For child graphic and it's parent paragraph,if split 2 graphic to 2 paragraph,
+For child graphic and its parent paragraph,if split 2 graphic to 2 paragraph,
 will delete one graphic swfrm and new create 1 graphic swfrm ,
 then the new paragraph and the new graphic SwFrm will add .
 but when add graphic SwFrm ,the accessible of the new Paragraph is not created yet.

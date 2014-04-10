@@ -140,7 +140,7 @@ void OTableFieldDescWin::Resize()
         nHelpWidth = DETAILS_OPT_HELP_WIDTH;
         nPageWidth = nOutputWidth - nHelpWidth - STANDARD_MARGIN - STANDARD_MARGIN;
         if (nPageWidth < DETAILS_OPT_PAGE_WIDTH)
-        {   // rather resize the help from its optimal width to it's minimum width
+        {   // rather resize the help from its optimal width to its minimum width
             long nTransfer = DETAILS_OPT_PAGE_WIDTH - nPageWidth;
             nPageWidth += nTransfer;
             nHelpWidth -= nTransfer;

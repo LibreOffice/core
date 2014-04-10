@@ -82,7 +82,7 @@ public:
     void    Add(XFFrame *pFrame);
 
     /**
-     * @descr   Output group object and all it's children.
+     * @descr   Output group object and all its children.
      */
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 

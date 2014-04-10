@@ -519,7 +519,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
         pSourceViewFrm->GetDispatcher()->Execute(SID_SAVEDOC, SFX_CALLMODE_SYNCHRON);
         xFrame->getContainerWindow()->setVisible(sal_False);
         SwDocShell* pDocShell = pSourceView->GetDocShell();
-        //if the document has been saved it's URL has to be stored for
+        //if the document has been saved its URL has to be stored for
         // later use and it can be closed now
         if(pDocShell->HasName() && !pDocShell->IsModified())
         {

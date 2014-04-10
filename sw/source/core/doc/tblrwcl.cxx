@@ -351,7 +351,7 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
                 pNewFmt->SetFmtAttr( aFrmSz );
                 aFrmSz.SetWidth( nSz / ( pCpyPara->nCpyCnt + 1 ) );
 
-                // Create a new Format for the new Box, specifying it's size.
+                // Create a new Format for the new Box, specifying its size.
                 aFindFrm.pNewFrmFmt = (SwTableBoxFmt*)pNewFmt->GetDoc()->
                                             MakeTableLineFmt();
                 *aFindFrm.pNewFrmFmt = *pNewFmt;

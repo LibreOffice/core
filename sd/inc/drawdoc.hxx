@@ -290,7 +290,7 @@ public:
         selected ones (specified via pBookmarkList/pExchangeList), or
         all from the source document.
 
-        @attention Beware! This method in it's current state does not
+        @attention Beware! This method in its current state does not
         handle all combinations of their input parameters
         correctly. For example, for pBookmarkList=NULL, bReplace=sal_True
         is ignored (no replace happens).

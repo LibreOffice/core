@@ -1251,7 +1251,7 @@ void SwCntntFrm::MakeAll()
 
             (Frm().*fnRect->fnSetWidth)( nNewFrmWidth );
 
-            // When a lower of a vertically aligned fly frame changes it's size we need to recalculate content pos.
+            // When a lower of a vertically aligned fly frame changes its size we need to recalculate content pos.
             if( GetUpper() && GetUpper()->IsFlyFrm() &&
                 GetUpper()->GetFmt()->GetTextVertAdjust().GetValue() != SDRTEXTVERTADJUST_TOP )
             {

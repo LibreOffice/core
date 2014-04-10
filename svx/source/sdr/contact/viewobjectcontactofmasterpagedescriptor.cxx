@@ -98,7 +98,7 @@ namespace sdr
             // hide MasterPage content? Test self here for hierarchy
             if(isPrimitiveVisible(rDisplayInfo))
             {
-                // get the VOC of the Master-SdrPage and get it's object hierarchy
+                // get the VOC of the Master-SdrPage and get its object hierarchy
                 ViewContact& rViewContactOfMasterPage(rDescriptor.GetUsedPage().GetViewContact());
                 ViewObjectContact& rVOCOfMasterPage(rViewContactOfMasterPage.GetViewObjectContact(GetObjectContact()));
 

@@ -418,7 +418,7 @@ namespace
         OUString sCurrentIndex;
         while (xChild.is())
         {
-            // get the content's relative pos within it's parent container
+            // get the content's relative pos within its parent container
             sal_Int32 nPos = getElementPos(xParent, xChild);
 
             // prepend this current relaive pos

@@ -1052,7 +1052,7 @@ void SbaXDataBrowserController::disposing(const EventObject& Source) throw( Runt
             disposingGridControl(Source);
     }
 
-    // it's model (the container of the columns) ?
+    // its model (the container of the columns) ?
     if (getControlModel() == Source.Source)
         disposingGridModel(Source);
 

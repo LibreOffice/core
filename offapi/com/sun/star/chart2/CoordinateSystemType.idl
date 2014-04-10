@@ -30,7 +30,7 @@ For example a 2 dimensional Cartesian coordinate system is a CoordinateSystemTyp
 and different from for example a 3 dimensional spherical coordinate system.
 </p>
 <p>A CoordinateSystemType is a stateless service which has no owner and does not
-enable cyclic references, thus it's lifetime can be handled by reference or it
+enable cyclic references, thus its lifetime can be handled by reference or it
 may be implemented as a singleton.</p>
 */
 

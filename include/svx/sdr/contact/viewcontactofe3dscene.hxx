@@ -76,7 +76,7 @@ namespace sdr
             // given SetOfByte is done.
             drawinglayer::primitive2d::Primitive2DSequence createScenePrimitive2DSequence(const SetOfByte* pLayerVisibility) const;
 
-            // helpers to get the sequence of all contained 3D primitives and it's range,
+            // helpers to get the sequence of all contained 3D primitives and its range,
             // regardless of layer or visibility constraints and using a neutral ViewInformation3D
             drawinglayer::primitive3d::Primitive3DSequence getAllPrimitive3DSequence() const;
             basegfx::B3DRange getAllContentRange3D() const;

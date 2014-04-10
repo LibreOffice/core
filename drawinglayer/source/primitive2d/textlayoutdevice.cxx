@@ -457,7 +457,7 @@ namespace drawinglayer
             // for WIN32 systems, the FontScaling at the Font is detected by
             // checking that FontWidth != 0. When FontScaling is used, WIN32
             // needs to do extra stuff to detect the correct width (since it's
-            // zero and not equal the font height) and it's relationship to
+            // zero and not equal the font height) and its relationship to
             // the height
             if(rFont.GetSize().getWidth() > 0)
             {

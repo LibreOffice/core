@@ -84,7 +84,7 @@ namespace svt
 
         /** return the internal used interaction handler object ...
             Because this pointer will be valid only, if the uno object is hold
-            alive by it's uno reference (and this reference is set on the
+            alive by its uno reference (and this reference is set on the
             command environment) we must return NULL, in case this environment does
             not exist!
         */

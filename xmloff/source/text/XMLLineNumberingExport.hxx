@@ -26,7 +26,7 @@
 
 class SvXMLExport;
 
-/** export <text:linenumbering-configuration> and it's child elements */
+/** export <text:linenumbering-configuration> and its child elements */
 class XMLLineNumberingExport
 {
     const OUString sCharStyleName;

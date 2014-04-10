@@ -397,7 +397,7 @@ namespace dbtools
 
     /** calculate a NumberFormatsSupplier for use with an given connection
         @param      _rxConn         the connection for which the formatter is requested
-        @param      _bAllowDefault  if the connection (and related components, such as it's parent) cannot supply
+        @param      _bAllowDefault  if the connection (and related components, such as its parent) cannot supply
                                     a formatter, we can ask the DatabaseEnvironment for a default one. This parameter
                                     states if this is allowed.
         @param      _rxFactory      required (only of _bAllowDefault is sal_True) for creating the DatabaseEnvironment.

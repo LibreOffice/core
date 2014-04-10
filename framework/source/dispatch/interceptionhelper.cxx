@@ -46,7 +46,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     // SAFE {
     SolarMutexClearableGuard aReadLock;
 
-    // a) first search an interceptor, which match to this URL by it's URL pattern registration
+    // a) first search an interceptor, which match to this URL by its URL pattern registration
     //    Note: if it return NULL - it does not mean an empty interceptor list automaticly!
     css::uno::Reference< css::frame::XDispatchProvider > xInterceptor;
     InterceptorList::const_iterator pIt = m_lInterceptionRegs.findByPattern(aURL.Complete);

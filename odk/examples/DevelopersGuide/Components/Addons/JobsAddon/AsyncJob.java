@@ -258,7 +258,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
                  m_xCmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.awt.Toolkit",
                                                                          m_xCmpCtx));
 
-            // describe the info box ini it's parameters
+            // describe the info box ini its parameters
             com.sun.star.awt.WindowDescriptor aDescriptor = new com.sun.star.awt.WindowDescriptor();
             aDescriptor.WindowServiceName = "infobox";
             aDescriptor.Bounds            = new com.sun.star.awt.Rectangle(0,0,300,200);

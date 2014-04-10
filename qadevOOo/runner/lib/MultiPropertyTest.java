@@ -368,7 +368,7 @@ public class MultiPropertyTest extends MultiMethodTest
                         {
                             log.println("NOTIFY: this property needs further investigations.");
                             log.println("\t The type seems to be an Any with value of NULL.");
-                            log.println("\t Maybe the property should get it's own test method.");
+                            log.println("\t Maybe the property should get its own test method.");
                         }
 
                         tRes.tested(propName, false);
@@ -404,7 +404,7 @@ public class MultiPropertyTest extends MultiMethodTest
                         {
                             log.println("NOTIFY: this property needs further investigations.");
                             log.println("\t The type seems to be an Any with value of NULL.");
-                            log.println("\t Maybe the property should get it's own test method.");
+                            log.println("\t Maybe the property should get its own test method.");
                         }
                         if (resValue != null)
                         {

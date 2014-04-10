@@ -188,7 +188,7 @@ protected:
  * to be subclassed to implement the events for a specific
  * objects. The subclass has to
  * 1) supply the super class constructor with a list of known events (item IDs)
- * 2) supply the super class constructor with a reference of it's parent object
+ * 2) supply the super class constructor with a reference of its parent object
  *    (to prevent destruction)
  * 3) implement getItem() and setItem(...) methods.
  *

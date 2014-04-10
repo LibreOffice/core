@@ -474,11 +474,11 @@ public class OOoBean
     // @requirement FUNC.PAR.RWL/0.4
     // @estimation 16h
     /** This method must be called when the OOoBean before the
-        sytem window may be released by it's parent AWT/Swing component.
+        sytem window may be released by its parent AWT/Swing component.
 
         This is the case when java.awt.Component.isDisplayable() returns
         true.  This is definitely the case when the OOoBean is removed
-        from it's parent container.
+        from its parent container.
 
         @throws SystemWindowException
             if system window is not acquired.

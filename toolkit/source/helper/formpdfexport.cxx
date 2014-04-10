@@ -462,7 +462,7 @@ namespace toolkitform
                 static const OUString FM_PROP_TARGET_URL("TargetURL");
                 if ( eButtonType == FormButtonType_SUBMIT )
                 {
-                    // if a button is a submit button, then it uses the URL at it's parent form
+                    // if a button is a submit button, then it uses the URL at its parent form
                     Reference< XChild > xChild( xModelProps, UNO_QUERY );
                     Reference < XPropertySet > xParentProps;
                     if ( xChild.is() )

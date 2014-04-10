@@ -37,7 +37,7 @@ class IniFile
     boolean m_bListContainUnsavedChanges = false;
 
     /**
-       open a ini file by it's name
+       open a ini file by its name
        @param _sFilename string a filename, if the file doesn't exist, a new empty ini file will create.
        write back to disk only if there are really changes.
      */

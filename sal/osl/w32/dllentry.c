@@ -284,7 +284,7 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
         {
             TCHAR   szBuffer[64];
 
-            // This code will attach the process to it's parent process
+            // This code will attach the process to its parent process
             // if the parent process had set the environment variable.
             // The corresponding code (setting the environment variable)
             // is is desktop/win32/source/officeloader.cxx

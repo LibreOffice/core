@@ -452,7 +452,7 @@ public:
         @param _orDocPos
         output parameter - corresponding position in the document, if given
         preview position is inside a shown document page, not an empty page.
-        If not, it's value is <Point( 0, 0 )>.
+        If not, its value is <Point( 0, 0 )>.
 
         @param _obPosInEmptyPage
         output parameter - indicates, that given preview position lays inside
@@ -461,7 +461,7 @@ public:
         @param _onPageNum
         output parameter - corresponding physical number of page, if given
         preview position is inside a shown document page, considers also empty
-        pages. If not, it's value is <0>.
+        pages. If not, its value is <0>.
 
         @return boolean - indicating, that given preview position lays inside
         a shown document preview page, not an empty page.

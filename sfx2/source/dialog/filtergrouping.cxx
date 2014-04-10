@@ -381,7 +381,7 @@ namespace sfx2
         {
             // create an empty filter descriptor for the class
             FilterDescriptor aClassEntry;
-            // set it's name (which is all we know by now)
+            // set its name (which is all we know by now)
             aClassEntry.First = _rClass.sDisplayName;
 
             // add it to the group

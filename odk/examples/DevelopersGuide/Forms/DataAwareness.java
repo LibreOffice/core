@@ -656,7 +656,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         xColProps.setPropertyValue( "DataField", sDataField );
         // the "display name" of the column
         xColProps.setPropertyValue( "Label", sDataField );
-        // the name of the column within it's parent
+        // the name of the column within its parent
         xColProps.setPropertyValue( "Name", sDataField );
 
         if ( nWidth > 0 )

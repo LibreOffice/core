@@ -1524,7 +1524,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
 
 OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties )
 {
-    //find out if any of the styles already has the required properties then return it's name
+    //find out if any of the styles already has the required properties then return its name
     OUString sListLabel = m_pImpl->HasListCharStyle(rCharProperties);
     if( !sListLabel.isEmpty() )
         return sListLabel;

@@ -550,7 +550,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     }
 
     /**
-     * Helper function to get a com.sun.star.wizards.report.layout.ReportBuilderLayouter by it's name
+     * Helper function to get a com.sun.star.wizards.report.layout.ReportBuilderLayouter by its name
      *
      * @param _sClassName
      * @return the object or null

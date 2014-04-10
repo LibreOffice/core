@@ -615,7 +615,7 @@ void Job::impl_stopListening()
                 the job, which was running and inform us now
 
     @param  aResult
-                it's results
+                its results
 */
 void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAsyncJob >& xJob    ,
                                 /*IN*/ const css::uno::Any&                               aResult ) throw(css::uno::RuntimeException, std::exception)
@@ -775,7 +775,7 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
     // No veto ...
     // But don't call die() here or free our internal member.
     // This must be done inside notifyClosing() only. Otherwhise the
-    // might stopped job has no chance to return it's results or
+    // might stopped job has no chance to return its results or
     // call us back. We must give him the chance to finish it's work successfully.
 }
 

@@ -19,7 +19,7 @@
 /**
  * Helper class to hold a Filename or a FileURL
  * Something like File in Java,
- * with some more extensions direct to ConvWatch and it's name conventions
+ * with some more extensions direct to ConvWatch and its name conventions
  *
  *
  */

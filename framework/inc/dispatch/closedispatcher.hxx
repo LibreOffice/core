@@ -251,7 +251,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
 
             @descr  The problem behind: closing some resources depends sometimes from the
                     context where its dispatched. Sometimes the start frame of the dispatch
-                    has to be closed itself (target=_self) ... sometimes it's parent frame
+                    has to be closed itself (target=_self) ... sometimes its parent frame
                     has to be closed - BUT(!) it means a parent frame containing a top level
                     window. _top cant be used then for dispatch - because it address TopFrames
                     not frames containg top level windows. So normaly _magic (which btw does not

@@ -83,7 +83,7 @@ published interface XFrame2
     interface XDispatchProviderInterception;
 
     /** Provides access to sub frames within this frame,
-        and via it's XFrame sub-interface: Allows the component to be loaded and accessed
+        and via its XFrame sub-interface: Allows the component to be loaded and accessed
         within the frame; it is the main connection to the
         environment of the component.
      */

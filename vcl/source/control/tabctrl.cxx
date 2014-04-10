@@ -1031,7 +1031,7 @@ IMPL_LINK( TabControl, ImplWindowEventListener, VclSimpleEvent*, pEvent )
     if ( pEvent && pEvent->ISA( VclWindowEvent ) && (pEvent->GetId() == VCLEVENT_WINDOW_KEYINPUT) )
     {
         VclWindowEvent* pWindowEvent = static_cast< VclWindowEvent* >(pEvent);
-        // Do not handle events from TabControl or it's children, which is done in Notify(), where the events can be consumed.
+        // Do not handle events from TabControl or its children, which is done in Notify(), where the events can be consumed.
         if ( !IsWindowOrChild( pWindowEvent->GetWindow() ) )
         {
             KeyEvent* pKeyEvent = static_cast< KeyEvent* >(pWindowEvent->GetData());

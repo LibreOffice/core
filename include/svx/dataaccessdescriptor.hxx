@@ -87,7 +87,7 @@ namespace svx
                     createPropertyValueSequence();
 
         /** initialized the descriptor from the property values given
-            <p>If <arg>_bClear</arg> is <TRUE/>, the descriptor will clear all it's current settings before
+            <p>If <arg>_bClear</arg> is <TRUE/>, the descriptor will clear all its current settings before
             initializing with the new ones.</p>
         */
         void        initializeFrom(

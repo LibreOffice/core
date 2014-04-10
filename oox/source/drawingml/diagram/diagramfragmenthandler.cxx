@@ -213,7 +213,7 @@ ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
         // the actual colors - defer to color fragment handlers.
 
         // TODO(F1): well, actually, there might be *several* color
-        // definitions in it, after all it's called list. but
+        // definitions in it, after all its called list. but
         // apparently colorChoiceContext doesn't handle that anyway...
         case DGM_TOKEN(fillClrLst):
             return new ColorContext( *this, maColorEntry.maFillColor );

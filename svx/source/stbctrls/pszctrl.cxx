@@ -135,7 +135,7 @@ struct SvxPosSizeStatusBarControl_Impl
     the toning down of symbols that are visible externally.
 
     One instance exists for each SvxPosSizeStatusBarControl-instance
-    during it's life time
+    during its life time
 */
 
 {

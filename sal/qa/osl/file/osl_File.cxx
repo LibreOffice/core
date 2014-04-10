@@ -760,7 +760,7 @@ namespace osl_FileBase
         the second only on windows based systems
         the first parameter are a file URL where we want to get the system path of,
         the second parameter is the assumed error of the osl_getSystemPathFromFileURL() function,
-        the third parameter is the assumed result string, the string will only test, if it's length is greater 0
+        the third parameter is the assumed result string, the string will only test, if its length is greater 0
     */
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_1()

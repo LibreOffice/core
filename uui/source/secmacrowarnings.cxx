@@ -49,7 +49,7 @@ namespace
         if( nContStart != -1 )
         {
             nContStart = nContStart + _rPartId.getLength();
-            ++nContStart;                   // now it's start of content, directly after Id
+            ++nContStart;                   // now its start of content, directly after Id
 
             sal_Int32  nContEnd = _rRawString.indexOf( ',', nContStart );
 

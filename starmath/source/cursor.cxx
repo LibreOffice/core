@@ -263,7 +263,7 @@ void SmCursor::Delete(){
     SmStructureNode* pLineParent = pLine->GetParent();
     //Find line offset in parent
     int nLineOffset = pLineParent->IndexOfSubNode(pLine);
-    OSL_ENSURE(nLineOffset != -1, "pLine must be a child of it's parent!");
+    OSL_ENSURE(nLineOffset != -1, "pLine must be a child of its parent!");
 
     //Position after delete
     SmCaretPos PosAfterDelete;

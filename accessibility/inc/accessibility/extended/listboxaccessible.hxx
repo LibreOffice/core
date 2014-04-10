@@ -35,7 +35,7 @@ namespace accessibility
 
     //= ListBoxAccessibleBase
 
-    /** helper class which couples it's life time to the life time of an
+    /** helper class which couples its life time to the life time of an
         SvTreeListBox
     */
     class ListBoxAccessibleBase

@@ -438,7 +438,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
 
             // To get the 3D aspect ratio's effect on the 2D scene size, the scene's 2D size needs to be adapted to
             // 3D content changes here. The tooling class remembers the current 3D transformation stack
-            // and in it's destructor, calculates a new 2D SnapRect for the scene and it's modified 3D geometry.
+            // and in its destructor, calculates a new 2D SnapRect for the scene and it's modified 3D geometry.
             E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
 
             m_xAspectRatio3D->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX

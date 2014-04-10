@@ -263,7 +263,7 @@ private:
 
     /** Auxiliary function for calling LineToList on a node
      *
-     * This method sets pNode = NULL and remove it from it's parent.
+     * This method sets pNode = NULL and remove it from its parent.
      * (Assuming it has a parent, and is a child of it).
      */
     static SmNodeList* NodeToList(SmNode*& rpNode, SmNodeList* pList = new SmNodeList()){

@@ -76,7 +76,7 @@ service ValueBinding
         by the ValueBinding instance changes.
 
         <p>This interface is optional, since a binding may not support
-        actively notifying changes in it's value. Note, however, that in case
+        actively notifying changes in its value. Note, however, that in case
         this interface is not supported, the bound component cannot react
         on value changes, and will thus override any values which are
         set by an instance other than itself.</p>
@@ -91,7 +91,7 @@ service ValueBinding
         The ownership is with another instance, which may also decide to obsolete
         the ValueBinding for whatever reasons (e.g. because the data model
         which the binding reflected died). For this reason, a ValueBinding
-        must offer a possibility to be obsoleted by it's owner, and to notify this
+        must offer a possibility to be obsoleted by its owner, and to notify this
         obsoleteness to other interested parties, such as XBindableValues.</p>
     */
     interface com::sun::star::lang::XComponent;

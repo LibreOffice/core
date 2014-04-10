@@ -1722,7 +1722,7 @@ namespace xmloff
                 // unknown control type
                 m_nIncludeCommon = CCA_NAME | CCA_SERVICE_NAME;
                     // at least a name should be there, 'cause without a name the control could never have been
-                    // inserted into it's parent container
+                    // inserted into its parent container
                     // In addition, the service name is absolutely necessary to create the control upon reading.
                 m_nIncludeEvents = EA_CONTROL_EVENTS;
                     // we always should be able to export events - this is not control type dependent

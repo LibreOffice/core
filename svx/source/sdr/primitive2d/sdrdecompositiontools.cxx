@@ -249,7 +249,7 @@ namespace drawinglayer
             else
             {
                 // rObjectTransform is the whole SdrObject transformation from unit rectangle
-                // to it's size and position. Decompose to allow working with single values.
+                // to its size and position. Decompose to allow working with single values.
                 basegfx::B2DVector aScale, aTranslate;
                 double fRotate, fShearX;
                 rObjectTransform.decompose(aScale, aTranslate, fRotate, fShearX);

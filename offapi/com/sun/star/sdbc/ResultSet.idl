@@ -147,7 +147,7 @@ published service ResultSet
     interface XRow;
 
 
-    /** is used for locating a column by it's name.
+    /** is used for locating a column by its name.
      */
     interface XColumnLocate;
 

@@ -105,7 +105,7 @@ namespace abp
     }
 
 
-    /// creates and inserts a data source, and sets it's URL property to the string given
+    /// creates and inserts a data source, and sets its URL property to the string given
     static ODataSource lcl_implCreateAndSetURL(
         const Reference< XComponentContext >& _rxORB, const OUString& _rName,
         const sal_Char* _pInitialAsciiURL ) SAL_THROW (( ))

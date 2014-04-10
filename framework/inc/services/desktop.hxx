@@ -146,7 +146,7 @@ class Desktop : private cppu::BaseMutex,
 
                         Registered termination listener will be taken into account
                         also. As special feature some of our registered listener
-                        are well known by it's UNO implementation name. They are handled
+                        are well known by its UNO implementation name. They are handled
                         different to all other listener.
 
                         Btw: Desktop.terminate() was designed in the past to be used
@@ -173,7 +173,7 @@ class Desktop : private cppu::BaseMutex,
             @short      add a listener for termination events
 
             @descr      Additional to adding normal listener these method was implemented special.
-                        Every listener will be asked for it's uno implementation name.
+                        Every listener will be asked for its uno implementation name.
                         Some of them are well known ... and the corresponding listener wont be added
                         to the container of "normal listener". Those listener will be set as special
                         member.
@@ -195,7 +195,7 @@ class Desktop : private cppu::BaseMutex,
             @short      remove a listener from this container.
 
             @descr      Additional to removing normal listener these method was implemented special.
-                        Every listener will be asked for it's uno implementation name.
+                        Every listener will be asked for its uno implementation name.
                         Some of them are well known ... and the corresponding listener was set as special member.
                         Now those special member will be reseted also.
                         see e.g. member m_xSfxTerminator

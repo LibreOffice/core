@@ -580,7 +580,7 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
             if(bFound)
             {
                 uno::Reference<xml::dom::XDocument> customXmlTemp = importSubStream(OOXMLStream::CUSTOMXML);
-                // This will add all item[n].xml with it's relationship file i.e itemprops.xml to
+                // This will add all item[n].xml with its relationship file i.e itemprops.xml to
                 // grabbag list.
                 if(mxCustomXmlProsDom.is() && customXmlTemp.is())
                 {

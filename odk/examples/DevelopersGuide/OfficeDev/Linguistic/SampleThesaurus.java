@@ -78,7 +78,7 @@ public class SampleThesaurus extends ComponentBase implements
 
         // this service has no listeners thus we may use the base class,
         // which is here basically used only to keep track of the
-        // property set (and it's lifetime) since it gets used in the
+        // property set (and its lifetime) since it gets used in the
         // 'GetValueToUse' function
         aPropChgHelper  = new PropChgHelper( this, aProps );
 

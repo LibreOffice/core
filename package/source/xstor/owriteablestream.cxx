@@ -2276,7 +2276,7 @@ void SAL_CALL OWriteStream::flush()
                 io::IOException,
                 uno::RuntimeException, std::exception )
 {
-    // In case stream is flushed it's current version becomes visible
+    // In case stream is flushed its current version becomes visible
     // to the parent storage. Usually parent storage flushes the stream
     // during own commit but a user can explicitly flush the stream
     // so the changes will be available through cloning functionality.

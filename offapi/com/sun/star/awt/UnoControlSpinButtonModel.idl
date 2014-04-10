@@ -34,7 +34,7 @@
 
     <p>A spin button is similar to a scroll bar, but it usually has no
     (own) visual representation of the associated value, but is used to propagate
-    it's value to other controls.</p>
+    its value to other controls.</p>
 
     @see UnoControlScrollBarModel
  */

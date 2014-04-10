@@ -191,7 +191,7 @@ private:
 
 /** the XAccessible which creates/returns an AccessibleBrowseBox
 
-    <p>The instance holds it's XAccessibleContext with a hard reference, while
+    <p>The instance holds its XAccessibleContext with a hard reference, while
     the contxt holds this instance weak.</p>
 */
 typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::accessibility::XAccessible

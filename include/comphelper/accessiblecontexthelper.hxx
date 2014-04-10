@@ -126,7 +126,7 @@ namespace comphelper
             <p>If your derived implementation implements the XAccessible (and does not follow the proposed
             separation of XAccessible from XAccessibleContext), you may pass <code>this</code> here.</p>
 
-            <p>The object is hold weak, so it's life time is not affected.</p>
+            <p>The object is hold weak, so its life time is not affected.</p>
 
             <p>The object is needed for performance reasons: for <method>getAccessibleIndexInParent</method>,
             all children (which are XAccessible's theirself) of our parent have to be asked. If we know our

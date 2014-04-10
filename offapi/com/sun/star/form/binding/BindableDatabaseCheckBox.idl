@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module form {  module binding {
 
     <p>If the value binding associated with a BindableDatabaseCheckBox
     supports exchanging string values, <em>and</em> the com::sun::star::form::component::CheckBox::RefValue
-    is <em>not</em> empty, then the radio button will exchange it's value as string:
+    is <em>not</em> empty, then the radio button will exchange its value as string:
     <ul><li>A string equal to the reference value will be mapped to the button being checked, and vice versa</li>
         <li>A string not equal to the reference value will be mapped to the button being unchecked, and vice versa</li>
         <li>`NULL` will be mapped to it being in undetermined state</li>

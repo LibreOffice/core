@@ -55,7 +55,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
 
     // structs, helper
 
-    /** @short bind an interceptor component to it's URL pattern registration. */
+    /** @short bind an interceptor component to its URL pattern registration. */
     struct InterceptorInfo
     {
         /** @short reference to the interceptor component. */

@@ -1231,7 +1231,7 @@ public:
 
 /** Font node
  *
- * Used to change the font of it's children.
+ * Used to change the font of its children.
  */
 class SmFontNode : public SmStructureNode
 {

@@ -162,7 +162,7 @@ namespace dbtools
         /** fills parameter values, as extensive as possible
 
             <p>In particular, all values which can be filled from the master-detail relationship of
-            between our database component and it's parent are filled in.</p>
+            between our database component and its parent are filled in.</p>
 
             @param _rxCompletionHandler
                 an interaction handler which should be used to fill all parameters which
@@ -329,7 +329,7 @@ namespace dbtools
         void    createOuterParameters();
 
         /** fills in the parameters values which result from the master-detail relationship
-            between the database component and it's parent
+            between the database component and its parent
 
             @param _rxParentColumns
                 the columns of the parameter database component. Must not be <NULL/>

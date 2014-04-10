@@ -267,7 +267,7 @@ namespace pcr
                 }
             }
 
-            // get the frame which we just opened and set it's title
+            // get the frame which we just opened and set its title
             Reference< XTitle> xTitle(xQueryDesign,UNO_QUERY);
             if ( xTitle.is() )
             {

@@ -1258,7 +1258,7 @@ private:
                     const ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XValidator >& _rxValidator
                 );
 
-    /** disconnects the component from it's current an external validator
+    /** disconnects the component from its current an external validator
 
         @precond
             there currently is an active validator

@@ -78,7 +78,7 @@ published service TypeDetection
                 <td>[sequence< string >]</td>
                 <td>It contains all available localized names for this type. The are organized
                     in pairs and represented as a structure of sequence< com::sun::star::beans::PropertyValue >.
-                    The name of such property must be interpreted as locale; it's value as the localized
+                    The name of such property must be interpreted as locale; its value as the localized
                     type name corresponding to this locale.</td>
             </tr>
             <tr>

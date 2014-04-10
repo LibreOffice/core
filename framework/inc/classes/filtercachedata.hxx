@@ -443,7 +443,7 @@ class DataContainer
                 These enum values can be used ate some interface methods to specify, which
                 configuration set should be used.
                 Further it must be possible to start the same action for more then one cfg type.
-                That's why these values must be interpreted as flags. Means: it's values must be
+                That's why these values must be interpreted as flags. Means: its values must be
                 in range [2^n]!
       */
     enum ECFGType

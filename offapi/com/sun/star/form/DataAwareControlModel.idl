@@ -50,7 +50,7 @@ published service DataAwareControlModel
     /** makes it possible to transfer the data of the model to the connected data field.
         <p>
         This interface is optional, if a component doesn't support it, it has to forward
-        the changes of it's value to the field it is connected to immediately (means whenever a user
+        the changes of its value to the field it is connected to immediately (means whenever a user
         interaction changes it's content).
         </p>
      */
@@ -82,7 +82,7 @@ published service DataAwareControlModel
 
         <p>In the context of a com::sun::star::form::component::DataForm, controls are
         automatically reset when one of the following applies
-        <ul><li>The form is reset by invoking it's XReset interface.</li>
+        <ul><li>The form is reset by invoking its XReset interface.</li>
             <li>The form moves to a new record.</li>
             <li>The changes in the current record of the form are undone</li>
         </ul>

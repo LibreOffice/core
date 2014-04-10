@@ -431,7 +431,7 @@ namespace basegfx
 
                     for(a = 0; a < rTrDeSimpleEdges.size(); a++)
                     {
-                        // get horizontal edge as candidate; prepare it's range and fixed Y
+                        // get horizontal edge as candidate; prepare its range and fixed Y
                         const TrDeSimpleEdge& rHorEdge = rTrDeSimpleEdges[a];
                         const B1DRange aRange(rHorEdge.getStart().getX(), rHorEdge.getEnd().getX());
                         const double fFixedY(rHorEdge.getStart().getY());
@@ -775,7 +775,7 @@ namespace basegfx
 
                         do
                         {
-                            // get compare edge and it's XRange
+                            // get compare edge and its XRange
                             TrDeEdgeEntries::reference aCompare(*aLoop++);
 
                             // avoid edges using the same start point as one of

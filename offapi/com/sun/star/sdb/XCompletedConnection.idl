@@ -31,7 +31,7 @@
 
 
 /** is used for establishing connections via a factory which is identified
-    by it's name. To complete the information needed for establishing a connection
+    by its name. To complete the information needed for establishing a connection
     an interaction handler is used.
  */
 published interface XCompletedConnection: com::sun::star::uno::XInterface

@@ -231,7 +231,7 @@ namespace svxform
             Reference< XVclWindowPeer > xPeer( xAsControl->getPeer(), UNO_QUERY );
             if ( xPeer.is() && canColorBorder( xPeer ) )
             {
-                // remember the control and it's current border color
+                // remember the control and its current border color
                 _rControlData.xControl.clear(); // so determineOriginalBorderStyle doesn't get confused
 
                 determineOriginalBorderStyle( xAsControl, _rControlData );

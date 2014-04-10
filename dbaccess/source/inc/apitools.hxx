@@ -30,7 +30,7 @@
 #include <comphelper/sequence.hxx>
 #include <connectivity/CommonTools.hxx>
 
-// OSubComponent - a component which holds a hard ref to it's parent
+// OSubComponent - a component which holds a hard ref to its parent
 //                 and is been hold itself (by the parent) with a weak ref
 class OSubComponent : public ::cppu::OComponentHelper
 {

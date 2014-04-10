@@ -1086,7 +1086,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
     OSL_ENSURE( IsTopTable() == (nRelAvail==0),
             "AutoLayout pass 2: Relative width at table in table or the other way around" );
 
-    // The table's minimum width must not be bigger than it's maximum width
+    // The table's minimum width must not be bigger than its maximum width
     OSL_ENSURE( nMin<=nMax, "AutoLayout pass 2: nMin > nMax" );
 
     // Remember the available width for which the table was calculated.
@@ -1359,7 +1359,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
                 SwHTMLTableLayoutColumn *pColumn = GetColumn( i );
                 if( !pColumn->IsRelWidthOption() || !pColumn->GetWidthOption() )
                 {
-                    // The column keeps it's width.
+                    // The column keeps its width.
                     nFixedCols++;
                     sal_uLong nColMax = pColumn->GetMax();
                     pColumn->SetAbsColWidth( (sal_uInt16)nColMax );

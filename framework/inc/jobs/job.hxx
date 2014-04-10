@@ -43,10 +43,10 @@
 namespace framework{
 
 /**
-    @short  it represent a job; execute it and control it's lifetime
+    @short  it represent a job; execute it and control its lifetime
 
     @descr  This implementation can be used to wrapp jobs, execute it
-            synchronously or asynchronous, control it's lifetime
+            synchronously or asynchronous, control its lifetime
             and differe between jobs with and without configuration.
  */
 class Job : public  ::cppu::WeakImplHelper3<

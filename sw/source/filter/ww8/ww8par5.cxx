@@ -272,7 +272,7 @@ sal_Int32 FindParaStart( const OUString& rStr, sal_Unicode cToken, sal_Unicode c
                  || rStr[ nBuf + 1 ] == cToken2 ) )
         {
             nBuf += 2;
-            // skip spaces between cToken and it's parameters
+            // skip spaces between cToken and its parameters
             while(    nBuf < rStr.getLength()
                    && rStr[ nBuf ] == ' ' )
                 nBuf++;

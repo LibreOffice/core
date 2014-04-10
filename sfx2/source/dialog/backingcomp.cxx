@@ -401,7 +401,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // safe the frame reference
     m_xFrame = xFrame;
 
-    // initialize the component and it's parent window
+    // initialize the component and its parent window
     css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
     WorkWindow* pParent = (WorkWindow*)VCLUnoHelper::GetWindow(xParentWindow);
     Window*     pWindow = VCLUnoHelper::GetWindow(m_xWindow);
@@ -457,7 +457,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
 /** not supported.
 
     This component does not know any model. It will be represented by a window and
-    it's controller only.
+    its controller only.
 
     return  <FALSE/> everytime.
  */
@@ -473,7 +473,7 @@ sal_Bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< cs
 /** not supported.
 
     This component does not know any model. It will be represented by a window and
-    it's controller only.
+    its controller only.
 
     return  An empty reference every time.
  */
@@ -531,7 +531,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL BackingComp::getFrame()
 
 
 
-/** ask controller for it's current working state.
+/** ask controller for its current working state.
 
     If someone wishes to close this component, it must suspend the controller before.
     That will be a chance for it to disagree with that AND show any UI for a possible

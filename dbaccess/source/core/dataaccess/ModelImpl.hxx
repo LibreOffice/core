@@ -202,7 +202,7 @@ private:
     /// true if and only if a database document existed previously (though meanwhile disposed), and was already initialized
     bool                                                m_bDocumentInitialized;
 
-    /** the URL which the document should report as it's URL
+    /** the URL which the document should report as its URL
 
         This might differ from ->m_sDocFileLocation in case the document was loaded
         as part of a crash recovery process. In this case, ->m_sDocFileLocation points to

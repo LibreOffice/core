@@ -40,7 +40,7 @@ namespace comphelper
 
         <p>The idea is that this adapter is added as listener to a foreign component, which usually
         holds it's listener hard. The adapter itself knows the real listener as weak reference,
-        thus not affecting it's life time.</p>
+        thus not affecting its life time.</p>
     */
     class OWeakListenerAdapterBase : public OBaseMutex
     {

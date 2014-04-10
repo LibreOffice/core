@@ -31,7 +31,7 @@
       <prop oor:name="ImplementationName" oor:type="xs:string">
         <info>
           <desc>Because there can exists more then one implementations of such TaskCreatorService,
-            the actual one must be specified with it's UNO implementation name.
+            the actual one must be specified with its UNO implementation name.
             Otherwise it's not guaranteed, which implementation is really used at runtime.</desc>
         </info>
       </prop>

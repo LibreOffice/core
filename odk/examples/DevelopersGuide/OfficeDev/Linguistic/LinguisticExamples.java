@@ -80,7 +80,7 @@ public class LinguisticExamples
 
     public static void main(String args[])
     {
-        // Create an instance of the class and call it's begin method
+        // Create an instance of the class and call its begin method
         try {
             LinguisticExamples aExample = new LinguisticExamples();
             aExample.Connect();

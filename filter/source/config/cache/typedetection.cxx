@@ -1108,7 +1108,7 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
         if (aRequest.isAbort())
             return OUString();
 
-        // "OK" pressed => verify the selected filter, get it's corresponding
+        // "OK" pressed => verify the selected filter, get its corresponding
         // type and return it. (BTW: We must update the media descriptor here ...)
         // The user selected explicitly a filter ... but normaly we are interested on
         // a type here only. But we must be shure, that the selected filter is used

@@ -234,7 +234,7 @@ namespace accessibility
         // spin lock to prevent notify in notify (guarded by solar mutex)
         bool mbInNotify;
 
-        // whether the object or it's children has the focus set (guarded by solar mutex)
+        // whether the object or its children has the focus set (guarded by solar mutex)
         sal_Bool mbGroupHasFocus;
 
         // whether we (this object) has the focus set (guarded by solar mutex)

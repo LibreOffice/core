@@ -121,7 +121,7 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
     // parsing the plain text of the document is an easy way to do this
     // but not the purest solution, since namespaces and other xml details
     // may lead to another syntactic expression of the same document.
-    // this example works for the way the office serializes it's XML stream
+    // this example works for the way the office serializes its XML stream
     // but might need extension for other data sources...
     static OString aDocToken("office:document");
     // static OString aClassToken("office:class=\"");
