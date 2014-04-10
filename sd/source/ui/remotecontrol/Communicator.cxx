@@ -122,8 +122,6 @@ void Communicator::execute()
     pTransmitter->join();
     pTransmitter = NULL;
 
-    if( mpSocket )
-        mpSocket->close();
     delete mpSocket;
 
 
