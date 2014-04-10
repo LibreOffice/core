@@ -10454,6 +10454,11 @@ if test "x$enable_gltf" != "xno"; then
             FREETYPE_LIBS="${WORKDIR}/UnpackedTarball/freetype/objs/win32/vc2010/freetype248$FREETYPE_LIB_DEBUGLIB_SUFFIX.lib"
         fi
     fi
+    # hopefully this is the right switch to use?
+    # otherwise build fails in collada2gltf external because of std::shared_ptr
+    if test "$HAVE_CXX11" = "TRUE"; then
+        BUILD_TYPE="$BUILD_TYPE COLLADA2GLTF"
+    fi
 else
     AC_MSG_RESULT([no])
 fi

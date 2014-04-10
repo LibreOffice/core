@@ -75,6 +75,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,NEON,neon) \
 	$(call gb_Helper_optional,NSS,nss) \
 	$(call gb_Helper_optional,ODFGEN,libodfgen) \
+	$(call gb_Helper_optional,COLLADA2GLTF,opencollada) \
 	$(call gb_Helper_optional,OPENLDAP,openldap) \
 	$(call gb_Helper_optional,OPENSSL,openssl) \
 	$(call gb_Helper_optional,ORCUS,liborcus) \

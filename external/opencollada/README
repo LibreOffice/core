@@ -1,0 +1,5 @@
+OpenCOLLADA is a COLLADA SDK that includes plug-ins for Autodesk Maya and 3ds Max.
+LibreOffice mainly use it for parse collada files (*.dae).
+
+From:
+[https://github.com/khronosGroup/OpenCOLLADA/].
