@@ -270,7 +270,7 @@ namespace {
 
     Dialog* Wizard::createDialog( Window* i_pParent )
     {
-        WizardShell* pDialog( new WizardShell( i_pParent, this, m_xController, m_aWizardSteps ) );
+        WizardShell* pDialog( new WizardShell( i_pParent, m_xController, m_aWizardSteps ) );
         pDialog->SetHelpId(  lcl_getHelpId( m_sHelpURL ) );
         pDialog->setTitleBase( m_sTitle );
         return pDialog;
