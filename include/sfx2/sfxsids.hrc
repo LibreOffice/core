@@ -364,6 +364,7 @@
 #define SID_STYLE_SHOW                      (SID_SFX_START + 1604)
 #define SID_STYLE_UPD_BY_EX_NAME            (SID_SFX_START + 1585)
 #define SID_STYLE_REFERENCE                 (SID_SFX_START + 1602)
+#define SID_STYLE_END_PREVIEW 				(SID_SFX_START + 568)
 
 #define SID_TEMPLATE_NAME                   (SID_SFX_START + 660)
 #define SID_TEMPLATE_REGION                 (SID_SFX_START + 661)
