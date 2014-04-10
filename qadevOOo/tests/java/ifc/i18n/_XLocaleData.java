@@ -118,7 +118,7 @@ public class _XLocaleData extends MultiMethodTest {
             locRes &= (! ldi.unoID.equals(""));
 
             if (!locRes) {
-                /* for debugging puposes
+                /* for debugging purposes
                 log.println("FAILED for: language="+languages[i]+" ; country="+countries[i]);
                 log.println("Getting: ");
                 log.println("\t DateSeparator="+ldi.dateSeparator);

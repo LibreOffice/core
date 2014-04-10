@@ -2148,7 +2148,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             OUString aSnippet( aAttrIter.GetSnippet( aStr, nAktPos + ofs, nLen ) );
             if ( ( nTxtTyp == TXT_EDN || nTxtTyp == TXT_FTN ) && nAktPos == 0 && nLen > 0 )
             {
-                // Insert tab for aesthetic puposes #i24762#
+                // Insert tab for aesthetic purposes #i24762#
                 if ( aSnippet[0] != 0x09 )
                     aSnippet = OUString( 0x09 ) + aSnippet;
             }
