@@ -3007,7 +3007,7 @@ void DomainMapper_Impl::handleIndex
         if( lcl_FindInCommand( pContext->GetCommand(), 'f', sValue ))
         {
             if(!sValue.isEmpty())
-            sIndexEntryType = sValue ;
+                sIndexEntryType = sValue ;
             xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_INDEX_ENTRY_TYPE ), uno::makeAny(sIndexEntryType));
         }
     }
