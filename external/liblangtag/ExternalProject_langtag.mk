@@ -23,7 +23,6 @@ $(eval $(call gb_ExternalProject_register_targets,langtag,\
 $(call gb_ExternalProject_get_state_target,langtag,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --disable-modules --disable-test --disable-introspection --disable-shared --enable-static --with-pic \
-		$(if $(filter WNTMSC,$(OS)$(COM)),--disable-rebuild-data) \
 		$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) "ac_cv_va_copy=no") \
 		$(if $(filter NO,$(SYSTEM_LIBXML)),\
@@ -36,6 +35,7 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 		$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2") \
 		&& $(if $(filter WNTMSC,$(OS)$(COM)),REAL_CC="$(shell cygpath -w $(lastword $(CC)))") \
 		   $(if $(VERBOSE)$(verbose),V=1) \
+		   $(gb_Helper_set_ld_path) \
 		   $(MAKE) \
 	)
 # vim: set noet sw=4 ts=4:
