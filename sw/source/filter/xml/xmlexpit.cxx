@@ -247,7 +247,7 @@ void SvXMLExportItemMapper::exportElementItems(
         rExport.IgnorableWhitespace();
 }
 
-/** returns the item with the givin WhichId from the given ItemSet if its
+/** returns the item with the given WhichId from the given ItemSet if its
     set or its default item if its not set and the XML_EXPORT_FLAG_DEEP
     is set in the flags
 */

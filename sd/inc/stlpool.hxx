@@ -65,7 +65,7 @@ public:
                         // Caller has to delete the list
     void                CreateOutlineSheetList(const OUString& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles);
 
-    /** creates all layout style sheets for the givin layout name if they
+    /** creates all layout style sheets for the given layout name if they
         don't exist yet.
 
         @param rLayoutName  Must be the name of a master page
