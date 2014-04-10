@@ -3230,10 +3230,14 @@ static void lcl_putItemToSet(const SvxSetItem* pSetItem, sal_uInt16 nRes, sal_uI
             case TYPE_BOX: pNewItem = new SvxBoxItem(nRes);         break;
         }
     }
-    pNewItem->PutValue(rVal, nMemberId);
-    rSetSet.Put(*pNewItem);
+    assert(pNewItem);
+    if (pNewItem)
+    {
+        pNewItem->PutValue(rVal, nMemberId);
+        rSetSet.Put(*pNewItem);
+        delete pNewItem;
+    }
     rBaseImpl.GetItemSet().Put(*pNewSetItem);
-    delete pNewItem;
     delete pNewSetItem;
 }
 
