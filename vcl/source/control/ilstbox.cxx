@@ -1436,7 +1436,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                         SetTopEntry( ( mnTop > nCurVis ) ? ( mnTop-nCurVis+1 ) : 0 );
                     }
 
-                    // find first selectable starting from mnTop looking foreward
+                    // find first selectable starting from mnTop looking forward
                     nSelect = mpEntryList->FindFirstSelectable( mnTop, true );
                 }
                 bDone = true;
