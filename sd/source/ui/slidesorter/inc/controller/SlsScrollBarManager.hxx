@@ -80,7 +80,7 @@ public:
     */
     void Connect (void);
 
-    /** Remove listeners from the scroll bars.  This method is called whent
+    /** Remove listeners from the scroll bars.  This method is called when
         the slide sorter is destroyed or when it is suspended, e.g. put
         into a cache for later reuse.
     */

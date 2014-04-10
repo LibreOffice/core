@@ -100,7 +100,7 @@ private:
     ChangeRequestQueue maQueue;
 
     /** The id returned by the last PostUserEvent() call.  This id is stored
-        so that a pending user event can be removed whent he queue processor
+        so that a pending user event can be removed when the queue processor
         is destroyed.
     */
     sal_uIntPtr mnUserEventId;
