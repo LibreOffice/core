@@ -19,8 +19,7 @@ MenuBar::AddMenuBarButton(Image const&, Link const&, rtl::OUString const&, unsig
 MenuBar::GetMenuBarButtonRectPixel(unsigned short)
 MenuBar::RemoveMenuBarButton(unsigned short)
 MenuBar::SetMenuBarButtonHighlightHdl(unsigned short, Link const&)
-OAuth2Handler::OAuth2Handler()
-OAuth2Handler::getAccessToken()
+OpenGLContext::getOpenGLWindow()
 OutputDevice::GetCanvas() const
 OutputDevice::LogicToLogic(basegfx::B2DPolyPolygon const&, MapMode const&, MapMode const&)
 OutputDevice::LogicToPixel(Region const&, MapMode const&) const
@@ -37,6 +36,7 @@ ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SdrItemBrowser::ForceParent()
 SdrItemBrowser::SdrItemBrowser(SdrView&)
+SdrOpenGLObj::getOpenGLContext()
 SdrTextObj::NbcSetAutoGrowHeight(bool)
 SdrTextObj::NbcSetAutoGrowWidth(bool)
 SdrTextObj::NbcSetFitToSize(SdrFitToSizeType)
@@ -186,8 +186,8 @@ apitest::XTextField::testGetPresentation()
 basegfx::tools::containsOnlyHorizontalAndVerticalEdges(basegfx::B2DPolyPolygon const&)
 basegfx::tools::equal(basegfx::B2DPolygon const&, basegfx::B2DPolygon const&, double const&)
 basegfx::tools::equal(basegfx::B3DPolygon const&, basegfx::B3DPolygon const&, double const&)
+basegfx::unotools::homMatrixFromMatrix(basegfx::B2DHomMatrix&, com::sun::star::geometry::Matrix2D const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
-chart::GL3DBarChartDialogController::GL3DBarChartDialogController()
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
@@ -210,7 +210,6 @@ std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::FormulaTokenArray>&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)
 std::vector<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread>, std::allocator<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread> > >::reserve(unsigned long)
-svt::AssignmentPersistentData::getInt32Property(char const*) const
 utl::extractTime(com::sun::star::util::DateTime const&, com::sun::star::util::Time&)
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, bool)
 writerfilter::dmapper::SdtHelper::appendToInteropGrabBag(rtl::OUString const&, com::sun::star::uno::Any const&)

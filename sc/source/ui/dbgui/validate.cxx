@@ -670,11 +670,6 @@ void ScTPValidationHelp::Init()
     pTsbHelp->EnableTriState( false );
 }
 
-sal_uInt16* ScTPValidationHelp::GetRanges()
-{
-    return pValueRanges;
-}
-
 SfxTabPage* ScTPValidationHelp::Create( Window* pParent,
                                          const SfxItemSet&  rArgSet )
 {
@@ -743,11 +738,6 @@ void ScTPValidationError::Init()
     m_pTsbShow->EnableTriState( false );
 
     SelectActionHdl( NULL );
-}
-
-sal_uInt16* ScTPValidationError::GetRanges()
-{
-    return pValueRanges;
 }
 
 SfxTabPage* ScTPValidationError::Create( Window*    pParent,
@@ -928,12 +918,6 @@ bool ScValidationDlg::IsChildFocus()
                 return true;
 
     return false;
-}
-
-
-bool    ScValidationDlg::IsAlive()
-{
-    return SC_MOD()->IsAliveRefDlg( SLOTID, this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

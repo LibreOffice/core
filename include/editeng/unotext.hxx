@@ -462,7 +462,6 @@ class EDITENG_DLLPUBLIC SvxUnoText : public SvxUnoTextBase,
                     public ::cppu::OWeakAggObject
 {
 public:
-    SvxUnoText( ) throw();
     SvxUnoText( const SvxItemPropertySet* _pSet ) throw();
     SvxUnoText( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > xParent ) throw();
     SvxUnoText( const SvxUnoText& rText ) throw();

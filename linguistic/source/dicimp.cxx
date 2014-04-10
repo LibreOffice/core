@@ -182,18 +182,6 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
     return nDicVersion;
 }
 
-DictionaryNeo::DictionaryNeo() :
-    aDicEvtListeners( GetLinguMutex() ),
-    eDicType        (DictionaryType_POSITIVE),
-    nLanguage       (LANGUAGE_NONE)
-{
-    nCount       = 0;
-    nDicVersion  = DIC_VERSION_DONTKNOW;
-    bNeedEntries = sal_False;
-    bIsModified  = bIsActive = sal_False;
-    bIsReadonly  = sal_False;
-}
-
 DictionaryNeo::DictionaryNeo(const OUString &rName,
                              sal_Int16 nLang, DictionaryType eType,
                              const OUString &rMainURL,

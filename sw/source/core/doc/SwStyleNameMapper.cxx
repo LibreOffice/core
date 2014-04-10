@@ -390,6 +390,7 @@ static void lcl_CheckSuffixAndDelete(OUString & rString)
 }
 }
 
+#ifdef _NEED_TO_DEBUG_MAPPING
 void SwStyleNameMapper::testNameTable( SwGetPoolIdFromName const nFamily, sal_uInt16 const nStartIndex, sal_uInt16 const nEndIndex )
 {
     sal_uInt16 nIndex;
@@ -408,6 +409,7 @@ void SwStyleNameMapper::testNameTable( SwGetPoolIdFromName const nFamily, sal_uI
             abort();
     }
 }
+#endif
 
 const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlags, bool bProgName )
 {

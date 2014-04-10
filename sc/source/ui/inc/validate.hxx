@@ -102,7 +102,6 @@ public:
     {
         return static_cast<ScValidationDlg *>( SC_MOD()->Find1RefWindow( SLOTID, pAncestor ) );
     }
-    bool    IsAlive();
     ScTabViewShell *GetTabViewShell()
     {
         return m_pTabVwSh;
@@ -277,7 +276,6 @@ public:
             virtual ~ScTPValidationHelp();
 
     static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
-    static  sal_uInt16*     GetRanges   ();
     virtual bool        FillItemSet ( SfxItemSet& rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 };
@@ -303,7 +301,6 @@ public:
             virtual ~ScTPValidationError();
 
     static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
-    static  sal_uInt16*     GetRanges   ();
     virtual bool        FillItemSet ( SfxItemSet& rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 };

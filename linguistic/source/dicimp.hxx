@@ -81,7 +81,6 @@ class DictionaryNeo :
                                           sal_Bool bIsLoadEntries = sal_False);
 
 public:
-    DictionaryNeo();
     DictionaryNeo(const OUString &rName, sal_Int16 nLang,
                     ::com::sun::star::linguistic2::DictionaryType eType,
                     const OUString &rMainURL,

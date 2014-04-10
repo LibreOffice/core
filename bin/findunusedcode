@@ -76,4 +76,5 @@ grep ::.*\( unusedcode.all \
 		  | grep -v ^WPS \
 		  | grep -v WPX \
 		  | grep -v ^WSObject \
+		  | grep -v ^OAuth2Handler \
 		  > ../unusedcode.easy

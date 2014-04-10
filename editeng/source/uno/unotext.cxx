@@ -2292,12 +2292,6 @@ sal_Int64 SAL_CALL SvxUnoTextBase::getSomething( const uno::Sequence< sal_Int8 >
     }
 }
 
-
-
-SvxUnoText::SvxUnoText( ) throw()
-{
-}
-
 SvxUnoText::SvxUnoText( const SvxItemPropertySet* _pSet ) throw()
 : SvxUnoTextBase( _pSet )
 {
