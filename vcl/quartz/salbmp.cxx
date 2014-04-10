@@ -806,7 +806,6 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
         static const CGFloat* pDecode = NULL;
         xMask = CGImageMaskCreate( nWidth, nHeight, 8, 8, nMaskBytesPerRow, xDataProvider, pDecode, false );
         CG_TRACE( "CGImageMaskCreate(" << nWidth << "," << nHeight << ",8,8) = " << xMask );
-        DBG_WRITE_IMAGE(xMask, "xMask.new");
         CFRelease( xDataProvider );
         CG_TRACE( "CFRelease(" << xMaskContext << ")" );
         CFRelease( xMaskContext );
