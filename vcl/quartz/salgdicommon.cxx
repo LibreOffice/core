@@ -1458,8 +1458,6 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
         return COL_BLACK;
     }
     // prepare creation of matching a CGBitmapContext
-    CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
-    CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big;
 #if defined OSL_BIGENDIAN
     struct{ unsigned char b, g, r, a; } aPixel;
 #else
@@ -1469,8 +1467,8 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
     // create a one-pixel bitmap context
     // TODO: is it worth to cache it?
     CGContextRef xOnePixelContext =
-        CGBitmapContextCreate( &aPixel, 1, 1, 8, sizeof(aPixel),
-                               aCGColorSpace, aCGBmpInfo );
+        CGBitmapContextCreate( &aPixel, 1, 1, 8, 32,
+                               GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big );
 
     CG_TRACE( "CGBitmapContextCreate(1x1x8) = " << xOnePixelContext );
 

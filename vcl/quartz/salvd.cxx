@@ -184,8 +184,6 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     if( mnBitmapDepth && (mnBitmapDepth < 16) )
     {
         mnBitmapDepth = 8;  // TODO: are 1bit vdevs worth it?
-        const CGColorSpaceRef aCGColorSpace = GetSalData()->mxGraySpace;
-        const CGBitmapInfo aCGBmpInfo = kCGImageAlphaNone;
         const int nBytesPerRow = (mnBitmapDepth * nDX + 7) / 8;
 
         void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
@@ -194,7 +192,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
             ((sal_uInt8*)pRawData)[i] = (i & 0xFF);
 #endif
         mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
-                                                 mnBitmapDepth, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
+                                                 mnBitmapDepth, nBytesPerRow, GetSalData()->mxGraySpace, kCGImageAlphaNone );
         CG_TRACE( "CGBitmapContextCreate(" << nDX << "x" << nDY << "x" << mnBitmapDepth << ") = " << mxBitmapContext );
         xCGContext = mxBitmapContext;
     }
@@ -233,8 +231,6 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
             {
                 // fall back to a bitmap context
                 mnBitmapDepth = 32;
-                const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
-                const CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
                 const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
 
                 void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
@@ -243,15 +239,13 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
                     ((sal_uInt8*)pRawData)[i] = (i & 0xFF);
 #endif
                 mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
-                                                         8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
+                                                         8, nBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst );
                 CG_TRACE( "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << mxBitmapContext );
                 xCGContext = mxBitmapContext;
             }
         }
 #else
         mnBitmapDepth = 32;
-        const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
-        const CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
         const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
 
         void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
@@ -260,7 +254,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
             ((sal_uInt8*)pRawData)[i] = (i & 0xFF);
 #endif
         mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
-                                                 8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
+                                                 8, nBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst );
         CG_TRACE( "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << mxBitmapContext );
         xCGContext = mxBitmapContext;
 #endif
