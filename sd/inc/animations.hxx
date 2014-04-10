@@ -26,7 +26,7 @@ namespace sd
 {
 
 /** stores the link between an after effect node and its master for later insertion
-    into the timing hierarchie
+    into the timing hierarchy
 */
 struct AfterEffectNode
 {
@@ -41,7 +41,7 @@ struct AfterEffectNode
 typedef std::list< AfterEffectNode > AfterEffectNodeList;
 
 /** inserts the animation node in the given AfterEffectNode at the correct position
-    in the timing hierarchie of its master */
+    in the timing hierarchy of its master */
 SD_DLLPUBLIC void stl_process_after_effect_node_func(AfterEffectNode& rNode);
 
 } // namespace sd;

@@ -331,7 +331,7 @@ public:
     SbxArray* GetParameters() const;
 
     // Sfx-Broadcasting-Support:
-    // Due to data reduction and better DLL-hierarchie currently via casting
+    // Due to data reduction and better DLL-hierarchy currently via casting
     SfxBroadcaster& GetBroadcaster();
     bool IsBroadcaster() const { return pCst != NULL; }
     virtual void Broadcast( sal_uIntPtr nHintId ) SAL_OVERRIDE;

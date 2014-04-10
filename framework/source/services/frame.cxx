@@ -976,7 +976,7 @@ void SAL_CALL Frame::setName( const OUString& sName ) throw( css::uno::RuntimeEx
     @short      search for frames
     @descr      This method searches for a frame with the specified name.
                 Frames may contain other frames (e.g. a frameset) and may
-                be contained in other frames. This hierarchie is searched by
+                be contained in other frames. This hierarchy is searched by
                 this method.
                 First some special names are taken into account, i.e. "",
                 "_self", "_top", "_blank" etc. The nSearchFlags are ignored

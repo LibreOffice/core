@@ -60,7 +60,7 @@ CWinFolderPickerImpl::CWinFolderPickerImpl( CFolderPicker* aFolderPicker ) :
 // If the given URL for the directory is invalid the function throws an
 // IllegalArgumentException
 // If the specified path is well formed but invalid for the underlying
-// OS the FolderPicker starts in the root of the file system hierarchie
+// OS the FolderPicker starts in the root of the file system hierarchy
 
 
 void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirectory )
@@ -86,7 +86,7 @@ void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirect
         // works correctly when providing "c:\" or an environment
         // variable like "=c:=c:\.." etc. is set, else the
         // FolderPicker would stand in the root of the shell
-        // hierarchie which is the desktop folder
+        // hierarchy which is the desktop folder
         if ( sysDir.lastIndexOf( BACKSLASH ) != (sysDir.getLength( ) - 1) )
             sysDir += BACKSLASH;
     }

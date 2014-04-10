@@ -89,7 +89,7 @@ namespace sd
     {
         try
         {
-            // clone animation hierarchie
+            // clone animation hierarchy
             Reference< ::com::sun::star::util::XCloneable > xClonable( xSourceNode, UNO_QUERY_THROW );
             Reference< XAnimationNode > xCloneNode( xClonable->createClone(), UNO_QUERY_THROW );
 

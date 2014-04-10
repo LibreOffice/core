@@ -126,7 +126,7 @@ void CWinFileOpenImpl::setDisplayDirectory(const OUString& aDirectory)
         // works correctly when providing "c:\" or an environment
         // variable like "=c:=c:\.." etc. is set, else the
         // FolderPicker would stand in the root of the shell
-        // hierarchie which is the desktop folder
+        // hierarchy which is the desktop folder
         if ( aSysDirectory.lastIndexOf(BACKSLASH) != (aSysDirectory.getLength() - 1))
             aSysDirectory += BACKSLASH;
     }
