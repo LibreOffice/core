@@ -2408,7 +2408,7 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
 
     if( eActiveState != E_INACTIVE )
     {
-        // Deactivation is always done implicitely by activation of another frame.
+        // Deactivation is always done implicitly by activation of another frame.
         // Only if no activation is done, deactivations have to be processed if the activated window
         // is a parent window of the last active Window!
         SolarMutexClearableGuard aSolarGuard;

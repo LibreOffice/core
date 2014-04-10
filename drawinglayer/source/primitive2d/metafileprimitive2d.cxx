@@ -2311,7 +2311,7 @@ namespace
                                 }
 
                                 // #i112300# clip against polygon representing the rectangle from
-                                // the action. This is implicitely done using a temp Clipping in VCL
+                                // the action. This is implicitly done using a temp Clipping in VCL
                                 // when a MetaGradientAction is executed
                                 aOutline.transform(rPropertyHolders.Current().getTransformation());
                                 rTargetHolders.Current().append(

@@ -121,7 +121,7 @@ AnimationBaseNode::AnimationBaseNode(
                                                xShape );
 
             // NOTE: For shapes with ParagraphTarget, we ignore
-            // the SubItem property. We implicitely assume that it
+            // the SubItem property. We implicitly assume that it
             // is set to ONLY_TEXT.
             OSL_ENSURE(
                 mxAnimateNode->getSubItem() ==

@@ -587,7 +587,7 @@ bool Impl_calcClipRange( double&        t1,
         FatLine bounds_c2;
 
         // must use the subdivided version of c2, since the fat line
-        // algorithm works implicitely with the convex hull bounding
+        // algorithm works implicitly with the convex hull bounding
         // box.
         Impl_calcFatLine(bounds_c2, c2_part);
 

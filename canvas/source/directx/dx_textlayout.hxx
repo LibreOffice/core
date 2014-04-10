@@ -92,7 +92,7 @@ namespace dxcanvas
         ~TextLayout(); // we're a ref-counted UNO class. _We_ destroy ourselves.
 
     private:
-        // NOTE: no need for GDIPlusUserSharedPtr, mpFont implicitely has one already
+        // NOTE: no need for GDIPlusUserSharedPtr, mpFont implicitly has one already
 
         ::com::sun::star::rendering::StringContext maText;
         ::com::sun::star::uno::Sequence< double >  maLogicalAdvancements;

@@ -123,7 +123,7 @@ namespace slideshow
                 slideshow to set their own user space transformation
                 at the canvas, whilst the slideshow adds their
                 transformation on top of that. Concretely, this method
-                returns the user transform (implicitely calculated
+                returns the user transform (implicitly calculated
                 from the setViewSize() method), combined with the view
                 transformation.
             */

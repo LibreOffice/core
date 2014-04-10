@@ -1498,7 +1498,7 @@ void SmBinDiagonalNode::Arrange(const OutputDevice &rDev, const SmFormat &rForma
     pLeft->Arrange(aTmpDev, rFormat);
     pRight->Arrange(aTmpDev, rFormat);
 
-    // determine implicitely the values (incl. the margin) of the diagonal line
+    // determine implicitly the values (incl. the margin) of the diagonal line
     pOper->Arrange(aTmpDev, rFormat);
 
     long nDelta = pOper->GetWidth() * 8 / 10;

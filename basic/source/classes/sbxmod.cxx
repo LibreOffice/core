@@ -858,7 +858,7 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         else
         {
             // #i92642: Special handling for name property to avoid
-            // side effects when using name as variable implicitely
+            // side effects when using name as variable implicitly
             bool bForwardToSbxObject = true;
 
             sal_uIntPtr nId = pHint->GetId();

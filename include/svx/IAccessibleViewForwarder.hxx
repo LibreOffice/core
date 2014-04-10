@@ -39,7 +39,7 @@ namespace accessibility {
     differs in two important points: Firstly the <member>GetVisArea</member>
     method returns a rectangle in internal coordinates and secondly the
     transformation methods do not require explicit mapmodes.  These have to
-    be provided implicitely by the classes that implement this
+    be provided implicitly by the classes that implement this
     interface.  A third, less important, difference are the additional
     transfomation methods for sizes.  The reasons for their existince are
     convenience and improved performance.</p>

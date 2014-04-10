@@ -37,7 +37,7 @@ namespace basegfx
             single Polygons may be re-combined. The orientations of
             the contained polygons in not changed but used as
             topological information.  Self crossovers of the contained
-            sub-polygons are implicitely handled, but to not lose the
+            sub-polygons are implicitly handled, but to not lose the
             topological information, it may be necessary to remove
             self-intersections of the contained sub-polygons in a
             preparing step and to explicitly correct their

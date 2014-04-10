@@ -1799,7 +1799,7 @@ void SwTabFrm::MakeAll()
     const bool bTableRowKeep = !bDontSplit && GetFmt()->GetDoc()->get(IDocumentSettingAccess::TABLE_ROW_KEEP);
 
     // The Magic Move: Used for the table row keep feature.
-    // If only the last row of the table wants to keep (implicitely by setting
+    // If only the last row of the table wants to keep (implicitly by setting
     // keep for the first paragraph in the first cell), and this table does
     // not have a next, the last line will be cut. Loop prevention: Only
     // one try.
