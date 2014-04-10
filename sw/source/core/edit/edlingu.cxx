@@ -181,7 +181,12 @@ const SwTxtNode *pLinguNode;
       SwTxtFrm  *pLinguFrm;
 
 SwLinguIter::SwLinguIter()
-    : pSh( 0 ), pStart( 0 ), pEnd( 0 ), pCurr( 0 ), pCurrX( 0 )
+    : pSh(0)
+    , pStart(0)
+    , pEnd(0)
+    , pCurr(0)
+    , pCurrX(0)
+    , nCrsrCnt(0)
 {
     // TODO missing: ensurance of re-entrance, OSL_ENSURE( etc.
 }
