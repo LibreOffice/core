@@ -1212,11 +1212,11 @@ namespace
                                         const ::connectivity::OSQLParseNode* pNode,
                                         sal_uInt16& rLevel )
     {
-        if (!SQL_ISRULE(pNode, select_statement))
+        if (!pNode || !SQL_ISRULE(pNode, select_statement))
             return eNoSelectStatement;
 
         // nyi: more checking for the correct structure!
-        pNode = pNode ? pNode->getChild(3)->getChild(1) : NULL;
+        pNode = pNode->getChild(3)->getChild(1);
         // no where clause found
         if (!pNode || pNode->isLeaf())
             return eOk;
