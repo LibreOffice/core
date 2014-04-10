@@ -48,7 +48,7 @@ public:
         @param rsURL
             The type of the resource that will be created by the factory.
         @param rxFactory
-            The factory that will create resource objects of the specfied type.
+            The factory that will create resource objects of the specified type.
     */
     void AddFactory (
         const OUString& rsURL,
