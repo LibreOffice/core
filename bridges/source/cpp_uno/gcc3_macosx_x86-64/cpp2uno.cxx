@@ -36,6 +36,7 @@
 #include "bridges/cpp_uno/shared/vtablefactory.hxx"
 
 #include "abi.hxx"
+#include "call.hxx"
 #include "share.hxx"
 
 using namespace ::osl;
@@ -250,8 +251,7 @@ static typelib_TypeClass cpp2uno_call(
     }
 }
 
-
-extern "C" typelib_TypeClass cpp_vtable_call(
+typelib_TypeClass cpp_vtable_call(
     sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
     void ** gpreg, void ** fpreg, void ** ovrflw,
     sal_uInt64 * pRegisterReturn /* space for register return */ )

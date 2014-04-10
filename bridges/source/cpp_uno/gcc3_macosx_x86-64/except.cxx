@@ -55,11 +55,13 @@ namespace CPPU_CURRENT_NAMESPACE {
 namespace {
 
 struct Fake_type_info {
-    virtual ~Fake_type_info() {}
+    virtual ~Fake_type_info() SAL_DELETED_FUNCTION;
     char const * name;
 };
 
-struct Fake_class_type_info: Fake_type_info {};
+struct Fake_class_type_info: Fake_type_info {
+    virtual ~Fake_class_type_info() SAL_DELETED_FUNCTION;
+};
 
 #if MACOSX_SDK_VERSION < 1070
 BOOST_STATIC_ASSERT(
@@ -67,6 +69,7 @@ BOOST_STATIC_ASSERT(
 #endif
 
 struct Fake_si_class_type_info: Fake_class_type_info {
+    virtual ~Fake_si_class_type_info() SAL_DELETED_FUNCTION;
     void const * base;
 };
 
@@ -117,9 +120,16 @@ std::type_info * createFake_si_class_type_info(
 
 }
 
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE && HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
 void dummy_can_throw_anything( char const * )
 {
 }
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE && HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#pragma GCC diagnostic pop
+#endif
 
 static OUString toUNOname( char const * p ) SAL_THROW(())
 {

@@ -18,8 +18,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-extern "C" void
-privateSnippetExecutor()
+#include <sal/config.h>
+
+#include <call.hxx>
+
+void privateSnippetExecutor()
 {
     asm volatile
         (
