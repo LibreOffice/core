@@ -249,6 +249,7 @@ private:
 
     // #124608# explicit ShapeSelection for export when export of the selection is wanted
     Reference< XShapes >                maShapeSelection;
+    bool                                mbExportSelection;
 
     UniqueIdVector                      maUniqueIdVector;
     sal_Int32                           mnMasterSlideId;

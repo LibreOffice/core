@@ -52,7 +52,22 @@ SVGFilter::SVGFilter( const Reference< XMultiServiceFactory > &rxMSF ) :
     mpSVGWriter( NULL ),
     mpDefaultSdrPage( NULL ),
     mpSdrModel( NULL ),
-    mbPresentation( sal_False )
+    mbPresentation( sal_False ),
+    mpObjects( NULL ),
+    mxSrcDoc(),
+#ifdef SOLAR_JAVA
+    mxDstDoc(),
+#endif
+    mxDefaultPage(),
+    maFilterData(),
+    maShapeSelection(),
+    mbExportSelection(false),
+    maUniqueIdVector(),
+    mnMasterSlideId(0),
+    mnSlideId(0),
+    mnDrawingGroupId(0),
+    mnDrawingId(0),
+    maOldFieldHdl()
 {
 }
 
