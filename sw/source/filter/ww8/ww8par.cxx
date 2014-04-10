@@ -2203,7 +2203,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
                             }
                         }
 
-                        // Set postion of the text range's first character
+                        // Set position of the text range's first character
                         if( pTxtNode )
                         {
                             pTxtNode->MakeStartIndex(&pPaM->GetPoint()->nContent);

@@ -132,7 +132,7 @@ namespace dbaui
         sal_Int32 nIndex = -1;
         if( m_pTable )
         {
-            // search the postion of our table window in the table window map
+            // search the position of our table window in the table window map
             OJoinTableView::OTableWindowMap* pMap = m_pTable->getTableView()->GetTabWinMap();
             OJoinTableView::OTableWindowMap::iterator aIter = pMap->begin();
             OJoinTableView::OTableWindowMap::iterator aEnd = pMap->end();

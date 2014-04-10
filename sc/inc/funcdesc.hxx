@@ -268,7 +268,7 @@ public:
       @param _nPos
       position of function in this category.
 
-      @return function at the _nPos postion in this category, null if _nPos out of bounds.
+      @return function at the _nPos position in this category, null if _nPos out of bounds.
     */
     virtual const formula::IFunctionDescription* getFunction(sal_uInt32 _nPos) const SAL_OVERRIDE;
 

@@ -73,7 +73,7 @@
  * @brief
  *  Base class for all frame object,include drawing,image,text-box.
  *
- *  Use SetX(),SetY(),SetWidth(),SetHeight() to set postion for the frame.
+ *  Use SetX(),SetY(),SetWidth(),SetHeight() to set position for the frame.
  *  Only if you set anchor type to enumXFAnchorPage, the SetAnchorPage functions.
  */
 class XFFrame : public XFContentContainer

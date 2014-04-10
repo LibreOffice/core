@@ -98,7 +98,7 @@ private:
     */
     SdrObject* pickObject (const Point& rTestPoint);
     //Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
-    //and SHIFT+ENTER key to decide the postion and draw the new insert point
+    //and SHIFT+ENTER key to decide the position and draw the new insert point
     sal_Bool   bBeginInsertPoint;
     Point    oldPoint;
     //let mouse cursor move

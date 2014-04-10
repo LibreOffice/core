@@ -49,7 +49,7 @@ FuEditGluePoints::FuEditGluePoints (
     SfxRequest& rReq)
     : FuDraw(pViewSh, pWin, pView, pDoc, rReq)
      //Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
-     //and SHIFT+ENTER key to decide the postion and draw the new insert point
+     //and SHIFT+ENTER key to decide the position and draw the new insert point
      ,bBeginInsertPoint(sal_False),
     oldPoint(0,0)
 {
@@ -270,7 +270,7 @@ sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
     mpView->SetActualWin( mpWindow );
 
     //Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
-    //and SHIFT+ENTER key to decide the postion and draw the new insert point
+    //and SHIFT+ENTER key to decide the position and draw the new insert point
 
     sal_Bool bReturn = sal_False;
 
@@ -353,7 +353,7 @@ sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 }
 
 //Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point, and
-//SHIFT+ENTER key to decide the postion and draw the new insert point
+//SHIFT+ENTER key to decide the position and draw the new insert point
 void FuEditGluePoints::ForcePointer(const MouseEvent* pMEvt)
 {
     if(bBeginInsertPoint && pMEvt)

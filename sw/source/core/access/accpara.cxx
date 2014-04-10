@@ -1403,7 +1403,7 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwAccessiblePa
     SwPosition aPosition( *pNode, aIndex );
     GetFrm()->GetCharRect( aCoreRect, aPosition, &aMoveState );
 
-    // already get the caret postion
+    // already get the caret position
     com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > tabs;
     const sal_Int32 nStrLen = GetTxtNode()->GetTxt().getLength();
     if( nStrLen > 0 )

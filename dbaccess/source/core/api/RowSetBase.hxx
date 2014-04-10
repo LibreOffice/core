@@ -191,7 +191,7 @@ namespace dbaccess
         void movementFailed();
 
         ORowSetRow getOldRow(sal_Bool _bWasNew);
-        /** move the cache the postion defined by the member functor
+        /** move the cache the position defined by the member functor
             @param  _aCheckFunctor
                 Return <TRUE/> when we already stand on the row we want to.
             @param  _aMovementFunctor

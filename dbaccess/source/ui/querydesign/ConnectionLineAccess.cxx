@@ -80,7 +80,7 @@ namespace dbaui
         sal_Int32 nIndex = -1;
         if( m_pLine )
         {
-            // search the postion of our table window in the table window map
+            // search the position of our table window in the table window map
             nIndex = m_pLine->GetParent()->GetTabWinMap()->size();
             const ::std::vector<OTableConnection*>* pVec = m_pLine->GetParent()->getTableConnections();
             ::std::vector<OTableConnection*>::const_iterator aIter = pVec->begin();

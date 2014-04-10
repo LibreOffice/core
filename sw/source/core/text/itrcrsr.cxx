@@ -321,7 +321,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
         }
 
         // Note: <SwTxtFrm::GetAdditionalFirstLineOffset()> returns a negative
-        //       value for the new list label postion and space mode LABEL_ALIGNMENT
+        //       value for the new list label position and space mode LABEL_ALIGNMENT
         //       and label alignment CENTER and RIGHT in L2R layout respectively
         //       label alignment LEFT and CENTER in R2L layout
         nFirst += pFrm->GetAdditionalFirstLineOffset();

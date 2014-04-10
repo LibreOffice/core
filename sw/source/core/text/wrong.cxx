@@ -260,7 +260,7 @@ void SwWrongList::SetInvalid( sal_Int32 nBegin, sal_Int32 nEnd )
     nEndInvalid = nEnd;
 }
 
-/** Change all values after the given postion.
+/** Change all values after the given position.
 
    Needed after insert/deletion of characters.
 

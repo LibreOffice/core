@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
  * position has to be adjusted.
  * @param xText a text where a range position is searched
  * @param position a position inside o the text
- * @return a range for the postion; null is returned if no range can be
+ * @return a range for the position; null is returned if no range can be
  * constructed.
  */
 uno::Reference< text::XTextRange > SwVbaRangeHelper::getRangeByPosition( const uno::Reference< text::XText >& rText, sal_Int32 _position ) throw ( uno::RuntimeException )

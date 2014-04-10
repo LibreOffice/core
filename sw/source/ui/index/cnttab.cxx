@@ -3140,7 +3140,7 @@ void SwTokenWindow::AdjustScrolling()
         }
         else
         {
-            //if the control fits into the space then the first control must be at postion 0
+            //if the control fits into the space then the first control must be at position 0
             long nFirstPos = pFirstCtrl->GetPosPixel().X();
 
             if(nFirstPos != 0)

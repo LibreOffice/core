@@ -187,7 +187,7 @@ AccObject::~AccObject()
 /**
    * Insert a child element.
    * @param pChild Child element that should be inserted into child list.
-   * @param pos Insert postion.
+   * @param pos Insert position.
    * @return
    */
 void AccObject::InsertChild( AccObject* pChild,short pos )
@@ -213,7 +213,7 @@ void AccObject::InsertChild( AccObject* pChild,short pos )
 /**
    * Delete a child element
    * @param pChild Child element that should be inserted into child list.
-   * @param pos Insert postion.
+   * @param pos Insert position.
    * @return
    */
 void AccObject::DeleteChild( AccObject* pChild )

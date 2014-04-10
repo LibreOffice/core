@@ -629,7 +629,7 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         bRet = sal_True;
         if( this == pDestShell )
         {
-            // same shell? then request the postion
+            // same shell? then request the position
             // at the passed document position
             SwPosition aPos( *GetCrsr()->GetPoint() );
             Point aPt( rInsPt );

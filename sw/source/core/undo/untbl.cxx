@@ -2496,7 +2496,7 @@ void SwUndoTblCpyTbl::UndoImpl(::sw::UndoRedoContext & rContext)
             if( bShiftPam )
             {
                 // The aPam.Point is at the moment at the last position of the new content and has to be
-                // moved to the first postion of the old content for the SwUndoDelete operation
+                // moved to the first position of the old content for the SwUndoDelete operation
                 SwNodeIndex aTmpIdx( aPam.GetPoint()->nNode, 1 );
                 SwTxtNode *pTxt = aTmpIdx.GetNode().GetTxtNode();
                 if( pTxt )

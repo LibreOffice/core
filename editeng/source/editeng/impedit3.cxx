@@ -1254,7 +1254,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             bool bCanHyphenate = ( aTmpFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL );
             if ( bCompressedChars && pPortion && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
             {
-                // I need the manipulated DXArray for determining the break postion...
+                // I need the manipulated DXArray for determining the break position...
                 sal_Int32* pDXArray = NULL;
                 if (!pLine->GetCharPosArray().empty())
                     pDXArray = &pLine->GetCharPosArray()[0] + (nPortionStart - pLine->GetStart());
@@ -4310,7 +4310,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
 
     sal_uLong nLayoutMode = pOutDev->GetLayoutMode();
 
-    // We always use the left postion for DrawText()
+    // We always use the left position for DrawText()
     nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL);
 
     if ( !bCTL && !bR2L)

@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module io {
  */
 published interface XMarkableStream: com::sun::star::uno::XInterface
 {
-    /** creates a mark of the current postion and returns an identifier to it.
+    /** creates a mark of the current position and returns an identifier to it.
      */
     long createMark()
             raises( com::sun::star::io::IOException );
