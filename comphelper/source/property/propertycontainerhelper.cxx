@@ -132,7 +132,7 @@ void OPropertyContainerHelper::registerPropertyNoMember(const OUString& _rName, 
     OSL_ENSURE(!_rType.equals(::getCppuType(static_cast< Any* >(NULL))),
         "OPropertyContainerHelper::registerPropertyNoMember : don't give my the type of an uno::Any ! Really can't handle this !");
     OSL_ENSURE(_pInitialValue || ((_nAttributes & PropertyAttribute::MAYBEVOID) != 0),
-        "OPropertyContainerHelper::registerPropertyNoMember : you should not ommit the initial value if the property can't be void ! This will definitivly crash later !");
+        "OPropertyContainerHelper::registerPropertyNoMember : you should not omit the initial value if the property can't be void ! This will definitivly crash later !");
 
     PropertyDescription aNewProp;
     aNewProp.aProperty = Property( _rName, _nHandle, _rType, (sal_Int16)_nAttributes );

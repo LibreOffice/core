@@ -112,7 +112,7 @@ public:
         @return
             Returns a reference to the current position.  Therefore this
             method is not thread safe.  The reason for this behaviour is, of
-            course, to ommit the copying of the returned position.
+            course, to omit the copying of the returned position.
     */
     const IteratorPosition& operator* () const;
     /** The prefix increment operator returns the iterator pointing to the

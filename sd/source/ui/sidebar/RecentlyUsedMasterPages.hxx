@@ -90,7 +90,7 @@ private:
         @param bMakePersistent
             When <TRUE/> is given then the new list of recently used master
             pages is written back into the configuration to make it
-            persistent.  Giving <FALSE/> to ommit this is used while loading
+            persistent.  Giving <FALSE/> to omit this is used while loading
             the persistent list from the configuration.
     */
     void AddMasterPage (
