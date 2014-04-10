@@ -262,7 +262,7 @@
     <menu:menupopup>
      <menu:menuitem menu:id="slot:10454" menu:helpid="10454" menu:label="~Group"/>
      <menu:menuitem menu:id="slot:10455" menu:helpid="10455" menu:label="~Ungroup"/>
-     <menu:menuitem menu:id="slot:27096" menu:helpid="27096" menu:label="~Edit Group"/>
+     <menu:menuitem menu:id="slot:27096" menu:helpid="27096" menu:label="~Enter Group"/>
      <menu:menuitem menu:id="slot:27097" menu:helpid="27097" menu:label="E~xit group"/>
     </menu:menupopup>
    </menu:menu>
