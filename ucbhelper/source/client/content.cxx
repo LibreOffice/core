@@ -298,6 +298,7 @@ static Reference< XContent > getContentNoThrow(
     }
     catch ( IllegalIdentifierException const & e )
     {
+        SAL_WARN("ucbhelper", "getContentNoThrow: exception: " << e.Message);
     }
 
     return xContent;
