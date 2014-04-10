@@ -347,7 +347,7 @@
 #define ITEM_POPUP_ENTER_GROUP \
     Identifier = SID_ENTER_GROUP ; \
     Command = ".uno:EnterGroup" ; \
-    Text [ en-US ] = "~Edit Group" ; \
+    Text [ en-US ] = "~Enter Group" ; \
 
 #define ITEM_POPUP_LEAVE_GROUP \
     Identifier = SID_LEAVE_GROUP ; \
