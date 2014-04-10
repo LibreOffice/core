@@ -22,6 +22,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
+#include <mediamisc.hxx>
+
 namespace avmedia {
 
 ResMgr* GetResMgr()
