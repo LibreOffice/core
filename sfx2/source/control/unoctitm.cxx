@@ -813,7 +813,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
     {
         // Use special uno struct to transport don't care state
         ::com::sun::star::frame::status::ItemStatus aItemStatus;
-        aItemStatus.State = ::com::sun::star::frame::status::ItemState::dont_care;
+        aItemStatus.State = ::com::sun::star::frame::status::ItemState::DONT_CARE;
         aState = makeAny( aItemStatus );
     }
 
@@ -902,7 +902,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         {
             // Use special uno struct to transport don't care state
             ::com::sun::star::frame::status::ItemStatus aItemStatus;
-            aItemStatus.State = ::com::sun::star::frame::status::ItemState::dont_care;
+            aItemStatus.State = ::com::sun::star::frame::status::ItemState::DONT_CARE;
             aState = makeAny( aItemStatus );
         }
 

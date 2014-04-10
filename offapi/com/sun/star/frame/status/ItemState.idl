@@ -34,15 +34,15 @@ constants ItemState
 {
     /** specifies an unknown state.
      */
-    const short unknown        = 0;
+    const short UNKNOWN        = 0;
 
     /** specifies that the property is currently disabled.
      */
-    const short disabled       = 1;
+    const short DISABLED       = 1;
 
     /** specifies that the property is currently read-only.
      */
-    const short read_only      = 2;
+    const short READ_ONLY      = 2;
 
     /** specifies that the property is currently in a don't care state.
 
@@ -51,15 +51,15 @@ constants ItemState
         for a property at the same time.
         </p>
      */
-    const short dont_care      = 16;
+    const short DONT_CARE      = 16;
 
     /** specifies that the property is currently in a default state.
     */
-    const short default_value  = 32;
+    const short DEFAULT_VALUE  = 32;
 
     /** specifies that the property is currently in a set state.
     */
-    const short set            = 64;
+    const short SET            = 64;
 };
 
 
