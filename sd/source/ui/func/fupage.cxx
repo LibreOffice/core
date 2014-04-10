@@ -90,7 +90,7 @@ void mergeItemSetsImpl( SfxItemSet& rTarget, const SfxItemSet& rSource )
         p1 = pPtr[0];
         p2 = pPtr[1];
 
-        // make ranges discret
+        // make ranges discrete
         while(pPtr[2] && (pPtr[2] - p2 == 1))
         {
             p2 = pPtr[3];
