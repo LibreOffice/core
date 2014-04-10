@@ -555,7 +555,7 @@ void SdStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
  */
 void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, sal_Bool bOnlyMissingItems)
 {
-    /* If not explicit set, ddjust bullet width and text indent to new font
+    /* If not explicit set, adjust bullet width and text indent to new font
        height. */
     SfxStyleFamily eFamily = nFamily;
     OUString aStyleName(aName);
