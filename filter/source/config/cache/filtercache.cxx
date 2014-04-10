@@ -190,7 +190,7 @@ void FilterCache::load(EFillState eRequired,
     // Otherwise load the missing items.
 
 
-    // a) load some const values from configration.
+    // a) load some const values from configuration.
     //    These values are needed there for loading
     //    config items ...
     //    Further we load some std items from the

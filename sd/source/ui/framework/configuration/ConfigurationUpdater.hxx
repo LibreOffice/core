@@ -162,7 +162,7 @@ private:
         ::std::vector<css::uno::Reference<css::drawing::framework::XResourceId> >&
             rResourcesToDeactivate);
 
-    /** Remove from the requested configration all pure anchors that have no
+    /** Remove from the requested configuration all pure anchors that have no
         child.  Requested but not yet activated anchors can not be removed
         because without the actual resource the 'pureness' of an anchor can
         not be determined.
