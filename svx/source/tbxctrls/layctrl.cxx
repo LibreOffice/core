@@ -781,8 +781,9 @@ void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, cons
 
 // class SvxColumnsToolBoxControl ------------------------------------------
 
-SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx )
+SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
+    : SfxToolBoxControl(nSlotId, nId, rTbx)
+    , bEnabled(false)
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
