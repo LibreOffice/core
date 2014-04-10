@@ -513,7 +513,7 @@ void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierExceptio
 bool URLParameter::scheme()
 {
     // Correct extension help links as sometimes the
-    // module is missing resulting in a misformed URL
+    // module is missing resulting in a malformed URL
     if( m_aExpr.startsWith("vnd.sun.star.help:///") )
     {
         sal_Int32 nLen = m_aExpr.getLength();

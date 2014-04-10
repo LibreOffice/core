@@ -124,7 +124,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             }
             else
                 {
-                    OSL_FAIL( "sd::TransitionPreset::importTransitionPresetList(), misformed xml configuration file, giving up!" );
+                    OSL_FAIL( "sd::TransitionPreset::importTransitionPresetList(), malformed xml configuration file, giving up!" );
                     break;
                 }
         }
