@@ -721,6 +721,7 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
     if( !nX && !nY && (mnWidth == nNewWidth) && (mnHeight == nNewHeight) )
     {
           xCroppedImage = mxCachedImage;
+          CG_TRACE( "CFRetain(" << xCroppedImage << ")" );
           CFRetain( xCroppedImage );
     }
     else
