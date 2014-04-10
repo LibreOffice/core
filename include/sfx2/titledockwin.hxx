@@ -135,7 +135,7 @@ namespace sfx2
 
         Link                m_aEndDockingHdl;
 
-        /** The border that is painted arround the inner window.  The bevel
+        /** The border that is painted around the inner window.  The bevel
             shadow lines are part of the border, so where the border is 0 no
             such line is painted.
         */

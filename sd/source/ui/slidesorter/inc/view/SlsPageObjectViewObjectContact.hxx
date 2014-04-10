@@ -92,7 +92,7 @@ public:
     model::SharedPageDescriptor GetPageDescriptor (void) const;
 
     /** Return the border widths in the screen coordinate system of the
-        border arround the page object.  The border contains frames for
+        border around the page object.  The border contains frames for
         selection, focus, the page name and number, and the indicator for
         the page transition.
         @param pDevice

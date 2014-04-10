@@ -165,7 +165,7 @@ protected:
     /** This flag specifies whether an object has a list as child regardless
         of whether that child being currently instantiated or not.  This
         flag is always true in the current implementation because the list
-        child is just another wrapper arround this object and thus has the
+        child is just another wrapper around this object and thus has the
         same life time.
     */
     bool m_bHasListChild;

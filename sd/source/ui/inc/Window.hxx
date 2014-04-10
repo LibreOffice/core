@@ -51,7 +51,7 @@ public:
     void    SetViewShell (ViewShell* pViewSh);
 
     /** Set the zoom factor to the specified value and center the display
-        area arround the zoom center.
+        area around the zoom center.
         @param nZoom
             The zoom factor is given as integral percent value.
     */

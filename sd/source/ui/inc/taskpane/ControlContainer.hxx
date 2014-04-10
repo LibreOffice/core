@@ -119,7 +119,7 @@ public:
             is <FALSE/> the hidden controls are skipped.
         @param bCycle
             When this flag is <TRUE/> then the search for the previous
-            control wraps arround when reaching the first control.
+            control wraps around when reaching the first control.
         @return
             Returns the index to the previous control or (sal_uInt32)-1 when
             there is no previous control.  This would be the case when there
@@ -141,7 +141,7 @@ public:
             <FALSE/> the hidden controls are skipped.
         @param bCycle
             When this flag is <TRUE/> then the search for the next control
-            wraps arround when reaching the last control.
+            wraps around when reaching the last control.
         @return
             Returns the index to the next control or (sal_uInt32)-1 when
             there is no next control.  This would be the case when there is

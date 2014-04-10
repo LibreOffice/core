@@ -317,7 +317,7 @@ public:
     */
     ::sd::WindowUpdater* GetWindowUpdater (void) const;
 
-    /** Return the border that is drawn arround the actual document view.
+    /** Return the border that is drawn around the actual document view.
         The border contains typically rulers and scroll bars.
         @param bOuterResize
             When this flag is <TRUE/> then the border is used for an

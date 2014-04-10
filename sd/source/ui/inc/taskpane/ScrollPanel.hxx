@@ -137,7 +137,7 @@ private:
     const int mnHorizontalBorder;
     /** List of horizontal stripes that is created from the gaps between
         children when they are layouted.  The stripes are painted in Paint()
-        to fill the space arround the children.
+        to fill the space around the children.
     */
     typedef ::std::vector< ::std::pair<int,int> > StripeList;
     StripeList maStripeList;

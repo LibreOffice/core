@@ -44,7 +44,7 @@ class InsertPosition;
     2.) Desired and minimal and maximal widths of page objects.
     3.) Minimal and maximal number of columns.
     4.) Vertical and horizontal gaps between objects in adjacent columns.
-    5.) Borders arround every page object.
+    5.) Borders around every page object.
     6.) Vertical and horizontal borders between enclosing page and outer
         page objects.
     From these it calculates various output values:

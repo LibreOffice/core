@@ -134,7 +134,7 @@ private:
     const Color maFrameColor;
     const bool mbHasFrame;
     static const int snSubstitutionTextSize;
-    // Width of the frame that is painted arround the preview.
+    // Width of the frame that is painted around the preview.
     static const int snFrameWidth;
 
     bool Initialize (

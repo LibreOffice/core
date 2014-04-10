@@ -389,7 +389,7 @@ void PreviewRenderer::PaintFrame (void)
 {
     if (mbHasFrame)
     {
-        // Paint a frame arround the preview.
+        // Paint a frame around the preview.
         Rectangle aPaintRectangle (
             Point(0,0),
             mpPreviewDevice->GetOutputSizePixel());
@@ -508,7 +508,7 @@ Image PreviewRenderer::ScaleBitmap (
         mpPreviewDevice->SetMapMode (aMapMode);
         mpPreviewDevice->SetOutputSize (aFrameSize);
 
-        // Paint a frame arround the preview.
+        // Paint a frame around the preview.
         mpPreviewDevice->SetLineColor (maFrameColor);
         mpPreviewDevice->SetFillColor ();
         mpPreviewDevice->DrawRect (Rectangle(Point(0,0), aFrameSize));

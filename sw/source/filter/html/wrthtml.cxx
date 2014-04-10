@@ -661,7 +661,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
         if( lcl_html_IsMultiColEnd( rHTMLWrt, nSectEndIdx-1 ) )
             bEndTag = false;
 
-        //.is there a columned section arround this one?
+        //.is there a columned section around this one?
         const SwStartNode *pSttNd = rSectNd.StartOfSectionNode();
         if( pSttNd )
         {

@@ -399,7 +399,7 @@ private:
     /** Handle the situation that the iterator has reached the last object.
         This may result in setting the <member>mbEndOfSearch</member> flag
         back to </sal_False>.  This method may show either the end-of-search
-        dialog or the wrap-arround dialog.
+        dialog or the wrap-around dialog.
     */
     void EndOfSearch (void);
 
@@ -409,7 +409,7 @@ private:
     */
     void ShowEndOfSearchDialog (void);
 
-    /** Show a dialog that asks the user whether to wrap arround to the
+    /** Show a dialog that asks the user whether to wrap around to the
         beginning/end of the document and continue with the search/spell
         check.
     */
@@ -488,7 +488,7 @@ private:
         i.e. there is no match in the whole presentation, or when no further
         match exists.
         @return
-            The returned value indicates whether another (wrapped arround)
+            The returned value indicates whether another (wrapped around)
             search shall take place.  If that is so, then it is the caller's
             responsibility to set the cursor position accordingly.
     */
@@ -520,7 +520,7 @@ private:
 
     /** Initiate the spell check of the next relevant text object.
         When the outline view is active then this method is called
-        after a wrap arround to continue at the beginning of the document.
+        after a wrap around to continue at the beginning of the document.
         @return
             Returns <TRUE/> to indicate that another call to this method is
             required.  When all text objects have been processed then

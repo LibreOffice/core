@@ -419,7 +419,7 @@ bool Outliner::SpellNextDocument (void)
     // found the loop is left through a break.
     // It is the responsibility of the sd outliner object to correctly
     // iterate over all text shapes, i.e. switch between views, wrap
-    // arround at the end of the document, stop when all text shapes
+    // around at the end of the document, stop when all text shapes
     // have been examined exactly once.
     bool bFoundNextSentence = false;
     while ( ! bFoundNextSentence)
@@ -581,7 +581,7 @@ void Outliner::Initialize (bool bDirectionIsForward)
     }
     else if (bOldDirectionIsForward != mbDirectionIsForward)
     {
-        // Requested iteration direction has changed.  Turn arround the iterator.
+        // Requested iteration direction has changed.  Turn around the iterator.
         maObjectIterator.Reverse();
         if (bIsAtEnd)
         {
@@ -726,7 +726,7 @@ bool Outliner::SearchAndReplaceOnce (void)
         {
             mpDrawDocument->GetDocSh()->SetWaitCursor(false);
             // The following loop is executed more then once only when a
-            // wrap arround search is done.
+            // wrap around search is done.
             while (true)
             {
                 int nResult = pOutlinerView->StartSearchAndReplace(*mpSearchItem);
@@ -1071,7 +1071,7 @@ void Outliner::EndOfSearch (void)
             ShowEndOfSearchDialog ();
             mbEndOfSearch = true;
         }
-        // Ask the user whether to wrap arround and continue the search or
+        // Ask the user whether to wrap around and continue the search or
         // to terminate.
         else if (meMode==TEXT_CONVERSION || ShowWrapArroundDialog ())
         {
@@ -1090,7 +1090,7 @@ void Outliner::EndOfSearch (void)
         }
         else
         {
-            // No wrap arround.
+            // No wrap around.
             mbEndOfSearch = true;
         }
     }
@@ -1155,7 +1155,7 @@ bool Outliner::ShowWrapArroundDialog (void)
                 ? STR_SAR_WRAP_BACKWARD
                 : STR_SAR_WRAP_BACKWARD_DRAW;
 
-        // Pop up question box that asks the user whether to wrap arround.
+        // Pop up question box that asks the user whether to wrap around.
         // The dialog is made modal with respect to the whole application.
         QueryBox aQuestionBox (
             NULL,
@@ -1454,7 +1454,7 @@ bool Outliner::HandleFailedSearch (void)
     if (pOutlinerView != NULL && mpSearchItem != NULL)
     {
         // Detect whether there is/may be a prior match.  If there is then
-        // ask the user whether to wrap arround.  Otherwise tell the user
+        // ask the user whether to wrap around.  Otherwise tell the user
         // that there is no match.
         if (HasNoPreviousMatch ())
         {
@@ -1466,7 +1466,7 @@ bool Outliner::HandleFailedSearch (void)
         else
         {
             // No further matches found.  Ask the user whether to wrap
-            // arround and start again.
+            // around and start again.
             bContinueSearch = ShowWrapArroundDialog ();
         }
     }

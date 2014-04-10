@@ -45,7 +45,7 @@ namespace sd { namespace toolpanel {
     is made transparent and painting it is done by this class.  While
     layouting its children it remembers the gaps between children and stores
     them in maStripeList.  In Paint() those gaps as well as the border
-    arround all children are painted in the background color.</p>
+    around all children are painted in the background color.</p>
 */
 class SubToolPanel
     : public Control,
@@ -96,7 +96,7 @@ private:
     const int mnHorizontalBorder;
     /** List of horizontal stripes that is created from the gaps between
         children when they are layouted.  The stripes are painted in Paint()
-        to fill the space arround the children.
+        to fill the space around the children.
     */
     typedef ::std::vector< ::std::pair<int,int> > StripeList;
     StripeList maStripeList;

@@ -233,7 +233,7 @@ class Canvas
                 mnVOffset,
                 mnScale*aScreenSize.getWidth(),
                 mnScale*aScreenSize.getHeight());
-            // Fill the screen rectangle and draw a frame arround it to increase its visibility.
+            // Fill the screen rectangle and draw a frame around it to increase its visibility.
             g2.setColor (new Color (250,240,230));
             g2.fill (aScreen);
             g2.setColor (Color.BLACK);

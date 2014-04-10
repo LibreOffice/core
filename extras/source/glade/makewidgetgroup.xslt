@@ -19,7 +19,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="xml" version="1.0" encoding="UTF-8"/>
 
-  <!-- work arround apparently broken output indenting in libxslt -->
+  <!-- work around apparently broken output indenting in libxslt -->
   <xsl:param name="indent" select="'  '"/>
 
   <xsl:template match="/glade-catalog">
