@@ -4609,13 +4609,6 @@ void FmXComboBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& 
 /*************************************************************************/
 TYPEINIT1(FmXFilterCell, FmXGridCell);
 
-
-Reference< XInterface >  FmXFilterCell_CreateInstance(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& /*_rxFactory*/)
-{
-    return *new FmXFilterCell();
-}
-
-
 FmXFilterCell::FmXFilterCell(DbGridColumn* pColumn, DbCellControl* pControl )
               :FmXGridCell( pColumn, pControl )
               ,m_aTextListeners(m_aMutex)

@@ -43,6 +43,8 @@
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
 
+#include <shapeimpl.hxx>
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;

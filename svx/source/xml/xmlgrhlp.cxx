@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <comphelper/string.hxx>
 #include <sal/macros.h>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -69,7 +72,8 @@ const MetaCommentAction* ImplCheckForEPS( GDIMetaFile& rMtf )
     return pComment;
 }
 
-class SvXMLGraphicInputStream : public::cppu::WeakImplHelper1< XInputStream >
+class SvXMLGraphicInputStream:
+    public cppu::WeakImplHelper1<XInputStream>, private boost::noncopyable
 {
 private:
 
@@ -83,11 +87,6 @@ private:
 
     ::utl::TempFile                 maTmp;
     Reference< XInputStream >       mxStmWrapper;
-
-                                    // not available
-                                    SvXMLGraphicInputStream();
-                                    SvXMLGraphicInputStream( const SvXMLGraphicInputStream& );
-    SvXMLGraphicInputStream&        operator==( SvXMLGraphicInputStream& );
 
 public:
 
@@ -199,7 +198,8 @@ void SAL_CALL SvXMLGraphicInputStream::closeInput() throw( NotConnectedException
     mxStmWrapper->closeInput();
 }
 
-class SvXMLGraphicOutputStream : public::cppu::WeakImplHelper1< XOutputStream >
+class SvXMLGraphicOutputStream:
+    public cppu::WeakImplHelper1<XOutputStream>, private boost::noncopyable
 {
 private:
 
@@ -215,10 +215,6 @@ private:
     Reference< XOutputStream >      mxStmWrapper;
     GraphicObject                   maGrfObj;
     sal_Bool                        mbClosed;
-
-                                    // not available
-                                    SvXMLGraphicOutputStream( const SvXMLGraphicOutputStream& );
-    SvXMLGraphicOutputStream&       operator==( SvXMLGraphicOutputStream& );
 
 public:
 

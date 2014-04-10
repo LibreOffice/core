@@ -88,7 +88,6 @@ class SvxXMLLineEndEntryExporter : public SvxXMLTableEntryExporter
 {
 public:
     SvxXMLLineEndEntryExporter( SvXMLExport& rExport );
-    SvxXMLLineEndEntryExporter();
     virtual ~SvxXMLLineEndEntryExporter();
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;

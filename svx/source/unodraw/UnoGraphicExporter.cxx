@@ -68,6 +68,8 @@
 
 #include "boost/scoped_ptr.hpp"
 
+#include <UnoGraphicExporter.hxx>
+
 #define MAX_EXT_PIX         2048
 
 using namespace ::comphelper;

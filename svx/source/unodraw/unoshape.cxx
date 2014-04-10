@@ -84,6 +84,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/tools/unotools.hxx>
+#include "gluepts.hxx"
 #include "shapeimpl.hxx"
 #include <sal/log.hxx>
 
@@ -106,8 +107,6 @@ using ::svx::PropertyValueProvider;
 using ::svx::IPropertyValueProvider;
 
 class GDIMetaFile;
-
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoGluePointAccess_createInstance( SdrObject* pObject );
 
 /***********************************************************************
 * class SvxShapeImpl                                                   *
@@ -1023,17 +1022,6 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShape::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
-
-
-Reference< uno::XInterface > SvxShape_NewInstance()
-{
-    return uno::Reference< uno::XInterface >(static_cast< OWeakObject* >( new SvxShape() ) );
-}
-
-
-// SfxListener
-
 
 void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 {

@@ -46,7 +46,6 @@ struct Cell
     explicit            Cell();
 
     inline bool         IsMerged() const { return mbMergeOrig || mbOverlapX || mbOverlapY; }
-    inline bool         IsOverlapped() const { return mbOverlapX || mbOverlapY; }
 
     void                MirrorSelfX( bool bMirrorStyles, bool bSwapDiag );
 };
@@ -163,7 +162,6 @@ struct ArrayImpl
     bool                IsRowInClipRange( size_t nRow ) const;
 
     inline size_t       GetMirrorCol( size_t nCol ) const { return mnWidth - nCol - 1; }
-    inline size_t       GetMirrorRow( size_t nRow ) const { return mnHeight - nRow - 1; }
 
     long                GetColPosition( size_t nCol ) const;
     long                GetRowPosition( size_t nRow ) const;

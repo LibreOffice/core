@@ -19,7 +19,14 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMSERVS_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMSERVS_HXX
 
+#include <sal/config.h>
+
+#include <com/sun/star/uno/Reference.hxx>
 #include <svx/svxdllapi.h>
+
+namespace com { namespace sun { namespace star { namespace lang {
+    class XMultiServiceFactory;
+} } } }
 
 #define FM_COMPONENT_EDIT               OUString( "stardiv.one.form.component.Edit" )
 #define FM_COMPONENT_TEXTFIELD          OUString( "stardiv.one.form.component.TextField" )
@@ -74,7 +81,31 @@
 namespace svxform
 {
     SVX_DLLPUBLIC void ImplSmartRegisterUnoServices();
-}   // namespace svxform
+
+    css::uno::Reference<css::uno::XInterface> SAL_CALL
+    OAddConditionDialog_Create(
+        css::uno::Reference<css::lang::XMultiServiceFactory> const &);
+
+    OUString SAL_CALL OAddConditionDialog_GetImplementationName();
+
+    css::uno::Sequence<OUString> SAL_CALL
+    OAddConditionDialog_GetSupportedServiceNames();
+}
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL
+FmXGridControl_NewInstance_Impl(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const &)
+    throw (css::uno::Exception);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL
+FormController_NewInstance_Impl(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const &)
+    throw (css::uno::Exception);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL
+LegacyFormController_NewInstance_Impl(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const &)
+    throw (css::uno::Exception);
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMSERVS_HXX
 

@@ -49,8 +49,6 @@ public:
     virtual void Closed() SAL_OVERRIDE;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
-
-    bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
 
 ImpSdrObjTextLink::~ImpSdrObjTextLink()

@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include "UnoGraphicExporter.hxx"
 #include "shapeimpl.hxx"
 #include "svx/unoshprp.hxx"
 #include "svx/svdotable.hxx"
@@ -100,8 +102,6 @@ bool SvxTableShape::setPropertyValueImpl(
     }
     }
 }
-
-extern Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector );
 
 bool SvxTableShape::getPropertyValueImpl(
     const OUString& rName,

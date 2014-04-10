@@ -38,6 +38,7 @@
 #include <sfx2/app.hxx>
 #include <basic/basmgr.hxx>
 
+#include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/assign/list_of.hpp>
 #include <utility>
@@ -140,7 +141,8 @@ namespace svxform
 
     //= FormScriptingEnvironment
 
-    class FormScriptingEnvironment : public IFormScriptingEnvironment
+    class FormScriptingEnvironment:
+        public IFormScriptingEnvironment, private boost::noncopyable
     {
     private:
         typedef ::comphelper::ImplementationReference< FormScriptListener, XScriptListener >    ListenerImplementation;
@@ -170,11 +172,6 @@ namespace svxform
 
     private:
         void impl_registerOrRevoke_throw( const Reference< XEventAttacherManager >& _rxManager, bool _bRegister );
-
-    private:
-        FormScriptingEnvironment();                                                 // never implemented
-        FormScriptingEnvironment( const FormScriptingEnvironment& );                // never implemented
-        FormScriptingEnvironment& operator=( const FormScriptingEnvironment& );     // never implemented
     };
 
 

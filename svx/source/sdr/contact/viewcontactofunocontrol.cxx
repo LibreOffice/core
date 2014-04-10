@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <boost/noncopyable.hpp>
 #include <svx/sdr/contact/viewcontactofunocontrol.hxx>
 #include <svx/sdr/contact/viewobjectcontactofunocontrol.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
@@ -51,15 +53,11 @@ namespace sdr { namespace contact {
 
     //= ViewContactOfUnoControl
 
-    class ViewContactOfUnoControl_Impl
+    class ViewContactOfUnoControl_Impl: private boost::noncopyable
     {
     public:
         ViewContactOfUnoControl_Impl();
         ~ViewContactOfUnoControl_Impl();
-
-    private:
-        ViewContactOfUnoControl_Impl( const ViewContactOfUnoControl_Impl& );            // never implemented
-        ViewContactOfUnoControl_Impl& operator=( const ViewContactOfUnoControl_Impl& ); // never implemented
     };
 
 

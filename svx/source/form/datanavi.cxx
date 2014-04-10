@@ -121,8 +121,6 @@ namespace svxform
             m_xNode( _rxNode ) {}
         ItemNode( const Reference< XPropertySet >& _rxSet ) :
             m_xPropSet( _rxSet ) {}
-
-        DataGroupType   GetDataGroupType() const;
     };
 
 

@@ -24,36 +24,11 @@
 #include "osl/diagnose.h"
 #include "cppuhelper/factory.hxx"
 
+#include <coreservices.hxx>
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
-
-namespace svx
-{
-extern OUString SAL_CALL ExtrusionDepthController_getImplementationName();
-extern Reference< XInterface > SAL_CALL ExtrusionDepthController_createInstance(const Reference< XMultiServiceFactory > &)  throw( RuntimeException );
-extern Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames() throw( RuntimeException );
-
-extern OUString SAL_CALL ExtrusionDirectionControl_getImplementationName();
-extern Reference< XInterface > SAL_CALL ExtrusionDirectionControl_createInstance(const Reference< XMultiServiceFactory > &)  throw( RuntimeException );
-extern Sequence< OUString > SAL_CALL ExtrusionDirectionControl_getSupportedServiceNames() throw( RuntimeException );
-
-extern OUString SAL_CALL ExtrusionLightingControl_getImplementationName();
-extern Reference< XInterface > SAL_CALL ExtrusionLightingControl_createInstance(const Reference< XMultiServiceFactory > &)  throw( RuntimeException );
-extern Sequence< OUString > SAL_CALL ExtrusionLightingControl_getSupportedServiceNames() throw( RuntimeException );
-
-extern OUString SAL_CALL ExtrusionSurfaceControl_getImplementationName();
-extern Reference< XInterface > SAL_CALL ExtrusionSurfaceControl_createInstance(const Reference< XMultiServiceFactory > &)  throw( RuntimeException );
-extern Sequence< OUString > SAL_CALL ExtrusionSurfaceControl_getSupportedServiceNames() throw( RuntimeException );
-
-extern OUString SAL_CALL FontworkAlignmentControl_getImplementationName();
-extern Reference< XInterface > SAL_CALL FontworkAlignmentControl_createInstance(const Reference< XMultiServiceFactory > &)  throw( RuntimeException );
-extern Sequence< OUString > SAL_CALL FontworkAlignmentControl_getSupportedServiceNames() throw( RuntimeException );
-
-extern OUString SAL_CALL FontworkCharacterSpacingControl_getImplementationName();
-extern Reference< XInterface > SAL_CALL FontworkCharacterSpacingControl_createInstance(const Reference< XMultiServiceFactory > &)  throw( RuntimeException );
-extern Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl_getSupportedServiceNames() throw( RuntimeException );
-}
 
 extern "C"
 {

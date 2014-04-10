@@ -38,6 +38,7 @@
 #include <svx/dialmgr.hxx>
 #include "svx/extrusioncolorcontrol.hxx"
 
+#include "coreservices.hxx"
 #include "helpid.hrc"
 #include "extrusioncontrols.hxx"
 #include "extrusioncontrols.hrc"

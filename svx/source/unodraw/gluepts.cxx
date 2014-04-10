@@ -28,6 +28,8 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdpage.hxx>
 
+#include <gluepts.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;

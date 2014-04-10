@@ -130,7 +130,6 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    SvxEditSource*          Clone() const;
     SvxTextForwarder*       GetTextForwarder();
     SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool );
     void                    UpdateData();
@@ -138,8 +137,6 @@ public:
     void addRange( SvxUnoTextRangeBase* pNewRange );
     void removeRange( SvxUnoTextRangeBase* pOldRange );
     const SvxUnoTextRangeBaseList& getRanges() const;
-
-    SdrObject*              GetSdrObject() const { return mpObject; }
 
     void                    lock();
     void                    unlock();

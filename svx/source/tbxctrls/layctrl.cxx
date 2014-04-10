@@ -433,8 +433,6 @@ public:
     virtual void            Paint( const Rectangle& ) SAL_OVERRIDE;
     virtual void            PopupModeEnd() SAL_OVERRIDE;
     virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
-
-    sal_uInt16                  GetColCount() const { return (sal_uInt16)nCol; }
 };
 
 

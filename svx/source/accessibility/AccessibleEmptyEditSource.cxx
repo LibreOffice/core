@@ -84,9 +84,6 @@ namespace accessibility
         AccessibleEmptyEditSource_Impl() {}
         virtual ~AccessibleEmptyEditSource_Impl() {}
 
-        // from the SfxListener interface
-        void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
         // SvxEditSource
         SvxTextForwarder*       GetTextForwarder() SAL_OVERRIDE { return this; }
         SvxViewForwarder*       GetViewForwarder() SAL_OVERRIDE { return this; }
@@ -136,7 +133,6 @@ namespace accessibility
 
         bool            IsValid() const SAL_OVERRIDE { return true; }
 
-        void            SetNotifyHdl( const Link& ) {}
         LanguageType    GetLanguage( sal_Int32, sal_Int32 ) const SAL_OVERRIDE { return LANGUAGE_DONTKNOW; }
         sal_Int32       GetFieldCount( sal_Int32 ) const SAL_OVERRIDE { return 0; }
         EFieldInfo      GetFieldInfo( sal_Int32, sal_uInt16 ) const SAL_OVERRIDE { return EFieldInfo(); }

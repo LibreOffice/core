@@ -160,12 +160,6 @@ struct PropertySetInfo
                                             // sal_False -> the set has _no_ such property or it's value isn't empty
 };
 
-sal_Bool operator < (const Reference< XPropertySet >& lhs,
-                 const Reference< XPropertySet >& rhs)
-{
-    return lhs.get() < rhs.get();
-}
-
 typedef std::map<Reference< XPropertySet >, PropertySetInfo> PropertySetInfoCache;
 
 

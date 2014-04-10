@@ -34,6 +34,8 @@
 #include "rtl/ustring.hxx"
 #include "vcl/svapp.hxx"
 
+#include <lookupcolorname.hxx>
+
 namespace {
 
 class ColorNameMap: private boost::noncopyable {

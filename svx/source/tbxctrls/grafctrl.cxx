@@ -103,7 +103,6 @@ public:
                     virtual ~ImplGrafMetricField();
 
     void            Update( const SfxPoolItem* pItem );
-    const OUString& GetCommand() const { return maCommand; }
 };
 
 ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame ) :

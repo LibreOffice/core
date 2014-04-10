@@ -99,6 +99,7 @@ using namespace ::connectivity::simple;
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     FormController_NewInstance_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB )
+    throw (css::uno::Exception)
 {
     return *( new ::svxform::FormController( comphelper::getComponentContext(_rxORB) ) );
 }
@@ -469,8 +470,6 @@ struct FmFieldInfo
 class FmXAutoControl: public UnoControl
 
 {
-    friend Reference< XInterface > SAL_CALL FmXAutoControl_NewInstance_Impl();
-
 public:
     FmXAutoControl() :UnoControl()
     {

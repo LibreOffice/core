@@ -177,20 +177,6 @@ OUString SdrVirtObj::TakeObjNamePlural() const
     return sName.makeStringAndClear();
 }
 
-void operator +=(PolyPolygon& rPoly, const Point& rOfs)
-{
-    if (rOfs.X()!=0 || rOfs.Y()!=0) {
-        sal_uInt16 i,j;
-        for (j=0; j<rPoly.Count(); j++) {
-            Polygon aP1(rPoly.GetObject(j));
-            for (i=0; i<aP1.GetSize(); i++) {
-                 aP1[i]+=rOfs;
-            }
-            rPoly.Replace(aP1,j);
-        }
-    }
-}
-
 basegfx::B2DPolyPolygon SdrVirtObj::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aPolyPolygon(rRefObj.TakeXorPoly());

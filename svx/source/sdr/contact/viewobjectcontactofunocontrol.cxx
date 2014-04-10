@@ -56,6 +56,7 @@
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 
 #include <boost/bind.hpp>
+#include <boost/noncopyable.hpp>
 
 /*
 
@@ -199,9 +200,6 @@ namespace sdr { namespace contact {
         inline Reference< XControlModel >
                         getModel() const { return m_xControl->getModel(); }
         inline void     setModel( const Reference< XControlModel >& _m ) const { m_xControl->setModel( _m ); }
-        inline bool     isTransparent() const { return m_xControl->isTransparent(); }
-        inline Reference< XWindowPeer >
-                        getPeer() const { return m_xControl->getPeer(); }
 
         inline void     addWindowListener( const Reference< XWindowListener >& _l ) const    { m_xControlWindow->addWindowListener( _l );    }
         inline void     removeWindowListener( const Reference< XWindowListener >& _l ) const { m_xControlWindow->removeWindowListener( _l ); }
@@ -211,11 +209,6 @@ namespace sdr { namespace contact {
                void     setZoom( const ::basegfx::B2DVector& _rScale ) const;
                ::basegfx::B2DVector
                         getZoom() const;
-
-        inline void     setGraphics( const Reference< XGraphics >& _g ) const { m_xControlView->setGraphics( _g ); }
-        inline Reference< XGraphics >
-                        getGraphics() const { return m_xControlView->getGraphics(); }
-        inline void     draw( const Point& _rTopLeft ) const { m_xControlView->draw( _rTopLeft.X(), _rTopLeft.Y() ); }
 
                void     invalidate() const;
 
@@ -229,24 +222,10 @@ namespace sdr { namespace contact {
         return _rControl.getControl() == _rxCompare;
     }
 
-
-    bool operator==( const Reference< XInterface >& _rxCompare, const ControlHolder& _rControl )
-    {
-        return _rxCompare == _rControl.getControl();
-    }
-
-
     bool operator==( const ControlHolder& _rControl, const Any& _rxCompare )
     {
         return _rControl == Reference< XInterface >( _rxCompare, UNO_QUERY );
     }
-
-
-    bool operator==( const Any& _rxCompare, const ControlHolder& _rControl )
-    {
-        return Reference< XInterface >( _rxCompare, UNO_QUERY ) == _rControl;
-    }
-
 
     void ControlHolder::setPosSize( const Rectangle& _rPosSize ) const
     {
@@ -310,35 +289,11 @@ namespace sdr { namespace contact {
         return aZoom;
     }
 
+    namespace UnoControlContactHelper {
 
-    //= UnoControlContactHelper
-
-    class UnoControlContactHelper
-    {
-    public:
-        /** positions a control, and sets its zoom mode, using a given transformation and output device
-        */
-        static void adjustControlGeometry_throw(
-                const ControlHolder& _rControl,
-                const Rectangle& _rLogicBoundingRect,
-                const ::basegfx::B2DHomMatrix& _rViewTransformation,
-                const ::basegfx::B2DHomMatrix& _rZoomLevelNormalization
-            );
-
-        /** disposes the given control
-        */
-        static void disposeAndClearControl_nothrow(
-                ControlHolder& _rControl
-            );
-
-    private:
-        UnoControlContactHelper();                                              // never implemented
-        UnoControlContactHelper( const UnoControlContactHelper& );              // never implemented
-        UnoControlContactHelper& operator=( const UnoControlContactHelper& );   // never implemented
-    };
-
-
-    void UnoControlContactHelper::adjustControlGeometry_throw( const ControlHolder& _rControl, const Rectangle& _rLogicBoundingRect,
+    /** positions a control, and sets its zoom mode, using a given transformation and output device
+     */
+    void adjustControlGeometry_throw( const ControlHolder& _rControl, const Rectangle& _rLogicBoundingRect,
         const basegfx::B2DHomMatrix& _rViewTransformation, const ::basegfx::B2DHomMatrix& _rZoomLevelNormalization )
     {
         OSL_PRECOND( _rControl.is(), "UnoControlContactHelper::adjustControlGeometry_throw: illegal control!" );
@@ -372,8 +327,9 @@ namespace sdr { namespace contact {
         _rControl.setZoom( aScale );
     }
 
-
-    void UnoControlContactHelper::disposeAndClearControl_nothrow( ControlHolder& _rControl )
+    /** disposes the given control
+     */
+    void disposeAndClearControl_nothrow( ControlHolder& _rControl )
     {
         try
         {
@@ -388,6 +344,7 @@ namespace sdr { namespace contact {
         _rControl.clear();
     }
 
+    }
 
     //= IPageViewAccess
 
@@ -554,7 +511,9 @@ namespace sdr { namespace contact {
                                         ,   XModeChangeListener
                                         >   ViewObjectContactOfUnoControl_Impl_Base;
 
-    class SVX_DLLPRIVATE ViewObjectContactOfUnoControl_Impl : public ViewObjectContactOfUnoControl_Impl_Base
+    class SVX_DLLPRIVATE ViewObjectContactOfUnoControl_Impl:
+        public ViewObjectContactOfUnoControl_Impl_Base,
+        private boost::noncopyable
     {
     private:
         // fdo#41935 note that access to members is protected with SolarMutex;
@@ -602,10 +561,6 @@ namespace sdr { namespace contact {
         /** determines whether the instance is disposed
         */
         bool isDisposed() const { return impl_isDisposed_nofail(); }
-
-        /** determines whether the instance is alive
-        */
-        bool isAlive() const { return !isDisposed(); }
 
         /** returns the SdrUnoObject associated with the ViewContact
 
@@ -847,11 +802,6 @@ namespace sdr { namespace contact {
              );
 
         const OutputDevice& impl_getOutputDevice_throw() const;
-
-    private:
-        ViewObjectContactOfUnoControl_Impl();                                                       // never implemented
-        ViewObjectContactOfUnoControl_Impl( const ViewObjectContactOfUnoControl_Impl& );            // never implemented
-        ViewObjectContactOfUnoControl_Impl& operator=( const ViewObjectContactOfUnoControl_Impl& ); // never implemented
     };
 
 

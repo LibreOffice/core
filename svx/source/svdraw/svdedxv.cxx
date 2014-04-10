@@ -58,6 +58,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrundomanager.hxx>
 #include <svx/sdr/overlay/overlaytools.hxx>
+#include <svx/sdr/table/tablecontroller.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 
 
@@ -1816,10 +1817,6 @@ void SdrObjEditView::getTextSelection( ::com::sun::star::uno::Any& rSelection )
         }
     }
 }
-
-namespace sdr { namespace table {
-extern rtl::Reference< sdr::SelectionController > CreateTableController( SdrObjEditView* pView, const SdrObject* pObj, const rtl::Reference< sdr::SelectionController >& xRefController );
-} }
 
 /* check if we have a single selection and that single object likes
     to handle the mouse and keyboard events itself

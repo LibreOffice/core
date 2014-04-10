@@ -48,6 +48,7 @@
 #include <svx/dlgutil.hxx>
 
 #include <svx/fontworkgallery.hxx>
+#include "coreservices.hxx"
 #include "fontworkgallery.hrc"
 
 #include <algorithm>

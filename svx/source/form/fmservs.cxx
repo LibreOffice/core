@@ -24,10 +24,6 @@
 
 using namespace com::sun::star;
 
-
-#define DECL_SERVICE(ImplName)                      \
-uno::Reference< uno::XInterface > SAL_CALL ImplName##_NewInstance_Impl(const uno::Reference< lang::XMultiServiceFactory > &) throw( uno::Exception );
-
 #define REGISTER_SERVICE(ImplName, ServiceName)                     \
     sString = (ServiceName);                                        \
     xSingleFactory = ::cppu::createSingleFactory(xServiceFactory,   \
@@ -36,23 +32,8 @@ uno::Reference< uno::XInterface > SAL_CALL ImplName##_NewInstance_Impl(const uno
     if (xSingleFactory.is())                                        \
         xSet->insert(uno::makeAny(xSingleFactory));
 
-
-    DECL_SERVICE( FmXGridControl )
-    DECL_SERVICE( FormController )
-    DECL_SERVICE( LegacyFormController )
-
-
-
 namespace svxform
 {
-
-
-    // declare selfaware service
-    uno::Reference< uno::XInterface > SAL_CALL OAddConditionDialog_Create( const uno::Reference< lang::XMultiServiceFactory >& );
-    OUString SAL_CALL OAddConditionDialog_GetImplementationName();
-    uno::Sequence< OUString > SAL_CALL OAddConditionDialog_GetSupportedServiceNames();
-
-
     void ImplSmartRegisterUnoServices()
     {
         uno::Reference< lang::XMultiServiceFactory >  xServiceFactory(::comphelper::getProcessServiceFactory(), uno::UNO_QUERY);

@@ -68,11 +68,6 @@ class ColorWindow : public Control
 
 
 public:
-
-                ColorWindow( Window* pParent, WinBits nWinStyle ) :
-                    Control( pParent, nWinStyle ),
-                    aColor( COL_WHITE ) {};
-
                 ColorWindow( Window* pParent, const ResId& rId ) :
                     Control( pParent, rId ),
                     aColor( COL_WHITE ) {};

@@ -350,6 +350,7 @@ void SAL_CALL FmXGridControlMultiplexer::columnChanged( const EventObject& _even
 
 
 Reference< XInterface > SAL_CALL FmXGridControl_NewInstance_Impl(const Reference< XMultiServiceFactory>& _rxFactory)
+    throw (css::uno::Exception)
 {
     return *(new FmXGridControl( comphelper::getComponentContext(_rxFactory) ));
 }
@@ -1033,16 +1034,6 @@ void FmXGridPeer::GridListenerDelegator::columnChanged()
 {
     m_pPeer->columnChanged();
 }
-
-
-
-Reference< XInterface >  FmXGridPeer_CreateInstance(const Reference< XMultiServiceFactory>& _rxFactory)
-{
-    FmXGridPeer* pNewObject = new FmXGridPeer( comphelper::getComponentContext(_rxFactory) );
-    pNewObject->Create(NULL, WB_TABSTOP);
-    return *pNewObject;
-}
-
 
 Sequence< Type> SAL_CALL FmXGridPeer::getTypes(  ) throw(RuntimeException, std::exception)
 {

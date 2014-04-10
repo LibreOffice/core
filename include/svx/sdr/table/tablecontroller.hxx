@@ -170,6 +170,8 @@ private:
     sal_uLong mnUpdateEvent;
 };
 
+rtl::Reference< sdr::SelectionController > CreateTableController( SdrObjEditView* pView, const SdrObject* pObj, const rtl::Reference< sdr::SelectionController >& xRefController );
+
 } }
 
 #endif // INCLUDED_SVX_SDR_TABLE_TABLECONTROLLER_HXX

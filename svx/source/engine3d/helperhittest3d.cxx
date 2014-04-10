@@ -54,7 +54,6 @@ public:
 
     // data read access
     const E3dCompoundObject* getObject() const { return mpObject; }
-    double getDepth() const { return mfDepth; }
 };
 
 

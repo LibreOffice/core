@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <tools/debug.hxx>
 #include <sal/types.h>
 #include <vcl/lstbox.hxx>
@@ -52,7 +55,7 @@ class SvxPopupWindowListBox;
 
 
 
-class SvxPopupWindowListBox : public SfxPopupWindow
+class SvxPopupWindowListBox: public SfxPopupWindow, private boost::noncopyable
 {
     using FloatingWindow::StateChanged;
 
@@ -62,9 +65,6 @@ class SvxPopupWindowListBox : public SfxPopupWindow
     sal_uInt16          nTbxId;
     OUString   maCommandURL;
     // disallow copy-constructor and assignment-operator
-
-    SvxPopupWindowListBox(const int& );
-    SvxPopupWindowListBox & operator = (const int& );
 
 //  SvxPopupWindowListBox( sal_uInt16 nSlotId, ToolBox& rTbx, sal_uInt16 nTbxItemId );
 

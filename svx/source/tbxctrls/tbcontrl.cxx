@@ -145,7 +145,6 @@ public:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
     inline void     SetVisibilityListener( const Link& aVisListener ) { aVisibilityListener = aVisListener; }
-    inline void     RemoveVisibilityListener() { aVisibilityListener = Link(); }
 
     void            SetDefaultStyle( const OUString& rDefault ) { sDefaultStyle = rDefault; }
     DECL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control* );

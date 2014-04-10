@@ -1704,28 +1704,6 @@ OutlinerParaObject* SdrTableObj::GetEditOutlinerParaObject() const
     return SdrTextObj::GetEditOutlinerParaObject();
 }
 
-
-
-struct ImplTableShadowPaintInfo
-{
-    Color maShadowColor;
-    sal_uInt32 mnXDistance;
-    sal_uInt32 mnYDistance;
-    sal_uInt16 mnShadowTransparence;
-
-    ImplTableShadowPaintInfo( const SfxItemSet& rSet )
-    {
-        const SdrShadowColorItem& rShadColItem = ((const SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
-        maShadowColor = rShadColItem.GetColorValue();
-        mnShadowTransparence = ((const SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
-
-        mnXDistance = ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
-        mnYDistance = ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
-    }
-};
-
-
-
 OUString SdrTableObj::TakeObjNameSingul() const
 {
     OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulTable));
