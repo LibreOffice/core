@@ -105,7 +105,7 @@ sal_Bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (bReturn)
     {
-        // Now the attributs of the current text position can be different
+        // Now the attributes of the current text position can be different
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
     else
@@ -136,7 +136,7 @@ sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (bReturn)
     {
-        // Now the attributs of the current text position can be different
+        // Now the attributes of the current text position can be different
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
     else

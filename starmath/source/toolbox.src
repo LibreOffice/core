@@ -926,7 +926,7 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     ToolBox TOOLBOX_CAT_F
     {
-        // attributs
+        // attributes
         HelpId = HID_SMA_ATTRIBUTES_TBX ;
         Pos = MAP_APPFONT ( 0 , 45 ) ;
         Size = MAP_APPFONT ( 65 , 95 ) ;

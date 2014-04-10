@@ -224,7 +224,7 @@ public:
     bool DontExpandFmt();
 
     /** Apply / remove attributes.
-     @return attributs in required AttributeSet.
+     @return attributes in required AttributeSet.
      When not unambiguous the set has a DONT_CARE !!
      2nd optional parameter <bMergeIndentValuesOfNumRule>.
      If <bMergeIndentValuesOfNumRule> == sal_True, the indent attributes of
