@@ -297,9 +297,10 @@ bool ScOutlineWindow::GetEntryPos(
         rnImagePos = rnStartPos;
 
     // do not cover previous collapsed image
-    if ( !bHidden && nEntry )
+    bool bDoNoCover = !bHidden && nEntry;
+    const ScOutlineEntry* pPrevEntry = bDoNoCover ? GetOutlineEntry(nLevel, nEntry - 1) : NULL;
+    if (pPrevEntry)
     {
-        const ScOutlineEntry* pPrevEntry = GetOutlineEntry( nLevel, nEntry - 1 );
         SCCOLROW nPrevEnd = pPrevEntry->GetEnd();
         if ( (nPrevEnd + 1 == nStart) && IsHidden( nPrevEnd ) )
         {
