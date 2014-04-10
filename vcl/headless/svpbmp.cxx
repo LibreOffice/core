@@ -53,7 +53,7 @@ bool SvpSalBitmap::Create( const Size& rSize,
         case 16: nFormat = FORMAT_SIXTEEN_BIT_LSB_TC_MASK; break;
 #endif
         case 24: nFormat = FORMAT_TWENTYFOUR_BIT_TC_MASK; break;
-#if defined(ANDROID) || defined(IOS)
+#ifdef ANDROID
         case 32: nFormat = FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA; break;
 #else
         case 32: nFormat = FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA; break;

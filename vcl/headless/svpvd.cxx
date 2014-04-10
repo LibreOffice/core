@@ -81,7 +81,7 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY, const ba
 #endif
             case 24: nFormat = FORMAT_TWENTYFOUR_BIT_TC_MASK; break;
             case 32: nFormat = FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA; break;
-#if defined(ANDROID) || defined(IOS)
+#ifdef ANDROID
             case 0:  nFormat = FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA; break;
 #else
             case 0:  nFormat = FORMAT_TWENTYFOUR_BIT_TC_MASK; break;
