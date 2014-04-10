@@ -236,7 +236,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
     }
     catch (const ::com::sun::star::beans::UnknownPropertyException&)
     {
-        OSL_TRACE ("caught excption due to unknown property");
+        OSL_TRACE ("caught exception due to unknown property");
         // Ignore exception and return default color.
     }
     return nColor;
