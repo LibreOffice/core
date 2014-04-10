@@ -52,6 +52,7 @@
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$€-611]">
+    <DateAcceptancePattern>M-D</DateAcceptancePattern>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>YYYY-MM-DD</FormatCode>
     </FormatElement>

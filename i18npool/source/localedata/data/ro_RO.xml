@@ -52,6 +52,7 @@
     <MeasurementSystem>Metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT>
+    <DateAcceptancePattern>D.M</DateAcceptancePattern>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>DD.MM.YYYY</FormatCode>
     </FormatElement>

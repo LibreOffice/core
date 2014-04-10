@@ -52,6 +52,7 @@
     <MeasurementSystem>Metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$KM-141A]">
+    <DateAcceptancePattern>D.M</DateAcceptancePattern>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D.M.YYYY</FormatCode>
     </FormatElement>
