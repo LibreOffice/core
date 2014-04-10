@@ -108,20 +108,15 @@ public:
 class IFrameWindow_Impl : public Window
 {
     uno::Reference < frame::XFrame2 > mxFrame;
-    bool                bBorder;
 
 public:
     IFrameWindow_Impl( Window *pParent,
                        bool bHasBorder,
                        WinBits nWinBits = 0 );
-
-public:
-    bool        HasBorder() const { return bBorder; }
 };
 
 IFrameWindow_Impl::IFrameWindow_Impl( Window *pParent, bool bHasBorder, WinBits nWinBits )
     : Window( pParent, nWinBits | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_DOCKBORDER )
-    , bBorder(bHasBorder)
 {
     if ( !bHasBorder )
         SetBorderStyle( WINDOW_BORDER_NOBORDER );

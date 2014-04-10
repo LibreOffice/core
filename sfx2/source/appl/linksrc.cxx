@@ -185,8 +185,6 @@ struct SvLinkSource_Impl
     {
     }
     ~SvLinkSource_Impl();
-
-    void Closed();
 };
 
 SvLinkSource_Impl::~SvLinkSource_Impl()

@@ -184,8 +184,6 @@ public:
                                   size_t *pPos = NULL );
     void                DeleteEntry( size_t nIndex );
 
-    int                 Compare( const OUString& rTitle ) const
-                            { return maTitle.compareTo( rTitle ); }
     int                 Compare( RegionData_Impl* pCompareWith ) const;
 };
 

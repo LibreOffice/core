@@ -93,7 +93,6 @@ namespace sfx2
         {
         };
 
-        const SfxObjectShell* getObjectShell() const { return rAntiImpl.getBaseModel().GetObjectShell(); }
               SfxObjectShell* getObjectShell()       { return rAntiImpl.getBaseModel().GetObjectShell(); }
 
         // IUndoManagerImplementation

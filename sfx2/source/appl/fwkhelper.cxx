@@ -17,13 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <sal/config.h>
+#include <framework/sfxhelperfunctions.hxx>
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
+#include "fwkhelper.hxx"
 #include "workwin.hxx"
 #include <sfx2/frame.hxx>
 

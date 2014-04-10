@@ -36,10 +36,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 
-extern void AppendConfigToken_Impl( OUString& rURL, bool bQuestionMark ); // sfxhelp.cxx
-
-// class HelpInterceptor_Impl --------------------------------------------
-
 HelpInterceptor_Impl::HelpInterceptor_Impl() :
 
     m_pHistory  ( NULL ),

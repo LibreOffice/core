@@ -241,25 +241,6 @@ void SfxProgress::SetText( const OUString&  /*      new Text */)
     }
 }
 
-
-
-// Required in App data
-static sal_uIntPtr nLastTime = 0;
-
-long TimeOut_Impl( void*, void* pArgV )
-{
-    Timer *pArg = (Timer*)pArgV;
-    if( Time::GetSystemTicks() - nLastTime > 3000 )
-    {
-        nLastTime = 0;
-        delete pArg;
-    }
-    else pArg->Start();
-    return 0;
-}
-
-
-
 bool SfxProgress::SetStateText
 (
     sal_uLong       nNewVal,     /* New value for the progress-bar */

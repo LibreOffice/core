@@ -88,9 +88,6 @@ struct CustomProperty
     CustomProperty( const OUString& sName,
             const com::sun::star::uno::Any& rValue ) :
         m_sName( sName ), m_aValue( rValue ) {}
-
-    inline bool operator==( const CustomProperty& rProp )
-    { return m_sName.equals( rProp.m_sName ) && m_aValue == rProp.m_aValue; }
 };
 
 static

@@ -76,13 +76,6 @@ struct SfxToDo_Impl
     bool       bDeleted;
     bool       bUntil;
 
-    SfxToDo_Impl()
-        : pCluster(0)
-        , bPush(false)
-        , bDelete(false)
-        , bDeleted(false)
-        , bUntil(false)
-                {}
     SfxToDo_Impl( bool bOpPush, bool bOpDelete, bool bOpUntil, SfxShell& rCluster )
         : pCluster(&rCluster)
         , bPush(bOpPush)
@@ -90,9 +83,6 @@ struct SfxToDo_Impl
         , bDeleted(false)
         , bUntil(bOpUntil)
                 {}
-
-    bool operator==( const SfxToDo_Impl& rWith ) const
-    { return pCluster==rWith.pCluster && bPush==rWith.bPush; }
 };
 
 struct SfxObjectBars_Impl

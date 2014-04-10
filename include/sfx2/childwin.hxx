@@ -364,7 +364,9 @@ public:
             ((SfxToolbox*)GetWindow())->FillInfo( aInfo );  \
             return aInfo; }
 
+bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize );
 
+bool GetSplitSizeFromString( const OUString& rStr, Size& rSize );
 
 #endif
 

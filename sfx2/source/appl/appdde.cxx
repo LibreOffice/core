@@ -44,7 +44,7 @@
 #include <comphelper/string.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 
-
+#if defined WNT
 
 OUString SfxDdeServiceName_Impl( const OUString& sIn )
 {
@@ -60,7 +60,6 @@ OUString SfxDdeServiceName_Impl( const OUString& sIn )
     return sReturn.makeStringAndClear();
 }
 
-#if defined( WNT )
 class ImplDdeService : public DdeService
 {
 public:
@@ -199,16 +198,19 @@ bool ImplDdeService::SysTopicExecute( const OUString* pStr )
 
 class SfxDdeTriggerTopic_Impl : public DdeTopic
 {
+#if defined WNT
 public:
     SfxDdeTriggerTopic_Impl()
         : DdeTopic( "TRIGGER" )
         {}
 
-    virtual bool Execute( const OUString* ) SAL_OVERRIDE;
+    virtual bool Execute( const OUString* ) SAL_OVERRIDE { return true; }
+#endif
 };
 
 class SfxDdeDocTopic_Impl : public DdeTopic
 {
+#if defined WNT
 public:
     SfxObjectShell* pSh;
     DdeData aData;
@@ -223,6 +225,7 @@ public:
     virtual bool Execute( const OUString* ) SAL_OVERRIDE;
     virtual bool StartAdviseLoop() SAL_OVERRIDE;
     virtual bool MakeItem( const OUString& rItem ) SAL_OVERRIDE;
+#endif
 };
 
 
@@ -555,6 +558,7 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 
 void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
 {
+#if defined WNT
     DBG_ASSERT( pAppData_Impl->pDocTopics, "There is no Dde-Service" );
     //OV: DDE is disconnected in server mode!
     if( !pAppData_Impl->pDocTopics )
@@ -570,6 +574,9 @@ void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
             pAppData_Impl->pDocTopics->erase( pAppData_Impl->pDocTopics->begin() + n );
         }
     }
+#else
+    (void) pSh;
+#endif
 }
 
 const DdeService* SfxApplication::GetDdeService() const
@@ -582,13 +589,7 @@ DdeService* SfxApplication::GetDdeService()
     return pAppData_Impl->pDdeService;
 }
 
-
-
-bool SfxDdeTriggerTopic_Impl::Execute( const OUString* )
-{
-    return true;
-}
-
+#if defined WNT
 
 DdeData* SfxDdeDocTopic_Impl::Get( sal_uIntPtr nFormat )
 {
@@ -647,5 +648,7 @@ bool SfxDdeDocTopic_Impl::StartAdviseLoop()
     }
     return bRet;
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -112,6 +112,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
+#include "appopen.hxx"
 #include "objshimp.hxx"
 #include "sfxtypes.hxx"
 #include "doc.hrc"
@@ -128,8 +129,6 @@
 #include "appdata.hxx"
 
 #include "../appl/app.hrc"
-
-extern sal_uInt32 CheckPasswd_Impl( SfxObjectShell*, SfxItemPool&, SfxMedium* );
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;

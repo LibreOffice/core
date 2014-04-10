@@ -22,6 +22,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include "appopen.hxx"
 #include "openflag.hxx"
 #include <sfx2/passwd.hxx>
 
@@ -43,9 +44,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
-
-// implemented in 'sfx2/source/appl/appopen.cxx'
-extern sal_uInt32 CheckPasswd_Impl( SfxObjectShell* pDoc, SfxItemPool &rPool, SfxMedium* pFile );
 
 namespace sfx2 {
 

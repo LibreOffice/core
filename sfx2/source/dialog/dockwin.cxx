@@ -53,10 +53,6 @@
 
 using namespace ::com::sun::star;
 
-// implemented in 'sfx2/source/appl/childwin.cxx'
-extern bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize );
-extern bool GetSplitSizeFromString( const OUString& rStr, Size& rSize );
-
 // If you want to change the number you also have to:
 // - Add new slot ids to sfxsids.hrc
 // - Add new slots to frmslots.sdi

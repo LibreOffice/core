@@ -84,6 +84,7 @@
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/slstitm.hxx>
+#include "appopen.hxx"
 #include "objshimp.hxx"
 #include "openflag.hxx"
 #include <sfx2/passwd.hxx>
@@ -112,33 +113,6 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::container;
 using namespace ::cppu;
 using namespace ::sfx2;
-
-
-
-class SfxOpenDocStatusListener_Impl : public WeakImplHelper1< XDispatchResultListener >
-{
-public:
-    bool    bFinished;
-    bool    bSuccess;
-    virtual void SAL_CALL   dispatchFinished( const DispatchResultEvent& Event ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL   disposing( const EventObject& Source ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-                            SfxOpenDocStatusListener_Impl()
-                                : bFinished( false )
-                                , bSuccess( false )
-                            {}
-};
-
-void SAL_CALL SfxOpenDocStatusListener_Impl::dispatchFinished( const DispatchResultEvent& aEvent ) throw(RuntimeException, std::exception)
-{
-    bSuccess = ( aEvent.State == DispatchResultState::SUCCESS );
-    bFinished = true;
-}
-
-void SAL_CALL SfxOpenDocStatusListener_Impl::disposing( const EventObject& ) throw(RuntimeException, std::exception)
-{
-}
-
-
 
 void SetTemplate_Impl( const OUString &rFileName,
                         const OUString &rLongName,

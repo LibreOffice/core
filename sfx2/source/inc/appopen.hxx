@@ -17,21 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "syspath.hxx"
+#ifndef INCLUDED_SFX2_SOURCE_INC_APPOPEN_HXX
+#define INCLUDED_SFX2_SOURCE_INC_APPOPEN_HXX
 
-#if defined WNT
-extern "C" bool GetUserTemplateLocation(sal_Unicode*, int nSize);
-#endif
+#include <sal/config.h>
 
-bool SystemPath::GetUserTemplateLocation(sal_Unicode* pFolder, int nSize )
-{
-#ifdef WNT
-    return ::GetUserTemplateLocation( pFolder, nSize );
-#else
-    (void)pFolder;
-    (void)nSize;
-    return false;
+#include <sal/types.h>
+
+class SfxItemPool;
+class SfxMedium;
+class SfxObjectShell;
+
+sal_uInt32 CheckPasswd_Impl( SfxObjectShell* pDoc, SfxItemPool &rPool, SfxMedium* pFile );
+
 #endif
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

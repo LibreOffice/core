@@ -100,8 +100,6 @@ public:
 private:
     ResourceManager (void);
     ~ResourceManager (void);
-    class Deleter;
-    friend class Deleter;
 
     typedef ::std::vector<DeckDescriptor> DeckContainer;
     DeckContainer maDecks;

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/eitem.hxx>
@@ -58,39 +61,21 @@ struct SfxVersionInfo
     DateTime                aCreationDate;
 
                             SfxVersionInfo();
-                            SfxVersionInfo( const SfxVersionInfo& rInfo )
-                                : aCreationDate( DateTime::EMPTY )
-                            { *this = rInfo; }
-
-    SfxVersionInfo&         operator=( const SfxVersionInfo &rInfo )
-                            {
-                                aName = rInfo.aName;
-                                aComment = rInfo.aComment;
-                                aAuthor = rInfo.aAuthor;
-                                aCreationDate = rInfo.aCreationDate;
-                                return *this;
-                            }
 };
 
 typedef vector< SfxVersionInfo* > _SfxVersionTable;
 
-class SfxVersionTableDtor
+class SfxVersionTableDtor: private boost::noncopyable
 {
 private:
     _SfxVersionTable        aTableList;
 public:
-                            SfxVersionTableDtor( const SfxVersionTableDtor &rCpy )
-                            { *this = rCpy; }
-
                             SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo );
                             SfxVersionTableDtor( const uno::Sequence < document::CmisVersion > & rInfo );
                             ~SfxVersionTableDtor()
                             { DelDtor(); }
 
-    SfxVersionTableDtor&    operator=( const SfxVersionTableDtor &rCpy );
     void                    DelDtor();
-    SvStream&               Read( SvStream & );
-    SvStream&               Write( SvStream & ) const;
 
     size_t                  size() const
                             { return aTableList.size(); }
@@ -139,18 +124,6 @@ void SfxVersionTableDtor::DelDtor()
         delete aTableList[ i ];
     aTableList.clear();
 }
-
-SfxVersionTableDtor& SfxVersionTableDtor::operator=( const SfxVersionTableDtor& rTbl )
-{
-    DelDtor();
-    for ( size_t i = 0, n = rTbl.size(); i < n; ++i )
-    {
-        SfxVersionInfo* pNew = new SfxVersionInfo( *(rTbl.at( i )) );
-        aTableList.push_back( pNew );
-    }
-    return *this;
-}
-
 
 SfxVersionInfo::SfxVersionInfo()
     : aCreationDate( DateTime::EMPTY )

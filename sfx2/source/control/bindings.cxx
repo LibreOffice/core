@@ -155,32 +155,12 @@ struct SfxFoundCache_Impl
     const SfxSlot*  pSlot;     // Pointer to <Master-Slot>
     SfxStateCache*  pCache;    // Pointer to StatusCache, if possible NULL
 
-    SfxFoundCache_Impl():
-        nSlotId(0),
-        nWhichId(0),
-        pSlot(0),
-        pCache(0)
-    {}
-
-    SfxFoundCache_Impl(SfxFoundCache_Impl&r):
-        nSlotId(r.nSlotId),
-        nWhichId(r.nWhichId),
-        pSlot(r.pSlot),
-        pCache(r.pCache)
-    {}
-
     SfxFoundCache_Impl(sal_uInt16 nS, sal_uInt16 nW, const SfxSlot *pS, SfxStateCache *pC ):
         nSlotId(nS),
         nWhichId(nW),
         pSlot(pS),
         pCache(pC)
     {}
-
-    bool operator<( const SfxFoundCache_Impl &r ) const
-    { return nWhichId < r.nWhichId; }
-
-    bool operator==( const SfxFoundCache_Impl &r ) const
-    { return nWhichId== r.nWhichId; }
 };
 
 

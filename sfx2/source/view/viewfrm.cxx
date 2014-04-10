@@ -240,11 +240,6 @@ class SfxViewNotificatedFrameList_Impl :
 {
 public:
 
-    void InsertViewFrame( SfxViewFrame* pFrame )
-    {
-        StartListening( *pFrame );
-        push_back( pFrame );
-    }
     void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
@@ -266,14 +261,6 @@ void SfxViewNotificatedFrameList_Impl::Notify( SfxBroadcaster& rBC, const SfxHin
                 break;
         }
     }
-}
-
-
-
-long ReloadDecouple_Impl( void* pObj, void* pArg )
-{
-    ((SfxViewFrame*) pObj)->ExecReload_Impl( *(SfxRequest*)pArg );
-    return 0;
 }
 
 void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )

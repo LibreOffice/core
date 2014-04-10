@@ -1131,39 +1131,6 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
     ::comphelper::disposeComponent( mxFileDlg );
 }
 
-#define nMagic -1
-
-class PickerThread_Impl : public ::osl::Thread
-{
-    uno::Reference < XFilePicker > mxPicker;
-    ::osl::Mutex            maMutex;
-    virtual void SAL_CALL   run() SAL_OVERRIDE;
-    sal_Int16               mnRet;
-public:
-                            PickerThread_Impl( const uno::Reference < XFilePicker >& rPicker )
-                            : mxPicker( rPicker ), mnRet(nMagic) {}
-
-    sal_Int16               GetReturnValue()
-                            { ::osl::MutexGuard aGuard( maMutex ); return mnRet; }
-
-    void                    SetReturnValue( sal_Int16 aRetValue )
-                            { ::osl::MutexGuard aGuard( maMutex ); mnRet = aRetValue; }
-};
-
-void SAL_CALL PickerThread_Impl::run()
-{
-    try
-    {
-        sal_Int16 n = mxPicker->execute();
-        SetReturnValue( n );
-    }
-    catch( const RuntimeException& )
-    {
-        SetReturnValue( ExecutableDialogResults::CANCEL );
-        SAL_WARN( "sfx.dialog", "RuntimeException caught" );
-    }
-}
-
 void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId )
 {
     DBG_ASSERT( _pControlId && _pHelpId, "FileDialogHelper_Impl::setControlHelpIds: invalid array pointers!" );

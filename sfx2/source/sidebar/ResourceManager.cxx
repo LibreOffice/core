@@ -38,15 +38,6 @@ using namespace cssu;
 
 namespace sfx2 { namespace sidebar {
 
-class ResourceManager::Deleter
-{
-public:
-    void operator() (ResourceManager* pObject)
-    {
-        delete pObject;
-    }
-};
-
 ResourceManager& ResourceManager::Instance (void)
 {
     static ResourceManager maInstance;

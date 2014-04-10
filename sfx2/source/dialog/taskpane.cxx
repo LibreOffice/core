@@ -525,7 +525,6 @@ namespace sfx2
         static bool ModuleHasToolPanels( const OUString& i_rModuleIdentifier );
 
               ::svt::ToolPanelDeck& GetPanelDeck()          { return m_aPanelDeck; }
-        const ::svt::ToolPanelDeck& GetPanelDeck() const    { return m_aPanelDeck; }
 
         ::boost::optional< size_t >
                     GetPanelPos( const OUString& i_rResourceURL );
@@ -827,12 +826,6 @@ namespace sfx2
     {
         ::svt::PToolPanel   pPanel;
         bool                bHidden;
-
-        PanelDescriptor()
-            :pPanel()
-            ,bHidden( false )
-        {
-        }
 
         PanelDescriptor( const ::svt::PToolPanel& i_rPanel )
             :pPanel( i_rPanel )

@@ -109,52 +109,6 @@ SfxPoolItem* SfxTabDialogItem::Create(SvStream& /*rStream*/, sal_uInt16 /*nVersi
     return NULL;
 }
 
-class SfxTabDialogController : public SfxControllerItem
-{
-    SfxTabDialog*   pDialog;
-    const SfxItemSet*     pSet;
-public:
-                    SfxTabDialogController( sal_uInt16 nSlotId, SfxBindings& rBindings, SfxTabDialog* pDlg )
-                        : SfxControllerItem( nSlotId, rBindings )
-                        , pDialog( pDlg )
-                        , pSet( NULL )
-                    {}
-
-                    virtual ~SfxTabDialogController();
-
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-};
-
-SfxTabDialogController::~SfxTabDialogController()
-{
-    delete pSet;
-}
-
-void SfxTabDialogController::StateChanged( sal_uInt16 /*nSID*/, SfxItemState /*eState*/, const SfxPoolItem* pState )
-{
-    const SfxSetItem* pSetItem = PTR_CAST( SfxSetItem, pState );
-    if ( pSetItem )
-    {
-        pSet = pDialog->pSet = pSetItem->GetItemSet().Clone();
-        bool bDialogStarted = false;
-        for ( sal_uInt16 n=0; n<pDialog->m_pTabCtrl->GetPageCount(); n++ )
-        {
-            sal_uInt16 nPageId = pDialog->m_pTabCtrl->GetPageId( n );
-            SfxTabPage* pTabPage = dynamic_cast<SfxTabPage*> (pDialog->m_pTabCtrl->GetTabPage( nPageId ));
-            if ( pTabPage )
-            {
-                pTabPage->Reset( pSetItem->GetItemSet() );
-                bDialogStarted = true;
-            }
-        }
-
-        if ( bDialogStarted )
-            pDialog->Show();
-    }
-    else
-        pDialog->Hide();
-}
-
 typedef std::vector<Data_Impl*> SfxTabDlgData_Impl;
 
 struct TabDlg_Impl
@@ -164,20 +118,16 @@ struct TabDlg_Impl
                         bHideResetBtn   : 1;
     SfxTabDlgData_Impl  aData;
 
-    SfxTabDialogController* pController;
-
     TabDlg_Impl( sal_uInt8 nCnt ) :
 
         bModified       ( false ),
         bModal          ( true ),
-        bHideResetBtn   ( false ),
-        pController     ( NULL )
+        bHideResetBtn   ( false )
     {
         aData.reserve( nCnt );
     }
     ~TabDlg_Impl()
     {
-        delete pController;
     }
 };
 

@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <boost/noncopyable.hpp>
 #include <svl/itempool.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
@@ -32,17 +34,13 @@
 
 class CntItemPool;
 
-class CntStaticPoolDefaults_Impl
+class CntStaticPoolDefaults_Impl: private boost::noncopyable
 {
     sal_uInt32        m_nItems;
     SfxPoolItem** m_ppDefaults;
     SfxItemInfo*  m_pItemInfos;
 
 private:
-    // Forbidden and not implemented...
-    CntStaticPoolDefaults_Impl( const CntStaticPoolDefaults_Impl& );
-    CntStaticPoolDefaults_Impl& operator=( const CntStaticPoolDefaults_Impl& );
-
     inline void Insert( SfxPoolItem* pItem, sal_uInt16 nSID, sal_uInt16 nFlags );
 
 public:

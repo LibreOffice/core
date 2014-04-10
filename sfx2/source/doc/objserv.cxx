@@ -110,25 +110,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::task;
 
-
-
-class SfxSaveAsContext_Impl
-{
-    OUString&     _rNewNameVar;
-    OUString      _aNewName;
-
-public:
-                SfxSaveAsContext_Impl( OUString &rNewNameVar,
-                                       const OUString &rNewName )
-                :   _rNewNameVar( rNewNameVar ),
-                    _aNewName( rNewName )
-                { rNewNameVar = rNewName; }
-                ~SfxSaveAsContext_Impl()
-                { _rNewNameVar = ""; }
-};
-
-
-
 #define SfxObjectShell
 #include "sfxslots.hxx"
 

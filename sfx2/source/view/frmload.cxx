@@ -164,11 +164,6 @@ private:
                             const css::uno::Reference< css::frame::XModel2 >& i_rxDocument
                         ) const;
 
-    void                impl_lockHiddenDocument(
-                                  SfxObjectShell& i_rDocument,
-                            const ::comphelper::NamedValueCollection& i_rDescriptor
-                        ) const;
-
     void                impl_handleCaughtError_nothrow(
                             const css::uno::Any& i_rCaughtError,
                             const ::comphelper::NamedValueCollection& i_rDescriptor

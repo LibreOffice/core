@@ -75,7 +75,6 @@ public:
     explicit            SfxOleInt32Property( sal_Int32 nPropId, sal_Int32 nValue = 0 );
 
     inline sal_Int32    GetValue() const { return mnValue; }
-    inline void         SetValue( sal_Int32 nValue ) { mnValue = nValue; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
@@ -94,7 +93,6 @@ public:
     explicit            SfxOleDoubleProperty( sal_Int32 nPropId, double fValue = 0.0 );
 
     inline double       GetValue() const { return mfValue; }
-    inline void         SetValue( double fValue ) { mfValue = fValue; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
@@ -113,7 +111,6 @@ public:
     explicit            SfxOleBoolProperty( sal_Int32 nPropId, bool bValue = false );
 
     inline bool         GetValue() const { return mbValue; }
-    inline void         SetValue( bool bValue ) { mbValue = bValue; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
@@ -188,8 +185,6 @@ public:
 
     /** Returns the time value as LOCAL time. */
     inline const util::DateTime& GetValue() const { return maDateTime; }
-    /** @param rDateTime  Date and time as LOCAL time. */
-    inline void         SetValue( const util::DateTime& rDateTime ) { maDateTime = rDateTime; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
@@ -207,8 +202,6 @@ public:
 
     /** Returns the date value as LOCAL time. */
     inline const util::Date& GetValue() const { return maDate; }
-    /** @param rDate  Date as LOCAL time. */
-    inline void         SetValue( const util::Date& rDate ) { maDate = rDate; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <sfx2/querystatus.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
@@ -42,7 +45,9 @@ using namespace ::com::sun::star::frame::status;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-class SfxQueryStatus_Impl : public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
+class SfxQueryStatus_Impl:
+    public cppu::WeakImplHelper1<css::frame::XStatusListener>,
+    private boost::noncopyable
 {
     public:
 
@@ -59,10 +64,6 @@ class SfxQueryStatus_Impl : public ::cppu::WeakImplHelper1< css::frame::XStatusL
         virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
-        SfxQueryStatus_Impl( const SfxQueryStatus& );
-        SfxQueryStatus_Impl();
-        SfxQueryStatus_Impl& operator=( const SfxQueryStatus& );
-
         bool                                                                   m_bQueryInProgress;
         SfxItemState                                                               m_eState;
         SfxPoolItem*                                                               m_pItem;

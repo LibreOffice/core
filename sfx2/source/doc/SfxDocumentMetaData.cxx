@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <cppuhelper/compbase6.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -126,7 +127,8 @@ typedef ::cppu::WeakComponentImplHelper6<
 
 class SfxDocumentMetaData:
     private ::cppu::BaseMutex,
-    public SfxDocumentMetaData_Base
+    public SfxDocumentMetaData_Base,
+    private boost::noncopyable
 {
 public:
     explicit SfxDocumentMetaData(
@@ -286,9 +288,6 @@ public:
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
 protected:
-    SfxDocumentMetaData(SfxDocumentMetaData &); // not defined
-    SfxDocumentMetaData& operator =(SfxDocumentMetaData &); // not defined
-
     virtual ~SfxDocumentMetaData() {}
     virtual SfxDocumentMetaData* createMe( css::uno::Reference< css::uno::XComponentContext > const & context ) { return new SfxDocumentMetaData( context ); };
     const css::uno::Reference< css::uno::XComponentContext > m_xContext;

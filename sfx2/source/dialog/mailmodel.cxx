@@ -130,30 +130,6 @@ void PrepareListener_Impl::disposing(const css::lang::EventObject& /*rEvent*/) t
 
 static const char       PDF_DOCUMENT_TYPE[]   = "pdf_Portable_Document_Format";
 
-bool HasDocumentValidSignature( const css::uno::Reference< css::frame::XModel >& xModel )
-{
-    try
-    {
-        css::uno::Reference< css::beans::XPropertySet > xPropSet( xModel, css::uno::UNO_QUERY );
-        if ( xPropSet.is() )
-        {
-            Any a = xPropSet->getPropertyValue("HasValidSignatures");
-            bool bReturn;
-            if ( a >>= bReturn )
-                return bReturn;
-        }
-    }
-    catch ( css::uno::RuntimeException& )
-    {
-        throw;
-    }
-    catch ( css::uno::Exception& )
-    {
-    }
-
-    return false;
-}
-
 SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
     uno::Reference< lang::XMultiServiceFactory > xSMGR,
     uno::Reference< frame::XModel > xModel,

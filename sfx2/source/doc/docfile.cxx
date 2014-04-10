@@ -164,48 +164,6 @@ bool IsLockingUsed()
 
 } // anonymous namespace
 
-
-
-
-class SfxMediumHandler_Impl : public ::cppu::WeakImplHelper1< com::sun::star::task::XInteractionHandler >
-{
-    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > m_xInter;
-
-public:
-    virtual void SAL_CALL handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& xRequest )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
-    SfxMediumHandler_Impl( com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteraction )
-        : m_xInter( xInteraction )
-        {}
-
-    virtual ~SfxMediumHandler_Impl();
-};
-
-
-SfxMediumHandler_Impl::~SfxMediumHandler_Impl()
-{
-}
-
-
-void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& xRequest )
-        throw( com::sun::star::uno::RuntimeException, std::exception )
-{
-    if( !m_xInter.is() )
-        return;
-
-    com::sun::star::uno::Any aRequest = xRequest->getRequest();
-    com::sun::star::ucb::InteractiveIOException aIoException;
-    com::sun::star::ucb::UnsupportedDataSinkException aSinkException;
-    if ( (aRequest >>= aIoException) && ( aIoException.Code == IOErrorCode_ACCESS_DENIED || aIoException.Code == IOErrorCode_LOCKING_VIOLATION ) )
-        return;
-    else
-    if ( aRequest >>= aSinkException )
-        return;
-    else
-        m_xInter->handle( xRequest );
-}
-
 class SfxMedium_Impl : boost::noncopyable
 {
 public:

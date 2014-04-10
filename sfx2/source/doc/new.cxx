@@ -149,7 +149,6 @@ class SfxNewFileDialog_Impl
     DECL_LINK( RegionSelect, ListBox * );
     DECL_LINK(TemplateSelect, void *);
     DECL_LINK( DoubleClick, ListBox * );
-    void TogglePreview(CheckBox *);
     DECL_LINK( Expand, void * );
     DECL_LINK(LoadFile, void *);
     sal_uInt16  GetSelectedTemplatePos() const;
