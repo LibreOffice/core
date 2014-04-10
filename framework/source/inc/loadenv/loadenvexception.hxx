@@ -77,7 +77,7 @@ class LoadEnvException
             /** @short  TODO */
             ID_COULD_NOT_REACTIVATE_CONTROLLER,
 
-            /** @short  inidcates an already running load operation. Of yourse the same
+            /** @short  indicates an already running load operation. Of yourse the same
                         instance cant be used for multiple load requests at the same time.
              */
             ID_STILL_RUNNING,

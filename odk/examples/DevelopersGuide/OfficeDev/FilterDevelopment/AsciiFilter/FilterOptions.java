@@ -198,7 +198,7 @@ public class FilterOptions
      * Note: This method doesn't check for a valid URL. It must be done before.
      *
      * @param bImport
-     *          inidcates which stream member must be valid as result of this call
+     *          indicates which stream member must be valid as result of this call
      */
     private void impl_openStreams( boolean bImport )
     {
