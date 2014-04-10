@@ -56,7 +56,7 @@ enum IteratorLocation {BEGIN,END,CURRENT};
     <ul><li>SELECTION for iteration over all objects that belong to the
     current mark list.</li>
     <li>SINGLE_VIEW for iteration over all objects in the current view.</li>
-    <li>DOCUMENT for iteratioin over all object in all relevant
+    <li>DOCUMENT for iteration over all object in all relevant
     views.</li></ul>
 */
 enum IteratorType {SELECTION,SINGLE_VIEW,DOCUMENT};
