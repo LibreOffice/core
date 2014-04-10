@@ -481,7 +481,7 @@ void ExtensionBox_Impl::DeleteRemoved()
 void ExtensionBox_Impl::selectEntry( const long nPos )
 {
     //ToDo whe should not use the guard at such a big scope here.
-    //Currently it is used to gard m_vEntries and m_nActive. m_nActive will be
+    //Currently it is used to guard m_vEntries and m_nActive. m_nActive will be
     //modified in this function.
     //It would be probably best to always use a copy of m_vEntries
     //and some other state variables from ExtensionBox_Impl for
