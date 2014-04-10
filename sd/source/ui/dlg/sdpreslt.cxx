@@ -209,7 +209,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
 
     if( !bCancel )
     {
-        // check if template already ecists
+        // check if template already exists
         sal_Bool bExists = sal_False;
         OUString aCompareStr(maName);
         if (aCompareStr.isEmpty())
