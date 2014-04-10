@@ -58,7 +58,7 @@ SvFileObject::SvFileObject()
     , bNativFormat(false)
     , bClearMedium(false)
     , bStateChangeCalled(false)
-    , bInCallDownLoad(false)
+    , bInCallDownload(false)
 {
 }
 
@@ -111,7 +111,7 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                     if( !xMed.Is() )
                         LoadFile_Impl();
 
-                    if( !bInCallDownLoad )
+                    if( !bInCallDownload )
                     {
                         xTmpMed = xMed;
                         while( bWaitForData )
@@ -263,19 +263,19 @@ bool SvFileObject::LoadFile_Impl()
         bWaitForData = true;
 
         SfxMediumRef xTmpMed = xMed;
-        bInCallDownLoad = true;
-        xMed->DownLoad( STATIC_LINK( this, SvFileObject, LoadGrfReady_Impl ) );
-        bInCallDownLoad = false;
+        bInCallDownload = true;
+        xMed->Download( STATIC_LINK( this, SvFileObject, LoadGrfReady_Impl ) );
+        bInCallDownload = false;
 
         bClearMedium = !xMed.Is();
         if( bClearMedium )
-            xMed = xTmpMed;  // If already finished in DownLoad
+            xMed = xTmpMed;  // If already finished in Download
         return bDataReady;
     }
 
     bWaitForData = true;
     bDataReady = bInNewData = false;
-    xMed->DownLoad();
+    xMed->Download();
     bLoadAgain = !xMed->IsRemote();
     bWaitForData = false;
 
@@ -464,7 +464,7 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
     // When we come form here there it can not be an error no more.
     pThis->bLoadError = false;
     pThis->bWaitForData = false;
-    pThis->bInCallDownLoad = false;
+    pThis->bInCallDownload = false;
 
     if( !pThis->bInNewData && !pThis->bDataReady )
     {

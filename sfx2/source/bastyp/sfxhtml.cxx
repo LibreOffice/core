@@ -235,7 +235,7 @@ void SfxHTMLParser::StartFileDownload(const OUString& rURL)
         return;
 
     pDLMedium = new SfxMedium( rURL, SFX_STREAM_READONLY );
-    pDLMedium->DownLoad();
+    pDLMedium->Download();
 }
 
 bool SfxHTMLParser::FinishFileDownload( OUString& rStr )

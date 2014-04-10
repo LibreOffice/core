@@ -159,7 +159,7 @@ BlipContext::BlipContext( ContextHandler2Helper& rParent,
         OUString aRelId = rAttribs.getString( R_TOKEN( link ), OUString() );
         OUString aTargetLink = getFilter().getAbsoluteUrl( getRelations().getExternalTargetFromRelId( aRelId ) );
         SfxMedium xMed( aTargetLink, STREAM_STD_READ );
-        xMed.DownLoad();
+        xMed.Download();
         Reference< io::XInputStream > xInStrm = xMed.GetInputStream();
         if ( xInStrm.is() )
             mrBlipProps.mxGraphic = getFilter().getGraphicHelper().importGraphic( xInStrm );

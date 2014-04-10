@@ -799,7 +799,7 @@ namespace frm
             m_bProdStarted = sal_False;
 
             // Download anstossen (Achtung: Kann auch synchron sein).
-            m_pMedium->DownLoad(STATIC_LINK(this, OClickableImageBaseModel, DownloadDoneLink));
+            m_pMedium->Download(STATIC_LINK(this, OClickableImageBaseModel, DownloadDoneLink));
         }
         else
         {

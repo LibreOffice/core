@@ -134,7 +134,7 @@ public:
     const OUString& GetPhysicalName() const;
     bool                IsRemote();
     bool                IsOpen() const; // { return aStorage.Is() || pInStream; }
-    void                DownLoad( const Link& aLink = Link());
+    void                Download( const Link& aLink = Link());
     void                SetDoneLink( const Link& rLink );
 
     sal_uInt32          GetErrorCode() const;

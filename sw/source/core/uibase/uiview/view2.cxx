@@ -2161,7 +2161,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
             return -1;
         }
 
-        pMedium->DownLoad();    // start download if needed
+        pMedium->Download();    // start download if needed
         if( aRef.Is() && 1 < aRef->GetRefCount() )  // still a valid ref?
         {
             SwReader* pRdr;

@@ -299,7 +299,7 @@ inline bool IsMinMove(const Point &rStartPos, const Point &rLPt)
  * For MouseButtonDown - determine whether a DrawObject
  * an NO SwgFrame was hit! Shift/Ctrl should only result
  * in selecting, with DrawObjects; at SwgFlys to trigger
- * hyperlinks if applicable (DownLoad/NewWindow!)
+ * hyperlinks if applicable (Download/NewWindow!)
  */
 inline bool IsDrawObjSelectable( const SwWrtShell& rSh, const Point& rPt )
 {

@@ -2391,7 +2391,7 @@ void SfxMedium::SetDoneLink( const Link& rLink )
     pImp->aDoneLink = rLink;
 }
 
-void SfxMedium::DownLoad( const Link& aLink )
+void SfxMedium::Download( const Link& aLink )
 {
     SetDoneLink( aLink );
     GetInStream();

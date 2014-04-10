@@ -88,7 +88,7 @@ sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
     sal_uInt16      nRet = SGA_IMPORT_NONE;
     SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
-    aMedium.DownLoad();
+    aMedium.Download();
 
     SvStream* pIStm = aMedium.GetInStream();
 
