@@ -151,7 +151,7 @@ public:
     */
     bool operator!= (const Iterator& rIterator);
     /** Reverse the direction of iteration.  The position of the iterator is
-        not changed.  Thus caling this method twice returns to the old state.
+        not changed.  Thus calling this method twice returns to the old state.
     */
     void Reverse (void);
 
