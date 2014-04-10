@@ -111,7 +111,8 @@ SwDropPortion::SwDropPortion( const MSHORT nLineCnt,
     nDropDescent(nDrpDescent),
     nDistance(nDist),
     nFix(0),
-    nX(0)
+    nX(0),
+    nY(0)
 {
     SetWhichPor( POR_DROP );
 }
