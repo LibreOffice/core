@@ -2535,12 +2535,6 @@ COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`
 # Set the ENABLE_LTO variable
 # ===================================================================
 AC_MSG_CHECKING([whether to use link-time optimization])
-if test $_os = WINNT -a "$WITH_MINGW" != yes -a -z "$enable_lto" -a \
-        \( -z "$enable_dbgutil" -o "$enable_dbgutil" = no \) -a \
-        \( -z "$enable_debug" -o "$enable_debug" = no \); then
-    # Turn on LTO for MSVC when optimising unless told not to
-    enable_lto=yes
-fi
 if test -n "$enable_lto" -a "$enable_lto" != "no"; then
     ENABLE_LTO="TRUE"
     AC_MSG_RESULT([yes])
@@ -3684,6 +3678,11 @@ if test "$_os" = "WINNT"; then
             100)
                 COMEX=13
                 WINDOWS_SDK_ACCEPTABLE_VERSIONS="7.1A 7.1 7.0A 6.0A"
+                if test "$ENABLE_LTO" = TRUE; then
+
+                    AC_MSG_WARN([LTO is known to cause problems with MSVC 2010])
+                    add_warning "LTO is known to cause problems with MSVC 2010"
+                fi
                 ;;
             110)
                 COMEX=14
