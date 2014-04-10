@@ -51,7 +51,6 @@ namespace svt { namespace uno
     public:
         WizardShell(
             Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizard >& i_rWizard,
             const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardController >& i_rController,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int16 > >& i_rPaths
         );
@@ -69,10 +68,6 @@ namespace svt { namespace uno
         virtual sal_Bool    onFinish();
         virtual IWizardPageController*
                             getPageController( TabPage* _pCurrentPage ) const;
-
-        // attribute access
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizard >&
-            getWizard() const { return m_xWizard; }
 
         static sal_Int16 convertCommitReasonToTravelType( const CommitPageReason i_eReason );
 
@@ -131,7 +126,6 @@ namespace svt { namespace uno
     private:
         typedef ::std::map< TabPage*, PWizardPageController > Page2ControllerMap;
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizard >            m_xWizard;
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardController >  m_xController;
         const sal_Int16                                                                             m_nFirstPageID;
         Page2ControllerMap                                                                          m_aPageControllers;
