@@ -2058,6 +2058,13 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
 }
 
 SwParaPortion::SwParaPortion()
+    : bFlag00(false)
+    , bFlag11(false)
+    , bFlag12(false)
+    , bFlag13(false)
+    , bFlag14(false)
+    , bFlag15(false)
+    , bFlag16(false)
 {
     FormatReset();
     bFlys = bFtnNum = bMargin = false;
