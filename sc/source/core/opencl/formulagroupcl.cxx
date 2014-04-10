@@ -1953,7 +1953,7 @@ public:
         }
     }
     /// Generate either a function call to each children
-    /// or direclty inline it if we are already inside a loop
+    /// or directly inline it if we are already inside a loop
     virtual std::string GenSlidingWindowDeclRef(bool nested=false) const SAL_OVERRIDE
     {
         std::stringstream ss;
