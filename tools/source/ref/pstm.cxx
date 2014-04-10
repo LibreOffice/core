@@ -554,7 +554,7 @@ sal_uInt32 SvPersistStream::ReadObj
     rpObj = NULL; // specification: 0 in case of error
     ReadId( *this, nHdr, nId, nClassId );
 
-    // get version nummer through masking
+    // get version number through masking
     if( P_VER < (nHdr & P_VER_MASK) )
     {
         SetError( SVSTREAM_FILEFORMAT_ERROR );

@@ -1721,7 +1721,7 @@ void SfxViewFrame::Show()
         if ( !pImp->bObjLocked )
             LockObjectShell_Impl( true );
 
-        // Adjust Doc-Shell title nummer, get unique view-no
+        // Adjust Doc-Shell title number, get unique view-no
         if ( 0 == pImp->nDocViewNo  )
         {
             GetDocNumber_Impl();
