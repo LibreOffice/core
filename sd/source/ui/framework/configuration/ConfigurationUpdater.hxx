@@ -126,7 +126,7 @@ private:
     sal_Int32 mnLockCount;
 
     /** This timer is used to check from time to time whether the requested
-        configuration and the current configuration are identcal and request
+        configuration and the current configuration are identical and request
         an update when they are not.
         This is used to overcome problems with resources that become
         available asynchronously.
