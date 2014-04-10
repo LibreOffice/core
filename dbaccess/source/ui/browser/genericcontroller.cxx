@@ -731,7 +731,7 @@ void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyV
 
 void OGenericUnoController::addStatusListener(const Reference< XStatusListener > & aListener, const URL& _rURL) throw(RuntimeException, std::exception)
 {
-    // parse the ULR now and here, this saves later parsing in each notification round
+    // parse the URL now and here, this saves later parsing in each notification round
     URL aParsedURL( _rURL );
     if ( m_xUrlTransformer.is() )
         m_xUrlTransformer->parseStrict( aParsedURL );

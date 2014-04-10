@@ -611,7 +611,7 @@ bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, sa
 
                 // write document storage
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false );
-                // mba: no relative ULRs for clipboard!
+                // mba: no relative URLs for clipboard!
                 SfxMedium aMedium( xWorkStore, OUString() );
                 bRet = pEmbObj->DoSaveObjectAs( aMedium, false );
                 pEmbObj->DoSaveCompleted();
