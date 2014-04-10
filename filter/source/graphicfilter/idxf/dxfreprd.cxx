@@ -20,7 +20,7 @@
 
 #include <string.h>
 #include <dxfreprd.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 //------------------DXFBoundingBox--------------------------------------------
 
@@ -141,14 +141,13 @@ DXFRepresentation::~DXFRepresentation()
 
 sal_Bool DXFRepresentation::Read( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent)
 {
-    DXFGroupReader * pDGR;
     sal_Bool bRes;
 
     aTables.Clear();
     aBlocks.Clear();
     aEntities.Clear();
 
-    pDGR = new DXFGroupReader( rIStream, nMinPercent, nMaxPercent );
+    boost::scoped_ptr<DXFGroupReader> pDGR(new DXFGroupReader( rIStream, nMinPercent, nMaxPercent ));
 
     pDGR->Read();
     while (pDGR->GetG()!=0 || strcmp(pDGR->GetS(),"EOF")!=0) {
@@ -168,7 +167,7 @@ sal_Bool DXFRepresentation::Read( SvStream & rIStream, sal_uInt16 nMinPercent, s
 
     bRes=pDGR->GetStatus();
 
-    delete pDGR;
+    pDGR.reset();
 
     if (bRes==sal_True && aBoundingBox.bEmpty==sal_True)
         CalcBoundingBox(aEntities,aBoundingBox);

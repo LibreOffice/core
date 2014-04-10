@@ -255,7 +255,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
 
     if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( OUString("d:\\ashape.dbg"), aURLStr ) )
     {
-        SvStream* pOut = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_WRITE );
+        boost::scoped_ptr<SvStream> pOut(::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_WRITE ));
 
         if( pOut )
         {
@@ -339,8 +339,6 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                     }
                 }
             }
-
-            delete pOut;
         }
     }
 
@@ -6302,10 +6300,10 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
         rBLIPStream.SeekRel( nSkip );
 
         SvStream* pGrStream = &rBLIPStream;
-        SvMemoryStream* pOut = NULL;
+        boost::scoped_ptr<SvMemoryStream> pOut;
         if( bZCodecCompression )
         {
-            pOut = new SvMemoryStream( 0x8000, 0x4000 );
+            pOut.reset(new SvMemoryStream( 0x8000, 0x4000 ));
             ZCodec aZCodec( 0x8000, 0x8000 );
             aZCodec.BeginCompression();
             aZCodec.Decompress( rBLIPStream, *pOut );
@@ -6313,7 +6311,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
             pOut->Seek( STREAM_SEEK_TO_BEGIN );
             pOut->SetResizeOffset( 0 ); // sj: #i102257# setting ResizeOffset of 0 prevents from seeking
                                         // behind the stream end (allocating too much memory)
-            pGrStream = pOut;
+            pGrStream = pOut.get();
         }
 
 #if OSL_DEBUG_LEVEL > 2
@@ -6345,7 +6343,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
 
             SAL_INFO("filter.ms", "dumping " << aURLStr);
 
-            SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream(aURLStr, STREAM_TRUNC | STREAM_WRITE);
+            boost::scoped_ptr<SvStream> pDbgOut(::utl::UcbStreamHelper::CreateStream(aURLStr, STREAM_TRUNC | STREAM_WRITE));
 
             if( pDbgOut )
             {
@@ -6366,8 +6364,6 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
                         pGrStream->SeekRel( -nDbgLen );
                     }
                 }
-
-                delete pDbgOut;
             }
         }
 #endif
@@ -6415,7 +6411,6 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
         // reset error status if necessary
         if ( ERRCODE_IO_PENDING == pGrStream->GetError() )
           pGrStream->ResetError();
-        delete pOut;
     }
     rBLIPStream.Seek( nOldPos );    // restore old FilePos of the strem
 

@@ -28,6 +28,7 @@
 #include <main.hxx>
 #include <elements.hxx>
 #include <outact.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -707,16 +708,14 @@ ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_u
 
     if( rXModel.is() )
     {
-        CGM*        pCGM= NULL;
-
         try
         {
-            pCGM = new CGM( nMode, rXModel );
+            boost::scoped_ptr<CGM> pCGM(new CGM( nMode, rXModel ));
             if ( pCGM && pCGM->IsValid() )
             {
                 if ( nMode & CGM_IMPORT_CGM )
                 {
-                    SvStream* pIn = ::utl::UcbStreamHelper::CreateStream( rFileName, STREAM_READ );
+                    boost::scoped_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream( rFileName, STREAM_READ ));
                     if ( pIn )
                     {
                         pIn->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
@@ -763,7 +762,6 @@ ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_u
                         if ( bProgressBar )
                             aXStatInd->end();
 #endif
-                        delete pIn;
                     }
                 }
             }
@@ -772,7 +770,6 @@ ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_u
         {
             nStatus = 0;
         }
-        delete pCGM;
     }
     return nStatus;
 }

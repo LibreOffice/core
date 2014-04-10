@@ -91,6 +91,7 @@
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
 #include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -1298,21 +1299,20 @@ bool EscherPropertyContainer::CreateGraphicProperties( const ::com::sun::star::u
         if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect && aXPropSet.is() )
         {
             ::com::sun::star::uno::Any aAny;
-            ::com::sun::star::awt::Rectangle* pVisArea = NULL;
+            boost::scoped_ptr< ::com::sun::star::awt::Rectangle> pVisArea;
             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, OUString("VisibleArea" ) ) )
             {
-                pVisArea = new ::com::sun::star::awt::Rectangle;
+                pVisArea.reset(new ::com::sun::star::awt::Rectangle);
                 aAny >>= (*pVisArea);
             }
             Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
-            sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, pVisArea, NULL );
+            sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, pVisArea.get(), NULL );
             if ( nBlibId )
             {
                 AddOpt( ESCHER_Prop_pib, nBlibId, true );
                 ImplCreateGraphicAttributes( aXPropSet, nBlibId, false );
                 bRetValue = true;
             }
-            delete pVisArea;
         }
     }
     return bRetValue;
@@ -1434,7 +1434,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
 
     sal_Bool        bMirrored = sal_False;
     sal_Bool        bRotate   = sal_True;
-    GraphicAttr*    pGraphicAttr = NULL;
+    boost::scoped_ptr<GraphicAttr> pGraphicAttr;
     GraphicObject   aGraphicObject;
     OUString        aGraphicUrl;
     OString         aUniqueId;
@@ -1600,8 +1600,8 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                       nFormat != GFF_WMF &&
                       nFormat != GFF_EMF) )
                 {
-                    SvStream* pIn = ::utl::UcbStreamHelper::CreateStream(
-                        aTmp.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+                    boost::scoped_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
+                        aTmp.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
                     if ( pIn )
                     {
                         Graphic aGraphic;
@@ -1614,7 +1614,6 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                             aUniqueId = aGraphicObject.GetUniqueID();
                         }
                         // else: simply keep the graphic link
-                        delete pIn;
                     }
                 }
                 if ( aUniqueId.isEmpty() )
@@ -1639,7 +1638,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
         {
             if(bMirrored || nTransparency || nRed || nGreen || nBlue || (1.0 != fGamma))
             {
-                pGraphicAttr = new GraphicAttr;
+                pGraphicAttr.reset(new GraphicAttr);
 
                 if(bMirrored)
                 {
@@ -1719,7 +1718,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                 if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
                 {
                     Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
-                    const sal_uInt32 nBlibId(pGraphicProvider->GetBlibID(*pPicOutStrm, aUniqueId, aRect, NULL, pGraphicAttr));
+                    const sal_uInt32 nBlibId(pGraphicProvider->GetBlibID(*pPicOutStrm, aUniqueId, aRect, NULL, pGraphicAttr.get()));
 
                     if(nBlibId)
                     {
@@ -1742,7 +1741,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                     SvMemoryStream aMemStrm;
                     Rectangle aRect;
 
-                    if ( aProvider.GetBlibID( aMemStrm, aUniqueId, aRect, NULL, pGraphicAttr, bOOxmlExport ) )
+                    if ( aProvider.GetBlibID( aMemStrm, aUniqueId, aRect, NULL, pGraphicAttr.get(), bOOxmlExport ) )
                     {
                         // grab BLIP from stream and insert directly as complex property
                         // ownership of stream memory goes to complex property
@@ -1767,7 +1766,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             }
         }
     }
-    delete pGraphicAttr;
+    pGraphicAttr.reset();
     if ( bCreateFillStyles )
         CreateFillProperties( rXPropSet, true );
 

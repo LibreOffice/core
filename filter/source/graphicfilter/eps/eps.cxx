@@ -40,6 +40,7 @@
 #include "strings.hrc"
 
 #include <math.h>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::uno;
 
@@ -343,9 +344,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     // try to get the dialog selection
     if ( pFilterConfigItem )
     {
-        ResMgr*     pResMgr;
-
-        pResMgr = ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILanguageTag() );
+        boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILanguageTag() ));
 
         if( pResMgr )
         {
@@ -366,7 +365,6 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
             mnTextMode = pFilterConfigItem->ReadInt32( "TextMode", 0 );
             if ( mnTextMode > 2 )
                 mnTextMode = 0;
-            delete pResMgr;
         }
     }
 
