@@ -376,8 +376,8 @@ RES_POOLCOLL_REGISTER_END,
 /// Group chapter / document.
 RES_POOLCOLL_DOC_BEGIN = COLL_DOC_BITS,
 
-RES_POOLCOLL_DOC_TITEL = RES_POOLCOLL_DOC_BEGIN,        ///< Doc. titel.
-RES_POOLCOLL_DOC_SUBTITEL,                              ///< Doc. subtitel.
+RES_POOLCOLL_DOC_TITEL = RES_POOLCOLL_DOC_BEGIN,        ///< Doc. title.
+RES_POOLCOLL_DOC_SUBTITEL,                              ///< Doc. subtitle.
 
 RES_POOLCOLL_DOC_END,
 

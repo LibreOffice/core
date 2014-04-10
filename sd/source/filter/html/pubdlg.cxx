@@ -108,7 +108,7 @@ public:
     sal_Bool    m_bSlideSound;
     sal_Bool    m_bHiddenSlides;
 
-    // titel page information
+    // title page information
     OUString    m_aAuthor;
     OUString    m_aEMail;
     OUString    m_aWWW;

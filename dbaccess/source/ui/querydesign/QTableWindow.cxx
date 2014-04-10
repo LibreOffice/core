@@ -114,7 +114,7 @@ sal_Bool OQueryTableWindow::Init()
         if (!m_pListBox)
             m_pListBox = CreateListBox();
 
-        // set titel
+        // set title
         m_aTitle.SetText(GetAliasName());
         m_aTitle.Show();
 

@@ -452,7 +452,7 @@ ModalDialog DLG_PUBLISHING
         Text [ en-US ] = "Export ~hidden slides" ;
     };
 
-    // Page 4, information for titel page
+    // Page 4, information for title page
     FixedLine PAGE4_TITEL_1
     {
         Pos = MAP_APPFONT ( 6 , 9 ) ;
