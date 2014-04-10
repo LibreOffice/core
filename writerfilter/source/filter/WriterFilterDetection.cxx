@@ -71,53 +71,25 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
         else if ( pValues[nProperty].Name == "InputStream" )
             pValues[nProperty].Value >>= xInputStream;
     }
-    bool bBinary = sTypeName == "writer_MS_Word_97" ||
-                   sTypeName == "writer_MS_Word_97_Vorlage";
-
     try
     {
-        if(bBinary)
-        {
-            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xInputStream );
-            if ( pStream && SotStorage::IsStorageFile(pStream) )
-
-            {
-                SotStorageRef xStg = new SotStorage( pStream, false );
-
-                bool bTable2 = xStg->IsContained(OUString("1Table"));
-                SotStorageStreamRef xRef = xStg->OpenSotStream(OUString("WordDocument"), STREAM_STD_READ | STREAM_NOCREATE );
-
-                if(bTable2 && xStg.Is())
-                {
-                    xRef->Seek(2);
-                    sal_Int16 nWord;
-                    xRef->ReadInt16( nWord );
-                    //version detection
-                    bWord = nWord >= 0x6a && nWord <= 0xc1;
-                }
-            }
-        }
+        uno::Reference< embed::XStorage > xDocStorage;
+        if ( sURL == "private:stream" )
+            xDocStorage = comphelper::OStorageHelper::GetStorageFromInputStream( xInputStream );
         else
+            xDocStorage = comphelper::OStorageHelper::GetStorageFromURL( sURL, embed::ElementModes::READ );
+        if( xDocStorage.is() )
         {
-            uno::Reference< embed::XStorage > xDocStorage;
-            if ( sURL == "private:stream" )
-                xDocStorage = comphelper::OStorageHelper::GetStorageFromInputStream( xInputStream );
-            else
-                xDocStorage = comphelper::OStorageHelper::GetStorageFromURL(
-                                            sURL, embed::ElementModes::READ );
-            if( xDocStorage.is() )
+            uno::Sequence< OUString > aNames = xDocStorage->getElementNames();
+            const OUString* pNames = aNames.getConstArray();
+            for(sal_Int32 nName = 0; nName < aNames.getLength(); ++nName)
             {
-                uno::Sequence< OUString > aNames = xDocStorage->getElementNames();
-                const OUString* pNames = aNames.getConstArray();
-                for(sal_Int32 nName = 0; nName < aNames.getLength(); ++nName)
+                if ( pNames[nName] == "word" )
                 {
-                    if ( pNames[nName] == "word" )
-                    {
-                        bWord = true;
-                        if( sTypeName.isEmpty() )
-                            sTypeName = "writer_MS_Word_2007";
-                        break;
-                    }
+                    bWord = true;
+                    if( sTypeName.isEmpty() )
+                        sTypeName = "writer_MS_Word_2007";
+                    break;
                 }
             }
         }
