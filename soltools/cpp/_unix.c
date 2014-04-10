@@ -32,9 +32,7 @@
 #include "cpp.h"
 
 #if defined MACOSX || defined AIX || defined WNT
-extern int stgetopt(int, char *const *, const char *);
-extern char *optarg;
-extern int optind;
+#include <_getopt.h>
 #else
 #include <getopt.h>
 #endif
