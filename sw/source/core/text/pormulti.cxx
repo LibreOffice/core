@@ -1269,8 +1269,10 @@ public:
 };
 
 SwSpaceManipulator::SwSpaceManipulator( SwTxtPaintInfo& rInf,
-                                        SwMultiPortion& rMult ) :
-         rInfo( rInf ), rMulti( rMult )
+                                        SwMultiPortion& rMult )
+    : rInfo(rInf)
+    , rMulti(rMult)
+    , nSpaceAdd(0)
 {
     pOldSpaceAdd = rInfo.GetpSpaceAdd();
     nOldSpIdx = rInfo.GetSpaceIdx();
