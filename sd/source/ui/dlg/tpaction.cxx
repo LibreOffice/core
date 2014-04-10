@@ -454,7 +454,7 @@ void SdTPAction::OpenFileDialog()
 
             aFileDialog.SetDisplayDirectory( aFile );
 
-            // The following is a workarround for #i4306#:
+            // The following is a workaround for #i4306#:
             // The addition of the implicitely existing "all files"
             // filter makes the (Windows system) open file dialog follow
             // links on the desktop to directories.

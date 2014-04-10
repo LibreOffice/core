@@ -62,7 +62,7 @@ ColorNameMap::ColorNameMap() {
 
         // Get list of color names in order to iterate over the color table.
 
-        // Lock the solar mutex here as workarround for missing lock in
+        // Lock the solar mutex here as workaround for missing lock in
         // called function.
         SolarMutexGuard aGuard;
         aNames = xNA->getElementNames();
