@@ -41,4 +41,14 @@
    </node>
   </node>
  </oor:component-data>
+ <oor:component-data oor:name="Setup" oor:package="org.openoffice">
+  <node oor:name="L10N">
+    <prop oor:name="ooLocale">
+      <value>en-US</value>
+    </prop>
+    <prop oor:name="ooSetupSystemLocale">
+      <value>en-US</value>
+    </prop>
+  </node>
+ </oor:component-data>
 </oor:data>
