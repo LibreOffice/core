@@ -701,7 +701,7 @@ void ScUndoDeleteMulti::Redo()
 
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    // reverese delete
+    // reverse delete
     std::vector<sc::ColRowSpan>::const_reverse_iterator ri = maSpans.rbegin(), riEnd = maSpans.rend();
     for (; ri != riEnd; ++ri)
     {

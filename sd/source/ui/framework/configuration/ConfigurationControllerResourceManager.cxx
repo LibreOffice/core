@@ -92,7 +92,7 @@ void ConfigurationControllerResourceManager::DeactivateResources (
     const Reference<XConfiguration>& rxConfiguration)
 {
     ::osl::MutexGuard aGuard (maMutex);
-    // Iterate in reverese order over the resources that are to be
+    // Iterate in reverse order over the resources that are to be
     // deactivated so that resources on which others depend are deactivated
     // only when the depending resources have already been deactivated.
     ::std::for_each(
