@@ -390,6 +390,7 @@ done
 %attr(0755,root,root) /opt/%unixfilename
 %endif
 %attr(0755, root, root) /usr/bin/*
+/etc/dbus-1/system.d/org.libreoffice.bluez.profile1.conf
 /usr/share/applications/%unixfilename-base.desktop
 /usr/share/applications/%unixfilename-calc.desktop
 /usr/share/applications/%unixfilename-draw.desktop

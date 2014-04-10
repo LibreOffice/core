@@ -87,3 +87,5 @@ for i in base calc draw impress writer; do
     cp "${APPDATA_SOURCE_DIR}/libreoffice-${i}.appdata.xml" "${DESTDIR}/usr/share/appdata/${PREFIX}-${i}.appdata.xml"
 done
 
+mkdir -p "${DESTDIR}/etc/dbus-1/system.d"
+cp "${SRCDIR}/sysui/desktop/dbus/org.libreoffice.bluez.profile1.conf" "${DESTDIR}/etc/dbus-1/system.d/org.libreoffice.bluez.profile1.conf"

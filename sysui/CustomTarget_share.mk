@@ -133,6 +133,7 @@ $(eval $(call gb_CustomTarget_register_targets,sysui/share,\
 		$(product)/create_tree.sh \
 		$(product)/mimelnklist \
 		$(product)/launcherlist) \
+		dbus-bluez-conf \
 ))
 
 $(share_WORKDIR)/%/openoffice.org.xml: $(share_WORKDIR)/documents.ulf $(MIMEDESKTOPS) $(share_SRCDIR)/share/create_mime_xml.pl
@@ -204,6 +205,10 @@ $(share_WORKDIR)/%/$(1).desktop : $(share_WORKDIR)/%/build.flag
 	touch $$@
 
 endef
+
+dbus-bluez-conf:
+	mkdir -p $(call gb_CustomTarget_get_workdir,sysui)/etc/dbus-1/system.d
+	cp  $(SRCDIR)/sysui/desktop/dbus/org.libreoffice.bluez.profile1.conf $(call gb_CustomTarget_get_workdir,sysui)/etc/dbus-1/system.d/org.libreoffice.bluez.profile1.conf
 
 $(foreach launcher,$(LAUNCHERLIST),$(eval $(call sysui_Desktop_rule,$(launcher))))
 

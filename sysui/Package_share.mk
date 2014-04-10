@@ -13,6 +13,10 @@ $(eval $(call gb_Package_add_files,share,share/xdg,\
 	$(addsuffix .desktop,$(LAUNCHERLIST)) \
 ))
 
+$(eval $(call gb_Package_add_files,share,etc/dbus-1/system.d,\
+    ../../etc/dbus-1/system.d/org.libreoffice.bluez.profile1.conf \
+))
+
 $(eval $(call gb_Package_use_custom_target,share,sysui/share))
 
 # vim: set noet sw=4 ts=4:

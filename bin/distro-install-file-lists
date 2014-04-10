@@ -506,6 +506,11 @@ else
     fi
     mv usr/share/man/man1/libreoffice$BINSUFFIX.1 \
         pkg/libreoffice-common/usr/share/man/man1
+
+    # install bluez 5 policy files
+    mkdir -p pkg/libreoffice-common/etc/dbus-1/system.d
+    mv /etc/dbus-1/system.d/org.libreoffice.bluez.profile1.conf pkg/libreoffice-common/etc/dbus-1/system.d/org.libreoffice.bluez.profile1.conf
+
     mkdir -p pkg/libreoffice-common/etc/bash_completion.d
     if test "$COMPAT_OOWRAPPERS" = "YES" ; then
         mv etc/bash_completion.d/ooffice$BINSUFFIX.sh \
