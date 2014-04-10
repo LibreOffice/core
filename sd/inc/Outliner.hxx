@@ -318,7 +318,7 @@ private:
     */
     ::sd::outliner::IteratorPosition maLastValidPosition;
 
-    /** This flag remebers a selection change between a call to the
+    /** This flag remembers a selection change between a call to the
         selection change listener callback and the next
         <member>DetectChange()</member> method call.
     */
