@@ -80,7 +80,7 @@ enum IteratorType {SELECTION,SINGLE_VIEW,DOCUMENT};
     <code>Iterator(pDocument,pViewShell,true,BEGIN)</code> for some document
     and view shell.  This iterator can then be compared against
     <code>Iterator(pDocument,pViewShell,true,END)</code>.  On equality the
-    iteration should be stoped without evaluating the iterator: The position
+    iteration should be stopped without evaluating the iterator: The position
     of an end iterator is not valid.</p>
 */
 class Iterator

@@ -317,7 +317,7 @@ public class RecoveryTest extends ComplexTestCase {
       * and click it then to continue.
       * @param expectedDocumentCount the amount of documents which must be displayed in the recovery dialog
       * @param recover If the documenst should be recoverd this variable must be true. If it is fasle
-      * the recovery process was stoped and the button cancel was klicked.
+      * the recovery process was stopped and the button cancel was klicked.
       * @param cancel If the recovery is fifnished, this parameter desicdes to klick the "Next" button
       * or the click cancel. If the value is true, the cancel button was clicked.
       */
