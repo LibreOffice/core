@@ -114,6 +114,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,CLUCENE,CLUCENE_TARBALL) \
 		$(call fetch_Optional,CMIS,CMIS_TARBALL) \
 		$(call fetch_Optional,COINMP,COINMP_TARBALL) \
+		$(call fetch_Optional,COLLADA2GLTF,COLLADA2GLTF_TARBALL) \
 		$(call fetch_Optional,CPPUNIT,CPPUNIT_TARBALL) \
 		$(call fetch_Optional,CT2N,CT2N_TARBALL) \
 		$(call fetch_Optional,CURL,CURL_TARBALL) \
