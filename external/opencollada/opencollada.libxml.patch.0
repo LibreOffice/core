@@ -1,0 +1,12 @@
+diff -ur opencollada.org/GeneratedSaxParser/include/GeneratedSaxParserPrerequisites.h opencollada/GeneratedSaxParser/include/GeneratedSaxParserPrerequisites.h
+--- GeneratedSaxParser/include/GeneratedSaxParserPrerequisites.h	2014-05-13 10:37:05.029390239 +0200
++++ GeneratedSaxParser/include/GeneratedSaxParserPrerequisites.h	2014-05-13 10:37:37.093390617 +0200
+@@ -11,8 +11,6 @@
+ #ifndef __GENERATEDSAXPARSER_PREREQUISITES_H__
+ #define __GENERATEDSAXPARSER_PREREQUISITES_H__
+ 
+-#define LIBXML_STATIC
+-
+ #include <string>
+ 
+ #include "COLLADABUPlatform.h"
