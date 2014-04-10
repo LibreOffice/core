@@ -220,12 +220,12 @@
                 <Day>
                     <DayID>tue</DayID>
                     <DefaultAbbrvName>Сш</DefaultAbbrvName>
-                    <DefaultFullName>Сишәмбе</DefaultFullName>
+                    <DefaultFullName>сишәмбе</DefaultFullName>
                 </Day>
                 <Day>
                     <DayID>wed</DayID>
                     <DefaultAbbrvName>Чр</DefaultAbbrvName>
-                    <DefaultFullName>Чәршәмбе</DefaultFullName>
+                    <DefaultFullName>чәршәмбе</DefaultFullName>
                 </Day>
                 <Day>
                     <DayID>thu</DayID>
