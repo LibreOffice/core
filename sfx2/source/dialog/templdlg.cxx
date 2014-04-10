@@ -1191,6 +1191,8 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
     if(pStyleSheetPool && nActFamily != 0xffff)
     {
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
+        if(!pItem)
+            return;
         pStyleSheetPool->SetSearchMask(pItem->GetFamily(), SFXSTYLEBIT_ALL_VISIBLE);
         StyleTreeArr_Impl aArr;
         SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
@@ -1533,7 +1535,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          // other filters for automatic
          CheckItem( nActFamily, true );
          const SfxStyleFamilyItem *pStyleItem =  GetFamilyItem_Impl();
-         if (  0 == pStyleItem->GetFilterList()[ nActFilter ]->nFlags
+         if ( pStyleItem && 0 == pStyleItem->GetFilterList()[ nActFilter ]->nFlags
             && nAppFilter != pItem->GetValue())
          {
              nAppFilter = pItem->GetValue();
