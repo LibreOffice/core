@@ -32,7 +32,7 @@ namespace desktop
 {
 
 /*
-    Class for controlls dispatching of command URL through office command line. There
+    Class for controls dispatching of command URL through office command line. There
     are "dangerous" command URLs, that can result in a running office without UI. To prevent
     this situation the implementation surveile all dispatches and looks for an open task if
     there is arose a problem. If there is none the office will be shutdown to prevent a

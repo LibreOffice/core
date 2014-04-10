@@ -2435,7 +2435,7 @@ void SAL_CALL SfxBaseModel::removeDocumentEventListener( const Reference< docume
 void SAL_CALL SfxBaseModel::notifyDocumentEvent( const OUString&, const Reference< frame::XController2 >&, const Any& )
     throw ( lang::IllegalArgumentException, lang::NoSupportException, RuntimeException, std::exception )
 {
-    throw lang::NoSupportException("SfxBaseModel controlls all the sent notifications itself!", Reference< XInterface >() );
+    throw lang::NoSupportException("SfxBaseModel controls all the sent notifications itself!", Reference< XInterface >() );
 }
 
 Sequence< document::CmisProperty > SAL_CALL SfxBaseModel::getCmisProperties()

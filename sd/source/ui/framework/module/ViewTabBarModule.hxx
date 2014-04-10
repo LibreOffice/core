@@ -50,7 +50,7 @@ class ViewTabBarModule
       public ViewTabBarModuleInterfaceBase
 {
 public:
-    /** Create a new module that controlls the view tab bar above the view
+    /** Create a new module that controls the view tab bar above the view
         in the specified pane.
         @param rxController
             This is the access point to the drawing framework.

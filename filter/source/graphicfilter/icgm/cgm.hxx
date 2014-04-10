@@ -74,7 +74,7 @@ class CGM
         CGMBitmap*          mpBitmapInUse;
         CGMChart*           mpChart;                // if sal_True->"SHWSLIDEREC"
                                                     //  otherwise "BEGINPIC" commands
-                                                    // controlls page inserting
+                                                    // controls page inserting
         CGMElements*        pElement;
         CGMElements*        pCopyOfE;
         CGMOutAct*          mpOutAct;

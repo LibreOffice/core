@@ -26,7 +26,7 @@
 namespace sd { namespace sidebar {
 
 
-/** Adapt the svtools valueset to the needs of the master page controlls.
+/** Adapt the svtools valueset to the needs of the master page controls.
 */
 class PreviewValueSet
     : public ValueSet

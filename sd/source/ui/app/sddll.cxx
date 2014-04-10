@@ -339,7 +339,7 @@ void SdDLL::Init()
     // register Object-Factory
     SdrObjFactory::InsertMakeUserDataHdl(LINK(&aSdObjectFactory, SdObjectFactory, MakeUserData));
 
-    // register your exotic remote controlls here
+    // register your exotic remote controls here
 #ifdef ENABLE_SDREMOTE
     if ( !Application::IsHeadlessModeRequested() )
         RegisterRemotes();
