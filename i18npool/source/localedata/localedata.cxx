@@ -124,6 +124,7 @@ static const struct {
     { "pt_PT",  lcl_DATA_EURO },
     { "ru_RU",  lcl_DATA_EURO },
     { "tr_TR",  lcl_DATA_EURO },
+    { "tt_RU",  lcl_DATA_EURO },
     { "et_EE",  lcl_DATA_EURO },
     { "lb_LU",  lcl_DATA_EURO },
     { "lt_LT",  lcl_DATA_EURO },
