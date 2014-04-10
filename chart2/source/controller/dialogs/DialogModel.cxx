@@ -151,7 +151,7 @@ struct lcl_DataSeriesContainerAppend : public
 {
     typedef ::std::vector< ::chart::DialogModel::tSeriesWithChartTypeByName > tContainerType;
 
-    explicit lcl_DataSeriesContainerAppend( tContainerType & rCnt )
+    explicit lcl_DataSeriesContainerAppend( tContainerType * rCnt )
             : m_rDestCnt( rCnt )
     {}
 
@@ -168,7 +168,7 @@ struct lcl_DataSeriesContainerAppend : public
                     aRole = xCT->getRoleOfSequenceForSeriesLabel();
                 for( sal_Int32 nI = 0; nI < aSeq.getLength(); ++ nI )
                 {
-                    m_rDestCnt.push_back(
+                    m_rDestCnt->push_back(
                         ::chart::DialogModel::tSeriesWithChartTypeByName(
                             ::chart::DataSeriesHelper::getDataSeriesLabel( aSeq[nI], aRole ),
                             ::std::make_pair( aSeq[nI], xCT )));
@@ -189,10 +189,9 @@ struct lcl_DataSeriesContainerAppend : public
     lcl_DataSeriesContainerAppend & operator* ()     { return *this; }
     lcl_DataSeriesContainerAppend & operator++ ()    { return operator++(0); }
     lcl_DataSeriesContainerAppend & operator++ (int) { return *this; }
-    lcl_DataSeriesContainerAppend & operator= ( lcl_DataSeriesContainerAppend& ) { return *this; }
 
 private:
-    tContainerType & m_rDestCnt;
+    tContainerType * m_rDestCnt;
 };
 
 struct lcl_RolesWithRangeAppend : public
@@ -200,7 +199,7 @@ struct lcl_RolesWithRangeAppend : public
 {
     typedef ::chart::DialogModel::tRolesWithRanges tContainerType;
 
-    explicit lcl_RolesWithRangeAppend( tContainerType & rCnt,
+    explicit lcl_RolesWithRangeAppend( tContainerType * rCnt,
                                        const OUString & aLabelRole )
             : m_rDestCnt( rCnt ),
               m_aRoleForLabelSeq( aLabelRole )
@@ -220,7 +219,7 @@ struct lcl_RolesWithRangeAppend : public
                     Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
                     if( xProp->getPropertyValue( "Role" ) >>= aRole )
                     {
-                        m_rDestCnt.insert(
+                        m_rDestCnt->insert(
                             tContainerType::value_type(
                                 aRole, xSeq->getSourceRangeRepresentation()));
                         // label
@@ -229,7 +228,7 @@ struct lcl_RolesWithRangeAppend : public
                             Reference< data::XDataSequence > xLabelSeq( xVal->getLabel());
                             if( xLabelSeq.is())
                             {
-                                m_rDestCnt.insert(
+                                m_rDestCnt->insert(
                                     tContainerType::value_type(
                                         lcl_aLabelRole, xLabelSeq->getSourceRangeRepresentation()));
                             }
@@ -252,10 +251,9 @@ struct lcl_RolesWithRangeAppend : public
     lcl_RolesWithRangeAppend & operator* ()     { return *this; }
     lcl_RolesWithRangeAppend & operator++ ()    { return operator++(0); }
     lcl_RolesWithRangeAppend & operator++ (int) { return *this; }
-    lcl_RolesWithRangeAppend & operator= ( lcl_RolesWithRangeAppend& ) { return *this; }
 
 private:
-    tContainerType & m_rDestCnt;
+    tContainerType * m_rDestCnt;
     OUString m_aRoleForLabelSeq;
 };
 
@@ -466,7 +464,7 @@ Reference< data::XDataProvider > DialogModel::getDataProvider() const
         getAllDataSeriesContainers());
 
     ::std::copy( aContainers.begin(), aContainers.end(),
-                 lcl_DataSeriesContainerAppend( aResult ));
+                 lcl_DataSeriesContainerAppend( &aResult ));
     return aResult;
 }
 
@@ -481,7 +479,7 @@ DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
         Reference< data::XDataSource > xSource( xSeries, uno::UNO_QUERY_THROW );
         const Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
         ::std::copy( aSeq.getConstArray(), aSeq.getConstArray() + aSeq.getLength(),
-                     lcl_RolesWithRangeAppend( aResult, aRoleOfSequenceForLabel ));
+                     lcl_RolesWithRangeAppend( &aResult, aRoleOfSequenceForLabel ));
         if( xChartType.is())
         {
             // add missing mandatory roles
