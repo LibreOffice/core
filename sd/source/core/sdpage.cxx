@@ -678,7 +678,7 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
 
 /*************************************************************************
 |*
-|* The presentation object rObj has changed and is no longer referenzed by the
+|* The presentation object rObj has changed and is no longer referenced by the
 |* presentation object of the master page.
 |* The UserCall is deleted.
 |*
