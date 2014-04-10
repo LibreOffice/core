@@ -1594,7 +1594,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                     aReplData.nFamily    = pMySheet->GetFamily();
                     aReplData.aNewName   = pMySheet->GetName();
 
-                    // #i121863# re-create original name of styte used at page where to replace with
+                    // #i121863# re-create original name of style used at page where to replace with
                     // this new style
                     OUString aTemp(pMySheet->GetName());
                     const sal_Int32 nPos(aTemp.indexOf(SD_LT_SEPARATOR));
