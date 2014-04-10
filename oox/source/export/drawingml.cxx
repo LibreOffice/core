@@ -28,6 +28,7 @@
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -1058,6 +1059,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
     const char* bold = NULL;
     const char* italic = NULL;
     const char* underline = NULL;
+    const char* strikeout = NULL;
     sal_Int32 nSize = 1800;
     sal_Int32 nCharEscapement = 0;
 
@@ -1132,6 +1134,32 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
                 break;
         }
 
+    if ( GETAD( CharStrikeout ) )
+    {
+        switch ( *((sal_Int16*) mAny.getValue()) )
+        {
+            case awt::FontStrikeout::NONE :
+               strikeout = "noStrike";
+               break;
+            case awt::FontStrikeout::SINGLE :
+            // LibO supports further values of character
+            // strikeout, OOXML standard (20.1.10.78,
+            // ST_TextStrikeType) however specifies only
+            // 3 - single, double and none. Approximate
+            // the remaining ones by single strike (better
+            // some strike than none at all).
+            // TODO: figure out how to do this better
+            case awt::FontStrikeout::BOLD :
+            case awt::FontStrikeout::SLASH :
+            case awt::FontStrikeout::X :
+               strikeout = "sngStrike";
+               break;
+            case awt::FontStrikeout::DOUBLE :
+               strikeout = "dblStrike";
+               break;
+        }
+    }
+
     if( GETA( CharLocale ) ) {
         com::sun::star::lang::Locale aLocale;
         mAny >>= aLocale;
@@ -1156,6 +1184,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
                           XML_i, italic,
                           XML_lang, usLanguage.isEmpty() ? NULL : USS( usLanguage ),
                           XML_sz, nSize == 1800 ? NULL : IS( nSize ),
+                          XML_strike, strikeout,
                           XML_u, underline,
                           XML_baseline, nCharEscapement == 0 ? NULL : IS( nCharEscapement*1000 ),
                           FSEND );
