@@ -59,9 +59,22 @@ namespace sdr
         // old access to anchor as point
         SVX_DLLPUBLIC Point GetAnchorPos(const SdrObject& rObject);
 
+        // back and forth converters for Rotation new (angle in rad [0.0 .. F_2PI[) and
+        // old (mirrored angle in deg * 100 [0 .. 36000[)
+        // These converters are used for places where the correct new values are used
+        // for the UI and similar
+        long convertRotateAngleNewToLegacy(double fNew);
+        double convertRotateAngleLegacyToNew(long nOld);
+
+        // back and forth converters for ShearX new (shear x in rad [-F_PI .. F_PI[) and
+        // old (mirrored shear x in deg * 100 [-18000 .. 18000[)
+        // These converters are used for places where the correct new values are used
+        // for the UI and similar
+        long convertShearAngleXNewToLegacy(double fNew);
+        double convertShearAngleXLegacyToNew(long nOld);
+
         // old access to rotate and shear (including wrong orientation and
-        // integer nature). bool bVertical removed and method renamed,
-        // was not supported anyways
+        // integer nature, see above converters)
         SVX_DLLPUBLIC long GetRotateAngle(const SdrObject& rObject);
         SVX_DLLPUBLIC long GetShearAngleX(const SdrObject& rObject);
 

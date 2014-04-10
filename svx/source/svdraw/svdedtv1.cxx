@@ -268,36 +268,22 @@ void SdrEditView::ResizeMarkedObj(const basegfx::B2DPoint& rRefPoint, const base
 
 double SdrEditView::GetMarkedObjRotate() const
 {
-    if(!areSdrObjectsSelected())
+    SdrObject* pCandidate = getSelectedIfSingle();
+
+    if(!pCandidate)
     {
-        return 0.0;
-    }
+        // for multiselection use the rotation angle of the 1st object
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
 
-    SdrObject* pSingle = getSelectedIfSingle();
-
-    if(pSingle)
-    {
-        return pSingle->getSdrObjectRotate();
-    }
-
-    const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
-
-    if(aSelection.size())
-    {
-        SdrObject* pObject = aSelection[0];
-
-        if(pObject)
+        if(aSelection.size())
         {
-            return pObject->getSdrObjectRotate();
-        }
-        else
-        {
-            OSL_ENSURE(false, "OOps, areSdrObjectsSelected() == true, but no first object (!)");
+            pCandidate = aSelection[0];
         }
     }
-    else
+
+    if(pCandidate)
     {
-        OSL_ENSURE(false, "OOps, areSdrObjectsSelected() == true, but no objects (!)");
+        return pCandidate->getSdrObjectRotate();
     }
 
     return 0.0;
@@ -496,36 +482,30 @@ void SdrEditView::MirrorMarkedObjVertical(bool bCopy)
 
 double SdrEditView::GetMarkedObjShearX() const
 {
-    double fRetval(0.0);
+    SdrObject* pCandidate = getSelectedIfSingle();
 
-    if(areSdrObjectsSelected())
+    if(!pCandidate)
     {
+        // for multiselection use the shear value of the 1st object
         const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
 
-        for(sal_uInt32 a(0); a < aSelection.size(); a++)
+        if(aSelection.size())
         {
-            SdrObject* pObject = aSelection[a];
-
-            if(a)
-            {
-                const double fNew(pObject->getSdrObjectShearX());
-
-                if(!basegfx::fTools::equal(fNew, fRetval))
-                {
-                    return 0.0;
-                }
-            }
-            else
-            {
-                fRetval = pObject->getSdrObjectShearX();
-            }
+            pCandidate = aSelection[0];
         }
-
-        const double fMaxShearRange(F_PI2 * (89.0/90.0));
-        fRetval = basegfx::clamp(fRetval, -fMaxShearRange, fMaxShearRange);
     }
 
-    return fRetval;
+    if(pCandidate)
+    {
+        OSL_ENSURE(
+            basegfx::fTools::less(atan(pCandidate->getSdrObjectShearX()), F_PI2 * (89.0/90.0)) &&
+            basegfx::fTools::more(atan(pCandidate->getSdrObjectShearX()), -F_PI2 * (89.0/90.0)),
+            "Shear angle is out of bounds (inside the one degree extrema corresponding to a +/- 90 degree range)");
+
+        return pCandidate->getSdrObjectShearX();
+    }
+
+    return 0.0;
 }
 
 void SdrEditView::ShearMarkedObj(const basegfx::B2DPoint& rRefPoint, double fAngle, bool bVShear, bool bCopy)
@@ -962,7 +942,7 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool /*bRep
         if (rAttr.GetItemState(SDRATTR_ROTATEALL,true,&pPoolItem)==SFX_ITEM_SET)
         {
             const sal_Int32 nAngle(((const SdrAngleItem*)pPoolItem)->GetValue());
-            const double fNewAngle((((36000 - nAngle) % 36000) * F_PI) / 18000.0);
+            const double fNewAngle(sdr::legacy::convertRotateAngleLegacyToNew(nAngle));
 
             RotateMarkedObj(rAllSnapRange.getCenter(), fNewAngle);
         }
@@ -970,7 +950,7 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool /*bRep
         if (rAttr.GetItemState(SDRATTR_HORZSHEARALL,true,&pPoolItem)==SFX_ITEM_SET)
         {
             const sal_Int32 nAngle(((const SdrAngleItem*)pPoolItem)->GetValue());
-            const double fAngle(tan(((36000 - nAngle) * F_PI) / 18000.0));
+            const double fAngle(sdr::legacy::convertShearAngleXLegacyToNew(nAngle));
 
             ShearMarkedObj(rAllSnapRange.getCenter(), fAngle, false);
         }
@@ -978,7 +958,7 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool /*bRep
         if (rAttr.GetItemState(SDRATTR_VERTSHEARALL,true,&pPoolItem)==SFX_ITEM_SET)
         {
             const sal_Int32 nAngle(((const SdrAngleItem*)pPoolItem)->GetValue());
-            const double fAngle(tan(((36000 - nAngle) * F_PI) / 18000.0));
+            const double fAngle(sdr::legacy::convertShearAngleXLegacyToNew(nAngle));
 
             ShearMarkedObj(rAllSnapRange.getCenter(), fAngle, true);
         }
@@ -1706,8 +1686,12 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
             fRotateRefY = aRotateAxe.getY();
         }
 
+        // get rotation of selection. fAllRotation is in radians [0.0 .. F_2PI[
         const double fAllRotation(GetMarkedObjRotate());
-        const sal_Int32 nOldAllRot((basegfx::fround(((F_2PI - fAllRotation) * 18000.0) / F_PI)) % 36000);
+
+        // convert to old notation used in the UI; it's orientation is mirrored and its
+        // degrees * 100 in integer
+        const sal_Int32 nOldAllRot(sdr::legacy::convertRotateAngleNewToLegacy(fAllRotation));
 
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ANGLE,nOldAllRot));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ROT_X,basegfx::fround(fRotateRefX)));
@@ -1724,15 +1708,15 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
             fShearRefY = aRotateAxe.getY();
         }
 
-        double fAllShearX(GetMarkedObjShearX());
-        const double fMaxShearRange(F_PI2 * (89.0/90.0));
+        // get shear of selection. GetMarkedObjShearX is the tan of the shear angle in radians
+        // tan(]-F_PI2 .. F_PI2[), so apply atan to get the shear angle
+        const double fAllShearAngleX(atan(GetMarkedObjShearX()));
 
-        fAllShearX = basegfx::snapToRange(fAllShearX, -F_PI, F_PI);
-        fAllShearX = basegfx::clamp(fAllShearX, -fMaxShearRange, fMaxShearRange);
+        // convert to old notation used in the UI; it's orientation is mirrored and its
+        // degrees * 100 in integer
+        const sal_Int32 nOldAllShearAngleX(sdr::legacy::convertShearAngleXNewToLegacy(fAllShearAngleX));
 
-        const sal_Int32 nOldAllShearX(basegfx::fround(((-fAllShearX) * 18000.0) / F_PI));
-
-        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR,nOldAllShearX));
+        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR,nOldAllShearAngleX));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X,basegfx::fround(fShearRefX)));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y,basegfx::fround(fShearRefY)));
 
@@ -1936,13 +1920,16 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // rotation change?
-    const double fOldRotateAngle(GetMarkedObjRotate());
+    const double fOldRotateAngle(GetMarkedObjRotate()); // radians [0.0 .. F_2PI[
     double fNewRotateAngle(fOldRotateAngle);
 
     if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ANGLE,true,&pPoolItem))
     {
         const sal_Int32 nAllRot(((const SfxInt32Item*)pPoolItem)->GetValue());
-        fNewRotateAngle = (((36000 - nAllRot) % 36000) * F_PI) / 18000.0;
+
+        // convert from old UI units (angle in degree * 100, wrong oriented)
+        // to correctly orinented radians, same coordinate system as fOldRotateAngle
+        fNewRotateAngle = sdr::legacy::convertRotateAngleLegacyToNew(nAllRot);
     }
 
     const bool bRotate(!basegfx::fTools::equal(fOldRotateAngle, fNewRotateAngle));
@@ -1960,24 +1947,36 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // shear change?
-    double fShearAngle(0.0);
+    double fShearChange(0.0);
     basegfx::B2DPoint aShearOffset(0.0, 0.0);
-    bool bShearVert(false);
-    bool bShear(false);
+    bool bDoShearY(false);
+    bool bDoShearDelta(false);
 
     if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_SHEAR,true,&pPoolItem))
     {
+        // get UI shear angle ]-9000 .. 9000[
         const sal_Int32 nAllShear(((const SfxInt32Item*)pPoolItem)->GetValue());
+
+        // convert to correctly oriented shear angle in radians ]-F_PI2 .. F_PI2[
+        // limit to partial values (corresponding to +-89 degree)
+        // convert from shear angle to shear value used in the transformation to
+        // get to the same coordinate system as fOldShearValue below will use
         const double fMaxShearRange(F_PI2 * (89.0/90.0));
-        double fNewShearAngle(((-nAllShear) * F_PI) / 18000.0);
+        const double fNewShearValue(
+            tan(
+                basegfx::clamp(
+                    sdr::legacy::convertShearAngleXLegacyToNew(nAllShear),
+                    -fMaxShearRange,
+                    fMaxShearRange)));
 
-        fNewShearAngle = basegfx::snapToRange(fNewShearAngle, -F_PI, F_PI);
-        fNewShearAngle = basegfx::clamp(fNewShearAngle, -fMaxShearRange, fMaxShearRange);
+        // check if we have a ShearY
+        bDoShearY = ((const SfxBoolItem&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_VERTICAL)).GetValue();
 
-        bShearVert = ((const SfxBoolItem&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_VERTICAL)).GetValue();
-        double fOldShearAngle(GetMarkedObjShearX());
+        // get current shear value. It is the tan of the shear angle in radians
+        // tan(]-F_PI .. F_PI[)
+        double fOldShearValue(GetMarkedObjShearX());
 
-        if(bShearVert)
+        if(bDoShearY)
         {
             // Currently only ShearX is directly used at the SdrObject since the homogen
             // matrix only has six degrees of freedom and it has to be decided which one
@@ -1985,16 +1984,18 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
             // the same as a 90 degree rotation, a ShearY(-x) and a -90 degree back-rotation.
             // Exactly this will be used below. It also shows that the ShearY is -ShearX, thus
             // the compare value can be detected
-            fOldShearAngle = -fOldShearAngle;
+            fOldShearValue = -fOldShearValue;
         }
 
-        if(!basegfx::fTools::equal(fNewShearAngle, fOldShearAngle))
+        if(!basegfx::fTools::equal(fNewShearValue, fOldShearValue))
         {
-            fShearAngle = fNewShearAngle - fOldShearAngle;
-            bShear = true;
+            // create shear diff and convert to shear angle, this is what ShearMarkedObj
+            // expects
+            fShearChange = atan(fNewShearValue - fOldShearValue);
+            bDoShearDelta = true;
         }
 
-        if(bShear)
+        if(bDoShearDelta)
         {
             aShearOffset.setX(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_X)).GetValue());
             aShearOffset.setY(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_Y)).GetValue());
@@ -2062,20 +2063,20 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // change shear
-    if(bShear && mbShearAllowed)
+    if(bDoShearDelta && mbShearAllowed)
     {
         basegfx::B2DPoint aRef(aShearOffset + aPageOrigin);
 
-        if(bShearVert)
+        if(bDoShearY)
         {
-            // see explanation at setting bShearVert
+            // see explanation at setting bDoShearY above
             RotateMarkedObj(aRef, F_PI2);
-            ShearMarkedObj(aRef, -fShearAngle, true);
+            ShearMarkedObj(aRef, -fShearChange, true);
             RotateMarkedObj(aRef, -F_PI2);
         }
         else
         {
-            ShearMarkedObj(aRef, fShearAngle, false);
+            ShearMarkedObj(aRef, fShearChange, false);
         }
     }
 

@@ -792,7 +792,7 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.mbShearAllowed = true;
 
     rInfo.mbEdgeRadiusAllowed=false;
-    rInfo.mbCanConvToPath = false;
+    rInfo.mbCanConvToPath = !IsEPS();
     rInfo.mbCanConvToPathLineToArea = false;
     rInfo.mbCanConvToPolyLineToArea = false;
     rInfo.mbCanConvToPoly = !IsEPS();

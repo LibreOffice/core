@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
@@ -46,8 +45,6 @@
 #include <editeng/unolingu.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
-
-// #UndoRedo#
 #include <svl/slstitm.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/insdlg.hxx>
@@ -55,18 +52,17 @@
 #include <svl/languageoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/request.hxx>
-
-
+#include <svx/svdoole2.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svx/grafctrl.hxx>
 #include <svtools/cliplistener.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svx/svdotable.hxx>
 
 #include "app.hrc"
 #include "glob.hrc"
 #include "res_bmp.hrc"
 #include "PresentationViewShell.hxx"
-
 #include "misc.hxx"
 #include "Outliner.hxx"
 #include "drawdoc.hxx"
@@ -1424,125 +1420,110 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         for(sal_uInt32 i(0); i < aSelection.size() && !bFoundAny; i++)
         {
             SdrObject* pObj = aSelection[i];
-            const sal_uInt16 nId(pObj->GetObjIdentifier());
-            const sal_uInt32 nInv(pObj->GetObjInventor());
 
-            if(nInv == SdrInventor)
+            if(pObj)
             {
-                // 2D objects
-                switch( nId )
+                if(dynamic_cast< SdrPathObj* >(pObj) || dynamic_cast< SdrCircObj* >(pObj) || dynamic_cast< SdrEdgeObj* >(pObj))
                 {
-                    case OBJ_POLY:
+                    // OBJ_POLY, OBJ_CIRC and OBJ_EDGE; decision depends on closed or not (fill possible)
+                    if(pObj->IsClosedObj())
                     {
-                        SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(pObj);
-
-                        if(pSdrPathObj)
-                        {
-                            switch(pSdrPathObj->getSdrPathObjType())
-                            {
-                                case PathType_Line:
-                                case PathType_OpenPolygon:
-                                case PathType_OpenBezier:
-                                {
-                                    bFoundObjNoArea = true;
-                                    bFoundNoGraphicObj = true;
-                                    break;
-                                }
-                                default:
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            OSL_ENSURE(false, "OOps, SdrObjKind and dynamic_cast do not fit (!)");
-                        }
-                        break;
-                    }
-                    case OBJ_CIRC:
-                    {
-                        SdrCircObj* pSdrCircObj = dynamic_cast< SdrCircObj* >(pObj);
-
-                        if(pSdrCircObj)
-                        {
-                            if(CircleType_Arc == pSdrCircObj->GetSdrCircleObjType())
-                            {
-                                bFoundObjNoArea = true;
-                                bFoundNoGraphicObj = true;
-                            }
-                        }
-                        else
-                        {
-                            OSL_ENSURE(false, "OOps, SdrObjKind and dynamic_cast do not fit (!)");
-                        }
-                        break;
-                    }
-                    case OBJ_EDGE:
-                        bFoundObjNoArea      = true;
+                        bFoundObjNoArea = true;
                         bFoundNoGraphicObj = true;
-                        break;
-                    case OBJ_OLE2 :
-                        // #i118485# #i118525# Allow Line, Area and Graphic (Metafile, Bitmap)
-                        bSingleGraphicSelected = (1 == aSelection.size());
-                        bFoundBitmap = true;
-                        bFoundMetafile = true;
-                        break;
-                    case OBJ_GRAF :
+                    }
+                    else
                     {
-                        bSingleGraphicSelected = (1 == aSelection.size());
-                        const SdrGrafObj* pSdrGrafObj = static_cast< const SdrGrafObj* >(pObj);
-                        switch(pSdrGrafObj->GetGraphicType())
-                        {
-                            case GRAPHIC_BITMAP :
-                                bFoundBitmap = true;
-                                if(pSdrGrafObj->isEmbeddedSvg())
-                                {
-                                    bFoundMetafile = true;
-                                }
-                                break;
-                            case GRAPHIC_GDIMETAFILE :
-                                bFoundMetafile = true;
-                                break;
-                            default:
-                                break;
-                        }
-
+                        bFoundAny = true;
                         break;
                     }
-                    case OBJ_TABLE:
-                        bFoundTable = true;
-                        break;
-                    default :
-                        bFoundAny = true;
+                }
+                else if(dynamic_cast< SdrOle2Obj* >(pObj))
+                {
+                    // OBJ_OLE2 #i118485# #i118525# Allow Line, Area and Graphic (Metafile, Bitmap)
+                    bSingleGraphicSelected = (1 == aSelection.size());
+                    bFoundBitmap = true;
+                    bFoundMetafile = true;
+                }
+                else if(dynamic_cast< SdrGrafObj* >(pObj))
+                {
+                    // OBJ_GRAF
+                    bSingleGraphicSelected = (1 == aSelection.size());
+
+                    switch(static_cast< const SdrGrafObj* >(pObj)->GetGraphicType())
+                    {
+                        case GRAPHIC_BITMAP:
+                        {
+                            bFoundBitmap = true;
+
+                            if(static_cast< const SdrGrafObj* >(pObj)->isEmbeddedSvg())
+                            {
+                                bFoundMetafile = true;
+                            }
+                            break;
+                        }
+                        case GRAPHIC_GDIMETAFILE:
+                        {
+                            bFoundMetafile = true;
+                            break;
+                        }
+                        default:
+                        {
+                            break;
+                        }
+                    }
+                }
+                else if(dynamic_cast< sdr::table::SdrTableObj* >(pObj))
+                {
+                    // OBJ_TABLE
+                    bFoundTable = true;
+                }
+                else
+                {
+                    // everything else (including 3D objects)
+                    bFoundAny = true;
                 }
             }
-            else if(nInv == E3dInventor)
+            else
             {
-                // 3D objects
-                bFoundAny = true;
+                OSL_ENSURE(false, "SdrObject selection with empty SdrObjects is not allowed (!)");
             }
         }
 
-        if( bFoundTable )
-            rSet.DisableItem( SID_ATTRIBUTES_LINE );
+        if(bFoundTable)
+        {
+            rSet.DisableItem(SID_ATTRIBUTES_LINE);
+        }
 
-        if (!bFoundAny)
+        if(!bFoundAny)
         {
             // Disable menuitem for area-dialog
-            if( bFoundObjNoArea ) // #i25616#
-                rSet.DisableItem( SID_ATTRIBUTES_AREA );
+            if(bFoundObjNoArea)
+            {
+                // #i25616#
+                rSet.DisableItem(SID_ATTRIBUTES_AREA);
+            }
 
             // Disable menuitem for line-dialog
-            if( bFoundObjNoLine )
-                rSet.DisableItem( SID_ATTRIBUTES_LINE );
-
-            if( bFoundBitmap && !bFoundMetafile && !bFoundNoGraphicObj )    // only Bitmaps marked
-                rSet.DisableItem( SID_CONVERT_TO_BITMAP );
-            else if( !bFoundBitmap && bFoundMetafile && !bFoundNoGraphicObj )   // only Metafiles marked
-                rSet.DisableItem( SID_CONVERT_TO_METAFILE );
-            else if( !bFoundBitmap && !bFoundMetafile && !bFoundNoGraphicObj )  // nothing to do
+            if(bFoundObjNoLine)
             {
-                rSet.DisableItem( SID_CONVERT_TO_BITMAP );
-                rSet.DisableItem( SID_CONVERT_TO_METAFILE );
+                rSet.DisableItem(SID_ATTRIBUTES_LINE);
+            }
+
+            if(bFoundBitmap && !bFoundMetafile && !bFoundNoGraphicObj)
+            {
+                // only Bitmaps marked
+                rSet.DisableItem(SID_CONVERT_TO_BITMAP);
+            }
+            else if(!bFoundBitmap && bFoundMetafile && !bFoundNoGraphicObj)
+            {
+                // only Metafiles marked
+                rSet.DisableItem(SID_CONVERT_TO_METAFILE);
+            }
+            else if(!bFoundBitmap && !bFoundMetafile && !bFoundNoGraphicObj)
+            {
+                // nothing to do
+                rSet.DisableItem(SID_CONVERT_TO_BITMAP);
+                rSet.DisableItem(SID_CONVERT_TO_METAFILE);
             }
         }
     }

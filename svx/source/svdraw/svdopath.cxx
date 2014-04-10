@@ -1637,7 +1637,7 @@ void SdrPathObj::impSetPathPolyPolygonWithTransformationAdaption(const basegfx::
     // the SdrPathObj has two basic states, line and other. Line is for two points
     // and no bezier, it uses a specialized geometry (unified line from 0.0, to 1.0)
     // and a specialized transformation which shows the rotation of the line what is
-    // wanted.
+    // wanted. Shear is not preserved due to lines having no shear.
     // When a third point is added that mode is left and the regular one entered, in
     // this conversion when using the code below keeping the rotation of the former
     // line object. This is not wrong and works as intended, but is irritating for the
@@ -1750,6 +1750,9 @@ void SdrPathObj::impSetPathPolyPolygonWithTransformationAdaption(const basegfx::
     else
     {
         // use translate and scale straightforward from new geometry
+        // when either no mirror, scale and shear or object was a line
+        // before and reset is wanted (see explanation for
+        // bResetCoordinateSystemAfterWasLine above)
         maSdrObjectTransformation.setB2DHomMatrix(
             basegfx::tools::createScaleTranslateB2DHomMatrix(
                 aRangeNewGeometry.getRange(),
@@ -2726,11 +2729,26 @@ void SdrPathObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransf
         if(isLine())
         {
             // apply new transformation to (0,0) and (1,0) to create the polygon data
+            // and set as new geometry
+            const basegfx::B2DPoint aPointA(rTransformation * basegfx::B2DPoint(0.0, 0.0));
+            const basegfx::B2DPoint aPointB(rTransformation * basegfx::B2DPoint(1.0, 0.0));
             basegfx::B2DPolygon aLine;
 
-            aLine.append(rTransformation * basegfx::B2DPoint(0.0, 0.0));
-            aLine.append(rTransformation * basegfx::B2DPoint(1.0, 0.0));
+            aLine.append(aPointA);
+            aLine.append(aPointB);
             maPathPolyPolygon = basegfx::B2DPolyPolygon(aLine);
+
+            // the geometry is a non-curved line, create unit transformation so that (0,0) is
+            // 1st point and (1,0) is 2nd point and call the parent method with the new
+            // transformation. This is needed to trigger all the refresh stuff
+            const basegfx::B2DVector aDelta(aPointB - aPointA);
+
+            // call parent with new, adapted transformation
+            SdrTextObj::setSdrObjectTransformation(
+                basegfx::tools::createScaleRotateTranslateB2DHomMatrix(
+                    basegfx::B2DTuple(aDelta.getLength(), 1.0),
+                    atan2(aDelta.getY(), aDelta.getX()),
+                    aPointA));
         }
         else
         {
@@ -2740,14 +2758,18 @@ void SdrPathObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransf
                 // take out old and apply new transformation
                 basegfx::B2DHomMatrix aCombined(maSdrObjectTransformation.getB2DHomMatrix());
 
+                // apply minimal scaling before inverting to secure inversion and
+                // to handle cases where polygons have no width and/or height, but are not a line
+                aCombined = basegfx::tools::guaranteeMinimalScaling(aCombined);
+
                 aCombined.invert();
                 aCombined = rTransformation * aCombined;
                 maPathPolyPolygon.transform(aCombined);
             }
-        }
 
-        // call parent
-        SdrTextObj::setSdrObjectTransformation(rTransformation);
+            // call parent
+            SdrTextObj::setSdrObjectTransformation(rTransformation);
+        }
     }
 }
 

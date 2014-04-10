@@ -1390,6 +1390,8 @@ SdXMLPolygonShapeContext::~SdXMLPolygonShapeContext()
 void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // Add, set Style and properties from base shape
+    // The type is no longer relevant for having a closed or open shape; instead use an opened or
+    // closed polygon (see below)
     if(mbClosed)
         AddShape("com.sun.star.drawing.PolyPolygonShape");
     else
@@ -1423,6 +1425,13 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 {
                     if(aPolygon.count())
                     {
+                        // dependent from the ObjectType in the ODF file set the closed state
+                        // of the Polygon. That state is not part of the draw:points definition
+                        // which was imported in importFromSvgPoints, but depends on the object type
+                        // imported (e.g. draw:polyline or draw:polygon) which is reflected in the
+                        // member variable mbClosed
+                        aPolygon.setClosed(mbClosed);
+
                         const basegfx::B2DRange aSourceRange(
                             aViewBox.GetX(), aViewBox.GetY(),
                             aViewBox.GetX() + aViewBox.GetWidth(), aViewBox.GetY() + aViewBox.GetHeight());

@@ -285,14 +285,21 @@ namespace sdr
             return Point(basegfx::fround(rAnchor.getX()), basegfx::fround(rAnchor.getY()));
         }
 
+        long convertRotateAngleNewToLegacy(double fNew)
+        {
+            return basegfx::fround(basegfx::snapToZeroRange(-fNew / F_PI18000, 36000.0));
+        }
+
+        double convertRotateAngleLegacyToNew(long nOld)
+        {
+            return basegfx::snapToZeroRange(static_cast< double >(nOld) * -F_PI18000, F_2PI);
+        }
+
         long GetRotateAngle(const SdrObject& rObject)
         {
             if(rObject.isRotated())
             {
-                const double fRotate(rObject.getSdrObjectRotate());
-                const double fSnapped(basegfx::snapToZeroRange(-fRotate / F_PI18000, 36000.0));
-
-                return basegfx::fround(fSnapped);
+                return convertRotateAngleNewToLegacy(rObject.getSdrObjectRotate());
             }
             else
             {
@@ -300,24 +307,21 @@ namespace sdr
             }
         }
 
+        long convertShearAngleXNewToLegacy(double fNew)
+        {
+            return basegfx::fround(basegfx::snapToRange(-fNew / F_PI18000, -18000.0, 18000.0));
+        }
+
+        double convertShearAngleXLegacyToNew(long nOld)
+        {
+            return basegfx::snapToRange(static_cast< double >(nOld) * -F_PI18000, -F_PI, F_PI);
+        }
+
         long GetShearAngleX(const SdrObject& rObject)
         {
             if(rObject.isSheared())
             {
-                const double fShearX(rObject.getSdrObjectShearX());
-                long nRetval(basegfx::fround(-atan(fShearX) / F_PI18000));
-
-                while(nRetval < -18000)
-                {
-                    nRetval += 36000;
-                }
-
-                while(nRetval >= 18000)
-                {
-                    nRetval -= 36000;
-                }
-
-                return nRetval;
+                return convertShearAngleXNewToLegacy(rObject.getSdrObjectShearX());
             }
             else
             {

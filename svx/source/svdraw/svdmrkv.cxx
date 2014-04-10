@@ -530,9 +530,40 @@ void SdrMarkView::BrkMarkGluePoints()
 
 bool SdrMarkView::HasMarkableObj() const
 {
-    const sal_uInt32 nCount(GetMarkableObjCount());
+    SdrPageView* pPV = GetSdrPageView();
 
-    return (0 != nCount);
+    if(pPV)
+    {
+        SdrObjList* pOL = pPV->GetCurrentObjectList();
+
+        if(pOL)
+        {
+            SdrObjectVector aObjects(pOL->getSdrObjectVector());
+
+            for(sal_uInt32 a(0); a < aObjects.size(); a++)
+            {
+                SdrObject* pCandidate = aObjects[a];
+
+                if(pCandidate)
+                {
+                    if(IsObjMarkable(*pCandidate))
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    OSL_ENSURE(false, "SdrObjectVector with empty entries (!)");
+                }
+            }
+        }
+        else
+        {
+            OSL_ENSURE(false, "Unexpected missing SdrObjList (!)");
+        }
+    }
+
+    return false;
 }
 
 sal_uInt32 SdrMarkView::GetMarkableObjCount() const
@@ -543,16 +574,31 @@ sal_uInt32 SdrMarkView::GetMarkableObjCount() const
     if(pPV)
     {
         SdrObjList* pOL = pPV->GetCurrentObjectList();
-        sal_uInt32 nObjAnz = pOL->GetObjCount();
 
-        for(sal_uInt32 nObjNum(0); nObjNum < nObjAnz && !nCount; nObjNum++)
+        if(pOL)
         {
-            SdrObject* pObj=pOL->GetObj(nObjNum);
+            SdrObjectVector aObjects(pOL->getSdrObjectVector());
 
-            if(IsObjMarkable(*pObj))
+            for(sal_uInt32 a(0); a < aObjects.size(); a++)
             {
-                nCount++;
+                SdrObject* pCandidate = aObjects[a];
+
+                if(pCandidate)
+                {
+                    if(IsObjMarkable(*pCandidate))
+                    {
+                        nCount++;
+                    }
+                }
+                else
+                {
+                    OSL_ENSURE(false, "SdrObjectVector with empty entries (!)");
+                }
             }
+        }
+        else
+        {
+            OSL_ENSURE(false, "Unexpected missing SdrObjList (!)");
         }
     }
 
