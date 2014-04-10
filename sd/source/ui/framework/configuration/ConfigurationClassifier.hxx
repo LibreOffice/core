@@ -110,7 +110,7 @@ private:
     */
     ResourceIdVector maC1andC2;
 
-    /** Put all the elements in the two gven sequences of resource ids and
+    /** Put all the elements in the two given sequences of resource ids and
         copy them into one of the resource id result vectors maC1minusC2,
         maC2minusC1, and maC1andC2.  This is done by using only the resource
         URLs for classification.  Therefor this method calls itself
