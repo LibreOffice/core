@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <GL/glew.h>
+#include <GL3DBarChart.hxx>
 
-#include "3DBarChart.hxx"
+#include <GL/glew.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -18,17 +18,17 @@
 
 namespace chart {
 
-Bar3DChart::Bar3DChart(const std::vector<VDataSeries*>& rDataSeries):
+GL3DBarChart::GL3DBarChart(const std::vector<VDataSeries*>& rDataSeries):
     maDataSeries(rDataSeries),
     mxContext(new opengl3D::temporary::TemporaryContext())
 {
 }
 
-Bar3DChart::~Bar3DChart()
+GL3DBarChart::~GL3DBarChart()
 {
 }
 
-void Bar3DChart::create3DShapes()
+void GL3DBarChart::create3DShapes()
 {
     const float nBarSizeX = 10;
     const float nBarSizeY = 10;
@@ -61,7 +61,7 @@ void Bar3DChart::create3DShapes()
     }
 }
 
-void Bar3DChart::render()
+void GL3DBarChart::render()
 {
     mxContext->init();
     for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = maShapes.begin(),

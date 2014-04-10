@@ -86,7 +86,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/axes/VPolarCoordinateSystem \
     chart2/source/view/axes/VPolarGrid \
     chart2/source/view/axes/VPolarRadiusAxis \
-    chart2/source/view/charttypes/3DBarChart \
+    chart2/source/view/charttypes/GL3DBarChart \
     chart2/source/view/charttypes/AreaChart \
     chart2/source/view/charttypes/BarChart \
     chart2/source/view/charttypes/BarPositionHelper \

@@ -48,7 +48,7 @@
 #include "DateHelper.hxx"
 #include "defines.hxx"
 #include <unonames.hxx>
-#include "3DBarChart.hxx"
+#include <GL3DBarChart.hxx>
 
 #include <rtl/uuid.h>
 #include <comphelper/scopeguard.hxx>
@@ -3149,7 +3149,7 @@ void ChartView::createShapes3D()
         }
     }
 
-    Bar3DChart aBarChart(aDataSeries);
+    GL3DBarChart aBarChart(aDataSeries);
     aBarChart.create3DShapes();
     aBarChart.render();
 }

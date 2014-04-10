@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef CHART2_GL3DBARCHART_HXX
+#define CHART2_GL3DBARCHART_HXX
+
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "VDataSeries.hxx"
@@ -25,11 +28,11 @@ class TemporaryContext;
 
 } }
 
-class Bar3DChart
+class GL3DBarChart
 {
 public:
-    Bar3DChart(const std::vector<VDataSeries*>& rDataSeries);
-    ~Bar3DChart();
+    GL3DBarChart(const std::vector<VDataSeries*>& rDataSeries);
+    ~GL3DBarChart();
 
     void create3DShapes();
 
@@ -44,5 +47,7 @@ private:
 };
 
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
