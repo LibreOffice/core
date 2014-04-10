@@ -615,12 +615,15 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
 {
     DIBV5Header aHeader;
     const sal_uLong nStmPos = rIStm.Tell();
-    bool bRet(false);
-    bool bTopDown(false);
+    bool bRet( false );
+    bool bTopDown( false );
 
-    if(ImplReadDIBInfoHeader(rIStm, aHeader, bTopDown) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount)
+    if ( ImplReadDIBInfoHeader( rIStm, aHeader, bTopDown )
+         && aHeader.nWidth != 0
+         && aHeader.nHeight != 0
+         && aHeader.nBitCount != 0 )
     {
-        if (aHeader.nSize > nOffset)
+        if ( nOffset > 0 && aHeader.nSize > nOffset )
         {
             // Header size claims to extend into the image data.
             // Looks like an error.
