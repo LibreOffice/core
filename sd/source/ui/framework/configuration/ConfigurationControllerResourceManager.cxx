@@ -76,7 +76,7 @@ void ConfigurationControllerResourceManager::ActivateResources (
     ::osl::MutexGuard aGuard (maMutex);
     // Iterate in normal order over the resources that are to be
     // activated so that resources on which others depend are activated
-    // beforet the depending resources are activated.
+    // before the depending resources are activated.
     ::std::for_each(
         rResources.begin(),
         rResources.end(),
