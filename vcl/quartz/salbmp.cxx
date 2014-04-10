@@ -46,6 +46,38 @@ static const unsigned long k32BitRedColorMask   = 0x00ff0000;
 static const unsigned long k32BitGreenColorMask = 0x0000ff00;
 static const unsigned long k32BitBlueColorMask  = 0x000000ff;
 
+#if defined IOS && defined DBG_UTIL
+
+#include <MobileCoreServices/UTCoreTypes.h>
+#include <ImageIO/ImageIO.h>
+
+static void writeImageToFile(CGImageRef image, const char *baseName)
+{
+    static int counter = 0;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *path = [NSString stringWithFormat:@"%@/%s.%d.png", documentsDirectory, baseName, counter++];
+    CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:path];
+    CGImageDestinationRef destination = CGImageDestinationCreateWithURL(url, kUTTypePNG, 1, NULL);
+    CGImageDestinationAddImage(destination, image, nil);
+
+    if (!CGImageDestinationFinalize(destination)) {
+        NSLog(@"Failed to write image to %@", path);
+    } else {
+        SAL_DEBUG("--- saved image " << baseName << " to " << [path UTF8String]);
+    }
+
+    CFRelease(destination);
+}
+
+#define DBG_WRITE_IMAGE(image, name) writeImageToFile(image, name)
+
+#else
+
+#define DBG_WRITE_IMAGE(image, name) /* empty */
+
+#endif
+
 static bool isValidBitCount( sal_uInt16 nBitCount )
 {
     return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
@@ -753,6 +785,7 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
 
     // CGImageCreateWithMask() only likes masks or greyscale images => convert if needed
     // TODO: isolate in an extra method?
+    DBG_WRITE_IMAGE(xMask, "xMask");
     if( !CGImageIsMask(xMask) || rMask.GetBitCount() != 8)//(CGImageGetColorSpace(xMask) != GetSalData()->mxGraySpace) )
     {
         const CGRect xImageRect=CGRectMake( 0, 0, nWidth, nHeight );//the rect has no offset
@@ -763,7 +796,7 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
         void* pMaskMem = rtl_allocateMemory( nMaskBytesPerRow * nHeight );
         CGContextRef xMaskContext = CGBitmapContextCreate( pMaskMem,
             nWidth, nHeight, 8, nMaskBytesPerRow, GetSalData()->mxGraySpace, kCGImageAlphaNone );
-        CG_TRACE( "CGBitmapContextCreate(" << nWidth << "x" << nHeight << "x8) = " << xMaskContext );
+        CG_TRACE( "CGBitmapContextCreate(" << nWidth << "x" << nHeight << "x8," << nMaskBytesPerRow << ") = " << xMaskContext );
         CG_TRACE( "CGContextDrawImage(" << xMaskContext << "," << xImageRect << "," << xMask << ")" );
         CGContextDrawImage( xMaskContext, xImageRect, xMask );
         CG_TRACE( "CFRelease(" << xMask << ")" );
@@ -773,6 +806,7 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
         static const CGFloat* pDecode = NULL;
         xMask = CGImageMaskCreate( nWidth, nHeight, 8, 8, nMaskBytesPerRow, xDataProvider, pDecode, false );
         CG_TRACE( "CGImageMaskCreate(" << nWidth << "," << nHeight << ",8,8) = " << xMask );
+        DBG_WRITE_IMAGE(xMask, "xMask.new");
         CFRelease( xDataProvider );
         CG_TRACE( "CFRelease(" << xMaskContext << ")" );
         CFRelease( xMaskContext );
@@ -784,6 +818,8 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
     // combine image and alpha mask
     CGImageRef xMaskedImage = CGImageCreateWithMask( xImage, xMask );
     CG_TRACE( "CGImageCreateWithMask(" << xImage << "," << xMask << ") = " << xMaskedImage );
+    DBG_WRITE_IMAGE(xImage, "xImage");
+    DBG_WRITE_IMAGE(xMaskedImage, "xMaskedImage");
     CG_TRACE( "CFRelease(" << xMask << ")" );
     CFRelease( xMask );
     CG_TRACE( "CFRelease(" << xImage << ")" );
