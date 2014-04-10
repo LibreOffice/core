@@ -958,7 +958,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
-        SAL_CALL AccessibleDocumentViewBase::get_AccFlowTo(const ::com::sun::star::uno::Any&, sal_Int32 )
+        SAL_CALL AccessibleDocumentViewBase::getAccFlowTo(const ::com::sun::star::uno::Any&, sal_Int32 )
         throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ::com::sun::star::uno::Sequence< uno::Any> aRet;

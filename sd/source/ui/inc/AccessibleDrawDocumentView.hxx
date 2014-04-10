@@ -188,7 +188,7 @@ protected:
 
     //=====  XAccessibleGetAccFromXShape  ============================================
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
-        SAL_CALL get_AccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
+        SAL_CALL getAccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
         throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         GetSelAccContextInTable();
