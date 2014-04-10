@@ -32,6 +32,8 @@ LIBATOMIC_OPS_MD5SUM := c0b86562d5aa40761a87134f83e6adcf
 export LIBATOMIC_OPS_TARBALL := libatomic_ops-7_2d.zip
 LIBEOT_MD5SUM := aa24f5dd2a2992f4a116aa72af817548
 export LIBEOT_TARBALL := libeot-0.01.tar.bz2
+LANGTAGREG_MD5SUM := 504af523f5d1a5590bbeb6a4b55e8a97
+export LANGTAGREG_TARBALL := language-subtag-registry-2014-03-27.tar.bz2
 SERF_MD5SUM := 4f8e76c9c6567aee1d66aba49f76a58b
 export SERF_TARBALL := serf-1.2.1.tar.bz2
 
