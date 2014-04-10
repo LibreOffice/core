@@ -572,7 +572,7 @@ public:
 
     sd::UndoManager* GetUndoManager() const;
 
-    /** converts the given western font height to a corresponding ctl font height, deppending on the system language */
+    /** converts the given western font height to a corresponding ctl font height, depending on the system language */
     static sal_uInt32 convertFontHeightToCTL( sal_uInt32 nWesternFontHeight );
 
     /** Get the style sheet pool if it was a SdStyleSheetPool.

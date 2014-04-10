@@ -1311,7 +1311,7 @@ void SdDrawDocument::getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rC
     rCTLFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CTL ), DEFAULTFONT_FLAGS_ONLYONE ) ;
 }
 
-/* converts the given western font height to a corresponding ctl font height, deppending on the system language */
+/* converts the given western font height to a corresponding ctl font height, depending on the system language */
 sal_uInt32 SdDrawDocument::convertFontHeightToCTL( sal_uInt32 nWesternFontHeight )
 {
     LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
