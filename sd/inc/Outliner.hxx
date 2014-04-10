@@ -123,7 +123,7 @@ public:
     void PrepareSpelling (void);
 
     /** Initialize a spell check but do not start it yet.  This method
-        is a better candiate for the name PrepareSpelling.
+        is a better candidate for the name PrepareSpelling.
     */
     void StartSpelling (void);
 

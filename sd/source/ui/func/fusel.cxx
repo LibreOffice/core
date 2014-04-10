@@ -761,7 +761,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             }
             else if (pWaterCanCandidate != NULL)
             {
-                // Is the candiate object still under the mouse?
+                // Is the candidate object still under the mouse?
                 if (pickObject (aPnt) == pWaterCanCandidate)
                 {
                     SdStyleSheetPool* pPool = static_cast<SdStyleSheetPool*>(
