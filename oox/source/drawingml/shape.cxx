@@ -408,8 +408,8 @@ Reference< XShape > Shape::createAndInsert(
     {
         aServiceName = finalizeServiceName( rFilterBase, rServiceName, aShapeRectHmm );
     }
-    sal_Bool bIsCustomShape = ( aServiceName == "com.sun.star.drawing.CustomShape" ||
-                                aServiceName == "com.sun.star.drawing.ConnectorShape" );
+    bool bIsCustomShape = ( aServiceName == "com.sun.star.drawing.CustomShape" ||
+                            aServiceName == "com.sun.star.drawing.ConnectorShape" );
 
     basegfx::B2DHomMatrix aTransformation;
 
