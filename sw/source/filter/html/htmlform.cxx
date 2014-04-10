@@ -717,19 +717,19 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     OSL_ENSURE( pSwShape, "Wo ist das SW-Shape?" );
 
     // es muss ein Draw-Format sein
-    SwFrmFmt *pFrmFmt = pSwShape->GetFrmFmt();
-    OSL_ENSURE( RES_DRAWFRMFMT == pFrmFmt->Which(), "Kein DrawFrmFmt" );
+    SwFrmFmt *pFrmFmt = pSwShape ? pSwShape->GetFrmFmt() : NULL ;
+    OSL_ENSURE( pFrmFmt && RES_DRAWFRMFMT == pFrmFmt->Which(), "Kein DrawFrmFmt" );
 
     // Schauen, ob es ein SdrObject dafuer gibt
-    const SdrObject *pObj = pFrmFmt->FindSdrObject();
+    const SdrObject *pObj = pFrmFmt ? pFrmFmt->FindSdrObject() : NULL;
     OSL_ENSURE( pObj, "SdrObject nicht gefunden" );
-    OSL_ENSURE( FmFormInventor == pObj->GetObjInventor(), "falscher Inventor" );
+    OSL_ENSURE( pObj && FmFormInventor == pObj->GetObjInventor(), "falscher Inventor" );
 
     const SdrView* pDrawView = pVSh ? pVSh->GetDrawView() : 0;
 
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
     uno::Reference< awt::XControl > xControl;
-    if ( pDrawView && pVSh->GetWin() )
+    if ( pDrawView && pVSh->GetWin() && pFormObj )
         xControl = pFormObj->GetUnoControl( *pDrawView, *pVSh->GetWin() );
 
     awt::Size aSz( rShape->getSize() );
