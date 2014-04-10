@@ -11,6 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,langtag))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,langtag,$(LIBLANGTAG_TARBALL),,liblangtag))
 
+$(eval $(call gb_UnpackedTarball_set_pre_action,langtag,\
+	$(GNUTAR) -x -j -f $(gb_UnpackedTarget_TARFILE_LOCATION)/$(LANGTAGREG_TARBALL) \
+))
+
 $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 	external/liblangtag/liblangtag-0.5.1-msvc-warning.patch \
 	external/liblangtag/liblangtag-0.5.1-vsnprintf.patch \
