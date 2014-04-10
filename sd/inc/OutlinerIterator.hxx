@@ -176,7 +176,7 @@ private:
 class OutlinerContainer
 {
 public:
-    /** Create a new wraper object for the given outliner.
+    /** Create a new wrapper object for the given outliner.
         @param pOutliner
             The outliner that is represented by the new object as
             <type>SdrObject</type> container.
