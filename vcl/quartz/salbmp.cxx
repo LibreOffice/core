@@ -53,6 +53,9 @@ static const unsigned long k32BitBlueColorMask  = 0x000000ff;
 
 static void writeImageToFile(CGImageRef image, const char *baseName)
 {
+    static bool bDoIt = getenv("DBG_WRITE_CGIMAGES");
+    if (!bDoIt)
+        return;
     static int counter = 0;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
