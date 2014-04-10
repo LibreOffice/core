@@ -637,7 +637,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
     pEffect->setBegin( this->GetDelayTimeInSeconds() );
 
     // some effects need a different duration than that of the mapped preset effect
-    double fDurationInSeconds = 1.0;//in secunden
+    double fDurationInSeconds = 1.0; //in seconds
     if( this->GetSpecialDuration( fDurationInSeconds ) )
         pEffect->setDuration( fDurationInSeconds );
 
