@@ -61,7 +61,7 @@ public:
 
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) SAL_OVERRIDE;
 
-    /** is called when the currenct function should be aborted. <p>
+    /** is called when the current function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
         be called directly.
 

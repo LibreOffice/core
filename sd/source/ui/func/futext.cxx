@@ -1346,7 +1346,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
 
 
 
-/** is called when the currenct function should be aborted. <p>
+/** is called when the current function should be aborted. <p>
     This is used when a function gets a KEY_ESCAPE but can also
     be called directly.
 
