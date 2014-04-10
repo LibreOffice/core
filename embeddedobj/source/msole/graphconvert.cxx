@@ -54,7 +54,7 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         sal_uInt16 nRetFormat = 0;
         if (rFilter.CanImportGraphic(OUString(), aMemoryStream, GRFILTER_FORMAT_DONTKNOW, &nRetFormat) == GRFILTER_OK &&
-                rFilter.GetImportFormatMediaType(nRetFormat) == aMimeType)
+                rFilter.GetImportFormatMediaType(nRetFormat) == String(aMimeType))
         {
             aResult <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemoryStream.GetData() ), aMemoryStream.Seek( STREAM_SEEK_TO_END ) );
             return sal_True;
