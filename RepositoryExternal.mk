@@ -3134,6 +3134,22 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 )
 endef
 
+define gb_LinkTarget__use_collada2gltf
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,collada2gltf) \
+	-I$(call gb_UnpackedTarball_get_dir,collada2gltf)/assetModifiers \
+	-I$(call gb_UnpackedTarball_get_dir,collada2gltf)/GLTF \
+	-I$(call gb_UnpackedTarball_get_dir,collada2gltf)/helpers \
+	-I$(call gb_UnpackedTarball_get_dir,collada2gltf)/JSON \
+	-I$(call gb_UnpackedTarball_get_dir,collada2gltf)/dependencies/json/include/rapidjson/ \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	collada2gltf \
+)
+endef
+
 endif
 
 ### Jars ############################################################

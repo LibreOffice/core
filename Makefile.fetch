@@ -80,6 +80,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,APR,APR_UTIL_TARBALL) \
 		$(call fetch_Optional,CDR,CDR_TARBALL) \
 		$(call fetch_Optional,COINMP,COINMP_TARBALL) \
+		$(call fetch_Optional,LIBGLTF,COLLADA2GLTF_TARBALL) \
 		$(call fetch_Optional,EBOOK,EBOOK_TARBALL) \
 		$(call fetch_Optional,FREEHAND,FREEHAND_TARBALL) \
 		$(call fetch_Optional,ETONYEK,ETONYEK_TARBALL) \
