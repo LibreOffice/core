@@ -61,7 +61,7 @@ sal_Int32 BufferedStreamSocket::write( const void* pBuffer, sal_uInt32 n )
 
 void BufferedStreamSocket::close()
 {
-    if( usingCSocket )
+    if( usingCSocket && mSocket != -1 )
     {
 #ifdef WIN32
         ::closesocket( mSocket );
