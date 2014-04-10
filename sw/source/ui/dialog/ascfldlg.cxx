@@ -365,7 +365,7 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
     }
     else
     {
-        // restore old user choise (not the automatic!)
+        // restore old user choice (not the automatic!)
         m_pCRLF_RB->Check( m_pCRLF_RB->GetSavedValue() );
         m_pCR_RB->Check( m_pCR_RB->GetSavedValue() );
         m_pLF_RB->Check( m_pLF_RB->GetSavedValue() );

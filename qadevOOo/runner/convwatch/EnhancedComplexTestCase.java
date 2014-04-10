@@ -89,7 +89,7 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
             String sNEEDCHECK = (String)param.get( PropertyName.CHECK_NEED_TOOLS );
 // TODO: I need to get the boolean value with get("name") because, if it is not given getBool() returns
 //       with a default of 'false' which is not very helpful if the default should be 'true'
-//       maybe a getBoolean("name", true) could be a better choise.
+//       maybe a getBoolean("name", true) could be a better choice.
             if (sNEEDCHECK == null)
             {
                 sNEEDCHECK = "false";

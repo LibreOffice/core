@@ -157,7 +157,7 @@ public class ParameterHelper
             String sRECURSIVE = (String)getTestParameters().get( PropertyName.DOC_COMPARATOR_INCLUDE_SUBDIRS );
 // TODO: I need to get the boolean value with get("name") because, if it is not given getBool() returns
 //       with a default of 'false' which is not very helpful if the default should be 'true'
-//       maybe a getBoolean("name", true) could be a better choise.
+//       maybe a getBoolean("name", true) could be a better choice.
             if (sRECURSIVE == null)
             {
                 sRECURSIVE = "true";

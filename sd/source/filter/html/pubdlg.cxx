@@ -950,7 +950,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
     return 0;
 }
 
-// Clickhandler for the choise of one design
+// Clickhandler for the choice of one design
 IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl)
 {
     sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
