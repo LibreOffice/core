@@ -2140,9 +2140,9 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
 
 #ifndef IOS
     mbWindow    = false;
+#endif
     mbPrinter   = false;
     mbVirDev    = true;
-#endif
 
 #ifdef IOS
     (void) nBitmapDepth;
