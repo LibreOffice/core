@@ -82,10 +82,10 @@ public:
 
     inline const DffRecordHeader& getHeader() const;
 
-    /** returns true if at least one atim with the given nRecType is found */
+    /** returns true if at least one atom with the given nRecType is found */
     inline bool hasChildAtom( sal_uInt16 nRecType ) const;
 
-    /** returns true if at least one atim with the given nRecType and nRecInstnace is found */
+    /** returns true if at least one atom with the given nRecType and nRecInstnace is found */
     inline bool hasChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstance ) const;
 
     /** returns the first child atom with nRecType or NULL */
