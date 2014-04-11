@@ -339,9 +339,12 @@ SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_Bool bFlg )
 }
 
 SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt )
-    : SwUndo( UNDO_SETNUMRULESTART ),
-    nIdx( rPos.nNode.GetIndex() ),
-    nOldStt( USHRT_MAX ), nNewStt( nStt ), bSetSttValue( sal_True )
+    : SwUndo(UNDO_SETNUMRULESTART)
+    , nIdx(rPos.nNode.GetIndex())
+    , nOldStt(USHRT_MAX)
+    , nNewStt(nStt)
+    , bSetSttValue(true)
+    , bFlag(false)
 {
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if ( pTxtNd )
