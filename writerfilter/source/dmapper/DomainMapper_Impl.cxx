@@ -1245,6 +1245,9 @@ void DomainMapper_Impl::appendTextContent(
     const uno::Sequence< beans::PropertyValue > xPropertyValues
     )
 {
+    SAL_WARN_IF(m_aTextAppendStack.empty(), "writerfilter.dmapper", "no text append stack");
+    if (m_aTextAppendStack.empty())
+        return;
     uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert( m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY );
     OSL_ENSURE( xTextAppendAndConvert.is(), "trying to append a text content without XTextAppendAndConvert" );
     if(xTextAppendAndConvert.is() && ! getTableManager( ).isIgnore())
@@ -1294,7 +1297,9 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pO
         // gives a better ( visually ) result
         xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
         // remove ( if valid ) associated shape ( used for graphic replacement )
-        m_aAnchoredStack.top( ).bToRemove = true;
+        SAL_WARN_IF(m_aAnchoredStack.empty(), "writerfilter.dmapper", "no anchor stack");
+        if (!m_aAnchoredStack.empty())
+            m_aAnchoredStack.top( ).bToRemove = true;
         RemoveLastParagraph();
         m_aTextAppendStack.pop();
 
