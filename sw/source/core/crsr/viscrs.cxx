@@ -291,7 +291,7 @@ void SwSelPaintRects::Show()
 
             if (xTargetOverlay.is())
             {
-                // get the system's hilight color
+                // get the system's highlight color
                 const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
                 const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
 
@@ -398,7 +398,7 @@ void SwSelPaintRects::HighlightInputFld()
 
             if (xTargetOverlay.is())
             {
-                // use system's hilight color with decreased luminance as highlight color
+                // use system's highlight color with decreased luminance as highlight color
                 const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
                 Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
                 aHighlight.DecreaseLuminance( 128 );

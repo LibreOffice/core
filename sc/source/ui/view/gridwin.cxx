@@ -5885,7 +5885,7 @@ void ScGridWindow::UpdateSelectionOverlay()
                 aRanges.push_back(aRB);
             }
 
-            // get the system's hilight color
+            // get the system's highlight color
             const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
             const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
 

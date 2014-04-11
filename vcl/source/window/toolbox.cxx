@@ -3545,7 +3545,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
     // only highlight when the focus is not inside a child window of a toolbox
     // eg, in a edit control
-    // and do not hilight when focus is in a different toolbox
+    // and do not highlight when focus is in a different toolbox
     bool bDrawHotSpot = true;
     Window *pWin = Application::GetFocusWindow();
     if( pWin && pWin->ImplGetWindowImpl()->mbToolBox && pWin != this )

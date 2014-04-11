@@ -163,7 +163,7 @@ namespace svt
             aSelectionRect.Bottom() -= ITEM_OUTER_SPACE / 2;
             i_rActualWindow.DrawSelectionBackground(
                 aSelectionRect,
-                ( bHovered || bFocused ) ? ( bActive ? 1 : 2 ) : 0 /* hilight */,
+                ( bHovered || bFocused ) ? ( bActive ? 1 : 2 ) : 0 /* highlight */,
                 bActive /* check */,
                 true /* border */,
                 false /* ext border only */,
