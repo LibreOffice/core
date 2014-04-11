@@ -1,0 +1,33 @@
+--- src/core/CLucene/index/DocumentsWriterThreadState.cpp
++++ src/core/CLucene/index/DocumentsWriterThreadState.cpp
+@@ -994,7 +994,7 @@
+   const TCHAR* tokenText = token->termBuffer();
+   const int32_t tokenTextLen = token->termLength();
+ 
+-  int32_t code = 0;
++  uint32_t code = 0;
+ 
+   // Compute hashcode
+   int32_t downto = tokenTextLen;
+@@ -1203,7 +1203,7 @@
+   const int32_t newMask = newSize-1;
+ 
+   ValueArray<Posting*> newHash(newSize);
+-  int32_t hashPos, code;
++  int32_t hashPos; uint32_t code;
+   const TCHAR* pos = NULL;
+   const TCHAR* start = NULL;
+   Posting* p0;
+--- src/core/CLucene/store/IndexInput.cpp
++++ src/core/CLucene/store/IndexInput.cpp
+@@ -41,8 +41,8 @@
+   }
+ 
+   int64_t IndexInput::readLong() {
+-    int64_t i = ((int64_t)readInt() << 32);
+-    return (i | ((int64_t)readInt() & 0xFFFFFFFFL));
++    uint64_t i = ((uint64_t)readInt() << 32);
++    return (i | ((uint64_t)readInt() & 0xFFFFFFFFL));
+   }
+ 
+   int64_t IndexInput::readVLong() {
