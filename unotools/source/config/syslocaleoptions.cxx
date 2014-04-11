@@ -410,7 +410,6 @@ void SvtSysLocaleOptions_Impl::SetUILocaleString( const OUString& rStr )
 
         // as we can't switch UILocale at runtime, we only store changes in the configuration
         MakeRealUILocale();
-        LanguageTag::setConfiguredSystemLanguage( m_aRealUILocale.getLanguageType() );
         SetModified();
         NotifyListeners( SYSLOCALEOPTIONS_HINT_UILOCALE );
     }
