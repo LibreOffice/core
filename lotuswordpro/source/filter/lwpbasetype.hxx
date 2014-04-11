@@ -75,7 +75,19 @@
 class LwpPanoseNumber
 {
 public:
-    LwpPanoseNumber(){}
+    LwpPanoseNumber()
+        : m_nFamilyType(0)
+        , m_nSerifStyle(0)
+        , m_nWeight(0)
+        , m_nProportion(0)
+        , m_nContrast(0)
+        , m_nStrokeVariation(0)
+        , m_nArmStyle(0)
+        , m_nLetterform(0)
+        , m_nMidline(0)
+        , m_nXHeight(0)
+    {
+    }
     ~LwpPanoseNumber(){}
 public:
     void Read(LwpObjectStream *pStrm);
