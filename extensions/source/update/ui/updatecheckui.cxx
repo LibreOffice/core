@@ -714,7 +714,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
             Point aWinPos = aIconRect.BottomCenter();
             mpBubbleWin->SetTipPosPixel( aWinPos );
             if ( mpBubbleWin->IsVisible() )
-                mpBubbleWin->Show();    // This will recalc the screen positon of the bubble
+                mpBubbleWin->Show();    // This will recalc the screen position of the bubble
         }
     }
 

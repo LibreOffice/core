@@ -1490,7 +1490,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _n
 
     DeactivateCell();
 
-    // remember the column id of the current positon
+    // remember the column id of the current position
     sal_uInt16 nColumnId = GetColumnId(_nColumnPosition);
     // put at the end of the list if to small or to big,
     if ((_nColumnPosition == BROWSER_INVALIDID) || (_nColumnPosition >= getFields().size()))   // append the field

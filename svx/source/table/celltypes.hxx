@@ -79,7 +79,7 @@ public:
     }
 
     /* iterates in the configured direction and returns true if rValue
-       now contains a valid positon in the range of this iterator */
+       now contains a valid position in the range of this iterator */
     bool next( T& rValue )
     {
         if( maIter == maEnd )

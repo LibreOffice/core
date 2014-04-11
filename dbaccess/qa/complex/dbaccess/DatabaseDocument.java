@@ -887,7 +887,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
                 for (int i = 0; i < _expectedEvents.length; ++i)
                 {
-                    assertEquals("wrong event at positon " + (i + 1) + " for '" + _context + "'",
+                    assertEquals("wrong event at position " + (i + 1) + " for '" + _context + "'",
                             _expectedEvents[i], _actualEvents.get(i));
                 }
             }

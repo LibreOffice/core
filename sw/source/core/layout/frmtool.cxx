@@ -642,7 +642,7 @@ SwFlyNotify::~SwFlyNotify()
         pFly->ResetNotifyBack();
     }
 
-    //Have the size or the positon changed,
+    //Have the size or the position changed,
     //so should the view know this.
     SWRECTFN( pFly )
     const bool bPosChgd = POS_DIFF( aFrm, pFly->Frm() );

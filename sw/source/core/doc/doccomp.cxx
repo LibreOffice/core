@@ -2042,7 +2042,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
                 const SwNode* pDstNd = GetNodes()[
                                         nMyEndOfExtra + nNd - nEndOfExtra ];
 
-                // Found the positon.
+                // Found the position.
                 // Then we also have to insert the redline to the line in the DestDoc.
                 _SaveMergeRedlines* pTmp = new _SaveMergeRedlines(
                                                     *pDstNd, *pRedl, pRing );

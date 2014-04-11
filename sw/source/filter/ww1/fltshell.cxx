@@ -460,7 +460,7 @@ static bool IterateNumrulePiece( const SwNodeIndex& rEnd,
     return rTmpStart <= rTmpEnd;                    // valid ?
 }
 
-//***This function will check whether there is existing individual attribute positon for 0x0D***/
+//***This function will check whether there is existing individual attribute position for 0x0D***/
 //The check will happen only once for a paragraph during loading
 bool SwFltControlStack::HasSdOD()
 {

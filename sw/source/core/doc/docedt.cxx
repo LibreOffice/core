@@ -933,7 +933,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     }
 
     // Copy all Bookmarks that are within the Move range into an array,
-    // that saves the positon as an offset.
+    // that saves the position as an offset.
     ::std::vector< ::sw::mark::SaveBookmark> aSaveBkmks;
     _DelBookmarks(
         pStt->nNode,

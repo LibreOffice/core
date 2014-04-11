@@ -575,7 +575,7 @@ private:
 
         @returns a string with the calendar if one was determined from the
         calendar code, else an empty string. The calendar string needs to be
-        inserted at a proper positon to rString after all bracketed prefixes.
+        inserted at a proper position to rString after all bracketed prefixes.
      */
     SVL_DLLPRIVATE OUString ImpObtainCalendarAndNumerals( OUStringBuffer & rString,
                                                           sal_Int32 & nPos,

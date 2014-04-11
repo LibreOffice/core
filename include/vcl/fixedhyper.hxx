@@ -37,7 +37,7 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
         */
         void                Initialize();
 
-        /** is position X positon hitting text */
+        /** is position X position hitting text */
         SAL_DLLPRIVATE bool ImplIsOverText(Point rPosition);
 
     protected:

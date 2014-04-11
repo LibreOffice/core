@@ -324,7 +324,7 @@ XFCell* LwpCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uI
     OUString aStyleName = m_StyleName;
 
     // if cell layout is aTableID's default cell layout
-    // we should judt its style by current positon
+    // we should judt its style by current position
     if (*pTable->GetDefaultCellStyle() == *GetObjectID())
     {
         aStyleName = GetCellStyleName(nRow, nCol, pTable->GetTableLayout());

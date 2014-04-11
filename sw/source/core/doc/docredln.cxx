@@ -2462,7 +2462,7 @@ const SwRangeRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
     SwPosition aSavePos( rSttPos );
     bool bRestart;
 
-    // If the starting positon points to the last valid ContentNode,
+    // If the starting position points to the last valid ContentNode,
     // we take the next Redline in any case.
     sal_uInt16 n = 0;
     const SwRangeRedline* pFnd = lcl_FindCurrRedline( rSttPos, n, true );
@@ -2581,7 +2581,7 @@ const SwRangeRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
     SwPosition aSavePos( rSttPos );
     bool bRestart;
 
-    // If the starting positon points to the last valid ContentNode,
+    // If the starting position points to the last valid ContentNode,
     // we take the previous Redline in any case.
     sal_uInt16 n = 0;
     const SwRangeRedline* pFnd = lcl_FindCurrRedline( rSttPos, n, false );
