@@ -1905,7 +1905,7 @@ void SwCrsrShell::RefreshBlockCursor()
         {
             // The order of the SwSelectionList has to be preserved but
             // the order inside the ring created by CreateCrsr() is not like
-            // exspected => First create the selections before the last one
+            // expected => First create the selections before the last one
             // downto the first selection.
             // At least create the cursor for the last selection
             --pPam;

@@ -2477,11 +2477,11 @@ SwFtnContFrm* SwSectionFrm::ContainsFtnCont( const SwFtnContFrm* pCont ) const
         if( pLay->Lower() && pLay->Lower()->GetNext() )
         {
             OSL_ENSURE( pLay->Lower()->GetNext()->IsFtnContFrm(),
-                    "ToMaximize: Unexspected Frame" );
+                    "ToMaximize: Unexpected Frame" );
             pRet = (SwFtnContFrm*)pLay->Lower()->GetNext();
         }
         OSL_ENSURE( !pLay->GetNext() || pLay->GetNext()->IsLayoutFrm(),
-                "ToMaximize: ColFrm exspected" );
+                "ToMaximize: ColFrm expected" );
         pLay = (SwLayoutFrm*)pLay->GetNext();
     }
     return pRet;

@@ -3367,7 +3367,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 {
                     bFoundLower = true;
                     pLay = (SwLayoutFrm*)pLay->GetNext();
-                    OSL_ENSURE( pLay->IsFtnContFrm(),"FtnContainer exspected" );
+                    OSL_ENSURE( pLay->IsFtnContFrm(),"FtnContainer expected" );
                     nInnerHeight += pLay->InnerHeight();
                     nInnerHeight += (pLay->Frm().*fnRect->fnGetHeight)() -
                                     (pLay->Prt().*fnRect->fnGetHeight)();

@@ -1802,7 +1802,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
             } while( !pNxtFtn && pBoss );
         }
         else if( !pNxtFtn->GetAttr()->GetFtn().IsEndNote() )
-        { OSL_ENSURE( !pNxtFtn->GetMaster(), "_CollectFtn: Master exspected" );
+        { OSL_ENSURE( !pNxtFtn->GetMaster(), "_CollectFtn: Master expected" );
             while ( pNxtFtn->GetMaster() )
                 pNxtFtn = pNxtFtn->GetMaster();
         }
@@ -2420,7 +2420,7 @@ SwTwips SwFtnBossFrm::GetVarSpace() const
             if( pSect->IsEndnAtEnd() ) // endnotes allowed?
             {
                 OSL_ENSURE( !Lower() || !Lower()->GetNext() || Lower()->GetNext()->
-                        IsFtnContFrm(), "FtnContainer exspected" );
+                        IsFtnContFrm(), "FtnContainer expected" );
                 const SwFtnContFrm* pCont = Lower() ?
                     (SwFtnContFrm*)Lower()->GetNext() : 0;
                 if( pCont )
@@ -2487,7 +2487,7 @@ sal_uInt8 SwFtnBossFrm::_NeighbourhoodAdjustment( const SwFrm* ) const
             nRet = NA_GROW_SHRINK;
         else
         {
-            OSL_ENSURE( GetUpper()->IsSctFrm(), "NeighbourhoodAdjustment: Unexspected Upper" );
+            OSL_ENSURE( GetUpper()->IsSctFrm(), "NeighbourhoodAdjustment: Unexpected Upper" );
             if( !GetNext() && !GetPrev() )
                 nRet = NA_GROW_ADJUST; // section with a single column (FtnAtEnd)
             else
