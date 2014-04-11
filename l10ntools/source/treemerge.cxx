@@ -213,7 +213,7 @@ TreeParser::TreeParser(
     }
     if( !m_pSource->name )
     {
-        m_pSource->name = new char[strlen(rInputFile.getStr())+1];
+        m_pSource->name = static_cast<char *>(xmlMalloc(strlen(rInputFile.getStr())+1));
         strcpy( m_pSource->name, rInputFile.getStr() );
     }
     m_bIsInitialized = true;
