@@ -40,31 +40,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
-OUString implGetExceptionMsg( Exception& e, const OUString& aExceptionType_ )
-{
-     OUString aExceptionType = aExceptionType_;
-     if( aExceptionType.isEmpty() )
-         aExceptionType = "Unknown";
-
-     OUString aTypeLine( "\nType: "  );
-     aTypeLine += aExceptionType;
-
-     OUString aMessageLine( "\nMessage: "  );
-     aMessageLine += e.Message;
-
-     OUString aMsg(aTypeLine);
-     aMsg += aMessageLine;
-     return aMsg;
-}
-
- // Exception type unknown
-OUString implGetExceptionMsg( Exception& e )
-{
-         OUString aMsg = implGetExceptionMsg( e, OUString() );
-         return aMsg;
-}
-
-
 OEvoabConnection::OEvoabConnection( OEvoabDriver& _rDriver )
     :OSubComponent<OEvoabConnection, OConnection_BASE>( (::cppu::OWeakObject*)(&_rDriver), this )
     ,m_rDriver(_rDriver)

@@ -83,33 +83,6 @@ namespace GraphicColorMode = ::com::sun::star::graphic::GraphicColorMode;
 
 namespace connectivity { namespace hsqldb
 {
-
-    // = FlushListeners
-
-    typedef ::comphelper::OListenerContainerBase< XFlushListener, EventObject > FlushListeners_Base;
-    class FlushListeners : public FlushListeners_Base
-    {
-    public:
-        FlushListeners( ::osl::Mutex& _rMutex ) :FlushListeners_Base( _rMutex ) { }
-
-    protected:
-        virtual bool    implTypedNotify(
-                            const Reference< XFlushListener >& _rxListener,
-                            const EventObject& _rEvent
-                        )   SAL_THROW( ( Exception ) ) SAL_OVERRIDE;
-    };
-
-
-    bool FlushListeners::implTypedNotify( const Reference< XFlushListener >& _rxListener, const EventObject& _rEvent ) SAL_THROW( ( Exception ) )
-    {
-        _rxListener->flushed( _rEvent );
-        return true;    // continue notifying the other listeners, if any
-    }
-
-
-    // = OHsqlConnection
-
-
     void SAL_CALL OHsqlConnection::disposing(void)
     {
         m_aFlushListeners.disposeAndClear( EventObject( *this ) );

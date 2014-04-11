@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include "connectivity/TTableHelper.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -50,13 +53,12 @@ namespace
 {
     /// helper class for column property change events which holds the OComponentDefinition weak
 typedef ::cppu::WeakImplHelper1 < XContainerListener > OTableContainerListener_BASE;
-class OTableContainerListener : public OTableContainerListener_BASE
+class OTableContainerListener:
+    public OTableContainerListener_BASE, private boost::noncopyable
 {
     OTableHelper* m_pComponent;
     ::std::map< OUString,bool> m_aRefNames;
 
-    OTableContainerListener(const OTableContainerListener&);
-    void operator =(const OTableContainerListener&);
 protected:
     virtual ~OTableContainerListener(){}
 public:

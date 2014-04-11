@@ -40,29 +40,6 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             rtl_ModuleCount* _pTemp
         );
 
-
-
-// The required C-Api must be provided!
-// It contains of 3 special functions that have to be exported.
-
-
-
-void REGISTER_PROVIDER(
-        const OUString& aServiceImplName,
-        const Sequence< OUString>& Services,
-        const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
-{
-    OUString aMainKeyName = "/" + aServiceImplName + "/UNO/SERVICES";
-
-    Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
-    OSL_ENSURE(xNewKey.is(), "FIREBIRD::component_writeInfo : could not create a registry key !");
-
-    for (sal_Int32 i=0; i<Services.getLength(); ++i)
-        xNewKey->createKey(Services[i]);
-}
-
-
-
 struct ProviderRequest
 {
     Reference< XSingleServiceFactory > xRet;

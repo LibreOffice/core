@@ -35,47 +35,6 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             rtl_ModuleCount*
         );
 
-
-struct ProviderRequest
-{
-    Reference< XSingleServiceFactory > xRet;
-    Reference< XMultiServiceFactory > const xServiceManager;
-    OUString const sImplementationName;
-
-    ProviderRequest(
-        void* pServiceManager,
-        sal_Char const* pImplementationName
-    )
-    : xServiceManager(reinterpret_cast<XMultiServiceFactory*>(pServiceManager))
-    , sImplementationName(OUString::createFromAscii(pImplementationName))
-    {
-    }
-
-    inline
-    sal_Bool CREATE_PROVIDER(
-                const OUString& Implname,
-                const Sequence< OUString > & Services,
-                ::cppu::ComponentInstantiation Factory,
-                createFactoryFunc creator
-            )
-    {
-        if (!xRet.is() && (Implname == sImplementationName))
-        {
-            try
-            {
-                xRet = creator( xServiceManager, sImplementationName,Factory, Services,0);
-            }
-            catch(...)
-            {
-            }
-        }
-        return xRet.is();
-    }
-
-    void* getProvider() const { return xRet.get(); }
-};
-
-
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mysql_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
