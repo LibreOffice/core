@@ -299,7 +299,7 @@ void SwAccessibleContext::ScrolledWithin( const SwRect& rOldVisArea )
 void SwAccessibleContext::ScrolledIn()
 {
     // This accessible should be freshly created, because it
-    // was not visisble before. Therefor, its vis area must already
+    // was not visible before. Therefor, its vis area must already
     // reflect the scrolling.
     OSL_ENSURE( GetVisArea() == GetMap()->GetVisArea(),
             "Vis area of child is wrong. Did it exist already?" );
