@@ -325,7 +325,7 @@ sal_Bool SwCrsrShell::SelTblBox()
     m_pTblCrsr->Exchange();
 
     // with some luck, UpdateCrsr() will now update everything that
-    // needs updateing
+    // needs updating
     UpdateCrsr();
 
     return sal_True;
