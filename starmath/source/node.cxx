@@ -2396,7 +2396,7 @@ void SmRectangleNode::Arrange(const OutputDevice &rDev, const SmFormat &/*rForma
     nHeight += 2 * nTmpBorderWidth;
 
     //! use this method in order to have 'SmRect::HasAlignInfo() == true'
-    //! and thus having the attribut-fences updated in 'SmRect::ExtendBy'
+    //! and thus having the attribute-fences updated in 'SmRect::ExtendBy'
     SmRect::operator = (SmRect(nWidth, nHeight));
 }
 

@@ -1875,7 +1875,7 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG pButton )
 
     // get new Sybol to use
     //! get font from symbol-disp lay since charset-display does not keep
-    //! the bold attribut.
+    //! the bold attribute.
     const SmSym aNewSymbol( pSymbols->GetText(), pCharsetDisplay->GetFont(),
             pCharsetDisplay->GetSelectCharacter(), pSymbolSets->GetText() );
 

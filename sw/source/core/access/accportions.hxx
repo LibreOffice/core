@@ -158,7 +158,7 @@ public:
     void GetSentenceBoundary( com::sun::star::i18n::Boundary& rBound,
                               sal_Int32 nPos );
 
-    // get (a) boundary for attribut change
+    // get (a) boundary for attribute change
     void GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
                                sal_Int32 nPos ) const;
 

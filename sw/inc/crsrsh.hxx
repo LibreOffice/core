@@ -169,7 +169,7 @@ private:
 
     Link m_aFlyMacroLnk;          /**< Link will be called, if the Crsr is set
                                    into a fly. A macro can be then becalled */
-    Link m_aChgLnk;               /**< link will be called by every attribut/
+    Link m_aChgLnk;               /**< link will be called by every attribute/
                                    format changes at cursor position.*/
     Link m_aGrfArrivedLnk;        ///< Link calls to UI if a graphic is arrived
 

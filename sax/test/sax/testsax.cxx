@@ -472,7 +472,7 @@ void OSaxParserTest::testSimple(    const Reference < XParser > &rParser )
         {
             rParser->parseStream( source );
             ERROR_ASSERT( pDocHandler->m_iElementCount      == 4 , "wrong element count"    );
-            ERROR_ASSERT( pDocHandler->m_iAttributeCount    == 2 , "wrong attribut count"   );
+            ERROR_ASSERT( pDocHandler->m_iAttributeCount    == 2 , "wrong attribute count"   );
             ERROR_ASSERT( pDocHandler->m_iCharCount         == 130 , "wrong char count"     );
             ERROR_ASSERT( pDocHandler->m_iWhitespaceCount   == 0, "wrong whitespace count" );
         }
@@ -537,7 +537,7 @@ void OSaxParserTest::testNamespaces( const Reference < XParser > &rParser )
         {
             rParser->parseStream( source );
             ERROR_ASSERT( pDocHandler->m_iElementCount      == 6 , "wrong element count"    );
-            ERROR_ASSERT( pDocHandler->m_iAttributeCount    == 2 , "wrong attribut count"   );
+            ERROR_ASSERT( pDocHandler->m_iAttributeCount    == 2 , "wrong attribute count"   );
             ERROR_ASSERT( pDocHandler->m_iCharCount         == 33, "wrong char count"       );
             ERROR_ASSERT( pDocHandler->m_iWhitespaceCount   == 0 , "wrong whitespace count" );
         }

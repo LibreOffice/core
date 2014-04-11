@@ -1277,7 +1277,7 @@ static bool lcl_HasEffectOnMathvariant( const SmTokenType eType )
 void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
 {
 
-    // gather the mathvariant attribut relevant data from all
+    // gather the mathvariant attribute relevant data from all
     // successively following SmFontNodes...
 
     int nBold   = -1;   // for the following variables: -1 = yet undefined; 0 = false; 1 = true;
@@ -1480,7 +1480,7 @@ void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
     {//Scoping
         // using accents will draw the over-/underbraces too close to the base
         // see http://www.w3.org/TR/MathML2/chapter3.html#id.3.4.5.2
-        // also XML_ACCENT is illegal with XML_MUNDER. Thus no XML_ACCENT attribut here!
+        // also XML_ACCENT is illegal with XML_MUNDER. Thus no XML_ACCENT attribute here!
         SvXMLElementExport aOver2(*this, XML_NAMESPACE_MATH,which, true, true);
         ExportNodes(pNode->GetSubNode(0), nLevel);
         AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);

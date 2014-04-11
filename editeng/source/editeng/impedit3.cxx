@@ -4217,8 +4217,8 @@ sal_Int32 ImpEditEngine::GetSpaceBeforeAndMinLabelWidth(
     const ContentNode *pNode,
     sal_Int32 *pnSpaceBefore, sal_Int32 *pnMinLabelWidth ) const
 {
-    // nSpaceBefore     matches the ODF attribut text:space-before
-    // nMinLabelWidth   matches the ODF attribut text:min-label-width
+    // nSpaceBefore     matches the ODF attribute text:space-before
+    // nMinLabelWidth   matches the ODF attribute text:min-label-width
 
     const SvxNumberFormat *pNumFmt = GetNumberFormat( pNode );
 

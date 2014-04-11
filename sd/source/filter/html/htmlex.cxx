@@ -2710,7 +2710,7 @@ OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltTe
     }
     else
     {
-        // Agerskov: HTML 4.01 has to have an alt attribut even if it is an empty string
+        // Agerskov: HTML 4.01 has to have an alt attribute even if it is an empty string
         aStr.append(" alt=\"\"");
      }
 

@@ -283,8 +283,8 @@ SwDoubleLinePortion::SwDoubleLinePortion(SwDoubleLinePortion& rDouble, sal_Int32
 
 /*--------------------------------------------------
  * SwDoubleLinePortion::SwDoubleLinePortion(..)
- * This constructor uses the textattribut to get the right brackets.
- * The textattribut could be a 2-line-attribute or a character- or
+ * This constructor uses the textattribute to get the right brackets.
+ * The textattribute could be a 2-line-attribute or a character- or
  * internetstyle, which contains the 2-line-attribute.
  * --------------------------------------------------*/
 
@@ -2271,7 +2271,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
 
     if ( !pCreate )
     {
-        OSL_ENSURE( !pHelpMulti->GetLen(), "Multiportion without attribut?" );
+        OSL_ENSURE( !pHelpMulti->GetLen(), "Multiportion without attribute?" );
         if ( nMultiPos )
             --nMultiPos;
         pCreate = GetInfo().GetMultiCreator( --nMultiPos, 0 );

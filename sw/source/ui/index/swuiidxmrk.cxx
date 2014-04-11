@@ -872,7 +872,7 @@ void SwIndexMarkPane::UpdateDialog()
     m_pKey2DCB->SetReadOnly( !bEnable );
 
     pSh->SelectTxtAttr( RES_TXTATR_TOXMARK, pMark->GetTxtTOXMark() );
-    // we need the point at the start of the attribut
+    // we need the point at the start of the attribute
     pSh->SwapPam();
 
     pSh->EndCrsrMove();

@@ -90,7 +90,7 @@ public:
         an no further elements are read.
      */
     void loadFromNode(xmlDoc * pDoc,xmlNode * pJavaInfo);
-    /** The attribut nil will be set to false. The function gets the value
+    /** The attribute nil will be set to false. The function gets the value
         javaSettings/updated from the javavendors.xml and writes it to
         javaInfo@vendorUpdate in javasettings.xml
      */

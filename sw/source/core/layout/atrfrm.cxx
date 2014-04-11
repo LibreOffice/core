@@ -257,7 +257,7 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             // #95848# returned size should never be zero.
             // (there was a bug that allowed for setting height to 0.
             // Thus there some documents existing with that not allowed
-            // attribut value which may cause problems on import.)
+            // attribute value which may cause problems on import.)
             rVal <<= (sal_Int32)convertTwipToMm100(m_aSize.Height() < MINLAY ? MINLAY : m_aSize.Height() );
         break;
         case MID_FRMSIZE_SIZE_TYPE:

@@ -2687,7 +2687,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
         && rSection.GetType() != TOX_CONTENT_SECTION && rSection.GetType() != TOX_HEADER_SECTION) //No sections in table
     {
         // if the first Node inside the section has an own
-        // PageDesc or PageBreak attribut, then dont write
+        // PageDesc or PageBreak attribute, then dont write
         // here the section break
         sal_uLong nRstLnNum = 0;
         const SfxItemSet* pSet;

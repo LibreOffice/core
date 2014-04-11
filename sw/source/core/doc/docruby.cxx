@@ -42,7 +42,7 @@ using namespace ::com::sun::star::i18n;
 /*
  * Members in the list:
  *   - String - the orig text
- *   - SwFmtRuby - the ruby attribut
+ *   - SwFmtRuby - the ruby attribute
  */
 sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
                             sal_uInt16 nMode )
@@ -123,7 +123,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                     const SwRubyListEntry* pEntry = &rList[ nListEntry++ ];
                     if( aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr() )
                     {
-                        // set/reset the attribut
+                        // set/reset the attribute
                         if( !pEntry->GetRubyAttr().GetText().isEmpty() )
                         {
                             InsertPoolItem( aPam, pEntry->GetRubyAttr(), 0 );
@@ -154,7 +154,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                     {
                         const SwRubyListEntry* pEntry = &rList[ nListEntry++ ];
 
-                        // set/reset the attribut
+                        // set/reset the attribute
                         if( !pEntry->GetRubyAttr().GetText().isEmpty() &&
                             !pEntry->GetText().isEmpty() )
                         {
@@ -203,7 +203,7 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
     }
 
     // ----- search the start
-    // --- look where a ruby attribut starts
+    // --- look where a ruby attribute starts
     sal_uInt16 nHtIdx = USHRT_MAX;
     const SwpHints* pHts = pTNd->GetpSwpHints();
     const SwTxtAttr* pAttr = 0;

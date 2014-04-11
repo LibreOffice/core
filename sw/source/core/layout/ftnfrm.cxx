@@ -1600,7 +1600,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
 
 SwFtnFrm *SwFtnBossFrm::FindFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr )
 {
-    // the easiest and savest way goes via the attribut
+    // the easiest and savest way goes via the attribute
     OSL_ENSURE( pAttr->GetStartNode(), "FtnAtr without StartNode." );
     SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
     SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();

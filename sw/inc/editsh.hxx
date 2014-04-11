@@ -245,7 +245,7 @@ public:
      * @see GetPaMParAttr()
      *
      * @param rSet
-     * output parameter - the SfxItemSet where the automatic paragraph format attribut(s) will be store.
+     * output parameter - the SfxItemSet where the automatic paragraph format attribute(s) will be store.
      * The attributes aren't invalidated or cleared if the function reach the getMaxLookup limite.
      *
      * @return true if the function inspect all the nodes point by the pPaM parameter,
@@ -930,7 +930,7 @@ public:
     static SwAutoCompleteWord& GetAutoCompleteWords();
 
     /** @return a scaling factor of selected text. Used for the rotated
-     character attribut dialog. */
+     character attribute dialog. */
     sal_uInt16 GetScalingOfSelectedText() const;
 
     /// Ctor/Dtor.

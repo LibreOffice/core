@@ -145,7 +145,7 @@ void DrawViewShell::AssignFrom3DWindow()
                         nSId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
                     // Determine if a FILL attribute is set.
-                    // If not, hard set a fill attribut
+                    // If not, hard set a fill attribute
                     XFillStyle eFillStyle = ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem );
                     if(eFillStyle == XFILL_NONE)
                         aSet.Put(XFillStyleItem (XFILL_SOLID));

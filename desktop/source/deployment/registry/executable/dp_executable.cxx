@@ -236,7 +236,7 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
             return;
         }
         sal_uInt64 attributes = 0;
-        //Setting the executable attribut does not affect executables on Windows
+        //Setting the executable attribute does not affect executables on Windows
         if (getFileAttributes(attributes))
         {
             if(getMyBackend()->m_context == "user")

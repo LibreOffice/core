@@ -2389,7 +2389,7 @@ void SAL_CALL SwXTextCursor::firePropertiesChangeEvent(
     OSL_FAIL("SwXTextCursor::firePropertiesChangeEvent(): not implemented");
 }
 
-// para specific attribut ranges
+// para specific attribute ranges
 static sal_uInt16 g_ParaResetableSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
@@ -2398,7 +2398,7 @@ static sal_uInt16 g_ParaResetableSetRange[] = {
     0
 };
 
-// selection specific attribut ranges
+// selection specific attribute ranges
 static sal_uInt16 g_ResetableSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,

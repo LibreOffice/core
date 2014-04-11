@@ -1319,7 +1319,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
     KSHORT nX = KSHORT( x );
 
-    // If there are attribut changes in the line, search for the paragraph,
+    // If there are attribute changes in the line, search for the paragraph,
     // in which nX is situated.
     SwLinePortion *pPor = pCurr->GetFirstPortion();
     sal_Int32 nCurrStart  = nStart;

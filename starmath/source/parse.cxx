@@ -1779,7 +1779,7 @@ void SmParser::Attribut()
     SmNode      *pAttr;
     SmScaleMode  eScaleMode = SCALE_NONE;
 
-    // get appropriate node for the attribut itself
+    // get appropriate node for the attribute itself
     switch (m_aCurToken.eType)
     {   case TUNDERLINE :
         case TOVERLINE :

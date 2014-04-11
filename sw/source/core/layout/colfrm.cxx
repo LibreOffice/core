@@ -162,7 +162,7 @@ static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
 
 /** add or remove columns from a layoutframe.
  *
- * Normally, a layoutframe with a column attribut of 1 or 0 columns contains
+ * Normally, a layoutframe with a column attribute of 1 or 0 columns contains
  * no columnframe. However, a sectionframe with "footnotes at the end" needs
  * a columnframe.
  *

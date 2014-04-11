@@ -227,7 +227,7 @@ namespace xmloff
         */
         void exportCellListSourceRange( );
 
-        /** exports the attribut(s) for the ImagePosition property
+        /** exports the attribute(s) for the ImagePosition property
         */
         void exportImagePositionAttributes();
 

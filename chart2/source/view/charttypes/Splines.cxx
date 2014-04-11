@@ -676,9 +676,9 @@ void SplineCalculater::CalculateBSplines(
             , sal_uInt32 nResolution
             , sal_uInt32 nDegree )
 {
-    // nResolution is ODF1.2 file format attribut chart:spline-resolution and
+    // nResolution is ODF1.2 file format attribute chart:spline-resolution and
     // ODF1.2 spec variable k. Causion, k is used as index in the spec in addition.
-    // nDegree is ODF1.2 file format attribut chart:spline-order and
+    // nDegree is ODF1.2 file format attribute chart:spline-order and
     // ODF1.2 spec variable p
     OSL_ASSERT( nResolution > 1 );
     OSL_ASSERT( nDegree >= 1 );

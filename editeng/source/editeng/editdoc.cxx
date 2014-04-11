@@ -1362,7 +1362,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
                         bExpand = true;
                         if( bExpandedEmptyAtIndexNull )
                         {
-                            // Check if this kind of attribut was empty and expanded here...
+                            // Check if this kind of attribute was empty and expanded here...
                             sal_uInt16 nW = pAttrib->GetItem()->Which();
                             for ( sal_uInt16 nA = 0; nA < nAttr; nA++ )
                             {
