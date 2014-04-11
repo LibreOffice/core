@@ -1725,8 +1725,9 @@ OUString SdrUndoSetPageNum::GetComment() const
 }
 
 SdrUndoPageMasterPage::SdrUndoPageMasterPage(SdrPage& rChangedPage)
-:   SdrUndoPage(rChangedPage),
-    mbOldHadMasterPage(mrPage.TRG_HasMasterPage())
+    : SdrUndoPage(rChangedPage)
+    , mbOldHadMasterPage(mrPage.TRG_HasMasterPage())
+    , maOldMasterPageNumber(0)
 {
     // get current state from page
     if(mbOldHadMasterPage)
@@ -1739,8 +1740,6 @@ SdrUndoPageMasterPage::SdrUndoPageMasterPage(SdrPage& rChangedPage)
 SdrUndoPageMasterPage::~SdrUndoPageMasterPage()
 {
 }
-
-
 
 SdrUndoPageRemoveMasterPage::SdrUndoPageRemoveMasterPage(SdrPage& rChangedPage)
 :   SdrUndoPageMasterPage(rChangedPage)
