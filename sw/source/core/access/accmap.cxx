@@ -2629,7 +2629,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
             // cursor even if the current cell has no accessible object.
             // If the old cursor objects exists and is in the same
             // table, its the best choice, because using it avoids
-            // an unnessarary cursor invalidation cycle when creating
+            // an unnecessary cursor invalidation cycle when creating
             // a new object for the current cell.
             if( aFrmOrObj.GetSwFrm()->IsCellFrm() )
             {
