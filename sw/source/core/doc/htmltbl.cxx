@@ -1416,7 +1416,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
         }
         else
         {
-            // No. So distribute the space regularily among all columns.
+            // No. So distribute the space regularly among all columns.
             for( sal_uInt16 i=0; i<nCols; i++ )
             {
                 sal_uLong nColMax = GetColumn( i )->GetMax();
