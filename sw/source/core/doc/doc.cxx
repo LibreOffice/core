@@ -112,6 +112,7 @@
 #include <txtfrm.hxx>
 #include <attrhint.hxx>
 #include <view.hxx>
+#include <DocumentDeviceManager.hxx>
 
 #include <wdocsh.hxx>
 #include <prtopt.hxx>
@@ -543,198 +544,67 @@ void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
     }
 }
 
-/* IDocumentDeviceAccess */
-SfxPrinter* SwDoc::getPrinter(/*[in]*/ bool bCreate ) const
+// IDocumentDeviceAccess
+const IDocumentDeviceAccess* SwDoc::getIDocumentDeviceAccessConst() const
 {
-    SfxPrinter* pRet = 0;
-    if ( !bCreate || mpPrt )
-        pRet = mpPrt;
-    else
-        pRet = &CreatePrinter_();
-
-    return pRet;
+    return m_DeviceAccess.get();
 }
 
-void SwDoc::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged )
+IDocumentDeviceAccess* SwDoc::getIDocumentDeviceAccess()
 {
-    if ( pP != mpPrt )
-    {
-        if ( bDeleteOld )
-            delete mpPrt;
-        mpPrt = pP;
+    return m_DeviceAccess.get();
+}
 
-        // our printer should always use TWIP. Don't rely on this being set in SwViewShell::InitPrt, there
-        // are situations where this isn't called.
-        // #i108712# / 2010-02-26 / frank.schoenheit@sun.com
-        if ( mpPrt )
-        {
-            MapMode aMapMode( mpPrt->GetMapMode() );
-            aMapMode.SetMapUnit( MAP_TWIP );
-            mpPrt->SetMapMode( aMapMode );
-        }
+SfxPrinter* SwDoc::getPrinter(/*[in]*/ bool bCreate ) const
+{
+    return getIDocumentDeviceAccessConst()->getPrinter( bCreate );
+}
 
-        if ( mpDrawModel && !get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
-            mpDrawModel->SetRefDevice( mpPrt );
-    }
-
-    if ( bCallPrtDataChanged &&
-         // #i41075# Do not call PrtDataChanged() if we do not
-         // use the printer for formatting:
-         !get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
-        PrtDataChanged();
+void SwDoc::setPrinter(/*[in]*/ SfxPrinter* pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged )
+{
+    getIDocumentDeviceAccess()->setPrinter( pP, bDeleteOld, bCallPrtDataChanged );
 }
 
 VirtualDevice* SwDoc::getVirtualDevice(/*[in]*/ bool bCreate ) const
 {
-    VirtualDevice* pRet = 0;
-    if ( !bCreate || mpVirDev )
-        pRet = mpVirDev;
-    else
-        pRet = &CreateVirtualDevice_();
-
-    return pRet;
+    return getIDocumentDeviceAccessConst()->getVirtualDevice( bCreate );
 }
 
-void SwDoc::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool )
+void SwDoc::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool bCallVirDevDataChanged )
 {
-    if ( mpVirDev != pVd )
-    {
-        if ( bDeleteOld )
-            delete mpVirDev;
-        mpVirDev = pVd;
-
-        if ( mpDrawModel && get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
-            mpDrawModel->SetRefDevice( mpVirDev );
-    }
+    getIDocumentDeviceAccess()->setVirtualDevice( pVd, bDeleteOld, bCallVirDevDataChanged );
 }
 
 OutputDevice* SwDoc::getReferenceDevice(/*[in]*/ bool bCreate ) const
 {
-    OutputDevice* pRet = 0;
-    if ( !get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
-    {
-        pRet = getPrinter( bCreate );
-
-        if ( bCreate && !mpPrt->IsValid() )
-        {
-            pRet = getVirtualDevice( true );
-        }
-    }
-    else
-    {
-        pRet = getVirtualDevice( bCreate );
-    }
-
-    return pRet;
+    return getIDocumentDeviceAccessConst()->getReferenceDevice( bCreate );
 }
 
 void SwDoc::setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewHiRes )
 {
-    if ( get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) != bNewVirtual ||
-         get(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE) != bNewHiRes )
-    {
-        if ( bNewVirtual )
-        {
-            VirtualDevice* pMyVirDev = getVirtualDevice( true );
-            if ( !bNewHiRes )
-                pMyVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE06 );
-            else
-                pMyVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
-
-            if( mpDrawModel )
-                mpDrawModel->SetRefDevice( pMyVirDev );
-        }
-        else
-        {
-            // #i41075#
-            // We have to take care that a printer exists before calling
-            // PrtDataChanged() in order to prevent that PrtDataChanged()
-            // triggers this funny situation:
-            // getReferenceDevice()->getPrinter()->CreatePrinter_()
-            // ->setPrinter()-> PrtDataChanged()
-            SfxPrinter* pPrinter = getPrinter( true );
-            if( mpDrawModel )
-                mpDrawModel->SetRefDevice( pPrinter );
-        }
-
-        set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, bNewVirtual );
-        set(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE, bNewHiRes );
-        PrtDataChanged();
-        SetModified();
-    }
+    getIDocumentDeviceAccess()->setReferenceDeviceType( bNewVirtual, bNewHiRes );
 }
 
 const JobSetup* SwDoc::getJobsetup() const
 {
-    return mpPrt ? &mpPrt->GetJobSetup() : 0;
+    return getIDocumentDeviceAccessConst()->getJobsetup();
 }
 
-void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
+void SwDoc::setJobsetup(/*[in]*/ const JobSetup& rJobSetup )
 {
-    bool bCheckPageDescs = 0 == mpPrt;
-    bool bDataChanged = false;
-
-    if ( mpPrt )
-    {
-        if ( mpPrt->GetName() == rJobSetup.GetPrinterName() )
-        {
-            if ( mpPrt->GetJobSetup() != rJobSetup )
-            {
-                mpPrt->SetJobSetup( rJobSetup );
-                bDataChanged = true;
-            }
-        }
-        else
-            delete mpPrt, mpPrt = 0;
-    }
-
-    if( !mpPrt )
-    {
-        //The ItemSet is deleted by Sfx!
-        SfxItemSet *pSet = new SfxItemSet( GetAttrPool(),
-                        FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
-                        SID_HTML_MODE,  SID_HTML_MODE,
-                        SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                        SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                        0 );
-        SfxPrinter *p = new SfxPrinter( pSet, rJobSetup );
-        if ( bCheckPageDescs )
-            setPrinter( p, true, true );
-        else
-        {
-            mpPrt = p;
-            bDataChanged = true;
-        }
-    }
-    if ( bDataChanged && !get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
-        PrtDataChanged();
+    getIDocumentDeviceAccess()->setJobsetup( rJobSetup );
 }
 
 const SwPrintData & SwDoc::getPrintData() const
 {
-    if(!mpPrtData)
-    {
-        SwDoc * pThis = const_cast< SwDoc * >(this);
-        pThis->mpPrtData = new SwPrintData;
-
-        // SwPrintData should be initialized from the configuration,
-        // the respective config item is implememted by SwPrintOptions which
-        // is also derived from SwPrintData
-        const SwDocShell *pDocSh = GetDocShell();
-        OSL_ENSURE( pDocSh, "pDocSh is 0, can't determine if this is a WebDoc or not" );
-        bool bWeb = 0 != dynamic_cast< const SwWebDocShell * >(pDocSh);
-        SwPrintOptions aPrintOptions( bWeb );
-        *pThis->mpPrtData = aPrintOptions;
-    }
-    return *mpPrtData;
+    return getIDocumentDeviceAccessConst()->getPrintData();
 }
 
-void SwDoc::setPrintData(/*[in]*/ const SwPrintData& rPrtData )
+void SwDoc::setPrintData(/*[in]*/ const SwPrintData& rPrtData)
 {
-    if(!mpPrtData)
-        mpPrtData = new SwPrintData;
-    *mpPrtData = rPrtData;
+    getIDocumentDeviceAccess()->setPrintData( rPrtData );
 }
+
 
 /* Implementations the next Interface here */
 
