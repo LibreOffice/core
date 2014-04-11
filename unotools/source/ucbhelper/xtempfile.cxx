@@ -227,14 +227,8 @@ throw ( css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeE
 
     checkConnected();
 
-    sal_uInt32 nPos = mpStream->Tell();
-    checkError();
-
-    mpStream->Seek(STREAM_SEEK_TO_END);
-    checkError();
-
-    sal_Int32 nAvailable = (sal_Int32)mpStream->Tell() - nPos;
-    mpStream->Seek(nPos);
+    sal_uInt32 const nAvailable =
+        static_cast<sal_uInt32>(mpStream->remainingSize());
     checkError();
 
     return nAvailable;

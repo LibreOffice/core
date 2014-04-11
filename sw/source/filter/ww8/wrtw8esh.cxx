@@ -273,12 +273,7 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFm
     rStrm .WriteUInt32( sal_uInt32( 2 ) )
           .WriteUInt32( mnFlags );
     tmpStrm.Seek( STREAM_SEEK_TO_BEGIN );
-    sal_uInt32 nStrmPos = tmpStrm.Tell();
-    tmpStrm.Seek( STREAM_SEEK_TO_END );
-    sal_uInt32 nStrmSize = tmpStrm.Tell();
-    tmpStrm.Seek( nStrmPos );
-    sal_uInt32 nLen;
-    nLen = nStrmSize - nStrmPos;
+    sal_uInt32 const nLen = tmpStrm.remainingSize();
     if(nLen >0)
     {
         sal_uInt8* pBuffer = new sal_uInt8[ nLen ];

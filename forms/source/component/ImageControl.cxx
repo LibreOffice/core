@@ -426,8 +426,7 @@ sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL,
         if ( !bSetNull )
         {
             // get the size of the stream
-            pImageStream->Seek(STREAM_SEEK_TO_END);
-            sal_Int32 nSize = (sal_Int32)pImageStream->Tell();
+            sal_uInt64 const nSize = pImageStream->remainingSize();
             if (pImageStream->GetBufferSize() < 8192)
                 pImageStream->SetBufferSize(8192);
             pImageStream->Seek(STREAM_SEEK_TO_BEGIN);

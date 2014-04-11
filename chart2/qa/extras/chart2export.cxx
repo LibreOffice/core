@@ -167,9 +167,7 @@ xmlDocPtr Chart2ExportTest::parseExport(const OUString& rDir, const OUString& rF
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(findChartFile(rDir, xNameAccess)), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xInputStream.is());
     boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_Size nSize = pStream->Tell();
-    pStream->Seek(0);
+    sal_uInt64 const nSize = pStream->remainingSize();
     OStringBuffer aDocument(nSize);
     char ch;
     for (sal_Size i = 0; i < nSize; ++i)

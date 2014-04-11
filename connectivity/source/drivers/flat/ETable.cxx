@@ -455,9 +455,7 @@ void OFlatTable::construct()
 
     if(m_pFileStream)
     {
-        m_pFileStream->Seek(STREAM_SEEK_TO_END);
-        sal_Size nSize = m_pFileStream->Tell();
-        m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
+        sal_uInt64 const nSize = m_pFileStream->remainingSize();
 
         // Buffersize is dependent on the file-size
         m_pFileStream->SetBufferSize(nSize > 1000000 ? 32768 :

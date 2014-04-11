@@ -1267,11 +1267,10 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     if (!pExtOptions)
         return Text2Doc( rStrm );
 
-    sal_uLong nOldPos = rStrm.Tell();
-    rStrm.Seek( STREAM_SEEK_TO_END );
+    sal_uInt64 const nOldPos = rStrm.Tell();
+    sal_uInt64 const nRemaining = rStrm.remainingSize();
     boost::scoped_ptr<ScProgress> xProgress( new ScProgress( pDocSh,
-            ScGlobal::GetRscString( STR_LOAD_DOC ), rStrm.Tell() - nOldPos ));
-    rStrm.Seek( nOldPos );
+            ScGlobal::GetRscString( STR_LOAD_DOC ), nRemaining ));
     rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
 
     SCCOL nStartCol = aRange.aStart.Col();

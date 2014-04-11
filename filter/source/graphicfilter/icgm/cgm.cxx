@@ -719,8 +719,7 @@ ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_u
                     if ( pIn )
                     {
                         pIn->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-                        pIn->Seek( STREAM_SEEK_TO_END );
-                        sal_uInt32  nInSize = pIn->Tell();
+                        sal_uInt64 const nInSize = pIn->remainingSize();
                         pIn->Seek( 0 );
 
 #ifdef CGM_EXPORT_IMPRESS

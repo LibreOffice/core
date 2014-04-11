@@ -2521,7 +2521,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 {
     sal_uInt16 nFieldSize;
     sal_uInt16 nFieldType;
-    sal_uLong nPos, nStartPos, nEndPos, nPercent, nLastPercent;
+    sal_uLong nPercent, nLastPercent;
     sal_uInt8 nMagicByte;
 
     ErrorCode=0;
@@ -2586,20 +2586,15 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
     pOS2MET->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
 
-    nStartPos=pOS2MET->Tell();
-    nEndPos=pOS2MET->Seek(STREAM_SEEK_TO_END); pOS2MET->Seek(nStartPos);
+    sal_uInt64 const nStartPos = pOS2MET->Tell();
+    sal_uInt64 const nRemaining = pOS2MET->remainingSize();
     Callback(0); nLastPercent=0;
 
-    nPos=pOS2MET->Tell();
-    if ( nStartPos == nEndPos )
-    {
-        nEndPos = 100;
-        nStartPos = 0;
-    }
+    sal_uInt64 nPos = pOS2MET->Tell();
 
     for (;;) {
 
-        nPercent=(nPos-nStartPos)*100/(nEndPos-nStartPos);
+        nPercent = (nPos-nStartPos)*100 / nRemaining;
         if (nLastPercent+4<=nPercent) {
             if (Callback((sal_uInt16)nPercent)==sal_True) break;
             nLastPercent=nPercent;

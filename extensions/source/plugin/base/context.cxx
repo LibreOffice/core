@@ -209,10 +209,8 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
         SvFileStream aStream( aFileName, STREAM_READ );
         if( aStream.IsOpen() )
         {
-            int nBytes = 0;
-            aStream.Seek( STREAM_SEEK_TO_END );
-            aBuf = Sequence<sal_Int8>( nBytes = aStream.Tell() );
-            aStream.Seek( STREAM_SEEK_TO_BEGIN );
+            sal_Int64 const nBytes = aStream.remainingSize();
+            aBuf = Sequence<sal_Int8>( nBytes );
             aStream.Read( aBuf.getArray(), nBytes );
             aStream.Close();
             osl::FileBase::getFileURLFromSystemPath( aFileName, aFileName );

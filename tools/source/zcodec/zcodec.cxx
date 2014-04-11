@@ -284,11 +284,8 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
         {
             nInToRead = (mnInBufSize > mnInToRead) ? mnInToRead : mnInBufSize;
 
-            sal_uIntPtr nStreamPos = rIStm.Tell();
-            rIStm.Seek( STREAM_SEEK_TO_END );
-            sal_uIntPtr nMaxPos = rIStm.Tell();
-            rIStm.Seek( nStreamPos );
-            if ( ( nMaxPos - nStreamPos ) < nInToRead )
+            sal_uInt64 const nRemaining = rIStm.remainingSize();
+            if (nRemaining < nInToRead)
             {
                 rIStm.SetError( ERRCODE_IO_PENDING );
                 err= int(!Z_STREAM_END); // TODO What is appropriate code for this?

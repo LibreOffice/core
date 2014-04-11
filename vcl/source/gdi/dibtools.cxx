@@ -427,11 +427,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
         {
             if(!rHeader.nSizeImage)
             {
-                const sal_uLong nOldPos(rIStm.Tell());
-
-                rIStm.Seek(STREAM_SEEK_TO_END);
-                rHeader.nSizeImage = rIStm.Tell() - nOldPos;
-                rIStm.Seek(nOldPos);
+                rHeader.nSizeImage = rIStm.remainingSize();
             }
 
             sal_uInt8* pBuffer = (sal_uInt8*)rtl_allocateMemory(rHeader.nSizeImage);

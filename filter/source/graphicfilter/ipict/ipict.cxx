@@ -1780,7 +1780,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 {
     sal_uInt16          nOpcode;
     sal_uInt8           nOneByteOpcode;
-    sal_uLong           nSize, nPos, nStartPos, nEndPos, nPercent, nLastPercent;
+    sal_uLong           nSize, nPercent, nLastPercent;
 
     pPict               = &rStreamPict;
     nOrigPos            = pPict->Tell();
@@ -1806,8 +1806,8 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
     pPict->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
 
-    nStartPos=pPict->Tell();
-    nEndPos=pPict->Seek(STREAM_SEEK_TO_END); pPict->Seek(nStartPos);
+    sal_uInt64 const nStartPos=pPict->Tell();
+    sal_uInt64 const nRemaining = pPict->remainingSize();
     Callback(0); nLastPercent=0;
 
     ReadHeader();
@@ -1815,11 +1815,11 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     aPenPosition=Point(-aBoundingRect.Left(),-aBoundingRect.Top());
     aTextPosition=aPenPosition;
 
-    nPos=pPict->Tell();
+    sal_uInt64 nPos=pPict->Tell();
 
     for (;;) {
 
-        nPercent=(nPos-nStartPos)*100/(nEndPos-nStartPos);
+        nPercent = (nPos-nStartPos) * 100 / nRemaining;
         if (nLastPercent+4<=nPercent) {
             if (Callback((sal_uInt16)nPercent)==sal_True) break;
             nLastPercent=nPercent;

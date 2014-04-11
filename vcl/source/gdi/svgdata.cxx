@@ -173,12 +173,10 @@ SvgData::SvgData(const OUString& rPath):
     SvFileStream rIStm(rPath, STREAM_STD_READ);
     if(rIStm.GetError())
         return;
-    const sal_uInt32 nStmPos(rIStm.Tell());
-    const sal_uInt32 nStmLen(rIStm.Seek(STREAM_SEEK_TO_END) - nStmPos);
+    const sal_uInt32 nStmLen(rIStm.remainingSize());
     if(nStmLen)
     {
         SvgDataArray aNewData(new sal_uInt8[nStmLen]);
-        rIStm.Seek(nStmPos);
         rIStm.Read(aNewData.get(), nStmLen);
 
         if(!rIStm.GetError())
