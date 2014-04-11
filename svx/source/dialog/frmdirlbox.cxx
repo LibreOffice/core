@@ -38,8 +38,9 @@ inline SvxFrameDirection lclVoidToEnum( void* pDirection )
 
 } // namespace
 
-FrameDirectionListBox::FrameDirectionListBox( Window* pParent, WinBits nBits ) :
-    ListBox( pParent, nBits )
+FrameDirectionListBox::FrameDirectionListBox( Window* pParent, WinBits nBits )
+    : ListBox(pParent, nBits)
+    , meSaveValue(FRMDIR_HORI_LEFT_TOP)
 {
 }
 
