@@ -926,6 +926,9 @@ namespace drawinglayer
                                             bDrawTransparentUsed = bAllowed && tryDrawPolygonStrokePrimitive2DDirect(*pPoStroke, rUniTransparenceCandidate.getTransparence());
                                             break;
                                         }
+                                    default:
+                                        SAL_INFO("drawinglayer", "default case for " << drawinglayer::primitive2d::idToString(rCandidate.getPrimitive2DID()));
+                                        break;
                                     }
                                 }
                             }
@@ -1227,6 +1230,7 @@ namespace drawinglayer
                 }
                 default :
                 {
+                    SAL_INFO("drawinglayer", "default case for " << drawinglayer::primitive2d::idToString(rCandidate.getPrimitive2DID()));
                     // process recursively
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     break;
