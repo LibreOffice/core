@@ -2011,6 +2011,14 @@ DECLARE_OOXMLIMPORT_TEST(testFdo38414, "fdo38414.docx" )
     CPPUNIT_ASSERT_EQUAL( height3, height4 );
 }
 
+DECLARE_OOXMLIMPORT_TEST(test_extra_image, "test_extra_image.docx" )
+{
+    // fdo#74652 Check there is no shape added to the doc during import
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xDraws->getCount());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo74401, "fdo74401.docx")
 {
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
