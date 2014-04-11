@@ -257,6 +257,12 @@ struct SdwArcRecord
     sal_uInt8 nLineEnd;
     sal_uInt8 nLineStyle;
     SdwColor aPenColor;
+    SdwArcRecord()
+        : nLineWidth(0)
+        , nLineEnd(0)
+        , nLineStyle(0)
+    {
+    }
 };
 
 struct SdwTextBoxRecord
