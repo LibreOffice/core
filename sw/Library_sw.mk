@@ -185,6 +185,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/doc/docsort \
     sw/source/core/doc/docstat \
     sw/source/core/doc/doctxm \
+    sw/source/core/doc/DocumentDeviceManager \
     sw/source/core/doc/docxforms \
     sw/source/core/doc/extinput \
     sw/source/core/doc/fmtcol \
