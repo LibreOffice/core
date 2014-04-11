@@ -186,9 +186,12 @@ drawing::Direction3D GetDirection3D( SdrCustomShapeGeometryItem& rItem, const OU
 }
 
 EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCustomShape, const Rectangle& /*rBoundRect*/, const double *pM )
-:   aCenter( pCustomShape->GetSnapRect().Center() )
-,   eProjectionMode( drawing::ProjectionMode_PARALLEL )
-,   pMap( pM )
+    : aCenter( pCustomShape->GetSnapRect().Center() )
+    , eProjectionMode( drawing::ProjectionMode_PARALLEL )
+    , fZScreen(0.0)
+    , fOriginX(0.0)
+    , fOriginY(0.0)
+    , pMap( pM )
 {
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const OUString sProjectionMode( "ProjectionMode" );
@@ -200,7 +203,6 @@ EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCus
         GetSkew( rGeometryItem, fSkew, fSkewAngle );
     else
     {
-        fZScreen = 0.0;
         GetOrigin( rGeometryItem, fOriginX, fOriginY );
         fOriginX = fOriginX * pCustomShape->GetLogicRect().GetWidth();
         fOriginY = fOriginY * pCustomShape->GetLogicRect().GetHeight();
