@@ -168,7 +168,7 @@ public:
 protected:
 
     // Set states for getAccessibleStateSet.
-    // This derived class additinaly sets MULTILINE(1), MULTISELECTABLE(+),
+    // This derived class additionally sets MULTILINE(1), MULTISELECTABLE(+),
     // FOCUSABLE(+) and FOCUSED(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
 

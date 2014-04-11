@@ -116,7 +116,7 @@ class SwAccessibleDocument : public SwAccessibleDocumentBase,
 
 protected:
     // Set states for getAccessibleStateSet.
-    // This derived class additinaly sets MULTISELECTABLE(1)
+    // This derived class additionally sets MULTISELECTABLE(1)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
 
     virtual ~SwAccessibleDocument();
