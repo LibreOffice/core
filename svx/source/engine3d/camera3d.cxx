@@ -36,6 +36,11 @@ Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLook
 }
 
 Camera3D::Camera3D()
+    : fResetFocalLength(0.0)
+    , fResetBankAngle(0.0)
+    , fFocalLength(0.0)
+    , fBankAngle(0.0)
+    , bAutoAdjustProjection(false)
 {
     basegfx::B3DPoint aVector3D(0.0 ,0.0 ,1.0);
     Camera3D(aVector3D, basegfx::B3DPoint());
