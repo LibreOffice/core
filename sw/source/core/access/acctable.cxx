@@ -1507,7 +1507,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
     if( pCrsrShell == NULL )
         return;
 
-    // assure, that child, indentified by the given index, isn't already selected.
+    // assure, that child, identified by the given index, isn't already selected.
     if ( IsChildSelected( nChildIndex ) )
     {
         return;
