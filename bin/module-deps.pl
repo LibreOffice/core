@@ -218,14 +218,18 @@ sub collapse_lib_to_module($)
     my %unknown_libs;
     for my $name (sort keys %{$tree}) {
         my $result = $tree->{$name};
+        $unknown_libs{$name} = 1 && next if (!grep {/$name/} keys $l2m);
+        $name = $l2m->{$name};
         # sal has no dependencies, take care of it
         # otherwise it doesn't have target key
         if (!@{$result->{deps}}) {
-            $digraph{$name}{target} = $result->{target};
+            if (!exists($digraph{$name})) {
+                my @empty;
+                $digraph{$name}{deps} = \@empty;
+                $digraph{$name}{target} = $result->{target};
+            }
         }
         for my $dep (@{$result->{deps}}) {
-            $unknown_libs{$name} = 1 && next if (!grep {/$name/} keys $l2m);
-            $name = $l2m->{$name};
             $dep = $l2m->{$dep};
             # ignore: two libraries from the same module depend on each other
             next if ($name eq $dep);
