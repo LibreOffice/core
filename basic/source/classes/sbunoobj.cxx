@@ -3713,7 +3713,7 @@ void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                                 continue;
                             com::sun::star::uno::Type aType( xParamTypeDesc->getTypeClass(), xParamTypeDesc->getName() );
 
-                            // sbx paramter needs offset 1
+                            // sbx parameter needs offset 1
                             pAnyArgs[i] = sbxToUnoValue( pParams->Get( iSbx ), aType );
 
                             // Check for out parameter if not already done

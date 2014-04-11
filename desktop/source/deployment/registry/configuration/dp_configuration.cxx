@@ -126,7 +126,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         Reference<XCommandEnvironment> const & xCmdEnv );
     void configmgrini_flush( Reference<XCommandEnvironment> const & xCmdEnv );
 
-    /* The paramter isURL is false in the case of adding the conf:ini-entry
+    /* The parameter isURL is false in the case of adding the conf:ini-entry
        value from the backend db. This entry already contains the path as it
        is used in the configmgr.ini.
      */

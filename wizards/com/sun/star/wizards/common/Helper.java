@@ -267,7 +267,7 @@ public class Helper
     /**
      * checks if the value of an object that represents an array is null.
      * check beforehand if the Object is really an array with "AnyConverter.IsArray(oObject)
-     * @param oValue the paramter that has to represent an object
+     * @param oValue the parameter that has to represent an object
      * @return a null reference if the array is empty
      */
     public static Object getArrayValue(Object oValue)

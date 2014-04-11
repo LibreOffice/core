@@ -800,7 +800,7 @@ void HelpLinker::main( std::vector<std::string> &args,
     {
         //No extension mode and extension mode using commandline
         //!extsource.empty indicates extension mode using commandline
-        // -idxcaption paramter is required
+        // -idxcaption parameter is required
         std::stringstream aStrStream;
         aStrStream << "no index caption stylesheet given" << std::endl;
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
@@ -824,7 +824,7 @@ void HelpLinker::main( std::vector<std::string> &args,
     {
         //No extension mode and extension mode using commandline
         //!extsource.empty indicates extension mode using commandline
-        // -idxcontent paramter is required
+        // -idxcontent parameter is required
         std::stringstream aStrStream;
         aStrStream << "no index content stylesheet given" << std::endl;
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );

@@ -555,7 +555,7 @@ namespace dbtools
             sal_Int32 nMasterLen = m_aMasterFields.getLength();
 
             // loop through all master fields. For each of them, get the respective column from the
-            // parent , and forward its current value as paramter value to the (inner) row set
+            // parent , and forward its current value as parameter value to the (inner) row set
             for ( sal_Int32 i = 0; i < nMasterLen; ++i, ++pMasterFields, ++pDetailFields )
             {
                 // does the name denote a valid column in the parent?

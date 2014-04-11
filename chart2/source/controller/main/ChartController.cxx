@@ -213,7 +213,7 @@ void ChartController::TheModel::tryTermination()
             }
             catch( const util::CloseVetoException& )
             {
-                //since we have indicated to give up the ownership with paramter true in close call
+                //since we have indicated to give up the ownership with parameter true in close call
                 //the one who has thrown the CloseVetoException is the new owner
 
 #if OSL_DEBUG_LEVEL > 1

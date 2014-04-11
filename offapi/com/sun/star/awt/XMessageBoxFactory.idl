@@ -50,7 +50,7 @@ published interface XMessageBoxFactory : com::sun::star::uno::XInterface
 
             <p>A combination of com::sun::star::awt::MessageBoxButtons</p>
             <p>A com::sun::star::awt::MessageBoxType::INFOBOX
-            ignores this paramter, instead it uses a
+            ignores this parameter, instead it uses a
             com::sun::star::awt::MessageBoxButtons::BUTTONS_OK.</p>
 
         @param sTitle

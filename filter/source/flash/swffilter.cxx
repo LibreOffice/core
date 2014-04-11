@@ -196,7 +196,7 @@ OUString exportBackground(FlashExporter &aFlashExporter, Reference< XDrawPage > 
     OUString filename = STR("slide") + VAL(nPage+1) + STR(suffix) + STR(".swf");
     OUString fullpath = sPath + STR("/") + filename;
 
-    // AS: If suffix is "o" then the last paramter is true (for exporting objects).
+    // AS: If suffix is "o" then the last parameter is true (for exporting objects).
     Reference<XOutputStream> xOutputStreamWrap(*(new OslOutputStreamWrapper(fullpath)), UNO_QUERY);
     sal_uInt16 nCached = aFlashExporter.exportBackgrounds( xDrawPage, xOutputStreamWrap, sal::static_int_cast<sal_uInt16>( nPage ), *suffix == 'o' );
     aFlashExporter.Flush();

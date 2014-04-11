@@ -358,7 +358,7 @@ typedef uint32_t DebugPropertyTag;
 
 /*!    @defined    DEBUG_UNUSED
 
-    @abstract    Macro to mark a paramter as unused to avoid unused parameter warnings.
+    @abstract    Macro to mark a parameter as unused to avoid unused parameter warnings.
 
     @discussion
 

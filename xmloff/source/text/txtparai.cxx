@@ -2028,7 +2028,7 @@ XMLParaContext::~XMLParaContext()
         xTxtImport->FindOutlineStyleName( sStyleName, nOutlineLevel );
 
     // set style and hard attributes at the previous paragraph
-    // Add paramter <mbOutlineLevelAttrFound> (#i73509#)
+    // Add parameter <mbOutlineLevelAttrFound> (#i73509#)
     sStyleName = xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor,
                                                sStyleName,
                                                true,

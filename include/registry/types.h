@@ -261,8 +261,8 @@ enum RTMethodMode {
 
 /** specifies the mode of a parameter.
 
-    There are three paramter modes which have impact of the handling of the
-    paramter in the UNO bridges and the UNO code generation.
+    There are three parameter modes which have impact of the handling of the
+    parameter in the UNO bridges and the UNO code generation.
  */
 enum RTParamMode {
     /// indicates an invalid parameter mode

@@ -121,7 +121,7 @@ public:
       * Construtor.
       *
       * @param rxContext is a Service Manager.
-      * @param rCommand is the paramter for the open command that produces
+      * @param rCommand is the parameter for the open command that produces
       *        this resultset.
       */
     ResultSetImplHelper(

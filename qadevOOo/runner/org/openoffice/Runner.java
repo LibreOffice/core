@@ -218,7 +218,7 @@ public class Runner
         {
             System.out.println("==========================================================================");
             System.out.println("No TestJob given, please make sure that you ");
-            System.out.println("a.) called the OOoRunner with the paramter -o <job> or -sce <scenarioFile>");
+            System.out.println("a.) called the OOoRunner with the parameter -o <job> or -sce <scenarioFile>");
             System.out.println("or");
             System.out.println("b.) have an entry called TestJob in your used properties file");
             System.out.println("==========================================================================");
