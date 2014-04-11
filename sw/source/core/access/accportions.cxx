@@ -388,7 +388,7 @@ sal_Int32 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
         OSL_ENSURE( ( aModelPositions[nPortionNo+1] - nStartPos ) ==
                     ( aAccessiblePositions[nPortionNo+1] -
                       aAccessiblePositions[nPortionNo] ),
-                    "accesability portion disagrees with text model" );
+                    "accessibility portion disagrees with text model" );
 
         nStartPos += nPos - aAccessiblePositions[nPortionNo];
     }
@@ -567,7 +567,7 @@ sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( sal_Int32 nPos ) const
         OSL_ENSURE( ( nEndPos - nStartPos ) ==
                     ( aAccessiblePositions[nPortionNo+1] -
                       aAccessiblePositions[nPortionNo] ),
-                    "accesability portion disagrees with text model" );
+                    "accessibility portion disagrees with text model" );
 
         sal_Int32 nWithinPortion = nPos - aModelPositions[nPortionNo];
         nRet += nWithinPortion;
