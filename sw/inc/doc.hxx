@@ -22,7 +22,7 @@
 // SwDoc interfaces
 #include <IInterface.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <IDocumentDeviceAccess.hxx>
+#include "../source/core/inc/DocumentDeviceManager.hxx" //couldnt get it to properly include when running make otherwise
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
@@ -199,6 +199,7 @@ class SwRenderData;
 class SwPageFrm;
 class SwViewOption;
 class IDocumentUndoRedo;
+class IDocumentDeviceAccess;
 
 namespace sw { namespace mark {
     class MarkManager;
@@ -245,7 +246,6 @@ void StartGrammarChecking( SwDoc &rDoc );
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
     public IDocumentSettingAccess,
-    public IDocumentDeviceAccess,
     public IDocumentRedlineAccess,
     public IDocumentLinksAdministration,
     public IDocumentFieldsAccess,
@@ -269,6 +269,7 @@ class SW_DLLPUBLIC SwDoc :
 
     // private Member
     ::boost::scoped_ptr<SwNodes> m_pNodes;  //< document content (Nodes Array)
+    sw::DocumentDeviceManager m_DeviceAccess; //Implementation of IDocumentDeviceAccess
     SwAttrPool* mpAttrPool;             //< the attribute pool
     SwPageDescs maPageDescs;             //< PageDescriptors
     Link        maOle2Link;              //< OLE 2.0-notification
@@ -316,10 +317,6 @@ class SW_DLLPUBLIC SwDoc :
     SwFldTypes      *mpFldTypes;
     SwNewDBMgr      *mpNewDBMgr;         /**< Pointer to the new DBMgr for
                                          evaluation of DB-fields. */
-
-    VirtualDevice   *mpVirDev;           //< can be used for formatting
-    SfxPrinter      *mpPrt;              //< can be used for formatting
-    SwPrintData     *mpPrtData;          //< Print configuration
 
     SwDoc           *mpGlossaryDoc;      //< Pointer to glossary-document.
 
@@ -625,8 +622,6 @@ private:
                                 const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt );
     SwFmt* FindFmtByName( const SwFmtsBase& rFmtArr, const OUString& rName ) const;
 
-    VirtualDevice& CreateVirtualDevice_() const;
-    SfxPrinter& CreatePrinter_() const;
     void        PrtDataChanged();   /**< Printer or JobSetup altered.
                                      Care has to be taken of the necessary
                                      invalidations and notifications. */
@@ -736,16 +731,21 @@ public:
     virtual void setRsidRoot( sal_uInt32 nVal );
 
     // IDocumentDeviceAccess
-    virtual SfxPrinter* getPrinter(/*[in]*/ bool bCreate ) const SAL_OVERRIDE;
-    virtual void setPrinter(/*[in]*/ SfxPrinter* pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged ) SAL_OVERRIDE;
-    virtual VirtualDevice* getVirtualDevice(/*[in]*/ bool bCreate ) const SAL_OVERRIDE;
-    virtual void setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool bCallVirDevDataChanged ) SAL_OVERRIDE;
-    virtual OutputDevice* getReferenceDevice(/*[in]*/ bool bCreate ) const SAL_OVERRIDE;
-    virtual void setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewHiRes ) SAL_OVERRIDE;
-    virtual const JobSetup* getJobsetup() const SAL_OVERRIDE;
-    virtual void setJobsetup(/*[in]*/ const JobSetup& rJobSetup ) SAL_OVERRIDE;
-    virtual const SwPrintData & getPrintData() const SAL_OVERRIDE;
-    virtual void setPrintData(/*[in]*/ const SwPrintData& rPrtData) SAL_OVERRIDE;
+    //I didnt really know where to put this but the DeviceAccess implementation is not the only thing that needs mpDrawModel (and making the classes friends would defeat the purpose, so I just put it here for the moment
+    SdrModel& get_mpDrawModel() const { return *mpDrawModel; };
+    //This does not seem optimal
+    const IDocumentDeviceAccess* getIDocumentDeviceAccessConst() const { return &m_DeviceAccess; };
+    IDocumentDeviceAccess* getIDocumentDeviceAccess() { return &m_DeviceAccess; };
+    virtual SfxPrinter* getPrinter(/*[in]*/ bool bCreate ) const { return m_DeviceAccess.getPrinter( bCreate ); };
+    virtual void setPrinter(/*[in]*/ SfxPrinter* pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged ) { m_DeviceAccess.setPrinter( pP, bDeleteOld, bCallPrtDataChanged ); };
+    virtual VirtualDevice* getVirtualDevice(/*[in]*/ bool bCreate ) const { return m_DeviceAccess.getVirtualDevice( bCreate ); } ;
+    virtual void setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool bCallVirDevDataChanged ) { m_DeviceAccess.setVirtualDevice( pVd, bDeleteOld, bCallVirDevDataChanged ); };
+    virtual OutputDevice* getReferenceDevice(/*[in]*/ bool bCreate ) const { return m_DeviceAccess.getReferenceDevice( bCreate ); };
+    virtual void setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewHiRes ) { m_DeviceAccess.setReferenceDeviceType( bNewVirtual, bNewHiRes ); };
+    virtual const JobSetup* getJobsetup() const { return m_DeviceAccess.getJobsetup(); };
+    virtual void setJobsetup(/*[in]*/ const JobSetup& rJobSetup ) { m_DeviceAccess.setJobsetup( rJobSetup ); };
+    virtual const SwPrintData & getPrintData() const { return m_DeviceAccess.getPrintData(); };
+    virtual void setPrintData(/*[in]*/ const SwPrintData& rPrtData) { m_DeviceAccess.setPrintData( rPrtData ); };
 
     // IDocumentMarkAccess
     IDocumentMarkAccess* getIDocumentMarkAccess();
