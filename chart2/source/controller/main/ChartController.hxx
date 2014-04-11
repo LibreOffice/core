@@ -433,6 +433,10 @@ private:
 
     void queryGL3DChart();
 
+    void executeGL3D_Tracking( const TrackingEvent& rTEvt );
+    void executeGL3D_Command( const CommandEvent& rCEvt );
+    bool executeGL3D_KeyInput( const KeyEvent& rKEvt );
+
     void executeGL3D_MouseButtonUp( const MouseEvent& rMEvt );
     void executeGL3D_MouseButtonDown( const MouseEvent& rMEvt );
     void executeGL3D_MouseMove( const MouseEvent& rMEvt );

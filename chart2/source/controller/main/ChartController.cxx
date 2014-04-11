@@ -1410,6 +1410,19 @@ void ChartController::queryGL3DChart()
     m_bGL3DChart = GL3DHelper::isGL3DDiagram(xDiagram);
 }
 
+void ChartController::executeGL3D_Tracking( const TrackingEvent& /*rTEvt*/ )
+{
+}
+
+void ChartController::executeGL3D_Command( const CommandEvent& /*rCEvt*/ )
+{
+}
+
+bool ChartController::executeGL3D_KeyInput( const KeyEvent& /*rKEvt*/ )
+{
+    return false;
+}
+
 void ChartController::executeGL3D_MouseButtonUp( const MouseEvent& /*rMEvt*/ )
 {
 }

@@ -746,8 +746,13 @@ void ChartController::execute_MouseMove( const MouseEvent& rMEvt )
     impl_SetMousePointer( rMEvt );
 }
 
-void ChartController::execute_Tracking( const TrackingEvent& /* rTEvt */ )
+void ChartController::execute_Tracking( const TrackingEvent& rTEvt )
 {
+    if (m_bGL3DChart)
+    {
+        executeGL3D_Tracking(rTEvt);
+        return;
+    }
 }
 
 void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
@@ -988,6 +993,12 @@ void ChartController::execute_LoseFocus()
 
 void ChartController::execute_Command( const CommandEvent& rCEvt )
 {
+    if (m_bGL3DChart)
+    {
+        executeGL3D_Command(rCEvt);
+        return;
+    }
+
     bool bIsAction = false;
     {
         SolarMutexGuard aGuard;
@@ -1303,6 +1314,9 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
 bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
 {
+    if (m_bGL3DChart)
+        return executeGL3D_KeyInput(rKEvt);
+
     bool bReturn=false;
 
     DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
