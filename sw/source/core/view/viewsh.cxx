@@ -2502,8 +2502,8 @@ SwPostItMgr* SwViewShell::GetPostItMgr()
  */
 const IDocumentSettingAccess* SwViewShell::getIDocumentSettingAccess() const { return mpDoc; }
 IDocumentSettingAccess* SwViewShell::getIDocumentSettingAccess() { return mpDoc; }
-const IDocumentDeviceAccess* SwViewShell::getIDocumentDeviceAccess() const { return mpDoc; }
-IDocumentDeviceAccess* SwViewShell::getIDocumentDeviceAccess() { return mpDoc; }
+const IDocumentDeviceAccess* SwViewShell::getIDocumentDeviceAccess() const { return mpDoc->getIDocumentDeviceAccessConst(); }
+IDocumentDeviceAccess* SwViewShell::getIDocumentDeviceAccess() { return mpDoc->getIDocumentDeviceAccess(); }
 const IDocumentMarkAccess* SwViewShell::getIDocumentMarkAccess() const { return mpDoc->getIDocumentMarkAccess(); }
 IDocumentMarkAccess* SwViewShell::getIDocumentMarkAccess() { return mpDoc->getIDocumentMarkAccess(); }
 const IDocumentDrawModelAccess* SwViewShell::getIDocumentDrawModelAccess() const { return mpDoc; }

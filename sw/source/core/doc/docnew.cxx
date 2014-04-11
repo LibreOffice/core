@@ -88,6 +88,7 @@
 #include <tblsel.hxx>
 #include <MarkManager.hxx>
 #include <UndoManager.hxx>
+#include <DocumentDeviceManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -182,8 +183,8 @@ static void lcl_DelFmtIndices( SwFmt* pFmt )
  * exported methods
  */
 SwDoc::SwDoc()
-    : m_pNodes( new SwNodes(this) )
-    ,
+    : m_pNodes( new SwNodes(this) ),
+    m_DeviceAccess( new ::sw::DocumentDeviceManager( *this ) ),
     mpAttrPool(new SwAttrPool(this)),
     mpMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
@@ -209,9 +210,6 @@ SwDoc::SwDoc()
     mpDrawModel( 0 ),
     mpUpdtFlds( new SwDocUpdtFld( this ) ),
     mpFldTypes( new SwFldTypes() ),
-    mpVirDev( 0 ),
-    mpPrt( 0 ),
-    mpPrtData( 0 ),
     mpGlossaryDoc( 0 ),
     mpOutlineRule( 0 ),
     mpFtnInfo( new SwFtnInfo ),
@@ -577,6 +575,11 @@ SwDoc::~SwDoc()
     DeleteAndDestroy(*mpGrfFmtCollTbl, 1, mpGrfFmtCollTbl->size());
     delete mpGrfFmtCollTbl;
 
+    // Without explicitly freeing the DocumentDeviceManager
+    // and relying on the implicit freeing there would be a crash
+    // due to it happening after SwAttrPool is freed.
+    m_DeviceAccess.reset();
+
     /*
      * DefaultFormats and DefaultFormatCollections (FmtColl)
      * are at position 0 of their respective arrays.
@@ -586,7 +589,6 @@ SwDoc::~SwDoc()
     mpFrmFmtTbl->erase( mpFrmFmtTbl->begin() );
     mpCharFmtTbl->erase( mpCharFmtTbl->begin() );
 
-    DELETEZ( mpPrt );
 #if HAVE_FEATURE_DBCONNECTIVITY
     DELETEZ( mpDBMgr );
 #endif
@@ -632,7 +634,6 @@ SwDoc::~SwDoc()
 
     disposeXForms(); // #i113606#, dispose the XForms objects
 
-    delete mpPrtData;
     delete mpNumberFormatter;
     delete mpFtnInfo;
     delete mpEndNoteInfo;
@@ -646,49 +647,8 @@ SwDoc::~SwDoc()
     delete mpDfltCharFmt;
     delete mpDfltFrmFmt;
     delete mpLayoutCache;
-    delete mpVirDev;
 
     SfxItemPool::Free(mpAttrPool);
-}
-
-VirtualDevice& SwDoc::CreateVirtualDevice_() const
-{
-    VirtualDevice* pNewVir = new VirtualDevice( 1 );
-
-    pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
-
-    // #i60945# External leading compatibility for unix systems.
-    if ( get(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING ) )
-        pNewVir->Compat_ZeroExtleadBug();
-
-    MapMode aMapMode( pNewVir->GetMapMode() );
-    aMapMode.SetMapUnit( MAP_TWIP );
-    pNewVir->SetMapMode( aMapMode );
-
-    const_cast<SwDoc*>(this)->setVirtualDevice( pNewVir, true, true );
-    return *mpVirDev;
-}
-
-SfxPrinter& SwDoc::CreatePrinter_() const
-{
-    OSL_ENSURE( ! mpPrt, "Do not call CreatePrinter_(), call getPrinter() instead" );
-
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "Printer will be created!" );
-#endif
-
-    // We create a default SfxPrinter.
-    // The ItemSet is deleted by Sfx!
-    SfxItemSet *pSet = new SfxItemSet( ((SwDoc*)this)->GetAttrPool(),
-                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
-                    SID_HTML_MODE,  SID_HTML_MODE,
-                    SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                    0 );
-
-    SfxPrinter* pNewPrt = new SfxPrinter( pSet );
-    const_cast<SwDoc*>(this)->setPrinter( pNewPrt, true, true );
-    return *mpPrt;
 }
 
 void SwDoc::SetDocShell( SwDocShell* pDSh )
