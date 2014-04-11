@@ -64,6 +64,18 @@ public:
 PCXReader::PCXReader(SvStream &rStream)
     : m_rPCX(rStream)
     , pAcc(NULL)
+    , nVersion(0)
+    , nEncoding(0)
+    , nBitsPerPlanePix(0)
+    , nPlanes(0)
+    , nBytesPerPlaneLin(0)
+    , nPaletteInfo(0)
+    , nWidth(0)
+    , nHeight(0)
+    , nResX(0)
+    , nResY(0)
+    , nDestBitsPerPixel(0)
+    , nStatus(false)
 {
     pPalette = new sal_uInt8[ 768 ];
 }
