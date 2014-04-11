@@ -166,8 +166,17 @@ class EnhancedCustomShape2d : public SfxItemSet
             com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMinimum;
             com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMaximum;
 
-            Handle() : bMirroredX ( false ), bMirroredY ( false ), bSwitched( false ),
-                nRefX( -1 ), nRefY( -1 ), nRefAngle( -1 ), nRefR( -1 ) {};
+            Handle()
+                : nFlags(0)
+                , bMirroredX ( false )
+                , bMirroredY ( false )
+                , bSwitched( false )
+                , nRefX( -1 )
+                , nRefY( -1 )
+                , nRefAngle( -1 )
+                , nRefR( -1 )
+            {
+            }
         };
 
         bool                        IsFlipVert() { return bFlipV; };
