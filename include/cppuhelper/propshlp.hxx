@@ -315,7 +315,7 @@ public:
         Method to be called by OPropertySetHelper::fire.
 
         @param bIgnoreRuntimeExceptionsWhileFiring
-                        indicates whether occuring RuntimeExceptions shall be
+                        indicates whether occurring RuntimeExceptions shall be
                         ignored when firing notifications
        @param pnHandles     the id's of the properties that changed.
        @param nCount        the number of elements in the arrays pnHandles, pNewValues and pOldValues.

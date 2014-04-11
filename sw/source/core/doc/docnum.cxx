@@ -328,7 +328,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     }
 
     /* If moving of the outline levels is applicable, i.e. for all
-       outline levels occuring in the document there has to be a valid
+       outline levels occurring in the document there has to be a valid
        target outline level implied by aMoveArr. */
     bool bMoveApplicable = true;
     for (n = nSttPos; n < nEndPos; n++)

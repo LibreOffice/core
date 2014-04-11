@@ -2038,7 +2038,7 @@ void OBoundControlModel::impl_connectDatabaseColumn_noNotify( bool _bFromReload 
     }
 
     // now that we're connected (more or less, even if we did not find a column),
-    // we definitely want to forward any potentially occuring value changes
+    // we definitely want to forward any potentially occurring value changes
     m_bForwardValueChanges = sal_True;
     // let derived classes react on this new connection
     m_bLoaded = sal_True;

@@ -311,7 +311,7 @@ public:
      - If bForce is set, table will be recalculated even if this was
        disallowed by SetMustNotResize.
      - If nDelay > 0 the calculation is delayed accordingly. Resizing calls
-       occuring during delay-time are ignored, but the delay may be counted
+       occurring during delay-time are ignored, but the delay may be counted
        under certain circumstances.
      - If nDelay == HTMLTABLE_RESIZE_NOW, resize immediately and do not
        consider any resize-calls that might possibly be in order.

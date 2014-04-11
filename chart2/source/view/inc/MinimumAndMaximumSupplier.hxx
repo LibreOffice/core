@@ -50,7 +50,7 @@ public:
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex ) = 0;
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) = 0;
 
-    //return a constant out of ::com::sun::star::chart::TimeUnit that allows to display the smallest distance between occuring dates
+    //return a constant out of ::com::sun::star::chart::TimeUnit that allows to display the smallest distance between occurring dates
     virtual long calculateTimeResolutionOnXAxis() = 0;
     virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate ) = 0;
 

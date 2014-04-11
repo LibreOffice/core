@@ -3837,7 +3837,7 @@ void XclImpChChart::ReadChDataFormat( XclImpStream& rStrm )
                 itr, XclImpChDataFormatMap::value_type(rPos, xDataFmt));
 
         /*  Do not overwrite existing data format group, Excel always uses the
-            first data format group occuring in any CHSERIES group. */
+            first data format group occurring in any CHSERIES group. */
     }
 }
 
