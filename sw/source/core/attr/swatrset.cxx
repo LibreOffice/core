@@ -80,7 +80,7 @@ void SwAttrPool::createAndAddSecondaryPools()
     }
 
     // create SfxItemPool and EditEngine pool and add these in a chain. These
-    // belomg us and will be removed/destroyed in removeAndDeleteSecondaryPools() used from
+    // belong us and will be removed/destroyed in removeAndDeleteSecondaryPools() used from
     // the destructor
     SfxItemPool *pSdrPool = new SdrItemPool(this);
 
