@@ -400,8 +400,8 @@ static const XclFunctionInfo saFuncTable_Oox[] =
     { ocIfError,            255,    3,  3,  V, { RO_E, VO, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "IFERROR" ) },
     { ocNetWorkdays_MS,     NOID,   2,  4,  V, { VR, VR, VR, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "NETWORKDAYS.INTL" ) },
     { ocNetWorkdays_MS,     255,    3,  5,  V, { RO_E, VR, VR, VR, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "NETWORKDAYS.INTL" ) },
-    { ocWorkday_MS,         NOID,   2,  4,  V, { VR, VR, VR, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "NETWORKDAYS.INTL" ) },
-    { ocWorkday_MS,         255,    3,  5,  V, { RO_E, VR, VR, VR, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "NETWORKDAYS.INTL" ) },
+    { ocWorkday_MS,         NOID,   2,  4,  V, { VR, VR, VR, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "WORKDAY.INTL" ) },
+    { ocWorkday_MS,         255,    3,  5,  V, { RO_E, VR, VR, VR, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "WORKDAY.INTL" ) },
     EXC_FUNCENTRY_V_VR( ocCeil_ISO,         2,  2,  0,  "ISO.CEILING" )
 };
 
