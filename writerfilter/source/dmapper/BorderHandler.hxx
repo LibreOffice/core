@@ -20,7 +20,6 @@
 #define INCLUDED_BORDERHANDLER_HXX
 
 #include <vector>
-#include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>

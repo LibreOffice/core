@@ -26,7 +26,6 @@
 #include <sal/types.h>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <WriterFilterDllApi.hxx>
 /**
    @file WW8ResourceModel.hxx
 

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_MODELEVENTLISTENER_HXX
 #define INCLUDED_MODELEVENTLISTENER_HXX
 
-#include <WriterFilterDllApi.hxx>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <cppuhelper/implbase1.hxx>
 

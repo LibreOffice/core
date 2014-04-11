@@ -26,7 +26,6 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
-#include <WriterFilterDllApi.hxx>
 
 namespace writerfilter
 {

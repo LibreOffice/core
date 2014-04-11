@@ -19,7 +19,6 @@
 #ifndef INCLUDED_OLEHANDLER_HXX
 #define INCLUDED_OLEHANDLER_HXX
 
-#include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/awt/Size.hpp>

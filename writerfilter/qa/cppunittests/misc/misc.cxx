@@ -21,7 +21,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include <WriterFilterDllApi.hxx>
 
 
 using namespace std;

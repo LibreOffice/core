@@ -21,7 +21,6 @@
 
 #include "TblStylePrHandler.hxx"
 
-#include <WriterFilterDllApi.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>

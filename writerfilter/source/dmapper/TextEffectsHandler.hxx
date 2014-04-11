@@ -11,7 +11,6 @@
 #ifndef INCLUDED_TEXTEFFECTSHANDLER_HXX
 #define INCLUDED_TEXTEFFECTSHANDLER_HXX
 
-#include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

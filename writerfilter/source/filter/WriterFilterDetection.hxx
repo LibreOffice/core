@@ -23,10 +23,9 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <WriterFilterDllApi.hxx>
 
 /// File format detection service for DOC (unused) / DOCX.
-class WRITERFILTER_WRITERFILTER_DLLPUBLIC WriterFilterDetection : public cppu::WeakImplHelper2
+class WriterFilterDetection : public cppu::WeakImplHelper2
 <
     com::sun::star::document::XExtendedFilterDetection,
     com::sun::star::lang::XServiceInfo

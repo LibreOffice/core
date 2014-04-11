@@ -22,7 +22,6 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <WriterFilterDllApi.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <string>
 #include <boost/unordered_map.hpp>

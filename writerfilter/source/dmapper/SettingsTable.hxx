@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SETTINGSTABLE_HXX
 #define INCLUDED_SETTINGSTABLE_HXX
 
-#include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>

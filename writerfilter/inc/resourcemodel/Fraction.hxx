@@ -21,7 +21,6 @@
 
 #include <sal/types.h>
 
-#include <WriterFilterDllApi.hxx>
 
 namespace writerfilter {
 namespace resourcemodel {

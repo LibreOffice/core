@@ -23,7 +23,6 @@
 #include "TablePropertiesHandler.hxx"
 
 #include <dmapper/DomainMapper.hxx>
-#include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 

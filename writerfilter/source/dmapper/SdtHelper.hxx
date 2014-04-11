@@ -15,7 +15,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
 
-#include <WriterFilterDllApi.hxx>
 
 namespace com
 {

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_TDEFTABLEHANDLER_HXX
 #define INCLUDED_TDEFTABLEHANDLER_HXX
 
-#include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 #include <vector>

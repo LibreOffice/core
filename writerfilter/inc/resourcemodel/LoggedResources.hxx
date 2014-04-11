@@ -23,7 +23,6 @@
 #include "WW8ResourceModel.hxx"
 #include "TagLogger.hxx"
 
-#include <WriterFilterDllApi.hxx>
 
 namespace writerfilter
 {

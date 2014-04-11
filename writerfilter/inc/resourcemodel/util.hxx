@@ -21,7 +21,6 @@
 #define INCLUDED_RESOURCEMODEL_UTIL_HXX
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <WriterFilterDllApi.hxx>
 #include <string>
 
 namespace writerfilter

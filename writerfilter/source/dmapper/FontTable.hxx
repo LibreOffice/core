@@ -21,7 +21,6 @@
 #define INCLUDED_FONTTABLE_HXX
 
 #include <boost/shared_ptr.hpp>
-#include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

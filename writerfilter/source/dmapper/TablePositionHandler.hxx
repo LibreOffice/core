@@ -9,7 +9,6 @@
 #ifndef INCLUDED_POSITIONHANDLER_HXX
 #define INCLUDED_POSITIONHANDLER_HXX
 
-#include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

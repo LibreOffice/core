@@ -27,10 +27,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/implbase5.hxx>
-#include <WriterFilterDllApi.hxx>
 
-/// Common DOC/DOCX filter, calls DocxExportFilter via UNO or does the DOC (currently unused) / DOCX import.
-class WRITERFILTER_WRITERFILTER_DLLPUBLIC WriterFilter : public cppu::WeakImplHelper5
+/// Common DOC/DOCX filter, calls DocxExportFilter via UNO or does the DOCX import.
+class WriterFilter : public cppu::WeakImplHelper5
 <
     com::sun::star::document::XFilter,
     com::sun::star::document::XImporter,

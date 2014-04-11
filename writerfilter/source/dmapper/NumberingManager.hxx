@@ -22,7 +22,6 @@
 
 #include "PropertyMap.hxx"
 
-#include <WriterFilterDllApi.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 

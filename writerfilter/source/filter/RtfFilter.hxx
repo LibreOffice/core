@@ -27,10 +27,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/implbase5.hxx>
-#include <WriterFilterDllApi.hxx>
 
 /// Common RTF filter, calls RtfImportFilter and RtfExportFilter via UNO.
-class WRITERFILTER_WRITERFILTER_DLLPUBLIC RtfFilter : public cppu::WeakImplHelper5
+class RtfFilter : public cppu::WeakImplHelper5
 <
     com::sun::star::document::XFilter,
     com::sun::star::document::XImporter,

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_THEMETABLE_HXX
 #define INCLUDED_THEMETABLE_HXX
 
-#include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

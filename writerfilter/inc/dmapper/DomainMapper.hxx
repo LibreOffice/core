@@ -19,7 +19,6 @@
 #ifndef INCLUDED_DOMAINMAPPER_HXX
 #define INCLUDED_DOMAINMAPPER_HXX
 
-#include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>

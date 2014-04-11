@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CELLMARGINHANDLER_HXX
 #define INCLUDED_CELLMARGINHANDLER_HXX
 
-#include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 #include <vector>
