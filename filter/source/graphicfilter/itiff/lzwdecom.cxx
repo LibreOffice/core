@@ -23,7 +23,16 @@
 #define MAX_TABLE_SIZE 4096
 
 LZWDecompressor::LZWDecompressor()
-    : pOutBufData(NULL)
+    : pIStream(NULL)
+    , nTableSize(0)
+    , bEOIFound(false)
+    , bInvert(false)
+    , bFirst(true)
+    , nOldCode(0)
+    , pOutBufData(NULL)
+    , nOutBufDataLen(0)
+    , nInputBitsBuf(0)
+    , nInputBitsBufSize(0)
 {
     sal_uInt16 i;
 
@@ -35,9 +44,6 @@ LZWDecompressor::LZWDecompressor()
         pTable[i].nDataCount=1;
         pTable[i].nData=(sal_uInt8)i;
     }
-    pIStream=NULL;
-    bFirst = sal_True;
-    nOldCode = 0;
 }
 
 
