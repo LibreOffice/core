@@ -17,6 +17,7 @@
 
 #include "osl/file.hxx"
 #include "osl/process.h"
+#include "rtl/character.hxx"
 #include "rtl/process.h"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
@@ -890,6 +891,274 @@ void checkMap(
     }
 }
 
+bool valid(OUString const & identifier) {
+    for (sal_Int32 i = 0;; ++i) {
+        i = identifier.indexOf('_', i);
+        if (i == -1) {
+            return true;
+        }
+        if (!rtl::isAsciiUpperCase(identifier[0]) || identifier[i - 1] == '_') {
+            return false;
+        }
+    }
+}
+
+void checkIds(
+    rtl::Reference<unoidl::Provider> const & providerA, OUString const & prefix,
+    rtl::Reference<unoidl::MapCursor> const & cursor)
+{
+    assert(cursor.is());
+    for (;;) {
+        OUString id;
+        rtl::Reference<unoidl::Entity> entB(cursor->getNext(&id));
+        if (!entB.is()) {
+            break;
+        }
+        OUString name(prefix + id);
+        rtl::Reference<unoidl::Entity> entA(providerA->findEntity(name));
+        if (!(entA.is() || valid(id))) {
+            std::cerr
+                << "entity name " << name << " uses an invalid identifier"
+                << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+        switch (entB->getSort()) {
+        case unoidl::Entity::SORT_MODULE:
+            checkIds(
+                providerA, name + ".",
+                (static_cast<unoidl::ModuleEntity *>(entB.get())
+                 ->createCursor()));
+            break;
+        case unoidl::Entity::SORT_ENUM_TYPE:
+            if (!entA.is()) {
+                rtl::Reference<unoidl::EnumTypeEntity> ent2B(
+                    static_cast<unoidl::EnumTypeEntity *>(entB.get()));
+                for (std::vector<unoidl::EnumTypeEntity::Member>::const_iterator
+                         i(ent2B->getMembers().begin());
+                     i != ent2B->getMembers().end(); ++i)
+                {
+                    if (!valid(i->name)) {
+                        std::cerr
+                            << "enum type " << name << " member " << i->name
+                            << " uses an invalid identifier" << std::endl;
+                        std::exit(EXIT_FAILURE);
+                    }
+                }
+            }
+            break;
+        case unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
+            if (!entA.is()) {
+                rtl::Reference<unoidl::PlainStructTypeEntity> ent2B(
+                    static_cast<unoidl::PlainStructTypeEntity *>(
+                        entB.get()));
+                for (std::vector<unoidl::PlainStructTypeEntity::Member>::const_iterator
+                         i(ent2B->getDirectMembers().begin());
+                     i != ent2B->getDirectMembers().end(); ++i)
+                {
+                    if (!valid(i->name)) {
+                        std::cerr
+                            << "plain struct type " << name << " direct member "
+                            << i->name << " uses an invalid identifier"
+                            << std::endl;
+                        std::exit(EXIT_FAILURE);
+                    }
+                }
+            }
+            break;
+        case unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+            if (!entA.is()) {
+                rtl::Reference<unoidl::PolymorphicStructTypeTemplateEntity>
+                    ent2B(
+                        static_cast<
+                            unoidl::PolymorphicStructTypeTemplateEntity *>(
+                                entB.get()));
+                for (std::vector<OUString>::const_iterator i(
+                         ent2B->getTypeParameters().begin());
+                     i != ent2B->getTypeParameters().end(); ++i)
+                {
+                    if (!valid(*i)) {
+                        std::cerr
+                            << "polymorphic struct type template " << name
+                            << " type parameter " << *i
+                            << " uses an invalid identifier" << std::endl;
+                        std::exit(EXIT_FAILURE);
+                    }
+                }
+                for (std::vector<unoidl::PolymorphicStructTypeTemplateEntity::Member>::const_iterator
+                         i(ent2B->getMembers().begin());
+                     i != ent2B->getMembers().end(); ++i)
+                {
+                    if (!valid(i->name)) {
+                        std::cerr
+                            << "polymorphic struct type template " << name
+                            << " member " << i->name
+                            << " uses an invalid identifier" << std::endl;
+                        std::exit(EXIT_FAILURE);
+                    }
+                }
+            }
+            break;
+        case unoidl::Entity::SORT_EXCEPTION_TYPE:
+            if (!entA.is()) {
+                rtl::Reference<unoidl::ExceptionTypeEntity> ent2B(
+                    static_cast<unoidl::ExceptionTypeEntity *>(entB.get()));
+                for (std::vector<unoidl::ExceptionTypeEntity::Member>::const_iterator
+                         i(ent2B->getDirectMembers().begin());
+                     i != ent2B->getDirectMembers().end(); ++i)
+                {
+                    if (!valid(i->name)) {
+                        std::cerr
+                            << "exception type " << name << " direct member "
+                            << i->name << " uses an invalid identifier"
+                            << std::endl;
+                        std::exit(EXIT_FAILURE);
+                    }
+                }
+            }
+            break;
+        case unoidl::Entity::SORT_INTERFACE_TYPE:
+            if (!entA.is()) {
+                rtl::Reference<unoidl::InterfaceTypeEntity> ent2B(
+                    static_cast<unoidl::InterfaceTypeEntity *>(entB.get()));
+                for (std::vector<unoidl::InterfaceTypeEntity::Attribute>::const_iterator
+                         i(ent2B->getDirectAttributes().begin());
+                     i != ent2B->getDirectAttributes().end(); ++i)
+                {
+                    if (!valid(i->name)) {
+                        std::cerr
+                            << "interface type " << name << " direct attribute "
+                            << i->name << " uses an invalid identifier"
+                            << std::endl;
+                        std::exit(EXIT_FAILURE);
+                    }
+                }
+                for (std::vector<unoidl::InterfaceTypeEntity::Method>::const_iterator
+                         i(ent2B->getDirectMethods().begin());
+                     i != ent2B->getDirectMethods().end(); ++i)
+                {
+                    if (!valid(i->name)) {
+                        std::cerr
+                            << "interface type " << name << " direct method "
+                            << i->name << " uses an invalid identifier"
+                            << std::endl;
+                        std::exit(EXIT_FAILURE);
+                    }
+                    for (std::vector<unoidl::InterfaceTypeEntity::Method::Parameter>::const_iterator
+                             j(i->parameters.begin());
+                         j != i->parameters.end(); ++j)
+                    {
+                        if (!valid(j->name)) {
+                            std::cerr
+                                << "interface type " << name
+                                << " direct method " << i->name << " parameter "
+                                << j->name << " uses an invalid identifier"
+                                << std::endl;
+                            std::exit(EXIT_FAILURE);
+                        }
+                    }
+                }
+            }
+            break;
+        case unoidl::Entity::SORT_TYPEDEF:
+        case unoidl::Entity::SORT_INTERFACE_BASED_SINGLETON:
+        case unoidl::Entity::SORT_SERVICE_BASED_SINGLETON:
+            break;
+        case unoidl::Entity::SORT_CONSTANT_GROUP:
+            {
+                rtl::Reference<unoidl::ConstantGroupEntity> ent2B(
+                    static_cast<unoidl::ConstantGroupEntity *>(entB.get()));
+                for (std::vector<unoidl::ConstantGroupEntity::Member>::const_iterator
+                             i(ent2B->getMembers().begin());
+                     i != ent2B->getMembers().end(); ++i)
+                {
+                    bool found = false;
+                    if (entA.is()) {
+                        rtl::Reference<unoidl::ConstantGroupEntity> ent2A(
+                            static_cast<unoidl::ConstantGroupEntity *>(
+                                entA.get()));
+                        for (std::vector<unoidl::ConstantGroupEntity::Member>::const_iterator
+                                 j(ent2A->getMembers().begin());
+                             j != ent2A->getMembers().end(); ++j)
+                        {
+                            if (i->name == j->name) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!(found || valid(i->name))) {
+                        std::cerr
+                            << "Constant group " << name << " member "
+                            << i->name << " uses an invalid identifier"
+                            << std::endl;
+                        std::exit(EXIT_FAILURE);
+                    }
+                }
+                break;
+            }
+        case unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+            if (!entA.is()) {
+                rtl::Reference<unoidl::SingleInterfaceBasedServiceEntity>
+                    ent2B(
+                        static_cast<unoidl::SingleInterfaceBasedServiceEntity *>(
+                            entB.get()));
+                for (std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor>::const_iterator
+                         i(ent2B->getConstructors().begin());
+                     i != ent2B->getConstructors().end(); ++i)
+                {
+                    if (!valid(i->name)) {
+                        std::cerr
+                            << "single-interface--based service " << name
+                            << " constructor " << i->name
+                            << " uses an invalid identifier" << std::endl;
+                        std::exit(EXIT_FAILURE);
+                    }
+                    for (std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter>::const_iterator
+                             j(i->parameters.begin());
+                         j != i->parameters.end(); ++j)
+                    {
+                        if (!valid(j->name)) {
+                            std::cerr
+                                << "single-interface--based service " << name
+                                << " constructor " << i->name << " parameter "
+                                << j->name << " uses an invalid identifier"
+                                << std::endl;
+                            std::exit(EXIT_FAILURE);
+                        }
+                    }
+                }
+            }
+            break;
+        case unoidl::Entity::SORT_ACCUMULATION_BASED_SERVICE:
+            {
+                rtl::Reference<unoidl::AccumulationBasedServiceEntity> ent2B(
+                    static_cast<unoidl::AccumulationBasedServiceEntity *>(
+                        entB.get()));
+                std::vector<unoidl::AccumulationBasedServiceEntity::Property>::size_type
+                    n(entA.is()
+                      ? (static_cast<unoidl::AccumulationBasedServiceEntity *>(
+                             entA.get())
+                         ->getDirectProperties().size())
+                      : 0);
+                assert(n <= ent2B->getDirectProperties().size());
+                for (std::vector<unoidl::AccumulationBasedServiceEntity::Property>::const_iterator
+                         i(ent2B->getDirectProperties().begin() + n);
+                     i != ent2B->getDirectProperties().end(); ++i)
+                {
+                    if (!valid(i->name)) {
+                        std::cerr
+                            << "accumulation-based service " << name
+                            << " direct property " << i->name
+                            << " uses an invalid identifier" << std::endl;
+                        std::exit(EXIT_FAILURE);
+                    }
+                }
+                break;
+            }
+        }
+    }
+}
+
 }
 
 SAL_IMPLEMENT_MAIN() {
@@ -920,6 +1189,7 @@ SAL_IMPLEMENT_MAIN() {
             badUsage();
         }
         checkMap(prov[1], "", prov[0]->createRootCursor());
+        checkIds(prov[0], "", prov[1]->createRootCursor());
         return EXIT_SUCCESS;
     } catch (unoidl::FileFormatException & e1) {
         std::cerr
