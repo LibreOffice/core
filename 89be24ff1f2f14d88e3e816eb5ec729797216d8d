@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_c7a91e26",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-11T11:30:32Z",
+      "side": 1,
+      "message": "nitpick - please do some line breaking in the commit message, i think the git convention is something less than 80 columns",
+      "revId": "89be24ff1f2f14d88e3e816eb5ec729797216d8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_47b60e8c",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-11T11:30:32Z",
+      "side": 1,
+      "message": "doc.hxx should only require IDocumentDeviceAccess, not the Manager header, to minimize dependencies; it should be sufficient to use a forward declaration for DocumentDeviceManager in doc.hxx.",
+      "revId": "89be24ff1f2f14d88e3e816eb5ec729797216d8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_67bb1273",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-11T11:30:32Z",
+      "side": 1,
+      "message": "if you use a boost::scoped_ptr here, you can use a forward declaration and won\u0027t need the header.",
+      "revId": "89be24ff1f2f14d88e3e816eb5ec729797216d8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_87af262b",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-11T11:30:32Z",
+      "side": 1,
+      "message": "this is unnecessary - method GetDrawModel() already exists",
+      "revId": "89be24ff1f2f14d88e3e816eb5ec729797216d8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_a7ac2a37",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-11T11:30:32Z",
+      "side": 1,
+      "message": "you correctly identify some room for improvement there - as a first step this \"forwarding\" definition is fine (actually you can keep the IDocument* base class at first);  the next step of this refactoring would be to adapt all callers of these methods to call them on the getIDocumentDeviceAccess() instead [should be a separate commit, best not to do that until the first step is finished; this can wait until the GSoC itself starts].",
+      "revId": "89be24ff1f2f14d88e3e816eb5ec729797216d8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_e7a62253",
+        "filename": "sw/source/core/doc/docDeviceManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-11T11:30:32Z",
+      "side": 1,
+      "message": "please name this cxx file the same as the header file for consistency\n(the random naming of cxx files in writer is generally considered annoying)",
+      "revId": "89be24ff1f2f14d88e3e816eb5ec729797216d8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_0763361b",
+        "filename": "sw/source/core/doc/docDeviceManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-11T11:30:32Z",
+      "side": 1,
+      "message": "that should be m_rSwDoc - ah you didn\u0027t notice because this file isn\u0027t added to makefile :)",
+      "revId": "89be24ff1f2f14d88e3e816eb5ec729797216d8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_c7803e8e",
+        "filename": "sw/source/core/doc/docdesc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-11T11:30:32Z",
+      "side": 1,
+      "message": "looks correct to me",
+      "revId": "89be24ff1f2f14d88e3e816eb5ec729797216d8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_e77d42b3",
+        "filename": "sw/source/core/doc/docnew.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-11T11:30:32Z",
+      "side": 1,
+      "message": "actually this is creating a temporary DocumentDeviceManager instance and then assigning that to the member variable with the copy constructor - which reminds me, DocumentDeviceManager is not supposed to have a copy constructor or assignment operator, since it owns pointer members; use \"boost::noncopyable\" as a base class for DocumentDeviceManager to prevent that and make this SwDoc member a boost::scoped_ptr.",
+      "revId": "89be24ff1f2f14d88e3e816eb5ec729797216d8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
