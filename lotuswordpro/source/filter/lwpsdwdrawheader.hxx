@@ -212,6 +212,16 @@ struct SdwLineRecord
     sal_uInt8 nLineEnd;
     sal_uInt8 nLineStyle;
     SdwColor aPenColor;
+    SdwLineRecord()
+        : nStartX(0)
+        , nStartY(0)
+        , nEndX(0)
+        , nEndY(0)
+        , nLineWidth(0)
+        , nLineEnd(0)
+        , nLineStyle(0)
+    {
+    }
 };
 
 struct SdwPolyLineRecord
