@@ -53,11 +53,16 @@ public:
 //=================== Methods of PBMReader ==============================
 
 PBMReader::PBMReader(SvStream & rPBM)
-    : mrPBM( rPBM )
-    , mbStatus( sal_True )
-    , mbRemark( sal_False )
-    , mbRaw( sal_True )
-    , mpAcc( NULL )
+    : mrPBM(rPBM)
+    , mbStatus(true)
+    , mbRemark(false)
+    , mbRaw(true)
+    , mnMode(0)
+    , mpAcc(NULL)
+    , mnWidth(0)
+    , mnHeight(0)
+    , mnCol(0)
+    , mnMaxVal(0)
 {
 }
 
