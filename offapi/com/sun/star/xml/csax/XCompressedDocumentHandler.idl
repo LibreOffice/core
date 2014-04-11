@@ -42,28 +42,28 @@ module com { module sun { module star { module xml { module csax {
  */
 interface XCompressedDocumentHandler: com::sun::star::uno::XInterface
 {
-    void _startDocument()
+    void compressedStartDocument()
         raises( com::sun::star::xml::sax::SAXException );
 
-    void _endDocument()
+    void compressedEndDocument()
         raises( com::sun::star::xml::sax::SAXException );
 
-    void _startElement( [in] string aName, [in] sequence< XMLAttribute > aAttributes)
+    void compressedStartElement( [in] string aName, [in] sequence< XMLAttribute > aAttributes)
         raises( com::sun::star::xml::sax::SAXException );
 
-    void _endElement( [in] string aName )
+    void compressedEndElement( [in] string aName )
         raises( com::sun::star::xml::sax::SAXException );
 
-    void _characters( [in] string aChars )
+    void compressedCharacters( [in] string aChars )
         raises( com::sun::star::xml::sax::SAXException );
 
-    void _ignorableWhitespace( [in] string aWhitespaces )
+    void compressedIgnorableWhitespace( [in] string aWhitespaces )
         raises( com::sun::star::xml::sax::SAXException );
 
-    void _processingInstruction( [in] string aTarget, [in] string aData )
+    void compressedProcessingInstruction( [in] string aTarget, [in] string aData )
         raises( com::sun::star::xml::sax::SAXException );
 
-    void _setDocumentLocator( [in] long columnNumber, [in] long lineNumber, [in] string publicId, [in] string systemId)
+    void compressedSetDocumentLocator( [in] long columnNumber, [in] long lineNumber, [in] string publicId, [in] string systemId)
         raises( com::sun::star::xml::sax::SAXException );
 
 };

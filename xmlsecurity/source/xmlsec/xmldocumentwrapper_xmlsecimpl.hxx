@@ -212,31 +212,31 @@ public:
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /* com::sun::star::xml::csax::XCompressedDocumentHandler */
-    virtual void SAL_CALL _startDocument(  )
+    virtual void SAL_CALL compressedStartDocument(  )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL _endDocument(  )
+    virtual void SAL_CALL compressedEndDocument(  )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL _startElement(
+    virtual void SAL_CALL compressedStartElement(
         const OUString& aName,
         const com::sun::star::uno::Sequence<
             com::sun::star::xml::csax::XMLAttribute >& aAttributes )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL _endElement( const OUString& aName )
+    virtual void SAL_CALL compressedEndElement( const OUString& aName )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL _characters( const OUString& aChars )
+    virtual void SAL_CALL compressedCharacters( const OUString& aChars )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL _ignorableWhitespace( const OUString& aWhitespaces )
+    virtual void SAL_CALL compressedIgnorableWhitespace( const OUString& aWhitespaces )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL _processingInstruction( const OUString& aTarget, const OUString& aData )
+    virtual void SAL_CALL compressedProcessingInstruction( const OUString& aTarget, const OUString& aData )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL _setDocumentLocator(
+    virtual void SAL_CALL compressedSetDocumentLocator(
         sal_Int32 columnNumber,
         sal_Int32 lineNumber,
         const OUString& publicId,

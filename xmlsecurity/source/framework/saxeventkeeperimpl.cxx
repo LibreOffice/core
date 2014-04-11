@@ -1218,7 +1218,7 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
             aAttributes[i].sValue =xAttribs->getValueByIndex((short)i);
         }
 
-        m_xCompressedDocumentHandler->_startElement(aName, aAttributes);
+        m_xCompressedDocumentHandler->compressedStartElement(aName, aAttributes);
     #endif
 
     }
@@ -1255,7 +1255,7 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
         #ifndef _USECOMPRESSEDDOCUMENTHANDLER
             m_xDocumentHandler->endElement(aName);
         #else
-            m_xCompressedDocumentHandler->_endElement(aName);
+            m_xCompressedDocumentHandler->compressedEndElement(aName);
         #endif
         }
 
@@ -1303,7 +1303,7 @@ void SAL_CALL SAXEventKeeperImpl::characters( const OUString& aChars )
         #ifndef _USECOMPRESSEDDOCUMENTHANDLER
                 m_xDocumentHandler->characters(aChars);
         #else
-            m_xCompressedDocumentHandler->_characters(aChars);
+            m_xCompressedDocumentHandler->compressedCharacters(aChars);
         #endif
             }
         }
@@ -1332,7 +1332,7 @@ void SAL_CALL SAXEventKeeperImpl::processingInstruction(
         #ifndef _USECOMPRESSEDDOCUMENTHANDLER
             m_xDocumentHandler->processingInstruction(aTarget, aData);
         #else
-            m_xCompressedDocumentHandler->_processingInstruction(aTarget, aData);
+            m_xCompressedDocumentHandler->compressedProcessingInstruction(aTarget, aData);
         #endif
             }
         }

@@ -971,7 +971,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::startElement( const OUString& aName
         aAttributes[i].sValue =xAttribs->getValueByIndex((short)i);
     }
 
-    _startElement(aName, aAttributes);
+    compressedStartElement(aName, aAttributes);
 }
 
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::endElement( const OUString& aName )
@@ -1006,17 +1006,17 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::setDocumentLocator( const cssu::Ref
 }
 
 /* XCompressedDocumentHandler */
-void SAL_CALL XMLDocumentWrapper_XmlSecImpl::_startDocument(  )
+void SAL_CALL XMLDocumentWrapper_XmlSecImpl::compressedStartDocument(  )
     throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL XMLDocumentWrapper_XmlSecImpl::_endDocument(  )
+void SAL_CALL XMLDocumentWrapper_XmlSecImpl::compressedEndDocument(  )
     throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL XMLDocumentWrapper_XmlSecImpl::_startElement( const OUString& aName, const cssu::Sequence< cssxcsax::XMLAttribute >& aAttributes )
+void SAL_CALL XMLDocumentWrapper_XmlSecImpl::compressedStartElement( const OUString& aName, const cssu::Sequence< cssxcsax::XMLAttribute >& aAttributes )
     throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     saxHelper.startElement(aName, aAttributes);
@@ -1025,31 +1025,31 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::_startElement( const OUString& aNam
     buildIDAttr( m_pCurrentElement );
 }
 
-void SAL_CALL XMLDocumentWrapper_XmlSecImpl::_endElement( const OUString& aName )
+void SAL_CALL XMLDocumentWrapper_XmlSecImpl::compressedEndElement( const OUString& aName )
     throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     endElement( aName );
 }
 
-void SAL_CALL XMLDocumentWrapper_XmlSecImpl::_characters( const OUString& aChars )
+void SAL_CALL XMLDocumentWrapper_XmlSecImpl::compressedCharacters( const OUString& aChars )
     throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     characters( aChars );
 }
 
-void SAL_CALL XMLDocumentWrapper_XmlSecImpl::_ignorableWhitespace( const OUString& aWhitespaces )
+void SAL_CALL XMLDocumentWrapper_XmlSecImpl::compressedIgnorableWhitespace( const OUString& aWhitespaces )
     throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     ignorableWhitespace( aWhitespaces );
 }
 
-void SAL_CALL XMLDocumentWrapper_XmlSecImpl::_processingInstruction( const OUString& aTarget, const OUString& aData )
+void SAL_CALL XMLDocumentWrapper_XmlSecImpl::compressedProcessingInstruction( const OUString& aTarget, const OUString& aData )
     throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
     processingInstruction( aTarget, aData );
 }
 
-void SAL_CALL XMLDocumentWrapper_XmlSecImpl::_setDocumentLocator( sal_Int32 /*columnNumber*/, sal_Int32 /*lineNumber*/, const OUString& /*publicId*/, const OUString& /*systemId*/ )
+void SAL_CALL XMLDocumentWrapper_XmlSecImpl::compressedSetDocumentLocator( sal_Int32 /*columnNumber*/, sal_Int32 /*lineNumber*/, const OUString& /*publicId*/, const OUString& /*systemId*/ )
     throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
 }
