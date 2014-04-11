@@ -54,15 +54,16 @@ public:
 };
 
 //=================== Methods of PPMWriter ==============================
-
 PPMWriter::PPMWriter(SvStream &rStrm)
     : m_rOStm(rStrm)
-    , mbStatus  ( sal_True )
-    , mpAcc     ( NULL )
+    , mpOStmOldModus(0)
+    , mbStatus(true)
+    , mnMode(0)
+    , mpAcc(NULL)
+    , mnWidth(0)
+    , mnHeight(0)
 {
 }
-
-
 
 PPMWriter::~PPMWriter()
 {
