@@ -720,11 +720,6 @@ void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, cons
     EnableOutput( bOldOutput );
 }
 
-void OutputDevice::ClipAndDrawGradientToBounds ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
-{
-    ClipAndDrawGradient ( rGradient, rPolyPoly );
-}
-
 void OutputDevice::ClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
 {
     const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
@@ -824,7 +819,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
         if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
             return;
 
-        ClipAndDrawGradientToBounds ( aGradient, rPolyPoly );
+        ClipAndDrawGradient ( aGradient, rPolyPoly );
     }
 
     if( mpAlphaVDev )

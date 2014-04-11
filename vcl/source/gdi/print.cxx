@@ -1812,11 +1812,6 @@ bool Printer::UsePolyPolygonForComplexGradient()
     return true;
 }
 
-void Printer::ClipAndDrawGradientToBounds ( Gradient &rGradient, const PolyPolygon &rPolyPoly )
-{
-    ClipAndDrawGradient ( rGradient, rPolyPoly );
-}
-
 void Printer::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly )
 {
     const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
