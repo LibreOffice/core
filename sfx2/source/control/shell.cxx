@@ -84,7 +84,6 @@ struct SfxShell_Impl: public SfxBroadcaster
                                             // ViewFrame/ViewShell/SubShell list
     SfxViewFrame*            pFrame;        // Frame, if  <UI-active>
     SfxRepeatTarget*         pRepeatTarget; // SbxObjectRef xParent;
-    bool                        bInAppBASIC;
     bool                        bActive;
     sal_uIntPtr                 nDisableFlags;
     sal_uIntPtr                 nHelpId;
@@ -128,7 +127,6 @@ SfxShell::SfxShell()
     pImp->pViewSh = 0;
     pImp->pFrame = 0;
     pImp->pRepeatTarget = 0;
-    pImp->bInAppBASIC = false;
     pImp->nHelpId = 0L;
     pImp->bActive = false;
     pImp->nDisableFlags = 0;
@@ -153,7 +151,6 @@ SfxShell::SfxShell( SfxViewShell *pViewSh )
     pImp->pViewSh = pViewSh;
     pImp->pFrame = 0;
     pImp->pRepeatTarget = 0;
-    pImp->bInAppBASIC = false;
     pImp->nHelpId = 0L;
     pImp->bActive = false;
 }
