@@ -73,7 +73,7 @@ class Point;
 
         When start and end points exist, the block cursor depends on this. If the
         cursor is moved by cursor keys (e.g. up/down, home/end) the mouse rectangle
-        is obsolet and has to be deleted.
+        is obsolete and has to be deleted.
     */
     virtual void clearPoints() = 0;
 

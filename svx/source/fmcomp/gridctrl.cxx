@@ -2689,7 +2689,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) th
             {   // modified state changed from sal_True to sal_False and we're on a insert row
                 // we have two "new row"s at the moment : the one we're editing currently (where the current
                 // column is the only dirty element) and a "new new" row which is completely clean. As the first
-                // one is about to be cleaned, too, the second one is obsolet now.
+                // one is about to be cleaned, too, the second one is obsolete now.
                 if (m_xCurrentRow->IsNew() && nRecordCount == (GetRowCount() - 2))
                 {
                     RowRemoved(GetRowCount() - 1, 1, true);
@@ -3008,7 +3008,7 @@ void DbGridControl::resetCurrentRow()
         // is clean). Normally in DataSourcePropertyChanged we would remove this second row if the modified state of
         // the insert row changes from sal_True to sal_False. But if our current cell is the only modified element (means the
         // data source isn't modified) and we're reset this DataSourcePropertyChanged would never be called, so we
-        // would never delete the obsolet "second insert row". Thus in this special case this method here
+        // would never delete the obsolete "second insert row". Thus in this special case this method here
         // is the only possibility to determine the redundance of the row (resetCurrentRow is called when the
         // "first insert row" is about to be cleaned, so of course the "second insert row" is redundant now)
         Reference< XPropertySet > xDataSource = getDataSource()->getPropertySet();

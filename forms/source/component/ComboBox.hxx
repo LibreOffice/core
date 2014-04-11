@@ -50,7 +50,7 @@ class OComboBoxModel
             ,public OErrorBroadcaster
 {
     CachedRowSet                            m_aListRowSet;          // the row set to fill the list
-    ::com::sun::star::uno::Any              m_aBoundColumn;         // obsolet
+    ::com::sun::star::uno::Any              m_aBoundColumn;         // obsolete
     OUString                         m_aListSource;
     OUString                         m_aDefaultText;         // DefaultText
     ::com::sun::star::uno::Any              m_aLastKnownValue;
