@@ -1260,7 +1260,7 @@ module com {
     published interface XIdlMethod;
     published interface XIdlClass {
      interface ::com::sun::star::uno::XInterface;
-     sequence< ::com::sun::star::reflection::XIdlClass > getClasses();
+     /** @deprecated */ sequence< ::com::sun::star::reflection::XIdlClass > getClasses();
      /** @deprecated */ ::com::sun::star::reflection::XIdlClass getClass([in] string aName);
      boolean equals([in] ::com::sun::star::reflection::XIdlClass Type);
      boolean isAssignableFrom([in] ::com::sun::star::reflection::XIdlClass xType);
@@ -1268,7 +1268,7 @@ module com {
      string getName();
      /** @deprecated */ ::com::sun::star::uno::Uik getUik();
      sequence< ::com::sun::star::reflection::XIdlClass > getSuperclasses();
-     sequence< ::com::sun::star::reflection::XIdlClass > getInterfaces();
+     /** @deprecated */ sequence< ::com::sun::star::reflection::XIdlClass > getInterfaces();
      ::com::sun::star::reflection::XIdlClass getComponentType();
      ::com::sun::star::reflection::XIdlField getField([in] string aName);
      sequence< ::com::sun::star::reflection::XIdlField > getFields();

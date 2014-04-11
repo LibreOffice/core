@@ -3006,6 +3006,7 @@ module com {
      [property, optional] long CharTopBorderDistance;
      [property, optional] long CharBottomBorderDistance;
      [property, optional] ::com::sun::star::table::ShadowFormat CharShadowFormat;
+     [property, optional] ::com::sun::star::util::Color CharHighlight;
     };
    };
    module chart {
@@ -3112,7 +3113,7 @@ module com {
      double HighError;
      double LowError;
     };
-    published typedef sequence< ::com::sun::star::chart::ChartDataValue > ChartDataPoint;
+    /** @deprecated */ published typedef sequence< ::com::sun::star::chart::ChartDataValue > ChartDataPoint;
     published service ChartDataPointProperties {
      service ::com::sun::star::drawing::LineProperties;
      service ::com::sun::star::style::CharacterProperties;
@@ -3244,6 +3245,7 @@ module com {
      [property, optional] ::com::sun::star::container::XNameContainer ShapeUserDefinedAttributes;
      [property, optional] long NavigationOrder;
      [property, optional] string Hyperlink;
+     [property, optional] sequence< ::com::sun::star::beans::PropertyValue > InteropGrabBag;
     };
    };
    module chart {
@@ -3503,6 +3505,7 @@ module com {
      [property, optional] string IsAutoUpdate;
      [property, optional] sequence< ::com::sun::star::beans::NamedValue > ParaStyleConditions;
      [property, optional] boolean Hidden;
+     [property, optional] sequence< ::com::sun::star::beans::PropertyValue > StyleInteropGrabBag;
     };
     published interface XDefaultsSupplier {
      interface ::com::sun::star::uno::XInterface;
@@ -4758,6 +4761,7 @@ module com {
      [property, optional] boolean AutomaticControlFocus;
      [property, optional] boolean ApplyFormDesignMode;
      [property, optional, readonly] string RuntimeUID;
+     [property, optional] sequence< ::com::sun::star::beans::PropertyValue > InteropGrabBag;
     };
     published service OleEmbeddedServerRegistration: ::com::sun::star::uno::XInterface;
     published exception OwnLockOnDocumentRequest: ::com::sun::star::uno::Exception {
@@ -7698,8 +7702,8 @@ module com {
     };
     /** @deprecated */ published interface XFrameLoaderQuery {
      interface ::com::sun::star::uno::XInterface;
-     sequence< string > getAvailableFilterNames();
-     sequence< ::com::sun::star::beans::PropertyValue > getLoaderProperties([in] string sFilterName);
+     /** @deprecated */ sequence< string > getAvailableFilterNames();
+     /** @deprecated */ sequence< ::com::sun::star::beans::PropertyValue > getLoaderProperties([in] string sFilterName);
      /** @deprecated */ string searchFilter([in] string sURL, [in] sequence< ::com::sun::star::beans::PropertyValue > seqArguments);
     };
     /** @deprecated */ published interface XFrameSetModel {
@@ -8852,7 +8856,7 @@ module com {
      boolean add([in] string aWord, [in] boolean bIsNegative, [in] string aRplcText);
      boolean remove([in] string aWord);
      boolean isFull();
-     sequence< ::com::sun::star::linguistic2::XDictionaryEntry > getEntries();
+     /** @deprecated */ sequence< ::com::sun::star::linguistic2::XDictionaryEntry > getEntries();
      void clear();
      boolean addDictionaryEventListener([in] ::com::sun::star::linguistic2::XDictionaryEventListener xListener);
      boolean removeDictionaryEventListener([in] ::com::sun::star::linguistic2::XDictionaryEventListener xListener);
@@ -8941,7 +8945,7 @@ module com {
      [attribute] boolean IsIgnoreControlCharacters;
      [attribute] boolean IsSpellUpperCase;
      [attribute] boolean IsSpellWithDigits;
-     [attribute] boolean IsSpellCapitalization;
+     /** @deprecated */ [attribute] boolean IsSpellCapitalization;
      [attribute] short HyphMinLeading;
      [attribute] short HyphMinTrailing;
      [attribute] short HyphMinWordLength;
@@ -13922,6 +13926,7 @@ module com {
      [property, optional] ::com::sun::star::awt::Gradient FillGradient;
      [property, optional] string FillGradientName;
      [property, optional] short ShadowTransparence;
+     [property, optional] sequence< ::com::sun::star::beans::PropertyValue > FrameInteropGrabBag;
     };
     published service BaseFrame {
      service ::com::sun::star::text::BaseFrameProperties;
