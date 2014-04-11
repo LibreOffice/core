@@ -60,6 +60,9 @@ XPMWriter::XPMWriter(SvStream& rOStm)
     , mbStatus(sal_True)
     , mbTrans(sal_False)
     , mpAcc(NULL)
+    , mnWidth(0)
+    , mnHeight(0)
+    , mnColors(0)
 {
 }
 
