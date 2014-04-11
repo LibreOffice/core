@@ -226,7 +226,10 @@ class FmNavRequestSelectHint : public SfxHint
     sal_Bool                m_bMixedSelection;
 public:
     TYPEINFO_OVERRIDE();
-    FmNavRequestSelectHint() { }
+    FmNavRequestSelectHint()
+        : m_bMixedSelection(sal_False)
+    {
+    }
     virtual ~FmNavRequestSelectHint() {}
 
     void SetMixedSelection(sal_Bool bMixedSelection) { m_bMixedSelection = bMixedSelection; }
