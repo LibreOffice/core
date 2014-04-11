@@ -1403,7 +1403,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
 
         // add all post-its on valid pages within the page range to the
         // temporary post-it document.
-        // Since the array of post-it fileds is sorted by page and line number we will
+        // Since the array of post-it fields is sorted by page and line number we will
         // already get them in the correct order
         sal_uInt16 nVirtPg = 0, nLineNo = 0, nLastPageNum = 0, nPhyPageNum = 0;
         bool bIsFirstPostIt = true;

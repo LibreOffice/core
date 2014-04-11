@@ -514,7 +514,7 @@ public class UITools {
 
      /**
       * returns the numeric value of a numeric filed. This is needed ie. for
-      * fileds include the moneytary unit.
+      * fields include the moneytary unit.
       * @param NumericFieldName the name of the numeric filed
       * @return the value of the numeric filed
       * @throws java.lang.Exception if something fail
