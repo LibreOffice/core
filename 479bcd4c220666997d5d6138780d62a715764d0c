@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_8701e63b",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-11T07:52:54Z",
+      "side": 1,
+      "message": "Why duplicating the second line of the if/else branches? You could do it right after the end of the \"else\" to avoid duplication.",
+      "revId": "479bcd4c220666997d5d6138780d62a715764d0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_a7feea36",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-11T07:52:54Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "479bcd4c220666997d5d6138780d62a715764d0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
