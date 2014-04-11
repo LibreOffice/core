@@ -27,7 +27,7 @@
  * The children of the page preview are the pages that are visible in the
  * preview.
  *
- * The vast majority of the implemention logic is inherited from
+ * The vast majority of the implementation logic is inherited from
  * SwAccessibleDocumentBase.
  */
 class SwAccessiblePreview : public  SwAccessibleDocumentBase

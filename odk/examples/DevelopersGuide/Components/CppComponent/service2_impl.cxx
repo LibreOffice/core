@@ -106,7 +106,7 @@ public:
         throw (RuntimeException);
 };
 
-// XInitialization implemention
+// XInitialization implementation
 void MyService2Impl::initialize( Sequence< Any > const & args )
     throw (Exception)
 {
