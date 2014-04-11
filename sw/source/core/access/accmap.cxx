@@ -3423,7 +3423,7 @@ Size SwAccessibleMap::GetPreviewPageSize( sal_uInt16 _nPreviewPageNum ) const
     }
 }
 
-/** method to build up a new data structure of the accessible pararaphs,
+/** method to build up a new data structure of the accessible paragraphs,
     which have a selection
     Important note: method has to be used inside a mutual exclusive section
 */

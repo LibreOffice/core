@@ -120,7 +120,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
         ::com::sun::star::accessibility::XAccessible>
             _GetDocumentView( bool bPagePreview );
 
-    /** method to build up a new data structure of the accessible pararaphs,
+    /** method to build up a new data structure of the accessible paragraphs,
         which have a selection
 
         Important note: method has to used inside a mutual exclusive section
