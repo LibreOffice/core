@@ -708,6 +708,16 @@ ListsManager::ListsManager(DomainMapper& rDMapper,
 
 ListsManager::~ListsManager( )
 {
+    uno::Reference<drawing::XShape> xShape;
+    for (std::vector<NumPicBullet::Pointer>::iterator it = m_aNumPicBullets.begin(); it != m_aNumPicBullets.end(); ++it)
+    {
+        xShape = (*it)->GetShape();
+        if (xShape.is())
+        {
+            uno::Reference<lang::XComponent> xShapeComponent(xShape, uno::UNO_QUERY);
+            xShapeComponent->dispose();
+        }
+    }
 }
 
 void ListsManager::lcl_attribute( Id nName, Value& rVal )
