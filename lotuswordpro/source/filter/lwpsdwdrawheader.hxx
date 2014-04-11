@@ -156,6 +156,11 @@ struct SdwPoint
 {
     sal_Int16 x;
     sal_Int16 y;
+    SdwPoint()
+        : x(0)
+        , y(0)
+    {
+    }
 };
 
 struct SdwColor
@@ -251,6 +256,11 @@ struct SdwFMPATH
 {
     sal_uInt16 n;
     SdwPoint* pPts;
+    SdwFMPATH()
+        : n(0)
+        , pPts(NULL)
+    {
+    }
 };
 
 struct SdwTextArt : public SdwTextBoxRecord
@@ -259,6 +269,12 @@ struct SdwTextArt : public SdwTextBoxRecord
     sal_Int16 nRotation;
     sal_uInt16 nTextLen;
     SdwFMPATH aPath[2];
+    SdwTextArt()
+        : nIndex(0)
+        , nRotation(0)
+        , nTextLen(0)
+    {
+    }
 };
 
 struct SdwBmpRecord
