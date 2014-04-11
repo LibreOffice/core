@@ -836,7 +836,7 @@ void ScXMLExport::GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks )
                 aAreaLink.sFilter = pLink->GetFilter();
                 aAreaLink.sFilterOptions = pLink->GetOptions();
                 aAreaLink.sURL = pLink->GetFile();
-                aAreaLink.nRefresh = pLink->GetTimeout();
+                aAreaLink.nRefresh = pLink->GetRefreshDelay();
                 rAreaLinks.AddNewAreaLink( aAreaLink );
             }
         }
