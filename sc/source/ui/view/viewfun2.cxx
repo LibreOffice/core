@@ -1638,8 +1638,8 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
             if (nCommand == SVX_SEARCHCMD_FIND_ALL || nCommand == SVX_SEARCHCMD_REPLACE_ALL)
             {
-                static SearchResults *aSearchResults = new SearchResults(pDoc);
-                aSearchResults->Show(aMatchedRanges);
+                SearchResults aSearchResults(pDoc);
+                aSearchResults.Show(aMatchedRanges);
 
                 rMark.ResetMark();
                 for (size_t i = 0, n = aMatchedRanges.size(); i < n; ++i)
