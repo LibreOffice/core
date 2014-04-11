@@ -282,6 +282,12 @@ struct SdwBmpRecord
     sal_uInt16 nTranslation;
     sal_uInt16 nRotation;
     sal_uInt32 nFileSize;
+    SdwBmpRecord()
+        : nTranslation(0)
+        , nRotation(0)
+        , nFileSize(0)
+    {
+    }
 };
 
 struct BmpInfoHeader
