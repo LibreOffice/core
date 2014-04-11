@@ -64,12 +64,17 @@ sal_Bool SdHTMLFilter::Export()
     SfxItemSet *pSet = mrMedium.GetItemSet();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aParams;
+    OUString sFilterOptions;
 
     const SfxPoolItem* pItem;
+
     if ( pSet->GetItemState( SID_FILTER_DATA, false, &pItem ) == SFX_ITEM_SET )
         ((SfxUnoAnyItem*)pItem)->GetValue() >>= aParams;
 
-    delete( new HtmlExport( mrMedium.GetName(), aParams, &mrDocument, &mrDocShell ) );
+    if (pSet->GetItemState(SID_FILE_FILTEROPTIONS, true, &pItem) == SFX_ITEM_SET)
+        sFilterOptions = ((SfxStringItem*)pItem)->GetValue();
+
+    HtmlExport aExport(mrMedium.GetName(), aParams, sFilterOptions, &mrDocument, &mrDocShell);
 
     return true;
 }

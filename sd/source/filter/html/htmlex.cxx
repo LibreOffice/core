@@ -82,12 +82,16 @@
 #include "buttonset.hxx"
 #include <basegfx/polygon/b2dpolygon.hxx>
 
+#include <svx/svdotable.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
+
+using namespace sdr::table;
 
 // get parameter from Itemset
 #define RESTOHTML( res ) StringToHTMLString(SD_RESSTR(res))
@@ -312,36 +316,51 @@ OUString HtmlState::SetLink( const OUString& aLink, const OUString& aTarget )
 
     return aStr;
 }
+namespace
+{
 
-// methods of the class HtmlExport
-static OUString getParagraphStyle( SdrOutliner* pOutliner, sal_Int32 nPara )
+OUString getParagraphStyle( SdrOutliner* pOutliner, sal_Int32 nPara )
 {
     SfxItemSet aParaSet( pOutliner->GetParaAttribs( nPara ) );
 
-    OUString sStyle("direction:");
+    OUString sStyle;
+
     if( static_cast<const SvxFrameDirectionItem*>(aParaSet.GetItem( EE_PARA_WRITINGDIR ))->GetValue() == FRMDIR_HORI_RIGHT_TOP )
     {
-        sStyle += "rtl;";
+
+        sStyle = "direction: rtl;";
     }
     else
     {
-         sStyle += "ltr;";
+        // This is the default so don't write it out
+        // sStyle += "direction: ltr;";
     }
     return sStyle;
 }
 
+void lclAppendStyle(OUStringBuffer& aBuffer, const OUString& aTag, const OUString& aStyle)
+{
+    if (aStyle.isEmpty())
+        aBuffer.append("<" + aTag + ">");
+    else
+        aBuffer.append("<" + aTag + " style=\"" + aStyle + "\">");
+}
+
+} // anonymous namespace
 
 // constructor for the html export helper classes
 HtmlExport::HtmlExport(
     const OUString& aPath,
     const Sequence< PropertyValue >& rParams,
+    const OUString& rFilterOptions,
     SdDrawDocument* pExpDoc,
-    ::sd::DrawDocShell* pDocShell )
+    sd::DrawDocShell* pDocShell )
     :   maPath( aPath ),
+        maFilterOptions( rFilterOptions ),
         mpDoc(pExpDoc),
         mpDocSh( pDocShell ),
         meEC(NULL),
-        meMode( PUBLISH_HTML ),
+        meMode( PUBLISH_SINGLE_DOCUMENT ),
         mbContentsPage(false),
         mnButtonThema(-1),
         mnWidthPixel( PUB_MEDRES_WIDTH ),
@@ -379,6 +398,9 @@ HtmlExport::HtmlExport(
         break;
     case PUBLISH_KIOSK:
         ExportKiosk();
+        break;
+    case PUBLISH_SINGLE_DOCUMENT:
+        ExportSingleDocument();
         break;
     }
 
@@ -616,6 +638,74 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     maDocFileName = maIndex;
 }
 
+void HtmlExport::ExportSingleDocument()
+{
+    SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
+
+    maPageNames.resize(mnSdPageCount);
+
+    mnPagesWritten = 0;
+    InitProgress(mnSdPageCount);
+
+    OUStringBuffer aStr(maHTMLHeader);
+    aStr.append(CreateMetaCharset());
+    aStr.append("</head>\r\n");
+    aStr.append(CreateBodyTag());
+
+    for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; ++nSdPage)
+    {
+        SdPage* pPage = maPages[nSdPage];
+        maPageNames[nSdPage] = pPage->GetName();
+
+        if( mbDocColors )
+        {
+            SetDocColors( pPage );
+        }
+
+        // page title
+        OUString sTitleText(CreateTextForTitle(pOutliner, pPage, pPage->GetPageBackgroundColor()));
+        OUString sStyle;
+
+        if (nSdPage != 0) // First page - no need for a page brake here
+            sStyle += "page-break-before:always; ";
+        sStyle += getParagraphStyle(pOutliner, 0);
+
+        lclAppendStyle(aStr, "h1", sStyle);
+
+        aStr.append(sTitleText);
+        aStr.append("</h1>\r\n");
+
+        // write outline text
+        aStr.append(CreateTextForPage( pOutliner, pPage, true, pPage->GetPageBackgroundColor() ));
+
+        // notes
+        if(mbNotes)
+        {
+            SdPage* pNotesPage = maNotesPages[ nSdPage ];
+            OUString aNotesStr( CreateTextForNotesPage( pOutliner, pNotesPage, true, maBackColor) );
+
+            if (!aNotesStr.isEmpty())
+            {
+                aStr.append("<br>\r\n<h3>");
+                aStr.append(RESTOHTML(STR_HTMLEXP_NOTES));
+                aStr.append(":</h3>\r\n");
+
+                aStr.append(aNotesStr);
+            }
+        }
+
+        if (mpProgress)
+            mpProgress->SetState(++mnPagesWritten);
+
+    }
+
+    // close page
+    aStr.append("</body>\r\n</html>");
+
+    WriteHtml(maDocFileName, false, aStr.makeStringAndClear());
+
+    pOutliner->Clear();
+}
 
 // exports the (in the c'tor specified impress document) to html
 void HtmlExport::ExportHtml()
@@ -1022,9 +1112,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
 
         // page title
         OUString sTitleText( CreateTextForTitle(pOutliner,pPage, pPage->GetPageBackgroundColor()) );
-        aStr.append("<h1 style=\"");
-        aStr.append(getParagraphStyle(pOutliner, 0));
-        aStr.append("\">");
+        lclAppendStyle(aStr, "h1", getParagraphStyle(pOutliner, 0));
         aStr.append(sTitleText);
         aStr.append("</h1>\r\n");
 
@@ -1123,6 +1211,90 @@ OUString HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
 {
     OUStringBuffer aStr;
 
+    for (sal_uInt32 i = 0; i <pPage->GetObjCount(); i++ )
+    {
+        SdrObject* pObject = pPage->GetObj(i);
+        PresObjKind eKind = pPage->GetPresObjKind(pObject);
+
+        if (eKind == PRESOBJ_TABLE)
+        {
+            SdrTableObj* pTableObject = (SdrTableObj*) pObject;
+
+            CellPos aStart, aEnd;
+
+            aStart = pTableObject->getFirstCell();
+            aEnd = pTableObject->getLastCell();
+
+            sal_Int32 nColCount = pTableObject->getColumnCount();
+            aStr.append("<table>\r\n");
+            for (sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++)
+            {
+                aStr.append("  <tr>\r\n");
+                for (sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++)
+                {
+                    aStr.append("    <td>\r\n");
+                    sal_Int32 nCellIndex = nRow * nColCount + nCol;
+                    SdrText* pText = pTableObject->getText(nCellIndex);
+                    if (!pText || !pText->GetOutlinerParaObject())
+                        continue;
+
+                    pOutliner->SetText(*(pText->GetOutlinerParaObject()));
+
+                    sal_Int32 nCount = pOutliner->GetParagraphCount();
+
+                    Paragraph* pPara = NULL;
+
+                    sal_Int16 nCurrentDepth = -1;
+
+                    for (sal_Int32 nPara = 0; nPara < nCount; nPara++)
+                    {
+                        pPara = pOutliner->GetParagraph(nPara);
+                        if(pPara == 0)
+                            continue;
+
+                        const sal_Int16 nDepth = (sal_uInt16) pOutliner->GetDepth(nPara);
+                        OUString aParaText = ParagraphToHTMLString(pOutliner, nPara, rBackgroundColor);
+
+                        if (aParaText.isEmpty())
+                            continue;
+
+                        if (nDepth < 0)
+                        {
+                            lclAppendStyle(aStr, "p", getParagraphStyle(pOutliner, nPara));
+                            aStr.append(aParaText);
+                            aStr.append("</p>\r\n");
+                        }
+                        else
+                        {
+                            while(nCurrentDepth < nDepth)
+                            {
+                                aStr.append("<ul>\r\n");
+                                nCurrentDepth++;
+                            }
+                            while(nCurrentDepth > nDepth)
+                            {
+                                aStr.append("</ul>\r\n");
+                                nCurrentDepth--;
+                            }
+                            lclAppendStyle(aStr, "li", getParagraphStyle(pOutliner, nPara));
+                            aStr.append(aParaText);
+                            aStr.append("</li>\r\n");
+                        }
+                    }
+                    while(nCurrentDepth >= 0)
+                    {
+                        aStr.append("</ul>\r\n");
+                        nCurrentDepth--;
+                    }
+                    pOutliner->Clear();
+                    aStr.append("    </td>\r\n");
+                }
+                aStr.append("  </tr>\r\n");
+            }
+            aStr.append("</table>\r\n");
+        }
+    }
+
     SdrTextObj* pTO = (SdrTextObj*)pPage->GetPresObj(PRESOBJ_TEXT);
     if(!pTO)
         pTO = GetLayoutTextObject(pPage);
@@ -1175,7 +1347,7 @@ OUString HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
                 OUString sStyle(getParagraphStyle(pOutliner, nPara));
                 if(nActDepth >= 0 )
                 {
-                    aStr.append("<li style=\"" + sStyle + "\">");
+                    lclAppendStyle(aStr, "li", sStyle);
                 }
 
                 if(nActDepth <= 0 && bHeadLine)
@@ -1186,7 +1358,7 @@ OUString HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
                     }
                     else
                     {
-                        aStr.append("<h2 style=\"" + sStyle + "\">");
+                        lclAppendStyle(aStr, "h2", sStyle);
                     }
                 }
                 aStr.append(aParaText);
@@ -1230,7 +1402,7 @@ OUString HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
             sal_Int32 nCount = pOutliner->GetParagraphCount();
             for (sal_Int32 nPara = 0; nPara < nCount; nPara++)
             {
-                aStr.append("<p style=\"" + getParagraphStyle(pOutliner, nPara) + "\">");
+                lclAppendStyle(aStr, "p", getParagraphStyle(pOutliner, nPara));
                 aStr.append(ParagraphToHTMLString(pOutliner, nPara, rBackgroundColor));
                 aStr.append("</p>\r\n");
             }
@@ -1958,9 +2130,7 @@ bool HtmlExport::CreateOutlinePages()
             if (aTitle.isEmpty())
                 aTitle = maPageNames[nSdPage];
 
-            aStr.append("<p style=\"");
-            aStr.append(getParagraphStyle(pOutliner, 0));
-            aStr.append("\">");
+            lclAppendStyle(aStr, "p", getParagraphStyle(pOutliner, 0));
             aStr.append(CreateLink(aLink, aTitle));
             aStr.append("</p>");
 

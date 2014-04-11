@@ -83,6 +83,7 @@ class HtmlExport
     std::vector< SdPage* > maNotesPages;
 
     OUString maPath;
+    OUString maFilterOptions;
 
     SdDrawDocument* mpDoc;
     ::sd::DrawDocShell* mpDocSh;
@@ -205,12 +206,18 @@ class HtmlExport
     void ExportHtml();
     void ExportKiosk();
     void ExportWebCast();
+    void ExportSingleDocument();
 
     bool WriteHtml( const OUString& rFileName, bool bAddExtension, const OUString& rHtmlData );
     OUString GetButtonName( int nButton ) const;
 
  public:
-     HtmlExport( const OUString& aPath, const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams, SdDrawDocument* pExpDoc, ::sd::DrawDocShell* pDocShell );
+    HtmlExport(const OUString& aPath,
+               const css::uno::Sequence<css::beans::PropertyValue>& rParams,
+               const OUString& rFilterOptions,
+               SdDrawDocument* pExpDoc,
+               sd::DrawDocShell* pDocShell);
+
     virtual ~HtmlExport();
 
     static OUString ColorToHTMLString( Color aColor );
