@@ -332,26 +332,9 @@ namespace drawinglayer
             }
             else if(0.0 != fTrans)
             {
-#ifndef IOS
-                // For some reason using this "normal" code path on
-                // iOS with tiled rendering causes horrible artefacts:
-                // The mask ends up being drawn too, ending up looking
-                // as translucent milky rectangles covering the
-                // SmartArt (which is what this typically (?) ends up
-                // being used for) ... Why this doesn't cause any
-                // artefacts on OS X, which uses largely the very same
-                // code in vcl/quartz, I don't know.
                 sal_uInt8 nMaskValue((sal_uInt8)basegfx::fround(fTrans * 255.0));
                 const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
                 mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
-#else
-                // Not sure at all why this works, but it does. The
-                // result is not beautiful (jaggies), but better than
-                // blocking out rectangles of the image.
-                Bitmap aMask(aContent);
-                aMask.Convert(BMP_CONVERSION_8BIT_GREYS);
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aMask));
-#endif
             }
             else
             {
