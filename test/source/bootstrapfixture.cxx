@@ -19,6 +19,7 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 
+#include <i18nlangtag/mslangid.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -63,6 +64,9 @@ void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
     SvtSysLocaleOptions aLocalOptions;
     aLocalOptions.SetLocaleConfigString( aLangISO );
     aLocalOptions.SetUILocaleConfigString( aLangISO );
+
+    MsLangId::setConfiguredSystemUILanguage(LANGUAGE_ENGLISH_US);
+    LanguageTag::setConfiguredSystemLanguage(LANGUAGE_ENGLISH_US);
 
     InitVCL();
     if (Application::IsHeadlessModeRequested())
