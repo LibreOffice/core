@@ -19,6 +19,8 @@
 		BE82BDAC182190E400A447B5 /* TiledView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE82BDAB182190E400A447B5 /* TiledView.m */; };
 		BE82BDAF1821A1D000A447B5 /* View.m in Sources */ = {isa = PBXBuildFile; fileRef = BE82BDAE1821A1D000A447B5 /* View.m */; };
 		BECAB372186054DE00F814F9 /* lo.mm in Sources */ = {isa = PBXBuildFile; fileRef = BECAB371186054DE00F814F9 /* lo.mm */; };
+		BED2593F18F6B87900C94C72 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED2593E18F6B87900C94C72 /* ImageIO.framework */; };
+		BED2594118F6B89000C94C72 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED2594018F6B89000C94C72 /* MobileCoreServices.framework */; };
 		BEEE02D11860ABDB00FBDE67 /* program in Resources */ = {isa = PBXBuildFile; fileRef = BEEE02CE1860ABB700FBDE67 /* program */; };
 		BEEE02D21860ABDB00FBDE67 /* share in Resources */ = {isa = PBXBuildFile; fileRef = BEEE02CF1860ABB700FBDE67 /* share */; };
 		BEEE02D31860ABDB00FBDE67 /* ure in Resources */ = {isa = PBXBuildFile; fileRef = BEEE02D01860ABB700FBDE67 /* ure */; };
@@ -692,6 +694,8 @@
 		BE9F460A186839C100B8BE69 /* vtablefactory.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtablefactory.cxx; path = ../../../bridges/source/cpp_uno/shared/vtablefactory.cxx; sourceTree = "<group>"; };
 		BE9F460B186839C100B8BE69 /* vtables.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtables.cxx; path = ../../../bridges/source/cpp_uno/shared/vtables.cxx; sourceTree = "<group>"; };
 		BECAB371186054DE00F814F9 /* lo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = lo.mm; sourceTree = "<group>"; };
+		BED2593E18F6B87900C94C72 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		BED2594018F6B89000C94C72 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		BEDB0F08185B7537009A6F26 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = ../../../lo.xcconfig; sourceTree = "<group>"; };
 		BEEE02CE1860ABB700FBDE67 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = Resources/program; sourceTree = SOURCE_ROOT; };
 		BEEE02CF1860ABB700FBDE67 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = Resources/share; sourceTree = SOURCE_ROOT; };
@@ -713,6 +717,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BED2594118F6B89000C94C72 /* MobileCoreServices.framework in Frameworks */,
+				BED2593F18F6B87900C94C72 /* ImageIO.framework in Frameworks */,
 				BEEEF9661860741400FBDE67 /* libz.dylib in Frameworks */,
 				BEEEF9641860740400FBDE67 /* libiconv.dylib in Frameworks */,
 				BE82BD7818218E2E00A447B5 /* CoreGraphics.framework in Frameworks */,
@@ -1286,6 +1292,8 @@
 		BE82BD7418218E2E00A447B5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BED2594018F6B89000C94C72 /* MobileCoreServices.framework */,
+				BED2593E18F6B87900C94C72 /* ImageIO.framework */,
 				BEEEF9651860741400FBDE67 /* libz.dylib */,
 				BEEEF9631860740400FBDE67 /* libiconv.dylib */,
 				BE82BD7518218E2E00A447B5 /* Foundation.framework */,
