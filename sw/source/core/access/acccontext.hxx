@@ -388,9 +388,6 @@ public:
 };
 
 // some heavily used exception support
-const sal_Char sDefunc[] = "object is defunctional";
-const sal_Char sMissingWindow[] = "window is missing";
-
 #define THROW_RUNTIME_EXCEPTION( ifc, msg )                                 \
     ::com::sun::star::uno::Reference < ifc > xThis( this );                 \
     ::com::sun::star::uno::RuntimeException aExcept(                        \
@@ -402,7 +399,7 @@ const sal_Char sMissingWindow[] = "window is missing";
     {                                                                       \
         ::com::sun::star::uno::Reference < ifc > xThis( ths );              \
         ::com::sun::star::lang::DisposedException aExcept(                  \
-            OUString( sDefunc ),        \
+            OUString( "object is defunctional" ),        \
             xThis );                                                        \
         throw aExcept;                                                      \
     }
@@ -413,7 +410,7 @@ const sal_Char sMissingWindow[] = "window is missing";
 #define CHECK_FOR_WINDOW( i, w )                                            \
     if( !(w) )                                                              \
     {                                                                       \
-        THROW_RUNTIME_EXCEPTION( i, sMissingWindow );                       \
+        THROW_RUNTIME_EXCEPTION( i, "window is missing" );                  \
     }
 #endif
 
