@@ -387,7 +387,7 @@ public:
                                         const OUString *pArg2 = 0 );
 };
 
-// some heaviliy used exception support
+// some heavily used exception support
 const sal_Char sDefunc[] = "object is defunctional";
 const sal_Char sMissingWindow[] = "window is missing";
 
