@@ -24,6 +24,7 @@
 #include <vcl/window.hxx>
 #include <svl/outstrm.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <boost/scoped_ptr.hpp>
 
 // - PDFFilter -
 PDFFilter::PDFFilter( const Reference< XComponentContext > &rxContext ) :
@@ -112,7 +113,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
         if( bRet )
         {
-            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), STREAM_READ );
+            boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), STREAM_READ ));
 
             if( pIStm )
             {
@@ -120,8 +121,6 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
                 aOStm.WriteStream( *pIStm );
                 bRet = ( aOStm.Tell() && ( aOStm.GetError() == ERRCODE_NONE ) );
-
-                delete pIStm;
             }
         }
     }

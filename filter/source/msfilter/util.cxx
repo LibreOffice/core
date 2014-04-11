@@ -13,6 +13,7 @@
 #include <unotools/fontdefs.hxx>
 #include <vcl/svapp.hxx>
 #include <filter/msfilter/util.hxx>
+#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 
 namespace msfilter {
@@ -83,9 +84,9 @@ DateTime DTTM2DateTime( long lDTTM )
 sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
     rtl_TextEncoding& rChrSet, OUString& rFontName, bool bDisableUnicodeSupport)
 {
-    StarSymbolToMSMultiFont *pConvert = CreateStarSymbolToMSMultiFont();
+    boost::scoped_ptr<StarSymbolToMSMultiFont> pConvert(CreateStarSymbolToMSMultiFont());
     OUString sFont = pConvert->ConvertChar(cChar);
-    delete pConvert;
+    pConvert.reset();
     if (!sFont.isEmpty())
     {
         cChar = static_cast< sal_Unicode >(cChar | 0xF000);

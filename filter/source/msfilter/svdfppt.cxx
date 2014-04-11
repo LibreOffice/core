@@ -120,6 +120,7 @@
 #include <rtl/strbuf.hxx>
 #include <tools/time.hxx>
 #include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 
 // PPT ColorScheme Slots
 #define PPT_COLSCHEME                       (0x08000000)
@@ -1802,14 +1803,13 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
 
             if ( aTmpFile.IsValid() )
             {
-                SvStream* pDest = ::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), STREAM_TRUNC | STREAM_WRITE );
+                boost::scoped_ptr<SvStream> pDest(::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), STREAM_TRUNC | STREAM_WRITE ));
                 if ( pDest )
                     bSuccess = SdrPowerPointOLEDecompress( *pDest, rStCtrl, nLen );
-                delete pDest;
             }
             if ( bSuccess )
             {
-                SvStream* pDest = ::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), STREAM_READ );
+                boost::scoped_ptr<SvStream> pDest(::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), STREAM_READ ));
                 Storage* pObjStor = pDest ? new Storage( *pDest, true ) : NULL;
                 if ( pObjStor )
                 {
@@ -1915,7 +1915,6 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                         }
                     }
                 }
-                delete pDest;
             }
         }
     }
@@ -2056,11 +2055,10 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
         pHd = aDocRecManager.GetRecordHeader( PPT_PST_ExObjList, SEEK_FROM_BEGINNING );
         if ( pHd )
         {
-            DffRecordManager*   pExObjListManager = NULL;
             DffRecordHeader*    pExEmbed = NULL;
 
             pHd->SeekToBegOfRecord( rStCtrl );
-            pExObjListManager = new DffRecordManager( rStCtrl );
+            boost::scoped_ptr<DffRecordManager> pExObjListManager(new DffRecordManager( rStCtrl ));
             sal_uInt16 i, nRecType(PPT_PST_ExEmbed);
 
             for ( i = 0; i < 2; i++ )
@@ -2097,7 +2095,6 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                     }
                 }
             }
-            delete pExObjListManager;
         }
         rStCtrl.Seek( nOldPos );
     }
@@ -2254,12 +2251,11 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 for ( pPortion = pPara->First(); pPortion; pPortion = pPara->Next() )
                 {
                     SfxItemSet aPortionAttribs( rOutliner.GetEmptyItemSet() );
-                    SvxFieldItem* pFieldItem = pPortion->GetTextField();
+                    boost::scoped_ptr<SvxFieldItem> pFieldItem(pPortion->GetTextField());
                     if ( pFieldItem )
                     {
                         rOutliner.QuickInsertField( *pFieldItem, ESelection( nParaIndex, aSelection.nEndPos, nParaIndex, aSelection.nEndPos + 1 ) );
                         aSelection.nEndPos++;
-                        delete pFieldItem;
                     }
                     else
                     {
@@ -2931,7 +2927,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
 {
     SdrObject* pRet = NULL;
     sal_Bool bCreateObj = bForce;
-    SfxItemSet* pSet = NULL;
+    boost::scoped_ptr<SfxItemSet> pSet;
     sal_uLong nFPosMerk = rStCtrl.Tell(); // remember FilePos for restoring it later
     DffRecordHeader aPageHd;
     if ( SeekToAktPage( &aPageHd ) )
@@ -2956,7 +2952,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
                         ReadDffPropSet( rStCtrl, (DffPropertyReader&)*this );
                         mnFix16Angle = Fix16ToAngle( GetPropertyValue( DFF_Prop_Rotation, 0 ) );
                         sal_uInt32 nColor = GetPropertyValue( DFF_Prop_fillColor, 0xffffff );
-                        pSet = new SfxItemSet( pSdrModel->GetItemPool() );
+                        pSet.reset(new SfxItemSet( pSdrModel->GetItemPool() ));
                         DffObjData aObjData( aEscherObjectHd, Rectangle( 0, 0, 28000, 21000 ), 0 );
                         ApplyAttributes( rStCtrl, *pSet, aObjData );
                         Color aColor( MSO_CLR_ToColor( nColor ) );
@@ -2971,7 +2967,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
     {
         if ( !pSet )
         {
-            pSet = new SfxItemSet( pSdrModel->GetItemPool() );
+            pSet.reset(new SfxItemSet( pSdrModel->GetItemPool() ));
             pSet->Put( XFillStyleItem( XFILL_NONE ) );
         }
         pSet->Put( XLineStyleItem( XLINE_NONE ) );
@@ -2985,7 +2981,6 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
         pRet->SetMoveProtect( true );
         pRet->SetResizeProtect( true );
     }
-    delete pSet;
     return pRet;
 }
 

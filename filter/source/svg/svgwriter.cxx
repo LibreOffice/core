@@ -3633,9 +3633,8 @@ void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
     ReadGDIMetaFile( aMemStm, aMtf );
 
     const Reference< XDocumentHandler > xDocumentHandler( rxDocHandler );
-    SVGExport* pWriter = new SVGExport( mxContext, xDocumentHandler, maFilterData );
+    boost::scoped_ptr<SVGExport> pWriter(new SVGExport( mxContext, xDocumentHandler, maFilterData ));
     pWriter->writeMtf( aMtf );
-    delete pWriter;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -74,6 +74,7 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/drawing/XShapes.hpp"
 #include "com/sun/star/graphic/XGraphicProvider.hpp"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::rtl;
 using namespace ::vcl;
@@ -789,9 +790,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             aContext.SignCertificate = maSignCertificate;
 
 // all context data set, time to create the printing device
-            PDFWriter*          pPDFWriter = new PDFWriter( aContext, xEnc );
+            boost::scoped_ptr<PDFWriter> pPDFWriter(new PDFWriter( aContext, xEnc ));
             OutputDevice*       pOut = pPDFWriter->GetReferenceDevice();
-            vcl::PDFExtOutDevData* pPDFExtOutDevData = NULL;
 
             DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
             pXDevice->SetOutputDevice( pOut );
@@ -810,8 +810,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             if ( pOut )
             {
                 DBG_ASSERT( pOut->GetExtOutDevData() == NULL, "PDFExport: ExtOutDevData already set!!!" );
-                pPDFExtOutDevData = new vcl::PDFExtOutDevData( *pOut );
-                pOut->SetExtOutDevData( pPDFExtOutDevData );
+                boost::scoped_ptr<vcl::PDFExtOutDevData> pPDFExtOutDevData(new vcl::PDFExtOutDevData( *pOut ));
+                pOut->SetExtOutDevData( pPDFExtOutDevData.get() );
                 pPDFExtOutDevData->SetIsExportNotes( mbExportNotes );
                 pPDFExtOutDevData->SetIsExportTaggedPDF( mbUseTaggedPDF );
                 pPDFExtOutDevData->SetIsExportTransitionEffects( mbUseTransitionEffects );
@@ -884,14 +884,13 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 if ( mxStatusIndicator.is() )
                 {
-                    ResMgr* pResMgr = ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILanguageTag() );
+                    boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILanguageTag() ));
                     if ( pResMgr )
                     {
                         sal_Int32 nTotalPageCount = aRangeEnum.size();
                         if ( bSecondPassForImpressNotes )
                             nTotalPageCount *= 2;
                         mxStatusIndicator->start( OUString( ResId( PDF_PROGRESS_BAR, *pResMgr ) ), nTotalPageCount );
-                        delete pResMgr;
                     }
                 }
 
@@ -931,9 +930,6 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     }
                 }
             }
-
-            delete pPDFExtOutDevData;
-            delete pPDFWriter;
         }
     }
 

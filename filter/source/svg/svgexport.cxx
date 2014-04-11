@@ -46,6 +46,7 @@
 #include <xmloff/animationexport.hxx>
 
 #include <boost/preprocessor/repetition/repeat.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::geometry;
@@ -543,7 +544,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 {
     Reference< XComponentContext >      xContext( ::comphelper::getProcessComponentContext() ) ;
     Reference< XOutputStream >          xOStm;
-    SvStream*                           pOStm = NULL;
+    boost::scoped_ptr<SvStream>         pOStm;
     sal_Int32                            nLength = rDescriptor.getLength();
     const PropertyValue*                pValue = rDescriptor.getConstArray();
     sal_Bool                            bRet = sal_False;
@@ -559,7 +560,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             OUString aFileName;
 
             pValue[ i ].Value >>= aFileName;
-            pOStm = ::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_WRITE | STREAM_TRUNC );
+            pOStm.reset(::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_WRITE | STREAM_TRUNC ));
 
             if( pOStm )
                 xOStm = Reference< XOutputStream >( new ::utl::OOutputStreamWrapper ( *pOStm ) );
@@ -641,8 +642,6 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             }
         }
     }
-
-    delete pOStm;
 
     return bRet;
 }
