@@ -67,7 +67,7 @@ private:
     float mfFontScale; // TODO: does CoreText have a font size limit?
 
     CGFloat mfFontRotation; // text direction angle (in radians)
-    CGFloat mfFontStretch;  <1.0: font is squeezed, >1.0 font is stretched
+    CGFloat mfFontStretch;  // <1.0: font gets squeezed, >1.0: font gets stretched
 
     // cached details about the resulting layout
     // mutable members since these details are all lazy initialized
