@@ -718,7 +718,7 @@ const SwPrintData & SwDoc::getPrintData() const
         pThis->mpPrtData = new SwPrintData;
 
         // SwPrintData should be initialized from the configuration,
-        // the respective config item is implememted by SwPrintOptions which
+        // the respective config item is implemented by SwPrintOptions which
         // is also derived from SwPrintData
         const SwDocShell *pDocSh = GetDocShell();
         OSL_ENSURE( pDocSh, "pDocSh is 0, can't determine if this is a WebDoc or not" );
