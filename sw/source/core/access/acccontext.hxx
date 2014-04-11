@@ -126,7 +126,7 @@ protected:
     SwCrsrShell* GetCrsrShell();
     const SwCrsrShell* GetCrsrShell() const;
 
-    // Notify all children that the vis araea has changed.
+    // Notify all children that the vis area has changed.
     // The SwFrm might belong to the current object or to any other child or
     // grandchild.
     void ChildrenScrolled( const SwFrm *pFrm, const SwRect& rOldVisArea );
