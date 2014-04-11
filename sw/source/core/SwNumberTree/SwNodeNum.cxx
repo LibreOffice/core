@@ -200,7 +200,7 @@ bool SwNodeNum::HasCountedChildren() const
     {
         SwNodeNum* pChild( dynamic_cast<SwNodeNum*>(*aIt) );
         OSL_ENSURE( pChild,
-                "<SwNodeNum::HasCountedChildren()> - unexcepted type of child -> please inform OD" );
+                "<SwNodeNum::HasCountedChildren()> - unexpected type of child -> please inform OD" );
         if ( pChild &&
              ( pChild->IsCountedForNumbering() ||
                pChild->HasCountedChildren() ) )

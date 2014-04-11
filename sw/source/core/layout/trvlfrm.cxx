@@ -2586,7 +2586,7 @@ void SwRootFrm::CalcFrmRects(
                     for ( sal_uInt16 k = 0; bSub && k < aSortObjs.Count(); ++k )
                     {
                         OSL_ENSURE( aSortObjs[k]->ISA(SwFlyFrm),
-                            "<SwRootFrm::CalcFrmRects(..)> - object in <aSortObjs> of unexcepted type" );
+                            "<SwRootFrm::CalcFrmRects(..)> - object in <aSortObjs> of unexpected type" );
                         const SwFlyFrm* pTmp = static_cast<SwFlyFrm*>(aSortObjs[k]);
                         do
                         {

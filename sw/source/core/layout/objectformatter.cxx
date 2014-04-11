@@ -167,7 +167,7 @@ SwObjectFormatter* SwObjectFormatter::CreateObjFormatter(
     }
     else
     {
-        OSL_FAIL( "<SwObjectFormatter::CreateObjFormatter(..)> - unexcepted type of anchor frame" );
+        OSL_FAIL( "<SwObjectFormatter::CreateObjFormatter(..)> - unexpected type of anchor frame" );
     }
 
     return pObjFormatter;

@@ -61,7 +61,7 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
               !mrDrawObj.ISA(SwFlyDrawObj) );  // - indirectly checked
     (void) bObjOfExceptedType;
     OSL_ENSURE( bObjOfExceptedType,
-            "SwAnchoredObjectPosition(..) - object of unexcepted type!" );
+            "SwAnchoredObjectPosition(..) - object of unexpected type!" );
 #endif
 
     _GetInfoAboutObj();

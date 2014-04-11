@@ -3578,7 +3578,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
                         const SwTxtFrm* pTxtFrm(
                             dynamic_cast<const SwTxtFrm*>(xAccImpl->GetFrm()) );
                         OSL_ENSURE( pTxtFrm,
-                                "<SwAccessibleMap::_SubmitTextSelectionChangedEvents()> - unexcepted type of frame" );
+                                "<SwAccessibleMap::_SubmitTextSelectionChangedEvents()> - unexpected type of frame" );
                         if ( pTxtFrm )
                         {
                             InvalidateParaTextSelection( *pTxtFrm );
@@ -3606,7 +3606,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
                     const SwTxtFrm* pTxtFrm(
                             dynamic_cast<const SwTxtFrm*>(xAccImpl->GetFrm()) );
                     OSL_ENSURE( pTxtFrm,
-                            "<SwAccessibleMap::_SubmitTextSelectionChangedEvents()> - unexcepted type of frame" );
+                            "<SwAccessibleMap::_SubmitTextSelectionChangedEvents()> - unexpected type of frame" );
                     if ( pTxtFrm )
                     {
                         InvalidateParaTextSelection( *pTxtFrm );

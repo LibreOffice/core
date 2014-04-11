@@ -2065,7 +2065,7 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
 {
     if ( !_rNewObj.ISA(SwAnchoredDrawObject) )
     {
-        OSL_FAIL( "SwFrm::AppendDrawObj(..) - anchored object of unexcepted type -> object not appended" );
+        OSL_FAIL( "SwFrm::AppendDrawObj(..) - anchored object of unexpected type -> object not appended" );
         return;
     }
 
@@ -2275,7 +2275,7 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
             else
             {
                 OSL_ENSURE( pObj->ISA(SwAnchoredDrawObject),
-                        "<SwLayoutFrm::NotifyFlys() - anchored object of unexcepted type" );
+                        "<SwLayoutFrm::NotifyFlys() - anchored object of unexpected type" );
                 // #i26945# - use <pAnchorFrm> to check, if
                 // fly frame is lower of layout frame resp. if fly frame is
                 // at a different page registered as its anchor frame is on.

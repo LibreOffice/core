@@ -45,7 +45,7 @@ SwObjectFormatterLayFrm* SwObjectFormatterLayFrm::CreateObjFormatter(
     if ( !_rAnchorLayFrm.IsPageFrm() &&
          !_rAnchorLayFrm.IsFlyFrm() )
     {
-        OSL_FAIL( "<SwObjectFormatterLayFrm::CreateObjFormatter(..)> - unexcepted type of anchor frame " );
+        OSL_FAIL( "<SwObjectFormatterLayFrm::CreateObjFormatter(..)> - unexpected type of anchor frame " );
         return 0L;
     }
 
