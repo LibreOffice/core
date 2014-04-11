@@ -286,6 +286,8 @@ namespace drawinglayer
         /// concatenate single Primitive2D
         void DRAWINGLAYER_DLLPUBLIC appendPrimitive2DReferenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DReference& rSource);
 
+        OUString DRAWINGLAYER_DLLPUBLIC idToString(sal_uInt32 nId);
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
