@@ -60,15 +60,16 @@ using namespace ::com::sun::star;
 // - SgaTheme -
 
 
-GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry ) :
-        pParent               ( pGallery ),
-        pThm                  ( pThemeEntry ),
-        mnThemeLockCount      ( 0 ),
-        mnBroadcasterLockCount( 0 ),
-        nDragPos              ( 0 ),
-        bDragging             ( false )
+GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
+    : m_bDestDirRelative(false)
+    , pParent(pGallery)
+    , pThm(pThemeEntry)
+    , mnThemeLockCount(0)
+    , mnBroadcasterLockCount(0)
+    , nDragPos(0)
+    , bDragging(false)
+    , bAbortActualize(false)
 {
-
     ImplCreateSvDrawStorage();
 }
 
