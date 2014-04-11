@@ -422,6 +422,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     /* END defined ERROR.TYPE() values. */
     String SC_OPCODE_FILTERXML     { Text = "COM.MICROSOFT.FILTERXML";};
     String SC_OPCODE_WEBSERVICE    { Text = "COM.MICROSOFT.WEBSERVICE"; };
+    String SC_OPCODE_ERF_MS { Text = "COM.MICROSOFT.ERF.PRECISE" ; };
+    String SC_OPCODE_ERFC_MS { Text = "COM.MICROSOFT.ERFC.PRECISE" ; };
 };
 
 /** These function names are used only in the XLSX import. */
@@ -825,6 +827,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     /* END defined ERROR.TYPE() values. */
     String SC_OPCODE_FILTERXML     { Text = "_xlfn.FILTERXML";};
     String SC_OPCODE_WEBSERVICE    { Text = "_xlfn.WEBSERVICE"; };
+    String SC_OPCODE_ERF_MS { Text = "_xlfn.ERF.PRECISE" ; };
+    String SC_OPCODE_ERFC_MS { Text = "_xlfn.ERFC.PRECISE" ; };
 };
 
 // DO NOT CHANGE NAMES! Only add functions.
@@ -1230,6 +1234,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     /* END defined ERROR.TYPE() values. */
     String SC_OPCODE_FILTERXML     { Text = "FILTERXML";};
     String SC_OPCODE_WEBSERVICE    { Text = "WEBSERVICE"; };
+    String SC_OPCODE_ERF_MS { Text = "ERF.PRECISE" ; };
+    String SC_OPCODE_ERFC_MS { Text = "ERFC.PRECISE" ; };
 };
 
 Resource RID_STRLIST_FUNCTION_NAMES
@@ -2757,6 +2763,14 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_WEBSERVICE
     {
         Text [ en-US ] = "WEBSERVICE";
+    };
+    String SC_OPCODE_ERF_MS
+    {
+        Text [en-US ] = "ERF.PRECISE" ;
+    };
+    String SC_OPCODE_ERFC_MS
+    {
+        Text [en-US ] = "ERFC.PRECISE" ;
     };
 };
 
