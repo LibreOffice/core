@@ -1513,7 +1513,11 @@ void SdrDragMove::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 }
 
 SdrDragMove::SdrDragMove(SdrDragView& rNewView)
-:   SdrDragMethod(rNewView)
+    : SdrDragMethod(rNewView)
+    , nBestXSnap(0)
+    , nBestYSnap(0)
+    , bXSnapped(false)
+    , bYSnapped(false)
 {
     setMoveOnly(true);
 }
