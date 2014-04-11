@@ -281,19 +281,12 @@ Any ByteSequenceDataProvider::getOOoData()
 class HTMLFormatDataProvider : public DataProviderBaseImpl
 {
 public:
-  HTMLFormatDataProvider(const Any& data);
-
   HTMLFormatDataProvider(NSData* data);
 
   virtual NSData* getSystemData() SAL_OVERRIDE;
 
   virtual Any getOOoData() SAL_OVERRIDE;
 };
-
-HTMLFormatDataProvider::HTMLFormatDataProvider(const Any& data) :
-  DataProviderBaseImpl(data)
-{
-}
 
 HTMLFormatDataProvider::HTMLFormatDataProvider(NSData* data) :
   DataProviderBaseImpl(data)
