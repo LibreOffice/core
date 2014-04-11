@@ -31,6 +31,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/window.hxx>
+#include <vcl/graph.hxx>
 
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -186,14 +187,16 @@ namespace slideshow
 
             if( !mpMediaWindow.get() && !mxPlayerWindow.is() )
             {
-                // draw placeholder for no-video (no window) case
-                // no window and player == audio icon
-                // no window and no player == broken icon
-                BitmapEx aAudioLogo(mxPlayer.is() ?
-                    avmedia::MediaWindow::getAudioLogo() : avmedia::MediaWindow::getEmptyLogo() );
+                OUString sURL;
+                uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
+                if (xPropSet.is())
+                    xPropSet->getPropertyValue("PrivateTempFileURL") >>= sURL;
+
+                const Graphic aGraphic(avmedia::MediaWindow::grabFrame(sURL,"", true));
+                const BitmapEx aBmp = aGraphic.GetBitmapEx();
 
                 uno::Reference< rendering::XBitmap > xBitmap(vcl::unotools::xBitmapFromBitmapEx(
-                    pCanvas->getUNOCanvas()->getDevice(), aAudioLogo));
+                    pCanvas->getUNOCanvas()->getDevice(), aBmp));
 
                 rendering::ViewState aViewState;
                 aViewState.AffineTransform = pCanvas->getViewState().AffineTransform;
@@ -201,7 +204,7 @@ namespace slideshow
                 rendering::RenderState aRenderState;
                 ::canvas::tools::initRenderState( aRenderState );
 
-                const ::Size aBmpSize( aAudioLogo.GetSizePixel() );
+                const ::Size aBmpSize( aBmp.GetSizePixel() );
 
                 const ::basegfx::B2DVector aScale( rBounds.getWidth() / aBmpSize.Width(),
                                                    rBounds.getHeight() / aBmpSize.Height() );
