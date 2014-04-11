@@ -54,15 +54,15 @@ public:
 };
 
 //=================== Methoden von PGMWriter ==============================
-
 PGMWriter::PGMWriter(SvStream &rStream)
     : m_rOStm(rStream)
     , mbStatus(sal_True)
+    , mnMode(0)
     , mpAcc(NULL)
+    , mnWidth(0)
+    , mnHeight(0)
 {
 }
-
-
 
 PGMWriter::~PGMWriter()
 {
