@@ -138,7 +138,7 @@ static bool lcl_FindTable( const SwFrmFmt* pTableFmt, _FindItem * const pItem )
 bool SwDoc::GetData( const OUString& rItem, const OUString& rMimeType,
                      uno::Any & rValue ) const
 {
-    // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    // search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {
@@ -181,7 +181,7 @@ bool SwDoc::GetData( const OUString& rItem, const OUString& rMimeType,
 bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
                      const uno::Any & rValue )
 {
-    // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    // search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {
@@ -226,7 +226,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
 {
     SwServerObject* pObj = NULL;
 
-    // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    // search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {
@@ -376,7 +376,7 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
             return false;
     }
 
-    // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    // search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {

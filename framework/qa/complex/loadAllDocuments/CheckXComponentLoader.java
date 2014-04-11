@@ -522,7 +522,7 @@ public class CheckXComponentLoader
 //        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0,
 //                lProps);
 //
-//        System.out.println("check case senstive URLs");
+//        System.out.println("check case sensitive URLs");
 //
 //        sIllegalArgs = new String[] {
 //            "sLot:5000", "sloT:10909", ".unO:SaveAs", ".uno:OPEN",
