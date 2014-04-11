@@ -731,7 +731,7 @@ sal_Bool SwAccessiblePortionData::GetEditableRange(
             // special case: because size_t is usually unsigned, we can't just
             // decrease nLastPortion to -1 (which would normally do the job, so
             // this whole if wouldn't be needed). Instead, we'll do this
-            // special case and just increae the start portion beyond the last
+            // special case and just increase the start portion beyond the last
             // portion to make sure the loop below will have zero iteration.
             nStartPortion = nLastPortion + 1;
     }
