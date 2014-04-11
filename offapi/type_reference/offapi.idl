@@ -189,38 +189,38 @@ module com {
      [property] string DefaultControl;
     };
     /** @deprecated */ published constants CharSet {
-     const short DONTKNOW = 0;
      const short ANSI = 1;
-     const short MAC = 2;
+     const short DONTKNOW = 0;
      const short IBMPC_437 = 3;
      const short IBMPC_850 = 4;
      const short IBMPC_860 = 5;
      const short IBMPC_861 = 6;
      const short IBMPC_863 = 7;
      const short IBMPC_865 = 8;
-     const short SYSTEM = 9;
+     const short MAC = 2;
      const short SYMBOL = 10;
+     const short SYSTEM = 9;
     };
     published constants Command {
-     const short CONTEXTMENU = 1;
-     const short STARTDRAG = 2;
-     const short WHEEL = 3;
-     const short STARTAUTOSCROLL = 4;
      const short AUTOSCROLL = 5;
-     const short VOICE = 6;
-     const short STARTEXTTEXTINPUT = 7;
-     const short EXTTEXTINPUT = 8;
-     const short ENDEXTTEXTINPUT = 9;
-     const short INPUTCONTEXTCHANGE = 10;
+     const short CONTEXTMENU = 1;
      const short CURSORPOS = 11;
-     const short PASTESELECTION = 12;
-     const short MODKEYCHANGE = 13;
+     const short ENDEXTTEXTINPUT = 9;
+     const short EXTTEXTINPUT = 8;
      const short HANGUL_HANJA_CONVERSION = 14;
+     const short INPUTCONTEXTCHANGE = 10;
+     const short MODKEYCHANGE = 13;
+     const short PASTESELECTION = 12;
+     const short STARTAUTOSCROLL = 4;
+     const short STARTDRAG = 2;
+     const short STARTEXTTEXTINPUT = 7;
      const short USER = 4096;
+     const short VOICE = 6;
+     const short WHEEL = 3;
     };
     published constants DeviceCapability {
-     const long RASTEROPERATIONS = 1;
      const long GETBITS = 2;
+     const long RASTEROPERATIONS = 1;
     };
     published struct DeviceInfo {
      long Width;
@@ -248,12 +248,12 @@ module com {
      ::com::sun::star::uno::XInterface Target;
     };
     published constants FocusChangeReason {
-     const long TAB = 1;
-     const long CURSOR = 2;
-     const long MNEMONIC = 4;
-     const long FORWARD = 16;
-     const long BACKWARD = 32;
      const long AROUND = 64;
+     const long BACKWARD = 32;
+     const long CURSOR = 2;
+     const long FORWARD = 16;
+     const long MNEMONIC = 4;
+     const long TAB = 1;
      const long UNIQUEMNEMONIC = 256;
     };
     published struct FocusEvent: ::com::sun::star::lang::EventObject {
@@ -288,17 +288,17 @@ module com {
      short Type;
     };
     published constants FontEmphasisMark {
-     const short NONE = 0;
-     const short DOT = 1;
+     const short ABOVE = 4096;
+     const short ACCENT = 4;
+     const short BELOW = 8192;
      const short CIRCLE = 2;
      const short DISC = 3;
-     const short ACCENT = 4;
-     const short ABOVE = 4096;
-     const short BELOW = 8192;
+     const short DOT = 1;
+     const short NONE = 0;
     };
     published constants FontFamily {
-     const short DONTKNOW = 0;
      const short DECORATIVE = 1;
+     const short DONTKNOW = 0;
      const short MODERN = 2;
      const short ROMAN = 3;
      const short SCRIPT = 4;
@@ -311,68 +311,68 @@ module com {
      const short VARIABLE = 2;
     };
     published constants FontRelief {
-     const short NONE = 0;
      const short EMBOSSED = 1;
      const short ENGRAVED = 2;
+     const short NONE = 0;
     };
     published constants FontStrikeout {
+     const short BOLD = 4;
+     const short DONTKNOW = 3;
+     const short DOUBLE = 2;
      const short NONE = 0;
      const short SINGLE = 1;
-     const short DOUBLE = 2;
-     const short DONTKNOW = 3;
-     const short BOLD = 4;
      const short SLASH = 5;
      const short X = 6;
     };
     published constants FontType {
+     const short DEVICE = 2;
      const short DONTKNOW = 0;
      const short RASTER = 1;
-     const short DEVICE = 2;
      const short SCALABLE = 4;
     };
     published constants FontUnderline {
-     const short NONE = 0;
-     const short SINGLE = 1;
-     const short DOUBLE = 2;
-     const short DOTTED = 3;
-     const short DONTKNOW = 4;
-     const short DASH = 5;
-     const short LONGDASH = 6;
-     const short DASHDOT = 7;
-     const short DASHDOTDOT = 8;
-     const short SMALLWAVE = 9;
-     const short WAVE = 10;
-     const short DOUBLEWAVE = 11;
      const short BOLD = 12;
-     const short BOLDDOTTED = 13;
      const short BOLDDASH = 14;
-     const short BOLDLONGDASH = 15;
      const short BOLDDASHDOT = 16;
      const short BOLDDASHDOTDOT = 17;
+     const short BOLDDOTTED = 13;
+     const short BOLDLONGDASH = 15;
      const short BOLDWAVE = 18;
+     const short DASH = 5;
+     const short DASHDOT = 7;
+     const short DASHDOTDOT = 8;
+     const short DONTKNOW = 4;
+     const short DOTTED = 3;
+     const short DOUBLE = 2;
+     const short DOUBLEWAVE = 11;
+     const short LONGDASH = 6;
+     const short NONE = 0;
+     const short SINGLE = 1;
+     const short SMALLWAVE = 9;
+     const short WAVE = 10;
     };
     published constants FontWeight {
+     const float BLACK = 200;
+     const float BOLD = 150;
      const float DONTKNOW = 0;
-     const float THIN = 50;
-     const float ULTRALIGHT = 60;
      const float LIGHT = 75;
-     const float SEMILIGHT = 90;
      const float NORMAL = 100;
      const float SEMIBOLD = 110;
-     const float BOLD = 150;
+     const float SEMILIGHT = 90;
+     const float THIN = 50;
      const float ULTRABOLD = 175;
-     const float BLACK = 200;
+     const float ULTRALIGHT = 60;
     };
     published constants FontWidth {
-     const float DONTKNOW = 0;
-     const float ULTRACONDENSED = 50;
-     const float EXTRACONDENSED = 60;
      const float CONDENSED = 75;
-     const float SEMICONDENSED = 90;
-     const float NORMAL = 100;
-     const float SEMIEXPANDED = 110;
+     const float DONTKNOW = 0;
      const float EXPANDED = 150;
+     const float EXTRACONDENSED = 60;
      const float EXTRAEXPANDED = 175;
+     const float NORMAL = 100;
+     const float SEMICONDENSED = 90;
+     const float SEMIEXPANDED = 110;
+     const float ULTRACONDENSED = 50;
      const float ULTRAEXPANDED = 200;
     };
     published enum GradientStyle {
@@ -396,25 +396,25 @@ module com {
      short StepCount;
     };
     published constants ImageAlign {
-     const short LEFT = 0;
-     const short TOP = 1;
-     const short RIGHT = 2;
      const short BOTTOM = 3;
+     const short LEFT = 0;
+     const short RIGHT = 2;
+     const short TOP = 1;
     };
     published constants ImageStatus {
+     const long IMAGESTATUS_ABORTED = 4;
      const long IMAGESTATUS_ERROR = 1;
      const long IMAGESTATUS_SINGLEFRAMEDONE = 2;
      const long IMAGESTATUS_STATICIMAGEDONE = 3;
-     const long IMAGESTATUS_ABORTED = 4;
     };
     published constants InvalidateStyle {
      const short CHILDREN = 1;
      const short NOCHILDREN = 2;
-     const short NOERASE = 4;
-     const short UPDATE = 8;
-     const short TRANSPARENT = 16;
-     const short NOTRANSPARENT = 32;
      const short NOCLIPCHILDREN = 16384;
+     const short NOERASE = 4;
+     const short NOTRANSPARENT = 32;
+     const short TRANSPARENT = 16;
+     const short UPDATE = 8;
     };
     published struct ItemEvent: ::com::sun::star::lang::EventObject {
      long Selected;
@@ -422,51 +422,35 @@ module com {
      long ItemId;
     };
     published constants Key {
-     const short NUM0 = 256;
-     const short NUM1 = 257;
-     const short NUM2 = 258;
-     const short NUM3 = 259;
-     const short NUM4 = 260;
-     const short NUM5 = 261;
-     const short NUM6 = 262;
-     const short NUM7 = 263;
-     const short NUM8 = 264;
-     const short NUM9 = 265;
      const short A = 512;
+     const short ADD = 1287;
      const short B = 513;
+     const short BACKSPACE = 1283;
+     const short BRACKETLEFT = 1315;
+     const short BRACKETRIGHT = 1316;
      const short C = 514;
+     const short CAPSLOCK = 1312;
+     const short COMMA = 1292;
+     const short CONTEXTMENU = 1305;
+     const short COPY = 1298;
+     const short CUT = 1297;
      const short D = 515;
+     const short DECIMAL = 1309;
+     const short DELETE = 1286;
+     const short DELETE_TO_BEGIN_OF_LINE = 1536;
+     const short DELETE_TO_BEGIN_OF_PARAGRAPH = 1538;
+     const short DELETE_TO_END_OF_LINE = 1537;
+     const short DELETE_TO_END_OF_PARAGRAPH = 1539;
+     const short DELETE_WORD_BACKWARD = 1540;
+     const short DELETE_WORD_FORWARD = 1541;
+     const short DIVIDE = 1290;
+     const short DOWN = 1024;
      const short E = 516;
+     const short END = 1029;
+     const short EQUAL = 1295;
+     const short ESCAPE = 1281;
      const short F = 517;
-     const short G = 518;
-     const short H = 519;
-     const short I = 520;
-     const short J = 521;
-     const short K = 522;
-     const short L = 523;
-     const short M = 524;
-     const short N = 525;
-     const short O = 526;
-     const short P = 527;
-     const short Q = 528;
-     const short R = 529;
-     const short S = 530;
-     const short T = 531;
-     const short U = 532;
-     const short V = 533;
-     const short W = 534;
-     const short X = 535;
-     const short Y = 536;
-     const short Z = 537;
      const short F1 = 768;
-     const short F2 = 769;
-     const short F3 = 770;
-     const short F4 = 771;
-     const short F5 = 772;
-     const short F6 = 773;
-     const short F7 = 774;
-     const short F8 = 775;
-     const short F9 = 776;
      const short F10 = 777;
      const short F11 = 778;
      const short F12 = 779;
@@ -477,6 +461,7 @@ module com {
      const short F17 = 784;
      const short F18 = 785;
      const short F19 = 786;
+     const short F2 = 769;
      const short F20 = 787;
      const short F21 = 788;
      const short F22 = 789;
@@ -484,82 +469,97 @@ module com {
      const short F24 = 791;
      const short F25 = 792;
      const short F26 = 793;
-     const short DOWN = 1024;
-     const short UP = 1025;
-     const short LEFT = 1026;
-     const short RIGHT = 1027;
-     const short HOME = 1028;
-     const short END = 1029;
-     const short PAGEUP = 1030;
-     const short PAGEDOWN = 1031;
-     const short RETURN = 1280;
-     const short ESCAPE = 1281;
-     const short TAB = 1282;
-     const short BACKSPACE = 1283;
-     const short SPACE = 1284;
-     const short INSERT = 1285;
-     const short DELETE = 1286;
-     const short ADD = 1287;
-     const short SUBTRACT = 1288;
-     const short MULTIPLY = 1289;
-     const short DIVIDE = 1290;
-     const short POINT = 1291;
-     const short COMMA = 1292;
-     const short LESS = 1293;
-     const short GREATER = 1294;
-     const short EQUAL = 1295;
-     const short OPEN = 1296;
-     const short CUT = 1297;
-     const short COPY = 1298;
-     const short PASTE = 1299;
-     const short UNDO = 1300;
-     const short REPEAT = 1301;
+     const short F3 = 770;
+     const short F4 = 771;
+     const short F5 = 772;
+     const short F6 = 773;
+     const short F7 = 774;
+     const short F8 = 775;
+     const short F9 = 776;
      const short FIND = 1302;
-     const short PROPERTIES = 1303;
      const short FRONT = 1304;
-     const short CONTEXTMENU = 1305;
-     const short HELP = 1306;
-     const short MENU = 1307;
+     const short G = 518;
+     const short GREATER = 1294;
+     const short H = 519;
      const short HANGUL_HANJA = 1308;
-     const short DECIMAL = 1309;
-     const short TILDE = 1310;
-     const short QUOTELEFT = 1311;
-     const short CAPSLOCK = 1312;
-     const short NUMLOCK = 1313;
-     const short SCROLLLOCK = 1314;
-     const short DELETE_TO_BEGIN_OF_LINE = 1536;
-     const short DELETE_TO_END_OF_LINE = 1537;
-     const short DELETE_TO_BEGIN_OF_PARAGRAPH = 1538;
-     const short BRACKETLEFT = 1315;
-     const short BRACKETRIGHT = 1316;
-     const short SEMICOLON = 1317;
-     const short DELETE_TO_END_OF_PARAGRAPH = 1539;
-     const short DELETE_WORD_BACKWARD = 1540;
-     const short DELETE_WORD_FORWARD = 1541;
+     const short HELP = 1306;
+     const short HOME = 1028;
+     const short I = 520;
+     const short INSERT = 1285;
      const short INSERT_LINEBREAK = 1542;
      const short INSERT_PARAGRAPH = 1543;
+     const short J = 521;
+     const short K = 522;
+     const short L = 523;
+     const short LEFT = 1026;
+     const short LESS = 1293;
+     const short M = 524;
+     const short MENU = 1307;
+     const short MOVE_TO_BEGIN_OF_DOCUMENT = 1560;
+     const short MOVE_TO_BEGIN_OF_LINE = 1546;
+     const short MOVE_TO_BEGIN_OF_PARAGRAPH = 1548;
+     const short MOVE_TO_END_OF_DOCUMENT = 1561;
+     const short MOVE_TO_END_OF_LINE = 1547;
+     const short MOVE_TO_END_OF_PARAGRAPH = 1549;
      const short MOVE_WORD_BACKWARD = 1544;
      const short MOVE_WORD_FORWARD = 1545;
-     const short MOVE_TO_BEGIN_OF_LINE = 1546;
-     const short MOVE_TO_END_OF_LINE = 1547;
-     const short MOVE_TO_BEGIN_OF_PARAGRAPH = 1548;
-     const short MOVE_TO_END_OF_PARAGRAPH = 1549;
+     const short MULTIPLY = 1289;
+     const short N = 525;
+     const short NUM0 = 256;
+     const short NUM1 = 257;
+     const short NUM2 = 258;
+     const short NUM3 = 259;
+     const short NUM4 = 260;
+     const short NUM5 = 261;
+     const short NUM6 = 262;
+     const short NUM7 = 263;
+     const short NUM8 = 264;
+     const short NUM9 = 265;
+     const short NUMLOCK = 1313;
+     const short O = 526;
+     const short OPEN = 1296;
+     const short P = 527;
+     const short PAGEDOWN = 1031;
+     const short PAGEUP = 1030;
+     const short PASTE = 1299;
+     const short POINT = 1291;
+     const short PROPERTIES = 1303;
+     const short Q = 528;
+     const short QUOTELEFT = 1311;
+     const short R = 529;
+     const short REPEAT = 1301;
+     const short RETURN = 1280;
+     const short RIGHT = 1027;
+     const short S = 530;
+     const short SCROLLLOCK = 1314;
+     const short SELECT_ALL = 1557;
      const short SELECT_BACKWARD = 1550;
      const short SELECT_FORWARD = 1551;
-     const short SELECT_WORD_BACKWARD = 1552;
-     const short SELECT_WORD_FORWARD = 1553;
-     const short SELECT_WORD = 1554;
      const short SELECT_LINE = 1555;
      const short SELECT_PARAGRAPH = 1556;
-     const short SELECT_ALL = 1557;
-     const short SELECT_TO_BEGIN_OF_LINE = 1558;
-     const short SELECT_TO_END_OF_LINE = 1559;
-     const short MOVE_TO_BEGIN_OF_DOCUMENT = 1560;
-     const short MOVE_TO_END_OF_DOCUMENT = 1561;
      const short SELECT_TO_BEGIN_OF_DOCUMENT = 1562;
-     const short SELECT_TO_END_OF_DOCUMENT = 1563;
+     const short SELECT_TO_BEGIN_OF_LINE = 1558;
      const short SELECT_TO_BEGIN_OF_PARAGRAPH = 1564;
+     const short SELECT_TO_END_OF_DOCUMENT = 1563;
+     const short SELECT_TO_END_OF_LINE = 1559;
      const short SELECT_TO_END_OF_PARAGRAPH = 1565;
+     const short SELECT_WORD = 1554;
+     const short SELECT_WORD_BACKWARD = 1552;
+     const short SELECT_WORD_FORWARD = 1553;
+     const short SEMICOLON = 1317;
+     const short SPACE = 1284;
+     const short SUBTRACT = 1288;
+     const short T = 531;
+     const short TAB = 1282;
+     const short TILDE = 1310;
+     const short U = 532;
+     const short UNDO = 1300;
+     const short UP = 1025;
+     const short V = 533;
+     const short W = 534;
+     const short X = 535;
+     const short Y = 536;
+     const short Z = 537;
     };
     published struct KeyEvent: ::com::sun::star::awt::InputEvent {
      short KeyCode;
@@ -567,39 +567,39 @@ module com {
      short KeyFunc;
     };
     published constants KeyFunction {
-     const short DONTKNOW = 0;
-     const short NEW = 1;
-     const short OPEN = 2;
-     const short SAVE = 3;
-     const short SAVEAS = 4;
-     const short PRINT = 5;
      const short CLOSE = 6;
-     const short QUIT = 7;
-     const short CUT = 8;
      const short COPY = 9;
-     const short PASTE = 10;
-     const short UNDO = 11;
-     const short REDO = 12;
+     const short CUT = 8;
      const short DELETE = 13;
-     const short REPEAT = 14;
+     const short DONTKNOW = 0;
      const short FIND = 15;
      const short FINDBACKWARD = 16;
-     const short PROPERTIES = 17;
      const short FRONT = 18;
+     const short NEW = 1;
+     const short OPEN = 2;
+     const short PASTE = 10;
+     const short PRINT = 5;
+     const short PROPERTIES = 17;
+     const short QUIT = 7;
+     const short REDO = 12;
+     const short REPEAT = 14;
+     const short SAVE = 3;
+     const short SAVEAS = 4;
+     const short UNDO = 11;
     };
     /** @deprecated */ published constants KeyGroup {
-     const short NUM = 256;
      const short ALPHA = 512;
-     const short FKEYS = 768;
      const short CURSOR = 1024;
+     const short FKEYS = 768;
      const short MISC = 1280;
+     const short NUM = 256;
      const short TYPE = 3840;
     };
     published constants KeyModifier {
-     const short SHIFT = 1;
      const short MOD1 = 2;
      const short MOD2 = 4;
      const short MOD3 = 8;
+     const short SHIFT = 1;
     };
     published enum MenuItemType {
      DONTKNOW = 0,
@@ -655,8 +655,8 @@ module com {
     };
     published constants MouseButton {
      const short LEFT = 1;
-     const short RIGHT = 2;
      const short MIDDLE = 4;
+     const short RIGHT = 2;
     };
     published struct PaintEvent: ::com::sun::star::lang::EventObject {
      ::com::sun::star::awt::Rectangle UpdateRect;
@@ -692,18 +692,18 @@ module com {
     published constants PopupMenuDirection {
      const short EXECUTE_DEFAULT = 0;
      const short EXECUTE_DOWN = 1;
-     const short EXECUTE_UP = 2;
      const short EXECUTE_LEFT = 4;
      const short EXECUTE_RIGHT = 8;
+     const short EXECUTE_UP = 2;
     };
     published constants PosSize {
-     const short X = 1;
-     const short Y = 2;
-     const short WIDTH = 4;
      const short HEIGHT = 8;
      const short POS = 3;
-     const short SIZE = 12;
      const short POSSIZE = 15;
+     const short SIZE = 12;
+     const short WIDTH = 4;
+     const short X = 1;
+     const short Y = 2;
     };
     published exception PrinterException: ::com::sun::star::uno::Exception {
     };
@@ -748,8 +748,8 @@ module com {
      short dummy1;
     };
     published constants Style {
-     const short FRAME = 0;
      const short DIALOG = 1;
+     const short FRAME = 0;
     };
     /** @deprecated */ published struct SystemDependentXWindow {
      long WindowHandle;
@@ -757,77 +757,77 @@ module com {
     };
     published constants SystemPointer {
      const long ARROW = 0;
-     const long INVISIBLE = 1;
-     const long WAIT = 2;
-     const long TEXT = 3;
-     const long HELP = 4;
-     const long CROSS = 5;
-     const long MOVE = 6;
-     const long NSIZE = 7;
-     const long SSIZE = 8;
-     const long WSIZE = 9;
-     const long ESIZE = 10;
-     const long NWSIZE = 11;
-     const long NESIZE = 12;
-     const long SWSIZE = 13;
-     const long SESIZE = 14;
-     const long WINDOW_NSIZE = 15;
-     const long WINDOW_SSIZE = 16;
-     const long WINDOW_WSIZE = 17;
-     const long WINDOW_ESIZE = 18;
-     const long WINDOW_NWSIZE = 19;
-     const long WINDOW_NESIZE = 20;
-     const long WINDOW_SWSIZE = 21;
-     const long WINDOW_SESIZE = 22;
-     const long HSPLIT = 23;
-     const long VSPLIT = 24;
-     const long HSIZEBAR = 25;
-     const long VSIZEBAR = 26;
-     const long HAND = 27;
-     const long REFHAND = 28;
-     const long PEN = 29;
-     const long MAGNIFY = 30;
-     const long FILL = 31;
-     const long ROTATE = 32;
-     const long HSHEAR = 33;
-     const long VSHEAR = 34;
-     const long MIRROR = 35;
-     const long CROOK = 36;
-     const long CROP = 37;
-     const long MOVEPOINT = 38;
-     const long MOVEBEZIERWEIGHT = 39;
-     const long MOVEDATA = 40;
-     const long COPYDATA = 41;
-     const long LINKDATA = 42;
-     const long MOVEDATALINK = 43;
-     const long COPYDATALINK = 44;
-     const long MOVEFILE = 45;
-     const long COPYFILE = 46;
-     const long LINKFILE = 47;
-     const long MOVEFILELINK = 48;
-     const long COPYFILELINK = 49;
-     const long MOVEFILES = 50;
-     const long COPYFILES = 51;
-     const long NOTALLOWED = 52;
-     const long DRAW_LINE = 53;
-     const long DRAW_RECT = 54;
-     const long DRAW_POLYGON = 55;
-     const long DRAW_BEZIER = 56;
-     const long DRAW_ARC = 57;
-     const long DRAW_PIE = 58;
-     const long DRAW_CIRCLECUT = 59;
-     const long DRAW_ELLIPSE = 60;
-     const long DRAW_FREEHAND = 61;
-     const long DRAW_CONNECT = 62;
-     const long DRAW_TEXT = 63;
-     const long DRAW_CAPTION = 64;
-     const long CHART = 65;
-     const long DETECTIVE = 66;
-     const long PIVOT_COL = 67;
-     const long PIVOT_ROW = 68;
-     const long PIVOT_FIELD = 69;
      const long CHAIN = 70;
      const long CHAIN_NOTALLOWED = 71;
+     const long CHART = 65;
+     const long COPYDATA = 41;
+     const long COPYDATALINK = 44;
+     const long COPYFILE = 46;
+     const long COPYFILELINK = 49;
+     const long COPYFILES = 51;
+     const long CROOK = 36;
+     const long CROP = 37;
+     const long CROSS = 5;
+     const long DETECTIVE = 66;
+     const long DRAW_ARC = 57;
+     const long DRAW_BEZIER = 56;
+     const long DRAW_CAPTION = 64;
+     const long DRAW_CIRCLECUT = 59;
+     const long DRAW_CONNECT = 62;
+     const long DRAW_ELLIPSE = 60;
+     const long DRAW_FREEHAND = 61;
+     const long DRAW_LINE = 53;
+     const long DRAW_PIE = 58;
+     const long DRAW_POLYGON = 55;
+     const long DRAW_RECT = 54;
+     const long DRAW_TEXT = 63;
+     const long ESIZE = 10;
+     const long FILL = 31;
+     const long HAND = 27;
+     const long HELP = 4;
+     const long HSHEAR = 33;
+     const long HSIZEBAR = 25;
+     const long HSPLIT = 23;
+     const long INVISIBLE = 1;
+     const long LINKDATA = 42;
+     const long LINKFILE = 47;
+     const long MAGNIFY = 30;
+     const long MIRROR = 35;
+     const long MOVE = 6;
+     const long MOVEBEZIERWEIGHT = 39;
+     const long MOVEDATA = 40;
+     const long MOVEDATALINK = 43;
+     const long MOVEFILE = 45;
+     const long MOVEFILELINK = 48;
+     const long MOVEFILES = 50;
+     const long MOVEPOINT = 38;
+     const long NESIZE = 12;
+     const long NOTALLOWED = 52;
+     const long NSIZE = 7;
+     const long NWSIZE = 11;
+     const long PEN = 29;
+     const long PIVOT_COL = 67;
+     const long PIVOT_FIELD = 69;
+     const long PIVOT_ROW = 68;
+     const long REFHAND = 28;
+     const long ROTATE = 32;
+     const long SESIZE = 14;
+     const long SSIZE = 8;
+     const long SWSIZE = 13;
+     const long TEXT = 3;
+     const long VSHEAR = 34;
+     const long VSIZEBAR = 26;
+     const long VSPLIT = 24;
+     const long WAIT = 2;
+     const long WINDOW_ESIZE = 18;
+     const long WINDOW_NESIZE = 20;
+     const long WINDOW_NSIZE = 15;
+     const long WINDOW_NWSIZE = 19;
+     const long WINDOW_SESIZE = 22;
+     const long WINDOW_SSIZE = 16;
+     const long WINDOW_SWSIZE = 21;
+     const long WINDOW_WSIZE = 17;
+     const long WSIZE = 9;
     };
     published interface XControlContainer;
     published interface XTabControllerModel;
@@ -860,8 +860,8 @@ module com {
      interface ::com::sun::star::io::XPersistObject;
     };
     published constants TextAlign {
-     const long LEFT = 0;
      const long CENTER = 1;
+     const long LEFT = 0;
      const long RIGHT = 2;
     };
     published struct TextEvent: ::com::sun::star::lang::EventObject {
@@ -1901,44 +1901,44 @@ module com {
      ::com::sun::star::uno::XInterface Child;
     };
     /** @deprecated */ published constants VclWindowPeerAttribute {
-     const long HSCROLL = 256;
-     const long VSCROLL = 512;
-     const long LEFT = 1024;
-     const long CENTER = 2048;
-     const long RIGHT = 4096;
-     const long SPIN = 8192;
-     const long SORT = 16384;
-     const long DROPDOWN = 32768;
-     const long DEFBUTTON = 65536;
-     const long READONLY = 262144;
-     const long CLIPCHILDREN = 524288;
-     const long NOBORDER = 1048576;
-     const long GROUP = 2097152;
-     const long OK = 4194304;
-     const long OK_CANCEL = 8388608;
-     const long YES_NO = 16777216;
-     const long YES_NO_CANCEL = 33554432;
-     const long RETRY_CANCEL = 67108864;
-     const long DEF_OK = 134217728;
-     const long DEF_CANCEL = 268435456;
-     const long DEF_RETRY = 536870912;
-     const long DEF_YES = 1073741824;
-     const long DEF_NO = -2147483648;
-     const long NOLABEL = 536870912;
      const long AUTOHSCROLL = 1073741824;
      const long AUTOVSCROLL = -2147483648;
+     const long CENTER = 2048;
+     const long CLIPCHILDREN = 524288;
+     const long DEFBUTTON = 65536;
+     const long DEF_CANCEL = 268435456;
+     const long DEF_NO = -2147483648;
+     const long DEF_OK = 134217728;
+     const long DEF_RETRY = 536870912;
+     const long DEF_YES = 1073741824;
+     const long DROPDOWN = 32768;
+     const long GROUP = 2097152;
+     const long HSCROLL = 256;
+     const long LEFT = 1024;
+     const long NOBORDER = 1048576;
+     const long NOLABEL = 536870912;
+     const long OK = 4194304;
+     const long OK_CANCEL = 8388608;
+     const long READONLY = 262144;
+     const long RETRY_CANCEL = 67108864;
+     const long RIGHT = 4096;
+     const long SORT = 16384;
+     const long SPIN = 8192;
+     const long VSCROLL = 512;
+     const long YES_NO = 16777216;
+     const long YES_NO_CANCEL = 33554432;
     };
     published constants WindowAttribute {
-     const long SHOW = 1;
-     const long FULLSIZE = 2;
-     const long OPTIMUMSIZE = 4;
-     const long MINSIZE = 8;
      const long BORDER = 16;
-     const long SIZEABLE = 32;
-     const long MOVEABLE = 64;
      const long CLOSEABLE = 128;
-     /** @deprecated */ const long SYSTEMDEPENDENT = 256;
+     const long FULLSIZE = 2;
+     const long MINSIZE = 8;
+     const long MOVEABLE = 64;
      const long NODECORATION = 512;
+     const long OPTIMUMSIZE = 4;
+     const long SHOW = 1;
+     const long SIZEABLE = 32;
+     /** @deprecated */ const long SYSTEMDEPENDENT = 256;
     };
     published struct WindowEvent: ::com::sun::star::lang::EventObject {
      long X;
@@ -3051,8 +3051,8 @@ module com {
      const long SECONDARY_Y = 4;
     };
     published constants ChartAxisMarks {
-     const long NONE = 0;
      const long INNER = 1;
+     const long NONE = 0;
      const long OUTER = 2;
     };
     published constants ChartAxisType {
@@ -3085,12 +3085,12 @@ module com {
      interface ::com::sun::star::chart::XChartDataArray;
     };
     published constants ChartDataCaption {
-     const long NONE = 0;
-     const long VALUE = 1;
-     const long PERCENT = 2;
-     const long TEXT = 4;
      /** @deprecated */ const long FORMAT = 8;
+     const long NONE = 0;
+     const long PERCENT = 2;
      const long SYMBOL = 16;
+     const long TEXT = 4;
+     const long VALUE = 1;
     };
     published enum ChartDataChangeType {
      ALL = 0,
@@ -3269,15 +3269,15 @@ module com {
      sequence< string > DomainRangeAddresses;
     };
     published constants ChartSolidType {
-     const long RECTANGULAR_SOLID = 0;
-     const long CYLINDER = 1;
      const long CONE = 2;
+     const long CYLINDER = 1;
      const long PYRAMID = 3;
+     const long RECTANGULAR_SOLID = 0;
     };
     published constants ChartSymbolType {
-     const long NONE = -3;
      const long AUTO = -2;
      const long BITMAPURL = -1;
+     const long NONE = -3;
      const long SYMBOL0 = 0;
      const long SYMBOL1 = 1;
      const long SYMBOL2 = 2;
@@ -3313,31 +3313,31 @@ module com {
     };
     published constants DataLabelPlacement {
      const long AVOID_OVERLAP = 0;
+     const long BOTTOM = 6;
+     const long BOTTOM_LEFT = 5;
+     const long BOTTOM_RIGHT = 7;
      const long CENTER = 1;
+     const long INSIDE = 10;
+     const long LEFT = 4;
+     const long NEAR_ORIGIN = 12;
+     const long OUTSIDE = 11;
+     const long RIGHT = 8;
      const long TOP = 2;
      const long TOP_LEFT = 3;
-     const long LEFT = 4;
-     const long BOTTOM_LEFT = 5;
-     const long BOTTOM = 6;
-     const long BOTTOM_RIGHT = 7;
-     const long RIGHT = 8;
      const long TOP_RIGHT = 9;
-     const long INSIDE = 10;
-     const long OUTSIDE = 11;
-     const long NEAR_ORIGIN = 12;
     };
     published service DonutDiagram {
      service ::com::sun::star::chart::Diagram;
     };
     published constants ErrorBarStyle {
-     const long NONE = 0;
-     const long VARIANCE = 1;
-     const long STANDARD_DEVIATION = 2;
      const long ABSOLUTE = 3;
-     const long RELATIVE = 4;
      const long ERROR_MARGIN = 5;
-     const long STANDARD_ERROR = 6;
      const long FROM_DATA = 7;
+     const long NONE = 0;
+     const long RELATIVE = 4;
+     const long STANDARD_DEVIATION = 2;
+     const long STANDARD_ERROR = 6;
+     const long VARIANCE = 1;
     };
     published service FilledNetDiagram {
      service ::com::sun::star::chart::Diagram;
@@ -3362,9 +3362,9 @@ module com {
      [property, optional] long SplineResolution;
     };
     published constants MissingValueTreatment {
+     const long CONTINUE = 2;
      const long LEAVE_GAP = 0;
      const long USE_ZERO = 1;
-     const long CONTINUE = 2;
     };
     published service NetDiagram {
      service ::com::sun::star::chart::Diagram;
@@ -4085,10 +4085,10 @@ module com {
      };
      published constants NodeAttribute {
       const short FINALIZED = 256;
-      const short MANDATORY = 512;
-      const short READONLY = 1024;
       const short FUSE = 2048;
+      const short MANDATORY = 512;
       const short MASK = 32512;
+      const short READONLY = 1024;
      };
      published service OfflineBackend {
       service ::com::sun::star::configuration::backend::BackendAdapter;
@@ -4108,10 +4108,10 @@ module com {
       [property, optional, readonly] string URL;
      };
      published constants SchemaAttribute {
-      const short REQUIRED = 1;
-      const short LOCALIZED = 2;
       const short EXTENSIBLE = 4;
+      const short LOCALIZED = 2;
       const short MASK = 255;
+      const short REQUIRED = 1;
      };
      published service SingleBackendAdapter {
       service ::com::sun::star::configuration::backend::BackendAdapter;
@@ -4318,13 +4318,13 @@ module com {
     };
     module dnd {
      published constants DNDConstants {
-      const byte ACTION_NONE = 0;
       const byte ACTION_COPY = 1;
-      const byte ACTION_MOVE = 2;
       const byte ACTION_COPY_OR_MOVE = 3;
-      const byte ACTION_LINK = 4;
-      const byte ACTION_REFERENCE = 4;
       const byte ACTION_DEFAULT = -128;
+      const byte ACTION_LINK = 4;
+      const byte ACTION_MOVE = 2;
+      const byte ACTION_NONE = 0;
+      const byte ACTION_REFERENCE = 4;
      };
      published interface XDragSource;
      published struct DragGestureEvent: ::com::sun::star::lang::EventObject {
@@ -4622,10 +4622,10 @@ module com {
      interface ::com::sun::star::container::XNameAccess;
     };
     published constants LinkUpdateModes {
-     const long NEVER = 0;
-     const long MANUAL = 1;
      const long AUTO = 2;
      const long GLOBAL_SETTING = 3;
+     const long MANUAL = 1;
+     const long NEVER = 0;
     };
     published exception LockFileIgnoreRequest: ::com::sun::star::io::IOException {
     };
@@ -4638,16 +4638,16 @@ module com {
      string UserInfo;
     };
     published constants MacroExecMode {
-     const short NEVER_EXECUTE = 0;
-     const short FROM_LIST = 1;
      const short ALWAYS_EXECUTE = 2;
-     const short USE_CONFIG = 3;
      const short ALWAYS_EXECUTE_NO_WARN = 4;
-     const short USE_CONFIG_REJECT_CONFIRMATION = 5;
-     const short USE_CONFIG_APPROVE_CONFIRMATION = 6;
-     const short FROM_LIST_NO_WARN = 7;
-     const short FROM_LIST_AND_SIGNED_WARN = 8;
+     const short FROM_LIST = 1;
      const short FROM_LIST_AND_SIGNED_NO_WARN = 9;
+     const short FROM_LIST_AND_SIGNED_WARN = 8;
+     const short FROM_LIST_NO_WARN = 7;
+     const short NEVER_EXECUTE = 0;
+     const short USE_CONFIG = 3;
+     const short USE_CONFIG_APPROVE_CONFIRMATION = 6;
+     const short USE_CONFIG_REJECT_CONFIRMATION = 5;
     };
     published exception NoSuchFilterRequest: ::com::sun::star::uno::Exception {
      string URL;
@@ -4777,14 +4777,14 @@ module com {
    module document {
     published constants PrinterIndependentLayout {
      const short DISABLED = 1;
-     const short LOW_RESOLUTION = 2;
      /** @deprecated */ const short ENABLED = 2;
      const short HIGH_RESOLUTION = 3;
+     const short LOW_RESOLUTION = 2;
     };
     published constants RedlineDisplayType {
-     const short NONE = 0;
      const short INSERTED = 1;
      const short INSERTED_AND_REMOVED = 2;
+     const short NONE = 0;
      const short REMOVED = 3;
     };
    };
@@ -4837,10 +4837,10 @@ module com {
      [optional] interface ::com::sun::star::util::XFlushable;
     };
     published constants UpdateDocMode {
-     const short NO_UPDATE = 0;
-     const short QUIET_UPDATE = 1;
      const short ACCORDING_TO_CONFIG = 2;
      const short FULL_UPDATE = 3;
+     const short NO_UPDATE = 0;
+     const short QUIET_UPDATE = 1;
     };
     published interface XActionLockable {
      interface ::com::sun::star::uno::XInterface;
@@ -4982,9 +4982,9 @@ module com {
      ::com::sun::star::drawing::Direction3D vup;
     };
     published constants CaptionEscapeDirection {
+     const short auto = 2;
      const short horizontal = 0;
      const short vertical = 1;
-     const short auto = 2;
     };
     /** @deprecated */ published service RotationDescriptor {
      /** @deprecated */ [property] long RotateAngle;
@@ -5131,9 +5131,9 @@ module com {
      [property] boolean CaptionIsFitLineLength;
     };
     published constants CaptionType {
-     const short straight = 0;
      const short angled = 1;
      const short connector = 2;
+     const short straight = 0;
     };
     published enum CircleKind {
      FULL = 0,
@@ -5883,9 +5883,9 @@ module com {
     };
     published constants Aspects {
      const hyper MSOLE_CONTENT = 1;
-     const hyper MSOLE_THUMBNAIL = 2;
-     const hyper MSOLE_ICON = 4;
      const hyper MSOLE_DOCPRINT = 8;
+     const hyper MSOLE_ICON = 4;
+     const hyper MSOLE_THUMBNAIL = 2;
     };
     published exception InvalidStorageException: ::com::sun::star::io::IOException {
     };
@@ -5932,59 +5932,59 @@ module com {
      DocumentCloserCtor1([in] ::com::sun::star::frame::XFrame xFrame) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::uno::Exception);
     };
     published constants ElementModes {
+     const long NOCREATE = 16;
      const long READ = 1;
+     const long READWRITE = 7;
      const long SEEKABLE = 2;
      const long SEEKABLEREAD = 3;
-     const long WRITE = 4;
-     const long READWRITE = 7;
      const long TRUNCATE = 8;
-     const long NOCREATE = 16;
+     const long WRITE = 4;
     };
     published constants EmbedMapUnits {
-     const long ONE_100TH_MM = 0;
-     const long ONE_10TH_MM = 1;
-     const long ONE_MM = 2;
-     const long ONE_CM = 3;
      const long ONE_1000TH_INCH = 4;
      const long ONE_100TH_INCH = 5;
+     const long ONE_100TH_MM = 0;
      const long ONE_10TH_INCH = 6;
+     const long ONE_10TH_MM = 1;
+     const long ONE_CM = 3;
      const long ONE_INCH = 7;
+     const long ONE_MM = 2;
+     const long PIXEL = 10;
      const long POINT = 8;
      const long TWIP = 9;
-     const long PIXEL = 10;
     };
     published constants EmbedMisc {
-     const hyper MS_EMBED_RECOMPOSEONRESIZE = 1;
-     const hyper MS_EMBED_ONLYICONIC = 2;
-     const hyper MS_EMBED_INSERTNOTREPLACE = 4;
-     const hyper MS_EMBED_STATIC = 8;
-     const hyper MS_EMBED_CANTLINKINSIDE = 16;
-     const hyper MS_EMBED_CANLINKBYOLE1 = 32;
-     const hyper MS_EMBED_ISLINKOBJECT = 64;
-     const hyper MS_EMBED_INSIDEOUT = 128;
+     const hyper EMBED_ACTIVATEIMMEDIATELY = 4294967296;
+     const hyper EMBED_NEEDSSIZEONLOAD = 17179869184;
+     const hyper EMBED_NEVERRESIZE = 8589934592;
      const hyper MS_EMBED_ACTIVATEWHENVISIBLE = 256;
-     const hyper MS_EMBED_RENDERINGISDEVICEINDEPENDENT = 512;
-     const hyper MS_EMBED_INVISIBLEATRUNTIME = 1024;
-     const hyper MS_EMBED_ALWAYSRUN = 2048;
      const hyper MS_EMBED_ACTSLIKEBUTTON = 4096;
      const hyper MS_EMBED_ACTSLIKELABEL = 8192;
-     const hyper MS_EMBED_NOUIACTIVATE = 16384;
      const hyper MS_EMBED_ALIGNABLE = 32768;
-     const hyper MS_EMBED_SIMPLEFRAME = 65536;
-     const hyper MS_EMBED_SETCLIENTSITEFIRST = 131072;
-     const hyper MS_EMBED_IMEMODE = 262144;
+     const hyper MS_EMBED_ALWAYSRUN = 2048;
+     const hyper MS_EMBED_CANLINKBYOLE1 = 32;
+     const hyper MS_EMBED_CANTLINKINSIDE = 16;
      const hyper MS_EMBED_IGNOREACTIVATEWHENVISIBLE = 524288;
-     const hyper MS_EMBED_WANTSTOMENUMERGE = 1048576;
+     const hyper MS_EMBED_IMEMODE = 262144;
+     const hyper MS_EMBED_INSERTNOTREPLACE = 4;
+     const hyper MS_EMBED_INSIDEOUT = 128;
+     const hyper MS_EMBED_INVISIBLEATRUNTIME = 1024;
+     const hyper MS_EMBED_ISLINKOBJECT = 64;
+     const hyper MS_EMBED_NOUIACTIVATE = 16384;
+     const hyper MS_EMBED_ONLYICONIC = 2;
+     const hyper MS_EMBED_RECOMPOSEONRESIZE = 1;
+     const hyper MS_EMBED_RENDERINGISDEVICEINDEPENDENT = 512;
+     const hyper MS_EMBED_SETCLIENTSITEFIRST = 131072;
+     const hyper MS_EMBED_SIMPLEFRAME = 65536;
+     const hyper MS_EMBED_STATIC = 8;
      const hyper MS_EMBED_SUPPORTSMULTILEVELUNDO = 2097152;
-     const hyper EMBED_ACTIVATEIMMEDIATELY = 4294967296;
-     const hyper EMBED_NEVERRESIZE = 8589934592;
-     const hyper EMBED_NEEDSSIZEONLOAD = 17179869184;
+     const hyper MS_EMBED_WANTSTOMENUMERGE = 1048576;
     };
     published constants EmbedStates {
-     const long LOADED = 0;
-     const long RUNNING = 1;
      const long ACTIVE = 2;
      const long INPLACE_ACTIVE = 3;
+     const long LOADED = 0;
+     const long RUNNING = 1;
      const long UI_ACTIVE = 4;
     };
     published constants EmbedUpdateModes {
@@ -5992,13 +5992,13 @@ module com {
      const long EXPLICIT_UPDATE = 1;
     };
     published constants EmbedVerbs {
+     const long MS_OLEVERB_DISCARDUNDOSTATE = -6;
+     const long MS_OLEVERB_HIDE = -3;
+     const long MS_OLEVERB_IPACTIVATE = -5;
+     const long MS_OLEVERB_OPEN = -2;
      const long MS_OLEVERB_PRIMARY = 0;
      const long MS_OLEVERB_SHOW = -1;
-     const long MS_OLEVERB_OPEN = -2;
-     const long MS_OLEVERB_HIDE = -3;
      const long MS_OLEVERB_UIACTIVATE = -4;
-     const long MS_OLEVERB_IPACTIVATE = -5;
-     const long MS_OLEVERB_DISCARDUNDOSTATE = -6;
     };
     published interface XEmbedObjectCreator {
      interface ::com::sun::star::uno::XInterface;
@@ -6030,9 +6030,9 @@ module com {
     };
     published constants EntryInitModes {
      const long DEFAULT_INIT = 0;
-     const long TRUNCATE_INIT = 1;
-     const long NO_INIT = 2;
      const long MEDIA_DESCRIPTOR_INIT = 3;
+     const long NO_INIT = 2;
+     const long TRUNCATE_INIT = 1;
      const long URL_LINK_INIT = 4;
     };
     published service FileSystemStorage {
@@ -6118,9 +6118,9 @@ module com {
     };
     published service StorageFactory: ::com::sun::star::lang::XSingleServiceFactory;
     published constants StorageFormats {
+     const long OFOPXML = 3;
      const long PACKAGE = 1;
      const long ZIP = 2;
-     const long OFOPXML = 3;
     };
     published service StorageStream {
      interface ::com::sun::star::io::XStream;
@@ -6425,28 +6425,28 @@ module com {
      URL = 3
     };
     published constants FormComponentType {
-     const short CONTROL = 1;
-     const short COMMANDBUTTON = 2;
-     const short RADIOBUTTON = 3;
-     const short IMAGEBUTTON = 4;
      const short CHECKBOX = 5;
-     const short LISTBOX = 6;
      const short COMBOBOX = 7;
-     const short GROUPBOX = 8;
-     const short TEXTFIELD = 9;
+     const short COMMANDBUTTON = 2;
+     const short CONTROL = 1;
+     const short CURRENCYFIELD = 18;
+     const short DATEFIELD = 15;
+     const short FILECONTROL = 12;
      const short FIXEDTEXT = 10;
      const short GRIDCONTROL = 11;
-     const short FILECONTROL = 12;
+     const short GROUPBOX = 8;
      const short HIDDENCONTROL = 13;
+     const short IMAGEBUTTON = 4;
      const short IMAGECONTROL = 14;
-     const short DATEFIELD = 15;
-     const short TIMEFIELD = 16;
+     const short LISTBOX = 6;
+     const short NAVIGATIONBAR = 22;
      const short NUMERICFIELD = 17;
-     const short CURRENCYFIELD = 18;
      const short PATTERNFIELD = 19;
+     const short RADIOBUTTON = 3;
      const short SCROLLBAR = 20;
      const short SPINBUTTON = 21;
-     const short NAVIGATIONBAR = 22;
+     const short TEXTFIELD = 9;
+     const short TIMEFIELD = 16;
     };
     published service FormComponents {
      interface ::com::sun::star::container::XContainer;
@@ -7318,32 +7318,32 @@ module com {
     };
     published service Bibliography: ::com::sun::star::container::XNameAccess;
     published constants CommandGroup {
-     const short INTERNAL = 0;
      const short APPLICATION = 1;
-     const short VIEW = 2;
+     const short CHART = 20;
+     const short CONNECTOR = 22;
+     const short CONTROLS = 25;
+     const short DATA = 17;
      const short DOCUMENT = 3;
+     const short DRAWING = 24;
      const short EDIT = 4;
-     const short MACRO = 5;
-     const short OPTIONS = 6;
-     const short MATH = 7;
-     const short NAVIGATOR = 8;
-     const short INSERT = 9;
+     const short ENUMERATION = 16;
+     const short EXPLORER = 21;
      const short FORMAT = 10;
-     const short TEMPLATE = 11;
-     const short TEXT = 12;
      const short FRAME = 13;
      const short GRAPHIC = 14;
-     const short TABLE = 15;
-     const short ENUMERATION = 16;
-     const short DATA = 17;
-     const short SPECIAL = 18;
      const short IMAGE = 19;
-     const short CHART = 20;
-     const short EXPLORER = 21;
-     const short CONNECTOR = 22;
+     const short INSERT = 9;
+     const short INTERNAL = 0;
+     const short MACRO = 5;
+     const short MATH = 7;
      const short MODIFY = 23;
-     const short DRAWING = 24;
-     const short CONTROLS = 25;
+     const short NAVIGATOR = 8;
+     const short OPTIONS = 6;
+     const short SPECIAL = 18;
+     const short TABLE = 15;
+     const short TEMPLATE = 11;
+     const short TEXT = 12;
+     const short VIEW = 2;
     };
     published service Components {
      interface ::com::sun::star::container::XEnumerationAccess;
@@ -7471,9 +7471,9 @@ module com {
      any Result;
     };
     published constants DispatchResultState {
+     const short DONTKNOW = 2;
      const short FAILURE = 0;
      const short SUCCESS = 1;
-     const short DONTKNOW = 2;
     };
     published struct DispatchStatement {
      string aCommand;
@@ -7560,15 +7560,15 @@ module com {
     };
     published service FrameLoaderFactory: ::com::sun::star::frame::XLoaderFactory;
     published constants FrameSearchFlag {
+     const long ALL = 23;
      /** @deprecated */ const long AUTO = 0;
-     const long PARENT = 1;
-     const long SELF = 2;
      const long CHILDREN = 4;
      const long CREATE = 8;
+     const long GLOBAL = 55;
+     const long PARENT = 1;
+     const long SELF = 2;
      const long SIBLINGS = 16;
      const long TASKS = 32;
-     const long ALL = 23;
-     const long GLOBAL = 55;
     };
     published interface XFrames {
      interface ::com::sun::star::container::XIndexAccess;
@@ -7653,12 +7653,12 @@ module com {
     published exception TerminationVetoException: ::com::sun::star::uno::Exception {
     };
     published constants WindowArrange {
-     const short TILE = 1;
-     const short VERTICAL = 2;
-     const short HORIZONTAL = 3;
      const short CASCADE = 4;
+     const short HORIZONTAL = 3;
      const short MAXIMIZE = 5;
      const short MINIMIZE = 6;
+     const short TILE = 1;
+     const short VERTICAL = 2;
     };
     /** @deprecated */ published interface XBrowseHistoryRegistry {
      interface ::com::sun::star::uno::XInterface;
@@ -7849,16 +7849,16 @@ module com {
     };
     published service BreakIterator: ::com::sun::star::i18n::XBreakIterator;
     published constants BreakType {
-     const short WORDBOUNDARY = 1;
-     const short HYPHENATION = 2;
      const short HANGINGPUNCTUATION = 3;
+     const short HYPHENATION = 2;
+     const short WORDBOUNDARY = 1;
     };
     published constants CTLScriptType {
-     const short CTL_UNKNOWN = 0;
-     const short CTL_HEBREW = 1;
      const short CTL_ARABIC = 2;
-     const short CTL_THAI = 3;
+     const short CTL_HEBREW = 1;
      const short CTL_INDIC = 4;
+     const short CTL_THAI = 3;
+     const short CTL_UNKNOWN = 0;
     };
     published struct CalendarItem {
      string ID;
@@ -7889,39 +7889,39 @@ module com {
      string Name;
     };
     published constants CalendarDisplayCode {
-     const long SHORT_DAY = 1;
      const long LONG_DAY = 2;
-     const long SHORT_DAY_NAME = 3;
      const long LONG_DAY_NAME = 4;
-     const long SHORT_MONTH = 5;
-     const long LONG_MONTH = 6;
-     const long SHORT_MONTH_NAME = 7;
-     const long LONG_MONTH_NAME = 8;
-     const long SHORT_YEAR = 9;
-     const long LONG_YEAR = 10;
-     const long SHORT_ERA = 11;
      const long LONG_ERA = 12;
-     const long SHORT_YEAR_AND_ERA = 13;
-     const long LONG_YEAR_AND_ERA = 14;
-     const long SHORT_QUARTER = 15;
-     const long LONG_QUARTER = 16;
-     const long SHORT_GENITIVE_MONTH_NAME = 17;
      const long LONG_GENITIVE_MONTH_NAME = 18;
-     const long NARROW_GENITIVE_MONTH_NAME = 19;
-     const long SHORT_PARTITIVE_MONTH_NAME = 20;
+     const long LONG_MONTH = 6;
+     const long LONG_MONTH_NAME = 8;
      const long LONG_PARTITIVE_MONTH_NAME = 21;
-     const long NARROW_PARTITIVE_MONTH_NAME = 22;
+     const long LONG_QUARTER = 16;
+     const long LONG_YEAR = 10;
+     const long LONG_YEAR_AND_ERA = 14;
      const long NARROW_DAY_NAME = 23;
+     const long NARROW_GENITIVE_MONTH_NAME = 19;
      const long NARROW_MONTH_NAME = 24;
+     const long NARROW_PARTITIVE_MONTH_NAME = 22;
+     const long SHORT_DAY = 1;
+     const long SHORT_DAY_NAME = 3;
+     const long SHORT_ERA = 11;
+     const long SHORT_GENITIVE_MONTH_NAME = 17;
+     const long SHORT_MONTH = 5;
+     const long SHORT_MONTH_NAME = 7;
+     const long SHORT_PARTITIVE_MONTH_NAME = 20;
+     const long SHORT_QUARTER = 15;
+     const long SHORT_YEAR = 9;
+     const long SHORT_YEAR_AND_ERA = 13;
     };
     published constants CalendarDisplayIndex {
      const short AM_PM = 0;
      const short DAY = 1;
-     const short MONTH = 2;
-     const short YEAR = 3;
      const short ERA = 4;
      const short GENITIVE_MONTH = 5;
+     const short MONTH = 2;
      const short PARTITIVE_MONTH = 6;
+     const short YEAR = 3;
     };
     published constants CalendarFieldIndex {
      const short AM_PM = 0;
@@ -7929,20 +7929,20 @@ module com {
      const short DAY_OF_WEEK = 2;
      const short DAY_OF_YEAR = 3;
      const short DST_OFFSET = 4;
+     const short DST_OFFSET_SECOND_MILLIS = 16;
+     const short ERA = 13;
+     const short FIELD_COUNT = 15;
+     const short FIELD_COUNT2 = 17;
      const short HOUR = 5;
-     const short MINUTE = 6;
-     const short SECOND = 7;
      const short MILLISECOND = 8;
+     const short MINUTE = 6;
+     const short MONTH = 12;
+     const short SECOND = 7;
      const short WEEK_OF_MONTH = 9;
      const short WEEK_OF_YEAR = 10;
      const short YEAR = 11;
-     const short MONTH = 12;
-     const short ERA = 13;
      const short ZONE_OFFSET = 14;
-     const short FIELD_COUNT = 15;
      const short ZONE_OFFSET_SECOND_MILLIS = 15;
-     const short DST_OFFSET_SECOND_MILLIS = 16;
-     const short FIELD_COUNT2 = 17;
     };
     published interface XCollator {
      interface ::com::sun::star::uno::XInterface;
@@ -7957,36 +7957,36 @@ module com {
     published service ChapterCollator: ::com::sun::star::i18n::XCollator;
     published constants CharType {
      const short ANY_CHAR = 0;
-     const short UPPERCASE_LETTER = 1;
-     const short LOWERCASE_LETTER = 2;
-     const short TITLECASE_LETTER = 3;
-     const short MODIFIER_LETTER = 4;
-     const short OTHER_LETTER = 5;
-     const short NON_SPACING_MARK = 6;
-     const short ENCLOSING_MARK = 7;
      const short COMBINING_SPACING_MARK = 8;
-     const short DECIMAL_DIGIT_NUMBER = 9;
-     const short LETTER_NUMBER = 10;
-     const short OTHER_NUMBER = 11;
-     const short SPACE_SEPARATOR = 12;
-     const short LINE_SEPARATOR = 13;
-     const short PARAGRAPH_SEPARATOR = 14;
-     const short CONTROL = 15;
-     const short FORMAT = 16;
-     const short PRIVATE_USE = 17;
-     const short SURROGATE = 18;
-     const short DASH_PUNCTUATION = 19;
-     const short START_PUNCTUATION = 20;
-     const short END_PUNCTUATION = 21;
      const short CONNECTOR_PUNCTUATION = 22;
-     const short OTHER_PUNCTUATION = 23;
-     const short MATH_SYMBOL = 24;
+     const short CONTROL = 15;
      const short CURRENCY_SYMBOL = 25;
-     const short MODIFIER_SYMBOL = 26;
-     const short OTHER_SYMBOL = 27;
-     const short INITIAL_PUNCTUATION = 28;
+     const short DASH_PUNCTUATION = 19;
+     const short DECIMAL_DIGIT_NUMBER = 9;
+     const short ENCLOSING_MARK = 7;
+     const short END_PUNCTUATION = 21;
      const short FINAL_PUNCTUATION = 29;
+     const short FORMAT = 16;
      const short GENERAL_TYPES_COUNT = 30;
+     const short INITIAL_PUNCTUATION = 28;
+     const short LETTER_NUMBER = 10;
+     const short LINE_SEPARATOR = 13;
+     const short LOWERCASE_LETTER = 2;
+     const short MATH_SYMBOL = 24;
+     const short MODIFIER_LETTER = 4;
+     const short MODIFIER_SYMBOL = 26;
+     const short NON_SPACING_MARK = 6;
+     const short OTHER_LETTER = 5;
+     const short OTHER_NUMBER = 11;
+     const short OTHER_PUNCTUATION = 23;
+     const short OTHER_SYMBOL = 27;
+     const short PARAGRAPH_SEPARATOR = 14;
+     const short PRIVATE_USE = 17;
+     const short SPACE_SEPARATOR = 12;
+     const short START_PUNCTUATION = 20;
+     const short SURROGATE = 18;
+     const short TITLECASE_LETTER = 3;
+     const short UPPERCASE_LETTER = 1;
     };
     published struct ParseResult {
      long LeadingWhiteSpace;
@@ -8013,16 +8013,16 @@ module com {
     };
     published service CharacterClassification: ::com::sun::star::i18n::XCharacterClassification;
     published constants CharacterIteratorMode {
-     const short SKIPCHARACTER = 0;
      const short SKIPCELL = 1;
+     const short SKIPCHARACTER = 0;
      const short SKIPCONTROLCHARACTER = 2;
     };
     published service Collator: ::com::sun::star::i18n::XCollator;
     published constants CollatorOptions {
      const short CollatorOptions_IGNORE_CASE = 1;
+     const short CollatorOptions_IGNORE_CASE_ACCENT = 8;
      const short CollatorOptions_IGNORE_KANA = 2;
      const short CollatorOptions_IGNORE_WIDTH = 4;
-     const short CollatorOptions_IGNORE_CASE_ACCENT = 8;
     };
     published struct Currency {
      string ID;
@@ -8091,8 +8091,8 @@ module com {
     };
     published service IndexEntrySupplier: ::com::sun::star::i18n::XExtendedIndexEntrySupplier;
     published constants InputSequenceCheckMode {
-     const short PASSTHROUGH = 0;
      const short BASIC = 1;
+     const short PASSTHROUGH = 0;
      const short STRICT = 2;
     };
     published interface XInputSequenceChecker {
@@ -8105,76 +8105,76 @@ module com {
     };
     published service InputSequenceChecker: ::com::sun::star::i18n::XExtendedInputSequenceChecker;
     published constants KCharacterType {
-     const long DIGIT = 1;
-     const long UPPER = 2;
-     const long LOWER = 4;
-     const long TITLE_CASE = 8;
      const long ALPHA = 14;
-     const long CONTROL = 16;
-     const long PRINTABLE = 32;
      const long BASE_FORM = 64;
+     const long CONTROL = 16;
+     const long DIGIT = 1;
      const long LETTER = 128;
+     const long LOWER = 4;
+     const long PRINTABLE = 32;
+     const long TITLE_CASE = 8;
+     const long UPPER = 2;
     };
     published constants KNumberFormatType {
-     const short SHORT = 1;
-     const short MEDIUM = 2;
      const short LONG = 3;
+     const short MEDIUM = 2;
+     const short SHORT = 1;
     };
     published constants KNumberFormatUsage {
+     const short CURRENCY = 8;
      const short DATE = 1;
-     const short TIME = 2;
      const short DATE_TIME = 3;
      const short FIXED_NUMBER = 4;
      const short FRACTION_NUMBER = 5;
      const short PERCENT_NUMBER = 6;
      const short SCIENTIFIC_NUMBER = 7;
-     const short CURRENCY = 8;
+     const short TIME = 2;
     };
     published constants KParseTokens {
-     const long ASC_UPALPHA = 1;
-     const long ASC_LOALPHA = 2;
-     const long ASC_DIGIT = 4;
-     const long ASC_UNDERSCORE = 8;
-     const long ASC_DOLLAR = 16;
-     const long ASC_DOT = 32;
-     const long ASC_COLON = 64;
-     const long ASC_CONTROL = 512;
-     const long ASC_ANY_BUT_CONTROL = 1024;
-     const long ASC_OTHER = 2048;
-     const long UNI_UPALPHA = 4096;
-     const long UNI_LOALPHA = 8192;
-     const long UNI_DIGIT = 16384;
-     const long UNI_TITLE_ALPHA = 32768;
-     const long UNI_MODIFIER_LETTER = 65536;
-     const long UNI_OTHER_LETTER = 131072;
-     const long UNI_LETTER_NUMBER = 262144;
-     const long UNI_OTHER_NUMBER = 524288;
-     const long TWO_DOUBLE_QUOTES_BREAK_STRING = 268435456;
-     const long UNI_OTHER = 536870912;
-     const long IGNORE_LEADING_WS = 1073741824;
-     const long ASC_ALPHA = 3;
-     const long ASC_ALNUM = 7;
-     const long UNI_ALPHA = 45056;
-     const long UNI_ALNUM = 61440;
-     const long UNI_LETTER = 241664;
-     const long UNI_NUMBER = 802816;
+     const long ANY_ALNUM = 61447;
      const long ANY_ALPHA = 45059;
      const long ANY_DIGIT = 16388;
-     const long ANY_ALNUM = 61447;
      const long ANY_LETTER = 241667;
-     const long ANY_NUMBER = 802820;
      const long ANY_LETTER_OR_NUMBER = 1044487;
+     const long ANY_NUMBER = 802820;
+     const long ASC_ALNUM = 7;
+     const long ASC_ALPHA = 3;
+     const long ASC_ANY_BUT_CONTROL = 1024;
+     const long ASC_COLON = 64;
+     const long ASC_CONTROL = 512;
+     const long ASC_DIGIT = 4;
+     const long ASC_DOLLAR = 16;
+     const long ASC_DOT = 32;
+     const long ASC_LOALPHA = 2;
+     const long ASC_OTHER = 2048;
+     const long ASC_UNDERSCORE = 8;
+     const long ASC_UPALPHA = 1;
+     const long IGNORE_LEADING_WS = 1073741824;
+     const long TWO_DOUBLE_QUOTES_BREAK_STRING = 268435456;
+     const long UNI_ALNUM = 61440;
+     const long UNI_ALPHA = 45056;
+     const long UNI_DIGIT = 16384;
+     const long UNI_LETTER = 241664;
+     const long UNI_LETTER_NUMBER = 262144;
+     const long UNI_LOALPHA = 8192;
+     const long UNI_MODIFIER_LETTER = 65536;
+     const long UNI_NUMBER = 802816;
+     const long UNI_OTHER = 536870912;
+     const long UNI_OTHER_LETTER = 131072;
+     const long UNI_OTHER_NUMBER = 524288;
+     const long UNI_TITLE_ALPHA = 32768;
+     const long UNI_UPALPHA = 4096;
     };
     published constants KParseType {
-     const long ONE_SINGLE_CHAR = 1;
-     const long BOOLEAN = 2;
-     const long IDENTNAME = 4;
-     const long SINGLE_QUOTE_NAME = 8;
-     const long DOUBLE_QUOTE_STRING = 16;
-     const long ASC_NUMBER = 32;
-     const long UNI_NUMBER = 64;
-     const long MISSING_QUOTE = 1073741824;
      const long ANY_NUMBER = 96;
+     const long ASC_NUMBER = 32;
+     const long BOOLEAN = 2;
+     const long DOUBLE_QUOTE_STRING = 16;
+     const long IDENTNAME = 4;
+     const long MISSING_QUOTE = 1073741824;
+     const long ONE_SINGLE_CHAR = 1;
+     const long SINGLE_QUOTE_NAME = 8;
+     const long UNI_NUMBER = 64;
     };
     published struct LanguageCountryInfo {
      string Language;
@@ -8268,44 +8268,46 @@ module com {
     };
     published service LocaleData: ::com::sun::star::i18n::XLocaleData4;
     /** @deprecated */ published constants LocaleItem {
+     const short COUNT = 17;
      const short DATE_SEPARATOR = 0;
-     const short THOUSAND_SEPARATOR = 1;
      const short DECIMAL_SEPARATOR = 2;
-     const short TIME_SEPARATOR = 3;
-     const short TIME_100SEC_SEPARATOR = 4;
-     const short LIST_SEPARATOR = 5;
-     const short SINGLE_QUOTATION_START = 6;
-     const short SINGLE_QUOTATION_END = 7;
-     const short DOUBLE_QUOTATION_START = 8;
      const short DOUBLE_QUOTATION_END = 9;
-     const short MEASUREMENT_SYSTEM = 10;
-     const short TIME_AM = 11;
-     const short TIME_PM = 12;
+     const short DOUBLE_QUOTATION_START = 8;
+     const short LIST_SEPARATOR = 5;
      const short LONG_DATE_DAY_OF_WEEK_SEPARATOR = 13;
      const short LONG_DATE_DAY_SEPARATOR = 14;
      const short LONG_DATE_MONTH_SEPARATOR = 15;
      const short LONG_DATE_YEAR_SEPARATOR = 16;
-     const short COUNT = 17;
+     const short MEASUREMENT_SYSTEM = 10;
+     const short SINGLE_QUOTATION_END = 7;
+     const short SINGLE_QUOTATION_START = 6;
+     const short THOUSAND_SEPARATOR = 1;
+     const short TIME_100SEC_SEPARATOR = 4;
+     const short TIME_AM = 11;
+     const short TIME_PM = 12;
+     const short TIME_SEPARATOR = 3;
     };
     published constants Months {
-     const short JANUARY = 0;
-     const short FEBURARY = 1;
-     const short MARCH = 2;
      const short APRIL = 3;
-     const short MAY = 4;
-     const short JUNE = 5;
-     const short JULY = 6;
      const short AUGUST = 7;
-     const short SEPTEMBER = 8;
-     const short OCTOBER = 9;
-     const short NOVEMBER = 10;
      const short DECEMBER = 11;
+     const short FEBURARY = 1;
+     const short JANUARY = 0;
+     const short JULY = 6;
+     const short JUNE = 5;
+     const short MARCH = 2;
+     const short MAY = 4;
+     const short NOVEMBER = 10;
+     const short OCTOBER = 9;
+     const short SEPTEMBER = 8;
     };
     published exception MultipleCharsOutputException: ::com::sun::star::uno::Exception {
     };
     published constants NativeNumberMode {
      const short NATNUM0 = 0;
      const short NATNUM1 = 1;
+     const short NATNUM10 = 10;
+     const short NATNUM11 = 11;
      const short NATNUM2 = 2;
      const short NATNUM3 = 3;
      const short NATNUM4 = 4;
@@ -8314,8 +8316,6 @@ module com {
      const short NATNUM7 = 7;
      const short NATNUM8 = 8;
      const short NATNUM9 = 9;
-     const short NATNUM10 = 10;
-     const short NATNUM11 = 11;
     };
     published struct NativeNumberXmlAttributes {
      ::com::sun::star::lang::Locale Locale;
@@ -8340,73 +8340,73 @@ module com {
      boolean Default;
     };
     published constants NumberFormatIndex {
-     const short NUMBER_START = 0;
-     const short NUMBER_STANDARD = 0;
-     const short NUMBER_INT = 1;
-     const short NUMBER_DEC2 = 2;
-     const short NUMBER_1000INT = 3;
-     const short NUMBER_1000DEC2 = 4;
-     const short NUMBER_SYSTEM = 5;
-     const short NUMBER_END = 5;
-     const short SCIENTIFIC_START = 6;
-     const short SCIENTIFIC_000E000 = 6;
-     const short SCIENTIFIC_000E00 = 7;
-     const short SCIENTIFIC_END = 7;
-     const short PERCENT_START = 8;
-     const short PERCENT_INT = 8;
-     const short PERCENT_DEC2 = 9;
-     const short PERCENT_END = 9;
-     const short FRACTION_START = 10;
-     const short FRACTION_1 = 10;
-     const short FRACTION_2 = 11;
-     const short FRACTION_END = 11;
-     const short CURRENCY_START = 12;
-     const short CURRENCY_1000INT = 12;
+     const short BOOLEAN = 48;
      const short CURRENCY_1000DEC2 = 13;
-     const short CURRENCY_1000INT_RED = 14;
-     const short CURRENCY_1000DEC2_RED = 15;
      const short CURRENCY_1000DEC2_CCC = 16;
      const short CURRENCY_1000DEC2_DASHED = 17;
+     const short CURRENCY_1000DEC2_RED = 15;
+     const short CURRENCY_1000INT = 12;
+     const short CURRENCY_1000INT_RED = 14;
      const short CURRENCY_END = 17;
-     const short DATE_START = 18;
-     const short DATE_SYSTEM_SHORT = 18;
-     const short DATE_SYSTEM_LONG = 19;
-     const short DATE_SYS_DDMMYY = 20;
-     const short DATE_SYS_DDMMYYYY = 21;
-     const short DATE_SYS_DMMMYY = 22;
-     const short DATE_SYS_DMMMYYYY = 23;
-     const short DATE_DIN_DMMMYYYY = 24;
-     const short DATE_SYS_DMMMMYYYY = 25;
-     const short DATE_DIN_DMMMMYYYY = 26;
-     const short DATE_SYS_NNDMMMYY = 27;
-     const short DATE_DEF_NNDDMMMYY = 28;
-     const short DATE_SYS_NNDMMMMYYYY = 29;
-     const short DATE_SYS_NNNNDMMMMYYYY = 30;
-     const short DATE_DIN_MMDD = 31;
-     const short DATE_DIN_YYMMDD = 32;
-     const short DATE_DIN_YYYYMMDD = 33;
-     const short DATE_SYS_MMYY = 34;
-     const short DATE_SYS_DDMMM = 35;
-     const short DATE_MMMM = 36;
-     const short DATE_QQJJ = 37;
-     const short DATE_WW = 38;
-     const short DATE_END = 38;
-     const short TIME_START = 39;
-     const short TIME_HHMM = 39;
-     const short TIME_HHMMSS = 40;
-     const short TIME_HHMMAMPM = 41;
-     const short TIME_HHMMSSAMPM = 42;
-     const short TIME_HH_MMSS = 43;
-     const short TIME_MMSS00 = 44;
-     const short TIME_HH_MMSS00 = 45;
-     const short TIME_END = 45;
+     const short CURRENCY_START = 12;
+     const short DATETIME_END = 47;
      const short DATETIME_START = 46;
      const short DATETIME_SYSTEM_SHORT_HHMM = 46;
      const short DATETIME_SYS_DDMMYYYY_HHMMSS = 47;
-     const short DATETIME_END = 47;
-     const short BOOLEAN = 48;
-     const short TEXT = 49;
+     const short DATE_DEF_NNDDMMMYY = 28;
+     const short DATE_DIN_DMMMMYYYY = 26;
+     const short DATE_DIN_DMMMYYYY = 24;
+     const short DATE_DIN_MMDD = 31;
+     const short DATE_DIN_YYMMDD = 32;
+     const short DATE_DIN_YYYYMMDD = 33;
+     const short DATE_END = 38;
+     const short DATE_MMMM = 36;
+     const short DATE_QQJJ = 37;
+     const short DATE_START = 18;
+     const short DATE_SYSTEM_LONG = 19;
+     const short DATE_SYSTEM_SHORT = 18;
+     const short DATE_SYS_DDMMM = 35;
+     const short DATE_SYS_DDMMYY = 20;
+     const short DATE_SYS_DDMMYYYY = 21;
+     const short DATE_SYS_DMMMMYYYY = 25;
+     const short DATE_SYS_DMMMYY = 22;
+     const short DATE_SYS_DMMMYYYY = 23;
+     const short DATE_SYS_MMYY = 34;
+     const short DATE_SYS_NNDMMMMYYYY = 29;
+     const short DATE_SYS_NNDMMMYY = 27;
+     const short DATE_SYS_NNNNDMMMMYYYY = 30;
+     const short DATE_WW = 38;
+     const short FRACTION_1 = 10;
+     const short FRACTION_2 = 11;
+     const short FRACTION_END = 11;
+     const short FRACTION_START = 10;
      const short INDEX_TABLE_ENTRIES = 50;
+     const short NUMBER_1000DEC2 = 4;
+     const short NUMBER_1000INT = 3;
+     const short NUMBER_DEC2 = 2;
+     const short NUMBER_END = 5;
+     const short NUMBER_INT = 1;
+     const short NUMBER_STANDARD = 0;
+     const short NUMBER_START = 0;
+     const short NUMBER_SYSTEM = 5;
+     const short PERCENT_DEC2 = 9;
+     const short PERCENT_END = 9;
+     const short PERCENT_INT = 8;
+     const short PERCENT_START = 8;
+     const short SCIENTIFIC_000E00 = 7;
+     const short SCIENTIFIC_000E000 = 6;
+     const short SCIENTIFIC_END = 7;
+     const short SCIENTIFIC_START = 6;
+     const short TEXT = 49;
+     const short TIME_END = 45;
+     const short TIME_HHMM = 39;
+     const short TIME_HHMMAMPM = 41;
+     const short TIME_HHMMSS = 40;
+     const short TIME_HHMMSSAMPM = 42;
+     const short TIME_HH_MMSS = 43;
+     const short TIME_HH_MMSS00 = 45;
+     const short TIME_MMSS00 = 44;
+     const short TIME_START = 39;
     };
     published interface XNumberFormatCode {
      interface ::com::sun::star::uno::XInterface;
@@ -8417,14 +8417,14 @@ module com {
     };
     published service NumberFormatMapper: ::com::sun::star::i18n::XNumberFormatCode;
     published constants ScriptDirection {
-     const short NEUTRAL = 0;
      const short LEFT_TO_RIGHT = 1;
+     const short NEUTRAL = 0;
      const short RIGHT_TO_LEFT = 2;
     };
     published constants ScriptType {
-     const short LATIN = 1;
      const short ASIAN = 2;
      const short COMPLEX = 3;
+     const short LATIN = 1;
      const short WEAK = 4;
     };
     published struct TextConversionResult {
@@ -8443,9 +8443,9 @@ module com {
     };
     published service TextConversion: ::com::sun::star::i18n::XExtendedTextConversion;
     published constants TextConversionOption {
-     const long NONE = 0;
      const long CHARACTER_BY_CHARACTER = 1;
      const long IGNORE_POST_POSITIONAL_WORD = 2;
+     const long NONE = 0;
      const long USE_CHARACTER_VARIANTS = 2;
     };
     published constants TextConversionType {
@@ -8583,12 +8583,12 @@ module com {
     };
     published service Transliteration: ::com::sun::star::i18n::XExtendedTransliteration;
     published constants TransliterationType {
-     const short NONE = 0;
-     const short ONE_TO_ONE = 1;
-     const short NUMERIC = 2;
-     const short ONE_TO_ONE_NUMERIC = 3;
-     const short IGNORE = 4;
      const short CASCADE = 8;
+     const short IGNORE = 4;
+     const short NONE = 0;
+     const short NUMERIC = 2;
+     const short ONE_TO_ONE = 1;
+     const short ONE_TO_ONE_NUMERIC = 3;
     };
     published enum UnicodeScript {
      kBasicLatin = 0,
@@ -8681,50 +8681,50 @@ module com {
      kScriptCount = 87
     };
     published constants UnicodeType {
+     const short COMBINING_SPACING_MARK = 8;
+     const short CONNECTOR_PUNCTUATION = 22;
+     const short CONTROL = 15;
+     const short CURRENCY_SYMBOL = 25;
+     const short DASH_PUNCTUATION = 19;
+     const short DECIMAL_DIGIT_NUMBER = 9;
+     const short ENCLOSING_MARK = 7;
+     const short END_PUNCTUATION = 29;
+     const short FINAL_PUNCTUATION = 21;
+     const short FORMAT = 16;
+     const short GENERAL_TYPES_COUNT = 30;
+     const short INITIAL_PUNCTUATION = 20;
+     const short LETTER_NUMBER = 10;
+     const short LINE_SEPARATOR = 13;
+     const short LOWERCASE_LETTER = 2;
+     const short MATH_SYMBOL = 24;
+     const short MODIFIER_LETTER = 4;
+     const short MODIFIER_SYMBOL = 26;
+     const short NON_SPACING_MARK = 6;
+     const short OTHER_LETTER = 5;
+     const short OTHER_NUMBER = 11;
+     const short OTHER_PUNCTUATION = 23;
+     const short OTHER_SYMBOL = 27;
+     const short PARAGRAPH_SEPARATOR = 14;
+     const short PRIVATE_USE = 17;
+     const short SPACE_SEPARATOR = 12;
+     const short START_PUNCTUATION = 28;
+     const short SURROGATE = 18;
+     const short TITLECASE_LETTER = 3;
      const short UNASSIGNED = 0;
      const short UPPERCASE_LETTER = 1;
-     const short LOWERCASE_LETTER = 2;
-     const short TITLECASE_LETTER = 3;
-     const short MODIFIER_LETTER = 4;
-     const short OTHER_LETTER = 5;
-     const short NON_SPACING_MARK = 6;
-     const short ENCLOSING_MARK = 7;
-     const short COMBINING_SPACING_MARK = 8;
-     const short DECIMAL_DIGIT_NUMBER = 9;
-     const short LETTER_NUMBER = 10;
-     const short OTHER_NUMBER = 11;
-     const short SPACE_SEPARATOR = 12;
-     const short LINE_SEPARATOR = 13;
-     const short PARAGRAPH_SEPARATOR = 14;
-     const short CONTROL = 15;
-     const short FORMAT = 16;
-     const short PRIVATE_USE = 17;
-     const short SURROGATE = 18;
-     const short DASH_PUNCTUATION = 19;
-     const short INITIAL_PUNCTUATION = 20;
-     const short FINAL_PUNCTUATION = 21;
-     const short CONNECTOR_PUNCTUATION = 22;
-     const short OTHER_PUNCTUATION = 23;
-     const short MATH_SYMBOL = 24;
-     const short CURRENCY_SYMBOL = 25;
-     const short MODIFIER_SYMBOL = 26;
-     const short OTHER_SYMBOL = 27;
-     const short START_PUNCTUATION = 28;
-     const short END_PUNCTUATION = 29;
-     const short GENERAL_TYPES_COUNT = 30;
     };
     published constants Weekdays {
-     const short SUNDAY = 0;
+     const short FRIDAY = 5;
      const short MONDAY = 1;
+     const short SATURDAY = 6;
+     const short SUNDAY = 0;
+     const short THURSDAY = 4;
      const short TUESDAY = 2;
      const short WEDNESDAY = 3;
-     const short THURSDAY = 4;
-     const short FRIDAY = 5;
-     const short SATURDAY = 6;
     };
     published constants WordType {
-     const short ANY_WORD = 0;
      const short ANYWORD_IGNOREWHITESPACES = 1;
+     const short ANY_WORD = 0;
      const short DICTIONARY_WORD = 2;
      const short WORD_COUNT = 3;
     };
@@ -8745,19 +8745,19 @@ module com {
      short getCTLScriptType([in] string aText, [in] long nPos);
     };
     published constants reservedWords {
-     const short TRUE_WORD = 0;
-     const short FALSE_WORD = 1;
-     const short QUARTER1_WORD = 2;
-     const short QUARTER2_WORD = 3;
-     const short QUARTER3_WORD = 4;
-     const short QUARTER4_WORD = 5;
      const short ABOVE_WORD = 6;
      const short BELOW_WORD = 7;
-     const short QUARTER1_ABBREVIATION = 8;
-     const short QUARTER2_ABBREVIATION = 9;
-     const short QUARTER3_ABBREVIATION = 10;
-     const short QUARTER4_ABBREVIATION = 11;
      const short COUNT = 12;
+     const short FALSE_WORD = 1;
+     const short QUARTER1_ABBREVIATION = 8;
+     const short QUARTER1_WORD = 2;
+     const short QUARTER2_ABBREVIATION = 9;
+     const short QUARTER2_WORD = 3;
+     const short QUARTER3_ABBREVIATION = 10;
+     const short QUARTER3_WORD = 4;
+     const short QUARTER4_ABBREVIATION = 11;
+     const short QUARTER4_WORD = 5;
+     const short TRUE_WORD = 0;
     };
    };
    module image {
@@ -8863,13 +8863,13 @@ module com {
      ::com::sun::star::linguistic2::XDictionaryEntry xDictionaryEntry;
     };
     published constants DictionaryEventFlags {
-     const short ADD_ENTRY = 1;
-     const short DEL_ENTRY = 2;
-     const short CHG_NAME = 4;
-     const short CHG_LANGUAGE = 8;
-     const short ENTRIES_CLEARED = 16;
      const short ACTIVATE_DIC = 32;
+     const short ADD_ENTRY = 1;
+     const short CHG_LANGUAGE = 8;
+     const short CHG_NAME = 4;
      const short DEACTIVATE_DIC = 64;
+     const short DEL_ENTRY = 2;
+     const short ENTRIES_CLEARED = 16;
     };
     published interface XDictionaryListEventListener;
     published interface XDictionaryList {
@@ -8897,14 +8897,14 @@ module com {
      sequence< ::com::sun::star::linguistic2::DictionaryEvent > aDictionaryEvents;
     };
     published constants DictionaryListEventFlags {
-     const short ADD_POS_ENTRY = 1;
-     const short DEL_POS_ENTRY = 2;
-     const short ADD_NEG_ENTRY = 4;
-     const short DEL_NEG_ENTRY = 8;
-     const short ACTIVATE_POS_DIC = 16;
-     const short DEACTIVATE_POS_DIC = 32;
      const short ACTIVATE_NEG_DIC = 64;
+     const short ACTIVATE_POS_DIC = 16;
+     const short ADD_NEG_ENTRY = 4;
+     const short ADD_POS_ENTRY = 1;
      const short DEACTIVATE_NEG_DIC = 128;
+     const short DEACTIVATE_POS_DIC = 32;
+     const short DEL_NEG_ENTRY = 8;
+     const short DEL_POS_ENTRY = 2;
     };
     published service HangulHanjaConversionDictionary {
      service ::com::sun::star::linguistic2::ConversionDictionary;
@@ -8959,10 +8959,10 @@ module com {
      short nEvent;
     };
     published constants LinguServiceEventFlags {
-     const short SPELL_CORRECT_WORDS_AGAIN = 1;
-     const short SPELL_WRONG_WORDS_AGAIN = 2;
      const short HYPHENATE_AGAIN = 4;
      const short PROOFREAD_AGAIN = 8;
+     const short SPELL_CORRECT_WORDS_AGAIN = 1;
+     const short SPELL_WRONG_WORDS_AGAIN = 2;
     };
     published interface XAvailableLocales {
      interface ::com::sun::star::uno::XInterface;
@@ -9001,8 +9001,8 @@ module com {
      interface ::com::sun::star::lang::XServiceDisplayName;
     };
     published constants SpellFailure {
-     const short IS_NEGATIVE_WORD = 2;
      const short CAPTION_ERROR = 3;
+     const short IS_NEGATIVE_WORD = 2;
      const short SPELLING_ERROR = 4;
     };
     published interface XMeaning;
@@ -9248,58 +9248,58 @@ module com {
     };
     module zip {
      published constants ZipConstants {
-      const short DEFLATED = 8;
-      const short NO_COMPRESSION = 0;
-      const short BEST_SPEED = 1;
       const short BEST_COMPRESSION = 9;
-      const short DEFAULT_COMPRESSION = -1;
-      const short FILTERED = 1;
-      const short HUFFMAN_ONLY = 2;
-      const short DEFAULT_STRATEGY = 0;
-      const short STORED = 0;
-      const short DEF_MEM_LEVEL = 8;
-      const long LOCSIG = 67324752;
-      const long EXTSIG = 134695760;
-      const long CENSIG = 33639248;
-      const long ENDSIG = 101010256;
-      const long SPANSIG = 134695760;
-      const short LOCHDR = 30;
-      const short EXTHDR = 16;
-      const short CENHDR = 46;
-      const short ENDHDR = 22;
-      const short LOCVER = 4;
-      const short LOCFLG = 6;
-      const short LOCHOW = 8;
-      const short LOCTIM = 10;
-      const short LOCCRC = 14;
-      const short LOCSIZ = 18;
-      const short LOCLEN = 22;
-      const short LOCNAM = 26;
-      const short LOCEXT = 28;
-      const short EXTCRC = 4;
-      const short EXTSIZ = 8;
-      const short EXTLEN = 12;
-      const short CENVEM = 4;
-      const short CENVER = 6;
-      const short CENFLG = 8;
-      const short CENHOW = 10;
-      const short CENTIM = 12;
-      const short CENDAT = 14;
-      const short CENCRC = 16;
-      const short CENSIZ = 20;
-      const short CENLEN = 24;
-      const short CENNAM = 28;
-      const short CENEXT = 30;
-      const short CENCOM = 32;
-      const short CENDSK = 34;
+      const short BEST_SPEED = 1;
       const short CENATT = 36;
       const short CENATX = 38;
+      const short CENCOM = 32;
+      const short CENCRC = 16;
+      const short CENDAT = 14;
+      const short CENDSK = 34;
+      const short CENEXT = 30;
+      const short CENFLG = 8;
+      const short CENHDR = 46;
+      const short CENHOW = 10;
+      const short CENLEN = 24;
+      const short CENNAM = 28;
       const short CENOFF = 42;
+      const long CENSIG = 33639248;
+      const short CENSIZ = 20;
+      const short CENTIM = 12;
+      const short CENVEM = 4;
+      const short CENVER = 6;
+      const short DEFAULT_COMPRESSION = -1;
+      const short DEFAULT_STRATEGY = 0;
+      const short DEFLATED = 8;
+      const short DEF_MEM_LEVEL = 8;
+      const short ENDCOM = 20;
+      const short ENDHDR = 22;
+      const short ENDOFF = 16;
+      const long ENDSIG = 101010256;
+      const short ENDSIZ = 12;
       const short ENDSUB = 8;
       const short ENDTOT = 10;
-      const short ENDSIZ = 12;
-      const short ENDOFF = 16;
-      const short ENDCOM = 20;
+      const short EXTCRC = 4;
+      const short EXTHDR = 16;
+      const short EXTLEN = 12;
+      const long EXTSIG = 134695760;
+      const short EXTSIZ = 8;
+      const short FILTERED = 1;
+      const short HUFFMAN_ONLY = 2;
+      const short LOCCRC = 14;
+      const short LOCEXT = 28;
+      const short LOCFLG = 6;
+      const short LOCHDR = 30;
+      const short LOCHOW = 8;
+      const short LOCLEN = 22;
+      const short LOCNAM = 26;
+      const long LOCSIG = 67324752;
+      const short LOCSIZ = 18;
+      const short LOCTIM = 10;
+      const short LOCVER = 4;
+      const short NO_COMPRESSION = 0;
+      const long SPANSIG = 134695760;
+      const short STORED = 0;
      };
      published struct ZipEntry {
       short nVersion;
@@ -9941,11 +9941,11 @@ module com {
      void renameLibrary([in] string Name, [in] string NewName) raises (::com::sun::star::container::NoSuchElementException, ::com::sun::star::container::ElementExistException);
     };
     published constants ModuleType {
-     const long UNKNOWN = 0;
-     const long NORMAL = 1;
      const long CLASS = 2;
-     const long FORM = 3;
      const long DOCUMENT = 4;
+     const long FORM = 3;
+     const long NORMAL = 1;
+     const long UNKNOWN = 0;
     };
     published interface XLibraryContainer3 {
      interface ::com::sun::star::script::XLibraryContainer2;
@@ -10071,9 +10071,9 @@ module com {
    };
    module sdb {
     published constants CommandType {
-     const long TABLE = 0;
-     const long QUERY = 1;
      const long COMMAND = 2;
+     const long QUERY = 1;
+     const long TABLE = 0;
     };
     published interface XCommandPreparation {
      interface ::com::sun::star::uno::XInterface;
@@ -10567,9 +10567,9 @@ module com {
      interface ::com::sun::star::lang::XInitialization;
     };
     published constants RowChangeAction {
+     const long DELETE = 3;
      const long INSERT = 1;
      const long UPDATE = 2;
-     const long DELETE = 3;
     };
     published exception RowSetVetoException: ::com::sun::star::sdbc::SQLException {
     };
@@ -10700,35 +10700,35 @@ module com {
      sequence< long > UpdateCounts;
     };
     published constants BestRowScope {
+     const long SESSION = 2;
      const long TEMPORARY = 0;
      const long TRANSACTION = 1;
-     const long SESSION = 2;
     };
     published constants BestRowType {
-     const long UNKNOWN = 0;
      const long NOT_PSEUDO = 1;
      const long PSEUDO = 2;
+     const long UNKNOWN = 0;
     };
     /** @deprecated */ published constants ChangeAction {
-     const long INSERT = 1;
-     const long UPDATE = 2;
      const long DELETE = 3;
+     const long INSERT = 1;
      const long UNDO = 4;
+     const long UPDATE = 2;
     };
     /** @deprecated */ published struct ChangeEvent: ::com::sun::star::lang::EventObject {
      long Action;
      long Rows;
     };
     published constants ColumnSearch {
-     const long NONE = 0;
-     const long CHAR = 1;
      const long BASIC = 2;
+     const long CHAR = 1;
      const long FULL = 3;
+     const long NONE = 0;
     };
     published constants ColumnType {
-     const long UNKNOWN = 0;
      const long NOT_PSEUDO = 1;
      const long PSEUDO = 2;
+     const long UNKNOWN = 0;
     };
     published constants ColumnValue {
      const long NO_NULLS = 0;
@@ -10757,35 +10757,35 @@ module com {
      long TransferSize;
     };
     published constants DataType {
-     const long BIT = -7;
-     const long TINYINT = -6;
-     const long SMALLINT = 5;
-     const long INTEGER = 4;
+     const long ARRAY = 2003;
      const long BIGINT = -5;
-     const long FLOAT = 6;
-     const long REAL = 7;
-     const long DOUBLE = 8;
-     const long NUMERIC = 2;
-     const long DECIMAL = 3;
+     const long BINARY = -2;
+     const long BIT = -7;
+     const long BLOB = 2004;
+     const long BOOLEAN = 16;
      const long CHAR = 1;
-     const long VARCHAR = 12;
-     const long LONGVARCHAR = -1;
+     const long CLOB = 2005;
      const long DATE = 91;
+     const long DECIMAL = 3;
+     const long DISTINCT = 2001;
+     const long DOUBLE = 8;
+     const long FLOAT = 6;
+     const long INTEGER = 4;
+     const long LONGVARBINARY = -4;
+     const long LONGVARCHAR = -1;
+     const long NUMERIC = 2;
+     const long OBJECT = 2000;
+     const long OTHER = 1111;
+     const long REAL = 7;
+     const long REF = 2006;
+     const long SMALLINT = 5;
+     const long SQLNULL = 0;
+     const long STRUCT = 2002;
      const long TIME = 92;
      const long TIMESTAMP = 93;
-     const long BINARY = -2;
+     const long TINYINT = -6;
      const long VARBINARY = -3;
-     const long LONGVARBINARY = -4;
-     const long SQLNULL = 0;
-     const long OTHER = 1111;
-     const long OBJECT = 2000;
-     const long DISTINCT = 2001;
-     const long STRUCT = 2002;
-     const long ARRAY = 2003;
-     const long BLOB = 2004;
-     const long CLOB = 2005;
-     const long REF = 2006;
-     const long BOOLEAN = 16;
+     const long VARCHAR = 12;
     };
     published constants Deferrability {
      const long INITIALLY_DEFERRED = 5;
@@ -10822,30 +10822,30 @@ module com {
      const long UNKNOWN = 1002;
     };
     published constants IndexType {
-     const short STATISTIC = 0;
      const short CLUSTERED = 1;
      const short HASHED = 2;
      const short OTHER = 3;
+     const short STATISTIC = 0;
     };
     published constants KeyRule {
      const long CASCADE = 0;
-     const long RESTRICT = 1;
-     const long SET_NULL = 2;
      const long NO_ACTION = 3;
+     const long RESTRICT = 1;
      const long SET_DEFAULT = 4;
+     const long SET_NULL = 2;
     };
     published constants ProcedureColumn {
-     const long UNKNOWN = 0;
      const long IN = 1;
      const long INOUT = 2;
-     const long RESULT = 3;
      const long OUT = 4;
+     const long RESULT = 3;
      const long RETURN = 5;
+     const long UNKNOWN = 0;
     };
     published constants ProcedureResult {
-     const long UNKNOWN = 0;
      const long NONE = 1;
      const long RETURN = 2;
+     const long UNKNOWN = 0;
     };
     published constants ResultSetConcurrency {
      const long READ_ONLY = 1007;
@@ -10890,8 +10890,8 @@ module com {
     };
     published constants TransactionIsolation {
      const long NONE = 0;
-     const long READ_UNCOMMITTED = 1;
      const long READ_COMMITTED = 2;
+     const long READ_UNCOMMITTED = 1;
      const long REPEATABLE_READ = 4;
      const long SERIALIZABLE = 8;
     };
@@ -11177,9 +11177,9 @@ module com {
    };
    module sdbcx {
     published constants CheckOption {
-     const long NONE = 0;
      const long CASCADE = 2;
      const long LOCAL = 3;
+     const long NONE = 0;
     };
     published service ColumnDescriptor {
      service ::com::sun::star::sdbcx::Descriptor;
@@ -11195,11 +11195,11 @@ module com {
      [property, optional] string AutoIncrementCreation;
     };
     published constants CompareBookmark {
-     const long LESS = -1;
      const long EQUAL = 0;
      const long GREATER = 1;
-     const long NOT_EQUAL = 2;
+     const long LESS = -1;
      const long NOT_COMPARABLE = 3;
+     const long NOT_EQUAL = 2;
     };
     published interface XAppend {
      interface ::com::sun::star::uno::XInterface;
@@ -11307,29 +11307,29 @@ module com {
      [property] long DeleteRule;
     };
     published constants KeyType {
+     const long FOREIGN = 3;
      const long PRIMARY = 1;
      const long UNIQUE = 2;
-     const long FOREIGN = 3;
     };
     published service PreparedStatement {
      service ::com::sun::star::sdbc::PreparedStatement;
      [property] boolean UseBookmarks;
     };
     published constants Privilege {
-     const long SELECT = 1;
-     const long INSERT = 2;
-     const long UPDATE = 4;
-     const long DELETE = 8;
-     const long READ = 16;
-     const long CREATE = 32;
      const long ALTER = 64;
-     const long REFERENCE = 128;
+     const long CREATE = 32;
+     const long DELETE = 8;
      const long DROP = 256;
+     const long INSERT = 2;
+     const long READ = 16;
+     const long REFERENCE = 128;
+     const long SELECT = 1;
+     const long UPDATE = 4;
     };
     published constants PrivilegeObject {
+     const long COLUMN = 2;
      const long TABLE = 0;
      const long VIEW = 1;
-     const long COLUMN = 2;
     };
     published service ReferenceColumn {
      service ::com::sun::star::sdbcx::Column;
@@ -11491,16 +11491,16 @@ module com {
      COLUMNS = 4
     };
     published constants CellFlags {
-     const long VALUE = 1;
-     const long DATETIME = 2;
-     const long STRING = 4;
      const long ANNOTATION = 8;
-     const long FORMULA = 16;
-     const long HARDATTR = 32;
-     const long STYLES = 64;
-     const long OBJECTS = 128;
+     const long DATETIME = 2;
      const long EDITATTR = 256;
      const long FORMATTED = 512;
+     const long FORMULA = 16;
+     const long HARDATTR = 32;
+     const long OBJECTS = 128;
+     const long STRING = 4;
+     const long STYLES = 64;
+     const long VALUE = 1;
     };
     published service CellFormatRanges {
      interface ::com::sun::star::container::XIndexAccess;
@@ -11723,12 +11723,12 @@ module com {
      [optional] interface ::com::sun::star::container::XNameContainer;
     };
     published constants DataPilotFieldGroupBy {
-     const long SECONDS = 1;
-     const long MINUTES = 2;
-     const long HOURS = 4;
      const long DAYS = 8;
+     const long HOURS = 4;
+     const long MINUTES = 2;
      const long MONTHS = 16;
      const long QUARTERS = 32;
+     const long SECONDS = 1;
      const long YEARS = 64;
     };
     published service DataPilotFieldGroupItem {
@@ -11857,9 +11857,9 @@ module com {
     };
     published constants DimensionFlags {
      const long NO_COLUMN_ORIENTATION = 1;
-     const long NO_ROW_ORIENTATION = 2;
-     const long NO_PAGE_ORIENTATION = 4;
      const long NO_DATA_ORIENTATION = 8;
+     const long NO_PAGE_ORIENTATION = 4;
+     const long NO_ROW_ORIENTATION = 2;
     };
     published service DocumentSettings {
      service ::com::sun::star::document::Settings;
@@ -11900,29 +11900,29 @@ module com {
      AUTO = 4
     };
     published constants FilterOperator2 {
+     const long BEGINS_WITH = 14;
+     const long BOTTOM_PERCENT = 11;
+     const long BOTTOM_VALUES = 10;
+     const long CONTAINS = 12;
+     const long DOES_NOT_BEGIN_WITH = 15;
+     const long DOES_NOT_CONTAIN = 13;
+     const long DOES_NOT_END_WITH = 17;
      const long EMPTY = 0;
-     const long NOT_EMPTY = 1;
+     const long ENDS_WITH = 16;
      const long EQUAL = 2;
-     const long NOT_EQUAL = 3;
      const long GREATER = 4;
      const long GREATER_EQUAL = 5;
      const long LESS = 6;
      const long LESS_EQUAL = 7;
-     const long TOP_VALUES = 8;
+     const long NOT_EMPTY = 1;
+     const long NOT_EQUAL = 3;
      const long TOP_PERCENT = 9;
-     const long BOTTOM_VALUES = 10;
-     const long BOTTOM_PERCENT = 11;
-     const long CONTAINS = 12;
-     const long DOES_NOT_CONTAIN = 13;
-     const long BEGINS_WITH = 14;
-     const long DOES_NOT_BEGIN_WITH = 15;
-     const long ENDS_WITH = 16;
-     const long DOES_NOT_END_WITH = 17;
+     const long TOP_VALUES = 8;
     };
     published constants FormulaResult {
-     const long VALUE = 1;
-     const long STRING = 2;
      const long ERROR = 4;
+     const long STRING = 2;
+     const long VALUE = 1;
     };
     /** @deprecated */ published service SpreadsheetDocumentSettings {
      interface ::com::sun::star::beans::XPropertySet;
@@ -11959,6 +11959,7 @@ module com {
      [property, optional] boolean IsArrayFunction;
     };
     published constants FunctionCategory {
+     const long ADDIN = 11;
      const long DATABASE = 1;
      const long DATETIME = 2;
      const long FINANCIAL = 3;
@@ -11966,10 +11967,9 @@ module com {
      const long LOGICAL = 5;
      const long MATHEMATICAL = 6;
      const long MATRIX = 7;
-     const long STATISTICAL = 8;
      const long SPREADSHEET = 9;
+     const long STATISTICAL = 8;
      const long TEXT = 10;
-     const long ADDIN = 11;
     };
     published service FunctionDescription {
      [property, readonly] long Id;
@@ -12050,9 +12050,9 @@ module com {
     };
     published constants MoveDirection {
      const short DOWN = 0;
+     const short LEFT = 3;
      const short RIGHT = 1;
      const short UP = 2;
-     const short LEFT = 3;
     };
     published interface XNamedRange {
      interface ::com::sun::star::container::XNamed;
@@ -12070,9 +12070,9 @@ module com {
      [property, optional] boolean IsSharedFormula;
     };
     published constants NamedRangeFlag {
+     const long COLUMN_HEADER = 4;
      const long FILTER_CRITERIA = 1;
      const long PRINT_AREA = 2;
-     const long COLUMN_HEADER = 4;
      const long ROW_HEADER = 8;
     };
     published interface XNamedRanges {
@@ -12964,8 +12964,8 @@ module com {
      [optional] interface ::com::sun::star::sheet::XActivationBroadcaster;
     };
     published constants SpreadsheetViewObjectsMode {
-     const short SHOW = 0;
      const short HIDE = 1;
+     const short SHOW = 0;
     };
     published service SpreadsheetViewPanesEnumeration {
      interface ::com::sun::star::container::XEnumeration;
@@ -12992,12 +12992,12 @@ module com {
      interface ::com::sun::star::container::XEnumeration;
     };
     published constants StatusBarFunction {
-     const short NONE = 0;
      const short AVERAGE = 1;
-     const short COUNTNUMS = 2;
      const short COUNT = 3;
+     const short COUNTNUMS = 2;
      const short MAX = 4;
      const short MIN = 5;
+     const short NONE = 0;
      const short SUM = 9;
     };
     published struct SubTotalColumn {
@@ -13380,11 +13380,11 @@ module com {
    };
    module style {
     published constants CaseMap {
-     const short NONE = 0;
-     const short UPPERCASE = 1;
      const short LOWERCASE = 2;
-     const short TITLE = 3;
+     const short NONE = 0;
      const short SMALLCAPS = 4;
+     const short TITLE = 3;
+     const short UPPERCASE = 1;
     };
     published service CharacterStyle {
      service ::com::sun::star::style::Style;
@@ -13397,22 +13397,22 @@ module com {
      [property] short CharPropHeightComplex;
     };
     published constants FootnoteLineStyle {
+     const short DASHED = 3;
+     const short DOTTED = 2;
      const short NONE = 0;
      const short SOLID = 1;
-     const short DOTTED = 2;
-     const short DASHED = 3;
     };
     published constants LineNumberPosition {
-     const short LEFT = 0;
-     const short RIGHT = 1;
      const short INSIDE = 2;
+     const short LEFT = 0;
      const short OUTSIDE = 3;
+     const short RIGHT = 1;
     };
     published constants LineSpacingMode {
-     const short PROP = 0;
-     const short MINIMUM = 1;
-     const short LEADING = 2;
      const short FIX = 3;
+     const short LEADING = 2;
+     const short MINIMUM = 1;
+     const short PROP = 0;
     };
     published service NumberingAlignment {
      [property] ::com::sun::star::style::HorizontalAlignment Alignment;
@@ -13436,62 +13436,62 @@ module com {
      service ::com::sun::star::style::NumberingLevel;
     };
     published constants NumberingType {
-     const short CHARS_UPPER_LETTER = 0;
-     const short CHARS_LOWER_LETTER = 1;
-     const short ROMAN_UPPER = 2;
-     const short ROMAN_LOWER = 3;
-     const short ARABIC = 4;
-     const short NUMBER_NONE = 5;
-     const short CHAR_SPECIAL = 6;
-     const short PAGE_DESCRIPTOR = 7;
-     const short BITMAP = 8;
-     const short CHARS_UPPER_LETTER_N = 9;
-     const short CHARS_LOWER_LETTER_N = 10;
-     const short TRANSLITERATION = 11;
-     const short NATIVE_NUMBERING = 12;
-     const short FULLWIDTH_ARABIC = 13;
-     const short CIRCLE_NUMBER = 14;
-     const short NUMBER_LOWER_ZH = 15;
-     const short NUMBER_UPPER_ZH = 16;
-     const short NUMBER_UPPER_ZH_TW = 17;
-     const short TIAN_GAN_ZH = 18;
-     const short DI_ZI_ZH = 19;
-     const short NUMBER_TRADITIONAL_JA = 20;
      const short AIU_FULLWIDTH_JA = 21;
      const short AIU_HALFWIDTH_JA = 22;
-     const short IROHA_FULLWIDTH_JA = 23;
-     const short IROHA_HALFWIDTH_JA = 24;
-     const short NUMBER_UPPER_KO = 25;
-     const short NUMBER_HANGUL_KO = 26;
-     const short HANGUL_JAMO_KO = 27;
-     const short HANGUL_SYLLABLE_KO = 28;
-     const short HANGUL_CIRCLED_JAMO_KO = 29;
-     const short HANGUL_CIRCLED_SYLLABLE_KO = 30;
+     const short ARABIC = 4;
+     const short BITMAP = 8;
      const short CHARS_ARABIC = 31;
-     const short CHARS_THAI = 32;
+     const short CHARS_ARABIC_ABJAD = 54;
+     const short CHARS_CYRILLIC_LOWER_LETTER_BG = 39;
+     const short CHARS_CYRILLIC_LOWER_LETTER_N_BG = 41;
+     const short CHARS_CYRILLIC_LOWER_LETTER_N_RU = 45;
+     const short CHARS_CYRILLIC_LOWER_LETTER_N_SR = 51;
+     const short CHARS_CYRILLIC_LOWER_LETTER_RU = 43;
+     const short CHARS_CYRILLIC_LOWER_LETTER_SR = 49;
+     const short CHARS_CYRILLIC_UPPER_LETTER_BG = 38;
+     const short CHARS_CYRILLIC_UPPER_LETTER_N_BG = 40;
+     const short CHARS_CYRILLIC_UPPER_LETTER_N_RU = 44;
+     const short CHARS_CYRILLIC_UPPER_LETTER_N_SR = 50;
+     const short CHARS_CYRILLIC_UPPER_LETTER_RU = 42;
+     const short CHARS_CYRILLIC_UPPER_LETTER_SR = 48;
+     const short CHARS_GREEK_LOWER_LETTER = 53;
+     const short CHARS_GREEK_UPPER_LETTER = 52;
      const short CHARS_HEBREW = 33;
-     const short CHARS_NEPALI = 34;
      const short CHARS_KHMER = 35;
      const short CHARS_LAO = 36;
-     const short CHARS_TIBETAN = 37;
-     const short CHARS_CYRILLIC_UPPER_LETTER_BG = 38;
-     const short CHARS_CYRILLIC_LOWER_LETTER_BG = 39;
-     const short CHARS_CYRILLIC_UPPER_LETTER_N_BG = 40;
-     const short CHARS_CYRILLIC_LOWER_LETTER_N_BG = 41;
-     const short CHARS_CYRILLIC_UPPER_LETTER_RU = 42;
-     const short CHARS_CYRILLIC_LOWER_LETTER_RU = 43;
-     const short CHARS_CYRILLIC_UPPER_LETTER_N_RU = 44;
-     const short CHARS_CYRILLIC_LOWER_LETTER_N_RU = 45;
-     const short CHARS_PERSIAN = 46;
+     const short CHARS_LOWER_LETTER = 1;
+     const short CHARS_LOWER_LETTER_N = 10;
      const short CHARS_MYANMAR = 47;
-     const short CHARS_CYRILLIC_UPPER_LETTER_SR = 48;
-     const short CHARS_CYRILLIC_LOWER_LETTER_SR = 49;
-     const short CHARS_CYRILLIC_UPPER_LETTER_N_SR = 50;
-     const short CHARS_CYRILLIC_LOWER_LETTER_N_SR = 51;
-     const short CHARS_GREEK_UPPER_LETTER = 52;
-     const short CHARS_GREEK_LOWER_LETTER = 53;
-     const short CHARS_ARABIC_ABJAD = 54;
+     const short CHARS_NEPALI = 34;
+     const short CHARS_PERSIAN = 46;
      const short CHARS_PERSIAN_WORD = 55;
+     const short CHARS_THAI = 32;
+     const short CHARS_TIBETAN = 37;
+     const short CHARS_UPPER_LETTER = 0;
+     const short CHARS_UPPER_LETTER_N = 9;
+     const short CHAR_SPECIAL = 6;
+     const short CIRCLE_NUMBER = 14;
+     const short DI_ZI_ZH = 19;
+     const short FULLWIDTH_ARABIC = 13;
+     const short HANGUL_CIRCLED_JAMO_KO = 29;
+     const short HANGUL_CIRCLED_SYLLABLE_KO = 30;
+     const short HANGUL_JAMO_KO = 27;
+     const short HANGUL_SYLLABLE_KO = 28;
+     const short IROHA_FULLWIDTH_JA = 23;
+     const short IROHA_HALFWIDTH_JA = 24;
+     const short NATIVE_NUMBERING = 12;
+     const short NUMBER_HANGUL_KO = 26;
+     const short NUMBER_LOWER_ZH = 15;
+     const short NUMBER_NONE = 5;
+     const short NUMBER_TRADITIONAL_JA = 20;
+     const short NUMBER_UPPER_KO = 25;
+     const short NUMBER_UPPER_ZH = 16;
+     const short NUMBER_UPPER_ZH_TW = 17;
+     const short PAGE_DESCRIPTOR = 7;
+     const short ROMAN_LOWER = 3;
+     const short ROMAN_UPPER = 2;
+     const short TIAN_GAN_ZH = 18;
+     const short TRANSLITERATION = 11;
     };
    };
    module xml {
@@ -13518,12 +13518,12 @@ module com {
      [property, optional, readonly] string PageStyleName;
     };
     published constants ParagraphStyleCategory {
-     const short TEXT = 0;
      const short CHAPTER = 1;
-     const short LIST = 2;
-     const short INDEX = 3;
      const short EXTRA = 4;
      const short HTML = 5;
+     const short INDEX = 3;
+     const short LIST = 2;
+     const short TEXT = 0;
     };
     published service StyleFamilies {
      interface ::com::sun::star::container::XNameAccess;
@@ -13561,8 +13561,8 @@ module com {
     published service SimpleCommandMail: ::com::sun::star::system::XSimpleMailClientSupplier;
     published constants SimpleMailClientFlags {
      const long DEFAULTS = 0;
-     const long NO_USER_INTERFACE = 1;
      const long NO_LOGON_DIALOG = 2;
+     const long NO_USER_INTERFACE = 1;
     };
     published service SimpleSystemMail: ::com::sun::star::system::XSimpleMailClientSupplier;
     published exception SystemShellExecuteException: ::com::sun::star::uno::Exception {
@@ -13827,10 +13827,10 @@ module com {
    };
    module text {
     published constants AuthorDisplayFormat {
-     const short FULL = 0;
-     const short LAST_NAME = 1;
      const short FIRST_NAME = 2;
+     const short FULL = 0;
      const short INITIALS = 3;
+     const short LAST_NAME = 1;
     };
     published interface XAutoTextGroup;
     published interface XAutoTextContainer {
@@ -13976,17 +13976,23 @@ module com {
      [property] string SortAlgorithm;
     };
     published constants BibliographyDataField {
-     const short IDENTIFIER = 0;
-     const short BIBILIOGRAPHIC_TYPE = 1;
      const short ADDRESS = 2;
      const short ANNOTE = 3;
      const short AUTHOR = 4;
+     const short BIBILIOGRAPHIC_TYPE = 1;
      const short BOOKTITLE = 5;
      const short CHAPTER = 6;
+     const short CUSTOM1 = 25;
+     const short CUSTOM2 = 26;
+     const short CUSTOM3 = 27;
+     const short CUSTOM4 = 28;
+     const short CUSTOM5 = 29;
      const short EDITION = 7;
      const short EDITOR = 8;
      const short HOWPUBLISHED = 9;
+     const short IDENTIFIER = 0;
      const short INSTITUTION = 10;
+     const short ISBN = 30;
      const short JOURNAL = 11;
      const short MONTH = 12;
      const short NOTE = 13;
@@ -13994,25 +14000,25 @@ module com {
      const short ORGANIZATIONS = 15;
      const short PAGES = 16;
      const short PUBLISHER = 17;
+     const short REPORT_TYPE = 21;
      const short SCHOOL = 18;
      const short SERIES = 19;
      const short TITLE = 20;
-     const short REPORT_TYPE = 21;
+     const short URL = 24;
      const short VOLUME = 22;
      const short YEAR = 23;
-     const short URL = 24;
-     const short CUSTOM1 = 25;
-     const short CUSTOM2 = 26;
-     const short CUSTOM3 = 27;
-     const short CUSTOM4 = 28;
-     const short CUSTOM5 = 29;
-     const short ISBN = 30;
     };
     published constants BibliographyDataType {
      const short ARTICLE = 0;
      const short BOOK = 1;
      const short BOOKLET = 2;
      const short CONFERENCE = 3;
+     const short CUSTOM1 = 17;
+     const short CUSTOM2 = 18;
+     const short CUSTOM3 = 19;
+     const short CUSTOM4 = 20;
+     const short CUSTOM5 = 21;
+     const short EMAIL = 15;
      const short INBOOK = 4;
      const short INCOLLECTION = 5;
      const short INPROCEEDINGS = 6;
@@ -14024,13 +14030,7 @@ module com {
      const short PROCEEDINGS = 12;
      const short TECHREPORT = 13;
      const short UNPUBLISHED = 14;
-     const short EMAIL = 15;
      const short WWW = 16;
-     const short CUSTOM1 = 17;
-     const short CUSTOM2 = 18;
-     const short CUSTOM3 = 19;
-     const short CUSTOM4 = 20;
-     const short CUSTOM5 = 21;
     };
     published service Bookmark {
      service ::com::sun::star::text::TextContent;
@@ -14106,11 +14106,11 @@ module com {
      [property, maybevoid] string ChainPrevName;
     };
     published constants ChapterFormat {
+     const short DIGIT = 4;
      const short NAME = 0;
-     const short NUMBER = 1;
      const short NAME_NUMBER = 2;
      const short NO_PREFIX_SUFFIX = 3;
-     const short DIGIT = 4;
+     const short NUMBER = 1;
     };
     published service ChapterNumberingRule {
      service ::com::sun::star::style::NumberingRule;
@@ -14118,14 +14118,14 @@ module com {
     };
     published constants CharacterCompressionType {
      const short NONE = 0;
-     const short PUNCTUATION_ONLY = 1;
      const short PUNCTUATION_AND_KANA = 2;
+     const short PUNCTUATION_ONLY = 1;
     };
     published constants ColumnSeparatorStyle {
+     const short DASHED = 3;
+     const short DOTTED = 2;
      const short NONE = 0;
      const short SOLID = 1;
-     const short DOTTED = 2;
-     const short DASHED = 3;
     };
     published service ContentIndex {
      service ::com::sun::star::text::BaseIndex;
@@ -14140,22 +14140,22 @@ module com {
      [property] short Level;
     };
     published constants ControlCharacter {
-     const short PARAGRAPH_BREAK = 0;
-     const short LINE_BREAK = 1;
-     const short HARD_HYPHEN = 2;
-     const short SOFT_HYPHEN = 3;
-     const short HARD_SPACE = 4;
      const short APPEND_PARAGRAPH = 5;
+     const short HARD_HYPHEN = 2;
+     const short HARD_SPACE = 4;
+     const short LINE_BREAK = 1;
+     const short PARAGRAPH_BREAK = 0;
+     const short SOFT_HYPHEN = 3;
     };
     /** @deprecated */ published constants DateDisplayFormat {
-     const short STANDARD_SHORT = 0;
-     const short STANDARD_LONG = 1;
+     const short DDMMMMYYYY = 5;
+     const short DDMMMYYYY = 4;
      const short MMDDYY = 2;
      const short MMDDYYYY = 3;
-     const short DDMMMYYYY = 4;
-     const short DDMMMMYYYY = 5;
      const short NNDDMMMMYYYY = 6;
      const short NNNNDDMMMMYYYY = 7;
+     const short STANDARD_LONG = 1;
+     const short STANDARD_SHORT = 0;
     };
     published interface XDefaultNumberingProvider {
      interface ::com::sun::star::uno::XInterface;
@@ -14258,10 +14258,10 @@ module com {
      [property, optional] boolean MathBaselineAlignment;
     };
     published constants DocumentStatistic {
+     const short CHARS = 3;
      const short PAGES = 0;
      const short PARAS = 1;
      const short WORDS = 2;
-     const short CHARS = 3;
     };
     published interface XFootnote {
      interface ::com::sun::star::text::XTextContent;
@@ -14295,30 +14295,30 @@ module com {
     };
     published constants FilenameDisplayFormat {
      const short FULL = 0;
-     const short PATH = 1;
      const short NAME = 2;
      const short NAME_AND_EXT = 3;
+     const short PATH = 1;
     };
     published constants FontEmphasis {
-     const short NONE = 0;
-     const short DOT_ABOVE = 1;
-     const short CIRCLE_ABOVE = 2;
-     const short DISK_ABOVE = 3;
      const short ACCENT_ABOVE = 4;
-     const short DOT_BELOW = 11;
-     const short CIRCLE_BELOW = 12;
-     const short DISK_BELOW = 13;
      const short ACCENT_BELOW = 14;
+     const short CIRCLE_ABOVE = 2;
+     const short CIRCLE_BELOW = 12;
+     const short DISK_ABOVE = 3;
+     const short DISK_BELOW = 13;
+     const short DOT_ABOVE = 1;
+     const short DOT_BELOW = 11;
+     const short NONE = 0;
     };
     published constants FontRelief {
-     const short NONE = 0;
      const short EMBOSSED = 1;
      const short ENGRAVED = 2;
+     const short NONE = 0;
     };
     published constants FootnoteNumbering {
-     const short PER_PAGE = 0;
      const short PER_CHAPTER = 1;
      const short PER_DOCUMENT = 2;
+     const short PER_PAGE = 0;
     };
     published service Footnotes {
      interface ::com::sun::star::container::XIndexAccess;
@@ -14435,14 +14435,14 @@ module com {
      long Right;
     };
     published constants HoriOrientation {
-     const short NONE = 0;
-     const short RIGHT = 1;
      const short CENTER = 2;
-     const short LEFT = 3;
-     const short INSIDE = 4;
-     const short OUTSIDE = 5;
      const short FULL = 6;
+     const short INSIDE = 4;
+     const short LEFT = 3;
      const short LEFT_AND_WIDTH = 7;
+     const short NONE = 0;
+     const short OUTSIDE = 5;
+     const short RIGHT = 1;
     };
     published struct HoriOrientationFormat {
      long XPos;
@@ -14466,8 +14466,8 @@ module com {
     };
     published constants LabelFollow {
      const short LISTTAB = 0;
-     const short SPACE = 1;
      const short NOTHING = 2;
+     const short SPACE = 1;
     };
     published service LineNumberingProperties {
      [property] boolean IsOn;
@@ -14527,9 +14527,9 @@ module com {
      ::com::sun::star::frame::XModel Model;
     };
     published constants MailMergeType {
-     const short PRINTER = 1;
      const short FILE = 2;
      const short MAIL = 3;
+     const short PRINTER = 1;
     };
     published service NumberingLevel {
      [property] short Adjust;
@@ -14681,20 +14681,20 @@ module com {
     published constants ParagraphVertAlign {
      const short AUTOMATIC = 0;
      const short BASELINE = 1;
-     const short TOP = 2;
-     const short CENTER = 3;
      const short BOTTOM = 4;
+     const short CENTER = 3;
+     const short TOP = 2;
     };
     published constants PlaceholderType {
-     const short TEXT = 0;
-     const short TABLE = 1;
-     const short TEXTFRAME = 2;
      const short GRAPHIC = 3;
      const short OBJECT = 4;
+     const short TABLE = 1;
+     const short TEXT = 0;
+     const short TEXTFRAME = 2;
     };
     published constants PositionAndSpaceMode {
-     const short LABEL_WIDTH_AND_POSITION = 0;
      const short LABEL_ALIGNMENT = 1;
+     const short LABEL_WIDTH_AND_POSITION = 0;
     };
     published service TextPortion {
      service ::com::sun::star::text::TextRange;
@@ -14724,24 +14724,24 @@ module com {
      [property, readonly] boolean MergeLastPara;
     };
     published constants ReferenceFieldPart {
-     const short PAGE = 0;
-     const short CHAPTER = 1;
-     const short TEXT = 2;
-     const short UP_DOWN = 3;
-     const short PAGE_DESC = 4;
      const short CATEGORY_AND_NUMBER = 5;
+     const short CHAPTER = 1;
+     const short NUMBER = 8;
+     const short NUMBER_FULL_CONTEXT = 10;
+     const short NUMBER_NO_CONTEXT = 9;
      const short ONLY_CAPTION = 6;
      const short ONLY_SEQUENCE_NUMBER = 7;
-     const short NUMBER = 8;
-     const short NUMBER_NO_CONTEXT = 9;
-     const short NUMBER_FULL_CONTEXT = 10;
+     const short PAGE = 0;
+     const short PAGE_DESC = 4;
+     const short TEXT = 2;
+     const short UP_DOWN = 3;
     };
     published constants ReferenceFieldSource {
+     const short BOOKMARK = 2;
+     const short ENDNOTE = 4;
+     const short FOOTNOTE = 3;
      const short REFERENCE_MARK = 0;
      const short SEQUENCE_FIELD = 1;
-     const short BOOKMARK = 2;
-     const short FOOTNOTE = 3;
-     const short ENDNOTE = 4;
     };
     published service ReferenceMark {
      interface ::com::sun::star::text::XTextContent;
@@ -14752,15 +14752,15 @@ module com {
      interface ::com::sun::star::container::XNameAccess;
     };
     published constants RelOrientation {
-     const short FRAME = 0;
-     const short PRINT_AREA = 1;
      const short CHAR = 2;
-     const short PAGE_LEFT = 3;
-     const short PAGE_RIGHT = 4;
+     const short FRAME = 0;
      const short FRAME_LEFT = 5;
      const short FRAME_RIGHT = 6;
      const short PAGE_FRAME = 7;
+     const short PAGE_LEFT = 3;
      const short PAGE_PRINT_AREA = 8;
+     const short PAGE_RIGHT = 4;
+     const short PRINT_AREA = 1;
      const short TEXT_LINE = 9;
     };
     published enum RubyAdjust {
@@ -14775,10 +14775,10 @@ module com {
      string FilterName;
     };
     published constants SetVariableType {
-     const short VAR = 0;
-     const short SEQUENCE = 1;
      const short FORMULA = 2;
+     const short SEQUENCE = 1;
      const short STRING = 3;
+     const short VAR = 0;
     };
     published service Shape {
      service ::com::sun::star::drawing::Shape;
@@ -14808,9 +14808,9 @@ module com {
      [property, optional, readonly] ::com::sun::star::awt::Point EndPositionInHoriL2R;
     };
     published constants SizeType {
-     const short VARIABLE = 0;
      const short FIX = 1;
      const short MIN = 2;
+     const short VARIABLE = 0;
     };
     published service TableColumns {
      interface ::com::sun::star::table::XTableColumns;
@@ -14825,11 +14825,11 @@ module com {
      interface ::com::sun::star::table::XTableRows;
     };
     published constants TemplateDisplayFormat {
+     const short AREA = 4;
      const short FULL = 0;
-     const short PATH = 1;
      const short NAME = 2;
      const short NAME_AND_EXT = 3;
-     const short AREA = 4;
+     const short PATH = 1;
      const short TITLE = 5;
     };
     published struct TextColumn {
@@ -15000,9 +15000,9 @@ module com {
      interface ::com::sun::star::container::XIndexAccess;
     };
     published constants TextGridMode {
-     const short NONE = 0;
      const short LINES = 1;
      const short LINES_AND_CHARS = 2;
+     const short NONE = 0;
     };
     published interface XPageCursor {
      interface ::com::sun::star::uno::XInterface;
@@ -15165,30 +15165,30 @@ module com {
      interface ::com::sun::star::view::XScreenCursor;
     };
     /** @deprecated */ published constants TimeDisplayFormat {
-     const short STANDARD = 0;
      const short HHMM = 1;
+     const short HHMMAMPM = 4;
      const short HHMMSS = 2;
      const short HHMMSS00 = 3;
-     const short HHMMAMPM = 4;
-     const short HHMMSSAMPM = 5;
      const short HHMMSS00AMPM = 6;
+     const short HHMMSSAMPM = 5;
+     const short STANDARD = 0;
     };
     published constants UserDataPart {
+     const short CITY = 7;
      const short COMPANY = 0;
+     const short COUNTRY = 5;
+     const short EMAIL = 13;
+     const short FAX = 12;
      const short FIRSTNAME = 1;
      const short NAME = 2;
-     const short SHORTCUT = 3;
-     const short STREET = 4;
-     const short COUNTRY = 5;
-     const short ZIP = 6;
-     const short CITY = 7;
-     const short TITLE = 8;
-     const short POSITION = 9;
-     const short PHONE_PRIVATE = 10;
      const short PHONE_COMPANY = 11;
-     const short FAX = 12;
-     const short EMAIL = 13;
+     const short PHONE_PRIVATE = 10;
+     const short POSITION = 9;
+     const short SHORTCUT = 3;
      const short STATE = 14;
+     const short STREET = 4;
+     const short TITLE = 8;
+     const short ZIP = 6;
     };
     published interface XDocumentIndexMark;
     published service UserDefinedIndex {
@@ -15203,9 +15203,9 @@ module com {
      [property, readonly] sequence< ::com::sun::star::text::XDocumentIndexMark > DocumentIndexMarks;
     };
     published constants UserFieldFormat {
+     const short NUM = 2;
      const short SYSTEM = 0;
      const short TEXT = 1;
-     const short NUM = 2;
     };
     published service UserIndex {
      service ::com::sun::star::text::BaseIndex;
@@ -15224,16 +15224,16 @@ module com {
      [property] string UserIndexName;
     };
     published constants VertOrientation {
+     const short BOTTOM = 3;
+     const short CENTER = 2;
+     const short CHAR_BOTTOM = 6;
+     const short CHAR_CENTER = 5;
+     const short CHAR_TOP = 4;
+     const short LINE_BOTTOM = 9;
+     const short LINE_CENTER = 8;
+     const short LINE_TOP = 7;
      const short NONE = 0;
      const short TOP = 1;
-     const short CENTER = 2;
-     const short BOTTOM = 3;
-     const short CHAR_TOP = 4;
-     const short CHAR_CENTER = 5;
-     const short CHAR_BOTTOM = 6;
-     const short LINE_TOP = 7;
-     const short LINE_CENTER = 8;
-     const short LINE_BOTTOM = 9;
     };
     published struct VertOrientationFormat {
      long YPos;
@@ -15285,12 +15285,12 @@ module com {
      [property, optional] boolean ShowScrollBarTips;
     };
     published constants WritingMode2 {
-     const short LR_TB = 0;
-     const short RL_TB = 1;
-     const short TB_RL = 2;
-     const short TB_LR = 3;
-     /** @deprecated */ const short PAGE = 4;
      const short CONTEXT = 4;
+     const short LR_TB = 0;
+     /** @deprecated */ const short PAGE = 4;
+     const short RL_TB = 1;
+     const short TB_LR = 3;
+     const short TB_RL = 2;
     };
     published interface XBookmarkInsertTool {
      interface ::com::sun::star::uno::XInterface;
@@ -15901,14 +15901,14 @@ module com {
      long Reason;
     };
     published constants ConnectionMode {
-     const short ONLINE = 0;
      const short OFFLINE = 1;
+     const short ONLINE = 0;
     };
     published constants ContentAction {
-     const long INSERTED = 0;
-     const long REMOVED = 1;
      const long DELETED = 2;
      const long EXCHANGED = 4;
+     const long INSERTED = 0;
+     const long REMOVED = 1;
      /** @deprecated */ const long SEARCH_MATCHED = 128;
     };
     published interface XContentIdentifier;
@@ -15918,11 +15918,11 @@ module com {
      ::com::sun::star::ucb::XContentIdentifier Id;
     };
     published constants ContentInfoAttribute {
-     const short NONE = 0;
      const short INSERT_WITH_INPUTSTREAM = 1;
      const short KIND_DOCUMENT = 2;
      const short KIND_FOLDER = 4;
      const short KIND_LINK = 8;
+     const short NONE = 0;
     };
     published interface XContentIdentifier;
     published interface XContentIdentifierFactory {
@@ -15995,105 +15995,105 @@ module com {
      interface ::com::sun::star::ucb::XDynamicResultSet;
     };
     /** @deprecated */ published constants Error {
-     const long NONE = 0;
-     const long LOGIN_FAILURE_RECEIVE = 122880;
-     const long LOGIN_FAILURE_NEWSSEND = 122881;
-     const long LOGIN_FAILURE_MAILSEND = 122882;
-     const long CONNECT_FAILURE = 122883;
-     const long UCB_OFFLINE = 122884;
-     const long UCB_SERVER_ERROR = 122885;
-     const long STORAGE_READONLY = 122886;
-     const long STORAGE_KILLED = 122887;
-     const long WRONG_FILE_FORMAT = 122888;
-     const long UNSUPPORTED_URL = 122889;
-     const long CNTOUT_NO_FROM = 122890;
-     const long TOO_MANY_GROUPS = 122891;
-     const long DELETE_ABORTED = 122892;
-     const long QUERY_DELETE = 122893;
-     const long NOTAVAILABLE = 122894;
-     const long VIM_LIBRARY_ERROR = 122895;
-     const long FOLDER_INVALID = 122896;
-     const long FTP_RESOLVERERROR = 122897;
-     const long FTP_NETWORKERROR = 122898;
-     const long FTP_NOTNECESSARYCMD = 122899;
-     const long FTP_SERVICEUNAVAILABLE = 122900;
-     const long FTP_DCONFAILURE = 122901;
-     const long FTP_TRANSFERABORTED = 122902;
-     const long NO_VIM_LIBRARY = 122903;
-     const long VIM_LIBRARY_CORRUPTED = 122904;
-     const long CCMAIL_EXPORT_ERROR = 122905;
-     const long NO_CCMAIL_EXPORT_FILE = 122906;
-     const long ILLEGAL_CCMAIL_EXPORT_FILE = 122907;
-     const long MESSAGE_NOT_FOUND = 122908;
+     const long ACCOUNT_SYNTAX = 122977;
      const long BAD_CCMAIL_EXPORT_PASSWORD = 122909;
-     const long CCMAIL_EXPORT_TOO_LONG = 122910;
-     const long FOLDER_EXISTS = 122911;
-     const long FOLDER_NOT_EXISTS = 122912;
-     const long NO_VIM_BBOARDLIST = 122913;
-     const long ILLEGAL_MESSAGE_ID = 122914;
-     const long SERVER_PORT_SYNTAX = 122915;
-     const long SERVERNAME_SYNTAX = 122916;
-     const long USERNAME_SYNTAX = 122917;
-     const long IS_RESCHEDULED = 122918;
-     const long VIM_NO_FAKE_MESSAGE_ID = 122919;
-     const long FSYS_ROOT_DELETE = 122920;
-     const long FILE_EXISTS = 122921;
-     const long FILE_NOT_EXISTS = 122922;
-     const long FSYS_MISPLACED_CHAR = 122923;
-     const long FSYS_INVALID_CHAR = 122924;
-     const long FSYS_INVALID_DEVICE = 122925;
-     const long FSYS_ACCESS_DENIED = 122926;
-     const long FSYS_LOCK_VIOLATION = 122927;
-     const long FSYS_VOLUME_FULL = 122928;
-     const long FSYS_NOT_SUPPORTED = 122929;
-     const long FSYS_UNKNOWN = 122930;
-     const long FSYS_NOT_A_FILE = 122931;
-     const long FSYS_NOT_A_DIRECTORY = 122932;
-     const long FSYS_IS_WILDCARD = 122933;
-     const long RENAMED_WRONG_FILE_FORMAT = 122934;
-     const long FSYS_UPDATE_NEEDED = 122935;
-     const long FSYS_CANT_RESOLVE_CONFLICT = 122936;
-     const long FSYS_CANT_ITERATE = 122937;
-     const long ONE_NOT_SEARCHABLE = 122938;
-     const long MULTIPLE_NOT_SEARCHABLE = 122939;
-     const long FSYS_CACHE_INCONSISTENT = 122940;
-     const long FSYS_READONLY = 122941;
-     const long FSYS_LOCK = 122942;
-     const long FSYS_UNLOCK = 122943;
-     const long FSYS_DELETE = 122944;
-     const long FSYS_IS_MARKED = 122945;
-     const long FTP_GENERAL_FAILURE = 122946;
-     const long DO_LOG = 122947;
-     const long HTTP_COOKIE_REQUEST = 122948;
-     const long FSYS_LOST_ROOT = 122949;
-     const long FTP_PROXY = 122950;
-     const long SOURCE_SAME_AS_TARGET = 122951;
-     const long CONFIRM_EMPTY_TRASH = 122952;
-     const long FSYS_NO_TARGET = 122953;
-     const long FSYS_RECURSIVE = 122954;
-     const long FSYS_INSERT_MEDIUM = 122955;
-     const long NO_DOCINFO = 122956;
+     const long BAD_INET = 122965;
+     const long CCMAIL_EXPORT_ERROR = 122905;
      const long CCMAIL_EXPORT_NOT_TERMINATING = 122957;
-     const long EXTERNAL_COMMAND_FAILED = 122958;
-     const long RENAME_FAILED = 122959;
-     const long NOT_HANDLED = 122960;
+     const long CCMAIL_EXPORT_TOO_LONG = 122910;
+     const long CNTOUT_NO_FROM = 122890;
+     const long CONFIRM_EMPTY_TRASH = 122952;
+     const long CONNECT_FAILURE = 122883;
      const long COULD_NOT_INIT_COMPONENT = 122961;
-     const long TRANSFER_URL_NOT_SUPPORTED = 122962;
+     const long DELETE_ABORTED = 122892;
+     const long DO_LOG = 122947;
      const long EMPTY_SERVERNAME = 122963;
      const long EMPTY_USERNAME = 122964;
-     const long BAD_INET = 122965;
-     const long IMAP_SERVER_MSG = 122966;
+     const long EXTERNAL_COMMAND_FAILED = 122958;
+     const long FILE_EXISTS = 122921;
+     const long FILE_NOT_EXISTS = 122922;
+     const long FOLDER_EXISTS = 122911;
+     const long FOLDER_INVALID = 122896;
+     const long FOLDER_NOT_EXISTS = 122912;
+     const long FSYS_ACCESS_DENIED = 122926;
+     const long FSYS_CACHE_INCONSISTENT = 122940;
+     const long FSYS_CANT_ITERATE = 122937;
+     const long FSYS_CANT_RESOLVE_CONFLICT = 122936;
+     const long FSYS_DELETE = 122944;
+     const long FSYS_INSERT_MEDIUM = 122955;
+     const long FSYS_INVALID_CHAR = 122924;
+     const long FSYS_INVALID_DEVICE = 122925;
+     const long FSYS_IS_MARKED = 122945;
+     const long FSYS_IS_WILDCARD = 122933;
+     const long FSYS_LOCK = 122942;
+     const long FSYS_LOCK_VIOLATION = 122927;
+     const long FSYS_LOST_ROOT = 122949;
+     const long FSYS_MISPLACED_CHAR = 122923;
+     const long FSYS_NOT_A_DIRECTORY = 122932;
+     const long FSYS_NOT_A_FILE = 122931;
+     const long FSYS_NOT_SUPPORTED = 122929;
+     const long FSYS_NO_TARGET = 122953;
+     const long FSYS_READONLY = 122941;
+     const long FSYS_RECURSIVE = 122954;
+     const long FSYS_ROOT_DELETE = 122920;
+     const long FSYS_UNKNOWN = 122930;
+     const long FSYS_UNLOCK = 122943;
+     const long FSYS_UPDATE_NEEDED = 122935;
+     const long FSYS_VOLUME_FULL = 122928;
+     const long FTP_DCONFAILURE = 122901;
+     const long FTP_GENERAL_FAILURE = 122946;
+     const long FTP_NETWORKERROR = 122898;
+     const long FTP_NOTNECESSARYCMD = 122899;
+     const long FTP_PROXY = 122950;
+     const long FTP_RESOLVERERROR = 122897;
+     const long FTP_SERVICEUNAVAILABLE = 122900;
+     const long FTP_TRANSFERABORTED = 122902;
+     const long HTTP_COOKIE_REQUEST = 122948;
+     const long ILLEGAL_CCMAIL_EXPORT_FILE = 122907;
+     const long ILLEGAL_MESSAGE_ID = 122914;
+     const long IMAP_BAD_SERVER = 122969;
+     const long IMAP_BAD_TITLE = 122971;
      const long IMAP_CONNECTION_CLOSED = 122967;
      const long IMAP_NOT_IMAP4 = 122968;
-     const long IMAP_BAD_SERVER = 122969;
-     const long REORGANIZE_FILE_LOCKED = 122970;
-     const long IMAP_BAD_TITLE = 122971;
-     const long SERVER_CONNECT_FAILURE = 122972;
-     const long PASSWORD_SYNTAX = 122973;
-     const long QUERY_DELETE_CACHE = 122974;
-     const long REORGANIZE_NO_DISKSPACE = 122975;
+     const long IMAP_SERVER_MSG = 122966;
+     const long IS_RESCHEDULED = 122918;
      const long LOGIN_FAILURE_ACCOUNT = 122976;
-     const long ACCOUNT_SYNTAX = 122977;
+     const long LOGIN_FAILURE_MAILSEND = 122882;
+     const long LOGIN_FAILURE_NEWSSEND = 122881;
+     const long LOGIN_FAILURE_RECEIVE = 122880;
+     const long MESSAGE_NOT_FOUND = 122908;
+     const long MULTIPLE_NOT_SEARCHABLE = 122939;
+     const long NONE = 0;
+     const long NOTAVAILABLE = 122894;
+     const long NOT_HANDLED = 122960;
+     const long NO_CCMAIL_EXPORT_FILE = 122906;
+     const long NO_DOCINFO = 122956;
+     const long NO_VIM_BBOARDLIST = 122913;
+     const long NO_VIM_LIBRARY = 122903;
+     const long ONE_NOT_SEARCHABLE = 122938;
+     const long PASSWORD_SYNTAX = 122973;
+     const long QUERY_DELETE = 122893;
+     const long QUERY_DELETE_CACHE = 122974;
+     const long RENAMED_WRONG_FILE_FORMAT = 122934;
+     const long RENAME_FAILED = 122959;
+     const long REORGANIZE_FILE_LOCKED = 122970;
+     const long REORGANIZE_NO_DISKSPACE = 122975;
+     const long SERVERNAME_SYNTAX = 122916;
+     const long SERVER_CONNECT_FAILURE = 122972;
+     const long SERVER_PORT_SYNTAX = 122915;
+     const long SOURCE_SAME_AS_TARGET = 122951;
+     const long STORAGE_KILLED = 122887;
+     const long STORAGE_READONLY = 122886;
+     const long TOO_MANY_GROUPS = 122891;
+     const long TRANSFER_URL_NOT_SUPPORTED = 122962;
+     const long UCB_OFFLINE = 122884;
+     const long UCB_SERVER_ERROR = 122885;
+     const long UNSUPPORTED_URL = 122889;
+     const long USERNAME_SYNTAX = 122917;
+     const long VIM_LIBRARY_CORRUPTED = 122904;
+     const long VIM_LIBRARY_ERROR = 122895;
+     const long VIM_NO_FAKE_MESSAGE_ID = 122919;
+     const long WRONG_FILE_FORMAT = 122888;
     };
     published struct ExportStreamInfo {
      ::com::sun::star::io::XOutputStream Target;
@@ -16114,9 +16114,9 @@ module com {
      interface ::com::sun::star::ucb::XContentProvider;
     };
     published constants FetchError {
-     const short SUCCESS = 0;
      const short ENDOFDATA = 1;
      const short EXCEPTION = 2;
+     const short SUCCESS = 0;
     };
     published service FileContent {
      interface ::com::sun::star::lang::XComponent;
@@ -16143,10 +16143,10 @@ module com {
      interface ::com::sun::star::ucb::XFileIdentifierConverter;
     };
     published constants FileSystemNotation {
-     const long UNKNOWN_NOTATION = 0;
-     const long UNIX_NOTATION = 1;
      const long DOS_NOTATION = 2;
      const long MAC_NOTATION = 3;
+     const long UNIX_NOTATION = 1;
+     const long UNKNOWN_NOTATION = 0;
     };
     published enum FolderListCommand {
      GET = 0,
@@ -16288,13 +16288,13 @@ module com {
      any ActionInfo;
     };
     published constants ListActionType {
-     const long WELCOME = 20;
-     const long INSERTED = 21;
-     const long REMOVED = 22;
      const long CLEARED = 23;
+     const long COMPLETED = 27;
+     const long INSERTED = 21;
      const long MOVED = 24;
      const long PROPERTIES_CHANGED = 25;
-     const long COMPLETED = 27;
+     const long REMOVED = 22;
+     const long WELCOME = 20;
     };
     published struct ListEvent: ::com::sun::star::lang::EventObject {
      sequence< ::com::sun::star::ucb::ListAction > Changes;
@@ -16327,11 +16327,11 @@ module com {
      sequence< string > Properties;
     };
     published constants NameClash {
+     const long ASK = 4;
      const long ERROR = 0;
+     /** @deprecated */ const long KEEP = 3;
      const long OVERWRITE = 1;
      const long RENAME = 2;
-     /** @deprecated */ const long KEEP = 3;
-     const long ASK = 4;
     };
     published exception NameClashException: ::com::sun::star::task::ClassifiedInteractionRequest {
      string Name;
@@ -16369,11 +16369,11 @@ module com {
     };
     published constants OpenMode {
      const short ALL = 0;
-     const short FOLDERS = 1;
-     const short DOCUMENTS = 3;
      const short DOCUMENT = 2;
+     const short DOCUMENTS = 3;
      const short DOCUMENT_SHARE_DENY_NONE = 4;
      const short DOCUMENT_SHARE_DENY_WRITE = 5;
+     const short FOLDERS = 1;
     };
     published enum OutgoingMessageState {
      WRITTEN = 0,
@@ -16519,28 +16519,28 @@ module com {
      short Action;
     };
     published constants RuleAction {
-     const short NONE = 0;
-     const short SHOW = 1;
+     const short COPY = 8;
+     const short DELETE = 9;
+     const short FORWARD = 11;
      const short HIDE = 2;
+     const short LINK = 10;
      const short MARK = 3;
-     const short UNMARK = 4;
      const short MARKREAD = 5;
      const short MARKUNREAD = 6;
      const short MOVE = 7;
-     const short COPY = 8;
-     const short DELETE = 9;
-     const short LINK = 10;
-     const short FORWARD = 11;
+     const short NONE = 0;
+     const short SHOW = 1;
+     const short UNMARK = 4;
     };
     published constants RuleOperator {
      const short CONTAINS = 1;
      const short CONTAINSNOT = 2;
+     const short EQUAL = 5;
      const short GREATEREQUAL = 3;
      const short LESSEQUAL = 4;
-     const short EQUAL = 5;
      const short NOTEQUAL = 6;
-     const short VALUE_TRUE = 7;
      const short VALUE_FALSE = 8;
+     const short VALUE_TRUE = 7;
     };
     published struct RuleSet {
      sequence< ::com::sun::star::ucb::Rule > Rules;
@@ -16832,8 +16832,8 @@ module com {
     };
     published constants ActionTriggerSeparatorType {
      const short LINE = 0;
-     const short SPACE = 1;
      const short LINEBREAK = 2;
+     const short SPACE = 1;
     };
     published struct ContextMenuExecuteEvent {
      ::com::sun::star::awt::XWindow SourceWindow;
@@ -16853,25 +16853,25 @@ module com {
     };
     module dialogs {
      published constants CommonFilePickerElementIds {
-      const short PUSHBUTTON_OK = 1;
-      const short PUSHBUTTON_CANCEL = 2;
-      const short LISTBOX_FILTER = 3;
       const short CONTROL_FILEVIEW = 4;
       const short EDIT_FILEURL = 5;
-      const short LISTBOX_FILTER_LABEL = 6;
       const short EDIT_FILEURL_LABEL = 7;
+      const short LISTBOX_FILTER = 3;
+      const short LISTBOX_FILTER_LABEL = 6;
+      const short PUSHBUTTON_CANCEL = 2;
+      const short PUSHBUTTON_OK = 1;
      };
      published constants ControlActions {
       const short ADD_ITEM = 1;
       const short ADD_ITEMS = 2;
       const short DELETE_ITEM = 3;
       const short DELETE_ITEMS = 4;
-      const short SET_SELECT_ITEM = 5;
+      const short GET_HELP_URL = 101;
       const short GET_ITEMS = 6;
       const short GET_SELECTED_ITEM = 7;
       const short GET_SELECTED_ITEM_INDEX = 8;
       const short SET_HELP_URL = 100;
-      const short GET_HELP_URL = 101;
+      const short SET_SELECT_ITEM = 5;
      };
      published exception ExecutableDialogException: ::com::sun::star::uno::Exception {
      };
@@ -16881,20 +16881,20 @@ module com {
      };
      published constants ExtendedFilePickerElementIds {
       const short CHECKBOX_AUTOEXTENSION = 100;
-      const short CHECKBOX_PASSWORD = 101;
       const short CHECKBOX_FILTEROPTIONS = 102;
-      const short CHECKBOX_READONLY = 103;
       const short CHECKBOX_LINK = 104;
+      const short CHECKBOX_PASSWORD = 101;
       const short CHECKBOX_PREVIEW = 105;
-      const short PUSHBUTTON_PLAY = 106;
-      const short LISTBOX_VERSION = 107;
-      const short LISTBOX_TEMPLATE = 108;
-      const short LISTBOX_IMAGE_TEMPLATE = 109;
+      const short CHECKBOX_READONLY = 103;
       const short CHECKBOX_SELECTION = 110;
-      const short LISTBOX_VERSION_LABEL = 207;
-      const short LISTBOX_TEMPLATE_LABEL = 208;
-      const short LISTBOX_IMAGE_TEMPLATE_LABEL = 209;
       const short LISTBOX_FILTER_SELECTOR = 210;
+      const short LISTBOX_IMAGE_TEMPLATE = 109;
+      const short LISTBOX_IMAGE_TEMPLATE_LABEL = 209;
+      const short LISTBOX_TEMPLATE = 108;
+      const short LISTBOX_TEMPLATE_LABEL = 208;
+      const short LISTBOX_VERSION = 107;
+      const short LISTBOX_VERSION_LABEL = 207;
+      const short PUSHBUTTON_PLAY = 106;
      };
      published interface XFilePicker {
       interface ::com::sun::star::ui::dialogs::XExecutableDialog;
@@ -16965,22 +16965,22 @@ module com {
       const short ADD_ITEMS = 2;
       const short DELETE_ITEM = 3;
       const short DELETE_ITEMS = 4;
-      const short SET_SELECT_ITEM = 5;
       const short GET_ITEMS = 6;
       const short GET_SELECTED_ITEM = 7;
+      const short SET_SELECT_ITEM = 5;
      };
      published constants TemplateDescription {
+      const short FILEOPEN_LINK_PREVIEW = 9;
+      const short FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE = 6;
+      const short FILEOPEN_PLAY = 7;
+      const short FILEOPEN_READONLY_VERSION = 8;
       const short FILEOPEN_SIMPLE = 0;
-      const short FILESAVE_SIMPLE = 1;
+      const short FILESAVE_AUTOEXTENSION = 10;
       const short FILESAVE_AUTOEXTENSION_PASSWORD = 2;
       const short FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS = 3;
       const short FILESAVE_AUTOEXTENSION_SELECTION = 4;
       const short FILESAVE_AUTOEXTENSION_TEMPLATE = 5;
-      const short FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE = 6;
-      const short FILEOPEN_PLAY = 7;
-      const short FILEOPEN_READONLY_VERSION = 8;
-      const short FILEOPEN_LINK_PREVIEW = 9;
-      const short FILESAVE_AUTOEXTENSION = 10;
+      const short FILESAVE_SIMPLE = 1;
      };
      published interface XControlAccess {
       interface ::com::sun::star::uno::XInterface;
@@ -17061,25 +17061,25 @@ module com {
      long CheckPos;
     };
     published constants MeasureUnit {
-     const short MM_100TH = 0;
-     const short MM_10TH = 1;
-     const short MM = 2;
+     const short APPFONT = 17;
      const short CM = 3;
+     const short FOOT = 13;
+     const short INCH = 7;
      const short INCH_1000TH = 4;
      const short INCH_100TH = 5;
      const short INCH_10TH = 6;
-     const short INCH = 7;
-     const short POINT = 8;
-     const short TWIP = 9;
-     const short M = 10;
      const short KM = 11;
-     const short PICA = 12;
-     const short FOOT = 13;
+     const short M = 10;
      const short MILE = 14;
+     const short MM = 2;
+     const short MM_100TH = 0;
+     const short MM_10TH = 1;
      const short PERCENT = 15;
+     const short PICA = 12;
      const short PIXEL = 16;
-     const short APPFONT = 17;
+     const short POINT = 8;
      const short SYSFONT = 18;
+     const short TWIP = 9;
     };
     published struct ModeChangeEvent: ::com::sun::star::lang::EventObject {
      string NewMode;
@@ -17088,17 +17088,17 @@ module com {
     };
     published constants NumberFormat {
      const short ALL = 0;
-     const short DEFINED = 1;
-     const short DATE = 2;
-     const short TIME = 4;
      const short CURRENCY = 8;
-     const short NUMBER = 16;
-     const short SCIENTIFIC = 32;
-     const short FRACTION = 64;
-     const short PERCENT = 128;
-     const short TEXT = 256;
+     const short DATE = 2;
      const short DATETIME = 6;
+     const short DEFINED = 1;
+     const short FRACTION = 64;
      const short LOGICAL = 1024;
+     const short NUMBER = 16;
+     const short PERCENT = 128;
+     const short SCIENTIFIC = 32;
+     const short TEXT = 256;
+     const short TIME = 4;
      const short UNDEFINED = 2048;
     };
     published service NumberFormatProperties {
@@ -17244,13 +17244,13 @@ module com {
     };
     published constants SearchFlags {
      /** @deprecated */ const long ALL_IGNORE_CASE = 1;
+     const long LEV_RELAXED = 65536;
      const long NORM_WORD_ONLY = 16;
      /** @deprecated */ const long REG_EXTENDED = 256;
-     /** @deprecated */ const long REG_NOSUB = 512;
      /** @deprecated */ const long REG_NEWLINE = 1024;
+     /** @deprecated */ const long REG_NOSUB = 512;
      const long REG_NOT_BEGINOFLINE = 2048;
      const long REG_NOT_ENDOFLINE = 4096;
-     const long LEV_RELAXED = 65536;
     };
     published struct SearchOptions {
      ::com::sun::star::util::SearchAlgorithms algorithmType;
@@ -17385,10 +17385,10 @@ module com {
    };
    module view {
     published constants DocumentZoomType {
+     const short BY_VALUE = 3;
+     const short ENTIRE_PAGE = 2;
      const short OPTIMAL = 0;
      const short PAGE_WIDTH = 1;
-     const short ENTIRE_PAGE = 2;
-     const short BY_VALUE = 3;
      const short PAGE_WIDTH_EXACT = 4;
     };
     published enum PaperFormat {

@@ -46,11 +46,11 @@ module com {
     published constants MethodConcept {
      const long ALL = -1;
      const long DANGEROUS = 1;
-     const long PROPERTY = 2;
-     const long LISTENER = 4;
      const long ENUMERATION = 8;
-     const long NAMECONTAINER = 16;
      const long INDEXCONTAINER = 32;
+     const long LISTENER = 4;
+     const long NAMECONTAINER = 16;
+     const long PROPERTY = 2;
     };
     published struct NamedValue {
      string Name;
@@ -65,16 +65,16 @@ module com {
      short Attributes;
     };
     published constants PropertyAttribute {
-     const short MAYBEVOID = 1;
      const short BOUND = 2;
      const short CONSTRAINED = 4;
-     const short TRANSIENT = 8;
-     const short READONLY = 16;
      const short MAYBEAMBIGUOUS = 32;
      const short MAYBEDEFAULT = 64;
+     const short MAYBEVOID = 1;
+     const short OPTIONAL = 256;
+     const short READONLY = 16;
      const short REMOVABLE = 128;
      /** @deprecated */ const short REMOVEABLE = 128;
-     const short OPTIONAL = 256;
+     const short TRANSIENT = 8;
     };
     published struct PropertyValue {
      string Name;
@@ -150,10 +150,10 @@ module com {
     };
     published constants PropertyConcept {
      const long ALL = -1;
-     const long DANGEROUS = 1;
-     const long PROPERTYSET = 2;
      const long ATTRIBUTES = 4;
+     const long DANGEROUS = 1;
      const long METHODS = 8;
+     const long PROPERTYSET = 2;
     };
     published interface XFastPropertySet {
      interface ::com::sun::star::uno::XInterface;
@@ -388,10 +388,10 @@ module com {
      long reason;
     };
     published constants ModelDependent {
-     const short UNO = 1;
-     const short OLE = 2;
-     const short JAVA = 3;
      const short CORBA = 4;
+     const short JAVA = 3;
+     const short OLE = 2;
+     const short UNO = 1;
     };
     /** @deprecated */ published service OleApplicationRegistration {
      interface ::com::sun::star::uno::XInterface;
@@ -1014,14 +1014,14 @@ module com {
     published exception ServiceNotRegisteredException: ::com::sun::star::uno::Exception {
     };
     /** @deprecated */ published constants SystemDependent {
-     const short SYSTEM_WIN32 = 1;
-     const short SYSTEM_WIN16 = 2;
-     const short SYSTEM_JAVA = 3;
-     const short SYSTEM_OS2 = 4;
-     const short SYSTEM_MAC = 5;
-     const short SYSTEM_XWINDOW = 6;
-     const short SYSTEM_IOS = 7;
      const short SYSTEM_ANDROID = 8;
+     const short SYSTEM_IOS = 7;
+     const short SYSTEM_JAVA = 3;
+     const short SYSTEM_MAC = 5;
+     const short SYSTEM_OS2 = 4;
+     const short SYSTEM_WIN16 = 2;
+     const short SYSTEM_WIN32 = 1;
+     const short SYSTEM_XWINDOW = 6;
     };
     published exception WrappedTargetRuntimeException: ::com::sun::star::uno::RuntimeException {
      any TargetException;
@@ -1519,15 +1519,15 @@ module com {
      interface ::com::sun::star::script::XEngine;
     };
     published constants FailReason {
-     const long OUT_OF_RANGE = 1;
-     const long IS_NOT_NUMBER = 2;
-     const long IS_NOT_ENUM = 3;
+     const long INVALID = 8;
      const long IS_NOT_BOOL = 4;
+     const long IS_NOT_ENUM = 3;
+     const long IS_NOT_NUMBER = 2;
+     /** @deprecated */ const long NO_DEFAULT_AVAILABLE = 9;
      const long NO_SUCH_INTERFACE = 5;
+     const long OUT_OF_RANGE = 1;
      const long SOURCE_IS_NO_DERIVED_TYPE = 6;
      const long TYPE_NOT_SUPPORTED = 7;
-     const long INVALID = 8;
-     /** @deprecated */ const long NO_DEFAULT_AVAILABLE = 9;
      /** @deprecated */ const long UNKNOWN = 10;
     };
     /** @deprecated */ published enum FinishReason {
