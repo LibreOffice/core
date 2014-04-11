@@ -1077,7 +1077,7 @@ void SwPaM::InvalidatePaM()
     const SwTxtNode *_pTxtNd=(_pNd!=NULL?_pNd->GetTxtNode():NULL);
     if (_pTxtNd!=NULL)
     {
-        // pretent that the PaM marks inserted text to recalc the portion...
+        // pretend that the PaM marks inserted text to recalc the portion...
         SwInsTxt aHint( Start()->nContent.GetIndex(),
                         End()->nContent.GetIndex() - Start()->nContent.GetIndex() + 1 );
         SwModify *_pModify=(SwModify*)_pTxtNd;
