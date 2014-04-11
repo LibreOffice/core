@@ -675,7 +675,7 @@ void SwDocShell::SubInitNew()
 /*
  * Document Interface Access
  */
-IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return pDoc; }
+IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return pDoc->getIDocumentDeviceAccess(); }
 const IDocumentSettingAccess* SwDocShell::getIDocumentSettingAccess() const { return pDoc; }
 IDocumentChartDataProviderAccess* SwDocShell::getIDocumentChartDataProviderAccess() { return pDoc; }
 

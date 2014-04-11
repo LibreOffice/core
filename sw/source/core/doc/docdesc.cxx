@@ -690,7 +690,8 @@ void SwDoc::PrtDataChanged()
 
             do
             {
-                pSh->InitPrt( mpPrt );
+                //Not sure if this line is correct
+                pSh->InitPrt( getPrinter(false) );
                 pSh = (SwViewShell*)pSh->GetNext();
             }
             while ( pSh != GetCurrentViewShell() );
