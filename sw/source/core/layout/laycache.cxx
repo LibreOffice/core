@@ -912,7 +912,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
     if( !pImpl || !pPage )
         return;
     sal_uInt16 nFlyCount = pImpl->GetFlyCount();
-    // Any text frames at the page, fly cache avaiable?
+    // Any text frames at the page, fly cache available?
     if( pPage->GetSortedObjs() && nFlyIdx < nFlyCount )
     {
         SwSortedObjs &rObjs = *pPage->GetSortedObjs();
