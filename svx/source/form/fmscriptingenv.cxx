@@ -939,6 +939,7 @@ namespace svxform
 #ifdef DISABLE_SCRIPTING
         (void) _rEvent;
         (void) _pSyncronousResult;
+        (void) m_rFormModel;
 #else
         SolarMutexClearableGuard aSolarGuard;
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
