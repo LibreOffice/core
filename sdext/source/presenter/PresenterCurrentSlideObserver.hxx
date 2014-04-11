@@ -42,7 +42,7 @@ namespace {
     then inform the presenter controller about it.
 
     Objects of this class have their own lifetime control and destroy
-    themselves when the presenter controller is diposed.
+    themselves when the presenter controller is disposed.
 */
 class PresenterCurrentSlideObserver
     : protected ::cppu::BaseMutex,

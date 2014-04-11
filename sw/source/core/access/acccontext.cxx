@@ -432,7 +432,7 @@ void SwAccessibleContext::_InvalidateFocus()
 
 void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
 {
-    OSL_ENSURE( GetFrm(), "fire event for diposed frame?" );
+    OSL_ENSURE( GetFrm(), "fire event for disposed frame?" );
     if( !GetFrm() )
         return;
 
@@ -1078,7 +1078,7 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
     }
 
     // set defunc state (its not required to broadcast a state changed
-    // event if the object is diposed afterwards)
+    // event if the object is disposed afterwards)
     {
         osl::MutexGuard aDefuncStateGuard( aMutex );
         bIsDefuncState = sal_True;
