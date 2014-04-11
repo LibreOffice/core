@@ -641,7 +641,7 @@ namespace sw { namespace mark
         ::std::vector<const_iterator_t> vMarksToDelete;
         bool bIsSortingNeeded = false;
 
-        // boolean indicating, if at least one mark has been moved while colleting marks for deletion
+        // boolean indicating, if at least one mark has been moved while collecting marks for deletion
         bool bMarksMoved = false;
 
         // copy all bookmarks in the move area to a vector storing all position data as offset
