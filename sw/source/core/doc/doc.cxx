@@ -1299,7 +1299,7 @@ void SwDoc::CalculatePagesForPrinting(
     const sal_Int64 nContent = rOptions.getIntValue( "PrintContent", 0 );
     const bool bPrintSelection = nContent == 2;
 
-    // properties to take into account when calcualting the set of pages
+    // properties to take into account when calculating the set of pages
     // (PDF export UI does not allow for selecting left or right pages only)
     bool bPrintLeftPages    = bIsPDFExport ? true : rOptions.IsPrintLeftPages();
     bool bPrintRightPages   = bIsPDFExport ? true : rOptions.IsPrintRightPages();
@@ -1559,7 +1559,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     }
     OSL_ENSURE( nPageNum == nDocPageCount, "unexpected number of pages" );
 
-    // properties to take into account when calcualting the set of pages
+    // properties to take into account when calculating the set of pages
     // Note: here bPrintLeftPages and bPrintRightPages refer to the (virtual) resulting pages
     //      of the prospect!
     bool bPrintLeftPages     = rOptions.IsPrintLeftPages();
