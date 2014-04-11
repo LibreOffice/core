@@ -422,7 +422,7 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     // the formatter's standard templates have only got a two-digit date
     // -> registering an own format
 
-    // HACK, beause the numberformatter doesn't swap the place holders
+    // HACK, because the numberformatter doesn't swap the place holders
     // for month, day and year according to the system setting.
     // Problem: Print Year(Date) under engl. BS
     // also have a look at: basic/source/sbx/sbxdate.cxx
