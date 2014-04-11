@@ -213,7 +213,6 @@ public:
     sal_uInt8 GetType() const {return nType;}
     sal_Bool IsChecked() const {return bIsChecked;}
     sal_uInt8 GetIndex() const {return nIndex;}
-    void SetIndex(sal_uInt8 nSet)  {nIndex = nSet;}
     const OUString& GetImplName() const {return sImplName;}
 
 };
@@ -233,10 +232,7 @@ public:
     sal_uLong   GetUserData() const         { return nVal; }
     sal_uInt16  GetEntryId() const          { return (sal_uInt16)(nVal >> 16); }
     sal_Bool    IsChecked() const           { return (sal_Bool)(nVal >>  8) & 0x01; }
-    sal_Bool    IsEditable() const          { return (sal_Bool)(nVal >>  9) & 0x01; }
     sal_Bool    IsDeletable() const         { return (sal_Bool)(nVal >> 10) & 0x01; }
-
-    void    SetChecked( sal_Bool bVal );
 };
 
 
@@ -249,13 +245,6 @@ DicUserData::DicUserData(
             ((sal_uLong)(bChecked ? 1 : 0)      <<  8) |
             ((sal_uLong)(bEditable ? 1 : 0)     <<  9) |
             ((sal_uLong)(bDeletable ? 1 : 0)    << 10);
-}
-
-
-void DicUserData::SetChecked( sal_Bool bVal )
-{
-    nVal &= ~(1UL << 8);
-    nVal |=  (sal_uLong)(bVal ? 1 : 0) << 8;
 }
 
 
@@ -408,11 +397,9 @@ public:
     sal_uInt16  GetEntryId() const          { return (sal_uInt16)(nVal >> 16); }
     sal_Bool    HasNumericValue() const     { return (sal_Bool)(nVal >> 10) & 0x01; }
     sal_uInt16  GetNumericValue() const     { return (sal_uInt16)(nVal & 0xFF); }
-    sal_Bool    IsChecked() const           { return (sal_Bool)(nVal >> 8) & 0x01; }
     sal_Bool    IsCheckable() const         { return (sal_Bool)(nVal >> 9) & 0x01; }
     sal_Bool    IsModified() const          { return (sal_Bool)(nVal >> 11) & 0x01; }
 
-    void    SetChecked( sal_Bool bVal );
     void    SetNumericValue( sal_uInt8 nNumVal );
 };
 
@@ -427,16 +414,6 @@ OptionsUserData::OptionsUserData( sal_uInt16 nEID,
             ((sal_uLong)(bCheckable ? 1 : 0)    <<  9) |
             ((sal_uLong)(bChecked ? 1 : 0)      <<  8) |
             ((sal_uLong)(0xFF & nNumVal));
-}
-
-void OptionsUserData::SetChecked( sal_Bool bVal )
-{
-    if (IsCheckable()  &&  (IsChecked() != bVal))
-    {
-        nVal &= ~(1UL << 8);
-        nVal |=  (sal_uLong)(bVal ? 1 : 0) << 8;
-        SetModified();
-    }
 }
 
 void OptionsUserData::SetNumericValue( sal_uInt8 nNumVal )
@@ -551,16 +528,11 @@ public:
 
     const Sequence<Locale> &    GetAllSupportedLocales() const { return aAllServiceLocales; }
 
-    const LangImplNameTable &   GetSpellTable() const   { return aCfgSpellTable; }
     LangImplNameTable &         GetSpellTable()         { return aCfgSpellTable; }
-    const LangImplNameTable &   GetHyphTable() const    { return aCfgHyphTable; }
     LangImplNameTable &         GetHyphTable()          { return aCfgHyphTable; }
-    const LangImplNameTable &   GetThesTable() const    { return aCfgThesTable; }
     LangImplNameTable &         GetThesTable()          { return aCfgThesTable; }
-    const LangImplNameTable &   GetGrammarTable() const { return aCfgGrammarTable; }
     LangImplNameTable &         GetGrammarTable()       { return aCfgGrammarTable; }
 
-    const ServiceInfoArr &      GetDisplayServiceArray() const  { return aDisplayServiceArr; }
     ServiceInfoArr &            GetDisplayServiceArray()        { return aDisplayServiceArr; }
 
     const sal_uLong &   GetDisplayServiceCount() const          { return nDisplayServices; }

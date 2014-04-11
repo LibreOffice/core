@@ -138,8 +138,6 @@ public:
                                         m_nOldErrorStart = nOldStart;
                                         m_nOldErrorEnd = nOldEnd;
                                 }
-    long                    GetNewErrorStart() { return m_nNewErrorStart;}
-    long                    GetNewErrorEnd() { return m_nNewErrorEnd;}
     long                    GetOldErrorStart() { return m_nOldErrorStart;}
     long                    GetOldErrorEnd() { return m_nOldErrorEnd;}
 
@@ -153,10 +151,6 @@ public:
 
     void                    SetOffset(long nSet) {m_nOffset = nSet;}
     long                    GetOffset() const {return m_nOffset;}
-
-    void                    SetErrorType( const OUString& rId ) { m_sRuleId = rId; }
-    const OUString&  GetErrorType() const { return m_sRuleId; }
-
 };
 }//namespace svx
 using namespace ::svx;

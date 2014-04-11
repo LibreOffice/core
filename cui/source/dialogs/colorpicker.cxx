@@ -43,6 +43,7 @@
 #include <basegfx/color/bcolortools.hxx>
 #include "dialmgr.hxx"
 #include "colorpicker.hrc"
+#include "colorpicker.hxx"
 #include <cmath>
 #include <limits>
 

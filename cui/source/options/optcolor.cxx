@@ -199,8 +199,6 @@ private:
         ~Chapter();
     public:
         void SetBackground(const Wallpaper& W) { m_pText->SetBackground(W); }
-        long GetHeight() const { return m_pText->GetSizePixel().Height(); }
-        long GetLeft() const { return m_pText->GetPosPixel().X(); }
         void Show(const Wallpaper& rBackWall);
         void Hide();
     };
@@ -227,7 +225,6 @@ private:
         void ColorChanged (ExtendedColorConfigValue&);
     public:
         long GetTop () const { return m_pPreview->GetPosPixel().Y(); }
-        long GetBottom () const { return GetTop() + m_pPreview->GetSizePixel().Height(); }
         unsigned GetHeight () const { return m_pColorList->GetSizePixel().Height(); }
     public:
         bool Is (CheckBox* pBox) const { return m_pText == pBox; }

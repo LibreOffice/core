@@ -54,9 +54,7 @@ namespace offapp
         // the handler will be called with a DriverPoolingSettings::const_iterator as parameter,
         // or NULL if no valid current row exists
         void SetRowChangeHandler(const Link& _rHdl) { m_aRowChangeHandler = _rHdl; }
-        Link GetRowChangeHandler() const { return m_aRowChangeHandler; }
 
-        const DriverPooling* getCurrentRow() const;
         DriverPooling* getCurrentRow();
         void                                    updateCurrentRow();
 
@@ -158,19 +156,6 @@ namespace offapp
             }
         }
     }
-
-
-    const DriverPooling* DriverListControl::getCurrentRow() const
-    {
-        OSL_ENSURE( ( GetCurRow() < m_aSettings.size() ) && ( GetCurRow() >= 0 ),
-            "DriverListControl::getCurrentRow: invalid current row!");
-
-        if ( ( GetCurRow() >= 0 ) && ( GetCurRow() < m_aSettings.size() ) )
-            return &(*(m_aSettings.begin() + GetCurRow()));
-
-        return NULL;
-    }
-
 
     DriverPooling* DriverListControl::getCurrentRow()
     {

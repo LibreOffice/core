@@ -17,26 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include "sal/types.h"
-#include "cppuhelper/factory.hxx"
-#include <cppuhelper/implementationentry.hxx>
+#ifndef INCLUDED_CUI_SOURCE_DIALOGS_PLFILTER_HXX
+#define INCLUDED_CUI_SOURCE_DIALOGS_PLFILTER_HXX
 
-#include <colorpicker.hxx>
+#include <sal/config.h>
 
-using namespace com::sun::star;
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
 
-namespace
-{
-    cppu::ImplementationEntry entries[] = {
-        { &::cui::ColorPicker_createInstance, &::cui::ColorPicker_getImplementationName, &::cui::ColorPicker_getSupportedServiceNames, &cppu::createSingleComponentFactory, 0, 0 },
-        { 0, 0, 0, 0, 0, 0 }
-    };
-}
+void fillNetscapePluginFilters(
+    css::uno::Sequence<OUString> & rNames,
+    css::uno::Sequence<OUString> & rTypes);
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cui_component_getFactory( char const * implName, void * serviceManager, void * registryKey)
-{
-    return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);
-}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

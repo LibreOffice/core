@@ -33,6 +33,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include "insdlg.hxx"
+#include <plfilter.hxx>
 #include <dialmgr.hxx>
 #include <svtools/sores.hxx>
 
@@ -353,7 +354,6 @@ uno::Reference< io::XInputStream > SvInsertOleDlg::GetIconIfIconified( OUString*
 IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
 {
     Sequence< OUString > aFilterNames, aFilterTypes;
-    void fillNetscapePluginFilters( Sequence< OUString >& rNames, Sequence< OUString >& rTypes );
     fillNetscapePluginFilters( aFilterNames, aFilterTypes );
 
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );

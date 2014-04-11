@@ -17,26 +17,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include "sal/types.h"
-#include "cppuhelper/factory.hxx"
-#include <cppuhelper/implementationentry.hxx>
+#ifndef INCLUDED_CUI_SOURCE_INC_COLORPICKER_HXX
+#define INCLUDED_CUI_SOURCE_INC_COLORPICKER_HXX
 
-#include <colorpicker.hxx>
+#include <sal/config.h>
 
-using namespace com::sun::star;
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
-namespace
-{
-    cppu::ImplementationEntry entries[] = {
-        { &::cui::ColorPicker_createInstance, &::cui::ColorPicker_getImplementationName, &::cui::ColorPicker_getSupportedServiceNames, &cppu::createSingleComponentFactory, 0, 0 },
-        { 0, 0, 0, 0, 0, 0 }
-    };
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+    class XInterface;
+} } } }
+
+namespace cui {
+
+OUString SAL_CALL ColorPicker_getImplementationName();
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL ColorPicker_createInstance(
+    css::uno::Reference<css::uno::XComponentContext> const &)
+    SAL_THROW((css::uno::Exception));
+
+css::uno::Sequence<OUString> SAL_CALL ColorPicker_getSupportedServiceNames()
+    throw (css::uno::RuntimeException);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cui_component_getFactory( char const * implName, void * serviceManager, void * registryKey)
-{
-    return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);
-}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
