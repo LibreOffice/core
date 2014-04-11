@@ -225,7 +225,7 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
         {
             const SwAccessibleChild& rLower = (*aRIter).second;
             // A frame is returned if it's frame size is inside the visarea
-            // and the positiion is inside the frame's paint area.
+            // and the position is inside the frame's paint area.
             if( rLower.IsAccessible( bInPagePreview ) )
             {
                 SwRect aLogBounds( rLower.GetBounds( rAccMap ) );
@@ -256,7 +256,7 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
         {
             const SwAccessibleChild& rLower = *aIter;
             // A frame is returned if it's frame size is inside the visarea
-            // and the positiion is inside the frame's paint area.
+            // and the position is inside the frame's paint area.
             if( rLower.IsAccessible( bInPagePreview ) )
             {
                 SwRect aLogBounds( rLower.GetBounds( rAccMap ) );
