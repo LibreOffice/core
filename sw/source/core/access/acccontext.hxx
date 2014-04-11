@@ -89,7 +89,7 @@ private:
     bool bRegisteredAtAccessibleMap;
 
     void InitStates();
-    //Add a member to identify the firt time that document load
+    //Add a member to identify the first time that document load
     sal_Bool bBeginDocumentLoad;
 
 protected:
