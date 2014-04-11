@@ -199,10 +199,11 @@ void Impl_OlePres::Write( SvStream & rStm )
     rStm.Seek( nEndPos );
 }
 
-DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan ) :
-    rManager( rMan ),
-    pDefaultPropSet( NULL ),
-    mbRotateGranientFillWithAngle ( false )
+DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan )
+    : rManager(rMan)
+    , pDefaultPropSet(NULL)
+    , mnFix16Angle(0)
+    , mbRotateGranientFillWithAngle(false)
 {
     InitializePropSet( DFF_msofbtOPT );
 }
