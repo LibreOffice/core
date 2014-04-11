@@ -94,7 +94,18 @@ struct SfxShell_Impl: public SfxBroadcaster
     com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > aVerbList;
     ::sfx2::sidebar::ContextChangeBroadcaster maContextChangeBroadcaster;
 
-    SfxShell_Impl()  : pViewSh(0), pFrame(0), pRepeatTarget(0), pExecuter(0), pUpdater(0) {}
+    SfxShell_Impl()
+        : pViewSh(0)
+        , pFrame(0)
+        , pRepeatTarget(0)
+        , bActive(false)
+        , nDisableFlags(0)
+        , nHelpId(0)
+        , pExecuter(0)
+        , pUpdater(0)
+    {
+    }
+
     virtual ~SfxShell_Impl() { delete pExecuter; delete pUpdater;}
 };
 
@@ -124,12 +135,6 @@ SfxShell::SfxShell()
     pUndoMgr(0)
 {
     pImp = new SfxShell_Impl;
-    pImp->pViewSh = 0;
-    pImp->pFrame = 0;
-    pImp->pRepeatTarget = 0;
-    pImp->nHelpId = 0L;
-    pImp->bActive = false;
-    pImp->nDisableFlags = 0;
 }
 
 
@@ -149,10 +154,6 @@ SfxShell::SfxShell( SfxViewShell *pViewSh )
 {
     pImp = new SfxShell_Impl;
     pImp->pViewSh = pViewSh;
-    pImp->pFrame = 0;
-    pImp->pRepeatTarget = 0;
-    pImp->nHelpId = 0L;
-    pImp->bActive = false;
 }
 
 
