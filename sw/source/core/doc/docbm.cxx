@@ -715,7 +715,7 @@ namespace sw { namespace mark
             }
             else if ( bIsPosInRange != bIsOtherPosInRange )
             {
-                // the bookmark is partitially in the range
+                // the bookmark is partially in the range
                 // move position of that is in the range out of it
 
                 SAL_WNODEPRECATED_DECLARATIONS_PUSH
