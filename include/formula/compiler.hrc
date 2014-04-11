@@ -192,7 +192,9 @@
 #define SC_OPCODE_UNICHAR           160
 #define SC_OPCODE_GAMMA             161
 #define SC_OPCODE_GAMMA_LN_MS       162
-#define SC_OPCODE_STOP_1_PAR        163
+#define SC_OPCODE_ERF_MS            163
+#define SC_OPCODE_ERFC_MS           164
+#define SC_OPCODE_STOP_1_PAR        165
 
 /*** Functions with more than one parameters ***/
 #define SC_OPCODE_START_2_PAR       201

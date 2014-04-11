@@ -832,6 +832,8 @@ void ScMidB();
 
 void ScFilterXML();
 void ScWebservice();
+void ScErf();
+void ScErfc();
 
 static const double fMaxGammaArgument;
 
