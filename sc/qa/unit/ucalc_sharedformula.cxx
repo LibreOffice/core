@@ -1222,6 +1222,9 @@ void Test::testSharedFormulaUpdateOnNamedRangeChange()
     m_pDoc->SetString(ScAddress(1,1,0), "=SUM(MyRange)");
     m_pDoc->SetString(ScAddress(1,2,0), "=SUM(MyRange)");
 
+    // Set single formula with no named range to B5.
+    m_pDoc->SetString(ScAddress(1,4,0), "=ROW()");
+
     // B1:B3 should be grouped.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
     CPPUNIT_ASSERT(pFC);
@@ -1231,6 +1234,8 @@ void Test::testSharedFormulaUpdateOnNamedRangeChange()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,0,0)));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,1,0)));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(1,4,0)));
 
     // Set a single formula to C1.
     m_pDoc->SetString(ScAddress(2,0,0), "=AVERAGE(MyRange)");
@@ -1260,6 +1265,8 @@ void Test::testSharedFormulaUpdateOnNamedRangeChange()
         CPPUNIT_FAIL("Wrong formula!");
     if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "SUM(MyRange)"))
         CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(1,4,0), "ROW()"))
+        CPPUNIT_FAIL("Wrong formula!");
     if (!checkFormula(*m_pDoc, ScAddress(2,0,0), "AVERAGE(MyRange)"))
         CPPUNIT_FAIL("Wrong formula!");
 
@@ -1267,6 +1274,7 @@ void Test::testSharedFormulaUpdateOnNamedRangeChange()
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(1,0,0)));
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(1,1,0)));
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(1,4,0)));
     CPPUNIT_ASSERT_EQUAL(2.5, m_pDoc->GetValue(ScAddress(2,0,0)));
 
     m_pDoc->DeleteTab(0);
