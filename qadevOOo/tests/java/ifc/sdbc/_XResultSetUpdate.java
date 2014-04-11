@@ -194,7 +194,7 @@ public class _XResultSetUpdate extends MultiMethodTest {
     /**
     * Returns cursor from insert row back to previous row. <p>
     * <code>moveToInsertRow</code> method test must be executed
-    * first for positioning curosr to insert row. <p>
+    * first for positioning cursor to insert row. <p>
     * Has OK status if after method call current row number is
     * above 0.
     */

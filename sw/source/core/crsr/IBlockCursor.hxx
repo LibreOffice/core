@@ -77,7 +77,7 @@ class Point;
     */
     virtual void clearPoints() = 0;
 
-    /** Destructor of the block curosr interface */
+    /** Destructor of the block cursor interface */
     virtual ~IBlockCursor() {};
  };
 
