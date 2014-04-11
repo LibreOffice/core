@@ -164,6 +164,13 @@ struct SdwColor
     sal_uInt8 nG;
     sal_uInt8 nB;
     sal_uInt8 unused;
+    SdwColor()
+        : nR(0)
+        , nG(0)
+        , nB(0)
+        , unused(0)
+    {
+    }
 };
 
 struct SdwClosedObjStyleRec
@@ -209,6 +216,13 @@ struct SdwPolyLineRecord
     sal_uInt8 nLineStyle;
     SdwColor aPenColor;
     sal_uInt16 nNumPoints;
+    SdwPolyLineRecord()
+        : nLineWidth(0)
+        , nLineEnd(0)
+        , nLineStyle(0)
+        , nNumPoints(0)
+    {
+    }
 };
 
 struct SdwArcRecord
