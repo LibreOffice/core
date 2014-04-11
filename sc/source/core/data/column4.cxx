@@ -213,23 +213,26 @@ public:
             ScFormulaCell* pTop = *rEntry.mpCells;
             OUString aFormula = pTop->GetHybridFormula();
 
-            // Create a new token array from the hybrid formula string, and
-            // set it to the group.
-            ScCompiler aComp(mrCompileFormulaCxt, pTop->aPos);
-            ScTokenArray* pNewCode = aComp.CompileString(aFormula);
-            ScFormulaCellGroupRef xGroup = pTop->GetCellGroup();
-            assert(xGroup);
-            xGroup->setCode(pNewCode);
-            xGroup->compileCode(*mpDoc, pTop->aPos, mpDoc->GetGrammar());
-
-            // Propagate the new token array to all formula cells in the group.
-            ScFormulaCell** pp = rEntry.mpCells;
-            ScFormulaCell** ppEnd = pp + rEntry.mnLength;
-            for (; pp != ppEnd; ++pp)
+            if (!aFormula.isEmpty())
             {
-                ScFormulaCell* p = *pp;
-                p->SyncSharedCode();
-                p->SetDirty();
+                // Create a new token array from the hybrid formula string, and
+                // set it to the group.
+                ScCompiler aComp(mrCompileFormulaCxt, pTop->aPos);
+                ScTokenArray* pNewCode = aComp.CompileString(aFormula);
+                ScFormulaCellGroupRef xGroup = pTop->GetCellGroup();
+                assert(xGroup);
+                xGroup->setCode(pNewCode);
+                xGroup->compileCode(*mpDoc, pTop->aPos, mpDoc->GetGrammar());
+
+                // Propagate the new token array to all formula cells in the group.
+                ScFormulaCell** pp = rEntry.mpCells;
+                ScFormulaCell** ppEnd = pp + rEntry.mnLength;
+                for (; pp != ppEnd; ++pp)
+                {
+                    ScFormulaCell* p = *pp;
+                    p->SyncSharedCode();
+                    p->SetDirty();
+                }
             }
         }
         else
@@ -237,16 +240,19 @@ public:
             ScFormulaCell* pCell = rEntry.mpCell;
             OUString aFormula = pCell->GetHybridFormula();
 
-            // Create token array from formula string.
-            ScCompiler aComp(mrCompileFormulaCxt, pCell->aPos);
-            ScTokenArray* pNewCode = aComp.CompileString(aFormula);
+            if (!aFormula.isEmpty())
+            {
+                // Create token array from formula string.
+                ScCompiler aComp(mrCompileFormulaCxt, pCell->aPos);
+                ScTokenArray* pNewCode = aComp.CompileString(aFormula);
 
-            // Generate RPN tokens.
-            ScCompiler aComp2(mpDoc, pCell->aPos, *pNewCode);
-            aComp2.CompileTokenArray();
+                // Generate RPN tokens.
+                ScCompiler aComp2(mpDoc, pCell->aPos, *pNewCode);
+                aComp2.CompileTokenArray();
 
-            pCell->SetCode(pNewCode);
-            pCell->SetDirty();
+                pCell->SetCode(pNewCode);
+                pCell->SetDirty();
+            }
         }
     }
 };
