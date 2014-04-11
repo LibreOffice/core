@@ -98,7 +98,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     get(m_pZoomLB, "zoom");
 
     const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-            OUString( FILTER_XML ),
+            FILTER_XML,
             SwDocShell::Factory().GetFilterContainer() );
     //save the current document into a temporary file
     {
