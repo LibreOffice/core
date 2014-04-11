@@ -1657,7 +1657,7 @@ namespace
 {
     class LockAllViews
     {
-        std::stack<bool> m_aViewWasLocked;
+        std::vector<SwViewShell*> m_aViewWasUnLocked;
         SwViewShell* m_pViewShell;
     public:
         LockAllViews(SwViewShell *pViewShell)
@@ -1668,22 +1668,21 @@ namespace
             SwViewShell *pSh = m_pViewShell;
             do
             {
-                m_aViewWasLocked.push(pSh->IsViewLocked());
-                pSh->LockView(true);
+                if (!pSh->IsViewLocked())
+                {
+                    m_aViewWasUnLocked.push_back(pSh);
+                    pSh->LockView(true);
+                }
                 pSh = (SwViewShell*)pSh->GetNext();
             } while (pSh != m_pViewShell);
         }
         ~LockAllViews()
         {
-            if (!m_pViewShell)
-                return;
-            SwViewShell *pSh = m_pViewShell;
-            do
+            for (std::vector<SwViewShell*>::iterator aI = m_aViewWasUnLocked.begin(); aI != m_aViewWasUnLocked.end(); ++aI)
             {
-                pSh->LockView(m_aViewWasLocked.top());
-                m_aViewWasLocked.pop();
-                pSh = (SwViewShell*)pSh->GetNext();
-            } while (pSh != m_pViewShell);
+                SwViewShell *pSh = *aI;
+                pSh->LockView(false);
+            }
         }
     };
 }
