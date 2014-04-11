@@ -308,12 +308,12 @@ $(call gb_Extension_get_rootdir,$(1))/$(2) : $(3) \
 	$$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $$(dir $$@) && \
 		$(if $(filter qtz,$(4)), \
-			$(gb_Extension_PROPMERGECOMMAND) -i $$< -o $$@ -m -l $(4) \
+			$(subst $$,$$$$,$(gb_Extension_PROPMERGECOMMAND)) -i $$< -o $$@ -m -l $(4) \
 			, \
 			$(if $(filter-out en-US,$(4)), \
 				MERGEINPUT=`$(gb_MKTEMP)` && \
 				echo $$(POFILE) > $$$${MERGEINPUT} && \
-				$(gb_Extension_PROPMERGECOMMAND) -i $$< -o $$@ -m $$$${MERGEINPUT} -l $(4) && \
+				$(subst $$,$$$$,$(gb_Extension_PROPMERGECOMMAND)) -i $$< -o $$@ -m $$$${MERGEINPUT} -l $(4) && \
 				rm -rf $$$${MERGEINPUT} \
 				, \
 				cp -f $$< $$@ \
@@ -409,18 +409,18 @@ $(call gb_Extension_get_rootdir,$(1))/help/$(5)/$(3) : \
 	$$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $$(dir $$@) && \
 		$(if $(filter qtz,$(5)), \
-			$(gb_Extension_TREEXCOMMAND) -i $$< -o $$@ -l $(5) -m \
+			$(subst $$,$$$$,$(gb_Extension_TREEXCOMMAND)) -i $$< -o $$@ -l $(5) -m \
 				-r $$(call gb_Extension_get_workdir,$(1))/help/$(5)/$(6) \
 			, \
 			$(if $(filter-out en-US,$(5)), \
 				MERGEINPUT=`$(gb_MKTEMP)` && \
 				echo $$(POFILE) > $$$${MERGEINPUT} && \
-				$(gb_Extension_TREEXCOMMAND) -i $$< -o $$@ -l $(5) \
+				$(subst $$,$$$$,$(gb_Extension_TREEXCOMMAND)) -i $$< -o $$@ -l $(5) \
 					-m $$$${MERGEINPUT} \
 					-r $$(call gb_Extension_get_workdir,$(1))/help/$(5)/$(6) && \
 				rm -rf $$$${MERGEINPUT} \
 				, \
-				$(gb_Extension_TREEXCOMMAND) -i $$< -o $$@ -l $(5) \
+				$(subst $$,$$$$,$(gb_Extension_TREEXCOMMAND)) -i $$< -o $$@ -l $(5) \
 					-r $$(call gb_Extension_get_workdir,$(1))/help/$(5)/$(6) \
 			) \
 		) \
