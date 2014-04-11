@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include "unoservices.hxx"
 #include "xmlbas_export.hxx"
 #include <xmlscript/xmlns.h>
 #include <xmlscript/xml_helper.hxx>
