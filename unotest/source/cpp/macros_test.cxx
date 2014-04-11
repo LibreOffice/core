@@ -15,21 +15,20 @@
 #include "cppunit/TestAssert.h"
 #include <rtl/ustrbuf.hxx>
 
-using namespace com::sun::star;
+using namespace css;
 
 namespace unotest {
 
-uno::Reference< com::sun::star::lang::XComponent > MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService)
+uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService)
 {
     CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
-    uno::Reference< com::sun::star::frame::XComponentLoader> xLoader = uno::Reference< com::sun::star::frame::XComponentLoader >( mxDesktop, uno::UNO_QUERY );
+    uno::Reference<frame::XComponentLoader> xLoader = uno::Reference<frame::XComponentLoader>(mxDesktop, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("no loader", xLoader.is());
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > args(1);
+    uno::Sequence<beans::PropertyValue> args(1);
     args[0].Name = "MacroExecutionMode";
     args[0].Handle = -1;
-    args[0].Value <<=
-        com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-    args[0].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
+    args[0].Value <<= document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+    args[0].State = beans::PropertyState_DIRECT_VALUE;
 
     if (!rDocService.isEmpty())
     {
@@ -37,10 +36,10 @@ uno::Reference< com::sun::star::lang::XComponent > MacrosTest::loadFromDesktop(c
         args[1].Name = "DocumentService";
         args[1].Handle = -1;
         args[1].Value <<= rDocService;
-        args[1].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
+        args[1].State = beans::PropertyState_DIRECT_VALUE;
     }
 
-    uno::Reference< com::sun::star::lang::XComponent> xComponent= xLoader->loadComponentFromURL(rURL, OUString("_default"), 0, args);
+    uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(rURL, OUString("_default"), 0, args);
     OUString sMessage = "loading failed: " + rURL;
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString( sMessage, RTL_TEXTENCODING_UTF8 ).getStr( ), xComponent.is());
     return xComponent;
