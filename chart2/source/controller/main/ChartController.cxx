@@ -43,6 +43,7 @@
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
 #include "UndoActions.hxx"
+#include <GL3DHelper.hxx>
 
 #include <comphelper/InlineContainer.hxx>
 
@@ -107,6 +108,7 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     m_bWaitingForDoubleClick(false),
     m_bWaitingForMouseUp(false),
     m_bConnectingToView(false),
+    m_bGL3DChart(false),
     m_xUndoManager( 0 ),
     m_aDispatchContainer( m_xCC, this ),
     m_eDrawMode( CHARTDRAW_SELECT )
@@ -483,6 +485,8 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
                 }
 
                 m_bConnectingToView = false;
+
+                queryGL3DChart();
             }
         }
     }
@@ -577,6 +581,8 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
 
     uno::Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
     m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_QUERY_THROW );
+
+    queryGL3DChart();
 
     return sal_True;
 }
@@ -1386,6 +1392,34 @@ DrawViewWrapper* ChartController::GetDrawViewWrapper()
         impl_createDrawViewController();
     }
     return m_pDrawViewWrapper;
+}
+
+void ChartController::queryGL3DChart()
+{
+    m_bGL3DChart = false;
+
+    uno::Reference<frame::XModel> xModel = m_aModel->getModel();
+    if (!xModel.is())
+        return;
+
+    uno::Reference<XChartDocument> xChartDoc(xModel, uno::UNO_QUERY);
+    if (!xChartDoc.is())
+        return;
+
+    uno::Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+    m_bGL3DChart = GL3DHelper::isGL3DDiagram(xDiagram);
+}
+
+void ChartController::executeGL3D_MouseButtonUp( const MouseEvent& /*rMEvt*/ )
+{
+}
+
+void ChartController::executeGL3D_MouseButtonDown( const MouseEvent& /*rMEvt*/ )
+{
+}
+
+void ChartController::executeGL3D_MouseMove( const MouseEvent& /*rMEvt*/ )
+{
 }
 
 uno::Reference< XAccessible > ChartController::CreateAccessible()

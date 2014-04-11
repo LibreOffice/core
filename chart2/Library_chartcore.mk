@@ -199,6 +199,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/ExponentialRegressionCurveCalculator \
     chart2/source/tools/FillProperties \
     chart2/source/tools/FormattedStringHelper \
+    chart2/source/tools/GL3DHelper \
     chart2/source/tools/ImplOPropertySet \
     chart2/source/tools/InternalData \
     chart2/source/tools/InternalDataProvider \

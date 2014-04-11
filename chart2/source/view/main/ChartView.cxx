@@ -49,6 +49,7 @@
 #include "defines.hxx"
 #include <unonames.hxx>
 #include <GL3DBarChart.hxx>
+#include <GL3DHelper.hxx>
 
 #include <rtl/uuid.h>
 #include <comphelper/scopeguard.hxx>
@@ -2405,32 +2406,8 @@ void ChartView::impl_refreshAddIn()
 bool ChartView::isReal3DChart()
 {
     uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
-    uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    if( !xCooSysContainer.is())
-        return false;
 
-    uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-    for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
-    {
-        uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
-        //
-        //iterate through all chart types in the current coordinate system
-        uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-        OSL_ASSERT( xChartTypeContainer.is());
-        if( !xChartTypeContainer.is() )
-            continue;
-
-        uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-        for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
-        {
-            uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
-            OUString aChartType = xChartType->getChartType();
-            if( aChartType == "com.sun.star.chart2.GL3DBarChartType" )
-                return true;
-        }
-    }
-
-    return false;
+    return GL3DHelper::isGL3DDiagram(xDiagram);
 }
 
 void ChartView::createShapes()
