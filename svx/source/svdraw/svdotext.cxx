@@ -169,6 +169,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
 {
     bTextSizeDirty=false;
     bTextFrame=true;
+    bPortionInfoChecked=false;
     bNoShear=true;
     bNoRotate=false;
     bNoMirror=true;
