@@ -187,19 +187,30 @@ struct SdwClosedObjStyleRec
     SdwColor aBackColor;
     sal_uInt16 nFillType;
     sal_uInt8 pFillPattern[8];
+    SdwClosedObjStyleRec()
+        : nLineWidth(0)
+        , nLineStyle(0)
+        , nFillType(0)
+    {
+        memset(pFillPattern, 0, sizeof(pFillPattern));
+    }
 };
 
 struct SdwDrawObjHeader
 {
-//  sal_uInt8 nType
-//  sal_uInt8 nFlags;
     sal_uInt16 nRecLen;
     sal_Int16 nLeft;
     sal_Int16 nTop;
     sal_Int16 nRight;
     sal_Int16 nBottom;
-//  sal_uInt16 nextObj;
-//  sal_uInt16 prevObj;
+    SdwDrawObjHeader()
+        : nRecLen(0)
+        , nLeft(0)
+        , nTop(0)
+        , nRight(0)
+        , nBottom(0)
+    {
+    }
 };
 
 struct SdwLineRecord
