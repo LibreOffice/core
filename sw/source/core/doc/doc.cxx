@@ -1653,6 +1653,41 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // thus we are done here.
 }
 
+namespace
+{
+    class LockAllViews
+    {
+        std::stack<bool> m_aViewWasLocked;
+        SwViewShell* m_pViewShell;
+    public:
+        LockAllViews(SwViewShell *pViewShell)
+            : m_pViewShell(pViewShell)
+        {
+            if (!m_pViewShell)
+                return;
+            SwViewShell *pSh = m_pViewShell;
+            do
+            {
+                m_aViewWasLocked.push(pSh->IsViewLocked());
+                pSh->LockView(true);
+                pSh = (SwViewShell*)pSh->GetNext();
+            } while (pSh != m_pViewShell);
+        }
+        ~LockAllViews()
+        {
+            if (!m_pViewShell)
+                return;
+            SwViewShell *pSh = m_pViewShell;
+            do
+            {
+                pSh->LockView(m_aViewWasLocked.top());
+                m_aViewWasLocked.pop();
+                pSh = (SwViewShell*)pSh->GetNext();
+            } while (pSh != m_pViewShell);
+        }
+    };
+}
+
 // returns true while there is more to do
 bool SwDoc::IncrementalDocStatCalculate(long nChars, bool bFields)
 {
@@ -1723,7 +1758,7 @@ bool SwDoc::IncrementalDocStatCalculate(long nChars, bool bFields)
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nCharExcludingSpaces;
 
     // For e.g. autotext documents there is no pSwgInfo (#i79945)
-    SfxObjectShell * const pObjShell( GetDocShell() );
+    SwDocShell* pObjShell(GetDocShell());
     if (pObjShell)
     {
         const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -1733,6 +1768,9 @@ bool SwDoc::IncrementalDocStatCalculate(long nChars, bool bFields)
         // #i96786#: do not set modified flag when updating statistics
         const bool bDocWasModified( IsModified() );
         const ModifyBlocker_Impl b(pObjShell);
+        // rhbz#1081176: don't jump to cursor pos because of (temporary)
+        // activation of modified flag triggering move to input position
+        LockAllViews aViewGuard((SwViewShell*)pObjShell->GetWrtShell());
         xDocProps->setDocumentStatistics(aStat);
         if (!bDocWasModified)
         {
