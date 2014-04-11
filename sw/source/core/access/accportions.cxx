@@ -459,7 +459,7 @@ size_t SwAccessiblePortionData::FindBreak(
                 "earlier value should have been returned" );
 
     OSL_ENSURE( nMin < rPositions.size()-1,
-                "shouldn't return last position (due to termintator values)" );
+                "shouldn't return last position (due to terminator values)" );
 
     return nMin;
 }
