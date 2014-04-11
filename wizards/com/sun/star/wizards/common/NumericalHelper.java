@@ -56,7 +56,7 @@ public class NumericalHelper
      */
     private NumericalHelper()
     {
-        // private c'tor, so noone can instantiate
+        // private c'tor, so no one can instantiate
     }
 
     /**

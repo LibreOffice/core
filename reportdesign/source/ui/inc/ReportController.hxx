@@ -258,7 +258,7 @@ namespace rptui
 
         /** gets the current section (SdrView)
         *
-        * \return the currently selected section or <NULL/> if noone is selected
+        * \return the currently selected section or <NULL/> if no one is selected
         */
         OSectionView* getCurrentSectionView() const;
 

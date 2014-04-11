@@ -1932,7 +1932,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                         // focused state then. Sending the focus changes event
                         // after that seems to be strange. However, we cannot
                         // send a focus event for the new context now, because
-                        // noone except us knows it. In any case, we remember
+                        // no one except us knows it. In any case, we remember
                         // the new context as the one that has the focus
                         // currently.
 

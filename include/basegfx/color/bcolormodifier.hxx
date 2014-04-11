@@ -60,12 +60,12 @@ namespace basegfx
     {
     private:
     protected:
-        // noone is allowed to incarnate the abstract base class
+        // no one is allowed to incarnate the abstract base class
         // except derivations
         BColorModifier() {}
 
     public:
-        // noone should directly destroy it; all incarnations should be
+        // no one should directly destroy it; all incarnations should be
         // handled in a boost::shared_ptr of type BColorModifierSharedPtr
         virtual ~BColorModifier();
 

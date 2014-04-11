@@ -172,8 +172,8 @@ namespace cli_uno
     I doubt that the case that the ref count raises from 0 to 1
     can occur.  uno_ext_getMapping returns an acquired mapping. Every time
     that function is called then a new mapping is created. Following the
-    rules of ref counted objects, then if the ref count is null noone has
-    a reference to the object anymore. Hence noone can call acquire. If someone
+    rules of ref counted objects, then if the ref count is null no one has
+    a reference to the object anymore. Hence no one can call acquire. If someone
     calls acquire then they must have kept an unacquired pointer which is
     illegal.
  */

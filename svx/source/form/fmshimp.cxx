@@ -2984,7 +2984,7 @@ void FmXFormShell::startFiltering()
     Reference< XControlContainer> xContainer;
     if (getActiveController() == m_xExternalViewController)
     {
-        DBG_ASSERT(m_xExtViewTriggerController.is(), "FmXFormShell::startFiltering : inconsistent : active external controller, but noone triggered this !");
+        DBG_ASSERT(m_xExtViewTriggerController.is(), "FmXFormShell::startFiltering : inconsistent : active external controller, but no one triggered this !");
         xContainer = m_xExtViewTriggerController->getContainer();
     }
     else
@@ -3061,7 +3061,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
     Reference< XControlContainer> xContainer;
     if (getActiveController() == m_xExternalViewController)
     {
-        DBG_ASSERT(m_xExtViewTriggerController.is(), "FmXFormShell::stopFiltering : inconsistent : active external controller, but noone triggered this !");
+        DBG_ASSERT(m_xExtViewTriggerController.is(), "FmXFormShell::stopFiltering : inconsistent : active external controller, but no one triggered this !");
         xContainer = m_xExtViewTriggerController->getContainer();
     }
     else

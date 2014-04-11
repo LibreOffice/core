@@ -815,7 +815,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
                                         sal_Int32* pStt, sal_Int32* pEnd )
 {
-    OSL_ENSURE( pStt, "Why did noone check the StartPos?" );
+    OSL_ENSURE( pStt, "Why did no one check the StartPos?" );
 
     SwTxtNode* pTxtNd = 0;
     switch( nSubType )

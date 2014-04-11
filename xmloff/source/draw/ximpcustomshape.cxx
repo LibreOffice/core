@@ -932,7 +932,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                         // entries for CustomShapes. To allow for a better ODF user experience, just correct this
                         // here by getting the real object scale from the already set transformation from the xShape.
                         // Hopefully LO will fix that bug (but this will still leave the files with the error), but
-                        // even when not this will do no harm as long noone uses this state explicitely for some
+                        // even when not this will do no harm as long no one uses this state explicitely for some
                         // purpose (e.g. to really have CustomShapes without content, but unlikely).
                         uno::Reference< beans::XPropertySet > xProps(mrxShape, uno::UNO_QUERY_THROW);
                         uno::Any aObjectTransform = xProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")));

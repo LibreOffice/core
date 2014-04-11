@@ -97,7 +97,7 @@ const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& a
         // handing it over means that any GraphicFormat that internallv needs a path as base
         // to interpret included links may fail.
         // Alternatively the path may be set at the result after this call when it is known
-        // that it is a SVG graphic, but only because noone yet tried to interpret it.
+        // that it is a SVG graphic, but only because no one yet tried to interpret it.
         rGF.ImportGraphic( aGraphic, aFileName, *pInStrm, nFilter, NULL, 0, &aFilterData );
     }
     return aGraphic;
