@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_a7850aaf",
+        "filename": "tools/source/misc/getstringresource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-04-11T09:39:08Z",
+      "side": 1,
+      "message": "But switching to \"tools\" ResMgr would also require moving the STR_SVT_MIMETYPE_* resources from svl to tools (include/svl/svl.hrc, svl/source/misc/mediatype.src, translations/).  A simpler fix might be to split out the INetContentTypes::GetPresentation functionality (which is a static member) and keep it in svl.",
+      "revId": "08691be3f833242cc64f89c134ac7276abfc320a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
