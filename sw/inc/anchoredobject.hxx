@@ -57,7 +57,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         Point maRelPos;
 
         // for to-character anchored objects:
-        // Last known anchor character retangle.
+        // Last known anchor character rectangle.
         // Used to decide, if invalidation has to been performed, if anchor position
         // has changed, and used to position object.
         SwRect maLastCharRect;

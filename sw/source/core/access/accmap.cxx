@@ -613,7 +613,7 @@ class SwAccPreviewData
 
     const SwPageFrm *mpSelPage;
 
-    /** adjust logic page retangle to its visible part
+    /** adjust logic page rectangle to its visible part
 
         @param _iorLogicPgSwRect
         input/output parameter - reference to the logic page rectangle, which
@@ -767,7 +767,7 @@ void SwAccPreviewData::DisposePage(const SwPageFrm *pPageFrm )
         mpSelPage = 0;
 }
 
-// adjust logic page retangle to its visible part
+// adjust logic page rectangle to its visible part
 void SwAccPreviewData::AdjustLogicPgRectToVisibleArea(
                             SwRect&         _iorLogicPgSwRect,
                             const SwRect&   _rPreviewPgSwRect,

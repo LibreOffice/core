@@ -1732,7 +1732,7 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
     output device the background has to be drawn in.
 
     @param _rAlignedPaintRect
-    paint retangle in the output device, which has to be drawn with the background.
+    paint rectangle in the output device, which has to be drawn with the background.
     rectangle have to be aligned by method ::SwAlignRect
 
     @param _rGraphicObj
@@ -7353,7 +7353,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
     set under special conditions, if background brush is taken from an index section.
 
     @param rOrigRect
-    in-/output parameter - reference to the retangle the background brush is
+    in-/output parameter - reference to the rectangle the background brush is
     considered for - adjusted to the frame, from which the background brush is
     taken.
 

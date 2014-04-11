@@ -1440,7 +1440,7 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             // no connect to layout during disconnection
             if ( !mbDisconnectInProgress )
             {
-                // determine old object retangle of 'master' drawing object
+                // determine old object rectangle of 'master' drawing object
                 // for notification
                 const Rectangle* pOldRect = 0L;
                 Rectangle aOldRect;
