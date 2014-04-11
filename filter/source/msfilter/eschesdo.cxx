@@ -61,21 +61,25 @@ using namespace ::com::sun::star::style;
 #define EES_MAP_FRACTION 1440   // 1440 dpi
 
 ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
-        :
-        mpEscherEx              ( &rEx ),
-        maMapModeSrc            ( MAP_100TH_MM ),
-        // PowerPoint: 576 dpi, WinWord: 1440 dpi, Excel: 1440 dpi
-        maMapModeDest( MAP_INCH, Point(), Fraction( 1, EES_MAP_FRACTION ), Fraction( 1, EES_MAP_FRACTION ) ),
-        mpPicStrm               ( NULL ),
-        mpHostAppData           ( NULL ),
-        mnPagesWritten          ( 0 ),
-        mnShapeMasterTitle      ( 0 ),
-        mnShapeMasterBody       ( 0 ),
-        mbStatusIndicator       ( sal_False ),
-        mbStatus                ( sal_False )
+    : mpEscherEx(&rEx)
+    , maMapModeSrc(MAP_100TH_MM)
+    // PowerPoint: 576 dpi, WinWord: 1440 dpi, Excel: 1440 dpi
+    , maMapModeDest( MAP_INCH, Point(), Fraction( 1, EES_MAP_FRACTION ), Fraction( 1, EES_MAP_FRACTION ) )
+    , mpPicStrm(NULL)
+    , mpHostAppData(NULL)
+    , mnPagesWritten(0)
+    , mnShapeMasterTitle(0)
+    , mnShapeMasterBody(0)
+    , mnIndices(0)
+    , mnOutlinerCount(0)
+    , mnPrevTextStyle(0)
+    , mnStatMaxValue(0)
+    , mnEffectCount(0)
+    , mbIsTitlePossible(false)
+    , mbStatusIndicator(false)
+    , mbStatus(false)
 {
 }
-
 
 Point ImplEESdrWriter::ImplMapPoint( const Point& rPoint )
 {
