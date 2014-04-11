@@ -389,7 +389,7 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
         pDescriptor->setNew( false );
 
     sName = getNameForObject( xNewlyCreated );
-    if ( !m_pElements->exists( sName ) ) // this may happen when the drived class included it itself
+    if ( !m_pElements->exists( sName ) ) // this may happen when the derived class included it itself
         m_pElements->insert( sName, xNewlyCreated );
 
     // notify our container listeners

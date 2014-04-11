@@ -58,7 +58,7 @@ class SwAccessibleTable :
 
 protected:
     // Set states for getAccessibleStateSet.
-    // This drived class additinaly sets MULTISELECTABLE(+)
+    // This derived class additinaly sets MULTISELECTABLE(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
 
     virtual ~SwAccessibleTable();

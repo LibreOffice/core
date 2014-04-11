@@ -34,7 +34,7 @@ class SwAccessibleFrameBase : public SwAccessibleContext,
 
 protected:
     // Set states for getAccessibleStateSet.
-    // This drived class additionally sets SELECTABLE(1), SELECTED(+),
+    // This derived class additionally sets SELECTABLE(1), SELECTED(+),
     // FOCUSABLE(1) and FOCUSED(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
     SwFlyFrm* getFlyFrm() const;
