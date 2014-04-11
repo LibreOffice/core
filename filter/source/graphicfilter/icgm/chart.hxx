@@ -91,7 +91,7 @@ typedef struct TextEntry
     TextAttribute*  pAttribute;
 } TextEntry;
 
-typedef struct ZoneOption
+struct ZoneOption
 {
     char            nOverTitle;
     char            nOverBody;
@@ -105,18 +105,43 @@ typedef struct ZoneOption
     char            nFFillc_Title;
     char            nFFillc_Body;
     char            nFFillc_Foot;
-} ZoneOption;
+    ZoneOption()
+        : nOverTitle(0)
+        , nOverBody(0)
+        , nOverFoot(0)
+        , nFStyle_Title(0)
+        , nFStyle_Body(0)
+        , nFStyle_Foot(0)
+        , nFOutc_Title(0)
+        , nFOutc_Body(0)
+        , nFOutc_Foot(0)
+        , nFFillc_Title(0)
+        , nFFillc_Body(0)
+        , nFFillc_Foot(0)
+    {
+    }
+};
 
-typedef struct BulletOption
+struct BulletOption
 {
     char            nBType;
     char            nBSize;
     char            nBColor;
-    sal_Int16           nBStart;
+    sal_Int16       nBStart;
     double          nTMargin;
     double          nBSpace;
     char            nCPlace;
-} BulletOption;
+    BulletOption()
+        : nBType(0)
+        , nBSize(0)
+        , nBColor(0)
+        , nBStart(0)
+        , nTMargin(0)
+        , nBSpace(0)
+        , nCPlace(0)
+    {
+    }
+};
 
 typedef struct BulDef
 {
@@ -131,7 +156,7 @@ typedef struct BulletLines
     BulDef          nBulDef[ 48 ];
 } BulletLines;
 
-typedef struct IntSettings
+struct IntSettings
 {
     sal_uInt16          nCountry;
     sal_uInt16          nDateFormat;
@@ -141,7 +166,18 @@ typedef struct IntSettings
     sal_uInt16          nNumSeps;
     sal_uInt16          nCurrencyFormat;
     char            nCurrencySymbol[ 5 ];
-} IntSettings;
+    IntSettings()
+        : nCountry(0)
+        , nDateFormat(0)
+        , nDateSep(0)
+        , nTimeFormat(0)
+        , nTimeSep(0)
+        , nNumSeps(0)
+        , nCurrencyFormat(0)
+    {
+        memset (nCurrencySymbol, 0, sizeof(nCurrencySymbol));
+    }
+};
 
 typedef struct PageOrientDim
 {
