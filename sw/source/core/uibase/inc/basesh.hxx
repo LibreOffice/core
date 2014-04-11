@@ -42,7 +42,7 @@ class SwBaseShell: public SfxShell
     // DragMode
     static FlyMode eFrameMode;
 
-    // Bug 75078 - if in GetState the asynch call of GetGraphic returns
+    // Bug 75078 - if in GetState the async call of GetGraphic returns
     //              synch, the set the state directly into the itemset
     SfxItemSet*         pGetStateSet;
 

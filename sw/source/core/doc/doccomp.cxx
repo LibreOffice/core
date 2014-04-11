@@ -929,7 +929,7 @@ void Compare::ShiftBoundaries( CompareData& rData1, CompareData& rData2 )
                     pData->SetChanged(  i );
                     /* Since one line-that-matches is now before this run
                        instead of after, we must advance in the other file
-                       to keep in synch.  */
+                       to keep in sync.  */
                     ++j;
                 }
                 else
