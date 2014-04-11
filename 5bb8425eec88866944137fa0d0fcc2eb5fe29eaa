@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_07189683",
+        "filename": "include/formula/compiler.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-11T13:43:49Z",
+      "side": 1,
+      "message": "As both functions have exactly one parameter they should go into the block \"Functions with one parameter\" instead, so the compiler can already check presence of the parameter.\n\nI\u0027ll submit an amended patch for this.",
+      "revId": "5bb8425eec88866944137fa0d0fcc2eb5fe29eaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
