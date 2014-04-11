@@ -661,16 +661,19 @@ public:
             ScFormulaCell* pCell = rEntry.mpCell;
             OUString aFormula = pCell->GetHybridFormula();
 
-            // Create token array from formula string.
-            ScCompiler aComp(mrCompileFormulaCxt, pCell->aPos);
-            ScTokenArray* pNewCode = aComp.CompileString(aFormula);
+            if (!aFormula.isEmpty())
+            {
+                // Create token array from formula string.
+                ScCompiler aComp(mrCompileFormulaCxt, pCell->aPos);
+                ScTokenArray* pNewCode = aComp.CompileString(aFormula);
 
-            // Generate RPN tokens.
-            ScCompiler aComp2(mpDoc, pCell->aPos, *pNewCode);
-            aComp2.CompileTokenArray();
+                // Generate RPN tokens.
+                ScCompiler aComp2(mpDoc, pCell->aPos, *pNewCode);
+                aComp2.CompileTokenArray();
 
-            pCell->SetCode(pNewCode);
-            pCell->SetDirty();
+                pCell->SetCode(pNewCode);
+                pCell->SetDirty();
+            }
         }
     }
 };
