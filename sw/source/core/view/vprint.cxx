@@ -600,6 +600,7 @@ sal_Bool SwViewShell::IsAnyFieldInDoc() const
 ///  Saves some settings at the draw view
 SwDrawViewSave::SwDrawViewSave( SdrView* pSdrView )
     : pDV( pSdrView )
+    , bPrintControls(true)
 {
     if ( pDV )
     {
