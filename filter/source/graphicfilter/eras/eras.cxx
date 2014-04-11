@@ -56,16 +56,18 @@ public:
 };
 
 //=================== Methoden von RASWriter ==============================
-
 RASWriter::RASWriter(SvStream &rStream)
     : m_rOStm(rStream)
     , mbStatus(sal_True)
     , mpAcc(NULL)
-    , mnRepCount( 0xffffffff )
+    , mnWidth(0)
+    , mnHeight(0)
+    , mnColors(0)
+    , mnDepth(0)
+    , mnRepCount(0xffffffff)
+    , mnRepVal(0)
 {
 }
-
-
 
 RASWriter::~RASWriter()
 {
