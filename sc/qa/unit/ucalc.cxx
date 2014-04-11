@@ -2577,6 +2577,8 @@ void Test::testFunctionLists()
         "COVARIANCE.S",
         "CRITBINOM",
         "DEVSQ",
+        "ERF.PRECISE",
+        "ERFC.PRECISE",
         "EXPON.DIST",
         "EXPONDIST",
         "F.DIST",

@@ -265,4 +265,24 @@ void ScInterpreter::ScDebugVar()
         PushIllegalParameter();
 }
 
+void ScInterpreter::ScErf()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if (MustHaveParamCount( nParamCount, 1 ) )
+    {
+        double x = GetDouble();
+        PushDouble( ::rtl::math::erf( x ) );
+    }
+}
+
+void ScInterpreter::ScErfc()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if (MustHaveParamCount( nParamCount, 1 ) )
+    {
+        double x = GetDouble();
+        PushDouble( ::rtl::math::erfc( x ) );
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
