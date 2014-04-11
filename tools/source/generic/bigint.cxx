@@ -484,6 +484,7 @@ BigInt::BigInt( const BigInt& rBigInt )
 }
 
 BigInt::BigInt( const OUString& rString )
+    : nLen(0)
 {
     bIsSet = true;
     bIsNeg = false;
