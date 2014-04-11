@@ -175,7 +175,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleField::getAccessibleAtPoint(
 
    There are two modes.
 
-   - realative
+   - relative
 
      Return bounding box relative to parent if parent is no root
      frame. Otherwise return the absolute bounding box.
