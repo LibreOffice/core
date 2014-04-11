@@ -153,7 +153,7 @@ public:
 
     // XInterface is inherited through SwAcessibleContext and
     // XAccessibleSelection. These methods are needed to avoid
-    // ambigiouties.
+    // ambiguities.
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         const ::com::sun::star::uno::Type& aType )
