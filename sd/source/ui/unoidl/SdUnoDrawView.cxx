@@ -20,6 +20,7 @@
 
 #include "SdUnoDrawView.hxx"
 
+#include "FrameView.hxx"
 #include "DrawController.hxx"
 #include "DrawDocShell.hxx"
 #include "DrawViewShell.hxx"
@@ -473,6 +474,7 @@ void SAL_CALL SdUnoDrawView::setCurrentPage (
     const Reference< drawing::XDrawPage >& xPage )
     throw (RuntimeException, std::exception)
 {
+    FrameView* pFrameView=mrDrawViewShell.GetFrameView()->pageSelectedOnLoad();
     SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
     SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : NULL;
 

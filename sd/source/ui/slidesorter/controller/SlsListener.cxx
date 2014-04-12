@@ -500,6 +500,9 @@ void SAL_CALL Listener::propertyChange (
                 Any aPageNumber = xPageSet->getPropertyValue ("Number");
                 sal_Int32 nCurrentPage = 0;
                 aPageNumber >>= nCurrentPage;
+                FrameView* pFrameView = mpBase->GetDocShell()->GetFrameView();
+                if( pFrameView != NULL && pFrameView->IsSelectPageOnLoad() )
+                    nCurrentPage= pFrameView->GetSelectedPageOnLoad() + 1;
                 // The selection is already set but we call SelectPage()
                 // nevertheless in order to make the new current page the
                 // last recently selected page of the PageSelector.  This is
