@@ -102,6 +102,8 @@ public:
 
     /** can be used to get the page that was selected on last save of this document */
     sal_uInt16 GetSelectedPageOnLoad () const { return mnSelectedPageOnLoad; }
+    void pageSelectedOnLoad () { bLoadSavedPage = sal_False; }
+    sal_Bool IsSelectPageOnLoad () { return bLoadSavedPage; }
 
     void SetViewShEditMode(EditMode eMode, PageKind eKind);
     EditMode GetViewShEditMode (PageKind eKind);
@@ -206,6 +208,7 @@ private:
         the names ones (<FALSE/>).  Not persistent.
     */
     bool            mbIsNavigatorShowingAllShapes;
+    static sal_Bool bLoadSavedPage;
 
     /** The type of the previous view shell.  The (default) value
         ViewShell::ST_NONE indicates that there was no previous view shell.
