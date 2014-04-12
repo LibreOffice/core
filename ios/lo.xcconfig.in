@@ -16,6 +16,7 @@ LO_BUILDDIR = @BUILDDIR@
 LO_INSTDIR = @INSTDIR@
 LO_SRCDIR = @SRC_ROOT@
 LO_WORKDIR = @WORKDIR@
+LO_ICU_MAJOR = @ICU_MAJOR@
 
 // These are actual Xcode-known settings. The corresponding autoconf
 // variables are prefixed with XCODE_ to make it clear in configure.ac

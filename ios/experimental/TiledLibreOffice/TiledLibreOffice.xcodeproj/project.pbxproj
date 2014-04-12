@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE03BF9318F9A7CC00620DC7 /* icudt52l.dat in Resources */ = {isa = PBXBuildFile; fileRef = BE03BF9218F9A7CC00620DC7 /* icudt52l.dat */; };
 		BE55B06D18D87CC600950228 /* DocumentTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE55B06C18D87CC600950228 /* DocumentTableViewController.m */; };
 		BE82BD7618218E2E00A447B5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE82BD7518218E2E00A447B5 /* Foundation.framework */; };
 		BE82BD7818218E2E00A447B5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE82BD7718218E2E00A447B5 /* CoreGraphics.framework */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		BE03BF9118F9648F00620DC7 /* udata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = udata.cpp; path = ../../../workdir/UnpackedTarball/icu/source/common/udata.cpp; sourceTree = "<group>"; };
+		BE03BF9218F9A7CC00620DC7 /* icudt52l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = "icudt$(LO_ICU_MAJOR)l.dat"; path = ../../../../workdir/UnpackedTarball/icu/source/data/in/icudt52l.dat; sourceTree = "<group>"; };
 		BE0898E81860D42B0021A679 /* brand.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = brand.cxx; path = ../../../vcl/source/app/brand.cxx; sourceTree = "<group>"; };
 		BE0898E91860D42B0021A679 /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../../../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
 		BE0898EA1860D42B0021A679 /* dndhelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dndhelp.cxx; path = ../../../vcl/source/app/dndhelp.cxx; sourceTree = "<group>"; };
@@ -1687,6 +1689,7 @@
 				BEEEFDFE1860A82C00FBDE67 /* unorc */,
 				BEEE02D01860ABB700FBDE67 /* ure */,
 				BEEEF9691860A25400FBDE67 /* test1.odt */,
+				BE03BF9218F9A7CC00620DC7 /* icudt52l.dat */,
 			);
 			name = Resources;
 			path = TiledLibreOffice;
@@ -1752,6 +1755,7 @@
 				BEEEFE041860A89100FBDE67 /* rc in Resources */,
 				BEEEFE051860A89100FBDE67 /* services.rdb in Resources */,
 				BEEE02D21860ABDB00FBDE67 /* share in Resources */,
+				BE03BF9318F9A7CC00620DC7 /* icudt52l.dat in Resources */,
 				BEEEFE061860A89100FBDE67 /* types.rdb in Resources */,
 				BEEEFE071860A89100FBDE67 /* unorc in Resources */,
 				BEEE02D31860ABDB00FBDE67 /* ure in Resources */,
@@ -1829,6 +1833,7 @@
 					"$(LO_SRCDIR)/include",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
+					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
