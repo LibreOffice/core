@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_4a57f302",
+        "filename": "include/sfx2/sfxsids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-04-12T03:16:31Z",
+      "side": 1,
+      "message": "are you bypassing the standard gerrit hook, or force committing around them ? these tabs should have been picked-up\nby the pre-commit hook",
+      "revId": "fcf05d9f7a932d71a946b41392599a3ce8eaba3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_6a5cb726",
+        "filename": "include/svtools/treelistbox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-04-12T03:16:31Z",
+      "side": 1,
+      "message": "what\u0027s the connection with fdo#69195\nwhy do we need/want to backport that to 4.1 ?",
+      "revId": "fcf05d9f7a932d71a946b41392599a3ce8eaba3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_aa3dcfbd",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-04-12T03:16:31Z",
+      "side": 1,
+      "message": "I mention it here but that is true to 95% of the diff as far as I can tell: what is the relation with the claimed bug resolution?\nwhy does random String\u003d\u003eOUString conversion should be back-ported to a stable release ?",
+      "revId": "fcf05d9f7a932d71a946b41392599a3ce8eaba3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_8a400b37",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-04-12T03:16:31Z",
+      "side": 1,
+      "message": "what is that ? STYLEPREVIEW that is surely not a config option, otherwise that would be a poor name.. so it looks like random debug construct... or unfinished feature.. either way it has no place in a patch to a stable release branch.",
+      "revId": "fcf05d9f7a932d71a946b41392599a3ce8eaba3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_ea47c749",
+        "filename": "sfx2/source/inc/sfxtypes.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-04-12T03:16:31Z",
+      "side": 1,
+      "message": "presumably the bug is in release code...\nso why do we need to backport that ?",
+      "revId": "fcf05d9f7a932d71a946b41392599a3ce8eaba3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
