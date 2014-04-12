@@ -98,8 +98,8 @@ private:
     /** @descr this function corresponds to the algorithm 4.76 in [2] and
         theorem 5.3.7 in [3]
 
-        [2] Engeln-Müllges, Gisela: Numerik-Algorithmen: Verfahren, Beispiele, Anwendungen
-            Springer, Berlin; Auflage: 9., überarb. und erw. A. (8. Dezember 2004)
+        [2] Engeln-MÃ¼llges, Gisela: Numerik-Algorithmen: Verfahren, Beispiele, Anwendungen
+            Springer, Berlin; Auflage: 9., Ã¼berarb. und erw. A. (8. Dezember 2004)
             Section 4.10.2, page 175
 
         [3] Hanrath, Wilhelm: Mathematik III / Numerik, Vorlesungsskript zur
