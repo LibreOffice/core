@@ -34,17 +34,24 @@ for var in EBOOK_LIBS FREEHAND_LIBS HARFBUZZ_LIBS HUNSPELL_LIBS HYPHEN_LIB MYTHE
     done
 done
 
-androidlibs=
-if test "$OS" = ANDROID; then
-    androidlibs="$WORKDIR/UnpackedTarball/curl/lib/.libs/*.a"
-    androidlibs="$androidlibs $WORKDIR/UnpackedTarball/fontconfig/src/.libs/libfontconfig.a"
-    androidlibs="$androidlibs $WORKDIR/UnpackedTarball/freetype/objs/.libs/libfreetype.a"
-fi
+case $OS in
+ANDROID)
+    oslibs="$WORKDIR/UnpackedTarball/curl/lib/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/fontconfig/src/.libs/libfontconfig.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/freetype/objs/.libs/libfreetype.a"
+    ;;
+IOS)
+    oslibs="$WORKDIR/UnpackedTarball/icu/source/stubdata/*.a"
+    ;;
+*)
+    oslibs=
+    ;;
+esac
 
 echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $foolibs \
      $WORKDIR/LinkTarget/StaticLibrary/lib*.a \
-     $androidlibs \
+     $oslibs \
      $WORKDIR/UnpackedTarball/glew/lib/*.a \
      $WORKDIR/UnpackedTarball/icu/source/lib/*.a \
      $WORKDIR/UnpackedTarball/lcms2/src/.libs/*.a \
