@@ -2712,7 +2712,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
             aLine.append( "\n" );
         }
     }
-    if( ! rEle.m_aBBox.IsEmpty() || rEle.m_aAttributes.size() )
+    if( (! rEle.m_aBBox.IsEmpty()) || (! rEle.m_aAttributes.empty()) )
     {
         OString aAttribs =  emitStructureAttributes( rEle );
         if( !aAttribs.isEmpty() )
