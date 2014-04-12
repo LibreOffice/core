@@ -63,18 +63,18 @@ extern "C" void lo_initialize(NSString *documentPath)
             } else {
                 UErrorCode icuStatus = U_ZERO_ERROR;
                 udata_setCommonData(icudata, &icuStatus);
+#if OSL_DEBUG_LEVEL > 0
                 if (U_FAILURE(icuStatus))
                     NSLog(@"udata_setCommonData failed");
                 else {
-#if OSL_DEBUG_LEVEL > 0
                     // Test that ICU works...
                     UConverter *cnv = ucnv_open("iso-8859-3", &icuStatus);
                     NSLog(@"ucnv_open(iso-8859-3)-> %p, err = %s, name=%s",
                           (void *)cnv, u_errorName(icuStatus), (!cnv)?"?":ucnv_getName(cnv,&icuStatus));
                     if (U_SUCCESS(icuStatus))
                         ucnv_close(cnv);
-#endif
                 }
+#endif
             }
         }
         close(fd);
