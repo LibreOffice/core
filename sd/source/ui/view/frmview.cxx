@@ -1011,7 +1011,7 @@ bool FrameView::IsNavigatorShowingAllShapes (void) const
     return mbIsNavigatorShowingAllShapes;
 }
 
-
+sal_Bool FrameView::bLoadSavedPage = sal_True;
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
