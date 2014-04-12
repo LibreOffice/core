@@ -1,43 +1,3 @@
---- misc/boost_1_44_0/boost/date_time/date_names_put.hpp	2008-02-27 21:00:24.000000000 +0100
-+++ misc/build/boost_1_44_0/boost/date_time/date_names_put.hpp	2011-10-05 16:58:58.413575307 +0200
-@@ -218,14 +218,14 @@
-                          const charT* const weekday_long_names[],
-                          charT separator_char = '-',
-                          ymd_order_spec order_spec = ymd_order_iso,
--                         month_format_spec month_format = month_as_short_string) :
-+                         month_format_spec month_format_ = month_as_short_string) :
-         month_short_names_(month_short_names),
-         month_long_names_(month_long_names),
-         special_value_names_(special_value_names),
-         weekday_short_names_(weekday_short_names),
-         weekday_long_names_(weekday_long_names),
-         order_spec_(order_spec),
--        month_format_spec_(month_format)
-+        month_format_spec_(month_format_)
-       {
-         separator_char_[0] = separator_char;
-         separator_char_[1] = '\0';
---- misc/boost_1_44_0/boost/ptr_container/detail/map_iterator.hpp	2008-06-24 22:37:35.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/ptr_container/detail/map_iterator.hpp	2011-02-04 16:39:19.000000000 +0100
-@@ -49,7 +49,7 @@
-             : first(rp->first), second(rp->second)
-             { }
-             
--            const ref_pair* const operator->() const
-+            const ref_pair* operator->() const
-             {
-                 return this;
-             }
---- misc/boost_1_44_0/boost/ptr_container/ptr_map_adapter.hpp	2008-06-24 22:37:35.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/ptr_container/ptr_map_adapter.hpp	2011-02-04 16:39:19.000000000 +0100
-@@ -477,6 +477,7 @@
-         }
-                 
-         ptr_map_adapter( const ptr_map_adapter& r )
-+          : base_type()
-         {
-             map_basic_clone_and_insert( r.begin(), r.end() );      
-         }
 --- misc/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2009-11-01 12:07:12.000000000 +0100
 +++ misc/build/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2011-02-04 16:39:19.000000000 +0100
 @@ -476,19 +476,19 @@
@@ -45,7 +5,7 @@
      
          void transfer( iterator before, value_type* from, 
 -                       size_type size, bool delete_from = true ) // strong 
-+                       size_type size_, bool delete_from = true ) // strong 
++                       size_type size_, bool delete_from = true ) // strong
          {
              BOOST_ASSERT( from != 0 );
              if( delete_from )
@@ -64,34 +24,6 @@
              }
          }
  
-@@ -671,6 +671,7 @@
-         void range_check_impl( iterator first, iterator last,
-                                std::random_access_iterator_tag )
-         {
-+            (void)first; (void)last;
-             BOOST_ASSERT( first <= last && "out of range unique()/erase_if()" );
-             BOOST_ASSERT( this->begin() <= first && "out of range unique()/erase_if()" );
-             BOOST_ASSERT( last <= this->end() && "out of range unique()/erase_if)(" );             
---- misc/boost_1_44_0/boost/spirit/home/classic/symbols/symbols.hpp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/symbols/symbols.hpp	2011-02-04 16:39:19.000000000 +0100
-@@ -102,13 +102,13 @@
-     {
-         typedef typename ScannerT::iterator_t iterator_t;
-         iterator_t first = scan.first;
--        typename SetT::search_info result = SetT::find(scan);
-+        typename SetT::search_info result_ = SetT::find(scan);
- 
--        if (result.data)
-+        if (result_.data)
-             return scan.
-                 create_match(
--                    result.length,
--                    symbol_ref_t(*result.data),
-+                    result_.length,
-+                    symbol_ref_t(*result_.data),
-                     first,
-                     scan.first);
-         else
 --- misc/boost_1_44_0/boost/ptr_container/exception.hpp	2011-02-05 09:42:56.074932485 +0000
 +++ misc/build/boost_1_44_0/boost/ptr_container/exception.hpp	2011-02-05 09:43:00.350931536 +0000
 @@ -24,7 +24,7 @@
@@ -119,24 +51,13 @@
      private:
          template< class ForwardIterator >
 -        ForwardIterator advance( ForwardIterator begin, size_type n ) 
-+        ForwardIterator advance( ForwardIterator begin_, size_type n ) 
++        ForwardIterator advance( ForwardIterator begin_, size_type n )
          {
 -            ForwardIterator iter = begin;
 +            ForwardIterator iter = begin_;
              std::advance( iter, n );
              return iter;
          }        
---- misc/boost_1_44_0/boost/ptr_container/detail/static_move_ptr.hpp	2011-02-05 09:55:44.846931338 +0000
-+++ misc/build/boost_1_44_0/boost/ptr_container/detail/static_move_ptr.hpp	2011-02-05 09:56:42.760931701 +0000
-@@ -151,7 +151,7 @@
-     deleter_const_reference get_deleter() const { return impl_.second(); }
- private:
-     template<typename TT, typename DD>
--    void check(const static_move_ptr<TT, DD>& ptr)
-+    void check(const static_move_ptr<TT, DD>&)
-         {
-             typedef move_ptrs::is_smart_ptr_convertible<TT, T> convertible;
-             BOOST_STATIC_ASSERT(convertible::value);
 --- misc/boost_1_44_0/boost/ptr_container/detail/move.hpp	2011-02-05 10:01:21.156931884 +0000
 +++ misc/build/boost_1_44_0/boost/ptr_container/detail/move.hpp	2011-02-05 10:01:14.160931007 +0000
 @@ -20,7 +20,7 @@
@@ -148,26 +69,17 @@
      Ptr& ptr() const { return ptr_; }
  private:
      Ptr& ptr_;
---- misc/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp	2011-02-08 09:24:50.817320629 +0000
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp	2011-02-08 09:25:20.496639901 +0000
-@@ -210,7 +210,7 @@
-             subrule_list<
-                 subrule_parser<ID2, DefT2, ContextT2>,
-                 nil_t> >
--        operator,(subrule_parser<ID2, DefT2, ContextT2> const& rhs) const
-+        operator,(subrule_parser<ID2, DefT2, ContextT2> const& rhs_) const
+--- misc/boost_1_44_0/boost/ptr_container/detail/static_move_ptr.hpp	2011-02-05 09:55:44.846931338 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/static_move_ptr.hpp	2011-02-05 09:56:42.760931701 +0000
+@@ -151,7 +151,7 @@
+     deleter_const_reference get_deleter() const { return impl_.second(); }
+ private:
+     template<typename TT, typename DD>
+-    void check(const static_move_ptr<TT, DD>& ptr)
++    void check(const static_move_ptr<TT, DD>&)
          {
-             return subrule_list<
-                 self_t,
-@@ -220,7 +220,7 @@
-                         *this,
-                         subrule_list<
-                             subrule_parser<ID2, DefT2, ContextT2>, nil_t>(
--                                rhs, nil_t()));
-+                                rhs_, nil_t()));
-         }
- 
-         typename DefT::embed_t rhs;
+             typedef move_ptrs::is_smart_ptr_convertible<TT, T> convertible;
+             BOOST_STATIC_ASSERT(convertible::value);
 --- misc/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2011-02-09 08:49:00.416529470 +0000
 +++ misc/build/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2011-02-09 08:50:44.607653864 +0000
 @@ -510,72 +510,72 @@
@@ -182,7 +94,7 @@
 +            if( old_size > size_ )
              {
 -                this->erase( boost::next( this->begin(), size ), this->end() );  
-+                this->erase( boost::next( this->begin(), size_ ), this->end() );  
++                this->erase( boost::next( this->begin(), size_ ), this->end() );
              }
 -            else if( size > old_size )
 +            else if( size_ > old_size )
@@ -205,7 +117,7 @@
 +            if( old_size > size_ )
              {
 -                this->erase( boost::next( this->begin(), size ), this->end() );  
-+                this->erase( boost::next( this->begin(), size_ ), this->end() );  
++                this->erase( boost::next( this->begin(), size_ ), this->end() );
              }
 -            else if( size > old_size )
 +            else if( size_ > old_size )
@@ -216,7 +128,7 @@
              }
  
 -            BOOST_ASSERT( this->size() == size );        
-+            BOOST_ASSERT( this->size() == size_ );        
++            BOOST_ASSERT( this->size() == size_ );
          }
  
 -        void rresize( size_type size ) // basic
@@ -228,7 +140,7 @@
              {
                  this->erase( this->begin(), 
 -                             boost::next( this->begin(), old_size - size ) );  
-+                             boost::next( this->begin(), old_size - size_ ) );  
++                             boost::next( this->begin(), old_size - size_ ) );
              }
 -            else if( size > old_size )
 +            else if( size_ > old_size )
@@ -252,7 +164,7 @@
              {
                  this->erase( this->begin(), 
 -                             boost::next( this->begin(), old_size - size ) );  
-+                             boost::next( this->begin(), old_size - size_ ) );  
++                             boost::next( this->begin(), old_size - size_ ) );
              }
 -            else if( size > old_size )
 +            else if( size_ > old_size )
@@ -267,16 +179,3 @@
          }           
                  
      public: // algorithms
---- misc/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-03-04 11:33:36.269274940 +0000
-+++ misc/build/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-03-04 11:33:36.269274940 +0000
-@@ -259,6 +259,10 @@
- 
-         static void enforce_null_policy( const Ty_* x, const char* msg )
-         {
-+#ifdef BOOST_PTR_CONTAINER_NO_EXCEPTIONS
-+            (void)x;
-+            (void)msg;
-+#endif
-             if( !allow_null )
-             {
-                 BOOST_PTR_CONTAINER_THROW_EXCEPTION( 0 == x && "null not allowed", 

@@ -1,0 +1,12 @@
+base class ‘class boost::ptr_container_detail::ptr_map_adapter_base<chart::VDataSequence, std::__debug::map<rtl::OUString, void*, std::less<rtl::OUString>, std::allocator<std::pair<const rtl::OUString, void*> > >, boost::heap_clone_allocator, true>’ should be explicitly initialized in the copy constructor [-Werror=extra]
+
+--- misc/boost_1_44_0/boost/ptr_container/ptr_map_adapter.hpp	2008-06-24 22:37:35.000000000 +0200
++++ misc/build/boost_1_44_0/boost/ptr_container/ptr_map_adapter.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -477,6 +477,7 @@
+         }
+                 
+         ptr_map_adapter( const ptr_map_adapter& r )
++          : base_type()
+         {
+             map_basic_clone_and_insert( r.begin(), r.end() );      
+         }

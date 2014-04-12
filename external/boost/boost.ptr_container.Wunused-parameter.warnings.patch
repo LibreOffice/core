@@ -1,0 +1,23 @@
+--- misc/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-03-04 11:33:36.269274940 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-03-04 11:33:36.269274940 +0000
+@@ -259,6 +259,10 @@
+ 
+         static void enforce_null_policy( const Ty_* x, const char* msg )
+         {
++#ifdef BOOST_PTR_CONTAINER_NO_EXCEPTIONS
++            (void)x;
++            (void)msg;
++#endif
+             if( !allow_null )
+             {
+                 BOOST_PTR_CONTAINER_THROW_EXCEPTION( 0 == x && "null not allowed", 
+--- misc/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2009-11-01 12:07:12.000000000 +0100
++++ misc/build/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -671,6 +671,7 @@
+         void range_check_impl( iterator first, iterator last,
+                                std::random_access_iterator_tag )
+         {
++            (void)first; (void)last;
+             BOOST_ASSERT( first <= last && "out of range unique()/erase_if()" );
+             BOOST_ASSERT( this->begin() <= first && "out of range unique()/erase_if()" );
+             BOOST_ASSERT( last <= this->end() && "out of range unique()/erase_if)(" );             

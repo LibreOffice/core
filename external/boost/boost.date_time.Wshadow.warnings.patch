@@ -1,0 +1,19 @@
+--- misc/boost_1_44_0/boost/date_time/date_names_put.hpp	2008-02-27 21:00:24.000000000 +0100
++++ misc/build/boost_1_44_0/boost/date_time/date_names_put.hpp	2011-10-05 16:58:58.413575307 +0200
+@@ -218,14 +218,14 @@
+                          const charT* const weekday_long_names[],
+                          charT separator_char = '-',
+                          ymd_order_spec order_spec = ymd_order_iso,
+-                         month_format_spec month_format = month_as_short_string) :
++                         month_format_spec month_format_ = month_as_short_string) :
+         month_short_names_(month_short_names),
+         month_long_names_(month_long_names),
+         special_value_names_(special_value_names),
+         weekday_short_names_(weekday_short_names),
+         weekday_long_names_(weekday_long_names),
+         order_spec_(order_spec),
+-        month_format_spec_(month_format)
++        month_format_spec_(month_format_)
+       {
+         separator_char_[0] = separator_char;
+         separator_char_[1] = '\0';

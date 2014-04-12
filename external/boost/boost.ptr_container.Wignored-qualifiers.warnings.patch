@@ -1,0 +1,11 @@
+--- misc/boost_1_44_0/boost/ptr_container/detail/map_iterator.hpp	2008-06-24 22:37:35.000000000 +0200
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/map_iterator.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -49,7 +49,7 @@
+             : first(rp->first), second(rp->second)
+             { }
+             
+-            const ref_pair* const operator->() const
++            const ref_pair* operator->() const
+             {
+                 return this;
+             }

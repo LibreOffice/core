@@ -1,0 +1,40 @@
+--- misc/boost_1_44_0/boost/spirit/home/classic/symbols/symbols.hpp	2008-06-22 17:05:38.000000000 +0200
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/symbols/symbols.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -102,13 +102,13 @@
+     {
+         typedef typename ScannerT::iterator_t iterator_t;
+         iterator_t first = scan.first;
+-        typename SetT::search_info result = SetT::find(scan);
++        typename SetT::search_info result_ = SetT::find(scan);
+ 
+-        if (result.data)
++        if (result_.data)
+             return scan.
+                 create_match(
+-                    result.length,
+-                    symbol_ref_t(*result.data),
++                    result_.length,
++                    symbol_ref_t(*result_.data),
+                     first,
+                     scan.first);
+         else
+--- misc/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp	2011-02-08 09:24:50.817320629 +0000
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp	2011-02-08 09:25:20.496639901 +0000
+@@ -210,7 +210,7 @@
+             subrule_list<
+                 subrule_parser<ID2, DefT2, ContextT2>,
+                 nil_t> >
+-        operator,(subrule_parser<ID2, DefT2, ContextT2> const& rhs) const
++        operator,(subrule_parser<ID2, DefT2, ContextT2> const& rhs_) const
+         {
+             return subrule_list<
+                 self_t,
+@@ -220,7 +220,7 @@
+                         *this,
+                         subrule_list<
+                             subrule_parser<ID2, DefT2, ContextT2>, nil_t>(
+-                                rhs, nil_t()));
++                                rhs_, nil_t()));
+         }
+ 
+         typename DefT::embed_t rhs;
