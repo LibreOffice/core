@@ -1876,6 +1876,7 @@
 					$LO_SRCDIR/include,
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
+					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
