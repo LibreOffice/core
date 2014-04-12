@@ -736,6 +736,10 @@ void OutputDevice::ClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon 
             if( !mpGraphics && !ImplGetGraphics() )
                 return;
 
+            // secure clip region
+            Push( PUSH_CLIPREGION );
+            IntersectClipRegion( aBoundRect );
+
             if( mbInitClipRegion )
                 ImplInitClipRegion();
 
@@ -761,6 +765,8 @@ void OutputDevice::ClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon 
                 else
                     ImplDrawComplexGradient( aRect, rGradient, false, &aClipPolyPoly );
             }
+
+            Pop();
         }
     }
 }
