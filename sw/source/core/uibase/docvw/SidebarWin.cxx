@@ -270,12 +270,6 @@ SfxItemSet SwSidebarWin::DefaultItem()
 {
     SfxItemSet aItem( mrView.GetDocShell()->GetPool() );
     aItem.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
-    aItem.Put(SvxFontItem(FAMILY_SWISS,
-                          GetSettings().GetStyleSettings().GetFieldFont().GetName(),
-                          OUString(),
-                          PITCH_DONTKNOW,
-                          RTL_TEXTENCODING_DONTKNOW,
-                          EE_CHAR_FONTINFO));
     return aItem;
 }
 
