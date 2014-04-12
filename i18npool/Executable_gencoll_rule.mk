@@ -20,7 +20,6 @@ $(eval $(call gb_Executable_use_libraries,gencoll_rule,\
 ))
 
 $(eval $(call gb_Executable_use_externals,gencoll_rule,\
-	icudata \
 	icui18n \
 	icuuc \
 	icu_headers \

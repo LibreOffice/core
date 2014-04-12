@@ -38,7 +38,6 @@ $(eval $(call gb_Library_use_sdk_api,sc))
 $(eval $(call gb_Library_use_externals,sc,\
     boost_headers \
     icu_headers \
-    icudata \
     icui18n \
     icuuc \
     libxml2 \

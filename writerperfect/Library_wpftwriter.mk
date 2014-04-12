@@ -53,7 +53,6 @@ $(eval $(call gb_Library_use_externals,wpftwriter,\
 	ebook \
 	etonyek \
 	icui18n \
-	icudata \
 	icuuc \
 	libxml2 \
 	mwaw \

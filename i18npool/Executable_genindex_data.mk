@@ -15,7 +15,6 @@ $(eval $(call gb_Executable_use_libraries,genindex_data,\
 ))
 
 $(eval $(call gb_Executable_use_externals,genindex_data,\
-	icudata \
 	icui18n \
 	icuuc \
 ))

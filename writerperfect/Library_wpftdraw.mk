@@ -58,7 +58,6 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
 	libxml2 \
 	icui18n \
 	icuuc \
-	icudata \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,wpftdraw,\

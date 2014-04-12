@@ -31,7 +31,6 @@ endif
 $(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
 	boost_headers \
     icu_headers \
-    icudata \
     icui18n \
     icuuc \
 	libxml2 \

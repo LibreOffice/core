@@ -12,7 +12,6 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_rangelst_test))
 $(eval $(call gb_CppunitTest_use_externals,sc_rangelst_test, \
 	boost_headers \
     icu_headers \
-    icudata \
     icui18n \
     icuuc \
 	libxml2 \
