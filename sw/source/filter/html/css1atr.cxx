@@ -2577,10 +2577,6 @@ static Writer& OutCSS1_SvxKerning( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Only export Kerning-Item, if the Style supports it fully
-    if( !rHTMLWrt.IsHTMLMode(HTMLMODE_FULL_STYLES) )
-        return rWrt;
-
     sal_Int16 nValue = ((const SvxKerningItem&)rHt).GetValue();
     if( nValue )
     {
