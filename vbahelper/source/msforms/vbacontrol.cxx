@@ -699,10 +699,6 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
         xVBAControl.set( new ScVbaControl( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoFrameModel" ) )
         xVBAControl.set( new ScVbaFrame( xVbaParent, xContext, xControl, xModel, xGeoHelper.release(), xDialog ) );
-    else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlSpinButtonModel" ) )
-        xVBAControl.set( new ScVbaSpinButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
-    else if ( xServiceInfo->supportsService( "com.sun.star.custom.awt.UnoControlSystemAXContainerModel" ) )
-        xVBAControl.set( new VbaSystemAXControl( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     if( xVBAControl.is() )
         return xVBAControl;
     throw uno::RuntimeException( "Unsupported control." , uno::Reference< uno::XInterface >() );
