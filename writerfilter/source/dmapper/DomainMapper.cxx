@@ -107,6 +107,9 @@ LoggedStream(dmapper_logger, "DomainMapper"),
         PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_SURROUND_TEXT_WRAP_SMALL ),
         uno::makeAny( true ) );
 
+    // Don't load the default style definitions to avoid weird mix
+    m_pImpl->SetDocumentSettingsProperty("StylesNoDefault", uno::makeAny(true));
+
     //import document properties
     try
     {
