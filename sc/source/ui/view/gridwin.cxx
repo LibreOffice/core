@@ -3050,7 +3050,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 Link aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
                 pEditView->ExecuteSpellPopup( aMenuPos, &aLink );
 
-                bDone = sal_True;
+                bDone = true;
             }
         }
         else if ( !bMouse )
