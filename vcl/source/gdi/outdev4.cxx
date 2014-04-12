@@ -613,24 +613,6 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
     DrawGradient ( aPolyPoly, rGradient );
 }
 
-void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly )
-{
-    const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
-    const bool  bOldOutput = IsOutputEnabled();
-
-    EnableOutput( false );
-    Push( PUSH_RASTEROP );
-    SetRasterOp( ROP_XOR );
-    DrawGradient( aBoundRect, rGradient );
-    SetFillColor( COL_BLACK );
-    SetRasterOp( ROP_0 );
-    DrawPolyPolygon( rPolyPoly );
-    SetRasterOp( ROP_XOR );
-    DrawGradient( aBoundRect, rGradient );
-    Pop();
-    EnableOutput( bOldOutput );
-}
-
 void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                                  const Gradient& rGradient )
 {
@@ -666,9 +648,10 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
         if( mpMetaFile )
         {
+            const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+
             if ( rPolyPoly.IsRect() )
             {
-                const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
                 mpMetaFile->AddAction( new MetaGradientAction( aBoundRect, aGradient ) );
             }
             else
@@ -676,7 +659,10 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                 mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
                 mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
 
-                ClipAndDrawGradientMetafile ( rGradient, rPolyPoly );
+                Push( PUSH_CLIPREGION );
+                IntersectClipRegion(Region(rPolyPoly));
+                DrawGradient( aBoundRect, rGradient );
+                Pop();
 
                 mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );
             }

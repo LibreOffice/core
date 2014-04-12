@@ -841,9 +841,6 @@ protected:
     virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                        DrawInvisiblePolygon( const PolyPolygon& rPolyPoly );
 
-    void                        ClipAndDrawGradient( Gradient &rGradient, const PolyPolygon &rPolyPoly );
-    virtual void                ClipAndDrawGradientMetafile ( const Gradient &rGradient, const PolyPolygon &rPolyPoly );
-
 private:
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
 
