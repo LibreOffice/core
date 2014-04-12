@@ -395,7 +395,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
 
     while(iter != m_vRunData.end() && iter->m_EndPos <= nStart)
     {
-        iter++;
+        ++iter;
     }
     if(iter == m_vRunData.end())
     {
