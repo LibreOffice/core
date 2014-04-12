@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_cab8432d",
+        "filename": "sw/source/core/doc/docnew.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-12T22:06:17Z",
+      "side": 0,
+      "message": "this thing contains an SfxItemSet that is tied to the document\u0027s SwAttrPool... it\u0027s possible that relying on the scoped_ptr\u0027s implicit delete will crash, because it will happen after the SwAttrPool is freed; use an explicit reset() if that turns out to be a problem.",
+      "revId": "2b5609634089de64768a97bdfd4bb120694ab49c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

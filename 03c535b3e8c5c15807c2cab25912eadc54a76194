@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_4aa53303",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-12T22:06:17Z",
+      "side": 1,
+      "message": "please put a space between \"\u003c\" and \"::\" (older compilers without C++11 support cannot parse this",
+      "revId": "03c535b3e8c5c15807c2cab25912eadc54a76194",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_6aaaf7d5",
+        "filename": "sw/source/core/doc/DocumentDeviceManager.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-12T22:06:17Z",
+      "side": 1,
+      "message": "get() is a SwDoc-method (this fails to build with debug)",
+      "revId": "03c535b3e8c5c15807c2cab25912eadc54a76194",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_aaab0fd5",
+        "filename": "sw/source/core/inc/DocumentDeviceManager.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-12T22:06:17Z",
+      "side": 1,
+      "message": "please use SAL_OVERRIDE on these interface method implementations",
+      "revId": "03c535b3e8c5c15807c2cab25912eadc54a76194",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a80dd14_8aae4be6",
+        "filename": "sw/source/core/inc/DocumentDeviceManager.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-12T22:06:17Z",
+      "side": 1,
+      "message": "it is good style to mark a destructor in a derived class as \"virtual\" (even though it\u0027s not strictly necessary)",
+      "revId": "03c535b3e8c5c15807c2cab25912eadc54a76194",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
