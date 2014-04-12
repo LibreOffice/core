@@ -131,8 +131,12 @@ namespace T602ImportFilter {
 
 inistruct ini;
 
-T602ImportFilter::T602ImportFilter(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > &r ) :
-    mxMSF( r ) {}
+T602ImportFilter::T602ImportFilter(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > &r )
+    : mxMSF(r)
+    , mpAttrList(NULL)
+    , node(START)
+{
+}
 
 T602ImportFilter::~T602ImportFilter()
 {

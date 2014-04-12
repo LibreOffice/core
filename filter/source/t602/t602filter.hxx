@@ -163,7 +163,8 @@ private:
 
     tnode node;         // START
 
-    struct {
+    struct format602struct
+    {
         sal_Int16   mt;       // row for header
         sal_Int16   mb;       // row for footer
         sal_Int16   tb;       // tabs
@@ -173,7 +174,21 @@ private:
         sal_Int16   lm;       // left border
         sal_Int16   rm;       // right border
         sal_Int16   pl;       // page length
-    } format602;
+        format602struct()
+            : mt(0)
+            , mb(0)
+            , tb(0)
+            , ct(0)
+            , pn(0)
+            , lh(0)
+            , lm(0)
+            , rm(0)
+            , pl(0)
+        {
+        }
+    };
+
+    format602struct format602;
 
     // Initialisation constants - they are not changed during the conversion
 
@@ -181,16 +196,27 @@ private:
 
     // Font state - changes based on font
 
-    struct {
+    struct fststruct
+    {
         fonts nowfnt;     // current font
         fonts oldfnt;     // previous font
         bool uline;       // underlined
         bool olduline;    // previous value of uline (font change)
-    } fst;
+        fststruct()
+            : nowfnt(standard)
+            , oldfnt(standard)
+            , uline(false)
+            , olduline(false)
+        {
+        }
+    };
+
+    fststruct fst;
 
     // Paragraph state
 
-    struct {
+    struct pststruct
+    {
         sal_Int16 pars;            //       the number of line endings times linespacing on the current page
         bool comment;        //       in comments
         sal_Int16 wasspace;        // 0     there was a space - for reformatting
@@ -198,7 +224,19 @@ private:
         bool ccafterln;      // false
         bool willbeeop;      // false
         bool waspar;         // false
-    } pst;
+        pststruct()
+            : pars(0)
+            , comment(false)
+            , wasspace(0)
+            , wasfdash(false)
+            , ccafterln(false)
+            , willbeeop(false)
+            , waspar(false)
+        {
+        }
+    };
+
+    pststruct pst;
 
     void Reset602();
     unsigned char Readchar602();
