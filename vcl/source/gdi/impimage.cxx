@@ -297,7 +297,7 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
                 {
                     if( aTmpBmpEx.IsAlpha() )
                         aTmpBmpEx = BitmapEx( aTmpBmp, aTmpBmpEx.GetAlpha() );
-                    else if( aTmpBmpEx.IsAlpha() )
+                    else if( aTmpBmpEx.IsTransparent() )
                         aTmpBmpEx = BitmapEx( aTmpBmp, aTmpBmpEx.GetMask() );
                 }
 
