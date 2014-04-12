@@ -3654,6 +3654,15 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
                     return NotEqual;
             }
             break;
+            case formula::svExternal:
+            {
+                if (pThisTok->GetExternal() != pOtherTok->GetExternal())
+                    return NotEqual;
+
+                if (pThisTok->GetByte() != pOtherTok->GetByte())
+                    return NotEqual;
+            }
+            break;
             default:
                 ;
         }
