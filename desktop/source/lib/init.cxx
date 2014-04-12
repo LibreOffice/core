@@ -195,7 +195,7 @@ static LibreOfficeDocument* lo_documentLoad(LibreOffice* pThis, const char* pURL
                                             aURL, OUString("_blank"), 0,
                                             uno::Sequence<css::beans::PropertyValue>());
 
-        if (xComponentLoader.is())
+        if (xComponent.is())
             return new LibLODocument_Impl(xComponent);
         else
             pLib->maLastExceptionMsg = "unknown load failure";
