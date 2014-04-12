@@ -37,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE03BF9118F9648F00620DC7 /* udata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = udata.cpp; path = ../../../workdir/UnpackedTarball/icu/source/common/udata.cpp; sourceTree = "<group>"; };
 		BE0898E81860D42B0021A679 /* brand.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = brand.cxx; path = ../../../vcl/source/app/brand.cxx; sourceTree = "<group>"; };
 		BE0898E91860D42B0021A679 /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../../../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
 		BE0898EA1860D42B0021A679 /* dndhelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dndhelp.cxx; path = ../../../vcl/source/app/dndhelp.cxx; sourceTree = "<group>"; };
@@ -730,6 +731,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BE03BF8F18F9641D00620DC7 /* External library sources */ = {
+			isa = PBXGroup;
+			children = (
+				BE03BF9018F9642F00620DC7 /* icu */,
+			);
+			name = "External library sources";
+			sourceTree = "<group>";
+		};
+		BE03BF9018F9642F00620DC7 /* icu */ = {
+			isa = PBXGroup;
+			children = (
+				BE03BF9118F9648F00620DC7 /* udata.cpp */,
+			);
+			name = icu;
+			sourceTree = "<group>";
+		};
 		BE0898E61860D3CD0021A679 /* LibreOffice source files */ = {
 			isa = PBXGroup;
 			children = (
@@ -1273,6 +1290,7 @@
 		BE82BD6918218E2E00A447B5 = {
 			isa = PBXGroup;
 			children = (
+				BE03BF8F18F9641D00620DC7 /* External library sources */,
 				BE0898E61860D3CD0021A679 /* LibreOffice source files */,
 				BE82BD7B18218E2E00A447B5 /* TiledLibreOffice */,
 				BEEEF9681860A21F00FBDE67 /* Resources */,
