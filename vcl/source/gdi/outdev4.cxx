@@ -760,10 +760,22 @@ void OutputDevice::ClipAndDrawGradient ( Gradient &rGradient, const PolyPolygon 
                 if ( !rGradient.GetSteps() )
                     rGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
+                if ( rPolyPoly.IsRect() )
+                {
+                    // because we draw with no border line, we have to expand gradient
+                    // rect to avoid missing lines on the right and bottom edge
+                    aRect.Left()--;
+                    aRect.Top()--;
+                    aRect.Right()++;
+                    aRect.Bottom()++;
+                }
+
+                // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
+                // polypolygon, so pass in a NULL for the clipping parameter
                 if( rGradient.GetStyle() == GradientStyle_LINEAR || rGradient.GetStyle() == GradientStyle_AXIAL )
-                    ImplDrawLinearGradient( aRect, rGradient, false, &aClipPolyPoly );
+                    ImplDrawLinearGradient( aRect, rGradient, false, aClipPolyPoly.IsRect() ? NULL : &aClipPolyPoly );
                 else
-                    ImplDrawComplexGradient( aRect, rGradient, false, &aClipPolyPoly );
+                    ImplDrawComplexGradient( aRect, rGradient, false, aClipPolyPoly.IsRect() ? NULL : &aClipPolyPoly );
             }
 
             Pop();
