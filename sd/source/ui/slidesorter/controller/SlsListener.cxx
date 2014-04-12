@@ -20,6 +20,7 @@
 
 #include "SlsListener.hxx"
 
+#include "SdUnoDrawView.hxx"
 #include "SlideSorter.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "ViewShellHint.hxx"
@@ -500,6 +501,9 @@ void SAL_CALL Listener::propertyChange (
                 Any aPageNumber = xPageSet->getPropertyValue ("Number");
                 sal_Int32 nCurrentPage = 0;
                 aPageNumber >>= nCurrentPage;
+                FrameView* pFrameView = mpBase->GetDocShell()->GetFrameView();
+                if(nCurrentPage == 1 && pFrameView != NULL && SdUnoDrawView::bLoadSavedPage )
+                    nCurrentPage= pFrameView->GetSelectedPageOnLoad() + 1;
                 // The selection is already set but we call SelectPage()
                 // nevertheless in order to make the new current page the
                 // last recently selected page of the PageSelector.  This is

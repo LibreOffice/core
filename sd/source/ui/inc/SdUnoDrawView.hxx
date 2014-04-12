@@ -41,6 +41,7 @@ class SdUnoDrawView
       public DrawSubControllerInterfaceBase
 {
 public:
+    static sal_Bool bLoadSavedPage;
     SdUnoDrawView (
         DrawViewShell& rViewShell,
         View& rView) throw();

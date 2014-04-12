@@ -362,6 +362,7 @@ void SdUnoDrawView::setFastPropertyValue (
             {
                 Reference< drawing::XDrawPage > xPage;
                 rValue >>= xPage;
+                bLoadSavedPage = sal_False;
                 setCurrentPage( xPage );
             }
             break;
@@ -627,6 +628,7 @@ Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  ) throw 
     return aSeq;
 }
 
+sal_Bool SdUnoDrawView::bLoadSavedPage = sal_True;
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

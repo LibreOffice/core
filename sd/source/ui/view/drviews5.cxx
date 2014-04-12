@@ -285,6 +285,8 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if (mePageKind != PK_HANDOUT)
     {
         nSelectedPage = pView->GetSelectedPage();
+        if(nSelectedPage == 0 && SdUnoDrawView::bLoadSavedPage)
+            nSelectedPage = pView->GetSelectedPageOnLoad();
     }
 
     EditMode eNewEditMode = pView->GetViewShEditMode(mePageKind);
