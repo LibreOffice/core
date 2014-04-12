@@ -221,9 +221,6 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
    xSettings->setPropertyValue( "TabOverflow", uno::makeAny( sal_True ) );
    xSettings->setPropertyValue( "UnbreakableNumberings", uno::makeAny( sal_True ) );
 
-   // Don't load the default style definitions to avoid weird mix
-   xSettings->setPropertyValue( "StylesNoDefault", uno::makeAny( sal_True ) );
-
    xSettings->setPropertyValue("FloattableNomargins", uno::makeAny( sal_True ));
    xSettings->setPropertyValue( "ClippedPictures", uno::makeAny( sal_True ) );
    xSettings->setPropertyValue( "BackgroundParaOverDrawings", uno::makeAny( sal_True ) );

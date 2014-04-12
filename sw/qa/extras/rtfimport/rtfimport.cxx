@@ -1641,6 +1641,13 @@ DECLARE_RTFIMPORT_TEST(testFdo74823, "fdo74823.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(5391), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[2].Position);
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo74599, "fdo74599.rtf")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Heading 3"), uno::UNO_QUERY);
+    // Writer default styles weren't disabled, so the color was gray, not default (black).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), getProperty<sal_Int32>(xPropertySet, "CharColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
