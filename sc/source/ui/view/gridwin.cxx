@@ -136,6 +136,7 @@
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -2940,6 +2941,10 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         SCsROW nCellY = -1;
         pViewData->GetPosFromPixel(aPosPixel.X(), aPosPixel.Y(), eWhich, nCellX, nCellY);
 
+        bool bSpellError = false;
+        SCCOL nColSpellError = nCellX;
+        ScRefCellValue aSpellCheckCell;
+
         if ( bMouse )
         {
             ScDocument* pDoc = pViewData->GetDocument();
@@ -2962,14 +2967,39 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 // Selecting this cell is not allowed, neither is context menu.
                 return;
 
+            if (mpSpellCheckCxt)
+            {
+                // Find the first string to the left for spell checking in case the current cell is empty.
+                ScAddress aPos(nCellX, nCellY, nTab);
+                aSpellCheckCell.assign(*pDoc, aPos);
+                while (aSpellCheckCell.meType == CELLTYPE_NONE)
+                {
+                    // Loop until we get the first non-empty cell in the row.
+                    aPos.IncCol(-1);
+                    if (aPos.Col() < 0)
+                        break;
+
+                    aSpellCheckCell.assign(*pDoc, aPos);
+                }
+
+                if (aPos.Col() >= 0 && (aSpellCheckCell.meType == CELLTYPE_STRING || aSpellCheckCell.meType == CELLTYPE_EDIT))
+                    nColSpellError = aPos.Col();
+
+                bSpellError = (mpSpellCheckCxt->isMisspelled(nColSpellError, nCellY));
+                if (bSpellError)
+                {
+                    // Check and see if a misspelled word is under the mouse pointer.
+                    bSpellError = IsSpellErrorAtPos(aPosPixel, nColSpellError, nCellX, nCellY);
+                }
+            }
+
             //  #i18735# First select the item under the mouse pointer.
             //  This can change the selection, and the view state (edit mode, etc).
-            SelectForContextMenu( aPosPixel, nCellX, nCellY );
+            SelectForContextMenu(aPosPixel, bSpellError ? nColSpellError : nCellX, nCellY);
         }
 
-        sal_Bool bDone = false;
-        sal_Bool bEdit = pViewData->HasEditView(eWhich);
-        bool bSpellError = (mpSpellCheckCxt && mpSpellCheckCxt->isMisspelled(nCellX, nCellY));
+        bool bDone = false;
+        bool bEdit = pViewData->HasEditView(eWhich);
 
         if ( !bEdit )
         {
@@ -5091,6 +5121,54 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
         pViewData->GetView()->ResetTimer();
 }
 
+namespace {
+
+SvxAdjust toSvxAdjust( const ScPatternAttr& rPat )
+{
+    SvxCellHorJustify eHorJust =
+        static_cast<SvxCellHorJustify>(
+            static_cast<const SvxHorJustifyItem&>(rPat.GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+
+    SvxAdjust eSvxAdjust = SVX_ADJUST_LEFT;
+    switch (eHorJust)
+    {
+        case SVX_HOR_JUSTIFY_LEFT:
+        case SVX_HOR_JUSTIFY_REPEAT:            // nicht implementiert
+        case SVX_HOR_JUSTIFY_STANDARD:          // always Text if an EditCell type
+                eSvxAdjust = SVX_ADJUST_LEFT;
+                break;
+        case SVX_HOR_JUSTIFY_RIGHT:
+                eSvxAdjust = SVX_ADJUST_RIGHT;
+                break;
+        case SVX_HOR_JUSTIFY_CENTER:
+                eSvxAdjust = SVX_ADJUST_CENTER;
+                break;
+        case SVX_HOR_JUSTIFY_BLOCK:
+                eSvxAdjust = SVX_ADJUST_BLOCK;
+                break;
+    }
+
+    return eSvxAdjust;
+}
+
+boost::shared_ptr<ScFieldEditEngine> createEditEngine( ScDocShell* pDocSh, const ScPatternAttr& rPat )
+{
+    ScDocument* pDoc = pDocSh->GetDocument();
+
+    boost::shared_ptr<ScFieldEditEngine> pEngine(new ScFieldEditEngine(pDoc, pDoc->GetEditPool()));
+    ScSizeDeviceProvider aProv(pDocSh);
+    pEngine->SetRefDevice(aProv.GetDevice());
+    pEngine->SetRefMapMode(MAP_100TH_MM);
+    SfxItemSet aDefault = pEngine->GetEmptyItemSet();
+    rPat.FillEditItemSet(&aDefault);
+    aDefault.Put( SvxAdjustItem(toSvxAdjust(rPat), EE_PARA_JUST) );
+    pEngine->SetDefaults(aDefault);
+
+    return pEngine;
+}
+
+}
+
 bool ScGridWindow::GetEditUrl( const Point& rPos,
                                OUString* pName, OUString* pUrl, OUString* pTarget )
 {
@@ -5127,32 +5205,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
 
         //  EditEngine
 
-    ScFieldEditEngine aEngine(pDoc, pDoc->GetEditPool());
-    ScSizeDeviceProvider aProv(pDocSh);
-    aEngine.SetRefDevice( aProv.GetDevice() );
-    aEngine.SetRefMapMode( MAP_100TH_MM );
-    SfxItemSet aDefault( aEngine.GetEmptyItemSet() );
-    pPattern->FillEditItemSet( &aDefault );
-    SvxAdjust eSvxAdjust = SVX_ADJUST_LEFT;
-    switch (eHorJust)
-    {
-        case SVX_HOR_JUSTIFY_LEFT:
-        case SVX_HOR_JUSTIFY_REPEAT:            // nicht implementiert
-        case SVX_HOR_JUSTIFY_STANDARD:          // always Text if an EditCell type
-                eSvxAdjust = SVX_ADJUST_LEFT;
-                break;
-        case SVX_HOR_JUSTIFY_RIGHT:
-                eSvxAdjust = SVX_ADJUST_RIGHT;
-                break;
-        case SVX_HOR_JUSTIFY_CENTER:
-                eSvxAdjust = SVX_ADJUST_CENTER;
-                break;
-        case SVX_HOR_JUSTIFY_BLOCK:
-                eSvxAdjust = SVX_ADJUST_BLOCK;
-                break;
-    }
-    aDefault.Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
-    aEngine.SetDefaults( aDefault );
+    boost::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
 
     MapMode aEditMode = pViewData->GetLogicMode(eWhich);            // ohne Drawing-Skalierung
     Rectangle aLogicEdit = PixelToLogic( aEditRect, aEditMode );
@@ -5169,13 +5222,13 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
 
     if (bBreak)
         aPaperSize.Width() = nThisColLogic;
-    aEngine.SetPaperSize( aPaperSize );
+    pEngine->SetPaperSize( aPaperSize );
 
     boost::scoped_ptr<EditTextObject> pTextObj;
     if (aCell.meType == CELLTYPE_EDIT)
     {
         if (aCell.mpEditText)
-            aEngine.SetText(*aCell.mpEditText);
+            pEngine->SetText(*aCell.mpEditText);
     }
     else  // Not an Edit cell and is a formula cell with 'Hyperlink'
           // function if we have no URL, otherwise it could be a formula
@@ -5187,13 +5240,13 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
             pTextObj.reset(ScEditUtil::CreateURLObjectFromURL(*pDoc, sURL, sURL));
 
         if (pTextObj.get())
-            aEngine.SetText(*pTextObj);
+            pEngine->SetText(*pTextObj);
     }
 
     long nStartX = aLogicEdit.Left();
 
-        long nTextWidth = aEngine.CalcTextWidth();
-    long nTextHeight = aEngine.GetTextHeight();
+        long nTextWidth = pEngine->CalcTextWidth();
+    long nTextHeight = pEngine->GetTextHeight();
     if ( nTextWidth < nThisColLogic )
     {
         if (eHorJust == SVX_HOR_JUSTIFY_RIGHT)
@@ -5221,7 +5274,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     Point aLogicClick = PixelToLogic(rPos,aEditMode);
     if ( aLogicEdit.IsInside(aLogicClick) )
     {
-        EditView aTempView( &aEngine, this );
+        EditView aTempView(pEngine.get(), this);
         aTempView.SetOutputArea( aLogicEdit );
 
         sal_Bool bRet = false;
@@ -5253,6 +5306,61 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
         return bRet;
     }
     return false;
+}
+
+bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCCOL nCol2, SCROW nRow )
+{
+    if (!mpSpellCheckCxt)
+        return false;
+
+    SCTAB nTab = pViewData->GetTabNo();
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
+
+    ScAddress aCellPos(nCol1, nRow, nTab);
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, aCellPos);
+    if (aCell.meType != CELLTYPE_STRING && aCell.meType != CELLTYPE_EDIT)
+        return false;
+
+    const std::vector<editeng::MisspellRanges>* pRanges = mpSpellCheckCxt->getMisspellRanges(nCol1, nRow);
+    if (!pRanges)
+        return false;
+
+    const ScPatternAttr* pPattern = pDoc->GetPattern(nCol1, nRow, nTab);
+
+    Rectangle aEditRect = pViewData->GetEditArea(eWhich, nCol1, nRow, this, pPattern, false);
+    if (rPos.Y() < aEditRect.Top())
+        return false;
+
+    Rectangle aEditRect2 = pViewData->GetEditArea(eWhich, nCol2, nRow, this, pPattern, false);
+    long nExt = aEditRect2.Left() - aEditRect.Right() + aEditRect2.GetWidth();
+    aEditRect.setWidth(aEditRect.getWidth() + nExt);
+
+    MapMode aEditMode = pViewData->GetLogicMode(eWhich);
+    Rectangle aLogicEdit = PixelToLogic(aEditRect, aEditMode);
+    Point aLogicClick = PixelToLogic(rPos, aEditMode);
+
+    if (!aLogicEdit.IsInside(aLogicClick))
+        return false;
+
+    boost::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
+
+    Size aPaperSize = Size(1000000, 1000000);
+    pEngine->SetPaperSize(aPaperSize);
+
+    if (aCell.meType == CELLTYPE_EDIT)
+        pEngine->SetText(*aCell.mpEditText);
+    else
+        pEngine->SetText(aCell.mpString->getString());
+
+    pEngine->SetControlWord(pEngine->GetControlWord() | EE_CNTRL_ONLINESPELLING);
+    pEngine->SetAllMisspellRanges(*pRanges);
+
+    EditView aTempView(pEngine.get(), this);
+    aTempView.SetOutputArea(aLogicEdit);
+
+    return aTempView.IsWrongSpelledWordAtPos(rPos);
 }
 
 bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRange )
