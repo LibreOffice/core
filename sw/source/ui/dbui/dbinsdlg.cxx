@@ -162,7 +162,12 @@ struct _DB_Column
 struct _DB_ColumnConfigData: private boost::noncopyable
 {
     SwInsDBColumns aDBColumns;
-    OUString sSource, sTable, sEdit, sTblList, sTmplNm, sTAutoFmtNm;
+    OUString sSource;
+    OUString sTable;
+    OUString sEdit;
+    OUString sTblList;
+    OUString sTmplNm;
+    OUString sTAutoFmtNm;
     sal_Bool bIsTable : 1,
          bIsField : 1,
          bIsHeadlineOn : 1,
@@ -421,8 +426,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, Button*, pButton )
 {
     bool bShowTbl = pButton == m_pRbAsTable;
 
-    OUString sTxt(pButton->GetText());
-    m_pHeadFrame->set_label(MnemonicGenerator::EraseAllMnemonicChars(sTxt));
+    m_pHeadFrame->set_label(MnemonicGenerator::EraseAllMnemonicChars(pButton->GetText()));
 
     m_pLbTxtDbColumn->Show( !bShowTbl );
     m_pIbDbcolToEdit->Show( !bShowTbl );
@@ -527,7 +531,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
                 nInsPos = LISTBOX_ENTRY_NOTFOUND;
                 while( ++it != aDBColumns.end() &&
                         LISTBOX_ENTRY_NOTFOUND == (nInsPos = m_pLbTblDbColumn->
-                        GetEntryPos( OUString( (*it)->sColumn ))) )
+                        GetEntryPos( (*it)->sColumn )) )
                     ;
             }
 
@@ -590,8 +594,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
                 }
             }
 
-            aStr = aStr.replaceAt( nPos, 0, aFld );
-            m_pEdDbText->SetText( aStr );
+            m_pEdDbText->SetText( aStr.replaceAt( nPos, 0, aFld ) );
             nPos += aFld.getLength();
             m_pEdDbText->SetSelection( Selection( nPos ));
         }
@@ -803,7 +806,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
 
             if( bEnableFmt )
             {
-                sTxt = sTxt + " ("  + aSrch.sColumn + ")";
+                sTxt += " ("  + aSrch.sColumn + ")";
             }
 
             sal_Bool bIsDBFmt = (*it)->bIsDBFmt;
@@ -1128,7 +1131,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     }
                     else
                     {
-                        OUString sVal =  xColumn->getString();
+                        const OUString sVal =  xColumn->getString();
                         if(!xColumn->wasNull())
                         {
                             rSh.SwEditShell::Insert2( sVal );
@@ -1185,7 +1188,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
             SwTxtFmtColl* pColl = 0;
             {
-                OUString sTmplNm( m_pLbDbParaColl->GetSelectEntry() );
+                const OUString sTmplNm( m_pLbDbParaColl->GetSelectEntry() );
                 if( sNoTmpl != sTmplNm )
                 {
                     pColl = rSh.FindTxtFmtCollByName( sTmplNm );
@@ -1229,7 +1232,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             aDBFormatData.aLocale = LanguageTag( rSh.GetCurLang() ).getLocale();
             SwDBNextSetField aNxtDBFld( (SwDBNextSetFieldType*)rSh.
                                         GetFldType( 0, RES_DBNEXTSETFLD ),
-                                        OUString("1"), aEmptyOUStr, aDBData );
+                                        "1", "", aDBData );
 
             bool bSetCrsr = true;
             const size_t nCols = aColArr.size();
@@ -1522,16 +1525,14 @@ void SwInsertDBColAutoPilot::Commit()
     {
         Sequence<OUString> aSourceNames(2);
         OUString* pSourceNames = aSourceNames.getArray();
-        pSourceNames[0] = pNames[nNode];
-        pSourceNames[0] += "/DataSource";
-        pSourceNames[1] = pNames[nNode];
-        pSourceNames[1] += "/Command";
+        pSourceNames[0] = pNames[nNode] + "/DataSource";
+        pSourceNames[1] = pNames[nNode] + "/Command";
         Sequence<Any> aSourceProperties = GetProperties(aSourceNames);
         const Any* pSourceProps = aSourceProperties.getArray();
         OUString sSource, sCommand;
         pSourceProps[0] >>= sSource;
         pSourceProps[1] >>= sCommand;
-        if(sSource.equals(aDBData.sDataSource) && sCommand.equals(aDBData.sCommand))
+        if(sSource==aDBData.sDataSource && sCommand==aDBData.sCommand)
         {
             Sequence<OUString> aElements(1);
             aElements.getArray()[0] = pNames[nNode];
@@ -1545,22 +1546,20 @@ void SwInsertDBColAutoPilot::Commit()
     Sequence<PropertyValue> aValues(aNodeNames.getLength());
     PropertyValue* pValues = aValues.getArray();
     const OUString* pNodeNames = aNodeNames.getConstArray();
-    OUString sSlash("/");
     for(sal_Int32 i = 0; i < aNodeNames.getLength(); i++)
     {
-        pValues[i].Name = sSlash;
-        pValues[i].Name += pNodeNames[i];
+        pValues[i].Name = "/" + pNodeNames[i];
     }
 
-    pValues[0].Value <<= OUString(aDBData.sDataSource);
-    pValues[1].Value <<= OUString(aDBData.sCommand);
+    pValues[0].Value <<= aDBData.sDataSource;
+    pValues[1].Value <<= aDBData.sCommand;
     pValues[2].Value <<= aDBData.nCommandType;
-    pValues[3].Value <<= OUString(m_pEdDbText->GetText());
+    pValues[3].Value <<= m_pEdDbText->GetText();
 
     OUString sTmp;
     const sal_Int32 nCnt = m_pLbTableCol->GetEntryCount();
     for( sal_Int32 n = 0; n < nCnt; ++n )
-        (sTmp += m_pLbTableCol->GetEntry(n)) += "\x0a";
+        sTmp += m_pLbTableCol->GetEntry(n) + "\x0a";
 
     if (!sTmp.isEmpty())
         pValues[4].Value <<= sTmp;
@@ -1569,7 +1568,7 @@ void SwInsertDBColAutoPilot::Commit()
         pValues[5].Value <<= sTmp;
 
     if( pTAutoFmt )
-        pValues[6].Value <<= OUString(pTAutoFmt->GetName());
+        pValues[6].Value <<= pTAutoFmt->GetName();
 
     const Type& rBoolType = ::getBooleanCppuType();
     sal_Bool bTmp = m_pRbAsTable->IsChecked();
@@ -1587,21 +1586,17 @@ void SwInsertDBColAutoPilot::Commit()
     SetSetProperties(OUString(), aValues);
 
     sNewNode += "/ColumnSet";
-    OUString sDelim("/__");
 
     LanguageType ePrevLang = (LanguageType)-1;
-    OUString sPrevLang;
 
     SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
     for(size_t nCol = 0; nCol < aDBColumns.size(); nCol++)
     {
-        OUString sColumnNode = sNewNode;
-         SwInsDBColumn* pColumn = aDBColumns[nCol];
-        OUString sColumnInsertNode(sColumnNode);
-        sColumnInsertNode += sDelim;
-        if( nCol < 100 )
-            sColumnInsertNode += "0";
+        SwInsDBColumn* pColumn = aDBColumns[nCol];
+        OUString sColumnInsertNode(sNewNode + "/__");
         if( nCol < 10 )
+            sColumnInsertNode += "00";
+        else if( nCol < 100 )
             sColumnInsertNode += "0";
         sColumnInsertNode += OUString::number(  nCol );
 
@@ -1626,7 +1621,7 @@ void SwInsertDBColAutoPilot::Commit()
         LanguageType eLang;
         if( pNF )
         {
-            pSubValues[4].Value <<= OUString(pNF->GetFormatstring());
+            pSubValues[4].Value <<= pNF->GetFormatstring();
             eLang = pNF->GetLanguage();
         }
         else
@@ -1635,6 +1630,7 @@ void SwInsertDBColAutoPilot::Commit()
             eLang = GetAppLanguage();
         }
 
+        OUString sPrevLang;
         if( eLang != ePrevLang )
         {
             sPrevLang = LanguageTag::convertToBcp47( eLang );
@@ -1642,7 +1638,7 @@ void SwInsertDBColAutoPilot::Commit()
         }
 
         pSubValues[5].Value <<=  sPrevLang;
-        SetSetProperties(sColumnNode, aSubValues);
+        SetSetProperties(sNewNode, aSubValues);
     }
 }
 
@@ -1682,15 +1678,13 @@ void SwInsertDBColAutoPilot::Load()
             if(pDataSourceProps[10].hasValue())
                  pNewData->bIsEmptyHeadln = *(sal_Bool*)pDataSourceProps[10].getValue();
 
-            OUString sSubNodeName(pNames[nNode]);
-            sSubNodeName += "/ColumnSet/";
+            const OUString sSubNodeName(pNames[nNode] + "/ColumnSet/");
             Sequence <OUString> aSubNames = GetNodeNames(sSubNodeName);
             const OUString* pSubNames = aSubNames.getConstArray();
             for(sal_Int32 nSub = 0; nSub < aSubNames.getLength(); nSub++)
             {
-                OUString sSubSubNodeName(sSubNodeName);
-                sSubSubNodeName += pSubNames[nSub];
-                Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sSubSubNodeName);
+                Sequence <OUString> aSubNodeNames =
+                    lcl_CreateSubNames(sSubNodeName + pSubNames[nSub]);
                 Sequence< Any> aSubProps = GetProperties(aSubNodeNames);
                 const Any* pSubProps = aSubProps.getConstArray();
 
@@ -1740,7 +1734,7 @@ void SwInsertDBColAutoPilot::Load()
             {
                 sal_Int32 n = 0;
                 do {
-                    OUString sEntry( sTmp.getToken( 0, '\x0a', n ) );
+                    const OUString sEntry( sTmp.getToken( 0, '\x0a', n ) );
                     //preselect column - if they still exist!
                     if(m_pLbTblDbColumn->GetEntryPos(sEntry) != LISTBOX_ENTRY_NOTFOUND)
                     {
