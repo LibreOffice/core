@@ -27,6 +27,7 @@
 #include "dbu_reghelper.hxx"
 #include "dbustrings.hrc"
 #include "dlgsave.hxx"
+#include "uiservices.hxx"
 #include "HtmlReader.hxx"
 #include "imageprovider.hxx"
 #include "listviewitems.hxx"

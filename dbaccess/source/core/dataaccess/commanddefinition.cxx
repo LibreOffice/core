@@ -21,6 +21,7 @@
 #include "apitools.hxx"
 #include "dbastrings.hrc"
 #include "module_dba.hxx"
+#include "services.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

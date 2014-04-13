@@ -21,6 +21,7 @@
 #include "dbustrings.hrc"
 #include "advancedsettingsdlg.hxx"
 #include "subcomponentmanager.hxx"
+#include "uiservices.hxx"
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XChild.hpp>

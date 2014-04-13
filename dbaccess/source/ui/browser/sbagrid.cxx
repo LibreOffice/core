@@ -18,6 +18,7 @@
  */
 
 #include "sbagrid.hrc"
+#include "uiservices.hxx"
 
 #include <svx/svxids.hrc>
 

@@ -19,6 +19,7 @@
 
 #include "xmlExport.hxx"
 #include "xmlAutoStyle.hxx"
+#include "xmlservices.hxx"
 #include "flt_reghelper.hxx"
 #include <sax/tools/converter.hxx>
 #include <xmloff/ProgressBarHelper.hxx>

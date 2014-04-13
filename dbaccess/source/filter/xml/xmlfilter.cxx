@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <config_features.h>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
@@ -26,6 +29,7 @@
 #include <jvmaccess/virtualmachine.hxx>
 #endif
 #include "xmlfilter.hxx"
+#include "xmlservices.hxx"
 #include "flt_reghelper.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -171,12 +175,12 @@ namespace dbaxml
             delete this;
         }
 
-        class DatasourceURLListener : public ::cppu::WeakImplHelper1< beans::XPropertyChangeListener >
+        class DatasourceURLListener:
+            public cppu::WeakImplHelper1<beans::XPropertyChangeListener>,
+            private boost::noncopyable
         {
             uno::Reference< uno::XComponentContext > m_xContext;
             ::dbaccess::ODsnTypeCollection m_aTypeCollection;
-            DatasourceURLListener(const DatasourceURLListener&);
-            void operator =(const DatasourceURLListener&);
         protected:
             virtual ~DatasourceURLListener(){}
         public:

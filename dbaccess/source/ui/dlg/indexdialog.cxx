@@ -87,8 +87,6 @@ namespace dbaui
     {
     }
 
-    extern sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const OUString& _sAllowedChars);
-
     bool DbaIndexList::EditedEntry( SvTreeListEntry* _pEntry, const OUString& _rNewText )
     {
         // first check if this is valid SQL92 name

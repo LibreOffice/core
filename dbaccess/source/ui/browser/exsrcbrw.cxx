@@ -18,6 +18,7 @@
  */
 
 #include "exsrcbrw.hxx"
+#include "uiservices.hxx"
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>

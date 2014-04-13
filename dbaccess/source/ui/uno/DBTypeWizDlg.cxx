@@ -18,6 +18,7 @@
  */
 
 #include "dbu_reghelper.hxx"
+#include "uiservices.hxx"
 #include "DBTypeWizDlg.hxx"
 #include "dbwiz.hxx"
 #include <comphelper/processfactory.hxx>

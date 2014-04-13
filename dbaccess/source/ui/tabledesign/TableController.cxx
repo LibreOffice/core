@@ -33,6 +33,7 @@
 #include "dsmeta.hxx"
 #include "indexdialog.hxx"
 #include "sqlmessage.hxx"
+#include "uiservices.hxx"
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

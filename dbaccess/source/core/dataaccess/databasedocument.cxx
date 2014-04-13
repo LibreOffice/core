@@ -23,6 +23,7 @@
 #include "databasedocument.hxx"
 #include "dbastrings.hrc"
 #include "module_dba.hxx"
+#include "services.hxx"
 #include "documenteventexecutor.hxx"
 #include "databasecontext.hxx"
 #include "documentcontainer.hxx"

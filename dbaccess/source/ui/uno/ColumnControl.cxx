@@ -20,6 +20,7 @@
 #include "ColumnControl.hxx"
 #include "ColumnPeer.hxx"
 #include "dbustrings.hrc"
+#include "uiservices.hxx"
 #include "apitools.hxx"
 #include <com/sun/star/awt/PosSize.hpp>
 #include "dbu_reghelper.hxx"

@@ -19,6 +19,7 @@
 
 #include "datasource.hxx"
 #include "module_dba.hxx"
+#include "services.hxx"
 #include "userinformation.hxx"
 #include "commandcontainer.hxx"
 #include "dbastrings.hrc"

@@ -18,6 +18,7 @@
  */
 
 #include "flt_reghelper.hxx"
+#include "xmlservices.hxx"
 #include "xmlstrings.hrc"
 
 #include <com/sun/star/beans/NamedValue.hpp>

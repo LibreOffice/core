@@ -38,13 +38,6 @@ namespace dbmm
         OUString sOldName;
         OUString sNewName;
 
-        LibraryEntry()
-            :eType( eBasic )
-            ,sOldName()
-            ,sNewName()
-        {
-        }
-
         LibraryEntry( const ScriptType& _eType, const OUString& _rOldName, const OUString& _rNewName )
             :eType( _eType )
             ,sOldName( _rOldName )

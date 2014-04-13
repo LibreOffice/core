@@ -25,18 +25,11 @@
 #include "dbadllapi.hxx"
 
 #include <../dataaccess/databasecontext.hxx>
+#include <services.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
-
-// registry functions
-extern "C" void SAL_CALL createRegistryInfo_OCommandDefinition();
-extern "C" void SAL_CALL createRegistryInfo_OComponentDefinition();
-extern "C" void SAL_CALL createRegistryInfo_ORowSet();
-extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument();
-extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource();
-extern "C" void SAL_CALL createRegistryInfo_DataAccessDescriptorFactory();
 
 namespace dba{
     ::cppu::ImplementationEntry entries[] = {

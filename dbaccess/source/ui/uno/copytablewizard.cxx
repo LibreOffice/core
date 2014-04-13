@@ -23,6 +23,7 @@
 #include "dbustrings.hrc"
 #include "moduledbu.hxx"
 #include "sqlmessage.hxx"
+#include "uiservices.hxx"
 #include "WCopyTable.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -209,14 +210,6 @@ namespace dbaui
         */
         OCopyTableWizard&
                 impl_getDialog_throw();
-
-        /** returns our typed dialog
-
-            @throws ::com::sun::star::uno::RuntimeException
-                if we don't have a dialog at the moment the method is called
-        */
-        const OCopyTableWizard&
-                impl_getDialog_throw() const;
 
         /** ensures the given argument sequence contains a valid data access descriptor at the given position
             @param _rAllArgs
@@ -562,14 +555,6 @@ OCopyTableWizard& CopyTableWizard::impl_getDialog_throw()
     OCopyTableWizard* pWizard = dynamic_cast< OCopyTableWizard* >( m_pDialog );
     if ( !pWizard )
         throw DisposedException( OUString(), *this );
-    return *pWizard;
-}
-
-const OCopyTableWizard& CopyTableWizard::impl_getDialog_throw() const
-{
-    const OCopyTableWizard* pWizard = dynamic_cast< const OCopyTableWizard* >( m_pDialog );
-    if ( !pWizard )
-        throw DisposedException( OUString(), *const_cast< CopyTableWizard* >( this ) );
     return *pWizard;
 }
 

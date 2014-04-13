@@ -20,41 +20,12 @@
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
 #include "dbu_reghelper.hxx"
+#include "uiservices.hxx"
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
-
-
-
-// registry functions
-extern "C" void SAL_CALL createRegistryInfo_OTableFilterDialog();
-extern "C" void SAL_CALL createRegistryInfo_ODataSourcePropertyDialog();
-extern "C" void SAL_CALL createRegistryInfo_OSQLMessageDialog();
-extern "C" void SAL_CALL createRegistryInfo_OBrowser();
-extern "C" void SAL_CALL createRegistryInfo_OFormGridView();
-extern "C" void SAL_CALL createRegistryInfo_DBContentLoader();
-extern "C" void SAL_CALL createRegistryInfo_OInteractionHandler();
-extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl();
-extern "C" void SAL_CALL createRegistryInfo_OQueryControl();
-extern "C" void SAL_CALL createRegistryInfo_OViewControl();
-extern "C" void SAL_CALL createRegistryInfo_OTableControl();
-extern "C" void SAL_CALL createRegistryInfo_ORelationControl();
-extern "C" void SAL_CALL createRegistryInfo_ComposerDialogs();
-extern "C" void SAL_CALL createRegistryInfo_ODBApplication();
-extern "C" void SAL_CALL createRegistryInfo_ODirectSQLDialog();
-extern "C" void SAL_CALL createRegistryInfo_OAdvancedSettingsDialog();
-extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialog();
-extern "C" void SAL_CALL createRegistryInfo_OUserSettingsDialog();
-extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialogSetup();
-extern "C" void SAL_CALL createRegistryInfo_OColumnControlModel();
-extern "C" void SAL_CALL createRegistryInfo_OColumnControl();
-extern "C" void SAL_CALL createRegistryInfo_OToolboxController();
-extern "C" void SAL_CALL createRegistryInfo_CopyTableWizard();
-extern "C" void SAL_CALL createRegistryInfo_OTextConnectionSettingsDialog();
-extern "C" void SAL_CALL createRegistryInfo_LimitBoxController();
-
 
 extern "C" void SAL_CALL createRegistryInfo_DBU()
 {

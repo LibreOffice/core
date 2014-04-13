@@ -91,33 +91,6 @@ using ::com::sun::star::ui::XContextMenuInterceptor;
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
-class CloseChecker : public ::cppu::WeakImplHelper1< com::sun::star::lang::XEventListener >
-{
-    bool    m_bClosed;
-
-public:
-    CloseChecker()
-        :m_bClosed( false )
-    {
-    }
-
-    virtual ~CloseChecker()
-    {
-    }
-
-    bool isClosed()
-    {
-        return true;
-    }
-
-    // interface XEventListener
-    virtual void SAL_CALL disposing( const EventObject& /*Source*/ ) throw( RuntimeException, std::exception ) SAL_OVERRIDE
-    {
-        m_bClosed = true;
-    }
-
-};
-
 void OApplicationController::convertToView(const OUString& _sName)
 {
     try

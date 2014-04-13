@@ -18,14 +18,13 @@
  */
 
 #include "module_sdbt.hxx"
+#include "sdbt_services.hxx"
 
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::registry::InvalidRegistryException;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
-
-extern "C" void SAL_CALL createRegistryInfo_ConnectionTools();
 
 extern "C" void SAL_CALL sdbt_initializeModule()
 {

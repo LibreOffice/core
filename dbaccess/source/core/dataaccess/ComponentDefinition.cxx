@@ -21,7 +21,9 @@
 #include "apitools.hxx"
 #include "dbastrings.hrc"
 #include "module_dba.hxx"
+#include "services.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
@@ -51,12 +53,10 @@ namespace dbaccess
 
 /// helper class for column property change events which holds the OComponentDefinition weak
 typedef ::cppu::WeakImplHelper1 < XPropertyChangeListener > TColumnPropertyListener_BASE;
-class OColumnPropertyListener : public TColumnPropertyListener_BASE
+class OColumnPropertyListener:
+    public TColumnPropertyListener_BASE, private boost::noncopyable
 {
     OComponentDefinition* m_pComponent;
-
-    OColumnPropertyListener(const OColumnPropertyListener&);
-    void operator =(const OColumnPropertyListener&);
 protected:
     virtual ~OColumnPropertyListener(){}
 public:

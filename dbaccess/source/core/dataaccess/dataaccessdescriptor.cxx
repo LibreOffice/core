@@ -19,6 +19,7 @@
 
 #include "dbastrings.hrc"
 #include "module_dba.hxx"
+#include "services.hxx"
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

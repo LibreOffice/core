@@ -8,6 +8,7 @@
  */
 
 #include "limitboxcontroller.hxx"
+#include "uiservices.hxx"
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

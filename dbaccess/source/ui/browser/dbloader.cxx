@@ -19,6 +19,7 @@
 
 #include "dbu_reghelper.hxx"
 #include "dbustrings.hrc"
+#include "uiservices.hxx"
 #include "UITools.hxx"
 
 #include <com/sun/star/container/XChild.hpp>

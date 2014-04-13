@@ -18,6 +18,7 @@
  */
 
 #include "toolboxcontroller.hxx"
+#include "uiservices.hxx"
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <toolkit/helper/vclunohelper.hxx>

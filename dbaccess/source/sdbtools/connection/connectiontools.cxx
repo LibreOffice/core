@@ -18,6 +18,7 @@
  */
 
 #include "connectiontools.hxx"
+#include "sdbt_services.hxx"
 #include "tablename.hxx"
 #include "objectnames.hxx"
 #include "datasourcemetadata.hxx"

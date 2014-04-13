@@ -20,23 +20,12 @@
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
 #include "flt_reghelper.hxx"
+#include "xmlservices.hxx"
 
 using namespace ::dbaxml;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
-
-
-
-// registry functions
-extern "C" void SAL_CALL createRegistryInfo_ODBFilter();
-extern "C" void SAL_CALL createRegistryInfo_ODBFilterExport();
-extern "C" void SAL_CALL createRegistryInfo_OSettingsExport();
-extern "C" void SAL_CALL createRegistryInfo_OFullExport();
-extern "C" void SAL_CALL createRegistryInfo_DBContentLoader2();
-extern "C" void SAL_CALL createRegistryInfo_DBTypeDetection();
-extern "C" void SAL_CALL writeDBLoaderInfo2(void* pRegistryKey);
-
 
 extern "C" void SAL_CALL createRegistryInfo_dbaxml()
 {

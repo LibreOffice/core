@@ -20,6 +20,7 @@
 #include "dbmm_module.hxx"
 #include "dbmm_global.hrc"
 #include "macromigrationdialog.hxx"
+#include "macromigrationwizard.hxx"
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>

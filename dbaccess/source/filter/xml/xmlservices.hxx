@@ -17,26 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbmm_module.hxx"
-#include "macromigrationwizard.hxx"
+#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLSERVICES_HXX
+#define INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLSERVICES_HXX
 
-namespace dbmm
-{
+#include <sal/config.h>
 
-    static void initializeModule()
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        createRegistryInfo_MacroMigrationDialogService();
-    }
+#include <sal/types.h>
 
-} // namespace dbmm
+extern "C" {
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbmm_component_getFactory(
-    const sal_Char* pImplementationName, SAL_UNUSED_PARAMETER void*,
-    SAL_UNUSED_PARAMETER void* )
-{
-    ::dbmm::initializeModule();
-    return ::dbmm::MacroMigrationModule::getInstance().getComponentFactory( pImplementationName );
+void SAL_CALL createRegistryInfo_DBContentLoader2();
+void SAL_CALL createRegistryInfo_DBTypeDetection();
+void SAL_CALL createRegistryInfo_ODBFilter();
+void SAL_CALL createRegistryInfo_ODBFilterExport();
+void SAL_CALL createRegistryInfo_OFullExport();
+void SAL_CALL createRegistryInfo_OSettingsExport();
+
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

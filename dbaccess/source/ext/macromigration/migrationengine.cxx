@@ -785,12 +785,6 @@ namespace dbmm
         {
         }
 
-        PhaseGuard( ProgressMixer& _rMixer, const PhaseID _nID, const sal_uInt32 _nPhaseRange )
-            :m_rMixer( _rMixer )
-        {
-            start( _nID, _nPhaseRange );
-        }
-
         ~PhaseGuard()
         {
             m_rMixer.endPhase();

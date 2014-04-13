@@ -18,6 +18,7 @@
  */
 
 #include "sqlmessage.hxx"
+#include "uiservices.hxx"
 #include "unosqlmessage.hxx"
 #include "dbu_reghelper.hxx"
 #include "dbustrings.hrc"

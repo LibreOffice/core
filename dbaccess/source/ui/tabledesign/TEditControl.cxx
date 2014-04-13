@@ -61,11 +61,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
 
-namespace dbaui
-{
-    extern OUString GetTypeString( sal_uInt16 nType );
-}
-
 //  TYPEINIT1(OTableEditorCtrl, DBView);
 
 #define HANDLE_ID       0

@@ -27,6 +27,8 @@
 #include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>
 
+#include <databaseregistrations.hxx>
+
 namespace dbaccess
 {
     using ::com::sun::star::uno::Reference;

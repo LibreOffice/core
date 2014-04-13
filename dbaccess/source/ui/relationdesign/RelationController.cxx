@@ -22,6 +22,7 @@
 #include <map>
 
 #include "dbu_reghelper.hxx"
+#include "uiservices.hxx"
 #include <sfx2/sfxsids.hrc>
 #include "dbu_rel.hrc"
 #include <vcl/svapp.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include "ColumnModel.hxx"
+#include "uiservices.hxx"
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

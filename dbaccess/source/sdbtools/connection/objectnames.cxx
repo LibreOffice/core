@@ -34,6 +34,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace sdbtools
@@ -232,7 +233,7 @@ namespace sdbtools
     };
 
     // NameCheckFactory
-    class NameCheckFactory
+    class NameCheckFactory: private boost::noncopyable
     {
     public:
         /** creates an INameValidation instance which can be used to check the existence of query or table names
@@ -280,9 +281,6 @@ namespace sdbtools
                     const sal_Int32 _nCommandType,
                     const Reference< XConnection >& _rxConnection
                 );
-
-    private:
-        NameCheckFactory();                                     // never implemented
 
     private:
         static  void    verifyCommandType( sal_Int32 _nCommandType );

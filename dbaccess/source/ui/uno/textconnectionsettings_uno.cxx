@@ -18,6 +18,7 @@
  */
 
 #include "textconnectionsettings.hxx"
+#include "uiservices.hxx"
 #include "dbu_reghelper.hxx"
 #include "moduledbu.hxx"
 #include "apitools.hxx"

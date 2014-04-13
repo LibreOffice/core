@@ -18,6 +18,7 @@
  */
 
 #include "dbu_reghelper.hxx"
+#include "uiservices.hxx"
 #include "TableFilterDlg.hxx"
 #include "TablesSingleDlg.hxx"
 #include <comphelper/processfactory.hxx>

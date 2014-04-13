@@ -18,6 +18,7 @@
  */
 
 #include "dbu_reghelper.hxx"
+#include "uiservices.hxx"
 #include "UserSettingsDlg.hxx"
 #include "UserAdminDlg.hxx"
 #include <comphelper/processfactory.hxx>

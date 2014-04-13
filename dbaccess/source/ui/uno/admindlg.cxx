@@ -18,6 +18,7 @@
  */
 
 #include "dbu_reghelper.hxx"
+#include "uiservices.hxx"
 #include "admindlg.hxx"
 #include "dbadmin.hxx"
 #include <comphelper/processfactory.hxx>
