@@ -237,6 +237,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/outdev/outdev2 \
     vcl/source/gdi/outdev/outdev3 \
     vcl/source/gdi/outdev/outdev4 \
+    vcl/source/gdi/outdev/gradient \
     vcl/source/gdi/outdev/outdev5 \
     vcl/source/gdi/outdev/outdev6 \
     vcl/source/gdi/outdev/outdev \
