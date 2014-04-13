@@ -1492,26 +1492,20 @@ static Sequence<OUString> lcl_CreateSubNames(const OUString& rSubNodeName)
 
 static OUString lcl_CreateUniqueName(const Sequence<OUString>& aNames)
 {
-    sal_Int32 nIdx = aNames.getLength();
+    const sal_Int32 nNames = aNames.getLength();
+    sal_Int32 nIdx = nNames;
     const OUString* pNames = aNames.getConstArray();
-    OUString sTest("_");
-    OUString sRet;
     while(true)
     {
-        sRet = sTest; sRet += OUString::number(nIdx++);
-        bool bFound = false;
-        for(sal_Int32 i = 0; i < aNames.getLength(); i++)
+        const OUString sRet = "_" + OUString::number(nIdx++);
+        sal_Int32 i = 0;
+        while ( i < nNames && pNames[i] != sRet )
         {
-            if(pNames[i] == sRet)
-            {
-                bFound = true;
-                break;
-            }
+            ++i;
         }
-        if(!bFound)
-            break;
+        if ( i >= nNames )
+            return sRet;    // No match found, return unique name
     }
-    return sRet;
 }
 
 void SwInsertDBColAutoPilot::Notify( const ::com::sun::star::uno::Sequence< OUString >&  ) {}
