@@ -1,0 +1,34 @@
+--- a/b/boost/boost/math/special_functions/fpclassify.hpp	2013-05-31 14:02:13.660436127 +0200
++++ a/b/boost/boost/math/special_functions/fpclassify.hpp	2013-05-31 14:01:17.372246240 +0200
+@@ -339,7 +338,6 @@
+ { //!< \brief return true if floating-point type t is finite.
+    typedef detail::fp_traits<long double>::type traits;
+    typedef traits::method method;
+-   typedef boost::is_floating_point<long double>::type fp_tag;
+    typedef long double value_type;
+    return detail::isfinite_impl(static_cast<value_type>(x), method());
+ }
+@@ -410,7 +407,6 @@
+ {
+    typedef detail::fp_traits<long double>::type traits;
+    typedef traits::method method;
+-   typedef boost::is_floating_point<long double>::type fp_tag;
+    typedef long double value_type;
+    return detail::isnormal_impl(static_cast<value_type>(x), method());
+ }
+@@ -499,7 +494,6 @@
+ {
+    typedef detail::fp_traits<long double>::type traits;
+    typedef traits::method method;
+-   typedef boost::is_floating_point<long double>::type fp_tag;
+    typedef long double value_type;
+    return detail::isinf_impl(static_cast<value_type>(x), method());
+ }
+@@ -585,7 +578,6 @@
+ { //!< \brief return true if floating-point type t is NaN (Not A Number).
+    typedef detail::fp_traits<long double>::type traits;
+    typedef traits::method method;
+-   typedef boost::is_floating_point<long double>::type fp_tag;
+    return detail::isnan_impl(x, method());
+ }
+ #endif

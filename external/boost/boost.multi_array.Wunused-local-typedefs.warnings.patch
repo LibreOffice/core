@@ -1,0 +1,20 @@
+--- misc/boost_1_44_0/boost/multi_array/concept_checks.hpp
++++ misc/build/boost_1_44_0/boost/multi_array/concept_checks.hpp
+@@ -39,8 +39,6 @@
+ 
+     template <typename Array, typename IdxGen, typename Call_Type>
+     static void call(Array& a, const IdxGen& idgen, Call_Type c) {
+-      typedef typename Array::index_range index_range_;
+-      typedef typename Array::index index_;
+       idgen_helper<N-1>::call(a,idgen[c],c);
+     }
+   };
+@@ -50,8 +48,6 @@
+ 
+     template <typename Array, typename IdxGen, typename Call_Type>
+     static void call(Array& a, const IdxGen& idgen, Call_Type) {
+-      typedef typename Array::index_range index_range_;
+-      typedef typename Array::index index_;
+       a[ idgen ];
+     }
+   };

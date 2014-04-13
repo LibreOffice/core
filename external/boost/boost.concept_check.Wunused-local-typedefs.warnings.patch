@@ -1,0 +1,13 @@
+--- misc/boost_1_44_0/boost/concept/detail/general.hpp
++++ misc/build/boost_1_44_0/boost/concept/detail/general.hpp
+@@ -68,7 +68,9 @@
+ #  define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )             \
+     typedef ::boost::concepts::detail::instantiate<          \
+     &::boost::concepts::requirement_<ModelFnPtr>::failed>    \
+-      BOOST_PP_CAT(boost_concept_check,__LINE__)
++      BOOST_PP_CAT(boost_concept_check,__LINE__); \
++    void BOOST_PP_CAT(boost_concept_check_dummy,__LINE__)(BOOST_PP_CAT(boost_concept_check,__LINE__) *)
++        // silence -Werror=unused-local-typedefs (GCC 4.8)
+ 
+ }}
+ 

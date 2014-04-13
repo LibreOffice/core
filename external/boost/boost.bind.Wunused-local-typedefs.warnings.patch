@@ -1,0 +1,11 @@
+--- misc/boost_1_44_0/boost/bind/arg.hpp
++++ misc/build/boost_1_44_0/boost/bind/arg.hpp
+@@ -35,6 +35,8 @@
+     {
+         // static assert I == is_placeholder<T>::value
+         typedef char T_must_be_placeholder[ I == is_placeholder<T>::value? 1: -1 ];
++        T_must_be_placeholder dummy; (void) dummy;
++            // silence -Werror=unused-local-typedefs (GCC 4.8)
+     }
+ };
+ 

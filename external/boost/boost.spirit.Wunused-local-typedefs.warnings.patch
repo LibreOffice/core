@@ -1,0 +1,49 @@
+--- misc/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp
+@@ -307,7 +307,6 @@
+ #if !defined(BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE)
+         typedef impl::grammar_helper_base<GrammarT> helper_base_t;
+         typedef grammar_helper_list<GrammarT> helper_list_t;
+-        typedef typename helper_list_t::vector_t::reverse_iterator iterator_t;
+ 
+         helper_list_t&  helpers =
+ # if !defined(__GNUC__) || (__GNUC__ > 2)
+@@ -318,6 +317,7 @@
+ 
+ # if (defined(BOOST_MSVC) && (BOOST_MSVC < 1300)) \
+     || defined(BOOST_INTEL_CXX_VERSION)
++        typedef typename helper_list_t::vector_t::reverse_iterator iterator_t;
+         for (iterator_t i = helpers.rbegin(); i != helpers.rend(); ++i)
+             (*i)->undefine(self);
+ # else
+--- misc/boost_1_44_0/boost/spirit/home/classic/core/primitives/primitives.hpp
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/primitives/primitives.hpp
+@@ -47,7 +47,6 @@
+         typename parser_result<self_t, ScannerT>::type
+         parse(ScannerT const& scan) const
+         {
+-            typedef typename parser_result<self_t, ScannerT>::type result_t;
+             typedef typename ScannerT::value_t value_t;
+             typedef typename ScannerT::iterator_t iterator_t;
+ 
+--- misc/boost_1_44_0/boost/spirit/home/classic/error_handling/exceptions.hpp
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/error_handling/exceptions.hpp
+@@ -140,7 +140,6 @@
+         parse(ScannerT const& scan) const
+         {
+             typedef typename parser_result<ParserT, ScannerT>::type result_t;
+-            typedef typename ScannerT::iterator_t iterator_t;
+ 
+             result_t hit = this->subject().parse(scan);
+             if (!hit)
+--- misc/boost_1_44_0/boost/spirit/home/classic/utility/functor_parser.hpp
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/utility/functor_parser.hpp
+@@ -49,8 +49,6 @@
+         typename parser_result<self_t, ScannerT>::type
+         parse(ScannerT const& scan) const
+         {
+-            typedef typename parser_result<self_t, ScannerT>::type result_t;
+-            typedef typename ScannerT::value_t      value_t;
+             typedef typename ScannerT::iterator_t   iterator_t;
+ 
+             iterator_t const s(scan.first);

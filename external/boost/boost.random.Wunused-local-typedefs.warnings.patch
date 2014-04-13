@@ -1,0 +1,20 @@
+--- a/b/boost/boost/random/generate_canonical.hpp	2013-05-31 18:13:09.804149686 +0200
++++ a/b/boost/boost/random/generate_canonical.hpp	2013-05-31 18:13:30.020195845 +0200
+@@ -55,7 +55,6 @@
+     using std::floor;
+     BOOST_ASSERT((g.min)() == 0);
+     BOOST_ASSERT((g.max)() == 1);
+-    typedef typename URNG::result_type base_result;
+     std::size_t digits = std::numeric_limits<RealType>::digits;
+     std::size_t engine_bits = detail::generator_bits<URNG>::value();
+     std::size_t b = (std::min)(bits, digits);
+--- a/b/boost/boost/random/uniform_real_distribution.hpp	2013-05-31 18:15:04.571429634 +0200
++++ a/b/boost/boost/random/uniform_real_distribution.hpp	2013-05-31 18:14:28.452337186 +0200
+@@ -36,7 +36,6 @@
+ {
+     for(;;) {
+         typedef T result_type;
+-        typedef typename Engine::result_type base_result;
+         result_type numerator = static_cast<T>(eng() - (eng.min)());
+         result_type divisor = static_cast<T>((eng.max)() - (eng.min)());
+         BOOST_ASSERT(divisor > 0);

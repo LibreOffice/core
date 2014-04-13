@@ -21,13 +21,18 @@ boost_patches += boost.7551.unusedvars.patch
 #https://svn.boost.org/trac/boost/ticket/6142
 boost_patches += boost.6142.warnings.patch.1
 
+boost_patches += boost.bind.Wunused-local-typedefs.warnings.patch
 boost_patches += boost.concept_check.C4100.warnings.patch
+boost_patches += boost.concept_check.Wunused-local-typedefs.warnings.patch
 boost_patches += boost.crc.Wshadow.warnings.patch
 boost_patches += boost.date_time.Wshadow.warnings.patch
+boost_patches += boost.date_time.Wunused-local-typedefs.warnings.patch
 boost_patches += boost.math.Wdeprecated-register.patch.0
+boost_patches += boost.math.Wunused-local-typedefs.warnings.patch
 boost_patches += boost.multi_array.C4510.warnings.patch
 boost_patches += boost.multi_array.Wshadow.warnings.patch
 boost_patches += boost.multi_array.Wundef.warnings.patch
+boost_patches += boost.multi_array.Wunused-local-typedefs.warnings.patch
 boost_patches += boost.multi_index.Wshadow.warnings.patch.1
 boost_patches += boost.predef.Wundef.warnings.patch
 boost_patches += boost.preprocessor.Wundef.warnings.patch
@@ -39,8 +44,11 @@ boost_patches += boost.ptr_container.Wextra.warnings.patch
 boost_patches += boost.ptr_container.Wunused-parameter.warnings.patch
 boost_patches += boost.random.Wshadow.warnings.patch
 boost_patches += boost.random.Wuninitialized.patch
+boost_patches += boost.random.Wunused-local-typedefs.warnings.patch
 boost_patches += boost.spirit.Wshadow.warnings.patch
+boost_patches += boost.spirit.Wunused-local-typedefs.warnings.patch
 boost_patches += boost.unordered.Wshadow.warnings.patch
+boost_patches += boost.tuple.Wunused-local-typedefs.warnings.patch
 boost_patches += boost.utility.Wundef.warnings.patch
 boost_patches += boost.uuid.Wshadow.warnings.patch
 
@@ -51,8 +59,6 @@ endif
 
 # Clang warnings:
 boost_patches += boost_1_44_0-clang-warnings.patch
-
-boost_patches += boost.wunused-local-typedefs.patch
 
 boost_patches += boost.auto_link.patch
 boost_patches += boost.endian.patch
