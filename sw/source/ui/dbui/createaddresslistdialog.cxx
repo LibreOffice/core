@@ -392,10 +392,6 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             pStream->SetLineDelimiter( LINEEND_LF );
             pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
 
-            OUString sQuote('"');
-            OUString sTempMiddle(sQuote);
-            sTempMiddle += OUString(sal_Unicode(9));
-
             OUString sLine;
             bool bRead = pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
 
