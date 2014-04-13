@@ -31,7 +31,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 
-#include "pdfwriter_impl.hxx"
+#include "../pdfwriter_impl.hxx"
 
 #include "window.h"
 #include "salframe.hxx"
