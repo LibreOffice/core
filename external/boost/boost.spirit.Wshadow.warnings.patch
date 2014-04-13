@@ -38,3 +38,20 @@
          }
  
          typename DefT::embed_t rhs;
+--- misc/boost_1_44_0/boost/spirit/home/classic/debug/impl/parser_names.ipp	2012-04-10 21:23:48.599238472 +0100
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/debug/impl/parser_names.ipp	2012-04-10 21:24:02.752394878 +0100
+@@ -395,13 +395,13 @@
+             }
+ 
+             bool register_node(void const *r, char const *name_to_register,
+-                bool trace_node)
++                bool trace_node_)
+             {
+                 if (infos.find(r) != infos.end())
+                     return false;
+ 
+                 return infos.insert(rule_infos::value_type(r,
+-                    rule_info(std::string(name_to_register), trace_node))
++                    rule_info(std::string(name_to_register), trace_node_))
+                 ).second;
+             }
