@@ -3752,8 +3752,9 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
         }
         if ( bGrfRead )
         {
-            // the writer is doing it's own cropping, so this part affects only impress and calc
-            if ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_CROP_BITMAPS )
+            // the writer is doing its own cropping, so this part affects only impress and calc,
+            // unless we're inside a group, in which case writer doesn't crop either
+            if (( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_CROP_BITMAPS ) || rObjData.nCalledByGroup != 0 )
                 lcl_ApplyCropping( *this, ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0 ? &rSet : NULL, aGraf );
 
             if ( IsProperty( DFF_Prop_pictureTransparent ) )
