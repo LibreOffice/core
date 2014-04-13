@@ -35,6 +35,7 @@ boost_patches += boost.ptr_container.Wextra.warnings.patch
 boost_patches += boost.ptr_container.Wunused-parameter.warnings.patch
 boost_patches += boost.random.Wshadow.warnings.patch
 boost_patches += boost.spirit.Wshadow.warnings.patch
+boost_patches += boost.unordered.Wshadow.warnings.patch
 boost_patches += boost.uuid.Wshadow.warnings.patch
 
 # Help static analysis tools (see SAL_UNUSED_PARAMETER in sal/types.h):
@@ -54,7 +55,6 @@ boost_patches += boost.std.move.patch
 boost_patches += boost.transform_width.patch
 boost_patches += boost.wundef.patch
 boost_patches += boost.wunused.patch
-boost_patches += boost.wshadow.patch
 boost_patches += boost.wdeprecated-register.patch.0
 boost_patches += boost.wuninitialized.patch
 boost_patches += boost.wdeprecated-auto_ptr.patch.0

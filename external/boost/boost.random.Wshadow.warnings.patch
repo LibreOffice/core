@@ -27,3 +27,155 @@
  
  private:
      /// \cond show_private
+--- foo/foo/foo/boost/random/binomial_distribution.hpp
++++ foo/foo/foo/boost/random/binomial_distribution.hpp
+@@ -272,21 +272,21 @@
+         using std::sqrt;
+         using std::pow;
+ 
+-        RealType p = (0.5 < _p)? (1 - _p) : _p;
+-        IntType t = _t;
++        RealType p_lcl = (0.5 < _p)? (1 - _p) : _p;
++        IntType t_lcl = _t;
+         
+-        m = static_cast<IntType>((t+1)*p);
++        m = static_cast<IntType>((t_lcl+1)*p_lcl);
+ 
+         if(use_inversion()) {
+-            q_n = pow((1 - p), static_cast<RealType>(t));
++            q_n = pow((1 - p_lcl), static_cast<RealType>(t_lcl));
+         } else {
+-            btrd.r = p/(1-p);
+-            btrd.nr = (t+1)*btrd.r;
+-            btrd.npq = t*p*(1-p);
++            btrd.r = p_lcl/(1-p_lcl);
++            btrd.nr = (t_lcl+1)*btrd.r;
++            btrd.npq = t_lcl*p_lcl*(1-p_lcl);
+             RealType sqrt_npq = sqrt(btrd.npq);
+             btrd.b = 1.15 + 2.53 * sqrt_npq;
+-            btrd.a = -0.0873 + 0.0248*btrd.b + 0.01*p;
+-            btrd.c = t*p + 0.5;
++            btrd.a = -0.0873 + 0.0248*btrd.b + 0.01*p_lcl;
++            btrd.c = t_lcl*p_lcl + 0.5;
+             btrd.alpha = (2.83 + 5.1/btrd.b) * sqrt_npq;
+             btrd.v_r = 0.92 - 4.2/btrd.b;
+             btrd.u_rv_r = 0.86*btrd.v_r;
+@@ -304,9 +304,9 @@
+             RealType u;
+             RealType v = uniform_01<RealType>()(urng);
+             if(v <= btrd.u_rv_r) {
+-                RealType u = v/btrd.v_r - 0.43;
++                RealType u_lcl = v/btrd.v_r - 0.43;
+                 return static_cast<IntType>(floor(
+-                    (2*btrd.a/(0.5 - abs(u)) + btrd.b)*u + btrd.c));
++                    (2*btrd.a/(0.5 - abs(u_lcl)) + btrd.b)*u_lcl + btrd.c));
+             }
+ 
+             if(v >= btrd.v_r) {
+@@ -344,9 +344,9 @@
+                 v = log(v);
+                 RealType rho =
+                     (km/btrd.npq)*(((km/3. + 0.625)*km + 1./6)/btrd.npq + 0.5);
+-                RealType t = -km*km/(2*btrd.npq);
+-                if(v < t - rho) return k;
+-                if(v > t + rho) continue;
++                RealType t_lcl = -km*km/(2*btrd.npq);
++                if(v < t_lcl - rho) return k;
++                if(v > t_lcl + rho) continue;
+ 
+                 IntType nm = _t - m + 1;
+                 RealType h = (m + 0.5)*log((m + 1)/(btrd.r*nm))
+@@ -367,11 +367,11 @@
+     }
+ 
+     template<class URNG>
+-    IntType invert(IntType t, RealType p, URNG& urng) const
++    IntType invert(IntType t_arg, RealType p_arg, URNG& urng) const
+     {
+-        RealType q = 1 - p;
+-        RealType s = p / q;
+-        RealType a = (t + 1) * s;
++        RealType q = 1 - p_arg;
++        RealType s = p_arg / q;
++        RealType a = (t_arg + 1) * s;
+         RealType r = q_n;
+         RealType u = uniform_01<RealType>()(urng);
+         IntType x = 0;
+--- foo/foo/foo/boost/random/geometric_distribution.hpp
++++ foo/foo/foo/boost/random/geometric_distribution.hpp
+@@ -104,8 +104,8 @@
+      *
+      * Requires: 0 < p < 1
+      */
+-    explicit geometric_distribution(const RealType& p = RealType(0.5))
+-      : _p(p)
++    explicit geometric_distribution(const RealType& p_arg = RealType(0.5))
++      : _p(p_arg)
+     {
+         BOOST_ASSERT(RealType(0) < _p && _p < RealType(1));
+         init();
+--- foo/foo/foo/boost/random/shuffle_order.hpp
++++ foo/foo/foo/boost/random/shuffle_order.hpp
+@@ -200,8 +200,8 @@
+     }
+ 
+     /** Returns true if the two generators will produce identical sequences. */
+-    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(shuffle_order_engine, x, y)
+-    { return x._rng == y._rng && x.y == y.y && std::equal(x.v, x.v+k, y.v); }
++    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(shuffle_order_engine, x, y_arg)
++    { return x._rng == y_arg._rng && x.y == y_arg.y && std::equal(x.v, x.v+k, y_arg.v); }
+     /** Returns true if the two generators will produce different sequences. */
+     BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(shuffle_order_engine)
+ 
+--- foo/foo/foo/boost/random/subtract_with_carry.hpp
++++ foo/foo/foo/boost/random/subtract_with_carry.hpp
+@@ -268,21 +268,21 @@
+ 
+     friend struct detail::subtract_with_carry_discard;
+ 
+-    IntType do_update(std::size_t current, std::size_t short_index, IntType carry)
++    IntType do_update(std::size_t current, std::size_t short_index, IntType carry_arg)
+     {
+         IntType delta;
+-        IntType temp = x[current] + carry;
++        IntType temp = x[current] + carry_arg;
+         if (x[short_index] >= temp) {
+             // x(n) >= 0
+             delta =  x[short_index] - temp;
+-            carry = 0;
++            carry_arg = 0;
+         } else {
+             // x(n) < 0
+             delta = modulus - temp + x[short_index];
+-            carry = 1;
++            carry_arg = 1;
+         }
+         x[current] = delta;
+-        return carry;
++        return carry_arg;
+     }
+     /// \endcond
+ 
+@@ -498,17 +498,17 @@
+ 
+     friend struct detail::subtract_with_carry_discard;
+ 
+-    RealType do_update(std::size_t current, std::size_t short_index, RealType carry)
++    RealType do_update(std::size_t current, std::size_t short_index, RealType carry_arg)
+     {
+-        RealType delta = x[short_index] - x[current] - carry;
++        RealType delta = x[short_index] - x[current] - carry_arg;
+         if(delta < 0) {
+             delta += RealType(1);
+-            carry = RealType(1)/_modulus;
++            carry_arg = RealType(1)/_modulus;
+         } else {
+-            carry = 0;
++            carry_arg = 0;
+         }
+         x[current] = delta;
+-        return carry;
++        return carry_arg;
+     }
+     /// \endcond
+     std::size_t k;
