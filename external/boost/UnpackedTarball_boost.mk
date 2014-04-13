@@ -24,6 +24,7 @@ boost_patches += boost.6142.warnings.patch.1
 boost_patches += boost.concept_check.C4100.warnings.patch
 boost_patches += boost.crc.Wshadow.warnings.patch
 boost_patches += boost.date_time.Wshadow.warnings.patch
+boost_patches += boost.math.Wdeprecated-register.patch.0
 boost_patches += boost.multi_array.C4510.warnings.patch
 boost_patches += boost.multi_array.Wshadow.warnings.patch
 boost_patches += boost.multi_index.Wshadow.warnings.patch.1
@@ -55,7 +56,6 @@ boost_patches += boost.std.move.patch
 boost_patches += boost.transform_width.patch
 boost_patches += boost.wundef.patch
 boost_patches += boost.wunused.patch
-boost_patches += boost.wdeprecated-register.patch.0
 boost_patches += boost.wuninitialized.patch
 boost_patches += boost.wdeprecated-auto_ptr.patch.0
 
