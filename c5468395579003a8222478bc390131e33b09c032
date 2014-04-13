@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a80dd14_aa922f9d",
+        "filename": "sd/source/ui/inc/SdUnoDrawView.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-04-13T10:16:39Z",
+      "side": 1,
+      "message": "global data, and even worse public access to it, in a class within the UNO framework, is a no-go. Please find a different means.",
+      "revId": "c5468395579003a8222478bc390131e33b09c032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
