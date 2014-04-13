@@ -55,3 +55,17 @@
 +                    rule_info(std::string(name_to_register), trace_node_))
                  ).second;
              }
+ 
+--- a/a/boost/boost/spirit/home/classic/error_handling/exceptions.hpp	2013-05-17 15:57:23.722638823 +0200
++++ a/a/boost/boost/spirit/home/classic/error_handling/exceptions.hpp	2013-05-17 15:26:32.319247352 +0200
+@@ -126,8 +126,8 @@
+         typedef unary<ParserT, parser<self_t> >         base_t;
+         typedef unary_parser_category                   parser_category_t;
+ 
+-        assertive_parser(ParserT const& parser, ErrorDescrT descriptor_)
+-        : base_t(parser), descriptor(descriptor_) {}
++        assertive_parser(ParserT const& parser_, ErrorDescrT descriptor_)
++        : base_t(parser_), descriptor(descriptor_) {}
+ 
+         template <typename ScannerT>
+         struct result
