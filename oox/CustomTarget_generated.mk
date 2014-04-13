@@ -25,7 +25,7 @@ $(oox_MISC)/vmlexport-shape-types.cxx : \
 
 $(oox_INC)/tokenhash.inc : $(oox_MISC)/tokenhash.gperf
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,GPF,1)
-	$(GPERF) --compare-strncmp $< | sed -e 's/(char\*)0/(char\*)0, 0/g' | grep -v '^#line' > $@
+	$(GPERF) --compare-strncmp --switch=2 --readonly-tables $< | sed -e 's/(char\*)0/(char\*)0, 0/g' | grep -v '^#line' > $@
 
 define oox_GenTarget
 $(oox_MISC)/$(2)ids.inc $(oox_INC)/$(2)names.inc $(if $(3),$(oox_MISC)/$(3)) $(if $(4),$(oox_INC)/$(4)names.inc) : \

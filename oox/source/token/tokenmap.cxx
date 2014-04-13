@@ -73,7 +73,7 @@ TokenMap::TokenMap() :
     {
         // check that the getIdentifier <-> getToken roundtrip works
         OString aUtf8Name = OUStringToOString( maTokenNames[ nToken ].maUniName, RTL_TEXTENCODING_UTF8 );
-        struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
+        const struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
         bOk = pToken && (pToken->nToken == nToken);
         OSL_ENSURE( bOk, OStringBuffer( "TokenMap::TokenMap - token list broken, #" ).
             append( nToken ).append( ", '" ).append( aUtf8Name ).append( '\'' ).getStr() );
@@ -82,7 +82,7 @@ TokenMap::TokenMap() :
 
     for (unsigned char c = 'a'; c <= 'z'; c++)
     {
-        struct xmltoken* pToken = Perfect_Hash::in_word_set(
+        const struct xmltoken* pToken = Perfect_Hash::in_word_set(
                 reinterpret_cast< const char* >( &c ), 1 );
         mnAlphaTokens[ c - 'a' ] = pToken ? pToken->nToken : XML_TOKEN_INVALID;
     }
@@ -102,7 +102,7 @@ OUString TokenMap::getUnicodeTokenName( sal_Int32 nToken ) const
 sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName ) const
 {
     OString aUtf8Name = OUStringToOString( rUnicodeName, RTL_TEXTENCODING_UTF8 );
-    struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
+    const struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
@@ -115,7 +115,7 @@ Sequence< sal_Int8 > TokenMap::getUtf8TokenName( sal_Int32 nToken ) const
 
 sal_Int32 TokenMap::getTokenPerfectHash( const char *pStr, sal_Int32 nLength ) const
 {
-    struct xmltoken* pToken = Perfect_Hash::in_word_set( pStr, nLength );
+    const struct xmltoken* pToken = Perfect_Hash::in_word_set( pStr, nLength );
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
