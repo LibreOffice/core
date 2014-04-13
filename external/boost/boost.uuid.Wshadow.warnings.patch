@@ -1,0 +1,24 @@
+--- misc/boost_1_44_0/boost/uuid/uuid_io.hpp
++++ misc/build/boost_1_44_0/boost/uuid/uuid_io.hpp
+@@ -59,7 +59,7 @@
+         }
+         
+         if (flags & std::ios_base::left) {
+-            for (std::streamsize i=uuid_width; i<width; i++) {
++            for (std::streamsize s=uuid_width; s<width; ++s) {
+                 os << fill;
+             }
+         }
+--- misc/boost_1_44_0/boost/uuid/name_generator.hpp
++++ misc/build/boost_1_44_0/boost/uuid/name_generator.hpp
+@@ -30,8 +30,8 @@
+ public:
+     typedef uuid result_type;
+ 
+-    explicit name_generator(uuid const& namespace_uuid)
+-        : namespace_uuid(namespace_uuid)
++    explicit name_generator(uuid const& namespace_uuid_)
++        : namespace_uuid(namespace_uuid_)
+     {}
+ 
+     uuid operator()(const char* name) {

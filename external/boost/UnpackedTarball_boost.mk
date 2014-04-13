@@ -14,8 +14,6 @@ boost_patches += boost.3780.aliasing.patch
 boost_patches += boost.gcc47679.patch
 #https://svn.boost.org/trac/boost/ticket/6369
 boost_patches += boost.6369.warnings.patch
-#https://svn.boost.org/trac/boost/ticket/6397
-boost_patches += boost.6397.warnings.patch
 #https://svn.boost.org/trac/boost/ticket/7551
 boost_patches += boost.7551.unusedvars.patch
 boost_patches += boost.4100.warnings.patch
@@ -23,12 +21,16 @@ boost_patches += boost.4510.warnings.patch
 #https://svn.boost.org/trac/boost/ticket/6142
 boost_patches += boost.6142.warnings.patch.1
 
+boost_patches += boost.crc.Wshadow.warnings.patch
 boost_patches += boost.date_time.Wshadow.warnings.patch
+boost_patches += boost.multi_array.Wshadow.warnings.patch
 boost_patches += boost.ptr_container.Wshadow.warnings.patch
 boost_patches += boost.ptr_container.Wignored-qualifiers.warnings.patch
 boost_patches += boost.ptr_container.Wextra.warnings.patch
 boost_patches += boost.ptr_container.Wunused-parameter.warnings.patch
+boost_patches += boost.random.Wshadow.warnings.patch
 boost_patches += boost.spirit.Wshadow.warnings.patch
+boost_patches += boost.uuid.Wshadow.warnings.patch
 boost_patches += boost.libcdr.warnings.patch.1
 
 # Help static analysis tools (see SAL_UNUSED_PARAMETER in sal/types.h):

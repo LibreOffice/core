@@ -1,0 +1,21 @@
+--- misc/boost_1_44_0/boost/boost/crc.hpp
++++ misc/build/boost_1_44_0/boost/boost/crc.hpp
+@@ -755,15 +755,15 @@ void
+ crc_basic<Bits>::process_bits
+ (
+     unsigned char  bits,
+-    std::size_t    bit_count
++    std::size_t    bit_count_
+ )
+ {
+     // ignore the bits above the ones we want
+-    bits <<= CHAR_BIT - bit_count;
++    bits <<= CHAR_BIT - bit_count_;
+ 
+     // compute the CRC for each bit, starting with the upper ones
+     unsigned char const  high_bit_mask = 1u << ( CHAR_BIT - 1u );
+-    for ( std::size_t i = bit_count ; i > 0u ; --i, bits <<= 1u )
++    for ( std::size_t i = bit_count_ ; i > 0u ; --i, bits <<= 1u )
+     {
+         process_bit( static_cast<bool>(bits & high_bit_mask) );
+     }

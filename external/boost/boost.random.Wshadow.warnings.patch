@@ -1,0 +1,29 @@
+--- misc/boost_1_44_0/boost/random/mersenne_twister.hpp
++++ misc/build/boost_1_44_0/boost/random/mersenne_twister.hpp
+@@ -195,19 +195,19 @@
+      * Returns true if the two generators are in the same state,
+      * and will thus produce identical sequences.
+      */
+-    friend bool operator==(const mersenne_twister_engine& x,
+-                           const mersenne_twister_engine& y)
++    friend bool operator==(const mersenne_twister_engine& x_arg,
++                           const mersenne_twister_engine& y_arg)
+     {
+-        if(x.i < y.i) return x.equal_imp(y);
+-        else return y.equal_imp(x);
++        if(x_arg.i < y_arg.i) return x_arg.equal_imp(y_arg);
++        else return y_arg.equal_imp(x_arg);
+     }
+     
+     /**
+      * Returns true if the two generators are in different states.
+      */
+-    friend bool operator!=(const mersenne_twister_engine& x,
+-                           const mersenne_twister_engine& y)
+-    { return !(x == y); }
++    friend bool operator!=(const mersenne_twister_engine& x_arg,
++                           const mersenne_twister_engine& y_arg)
++    { return !(x_arg == y_arg); }
+ 
+ private:
+     /// \cond show_private
