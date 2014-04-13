@@ -10,6 +10,8 @@
 boost_patches :=
 #https://svn.boost.org/trac/boost/ticket/3780
 boost_patches += boost.3780.aliasing.patch
+#https://svn.boost.org/trac/boost/ticket/9397
+boost_patches += boost.9397.warnings.patch.0
 #http://gcc.gnu.org/bugzilla/show_bug.cgi?id=47679
 boost_patches += boost.gcc47679.patch
 #https://svn.boost.org/trac/boost/ticket/6369
@@ -26,6 +28,7 @@ boost_patches += boost.multi_array.C4510.warnings.patch
 boost_patches += boost.multi_array.Wshadow.warnings.patch
 boost_patches += boost.multi_index.Wshadow.warnings.patch.1
 boost_patches += boost.property_tree.Wshadow.warnings.patch.1
+boost_patches += boost.property_tree.Wtautological-constant-out-of-range-compare.warnings.patch.0
 boost_patches += boost.ptr_container.Wshadow.warnings.patch
 boost_patches += boost.ptr_container.Wignored-qualifiers.warnings.patch
 boost_patches += boost.ptr_container.Wextra.warnings.patch
@@ -55,9 +58,6 @@ boost_patches += boost.wshadow.patch
 boost_patches += boost.wdeprecated-register.patch.0
 boost_patches += boost.wuninitialized.patch
 boost_patches += boost.wdeprecated-auto_ptr.patch.0
-#https://svn.boost.org/trac/boost/ticket/9397
-boost_patches += boost.9397.warnings.patch.0
-boost_patches += boost.jsonparser.warnings.patch.0
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
