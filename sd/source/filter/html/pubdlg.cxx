@@ -807,11 +807,11 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     // Page 3
 
     aValue.Name = "Width";
-    sal_Int32 nTmpWidth = 512;
+    sal_Int32 nTmpWidth = 640;
     if( pPage3_Resolution_2->IsChecked() )
-        nTmpWidth = 640;
-    else if( pPage3_Resolution_3->IsChecked() )
         nTmpWidth = 800;
+    else if( pPage3_Resolution_3->IsChecked() )
+        nTmpWidth = 1024;
 
     aValue.Value <<= nTmpWidth;
     aProps.push_back( aValue );
