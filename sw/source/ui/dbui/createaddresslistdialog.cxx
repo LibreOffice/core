@@ -331,7 +331,7 @@ bool SwAddressControl_Impl::PreNotify( NotifyEvent& rNEvt )
     if(rNEvt.GetType() == EVENT_COMMAND)
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
-        sal_uInt16 nCmd = pCEvt->GetCommand();
+        const sal_uInt16 nCmd = pCEvt->GetCommand();
         if( COMMAND_WHEEL == nCmd )
         {
             Command(*pCEvt);
@@ -440,8 +440,8 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     {
         //database has to be created
         const ResStringArray& rAddressHeader = rConfig.GetDefaultAddressHeaders();
-        sal_uInt32 nCount = rAddressHeader.Count();
-        for(sal_uInt16 nHeader = 0; nHeader < nCount; ++nHeader)
+        const sal_uInt32 nCount = rAddressHeader.Count();
+        for(sal_uInt32 nHeader = 0; nHeader < nCount; ++nHeader)
             m_pCSVData->aDBColumnHeaders.push_back( rAddressHeader.GetString(nHeader));
         ::std::vector<OUString> aNewData;
         OUString sTemp;
