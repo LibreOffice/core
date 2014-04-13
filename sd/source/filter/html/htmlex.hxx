@@ -211,6 +211,10 @@ class HtmlExport
     bool WriteHtml( const OUString& rFileName, bool bAddExtension, const OUString& rHtmlData );
     OUString GetButtonName( int nButton ) const;
 
+    void WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutliner,
+                                OutlinerParaObject* pOutlinerParagraphObject,
+                                const Color& rBackgroundColor, bool bHeadLine);
+
  public:
     HtmlExport(const OUString& aPath,
                const css::uno::Sequence<css::beans::PropertyValue>& rParams,

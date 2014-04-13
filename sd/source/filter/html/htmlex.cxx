@@ -1205,9 +1205,8 @@ OUString HtmlExport::CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, 
 
 
 // creates a outliner text for a page
-OUString HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
-                                      SdPage* pPage,
-                                      bool bHeadLine, const Color& rBackgroundColor )
+OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
+                                       bool bHeadLine, const Color& rBackgroundColor)
 {
     OUStringBuffer aStr;
 
@@ -1216,170 +1215,113 @@ OUString HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
         SdrObject* pObject = pPage->GetObj(i);
         PresObjKind eKind = pPage->GetPresObjKind(pObject);
 
-        if (eKind == PRESOBJ_TABLE)
+        switch (eKind)
         {
-            SdrTableObj* pTableObject = (SdrTableObj*) pObject;
-
-            CellPos aStart, aEnd;
-
-            aStart = pTableObject->getFirstCell();
-            aEnd = pTableObject->getLastCell();
-
-            sal_Int32 nColCount = pTableObject->getColumnCount();
-            aStr.append("<table>\r\n");
-            for (sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++)
+            case PRESOBJ_TABLE:
             {
-                aStr.append("  <tr>\r\n");
-                for (sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++)
+                SdrTableObj* pTableObject = (SdrTableObj*) pObject;
+
+                CellPos aStart, aEnd;
+
+                aStart = pTableObject->getFirstCell();
+                aEnd = pTableObject->getLastCell();
+
+                sal_Int32 nColCount = pTableObject->getColumnCount();
+                aStr.append("<table>\r\n");
+                for (sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++)
                 {
-                    aStr.append("    <td>\r\n");
-                    sal_Int32 nCellIndex = nRow * nColCount + nCol;
-                    SdrText* pText = pTableObject->getText(nCellIndex);
-                    if (!pText || !pText->GetOutlinerParaObject())
-                        continue;
-
-                    pOutliner->SetText(*(pText->GetOutlinerParaObject()));
-
-                    sal_Int32 nCount = pOutliner->GetParagraphCount();
-
-                    Paragraph* pPara = NULL;
-
-                    sal_Int16 nCurrentDepth = -1;
-
-                    for (sal_Int32 nPara = 0; nPara < nCount; nPara++)
+                    aStr.append("  <tr>\r\n");
+                    for (sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++)
                     {
-                        pPara = pOutliner->GetParagraph(nPara);
-                        if(pPara == 0)
+                        aStr.append("    <td>\r\n");
+                        sal_Int32 nCellIndex = nRow * nColCount + nCol;
+                        SdrText* pText = pTableObject->getText(nCellIndex);
+
+                        if (pText == NULL)
                             continue;
-
-                        const sal_Int16 nDepth = (sal_uInt16) pOutliner->GetDepth(nPara);
-                        OUString aParaText = ParagraphToHTMLString(pOutliner, nPara, rBackgroundColor);
-
-                        if (aParaText.isEmpty())
-                            continue;
-
-                        if (nDepth < 0)
-                        {
-                            lclAppendStyle(aStr, "p", getParagraphStyle(pOutliner, nPara));
-                            aStr.append(aParaText);
-                            aStr.append("</p>\r\n");
-                        }
-                        else
-                        {
-                            while(nCurrentDepth < nDepth)
-                            {
-                                aStr.append("<ul>\r\n");
-                                nCurrentDepth++;
-                            }
-                            while(nCurrentDepth > nDepth)
-                            {
-                                aStr.append("</ul>\r\n");
-                                nCurrentDepth--;
-                            }
-                            lclAppendStyle(aStr, "li", getParagraphStyle(pOutliner, nPara));
-                            aStr.append(aParaText);
-                            aStr.append("</li>\r\n");
-                        }
+                        WriteOutlinerParagraph(aStr, pOutliner, pText->GetOutlinerParaObject(), rBackgroundColor, false);
+                        aStr.append("    </td>\r\n");
                     }
-                    while(nCurrentDepth >= 0)
-                    {
-                        aStr.append("</ul>\r\n");
-                        nCurrentDepth--;
-                    }
-                    pOutliner->Clear();
-                    aStr.append("    </td>\r\n");
+                    aStr.append("  </tr>\r\n");
                 }
-                aStr.append("  </tr>\r\n");
+                aStr.append("</table>\r\n");
             }
-            aStr.append("</table>\r\n");
+            break;
+            case PRESOBJ_TEXT:
+            case PRESOBJ_OUTLINE:
+            {
+                SdrTextObj* pTextObject = (SdrTextObj*) pObject;
+                if (pTextObject->IsEmptyPresObj())
+                    continue;
+                WriteOutlinerParagraph(aStr, pOutliner, pTextObject->GetOutlinerParaObject(), rBackgroundColor, bHeadLine);
+            }
+            break;
+            default:
+                break;
         }
     }
-
-    SdrTextObj* pTO = (SdrTextObj*)pPage->GetPresObj(PRESOBJ_TEXT);
-    if(!pTO)
-        pTO = GetLayoutTextObject(pPage);
-
-    if (pTO && !pTO->IsEmptyPresObj())
-    {
-        OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
-        if (pOPO)
-        {
-            pOutliner->Clear();
-            pOutliner->SetText( *pOPO );
-
-            sal_Int32 nCount = pOutliner->GetParagraphCount();
-
-            Paragraph* pPara = NULL;
-            sal_Int16 nActDepth = -1;
-
-            OUString aParaText;
-            for (sal_Int32 nPara = 0; nPara < nCount; nPara++)
-            {
-                pPara = pOutliner->GetParagraph(nPara);
-                if(pPara == 0)
-                    continue;
-
-                const sal_Int16 nDepth = (sal_uInt16) pOutliner->GetDepth( nPara );
-                aParaText = ParagraphToHTMLString(pOutliner,nPara,rBackgroundColor);
-
-                if (aParaText.isEmpty())
-                    continue;
-
-                if(nDepth < nActDepth )
-                {
-                    do
-                    {
-                        aStr.append("</ul>");
-                        nActDepth--;
-                    }
-                    while(nDepth < nActDepth);
-                }
-                else if(nDepth > nActDepth )
-                {
-                    do
-                    {
-                        aStr.append("<ul>");
-                        nActDepth++;
-                    }
-                    while( nDepth > nActDepth );
-                }
-
-                OUString sStyle(getParagraphStyle(pOutliner, nPara));
-                if(nActDepth >= 0 )
-                {
-                    lclAppendStyle(aStr, "li", sStyle);
-                }
-
-                if(nActDepth <= 0 && bHeadLine)
-                {
-                    if( nActDepth == 0 )
-                    {
-                        aStr.append("<h2>");
-                    }
-                    else
-                    {
-                        lclAppendStyle(aStr, "h2", sStyle);
-                    }
-                }
-                aStr.append(aParaText);
-                if(nActDepth == 0 && bHeadLine)
-                    aStr.append("</h2>");
-                if(nActDepth >= 0 )
-                    aStr.append("</li>");
-                aStr.append("\r\n");
-            }
-
-            while( nActDepth >= 0 )
-            {
-                aStr.append("</ul>");
-                nActDepth--;
-            };
-        }
-    }
-
     return aStr.makeStringAndClear();
 }
 
+void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutliner,
+                                        OutlinerParaObject* pOutlinerParagraphObject,
+                                        const Color& rBackgroundColor, bool bHeadLine)
+{
+    if (pOutlinerParagraphObject == NULL)
+        return;
+
+    pOutliner->SetText(*pOutlinerParagraphObject);
+
+    sal_Int32 nCount = pOutliner->GetParagraphCount();
+
+    Paragraph* pParagraph = NULL;
+
+    sal_Int16 nCurrentDepth = -1;
+
+    for (sal_Int32 nIndex = 0; nIndex < nCount; nIndex++)
+    {
+        pParagraph = pOutliner->GetParagraph(nIndex);
+        if(pParagraph == NULL)
+            continue;
+
+        const sal_Int16 nDepth = (sal_uInt16) pOutliner->GetDepth(nIndex);
+        OUString aParaText = ParagraphToHTMLString(pOutliner, nIndex, rBackgroundColor);
+
+        if (aParaText.isEmpty())
+            continue;
+
+        if (nDepth < 0)
+        {
+            OUString aTag = bHeadLine ? OUString("h2") : OUString("p");
+            lclAppendStyle(aStr, aTag, getParagraphStyle(pOutliner, nIndex));
+
+            aStr.append(aParaText);
+            aStr.append("</" + aTag + ">\r\n");
+        }
+        else
+        {
+            while(nCurrentDepth < nDepth)
+            {
+                aStr.append("<ul>\r\n");
+                nCurrentDepth++;
+            }
+            while(nCurrentDepth > nDepth)
+            {
+                aStr.append("</ul>\r\n");
+                nCurrentDepth--;
+            }
+            lclAppendStyle(aStr, "li", getParagraphStyle(pOutliner, nIndex));
+            aStr.append(aParaText);
+            aStr.append("</li>\r\n");
+        }
+    }
+    while(nCurrentDepth >= 0)
+    {
+        aStr.append("</ul>\r\n");
+        nCurrentDepth--;
+    }
+    pOutliner->Clear();
+}
 
 // creates a outliner text for a note page
 OUString HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
