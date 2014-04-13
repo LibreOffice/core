@@ -663,8 +663,7 @@ bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
         }
     }
     //search for this entry in the content
-    bool bRet = m_pDragED->GetText().indexOf("<" + sEntry + ">") != -1;
-    return bRet;
+    return m_pDragED->GetText().indexOf("<" + sEntry + ">") >= 0;
 }
 
 IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiLineEdit*, pEdit)
