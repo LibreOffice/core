@@ -76,9 +76,7 @@ int RTFTokenizer::resolveParse()
         OUString sDocLoad(ResId(RID_SVXSTR_DOC_LOAD, *pResMgr).toString());
 
         sal_Size nCurrentPos = Strm().Tell();
-        Strm().Seek(STREAM_SEEK_TO_END);
-        sal_Size nEndPos = Strm().Tell();
-        Strm().Seek(nCurrentPos);
+        sal_Size nEndPos = nCurrentPos + Strm().remainingSize();
         m_xStatusIndicator->start(sDocLoad, nEndPos);
         nPercentSize = nEndPos / 100;
 
