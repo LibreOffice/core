@@ -705,6 +705,7 @@ void HtmlExport::ExportSingleDocument()
     WriteHtml(maDocFileName, false, aStr.makeStringAndClear());
 
     pOutliner->Clear();
+    ResetProgress();
 }
 
 // exports the (in the c'tor specified impress document) to html
