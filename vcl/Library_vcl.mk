@@ -234,14 +234,14 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/metric \
     vcl/source/gdi/octree \
     vcl/source/gdi/oldprintadaptor \
-    vcl/source/gdi/outdev2 \
-    vcl/source/gdi/outdev3 \
-    vcl/source/gdi/outdev4 \
-    vcl/source/gdi/outdev5 \
-    vcl/source/gdi/outdev6 \
-    vcl/source/gdi/outdev \
-    vcl/source/gdi/outdevnative \
-    vcl/source/gdi/outmap \
+    vcl/source/gdi/outdev/outdev2 \
+    vcl/source/gdi/outdev/outdev3 \
+    vcl/source/gdi/outdev/outdev4 \
+    vcl/source/gdi/outdev/outdev5 \
+    vcl/source/gdi/outdev/outdev6 \
+    vcl/source/gdi/outdev/outdev \
+    vcl/source/gdi/outdev/outdevnative \
+    vcl/source/gdi/outdev/outmap \
     vcl/source/gdi/pdfextoutdevdata \
     vcl/source/gdi/pdffontcache \
     vcl/source/gdi/pdfwriter \
