@@ -258,8 +258,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         Reference <XNameAccess> xCols = xColSupp->getColumns();
         Sequence<OUString> aColNames = xCols->getElementNames();
         const OUString* pColNames = aColNames.getConstArray();
-        long nCount = aColNames.getLength();
-        for (long n = 0; n < nCount; n++)
+        sal_Int32 nCount = aColNames.getLength();
+        for (sal_Int32 n = 0; n < nCount; ++n)
         {
             SwInsDBColumn* pNew = new SwInsDBColumn( pColNames[n], (sal_uInt16)n );
             Any aCol = xCols->getByName(pColNames[n]);
@@ -391,11 +391,11 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     m_pLbTblDbColumn->SetDoubleClickHdl( LINK( this, SwInsertDBColAutoPilot, DblClickHdl ));
     m_pLbTableCol->SetDoubleClickHdl( LINK( this, SwInsertDBColAutoPilot, DblClickHdl ));
 
-    for( sal_uInt16 n = 0; n < aDBColumns.size(); ++n )
+    for( size_t n = 0; n < aDBColumns.size(); ++n )
     {
         const OUString& rS = aDBColumns[ n ]->sColumn;
-        m_pLbTblDbColumn->InsertEntry( rS, n );
-        m_pLbTxtDbColumn->InsertEntry( rS, n );
+        m_pLbTblDbColumn->InsertEntry( rS, static_cast<sal_Int32>(n) );
+        m_pLbTxtDbColumn->InsertEntry( rS, static_cast<sal_Int32>(n) );
     }
     m_pLbTxtDbColumn->SelectEntryPos( 0 );
     m_pLbTblDbColumn->SelectEntryPos( 0 );
@@ -554,8 +554,9 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
 
         m_pLbTblDbColumn->Clear();
         m_pLbTableCol->Clear();
-        for( sal_uInt16 n = 0; n < aDBColumns.size(); ++n )
-            m_pLbTblDbColumn->InsertEntry( aDBColumns[ n ]->sColumn, n );
+        for( size_t n = 0; n < aDBColumns.size(); ++n )
+            m_pLbTblDbColumn->InsertEntry( aDBColumns[ n ]->sColumn,
+                                           static_cast<sal_Int32>(n) );
         m_pLbTblDbColumn->SelectEntryPos( 0 );
     }
     else if( pButton == m_pIbDbcolToEdit )
@@ -566,8 +567,8 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
         if( !aFld.isEmpty() )
         {
             OUString aStr( m_pEdDbText->GetText() );
-            sal_uInt16 nPos = (sal_uInt16)m_pEdDbText->GetSelection().Min();
-            sal_uInt16 nSel = sal_uInt16(m_pEdDbText->GetSelection().Max()) - nPos;
+            sal_Int32 nPos = static_cast<sal_Int32>(m_pEdDbText->GetSelection().Min());
+            const sal_Int32 nSel = static_cast<sal_Int32>(m_pEdDbText->GetSelection().Max()) - nPos;
             if( nSel )
                 // first delete the existing selection
                 aStr = aStr.replaceAt( nPos, nSel, "" );
@@ -591,7 +592,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
 
             aStr = aStr.replaceAt( nPos, 0, aFld );
             m_pEdDbText->SetText( aStr );
-            nPos = nPos + aFld.getLength();
+            nPos += aFld.getLength();
             m_pEdDbText->SetSelection( Selection( nPos ));
         }
     }
@@ -713,16 +714,18 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
     {
         // Number of columns has changed: then the TabCols have to be adjusted
         long nWidth = pRep->GetWidth();
-        sal_Int32 nCols = m_pLbTableCol->GetEntryCount() - 1;
+        const sal_Int32 nCols = m_pLbTableCol->GetEntryCount() - 1;
         SwTabCols aTabCols( nCols );
         aTabCols.SetRight( nWidth  );
         aTabCols.SetRightMax( nWidth );
         if( nCols )
-            for( sal_uInt16 n = 0, nStep = (sal_uInt16)(nWidth / (nCols+1)), nW = nStep;
-                    n < nCols; ++n, nW = nW + nStep )
+        {
+            const sal_Int32 nStep = nWidth / (nCols+1);
+            for( sal_Int32 n = 0; n < nCols; ++n )
             {
-                aTabCols.Insert( nW, sal_False, n );
+                aTabCols.Insert( nStep*(n+1), sal_False, n );
             }
+        }
         delete pRep;
         pRep = new SwTableRep( aTabCols );
         pRep->SetAlign( text::HoriOrientation::NONE );
@@ -974,12 +977,12 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         rSh.DoUndo( sal_False );
 
         sal_Int32 nCols = m_pLbTableCol->GetEntryCount();
-        sal_uInt16 nRows = 0;
+        sal_Int32 nRows = 0;
         if( m_pCbTableHeadon->IsChecked() )
             nRows++;
 
         if( pSelection )
-            nRows = nRows + (sal_uInt16)rSelection.getLength();
+            nRows += rSelection.getLength();
         else
             ++nRows;
 
@@ -1188,7 +1191,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     pColl = rSh.FindTxtFmtCollByName( sTmplNm );
                     if( !pColl )
                     {
-                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sTmplNm, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
+                            sTmplNm, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                         if( USHRT_MAX != nId )
                             pColl = rSh.GetTxtCollFromPool( nId );
                         else
@@ -1228,7 +1232,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                         OUString("1"), aEmptyOUStr, aDBData );
 
             bool bSetCrsr = true;
-            sal_uInt16 n = 0, nCols = aColArr.size();
+            const size_t nCols = aColArr.size();
             ::sw::mark::IMark* pMark = NULL;
             for( sal_Int32 i = 0 ; ; ++i )
             {
@@ -1252,7 +1256,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 if(bBreak)
                     break;
 
-                for( n = 0; n < nCols; ++n )
+                for( size_t n = 0; n < nCols; ++n )
                 {
                     _DB_Column* pDBCol = &aColArr[ n ];
                     OUString sIns;
@@ -1554,7 +1558,8 @@ void SwInsertDBColAutoPilot::Commit()
     pValues[3].Value <<= OUString(m_pEdDbText->GetText());
 
     OUString sTmp;
-    for( sal_uInt16 n = 0, nCnt = m_pLbTableCol->GetEntryCount(); n < nCnt; ++n )
+    const sal_Int32 nCnt = m_pLbTableCol->GetEntryCount();
+    for( sal_Int32 n = 0; n < nCnt; ++n )
         (sTmp += m_pLbTableCol->GetEntry(n)) += "\x0a";
 
     if (!sTmp.isEmpty())
@@ -1588,7 +1593,7 @@ void SwInsertDBColAutoPilot::Commit()
     OUString sPrevLang;
 
     SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
-    for(sal_uInt16 nCol = 0; nCol < aDBColumns.size(); nCol++)
+    for(size_t nCol = 0; nCol < aDBColumns.size(); nCol++)
     {
         OUString sColumnNode = sNewNode;
          SwInsDBColumn* pColumn = aDBColumns[nCol];
@@ -1693,7 +1698,7 @@ void SwInsertDBColAutoPilot::Load()
                 pSubProps[0] >>= sColumn;
                 //check for existance of the loaded column name
                 bool bFound = false;
-                for(sal_uInt16 nRealColumn = 0; nRealColumn < aDBColumns.size(); nRealColumn++)
+                for(size_t nRealColumn = 0; nRealColumn < aDBColumns.size(); ++nRealColumn)
                 {
                     if(aDBColumns[nRealColumn]->sColumn == sColumn)
                     {
@@ -1730,10 +1735,10 @@ void SwInsertDBColAutoPilot::Load()
 
                 pNewData->aDBColumns.insert(pInsDBColumn);
             }
-            sal_Int32 n = 0;
             OUString sTmp( pNewData->sTblList );
             if( !sTmp.isEmpty() )
             {
+                sal_Int32 n = 0;
                 do {
                     OUString sEntry( sTmp.getToken( 0, '\x0a', n ) );
                     //preselect column - if they still exist!
@@ -1767,7 +1772,7 @@ void SwInsertDBColAutoPilot::Load()
                 // then load the AutoFmt file and look for Autoformat first
                 SwTableAutoFmtTbl aAutoFmtTbl;
                 aAutoFmtTbl.Load();
-                for( sal_uInt16 nAutoFmt = aAutoFmtTbl.size(); nAutoFmt; )
+                for( size_t nAutoFmt = aAutoFmtTbl.size(); nAutoFmt; )
                     if( sTmp == aAutoFmtTbl[ --nAutoFmt ].GetName() )
                     {
                         pTAutoFmt = new SwTableAutoFmt( aAutoFmtTbl[ nAutoFmt ] );
@@ -1786,10 +1791,10 @@ void SwInsertDBColAutoPilot::Load()
 
             // now copy the user defined Numberformat strings to the
             // Shell. Then only these are available as ID
-            for( n = 0; n < (sal_Int32) aDBColumns.size() ; ++n )
+            for( size_t n = 0; n < aDBColumns.size() ; ++n )
             {
                 SwInsDBColumn& rSet = *aDBColumns[ n ];
-                for( sal_uInt16 m = 0; m < pNewData->aDBColumns.size() ; ++m )
+                for( size_t m = 0; m < pNewData->aDBColumns.size() ; ++m )
                 {
                     SwInsDBColumn& rGet = *pNewData->aDBColumns[ m ];
                     if(rGet.sColumn == rSet.sColumn)
