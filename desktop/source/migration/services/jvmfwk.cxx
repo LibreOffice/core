@@ -27,6 +27,7 @@
 #include "rtl/bootstrap.hxx"
 #include "sal/types.h"
 #include "sal/config.h"
+#include "boost/noncopyable.hpp"
 #include "boost/scoped_array.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
@@ -57,10 +58,8 @@ using namespace com::sun::star::configuration::backend;
 namespace migration
 {
 
-class CJavaInfo
+class CJavaInfo: private boost::noncopyable
 {
-    CJavaInfo(const CJavaInfo&);
-    CJavaInfo& operator = (const CJavaInfo&);
 public:
     JavaInfo* pData;
     CJavaInfo();

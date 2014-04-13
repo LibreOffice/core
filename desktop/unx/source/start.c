@@ -35,6 +35,7 @@
 
 #include "args.h"
 #include "../../source/inc/exithelper.h"
+#include "pagein.h"
 #include "splashx.h"
 
 #define PIPEDEFAULTPATH      "/tmp"
@@ -597,9 +598,6 @@ system_checks( void )
     }
 #endif
 }
-
-/* re-use the pagein code */
-extern int pagein_execute (int argc, char **argv);
 
 static char *build_pagein_path (Args *args, const char *pagein_name)
 {

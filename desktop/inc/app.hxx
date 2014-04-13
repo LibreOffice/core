@@ -22,6 +22,7 @@
 
 // stl includes first
 #include <map>
+#include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/svapp.hxx>
@@ -187,6 +188,9 @@ class Desktop : public Application
 
         static ResMgr*          pResMgr;
 };
+
+OUString GetURL_Impl(
+    const OUString& rName, boost::optional< OUString > const & cwdUrl );
 
 }
 

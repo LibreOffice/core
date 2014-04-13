@@ -25,6 +25,7 @@
 #include "sfx2/app.hxx"
 #include <svl/fstathelper.hxx>
 
+#include "app.hxx"
 #include "dispatchwatcher.hxx"
 #include <rtl/ustring.hxx>
 #include <comphelper/processfactory.hxx>
@@ -66,9 +67,6 @@ using namespace ::com::sun::star::task;
 
 namespace desktop
 {
-
-OUString GetURL_Impl(
-    const OUString& rName, boost::optional< OUString > const & cwdUrl );
 
 struct DispatchHolder
 {
@@ -163,7 +161,7 @@ DispatchWatcher::~DispatchWatcher()
 
 sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequestsList, bool bNoTerminate )
 {
-    Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+    Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
 
     DispatchList::const_iterator    p;
     std::vector< DispatchHolder >   aDispatches;
@@ -628,7 +626,7 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) th
     if ( !nCount && !OfficeIPCThread::AreRequestsPending() )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.
-        Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+        Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         Reference< XElementAccess > xList( xDesktop->getFrames(), UNO_QUERY );
 
         if ( !xList->hasElements() )

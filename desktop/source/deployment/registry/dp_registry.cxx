@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include "dp_package.hxx"
 #include "dp_registry.hrc"
+#include "dp_registry.hxx"
 #include "dp_misc.h"
 #include "dp_resource.h"
 #include "dp_interact.h"
@@ -50,15 +53,6 @@ using namespace ::com::sun::star::ucb;
 
 
 namespace dp_registry {
-
-namespace backend {
-namespace bundle {
-Reference<deployment::XPackageRegistry> create(
-    Reference<deployment::XPackageRegistry> const & xRootRegistry,
-    OUString const & context, OUString const & cachePath, bool readOnly,
-    Reference<XComponentContext> const & xComponentContext );
-}
-}
 
 namespace {
 

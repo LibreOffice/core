@@ -218,12 +218,6 @@ private:
         uno::Reference< deployment::XPackage > const & package,
         uno::Any const & exception) const;
 
-    uno::Sequence< uno::Reference< xml::dom::XElement > >
-    getUpdateInformation(
-        uno::Reference< deployment::XPackage > const & package,
-        uno::Sequence< OUString > const & urls,
-        OUString const & identifier) const;
-
     OUString getUpdateDisplayString(
         dp_gui::UpdateData const & data, OUString const & version = OUString()) const;
 

@@ -155,7 +155,6 @@ public:
 
     Dialog * activeDialog() { return m_pDialogHelper ? m_pDialogHelper->getWindow() : NULL; }
 
-    void setTitle( const OUString& rNewTitle ) { m_sTitle = rNewTitle; }
     void startProgress();
     void stopProgress();
     void progressSection( const OUString &rText,

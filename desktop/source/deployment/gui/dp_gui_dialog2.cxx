@@ -136,7 +136,6 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     DECL_DLLPRIVATE_LINK( HandleOptionsBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleEnableBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleRemoveBtn, void * );
-    DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
 
 public:
                     ExtBoxWithBtns_Impl(Window* pParent);

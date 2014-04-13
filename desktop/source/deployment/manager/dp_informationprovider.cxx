@@ -64,9 +64,6 @@ class PackageInformationProvider :
                  PackageInformationProvider( uno::Reference< uno::XComponentContext >const& xContext);
     virtual     ~PackageInformationProvider();
 
-    static uno::Sequence< OUString > getServiceNames();
-    static OUString getImplName();
-
     // XPackageInformationProvider
     virtual OUString SAL_CALL getPackageLocation( const OUString& extensionId )
         throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;

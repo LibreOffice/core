@@ -19,6 +19,7 @@
 
 
 #include "dp_package.hrc"
+#include "dp_package.hxx"
 #include "dp_backend.h"
 #include "dp_ucb.h"
 #include "dp_interact.h"

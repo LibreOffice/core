@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include "dp_registry.hxx"
 #include "dp_ucb.h"
 #include "dp_resource.h"
 #include "dp_platform.hxx"
@@ -68,13 +69,6 @@ using namespace ::com::sun::star::ucb;
 
 namespace dp_log {
 extern comphelper::service_decl::ServiceDecl const serviceDecl;
-}
-
-namespace dp_registry {
-Reference<deployment::XPackageRegistry> create(
-    OUString const & context,
-    OUString const & cachePath, bool readOnly,
-    Reference<XComponentContext> const & xComponentContext );
 }
 
 namespace dp_manager {

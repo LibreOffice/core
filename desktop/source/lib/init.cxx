@@ -126,8 +126,6 @@ static OUString getAbsoluteURL(const char* pURL)
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT LibreOffice *liblibreoffice_hook(void);
-
 static void doc_destroy(LibreOfficeDocument* pThis);
 static int  doc_saveAs(LibreOfficeDocument* pThis, const char* pUrl, const char* pFormat);
 static int  doc_saveAsWithOptions(LibreOfficeDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
@@ -389,7 +387,7 @@ static int lo_initialize(LibreOffice* pThis, const char* pAppPath)
     return bInitialized;
 }
 
-LibreOffice *liblibreoffice_hook(void)
+SAL_DLLPUBLIC_EXPORT LibreOffice *liblibreoffice_hook(void)
 {
     if (!gImpl)
     {

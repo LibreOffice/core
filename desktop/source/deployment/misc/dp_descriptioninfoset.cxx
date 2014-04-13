@@ -26,6 +26,7 @@
 #include "comphelper/seqstream.hxx"
 #include "comphelper/makesequence.hxx"
 #include "comphelper/processfactory.hxx"
+#include "boost/noncopyable.hpp"
 #include "boost/optional.hpp"
 #include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
@@ -58,7 +59,9 @@ namespace {
 
 using css::uno::Reference;
 
-class EmptyNodeList: public ::cppu::WeakImplHelper1< css::xml::dom::XNodeList >
+class EmptyNodeList:
+    public cppu::WeakImplHelper1<css::xml::dom::XNodeList>,
+    private boost::noncopyable
 {
 public:
     EmptyNodeList();
@@ -69,10 +72,6 @@ public:
 
     virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL
     item(::sal_Int32 index) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-private:
-    EmptyNodeList(EmptyNodeList &); // not defined
-    void operator =(EmptyNodeList &); // not defined
 };
 
 EmptyNodeList::EmptyNodeList() {}

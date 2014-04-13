@@ -62,13 +62,10 @@ public:
 
     sal_Bool IsEndReached() const;
     sal_Bool EndReached() const { return mbEndReached; }
-    void SetEndReached( sal_Bool bEnd ) { mbEndReached = bEnd; }
 
     void SetEndReachedHdl( const Link& rHdl )  { maEndReachedHdl = rHdl; }
-    const Link& GetAutocompleteHdl() const { return maEndReachedHdl; }
 
     void SetScrolledHdl( const Link& rHdl )  { maScrolledHdl = rHdl; }
-    const Link& GetScrolledHdl() const { return maScrolledHdl; }
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 

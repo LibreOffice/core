@@ -18,6 +18,7 @@
  */
 
 #include "file_image.h"
+#include "pagein.h"
 
 #include <unistd.h>
 #include <errno.h>
@@ -48,8 +49,6 @@ cleanup_and_leave:
     file_image_close (&image);
     return (result);
 }
-
-extern int pagein_execute (int argc, char **argv);
 
 /* main */
 int pagein_execute (int argc, char **argv)

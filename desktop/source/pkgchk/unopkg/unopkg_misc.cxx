@@ -47,8 +47,6 @@ using namespace ::com::sun::star::ucb;
 
 namespace unopkg {
 
-bool getLockFilePath(OUString & out);
-
 OUString toString( OptionInfo const * info )
 {
     OSL_ASSERT( info != 0 );
