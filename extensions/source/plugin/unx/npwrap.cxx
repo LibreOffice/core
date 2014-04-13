@@ -45,6 +45,8 @@
 
 #include <config_vclplug.h>
 
+#include <npwrap.hxx>
+
 PluginConnector* pConnector = NULL;
 
 int         nAppArguments = 0;
@@ -54,8 +56,6 @@ Display*    pXtAppDisplay = NULL;
 
 extern oslModule pPluginLib;
 extern NPError (*pNP_Shutdown)();
-
-void LoadAdditionalLibs(const char*);
 
 XtAppContext app_context;
 Widget topLevel = NULL, topBox = NULL;

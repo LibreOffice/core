@@ -19,6 +19,7 @@
 
 
 #include "controltype.hxx"
+#include "pcrservices.hxx"
 #include "propctrlr.hrc"
 #include "extensio.hrc"
 #include "fontdialog.hxx"

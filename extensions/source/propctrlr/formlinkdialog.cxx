@@ -73,7 +73,6 @@ namespace pcr
         FieldLinkRow( Window* _pParent, const ResId& _rId );
 
         inline void         SetLinkChangeHandler( const Link& _rHdl ) { m_aLinkChangeHandler = _rHdl; }
-        inline const Link&  GetLinkChangeHandler( ) const             { return m_aLinkChangeHandler;  }
 
         enum LinkParticipant
         {

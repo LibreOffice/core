@@ -20,7 +20,9 @@
 #include "genericpropertyhandler.hxx"
 #include "formmetadata.hxx"
 #include "handlerhelper.hxx"
+#include "pcrservices.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 #include <com/sun/star/beans/theIntrospection.hpp>
@@ -60,7 +62,8 @@ namespace pcr
     using ::com::sun::star::awt::XActionListener;
     using ::com::sun::star::awt::ActionEvent;
 
-    class EnumRepresentation : public IPropertyEnumRepresentation
+    class EnumRepresentation:
+        public IPropertyEnumRepresentation, private boost::noncopyable
     {
     private:
         oslInterlockedCount                 m_refCount;
@@ -82,11 +85,6 @@ namespace pcr
 
     private:
         void            impl_getValues( Sequence< sal_Int32 >& _out_rValues ) const;
-
-    private:
-        EnumRepresentation();                                       // never implemented
-        EnumRepresentation( const EnumRepresentation& );            // never implemented
-        EnumRepresentation& operator=( const EnumRepresentation& ); // never implemented
     };
 
     EnumRepresentation::EnumRepresentation( const Reference< XComponentContext >& _rxContext, const Type& _rEnumType )

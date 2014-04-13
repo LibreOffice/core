@@ -23,6 +23,7 @@
 #include "fontdialog.hxx"
 #include "formstrings.hxx"
 #include "pcrcommon.hxx"
+#include "pcrservices.hxx"
 
 extern "C" void SAL_CALL createRegistryInfo_OControlFontDialog()
 {

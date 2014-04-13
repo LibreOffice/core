@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_system_win32_libs,ldapbe2,\
 ))
 else # 0S!=WNT
 $(eval $(call gb_Library_use_externals,ldapbe2,\
+	boost_headers \
 	openldap \
 	nss3 \
 	plc4 \

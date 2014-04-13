@@ -20,6 +20,7 @@
 #include "editpropertyhandler.hxx"
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
+#include "pcrservices.hxx"
 
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <tools/debug.hxx>

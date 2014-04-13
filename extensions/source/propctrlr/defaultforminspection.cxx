@@ -19,6 +19,7 @@
 
 #include "defaultforminspection.hxx"
 #include "pcrcommon.hxx"
+#include "pcrservices.hxx"
 #include "propresid.hrc"
 #include "formresid.hrc"
 #include "modulepcr.hxx"

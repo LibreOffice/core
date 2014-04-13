@@ -21,6 +21,7 @@
 
 #include <com/sun/star/beans/NamedValue.hpp>
 
+#include "pcrservices.hxx"
 #include "pcrunodialogs.hxx"
 #include "formstrings.hxx"
 #include "pcrstrings.hxx"

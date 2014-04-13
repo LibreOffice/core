@@ -77,10 +77,6 @@ public:
     static uno::Sequence< OUString > getServiceNames();
     static OUString getImplName();
 
-    // Allows runtime exceptions to be thrown by const methods
-    inline SAL_CALL operator uno::Reference< uno::XInterface > () const
-        { return const_cast< cppu::OWeakObject * > (static_cast< cppu::OWeakObject const * > (this)); };
-
     // XJob
     virtual uno::Any SAL_CALL execute(const uno::Sequence<beans::NamedValue>&)
         throw (lang::IllegalArgumentException, uno::Exception, std::exception) SAL_OVERRIDE;

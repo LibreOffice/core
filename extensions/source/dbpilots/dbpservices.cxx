@@ -18,21 +18,12 @@
  */
 
 #include "componentmodule.hxx"
-
-
+#include "dbpservices.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
-
-
-
-extern "C" void SAL_CALL createRegistryInfo_OGroupBoxWizard();
-extern "C" void SAL_CALL createRegistryInfo_OListComboWizard();
-extern "C" void SAL_CALL createRegistryInfo_OGridWizard();
-
-
 
 extern "C" void SAL_CALL dbp_initializeModule()
 {

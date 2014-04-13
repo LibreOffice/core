@@ -18,19 +18,12 @@
  */
 
 #include "componentmodule.hxx"
-
-
+#include "unodialogabp.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
-
-
-
-extern "C" void SAL_CALL createRegistryInfo_OABSPilotUno();
-
-
 
 extern "C" void SAL_CALL abp_initializeModule()
 {

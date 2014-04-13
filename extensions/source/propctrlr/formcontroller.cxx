@@ -19,6 +19,7 @@
 
 #include "formcontroller.hxx"
 #include "pcrcommon.hxx"
+#include "pcrservices.hxx"
 #include "formstrings.hxx"
 #include "defaultforminspection.hxx"
 #include "propctrlr.hrc"

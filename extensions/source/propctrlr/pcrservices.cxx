@@ -19,37 +19,12 @@
 
 
 #include "modulepcr.hxx"
-
-
+#include "pcrservices.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
-
-
-
-extern "C" void SAL_CALL createRegistryInfo_OPropertyBrowserController();
-extern "C" void SAL_CALL createRegistryInfo_FormController();
-extern "C" void SAL_CALL createRegistryInfo_DefaultFormComponentInspectorModel();
-extern "C" void SAL_CALL createRegistryInfo_DefaultHelpProvider();
-extern "C" void SAL_CALL createRegistryInfo_OControlFontDialog();
-extern "C" void SAL_CALL createRegistryInfo_OTabOrderDialog();
-extern "C" void SAL_CALL createRegistryInfo_CellBindingPropertyHandler();
-extern "C" void SAL_CALL createRegistryInfo_ButtonNavigationHandler();
-extern "C" void SAL_CALL createRegistryInfo_EditPropertyHandler();
-extern "C" void SAL_CALL createRegistryInfo_FormComponentPropertyHandler();
-extern "C" void SAL_CALL createRegistryInfo_EFormsPropertyHandler();
-extern "C" void SAL_CALL createRegistryInfo_XSDValidationPropertyHandler();
-extern "C" void SAL_CALL createRegistryInfo_EventHandler();
-extern "C" void SAL_CALL createRegistryInfo_GenericPropertyHandler();
-extern "C" void SAL_CALL createRegistryInfo_ObjectInspectorModel();
-extern "C" void SAL_CALL createRegistryInfo_SubmissionPropertyHandler();
-extern "C" void SAL_CALL createRegistryInfo_StringRepresentation();
-extern "C" void SAL_CALL createRegistryInfo_MasterDetailLinkDialog();
-extern "C" void SAL_CALL createRegistryInfo_FormGeometryHandler();
-
-
 
 extern "C" void SAL_CALL pcr_initializeModule()
 {

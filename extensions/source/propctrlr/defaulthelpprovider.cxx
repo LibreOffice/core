@@ -20,6 +20,7 @@
 
 #include "defaulthelpprovider.hxx"
 #include "pcrcommon.hxx"
+#include "pcrservices.hxx"
 #include "modulepcr.hxx"
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>

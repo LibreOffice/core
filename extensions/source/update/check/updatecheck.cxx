@@ -70,8 +70,9 @@ namespace uno = com::sun::star::uno ;
 #define PROPERTY_CLICK_HDL      "MenuClickHDL"
 #define PROPERTY_SHOW_MENUICON  "MenuIconVisible"
 
+#if defined WNT
 extern "C" bool SAL_CALL WNT_hasInternetConnection();
-
+#endif
 
 // Returns the URL of the release note for the given position
 OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloadEnabled)

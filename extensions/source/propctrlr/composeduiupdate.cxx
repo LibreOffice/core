@@ -19,6 +19,7 @@
 
 #include "composeduiupdate.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
@@ -76,7 +77,8 @@ namespace pcr
 
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::inspection::XObjectInspectorUI
                                     >   CachedInspectorUI_Base;
-    struct CachedInspectorUI : public CachedInspectorUI_Base
+    struct CachedInspectorUI:
+        public CachedInspectorUI_Base, private boost::noncopyable
     {
     private:
         ::osl::Mutex            m_aMutex;
@@ -168,10 +170,6 @@ namespace pcr
         /** calls <member>m_pUIChangeNotification</member> at <member>m_rMaster</member>
         */
         void    impl_notifySingleUIChange() const;
-
-    private:
-        CachedInspectorUI( const CachedInspectorUI& );              // never implemented
-        CachedInspectorUI& operator=( const CachedInspectorUI& );   // never implemented
 
     private:
         class MethodGuard;

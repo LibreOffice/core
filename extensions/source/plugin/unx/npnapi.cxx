@@ -42,6 +42,8 @@
 
 #include <config_vclplug.h>
 
+#include <npwrap.hxx>
+
 extern PluginConnector* pConnector;
 extern XtAppContext app_context;
 extern int wakeup_fd[];
@@ -50,8 +52,6 @@ extern Display* pAppDisplay;
 extern Display* pXtAppDisplay;
 extern int nAppArguments;
 extern char** pAppArguments;
-
-void* CreateNewShell( void**, XLIB_Window );
 
 // begin Netscape plugin api calls
 extern "C" {

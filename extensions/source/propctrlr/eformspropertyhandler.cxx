@@ -20,6 +20,7 @@
 #include "eformspropertyhandler.hxx"
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
+#include "pcrservices.hxx"
 #include "propctrlr.hrc"
 #include "formbrowsertools.hxx"
 #include "eformshelper.hxx"

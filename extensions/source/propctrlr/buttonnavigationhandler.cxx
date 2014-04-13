@@ -20,6 +20,7 @@
 #include "buttonnavigationhandler.hxx"
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
+#include "pcrservices.hxx"
 #include "pushbuttonnavigation.hxx"
 
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>

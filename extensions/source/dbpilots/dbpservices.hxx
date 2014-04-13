@@ -17,31 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "log_module.hxx"
-#include "log_services.hxx"
+#ifndef INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_DBPSERVICES_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_DBPSERVICES_HXX
 
-namespace logging
-{
-    static void initializeModule()
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        createRegistryInfo_LoggerPool();
-        createRegistryInfo_FileHandler();
-        createRegistryInfo_ConsoleHandler();
-        createRegistryInfo_PlainTextFormatter();
-        createRegistryInfo_CsvFormatter();
-    }
+#include <sal/config.h>
 
+#include <sal/types.h>
 
-} // namespace logging
+extern "C" {
 
+void SAL_CALL createRegistryInfo_OGridWizard();
+void SAL_CALL createRegistryInfo_OGroupBoxWizard();
+void SAL_CALL createRegistryInfo_OListComboWizard();
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL log_component_getFactory(
-    const sal_Char* pImplementationName, SAL_UNUSED_PARAMETER void*,
-    SAL_UNUSED_PARAMETER void* )
-{
-    ::logging::initializeModule();
-    return ::logging::LogModule::getInstance().getComponentFactory( pImplementationName );
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

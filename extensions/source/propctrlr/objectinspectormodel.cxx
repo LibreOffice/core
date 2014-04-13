@@ -19,6 +19,7 @@
 
 #include "modulepcr.hxx"
 #include "pcrcommon.hxx"
+#include "pcrservices.hxx"
 #include "inspectormodelbase.hxx"
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>

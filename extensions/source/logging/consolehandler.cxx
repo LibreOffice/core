@@ -19,6 +19,7 @@
 
 
 #include "log_module.hxx"
+#include "log_services.hxx"
 #include "methodguard.hxx"
 #include "loghandler.hxx"
 

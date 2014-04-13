@@ -19,6 +19,7 @@
 
 
 #include "log_module.hxx"
+#include "log_services.hxx"
 #include "logrecord.hxx"
 #include "loggerconfig.hxx"
 

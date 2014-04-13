@@ -24,7 +24,7 @@
 #include <comphelper/sequence.hxx>
 #include <vcl/msgbox.hxx>
 
-extern "C" void SAL_CALL createRegistryInfo_OABSPilotUno()
+void SAL_CALL createRegistryInfo_OABSPilotUno()
 {
     static ::abp::OMultiInstanceAutoRegistration< ::abp::OABSPilotUno > aAutoRegistration;
 }

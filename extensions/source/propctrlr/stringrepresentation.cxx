@@ -18,6 +18,8 @@
  */
 
 #include "sal/config.h"
+
+#include "boost/noncopyable.hpp"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/implbase3.hxx"
@@ -35,6 +37,7 @@
 #include <comphelper/sequenceasvector.hxx>
 #include <connectivity/dbconversion.hxx>
 #include "formresid.hrc"
+#include "pcrservices.hxx"
 #include <tools/debug.hxx>
 #include <tools/StringListResource.hxx>
 #include <comphelper/types.hxx>
@@ -65,7 +68,8 @@ class StringRepresentation:
     public ::cppu::WeakImplHelper3<
         lang::XServiceInfo,
         inspection::XStringRepresentation,
-        lang::XInitialization>
+        lang::XInitialization>,
+    private boost::noncopyable
 {
 public:
     explicit StringRepresentation(uno::Reference< uno::XComponentContext > const & context);
@@ -83,9 +87,6 @@ public:
     virtual void SAL_CALL initialize(const uno::Sequence< uno::Any > & aArguments) throw (uno::RuntimeException, uno::Exception, std::exception) SAL_OVERRIDE;
 
 private:
-    StringRepresentation(StringRepresentation &); // not defined
-    void operator =(StringRepresentation &); // not defined
-
     virtual ~StringRepresentation() {}
 
     /** converts a generic value into a string representation

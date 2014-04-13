@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include "pcrservices.hxx"
 #include "submissionhandler.hxx"
 #include "formmetadata.hxx"
 #include "formstrings.hxx"

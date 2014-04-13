@@ -19,6 +19,7 @@
 
 
 #include "eventhandler.hxx"
+#include "pcrservices.hxx"
 #include "propctrlr.hrc"
 #include "formbrowsertools.hxx"
 #include "formresid.hrc"

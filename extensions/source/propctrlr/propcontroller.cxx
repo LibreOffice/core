@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "pcrservices.hxx"
 #include "propcontroller.hxx"
 #include "pcrstrings.hxx"
 #include "standardcontrol.hxx"

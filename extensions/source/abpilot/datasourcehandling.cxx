@@ -23,6 +23,7 @@
 #include "componentmodule.hxx"
 #include "datasourcehandling.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -160,18 +161,13 @@ namespace abp
 
     //= ODataSourceContextImpl
 
-    struct ODataSourceContextImpl
+    struct ODataSourceContextImpl: private boost::noncopyable
     {
         Reference< XComponentContext >      xORB;
         Reference< XNameAccess >            xContext;           /// the UNO data source context
         StringBag                           aDataSourceNames;   /// for quicker name checks (without the UNO overhead)
 
         ODataSourceContextImpl( const Reference< XComponentContext >& _rxORB ) : xORB( _rxORB ) { }
-        ODataSourceContextImpl( const ODataSourceContextImpl& _rSource )
-            :xORB       ( _rSource.xORB )
-            ,xContext   ( _rSource.xContext )
-        {
-        }
     };
 
 
