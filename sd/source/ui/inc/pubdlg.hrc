@@ -32,22 +32,23 @@
 #define PAGE2_FRAMES        23
 #define PAGE2_KIOSK         24
 #define PAGE2_WEBCAST       25
+#define PAGE2_SINGLE_DOCUMENT 26
 
-#define PAGE2_NOFRAMES_FB   26
-#define PAGE2_FRAMES_FB     27
-#define PAGE2_KIOSK_FB      28
-#define PAGE2_WEBCAST_FB    29
+#define PAGE2_NOFRAMES_FB   27
+#define PAGE2_FRAMES_FB     28
+#define PAGE2_KIOSK_FB      29
+#define PAGE2_WEBCAST_FB    30
 
-#define PAGE2_TITEL_HTML    30
-#define PAGE2_CONTENT       31
-#define PAGE2_NOTES         32
+#define PAGE2_TITEL_HTML    31
+#define PAGE2_CONTENT       32
+#define PAGE2_NOTES         33
 
-#define PAGE2_TITEL_KIOSK   33
-#define PAGE2_CHG_DEFAULT   34
-#define PAGE2_CHG_AUTO      35
-#define PAGE2_DURATION_TXT  36
-#define PAGE2_DURATION_TMF  37
-#define PAGE2_ENDLESS       38
+#define PAGE2_TITEL_KIOSK   34
+#define PAGE2_CHG_DEFAULT   35
+#define PAGE2_CHG_AUTO      36
+#define PAGE2_DURATION_TXT  37
+#define PAGE2_DURATION_TMF  38
+#define PAGE2_ENDLESS       39
 
 #define PAGE2_TITEL_WEBCAST 40
 #define PAGE2_ASP           41

@@ -105,10 +105,18 @@ ModalDialog DLG_PUBLISHING
         Text [ en-US ] = "Standard HTML with ~frames";
     };
 
+    RadioButton PAGE2_SINGLE_DOCUMENT
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_SINGLE_DOCUMENT";
+        Pos = MAP_APPFONT( 12, 47 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "~Single document html";
+    };
+
     RadioButton PAGE2_KIOSK
     {
         HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_KIOSK";
-        Pos = MAP_APPFONT( 12, 47 );
+        Pos = MAP_APPFONT( 12, 60 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "~Automatic";
     };
@@ -116,14 +124,14 @@ ModalDialog DLG_PUBLISHING
     RadioButton PAGE2_WEBCAST
     {
         HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_WEBCAST";
-        Pos = MAP_APPFONT( 12, 60 );
+        Pos = MAP_APPFONT( 12, 73 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "~WebCast";
     };
 
     FixedBitmap PAGE2_NOFRAMES_FB
     {
-        Pos = MAP_APPFONT( 21, 73 );
+        Pos = MAP_APPFONT( 61, 60 );
         Scale = TRUE;
         Size = MAP_APPFONT( 60, 50 );
         Fixed = Bitmap { File = "pubdes.bmp"; };
@@ -133,7 +141,7 @@ ModalDialog DLG_PUBLISHING
 
     FixedBitmap PAGE2_FRAMES_FB
     {
-        Pos = MAP_APPFONT( 21, 73 );
+        Pos = MAP_APPFONT( 61, 60 );
         Scale = TRUE;
         Size = MAP_APPFONT( 60, 50 );
         Fixed = Bitmap { File = "pubdes2.bmp"; };
@@ -143,7 +151,7 @@ ModalDialog DLG_PUBLISHING
 
     FixedBitmap PAGE2_KIOSK_FB
     {
-        Pos = MAP_APPFONT( 21, 73 );
+        Pos = MAP_APPFONT( 61, 60 );
         Scale = TRUE;
         Size = MAP_APPFONT( 60, 50 );
         Fixed = Bitmap { File = "pubdes3.bmp"; };
@@ -153,7 +161,7 @@ ModalDialog DLG_PUBLISHING
 
     FixedBitmap PAGE2_WEBCAST_FB
     {
-        Pos = MAP_APPFONT( 21, 73 );
+        Pos = MAP_APPFONT( 61, 60 );
         Scale = TRUE;
         Size = MAP_APPFONT( 60, 50 );
         Fixed = Bitmap { File = "pubdes4.bmp"; };

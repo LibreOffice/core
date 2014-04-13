@@ -63,6 +63,7 @@ private:
     FixedLine*      pPage2_Titel;
     RadioButton*    pPage2_Standard;
     RadioButton*    pPage2_Frames;
+    RadioButton*    pPage2_SingleDocument;
     RadioButton*    pPage2_Kiosk;
     RadioButton*    pPage2_WebCast;
     FixedBitmap*    pPage2_Standard_FB;

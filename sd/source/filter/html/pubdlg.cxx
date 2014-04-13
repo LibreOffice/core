@@ -400,6 +400,7 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     pPage2_Standard_FB->SetBorderStyle(WINDOW_BORDER_MONO);
     pPage2_Frames->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
     pPage2_Frames_FB->SetBorderStyle(WINDOW_BORDER_MONO);
+    pPage2_SingleDocument->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
     pPage2_Kiosk->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
     pPage2_Kiosk_FB->SetBorderStyle(WINDOW_BORDER_MONO);
     pPage2_WebCast->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
@@ -490,6 +491,8 @@ void SdPublishingDlg::CreatePages()
         pPage2_Standard = new RadioButton(this,SdResId(PAGE2_STANDARD)));
     aAssistentFunc.InsertControl(2,
         pPage2_Frames = new RadioButton(this,SdResId(PAGE2_FRAMES)));
+    aAssistentFunc.InsertControl(2,
+        pPage2_SingleDocument = new RadioButton(this,SdResId(PAGE2_SINGLE_DOCUMENT)));
     aAssistentFunc.InsertControl(2,
         pPage2_Kiosk = new RadioButton(this,SdResId(PAGE2_KIOSK)));
     aAssistentFunc.InsertControl(2,
@@ -646,6 +649,7 @@ void SdPublishingDlg::RemovePages()
     delete pPage2_Titel;
     delete pPage2_Standard;
     delete pPage2_Frames;
+    delete pPage2_SingleDocument;
     delete pPage2_Kiosk;
     delete pPage2_WebCast;
     delete pPage2_Standard_FB;
@@ -740,9 +744,20 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 
     // Page 2
     aValue.Name = "PublishMode";
-    aValue.Value <<= (sal_Int32)(pPage2_Standard->IsChecked()?PUBLISH_HTML:
-                                          pPage2_Frames->IsChecked()?PUBLISH_FRAMES:
-                                          pPage2_Kiosk->IsChecked()?PUBLISH_KIOSK:PUBLISH_WEBCAST);
+
+    HtmlPublishMode ePublishMode;
+    if (pPage2_Frames->IsChecked())
+        ePublishMode = PUBLISH_FRAMES;
+    if (pPage2_SingleDocument->IsChecked())
+        ePublishMode = PUBLISH_SINGLE_DOCUMENT;
+    else if (pPage2_Kiosk->IsChecked())
+        ePublishMode  = PUBLISH_KIOSK;
+    else if (pPage2_WebCast->IsChecked())
+        ePublishMode  = PUBLISH_WEBCAST;
+    else
+        ePublishMode  = PUBLISH_HTML;
+
+    aValue.Value <<= (sal_Int32) ePublishMode;
     aProps.push_back( aValue );
 
     aValue.Name = "IsExportContentsPage";
