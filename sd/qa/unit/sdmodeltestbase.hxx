@@ -37,6 +37,7 @@ struct FileFormat {
 #define ODP_FORMAT_TYPE  ( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_TEMPLATE | SFX_FILTER_OWN | SFX_FILTER_DEFAULT | SFX_FILTER_ENCRYPTION | SFX_FILTER_PREFERED )
 #define PPT_FORMAT_TYPE  ( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN )
 #define PPTX_FORMAT_TYPE ( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_STARONEFILTER | SFX_FILTER_PREFERED )
+#define HTML_FORMAT_TYPE ( SFX_FILTER_EXPORT | SFX_FILTER_ALIEN )
 
 /** List of file formats we support in Impress unit tests.
 
@@ -50,12 +51,14 @@ FileFormat aFileFormats[] = {
     { "odp",  "impress8", "impress8", "", ODP_FORMAT_TYPE },
     { "ppt",  "MS PowerPoint 97", "Microsoft PowerPoint 97/2000/XP/2003", "sdfilt", PPT_FORMAT_TYPE },
     { "pptx", "Impress MS PowerPoint 2007 XML", "MS PowerPoint 2007 XML", "", PPTX_FORMAT_TYPE },
+    { "html", "graphic_HTML", "graphic_HTML", "", HTML_FORMAT_TYPE },
     { 0, 0, 0, 0, 0 }
 };
 
-#define ODP 0
-#define PPT 1
+#define ODP  0
+#define PPT  1
 #define PPTX 2
+#define HTML 3
 
 /// Base class for filter tests loading or roundtriping a document, and asserting the document model.
 class SdModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
@@ -83,7 +86,7 @@ public:
 
 protected:
     /// Load the document.
-    ::sd::DrawDocShellRef loadURL( const OUString &rURL )
+    sd::DrawDocShellRef loadURL( const OUString &rURL )
     {
         FileFormat *pFmt(0);
 
@@ -121,31 +124,60 @@ protected:
         return xDocShRef;
     }
 
-    ::sd::DrawDocShellRef saveAndReload( ::sd::DrawDocShell *pShell, sal_Int32 nExportType )
+    FileFormat* getFormat(sal_Int32 nExportType)
     {
-        FileFormat *pFmt = &aFileFormats[0];
-        if( ( (sal_uInt32) nExportType ) < SAL_N_ELEMENTS( aFileFormats ) )
-            pFmt = &aFileFormats[ nExportType ];
-        OUString aExt = OUString( "." ) + OUString::createFromAscii( pFmt->pName );
-        utl::TempFile aTempFile( OUString(), &aExt );
-        aTempFile.EnableKillingFile();
-        SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
+        FileFormat* pFormat = &aFileFormats[0];
+        if (((sal_uInt32) nExportType) < SAL_N_ELEMENTS(aFileFormats))
+            pFormat = &aFileFormats[nExportType];
+        return pFormat;
+    }
+
+    void exportTo(sd::DrawDocShell* pShell, FileFormat* pFormat, utl::TempFile& rTempFile)
+    {
+        SfxMedium aStoreMedium(rTempFile.GetURL(), STREAM_STD_WRITE);
         sal_uInt32 nExportFormat = 0;
-        if( pFmt->nFormatType == ODP_FORMAT_TYPE )
+        if (pFormat->nFormatType == ODP_FORMAT_TYPE)
             nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
         SfxFilter* pExportFilter = new SfxFilter(
-                OUString::createFromAscii( pFmt->pFilterName ),
-                OUString(), pFmt->nFormatType, nExportFormat,
-                OUString::createFromAscii( pFmt->pTypeName ),
-                0, OUString(),
-                OUString::createFromAscii( pFmt->pUserData ),
-                OUString("private:factory/simpress*") );
-        pExportFilter->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-        aStoreMedium.SetFilter( pExportFilter );
-        pShell->DoSaveAs( aStoreMedium );
+                                        OUString::createFromAscii(pFormat->pFilterName),
+                                        OUString(), pFormat->nFormatType, nExportFormat,
+                                        OUString::createFromAscii(pFormat->pTypeName),
+                                        0, OUString(),
+                                        OUString::createFromAscii(pFormat->pUserData),
+                                        OUString("private:factory/simpress*") );
+        pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        aStoreMedium.SetFilter(pExportFilter);
+        pShell->ConvertTo(aStoreMedium);
         pShell->DoClose();
+    }
 
-        return loadURL( aTempFile.GetURL() );
+    void save(sd::DrawDocShell* pShell, FileFormat* pFormat, utl::TempFile& rTempFile)
+    {
+        SfxMedium aStoreMedium(rTempFile.GetURL(), STREAM_STD_WRITE);
+        sal_uInt32 nExportFormat = 0;
+        if (pFormat->nFormatType == ODP_FORMAT_TYPE)
+            nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
+        SfxFilter* pExportFilter = new SfxFilter(
+                                        OUString::createFromAscii(pFormat->pFilterName),
+                                        OUString(), pFormat->nFormatType, nExportFormat,
+                                        OUString::createFromAscii(pFormat->pTypeName),
+                                        0, OUString(),
+                                        OUString::createFromAscii(pFormat->pUserData),
+                                        OUString("private:factory/simpress*") );
+        pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        aStoreMedium.SetFilter(pExportFilter);
+        pShell->DoSaveAs(aStoreMedium);
+        pShell->DoClose();
+    }
+
+    sd::DrawDocShellRef saveAndReload(sd::DrawDocShell *pShell, sal_Int32 nExportType)
+    {
+        FileFormat* pFormat = getFormat(nExportType);
+        OUString aExt = OUString( "." ) + OUString::createFromAscii(pFormat->pName);
+        utl::TempFile aTempFile(OUString(), &aExt);
+        aTempFile.EnableKillingFile();
+        save(pShell, pFormat, aTempFile);
+        return loadURL(aTempFile.GetURL());
     }
 
     /** Dump shapes in xDocShRef, and compare the dump against content of pShapesDumpFileNameBase<number>.xml.
