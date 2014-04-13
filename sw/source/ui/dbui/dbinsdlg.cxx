@@ -1747,7 +1747,7 @@ void SwInsertDBColAutoPilot::Load()
                         m_pLbTableCol->InsertEntry( sEntry );
                         m_pLbTblDbColumn->RemoveEntry( sEntry );
                     }
-                } while( n < sTmp.getLength() );
+                } while( n>=0 );
 
                 if( !m_pLbTblDbColumn->GetEntryCount() )
                 {
