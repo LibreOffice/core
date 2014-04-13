@@ -67,7 +67,6 @@ namespace {
     {
     public:
         Text (void);
-        Text (const Text& rText);
         Text (
             const OUString& rsText,
             const PresenterTheme::SharedFontDescriptor& rpFont);
@@ -1695,12 +1694,6 @@ namespace {
 Text::Text (void)
     : msText(),
       mpFont()
-{
-}
-
-Text::Text (const Text& rText)
-    : msText(rText.msText),
-      mpFont(rText.mpFont)
 {
 }
 

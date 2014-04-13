@@ -22,6 +22,7 @@
 #include "contentsink.hxx"
 #include "pdfparse.hxx"
 #include "pdfihelper.hxx"
+#include "wrapper.hxx"
 
 #include "osl/file.h"
 #include "osl/file.hxx"

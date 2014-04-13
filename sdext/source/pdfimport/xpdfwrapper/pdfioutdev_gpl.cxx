@@ -370,21 +370,11 @@ void writeImage_( OutputBuffer&     o_rOutputBuf,
 // forwarders
 
 
-inline void writeImage( OutputBuffer&     o_rOutputBuf,
-                        Stream*           str,
-                        int               width,
-                        int               height,
-                        GfxImageColorMap* colorMap ) { writeImage_(o_rOutputBuf,str,width,height,colorMap,false); }
 inline void writeImageLF( OutputBuffer&     o_rOutputBuf,
                           Stream*           str,
                           int               width,
                           int               height,
                           GfxImageColorMap* colorMap ) { writeImage_(o_rOutputBuf,str,width,height,colorMap,true); }
-inline void writeMask( OutputBuffer&     o_rOutputBuf,
-                       Stream*           str,
-                       int               width,
-                       int               height,
-                       bool              bInvert ) { writeMask_(o_rOutputBuf,str,width,height,false,bInvert); }
 inline void writeMaskLF( OutputBuffer&     o_rOutputBuf,
                          Stream*           str,
                          int               width,

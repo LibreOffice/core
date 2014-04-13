@@ -50,8 +50,6 @@ namespace {
     {
     public:
         BorderSize (void);
-        BorderSize (const BorderSize& rBorderSize);
-        BorderSize& operator= (const BorderSize& rBoderSize);
         sal_Int32 mnLeft;
         sal_Int32 mnTop;
         sal_Int32 mnRight;
@@ -791,26 +789,6 @@ BorderSize::BorderSize (void)
       mnRight(0),
       mnBottom(0)
 {
-}
-
-BorderSize::BorderSize (const BorderSize& rBorderSize)
-    : mnLeft(rBorderSize.mnLeft),
-      mnTop(rBorderSize.mnTop),
-      mnRight(rBorderSize.mnRight),
-      mnBottom(rBorderSize.mnBottom)
-{
-}
-
-BorderSize& BorderSize::operator= (const BorderSize& rBorderSize)
-{
-    if (&rBorderSize != this)
-    {
-        mnLeft = rBorderSize.mnLeft;
-        mnTop = rBorderSize.mnTop;
-        mnRight = rBorderSize.mnRight;
-        mnBottom = rBorderSize.mnBottom;
-    }
-    return *this;
 }
 
 //===== RendererPaneStyle  ============================================================

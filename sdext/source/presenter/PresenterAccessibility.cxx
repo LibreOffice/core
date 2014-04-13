@@ -81,8 +81,6 @@ public:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-    void NotifyCurrentSlideChange (const sal_Int32 nCurrentSlideIndex);
-
     void AddChild (const ::rtl::Reference<AccessibleObject>& rpChild);
     void RemoveChild (const ::rtl::Reference<AccessibleObject>& rpChild);
 

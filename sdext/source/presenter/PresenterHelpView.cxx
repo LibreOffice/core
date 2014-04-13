@@ -34,6 +34,7 @@
 #include <algorithm>
 #include <vector>
 #include <boost/bind.hpp>
+#include <boost/noncopyable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -95,10 +96,9 @@ namespace {
             const sal_Int32 nMaximalWidth);
     };
 
-    class Block
+    class Block: private boost::noncopyable
     {
     public:
-        Block (const Block& rBlock);
         Block (
             const OUString& rsLeftText,
             const OUString& rsRightText,
