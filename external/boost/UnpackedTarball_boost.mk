@@ -35,6 +35,7 @@ boost_patches += boost.ptr_container.Wignored-qualifiers.warnings.patch
 boost_patches += boost.ptr_container.Wextra.warnings.patch
 boost_patches += boost.ptr_container.Wunused-parameter.warnings.patch
 boost_patches += boost.random.Wshadow.warnings.patch
+boost_patches += boost.random.Wuninitialized.patch
 boost_patches += boost.spirit.Wshadow.warnings.patch
 boost_patches += boost.unordered.Wshadow.warnings.patch
 boost_patches += boost.uuid.Wshadow.warnings.patch
@@ -56,7 +57,6 @@ boost_patches += boost.std.move.patch
 boost_patches += boost.transform_width.patch
 boost_patches += boost.wundef.patch
 boost_patches += boost.wunused.patch
-boost_patches += boost.wuninitialized.patch
 boost_patches += boost.wdeprecated-auto_ptr.patch.0
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
