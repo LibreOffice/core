@@ -523,7 +523,7 @@ static hchar cdkssm2ks_han(hchar kssm)
     unsigned int index;
     unsigned char lo, hi;
 
-/* "ÇÑ" */
+/* "í•œ" */
     if (kssm == 0xd3c5)
         return 0xc7d1;
 
@@ -585,7 +585,7 @@ static const hchar choseong_to_unicode[] =
     0x110e, 0x110f, 0x1110, 0x1111, 0x1112, 0x1120, 0x1121, 0x1127,
     0x112b, 0x112d, 0x112f, 0x1132, 0x1136, 0x1140, 0x114c, 0x1158
 };
-/* Áß¼ºÀÌ 0°ú 1ÀÎ °÷¿¡´Â ´Ù¸¥ ÄÚµåµéÀÌ µé¾î°¡ ÀÖ´Ù. ÀÌºÎºÐ¿¡ ´ëÇÑ ¹ýÄ¢À» »Ì¾Æ¶ó. */
+/* ì¤‘ì„±ì´ 0ê³¼ 1ì¸ ê³³ì—ëŠ” ë‹¤ë¥¸ ì½”ë“œë“¤ì´ ë“¤ì–´ê°€ ìžˆë‹¤. ì´ë¶€ë¶„ì— ëŒ€í•œ ë²•ì¹™ì„ ë½‘ì•„ë¼. */
 static const hchar joongseong_to_unicode[] =
 {
     0,      0,  0, 0x1161, 0x1162, 0x1163, 0x1164, 0x1165,
@@ -602,12 +602,12 @@ static const hchar jongseong_to_unicode[] =
     0x11bd, 0x11be, 0x11bf, 0x11c0, 0x11c1, 0x11c2, 0x11eb, 0x11f0
 };
 
-/* Áß¼ºÀÌ 0°ú 1ÀÎ°÷ */
-/* Ã³À½ 32°³´Â ÀÚ¸ð, ³ª¸ÓÁö 32°³´Â Á¶ÇÕÀ¸·Î ±¸¼º.
- * 0x8000 ~ 0xa413±îÁö 32°³ ³ª¿À°í, 0x0400´õÇÑ 0x8400¿¡¼­ ´Ù½Ã 32°³ ³ª¿À´Â ½ÄÀ¸·Î ÁøÇàµÈ´Ù.
- * ÀÚ¸ð¿µ¿ªÀº ÀÏ¹Ý Å×ÀÌºí·Î ³ª¸ÓÁö´Â ±¸Á¶Ã¼ ¸ÅÇÎÅ×ÀÌºí·Î ¸¸µç´Ù.
+/* ì¤‘ì„±ì´ 0ê³¼ 1ì¸ê³³ */
+/* ì²˜ìŒ 32ê°œëŠ” ìžëª¨, ë‚˜ë¨¸ì§€ 32ê°œëŠ” ì¡°í•©ìœ¼ë¡œ êµ¬ì„±.
+ * 0x8000 ~ 0xa413ê¹Œì§€ 32ê°œ ë‚˜ì˜¤ê³ , 0x0400ë”í•œ 0x8400ì—ì„œ ë‹¤ì‹œ 32ê°œ ë‚˜ì˜¤ëŠ” ì‹ìœ¼ë¡œ ì§„í–‰ëœë‹¤.
+ * ìžëª¨ì˜ì—­ì€ ì¼ë°˜ í…Œì´ë¸”ë¡œ ë‚˜ë¨¸ì§€ëŠ” êµ¬ì¡°ì²´ ë§¤í•‘í…Œì´ë¸”ë¡œ ë§Œë“ ë‹¤.
  */
-/* 308°³.. 1152°³¿¡¼­ 308°³¸¦ Á¦¿ÜÇÑ ³ª¸ÓÁö 844°³´Â ÀÚ¸ðÁ¶ÇÕÀÌ´Ù. */
+/* 308ê°œ.. 1152ê°œì—ì„œ 308ê°œë¥¼ ì œì™¸í•œ ë‚˜ë¨¸ì§€ 844ê°œëŠ” ìžëª¨ì¡°í•©ì´ë‹¤. */
 static const hchar jamo_to_unicode[] =
 {
     0x3131, 0x3132, 0x3133, 0x3134, 0x3135, 0x3136, 0x3137, 0x3138,
@@ -666,7 +666,7 @@ struct JamoComp{
     hchar v2;
     hchar v3;
 };
-/* 704 + 12 = 706 °³  */
+/* 704 + 12 = 706 ê°œ  */
 static const JamoComp jamocomp1_to_unicode[] =
 {
     {3, 0x1100, 0x1161, 0x11e7}, {3, 0x1100, 0x1161, 0x3167},
@@ -789,7 +789,7 @@ static const JamoComp jamocomp1_to_unicode[] =
     {3, 0x1105, 0x119e, 0x11d7}, {3, 0x1105, 0x119e, 0x11dc},
     {3, 0x1105, 0x119e, 0x11dd}, {2, 0x1105, 0x1176, 0x0000},
 
-/* -- ¿©±âºÎÅÍ ¼ýÀÚ ¾È¹Ù²Þ Áï, 3À» 2·Î ¹Ù²Ù¾î ÁÖ¾î¾ß ÇÔ. */
+/* -- ì—¬ê¸°ë¶€í„° ìˆ«ìž ì•ˆë°”ê¿ˆ ì¦‰, 3ì„ 2ë¡œ ë°”ê¾¸ì–´ ì£¼ì–´ì•¼ í•¨. */
     {2, 0x1105, 0x1178, 0x0000}, {2, 0x1105, 0x117a, 0x0000},
     {2, 0x1105, 0x117b, 0x0000}, {2, 0x1105, 0x1186, 0x0000},
     {2, 0x1105, 0x1187, 0x0000}, {2, 0x1105, 0x118c, 0x0000},
@@ -914,13 +914,13 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
           dest[0] = ch;
         return 1;
     }
-      /* ÇÑÀÚ´Â 0x4000ºÎÅÍ 4888°¡ÁöÀÇ °ªÀ» °¡Áø´Ù. */
+      /* í•œìžëŠ” 0x4000ë¶€í„° 4888ê°€ì§€ì˜ ê°’ì„ ê°€ì§„ë‹¤. */
     else if (IsHanja(ch))
     {
         unsigned int index;
         unsigned char hi;
-        /*  4888ÀÌ¿ÜÀÇ ¼ö´Â ¾Æ·¡ÇÑ±Û¿¡¼­ Á¤ÀÇÇÑ È®ÀåÇÑÀÚÀÌ´Ù. ÀÌ°Í¿¡ ´ëÇØ¼­´Â
-            À¯´ÏÄÚµå³ª ¿Ï¼ºÇüÄÚµå·ÎÀÇ º¯È¯À» À§ÇÑ ¸ÅÇÎÅ×ÀÌºí¾î ¾ø´Â ½ÇÁ¤ÀÌ´Ù.
+        /*  4888ì´ì™¸ì˜ ìˆ˜ëŠ” ì•„ëž˜í•œê¸€ì—ì„œ ì •ì˜í•œ í™•ìž¥í•œìžì´ë‹¤. ì´ê²ƒì— ëŒ€í•´ì„œëŠ”
+            ìœ ë‹ˆì½”ë“œë‚˜ ì™„ì„±í˜•ì½”ë“œë¡œì˜ ë³€í™˜ì„ ìœ„í•œ ë§¤í•‘í…Œì´ë¸”ì–´ ì—†ëŠ” ì‹¤ì •ì´ë‹¤.
          */
         if ((index = ch - 0x4000) >= 4888)
         {
@@ -932,8 +932,8 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
         }
         if (codeType == KS)
         {
-            /*  ÇÑÀÚÄÚµå´Â »óÀ§ÄÚµå¿Í ÇÏÀ§ÄÚµå·Î ³ª´©¾îÁö¸ç ÇÏÀ§ÄÚµå´Â 0xA1 - 0xFE ±îÁöÀÇ °ªÀ» °¡Áø´Ù.
-                Áï ÇÏÀ§ÄÚµå¿¡ ¿Ã¼öÀÖ´Â °¡Áö¼ö´Â 0xFE - 0xA1 +1 °¡Áö¼öÀÌ´Ù.
+            /*  í•œìžì½”ë“œëŠ” ìƒìœ„ì½”ë“œì™€ í•˜ìœ„ì½”ë“œë¡œ ë‚˜ëˆ„ì–´ì§€ë©° í•˜ìœ„ì½”ë“œëŠ” 0xA1 - 0xFE ê¹Œì§€ì˜ ê°’ì„ ê°€ì§„ë‹¤.
+                ì¦‰ í•˜ìœ„ì½”ë“œì— ì˜¬ìˆ˜ìžˆëŠ” ê°€ì§€ìˆ˜ëŠ” 0xFE - 0xA1 +1 ê°€ì§€ìˆ˜ì´ë‹¤.
              */
             hi = sal::static_int_cast<unsigned char>(index / (0xFE - 0xA1 + 1) + 0xCA);
             lo = sal::static_int_cast<unsigned char>(index % (0xFE - 0xA1 + 1) + 0xA1);
@@ -997,8 +997,8 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
         return 1 ;
     }
 /**
- * Æ¯¼ö¹®ÀÚ ÄÚµå
- * ¾Æ·¡ÇÑ±Û¿¡¼­´Â 0x3400ºÎÅÍ Æ¯¼ö¹®ÀÚ°¡ ½ÃÀÛµÈ´Ù. Á¶ÇÕÇüÀº 0xA1A0
+ * íŠ¹ìˆ˜ë¬¸ìž ì½”ë“œ
+ * ì•„ëž˜í•œê¸€ì—ì„œëŠ” 0x3400ë¶€í„° íŠ¹ìˆ˜ë¬¸ìžê°€ ì‹œìž‘ëœë‹¤. ì¡°í•©í˜•ì€ 0xA1A0
  */
     else
     {
@@ -1013,7 +1013,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
                          dest[0] = ch;
                           return 1;
                      }
-                     /* ÇÑ±Û°úÄÄÇ»ÅÍ : 0x37c0 ~ 0x37c5 */
+                     /* í•œê¸€ê³¼ì»´í“¨í„° : 0x37c0 ~ 0x37c5 */
                      if( ch2 >= 0x37c0 && ch2 <= 0x37c5 ){
                          if( ch2 == 0x37c0 ) dest[0] = 0xd55c;
                          else if( ch2 == 0x37c1 ) dest[0] = 0xae00;
@@ -1059,7 +1059,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
     }
 }
 
-/* ÇÑ±ÛÀÏ °æ¿ì. */
+/* í•œê¸€ì¼ ê²½ìš°. */
 int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
 {
     hchar choseong, joongseong, jongseong;
@@ -1070,13 +1070,13 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
 
      //printf("kssm_hangul_to_ucs2 : [%d,%d,%d]\n", choseong,joongseong,jongseong);
 
-     if( joongseong < 2 ){ /* Á¶ÇÕµÇÁö ¾ÊÀº ¿µ¿ª Áß¼º=0,1 */
-         if( joongseong == 0 && ch < 0xa414 ){ /* °í¾îÆ÷ÇÔ ÀÚ¸ð */
+     if( joongseong < 2 ){ /* ì¡°í•©ë˜ì§€ ì•Šì€ ì˜ì—­ ì¤‘ì„±=0,1 */
+         if( joongseong == 0 && ch < 0xa414 ){ /* ê³ ì–´í¬í•¨ ìžëª¨ */
              int index = choseong * 32 + jongseong;
              dest[0] = jamo_to_unicode[index];
              return 1;
          }
-         else{ /* °í¾îÆ÷ÇÔ ÀÚ¸ðÁ¶ÇÕ : Å×ÀÌºí ¹Ì¿Ï¼º */
+         else{ /* ê³ ì–´í¬í•¨ ìžëª¨ì¡°í•© : í…Œì´ë¸” ë¯¸ì™„ì„± */
              unsigned int index = choseong * 32 + jongseong - 308;
              if( index < SAL_N_ELEMENTS(jamocomp1_to_unicode) ){
                  dest[0] = jamocomp1_to_unicode[index].v1;
@@ -1088,11 +1088,11 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
              return 1;
          }
      }
-     else if ( choseong == 1 && jongseong == 1 ){ /* ¸ðÀ½ */
+     else if ( choseong == 1 && jongseong == 1 ){ /* ëª¨ìŒ */
          dest[0] = joongseong_to_unicode[joongseong];
          return 1;
      }
-     else if ( joongseong == 2 && jongseong == 1 ){  /* ÀÚÀ½ */
+     else if ( joongseong == 2 && jongseong == 1 ){  /* ìžìŒ */
          dest[0] = choseong_to_unicode[choseong];
        return 1;
     }
@@ -1101,8 +1101,8 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
              joongseong == 25 || joongseong > 29 ||
              jongseong == 0 || jongseong == 18 ||
              jongseong > 29 ||
-             choseong == 1 || joongseong == 2  /* ¿Ï¼ºµÇÁö ¾ÊÀº ÇÑ±Û */
-             ) { /* °í¾î */
+             choseong == 1 || joongseong == 2  /* ì™„ì„±ë˜ì§€ ì•Šì€ í•œê¸€ */
+             ) { /* ê³ ì–´ */
          int count = 0;
          if( choseong != 1 ){
              dest[count] = choseong_to_unicode[choseong];
@@ -1182,7 +1182,7 @@ hchar_string hstr2ucsstr(hchar const* hstr)
 }
 
 /**
- * ÇÑÄÄ½ºÆ®¸µÀ» ¿Ï¼ºÇü½ºÆ®¸µÀ¸·Î º¯È¯ÇÑ´Ù
+ * í•œì»´ìŠ¤íŠ¸ë§ì„ ì™„ì„±í˜•ìŠ¤íŠ¸ë§ìœ¼ë¡œ ë³€í™˜í•œë‹¤
  */
 ::std::string hstr2ksstr(hchar const* hstr)
 {
@@ -1212,8 +1212,8 @@ hchar_string hstr2ucsstr(hchar const* hstr)
 
 
 /*
- * ÇÑ±Û¿¡¼­ ¿µ¹®¿ÜÀÇ ¹®ÀÚ±îÁö Æ÷ÇÔÇÒ ¼ö ÀÖ´Â kcharÅ¸ÀÔÀÇ ¹®ÀÚ¿­À»
- * ÇÑ±Û¿¡¼­ »ç¿ëÇÏ´Â hcharÅ¸ÀÔÀÇ ¹®ÀÚ¿­·Î º¯È¯ÇÑ´Ù.
+ * í•œê¸€ì—ì„œ ì˜ë¬¸ì™¸ì˜ ë¬¸ìžê¹Œì§€ í¬í•¨í•  ìˆ˜ ìžˆëŠ” kcharíƒ€ìž…ì˜ ë¬¸ìžì—´ì„
+ * í•œê¸€ì—ì„œ ì‚¬ìš©í•˜ëŠ” hcharíƒ€ìž…ì˜ ë¬¸ìžì—´ë¡œ ë³€í™˜í•œë‹¤.
  */
 hchar_string kstr2hstr(unsigned char const* src)
 {
@@ -1244,7 +1244,7 @@ char* Int2Str(int value, const char *format, char *buf)
 }
 
 
-/* colorÀÎµ¦½º °ª°ú À½¿µ°ªÀ» Á¶ÇÕÇÏ¿© ½ºÅ¸¿ÀÇÇ½ºÀÇ color·Î º¯È¯ */
+/* colorì¸ë±ìŠ¤ ê°’ê³¼ ìŒì˜ê°’ì„ ì¡°í•©í•˜ì—¬ ìŠ¤íƒ€ì˜¤í”¼ìŠ¤ì˜ colorë¡œ ë³€í™˜ */
 char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
 {
     unsigned short red,green,blue;
@@ -1448,11 +1448,11 @@ double calcAngle(int x1, int y1, int x2, int y2)
      }
      double angle;
      angle = (180 / PI) * atan( ( y2 - y1 ) * 1.0 / ( x2 - x1 ));
-     if( y2 >= y1 ){ /* 1,2»çºÐ¸é */
+     if( y2 >= y1 ){ /* 1,2ì‚¬ë¶„ë©´ */
           if( angle < 0. )
                 angle += 180.;
      }
-     else{ /* 3, 4 »çºÐ¸é */
+     else{ /* 3, 4 ì‚¬ë¶„ë©´ */
           if( angle > 0 )
                 angle += 180.;
           else

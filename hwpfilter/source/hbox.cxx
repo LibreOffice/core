@@ -436,7 +436,7 @@ Footnote::~Footnote(void)
 // auto number(18)
 // new number(19)
 // show page number (20)
-// È¦¼öÂÊ½ÃÀÛ/°¨Ãß±â (21)
+// í™€ìˆ˜ìª½ì‹œì‘/ê°ì¶”ê¸° (21)
 
 // mail merge(22)
 hchar_string MailMerge::GetString()
@@ -582,9 +582,9 @@ static void getOutlineNumStr(int style, int level, int num, hchar * hstr)
 enum
 { OUTLINE_ON, OUTLINE_NUM };
 
-/*  level Àº 0ºÎÅÍ ½ÃÀÛ. Áï 1.1.1. ÀÇ ·¹º§Àº 2ÀÌ´Ù.
-    number´Â °ªÀÌ ±×´ë·Î µé¾î°¡ ÀÖ´Ù. Áï, 1.2.1¿¡´Â 1,2,1ÀÌ µé¾î°¡ ÀÖ´Ù.
-    style Àº 1ºÎÅÍ °ªÀÌ µé¾î°¡ ÀÖ´Ù. hbox.h¿¡ Á¤ÀÇµÈ µ¥·Î..
+/*  level ì€ 0ë¶€í„° ì‹œì‘. ì¦‰ 1.1.1. ì˜ ë ˆë²¨ì€ 2ì´ë‹¤.
+    numberëŠ” ê°’ì´ ê·¸ëŒ€ë¡œ ë“¤ì–´ê°€ ìˆë‹¤. ì¦‰, 1.2.1ì—ëŠ” 1,2,1ì´ ë“¤ì–´ê°€ ìˆë‹¤.
+    style ì€ 1ë¶€í„° ê°’ì´ ë“¤ì–´ê°€ ìˆë‹¤. hbox.hì— ì •ì˜ëœ ë°ë¡œ..
  */
 hchar_string Outline::GetUnicode() const
 {
@@ -643,17 +643,17 @@ hchar_string Outline::GetUnicode() const
                     if( deco[i][0] ){
                         buffer[l++] = deco[i][0];
                     }
-/*  level Àº 0ºÎÅÍ ½ÃÀÛ. Áï 1.1.1. ÀÇ ·¹º§Àº 2ÀÌ´Ù.
-    number´Â °ªÀÌ ±×´ë·Î µé¾î°¡ ÀÖ´Ù. Áï, 1.2.1¿¡´Â 1,2,1ÀÌ µé¾î°¡ ÀÖ´Ù.
-    style Àº 1ºÎÅÍ °ªÀÌ µé¾î°¡ ÀÖ´Ù. hbox.h¿¡ Á¤ÀÇµÈ µ¥·Î..
+/*  level ì€ 0ë¶€í„° ì‹œì‘. ì¦‰ 1.1.1. ì˜ ë ˆë²¨ì€ 2ì´ë‹¤.
+    numberëŠ” ê°’ì´ ê·¸ëŒ€ë¡œ ë“¤ì–´ê°€ ìˆë‹¤. ì¦‰, 1.2.1ì—ëŠ” 1,2,1ì´ ë“¤ì–´ê°€ ìˆë‹¤.
+    style ì€ 1ë¶€í„° ê°’ì´ ë“¤ì–´ê°€ ìˆë‹¤. hbox.hì— ì •ì˜ëœ ë°ë¡œ..
  */
                     switch( user_shape[i] )
                     {
                         case 0:
                             buffer[l++] = '1' + number[i] - 1;
                             break;
-                        case 1: /* ´ë¹®ÀÚ·Î¸¶ */
-                        case 2: /* ¼Ò¹®ÀÚ·Î¸¶ */
+                        case 1: /* ëŒ€ë¬¸ìë¡œë§ˆ */
+                        case 2: /* ì†Œë¬¸ìë¡œë§ˆ */
                             num2roman(number[i], dest);
                             if( user_shape[i] == 1 ){
                                 char *ptr = dest;
@@ -678,22 +678,22 @@ hchar_string Outline::GetUnicode() const
                         case 6:
                             buffer[l++] = olHanglJaso(number[i] -1, OL_HANGL_JASO);
                             break;
-                        case 7: /* ÇÑÀÚ ¼ıÀÚ : ÀÏ¹İ ¼ıÀÚ·Î Ç¥Çö */
+                        case 7: /* í•œì ìˆ«ì : ì¼ë°˜ ìˆ«ìë¡œ í‘œí˜„ */
                             buffer[l++] = '1' + number[i] -1;
                             break;
-                        case 8: /* ¿ø¼ıÀÚ */
+                        case 8: /* ì›ìˆ«ì */
                             buffer[l++] = 0x2e00 + number[i];
                             break;
-                        case 9: /* ¿ø ¾ËÆÄºª ¼Ò¹®ÀÚ */
+                        case 9: /* ì› ì•ŒíŒŒë²³ ì†Œë¬¸ì */
                             buffer[l++] = 0x2c20 + number[i];
                             break;
-                        case 10: /* ¿ø °¡³ª´Ù */
+                        case 10: /* ì› ê°€ë‚˜ë‹¤ */
                             buffer[l++] = 0x2c50 + number[i] -1;
                             break;
-                        case 11: /* ¿ø ¤¡ ¤¤ */
+                        case 11: /* ì› ã„± ã„´ */
                             buffer[l++] = 0x2c40 + number[i] -1;
                             break;
-                        case 12: /* ÀÌ¾îÁø ¼ıÀÚ. */
+                        case 12: /* ì´ì–´ì§„ ìˆ«ì. */
                         {
                              char cur_num_str[10],buf[80];
                              int j;
@@ -727,7 +727,7 @@ hchar_string Outline::GetUnicode() const
 }
 
 
-/* ¹­À½ ºóÄ­(30) */
-/* °íÁ¤Æø ºóÄ­(31) */
+/* ë¬¶ìŒ ë¹ˆì¹¸(30) */
+/* ê³ ì •í­ ë¹ˆì¹¸(31) */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

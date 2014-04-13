@@ -387,7 +387,7 @@ void Formula::makeDecoration(Node *res)
      else
           fprintf(stderr,"<math:munder>\n");
 #else
-     /* accent´Â ¾ğÁ¦ trueÀÌ°í, ¾ğÁ¦, falseÀÎÁö ¸ğ¸£°Ú´Ù. */
+     /* accentëŠ” ì–¸ì œ trueì´ê³ , ì–¸ì œ, falseì¸ì§€ ëª¨ë¥´ê² ë‹¤. */
      if( isover ){
           padd(ascii("accent"),ascii("CDATA"),ascii("true"));
           rstartEl(ascii("math:mover"), rList);

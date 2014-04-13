@@ -54,42 +54,42 @@ HWPInfo::~HWPInfo(void)
 
 
 /**
- * ¹®¼­Á¤º¸¸¦ ÀĞ¾îµéÀÌ´Â ÇÔ¼ö ( 128 bytes )
- * ¹®¼­Á¤º¸´Â ÆÄÀÏÀÎ½ÄÁ¤º¸( 30 bytes ) ´ÙÀ½¿¡ À§Ä¡ÇÑ Á¤º¸ÀÌ´Ù.
+ * ë¬¸ì„œì •ë³´ë¥¼ ì½ì–´ë“¤ì´ëŠ” í•¨ìˆ˜ ( 128 bytes )
+ * ë¬¸ì„œì •ë³´ëŠ” íŒŒì¼ì¸ì‹ì •ë³´( 30 bytes ) ë‹¤ìŒì— ìœ„ì¹˜í•œ ì •ë³´ì´ë‹¤.
  */
 bool HWPInfo::Read(HWPFile & hwpf)
 {
-    hwpf.Read2b(&cur_col, 1);                     /* ¹®¼­¸¦ ÀúÀåÇÒ ´ç½ÃÀÇ Ä¿¼­°¡ À§Ä¡ÇÑ ¹®´Ü¹øÈ£ */
-    hwpf.Read2b(&cur_row, 1);                     /* ¹®´Ü Ä­ */
+    hwpf.Read2b(&cur_col, 1);                     /* ë¬¸ì„œë¥¼ ì €ì¥í•  ë‹¹ì‹œì˜ ì»¤ì„œê°€ ìœ„ì¹˜í•œ ë¬¸ë‹¨ë²ˆí˜¸ */
+    hwpf.Read2b(&cur_row, 1);                     /* ë¬¸ë‹¨ ì¹¸ */
 
-    hwpf.Read1b(&paper.paper_kind, 1);            /* ¿ëÁö Á¾·ù */
-    hwpf.Read1b(&paper.paper_direction, 1);       /* ¿ëÁö ¹æÇâ */
+    hwpf.Read1b(&paper.paper_kind, 1);            /* ìš©ì§€ ì¢…ë¥˜ */
+    hwpf.Read1b(&paper.paper_direction, 1);       /* ìš©ì§€ ë°©í–¥ */
 
 // paper geometry information
-    paper.paper_height = (short) hwpf.Read2b();   /* ¿ëÁö ±æÀÌ */
-    paper.paper_width = (short) hwpf.Read2b();    /* ¿ëÁö ³Êºñ */
-    paper.top_margin = (short) hwpf.Read2b();     /* À§ÂÊ ¿©¹é */
-    paper.bottom_margin = (short) hwpf.Read2b();  /* ¾Æ·¡ÂÊ ¿©¹é */
-    paper.left_margin = (short) hwpf.Read2b();    /* ¿ŞÂÊ ¿©¹é */
-    paper.right_margin = (short) hwpf.Read2b();   /* ¿À¸¥ÂÊ ¿©¹é */
-    paper.header_length = (short) hwpf.Read2b();  /* ¸Ó¸®¸» ±æÀÌ */
-    paper.footer_length = (short) hwpf.Read2b();  /* ²¿¸®¸» ±æÀÌ */
-    paper.gutter_length = (short) hwpf.Read2b();  /* Á¦º»¿©¹é */
-    hwpf.Read2b(&readonly, 1);                    /* ¿¹¾à */
-    hwpf.Read1b(reserved1, 4);                    /* ¿¹¾à */
-    hwpf.Read1b(&chain_info.chain_page_no, 1);    /* ÂÊ ¹øÈ£ ¿¬°á 1-¿¬°á, 0-»õ·Î½ÃÀÛ (¿¬°áÀÎ¼â¿¡¼­ »ç¿ë) */
-    hwpf.Read1b(&chain_info.chain_footnote_no, 1);/* °¢ÁÖ¹øÈ£ ¿¬°á 1-¿¬°á 0-»õ·Î½ÃÀÛ */
-                                                  /* ¿¬°áÀÎ¼âÇÒ ÆÄÀÏÀÇ ÀÌ¸§ */
+    paper.paper_height = (short) hwpf.Read2b();   /* ìš©ì§€ ê¸¸ì´ */
+    paper.paper_width = (short) hwpf.Read2b();    /* ìš©ì§€ ë„ˆë¹„ */
+    paper.top_margin = (short) hwpf.Read2b();     /* ìœ„ìª½ ì—¬ë°± */
+    paper.bottom_margin = (short) hwpf.Read2b();  /* ì•„ë˜ìª½ ì—¬ë°± */
+    paper.left_margin = (short) hwpf.Read2b();    /* ì™¼ìª½ ì—¬ë°± */
+    paper.right_margin = (short) hwpf.Read2b();   /* ì˜¤ë¥¸ìª½ ì—¬ë°± */
+    paper.header_length = (short) hwpf.Read2b();  /* ë¨¸ë¦¬ë§ ê¸¸ì´ */
+    paper.footer_length = (short) hwpf.Read2b();  /* ê¼¬ë¦¬ë§ ê¸¸ì´ */
+    paper.gutter_length = (short) hwpf.Read2b();  /* ì œë³¸ì—¬ë°± */
+    hwpf.Read2b(&readonly, 1);                    /* ì˜ˆì•½ */
+    hwpf.Read1b(reserved1, 4);                    /* ì˜ˆì•½ */
+    hwpf.Read1b(&chain_info.chain_page_no, 1);    /* ìª½ ë²ˆí˜¸ ì—°ê²° 1-ì—°ê²°, 0-ìƒˆë¡œì‹œì‘ (ì—°ê²°ì¸ì‡„ì—ì„œ ì‚¬ìš©) */
+    hwpf.Read1b(&chain_info.chain_footnote_no, 1);/* ê°ì£¼ë²ˆí˜¸ ì—°ê²° 1-ì—°ê²° 0-ìƒˆë¡œì‹œì‘ */
+                                                  /* ì—°ê²°ì¸ì‡„í•  íŒŒì¼ì˜ ì´ë¦„ */
     hwpf.Read1b(chain_info.chain_filename, CHAIN_MAX_PATH);
 
-    hwpf.Read1b(annotation, ANNOTATION_LEN);      /* µ¡ºÙÀÌ´Â ¸» ( ÆÄÀÏ ÀúÀåÇÒ ¶§ µ¡ºÙÀÌ´Â ¸»¿¡ ÁöÁ¤ÇÑ ³»¿ë ) */
-    hwpf.Read2b(&encrypted, 1);                   /* ¾ÏÈ£ ¿©ºÎ 0-º¸ÅëÆÄÀÏ, ±×¿Ü-¾ÏÈ£°É¸° ÆÄÀÏ */
-//hwpf.Read1b(reserved2, 6);                      /* ¾Æ·¡ 3°³ÀÇ°ªÀ¸·Î ¹Ù²î¾ú´Ù. */
-    hwpf.Read2b(&beginpagenum,1);                 /* ÆäÀÌÁö½ÃÀÛ¹øÈ£ */
+    hwpf.Read1b(annotation, ANNOTATION_LEN);      /* ë§ë¶™ì´ëŠ” ë§ ( íŒŒì¼ ì €ì¥í•  ë•Œ ë§ë¶™ì´ëŠ” ë§ì— ì§€ì •í•œ ë‚´ìš© ) */
+    hwpf.Read2b(&encrypted, 1);                   /* ì•”í˜¸ ì—¬ë¶€ 0-ë³´í†µíŒŒì¼, ê·¸ì™¸-ì•”í˜¸ê±¸ë¦° íŒŒì¼ */
+//hwpf.Read1b(reserved2, 6);                      /* ì•„ë˜ 3ê°œì˜ê°’ìœ¼ë¡œ ë°”ë€Œì—ˆë‹¤. */
+    hwpf.Read2b(&beginpagenum,1);                 /* í˜ì´ì§€ì‹œì‘ë²ˆí˜¸ */
 
 // footnote
-    hwpf.Read2b(&beginfnnum,1);                   /* °¢ÁÖ ½ÃÀÛ¹øÈ£ */
-    hwpf.Read2b(&countfn,1);                      /* °¢ÁÖ °¹¼ö */
+    hwpf.Read2b(&beginfnnum,1);                   /* ê°ì£¼ ì‹œì‘ë²ˆí˜¸ */
+    hwpf.Read2b(&countfn,1);                      /* ê°ì£¼ ê°¯ìˆ˜ */
     splinetext = (short) hwpf.Read2b();
     splinefn = (short) hwpf.Read2b();
     spfnfn = (short) hwpf.Read2b();
@@ -110,7 +110,7 @@ bool HWPInfo::Read(HWPFile & hwpf)
     if (hwpf.State())
         return false;
 
-/* ¹®¼­ ¿ä¾àÀ» ÀĞ´Â´Ù. */
+/* ë¬¸ì„œ ìš”ì•½ì„ ì½ëŠ”ë‹¤. */
     if (!summary.Read(hwpf))
         return false;
     if (info_block_len > 0)
@@ -122,7 +122,7 @@ bool HWPInfo::Read(HWPFile & hwpf)
             return false;
     }
 
-/* hwpfÀÇ °ªÀ» Àç¼³Á¤ ÇÑ´Ù. */
+/* hwpfì˜ ê°’ì„ ì¬ì„¤ì • í•œë‹¤. */
     hwpf.compressed = compressed ? true : false;
     hwpf.encrypted = encrypted ? true : false;
     hwpf.info_block_len = info_block_len;

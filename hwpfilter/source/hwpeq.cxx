@@ -32,7 +32,7 @@ using namespace std;
 #include <sal/types.h>
 #include <sal/macros.h>
 
-/* @Man: hwp¼ö½ÄÀ» LaTeXÀ¸·Î ¹Ù²Ù±â */
+/* @Man: hwpìˆ˜ì‹ì„ LaTeXìœ¼ë¡œ ë°”ê¾¸ê¸° */
 #ifdef WIN32
 # define ENDL  "\r\n"
 #else /* !WIN32 */
@@ -125,7 +125,7 @@ static const hwpeq eq_tbl[] = {
   { "bullet",       NULL,       0,  0   },
   { "cap",      NULL,       0,  0   },
   { "cases",        NULL,       0,  EQ_ENV  },
-  { "ccol",     NULL,       0,  0   }, /* ¼¼·Î·Î °¡¿îµ¥ */
+  { "ccol",     NULL,       0,  0   }, /* ì„¸ë¡œë¡œ ê°€ìš´ë° */
   { "cdot",     NULL,       0,  0   },
   { "cdots",        NULL,       0,  0   },
   { "check",        NULL,       1,  0   },
@@ -401,7 +401,7 @@ static const hwpeq *lookup_eqn(char *str)
   return result;
 }
 
-/* Ã¹ÀÚ¸¸ ´ë¹®ÀÚÀÌ°Å³ª ÀüºÎ ´ë¹®ÀÚ¸é ¼Ò¹®ÀÚ·Î ¹Ù²Û´Ù. */
+/* ì²«ìžë§Œ ëŒ€ë¬¸ìžì´ê±°ë‚˜ ì „ë¶€ ëŒ€ë¬¸ìžë©´ ì†Œë¬¸ìžë¡œ ë°”ê¾¼ë‹¤. */
 
 static char *make_keyword( char *keyword, const char *token)
 {
@@ -462,7 +462,7 @@ void push_token(MzString &white, MzString &token, istream *strm)
   stk->strm = strm;
 }
 
-/* ÀÐÀº ÅäÅ«ÀÇ ±æÀÌ¸¦ ¹ÝÈ¯ÇÑ´Ù. */
+/* ì½ì€ í† í°ì˜ ê¸¸ì´ë¥¼ ë°˜í™˜í•œë‹¤. */
 /* control char, control sequence, binary sequence,
    alphabet string, sigle character */
 static int next_token(MzString &white, MzString &token, istream *strm)
@@ -498,8 +498,8 @@ static int next_token(MzString &white, MzString &token, istream *strm)
       ch = strm->get();
     } while( ch != EOF && (ch & 0x80 || isalpha(ch)) ) ;
     strm->putback(sal::static_int_cast<char>(ch));
-    /*  sub, sub, over, atop Æ¯¼ö Ã³¸®
-        ±× ÀÌÀ¯´Â next_state()¿¡ ¿µÇâÀ» ¹ÌÄ¡±â ¶§¹®ÀÌ´Ù.
+    /*  sub, sub, over, atop íŠ¹ìˆ˜ ì²˜ë¦¬
+        ê·¸ ì´ìœ ëŠ” next_state()ì— ì˜í–¥ì„ ë¯¸ì¹˜ê¸° ë•Œë¬¸ì´ë‹¤.
      */
     if( !STRICMP("sub", token) || !STRICMP("from", token) ||
     !STRICMP("sup", token) || !STRICMP("to", token) ||
@@ -550,17 +550,17 @@ static int read_white_space(MzString& outs, istream *strm)
   return result;
 }
 
-/* ÀÎ¼ö°¡ ÇÊ¿äÇÏÁö ¾ÊÀº °æ¿ì °¢ Ç×¸ñ°£ÀÇ ±¸ºÐÀº space¿Í brace
+/* ì¸ìˆ˜ê°€ í•„ìš”í•˜ì§€ ì•Šì€ ê²½ìš° ê° í•­ëª©ê°„ì˜ êµ¬ë¶„ì€ spaceì™€ brace
      sqrt {ab}c = sqrt{ab} c
-   (, }´Â grouping
-   ^, _ ´Â ¾ÕµÚ·Î °áÇÕÇÑ´Ù.
+   (, }ëŠ” grouping
+   ^, _ ëŠ” ì•žë’¤ë¡œ ê²°í•©í•œë‹¤.
 
-   sqrt µî°ú °°ÀÌ ÀÎ¼ö°¡ ÀÖ´Â Çü½Ä Á¤¸®
+   sqrt ë“±ê³¼ ê°™ì´ ì¸ìˆ˜ê°€ ìžˆëŠ” í˜•ì‹ ì •ë¦¬
      sqrt a  -> sqrt{a}
      sqrt {a}    -> sqrt{a}
-   1 ÀÌ»óÀÇ ÀÎ¼ö°¡ ÀÖ´Â °æ¿ì ÀÎ¼öµé°£ÀÇ ¿ª¹éÀº ¾ø¾Ø´Ù.
+   1 ì´ìƒì˜ ì¸ìˆ˜ê°€ ìžˆëŠ” ê²½ìš° ì¸ìˆ˜ë“¤ê°„ì˜ ì—­ë°±ì€ ì—†ì•¤ë‹¤.
      \frac a b   -> frac{a}{b}
-   overÀÇ Çü½Ä Á¤¸®
+   overì˜ í˜•ì‹ ì •ë¦¬
      a over b    -> {a}over{b}
  */
 
@@ -591,7 +591,7 @@ static int eq_word(MzString& outs, istream *strm, int status)
     state << white << token;
   }
   else {
-    /* Á¤»óÀûÀÎ token */
+    /* ì •ìƒì ì¸ token */
     int script_status = SCRIPT_NONE;
     while( true ) {
       state << white << token;
