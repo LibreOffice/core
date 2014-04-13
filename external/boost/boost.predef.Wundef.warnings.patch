@@ -1,0 +1,11 @@
+--- foo/foo/foo/boost/predef/other/endian.h
++++ foo/foo/foo/boost/predef/other/endian.h
+@@ -77,7 +77,7 @@
+ #           undef BOOST_ENDIAN_LITTLE_BYTE
+ #           define BOOST_ENDIAN_LITTLE_BYTE BOOST_VERSION_NUMBER_AVAILABLE
+ #       endif
+-#       if (__BYTE_ORDER == __PDP_ENDIAN)
++#       if defined(__PDP_ENDIAN) && (__BYTE_ORDER == __PDP_ENDIAN)
+ #           undef BOOST_ENDIAN_LITTLE_WORD
+ #           define BOOST_ENDIAN_LITTLE_WORD BOOST_VERSION_NUMBER_AVAILABLE
+ #       endif

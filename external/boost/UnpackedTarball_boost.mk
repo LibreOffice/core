@@ -27,7 +27,10 @@ boost_patches += boost.date_time.Wshadow.warnings.patch
 boost_patches += boost.math.Wdeprecated-register.patch.0
 boost_patches += boost.multi_array.C4510.warnings.patch
 boost_patches += boost.multi_array.Wshadow.warnings.patch
+boost_patches += boost.multi_array.Wundef.warnings.patch
 boost_patches += boost.multi_index.Wshadow.warnings.patch.1
+boost_patches += boost.predef.Wundef.warnings.patch
+boost_patches += boost.preprocessor.Wundef.warnings.patch
 boost_patches += boost.property_tree.Wshadow.warnings.patch.1
 boost_patches += boost.property_tree.Wtautological-constant-out-of-range-compare.warnings.patch.0
 boost_patches += boost.ptr_container.Wshadow.warnings.patch
@@ -38,6 +41,7 @@ boost_patches += boost.random.Wshadow.warnings.patch
 boost_patches += boost.random.Wuninitialized.patch
 boost_patches += boost.spirit.Wshadow.warnings.patch
 boost_patches += boost.unordered.Wshadow.warnings.patch
+boost_patches += boost.utility.Wundef.warnings.patch
 boost_patches += boost.uuid.Wshadow.warnings.patch
 
 # Help static analysis tools (see SAL_UNUSED_PARAMETER in sal/types.h):
@@ -55,7 +59,6 @@ boost_patches += boost.endian.patch
 boost_patches += boost.loplugin.patch
 boost_patches += boost.std.move.patch
 boost_patches += boost.transform_width.patch
-boost_patches += boost.wundef.patch
 boost_patches += boost.wunused.patch
 boost_patches += boost.wdeprecated-auto_ptr.patch.0
 
