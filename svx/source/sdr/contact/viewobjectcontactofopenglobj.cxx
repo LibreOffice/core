@@ -8,6 +8,9 @@
  */
 
 #include <svx/sdr/contact/viewobjectcontactofopenglobj.hxx>
+#include <svx/sdr/contact/viewcontactofopenglobj.hxx>
+
+#include <svx/svdoopengl.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 
@@ -18,6 +21,8 @@ ViewObjectContactOfOpenGLObj::ViewObjectContactOfOpenGLObj(
     ObjectContact& rObjectContact, ViewContact& rViewContact )
     : ViewObjectContactOfSdrObj( rObjectContact, rViewContact )
 {
+    OpenGLContext& rContext = static_cast<SdrOpenGLObj&>(static_cast<ViewContactOfSdrObj&>(rViewContact).GetSdrObject()).getOpenGLContext();
+    rContext.init(getWindow());
 }
 
 ViewObjectContactOfOpenGLObj::~ViewObjectContactOfOpenGLObj()
