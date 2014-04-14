@@ -5254,29 +5254,6 @@ PPTStyleTextPropReader::~PPTStyleTextPropReader()
         delete *it;
 }
 
-struct FieldEntry
-{
-    sal_uInt32  nFieldType;
-    sal_uInt32  nFieldStartPos;
-    sal_uInt32  nFieldEndPos;
-    OUString    aFieldUrl;
-
-    FieldEntry( sal_uInt32 nType, sal_uInt32 nStart, sal_uInt32 nEnd )
-    {
-        nFieldType = nType;
-        nFieldStartPos = nStart;
-        nFieldEndPos = nEnd;
-    }
-    FieldEntry( FieldEntry& rFieldEntry )
-    {
-        nFieldType = rFieldEntry.nFieldType;
-        nFieldStartPos = rFieldEntry.nFieldStartPos;
-        nFieldEndPos = rFieldEntry.nFieldEndPos;
-        aFieldUrl = rFieldEntry.aFieldUrl;
-    }
-};
-
-
 PPTPortionObj::PPTPortionObj( const PPTStyleSheet& rStyleSheet, sal_uInt32 nInstance, sal_uInt32 nDepth ) :
     PPTCharPropSet  ( 0 ),
     mrStyleSheet    ( rStyleSheet ),

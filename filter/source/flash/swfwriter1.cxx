@@ -47,7 +47,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 
-extern sal_uInt16 getMaxBitsUnsigned( sal_uInt32 nValue );
 extern sal_uInt16 getMaxBitsSigned( sal_Int32 nValue );
 
 static MapMode aTWIPSMode( MAP_TWIP );

@@ -17,29 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/implementationentry.hxx>
-#include <filter/msfilter/msvbahelper.hxx>
+#ifndef INCLUDED_FILTER_SOURCE_PLACEWARE_FILTER_HXX
+#define INCLUDED_FILTER_SOURCE_PLACEWARE_FILTER_HXX
 
-using namespace ::com::sun::star::uno;
+#include <sal/config.h>
 
-namespace {
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
-#define IMPLEMENTATION_ENTRY( className ) \
-    { &className##_createInstance, &className##_getImplementationName, &className##_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0 }
+namespace com { namespace sun { namespace star {
+    namespace lang { class XMultiSerivceFactory; }
+    namespace uno { class XInterface; }
+} } }
 
-static ::cppu::ImplementationEntry const spServices[] =
-{
-    IMPLEMENTATION_ENTRY( ::ooo::vba::VBAMacroResolver ),
-    { 0, 0, 0, 0, 0, 0 }
-};
+namespace pwp {
 
-#undef IMPLEMENTATION_ENTRY
+OUString PlaceWareExportFilter_getImplementationName()
+    throw (css::uno::RuntimeException);
 
-} // namespace
+css::uno::Sequence<OUString> SAL_CALL
+PlaceWareExportFilter_getSupportedServiceNames()
+    throw (css::uno::RuntimeException);
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL msfilter_component_getFactory( const char* pImplName, void* pServiceManager, void* pRegistryKey )
-{
-    return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, spServices );
+css::uno::Reference<css::uno::XInterface> SAL_CALL
+PlaceWareExportFilter_createInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
+    throw (css::uno::Exception);
+
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

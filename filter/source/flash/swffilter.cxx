@@ -43,6 +43,7 @@
 #include <osl/file.hxx>
 
 #include "swfexporter.hxx"
+#include "swfuno.hxx"
 
 #include <string.h>
 

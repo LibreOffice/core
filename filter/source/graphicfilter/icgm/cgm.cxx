@@ -691,12 +691,6 @@ sal_Bool CGM::Write( SvStream& rIStm )
     return mbStatus;
 };
 
-SvStream& operator>>( SvStream& rOStm, CGM& /*rCGM*/ )
-{
-
-    return rOStm;
-};
-
 // GraphicImport - the exported function
 extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 SAL_CALL
 ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uInt32 nMode, void* pProgressBar )

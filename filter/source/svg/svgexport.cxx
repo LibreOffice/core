@@ -197,22 +197,6 @@ public:
     virtual ~FooterField() {}
 };
 
-class HeaderField : public FixedTextField
-{
-public:
-    HeaderField() {}
-    virtual OUString getClassName() const SAL_OVERRIDE
-    {
-        return OUString( "HeaderField" );
-    }
-    virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const SAL_OVERRIDE
-    {
-        static const OUString sFieldId = aOOOAttrHeaderField;
-        implGrowCharSet( aTextFieldCharSets, text, sFieldId );
-    }
-    virtual ~HeaderField() {}
-};
-
 class VariableTextField : public TextField
 {
 public:

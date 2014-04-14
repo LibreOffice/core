@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include "exporter.hxx"
+#include "filter.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

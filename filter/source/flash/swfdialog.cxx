@@ -19,6 +19,7 @@
 
 
 #include "swfdialog.hxx"
+#include "swfuno.hxx"
 #include "impswfdialog.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>

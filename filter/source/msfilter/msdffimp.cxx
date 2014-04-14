@@ -1086,15 +1086,6 @@ void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyReader& r
     rIn.Seek( nPos );
 }
 
-struct QuantErr
-{
-    double  fRed;
-    double  fGreen;
-    double  fBlue;
-
-    QuantErr() : fRed( 0.0 ), fGreen( 0.0 ), fBlue( 0.0 ){};
-};
-
 void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream& rIn, SfxItemSet& rSet, const std::vector< ShadeColor >& rShadeColors, const DffObjData& rObjData, sal_Int32 nFix16Angle )
 {
     Size aBitmapSizePixel( static_cast< sal_Int32 >( ( rObjData.aBoundRect.GetWidth() / 2540.0 ) * 90.0 ),      // we will create a bitmap with 90 dpi

@@ -96,7 +96,15 @@ private:
     OUString            maProjectName;
 };
 
+OUString SAL_CALL VBAMacroResolver_getImplementationName();
 
+css::uno::Sequence<OUString> SAL_CALL
+VBAMacroResolver_getSupportedServiceNames();
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL
+VBAMacroResolver_createInstance(
+    css::uno::Reference<css::uno::XComponentContext > const & rxContext)
+    throw (css::uno::Exception);
 
 } // namespace vba
 } // namespace ooo

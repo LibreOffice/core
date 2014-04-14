@@ -196,7 +196,6 @@ private:
     void                ImplTranslate( const double& fX, const double& fY, sal_uInt32 nMode = PS_RET );
     void                ImplScale( const double& fX, const double& fY, sal_uInt32 nMode = PS_RET );
 
-    void                ImplWriteLine( const Polygon & rPolygon );
     void                ImplAddPath( const Polygon & rPolygon );
     void                ImplWriteLineInfo( double fLineWidth, double fMiterLimit, SvtGraphicStroke::CapType eLineCap,
                                     SvtGraphicStroke::JoinType eJoinType, SvtGraphicStroke::DashArray& rDashArray );
@@ -222,7 +221,6 @@ private:
     inline void         ImplWriteLineColor( sal_uLong nMode = PS_RET );
     inline void         ImplWriteFillColor( sal_uLong nMode = PS_RET );
     inline void         ImplWriteTextColor( sal_uLong nMode = PS_RET );
-    inline void         ImplWriteTextFillColor( sal_uLong nMode = PS_RET );
     void                ImplWriteColor( sal_uLong nMode );
 
     double              ImplGetScaling( const MapMode& );
@@ -2304,16 +2302,6 @@ inline void PSWriter::ImplWriteTextColor( sal_uLong nMode )
         ImplWriteColor( nMode );
     }
 }
-inline void PSWriter::ImplWriteTextFillColor( sal_uLong nMode )
-{
-    if ( aColor != aTextFillColor )
-    {
-        aColor = aTextFillColor;
-        ImplWriteColor( nMode );
-    }
-}
-
-
 
 void PSWriter::ImplWriteColor( sal_uLong nMode )
 {
