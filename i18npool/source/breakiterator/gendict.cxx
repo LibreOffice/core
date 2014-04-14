@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -31,6 +30,22 @@
 using std::vector;
 
 using namespace ::rtl;
+
+// For iOS, where we must strive for a minimal executable size, we
+// keep the data produced by this utility not as large const tables in
+// source code but instead as separate data files, to be bundled with
+// an app, and mmapped in at run time.
+
+// To test this easier on a desktop OS, just make sure
+// DICT_JA_ZH_IN_DATAFILE is defined when building i18npool.
+
+#ifdef DICT_JA_ZH_IN_DATAFILE
+static sal_Int64 dataAreaOffset = 0;
+static sal_Int64 lenArrayOffset = 0;
+static sal_Int64 index1Offset = 0;
+static sal_Int64 index2Offset = 0;
+static sal_Int64 existMarkOffset = 0;
+#endif
 
 /* Utility gendict:
 
@@ -60,12 +75,17 @@ static inline void set_exists(sal_uInt32 index)
 
 static inline void printIncludes(FILE* source_fp)
 {
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fputs("/* !!!The file is generated automatically. DO NOT edit the file manually!!! */\n\n", source_fp);
     fputs("#include <sal/types.h>\n\n", source_fp);
+#else
+    (void) source_fp;
+#endif
 }
 
 static inline void printFunctions(FILE* source_fp, const char *lang)
 {
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fputs ("#ifndef DISABLE_DYNLOADING\n", source_fp);
     fputs ("SAL_DLLPUBLIC_EXPORT const sal_uInt8* getExistMark() { return existMark; }\n", source_fp);
     fputs ("SAL_DLLPUBLIC_EXPORT const sal_Int16* getIndex1() { return index1; }\n", source_fp);
@@ -79,12 +99,20 @@ static inline void printFunctions(FILE* source_fp, const char *lang)
     fprintf (source_fp, "SAL_DLLPUBLIC_EXPORT const sal_Int32* getLenArray_%s() { return lenArray; }\n", lang);
     fprintf (source_fp, "SAL_DLLPUBLIC_EXPORT const sal_Unicode* getDataArea_%s() { return dataArea; }\n", lang);
     fputs ("#endif\n", source_fp);
+#else
+    (void) source_fp;
+    (void) lang;
+#endif
 }
 
 static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sal_uInt32>& lenArray)
 {
     // generate main dict. data array
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fputs("static const sal_Unicode dataArea[] = {\n\t", source_fp);
+#else
+    dataAreaOffset = ftell(source_fp);
+#endif
     sal_Char str[1024];
     sal_uInt32 lenArrayCurr = 0;
     sal_Unicode current = 0;
@@ -114,28 +142,47 @@ static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sa
         // first character is stored in charArray, so start from second
         for (i = 1; i < len; i++, lenArrayCurr++) {
             set_exists(u[i]);
+#ifndef DICT_JA_ZH_IN_DATAFILE
             fprintf(source_fp, "0x%04x, ", u[i]);
             if ((lenArrayCurr & 0x0f) == 0x0f)
                 fputs("\n\t", source_fp);
+#else
+            fwrite(&u[i], sizeof(u[i]), 1, source_fp);
+#endif
         }
     }
     lenArray.push_back( lenArrayCurr ); // store last ending pointer
     charArray[current+1] = lenArray.size();
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fputs("\n};\n", source_fp);
+#endif
 }
 
 static inline void printLenArray(FILE* source_fp, const vector<sal_uInt32>& lenArray)
 {
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fprintf(source_fp, "static const sal_Int32 lenArray[] = {\n\t");
     fprintf(source_fp, "0x%x, ", 0); // insert one slat for skipping 0 in index2 array.
+#else
+    lenArrayOffset = ftell(source_fp);
+    sal_uInt32 zero(0);
+    fwrite(&zero, sizeof(zero), 1, source_fp);
+#endif
     for (size_t k = 0; k < lenArray.size(); k++)
     {
         if( !(k & 0xf) )
             fputs("\n\t", source_fp);
 
+#ifndef DICT_JA_ZH_IN_DATAFILE
         fprintf(source_fp, "0x%lx, ", static_cast<long unsigned int>(lenArray[k]));
+#else
+        fwrite(&lenArray[k], sizeof(lenArray[k]), 1, source_fp);
+#endif
     }
+
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fputs("\n};\n", source_fp );
+#endif
 }
 
 /* FIXME?: what happens if in every range i there is at least one charArray != 0
@@ -143,23 +190,40 @@ static inline void printLenArray(FILE* source_fp, const vector<sal_uInt32>& lenA
        => then in index2, the last range will be ignored incorrectly */
 static inline void printIndex1(FILE *source_fp, sal_Int16 *set)
 {
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fprintf (source_fp, "static const sal_Int16 index1[] = {\n\t");
+#else
+    index1Offset = ftell(source_fp);
+#endif
+
     sal_Int16 count = 0;
     for (sal_Int32 i = 0; i < 0x100; i++) {
         sal_Int32 j = 0;
         while( j < 0x100 && charArray[(i<<8) + j] == 0)
             j++;
 
-        fprintf(source_fp, "0x%02x, ", set[i] = (j < 0x100 ? count++ : 0xff));
+        set[i] = (j < 0x100 ? count++ : 0xff);
+#ifndef DICT_JA_ZH_IN_DATAFILE
+        fprintf(source_fp, "0x%02x, ", set[i]);
         if ((i & 0x0f) == 0x0f)
             fputs ("\n\t", source_fp);
+#else
+        fwrite(&set[i], sizeof(set[i]), 1, source_fp);
+#endif
     }
+
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fputs("};\n", source_fp);
+#endif
 }
 
 static inline void printIndex2(FILE *source_fp, sal_Int16 *set)
 {
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fputs ("static const sal_Int32 index2[] = {\n\t", source_fp);
+#else
+    index2Offset = ftell(source_fp);
+#endif
     sal_Int32 prev = 0;
     for (sal_Int32 i = 0; i < 0x100; i++) {
         if (set[i] != 0xff) {
@@ -170,28 +234,48 @@ static inline void printIndex2(FILE *source_fp, sal_Int16 *set)
                         k++;
 
                 prev = charArray[(i<<8) + j];
+#ifndef DICT_JA_ZH_IN_DATAFILE
                 fprintf(source_fp, "0x%lx, ", static_cast<long unsigned int>(k < 0x10000 ? charArray[k] + 1 : 0));
                 if ((j & 0x0f) == 0x0f)
                     fputs ("\n\t", source_fp);
+#else
+                sal_uInt32 n = (k < 0x10000 ? charArray[k] + 1 : 0);
+                fwrite(&n, sizeof(n), 1, source_fp);
+#endif
             }
+#ifndef DICT_JA_ZH_IN_DATAFILE
             fputs ("\n\t", source_fp);
+#endif
         }
     }
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fputs ("\n};\n", source_fp);
+#endif
 }
 
 /* Generates a bitmask for the existance of sal_Unicode values in dictionary;
    it packs 8 sal_Bool values in 1 sal_uInt8 */
 static inline void printExistsMask(FILE *source_fp)
 {
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fprintf (source_fp, "static const sal_uInt8 existMark[] = {\n\t");
+#else
+    existMarkOffset = ftell(source_fp);
+#endif
     for (unsigned int i = 0; i < 0x2000; i++)
     {
+#ifndef DICT_JA_ZH_IN_DATAFILE
         fprintf(source_fp, "0x%02x, ", exists[i]);
         if ( (i & 0xf) == 0xf )
             fputs("\n\t", source_fp);
+#else
+        fwrite(&exists[i], sizeof(exists[i]), 1, source_fp);
+#endif
     }
+
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fputs("\n};\n", source_fp);
+#endif
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
@@ -228,14 +312,25 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     sal_Int16 set[0x100];
 
     printIncludes(source_fp);
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fputs("extern \"C\" {\n", source_fp);
-        printDataArea(dictionary_fp, source_fp, lenArray);
-        printLenArray(source_fp, lenArray);
-        printIndex1(source_fp, set);
-        printIndex2(source_fp, set);
-        printExistsMask(source_fp);
-        printFunctions(source_fp, argv[3]);
+#endif
+    printDataArea(dictionary_fp, source_fp, lenArray);
+    printLenArray(source_fp, lenArray);
+    printIndex1(source_fp, set);
+    printIndex2(source_fp, set);
+    printExistsMask(source_fp);
+    printFunctions(source_fp, argv[3]);
+#ifndef DICT_JA_ZH_IN_DATAFILE
     fputs("}\n", source_fp);
+#else
+    // Put pointers to the tables at the end of the file...
+    fwrite(&dataAreaOffset, sizeof(dataAreaOffset), 1, source_fp);
+    fwrite(&lenArrayOffset, sizeof(lenArrayOffset), 1, source_fp);
+    fwrite(&index1Offset, sizeof(index1Offset), 1, source_fp);
+    fwrite(&index2Offset, sizeof(index2Offset), 1, source_fp);
+    fwrite(&existMarkOffset, sizeof(existMarkOffset), 1, source_fp);
+#endif
 
     fclose(dictionary_fp);
     fclose(source_fp);

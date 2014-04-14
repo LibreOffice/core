@@ -17,28 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
-// xdictionary.cpp: implementation of the xdictionary class.
-
-
-
-
+#include <osl/file.h>
 #include <rtl/ustrbuf.hxx>
-
+#include <rtl/bootstrap.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <xdictionary.hxx>
 #include <unicode/uchar.h>
 #include <string.h>
 #include <breakiteratorImpl.hxx>
 
-
-// Construction/Destruction
-
-
-
 namespace com { namespace sun { namespace star { namespace i18n {
 
-#ifndef DISABLE_DYNLOADING
+#ifdef DICT_JA_ZH_IN_DATAFILE
+
+#elif !defined DISABLE_DYNLOADING
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
@@ -74,8 +68,44 @@ xdictionary::xdictionary(const sal_Char *lang) :
     boundary(),
     japaneseWordBreak( sal_False )
 {
-    index1 = 0;
-#ifndef DISABLE_DYNLOADING
+    existMark = NULL;
+    index1 = NULL;
+    index2 = NULL;
+    lenArray = NULL;
+    dataArea = NULL;
+
+#ifdef DICT_JA_ZH_IN_DATAFILE
+
+    if( strcmp( lang, "ja" ) == 0 || strcmp( lang, "zh" ) == 0 )
+    {
+        OUString sUrl( "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/dict_" );
+        rtl::Bootstrap::expandMacros(sUrl);
+
+        if( strcmp( lang, "ja" ) == 0 )
+            sUrl += "ja.data";
+        else if( strcmp( lang, "zh" ) == 0 )
+            sUrl += "zh.data";
+
+        oslFileHandle aFileHandle;
+        sal_uInt64 nFileSize;
+        char *pMapping;
+        if( osl_openFile( sUrl.pData, &aFileHandle, osl_File_OpenFlag_Read ) == osl_File_E_None &&
+            osl_getFileSize( aFileHandle, &nFileSize) == osl_File_E_None &&
+            osl_mapFile( aFileHandle, (void **) &pMapping, nFileSize, 0, osl_File_MapFlag_RandomAccess ) == osl_File_E_None )
+        {
+            // We have the offsets to the parts of the file at its end, see gendict.cxx
+            sal_Int64 *pEOF = (sal_Int64*)(pMapping + nFileSize);
+
+            existMark = (sal_uInt8*) (pMapping + pEOF[-1]);
+            index2 = (sal_Int32*) (pMapping + pEOF[-2]);
+            index1 = (sal_Int16*) (pMapping + pEOF[-3]);
+            lenArray = (sal_Int32*) (pMapping + pEOF[-4]);
+            dataArea = (sal_Unicode*) (pMapping + pEOF[-5]);
+        }
+    }
+
+#elif !defined DISABLE_DYNLOADING
+
 #ifdef SAL_DLLPREFIX
     OUStringBuffer aBuf( strlen(lang) + 7 + 6 );    // mostly "lib*.so" (with * == dict_zh)
     aBuf.appendAscii( SAL_DLLPREFIX );
@@ -97,16 +127,9 @@ xdictionary::xdictionary(const sal_Char *lang) :
         func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getDataArea").pData );
         dataArea = (sal_Unicode*) (*func)();
     }
-    else
-    {
-        existMark = NULL;
-        index1 = NULL;
-        index2 = NULL;
-        lenArray = NULL;
-        dataArea = NULL;
-    }
 
 #else
+
     if( strcmp( lang, "ja" ) == 0 ) {
         existMark = getExistMark_ja();
         index1 = getIndex1_ja();
@@ -121,14 +144,7 @@ xdictionary::xdictionary(const sal_Char *lang) :
         lenArray = getLenArray_zh();
         dataArea = getDataArea_zh();
     }
-    else
-    {
-        existMark = NULL;
-        index1 = NULL;
-        index2 = NULL;
-        lenArray = NULL;
-        dataArea = NULL;
-    }
+
 #endif
 
     for (sal_Int32 i = 0; i < CACHE_MAX; i++)

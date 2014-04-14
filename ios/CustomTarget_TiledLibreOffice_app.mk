@@ -59,6 +59,9 @@ TiledLibreOffice_setup:
 	mkdir -p $(TiledLibreOffice_resource)/share/config
 	cp -R $(INSTDIR)/share/config/soffice.cfg $(TiledLibreOffice_resource)/share/config
 
+	# Japanese and Chinese dict files
+	cp $(WORKDIR)/CustomTarget/i18npool/breakiterator/dict_*.data $(TiledLibreOffice_resource)/share
+
 	# "registry"
 	cp -R $(INSTDIR)/share/registry $(TiledLibreOffice_resource)/share
 

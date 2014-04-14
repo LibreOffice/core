@@ -11,6 +11,20 @@ $(eval $(call gb_CustomTarget_CustomTarget,i18npool/breakiterator))
 
 i18npool_BIDIR := $(call gb_CustomTarget_get_workdir,i18npool/breakiterator)
 
+ifeq ($(OS),IOS)
+
+$(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
+	$(i18npool_BIDIR)/dict_ja.data $(i18npool_BIDIR)/dict_zh.data $(i18npool_BIDIR)/OpenOffice_dat.c
+
+$(i18npool_BIDIR)/dict_%.data : \
+		$(SRCDIR)/i18npool/source/breakiterator/data/%.dic \
+		$(call gb_Executable_get_runtime_dependencies,gendict) \
+		| $(i18npool_BIDIR)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DIC,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		$(call gb_Helper_execute,gendict) $< $@ $(patsubst $(i18npool_BIDIR)/dict_%.cxx,%,$@))
+else
+
 $(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
 	$(i18npool_BIDIR)/dict_ja.cxx $(i18npool_BIDIR)/dict_zh.cxx $(i18npool_BIDIR)/OpenOffice_dat.c
 
@@ -21,6 +35,8 @@ $(i18npool_BIDIR)/dict_%.cxx : \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DIC,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		$(call gb_Helper_execute,gendict) $< $@ $(patsubst $(i18npool_BIDIR)/dict_%.cxx,%,$@))
+
+endif
 
 i18npool_BRKTXTS := \
     char_in.brk \

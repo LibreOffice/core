@@ -35,6 +35,12 @@ $(eval $(call gb_Library_use_externals,i18npool,\
 	icu_headers \
 ))
 
+ifeq ($(OS),IOS)
+$(eval $(call gb_Library_add_cxxflags,i18npool,\
+	-DDICT_JA_ZH_IN_DATAFILE \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,i18npool,\
 	i18npool/source/breakiterator/breakiterator_cjk \
 	i18npool/source/breakiterator/breakiterator_ctl \

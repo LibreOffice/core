@@ -14,6 +14,14 @@ $(eval $(call gb_Executable_use_libraries,gendict,\
 	$(gb_UWINAPI) \
 ))
 
+ifeq ($(gb_Side),build)
+ifneq ($(shell grep OS=IOS $(BUILDDIR)/config_host.mk),)
+$(eval $(call gb_Executable_add_cxxflags,gendict,\
+	-DDICT_JA_ZH_IN_DATAFILE \
+))
+endif
+endif
+
 $(eval $(call gb_Executable_add_exception_objects,gendict,\
 	i18npool/source/breakiterator/gendict \
 ))
