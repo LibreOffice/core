@@ -17,34 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/debug.hxx>
-#include <tools/line.hxx>
 #include <tools/poly.hxx>
 
-#include <vcl/metaact.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/settings.hxx>
 
-#include "salframe.hxx"
 #include "salgdi.hxx"
-#include "svdata.hxx"
-#include "outdata.hxx"
 
-#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b2dlinegeometry.hxx>
 
 #include <boost/scoped_array.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #define OUTDEV_POLYPOLY_STACKBUF        32
 
