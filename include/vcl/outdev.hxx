@@ -41,6 +41,28 @@
 
 #include <vector>
 
+#if defined UNX
+#define GLYPH_FONT_HEIGHT   128
+#else
+#define GLYPH_FONT_HEIGHT   256
+#endif
+
+#define OUTDEV_INIT()                       \
+{                                           \
+    if ( !IsDeviceOutputNecessary() )       \
+        return;                             \
+                                            \
+    if ( !mpGraphics )                      \
+        if ( !ImplGetGraphics() )           \
+            return;                         \
+                                            \
+    if ( mbInitClipRegion )                 \
+        ImplInitClipRegion();               \
+                                            \
+    if ( mbOutputClipped )                  \
+        return;                             \
+}
+
 struct ImplOutDevData;
 class ImplFontEntry;
 struct ImplObjStack;
@@ -124,22 +146,6 @@ struct ImplThresholdRes
     long                mnThresPixToLogX;   // ""
     long                mnThresPixToLogY;   // ""
 };
-
-#define OUTDEV_INIT()                       \
-{                                           \
-    if ( !IsDeviceOutputNecessary() )       \
-        return;                             \
-                                            \
-    if ( !mpGraphics )                      \
-        if ( !ImplGetGraphics() )           \
-            return;                         \
-                                            \
-    if ( mbInitClipRegion )                 \
-        ImplInitClipRegion();               \
-                                            \
-    if ( mbOutputClipped )                  \
-        return;                             \
-}
 
 // OutputDevice-Types
 
@@ -274,6 +280,9 @@ PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly );
 
 sal_uLong ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
 void ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect );
+
+void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
+                    int nOrientation );
 
 extern const sal_uLong nVCLRLut[ 6 ];
 extern const sal_uLong nVCLGLut[ 6 ];
