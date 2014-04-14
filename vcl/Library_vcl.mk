@@ -238,6 +238,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/outdev/polygon \
     vcl/source/gdi/outdev/outdev2 \
     vcl/source/gdi/outdev/outdev3 \
+    vcl/source/gdi/outdev/line \
+    vcl/source/gdi/outdev/polyline \
     vcl/source/gdi/outdev/hatch \
     vcl/source/gdi/outdev/gradient \
     vcl/source/gdi/outdev/outdev5 \
