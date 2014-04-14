@@ -570,7 +570,7 @@ CustomAnimationCreateTabPage* CustomAnimationCreateDialog::getCurrentPage() cons
 {
     sal_Int16 curPageId = mpTabControl->GetCurPageId();
 
-    for( sal_uInt16 i = ENTRANCE; i <= MOTIONPATH; i++ )
+    for( sal_uInt16 i = ENTRANCE; i <= MISCEFFECTS; i++ )
     {
         if( mpTabPages[i]->getId() == curPageId )
             return mpTabPages[i];
