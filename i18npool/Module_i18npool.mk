@@ -16,8 +16,9 @@ $(eval $(call gb_Module_add_targets,i18npool,\
 	CustomTarget_localedata \
 	CustomTarget_textconversion \
 	Library_collator_data \
-	Library_dict_ja \
-	Library_dict_zh \
+	$(if $(filter-ouut IOS,$(OS)), \
+		Library_dict_ja \
+		Library_dict_zh) \
 	Library_i18npool \
 	Library_i18nsearch \
 	Library_index_data \
