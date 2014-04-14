@@ -119,12 +119,12 @@ awt::Size SAL_CALL SvtRulerAccessible::getSize() throw( RuntimeException, std::e
     return AWTSize( GetBoundingBox().GetSize() );
 }
 
-sal_Bool SAL_CALL SvtRulerAccessible::isShowing() throw( RuntimeException )
+bool SAL_CALL SvtRulerAccessible::isShowing() throw( RuntimeException )
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool SAL_CALL SvtRulerAccessible::isVisible() throw( RuntimeException )
+bool SAL_CALL SvtRulerAccessible::isVisible() throw( RuntimeException )
 {
     ::osl::MutexGuard           aGuard( m_aMutex );
 
@@ -133,9 +133,9 @@ sal_Bool SAL_CALL SvtRulerAccessible::isVisible() throw( RuntimeException )
     return mpRepr->IsVisible();
 }
 
-sal_Bool SAL_CALL SvtRulerAccessible::isFocusTraversable() throw( RuntimeException )
+bool SAL_CALL SvtRulerAccessible::isFocusTraversable() throw( RuntimeException )
 {
-    return sal_True;
+    return true;
 }
 
 //=====  XAccessibleContext  ==================================================

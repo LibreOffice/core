@@ -67,6 +67,25 @@ public:
 protected:
     virtual ~SvtRulerAccessible();
 public:
+    virtual bool SAL_CALL
+        isShowing() throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual bool SAL_CALL
+        isVisible() throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual bool SAL_CALL
+        isFocusTraversable() throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL
+        addFocusListener(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener )
+            throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL
+        removeFocusListener(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener )
+            throw( ::com::sun::star::uno::RuntimeException );
+
     //=====  XAccessible  =====================================================
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
@@ -91,25 +110,6 @@ public:
 
     virtual ::com::sun::star::awt::Size SAL_CALL
         getSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
-    virtual sal_Bool SAL_CALL
-        isShowing() throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual sal_Bool SAL_CALL
-        isVisible() throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual sal_Bool SAL_CALL
-        isFocusTraversable() throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL
-        addFocusListener(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener )
-            throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL
-        removeFocusListener(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener )
-            throw( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL
         grabFocus() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
