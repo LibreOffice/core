@@ -92,8 +92,6 @@ struct StorInternalData_Impl
     ~StorInternalData_Impl();
 };
 
-OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext > xContext );
-
 // static
 void OStorage_Impl::completeStorageStreamCopy_Impl(
                             const uno::Reference< io::XStream >& xSource,
