@@ -30,6 +30,11 @@ namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
 } } } }
 
+namespace svl {
+
+class SharedStringPool;
+
+}
 
 namespace rptui
 {
@@ -51,13 +56,17 @@ class FormulaDialog : public formula::FormulaModalDialog,
     sal_Int32                   m_nStart;
     sal_Int32                   m_nEnd;
 
+    svl::SharedStringPool& mrStringPool;
+
     DECL_LINK( OnClickHdl, OAddFieldWindow*);
 public:
     FormulaDialog( Window* pParent
         , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xServiceFactory
         , const ::boost::shared_ptr< formula::IFunctionManager >& _pFunctionMgr
         , const OUString& _sFormula
-        , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet);
+        , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet
+        , svl::SharedStringPool& rStrPool );
+
     virtual ~FormulaDialog();
 
     // IFormulaEditorHelper
