@@ -124,6 +124,8 @@ public:
     void testNewCondFormatODS();
     void testNewCondFormatXLSX();
 
+    void testLiteralInFormulaXLS();
+
     //change this test file only in excel and not in calc
     void testCellValueXLSX();
 
@@ -211,6 +213,7 @@ public:
     CPPUNIT_TEST(testColorScaleXLSX);
     CPPUNIT_TEST(testNewCondFormatODS);
     CPPUNIT_TEST(testNewCondFormatXLSX);
+    CPPUNIT_TEST(testLiteralInFormulaXLS);
 
     CPPUNIT_TEST(testNumberFormatHTML);
     CPPUNIT_TEST(testNumberFormatCSV);
@@ -2343,6 +2346,19 @@ void ScFiltersTest::testNewCondFormatXLSX()
     OUString aCSVPath;
     createCSVPath( aCSVFile, aCSVPath );
     testCondFile(aCSVPath, pDoc, 0);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testLiteralInFormulaXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("shared-string/literal-in-formula.", XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    pDoc->CalcAll();
+
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0,0,0)));
 
     xDocSh->DoClose();
 }
