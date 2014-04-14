@@ -20,6 +20,8 @@
 #include "smmod.hxx"
 #include "tmpdevice.hxx"
 
+#include <vcl/window.hxx>
+
 // SmTmpDevice
 // Allows for font and color changes. The original settings will be restored
 // in the destructor.
