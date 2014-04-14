@@ -1736,6 +1736,10 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit*, pEd )
                             bSep = false;
                             break;
                         default:
+                            // A pattern must not start with a separator (but
+                            // may end with).
+                            if (!(bY || bM || bD))
+                                bValid = false;
                             bSep = true;
                     }
                     nChar += i-j;
