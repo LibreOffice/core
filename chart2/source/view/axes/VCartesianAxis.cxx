@@ -211,9 +211,6 @@ public:
     virtual TickInfo*   firstInfo() SAL_OVERRIDE;
     virtual TickInfo*   nextInfo() SAL_OVERRIDE;
 
-private: //methods
-    LabelIterator();
-
 private: //member
     PureTickIter m_aPureTickIter;
     const AxisLabelStaggering   m_eAxisLabelStaggering;
@@ -466,17 +463,6 @@ bool VCartesianAxis::isAutoStaggeringOfLabelsAllowed( const AxisLabelProperties&
         return rAxisLabelProperties.bStackCharacters;
     return false;
 }
-
-struct ComplexCategoryPlacement
-{
-    OUString Text;
-    sal_Int32 Count;
-    double TickValue;
-
-    ComplexCategoryPlacement( const OUString& rText, sal_Int32 nCount, double fTickValue )
-        : Text(rText), Count(nCount), TickValue(fTickValue)
-    {}
-};
 
 void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos, bool bShiftedPosition )
 {
