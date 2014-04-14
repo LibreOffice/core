@@ -242,7 +242,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/blend \
     vcl/source/outdev/mask \
     vcl/source/outdev/bitmap \
-    vcl/source/outdev/outdev3 \
+    vcl/source/outdev/font \
+    vcl/source/outdev/text \
     vcl/source/outdev/pixel \
     vcl/source/outdev/rect \
     vcl/source/outdev/line \
