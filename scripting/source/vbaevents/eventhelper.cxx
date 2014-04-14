@@ -78,6 +78,9 @@
 
 #include <list>
 #include <boost/unordered_map.hpp>
+
+#include <service.hxx>
+
 #define ASYNC 0
 
 // primitive support for asynchronous handling of

@@ -21,55 +21,12 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
 
+#include <service.hxx>
 
 // component exports
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-namespace evtlstner
-{
-
-    // component operations
-
-
-    uno::Reference< XInterface > SAL_CALL create(
-        Reference< XComponentContext > const & xContext )
-        SAL_THROW(());
-
-
-
-    OUString SAL_CALL getImplementationName();
-
-    Sequence< OUString > SAL_CALL getSupportedServiceNames();
-
-    Reference<XInterface> SAL_CALL create(
-        Sequence<Any> const &, Reference<XComponentContext> const & );
-} // end evtlstner
-
-namespace ooevtdescgen
-{
-
-    // component operations
-
-
-    uno::Reference< XInterface > SAL_CALL create(
-        Reference< XComponentContext > const & xContext )
-        SAL_THROW(());
-
-
-
-    OUString SAL_CALL getImplementationName();
-
-    Sequence< OUString > SAL_CALL getSupportedServiceNames();
-
-    Reference<XInterface> SAL_CALL create(
-        Sequence<Any> const &, Reference<XComponentContext> const & );
-} // end ooevtdescgen
-
-
-
-
 
     const ::cppu::ImplementationEntry s_component_entries [] =
     {

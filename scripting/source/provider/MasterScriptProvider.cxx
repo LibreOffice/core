@@ -56,14 +56,6 @@ using namespace ::sf_misc;
 namespace func_provider
 {
 
-//  Definitions for MasterScriptProviderFactory global methods.
-
-
-OUString SAL_CALL mspf_getImplementationName() ;
-Reference< XInterface > SAL_CALL mspf_create( Reference< XComponentContext > const & xComponentContext );
-Sequence< OUString > SAL_CALL mspf_getSupportedServiceNames();
-
-
 bool endsWith( const OUString& target,
     const OUString& item )
 {
@@ -829,13 +821,6 @@ throw( RuntimeException, std::exception )
 
 } // namespace func_provider
 
-
-namespace browsenodefactory
-{
-OUString SAL_CALL bnf_getImplementationName() ;
-Reference< XInterface > SAL_CALL bnf_create( Reference< XComponentContext > const & xComponentContext );
-Sequence< OUString > SAL_CALL bnf_getSupportedServiceNames();
-}
 
 namespace scripting_runtimemgr
 {

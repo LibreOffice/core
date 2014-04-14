@@ -24,6 +24,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 
+#include "MasterScriptProvider.hxx"
 #include "MasterScriptProviderFactory.hxx"
 
 using namespace ::com::sun::star;

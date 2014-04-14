@@ -37,6 +37,7 @@
 #include <tools/diagnose_ex.h>
 
 #include "BrowseNodeFactoryImpl.hxx"
+#include "MasterScriptProvider.hxx"
 #include "ActiveMSPList.hxx"
 #include <util/MiscUtils.hxx>
 
@@ -382,7 +383,6 @@ private:
     Reference< XAggregation >        m_xAggProxy;
     Reference< XComponentContext >   m_xCtx;
 
-    DefaultBrowseNode();
 public:
     DefaultBrowseNode( const Reference< XComponentContext >& xCtx, const Reference< browse::XBrowseNode>& xNode ) : m_xWrappedBrowseNode( xNode ), m_xWrappedTypeProv( xNode, UNO_QUERY ), m_xCtx( xCtx )
     {
@@ -538,7 +538,6 @@ private:
     vXBrowseNodes m_vNodes;
     OUString m_Name;
 
-    DefaultRootBrowseNode();
 public:
     DefaultRootBrowseNode( const Reference< XComponentContext >& xCtx )
     {

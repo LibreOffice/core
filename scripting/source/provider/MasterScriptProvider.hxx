@@ -143,7 +143,20 @@ private:
     osl::Mutex m_mutex;
     OUString m_sCtxString;
 };
-} // namespace func_provider
+
+OUString SAL_CALL mspf_getImplementationName() ;
+css::uno::Reference< css::uno::XInterface > SAL_CALL mspf_create( css::uno::Reference< css::uno::XComponentContext > const & xComponentContext );
+css::uno::Sequence< OUString > SAL_CALL mspf_getSupportedServiceNames();
+
+}
+
+namespace browsenodefactory
+{
+OUString SAL_CALL bnf_getImplementationName() ;
+css::uno::Reference< css::uno::XInterface > SAL_CALL bnf_create( css::uno::Reference< css::uno::XComponentContext > const & xComponentContext );
+css::uno::Sequence< OUString > SAL_CALL bnf_getSupportedServiceNames();
+}
+
 #endif //_FRAMEWORK_SCRIPT_PROVIDER_XFUNCTIONPROVIDER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
