@@ -163,9 +163,9 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                     // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
                     // polypolygon, so pass in a NULL for the clipping parameter
                     if( aGradient.GetStyle() == GradientStyle_LINEAR || rGradient.GetStyle() == GradientStyle_AXIAL )
-                        ImplDrawLinearGradient( aRect, aGradient, false, aClipPolyPoly.IsRect() ? NULL : &aClipPolyPoly );
+                        DrawLinearGradient( aRect, aGradient, false, aClipPolyPoly.IsRect() ? NULL : &aClipPolyPoly );
                     else
-                        ImplDrawComplexGradient( aRect, aGradient, false, aClipPolyPoly.IsRect() ? NULL : &aClipPolyPoly );
+                        DrawComplexGradient( aRect, aGradient, false, aClipPolyPoly.IsRect() ? NULL : &aClipPolyPoly );
                 }
 
                 Pop();
@@ -177,9 +177,9 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
 }
 
-void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
-                                           const Gradient& rGradient,
-                                           bool bMtf, const PolyPolygon* pClipPolyPoly )
+void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
+                                       const Gradient& rGradient,
+                                       bool bMtf, const PolyPolygon* pClipPolyPoly )
 {
     // get BoundRect of rotated rectangle
     Rectangle aRect;
@@ -372,7 +372,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     }
 }
 
-void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
+void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
                                             const Gradient& rGradient,
                                             bool bMtf, const PolyPolygon* pClipPolyPoly )
 {
@@ -683,9 +683,9 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
             aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
         if( aGradient.GetStyle() == GradientStyle_LINEAR || aGradient.GetStyle() == GradientStyle_AXIAL )
-            ImplDrawLinearGradient( aRect, aGradient, true, NULL );
+            DrawLinearGradient( aRect, aGradient, true, NULL );
         else
-            ImplDrawComplexGradient( aRect, aGradient, true, NULL );
+            DrawComplexGradient( aRect, aGradient, true, NULL );
 
         mpMetaFile->AddAction( new MetaPopAction() );
         mpMetaFile = pOldMtf;
