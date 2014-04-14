@@ -130,14 +130,6 @@ void LWPFilterReader::cancel() throw (com::sun::star::uno::RuntimeException, std
 {
 }
 
-uno::Reference< XInterface > LWPFilterImportFilter_CreateInstance(
-    const uno::Reference< XMultiServiceFactory >& rSMgr ) throw( Exception )
-{
-    LWPFilterImportFilter *p = new LWPFilterImportFilter( rSMgr );
-
-    return uno::Reference< XInterface > ( (OWeakObject* )p );
-}
-
 LWPFilterImportFilter::LWPFilterImportFilter( const uno::Reference< XMultiServiceFactory >& xFact )
 {
     try
@@ -412,11 +404,6 @@ int ReadWordproFile(SvStream &rStream, uno::Reference<XDocumentHandler>& xHandle
     {
         return 1;
     }
-}
-
-void ErrorMsg(int /*iErrCode*/)
-{
-
 }
 
 /**
