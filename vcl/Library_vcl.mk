@@ -234,6 +234,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/metric \
     vcl/source/gdi/octree \
     vcl/source/gdi/oldprintadaptor \
+    vcl/source/gdi/outdev/bezier \
     vcl/source/gdi/outdev/polygon \
     vcl/source/gdi/outdev/outdev2 \
     vcl/source/gdi/outdev/outdev3 \

@@ -253,6 +253,9 @@ typedef ::std::vector< VCLXGraphics* > VCLXGraphicsList_impl;
 
 const char* ImplDbgCheckOutputDevice( const void* pObj );
 
+Polygon ImplSubdivideBezier( const Polygon& rPoly );
+PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly );
+
 class VCL_DLLPUBLIC OutputDevice
 {
     friend class Application;

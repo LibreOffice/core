@@ -34,11 +34,392 @@
 #include "svdata.hxx"
 #include "outdata.hxx"
 
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
+
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
+
+#define OUTDEV_POLYPOLY_STACKBUF        32
+
+void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
+{
+
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPoly ) );
+
+    sal_uInt16 nPoly = rPolyPoly.Count();
+
+    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || !nPoly || ImplIsRecordLayout() )
+        return;
+
+    // we need a graphics
+    if ( !mpGraphics )
+        if ( !ImplGetGraphics() )
+            return;
+
+    if ( mbInitClipRegion )
+        ImplInitClipRegion();
+    if ( mbOutputClipped )
+        return;
+
+    if ( mbInitLineColor )
+        ImplInitLineColor();
+    if ( mbInitFillColor )
+        ImplInitFillColor();
+
+    // use b2dpolygon drawing if possible
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && (IsLineColor() || IsFillColor()))
+    {
+        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
+        basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPoly.getB2DPolyPolygon());
+        bool bSuccess(true);
+
+        // transform the polygon and ensure closed
+        aB2DPolyPolygon.transform(aTransform);
+        aB2DPolyPolygon.setClosed(true);
+
+        if(IsFillColor())
+        {
+            bSuccess = mpGraphics->DrawPolyPolygon(aB2DPolyPolygon, 0.0, this);
+        }
+
+        if(bSuccess && IsLineColor())
+        {
+            const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+
+            if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+            {
+                aB2DPolyPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
+            }
+
+            for(sal_uInt32 a(0); bSuccess && a < aB2DPolyPolygon.count(); a++)
+            {
+                bSuccess = mpGraphics->DrawPolyLine(
+                    aB2DPolyPolygon.getB2DPolygon(a),
+                    0.0,
+                    aB2DLineWidth,
+                    basegfx::B2DLINEJOIN_NONE,
+                    css::drawing::LineCap_BUTT,
+                    this);
+            }
+        }
+
+        if(bSuccess)
+        {
+            return;
+        }
+    }
+
+    if ( nPoly == 1 )
+    {
+        // #100127# Map to DrawPolygon
+        Polygon aPoly = rPolyPoly.GetObject( 0 );
+        if( aPoly.GetSize() >= 2 )
+        {
+            GDIMetaFile* pOldMF = mpMetaFile;
+            mpMetaFile = NULL;
+
+            DrawPolygon( aPoly );
+
+            mpMetaFile = pOldMF;
+        }
+    }
+    else
+    {
+        // #100127# moved real PolyPolygon draw to separate method,
+        // have to call recursively, avoiding duplicate
+        // ImplLogicToDevicePixel calls
+        ImplDrawPolyPolygon( nPoly, ImplLogicToDevicePixel( rPolyPoly ) );
+    }
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
+}
+
+void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
+{
+    // AW: Do NOT paint empty polygons
+    if(rB2DPolygon.count())
+    {
+        basegfx::B2DPolyPolygon aPP( rB2DPolygon );
+        DrawPolyPolygon( aPP );
+    }
+}
+
+void OutputDevice::DrawPolygon( const Polygon& rPoly )
+{
+
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
+
+    sal_uInt16 nPoints = rPoly.GetSize();
+
+    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || (nPoints < 2) || ImplIsRecordLayout() )
+        return;
+
+    // we need a graphics
+    if ( !mpGraphics )
+        if ( !ImplGetGraphics() )
+            return;
+
+    if ( mbInitClipRegion )
+        ImplInitClipRegion();
+    if ( mbOutputClipped )
+        return;
+
+    if ( mbInitLineColor )
+        ImplInitLineColor();
+    if ( mbInitFillColor )
+        ImplInitFillColor();
+
+    // use b2dpolygon drawing if possible
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && (IsLineColor() || IsFillColor()))
+    {
+        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
+        basegfx::B2DPolygon aB2DPolygon(rPoly.getB2DPolygon());
+        bool bSuccess(true);
+
+        // transform the polygon and ensure closed
+        aB2DPolygon.transform(aTransform);
+        aB2DPolygon.setClosed(true);
+
+        if(IsFillColor())
+        {
+            bSuccess = mpGraphics->DrawPolyPolygon(basegfx::B2DPolyPolygon(aB2DPolygon), 0.0, this);
+        }
+
+        if(bSuccess && IsLineColor())
+        {
+            const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+
+            if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+            {
+                aB2DPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
+            }
+
+            bSuccess = mpGraphics->DrawPolyLine(
+                aB2DPolygon,
+                0.0,
+                aB2DLineWidth,
+                basegfx::B2DLINEJOIN_NONE,
+                css::drawing::LineCap_BUTT,
+                this);
+        }
+
+        if(bSuccess)
+        {
+            return;
+        }
+    }
+
+    Polygon aPoly = ImplLogicToDevicePixel( rPoly );
+    const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
+
+    // #100127# Forward beziers to sal, if any
+    if( aPoly.HasFlags() )
+    {
+        const sal_uInt8* pFlgAry = aPoly.GetConstFlagAry();
+        if( !mpGraphics->DrawPolygonBezier( nPoints, pPtAry, pFlgAry, this ) )
+        {
+            aPoly = ImplSubdivideBezier(aPoly);
+            pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
+            mpGraphics->DrawPolygon( aPoly.GetSize(), pPtAry, this );
+        }
+    }
+    else
+    {
+        mpGraphics->DrawPolygon( nPoints, pPtAry, this );
+    }
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawPolygon( rPoly );
+}
+
+// Caution: This method is nearly the same as
+// OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency),
+// so when changes are made here do not forget to make change sthere, too
+
+void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
+{
+
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaPolyPolygonAction( PolyPolygon( rB2DPolyPoly ) ) );
+
+    // call helper
+    ImplDrawPolyPolygonWithB2DPolyPolygon(rB2DPolyPoly);
+}
+
+void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly)
+{
+    // Do not paint empty PolyPolygons
+    if(!rB2DPolyPoly.count() || !IsDeviceOutputNecessary())
+        return;
+
+    // we need a graphics
+    if( !mpGraphics )
+        if( !ImplGetGraphics() )
+            return;
+
+    if( mbInitClipRegion )
+        ImplInitClipRegion();
+    if( mbOutputClipped )
+        return;
+
+    if( mbInitLineColor )
+        ImplInitLineColor();
+    if( mbInitFillColor )
+        ImplInitFillColor();
+
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && (IsLineColor() || IsFillColor()))
+    {
+        const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
+        basegfx::B2DPolyPolygon aB2DPolyPolygon(rB2DPolyPoly);
+        bool bSuccess(true);
+
+        // transform the polygon and ensure closed
+        aB2DPolyPolygon.transform(aTransform);
+        aB2DPolyPolygon.setClosed(true);
+
+        if(IsFillColor())
+        {
+            bSuccess = mpGraphics->DrawPolyPolygon(aB2DPolyPolygon, 0.0, this);
+        }
+
+        if(bSuccess && IsLineColor())
+        {
+            const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+
+            if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+            {
+                aB2DPolyPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
+            }
+
+            for(sal_uInt32 a(0);bSuccess && a < aB2DPolyPolygon.count(); a++)
+            {
+                bSuccess = mpGraphics->DrawPolyLine(
+                    aB2DPolyPolygon.getB2DPolygon(a),
+                    0.0,
+                    aB2DLineWidth,
+                    basegfx::B2DLINEJOIN_NONE,
+                    css::drawing::LineCap_BUTT,
+                    this);
+            }
+        }
+
+        if(bSuccess)
+        {
+            return;
+        }
+    }
+
+    // fallback to old polygon drawing if needed
+    const PolyPolygon aToolsPolyPolygon( rB2DPolyPoly );
+    const PolyPolygon aPixelPolyPolygon = ImplLogicToDevicePixel( aToolsPolyPolygon );
+    ImplDrawPolyPolygon( aPixelPolyPolygon.Count(), aPixelPolyPolygon );
+}
+
+// #100127# Extracted from OutputDevice::DrawPolyPolygon()
+void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPolyPoly )
+{
+    // AW: This crashes on empty PolyPolygons, avoid that
+    if(!nPoly)
+        return;
+
+    sal_uInt32          aStackAry1[OUTDEV_POLYPOLY_STACKBUF];
+    PCONSTSALPOINT      aStackAry2[OUTDEV_POLYPOLY_STACKBUF];
+    sal_uInt8*              aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
+    sal_uInt32*         pPointAry;
+    PCONSTSALPOINT*     pPointAryAry;
+    const sal_uInt8**       pFlagAryAry;
+    sal_uInt16              i = 0, j = 0, last = 0;
+    bool                bHaveBezier = false;
+    if ( nPoly > OUTDEV_POLYPOLY_STACKBUF )
+    {
+        pPointAry       = new sal_uInt32[nPoly];
+        pPointAryAry    = new PCONSTSALPOINT[nPoly];
+        pFlagAryAry     = new const sal_uInt8*[nPoly];
+    }
+    else
+    {
+        pPointAry       = aStackAry1;
+        pPointAryAry    = aStackAry2;
+        pFlagAryAry     = (const sal_uInt8**)aStackAry3;
+    }
+    do
+    {
+        const Polygon&  rPoly = rPolyPoly.GetObject( i );
+        sal_uInt16          nSize = rPoly.GetSize();
+        if ( nSize )
+        {
+            pPointAry[j]    = nSize;
+            pPointAryAry[j] = (PCONSTSALPOINT)rPoly.GetConstPointAry();
+            pFlagAryAry[j]  = rPoly.GetConstFlagAry();
+            last            = i;
+
+            if( pFlagAryAry[j] )
+                bHaveBezier = true;
+
+            ++j;
+        }
+
+        ++i;
+    }
+    while ( i < nPoly );
+
+    if ( j == 1 )
+    {
+        // #100127# Forward beziers to sal, if any
+        if( bHaveBezier )
+        {
+            if( !mpGraphics->DrawPolygonBezier( *pPointAry, *pPointAryAry, *pFlagAryAry, this ) )
+            {
+                Polygon aPoly = ImplSubdivideBezier( rPolyPoly.GetObject( last ) );
+                mpGraphics->DrawPolygon( aPoly.GetSize(), (const SalPoint*)aPoly.GetConstPointAry(), this );
+            }
+        }
+        else
+        {
+            mpGraphics->DrawPolygon( *pPointAry, *pPointAryAry, this );
+        }
+    }
+    else
+    {
+        // #100127# Forward beziers to sal, if any
+        if( bHaveBezier )
+        {
+            if( !mpGraphics->DrawPolyPolygonBezier( j, pPointAry, pPointAryAry, pFlagAryAry, this ) )
+            {
+                PolyPolygon aPolyPoly = ImplSubdivideBezier( rPolyPoly );
+                ImplDrawPolyPolygon( aPolyPoly.Count(), aPolyPoly );
+            }
+        }
+        else
+        {
+            mpGraphics->DrawPolyPolygon( j, pPointAry, pPointAryAry, this );
+        }
+    }
+
+    if ( pPointAry != aStackAry1 )
+    {
+        delete[] pPointAry;
+        delete[] pPointAryAry;
+        delete[] pFlagAryAry;
+    }
+}
 
 void OutputDevice::ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly )
 {
