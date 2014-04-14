@@ -309,7 +309,7 @@ public:
     // XDefaultMethod
     OUString SAL_CALL getDefaultMethodName(  ) throw (css::uno::RuntimeException)
     {
-        return "Item";
+        return OUString("Item");
     }
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) = 0;
