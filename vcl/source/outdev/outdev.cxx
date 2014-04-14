@@ -175,6 +175,10 @@ bool OutputDevice::ImplIsAntiparallel() const
     return bRet;
 }
 
+void OutputDevice::ClipToPaintRegion(Rectangle& /*rDstRect*/)
+{
+}
+
 bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGraphics )
 {
     DBG_TESTSOLARMUTEX();
@@ -499,6 +503,283 @@ void OutputDevice::ImplDeInitOutDevData()
         delete mpOutDevData;
     }
 }
+
+void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rPosAry )
+{
+    SalGraphics*        pGraphics2;
+
+    if ( this == pSrcDev )
+        pGraphics2 = NULL;
+    else
+    {
+        if ( (GetOutDevType() != pSrcDev->GetOutDevType()) ||
+             (GetOutDevType() != OUTDEV_WINDOW) )
+        {
+            if ( !pSrcDev->mpGraphics )
+            {
+                if ( !((OutputDevice*)pSrcDev)->ImplGetGraphics() )
+                    return;
+            }
+            pGraphics2 = pSrcDev->mpGraphics;
+        }
+        else
+        {
+            if ( ((Window*)this)->mpWindowImpl->mpFrameWindow == ((Window*)pSrcDev)->mpWindowImpl->mpFrameWindow )
+                pGraphics2 = NULL;
+            else
+            {
+                if ( !pSrcDev->mpGraphics )
+                {
+                    if ( !((OutputDevice*)pSrcDev)->ImplGetGraphics() )
+                        return;
+                }
+                pGraphics2 = pSrcDev->mpGraphics;
+
+                if ( !mpGraphics )
+                {
+                    if ( !ImplGetGraphics() )
+                        return;
+                }
+                DBG_ASSERT( mpGraphics && pSrcDev->mpGraphics,
+                            "OutputDevice::DrawOutDev(): We need more than one Graphics" );
+            }
+        }
+    }
+
+    // #102532# Offset only has to be pseudo window offset
+    const Rectangle aSrcOutRect( Point( pSrcDev->mnOutOffX, pSrcDev->mnOutOffY ),
+                                 Size( pSrcDev->mnOutWidth, pSrcDev->mnOutHeight ) );
+
+    ImplAdjustTwoRect( rPosAry, aSrcOutRect );
+
+    if ( rPosAry.mnSrcWidth && rPosAry.mnSrcHeight && rPosAry.mnDestWidth && rPosAry.mnDestHeight )
+    {
+        // --- RTL --- if this is no window, but pSrcDev is a window
+        // mirroring may be required
+        // because only windows have a SalGraphicsLayout
+        // mirroring is performed here
+        if( (GetOutDevType() != OUTDEV_WINDOW) && pGraphics2 && (pGraphics2->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+        {
+            SalTwoRect aPosAry2 = rPosAry;
+            pGraphics2->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, pSrcDev );
+            mpGraphics->CopyBits( aPosAry2, pGraphics2, this, pSrcDev );
+        }
+        else
+            mpGraphics->CopyBits( rPosAry, pGraphics2, this, pSrcDev );
+    }
+}
+
+void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
+                               const Point& rSrcPt,  const Size& rSrcSize )
+{
+    if( ImplIsRecordLayout() )
+        return;
+
+    if ( ROP_INVERT == meRasterOp )
+    {
+        DrawRect( Rectangle( rDestPt, rDestSize ) );
+        return;
+    }
+
+    if ( mpMetaFile )
+    {
+        const Bitmap aBmp( GetBitmap( rSrcPt, rSrcSize ) );
+        mpMetaFile->AddAction( new MetaBmpScaleAction( rDestPt, rDestSize, aBmp ) );
+    }
+
+    OUTDEV_INIT();
+
+    SalTwoRect aPosAry;
+    aPosAry.mnSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
+    aPosAry.mnSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
+    aPosAry.mnDestWidth  = ImplLogicWidthToDevicePixel( rDestSize.Width() );
+    aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
+
+    if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
+    {
+        aPosAry.mnSrcX       = ImplLogicXToDevicePixel( rSrcPt.X() );
+        aPosAry.mnSrcY       = ImplLogicYToDevicePixel( rSrcPt.Y() );
+        aPosAry.mnDestX      = ImplLogicXToDevicePixel( rDestPt.X() );
+        aPosAry.mnDestY      = ImplLogicYToDevicePixel( rDestPt.Y() );
+
+        const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
+                                     Size( mnOutWidth, mnOutHeight ) );
+
+        ImplAdjustTwoRect( aPosAry, aSrcOutRect );
+
+        if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
+            mpGraphics->CopyBits( aPosAry, NULL, this, NULL );
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawOutDev( rDestPt, rDestSize, rSrcPt, rSrcSize );
+}
+
+void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
+                               const Point& rSrcPt,  const Size& rSrcSize,
+                               const OutputDevice& rOutDev )
+{
+    if ( ImplIsRecordLayout() )
+        return;
+
+    if ( ROP_INVERT == meRasterOp )
+    {
+        DrawRect( Rectangle( rDestPt, rDestSize ) );
+        return;
+    }
+
+    if ( mpMetaFile )
+    {
+        const Bitmap aBmp( rOutDev.GetBitmap( rSrcPt, rSrcSize ) );
+        mpMetaFile->AddAction( new MetaBmpScaleAction( rDestPt, rDestSize, aBmp ) );
+    }
+
+    OUTDEV_INIT();
+
+    SalTwoRect aPosAry;
+    aPosAry.mnSrcX       = rOutDev.ImplLogicXToDevicePixel( rSrcPt.X() );
+    aPosAry.mnSrcY       = rOutDev.ImplLogicYToDevicePixel( rSrcPt.Y() );
+    aPosAry.mnSrcWidth   = rOutDev.ImplLogicWidthToDevicePixel( rSrcSize.Width() );
+    aPosAry.mnSrcHeight  = rOutDev.ImplLogicHeightToDevicePixel( rSrcSize.Height() );
+    aPosAry.mnDestX      = ImplLogicXToDevicePixel( rDestPt.X() );
+    aPosAry.mnDestY      = ImplLogicYToDevicePixel( rDestPt.Y() );
+    aPosAry.mnDestWidth  = ImplLogicWidthToDevicePixel( rDestSize.Width() );
+    aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
+
+    if( mpAlphaVDev )
+    {
+        if( rOutDev.mpAlphaVDev )
+        {
+            // alpha-blend source over destination
+            DrawBitmapEx( rDestPt, rDestSize, rOutDev.GetBitmapEx(rSrcPt, rSrcSize) );
+        }
+        else
+        {
+            ImplDrawOutDevDirect( &rOutDev, aPosAry );
+
+            // #i32109#: make destination rectangle opaque - source has no alpha
+            mpAlphaVDev->ImplFillOpaqueRectangle( Rectangle(rDestPt, rDestSize) );
+        }
+    }
+    else
+    {
+        if( rOutDev.mpAlphaVDev )
+        {
+            // alpha-blend source over destination
+            DrawBitmapEx( rDestPt, rDestSize, rOutDev.GetBitmapEx(rSrcPt, rSrcSize) );
+        }
+        else
+        {
+            // no alpha at all, neither in source nor destination device
+            ImplDrawOutDevDirect( &rOutDev, aPosAry );
+        }
+    }
+}
+
+void OutputDevice::CopyArea( const Point& rDestPt,
+                             const Point& rSrcPt,  const Size& rSrcSize,
+                             sal_uInt16 nFlags )
+{
+    if ( ImplIsRecordLayout() )
+        return;
+
+    RasterOp eOldRop = GetRasterOp();
+    SetRasterOp( ROP_OVERPAINT );
+
+    OUTDEV_INIT();
+
+    SalTwoRect aPosAry;
+    aPosAry.mnSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
+    aPosAry.mnSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
+
+    if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight )
+    {
+        aPosAry.mnSrcX       = ImplLogicXToDevicePixel( rSrcPt.X() );
+        aPosAry.mnSrcY       = ImplLogicYToDevicePixel( rSrcPt.Y() );
+        aPosAry.mnDestX      = ImplLogicXToDevicePixel( rDestPt.X() );
+        aPosAry.mnDestY      = ImplLogicYToDevicePixel( rDestPt.Y() );
+        aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
+        aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
+
+        const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
+                                     Size( mnOutWidth, mnOutHeight ) );
+
+        ImplAdjustTwoRect( aPosAry, aSrcOutRect );
+
+        CopyAreaFinal ( aPosAry, nFlags );
+    }
+
+    SetRasterOp( eOldRop );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->CopyArea( rDestPt, rSrcPt, rSrcSize, nFlags );
+}
+
+void OutputDevice::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 /*nFlags*/)
+{
+    if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
+        return;
+
+    aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
+    aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
+    mpGraphics->CopyBits(aPosAry, NULL, this, NULL);
+}
+
+void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
+                                     const OutputDevice& rOutDev, const Region& rRegion )
+{
+
+    GDIMetaFile*    pOldMetaFile = mpMetaFile;
+    bool            bOldMap = mbMap;
+    RasterOp        eOldROP = GetRasterOp();
+    mpMetaFile = NULL;
+    mbMap = false;
+    SetRasterOp( ROP_OVERPAINT );
+
+    if ( !IsDeviceOutputNecessary() )
+        return;
+
+    if ( !mpGraphics )
+    {
+        if ( !ImplGetGraphics() )
+            return;
+    }
+
+    // ClipRegion zuruecksetzen
+    if ( rRegion.IsNull() )
+        mpGraphics->ResetClipRegion();
+    else
+        ImplSelectClipRegion( rRegion );
+
+    SalTwoRect aPosAry;
+    aPosAry.mnSrcX       = rDevPt.X();
+    aPosAry.mnSrcY       = rDevPt.Y();
+    aPosAry.mnSrcWidth   = rDevSize.Width();
+    aPosAry.mnSrcHeight  = rDevSize.Height();
+    aPosAry.mnDestX      = rPt.X();
+    aPosAry.mnDestY      = rPt.Y();
+    aPosAry.mnDestWidth  = rDevSize.Width();
+    aPosAry.mnDestHeight = rDevSize.Height();
+    ImplDrawOutDevDirect( &rOutDev, aPosAry );
+
+    // Ensure that ClipRegion is recalculated and set
+    mbInitClipRegion = true;
+
+    SetRasterOp( eOldROP );
+    mbMap = bOldMap;
+    mpMetaFile = pOldMetaFile;
+}
+
+void OutputDevice::ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
+                                    OutputDevice& rDev )
+{
+
+    bool bOldMap = mbMap;
+    mbMap = false;
+    rDev.DrawOutDev( rDevPt, rDevSize, rPt, rDevSize, *this );
+    mbMap = bOldMap;
+}
+
 
 void OutputDevice::ImplInitLineColor()
 {

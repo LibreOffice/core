@@ -234,20 +234,26 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/metric \
     vcl/source/gdi/octree \
     vcl/source/gdi/oldprintadaptor \
-    vcl/source/gdi/outdev/bezier \
-    vcl/source/gdi/outdev/polygon \
-    vcl/source/gdi/outdev/outdev2 \
-    vcl/source/gdi/outdev/outdev3 \
-    vcl/source/gdi/outdev/rect \
-    vcl/source/gdi/outdev/line \
-    vcl/source/gdi/outdev/polyline \
-    vcl/source/gdi/outdev/hatch \
-    vcl/source/gdi/outdev/gradient \
-    vcl/source/gdi/outdev/outdev5 \
-    vcl/source/gdi/outdev/outdev6 \
-    vcl/source/gdi/outdev/outdev \
-    vcl/source/gdi/outdev/outdevnative \
-    vcl/source/gdi/outdev/outmap \
+    vcl/source/outdev/tworect \
+    vcl/source/outdev/bezier \
+    vcl/source/outdev/polygon \
+    vcl/source/outdev/transparent \
+    vcl/source/outdev/alpha \
+    vcl/source/outdev/blend \
+    vcl/source/outdev/mask \
+    vcl/source/outdev/bitmap \
+    vcl/source/outdev/outdev3 \
+    vcl/source/outdev/pixel \
+    vcl/source/outdev/rect \
+    vcl/source/outdev/line \
+    vcl/source/outdev/polyline \
+    vcl/source/outdev/hatch \
+    vcl/source/outdev/gradient \
+    vcl/source/outdev/outdev5 \
+    vcl/source/outdev/outdev6 \
+    vcl/source/outdev/outdev \
+    vcl/source/outdev/outdevnative \
+    vcl/source/outdev/outmap \
     vcl/source/gdi/pdfextoutdevdata \
     vcl/source/gdi/pdffontcache \
     vcl/source/gdi/pdfwriter \

@@ -125,6 +125,22 @@ struct ImplThresholdRes
     long                mnThresPixToLogY;   // ""
 };
 
+#define OUTDEV_INIT()                       \
+{                                           \
+    if ( !IsDeviceOutputNecessary() )       \
+        return;                             \
+                                            \
+    if ( !mpGraphics )                      \
+        if ( !ImplGetGraphics() )           \
+            return;                         \
+                                            \
+    if ( mbInitClipRegion )                 \
+        ImplInitClipRegion();               \
+                                            \
+    if ( mbOutputClipped )                  \
+        return;                             \
+}
+
 // OutputDevice-Types
 
 // Flags for Push()
@@ -255,6 +271,15 @@ const char* ImplDbgCheckOutputDevice( const void* pObj );
 
 Polygon ImplSubdivideBezier( const Polygon& rPoly );
 PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly );
+
+sal_uLong ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
+void ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect );
+
+extern const sal_uLong nVCLRLut[ 6 ];
+extern const sal_uLong nVCLGLut[ 6 ];
+extern const sal_uLong nVCLBLut[ 6 ];
+extern const sal_uLong nVCLDitherLut[ 256 ];
+extern const sal_uLong nVCLLut[ 256 ];
 
 class VCL_DLLPUBLIC OutputDevice
 {
