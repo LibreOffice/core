@@ -42,20 +42,14 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 
+#include "olepersist.hxx"
 #include "ownview.hxx"
 
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw( io::IOException );
-OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw( io::IOException );
 sal_Bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
-uno::Reference< io::XStream > TryToGetAcceptableFormat_Impl( const uno::Reference< io::XStream >& xStream, const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw ( uno::Exception );
-
-
-// Dummy interaction handler
-
 
 class DummyHandler_Impl : public ::cppu::WeakImplHelper1< task::XInteractionHandler >
 {
