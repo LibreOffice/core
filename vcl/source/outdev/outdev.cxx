@@ -1576,4 +1576,122 @@ css::uno::Reference< css::rendering::XCanvas > OutputDevice::GetCanvas() const
     return xCanvas;
 }
 
+void OutputDevice::Erase()
+{
+    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
+        return;
+
+    bool bNativeOK = false;
+
+    if( meOutDevType == OUTDEV_WINDOW )
+    {
+        Window* pWindow = static_cast<Window*>(this);
+        ControlPart aCtrlPart = pWindow->ImplGetWindowImpl()->mnNativeBackground;
+        if( aCtrlPart != 0 && ! pWindow->IsControlBackground() )
+        {
+            ImplControlValue    aControlValue;
+            Point               aGcc3WorkaroundTemporary;
+            Rectangle           aCtrlRegion( aGcc3WorkaroundTemporary, GetOutputSizePixel() );
+            ControlState        nState = 0;
+
+            if( pWindow->IsEnabled() )              nState |= CTRL_STATE_ENABLED;
+            bNativeOK = pWindow->DrawNativeControl( CTRL_WINDOW_BACKGROUND, aCtrlPart, aCtrlRegion,
+                                                    nState, aControlValue, OUString() );
+        }
+    }
+
+    if ( mbBackground && ! bNativeOK )
+    {
+        RasterOp eRasterOp = GetRasterOp();
+        if ( eRasterOp != ROP_OVERPAINT )
+            SetRasterOp( ROP_OVERPAINT );
+        ImplDrawWallpaper( 0, 0, mnOutWidth, mnOutHeight, maBackground );
+        if ( eRasterOp != ROP_OVERPAINT )
+            SetRasterOp( eRasterOp );
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->Erase();
+}
+
+bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
+                            const GfxLink& rGfxLink, GDIMetaFile* pSubst )
+{
+    bool bDrawn(true);
+
+    if ( mpMetaFile )
+    {
+        GDIMetaFile aSubst;
+
+        if( pSubst )
+            aSubst = *pSubst;
+
+        mpMetaFile->AddAction( new MetaEPSAction( rPoint, rSize, rGfxLink, aSubst ) );
+    }
+
+    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
+        return bDrawn;
+
+    if( mbOutputClipped )
+        return bDrawn;
+
+    Rectangle aRect( ImplLogicToDevicePixel( Rectangle( rPoint, rSize ) ) );
+
+    if( !aRect.IsEmpty() )
+    {
+        // draw the real EPS graphics
+        if( rGfxLink.GetData() && rGfxLink.GetDataSize() )
+        {
+            if( !mpGraphics && !ImplGetGraphics() )
+                return bDrawn;
+
+            if( mbInitClipRegion )
+                ImplInitClipRegion();
+
+            aRect.Justify();
+            bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
+                         (sal_uInt8*) rGfxLink.GetData(), rGfxLink.GetDataSize(), this );
+        }
+
+        // else draw the substitution graphics
+        if( !bDrawn && pSubst )
+        {
+            GDIMetaFile* pOldMetaFile = mpMetaFile;
+
+            mpMetaFile = NULL;
+            Graphic( *pSubst ).Draw( this, rPoint, rSize );
+            mpMetaFile = pOldMetaFile;
+        }
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawEPS( rPoint, rSize, rGfxLink, pSubst );
+
+    return bDrawn;
+}
+
+void OutputDevice::DrawCheckered(const Point& rPos, const Size& rSize, sal_uInt32 nLen, Color aStart, Color aEnd)
+{
+    const sal_uInt32 nMaxX(rPos.X() + rSize.Width());
+    const sal_uInt32 nMaxY(rPos.Y() + rSize.Height());
+
+    Push(PUSH_LINECOLOR|PUSH_FILLCOLOR);
+    SetLineColor();
+
+    for(sal_uInt32 x(0), nX(rPos.X()); nX < nMaxX; x++, nX += nLen)
+    {
+        const sal_uInt32 nRight(std::min(nMaxX, nX + nLen));
+
+        for(sal_uInt32 y(0), nY(rPos.Y()); nY < nMaxY; y++, nY += nLen)
+        {
+            const sal_uInt32 nBottom(std::min(nMaxY, nY + nLen));
+
+            SetFillColor((x & 0x0001) ^ (y & 0x0001) ? aStart : aEnd);
+            DrawRect(Rectangle(nX, nY, nRight, nBottom));
+        }
+    }
+
+    Pop();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
