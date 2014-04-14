@@ -693,16 +693,27 @@ public:
     // without MetaFile processing
     SAL_DLLPRIVATE void         ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
 
-
+private:
     ///@}
 
     /** @name Gradient functions
      */
     ///@{
-    SAL_DLLPRIVATE void         ImplDrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
-    SAL_DLLPRIVATE void         ImplDrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         DrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         DrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
+
+public:
+
+    void                        DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
+    void                        DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    void                        AddGradientActions(
+                                    const Rectangle& rRect,
+                                    const Gradient& rGradient,
+                                    GDIMetaFile& rMtf );
+
     ///@}
 
+public:
     /** @name Hatch functions
      */
     ///@{
@@ -1101,12 +1112,6 @@ public:
                                            const Image& rImage, sal_uInt16 nStyle = 0 );
     void                        DrawImage( const Point& rPos, const Size& rSize,
                                            const Image& rImage, sal_uInt16 nStyle = 0 );
-
-    void                        DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
-    void                        DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
-    void                        AddGradientActions( const Rectangle& rRect,
-                                                    const Gradient& rGradient,
-                                                    GDIMetaFile& rMtf );
 
 #ifdef _MSC_VER
     void                        DrawHatch( const PolyPolygon& rPolyPoly, const ::Hatch& rHatch );
