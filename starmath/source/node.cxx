@@ -28,6 +28,7 @@
 #include "tmpdevice.hxx"
 #include "visitors.hxx"
 
+#include <comphelper/string.hxx>
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
