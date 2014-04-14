@@ -69,7 +69,9 @@ protected:
 
 public:
     static Pointer_t Instance();
+#ifdef DEBUG_LOGGING
     string operator()(sal_uInt32 nId);
+#endif
 };
 
 

@@ -31,6 +31,7 @@ QNameToString::Pointer_t QNameToString::Instance()
     return pInstance;
 }
 
+#ifdef DEBUG_LOGGING
 string QNameToString::operator()(Id qName)
 {
     Map::const_iterator aIt = mMap.find(qName);
@@ -40,6 +41,7 @@ string QNameToString::operator()(Id qName)
 
     return string();
 }
+#endif
 
 QNameToString::QNameToString()
 {

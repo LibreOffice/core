@@ -911,13 +911,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->m_bIgnoreNextPara = true;
         break;
         case NS_ooxml::LN_CT_DataBinding_prefixMappings:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_prefixMappings", sStringValue);
+            break;
         case NS_ooxml::LN_CT_DataBinding_xpath:
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_xpath", sStringValue);
+            break;
         case NS_ooxml::LN_CT_DataBinding_storeItemID:
-        {
-            OUString sName = OUString::createFromAscii((*QNameToString::Instance())(nName).c_str());
-            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, sName, sStringValue);
-        }
-        break;
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_storeItemID", sStringValue);
+            break;
         default:
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -2268,7 +2269,21 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_SdtPr_id:
     {
         // this is an unsupported SDT property, create a grab bag for it
-        OUString sName = OUString::createFromAscii((*QNameToString::Instance())(nSprmId).c_str());
+        OUString sName;
+        switch (nSprmId)
+        {
+            case NS_ooxml::LN_CT_SdtPr_dataBinding: sName = "ooxml:CT_SdtPr_dataBinding"; break;
+            case NS_ooxml::LN_CT_SdtPr_equation:    sName = "ooxml:CT_SdtPr_equation"; break;
+            case NS_ooxml::LN_CT_SdtPr_checkbox:    sName = "ooxml:CT_SdtPr_checkbox"; break;
+            case NS_ooxml::LN_CT_SdtPr_docPartObj:  sName = "ooxml:CT_SdtPr_docPartObj"; break;
+            case NS_ooxml::LN_CT_SdtPr_docPartList: sName = "ooxml:CT_SdtPr_docPartList"; break;
+            case NS_ooxml::LN_CT_SdtPr_picture:     sName = "ooxml:CT_SdtPr_picture"; break;
+            case NS_ooxml::LN_CT_SdtPr_citation:    sName = "ooxml:CT_SdtPr_citation"; break;
+            case NS_ooxml::LN_CT_SdtPr_group:       sName = "ooxml:CT_SdtPr_group"; break;
+            case NS_ooxml::LN_CT_SdtPr_text:        sName = "ooxml:CT_SdtPr_text"; break;
+            case NS_ooxml::LN_CT_SdtPr_id:          sName = "ooxml:CT_SdtPr_id"; break;
+            default: assert(false);
+        };
         enableInteropGrabBag(sName);
 
         // process subitems
@@ -2281,17 +2296,23 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     }
     break;
     case NS_ooxml::LN_CT_SdtCheckbox_checked:
+        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtCheckbox_checked", sStringValue);
+        break;
     case NS_ooxml::LN_CT_SdtCheckbox_checkedState:
+        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtCheckbox_checkedState", sStringValue);
+        break;
     case NS_ooxml::LN_CT_SdtCheckbox_uncheckedState:
+        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtCheckbox_uncheckedState", sStringValue);
+        break;
     case NS_ooxml::LN_CT_SdtDocPart_docPartGallery:
+        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDocPart_docPartGallery", sStringValue);
+        break;
     case NS_ooxml::LN_CT_SdtDocPart_docPartCategory:
+        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDocPart_docPartCategory", sStringValue);
+        break;
     case NS_ooxml::LN_CT_SdtDocPart_docPartUnique:
-    {
-        // this is a child of an unsupported SDT property, store in the grab bag
-        OUString sName = OUString::createFromAscii((*QNameToString::Instance())(nSprmId).c_str());
-        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, sName, sStringValue);
-    }
-    break;
+        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDocPart_docPartUnique", sStringValue);
+        break;
     case NS_ooxml::LN_EG_SectPrContents_pgNumType:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();

@@ -107,7 +107,11 @@ writerfilter::Reference<Properties>::Pointer_t OOXMLPropertyImpl::getProps()
 
 string OOXMLPropertyImpl::getName() const
 {
-    string sResult = (*QNameToString::Instance())(mId);
+    string sResult;
+
+#ifdef DEBUG_LOGGING
+    sResult = (*QNameToString::Instance())(mId);
+#endif
 
     if (sResult.length() == 0)
         sResult = fastTokenToId(mId);
