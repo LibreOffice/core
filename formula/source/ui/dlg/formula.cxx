@@ -69,21 +69,6 @@ namespace formula
 {
     using namespace ::com::sun::star;
 
-    class OFormulaToken : public IFormulaToken
-    {
-        sal_Int32   m_nParaCount;
-        bool        m_bIsFunction;
-
-    public:
-        OFormulaToken(bool _bFunction,sal_Int32 _nParaCount) : m_nParaCount(_nParaCount),m_bIsFunction(_bFunction){}
-
-        virtual ~OFormulaToken() {}
-
-        virtual bool isFunction() const SAL_OVERRIDE { return m_bIsFunction; }
-        virtual sal_uInt32 getArgumentCount() const SAL_OVERRIDE { return m_nParaCount; }
-    };
-
-
     class FormulaDlg_Impl
     {
     public:
@@ -108,7 +93,6 @@ namespace formula
 
         void            StoreFormEditData(FormEditData* pEditData);
 
-        void            UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 nInput );
         void            Update();
         void            Update(const OUString& _sExp);
 
@@ -142,8 +126,6 @@ namespace formula
         DECL_LINK(FormulaHdl, void *);
         DECL_LINK(FormulaCursorHdl, void *);
         DECL_LINK( BtnHdl, PushButton* );
-        DECL_LINK( GetEdFocusHdl, ArgInput* );
-        DECL_LINK( GetFxFocusHdl, ArgInput* );
         DECL_LINK(DblClkHdl, void *);
         DECL_LINK(FuncSelHdl, void *);
         DECL_LINK(StructSelHdl, void *);
@@ -160,7 +142,6 @@ namespace formula
         mutable const sheet::FormulaOpCodeMapEntry*             m_pUnaryOpCodesEnd;
         mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aBinaryOpCodes;
         mutable const sheet::FormulaOpCodeMapEntry*             m_pBinaryOpCodesEnd;
-        ::std::vector< ::boost::shared_ptr<OFormulaToken> >     m_aTokens;
         ::std::map<FormulaToken*,sheet::FormulaToken>           m_aTokenMap;
         IFormulaEditorHelper*                                   m_pHelper;
         Dialog*  m_pParent;
