@@ -19,6 +19,7 @@
 
 #include <iostream>
 
+#include <boost/noncopyable.hpp>
 #include <tools/debug.hxx>
 
 #include <sal/config.h>
@@ -77,14 +78,12 @@ static osl::Mutex &  GetLangGuessMutex()
 class LangGuess_Impl :
     public ::cppu::WeakImplHelper2<
         XLanguageGuessing,
-        XServiceInfo >
+        XServiceInfo >,
+    private boost::noncopyable
 {
     SimpleGuesser   m_aGuesser;
     bool            m_bInitialized;
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;
-
-    LangGuess_Impl( const LangGuess_Impl & ); // not defined
-    LangGuess_Impl & operator =( const LangGuess_Impl & ); // not defined
 
     virtual ~LangGuess_Impl() {}
     void    EnsureInitialized();
@@ -108,9 +107,6 @@ public:
 
     // implementation specific
     void SetFingerPrintsDB( const OUString &fileName ) throw (RuntimeException);
-
-    static const OUString & SAL_CALL getImplementationName_Static() throw();
-
 };
 
 LangGuess_Impl::LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext > const & rxContext) :

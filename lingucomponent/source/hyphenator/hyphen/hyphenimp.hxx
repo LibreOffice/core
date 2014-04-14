@@ -40,6 +40,8 @@
 #include <lingutil.hxx>
 #include <stdio.h>
 
+#include <hyphen.h>
+
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -131,6 +133,10 @@ inline OUString Hyphenator::getImplementationName_Static() throw()
 {
     return OUString( "org.openoffice.lingu.LibHnjHyphenator" );
 }
+
+void * SAL_CALL Hyphenator_getFactory(
+    char const * pImplName, css::lang::XMultiServiceFactory * pServiceManager,
+    void *);
 
 #endif
 

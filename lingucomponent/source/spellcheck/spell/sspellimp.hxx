@@ -43,6 +43,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
+class Hunspell;
+
 class SpellChecker :
     public cppu::WeakImplHelper6
     <
@@ -118,6 +120,10 @@ inline OUString SpellChecker::getImplementationName_Static() throw()
 {
     return OUString( "org.openoffice.lingu.MySpellSpellChecker" );
 }
+
+void * SAL_CALL SpellChecker_getFactory(
+    char const * pImplName, css::lang::XMultiServiceFactory * pServiceManager,
+    void *);
 
 #endif
 
