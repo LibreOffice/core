@@ -407,6 +407,8 @@ private:
 
 public:
     OpenGLRender m_GLRender;
+
+    bool mbNotInit;
 };
 
 class DummyGroup2D : public DummyXShapes

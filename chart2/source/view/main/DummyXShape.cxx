@@ -1143,11 +1143,11 @@ void DummyXShapes::render()
 }
 
 DummyChart::DummyChart(uno::Reference< drawing::XShape > xTarget):
-    m_GLRender(xTarget)
+    m_GLRender(xTarget),
+    mbNotInit(true)
 {
     SAL_INFO("chart2.opengl", "DummyXShape::DummyChart()-----test: ");
     setName("com.sun.star.chart2.shapes");
-    m_GLRender.InitOpenGL();
 }
 
 void SAL_CALL DummyChart::setPosition( const awt::Point& aPosition )
@@ -1173,6 +1173,12 @@ void SAL_CALL DummyChart::setSize( const awt::Size& aSize )
 
 void DummyChart::render()
 {
+    if(mbNotInit)
+    {
+        m_GLRender.InitOpenGL();
+        mbNotInit = false;
+    }
+
     SAL_INFO("chart2.opengl", "render chart");
     m_GLRender.prepareToRender();
 #if 0
