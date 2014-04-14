@@ -393,7 +393,7 @@ void DrawDocShell::ApplySlotFilter() const
             SfxDispatcher* pDispatcher = pTestViewShell->GetViewFrame()->GetDispatcher();
 
             if( mpFilterSIDs )
-                pDispatcher->SetSlotFilter( mbFilterEnable, mnFilterCount, mpFilterSIDs );
+                pDispatcher->SetSlotFilter( mbFilterEnable ? SFX_SLOT_FILTER_ENABLED : SFX_SLOT_FILTER_DISABLED, mnFilterCount, mpFilterSIDs );
             else
                 pDispatcher->SetSlotFilter();
 

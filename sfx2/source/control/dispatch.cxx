@@ -133,8 +133,8 @@ struct SfxDispatcher_Impl
     bool                 bQuiet;        // Only use parent dispatcher
     bool                 bModal;        // Only slots from parent dispatcher
 
-    sal_Bool             bFilterEnabling; // sal_True=filter enabled slots,
-                                        // 2==ReadOnlyDoc overturned
+    SfxSlotFilterState   nFilterEnabling; // 1==filter enabled slots,
+                                          // 2==ReadOnlyDoc overturned
     sal_uInt16           nFilterCount;  // Number of SIDs in pFilterSIDs
     const sal_uInt16*    pFilterSIDs;   // sorted Array of SIDs
     sal_uInt32           nDisableFlags;
@@ -347,7 +347,7 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
     pImp->bQuiet = false;
     pImp->bModal = false;
     pImp->pInCallAliveFlag = 0;
-    pImp->bFilterEnabling = sal_False;
+    pImp->nFilterEnabling = SFX_SLOT_FILTER_DISABLED;
     pImp->nFilterCount = 0;
     pImp->pFilterSIDs = 0;
     pImp->nDisableFlags = 0;
@@ -1730,11 +1730,11 @@ void SfxDispatcher::FlushImpl()
 void SfxDispatcher::SetSlotFilter
 (
     // HACK(hier muss mal ein enum rein) ???
-    sal_Bool           bEnable,  /* sal_True:
+    SfxSlotFilterState nEnable,  /* 1==true:
                                     only enable specified slots,
                                     disable all other
 
-                                    sal_False:
+                                    0==false:
                                     disable specified slots,
                                     first enable all other
                                  */
@@ -1780,7 +1780,7 @@ void SfxDispatcher::SetSlotFilter
     if ( pImp->pFilterSIDs )
         pImp->pFilterSIDs = 0;
 
-    pImp->bFilterEnabling = bEnable;
+    pImp->nFilterEnabling = nEnable;
     pImp->nFilterCount = nCount;
     pImp->pFilterSIDs = pSIDs;
 
@@ -1801,7 +1801,7 @@ SfxCompareSIDs_Impl( const void* pSmaller, const void* pBigger )
 }
 
 
-sal_Bool SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const
+SfxSlotFilterState SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const
 
 /*  [Description]
 
@@ -1810,7 +1810,7 @@ sal_Bool SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const
     disabled by the Filter.
 
     [Return value]
-    sal_Bool            0       =>      disabled
+    int                 0       =>      disabled
                         1       =>      enabled
                         2       =>      enabled even if ReadOnlyDoc
 */
@@ -1819,17 +1819,20 @@ sal_Bool SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const
     // no filter?
     if ( 0 == pImp->nFilterCount )
         // => all SIDs allowed
-        return sal_True;
+        return SFX_SLOT_FILTER_ENABLED;
 
     // search
     bool bFound = 0 != bsearch( &nSID, pImp->pFilterSIDs, pImp->nFilterCount,
                                 sizeof(sal_uInt16), SfxCompareSIDs_Impl );
 
     // even if ReadOnlyDoc
-    if ( 2 == pImp->bFilterEnabling )
-        return bFound ? 2 : 1;
+    if ( SFX_SLOT_FILTER_ENABLED_READONLY == pImp->nFilterEnabling )
+        return bFound ? SFX_SLOT_FILTER_ENABLED_READONLY : SFX_SLOT_FILTER_ENABLED;
     // Otherwise after Negative/Positive Filter
-    return pImp->bFilterEnabling ? bFound : !bFound;
+    else if ( SFX_SLOT_FILTER_ENABLED == pImp->nFilterEnabling )
+        return bFound ? SFX_SLOT_FILTER_ENABLED : SFX_SLOT_FILTER_DISABLED;
+    else
+        return bFound ? SFX_SLOT_FILTER_DISABLED : SFX_SLOT_FILTER_ENABLED;
 }
 
 
@@ -1955,11 +1958,11 @@ bool SfxDispatcher::_FindServer
     }
 
     // SID check against set filter
-    sal_uInt16 nSlotEnableMode=0;
+    SfxSlotFilterState nSlotEnableMode = SFX_SLOT_FILTER_DISABLED;
     if ( pImp->pFrame )
     {
         nSlotEnableMode = IsSlotEnabledByFilter_Impl( nSlot );
-        if ( 0 == nSlotEnableMode )
+        if ( SFX_SLOT_FILTER_DISABLED == nSlotEnableMode )
             return false;
     }
 
@@ -1977,7 +1980,7 @@ bool SfxDispatcher::_FindServer
             return false;
     }
 
-    bool bReadOnly = ( 2 != nSlotEnableMode && pImp->bReadOnly );
+    bool bReadOnly = ( SFX_SLOT_FILTER_ENABLED_READONLY != nSlotEnableMode && pImp->bReadOnly );
 
     // search through all the shells of the chained dispatchers
     // from top to bottom

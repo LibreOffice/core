@@ -61,6 +61,14 @@ namespace com
 #define SFX_SHELL_PUSH          1
 
 
+enum SfxSlotFilterState
+{
+    SFX_SLOT_FILTER_DISABLED,
+    SFX_SLOT_FILTER_ENABLED,
+    // enabled even if ReadOnlyDoc
+    SFX_SLOT_FILTER_ENABLED_READONLY,
+};
+
 
 class SFX2_DLLPUBLIC SfxDispatcher
 {
@@ -158,8 +166,7 @@ public:
     void                Flush();
     void                Lock( bool bLock );
     bool                IsLocked( sal_uInt16 nSID = 0 ) const;
-    // bEnable can be sal_True,sal_False, or 2(some kind of read-only override hack)
-    void                SetSlotFilter( sal_Bool bEnable = sal_False,
+    void                SetSlotFilter( SfxSlotFilterState nEnable = SFX_SLOT_FILTER_DISABLED,
                                        sal_uInt16 nCount = 0, const sal_uInt16 *pSIDs = 0 );
 
     void                HideUI( bool bHide = true );
@@ -180,8 +187,7 @@ public:
                                               bool bOwnShellsOnly, bool bModal, bool bRealSlot=true );
     SAL_DLLPRIVATE void SetReadOnly_Impl( bool  bOn );
     SAL_DLLPRIVATE bool GetReadOnly_Impl() const;
-    // bEnable can be sal_True,sal_False, or 2(some kind of read-only override hack)
-    SAL_DLLPRIVATE sal_Bool IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const;
+    SAL_DLLPRIVATE SfxSlotFilterState IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const;
     SAL_DLLPRIVATE void SetQuietMode_Impl( bool bOn );
     SAL_DLLPRIVATE bool IsReadOnlyShell_Impl( sal_uInt16 nShell ) const;
     SAL_DLLPRIVATE void RemoveShell_Impl( SfxShell& rShell );
