@@ -60,6 +60,7 @@
     <xsl:text>
 void QNameToString::init_ooxml()
 {
+#ifdef DEBUG_LOGGING
     /* ooxml */
     </xsl:text>
     <xsl:for-each select="//@tokenid">
@@ -75,6 +76,7 @@ void QNameToString::init_ooxml()
       </xsl:if>
     </xsl:for-each>
     <xsl:text>
+#endif
 }
     </xsl:text>
   </xsl:template>

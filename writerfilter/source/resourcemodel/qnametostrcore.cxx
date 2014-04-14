@@ -33,14 +33,12 @@ QNameToString::Pointer_t QNameToString::Instance()
 
 string QNameToString::operator()(Id qName)
 {
-    string sResult;
-
     Map::const_iterator aIt = mMap.find(qName);
 
     if (aIt != mMap.end())
-        sResult = aIt->second;
+        return aIt->second;
 
-    return mMap[qName];
+    return string();
 }
 
 QNameToString::QNameToString()
