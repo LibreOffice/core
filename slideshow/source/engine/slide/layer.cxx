@@ -232,8 +232,6 @@ namespace slideshow
 
             ~LayerEndUpdate() { if(mpLayer) mpLayer->endUpdate(); }
 
-            void dismiss() { mpLayer.reset(); }
-
         private:
             LayerSharedPtr mpLayer;
         };

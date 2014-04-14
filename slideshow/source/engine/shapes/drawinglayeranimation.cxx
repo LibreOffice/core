@@ -42,6 +42,7 @@
 #include "activity.hxx"
 #include "wakeupevent.hxx"
 #include "eventqueue.hxx"
+#include "drawinglayeranimation.hxx"
 #include "drawshapesubsetting.hxx"
 #include "drawshape.hxx"
 #include "shapesubset.hxx"

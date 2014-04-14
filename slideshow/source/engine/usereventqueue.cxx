@@ -127,27 +127,6 @@ protected:
 
 } // anon namespace
 
-class PlainEventHandler : public EventHandler,
-                          public EventContainer
-{
-public:
-    PlainEventHandler( EventQueue & rEventQueue )
-        : EventContainer(), mrEventQueue(rEventQueue) {}
-
-    virtual void dispose()
-    {
-        clearContainer();
-    }
-
-    virtual bool handleEvent() SAL_OVERRIDE
-    {
-        return fireAllEvents( maEvents, mrEventQueue );
-    }
-
-private:
-    EventQueue & mrEventQueue;
-};
-
 class AllAnimationEventHandler : public AnimationEventHandler
 {
 public:
@@ -203,22 +182,6 @@ public:
 
         // add new event to queue
         aIter->second.push_back( rEvent );
-    }
-
-    bool isEmpty()
-    {
-        // find at least one animation with a non-empty vector
-        ImpAnimationEventMap::const_iterator aCurr( maAnimationEventMap.begin() );
-        const ImpAnimationEventMap::const_iterator aEnd( maAnimationEventMap.end() );
-        while( aCurr != aEnd )
-        {
-            if( !aCurr->second.empty() )
-                return false; // at least one non-empty entry found
-
-            ++aCurr;
-        }
-
-        return true; // not a single non-empty entry found
     }
 
 private:
@@ -397,22 +360,6 @@ public:
 
         // add new event to queue
         aIter->second.push( rEvent );
-    }
-
-    bool isEmpty()
-    {
-        // find at least one shape with a non-empty queue
-        ImpShapeEventMap::reverse_iterator aCurrShape( maShapeEventMap.begin());
-        ImpShapeEventMap::reverse_iterator aEndShape( maShapeEventMap.end() );
-        while( aCurrShape != aEndShape )
-        {
-            if( !aCurrShape->second.empty() )
-                return false; // at least one non-empty entry found
-
-            ++aCurrShape;
-        }
-
-        return true; // not a single non-empty entry found
     }
 
 protected:
@@ -646,8 +593,6 @@ UserEventQueue::UserEventQueue( EventMultiplexer&   rMultiplexer,
     : mrMultiplexer( rMultiplexer ),
       mrEventQueue( rEventQueue ),
       mrCursorManager( rCursorManager ),
-      mpStartEventHandler(),
-      mpEndEventHandler(),
       mpAnimationStartEventHandler(),
       mpAnimationEndEventHandler(),
       mpAudioStoppedEventHandler(),
@@ -679,14 +624,6 @@ UserEventQueue::~UserEventQueue()
 void UserEventQueue::clear()
 {
     // unregister and delete all handlers
-    if( mpStartEventHandler ) {
-        mrMultiplexer.removeSlideStartHandler( mpStartEventHandler );
-        mpStartEventHandler.reset();
-    }
-    if( mpEndEventHandler ) {
-        mrMultiplexer.removeSlideEndHandler( mpEndEventHandler );
-        mpEndEventHandler.reset();
-    }
     if( mpAnimationStartEventHandler ) {
         mrMultiplexer.removeAnimationStartHandler(
             mpAnimationStartEventHandler );

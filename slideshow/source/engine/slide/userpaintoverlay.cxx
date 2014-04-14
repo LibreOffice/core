@@ -444,16 +444,6 @@ namespace slideshow
                 return false; // did not handle the event
             }
 
-
-            void update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth )
-            {
-                maStrokeColor = aUserPaintColor;
-                mnStrokeWidth = dUserPaintStrokeWidth;
-                mbActive = bUserPaintEnabled;
-                if( !mbActive )
-                    disable();
-            }
-
         private:
             ScreenUpdater&          mrScreenUpdater;
             UnoViewVector           maViews;

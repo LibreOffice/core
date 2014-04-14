@@ -33,7 +33,6 @@
 namespace slideshow {
 namespace internal {
 
-class PlainEventHandler;
 class AllAnimationEventHandler;
 class ShapeClickEventHandler;
 class ClickEventHandler;
@@ -261,8 +260,6 @@ private:
     EventQueue&                                     mrEventQueue;
     CursorManager&                                  mrCursorManager;
 
-    ::boost::shared_ptr<PlainEventHandler>          mpStartEventHandler;
-    ::boost::shared_ptr<PlainEventHandler>          mpEndEventHandler;
     ::boost::shared_ptr<AllAnimationEventHandler>   mpAnimationStartEventHandler;
     ::boost::shared_ptr<AllAnimationEventHandler>   mpAnimationEndEventHandler;
     ::boost::shared_ptr<AllAnimationEventHandler>   mpAudioStoppedEventHandler;

@@ -29,6 +29,7 @@
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/animations/Event.hpp>
 
+#include "generateevent.hxx"
 #include "shape.hxx"
 #include "subsettableshapemanager.hxx"
 #include "usereventqueue.hxx"
