@@ -35,8 +35,10 @@ $(eval $(call gb_Library_use_libraries,ldapbe2,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_system_win32_libs,ldapbe2,\
+$(eval $(call gb_Library_use_externals,ldapbe2,\
 	boost_headers \
+))
+$(eval $(call gb_Library_use_system_win32_libs,ldapbe2,\
 	wldap32 \
 ))
 else # 0S!=WNT
