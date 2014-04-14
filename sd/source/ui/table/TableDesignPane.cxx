@@ -46,6 +46,7 @@
 #include <svx/sdr/table/tabledesign.hxx>
 
 #include "TableDesignPane.hxx"
+#include "createtabledesignpanel.hxx"
 
 #include "DrawDocShell.hxx"
 #include "ViewShellBase.hxx"

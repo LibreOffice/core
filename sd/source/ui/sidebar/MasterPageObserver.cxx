@@ -67,13 +67,6 @@ public:
     */
     void RemoveEventListener (const Link& rEventListener);
 
-    /** Return a set of the names of master pages for the given document.
-        This convenience method exists because this set is part of the
-        internal data structure and thus takes no time to create.
-    */
-    inline MasterPageObserver::MasterPageNameSet GetMasterPageNames (
-        SdDrawDocument& rDocument);
-
 private:
     ::std::vector<Link> maListeners;
 
@@ -256,25 +249,6 @@ void MasterPageObserver::Implementation::RemoveEventListener (
             maListeners.end(),
             rEventListener));
 }
-
-
-
-
-MasterPageObserver::MasterPageNameSet
-    MasterPageObserver::Implementation::GetMasterPageNames (
-        SdDrawDocument& rDocument)
-{
-    MasterPageContainer::iterator aMasterPageDescriptor (
-        maUsedMasterPages.find(&rDocument));
-    if (aMasterPageDescriptor != maUsedMasterPages.end())
-        return aMasterPageDescriptor->second;
-    else
-        // Not found so return an empty set.
-        return MasterPageObserver::MasterPageNameSet();
-}
-
-
-
 
 void MasterPageObserver::Implementation::Notify(
     SfxBroadcaster& rBroadcaster,

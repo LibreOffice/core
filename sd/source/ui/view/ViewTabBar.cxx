@@ -79,23 +79,6 @@ private:
 
 } // end of anonymous namespace
 
-
-
-
-
-class ViewTabPage : public TabPage
-{
-public:
-    ViewTabPage (Window* pParent) : TabPage(pParent) {}
-    virtual void Resize (void) SAL_OVERRIDE
-    { SetPosSizePixel(Point(0,0),GetParent()->GetOutputSizePixel()); }
-};
-
-
-
-
-//===== ViewTabBar ============================================================
-
 ViewTabBar::ViewTabBar (
     const Reference<XResourceId>& rxViewTabBarId,
     const Reference<frame::XController>& rxController)

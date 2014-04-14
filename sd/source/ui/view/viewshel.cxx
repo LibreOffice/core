@@ -20,6 +20,7 @@
 
 #include "ViewShell.hxx"
 #include "ViewShellImplementation.hxx"
+#include "createtableobjectbar.hxx"
 
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include "ViewShellBase.hxx"
@@ -80,10 +81,6 @@
 #include <svl/poolitem.hxx>
 #include <glob.hrc>
 #include "AccessibleDocumentViewBase.hxx"
-
-namespace sd { namespace ui { namespace table {
-    extern SfxShell* CreateTableObjectBar( ViewShell& rShell, ::sd::View* pView );
-} } }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "osl/time.h"
 #include "sal/config.h"
+
+#include "boost/noncopyable.hpp"
+#include "osl/time.h"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
@@ -30,7 +31,9 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
+#include "Annotation.hxx"
 #include "drawdoc.hxx"
+#include "notifydocumentevent.hxx"
 #include "sdpage.hxx"
 #include "textapi.hxx"
 
@@ -44,13 +47,12 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star;
 
-extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName, const Reference< XInterface >& xSource );
-
 namespace sd {
 
 class Annotation : private ::cppu::BaseMutex,
                    public ::cppu::WeakComponentImplHelper1< XAnnotation>,
-                   public ::cppu::PropertySetMixin< XAnnotation >
+                   public ::cppu::PropertySetMixin< XAnnotation >,
+                   private boost::noncopyable
 {
 public:
     explicit Annotation( const Reference< XComponentContext >& context, SdPage* pPage );
@@ -85,9 +87,6 @@ public:
     virtual Reference< XText > SAL_CALL getTextRange() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    Annotation(const Annotation &); // not defined
-    Annotation& operator=(const Annotation &); // not defined
-
     // destructor is private and will be called indirectly by the release call    virtual ~Annotation() {}
 
     void createChangeUndo();

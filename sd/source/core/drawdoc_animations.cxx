@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include "createpresentation.hxx"
 #include "drawdoc.hxx"
 #include "cusshow.hxx"
 #include "customshowlist.hxx"
@@ -39,8 +41,6 @@ void SdDrawDocument::ReplacePageInCustomShows( const SdPage* pOldPage, const SdP
         }
     }
 }
-
-extern Reference< XPresentation2 > CreatePresentation( const SdDrawDocument& rDocument );
 
 const Reference< XPresentation2 >& SdDrawDocument::getPresentation() const
 {

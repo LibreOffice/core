@@ -63,6 +63,7 @@
 
 #include "sderror.hxx"
 #include "sdresid.hxx"
+#include "sdtransform.hxx"
 #include "glob.hrc"
 
 #include <sfx2/frame.hxx>
@@ -74,8 +75,6 @@ using namespace com::sun::star::document;
 using namespace comphelper;
 
 #define SD_XML_READERROR 1234
-
-extern void TransformOOo2xDocument( SdDrawDocument* pDocument );
 
 char const sXML_metaStreamName[] = "meta.xml";
 char const sXML_styleStreamName[] = "styles.xml";

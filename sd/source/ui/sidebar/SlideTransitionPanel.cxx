@@ -18,16 +18,9 @@
  */
 
 #include "SlideTransitionPanel.hxx"
+#include "createslidetransitionpanel.hxx"
 
 #include "ViewShellBase.hxx"
-
-
-namespace sd {
-    extern ::Window* createSlideTransitionPanel (::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame);
-}
-
-
-
 
 namespace sd { namespace sidebar {
 

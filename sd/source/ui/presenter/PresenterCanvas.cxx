@@ -19,6 +19,7 @@
 
 
 #include "PresenterCanvas.hxx"
+#include "facreg.hxx"
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -42,7 +43,7 @@ namespace sd { namespace presenter {
 //===== Service ===============================================================
 
 Reference<XInterface> SAL_CALL PresenterCanvas_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     (void)rxContext;
     return Reference<XInterface>(static_cast<XWeak*>(new PresenterCanvas()));

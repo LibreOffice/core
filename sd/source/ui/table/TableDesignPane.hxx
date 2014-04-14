@@ -137,6 +137,8 @@ public:
     virtual short Execute() SAL_OVERRIDE;
 };
 
+void showTableDesignDialog( ::Window*, ViewShellBase& );
+
 }
 
 #endif // _SD_TABLEFORMATPANE_HXX

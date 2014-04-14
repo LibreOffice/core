@@ -27,6 +27,8 @@
 
 #include <tools/diagnose_ex.h>
 
+#include <facreg.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -66,7 +68,7 @@ public:
 
 
 Reference<XInterface> SAL_CALL ModuleController_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     return Reference<XInterface>(ModuleController::CreateInstance(rxContext), UNO_QUERY);
 }

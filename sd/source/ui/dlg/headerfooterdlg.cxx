@@ -137,15 +137,12 @@ private:
     Edit*        mpTBFooter;
 
     CheckBox*   mpCBSlideNumber;
-    FixedText*   mpFTPageNumber;
 
     CheckBox*    mpCBNotOnTitle;
 
     PresLayoutPreview*   mpCTPreview;
 
-    SdPage*             mpCurrentPage;
     SdDrawDocument*    mpDoc;
-    HeaderFooterDialog* mpDialog;
     LanguageType        meOldLanguage;
 
     bool            mbHandoutMode;
@@ -159,11 +156,8 @@ private:
     void GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet, SdPage* pPage );
 
 public:
-    HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window* pParent, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode );
+    HeaderFooterTabPage( ::Window* pParent, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode );
     virtual ~HeaderFooterTabPage();
-
-    static  SfxTabPage* Create( ::Window*, const SfxItemSet& );
-    static  sal_uInt16*    GetRanges();
 
     void    init( const HeaderFooterSettings& rSettings, bool bNotOnTitle );
     void    getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle );
@@ -210,7 +204,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
     mpTabCtrl->Show();
 
     mnSlidesId = mpTabCtrl->GetPageId("slides");
-    mpSlideTabPage = new HeaderFooterTabPage( this, mpTabCtrl, pDoc, pSlide, false );
+    mpSlideTabPage = new HeaderFooterTabPage( mpTabCtrl, pDoc, pSlide, false );
     mpTabCtrl->SetTabPage( mnSlidesId, mpSlideTabPage );
 
     Size aSiz = mpSlideTabPage->GetSizePixel();
@@ -223,7 +217,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
     }
 
     mnNotesId = mpTabCtrl->GetPageId("notes");
-    mpNotesHandoutsTabPage = new HeaderFooterTabPage( this, mpTabCtrl, pDoc, pNotes, true );
+    mpNotesHandoutsTabPage = new HeaderFooterTabPage( mpTabCtrl, pDoc, pNotes, true );
     mpTabCtrl->SetTabPage( mnNotesId, mpNotesHandoutsTabPage );
 
     get(maPBApplyToAll, "apply_all" );
@@ -427,11 +421,9 @@ void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const H
 
 
 
-HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window* pWindow, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode ) :
+HeaderFooterTabPage::HeaderFooterTabPage( ::Window* pWindow, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode ) :
         TabPage( pWindow, "HeaderFooterTab", "modules/simpress/ui/headerfootertab.ui" ),
-        mpCurrentPage(pActualPage),
         mpDoc(pDoc),
-        mpDialog(pDialog),
         mbHandoutMode( bHandoutMode )
 {
     get(mpFTIncludeOn, "include_label");

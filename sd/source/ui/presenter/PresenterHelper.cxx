@@ -24,6 +24,7 @@
 #include "PresenterHelper.hxx"
 #include "CanvasUpdateRequester.hxx"
 #include "PresenterCanvas.hxx"
+#include "facreg.hxx"
 #include <cppcanvas/vclfactory.hxx>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
@@ -44,7 +45,7 @@ namespace sd { namespace presenter {
 //===== Service ===============================================================
 
 Reference<XInterface> SAL_CALL PresenterHelperService_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     return Reference<XInterface>(static_cast<XWeak*>(new PresenterHelper(rxContext)));
 }

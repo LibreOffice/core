@@ -23,6 +23,7 @@
 #include "framework/FrameworkHelper.hxx"
 #include "DrawController.hxx"
 #include "ViewShellBase.hxx"
+#include "facreg.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <cppuhelper/compbase1.hxx>
 #include <tools/diagnose_ex.h>
@@ -98,7 +99,7 @@ private:
 //===== PresentationFactoryProvider service ===================================
 
 Reference<XInterface> SAL_CALL PresentationFactoryProvider_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     return Reference<XInterface>(static_cast<XWeak*>(new PresentationFactoryProvider(rxContext)));
 }

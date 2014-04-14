@@ -42,6 +42,7 @@
 #include "framework/FrameworkHelper.hxx"
 
 #include "FrameView.hxx"
+#include "createpresentation.hxx"
 #include "unomodel.hxx"
 #include "slideshow.hxx"
 #include "slideshowimpl.hxx"

@@ -38,6 +38,7 @@
 
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
+#include "UnoDocumentSettings.hxx"
 #include "unomodel.hxx"
 
 #include "optsitem.hxx"
@@ -123,7 +124,7 @@ namespace sd
     };
 
     Reference< XInterface > SAL_CALL DocumentSettings_createInstance( SdXImpressDocument* pModel )
-        throw( Exception )
+        throw ()
     {
         DBG_ASSERT( pModel, "I need a model for the DocumentSettings!" );
         return (XWeak*)new DocumentSettings( pModel );

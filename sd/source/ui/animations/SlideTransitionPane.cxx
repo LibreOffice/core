@@ -21,6 +21,7 @@
 
 #include "SlideTransitionPane.hxx"
 #include "CustomAnimation.hrc"
+#include "createslidetransitionpanel.hxx"
 
 #include "TransitionPreset.hxx"
 #include "sdresid.hxx"
@@ -82,15 +83,6 @@ struct TransitionEffect
             mnSubType( rPreset.getSubtype()),
             mbDirection( rPreset.getDirection()),
             mnFadeColor( rPreset.getFadeColor())
-    {
-        init();
-    }
-    explicit TransitionEffect( sal_Int16 nType, sal_Int16 nSubType,
-                               sal_Bool  bDirection, sal_Int32 nFadeColor ) :
-            mnType( nType),
-            mnSubType( nSubType ),
-            mbDirection( bDirection ),
-            mnFadeColor( nFadeColor )
     {
         init();
     }

@@ -34,6 +34,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include "CustomAnimationPreset.hxx"
+#include "facreg.hxx"
+#include "randomnode.hxx"
 
 using ::osl::Mutex;
 using ::osl::Guard;

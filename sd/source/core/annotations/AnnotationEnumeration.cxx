@@ -20,11 +20,13 @@
 
 #include "sal/config.h"
 
+#include "boost/noncopyable.hpp"
 #include "cppuhelper/implbase1.hxx"
 
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/office/XAnnotationEnumeration.hpp"
 
+#include "AnnotationEnumeration.hxx"
 #include "sdpage.hxx"
 
 using namespace ::com::sun::star::uno;
@@ -34,7 +36,7 @@ using namespace ::com::sun::star::lang;
 
 namespace sd {
 
-class AnnotationEnumeration: public ::cppu::WeakImplHelper1< css::office::XAnnotationEnumeration >
+class AnnotationEnumeration: public ::cppu::WeakImplHelper1< css::office::XAnnotationEnumeration >, private boost::noncopyable
 {
 public:
     AnnotationEnumeration( const AnnotationVector& rAnnotations );
@@ -44,9 +46,6 @@ public:
     virtual css::uno::Reference< css::office::XAnnotation > SAL_CALL nextElement() throw (css::uno::RuntimeException, css::container::NoSuchElementException, std::exception) SAL_OVERRIDE;
 
 private:
-    AnnotationEnumeration(const AnnotationEnumeration &); // not defined
-    AnnotationEnumeration& operator=(const AnnotationEnumeration &); // not defined
-
     // destructor is private and will be called indirectly by the release call    virtual ~AnnotationEnumeration() {}
 
     AnnotationVector maAnnotations;

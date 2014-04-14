@@ -53,8 +53,10 @@
 #include <svl/style.hxx>
 
 #include "framework/FrameworkHelper.hxx"
+#include "TableDesignPane.hxx"
 #include "app.hrc"
 #include "glob.hrc"
+#include "tablefunction.hxx"
 #include "DrawViewShell.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
@@ -79,7 +81,6 @@ using namespace ::com::sun::star::linguistic2;
 
 namespace sd
 {
-extern void showTableDesignDialog( ::Window*, ViewShellBase& );
 
 static void apply_table_style( SdrTableObj* pObj, SdrModel* pModel, const OUString& sTableStyle )
 {

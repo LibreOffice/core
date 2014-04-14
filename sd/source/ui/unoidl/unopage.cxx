@@ -35,6 +35,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <AnnotationEnumeration.hxx>
+#include <createunopageimpl.hxx>
 #include <unomodel.hxx>
 #include <unopage.hxx>
 #include <svx/svxids.hrc>
@@ -80,11 +82,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::office;
-
-namespace sd {
-extern Reference< XAnnotation > createAnnotation( const Reference< XComponentContext >& xContext, SdPage* );
-extern Reference< XAnnotationEnumeration > createAnnotationEnumeration( const sd::AnnotationVector& );
-}
 
 // this are the ids for page properties
 enum WID_PAGE

@@ -177,6 +177,8 @@ private:
     ScopeLock maSelectionLock;
 };
 
+void fillRepeatComboBox( ListBox* pBox );
+
 }
 
 #endif // INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX

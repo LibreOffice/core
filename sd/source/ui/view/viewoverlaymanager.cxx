@@ -187,10 +187,6 @@ void ImageButtonHdl::HideTip()
     }
 }
 
-
-
-extern OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL );
-
 void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 {
 

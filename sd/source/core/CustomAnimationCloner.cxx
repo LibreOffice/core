@@ -45,6 +45,7 @@
 // header for class SdrObjListIter
 #include <svx/svditer.hxx>
 
+#include "CustomAnimationCloner.hxx"
 #include "sdpage.hxx"
 
 using namespace ::com::sun::star::uno;

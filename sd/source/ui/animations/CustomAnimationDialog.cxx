@@ -68,6 +68,7 @@
 
 #include "glob.hrc"
 #include "CustomAnimationDialog.hxx"
+#include "CustomAnimationPane.hxx"
 #include "CustomAnimation.hrc"
 #include "STLPropertySet.hxx"
 
@@ -94,7 +95,6 @@ using ::com::sun::star::beans::XPropertySet;
 
 namespace sd {
 
-extern void fillRepeatComboBox( ListBox* pBox );
 extern void fillDurationComboBox( ListBox* pBox );
 extern OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText = true );
 extern OUString getPropertyName( sal_Int32 nPropertyType );

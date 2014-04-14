@@ -19,6 +19,7 @@
 
 
 #include "SlideRenderer.hxx"
+#include "facreg.hxx"
 #include "sdpage.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
@@ -34,7 +35,7 @@ namespace sd { namespace presenter {
 //===== Service ===============================================================
 
 Reference<XInterface> SAL_CALL SlideRenderer_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     return Reference<XInterface>(static_cast<XWeak*>(new SlideRenderer(rxContext)));
 }

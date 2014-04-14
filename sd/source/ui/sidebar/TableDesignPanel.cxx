@@ -18,14 +18,9 @@
  */
 
 #include "TableDesignPanel.hxx"
+#include "createtabledesignpanel.hxx"
 
 #include "ViewShellBase.hxx"
-
-
-namespace sd {
-    extern ::Window * createTableDesignPanel (::Window* pParent, ViewShellBase& rBase);
-}
-
 
 namespace sd { namespace sidebar {
 

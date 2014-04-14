@@ -64,6 +64,7 @@
 #include <pptinanimations.hxx>
 #include <pptatom.hxx>
 #include "pptin.hxx"
+#include "randomnode.hxx"
 #include <algorithm>
 
 using ::std::map;
@@ -76,11 +77,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
-
-namespace sd
-{
-extern Reference< XInterface > RandomAnimationNode_createInstance( sal_Int16 nPresetClass );
-}
 
 namespace ppt
 {

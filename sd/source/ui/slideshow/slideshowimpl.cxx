@@ -57,6 +57,7 @@
 #include <svx/galbrws.hxx>
 #include "NavigatorChildWindow.hxx"
 #include "AnimationChildWindow.hxx"
+#include "notifydocumentevent.hxx"
 #include <slideshowimpl.hxx>
 #include <slideshowviewimpl.hxx>
 #include <pgjump.hxx>
@@ -94,7 +95,6 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::beans;
 
-extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName );
 extern OUString getUiNameFromPageApiNameImpl( const OUString& rApiName );
 
 namespace sd

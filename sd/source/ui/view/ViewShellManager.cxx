@@ -204,8 +204,6 @@ private:
 
     SfxShell* mpTopShell;
 
-    void GatherActiveShells (ShellStack& rShellList);
-
     void UpdateShellStack (void);
 
     void CreateShells (void);

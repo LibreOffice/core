@@ -21,6 +21,7 @@
 #include "BasicToolBarFactory.hxx"
 
 #include "ViewTabBar.hxx"
+#include "facreg.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include <unotools/mediadescriptor.hxx>
 
@@ -36,7 +37,7 @@ namespace sd { namespace framework {
 
 
 Reference<XInterface> SAL_CALL BasicToolBarFactory_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     return static_cast<XWeak*>(new BasicToolBarFactory(rxContext));
 }

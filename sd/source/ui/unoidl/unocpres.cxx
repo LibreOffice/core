@@ -26,6 +26,7 @@
 #include <comphelper/extract.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+#include "createunocustomshow.hxx"
 #include "unohelp.hxx"
 #include "unomodel.hxx"
 #include "drawdoc.hxx"

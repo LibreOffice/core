@@ -19,6 +19,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
+#include "createunocustomshow.hxx"
 #include "sdiocmpt.hxx"
 #include "cusshow.hxx"
 #include "sdpage.hxx"
@@ -70,8 +71,6 @@ SdCustomShow::~SdCustomShow()
     if( xComponent.is() )
         xComponent->dispose();
 }
-
-extern uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow );
 
 uno::Reference< uno::XInterface > SdCustomShow::getUnoCustomShow()
 {

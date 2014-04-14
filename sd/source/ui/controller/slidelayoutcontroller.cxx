@@ -44,6 +44,7 @@
 #include <sfx2/imagemgr.hxx>
 
 #include "app.hrc"
+#include "facreg.hxx"
 #include "glob.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
@@ -311,7 +312,7 @@ IMPL_LINK( LayoutToolbarMenu, SelectHdl, void *, pControl )
 
 
 
-OUString SlideLayoutController_getImplementationName()
+OUString SlideLayoutController_getImplementationName() throw (css::uno::RuntimeException)
 {
     return OUString( "com.sun.star.comp.sd.SlideLayoutController" );
 }
@@ -327,7 +328,7 @@ Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( Ru
 
 
 
-Reference< XInterface > SAL_CALL SlideLayoutController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
+Reference< XInterface > SAL_CALL SlideLayoutController_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
 {
     return static_cast< cppu::OWeakObject * >(
         new SlideLayoutController( comphelper::getComponentContext(rSMgr), ".uno:AssignLayout", false ));
@@ -335,7 +336,7 @@ Reference< XInterface > SAL_CALL SlideLayoutController_createInstance( const Ref
 
 
 
-OUString InsertSlideController_getImplementationName()
+OUString InsertSlideController_getImplementationName() throw (css::uno::RuntimeException)
 {
     return OUString( "com.sun.star.comp.sd.InsertSlideController" );
 }
@@ -351,7 +352,7 @@ Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( Ru
 
 
 
-Reference< XInterface > SAL_CALL InsertSlideController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
+Reference< XInterface > SAL_CALL InsertSlideController_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
 {
     return static_cast< cppu::OWeakObject * >(
         new SlideLayoutController( comphelper::getComponentContext(rSMgr), ".uno:InsertPage" , true ) );

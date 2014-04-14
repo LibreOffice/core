@@ -31,6 +31,8 @@
 #include <editeng/xmlcnitm.hxx>
 #include <svx/svditer.hxx>
 
+#include "Annotation.hxx"
+#include "notifydocumentevent.hxx"
 #include "sdresid.hxx"
 #include "sdpage.hxx"
 #include "glob.hxx"
@@ -51,8 +53,6 @@ using namespace ::sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::office;
-
-extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName, const Reference< XInterface >& xSource );
 
 /*************************************************************************
 |*
@@ -606,12 +606,6 @@ OString SdPage::stringify() const
 sal_Int32 SdPage::getHash() const
 {
     return stringify().hashCode();
-}
-
-
-namespace sd {
-extern void createAnnotation( Reference< XAnnotation >& xAnnotation, SdPage* pPage );
-extern SdrUndoAction* CreateUndoInsertOrRemoveAnnotation( const Reference< XAnnotation >& xAnnotation, bool bInsert );
 }
 
 void SdPage::createAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation )

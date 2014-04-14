@@ -55,6 +55,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include "DrawDocShell.hxx"
 #include "fupoor.hxx"
+#include "tablefunction.hxx"
 #include "Window.hxx"
 #include "sdxfer.hxx"
 #include "sdpage.hxx"
@@ -1489,8 +1490,6 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     return bReturn;
 }
-
-extern void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel  );
 
 bool View::PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, sal_uLong nPasteOptions )
 {

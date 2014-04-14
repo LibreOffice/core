@@ -57,6 +57,7 @@
 #include "../ui/inc/DrawDocShell.hxx"
 #include "Outliner.hxx"
 #include "app.hrc"
+#include "createunopageimpl.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "pglink.hxx"
@@ -2660,8 +2661,6 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
 
     return aString;
 }
-
-extern uno::Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage );
 
 uno::Reference< uno::XInterface > SdPage::createUnoPage()
 {

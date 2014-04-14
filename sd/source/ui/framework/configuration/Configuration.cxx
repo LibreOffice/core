@@ -22,6 +22,8 @@
 
 #include "framework/FrameworkHelper.hxx"
 
+#include <facreg.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -62,7 +64,7 @@ public:
 //----- Service ---------------------------------------------------------------
 
 Reference<XInterface> SAL_CALL Configuration_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     (void)rxContext;
     return Reference<XInterface>(static_cast<XWeak*>(new Configuration(NULL,false)));

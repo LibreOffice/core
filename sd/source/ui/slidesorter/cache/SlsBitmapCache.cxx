@@ -61,8 +61,6 @@ public:
 
     bool HasReplacement (void) const { return (mpReplacement.get() != NULL); }
     inline bool HasLosslessReplacement (void) const;
-    void Clear (void) { maPreview.SetEmpty(); maMarkedPreview.SetEmpty();
-        mpReplacement.reset(); mpCompressor.reset(); }
     void Invalidate (void) { mpReplacement.reset(); mpCompressor.reset(); mbIsUpToDate = false; }
     bool IsPrecious (void) const { return mbIsPrecious; }
     void SetPrecious (bool bIsPrecious) { mbIsPrecious = bIsPrecious; }

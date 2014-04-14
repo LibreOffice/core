@@ -81,8 +81,6 @@ SFX_IMPL_INTERFACE(DrawDocShell, SfxObjectShell, SdResId(0))
 
 namespace sd {
 
-GraphicFilter* GetGrfFilter();
-
 /**
  * slotmaps and definitions of SFX
  */

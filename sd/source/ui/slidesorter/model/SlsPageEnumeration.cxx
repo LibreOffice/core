@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
@@ -27,7 +30,7 @@ using namespace ::sd::slidesorter::model;
 namespace {
 
 class PageEnumerationImpl
-    : public Enumeration<SharedPageDescriptor>
+    : public Enumeration<SharedPageDescriptor>, private boost::noncopyable
 {
 public:
     inline PageEnumerationImpl (
@@ -62,9 +65,6 @@ private:
         one pointed to by mnIndex.
     */
     inline void AdvanceToNextValidElement (void);
-
-    // Assignment operator not implemented.
-    PageEnumerationImpl& operator= (const PageEnumerationImpl&);
 };
 
 } // end of anonymouse namespace

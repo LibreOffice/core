@@ -28,6 +28,7 @@
 #include <svx/objfac3d.hxx>
 #include <vcl/svapp.hxx>
 
+#include "registerinterfaces.hxx"
 #include "sddll.hxx"
 #include "app.hrc"
 #include "AnimationChildWindow.hxx"
@@ -100,10 +101,6 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-
-namespace sd { namespace ui { namespace table {
-    extern void RegisterInterfaces( SfxModule* pMod );
-} } }
 
 // Register all Factorys
 void SdDLL::RegisterFactorys()

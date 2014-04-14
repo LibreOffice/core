@@ -18,13 +18,9 @@
  */
 
 #include "CustomAnimationPanel.hxx"
+#include "createcustomanimationpanel.hxx"
 
 #include "ViewShellBase.hxx"
-
-
-namespace sd {
-    extern ::Window * createCustomAnimationPanel (::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame);
-}
 
 namespace sd { namespace sidebar {
 

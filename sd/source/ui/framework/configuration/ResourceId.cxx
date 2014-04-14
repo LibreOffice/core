@@ -27,6 +27,8 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ref.hxx>
 
+#include <facreg.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -43,7 +45,7 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sd { namespace framework {
 
 Reference<XInterface> SAL_CALL ResourceId_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     (void)rxContext;
     return Reference<XInterface>(static_cast<XWeak*>(new ::sd::framework::ResourceId()));

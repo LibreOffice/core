@@ -19,6 +19,7 @@
 
 
 #include "SlideSorterService.hxx"
+#include "facreg.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsProperties.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
@@ -59,7 +60,7 @@ namespace {
 //===== Service ===============================================================
 
 Reference<XInterface> SAL_CALL SlideSorterService_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     return Reference<XInterface>(static_cast<drawing::XDrawView*>(new SlideSorterService(rxContext)));
 }

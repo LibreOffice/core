@@ -36,6 +36,7 @@
 #include "PresentationViewShell.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "FrameView.hxx"
+#include "facreg.hxx"
 
 #include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
@@ -55,7 +56,7 @@ namespace sd { namespace framework {
 
 
 Reference<XInterface> SAL_CALL BasicViewFactory_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     return Reference<XInterface>(static_cast<XWeak*>(new BasicViewFactory(rxContext)));
 }

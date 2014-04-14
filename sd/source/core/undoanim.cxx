@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include "CustomAnimationCloner.hxx"
@@ -110,7 +113,7 @@ OUString UndoAnimation::GetComment() const
     return SdResId(STR_UNDO_ANIMATION).toString();
 }
 
-struct UndoAnimationPathImpl
+struct UndoAnimationPathImpl: private boost::noncopyable
 {
     SdPage*         mpPage;
     sal_Int32       mnEffectOffset;
@@ -147,11 +150,6 @@ struct UndoAnimationPathImpl
         }
         return pEffect;
     }
-
-    private:
-        UndoAnimationPathImpl( const UndoAnimationPathImpl& ); //not implemented
-        const UndoAnimationPathImpl& operator=( const UndoAnimationPathImpl& ); // not implemented
-
 };
 
 UndoAnimationPath::UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )

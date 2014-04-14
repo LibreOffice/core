@@ -19,6 +19,7 @@
 
 
 #include "PresenterPreviewCache.hxx"
+#include "facreg.hxx"
 
 #include "cache/SlsCacheContext.hxx"
 #include "tools/IdleDetection.hxx"
@@ -77,7 +78,7 @@ private:
 //===== Service ===============================================================
 
 Reference<XInterface> SAL_CALL PresenterPreviewCache_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     return Reference<XInterface>(static_cast<XWeak*>(new PresenterPreviewCache(rxContext)));
 }

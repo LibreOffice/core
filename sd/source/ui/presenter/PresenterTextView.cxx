@@ -19,6 +19,7 @@
 
 
 #include "PresenterTextView.hxx"
+#include "facreg.hxx"
 
 #include <i18nlangtag/mslangid.hxx>
 #include <cppcanvas/vclfactory.hxx>
@@ -52,7 +53,7 @@ namespace sd { namespace presenter {
 
 // Service
 Reference<XInterface> SAL_CALL PresenterTextViewService_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     return Reference<XInterface>(static_cast<XWeak*>(new PresenterTextView(rxContext)));
 }

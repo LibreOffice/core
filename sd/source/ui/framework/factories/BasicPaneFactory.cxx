@@ -19,6 +19,7 @@
 
 
 #include "BasicPaneFactory.hxx"
+#include "facreg.hxx"
 
 #include "ChildWindowPane.hxx"
 #include "FrameWindowPane.hxx"
@@ -86,7 +87,7 @@ public:
 
 
 Reference<XInterface> SAL_CALL BasicPaneFactory_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     return Reference<XInterface>(static_cast<XWeak*>(new BasicPaneFactory(rxContext)));
 }

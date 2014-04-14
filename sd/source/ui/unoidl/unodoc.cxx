@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "sddll.hxx"
+#include "facreg.hxx"
 #include "DrawDocShell.hxx"
 #include "GraphicDocShell.hxx"
 #include <osl/mutex.hxx>

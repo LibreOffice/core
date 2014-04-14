@@ -18,6 +18,7 @@
  */
 
 #include "PanelFactory.hxx"
+#include "facreg.hxx"
 #include "framework/Pane.hxx"
 #include "ViewShellBase.hxx"
 #include "DrawController.hxx"
@@ -65,7 +66,7 @@ Reference<lang::XEventListener> mxControllerDisposeListener;
 // ----- Service functions ----------------------------------------------------
 
 Reference<XInterface> SAL_CALL PanelFactory_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     return Reference<XInterface>(static_cast<XWeak*>(new PanelFactory(rxContext)));
 }

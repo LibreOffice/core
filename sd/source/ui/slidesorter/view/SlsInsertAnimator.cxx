@@ -144,7 +144,6 @@ private:
     RunContainer maRuns;
     InsertPosition maInsertPosition;
 
-    void StopAnimation (void);
     SharedPageObjectRun GetRun (
         view::Layouter& rLayouter,
         const InsertPosition& rInsertPosition,

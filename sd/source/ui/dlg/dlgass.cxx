@@ -254,7 +254,6 @@ public:
     OUString GetUiTextForCommand (const OUString& aCommandURL);
     Image GetUiIconForCommand (const OUString& aCommandURL);
 
-    DECL_LINK( StartScanHdl, void * );
     DECL_LINK( SelectFileHdl, void * );
     DECL_LINK( SelectRegionHdl, ListBox * );
     DECL_LINK( UpdatePreviewHdl, void * );

@@ -30,6 +30,7 @@
 #include "ConfigurationClassifier.hxx"
 #include "ViewShellBase.hxx"
 #include "DrawController.hxx"
+#include "facreg.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
@@ -44,7 +45,7 @@ using ::sd::framework::FrameworkHelper;
 namespace sd { namespace framework {
 
 Reference<XInterface> SAL_CALL ConfigurationController_createInstance (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
 {
     (void)rxContext;
     return static_cast<XWeak*>(new ConfigurationController());

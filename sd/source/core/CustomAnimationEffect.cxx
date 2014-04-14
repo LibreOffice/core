@@ -2355,12 +2355,6 @@ void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr& pEffect )
     }
 }
 
-class TextGroupMapImpl : public std::map< sal_Int32, CustomAnimationTextGroup* >
-{
-public:
-    CustomAnimationTextGroup* findGroup( sal_Int32 nGroupId );
-};
-
 CustomAnimationTextGroupPtr EffectSequenceHelper::findGroup( sal_Int32 nGroupId )
 {
     CustomAnimationTextGroupPtr aPtr;

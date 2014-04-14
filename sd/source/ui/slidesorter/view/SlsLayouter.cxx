@@ -227,9 +227,6 @@ protected:
 class VerticalImplementation : public Layouter::Implementation
 {
 public:
-    VerticalImplementation (
-        const SharedSdWindow& rpWindow,
-        const ::boost::shared_ptr<view::Theme>& rpTheme);
     VerticalImplementation (const Implementation& rImplementation);
 
     virtual Layouter::Orientation GetOrientation (void) const SAL_OVERRIDE;

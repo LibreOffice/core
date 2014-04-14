@@ -35,7 +35,9 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <editeng/unofield.hxx>
+#include <notifydocumentevent.hxx>
 #include <unomodel.hxx>
+#include <unopool.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/svapp.hxx>
@@ -108,8 +110,6 @@
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
-
-extern uno::Reference< uno::XInterface > SdUnoCreatePool( SdDrawDocument* pDrawModel );
 
 class SdUnoForbiddenCharsTable : public SvxUnoForbiddenCharsTable,
                                  public SfxListener
@@ -767,8 +767,6 @@ uno::Reference< container::XNameContainer > SAL_CALL SdXImpressDocument::getCust
 
     return xCustomPres;
 }
-
-extern uno::Reference< presentation::XPresentation > createPresentation( SdXImpressDocument& rModel );
 
 // XPresentationSupplier
 uno::Reference< presentation::XPresentation > SAL_CALL SdXImpressDocument::getPresentation()
