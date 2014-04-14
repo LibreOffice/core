@@ -275,8 +275,6 @@ public:
     /** Returns the BIFF drawing page for this sheet (BIFF2-BIFF8 only). */
     inline BiffSheetDrawing& getBiffDrawing() const { return *mxBiffDrawing; }
 
-    /** Changes the current sheet type. */
-    inline void         setSheetType( WorksheetType eSheetType ) { meSheetType = eSheetType; }
     /** Sets a column or row page break described in the passed struct. */
     void                setPageBreak( const PageBreakModel& rModel, bool bRowBreak );
     /** Inserts the hyperlink URL into the spreadsheet. */

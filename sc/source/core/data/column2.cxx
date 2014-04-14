@@ -2500,11 +2500,6 @@ copyFirstFormulaBlock(
     return rCxt.setCachedColArray(nTab, nCol, pNumArray, pStrArray);
 }
 
-struct FiniteValueFinder : std::unary_function<double, bool>
-{
-    bool operator() (double f) const { return !rtl::math::isNan(f); }
-};
-
 struct NonNullStringFinder : std::unary_function<const rtl_uString*, bool>
 {
     bool operator() (const rtl_uString* p) const { return p != NULL; }

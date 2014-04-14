@@ -319,7 +319,7 @@ private:
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< table::XCellRange > m_xRange;
     uno::Reference< uno::XComponentContext > mxContext;
-    SingleRangeIndexAccess(); // not defined
+
 public:
     SingleRangeIndexAccess( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< table::XCellRange >& xRange ):mxParent( xParent ), m_xRange( xRange ), mxContext( xContext ) {}
     // XIndexAccess
@@ -603,7 +603,6 @@ public:
 
 struct CellPos
 {
-    CellPos():m_nRow(-1), m_nCol(-1), m_nArea(0) {};
     CellPos( sal_Int32 nRow, sal_Int32 nCol, sal_Int32 nArea ):m_nRow(nRow), m_nCol(nCol), m_nArea( nArea ) {};
 sal_Int32 m_nRow;
 sal_Int32 m_nCol;

@@ -17,34 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/childwin.hxx>
-#include <sfx2/objsh.hxx>
+#ifndef INCLUDED_SC_SOURCE_UI_VIEW_OLKACT_HXX
+#define INCLUDED_SC_SOURCE_UI_VIEW_OLKACT_HXX
 
-#include "document.hxx"
-#include "viewdata.hxx"
-#include "drawview.hxx"
-#include "drawpage.hxx"
-#include "drwlayer.hxx"
-#include "olkact.hxx"
+#include <sal/config.h>
 
-// STATIC DATA -----------------------------------------------------------
+class ScViewData;
 
-void ActivateOlk( ScViewData* /* pViewData */ )
-{
-    // Browser fuer Virtual Controls fuellen
-    //  VC's und den Browser dazu gibts nicht mehr...
+void ActivateOlk(ScViewData * pViewData);
 
-    //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
-}
+void DeActivateOlk(ScViewData * pViewData);
 
-void DeActivateOlk( ScViewData* /* pViewData */ )
-{
-    // Browser fuer Virtual Controls fuellen
-    //  VC's und den Browser dazu gibts nicht mehr...
-
-    //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
-}
-
-
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

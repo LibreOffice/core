@@ -351,7 +351,6 @@ class ScXMLMapContext : public SvXMLImportContext
     OUString msCondition;
     OUString msBaseCell;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
 

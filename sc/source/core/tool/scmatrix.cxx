@@ -25,6 +25,7 @@
 #include "mtvelements.hxx"
 #include "compare.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <svl/zforlist.hxx>
 #include "svl/sharedstring.hxx"
 #include <tools/stream.hxx>
@@ -188,15 +189,13 @@ _Comp CompareMatrixElemFunc<_Comp>::maComp;
 
 }
 
-class ScMatrixImpl
+class ScMatrixImpl: private boost::noncopyable
 {
     MatrixImplType maMat;
     MatrixImplType maMatFlag;
     ScInterpreter* pErrorInterpreter;
     bool            mbCloneIfConst; // Whether the matrix is cloned with a CloneIfConst() call.
 
-    ScMatrixImpl();
-    ScMatrixImpl(const ScMatrixImpl&);
 public:
     ScMatrixImpl(SCSIZE nC, SCSIZE nR);
     ScMatrixImpl(SCSIZE nC, SCSIZE nR, double fInitVal);

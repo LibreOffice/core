@@ -24,18 +24,13 @@
 
 #include "drawview.hxx"
 #include "drwlayer.hxx"
+#include "imapwrap.hxx"
 #include "viewdata.hxx"
 #include "dbfunc.hxx"
 #include "document.hxx"
 #include "userdat.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
-
-void ScIMapDlgSet( const Graphic& rGraphic, const ImageMap* pImageMap,
-                    const TargetList* pTargetList, void* pEditingObj );     // imapwrap
-sal_uInt16 ScIMapChildWindowId();
-
-// STATIC DATA -----------------------------------------------------------
 
 ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     FmFormView( pData->GetDocument()->GetDrawLayer(), pOut ),

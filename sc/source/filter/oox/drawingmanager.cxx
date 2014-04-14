@@ -68,8 +68,6 @@ const sal_uInt8 BIFF_OBJ_LINE_THIN          = 1;
 const sal_uInt8 BIFF_OBJ_LINE_MEDIUM        = 2;
 const sal_uInt8 BIFF_OBJ_LINE_THICK         = 3;
 
-const sal_uInt8 BIFF_OBJ_LINE_AUTO          = 0x01;
-
 const sal_uInt8 BIFF_OBJ_ARROW_OPEN         = 1;
 const sal_uInt8 BIFF_OBJ_ARROW_FILLED       = 2;
 const sal_uInt8 BIFF_OBJ_ARROW_OPENBOTH     = 3;
@@ -86,8 +84,6 @@ const sal_uInt8 BIFF_OBJ_FILL_AUTOCOLOR     = 65;
 const sal_uInt8 BIFF_OBJ_PATT_NONE          = 0;
 const sal_uInt8 BIFF_OBJ_PATT_SOLID         = 1;
 
-const sal_uInt8 BIFF_OBJ_FILL_AUTO          = 0x01;
-
 } // namespace
 
 
@@ -102,14 +98,6 @@ BiffObjLineModel::BiffObjLineModel() :
 {
 }
 
-BiffInputStream& operator>>( BiffInputStream& rStrm, BiffObjLineModel& rModel )
-{
-    sal_uInt8 nFlags;
-    rStrm >> rModel.mnColorIdx >> rModel.mnStyle >> rModel.mnWidth >> nFlags;
-    rModel.mbAuto = getFlag( nFlags, BIFF_OBJ_LINE_AUTO );
-    return rStrm;
-}
-
 BiffObjFillModel::BiffObjFillModel() :
     mnBackColorIdx( BIFF_OBJ_LINE_AUTOCOLOR ),
     mnPattColorIdx( BIFF_OBJ_FILL_AUTOCOLOR ),
@@ -117,15 +105,6 @@ BiffObjFillModel::BiffObjFillModel() :
     mbAuto( true )
 {
 }
-
-BiffInputStream& operator>>( BiffInputStream& rStrm, BiffObjFillModel& rModel )
-{
-    sal_uInt8 nFlags;
-    rStrm >> rModel.mnBackColorIdx >> rModel.mnPattColorIdx >> rModel.mnPattern >> nFlags;
-    rModel.mbAuto = getFlag( nFlags, BIFF_OBJ_FILL_AUTO );
-    return rStrm;
-}
-
 
 // BIFF drawing objects
 

@@ -135,11 +135,6 @@ SfxViewShell* pScActiveViewShell = NULL;            //! als Member !!!!!
 sal_uInt16 nScClickMouseModifier = 0;                   //! dito
 sal_uInt16 nScFillModeMouseModifier = 0;                //! dito
 
-// Hack: ScGlobal::GetUserList() muss InitAppOptions in der UI aufrufen,
-//       damit UserList aus Cfg geladen wird
-
-void global_InitAppOptions();
-
 //      statische Funktionen
 
 bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,

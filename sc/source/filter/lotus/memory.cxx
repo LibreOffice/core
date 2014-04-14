@@ -22,6 +22,7 @@
 
 
 #include "scitems.hxx"
+#include "scmem.h"
 #include <svx/algitem.hxx>
 #include <editeng/justifyitem.hxx>
 

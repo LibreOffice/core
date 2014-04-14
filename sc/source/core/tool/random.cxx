@@ -12,6 +12,8 @@
 
 #include <boost/random.hpp>
 
+#include <random.hxx>
+
 // this is nothing but a simple wrapper around
 // the boost random generators
 

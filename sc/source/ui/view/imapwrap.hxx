@@ -17,34 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/childwin.hxx>
-#include <sfx2/objsh.hxx>
+#ifndef INCLUDED_SC_SOURCE_UI_VIEW_IMAPWRAP_HXX
+#define INCLUDED_SC_SOURCE_UI_VIEW_IMAPWRAP_HXX
 
-#include "document.hxx"
-#include "viewdata.hxx"
-#include "drawview.hxx"
-#include "drawpage.hxx"
-#include "drwlayer.hxx"
-#include "olkact.hxx"
+#include <sal/config.h>
 
-// STATIC DATA -----------------------------------------------------------
+#include <sal/types.h>
+#include <sfx2/frame.hxx>
 
-void ActivateOlk( ScViewData* /* pViewData */ )
-{
-    // Browser fuer Virtual Controls fuellen
-    //  VC's und den Browser dazu gibts nicht mehr...
+class Graphic;
+class ImageMap;
+class SvxIMapDlg;
 
-    //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
-}
+SvxIMapDlg * ScGetIMapDlg();
 
-void DeActivateOlk( ScViewData* /* pViewData */ )
-{
-    // Browser fuer Virtual Controls fuellen
-    //  VC's und den Browser dazu gibts nicht mehr...
+sal_uInt16 ScIMapChildWindowId();
 
-    //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
-}
+ImageMap const & ScIMapDlgGetMap(SvxIMapDlg * pDlg);
 
+void const * ScIMapDlgGetObj(SvxIMapDlg * pDlg);
 
+void ScIMapDlgSet(
+    Graphic const & rGraphic, ImageMap const * pImageMap,
+    TargetList const * pTargetList, void * pEditingObj);
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

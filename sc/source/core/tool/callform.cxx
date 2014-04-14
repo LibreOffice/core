@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <osl/module.hxx>
@@ -74,26 +77,17 @@ typedef void (CALLTYPE* FARPROC) ( void );
 #define UNADVICE                "Unadvice"
 #endif
 
-class ModuleData
+class ModuleData: private boost::noncopyable
 {
 friend class ModuleCollection;
     OUString aName;
     osl::Module* pInstance;
 public:
     ModuleData(const OUString& rStr, osl::Module* pInst) : aName(rStr), pInstance(pInst) {}
-    ModuleData(const ModuleData& rData) : aName(rData.aName)
-    {
-#ifndef DISABLE_DYNLOADING
-        pInstance = new osl::Module(aName);
-#else
-        pInstance = NULL;
-#endif
-    }
     ~ModuleData() { delete pInstance; }
 
     const OUString& GetName() const { return aName; }
     osl::Module*    GetInstance() const { return pInstance; }
-    void            FreeInstance() { delete pInstance; pInstance = 0; }
 };
 
 FuncData::FuncData(const ModuleData*pModule,
@@ -134,7 +128,6 @@ class ModuleCollection
     MapType maData;
 public:
     ModuleCollection() {}
-    ModuleCollection(const ModuleCollection& r) : maData(r.maData) {}
 
     const ModuleData* findByName(const OUString& rName) const;
     void insert(ModuleData* pNew);

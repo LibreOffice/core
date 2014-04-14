@@ -21,6 +21,7 @@
 
 #include "document.hxx"
 #include "drwlayer.hxx"
+#include "undoolk.hxx"
 
 SdrUndoAction* GetSdrUndoAction( ScDocument* pDoc )
 {

@@ -36,27 +36,6 @@ void ScPivotLayoutTreeList::Setup(ScPivotLayoutDialog* pParent, SvPivotTreeListT
     meType = eType;
 }
 
-OUString lclFunctName(const sal_uInt16 nFunctionMask)
-{
-    switch (nFunctionMask)
-    {
-        case PIVOT_FUNC_SUM:       return OUString("Sum");
-        case PIVOT_FUNC_COUNT:     return OUString("Count");
-        case PIVOT_FUNC_AVERAGE:   return OUString("Mean");
-        case PIVOT_FUNC_MAX:       return OUString("Max");
-        case PIVOT_FUNC_MIN:       return OUString("Min");
-        case PIVOT_FUNC_PRODUCT:   return OUString("Product");
-        case PIVOT_FUNC_COUNT_NUM: return OUString("Count");
-        case PIVOT_FUNC_STD_DEV:   return OUString("StDev");
-        case PIVOT_FUNC_STD_DEVP:  return OUString("StDevP");
-        case PIVOT_FUNC_STD_VAR:   return OUString("Var");
-        case PIVOT_FUNC_STD_VARP:  return OUString("VarP");
-        default:
-            break;
-    }
-    return OUString();
-}
-
 bool ScPivotLayoutTreeList::DoubleClickHdl()
 {
     ScItemValue* pCurrentItemValue = (ScItemValue*) GetCurEntry()->GetUserData();

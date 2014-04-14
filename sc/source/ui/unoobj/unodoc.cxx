@@ -22,6 +22,7 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include "appluno.hxx"
 #include "scmod.hxx"
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>

@@ -225,7 +225,6 @@ public:
     SCCOL           GetCol() const          { return nCol; }
     SCROW           GetRow() const          { return nRow; }
     ScFilterBoxMode GetMode() const         { return eMode; }
-    sal_Bool            IsDataSelect() const    { return (eMode == SC_FILTERBOX_DATASELECT); }
     void            EndInit();
     sal_Bool            IsInInit() const        { return bInit; }
     void            SetCancelled()          { bCancelled = sal_True; }

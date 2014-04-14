@@ -27,9 +27,6 @@
 #include "filtopt.hxx"
 #include "ftools.hxx"
 
-extern FltError ScImportLotus123old( SvStream&, ScDocument*, rtl_TextEncoding eSrc );
-        // alter Krempel in filter.cxx!
-
 FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, rtl_TextEncoding eSrc )
 {
         ScFilterOptions aFilterOpt;

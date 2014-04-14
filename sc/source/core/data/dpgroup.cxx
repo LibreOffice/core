@@ -119,8 +119,6 @@ public:
     virtual std::vector<ScDPItemData> getMatchValues() const SAL_OVERRIDE;
 
 private:
-    ScDPGroupDateFilter(); // disabled
-
     std::vector<ScDPItemData> maValues;
     Date             maNullDate;
     ScDPNumGroupInfo maNumInfo;

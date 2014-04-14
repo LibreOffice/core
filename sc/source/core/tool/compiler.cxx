@@ -94,16 +94,6 @@ static const sal_Char* pInternal[2] = { "TTT", "__DEBUG_VAR" };
 
 using namespace ::com::sun::star::i18n;
 
-class ScCompilerRecursionGuard
-{
-private:
-            short&              rRecursion;
-public:
-                                ScCompilerRecursionGuard( short& rRec )
-                                    : rRecursion( rRec ) { ++rRecursion; }
-                                ~ScCompilerRecursionGuard() { --rRecursion; }
-};
-
 void ScCompiler::fillFromAddInMap( NonConstOpCodeMapPtr xMap,FormulaGrammar::Grammar _eGrammar  ) const
 {
     size_t nSymbolOffset;

@@ -130,6 +130,8 @@ class ScFormatFilter {
     SC_DLLPUBLIC static ScFormatFilterPlugin &Get();
 };
 
+FltError ScImportLotus123old( SvStream&, ScDocument*, rtl_TextEncoding eSrc );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

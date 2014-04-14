@@ -28,6 +28,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/whiter.hxx>
 
+#include "imapwrap.hxx"
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
 #include "tabview.hxx"
@@ -39,11 +40,6 @@
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 
 class SvxIMapDlg;
-
-sal_uInt16          ScIMapChildWindowId();
-SvxIMapDlg*     ScGetIMapDlg();
-const void*     ScIMapDlgGetObj( SvxIMapDlg* pDlg );
-const ImageMap& ScIMapDlgGetMap( SvxIMapDlg* pDlg );
 
 void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
 {

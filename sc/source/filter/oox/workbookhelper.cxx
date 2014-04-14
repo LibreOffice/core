@@ -148,7 +148,6 @@ public:
     }
 
     ScDocument& getScDocument() { return *mpDoc; }
-    const ScDocument& getScDocument() const { return *mpDoc; }
 
     ScDocShell& getDocShell();
     ScDocumentImport& getDocImport();

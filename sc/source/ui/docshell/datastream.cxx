@@ -8,6 +8,7 @@
  */
 
 #include <datastream.hxx>
+#include <datastreamgettime.hxx>
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
@@ -37,8 +38,6 @@
 #include <queue>
 
 namespace sc {
-
-extern double datastream_get_time(int nIdx);
 
 enum {
     DEBUG_TIME_IMPORT,

@@ -260,6 +260,8 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
 
 #define SC_MOD() ( *(ScModule**) GetAppData(SHL_CALC) )
 
+void global_InitAppOptions();
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

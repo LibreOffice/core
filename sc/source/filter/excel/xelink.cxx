@@ -820,11 +820,13 @@ void XclExpTabInfo::CalcXclIndexes()
 typedef ::std::pair< OUString, SCTAB > XclExpTabName;
 typedef ::std::vector< XclExpTabName >  XclExpTabNameVec;
 
-inline bool operator<( const XclExpTabName& rArg1, const XclExpTabName& rArg2 )
-{
-    // compare the sheet names only
-    return ScGlobal::GetCollator()->compareString( rArg1.first, rArg2.first ) < 0;
-}
+struct XclExpTabNameSort {
+    bool operator ()( const XclExpTabName& rArg1, const XclExpTabName& rArg2 )
+    {
+        // compare the sheet names only
+        return ScGlobal::GetCollator()->compareString( rArg1.first, rArg2.first ) < 0;
+    }
+};
 
 void XclExpTabInfo::CalcSortedIndexes()
 {
@@ -838,7 +840,7 @@ void XclExpTabInfo::CalcSortedIndexes()
         rDoc.GetName( nScTab, aVec[ nScTab ].first );
         aVec[ nScTab ].second = nScTab;
     }
-    ::std::sort( aVec.begin(), aVec.end() );
+    ::std::sort( aVec.begin(), aVec.end(), XclExpTabNameSort() );
 
     // fill index vectors from sorted sheet name vector
     maFromSortedVec.resize( mnScCnt );

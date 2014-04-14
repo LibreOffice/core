@@ -42,6 +42,7 @@
 #include <svl/languageoptions.hxx>
 #include "editeng/editstat.hxx"
 
+#include "appluno.hxx"
 #include "xmlimprt.hxx"
 #include "document.hxx"
 #include "docsh.hxx"
@@ -243,7 +244,6 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
 class ScXMLDocContext_Impl : public virtual SvXMLImportContext
 {
 protected:
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -319,8 +319,6 @@ SvXMLImportContext *ScXMLFlatDocContext_Impl::CreateChildContext(
 
 class ScXMLBodyContext_Impl : public SvXMLImportContext
 {
-    const ScXMLImport& GetScImport() const
-    { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:

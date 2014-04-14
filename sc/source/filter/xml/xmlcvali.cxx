@@ -89,7 +89,6 @@ class ScXMLHelpMessageContext : public SvXMLImportContext
 
     ScXMLContentValidationContext* pValidationContext;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -120,7 +119,6 @@ class ScXMLErrorMessageContext : public SvXMLImportContext
 
     ScXMLContentValidationContext* pValidationContext;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -148,7 +146,6 @@ class ScXMLErrorMacroContext : public SvXMLImportContext
 
     ScXMLContentValidationContext*  pValidationContext;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:

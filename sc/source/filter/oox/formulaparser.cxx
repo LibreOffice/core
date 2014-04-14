@@ -478,7 +478,6 @@ protected:
     size_t              popOperandSize();
 
     ApiToken&           getOperandToken( size_t nOpCountFromEnd, size_t nOpIndex, size_t nTokenIndex );
-    void                removeOperand( size_t nOpCountFromEnd, size_t nOpIndex );
 
     bool                pushOperandToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = 0 );
     bool                pushAnyOperandToken( const Any& rAny, sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = 0 );
@@ -532,7 +531,6 @@ private:
 
     void                initReference2d( SingleReference& orApiRef ) const;
     void                initReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bSameSheet ) const;
-    void                convertColRow( SingleReference& orApiRef, const BinSingleRef2d& rRef, bool bRelativeAsOffset ) const;
     void                convertReference( SingleReference& orApiRef, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const;
     void                convertReference( ComplexReference& orApiRef, const BinSingleRef2d& rRef1, const BinSingleRef2d& rRef2, bool bDeleted, bool bRelativeAsOffset ) const;
     void                convertReference2d( SingleReference& orApiRef, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const;

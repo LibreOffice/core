@@ -141,12 +141,10 @@ public:
     void SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth );
     void        SetAutoText( const OUString& rAutoText );
 
-    const ScPatternAttr*    GetPattern() const       { return pPattern; }
     SvxCellOrientation      GetOrient() const        { return eAttrOrient; }
     SvxCellHorJustify       GetHorJust() const       { return eAttrHorJust; }
     SvxCellVerJustify       GetVerJust() const       { return eAttrVerJust; }
     SvxCellJustifyMethod    GetHorJustMethod() const { return eAttrHorJustMethod; }
-    SvxCellJustifyMethod    GetVerJustMethod() const { return eAttrVerJustMethod; }
     const SvxMarginItem*    GetMargin() const        { return pMargin; }
 
     sal_uInt16              GetLeftTotal() const     { return pMargin->GetLeftMargin() + nIndent; }

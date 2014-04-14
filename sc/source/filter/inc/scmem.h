@@ -20,6 +20,10 @@
 #ifndef SC_SCMEM_H
 #define SC_SCMEM_H
 
+#include <sal/config.h>
+
+#include <sal/types.h>
+
 sal_Bool MemNew( void );
 void MemDelete( void );
 

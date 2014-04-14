@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include "olkact.hxx"
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
@@ -87,9 +90,6 @@
 #include <documentlinkmgr.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
-
-void ActivateOlk( ScViewData* pViewData );
-void DeActivateOlk( ScViewData* pViewData );
 
 extern SfxViewShell* pScActiveViewShell;            // global.cxx
 

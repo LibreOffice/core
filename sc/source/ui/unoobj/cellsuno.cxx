@@ -9517,12 +9517,6 @@ class ScUniqueFormatsEntry
 
 public:
                         ScUniqueFormatsEntry() : eState( STATE_EMPTY ) {}
-                        ScUniqueFormatsEntry( const ScUniqueFormatsEntry& r ) :
-                            eState( r.eState ),
-                            aSingleRange( r.aSingleRange ),
-                            aJoinedRanges( r.aJoinedRanges ),
-                            aCompletedRanges( r.aCompletedRanges ),
-                            aReturnRanges( r.aReturnRanges ) {}
                         ~ScUniqueFormatsEntry() {}
 
     void                Join( const ScRange& rNewRange );

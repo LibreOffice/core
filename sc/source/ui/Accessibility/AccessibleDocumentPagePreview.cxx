@@ -485,17 +485,6 @@ void ScNotesChildren::DataChanged(const Rectangle& rVisRect)
     }
 }
 
-struct ScChangeOffset
-{
-    sal_Int32 mnDiff;
-    ScChangeOffset(sal_Int32 nDiff) : mnDiff(nDiff) {}
-    void operator() (const ScAccNote& rNote)
-    {
-        if (rNote.mpTextHelper)
-            rNote.mpTextHelper->SetStartIndex(rNote.mpTextHelper->GetStartIndex() + mnDiff);
-    }
-};
-
 inline ScDocument* ScNotesChildren::GetDocument() const
 {
     ScDocument* pDoc = NULL;

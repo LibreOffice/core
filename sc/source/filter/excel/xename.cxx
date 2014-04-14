@@ -63,8 +63,6 @@ public:
     /** Sets the name's symbol value
         @param sValue   the name's symbolic value */
     void                SetSymbol( const OUString& rValue );
-    /** Returns the name's symbol value */
-    inline const OUString& GetSymbol() const { return msSymbol; }
 
     /** Returns the original name (title) of this defined name. */
     inline const OUString& GetOrigName() const { return maOrigName; }
@@ -172,9 +170,6 @@ private:
     /** Creates a new NAME record for the passed user-defined name.
         @return  The 1-based NAME record index used elsewhere in the Excel file. */
     sal_uInt16          CreateName( SCTAB nTab, const ScRangeData& rRangeData );
-    /** Creates a new NAME record for the passed database range.
-        @return  The 1-based NAME record index used elsewhere in the Excel file. */
-    sal_uInt16          CreateName( const ScDBData& rDBData );
 
     /** Creates NAME records for all built-in names in the document. */
     void                CreateBuiltInNames();

@@ -251,10 +251,6 @@ public:
     /** Returns the RGB color data for a (non-zero-based) Excel palette entry.
         @return  The color from current or default palette or COL_AUTO, if nothing else found. */
     ColorData           GetColorData( sal_uInt16 nXclIndex ) const;
-    /** Returns the color for a (non-zero-based) Excel palette entry.
-        @return  The color from current or default palette or COL_AUTO, if nothing else found. */
-    inline Color        GetColor( sal_uInt16 nXclIndex ) const
-                            { return Color( GetColorData( nXclIndex ) ); }
 
     /** Returns true, if all colors of the palette are equal to default palette colors. */
     bool                IsDefaultPalette() const;

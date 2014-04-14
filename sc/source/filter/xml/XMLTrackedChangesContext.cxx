@@ -49,7 +49,6 @@ class ScXMLChangeInfoContext : public SvXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     sal_uInt32                          nParagraphCount;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -71,7 +70,6 @@ class ScXMLBigRangeContext : public SvXMLImportContext
 {
     ScBigRange&         rBigRange;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -108,7 +106,6 @@ class ScXMLCellContentDeletionContext : public SvXMLImportContext
     sal_Bool                            bBigRange;
     sal_Bool                            bContainsCell;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -130,7 +127,6 @@ class ScXMLDependenceContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -152,7 +148,6 @@ class ScXMLDependingsContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -174,7 +169,6 @@ class ScXMLChangeDeletionContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -196,7 +190,6 @@ class ScXMLDeletionsContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -225,7 +218,6 @@ class ScXMLChangeTextPContext : public SvXMLImportContext
     SvXMLImportContext*         pTextPContext;
     sal_uInt16                      nPrefix;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -263,7 +255,6 @@ class ScXMLChangeCellContext : public SvXMLImportContext
     sal_Bool                bString;
     sal_Bool                bFormula;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -305,7 +296,6 @@ class ScXMLPreviousContext : public SvXMLImportContext
     sal_uInt16                          nType;
     sal_uInt8                           nMatrixFlag;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -328,7 +318,6 @@ class ScXMLContentChangeContext : public SvXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScBigRange                          aBigRange;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -349,7 +338,6 @@ class ScXMLInsertionContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -370,7 +358,6 @@ class ScXMLInsertionCutOffContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -391,7 +378,6 @@ class ScXMLMovementCutOffContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -412,7 +398,6 @@ class ScXMLCutOffsContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -433,7 +418,6 @@ class ScXMLDeletionContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -456,7 +440,6 @@ class ScXMLMovementContext : public SvXMLImportContext
     ScBigRange                          aTargetRange;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
@@ -477,7 +460,6 @@ class ScXMLRejectionContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:

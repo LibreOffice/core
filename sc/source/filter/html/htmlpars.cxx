@@ -1845,11 +1845,8 @@ public:
     explicit            ScHTMLTableMap( ScHTMLTable& rParentTable );
     virtual             ~ScHTMLTableMap();
 
-    inline iterator     begin() { return maTables.begin(); }
     inline const_iterator begin() const { return maTables.begin(); }
-    inline iterator     end() { return maTables.end(); }
     inline const_iterator end() const { return maTables.end(); }
-    inline bool         empty() const { return maTables.empty(); }
 
     /** Returns the specified table.
         @param nTableId  Unique identifier of the table.
@@ -1920,7 +1917,6 @@ public:
 
     inline bool         is() const { return mpTableMap && maIter != maEnd; }
     inline ScHTMLTable* operator->() { return maIter->second.get(); }
-    inline ScHTMLTable& operator*() { return *maIter->second; }
     inline ScHTMLTableIterator& operator++() { ++maIter; return *this; }
 
 private:

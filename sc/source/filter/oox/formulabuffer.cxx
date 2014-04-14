@@ -314,15 +314,12 @@ void processSheetFormulaCells(
         applyCellFormulaValues(rDoc, *rItem.mpCellFormulaValues);
 }
 
-class WorkerThread : public salhelper::Thread
+class WorkerThread: public salhelper::Thread, private boost::noncopyable
 {
     ScDocumentImport& mrDoc;
     FormulaBuffer::SheetItem& mrItem;
     boost::scoped_ptr<SvNumberFormatter> mpFormatter;
     const uno::Sequence<sheet::ExternalLinkInfo>& mrExternalLinks;
-
-    WorkerThread( const WorkerThread& );
-    WorkerThread& operator= ( const WorkerThread& );
 
 public:
     WorkerThread(

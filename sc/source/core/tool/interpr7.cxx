@@ -17,6 +17,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 
 #include "libxml/xpath.h"
+#include <datastreamgettime.hxx>
 #include <dpobject.hxx>
 #include <document.hxx>
 
@@ -24,12 +25,6 @@
 #include <cstring>
 
 using namespace com::sun::star;
-
-namespace sc
-{
-    // punch through into the datastream impl.
-    extern double datastream_get_time( int nIdx );
-}
 
 // TODO: Add new methods for ScInterpreter here.
 

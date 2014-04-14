@@ -96,7 +96,6 @@ class WindowEnumImpl : public  WindowComponentEnumImpl
 {
     uno::Any m_aApplication;
 public:
-    WindowEnumImpl(const uno::Reference< uno::XComponentContext >& xContext, const Components& components, const uno::Any& aApplication ):WindowComponentEnumImpl( xContext, components ), m_aApplication( aApplication ){}
     WindowEnumImpl( const uno::Reference< uno::XComponentContext >& xContext,  const uno::Any& aApplication ): WindowComponentEnumImpl( xContext ), m_aApplication( aApplication ) {}
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
