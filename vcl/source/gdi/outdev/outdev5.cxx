@@ -30,62 +30,6 @@
 #include <outdata.hxx>
 #include <outdev.h>
 
-void OutputDevice::DrawRect( const Rectangle& rRect,
-                             sal_uLong nHorzRound, sal_uLong nVertRound )
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRoundRectAction( rRect, nHorzRound, nVertRound ) );
-
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
-        return;
-
-    const Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
-
-    if ( aRect.IsEmpty() )
-        return;
-
-    nHorzRound = ImplLogicWidthToDevicePixel( nHorzRound );
-    nVertRound = ImplLogicHeightToDevicePixel( nVertRound );
-
-    // we need a graphics
-    if ( !mpGraphics )
-    {
-        if ( !ImplGetGraphics() )
-            return;
-    }
-
-    if ( mbInitClipRegion )
-        ImplInitClipRegion();
-    if ( mbOutputClipped )
-        return;
-
-    if ( mbInitLineColor )
-        ImplInitLineColor();
-    if ( mbInitFillColor )
-        ImplInitFillColor();
-
-    if ( !nHorzRound && !nVertRound )
-        mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), this );
-    else
-    {
-        const Polygon aRoundRectPoly( aRect, nHorzRound, nVertRound );
-
-        if ( aRoundRectPoly.GetSize() >= 2 )
-        {
-            const SalPoint* pPtAry = (const SalPoint*) aRoundRectPoly.GetConstPointAry();
-
-            if ( !mbFillColor )
-                mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry, this );
-            else
-                mpGraphics->DrawPolygon( aRoundRectPoly.GetSize(), pPtAry, this );
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawRect( rRect, nHorzRound, nVertRound );
-}
-
 void OutputDevice::DrawEllipse( const Rectangle& rRect )
 {
 
