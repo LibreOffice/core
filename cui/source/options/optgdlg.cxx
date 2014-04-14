@@ -1668,13 +1668,16 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
 
 IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit*, pEd )
 {
-    OUString aPatterns( pEd->GetText());
+    const OUString aPatterns( pEd->GetText());
+    OUStringBuffer aBuf( aPatterns);
+    sal_Int32 nChar = 0;
     bool bValid = true;
+    bool bModified = false;
     if (!aPatterns.isEmpty())
     {
-        for (sal_Int32 nIndex=0; nIndex >= 0 && bValid; /*nop*/)
+        for (sal_Int32 nIndex=0; nIndex >= 0 && bValid; ++nChar)
         {
-            OUString aPat( aPatterns.getToken( 0, ';', nIndex));
+            const OUString aPat( aPatterns.getToken( 0, ';', nIndex));
             if (aPat.isEmpty() && nIndex < 0)
             {
                 // Indicating failure when about to append a pattern is too
@@ -1691,36 +1694,64 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit*, pEd )
                 bool bSep = true;
                 for (sal_Int32 i = 0; i < aPat.getLength() && bValid; /*nop*/)
                 {
-                    sal_uInt32 c = aPat.iterateCodePoints( &i);
+                    const sal_Int32 j = i;
+                    const sal_uInt32 c = aPat.iterateCodePoints( &i);
                     // Only one Y,M,D per pattern, separated by any character(s).
                     switch (c)
                     {
+                        case 'y':
                         case 'Y':
                             if (bY || !bSep)
                                 bValid = false;
+                            else if (c == 'y')
+                            {
+                                aBuf[nChar] = 'Y';
+                                bModified = true;
+                            }
                             bY = true;
                             bSep = false;
                             break;
+                        case 'm':
                         case 'M':
                             if (bM || !bSep)
                                 bValid = false;
+                            else if (c == 'm')
+                            {
+                                aBuf[nChar] = 'M';
+                                bModified = true;
+                            }
                             bM = true;
                             bSep = false;
                             break;
+                        case 'd':
                         case 'D':
                             if (bD || !bSep)
                                 bValid = false;
+                            else if (c == 'd')
+                            {
+                                aBuf[nChar] = 'D';
+                                bModified = true;
+                            }
                             bD = true;
                             bSep = false;
                             break;
                         default:
                             bSep = true;
                     }
+                    nChar += i-j;
                 }
                 // At least one of Y,M,D
                 bValid &= (bY || bM || bD);
             }
         }
+    }
+    if (bModified)
+    {
+        // Do not use SetText(...,GetSelection()) because internally the
+        // reference's pointer of the selection is obtained resulting in the
+        // entire text being selected at the end.
+        Selection aSelection( pEd->GetSelection());
+        pEd->SetText( aBuf.makeStringAndClear(), aSelection);
     }
     if (bValid)
     {
