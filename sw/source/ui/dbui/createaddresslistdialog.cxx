@@ -402,7 +402,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                 sal_Int32 nIndex = 0;
                 for( sal_Int32 nToken = 0; nToken < nHeaders; ++nToken)
                 {
-                    OUString sHeader = sLine.getToken( 0, '\t', nIndex );
+                    const OUString sHeader = sLine.getToken( 0, '\t', nIndex );
                     OSL_ENSURE(sHeader.getLength() > 2 &&
                             sHeader.startsWith("\"") && sHeader.endsWith("\""),
                             "Wrong format of header");
@@ -420,7 +420,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                 sal_Int32 nIndex = 0;
                 for( sal_Int32 nToken = 0; nToken < nDataCount; ++nToken)
                 {
-                    OUString sData = sLine.getToken( 0, '\t', nIndex );
+                    const OUString sData = sLine.getToken( 0, '\t', nIndex );
                     OSL_ENSURE( sData.startsWith("\"") && sData.endsWith("\""),
                             "Wrong format of line");
                     if(sData.getLength() >= 2)
@@ -548,19 +548,17 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
         sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
         uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
-        OUString sPath( SvtPathOptions().SubstituteVariable(
-                    OUString("$(userurl)/database") ));
+        const OUString sPath( SvtPathOptions().SubstituteVariable("$(userurl)/database") );
         aDlgHelper.SetDisplayDirectory( sPath );
         uno::Reference< XFilterManager > xFltMgr(xFP, uno::UNO_QUERY);
-        OUString sCSV("*.csv");
-        xFltMgr->appendFilter( m_sAddressListFilterName, sCSV );
+        xFltMgr->appendFilter( m_sAddressListFilterName, "*.csv" );
         xFltMgr->setCurrentFilter( m_sAddressListFilterName ) ;
 
         if( ERRCODE_NONE == aDlgHelper.Execute() )
         {
             m_sURL = xFP->getFiles().getConstArray()[0];
             INetURLObject aResult( m_sURL );
-            aResult.setExtension(OUString("csv"));
+            aResult.setExtension("csv");
             m_sURL = aResult.GetMainURL(INetURLObject::NO_DECODE);
         }
     }
@@ -658,7 +656,7 @@ void SwCreateAddressListDialog::UpdateButtons()
 
 void SwCreateAddressListDialog::Find(const OUString& rSearch, sal_Int32 nColumn)
 {
-    OUString sSearch = OUString(rSearch).toAsciiLowerCase();
+    const OUString sSearch = rSearch.toAsciiLowerCase();
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
     //search forward
     bool bFound = false;
