@@ -25,7 +25,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 
-#include "../pdfwriter_impl.hxx"
+#include "../gdi/pdfwriter_impl.hxx"
 
 #include <boost/scoped_array.hpp>
 
