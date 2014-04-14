@@ -1052,7 +1052,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     if( GetWhich( rSet, SID_ATTR_CHAR_CONTOUR, nWhich ) )
     {
         const SvxContourItem& rItem = ( SvxContourItem& ) rSet.Get( nWhich );
-        sal_Bool bOutline = rItem.GetValue();
+        bool bOutline = rItem.GetValue();
         rFont.SetOutline( bOutline );
         rCJKFont.SetOutline( bOutline );
         rCTLFont.SetOutline( bOutline );
@@ -1062,14 +1062,14 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     if( GetWhich( rSet, SID_ATTR_CHAR_SHADOWED, nWhich ) )
     {
         const SvxShadowedItem& rItem = ( SvxShadowedItem& ) rSet.Get( nWhich );
-        sal_Bool bShadow = rItem.GetValue();
+        bool bShadow = rItem.GetValue();
         rFont.SetShadow( bShadow );
         rCJKFont.SetShadow( bShadow );
         rCTLFont.SetShadow( bShadow );
     }
 
     // Background
-    sal_Bool bTransparent;
+    bool bTransparent;
     if( GetWhich( rSet, bPreviewBackgroundToCharacter ? SID_ATTR_BRUSH : SID_ATTR_BRUSH_CHAR, nWhich ) )
     {
          const SvxBrushItem& rBrush = ( SvxBrushItem& ) rSet.Get( nWhich );
@@ -1297,7 +1297,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     if( ISITEMSET )
     {
         const SvxContourItem& rItem = ( SvxContourItem& ) rSet.Get( nWhich );
-        sal_Bool bOutline = rItem.GetValue();
+        bool bOutline = rItem.GetValue();
         rFont.SetOutline( bOutline );
         rCJKFont.SetOutline( bOutline );
         rCTLFont.SetOutline( bOutline );
@@ -1308,14 +1308,14 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     if( ISITEMSET )
     {
         const SvxShadowedItem& rItem = ( SvxShadowedItem& ) rSet.Get( nWhich );
-        sal_Bool bShadow = rItem.GetValue();
+        bool bShadow = rItem.GetValue();
         rFont.SetShadow( bShadow );
         rCJKFont.SetShadow( bShadow );
         rCTLFont.SetShadow( bShadow );
     }
 
     // Background
-    sal_Bool bTransparent;
+    bool bTransparent;
     nWhich = rSet.GetPool()->GetWhich( pImpl->bPreviewBackgroundToCharacter ? SID_ATTR_BRUSH : SID_ATTR_BRUSH_CHAR );
     if( ISITEMSET )
     {
@@ -1327,7 +1327,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
          rCTLFont.SetFillColor( rColor );
     }
     else
-        bTransparent = sal_True;
+        bTransparent = true;
 
     rFont.SetTransparent( bTransparent );
     rCJKFont.SetTransparent( bTransparent );

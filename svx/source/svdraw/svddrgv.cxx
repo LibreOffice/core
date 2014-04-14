@@ -170,7 +170,7 @@ bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, bool bTR ) const
         {
             Point aPt(((SdrCaptionObj*)pObj)->GetTailPos());
             bool bTail=eDragHdl==HDL_POLY; // drag tail
-            sal_Bool bOwn=mpCurrentSdrDragMethod->ISA(SdrDragObjOwn); // specific to object
+            bool bOwn=mpCurrentSdrDragMethod->ISA(SdrDragObjOwn); // specific to object
             if (!bTail)
             { // for bTail, TakeActionRect already does the right thing
                 if (bOwn)

@@ -224,7 +224,7 @@ void FmFieldWin::GetFocus()
 }
 
 
-sal_Bool FmFieldWin::createSelectionControls( )
+bool FmFieldWin::createSelectionControls( )
 {
     SvTreeListEntry* pSelected = pListBox->FirstSelected();
     if ( pSelected )
@@ -336,7 +336,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
         // get the connection of the form
         OStaticDataAccessTools aTools;
         m_aConnection.reset(
-            aTools.connectRowset( Reference< XRowSet >( xForm, UNO_QUERY ), ::comphelper::getProcessComponentContext(), sal_True ),
+            aTools.connectRowset( Reference< XRowSet >( xForm, UNO_QUERY ), ::comphelper::getProcessComponentContext(), true ),
             SharedConnection::NoTakeOwnership
         );
         // TODO: When incompatible changes (such as extending the "virtualdbtools" interface by ensureRowSetConnection)

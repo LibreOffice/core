@@ -549,13 +549,13 @@ bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
             rVal <<= nLeft;
             break;
         case MID_ORTHO:
-            rVal <<= (sal_Bool) bOrtho;
+            rVal <<= bOrtho;
             break;
         case MID_ACTUAL:
             rVal <<= (sal_Int32) nActColumn;
             break;
         case MID_TABLE:
-            rVal <<= (sal_Bool) bTable;
+            rVal <<= bTable;
             break;
         default:
             OSL_FAIL("Wrong MemberId!");
@@ -583,7 +583,7 @@ bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
             break;
         case MID_ORTHO:
             rVal >>= nVal;
-            bOrtho = (sal_Bool) nVal;
+            bOrtho = (bool) nVal;
             break;
         case MID_ACTUAL:
             rVal >>= nVal;
@@ -591,7 +591,7 @@ bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
             break;
         case MID_TABLE:
             rVal >>= nVal;
-            bTable = (sal_Bool) nVal;
+            bTable = (bool) nVal;
             break;
         default:
             OSL_FAIL("Wrong MemberId!");

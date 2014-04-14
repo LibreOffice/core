@@ -157,7 +157,7 @@ public:
 
     void Lock() { osl_atomic_increment( &m_Locks ); }
     void UnLock() { osl_atomic_decrement( &m_Locks ); }
-    sal_Bool IsLocked() const { return m_Locks != 0; }
+    bool IsLocked() const { return m_Locks != 0; }
 
     // access control
     struct Accessor { friend class FmFormModel; private: Accessor() { } };
@@ -167,8 +167,8 @@ public:
     void RemoveForms( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& rForms );
 
     // readonly-ness
-    void SetReadOnly( sal_Bool bRead, const Accessor& ) { bReadOnly = bRead; }
-    sal_Bool IsReadOnly() const {return bReadOnly;}
+    void SetReadOnly( bool bRead, const Accessor& ) { bReadOnly = bRead; }
+    bool IsReadOnly() const {return bReadOnly;}
 
 protected:
     // XEventListener

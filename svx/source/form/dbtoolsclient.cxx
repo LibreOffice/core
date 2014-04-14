@@ -180,7 +180,7 @@ namespace svxform
     }
 
 
-    Reference< XNumberFormatsSupplier > OStaticDataAccessTools::getNumberFormats(const Reference< XConnection>& _rxConn, sal_Bool _bAllowDefault) const
+    Reference< XNumberFormatsSupplier > OStaticDataAccessTools::getNumberFormats(const Reference< XConnection>& _rxConn, bool _bAllowDefault) const
     {
         Reference< XNumberFormatsSupplier > xReturn;
         if ( ensureLoaded() )
@@ -210,7 +210,7 @@ namespace svxform
 
 
     Reference< XConnection > OStaticDataAccessTools::connectRowset( const Reference< XRowSet >& _rxRowSet,
-        const Reference< XComponentContext >& _rxContext, sal_Bool _bSetAsActiveConnection ) const
+        const Reference< XComponentContext >& _rxContext, bool _bSetAsActiveConnection ) const
         SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
     {
         Reference< XConnection > xReturn;

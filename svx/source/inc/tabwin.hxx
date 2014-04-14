@@ -106,7 +106,7 @@ public:
     const OUString&      GetObjectName() const { return m_aObjectName; }
     sal_Int32                   GetObjectType() const { return m_nObjectType; }
 
-    sal_Bool    createSelectionControls( );
+    bool    createSelectionControls( );
 
 protected:
     // FmXChangeListener

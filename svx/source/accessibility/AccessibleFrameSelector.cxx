@@ -421,29 +421,29 @@ AwtSize AccFrameSelector::getSize(  ) throw (RuntimeException, std::exception)
 
 
 
-sal_Bool AccFrameSelector::isShowing(  ) throw (RuntimeException)
+bool AccFrameSelector::isShowing(  ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
     IsValid();
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool AccFrameSelector::isVisible(  ) throw (RuntimeException)
+bool AccFrameSelector::isVisible(  ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
     IsValid();
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool AccFrameSelector::isFocusTraversable(  ) throw (RuntimeException)
+bool AccFrameSelector::isFocusTraversable(  ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
     IsValid();
-    return sal_True;
+    return true;
 }
 
 
@@ -588,7 +588,7 @@ void AccFrameSelector::IsValid() throw (RuntimeException)
         throw RuntimeException();
 }
 
-void    AccFrameSelector::NotifyFocusListeners(sal_Bool bGetFocus)
+void    AccFrameSelector::NotifyFocusListeners(bool bGetFocus)
 {
     SolarMutexGuard aGuard;
     AwtFocusEvent aEvent;

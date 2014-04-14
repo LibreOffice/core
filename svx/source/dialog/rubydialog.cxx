@@ -292,7 +292,7 @@ void SvxRubyDialog::Activate()
     SfxModelessDialog::Activate();
     SfxPoolItem* pState = 0;
     SfxItemState    eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
-    sal_Bool bEnable = (eState < SFX_ITEM_AVAILABLE) || !pState || !((SfxBoolItem*)pState)->GetValue();
+    bool bEnable = (eState < SFX_ITEM_AVAILABLE) || !pState || !((SfxBoolItem*)pState)->GetValue();
     delete pState;
     m_pStylistPB->Enable(bEnable);
     //get selection from current view frame
@@ -378,7 +378,7 @@ void SvxRubyDialog::SetRubyText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
 {
     OUString sLeft, sRight;
     const Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
-    sal_Bool bEnable = aRubyValues.getLength() > nPos;
+    bool bEnable = aRubyValues.getLength() > nPos;
     if(bEnable)
     {
         const Sequence<PropertyValue> aProps = aRubyValues.getConstArray()[nPos];
@@ -392,7 +392,7 @@ void SvxRubyDialog::SetRubyText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
         }
     }
     else if(!nPos)
-        bEnable = sal_True;
+        bEnable = true;
     rLeft.Enable(bEnable);
     rRight.Enable(bEnable);
     rLeft.SetText(sLeft);
@@ -457,7 +457,7 @@ void SvxRubyDialog::Update()
             }
             if(nPosition > -2 && pProps[nProp].Name == cRubyIsAbove )
             {
-                sal_Bool bTmp = *(sal_Bool*)pProps[nProp].Value.getValue();
+                bool bTmp = *(sal_Bool*)pProps[nProp].Value.getValue();
                 if(!nRuby)
                     nPosition = bTmp ? 0 : 1;
                 else if( (!nPosition && !bTmp) || (nPosition == 1 && bTmp)  )

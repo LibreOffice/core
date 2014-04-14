@@ -115,7 +115,7 @@ void SetKernCharacterPairsState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
-    sal_Bool    bChecked = sal_False;
+    bool    bChecked = false;
     for( i = 0; i < nCount; i++ )
     {
         SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
@@ -123,7 +123,7 @@ void SetKernCharacterPairsState( SdrView* pSdrView, SfxItemSet& rSet )
         {
             SvxKerningItem& rKerningItem = (SvxKerningItem&)pObj->GetMergedItem( EE_CHAR_KERNING );
             if ( rKerningItem.GetValue() )
-                bChecked = sal_True;
+                bChecked = true;
         }
     }
     rSet.Put( SfxBoolItem( SID_FONTWORK_KERN_CHARACTER_PAIRS, bChecked ) );
@@ -243,7 +243,7 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     for(i=0;(i<nCount) && !bFound ; i++)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
@@ -275,7 +275,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sSameLetterHeights );
             if( pAny )
             {
-                sal_Bool bOn;
+                bool bOn;
                 (*pAny) >>= bOn;
                 bOn = !bOn;
                 (*pAny) <<= bOn;

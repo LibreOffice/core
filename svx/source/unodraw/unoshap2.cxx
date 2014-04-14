@@ -1621,7 +1621,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     {
     case OWN_ATTR_VALUE_FILLBITMAP:
     {
-        sal_Bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
+        bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
         const Graphic& rGraphic = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphic();
 
         if(rGraphic.GetType() != GRAPHIC_GDIMETAFILE)
@@ -1653,7 +1653,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
         }
         else
         {
-            sal_Bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
+            bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
             const GraphicObject& rGrafObj = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphicObject(true);
             OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
             aURL += OStringToOUString(rGrafObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
@@ -1688,7 +1688,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 
     case OWN_ATTR_VALUE_GRAPHIC:
     {
-        sal_Bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
+        bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
         Reference< graphic::XGraphic > xGraphic( static_cast< SdrGrafObj* >( mpObj.get() )->GetGraphic().GetXGraphic() );
         rValue <<= xGraphic;
         if ( bSwapped )
@@ -1799,8 +1799,8 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, s
         SdrAShapeObjGeoData aCustomShapeGeoData;
         ((SdrObjCustomShape*)mpObj.get())->SaveGeoData( aCustomShapeGeoData );
 
-        sal_Bool bMirroredX = sal_False;
-        sal_Bool bMirroredY = sal_False;
+        bool bMirroredX = false;
+        bool bMirroredY = false;
 
         if ( mpObj.is() )
         {

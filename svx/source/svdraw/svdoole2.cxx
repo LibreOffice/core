@@ -355,7 +355,7 @@ uno::Reference< util::XCloseable > SAL_CALL SdrLightEmbeddedClient_Impl::getComp
 sal_Bool SAL_CALL SdrLightEmbeddedClient_Impl::canInplaceActivate()
     throw ( uno::RuntimeException, std::exception )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SolarMutexGuard aGuard;
     if ( mpObj )
     {

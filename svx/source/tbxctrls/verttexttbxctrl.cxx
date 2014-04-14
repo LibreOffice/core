@@ -62,7 +62,7 @@ void SvxVertCTLTextTbxCtrl::StateChanged(
 {
     SvtLanguageOptions aLangOptions;
     bool bCalc = false;
-    sal_Bool bEnabled = sal_False;
+    bool bEnabled = false;
     if ( nSID == SID_VERTICALTEXT_STATE )
         bEnabled = aLangOptions.IsVerticalTextEnabled();
     else if ( nSID == SID_CTLFONT_STATE )

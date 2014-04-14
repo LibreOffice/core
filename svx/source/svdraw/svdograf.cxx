@@ -711,7 +711,7 @@ bool SdrGrafObj::ImpUpdateGraphicLink( bool bAsynchron ) const
 
 void SdrGrafObj::ImpSetLinkedGraphic( const Graphic& rGraphic )
 {
-    const sal_Bool bIsChanged = GetModel()->IsChanged();
+    const bool bIsChanged = GetModel()->IsChanged();
     NbcSetGraphic( rGraphic );
     ActionChanged();
     BroadcastObjectChange();
@@ -1353,8 +1353,8 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         pFilterData = new com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >( 3 );
 
                         com::sun::star::awt::Size aPreviewSizeHint( 64, 64 );
-                        sal_Bool bAllowPartialStreamRead = true;
-                        sal_Bool bCreateNativeLink = false;
+                        bool bAllowPartialStreamRead = true;
+                        bool bCreateNativeLink = false;
                         (*pFilterData)[ 0 ].Name = "PreviewSizeHint";
                         (*pFilterData)[ 0 ].Value <<= aPreviewSizeHint;
                         (*pFilterData)[ 1 ].Name = "AllowPartialStreamRead";

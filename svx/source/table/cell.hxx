@@ -74,13 +74,13 @@ public:
     SVX_DLLPRIVATE ::Rectangle& getCellRect() { return maCellRect; }
 
     OutlinerParaObject* GetEditOutlinerParaObject() const;
-    SVX_DLLPRIVATE void SetStyleSheet( SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr );
+    SVX_DLLPRIVATE void SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr );
     SVX_DLLPRIVATE virtual SfxStyleSheet* GetStyleSheet() const SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual const Rectangle& GetCurrentBoundRect() const;
     SVX_DLLPRIVATE virtual void TakeTextAnchorRect(Rectangle& rAnchorRect) const;
 
     SVX_DLLPRIVATE virtual const SfxItemSet& GetItemSet() const SAL_OVERRIDE;
-    SVX_DLLPRIVATE void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems);
+    SVX_DLLPRIVATE void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems);
     void SetMergedItem(const SfxPoolItem& rItem);
 
     SVX_DLLPRIVATE sal_Int32 getMinimumWidth();
@@ -223,7 +223,7 @@ private:
     OUString msFormula;
     double          mfValue;
     ::sal_Int32     mnError;
-    sal_Bool      mbMerged;
+    bool      mbMerged;
     ::sal_Int32     mnRowSpan;
     ::sal_Int32     mnColSpan;
 

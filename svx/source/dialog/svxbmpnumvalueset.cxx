@@ -92,7 +92,7 @@ static const sal_Unicode aBulletTypes[] =
 
 static Font& lcl_GetDefaultBulletFont()
 {
-    static sal_Bool bInit = 0;
+    static bool bInit = false;
     static Font aDefBulletFont( "StarSymbol", "", Size( 0, 14 ) );
     if(!bInit)
     {
@@ -101,7 +101,7 @@ static Font& lcl_GetDefaultBulletFont()
         aDefBulletFont.SetPitch( PITCH_DONTKNOW );
         aDefBulletFont.SetWeight( WEIGHT_DONTKNOW );
         aDefBulletFont.SetTransparent( true );
-        bInit = sal_True;
+        bInit = true;
     }
     return aDefBulletFont;
 }
@@ -367,11 +367,11 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 #ifdef DBG_UTIL
             catch(Exception&)
             {
-                static sal_Bool bAssert = sal_False;
+                static bool bAssert = false;
                 if(!bAssert)
                 {
                     OSL_FAIL("exception in ::UserDraw");
-                    bAssert = sal_True;
+                    bAssert = true;
                 }
             }
 #else

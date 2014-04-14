@@ -1146,7 +1146,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
 
         SfxItemSet aNewSet(*aSet.GetPool(),pEntry->nWhichId,pEntry->nWhichId);
         OUString aNewText(pBrowse->GetNewEntryValue());
-        sal_Bool bDel( aNewText == "del"
+        bool bDel( aNewText == "del"
             || aNewText == "Del"
             || aNewText == "DEL"
             || aNewText == "default"
@@ -1199,7 +1199,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                     if (aNewText == "EIN") nLongVal=1;
                     if (aNewText == "ON") nLongVal=1;
                     if (aNewText == "YES") nLongVal=1;
-                    ((SfxBoolItem*)pNewItem)->SetValue((sal_Bool)nLongVal);
+                    ((SfxBoolItem*)pNewItem)->SetValue(nLongVal == 1);
                 } break;
                 case ITEM_FLAG  : ((SfxFlagItem  *)pNewItem)->SetValue((sal_uInt16)nLongVal); break;
                 case ITEM_STRING: ((SfxStringItem*)pNewItem)->SetValue(aNewText); break;

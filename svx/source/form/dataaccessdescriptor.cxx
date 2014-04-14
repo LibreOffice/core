@@ -43,8 +43,8 @@ namespace svx
     class ODADescriptorImpl
     {
     protected:
-        sal_Bool                    m_bSetOutOfDate         : 1;
-        sal_Bool                    m_bSequenceOutOfDate    : 1;
+        bool                    m_bSetOutOfDate         : 1;
+        bool                    m_bSequenceOutOfDate    : 1;
 
     public:
         typedef ::std::map< DataAccessDescriptorProperty, Any >     DescriptorValues;
@@ -66,13 +66,13 @@ namespace svx
             @return <TRUE/>
                 if and only if the sequence contained valid properties only
         */
-        sal_Bool buildFrom( const Sequence< PropertyValue >& _rValues );
+        bool buildFrom( const Sequence< PropertyValue >& _rValues );
 
         /** builds the descriptor from a property set
             @return <TRUE/>
                 if and only if the set contained valid properties only
         */
-        sal_Bool buildFrom( const Reference< XPropertySet >& _rValues );
+        bool buildFrom( const Reference< XPropertySet >& _rValues );
 
     protected:
         static PropertyValue                    buildPropertyValue( const DescriptorValues::const_iterator& _rPos );
@@ -82,8 +82,8 @@ namespace svx
 
 
     ODADescriptorImpl::ODADescriptorImpl()
-        :m_bSetOutOfDate(sal_True)
-        ,m_bSequenceOutOfDate(sal_True)
+        :m_bSetOutOfDate(true)
+        ,m_bSequenceOutOfDate(true)
     {
     }
 
@@ -100,11 +100,11 @@ namespace svx
     }
 
 
-    sal_Bool ODADescriptorImpl::buildFrom( const Sequence< PropertyValue >& _rValues )
+    bool ODADescriptorImpl::buildFrom( const Sequence< PropertyValue >& _rValues )
     {
         const MapString2PropertyEntry& rProperties = getPropertyMap();
 
-        sal_Bool bValidPropsOnly = sal_True;
+        bool bValidPropsOnly = true;
 
         // loop through the sequence, and fill our m_aValues
         const PropertyValue* pValues = _rValues.getConstArray();
@@ -119,22 +119,22 @@ namespace svx
             }
             else
                 // unknown property
-                bValidPropsOnly = sal_False;
+                bValidPropsOnly = false;
         }
 
         if (bValidPropsOnly)
         {
             m_aAsSequence = _rValues;
-            m_bSequenceOutOfDate = sal_False;
+            m_bSequenceOutOfDate = false;
         }
         else
-            m_bSequenceOutOfDate = sal_True;
+            m_bSequenceOutOfDate = true;
 
         return bValidPropsOnly;
     }
 
 
-    sal_Bool ODADescriptorImpl::buildFrom( const Reference< XPropertySet >& _rxValues )
+    bool ODADescriptorImpl::buildFrom( const Reference< XPropertySet >& _rxValues )
     {
         Reference< XPropertySetInfo > xPropInfo;
         if (_rxValues.is())
@@ -142,7 +142,7 @@ namespace svx
         if (!xPropInfo.is())
         {
             OSL_FAIL("ODADescriptorImpl::buildFrom: invalid property set!");
-            return sal_False;
+            return false;
         }
 
         // build a PropertyValue sequence with the current values
@@ -159,14 +159,14 @@ namespace svx
             pValues->Value = _rxValues->getPropertyValue(pProperty->Name);
         }
 
-        sal_Bool bValidPropsOnly = buildFrom(aValues);
+        bool bValidPropsOnly = buildFrom(aValues);
         if (bValidPropsOnly)
         {
             m_xAsSet = _rxValues;
-            m_bSetOutOfDate = sal_False;
+            m_bSetOutOfDate = false;
         }
         else
-            m_bSetOutOfDate = sal_True;
+            m_bSetOutOfDate = true;
 
         return bValidPropsOnly;
     }
@@ -174,8 +174,8 @@ namespace svx
 
     void ODADescriptorImpl::invalidateExternRepresentations()
     {
-        m_bSetOutOfDate = sal_True;
-        m_bSequenceOutOfDate = sal_True;
+        m_bSetOutOfDate = true;
+        m_bSequenceOutOfDate = true;
     }
 
 
@@ -269,7 +269,7 @@ namespace svx
         }
 
         // don't need to rebuild next time
-        m_bSequenceOutOfDate = sal_False;
+        m_bSequenceOutOfDate = false;
     }
 
 

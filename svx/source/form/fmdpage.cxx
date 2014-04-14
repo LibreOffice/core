@@ -109,7 +109,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 // XFormsSupplier2
 sal_Bool SAL_CALL SvxFmDrawPage::hasForms(void) throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
-    sal_Bool bHas = sal_False;
+    bool bHas = false;
     FmFormPage* pFormPage = PTR_CAST( FmFormPage, GetSdrPage() );
     if ( pFormPage )
         bHas = pFormPage->GetForms( false ).is();

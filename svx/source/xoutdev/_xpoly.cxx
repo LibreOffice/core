@@ -38,7 +38,7 @@ ImpXPolygon::ImpXPolygon(sal_uInt16 nInitSize, sal_uInt16 _nResize)
     : pPointAry(NULL)
     , pFlagAry(NULL)
     , pOldPointAry(NULL)
-    , bDeleteOldPoints(sal_False)
+    , bDeleteOldPoints(false)
     , nSize(0)
     , nResize(_nResize)
     , nPoints(0)
@@ -51,7 +51,7 @@ ImpXPolygon::ImpXPolygon( const ImpXPolygon& rImpXPoly )
     : pPointAry(NULL)
     , pFlagAry(NULL)
     , pOldPointAry(NULL)
-    , bDeleteOldPoints(sal_False)
+    , bDeleteOldPoints(false)
     , nSize(0)
     , nResize(rImpXPoly.nResize)
     , nPoints(0)
@@ -91,7 +91,7 @@ bool ImpXPolygon::operator==(const ImpXPolygon& rImpXPoly) const
  *                      errors with XPoly[n] = XPoly[0] where a resize might
  *                      destroy the right side point array too early.
  */
-void ImpXPolygon::Resize( sal_uInt16 nNewSize, sal_Bool bDeletePoints )
+void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
 {
     if( nNewSize == nSize )
         return;
@@ -136,7 +136,7 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, sal_Bool bDeletePoints )
                 nPoints = nSize;
         }
         if ( bDeletePoints )    delete[] (char*) pOldPointAry;
-        else                    bDeleteOldPoints = sal_True;
+        else                    bDeleteOldPoints = true;
         delete[] pOldFlagAry;
     }
 }
@@ -286,7 +286,7 @@ XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
     long    nXHdl = (long)(0.552284749 * nRx);
     long    nYHdl = (long)(0.552284749 * nRy);
     sal_uInt16  nPos = 0;
-    sal_Bool    bLoopEnd = sal_False;
+    bool    bLoopEnd = false;
 
     do
     {
@@ -447,7 +447,7 @@ Point& XPolygon::operator[]( sal_uInt16 nPos )
     if( nPos >= pImpXPolygon->nSize )
     {
         DBG_ASSERT(pImpXPolygon->nResize, "Ungueltiger Index bei Arrayzugriff auf XPolygon");
-        pImpXPolygon->Resize(nPos + 1, sal_False);
+        pImpXPolygon->Resize(nPos + 1, false);
     }
     if( nPos >= pImpXPolygon->nPoints )
         pImpXPolygon->nPoints = nPos + 1;

@@ -51,9 +51,9 @@ TableColumn::TableColumn( const TableModelRef& xTableModel, sal_Int32 nColumn )
 , mxTableModel( xTableModel )
 , mnColumn( nColumn )
 , mnWidth( 0 )
-, mbOptimalWidth( sal_True )
-, mbIsVisible( sal_True )
-, mbIsStartOfNewPage( sal_False )
+, mbOptimalWidth( true )
+, mbIsVisible( true )
+, mbIsStartOfNewPage( false )
 {
 }
 
@@ -174,7 +174,7 @@ void SAL_CALL TableColumn::setFastPropertyValue( sal_Int32 nHandle, const Any& a
         }
     case Property_OptimalWidth:
         {
-            sal_Bool bOptimalWidth = mbOptimalWidth;
+            bool bOptimalWidth = mbOptimalWidth;
             bOk = aValue >>= bOptimalWidth;
             if( bOk && (mbOptimalWidth != bOptimalWidth) )
             {
@@ -187,7 +187,7 @@ void SAL_CALL TableColumn::setFastPropertyValue( sal_Int32 nHandle, const Any& a
         }
     case Property_IsVisible:
         {
-            sal_Bool bIsVisible = mbIsVisible;
+            bool bIsVisible = mbIsVisible;
             bOk = aValue >>= bIsVisible;
             if( bOk && (mbIsVisible != bIsVisible) )
             {
@@ -199,7 +199,7 @@ void SAL_CALL TableColumn::setFastPropertyValue( sal_Int32 nHandle, const Any& a
 
     case Property_IsStartOfNewPage:
         {
-            sal_Bool bIsStartOfNewPage = mbIsStartOfNewPage;
+            bool bIsStartOfNewPage = mbIsStartOfNewPage;
             bOk = aValue >>= bIsStartOfNewPage;
             if( bOk && (mbIsStartOfNewPage != bIsStartOfNewPage) )
             {

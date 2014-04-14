@@ -696,7 +696,7 @@ class BrokenRecoveryDialog : public ModalDialog
         OUString m_sSavePath;
         RecoveryCore*   m_pCore;
         bool        m_bBeforeRecovery;
-        sal_Bool        m_bExecutionNeeded;
+        bool        m_bExecutionNeeded;
 
 
     // interface
@@ -714,7 +714,7 @@ class BrokenRecoveryDialog : public ModalDialog
 
 
         /** @short TODO */
-        virtual sal_Bool isExecutionNeeded();
+        virtual bool isExecutionNeeded();
 
 
         /** @short TODO */

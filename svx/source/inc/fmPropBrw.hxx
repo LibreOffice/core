@@ -42,7 +42,7 @@ class FmFormShell;
 
 class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
 {
-    sal_Bool        m_bInitialStateChange;
+    bool        m_bInitialStateChange;
     bool            m_bInStateChange;
     OUString m_sLastActivePage;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >

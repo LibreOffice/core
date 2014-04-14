@@ -465,7 +465,7 @@ void SmartTagMgr::ReadConfiguration( bool bExcludedTypes, bool bRecognize )
         if ( bRecognize )
         {
             Any aAny = mxConfigurationSettings->getPropertyValue( "RecognizeSmartTags" );
-            sal_Bool bValue = sal_True;
+            bool bValue = true;
             aAny >>= bValue;
 
             mbLabelTextWithSmartTags = bValue;

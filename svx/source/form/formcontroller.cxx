@@ -217,8 +217,8 @@ struct ColumnInfo
     // information about the column itself
     Reference< XColumn >    xColumn;
     sal_Int32               nNullable;
-    sal_Bool                bAutoIncrement;
-    sal_Bool                bReadOnly;
+    bool                bAutoIncrement;
+    bool                bReadOnly;
     OUString         sName;
 
     // information about the control(s) bound to this column
@@ -237,8 +237,8 @@ struct ColumnInfo
     ColumnInfo()
         :xColumn()
         ,nNullable( ColumnValue::NULLABLE_UNKNOWN )
-        ,bAutoIncrement( sal_False )
-        ,bReadOnly( sal_False )
+        ,bAutoIncrement( false )
+        ,bReadOnly( false )
         ,sName()
         ,xFirstControlWithInputRequired()
         ,xFirstGridWithInputRequiredColumn()
@@ -313,9 +313,9 @@ namespace
 
     bool lcl_isInputRequired( const Reference< XPropertySet >& _rxControlModel )
     {
-        sal_Bool bInputRequired = sal_True;
+        bool bInputRequired = true;
         OSL_VERIFY( _rxControlModel->getPropertyValue( FM_PROP_INPUT_REQUIRED ) >>= bInputRequired );
-        return ( bInputRequired != sal_False );
+        return ( bInputRequired != false );
     }
 
     void lcl_resetColumnControlInfo( ColumnInfo& _rColInfo )
@@ -565,19 +565,19 @@ FormController::FormController(const Reference< css::uno::XComponentContext > & 
                   ,m_aActivationEvent( LINK( this, FormController, OnActivated ) )
                   ,m_aDeactivationEvent( LINK( this, FormController, OnDeactivated ) )
                   ,m_nCurrentFilterPosition(-1)
-                  ,m_bCurrentRecordModified(sal_False)
-                  ,m_bCurrentRecordNew(sal_False)
-                  ,m_bLocked(sal_False)
-                  ,m_bDBConnection(sal_False)
-                  ,m_bCycle(sal_False)
-                  ,m_bCanInsert(sal_False)
-                  ,m_bCanUpdate(sal_False)
-                  ,m_bCommitLock(sal_False)
-                  ,m_bModified(sal_False)
-                  ,m_bControlsSorted(sal_False)
-                  ,m_bFiltering(sal_False)
-                  ,m_bAttachEvents(sal_True)
-                  ,m_bDetachEvents(sal_True)
+                  ,m_bCurrentRecordModified(false)
+                  ,m_bCurrentRecordNew(false)
+                  ,m_bLocked(false)
+                  ,m_bDBConnection(false)
+                  ,m_bCycle(false)
+                  ,m_bCanInsert(false)
+                  ,m_bCanUpdate(false)
+                  ,m_bCommitLock(false)
+                  ,m_bModified(false)
+                  ,m_bControlsSorted(false)
+                  ,m_bFiltering(false)
+                  ,m_bAttachEvents(true)
+                  ,m_bDetachEvents(true)
                   ,m_bAttemptedHandlerCreation( false )
                   ,m_bSuspendFilterTextListening( false )
 {
@@ -703,7 +703,7 @@ void SAL_CALL FormController::resetted(const EventObject& rEvent) throw( Runtime
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (getCurrentControl().is() &&  (getCurrentControl()->getModel() == rEvent.Source))
-        m_bModified = sal_False;
+        m_bModified = false;
 }
 
 
@@ -807,7 +807,7 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
             if (xConnection.is())
             {
                 Reference< XDatabaseMetaData> xMetaData(xConnection->getMetaData());
-                Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats( xConnection, sal_True ) );
+                Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats( xConnection, true ) );
                 Reference< XNumberFormatter> xFormatter = NumberFormatter::create(m_xComponentContext);
                 xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
@@ -1234,7 +1234,7 @@ void FormController::disposing(void)
 
     ::comphelper::disposeComponent( m_xComposer );
 
-    m_bDBConnection = sal_False;
+    m_bDBConnection = false;
 }
 
 
@@ -1263,7 +1263,7 @@ void SAL_CALL FormController::propertyChange(const PropertyChangeEvent& evt) thr
         if ( !xOldBound.is() && evt.NewValue.hasValue() )
         {
             Reference< XControlModel > xControlModel(evt.Source,UNO_QUERY);
-            Reference< XControl > xControl = findControl(m_aControls,xControlModel,sal_False,sal_False);
+            Reference< XControl > xControl = findControl(m_aControls,xControlModel,false,false);
             if ( xControl.is() )
             {
                 startControlModifyListening( xControl );
@@ -1275,8 +1275,8 @@ void SAL_CALL FormController::propertyChange(const PropertyChangeEvent& evt) thr
     }
     else
     {
-        sal_Bool bModifiedChanged = (evt.PropertyName == FM_PROP_ISMODIFIED);
-        sal_Bool bNewChanged = (evt.PropertyName == FM_PROP_ISNEW);
+        bool bModifiedChanged = (evt.PropertyName == FM_PROP_ISMODIFIED);
+        bool bNewChanged = (evt.PropertyName == FM_PROP_ISNEW);
         if (bModifiedChanged || bNewChanged)
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -1300,7 +1300,7 @@ void SAL_CALL FormController::propertyChange(const PropertyChangeEvent& evt) thr
                 m_aToggleEvent.Call();
 
             if (!m_bCurrentRecordModified)
-                m_bModified = sal_False;
+                m_bModified = false;
         }
         else if ( evt.PropertyName == FM_PROP_DYNAMIC_CONTROL_BORDER )
         {
@@ -1381,7 +1381,7 @@ bool FormController::replaceControl( const Reference< XControl >& _rxExistentCon
 }
 
 
-void FormController::toggleAutoFields(sal_Bool bAutoFields)
+void FormController::toggleAutoFields(bool bAutoFields)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
 
@@ -1394,7 +1394,7 @@ void FormController::toggleAutoFields(sal_Bool bAutoFields)
     {
         // as we don't want new controls to be attached to the scripting environment
         // we change attach flags
-        m_bAttachEvents = sal_False;
+        m_bAttachEvents = false;
         for (sal_Int32 i = nControls; i > 0;)
         {
             Reference< XControl > xControl = pControls[--i];
@@ -1418,11 +1418,11 @@ void FormController::toggleAutoFields(sal_Bool bAutoFields)
                 }
             }
         }
-        m_bAttachEvents = sal_True;
+        m_bAttachEvents = true;
     }
     else
     {
-        m_bDetachEvents = sal_False;
+        m_bDetachEvents = false;
         for (sal_Int32 i = nControls; i > 0;)
         {
             Reference< XControl > xControl = pControls[--i];
@@ -1449,7 +1449,7 @@ void FormController::toggleAutoFields(sal_Bool bAutoFields)
                 }
             }
         }
-        m_bDetachEvents = sal_True;
+        m_bDetachEvents = true;
     }
 }
 
@@ -1587,7 +1587,7 @@ void FormController::impl_onModify()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_bModified )
-            m_bModified = sal_True;
+            m_bModified = true;
     }
 
     EventObject aEvt(static_cast<cppu::OWeakObject*>(this));
@@ -1622,7 +1622,7 @@ void FormController::impl_appendEmptyFilterRow( ::osl::ClearableMutexGuard& _rCl
 }
 
 
-sal_Bool FormController::determineLockState() const
+bool FormController::determineLockState() const
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     // a.) in filter mode we are always locked
@@ -1631,7 +1631,7 @@ sal_Bool FormController::determineLockState() const
     // d.) if are not updatable or on invalid position
     Reference< XResultSet >  xResultSet(m_xModelAsIndex, UNO_QUERY);
     if (m_bFiltering || !xResultSet.is() || !isRowSetAlive(xResultSet))
-        return sal_True;
+        return true;
     else
         return (m_bCanInsert && m_bCurrentRecordNew) ? sal_False
         :  xResultSet->isBeforeFirst() || xResultSet->isAfterLast() || xResultSet->rowDeleted() || !m_bCanUpdate;
@@ -1687,7 +1687,7 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException, s
                 xBound  = Reference< XBoundComponent > (m_xCurrentControl->getModel(), UNO_QUERY);
 
             // lock if we lose the focus during commit
-            m_bCommitLock = sal_True;
+            m_bCommitLock = true;
 
             // Commit nicht erfolgreich, Focus zuruecksetzen
             if (xBound.is() && !xBound->commit())
@@ -1701,8 +1701,8 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException, s
             }
             else
             {
-                m_bModified = sal_False;
-                m_bCommitLock = sal_False;
+                m_bModified = false;
+                m_bCommitLock = false;
             }
         }
 
@@ -1741,7 +1741,7 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException, s
         return;
     }
 
-    sal_Bool bActivated = !m_xActiveControl.is() && xControl.is();
+    bool bActivated = !m_xActiveControl.is() && xControl.is();
 
     m_xActiveControl  = xControl;
 
@@ -1839,7 +1839,7 @@ void SAL_CALL FormController::mouseExited( const awt::MouseEvent& _rEvent ) thro
 
 void SAL_CALL FormController::componentValidityChanged( const EventObject& _rSource ) throw (RuntimeException, std::exception)
 {
-    Reference< XControl > xControl( findControl( m_aControls, Reference< XControlModel >( _rSource.Source, UNO_QUERY ), sal_False, sal_False ) );
+    Reference< XControl > xControl( findControl( m_aControls, Reference< XControlModel >( _rSource.Source, UNO_QUERY ), false, false ) );
     Reference< XValidatableFormComponent > xValidatable( _rSource.Source, UNO_QUERY );
 
     OSL_ENSURE( xControl.is() && xValidatable.is(), "FormController::componentValidityChanged: huh?" );
@@ -2082,7 +2082,7 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
         sal_Int32 i, j;
         for (i = 0, j = 0; i < nCount; ++i, ++pModels )
         {
-            Reference< XControl > xControl = findControl( aAllControls, *pModels, sal_False, sal_True );
+            Reference< XControl > xControl = findControl( aAllControls, *pModels, false, true );
             if ( xControl.is() )
             {
                 pControls[j++] = xControl;
@@ -2109,7 +2109,7 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
         }
     }
     // befinden sich die Controls in der richtigen Reihenfolge
-    m_bControlsSorted = sal_True;
+    m_bControlsSorted = true;
 }
 
 
@@ -2149,7 +2149,7 @@ Sequence< Reference< XControl > > FormController::getControls(void) throw( Runti
         sal_Int32 j = 0;
         for (sal_Int32 i = 0; i < nModels; ++i, ++pModels )
         {
-            xControl = findControl( m_aControls, *pModels, sal_True, sal_True );
+            xControl = findControl( m_aControls, *pModels, true, true );
             if ( xControl.is() )
                 pControls[j++] = xControl;
         }
@@ -2159,7 +2159,7 @@ Sequence< Reference< XControl > > FormController::getControls(void) throw( Runti
             aNewControls.realloc( j );
 
         m_aControls = aNewControls;
-        m_bControlsSorted = sal_True;
+        m_bControlsSorted = true;
     }
     return m_aControls;
 }
@@ -2190,13 +2190,13 @@ void FormController::activateTabOrder() throw( RuntimeException, std::exception 
 void FormController::setControlLock(const Reference< XControl > & xControl)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
-    sal_Bool bLocked = isLocked();
+    bool bLocked = isLocked();
 
     // es wird gelockt
     // a.) wenn der ganze Datensatz gesperrt ist
     // b.) wenn das zugehoerige Feld gespeert ist
     Reference< XBoundControl >  xBound(xControl, UNO_QUERY);
-    if (xBound.is() && (( (bLocked && bLocked != xBound->getLock()) ||
+    if (xBound.is() && (( (bLocked && (bLocked ? 1 : 0) != xBound->getLock()) ||
                          !bLocked)))    // beim entlocken immer einzelne Felder ueberpr�fen
     {
         // gibt es eine Datenquelle
@@ -2204,7 +2204,7 @@ void FormController::setControlLock(const Reference< XControl > & xControl)
         if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
         {
             // wie sieht mit den Properties ReadOnly und Enable aus
-            sal_Bool bTouch = sal_True;
+            bool bTouch = true;
             if (::comphelper::hasProperty(FM_PROP_ENABLED, xSet))
                 bTouch = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ENABLED));
             if (::comphelper::hasProperty(FM_PROP_READONLY, xSet))
@@ -2382,7 +2382,7 @@ void FormController::stopControlModifyListening(const Reference< XControl > & xC
 void FormController::startListening()
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
-    m_bModified  = sal_False;
+    m_bModified  = false;
 
     // jetzt anmelden bei gebundenen feldern
     const Reference< XControl >* pControls = m_aControls.getConstArray();
@@ -2395,7 +2395,7 @@ void FormController::startListening()
 void FormController::stopListening()
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
-    m_bModified  = sal_False;
+    m_bModified  = false;
 
     // jetzt anmelden bei gebundenen feldern
     const Reference< XControl >* pControls = m_aControls.getConstArray();
@@ -2406,7 +2406,7 @@ void FormController::stopListening()
 
 
 
-Reference< XControl >  FormController::findControl(Sequence< Reference< XControl > >& _rControls, const Reference< XControlModel > & xCtrlModel ,sal_Bool _bRemove,sal_Bool _bOverWrite) const
+Reference< XControl >  FormController::findControl(Sequence< Reference< XControl > >& _rControls, const Reference< XControlModel > & xCtrlModel ,bool _bRemove,bool _bOverWrite) const
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     DBG_ASSERT( xCtrlModel.is(), "findControl - welches ?!" );
@@ -2523,7 +2523,7 @@ void FormController::implSetCurrentControl( const Reference< XControl >& _rxCont
 void FormController::insertControl(const Reference< XControl > & xControl)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
-    m_bControlsSorted = sal_False;
+    m_bControlsSorted = false;
     m_aControls.realloc(m_aControls.getLength() + 1);
     m_aControls.getArray()[m_aControls.getLength() - 1] = xControl;
 
@@ -2589,7 +2589,7 @@ void FormController::loaded(const EventObject& rEvent) throw( RuntimeException, 
             m_bCurrentRecordModified = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED));
             m_bCurrentRecordNew      = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
 
-            startFormListening( xSet, sal_False );
+            startFormListening( xSet, false );
 
             // set the locks for the current controls
             if (getContainer().is())
@@ -2599,20 +2599,20 @@ void FormController::loaded(const EventObject& rEvent) throw( RuntimeException, 
         }
         else
         {
-            m_bCanInsert = m_bCanUpdate = m_bCycle = sal_False;
-            m_bCurrentRecordModified = sal_False;
-            m_bCurrentRecordNew = sal_False;
-            m_bLocked = sal_False;
+            m_bCanInsert = m_bCanUpdate = m_bCycle = false;
+            m_bCurrentRecordModified = false;
+            m_bCurrentRecordNew = false;
+            m_bLocked = false;
         }
-        m_bDBConnection = sal_True;
+        m_bDBConnection = true;
     }
     else
     {
-        m_bDBConnection = sal_False;
-        m_bCanInsert = m_bCanUpdate = m_bCycle = sal_False;
-        m_bCurrentRecordModified = sal_False;
-        m_bCurrentRecordNew = sal_False;
-        m_bLocked = sal_False;
+        m_bDBConnection = false;
+        m_bCanInsert = m_bCanUpdate = m_bCycle = false;
+        m_bCurrentRecordModified = false;
+        m_bCurrentRecordNew = false;
+        m_bLocked = false;
     }
 
     Reference< XColumnsSupplier > xFormColumns( xForm, UNO_QUERY );
@@ -2647,7 +2647,7 @@ IMPL_LINK_NOARG(FormController, OnLoad)
 
     // just one exception toggle the auto values
     if (m_bCurrentRecordNew)
-        toggleAutoFields(sal_True);
+        toggleAutoFields(true);
 
     return 1L;
 }
@@ -2701,7 +2701,7 @@ void FormController::unload() throw( RuntimeException )
 
     // be sure not to have autofields
     if (m_bCurrentRecordNew)
-        toggleAutoFields(sal_False);
+        toggleAutoFields(false);
 
     // remove bound field listing again
     removeBoundFieldListener();
@@ -2711,11 +2711,11 @@ void FormController::unload() throw( RuntimeException )
 
     Reference< XPropertySet >  xSet( m_xModelAsIndex, UNO_QUERY );
     if ( m_bDBConnection && xSet.is() )
-        stopFormListening( xSet, sal_False );
+        stopFormListening( xSet, false );
 
-    m_bDBConnection = sal_False;
-    m_bCanInsert = m_bCanUpdate = m_bCycle = sal_False;
-    m_bCurrentRecordModified = m_bCurrentRecordNew = m_bLocked = sal_False;
+    m_bDBConnection = false;
+    m_bCanInsert = m_bCanUpdate = m_bCycle = false;
+    m_bCurrentRecordModified = m_bCurrentRecordNew = m_bLocked = false;
 
     m_pColumnInfoCache.reset();
 }
@@ -2734,7 +2734,7 @@ void FormController::removeBoundFieldListener()
 }
 
 
-void FormController::startFormListening( const Reference< XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly )
+void FormController::startFormListening( const Reference< XPropertySet >& _rxForm, bool _bPropertiesOnly )
 {
     try
     {
@@ -2768,7 +2768,7 @@ void FormController::startFormListening( const Reference< XPropertySet >& _rxFor
 }
 
 
-void FormController::stopFormListening( const Reference< XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly )
+void FormController::stopFormListening( const Reference< XPropertySet >& _rxForm, bool _bPropertiesOnly )
 {
     try
     {
@@ -2818,7 +2818,7 @@ void FormController::cursorMoved(const EventObject& /*event*/) throw( RuntimeExc
     }
 
     // neither the current control nor the current record are modified anymore
-    m_bCurrentRecordModified = m_bModified = sal_False;
+    m_bCurrentRecordModified = m_bModified = false;
 }
 
 
@@ -3121,7 +3121,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
 
         // need to parse criteria localized
         OStaticDataAccessTools aStaticTools;
-        Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats(xConnection, sal_True));
+        Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats(xConnection, true));
         Reference< XNumberFormatter> xFormatter = NumberFormatter::create(m_xComponentContext);
         xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
         Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
@@ -3260,11 +3260,11 @@ void FormController::startFiltering()
     if (isListeningForChanges())
         stopListening();
 
-    m_bFiltering = sal_True;
+    m_bFiltering = true;
 
     // as we don't want new controls to be attached to the scripting environment
     // we change attach flags
-    m_bAttachEvents = sal_False;
+    m_bAttachEvents = false;
 
     // Austauschen der Kontrols fuer das aktuelle Formular
     Sequence< Reference< XControl > > aControlsCopy( m_aControls );
@@ -3273,7 +3273,7 @@ void FormController::startFiltering()
 
     // the control we have to activate after replacement
     Reference< XDatabaseMetaData >  xMetaData(xConnection->getMetaData());
-    Reference< XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, sal_True);
+    Reference< XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, true);
     Reference< XNumberFormatter >  xFormatter = NumberFormatter::create(m_xComponentContext);
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
@@ -3374,14 +3374,14 @@ void FormController::startFiltering()
 
     Reference< XPropertySet > xSet( m_xModelAsIndex, UNO_QUERY );
     if ( xSet.is() )
-        stopFormListening( xSet, sal_True );
+        stopFormListening( xSet, true );
 
     impl_setTextOnAllFilter_throw();
 
     // lock all controls which are not used for filtering
     m_bLocked = determineLockState();
     setLocks();
-    m_bAttachEvents = sal_True;
+    m_bAttachEvents = true;
 }
 
 
@@ -3393,8 +3393,8 @@ void FormController::stopFiltering()
         return;
     }
 
-    m_bFiltering = sal_False;
-    m_bDetachEvents = sal_False;
+    m_bFiltering = false;
+    m_bDetachEvents = false;
 
     ::comphelper::disposeComponent(m_xComposer);
 
@@ -3451,9 +3451,9 @@ void FormController::stopFiltering()
 
     Reference< XPropertySet >  xSet( m_xModelAsIndex, UNO_QUERY );
     if ( xSet.is() )
-        startFormListening( xSet, sal_True );
+        startFormListening( xSet, true );
 
-    m_bDetachEvents = sal_True;
+    m_bDetachEvents = true;
 
     m_aFilterRows.clear();
     m_nCurrentFilterPosition = -1;
@@ -3643,7 +3643,7 @@ namespace
         }
     }
 
-    sal_Bool lcl_shouldValidateRequiredFields_nothrow( const Reference< XInterface >& _rxForm )
+    bool lcl_shouldValidateRequiredFields_nothrow( const Reference< XInterface >& _rxForm )
     {
         try
         {
@@ -3656,7 +3656,7 @@ namespace
             Reference< XPropertySetInfo > xPSI( xFormProps->getPropertySetInfo() );
             if ( xPSI->hasPropertyByName( s_sFormsCheckRequiredFields ) )
             {
-                sal_Bool bShouldValidate = true;
+                bool bShouldValidate = true;
                 OSL_VERIFY( xFormProps->getPropertyValue( s_sFormsCheckRequiredFields ) >>= bShouldValidate );
                 return bShouldValidate;
             }
@@ -3666,13 +3666,13 @@ namespace
             Reference< XPropertySet > xDataSource( xConnectionAsChild->getParent(), UNO_QUERY );
             if ( !xDataSource.is() )
                 // seldom (but possible): this is not a connection created by a data source
-                return sal_True;
+                return true;
 
             Reference< XPropertySet > xDataSourceSettings(
                 xDataSource->getPropertyValue("Settings"),
                 UNO_QUERY_THROW );
 
-            sal_Bool bShouldValidate = true;
+            bool bShouldValidate = true;
             OSL_VERIFY( xDataSourceSettings->getPropertyValue( s_sFormsCheckRequiredFields ) >>= bShouldValidate );
             return bShouldValidate;
         }
@@ -3681,7 +3681,7 @@ namespace
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        return sal_True;
+        return true;
     }
 }
 
@@ -3693,7 +3693,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
     impl_checkDisposed_throw();
 
     ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
-    sal_Bool bValid = sal_True;
+    bool bValid = true;
     if (aIter.hasMoreElements())
     {
         RowChangeEvent aEvt( _rEvent );

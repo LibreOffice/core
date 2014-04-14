@@ -1223,14 +1223,14 @@ namespace svxform
 
     void XFormsPage::EnableMenuItems( Menu* _pMenu )
     {
-        sal_Bool bEnableAdd = sal_False;
-        sal_Bool bEnableEdit = sal_False;
-        sal_Bool bEnableRemove = sal_False;
+        bool bEnableAdd = false;
+        bool bEnableEdit = false;
+        bool bEnableRemove = false;
 
         SvTreeListEntry* pEntry = m_aItemList.FirstSelected();
         if ( pEntry )
         {
-            bEnableAdd = sal_True;
+            bEnableAdd = true;
             bool bSubmitChild = false;
             if ( DGTSubmission == m_eGroup && m_aItemList.GetParent( pEntry ) )
             {
@@ -1240,10 +1240,10 @@ namespace svxform
             ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
             if ( pNode && ( pNode->m_xNode.is() || pNode->m_xPropSet.is() ) )
             {
-                bEnableEdit = sal_True;
+                bEnableEdit = true;
                 bEnableRemove = ( bSubmitChild != true );
                 if ( DGTInstance == m_eGroup && !m_aItemList.GetParent( pEntry ) )
-                    bEnableRemove = sal_False;
+                    bEnableRemove = false;
                 if ( pNode->m_xNode.is() )
                 {
                     try
@@ -1252,7 +1252,7 @@ namespace svxform
                         if ( eChildType != css::xml::dom::NodeType_ELEMENT_NODE
                             && eChildType != css::xml::dom::NodeType_DOCUMENT_NODE )
                         {
-                            bEnableAdd = sal_False;
+                            bEnableAdd = false;
                         }
                     }
                     catch ( Exception& )
@@ -1263,7 +1263,7 @@ namespace svxform
             }
         }
         else if ( m_eGroup != DGTInstance )
-            bEnableAdd = sal_True;
+            bEnableAdd = true;
 
         m_aToolBox.EnableItem( TBI_ITEM_ADD, bEnableAdd );
         m_aToolBox.EnableItem( TBI_ITEM_ADD_ELEMENT, bEnableAdd );
@@ -1471,7 +1471,7 @@ namespace svxform
                         if ( aDlg.Execute() == RET_OK )
                         {
                             OUString sNewName = aDlg.GetName();
-                            sal_Bool bDocumentData = aDlg.GetModifyDoc();
+                            bool bDocumentData = aDlg.GetModifyDoc();
 
                             if ( m_aModelsBox.GetEntryPos( sNewName ) != LISTBOX_ENTRY_NOTFOUND )
                             {
@@ -1494,7 +1494,7 @@ namespace svxform
                                     Reference< XPropertySet > xModelProps( xNewModel, UNO_QUERY_THROW );
                                     xModelProps->setPropertyValue(
                                         OUString( "ExternalData" ),
-                                        makeAny( sal_Bool( !bDocumentData ) ) );
+                                        makeAny( !bDocumentData ) );
 
                                     sal_Int32 nNewPos = m_aModelsBox.InsertEntry( sNewName );
                                     m_aModelsBox.SelectEntryPos( nNewPos );
@@ -1521,10 +1521,10 @@ namespace svxform
                         Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
                         Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
                         Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
-                        sal_Bool bExternalData = sal_False;
+                        bool bExternalData = false;
                         OSL_VERIFY( xModelProps->getPropertyValue(
                             OUString( "ExternalData" ) ) >>= bExternalData );
-                        bDocumentData = ( bExternalData == sal_False );
+                        bDocumentData = !bExternalData;
                     }
                     catch( const Exception& )
                     {
@@ -1544,7 +1544,7 @@ namespace svxform
                                 Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
                                 xModelProps->setPropertyValue(
                                     OUString( "ExternalData" ),
-                                    makeAny( sal_Bool( !bDocumentData ) ) );
+                                    makeAny( !bDocumentData ) );
                                 bIsDocModified = true;
                             }
                             catch( const Exception& )
@@ -2936,7 +2936,7 @@ namespace svxform
 
     IMPL_LINK( NamespaceItemDialog, SelectHdl, SvSimpleTable *,  EMPTYARG )
     {
-        sal_Bool bEnable = ( m_pNamespacesList->FirstSelected() != NULL );
+        bool bEnable = ( m_pNamespacesList->FirstSelected() != NULL );
         m_pEditNamespaceBtn->Enable( bEnable );
         m_pDeleteNamespaceBtn->Enable( bEnable );
 

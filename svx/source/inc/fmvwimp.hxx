@@ -187,7 +187,7 @@ protected:
     FmXFormView( FmFormView* _pView );
     virtual ~FmXFormView();
 
-    void    saveMarkList( sal_Bool _bSmartUnmark = sal_True );
+    void    saveMarkList( bool _bSmartUnmark = true );
     void    restoreMarkList( SdrMarkList& _rRestoredMarkList );
     void    stopMarkListWatching();
     void    startMarkListWatching();
@@ -248,8 +248,8 @@ private:
     //void addWindow(const SdrPageViewWinRec*);
     void addWindow(const SdrPageWindow&);
     void removeWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
-    void Activate(sal_Bool bSync = sal_False);
-    void Deactivate(sal_Bool bDeactivateController = sal_True);
+    void Activate(bool bSync = false);
+    void Deactivate(bool bDeactivateController = true);
 
     SdrObject*  implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
     SdrObject*  implCreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc );
@@ -296,7 +296,7 @@ private:
     void cancelEvents();
 
     /// the auto focus to the first (in terms of the tab order) control
-    void AutoFocus( sal_Bool _bSync = sal_False );
+    void AutoFocus( bool _bSync = false );
     DECL_LINK( OnActivate, void* );
     DECL_LINK( OnAutoFocus, void* );
     DECL_LINK( OnDelayedErrorMessage, void* );

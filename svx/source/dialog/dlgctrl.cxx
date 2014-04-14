@@ -190,8 +190,8 @@ void SvxRectCtl::InitRectBitmap( void )
     aColorAry2[6] = rStyles.GetDialogColor();
 
 #ifdef DBG_UTIL
-    static sal_Bool     bModify = sal_False;
-    sal_Bool&           rModify = bModify;
+    static bool     bModify = false;
+    bool&           rModify = bModify;
     if( rModify )
     {
         static int      n = 0;
@@ -883,7 +883,7 @@ void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
     if(m_pAccess)
     {
-        m_pAccess->NotifyChild(nIndex,sal_True, sal_True);
+        m_pAccess->NotifyChild(nIndex,true, true);
     }
 }
 
@@ -968,7 +968,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aKeyCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = aKeyCode.GetCode();
-    sal_Bool bIsMod = aKeyCode.IsShift() || aKeyCode.IsMod1() || aKeyCode.IsMod2();
+    bool bIsMod = aKeyCode.IsShift() || aKeyCode.IsMod1() || aKeyCode.IsMod2();
 
     if( !bIsMod )
     {
@@ -977,7 +977,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                             );
         Size  mRepaintSize( aRectSize.Width() *3/ nLines + 2,aRectSize.Height() *3/ nLines + 2);
         Rectangle mRepaintRect( pRepaintPoint, mRepaintSize );
-        sal_Bool bFocusPosChanged=sal_False;
+        bool bFocusPosChanged=false;
         switch(nCode)
         {
             case KEY_LEFT:
@@ -985,7 +985,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                 {
                     aFocusPosition.setX( aFocusPosition.getX() - 1 );
                     Invalidate(mRepaintRect);
-                    bFocusPosChanged=sal_True;
+                    bFocusPosChanged=true;
                 }
                 break;
             case KEY_RIGHT:
@@ -993,7 +993,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                 {
                     aFocusPosition.setX( aFocusPosition.getX() + 1 );
                     Invalidate(mRepaintRect);
-                    bFocusPosChanged=sal_True;
+                    bFocusPosChanged=true;
                 }
                 break;
             case KEY_UP:
@@ -1001,7 +1001,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                 {
                     aFocusPosition.setY( aFocusPosition.getY() - 1 );
                     Invalidate(mRepaintRect);
-                    bFocusPosChanged=sal_True;
+                    bFocusPosChanged=true;
                 }
                 break;
             case KEY_DOWN:
@@ -1009,7 +1009,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                 {
                     aFocusPosition.setY( aFocusPosition.getY() + 1 );
                     Invalidate(mRepaintRect);
-                    bFocusPosChanged=sal_True;
+                    bFocusPosChanged=true;
                 }
                 break;
             case KEY_SPACE:
@@ -1031,11 +1031,11 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
             case KEY_DOWN:
                 if (bFocusPosChanged)
                 {
-                    m_pAccess->NotifyChild(nIndex,sal_False,sal_False);
+                    m_pAccess->NotifyChild(nIndex,false,false);
                 }
                 break;
             case KEY_SPACE:
-                m_pAccess->NotifyChild(nIndex,sal_False,sal_True);
+                m_pAccess->NotifyChild(nIndex,false,true);
                 break;
             default:
                 break;
@@ -1055,7 +1055,7 @@ void SvxPixelCtl::GetFocus()
 
     if(m_pAccess)
     {
-        m_pAccess->NotifyChild(GetFoucsPosIndex(),sal_True,sal_False);
+        m_pAccess->NotifyChild(GetFoucsPosIndex(),true,false);
     }
 
     Control::GetFocus();

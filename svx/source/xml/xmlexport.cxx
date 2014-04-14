@@ -50,7 +50,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
 
 bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputStream>& xOut, const Reference< lang::XComponent >& xComponent, const char* pExportService )
 {
-    sal_Bool bDocRet = xOut.is();
+    bool bDocRet = xOut.is();
 
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
     SvXMLGraphicHelper *pGraphicHelper = 0;
@@ -101,7 +101,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
                 if( !xFilter.is() )
                 {
                     OSL_FAIL( "com.sun.star.comp.Draw.XMLExporter service missing" );
-                    bDocRet = sal_False;
+                    bDocRet = false;
                 }
 
                 if( bDocRet )
@@ -121,7 +121,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
     catch(uno::Exception const&)
     {
         DBG_UNHANDLED_EXCEPTION();
-        bDocRet = sal_False;
+        bDocRet = false;
     }
 
     if( pGraphicHelper )

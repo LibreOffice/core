@@ -43,8 +43,8 @@
 using namespace ::com::sun::star;
 
 SgaObject::SgaObject()
-:   bIsValid    ( sal_False ),
-    bIsThumbBmp ( sal_True )
+:   bIsValid    ( false ),
+    bIsThumbBmp ( true )
 {
 }
 
@@ -90,9 +90,9 @@ BitmapEx SgaObject::createPreviewBitmapEx(const Size& rSizePixel) const
     return aRetval;
 }
 
-sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
+bool SgaObject::CreateThumb( const Graphic& rGraphic )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( rGraphic.GetType() == GRAPHIC_BITMAP )
     {
@@ -127,7 +127,7 @@ sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
             if( ( aBmpSize.Width() <= S_THUMB ) && ( aBmpSize.Height() <= S_THUMB ) )
             {
                 aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
-                bRet = sal_True;
+                bRet = true;
             }
             else
             {
@@ -140,7 +140,7 @@ sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
                     BMP_SCALE_BESTQUALITY ) )
                 {
                     aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
         }
@@ -161,7 +161,7 @@ sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
         if( !aThumbBmp.IsEmpty() )
         {
             aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -201,7 +201,7 @@ void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
     sal_uInt32      nTmp32;
     sal_uInt16      nTmp16;
 
-    rIn.ReadUInt32( nTmp32 ).ReadUInt16( nTmp16 ).ReadUInt16( rReadVersion ).ReadUInt16( nTmp16 ).ReadUChar( bIsThumbBmp );
+    rIn.ReadUInt32( nTmp32 ).ReadUInt16( nTmp16 ).ReadUInt16( rReadVersion ).ReadUInt16( nTmp16 ).ReadCharAsBool( bIsThumbBmp );
 
     if( bIsThumbBmp )
     {
@@ -329,10 +329,10 @@ SgaObjectSound::SgaObjectSound( const INetURLObject& rURL ) :
     {
         aURL = rURL;
         aThumbBmp = Bitmap( Size( 1, 1 ), 1 );
-        bIsValid = sal_True;
+        bIsValid = true;
     }
     else
-        bIsValid = sal_False;
+        bIsValid = false;
 }
 
 SgaObjectSound::~SgaObjectSound()
@@ -464,11 +464,11 @@ SgaObjectSvDraw::SgaObjectSvDraw( SvStream& rIStm, const INetURLObject& rURL )
     }
 }
 
-sal_Bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
+bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
 {
     Graphic     aGraphic;
     ImageMap    aImageMap;
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     if ( CreateIMapGraphic( rModel, aGraphic, aImageMap ) )
     {

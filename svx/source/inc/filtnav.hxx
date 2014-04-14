@@ -172,7 +172,7 @@ public:
 
     void Update(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & xCurrent);
     void Clear();
-    sal_Bool ValidateText(FmFilterItem* pItem, OUString& rText, OUString& rErrorMsg) const;
+    bool ValidateText(FmFilterItem* pItem, OUString& rText, OUString& rErrorMsg) const;
     void Append(FmFilterItems* pItems, FmFilterItem* pFilterItem);
     void SetTextForItem(FmFilterItem* pItem, const OUString& rText);
 
@@ -207,7 +207,7 @@ public:
     OFilterItemExchange();
 
     static sal_uInt32       getFormatId( );
-    inline static sal_Bool  hasFormat( const DataFlavorExVector& _rFormats );
+    inline static bool  hasFormat( const DataFlavorExVector& _rFormats );
 
     const ::std::vector<FmFilterItem*>& getDraggedEntries() const { return m_aDraggedEntries; }
     void setDraggedEntries(const ::std::vector<FmFilterItem*>& _rList) { m_aDraggedEntries = _rList; }
@@ -220,7 +220,7 @@ protected:
     virtual void AddSupportedFormats() SAL_OVERRIDE;
 };
 
-inline sal_Bool OFilterItemExchange::hasFormat( const DataFlavorExVector& _rFormats )
+inline bool OFilterItemExchange::hasFormat( const DataFlavorExVector& _rFormats )
 {
     return OLocalExchange::hasFormat( _rFormats, getFormatId() );
 }
@@ -271,7 +271,7 @@ protected:
     virtual void Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
-    virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
+    virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true ) SAL_OVERRIDE;
     virtual bool EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection ) SAL_OVERRIDE;
     virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
 
@@ -304,7 +304,7 @@ private:
         @param  _bCopy
             If <TRUE/> the items will not be removed from the model, otherwise they will.
     */
-    void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,sal_Bool _bCopy = sal_False);
+    void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems, bool _bCopy = false);
     SvTreeListEntry* getPrevEntry(SvTreeListEntry* _pStartWith = NULL);
     SvTreeListEntry* getNextEntry(SvTreeListEntry* _pStartWith = NULL);
 

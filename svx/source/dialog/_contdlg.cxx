@@ -217,9 +217,9 @@ SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *_pBindings, SfxChildWindow 
         aContourWnd         ( this, ResId( CTL_CONTOUR, *rResId.GetResMgr() ) ),
         aStbStatus          ( this, WB_BORDER | WB_3DLOOK | WB_LEFT ),
         nGrfChanged         ( 0UL ),
-        bExecState          ( sal_False ),
-        bUpdateGraphicLinked( sal_False ),
-        bGraphicLinked      ( sal_False ),
+        bExecState          ( false ),
+        bUpdateGraphicLinked( false ),
+        bGraphicLinked      ( false ),
         maImageList         ( SVX_RES( CD_IMAPDLG ) )
 {
     ApplyImageList();
@@ -302,7 +302,7 @@ void SvxSuperContourDlg::Resize()
 
 bool SvxSuperContourDlg::Close()
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     if ( aTbx1.IsItemEnabled( TBI_APPLY ) )
     {
@@ -316,7 +316,7 @@ bool SvxSuperContourDlg::Close()
                 SID_CONTOUR_EXEC, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
         }
         else if ( nRet == RET_CANCEL )
-            bRet = sal_False;
+            bRet = false;
     }
 
     return( bRet ? SfxFloatingWindow::Close() : sal_False );
@@ -324,7 +324,7 @@ bool SvxSuperContourDlg::Close()
 
 // Enabled or disabled all Controls
 
-void SvxSuperContourDlg::SetExecState( sal_Bool bEnable )
+void SvxSuperContourDlg::SetExecState( bool bEnable )
 {
     bExecState = bEnable;
 }
@@ -345,7 +345,7 @@ void SvxSuperContourDlg::SetPolyPolygon( const PolyPolygon& rPolyPoly )
     const MapMode   aMap100( MAP_100TH_MM );
     const MapMode   aGrfMap( aGraphic.GetPrefMapMode() );
     OutputDevice*   pOutDev = Application::GetDefaultDevice();
-    sal_Bool            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
+    bool            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
 
     for ( sal_uInt16 j = 0, nPolyCount = aPolyPoly.Count(); j < nPolyCount; j++ )
     {
@@ -375,7 +375,7 @@ PolyPolygon SvxSuperContourDlg::GetPolyPolygon( bool bRescaleToGraphic )
         const MapMode   aMap100( MAP_100TH_MM );
         const MapMode   aGrfMap( aGraphic.GetPrefMapMode() );
         OutputDevice*   pOutDev = Application::GetDefaultDevice();
-        sal_Bool            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
+        bool            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
 
         for ( sal_uInt16 j = 0, nPolyCount = aRetPolyPoly.Count(); j < nPolyCount; j++ )
         {
@@ -396,7 +396,7 @@ PolyPolygon SvxSuperContourDlg::GetPolyPolygon( bool bRescaleToGraphic )
     return aRetPolyPoly;
 }
 
-void SvxSuperContourDlg::UpdateGraphic( const Graphic& rGraphic, sal_Bool _bGraphicLinked,
+void SvxSuperContourDlg::UpdateGraphic( const Graphic& rGraphic, bool _bGraphicLinked,
                                  const PolyPolygon* pPolyPoly, void* pEditingObj )
 {
     aUpdateGraphic = rGraphic;
@@ -444,12 +444,12 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
                 MessageDialog aQBox( this,"QueryDeleteContourDialog","svx/ui/querydeletecontourdialog.ui");
 
                 if ( !aContourWnd.IsContourChanged() || ( aQBox.Execute() == RET_YES ) )
-                    aContourWnd.SetWorkplaceMode( sal_True );
+                    aContourWnd.SetWorkplaceMode( true );
                 else
                     aTbx1.CheckItem( TBI_WORKPLACE, false );
             }
             else
-                aContourWnd.SetWorkplaceMode( sal_False );
+                aContourWnd.SetWorkplaceMode( false );
         }
         break;
 
@@ -531,7 +531,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
 
         case( TBI_PIPETTE ):
         {
-            sal_Bool bPipette = aTbx1.IsItemChecked( TBI_PIPETTE );
+            bool bPipette = aTbx1.IsItemChecked( TBI_PIPETTE );
 
             if ( !bPipette )
                 aStbStatus.Invalidate();
@@ -609,7 +609,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl)
 
         aUpdateGraphic = Graphic();
         aUpdatePolyPoly = PolyPolygon();
-        bUpdateGraphicLinked = sal_False;
+        bUpdateGraphicLinked = false;
 
         aContourWnd.GetSdrModel()->SetChanged( false );
     }
@@ -625,7 +625,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, CreateHdl)
 
     const Rectangle aWorkRect = aContourWnd.LogicToPixel( aContourWnd.GetWorkRect(), MapMode( MAP_100TH_MM ) );
     const Graphic&  rGraphic = aContourWnd.GetGraphic();
-    const sal_Bool      bValid = aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom();
+    const bool      bValid = aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom();
 
     EnterWait();
     SetPolyPolygon( CreateAutoContour( rGraphic, bValid ? &aWorkRect : NULL ) );
@@ -638,12 +638,12 @@ IMPL_LINK( SvxSuperContourDlg, StateHdl, ContourWindow*, pWnd )
 {
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrView*      pView = pWnd->GetSdrView();
-    const sal_Bool          bPolyEdit = ( pObj != NULL ) && pObj->ISA( SdrPathObj );
-    const sal_Bool          bDrawEnabled = !( bPolyEdit && aTbx1.IsItemChecked( TBI_POLYEDIT ) );
-    const sal_Bool          bPipette = aTbx1.IsItemChecked( TBI_PIPETTE );
-    const sal_Bool          bWorkplace = aTbx1.IsItemChecked( TBI_WORKPLACE );
-    const sal_Bool          bDontHide = !( bPipette || bWorkplace );
-    const sal_Bool          bBitmap = pWnd->GetGraphic().GetType() == GRAPHIC_BITMAP;
+    const bool          bPolyEdit = ( pObj != NULL ) && pObj->ISA( SdrPathObj );
+    const bool          bDrawEnabled = !( bPolyEdit && aTbx1.IsItemChecked( TBI_POLYEDIT ) );
+    const bool          bPipette = aTbx1.IsItemChecked( TBI_PIPETTE );
+    const bool          bWorkplace = aTbx1.IsItemChecked( TBI_WORKPLACE );
+    const bool          bDontHide = !( bPipette || bWorkplace );
+    const bool          bBitmap = pWnd->GetGraphic().GetType() == GRAPHIC_BITMAP;
 
     aTbx1.EnableItem( TBI_APPLY, bDontHide && bExecState && pWnd->IsChanged() );
 
@@ -738,7 +738,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
             if( !!aMask )
             {
                 MessageDialog aQBox( this,"QueryNewContourDialog","svx/ui/querynewcontourdialog.ui");
-                sal_Bool        bNewContour;
+                bool        bNewContour;
 
                 aRedoGraphic = Graphic();
                 aUndoGraphic = aGraphic;
@@ -757,7 +757,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
     }
 
     aTbx1.CheckItem( TBI_PIPETTE, false );
-    pWnd->SetPipetteMode( sal_False );
+    pWnd->SetPipetteMode( false );
     aStbStatus.Invalidate();
 
     return 0L;
@@ -767,7 +767,7 @@ IMPL_LINK( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow*, pWnd )
 {
     aTbx1.CheckItem( TBI_WORKPLACE, false );
     aTbx1.CheckItem( TBI_SELECT, true );
-    pWnd->SetWorkplaceMode( sal_False );
+    pWnd->SetWorkplaceMode( false );
 
     return 0L;
 }

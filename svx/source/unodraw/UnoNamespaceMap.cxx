@@ -109,7 +109,7 @@ namespace svx
 
         NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool* pPool );
 
-        sal_Bool next( OUString& rPrefix, OUString& rURL );
+        bool next( OUString& rPrefix, OUString& rURL );
     };
 }
 
@@ -129,7 +129,7 @@ NamespaceIteratorImpl::NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool
     mnItemCount = (mpWhichId && (0 != *mpWhichId) && mpPool) ? mpPool->GetItemCount2( *mpWhichId ) : 0;
 }
 
-sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
+bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
 {
     // we still need to process the current attribute
     if( mpCurrentAttr && (mnCurrentAttr != USHRT_MAX) )
@@ -138,7 +138,7 @@ sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
         rURL = mpCurrentAttr->GetNamespace( mnCurrentAttr );
 
         mnCurrentAttr = mpCurrentAttr->GetNextNamespaceIndex( mnCurrentAttr );
-        return sal_True;
+        return true;
     }
 
     // we need the next namespace item
@@ -201,7 +201,7 @@ Any SAL_CALL NamespaceMap::getByName( const OUString& aName ) throw (NoSuchEleme
     OUString aPrefix;
     OUString aURL;
 
-    sal_Bool bFound;
+    bool bFound;
 
     do
     {
@@ -248,7 +248,7 @@ sal_Bool SAL_CALL NamespaceMap::hasByName( const OUString& aName ) throw (Runtim
     OUString aPrefix;
     OUString aURL;
 
-    sal_Bool bFound;
+    bool bFound;
 
     do
     {

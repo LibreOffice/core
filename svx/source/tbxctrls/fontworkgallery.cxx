@@ -512,7 +512,7 @@ private:
     DECL_LINK( SelectHdl, void * );
 
     void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
-    void    implSetKernCharacterPairs( sal_Bool bKernOnOff, bool bEnabled );
+    void    implSetKernCharacterPairs( bool bKernOnOff, bool bEnabled );
 
 };
 
@@ -572,7 +572,7 @@ void FontworkCharacterSpacingWindow::implSetCharacterSpacing( sal_Int32 nCharact
 
 
 
-void FontworkCharacterSpacingWindow::implSetKernCharacterPairs( sal_Bool, bool bEnabled )
+void FontworkCharacterSpacingWindow::implSetKernCharacterPairs( bool, bool bEnabled )
 {
     enableEntry( 6, bEnabled );
     checkEntry( 6, bEnabled );
@@ -599,11 +599,11 @@ void FontworkCharacterSpacingWindow::statusChanged( const ::com::sun::star::fram
     {
         if( !Event.IsEnabled )
         {
-            implSetKernCharacterPairs( 0, false );
+            implSetKernCharacterPairs( false, false );
         }
         else
         {
-            sal_Bool bValue = sal_False;
+            bool bValue = false;
             if( Event.State >>= bValue )
                 implSetKernCharacterPairs( bValue, true );
         }
@@ -640,11 +640,11 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl)
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = msFontworkKernCharacterPairs.copy(5);
-        aArgs[0].Value <<= (sal_Bool) sal_True;
+        aArgs[0].Value <<= true;
 
         mrController.dispatchCommand( msFontworkKernCharacterPairs, aArgs );
 
-        implSetKernCharacterPairs( sal_True, true );
+        implSetKernCharacterPairs( true, true );
     }
     else if( nSelection >= 0 )
     {

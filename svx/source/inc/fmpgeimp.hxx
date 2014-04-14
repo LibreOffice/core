@@ -56,7 +56,7 @@ class SVX_DLLPRIVATE FmFormPageImpl
     FmFormPage&     m_rPage;
     Link            m_aFormsCreationHdl;
 
-    sal_Bool        m_bFirstActivation;
+    bool        m_bFirstActivation;
     bool            m_bAttemptedFormCreation;
     bool            m_bInFind;
 
@@ -88,8 +88,8 @@ public:
     );
 
     // activation handling
-    inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
-    inline  void        setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
+    inline  bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
+    inline  void        setHasBeenActivated( ) { m_bFirstActivation = false; }
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms>& getForms( bool _bForceCreate = true );
 

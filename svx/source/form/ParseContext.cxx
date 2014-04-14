@@ -165,7 +165,7 @@ namespace
         return s_nCounter;
     }
 
-    OSystemParseContext* getSharedContext(OSystemParseContext* _pContext = NULL,sal_Bool _bSet = sal_False)
+    OSystemParseContext* getSharedContext(OSystemParseContext* _pContext = NULL,bool _bSet = false)
     {
         static OSystemParseContext* s_pSharedContext = NULL;
         if ( _pContext && !s_pSharedContext )
@@ -199,7 +199,7 @@ OParseContextClient::~OParseContextClient()
     {
         ::osl::MutexGuard aGuard( getSafteyMutex() );
         if ( 0 == osl_atomic_decrement( &getCounter() ) )
-            delete getSharedContext(NULL,sal_True);
+            delete getSharedContext(NULL,true);
     }
 }
 

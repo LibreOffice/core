@@ -96,7 +96,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
             if (aSiz.Width()<2) aSiz.Width()=2;
             if (aSiz.Height()<2) aSiz.Height()=2;
 
-            sal_Bool bInEditMode = IsInEditMode();
+            bool bInEditMode = IsInEditMode();
 
             if(!bInEditMode)
             {
@@ -249,7 +249,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
                     aStyleName += OUString('|');
                     aStyleName += aFam.makeStringAndClear();
 
-                    sal_Bool bFnd(sal_False);
+                    bool bFnd(false);
                     sal_uInt32 nNum(aStyleNames.size());
 
                     while(!bFnd && nNum > 0)

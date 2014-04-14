@@ -70,7 +70,7 @@ class SvxPixelCtlAccessibleChild :
     SvxPixelCtl& mrParentWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxParent;
        void IsValid() throw (::com::sun::star::uno::RuntimeException);
-    sal_Bool m_bPixelColorOrBG;//Pixel Color Or BackGround Color
+    bool m_bPixelColorOrBG;//Pixel Color Or BackGround Color
     Point maPoint;
     Rectangle*  mpBoundingBox;
     /// index of child in parent
@@ -80,7 +80,7 @@ class SvxPixelCtlAccessibleChild :
 public:
     SvxPixelCtlAccessibleChild(
                 SvxPixelCtl& rWindow,
-                sal_Bool bPixelColorOrBG,
+                bool bPixelColorOrBG,
                 const Point& aPoint,
                 const Rectangle& rBounds,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xParent,
@@ -142,16 +142,16 @@ public:
     virtual Rectangle GetBoundingBox( void ) throw( ::com::sun::star::uno::RuntimeException );
 
     /// @returns true if it's disposed or in disposing
-    inline sal_Bool IsAlive( void ) const;
+    inline bool IsAlive( void ) const;
     /// @returns true if it's not disposed and no in disposing
-    inline sal_Bool IsNotAlive( void ) const;
+    inline bool IsNotAlive( void ) const;
     /// throws the exception DisposedException if it's not alive
     void ThrowExceptionIfNotAlive( void ) throw( ::com::sun::star::lang::DisposedException );
 
 
     void CheckChild();
-    void SelectChild( sal_Bool bSelect);
-    void ChangePixelColorOrBG(sal_Bool bPixelColorOrBG){ m_bPixelColorOrBG = bPixelColorOrBG ;}
+    void SelectChild( bool bSelect);
+    void ChangePixelColorOrBG(bool bPixelColorOrBG){ m_bPixelColorOrBG = bPixelColorOrBG ;}
     OUString GetName();
 };
 
@@ -244,32 +244,32 @@ public:
     void LoseFocus();
 
     /// @returns true if it's disposed or in disposing
-    inline sal_Bool IsAlive( void ) const;
+    inline bool IsAlive( void ) const;
     /// @returns true if it's not disposed and no in disposing
-    inline sal_Bool IsNotAlive( void ) const;
+    inline bool IsNotAlive( void ) const;
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> m_xCurChild;
 public:
-    void NotifyChild(long nIndex,sal_Bool bSelect ,sal_Bool bCheck);
+    void NotifyChild(long nIndex, bool bSelect, bool bCheck);
 };
 
-inline sal_Bool SvxPixelCtlAccessible::IsAlive( void ) const
+inline bool SvxPixelCtlAccessible::IsAlive( void ) const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
 }
 
-inline sal_Bool SvxPixelCtlAccessible::IsNotAlive( void ) const
+inline bool SvxPixelCtlAccessible::IsNotAlive( void ) const
 {
     return rBHelper.bDisposed || rBHelper.bInDispose;
 }
 
-inline sal_Bool SvxPixelCtlAccessibleChild::IsAlive( void ) const
+inline bool SvxPixelCtlAccessibleChild::IsAlive( void ) const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
 }
 
-inline sal_Bool SvxPixelCtlAccessibleChild::IsNotAlive( void ) const
+inline bool SvxPixelCtlAccessibleChild::IsNotAlive( void ) const
 {
     return rBHelper.bDisposed || rBHelper.bInDispose;
 }

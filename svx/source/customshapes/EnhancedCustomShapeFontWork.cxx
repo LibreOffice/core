@@ -208,9 +208,9 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
     rFWData.fHorizontalTextScaling = fScalingFactor;
 }
 
-void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, FWTextArea& rTextArea, sal_Bool bSameLetterHeights )
+void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, FWTextArea& rTextArea, bool bSameLetterHeights )
 {
-    sal_Bool bIsVertical = ((SdrObjCustomShape*)pCustomShape)->IsVerticalWriting();
+    bool bIsVertical = ((SdrObjCustomShape*)pCustomShape)->IsVerticalWriting();
     sal_Int32 nVerticalOffset = rFWData.nMaxParagraphsPerTextArea > rTextArea.vParagraphs.size()
                                     ? rFWData.nSingleLineHeight / 2 : 0;
 
@@ -423,7 +423,7 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
     rFWData.nSingleLineHeight = (sal_Int32)( ( (double)pCustomShape->GetLogicRect().GetHeight()
                                                 / rFWData.nMaxParagraphsPerTextArea ) * rFWData.fHorizontalTextScaling );
 
-    sal_Bool bSameLetterHeights = sal_False;
+    bool bSameLetterHeights = false;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const OUString sTextPath( "TextPath"  );
     const OUString sSameLetterHeights( "SameLetterHeights"  );

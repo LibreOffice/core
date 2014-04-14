@@ -279,7 +279,7 @@ bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         nPos = aURLNoPar.indexOf( ':' );
         if( -1 == nPos )
             return false;
-        sal_Bool bObjUrl = aURLNoPar.startsWith( XML_EMBEDDEDOBJECT_URL_BASE );
+        bool bObjUrl = aURLNoPar.startsWith( XML_EMBEDDEDOBJECT_URL_BASE );
         bool bGrUrl = !bObjUrl &&
               aURLNoPar.startsWith( XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE );
         if( !(bObjUrl || bGrUrl) )
@@ -384,7 +384,7 @@ bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     // Is the object name unique?
     // if the object is already instantiated by GetEmbeddedObject
     // that means that the duplication is being loaded
-    sal_Bool bDuplicate = rContainer.HasInstantiatedEmbeddedObject( rObjName );
+    bool bDuplicate = rContainer.HasInstantiatedEmbeddedObject( rObjName );
     DBG_ASSERT( !bDuplicate, "An object in the document is referenced twice!" );
 
     if( xDocStor != xCntnrStor || pTemp || bDuplicate )
@@ -678,7 +678,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
                                     comphelper::OStorageHelper::GetTemporaryStorage();
                             Sequence < beans::PropertyValue > aDummy( 0 ), aEmbDescr( 1 );
                             aEmbDescr[0].Name = "StoreVisualReplacement";
-                               aEmbDescr[0].Value <<= (sal_Bool)(!bOasisFormat);
+                            aEmbDescr[0].Value <<= !bOasisFormat;
                             if ( !bOasisFormat )
                             {
                                 uno::Reference< io::XInputStream > xGrInStream = ImplGetReplacementImage( xObj );

@@ -174,7 +174,7 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
     aEdtText.Disable();
     maFtTarget.Disable();
     maCbbTarget.Disable();
-    pOwnData->bExecState = sal_False;
+    pOwnData->bExecState = false;
 
     Resize();
 
@@ -220,7 +220,7 @@ void SvxIMapDlg::Resize()
 
 bool SvxIMapDlg::Close()
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     if ( aTbxIMapDlg1.IsItemEnabled( TBI_APPLY ) )
     {
@@ -234,7 +234,7 @@ bool SvxIMapDlg::Close()
                 SID_IMAP_EXEC, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
         }
         else if( nRet == RET_CANCEL )
-            bRet = sal_False;
+            bRet = false;
     }
     else if( pIMapWnd->IsChanged() )
     {
@@ -244,7 +244,7 @@ bool SvxIMapDlg::Close()
         if( nRet == RET_YES )
             bRet = DoSave();
         else if( nRet == RET_CANCEL )
-            bRet = sal_False;
+            bRet = false;
     }
 
     return( bRet ? SfxModelessDialog::Close() : sal_False );
@@ -513,7 +513,7 @@ bool SvxIMapDlg::DoSave()
     const OUString    aCERNFilter( IMAP_CERN_FILTER );
     const OUString    aNCSAFilter( IMAP_NCSA_FILTER );
     SdrModel*       pModel = pIMapWnd->GetSdrModel();
-    const sal_Bool bChanged = pModel->IsChanged();
+    const bool bChanged = pModel->IsChanged();
     bool            bRet = false;
 
     aDlg.AddFilter( aCERNFilter, IMAP_CERN_TYPE );
@@ -753,8 +753,8 @@ IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrModel*     pModel = pWnd->GetSdrModel();
     const SdrView*      pView = pWnd->GetSdrView();
-    const sal_Bool          bPolyEdit = ( pObj != NULL ) && pObj->ISA( SdrPathObj );
-    const sal_Bool          bDrawEnabled = !( bPolyEdit && aTbxIMapDlg1.IsItemChecked( TBI_POLYEDIT ) );
+    const bool          bPolyEdit = ( pObj != NULL ) && pObj->ISA( SdrPathObj );
+    const bool          bDrawEnabled = !( bPolyEdit && aTbxIMapDlg1.IsItemChecked( TBI_POLYEDIT ) );
 
     aTbxIMapDlg1.EnableItem( TBI_APPLY, pOwnData->bExecState && pWnd->IsChanged() );
 

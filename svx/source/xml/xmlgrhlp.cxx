@@ -110,7 +110,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
         {
             Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
             const GfxLink   aGfxLink( aGraphic.GetLink() );
-            sal_Bool        bRet = sal_False;
+            bool        bRet = false;
 
             if( aGfxLink.GetDataSize() && aGfxLink.GetData() )
             {
@@ -214,7 +214,7 @@ private:
     SvStream*                       mpOStm;
     Reference< XOutputStream >      mxStmWrapper;
     GraphicObject                   maGrfObj;
-    sal_Bool                        mbClosed;
+    bool                        mbClosed;
 
 public:
 
@@ -227,7 +227,7 @@ public:
 
 SvXMLGraphicOutputStream::SvXMLGraphicOutputStream() :
     mpTmp( new ::utl::TempFile ),
-    mbClosed( sal_False )
+    mbClosed( false )
 {
     mpTmp->EnableKillingFile();
 
@@ -270,7 +270,7 @@ void SAL_CALL SvXMLGraphicOutputStream::closeOutput()
     mxStmWrapper->closeOutput();
     mxStmWrapper.clear();
 
-    mbClosed = sal_True;
+    mbClosed = true;
 }
 
 const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
@@ -374,7 +374,7 @@ bool SvXMLGraphicHelper::ImplGetStreamNames( const OUString& rURLStr,
                                                  OUString& rPictureStreamName )
 {
     OUString      aURLStr( rURLStr );
-    sal_Bool    bRet = sal_False;
+    bool    bRet = false;
 
     if( !aURLStr.isEmpty() )
     {
@@ -511,7 +511,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                                                bool bUseGfxLink )
 {
     GraphicObject   aGrfObject( OUStringToOString(rGraphicId, RTL_TEXTENCODING_ASCII_US) );
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     if( aGrfObject.GetType() != GRAPHIC_NONE )
     {
@@ -531,7 +531,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                 xProps->setPropertyValue( "MediaType", aAny );
             }
 
-            const sal_Bool bCompressed = aMimeType.isEmpty() || aMimeType == "image/tiff" || aMimeType == "image/svg+xml";
+            const bool bCompressed = aMimeType.isEmpty() || aMimeType == "image/tiff" || aMimeType == "image/svg+xml";
             aAny <<= bCompressed;
             xProps->setPropertyValue( "Compressed", aAny );
 

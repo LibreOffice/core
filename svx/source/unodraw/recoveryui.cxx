@@ -124,7 +124,7 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
 
         EJob impl_classifyJob(const css::util::URL& aURL);
 
-        sal_Bool impl_doEmergencySave();
+        bool impl_doEmergencySave();
 
         void impl_doRecovery();
 
@@ -179,7 +179,7 @@ css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL&
     {
         case RecoveryUI::E_DO_EMERGENCY_SAVE :
         {
-            sal_Bool bRet = impl_doEmergencySave();
+            bool bRet = impl_doEmergencySave();
             aRet <<= bRet;
             break;
         }
@@ -275,7 +275,7 @@ RecoveryUI::EJob RecoveryUI::impl_classifyJob(const css::util::URL& aURL)
 }
 
 
-sal_Bool RecoveryUI::impl_doEmergencySave()
+bool RecoveryUI::impl_doEmergencySave()
 {
     // create core service, which implements the real "emergency save" algorithm.
     svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xContext, true);

@@ -130,7 +130,7 @@ public:
     OUString                GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetEntry( mpThemes->GetSelectEntryPos() ) : OUString(); }
 
     void                    ShowContextMenu();
-    sal_Bool                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
+    bool                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

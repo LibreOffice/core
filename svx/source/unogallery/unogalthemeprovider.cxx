@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 namespace {
 
 GalleryThemeProvider::GalleryThemeProvider() :
-    mbHiddenThemes( sal_False )
+    mbHiddenThemes( false )
 {
     mpGallery = ::Gallery::GetGalleryInstance();
 }
@@ -174,7 +174,7 @@ sal_Bool SAL_CALL GalleryThemeProvider::hasByName( const OUString& rName )
 {
     const SolarMutexGuard aGuard;
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( mpGallery && mpGallery->HasTheme( rName ) )
         bRet = ( mbHiddenThemes || !mpGallery->GetThemeInfo( rName )->IsHidden() );

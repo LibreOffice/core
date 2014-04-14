@@ -44,7 +44,7 @@ public:
         Window* pParentWindow);
     virtual ~GalleryControl (void);
 
-    sal_Bool GalleryKeyInput( const KeyEvent& rKEvt, Window* pWindow);
+    bool GalleryKeyInput( const KeyEvent& rKEvt, Window* pWindow);
 
 private:
     Gallery* mpGallery;

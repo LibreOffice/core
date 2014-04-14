@@ -155,7 +155,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
             case DataType::DATE:
             case DataType::TIME:
             case DataType::TIMESTAMP:
-                m_bDateTime = sal_True;
+                m_bDateTime = true;
 
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -169,7 +169,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
             case DataType::NUMERIC:
             case DataType::DECIMAL:
                 m_nAlign = ::com::sun::star::awt::TextAlign::RIGHT;
-                m_bNumeric = sal_True;
+                m_bNumeric = true;
                 break;
             default:
                 m_nAlign = ::com::sun::star::awt::TextAlign::LEFT;
@@ -270,12 +270,12 @@ void DbGridColumn::UpdateFromField(const DbGridRow* pRow, const Reference< XNumb
 }
 
 
-sal_Bool DbGridColumn::Commit()
+bool DbGridColumn::Commit()
 {
-    sal_Bool bResult = sal_True;
+    bool bResult = true;
     if (!m_bInSave && m_pCell)
     {
-        m_bInSave = sal_True;
+        m_bInSave = true;
         bResult = m_pCell->Commit();
 
         // store the data into the model
@@ -286,7 +286,7 @@ sal_Bool DbGridColumn::Commit()
             if (xComp.is())
                 bResult = xComp->commit();
         }
-        m_bInSave = sal_False;
+        m_bInSave = false;
     }
     return bResult;
 }
@@ -326,8 +326,8 @@ void DbGridColumn::Clear()
 
     m_nFormatKey = 0;
     m_nFieldPos = -1;
-    m_bReadOnly = sal_True;
-    m_bAutoValue = sal_False;
+    m_bReadOnly = true;
+    m_bAutoValue = false;
     m_nFieldType = DataType::OTHER;
 }
 
@@ -390,7 +390,7 @@ sal_Int16 DbGridColumn::SetAlignmentFromModel(sal_Int16 nStandardAlign)
 }
 
 
-void DbGridColumn::setLock(sal_Bool _bLock)
+void DbGridColumn::setLock(bool _bLock)
 {
     if (m_bLocked == _bLock)
         return;
@@ -543,13 +543,13 @@ TYPEINIT1( DbNumericField, DbSpinField )
 TYPEINIT1( DbFilterField, DbCellControl )
 
 
-DbCellControl::DbCellControl( DbGridColumn& _rColumn, sal_Bool /*_bText*/ )
+DbCellControl::DbCellControl( DbGridColumn& _rColumn, bool /*_bText*/ )
     :OPropertyChangeListener(m_aMutex)
     ,m_pModelChangeBroadcaster(NULL)
     ,m_pFieldChangeBroadcaster(NULL)
-    ,m_bTransparent( sal_False )
-    ,m_bAlignedController( sal_True )
-    ,m_bAccessingValueProperty( sal_False )
+    ,m_bTransparent( false )
+    ,m_bAlignedController( true )
+    ,m_bAccessingValueProperty( false )
     ,m_rColumn( _rColumn )
     ,m_pPainter( NULL )
     ,m_pWindow( NULL )
@@ -562,14 +562,14 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn, sal_Bool /*_bText*/ )
         m_pModelChangeBroadcaster->acquire();
 
         // be listener for some common properties
-        implDoPropertyListening( FM_PROP_READONLY, sal_False );
-        implDoPropertyListening( FM_PROP_ENABLED, sal_False );
+        implDoPropertyListening( FM_PROP_READONLY, false );
+        implDoPropertyListening( FM_PROP_ENABLED, false );
 
         // add as listener for all know "value" properties
-        implDoPropertyListening( FM_PROP_VALUE, sal_False );
-        implDoPropertyListening( FM_PROP_STATE, sal_False );
-        implDoPropertyListening( FM_PROP_TEXT, sal_False );
-        implDoPropertyListening( FM_PROP_EFFECTIVE_VALUE, sal_False );
+        implDoPropertyListening( FM_PROP_VALUE, false );
+        implDoPropertyListening( FM_PROP_STATE, false );
+        implDoPropertyListening( FM_PROP_TEXT, false );
+        implDoPropertyListening( FM_PROP_EFFECTIVE_VALUE, false );
 
         // be listener at the bound field as well
         try
@@ -596,7 +596,7 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn, sal_Bool /*_bText*/ )
 }
 
 
-void DbCellControl::implDoPropertyListening(const OUString& _rPropertyName, sal_Bool _bWarnIfNotExistent)
+void DbCellControl::implDoPropertyListening(const OUString& _rPropertyName, bool _bWarnIfNotExistent)
 {
     try
     {
@@ -688,7 +688,7 @@ void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(R
     }
     else if ( _rEvent.PropertyName.equals( FM_PROP_ISREADONLY ) )
     {
-        sal_Bool bReadOnly = sal_True;
+        bool bReadOnly = true;
         _rEvent.NewValue >>= bReadOnly;
         m_rColumn.SetReadOnly(bReadOnly);
         implAdjustReadOnly( xSourceProps, false);
@@ -702,12 +702,12 @@ void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(R
 }
 
 
-sal_Bool DbCellControl::Commit()
+bool DbCellControl::Commit()
 {
     // lock the listening for value property changes
     lockValueProperty();
     // commit the content of the control into the model's value property
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     try
     {
         bReturn = commitControl();
@@ -767,7 +767,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
     {
         Color aTextColor( rParent.IsControlForeground() ? rParent.GetControlForeground() : rParent.GetTextColor() );
 
-        sal_Bool bTextLineColor = rParent.IsTextLineColor();
+        bool bTextLineColor = rParent.IsTextLineColor();
         Color aTextLineColor( rParent.GetTextLineColor() );
 
         for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
@@ -838,7 +838,7 @@ void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxMode
         Edit* pEditWindow = dynamic_cast< Edit* >( m_pWindow );
         if ( pEditWindow )
         {
-            sal_Bool bReadOnly = m_rColumn.IsReadOnly();
+            bool bReadOnly = m_rColumn.IsReadOnly();
             if ( !bReadOnly )
             {
                 _rxModel->getPropertyValue( i_bReadOnly ? OUString(FM_PROP_READONLY) : OUString(FM_PROP_ISREADONLY)) >>= bReadOnly;
@@ -855,7 +855,7 @@ void DbCellControl::implAdjustEnabled( const Reference< XPropertySet >& _rxModel
     DBG_ASSERT( _rxModel.is(), "DbCellControl::implAdjustEnabled: invalid model!" );
     if ( m_pWindow && _rxModel.is() )
     {
-        sal_Bool bEnable = sal_True;
+        bool bEnable = true;
         _rxModel->getPropertyValue( FM_PROP_ENABLED ) >>= bEnable;
         m_pWindow->Enable( bEnable );
     }
@@ -1015,11 +1015,11 @@ double DbCellControl::GetValue(const Reference< ::com::sun::star::sdb::XColumn >
     }
     else
     {
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
         try
         {
             fValue = _rxField->getDouble();
-            bSuccess = sal_True;
+            bSuccess = true;
         }
         catch(const Exception&) { }
         if (!bSuccess)
@@ -1084,7 +1084,7 @@ DbTextField::DbTextField(DbGridColumn& _rColumn)
             ,m_pEdit( NULL )
             ,m_pPainterImplementation( NULL )
             ,m_nKeyType(::com::sun::star::util::NumberFormat::TEXT)
-            ,m_bIsSimpleEdit( sal_True )
+            ,m_bIsSimpleEdit( true )
 {
 }
 
@@ -1115,7 +1115,7 @@ void DbTextField::Init( Window& rParent, const Reference< XRowSet >& xCursor)
     }
 
     // is this a multi-line field?
-    sal_Bool bIsMultiLine = sal_False;
+    bool bIsMultiLine = false;
     try
     {
         if ( xModel.is() )
@@ -1226,7 +1226,7 @@ void DbTextField::updateFromModel( Reference< XPropertySet > _rxModel )
 }
 
 
-sal_Bool DbTextField::commitControl()
+bool DbTextField::commitControl()
 {
     OUString aText( m_pEdit->GetText( getModelLineEndSetting( m_rColumn.getModel() ) ) );
     // we have to check if the length before we can decide if the value was modified
@@ -1240,7 +1240,7 @@ sal_Bool DbTextField::commitControl()
             aText = sOldValue;
     }
     m_rColumn.getModel()->setPropertyValue( FM_PROP_TEXT, makeAny( aText ) );
-    return sal_True;
+    return true;
 }
 
 
@@ -1350,7 +1350,7 @@ void DbFormattedField::Init( Window& rParent, const Reference< XRowSet >& xCurso
         Reference< XRowSet >  xCursorForm(xCursor, UNO_QUERY);
         if (xCursorForm.is())
         {   // wenn wir vom Cursor den Formatter nehmen, dann auch den Key vom Feld, an das wir gebunden sind
-            m_xSupplier = getNumberFormats(getRowSetConnection(xCursorForm), sal_False);
+            m_xSupplier = getNumberFormats(getRowSetConnection(xCursorForm), false);
 
             if (m_rColumn.GetField().is())
                 nFormatKey = ::comphelper::getINT32(m_rColumn.GetField()->getPropertyValue(FM_PROP_FORMATKEY));
@@ -1393,7 +1393,7 @@ void DbFormattedField::Init( Window& rParent, const Reference< XRowSet >& xCurso
     // Min- und Max-Werte
     if (m_rColumn.IsNumeric())
     {
-        sal_Bool bClearMin = sal_True;
+        bool bClearMin = true;
         if (::comphelper::hasProperty(FM_PROP_EFFECTIVE_MIN, xUnoModel))
         {
             Any aMin( xUnoModel->getPropertyValue(FM_PROP_EFFECTIVE_MIN));
@@ -1403,7 +1403,7 @@ void DbFormattedField::Init( Window& rParent, const Reference< XRowSet >& xCurso
                 double dMin = ::comphelper::getDouble(aMin);
                 ((FormattedField*)m_pWindow)->SetMinValue(dMin);
                 ((FormattedField*)m_pPainter)->SetMinValue(dMin);
-                bClearMin = sal_False;
+                bClearMin = false;
             }
         }
         if (bClearMin)
@@ -1411,7 +1411,7 @@ void DbFormattedField::Init( Window& rParent, const Reference< XRowSet >& xCurso
             ((FormattedField*)m_pWindow)->ClearMinValue();
             ((FormattedField*)m_pPainter)->ClearMinValue();
         }
-        sal_Bool bClearMax = sal_True;
+        bool bClearMax = true;
         if (::comphelper::hasProperty(FM_PROP_EFFECTIVE_MAX, xUnoModel))
         {
             Any aMin( xUnoModel->getPropertyValue(FM_PROP_EFFECTIVE_MAX));
@@ -1421,7 +1421,7 @@ void DbFormattedField::Init( Window& rParent, const Reference< XRowSet >& xCurso
                 double dMin = ::comphelper::getDouble(aMin);
                 ((FormattedField*)m_pWindow)->SetMaxValue(dMin);
                 ((FormattedField*)m_pPainter)->SetMaxValue(dMin);
-                bClearMax = sal_False;
+                bClearMax = false;
             }
         }
         if (bClearMax)
@@ -1616,7 +1616,7 @@ void DbFormattedField::updateFromModel( Reference< XPropertySet > _rxModel )
 }
 
 
-sal_Bool DbFormattedField::commitControl()
+bool DbFormattedField::commitControl()
 {
     Any aNewVal;
     FormattedField& rField = *(FormattedField*)m_pWindow;
@@ -1631,7 +1631,7 @@ sal_Bool DbFormattedField::commitControl()
         aNewVal <<= OUString(rField.GetTextValue());
 
     m_rColumn.getModel()->setPropertyValue(FM_PROP_EFFECTIVE_VALUE, aNewVal);
-    return sal_True;
+    return true;
 }
 
 
@@ -1639,9 +1639,9 @@ sal_Bool DbFormattedField::commitControl()
 
 
 DbCheckBox::DbCheckBox( DbGridColumn& _rColumn )
-    :DbCellControl( _rColumn, sal_True )
+    :DbCellControl( _rColumn, true )
 {
-    setAlignedController( sal_False );
+    setAlignedController( false );
 }
 
 namespace
@@ -1662,7 +1662,7 @@ namespace
 
 void DbCheckBox::Init( Window& rParent, const Reference< XRowSet >& xCursor )
 {
-    setTransparent( sal_True );
+    setTransparent( true );
 
     m_pWindow  = new CheckBoxControl( &rParent );
     m_pPainter = new CheckBoxControl( &rParent );
@@ -1682,7 +1682,7 @@ void DbCheckBox::Init( Window& rParent, const Reference< XRowSet >& xCursor )
         setCheckBoxStyle( m_pWindow, nStyle == awt::VisualEffect::FLAT );
         setCheckBoxStyle( m_pPainter, nStyle == awt::VisualEffect::FLAT );
 
-        sal_Bool bTristate = sal_True;
+        bool bTristate = true;
         OSL_VERIFY( xModel->getPropertyValue( FM_PROP_TRISTATE ) >>= bTristate );
         static_cast< CheckBoxControl* >( m_pWindow )->GetBox().EnableTriState( bTristate );
         static_cast< CheckBoxControl* >( m_pPainter )->GetBox().EnableTriState( bTristate );
@@ -1709,7 +1709,7 @@ static void lcl_setCheckBoxState(   const Reference< ::com::sun::star::sdb::XCol
     {
         try
         {
-            sal_Bool bValue = _rxField->getBoolean();
+            bool bValue = _rxField->getBoolean();
             if (!_rxField->wasNull())
                 eState = bValue ? TRISTATE_TRUE : TRISTATE_FALSE;
         }
@@ -1747,11 +1747,11 @@ void DbCheckBox::updateFromModel( Reference< XPropertySet > _rxModel )
 }
 
 
-sal_Bool DbCheckBox::commitControl()
+bool DbCheckBox::commitControl()
 {
     m_rColumn.getModel()->setPropertyValue( FM_PROP_STATE,
                     makeAny( (sal_Int16)( static_cast< CheckBoxControl* >( m_pWindow )->GetBox().GetState() ) ) );
-    return sal_True;
+    return true;
 }
 
 
@@ -1781,7 +1781,7 @@ void DbPatternField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     {
         OUString aLitMask;
         OUString aEditMask;
-        sal_Bool bStrict = sal_False;
+        bool bStrict = false;
 
         _rxModel->getPropertyValue( FM_PROP_LITERALMASK ) >>= aLitMask;
         _rxModel->getPropertyValue( FM_PROP_EDITMASK ) >>= aEditMask;
@@ -1870,11 +1870,11 @@ void DbPatternField::updateFromModel( Reference< XPropertySet > _rxModel )
 }
 
 
-sal_Bool DbPatternField::commitControl()
+bool DbPatternField::commitControl()
 {
     OUString aText(m_pWindow->GetText());
     m_rColumn.getModel()->setPropertyValue(FM_PROP_TEXT, makeAny(aText));
-    return sal_True;
+    return true;
 }
 
 
@@ -1940,9 +1940,9 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
         sal_Int32   nMin        = (sal_Int32)getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMIN ) );
         sal_Int32   nMax        = (sal_Int32)getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMAX ) );
         sal_Int32   nStep       = (sal_Int32)getDouble( _rxModel->getPropertyValue( FM_PROP_VALUESTEP ) );
-        sal_Bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
+        bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
         sal_Int16   nScale      = getINT16( _rxModel->getPropertyValue( FM_PROP_DECIMAL_ACCURACY ) );
-        sal_Bool    bThousand   = getBOOL( _rxModel->getPropertyValue( FM_PROP_SHOWTHOUSANDSEP ) );
+        bool    bThousand   = getBOOL( _rxModel->getPropertyValue( FM_PROP_SHOWTHOUSANDSEP ) );
 
         static_cast< DoubleNumericField* >( m_pWindow )->SetMinValue(nMin);
         static_cast< DoubleNumericField* >( m_pWindow )->SetMaxValue(nMax);
@@ -1961,7 +1961,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
         if ( m_rColumn.GetParent().getDataSource() )
             xForm = Reference< XRowSet >( ( Reference< XInterface > )*m_rColumn.GetParent().getDataSource(), UNO_QUERY );
         if ( xForm.is() )
-            xSupplier = getNumberFormats( getRowSetConnection( xForm ), sal_True );
+            xSupplier = getNumberFormats( getRowSetConnection( xForm ), true );
         SvNumberFormatter* pFormatterUsed = NULL;
         if ( xSupplier.is() )
         {
@@ -2043,7 +2043,7 @@ void DbNumericField::updateFromModel( Reference< XPropertySet > _rxModel )
 }
 
 
-sal_Bool DbNumericField::commitControl()
+bool DbNumericField::commitControl()
 {
     OUString aText( m_pWindow->GetText());
     Any aVal;
@@ -2054,7 +2054,7 @@ sal_Bool DbNumericField::commitControl()
         aVal <<= (double)fValue;
     }
     m_rColumn.getModel()->setPropertyValue(FM_PROP_VALUE, aVal);
-    return sal_True;
+    return true;
 }
 
 
@@ -2085,8 +2085,8 @@ void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertyS
         double  nMin            = getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMIN ) );
         double  nMax            = getDouble( _rxModel->getPropertyValue( FM_PROP_VALUEMAX ) );
         double  nStep           = getDouble( _rxModel->getPropertyValue( FM_PROP_VALUESTEP ) );
-        sal_Bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
-        sal_Bool    bThousand   = getBOOL( _rxModel->getPropertyValue( FM_PROP_SHOWTHOUSANDSEP ) );
+        bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
+        bool    bThousand   = getBOOL( _rxModel->getPropertyValue( FM_PROP_SHOWTHOUSANDSEP ) );
         OUString aStr( getString( _rxModel->getPropertyValue(FM_PROP_CURRENCYSYMBOL ) ) );
 
         static_cast< LongCurrencyField* >( m_pWindow )->SetUseThousandSep( bThousand );
@@ -2189,7 +2189,7 @@ void DbCurrencyField::updateFromModel( Reference< XPropertySet > _rxModel )
 }
 
 
-sal_Bool DbCurrencyField::commitControl()
+bool DbCurrencyField::commitControl()
 {
     OUString aText(m_pWindow->GetText());
     Any aVal;
@@ -2203,7 +2203,7 @@ sal_Bool DbCurrencyField::commitControl()
         aVal <<= (double)fValue;
     }
     m_rColumn.getModel()->setPropertyValue(FM_PROP_VALUE, aVal);
-    return sal_True;
+    return true;
 }
 
 
@@ -2224,7 +2224,7 @@ DbDateField::DbDateField( DbGridColumn& _rColumn )
 SpinField* DbDateField::createField( Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& _rxModel  )
 {
     // check if there is a DropDown property set to TRUE
-    sal_Bool bDropDown =    !hasProperty( FM_PROP_DROPDOWN, _rxModel )
+    bool bDropDown =    !hasProperty( FM_PROP_DROPDOWN, _rxModel )
                         ||  getBOOL( _rxModel->getPropertyValue( FM_PROP_DROPDOWN ) );
     if ( bDropDown )
         _nFieldStyle |= WB_DROPDOWN;
@@ -2249,12 +2249,12 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
         OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_DATEMIN ) >>= aMin );
         util::Date  aMax;
         OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_DATEMAX ) >>= aMax );
-        sal_Bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
+        bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
 
         Any  aCentury = _rxModel->getPropertyValue( FM_PROP_DATE_SHOW_CENTURY );
         if ( aCentury.getValueType().getTypeClass() != TypeClass_VOID )
         {
-            sal_Bool bShowDateCentury = getBOOL( aCentury );
+            bool bShowDateCentury = getBOOL( aCentury );
 
             static_cast<DateField*>( m_pWindow )->SetShowDateCentury( bShowDateCentury );
             static_cast<DateField*>( m_pPainter )->SetShowDateCentury( bShowDateCentury );
@@ -2326,7 +2326,7 @@ void DbDateField::updateFromModel( Reference< XPropertySet > _rxModel )
 }
 
 
-sal_Bool DbDateField::commitControl()
+bool DbDateField::commitControl()
 {
     OUString aText(m_pWindow->GetText());
     Any aVal;
@@ -2336,7 +2336,7 @@ sal_Bool DbDateField::commitControl()
         aVal.clear();
 
     m_rColumn.getModel()->setPropertyValue(FM_PROP_DATE, aVal);
-    return sal_True;
+    return true;
 }
 
 
@@ -2370,7 +2370,7 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
         OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_TIMEMIN ) >>= aMin );
         util::Time  aMax;
         OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_TIMEMAX ) >>= aMax );
-        sal_Bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
+        bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
 
         static_cast< TimeField* >( m_pWindow )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
         static_cast< TimeField* >( m_pWindow )->SetMin( aMin );
@@ -2438,7 +2438,7 @@ void DbTimeField::updateFromModel( Reference< XPropertySet > _rxModel )
 }
 
 
-sal_Bool DbTimeField::commitControl()
+bool DbTimeField::commitControl()
 {
     OUString aText(m_pWindow->GetText());
     Any aVal;
@@ -2448,7 +2448,7 @@ sal_Bool DbTimeField::commitControl()
         aVal.clear();
 
     m_rColumn.getModel()->setPropertyValue(FM_PROP_TIME, aVal);
-    return sal_True;
+    return true;
 }
 
 
@@ -2459,7 +2459,7 @@ DbComboBox::DbComboBox(DbGridColumn& _rColumn)
            :DbCellControl(_rColumn)
            ,m_nKeyType(::com::sun::star::util::NumberFormat::UNDEFINED)
 {
-    setAlignedController( sal_False );
+    setAlignedController( false );
 
     doPropertyListening( FM_PROP_STRINGITEMLIST );
     doPropertyListening( FM_PROP_LINECOUNT );
@@ -2576,19 +2576,19 @@ void DbComboBox::updateFromModel( Reference< XPropertySet > _rxModel )
 }
 
 
-sal_Bool DbComboBox::commitControl()
+bool DbComboBox::commitControl()
 {
     OUString aText( m_pWindow->GetText());
     m_rColumn.getModel()->setPropertyValue(FM_PROP_TEXT, makeAny(aText));
-    return sal_True;
+    return true;
 }
 
 
 DbListBox::DbListBox(DbGridColumn& _rColumn)
           :DbCellControl(_rColumn)
-          ,m_bBound(sal_False)
+          ,m_bBound(false)
 {
-    setAlignedController( sal_False );
+    setAlignedController( false );
 
     doPropertyListening( FM_PROP_STRINGITEMLIST );
     doPropertyListening( FM_PROP_LINECOUNT );
@@ -2613,7 +2613,7 @@ void DbListBox::SetList(const Any& rItems)
     ListBoxControl* pField = (ListBoxControl*)m_pWindow;
 
     pField->Clear();
-    m_bBound = sal_False;
+    m_bBound = false;
 
     ::comphelper::StringSequence aTest;
     if (rItems >>= aTest)
@@ -2724,7 +2724,7 @@ void DbListBox::updateFromModel( Reference< XPropertySet > _rxModel )
 }
 
 
-sal_Bool DbListBox::commitControl()
+bool DbListBox::commitControl()
 {
     Any aVal;
     Sequence<sal_Int16> aSelectSeq;
@@ -2735,7 +2735,7 @@ sal_Bool DbListBox::commitControl()
     }
     aVal <<= aSelectSeq;
     m_rColumn.getModel()->setPropertyValue(FM_PROP_SELECT_SEQ, aVal);
-    return sal_True;
+    return true;
 }
 
 
@@ -2744,12 +2744,12 @@ DbFilterField::DbFilterField(const Reference< XComponentContext >& rxContext,DbG
               :DbCellControl(_rColumn)
               ,OSQLParserClient(rxContext)
               ,m_nControlClass(::com::sun::star::form::FormComponentType::TEXTFIELD)
-              ,m_bFilterList(sal_False)
-              ,m_bFilterListFilled(sal_False)
-              ,m_bBound(sal_False)
+              ,m_bFilterList(false)
+              ,m_bFilterListFilled(false)
+              ,m_bBound(false)
 {
 
-    setAlignedController( sal_False );
+    setAlignedController( false );
 }
 
 
@@ -2778,7 +2778,7 @@ void DbFilterField::PaintCell(OutputDevice& rDev, const Rectangle& rRect)
 }
 
 
-void DbFilterField::SetList(const Any& rItems, sal_Bool bComboBox)
+void DbFilterField::SetList(const Any& rItems, bool bComboBox)
 {
     ::comphelper::StringSequence aTest;
     rItems >>= aTest;
@@ -2936,13 +2936,13 @@ void DbFilterField::updateFromModel( Reference< XPropertySet > _rxModel )
 }
 
 
-sal_Bool DbFilterField::commitControl()
+bool DbFilterField::commitControl()
 {
     OUString aText(m_aText);
     switch (m_nControlClass)
     {
         case ::com::sun::star::form::FormComponentType::CHECKBOX:
-            return sal_True;
+            return true;
         case ::com::sun::star::form::FormComponentType::LISTBOX:
             aText = OUString();
             if (static_cast<ListBox*>(m_pWindow)->GetSelectEntryCount())
@@ -2957,7 +2957,7 @@ sal_Bool DbFilterField::commitControl()
                 m_aText = aText;
                 m_aCommitLink.Call(this);
             }
-            return sal_True;
+            return true;
         default:
             aText = m_pWindow->GetText();
     }
@@ -3000,7 +3000,7 @@ sal_Bool DbFilterField::commitControl()
                 displayException(aError, m_pWindow->GetParent());
                     // TODO: transport the title
 
-                return sal_False;
+                return false;
             }
         }
         else
@@ -3009,7 +3009,7 @@ sal_Bool DbFilterField::commitControl()
         m_pWindow->SetText(m_aText);
         m_aCommitLink.Call(this);
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -3053,7 +3053,7 @@ void DbFilterField::Update()
     // should we fill the combobox with a filter proposal?
     if (m_bFilterList && !m_bFilterListFilled)
     {
-        m_bFilterListFilled = sal_True;
+        m_bFilterListFilled = true;
         Reference< ::com::sun::star::beans::XPropertySet >  xField = m_rColumn.GetField();
         if (!xField.is())
             return;
@@ -3125,7 +3125,7 @@ void DbFilterField::Update()
 
                 xStatement = xConnection->createStatement();
                 Reference< ::com::sun::star::beans::XPropertySet >  xStatementProps(xStatement, UNO_QUERY);
-                xStatementProps->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, makeAny((sal_Bool)sal_True));
+                xStatementProps->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, makeAny(true));
 
                 xListCursor = xStatement->executeQuery(aStatement.makeStringAndClear());
 
@@ -3590,7 +3590,7 @@ TYPEINIT1(FmXTextCell, FmXDataCell);
 
 FmXTextCell::FmXTextCell( DbGridColumn* pColumn, DbCellControl& _rControl )
     :FmXDataCell( pColumn, _rControl )
-    ,m_bFastPaint( sal_True )
+    ,m_bFastPaint( true )
 {
 }
 
@@ -3653,7 +3653,7 @@ FmXEditCell::FmXEditCell( DbGridColumn* pColumn, DbCellControl& _rControl )
 
         m_pEditImplementation = pTextField->GetEditImplementation();
         if ( !pTextField->IsSimpleEdit() )
-            m_bFastPaint = sal_False;
+            m_bFastPaint = false;
     }
     else
     {
@@ -4327,7 +4327,7 @@ sal_Bool SAL_CALL FmXListBoxCell::isMutipleMode() throw( RuntimeException, std::
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Bool bMulti = sal_False;
+    bool bMulti = false;
     if (m_pBox)
         bMulti = m_pBox->IsMultiSelectionEnabled();
     return bMulti;

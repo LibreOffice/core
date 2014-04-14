@@ -284,10 +284,10 @@ namespace svx
     }
 
 
-    sal_Bool FormControllerHelper::isEnabled( sal_Int32 _nSlotId ) const
+    bool FormControllerHelper::isEnabled( sal_Int32 _nSlotId ) const
     {
         if ( !m_xFormOperations.is() )
-            return sal_False;
+            return false;
         return m_xFormOperations->isEnabled( FeatureSlotTranslation::getFormFeatureForSlotId( _nSlotId ) );
     }
 
@@ -308,13 +308,13 @@ namespace svx
     }
 
 
-    sal_Bool FormControllerHelper::commitCurrentControl( ) const
+    bool FormControllerHelper::commitCurrentControl( ) const
     {
         return impl_operateForm_nothrow( COMMIT_CONTROL );
     }
 
 
-    sal_Bool FormControllerHelper::commitCurrentRecord() const
+    bool FormControllerHelper::commitCurrentRecord() const
     {
         return impl_operateForm_nothrow( COMMIT_RECORD );
     }
@@ -472,18 +472,18 @@ namespace svx
     }
 
 
-    sal_Bool FormControllerHelper::isInsertionRow() const
+    bool FormControllerHelper::isInsertionRow() const
     {
-        sal_Bool bIs = sal_False;
+        bool bIs = false;
         if ( m_xFormOperations.is() )
             bIs = m_xFormOperations->isInsertionRow();
         return bIs;
     }
 
 
-    sal_Bool FormControllerHelper::isModifiedRow() const
+    bool FormControllerHelper::isModifiedRow() const
     {
-        sal_Bool bIs = sal_False;
+        bool bIs = false;
         if ( m_xFormOperations.is() )
             bIs = m_xFormOperations->isModifiedRow();
         return bIs;

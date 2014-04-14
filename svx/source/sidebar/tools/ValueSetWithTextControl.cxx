@@ -52,7 +52,7 @@ namespace svx { namespace sidebar {
 
 static Font& lcl_GetDefaultBulletFont()
 {
-    static sal_Bool bInit = 0;
+    static bool bInit = false;
     static Font aDefBulletFont( OUString( "StarSymbol" ),
                                 OUString(), Size( 0, 14 ) );
     if(!bInit)
@@ -62,7 +62,7 @@ static Font& lcl_GetDefaultBulletFont()
         aDefBulletFont.SetPitch( PITCH_DONTKNOW );
         aDefBulletFont.SetWeight( WEIGHT_DONTKNOW );
         aDefBulletFont.SetTransparent( true );
-        bInit = sal_True;
+        bInit = true;
     }
     return aDefBulletFont;
 }

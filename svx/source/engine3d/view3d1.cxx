@@ -52,7 +52,7 @@ void E3dView::ConvertMarkedToPolyObj(bool bLineToArea)
 
         if (pObj && pObj->ISA(E3dPolyScene))
         {
-            sal_Bool bBezier = sal_False;
+            bool bBezier = false;
             pNewObj = ((E3dPolyScene*) pObj)->ConvertToPolyObj(bBezier, bLineToArea);
 
             if (pNewObj)

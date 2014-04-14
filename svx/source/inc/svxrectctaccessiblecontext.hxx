@@ -106,13 +106,13 @@ public:
     virtual ::com::sun::star::awt::Size SAL_CALL
         getSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isShowing() throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isVisible() throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isFocusTraversable() throw( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL
@@ -241,7 +241,7 @@ protected:
         @param nIndexOfChild
             Index of the new child which should be selected.
     */
-    void selectChild( long nIndexOfChild, sal_Bool bFireFocus = sal_True);
+    void selectChild( long nIndexOfChild, bool bFireFocus = true);
 
 public:
     /** Selects a new child by point.
@@ -252,7 +252,7 @@ public:
         @param eButton
             Button which belongs to the child which should be selected.
     */
-    void selectChild( RECT_POINT ePoint, sal_Bool bFireFocus = sal_True );
+    void selectChild( RECT_POINT ePoint, bool bFireFocus = true );
     void FireChildFocus( RECT_POINT eButton );
 
 protected:
@@ -364,13 +364,13 @@ public:
     virtual ::com::sun::star::awt::Size SAL_CALL
         getSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isShowing() throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isVisible() throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual sal_Bool SAL_CALL
+    virtual bool SAL_CALL
         isFocusTraversable() throw( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL

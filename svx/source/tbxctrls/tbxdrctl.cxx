@@ -82,7 +82,7 @@ void SvxTbxCtlDraw::toggleToolbox()
     Reference< XLayoutManager > xLayoutMgr = getLayoutManager();
     if ( xLayoutMgr.is() )
     {
-        sal_Bool bCheck = sal_False;
+        bool bCheck = false;
         if ( xLayoutMgr->isElementVisible( m_sToolboxName ) )
         {
             xLayoutMgr->hideElement( m_sToolboxName );
@@ -90,7 +90,7 @@ void SvxTbxCtlDraw::toggleToolbox()
         }
         else
         {
-            bCheck = sal_True;
+            bCheck = true;
             xLayoutMgr->createElement( m_sToolboxName );
             xLayoutMgr->showElement( m_sToolboxName );
         }

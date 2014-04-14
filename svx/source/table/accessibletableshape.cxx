@@ -219,10 +219,10 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
         const sal_Int32 nRowCount = mxTable->getRowCount();
         const sal_Int32 nColCount = mxTable->getColumnCount();
 
-        sal_Bool bRowOrColumnChanged = sal_False;
+        bool bRowOrColumnChanged = false;
         if (mRowCount != nRowCount || mColCount != nColCount )
         {
-            bRowOrColumnChanged = sal_True;
+            bRowOrColumnChanged = true;
             mRowCount = nRowCount;
             mColCount = nColCount;
         }
@@ -947,7 +947,7 @@ void  SAL_CALL AccessibleTableShape::selectionChanged (const EventObject& rEvent
         {
             sal_Int32 nIndex = xAccCell->getAccessibleIndexInParent(),
                 nCount = getSelectedAccessibleChildCount();
-            sal_Bool bSelected = isAccessibleChildSelected(nIndex);
+            bool bSelected = isAccessibleChildSelected(nIndex);
             if (mnPreviousSelectionCount == 0 && nCount > 0 && bSelected)
             {
                 xAccCell->SetState(AccessibleStateType::SELECTED);
@@ -970,7 +970,7 @@ void  SAL_CALL AccessibleTableShape::selectionChanged (const EventObject& rEvent
 // Get the currently active cell which is text editing
 AccessibleCell* AccessibleTableShape::GetActiveAccessibleCell()
 {
-    sal_Bool bCellEditing = sal_False;
+    bool bCellEditing = false;
     Reference< AccessibleCell > xAccCell;
     AccessibleCell* pAccCell = NULL;
     SvxTableController* pController = getTableController();

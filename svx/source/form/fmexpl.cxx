@@ -269,30 +269,30 @@ void FmEntryData::Clear()
 }
 
 
-sal_Bool FmEntryData::IsEqualWithoutChildren( FmEntryData* pEntryData )
+bool FmEntryData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 {
     if(this == pEntryData)
-        return sal_True;
+        return true;
 
     if( !pEntryData )
-        return sal_False;
+        return false;
 
     if( !aText.equals(pEntryData->GetText()))
-        return sal_False;
+        return false;
 
     if( !pEntryData->GetParent() && pParent )
-        return sal_False;
+        return false;
 
     if( pEntryData->GetParent() && !pParent )
-        return sal_False;
+        return false;
 
     if( !pEntryData->GetParent() && !pParent )
-        return sal_True;
+        return true;
 
     if( !pParent->IsEqualWithoutChildren(pEntryData->GetParent()) )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 
@@ -348,15 +348,15 @@ FmEntryData* FmFormData::Clone()
 }
 
 
-sal_Bool FmFormData::IsEqualWithoutChildren( FmEntryData* pEntryData )
+bool FmFormData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 {
     if(this == pEntryData)
-        return sal_True;
+        return true;
     if( !pEntryData->ISA(FmFormData) )
-        return sal_False;
+        return false;
     FmFormData* pFormData = (FmFormData*)pEntryData;
     if( (XForm*)m_xForm.get() != (XForm*)pFormData->GetFormIface().get() )
-        return sal_False;
+        return false;
 
     return FmEntryData::IsEqualWithoutChildren( pFormData );
 }
@@ -515,17 +515,17 @@ Image FmControlData::GetImage(const ImageList& ilNavigatorImages) const
 }
 
 
-sal_Bool FmControlData::IsEqualWithoutChildren( FmEntryData* pEntryData )
+bool FmControlData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 {
     if(this == pEntryData)
-        return sal_True;
+        return true;
 
     if( !pEntryData->ISA(FmControlData) )
-        return sal_False;
+        return false;
     FmControlData* pControlData = (FmControlData*)pEntryData;
 
     if( (XFormComponent*)m_xFormComponent.get() != (XFormComponent*)pControlData->GetFormComponent().get() )
-        return sal_False;
+        return false;
 
     return FmEntryData::IsEqualWithoutChildren( pControlData );
 }

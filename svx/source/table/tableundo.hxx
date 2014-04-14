@@ -63,7 +63,7 @@ private:
         OUString msFormula;
         double          mfValue;
         ::sal_Int32     mnError;
-        sal_Bool      mbMerged;
+        bool      mbMerged;
         ::sal_Int32     mnRowSpan;
         ::sal_Int32     mnColSpan;
 
@@ -171,9 +171,9 @@ private:
     {
         sal_Int32   mnColumn;
         sal_Int32   mnWidth;
-        sal_Bool    mbOptimalWidth;
-        sal_Bool    mbIsVisible;
-        sal_Bool    mbIsStartOfNewPage;
+        bool    mbOptimalWidth;
+        bool    mbIsVisible;
+        bool    mbIsStartOfNewPage;
         OUString maName;
     };
 
@@ -204,9 +204,9 @@ private:
         CellVector  maCells;
         sal_Int32   mnRow;
         sal_Int32   mnHeight;
-        sal_Bool    mbOptimalHeight;
-        sal_Bool    mbIsVisible;
-        sal_Bool    mbIsStartOfNewPage;
+        bool    mbOptimalHeight;
+        bool    mbIsVisible;
+        bool    mbIsStartOfNewPage;
         OUString maName;
     };
 

@@ -487,12 +487,12 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
         sal_Int16 nCurrentSourceIndex = 0, nCurrentDestIndex = 0;
         while (nCurrentSourceIndex <= nIndex)
         {
-            sal_Bool bEqualDSS = sal_False;
+            bool bEqualDSS = false;
             while (!bEqualDSS)  // (we don't have to check nCurrentSourceIndex here : it's bound by nIndex)
             {
                 xSourceContainer->getByIndex(nCurrentSourceIndex) >>= xCurrentSourceForm;
                 DBG_ASSERT(xCurrentSourceForm.is(), "FmFormObj::ensureModelEnv : invalid form ancestor (2) !");
-                bEqualDSS = sal_False;
+                bEqualDSS = false;
                 if (::comphelper::hasProperty(FM_PROP_DATASOURCE, xCurrentSourceForm))
                 {   // it is a form
                     try
@@ -502,7 +502,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                             &&  ::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_DATASOURCE), aSrcDataSource)
                             )
                         {
-                            bEqualDSS = sal_True;
+                            bEqualDSS = true;
                         }
                     }
                     catch(Exception&)
@@ -518,12 +518,12 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
             // ??? at least the nIndex-th one should have been found ???
 
             // now search the next one with the given DSS (within the destination container)
-            bEqualDSS = sal_False;
+            bEqualDSS = false;
             while (!bEqualDSS && (nCurrentDestIndex < xDestContainer->getCount()))
             {
                 xDestContainer->getByIndex(nCurrentDestIndex) >>= xCurrentDestForm;
                 DBG_ASSERT(xCurrentDestForm.is(), "FmFormObj::ensureModelEnv : invalid destination form !");
-                bEqualDSS = sal_False;
+                bEqualDSS = false;
                 if (::comphelper::hasProperty(FM_PROP_DATASOURCE, xCurrentDestForm))
                 {   // it is a form
                     try
@@ -533,7 +533,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                             &&  ::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_DATASOURCE), aSrcDataSource)
                             )
                         {
-                            bEqualDSS = sal_True;
+                            bEqualDSS = true;
                         }
                     }
                     catch(Exception&)

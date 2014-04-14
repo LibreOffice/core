@@ -533,7 +533,7 @@ void SdrEditView::CheckPossibilities()
                 }
             }
 
-            sal_Bool bNoMovRotFound=sal_False;
+            bool bNoMovRotFound=false;
             const SdrPageView* pPV0=NULL;
 
             for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++) {
@@ -547,8 +547,8 @@ void SdrEditView::CheckPossibilities()
 
                 SdrObjTransformInfoRec aInfo;
                 pObj->TakeObjInfo(aInfo);
-                sal_Bool bMovPrt=pObj->IsMoveProtect();
-                sal_Bool bSizPrt=pObj->IsResizeProtect();
+                bool bMovPrt=pObj->IsMoveProtect();
+                bool bSizPrt=pObj->IsResizeProtect();
                 if (!bMovPrt && aInfo.bMoveAllowed) nMovableCount++; // count MovableObjs
                 if (bMovPrt) bMoveProtect=true;
                 if (bSizPrt) bResizeProtect=true;
@@ -574,7 +574,7 @@ void SdrEditView::CheckPossibilities()
                 if (!bMoreThanOneNoMovRot) {
                     if (!aInfo.bMoveAllowed || !aInfo.bResizeFreeAllowed) {
                         bMoreThanOneNoMovRot=bNoMovRotFound;
-                        bNoMovRotFound=sal_True;
+                        bNoMovRotFound=true;
                     }
                 }
 
@@ -629,7 +629,7 @@ void SdrEditView::CheckPossibilities()
         bPossibilitiesDirty=false;
 
         if (bReadOnly) {
-            sal_Bool bMerker1=bGrpEnterPossible;
+            bool bMerker1=bGrpEnterPossible;
             ImpResetPossibilityFlags();
             bReadOnly=true;
             bGrpEnterPossible=bMerker1;
@@ -661,7 +661,7 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
         Rectangle aObjRect(pObj->GetCurrentBoundRect());
         Rectangle aPgRect(pM->GetPageView()->GetPageRect());
         if (!aObjRect.IsOver(aPgRect)) {
-            sal_Bool bFnd=sal_False;
+            bool bFnd=false;
             SdrPageView* pPV = GetSdrPageView();
 
             if(pPV)

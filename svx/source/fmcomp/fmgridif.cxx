@@ -195,7 +195,7 @@ sal_Bool FmXUpdateMultiplexer::approveUpdate(const EventObject &e) throw( Runtim
     EventObject aMulti( e );
     aMulti.Source = &m_rParent;
 
-    sal_Bool bResult = sal_True;
+    bool bResult = true;
     if (getLength())
     {
         ::cppu::OInterfaceIteratorHelper aIter(*this);
@@ -566,7 +566,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
                 pPeer->addContainerListener( &m_aContainerListeners );
 
             // forward the design mode
-            sal_Bool bForceAlivePeer = m_bInDraw && !maComponentInfos.bVisible;
+            bool bForceAlivePeer = m_bInDraw && !maComponentInfos.bVisible;
             // (we force an alive-mode peer if we're in "draw", cause in this case the peer will be used for drawing in
             // foreign devices. We ensure this with the visibility check as an living peer is assumed to be noncritical
             // only if invisible)
@@ -1282,7 +1282,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
     Sequence<sal_Bool> aReturnSequence(nColumns);
     sal_Bool* pReturnArray = aReturnSequence.getArray();
 
-    sal_Bool bRequestedAsAny = (xType.getTypeClass() == TypeClass_ANY);
+    bool bRequestedAsAny = (xType.getTypeClass() == TypeClass_ANY);
 
     DbGridColumn* pCol;
     Reference< ::com::sun::star::sdb::XColumn >  xFieldContent;
@@ -1353,7 +1353,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
     Sequence< Any> aReturnSequence(nColumnCount);
     Any* pReturnArray = aReturnSequence.getArray();
 
-    sal_Bool bRequestedAsAny = (xType.getTypeClass() == TypeClass_ANY);
+    bool bRequestedAsAny = (xType.getTypeClass() == TypeClass_ANY);
     Reference< ::com::sun::star::sdb::XColumn >  xFieldContent;
     DbGridColumn* pCol;
     for (sal_Int32 i=0; i < nColumnCount; ++i)
@@ -1448,7 +1448,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
             return;
 
         sal_uInt16 nId = pGrid->GetColumnIdFromModelPos((sal_uInt16)i);
-        sal_Bool bInvalidateColumn = sal_False;
+        bool bInvalidateColumn = false;
 
         if (evt.PropertyName == FM_PROP_LABEL)
         {
@@ -1499,19 +1499,19 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
                 DbGridColumn* pCol = pGrid->GetColumns().at( i );
 
                 pCol->SetAlignmentFromModel(-1);
-                bInvalidateColumn = sal_True;
+                bInvalidateColumn = true;
             }
         }
         else if (evt.PropertyName == FM_PROP_FORMATKEY)
         {
             if (!isDesignMode())
-                bInvalidateColumn = sal_True;
+                bInvalidateColumn = true;
         }
 
         // need to invalidate the affected column ?
         if (bInvalidateColumn)
         {
-            sal_Bool bWasEditing = pGrid->IsEditing();
+            bool bWasEditing = pGrid->IsEditing();
             if (bWasEditing)
                 pGrid->DeactivateCell();
 
@@ -1548,10 +1548,10 @@ sal_Bool FmXGridPeer::commit() throw( RuntimeException, std::exception )
 
     EventObject aEvt(static_cast< ::cppu::OWeakObject* >(this));
     ::cppu::OInterfaceIteratorHelper aIter(m_aUpdateListeners);
-    sal_Bool bCancel = sal_False;
+    bool bCancel = false;
     while (aIter.hasMoreElements() && !bCancel)
         if ( !static_cast< XUpdateListener* >( aIter.next() )->approveUpdate( aEvt ) )
-            bCancel = sal_True;
+            bCancel = true;
 
     if (!bCancel)
         bCancel = !pGrid->commit();
@@ -1804,7 +1804,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
     Reference< XPropertySet > xOldColumn(
         evt.ReplacedElement, css::uno::UNO_QUERY);
 
-    sal_Bool bWasEditing = pGrid->IsEditing();
+    bool bWasEditing = pGrid->IsEditing();
     if (bWasEditing)
         pGrid->DeactivateCell();
 
@@ -1868,7 +1868,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
 
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
 
-    sal_Bool bVoid = !Value.hasValue();
+    bool bVoid = !Value.hasValue();
 
     if ( PropertyName == FM_PROP_TEXTLINECOLOR )
     {
@@ -2019,19 +2019,19 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
     }
     else if ( PropertyName == FM_PROP_HASNAVIGATION )
     {
-        sal_Bool bValue( sal_True );
+        bool bValue( true );
         OSL_VERIFY( Value >>= bValue );
         pGrid->EnableNavigationBar( bValue );
     }
     else if ( PropertyName == FM_PROP_RECORDMARKER )
     {
-        sal_Bool bValue( sal_True );
+        bool bValue( true );
         OSL_VERIFY( Value >>= bValue );
         pGrid->EnableHandle( bValue );
     }
     else if ( PropertyName == FM_PROP_ENABLED )
     {
-        sal_Bool bValue( sal_True );
+        bool bValue( true );
         OSL_VERIFY( Value >>= bValue );
 
         // In design mode, disable only the data window.
@@ -2105,17 +2105,17 @@ Any FmXGridPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeExc
         }
         else if ( _rPropertyName == FM_PROP_HASNAVIGATION )
         {
-            sal_Bool bHasNavBar = pGrid->HasNavigationBar();
-            aProp <<= (sal_Bool)bHasNavBar;
+            bool bHasNavBar = pGrid->HasNavigationBar();
+            aProp <<= bHasNavBar;
         }
         else if ( _rPropertyName == FM_PROP_RECORDMARKER )
         {
-            sal_Bool bHasHandle = pGrid->HasHandle();
-            aProp <<= (sal_Bool)bHasHandle;
+            bool bHasHandle = pGrid->HasHandle();
+            aProp <<= bHasHandle;
         }
         else if ( _rPropertyName == FM_PROP_ENABLED )
         {
-            aProp <<= (sal_Bool)pDataWindow->IsEnabled();
+            aProp <<= pDataWindow->IsEnabled();
         }
         else
             aProp = VCLXWindow::getProperty( _rPropertyName );

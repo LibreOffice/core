@@ -86,7 +86,7 @@ namespace svxform
     }
 
     // XColumn
-    sal_Bool DataColumn::wasNull() throw( SQLException, RuntimeException )
+    bool DataColumn::wasNull() throw( SQLException, RuntimeException )
     {
         return m_xColumn->wasNull();
     }
@@ -96,7 +96,7 @@ namespace svxform
         return m_xColumn->getString();
     }
 
-    sal_Bool DataColumn::getBoolean() throw( SQLException, RuntimeException )
+    bool DataColumn::getBoolean() throw( SQLException, RuntimeException )
     {
         return m_xColumn->getBoolean();
     }
@@ -192,7 +192,7 @@ namespace svxform
         m_xColumnUpdate->updateNull();
     }
 
-    void DataColumn::updateBoolean(sal_Bool x) throw( SQLException, RuntimeException )
+    void DataColumn::updateBoolean(bool x) throw( SQLException, RuntimeException )
     {
         m_xColumnUpdate->updateBoolean(x);
     }

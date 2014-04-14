@@ -46,8 +46,8 @@ namespace svx
         ,m_xFormOperations( _rxFormOperations )
         ,m_aFeatureURL( _rFeatureURL )
         ,m_nFormFeature( _nFormFeature )
-        ,m_bLastKnownEnabled( sal_False )
-        ,m_bDisposed( sal_False )
+        ,m_bLastKnownEnabled( false )
+        ,m_bDisposed( false )
     {
     }
 
@@ -72,7 +72,7 @@ namespace svx
         FeatureStateEvent aUnoState;
         getUnoState( aUnoState );
 
-        if ( ( m_aLastKnownState == aUnoState.State ) && ( m_bLastKnownEnabled == aUnoState.IsEnabled ) )
+        if ( ( m_aLastKnownState == aUnoState.State ) && ( (m_bLastKnownEnabled ? 1 : 0) == aUnoState.IsEnabled ) )
             return;
 
         m_aLastKnownState = aUnoState.State;

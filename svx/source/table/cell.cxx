@@ -356,7 +356,7 @@ Cell::Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) th
 , mnCellContentType( CellContentType_EMPTY )
 , mfValue( 0.0 )
 , mnError( 0 )
-, mbMerged( sal_False )
+, mbMerged( false )
 , mnRowSpan( 1 )
 , mnColSpan( 1 )
 , mxTable( rTableObj.getTable() )
@@ -423,7 +423,7 @@ void Cell::SetModel(SdrModel* pNewModel)
             SetEditSource( new SvxTextEditSource( &GetObject(), this, static_cast< XWeak * >( this ) ) );
         }
 
-        SetStyleSheet( 0, sal_True );
+        SetStyleSheet( 0, true );
         SdrText::SetModel( pNewModel );
         ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
     }
@@ -433,11 +433,11 @@ void Cell::SetModel(SdrModel* pNewModel)
 
 void Cell::merge( sal_Int32 nColumnSpan, sal_Int32 nRowSpan )
 {
-    if( (mnColSpan != nColumnSpan) || (mnRowSpan != nRowSpan) || (mbMerged != sal_False) )
+    if( (mnColSpan != nColumnSpan) || (mnRowSpan != nRowSpan) || (mbMerged != false) )
     {
         mnColSpan = nColumnSpan;
         mnRowSpan = nRowSpan;
-        mbMerged = sal_False;
+        mbMerged = false;
         notifyModified();
     }
 }
@@ -467,7 +467,7 @@ void Cell::mergeContent( const CellRef& xSourceCell )
         rOutliner.Clear();
         xSourceCell->SetOutlinerParaObject(rOutliner.CreateParaObject());
         rOutliner.Clear();
-        SetStyleSheet( GetStyleSheet(), sal_True );
+        SetStyleSheet( GetStyleSheet(), true );
     }
 }
 
@@ -505,7 +505,7 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
 
         if(rSourceTableObj.GetModel() != rTableObj.GetModel())
         {
-            SetStyleSheet( 0, sal_True );
+            SetStyleSheet( 0, true );
         }
     }
 }
@@ -516,7 +516,7 @@ void Cell::setMerged()
 {
     if( !mbMerged )
     {
-        mbMerged = sal_True;
+        mbMerged = true;
         notifyModified();
     }
 }
@@ -583,7 +583,7 @@ OutlinerParaObject* Cell::GetEditOutlinerParaObject() const
 
 
 
-void Cell::SetStyleSheet( SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr )
+void Cell::SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr )
 {
     // only allow cell styles for cells
     if( pStyleSheet && pStyleSheet->GetFamily() != SFX_STYLE_FAMILY_FRAME )
@@ -658,7 +658,7 @@ const SfxItemSet& Cell::GetItemSet() const
 
 
 
-void Cell::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems)
+void Cell::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems)
 {
     if( mpProperties )
     {
@@ -1032,7 +1032,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
                 throw IllegalArgumentException();
 
             SfxUnoStyleSheet* pStyle = SfxUnoStyleSheet::getUnoStyleSheet(xStyle);
-            SetStyleSheet( pStyle, sal_True );
+            SetStyleSheet( pStyle, true );
             return;
         }
         case OWN_ATTR_TABLEBORDER:
@@ -1048,7 +1048,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             SvxBoxInfoItem aBoxInfo( SDRATTR_TABLE_BORDER_INNER );
             SvxBorderLine aLine;
 
-            sal_Bool bSet = SvxBoxItem::LineToSvxLine(pBorder->TopLine, aLine, false);
+            bool bSet = SvxBoxItem::LineToSvxLine(pBorder->TopLine, aLine, false);
             aBox.SetLine(bSet ? &aLine : 0, BOX_LINE_TOP);
             aBoxInfo.SetValid(VALID_TOP, pBorder->IsTopLineValid);
 

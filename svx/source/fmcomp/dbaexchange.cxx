@@ -98,7 +98,7 @@ namespace svx
         sal_Int32       nCommandType = CommandType::TABLE;
         OUString sDatasource,sURL;
 
-        sal_Bool        bTryToParse = sal_True;
+        bool        bTryToParse = true;
         try
         {
             _rxForm->getPropertyValue(FM_PROP_COMMANDTYPE)  >>= nCommandType;
@@ -271,7 +271,7 @@ namespace svx
             // extract the any from the transferable
             DataFlavor aFlavor;
 #if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
+            bool bSuccess =
 #endif
             SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
@@ -519,7 +519,7 @@ namespace svx
             // extract the any from the transferable
             DataFlavor aFlavor;
 #if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
+            bool bSuccess =
 #endif
             SotExchange::GetFormatDataFlavor(nKnownFormatId, aFlavor);
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
@@ -591,7 +591,7 @@ namespace svx
 
         // for compatibility: create a string which can be used for the SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
 
-        sal_Bool bTreatAsStatement = (CommandType::COMMAND == _nCommandType);
+        bool bTreatAsStatement = (CommandType::COMMAND == _nCommandType);
             // statements are - in this old and ugly format - described as queries
 
         const sal_Unicode       cSeparator = sal_Unicode(11);
@@ -677,7 +677,7 @@ namespace svx
             // extract the any from the transferable
             DataFlavor aFlavor;
 #if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
+            bool bSuccess =
 #endif
             SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");

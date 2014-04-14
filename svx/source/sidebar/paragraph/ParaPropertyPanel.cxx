@@ -1001,7 +1001,7 @@ void ParaPropertyPanel::StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState 
     if ( (eState >= SFX_ITEM_DEFAULT) && (pState->ISA(SfxBoolItem)) )
     {
         const SfxBoolItem* pItem= (const SfxBoolItem*)pState;
-        const sal_Bool aBool = (sal_Bool)pItem->GetValue();
+        const bool aBool = pItem->GetValue();
 
         const sal_uInt16 nIdNumber = mpTBxNumBullet->GetItemId(UNO_DEFAULTNUMBERING);
         const sal_uInt16 nIdBullet = mpTBxNumBullet->GetItemId(UNO_DEFAULTBULLET);

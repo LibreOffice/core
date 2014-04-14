@@ -1071,7 +1071,7 @@ void LinePropertyPanel::SelectLineStyle()
 
 void LinePropertyPanel::SelectEndStyle(bool bStart)
 {
-    sal_Bool bSelected(false);
+    bool bSelected(false);
 
     if(bStart)
     {

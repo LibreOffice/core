@@ -60,7 +60,7 @@ namespace svxform
     OFormComponentObserver::OFormComponentObserver(NavigatorTreeModel* _pModel)
         :m_pNavModel(_pModel)
         ,m_nLocks(0)
-        ,m_bCanUndo(sal_True)
+        ,m_bCanUndo(true)
     {
     }
 
@@ -103,13 +103,13 @@ namespace svxform
             return;
 
         // keine Undoaction einfuegen
-        m_bCanUndo = sal_False;
+        m_bCanUndo = false;
 
         Reference< XInterface > xTemp;
         evt.Element >>= xTemp;
         Insert(xTemp, ::comphelper::getINT32(evt.Accessor));
 
-        m_bCanUndo = sal_True;
+        m_bCanUndo = true;
     }
 
 
@@ -141,12 +141,12 @@ namespace svxform
         if (IsLocked() || !m_pNavModel)
             return;
 
-        m_bCanUndo = sal_False;
+        m_bCanUndo = false;
 
         // EntryData loeschen
         Reference< XFormComponent >  xReplaced;
         evt.ReplacedElement >>= xReplaced;
-        FmEntryData* pEntryData = m_pNavModel->FindData(xReplaced, m_pNavModel->GetRootList(), sal_True);
+        FmEntryData* pEntryData = m_pNavModel->FindData(xReplaced, m_pNavModel->GetRootList(), true);
         if (pEntryData)
         {
             if (pEntryData->ISA(FmControlData))
@@ -163,7 +163,7 @@ namespace svxform
             }
         }
 
-        m_bCanUndo = sal_True;
+        m_bCanUndo = true;
     }
 
 
@@ -172,15 +172,15 @@ namespace svxform
         if (IsLocked() || !m_pNavModel)
             return;
 
-        m_bCanUndo = sal_False;
+        m_bCanUndo = false;
 
 
         // EntryData loeschen
-        FmEntryData* pEntryData = m_pNavModel->FindData( _rxElement, m_pNavModel->GetRootList(), sal_True );
+        FmEntryData* pEntryData = m_pNavModel->FindData( _rxElement, m_pNavModel->GetRootList(), true );
         if (pEntryData)
             m_pNavModel->Remove(pEntryData);
 
-        m_bCanUndo = sal_True;
+        m_bCanUndo = true;
     }
 
 
@@ -230,7 +230,7 @@ namespace svxform
 
 
 
-    void NavigatorTreeModel::SetModified( sal_Bool bMod )
+    void NavigatorTreeModel::SetModified( bool bMod )
     {
         if( !m_pFormShell ) return;
         SfxObjectShell* pObjShell = m_pFormShell->GetFormModel()->GetObjectShell();
@@ -265,7 +265,7 @@ namespace svxform
     }
 
 
-    void NavigatorTreeModel::Insert(FmEntryData* pEntry, sal_uLong nRelPos, sal_Bool bAlterModel)
+    void NavigatorTreeModel::Insert(FmEntryData* pEntry, sal_uLong nRelPos, bool bAlterModel)
     {
         if (IsListening(*m_pFormModel))
             EndListening(*m_pFormModel);
@@ -364,7 +364,7 @@ namespace svxform
     }
 
 
-    void NavigatorTreeModel::Remove(FmEntryData* pEntry, sal_Bool bAlterModel)
+    void NavigatorTreeModel::Remove(FmEntryData* pEntry, bool bAlterModel)
     {
 
         // Form und Parent holen
@@ -617,7 +617,7 @@ namespace svxform
             Insert( pParentData, CONTAINER_APPEND );
         }
 
-        if (!FindData(xComp, pParentData->GetChildList(),sal_False))
+        if (!FindData(xComp, pParentData->GetChildList(),false))
         {
 
             // Neue EntryData setzen
@@ -635,7 +635,7 @@ namespace svxform
         const Reference< XFormComponent > & xNew
     )
     {
-        FmEntryData* pData = FindData(xOld, GetRootList(), sal_True);
+        FmEntryData* pData = FindData(xOld, GetRootList(), true);
         DBG_ASSERT(pData && pData->ISA(FmControlData), "NavigatorTreeModel::ReplaceFormComponent : invalid argument !");
         ((FmControlData*)pData)->ModelReplaced( xNew, m_aNormalImages );
 
@@ -644,7 +644,7 @@ namespace svxform
     }
 
 
-    FmEntryData* NavigatorTreeModel::FindData(const Reference< XInterface > & xElement, FmEntryDataList* pDataList, sal_Bool bRecurs)
+    FmEntryData* NavigatorTreeModel::FindData(const Reference< XInterface > & xElement, FmEntryDataList* pDataList, bool bRecurs)
     {
         // normalize
         Reference< XInterface > xIFace( xElement, UNO_QUERY );
@@ -665,7 +665,7 @@ namespace svxform
     }
 
 
-    FmEntryData* NavigatorTreeModel::FindData( const OUString& rText, FmFormData* pParentData, sal_Bool bRecurs )
+    FmEntryData* NavigatorTreeModel::FindData( const OUString& rText, FmFormData* pParentData, bool bRecurs )
     {
         FmEntryDataList* pDataList;
         if( !pParentData )
@@ -762,7 +762,7 @@ namespace svxform
             try
             {
                 Reference< XFormComponent > xFormComponent( pFormObject->GetUnoControlModel(), UNO_QUERY_THROW );
-                FmEntryData* pEntryData = FindData( xFormComponent, GetRootList(), sal_True );
+                FmEntryData* pEntryData = FindData( xFormComponent, GetRootList(), true );
                 if ( pEntryData )
                     Remove( pEntryData );
             }
@@ -779,7 +779,7 @@ namespace svxform
         }
     }
 
-    sal_Bool NavigatorTreeModel::InsertFormComponent(FmNavRequestSelectHint& rHint, SdrObject* pObject)
+    bool NavigatorTreeModel::InsertFormComponent(FmNavRequestSelectHint& rHint, SdrObject* pObject)
     {
         if ( pObject->ISA(SdrObjGroup) )
         {   // rekursiv absteigen
@@ -788,33 +788,33 @@ namespace svxform
             {
                 SdrObject* pCurrent = pChildren->GetObj(i);
                 if (!InsertFormComponent(rHint, pCurrent))
-                    return sal_False;
+                    return false;
             }
         }
         else
         {
             FmFormObj* pFormObject = FmFormObj::GetFormObject( pObject );
             if ( !pFormObject )
-                return sal_False;
+                return false;
 
             try
             {
                 Reference< XFormComponent > xFormViewControl( pFormObject->GetUnoControlModel(), UNO_QUERY_THROW );
                 FmEntryData* pControlData = FindData( xFormViewControl, GetRootList() );
                 if ( !pControlData )
-                    return sal_False;
+                    return false;
 
                 rHint.AddItem( pControlData );
-                return sal_True;
+                return true;
             }
             catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
-                return sal_False;
+                return false;
             }
         }
 
-        return sal_True;
+        return true;
     }
 
     void NavigatorTreeModel::BroadcastMarkedObjects(const SdrMarkList& mlMarked)
@@ -913,7 +913,7 @@ namespace svxform
     }
 
 
-    sal_Bool NavigatorTreeModel::Rename( FmEntryData* pEntryData, const OUString& rNewText )
+    bool NavigatorTreeModel::Rename( FmEntryData* pEntryData, const OUString& rNewText )
     {
 
         // Wenn Name schon vorhanden, Fehlermeldung
@@ -936,15 +936,15 @@ namespace svxform
             xFormComponent = pControlData->GetFormComponent();
         }
 
-        if( !xFormComponent.is() ) return sal_False;
+        if( !xFormComponent.is() ) return false;
         Reference< XPropertySet >  xSet(xFormComponent, UNO_QUERY);
-        if( !xSet.is() ) return sal_False;
+        if( !xSet.is() ) return false;
 
 
         // Namen setzen
         xSet->setPropertyValue( FM_PROP_NAME, makeAny(rNewText) );
 
-        return sal_True;
+        return true;
     }
 
 

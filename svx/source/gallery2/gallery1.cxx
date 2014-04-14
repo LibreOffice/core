@@ -287,7 +287,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                         INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( s_sSDG_EXT );
                         INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( s_sSDV_EXT );
                         OUString        aTitle;
-                        sal_Bool        bReadOnly = sal_False;
+                        bool        bReadOnly = false;
 
                         try
                         {

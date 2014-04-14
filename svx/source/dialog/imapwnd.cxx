@@ -76,10 +76,10 @@ IMapWindow::~IMapWindow()
 
 void IMapWindow::SetImageMap( const ImageMap& rImageMap )
 {
-    ReplaceImageMap( rImageMap, sal_False );
+    ReplaceImageMap( rImageMap, false );
 }
 
-void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, sal_Bool /*bScaleToGraphic*/ )
+void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, bool /*bScaleToGraphic*/ )
 {
     SdrPage* pPage = 0;
     aIMap = rImageMap;
@@ -116,11 +116,11 @@ void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, sal_Bool /*bScaleTo
     }
 }
 
-sal_Bool IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
+bool IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
 {
     const SdrObject*    pSdrObj = GetSelectedSdrObject();
     IMapObject*         pIMapObj;
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if ( pSdrObj && ( ( pIMapObj = GetIMapObj( pSdrObj ) ) != NULL ) )
     {
@@ -128,9 +128,9 @@ sal_Bool IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
         pIMapObj->SetAltText( rNewInfo.aMarkAltText );
         pIMapObj->SetTarget( rNewInfo.aMarkTarget );
         pModel->SetChanged( true );
-        UpdateInfo( sal_False );
+        UpdateInfo( false );
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -341,7 +341,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
         OUString        aDesc;
         OUString        aTarget;
         IMapObjectPtr   pIMapObj = pUserData->GetObject();
-        sal_Bool        bActive = sal_True;
+        bool        bActive = true;
 
         if ( pIMapObj.get() )
         {
@@ -402,13 +402,13 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
 void IMapWindow::MouseButtonUp(const MouseEvent& rMEvt)
 {
     GraphCtrl::MouseButtonUp( rMEvt );
-    UpdateInfo( sal_True );
+    UpdateInfo( true );
 }
 
 void IMapWindow::MarkListHasChanged()
 {
     GraphCtrl::MarkListHasChanged();
-    UpdateInfo( sal_False );
+    UpdateInfo( false );
 }
 
 SdrObject* IMapWindow::GetHitSdrObj( const Point& rPosPixel ) const
@@ -530,7 +530,7 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
             pModel->SetChanged( true );
             pView->UnmarkAll();
             pView->MarkObj( pSdrObj, pView->GetSdrPageView() );
-            UpdateInfo( sal_True );
+            UpdateInfo( true );
             nRet =  rEvt.mnAction;
         }
     }
@@ -568,7 +568,7 @@ void IMapWindow::RequestHelp( const HelpEvent& rHEvt )
     }
 }
 
-void IMapWindow::SetCurrentObjState( sal_Bool bActive )
+void IMapWindow::SetCurrentObjState( bool bActive )
 {
     SdrObject* pObj = GetSelectedSdrObject();
 
@@ -595,7 +595,7 @@ void IMapWindow::SetCurrentObjState( sal_Bool bActive )
     }
 }
 
-void IMapWindow::UpdateInfo( sal_Bool bNewObj )
+void IMapWindow::UpdateInfo( bool bNewObj )
 {
     if ( aInfoLink.IsSet() )
     {
@@ -606,7 +606,7 @@ void IMapWindow::UpdateInfo( sal_Bool bNewObj )
 
         if ( pIMapObj )
         {
-            aInfo.bOneMarked = sal_True;
+            aInfo.bOneMarked = true;
             aInfo.aMarkURL = pIMapObj->GetURL();
             aInfo.aMarkAltText = pIMapObj->GetAltText();
             aInfo.aMarkTarget = pIMapObj->GetTarget();
@@ -616,8 +616,8 @@ void IMapWindow::UpdateInfo( sal_Bool bNewObj )
         else
         {
             aInfo.aMarkURL = aInfo.aMarkAltText = aInfo.aMarkTarget = "";
-            aInfo.bOneMarked = sal_False;
-            aInfo.bActivated = sal_False;
+            aInfo.bOneMarked = false;
+            aInfo.bActivated = false;
         }
 
         aInfoLink.Call( this );
@@ -650,7 +650,7 @@ void IMapWindow::DoMacroAssign()
             const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
             pIMapObj->SetMacroTable( ((const SvxMacroItem& )pOutSet->Get( SID_ATTR_MACROITEM )).GetMacroTable() );
             pModel->SetChanged( true );
-            UpdateInfo( sal_False );
+            UpdateInfo( false );
         }
 
         delete pMacroDlg;
@@ -688,7 +688,7 @@ void IMapWindow::DoPropertyDialog()
                 pIMapObj->SetTarget( aDlg->GetTarget() );
                 pIMapObj->SetName( aDlg->GetName() );
                 pModel->SetChanged( true );
-                UpdateInfo( sal_True );
+                UpdateInfo( true );
             }
             delete aDlg;
         }
@@ -713,11 +713,11 @@ IMPL_LINK( IMapWindow, MenuSelectHdl, Menu*, pMenu )
 
             case( MN_ACTIVATE ):
             {
-                const sal_Bool bNewState = !pMenu->IsItemChecked( MN_ACTIVATE );
+                const bool bNewState = !pMenu->IsItemChecked( MN_ACTIVATE );
 
                 pMenu->CheckItem( MN_ACTIVATE, bNewState );
                 SetCurrentObjState( bNewState );
-                UpdateInfo( sal_False );
+                UpdateInfo( false );
             }
 
             case( MN_FRAME_TO_TOP ):

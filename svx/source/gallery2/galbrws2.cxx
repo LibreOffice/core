@@ -109,7 +109,7 @@ class GalleryThemePopup : public ::cppu::WeakImplHelper1< css::frame::XStatusLis
 private:
     const GalleryTheme* mpTheme;
     sal_uIntPtr         mnObjectPos;
-    sal_Bool            mbPreview;
+    bool            mbPreview;
     PopupMenu           maPopupMenu;
     PopupMenu           maBackgroundPopup;
     GalleryBrowser2*    mpBrowser;
@@ -125,7 +125,7 @@ private:
 public:
     GalleryThemePopup( const GalleryTheme* pTheme,
                        sal_uIntPtr nObjectPos,
-                       sal_Bool bPreview,
+                       bool bPreview,
                        GalleryBrowser2* pBrowser );
     virtual ~GalleryThemePopup();
 
@@ -139,7 +139,7 @@ public:
 GalleryThemePopup::GalleryThemePopup(
     const GalleryTheme* pTheme,
     sal_uIntPtr nObjectPos,
-    sal_Bool bPreview,
+    bool bPreview,
     GalleryBrowser2* pBrowser )
     : mpTheme( pTheme )
     , mnObjectPos( nObjectPos )
@@ -238,7 +238,7 @@ void GalleryThemePopup::ExecutePopup( Window *pWindow, const ::Point &aPos )
     INetURLObject    aURL;
 
     const_cast< GalleryTheme* >( mpTheme )->GetURL( mnObjectPos, aURL );
-    const sal_Bool bValidURL = ( aURL.GetProtocol() != INET_PROT_NOT_VALID );
+    const bool bValidURL = ( aURL.GetProtocol() != INET_PROT_NOT_VALID );
 
     maPopupMenu.EnableItem( MN_ADD, bValidURL && SGA_OBJ_SOUND != eObjKind );
 
@@ -651,12 +651,12 @@ void GalleryBrowser2::ShowContextMenu( Window*, const Point* pContextPoint )
     }
 }
 
-sal_Bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
+bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 {
     Point       aSelPos;
     const sal_uIntPtr   nItemId = ImplGetSelectedItemId( NULL, aSelPos );
     GalleryBrowser* pParentBrowser = dynamic_cast<GalleryBrowser*>(GetParent());
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if (pParentBrowser != NULL)
         bRet = pParentBrowser->KeyInput( rKEvt, pWindow );
     else
@@ -673,15 +673,15 @@ sal_Bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 
         const_cast< GalleryTheme* >( mpCurTheme )->GetURL( nItemId - 1, aURL );
 
-        const sal_Bool  bValidURL = ( aURL.GetProtocol() != INET_PROT_NOT_VALID );
-        sal_Bool        bPreview = bValidURL;
-        sal_Bool        bDelete = sal_False;
-        sal_Bool        bTitle = sal_False;
+        const bool  bValidURL = ( aURL.GetProtocol() != INET_PROT_NOT_VALID );
+        bool        bPreview = bValidURL;
+        bool        bDelete = false;
+        bool        bTitle = false;
 
         if( !mpCurTheme->IsReadOnly() && mpCurTheme->GetObjectCount() )
         {
             bDelete = ( GALLERYBROWSERMODE_PREVIEW != GetMode() );
-            bTitle = sal_True;
+            bTitle = true;
         }
 
         switch( rKEvt.GetKeyCode().GetCode() )
@@ -693,7 +693,7 @@ sal_Bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
                 if( bPreview )
                 {
                     TogglePreview( pWindow );
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
             break;
@@ -705,7 +705,7 @@ sal_Bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
                 if( bValidURL )
                 {
                     Dispatch( MN_ADD );
-                    return sal_True;
+                    return true;
                 }
             }
             break;
@@ -732,7 +732,7 @@ sal_Bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
         if( nExecuteId )
         {
             Execute( nExecuteId );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -1131,7 +1131,7 @@ void GalleryBrowser2::Dispatch(
             }
 
             Graphic aGraphic;
-            sal_Bool bGraphic = mpCurTheme->GetGraphic( mnCurActionPos, aGraphic );
+            bool bGraphic = mpCurTheme->GetGraphic( mnCurActionPos, aGraphic );
             if ( bGraphic && !!aGraphic )
                 xGraphic.set( aGraphic.GetXGraphic() );
             OSL_ENSURE( xGraphic.is(), "gallery item is graphic, but the reference is invalid!" );

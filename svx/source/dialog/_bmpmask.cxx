@@ -51,7 +51,7 @@
              ( pMinG[i] <= nG ) && ( pMaxG[i] >= nG ) &&            \
              ( pMinB[i] <= nB ) && ( pMaxB[i] >= nB ) )             \
         {                                                           \
-            aCol = pDstCols[i]; bReplace = sal_True; break;             \
+            aCol = pDstCols[i]; bReplace = true; break;             \
         }                                                           \
     }                                                               \
 }
@@ -163,16 +163,16 @@ void MaskSet::onEditColor()
 class MaskData
 {
     SvxBmpMask*     pMask;
-    sal_Bool            bIsReady;
-    sal_Bool            bExecState;
+    bool            bIsReady;
+    bool            bExecState;
     SfxBindings&    rBindings;
 
 public:
                 MaskData( SvxBmpMask* pBmpMask, SfxBindings& rBind );
 
-    sal_Bool        IsCbxReady() const { return bIsReady; }
-    void        SetExecState( sal_Bool bState ) { bExecState = bState; }
-    sal_Bool        IsExecReady() const { return bExecState; }
+    bool        IsCbxReady() const { return bIsReady; }
+    void        SetExecState( bool bState ) { bExecState = bState; }
+    bool        IsExecReady() const { return bExecState; }
 
                 DECL_LINK( PipetteHdl, ToolBox* pTbx );
                 DECL_LINK( CbxHdl, CheckBox* pCbx );
@@ -186,8 +186,8 @@ public:
 MaskData::MaskData( SvxBmpMask* pBmpMask, SfxBindings& rBind ) :
 
     pMask       ( pBmpMask ),
-    bIsReady    ( sal_False ),
-    bExecState  ( sal_False ),
+    bIsReady    ( false ),
+    bExecState  ( false ),
     rBindings   ( rBind )
 
 {
@@ -783,7 +783,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         long*       pMinB = new long[nCount];
         long*       pMaxB = new long[nCount];
         sal_uInt16      i;
-        sal_Bool        bReplace;
+        bool        bReplace;
 
         aMtf.SetPrefSize( rMtf.GetPrefSize() );
         aMtf.SetPrefMapMode( rMtf.GetPrefMapMode() );
@@ -813,7 +813,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         {
             MetaAction* pAction = rMtf.GetAction( nAct );
 
-            bReplace = sal_False;
+            bReplace = false;
 
             switch( pAction->GetType() )
             {

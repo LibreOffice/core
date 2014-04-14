@@ -52,8 +52,8 @@ namespace svxform
     {
     private:
         Link                m_aClipboardListener;
-        sal_Bool            m_bDragging         : 1;
-        sal_Bool            m_bClipboardOwner   : 1;
+        bool            m_bDragging         : 1;
+        bool            m_bClipboardOwner   : 1;
 
     public:
         class GrantAccess
@@ -64,8 +64,8 @@ namespace svxform
     public:
         OLocalExchange( );
 
-        sal_Bool    isDragging() const { return m_bDragging; }
-        sal_Bool    isClipboardOwner() const { return m_bClipboardOwner; }
+        bool        isDragging() const { return m_bDragging; }
+        bool        isClipboardOwner() const { return m_bClipboardOwner; }
 
         void        startDrag( Window* pWindow, sal_Int8 nDragSourceActions, const GrantAccess& );
         void        copyToClipboard( Window* _pWindow, const GrantAccess& );
@@ -74,7 +74,7 @@ namespace svxform
 
         void        clear();
 
-        static  sal_Bool    hasFormat( const DataFlavorExVector& _rFormats, sal_uInt32 _nFormatId );
+        static  bool    hasFormat( const DataFlavorExVector& _rFormats, sal_uInt32 _nFormatId );
 
     protected:
         // XClipboardOwner
@@ -110,9 +110,9 @@ namespace svxform
         void        startDrag( sal_Int8 nDragSourceActions );
         void        copyToClipboard( ) const;
 
-        inline  sal_Bool    isDragSource() const { return m_pTransferable && m_pTransferable->isDragging(); }
-        inline  sal_Bool    isClipboardOwner() const { return m_pTransferable && m_pTransferable->isClipboardOwner(); }
-        inline  sal_Bool    isDataExchangeActive( ) const { return isDragSource() || isClipboardOwner(); }
+        inline  bool    isDragSource() const { return m_pTransferable && m_pTransferable->isDragging(); }
+        inline  bool    isClipboardOwner() const { return m_pTransferable && m_pTransferable->isClipboardOwner(); }
+        inline  bool    isDataExchangeActive( ) const { return isDragSource() || isClipboardOwner(); }
         inline  void        clear() { if ( isDataExchangeActive() ) m_pTransferable->clear(); }
 
         SVX_DLLPRIVATE void     setClipboardListener( const Link& _rListener ) { if ( m_pTransferable ) m_pTransferable->setClipboardListener( _rListener ); }
@@ -220,9 +220,9 @@ namespace svxform
         static sal_uInt32       getControlPathFormatId( );
         static sal_uInt32       getHiddenControlModelsFormatId( );
 
-        inline static sal_Bool  hasFieldExchangeFormat( const DataFlavorExVector& _rFormats );
-        inline static sal_Bool  hasControlPathFormat( const DataFlavorExVector& _rFormats );
-        inline static sal_Bool  hasHiddenControlModelsFormat( const DataFlavorExVector& _rFormats );
+        inline static bool  hasFieldExchangeFormat( const DataFlavorExVector& _rFormats );
+        inline static bool  hasControlPathFormat( const DataFlavorExVector& _rFormats );
+        inline static bool  hasHiddenControlModelsFormat( const DataFlavorExVector& _rFormats );
 
     protected:
         virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
@@ -246,17 +246,17 @@ namespace svxform
 
 
 
-    inline sal_Bool OControlExchange::hasFieldExchangeFormat( const DataFlavorExVector& _rFormats )
+    inline bool OControlExchange::hasFieldExchangeFormat( const DataFlavorExVector& _rFormats )
     {
         return hasFormat( _rFormats, getFieldExchangeFormatId() );
     }
 
-    inline sal_Bool OControlExchange::hasControlPathFormat( const DataFlavorExVector& _rFormats )
+    inline bool OControlExchange::hasControlPathFormat( const DataFlavorExVector& _rFormats )
     {
         return hasFormat( _rFormats, getControlPathFormatId() );
     }
 
-    inline sal_Bool OControlExchange::hasHiddenControlModelsFormat( const DataFlavorExVector& _rFormats )
+    inline bool OControlExchange::hasHiddenControlModelsFormat( const DataFlavorExVector& _rFormats )
     {
         return hasFormat( _rFormats, getHiddenControlModelsFormatId() );
     }

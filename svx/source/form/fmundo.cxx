@@ -146,8 +146,8 @@ private:
 
 struct PropertyInfo
 {
-    sal_Bool    bIsTransientOrReadOnly  : 1;    // the property is transient or read-only, thus we need no undo action for it
-    sal_Bool    bIsValueProperty        : 1;    // the property is the special value property, thus it may be handled
+    bool    bIsTransientOrReadOnly  : 1;    // the property is transient or read-only, thus we need no undo action for it
+    bool    bIsValueProperty        : 1;    // the property is the special value property, thus it may be handled
                                             // as if it's transient or persistent
 };
 
@@ -156,7 +156,7 @@ struct PropertySetInfo
     typedef std::map<OUString, PropertyInfo> AllProperties;
 
     AllProperties   aProps;                 // all properties of this set which we know so far
-    sal_Bool            bHasEmptyControlSource; // sal_True -> the set has a DataField property, and the current value is an empty string
+    bool            bHasEmptyControlSource; // sal_True -> the set has a DataField property, and the current value is an empty string
                                             // sal_False -> the set has _no_ such property or its value isn't empty
 };
 
@@ -353,10 +353,10 @@ void FmXUndoEnvironment::Inserted(SdrObject* pObj)
 
 namespace
 {
-    sal_Bool lcl_searchElement(const Reference< XIndexAccess>& xCont, const Reference< XInterface >& xElement)
+    bool lcl_searchElement(const Reference< XIndexAccess>& xCont, const Reference< XInterface >& xElement)
     {
         if (!xCont.is() || !xElement.is())
-            return sal_False;
+            return false;
 
         sal_Int32 nCount = xCont->getCount();
         Reference< XInterface > xComp;
@@ -368,12 +368,12 @@ namespace
                 if (xComp.is())
                 {
                     if ( xElement == xComp )
-                        return sal_True;
+                        return true;
                     else
                     {
                         Reference< XIndexAccess> xCont2(xComp, UNO_QUERY);
                         if (xCont2.is() && lcl_searchElement(xCont2, xElement))
-                            return sal_True;
+                            return true;
                     }
                 }
             }
@@ -382,7 +382,7 @@ namespace
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
-        return sal_False;
+        return false;
     }
 }
 
@@ -587,7 +587,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             PropertySetInfo aNewEntry;
             if (!::comphelper::hasProperty(FM_PROP_CONTROLSOURCE, xSet))
             {
-                aNewEntry.bHasEmptyControlSource = sal_False;
+                aNewEntry.bHasEmptyControlSource = false;
             }
             else
             {
@@ -625,7 +625,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             aNewEntry.bIsTransientOrReadOnly = ((nAttributes & PropertyAttribute::READONLY) != 0) || ((nAttributes & PropertyAttribute::TRANSIENT) != 0);
 
             // check if it is the special "DataFieldProperty"
-            aNewEntry.bIsValueProperty = sal_False;
+            aNewEntry.bIsValueProperty = false;
             try
             {
                 if (::comphelper::hasProperty(FM_PROP_CONTROLSOURCEPROPERTY, xSet))
@@ -682,7 +682,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                 static const OUString s_sExternalData( "ExternalData" );
                 if ( xBindingPropsPSI.is() && xBindingPropsPSI->hasPropertyByName( s_sExternalData ) )
                 {
-                    sal_Bool bExternalData = sal_True;
+                    bool bExternalData = true;
                     OSL_VERIFY( xBindingProps->getPropertyValue( s_sExternalData ) >>= bExternalData );
                     bAddUndoAction = !bExternalData;
                 }

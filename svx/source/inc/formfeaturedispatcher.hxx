@@ -48,8 +48,8 @@ namespace svx
         const ::com::sun::star::util::URL   m_aFeatureURL;
         ::com::sun::star::uno::Any          m_aLastKnownState;
         const sal_Int16                     m_nFormFeature;
-        sal_Bool                            m_bLastKnownEnabled;
-        sal_Bool                            m_bDisposed;
+        bool                            m_bLastKnownEnabled;
+        bool                            m_bDisposed;
 
     public:
         /** constructs the dispatcher

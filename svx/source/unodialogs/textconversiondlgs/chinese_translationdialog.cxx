@@ -47,7 +47,7 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     get(m_pCB_Translate_Commonterms, "commonterms");
 
     SvtLinguConfig  aLngCfg;
-    sal_Bool bValue = sal_Bool();
+    bool bValue;
     Any aAny( aLngCfg.GetProperty( OUString( UPN_IS_DIRECTION_TO_SIMPLIFIED ) ) );
     aAny >>= bValue;
     if( bValue )
@@ -73,8 +73,8 @@ ChineseTranslationDialog::~ChineseTranslationDialog()
     }
 }
 
-void ChineseTranslationDialog::getSettings( sal_Bool& rbDirectionToSimplified
-                                          , sal_Bool& rbTranslateCommonTerms ) const
+void ChineseTranslationDialog::getSettings( bool& rbDirectionToSimplified
+                                          , bool& rbTranslateCommonTerms ) const
 {
     rbDirectionToSimplified = m_pRB_To_Simplified->IsChecked();
     rbTranslateCommonTerms = m_pCB_Translate_Commonterms->IsChecked();
@@ -85,9 +85,9 @@ IMPL_LINK_NOARG(ChineseTranslationDialog, OkHdl)
     //save settings to configuration
     SvtLinguConfig  aLngCfg;
     Any aAny;
-    aAny <<= sal_Bool( !!m_pRB_To_Simplified->IsChecked() );
+    aAny <<= m_pRB_To_Simplified->IsChecked();
     aLngCfg.SetProperty( OUString( UPN_IS_DIRECTION_TO_SIMPLIFIED ), aAny );
-    aAny <<= sal_Bool( !!m_pCB_Translate_Commonterms->IsChecked() );
+    aAny <<= m_pCB_Translate_Commonterms->IsChecked();
     aLngCfg.SetProperty( OUString( UPN_IS_TRANSLATE_COMMON_TERMS ), aAny );
 
     EndDialog( RET_OK );

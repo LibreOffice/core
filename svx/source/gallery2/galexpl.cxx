@@ -280,7 +280,7 @@ bool GalleryExplorer::EndLocking( const OUString& rThemeName )
 
         if( pTheme )
         {
-            const sal_Bool bReleaseLockedTheme = pTheme->UnlockTheme();
+            const bool bReleaseLockedTheme = pTheme->UnlockTheme();
 
             // release acquired theme
             pGal->ReleaseTheme( pTheme, aListener );

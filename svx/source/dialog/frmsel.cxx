@@ -1217,7 +1217,7 @@ void FrameSelector::GetFocus()
 
     mxImpl->DoInvalidate( false );
     if( mxImpl->mxAccess.is() )
-        mxImpl->mpAccess->NotifyFocusListeners( sal_True );
+        mxImpl->mpAccess->NotifyFocusListeners( true );
     if (IsAnyBorderSelected())
     {
         FrameBorderType borderType = FRAMEBORDER_NONE;
@@ -1248,7 +1248,7 @@ void FrameSelector::LoseFocus()
 {
     mxImpl->DoInvalidate( false );
     if( mxImpl->mxAccess.is() )
-        mxImpl->mpAccess->NotifyFocusListeners( sal_False );
+        mxImpl->mpAccess->NotifyFocusListeners( false );
     Control::LoseFocus();
 }
 

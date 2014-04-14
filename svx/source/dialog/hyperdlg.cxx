@@ -38,9 +38,9 @@ struct MyStruct
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
     SfxChildWinFactory* pFact;
-    sal_Bool                bHideNotDelete;
-    sal_Bool                bVisible;
-    sal_Bool                bHideAtToggle;
+    bool                bHideNotDelete;
+    bool                bVisible;
+    bool                bHideAtToggle;
     SfxModule*          pContextModule;
     SfxWorkWindow*      pWorkWin;
 };
@@ -58,7 +58,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, sal_uInt16 nId,
     mpDlg = pFact->CreateSvxHpLinkDlg( _pParent, pBindings, SID_HYPERLINK_DIALOG );
     DBG_ASSERT(mpDlg, "Dialogdiet fail!");
     pWindow = mpDlg->GetWindow();
-    ((MyStruct*)pImp)->bVisible = sal_False;
+    ((MyStruct*)pImp)->bVisible = false;
 
     Window* pTopWindow = 0;
     if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 &&

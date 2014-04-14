@@ -68,7 +68,7 @@ protected:
 private:
 
     Gallery*    mpGallery;
-    sal_Bool    mbHiddenThemes;
+    bool    mbHiddenThemes;
 };
 
 }

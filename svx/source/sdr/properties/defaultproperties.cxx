@@ -144,7 +144,7 @@ namespace sdr
             sal_uInt16 nWhich(aWhichIter.FirstWhich());
             const SfxPoolItem *pPoolItem;
             std::vector< sal_uInt16 > aPostItemChangeList;
-            sal_Bool bDidChange(sal_False);
+            bool bDidChange(false);
             SfxItemSet aSet(*GetSdrObject().GetObjectItemPool(), SDRATTR_START, EE_ITEMS_END);
 
             // give a hint to STL_Vector
@@ -156,7 +156,7 @@ namespace sdr
                 {
                     if(AllowItemChange(nWhich, pPoolItem))
                     {
-                        bDidChange = sal_True;
+                        bDidChange = true;
                         ItemChange(nWhich, pPoolItem);
                         aPostItemChangeList.push_back( nWhich );
                         aSet.Put(*pPoolItem);

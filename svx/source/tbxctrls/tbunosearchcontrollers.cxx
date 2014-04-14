@@ -68,8 +68,8 @@ static const sal_Int32       REMEMBER_SIZE = 10;
 void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                          const css::uno::Reference< css::frame::XFrame >& xFrame,
                          const ToolBox* pToolBox,
-                         const sal_Bool aSearchBackwards = false,
-                         const sal_Bool aFindAll = false )
+                         const bool aSearchBackwards = false,
+                         const bool aFindAll = false )
 {
     css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( rxContext ) );
     css::util::URL aURL;
@@ -77,7 +77,7 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
     xURLTransformer->parseStrict(aURL);
 
     OUString sFindText;
-    sal_Bool aMatchCase = false;
+    bool aMatchCase = false;
     if ( pToolBox )
     {
         sal_uInt16 nItemCount = pToolBox->GetItemCount();
@@ -192,8 +192,8 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
         case EVENT_KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-            sal_Bool bShift = pKeyEvent->GetKeyCode().IsShift();
-            sal_Bool bMod1 = pKeyEvent->GetKeyCode().IsMod1();
+            bool bShift = pKeyEvent->GetKeyCode().IsShift();
+            bool bMod1 = pKeyEvent->GetKeyCode().IsMod1();
             sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
 
             if ( KEY_ESCAPE == nCode || (bMod1 && (KEY_F == nCode)) )
@@ -583,7 +583,7 @@ void SAL_CALL UpDownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ 
     Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
     ToolBox* pToolBox = (ToolBox*)pWindow;
 
-    impl_executeSearch(m_xContext, m_xFrame, pToolBox, sal_Bool( meType == UP ));
+    impl_executeSearch(m_xContext, m_xFrame, pToolBox, meType == UP );
 
     css::frame::FeatureStateEvent aEvent;
     aEvent.FeatureURL.Complete = OUString(COMMAND_APPENDSEARCHHISTORY);

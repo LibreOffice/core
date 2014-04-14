@@ -57,7 +57,7 @@ namespace sdr
 
                 if(nSubHierarchyCount)
                 {
-                    const sal_Bool bDoGhostedDisplaying(
+                    const bool bDoGhostedDisplaying(
                         GetObjectContact().DoVisualizeEnteredGroup()
                         && !GetObjectContact().isOutputToPrinter()
                         && GetObjectContact().getActiveViewContact() == &GetViewContact());

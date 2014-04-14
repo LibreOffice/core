@@ -37,9 +37,9 @@
 ContourWindow::ContourWindow( Window* pParent, const ResId& rResId ) :
             GraphCtrl       ( pParent, rResId ),
             aWorkRect       ( 0, 0, 0, 0 ),
-            bPipetteMode    ( sal_False ),
-            bWorkplaceMode  ( sal_False ),
-            bClickValid     ( sal_False )
+            bPipetteMode    ( false ),
+            bWorkplaceMode  ( false ),
+            bClickValid     ( false )
 {
     SetWinStyle( WB_SDRMODE );
 }
@@ -161,7 +161,7 @@ void ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ContourWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    bClickValid = sal_False;
+    bClickValid = false;
 
     if ( bPipetteMode )
     {

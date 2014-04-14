@@ -73,9 +73,9 @@ private:
     CellVector  maCells;
     sal_Int32   mnRow;
     sal_Int32   mnHeight;
-    sal_Bool    mbOptimalHeight;
-    sal_Bool    mbIsVisible;
-    sal_Bool    mbIsStartOfNewPage;
+    bool    mbOptimalHeight;
+    bool    mbIsVisible;
+    bool    mbIsStartOfNewPage;
     OUString maName;
 };
 

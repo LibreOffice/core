@@ -137,7 +137,7 @@ bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
 
     SvxNumberInfoItem& rOther = (SvxNumberInfoItem&)rItem;
 
-    sal_Bool bEqual = sal_False;
+    bool bEqual = false;
 
     if ( nDelCount == rOther.nDelCount )
     {
@@ -145,7 +145,7 @@ bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
         {
             if ( pDelFormatArr != NULL && rOther.pDelFormatArr != NULL )
             {
-                bEqual = sal_True;
+                bEqual = true;
 
                 for ( sal_uInt16 i = 0; i < nDelCount && bEqual; ++i )
                     bEqual = ( pDelFormatArr[i] == rOther.pDelFormatArr[i] );

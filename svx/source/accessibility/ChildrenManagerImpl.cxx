@@ -920,7 +920,7 @@ void ChildrenManagerImpl::UpdateSelection (void)
     VEC_SHAPE vecSelect;
     int nAddSelect=0;
     int nRemoveSelect=0;
-    sal_Bool bHasSelectedShape=sal_False;
+    bool bHasSelectedShape=false;
     ChildDescriptorListType::iterator I, aEnd = maVisibleChildren.end();
     for (I=maVisibleChildren.begin(); I != aEnd; ++I)
     {
@@ -972,7 +972,7 @@ void ChildrenManagerImpl::UpdateSelection (void)
                 }
                 else
                 {//Selected not change,has selected shape before
-                    bHasSelectedShape=sal_True;
+                    bHasSelectedShape=true;
                 }
             }
             else
@@ -1045,7 +1045,7 @@ void ChildrenManagerImpl::UpdateSelection (void)
                 }
                 if (nAddSelect > 1 )//check other selected shape fire selection add event
                 {
-                    bHasSelectedShape=sal_True;
+                    bHasSelectedShape=true;
                 }
             }
         }

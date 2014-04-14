@@ -226,21 +226,21 @@ class FmXFormShell   :public FmXFormShell_BASE
     mutable ::svxform::DocumentType
                     m_eDocumentType;        /// the type of document we're living in
     sal_Int16       m_nLockSlotInvalidation;
-    sal_Bool        m_bHadPropertyBrowserInDesignMode : 1;
+    bool        m_bHadPropertyBrowserInDesignMode : 1;
 
-    sal_Bool        m_bTrackProperties  : 1;
+    bool        m_bTrackProperties  : 1;
         // soll ich (bzw. der Owner diese Impl-Klasse) mich um die Aktualisierung des ::com::sun::star::beans::Property-Browsers kuemmern ?
 
-    sal_Bool        m_bUseWizards : 1;
+    bool        m_bUseWizards : 1;
 
-    sal_Bool        m_bDatabaseBar      : 1;    // Gibt es eine Datenbankleiste
-    sal_Bool        m_bInActivate       : 1;    // Wird ein Controller aktiviert
-    sal_Bool        m_bSetFocus         : 1;    // Darf der Focus umgesetzt werden
-    sal_Bool        m_bFilterMode       : 1;    // Wird gerade ein Filter auf die Controls angesetzt
-    sal_Bool        m_bChangingDesignMode:1;    // sal_True within SetDesignMode
-    sal_Bool        m_bPreparedClose    : 1;    // for the current modification state of the current form
+    bool        m_bDatabaseBar      : 1;    // Gibt es eine Datenbankleiste
+    bool        m_bInActivate       : 1;    // Wird ein Controller aktiviert
+    bool        m_bSetFocus         : 1;    // Darf der Focus umgesetzt werden
+    bool        m_bFilterMode       : 1;    // Wird gerade ein Filter auf die Controls angesetzt
+    bool        m_bChangingDesignMode:1;    // sal_True within SetDesignMode
+    bool        m_bPreparedClose    : 1;    // for the current modification state of the current form
                                                 //  PrepareClose had been called and the user denied to save changes
-    sal_Bool        m_bFirstActivation  : 1;    // has the shell ever been activated?
+    bool        m_bFirstActivation  : 1;    // has the shell ever been activated?
 
 public:
     // attribute access
@@ -249,10 +249,10 @@ public:
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&
                 getExternallyDisplayedForm() const { return m_xExternalDisplayedForm; }
 
-    inline sal_Bool
+    inline bool
                 didPrepareClose() const { return m_bPreparedClose; }
     inline void
-                didPrepareClose( sal_Bool _bDid ) { m_bPreparedClose = _bDid; }
+                didPrepareClose( bool _bDid ) { m_bPreparedClose = _bDid; }
 
 public:
     FmXFormShell(FmFormShell& _rShell, SfxViewFrame* _pViewFrame);
@@ -290,12 +290,12 @@ protected:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
-    void EnableTrackProperties( sal_Bool bEnable) { m_bTrackProperties = bEnable; }
-    sal_Bool IsTrackPropertiesEnabled() {return m_bTrackProperties;}
+    void EnableTrackProperties( bool bEnable) { m_bTrackProperties = bEnable; }
+    bool IsTrackPropertiesEnabled() {return m_bTrackProperties;}
 
     // activation handling
-            void        viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncAction = sal_False );
-            void        viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeactivateController = sal_True );
+    void        viewActivated( FmFormView& _rCurrentView, bool _bSyncAction = false );
+    void        viewDeactivated( FmFormView& _rCurrentView, bool _bDeactivateController = true );
 
     // IControllerFeatureInvalidation
     virtual void invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures ) SAL_OVERRIDE;
@@ -311,18 +311,18 @@ public:
     /** updates m_xForms, to be either <NULL/>, if we're in alive mode, or our current page's forms collection,
         if in design mode
     */
-    void UpdateForms( sal_Bool _bInvalidate );
+    void UpdateForms( bool _bInvalidate );
 
     void ExecuteSearch();               // execute SID_FM_SEARCH
     void CreateExternalView();          // execute SID_FM_VIEW_AS_GRID
 
-    sal_Bool    GetY2KState(sal_uInt16& n);
+    bool        GetY2KState(sal_uInt16& n);
     void        SetY2KState(sal_uInt16 n);
 
 protected:
     // activation handling
-    inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
-    inline  void        setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
+    inline  bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
+    inline  void        setHasBeenActivated( ) { m_bFirstActivation = false; }
 
     // form handling
     /// load or unload the forms on a page
@@ -353,7 +353,7 @@ protected:
 
 public:
     // methode fuer nicht designmode (alive mode)
-    void setActiveController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& _xController, sal_Bool _bNoSaveOldContent = sal_False );
+    void setActiveController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& _xController, bool _bNoSaveOldContent = false );
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& getActiveController() const {return m_xActiveController;}
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& getActiveInternalController() const { return m_xActiveController == m_xExternalViewController ? m_xExtViewTriggerController : m_xActiveController; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& getActiveForm() const {return m_xActiveForm;}
@@ -389,7 +389,7 @@ public:
                 getCurrentForm() const { return m_xCurrentForm; }
     void        forgetCurrentForm();
     /// returns whether the last known marking contained only controls
-    sal_Bool    onlyControlsAreMarked() const { return !m_aLastKnownMarkedControls.empty(); }
+    bool    onlyControlsAreMarked() const { return !m_aLastKnownMarkedControls.empty(); }
 
     /// determines whether the current selection consists of exactly the given object
     bool    isSolelySelected(
@@ -401,12 +401,12 @@ public:
     /// handles the request for showing the "Properties"
     void handleShowPropertiesRequest();
 
-    sal_Bool hasForms() const {return m_xForms.is() && m_xForms->getCount() != 0;}
-    sal_Bool hasDatabaseBar() const {return m_bDatabaseBar;}
-    sal_Bool canNavigate() const    {return m_xNavigationController.is();}
+    bool hasForms() const {return m_xForms.is() && m_xForms->getCount() != 0;}
+    bool hasDatabaseBar() const {return m_bDatabaseBar;}
+    bool canNavigate() const    {return m_xNavigationController.is();}
 
-    void ShowSelectionProperties( sal_Bool bShow );
-    sal_Bool IsPropBrwOpen() const;
+    void ShowSelectionProperties( bool bShow );
+    bool IsPropBrwOpen() const;
 
     void DetermineSelection(const SdrMarkList& rMarkList);
     void SetSelection(const SdrMarkList& rMarkList);
@@ -414,13 +414,13 @@ public:
 
     void SetDesignMode(bool bDesign);
 
-    sal_Bool    GetWizardUsing() const { return m_bUseWizards; }
-    void        SetWizardUsing(sal_Bool _bUseThem);
+    bool    GetWizardUsing() const { return m_bUseWizards; }
+    void    SetWizardUsing(bool _bUseThem);
 
         // Setzen des Filtermodus
-    sal_Bool isInFilterMode() const {return m_bFilterMode;}
+    bool isInFilterMode() const {return m_bFilterMode;}
     void startFiltering();
-    void stopFiltering(sal_Bool bSave);
+    void stopFiltering(bool bSave);
 
     static PopupMenu* GetConversionMenu();
         // ein Menue, das alle ControlConversion-Eintraege enthaelt
@@ -454,8 +454,8 @@ public:
 
     // das Setzen des curObject/selObject/curForm erfolgt verzoegert (SetSelectionDelayed), mit den folgenden
     // Funktionen laesst sich das abfragen/erzwingen
-    inline sal_Bool IsSelectionUpdatePending();
-    void            ForceUpdateSelection(sal_Bool bLockInvalidation);
+    inline bool IsSelectionUpdatePending();
+    void        ForceUpdateSelection(bool bLockInvalidation);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>          getContextDocument() const;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>            getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm) const;
@@ -477,11 +477,11 @@ private:
     void LoopGrids(sal_Int16 nWhat);
 
     // Invalidierung von Slots
-    void    InvalidateSlot( sal_Int16 nId, sal_Bool bWithId );
+    void    InvalidateSlot( sal_Int16 nId, bool bWithId );
     void    UpdateSlot( sal_Int16 nId );
     // Locking der Invalidierung - wenn der interne Locking-Counter auf 0 geht, werden alle aufgelaufenen Slots
     // (asynchron) invalidiert
-    void    LockSlotInvalidation(sal_Bool bLock);
+    void    LockSlotInvalidation(bool bLock);
 
     DECL_LINK(OnInvalidateSlots, void*);
 
@@ -537,7 +537,7 @@ protected:
 };
 
 
-inline sal_Bool FmXFormShell::IsSelectionUpdatePending()
+inline bool FmXFormShell::IsSelectionUpdatePending()
 {
     return m_aMarkTimer.IsActive();
 }

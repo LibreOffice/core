@@ -565,7 +565,7 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
 
         // If the drag point was limited and Ortho is active, do
         // the small ortho correction (reduction) -> last parameter to FALSE.
-        sal_Bool bDidLimit(ImpLimitToWorkArea(aPnt));
+        bool bDidLimit(ImpLimitToWorkArea(aPnt));
         if(bDidLimit && IsOrtho())
         {
             if(aDragStat.IsOrtho8Possible())
@@ -752,7 +752,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
         {
             // for migration from XOR, replace DrawDragObj here to create
             // overlay objects instead.
-            sal_Bool bUseSolidDragging(IsSolidDragging());
+            bool bUseSolidDragging(IsSolidDragging());
 
             // #i101648# check if dragged object is a naked SdrObject (not
             // a derivation). This is e.g. used in SW Frame construction
@@ -772,7 +772,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
 
                 if(XLINE_NONE == eLine && XFILL_NONE == eFill)
                 {
-                    bUseSolidDragging = sal_False;
+                    bUseSolidDragging = false;
                 }
             }
 
@@ -781,7 +781,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             {
                 if(pAktCreate->ISA(SdrUnoObj))
                 {
-                    bUseSolidDragging = sal_False;
+                    bUseSolidDragging = false;
                 }
             }
 

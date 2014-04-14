@@ -172,7 +172,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
             SdrTextAniKind      eAniKind=GetTextAniKind();
             SdrTextAniDirection eAniDirection=GetTextAniDirection();
 
-            sal_Bool bInEditMode = IsInEditMode();
+            bool bInEditMode = IsInEditMode();
 
             if (!bInEditMode && (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE))
             {

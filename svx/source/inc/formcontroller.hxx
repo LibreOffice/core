@@ -82,9 +82,9 @@
 #include <comphelper/implbase_var.hxx>
 #endif
 
-struct FmXTextComponentLess : public ::std::binary_function< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent> , sal_Bool>
+struct FmXTextComponentLess : public ::std::binary_function< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent> , bool>
 {
-    sal_Bool operator() (const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >& x, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >& y) const
+    bool operator() (const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >& x, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >& y) const
     {
         return reinterpret_cast<sal_Int64>(x.get()) < reinterpret_cast<sal_Int64>(y.get());
     }
@@ -190,19 +190,19 @@ namespace svxform
 
         sal_Int32                   m_nCurrentFilterPosition;   // current level for filtering (or-criteria)
 
-        sal_Bool                    m_bCurrentRecordModified    : 1;
-        sal_Bool                    m_bCurrentRecordNew         : 1;
-        sal_Bool                    m_bLocked                   : 1;
-        sal_Bool                    m_bDBConnection             : 1;    // Focuslistener nur fuer Datenbankformulare
-        sal_Bool                    m_bCycle                    : 1;
-        sal_Bool                    m_bCanInsert                : 1;
-        sal_Bool                    m_bCanUpdate                : 1;
-        sal_Bool                    m_bCommitLock               : 1;    // lock the committing of controls see focusGained
-        sal_Bool                    m_bModified                 : 1;    // ist der Inhalt eines Controls modifiziert ?
-        sal_Bool                    m_bControlsSorted           : 1;
-        sal_Bool                    m_bFiltering                : 1;
-        sal_Bool                    m_bAttachEvents             : 1;
-        sal_Bool                    m_bDetachEvents             : 1;
+        bool                        m_bCurrentRecordModified    : 1;
+        bool                        m_bCurrentRecordNew         : 1;
+        bool                        m_bLocked                   : 1;
+        bool                        m_bDBConnection             : 1;    // Focuslistener nur fuer Datenbankformulare
+        bool                        m_bCycle                    : 1;
+        bool                        m_bCanInsert                : 1;
+        bool                        m_bCanUpdate                : 1;
+        bool                        m_bCommitLock               : 1;    // lock the committing of controls see focusGained
+        bool                        m_bModified                 : 1;    // ist der Inhalt eines Controls modifiziert ?
+        bool                        m_bControlsSorted           : 1;
+        bool                        m_bFiltering                : 1;
+        bool                        m_bAttachEvents             : 1;
+        bool                        m_bDetachEvents             : 1;
         bool                        m_bAttemptedHandlerCreation : 1;
         bool                        m_bSuspendFilterTextListening;          // no bit field, passed around as reference
 
@@ -480,14 +480,14 @@ namespace svxform
         void setControlLock(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
         void addToEventAttacher(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
         void removeFromEventAttacher(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
-        void toggleAutoFields(sal_Bool bAutoFields);
+        void toggleAutoFields(bool bAutoFields);
         void unload() throw( ::com::sun::star::uno::RuntimeException );
         void removeBoundFieldListener();
 
-        void startFormListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly  );
-        void stopFormListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly );
+        void startFormListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm, bool _bPropertiesOnly  );
+        void stopFormListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm, bool _bPropertiesOnly );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> findControl( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >& rCtrls, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& rxCtrlModel, sal_Bool _bRemove, sal_Bool _bOverWrite ) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> findControl( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >& rCtrls, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& rxCtrlModel, bool _bRemove, bool _bOverWrite ) const;
 
         void insertControl(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
         void removeControl(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
@@ -522,8 +522,8 @@ namespace svxform
         */
         void    impl_appendEmptyFilterRow( ::osl::ClearableMutexGuard& _rClearBeforeNotify );
 
-        sal_Bool isLocked() const {return m_bLocked;}
-        sal_Bool determineLockState() const;
+        bool isLocked() const {return m_bLocked;}
+        bool determineLockState() const;
 
         Window* getDialogParentWindow();
             // returns the window which should be used as parent window for dialogs
@@ -565,7 +565,7 @@ namespace svxform
         void impl_setTextOnAllFilter_throw();
 
         // in filter mode we do not listen for changes
-        sal_Bool isListeningForChanges() const {return m_bDBConnection && !m_bFiltering && !isLocked();}
+        bool isListeningForChanges() const {return m_bDBConnection && !m_bFiltering && !isLocked();}
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> isInList(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& xPeer) const;
 
         DECL_LINK( OnActivateTabOrder, void* );

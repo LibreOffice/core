@@ -305,7 +305,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
                 if ( pProperty->nWID == OWN_ATTR_OLEMODEL || pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT )
                 {
 #if OSL_DEBUG_LEVEL > 0
-                    const sal_Bool bSuccess(pObj->AddOwnLightClient());
+                    const bool bSuccess(pObj->AddOwnLightClient());
                     OSL_ENSURE( bSuccess, "An object without client is provided!" );
 #else
                     pObj->AddOwnLightClient();
@@ -828,7 +828,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
 
         case( OWN_ATTR_MEDIA_LOOP ):
         {
-            sal_Bool bLoop = sal_Bool();
+            bool bLoop;
 
             if( rValue >>= bLoop )
             {
@@ -840,7 +840,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
 
         case( OWN_ATTR_MEDIA_MUTE ):
         {
-            sal_Bool bMute = sal_Bool();
+            bool bMute;
 
             if( rValue >>= bMute )
             {
@@ -923,11 +923,11 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
                 break;
 
             case( OWN_ATTR_MEDIA_LOOP ):
-                rValue <<= (sal_Bool) aItem.isLoop();
+                rValue <<= aItem.isLoop();
                 break;
 
             case( OWN_ATTR_MEDIA_MUTE ):
-                rValue <<= (sal_Bool) aItem.isMute();
+                rValue <<= aItem.isMute();
                 break;
 
             case( OWN_ATTR_MEDIA_VOLUMEDB ):

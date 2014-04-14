@@ -240,12 +240,12 @@ awt::Size SAL_CALL SvxRectCtlAccessibleContext::getSize() throw( RuntimeExceptio
     return AWTSize( GetBoundingBox().GetSize() );
 }
 
-sal_Bool SAL_CALL SvxRectCtlAccessibleContext::isShowing() throw( RuntimeException )
+bool SAL_CALL SvxRectCtlAccessibleContext::isShowing() throw( RuntimeException )
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool SAL_CALL SvxRectCtlAccessibleContext::isVisible() throw( RuntimeException )
+bool SAL_CALL SvxRectCtlAccessibleContext::isVisible() throw( RuntimeException )
 {
     ::osl::MutexGuard           aGuard( m_aMutex );
 
@@ -254,9 +254,9 @@ sal_Bool SAL_CALL SvxRectCtlAccessibleContext::isVisible() throw( RuntimeExcepti
     return mpRepr->IsVisible();
 }
 
-sal_Bool SAL_CALL SvxRectCtlAccessibleContext::isFocusTraversable() throw( RuntimeException )
+bool SAL_CALL SvxRectCtlAccessibleContext::isFocusTraversable() throw( RuntimeException )
 {
-    return sal_True;
+    return true;
 }
 
 //=====  XAccessibleContext  ==================================================
@@ -659,7 +659,7 @@ void SvxRectCtlAccessibleContext::FireChildFocus( RECT_POINT eButton )
     else
         mnSelectedChild = NOCHILDSELECTED;
 }
-void SvxRectCtlAccessibleContext::selectChild( long nNew, sal_Bool bFireFocus )
+void SvxRectCtlAccessibleContext::selectChild( long nNew, bool bFireFocus )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     if( nNew != mnSelectedChild )
@@ -690,7 +690,7 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew, sal_Bool bFireFocus )
     }
 }
 
-void SvxRectCtlAccessibleContext::selectChild(RECT_POINT eButton, sal_Bool bFireFocus )
+void SvxRectCtlAccessibleContext::selectChild(RECT_POINT eButton, bool bFireFocus )
 {
     // no guard -> is done in next selectChild
     selectChild(PointToIndex( eButton, mbAngleMode ), bFireFocus);
@@ -847,12 +847,12 @@ awt::Size SAL_CALL SvxRectCtlChildAccessibleContext::getSize() throw( RuntimeExc
     return AWTSize( GetBoundingBox().GetSize() );
 }
 
-sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::isShowing() throw( RuntimeException )
+bool SAL_CALL SvxRectCtlChildAccessibleContext::isShowing() throw( RuntimeException )
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::isVisible() throw( RuntimeException )
+bool SAL_CALL SvxRectCtlChildAccessibleContext::isVisible() throw( RuntimeException )
 {
     ::osl::MutexGuard                   aGuard( maMutex );
 
@@ -861,9 +861,9 @@ sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::isVisible() throw( RuntimeEx
     return mxParent.is()? ( static_cast< SvxRectCtlAccessibleContext* >( mxParent.get() ) )->isVisible() : sal_False;
 }
 
-sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::isFocusTraversable() throw( RuntimeException )
+bool SAL_CALL SvxRectCtlChildAccessibleContext::isFocusTraversable() throw( RuntimeException )
 {
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL SvxRectCtlChildAccessibleContext::addFocusListener( const Reference< awt::XFocusListener >& /*xListener*/ )

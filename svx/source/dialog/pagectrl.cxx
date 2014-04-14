@@ -35,7 +35,7 @@ struct PageWindow_Impl
     Bitmap          aBitmap;
     bool            bBitmap;
     bool            bResetBackground;
-    sal_Bool        bFrameDirection;
+    bool        bFrameDirection;
     sal_Int32       nFrameDirection;
 
 
@@ -43,10 +43,10 @@ struct PageWindow_Impl
         pBorder(0),
         bBitmap(false),
         bResetBackground(false),
-        bFrameDirection(sal_False),
+        bFrameDirection(false),
         nFrameDirection(0) {}
 
-    void        EnableFrameDirection(sal_Bool bEnable){bFrameDirection = bEnable;}
+    void        EnableFrameDirection(bool bEnable){bFrameDirection = bEnable;}
     void        SetFrameDirection(sal_Int32 nDirection){nFrameDirection = nDirection;}
 
 };

@@ -600,7 +600,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         }
     }
     // Bitmap fill ? -> Status
-    sal_Bool bBitmap(sal_False);
+    bool bBitmap(false);
     eState = rAttrs.GetItemState(XATTR_FILLSTYLE);
     if(eState != SFX_ITEM_DONTCARE)
     {
@@ -1786,7 +1786,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     TriState eState = aBtnDoubleSided.GetState();
     if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = TRISTATE_TRUE == eState;
+        bool bValue = TRISTATE_TRUE == eState;
         rAttrs.Put(Svx3DDoubleSidedItem(bValue));
     }
     else
@@ -1837,7 +1837,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnNormalsInvert.GetState();
     if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = TRISTATE_TRUE == eState;
+        bool bValue = TRISTATE_TRUE == eState;
         rAttrs.Put(Svx3DNormalsInvertItem(bValue));
     }
     else
@@ -1847,7 +1847,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnTwoSidedLighting.GetState();
     if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = TRISTATE_TRUE == eState;
+        bool bValue = TRISTATE_TRUE == eState;
         rAttrs.Put(Svx3DTwoSidedLightingItem(bValue));
     }
     else
@@ -1867,7 +1867,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnShadow3d.GetState();
     if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = TRISTATE_TRUE == eState;
+        bool bValue = TRISTATE_TRUE == eState;
         rAttrs.Put(Svx3DShadow3DItem(bValue));
         rAttrs.Put(SdrShadowItem(bValue));
     }
@@ -1922,7 +1922,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight1.GetState();
     if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = GetUILightState( aBtnLight1 );
+        bool bValue = GetUILightState( aBtnLight1 );
         rAttrs.Put(Svx3DLightOnOff1Item(bValue));
 
         // Light 1 (direction)
@@ -1947,7 +1947,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight2.GetState();
     if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = GetUILightState( aBtnLight2 );
+        bool bValue = GetUILightState( aBtnLight2 );
         rAttrs.Put(Svx3DLightOnOff2Item(bValue));
 
         // Light 2 (direction)
@@ -1971,7 +1971,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight3.GetState();
     if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = GetUILightState( aBtnLight3 );
+        bool bValue = GetUILightState( aBtnLight3 );
         rAttrs.Put(Svx3DLightOnOff3Item(bValue));
 
         // Light 3 (direction)
@@ -1995,7 +1995,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight4.GetState();
     if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = GetUILightState( aBtnLight4 );
+        bool bValue = GetUILightState( aBtnLight4 );
         rAttrs.Put(Svx3DLightOnOff4Item(bValue));
 
         // Light 4 (direction)
@@ -2019,7 +2019,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight5.GetState();
     if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = GetUILightState( aBtnLight5 );
+        bool bValue = GetUILightState( aBtnLight5 );
         rAttrs.Put(Svx3DLightOnOff5Item(bValue));
 
         // Light 5 (direction)
@@ -2043,7 +2043,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight6.GetState();
     if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = GetUILightState( aBtnLight6 );
+        bool bValue = GetUILightState( aBtnLight6 );
         rAttrs.Put(Svx3DLightOnOff6Item(bValue));
 
         // Light 6 (direction)
@@ -2067,7 +2067,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight7.GetState();
     if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = GetUILightState( aBtnLight7 );
+        bool bValue = GetUILightState( aBtnLight7 );
         rAttrs.Put(Svx3DLightOnOff7Item(bValue));
 
         // Light 7 (direction)
@@ -2091,7 +2091,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnLight8.GetState();
     if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = GetUILightState( aBtnLight8 );
+        bool bValue = GetUILightState( aBtnLight8 );
         rAttrs.Put(Svx3DLightOnOff8Item(bValue));
 
         // Light 8 (direction)
@@ -2171,7 +2171,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     eState = aBtnTexFilter.GetState();
     if( eState != TRISTATE_INDET )
     {
-        sal_Bool bValue = TRISTATE_TRUE == eState;
+        bool bValue = TRISTATE_TRUE == eState;
         rAttrs.Put(Svx3DTextureFilterItem(bValue));
     }
     else
@@ -2357,7 +2357,7 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
     if( pBtn )
     {
         // Since the permanent updating of the preview would be too expensive
-        sal_Bool bUpdatePreview = aBtnLight.IsChecked();
+        bool bUpdatePreview = aBtnLight.IsChecked();
 
         aBtnGeo.Check( &aBtnGeo == pBtn );
         aBtnRepresentation.Check( &aBtnRepresentation == pBtn );
@@ -2701,7 +2701,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
                     aLbLight8.Hide();
                 }
             }
-            sal_Bool bEnable = GetUILightState( *(ImageButton*)pBtn );
+            bool bEnable = GetUILightState( *(ImageButton*)pBtn );
             aBtnLightColor.Enable( bEnable );
             pLb->Enable( bEnable );
 

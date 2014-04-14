@@ -87,11 +87,11 @@ namespace sdr
 
         bool CustomShapeProperties::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem ) const
         {
-            sal_Bool bAllowItemChange = sal_True;
+            bool bAllowItemChange = true;
             if ( !pNewItem )
             {
                 if ( ( nWhich >= SDRATTR_CUSTOMSHAPE_FIRST ) && ( nWhich <= SDRATTR_CUSTOMSHAPE_LAST ) )
-                    bAllowItemChange = sal_False;
+                    bAllowItemChange = false;
             }
             if ( bAllowItemChange )
                 bAllowItemChange = TextProperties::AllowItemChange( nWhich, pNewItem );
@@ -211,7 +211,7 @@ namespace sdr
         {
             TextProperties::Notify( rBC, rHint );
 
-            sal_Bool bRemoveRenderGeometry = sal_False;
+            bool bRemoveRenderGeometry = false;
             const SfxStyleSheetHint *pStyleHint = PTR_CAST( SfxStyleSheetHint, &rHint );
             const SfxSimpleHint *pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
 
@@ -221,13 +221,13 @@ namespace sdr
                 {
                     case SFX_STYLESHEET_MODIFIED :
                     case SFX_STYLESHEET_CHANGED  :
-                        bRemoveRenderGeometry = sal_True;
+                        bRemoveRenderGeometry = true;
                     break;
                 };
             }
             else if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DATACHANGED )
             {
-                bRemoveRenderGeometry = sal_True;
+                bRemoveRenderGeometry = true;
             }
 
                 // update bTextFrame and RenderGeometry

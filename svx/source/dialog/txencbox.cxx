@@ -89,12 +89,12 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
     sal_uInt32 nCount = m_pEncTable->Count();
     for ( sal_uInt32 j=0; j<nCount; j++ )
     {
-        sal_Bool bInsert = sal_True;
+        bool bInsert = true;
         rtl_TextEncoding nEnc = rtl_TextEncoding( m_pEncTable->GetValue( j ) );
         if ( nExcludeInfoFlags )
         {
             if ( !rtl_getTextEncodingInfo( nEnc, &aInfo ) )
-                bInsert = sal_False;
+                bInsert = false;
             else
             {
                 if ( (aInfo.Flags & nExcludeInfoFlags) == 0 )
@@ -102,10 +102,10 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
                     if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
                             ((nEnc == RTL_TEXTENCODING_UCS2) ||
                             nEnc == RTL_TEXTENCODING_UCS4) )
-                        bInsert = sal_False;    // InfoFlags don't work for Unicode :-(
+                        bInsert = false;    // InfoFlags don't work for Unicode :-(
                 }
                 else if ( (aInfo.Flags & nButIncludeInfoFlags) == 0 )
-                    bInsert = sal_False;
+                    bInsert = false;
             }
         }
         if ( bInsert )
@@ -118,7 +118,7 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
                     case RTL_TEXTENCODING_GB_2312 :
                     case RTL_TEXTENCODING_GBK :
                     case RTL_TEXTENCODING_MS_936 :
-                        bInsert = sal_False;
+                        bInsert = false;
                     break;
                 }
             }
@@ -146,12 +146,12 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
     sal_Int32 nCount = aCSH.getSupportedTextEncodings( aEncs );
     for ( sal_Int32 j=0; j<nCount; j++ )
     {
-        sal_Bool bInsert = sal_True;
+        bool bInsert = true;
         rtl_TextEncoding nEnc = rtl_TextEncoding( aEncs[j] );
         if ( nExcludeInfoFlags )
         {
             if ( !rtl_getTextEncodingInfo( nEnc, &aInfo ) )
-                bInsert = sal_False;
+                bInsert = false;
             else
             {
                 if ( (aInfo.Flags & nExcludeInfoFlags) == 0 )
@@ -159,10 +159,10 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
                     if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
                             ((nEnc == RTL_TEXTENCODING_UCS2) ||
                             nEnc == RTL_TEXTENCODING_UCS4) )
-                        bInsert = sal_False;    // InfoFlags don't work for Unicode :-(
+                        bInsert = false;    // InfoFlags don't work for Unicode :-(
                 }
                 else if ( (aInfo.Flags & nButIncludeInfoFlags) == 0 )
-                    bInsert = sal_False;
+                    bInsert = false;
             }
         }
         if ( bInsert )
@@ -175,7 +175,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
                     case RTL_TEXTENCODING_GB_2312 :
                     case RTL_TEXTENCODING_GBK :
                     case RTL_TEXTENCODING_MS_936 :
-                        bInsert = sal_False;
+                        bInsert = false;
                     break;
                 }
             }

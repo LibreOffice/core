@@ -103,10 +103,10 @@ namespace {
 
         sal_Int32 mnWidth;
         sal_Int32 mnHeight;
-        sal_Bool mbExportOnlyBackground;
-        sal_Bool mbScrollText;
-        sal_Bool mbUseHighContrast;
-        sal_Bool mbTranslucent;
+        bool mbExportOnlyBackground;
+        bool mbScrollText;
+        bool mbUseHighContrast;
+        bool mbTranslucent;
 
         Sequence< PropertyValue >   maFilterData;
 
@@ -122,7 +122,7 @@ namespace {
     , mbExportOnlyBackground( false )
     , mbScrollText( false )
     , mbUseHighContrast( false )
-    , mbTranslucent( sal_False )
+    , mbTranslucent( false )
     , maScaleX( 1, 1 )
     , maScaleY( 1, 1 )
     {
@@ -164,7 +164,7 @@ namespace {
         DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 
         void ParseSettings( const Sequence< PropertyValue >& aDescriptor, ExportSettings& rSettings );
-        bool GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, sal_Bool bVectorType );
+        bool GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, bool bVectorType );
 
     private:
         Reference< XShape >     mxShape;
@@ -181,7 +181,7 @@ namespace {
 
     /** creates a bitmap that is optionaly transparent from a metafile
     */
-    BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, sal_Bool bTransparent, const Size* pSize )
+    BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, bool bTransparent, const Size* pSize )
     {
         BitmapEx aBmpEx;
 
@@ -352,7 +352,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             if( pField && pField->ISA( SvxPageField ) )
             {
                 OUString aPageNumValue;
-                sal_Bool bUpper = sal_False;
+                bool bUpper = false;
 
                 switch(mpDoc->GetPageNumType())
                 {
@@ -363,7 +363,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                         aPageNumValue += OUString( (sal_Unicode)(char)((mnPageNumber - 1) % 26 + 'a') );
                         break;
                     case SVX_ROMAN_UPPER:
-                        bUpper = sal_True;
+                        bUpper = true;
                         /* Fall through */
                     case SVX_ROMAN_LOWER:
                         aPageNumValue += SvxNumberFormat::CreateRomanString(mnPageNumber, bUpper);
@@ -616,7 +616,7 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
     }
 }
 
-bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, sal_Bool bVectorType )
+bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, bool bVectorType )
 {
     if( !mpDoc || !mpUnoPage )
         return false;
@@ -788,7 +788,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 if( rSettings.mbTranslucent )
                 {
                     Size aOutSize;
-                    aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), sal_True, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aNewSize, aOutSize ) );
+                    aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), true, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aNewSize, aOutSize ) );
                 }
             }
         }
@@ -1022,7 +1022,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     const sal_uInt16    nFilter = !aSettings.maMediaType.isEmpty()
                             ? rFilter.GetExportFormatNumberForMediaType( aSettings.maMediaType )
                             : rFilter.GetExportFormatNumberForShortName( aSettings.maFilterName );
-    sal_Bool            bVectorType = !rFilter.IsExportPixelFormat( nFilter );
+    bool            bVectorType = !rFilter.IsExportPixelFormat( nFilter );
 
     // create the output stuff
     Graphic aGraphic;

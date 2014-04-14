@@ -41,8 +41,8 @@ namespace svxform
 
 
     OLocalExchange::OLocalExchange( )
-        :m_bDragging( sal_False )
-        ,m_bClipboardOwner( sal_False )
+        :m_bDragging( false )
+        ,m_bClipboardOwner( false )
     {
     }
 
@@ -55,7 +55,7 @@ namespace svxform
                 m_aClipboardListener.Call( this );
         }
 
-        m_bClipboardOwner = sal_True;
+        m_bClipboardOwner = true;
         CopyToClipboard( _pWindow );
     }
 
@@ -74,7 +74,7 @@ namespace svxform
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
-            m_bClipboardOwner = sal_False;
+            m_bClipboardOwner = false;
         }
     }
 
@@ -82,7 +82,7 @@ namespace svxform
     void SAL_CALL OLocalExchange::lostOwnership( const Reference< clipboard::XClipboard >& _rxClipboard, const Reference< XTransferable >& _rxTrans ) throw(RuntimeException, std::exception)
     {
         TransferableHelper::implCallOwnLostOwnership( _rxClipboard, _rxTrans );
-        m_bClipboardOwner = sal_False;
+        m_bClipboardOwner = false;
 
         if ( m_aClipboardListener.IsSet() )
             m_aClipboardListener.Call( this );
@@ -91,7 +91,7 @@ namespace svxform
 
     void OLocalExchange::startDrag( Window* _pWindow, sal_Int8 _nDragSourceActions, const GrantAccess& )
     {
-        m_bDragging = sal_True;
+        m_bDragging = true;
         StartDrag( _pWindow, _nDragSourceActions );
     }
 
@@ -99,11 +99,11 @@ namespace svxform
     void OLocalExchange::DragFinished( sal_Int8 nDropAction )
     {
         TransferableHelper::DragFinished( nDropAction );
-        m_bDragging = sal_False;
+        m_bDragging = false;
     }
 
 
-    sal_Bool OLocalExchange::hasFormat( const DataFlavorExVector& _rFormats, sal_uInt32 _nFormatId )
+    bool OLocalExchange::hasFormat( const DataFlavorExVector& _rFormats, sal_uInt32 _nFormatId )
     {
         DataFlavorExVector::const_iterator aSearch;
 
@@ -162,7 +162,7 @@ namespace svxform
     }
 
 
-    static sal_Bool lcl_fillDataFlavorEx( SotFormatStringId nId, DataFlavorEx& _rFlavor )
+    static bool lcl_fillDataFlavorEx( SotFormatStringId nId, DataFlavorEx& _rFlavor )
     {
         _rFlavor.mnSotId = nId;
         return SotExchange::GetFormatDataFlavor( _rFlavor.mnSotId, _rFlavor );

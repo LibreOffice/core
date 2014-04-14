@@ -117,7 +117,7 @@ template< class Vec, class Iter, class Entry > sal_Int32 insert_range( Vec& rVec
 TableModel::TableModel( SdrTableObj* pTableObj )
 : TableModelBase( m_aMutex  )
 , mpTableObj( pTableObj )
-, mbModified( sal_False )
+, mbModified( false )
 , mbNotifyPending( false )
 , mnNotifyLock( 0 )
 {
@@ -126,7 +126,7 @@ TableModel::TableModel( SdrTableObj* pTableObj )
 TableModel::TableModel( SdrTableObj* pTableObj, const TableModelRef& xSourceTable )
 : TableModelBase( m_aMutex  )
 , mpTableObj( pTableObj )
-, mbModified( sal_False )
+, mbModified( false )
 , mbNotifyPending( false )
 , mnNotifyLock( 0 )
 {

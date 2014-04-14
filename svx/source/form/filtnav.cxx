@@ -876,7 +876,7 @@ void FmFilterModel::Remove( const ::std::vector<FmFilterData*>::iterator& rPos )
 }
 
 
-sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUString& rErrorMsg) const
+bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUString& rErrorMsg) const
 {
     FmFormItem* pFormItem = PTR_CAST( FmFormItem, pItem->GetParent()->GetParent() );
     try
@@ -889,7 +889,7 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUStr
 
         // obtain a number formatter for this connection
         // TODO: shouldn't this be cached?
-        Reference< XNumberFormatsSupplier > xFormatSupplier = aStaticTools.getNumberFormats( xConnection, sal_True );
+        Reference< XNumberFormatsSupplier > xFormatSupplier = aStaticTools.getNumberFormats( xConnection, true );
         Reference< XNumberFormatter > xFormatter( NumberFormatter::create( comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
         xFormatter->attachNumberFormatsSupplier( xFormatSupplier );
 
@@ -909,7 +909,7 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUStr
             xParseNode->parseNodeToPredicateStr(
                 aPreparedText, xConnection, xFormatter, xField, OUString(), aAppLocale, '.', getParseContext() );
             rText = aPreparedText;
-            return sal_True;
+            return true;
         }
     }
     catch( const Exception& )
@@ -917,7 +917,7 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUStr
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -996,7 +996,7 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
 {
     // checks whether for each form there's one free level for input
     ::std::vector< FmFilterData* >& rChildren = _rItem.GetChildren();
-    sal_Bool bAppendLevel = _rItem.ISA( FmFormItem );
+    bool bAppendLevel = _rItem.ISA( FmFormItem );
 
     for (   ::std::vector<FmFilterData*>::iterator i = rChildren.begin();
             i != rChildren.end();
@@ -1006,7 +1006,7 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
         FmFilterItems* pItems = PTR_CAST(FmFilterItems, *i);
         if ( pItems && pItems->GetChildren().empty() )
         {
-            bAppendLevel = sal_False;
+            bAppendLevel = false;
             break;
         }
 
@@ -1203,7 +1203,7 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
         {
             if (!IsExpanded(pEntry))
                 Expand(pEntry);
-            Select(pEntry, sal_True);
+            Select(pEntry, true);
         }
     }
 }
@@ -1320,12 +1320,12 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
     }
     else
     {
-        sal_Bool bNeedTrigger = sal_False;
+        bool bNeedTrigger = false;
         // auf dem ersten Eintrag ?
         if ((aDropPos.Y() >= 0) && (aDropPos.Y() < GetEntryHeight()))
         {
             m_aDropActionType = DA_SCROLLUP;
-            bNeedTrigger = sal_True;
+            bNeedTrigger = true;
         }
         else
         {
@@ -1334,7 +1334,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
             if ((aDropPos.Y() < GetSizePixel().Height()) && (aDropPos.Y() >= GetSizePixel().Height() - GetEntryHeight()))
             {
                 m_aDropActionType = DA_SCROLLDOWN;
-                bNeedTrigger = sal_True;
+                bNeedTrigger = true;
             }
             else
             {   // is it an entry with children, and not yet expanded?
@@ -1343,7 +1343,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
                 {
                     // -> aufklappen
                     m_aDropActionType = DA_EXPANDNODE;
-                    bNeedTrigger = sal_True;
+                    bNeedTrigger = true;
                 }
             }
         }
@@ -1434,7 +1434,7 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
     FmFilterItems*  pTargetItems = getTargetItems(pDropTarget);
     SelectAll(false);
     SvTreeListEntry* pEntry = FindEntry(pTargetItems);
-    Select(pEntry, sal_True);
+    Select(pEntry, true);
     SetCurEntry(pEntry);
 
     insertFilterItem(m_aControlExchange->getDraggedEntries(),pTargetItems,DND_ACTION_COPY == rEvt.mnAction);
@@ -1462,10 +1462,10 @@ void FmFilterNavigator::InitEntry(SvTreeListEntry* pEntry,
 }
 
 
-sal_Bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
+bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, bool bSelect )
 {
-    if (bSelect == (IsSelected(pEntry) ? 1 : 0))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
-        return sal_True;
+    if (bSelect == IsSelected(pEntry))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
+        return true;
 
     if (SvTreeListBox::Select(pEntry, bSelect))
     {
@@ -1490,10 +1490,10 @@ sal_Bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
                     m_pModel->SetCurrentController(((FmFormItem*)pEntry->GetUserData())->GetController());
             }
         }
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -1576,8 +1576,8 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
     // be sure that the data is only used within only one form!
     FmFormItem* pFirstItem = NULL;
 
-    sal_Bool bHandled = sal_True;
-    sal_Bool bFoundSomething = sal_False;
+    bool bHandled = true;
+    bool bFoundSomething = false;
     for (SvTreeListEntry* pEntry = FirstSelected();
          bHandled && pEntry != NULL;
          pEntry = NextSelected(pEntry))
@@ -1587,16 +1587,16 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
         {
             FmFormItem* pForm = PTR_CAST(FmFormItem,pFilter->GetParent()->GetParent());
             if (!pForm)
-                bHandled = sal_False;
+                bHandled = false;
             else if (!pFirstItem)
                 pFirstItem = pForm;
             else if (pFirstItem != pForm)
-                bHandled = sal_False;
+                bHandled = false;
 
             if (bHandled)
             {
                 _rItemList.push_back(pFilter);
-                bFoundSomething = sal_True;
+                bFoundSomething = true;
             }
         }
     }
@@ -1605,7 +1605,7 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
     return pFirstItem;
 }
 
-void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,sal_Bool _bCopy)
+void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,bool _bCopy)
 {
     ::std::vector<FmFilterItem*>::const_iterator aEnd = _rFilterList.end();
     for (   ::std::vector< FmFilterItem* >::const_iterator i = _rFilterList.begin();
@@ -1655,7 +1655,7 @@ void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
 
 void FmFilterNavigator::Command( const CommandEvent& rEvt )
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     switch (rEvt.GetCommand())
     {
         case COMMAND_CONTEXTMENU:
@@ -1673,7 +1673,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                 if (!IsSelected(pClicked))
                 {
                     SelectAll(false);
-                    Select(pClicked, sal_True);
+                    Select(pClicked, true);
                     SetCurEntry(pClicked);
                 }
             }
@@ -1710,7 +1710,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
             aContextMenu.EnableItem( SID_FM_DELETE, !aSelectList.empty() );
 
 
-            sal_Bool bEdit = PTR_CAST(FmFilterItem, (FmFilterData*)pClicked->GetUserData()) != NULL &&
+            bool bEdit = PTR_CAST(FmFilterItem, (FmFilterData*)pClicked->GetUserData()) != NULL &&
                 IsSelected(pClicked) && GetSelectionCount() == 1;
 
             aContextMenu.EnableItem( SID_FM_FILTER_EDIT,
@@ -1747,7 +1747,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                     DeleteSelection();
                 }   break;
             }
-            bHandled = sal_True;
+            bHandled = true;
         } break;
     }
 
@@ -1809,7 +1809,7 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
             break;
 
         ::std::vector<FmFilterItem*>::const_iterator aEnd = aItemList.end();
-        sal_Bool bNextTargetItem = sal_True;
+        bool bNextTargetItem = true;
         while ( bNextTargetItem )
         {
             ::std::vector<FmFilterItem*>::const_iterator i = aItemList.begin();

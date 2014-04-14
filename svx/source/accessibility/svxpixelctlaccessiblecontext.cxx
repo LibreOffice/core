@@ -329,7 +329,7 @@ void SAL_CALL SvxPixelCtlAccessible::selectAccessibleChild( sal_Int32 nChildInde
         throw lang::IndexOutOfBoundsException();
 
     long nIndex = mrPixelCtl.ShowPosition(mrPixelCtl.IndexToPoint(nChildIndex));
-    NotifyChild(nIndex,sal_True,sal_False);
+    NotifyChild(nIndex,true,false);
 }
 
 sal_Bool SAL_CALL SvxPixelCtlAccessible::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (lang::IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -436,7 +436,7 @@ void SAL_CALL SvxPixelCtlAccessible::disposing()
     }
 }
 
-void SvxPixelCtlAccessible::NotifyChild(long nIndex,sal_Bool bSelect ,sal_Bool bCheck)
+void SvxPixelCtlAccessible::NotifyChild(long nIndex,bool bSelect ,bool bCheck)
 {
     DBG_ASSERT( !(!bSelect && !bCheck),"" );//non is false
 
@@ -450,11 +450,11 @@ void SvxPixelCtlAccessible::NotifyChild(long nIndex,sal_Bool bSelect ,sal_Bool b
         {
             if (bSelect)
             {
-                pChild->SelectChild(sal_True);
+                pChild->SelectChild(true);
             }
             if (bCheck)
             {
-                pChild->ChangePixelColorOrBG(sal_Bool(mrPixelCtl.GetBitmapPixel(sal_uInt16(nIndex))));
+                pChild->ChangePixelColorOrBG( mrPixelCtl.GetBitmapPixel(sal_uInt16(nIndex)) != 0);
                 pChild->CheckChild();
             }
             return ;
@@ -474,9 +474,9 @@ void SvxPixelCtlAccessible::NotifyChild(long nIndex,sal_Bool bSelect ,sal_Bool b
     {
         if (pChild)
         {
-            pChild->SelectChild(sal_False);
+            pChild->SelectChild(false);
         }
-        pNewChild->SelectChild(sal_True);
+        pNewChild->SelectChild(true);
     }
     if (bCheck)
     {
@@ -496,7 +496,7 @@ uno::Reference<XAccessible> SvxPixelCtlAccessible::CreateChild (long nIndex,Poin
         nX = (sal_uInt16) mrPixelCtl.GetWidth() - 1 - nX;
     }
 
-    sal_Bool bPixelColorOrBG= sal_Bool(mrPixelCtl.GetBitmapPixel(sal_uInt16(nIndex)));
+    bool bPixelColorOrBG = mrPixelCtl.GetBitmapPixel(sal_uInt16(nIndex)) != 0;
     Size size(mrPixelCtl.GetWidth() / mrPixelCtl.GetLineCount(),mrPixelCtl.GetHeight() / mrPixelCtl.GetLineCount());
     uno::Reference<XAccessible> xChild;
     xChild = new SvxPixelCtlAccessibleChild(mrPixelCtl,
@@ -534,7 +534,7 @@ void SvxPixelCtlAccessibleChild::CheckChild()
     }
 }
 
-void SvxPixelCtlAccessibleChild::SelectChild( sal_Bool bSelect)
+void SvxPixelCtlAccessibleChild::SelectChild( bool bSelect)
 {
     Any aSelected;
     aSelected <<= AccessibleStateType::SELECTED;
@@ -563,7 +563,7 @@ void SvxPixelCtlAccessibleChild::FireAccessibleEvent (
 
 SvxPixelCtlAccessibleChild::SvxPixelCtlAccessibleChild(
     SvxPixelCtl& rWindow,
-    sal_Bool bPixelColorOrBG,
+    bool bPixelColorOrBG,
     const Point &aPoint,
     const Rectangle& rBoundingBox,
     const uno::Reference<XAccessible>&  rxParent,

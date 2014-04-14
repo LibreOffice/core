@@ -35,7 +35,7 @@ public:
     ImageMap        aUpdateImageMap;
     TargetList      aUpdateTargetList;
     void*           pUpdateEditingObject;
-    sal_Bool        bExecState;
+    bool        bExecState;
 
     IMapOwnData()
         : pUpdateEditingObject(NULL)

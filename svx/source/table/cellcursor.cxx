@@ -559,23 +559,6 @@ sal_Bool SAL_CALL CellCursor::isMergeable(  ) throw (RuntimeException, std::exce
 
 
 
-sal_Bool SAL_CALL CellCursor::isUnmergeable(  ) throw (RuntimeException)
-{
-    // this is true if there is at least one merged cell in the current range
-    for( sal_Int32 nRow = mnTop; nRow <= mnBottom; nRow++ )
-    {
-        for( sal_Int32 nCol = mnLeft; nCol <= mnRight; nCol++ )
-        {
-            CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
-            if( xCell.is() && ( (xCell->getRowSpan() > 1) || (xCell->getColumnSpan() > 1) ) )
-                return sal_True;
-        }
-    }
-    return sal_False;
-}
-
-
-
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

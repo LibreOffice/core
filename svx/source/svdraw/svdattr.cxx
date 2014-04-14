@@ -1399,8 +1399,8 @@ SdrTextFixedCellHeightItem::SdrTextFixedCellHeightItem( SvStream & rStream, sal_
 {
     if ( nVersion )
     {
-        sal_Bool bValue;
-        rStream.ReadUChar( bValue );
+        bool bValue;
+        rStream.ReadCharAsBool( bValue );
         SetValue( bValue );
     }
 }
@@ -1425,7 +1425,7 @@ SvStream& SdrTextFixedCellHeightItem::Store( SvStream& rOut, sal_uInt16 nItemVer
 {
     if ( nItemVersion )
     {
-        sal_Bool bValue = (sal_Bool)GetValue();
+        bool bValue = GetValue();
         rOut.WriteUChar( bValue );
     }
     return rOut;
@@ -1440,13 +1440,13 @@ sal_uInt16 SdrTextFixedCellHeightItem::GetVersion( sal_uInt16 /*nFileFormatVersi
 }
 bool SdrTextFixedCellHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    sal_Bool bValue = (sal_Bool)GetValue();
+    bool bValue = GetValue();
     rVal <<= bValue;
     return true;
 }
 bool SdrTextFixedCellHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
-    sal_Bool bValue = sal_Bool();
+    bool bValue;
     if( !( rVal >>= bValue ) )
         return false;
     SetValue( bValue );

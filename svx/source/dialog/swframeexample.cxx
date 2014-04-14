@@ -71,7 +71,7 @@ void SvxSwFrameExample::InitColors_Impl( void )
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     m_aBgCol = Color( rSettings.GetWindowColor() );
 
-    sal_Bool bHC = rSettings.GetHighContrastMode();
+    bool bHC = rSettings.GetHighContrastMode();
 
     m_aFrameColor = Color( COL_LIGHTGREEN );
     m_aAlignColor = Color( COL_LIGHTRED );
@@ -689,7 +689,7 @@ void SvxSwFrameExample::Paint(const Rectangle&)
     DrawRect_Impl(aRect, m_aTransColor, m_aAlignColor);
 
     // Frame View
-    sal_Bool bDontFill = (nAnchor == TextContentAnchorType_AT_CHARACTER && aFrmRect.IsOver(aAutoCharFrame)) ? sal_True : bTrans;
+    bool bDontFill = (nAnchor == TextContentAnchorType_AT_CHARACTER && aFrmRect.IsOver(aAutoCharFrame)) ? sal_True : bTrans;
     DrawRect_Impl( aFrmRect, bDontFill? m_aTransColor : m_aBgCol, m_aFrameColor );
 }
 

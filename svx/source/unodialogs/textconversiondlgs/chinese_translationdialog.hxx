@@ -42,8 +42,8 @@ public:
     ChineseTranslationDialog( Window* pParent );
     virtual ~ChineseTranslationDialog();
 
-    void getSettings( sal_Bool& rbDirectionToSimplified
-                    , sal_Bool& rbTranslateCommonTerms ) const;
+    void getSettings( bool& rbDirectionToSimplified
+                    , bool& rbTranslateCommonTerms ) const;
 
 private:
     DECL_LINK( DictionaryHdl, void* );

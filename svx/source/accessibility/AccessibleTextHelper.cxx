@@ -147,7 +147,7 @@ namespace accessibility
 
         void SetAdditionalChildStates( const VectorOfStates& rChildStates );
 
-        sal_Bool IsSelected() const;
+        bool IsSelected() const;
 
         void Dispose();
 
@@ -155,10 +155,10 @@ namespace accessibility
         void FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue = uno::Any(), const uno::Any& rOldValue = uno::Any() ) const;
         void FireEvent( const AccessibleEventObject& rEvent ) const;
 
-        void SetFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException));
-        sal_Bool HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException));
-        void SetChildFocus( sal_Int32 nChild, sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException));
-        void SetShapeFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        void SetFocus( bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        bool HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException));
+        void SetChildFocus( sal_Int32 nChild, bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        void SetShapeFocus( bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException));
         void ChangeChildFocus( sal_Int32 nNewChild ) SAL_THROW((::com::sun::star::uno::RuntimeException));
 
 #ifdef DBG_UTIL
@@ -198,10 +198,10 @@ namespace accessibility
         // lock solar mutex before
         SvxViewForwarder& GetViewForwarder() const SAL_THROW((uno::RuntimeException));
         // lock solar mutex before
-        SvxEditViewForwarder& GetEditViewForwarder( sal_Bool bCreate = sal_False ) const SAL_THROW((uno::RuntimeException));
+        SvxEditViewForwarder& GetEditViewForwarder( bool bCreate = false ) const SAL_THROW((uno::RuntimeException));
 
         // are we in edit mode?
-        sal_Bool IsActive() const SAL_THROW((uno::RuntimeException));
+        bool IsActive() const SAL_THROW((uno::RuntimeException));
 
         // our frontend class (the one implementing the actual
         // interface). That's not necessarily the one containing the impl
@@ -235,10 +235,10 @@ namespace accessibility
         bool mbInNotify;
 
         // whether the object or its children has the focus set (guarded by solar mutex)
-        sal_Bool mbGroupHasFocus;
+        bool mbGroupHasFocus;
 
         // whether we (this object) has the focus set (guarded by solar mutex)
-        sal_Bool mbThisHasFocus;
+        bool mbThisHasFocus;
 
         mutable ::osl::Mutex maMutex;
 
@@ -263,8 +263,8 @@ namespace accessibility
         mnStartIndex( 0 ),
         maEventOpenFrames( 0 ),
         mbInNotify( false ),
-        mbGroupHasFocus( sal_False ),
-        mbThisHasFocus( sal_False ),
+        mbGroupHasFocus( false ),
+        mbThisHasFocus( false ),
         maOffset(0,0),
         // well, that's strictly exception safe, though not really
         // robust. We rely on the fact that this member is constructed
@@ -327,7 +327,7 @@ namespace accessibility
             throw uno::RuntimeException("View forwarder is invalid, model might be dead", mxFrontEnd);
     }
 
-    SvxEditViewForwarder& AccessibleTextHelper_Impl::GetEditViewForwarder( sal_Bool bCreate ) const SAL_THROW((uno::RuntimeException))
+    SvxEditViewForwarder& AccessibleTextHelper_Impl::GetEditViewForwarder( bool bCreate ) const SAL_THROW((uno::RuntimeException))
     {
 
         if( !maEditSource.IsValid() )
@@ -363,10 +363,10 @@ namespace accessibility
             throw uno::RuntimeException("AccessibleTextHelper_Impl::GetEditSource: no edit source", mxFrontEnd );
     }
 
-    sal_Bool AccessibleTextHelper_Impl::IsSelected() const
+    bool AccessibleTextHelper_Impl::IsSelected() const
     {
 
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
 
         try
         {
@@ -414,13 +414,13 @@ namespace accessibility
         maParaManager.SetAdditionalChildStates( rChildStates );
     }
 
-    void AccessibleTextHelper_Impl::SetChildFocus( sal_Int32 nChild, sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
+    void AccessibleTextHelper_Impl::SetChildFocus( sal_Int32 nChild, bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 
         if( bHaveFocus )
         {
             if( mbThisHasFocus )
-                SetShapeFocus( sal_False );
+                SetShapeFocus( false );
 
             maParaManager.SetFocus( nChild );
 
@@ -436,7 +436,7 @@ namespace accessibility
             OSL_TRACE("AccessibleTextHelper_Impl::SetChildFocus(): Paragraph %d lost focus", nChild );
 
             if( mbGroupHasFocus )
-                SetShapeFocus( sal_True );
+                SetShapeFocus( true );
         }
     }
 
@@ -444,18 +444,18 @@ namespace accessibility
     {
 
         if( mbThisHasFocus )
-            SetShapeFocus( sal_False );
+            SetShapeFocus( false );
 
-        mbGroupHasFocus = sal_True;
+        mbGroupHasFocus = true;
         maParaManager.SetFocus( nNewChild );
 
         OSL_TRACE("AccessibleTextHelper_Impl::ChangeChildFocus(): Paragraph %d received focus", nNewChild );
     }
 
-    void AccessibleTextHelper_Impl::SetShapeFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
+    void AccessibleTextHelper_Impl::SetShapeFocus( bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 
-        sal_Bool bOldFocus( mbThisHasFocus );
+        bool bOldFocus( mbThisHasFocus );
 
         mbThisHasFocus = bHaveFocus;
 
@@ -498,10 +498,10 @@ namespace accessibility
         }
     }
 
-    void AccessibleTextHelper_Impl::SetFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
+    void AccessibleTextHelper_Impl::SetFocus( bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 
-        sal_Bool bOldFocus( mbGroupHasFocus );
+        bool bOldFocus( mbGroupHasFocus );
 
         mbGroupHasFocus = bHaveFocus;
 
@@ -524,7 +524,7 @@ namespace accessibility
         OSL_TRACE("AccessibleTextHelper_Impl::SetFocus: focus changed, Object %p, state: %s", this, bHaveFocus ? "focused" : "not focused");
     }
 
-    sal_Bool AccessibleTextHelper_Impl::HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException))
+    bool AccessibleTextHelper_Impl::HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 
         // No locking of solar mutex here, since we rely on the fact
@@ -532,7 +532,7 @@ namespace accessibility
         return mbThisHasFocus;
     }
 
-    sal_Bool AccessibleTextHelper_Impl::IsActive() const SAL_THROW((uno::RuntimeException))
+    bool AccessibleTextHelper_Impl::IsActive() const SAL_THROW((uno::RuntimeException))
     {
 
         try
@@ -541,7 +541,7 @@ namespace accessibility
             SvxEditViewForwarder* pViewForwarder = rEditSource.GetEditViewForwarder();
 
             if( !pViewForwarder )
-                return sal_False;
+                return false;
 
             if( mxFrontEnd.is() )
             {
@@ -554,13 +554,13 @@ namespace accessibility
                 }
             }
             if( pViewForwarder->IsValid() )
-                return sal_True;
+                return true;
             else
-                return sal_False;
+                return false;
         }
         catch( const uno::RuntimeException& )
         {
-            return sal_False;
+            return false;
         }
     }
 
@@ -838,7 +838,7 @@ namespace accessibility
             }
 
             Rectangle aTmpBB, aParaBB;
-            sal_Bool bFirstChild = sal_True;
+            bool bFirstChild = true;
             sal_Int32 nCurrPara;
             sal_Int32 nParas=rCacheTF.GetParagraphCount();
 
@@ -857,7 +857,7 @@ namespace accessibility
                 // at least partially visible
                 if( bFirstChild )
                 {
-                    bFirstChild = sal_False;
+                    bFirstChild = false;
                     mnFirstVisibleChild = nCurrPara;
                 }
 
@@ -1359,7 +1359,7 @@ namespace accessibility
                                 maParaManager.SetActive();
 
                                 // per definition, edit mode text has the focus
-                                SetFocus( sal_True );
+                                SetFocus( true );
                                 break;
                             }
 
@@ -1368,7 +1368,7 @@ namespace accessibility
                                 // focused child now looses focus
                                 ESelection aSelection;
                                 if( GetEditViewForwarder().GetSelection( aSelection ) )
-                                    SetChildFocus( aSelection.nEndPara, sal_False );
+                                    SetChildFocus( aSelection.nEndPara, false );
 
                                 // change children state
                                 maParaManager.SetActive( false );

@@ -182,7 +182,7 @@ private:
 
     SdrTableObj* mpTableObj;
 
-    sal_Bool mbModified;
+    bool mbModified;
     bool mbNotifyPending;
 
     sal_Int32 mnNotifyLock;

@@ -206,9 +206,9 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const OUString
 {
     uno::Any aRet;
 
-    sal_Bool bDirectionToSimplified = sal_True;
-    sal_Bool bUseCharacterVariants = sal_False;
-    sal_Bool bTranslateCommonTerms = sal_False;
+    bool bDirectionToSimplified = true;
+    bool bUseCharacterVariants = false;
+    bool bTranslateCommonTerms = false;
 
     {
         SolarMutexGuard aSolarGuard;

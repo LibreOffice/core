@@ -194,7 +194,7 @@ FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* 
             SfxChildWindow* _pMgr, Window* _pParent, const SfxChildWinInfo* _pInfo )
     :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE) )
     ,SfxControllerItem(SID_FM_PROPERTY_CONTROL, *_pBindings)
-    ,m_bInitialStateChange(sal_True)
+    ,m_bInitialStateChange(true)
     ,m_bInStateChange( false )
     ,m_xORB(_xORB)
 {
@@ -361,7 +361,7 @@ bool FmPropBrw::Close()
     // 10/19/00 - 79321 - FS
     SfxBindings& rBindings = SfxControllerItem::GetBindings();
 
-    sal_Bool bClose = SfxFloatingWindow::Close();
+    bool bClose = SfxFloatingWindow::Close();
 
     if (bClose)
     {
@@ -462,16 +462,16 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
             aConstrainedSize.setWidth( aMinSize.Width );
             SetMinOutputSizePixel( aConstrainedSize );
             aConstrainedSize = GetOutputSizePixel();
-            sal_Bool bResize = sal_False;
+            bool bResize = false;
             if( aConstrainedSize.Width() < aMinSize.Width )
             {
                 aConstrainedSize.setWidth( aMinSize.Width );
-                bResize = sal_True;
+                bResize = true;
             }
             if( aConstrainedSize.Height() < aMinSize.Height )
             {
                 aConstrainedSize.setHeight( aMinSize.Height );
-                bResize = sal_True;
+                bResize = true;
             }
             if( bResize )
                 SetOutputSizePixel( aConstrainedSize );
@@ -667,7 +667,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
                     }
                 }
 
-                m_bInitialStateChange = sal_False;
+                m_bInitialStateChange = false;
             }
 
         }

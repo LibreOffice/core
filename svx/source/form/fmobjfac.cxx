@@ -50,7 +50,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 
-static sal_Bool bInit = sal_False;
+static bool bInit = false;
 
 /*************************************************************************
 |*
@@ -86,7 +86,7 @@ FmFormObjFactory::FmFormObjFactory()
         FmFormShell::RegisterInterface(0);
 
         ImplSmartRegisterUnoServices();
-        bInit = sal_True;
+        bInit = true;
     }
 }
 

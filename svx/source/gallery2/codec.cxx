@@ -35,10 +35,10 @@ GalleryCodec::~GalleryCodec()
 {
 }
 
-sal_Bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
+bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
 {
     const sal_uIntPtr   nPos = rStm.Tell();
-    sal_Bool        bRet;
+    bool        bRet;
     sal_uInt8       cByte1, cByte2, cByte3, cByte4, cByte5, cByte6;
 
     rStm.ReadUChar( cByte1 ).ReadUChar( cByte2 ).ReadUChar( cByte3 ).ReadUChar( cByte4 ).ReadUChar( cByte5 ).ReadUChar( cByte6 );
@@ -46,12 +46,12 @@ sal_Bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
     if ( cByte1 == 'S' && cByte2 == 'V' && cByte3 == 'R' && cByte4 == 'L' && cByte5 == 'E' && ( cByte6 == '1' || cByte6 == '2' ) )
     {
         rVersion = ( ( cByte6 == '1' ) ? 1 : 2 );
-        bRet = sal_True;
+        bRet = true;
     }
     else
     {
         rVersion = 0;
-        bRet = sal_False;
+        bRet = false;
     }
 
     rStm.Seek( nPos );
@@ -104,7 +104,7 @@ void GalleryCodec::Read( SvStream& rStmToRead )
             sal_uInt8*  pTmpBuf = pOutBuf;
             sal_uInt8*  pLast = pOutBuf + nUnCompressedSize - 1;
             sal_uIntPtr   nIndex = 0UL, nCountByte, nRunByte;
-            sal_Bool    bEndDecoding = sal_False;
+            bool    bEndDecoding = false;
 
             do
             {
@@ -126,7 +126,7 @@ void GalleryCodec::Read( SvStream& rStmToRead )
                             pInBuf++;
                     }
                     else if ( nRunByte == 1 )   // End of the image
-                        bEndDecoding = sal_True;
+                        bEndDecoding = true;
                 }
                 else
                 {

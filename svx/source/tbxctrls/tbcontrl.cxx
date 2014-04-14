@@ -259,7 +259,7 @@ class SvxFrameWindow_Impl : public SfxPopupWindow
 private:
     SvxFrmValueSet_Impl  aFrameSet;
     ImageList       aImgList;
-    sal_Bool        bParagraphMode;
+    bool        bParagraphMode;
 
     DECL_LINK( SelectHdl, void * );
 
@@ -967,7 +967,7 @@ void SvxFontNameBox_Impl::ReleaseFocus_Impl()
 void SvxFontNameBox_Impl::EnableControls_Impl()
 {
     SvtFontOptions aFontOpt;
-    sal_Bool bEnable = aFontOpt.IsFontHistoryEnabled();
+    bool bEnable = aFontOpt.IsFontHistoryEnabled();
     sal_uInt16 nEntries = bEnable ? MAX_MRU_FONTNAME_ENTRIES : 0;
     if ( GetMaxMRUCount() != nEntries )
     {
@@ -1268,7 +1268,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFram
 
     SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
     aFrameSet   ( this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
-    bParagraphMode(sal_False)
+    bParagraphMode(false)
 
 {
     BindListener();
@@ -1497,7 +1497,7 @@ void SvxFrameWindow_Impl::StateChanged(
 
         if ( pItem )
         {
-            bParagraphMode = (sal_Bool)pItem->GetValue();
+            bParagraphMode = pItem->GetValue();
             //initial calls mustn't insert or remove elements
             if(aFrameSet.GetItemCount())
             {
@@ -1741,14 +1741,14 @@ struct SvxStyleToolBoxControl::Impl
     OUString                     aClearForm;
     OUString                     aMore;
     ::std::vector< OUString >    aDefaultStyles;
-    sal_Bool                     bSpecModeWriter;
-    sal_Bool                     bSpecModeCalc;
+    bool                     bSpecModeWriter;
+    bool                     bSpecModeCalc;
 
     inline Impl( void )
         :aClearForm         ( SVX_RESSTR( RID_SVXSTR_CLEARFORM ) )
         ,aMore              ( SVX_RESSTR( RID_SVXSTR_MORE ) )
-        ,bSpecModeWriter    ( sal_False )
-        ,bSpecModeCalc      ( sal_False )
+        ,bSpecModeWriter    ( false )
+        ,bSpecModeCalc      ( false )
     {
 
 
@@ -1792,7 +1792,7 @@ struct SvxStyleToolBoxControl::Impl
                 }
 
             }
-            else if( 0 != (
+            else if( (
                 bSpecModeCalc = xServices->supportsService(OUString(
                     "com.sun.star.sheet.SpreadsheetDocument"))))
             {

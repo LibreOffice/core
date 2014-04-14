@@ -1363,7 +1363,7 @@ BrokenRecoveryDialog::BrokenRecoveryDialog(Window*       pParent        ,
     , m_aCancelBtn  ( this   , SVX_RES( BTN_BROKEN_CANCEL                 ) )
     , m_pCore       ( pCore                                               )
     , m_bBeforeRecovery (bBeforeRecovery)
-    , m_bExecutionNeeded(sal_False)
+    , m_bExecutionNeeded(false)
 {
     FreeResource();
 
@@ -1388,7 +1388,7 @@ BrokenRecoveryDialog::~BrokenRecoveryDialog()
 
 void BrokenRecoveryDialog::impl_refresh()
 {
-                             m_bExecutionNeeded = sal_False;
+                             m_bExecutionNeeded = false;
     TURLList*                pURLList           = m_pCore->getURLListAccess();
     TURLList::const_iterator pIt;
     for (  pIt  = pURLList->begin();
@@ -1412,7 +1412,7 @@ void BrokenRecoveryDialog::impl_refresh()
                 continue;
         }
 
-        m_bExecutionNeeded = sal_True;
+        m_bExecutionNeeded = true;
 
         sal_uInt16 nPos = m_aFileListLB.InsertEntry(rInfo.DisplayName, rInfo.StandardImage );
         m_aFileListLB.SetEntryData( nPos, (void*)&rInfo );
@@ -1422,7 +1422,7 @@ void BrokenRecoveryDialog::impl_refresh()
 }
 
 
-sal_Bool BrokenRecoveryDialog::isExecutionNeeded()
+bool BrokenRecoveryDialog::isExecutionNeeded()
 {
     return m_bExecutionNeeded;
 }

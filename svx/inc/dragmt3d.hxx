@@ -77,7 +77,7 @@ public:
         SdrDragView &rView,
         const SdrMarkList& rMark,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
-        sal_Bool bFull = sal_False);
+        bool bFull = false);
 
     virtual void TakeSdrDragComment(OUString& rStr) const SAL_OVERRIDE;
     virtual bool BeginSdrDrag() SAL_OVERRIDE;
@@ -108,7 +108,7 @@ public:
         SdrDragView &rView,
         const SdrMarkList& rMark,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
-        sal_Bool bFull = sal_False);
+        bool bFull = false);
 
     virtual void MoveSdrDrag(const Point& rPnt) SAL_OVERRIDE;
     virtual Pointer GetSdrDragPointer() const SAL_OVERRIDE;
@@ -133,7 +133,7 @@ public:
         const SdrMarkList& rMark,
         SdrHdlKind eDrgHdl = HDL_MOVE,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
-        sal_Bool bFull = sal_False);
+        bool bFull = false);
 
     virtual void MoveSdrDrag(const Point& rPnt) SAL_OVERRIDE;
     virtual Pointer GetSdrDragPointer() const SAL_OVERRIDE;

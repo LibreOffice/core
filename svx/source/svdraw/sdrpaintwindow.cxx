@@ -149,8 +149,8 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const Region& rExpandedRegion)
     //Rectangle aRegionRectanglePixel;
 
     // MapModes off
-    sal_Bool bMapModeWasEnabledDest(mrOutputDevice.IsMapModeEnabled());
-    sal_Bool bMapModeWasEnabledSource(maPreRenderDevice.IsMapModeEnabled());
+    bool bMapModeWasEnabledDest(mrOutputDevice.IsMapModeEnabled());
+    bool bMapModeWasEnabledSource(maPreRenderDevice.IsMapModeEnabled());
     mrOutputDevice.EnableMapMode(false);
     maPreRenderDevice.EnableMapMode(false);
 

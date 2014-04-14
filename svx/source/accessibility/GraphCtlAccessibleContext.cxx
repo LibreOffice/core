@@ -78,7 +78,7 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
     mpPage (NULL),
     mpView (NULL),
     mnClientId( 0 ),
-    mbDisposed( sal_False )
+    mbDisposed( false )
 {
     if (mpControl != NULL)
     {
@@ -754,7 +754,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
     if( mbDisposed )
         return;
 
-    mbDisposed = sal_True;
+    mbDisposed = true;
 
     mpControl = NULL;       // object dies with representation
     mpView = NULL;

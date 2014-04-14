@@ -39,15 +39,15 @@ TYPEINIT1(FmFormModel, SdrModel);
 struct FmFormModelImplData
 {
     FmXUndoEnvironment*     pUndoEnv;
-    sal_Bool                bOpenInDesignIsDefaulted;
-    sal_Bool                bMovingPage;
+    bool                bOpenInDesignIsDefaulted;
+    bool                bMovingPage;
     ::boost::optional< sal_Bool >
                             aControlsUseRefDevice;
 
     FmFormModelImplData()
         :pUndoEnv( NULL )
-        ,bOpenInDesignIsDefaulted( sal_True )
-        ,bMovingPage( sal_False )
+        ,bOpenInDesignIsDefaulted( true )
+        ,bMovingPage( false )
         ,aControlsUseRefDevice()
     {
     }
@@ -155,12 +155,12 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 \************************************************************************/
 void FmFormModel::MovePage( sal_uInt16 nPgNum, sal_uInt16 nNewPos )
 {
-    m_pImpl->bMovingPage = sal_True;
+    m_pImpl->bMovingPage = true;
         // see InsertPage for this
 
     SdrModel::MovePage( nPgNum, nNewPos );
 
-    m_pImpl->bMovingPage = sal_False;
+    m_pImpl->bMovingPage = false;
 }
 
 /*************************************************************************
@@ -235,7 +235,7 @@ void FmFormModel::implSetOpenInDesignMode( bool _bOpenDesignMode, bool _bForce )
             m_pObjShell->SetModified( true );
     }
     // no matter if we really did it or not - from now on, it does not count as defaulted anymore
-    m_pImpl->bOpenInDesignIsDefaulted = sal_False;
+    m_pImpl->bOpenInDesignIsDefaulted = false;
 }
 
 

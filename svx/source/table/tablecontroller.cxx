@@ -908,7 +908,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                             if( bUndo )
                                 xCell->AddUndo();
 
-                            xCell->SetMergedItemSetAndBroadcast( aSet, sal_True );
+                            xCell->SetMergedItemSetAndBroadcast( aSet, true );
                         }
                     }
                 }

@@ -528,7 +528,7 @@ bool Svx3DCubeObject::setPropertyValueImpl( const OUString& rName, const SfxItem
     }
     case OWN_ATTR_3D_VALUE_POS_IS_CENTER:
     {
-        sal_Bool bNew = sal_False;
+        bool bNew = false;
         // sal_Bool bPosIsCenter in das Objekt packen
         if( rValue >>= bNew )
         {
@@ -1113,7 +1113,7 @@ bool Svx3DPolygonObject::setPropertyValueImpl( const OUString& rName, const SfxI
     }
     case OWN_ATTR_3D_VALUE_LINEONLY:
     {
-        sal_Bool bNew = sal_False;
+        bool bNew = false;
         if( rValue >>= bNew )
         {
             static_cast<E3dPolygonObj*>(mpObj.get())->SetLineOnly(bNew);
@@ -1163,7 +1163,7 @@ bool Svx3DPolygonObject::getPropertyValueImpl( const OUString& rName, const SfxI
 
     case OWN_ATTR_3D_VALUE_LINEONLY:
     {
-        rValue <<= (sal_Bool)static_cast<E3dPolygonObj*>(mpObj.get())->GetLineOnly();
+        rValue <<= static_cast<E3dPolygonObj*>(mpObj.get())->GetLineOnly();
         break;
     }
 

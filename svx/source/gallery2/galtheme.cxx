@@ -239,7 +239,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
     INetURLObject   aNewURL;
     sal_uInt32      nNextNumber = 1999;
     sal_Char const* pExt = NULL;
-    sal_Bool            bExists;
+    bool            bExists;
 
     aDir.Append( OUString("dragdrop") );
     CreateDir( aDir );
@@ -288,12 +288,12 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
             OUString aFileName( "gallery/svdraw/dd" );
             aNewURL = INetURLObject( aFileName += OUString::number( ++nNextNumber % 99999999 ), INET_PROT_PRIV_SOFFICE );
 
-            bExists = sal_False;
+            bExists = false;
 
             for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
                 if ( aObjectList[ i ]->aURL == aNewURL )
                 {
-                    bExists = sal_True;
+                    bExists = true;
                     break;
                 }
         }
@@ -693,7 +693,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
         {
             OUString        aThemeName;
             sal_uInt16      nVersion;
-            sal_Bool        bThemeNameFromResource = sal_False;
+            bool        bThemeNameFromResource = false;
 
             pIStm->ReadUInt16( nVersion );
 
@@ -732,7 +732,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
 
                             if( pCompat->GetVersion() >= 2 )
                             {
-                                pIStm->ReadUChar( bThemeNameFromResource );
+                                pIStm->ReadCharAsBool( bThemeNameFromResource );
                             }
 
                             delete pCompat;
@@ -1131,7 +1131,7 @@ bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_u
     try
     {
         ::ucbhelper::Content         aCnt( rFileOrDirURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        sal_Bool        bFolder = false;
+        bool        bFolder = false;
 
         aCnt.getPropertyValue("IsFolder") >>= bFolder;
 
@@ -1292,7 +1292,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     const INetURLObject aRelURL1( GetParent()->GetRelativeURL() );
     const INetURLObject aRelURL2( GetParent()->GetUserURL() );
     sal_uInt32          nCount = GetObjectCount();
-    sal_Bool                bRel;
+    bool                bRel;
 
     rOStm.WriteUInt16( (sal_uInt16) 0x0004 );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, GetRealName(), RTL_TEXTENCODING_UTF8);
@@ -1306,7 +1306,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
         if( SGA_OBJ_SVDRAW == pObj->eObjKind )
         {
             aPath = GetSvDrawStreamNameFromURL( pObj->aURL );
-            bRel = sal_False;
+            bRel = false;
         }
         else
         {
@@ -1404,7 +1404,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
         INetURLObject   aRelURL1( GetParent()->GetRelativeURL() );
         INetURLObject   aRelURL2( GetParent()->GetUserURL() );
         sal_uInt32      nId1, nId2;
-        sal_Bool            bRel;
+        bool            bRel;
 
         for( size_t i = 0, n = aObjectList.size(); i < n; ++i )
         {
@@ -1423,7 +1423,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             OUString    aPath;
             sal_uInt16  nTemp;
 
-            rIStm.ReadUChar( bRel );
+            rIStm.ReadCharAsBool( bRel );
             OString aTempFileName = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
             rIStm.ReadUInt32( pObj->nOffset );
             rIStm.ReadUInt16( nTemp ); pObj->eObjKind = (SgaObjKind) nTemp;
@@ -1489,13 +1489,13 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
         {
             VersionCompat*  pCompat = new VersionCompat( rIStm, STREAM_READ );
             sal_uInt32      nTemp32;
-            sal_Bool            bThemeNameFromResource = sal_False;
+            bool            bThemeNameFromResource = false;
 
             rIStm.ReadUInt32( nTemp32 );
 
             if( pCompat->GetVersion() >= 2 )
             {
-                rIStm.ReadUChar( bThemeNameFromResource );
+                rIStm.ReadCharAsBool( bThemeNameFromResource );
             }
 
             SetId( nTemp32, bThemeNameFromResource );

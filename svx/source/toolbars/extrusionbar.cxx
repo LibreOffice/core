@@ -150,7 +150,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 
         if( pAny )
         {
-            sal_Bool bOn;
+            bool bOn;
             (*pAny) >>= bOn;
             bOn = !bOn;
             (*pAny) <<= bOn;
@@ -353,7 +353,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             sal_Int32 nSurface = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_EXTRUSION_SURFACE))->GetValue();
 
             ShadeMode eShadeMode( ShadeMode_FLAT );
-            sal_Bool bMetal = sal_False;
+            bool bMetal = false;
             double fSpecularity = 0;
             double fDiffusion = 0;
 
@@ -407,7 +407,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             sal_Int32 nLevel = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_EXTRUSION_LIGHTING_INTENSITY))->GetValue();
 
             double fBrightness;
-            sal_Bool bHarsh2;
+            bool bHarsh2;
             double fLevel1;
             double fLevel2;
 
@@ -415,19 +415,19 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             {
             case 0: // bright
                 fBrightness = 34.0;
-                bHarsh2 = sal_False;
+                bHarsh2 = false;
                 fLevel1 = 66.0;
                 fLevel2 = 66.0;
                 break;
             case 1: // normal
                 fBrightness = 15.0;
-                bHarsh2 = sal_False;
+                bHarsh2 = false;
                 fLevel1 = 67.0;
                 fLevel2 = 37.0;
                 break;
             case 2: // dim
                 fBrightness = 6.0;
-                bHarsh2 = sal_True;
+                bHarsh2 = true;
                 fLevel1 = 79.0;
                 fLevel2 = 21.0;
                 break;
@@ -823,7 +823,7 @@ void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
             SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
 
-            sal_Bool    bParallel = sal_True;
+            bool    bParallel = true;
             pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sProjectionMode );
             ProjectionMode eProjectionMode;
             if( pAny && ( *pAny >>= eProjectionMode ) )
@@ -831,9 +831,9 @@ void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
             if( nFinalProjection == -1 )
             {
-                nFinalProjection = bParallel;
+                nFinalProjection = bParallel ? 1 : 0;
             }
-            else if( nFinalProjection != bParallel )
+            else if( nFinalProjection != (bParallel ? 1 : 0) )
             {
                 nFinalProjection = -1;
                 break;
@@ -889,7 +889,7 @@ void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
 
             if( eShadeMode == ShadeMode_FLAT )
             {
-                sal_Bool bMetal = sal_False;
+                bool bMetal = false;
                 pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sMetal );
                 if( pAny )
                     *pAny >>= bMetal;

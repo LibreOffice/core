@@ -410,7 +410,7 @@ namespace svxform
             switch ( nClassId )
             {
                 case FormComponentType::SCROLLBAR:
-                    _rxControlModel->setPropertyValue("LiveScroll", makeAny( (sal_Bool)sal_True ) );
+                    _rxControlModel->setPropertyValue("LiveScroll", makeAny( true ) );
                     // NO break!
                 case FormComponentType::SPINBUTTON:
                 {
@@ -424,9 +424,9 @@ namespace svxform
                 case FormComponentType::LISTBOX:
                 case FormComponentType::COMBOBOX:
                 {
-                    sal_Bool bDropDown = !_rControlBoundRect.IsEmpty() && ( _rControlBoundRect.GetWidth() >= 3 * _rControlBoundRect.GetHeight() );
+                    bool bDropDown = !_rControlBoundRect.IsEmpty() && ( _rControlBoundRect.GetWidth() >= 3 * _rControlBoundRect.GetHeight() );
                     if ( xPSI->hasPropertyByName( FM_PROP_DROPDOWN ) )
-                        _rxControlModel->setPropertyValue( FM_PROP_DROPDOWN, makeAny( (sal_Bool)bDropDown ) );
+                        _rxControlModel->setPropertyValue( FM_PROP_DROPDOWN, makeAny( bDropDown ) );
                     _rxControlModel->setPropertyValue( FM_PROP_LINECOUNT, makeAny( sal_Int16( 20 ) ) );
                 }
                 break;
@@ -441,7 +441,7 @@ namespace svxform
                         )
                     {
                         if ( xPSI->hasPropertyByName( FM_PROP_MULTILINE ) )
-                            _rxControlModel->setPropertyValue( FM_PROP_MULTILINE, makeAny( (sal_Bool)sal_True ) );
+                            _rxControlModel->setPropertyValue( FM_PROP_MULTILINE, makeAny( true ) );
                     }
                 }
                 break;
@@ -499,7 +499,7 @@ namespace svxform
             // strict format = yes is the default (i93467)
             if ( xPSI->hasPropertyByName( FM_PROP_STRICTFORMAT ) )
             {
-                _rxControlModel->setPropertyValue( FM_PROP_STRICTFORMAT, makeAny( sal_Bool( sal_True ) ) );
+                _rxControlModel->setPropertyValue( FM_PROP_STRICTFORMAT, makeAny( true ) );
             }
 
             // mouse wheel: don't use it for scrolling by default (i110036)
@@ -533,7 +533,7 @@ namespace svxform
 
             // let's see if the data source which the form belongs to (if any)
             // has a setting for the preferred line end format
-            sal_Bool bDosLineEnds = sal_False;
+            bool bDosLineEnds = false;
             Sequence< PropertyValue > aInfo = lcl_getDataSourceIndirectProperties( _rxModel, m_pData->m_xContext );
             const PropertyValue* pInfo = aInfo.getConstArray();
             const PropertyValue* pInfoEnd = pInfo + aInfo.getLength();
@@ -644,7 +644,7 @@ namespace svxform
             {
                 sal_Int32 nNullable = ColumnValue::NULLABLE_UNKNOWN;
                 OSL_VERIFY( _rxDatabaseField->getPropertyValue( FM_PROP_ISNULLABLE ) >>= nNullable );
-                _rxControlModel->setPropertyValue( FM_PROP_TRISTATE, makeAny( sal_Bool( ColumnValue::NO_NULLS != nNullable ) ) );
+                _rxControlModel->setPropertyValue( FM_PROP_TRISTATE, makeAny( ColumnValue::NO_NULLS != nNullable ) );
             }
         }
         catch( const Exception& )

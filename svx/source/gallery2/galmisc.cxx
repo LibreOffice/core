@@ -335,7 +335,7 @@ bool KillFile( const INetURLObject& rURL )
         try
         {
             ::ucbhelper::Content aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-            aCnt.executeCommand( OUString("delete"), uno::makeAny( sal_Bool( sal_True ) ) );
+            aCnt.executeCommand( OUString("delete"), uno::makeAny( true ) );
         }
         catch( const ucb::ContentCreationException& )
         {

@@ -1054,7 +1054,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
             sal_uInt16 nPntNum((sal_uInt16)pHdl->GetPointNum());
             const XPolygon& rXPoly = aPathPolygon[(sal_uInt16)rDrag.GetHdl()->GetPolyNum()];
             sal_uInt16 nPntAnz((sal_uInt16)rXPoly.GetPointCount());
-            sal_Bool bClose(IsClosed(meObjectKind));
+            bool bClose(IsClosed(meObjectKind));
 
             if(bClose)
                 nPntAnz--;
@@ -1084,7 +1084,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
             else if(nPntAnz > 1)
             {
                 sal_uInt16 nPntMax(nPntAnz - 1);
-                sal_Bool bIsClosed(IsClosed(meObjectKind));
+                bool bIsClosed(IsClosed(meObjectKind));
                 bool bPt1(nPntNum > 0);
                 bool bPt2(nPntNum < nPntMax);
 

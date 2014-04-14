@@ -466,7 +466,7 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
             }
             else if ( rPropVal.Name == sMirroredX )
             {
-                sal_Bool bMirroredX = sal_Bool();
+                bool bMirroredX;
                 if ( rPropVal.Value >>= bMirroredX )
                 {
                     if ( bMirroredX )
@@ -475,7 +475,7 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
             }
             else if ( rPropVal.Name == sMirroredY )
             {
-                sal_Bool bMirroredY = sal_Bool();
+                bool bMirroredY;
                 if ( rPropVal.Value >>= bMirroredY )
                 {
                     if ( bMirroredY )
@@ -484,7 +484,7 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
             }
             else if ( rPropVal.Name == sSwitched )
             {
-                sal_Bool bSwitched = sal_Bool();
+                bool bSwitched;
                 if ( rPropVal.Value >>= bSwitched )
                 {
                     if ( bSwitched )
@@ -1411,7 +1411,7 @@ void EnhancedCustomShape2d::SwapStartAndEndArrow( SdrObject* pObj ) //#108274
     pObj->SetMergedItem( aLineEndCenter );
 }
 
-static basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, const sal_Bool bClockwise, sal_Bool bFullCircle = sal_False )
+static basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, const bool bClockwise, bool bFullCircle = false )
 {
     Rectangle aRect( rRect );
     Point aStart( rStart );
@@ -1683,7 +1683,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                                 double fy1 = ( -sin( fStartAngle * F_PI180 ) * 65536.0 * fYScale ) + fCenterY;
                                 double fx2 = ( cos( fEndAngle * F_PI180 ) * 65536.0 * fXScale ) + fCenterX;
                                 double fy2 = ( -sin( fEndAngle * F_PI180 ) * 65536.0 * fYScale ) + fCenterY;
-                                aNewB2DPolygon.append(CreateArc( aRect, Point( (sal_Int32)fx1, (sal_Int32)fy1 ), Point( (sal_Int32)fx2, (sal_Int32)fy2 ), sal_False));
+                                aNewB2DPolygon.append(CreateArc( aRect, Point( (sal_Int32)fx1, (sal_Int32)fy1 ), Point( (sal_Int32)fx2, (sal_Int32)fy2 ), false));
                             }
                             else
                             {   /* SJ: TODO: this block should be replaced sometimes, because the current point
@@ -1784,7 +1784,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 case ARCTO :
                 case CLOCKWISEARCTO :
                 {
-                    sal_Bool bClockwise = ( nCommand == CLOCKWISEARC ) || ( nCommand == CLOCKWISEARCTO );
+                    bool bClockwise = ( nCommand == CLOCKWISEARC ) || ( nCommand == CLOCKWISEARCTO );
                     sal_uInt32 nXor = bClockwise ? 3 : 2;
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 3 ) < nCoordSize ); i++ )
                     {
@@ -1825,7 +1825,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
                         OSL_TRACE("ARCANGLETO scale: %f x %f angles: %f, %f", fWR, fHR, fStartAngle, fSwingAngle);
 
-                        sal_Bool bClockwise = fSwingAngle >= 0.0;
+                        bool bClockwise = fSwingAngle >= 0.0;
 
                         if (aNewB2DPolygon.count() > 0)
                         {
@@ -2219,7 +2219,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
     sal_uInt16 nSegmentInd = 0;
 
     std::vector< SdrPathObj* > vObjectList;
-    sal_Bool bSortFilledObjectsToBack = SortFilledObjectsToBackByDefault( eSpType );
+    bool bSortFilledObjectsToBack = SortFilledObjectsToBackByDefault( eSpType );
 
     sal_Int32 nSubPathIndex = 0;
 

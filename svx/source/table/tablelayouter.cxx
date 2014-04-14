@@ -571,7 +571,7 @@ void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
         {
             sal_Int32 nColWidth = 0;
             Reference< XPropertySet > xColSet( xCols->getByIndex( nCol ), UNO_QUERY_THROW );
-            sal_Bool bOptimal = sal_False;
+            bool bOptimal = false;
             xColSet->getPropertyValue( sOptimalSize ) >>= bOptimal;
             if( bOptimal )
             {
@@ -722,7 +722,7 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
             sal_Int32 nRowHeight = 0;
             Reference< XPropertySet > xRowSet( xRows->getByIndex(nRow), UNO_QUERY_THROW );
 
-            sal_Bool bOptimal = sal_False;
+            bool bOptimal = false;
             xRowSet->getPropertyValue( sOptimalSize ) >>= bOptimal;
             if( bOptimal )
             {

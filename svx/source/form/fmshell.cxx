@@ -273,7 +273,7 @@ bool FmFormShell::PrepareClose(bool bUI)
                 const ::svx::ControllerFeatures& rController = GetImpl()->getActiveControllerFeatures();
                 if ( rController->commitCurrentControl() )
                 {
-                    sal_Bool bModified = rController->isModifiedRow();
+                    bool bModified = rController->isModifiedRow();
 
                     if ( bModified && bUI )
                     {
@@ -281,8 +281,8 @@ bool FmFormShell::PrepareClose(bool bUI)
                         switch (aQry.Execute())
                         {
                             case RET_NO:
-                                bModified = sal_False;
-                                GetImpl()->didPrepareClose( sal_True );
+                                bModified = false;
+                                GetImpl()->didPrepareClose( true );
                                 break;
 
                             case RET_CANCEL:
@@ -609,7 +609,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_SHOW_PROPERTY_BROWSER:
         {
             SFX_REQUEST_ARG( rReq, pShowItem, SfxBoolItem, SID_FM_SHOW_PROPERTIES, false );
-            sal_Bool bShow = sal_True;
+            bool bShow = true;
             if ( pShowItem )
                 bShow = pShowItem->GetValue();
             GetImpl()->ShowSelectionProperties( bShow );
@@ -621,7 +621,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             // PropertyBrowser anzeigen
             SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot, false);
-            sal_Bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
+            bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
 
             InterfaceBag aOnlyTheForm;
             aOnlyTheForm.insert( Reference< XInterface >( GetImpl()->getCurrentForm(), UNO_QUERY ) );
@@ -635,7 +635,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_CTL_PROPERTIES:
         {
             SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot, false);
-            sal_Bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
+            bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
 
             OSL_ENSURE( GetImpl()->onlyControlsAreMarked(), "FmFormShell::Execute: ControlProperties should be disabled!" );
             if ( bShow )
@@ -777,8 +777,8 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_FILTER_EXECUTE:
         case SID_FM_FILTER_EXIT:
         {
-            sal_Bool bCancelled = ( SID_FM_FILTER_EXIT == nSlot );
-            sal_Bool bReopenNavigator = sal_False;
+            bool bCancelled = ( SID_FM_FILTER_EXIT == nSlot );
+            bool bReopenNavigator = false;
 
             if ( !bCancelled )
             {
@@ -788,7 +788,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                     if ( GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_FILTER_NAVIGATOR ) )
                     {
                         GetViewShell()->GetViewFrame()->ToggleChildWindow( SID_FM_FILTER_NAVIGATOR );
-                        bReopenNavigator = sal_True;
+                        bReopenNavigator = true;
                     }
 
                 Reference< runtime::XFormController >  xController( GetImpl()->getActiveController() );
@@ -906,7 +906,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    sal_Bool bLayerLocked = sal_False;
+                    bool bLayerLocked = false;
                     if (m_pFormView)
                     {
                         // Ist der ::com::sun::star::drawing::Layer gelocked, so m???ssen die Slots disabled werden. #36897
@@ -959,7 +959,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
 
             case SID_FM_SHOW_PROPERTY_BROWSER:
             {
-                rSet.Put(SfxBoolItem(GetImpl()->IsPropBrwOpen()));
+                rSet.Put(SfxBoolItem(nWhich, GetImpl()->IsPropBrwOpen()));
             }
             break;
 
@@ -968,13 +968,13 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 // der Impl eventuell die Moeglichjkeit geben, ihre an der aktuellen MarkList ausgerichteten Objekte
                 // auf den neuesten Stand zu bringen
                 if (GetImpl()->IsSelectionUpdatePending())
-                    GetImpl()->ForceUpdateSelection(sal_False);
+                    GetImpl()->ForceUpdateSelection(false);
 
                 if ( !m_pFormView || !m_bDesignMode || !GetImpl()->onlyControlsAreMarked() )
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    sal_Bool bChecked  = GetImpl()->IsPropBrwOpen() && !GetImpl()->isSolelySelected( GetImpl()->getCurrentForm() );
+                    bool bChecked  = GetImpl()->IsPropBrwOpen() && !GetImpl()->isSolelySelected( GetImpl()->getCurrentForm() );
                         // if the property browser is open, and only controls are marked, and the current selection
                         // does not consist of only the current form, then the current selection is the (composition of)
                         // the currently marked controls
@@ -987,13 +987,13 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 // der Impl eventuell die Moeglichjkeit geben, ihre an der aktuellen MarkList ausgerichteten Objekte
                 // auf den neuesten Stand zu bringen
                 if (GetImpl()->IsSelectionUpdatePending())
-                    GetImpl()->ForceUpdateSelection(sal_False);
+                    GetImpl()->ForceUpdateSelection(false);
 
                 if ( !m_pFormView || !m_bDesignMode || !GetImpl()->getCurrentForm().is() )
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    sal_Bool bChecked = GetImpl()->IsPropBrwOpen() && GetImpl()->isSolelySelected( GetImpl()->getCurrentForm() );
+                    bool bChecked = GetImpl()->IsPropBrwOpen() && GetImpl()->isSolelySelected( GetImpl()->getCurrentForm() );
                     rSet.Put(SfxBoolItem(nWhich, bChecked));
                 }
             }   break;
@@ -1001,7 +1001,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 // der Impl eventuell die Moeglichjkeit geben, ihre an der aktuellen MarkList ausgerichteten Objekte
                 // auf den neuesten Stand zu bringen
                 if (GetImpl()->IsSelectionUpdatePending())
-                    GetImpl()->ForceUpdateSelection(sal_False);
+                    GetImpl()->ForceUpdateSelection(false);
 
                 if (!m_pFormView || !m_bDesignMode || !GetImpl()->getCurrentForm().is() )
                     rSet.DisableItem( nWhich );
@@ -1099,7 +1099,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
         rSet.DisableItem(nWhich);
     else
     {
-        sal_Bool bEnable = sal_False;
+        bool bEnable = false;
         try
         {
             switch (nWhich)
@@ -1107,8 +1107,8 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             case SID_FM_VIEW_AS_GRID:
                 if (GetImpl()->getHostFrame().is() && GetImpl()->getNavController().is())
                 {
-                    bEnable = sal_True;
-                    sal_Bool bDisplayingCurrent =
+                    bEnable = true;
+                    bool bDisplayingCurrent =
                         GetImpl()->getInternalForm(
                             Reference< XForm >( GetImpl()->getNavController()->getModel(), UNO_QUERY )
                         ) == GetImpl()->getExternallyDisplayedForm();
@@ -1256,7 +1256,7 @@ void FmFormShell::Activate(bool bMDI)
     SfxShell::Activate(bMDI);
 
     if ( m_pFormView )
-        GetImpl()->viewActivated( *m_pFormView, sal_True );
+        GetImpl()->viewActivated( *m_pFormView, true );
 }
 
 
@@ -1265,7 +1265,7 @@ void FmFormShell::Deactivate(bool bMDI)
     SfxShell::Deactivate(bMDI);
 
     if ( m_pFormView )
-        GetImpl()->viewDeactivated( *m_pFormView, sal_False );
+        GetImpl()->viewDeactivated( *m_pFormView, false );
 }
 
 

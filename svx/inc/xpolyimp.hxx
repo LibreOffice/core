@@ -28,10 +28,10 @@ class Point;
 class ImpXPolygon
 {
 public:
-    Point*          pPointAry;
-    sal_uInt8*           pFlagAry;
-    Point*          pOldPointAry;
-    sal_Bool            bDeleteOldPoints;
+    Point*              pPointAry;
+    sal_uInt8*          pFlagAry;
+    Point*              pOldPointAry;
+    bool                bDeleteOldPoints;
     sal_uInt16          nSize;
     sal_uInt16          nResize;
     sal_uInt16          nPoints;
@@ -49,11 +49,11 @@ public:
         if ( bDeleteOldPoints )
         {
             delete[] (char*)pOldPointAry;
-            bDeleteOldPoints = sal_False;
+            bDeleteOldPoints = false;
         }
     }
 
-    void Resize( sal_uInt16 nNewSize, sal_Bool bDeletePoints = sal_True );
+    void Resize( sal_uInt16 nNewSize, bool bDeletePoints = true );
     void InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount );
     void Remove( sal_uInt16 nPos, sal_uInt16 nCount );
 };

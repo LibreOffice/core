@@ -64,7 +64,7 @@ namespace svx { namespace sidebar {
 
 Font& lcl_GetDefaultBulletFont()
 {
-    static sal_Bool bInit = 0;
+    static bool bInit = false;
     static Font aDefBulletFont( "StarSymbol", "", Size( 0, 14 ) );
     if(!bInit)
     {
@@ -73,7 +73,7 @@ Font& lcl_GetDefaultBulletFont()
         aDefBulletFont.SetPitch( PITCH_DONTKNOW );
         aDefBulletFont.SetWeight( WEIGHT_DONTKNOW );
         aDefBulletFont.SetTransparent( true );
-        bInit = sal_True;
+        bInit = true;
     }
     return aDefBulletFont;
 }
@@ -636,7 +636,7 @@ sal_uInt16 GraphyicBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uI
         for (sal_uInt16 i=0; i < aGrfDataLst.size(); ++i)
         {
             GrfBulDataRelation* pEntry = aGrfDataLst[i];
-            sal_Bool bExist = sal_False;
+            bool bExist = false;
             if ( pEntry)
                 bExist = GalleryExplorer::GetGraphicObj(GALLERY_THEME_BULLETS, pEntry->nGallaryIndex,&aGraphic);
             if (bExist) {
@@ -1625,7 +1625,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
     sal_uInt16 nLength = sizeof(pOutlineSettingsArrs)/sizeof(OutlineSettings_Impl*);
     for(sal_uInt16 iDex = nFromIndex; iDex < nLength; iDex++)
     {
-        sal_Bool bNotMatch = sal_False;
+        bool bNotMatch = false;
         OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[iDex];
         sal_uInt16 nCount = pItemArr->pNumSettingsArr->size();
         for (sal_uInt16 iLevel=0;iLevel < nCount;iLevel++)
@@ -1650,13 +1650,13 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
                     _pSet->nNumAlignAt == aFmt.GetFirstLineIndent() &&
                     _pSet->nNumIndentAt == aFmt.GetIndentAt()))
                 {
-                    bNotMatch = sal_True;
+                    bNotMatch = true;
                     break;
                 }
                 }else if ((eNumType&(~LINK_TOKEN)) == SVX_NUM_BITMAP ) {
                         const SvxBrushItem* pBrsh1 = aFmt.GetBrush();
                         const SvxBrushItem* pBrsh2 = _pSet->pBrushItem;
-                        sal_Bool bIsMatch = false;
+                        bool bIsMatch = false;
                         if (pBrsh1==pBrsh2) bIsMatch = true;
                         if (pBrsh1 && pBrsh2) {
                             const Graphic* pGrf1 = pBrsh1->GetGraphic();;
@@ -1669,7 +1669,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
                             }
                         }
                         if (!bIsMatch) {
-                            bNotMatch = sal_True;
+                            bNotMatch = true;
                             break;
                         }
                 } else
@@ -1683,7 +1683,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
                       _pSet->nNumAlignAt == aFmt.GetFirstLineIndent() &&
                       _pSet->nNumIndentAt == aFmt.GetIndentAt()))
                 {
-                    bNotMatch = sal_True;
+                    bNotMatch = true;
                     break;
                 }
                 }

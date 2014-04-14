@@ -63,7 +63,7 @@ namespace svxform
         // the component which's dispatches we're intercepting
         ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProviderInterception >
                         m_xIntercepted;
-        sal_Bool        m_bListening;
+        bool        m_bListening;
 
         // the real interceptor
         DispatchInterceptor*            m_pMaster;

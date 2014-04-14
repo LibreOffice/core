@@ -149,9 +149,9 @@ drawing::ShadeMode GetShadeMode( SdrCustomShapeGeometryItem& rItem, const drawin
     return eRet;
 }
 
-sal_Bool GetBool( SdrCustomShapeGeometryItem& rItem, const OUString& rPropertyName, const sal_Bool bDefault )
+bool GetBool( SdrCustomShapeGeometryItem& rItem, const OUString& rPropertyName, const bool bDefault )
 {
-    sal_Bool bRetValue = bDefault;
+    bool bRetValue = bDefault;
     const Any* pAny = rItem.GetPropertyValueByName( OUString(aExtrusion), rPropertyName );
     if ( pAny )
         *pAny >>= bRetValue;
@@ -283,10 +283,10 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pMap = &fMap;
         }
     }
-    if ( GetBool( rGeometryItem, aExtrusion, sal_False ) )
+    if ( GetBool( rGeometryItem, aExtrusion, false ) )
     {
-        sal_Bool bIsMirroredX = ((SdrObjCustomShape*)pCustomShape)->IsMirroredX();
-        sal_Bool bIsMirroredY = ((SdrObjCustomShape*)pCustomShape)->IsMirroredY();
+        bool bIsMirroredX = ((SdrObjCustomShape*)pCustomShape)->IsMirroredX();
+        bool bIsMirroredY = ((SdrObjCustomShape*)pCustomShape)->IsMirroredY();
         Rectangle aSnapRect( pCustomShape->GetLogicRect() );
         long nObjectRotation = pCustomShape->GetRotateAngle();
         if ( nObjectRotation )
@@ -341,7 +341,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
         drawing::ShadeMode eShadeMode( GetShadeMode( rGeometryItem, drawing::ShadeMode_FLAT ) );
         const OUString aExtrusionColor( "Color" );
-        sal_Bool bUseExtrusionColor = GetBool( rGeometryItem, aExtrusionColor, sal_False );
+        bool bUseExtrusionColor = GetBool( rGeometryItem, aExtrusionColor, false );
 
         XFillStyle eFillStyle( ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem ) );
         pScene->GetProperties().SetObjectItem( Svx3DShadeModeItem( 0 ) );
@@ -499,7 +499,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 else if ( bUseTwoFillStyles )
                 {
                     BitmapEx aFillBmp;
-                    sal_Bool bFillBmpTile = ((XFillBmpTileItem&)p3DObj->GetMergedItem( XATTR_FILLBMP_TILE )).GetValue();
+                    bool bFillBmpTile = ((XFillBmpTileItem&)p3DObj->GetMergedItem( XATTR_FILLBMP_TILE )).GetValue();
                     if ( bFillBmpTile )
                     {
                         const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetMergedItem(XATTR_FILLBITMAP);
@@ -679,7 +679,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             double fLightIntensity = GetDouble( rGeometryItem, sFirstLightLevel, 43712.0 / 655.36, NULL ) / 100.0;
 
             const OUString sFirstLightHarsh( "FirstLightHarsh" );
-            /* sal_Bool bFirstLightHarsh = */ GetBool( rGeometryItem, sFirstLightHarsh, sal_False );
+            /* sal_Bool bFirstLightHarsh = */ GetBool( rGeometryItem, sFirstLightHarsh, false );
 
             const OUString sSecondLightDirection( "SecondLightDirection" );
             drawing::Direction3D aSecondLightDirectionDefault( -50000, 0, 10000 );
@@ -692,8 +692,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
             const OUString sSecondLightHarsh( "SecondLightHarsh" );
             const OUString sLightFace( "LightFace" );
-            /* sal_Bool bLight2Harsh = */ GetBool( rGeometryItem, sSecondLightHarsh, sal_False );
-            /* sal_Bool bLightFace = */ GetBool( rGeometryItem, sLightFace, sal_False );
+            /* sal_Bool bLight2Harsh = */ GetBool( rGeometryItem, sSecondLightHarsh, false );
+            /* sal_Bool bLightFace = */ GetBool( rGeometryItem, sLightFace, false );
 
             sal_uInt16 nAmbientColor = (sal_uInt16)( fAmbientIntensity * 255.0 );
             if ( nAmbientColor > 255 )
@@ -727,7 +727,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             const OUString sSpecularity( "Specularity" );
             const OUString sMetal( "Metal" );
             double fSpecular = GetDouble( rGeometryItem, sSpecularity, 0, NULL ) / 100;
-            sal_Bool bMetal = GetBool( rGeometryItem, sMetal, sal_False );
+            bool bMetal = GetBool( rGeometryItem, sMetal, false );
 
             Color aSpecularCol( 225,225,225 );
             if ( bMetal )

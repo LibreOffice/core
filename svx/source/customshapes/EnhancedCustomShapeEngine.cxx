@@ -70,7 +70,7 @@ class EnhancedCustomShapeEngine : public cppu::WeakImplHelper3
 >
 {
     css::uno::Reference< css::drawing::XShape >      mxShape;
-    sal_Bool                                    mbForceGroupWithText;
+    bool                                    mbForceGroupWithText;
 
     SdrObject* ImplForceGroupWithText( const SdrObjCustomShape* pCustoObj, SdrObject* pRenderedShape );
 
@@ -106,7 +106,7 @@ public:
 };
 
 EnhancedCustomShapeEngine::EnhancedCustomShapeEngine() :
-    mbForceGroupWithText    ( sal_False )
+    mbForceGroupWithText    ( false )
 {
 }
 EnhancedCustomShapeEngine::~EnhancedCustomShapeEngine()
@@ -281,7 +281,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
         // retrieving the TextPath property to check if feature is enabled
         SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)
             pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-        sal_Bool bTextPathOn = sal_False;
+        bool bTextPathOn = false;
         const OUString sTextPath( "TextPath" );
         uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
         if ( pAny )
@@ -291,9 +291,9 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
         sal_Int32 nRotateAngle = aCustomShape2d.GetRotateAngle();
         bool bPostRotateAngle = aCustomShape2d.IsPostRotate();
 
-        sal_Bool bFlipV = aCustomShape2d.IsFlipVert();
-        sal_Bool bFlipH = aCustomShape2d.IsFlipHorz();
-        sal_Bool bLineGeometryNeededOnly = bTextPathOn;
+        bool bFlipV = aCustomShape2d.IsFlipVert();
+        bool bFlipH = aCustomShape2d.IsFlipHorz();
+        bool bLineGeometryNeededOnly = bTextPathOn;
 
         SdrObject* pRenderedShape = aCustomShape2d.CreateObject( bLineGeometryNeededOnly );
         if ( pRenderedShape )
@@ -310,7 +310,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
             SdrObject* pRenderedShape3d = EnhancedCustomShape3d::Create3DObject( pRenderedShape, pSdrObjCustomShape );
             if ( pRenderedShape3d )
             {
-                bFlipV = bFlipH = sal_False;
+                bFlipV = bFlipH = false;
                 nRotateAngle = 0;
                 SdrObject::Free( pRenderedShape );
                 pRenderedShape = pRenderedShape3d;
@@ -403,8 +403,8 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
         if ( pObj )
         {
             Rectangle aRect( pSdrObjCustomShape->GetSnapRect() );
-            sal_Bool bFlipV = aCustomShape2d.IsFlipVert();
-            sal_Bool bFlipH = aCustomShape2d.IsFlipHorz();
+            bool bFlipV = aCustomShape2d.IsFlipVert();
+            bool bFlipH = aCustomShape2d.IsFlipHorz();
 
             const GeoStat& rGeoStat = ((SdrObjCustomShape*)pSdrObjCustomShape)->GetGeoStat();
             if ( rGeoStat.nShearWink )

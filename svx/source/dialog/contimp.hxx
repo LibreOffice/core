@@ -46,9 +46,9 @@ class SvxSuperContourDlg : public SvxContourDlg
     ContourWindow       aContourWnd;
     StatusBar           aStbStatus;
     sal_uIntPtr             nGrfChanged;
-    sal_Bool                bExecState;
-    sal_Bool                bUpdateGraphicLinked;
-    sal_Bool                bGraphicLinked;
+    bool                bExecState;
+    bool                bUpdateGraphicLinked;
+    bool                bGraphicLinked;
     ImageList           maImageList;
 
     virtual void        Resize() SAL_OVERRIDE;
@@ -71,12 +71,12 @@ public:
                                             Window* pParent, const ResId& rResId );
                         virtual ~SvxSuperContourDlg();
 
-    void                SetExecState( sal_Bool bEnable );
+    void                SetExecState( bool bEnable );
 
     void                SetGraphic( const Graphic& rGraphic );
-    void                SetGraphicLinked( sal_Bool bLinked ) { bGraphicLinked = bLinked; }
+    void                SetGraphicLinked( bool bLinked ) { bGraphicLinked = bLinked; }
     const Graphic&      GetGraphic() const { return aGraphic; }
-    sal_Bool                IsGraphicChanged() const { return nGrfChanged > 0UL; }
+    bool                IsGraphicChanged() const { return nGrfChanged > 0UL; }
 
     void                SetPolyPolygon( const PolyPolygon& rPolyPoly );
     PolyPolygon         GetPolyPolygon( bool bRescaleToGraphic = true );
@@ -87,7 +87,7 @@ public:
     bool                IsUndoPossible() const;
     bool                IsRedoPossible() const;
 
-    void                UpdateGraphic( const Graphic& rGraphic, sal_Bool bGraphicLinked,
+    void                UpdateGraphic( const Graphic& rGraphic, bool bGraphicLinked,
                                 const PolyPolygon* pPolyPoly = NULL,
                                 void* pEditingObj = NULL );
 

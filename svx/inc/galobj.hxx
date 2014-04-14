@@ -62,13 +62,13 @@ protected:
     INetURLObject           aURL;
     OUString                aUserName;
     OUString                aTitle;
-    sal_Bool                    bIsValid;
-    sal_Bool                    bIsThumbBmp;
+    bool                    bIsValid;
+    bool                    bIsThumbBmp;
 
     virtual void            WriteData( SvStream& rOut, const OUString& rDestDir ) const;
     virtual void            ReadData( SvStream& rIn, sal_uInt16& rReadVersion );
 
-    sal_Bool                    CreateThumb( const Graphic& rGraphic );
+    bool                    CreateThumb( const Graphic& rGraphic );
 
 public:
                             SgaObject();
@@ -80,8 +80,8 @@ public:
     virtual BitmapEx        GetThumbBmp() const { return aThumbBmp; }
     const GDIMetaFile&      GetThumbMtf() const { return aThumbMtf; }
     const INetURLObject&    GetURL() const { return aURL; }
-    sal_Bool                IsValid() const { return bIsValid; }
-    sal_Bool                IsThumbBitmap() const { return bIsThumbBmp; }
+    bool                IsValid() const { return bIsValid; }
+    bool                IsThumbBitmap() const { return bIsThumbBmp; }
 
     const OUString          GetTitle() const;
     void                    SetTitle( const OUString& rTitle );
@@ -122,7 +122,7 @@ class SgaObjectSvDraw : public SgaObject
 
 private:
 
-    sal_Bool                CreateThumb( const FmFormModel& rModel );
+    bool                CreateThumb( const FmFormModel& rModel );
 
     virtual void        WriteData( SvStream& rOut, const OUString& rDestDir ) const SAL_OVERRIDE;
     virtual void        ReadData( SvStream& rIn, sal_uInt16& rReadVersion ) SAL_OVERRIDE;

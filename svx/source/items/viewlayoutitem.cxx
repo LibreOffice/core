@@ -102,13 +102,13 @@ bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nM
             aSeq[0].Name = OUString( VIEWLAYOUT_PARAM_COLUMNS );
             aSeq[0].Value <<= sal_Int32( GetValue() );
             aSeq[1].Name = OUString( VIEWLAYOUT_PARAM_BOOKMODE );
-            aSeq[1].Value <<= sal_Bool( mbBookMode );
+            aSeq[1].Value <<= mbBookMode;
             rVal <<= aSeq;
         }
         break;
 
         case MID_VIEWLAYOUT_COLUMNS : rVal <<= (sal_Int32) GetValue(); break;
-        case MID_VIEWLAYOUT_BOOKMODE: rVal <<= (sal_Bool) mbBookMode; break;
+        case MID_VIEWLAYOUT_BOOKMODE: rVal <<= mbBookMode; break;
         default:
             OSL_FAIL("svx::SvxViewLayoutItem::QueryValue(), Wrong MemberId!");
             return false;
@@ -128,7 +128,7 @@ bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == VIEWLAYOUT_PARAMS ))
             {
                 sal_Int32 nColumns( 0 );
-                sal_Bool  bBookMode = sal_False;
+                bool  bBookMode = false;
                 bool bAllConverted( true );
                 sal_Int16 nConvertedCount( 0 );
                 for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
@@ -170,7 +170,7 @@ bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
 
         case MID_VIEWLAYOUT_BOOKMODE:
         {
-            sal_Bool bBookMode = sal_False;
+            bool bBookMode = false;
             if ( rVal >>= bBookMode )
             {
                 mbBookMode = bBookMode;

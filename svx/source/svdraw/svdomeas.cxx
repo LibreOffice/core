@@ -81,8 +81,8 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
 {
     OUString aStr;
     Fraction aMeasureScale(1, 1);
-    sal_Bool bTextRota90(sal_False);
-    sal_Bool bShowUnit(sal_False);
+    bool bTextRota90(false);
+    bool bShowUnit(false);
     FieldUnit eMeasureUnit(FUNIT_NONE);
     FieldUnit eModUIUnit(FUNIT_NONE);
 

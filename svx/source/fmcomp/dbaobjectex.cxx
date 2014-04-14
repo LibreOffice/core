@@ -76,7 +76,7 @@ namespace svx
 
     void OComponentTransferable::AddSupportedFormats()
     {
-        sal_Bool bForm = sal_True;
+        bool bForm = true;
         try
         {
             Reference<XPropertySet> xProp;
@@ -118,7 +118,7 @@ namespace svx
 
     ODataAccessDescriptor OComponentTransferable::extractComponentDescriptor(const TransferableDataHelper& _rData)
     {
-        sal_Bool bForm = _rData.HasFormat(getDescriptorFormatId(true));
+        bool bForm = _rData.HasFormat(getDescriptorFormatId(true));
         if ( bForm || _rData.HasFormat(getDescriptorFormatId(false)) )
         {
             // the object has a real descriptor object (not just the old compatible format)
@@ -126,7 +126,7 @@ namespace svx
             // extract the any from the transferable
             DataFlavor aFlavor;
 #if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
+            bool bSuccess =
 #endif
             SotExchange::GetFormatDataFlavor(getDescriptorFormatId(bForm), aFlavor);
             OSL_ENSURE(bSuccess, "OComponentTransferable::extractColumnDescriptor: invalid data format (no flavor)!");

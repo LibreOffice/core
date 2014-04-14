@@ -2228,7 +2228,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     }
     case OWN_ATTR_MIRRORED:
     {
-        sal_Bool bMirror = sal_Bool();
+        bool bMirror;
         if(rValue >>= bMirror )
         {
             SdrGrafObj* pObj = dynamic_cast< SdrGrafObj* >( mpObj.get() );
@@ -2446,7 +2446,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case SDRATTR_OBJMOVEPROTECT:
     {
-        sal_Bool bMoveProtect = sal_Bool();
+        bool bMoveProtect;
         if( rValue >>= bMoveProtect )
         {
             mpObj->SetMoveProtect(bMoveProtect);
@@ -2489,7 +2489,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case SDRATTR_OBJPRINTABLE:
     {
-        sal_Bool bPrintable = sal_Bool();
+        bool bPrintable;
         if( rValue >>= bPrintable )
         {
             mpObj->SetPrintable(bPrintable);
@@ -2499,7 +2499,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     }
     case SDRATTR_OBJVISIBLE:
     {
-        sal_Bool bVisible = sal_Bool();
+        bool bVisible;
         if( rValue >>= bVisible )
         {
             mpObj->SetVisible(bVisible);
@@ -2509,7 +2509,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     }
     case SDRATTR_OBJSIZEPROTECT:
     {
-        sal_Bool bResizeProtect = sal_Bool();
+        bool bResizeProtect;
         if( rValue >>= bResizeProtect )
         {
             mpObj->SetResizeProtect(bResizeProtect);
@@ -2646,7 +2646,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case OWN_ATTR_ISFONTWORK:
     {
-        rValue <<= (sal_Bool)(mpObj->ISA(SdrTextObj) && ((SdrTextObj*)mpObj.get())->IsFontwork());
+        rValue <<= mpObj->ISA(SdrTextObj) && ((SdrTextObj*)mpObj.get())->IsFontwork();
         break;
     }
 
@@ -2710,7 +2710,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case OWN_ATTR_MIRRORED:
     {
-        sal_Bool bMirror = sal_False;
+        bool bMirror = false;
         if( mpObj.is() && mpObj->ISA(SdrGrafObj) )
             bMirror = ((SdrGrafObj*)mpObj.get())->IsMirrored();
 
@@ -2855,7 +2855,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     }
 
     case SDRATTR_OBJMOVEPROTECT:
-        rValue = uno::makeAny( (sal_Bool) mpObj->IsMoveProtect() );
+        rValue = uno::makeAny( mpObj->IsMoveProtect() );
         break;
 
     case SDRATTR_OBJECTNAME:
@@ -2881,15 +2881,15 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     }
 
     case SDRATTR_OBJPRINTABLE:
-        rValue <<= static_cast<sal_Bool>( mpObj->IsPrintable() );
+        rValue <<= mpObj->IsPrintable();
         break;
 
     case SDRATTR_OBJVISIBLE:
-        rValue <<= static_cast<sal_Bool>( mpObj->IsVisible() );
+        rValue <<= mpObj->IsVisible();
         break;
 
     case SDRATTR_OBJSIZEPROTECT:
-        rValue <<= static_cast<sal_Bool>( mpObj->IsResizeProtect() );
+        rValue <<= mpObj->IsResizeProtect();
         break;
 
     case OWN_ATTR_PAGE_NUMBER:

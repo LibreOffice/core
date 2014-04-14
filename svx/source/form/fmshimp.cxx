@@ -556,13 +556,13 @@ bool FmXBoundFormFieldIterator::ShouldHandleElement(const Reference< XInterface>
 }
 
 
-sal_Bool isControlList(const SdrMarkList& rMarkList)
+bool isControlList(const SdrMarkList& rMarkList)
 {
     // enthaelt die liste nur Controls und mindestens ein control
     sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
-    sal_Bool  bControlList = nMarkCount != 0;
+    bool  bControlList = nMarkCount != 0;
 
-    sal_Bool bHadAnyLeafs = sal_False;
+    bool bHadAnyLeafs = false;
 
     for (sal_uInt32 i = 0; i < nMarkCount && bControlList; i++)
     {
@@ -584,12 +584,12 @@ sal_Bool isControlList(const SdrMarkList& rMarkList)
                 while (aIter.IsMore() && bControlList)
                 {
                     bControlList = FmFormInventor == aIter.Next()->GetObjInventor();
-                    bHadAnyLeafs = sal_True;
+                    bHadAnyLeafs = true;
                 }
             }
             else
             {
-                bHadAnyLeafs = sal_True;
+                bHadAnyLeafs = true;
                 bControlList = FmFormInventor == pObj->GetObjInventor();
             }
         }
@@ -647,16 +647,16 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         ,m_aNavControllerFeatures( this )
         ,m_eDocumentType( eUnknownDocumentType )
         ,m_nLockSlotInvalidation( 0 )
-        ,m_bHadPropertyBrowserInDesignMode( sal_False )
-        ,m_bTrackProperties( sal_True )
-        ,m_bUseWizards( sal_True )
-        ,m_bDatabaseBar( sal_False )
-        ,m_bInActivate( sal_False )
-        ,m_bSetFocus( sal_False )
-        ,m_bFilterMode( sal_False )
-        ,m_bChangingDesignMode( sal_False )
-        ,m_bPreparedClose( sal_False )
-        ,m_bFirstActivation( sal_True )
+        ,m_bHadPropertyBrowserInDesignMode( false )
+        ,m_bTrackProperties( true )
+        ,m_bUseWizards( true )
+        ,m_bDatabaseBar( false )
+        ,m_bInActivate( false )
+        ,m_bSetFocus( false )
+        ,m_bFilterMode( false )
+        ,m_bChangingDesignMode( false )
+        ,m_bPreparedClose( false )
+        ,m_bFirstActivation( true )
 {
     m_aMarkTimer.SetTimeout(100);
     m_aMarkTimer.SetTimeoutHdl(LINK(this,FmXFormShell,OnTimeOut));
@@ -804,7 +804,7 @@ void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeExcept
         m_xExternalDisplayedForm = NULL;
         m_xExtViewTriggerController = NULL;
 
-        InvalidateSlot( SID_FM_VIEW_AS_GRID, sal_False );
+        InvalidateSlot( SID_FM_VIEW_AS_GRID, false );
     }
 }
 
@@ -832,16 +832,16 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw
         else
         {
             // with the following the slot is invalidated asynchron
-            LockSlotInvalidation(sal_True);
-            InvalidateSlot(SID_FM_RECORD_TOTAL, sal_False);
-            LockSlotInvalidation(sal_False);
+            LockSlotInvalidation(true);
+            InvalidateSlot(SID_FM_RECORD_TOTAL, false);
+            LockSlotInvalidation(false);
         }
     }
 
     // this may be called from a non-main-thread so invalidate the shell asynchronously
-    LockSlotInvalidation(sal_True);
-    InvalidateSlot(0, 0);       // special meaning : invalidate m_pShell
-    LockSlotInvalidation(sal_False);
+    LockSlotInvalidation(true);
+    InvalidateSlot(0, false);       // special meaning : invalidate m_pShell
+    LockSlotInvalidation(false);
 }
 
 
@@ -902,7 +902,7 @@ void FmXFormShell::disposing()
     FmXFormShell_BASE::disposing();
 
     if ( m_pShell && !m_pShell->IsDesignMode() )
-        setActiveController( NULL, sal_True );
+        setActiveController( NULL, true );
         // do NOT save the content of the old form (the second parameter tells this)
         // if we're here, then we expect that PrepareClose has been called, and thus the user
         // got a chance to commit or reject any changes. So in case we're here and there
@@ -981,7 +981,7 @@ void FmXFormShell::UpdateSlot( sal_Int16 _nId )
     if ( m_nLockSlotInvalidation )
     {
         OSL_FAIL( "FmXFormShell::UpdateSlot: cannot update if invalidation is currently locked!" );
-        InvalidateSlot( _nId, sal_False );
+        InvalidateSlot( _nId, false );
     }
     else
     {
@@ -992,7 +992,7 @@ void FmXFormShell::UpdateSlot( sal_Int16 _nId )
 }
 
 
-void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
+void FmXFormShell::InvalidateSlot( sal_Int16 nId, bool bWithId )
 {
     if ( impl_checkDisposed() )
         return;
@@ -1011,7 +1011,7 @@ void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
 }
 
 
-void FmXFormShell::LockSlotInvalidation(sal_Bool bLock)
+void FmXFormShell::LockSlotInvalidation(bool bLock)
 {
     if ( impl_checkDisposed() )
         return;
@@ -1050,7 +1050,7 @@ IMPL_LINK_NOARG(FmXFormShell, OnInvalidateSlots)
 }
 
 
-void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
+void FmXFormShell::ForceUpdateSelection(bool bAllowInvalidation)
 {
     if ( impl_checkDisposed() )
         return;
@@ -1061,12 +1061,12 @@ void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
 
         // die Invalidierung der Slots, die implizit von SetSelection besorgt wird, eventuell abschalten
         if (!bAllowInvalidation)
-            LockSlotInvalidation(sal_True);
+            LockSlotInvalidation(true);
 
         SetSelection(m_pShell->GetFormView()->GetMarkedObjectList());
 
         if (!bAllowInvalidation)
-            LockSlotInvalidation(sal_False);
+            LockSlotInvalidation(false);
     }
 }
 
@@ -1623,24 +1623,24 @@ void FmXFormShell::ExecuteSearch()
 }
 
 
-sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
+bool FmXFormShell::GetY2KState(sal_uInt16& n)
 {
     if ( impl_checkDisposed() )
-        return sal_False;
+        return false;
 
     if (m_pShell->IsDesignMode())
         // im Design-Modus (ohne aktive Controls) soll sich das Haupt-Dokument darum kuemmern
-        return sal_False;
+        return false;
 
     Reference< XForm> xForm( getActiveForm());
     if (!xForm.is())
         // kein aktuelles Formular (also insbesondere kein aktuelles Control) -> das Haupt-Dokument soll sich kuemmern
-        return sal_False;
+        return false;
 
     Reference< XRowSet> xDB(xForm, UNO_QUERY);
     DBG_ASSERT(xDB.is(), "FmXFormShell::GetY2KState : current form has no dbform-interface !");
 
-    Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(OStaticDataAccessTools().getRowSetConnection(xDB), sal_False));
+    Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(OStaticDataAccessTools().getRowSetConnection(xDB), false));
     if (xSupplier.is())
     {
         Reference< XPropertySet> xSet(xSupplier->getNumberFormatSettings());
@@ -1650,7 +1650,7 @@ sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
             {
                 Any aVal( xSet->getPropertyValue("TwoDigitDateStart") );
                 aVal >>= n;
-                return sal_True;
+                return true;
             }
             catch(Exception&)
             {
@@ -1658,7 +1658,7 @@ sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
 
         }
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -1671,7 +1671,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
     Reference< XRowSet > xActiveRowSet( xActiveForm, UNO_QUERY );
     if ( xActiveRowSet.is() )
     {
-        Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( getRowSetConnection( xActiveRowSet ), sal_False ) );
+        Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( getRowSetConnection( xActiveRowSet ), false ) );
         if (xSupplier.is())
         {
             Reference< XPropertySet> xSet(xSupplier->getNumberFormatSettings());
@@ -1711,7 +1711,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
         Reference< XRowSet> xElementAsRowSet( xCurrentElement, UNO_QUERY );
         if ( xElementAsRowSet.is() )
         {
-            Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( getRowSetConnection( xElementAsRowSet ), sal_False ) );
+            Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( getRowSetConnection( xElementAsRowSet ), false ) );
             if (!xSupplier.is())
                 continue;
 
@@ -1863,7 +1863,7 @@ void FmXFormShell::impl_switchActiveControllerListening( const bool _bListen )
 }
 
 
-void FmXFormShell::setActiveController( const Reference< runtime::XFormController >& xController, sal_Bool _bNoSaveOldContent )
+void FmXFormShell::setActiveController( const Reference< runtime::XFormController >& xController, bool _bNoSaveOldContent )
 {
     if ( impl_checkDisposed() )
         return;
@@ -1889,7 +1889,7 @@ void FmXFormShell::setActiveController( const Reference< runtime::XFormControlle
             xNavigationForm = Reference< XResultSet>(m_xNavigationController->getModel(), UNO_QUERY);
         aGuard.clear();
 
-        m_bInActivate = sal_True;
+        m_bInActivate = true;
 
         // check if the 2 controllers serve different forms
         Reference< XResultSet> xOldForm;
@@ -1911,11 +1911,11 @@ void FmXFormShell::setActiveController( const Reference< runtime::XFormControlle
             // wurde bereits ausgefuehrt
             if ( m_aActiveControllerFeatures->commitCurrentControl() )
             {
-                m_bSetFocus = sal_True;
+                m_bSetFocus = true;
                 if ( m_aActiveControllerFeatures->isModifiedRow() )
                 {
-                    sal_Bool bIsNew = m_aActiveControllerFeatures->isInsertionRow();
-                    sal_Bool bResult = m_aActiveControllerFeatures->commitCurrentRecord();
+                    bool bIsNew = m_aActiveControllerFeatures->isInsertionRow();
+                    bool bResult = m_aActiveControllerFeatures->commitCurrentRecord();
                     if ( !bResult && m_bSetFocus )
                     {
                         // if we couldn't save the current record, set the focus back to the
@@ -1923,7 +1923,7 @@ void FmXFormShell::setActiveController( const Reference< runtime::XFormControlle
                         Reference< XWindow > xWindow( m_xActiveController->getCurrentControl(), UNO_QUERY );
                         if ( xWindow.is() )
                             xWindow->setFocus();
-                        m_bInActivate = sal_False;
+                        m_bInActivate = false;
                         return;
                     }
                     else if ( bResult && bIsNew )
@@ -1961,12 +1961,12 @@ void FmXFormShell::setActiveController( const Reference< runtime::XFormControlle
         if (m_xNavigationController.is())
             xNavigationForm = Reference< XResultSet>(m_xNavigationController->getModel(), UNO_QUERY);
 
-        m_bInActivate = sal_False;
+        m_bInActivate = false;
 
         m_pShell->UIFeatureChanged();
         m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
 
-        InvalidateSlot(SID_FM_FILTER_NAVIGATOR_CONTROL, sal_True);
+        InvalidateSlot(SID_FM_FILTER_NAVIGATOR_CONTROL, true);
     }
 }
 
@@ -2069,7 +2069,7 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
 
     // ensure some slots are updated
     for ( size_t i = 0; i < sizeof( SelObjectSlotMap ) / sizeof( SelObjectSlotMap[0] ); ++i )
-        InvalidateSlot( SelObjectSlotMap[i], sal_False);
+        InvalidateSlot( SelObjectSlotMap[i], false);
 
     return true;
 }
@@ -2109,7 +2109,7 @@ void FmXFormShell::impl_updateCurrentForm( const Reference< XForm >& _rxNewCurFo
 
     // ensure the UI which depends on the current form is up-to-date
     for ( size_t i = 0; i < sizeof( DlgSlotMap ) / sizeof( DlgSlotMap[0] ); ++i )
-        InvalidateSlot( DlgSlotMap[i], sal_False );
+        InvalidateSlot( DlgSlotMap[i], false );
 }
 
 
@@ -2131,7 +2131,7 @@ void FmXFormShell::startListening()
             OUString aSource = ::comphelper::getString(xActiveFormSet->getPropertyValue(FM_PROP_COMMAND));
             if (!aSource.isEmpty())
             {
-                m_bDatabaseBar = sal_True;
+                m_bDatabaseBar = true;
 
                 xActiveFormSet->getPropertyValue(FM_PROP_NAVIGATION) >>= m_eNavigate;
 
@@ -2166,7 +2166,7 @@ void FmXFormShell::startListening()
 
                     default:
                         m_xNavigationController = NULL;
-                        m_bDatabaseBar = sal_False;
+                        m_bDatabaseBar = false;
                 }
 
                 m_aNavControllerFeatures.dispose();
@@ -2187,7 +2187,7 @@ void FmXFormShell::startListening()
     }
 
     m_eNavigate  = NavigationBarMode_NONE;
-    m_bDatabaseBar = sal_False;
+    m_bDatabaseBar = false;
     m_xNavigationController = NULL;
 }
 
@@ -2209,19 +2209,19 @@ void FmXFormShell::stopListening()
         }
     }
 
-    m_bDatabaseBar = sal_False;
+    m_bDatabaseBar = false;
     m_eNavigate  = NavigationBarMode_NONE;
     m_xNavigationController = NULL;
 }
 
 
-void FmXFormShell::ShowSelectionProperties( sal_Bool bShow )
+void FmXFormShell::ShowSelectionProperties( bool bShow )
 {
     if ( impl_checkDisposed() )
         return;
 
     // if the window is already visible, only update the state
-    sal_Bool bHasChild = m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_SHOW_PROPERTIES );
+    bool bHasChild = m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_SHOW_PROPERTIES );
     if ( bHasChild && bShow )
         UpdateSlot( SID_FM_PROPERTY_CONTROL );
 
@@ -2229,8 +2229,8 @@ void FmXFormShell::ShowSelectionProperties( sal_Bool bShow )
     else
         m_pShell->GetViewShell()->GetViewFrame()->ToggleChildWindow(SID_FM_SHOW_PROPERTIES);
 
-    InvalidateSlot( SID_FM_PROPERTIES, sal_False );
-    InvalidateSlot( SID_FM_CTL_PROPERTIES, sal_False );
+    InvalidateSlot( SID_FM_PROPERTIES, false );
+    InvalidateSlot( SID_FM_CTL_PROPERTIES, false );
 }
 
 
@@ -2279,7 +2279,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     if (m_xLastGridFound.is() && (m_xLastGridFound != xControlModel))
     {
         Reference< XPropertySet> xOldSet(m_xLastGridFound, UNO_QUERY);
-        xOldSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, makeAny( (sal_Bool)sal_False ) );
+        xOldSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, makeAny( false ) );
         Reference< XPropertyState> xOldSetState(xOldSet, UNO_QUERY);
         if (xOldSetState.is())
             xOldSetState->setPropertyToDefault(FM_PROP_CURSORCOLOR);
@@ -2299,7 +2299,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
         // enable a permanent cursor for the grid so we can see the found text
         Reference< XPropertySet> xModelSet(xControlModel, UNO_QUERY);
         DBG_ASSERT(xModelSet.is(), "FmXFormShell::OnFoundData : invalid control model (no property set) !");
-        xModelSet->setPropertyValue( FM_PROP_ALWAYSSHOWCURSOR, makeAny( (sal_Bool)sal_True ) );
+        xModelSet->setPropertyValue( FM_PROP_ALWAYSSHOWCURSOR, makeAny( true ) );
         xModelSet->setPropertyValue( FM_PROP_CURSORCOLOR, makeAny( sal_Int32( COL_LIGHTRED ) ) );
         m_xLastGridFound = xControlModel;
 
@@ -2589,7 +2589,7 @@ void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::s
 }
 
 
-void FmXFormShell::UpdateForms( sal_Bool _bInvalidate )
+void FmXFormShell::UpdateForms( bool _bInvalidate )
 {
     if ( impl_checkDisposed() )
         return;
@@ -2693,18 +2693,18 @@ void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun:
     if ( !xSelObj.is() )
         return;
 
-    EnableTrackProperties(sal_False);
+    EnableTrackProperties(false);
 
-    sal_Bool bMarkChanged = m_pShell->GetFormView()->checkUnMarkAll(rEvent.Source);
+    bool bMarkChanged = m_pShell->GetFormView()->checkUnMarkAll(rEvent.Source);
     Reference< XForm > xNewForm( GetForm( rEvent.Source ) );
 
     InterfaceBag aNewSelection;
     aNewSelection.insert( xSelObj );
 
     if ( setCurrentSelection( aNewSelection ) && IsPropBrwOpen() )
-        ShowSelectionProperties( sal_True );
+        ShowSelectionProperties( true );
 
-    EnableTrackProperties(sal_True);
+    EnableTrackProperties(true);
 
     if ( bMarkChanged )
         m_pShell->NotifyMarkListChanged( m_pShell->GetFormView() );
@@ -2746,14 +2746,14 @@ void FmXFormShell::SetSelection(const SdrMarkList& rMarkList)
 void FmXFormShell::DetermineSelection(const SdrMarkList& rMarkList)
 {
     if ( setCurrentSelectionFromMark( rMarkList ) && IsPropBrwOpen() )
-        ShowSelectionProperties( sal_True );
+        ShowSelectionProperties( true );
 }
 
 
-sal_Bool FmXFormShell::IsPropBrwOpen() const
+bool FmXFormShell::IsPropBrwOpen() const
 {
     if ( impl_checkDisposed() )
-        return sal_False;
+        return false;
 
     return( ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() ) ?
             m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow(SID_FM_SHOW_PROPERTIES) : sal_False );
@@ -2773,7 +2773,7 @@ public:
     {
         if ( m_rShell.IsTrackPropertiesEnabled() )
         {
-            m_rShell.EnableTrackProperties( sal_False );
+            m_rShell.EnableTrackProperties( false );
             m_bEnabled = true;
         }
     }
@@ -2781,7 +2781,7 @@ public:
     ~SuspendPropertyTracking( )
     {
         if ( m_bEnabled )   // note that ( false != m_bEnabled ) implies ( NULL != m_pShell )
-            m_rShell.EnableTrackProperties( sal_True );
+            m_rShell.EnableTrackProperties( true );
     }
 };
 
@@ -2792,7 +2792,7 @@ void FmXFormShell::SetDesignMode(bool bDesign)
         return;
 
     DBG_ASSERT(m_pShell->GetFormView(), "FmXFormShell::SetDesignMode : invalid call (have no shell or no view) !");
-    m_bChangingDesignMode = sal_True;
+    m_bChangingDesignMode = true;
 
     // 67506 - 15.07.99 - FS
     // if we're switching off the design mode we have to force the property browser to be closed
@@ -2809,7 +2809,7 @@ void FmXFormShell::SetDesignMode(bool bDesign)
     {
         // we are currently filtering, so stop filtering
         if (m_bFilterMode)
-            stopFiltering(sal_False);
+            stopFiltering(false);
 
         // unsubscribe from the objects of my MarkList
         pFormView->GetImpl()->stopMarkListWatching();
@@ -2819,7 +2819,7 @@ void FmXFormShell::SetDesignMode(bool bDesign)
         m_aMarkTimer.Stop();
 
         SuspendPropertyTracking aSuspend( *this );
-        pFormView->GetImpl()->saveMarkList( sal_True );
+        pFormView->GetImpl()->saveMarkList( true );
     }
 
     if (bDesign && m_xExternalViewController.is())
@@ -2832,7 +2832,7 @@ void FmXFormShell::SetDesignMode(bool bDesign)
     m_pShell->Broadcast(aChangedHint);
 
     m_pShell->m_bDesignMode = bDesign;
-    UpdateForms( sal_False );
+    UpdateForms( false );
 
     m_pTextShell->designModeChanged( m_pShell->m_bDesignMode );
 
@@ -2868,7 +2868,7 @@ void FmXFormShell::SetDesignMode(bool bDesign)
         // (And that's why this has to be done AFTER the UIFeatureChanged.)
         m_pShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON );
     }
-    m_bChangingDesignMode = sal_False;
+    m_bChangingDesignMode = false;
 }
 
 
@@ -3005,7 +3005,7 @@ void FmXFormShell::startFiltering()
         }
     }
 
-    m_bFilterMode = sal_True;
+    m_bFilterMode = true;
 
     m_pShell->UIFeatureChanged();
     SfxViewFrame* pViewFrame = m_pShell->GetViewShell()->GetViewFrame();
@@ -3038,7 +3038,7 @@ void saveFilter(const Reference< runtime::XFormController >& _rxController)
     {
 
         xFormAsSet->setPropertyValue(FM_PROP_FILTER, xControllerAsSet->getPropertyValue(FM_PROP_FILTER));
-        xFormAsSet->setPropertyValue(FM_PROP_APPLYFILTER, makeAny( (sal_Bool)sal_True ) );
+        xFormAsSet->setPropertyValue(FM_PROP_APPLYFILTER, makeAny( true ) );
     }
     catch (const Exception& )
     {
@@ -3048,12 +3048,12 @@ void saveFilter(const Reference< runtime::XFormController >& _rxController)
 }
 
 
-void FmXFormShell::stopFiltering(sal_Bool bSave)
+void FmXFormShell::stopFiltering(bool bSave)
 {
     if ( impl_checkDisposed() )
         return;
 
-    m_bFilterMode = sal_False;
+    m_bFilterMode = false;
 
     FmXFormView* pXView = m_pShell->GetFormView()->GetImpl();
 
@@ -3132,7 +3132,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                 if (!isRowSetAlive(xFormSet))
                 {   // something went wrong -> restore the original state
                     OUString sOriginalFilter = aOriginalFilters[ j - rControllers.begin() ];
-                    sal_Bool bOriginalApplyFlag = aOriginalApplyFlags[ j - rControllers.begin() ];
+                    bool bOriginalApplyFlag = aOriginalApplyFlags[ j - rControllers.begin() ];
                     try
                     {
                         xFormSet->setPropertyValue(FM_PROP_FILTER, makeAny(sOriginalFilter));
@@ -3161,7 +3161,7 @@ void FmXFormShell::CreateExternalView()
     DBG_ASSERT(m_xAttachedFrame.is(), "FmXFormShell::CreateExternalView : no frame !");
 
     // the frame the external view is displayed in
-    sal_Bool bAlreadyExistent = m_xExternalViewController.is();
+    bool bAlreadyExistent = m_xExternalViewController.is();
     Reference< ::com::sun::star::frame::XFrame> xExternalViewFrame;
     OUString sFrameName("_beamer");
     sal_Int32 nSearchFlags = ::com::sun::star::frame::FrameSearchFlag::CHILDREN | ::com::sun::star::frame::FrameSearchFlag::CREATE;
@@ -3558,7 +3558,7 @@ void FmXFormShell::CreateExternalView()
         OSL_FAIL("FmXFormShell::CreateExternalView : could not create the external form view !");
     }
 #endif
-    InvalidateSlot( SID_FM_VIEW_AS_GRID, sal_False );
+    InvalidateSlot( SID_FM_VIEW_AS_GRID, false );
 }
 
 
@@ -3584,7 +3584,7 @@ void FmXFormShell::Notify( const com::sun::star::uno::Sequence< OUString >& _rPr
         if (pSearch->equalsAscii("FormControlPilotsEnabled"))
         {
             implAdjustConfigCache();
-            InvalidateSlot( SID_FM_USE_WIZARDS, sal_True );
+            InvalidateSlot( SID_FM_USE_WIZARDS, true );
         }
 }
 
@@ -3593,7 +3593,7 @@ void FmXFormShell::Commit()
 }
 
 
-void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
+void FmXFormShell::SetWizardUsing(bool _bUseThem)
 {
     m_bUseWizards = _bUseThem;
 
@@ -3605,7 +3605,7 @@ void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
 }
 
 
-void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeactivateController /* = sal_True */ )
+void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, bool _bDeactivateController /* = sal_True */ )
 {
 
     if ( _rCurrentView.GetImpl() && !_rCurrentView.IsDesignMode() )
@@ -3642,7 +3642,7 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeacti
     {
         pPage->GetImpl().SetFormsCreationHdl( Link() );
     }
-    UpdateForms( sal_True );
+    UpdateForms( true );
 }
 
 
@@ -3670,12 +3670,12 @@ IMPL_LINK( FmXFormShell, OnFirstTimeActivation, void*, /*NOTINTERESTEDIN*/ )
 
 IMPL_LINK( FmXFormShell, OnFormsCreated, FmFormPage*, /*_pPage*/ )
 {
-    UpdateForms( sal_True );
+    UpdateForms( true );
     return 0L;
 }
 
 
-void FmXFormShell::viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncAction /* = sal_False */ )
+void FmXFormShell::viewActivated( FmFormView& _rCurrentView, bool _bSyncAction /* = sal_False */ )
 {
 
     FmFormPage* pPage = _rCurrentView.GetCurPage();
@@ -3709,7 +3709,7 @@ void FmXFormShell::viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncActi
         pPage->GetImpl().SetFormsCreationHdl( LINK( this, FmXFormShell, OnFormsCreated ) );
     }
 
-    UpdateForms( sal_True );
+    UpdateForms( true );
 
     if ( !hasEverBeenActivated() )
     {
@@ -3969,7 +3969,7 @@ void FmXFormShell::SetControlActivationHandler( const Link& _rHdl )
 void FmXFormShell::handleShowPropertiesRequest()
 {
     if ( onlyControlsAreMarked() )
-        ShowSelectionProperties( sal_True );
+        ShowSelectionProperties( true );
 }
 
 
@@ -3981,7 +3981,7 @@ void FmXFormShell::handleMouseButtonDown( const SdrViewEvent& _rViewEvent )
         if ( _rViewEvent.eHit == SDRHIT_MARKEDOBJECT )
         {
             if ( onlyControlsAreMarked() )
-                ShowSelectionProperties( sal_True );
+                ShowSelectionProperties( true );
         }
     }
 }

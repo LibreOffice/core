@@ -172,7 +172,7 @@ public:
     void                StartDrag( Window* pWindow, const Point* pDragPoint = NULL );
     void                TogglePreview( Window* pWindow, const Point* pPreviewPoint = NULL );
     void                ShowContextMenu( Window* pWindow, const Point* pContextPoint = NULL );
-    sal_Bool            KeyInput( const KeyEvent& rEvt, Window* pWindow );
+    bool                KeyInput( const KeyEvent& rEvt, Window* pWindow );
 
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame > GetFrame() const;
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > GetUNOContext() const { return m_xContext; }

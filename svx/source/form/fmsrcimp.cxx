@@ -472,8 +472,8 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
     WildCard aSearchExpression(strExpression);
 
 
-    sal_Bool bFound(sal_False);
-    sal_Bool bMovedAround(sal_False);
+    bool bFound(false);
+    bool bMovedAround(false);
     do
     {
         if (m_eMode == SM_ALLOWSCHEDULE)
@@ -575,7 +575,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
 
 
     bool bFound = false;
-    sal_Bool bMovedAround(sal_False);
+    bool bMovedAround(false);
     do
     {
         if (m_eMode == SM_ALLOWSCHEDULE)
@@ -848,7 +848,7 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
         xMeta = xConn->getMetaData();
     OSL_ENSURE( xMeta.is(), "FmSearchEngine::Init: very strange cursor (could not derive connection meta data from it)!" );
 
-    sal_Bool bCaseSensitiveIdentifiers = sal_True;  // assume case sensivity
+    bool bCaseSensitiveIdentifiers = true;  // assume case sensivity
     if ( xMeta.is() )
         bCaseSensitiveIdentifiers = xMeta->supportsMixedCaseQuotedIdentifiers();
 

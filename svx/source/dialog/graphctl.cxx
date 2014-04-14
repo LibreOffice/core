@@ -377,7 +377,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 {
                     // select next handle
                     const SdrHdlList& rHdlList = pView->GetHdlList();
-                    sal_Bool bForward(!aCode.IsShift());
+                    bool bForward(!aCode.IsShift());
 
                     ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
 
@@ -522,7 +522,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                         if(pView->IsDragObj())
                         {
                             bool bWasNoSnap = rDragStat.IsNoSnap();
-                            sal_Bool bWasSnapEnabled = pView->IsSnapEnabled();
+                            bool bWasSnapEnabled = pView->IsSnapEnabled();
 
                             // switch snapping off
                             if(!bWasNoSnap)

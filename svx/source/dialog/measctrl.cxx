@@ -103,7 +103,7 @@ void SvxXMeasurePreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     bool bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
     bool bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
-    sal_Bool bCtrl    = rMEvt.IsMod1();
+    bool bCtrl    = rMEvt.IsMod1();
 
     if( bZoomIn || bZoomOut )
     {

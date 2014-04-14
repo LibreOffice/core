@@ -41,7 +41,7 @@ E3dDragMethod::E3dDragMethod (
     SdrDragView &_rView,
     const SdrMarkList& rMark,
     E3dDragConstraint eConstr,
-    sal_Bool bFull)
+    bool bFull)
 :   SdrDragMethod(_rView),
     meConstraint(eConstr),
     mbMoveFull(bFull),
@@ -277,7 +277,7 @@ TYPEINIT1(E3dDragRotate, E3dDragMethod);
 E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
     const SdrMarkList& rMark,
     E3dDragConstraint eConstr,
-    sal_Bool bFull)
+    bool bFull)
 :   E3dDragMethod(_rView, rMark, eConstr, bFull)
 {
     // Get center of all selected objects in eye coordinates
@@ -457,7 +457,7 @@ E3dDragMove::E3dDragMove(SdrDragView &_rView,
     const SdrMarkList& rMark,
     SdrHdlKind eDrgHdl,
     E3dDragConstraint eConstr,
-    sal_Bool bFull)
+    bool bFull)
 :   E3dDragMethod(_rView, rMark, eConstr, bFull),
     meWhatDragHdl(eDrgHdl)
 {

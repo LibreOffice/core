@@ -34,7 +34,7 @@ public:
     void        Write( SvStream& rStmToWrite );
     void        Read( SvStream& rStmToRead );
 
-    static sal_Bool IsCoded( SvStream& rStm, sal_uInt32& rVersion );
+    static bool IsCoded( SvStream& rStm, sal_uInt32& rVersion );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

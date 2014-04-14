@@ -52,9 +52,9 @@ TableRow::TableRow( const TableModelRef& xTableModel, sal_Int32 nRow, sal_Int32 
 , mxTableModel( xTableModel )
 , mnRow( nRow )
 , mnHeight( 0 )
-, mbOptimalHeight( sal_True )
-, mbIsVisible( sal_True )
-, mbIsStartOfNewPage( sal_False )
+, mbOptimalHeight( true )
+, mbIsVisible( true )
+, mbIsStartOfNewPage( false )
 {
     if( nColumns < 20 )
         maCells.reserve( 20 );
@@ -248,7 +248,7 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
 
     case Property_OptimalHeight:
         {
-            sal_Bool bOptimalHeight = mbOptimalHeight;
+            bool bOptimalHeight = mbOptimalHeight;
             bOk = aValue >>= bOptimalHeight;
             if( bOk && (mbOptimalHeight != bOptimalHeight) )
             {
@@ -261,7 +261,7 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
         }
     case Property_IsVisible:
         {
-            sal_Bool bIsVisible = mbIsVisible;
+            bool bIsVisible = mbIsVisible;
             bOk = aValue >>= bIsVisible;
             if( bOk && (mbIsVisible != bIsVisible) )
             {
@@ -273,7 +273,7 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
 
     case Property_IsStartOfNewPage:
         {
-            sal_Bool bIsStartOfNewPage = mbIsStartOfNewPage;
+            bool bIsStartOfNewPage = mbIsStartOfNewPage;
             bOk = aValue >>= bIsStartOfNewPage;
             if( bOk && (mbIsStartOfNewPage != bIsStartOfNewPage) )
             {

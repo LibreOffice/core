@@ -466,7 +466,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
     m_pCT_DictionaryToTraditional = new DictionaryList(*mpToTraditionalContainer, 0);
 
     SvtLinguConfig  aLngCfg;
-    sal_Bool bValue = sal_Bool();
+    bool bValue;
     Any aAny( aLngCfg.GetProperty( OUString( UPN_IS_REVERSE_MAPPING ) ) );
     if( aAny >>= bValue )
         m_pCB_Reverse->Check( bValue );
@@ -789,7 +789,7 @@ short ChineseDictionaryDialog::Execute()
         //save settings to configuration
         SvtLinguConfig  aLngCfg;
         Any aAny;
-        aAny <<= sal_Bool( !!m_pCB_Reverse->IsChecked() );
+        aAny <<= m_pCB_Reverse->IsChecked();
         aLngCfg.SetProperty( OUString( UPN_IS_REVERSE_MAPPING ), aAny );
 
         m_pCT_DictionaryToSimplified->save();

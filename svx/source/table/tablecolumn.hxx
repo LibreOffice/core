@@ -69,9 +69,9 @@ private:
     TableModelRef mxTableModel;
     sal_Int32   mnColumn;
     sal_Int32   mnWidth;
-    sal_Bool    mbOptimalWidth;
-    sal_Bool    mbIsVisible;
-    sal_Bool    mbIsStartOfNewPage;
+    bool    mbOptimalWidth;
+    bool    mbIsVisible;
+    bool    mbIsStartOfNewPage;
     OUString maName;
 };
 

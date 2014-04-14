@@ -383,7 +383,7 @@ namespace svx
                 {
                 case TypeClass_BOOLEAN:
                 {
-                    sal_Bool bState = sal_False;
+                    bool bState = false;
                     _rUnoState >>= bState;
                     if ( _nSlot == SID_ATTR_PARA_SCRIPTSPACE )
                         _rSet.Put( SvxScriptSpaceItem( bState, nWhich ) );
@@ -480,7 +480,7 @@ namespace svx
                     bIsReadOnlyModel = true;
                 else
                 {
-                    sal_Bool bReadOnly = sal_True;
+                    bool bReadOnly = true;
                     xModelProps->getPropertyValue( FM_PROP_READONLY ) >>= bReadOnly;
                     bIsReadOnlyModel = bReadOnly;
                 }
@@ -724,7 +724,7 @@ namespace svx
                             {
                                 aArgs.realloc( 1 );
                                 aArgs[ 0 ].Name = "Enable";
-                                aArgs[ 0 ].Value <<= (sal_Bool)pBoolItem->GetValue();
+                                aArgs[ 0 ].Value <<= pBoolItem->GetValue();
                             }
                         }
 

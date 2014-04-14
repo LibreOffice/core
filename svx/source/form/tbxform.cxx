@@ -277,7 +277,7 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
         pWin->SetValue( pItem ? pItem->GetValue() : -1 );
     }
 
-    sal_Bool bEnable = SFX_ITEM_DISABLED != eState && pState;
+    bool bEnable = SFX_ITEM_DISABLED != eState && pState;
     if (!bEnable)
         pWin->SetText(OUString());
 

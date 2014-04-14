@@ -173,7 +173,7 @@ public:
     FmEntryData*    GetParent() const { return pParent; }
     FmEntryDataList* GetChildList() const { return pChildList; }
 
-    virtual sal_Bool IsEqualWithoutChildren( FmEntryData* pEntryData );
+    virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData );
     virtual FmEntryData* Clone() = 0;
 
     // note that the interface returned is normalized, i.e. querying the given XInterface of the object
@@ -223,17 +223,17 @@ typedef std::set<FmEntryData*> FmEntryDataArray;
 class FmNavRequestSelectHint : public SfxHint
 {
     FmEntryDataArray    m_arredToSelect;
-    sal_Bool                m_bMixedSelection;
+    bool                m_bMixedSelection;
 public:
     TYPEINFO_OVERRIDE();
     FmNavRequestSelectHint()
-        : m_bMixedSelection(sal_False)
+        : m_bMixedSelection(false)
     {
     }
     virtual ~FmNavRequestSelectHint() {}
 
-    void SetMixedSelection(sal_Bool bMixedSelection) { m_bMixedSelection = bMixedSelection; }
-    sal_Bool IsMixedSelection() { return m_bMixedSelection; }
+    void SetMixedSelection(bool bMixedSelection) { m_bMixedSelection = bMixedSelection; }
+    bool IsMixedSelection() { return m_bMixedSelection; }
     void AddItem(FmEntryData* pEntry) { m_arredToSelect.insert(pEntry); }
     void ClearItems() { m_arredToSelect.clear(); }
     FmEntryDataArray& GetItems() { return m_arredToSelect; }
@@ -267,7 +267,7 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& GetFormIface() const { return m_xForm; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& GetContainer() const { return m_xContainer; }
 
-    virtual sal_Bool IsEqualWithoutChildren( FmEntryData* pEntryData ) SAL_OVERRIDE;
+    virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData ) SAL_OVERRIDE;
     virtual FmEntryData* Clone() SAL_OVERRIDE;
 };
 
@@ -291,7 +291,7 @@ public:
     virtual ~FmControlData();
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& GetFormComponent() const { return m_xFormComponent; }
-    virtual sal_Bool IsEqualWithoutChildren( FmEntryData* pEntryData ) SAL_OVERRIDE;
+    virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData ) SAL_OVERRIDE;
     virtual FmEntryData* Clone() SAL_OVERRIDE;
 
     void ModelReplaced(
@@ -318,7 +318,7 @@ namespace svxform
     {
         ::svxform::NavigatorTreeModel*  m_pNavModel;
         sal_uInt32 m_nLocks;
-        sal_Bool   m_bCanUndo;
+        bool   m_bCanUndo;
 
     public:
         OFormComponentObserver( ::svxform::NavigatorTreeModel* pModel );
@@ -337,8 +337,8 @@ namespace svxform
 
         void Lock() { m_nLocks++; }
         void UnLock() { m_nLocks--; }
-        sal_Bool IsLocked() const { return m_nLocks != 0; }
-        sal_Bool CanUndo() const { return m_bCanUndo; }
+        bool IsLocked() const { return m_nLocks != 0; }
+        bool CanUndo() const { return m_bCanUndo; }
         void ReleaseModel() { m_pNavModel = NULL; }
     protected:
         void Insert(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xIface, sal_Int32 nIndex);
@@ -377,7 +377,7 @@ namespace svxform
 
         void BroadcastMarkedObjects(const SdrMarkList& mlMarked);
             // einen RequestSelectHint mit den aktuell markierten Objekten broadcasten
-        sal_Bool InsertFormComponent(FmNavRequestSelectHint& rHint, SdrObject* pObject);
+        bool InsertFormComponent(FmNavRequestSelectHint& rHint, SdrObject* pObject);
             // ist ein Helper fuer vorherige, managet das Abteigen in SdrObjGroups
             // Rueckgabe sal_True, wenn das Objekt eine FormComponent ist (oder rekursiv nur aus solchen besteht)
 
@@ -390,19 +390,19 @@ namespace svxform
         void UpdateContent( FmFormShell* pNewShell );
 
         void Insert( FmEntryData* pEntryData, sal_uLong nRelPos = CONTAINER_APPEND,
-                                              sal_Bool bAlterModel = sal_False );
-        void Remove( FmEntryData* pEntryData, sal_Bool bAlterModel = sal_False );
+                                              bool bAlterModel = false );
+        void Remove( FmEntryData* pEntryData, bool bAlterModel = false );
 
-        sal_Bool Rename( FmEntryData* pEntryData, const OUString& rNewText );
+        bool Rename( FmEntryData* pEntryData, const OUString& rNewText );
 
         void Clear();
-        void SetModified( sal_Bool bMod=sal_True );
+        void SetModified( bool bMod=true );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >    GetForms() const;
         FmFormShell*        GetFormShell() const { return m_pFormShell; }
         FmFormPage*         GetFormPage() const { return m_pFormPage; }
-        FmEntryData*        FindData( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElement, FmEntryDataList* pDataList, sal_Bool bRecurs=sal_True );
-        FmEntryData*        FindData( const OUString& rText, FmFormData* pParentData, sal_Bool bRecurs=sal_True );
+        FmEntryData*        FindData( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElement, FmEntryDataList* pDataList, bool bRecurs=true );
+        FmEntryData*        FindData( const OUString& rText, FmFormData* pParentData, bool bRecurs=true );
         FmEntryDataList*    GetRootList() const { return m_pRootList; }
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >   GetFormComponents( FmFormData* pParentFormData );
         SdrObject*          Search(SdrObjListIter& rIter, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xComp);
@@ -447,16 +447,16 @@ namespace svxform
 
         unsigned short      m_aTimerCounter;
 
-        sal_Bool            m_bDragDataDirty        : 1;    // dito
-        sal_Bool            m_bPrevSelectionMixed   : 1;
-        sal_Bool            m_bMarkingObjects       : 1;    // wenn das sal_True ist, brauche ich auf die RequestSelectHints nicht reagieren
-        sal_Bool            m_bRootSelected         : 1;
-        sal_Bool            m_bInitialUpdate        : 1;   // bin ich das erste Mal im UpdateContent ?
-        sal_Bool            m_bKeyboardCut          : 1;
+        bool            m_bDragDataDirty        : 1;    // dito
+        bool            m_bPrevSelectionMixed   : 1;
+        bool            m_bMarkingObjects       : 1;    // wenn das sal_True ist, brauche ich auf die RequestSelectHints nicht reagieren
+        bool            m_bRootSelected         : 1;
+        bool            m_bInitialUpdate        : 1;   // bin ich das erste Mal im UpdateContent ?
+        bool            m_bKeyboardCut          : 1;
 
 
         void            UpdateContent();
-        FmControlData*  NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, sal_Bool bEditName = sal_True );
+        FmControlData*  NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, bool bEditName = true );
         void            NewForm( SvTreeListEntry* pParentEntry );
         SvTreeListEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos=TREELIST_APPEND );
         void            Remove( FmEntryData* pEntryData );
@@ -474,7 +474,7 @@ namespace svxform
             // SDI_DIRTY ist natuerlich nicht erlaubt als Parameter
 
         // ein einziges Interface fuer alle selektierten Eintraege zusammensetzen
-        void    ShowSelectionProperties(sal_Bool bForce = sal_False);
+        void    ShowSelectionProperties(bool bForce = false);
         // alle selektierten Elemnte loeschen
         void    DeleteSelection();
 
@@ -485,15 +485,15 @@ namespace svxform
         void SynchronizeMarkList();
             // umgekehrte Richtung von SynchronizeMarkList : markiert in der ::com::sun::star::sdbcx::View alle der aktuellen Selektion entsprechenden Controls
 
-        void CollectObjects(FmFormData* pFormData, sal_Bool bDeep, ::std::set< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >& _rObjects);
+        void CollectObjects(FmFormData* pFormData, bool bDeep, ::std::set< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >& _rObjects);
 
         // im Select aktualisiere ich normalerweise die Marklist der zugehoerigen ::com::sun::star::sdbcx::View, mit folgenden Funktionen
         // kann ich das Locking dieses Verhaltens steuern
         void LockSelectionHandling() { ++m_nSelectLock; }
         void UnlockSelectionHandling() { --m_nSelectLock; }
-        sal_Bool IsSelectionHandlingLocked() const { return m_nSelectLock>0; }
+        bool IsSelectionHandlingLocked() const { return m_nSelectLock>0; }
 
-        sal_Bool IsHiddenControl(FmEntryData* pEntryData);
+        bool IsHiddenControl(FmEntryData* pEntryData);
 
         DECL_LINK( OnEdit, void* );
         DECL_LINK( OnDropActionTimer, void* );
@@ -516,12 +516,12 @@ namespace svxform
 
         void Clear();
         void UpdateContent( FmFormShell* pFormShell );
-        void MarkViewObj( FmFormData* pFormData, sal_Bool bMark, sal_Bool bDeep = sal_False );
-        void MarkViewObj( FmControlData* pControlData, sal_Bool bMarkHandles, sal_Bool bMark );
+        void MarkViewObj( FmFormData* pFormData, bool bMark, bool bDeep = false );
+        void MarkViewObj( FmControlData* pControlData, bool bMarkHandles, bool bMark );
         void UnmarkAllViewObj();
 
-        sal_Bool IsFormEntry( SvTreeListEntry* pEntry );
-        sal_Bool IsFormComponentEntry( SvTreeListEntry* pEntry );
+        bool IsFormEntry( SvTreeListEntry* pEntry );
+        bool IsFormComponentEntry( SvTreeListEntry* pEntry );
 
         OUString GenerateName( FmEntryData* pEntryData );
 
@@ -529,7 +529,7 @@ namespace svxform
         SvTreeListEntry*        FindEntry( FmEntryData* pEntryData );
 
         virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
-        virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
+        virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true ) SAL_OVERRIDE;
         virtual bool EditingEntry( SvTreeListEntry* pEntry, Selection& ) SAL_OVERRIDE;
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
         virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
@@ -542,25 +542,25 @@ namespace svxform
         using SvTreeListBox::Notify;
 
     private:
-        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const Point& _rDropPos, sal_Bool _bDnD );
-        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, sal_Bool _bDnD );
+        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const Point& _rDropPos, bool _bDnD );
+        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, bool _bDnD );
 
-        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const Point& _rDropPos, sal_Bool _bDnD );
-        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, sal_Bool _bDnD );
+        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const Point& _rDropPos, bool _bDnD );
+        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, bool _bDnD );
 
         // check if a cut, copy, or drag operation can be started in the current situation
-        sal_Bool    implAllowExchange( sal_Int8 _nAction, sal_Bool* _pHasNonHidden = NULL );
+        bool        implAllowExchange( sal_Int8 _nAction, bool* _pHasNonHidden = NULL );
         // check if a paste with the current clipboard content can be accepted
-        sal_Bool    implAcceptPaste( );
+        bool        implAcceptPaste( );
 
         // fills m_aControlExchange in preparation of a DnD or clipboard operation
-        sal_Bool    implPrepareExchange( sal_Int8 _nAction );
+        bool        implPrepareExchange( sal_Int8 _nAction );
 
         void        doPaste();
         void        doCopy();
         void        doCut();
 
-        sal_Bool    doingKeyboardCut( ) const { return m_bKeyboardCut; }
+        bool    doingKeyboardCut( ) const { return m_bKeyboardCut; }
     };
 
 

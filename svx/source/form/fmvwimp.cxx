@@ -733,7 +733,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
 }
 
 
-void FmXFormView::Activate(sal_Bool bSync)
+void FmXFormView::Activate(bool bSync)
 {
     if (m_nActivationEvent)
     {
@@ -750,7 +750,7 @@ void FmXFormView::Activate(sal_Bool bSync)
 }
 
 
-void FmXFormView::Deactivate(sal_Bool bDeactivateController)
+void FmXFormView::Deactivate(bool bDeactivateController)
 {
     if (m_nActivationEvent)
     {
@@ -769,7 +769,7 @@ FmFormShell* FmXFormView::GetFormShell() const
     return m_pView ? m_pView->GetFormShell() : NULL;
 }
 
-void FmXFormView::AutoFocus( sal_Bool _bSync )
+void FmXFormView::AutoFocus( bool _bSync )
 {
     if (m_nAutoFocusEvent)
         Application::RemoveUserEvent(m_nAutoFocusEvent);
@@ -791,7 +791,7 @@ bool FmXFormView::isFocusable( const Reference< XControl >& i_rControl )
         Reference< XPropertySet > xModelProps( i_rControl->getModel(), UNO_QUERY_THROW );
 
         // only enabled controls are allowed to participate
-        sal_Bool bEnabled = sal_False;
+        bool bEnabled = false;
         OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_ENABLED ) >>= bEnabled );
         if ( !bEnabled )
             return false;
@@ -994,7 +994,7 @@ void FmXFormView::onCreatedFormObject( FmFormObj& _rFormObject )
         return;
 
     // it is valid that the form shell's forms collection is not initialized, yet
-    pShellImpl->UpdateForms( sal_True );
+    pShellImpl->UpdateForms( true );
 
     m_xLastCreatedControlModel.set( _rFormObject.GetUnoControlModel(), UNO_QUERY );
     if ( !m_xLastCreatedControlModel.is() )
@@ -1207,7 +1207,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         if ( !xField.is() )
             return NULL;
 
-        Reference< XNumberFormatsSupplier > xSupplier( aDBATools.getNumberFormats( xConnection, sal_False ), UNO_SET_THROW );
+        Reference< XNumberFormatsSupplier > xSupplier( aDBATools.getNumberFormats( xConnection, false ), UNO_SET_THROW );
         Reference< XNumberFormats >  xNumberFormats( xSupplier->getNumberFormats(), UNO_SET_THROW );
 
         OUString sLabelPostfix;
@@ -1248,9 +1248,9 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
 
         // determine the control type by examining the data type of the bound column
         sal_uInt16 nOBJID = 0;
-        sal_Bool bDateNTimeField = sal_False;
+        bool bDateNTimeField = false;
 
-        sal_Bool bIsCurrency = sal_False;
+        bool bIsCurrency = false;
         if (::comphelper::hasProperty(FM_PROP_ISCURRENCY, xField))
             bIsCurrency = ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISCURRENCY));
 
@@ -1286,7 +1286,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
                     nOBJID = OBJ_FM_FORMATTEDFIELD;
                     break;
                 case DataType::TIMESTAMP:
-                    bDateNTimeField = sal_True;
+                    bDateNTimeField = true;
                     sLabelPostfix = SVX_RESSTR(RID_STR_POSTFIX_DATE);
                     // DON'T break !
                 case DataType::DATE:
@@ -1639,7 +1639,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
 
     if ( (nDataType == DataType::LONGVARCHAR || nDataType == DataType::CLOB) && xControlPropInfo->hasPropertyByName( FM_PROP_MULTILINE ) )
     {
-        xControlSet->setPropertyValue( FM_PROP_MULTILINE, makeAny( sal_Bool( sal_True ) ) );
+        xControlSet->setPropertyValue( FM_PROP_MULTILINE, makeAny( true ) );
     }
 
     // announce the label to the control
@@ -1732,7 +1732,7 @@ void FmXFormView::startMarkListWatching()
 }
 
 
-void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
+void FmXFormView::saveMarkList( bool _bSmartUnmark )
 {
     if ( m_pView )
     {
@@ -1750,7 +1750,7 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
                     if ( pObj->IsGroupObject() )
                     {
                         SdrObjListIter aIter( *pObj->GetSubList() );
-                        sal_Bool bMixed = sal_False;
+                        bool bMixed = false;
                         while ( aIter.IsMore() && !bMixed )
                             bMixed = ( aIter.Next()->GetObjInventor() != FmFormInventor );
 
@@ -1779,9 +1779,9 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
 }
 
 
-static sal_Bool lcl_hasObject( SdrObjListIter& rIter, SdrObject* pObj )
+static bool lcl_hasObject( SdrObjListIter& rIter, SdrObject* pObj )
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     while (rIter.IsMore() && !bFound)
         bFound = pObj == rIter.Next();
 
@@ -1803,7 +1803,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
     {
         if (rCurrentList.GetMarkCount())
         {   // there is a current mark ... hmm. Is it a subset of the mark we remembered in saveMarkList?
-            sal_Bool bMisMatch = sal_False;
+            bool bMisMatch = false;
 
             // loop through all current marks
             sal_uIntPtr nCurrentCount = rCurrentList.GetMarkCount();
@@ -1812,17 +1812,17 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
                 const SdrObject* pCurrentMarked = rCurrentList.GetMark( i )->GetMarkedSdrObj();
 
                 // loop through all saved marks, check for equality
-                sal_Bool bFound = sal_False;
+                bool bFound = false;
                 sal_uIntPtr nSavedCount = m_aMark.GetMarkCount();
                 for ( sal_uIntPtr j=0; j<nSavedCount && !bFound; ++j )
                 {
                     if ( m_aMark.GetMark( j )->GetMarkedSdrObj() == pCurrentMarked )
-                        bFound = sal_True;
+                        bFound = true;
                 }
 
                 // did not find a current mark in the saved marks
                 if ( !bFound )
-                    bMisMatch = sal_True;
+                    bMisMatch = true;
             }
 
             if ( bMisMatch )
@@ -1836,7 +1836,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
         // da diese bereits zerstoert sein koennen
         SdrPageView* pCurPageView = m_pView->GetSdrPageView();
         SdrObjListIter aPageIter( *pPage );
-        sal_Bool bFound = sal_True;
+        bool bFound = true;
 
         // gibt es noch alle Objecte
         sal_uIntPtr nCount = m_aMark.GetMarkCount();

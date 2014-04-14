@@ -247,7 +247,7 @@ private:
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32 mnClientId;
 
-    sal_Bool mbDisposed;
+    bool mbDisposed;
 };
 
 #endif

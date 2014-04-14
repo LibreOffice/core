@@ -37,9 +37,9 @@ struct NotifyInfo
     OUString    aMarkURL;
     OUString    aMarkAltText;
     OUString    aMarkTarget;
-    sal_Bool    bNewObj;
-    sal_Bool    bOneMarked;
-    sal_Bool    bActivated;
+    bool    bNewObj;
+    bool    bOneMarked;
+    bool    bActivated;
 };
 
 
@@ -47,8 +47,8 @@ struct NotifyPosSize
 {
     Size    aPictureSize;
     Point   aMousePos;
-    sal_Bool    bPictureSize;
-    sal_Bool    bMousePos;
+    bool    bPictureSize;
+    bool    bMousePos;
 };
 
 #define SVD_IMAP_USERDATA   0x0001
@@ -119,7 +119,7 @@ protected:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
     void                CreateImageMap();
-    void                ReplaceImageMap( const ImageMap& rNewImageMap, sal_Bool bScaleToGraphic );
+    void                ReplaceImageMap( const ImageMap& rNewImageMap, bool bScaleToGraphic );
 
     void                ClearTargetList();
 
@@ -127,19 +127,19 @@ protected:
     IMapObject*         GetIMapObj( const SdrObject* pSdrObj ) const;
     SdrObject*          GetHitSdrObj( const Point& rPosPixel ) const;
 
-    void                UpdateInfo( sal_Bool bNewObj );
+    void                UpdateInfo( bool bNewObj );
 
 public:
 
                         IMapWindow( Window* pParent, const ResId& rResId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame );
                         virtual ~IMapWindow();
 
-    sal_Bool                ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );
+    bool                ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );
 
     void                SetImageMap( const ImageMap& rImageMap );
     const ImageMap&     GetImageMap();
 
-    void                SetCurrentObjState( sal_Bool bActive );
+    void                SetCurrentObjState( bool bActive );
     void                DoMacroAssign();
     void                DoPropertyDialog();
 

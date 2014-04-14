@@ -106,7 +106,7 @@ void FmFormView::Init()
 
 
     // DesignMode vom Model holen
-    sal_Bool bInitDesignMode = pFormModel->GetOpenInDesignMode();
+    bool bInitDesignMode = pFormModel->GetOpenInDesignMode();
     if ( pFormModel->OpenInDesignModeIsDefaulted( ) )
     {   // this means that nobody ever explicitly set this on the model, and the model has never
         // been loaded from a stream.
@@ -116,7 +116,7 @@ void FmFormView::Init()
         DBG_ASSERT( !bInitDesignMode, "FmFormView::Init: doesn't the model default to FALSE anymore?" );
             // if this asserts, either the on-contruction default in the model has changed (then this here
             // may not be necessary anymore), or we're not dealing with a new document ....
-        bInitDesignMode = sal_True;
+        bInitDesignMode = true;
     }
 
     SfxObjectShell* pObjShell = pFormModel->GetObjectShell();
@@ -131,7 +131,7 @@ void FmFormView::Init()
     }
 
     if( pObjShell && pObjShell->IsReadOnly() )
-        bInitDesignMode = sal_False;
+        bInitDesignMode = false;
 
     // dieses wird in der Shell vorgenommen
     // bDesignMode = !bInitDesignMode;  // erzwingt, dass SetDesignMode ausgefuehrt wird
@@ -247,9 +247,9 @@ void FmFormView::ChangeDesignMode(bool bDesign)
 
     // --- 2. simulate a deactivation (the shell will handle some things there ...?)
     if ( pFormShell && pFormShell->GetImpl() )
-        pFormShell->GetImpl()->viewDeactivated( *this, sal_True );
+        pFormShell->GetImpl()->viewDeactivated( *this, true );
     else
-        pImpl->Deactivate( sal_True );
+        pImpl->Deactivate( true );
 
     // --- 3. activate all controls, if we're switching to alive mode
     if ( !bDesign )
@@ -302,7 +302,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
         else
         {
             // set the auto focus to the first control (if indicated by the model to do so)
-            sal_Bool bForceControlFocus = pModel ? pModel->GetAutoControlFocus() : sal_False;
+            bool bForceControlFocus = pModel ? pModel->GetAutoControlFocus() : sal_False;
             if (bForceControlFocus)
                 pImpl->AutoFocus();
         }
@@ -338,7 +338,7 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
         else if ( pFormShell && pFormShell->IsDesignMode() )
         {
             FmXFormShell* pFormShellImpl = pFormShell->GetImpl();
-            pFormShellImpl->UpdateForms( sal_True );
+            pFormShellImpl->UpdateForms( true );
 
             // damit der Formular-Navigator auf den Seitenwechsel reagieren kann
             pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL, true, false);
@@ -365,9 +365,9 @@ void FmFormView::HideSdrPage()
 
     // --- 2. tell the shell the view is (going to be) deactivated
     if ( pFormShell && pFormShell->GetImpl() )
-        pFormShell->GetImpl()->viewDeactivated( *this, sal_True );
+        pFormShell->GetImpl()->viewDeactivated( *this, true );
     else
-        pImpl->Deactivate( sal_True );
+        pImpl->Deactivate( true );
 
     // --- 3. base class behavior
     E3dView::HideSdrPage();

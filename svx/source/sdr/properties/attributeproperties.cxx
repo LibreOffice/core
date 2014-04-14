@@ -319,7 +319,7 @@ namespace sdr
                     // If metric has changed, scale items.
                     MapUnit aOldUnit(pOldModel->GetScaleUnit());
                     MapUnit aNewUnit(pNewModel->GetScaleUnit());
-                    sal_Bool bScaleUnitChanged(aNewUnit != aOldUnit);
+                    bool bScaleUnitChanged(aNewUnit != aOldUnit);
                     Fraction aMetricFactor;
 
                     if(bScaleUnitChanged)
@@ -522,7 +522,7 @@ namespace sdr
 
         void AttributeProperties::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         {
-            sal_Bool bHintUsed(sal_False);
+            bool bHintUsed(false);
 
             SfxStyleSheetHint *pStyleHint = PTR_CAST(SfxStyleSheetHint, &rHint);
 
@@ -598,7 +598,7 @@ namespace sdr
 
                 rObj.SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect);
 
-                bHintUsed = sal_True;
+                bHintUsed = true;
             }
 
             if(!bHintUsed)

@@ -57,7 +57,7 @@ namespace svxform
         ,m_aFallback()
         ,m_pMutex( _pMaster && _pMaster->getInterceptorMutex() ? _pMaster->getInterceptorMutex() : &m_aFallback )
         ,m_xIntercepted(_rxToIntercept)
-        ,m_bListening(sal_False)
+        ,m_bListening(false)
         ,m_pMaster(_pMaster)
     {
 
@@ -72,7 +72,7 @@ namespace svxform
             if (xInterceptedComponent.is())
             {
                 xInterceptedComponent->addEventListener(this);
-                m_bListening = sal_True;
+                m_bListening = true;
             }
         }
         ::comphelper::decrement(m_refCount);
@@ -173,7 +173,7 @@ namespace svxform
             // 88936 - 23.07.2001 - frank.schoenheit@sun.com
         m_pMaster = NULL;
         m_pMutex = &m_aFallback;
-        m_bListening = sal_False;
+        m_bListening = false;
     }
 
 

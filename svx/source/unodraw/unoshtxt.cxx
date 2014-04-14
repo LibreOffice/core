@@ -97,7 +97,7 @@ private:
     bool                            mbDestroyed;
     bool                            mbIsLocked;
     bool                            mbNeedsUpdate;
-    sal_Bool                            mbOldUndoMode;
+    bool                            mbOldUndoMode;
     bool                            mbForwarderIsEditMode;      // have to reflect that, since ENDEDIT can happen more often
     bool                            mbShapeIsEditMode;          // #104157# only true, if HINT_BEGEDIT was received
     bool                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
@@ -131,7 +131,7 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     SvxTextForwarder*       GetTextForwarder();
-    SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool );
+    SvxEditViewForwarder*   GetEditViewForwarder( bool );
     void                    UpdateData();
 
     void addRange( SvxUnoTextRangeBase* pNewRange );
@@ -141,7 +141,7 @@ public:
     void                    lock();
     void                    unlock();
 
-    sal_Bool                    IsValid() const;
+    bool                    IsValid() const;
 
     Rectangle               GetVisArea();
     Point                   LogicToPixel( const Point&, const MapMode& rMapMode );
@@ -172,7 +172,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText
     mbDestroyed     ( false ),
     mbIsLocked      ( false ),
     mbNeedsUpdate   ( false ),
-    mbOldUndoMode   ( sal_False ),
+    mbOldUndoMode   ( false ),
     mbForwarderIsEditMode ( false ),
     mbShapeIsEditMode     ( false ),
     mbNotificationsDisabled ( false ),
@@ -210,7 +210,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
     mbDestroyed     ( false ),
     mbIsLocked      ( false ),
     mbNeedsUpdate   ( false ),
-    mbOldUndoMode   ( sal_False ),
+    mbOldUndoMode   ( false ),
     mbForwarderIsEditMode ( false ),
     mbShapeIsEditMode     ( true ),
     mbNotificationsDisabled ( false ),
@@ -785,7 +785,7 @@ SvxDrawOutlinerViewForwarder* SvxTextEditSourceImpl::CreateViewForwarder()
     return NULL;
 }
 
-SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( sal_Bool bCreate )
+SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( bool bCreate )
 {
     if( mbDestroyed || mpObject == NULL )
         return NULL;
@@ -925,7 +925,7 @@ void SvxTextEditSourceImpl::unlock()
     }
 }
 
-sal_Bool SvxTextEditSourceImpl::IsValid() const
+bool SvxTextEditSourceImpl::IsValid() const
 {
     return mpView && mpWindow ? sal_True : sal_False;
 }
@@ -969,7 +969,7 @@ Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& r
     // but may change with every key press.
     if( IsEditMode() )
     {
-        SvxEditViewForwarder* pForwarder = GetEditViewForwarder(sal_False);
+        SvxEditViewForwarder* pForwarder = GetEditViewForwarder(false);
 
         if( pForwarder )
             return pForwarder->LogicToPixel( rPoint, rMapMode );
@@ -1001,7 +1001,7 @@ Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& r
     // but may change with every key press.
     if( IsEditMode() )
     {
-        SvxEditViewForwarder* pForwarder = GetEditViewForwarder(sal_False);
+        SvxEditViewForwarder* pForwarder = GetEditViewForwarder(false);
 
         if( pForwarder )
             return pForwarder->PixelToLogic( rPoint, rMapMode );

@@ -164,7 +164,7 @@ GalleryBrowser1::~GalleryBrowser1()
 
 sal_uIntPtr GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
 {
-    static const sal_Bool bShowHiddenThemes = ( getenv( "GALLERY_SHOW_HIDDEN_THEMES" ) != NULL );
+    static const bool bShowHiddenThemes = ( getenv( "GALLERY_SHOW_HIDDEN_THEMES" ) != NULL );
 
     sal_uIntPtr nRet = LISTBOX_ENTRY_NOTFOUND;
 
@@ -231,18 +231,18 @@ void GalleryBrowser1::ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec)
 
     if( pTheme )
     {
-        sal_Bool                bUpdateAllowed, bRenameAllowed, bRemoveAllowed;
-        static const sal_Bool   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != NULL );
+        bool                bUpdateAllowed, bRenameAllowed, bRemoveAllowed;
+        static const bool   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != NULL );
 
         if( pTheme->IsReadOnly() )
-            bUpdateAllowed = bRenameAllowed = bRemoveAllowed = sal_False;
+            bUpdateAllowed = bRenameAllowed = bRemoveAllowed = false;
         else if( pTheme->IsDefault() )
         {
-            bUpdateAllowed = bRenameAllowed = sal_True;
-            bRemoveAllowed = sal_False;
+            bUpdateAllowed = bRenameAllowed = true;
+            bRemoveAllowed = false;
         }
         else
-            bUpdateAllowed = bRenameAllowed = bRemoveAllowed = sal_True;
+            bUpdateAllowed = bRenameAllowed = bRemoveAllowed = true;
 
         if( bUpdateAllowed && pTheme->GetObjectCount() )
             o_aExec.push_back( MN_ACTUALIZE );
@@ -518,9 +518,9 @@ void GalleryBrowser1::ShowContextMenu()
     Application::PostUserEvent( LINK( this, GalleryBrowser1, ShowContextMenuHdl ), this );
 }
 
-sal_Bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
+bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 {
-    sal_Bool bRet (sal_False);
+    bool bRet = false;
     if (maKeyInputHandler)
         bRet = maKeyInputHandler(rKEvt, pWindow);
 
@@ -529,7 +529,7 @@ sal_Bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
         ::std::vector< sal_uInt16 > aExecVector;
         ImplGetExecuteVector(aExecVector);
         sal_uInt16                  nExecuteId = 0;
-        sal_Bool                    bMod1 = rKEvt.GetKeyCode().IsMod1();
+        bool                    bMod1 = rKEvt.GetKeyCode().IsMod1();
 
         switch( rKEvt.GetKeyCode().GetCode() )
         {
@@ -580,7 +580,7 @@ sal_Bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
         if( nExecuteId && ( ::std::find( aExecVector.begin(), aExecVector.end(), nExecuteId ) != aExecVector.end() ) )
         {
             ImplExecute( nExecuteId );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 

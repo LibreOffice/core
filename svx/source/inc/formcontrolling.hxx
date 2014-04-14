@@ -175,13 +175,13 @@ namespace svx
                         sal_Int32 _nSlotId,
                         ::com::sun::star::form::runtime::FeatureState& _out_rState
                     ) const;
-        sal_Bool    isEnabled( sal_Int32 _nSlotId ) const;
+        bool        isEnabled( sal_Int32 _nSlotId ) const;
         void        execute( sal_Int32 _nSlotId ) const;
         void        execute( sal_Int32 _nSlotId, const OUString& _rParamName, const ::com::sun::star::uno::Any& _rParamValue ) const;
-        sal_Bool    commitCurrentRecord() const;
-        sal_Bool    commitCurrentControl( ) const;
-        sal_Bool    isInsertionRow() const;
-        sal_Bool    isModifiedRow() const;
+        bool        commitCurrentRecord() const;
+        bool        commitCurrentControl( ) const;
+        bool        isInsertionRow() const;
+        bool        isModifiedRow() const;
 
         bool        canDoFormFilter() const;
 

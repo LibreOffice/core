@@ -132,7 +132,7 @@ void OLEObjCache::UnloadOnDemand()
                     // it is important to get object without reinitialization to avoid reentrance
                     uno::Reference< embed::XEmbeddedObject > xUnloadObj = pUnloadObj->GetObjRef_NoInit();
 
-                    sal_Bool bUnload = SdrOle2Obj::CanUnloadRunningObj( xUnloadObj, pUnloadObj->GetAspect() );
+                    bool bUnload = SdrOle2Obj::CanUnloadRunningObj( xUnloadObj, pUnloadObj->GetAspect() );
 
                     // check whether the object can be unloaded before looking for the parent objects
                     if ( xUnloadObj.is() && bUnload )
@@ -147,7 +147,7 @@ void OLEObjCache::UnloadOnDemand()
                                 {
                                     uno::Reference< frame::XModel > xParentModel = pCacheObj->GetParentXModel();
                                     if ( xUnloadModel == xParentModel )
-                                        bUnload = sal_False; // the object has running embedded objects
+                                        bUnload = false; // the object has running embedded objects
                                 }
                             }
                         }
@@ -298,7 +298,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
             Color aCol2(COL_WHITE);
 
             // when hatched background is activated, use object fill color as hatch color
-            sal_Bool bFillHatchBackground = ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue();
+            bool bFillHatchBackground = ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue();
             if(bFillHatchBackground)
             {
                 aCol2 = ((const XFillColorItem&)(rSet.Get(XATTR_FILLCOLOR))).GetColorValue();
