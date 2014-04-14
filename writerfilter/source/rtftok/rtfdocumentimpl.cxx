@@ -2536,6 +2536,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_inTbl, RTFValue::Pointer_t(new RTFValue(1)));
             }
             m_aStates.top().resetFrame();
+
+            // Reset currently selected paragraph style as well.
+            m_aStates.top().nCurrentStyleIndex = -1;
             break;
         case RTF_SECTD:
             {

@@ -1648,6 +1648,12 @@ DECLARE_RTFIMPORT_TEST(testFdo74599, "fdo74599.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), getProperty<sal_Int32>(xPropertySet, "CharColor"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo77267, "fdo77267.rtf")
+{
+    // Paragraph was aligned to left, should be center.
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
