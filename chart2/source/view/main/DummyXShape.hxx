@@ -12,7 +12,7 @@
 
 #include <cppuhelper/implbase6.hxx>
 
-#include <vcl/OpenGLContext.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 #include "OpenGLRender.hxx"
 
 #include <com/sun/star/drawing/XShape.hpp>

@@ -47,7 +47,7 @@
 #include <rtl/math.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
-#include <vcl/IOpenGLRenderer.hxx>
+#include <vcl/opengl/IOpenGLRenderer.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>

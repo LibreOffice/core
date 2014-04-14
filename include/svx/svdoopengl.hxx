@@ -11,9 +11,9 @@
 #define INCLUDED_SVX_SVDO_OPENGL_HXX
 
 #include <svx/svdobj.hxx>
-#include <vcl/OpenGLContext.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 
-#include <vcl/IOpenGLRenderer.hxx>
+#include <vcl/opengl/IOpenGLRenderer.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

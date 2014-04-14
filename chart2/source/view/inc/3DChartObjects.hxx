@@ -12,7 +12,7 @@
 #include <tools/color.hxx>
 #include <vcl/bitmapex.hxx>
 
-#include <vcl/OpenGLContext.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 
 namespace chart {
 

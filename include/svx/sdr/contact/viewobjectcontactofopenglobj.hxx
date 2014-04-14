@@ -11,7 +11,7 @@
 #define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFOPENGL_HXX
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
-#include <vcl/OpenGLContext.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 
 class Window;
 

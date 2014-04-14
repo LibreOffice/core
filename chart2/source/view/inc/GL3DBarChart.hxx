@@ -14,7 +14,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "VDataSeries.hxx"
 
-#include <vcl/OpenGLContext.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 
 namespace chart {
 

@@ -11,7 +11,7 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <vcl/font.hxx>
-#include <vcl/OpenGLContext.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 
 // Include GLM
 #include <list>

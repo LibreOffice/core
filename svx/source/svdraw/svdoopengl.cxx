@@ -10,7 +10,7 @@
 #include <svx/svdoopengl.hxx>
 #include <svx/sdr/contact/viewcontactofopenglobj.hxx>
 
-#include <vcl/IOpenGLRenderer.hxx>
+#include <vcl/opengl/IOpenGLRenderer.hxx>
 
 SdrOpenGLObj::~SdrOpenGLObj()
 {
