@@ -692,25 +692,31 @@ public:
     // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
     // without MetaFile processing
     SAL_DLLPRIVATE void         ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
-
-private:
     ///@}
 
     /** @name Gradient functions
      */
     ///@{
-    SAL_DLLPRIVATE void         DrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
-    SAL_DLLPRIVATE void         DrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
-
 public:
-
     void                        DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
     void                        DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+
     void                        AddGradientActions(
                                     const Rectangle& rRect,
                                     const Gradient& rGradient,
                                     GDIMetaFile& rMtf );
 
+protected:
+    virtual long                ImplGetGradientStepCount( long nMinRect );
+
+private:
+    SAL_DLLPRIVATE void         DrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         DrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
+
+    SAL_DLLPRIVATE long         ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex=false );
+
+    SAL_DLLPRIVATE Color        GetSingleColorGradientFill();
+    SAL_DLLPRIVATE void         SetGrayscaleColors( Gradient &rGradient );
     ///@}
 
 public:
@@ -812,7 +818,6 @@ protected:
                                                 const Point& rDestPt, const Size& rDestSize,
                                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel );
 
-    virtual long                ImplGetGradientStepCount( long nMinRect );
     virtual bool                UsePolyPolygonForComplexGradient() = 0;
 
     /** Transform and draw a bitmap directly
@@ -861,15 +866,11 @@ private:
     SAL_DLLPRIVATE void         ImplClearFontData( bool bNewFontLists );
     SAL_DLLPRIVATE void         ImplRefreshFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
-    SAL_DLLPRIVATE long         ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex=false );
 
     // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
     void                        DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&);
 
     bool                        DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
-
-    Color                       GetSingleColorGradientFill();
-    void                        SetGrayscaleColors( Gradient &rGradient );
 
 public:
     virtual                     ~OutputDevice();
