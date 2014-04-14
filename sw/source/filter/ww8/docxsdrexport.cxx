@@ -85,7 +85,7 @@ OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
     return aResult;
 }
 
-void lclMovePositionWithRotation(awt::Point& aPos, sal_Int64 nRotation)
+void lclMovePositionWithRotation(awt::Point& aPos, const Size& rSize, sal_Int64 nRotation)
 {
     // code from ImplEESdrWriter::ImplFlipBoundingBox (filter/source/msfilter/eschesdo.cxx)
     // TODO: refactor
@@ -104,8 +104,8 @@ void lclMovePositionWithRotation(awt::Point& aPos, sal_Int64 nRotation)
     double  fCos = cos(fVal);
     double  fSin = sin(fVal);
 
-    double  nWidthHalf = (double) aPos.X / 2;
-    double  nHeightHalf = (double) aPos.Y / 2;
+    double  nWidthHalf = (double) rSize.Width() / 2;
+    double  nHeightHalf = (double) rSize.Height() / 2;
 
     double nXDiff = fSin * nHeightHalf + fCos * nWidthHalf  - nWidthHalf;
     double nYDiff = fSin * nWidthHalf  + fCos * nHeightHalf - nHeightHalf;
@@ -303,7 +303,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
             // SdrObjects know their layer, consider that instead of the frame format.
             bOpaque = pObj->GetLayer() != pFrmFmt->GetDoc()->GetHellId() && pObj->GetLayer() != pFrmFmt->GetDoc()->GetInvisibleHellId();
 
-            lclMovePositionWithRotation(aPos, pObj->GetRotateAngle());
+            lclMovePositionWithRotation(aPos, rSize, pObj->GetRotateAngle());
         }
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
         attrList->add(XML_distT, OString::number(TwipsToEMU(pULSpaceItem.GetUpper())).getStr());

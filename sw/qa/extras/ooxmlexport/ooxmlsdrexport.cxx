@@ -503,16 +503,16 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
     aYPos[2] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset").toInt32();
     aYPos[3] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset").toInt32();
 
-    // TODO: compare values with a reference value extracted from the original document
-    //       depends on fdo#75722
     // certain degree of error is tolerated due to rounding in unit conversions
-    CPPUNIT_ASSERT(abs(aXPos[0] - aXPos[1]) < 1000);
-    CPPUNIT_ASSERT(abs(aXPos[1] - aXPos[2]) < 1000);
-    CPPUNIT_ASSERT(abs(aXPos[2] - aXPos[3]) < 1000);
+    CPPUNIT_ASSERT(abs(1239520 - aXPos[0]) < 1000);
+    CPPUNIT_ASSERT(abs(1239520 - aXPos[1]) < 1000);
+    CPPUNIT_ASSERT(abs(1238250 - aXPos[2]) < 1000);
+    CPPUNIT_ASSERT(abs(1238885 - aXPos[3]) < 1000);
 
-    CPPUNIT_ASSERT(abs(aYPos[0] - aYPos[1]) < 1000);
-    CPPUNIT_ASSERT(abs(aYPos[1] - aYPos[2]) < 1000);
-    CPPUNIT_ASSERT(abs(aYPos[2] - aYPos[3]) < 1000);
+    CPPUNIT_ASSERT(abs(2095500 - aYPos[0]) < 1000);
+    CPPUNIT_ASSERT(abs(2094865 - aYPos[1]) < 1000);
+    CPPUNIT_ASSERT(abs(2094230 - aYPos[2]) < 1000);
+    CPPUNIT_ASSERT(abs(2094865 - aYPos[3]) < 1000);
 
     sal_Int32 aHSize[4], aVSize[4];
     aHSize[0] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cx").toInt32();
@@ -586,6 +586,25 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
 
         } while( nextTokenPos != -1 );
     }
+
+    // Check shape objects
+
+    awt::Point aPos[4];
+    aPos[0] = getShape(1)->getPosition();
+    aPos[1] = getShape(2)->getPosition();
+    aPos[2] = getShape(3)->getPosition();
+    aPos[3] = getShape(4)->getPosition();
+
+    // certain degree of error is tolerated due to rounding in unit conversions
+    CPPUNIT_ASSERT(abs(4734 - aPos[0].X) < 10);
+    CPPUNIT_ASSERT(abs(4734 - aPos[1].X) < 10);
+    CPPUNIT_ASSERT(abs(4731 - aPos[2].X) < 10);
+    CPPUNIT_ASSERT(abs(4733 - aPos[3].X) < 10);
+
+    CPPUNIT_ASSERT(abs(2845 - aPos[0].Y) < 10);
+    CPPUNIT_ASSERT(abs(2843 - aPos[1].Y) < 10);
+    CPPUNIT_ASSERT(abs(2842 - aPos[2].Y) < 10);
+    CPPUNIT_ASSERT(abs(2843 - aPos[3].Y) < 10);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo73215, "fdo73215.docx")
