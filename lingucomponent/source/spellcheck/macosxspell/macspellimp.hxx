@@ -127,6 +127,9 @@ inline OUString MacSpellChecker::getImplementationName_Static() throw()
     return OUString( "org.openoffice.lingu.MacOSXSpellChecker" );
 }
 
+void * SAL_CALL MacSpellChecker_getFactory(
+    char const * pImplName, XMultiServiceFactory * pServiceManager, void *);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
