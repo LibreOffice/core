@@ -81,8 +81,6 @@ int static checkGLError(const char *file, int line)
     return retCode;
 }
 
-static bool bGlewInit = false;
-
 #define CHECK_GL_ERROR() checkGLError(__FILE__, __LINE__)
 
 #define CHECK_GL_FRAME_BUFFER_STATUS() \
@@ -107,19 +105,7 @@ int OpenGLRender::InitOpenGL()
 {
     //TODO: moggi: get the information from the context
     mbArbMultisampleSupported = true;
-    if(!bGlewInit)
-    {
-        glewExperimental = GL_TRUE;
-        if (glewInit() != GLEW_OK)
-        {
-            SAL_WARN("chart2.opengl", "Failed to initialize GLEW");
-            return -1;
-        }
-        else
-            bGlewInit = true;
-    }
 
-    // These guys don't just check support but setup the vtables.
     if (glewIsSupported("framebuffer_object") != GLEW_OK)
     {
         SAL_WARN("chart2.opengl", "GL stack has no framebuffer support");
