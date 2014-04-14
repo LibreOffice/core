@@ -18,6 +18,7 @@
  */
 
 #include "formula.h"
+#include "grammar.hxx"
 
 #include "mzstring.h"
 #include "nodes.h"
@@ -45,9 +46,6 @@ static int indent = 0;
 #define inde for(int i = 0 ; i < indent ; i++) fprintf(stderr," "); indent--
 #define indo indent--;
 #endif
-
-extern Node *mainParse(const char *);
-
 
 void Formula::makeMathML(Node *res)
 {

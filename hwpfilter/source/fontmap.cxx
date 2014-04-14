@@ -24,6 +24,8 @@
 #include <string.h>
 #endif
 
+#include <fontmap.hxx>
+
 // #i42367# prevent MS compiler from using system locale for parsing
 #ifdef _MSC_VER
 #pragma setlocale("C")
