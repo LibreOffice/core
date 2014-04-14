@@ -177,6 +177,19 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
 }
 
+namespace
+{
+    inline sal_uInt8 GetGradientColorValue( long nValue )
+    {
+        if ( nValue < 0 )
+            return 0;
+        else if ( nValue > 0xFF )
+            return 0xFF;
+        else
+            return (sal_uInt8)nValue;
+    }
+}
+
 void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
                                        const Gradient& rGradient,
                                        bool bMtf, const PolyPolygon* pClipPolyPoly )
@@ -310,11 +323,11 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
         // linear interpolation of color
         fAlpha = ((double)i) / fStepsMinus1;
         fTempColor = ((double)nStartRed) * (1.0-fAlpha) + ((double)nEndRed) * fAlpha;
-        nRed = ImplGetGradientColorValue((long)fTempColor);
+        nRed = GetGradientColorValue((long)fTempColor);
         fTempColor = ((double)nStartGreen) * (1.0-fAlpha) + ((double)nEndGreen) * fAlpha;
-        nGreen = ImplGetGradientColorValue((long)fTempColor);
+        nGreen = GetGradientColorValue((long)fTempColor);
         fTempColor = ((double)nStartBlue) * (1.0-fAlpha) + ((double)nEndBlue) * fAlpha;
-        nBlue = ImplGetGradientColorValue((long)fTempColor);
+        nBlue = GetGradientColorValue((long)fTempColor);
         if ( bMtf )
             mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
         else
@@ -350,9 +363,9 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
     if ( !bLinear)
     {
         // draw middle polygon with end color
-        nRed = ImplGetGradientColorValue(nEndRed);
-        nGreen = ImplGetGradientColorValue(nEndGreen);
-        nBlue = ImplGetGradientColorValue(nEndBlue);
+        nRed = GetGradientColorValue(nEndRed);
+        nGreen = GetGradientColorValue(nEndGreen);
+        nBlue = GetGradientColorValue(nEndBlue);
         if ( bMtf )
             mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
         else
@@ -484,9 +497,9 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
 
         // adapt colour accordingly
         const long nStepIndex = ( ( pPolyPoly ) ? i : ( i + 1 ) );
-        nRed = ImplGetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
-        nGreen = ImplGetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
-        nBlue = ImplGetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
+        nRed = GetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
+        nGreen = GetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
+        nBlue = GetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
 
         // either slow PolyPolygon output or fast Polygon-Paiting
         if( pPolyPoly )
@@ -537,9 +550,9 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
             // (i.e. start) color is taken, to generate _any_ output.
             if( bPaintLastPolygon )
             {
-                nRed = ImplGetGradientColorValue( nEndRed );
-                nGreen = ImplGetGradientColorValue( nEndGreen );
-                nBlue = ImplGetGradientColorValue( nEndBlue );
+                nRed = GetGradientColorValue( nEndRed );
+                nGreen = GetGradientColorValue( nEndGreen );
+                nBlue = GetGradientColorValue( nEndBlue );
             }
 
             if( bMtf )
@@ -554,16 +567,6 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
             }
         }
     }
-}
-
-inline sal_uInt8 ImplGetGradientColorValue( long nValue )
-{
-    if ( nValue < 0 )
-        return 0;
-    else if ( nValue > 0xFF )
-        return 0xFF;
-    else
-        return (sal_uInt8)nValue;
 }
 
 long OutputDevice::ImplGetGradientStepCount( long nMinRect )
