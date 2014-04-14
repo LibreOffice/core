@@ -2123,6 +2123,7 @@ private: // CLOOK-Impl-methods
 
     std::map< SCTAB, ScSortParam > mSheetSortParams;
 
+    void SharePooledResources( ScDocument* pSrcDoc );
 };
 inline void ScDocument::GetSortParam( ScSortParam& rParam, SCTAB nTab )
 {
