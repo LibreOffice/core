@@ -599,6 +599,36 @@ void Test::testSharedStringPool()
 
 void Test::testSharedStringPoolUndoDoc()
 {
+    struct
+    {
+        bool check( ScDocument& rSrcDoc, ScDocument& rCopyDoc )
+        {
+            // Copy A1:A4 to the undo document.
+            for (SCROW i = 0; i <= 4; ++i)
+            {
+                ScAddress aPos(0,i,0);
+                rCopyDoc.SetString(aPos, rSrcDoc.GetString(aPos));
+            }
+
+            // String values in A1:A4 should have identical hash.
+            for (SCROW i = 0; i <= 4; ++i)
+            {
+                ScAddress aPos(0,i,0);
+                svl::SharedString aSS1 = rSrcDoc.GetSharedString(aPos);
+                svl::SharedString aSS2 = rCopyDoc.GetSharedString(aPos);
+                if (aSS1.getDataIgnoreCase() != aSS2.getDataIgnoreCase())
+                {
+                    cerr << "String hash values are not equal at row " << (i+1)
+                        << " for string '" << aSS1.getString() << "'" << endl;
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+    } aTest;
+
     m_pDoc->InsertTab(0, "Test");
 
     m_pDoc->SetString(ScAddress(0,0,0), "Header");
@@ -609,21 +639,15 @@ void Test::testSharedStringPoolUndoDoc()
     ScDocument aUndoDoc(SCDOCMODE_UNDO);
     aUndoDoc.InitUndo(m_pDoc, 0, 0);
 
-    // Copy A1:A4 to the undo document.
-    for (SCROW i = 0; i <= 4; ++i)
-    {
-        ScAddress aPos(0,i,0);
-        aUndoDoc.SetString(aPos, m_pDoc->GetString(aPos));
-    }
+    bool bSuccess = aTest.check(*m_pDoc, aUndoDoc);
+    CPPUNIT_ASSERT_MESSAGE("Check failed with undo document.", bSuccess);
 
-    // String values in A1:A4 should have identical hash.
-    for (SCROW i = 0; i <= 4; ++i)
-    {
-        ScAddress aPos(0,i,0);
-        svl::SharedString aSS1 = m_pDoc->GetSharedString(aPos);
-        svl::SharedString aSS2 = aUndoDoc.GetSharedString(aPos);
-        CPPUNIT_ASSERT_MESSAGE("String hash values are not equal.", aSS1.getDataIgnoreCase() == aSS2.getDataIgnoreCase());
-    }
+    // Test the clip document as well.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    aClipDoc.ResetClip(m_pDoc, static_cast<SCTAB>(0));
+
+    bSuccess = aTest.check(*m_pDoc, aClipDoc);
+    CPPUNIT_ASSERT_MESSAGE("Check failed with clip document.", bSuccess);
 
     m_pDoc->DeleteTab(0);
 }
