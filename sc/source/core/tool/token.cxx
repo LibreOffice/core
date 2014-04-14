@@ -1175,25 +1175,26 @@ bool ScHybridCellToken::operator==( const FormulaToken& r ) const
 
 
 
-bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken,formula::ExternalReferenceHelper* _pRef)
+bool ScTokenArray::AddFormulaToken(
+    const css::sheet::FormulaToken& rToken, svl::SharedStringPool& rSPool, formula::ExternalReferenceHelper* pExtRef)
 {
-    bool bError = FormulaTokenArray::AddFormulaToken(_aToken,_pRef);
+    bool bError = FormulaTokenArray::AddFormulaToken(rToken, rSPool, pExtRef);
     if ( bError )
     {
         bError = false;
-        const OpCode eOpCode = static_cast<OpCode>(_aToken.OpCode);      //! assuming equal values for the moment
+        const OpCode eOpCode = static_cast<OpCode>(rToken.OpCode);      //! assuming equal values for the moment
 
-        const uno::TypeClass eClass = _aToken.Data.getValueTypeClass();
+        const uno::TypeClass eClass = rToken.Data.getValueTypeClass();
         switch ( eClass )
         {
             case uno::TypeClass_STRUCT:
                 {
-                    uno::Type aType = _aToken.Data.getValueType();
+                    uno::Type aType = rToken.Data.getValueType();
                     if ( aType.equals( cppu::UnoType<sheet::SingleReference>::get() ) )
                     {
                         ScSingleRefData aSingleRef;
                         sheet::SingleReference aApiRef;
-                        _aToken.Data >>= aApiRef;
+                        rToken.Data >>= aApiRef;
                         lcl_SingleRefToCalc( aSingleRef, aApiRef );
                         if ( eOpCode == ocPush )
                             AddSingleReference( aSingleRef );
@@ -1206,7 +1207,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                     {
                         ScComplexRefData aComplRef;
                         sheet::ComplexReference aApiRef;
-                        _aToken.Data >>= aApiRef;
+                        rToken.Data >>= aApiRef;
                         lcl_SingleRefToCalc( aComplRef.Ref1, aApiRef.Reference1 );
                         lcl_SingleRefToCalc( aComplRef.Ref2, aApiRef.Reference2 );
 
@@ -1218,7 +1219,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                     else if ( aType.equals( cppu::UnoType<sheet::NameToken>::get() ) )
                     {
                         sheet::NameToken aTokenData;
-                        _aToken.Data >>= aTokenData;
+                        rToken.Data >>= aTokenData;
                         if ( eOpCode == ocName )
                             AddRangeName(aTokenData.Index, aTokenData.Global);
                         else if (eOpCode == ocDBArea)
@@ -1229,7 +1230,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                     else if ( aType.equals( cppu::UnoType<sheet::ExternalReference>::get() ) )
                     {
                         sheet::ExternalReference aApiExtRef;
-                        if( (eOpCode == ocPush) && (_aToken.Data >>= aApiExtRef) && (0 <= aApiExtRef.Index) && (aApiExtRef.Index <= SAL_MAX_UINT16) )
+                        if( (eOpCode == ocPush) && (rToken.Data >>= aApiExtRef) && (0 <= aApiExtRef.Index) && (aApiExtRef.Index <= SAL_MAX_UINT16) )
                         {
                             sal_uInt16 nFileId = static_cast< sal_uInt16 >( aApiExtRef.Index );
                             sheet::SingleReference aApiSRef;
@@ -1239,7 +1240,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                             {
                                 // try to resolve cache index to sheet name
                                 size_t nCacheId = static_cast< size_t >( aApiSRef.Sheet );
-                                OUString aTabName = _pRef->getCacheTableName( nFileId, nCacheId );
+                                OUString aTabName = pExtRef->getCacheTableName( nFileId, nCacheId );
                                 if( !aTabName.isEmpty() )
                                 {
                                     ScSingleRefData aSingleRef;
@@ -1254,7 +1255,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                             {
                                 // try to resolve cache index to sheet name.
                                 size_t nCacheId = static_cast< size_t >( aApiCRef.Reference1.Sheet );
-                                OUString aTabName = _pRef->getCacheTableName( nFileId, nCacheId );
+                                OUString aTabName = pExtRef->getCacheTableName( nFileId, nCacheId );
                                 if( !aTabName.isEmpty() )
                                 {
                                     ScComplexRefData aComplRef;
@@ -1290,12 +1291,12 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                 {
                     if ( eOpCode != ocPush )
                         bError = true;      // not an inline array
-                    else if (!_aToken.Data.getValueType().equals( getCppuType(
+                    else if (!rToken.Data.getValueType().equals( getCppuType(
                                     (uno::Sequence< uno::Sequence< uno::Any > > *)0)))
                         bError = true;      // unexpected sequence type
                     else
                     {
-                        ScMatrixRef xMat = ScSequenceToMatrix::CreateMixedMatrix( _aToken.Data);
+                        ScMatrixRef xMat = ScSequenceToMatrix::CreateMixedMatrix( rToken.Data);
                         if (xMat)
                             AddMatrix( xMat);
                         else

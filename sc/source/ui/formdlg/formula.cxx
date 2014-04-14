@@ -655,7 +655,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<formula::FormulaTokenArray> ScFormulaDlg::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
     ::std::auto_ptr<formula::FormulaTokenArray> pArray(new ScTokenArray());
-    pArray->Fill( _aTokenList, pDoc->GetExternalRefManager());
+    pArray->Fill(_aTokenList, pDoc->GetSharedStringPool(), pDoc->GetExternalRefManager());
     return pArray;
 }
 // for mysterious reasons Apple llvm-g++ 4.2.1 needs these explicit
