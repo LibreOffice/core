@@ -10,6 +10,12 @@
 #include <svx/svdoopengl.hxx>
 #include <svx/sdr/contact/viewcontactofopenglobj.hxx>
 
+#include <vcl/IOpenGLRenderer.hxx>
+
+SdrOpenGLObj::~SdrOpenGLObj()
+{
+}
+
 sdr::contact::ViewContact* SdrOpenGLObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfOpenGLObj(*this);
@@ -29,5 +35,14 @@ void SdrOpenGLObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fra
     SAL_WARN("svx.opengl", "resized opengl drawinglayer object");
 }
 
+void SdrOpenGLObj::setRenderer(IOpenGLRenderer* pRenderer)
+{
+    mpRenderer.reset(pRenderer);
+}
+
+IOpenGLRenderer* SdrOpenGLObj::getRenderer()
+{
+    return mpRenderer.get();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

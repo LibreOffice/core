@@ -13,22 +13,34 @@
 #include <svx/svdobj.hxx>
 #include <vcl/OpenGLContext.hxx>
 
+#include <vcl/IOpenGLRenderer.hxx>
+
+#include <boost/scoped_ptr.hpp>
+
 namespace sdr { namespace contact {
     class ViewContact;
 } }
 
+class IOpenGLRenderer;
+
 class SVX_DLLPUBLIC SdrOpenGLObj : public SdrObject
 {
 public:
+    virtual ~SdrOpenGLObj();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
     OpenGLContext& getOpenGLContext();
 
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
 
+    void setRenderer(IOpenGLRenderer* pRenderer);
+    IOpenGLRenderer* getRenderer();
+
 private:
 
     OpenGLContext maContext;
+
+    boost::scoped_ptr<IOpenGLRenderer> mpRenderer;
 };
 
 #endif

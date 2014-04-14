@@ -66,6 +66,7 @@ class SdrModel;
 class SvxDrawPage;
 class SvGlobalName;
 class Pair;
+class IOpenGLRenderer;
 
 // Dimension arrows change size/position on save/reload (#i59051#)
 namespace basegfx
@@ -881,6 +882,9 @@ class SvxOpenGLObject : public SvxShape
 public:
     SvxOpenGLObject( SdrObject* pObj ) throw() : SvxShape(pObj){}
     virtual ~SvxOpenGLObject() throw() {}
+
+    void setRenderer(IOpenGLRenderer* pRenderer);
+    IOpenGLRenderer* getRenderer();
 };
 
 /*
