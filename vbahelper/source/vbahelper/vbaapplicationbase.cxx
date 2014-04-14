@@ -33,6 +33,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 
+#include <boost/noncopyable.hpp>
 #include <boost/unordered_map.hpp>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <tools/datetime.hxx>
@@ -55,15 +56,11 @@ using namespace ::ooo::vba;
 typedef ::std::pair< OUString, ::std::pair< double, double > > VbaTimerInfo;
 
 // ====VbaTimer==================================
-class VbaTimer
+class VbaTimer: private boost::noncopyable
 {
     Timer m_aTimer;
     VbaTimerInfo m_aTimerInfo;
     ::rtl::Reference< VbaApplicationBase > m_xBase;
-
-    // the following declarations are here to prevent the usage of them
-    VbaTimer( const VbaTimer& );
-    VbaTimer& operator=( const VbaTimer& );
 
 public:
     VbaTimer()
