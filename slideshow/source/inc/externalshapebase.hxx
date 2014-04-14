@@ -22,11 +22,11 @@
 
 #include <vector>
 
-#include "externalmediashape.hxx"
 #include "unoview.hxx"
 #include "subsettableshapemanager.hxx"
 #include "slideshowexceptions.hxx"
 #include "slideshowcontext.hxx"
+#include "shape.hxx"
 
 
 namespace slideshow
@@ -44,7 +44,7 @@ namespace slideshow
             (including mutual overdraw). It therefore reports yes for
             the isBackgroundDetached() question.
          */
-        class ExternalShapeBase : public ExternalMediaShape
+        class ExternalShapeBase : public Shape
         {
         public:
             /** Create a shape for the given XShape for an external shape
@@ -68,11 +68,11 @@ namespace slideshow
             // animation methods
 
 
-            virtual void play() SAL_OVERRIDE;
-            virtual void stop() SAL_OVERRIDE;
-            virtual void pause() SAL_OVERRIDE;
-            virtual bool isPlaying() const SAL_OVERRIDE;
-            virtual void setMediaTime(double) SAL_OVERRIDE;
+            virtual void play();
+            virtual void stop();
+            virtual void pause();
+            virtual bool isPlaying() const;
+            virtual void setMediaTime(double);
 
             // render methods
 

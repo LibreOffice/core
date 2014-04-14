@@ -20,9 +20,10 @@
 #define INCLUDED_SLIDESHOW_ANIMATIONCOMMANDNODE_HXX
 
 #include "basecontainernode.hxx"
-#include "externalmediashape.hxx"
+#include "externalshapebase.hxx"
 #include "soundplayer.hxx"
 #include "com/sun/star/animations/XCommand.hpp"
+#include <boost/shared_ptr.hpp>
 
 namespace slideshow {
 namespace internal {
@@ -49,7 +50,7 @@ private:
     virtual bool hasPendingAnimation() const SAL_OVERRIDE;
 
 private:
-    ExternalMediaShapeSharedPtr mpShape;
+    boost::shared_ptr< ExternalShapeBase > mpShape;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XCommand > mxCommandNode;
 };
