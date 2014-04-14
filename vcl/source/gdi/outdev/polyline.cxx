@@ -1,0 +1,383 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <vcl/virdev.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
+
+#include <salgdi.hxx>
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
+
+void OutputDevice::DrawPolyLine( const Polygon& rPoly )
+{
+
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaPolyLineAction( rPoly ) );
+
+    sal_uInt16 nPoints = rPoly.GetSize();
+
+    if ( !IsDeviceOutputNecessary() || !mbLineColor || (nPoints < 2) || ImplIsRecordLayout() )
+        return;
+
+    // we need a graphics
+    if ( !mpGraphics )
+        if ( !ImplGetGraphics() )
+            return;
+
+    if ( mbInitClipRegion )
+        ImplInitClipRegion();
+    if ( mbOutputClipped )
+        return;
+
+    if ( mbInitLineColor )
+        ImplInitLineColor();
+
+    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && IsLineColor());
+
+    // use b2dpolygon drawing if possible
+    if(bTryAA && ImplTryDrawPolyLineDirect(rPoly.getB2DPolygon()))
+    {
+        basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
+        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
+        const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+
+        // transform the polygon
+        aB2DPolyLine.transform( aTransform );
+
+        if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+        {
+            aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
+        }
+
+        if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this))
+        {
+            return;
+        }
+    }
+
+    Polygon aPoly = ImplLogicToDevicePixel( rPoly );
+    const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
+
+    // #100127# Forward beziers to sal, if any
+    if( aPoly.HasFlags() )
+    {
+        const sal_uInt8* pFlgAry = aPoly.GetConstFlagAry();
+        if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, this ) )
+        {
+            aPoly = ImplSubdivideBezier(aPoly);
+            pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
+            mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry, this );
+        }
+    }
+    else
+    {
+        mpGraphics->DrawPolyLine( nPoints, pPtAry, this );
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawPolyLine( rPoly );
+}
+
+void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo )
+{
+
+    if ( rLineInfo.IsDefault() )
+    {
+        DrawPolyLine( rPoly );
+        return;
+    }
+
+    // #i101491#
+    // Try direct Fallback to B2D-Version of DrawPolyLine
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && LINE_SOLID == rLineInfo.GetStyle())
+    {
+        DrawPolyLine( rPoly.getB2DPolygon(), (double)rLineInfo.GetWidth(), rLineInfo.GetLineJoin(), rLineInfo.GetLineCap());
+        return;
+    }
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaPolyLineAction( rPoly, rLineInfo ) );
+
+    ImplDrawPolyLineWithLineInfo(rPoly, rLineInfo);
+}
+
+void OutputDevice::DrawPolyLine(
+    const basegfx::B2DPolygon& rB2DPolygon,
+    double fLineWidth,
+    basegfx::B2DLineJoin eLineJoin,
+    css::drawing::LineCap eLineCap)
+{
+
+    if( mpMetaFile )
+    {
+        LineInfo aLineInfo;
+        if( fLineWidth != 0.0 )
+            aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+        const Polygon aToolsPolygon( rB2DPolygon );
+        mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
+    }
+
+    // Do not paint empty PolyPolygons
+    if(!rB2DPolygon.count() || !IsDeviceOutputNecessary())
+        return;
+
+    // we need a graphics
+    if( !mpGraphics )
+        if( !ImplGetGraphics() )
+            return;
+
+    if( mbInitClipRegion )
+        ImplInitClipRegion();
+    if( mbOutputClipped )
+        return;
+
+    if( mbInitLineColor )
+        ImplInitLineColor();
+
+    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && IsLineColor());
+
+    // use b2dpolygon drawing if possible
+    if(bTryAA && ImplTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap))
+    {
+        return;
+    }
+
+    // #i101491#
+    // no output yet; fallback to geometry decomposition and use filled polygon paint
+    // when line is fat and not too complex. ImplDrawPolyPolygonWithB2DPolyPolygon
+    // will do internal needed AA checks etc.
+    if(fLineWidth >= 2.5
+        && rB2DPolygon.count()
+        && rB2DPolygon.count() <= 1000)
+    {
+        const double fHalfLineWidth((fLineWidth * 0.5) + 0.5);
+        const basegfx::B2DPolyPolygon aAreaPolyPolygon(
+            basegfx::tools::createAreaGeometry(
+                rB2DPolygon,
+                fHalfLineWidth,
+                eLineJoin,
+                eLineCap));
+        const Color aOldLineColor(maLineColor);
+        const Color aOldFillColor(maFillColor);
+
+        SetLineColor();
+        ImplInitLineColor();
+        SetFillColor(aOldLineColor);
+        ImplInitFillColor();
+
+        // draw usig a loop; else the topology will paint a PolyPolygon
+        for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
+        {
+            ImplDrawPolyPolygonWithB2DPolyPolygon(
+                basegfx::B2DPolyPolygon(aAreaPolyPolygon.getB2DPolygon(a)));
+        }
+
+        SetLineColor(aOldLineColor);
+        ImplInitLineColor();
+        SetFillColor(aOldFillColor);
+        ImplInitFillColor();
+
+        if(bTryAA)
+        {
+            // when AA it is necessary to also paint the filled polygon's outline
+            // to avoid optical gaps
+            for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
+            {
+                ImplTryDrawPolyLineDirect(aAreaPolyPolygon.getB2DPolygon(a));
+            }
+        }
+    }
+    else
+    {
+        // fallback to old polygon drawing if needed
+        const Polygon aToolsPolygon( rB2DPolygon );
+        LineInfo aLineInfo;
+        if( fLineWidth != 0.0 )
+            aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+        ImplDrawPolyLineWithLineInfo( aToolsPolygon, aLineInfo );
+    }
+}
+
+void OutputDevice::ImplDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo)
+{
+    sal_uInt16 nPoints(rPoly.GetSize());
+
+    if ( !IsDeviceOutputNecessary() || !mbLineColor || ( nPoints < 2 ) || ( LINE_NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
+        return;
+
+    Polygon aPoly = ImplLogicToDevicePixel( rPoly );
+
+    // #100127# LineInfo is not curve-safe, subdivide always
+
+    // What shall this mean? It's wrong to subdivide here when the
+    // polygon is a fat line. In that case, the painted geometry
+    // WILL be much different.
+    // I also have no idea how this could be related to the given ID
+    // which reads 'consolidate boost versions' in the task description.
+    // Removing.
+
+    //if( aPoly.HasFlags() )
+    //{
+    //    aPoly = ImplSubdivideBezier( aPoly );
+    //    nPoints = aPoly.GetSize();
+    //}
+
+    // we need a graphics
+    if ( !mpGraphics && !ImplGetGraphics() )
+        return;
+
+    if ( mbInitClipRegion )
+        ImplInitClipRegion();
+
+    if ( mbOutputClipped )
+        return;
+
+    if ( mbInitLineColor )
+        ImplInitLineColor();
+
+    const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
+    const bool bDashUsed(LINE_DASH == aInfo.GetStyle());
+    const bool bLineWidthUsed(aInfo.GetWidth() > 1);
+
+    if(bDashUsed || bLineWidthUsed)
+    {
+        ImplPaintLineGeometryWithEvtlExpand(aInfo, basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()));
+    }
+    else
+    {
+        // #100127# the subdivision HAS to be done here since only a pointer
+        // to an array of points is given to the DrawPolyLine method, there is
+        // NO way to find out there that it's a curve.
+        if( aPoly.HasFlags() )
+        {
+            aPoly = ImplSubdivideBezier( aPoly );
+            nPoints = aPoly.GetSize();
+        }
+
+        mpGraphics->DrawPolyLine(nPoints, (const SalPoint*)aPoly.GetConstPointAry(), this);
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawPolyLine( rPoly, rLineInfo );
+}
+
+bool OutputDevice::ImplTryDrawPolyLineDirect(
+            const basegfx::B2DPolygon& rB2DPolygon,
+            double fLineWidth,
+            double fTransparency,
+            basegfx::B2DLineJoin eLineJoin,
+            css::drawing::LineCap eLineCap)
+{
+    const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
+    basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
+
+    // transform the line width if used
+    if( fLineWidth != 0.0 )
+    {
+        aB2DLineWidth = aTransform * ::basegfx::B2DVector( fLineWidth, fLineWidth );
+    }
+
+    // transform the polygon
+    basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
+    aB2DPolygon.transform(aTransform);
+
+    if((mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+        && aB2DPolygon.count() < 1000)
+    {
+        // #i98289#, #i101491#
+        // better to remove doubles on device coordinates. Also assume from a given amount
+        // of points that the single edges are not long enough to smooth
+        aB2DPolygon.removeDoublePoints();
+        aB2DPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
+    }
+
+    // draw the polyline
+    return mpGraphics->DrawPolyLine(
+        aB2DPolygon,
+        fTransparency,
+        aB2DLineWidth,
+        eLineJoin,
+        eLineCap,
+        this);
+}
+
+bool OutputDevice::TryDrawPolyLineDirect(
+            const basegfx::B2DPolygon& rB2DPolygon,
+            double fLineWidth,
+            double fTransparency,
+            basegfx::B2DLineJoin eLineJoin,
+            css::drawing::LineCap eLineCap)
+{
+    // AW: Do NOT paint empty PolyPolygons
+    if(!rB2DPolygon.count())
+        return true;
+
+    // we need a graphics
+    if( !mpGraphics )
+        if( !ImplGetGraphics() )
+            return false;
+
+    if( mbInitClipRegion )
+        ImplInitClipRegion();
+
+    if( mbOutputClipped )
+        return true;
+
+    if( mbInitLineColor )
+        ImplInitLineColor();
+
+    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && IsLineColor());
+
+    if(bTryAA)
+    {
+        if(ImplTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, fTransparency, eLineJoin, eLineCap))
+        {
+            // worked, add metafile action (if recorded) and return true
+            if( mpMetaFile )
+            {
+                LineInfo aLineInfo;
+                if( fLineWidth != 0.0 )
+                    aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+                const Polygon aToolsPolygon( rB2DPolygon );
+                mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
+            }
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
