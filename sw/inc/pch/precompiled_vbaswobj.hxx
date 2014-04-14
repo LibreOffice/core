@@ -100,12 +100,12 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
-#include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/view/XLineCursor.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XViewCursor.hpp>
@@ -119,7 +119,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <memory>
 #include <ooo/vba/XControlProvider.hpp>
 #include <ooo/vba/office/MsoDocProperties.hpp>
 #include <ooo/vba/word/WdBookmarkSortBy.hpp>

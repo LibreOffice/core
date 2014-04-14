@@ -110,6 +110,7 @@
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -312,8 +313,10 @@
 #include <vcl/graph.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>

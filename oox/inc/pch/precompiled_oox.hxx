@@ -20,6 +20,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "sal/log.hxx"
+#include "sax/fastparser.hxx"
 #include <algorithm>
 #include <assert.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -29,7 +30,9 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/bind.hpp>
 #include <boost/optional.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
+#include <cassert>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
 #include <com/sun/star/animations/AnimationColorSpace.hpp>
 #include <com/sun/star/animations/AnimationEndSync.hpp>
@@ -310,6 +313,8 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -318,6 +323,7 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
@@ -330,7 +336,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -339,6 +344,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cstdio>
 #include <editeng/escapementitem.hxx>
+#include <editeng/outlobj.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/unoprnms.hxx>
 #include <filter/msfilter/escherex.hxx>
@@ -367,6 +373,8 @@
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/tools/converter.hxx>
 #include <set>
@@ -383,7 +391,7 @@
 #include <svx/svdtrans.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unopage.hxx>
-#include <time.h>
+#include <svx/unoshape.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/mapunit.hxx>
@@ -399,6 +407,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>
 #include <vector>

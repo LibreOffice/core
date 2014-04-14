@@ -18,6 +18,7 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "editeng/editstat.hxx"
 #include "formula/errorcodes.hxx"
+#include "officecfg/Office/Common.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/core/relations.hxx"
 #include "oox/core/xmlfilterbase.hxx"
@@ -44,7 +45,6 @@
 #include "oox/token/tokens.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
-#include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "sal/config.h"
 #include "sal/types.h"
@@ -71,6 +71,7 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <cassert>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
@@ -299,6 +300,7 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
 #include <com/sun/star/table/CellJustifyMethod.hpp>
@@ -310,6 +312,7 @@
 #include <com/sun/star/table/XCell2.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -317,9 +320,9 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
-#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -339,6 +342,7 @@
 #include <config_orcus.h>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cstring>
 #include <ctype.h>
 #include <editeng/adjustitem.hxx>
@@ -397,6 +401,7 @@
 #include <officecfg/Setup.hxx>
 #include <officecfg/System.hxx>
 #include <oox/core/contexthandler.hxx>
+#include <oox/core/fastparser.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/export/chartexport.hxx>
@@ -413,10 +418,12 @@
 #include <oox/ole/vbaproject.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
+#include <queue>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
 #include <rtl/strbuf.hxx>
@@ -430,6 +437,7 @@
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/mathconf.h>
+#include <salhelper/thread.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/tools/converter.hxx>
 #include <set>
@@ -456,6 +464,7 @@
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/sharedstringpool.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
 #include <svl/urihelper.hxx>
@@ -538,7 +547,9 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wmf.hxx>
 #include <vector>

@@ -32,6 +32,7 @@
 #include <boost/mem_fn.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
@@ -112,7 +113,6 @@
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/TaskCreator.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -130,6 +130,7 @@
 #include <com/sun/star/frame/XTitleChangeListener.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/graphic/GraphicColorMode.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/Collator.hpp>
@@ -254,7 +255,6 @@
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
-#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
@@ -265,8 +265,10 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -288,7 +290,6 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <comphelper/basicio.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/containermultiplexer.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -355,6 +356,7 @@
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/config.h>
 #include <set>
 #include <sfx2/QuerySaveDocument.hxx>
 #include <sfx2/app.hxx>
@@ -468,6 +470,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menu.hxx>
@@ -475,6 +478,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/split.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>

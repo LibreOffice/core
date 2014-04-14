@@ -14,18 +14,11 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/text/XLineNumberingProperties.hpp>
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-#include <sal/config.h>
-#include <svl/urihelper.hxx>
-#include <tools/debug.hxx>
 #include <algorithm>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -40,6 +33,7 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <boost/bind.hpp>
 #include <boost/iterator_adaptors.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_array.hpp>
@@ -157,6 +151,7 @@
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
+#include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
@@ -297,7 +292,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
@@ -346,6 +340,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -399,6 +394,7 @@
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XFormField.hpp>
+#include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <com/sun/star/text/XRelativeTextContentInsert.hpp>
@@ -500,6 +496,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/xmltools.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -512,7 +509,6 @@
 #include <limits.h>
 #include <list>
 #include <map>
-#include <memory>
 #include <numeric>
 #include <o3tl/sorted_vector.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -526,17 +522,20 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
+#include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <sax/tools/converter.hxx>
 #include <set>
+#include <stack>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <svl/itemset.hxx>
 #include <svl/nfsymbol.hxx>
 #include <svl/numuno.hxx>
+#include <svl/urihelper.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <tools/color.hxx>
@@ -551,9 +550,7 @@
 #include <tools/helpers.hxx>
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/wintypes.hxx>
 #include <typeinfo>
-#include <uno/lbnames.h>
 #include <unotools/bootstrap.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/charclass.hxx>

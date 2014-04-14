@@ -38,7 +38,6 @@
 #include "osl/diagnose.h"
 #include "sal/config.h"
 #include "sal/types.h"
-#include "uno/lbnames.h"
 #include "xmloff/DashStyle.hxx"
 #include "xmloff/GradientStyle.hxx"
 #include "xmloff/HatchStyle.hxx"
@@ -84,6 +83,7 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <basic/sbxvar.hxx>
 #include <boost/bind.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
@@ -206,6 +206,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
+#include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -251,6 +252,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
@@ -263,6 +265,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -289,7 +292,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/serviceinfohelper.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
@@ -304,6 +306,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cstdio>
+#include <cstdlib>
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
@@ -346,6 +349,7 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
+#include <drawinglayer/primitive2d/openglprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -388,6 +392,7 @@
 #include <editeng/bulletitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/charscaleitem.hxx>
+#include <editeng/cmapitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/crossedoutitem.hxx>
@@ -436,12 +441,12 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <i18nutil/unicode.hxx>
 #include <limits>
 #include <linguistic/misc.hxx>
 #include <map>
 #include <math.h>
 #include <memory>
-#include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
@@ -556,6 +561,7 @@
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
 #include <tools/line.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/rcid.h>
 #include <tools/resmgr.hxx>

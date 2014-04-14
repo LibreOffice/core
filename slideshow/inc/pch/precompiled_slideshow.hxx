@@ -18,7 +18,6 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "rtl/ref.hxx"
 #include <algorithm>
-#include <animations/animationnodehelper.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -135,6 +134,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
@@ -148,6 +148,7 @@
 #include <com/sun/star/presentation/XSlideShow.hpp>
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/PanoseLetterForm.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
@@ -193,7 +194,6 @@
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <queue>
-#include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -217,6 +217,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/virdev.hxx>

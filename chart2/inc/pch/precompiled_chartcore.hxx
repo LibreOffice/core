@@ -15,6 +15,7 @@
 */
 
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include <GL/glew.h>
 #include <algorithm>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -30,6 +31,7 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <boost/bind.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <cmath>
@@ -45,6 +47,8 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -78,9 +82,11 @@
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/chart2/XColorScheme.hpp>
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -88,6 +94,7 @@
 #include <com/sun/star/chart2/XFormattedString.hpp>
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <com/sun/star/chart2/XTimeBased.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
@@ -189,7 +196,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/Color.hpp>
-#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -220,6 +227,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cstdarg>
 #include <drawinglayer/XShapeDumper.hxx>
 #include <editeng/brushitem.hxx>
@@ -229,16 +237,20 @@
 #include <editeng/unoprnms.hxx>
 #include <framework/undomanagerhelper.hxx>
 #include <functional>
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <iterator>
 #include <limits>
 #include <map>
-#include <memory>
 #include <o3tl/compat_functional.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <osl/conditn.hxx>
 #include <osl/diagnose.h>
+#include <osl/module.hxx>
 #include <osl/mutex.hxx>
+#include <osl/time.h>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
@@ -282,6 +294,7 @@
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/resmgr.hxx>
+#include <tools/solar.h>
 #include <ucbhelper/content.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/configitem.hxx>
@@ -294,6 +307,7 @@
 #include <valarray>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vector>

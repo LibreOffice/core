@@ -26,6 +26,7 @@
 #include <basic/sbuno.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
+#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
@@ -182,7 +183,7 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/thePathSettings.hpp>
+#include <com/sun/star/util/PathSettings.hpp>
 #include <com/sun/star/util/TriState.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>

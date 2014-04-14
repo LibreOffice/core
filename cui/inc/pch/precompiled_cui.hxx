@@ -59,8 +59,10 @@
 #include <basic/sbstar.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbxmeth.hxx>
+#include <bitset>
 #include <boost/make_shared.hpp>
 #include <boost/ref.hpp>
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <cassert>
@@ -87,6 +89,7 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XHierarchicalName.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -111,9 +114,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchInformation.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -126,6 +127,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
@@ -202,7 +205,6 @@
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
@@ -210,11 +212,8 @@
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
-#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/theUICategoryDescription.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-#include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
@@ -233,6 +232,9 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theUICategoryDescription.hpp>
+#include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -242,12 +244,12 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/classids.hxx>
@@ -263,7 +265,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequenceasvector.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
@@ -275,6 +276,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cstddef>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/adjustitem.hxx>
@@ -334,6 +336,8 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <i18nutil/unicode.hxx>
+#include <iostream>
 #include <limits>
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
@@ -415,6 +419,8 @@
 #include <svl/eitem.hxx>
 #include <svl/filenotation.hxx>
 #include <svl/flagitem.hxx>
+#include <svl/ilstitem.hxx>
+#include <svl/int64item.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/itempool.hxx>
@@ -539,9 +545,7 @@
 #include <svx/ucsubset.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/xfillit.hxx>
-#include <svx/xfillit0.hxx>
 #include <svx/xflbckit.hxx>
-#include <svx/xflgrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xlineit.hxx>
 #include <svx/xlineit0.hxx>
@@ -555,6 +559,7 @@
 #include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/mapunit.hxx>
 #include <tools/rc.h>
 #include <tools/rcid.h>
 #include <tools/resary.hxx>
@@ -595,6 +600,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/viewoptions.hxx>
+#include <vcl/IconThemeInfo.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/builder.hxx>

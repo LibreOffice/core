@@ -17,6 +17,7 @@
 #include "i18nlangtag/lang.h"
 #include "sal/config.h"
 #include "svl/ctloptions.hxx"
+#include "vcl/settings.hxx"
 #include "vcl/svapp.hxx"
 #include <algorithm>
 #include <basegfx/color/bcolor.hxx>
@@ -70,6 +71,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -91,9 +93,11 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/config.h>
 #include <svtools/borderhelper.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/formpdfexport.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -101,7 +105,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
-#include <uno/environment.h>
 #include <vcl/animate.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>

@@ -21,10 +21,11 @@
 #include <boost/scoped_ptr.hpp>
 #include <cmath>
 #include <config_folders.h>
+#include <float.h>
 #include <iostream>
 #include <list>
 #include <map>
-#include <memory>
+#include <math.h>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/digest.h>
@@ -34,5 +35,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

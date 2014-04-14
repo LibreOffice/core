@@ -69,6 +69,8 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <config_options.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>

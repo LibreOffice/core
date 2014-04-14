@@ -45,6 +45,7 @@
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediatoolbox.hxx>
 #include <avmedia/mediawindow.hxx>
+#include <avmedia/modeltools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -70,6 +71,7 @@
 #include <boost/foreach.hpp>
 #include <boost/function.hpp>
 #include <boost/limits.hpp>
+#include <boost/make_shared.hpp>
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_array.hpp>
@@ -165,6 +167,7 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -203,14 +206,12 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
-#include <com/sun/star/frame/theAutoRecovery.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/frame/FrameActionEvent.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -224,6 +225,8 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
+#include <com/sun/star/frame/theAutoRecovery.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
@@ -361,9 +364,11 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/serviceinfohelper.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <config_features.h>
+#include <config_libraries.h>
+#include <config_options.h>
 #include <cppcanvas/basegfxfactory.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -384,6 +389,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cstddef>
 #include <cstdio>
+#include <cstdlib>
 #include <deque>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
@@ -399,6 +405,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/bulletitem.hxx>
 #include <editeng/charreliefitem.hxx>
+#include <editeng/cmapitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/crossedoutitem.hxx>
@@ -456,6 +463,7 @@
 #include <filter/msfilter/svxmsbas.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <i18nutil/unicode.hxx>
 #include <iterator>
 #include <limits.h>
 #include <linguistic/lngprops.hxx>
@@ -543,6 +551,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <string>
+#include <svl/IndexedStyleSheets.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/cjkoptions.hxx>
@@ -589,11 +598,13 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/soerr.hxx>
+#include <svtools/svlbitm.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/tabbar.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/transfer.hxx>
+#include <svtools/treelistentry.hxx>
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/valueset.hxx>
@@ -743,7 +754,6 @@
 #include <svx/sxmsuitm.hxx>
 #include <svx/tabline.hxx>
 #include <svx/tbcontrl.hxx>
-#include <svx/tbxcolor.hxx>
 #include <svx/tbxcustomshapes.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
@@ -827,7 +837,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/wintypes.hxx>
 #include <tools/wldcrd.hxx>
-#include <uno/lbnames.h>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/confignode.hxx>
@@ -899,7 +908,6 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/unohelp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
