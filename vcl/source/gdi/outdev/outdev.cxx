@@ -1010,43 +1010,6 @@ void OutputDevice::SetRefPoint( const Point& rRefPoint )
         mpAlphaVDev->SetRefPoint( rRefPoint );
 }
 
-void OutputDevice::DrawRect( const Rectangle& rRect )
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRectAction( rRect ) );
-
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
-        return;
-
-    Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
-
-    if ( aRect.IsEmpty() )
-        return;
-    aRect.Justify();
-
-    if ( !mpGraphics )
-    {
-        if ( !ImplGetGraphics() )
-            return;
-    }
-
-    if ( mbInitClipRegion )
-        ImplInitClipRegion();
-    if ( mbOutputClipped )
-        return;
-
-    if ( mbInitLineColor )
-        ImplInitLineColor();
-    if ( mbInitFillColor )
-        ImplInitFillColor();
-
-    mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), this );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawRect( rRect );
-}
-
 sal_uInt32 OutputDevice::GetGCStackDepth() const
 {
     const ImplObjStack* pData = mpObjStack;
