@@ -24,7 +24,6 @@
 
 struct TagAttribute
 {
-    TagAttribute(){}
     TagAttribute( const OUString &rName, const OUString &rType , const OUString &rValue )
     {
         sName     = rName;

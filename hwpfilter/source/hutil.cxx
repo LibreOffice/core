@@ -22,6 +22,7 @@
 #include <ctype.h>
 #include "hwpfile.h"
 #include "hbox.h"
+#include "hutil.h"
 
 static char *get_one_roman(int num, char one, char five, char ten, char *str)
 {

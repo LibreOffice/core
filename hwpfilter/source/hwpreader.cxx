@@ -26,10 +26,9 @@
 
 #include <comphelper/newarray.hxx>
 
+#include "fontmap.hxx"
 #include "formula.h"
 #include "cspline.h"
-
-extern int getRepFamilyName(const char* , char *, double &ratio);
 
 #include <iostream>
 #include <locale.h>

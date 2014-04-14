@@ -47,6 +47,9 @@
 // matrix.  Therefore for very large N, you may have to worry about memory
 // usage.
 
+#include <sal/config.h>
+
+#include "cspline.h"
 #include "solver.h"
 
 void NaturalSpline (int N, double* x, double* a, double*& b, double*& c,

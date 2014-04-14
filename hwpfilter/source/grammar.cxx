@@ -32,15 +32,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "grammar.hxx"
+#include "lexer.hxx"
 #include "nodes.h"
 
 std::list<Node*> nodelist;
 
-Node *mainParse(const char *_code);
 void yyerror(const char *);
-int yylex();
-void initFlex( const char *s );
-void viewResult(Node *res);
 
 Node *top=0L;
 
