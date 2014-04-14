@@ -184,13 +184,13 @@ sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleRowSelected( sal_Int32
 
     ensureIsAlive();
     ensureIsValidRow( nRow );
-    sal_Bool bSelected = sal_False;
+    bool bSelected = false;
     Sequence< sal_Int32 > selectedRows = getSelectedAccessibleRows();
     for(int i=0; i<selectedRows.getLength(); i++)
     {
         if(nRow == selectedRows[i])
         {
-            bSelected = sal_True;
+            bSelected = true;
             continue;
         }
     }

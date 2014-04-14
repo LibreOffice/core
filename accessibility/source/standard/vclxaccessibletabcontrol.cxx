@@ -433,9 +433,9 @@ sal_Bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int32 nChildIn
     if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
         throw IndexOutOfBoundsException();
 
-    sal_Bool bSelected = sal_False;
+    bool bSelected = false;
     if ( m_pTabControl && m_pTabControl->GetCurPageId() == m_pTabControl->GetPageId( (sal_uInt16)nChildIndex ) )
-        bSelected = sal_True;
+        bSelected = true;
 
     return bSelected;
 }

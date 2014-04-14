@@ -279,7 +279,7 @@ inline bool hasFloatingChild(Window *pWindow)
 
     Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXListBox* _pXWindow )
     {
-        sal_Bool bIsDropDownBox = sal_False;
+        bool bIsDropDownBox = false;
         ListBox* pBox = static_cast< ListBox* >( _pXWindow->GetWindow() );
         if ( pBox )
             bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
@@ -312,7 +312,7 @@ inline bool hasFloatingChild(Window *pWindow)
 
     Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXComboBox* _pXWindow )
     {
-        sal_Bool bIsDropDownBox = sal_False;
+        bool bIsDropDownBox = false;
         ComboBox* pBox = static_cast< ComboBox* >( _pXWindow->GetWindow() );
         if ( pBox )
             bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );

@@ -67,7 +67,7 @@ AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnR
         pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
         pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
 
-        sal_Bool bSelected = isRowBarCell() ? mpBrowseBox->IsRowSelected(m_nColumnRowId) : mpBrowseBox->IsColumnSelected(m_nColumnRowId);
+        bool bSelected = isRowBarCell() ? mpBrowseBox->IsRowSelected(m_nColumnRowId) : mpBrowseBox->IsColumnSelected(m_nColumnRowId);
         if ( bSelected )
             pStateSetHelper->AddState( AccessibleStateType::SELECTED );
     }
@@ -121,7 +121,7 @@ OUString SAL_CALL AccessibleBrowseBoxHeaderCell::getImplementationName()
 
 namespace
 {
-    Rectangle getRectangle(IAccessibleTableProvider* _pBrowseBox,sal_Int32 _nRowColIndex, sal_Bool _bOnScreen,sal_Bool _bRowBar)
+    Rectangle getRectangle(IAccessibleTableProvider* _pBrowseBox,sal_Int32 _nRowColIndex, bool _bOnScreen,bool _bRowBar)
     {
         sal_Int32 nRow  = 0;
         sal_uInt16 nCol =  (sal_uInt16)_nRowColIndex;
@@ -138,13 +138,13 @@ namespace
 
 Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBox()
 {
-    return getRectangle(mpBrowseBox,m_nColumnRowId,sal_False,isRowBarCell());
+    return getRectangle(mpBrowseBox,m_nColumnRowId,false,isRowBarCell());
 }
 
 
 Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
 {
-    return getRectangle(mpBrowseBox,m_nColumnRowId,sal_True,isRowBarCell());
+    return getRectangle(mpBrowseBox,m_nColumnRowId,true,isRowBarCell());
 }
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()

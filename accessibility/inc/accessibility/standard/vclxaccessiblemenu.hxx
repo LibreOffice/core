@@ -37,8 +37,8 @@ class VCLXAccessibleMenu :  public VCLXAccessibleMenuItem,
                             public VCLXAccessibleMenu_BASE
 {
 protected:
-    virtual sal_Bool        IsFocused() SAL_OVERRIDE;
-    virtual sal_Bool        IsPopupMenuOpen() SAL_OVERRIDE;
+    virtual bool        IsFocused() SAL_OVERRIDE;
+    virtual bool        IsPopupMenuOpen() SAL_OVERRIDE;
 
 public:
     VCLXAccessibleMenu( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu );

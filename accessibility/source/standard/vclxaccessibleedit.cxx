@@ -255,12 +255,12 @@ sal_Bool VCLXAccessibleEdit::doAccessibleAction ( sal_Int32 nIndex ) throw (Inde
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    sal_Bool bDoAction = sal_False;
+    bool bDoAction = false;
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
         pWindow->GrabFocus();
-        bDoAction = sal_True;
+        bDoAction = true;
     }
 
     return bDoAction;
@@ -419,7 +419,7 @@ sal_Bool VCLXAccessibleEdit::setSelection( sal_Int32 nStartIndex, sal_Int32 nEnd
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     OUString sText( implGetText() );
 
     if ( !implIsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
@@ -430,7 +430,7 @@ sal_Bool VCLXAccessibleEdit::setSelection( sal_Int32 nStartIndex, sal_Int32 nEnd
     if ( pVCLXEdit && pEdit && pEdit->IsEnabled() )
     {
         pVCLXEdit->setSelection( awt::Selection( nStartIndex, nEndIndex ) );
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     return bReturn;
@@ -507,7 +507,7 @@ sal_Bool VCLXAccessibleEdit::pasteText( sal_Int32 nIndex ) throw (IndexOutOfBoun
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if ( GetWindow() )
     {
@@ -559,7 +559,7 @@ sal_Bool VCLXAccessibleEdit::replaceText( sal_Int32 nStartIndex, sal_Int32 nEndI
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     OUString sText( implGetText() );
 
     if ( !implIsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
@@ -574,7 +574,7 @@ sal_Bool VCLXAccessibleEdit::replaceText( sal_Int32 nStartIndex, sal_Int32 nEndI
         pVCLXEdit->setText( sText.replaceAt( nMinIndex, nMaxIndex - nMinIndex, sReplacement ) );
         sal_Int32 nIndex = nMinIndex + sReplacement.getLength();
         setSelection( nIndex, nIndex );
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     return bReturn;
@@ -598,7 +598,7 @@ sal_Bool VCLXAccessibleEdit::setText( const OUString& sText ) throw (RuntimeExce
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     try
     {
         bSuccess = replaceText( 0, implGetText().getLength(), sText );

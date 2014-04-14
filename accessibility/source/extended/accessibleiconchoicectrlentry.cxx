@@ -130,14 +130,14 @@ throw(RuntimeException, std::exception)
         return aRect;
     }
 
-    sal_Bool AccessibleIconChoiceCtrlEntry::IsAlive_Impl() const
+    bool AccessibleIconChoiceCtrlEntry::IsAlive_Impl() const
     {
         return ( !rBHelper.bDisposed && !rBHelper.bInDispose && m_pIconCtrl );
     }
 
-    sal_Bool AccessibleIconChoiceCtrlEntry::IsShowing_Impl() const
+    bool AccessibleIconChoiceCtrlEntry::IsShowing_Impl() const
     {
-        sal_Bool bShowing = sal_False;
+        bool bShowing = false;
         Reference< XAccessibleContext > m_xParentContext =
             m_xParent.is() ? m_xParent->getAccessibleContext() : Reference< XAccessibleContext >();
         if( m_xParentContext.is() )
@@ -471,7 +471,7 @@ throw(RuntimeException, std::exception)
             for ( long i = 0; i < nLen; ++i )
             {
                 Rectangle aRect = aLayoutData.GetCharacterBounds(i);
-                sal_Bool bInside = aRect.IsInside( aPnt );
+                bool bInside = aRect.IsInside( aPnt );
 
                 if ( bInside )
                     break;
@@ -658,7 +658,7 @@ throw(RuntimeException, std::exception)
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
         checkActionIndex_Impl( nIndex );
         EnsureIsAlive();
 
@@ -667,7 +667,7 @@ throw(RuntimeException, std::exception)
         {
             m_pIconCtrl->SetNoSelection();
             m_pIconCtrl->SetCursor( pEntry );
-            bRet = sal_True;
+            bRet = true;
         }
 
         return bRet;

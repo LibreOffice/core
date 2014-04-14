@@ -66,8 +66,8 @@ VCLXAccessibleListItem::VCLXAccessibleListItem( ::accessibility::IComboListBoxHe
     VCLXAccessibleListItem_BASE ( m_aMutex ),
 
     m_nIndexInParent( _nIndexInParent ),
-    m_bSelected     ( sal_False ),
-    m_bVisible      ( sal_False ),
+    m_bSelected     ( false ),
+    m_bVisible      ( false ),
     m_nClientId     ( 0 ),
     m_pListBoxHelper( _pListBoxHelper ),
     m_xParent       ( _xParent )
@@ -84,7 +84,7 @@ VCLXAccessibleListItem::~VCLXAccessibleListItem()
 {
 }
 
-void VCLXAccessibleListItem::SetSelected( sal_Bool _bSelected )
+void VCLXAccessibleListItem::SetSelected( bool _bSelected )
 {
     if ( m_bSelected != _bSelected )
     {
@@ -99,7 +99,7 @@ void VCLXAccessibleListItem::SetSelected( sal_Bool _bSelected )
     }
 }
 
-void VCLXAccessibleListItem::SetVisible( sal_Bool _bVisible )
+void VCLXAccessibleListItem::SetVisible( bool _bVisible )
 {
     if ( m_bVisible != _bVisible )
     {
@@ -326,7 +326,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::containsPoint( const awt::Point& _aPoi
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Bool bInside = sal_False;
+    bool bInside = false;
     if ( m_pListBoxHelper )
     {
         Rectangle aRect( m_pListBoxHelper->GetBoundingRectangle( (sal_uInt16)m_nIndexInParent ) );
@@ -568,7 +568,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_I
     checkIndex_Impl( nStartIndex, m_sEntryText );
     checkIndex_Impl( nEndIndex, m_sEntryText );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( m_pListBoxHelper )
     {
         Reference< datatransfer::clipboard::XClipboard > xClipboard = m_pListBoxHelper->GetClipboard();
@@ -584,7 +584,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_I
                 xFlushableClipboard->flushClipboard();
             Application::AcquireSolarMutex( nRef );
 
-            bRet = sal_True;
+            bRet = true;
         }
     }
 

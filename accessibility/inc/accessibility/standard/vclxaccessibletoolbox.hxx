@@ -45,7 +45,7 @@ private:
     void                        ReleaseFocus_Impl( sal_Int32 _nPos );
     void                        UpdateChecked_Impl( sal_Int32 _nPos );
     void                        UpdateIndeterminate_Impl( sal_Int32 _nPos );
-    void                        UpdateItem_Impl( sal_Int32 _nPos, sal_Bool _bItemAdded );
+    void                        UpdateItem_Impl( sal_Int32 _nPos, bool _bItemAdded );
     void                        UpdateAllItems_Impl();
     void                        UpdateItemName_Impl( sal_Int32 _nPos );
     void                        UpdateItemEnabled_Impl( sal_Int32 _nPos );

@@ -212,7 +212,7 @@ sal_Int32 AccessibleBrowseBoxTableBase::implGetColumnCount() const
 
 // internal helper methods ----------------------------------------------------
 
-sal_Bool AccessibleBrowseBoxTableBase::implHasHandleColumn() const
+bool AccessibleBrowseBoxTableBase::implHasHandleColumn() const
 {
     return mpBrowseBox->HasRowHeader();
 }
@@ -253,24 +253,24 @@ sal_Int32 AccessibleBrowseBoxTableBase::implGetChildIndex(
     return nRow * implGetColumnCount() + nColumn;
 }
 
-sal_Bool AccessibleBrowseBoxTableBase::implIsRowSelected( sal_Int32 nRow ) const
+bool AccessibleBrowseBoxTableBase::implIsRowSelected( sal_Int32 nRow ) const
 {
     return mpBrowseBox->IsRowSelected( nRow );
 }
 
-sal_Bool AccessibleBrowseBoxTableBase::implIsColumnSelected( sal_Int32 nColumn ) const
+bool AccessibleBrowseBoxTableBase::implIsColumnSelected( sal_Int32 nColumn ) const
 {
     if( implHasHandleColumn() )
         --nColumn;
     return mpBrowseBox->IsColumnSelected( nColumn );
 }
 
-void AccessibleBrowseBoxTableBase::implSelectRow( sal_Int32 nRow, sal_Bool bSelect )
+void AccessibleBrowseBoxTableBase::implSelectRow( sal_Int32 nRow, bool bSelect )
 {
     mpBrowseBox->SelectRow( nRow, bSelect, true );
 }
 
-void AccessibleBrowseBoxTableBase::implSelectColumn( sal_Int32 nColumnPos, sal_Bool bSelect )
+void AccessibleBrowseBoxTableBase::implSelectColumn( sal_Int32 nColumnPos, bool bSelect )
 {
     mpBrowseBox->SelectColumn( (sal_uInt16)nColumnPos, bSelect );
 }

@@ -104,7 +104,7 @@ AccessibleGridControlHeader::getAccessibleAtPoint( const awt::Point& rPoint )
 
     sal_Int32 nRow = 0;
     sal_Int32 nColumnPos = 0;
-    sal_Bool bConverted = isRowBar() ?
+    bool bConverted = isRowBar() ?
     m_aTable.ConvertPointToCellAddress( nRow, nColumnPos, VCLPoint( rPoint ) ) :
     m_aTable.ConvertPointToCellAddress( nRow, nColumnPos, VCLPoint( rPoint ) );
 

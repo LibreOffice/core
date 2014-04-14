@@ -51,21 +51,21 @@ namespace accessibility
 
     private:
         sal_uInt16              m_nPageId;
-        sal_Bool                m_bEnabled;
-        sal_Bool                m_bShowing;
-        sal_Bool                m_bSelected;
+        bool                m_bEnabled;
+        bool                m_bShowing;
+        bool                m_bSelected;
         OUString                m_sPageText;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >        m_xParent;
 
     protected:
-        sal_Bool                IsEnabled();
-        sal_Bool                IsShowing();
-        sal_Bool                IsSelected();
+        bool                IsEnabled();
+        bool                IsShowing();
+        bool                IsSelected();
 
-        void                    SetEnabled( sal_Bool bEnabled );
-        void                    SetShowing( sal_Bool bShowing );
-        void                    SetSelected( sal_Bool bSelected );
+        void                    SetEnabled( bool bEnabled );
+        void                    SetShowing( bool bShowing );
+        void                    SetSelected( bool bSelected );
         void                    SetPageText( const OUString& sPageText );
 
         sal_uInt16              GetPageId() const { return m_nPageId; }

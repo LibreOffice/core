@@ -113,7 +113,7 @@ public:
     */
     void commitHeaderBarEvent(sal_Int16 nEventId,
             const ::com::sun::star::uno::Any& rNewValue,
-            const ::com::sun::star::uno::Any& rOldValue,sal_Bool _bColumnHeaderBar = sal_True);
+            const ::com::sun::star::uno::Any& rOldValue,bool _bColumnHeaderBar = true);
 
     // helper functions
     /** commitTableEvent commit the event at all listeners of the table

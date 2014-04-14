@@ -357,9 +357,9 @@ void AccessibleBrowseBoxBase::setAccessibleDescription( const OUString& rDescrip
 
 // internal virtual methods ---------------------------------------------------
 
-sal_Bool AccessibleBrowseBoxBase::implIsShowing()
+bool AccessibleBrowseBoxBase::implIsShowing()
 {
-    sal_Bool bShowing = sal_False;
+    bool bShowing = false;
     if( mxParent.is() )
     {
         Reference< XAccessibleComponent >
@@ -392,7 +392,7 @@ sal_Bool AccessibleBrowseBoxBase::implIsShowing()
 
 // internal helper methods ----------------------------------------------------
 
-sal_Bool AccessibleBrowseBoxBase::isAlive() const
+bool AccessibleBrowseBoxBase::isAlive() const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose && mpBrowseBox;
 }

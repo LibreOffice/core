@@ -34,7 +34,7 @@ namespace accessibility
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos
                                 ,const TriState& _eState,
-                                sal_Bool _bIsTriState)
+                                bool _bIsTriState)
         :AccessibleBrowseBoxCell(_rxParent, _rBrowseBox, _xFocusWindow, _nRowPos, _nColPos, BBTYPE_CHECKBOXCELL)
         ,m_eState(_eState)
         ,m_bIsTriState(_bIsTriState)
@@ -137,7 +137,7 @@ namespace accessibility
         return ( getRowPos() * mpBrowseBox->GetColumnCount() ) + getColumnPos();
     }
 
-    void AccessibleCheckBoxCell::SetChecked( sal_Bool _bChecked )
+    void AccessibleCheckBoxCell::SetChecked( bool _bChecked )
     {
         m_eState = _bChecked ? TRISTATE_TRUE : TRISTATE_FALSE;
         Any aOldValue, aNewValue;

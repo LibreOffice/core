@@ -63,8 +63,8 @@ class VCLXAccessibleListItem : public ::comphelper::OBaseMutex,
 private:
     OUString                            m_sEntryText;
     sal_Int32                           m_nIndexInParent;
-    sal_Bool                            m_bSelected;
-    sal_Bool                            m_bVisible;
+    bool                            m_bSelected;
+    bool                            m_bVisible;
 
 protected:
     /// client id in the AccessibleEventNotifier queue
@@ -113,9 +113,9 @@ public:
 
     void                    NotifyAccessibleEvent(  sal_Int16 _nEventId, const ::com::sun::star::uno::Any& _aOldValue, const ::com::sun::star::uno::Any& _aNewValue );
 
-    inline sal_Bool         IsSelected() const { return m_bSelected; }
-    void                    SetSelected( sal_Bool _bSelected );
-    void                    SetVisible( sal_Bool _bVisible );
+    inline bool         IsSelected() const { return m_bSelected; }
+    void                    SetSelected( bool _bSelected );
+    void                    SetVisible( bool _bVisible );
     inline bool             DecrementIndexInParent() { OSL_ENSURE(m_nIndexInParent != 0,"Invalid call!");--m_nIndexInParent; return true;}
     inline bool             IncrementIndexInParent() { ++m_nIndexInParent; return true;}
 

@@ -84,7 +84,7 @@ AccessibleBrowseBoxHeaderBar::getAccessibleAtPoint( const awt::Point& rPoint )
 
     sal_Int32 nRow = 0;
     sal_uInt16 nColumnPos = 0;
-    sal_Bool bConverted = isRowBar() ?
+    bool bConverted = isRowBar() ?
         mpBrowseBox->ConvertPointToRowHeader( nRow, VCLPoint( rPoint ) ) :
         mpBrowseBox->ConvertPointToColumnHeader( nColumnPos, VCLPoint( rPoint ) );
 
@@ -214,9 +214,9 @@ void SAL_CALL AccessibleBrowseBoxHeaderBar::selectAccessibleChild( sal_Int32 nCh
     ensureIsAlive();
     ensureIsValidHeaderIndex( nChildIndex );
     if( isRowBar() )
-        implSelectRow( nChildIndex, sal_True );
+        implSelectRow( nChildIndex, true );
     else
-        implSelectColumn( implToVCLColumnPos( nChildIndex ), sal_True );
+        implSelectColumn( implToVCLColumnPos( nChildIndex ), true );
 }
 
 sal_Bool SAL_CALL AccessibleBrowseBoxHeaderBar::isAccessibleChildSelected( sal_Int32 nChildIndex )
@@ -247,7 +247,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderBar::selectAllAccessibleChildren()
     if( isRowBar() )
         mpBrowseBox->SelectAll();
     else
-        implSelectColumn( implToVCLColumnPos( 0 ), sal_True );
+        implSelectColumn( implToVCLColumnPos( 0 ), true );
 }
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderBar::getSelectedAccessibleChildCount()
@@ -284,9 +284,9 @@ void SAL_CALL AccessibleBrowseBoxHeaderBar::deselectAccessibleChild(
     if ( isAccessibleChildSelected(nSelectedChildIndex) )
     {
         if( isRowBar() )
-            implSelectRow( nSelectedChildIndex, sal_False );
+            implSelectRow( nSelectedChildIndex, false );
         else
-            implSelectColumn( implToVCLColumnPos( nSelectedChildIndex ), sal_False );
+            implSelectColumn( implToVCLColumnPos( nSelectedChildIndex ), false );
     }
 }
 

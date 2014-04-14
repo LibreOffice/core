@@ -298,7 +298,7 @@ sal_Bool VCLXAccessibleCheckBox::setCurrentValue( const Any& aNumber ) throw (Ru
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     VCLXCheckBox* pVCLXCheckBox = static_cast< VCLXCheckBox* >( GetVCLXWindow() );
     if ( pVCLXCheckBox )
@@ -314,7 +314,7 @@ sal_Bool VCLXAccessibleCheckBox::setCurrentValue( const Any& aNumber ) throw (Ru
             nValue = nValueMax;
 
         pVCLXCheckBox->setState( (sal_Int16) nValue );
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     return bReturn;

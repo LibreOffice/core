@@ -301,7 +301,7 @@ void AccessibleBrowseBox::commitTableEvent(sal_Int16 _nEventId,const Any& _rNewV
 
 void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
                                                 const Any& _rNewValue,
-                                                const Any& _rOldValue,sal_Bool _bColumnHeaderBar)
+                                                const Any& _rOldValue,bool _bColumnHeaderBar)
 {
     Reference< XAccessible > xHeaderBar = _bColumnHeaderBar ? m_pImpl->mxColumnHeaderBar : m_pImpl->mxRowHeaderBar;
     AccessibleBrowseBoxHeaderBar* pHeaderBar = _bColumnHeaderBar ? m_pImpl->m_pColumnHeaderBar : m_pImpl->m_pRowHeaderBar;

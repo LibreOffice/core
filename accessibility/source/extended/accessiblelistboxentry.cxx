@@ -142,16 +142,16 @@ namespace accessibility
         return aRect;
     }
 
-    sal_Bool AccessibleListBoxEntry::IsAlive_Impl() const
+    bool AccessibleListBoxEntry::IsAlive_Impl() const
     {
         return ( !rBHelper.bDisposed && !rBHelper.bInDispose && isAlive() );
     }
 
-    sal_Bool AccessibleListBoxEntry::IsShowing_Impl() const
+    bool AccessibleListBoxEntry::IsShowing_Impl() const
     {
         Reference< XAccessible > xParent = implGetParentAccessible( );
 
-        sal_Bool bShowing = sal_False;
+        bool bShowing = false;
         Reference< XAccessibleContext > m_xParentContext =
             xParent.is() ? xParent->getAccessibleContext() : Reference< XAccessibleContext >();
         if( m_xParentContext.is() )
@@ -392,7 +392,7 @@ namespace accessibility
             }
         }
 
-        sal_Bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
+        bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
         if( !(getListBox()->GetTreeFlags() & TREEFLAG_CHKBTN) )
         {
             if( bHasButtons )
@@ -759,7 +759,7 @@ namespace accessibility
         // three actions supported
         SvTreeListBox* pBox = getListBox();
         sal_uInt16 treeFlag = pBox->GetTreeFlags();
-        sal_Bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
+        bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
         if( (treeFlag & TREEFLAG_CHKBTN) && !bHasButtons)
         {
             sal_Int16 role = getAccessibleRole();
@@ -778,7 +778,7 @@ namespace accessibility
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
         checkActionIndex_Impl( nIndex );
         EnsureIsAlive();
 
@@ -804,7 +804,7 @@ namespace accessibility
                     getListBox()->Collapse( pEntry );
                 else
                     getListBox()->Expand( pEntry );
-                bRet = sal_True;
+                bRet = true;
             }
         }
 
@@ -1132,7 +1132,7 @@ namespace accessibility
         ::osl::MutexGuard aGuard( m_aMutex );
 
 
-        sal_Bool bReturn = sal_False;
+        bool bReturn = false;
         SvTreeListBox* pBox = getListBox();
         if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
         {
@@ -1150,7 +1150,7 @@ namespace accessibility
                     nValue = nValueMax;
 
                 pBox->SetCheckButtonState(pEntry,  (SvButtonState) nValue );
-                bReturn = sal_True;
+                bReturn = true;
             }
         }
 

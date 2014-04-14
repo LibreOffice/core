@@ -45,7 +45,7 @@ namespace accessibility
         /** Grabs the focus to the BrowseBox. */
         virtual void SAL_CALL grabFocus() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        inline sal_Bool isRowBarCell() const
+        inline bool isRowBarCell() const
         {
             return getType() == ::svt::BBTYPE_ROWHEADERCELL;
         }

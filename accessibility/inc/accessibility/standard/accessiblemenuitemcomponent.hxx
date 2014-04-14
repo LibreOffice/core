@@ -37,8 +37,8 @@ protected:
     OUString                m_sAccessibleName;
     OUString                m_sItemText;
 
-    virtual sal_Bool        IsEnabled() SAL_OVERRIDE;
-    virtual sal_Bool        IsVisible() SAL_OVERRIDE;
+    virtual bool            IsEnabled() SAL_OVERRIDE;
+    virtual bool            IsVisible() SAL_OVERRIDE;
     virtual void            Select() SAL_OVERRIDE;
     virtual void            DeSelect() SAL_OVERRIDE;
     virtual void            Click() SAL_OVERRIDE;
@@ -49,7 +49,7 @@ protected:
     void                    SetItemText( const OUString& sItemText );
     OUString                GetItemText();
 
-    virtual sal_Bool        IsMenuHideDisabledEntries() SAL_OVERRIDE;
+    virtual bool            IsMenuHideDisabledEntries() SAL_OVERRIDE;
 
     virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
 

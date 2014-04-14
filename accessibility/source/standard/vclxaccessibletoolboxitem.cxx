@@ -65,8 +65,8 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
     m_nIndexInParent( _nPos ),
     m_nRole         ( AccessibleRole::PUSH_BUTTON ),
     m_nItemId       ( 0 ),
-    m_bHasFocus     ( sal_False ),
-    m_bIsChecked    ( sal_False ),
+    m_bHasFocus     ( false ),
+    m_bIsChecked    ( false ),
     m_bIndeterminate( false )
 
 {
@@ -144,7 +144,7 @@ OUString VCLXAccessibleToolBoxItem::GetText( bool _bAsName )
     return sRet;
 }
 
-void VCLXAccessibleToolBoxItem::SetFocus( sal_Bool _bFocus )
+void VCLXAccessibleToolBoxItem::SetFocus( bool _bFocus )
 {
     if ( m_bHasFocus != _bFocus )
     {
@@ -159,7 +159,7 @@ void VCLXAccessibleToolBoxItem::SetFocus( sal_Bool _bFocus )
     }
 }
 
-void VCLXAccessibleToolBoxItem::SetChecked( sal_Bool _bCheck )
+void VCLXAccessibleToolBoxItem::SetChecked( bool _bCheck )
 {
     if( m_nRole == AccessibleRole::PANEL)
         return;
@@ -509,7 +509,7 @@ sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::copyText( sal_Int32 nStartIndex, sa
     if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if ( m_pToolBox )
     {
@@ -528,7 +528,7 @@ sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::copyText( sal_Int32 nStartIndex, sa
 
             Application::AcquireSolarMutex( nRef );
 
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
 
@@ -680,7 +680,7 @@ sal_Bool VCLXAccessibleToolBoxItem::setCurrentValue( const Any& aNumber ) throw 
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if ( m_pToolBox )
     {
@@ -692,8 +692,8 @@ sal_Bool VCLXAccessibleToolBoxItem::setCurrentValue( const Any& aNumber ) throw 
         else if ( nValue > 1 )
             nValue = 1;
 
-        m_pToolBox->CheckItem( m_nItemId, (sal_Bool) nValue );
-        bReturn = sal_True;
+        m_pToolBox->CheckItem( m_nItemId, nValue == 1 );
+        bReturn = true;
     }
 
     return bReturn;

@@ -61,12 +61,12 @@ VCLXAccessibleMenuBar::~VCLXAccessibleMenuBar()
 
 
 
-sal_Bool VCLXAccessibleMenuBar::IsFocused()
+bool VCLXAccessibleMenuBar::IsFocused()
 {
-    sal_Bool bFocused = sal_False;
+    bool bFocused = false;
 
     if ( m_pWindow && m_pWindow->HasFocus() && !IsChildHighlighted() )
-        bFocused = sal_True;
+        bFocused = true;
 
     return bFocused;
 }

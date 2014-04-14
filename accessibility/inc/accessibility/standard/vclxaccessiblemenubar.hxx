@@ -36,7 +36,7 @@ class VCLXAccessibleMenuBar :   public OAccessibleMenuComponent
 protected:
     Window*                 m_pWindow;
 
-    virtual sal_Bool        IsFocused() SAL_OVERRIDE;
+    virtual bool            IsFocused() SAL_OVERRIDE;
 
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
 

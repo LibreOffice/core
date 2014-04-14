@@ -51,8 +51,8 @@ private:
     sal_Int32               m_nIndexInParent;
     sal_Int16               m_nRole;
     sal_uInt16                  m_nItemId;
-    sal_Bool                m_bHasFocus;
-    sal_Bool                m_bIsChecked;
+    bool                m_bHasFocus;
+    bool                m_bIsChecked;
     bool                    m_bIndeterminate;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    m_xChild;
@@ -79,10 +79,10 @@ protected:
 public:
     VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_Int32 _nPos );
 
-    void                SetFocus( sal_Bool _bFocus );
-    inline sal_Bool     HasFocus() const { return m_bHasFocus; }
-    void                SetChecked( sal_Bool _bCheck );
-    inline sal_Bool     IsChecked() const { return m_bIsChecked; }
+    void                SetFocus( bool _bFocus );
+    inline bool     HasFocus() const { return m_bHasFocus; }
+    void                SetChecked( bool _bCheck );
+    inline bool     IsChecked() const { return m_bIsChecked; }
     void                SetIndeterminate( bool _bIndeterminate );
     inline bool         IsIndeterminate() const { return m_bIndeterminate; }
     inline void         ReleaseToolBox() { m_pToolBox = NULL; }

@@ -75,8 +75,8 @@ namespace accessibility
     private:
         Rectangle               GetBoundingBox_Impl() const;
         Rectangle               GetBoundingBoxOnScreen_Impl() const;
-        sal_Bool                IsAlive_Impl() const;
-        sal_Bool                IsShowing_Impl() const;
+        bool                IsAlive_Impl() const;
+        bool                IsShowing_Impl() const;
 
         Rectangle               GetBoundingBox()
             throw (css::lang::DisposedException,

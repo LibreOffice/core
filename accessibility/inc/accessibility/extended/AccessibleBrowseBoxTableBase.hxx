@@ -183,7 +183,7 @@ protected:
     // internal helper methods ------------------------------------------------
 
     /** @return  <TRUE/>, if first BrowseBox column is the "handle column". */
-    sal_Bool implHasHandleColumn() const;
+    bool implHasHandleColumn() const;
 
     /** @attention  This method requires locked mutex's and a living object.
         @param nColumn
@@ -209,19 +209,19 @@ protected:
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  <TRUE/>, if the specified row is selected. */
-    sal_Bool implIsRowSelected( sal_Int32 nRow ) const;
+    bool implIsRowSelected( sal_Int32 nRow ) const;
     /** @attention  This method requires locked mutex's and a living object.
         @return  <TRUE/>, if the specified column is selected. */
-    sal_Bool implIsColumnSelected( sal_Int32 nColumn ) const;
+    bool implIsColumnSelected( sal_Int32 nColumn ) const;
 
     /** Selects/deselects a row (tries to expand selection).
         @attention  This method requires locked mutex's and a living object.
         @param bSelect  <TRUE/> = select, <FALSE/> = deselect */
-    void implSelectRow( sal_Int32 nRow, sal_Bool bSelect );
+    void implSelectRow( sal_Int32 nRow, bool bSelect );
     /** Selects/deselects a column (tries to expand selection).
         @attention  This method requires locked mutex's and a living object.
         @param bSelect  <TRUE/> = select, <FALSE/> = deselect */
-    void implSelectColumn( sal_Int32 nColumnPos, sal_Bool bSelect );
+    void implSelectColumn( sal_Int32 nColumnPos, bool bSelect );
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The count of selected rows. */

@@ -655,7 +655,7 @@ sal_Bool VCLXAccessibleTabPage::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if ( m_pTabControl )
     {
@@ -674,7 +674,7 @@ sal_Bool VCLXAccessibleTabPage::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
 
             Application::AcquireSolarMutex( nRef );
 
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
 

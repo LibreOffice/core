@@ -62,7 +62,7 @@ namespace accessibility
 
 
 
-    void AccessibleTabBarPageList::UpdateEnabled( sal_Int32 i, sal_Bool bEnabled )
+    void AccessibleTabBarPageList::UpdateEnabled( sal_Int32 i, bool bEnabled )
     {
         if ( i >= 0 && i < (sal_Int32)m_aAccessibleChildren.size() )
         {
@@ -78,7 +78,7 @@ namespace accessibility
 
 
 
-    void AccessibleTabBarPageList::UpdateShowing( sal_Bool bShowing )
+    void AccessibleTabBarPageList::UpdateShowing( bool bShowing )
     {
         for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
         {
@@ -94,7 +94,7 @@ namespace accessibility
 
 
 
-    void AccessibleTabBarPageList::UpdateSelected( sal_Int32 i, sal_Bool bSelected )
+    void AccessibleTabBarPageList::UpdateSelected( sal_Int32 i, bool bSelected )
     {
         NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
 
@@ -228,7 +228,7 @@ namespace accessibility
                 Any aOldValue, aNewValue;
                 aNewValue <<= AccessibleStateType::SHOWING;
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
-                UpdateShowing( sal_True );
+                UpdateShowing( true );
             }
             break;
             case VCLEVENT_WINDOW_HIDE:
@@ -236,7 +236,7 @@ namespace accessibility
                 Any aOldValue, aNewValue;
                 aOldValue <<= AccessibleStateType::SHOWING;
                 NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
-                UpdateShowing( sal_False );
+                UpdateShowing( false );
             }
             break;
             case VCLEVENT_TABBAR_PAGEENABLED:
@@ -245,7 +245,7 @@ namespace accessibility
                 {
                     sal_uInt16 nPageId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
                     sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
-                    UpdateEnabled( nPagePos, sal_True );
+                    UpdateEnabled( nPagePos, true );
                 }
             }
             break;
@@ -255,7 +255,7 @@ namespace accessibility
                 {
                     sal_uInt16 nPageId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
                     sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
-                    UpdateEnabled( nPagePos, sal_False );
+                    UpdateEnabled( nPagePos, false );
                 }
             }
             break;
@@ -270,7 +270,7 @@ namespace accessibility
                 {
                     sal_uInt16 nPageId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
                     sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
-                    UpdateSelected( nPagePos, sal_True );
+                    UpdateSelected( nPagePos, true );
                 }
             }
             break;
@@ -280,7 +280,7 @@ namespace accessibility
                 {
                     sal_uInt16 nPageId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
                     sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
-                    UpdateSelected( nPagePos, sal_False );
+                    UpdateSelected( nPagePos, false );
                 }
             }
             break;
@@ -712,9 +712,9 @@ namespace accessibility
         if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
             throw IndexOutOfBoundsException();
 
-        sal_Bool bSelected = sal_False;
+        bool bSelected = false;
         if ( m_pTabBar && m_pTabBar->GetCurPageId() == m_pTabBar->GetPageId( (sal_uInt16)nChildIndex ) )
-            bSelected = sal_True;
+            bSelected = true;
 
         return bSelected;
     }

@@ -51,9 +51,9 @@ private:
         SAL_THROW( ( ::com::sun::star::lang::IndexOutOfBoundsException ) );
 
     /** Returns true, if the specified row is selected. */
-    sal_Bool implIsRowSelected( sal_Int32 _nRow ) const;
+    bool implIsRowSelected( sal_Int32 _nRow ) const;
     /** Selects the specified row. */
-    void implSelectRow( sal_Int32 _nRow, sal_Bool _bSelect );
+    void implSelectRow( sal_Int32 _nRow, bool _bSelect );
 
     /** Returns the count of rows in the table. */
     sal_Int32 implGetRowCount() const SAL_OVERRIDE;

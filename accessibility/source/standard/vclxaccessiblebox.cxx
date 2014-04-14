@@ -416,7 +416,7 @@ sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleActionCount (void)
 sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
     throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
-    sal_Bool bNotify = sal_False;
+    bool bNotify = false;
 
     {
         SolarMutexGuard aSolarGuard;
@@ -435,7 +435,7 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
             if (pComboBox != NULL)
             {
                 pComboBox->ToggleDropDown();
-                bNotify = sal_True;
+                bNotify = true;
             }
         }
         else if (m_aBoxType == LISTBOX)
@@ -444,7 +444,7 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
             if (pListBox != NULL)
             {
                 pListBox->ToggleDropDown();
-                bNotify = sal_True;
+                bNotify = true;
             }
         }
     }
@@ -534,7 +534,7 @@ sal_Bool VCLXAccessibleBox::setCurrentValue( const Any& aNumber )
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     ::rtl::OUString  fValue;
-    sal_Bool bValid = (aNumber >>= fValue);
+    bool bValid = (aNumber >>= fValue);
     if( bValid )
     {
 

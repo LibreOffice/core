@@ -254,7 +254,7 @@ sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber ) throw 
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
     if ( pVCLXRadioButton )
@@ -267,8 +267,8 @@ sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber ) throw 
         else if ( nValue > 1 )
             nValue = 1;
 
-        pVCLXRadioButton->setState( (sal_Bool) nValue );
-        bReturn = sal_True;
+        pVCLXRadioButton->setState( nValue == 1 );
+        bReturn = true;
     }
 
     return bReturn;

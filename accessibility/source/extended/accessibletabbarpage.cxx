@@ -66,11 +66,11 @@ namespace accessibility
 
 
 
-    sal_Bool AccessibleTabBarPage::IsEnabled()
+    bool AccessibleTabBarPage::IsEnabled()
     {
         OExternalLockGuard aGuard( this );
 
-        sal_Bool bEnabled = sal_False;
+        bool bEnabled = false;
         if ( m_pTabBar )
             bEnabled = m_pTabBar->IsPageEnabled( m_nPageId );
 
@@ -79,31 +79,31 @@ namespace accessibility
 
 
 
-    sal_Bool AccessibleTabBarPage::IsShowing()
+    bool AccessibleTabBarPage::IsShowing()
     {
-        sal_Bool bShowing = sal_False;
+        bool bShowing = false;
 
         if ( m_pTabBar && m_pTabBar->IsVisible() )
-            bShowing = sal_True;
+            bShowing = true;
 
         return bShowing;
     }
 
 
 
-    sal_Bool AccessibleTabBarPage::IsSelected()
+    bool AccessibleTabBarPage::IsSelected()
     {
-        sal_Bool bSelected = sal_False;
+        bool bSelected = false;
 
         if ( m_pTabBar && m_pTabBar->GetCurPageId() == m_nPageId )
-            bSelected = sal_True;
+            bSelected = true;
 
         return bSelected;
     }
 
 
 
-    void AccessibleTabBarPage::SetEnabled( sal_Bool bEnabled )
+    void AccessibleTabBarPage::SetEnabled( bool bEnabled )
     {
         if ( m_bEnabled != bEnabled )
         {
@@ -127,7 +127,7 @@ namespace accessibility
 
 
 
-    void AccessibleTabBarPage::SetShowing( sal_Bool bShowing )
+    void AccessibleTabBarPage::SetShowing( bool bShowing )
     {
         if ( m_bShowing != bShowing )
         {
@@ -143,7 +143,7 @@ namespace accessibility
 
 
 
-    void AccessibleTabBarPage::SetSelected( sal_Bool bSelected )
+    void AccessibleTabBarPage::SetSelected( bool bSelected )
     {
         if ( m_bSelected != bSelected )
         {

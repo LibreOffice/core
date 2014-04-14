@@ -89,7 +89,7 @@ namespace
         inline sal_Int32    getIndexInParent() const                    { return m_nIndexInParent; }
         inline void         setIndexInParent( sal_Int32 _nNewIndex )    { m_nIndexInParent = _nNewIndex; }
 
-        static  sal_Bool    isWindowItem( const Reference< XAccessible >& _rxAcc, OToolBoxWindowItem** /* [out] */ _ppImplementation = NULL );
+        static  bool    isWindowItem( const Reference< XAccessible >& _rxAcc, OToolBoxWindowItem** /* [out] */ _ppImplementation = NULL );
 
     public:
         OToolBoxWindowItem(sal_Int32 _nIndexInParent,
@@ -128,7 +128,7 @@ namespace
         return new OToolBoxWindowItemContext( m_nIndexInParent, getComponentContext(), _rxInnerContext, this, getParent() );
     }
 
-    sal_Bool OToolBoxWindowItem::isWindowItem( const Reference< XAccessible >& _rxAcc, OToolBoxWindowItem** /* [out] */ _ppImplementation )
+    bool OToolBoxWindowItem::isWindowItem( const Reference< XAccessible >& _rxAcc, OToolBoxWindowItem** /* [out] */ _ppImplementation )
     {
         OToolBoxWindowItem* pImplementation = NULL;
 
@@ -203,16 +203,16 @@ void VCLXAccessibleToolBox::UpdateFocus_Impl()
         return;
 
     // submit events only if toolbox has the focus to avoid sending events due to mouse move
-    sal_Bool bHasFocus = sal_False;
+    bool bHasFocus = false;
     if ( pToolBox->HasFocus() )
-        bHasFocus = sal_True;
+        bHasFocus = true;
     else
     {
         // check for subtoolbar, i.e. check if our parent is a toolbar
         ToolBox* pToolBoxParent = dynamic_cast< ToolBox* >( pToolBox->GetParent() );
         // subtoolbars never get the focus as key input is just forwarded, so check if the parent toolbar has it
         if ( pToolBoxParent && pToolBoxParent->HasFocus() )
-            bHasFocus = sal_True;
+            bHasFocus = true;
     }
 
     if ( bHasFocus )
@@ -231,13 +231,13 @@ void VCLXAccessibleToolBox::UpdateFocus_Impl()
                 if ( pItem->HasFocus() && nItemId != nHighlightItemId )
                 {
                     // reset the old focused item
-                    pItem->SetFocus( sal_False );
+                    pItem->SetFocus( false );
                     nFocusCount++;
                 }
                 if ( nItemId == nHighlightItemId )
                 {
                     // set the new focused item
-                    pItem->SetFocus( sal_True );
+                    pItem->SetFocus( true );
                     nFocusCount++;
                 }
             }
@@ -259,7 +259,7 @@ void VCLXAccessibleToolBox::ReleaseFocus_Impl( sal_Int32 _nPos )
             VCLXAccessibleToolBoxItem* pItem =
                 static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
             if ( pItem->HasFocus() )
-                pItem->SetFocus( sal_False );
+                pItem->SetFocus( false );
         }
     }
 }
@@ -285,7 +285,7 @@ void VCLXAccessibleToolBox::UpdateChecked_Impl( sal_Int32 _nPos )
         }
         //Solution:If the position is not a child item,the focus should not be called
         if ( pFocusItem && (sal_uInt16)_nPos != TOOLBOX_ITEM_NOTFOUND )
-            pFocusItem->SetFocus( sal_True );
+            pFocusItem->SetFocus( true );
     }
 }
 
@@ -339,7 +339,7 @@ void VCLXAccessibleToolBox::implReleaseToolboxItem( ToolBoxItemsMap::iterator& _
     }
 }
 
-void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, sal_Bool _bItemAdded )
+void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, bool _bItemAdded )
 {
     if ( _nPos < sal_Int32( m_aAccessibleChildren.size() ) )
     {
@@ -566,7 +566,7 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             break;
 
         case VCLEVENT_TOOLBOX_ITEMADDED :
-            UpdateItem_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData(), sal_True );
+            UpdateItem_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData(), true );
             break;
 
         case VCLEVENT_TOOLBOX_ITEMREMOVED :
@@ -735,9 +735,9 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
             }
             xChild = pChild;
             if ( nHighlightItemId > 0 && nItemId == nHighlightItemId )
-                pChild->SetFocus( sal_True );
+                pChild->SetFocus( true );
             if ( pToolBox->IsItemChecked( nItemId ) )
-                pChild->SetChecked( sal_True );
+                pChild->SetChecked( true );
             if ( pToolBox->GetItemState( nItemId ) == TRISTATE_INDET )
                 pChild->SetIndeterminate( true );
             m_aAccessibleChildren.insert( ToolBoxItemsMap::value_type( i, xChild ) );

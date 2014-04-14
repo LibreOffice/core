@@ -124,7 +124,7 @@ namespace accessibility
             case VCLEVENT_LISTBOX_TREEFOCUS:
                 {
                     SvTreeListBox* pBox = getListBox();
-                    sal_Bool bNeedFocus = sal_False;
+                    bool bNeedFocus = false;
                     if (pBox)
                     {
                         Window* pParent = ((Window*)pBox)->GetParent();
@@ -413,7 +413,7 @@ namespace accessibility
             }
         }
 
-        sal_Bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
+        bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
         if( !(getListBox()->GetTreeFlags() & TREEFLAG_CHKBTN) )
         {
             if( bHasButtons )
@@ -444,7 +444,7 @@ namespace accessibility
         }
 
         //o is: return AccessibleRole::TREE;
-        sal_Bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
+        bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
         if(!bHasButtons && (getListBox()->GetTreeFlags() & TREEFLAG_CHKBTN))
             return AccessibleRole::LIST;
         else

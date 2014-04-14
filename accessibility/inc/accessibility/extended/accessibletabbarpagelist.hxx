@@ -56,9 +56,9 @@ namespace accessibility
         sal_Int32               m_nIndexInParent;
 
     protected:
-        void                    UpdateEnabled( sal_Int32 i, sal_Bool bEnabled );
-        void                    UpdateShowing( sal_Bool bShowing );
-        void                    UpdateSelected( sal_Int32 i, sal_Bool bSelected );
+        void                    UpdateEnabled( sal_Int32 i, bool bEnabled );
+        void                    UpdateShowing( bool bShowing );
+        void                    UpdateSelected( sal_Int32 i, bool bSelected );
         void                    UpdatePageText( sal_Int32 i );
 
         void                    InsertChild( sal_Int32 i );

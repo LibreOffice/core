@@ -30,7 +30,7 @@
 class VCLXAccessiblePopupMenu : public OAccessibleMenuComponent
 {
 protected:
-    virtual sal_Bool        IsFocused() SAL_OVERRIDE;
+    virtual bool        IsFocused() SAL_OVERRIDE;
 
 public:
     VCLXAccessiblePopupMenu( Menu* pMenu );

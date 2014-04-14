@@ -111,7 +111,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleComponent
-    virtual sal_Bool SAL_CALL contains (const ::com::sun::star::awt::Point& aPoint)
+    virtual bool SAL_CALL contains (const ::com::sun::star::awt::Point& aPoint)
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleAt (const ::com::sun::star::awt::Point& aPoint)
@@ -136,7 +136,7 @@ public:
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    sal_Bool    IsInDropDown();
+    bool    IsInDropDown();
     void        HandleDropOpen();
     virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent, bool b_IsDropDownList);
     void UpdateSelection_Acc (const ::rtl::OUString& sTextOfSelectedItem, bool b_IsDropDownList);
@@ -211,11 +211,11 @@ private:
     void UpdateEntryRange_Impl (void);
 protected:
     void UpdateSelection_Impl (sal_uInt16 nPos = 0);
-    sal_Bool checkEntrySelected(sal_uInt16 _nPos,
+    bool checkEntrySelected(sal_uInt16 _nPos,
                             ::com::sun::star::uno::Any& _rNewValue,
                             ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxNewAcc);
 private:
-    void notifyVisibleStates(sal_Bool _bSetNew );
+    void notifyVisibleStates(bool _bSetNew );
     void UpdateVisibleLineCount();
 };
 

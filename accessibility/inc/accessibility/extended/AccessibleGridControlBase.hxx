@@ -233,7 +233,7 @@ public:
 
     const ::com::sun::star::uno::Any& rOldValue );
     /** @return  <TRUE/>, if the object is not disposed or disposing. */
-    sal_Bool isAlive() const;
+    bool isAlive() const;
 
 protected:
     // internal virtual methods -----------------------------------------------
@@ -243,7 +243,7 @@ protected:
         behaviour.
         @attention  This method requires locked mutex's and a living object.
         @return  <TRUE/>, if the object is really showing. */
-    virtual sal_Bool implIsShowing();
+    virtual bool implIsShowing();
 
     /** Derived classes return the bounding box relative to the parent window.
         @attention  This method requires locked mutex's and a living object.

@@ -55,11 +55,11 @@ private:
     sal_uInt16              m_nItemId;
     OUString                m_sItemName;
     OUString                m_sItemText;
-    sal_Bool                m_bShowing;
+    bool                m_bShowing;
 
 protected:
-    sal_Bool                IsShowing();
-    void                    SetShowing( sal_Bool bShowing );
+    bool                IsShowing();
+    void                    SetShowing( bool bShowing );
     void                    SetItemName( const OUString& sItemName );
     OUString                GetItemName();
     void                    SetItemText( const OUString& sItemText );

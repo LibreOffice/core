@@ -43,11 +43,11 @@ class VCLXAccessibleMenuItem :  public OAccessibleMenuItemComponent,
                                 public VCLXAccessibleMenuItem_BASE
 {
 protected:
-    virtual sal_Bool        IsFocused() SAL_OVERRIDE;
-    virtual sal_Bool        IsSelected() SAL_OVERRIDE;
-    virtual sal_Bool        IsChecked() SAL_OVERRIDE;
+    virtual bool            IsFocused() SAL_OVERRIDE;
+    virtual bool            IsSelected() SAL_OVERRIDE;
+    virtual bool            IsChecked() SAL_OVERRIDE;
 
-    virtual sal_Bool        IsHighlighted() SAL_OVERRIDE;
+    virtual bool            IsHighlighted() SAL_OVERRIDE;
 
     virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
 

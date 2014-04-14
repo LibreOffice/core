@@ -60,16 +60,16 @@ OAccessibleMenuComponent::~OAccessibleMenuComponent()
 
 
 
-sal_Bool OAccessibleMenuComponent::IsEnabled()
+bool OAccessibleMenuComponent::IsEnabled()
 {
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool OAccessibleMenuComponent::IsVisible()
+bool OAccessibleMenuComponent::IsVisible()
 {
-    sal_Bool bVisible = sal_False;
+    bool bVisible = false;
 
     if ( m_pMenu )
         bVisible = m_pMenu->IsMenuVisible();

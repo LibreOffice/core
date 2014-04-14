@@ -38,8 +38,8 @@ class OAccessibleMenuComponent : public OAccessibleMenuBaseComponent,
                                  public OAccessibleMenuComponent_BASE
 {
 protected:
-    virtual sal_Bool        IsEnabled() SAL_OVERRIDE;
-    virtual sal_Bool        IsVisible() SAL_OVERRIDE;
+    virtual bool            IsEnabled() SAL_OVERRIDE;
+    virtual bool            IsVisible() SAL_OVERRIDE;
 
     virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
 

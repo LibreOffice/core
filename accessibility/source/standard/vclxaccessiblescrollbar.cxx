@@ -138,7 +138,7 @@ sal_Bool VCLXAccessibleScrollBar::doAccessibleAction ( sal_Int32 nIndex ) throw 
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     ScrollBar* pScrollBar = static_cast< ScrollBar* >( GetWindow() );
     if ( pScrollBar )
     {
@@ -152,7 +152,7 @@ sal_Bool VCLXAccessibleScrollBar::doAccessibleAction ( sal_Int32 nIndex ) throw 
             default:    eScrollType = SCROLL_DONTKNOW;  break;
         }
         if ( pScrollBar->DoScrollAction( eScrollType ) )
-            bReturn = sal_True;
+            bReturn = true;
     }
 
     return bReturn;
@@ -216,7 +216,7 @@ sal_Bool VCLXAccessibleScrollBar::setCurrentValue( const Any& aNumber ) throw (R
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     VCLXScrollBar* pVCLXScrollBar = static_cast< VCLXScrollBar* >( GetVCLXWindow() );
     if ( pVCLXScrollBar )
@@ -232,7 +232,7 @@ sal_Bool VCLXAccessibleScrollBar::setCurrentValue( const Any& aNumber ) throw (R
             nValue = nValueMax;
 
         pVCLXScrollBar->setValue( nValue );
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     return bReturn;

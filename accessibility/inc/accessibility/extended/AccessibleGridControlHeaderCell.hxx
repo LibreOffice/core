@@ -64,7 +64,7 @@ namespace accessibility
         getAccessibleContext()
             throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        inline sal_Bool isRowBarCell() const
+        inline bool isRowBarCell() const
         {
             return getType() == ::svt::table::TCTYPE_ROWHEADERCELL;
         }

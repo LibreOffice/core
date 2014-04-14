@@ -277,7 +277,7 @@ sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (Runt
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     PushButton* pButton = (PushButton*) GetWindow();
     if ( pButton )
@@ -290,8 +290,8 @@ sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (Runt
         else if ( nValue > 1 )
             nValue = 1;
 
-        pButton->SetPressed( (sal_Bool) nValue );
-        bReturn = sal_True;
+        pButton->SetPressed( nValue == 1 );
+        bReturn = true;
     }
 
     return bReturn;

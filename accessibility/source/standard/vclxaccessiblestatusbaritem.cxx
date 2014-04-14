@@ -70,9 +70,9 @@ VCLXAccessibleStatusBarItem::~VCLXAccessibleStatusBarItem()
 
 
 
-sal_Bool VCLXAccessibleStatusBarItem::IsShowing()
+bool VCLXAccessibleStatusBarItem::IsShowing()
 {
-    sal_Bool bShowing = sal_False;
+    bool bShowing = false;
 
     if ( m_pStatusBar )
         bShowing = m_pStatusBar->IsItemVisible( m_nItemId );
@@ -82,7 +82,7 @@ sal_Bool VCLXAccessibleStatusBarItem::IsShowing()
 
 
 
-void VCLXAccessibleStatusBarItem::SetShowing( sal_Bool bShowing )
+void VCLXAccessibleStatusBarItem::SetShowing( bool bShowing )
 {
     if ( m_bShowing != bShowing )
     {
@@ -582,7 +582,7 @@ sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if ( m_pStatusBar )
     {
@@ -601,7 +601,7 @@ sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32
 
             Application::AcquireSolarMutex( nRef );
 
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
 

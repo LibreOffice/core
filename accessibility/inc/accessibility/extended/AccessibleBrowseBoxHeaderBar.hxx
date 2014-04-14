@@ -221,9 +221,9 @@ protected:
     // internal helper methods ------------------------------------------------
 
     /** @return  <TRUE/>, if the objects is a header bar for rows. */
-    inline sal_Bool isRowBar() const;
+    inline bool isRowBar() const;
     /** @return  <TRUE/>, if the objects is a header bar for columns. */
-    inline sal_Bool isColumnBar() const;
+    inline bool isColumnBar() const;
 
     /** Returns the specified row or column. Uses one of the parameters,
         depending on object type.
@@ -249,12 +249,12 @@ protected:
 
 // inlines --------------------------------------------------------------------
 
-inline sal_Bool AccessibleBrowseBoxHeaderBar::isRowBar() const
+inline bool AccessibleBrowseBoxHeaderBar::isRowBar() const
 {
     return getType() == ::svt::BBTYPE_ROWHEADERBAR;
 }
 
-inline sal_Bool AccessibleBrowseBoxHeaderBar::isColumnBar() const
+inline bool AccessibleBrowseBoxHeaderBar::isColumnBar() const
 {
     return getType() == ::svt::BBTYPE_COLUMNHEADERBAR;
 }

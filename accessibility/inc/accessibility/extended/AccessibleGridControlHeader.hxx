@@ -179,19 +179,19 @@ protected:
     // internal helper methods ------------------------------------------------
 
     /** @return  <TRUE/>, if the objects is a header bar for rows. */
-    inline sal_Bool isRowBar() const;
+    inline bool isRowBar() const;
     /** @return  <TRUE/>, if the objects is a header bar for columns. */
-    inline sal_Bool isColumnBar() const;
+    inline bool isColumnBar() const;
 };
 
 // inlines --------------------------------------------------------------------
 
-inline sal_Bool AccessibleGridControlHeader::isRowBar() const
+inline bool AccessibleGridControlHeader::isRowBar() const
 {
     return getType() == ::svt::table::TCTYPE_ROWHEADERBAR;
 }
 
-inline sal_Bool AccessibleGridControlHeader::isColumnBar() const
+inline bool AccessibleGridControlHeader::isColumnBar() const
 {
     return getType() == ::svt::table::TCTYPE_COLUMNHEADERBAR;
 }

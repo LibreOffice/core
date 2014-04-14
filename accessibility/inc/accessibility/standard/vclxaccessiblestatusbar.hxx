@@ -39,7 +39,7 @@ private:
     StatusBar*              m_pStatusBar;
 
 protected:
-    void                    UpdateShowing( sal_Int32 i, sal_Bool bShowing );
+    void                    UpdateShowing( sal_Int32 i, bool bShowing );
     void                    UpdateItemName( sal_Int32 i );
     void                    UpdateItemText( sal_Int32 i );
 

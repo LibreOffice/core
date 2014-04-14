@@ -52,7 +52,7 @@ VCLXAccessibleStatusBar::~VCLXAccessibleStatusBar()
 
 
 
-void VCLXAccessibleStatusBar::UpdateShowing( sal_Int32 i, sal_Bool bShowing )
+void VCLXAccessibleStatusBar::UpdateShowing( sal_Int32 i, bool bShowing )
 {
     if ( i >= 0 && i < (sal_Int32)m_aAccessibleChildren.size() )
     {

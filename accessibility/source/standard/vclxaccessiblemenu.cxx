@@ -47,27 +47,27 @@ VCLXAccessibleMenu::~VCLXAccessibleMenu()
 
 
 
-sal_Bool VCLXAccessibleMenu::IsFocused()
+bool VCLXAccessibleMenu::IsFocused()
 {
-    sal_Bool bFocused = sal_False;
+    bool bFocused = false;
 
     if ( IsHighlighted() && !IsChildHighlighted() )
-        bFocused = sal_True;
+        bFocused = true;
 
     return bFocused;
 }
 
 
 
-sal_Bool VCLXAccessibleMenu::IsPopupMenuOpen()
+bool VCLXAccessibleMenu::IsPopupMenuOpen()
 {
-    sal_Bool bPopupMenuOpen = sal_False;
+    bool bPopupMenuOpen = false;
 
     if ( m_pParent )
     {
         PopupMenu* pPopupMenu = m_pParent->GetPopupMenu( m_pParent->GetItemId( m_nItemPos ) );
         if ( pPopupMenu && pPopupMenu->IsMenuVisible() )
-            bPopupMenuOpen = sal_True;
+            bPopupMenuOpen = true;
     }
 
     return bPopupMenuOpen;

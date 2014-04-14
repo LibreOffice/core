@@ -1700,7 +1700,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclSimpleEvent *, pEvent)
                 break;
             //to enable the PARAGRAPH to get focus for multiline edit
             ::sal_Int32 count = getAccessibleChildCount();
-            sal_Bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
+            bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
             if ((m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd) || bEmpty)
             {
                 Paragraphs::iterator m_aTemp = bEmpty ? m_aVisibleBegin : m_aFocused;
@@ -1737,7 +1737,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclSimpleEvent *, pEvent)
                 break;
             //to enable the PARAGRAPH to get focus for multiline edit
             ::sal_Int32 count = getAccessibleChildCount();
-            sal_Bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
+            bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
             if ((m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd) || bEmpty)
             {
                 Paragraphs::iterator m_aTemp = bEmpty ? m_aVisibleBegin : m_aFocused;
@@ -2282,7 +2282,7 @@ void Document::handleSelectionChangeNotification()
         {
         //disable the first event when user types in empty field.
         ::sal_Int32 count = getAccessibleChildCount();
-        sal_Bool bEmpty = count > 1;
+        bool bEmpty = count > 1;
             //if (aIt != m_aFocused)
             if (aIt != m_aFocused && bEmpty)
                 xParagraph->notifyEvent(

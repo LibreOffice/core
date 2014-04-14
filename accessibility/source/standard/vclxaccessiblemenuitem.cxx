@@ -62,29 +62,29 @@ VCLXAccessibleMenuItem::~VCLXAccessibleMenuItem()
 
 
 
-sal_Bool VCLXAccessibleMenuItem::IsFocused()
+bool VCLXAccessibleMenuItem::IsFocused()
 {
     return IsHighlighted();
 }
 
 
 
-sal_Bool VCLXAccessibleMenuItem::IsSelected()
+bool VCLXAccessibleMenuItem::IsSelected()
 {
     return IsHighlighted();
 }
 
 
 
-sal_Bool VCLXAccessibleMenuItem::IsChecked()
+bool VCLXAccessibleMenuItem::IsChecked()
 {
-    sal_Bool bChecked = sal_False;
+    bool bChecked = false;
 
     if ( m_pParent )
     {
         sal_uInt16 nItemId = m_pParent->GetItemId( m_nItemPos );
         if ( m_pParent->IsItemChecked( nItemId ) )
-            bChecked = sal_True;
+            bChecked = true;
     }
 
     return bChecked;
@@ -92,12 +92,12 @@ sal_Bool VCLXAccessibleMenuItem::IsChecked()
 
 
 
-sal_Bool VCLXAccessibleMenuItem::IsHighlighted()
+bool VCLXAccessibleMenuItem::IsHighlighted()
 {
-    sal_Bool bHighlighted = sal_False;
+    bool bHighlighted = false;
 
     if ( m_pParent && m_pParent->IsHighlighted( m_nItemPos ) )
-        bHighlighted = sal_True;
+        bHighlighted = true;
 
     return bHighlighted;
 }
@@ -391,7 +391,7 @@ sal_Bool VCLXAccessibleMenuItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEnd
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if ( m_pParent )
     {
@@ -413,7 +413,7 @@ sal_Bool VCLXAccessibleMenuItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEnd
 
                 Application::AcquireSolarMutex( nRef );
 
-                bReturn = sal_True;
+                bReturn = true;
             }
         }
     }
@@ -558,19 +558,19 @@ sal_Bool VCLXAccessibleMenuItem::setCurrentValue( const Any& aNumber ) throw (Ru
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     sal_Int32 nValue = 0;
     OSL_VERIFY( aNumber >>= nValue );
 
     if ( nValue <= 0 )
     {
         DeSelect();
-        bReturn = sal_True;
+        bReturn = true;
     }
     else if ( nValue >= 1 )
     {
         Select();
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     return bReturn;

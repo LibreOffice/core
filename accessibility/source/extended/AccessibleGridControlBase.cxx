@@ -283,9 +283,9 @@ Sequence< OUString > SAL_CALL AccessibleGridControlBase::getSupportedServiceName
 }
 // internal virtual methods ---------------------------------------------------
 
-sal_Bool AccessibleGridControlBase::implIsShowing()
+bool AccessibleGridControlBase::implIsShowing()
 {
-    sal_Bool bShowing = sal_False;
+    bool bShowing = false;
     if( m_xParent.is() )
     {
         Reference< XAccessibleComponent >
@@ -317,7 +317,7 @@ sal_Bool AccessibleGridControlBase::implIsShowing()
 
 // internal helper methods ----------------------------------------------------
 
-sal_Bool AccessibleGridControlBase::isAlive() const
+bool AccessibleGridControlBase::isAlive() const
 {
     ::osl::MutexGuard g(m_aMutex); // guards rBHelper members
     return !rBHelper.bDisposed && !rBHelper.bInDispose && &m_aTable;

@@ -374,7 +374,7 @@ sal_Bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if ( GetWindow() )
     {
@@ -393,7 +393,7 @@ sal_Bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32
 
             Application::AcquireSolarMutex( nRef );
 
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
 

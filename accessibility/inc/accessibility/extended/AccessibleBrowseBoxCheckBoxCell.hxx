@@ -38,7 +38,7 @@ namespace accessibility
     {
     private:
         TriState m_eState;
-        sal_Bool m_bIsTriState;
+        bool m_bIsTriState;
 
     protected:
         virtual ~AccessibleCheckBoxCell() {}
@@ -52,7 +52,7 @@ namespace accessibility
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos,
                                 const TriState& _eState,
-                                sal_Bool _bIsTriState);
+                                bool _bIsTriState);
 
         // XInterface
         DECLARE_XINTERFACE( )
@@ -76,7 +76,7 @@ namespace accessibility
         virtual ::com::sun::star::uno::Any SAL_CALL getMinimumValue(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // internal
-        void        SetChecked( sal_Bool _bChecked );
+        void        SetChecked( bool _bChecked );
     };
 }
 #endif // ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOXCHECKBOXCELL_HXX

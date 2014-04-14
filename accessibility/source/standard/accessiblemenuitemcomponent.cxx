@@ -72,11 +72,11 @@ OAccessibleMenuItemComponent::~OAccessibleMenuItemComponent()
 
 
 
-sal_Bool OAccessibleMenuItemComponent::IsEnabled()
+bool OAccessibleMenuItemComponent::IsEnabled()
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Bool bEnabled = sal_False;
+    bool bEnabled = false;
     if ( m_pParent )
         bEnabled = m_pParent->IsItemEnabled( m_pParent->GetItemId( m_nItemPos ) );
 
@@ -85,9 +85,9 @@ sal_Bool OAccessibleMenuItemComponent::IsEnabled()
 
 
 
-sal_Bool OAccessibleMenuItemComponent::IsVisible()
+bool OAccessibleMenuItemComponent::IsVisible()
 {
-    sal_Bool bVisible = sal_False;
+    bool bVisible = false;
 
     if ( m_pParent )
         bVisible = m_pParent->IsItemPosVisible( m_nItemPos );
@@ -234,7 +234,7 @@ OUString OAccessibleMenuItemComponent::GetItemText()
 
 void OAccessibleMenuItemComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
-    sal_Bool bEnabled = IsEnabled();
+    bool bEnabled = IsEnabled();
     if ( bEnabled )
     {
         rStateSet.AddState( AccessibleStateType::ENABLED );
@@ -493,16 +493,16 @@ OUString OAccessibleMenuItemComponent::getToolTipText(  ) throw (RuntimeExceptio
 
 
 
-sal_Bool OAccessibleMenuItemComponent::IsMenuHideDisabledEntries()
+bool OAccessibleMenuItemComponent::IsMenuHideDisabledEntries()
 {
     if (m_pParent )
     {
         if( m_pParent->GetMenuFlags() & MENU_FLAG_HIDEDISABLEDENTRIES)
         {
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

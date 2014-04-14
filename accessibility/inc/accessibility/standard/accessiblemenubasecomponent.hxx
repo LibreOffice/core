@@ -64,31 +64,31 @@ protected:
     AccessibleChildren      m_aAccessibleChildren;
     Menu*                   m_pMenu;
 
-    sal_Bool                m_bEnabled;
-    sal_Bool                m_bFocused;
-    sal_Bool                m_bVisible;
-    sal_Bool                m_bSelected;
-    sal_Bool                m_bChecked;
+    bool                m_bEnabled;
+    bool                m_bFocused;
+    bool                m_bVisible;
+    bool                m_bSelected;
+    bool                m_bChecked;
 
     Menu*                   GetMenu() { return m_pMenu; }
 
-    virtual sal_Bool        IsEnabled();
-    virtual sal_Bool        IsFocused();
-    virtual sal_Bool        IsVisible();
-    virtual sal_Bool        IsSelected();
-    virtual sal_Bool        IsChecked();
+    virtual bool        IsEnabled();
+    virtual bool        IsFocused();
+    virtual bool        IsVisible();
+    virtual bool        IsSelected();
+    virtual bool        IsChecked();
 
-    void                    SetEnabled( sal_Bool bEnabled );
-    void                    SetFocused( sal_Bool bFocused );
-    void                    SetVisible( sal_Bool bVisible );
-    void                    SetSelected( sal_Bool bSelected );
-    void                    SetChecked( sal_Bool bChecked );
+    void                    SetEnabled( bool bEnabled );
+    void                    SetFocused( bool bFocused );
+    void                    SetVisible( bool bVisible );
+    void                    SetSelected( bool bSelected );
+    void                    SetChecked( bool bChecked );
 
-    void                    UpdateEnabled( sal_Int32 i, sal_Bool bEnabled );
-    void                    UpdateFocused( sal_Int32 i, sal_Bool bFocused );
+    void                    UpdateEnabled( sal_Int32 i, bool bEnabled );
+    void                    UpdateFocused( sal_Int32 i, bool bFocused );
     void                    UpdateVisible();
-    void                    UpdateSelected( sal_Int32 i, sal_Bool bSelected );
-    void                    UpdateChecked( sal_Int32 i, sal_Bool bChecked );
+    void                    UpdateSelected( sal_Int32 i, bool bSelected );
+    void                    UpdateChecked( sal_Int32 i, bool bChecked );
     void                    UpdateAccessibleName( sal_Int32 i );
     void                    UpdateItemText( sal_Int32 i );
 
@@ -100,19 +100,19 @@ protected:
     void                    InsertChild( sal_Int32 i );
     void                    RemoveChild( sal_Int32 i );
 
-    virtual sal_Bool        IsHighlighted();
-    sal_Bool                IsChildHighlighted();
+    virtual bool        IsHighlighted();
+    bool                IsChildHighlighted();
 
-    virtual sal_Bool        IsMenuHideDisabledEntries();
+    virtual bool        IsMenuHideDisabledEntries();
 
     void                    SelectChild( sal_Int32 i );
     void                    DeSelectAll();
-    sal_Bool                IsChildSelected( sal_Int32 i );
+    bool                IsChildSelected( sal_Int32 i );
 
     virtual void            Select();
     virtual void            DeSelect();
     virtual void            Click();
-    virtual sal_Bool        IsPopupMenuOpen();
+    virtual bool        IsPopupMenuOpen();
 
     DECL_LINK( MenuEventListener, VclSimpleEvent* );
 
