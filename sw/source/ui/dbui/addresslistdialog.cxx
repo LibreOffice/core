@@ -492,7 +492,7 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEnt
             pThis->m_pListLB->SetEntryText(pThis->m_sConnecting, pSelect, ITEMID_TABLE - 1);
             // allow painting of the new entry
             pThis->m_pListLB->Window::Invalidate(INVALIDATE_UPDATE);
-            for (sal_uInt16 i = 0; i < 10; i++)
+            for (int i = 0; i < 10; ++i)
                 Application::Reschedule();
         }
 
