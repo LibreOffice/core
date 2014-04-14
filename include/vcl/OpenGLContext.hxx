@@ -152,6 +152,11 @@ public:
 
     void renderToFile();
 
+    bool isInitialized()
+    {
+        return mbInitialized;
+    }
+
 private:
     SAL_DLLPRIVATE bool initWindow();
 

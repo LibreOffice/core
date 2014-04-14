@@ -239,9 +239,9 @@ public:
     /**
      * Only necessary for stateless implementations
      */
-    virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xRootShape) = 0;
+    virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage) = 0;
 
-    virtual void clearPage(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xRootShape) = 0;
+    virtual void clearPage(com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage) = 0;
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
          getChartRootShape( const ::com::sun::star::uno::Reference<

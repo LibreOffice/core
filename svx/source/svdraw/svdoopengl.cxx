@@ -38,11 +38,17 @@ void SdrOpenGLObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fra
 void SdrOpenGLObj::setRenderer(IOpenGLRenderer* pRenderer)
 {
     mpRenderer.reset(pRenderer);
+    mpRenderer->setInfoProvider(this);
 }
 
 IOpenGLRenderer* SdrOpenGLObj::getRenderer()
 {
     return mpRenderer.get();
+}
+
+bool SdrOpenGLObj::isOpenGLInitialized()
+{
+    return maContext.isInitialized();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -184,9 +184,9 @@ public:
 
     virtual void setPageSize( com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > xChartShapes, const com::sun::star::awt::Size& rSize ) SAL_OVERRIDE;
 
-    virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xRootShape) SAL_OVERRIDE;
+    virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage) SAL_OVERRIDE;
 
-    virtual void clearPage(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xRootShape) SAL_OVERRIDE;
+    virtual void clearPage(com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage) SAL_OVERRIDE;
 };
 
 }

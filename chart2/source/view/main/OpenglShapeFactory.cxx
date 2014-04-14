@@ -71,7 +71,6 @@ public:
         mxShapes(xShapes) {}
 
     virtual ~OpenGLChartAdapter() {}
-    virtual void operator()() {}
 
     uno::Reference<drawing::XShapes> getShapes()
     {
@@ -483,15 +482,34 @@ uno::Reference< drawing::XShape >
     return pText;
 }
 
-void OpenglShapeFactory::render(uno::Reference< drawing::XShapes > xRootShape)
+void OpenglShapeFactory::render(uno::Reference< drawing::XDrawPage > xDrawPage)
 {
+    IOpenGLRenderer* pRenderer = getRenderer(xDrawPage);
+    if(!pRenderer)
+        return;
+
+    if(!pRenderer->isOpenGLInitialized())
+        return;
+
+    OpenGLChartAdapter* pAdapter = dynamic_cast<OpenGLChartAdapter*>(pRenderer);
+    if(!pAdapter)
+        return;
+
+    uno::Reference< drawing::XShapes > xRootShape = pAdapter->getShapes();
     dummy::DummyChart* pChart = dynamic_cast<dummy::DummyChart*>(xRootShape.get());
     assert(pChart);
     pChart->render();
 }
 
-void OpenglShapeFactory::clearPage(uno::Reference< drawing::XShapes > xRootShape)
+void OpenglShapeFactory::clearPage(uno::Reference< drawing::XDrawPage > xDrawPage)
 {
+    IOpenGLRenderer* pRenderer = getRenderer(xDrawPage);
+
+    OpenGLChartAdapter* pAdapter = dynamic_cast<OpenGLChartAdapter*>(pRenderer);
+    if(!pAdapter)
+        return;
+
+    uno::Reference< drawing::XShapes > xRootShape = pAdapter->getShapes();
     dummy::DummyChart* pChart = dynamic_cast<dummy::DummyChart*>(xRootShape.get());
     assert(pChart);
     pChart->clear();
