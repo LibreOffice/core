@@ -541,6 +541,30 @@ IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, PushButton*, pButton)
     return 0;
 }
 
+namespace
+{
+
+void lcl_WriteValues(const ::std::vector<OUString> *pFields, SvStream* pStream)
+{
+    OUString sLine;
+    const ::std::vector< OUString >::const_iterator aBegin = pFields->begin();
+    const ::std::vector< OUString >::const_iterator aEnd = pFields->end();
+    for(::std::vector< OUString >::const_iterator aIter = aBegin; aIter != aEnd; ++aIter)
+    {
+        if (aIter==aBegin)
+        {
+            sLine += "\"" + *aIter + "\"";
+        }
+        else
+        {
+            sLine += "\t\"" + *aIter + "\"";
+        }
+    }
+    pStream->WriteByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
+}
+
+}
+
 IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
 {
     if(m_sURL.isEmpty())
@@ -569,39 +593,12 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
         pStream->SetLineDelimiter( LINEEND_LF );
         pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
 
-        OUString sQuote('"');
-        OUString sTempMiddle(sQuote);
-        sTempMiddle += OUString(sal_Unicode(9));
-        OUString sMiddle(sTempMiddle);
-        sMiddle += sQuote;
-
-        //create a string for the header line
-        OUString sLine(sQuote);
-        ::std::vector< OUString >::iterator  aHeaderIter;
-        for(aHeaderIter = m_pCSVData->aDBColumnHeaders.begin();
-                    aHeaderIter != m_pCSVData->aDBColumnHeaders.end();
-                    ++aHeaderIter)
-        {
-            sLine += *aHeaderIter;
-            sLine += sMiddle;
-        }
-        //remove tab and quote
-        sLine = sLine.copy( 0, sLine.getLength() - 2 );
-        pStream->WriteByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
+        lcl_WriteValues(&(m_pCSVData->aDBColumnHeaders), pStream);
 
         ::std::vector< ::std::vector< OUString > >::iterator aDataIter;
         for( aDataIter = m_pCSVData->aDBData.begin(); aDataIter != m_pCSVData->aDBData.end(); ++aDataIter)
         {
-            sLine = sQuote;
-            ::std::vector< OUString >::iterator  aColumnIter;
-            for(aColumnIter = aDataIter->begin(); aColumnIter != aDataIter->end(); ++aColumnIter)
-            {
-                sLine += *aColumnIter;
-                sLine += sMiddle;
-            }
-            //remove tab and quote
-            sLine = sLine.copy( 0, sLine.getLength() - 2 );
-            pStream->WriteByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
+            lcl_WriteValues(&(*aDataIter), pStream);
         }
         aMedium.Commit();
         EndDialog(RET_OK);
