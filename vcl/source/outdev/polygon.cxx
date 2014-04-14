@@ -476,3 +476,97 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
     if( pClipPolyPoly )
         delete pPolyPoly;
 }
+
+void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags )
+{
+
+    Rectangle aDstRect( PixelToLogic( Point() ), GetOutputSize() );
+    aDstRect.Intersection( rRect );
+
+    if( aDstRect.IsEmpty() || ImplIsRecordLayout() )
+        return;
+
+    if( !mpGraphics && !ImplGetGraphics() )
+        return;
+
+    if( mbInitClipRegion )
+        ImplInitClipRegion();
+
+    if( mbOutputClipped )
+        return;
+
+    const long  nDistX = std::max( rDist.Width(), 1L );
+    const long  nDistY = std::max( rDist.Height(), 1L );
+    long        nX = ( rRect.Left() >= aDstRect.Left() ) ? rRect.Left() : ( rRect.Left() + ( ( aDstRect.Left() - rRect.Left() ) / nDistX ) * nDistX );
+    long        nY = ( rRect.Top() >= aDstRect.Top() ) ? rRect.Top() : ( rRect.Top() + ( ( aDstRect.Top() - rRect.Top() ) / nDistY ) * nDistY );
+    const long  nRight = aDstRect.Right();
+    const long  nBottom = aDstRect.Bottom();
+    const long  nStartX = ImplLogicXToDevicePixel( nX );
+    const long  nEndX = ImplLogicXToDevicePixel( nRight );
+    const long  nStartY = ImplLogicYToDevicePixel( nY );
+    const long  nEndY = ImplLogicYToDevicePixel( nBottom );
+    long        nHorzCount = 0L;
+    long        nVertCount = 0L;
+
+    ::com::sun::star::uno::Sequence< sal_Int32 > aVertBuf;
+    ::com::sun::star::uno::Sequence< sal_Int32 > aHorzBuf;
+
+    if( ( nFlags & GRID_DOTS ) || ( nFlags & GRID_HORZLINES ) )
+    {
+        aVertBuf.realloc( aDstRect.GetHeight() / nDistY + 2L );
+        aVertBuf[ nVertCount++ ] = nStartY;
+        while( ( nY += nDistY ) <= nBottom )
+            aVertBuf[ nVertCount++ ] = ImplLogicYToDevicePixel( nY );
+    }
+
+    if( ( nFlags & GRID_DOTS ) || ( nFlags & GRID_VERTLINES ) )
+    {
+        aHorzBuf.realloc( aDstRect.GetWidth() / nDistX + 2L );
+        aHorzBuf[ nHorzCount++ ] = nStartX;
+        while( ( nX += nDistX ) <= nRight )
+            aHorzBuf[ nHorzCount++ ] = ImplLogicXToDevicePixel( nX );
+    }
+
+    if( mbInitLineColor )
+        ImplInitLineColor();
+
+    if( mbInitFillColor )
+        ImplInitFillColor();
+
+    const bool bOldMap = mbMap;
+    EnableMapMode( false );
+
+    if( nFlags & GRID_DOTS )
+    {
+        for( long i = 0L; i < nVertCount; i++ )
+            for( long j = 0L, Y = aVertBuf[ i ]; j < nHorzCount; j++ )
+                mpGraphics->DrawPixel( aHorzBuf[ j ], Y, this );
+    }
+    else
+    {
+        if( nFlags & GRID_HORZLINES )
+        {
+            for( long i = 0L; i < nVertCount; i++ )
+            {
+                nY = aVertBuf[ i ];
+                mpGraphics->DrawLine( nStartX, nY, nEndX, nY, this );
+            }
+        }
+
+        if( nFlags & GRID_VERTLINES )
+        {
+            for( long i = 0L; i < nHorzCount; i++ )
+            {
+                nX = aHorzBuf[ i ];
+                mpGraphics->DrawLine( nX, nStartY, nX, nEndY, this );
+            }
+        }
+    }
+
+    EnableMapMode( bOldMap );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawGrid( rRect, rDist, nFlags );
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

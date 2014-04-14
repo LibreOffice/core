@@ -234,6 +234,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/metric \
     vcl/source/gdi/octree \
     vcl/source/gdi/oldprintadaptor \
+    vcl/source/outdev/outdev \
     vcl/source/outdev/tworect \
     vcl/source/outdev/bezier \
     vcl/source/outdev/polygon \
@@ -250,9 +251,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/polyline \
     vcl/source/outdev/hatch \
     vcl/source/outdev/gradient \
-    vcl/source/outdev/outdev5 \
-    vcl/source/outdev/outdev6 \
-    vcl/source/outdev/outdev \
+    vcl/source/outdev/curvedshapes \
+    vcl/source/outdev/wallpaper \
     vcl/source/outdev/outdevnative \
     vcl/source/outdev/outmap \
     vcl/source/gdi/pdfextoutdevdata \
