@@ -500,6 +500,11 @@ void XclImpChangeTrack::Apply()
 //___________________________________________________________________
 // class XclImpChTrFmlConverter
 
+XclImpChTrFmlConverter::XclImpChTrFmlConverter(
+    XclImpRoot& rRoot, XclImpChangeTrack& rXclChTr ) :
+    ExcelToSc8( rRoot ),
+    rChangeTrack( rXclChTr ) {}
+
 XclImpChTrFmlConverter::~XclImpChTrFmlConverter()
 {
 }

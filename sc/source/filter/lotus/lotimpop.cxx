@@ -64,11 +64,12 @@ LOTUS_ROOT::~LOTUS_ROOT()
 
 static osl::Mutex aLotImpSemaphore;
 
-
-ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, rtl_TextEncoding eQ ) :
-    ImportTyp( pDoc, eQ ),
-    pIn( &aStream ),
-    aConv( *pIn, eQ, false )
+ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, rtl_TextEncoding eQ )
+    : ImportTyp(pDoc, eQ)
+    , pIn(&aStream)
+    , aConv(*pIn, pDoc->GetSharedStringPool(), eQ, false)
+    , nTab(0)
+    , nExtTab(0)
 {
     // good point to start locking of import lotus
     aLotImpSemaphore.acquire();

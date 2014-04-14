@@ -46,7 +46,8 @@ FormulaDialog::FormulaDialog(Window* pParent
                              , const uno::Reference<lang::XMultiServiceFactory>& _xServiceFactory
                              , const ::boost::shared_ptr< IFunctionManager >&  _pFunctionMgr
                              , const OUString& _sFormula
-                             , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet)
+                             , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet
+                             , svl::SharedStringPool& rStrPool )
     : FormulaModalDialog( pParent, false,false,false,_pFunctionMgr.get(),this)
     ,m_aFunctionManager(_pFunctionMgr)
     ,m_pFormulaData(new FormEditData())
@@ -56,6 +57,7 @@ FormulaDialog::FormulaDialog(Window* pParent
     ,m_sFormula("=")
     ,m_nStart(0)
     ,m_nEnd(1)
+    ,mrStringPool(rStrPool)
 {
     if ( !_sFormula.isEmpty() )
     {
@@ -255,7 +257,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<formula::FormulaTokenArray> FormulaDialog::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
     ::std::auto_ptr<formula::FormulaTokenArray> pArray(new FormulaTokenArray());
-    pArray->Fill(_aTokenList, NULL);
+    pArray->Fill(_aTokenList, mrStringPool, NULL);
     return pArray;
 }
 

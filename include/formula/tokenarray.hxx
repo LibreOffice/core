@@ -28,6 +28,13 @@
 
 #include <boost/unordered_set.hpp>
 
+namespace svl {
+
+class SharedString;
+class SharedStringPool;
+
+}
+
 namespace formula
 {
 
@@ -197,14 +204,18 @@ public:
         Derived classes must overload it when they want to support derived classes from FormulaToken.
         @return true        when an error occurs
     */
-    virtual bool AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken, ExternalReferenceHelper* _pRef = NULL);
+    virtual bool AddFormulaToken(
+        const css::sheet::FormulaToken& rToken, svl::SharedStringPool& rSPool,
+        ExternalReferenceHelper* pExtRef );
 
     /** fill the array with the tokens from the sequence.
         It calls AddFormulaToken for each token in the list.
         @param  _aSequence  the token to add
         @return true        when an error occurs
     */
-    bool Fill(const com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& _aSequence, ExternalReferenceHelper* _pRef = NULL);
+    bool Fill(
+        const css::uno::Sequence<css::sheet::FormulaToken>& rSequence,
+        svl::SharedStringPool& rSPool, ExternalReferenceHelper* pExtRef );
 
     /**
      * Do some checking based on the individual tokens. For now, we use this
@@ -213,8 +224,7 @@ public:
     virtual void CheckToken( const FormulaToken& t );
 
     FormulaToken* AddToken( const FormulaToken& );
-    FormulaToken* AddString( const sal_Unicode* pStr );
-    FormulaToken* AddString( const OUString& rStr );
+    FormulaToken* AddString( const svl::SharedString& rStr );
     FormulaToken* AddDouble( double fVal );
     FormulaToken* AddExternal( const sal_Unicode* pStr );
     /** Xcl import may play dirty tricks with OpCode!=ocExternal.

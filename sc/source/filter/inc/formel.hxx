@@ -31,6 +31,12 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <vector>
 
+namespace svl {
+
+class SharedStringPool;
+
+}
+
 class XclImpStream;
 class ScTokenArray;
 struct ScSingleRefData;
@@ -84,7 +90,7 @@ protected:
     sal_Char*           pBuffer;        // universal buffer
     sal_uInt16              nBufferSize;    // ...and its size
 
-                        ConverterBase( sal_uInt16 nNewBuffer );
+    ConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer );
     virtual             ~ConverterBase();
 
     void                Reset();
@@ -95,7 +101,7 @@ protected:
 class ExcelConverterBase : public ConverterBase
 {
 protected:
-                        ExcelConverterBase( sal_uInt16 nNewBuffer );
+    ExcelConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer );
     virtual             ~ExcelConverterBase();
 
 public:
@@ -124,7 +130,7 @@ protected:
     inline void         Read( double& fDouble );
         inline void                     Read( sal_uInt32& nUINT32 );
 
-                        LotusConverterBase( SvStream& rStr, sal_uInt16 nNewBuffer );
+    LotusConverterBase( SvStream& rStr, svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer );
     virtual             ~LotusConverterBase();
 
 public:

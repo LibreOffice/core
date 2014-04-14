@@ -26,6 +26,12 @@
 
 #include <vector>
 
+namespace svl {
+
+class SharedStringPool;
+
+}
+
 typedef OpCode DefTokenId;
 // in PRODUCT version: ambiguity between OpCode (being sal_uInt16) and UINT16
 // Unfortunately a typedef is just a dumb alias and not a real type ...
@@ -80,7 +86,9 @@ class TokenPool
 {
     // !ACHTUNG!: externe Id-Basis ist 1, interne 0!
     // Ausgabe Id = 0 -> Fehlerfall
-    private:
+private:
+    svl::SharedStringPool& mrStringPool;
+
         OUString**                      ppP_Str;    // Pool fuer Strings
         sal_uInt16                      nP_Str;     // ...mit Groesse
         sal_uInt16                      nP_StrAkt;  // ...und Schreibmarke
@@ -186,8 +194,8 @@ class TokenPool
 		bool						GrowMatrix( void );
 		bool						GetElement( const sal_uInt16 nId );
 		bool						GetElementRek( const sal_uInt16 nId );
-    public:
-                                    TokenPool( void );
+public:
+    TokenPool( svl::SharedStringPool& rSPool );
                                     ~TokenPool();
         inline TokenPool&           operator <<( const TokenId nId );
         inline TokenPool&           operator <<( const DefTokenId eId );
