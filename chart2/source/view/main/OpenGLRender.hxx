@@ -108,7 +108,6 @@ public:
 
     void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, sal_uInt8 nAlpha);
 private:
-    GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
     int CreateTextureObj(int width, int height);
     int CreateRenderObj(int width, int height);
     int CreateFrameBufferObj();
