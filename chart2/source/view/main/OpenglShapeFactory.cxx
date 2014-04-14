@@ -94,10 +94,8 @@ namespace opengl {
 
 namespace {
 
-uno::Reference< drawing::XShapes > getChartShape(
-    const uno::Reference< drawing::XDrawPage>& xDrawPage )
+IOpenGLRenderer* getRenderer(const uno::Reference< drawing::XDrawPage>& xDrawPage )
 {
-    uno::Reference< drawing::XShapes > xRet;
     uno::Reference< drawing::XShapes > xShapes( xDrawPage, uno::UNO_QUERY );
     if( xShapes.is() )
     {
@@ -114,15 +112,25 @@ uno::Reference< drawing::XShapes > getChartShape(
                 if( aRet.equals("com.sun.star.chart2.shapes") )
                 {
                     IOpenGLRenderer* pRenderer = dynamic_cast<SvxOpenGLObject*>(xShape.get())->getRenderer();
-                    OpenGLChartAdapter* pAdapter = dynamic_cast<OpenGLChartAdapter*>(pRenderer);
-                    if(pAdapter)
-                        xRet = pAdapter->getShapes();
-                    break;
+                    if(pRenderer)
+                        return pRenderer;
                 }
             }
         }
     }
-    return xRet;
+
+    return NULL;
+}
+
+uno::Reference< drawing::XShapes > getChartShape(
+    const uno::Reference< drawing::XDrawPage>& xDrawPage )
+{
+    IOpenGLRenderer* pRenderer = getRenderer(xDrawPage);
+    OpenGLChartAdapter* pAdapter = dynamic_cast<OpenGLChartAdapter*>(pRenderer);
+    if(pAdapter)
+        return pAdapter->getShapes();
+
+    return uno::Reference< drawing::XShapes> ();
 }
 
 }
