@@ -23,6 +23,9 @@
 #include <rtl/ustring.hxx>
 #include "frm_strings.hxx"
 
+namespace com { namespace sun { namespace star { namespace lang {
+    class XMultiServiceFactory;
+} } } }
 
 namespace frm
 {
@@ -211,10 +214,154 @@ namespace frm
     #define SRV_SDB_ROWSET "com.sun.star.sdb.RowSet"
     #define SRV_SDB_CONNECTION "com.sun.star.sdb.Connection"
 
+css::uno::Reference<css::uno::XInterface> SAL_CALL OFixedTextModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
 
+css::uno::Reference<css::uno::XInterface> SAL_CALL ORadioButtonModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL ORadioButtonControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OCheckBoxModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OCheckBoxControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OHiddenModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OGroupBoxModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OGroupBoxControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OListBoxControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OListBoxModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OComboBoxControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OComboBoxModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OEditControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OEditModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL ONumericControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL ONumericModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OPatternControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OPatternModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OCurrencyControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OCurrencyModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL ODateControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL ODateModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OTimeControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OTimeModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OFormattedControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OFormattedModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OFileControlModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OButtonControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OButtonModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OImageButtonControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OImageButtonModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OImageControlControl_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OImageControlModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OGridControlModel_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+// XForms objects
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL Binding_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL Model_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL XForms_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+// some special handling for the FormattedFieldWrapper which can act as FormattedModel or as EditModel
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OFormattedFieldWrapper_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+    // this is for a service, which is instantiated through the EditModel service name
+    // and which acts mostly as Edit (mostly means : if somebody uses XPersistObject::read immediately after
+    // the object was instantiated and the stream contains a FormattedModel, it switches permanently to
+    // formatted.)
+css::uno::Reference<css::uno::XInterface> SAL_CALL
+OFormattedFieldWrapper_CreateInstance_ForceFormatted(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL OFormsCollection_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL ImageProducer_CreateInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxFactory);
 
 }   // namespace frm
 
+extern "C" {
+
+void SAL_CALL createRegistryInfo_CLibxml2XFormsExtension();
+void SAL_CALL createRegistryInfo_FormOperations();
+void SAL_CALL createRegistryInfo_ODatabaseForm();
+void SAL_CALL createRegistryInfo_OFilterControl();
+void SAL_CALL createRegistryInfo_ONavigationBarControl();
+void SAL_CALL createRegistryInfo_ONavigationBarModel();
+void SAL_CALL createRegistryInfo_ORichTextControl();
+void SAL_CALL createRegistryInfo_ORichTextModel();
+void SAL_CALL createRegistryInfo_OScrollBarModel();
+void SAL_CALL createRegistryInfo_OSpinButtonModel();
+
+}
 
 #endif // INCLUDED_FORMS_SOURCE_INC_SERVICES_HXX
 

@@ -19,6 +19,7 @@
 
 
 #include "imgprod.hxx"
+#include "services.hxx"
 
 #include <vcl/bmpacc.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -38,8 +39,6 @@ class ImgProdLockBytes : public SvLockBytes
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >      xStmRef;
     ::com::sun::star::uno::Sequence<sal_Int8>       maSeq;
-
-                        ImgProdLockBytes() {};
 
 public:
 

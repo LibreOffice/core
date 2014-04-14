@@ -132,7 +132,7 @@ namespace frm
     //= OListBoxModel
 
 
-    InterfaceRef SAL_CALL OListBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
+    InterfaceRef SAL_CALL OListBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
     {
         return *(new OListBoxModel( comphelper::getComponentContext(_rxFactory) ));
     }
@@ -1727,7 +1727,7 @@ namespace frm
 
 
 
-    InterfaceRef SAL_CALL OListBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
+    InterfaceRef SAL_CALL OListBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
     {
         return *(new OListBoxControl( comphelper::getComponentContext(_rxFactory) ));
     }

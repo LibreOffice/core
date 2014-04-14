@@ -73,7 +73,7 @@ using namespace ::com::sun::star::form::binding;
 // class OComboBoxModel
 
 
-InterfaceRef SAL_CALL OComboBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
+InterfaceRef SAL_CALL OComboBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return (*new OComboBoxModel( comphelper::getComponentContext(_rxFactory) ));
 }
@@ -869,7 +869,7 @@ void SAL_CALL OComboBoxModel::disposing( const EventObject& _rSource ) throw ( R
 
 
 
-InterfaceRef SAL_CALL OComboBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
+InterfaceRef SAL_CALL OComboBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OComboBoxControl( comphelper::getComponentContext(_rxFactory) ));
 }

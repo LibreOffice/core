@@ -190,15 +190,6 @@ sal_Bool OGroup::operator==( const OGroup& rGroup ) const
     return m_aGroupName.equals(rGroup.GetGroupName());
 }
 
-class OGroupLess : public ::std::binary_function<OGroup, OGroup, sal_Bool>
-{
-public:
-    sal_Bool operator() (const OGroup& lhs, const OGroup& rhs) const
-    {
-        return lhs.m_aGroupName < rhs.m_aGroupName;
-    }
-};
-
 Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 {
     sal_Int32 nLen = m_aCompArray.size();

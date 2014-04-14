@@ -46,7 +46,7 @@ using namespace ::com::sun::star::form::binding;
 
 
 
-InterfaceRef SAL_CALL ORadioButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
+InterfaceRef SAL_CALL ORadioButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new ORadioButtonControl( comphelper::getComponentContext(_rxFactory) ));
 }
@@ -91,7 +91,7 @@ void SAL_CALL ORadioButtonControl::createPeer(const Reference<starawt::XToolkit>
 }
 
 
-InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
+InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new ORadioButtonModel( comphelper::getComponentContext(_rxFactory) ));
 }

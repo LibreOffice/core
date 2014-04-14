@@ -41,7 +41,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
 
-InterfaceRef SAL_CALL OHiddenModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
+InterfaceRef SAL_CALL OHiddenModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OHiddenModel( comphelper::getComponentContext(_rxFactory) ));
 }

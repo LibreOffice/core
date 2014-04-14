@@ -24,6 +24,7 @@
 #include "frm_resource.hxx"
 #include "property.hrc"
 #include "property.hxx"
+#include "services.hxx"
 
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>

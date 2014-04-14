@@ -23,6 +23,7 @@
 #include "frm_resource.hxx"
 #include "frm_resource.hrc"
 #include "frm_module.hxx"
+#include "services.hxx"
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>

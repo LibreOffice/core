@@ -27,70 +27,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-
-
-#define DECLARE_SERVICE_INFO(classImplName) \
-    namespace frm { \
-        extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> SAL_CALL classImplName##_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory) throw (::com::sun::star::uno::RuntimeException); \
-    }
-
-
-DECLARE_SERVICE_INFO(OFixedTextModel)
-DECLARE_SERVICE_INFO(ORadioButtonModel)
-DECLARE_SERVICE_INFO(ORadioButtonControl)
-DECLARE_SERVICE_INFO(OCheckBoxModel)
-DECLARE_SERVICE_INFO(OCheckBoxControl)
-DECLARE_SERVICE_INFO(OHiddenModel)
-DECLARE_SERVICE_INFO(OGroupBoxModel)
-DECLARE_SERVICE_INFO(OGroupBoxControl)
-DECLARE_SERVICE_INFO(OListBoxControl)
-DECLARE_SERVICE_INFO(OListBoxModel)
-DECLARE_SERVICE_INFO(OComboBoxControl)
-DECLARE_SERVICE_INFO(OComboBoxModel)
-DECLARE_SERVICE_INFO(OEditControl)
-DECLARE_SERVICE_INFO(OEditModel)
-DECLARE_SERVICE_INFO(ONumericControl)
-DECLARE_SERVICE_INFO(ONumericModel)
-DECLARE_SERVICE_INFO(OPatternControl)
-DECLARE_SERVICE_INFO(OPatternModel)
-DECLARE_SERVICE_INFO(OCurrencyControl)
-DECLARE_SERVICE_INFO(OCurrencyModel)
-DECLARE_SERVICE_INFO(ODateControl)
-DECLARE_SERVICE_INFO(ODateModel)
-DECLARE_SERVICE_INFO(OTimeControl)
-DECLARE_SERVICE_INFO(OTimeModel)
-DECLARE_SERVICE_INFO(OFormattedControl)
-DECLARE_SERVICE_INFO(OFormattedModel)
-DECLARE_SERVICE_INFO(OFileControlModel)
-DECLARE_SERVICE_INFO(OButtonControl)
-DECLARE_SERVICE_INFO(OButtonModel)
-DECLARE_SERVICE_INFO(OImageButtonControl)
-DECLARE_SERVICE_INFO(OImageButtonModel)
-
-DECLARE_SERVICE_INFO(OImageControlControl)
-DECLARE_SERVICE_INFO(OImageControlModel)
-DECLARE_SERVICE_INFO(OGridControlModel)
-
-// XForms objects
-DECLARE_SERVICE_INFO(Binding)
-DECLARE_SERVICE_INFO(Model)
-DECLARE_SERVICE_INFO(XForms)
-
-// some special handling for the FormattedFieldWrapper which can act as FormattedModel or as EditModel
-DECLARE_SERVICE_INFO(OFormattedFieldWrapper)
-    // this is for a service, which is instantiated through the EditModel service name
-    // and which acts mostly as Edit (mostly means : if somebody uses XPersistObject::read immediately after
-    // the object was instantiated and the stream contains a FormattedModel, it switches permanently to
-    // formatted.)
-namespace frm { \
-    extern Reference< XInterface > SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException); \
-}
-
-DECLARE_SERVICE_INFO(OFormsCollection)
-DECLARE_SERVICE_INFO(ImageProducer)
-
-
-
 static Sequence< OUString >                      s_aClassImplementationNames;
 static Sequence<Sequence< OUString > >   s_aClassServiceNames;
 static Sequence<sal_Int64>                              s_aFactories;
@@ -278,19 +214,6 @@ void ensureClassInfos()
 
 extern "C"
 {
-
-
-void SAL_CALL createRegistryInfo_ODatabaseForm();
-void SAL_CALL createRegistryInfo_OFilterControl();
-void SAL_CALL createRegistryInfo_OScrollBarModel();
-void SAL_CALL createRegistryInfo_OSpinButtonModel();
-void SAL_CALL createRegistryInfo_ONavigationBarModel();
-void SAL_CALL createRegistryInfo_ONavigationBarControl();
-void SAL_CALL createRegistryInfo_ORichTextModel();
-void SAL_CALL createRegistryInfo_ORichTextControl();
-void SAL_CALL createRegistryInfo_CLibxml2XFormsExtension();
-void SAL_CALL createRegistryInfo_FormOperations();
-
 
 void SAL_CALL createRegistryInfo_FORMS()
 {

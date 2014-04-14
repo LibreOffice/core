@@ -40,7 +40,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
 
-InterfaceRef SAL_CALL OFixedTextModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
+InterfaceRef SAL_CALL OFixedTextModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OFixedTextModel( comphelper::getComponentContext(_rxFactory) ));
 }

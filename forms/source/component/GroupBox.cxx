@@ -44,7 +44,7 @@ using namespace ::com::sun::star::util;
 
 
 
-InterfaceRef SAL_CALL OGroupBoxModel_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
+InterfaceRef SAL_CALL OGroupBoxModel_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory)
 {
     return *(new OGroupBoxModel( comphelper::getComponentContext(_rxFactory) ));
 }
@@ -132,7 +132,7 @@ void SAL_CALL OGroupBoxModel::read(const Reference< XObjectInputStream>& _rxInSt
 
 
 
-InterfaceRef SAL_CALL OGroupBoxControl_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
+InterfaceRef SAL_CALL OGroupBoxControl_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory)
 {
     return *(new OGroupBoxControl( comphelper::getComponentContext(_rxFactory) ));
 }
