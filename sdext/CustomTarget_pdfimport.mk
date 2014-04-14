@@ -16,6 +16,6 @@ $(call gb_CustomTarget_get_workdir,sdext/pdfimport)/hash.cxx : \
 		$(SRCDIR)/sdext/source/pdfimport/wrapper/keyword_list \
 		| $(call gb_CustomTarget_get_workdir,sdext/pdfimport)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GPF,1)
-	$(GPERF) -C -t -l -L C++ -m 20 -Z PdfKeywordHash -k'4-5,$$' $< > $@
+	$(GPERF) -C -t -l -L C++ -m 20 --switch=2 --readonly-tables -Z PdfKeywordHash -k'4-5,$$' $< > $@
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
