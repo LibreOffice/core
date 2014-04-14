@@ -6,7 +6,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+#include <tools/gen.hxx>
+#include <vcl/lineinfo.hxx>
 #include "visitors.hxx"
+#include "tmpdevice.hxx"
 #include "cursor.hxx"
 
 // SmVisitorTest
@@ -456,78 +460,6 @@ void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
     line = SmCaretLine( p1.X( ), p1.Y( ), pNode->GetHeight( ) );
 }
 
-// Nasty temporary device!!!
-
-#include <boost/noncopyable.hpp>
-#include <tools/gen.hxx>
-#include <tools/fract.hxx>
-#include <rtl/math.hxx>
-#include <tools/color.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/lineinfo.hxx>
-#include <vcl/outdev.hxx>
-#include <sfx2/module.hxx>
-#include "symbol.hxx"
-#include "smmod.hxx"
-
-class SmTmpDevice2: private boost::noncopyable
-{
-    OutputDevice  &rOutDev;
-
-    Color   Impl_GetColor( const Color& rColor );
-
-public:
-    SmTmpDevice2( OutputDevice &rTheDev, bool bUseMap100th_mm );
-    ~SmTmpDevice2( )  { rOutDev.Pop( ); }
-
-    void SetFont( const Font &rNewFont );
-
-    void SetLineColor( const Color& rColor )    { rOutDev.SetLineColor( Impl_GetColor( rColor ) ); }
-    void SetFillColor( const Color& rColor )    { rOutDev.SetFillColor( Impl_GetColor( rColor ) ); }
-};
-
-SmTmpDevice2::SmTmpDevice2( OutputDevice &rTheDev, bool bUseMap100th_mm ) :
-    rOutDev( rTheDev )
-{
-    rOutDev.Push( PUSH_FONT | PUSH_MAPMODE |
-                  PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_TEXTCOLOR );
-    if ( bUseMap100th_mm  &&  MAP_100TH_MM != rOutDev.GetMapMode( ).GetMapUnit( ) )
-    {
-        SAL_WARN("starmath", "incorrect MapMode?");
-        rOutDev.SetMapMode( MAP_100TH_MM );     //format for 100% always
-    }
-}
-
-Color SmTmpDevice2::Impl_GetColor( const Color& rColor )
-{
-    ColorData nNewCol = rColor.GetColor( );
-    if ( COL_AUTO == nNewCol )
-    {
-        if ( OUTDEV_PRINTER == rOutDev.GetOutDevType( ) )
-            nNewCol = COL_BLACK;
-        else
-        {
-            Color aBgCol( rOutDev.GetBackground( ).GetColor( ) );
-            if ( OUTDEV_WINDOW == rOutDev.GetOutDevType( ) )
-                aBgCol = ( ( Window & ) rOutDev ).GetDisplayBackground( ).GetColor( );
-
-            nNewCol = SM_MOD( )->GetColorConfig( ).GetColorValue( svtools::FONTCOLOR ).nColor;
-
-            Color aTmpColor( nNewCol );
-            if ( aBgCol.IsDark( ) && aTmpColor.IsDark( ) )
-                nNewCol = COL_WHITE;
-            else if ( aBgCol.IsBright( ) && aTmpColor.IsBright( ) )
-                nNewCol = COL_BLACK;
-        }
-    }
-    return Color( nNewCol );
-}
-
-void SmTmpDevice2::SetFont( const Font &rNewFont )
-{
-    rOutDev.SetFont( rNewFont );
-    rOutDev.SetTextColor( Impl_GetColor( rNewFont.GetColor( ) ) );
-}
 
 // SmDrawingVisitor
 
@@ -664,7 +596,7 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     // draw root-sign itself
     DrawSpecialNode( pNode );
 
-    SmTmpDevice2  aTmpDev( ( OutputDevice & ) rDev, true );
+    SmTmpDevice aTmpDev( ( OutputDevice & ) rDev, true );
     aTmpDev.SetFillColor( pNode->GetFont( ).GetColor( ) );
     rDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
@@ -720,7 +652,7 @@ void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
           aPos ( Position + aOffset );
     pNode->GetPolygon( ).Move( aPos.X( ), aPos.Y( ) );    //Works because Polygon wraps a pointer
 
-    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, false );
+    SmTmpDevice aTmpDev ( ( OutputDevice & ) rDev, false );
     aTmpDev.SetLineColor( pNode->GetFont( ).GetColor( ) );
 
     rDev.DrawPolyLine( pNode->GetPolygon( ), aInfo );
@@ -731,7 +663,7 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     if ( pNode->IsPhantom( ) )
         return;
 
-    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, false );
+    SmTmpDevice aTmpDev ( ( OutputDevice & ) rDev, false );
     aTmpDev.SetFillColor( pNode->GetFont( ).GetColor( ) );
     rDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
@@ -763,7 +695,7 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
     if ( pNode->IsPhantom() || pNode->GetText().isEmpty() || pNode->GetText()[0] == '\0' )
         return;
 
-    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, false );
+    SmTmpDevice aTmpDev ( ( OutputDevice & ) rDev, false );
     aTmpDev.SetFont( pNode->GetFont( ) );
 
     Point  aPos ( Position );

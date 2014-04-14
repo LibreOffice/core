@@ -25,95 +25,16 @@
 #include "document.hxx"
 #include "view.hxx"
 #include "mathtype.hxx"
+#include "tmpdevice.hxx"
 #include "visitors.hxx"
 
-#include <boost/noncopyable.hpp>
-#include <comphelper/string.hxx>
-#include <tools/gen.hxx>
-#include <tools/fract.hxx>
-#include <rtl/math.hxx>
 #include <tools/color.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/lineinfo.hxx>
+#include <tools/fract.hxx>
+#include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
-#include <sfx2/module.hxx>
 
 #include <math.h>
 #include <float.h>
-
-
-
-// SmTmpDevice
-// Allows for font and color changes. The original settings will be restored
-// in the destructor.
-// It's main purpose is to allow for the "const" in the 'OutputDevice'
-// argument in the 'Arrange' functions and restore changes made in the 'Draw'
-// functions.
-// Usually a MapMode of 1/100th mm will be used.
-
-
-class SmTmpDevice: private boost::noncopyable
-{
-    OutputDevice  &rOutDev;
-
-    Color   Impl_GetColor( const Color& rColor );
-
-public:
-    SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm);
-    ~SmTmpDevice()  { rOutDev.Pop(); }
-
-    void SetFont(const Font &rNewFont);
-
-    operator OutputDevice & () { return rOutDev; }
-};
-
-
-SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm) :
-    rOutDev(rTheDev)
-{
-    rOutDev.Push( PUSH_FONT | PUSH_MAPMODE |
-                  PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_TEXTCOLOR );
-    if (bUseMap100th_mm  &&  MAP_100TH_MM != rOutDev.GetMapMode().GetMapUnit())
-    {
-        SAL_WARN("starmath", "incorrect MapMode?");
-        rOutDev.SetMapMode( MAP_100TH_MM );     //Immer fuer 100% fomatieren
-    }
-}
-
-
-Color SmTmpDevice::Impl_GetColor( const Color& rColor )
-{
-    ColorData nNewCol = rColor.GetColor();
-    if (COL_AUTO == nNewCol)
-    {
-        if (OUTDEV_PRINTER == rOutDev.GetOutDevType())
-            nNewCol = COL_BLACK;
-        else
-        {
-            Color aBgCol( rOutDev.GetBackground().GetColor() );
-            if (OUTDEV_WINDOW == rOutDev.GetOutDevType())
-                aBgCol = ((Window &) rOutDev).GetDisplayBackground().GetColor();
-
-            nNewCol = SM_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
-
-            Color aTmpColor( nNewCol );
-            if (aBgCol.IsDark() && aTmpColor.IsDark())
-                nNewCol = COL_WHITE;
-            else if (aBgCol.IsBright() && aTmpColor.IsBright())
-                nNewCol = COL_BLACK;
-        }
-    }
-    return Color( nNewCol );
-}
-
-
-void SmTmpDevice::SetFont(const Font &rNewFont)
-{
-    rOutDev.SetFont( rNewFont );
-    rOutDev.SetTextColor( Impl_GetColor( rNewFont.GetColor() ) );
-}
-
-
 
 
 
@@ -862,7 +783,7 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         nFormulaBaseline = GetBaseline();
     else
     {
-        SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+        SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
         aTmpDev.SetFont(GetFont());
 
         SmRect aRect = (SmRect(aTmpDev, &rFormat, OUString("a"),
@@ -914,7 +835,7 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->Arrange(rDev, rFormat);
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     if (nSize < 1)
@@ -1485,7 +1406,7 @@ void SmBinDiagonalNode::Arrange(const OutputDevice &rDev, const SmFormat &rForma
     //! some routines being called extract some info from the OutputDevice's
     //! font (eg the space to be used for borders OR the font name(!!)).
     //! Thus the font should reflect the needs and has to be set!
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     pLeft->Arrange(aTmpDev, rFormat);
@@ -1905,7 +1826,7 @@ void SmVerticalBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFor
     OSL_ENSURE(pBrace,  "Sm: NULL pointer!");
     OSL_ENSURE(pScript, "Sm: NULL pointer!");
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     pBody->Arrange(aTmpDev, rFormat);
@@ -2288,7 +2209,7 @@ void SmPolyLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     //! some routines being called extract some info from the OutputDevice's
     //! font (eg the space to be used for borders OR the font name(!!)).
     //! Thus the font should reflect the needs and has to be set!
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     long  nBorderwidth = GetFont().GetBorderWidth();
@@ -2381,7 +2302,7 @@ void SmRectangleNode::Arrange(const OutputDevice &rDev, const SmFormat &/*rForma
     if (nWidth == 0)
         nWidth  = nFontHeight / 3;
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     // add some borderspace
@@ -2447,7 +2368,7 @@ void SmTextNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
                             SIZ_FUNCTION : SIZ_TEXT;
     GetFont() *= Fraction (rFormat.GetRelSize(nSizeDesc), 100);
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     SmRect::operator = (SmRect(aTmpDev, &rFormat, aText, GetFont().GetBorderWidth()));
@@ -2729,7 +2650,7 @@ void SmMathSymbolNode::AdaptToX(const OutputDevice &rDev, sal_uLong nWidth)
     aFntSize.Width() = nWidth;
     GetFont().SetSize(aFntSize);
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     // get denominator of error factor for width
@@ -2765,7 +2686,7 @@ void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
     aFntSize.Height() = nHeight;
     GetFont().SetSize(aFntSize);
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     // get denominator of error factor for height
@@ -2809,7 +2730,7 @@ void SmMathSymbolNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat
 
     GetFont() *= Fraction (rFormat.GetRelSize(SIZ_TEXT), 100);
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     SmRect::operator = (SmRect(aTmpDev, &rFormat, rText, GetFont().GetBorderWidth()));
@@ -3031,7 +2952,7 @@ void SmSpecialNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
     PrepareAttributes();
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     SmRect::operator = (SmRect(aTmpDev, &rFormat, GetText(), GetFont().GetBorderWidth()));
@@ -3044,7 +2965,7 @@ void SmGlyphSpecialNode::Arrange(const OutputDevice &rDev, const SmFormat &rForm
 {
     PrepareAttributes();
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     SmRect::operator = (SmRect(aTmpDev, &rFormat, GetText(),
@@ -3068,7 +2989,7 @@ void SmPlaceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
     PrepareAttributes();
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     SmRect::operator = (SmRect(aTmpDev, &rFormat, GetText(), GetFont().GetBorderWidth()));
@@ -3092,7 +3013,7 @@ void SmErrorNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
     PrepareAttributes();
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     const OUString &rText = GetText();
@@ -3129,7 +3050,7 @@ void SmBlankNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 
 void SmBlankNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
+    SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     // make distance depend on the font height
