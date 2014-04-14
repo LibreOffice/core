@@ -17,14 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
 
-#include "compiler.hxx"
 #include "tokstack.hxx"
+#include "compiler.hxx"
 #include "global.hxx"
 #include "scmatrix.hxx"
 
+#include <svl/sharedstringpool.hxx>
+
 #include <stdio.h>
+#include <string.h>
 
 const sal_uInt16    TokenPool::nScTokenOff = 8192;
 
@@ -53,7 +55,8 @@ TokenStack::~TokenStack()
 //              -> Unterscheidung von anderen Token
 
 
-TokenPool::TokenPool( void )
+TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
+    mrStringPool(rSPool)
 {
     sal_uInt16  nLauf = nScTokenOff;
 
@@ -394,7 +397,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
                     sal_uInt16 n = pElement[ nId ];
                     OUString* p = ( n < nP_Str )? ppP_Str[ n ] : NULL;
                     if (p)
-                        pScToken->AddString( *p );
+                        pScToken->AddString(mrStringPool.intern(*p));
                     else
                         bRet = false;
                 }

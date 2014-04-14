@@ -75,9 +75,11 @@
 #include <svx/unoprov.hxx>
 
 #include <unotools/pathoptions.hxx>
+#include <unotools/charclass.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <svl/sharedstringpool.hxx>
 
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -1027,7 +1029,14 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
         {
             ::boost::shared_ptr< formula::IFunctionManager > pFormulaManager(new FunctionManager(xMgr) );
             ReportFormula aFormula( _in_out_rFormula );
-            FormulaDialog aDlg(pParent,xServiceFactory,pFormulaManager,aFormula.getUndecoratedContent(),_xRowSet);
+
+            LanguageTag aLangTag(LANGUAGE_SYSTEM);
+            CharClass aCC(_xContext, aLangTag);
+            svl::SharedStringPool aStringPool(&aCC);
+
+            FormulaDialog aDlg(
+                pParent, xServiceFactory, pFormulaManager, aFormula.getUndecoratedContent(), _xRowSet, aStringPool);
+
             bSuccess = aDlg.Execute() == RET_OK;
             if ( bSuccess )
             {

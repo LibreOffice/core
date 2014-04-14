@@ -714,6 +714,7 @@ bool ScValidationData::GetSelectionFromFormula(
     }
 
     bool bHaveEmpty = false;
+    svl::SharedStringPool& rSPool = pDocument->GetSharedStringPool();
 
     /* XL artificially limits things to a single col or row in the UI but does
      * not list the constraint in MOOXml. If a defined name or INDIRECT
@@ -749,7 +750,7 @@ bool ScValidationData::GetSelectionFromFormula(
                     pEntry = new ScTypedStrData( aValStr, 0.0, ScTypedStrData::Standard);
 
                 if (!rCell.isEmpty() && rMatch < 0)
-                    aCondTokArr.AddString( aValStr );
+                    aCondTokArr.AddString(rSPool.intern(aValStr));
             }
             else
             {
@@ -877,6 +878,7 @@ bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos
 
     // *** try if formula is a string list ***
 
+    svl::SharedStringPool& rSPool = GetDocument()->GetSharedStringPool();
     sal_uInt32 nFormat = lclGetCellFormat( *GetDocument(), rPos );
     ScStringTokenIterator aIt( *pTokArr );
     for (rtl_uString* pString = aIt.First(); pString && aIt.Ok(); pString = aIt.Next())
@@ -892,7 +894,7 @@ bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos
             if (GetDocument()->GetFormatTable()->IsNumberFormat(aStr, nFormat, fValue))
                 aCondTokArr.AddDouble( fValue );
             else
-                aCondTokArr.AddString(aStr);
+                aCondTokArr.AddString(rSPool.intern(aStr));
 
             bIsValid = IsEqualToTokenArray(rCell, rPos, aCondTokArr);
         }
