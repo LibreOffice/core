@@ -30,6 +30,7 @@
 #include "xmlsignature_nssimpl.hxx"
 #include "xmlencryption_nssimpl.hxx"
 #include "xmlsecuritycontext_nssimpl.hxx"
+#include "xsec_xmlsec.hxx"
 #include "securityenvironment_nssimpl.hxx"
 
 using namespace ::rtl;

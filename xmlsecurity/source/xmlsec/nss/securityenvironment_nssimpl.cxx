@@ -75,18 +75,6 @@ struct UsageDescription
     : usage( i_usage )
     , description( i_description )
     {}
-
-    UsageDescription( const UsageDescription& aDescription )
-    : usage( aDescription.usage )
-    , description( aDescription.description )
-    {}
-
-    UsageDescription& operator =( const UsageDescription& aDescription )
-    {
-        usage = aDescription.usage;
-        description = aDescription.description;
-        return *this;
-    }
 };
 
 

@@ -17,19 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XSECERROR_HXX_
-#define _XSECERROR_HXX_
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XSEC_XMLSEC_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XSEC_XMLSEC_HXX
 
 #include <sal/config.h>
 
-#include <certt.h>
-#include <nspr.h>
+extern "C" {
 
-const char *
-getCertError(PRErrorCode errNum);
+void* nss_component_getFactory( const sal_Char*, void*, void* );
 
-void
-printChainFailure(CERTVerifyLog *log);
-#endif  // _XSECERROR_HXX_
+#if defined( XMLSEC_CRYPTO_MSCRYPTO )
+void* mscrypt_component_getFactory( const sal_Char*, void*, void* );
+#endif
+
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

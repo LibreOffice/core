@@ -19,6 +19,7 @@
 
 
 #include "secerr.h"
+#include "secerror.hxx"
 #include "sslerr.h"
 #include "nspr.h"
 #include "nss.h"

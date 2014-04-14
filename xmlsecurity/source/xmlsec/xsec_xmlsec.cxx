@@ -25,6 +25,7 @@
 #include "serialnumberadapter.hxx"
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
+#include "xsec_xmlsec.hxx"
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
@@ -32,12 +33,6 @@ using namespace ::com::sun::star::lang;
 
 extern "C"
 {
-
-extern void* nss_component_getFactory( const sal_Char*, void*, void* );
-
-#if defined( XMLSEC_CRYPTO_MSCRYPTO )
-extern void* mscrypt_component_getFactory( const sal_Char*, void*, void* );
-#endif
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL xsec_xmlsec_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* pRegistryKey )
 {
