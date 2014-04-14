@@ -18,6 +18,7 @@
  */
 #include "AddField.hxx"
 #include "UITools.hxx"
+#include <boost/noncopyable.hpp>
 #include <svx/dbaexchange.hxx>
 #include <svx/svdpagv.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -59,12 +60,9 @@ using namespace lang;
 using namespace container;
 using namespace ::svx;
 
-class OAddFieldWindowListBox    : public SvTreeListBox
+class OAddFieldWindowListBox: public SvTreeListBox, private boost::noncopyable
 {
     OAddFieldWindow*                    m_pTabWin;
-
-    OAddFieldWindowListBox(const OAddFieldWindowListBox&);
-    void operator =(const OAddFieldWindowListBox&);
 
 public:
     OAddFieldWindowListBox( OAddFieldWindow* _pParent );

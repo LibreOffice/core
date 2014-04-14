@@ -29,6 +29,7 @@
 #include "RptResId.hrc"
 #include "RptModel.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -65,11 +66,6 @@ struct PropertyInfo
 {
     bool    bIsReadonlyOrTransient;
 
-    PropertyInfo()
-        :bIsReadonlyOrTransient( false )
-    {
-    }
-
     PropertyInfo( const bool i_bIsTransientOrReadOnly )
         :bIsReadonlyOrTransient( i_bIsTransientOrReadOnly )
     {
@@ -94,10 +90,8 @@ typedef ::std::map< Reference< XPropertySet >, ObjectInfo, ::comphelper::OInterf
 
 
 
-class OXUndoEnvironmentImpl
+class OXUndoEnvironmentImpl: private boost::noncopyable
 {
-    OXUndoEnvironmentImpl(OXUndoEnvironmentImpl&);
-    void operator =(OXUndoEnvironmentImpl&);
 public:
     OReportModel&                                       m_rModel;
     PropertySetInfoCache                                m_aPropertySetCache;

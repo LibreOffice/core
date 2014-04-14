@@ -74,13 +74,6 @@ public:
         if ( m_pPropWin && aSize.Height() && aSize.Width() )
             m_pPropWin->SetSizePixel(aSize);
     }
-    long getMinimumWidth() const
-    {
-        long nRet = 0;
-        if ( m_pPropWin )
-            nRet = m_pPropWin->getMinimumSize().Width();
-        return nRet;
-    }
 };
 
 

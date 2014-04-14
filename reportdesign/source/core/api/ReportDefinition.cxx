@@ -121,6 +121,7 @@
 
 #include <boost/bind.hpp>
 #include <boost/mem_fn.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/utility.hpp>
 
 //  page styles
@@ -2409,15 +2410,14 @@ OUString SAL_CALL OReportDefinition::getShapeType(  ) throw (uno::RuntimeExcepti
 typedef ::cppu::WeakImplHelper2< container::XNameContainer,
                              container::XIndexAccess
                             > TStylesBASE;
-class OStylesHelper : public ::cppu::BaseMutex, public TStylesBASE
+class OStylesHelper:
+    public cppu::BaseMutex, public TStylesBASE, private boost::noncopyable
 {
     typedef ::std::map< OUString, uno::Any  , ::comphelper::UStringMixLess> TStyleElements;
     TStyleElements                                  m_aElements;
     ::std::vector<TStyleElements::iterator>         m_aElementsPos;
     uno::Type                                       m_aType;
 
-    OStylesHelper(const OStylesHelper&);
-    void operator =(const OStylesHelper&);
 protected:
     virtual ~OStylesHelper(){}
 public:

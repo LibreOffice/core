@@ -16,6 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -77,11 +81,11 @@ using namespace xmloff;
 
     using namespace ::com::sun::star::util;
 
-class RptMLMasterStylesContext_Impl : public XMLTextMasterStylesContext
+class RptMLMasterStylesContext_Impl:
+    public XMLTextMasterStylesContext, private boost::noncopyable
 {
     ORptFilter& m_rImport;
-    RptMLMasterStylesContext_Impl(const RptMLMasterStylesContext_Impl&);
-    void operator =(const RptMLMasterStylesContext_Impl&);
+
 public:
 
     TYPEINFO_OVERRIDE();

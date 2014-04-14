@@ -18,6 +18,7 @@
  */
 #include "xmlFixedContent.hxx"
 #include "xmlfilter.hxx"
+#include <boost/noncopyable.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -37,11 +38,10 @@ namespace rptxml
 {
     using namespace ::com::sun::star;
 
-class OXMLCharContent : public XMLCharContext
+class OXMLCharContent: public XMLCharContext, private boost::noncopyable
 {
     OXMLFixedContent* m_pFixedContent;
-    OXMLCharContent(const OXMLCharContent&);
-    OXMLCharContent operator =(const OXMLCharContent&);
+
 public:
     OXMLCharContent(
             SvXMLImport& rImport,

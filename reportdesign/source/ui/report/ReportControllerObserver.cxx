@@ -23,6 +23,7 @@
 
 #include <ReportControllerObserver.hxx>
 #include <ReportController.hxx>
+#include <boost/noncopyable.hpp>
 #include <svl/smplhint.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -47,10 +48,8 @@ namespace rptui
 typedef std::map<OUString, bool> AllProperties;
 typedef std::map<uno::Reference< beans::XPropertySet >, AllProperties> PropertySetInfoCache;
 
-class OXReportControllerObserverImpl
+class OXReportControllerObserverImpl: private boost::noncopyable
 {
-    OXReportControllerObserverImpl(OXReportControllerObserverImpl&);
-    void operator =(OXReportControllerObserverImpl&);
 public:
     const OReportController&                            m_rReportController;
     ::std::vector< uno::Reference< container::XChild> > m_aSections;

@@ -24,6 +24,7 @@
 #include "UITools.hxx"
 #include "RptUndo.hxx"
 #include "reportformula.hxx"
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XFixedText.hpp>
@@ -110,6 +111,7 @@ class NavigatorTree :   public ::cppu::BaseMutex
                     ,   public reportdesign::ITraverseReport
                     ,   public comphelper::OSelectionChangeListener
                     ,   public ::comphelper::OPropertyChangeListener
+                    ,   private boost::noncopyable
 {
     class UserData;
     friend class UserData;
@@ -157,8 +159,6 @@ class NavigatorTree :   public ::cppu::BaseMutex
     void traverseSection(const uno::Reference< report::XSection>& _xSection,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition = TREELIST_APPEND);
     void traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvTreeListEntry* _pParent);
 
-    NavigatorTree(const NavigatorTree&);
-    void operator =(const NavigatorTree&);
 protected:
     virtual void        Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
     // DragSourceHelper overridables
@@ -864,10 +864,8 @@ void NavigatorTree::UserData::_disposing(const lang::EventObject& _rSource)
 
 // class ONavigatorImpl
 
-class ONavigatorImpl
+class ONavigatorImpl: private boost::noncopyable
 {
-    ONavigatorImpl(const ONavigatorImpl&);
-    void operator =(const ONavigatorImpl&);
 public:
     ONavigatorImpl(OReportController& _rController,ONavigator* _pParent);
     virtual ~ONavigatorImpl();

@@ -82,6 +82,7 @@ typedef ::svt::EditBrowseBox OFieldExpressionControl_Base;
 typedef ::cppu::WeakImplHelper1< container::XContainerListener > TContainerListenerBase;
 class OFieldExpressionControl : public TContainerListenerBase
                                ,public OFieldExpressionControl_Base
+                               ,private boost::noncopyable
 {
     ::osl::Mutex                    m_aMutex;
     ::std::vector<sal_Int32>        m_aGroupPositions;
@@ -94,11 +95,8 @@ class OFieldExpressionControl : public TContainerListenerBase
     OGroupsSortingDialog*           m_pParent;
     bool                            m_bIgnoreEvent;
 
-    void fillListBox(const uno::Reference< beans::XPropertySet>& _xDest,long nRow,sal_uInt16 nColumnId);
     sal_Bool SaveModified(bool _bAppend);
 
-    OFieldExpressionControl(const OFieldExpressionControl&); // NO COPY
-    void operator =(const OFieldExpressionControl&);         // NO ASSIGN
 public:
     OFieldExpressionControl( OGroupsSortingDialog* _pParent,const ResId& _rResId);
     virtual ~OFieldExpressionControl();
