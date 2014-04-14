@@ -24,6 +24,7 @@
 #include "LockedCanvasContext.hxx"
 #include "WpsContext.hxx"
 #include "WpgContext.hxx"
+#include "services.hxx"
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
@@ -51,7 +52,7 @@ ShapeContextHandler_getSupportedServiceNames()
 
 uno::Reference< uno::XInterface > SAL_CALL
 ShapeContextHandler_createInstance( const uno::Reference< uno::XComponentContext > & context)
-        SAL_THROW((uno::Exception))
+        throw (uno::Exception)
 {
     return static_cast< ::cppu::OWeakObject* >( new ShapeContextHandler(context) );
 }

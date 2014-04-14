@@ -24,6 +24,8 @@
 
 #include <com/sun/star/drawing/XShape.hpp>
 
+#include <services.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -31,12 +33,12 @@ using namespace oox::core;
 
 namespace oox { namespace ppt {
 
-OUString SAL_CALL QuickDiagrammingImport_getImplementationName() throw()
+OUString SAL_CALL QuickDiagrammingImport_getImplementationName()
 {
     return OUString( "com.sun.star.comp.Impress.oox.QuickDiagrammingImport" );
 }
 
-uno::Sequence< OUString > SAL_CALL QuickDiagrammingImport_getSupportedServiceNames() throw()
+uno::Sequence< OUString > SAL_CALL QuickDiagrammingImport_getSupportedServiceNames()
 {
     const OUString aServiceName = "com.sun.star.comp.ooxpptx.dgm.import";
     const Sequence< OUString > aSeq( &aServiceName, 1 );

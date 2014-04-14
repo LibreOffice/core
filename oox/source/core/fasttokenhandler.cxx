@@ -24,6 +24,8 @@
 #include "oox/token/tokenmap.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
+#include <services.hxx>
+
 namespace oox {
 namespace core {
 

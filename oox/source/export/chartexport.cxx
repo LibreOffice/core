@@ -110,8 +110,6 @@ using ::sax_fastparser::FSHelperPtr;
 
 namespace cssc = com::sun::star::chart;
 
-DBG(extern void dump_pset(Reference< XPropertySet > rXPropSet));
-
 namespace oox { namespace drawingml {
 
 class lcl_MatchesRole : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >

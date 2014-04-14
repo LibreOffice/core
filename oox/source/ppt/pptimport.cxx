@@ -27,6 +27,8 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/ole/vbaproject.hxx"
 
+#include <services.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -37,12 +39,12 @@ using ::com::sun::star::lang::XComponent;
 
 namespace oox { namespace ppt {
 
-OUString SAL_CALL PowerPointImport_getImplementationName() throw()
+OUString SAL_CALL PowerPointImport_getImplementationName()
 {
     return OUString( "com.sun.star.comp.oox.ppt.PowerPointImport" );
 }
 
-uno::Sequence< OUString > SAL_CALL PowerPointImport_getSupportedServiceNames() throw()
+uno::Sequence< OUString > SAL_CALL PowerPointImport_getSupportedServiceNames()
 {
     Sequence< OUString > aSeq( 2 );
     aSeq[ 0 ] = "com.sun.star.document.ImportFilter";

@@ -29,6 +29,8 @@
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
+#include <services.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -37,12 +39,12 @@ using namespace ::oox::drawingml;
 
 namespace oox { namespace ppt {
 
-OUString SAL_CALL QuickDiagrammingLayout_getImplementationName() throw()
+OUString SAL_CALL QuickDiagrammingLayout_getImplementationName()
 {
     return OUString( "com.sun.star.comp.Impress.oox.QuickDiagrammingLayout" );
 }
 
-uno::Sequence< OUString > SAL_CALL QuickDiagrammingLayout_getSupportedServiceNames() throw()
+uno::Sequence< OUString > SAL_CALL QuickDiagrammingLayout_getSupportedServiceNames()
 {
     const OUString aServiceName = "com.sun.star.comp.ooxpptx.dgm.layout";
     const Sequence< OUString > aSeq( &aServiceName, 1 );

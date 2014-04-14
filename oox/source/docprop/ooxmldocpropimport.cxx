@@ -18,6 +18,7 @@
  */
 
 #include "ooxmldocpropimport.hxx"
+#include "services.hxx"
 
 #include <vector>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -55,7 +56,7 @@ Sequence< OUString > SAL_CALL DocumentPropertiesImport_getSupportedServiceNames(
     return aServices;
 }
 
-Reference< XInterface > SAL_CALL DocumentPropertiesImport_createInstance( const Reference< XComponentContext >& rxContext ) SAL_THROW((Exception))
+Reference< XInterface > SAL_CALL DocumentPropertiesImport_createInstance( const Reference< XComponentContext >& rxContext ) throw(Exception)
 {
     return static_cast< ::cppu::OWeakObject* >( new DocumentPropertiesImport( rxContext ) );
 }

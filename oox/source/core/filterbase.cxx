@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -68,7 +71,7 @@ struct UrlPool
 struct StaticUrlPool : public ::rtl::Static< UrlPool, StaticUrlPool > {};
 
 /** This guard prevents recursive loading/saving of the same document. */
-class DocumentOpenedGuard
+class DocumentOpenedGuard: private boost::noncopyable
 {
 public:
     explicit            DocumentOpenedGuard( const OUString& rUrl );
@@ -77,9 +80,6 @@ public:
     inline bool         isValid() const { return mbValid; }
 
 private:
-                        DocumentOpenedGuard( const DocumentOpenedGuard& );
-    DocumentOpenedGuard& operator=( const DocumentOpenedGuard& );
-
     OUString            maUrl;
     bool                mbValid;
 };

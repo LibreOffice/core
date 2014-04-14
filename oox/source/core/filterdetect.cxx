@@ -34,6 +34,8 @@
 
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 
+#include <services.hxx>
+
 namespace oox {
 namespace core {
 

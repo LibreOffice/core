@@ -39,7 +39,6 @@ struct ElementInfo
     bool                mbTrimSpaces;       /// True = trims leading/trailing spaces from text data.
 
     inline explicit     ElementInfo() : maChars( 0), mnElement( XML_TOKEN_INVALID ), mbTrimSpaces( false ) {}
-                        ElementInfo( sal_Int32 nElement ) : maChars( 0 ), mnElement( nElement ), mbTrimSpaces(false) {}
 };
 
 
