@@ -1831,8 +1831,7 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
     {
         Clear();
 
-        xPoolHelper = pSrcDoc->xPoolHelper;
-
+        SharePooledResources(pSrcDoc);
 
         OUString aString;
         for (SCTAB nTab = 0; nTab <= rTabSelection.GetLastSelected(); nTab++)
@@ -1867,8 +1866,7 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
         Clear();
 
         // Undo document shares its pooled resources with the source document.
-        xPoolHelper = pSrcDoc->xPoolHelper;
-        mpCellStringPool = pSrcDoc->mpCellStringPool;
+        SharePooledResources(pSrcDoc);
 
         if (pSrcDoc->pShell->GetMedium())
             maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);

@@ -16,6 +16,7 @@
 #include <editutil.hxx>
 #include <listenercontext.hxx>
 #include <tokenstringcontext.hxx>
+#include <poolhelp.hxx>
 
 // Add totally brand-new methods to this source file.
 
@@ -261,6 +262,12 @@ void ScDocument::PostprocessRangeNameUpdate()
         ScTable* p = *it;
         p->PostprocessRangeNameUpdate(aCompileCxt);
     }
+}
+
+void ScDocument::SharePooledResources( ScDocument* pSrcDoc )
+{
+    xPoolHelper = pSrcDoc->xPoolHelper;
+    mpCellStringPool = pSrcDoc->mpCellStringPool;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

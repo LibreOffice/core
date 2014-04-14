@@ -2147,6 +2147,8 @@ private: // CLOOK-Impl-methods
     SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol ) const;
     SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
     bool   ReservePatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserve );
+
+    void SharePooledResources( ScDocument* pSrcDoc );
 };
 inline void ScDocument::GetSortParam( ScSortParam& rParam, SCTAB nTab )
 {

@@ -464,7 +464,7 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
     Clear();
 
-    xPoolHelper = pSourceDoc->xPoolHelper;
+    SharePooledResources(pSourceDoc);
 
     //  bedingte Formate / Gueltigkeiten
     //! Vorlagen kopieren?
