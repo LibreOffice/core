@@ -73,7 +73,7 @@
 #include "graphite_features.hxx"
 #endif
 
-#include "../pdfwriter_impl.hxx"
+#include "../gdi/pdfwriter_impl.hxx"
 
 #include "com/sun/star/beans/PropertyValues.hpp"
 #include "com/sun/star/i18n/XBreakIterator.hpp"
