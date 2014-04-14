@@ -210,6 +210,7 @@ bool TBCHeader::Read( SvStream &rS )
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void TBCHeader::Print( FILE* fp )
 {
     Indent a;
@@ -226,6 +227,7 @@ void TBCHeader::Print( FILE* fp )
     if ( height.get() )
         indent_printf(fp,"  height 0x%d(0x%x)\n", *height, *height);
 }
+#endif
 
 TBCData::TBCData( const TBCHeader& Header ) : rHeader( Header )
 {
@@ -359,6 +361,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     return true; // just ignore
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void TBCData::Print( FILE* fp )
 {
     Indent a;
@@ -372,6 +375,7 @@ void TBCData::Print( FILE* fp )
         controlSpecificInfo->Print( fp );
     }
 }
+#endif
 
 bool
 WString::Read( SvStream &rS )
@@ -408,6 +412,7 @@ TBCExtraInfo::Read( SvStream &rS )
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void
 TBCExtraInfo::Print( FILE* fp )
 {
@@ -424,8 +429,8 @@ TBCExtraInfo::Print( FILE* fp )
         OUStringToOString( wstrParam.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     indent_printf( fp, "  tbcu 0x%x\n", tbcu );
     indent_printf( fp, "  tbmg 0x%x\n", tbmg );
-
 }
+#endif
 
 OUString
 TBCExtraInfo::getOnAction()
@@ -452,6 +457,7 @@ bool TBCGeneralInfo::Read( SvStream &rS )
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void
 TBCGeneralInfo::Print( FILE* fp )
 {
@@ -467,6 +473,7 @@ TBCGeneralInfo::Print( FILE* fp )
     if ( bFlags & 0x4 )
         extraInfo.Print( fp );
 }
+#endif
 
 bool
 TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std::vector< beans::PropertyValue >& sControlData )
@@ -530,6 +537,7 @@ TBCMenuSpecific::Read( SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void
 TBCMenuSpecific::Print( FILE* fp )
 {
@@ -538,8 +546,8 @@ TBCMenuSpecific::Print( FILE* fp )
     indent_printf( fp, "  tbid 0x%x\n", static_cast< unsigned int >( tbid ) );
     if ( tbid == 1 )
         indent_printf( fp, "  name %s\n", OUStringToOString( name->getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
-
 }
+#endif
 
 OUString TBCMenuSpecific::Name()
 {
@@ -584,6 +592,7 @@ bool TBCBSpecific::Read( SvStream &rS)
 }
 
 
+#if OSL_DEBUG_LEVEL > 1
 void TBCBSpecific::Print( FILE* fp )
 {
     Indent a;
@@ -612,6 +621,7 @@ void TBCBSpecific::Print( FILE* fp )
     bResult = ( wstrAcc.get() != NULL );
     indent_printf( fp, "  option string present? %s ->%s<-\n", bResult ? "true" : "false", bResult ? OUStringToOString( wstrAcc->getString(), RTL_TEXTENCODING_UTF8 ).getStr() : "N/A" );
 }
+#endif
 
 TBCBitMap*
 TBCBSpecific::getIcon()
@@ -639,6 +649,7 @@ bool TBCComboDropdownSpecific::Read( SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void TBCComboDropdownSpecific::Print( FILE* fp)
 {
     Indent a;
@@ -648,6 +659,7 @@ void TBCComboDropdownSpecific::Print( FILE* fp)
     else
         indent_printf(fp," no data " );
 }
+#endif
 
 TBCCDData::TBCCDData()
     : cwstrItems(0)
@@ -681,6 +693,7 @@ bool TBCCDData::Read( SvStream &rS)
     return wstrEdit.Read( rS );
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void TBCCDData::Print( FILE* fp)
 {
     Indent a;
@@ -697,6 +710,7 @@ void TBCCDData::Print( FILE* fp)
     indent_printf(fp,"  dxWidth width in pixels 0x%d", dxWidth);
     indent_printf(fp,"  wstrEdit %s", OUStringToOString( wstrEdit.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
 }
+#endif
 
 TBCBitMap::TBCBitMap() : cbDIB( 0 )
 {
@@ -722,12 +736,14 @@ bool TBCBitMap::Read( SvStream& rS)
     return ReadDIB(mBitMap, rS, false);
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void TBCBitMap::Print( FILE* fp )
 {
     Indent a;
     indent_printf(fp, "[ 0x%x ] TBCBitMap -- dump\n", nOffSet );
     indent_printf(fp, "  TBCBitMap size of bitmap data 0x%x\n", static_cast< unsigned int > ( cbDIB ) );
 }
+#endif
 
 TB::TB() : bSignature(0x2),
 bVersion(0x1),
@@ -754,6 +770,7 @@ bool TB::IsEnabled()
     return ( bFlags & 0x01 ) != 0x01;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void TB::Print( FILE* fp )
 {
     Indent a;
@@ -767,6 +784,7 @@ void TB::Print( FILE* fp )
     indent_printf(fp,"  bFlags 0x%x\n", bFlags );
     indent_printf(fp, "  name %s\n", OUStringToOString( name.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
 }
+#endif
 
 TBVisualData::TBVisualData() : tbds(0), tbv(0), tbdsDock(0), iRow(0)
 {
@@ -782,6 +800,7 @@ bool TBVisualData::Read( SvStream& rS )
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void SRECT::Print( FILE* fp )
 {
     Indent a;
@@ -790,7 +809,9 @@ void SRECT::Print( FILE* fp )
     indent_printf( fp, "  right 0x%x\n", right);
     indent_printf( fp, "  bottom 0x%x\n", bottom);
 }
+#endif
 
+#if OSL_DEBUG_LEVEL > 1
 void TBVisualData::Print( FILE* fp )
 {
     Indent a;
@@ -802,5 +823,6 @@ void TBVisualData::Print( FILE* fp )
     rcDock.Print( fp );
     rcFloat.Print( fp );
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

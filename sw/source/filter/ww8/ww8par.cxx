@@ -442,7 +442,9 @@ public:
     Sttb();
     virtual ~Sttb();
     bool Read(SvStream &rS) SAL_OVERRIDE;
-    void Print( FILE* fp ) SAL_OVERRIDE;
+#if OSL_DEBUG_LEVEL > 1
+    virtual void Print( FILE* fp ) SAL_OVERRIDE;
+#endif
     OUString getStringAtIndex( sal_uInt32 );
 };
 
@@ -474,6 +476,7 @@ bool Sttb::Read( SvStream& rS )
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void Sttb::Print( FILE* fp )
 {
     fprintf( fp, "[ 0x%" SAL_PRIxUINT32 " ] Sttb - dump\n", nOffSet);
@@ -486,6 +489,7 @@ void Sttb::Print( FILE* fp )
             fprintf(fp,"   string dataItem[ %d(0x%x) ] has name %s\n", static_cast< int >( index ), static_cast< unsigned int >( index ), OUStringToOString( dataItems[ index ].data, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
+#endif
 
 OUString
 Sttb::getStringAtIndex( sal_uInt32 index )

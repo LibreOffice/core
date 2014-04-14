@@ -26,7 +26,9 @@ public:
     bool C:1;
     sal_uInt16 reserved3:8;
     bool Read( SvStream& rS ) SAL_OVERRIDE;
-    void Print(FILE* fp) SAL_OVERRIDE;
+#if OSL_DEBUG_LEVEL > 1
+    virtual void Print(FILE* fp) SAL_OVERRIDE;
+#endif
 };
 
 class ScTBC : public TBBase
@@ -37,7 +39,9 @@ class ScTBC : public TBBase
 public:
     ScTBC();
     virtual ~ScTBC(){}
-    void Print( FILE* ) SAL_OVERRIDE;
+#if OSL_DEBUG_LEVEL > 1
+    virtual void Print( FILE* ) SAL_OVERRIDE;
+#endif
     bool Read(SvStream &rS) SAL_OVERRIDE;
     bool ImportToolBarControl( ScCTBWrapper&, const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar );
 };
@@ -53,7 +57,9 @@ class ScCTB : public TBBase
 public:
     ScCTB(sal_uInt16);
     virtual ~ScCTB(){}
-    void Print( FILE* ) SAL_OVERRIDE;
+#if OSL_DEBUG_LEVEL > 1
+    virtual void Print( FILE* ) SAL_OVERRIDE;
+#endif
     bool Read(SvStream &rS) SAL_OVERRIDE;
     bool IsMenuToolbar();
     bool ImportCustomToolBar( ScCTBWrapper&, CustomToolBarImportHelper& );
@@ -78,7 +84,9 @@ public:
     CTBS& operator = ( const CTBS&);
     CTBS();
     virtual ~CTBS(){}
-    void Print( FILE* ) SAL_OVERRIDE;
+#if OSL_DEBUG_LEVEL > 1
+    virtual void Print( FILE* ) SAL_OVERRIDE;
+#endif
     bool Read(SvStream &rS) SAL_OVERRIDE;
 };
 
@@ -92,7 +100,9 @@ public:
     ScCTBWrapper();
     virtual ~ScCTBWrapper();
     bool Read(SvStream &rS) SAL_OVERRIDE;
-    void Print( FILE* ) SAL_OVERRIDE;
+#if OSL_DEBUG_LEVEL > 1
+    virtual void Print( FILE* ) SAL_OVERRIDE;
+#endif
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
     ScCTB* GetCustomizationData( const OUString& name );
 };

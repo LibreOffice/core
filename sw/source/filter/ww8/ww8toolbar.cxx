@@ -176,6 +176,7 @@ SwTBC* SwCTBWrapper::GetTBCAtOffset( sal_uInt32 nStreamOffset )
     return NULL;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void SwCTBWrapper::Print( FILE* fp )
 {
     Indent a;
@@ -215,6 +216,7 @@ void SwCTBWrapper::Print( FILE* fp )
         it->Print(fp);
     }
 }
+#endif
 
 bool SwCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
@@ -277,6 +279,7 @@ bool Customization::Read( SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void Customization::Print( FILE* fp )
 {
     Indent a;
@@ -307,8 +310,8 @@ void Customization::Print( FILE* fp )
         for ( sal_Int32 index = 0; index < ctbds; ++it,++index )
             it->Print( fp );
     }
-
 }
+#endif
 
 bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
@@ -452,6 +455,7 @@ bool TBDelta::Read(SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void TBDelta::Print( FILE* fp )
 {
     // Like most of the debug output, it's raw and little ( no )
@@ -471,6 +475,7 @@ void TBDelta::Print( FILE* fp )
         indent_printf( fp, " the menu toolbar drops the toolbar defined at index[%d] in the rCustomizations array of the CTBWRAPPER that contains this TBDelta\n", CustomizationIndex() );
     }
 }
+#endif
 
 SwCTB::SwCTB() : cbTBData( 0 )
 ,iWCTBl( 0 )
@@ -520,6 +525,7 @@ bool SwCTB::Read( SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void
 SwCTB::Print( FILE* fp )
 {
@@ -546,6 +552,7 @@ SwCTB::Print( FILE* fp )
         }
     }
 }
+#endif
 
 bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
@@ -632,6 +639,7 @@ bool SwTBC::Read( SvStream &rS )
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void SwTBC::Print( FILE* fp )
 {
     Indent a;
@@ -646,6 +654,7 @@ void SwTBC::Print( FILE* fp )
         tbcd->Print(fp);
     }
 }
+#endif
 
 bool
 SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar )
@@ -771,6 +780,7 @@ Xst::Read( SvStream& rS )
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void
 Xst::Print( FILE* fp )
 {
@@ -778,6 +788,7 @@ Xst::Print( FILE* fp )
     indent_printf( fp, "[ 0x%x ] Xst -- dump\n", nOffSet );
     indent_printf( fp, " %s",  OUStringToOString( sString, RTL_TEXTENCODING_UTF8 ).getStr() );
 }
+#endif
 
 Tcg::Tcg() : nTcgVer( -1 )
 {
@@ -794,6 +805,7 @@ bool Tcg::Read(SvStream &rS)
     return tcg->Read( rS );
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void Tcg::Print( FILE* fp )
 {
     Indent a(true);
@@ -802,6 +814,7 @@ void Tcg::Print( FILE* fp )
     if ( tcg.get() )
         tcg->Print( fp );
 }
+#endif
 
 bool Tcg::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
@@ -904,6 +917,7 @@ bool Tcg255::Read(SvStream &rS)
     // Peek at
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void Tcg255::Print( FILE* fp)
 {
     Indent a;
@@ -919,6 +933,7 @@ void Tcg255::Print( FILE* fp)
         (*it)->Print(fp);
     }
 }
+#endif
 
 Tcg255SubStruct::Tcg255SubStruct( bool bReadId ) : mbReadId( bReadId ), ch(0)
 {
@@ -957,6 +972,7 @@ bool PlfMcd::Read(SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void PlfMcd::Print( FILE* fp )
 {
     Indent a;
@@ -968,8 +984,8 @@ void PlfMcd::Print( FILE* fp )
         indent_printf(fp, "[%d] MCD\n", static_cast< int >( count ) );
         rgmcd[ count ].Print( fp );
     }
-
 }
+#endif
 
 PlfAcd::PlfAcd( bool bReadId ) : Tcg255SubStruct( bReadId )
 ,iMac(0)
@@ -1000,6 +1016,7 @@ bool PlfAcd::Read( SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void PlfAcd::Print( FILE* fp )
 {
     Indent a;
@@ -1011,8 +1028,8 @@ void PlfAcd::Print( FILE* fp )
         indent_printf(fp, "[%d] ACD\n", static_cast< int >( count ) );
         rgacd[ count ].Print( fp );
     }
-
 }
+#endif
 
 PlfKme::PlfKme( bool bReadId ) : Tcg255SubStruct( bReadId )
 ,iMac( 0 )
@@ -1043,6 +1060,7 @@ bool PlfKme::Read(SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void PlfKme::Print( FILE* fp )
 {
     Indent a;
@@ -1054,8 +1072,8 @@ void PlfKme::Print( FILE* fp )
         indent_printf(fp, "[%d] Kme\n", static_cast< int >( count ) );
         rgkme[ count ].Print( fp );
     }
-
 }
+#endif
 
 TcgSttbf::TcgSttbf( bool bReadId ) : Tcg255SubStruct( bReadId )
 {
@@ -1069,12 +1087,14 @@ bool TcgSttbf::Read( SvStream &rS)
     return sttbf.Read( rS );
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void TcgSttbf::Print( FILE* fp )
 {
     Indent a;
     indent_printf(fp,"[ 0x%x ] TcgSttbf - dump\n", nOffSet );
     sttbf.Print( fp );
 }
+#endif
 
 TcgSttbfCore::TcgSttbfCore() : fExtend( 0 )
 ,cData( 0 )
@@ -1106,6 +1126,7 @@ bool TcgSttbfCore::Read( SvStream& rS )
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void TcgSttbfCore::Print( FILE* fp )
 {
     Indent a;
@@ -1119,8 +1140,8 @@ void TcgSttbfCore::Print( FILE* fp )
         for ( sal_Int32 index = 0; index < cData; ++index )
             indent_printf(fp,"   string dataItem[ %d(0x%x) ] has name %s and if referenced %d times.\n", static_cast< int >( index ), static_cast< unsigned int >( index ), OUStringToOString( dataItems[ index ].data, RTL_TEXTENCODING_UTF8 ).getStr(), dataItems[ index ].extraData );
     }
-
 }
+#endif
 
 MacroNames::MacroNames( bool bReadId ) : Tcg255SubStruct( bReadId )
 ,iMac( 0 )
@@ -1151,6 +1172,7 @@ bool MacroNames::Read( SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void MacroNames::Print( FILE* fp )
 {
     Indent a;
@@ -1162,8 +1184,8 @@ void MacroNames::Print( FILE* fp )
         indent_printf(fp, "[%d] MacroName\n", static_cast<int>( count ) );
         rgNames[ count ].Print( fp );
     }
-
 }
+#endif
 
 MacroName::MacroName():ibst(0)
 {
@@ -1177,6 +1199,7 @@ bool MacroName::Read(SvStream &rS)
     return xstz.Read( rS );
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void MacroName::Print( FILE* fp )
 {
     Indent a;
@@ -1184,6 +1207,7 @@ void MacroName::Print( FILE* fp )
     indent_printf( fp,"  index - 0x%x has associated following record\n", ibst );
     xstz.Print( fp );
 }
+#endif
 
 Xstz::Xstz():chTerm(0)
 {
@@ -1202,6 +1226,7 @@ Xstz::Read(SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void Xstz::Print( FILE* fp )
 {
     Indent a;
@@ -1210,6 +1235,7 @@ void Xstz::Print( FILE* fp )
     xst.Print( fp );
     indent_printf(fp,"  chterm 0x%x ( should be zero )\n", chTerm);
 }
+#endif
 
 Kme::Kme() : reserved1(0)
 ,reserved2(0)
@@ -1233,9 +1259,10 @@ Kme::Read(SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void Kme::Print( FILE* fp )
 {
-    Indent a;
+   Indent a;
 
    indent_printf( fp, "[ 0x%x ] Kme - dump\n", nOffSet );
    indent_printf( fp, " reserved1 0x%x [expected 0x0 ]\n", reserved1 );
@@ -1245,6 +1272,7 @@ void Kme::Print( FILE* fp )
    indent_printf( fp, " kt 0x%x \n", kt );
    indent_printf( fp, " param 0x%x \n", static_cast< unsigned int >( param ) );
 }
+#endif
 
 Acd::Acd() : ibst( 0 )
 , fciBasedOnABC( 0 )
@@ -1259,6 +1287,7 @@ bool Acd::Read(SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void Acd::Print( FILE* fp )
 {
     Indent a;
@@ -1267,6 +1296,7 @@ void Acd::Print( FILE* fp )
     indent_printf( fp,"  ibst 0x%x\n", ibst);
     indent_printf( fp,"  fciBaseObABC 0x%x\n", fciBasedOnABC);
 }
+#endif
 
 MCD::MCD() :  reserved1(0x56)
 ,reserved2( 0 )
@@ -1320,6 +1350,7 @@ bool MCD::Read(SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void MCD::Print( FILE* fp )
 {
     Indent a;
@@ -1335,5 +1366,6 @@ void MCD::Print( FILE* fp )
     indent_printf( fp, " reserved6 0x%x\n", static_cast< unsigned int >( reserved6 ) );
     indent_printf( fp, " reserved7 0x%x\n", static_cast< unsigned int >( reserved7 ) );
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

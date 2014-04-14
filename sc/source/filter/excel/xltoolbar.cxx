@@ -97,6 +97,7 @@ bool ScCTB::Read( SvStream &rS )
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void ScCTB::Print( FILE* fp )
 {
     Indent a;
@@ -123,6 +124,7 @@ void ScCTB::Print( FILE* fp )
         it->Print( fp );
     }
 }
+#endif
 
 bool ScCTB::IsMenuToolbar()
 {
@@ -192,6 +194,7 @@ bool CTBS::Read( SvStream &rS )
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void CTBS::Print( FILE* fp )
 {
     Indent a;
@@ -208,6 +211,7 @@ void CTBS::Print( FILE* fp )
     indent_printf( fp, "  ctbViews 0x%x\n", ctbViews );
     indent_printf( fp, "  ictbView 0x%x\n", ictbView );
 }
+#endif
 
 ScTBC::ScTBC()
 {
@@ -237,7 +241,7 @@ ScTBC::Read(SvStream &rS)
     return true;
 }
 
-
+#if OSL_DEBUG_LEVEL > 1
 void
 ScTBC::Print(FILE* fp)
 {
@@ -249,6 +253,7 @@ ScTBC::Print(FILE* fp)
     if ( tbcd.get() )
         tbcd->Print( fp );
 }
+#endif
 
 bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuToolbar )
 {
@@ -307,6 +312,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void
 TBCCmd::Print(FILE* fp)
 {
@@ -319,6 +325,7 @@ TBCCmd::Print(FILE* fp)
     indent_printf( fp, "   C ( reserved - ignored ) %s\n", A ? "true" : "false" );
     indent_printf( fp, "   reserved3 0x%x\n", reserved3 );
 }
+#endif
 
 bool TBCCmd::Read( SvStream &rS )
 {
@@ -361,6 +368,7 @@ ScCTBWrapper::Read( SvStream &rS)
     return true;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void
 ScCTBWrapper::Print( FILE* fp )
 {
@@ -374,6 +382,7 @@ ScCTBWrapper::Print( FILE* fp )
         it->Print( fp );
     }
 }
+#endif
 
 ScCTB* ScCTBWrapper::GetCustomizationData( const OUString& sTBName )
 {
