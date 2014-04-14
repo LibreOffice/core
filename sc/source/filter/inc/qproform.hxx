@@ -54,15 +54,15 @@ enum FUNC_TYPE
 
 class QProToSc : public ConverterBase
 {
-    private:
+private:
     TokenId mnAddToken;
     TokenId mnSubToken;
     TokenId mn0Token;
     SvStream& maIn;
 
-    public:
+public:
     static const size_t nBufSize = 256;
-    QProToSc( SvStream &aStr, const ScAddress& rRefPos );
+    QProToSc( SvStream &aStr, svl::SharedStringPool& rSPool, const ScAddress& rRefPos );
     virtual ~QProToSc(){ };
     ConvErr Convert( const ScTokenArray*& pArray, sal_uInt16 nLen,
                                                                          const FORMULA_TYPE eFT = FT_CellFormula );

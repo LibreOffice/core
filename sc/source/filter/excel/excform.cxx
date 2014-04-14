@@ -181,8 +181,8 @@ void ImportExcel::Formula(
 }
 
 
-ExcelToSc::ExcelToSc( const XclImpRoot& rRoot ) :
-    ExcelConverterBase( 512 ),
+ExcelToSc::ExcelToSc( XclImpRoot& rRoot ) :
+    ExcelConverterBase(rRoot.GetDocImport().getDoc().GetSharedStringPool(), 512),
     XclImpRoot( rRoot ),
     maFuncProv( rRoot ),
     meBiff( rRoot.GetBiff() )

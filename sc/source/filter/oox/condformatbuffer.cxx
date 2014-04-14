@@ -35,6 +35,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <svl/intitem.hxx>
+#include <svl/sharedstringpool.hxx>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -791,7 +792,8 @@ void CondFormatRule::finalizeImport()
     {
         ScDocument& rDoc = getScDocument();
         ScTokenArray aTokenArray;
-        aTokenArray.AddString(maModel.maText);
+        svl::SharedStringPool& rSPool = rDoc.GetSharedStringPool();
+        aTokenArray.AddString(rSPool.intern(maModel.maText));
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArray, NULL, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);

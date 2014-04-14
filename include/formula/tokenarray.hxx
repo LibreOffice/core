@@ -27,6 +27,12 @@
 
 #include <boost/unordered_set.hpp>
 
+namespace svl {
+
+class SharedString;
+
+}
+
 namespace formula
 {
 
@@ -212,7 +218,7 @@ public:
     virtual void CheckToken( const FormulaToken& t );
 
     FormulaToken* AddToken( const FormulaToken& );
-    FormulaToken* AddString( const OUString& rStr );
+    FormulaToken* AddString( const svl::SharedString& rStr );
     FormulaToken* AddDouble( double fVal );
     FormulaToken* AddExternal( const sal_Unicode* pStr );
     /** Xcl import may play dirty tricks with OpCode!=ocExternal.

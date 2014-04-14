@@ -67,7 +67,7 @@ static osl::Mutex aLotImpSemaphore;
 ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, rtl_TextEncoding eQ )
     : ImportTyp(pDoc, eQ)
     , pIn(&aStream)
-    , aConv(*pIn, eQ, false)
+    , aConv(*pIn, pDoc->GetSharedStringPool(), eQ, false)
     , nTab(0)
     , nExtTab(0)
 {

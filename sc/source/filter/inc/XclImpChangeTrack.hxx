@@ -159,19 +159,9 @@ private:
     virtual bool                Read3DTabReference( sal_uInt16 nIxti, SCTAB& rFirstTab, SCTAB& rLastTab, ExternalTabInfo& rExtInfo ) SAL_OVERRIDE;
 
 public:
-    inline                      XclImpChTrFmlConverter(
-                                    const XclImpRoot& rRoot,
-                                    XclImpChangeTrack& rXclChTr );
+    XclImpChTrFmlConverter( XclImpRoot& rRoot, XclImpChangeTrack& rXclChTr );
     virtual                     ~XclImpChTrFmlConverter();
 };
-
-inline XclImpChTrFmlConverter::XclImpChTrFmlConverter(
-        const XclImpRoot& rRoot,
-        XclImpChangeTrack& rXclChTr ) :
-    ExcelToSc8( rRoot ),
-    rChangeTrack( rXclChTr )
-{
-}
 
 #endif
 

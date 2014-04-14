@@ -100,13 +100,16 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 }
                 break;
 
-            case 0x0010:{ // Formula cell
+            case 0x0010:
+            {
+                // Formula cell
                 double nValue;
                 sal_uInt16 nState, nLen;
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadDouble( nValue ).ReadUInt16( nState ).ReadUInt16( nLen );
                 ScAddress aAddr( nCol, nRow, nTab );
                 const ScTokenArray *pArray;
-                QProToSc aConv( *mpStream, aAddr );
+
+                QProToSc aConv(*mpStream, pDoc->GetSharedStringPool(), aAddr);
                 if (ConvOK != aConv.Convert( pArray, nLen ))
                     eRet = eERR_FORMAT;
                 else
@@ -118,8 +121,8 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                     pDoc->EnsureTable(nTab);
                     pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pFormula);
                 }
-                }
-                break;
+            }
+            break;
         }
     }
     return eRet;

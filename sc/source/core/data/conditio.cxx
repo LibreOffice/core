@@ -40,7 +40,8 @@
 #include "editutil.hxx"
 #include "tokenarray.hxx"
 #include "refupdatecontext.hxx"
-#include "svl/sharedstring.hxx"
+#include <svl/sharedstring.hxx>
+#include <svl/sharedstringpool.hxx>
 
 using namespace formula;
 
@@ -1306,7 +1307,10 @@ ScTokenArray* ScConditionEntry::CreateTokenArry( sal_uInt16 nIndex ) const
         {
             pRet = new ScTokenArray();
             if (bIsStr1)
-                pRet->AddString( aStrVal1 );
+            {
+                svl::SharedStringPool& rSPool = mpDoc->GetSharedStringPool();
+                pRet->AddString(rSPool.intern(aStrVal1));
+            }
             else
                 pRet->AddDouble( nVal1 );
         }
@@ -1319,7 +1323,10 @@ ScTokenArray* ScConditionEntry::CreateTokenArry( sal_uInt16 nIndex ) const
         {
             pRet = new ScTokenArray();
             if (bIsStr2)
-                pRet->AddString( aStrVal2 );
+            {
+                svl::SharedStringPool& rSPool = mpDoc->GetSharedStringPool();
+                pRet->AddString(rSPool.intern(aStrVal2));
+            }
             else
                 pRet->AddDouble( nVal2 );
         }

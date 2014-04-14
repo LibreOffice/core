@@ -801,7 +801,7 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
     }
 }
 
-FormulaToken* FormulaTokenArray::AddString( const OUString& rStr )
+FormulaToken* FormulaTokenArray::AddString( const svl::SharedString& rStr )
 {
     return Add( new FormulaStringToken( rStr ) );
 }
@@ -1369,7 +1369,10 @@ bool FormulaDoubleToken::operator==( const FormulaToken& r ) const
 }
 
 FormulaStringToken::FormulaStringToken( const svl::SharedString& r ) :
-    FormulaToken( svString ), maString( r ) {}
+    FormulaToken( svString ), maString( r )
+{
+}
+
 FormulaStringToken::FormulaStringToken( const FormulaStringToken& r ) :
     FormulaToken( r ), maString( r.maString ) {}
 

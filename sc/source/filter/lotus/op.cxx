@@ -156,7 +156,8 @@ void OP_Formula( SvStream& r, sal_uInt16 /*n*/ )
     sal_Int32               nBytesLeft = nFormulaSize;
     ScAddress           aAddress( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab );
 
-    LotusToSc           aConv( r, pLotusRoot->eCharsetQ, false );
+    svl::SharedStringPool& rSPool = pLotusRoot->pDoc->GetSharedStringPool();
+    LotusToSc aConv(r, rSPool, pLotusRoot->eCharsetQ, false);
     aConv.Reset( aAddress );
     aConv.Convert( pErg, nBytesLeft );
 
@@ -388,7 +389,8 @@ void OP_Formula123( SvStream& r, sal_uInt16 n )
     sal_Int32 nBytesLeft = (n > 12) ? n - 12 : 0;
     ScAddress aAddress( nCol, nRow, nTab );
 
-    LotusToSc aConv( r, pLotusRoot->eCharsetQ, true );
+    svl::SharedStringPool& rSPool = pLotusRoot->pDoc->GetSharedStringPool();
+    LotusToSc aConv(r, rSPool, pLotusRoot->eCharsetQ, true);
     aConv.Reset( aAddress );
     aConv.Convert( pErg, nBytesLeft );
 

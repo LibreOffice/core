@@ -367,8 +367,11 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                     }
 
                     if (pStr)
+                    {
                         // This is a string cell.
-                        aCode2.AddString(OUString(pStr));
+                        svl::SharedStringPool& rPool = rDoc.GetSharedStringPool();
+                        aCode2.AddString(rPool.intern(OUString(pStr)));
+                    }
                     else if (rtl::math::isNan(fVal))
                         // Value of NaN represents an empty cell.
                         aCode2.AddToken(ScEmptyCellToken(false, false));

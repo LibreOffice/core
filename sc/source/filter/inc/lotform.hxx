@@ -86,7 +86,8 @@ private:
     void                NegToken( TokenId& rParam );
                         // ACHTUNG: wie ~, nur wird '-(<rParam>)' gebildet
 public:
-                        LotusToSc( SvStream& aStr, rtl_TextEncoding eSrc, bool b );
+    LotusToSc( SvStream& aStr, svl::SharedStringPool& rSPool, rtl_TextEncoding eSrc, bool b );
+
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) SAL_OVERRIDE;
 

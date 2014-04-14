@@ -26,6 +26,12 @@
 #include "ftools.hxx"
 #include <boost/shared_ptr.hpp>
 
+namespace svl {
+
+class SharedStringPool;
+
+}
+
 // Constants ==================================================================
 
 const size_t EXC_TOKARR_MAXLEN              = 4096;     /// Maximum size of a token array.
@@ -520,7 +526,8 @@ public:
         @param rScTokArr  (in/out-parameter) The token array to modify.
         @param cStringSep  The separator in the source string.
         @param bTrimLeadingSpaces  true = remove leading spaces from each token. */
-    static void         ConvertStringToList( ScTokenArray& rScTokArr, sal_Unicode cStringSep, bool bTrimLeadingSpaces );
+    static void ConvertStringToList(
+        ScTokenArray& rScTokArr, svl::SharedStringPool& rSPool, sal_Unicode cStringSep, bool bTrimLeadingSpaces );
 
     // multiple operations ----------------------------------------------------
 
