@@ -47,6 +47,7 @@
 
 #include <LibXSLTTransformer.hxx>
 #include <OleHandler.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -307,11 +308,11 @@ namespace XSLT
         xsltSetGenericDebugFunc(stderr, NULL);
         xsltDebugDumpExtensions(NULL);
 #endif
-        OleHandler* oh = new OleHandler(m_transformer->getComponentContext());
+        boost::scoped_ptr<OleHandler> oh(new OleHandler(m_transformer->getComponentContext()));
         if (styleSheet)
             {
                 tcontext = xsltNewTransformContext(styleSheet, doc);
-                tcontext->_private = static_cast<void *> (oh);
+                tcontext->_private = static_cast<void *> (oh.get());
                 xsltQuoteUserParams(tcontext, &params[0]);
                 result = xsltApplyStylesheetUser(styleSheet, doc, 0, 0, 0,
                         tcontext);
@@ -340,7 +341,7 @@ namespace XSLT
                 m_transformer->error(msg);
             }
         closeOutput();
-        delete(oh);
+        oh.reset();
         xsltFreeStylesheet(styleSheet);
         xsltFreeTransformContext(tcontext);
         xmlFreeDoc(doc);

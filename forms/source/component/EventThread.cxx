@@ -20,7 +20,7 @@
 #include "EventThread.hxx"
 #include <comphelper/guarding.hxx>
 #include <tools/debug.hxx>
-
+#include <boost/scoped_ptr.hpp>
 
 namespace frm
 {
@@ -176,7 +176,7 @@ void OComponentEventThread::run()
             ::cppu::OComponentHelper *pCompImpl = m_pCompImpl;
 
             ThreadEvents::iterator firstEvent( m_aEvents.begin() );
-            EventObject* pEvt = *firstEvent;
+            boost::scoped_ptr<EventObject> pEvt(*firstEvent);
             m_aEvents.erase( firstEvent );
 
             ThreadObjects::iterator firstControl( m_aControls.begin() );
@@ -196,10 +196,8 @@ void OComponentEventThread::run()
                     query_interface(xControlAdapter->queryAdapted(), xControl);
 
                 if( xComp.is() )
-                    processEvent( pCompImpl, pEvt, xControl, bFlag );
+                    processEvent( pCompImpl, pEvt.get(), xControl, bFlag );
             }
-
-            delete pEvt;
         };
 
         // After a Dispose, we do not know the Control anymore.

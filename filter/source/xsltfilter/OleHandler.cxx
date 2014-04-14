@@ -41,6 +41,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
 #include <OleHandler.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -128,12 +129,12 @@ namespace XSLT
             }
 
         // Decompress the bytes
-        ::ZipUtils::Inflater* decompresser = new ::ZipUtils::Inflater(false);
+        boost::scoped_ptr< ::ZipUtils::Inflater> decompresser(new ::ZipUtils::Inflater(false));
         decompresser->setInput(content);
         Sequence<sal_Int8> result(oleLength);
         decompresser->doInflateSegment(result, 0, oleLength);
         decompresser->end();
-        delete decompresser;
+        decompresser.reset();
         //return the base64 string of the uncompressed data
         OUStringBuffer buf(oleLength);
         ::sax::Converter::encodeBase64(buf, result);
@@ -196,11 +197,11 @@ namespace XSLT
 
         // Compress the bytes
         Sequence<sal_Int8> output(oledata.getLength());
-        ::ZipUtils::Deflater* compresser = new ::ZipUtils::Deflater((sal_Int32) 3, false);
+        boost::scoped_ptr< ::ZipUtils::Deflater> compresser(new ::ZipUtils::Deflater((sal_Int32) 3, false));
         compresser->setInputSegment(oledata, 0, oledata.getLength());
         compresser->finish();
         int compressedDataLength = compresser->doDeflateSegment(output, 0, oledata.getLength());
-        delete(compresser);
+        compresser.reset();
         //realloc the data length
         Sequence<sal_Int8> compressed(compressedDataLength);
         for (int i = 0; i < compressedDataLength; i++) {

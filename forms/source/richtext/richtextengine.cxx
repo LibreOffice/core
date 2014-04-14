@@ -35,7 +35,7 @@
 
 #include <algorithm>
 #include <functional>
-
+#include <boost/scoped_ptr.hpp>
 
 namespace frm
 {
@@ -85,14 +85,13 @@ namespace frm
         RichTextEngine* pClone( NULL );
         {
             SolarMutexGuard aGuard;
-            EditTextObject* pMyText = CreateTextObject();
+            boost::scoped_ptr<EditTextObject> pMyText(CreateTextObject());
             OSL_ENSURE( pMyText, "RichTextEngine::Clone: CreateTextObject returned nonsense!" );
 
             pClone = Create();
 
             if ( pMyText )
                 pClone->SetText( *pMyText );
-            delete pMyText;
         }
 
         return pClone;
