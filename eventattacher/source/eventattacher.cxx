@@ -219,7 +219,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
-    static OUString SAL_CALL getImplementationName_Static(  );
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
 
     // XInitialization
