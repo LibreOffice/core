@@ -63,6 +63,7 @@
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <svl/outstrm.hxx>
+#include <svx/svdtrans.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <vcl/graph.hxx>
@@ -410,6 +411,9 @@ Reference< XShape > Shape::createAndInsert(
     }
     bool bIsCustomShape = ( aServiceName == "com.sun.star.drawing.CustomShape" ||
                             aServiceName == "com.sun.star.drawing.ConnectorShape" );
+    bool bUseRotationTransform = ( !mbWps ||
+            aServiceName == "com.sun.star.drawing.LineShape" ||
+            aServiceName == "com.sun.star.drawing.GroupShape" );
 
     basegfx::B2DHomMatrix aTransformation;
 
@@ -436,7 +440,7 @@ Reference< XShape > Shape::createAndInsert(
             aTransformation.scale( mbFlipH ? -1.0 : 1.0, mbFlipV ? -1.0 : 1.0 );
         }
 
-        if( mnRotation != 0 )
+        if( bUseRotationTransform && mnRotation != 0 )
         {
             // rotate around object's center
             aTransformation.rotate( F_PI180 * ( (double)mnRotation / 60000.0 ) );
@@ -895,6 +899,15 @@ Reference< XShape > Shape::createAndInsert(
         }
         else if( getTextBody() )
             getTextBody()->getTextProperties().pushVertSimulation();
+
+        if ( !bUseRotationTransform && mnRotation != 0 )
+        {
+            // use the same logic for rotation from VML exporter (SimpleShape::implConvertAndInsert at vmlshape.cxx)
+            PropertySet aPropertySet( mxShape );
+            aPropertySet.setAnyProperty( PROP_RotateAngle, makeAny( sal_Int32( NormAngle360( mnRotation / -600 ) ) ) );
+            aPropertySet.setAnyProperty( PROP_HoriOrientPosition, makeAny( maPosition.X ) );
+            aPropertySet.setAnyProperty( PROP_VertOrientPosition, makeAny( maPosition.Y ) );
+        }
 
         // in some cases, we don't have any text body.
         if( getTextBody() && ( !bDoNotInsertEmptyTextBody || !mpTextBody->isEmpty() ) )

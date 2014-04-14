@@ -2019,6 +2019,35 @@ DECLARE_OOXMLIMPORT_TEST(testFdo74401, "fdo74401.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"), xShape->getShapeType());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo75722vml, "fdo75722-vml.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    awt::Point aPos = xShape->getPosition();
+    awt::Size aSize = xShape->getSize();
+    sal_Int64 nRot = getProperty<sal_Int64>(xShape, "RotateAngle");
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3720), aPos.X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-392), aPos.Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5457), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3447), aSize.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3100), nRot);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testFdo75722dml, "fdo75722-dml.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    awt::Point aPos = xShape->getPosition();
+    awt::Size aSize = xShape->getSize();
+    sal_Int64 nRot = getProperty<sal_Int64>(xShape, "RotateAngle");
+
+    // a slight difference regarding vml file is tolerated due to rounding errors
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3720), aPos.X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-397), aPos.Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5457), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3447), aSize.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3128), nRot);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
