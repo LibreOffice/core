@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a75e904_06ffba02",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-14T06:48:54Z",
+      "side": 1,
+      "message": "Please avoid whitespace and functional changes in the same change.",
+      "revId": "41ff5f7ce084799d1e50e62e51aad3fb9bc6f23e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
