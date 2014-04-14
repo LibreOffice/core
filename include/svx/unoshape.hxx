@@ -877,7 +877,7 @@ private:
     OUString referer_;
 };
 
-class SvxOpenGLObject : public SvxShape
+class SVX_DLLPUBLIC SvxOpenGLObject : public SvxShape
 {
 public:
     SvxOpenGLObject( SdrObject* pObj ) throw() : SvxShape(pObj){}

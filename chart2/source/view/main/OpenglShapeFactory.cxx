@@ -47,6 +47,7 @@
 #include <rtl/math.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
+#include <vcl/IOpenGLRenderer.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -66,6 +67,24 @@ extern "C" {
     SAL_DLLPUBLIC_EXPORT opengl::OpenglShapeFactory* getOpenglShapeFactory()
                               {    return new opengl::OpenglShapeFactory();}
     }
+
+class OpenGLChartAdapter : public IOpenGLRenderer
+{
+public:
+    OpenGLChartAdapter(uno::Reference<drawing::XShapes> xShapes):
+        mxShapes(xShapes) {}
+
+    virtual ~OpenGLChartAdapter() {}
+    virtual void operator()() {}
+
+    uno::Reference<drawing::XShapes> getShapes()
+    {
+        return mxShapes;
+    }
+
+private:
+    uno::Reference<drawing::XShapes> mxShapes; // here to fix lifetime
+};
 
 
 using dummy::DummyXShape;
@@ -92,14 +111,16 @@ uno::Reference< drawing::XShapes > getChartShape(
         {
             if( xShapes->getByIndex( nN ) >>= xShape )
             {
-
                 OUString aRet;
 
                 uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
                 xProp->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
                 if( aRet.equals("com.sun.star.chart2.shapes") )
                 {
-                    xRet = dynamic_cast<SvxDummyShapeContainer*>(xShape.get())->getWrappedShape();
+                    IOpenGLRenderer* pRenderer = dynamic_cast<SvxOpenGLObject*>(xShape.get())->getRenderer();
+                    OpenGLChartAdapter* pAdapter = dynamic_cast<OpenGLChartAdapter*>(pRenderer);
+                    if(pAdapter)
+                        xRet = pAdapter->getShapes();
                     break;
                 }
             }
@@ -121,12 +142,17 @@ uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape
 
         uno::Reference< drawing::XShape > xTarget (m_xShapeFactory->createInstance(
                 "com.sun.star.drawing.OpenGLObject" ), uno::UNO_QUERY );
-        dummy::DummyChart *pChart = new dummy::DummyChart(xTarget);
-        SvxDummyShapeContainer* pContainer = new SvxDummyShapeContainer(pChart);
-        pContainer->setSize(awt::Size(0,0));
-        xRet = pChart;
+        uno::Reference<drawing::XShapes> xChart(new dummy::DummyChart(xTarget));
         xDrawPage->add(xTarget);
-        xDrawPage->add(pContainer);
+        uno::Any aName;
+        aName <<= OUString("com.sun.star.chart2.shapes");
+        uno::Reference<beans::XPropertySet> xPropSet( xTarget, uno::UNO_QUERY_THROW );
+        xPropSet->setPropertyValue( UNO_NAME_MISC_OBJ_NAME, aName );
+
+        SvxOpenGLObject* pObj = dynamic_cast<SvxOpenGLObject*>(xTarget.get());
+        pObj->setRenderer(new OpenGLChartAdapter(xChart));
+
+        xRet = getChartShape( xDrawPage );
     }
     return xRet;
 }

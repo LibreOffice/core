@@ -13,7 +13,7 @@
 class IOpenGLRenderer
 {
 public:
-    virtual ~IOpenGLRenderer();
+    virtual ~IOpenGLRenderer() {};
     virtual void operator()() = 0;
 
 };
