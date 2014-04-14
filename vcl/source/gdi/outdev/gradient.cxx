@@ -177,48 +177,6 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
 }
 
-inline sal_uInt8 ImplGetGradientColorValue( long nValue )
-{
-    if ( nValue < 0 )
-        return 0;
-    else if ( nValue > 0xFF )
-        return 0xFF;
-    else
-        return (sal_uInt8)nValue;
-}
-
-long OutputDevice::ImplGetGradientStepCount( long nMinRect )
-{
-    long nInc = (nMinRect < 50) ? 2 : 4;
-
-    return nInc;
-}
-
-long OutputDevice::ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex )
-{
-    // calculate step count
-    long nStepCount  = rGradient.GetSteps();
-    long nMinRect;
-
-    // generate nStepCount, if not passed
-    if (bComplex)
-        nMinRect = std::min( rRect.GetWidth(), rRect.GetHeight() );
-    else
-        nMinRect = rRect.GetHeight();
-
-    if ( !nStepCount )
-    {
-        long nInc;
-
-        nInc = ImplGetGradientStepCount (nMinRect);
-        if ( !nInc || bMtf )
-            nInc = 1;
-        nStepCount = nMinRect / nInc;
-    }
-
-    return nStepCount;
-}
-
 void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
                                            const Gradient& rGradient,
                                            bool bMtf, const PolyPolygon* pClipPolyPoly )
@@ -596,6 +554,48 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
             }
         }
     }
+}
+
+inline sal_uInt8 ImplGetGradientColorValue( long nValue )
+{
+    if ( nValue < 0 )
+        return 0;
+    else if ( nValue > 0xFF )
+        return 0xFF;
+    else
+        return (sal_uInt8)nValue;
+}
+
+long OutputDevice::ImplGetGradientStepCount( long nMinRect )
+{
+    long nInc = (nMinRect < 50) ? 2 : 4;
+
+    return nInc;
+}
+
+long OutputDevice::ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex )
+{
+    // calculate step count
+    long nStepCount  = rGradient.GetSteps();
+    long nMinRect;
+
+    // generate nStepCount, if not passed
+    if (bComplex)
+        nMinRect = std::min( rRect.GetWidth(), rRect.GetHeight() );
+    else
+        nMinRect = rRect.GetHeight();
+
+    if ( !nStepCount )
+    {
+        long nInc;
+
+        nInc = ImplGetGradientStepCount (nMinRect);
+        if ( !nInc || bMtf )
+            nInc = 1;
+        nStepCount = nMinRect / nInc;
+    }
+
+    return nStepCount;
 }
 
 Color OutputDevice::GetSingleColorGradientFill()
