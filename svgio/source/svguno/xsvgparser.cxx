@@ -19,6 +19,7 @@
 
 #include "sal/config.h"
 
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/graphic/XSvgParser.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -38,12 +39,9 @@ namespace svgio
 {
     namespace svgreader
     {
-        class XSvgParser : public ::cppu::WeakAggImplHelper2< graphic::XSvgParser, lang::XServiceInfo >
+        class XSvgParser : public ::cppu::WeakAggImplHelper2< graphic::XSvgParser, lang::XServiceInfo >, private boost::noncopyable
         {
         private:
-            XSvgParser(const XSvgParser&);
-            XSvgParser& operator=(const XSvgParser&);
-
             uno::Reference< uno::XComponentContext > context_;
 
         protected:
