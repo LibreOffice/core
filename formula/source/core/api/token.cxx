@@ -29,6 +29,7 @@
 #include "formula/tokenarray.hxx"
 #include "formula/FormulaCompiler.hxx"
 #include <formula/compiler.hrc>
+#include <svl/sharedstringpool.hxx>
 
 namespace formula
 {
@@ -286,12 +287,13 @@ FormulaJumpToken::~FormulaJumpToken()
 }
 
 
-bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken,ExternalReferenceHelper* /*_pRef*/)
+bool FormulaTokenArray::AddFormulaToken(
+    const sheet::FormulaToken& rToken, svl::SharedStringPool& rSPool, ExternalReferenceHelper* /*pExtRef*/)
 {
     bool bError = false;
-    const OpCode eOpCode = static_cast<OpCode>(_aToken.OpCode);      //! assuming equal values for the moment
+    const OpCode eOpCode = static_cast<OpCode>(rToken.OpCode);      //! assuming equal values for the moment
 
-    const uno::TypeClass eClass = _aToken.Data.getValueTypeClass();
+    const uno::TypeClass eClass = rToken.Data.getValueTypeClass();
     switch ( eClass )
     {
         case uno::TypeClass_VOID:
@@ -301,14 +303,14 @@ bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken,Exter
         case uno::TypeClass_DOUBLE:
             // double is only used for "push"
             if ( eOpCode == ocPush )
-                AddDouble( _aToken.Data.get<double>() );
+                AddDouble( rToken.Data.get<double>() );
             else
                 bError = true;
             break;
         case uno::TypeClass_LONG:
             {
                 // long is svIndex, used for name / database area, or "byte" for spaces
-                sal_Int32 nValue = _aToken.Data.get<sal_Int32>();
+                sal_Int32 nValue = rToken.Data.get<sal_Int32>();
                 if ( eOpCode == ocDBArea )
                     AddToken( formula::FormulaIndexToken( eOpCode, static_cast<sal_uInt16>(nValue) ) );
                 else if ( eOpCode == ocSpaces )
@@ -319,9 +321,9 @@ bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken,Exter
             break;
         case uno::TypeClass_STRING:
             {
-                OUString aStrVal( _aToken.Data.get<OUString>() );
+                OUString aStrVal( rToken.Data.get<OUString>() );
                 if ( eOpCode == ocPush )
-                    AddString( aStrVal );
+                    AddString(rSPool.intern(aStrVal));
                 else if ( eOpCode == ocBad )
                     AddBad( aStrVal );
                 else if ( eOpCode == ocStringXML )
@@ -337,13 +339,16 @@ bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken,Exter
     } // switch ( eClass )
     return bError;
 }
-bool FormulaTokenArray::Fill(const uno::Sequence< sheet::FormulaToken >& _aSequence,ExternalReferenceHelper* _pRef)
+
+bool FormulaTokenArray::Fill(
+    const uno::Sequence<sheet::FormulaToken>& rSequence,
+    svl::SharedStringPool& rSPool, ExternalReferenceHelper* pExtRef )
 {
     bool bError = false;
-    const sal_Int32 nCount = _aSequence.getLength();
+    const sal_Int32 nCount = rSequence.getLength();
     for (sal_Int32 nPos=0; nPos<nCount; nPos++)
     {
-        bool bOneError = AddFormulaToken( _aSequence[nPos] ,_pRef);
+        bool bOneError = AddFormulaToken(rSequence[nPos], rSPool, pExtRef);
         if (bOneError)
         {
             AddOpCode( ocErrName);  // add something that indicates an error
@@ -790,12 +795,7 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
     }
 }
 
-FormulaToken* FormulaTokenArray::AddString( const sal_Unicode* pStr )
-{
-    return AddString( OUString( pStr ) );
-}
-
-FormulaToken* FormulaTokenArray::AddString( const OUString& rStr )
+FormulaToken* FormulaTokenArray::AddString( const svl::SharedString& rStr )
 {
     return Add( new FormulaStringToken( rStr ) );
 }
@@ -1363,7 +1363,10 @@ bool FormulaDoubleToken::operator==( const FormulaToken& r ) const
 }
 
 FormulaStringToken::FormulaStringToken( const svl::SharedString& r ) :
-    FormulaToken( svString ), maString( r ) {}
+    FormulaToken( svString ), maString( r )
+{
+}
+
 FormulaStringToken::FormulaStringToken( const FormulaStringToken& r ) :
     FormulaToken( r ), maString( r.maString ) {}
 

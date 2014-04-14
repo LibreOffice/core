@@ -28,6 +28,7 @@
 #include "xlroot.hxx"
 
 #include <comphelper/string.hxx>
+#include <svl/sharedstringpool.hxx>
 
 using namespace ::formula;
 
@@ -821,7 +822,8 @@ bool XclTokenArrayHelper::GetStringList( OUString& rStringList, const ScTokenArr
     return bRet;
 }
 
-void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unicode cStringSep, bool bTrimLeadingSpaces )
+void XclTokenArrayHelper::ConvertStringToList(
+    ScTokenArray& rScTokArr, svl::SharedStringPool& rSPool, sal_Unicode cStringSep, bool bTrimLeadingSpaces )
 {
     OUString aString;
     if( GetString( aString, rScTokArr ) )
@@ -836,7 +838,7 @@ void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unic
                 aToken = comphelper::string::stripStart(aToken, ' ');
             if( nToken > 0 )
                 rScTokArr.AddOpCode( ocSep );
-            rScTokArr.AddString( aToken );
+            rScTokArr.AddString(rSPool.intern(aToken));
         }
     }
 }

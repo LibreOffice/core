@@ -369,7 +369,7 @@ static void lcl_SingleRefToApi( sheet::SingleReference& rAPI, const ScSingleRefD
 bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
         ScTokenArray& rTokenArray, const uno::Sequence<sheet::FormulaToken>& rSequence )
 {
-    return !rTokenArray.Fill(rSequence,rDoc.GetExternalRefManager());
+    return !rTokenArray.Fill(rSequence, rDoc.GetSharedStringPool(), rDoc.GetExternalRefManager());
 }
 
 bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,

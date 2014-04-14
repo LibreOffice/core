@@ -167,7 +167,8 @@ const ScRange* _ScRangeListTabs::Next ()
     return &(*maItrCur);
 }
 
-ConverterBase::ConverterBase( sal_uInt16 nNewBuffer ) :
+ConverterBase::ConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer ) :
+    aPool(rSPool),
     aEingPos( 0, 0, 0 ),
     eStatus( ConvOK ),
     nBufferSize( nNewBuffer )
@@ -189,10 +190,8 @@ void ConverterBase::Reset()
 }
 
 
-
-
-ExcelConverterBase::ExcelConverterBase( sal_uInt16 nNewBuffer ) :
-    ConverterBase( nNewBuffer )
+ExcelConverterBase::ExcelConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer ) :
+    ConverterBase(rSPool, nNewBuffer)
 {
 }
 
@@ -213,10 +212,8 @@ void ExcelConverterBase::Reset()
 }
 
 
-
-
-LotusConverterBase::LotusConverterBase( SvStream &rStr, sal_uInt16 nNewBuffer ) :
-    ConverterBase( nNewBuffer ),
+LotusConverterBase::LotusConverterBase( SvStream &rStr, svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffers ) :
+    ConverterBase(rSPool, nNewBuffers),
     aIn( rStr ),
     nBytesLeft( 0 )
 {

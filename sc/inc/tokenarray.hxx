@@ -84,7 +84,10 @@ public:
                                 const ScAddress& rPos, ScDirection );
 
     formula::FormulaToken* AddRawToken( const ScRawToken& );
-    virtual bool AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken,formula::ExternalReferenceHelper* _pRef);
+    virtual bool AddFormulaToken(
+        const css::sheet::FormulaToken& rToken,
+        svl::SharedStringPool& rSPool,
+        formula::ExternalReferenceHelper* _pRef);
     virtual void CheckToken( const formula::FormulaToken& r );
     virtual formula::FormulaToken* AddOpCode( OpCode eCode );
     /** ScSingleRefToken with ocPush. */

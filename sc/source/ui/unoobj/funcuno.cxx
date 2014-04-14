@@ -19,6 +19,7 @@
 
 #include <sfx2/app.hxx>
 #include <svl/itemprop.hxx>
+#include <svl/sharedstringpool.hxx>
 
 #include "scitems.hxx"
 #include "funcuno.hxx"
@@ -539,6 +540,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
     long nArgCount = aArguments.getLength();
     const uno::Any* pArgArr = aArguments.getConstArray();
 
+    svl::SharedStringPool& rSPool = pDoc->GetSharedStringPool();
     aTokenArr.AddOpCode(ocOpen);
     for (long nPos=0; nPos<nArgCount; nPos++)
     {
@@ -568,7 +570,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         {
             OUString aUStr;
             rArg >>= aUStr;
-            aTokenArr.AddString( aUStr );
+            aTokenArr.AddString(rSPool.intern(aUStr));
         }
         else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<sal_Int16> > *)0 ) ) )
         {

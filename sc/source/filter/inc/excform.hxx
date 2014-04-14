@@ -49,7 +49,7 @@ protected:
     void                ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData&, const sal_Bool bName );
 
 public:
-                        ExcelToSc( const XclImpRoot& rRoot );
+    ExcelToSc( XclImpRoot& rRoot );
     virtual             ~ExcelToSc();
     virtual ConvErr     Convert( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen,
                                  bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
@@ -126,7 +126,7 @@ private:
 
     bool                HandleOleLink(sal_uInt16 nXtiIndex, const XclImpExtName& rExtName, ExternalTabInfo& rExtInfo);
 public:
-                        ExcelToSc8( const XclImpRoot& rRoot );
+    ExcelToSc8( XclImpRoot& rRoot );
     virtual             ~ExcelToSc8();
 
     virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );

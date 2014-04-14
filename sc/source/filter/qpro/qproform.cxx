@@ -65,8 +65,8 @@ void QProToSc::ReadSRD( ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sa
         rSRD.SetFlag3D(true);
 }
 
-QProToSc::QProToSc( SvStream& rStream, const ScAddress& rRefPos ) :
-    ConverterBase( 128 ),
+QProToSc::QProToSc( SvStream& rStream, svl::SharedStringPool& rSPool, const ScAddress& rRefPos ) :
+    ConverterBase(rSPool, 128),
     maIn( rStream )
 {
     aEingPos = rRefPos;
