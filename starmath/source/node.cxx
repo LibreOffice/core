@@ -27,6 +27,7 @@
 #include "mathtype.hxx"
 #include "visitors.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <comphelper/string.hxx>
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
@@ -51,13 +52,9 @@
 // Usually a MapMode of 1/100th mm will be used.
 
 
-class SmTmpDevice
+class SmTmpDevice: private boost::noncopyable
 {
     OutputDevice  &rOutDev;
-
-    // disallow use of copy-constructor and assignment-operator
-    SmTmpDevice(const SmTmpDevice &rTmpDev);
-    SmTmpDevice & operator = (const SmTmpDevice &rTmpDev);
 
     Color   Impl_GetColor( const Color& rColor );
 
@@ -66,10 +63,6 @@ public:
     ~SmTmpDevice()  { rOutDev.Pop(); }
 
     void SetFont(const Font &rNewFont);
-
-    void SetLineColor( const Color& rColor )    { rOutDev.SetLineColor( Impl_GetColor(rColor) ); }
-    void SetFillColor( const Color& rColor )    { rOutDev.SetFillColor( Impl_GetColor(rColor) ); }
-    void SetTextColor( const Color& rColor )    { rOutDev.SetTextColor( Impl_GetColor(rColor) ); }
 
     operator OutputDevice & () { return rOutDev; }
 };

@@ -458,6 +458,7 @@ void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
 
 // Nasty temporary device!!!
 
+#include <boost/noncopyable.hpp>
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include <rtl/math.hxx>
@@ -469,13 +470,9 @@ void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
 #include "symbol.hxx"
 #include "smmod.hxx"
 
-class SmTmpDevice2
+class SmTmpDevice2: private boost::noncopyable
 {
     OutputDevice  &rOutDev;
-
-    // disallow use of copy-constructor and assignment-operator
-    SmTmpDevice2( const SmTmpDevice2 &rTmpDev );
-    SmTmpDevice2 & operator = ( const SmTmpDevice2 &rTmpDev );
 
     Color   Impl_GetColor( const Color& rColor );
 
@@ -487,9 +484,6 @@ public:
 
     void SetLineColor( const Color& rColor )    { rOutDev.SetLineColor( Impl_GetColor( rColor ) ); }
     void SetFillColor( const Color& rColor )    { rOutDev.SetFillColor( Impl_GetColor( rColor ) ); }
-    void SetTextColor( const Color& rColor )    { rOutDev.SetTextColor( Impl_GetColor( rColor ) ); }
-
-    operator OutputDevice & ( ) const { return rOutDev; }
 };
 
 SmTmpDevice2::SmTmpDevice2( OutputDevice &rTheDev, bool bUseMap100th_mm ) :

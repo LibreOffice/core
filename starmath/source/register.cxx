@@ -24,6 +24,7 @@
 
 #include <sfx2/sfxmodelfactory.hxx>
 
+#include "register.hxx"
 #include "smdll.hxx"
 #include "document.hxx"
 #include "unomodel.hxx"
@@ -31,72 +32,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-
-//Math document
-extern Sequence< OUString > SAL_CALL
-        SmDocument_getSupportedServiceNames() throw();
-extern OUString SAL_CALL
-        SmDocument_getImplementationName() throw();
-extern Reference< XInterface >SAL_CALL
-        SmDocument_createInstance(const Reference< XMultiServiceFactory > & rSMgr, const sal_uInt64 _nCreationFlags) throw( Exception );
-
-//MathML import
-extern Sequence< OUString > SAL_CALL
-        SmXMLImport_getSupportedServiceNames() throw();
-extern OUString SAL_CALL
-        SmXMLImport_getImplementationName() throw();
-extern Reference< XInterface > SAL_CALL
-        SmXMLImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
-extern Sequence< OUString > SAL_CALL
-        SmXMLImportMeta_getSupportedServiceNames() throw();
-extern OUString SAL_CALL
-        SmXMLImportMeta_getImplementationName() throw();
-extern Reference< XInterface > SAL_CALL
-        SmXMLImportMeta_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
-extern Sequence< OUString > SAL_CALL
-        SmXMLImportSettings_getSupportedServiceNames() throw();
-extern OUString SAL_CALL SmXMLImportSettings_getImplementationName() throw();
-extern Reference< XInterface > SAL_CALL
-        SmXMLImportSettings_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
-
-//MathML export
-extern Sequence< OUString > SAL_CALL
-        SmXMLExport_getSupportedServiceNames() throw();
-extern OUString SAL_CALL
-        SmXMLExport_getImplementationName() throw();
-extern Reference< XInterface > SAL_CALL
-        SmXMLExport_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
-extern Sequence< OUString > SAL_CALL
-        SmXMLExportMetaOOO_getSupportedServiceNames() throw();
-extern OUString SAL_CALL
-        SmXMLExportMetaOOO_getImplementationName() throw();
-extern Reference< XInterface > SAL_CALL
-        SmXMLExportMetaOOO_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
-extern Sequence< OUString > SAL_CALL
-        SmXMLExportMeta_getSupportedServiceNames() throw();
-extern OUString SAL_CALL
-        SmXMLExportMeta_getImplementationName() throw();
-extern Reference< XInterface > SAL_CALL
-        SmXMLExportMeta_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
-extern Sequence< OUString > SAL_CALL
-        SmXMLExportSettingsOOO_getSupportedServiceNames() throw();
-extern OUString SAL_CALL
-        SmXMLExportSettingsOOO_getImplementationName() throw();
-extern Reference< XInterface > SAL_CALL
-        SmXMLExportSettingsOOO_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
-extern Sequence< OUString > SAL_CALL
-        SmXMLExportSettings_getSupportedServiceNames() throw();
-extern OUString SAL_CALL
-        SmXMLExportSettings_getImplementationName() throw();
-extern Reference< XInterface > SAL_CALL
-        SmXMLExportSettings_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
-extern Sequence< OUString > SAL_CALL
-        SmXMLExportContent_getSupportedServiceNames() throw();
-extern OUString SAL_CALL
-        SmXMLExportContent_getImplementationName() throw();
-extern Reference< XInterface > SAL_CALL
-        SmXMLExportContent_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
-
 
 extern "C" {
 

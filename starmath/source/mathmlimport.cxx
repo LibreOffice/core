@@ -63,6 +63,7 @@ one go*/
 #include <memory>
 
 #include "mathmlimport.hxx"
+#include "register.hxx"
 #include <starmath.hrc>
 #include <unomodel.hxx>
 #include <document.hxx>
@@ -562,11 +563,6 @@ public:
     SmXMLImportContext( SmXMLImport &rImport, sal_uInt16 nPrfx,
         const OUString& rLName)
         : SvXMLImportContext(rImport, nPrfx, rLName) {}
-
-    const SmXMLImport& GetSmImport() const
-    {
-        return (const SmXMLImport&)GetImport();
-    }
 
     SmXMLImport& GetSmImport()
     {
