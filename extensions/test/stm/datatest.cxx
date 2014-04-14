@@ -120,7 +120,7 @@ void ODataStreamTest::testInvariant( const UString& TestName, const XInterfaceRe
 
 
     }
-    else if( L"com.sun.star.io.DataInputStream" == TestName ) {
+    else if( L"com.sun.star.io.DataOutputStream" == TestName ) {
         XConnectableRef connect( TestObject , USR_QUERY );
         XActiveDataSourceRef active( TestObject , USR_QUERY );
         XOutputStreamRef output( TestObject , USR_QUERY );
