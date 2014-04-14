@@ -26,6 +26,7 @@
 #include "RowSet.hxx"
 #include "dbastrings.hrc"
 #include "sdbcoretools.hxx"
+#include "services.hxx"
 #include "SingleSelectQueryComposer.hxx"
 #include "module_dba.hxx"
 #include "CRowSetColumn.hxx"

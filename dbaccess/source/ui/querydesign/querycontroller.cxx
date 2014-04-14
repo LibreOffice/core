@@ -25,6 +25,7 @@
 #include "defaultobjectnamecheck.hxx"
 #include "dlgsave.hxx"
 #include "localresaccess.hxx"
+#include "uiservices.hxx"
 #include "QTableWindow.hxx"
 #include "QTableWindowData.hxx"
 #include "querycontainerwindow.hxx"

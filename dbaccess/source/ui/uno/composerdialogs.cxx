@@ -18,6 +18,7 @@
  */
 
 #include "composerdialogs.hxx"
+#include "uiservices.hxx"
 
 #include "dbu_reghelper.hxx"
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>

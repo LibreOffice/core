@@ -19,6 +19,7 @@
 
 #include "dbinteraction.hxx"
 #include "dbu_reghelper.hxx"
+#include "uiservices.hxx"
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
