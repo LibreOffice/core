@@ -20,7 +20,9 @@
 #include "clang/AST/Type.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/DiagnosticIDs.h"
+#include "clang/Basic/Linkage.h"
 #include "clang/Basic/SourceManager.h"
+#include "clang/Basic/Visibility.h"
 #include "llvm/ADT/StringRef.h"
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/raw_ostream.h"
@@ -49,6 +51,28 @@ inline bool isExternCContext(clang::DeclContext const & ctxt) {
         }
     }
     return false;
+#endif
+}
+
+#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+typedef clang::LinkageInfo LinkageInfo;
+#else
+typedef clang::NamedDecl::LinkageInfo LinkageInfo;
+#endif
+
+inline clang::Linkage getLinkage(LinkageInfo const & info) {
+#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+    return info.getLinkage();
+#else
+    return info.linkage();
+#endif
+}
+
+inline clang::Visibility getVisibility(LinkageInfo const & info) {
+#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+    return info.getVisibility();
+#else
+    return info.visibility();
 #endif
 }
 
