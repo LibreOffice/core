@@ -23,9 +23,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScPivotLayoutTreeListLabel(
     return new ScPivotLayoutTreeListLabel(pParent, WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
 }
 
-ScPivotLayoutTreeListLabel::ScPivotLayoutTreeListLabel(Window* pParent, WinBits nBits) :
-    ScPivotLayoutTreeListBase(pParent, nBits, LABEL_LIST)
-{}
+ScPivotLayoutTreeListLabel::ScPivotLayoutTreeListLabel(Window* pParent, WinBits nBits)
+    : ScPivotLayoutTreeListBase(pParent, nBits, LABEL_LIST)
+    , maDataItem(0)
+{
+}
 
 ScPivotLayoutTreeListLabel::~ScPivotLayoutTreeListLabel()
 {}
