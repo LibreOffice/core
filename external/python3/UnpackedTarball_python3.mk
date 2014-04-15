@@ -13,10 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,python3,$(PYTHON_TARBALL),,python3)
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,python3,\
 	PCbuild/pcbuild.sln \
-	PC/VS9.0/pcbuild.sln \
-	PC/VS9.0/make_versioninfo.vcproj \
-	PC/VS9.0/x64.vsprops \
-	PC/VS9.0/_ssl.vcproj \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,python3,\
