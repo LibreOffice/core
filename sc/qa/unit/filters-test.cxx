@@ -506,6 +506,8 @@ void testEnhancedProtectionImpl( ScDocument* pDoc )
 {
     const ScTableProtection* pProt = pDoc->GetTabProtection(0);
 
+    CPPUNIT_ASSERT( pProt);
+
     CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 0, 0, 0, 0, 0)));  // locked
     CPPUNIT_ASSERT(  pProt->isBlockEditable( ScRange( 0, 1, 0, 0, 1, 0)));  // editable without password
     CPPUNIT_ASSERT(  pProt->isBlockEditable( ScRange( 0, 2, 0, 0, 2, 0)));  // editable without password
