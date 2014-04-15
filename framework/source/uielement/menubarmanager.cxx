@@ -1927,6 +1927,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
     m_xFrame            = rFrame;
     m_bInitialized      = false;
     m_bIsBookmarkMenu   = true;
+    m_bShowMenuImages   = true;
 
     OUString aModuleIdentifier;
     m_xPopupMenuControllerFactory = frame::thePopupMenuControllerFactory::get(
