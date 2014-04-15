@@ -70,7 +70,9 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     maColStates( 1 ),
     maTypeNames( 1 ),
     mnFirstImpLine( 0 ),
-    mnRecentSelCol( CSV_COLUMN_INVALID )
+    mnRecentSelCol( CSV_COLUMN_INVALID ),
+    mnMTCurrCol( SAL_MAX_UINT32 ),
+    mbMTSelecting( false )
 {
     mpEditEngine->SetRefDevice( &maBackgrDev );
     mpEditEngine->SetRefMapMode( MapMode( MAP_PIXEL ) );
