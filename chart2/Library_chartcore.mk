@@ -27,7 +27,6 @@ $(eval $(call gb_Library_set_precompiled_header,chartcore,$(SRCDIR)/chart2/inc/p
 
 $(eval $(call gb_Library_use_externals,chartcore,\
 	boost_headers \
-	mdds_headers \
 	glm_headers \
 	glew \
 	mesa_headers \
