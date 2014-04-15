@@ -51,9 +51,6 @@ class SwMacrosTest : public test::BootstrapFixture, public unotest::MacrosTest
 public:
     SwMacrosTest();
 
-    SwDocShellRef load(const OUString &rFilter, const OUString &rURL,
-        const OUString &rUserData, const OUString& rTypeName, sal_uLong nFormatType=0);
-
     void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath);
 
     virtual void setUp() SAL_OVERRIDE;
