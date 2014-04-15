@@ -60,6 +60,7 @@
 #include "markdata.hxx"
 #include "stlsheet.hxx"
 #include "spellcheckcontext.hxx"
+#include <scopetools.hxx>
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <comphelper/string.hxx>
@@ -1245,8 +1246,8 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
     --nMergeSizeX;      // leave out the grid horizontally, also for alignment (align between grid lines)
 
     rParam.mnColWidth = nMergeSizeX; // store the actual column width.
+    rParam.mnLeftClipLength = rParam.mnRightClipLength = 0;
 
-    //
     // construct the rectangles using logical left/right values (justify is called at the end)
     //
 
@@ -1338,6 +1339,8 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
 
         rParam.mbLeftClip = ( nLeftMissing > 0 );
         rParam.mbRightClip = ( nRightMissing > 0 );
+        rParam.mnLeftClipLength = nLeftMissing;
+        rParam.mnRightClipLength = nRightMissing;
     }
     else
     {
@@ -1451,9 +1454,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
 
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, mpDev->GetExtOutDevData() );
 
-    bool bWasIdleEnabled = mpDoc->IsIdleEnabled();
-    mpDoc->EnableIdle(false);
-
+    sc::IdleSwitch aIdleSwitch(*mpDoc, false);
     ScDrawStringsVars aVars( this, bPixelToLogic );
 
     sal_Bool bProgress = false;
@@ -1485,6 +1486,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
     // before processing the cell value.
     ::boost::ptr_vector<ScPatternAttr> aAltPatterns;
 
+    std::vector<sal_Int32> aDX;
     long nPosY = nScrY;
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -2030,25 +2032,64 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         //  aufgezeichnet werden (fuer nicht-proportionales Resize):
 
                         OUString aString = aVars.GetString();
-                        if (bMetaFile || pFmtDevice != mpDev || aZoomX != aZoomY)
+                        if (!aString.isEmpty())
                         {
-                            sal_Int32* pDX = new sal_Int32[aString.getLength()];
-                            pFmtDevice->GetTextArray( aString, pDX );
+                            // If the string is clipped, make it shorter for
+                            // better performance since drawing by HarfBuzz is
+                            // quite expensive especiall for long string.
 
-                            if ( !mpRefDevice->GetConnectMetaFile() ||
-                                    mpRefDevice->GetOutDevType() == OUTDEV_PRINTER )
+                            OUString aShort = aString;
+
+                            double fVisibleRatio = 1.0;
+                            double fTextWidth = aVars.GetTextSize().Width();
+                            sal_Int32 nTextLen = aString.getLength();
+                            if (eOutHorJust == SVX_HOR_JUSTIFY_LEFT && aAreaParam.mnRightClipLength > 0)
                             {
-                                double fMul = GetStretch();
-                                sal_Int32 nLen = aString.getLength();
-                                for( sal_Int32 i = 0; i<nLen; i++ )
-                                    pDX[i] = (long)(pDX[i] / fMul + 0.5);
+                                fVisibleRatio = (fTextWidth - aAreaParam.mnRightClipLength) / fTextWidth;
+                                if (0.0 < fVisibleRatio && fVisibleRatio < 1.0)
+                                {
+                                    // Only show the left-end segment.
+                                    sal_Int32 nShortLen = fVisibleRatio*nTextLen + 1;
+                                    aShort = aShort.copy(0, nShortLen);
+                                }
+                            }
+                            else if (eOutHorJust == SVX_HOR_JUSTIFY_RIGHT && aAreaParam.mnLeftClipLength > 0)
+                            {
+                                fVisibleRatio = (fTextWidth - aAreaParam.mnLeftClipLength) / fTextWidth;
+                                if (0.0 < fVisibleRatio && fVisibleRatio < 1.0)
+                                {
+                                    // Only show the right-end segment.
+                                    sal_Int32 nShortLen = fVisibleRatio*nTextLen + 1;
+                                    aShort = aShort.copy(nTextLen-nShortLen);
+
+                                    // Adjust the text position after shortening of the string.
+                                    double fShortWidth = pFmtDevice->GetTextWidth(aShort);
+                                    double fOffset = fTextWidth - fShortWidth;
+                                    aDrawTextPos.Move(fOffset, 0);
+                                }
                             }
 
-                            mpDev->DrawTextArray( aDrawTextPos, aString, pDX );
-                            delete[] pDX;
+                            if (bMetaFile || pFmtDevice != mpDev || aZoomX != aZoomY)
+                            {
+                                size_t nLen = aShort.getLength();
+                                if (aDX.size() < nLen)
+                                    aDX.resize(nLen, 0);
+
+                                pFmtDevice->GetTextArray(aShort, &aDX[0]);
+
+                                if ( !mpRefDevice->GetConnectMetaFile() ||
+                                        mpRefDevice->GetOutDevType() == OUTDEV_PRINTER )
+                                {
+                                    double fMul = GetStretch();
+                                    for (size_t i = 0; i < nLen; ++i)
+                                        aDX[i] = static_cast<sal_Int32>(aDX[i] / fMul + 0.5);
+                                }
+
+                                mpDev->DrawTextArray(aDrawTextPos, aShort, &aDX[0]);
+                            }
+                            else
+                                mpDev->DrawText(aDrawTextPos, aShort);
                         }
-                        else
-                            mpDev->DrawText( aDrawTextPos, aString );
 
                         if ( bHClip || bVClip )
                         {
@@ -2074,7 +2115,6 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
     }
     if ( bProgress )
         ScProgress::DeleteInterpretProgress();
-    mpDoc->EnableIdle(bWasIdleEnabled);
 }
 
 //  -------------------------------------------------------------------------------
