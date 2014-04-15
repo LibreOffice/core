@@ -65,6 +65,12 @@ namespace slideshow
                         double                                      nPrio,
                         const SlideShowContext&                     rContext ); // throw ShapeLoadFailedException;
 
+            virtual void play() SAL_OVERRIDE;
+            virtual void stop() SAL_OVERRIDE;
+            virtual void pause() SAL_OVERRIDE;
+            virtual bool isPlaying() const SAL_OVERRIDE;
+            virtual void setMediaTime(double) SAL_OVERRIDE;
+
         private:
 
             // View layer methods
@@ -82,11 +88,6 @@ namespace slideshow
             virtual bool implRender( const ::basegfx::B2DRange& rCurrBounds ) const SAL_OVERRIDE;
             virtual void implViewChanged( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
             virtual void implViewsChanged() SAL_OVERRIDE;
-            virtual void play() SAL_OVERRIDE;
-            virtual void stop() SAL_OVERRIDE;
-            virtual void pause() SAL_OVERRIDE;
-            virtual bool isPlaying() const SAL_OVERRIDE;
-            virtual void setMediaTime(double) SAL_OVERRIDE;
 
             /// the list of active view shapes (one for each registered view layer)
             typedef ::std::vector< ViewMediaShapeSharedPtr > ViewMediaShapeVector;
