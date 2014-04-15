@@ -34,6 +34,17 @@ ExpandRefsSwitch::~ExpandRefsSwitch()
     mrDoc.SetExpandRefs(mbOldValue);
 }
 
+IdleSwitch::IdleSwitch(ScDocument& rDoc, bool bEnableIdle) :
+    mrDoc(rDoc), mbOldValue(rDoc.IsIdleEnabled())
+{
+    mrDoc.EnableIdle(bEnableIdle);
+}
+
+IdleSwitch::~IdleSwitch()
+{
+    mrDoc.EnableIdle(mbOldValue);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
