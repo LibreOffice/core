@@ -190,9 +190,10 @@ SwNumFmt::SwNumFmt( const SwNumFmt& rFmt) :
                                                 &eMyVertOrient);
 }
 
-SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
-    SvxNumberFormat(rNumFmt),
-    pVertOrient(new SwFmtVertOrient( 0, rNumFmt.GetVertOrient()))
+SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc)
+    : SvxNumberFormat(rNumFmt)
+    , pVertOrient(new SwFmtVertOrient( 0, rNumFmt.GetVertOrient()))
+    , cGrfBulletCP(USHRT_MAX)
 {
     sal_Int16 eMyVertOrient = rNumFmt.GetVertOrient();
     SetGraphicBrush( rNumFmt.GetBrush(), &rNumFmt.GetGraphicSize(),
@@ -213,7 +214,6 @@ SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
     }
     else if( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
-
 }
 
 SwNumFmt::~SwNumFmt()
