@@ -2853,7 +2853,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
             {
                 const OUString sTokenType =
                         lcl_AnyToString(pProperties[j].Value);
-                for (TokenType const* pTokenType = g_TokenTypes;
+                for (const TokenType *pTokenType = g_TokenTypes;
                         pTokenType->pName; ++pTokenType)
                 {
                     if (sTokenType.equalsAscii(pTokenType->pName))
