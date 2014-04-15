@@ -275,7 +275,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sSameLetterHeights );
             if( pAny )
             {
-                bool bOn;
+                bool bOn = false;
                 (*pAny) >>= bOn;
                 bOn = !bOn;
                 (*pAny) <<= bOn;
