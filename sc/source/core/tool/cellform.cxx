@@ -29,6 +29,7 @@
 #include "cellvalue.hxx"
 #include "formula/errorcodes.hxx"
 #include "sc.hrc"
+#include <editutil.hxx>
 
 // STATIC DATA
 // Err527 Workaround
@@ -266,6 +267,37 @@ void ScCellFormat::GetInputString(
             break;
     }
     rString = aString;
+}
+
+OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos, ScRefCellValue& rCell )
+{
+    if (rCell.isEmpty())
+        return EMPTY_OUSTRING;
+
+    OUString aVal;
+
+    if (rCell.meType == CELLTYPE_EDIT)
+    {
+        //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
+        //  hier werden die Umbrueche aber gebraucht
+        const EditTextObject* pData = rCell.mpEditText;
+        if (pData)
+        {
+            ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
+            rEngine.SetText(*pData);
+            aVal = rEngine.GetText(LINEEND_LF);
+        }
+        //  Edit-Zellen auch nicht per NumberFormatter formatieren
+        //  (passend zur Ausgabe)
+    }
+    else
+    {
+        //  wie in GetString am Dokument (column)
+        Color* pColor;
+        sal_uLong nNumFmt = rDoc.GetNumberFormat(rPos);
+        aVal = GetString(rDoc, rPos, nNumFmt, &pColor, *rDoc.GetFormatTable());
+    }
+    return aVal;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -278,6 +278,8 @@ public:
 // contains data to export for the current cell position
 struct ScMyCell
 {
+    ScAddress maCellAddress; /// Use this instead of the UNO one.
+
     com::sun::star::table::CellAddress      aCellAddress;
     com::sun::star::table::CellRangeAddress aMergeRange;
     com::sun::star::table::CellRangeAddress aMatrixRange;
@@ -336,7 +338,7 @@ class ScMyNotEmptyCellsIterator : boost::noncopyable
     SCTAB                       nCurrentTable;
 
     void                        UpdateAddress( ::com::sun::star::table::CellAddress& rAddress );
-    void                        SetCellData( ScMyCell& rMyCell, ::com::sun::star::table::CellAddress& rAddress );
+    void SetCellData( ScMyCell& rMyCell, const css::table::CellAddress& rAddress );
 
     void                        HasAnnotation( ScMyCell& aCell );
 public:

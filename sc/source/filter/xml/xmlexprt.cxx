@@ -67,6 +67,7 @@
 #include <datastream.hxx>
 #include <documentlinkmgr.hxx>
 #include <tokenstringcontext.hxx>
+#include <cellform.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -3287,8 +3288,12 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
         else
         {
             SvXMLElementExport aElemP(*this, sElemP, true, false);
-            bool bPrevCharWasSpace(true);
-            GetTextParagraphExport()->exportText(aCell.maBaseCell.getString(pDoc), bPrevCharWasSpace);
+
+            OUString aParaStr =
+                ScCellFormat::GetOutputString(*pDoc, aCell.maCellAddress, aCell.maBaseCell);
+
+            bool bPrevCharWasSpace = true;
+            GetTextParagraphExport()->exportText(aParaStr, bPrevCharWasSpace);
         }
     }
     WriteShapes(aCell);
