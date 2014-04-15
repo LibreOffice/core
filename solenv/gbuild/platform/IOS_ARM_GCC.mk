@@ -58,11 +58,10 @@ gb_CXXFLAGS := \
 	-fsigned-char \
 	$(CXXFLAGS_CXX11) \
 
-# these are to get gcc to switch to Objective-C++ or Objective-C mode
 gb_OBJC_OBJCXX_COMMON_FLAGS := -fobjc-abi-version=2 -fobjc-legacy-dispatch
 
+# These are to get the compiler to switch to Objective-C++ or Objective-C mode
 gb_OBJCXXFLAGS := -x objective-c++ $(gb_OBJC_OBJCXX_COMMON_FLAGS)
-
 gb_OBJCFLAGS := -x objective-c $(gb_OBJC_OBJCXX_COMMON_FLAGS)
 
 gb_COMPILERDEFS += \
