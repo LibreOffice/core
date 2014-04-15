@@ -2008,6 +2008,14 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
     pFS->singleElement( FSNS( XML_c, XML_ptCount ),
             XML_val, I32S( ptCount ),
             FSEND );
+
+    sal_Bool bIsNumberValue = sal_True;
+    sal_Bool bXSeriesValue = sal_False;
+    double Value = 1.0;
+
+    if(nValueType == XML_xVal)
+        bXSeriesValue = sal_True;
+
     for( sal_Int32 i = 0; i < ptCount; i++ )
     {
         pFS->startElement( FSNS( XML_c, XML_pt ),
@@ -2015,8 +2023,15 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
             FSEND );
         pFS->startElement( FSNS( XML_c, XML_v ),
             FSEND );
-        if (!rtl::math::isNan(aValues[i]))
+        if (bIsNumberValue && !rtl::math::isNan(aValues[i]))
             pFS->write( aValues[i] );
+        else if(bXSeriesValue)
+        {
+            //In Case aValues is not a number for X Values...We write X values as 1,2,3....MS Word does the same thing.
+            pFS->write( Value );
+            Value = Value + 1;
+            bIsNumberValue = sal_False;
+        }
         pFS->endElement( FSNS( XML_c, XML_v ) );
         pFS->endElement( FSNS( XML_c, XML_pt ) );
     }
