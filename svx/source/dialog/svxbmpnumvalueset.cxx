@@ -285,6 +285,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     aLevelAny >>= aLevel;
                     const PropertyValue* pValues = aLevel.getConstArray();
                     aNumberingTypes[i] = 0;
+                    aParentNumberings[i] = 0;
                     for(sal_Int32 nProperty = 0; nProperty < aLevel.getLength() - 1; nProperty++)
                     {
                         if ( pValues[nProperty].Name == cNumberingType )
