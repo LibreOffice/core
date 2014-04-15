@@ -220,7 +220,7 @@ public:
     void testStatisticalFormulaBinomDist();
     void testStatisticalFormulaVarP();
     void testMathFormulaCeil();
-    void testMathFormulaKombin();
+    // void testMathFormulaKombin();
     void testStatisticalFormulaDevSq();
     void testStatisticalFormulaStDev();
     void testStatisticalFormulaSlope();
@@ -496,6 +496,7 @@ public:
     CPPUNIT_TEST(testMathFormulaIsOdd);
     CPPUNIT_TEST(testMathFormulaFact);
     CPPUNIT_TEST(testStatisticalFormulaMaxa);
+    CPPUNIT_TEST(testStatisticalFormulaMina);
     CPPUNIT_TEST(testStatisticalFormulaCountA);
     CPPUNIT_TEST(testStatisticalFormulaAverageA);
     CPPUNIT_TEST(testStatisticalFormulaVarA);

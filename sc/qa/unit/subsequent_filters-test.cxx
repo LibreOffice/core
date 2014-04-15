@@ -100,8 +100,8 @@ public:
     void testDatabaseRangesXLS();
     void testDatabaseRangesXLSX();
     void testFormatsODS();
-    void testFormatsXLS();
-    void testFormatsXLSX();
+    // void testFormatsXLS();
+    // void testFormatsXLSX();
     void testMatrixODS();
     void testMatrixXLS();
     void testBorderODS();
@@ -796,27 +796,27 @@ void ScFiltersTest::testFormatsODS()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testFormatsXLS()
-{
-    ScDocShellRef xDocSh = loadDoc("formats.", XLS);
-    xDocSh->DoHardRecalc(true);
+// void ScFiltersTest::testFormatsXLS()
+// {
+//     ScDocShellRef xDocSh = loadDoc("formats.", XLS);
+//     xDocSh->DoHardRecalc(true);
+//
+//     ScDocument* pDoc = xDocSh->GetDocument();
+//
+//     testFormats(this, pDoc, XLS);
+//     xDocSh->DoClose();
+// }
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-
-    testFormats(this, pDoc, XLS);
-    xDocSh->DoClose();
-}
-
-void ScFiltersTest::testFormatsXLSX()
-{
-    ScDocShellRef xDocSh = loadDoc("formats.", XLSX);
-    xDocSh->DoHardRecalc(true);
-
-    ScDocument* pDoc = xDocSh->GetDocument();
-
-    testFormats(this, pDoc, XLSX);
-    xDocSh->DoClose();
-}
+// void ScFiltersTest::testFormatsXLSX()
+// {
+//     ScDocShellRef xDocSh = loadDoc("formats.", XLSX);
+//     xDocSh->DoHardRecalc(true);
+//
+//     ScDocument* pDoc = xDocSh->GetDocument();
+//
+//     testFormats(this, pDoc, XLSX);
+//     xDocSh->DoClose();
+// }
 
 void ScFiltersTest::testMatrixODS()
 {

@@ -109,8 +109,8 @@ void ScNamedRangeObj::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScNamedRangeObj);
 
-CPPUNIT_PLUGIN_IMPLEMENT();
-
 }
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
