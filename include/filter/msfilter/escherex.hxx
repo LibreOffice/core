@@ -1107,9 +1107,8 @@ public:
     void        SetBaseURI( const OUString& rBaseURI ) { maBaseURI = rBaseURI; };
     const OUString& GetBaseURI() { return maBaseURI; };
 
-                EscherGraphicProvider( sal_uInt32 nFlags = _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
-                ~EscherGraphicProvider();
-
+    EscherGraphicProvider( sal_uInt32 nFlags = _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
+    virtual ~EscherGraphicProvider();
 };
 
 struct EscherShapeListEntry;
@@ -1604,7 +1603,7 @@ public:
     /** Returns the graphic provider from the global object that has been
         passed to the constructor.
      */
-    inline EscherGraphicProvider& GetGraphicProvider() { return *mxGlobal; }
+    EscherGraphicProvider& GetGraphicProvider() { return *mxGlobal; }
 
     /** Called if a picture shall be written and no picture stream is set at
         class ImplEscherExSdr.
