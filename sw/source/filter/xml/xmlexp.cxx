@@ -86,6 +86,7 @@ SwXMLExport::SwXMLExport(
     pTableLines( 0 ),
     bBlock( sal_False ),
     bShowProgress( sal_True ),
+    bSavedShowChanges( sal_False ),
     doc( NULL ),
     sNumberFormat("NumberFormat"),
     sIsProtected("IsProtected"),
