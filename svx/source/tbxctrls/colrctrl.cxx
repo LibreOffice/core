@@ -233,8 +233,8 @@ SvxColorDockingWindow::SvxColorDockingWindow
     nLeftSlot       ( SID_ATTR_FILL_COLOR ),
     nRightSlot      ( SID_ATTR_LINE_COLOR ),
     nCols           ( 20 ),
-    nLines          ( 1 )
-
+    nLines          ( 1 ),
+    nCount          ( 0 )
 {
     FreeResource();
 
