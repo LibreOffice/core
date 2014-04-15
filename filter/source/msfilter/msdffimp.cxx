@@ -1996,20 +1996,23 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( SeekToContent( DFF_Prop_pFormulas, rIn ) )
             rIn >> nNumElem >> nNumElemMem >> nElemSize;
 
-        sal_Int16 nP1, nP2, nP3;
-        sal_uInt16 nFlags;
-
-        uno::Sequence< rtl::OUString > aEquations( nNumElem );
-        for ( i = 0; i < nNumElem; i++ )
+        if ( nNumElem <= 128 )
         {
-            rIn >> nFlags >> nP1 >> nP2 >> nP3;
-            aEquations[ i ] = EnhancedCustomShape2d::GetEquation( nFlags, nP1, nP2, nP3 );
+            sal_Int16 nP1, nP2, nP3;
+            sal_uInt16 nFlags;
+
+            uno::Sequence< rtl::OUString > aEquations( nNumElem );
+            for ( i = 0; i < nNumElem; i++ )
+            {
+                rIn >> nFlags >> nP1 >> nP2 >> nP3;
+                aEquations[ i ] = EnhancedCustomShape2d::GetEquation( nFlags, nP1, nP2, nP3 );
+            }
+            // pushing the whole Equations element
+            const rtl::OUString sEquations( RTL_CONSTASCII_USTRINGPARAM ( "Equations" ) );
+            aProp.Name = sEquations;
+            aProp.Value <<= aEquations;
+            aPropVec.push_back( aProp );
         }
-        // pushing the whole Equations element
-        const rtl::OUString sEquations( RTL_CONSTASCII_USTRINGPARAM ( "Equations" ) );
-        aProp.Name = sEquations;
-        aProp.Value <<= aEquations;
-        aPropVec.push_back( aProp );
     }
 
     ////////////////////////////////////////
