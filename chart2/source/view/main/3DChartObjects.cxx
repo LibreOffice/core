@@ -23,9 +23,10 @@ void Renderable3DObject::render()
     (void) mnUniqueId;
 }
 
-Bar::Bar(const glm::mat4& rPosition, sal_uInt32 nId):
-    Renderable3DObject(nId),
-    maPos(rPosition)
+Bar::Bar(const glm::mat4& rPosition, sal_uInt32 nId)
+    : Renderable3DObject(nId)
+    , mbRoundedCorners(false)
+    , maPos(rPosition)
 {
 }
 
