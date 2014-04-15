@@ -45,24 +45,6 @@ class SdHTMLFilterTest : public SdModelTestBase
         return pXmlXpathObj->nodesetval;
     }
 
-    OUString getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
-    {
-        xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
-                                     1, xmlXPathNodeSetGetLength(pXmlNodes));
-        if (rAttribute.isEmpty())
-            return OUString();
-        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-        return OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
-    }
-
-    void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute = OString(), const OUString& rExpectedValue = OUString())
-    {
-        OUString aValue = getXPath(pXmlDoc, rXPath, rAttribute);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Attribute '" + rAttribute + "' of '" + rXPath + "' incorrect value.").getStr(),
-                                     rExpectedValue, aValue);
-    }
-
     void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes)
     {
         xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
