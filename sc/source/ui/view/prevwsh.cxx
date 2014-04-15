@@ -149,6 +149,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
     pDocShell( (ScDocShell*)pViewFrame->GetObjectShell() ),
     mpFrameWindow(NULL),
     nSourceDesignMode( SC_FORCEMODE_NONE ),
+    nMaxVertPos(0),
     pAccessibilityBroadcaster( NULL )
 {
     Construct( &pViewFrame->GetWindow() );
