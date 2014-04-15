@@ -48,6 +48,7 @@ namespace dmapper {
 
 //---------------------------------------------------  Utility functions
 
+#if OSL_DEBUG_LEVEL > 1
 void lcl_printProperties( uno::Sequence< beans::PropertyValue > aProps )
 {
     sal_Int32 nLen = aProps.getLength( );
@@ -63,6 +64,7 @@ void lcl_printProperties( uno::Sequence< beans::PropertyValue > aProps )
         SAL_INFO("writerfilter", "Property " << aProps[i].Name << ": " << sValue);
     }
 }
+#endif
 
 sal_Int32 lcl_findProperty( uno::Sequence< beans::PropertyValue > aProps, const OUString& sName )
 {
