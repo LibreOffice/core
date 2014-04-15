@@ -31,13 +31,6 @@ using namespace ftp;
 
 typedef sal_uInt32 ULONG;
 
-
-inline sal_Bool ascii_isLetter( sal_Unicode ch )
-{
-    return (( (ch >= 0x0041) && (ch <= 0x005A)) ||
-            (( ch >= 0x0061) && (ch <= 0x007A)));
-}
-
 inline sal_Bool ascii_isWhitespace( sal_Unicode ch )
 {
     return ((ch <= 0x20) && ch);
