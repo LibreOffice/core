@@ -36,6 +36,7 @@ public:
     void testStockChart();
     void testBarChart();
     void testCrosses();
+    void testScatterChart();
     void testChartDataTable();
     void testChartExternalData();
     void testEmbeddingsGrabBag();
@@ -64,6 +65,7 @@ public:
     CPPUNIT_TEST(testStockChart);
     CPPUNIT_TEST(testBarChart);
     CPPUNIT_TEST(testCrosses);
+    CPPUNIT_TEST(testScatterChart);
     CPPUNIT_TEST(testChartDataTable);
     CPPUNIT_TEST(testChartExternalData);
     CPPUNIT_TEST(testEmbeddingsGrabBag);
@@ -117,6 +119,14 @@ protected:
      * Same as the assertXPath(), but don't assert: return the string instead.
      */
     OUString getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute);
+    /**
+    Assert that rXPath exists, and its content equals rContent.
+    */
+    void assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rContent);
+    /**
+    Same as the assertXPathContent(), but don't assert: return the string instead.
+    */
+    OUString getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath);
 
 private:
 };
@@ -209,6 +219,22 @@ void Chart2ExportTest::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
         nNumberOfNodes, xmlXPathNodeSetGetLength(pXmlNodes));
+}
+
+void Chart2ExportTest::assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rContent)
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("XPath contents of child does not match", rContent, getXPathContent(pXmlDoc, rXPath));
+}
+
+OUString Chart2ExportTest::getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath)
+{
+             xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+
+             CPPUNIT_ASSERT_MESSAGE(OString("XPath '" + rXPath + "' not found").getStr(),
+                     xmlXPathNodeSetGetLength(pXmlNodes) > 0);
+
+             xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+             return OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
 }
 
 OUString Chart2ExportTest::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
@@ -477,6 +503,16 @@ void Chart2ExportTest::testCrosses()
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:crosses", "val", "autoZero");
+}
+
+void Chart2ExportTest::testScatterChart()
+{
+    load("/chart2/qa/extras/data/docx/", "fdo77216.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    if (!pXmlDoc)
+       return;
+
+    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser[1]/c:xVal[1]/c:numRef[1]/c:numCache[1]/c:pt[1]/c:v[1]", "1");
 }
 
 void Chart2ExportTest::testChartDataTable()
