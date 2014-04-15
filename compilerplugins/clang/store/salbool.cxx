@@ -509,6 +509,7 @@ bool SalBool::isInUnoIncludeFile(SourceLocation spellingLocation) const {
            || name == SRCDIR "/cppuhelper/source/compat.cxx"
            || name == SRCDIR "/sal/osl/all/compat.cxx")
         : (name.startswith(SRCDIR "/include/com/")
+           || name.startswith(SRCDIR "/include/comphelper/")
            || name.startswith(SRCDIR "/include/cppu/")
            || name.startswith(SRCDIR "/include/cppuhelper/")
            || name.startswith(SRCDIR "/include/osl/")
