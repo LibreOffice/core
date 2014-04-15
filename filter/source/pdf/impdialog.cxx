@@ -1087,7 +1087,7 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(Window* i_pParent, const SfxItemSet
     get(mpPrintPermissions, "printing");
     get(mpRbPrintNone, "printnone");
     get(mpRbPrintLowRes, "printlow");
-    get(mpRbPrintHighRes, "printnone");
+    get(mpRbPrintHighRes, "printhigh");
 
     get(mpChangesAllowed, "changes");
     get(mpRbChangesNone, "changenone");
