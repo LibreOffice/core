@@ -1422,12 +1422,12 @@ int Desktop::Main()
 
         SetSplashScreenProgress(25);
 
+#if HAVE_FEATURE_DESKTOP
         // check user installation directory for lockfile so we can be sure
         // there is no other instance using our data files from a remote host
         SAL_INFO( "desktop.app", "desktop (lo119109) Desktop::Main -> Lockfile" );
         m_xLockfile.reset(new Lockfile);
 
-#if HAVE_FEATURE_DESKTOP
         if ( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoLockcheck() && !m_xLockfile->check( Lockfile_execWarning ))
         {
