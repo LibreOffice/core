@@ -29,7 +29,7 @@
 	<xsl:param name="pica-in-mm" select="4.2333333"/>
 	<xsl:param name="point-in-mm" select="0.3527778"/>
 	<xsl:param name="twip-in-mm" select="0.017636684"/>
-	<xsl:param name="pixel-in-mm" select="$inch-in-mm div $dpi"/>
+	<xsl:param name="pixel-in-mm" select="format-number($inch-in-mm div $dpi, '###,###.00')"/>
 	<!-- ***** MEASUREMENT CONVERSIONS *****
 	  PARAM 'value'
 		The measure to be converted.
@@ -99,31 +99,30 @@
 	<!-- changing measure to mm -->
 	<xsl:template name="convert2mm">
 		<xsl:param name="value"/>
-		<xsl:param name="rounding-factor" select="10000"/>
 		<xsl:choose>
 			<xsl:when test="contains($value, 'mm')">
-				<xsl:value-of select="substring-before($value, 'mm')"/>
+				<xsl:value-of select="format-number(substring-before($value, 'mm'), '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'cm')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'cm' ) * $centimeter-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(substring-before($value, 'cm' ) * $centimeter-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'in')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'in' ) * $inch-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(substring-before($value, 'in' ) * $inch-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pt')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pt') * $point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(substring-before($value, 'pt') * $point-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'twip')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'twip') * $twip-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(substring-before($value, 'twip') * $twip-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'dpt')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dpt') * $didot-point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(substring-before($value, 'dpt') * $didot-point-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pica')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pica') * $pica-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(substring-before($value, 'pica') * $pica-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'px')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') * $pixel-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(substring-before($value, 'px') * $pixel-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:message>measure_conversion.xsl: Find no conversion for <xsl:value-of select="$value"/> to 'mm'!</xsl:message>
@@ -134,31 +133,30 @@
 	<!-- changing measure to cm -->
 	<xsl:template name="convert2cm">
 		<xsl:param name="value"/>
-		<xsl:param name="rounding-factor" select="10000"/>
 		<xsl:choose>
 			<xsl:when test="contains($value, 'mm')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'mm') div $centimeter-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(substring-before($value, 'mm') div $centimeter-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'cm')">
-				<xsl:value-of select="substring-before($value, 'cm')"/>
+				<xsl:value-of select="format-number(substring-before($value, 'cm'), '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'in')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'in') div $centimeter-in-mm * $inch-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'in') div $centimeter-in-mm, '###,###.00') * $inch-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pt')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pt') div $centimeter-in-mm * $point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'pt') div $centimeter-in-mm, '###,###.00') * $point-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'dpt')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dpt') div $centimeter-in-mm * $didot-point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'dpt') div $centimeter-in-mm, '###,###.00') * $didot-point-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pica')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pica') div $centimeter-in-mm * $pica-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'pica') div $centimeter-in-mm, '###,###.00') * $pica-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'twip')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'twip') div $centimeter-in-mm * $twip-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'twip') div $centimeter-in-mm, '###,###.00') * $twip-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'px')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') div $centimeter-in-mm * $pixel-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'px') div $centimeter-in-mm, '###,###.00') * $pixel-in-mm, '###,###.00')"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:message>measure_conversion.xsl: Find no conversion for <xsl:value-of select="$value"/> to 'cm'!</xsl:message>
@@ -169,31 +167,30 @@
 	<!-- changing measure to inch (cp. section comment) -->
 	<xsl:template name="convert2in">
 		<xsl:param name="value"/>
-		<xsl:param name="rounding-factor" select="10000"/>
 		<xsl:choose>
 			<xsl:when test="contains($value, 'mm')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'mm') div $inch-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(substring-before($value, 'mm') div $inch-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'cm')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'cm') div $inch-in-mm * $centimeter-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'cm') div $inch-in-mm,'###,###.00') * $centimeter-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'in')">
-				<xsl:value-of select="substring-before($value, 'in')"/>
+				<xsl:value-of select="format-number(substring-before($value, 'in'))"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pt')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pt') div $inch-in-mm * $point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'pt') div $inch-in-mm ,'###,###.00')* $point-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'dpt')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dpt') div $inch-in-mm * $didot-point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'dpt') div $inch-in-mm ,'###,###.00')* $didot-point-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pica')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pica') div $inch-in-mm * $pica-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'pica') div $inch-in-mm,'###,###.00') * $pica-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'twip')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'twip') div $inch-in-mm * $twip-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'twip') div $inch-in-mm,'###,###.00') * $twip-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'px')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') div $inch-in-mm * $pixel-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'px') div $inch-in-mm,'###,###.00') * $pixel-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:message>measure_conversion.xsl: Find no conversion for <xsl:value-of select="$value"/> to 'in'!</xsl:message>
@@ -204,31 +201,30 @@
 	<!-- changing measure to dpt (cp. section comment) -->
 	<xsl:template name="convert2dpt">
 		<xsl:param name="value"/>
-		<xsl:param name="rounding-factor" select="10000"/>
 		<xsl:choose>
 			<xsl:when test="contains($value, 'mm')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'mm') div $didot-point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(substring-before($value, 'mm') div $didot-point-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'cm')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'cm') div $didot-point-in-mm * $centimeter-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'cm') div $didot-point-in-mm,'###,###.00') * $centimeter-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'in')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'in') div $didot-point-in-mm * $inch-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'in') div $didot-point-in-mm,'###,###.00') * $inch-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pt')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pt') div $didot-point-in-mm * $point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'pt') div $didot-point-in-mm,'###,###.00') * $point-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'dpt')">
-				<xsl:value-of select="substring-before($value, 'dpt')"/>
+				<xsl:value-of select="format-number(substring-before($value, 'dpt'),'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pica')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pica') div $didot-point-in-mm * $pica-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'pica') div $didot-point-in-mm,'###,###.00') * $pica-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'twip')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'twip') div $didot-point-in-mm * $twip-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'twip') div $didot-point-in-mm,'###,###.00') * $twip-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'px')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') div $didot-point-in-mm * $pixel-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'px') div $didot-point-in-mm,'###,###.00') * $pixel-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:message>measure_conversion.xsl: Find no conversion for <xsl:value-of select="$value"/> to 'dpt'!</xsl:message>
@@ -239,31 +235,30 @@
 	<!-- changing measure to pica (cp. section comment) -->
 	<xsl:template name="convert2pica">
 		<xsl:param name="value"/>
-		<xsl:param name="rounding-factor" select="10000"/>
 		<xsl:choose>
 			<xsl:when test="contains($value, 'mm')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'mm') div $pica-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(substring-before($value, 'mm') div $pica-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'cm')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'cm') div $pica-in-mm * $centimeter-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'cm') div $pica-in-mm ,'###,###.00')* $centimeter-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'in')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'in') div $pica-in-mm * $inch-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'in') div $pica-in-mm ,'###,###.00')* $inch-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pt')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pt') div $pica-in-mm * $point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'pt') div $pica-in-mm,'###,###.00') * $point-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'dpt')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dpt') div $pica-in-mm * $didot-point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'dpt') div $pica-in-mm,'###,###.00') * $didot-point-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pica')">
-				<xsl:value-of select="substring-before($value, 'pica')"/>
+				<xsl:value-of select="format-number(substring-before($value, 'pica'),'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'twip')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'twip') div $pica-in-mm * $twip-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'twip') div $pica-in-mm ,'###,###.00')* $twip-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'px')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') div $pica-in-mm * $pixel-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'px') div $pica-in-mm,'###,###.00') * $pixel-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:message>measure_conversion.xsl: Find no conversion for <xsl:value-of select="$value"/> to 'pica'!</xsl:message>
@@ -274,31 +269,30 @@
 	<!-- changing measure to pt (cp. section comment) -->
 	<xsl:template name="convert2pt">
 		<xsl:param name="value"/>
-		<xsl:param name="rounding-factor" select="10000"/>
 		<xsl:choose>
 			<xsl:when test="contains($value, 'mm')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'mm') div $point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(substring-before($value, 'mm') div $point-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'cm')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'cm') div $point-in-mm * $centimeter-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'cm') div $point-in-mm,'###,###.00') * $centimeter-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'in')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'in') div $point-in-mm * $inch-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'in') div $point-in-mm,'###,###.00') * $inch-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pt')">
-				<xsl:value-of select="substring-before($value, 'pt')"/>
+				<xsl:value-of select="format-number(substring-before($value, 'pt'),'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'dpt')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dpt') div $point-in-mm * $didot-point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'dpt') div $point-in-mm,'###,###.00') * $didot-point-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pica')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pica') div $point-in-mm * $pica-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'pica') div $point-in-mm,'###,###.00') * $pica-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'twip')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'twip') div $point-in-mm * $twip-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'twip') div $point-in-mm,'###,###.00') * $twip-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'px')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') div $point-in-mm * $pixel-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'px') div $point-in-mm,'###,###.00') * $pixel-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:message>measure_conversion.xsl: Find no conversion for <xsl:value-of select="$value"/> to 'pt'!</xsl:message>
@@ -309,31 +303,30 @@
 	<!-- changing measure to twip (cp. section comment) -->
 	<xsl:template name="convert2twip">
 		<xsl:param name="value"/>
-		<xsl:param name="rounding-factor" select="10000"/>
 		<xsl:choose>
 			<xsl:when test="contains($value, 'mm')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'mm') div $twip-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(substring-before($value, 'mm') div $twip-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'cm')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'cm') div $twip-in-mm * $centimeter-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'cm') div $twip-in-mm ,'###,###.00')* $centimeter-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'in')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'in') div $twip-in-mm * $inch-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'in') div $twip-in-mm,'###,###.00') * $inch-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pt')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pt') div $twip-in-mm * $point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'pt') div $twip-in-mm,'###,###.00') * $point-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'dpt')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'dpt') div $twip-in-mm * $didot-point-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'dpt') div $twip-in-mm ,'###,###.00')* $didot-point-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pica')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'pica') div $twip-in-mm * $pica-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'pica') div $twip-in-mm ,'###,###.00')* $pica-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'twip')">
-				<xsl:value-of select="substring-before($value, 'twip')"/>
+				<xsl:value-of select="format-number(substring-before($value, 'twip'),'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'px')">
-				<xsl:value-of select="round($rounding-factor * number(substring-before($value, 'px') div $twip-in-mm * $pixel-in-mm)) div $rounding-factor"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'px') div $twip-in-mm,'###,###.00') * $pixel-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:message>measure_conversion.xsl: Find no conversion for <xsl:value-of select="$value"/> to 'twip'!</xsl:message>
@@ -346,25 +339,25 @@
 		<xsl:param name="value"/>
 		<xsl:choose>
 			<xsl:when test="contains($value, 'mm')">
-				<xsl:value-of select="round(number(substring-before($value, 'mm')) div $pixel-in-mm)"/>
+				<xsl:value-of select="format-number(substring-before($value, 'mm') div $pixel-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'cm')">
-				<xsl:value-of select="round(number(substring-before($value, 'cm')) div $pixel-in-mm * $centimeter-in-mm)"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'cm') div $pixel-in-mm,'###,###.00') * $centimeter-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'in')">
-				<xsl:value-of select="round(number(substring-before($value, 'in')) div $pixel-in-mm * $inch-in-mm)"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'in') div $pixel-in-mm,'###,###.00') * $inch-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pt')">
-				<xsl:value-of select="round(number(substring-before($value, 'pt')) div $pixel-in-mm * $point-in-mm)"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'pt') div $pixel-in-mm ,'###,###.00')* $point-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'dpt')">
-				<xsl:value-of select="round(number(substring-before($value, 'dpt')) div $pixel-in-mm * $didot-point-in-mm)"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'dpt') div $pixel-in-mm ,'###,###.00')* $didot-point-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'pica')">
-				<xsl:value-of select="round(number(substring-before($value, 'pica')) div $pixel-in-mm * $pica-in-mm)"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'pica') div $pixel-in-mm ,'###,###.00')* $pica-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'twip')">
-				<xsl:value-of select="round(number(substring-before($value, 'twip')) div $pixel-in-mm * $twip-in-mm)"/>
+				<xsl:value-of select="format-number(format-number(substring-before($value, 'twip') div $pixel-in-mm,'###,###.00') * $twip-in-mm,'###,###.00')"/>
 			</xsl:when>
 			<xsl:when test="contains($value, 'px')">
 				<xsl:value-of select="$value"/>
@@ -376,9 +369,19 @@
 		</xsl:choose>
 	</xsl:template>
 	<xsl:template name="ConvertMeasure">
-		<xsl:param name="TargetMeasure" select="'cm'"/>
 		<xsl:param name="TargetTruncate" select=" 'all' "/>
 		<xsl:param name="value"/>
+		<xsl:param name="TargetMeasure"/>
+
+<xsl:variable name="TargerTest">
+	<xsl:choose>
+		<xsl:when test="$TargetMeasure = ''">cm</xsl:when>
+	<xsl:otherwise>
+		<xsl:value-of select="$TargetMeasure"/>
+	</xsl:otherwise>
+	</xsl:choose>
+</xsl:variable>
+	
 		<!-- When TargetTruncate ='all'  it returns the number whichsoever the return value is negative or positive
 			When TargetTruncate ='nonNegative' it only returns nonNegative number, all negative number to be returned as 0
 			When TargetTruncate ='positive" it only returns positive number, all nonPositive number to be returned as 1 -->
@@ -388,24 +391,45 @@
 				<xsl:when test="string-length(translate(string($value),'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ','')) = 0">0</xsl:when>
 				<xsl:when test="string-length(translate(string($value),'- .0123456789','')) = 0">
 					<xsl:value-of select="$value"/>
+					
 				</xsl:when>
-				<xsl:when test="$TargetMeasure = 'cm'">
+				<xsl:when test="$TargerTest = 'mm'">
+					<xsl:call-template name="convert2mm">
+						<xsl:with-param name="value" select="$value"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:when test="$TargerTest = 'cm'">
 					<xsl:call-template name="convert2cm">
 						<xsl:with-param name="value" select="$value"/>
 					</xsl:call-template>
 				</xsl:when>
-				<xsl:when test="$TargetMeasure = 'pt'">
+				<xsl:when test="$TargerTest = 'pt'">
 					<xsl:call-template name="convert2pt">
 						<xsl:with-param name="value" select="$value"/>
 					</xsl:call-template>
 				</xsl:when>
-				<xsl:when test="$TargetMeasure = 'twip'">
+				<xsl:when test="$TargerTest = 'twip'">
 					<xsl:call-template name="convert2twip">
 						<xsl:with-param name="value" select="$value"/>
 					</xsl:call-template>
 				</xsl:when>
-				<xsl:when test="$TargetMeasure = 'in'">
+				<xsl:when test="$TargerTest = 'px'">
+					<xsl:call-template name="convert2px">
+						<xsl:with-param name="value" select="$value"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:when test="$TargerTest = 'in'">
 					<xsl:call-template name="convert2in">
+						<xsl:with-param name="value" select="$value"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:when test="$TargerTest = 'pica'">
+					<xsl:call-template name="convert2pica">
+						<xsl:with-param name="value" select="$value"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:when test="$TargerTest = 'dpt'">
+					<xsl:call-template name="convert2dpt">
 						<xsl:with-param name="value" select="$value"/>
 					</xsl:call-template>
 				</xsl:when>
@@ -414,7 +438,7 @@
 		<xsl:choose>
 			<xsl:when test="$TargetTruncate = 'all' ">
 				<xsl:choose>
-					<xsl:when test="string(number($TargetMeasure)) = 'NaN' ">
+					<xsl:when test="string(number($return_value)) = 'NaN' ">
 						<xsl:value-of select=" '0' "/>
 					</xsl:when>
 					<xsl:otherwise>
@@ -424,7 +448,7 @@
 			</xsl:when>
 			<xsl:when test="$TargetTruncate = 'nonNegative' ">
 				<xsl:choose>
-					<xsl:when test="string(number($TargetMeasure)) = 'NaN' ">
+					<xsl:when test="string(number($return_value)) = 'NaN' ">
 						<xsl:value-of select=" '0' "/>
 					</xsl:when>
 					<xsl:otherwise>
@@ -441,7 +465,7 @@
 			</xsl:when>
 			<xsl:when test="$TargetTruncate = 'positive' ">
 				<xsl:choose>
-					<xsl:when test="string(number($TargetMeasure)) = 'NaN' ">
+					<xsl:when test="string(number($return_value)) = 'NaN' ">
 						<xsl:value-of select=" '1' "/>
 					</xsl:when>
 					<xsl:otherwise>

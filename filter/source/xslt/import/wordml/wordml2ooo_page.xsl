@@ -184,7 +184,7 @@
            <xsl:variable name="min-height">
                <xsl:choose>
                    <xsl:when test="$header-margin-diff &gt; 0">
-                       <xsl:value-of select="$header-margin-diff div 567.0"/>
+                       <xsl:value-of select="format-number($header-margin-diff div 567.0, '###,###.00')"/>
                    </xsl:when>
                    <xsl:otherwise>0</xsl:otherwise>
                </xsl:choose>
@@ -199,39 +199,46 @@
     <xsl:template match="w:sectPr" mode="master-page">
         <!-- style:page-layout style:style-->
 
+
         <xsl:variable name="master-page-number">
             <xsl:number count="w:sectPr" from="/w:wordDocument/w:body" level="any" format="1"/>
         </xsl:variable>
+	
         <xsl:if test="$master-page-number = '1'">
             <style:master-page style:next-style-name="Standard-1" style:page-layout-name="pm1" style:display-name="First Page" style:name="First_20_Page">
                 <style:header>
-                    <xsl:apply-templates select="w:hdr[@w:type='first']/child::*" mode="dispatch"/>
+                    <xsl:apply-templates select="w:hdr[@w:type='odd']/child::*" mode="dispatch"/>
                 </style:header>
                 <style:footer>
-                    <xsl:apply-templates select="w:ftr[@w:type='first']/child::*" mode="dispatch"/>
+                    <xsl:apply-templates select="w:ftr[@w:type='odd']/child::*" mode="dispatch"/>
                 </style:footer>
             </style:master-page>
-        </xsl:if>
+	</xsl:if>
         <xsl:element name="style:master-page">
-            <xsl:attribute name="style:name">Standard-<xsl:value-of select="$master-page-number"/>
+            <xsl:attribute name="style:name">Standard-1<xsl:value-of select="$master-page-number"/>
             </xsl:attribute>
             <xsl:attribute name="style:page-layout-name">
                 <xsl:value-of select="concat('pm', $master-page-number)"/>
             </xsl:attribute>
-
-            <style:header>
-                <xsl:apply-templates select="w:hdr[@w:type='odd']/child::*" mode="dispatch"/>
-            </style:header>
-            <style:header-left>
-                <xsl:apply-templates select="w:hdr[@w:type='even']/child::*" mode="dispatch"/>
-            </style:header-left>
-            <style:footer>
-                <xsl:apply-templates select="w:ftr[@w:type='odd']/child::*" mode="dispatch"/>
-            </style:footer>
-            <style:footer-left>
-                <xsl:apply-templates select="w:ftr[@w:type='even']/child::*" mode="dispatch"/>
-            </style:footer-left>
-
+		    <style:header>
+		        <xsl:apply-templates select="w:hdr[@w:type='odd']/child::*" mode="dispatch"/>
+		    </style:header>
+		    <style:header-left>
+		        <xsl:apply-templates select="w:hdr[@w:type='even']/child::*" mode="dispatch"/>
+		    </style:header-left>
+		    <style:footer>
+			<xsl:choose>
+				<xsl:when test="w:ftr[@w:type='odd']/child::*!=''">
+					<xsl:apply-templates select="w:ftr[@w:type='odd']/child::*" mode="dispatch"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:apply-templates select="preceding::w:ftr[1]/child::*" mode="dispatch"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		    </style:footer>
+		    <style:footer-left>
+		        <xsl:apply-templates select="w:ftr[@w:type='even']/child::*" mode="dispatch"/>
+		    </style:footer-left>
             <!-- Headers and footers-->
             <!--
             <style:header-style>

@@ -101,7 +101,7 @@
                 <xsl:variable name="rel-tblsize">
                     <xsl:choose>
                         <xsl:when test="w:tblW/@w:type = 'pct'">
-                            <xsl:value-of select="(number(w:tblW/@w:w  ) div 5000) * $page-size-inch"/>
+                            <xsl:value-of select="format-number(w:tblW/@w:w  div 5000, '###,###.00') * $page-size-inch"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:call-template name="ConvertMeasure">
@@ -373,14 +373,8 @@
             <xsl:element name="style:table-row-properties">
                 <xsl:choose>
                     <xsl:when test="w:trHeight/@w:val">
-                        <xsl:variable name="tbl_row_height">
-                            <xsl:call-template name="ConvertMeasure">
-                                <xsl:with-param name="TargetMeasure" select="'in'"/>
-                                <xsl:with-param name="value" select="concat(w:trHeight/@w:val, 'twip') "/>
-                            </xsl:call-template>
-                        </xsl:variable>
                         <xsl:attribute name="style:min-row-height">
-                            <xsl:value-of select="concat($tbl_row_height, 'in' )"/>
+                            <xsl:value-of select="w:trHeight/@w:val"/>
                         </xsl:attribute>
                     </xsl:when>
                 </xsl:choose>

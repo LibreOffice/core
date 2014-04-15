@@ -532,7 +532,7 @@ Sqrt-GetOneDigit
         </xsl:choose>
     </xsl:template>
     <xsl:template name="convert2redian">
-        <xsl:param name="x" select="'0'"/>
+        <xsl:param name="x"/>
         <xsl:param name="rounding-factor" select="100"/>
         <xsl:choose>
             <xsl:when test="contains($x,'deg')">
@@ -542,7 +542,7 @@ Sqrt-GetOneDigit
                 <xsl:value-of select="round($rounding-factor * number(substring-before($x, 'fd') div 180 div 65536 * $pi)) div $rounding-factor"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="round($rounding-factor * number($x) div 180 * $pi) div $rounding-factor"/>
+                <xsl:value-of select="format-number(format-number($x div 180, '###,###.00') * $pi, '###,###.00')"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

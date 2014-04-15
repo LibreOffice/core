@@ -584,7 +584,7 @@
     **Template vmlpath2enhancedpath**
     The template is resposible for converting the vml-path to enhanced-path, because the svg:path 
     cann't support command a now.(But heard that will be supported in OOo3.0)
-    And  the 2nd reason of using an enhanced-path is that enhanced-path have a perfect mapping to 
+    And  the 2nd reason of using an enhanced-path is that enhanced-path have a perfect maping to 
     vmlpath.(You will find out that often,we  even don't need to change the parameters).
     -->
     <xsl:template name="vmlpath2enhancedpath">
@@ -1640,10 +1640,10 @@
         <xsl:param name="x"/>
         <xsl:param name="y"/>
         <!-- Compute 1/2 distance between current and final point -->
-        <xsl:variable name="dx2" select="($x0 - $x) div 2"/>
-        <xsl:variable name="dy2" select="($y0 - $y) div 2"/>
+        <xsl:variable name="dx2" select="round(($x0 - $x) div 2)"/>
+        <xsl:variable name="dy2" select="round(($y0 - $y) div 2)"/>
         <!--    Convert from degrees to radians -->
-        <xsl:variable name="rotation-radian" select="$x-axis-rotation * $pi div 180"/>
+        <xsl:variable name="rotation-radian" select="$x-axis-rotation * round($pi div 180)"/>
         <!-- Compute (x1, y1). What are x1,y1?-->
         <xsl:variable name="cos-rotation">
             <xsl:call-template name="cos">
@@ -1672,7 +1672,7 @@
         <xsl:variable name="ry-sq" select="$ry-abs * $ry-abs"/>
         <xsl:variable name="x1-sq" select="$x1 * $x1"/>
         <xsl:variable name="y1-sq" select="$y1 * $y1"/>
-        <xsl:variable name="radius-check" select=" $x1-sq div $rx-sq + $y1-sq div $ry-sq "/>
+        <xsl:variable name="radius-check" select=" round($x1-sq div $rx-sq) + round($y1-sq div $ry-sq) "/>
         <xsl:variable name="radius-check-sqrt">
             <xsl:call-template name="sqrt">
                 <xsl:with-param name="x" select="$radius-check"/>
@@ -1725,7 +1725,7 @@
                 <xsl:otherwise>1</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="unchecked-sq" select=" (($new-rx-sq * $new-ry-sq) - ($new-rx-sq * $y1-sq) - ($new-ry-sq * $x1-sq)) div   (($new-rx-sq * $y1-sq) + ($new-ry-sq * $x1-sq)) "/>
+        <xsl:variable name="unchecked-sq" select=" round((($new-rx-sq * $new-ry-sq) - ($new-rx-sq * $y1-sq) - ($new-ry-sq * $x1-sq)) div   (($new-rx-sq * $y1-sq) + ($new-ry-sq * $x1-sq))) "/>
         <xsl:variable name="sq">
             <xsl:choose>
                 <xsl:when test=" $unchecked-sq &lt; 0">0</xsl:when>
@@ -1740,20 +1740,20 @@
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="coef" select="$sign * $sq-sqrt "/>
-        <xsl:variable name="cx1" select="$coef * $new-rx * $y1 div $new-ry"/>
-        <xsl:variable name="cy1" select=" -1 * $coef * $new-ry * $x1 div $new-rx"/>
+        <xsl:variable name="cx1" select="$coef * $new-rx * round($y1 div $new-ry)"/>
+        <xsl:variable name="cy1" select=" -1 * $coef * $new-ry * round($x1 div $new-rx)"/>
         <!--  Step 3: Compute (cx, cy) from (cx1, cy1) -->
-        <xsl:variable name="sx2" select="($x0 +$x) div 2 "/>
-        <xsl:variable name="sy2" select="($y0 +$y) div 2 "/>
+        <xsl:variable name="sx2" select="round(($x0 +$x) div 2) "/>
+        <xsl:variable name="sy2" select="round(($y0 +$y) div 2) "/>
         <xsl:variable name="tmp1" select="$cos-rotation * $cx1 "/>
         <xsl:variable name="tmp2" select="$cos-rotation * $cx1 "/>
         <xsl:variable name="cx" select=" $sx2 + ( $cos-rotation * $cx1 - $sin-rotation * $cy1 ) "/>
         <xsl:variable name="cy" select=" $sy2 + ( $sin-rotation * $cx1 + $cos-rotation * $cy1 ) "/>
         <!-- Step 4: Compute angle start and angle extent -->
-        <xsl:variable name="ux" select="( $x1 - $cx1)  div $new-rx"/>
-        <xsl:variable name="uy" select="( $y1 - $cy1)  div $new-ry"/>
-        <xsl:variable name="vx" select="( - 1 *  $x1 - $cx1)  div $new-rx"/>
-        <xsl:variable name="vy" select="(- 1 *  $y1 - $cy1)  div $new-ry"/>
+        <xsl:variable name="ux" select="round(( $x1 - $cx1)  div $new-rx)"/>
+        <xsl:variable name="uy" select="round(( $y1 - $cy1)  div $new-ry)"/>
+        <xsl:variable name="vx" select="round(( - 1 *  $x1 - $cx1)  div $new-rx)"/>
+        <xsl:variable name="vy" select="round((- 1 *  $y1 - $cy1)  div $new-ry)"/>
         <xsl:variable name="n">
             <xsl:call-template name="sqrt">
                 <xsl:with-param name="x" select="  ($ux * $ux) + ($uy * $uy)  "/>
@@ -1769,10 +1769,10 @@
         </xsl:variable>
         <xsl:variable name="acos-pn">
             <xsl:call-template name="acos">
-                <xsl:with-param name="x" select="$p div $n"/>
+                <xsl:with-param name="x" select="round($p div $n)"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="theta" select="( $uy-sign * $acos-pn * 180 div $pi ) mod 360 "/>
+        <xsl:variable name="theta" select="( $uy-sign * $acos-pn * round(180 div $pi) ) mod 360 "/>
         <xsl:variable name="n-delta">
             <xsl:call-template name="sqrt">
                 <xsl:with-param name="x" select="($ux * $ux + $uy * $uy) * ($vx * $vx + $vy * $vy)"/>
@@ -1787,10 +1787,10 @@
         </xsl:variable>
         <xsl:variable name="acos-pn-delta">
             <xsl:call-template name="acos">
-                <xsl:with-param name="x" select="$p-delta div $n-delta"/>
+                <xsl:with-param name="x" select="round($p-delta div $n-delta)"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="unchecked-delta" select="$vy-sign * $acos-pn-delta * 180 div $pi "/>
+        <xsl:variable name="unchecked-delta" select="$vy-sign * $acos-pn-delta * round(180 div $pi) "/>
         <xsl:variable name="delta">
             <xsl:choose>
                 <xsl:when test=" $sweep-flag = 0 and $unchecked-delta &gt; 0 ">

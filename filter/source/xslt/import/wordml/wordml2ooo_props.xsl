@@ -36,7 +36,7 @@
           </xsl:otherwise>
       </xsl:choose>
   </xsl:variable>
-  <xsl:value-of select="concat($margin-top div 567.0, 'cm')"/>
+  <xsl:value-of select="concat(format-number($margin-top div 567.0, '###,###.00'), 'cm')"/>
 </xsl:attribute>
 <xsl:attribute name="fo:margin-bottom">
   <xsl:variable name="footer-margin">
@@ -57,29 +57,24 @@
           </xsl:otherwise>
       </xsl:choose>
   </xsl:variable>
-  <xsl:value-of select="concat($margin-bottom div 567.0, 'cm')"/>
+  <xsl:value-of select="concat(format-number($margin-bottom div 567.0, '###,###.00'), 'cm')"/>
 </xsl:attribute>
 <xsl:attribute name="fo:margin-left">
-  <xsl:value-of select="concat(w:pgMar/@w:left div 567.0, 'cm')"/>
+  <xsl:value-of select="concat(format-number(w:pgMar/@w:left div 567.0, '###,###.00'), 'cm')"/>
 </xsl:attribute>
 <xsl:attribute name="fo:margin-right">
-  <xsl:value-of select="concat(w:pgMar/@w:right div 567.0, 'cm')"/>
+  <xsl:value-of select="concat(format-number(w:pgMar/@w:right div 567.0, '###,###.00'), 'cm')"/>
 </xsl:attribute>
-
 <xsl:attribute name="fo:page-width">
-  <xsl:value-of select="concat(w:pgSz/@w:w div 567.0, 'cm')"/>
-</xsl:attribute>
+<xsl:value-of select="format-number(w:pgSz/@w:w div 567.0, '###,###.00')"/>cm</xsl:attribute>
 <xsl:attribute name="fo:page-height">
-  <xsl:value-of select="concat(w:pgSz/@w:h div 567.0, 'cm')"/>
-</xsl:attribute>
+<xsl:value-of select="format-number(w:pgSz/@w:h div 567.0, '###,###.00')"/>cm</xsl:attribute>
 <xsl:attribute name="style:footnote-max-height">
   <xsl:value-of select="'0cm'"/>
 </xsl:attribute>
 <xsl:attribute name="style:print-orientation">
   <xsl:choose>
-      <xsl:when test="w:pgSz/@w:orient">
-          <xsl:value-of select="w:pgSz/@w:orient"/>
-      </xsl:when>
+      <xsl:when test="w:pgSz/@w:orient">landscape</xsl:when>
       <xsl:otherwise>portrait</xsl:otherwise>
   </xsl:choose>
 </xsl:attribute>
@@ -107,7 +102,7 @@
 <xsl:if test="not(w:cols/w:col)"> 
 <!-- bug in the OASIS spec resp. bug in xmloff  -->
 <xsl:attribute name="fo:column-gap">
-  <xsl:value-of select="concat(w:cols/@w:space div 567.0, 'cm')"/>
+  <xsl:value-of select="concat(format-number(w:cols/@w:space div 567.0, '###,###.00'), 'cm')"/>
 </xsl:attribute>
 </xsl:if>
 
@@ -122,7 +117,7 @@
      <xsl:attribute name="fo:end-indent">
        <xsl:choose>
           <xsl:when test="@w:space">
-              <xsl:value-of select="concat(@w:space div 567.0, 'cm')"/>
+              <xsl:value-of select="concat(format-number(@w:space div 567.0, '###,###.00'), 'cm')"/>
           </xsl:when>
           <xsl:otherwise>0cm</xsl:otherwise>
        </xsl:choose>

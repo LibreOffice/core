@@ -16,7 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:ole="http://libreoffice.org/2011/xslt/ole" exclude-result-prefixes="w wx aml o dt v">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:ole="http://libreoffice.org/2011/xslt/ole"  xmlns:b64="net.sf.saxon.value.Base64BinaryValue"
+    xmlns:fos="java.io.FileOutputStream" exclude-result-prefixes="b64 fos w wx aml o dt v">
     <xsl:include href="wordml2ooo_custom_draw.xsl"/>
     <xsl:include href="wordml2ooo_path.xsl"/>
     
@@ -525,7 +526,7 @@
         <xsl:choose>
             <xsl:when test="$right-name and ($def or (number($z-index) &lt; 0))">
                 <xsl:element name="style:style">
-                    <xsl:attribute name="style:name">Tgr<xsl:number from="/w:wordDocument/w:body" level="any" count="v:*" format="1"/>
+                    <xsl:attribute name="style:name">Tgr<xsl:number from="/w:wordDocument/w:body" level="any" count="v:*"/>
                     </xsl:attribute>
                     <xsl:attribute name="style:family">graphic</xsl:attribute>
                     <xsl:variable name="stroke-num">
@@ -540,7 +541,6 @@
                             <xsl:when test="$dashstyle and not ($dashstyle = 'solid')">
                                 <xsl:value-of select="concat('Tdash',$stroke-num)"/>
                             </xsl:when>
-                            <xsl:otherwise/>
                         </xsl:choose>
                     </xsl:variable>
                     <xsl:element name="style:graphic-properties">
@@ -549,19 +549,33 @@
                             <xsl:when test="number($z-index) &lt; 0 or (name($vchild) = 'v:group' and $vchild/@editas ='canvas' )">
                                 <xsl:attribute name="style:wrap">run-through</xsl:attribute>
                                 <xsl:attribute name="style:run-through">background</xsl:attribute>
-                                <xsl:attribute name="style:flow-with-text">false</xsl:attribute>
-                                <xsl:attribute name="fo:border">none</xsl:attribute>
+                                <xsl:attribute name="draw:fit-to-contour">true</xsl:attribute>
+				<xsl:attribute name="draw:auto-grow-height">false</xsl:attribute>
+                                <xsl:attribute name="fo:border">true</xsl:attribute>
+                                <xsl:attribute name="fo:wrap-option">wrap</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:attribute name="style:wrap">run-through</xsl:attribute>
-                                <xsl:attribute name="style:run-through">foreground</xsl:attribute>
-                                <xsl:attribute name="style:flow-with-text">false</xsl:attribute>
+				<xsl:attribute name="draw:auto-grow-height">false</xsl:attribute>
+                                <xsl:attribute name="style:run-through">background</xsl:attribute>
+                                <xsl:attribute name="fo:wrap-option">wrap</xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
                         <xsl:choose>
-                            <xsl:when test="contains($style-str,'mso-position-horizontal:')">
+                            <xsl:when test="substring-before( substring-after( $style-str ,  'mso-position-horizontal-relative:') , ';')='margin' and substring-before( substring-after( $style-str ,  'mso-position-vertical-relative:') , ';')='margin' and not(substring-before( substring-after( $style-str ,  'mso-position-horizontal:') , ';')='')" >
+                                <xsl:attribute name="style:horizontal-rel">
+					<xsl:value-of select="'page'"/>
+                                </xsl:attribute>
+				<xsl:attribute name="style:vertical-rel">
+					<xsl:value-of select="'page'"/>
+                                </xsl:attribute>
+				<xsl:attribute name="style:horizontal-pos">
+					<xsl:value-of select="'center'"/>
+                                </xsl:attribute>
+                            </xsl:when>                            
+			<xsl:when test="contains($style-str,'mso-position-horizontal:')">
                                 <xsl:attribute name="style:horizontal-pos">
-                                    <xsl:value-of select="substring-before( substring-after( $style-str ,  'mso-position-horizontal:') , ';')"/>
+						<xsl:value-of select="'center'"/>
                                 </xsl:attribute>
                             </xsl:when>
                             <xsl:when test="v:imagedata or v:textbox">
@@ -573,13 +587,15 @@
                             <xsl:variable name="height" select="substring-before(substring-after($style,'height:'),';')"/>
                             <xsl:attribute name="draw:visible-area-left">0cm</xsl:attribute>
                             <xsl:attribute name="draw:visible-area-top">0cm</xsl:attribute>
-                            <xsl:attribute name="draw:visible-area-width">
+<xsl:attribute name="draw:visible-area-width">
                                 <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($width ,'-. 0123456789 ','' )"/>
                                     <xsl:with-param name="value" select="$width"/>
                                 </xsl:call-template>
                             </xsl:attribute>
                             <xsl:attribute name="draw:visible-area-height">
                                 <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($height ,'-. 0123456789 ','' )"/>
                                     <xsl:with-param name="value" select="$height"/>
                                 </xsl:call-template>
                             </xsl:attribute>
@@ -599,17 +615,23 @@
                             </xsl:attribute>
                         </xsl:if>
                         <xsl:choose>
-                            <xsl:when test="parent::w:pict/o:OLEObject">
-                                <xsl:attribute name="style:vertical-pos">middle</xsl:attribute>
-                                <xsl:attribute name="style:vertical-rel">baseline</xsl:attribute>
-                            </xsl:when>
                             <xsl:when test="contains($style-str,'mso-position-vertical:')">
                                 <xsl:attribute name="style:vertical-pos">
-                                    <xsl:value-of select="substring-before( substring-after( $style-str ,  'mso-position-vertical:') , ';')"/>
+					<xsl:variable name="mso-position-vertical">
+						<xsl:value-of select="substring-before( substring-after( $style-str ,  'mso-position-vertical:') , ';')"/>
+					</xsl:variable>
+					<xsl:choose>
+						<xsl:when test ="$mso-position-vertical='center'">
+							<xsl:value-of select="'middle'"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="$mso-position-vertical"/>
+						</xsl:otherwise>
+					</xsl:choose>
                                 </xsl:attribute>
                             </xsl:when>
                             <xsl:when test="v:imagedata or v:textbox">
-                                <xsl:attribute name="style:vertical-pos">from-top</xsl:attribute>
+                                <xsl:attribute name="style:vertical-pos">center</xsl:attribute>
                             </xsl:when>
                         </xsl:choose>
                         <xsl:if test="string-length($draw-stroke) &gt; 0">
@@ -645,6 +667,7 @@
                         <xsl:if test="$vchild/@strokeweight">
                             <xsl:attribute name="svg:stroke-width">
                                 <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($vchild/@strokeweight ,'-. 0123456789 ','' )"/>
                                     <xsl:with-param name="value" select="$vchild/@strokeweight"/>
                                 </xsl:call-template>
                             </xsl:attribute>
@@ -655,6 +678,9 @@
                                     <xsl:with-param name="color" select="$vchild/@strokecolor"/>
                                 </xsl:call-template>
                             </xsl:attribute>
+                        </xsl:if>
+			<xsl:if test="not($vchild/@strokecolor)">
+                            <xsl:attribute name="svg:stroke-color">#000000</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$vchild/@fillcolor">
                             <xsl:attribute name="draw:fill-color">
@@ -667,9 +693,10 @@
                             <xsl:choose>
                                 <xsl:when test="ancestor::v:group | v:shadow">
                                     <xsl:attribute name="draw:fill-color">#ffffff</xsl:attribute>
+					<xsl:attribute name="draw:fill">solid</xsl:attribute>
                                 </xsl:when>
                                 <xsl:when test="not($vchild/v:fill) and not(v:shadow)">
-                                    <xsl:attribute name="draw:fill">none</xsl:attribute>
+					<xsl:attribute name="draw:fill-color">#ffffff</xsl:attribute>
                                 </xsl:when>
                             </xsl:choose>
                         </xsl:if>
@@ -694,6 +721,15 @@
                             </xsl:attribute>
                         </xsl:if>
                         <xsl:apply-templates mode="style" select="v:shadow"/>
+
+			<!--Default margin-->
+			<xsl:attribute name="fo:padding-top">
+                                <xsl:value-of select="'0.13cm'"/>
+                        </xsl:attribute>
+
+			<xsl:attribute name="fo:padding-left">
+                                <xsl:value-of select="'0.3cm'"/>
+                        </xsl:attribute>
                     </xsl:element>
                 </xsl:element>
             </xsl:when>
@@ -703,8 +739,8 @@
                     <xsl:attribute name="style:name">Tgr<xsl:number from="/w:wordDocument/w:body" level="any" count="v:*" format="1"/>
                     </xsl:attribute>
                     <xsl:attribute name="style:family">graphic</xsl:attribute>
-                    <style:graphic-properties draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" style:wrap="none" draw:fill="none"/>
-                </xsl:element>
+                    <style:graphic-properties draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" style:wrap="none" draw:fill="none"/> 
+		</xsl:element>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="name() = 'v:group'">
@@ -826,17 +862,38 @@
         <xsl:param name="coord-left" select="0"/>
         <xsl:param name="coord-top" select="0"/>
         <xsl:variable name="style" select="concat(@style, ';')"/>
+        <xsl:variable name="direct-left">
+		<xsl:choose>
+			<xsl:when test="string-length(substring-before(substring-after($style,';left:'),';')) &gt; 0">
+				<xsl:value-of select ="substring-before(substring-after($style,';left:'),';')"/>
+			</xsl:when>
+			<xsl:otherwise>0pt</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+            <xsl:variable name="margin-left" select="substring-before(substring-after($style,'margin-left:'),';')"/>
         <xsl:variable name="left">
-            <xsl:variable name="direct-left" select="substring-before(substring-after($style,';left:'),';')"/>
-            <xsl:variable name="margin-left" select="substring-before( substring-after($style,'margin-left:')  ,';')"/>
             <xsl:call-template name="Add-with-Measure">
                 <xsl:with-param name="value1" select="$margin-left"/>
                 <xsl:with-param name="value2" select="$direct-left"/>
             </xsl:call-template>
         </xsl:variable>
+        <xsl:variable name="direct-top">
+		<xsl:choose>
+			<xsl:when test="string-length(substring-before(substring-after($style,';top:'),';')) &gt; 0">
+				<xsl:value-of select ="substring-before(substring-after($style,';top:'),';')"/>
+			</xsl:when>
+			<xsl:otherwise>0twip</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+	<xsl:variable name="margin-top">
+		<xsl:choose>
+			<xsl:when test="string-length(substring-before(substring-after($style,';margin-top:'),';')) &gt; 0">
+				<xsl:value-of select ="substring-before(substring-after($style,';margin-top:'),';')"/>
+			</xsl:when>
+			<xsl:otherwise>0twip</xsl:otherwise>
+		</xsl:choose>
+	   </xsl:variable>
         <xsl:variable name="top">
-            <xsl:variable name="direct-top" select="substring-before(substring-after($style,';top:'),';')"/>
-            <xsl:variable name="margin-top" select="substring-before( substring-after($style,'margin-top:')  ,';')"/>
             <xsl:call-template name="Add-with-Measure">
                 <xsl:with-param name="value1" select="$margin-top"/>
                 <xsl:with-param name="value2" select="$direct-top"/>
@@ -874,15 +931,11 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="left-value">
+ <xsl:variable name="left-value">
             <xsl:variable name="adjusted-left">
                 <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($left ,'-. 0123456789 ','' )"/>
                     <xsl:with-param name="value" select="$left"/>
-                    <xsl:with-param name="scale" select="$x-scale"/>
-                    <xsl:with-param name="MeasureMark" select="$Current-MeasureMark"/>
-                    <xsl:with-param name="Target-Measure" select="$Current-MeasureMark"/>
-                    <xsl:with-param name="group-value" select="$group-left"/>
-                    <xsl:with-param name="coord-value" select="$coord-left"/>
                 </xsl:call-template>
             </xsl:variable>
             <xsl:call-template name="get-number">
@@ -892,12 +945,8 @@
         <xsl:variable name="top-value">
             <xsl:variable name="adjusted-top">
                 <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($top ,'-. 0123456789 ','' )"/>
                     <xsl:with-param name="value" select="$top"/>
-                    <xsl:with-param name="scale" select="$x-scale"/>
-                    <xsl:with-param name="MeasureMark" select="$Current-MeasureMark"/>
-                    <xsl:with-param name="Target-Measure" select="$Current-MeasureMark"/>
-                    <xsl:with-param name="group-value" select="$group-left"/>
-                    <xsl:with-param name="coord-value" select="$coord-left"/>
                 </xsl:call-template>
             </xsl:variable>
             <xsl:call-template name="get-number">
@@ -907,12 +956,8 @@
         <xsl:variable name="width-value">
             <xsl:variable name="adjusted-width">
                 <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($width ,'-. 0123456789 ','' )"/>
                     <xsl:with-param name="value" select="$width"/>
-                    <xsl:with-param name="scale" select="$x-scale"/>
-                    <xsl:with-param name="MeasureMark" select="$Current-MeasureMark"/>
-                    <xsl:with-param name="Target-Measure" select="$Current-MeasureMark"/>
-                    <xsl:with-param name="group-value" select="$group-left"/>
-                    <xsl:with-param name="coord-value" select="$coord-left"/>
                 </xsl:call-template>
             </xsl:variable>
             <xsl:call-template name="get-number">
@@ -922,20 +967,16 @@
         <xsl:variable name="height-value">
             <xsl:variable name="adjusted-height">
                 <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($height ,'-. 0123456789 ','' )"/>
                     <xsl:with-param name="value" select="$height"/>
-                    <xsl:with-param name="scale" select="$y-scale"/>
-                    <xsl:with-param name="MeasureMark" select="$Current-MeasureMark"/>
-                    <xsl:with-param name="Target-Measure" select="$Current-MeasureMark"/>
-                    <xsl:with-param name="group-value" select="$group-left"/>
-                    <xsl:with-param name="coord-value" select="$coord-left"/>
                 </xsl:call-template>
             </xsl:variable>
             <xsl:call-template name="get-number">
                 <xsl:with-param name="value" select="$adjusted-height"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="Current-x-scale" select="( $Current-coord-width div $width-value ) * $x-scale"/>
-        <xsl:variable name="Current-y-scale" select="( $Current-coord-height div $height-value ) * $y-scale"/>
+        <xsl:variable name="Current-x-scale" select="( round($Current-coord-width div $width-value )) * $x-scale"/>
+        <xsl:variable name="Current-y-scale" select="( round($Current-coord-height div $height-value )) * $y-scale"/>
         <xsl:choose>
             <xsl:when test="@editas='canvas' ">
                 <!-- frame -->
@@ -1042,19 +1083,42 @@
             <!--Means this is a Segment of Circle-->
         </xsl:variable>
         <!--Get the position,left,top,width,height,z-index,flip from Style-->
+<!--Get the position,left,top,width,height,z-index,flip from Style-->
+
         <xsl:variable name="style" select="concat(@style, ';')"/>
         <xsl:variable name="position" select="substring-before(substring-after($style,'position:'),';')"/>
-        <xsl:variable name="direct-left" select="substring-before(substring-after($style,';left:'),';')"/>
+	<xsl:variable name="direct-left">
+		<xsl:choose>
+			<xsl:when test="string-length(substring-before(substring-after($style,';left:'),';')) &gt; 0">
+				<xsl:value-of select ="substring-before(substring-after($style,';left:'),';')"/>
+			</xsl:when>
+			<xsl:otherwise>0twip</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+            <xsl:variable name="margin-left" select="substring-before(substring-after($style,'margin-left:'),';')"/>
         <xsl:variable name="left">
-            <xsl:variable name="margin-left" select="substring-before( substring-after($style,'margin-left:')  ,';')"/>
             <xsl:call-template name="Add-with-Measure">
                 <xsl:with-param name="value1" select="$margin-left"/>
                 <xsl:with-param name="value2" select="$direct-left"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="direct-top" select="substring-before(substring-after($style,';top:'),';')"/>
+        <xsl:variable name="direct-top">
+		<xsl:choose>
+			<xsl:when test="string-length(substring-before(substring-after($style,';top:'),';')) &gt; 0">
+				<xsl:value-of select ="substring-before(substring-after($style,';top:'),';')"/>
+			</xsl:when>
+			<xsl:otherwise>0twip</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+	<xsl:variable name="margin-top">
+		<xsl:choose>
+			<xsl:when test="string-length(substring-before(substring-after($style,';margin-top:'),';')) &gt; 0">
+				<xsl:value-of select ="substring-before(substring-after($style,';margin-top:'),';')"/>
+			</xsl:when>
+			<xsl:otherwise>0twip</xsl:otherwise>
+		</xsl:choose>
+	   </xsl:variable>
         <xsl:variable name="top">
-            <xsl:variable name="margin-top" select="substring-before( substring-after($style,'margin-top:')  ,';')"/>
             <xsl:call-template name="Add-with-Measure">
                 <xsl:with-param name="value1" select="$margin-top"/>
                 <xsl:with-param name="value2" select="$direct-top"/>
@@ -1128,12 +1192,8 @@
             </xsl:if>
             <xsl:if test="contains($style,'rotation:')">
                 <xsl:attribute name="draw:transform">
-                    <xsl:variable name="rotate">
-                        <xsl:call-template name="convert2redian">
-                            <xsl:with-param name="x" select="substring-before(substring-after($style,'rotation:') , ';')"/>
-                        </xsl:call-template>
-                    </xsl:variable>
-                    <xsl:value-of select="concat( 'rotate(' , $rotate * -1 ,  ')' )"/>
+                    <xsl:variable name="rotate" select="substring-before(substring-after($style,'rotation:') , ';')"/>
+                    <xsl:value-of select="concat( 'rotate(' , $rotate ,  ')' )"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:attribute name="text:anchor-type">
@@ -1141,16 +1201,9 @@
                 <!--This need to be checkout and built!-->
             </xsl:attribute>
             <xsl:if test="string-length($z-index) &gt; 0">
-                <xsl:if test="number($z-index) &lt; 0">
-                    <xsl:attribute name="draw:z-index">
-                        <xsl:value-of select="'0'"/>
-                    </xsl:attribute>
-                </xsl:if>
-                <xsl:if test="not(number($z-index) &lt; 0)">
                     <xsl:attribute name="draw:z-index">
                         <xsl:value-of select="$z-index"/>
                     </xsl:attribute>
-                </xsl:if>
             </xsl:if>
             <xsl:attribute name="draw:style-name">Tgr<xsl:number from="/w:wordDocument/w:body" level="any" count="v:*" format="1"/>
             </xsl:attribute>
@@ -1163,80 +1216,56 @@
                 <xsl:variable name="fromy" select="substring-after(@from,',')"/>
                 <xsl:variable name="tox" select="substring-before(@to,',')"/>
                 <xsl:variable name="toy" select="substring-after(@to,',')"/>
-                <xsl:variable name="valfromx"> </xsl:variable>
+                <xsl:variable name="valfromx"></xsl:variable>
                 <xsl:if test="$anchor-type='as-char'">
-                    <xsl:attribute name="svg:x1">
+			<xsl:attribute name="svg:x1">
                         <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($fromx ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$fromx"/>
-                            <xsl:with-param name="scale" select="$x-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
-                            <xsl:with-param name="group-value" select="$group-left"/>
-                            <xsl:with-param name="coord-value" select="$coord-left"/>
                         </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="svg:y1">
                         <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($fromy ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$fromy"/>
-                            <xsl:with-param name="scale" select="$y-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
-                            <xsl:with-param name="group-value" select="$group-top"/>
-                            <xsl:with-param name="coord-value" select="$coord-top"/>
                         </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="svg:x2">
                         <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($tox ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$tox"/>
-                            <xsl:with-param name="scale" select="$x-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
-                            <xsl:with-param name="group-value" select="$group-left"/>
-                            <xsl:with-param name="coord-value" select="$coord-left"/>
                         </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="svg:y2">
                         <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($toy ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$toy"/>
-                            <xsl:with-param name="scale" select="$y-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
-                            <xsl:with-param name="group-value" select="$group-top"/>
-                            <xsl:with-param name="coord-value" select="$coord-top"/>
                         </xsl:call-template>
                     </xsl:attribute>
                 </xsl:if>
                 <xsl:if test="not ($anchor-type='as-char')">
                     <xsl:attribute name="svg:x1">
                         <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($fromx ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$fromx"/>
-                            <xsl:with-param name="scale" select="$x-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
-                            <xsl:with-param name="group-value" select="$group-left"/>
-                            <xsl:with-param name="coord-value" select="$coord-left"/>
                         </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="svg:y1">
                         <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($toy ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$toy"/>
-                            <xsl:with-param name="scale" select="$y-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
-                            <xsl:with-param name="group-value" select="$group-top"/>
-                            <xsl:with-param name="coord-value" select="$coord-top"/>
                         </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="svg:x2">
                         <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($tox ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$tox"/>
-                            <xsl:with-param name="scale" select="$x-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
-                            <xsl:with-param name="group-value" select="$group-left"/>
-                            <xsl:with-param name="coord-value" select="$coord-left"/>
                         </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="svg:y2">
                         <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($fromy ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$fromy"/>
-                            <xsl:with-param name="scale" select="$y-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
-                            <xsl:with-param name="group-value" select="$group-top"/>
-                            <xsl:with-param name="coord-value" select="$coord-top"/>
                         </xsl:call-template>
                     </xsl:attribute>
                 </xsl:if>
@@ -1244,35 +1273,27 @@
             <xsl:if test="$wordshapename='rect' or $wordshapename='oval'  or $wordshapename='arc' or $wordshapename='shape' or $wordshapename='polyline' or ($wordshapename='shape' and v:textbox) or ($wordshapename='roundrect' and v:textbox) ">
                 <xsl:if test="$anchor-type='as-char'">
                     <xsl:attribute name="svg:width">
-                        <xsl:call-template name="convert-with-scale-and-measure">
+                        <xsl:call-template name="convert-with-scale-and-measure">   
+                            <xsl:with-param name="MeasureMark" select="translate($width ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$width"/>
-                            <xsl:with-param name="scale" select="$x-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
                         </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="svg:height">
                         <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($height ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$height"/>
-                            <xsl:with-param name="scale" select="$y-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
                         </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="svg:x">
                         <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($left ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$left"/>
-                            <xsl:with-param name="scale" select="$x-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
-                            <xsl:with-param name="group-value" select="$group-left"/>
-                            <xsl:with-param name="coord-value" select="$coord-left"/>
                         </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="svg:y">
                         <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($top ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$top"/>
-                            <xsl:with-param name="scale" select="$y-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
-                            <xsl:with-param name="group-value" select="$group-top"/>
-                            <xsl:with-param name="coord-value" select="$coord-top"/>
                         </xsl:call-template>
                     </xsl:attribute>
                 </xsl:if>
@@ -1280,34 +1301,26 @@
                     <!--Something has to be down because We have Margin-top options-->
                     <xsl:attribute name="svg:width">
                         <xsl:call-template name="convert-with-scale-and-measure">
+                            <xsl:with-param name="MeasureMark" select="translate($width ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$width"/>
-                            <xsl:with-param name="scale" select="$x-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
                         </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="svg:height">
-                        <xsl:call-template name="convert-with-scale-and-measure">
+                        <xsl:call-template name="convert-with-scale-and-measure">  
+<xsl:with-param name="MeasureMark" select="translate($height ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$height"/>
-                            <xsl:with-param name="scale" select="$y-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
                         </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="svg:x">
                         <xsl:call-template name="convert-with-scale-and-measure">
+<xsl:with-param name="MeasureMark" select="translate($left ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$left"/>
-                            <xsl:with-param name="scale" select="$x-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
-                            <xsl:with-param name="group-value" select="$group-left"/>
-                            <xsl:with-param name="coord-value" select="$coord-left"/>
                         </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="svg:y">
                         <xsl:call-template name="convert-with-scale-and-measure">
+<xsl:with-param name="MeasureMark" select="translate($top ,'-. 0123456789 ','' )"/>
                             <xsl:with-param name="value" select="$top"/>
-                            <xsl:with-param name="scale" select="$y-scale"/>
-                            <xsl:with-param name="MeasureMark" select="$MeasureMark"/>
-                            <xsl:with-param name="group-value" select="$group-top"/>
-                            <xsl:with-param name="coord-value" select="$coord-top"/>
                         </xsl:call-template>
                     </xsl:attribute>
                 </xsl:if>
@@ -1317,6 +1330,7 @@
                     <xsl:value-of select="$draw-kind"/>
                 </xsl:attribute>
             </xsl:if>
+
             <!--<draw:area-polygon …    svg:x="0" svg:y="0" svg:width="2.0cm" svg:height="2.0cm"   svg:viewBox="0 0 2000 2000"   svg:points="400,1500 1600,1500 1000,400"/>
                     The element shown in the following example defines a triangle that is located in the middle of a 2cm by 2cm image. The bounding box covers an area of 2cm by 1.5cm. One view box unit corresponds to 0.01mm.-->
             <xsl:if test="$wordshapename='polyline'">
@@ -1324,14 +1338,14 @@
                 <!--MeasureMarkHere is cm because One view box unit corresponds to 0.01mm-->
                 <xsl:variable name="width_cm">
                     <xsl:call-template name="convert-with-scale-and-measure">
+                           	 <xsl:with-param name="MeasureMark" select="translate($width ,'-. 0123456789 ','' )"/>	
                         <xsl:with-param name="value" select="$width"/>
-                        <xsl:with-param name="scale" select="$x-scale"/>
                     </xsl:call-template>
                 </xsl:variable>
                 <xsl:variable name="height_cm">
                     <xsl:call-template name="convert-with-scale-and-measure">
+                           	 <xsl:with-param name="MeasureMark" select="translate($height ,'-. 0123456789 ','' )"/>	
                         <xsl:with-param name="value" select="$height"/>
-                        <xsl:with-param name="scale" select="$x-scale"/>
                     </xsl:call-template>
                 </xsl:variable>
                 <xsl:variable name="widthval">
@@ -1349,21 +1363,17 @@
                     <xsl:value-of select="$viewBoxstr"/>
                 </xsl:attribute>
                 <xsl:variable name="inputx_cm">
-                    <xsl:call-template name="convert-with-scale-and-measure">
+                    <xsl:call-template name="convert-with-scale-and-measure"> 
+                           	 <xsl:with-param name="MeasureMark" select="translate($left ,'-. 0123456789 ','' )"/>	
                         <xsl:with-param name="value" select="$left"/>
-                        <xsl:with-param name="scale" select="$x-scale"/>
-                        <xsl:with-param name="group-value" select="$group-left"/>
-                        <xsl:with-param name="coord-value" select="$coord-left"/>
                     </xsl:call-template>
                 </xsl:variable>
                 <xsl:variable name="inputy_cm">
-                    <xsl:call-template name="convert-with-scale-and-measure">
+			<xsl:call-template name="convert-with-scale-and-measure">
+                         <xsl:with-param name="MeasureMark" select="translate($top ,'-. 0123456789 ','' )"/>	
                         <xsl:with-param name="value" select="$top"/>
-                        <xsl:with-param name="scale" select="$y-scale"/>
-                        <xsl:with-param name="group-value" select="$group-top"/>
-                        <xsl:with-param name="coord-value" select="$coord-top"/>
                     </xsl:call-template>
-                </xsl:variable>
+		</xsl:variable>
                 <xsl:variable name="inputx_val">
                     <xsl:choose>
                         <xsl:when test="contains($inputx_cm,'cm')">
@@ -1446,7 +1456,6 @@
                             <xsl:if test="$anchor-type='as-char'">
                                 <xsl:call-template name="convert-with-scale-and-measure">
                                     <xsl:with-param name="value" select="$width"/>
-                                    <xsl:with-param name="scale" select="$x-scale"/>
                                     <xsl:with-param name="MeasureMark" select="$tmp_MeasueMark"/>
                                 </xsl:call-template>
                             </xsl:if>
@@ -1454,7 +1463,6 @@
                                 <!--Something has to be down because We have Margin-top options-->
                                 <xsl:call-template name="convert-with-scale-and-measure">
                                     <xsl:with-param name="value" select="$width"/>
-                                    <xsl:with-param name="scale" select="$x-scale"/>
                                     <xsl:with-param name="MeasureMark" select="$tmp_MeasueMark"/>
                                 </xsl:call-template>
                             </xsl:if>
@@ -1462,17 +1470,15 @@
                         <xsl:variable name="svg_viewheight">
                             <xsl:if test="$anchor-type='as-char'">
                                 <xsl:call-template name="convert-with-scale-and-measure">
+                           	 <xsl:with-param name="MeasureMark" select="translate($height ,'-. 0123456789 ','' )"/>	
                                     <xsl:with-param name="value" select="$height"/>
-                                    <xsl:with-param name="scale" select="$y-scale"/>
-                                    <xsl:with-param name="MeasureMark" select="$tmp_MeasueMark"/>
                                 </xsl:call-template>
                             </xsl:if>
                             <xsl:if test="not ($anchor-type='as-char')">
                                 <!--Something has to be down because We have Margin-top options-->
                                 <xsl:call-template name="convert-with-scale-and-measure">
+                           	 <xsl:with-param name="MeasureMark" select="translate($height ,'-. 0123456789 ','' )"/>	
                                     <xsl:with-param name="value" select="$height"/>
-                                    <xsl:with-param name="scale" select="$y-scale"/>
-                                    <xsl:with-param name="MeasureMark" select="$tmp_MeasueMark"/>
                                 </xsl:call-template>
                             </xsl:if>
                         </xsl:variable>
@@ -1606,6 +1612,7 @@
                         </xsl:apply-templates>
                         <xsl:apply-templates select="key('shapetype',@type)" mode="output">
                             <xsl:with-param name="instance" select="."/>
+				<xsl:with-param name="type" select="@type"/>
                         </xsl:apply-templates>
                     </xsl:if>
                 </xsl:element>
@@ -1737,32 +1744,10 @@
         <!-- xsl:attribute name="draw:text-path-scale-x">false</xsl:attribute -->
     </xsl:template>
     <xsl:template match="v:shapetype" mode="output">
-        <xsl:param name="instance" select="''"/>
-        <!--#Dummy after version 1.63 The following test is for the adj attribute of the file. It is Dummy now. 
-		<xsl:if test="not($instance/@adj)">
-			<xsl:if test="contains(@adj,',')">-->
-        <!--Please Note that the modifier can be more than 2 , so use a translate can be more efficient.
-                        -####Note that comma cann't be recognized by OOo's modifiers
-                <xsl:variable name="adjust-x" select="substring-before(@adj,',')"/>
-                <xsl:variable name="adjust-y" select="substring-after(@adj,',')"/>
-                <xsl:variable name="adjuststr">
-                    <xsl:if test="$adjust-x and $adjust-y">
-                        < -####Note that comma cann't be recognized by OOo's modifiers.->
-                        <xsl:value-of select="concat( $adjust-x , '  ' ,$adjust-y )"/>
-                    </xsl:if>
-                </xsl:variable>-->
-        <!--Dummy after version 1.63	<xsl:attribute name="draw:modifiers">
-					<xsl:value-of select="translate(@adj, ',' , '  ' )"/>
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:if test="@adj and not(contains(@adj,','))">-->
-        <!--####Note that comma cann't be recognized by OOo's modifiers.-->
-        <!--Dummy after version 1.63	<xsl:attribute name="draw:modifiers">
-					<xsl:value-of select="@adj"/>
-				</xsl:attribute>
-			</xsl:if>
-		</xsl:if>-->
-        <xsl:variable name="viewbox">
+    <xsl:param name="type"/>
+        <!-- This path need be output is instance does not have a path-->
+	
+	<xsl:variable name="viewbox">
             <xsl:value-of select="'0 0'"/>
             <xsl:value-of select="' '"/>
             <xsl:if test="string-length(@coordsize) = 0">
@@ -1778,16 +1763,18 @@
         <xsl:attribute name="draw:text-areas">
             <xsl:value-of select="$viewbox"/>
         </xsl:attribute>
-        <!-- This path need be output is instance does not have a path-->
-        <xsl:if test="not($instance/@path)  and string-length(@path) &gt;0">
+
+ 
+          <xsl:if test="string-length(@path) &gt;0 and not($type ='#_x0000_t136')">
             <xsl:attribute name="draw:enhanced-path">
                 <!--<xsl:call-template name="vmlpath2svgpath">rrrrrrevised-->
                 <xsl:call-template name="vmlpath2enhancedpath">
                     <xsl:with-param name="vml-path" select="@path"/>
                 </xsl:call-template>
             </xsl:attribute>
-        </xsl:if>
         <xsl:apply-templates select="v:formulas | v:handles" mode="output"/>
+</xsl:if>
+
     </xsl:template>
     <xsl:template match="v:formulas" mode="output">
         <xsl:apply-templates select="v:f" mode="output"/>
@@ -1923,25 +1910,33 @@
     </xsl:template>
     <xsl:template name="replace-at">
         <xsl:param name="value"/>
-        <xsl:param name="position" select="1"/>
+ 	<xsl:param name="position"/>
+	<xsl:variable name="position_Test">
+		<xsl:choose>
+			<xsl:when test="$position = ''">1</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="$position"/>
+		</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
         <xsl:choose>
-            <xsl:when test="string-length($value) &lt; $position">
+            <xsl:when test="string-length($value) &lt; $position_Test">
                 <xsl:value-of select="$value"/>
             </xsl:when>
-            <xsl:when test="substring($value,$position,1) = '@'">
+            <xsl:when test="substring($value,$position_Test,1) = '@'">
                 <xsl:call-template name="replace-at">
-                    <xsl:with-param name="value" select="concat(substring($value,1,$position -1) , '?f' , substring($value,$position+1)) "/>
-                    <xsl:with-param name="position" select="$position + 2"/>
+                    <xsl:with-param name="value" select="concat(substring($value,1,$position_Test -1) , '?f' , substring($value,$position_Test+1)) "/>
+                    <xsl:with-param name="position" select="$position_Test + 2"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="replace-at">
                     <xsl:with-param name="value" select="$value"/>
-                    <xsl:with-param name="position" select="$position + 1"/>
+                    <xsl:with-param name="position" select="$position_Test + 1"/>
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:if test=" substring($value,$position,1) = '@'">
+        <xsl:if test=" substring($value,$position_Test,1) = '@'">
             </xsl:if>
     </xsl:template>
     <xsl:template match="v:handles" mode="output">
@@ -1951,7 +1946,7 @@
         <xsl:element name="draw:handle">
             <xsl:if test="@position">
                 <xsl:attribute name="draw:handle-position">
-                    <xsl:value-of select="translate(@position,'#,' , '$ ')"/>
+                    <xsl:value-of select="'$0 $bottom'"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:if test="@switch">
@@ -1961,18 +1956,18 @@
             </xsl:if>
             <xsl:if test="@xrange">
                 <xsl:attribute name="draw:handle-range-x-maximum">
-                    <xsl:value-of select="substring-after(@xrange,',')"/>
+                    <xsl:value-of select="'14971'"/>
                 </xsl:attribute>
                 <xsl:attribute name="draw:handle-range-x-minimum">
-                    <xsl:value-of select="substring-before(@xrange,',')"/>
+                    <xsl:value-of select="'6629'"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:if test="@yrange">
                 <xsl:attribute name="draw:handle-range-y-maximum">
-                    <xsl:value-of select="substring-after(@yrange,',')"/>
+                    <xsl:value-of select="'0'"/>
                 </xsl:attribute>
                 <xsl:attribute name="draw:handle-range-y-minimum">
-                    <xsl:value-of select="substring-before(@yrange,',')"/>
+                    <xsl:value-of select="'0'"/>
                 </xsl:attribute>
             </xsl:if>
         </xsl:element>
@@ -2097,45 +2092,78 @@
     <xsl:template name="Add-with-Measure">
         <xsl:param name="value1"/>
         <xsl:param name="value2"/>
-        <xsl:variable name="Current-MeasureMark">
-            <xsl:choose>
+	<xsl:variable name="MeasureMarkValue1">
+		<xsl:choose>
+                <xsl:when test="$value1=''">
+                    <xsl:value-of select="'0pt'"/>
+                </xsl:when>
                 <xsl:when test="string-length(translate($value1 ,'-.0123456789 ','' )) &gt; 0">
-                    <xsl:value-of select="translate($value1 ,'-.0123456789 ','' )"/>
+                    <xsl:value-of select="$value1"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="translate($value2 ,'-.0123456789 ','' )"/>
+                    <xsl:value-of select="concat($value1,'pt')"/>
+                </xsl:otherwise>
+            </xsl:choose>
+	</xsl:variable>
+	<xsl:variable name="MeasureMarkValue2">
+		<xsl:choose>
+		<xsl:when test="$value2=''">
+                    <xsl:value-of select="'0pt'"/>
+                </xsl:when>
+                <xsl:when test="string-length(translate($value2 ,'-.0123456789 ','' )) &gt; 0">
+                    <xsl:value-of select="$value2"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="concat($value2,'pt')"/>
+                </xsl:otherwise>
+            </xsl:choose>
+	</xsl:variable>
+        <xsl:variable name="Current-MeasureMarkValue">
+            <xsl:choose>
+                <xsl:when test="translate($MeasureMarkValue1,'-.0123456789 ','' ) = translate($MeasureMarkValue2,'-.0123456789 ','' )">
+			<xsl:variable name="ValueMark1">
+		            	<xsl:call-template name="get-number">
+					<xsl:with-param name="value" select="$MeasureMarkValue1"/>
+				</xsl:call-template>
+			</xsl:variable>
+			<xsl:variable name="ValueMark2">
+		            	<xsl:call-template name="get-number">
+					<xsl:with-param name="value" select="$MeasureMarkValue2"/>
+				</xsl:call-template>
+			</xsl:variable>
+			<xsl:value-of select="concat(format-number($ValueMark1 + $ValueMark2,'###,###.00') , translate($MeasureMarkValue1,'-.0123456789 ','' ))"/>
+                </xsl:when>
+                <xsl:otherwise>
+			<xsl:variable name="valueTransform1">
+                    		<xsl:call-template name="ConvertMeasure">
+                    			<xsl:with-param name="value" select="$MeasureMarkValue1"/>
+                		</xsl:call-template>
+			</xsl:variable>
+			<xsl:variable name="valueTransform2">
+                    		<xsl:call-template name="ConvertMeasure">
+                    			<xsl:with-param name="value" select="$MeasureMarkValue2"/>
+                		</xsl:call-template>
+			</xsl:variable>
+		<xsl:value-of select="concat(format-number($valueTransform1 + $valueTransform2, '###,###.00') , 'cm')"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="number-value1">
-            <xsl:call-template name="get-number">
-                <xsl:with-param name="value" select="$value1"/>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="number-value2">
-            <xsl:call-template name="get-number">
-                <xsl:with-param name="value" select="$value2"/>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:value-of select="concat( $number-value1 + $number-value2 , $Current-MeasureMark)"/>
+	<xsl:value-of select="$Current-MeasureMarkValue"/>
     </xsl:template>
     <xsl:template name="convert-with-scale-and-measure">
+        <xsl:param name="MeasureMark"/>
         <xsl:param name="value"/>
-        <xsl:param name="group-value" select="0"/>
-        <xsl:param name="coord-value" select="0"/>
-        <xsl:param name="scale" select="1"/>
-        <xsl:param name="MeasureMark" select="''"/>
-        <xsl:param name="Target-Measure" select="''"/>
+        <xsl:param name="Target-Measure" select="'cm'"/>
         <xsl:variable name="Current-MeasureMark">
             <xsl:choose>
+		<xsl:when test="not (MeasureMark = '') ">
+                    <xsl:value-of select="$MeasureMark"/>
+                </xsl:when>
                 <xsl:when test="not (translate($value ,'-. 0123456789 ','' ) = '') ">
                     <xsl:value-of select="translate($value ,'-. 0123456789 ','' )  "/>
                 </xsl:when>
-                <xsl:when test="string-length($MeasureMark) &gt; 0">
-                    <xsl:value-of select="$MeasureMark"/>
-                </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="translate($value ,'-. 0123456789 ','' )  "/>
+                    <xsl:value-of select="'twip'"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -2144,15 +2172,14 @@
                 <xsl:with-param name="value" select="$value"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="value-string" select="( $number-value - $coord-value)  div $scale + $group-value"/>
         <xsl:choose>
-            <xsl:when test="$value-string = 0">0cm</xsl:when>
+            <xsl:when test="$number-value = '0'">0cm</xsl:when>
             <xsl:when test="$Target-Measure = $Current-MeasureMark">
-                <xsl:value-of select="concat($value-string , $Current-MeasureMark)"/>
+                <xsl:value-of select="concat($number-value , $Target-Measure)"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="ConvertMeasure">
-                    <xsl:with-param name="value" select="concat($value-string , $Current-MeasureMark)"/>
+                    <xsl:with-param name="value" select="concat($number-value , $Current-MeasureMark)"/>
                 </xsl:call-template>
                 <xsl:value-of select=" 'cm' "/>
             </xsl:otherwise>
@@ -2161,9 +2188,9 @@
     <xsl:template name="get-number">
         <xsl:param name="value"/>
         <xsl:choose>
-            <xsl:when test="translate($value,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ','') = '' ">0</xsl:when>
+            <xsl:when test="translate($value,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ','') = ''">0</xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="number(translate($value,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',''))"/>
+                <xsl:value-of select="translate($value,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ','')"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

@@ -18,125 +18,7 @@
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt  v">
     <xsl:template name="create-default-paragraph-styles">
-        <xsl:variable name="default-paragraph-style" select="w:style[@w:default = 'on' and @w:type = 'paragraph']"/>
-        <xsl:if test="$default-paragraph-style">
-            <style:default-style style:family="paragraph">
-                <style:paragraph-properties>
-                    <xsl:attribute name="style:tab-stop-distance">
-                        <xsl:call-template name="ConvertMeasure">
-                            <xsl:with-param name="value" select="concat(/w:wordDocument/w:docPr/w:defaultTabStop/@w:val,'twip')"/>
-                        </xsl:call-template>cm</xsl:attribute>
-                </style:paragraph-properties>
-                <style:text-properties style:use-window-font-color="true">
-                    <xsl:choose>
-                        <xsl:when test="/w:wordDocument/w:fonts/w:defaultFonts">
-                            <xsl:attribute name="style:font-name">
-                                <xsl:value-of select="/w:wordDocument/w:fonts/w:defaultFonts/@w:ascii"/>
-                            </xsl:attribute>
-                            <xsl:attribute name="style:font-name-asian">
-                                <xsl:value-of select="/w:wordDocument/w:fonts/w:defaultFonts/@w:fareast"/>
-                            </xsl:attribute>
-                            <xsl:attribute name="style:font-name-complex">
-                                <xsl:value-of select="/w:wordDocument/w:fonts/w:defaultFonts/@w:cs"/>
-                            </xsl:attribute>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:attribute name="style:font-name">Times New Roman</xsl:attribute>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:if test="$default-paragraph-style/w:rPr/w:sz">
-                        <xsl:attribute name="fo:font-size">
-                            <xsl:value-of select="translate($default-paragraph-style/w:rPr/w:sz/@w:val,'Na','0') div 2"/>pt</xsl:attribute>
-                        <xsl:attribute name="style:font-size-asian">
-                            <xsl:value-of select="translate($default-paragraph-style/w:rPr/w:sz/@w:val,'Na','0') div 2"/>pt</xsl:attribute>
-                    </xsl:if>
-                    <xsl:if test="$default-paragraph-style/w:rPr/w:sz-cs">
-                        <xsl:attribute name="style:font-size-complex">
-                            <xsl:value-of select="$default-paragraph-style/w:rPr/w:sz-cs/@w:val div 2"/>pt</xsl:attribute>
-                    </xsl:if>
-                    <!-- if not defined default font size in Word, make it out as 10pt. glu -->
-                    <xsl:if test="not($default-paragraph-style/w:rPr/w:sz or w:rPr/w:sz-cs)">
-                        <xsl:attribute name="fo:font-size">10pt</xsl:attribute>
-                        <xsl:attribute name="style:font-size-asian">10pt</xsl:attribute>
-                        <xsl:attribute name="style:font-size-complex">10pt</xsl:attribute>
-                    </xsl:if>
-                    <xsl:if test="$default-paragraph-style/w:rPr/w:lang">
-                        <xsl:if test="$default-paragraph-style/w:rPr/w:lang/@w:val">
-                            <xsl:attribute name="fo:language">
-                                <xsl:choose>
-                                    <xsl:when test="contains($default-paragraph-style/w:rPr/w:lang/@w:val, '-')">
-                                        <xsl:value-of select="substring-before( $default-paragraph-style/w:rPr/w:lang/@w:val, '-')"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="$default-paragraph-style/w:rPr/w:lang/@w:val"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                                <!--xsl:value-of select="substring-before( $default-paragraph-style/w:rPr/w:lang/@w:val, '-')"/ -->
-                            </xsl:attribute>
-                            <xsl:attribute name="fo:country">
-                                <xsl:choose>
-                                    <xsl:when test="contains($default-paragraph-style/w:rPr/w:lang/@w:val, '-')">
-                                        <xsl:value-of select="substring-before( $default-paragraph-style/w:rPr/w:lang/@w:val, '-')"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="$default-paragraph-style/w:rPr/w:lang/@w:val"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                                <!--xsl:value-of select="substring-after( $default-paragraph-style/w:rPr/w:lang/@w:val, '-')"/-->
-                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$default-paragraph-style/w:rPr/w:lang/@w:fareast">
-                            <xsl:attribute name="style:language-asian">
-                                <xsl:choose>
-                                    <xsl:when test="contains($default-paragraph-style/w:rPr/w:lang/@w:fareast, '-')">
-                                        <xsl:value-of select="substring-before( $default-paragraph-style/w:rPr/w:lang/@w:fareast, '-')"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="$default-paragraph-style/w:rPr/w:lang/@w:fareast"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                                <!--xsl:value-of select="substring-before( $default-paragraph-style/w:rPr/w:lang/@w:fareast, '-')"/-->
-                            </xsl:attribute>
-                            <xsl:attribute name="style:country-asian">
-                                <xsl:choose>
-                                    <xsl:when test="contains($default-paragraph-style/w:rPr/w:lang/@w:fareast, '-')">
-                                        <xsl:value-of select="substring-before( $default-paragraph-style/w:rPr/w:lang/@w:fareast, '-')"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="$default-paragraph-style/w:rPr/w:lang/@w:fareast"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                                <!--xsl:value-of select="substring-after( $default-paragraph-style/w:rPr/w:lang/@w:fareast, '-')"/ -->
-                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$default-paragraph-style/w:rPr/w:lang/@w:bidi">
-                            <xsl:attribute name="style:language-complex">
-                                <xsl:choose>
-                                    <xsl:when test="contains( $default-paragraph-style/w:rPr/w:lang/@w:bidi, '-') ">
-                                        <xsl:value-of select="substring-after( $default-paragraph-style/w:rPr/w:lang/@w:bidi, '-')"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="$default-paragraph-style/w:rPr/w:lang/@w:bidi "/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                                <!--xsl:value-of select="substring-before( $default-paragraph-style/w:rPr/w:lang/@w:bidi, '-')"/-->
-                            </xsl:attribute>
-                            <xsl:attribute name="style:country-complex">
-                                <xsl:choose>
-                                    <xsl:when test="contains($default-paragraph-style/w:rPr/w:lang/@w:bidi, '-')">
-                                        <xsl:value-of select="substring-after( $default-paragraph-style/w:rPr/w:lang/@w:bidi, '-')"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="$default-paragraph-style/w:rPr/w:lang/@w:bidi"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                                <!-- xsl:value-of select="substring-after( $default-paragraph-style/w:rPr/w:lang/@w:bidi, '-')"/ -->
-                            </xsl:attribute>
-                        </xsl:if>
-                    </xsl:if>
-                </style:text-properties>
-            </style:default-style>
-        </xsl:if>
+       
     </xsl:template>
     <xsl:template name="create-default-text-styles">
         <style:style style:name="Footnote_20_Symbol" style:display-name="Footnote Symbol" style:family="text"/>
@@ -168,7 +50,7 @@
             </xsl:otherwise>
             </xsl:choose>
             <xsl:choose>
-                <xsl:when test="not($next-section-property/w:type/@w:val = 'continuous') and  generate-id($last-section-property[last()]/following::w:p[1]) = generate-id(.) and not(ancestor::w:sectPr or ancestor::w:tbl)">
+                <xsl:when test="not($next-section-property/w:type/@w:val = 'continuous') and generate-id($last-section-property[last()]/following::w:p[1]) = generate-id(.) and not(ancestor::w:sectPr or ancestor::w:tbl)">
                     <xsl:attribute name="style:master-page-name">Standard-1<xsl:value-of select="$section-property-number + 1"/>
                     </xsl:attribute>
                 </xsl:when>
@@ -229,22 +111,13 @@
     </xsl:template>
     <xsl:template match="w:pPr">
         <xsl:if test="w:ind/@w:left">
-            <xsl:attribute name="fo:margin-left">
-                <xsl:call-template name="ConvertMeasure">
-                    <xsl:with-param name="value" select="concat(w:ind/@w:left, 'twip')"/>
-                </xsl:call-template>cm</xsl:attribute>
+            <xsl:attribute name="fo:margin-left"><xsl:value-of select="w:ind/@w:left"/></xsl:attribute>
         </xsl:if>
         <xsl:if test="w:ind/@w:right">
-            <xsl:attribute name="fo:margin-right">
-                <xsl:call-template name="ConvertMeasure">
-                    <xsl:with-param name="value" select="concat(w:ind/@w:right, 'twip')"/>
-                </xsl:call-template>cm</xsl:attribute>
+            <xsl:attribute name="fo:margin-right"><xsl:value-of select="w:ind/@w:right"/></xsl:attribute>
         </xsl:if>
         <xsl:if test="w:ind/@w:first-line">
-            <xsl:attribute name="fo:text-indent">
-                <xsl:call-template name="ConvertMeasure">
-                    <xsl:with-param name="value" select="concat(w:ind/@w:first-line, 'twip')"/>
-                </xsl:call-template>cm</xsl:attribute>
+            <xsl:attribute name="fo:text-indent"><xsl:value-of select="w:ind/@w:first-line"/></xsl:attribute>
         </xsl:if>
         <xsl:if test="w:ind/@w:hanging">
             <xsl:attribute name="fo:text-indent">
@@ -305,13 +178,17 @@
                 </xsl:when>
                 <xsl:when test="w:spacing/@w:line-rule = 'auto'">
                     <xsl:attribute name="fo:line-height">
-                        <xsl:value-of select="round(w:spacing/@w:line div 240 * 100)"/>%</xsl:attribute>
+                        <xsl:value-of select="format-number(w:spacing/@w:line div 240,'###,###.00') * 100"/>%</xsl:attribute>
                 </xsl:when>
                 <xsl:when test="w:spacing/@w:line-rule = 'exact'">
-                    <xsl:attribute name="fo:line-height">
-                        <xsl:call-template name="ConvertMeasure">
-                            <xsl:with-param name="value" select="concat(w:spacing/@w:line, 'twip')"/>
-                        </xsl:call-template>cm</xsl:attribute>
+			<xsl:variable name ="value">
+				<xsl:call-template name="ConvertMeasure">
+                           		 <xsl:with-param name="value" select="concat(w:spacing/@w:line, 'twip')"/>
+                        	</xsl:call-template>
+			</xsl:variable>
+                    	<xsl:attribute name="fo:line-height">
+				<xsl:value-of select="concat(w:spacing/@w:line, 'twip')"/>			
+			</xsl:attribute>
                 </xsl:when>
             </xsl:choose>
             <xsl:if test="w:spacing/@w:before">
@@ -452,11 +329,8 @@
                                 </xsl:message>
                                 <xsl:value-of select="'0cm'"/>
                             </xsl:if>
-                            <xsl:if test="not(@w:pos &lt; 0)">
-                                <xsl:call-template name="ConvertMeasure">
-                                    <xsl:with-param name="value" select="concat(@w:pos, 'twip')"/>
-                                </xsl:call-template>cm</xsl:if>
-                        </xsl:attribute>
+                            <xsl:if test="not(@w:pos &lt; 0)"><xsl:value-of select="@w:pos"/></xsl:if>
+			</xsl:attribute>
                         <xsl:choose>
                             <xsl:when test="@w:val = 'decimal'">
                                 <xsl:attribute name="style:type">char</xsl:attribute>
@@ -625,13 +499,13 @@
         </xsl:if>
         <xsl:if test="w:sz">
             <xsl:attribute name="fo:font-size">
-                <xsl:value-of select="translate(w:sz/@w:val,'Na','0') div 2"/>pt</xsl:attribute>
+                <xsl:value-of select="round(translate(w:sz/@w:val,'Na','0') div 2)"/>pt</xsl:attribute>
             <xsl:attribute name="style:font-size-asian">
-                <xsl:value-of select="translate(w:sz/@w:val,'Na','0') div 2"/>pt</xsl:attribute>
+                <xsl:value-of select="round(translate(w:sz/@w:val,'Na','0') div 2)"/>pt</xsl:attribute>
         </xsl:if>
         <xsl:if test="w:sz-cs">
             <xsl:attribute name="style:font-size-complex">
-                <xsl:value-of select="w:sz-cs/@w:val div 2"/>pt</xsl:attribute>
+                <xsl:value-of select="round(w:sz-cs/@w:val div 2)"/>pt</xsl:attribute>
         </xsl:if>
         <xsl:if test="w:highlight">
             <xsl:choose>
@@ -782,7 +656,7 @@
         <!--  right-to-left support-->
         <xsl:if test="w:rtl and not(w:rtl/@w:val = 'off')">
             <xsl:attribute name="style:writing-mode">rl-tb</xsl:attribute>
-            <xsl:attribute name="fo:text-align">end</xsl:attribute>
+            <xsl:attribute name="fo:text-align">right</xsl:attribute>
         </xsl:if>
     </xsl:template>
     <xsl:template match="w:p">
