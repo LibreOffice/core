@@ -334,7 +334,8 @@ SwDocShell::SwDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     pWrtShell( 0 ),
     pOLEChildList( 0 ),
     nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
-    bInUpdateFontList(false)
+    bInUpdateFontList(false),
+    bIsATemplate(false)
 {
     Init_Impl();
 }
