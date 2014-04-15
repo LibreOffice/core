@@ -1406,10 +1406,11 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     //UUUU fallback to 1st page when requested one does not exist
     if(!pDataObject && pTabCtrl->GetPageCount())
     {
+        OSL_ENSURE(false, "Requested TabPage not found in the TabDialog, fallback to 1st page (!)");
         pTabCtrl->SetCurPageId(pTabCtrl->GetPageId(0));
         nId = pTabCtrl->GetCurPageId();
         pTabPage = dynamic_cast< SfxTabPage* >(pTabCtrl->GetTabPage(nId));
-        Data_Impl* pDataObject = Find(*pImpl->pData, nId);
+        pDataObject = Find(*pImpl->pData, nId);
     }
 
     DBG_ASSERT( pDataObject, "Id nicht bekannt" );
