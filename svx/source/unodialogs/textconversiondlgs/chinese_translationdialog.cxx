@@ -47,7 +47,7 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     get(m_pCB_Translate_Commonterms, "commonterms");
 
     SvtLinguConfig  aLngCfg;
-    bool bValue;
+    bool bValue = false;
     Any aAny( aLngCfg.GetProperty( OUString( UPN_IS_DIRECTION_TO_SIMPLIFIED ) ) );
     aAny >>= bValue;
     if( bValue )
