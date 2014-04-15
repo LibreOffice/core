@@ -296,8 +296,4 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/vml/vmltextbox \
 ))
 
-$(eval $(call gb_Library_add_generated_exception_objects,oox,\
-    CustomTarget/oox/generated/misc/vmlexport-shape-types \
-))
-
 # vim: set noet sw=4 ts=4:

@@ -17,7 +17,8 @@ Module gid_Module_Filter
     Styles = (HIDDEN_ROOT);
     Dirs = (gid_Dir_Share_Filter);
     Files = (
-        gid_File_Dat_OoxDrawingmlAdjNames);
+        gid_File_Dat_OoxDrawingmlAdjNames,
+        gid_File_Dat_VmlShapeTypes);
 End
 
 Directory gid_Dir_Share_Filter
@@ -29,6 +30,13 @@ File gid_File_Dat_OoxDrawingmlAdjNames
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Filter;
     Name = "oox-drawingml-adj-names";
+    Styles = (PACKED);
+End
+
+File gid_File_Dat_OoxVmlShapeTypes
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Filter;
+    Name = "vml-shape-types";
     Styles = (PACKED);
 End
 

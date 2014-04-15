@@ -11,6 +11,7 @@ $(eval $(call gb_Package_Package,oox_generated,$(call gb_CustomTarget_get_workdi
 
 $(eval $(call gb_Package_add_files,oox_generated,$(LIBO_SHARE_FOLDER)/filter,\
 	misc/oox-drawingml-adj-names \
+	misc/vml-shape-types \
 ))
 
 # vim: set noet sw=4 ts=4:

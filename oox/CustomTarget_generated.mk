@@ -14,14 +14,14 @@ oox_MISC := $(call gb_CustomTarget_get_workdir,oox/generated)/misc
 oox_INC := $(call gb_CustomTarget_get_workdir,oox/generated)
 oox_GENHEADERPATH := $(oox_INC)/oox/token
 
-$(oox_MISC)/vmlexport-shape-types.cxx : \
+$(oox_MISC)/vml-shape-types : \
 		$(SRCDIR)/oox/source/export/preset-definitions-to-shape-types.pl \
 		$(SRCDIR)/oox/source/drawingml/customshapes/presetShapeDefinitions.xml \
 		$(SRCDIR)/oox/source/export/presetTextWarpDefinitions.xml \
 		$(SRCDIR)/oox/CustomTarget_generated.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PRL,1)
 	mkdir -p $(dir $@)
-	perl $^ > $@.in_progress 2> $@.log && mv $@.in_progress $@
+	perl $< --vml-shape-types-data $(filter-out $<,$^) > $@.in_progress 2> $@.log && mv $@.in_progress $@
 
 $(oox_MISC)/oox-drawingml-adj-names : \
 		$(SRCDIR)/oox/source/export/preset-definitions-to-shape-types.pl \
@@ -58,8 +58,8 @@ $(eval $(call oox_GenTarget,properties,property,))
 $(eval $(call oox_GenTarget,tokens,token,tokenhash.gperf))
 
 $(call gb_CustomTarget_get_target,oox/generated) : \
-	$(oox_MISC)/vmlexport-shape-types.cxx \
 	$(oox_MISC)/oox-drawingml-adj-names \
+	$(oox_MISC)/vml-shape-types \
 	$(oox_INC)/tokenhash.inc \
 	$(oox_INC)/tokennames.inc \
 	$(oox_INC)/namespacenames.inc \

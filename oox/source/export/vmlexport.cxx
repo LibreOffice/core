@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+#include "rtl/bootstrap.hxx"
 #include <oox/export/vmlexport.hxx>
 
 #include <oox/token/tokens.hxx>
@@ -927,7 +929,26 @@ void VMLExport::AddShapeAttribute( sal_Int32 nAttribute, const OString& rValue )
     m_pShapeAttrList->add( nAttribute, rValue );
 }
 
-extern const char* pShapeTypes[];
+std::vector<OString> lcl_getShapeTypes()
+{
+    std::vector<OString> aRet;
+
+    OUString aPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/filter/vml-shape-types");
+    rtl::Bootstrap::expandMacros(aPath);
+    SvFileStream aStream(aPath, STREAM_READ);
+    if (aStream.GetError() != ERRCODE_NONE)
+        SAL_WARN("oox", "failed to open vml-shape-types");
+    OString aLine;
+    bool bNotDone = aStream.ReadLine(aLine);
+    while (bNotDone)
+    {
+        // Filter out comments.
+        if (!aLine.startsWith("/"))
+            aRet.push_back(aLine);
+        bNotDone = aStream.ReadLine(aLine);
+    }
+    return aRet;
+}
 
 sal_Int32 VMLExport::StartShape()
 {
@@ -951,13 +972,14 @@ sal_Int32 VMLExport::StartShape()
                 nShapeElement = XML_shape;
 
                 // a predefined shape?
-                const char* pShapeType = pShapeTypes[ m_nShapeType ];
-                if ( pShapeType )
+                static std::vector<OString> aShapeTypes = lcl_getShapeTypes();
+                OString aShapeType = aShapeTypes[ m_nShapeType ];
+                if ( aShapeType != "NULL" )
                 {
                     bReferToShapeType = true;
                     if ( !m_pShapeTypeWritten[ m_nShapeType ] )
                     {
-                        m_pSerializer->write( pShapeType );
+                        m_pSerializer->write( aShapeType.getStr() );
                         m_pShapeTypeWritten[ m_nShapeType ] = true;
                     }
                 }

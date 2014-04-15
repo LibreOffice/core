@@ -22,7 +22,7 @@ use warnings;
 
 sub usage() {
     print STDERR <<EOF;
-Usage: preset-definitions-to-shape-types.pl <shapes> <text>
+Usage: preset-definitions-to-shape-types.pl [ --drawingml-adj-names-data | --vml-shape-types-data ] <shapes> <text>
 
 Converts presetShapeDefinitions.xml and presetTextWarpDefinitions.xml to a
 .cxx that contains VML with the definitions of the shapes.  The result is
@@ -47,9 +47,13 @@ sub show_call_stack
 }
 
 my $drawingml_adj_names_data = 0;
+my $vml_shape_types_data = 0;
 my $src_shapes = shift;
 if ($src_shapes eq "--drawingml-adj-names-data") {
     $drawingml_adj_names_data = 1;
+    $src_shapes = shift;
+} elsif ($src_shapes eq "--vml-shape-types-data") {
+    $vml_shape_types_data = 1;
     $src_shapes = shift;
 }
 my $src_text = shift;
@@ -1191,7 +1195,7 @@ if ( !defined( $result_shapes{'textBox'} ) ) {
         "</v:shapetype>";
 }
 
-# Generate the code
+# Generate the data
 if ($drawingml_adj_names_data eq 1) {
     foreach my $adj_name (keys %adj_names)
     {
@@ -1201,52 +1205,32 @@ if ($drawingml_adj_names_data eq 1) {
         }
     }
     exit 0;
-}
-
-print <<EOF;
-// Shape types generated from
-//   '$src_shapes'
-// and
-//   '$src_text'
-// which are part of the OOXML documentation
-
-#include <map>
-#include <filter/msfilter/escherex.hxx>
-
-const char* pShapeTypes[ ESCHER_ShpInst_COUNT ] =
-{
-EOF
-
-for ( my $i = 0; $i < 203; ++$i ) {
-    if ( $i < 4 ) {
-        print "    /* $i - $shapes_ids{$i} - handled separately */\n    NULL,\n";
-    }
-    else {
-        print "    /* $i - $shapes_ids{$i} */\n";
-        my $out = $result_shapes{$shapes_ids{$i}};
-        if ( defined( $out ) ) {
-            # set the id
-            $out =~ s/__ID__/$i/g;
-
-            # escape the '"'s
-            $out =~ s/"/\\"/g;
-
-            # output as string
-            $out =~ s/^/    "/;
-            $out =~ s/\n/"\n    "/g;
-            $out =~ s/$/"/;
-
-            print "$out,\n";
+} elsif ($vml_shape_types_data eq 1) {
+    for ( my $i = 0; $i < 203; ++$i ) {
+        if ( $i < 4 ) {
+            print "/* $i - $shapes_ids{$i} - handled separately */\nNULL\n";
         }
         else {
-            print "    NULL,\n";
+            print "/* $i - $shapes_ids{$i} */\n";
+            my $out = $result_shapes{$shapes_ids{$i}};
+            if ( defined( $out ) ) {
+                # set the id
+                $out =~ s/__ID__/$i/g;
+
+                # output as string
+                $out =~ s/\n//g;
+
+                print "$out\n";
+            }
+            else {
+                print "NULL\n";
+            }
         }
     }
+    exit 0;
 }
 
-print <<EOF;
-};
-
-EOF
+# should not happen
+exit 1;
 
 # vim:set ft=perl shiftwidth=4 softtabstop=4 expandtab: #
