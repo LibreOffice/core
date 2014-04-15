@@ -1364,7 +1364,9 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
             {
                 bool bTheTestFlag = true;
                 pEntry->EnableChildrenOnDemand(false);
-                pTheView->RemoveEntry(pTheView->FirstChild(pEntry));
+                SvTreeListEntry* pChildEntry = pTheView->FirstChild(pEntry);
+                if (pChildEntry)
+                    pTheView->RemoveEntry(pChildEntry);
 
                 if(pEntryData!=NULL)
                 {
