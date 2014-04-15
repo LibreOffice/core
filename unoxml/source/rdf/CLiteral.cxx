@@ -19,6 +19,7 @@
 
 #include "CNodes.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -37,7 +38,8 @@ class CLiteral:
     public ::cppu::WeakImplHelper3<
         css::lang::XServiceInfo,
         css::lang::XInitialization,
-        css::rdf::XLiteral>
+        css::rdf::XLiteral>,
+    private boost::noncopyable
 {
 public:
     explicit CLiteral(css::uno::Reference< css::uno::XComponentContext > const & context);
@@ -60,9 +62,6 @@ public:
     virtual css::uno::Reference< css::rdf::XURI > SAL_CALL getDatatype() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    CLiteral(const CLiteral &); // not defined
-    CLiteral& operator=(const CLiteral &); // not defined
-
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     OUString m_Value;

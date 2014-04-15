@@ -19,6 +19,7 @@
 
 #include "CNodes.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -35,7 +36,8 @@ class CBlankNode:
     public ::cppu::WeakImplHelper3<
         css::lang::XServiceInfo,
         css::lang::XInitialization,
-        css::rdf::XBlankNode>
+        css::rdf::XBlankNode>,
+    private boost::noncopyable
 {
 public:
     explicit CBlankNode(css::uno::Reference< css::uno::XComponentContext > const & context);
@@ -53,9 +55,6 @@ public:
     virtual OUString SAL_CALL getStringValue() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    CBlankNode(const CBlankNode &); // not defined
-    CBlankNode& operator=(const CBlankNode &); // not defined
-
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     OUString m_NodeID;
