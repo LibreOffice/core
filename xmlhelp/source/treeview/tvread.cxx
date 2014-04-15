@@ -90,7 +90,6 @@ namespace treeview {
 
         bool isLeaf() const { return kind == TVDom::tree_leaf; }
         void setKind( Kind ind ) { kind = ind; }
-        Kind getKind( ) const { return kind; }
 
         void setApplication( const char* appl )
         {

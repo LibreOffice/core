@@ -68,9 +68,6 @@ struct HitItem
     OUString   m_aURL;
     float      m_fScore;
 
-    HitItem()
-        : m_fScore(0.0)
-    {}
     HitItem(const OUString& aURL, float fScore)
         : m_aURL(aURL)
         , m_fScore(fScore)
