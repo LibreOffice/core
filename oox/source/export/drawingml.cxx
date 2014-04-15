@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+#include "rtl/bootstrap.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/export/drawingml.hxx"
 #include "oox/export/utils.hxx"
@@ -100,9 +102,6 @@ using ::com::sun::star::text::XTextRange;
 using ::sax_fastparser::FSHelperPtr;
 
 DBG(extern void dump_pset(Reference< XPropertySet > rXPropSet));
-
-// Defined in generated code.
-extern std::map< OString, std::vector<OString> > ooxDrawingMLGetAdjNames();
 
 namespace oox {
 namespace drawingml {
@@ -1789,9 +1788,30 @@ void DrawingML::WritePresetShape( const char* pShape )
     mpFS->endElementNS(  XML_a, XML_prstGeom );
 }
 
+std::map< OString, std::vector<OString> > lcl_getAdjNames()
+{
+    std::map< OString, std::vector<OString> > aRet;
+
+    OUString aPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/filter/oox-drawingml-adj-names");
+    rtl::Bootstrap::expandMacros(aPath);
+    SvFileStream aStream(aPath, STREAM_READ);
+    if (aStream.GetError() != ERRCODE_NONE)
+        SAL_WARN("oox", "failed to open oox-drawingml-adj-names");
+    OString aLine;
+    bool bNotDone = aStream.ReadLine(aLine);
+    while (bNotDone)
+    {
+        OString aKey = aLine.getToken(0, '\t');
+        OString aValue = aLine.getToken(1, '\t');
+        aRet[aKey].push_back(aValue);
+        bNotDone = aStream.ReadLine(aLine);
+    }
+    return aRet;
+}
+
 void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const PropertyValue& rProp )
 {
-    static std::map< OString, std::vector<OString> > aAdjMap = ooxDrawingMLGetAdjNames();
+    static std::map< OString, std::vector<OString> > aAdjMap = lcl_getAdjNames();
     // If there are predefined adj names for this shape type, look them up now.
     std::vector<OString> aAdjustments;
     if (aAdjMap.find(OString(pShape)) != aAdjMap.end())
@@ -1813,7 +1833,7 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool b
             EscherPropertyContainer::LookForPolarHandles( eShapeType, nAdjustmentsWhichNeedsToBeConverted );
 
         sal_Int32 nValue, nLength = aAdjustmentSeq.getLength();
-        //aAdjustments will give info about the number of adj values for a particular geomtery.For example for hexagon aAdjustments.size() will be 2 and for circular arrow it will be 5 as per ooxDrawingMLGetAdjNames.
+        //aAdjustments will give info about the number of adj values for a particular geomtery.For example for hexagon aAdjustments.size() will be 2 and for circular arrow it will be 5 as per lcl_getAdjNames.
         if(aAdjustments.size() == static_cast<sal_uInt32>(nLength))// In case there is a mismatch do not write the XML_gd tag.
         {
             for( sal_Int32 i=0; i < nLength; i++ )

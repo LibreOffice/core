@@ -46,7 +46,12 @@ sub show_call_stack
     print STDERR "--- End stack trace ---\n";
 }
 
+my $drawingml_adj_names_data = 0;
 my $src_shapes = shift;
+if ($src_shapes eq "--drawingml-adj-names-data") {
+    $drawingml_adj_names_data = 1;
+    $src_shapes = shift;
+}
 my $src_text = shift;
 
 usage() if ( !defined( $src_shapes ) || !defined( $src_text ) ||
@@ -1187,6 +1192,17 @@ if ( !defined( $result_shapes{'textBox'} ) ) {
 }
 
 # Generate the code
+if ($drawingml_adj_names_data eq 1) {
+    foreach my $adj_name (keys %adj_names)
+    {
+        foreach my $adj (@{$adj_names{$adj_name}})
+        {
+            print "$adj_name\t$adj\n";
+        }
+    }
+    exit 0;
+}
+
 print <<EOF;
 // Shape types generated from
 //   '$src_shapes'
@@ -1231,22 +1247,6 @@ for ( my $i = 0; $i < 203; ++$i ) {
 print <<EOF;
 };
 
-std::map< OString, std::vector<OString> > ooxDrawingMLGetAdjNames()
-{
-    std::map< OString, std::vector<OString> > aMap;
-EOF
-
-foreach my $adj_name (keys %adj_names)
-{
-    foreach my $adj (@{$adj_names{$adj_name}})
-    {
-        print "    aMap[\"$adj_name\"].push_back(\"$adj\");\n";
-    }
-}
-
-print <<EOF;
-    return aMap;
-}
 EOF
 
 # vim:set ft=perl shiftwidth=4 softtabstop=4 expandtab: #

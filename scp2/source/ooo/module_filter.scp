@@ -1,0 +1,35 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "macros.inc"
+
+Module gid_Module_Filter
+    Name = "Filter Data";
+    Description = "Filter Data";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Root_Brand;
+    Styles = (HIDDEN_ROOT);
+    Dirs = (gid_Dir_Share_Filter);
+    Files = (
+        gid_File_Dat_OoxDrawingmlAdjNames);
+End
+
+Directory gid_Dir_Share_Filter
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "filter";
+End
+
+File gid_File_Dat_OoxDrawingmlAdjNames
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Filter;
+    Name = "oox-drawingml-adj-names";
+    Styles = (PACKED);
+End
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

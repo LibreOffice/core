@@ -23,6 +23,15 @@ $(oox_MISC)/vmlexport-shape-types.cxx : \
 	mkdir -p $(dir $@)
 	perl $^ > $@.in_progress 2> $@.log && mv $@.in_progress $@
 
+$(oox_MISC)/oox-drawingml-adj-names : \
+		$(SRCDIR)/oox/source/export/preset-definitions-to-shape-types.pl \
+		$(SRCDIR)/oox/source/drawingml/customshapes/presetShapeDefinitions.xml \
+		$(SRCDIR)/oox/source/export/presetTextWarpDefinitions.xml \
+		$(SRCDIR)/oox/CustomTarget_generated.mk
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PRL,1)
+	mkdir -p $(dir $@)
+	perl $< --drawingml-adj-names-data $(filter-out $<,$^) > $@.in_progress 2> $@.log && mv $@.in_progress $@
+
 $(oox_INC)/tokenhash.inc : $(oox_MISC)/tokenhash.gperf
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,GPF,1)
 	$(GPERF) --compare-strncmp --switch=2 --readonly-tables $< | sed -e 's/(char\*)0/(char\*)0, 0/g' | grep -v '^#line' > $@
@@ -50,6 +59,7 @@ $(eval $(call oox_GenTarget,tokens,token,tokenhash.gperf))
 
 $(call gb_CustomTarget_get_target,oox/generated) : \
 	$(oox_MISC)/vmlexport-shape-types.cxx \
+	$(oox_MISC)/oox-drawingml-adj-names \
 	$(oox_INC)/tokenhash.inc \
 	$(oox_INC)/tokennames.inc \
 	$(oox_INC)/namespacenames.inc \

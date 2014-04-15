@@ -124,6 +124,7 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
     $(if $(filter WNTGCC,$(OS)$(COM)),\
 		scp2/source/ooo/mingw_dlls \
 	) \
+    scp2/source/ooo/module_filter \
 ))
 
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/ooo,\
