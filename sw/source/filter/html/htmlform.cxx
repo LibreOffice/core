@@ -634,45 +634,6 @@ static void lcl_html_setFixedFontProperty(
     rPropSet->setPropertyValue("FontHeight", aTmp );
 }
 
-class SwHTMLFormPendingStackData_Impl: public SwPendingStackData
-{
-    uno::Reference< drawing::XShape >   xShape;
-    Size            aTextSz;
-    sal_Bool        bMinWidth;
-    sal_Bool        bMinHeight;
-
-public:
-    SwHTMLFormPendingStackData_Impl(
-            const uno::Reference< drawing::XShape > & rShape, const Size& rTextSz,
-            sal_Bool bMinW, sal_Bool bMinH ) :
-        xShape( rShape ),
-        aTextSz( rTextSz ),
-        bMinWidth( bMinW ),
-        bMinHeight( bMinH )
-    {}
-
-    const uno::Reference< drawing::XShape >& GetShape() const { return xShape; }
-    const Size& GetTextSize() const { return aTextSz; }
-    sal_Bool IsMinWidth() const { return bMinWidth; }
-    sal_Bool IsMinHeight() const { return bMinHeight; }
-};
-
-void SwHTMLParser::SetPendingControlSize()
-{
-    OSL_ENSURE( pPendStack, "Wo ist der Pending Stack?" );
-    SwHTMLFormPendingStackData_Impl *pData =
-        (SwHTMLFormPendingStackData_Impl *)pPendStack->pData;
-
-    SwPendingStack* pTmp = pPendStack->pNext;
-    delete pPendStack;
-    pPendStack = pTmp;
-    OSL_ENSURE( !pPendStack, "Wo kommt der Pending-Stack her?" );
-
-    SetControlSize( pData->GetShape(), pData->GetTextSize(),
-                    pData->IsMinWidth(), pData->IsMinHeight() );
-    delete pData;
-}
-
 void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rShape,
                                    const Size& rTextSz,
                                    sal_Bool bMinWidth,
@@ -1453,11 +1414,7 @@ void SwHTMLParser::EndForm( sal_Bool bAppend )
 
 void SwHTMLParser::InsertInput()
 {
-    if( pPendStack )
-    {
-        SetPendingControlSize();
-        return;
-    }
+    assert(pPendStack == 0);
 
     if( !pFormImpl || !pFormImpl->GetFormComps().is() )
         return;
@@ -1947,11 +1904,7 @@ void SwHTMLParser::InsertInput()
 
 void SwHTMLParser::NewTextArea()
 {
-    if( pPendStack )
-    {
-        SetPendingControlSize();
-        return;
-    }
+    assert(pPendStack == 0);
 
     OSL_ENSURE( !bTextArea, "TextArea in TextArea???" );
     OSL_ENSURE( !pFormImpl || !pFormImpl->GetFCompPropSet().is(),
@@ -2243,11 +2196,7 @@ void SwHTMLParser::InsertTextAreaText( sal_uInt16 nToken )
 
 void SwHTMLParser::NewSelect()
 {
-    if( pPendStack )
-    {
-        SetPendingControlSize();
-        return;
-    }
+    assert(pPendStack == 0);
 
     OSL_ENSURE( !bSelect, "Select in Select???" );
     OSL_ENSURE( !pFormImpl || !pFormImpl->GetFCompPropSet().is(),
@@ -2467,11 +2416,7 @@ void SwHTMLParser::NewSelect()
 
 void SwHTMLParser::EndSelect()
 {
-    if( pPendStack )
-    {
-        SetPendingControlSize();
-        return;
-    }
+    assert(pPendStack == 0);
 
     OSL_ENSURE( bSelect, "keine Select" );
     OSL_ENSURE( pFormImpl && pFormImpl->GetFCompPropSet().is(),

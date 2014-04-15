@@ -788,7 +788,6 @@ private:
                         sal_Bool bHidden = sal_False );
     void SetControlSize( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rShape, const Size& rTextSz,
                          sal_Bool bMinWidth, sal_Bool bMinHeight );
-    void SetPendingControlSize();
 
 public:
     void ResizeDrawObject( SdrObject* pObj, SwTwips nWidth );
