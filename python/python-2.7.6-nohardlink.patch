@@ -1,5 +1,5 @@
---- misc/Python-2.7.5/Makefile.pre.in	2012-04-09 18:07:33.000000000 -0500
-+++ misc/build/Python-2.7.5/Makefile.pre.in	2012-07-22 14:54:26.000000000 -0500
+--- misc/Python-2.7.6/Makefile.pre.in	2012-04-09 18:07:33.000000000 -0500
++++ misc/build/Python-2.7.6/Makefile.pre.in	2012-07-22 14:54:26.000000000 -0500
 @@ -427,7 +427,7 @@
  libpython$(VERSION).so: $(LIBRARY_OBJS)
  	if test $(INSTSONAME) != $(LDLIBRARY); then \

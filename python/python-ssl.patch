@@ -1,15 +1,15 @@
-diff -ru misc/Python-2.7.5/PCbuild/build_ssl.py misc/build/Python-2.7.5/PCbuild/build_ssl.py
---- misc/Python-2.7.5/PCbuild/build_ssl.py	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.5/PCbuild/build_ssl.py	2012-07-25 14:37:37.000000000 -0500
+diff -ru misc/Python-2.7.6/PCbuild/build_ssl.py misc/build/Python-2.7.6/PCbuild/build_ssl.py
+--- misc/Python-2.7.6/PCbuild/build_ssl.py	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.6/PCbuild/build_ssl.py	2012-07-25 14:37:37.000000000 -0500
 @@ -253,4 +253,4 @@
      sys.exit(rc)
  
  if __name__=='__main__':
 -    main()
 +    sys.exit(0)
-diff -ru misc/Python-2.7.5/setup.py misc/build/Python-2.7.5/setup.py
---- misc/Python-2.7.5/setup.py	2012-04-09 18:07:36.000000000 -0500
-+++ misc/build/Python-2.7.5/setup.py	2012-07-25 14:37:37.000000000 -0500
+diff -ru misc/Python-2.7.6/setup.py misc/build/Python-2.7.6/setup.py
+--- misc/Python-2.7.6/setup.py	2012-04-09 18:07:36.000000000 -0500
++++ misc/build/Python-2.7.6/setup.py	2012-07-25 14:37:37.000000000 -0500
 @@ -702,7 +702,15 @@
          exts.append( Extension('_socket', ['socketmodule.c'],
                                 depends = ['socketmodule.h']) )

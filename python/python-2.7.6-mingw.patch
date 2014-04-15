@@ -1,6 +1,6 @@
-diff -ru misc/Python-2.7.5/Include/pyport.h misc/build/Python-2.7.5/Include/pyport.h
---- misc/Python-2.7.5/Include/pyport.h	2012-04-09 18:07:29.000000000 -0500
-+++ misc/build/Python-2.7.5/Include/pyport.h	2012-07-25 15:33:16.000000000 -0500
+diff -ru misc/Python-2.7.6/Include/pyport.h misc/build/Python-2.7.6/Include/pyport.h
+--- misc/Python-2.7.6/Include/pyport.h	2012-04-09 18:07:29.000000000 -0500
++++ misc/build/Python-2.7.6/Include/pyport.h	2012-07-25 15:33:16.000000000 -0500
 @@ -9,6 +9,30 @@
  #include <inttypes.h>
  #endif
@@ -32,20 +32,20 @@ diff -ru misc/Python-2.7.5/Include/pyport.h misc/build/Python-2.7.5/Include/pypo
  #ifdef HAVE_STDINT_H
  #include <stdint.h>
  #endif
-diff -ru misc/Python-2.7.5/Lib/distutils/ccompiler.py misc/build/Python-2.7.5/Lib/distutils/ccompiler.py
---- misc/Python-2.7.5/Lib/distutils/ccompiler.py	2012-04-09 18:07:29.000000000 -0500
-+++ misc/build/Python-2.7.5/Lib/distutils/ccompiler.py	2012-07-25 15:33:16.000000000 -0500
+diff -ru misc/Python-2.7.6/Lib/distutils/ccompiler.py misc/build/Python-2.7.6/Lib/distutils/ccompiler.py
+--- misc/Python-2.7.6/Lib/distutils/ccompiler.py	2012-04-09 18:07:29.000000000 -0500
++++ misc/build/Python-2.7.6/Lib/distutils/ccompiler.py	2012-07-25 15:33:16.000000000 -0500
 @@ -893,6 +893,7 @@
-     # on a cygwin built python we can use gcc like an ordinary UNIXish
+     # on a cygwin built python we can use gcc like an ordinary UNIXishno	
      # compiler
      ('cygwin.*', 'unix'),
 +    ('winmingw*', 'unix'),
      ('os2emx', 'emx'),
  
      # OS name mappings
-diff -ru misc/Python-2.7.5/Lib/distutils/command/build_ext.py misc/build/Python-2.7.5/Lib/distutils/command/build_ext.py
---- misc/Python-2.7.5/Lib/distutils/command/build_ext.py	2012-04-09 18:07:29.000000000 -0500
-+++ misc/build/Python-2.7.5/Lib/distutils/command/build_ext.py	2012-07-25 15:33:16.000000000 -0500
+diff -ru misc/Python-2.7.6/Lib/distutils/command/build_ext.py misc/build/Python-2.7.6/Lib/distutils/command/build_ext.py
+--- misc/Python-2.7.6/Lib/distutils/command/build_ext.py	2012-04-09 18:07:29.000000000 -0500
++++ misc/build/Python-2.7.6/Lib/distutils/command/build_ext.py	2012-07-25 15:33:16.000000000 -0500
 @@ -221,7 +221,7 @@
  
          # for extensions under Cygwin and AtheOS Python's library directory must be
@@ -64,9 +64,9 @@ diff -ru misc/Python-2.7.5/Lib/distutils/command/build_ext.py misc/build/Python-
              template = "python%d.%d"
              pythonlib = (template %
                     (sys.hexversion >> 24, (sys.hexversion >> 16) & 0xff))
-diff -ru misc/Python-2.7.5/Lib/distutils/command/install.py misc/build/Python-2.7.5/Lib/distutils/command/install.py
---- misc/Python-2.7.5/Lib/distutils/command/install.py	2012-04-09 18:07:29.000000000 -0500
-+++ misc/build/Python-2.7.5/Lib/distutils/command/install.py	2012-07-25 15:33:16.000000000 -0500
+diff -ru misc/Python-2.7.6/Lib/distutils/command/install.py misc/build/Python-2.7.6/Lib/distutils/command/install.py
+--- misc/Python-2.7.6/Lib/distutils/command/install.py	2012-04-09 18:07:29.000000000 -0500
++++ misc/build/Python-2.7.6/Lib/distutils/command/install.py	2012-07-25 15:33:16.000000000 -0500
 @@ -348,9 +348,10 @@
  
          # Convert directories from Unix /-separated syntax to the local
@@ -102,9 +102,9 @@ diff -ru misc/Python-2.7.5/Lib/distutils/command/install.py misc/build/Python-2.
  
  
      def handle_extra_path (self):
-diff -ru misc/Python-2.7.5/Lib/distutils/spawn.py misc/build/Python-2.7.5/Lib/distutils/spawn.py
---- misc/Python-2.7.5/Lib/distutils/spawn.py	2012-04-09 18:07:29.000000000 -0500
-+++ misc/build/Python-2.7.5/Lib/distutils/spawn.py	2012-07-25 15:39:23.000000000 -0500
+diff -ru misc/Python-2.7.6/Lib/distutils/spawn.py misc/build/Python-2.7.6/Lib/distutils/spawn.py
+--- misc/Python-2.7.6/Lib/distutils/spawn.py	2012-04-09 18:07:29.000000000 -0500
++++ misc/build/Python-2.7.6/Lib/distutils/spawn.py	2012-07-25 15:39:23.000000000 -0500
 @@ -185,7 +185,7 @@
      paths = path.split(os.pathsep)
      base, ext = os.path.splitext(executable)
@@ -114,9 +114,9 @@ diff -ru misc/Python-2.7.5/Lib/distutils/spawn.py misc/build/Python-2.7.5/Lib/di
          executable = executable + '.exe'
  
      if not os.path.isfile(executable):
-diff -ru misc/Python-2.7.5/Lib/distutils/sysconfig.py misc/build/Python-2.7.5/Lib/distutils/sysconfig.py
---- misc/Python-2.7.5/Lib/distutils/sysconfig.py	2012-04-09 18:07:29.000000000 -0500
-+++ misc/build/Python-2.7.5/Lib/distutils/sysconfig.py	2012-07-25 15:44:24.000000000 -0500
+diff -ru misc/Python-2.7.6/Lib/distutils/sysconfig.py misc/build/Python-2.7.6/Lib/distutils/sysconfig.py
+--- misc/Python-2.7.6/Lib/distutils/sysconfig.py	2012-04-09 18:07:29.000000000 -0500
++++ misc/build/Python-2.7.6/Lib/distutils/sysconfig.py	2012-07-25 15:44:24.000000000 -0500
 @@ -419,6 +419,9 @@
  
          raise DistutilsPlatformError(my_msg)
@@ -137,9 +137,9 @@ diff -ru misc/Python-2.7.5/Lib/distutils/sysconfig.py misc/build/Python-2.7.5/Li
          if func:
              func()
          else:
-diff -ru misc/Python-2.7.5/Lib/distutils/unixccompiler.py misc/build/Python-2.7.5/Lib/distutils/unixccompiler.py
---- misc/Python-2.7.5/Lib/distutils/unixccompiler.py	2012-04-09 18:07:30.000000000 -0500
-+++ misc/build/Python-2.7.5/Lib/distutils/unixccompiler.py	2012-07-25 15:33:16.000000000 -0500
+diff -ru misc/Python-2.7.6/Lib/distutils/unixccompiler.py misc/build/Python-2.7.6/Lib/distutils/unixccompiler.py
+--- misc/Python-2.7.6/Lib/distutils/unixccompiler.py	2012-04-09 18:07:30.000000000 -0500
++++ misc/build/Python-2.7.6/Lib/distutils/unixccompiler.py	2012-07-25 15:33:16.000000000 -0500
 @@ -139,7 +139,7 @@
      shared_lib_extension = ".so"
      dylib_lib_extension = ".dylib"
@@ -149,9 +149,9 @@ diff -ru misc/Python-2.7.5/Lib/distutils/unixccompiler.py misc/build/Python-2.7.
          exe_extension = ".exe"
  
      def preprocess(self, source,
-diff -ru misc/Python-2.7.5/Lib/os.py misc/build/Python-2.7.5/Lib/os.py
---- misc/Python-2.7.5/Lib/os.py	2012-04-09 18:07:30.000000000 -0500
-+++ misc/build/Python-2.7.5/Lib/os.py	2012-07-25 15:33:16.000000000 -0500
+diff -ru misc/Python-2.7.6/Lib/os.py misc/build/Python-2.7.6/Lib/os.py
+--- misc/Python-2.7.6/Lib/os.py	2012-04-09 18:07:30.000000000 -0500
++++ misc/build/Python-2.7.6/Lib/os.py	2012-07-25 15:33:16.000000000 -0500
 @@ -38,7 +38,21 @@
      except AttributeError:
          return [n for n in dir(module) if n[0] != '_']
@@ -175,9 +175,9 @@ diff -ru misc/Python-2.7.5/Lib/os.py misc/build/Python-2.7.5/Lib/os.py
      name = 'posix'
      linesep = '\n'
      from posix import *
-diff -ru misc/Python-2.7.5/Lib/socket.py misc/build/Python-2.7.5/Lib/socket.py
---- misc/Python-2.7.5/Lib/socket.py	2012-04-09 18:07:31.000000000 -0500
-+++ misc/build/Python-2.7.5/Lib/socket.py	2012-07-25 15:33:16.000000000 -0500
+diff -ru misc/Python-2.7.6/Lib/socket.py misc/build/Python-2.7.6/Lib/socket.py
+--- misc/Python-2.7.6/Lib/socket.py	2012-04-09 18:07:31.000000000 -0500
++++ misc/build/Python-2.7.6/Lib/socket.py	2012-07-25 15:33:16.000000000 -0500
 @@ -153,7 +153,7 @@
      'sendall', 'setblocking',
      'settimeout', 'gettimeout', 'shutdown')
@@ -187,9 +187,9 @@ diff -ru misc/Python-2.7.5/Lib/socket.py misc/build/Python-2.7.5/Lib/socket.py
      _socketmethods = _socketmethods + ('ioctl',)
  
  if sys.platform == "riscos":
-diff -ru misc/Python-2.7.5/Makefile.pre.in misc/build/Python-2.7.5/Makefile.pre.in
---- misc/Python-2.7.5/Makefile.pre.in	2012-04-09 18:07:33.000000000 -0500
-+++ misc/build/Python-2.7.5/Makefile.pre.in	2012-07-25 16:01:28.000000000 -0500
+diff -ru misc/Python-2.7.6/Makefile.pre.in misc/build/Python-2.7.6/Makefile.pre.in
+--- misc/Python-2.7.6/Makefile.pre.in	2012-04-09 18:07:33.000000000 -0500
++++ misc/build/Python-2.7.6/Makefile.pre.in	2012-07-25 16:01:28.000000000 -0500
 @@ -112,6 +112,16 @@
  BLDSHARED=	@BLDSHARED@ $(LDFLAGS)
  LDCXXSHARED=	@LDCXXSHARED@
@@ -347,9 +347,9 @@ diff -ru misc/Python-2.7.5/Makefile.pre.in misc/build/Python-2.7.5/Makefile.pre.
  # Here are a couple of targets for MacOSX again, to install a full
  # framework-based Python. frameworkinstall installs everything, the
  # subtargets install specific parts. Much of the actual work is offloaded to
-diff -ru misc/Python-2.7.5/Modules/Setup.config.in misc/build/Python-2.7.5/Modules/Setup.config.in
---- misc/Python-2.7.5/Modules/Setup.config.in	2012-04-09 18:07:33.000000000 -0500
-+++ misc/build/Python-2.7.5/Modules/Setup.config.in	2012-07-25 15:33:16.000000000 -0500
+diff -ru misc/Python-2.7.6/Modules/Setup.config.in misc/build/Python-2.7.6/Modules/Setup.config.in
+--- misc/Python-2.7.6/Modules/Setup.config.in	2012-04-09 18:07:33.000000000 -0500
++++ misc/build/Python-2.7.6/Modules/Setup.config.in	2012-07-25 15:33:16.000000000 -0500
 @@ -9,5 +9,9 @@
  # The signal module
  @USE_SIGNAL_MODULE@signal signalmodule.c
@@ -360,9 +360,9 @@ diff -ru misc/Python-2.7.5/Modules/Setup.config.in misc/build/Python-2.7.5/Modul
 +
  # The rest of the modules previously listed in this file are built
  # by the setup.py script in Python 2.1 and later.
-diff -ru misc/Python-2.7.5/Modules/Setup.dist misc/build/Python-2.7.5/Modules/Setup.dist
---- misc/Python-2.7.5/Modules/Setup.dist	2012-04-09 18:07:33.000000000 -0500
-+++ misc/build/Python-2.7.5/Modules/Setup.dist	2012-07-25 15:33:16.000000000 -0500
+diff -ru misc/Python-2.7.6/Modules/Setup.dist misc/build/Python-2.7.6/Modules/Setup.dist
+--- misc/Python-2.7.6/Modules/Setup.dist	2012-04-09 18:07:33.000000000 -0500
++++ misc/build/Python-2.7.6/Modules/Setup.dist	2012-07-25 15:33:16.000000000 -0500
 @@ -114,7 +114,7 @@
  
  posix posixmodule.c		# posix (UNIX) system calls
@@ -372,9 +372,9 @@ diff -ru misc/Python-2.7.5/Modules/Setup.dist misc/build/Python-2.7.5/Modules/Se
  				# if $HOME is not set
  _sre _sre.c			# Fredrik Lundh's new regular expressions
  _codecs _codecsmodule.c		# access to the builtin codecs and codec registry
-diff -ru misc/Python-2.7.5/Modules/_ctypes/libffi/configure misc/build/Python-2.7.5/Modules/_ctypes/libffi/configure
---- misc/Python-2.7.5/Modules/_ctypes/libffi/configure	2012-04-09 18:07:33.000000000 -0500
-+++ misc/build/Python-2.7.5/Modules/_ctypes/libffi/configure	2012-07-25 16:12:30.000000000 -0500
+diff -ru misc/Python-2.7.6/Modules/_ctypes/libffi/configure misc/build/Python-2.7.6/Modules/_ctypes/libffi/configure
+--- misc/Python-2.7.6/Modules/_ctypes/libffi/configure	2012-04-09 18:07:33.000000000 -0500
++++ misc/build/Python-2.7.6/Modules/_ctypes/libffi/configure	2012-07-25 16:12:30.000000000 -0500
 @@ -1,13 +1,11 @@
  #! /bin/sh
  # Guess values for system-dependent variables and create Makefiles.
@@ -3572,9 +3572,9 @@ diff -ru misc/Python-2.7.5/Modules/_ctypes/libffi/configure misc/build/Python-2.
  fi
  if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
-diff -ru misc/Python-2.7.5/Modules/_ctypes/libffi/configure.ac misc/build/Python-2.7.5/Modules/_ctypes/libffi/configure.ac
---- misc/Python-2.7.5/Modules/_ctypes/libffi/configure.ac	2012-04-09 18:07:33.000000000 -0500
-+++ misc/build/Python-2.7.5/Modules/_ctypes/libffi/configure.ac	2012-07-25 16:10:32.000000000 -0500
+diff -ru misc/Python-2.7.6/Modules/_ctypes/libffi/configure.ac misc/build/Python-2.7.6/Modules/_ctypes/libffi/configure.ac
+--- misc/Python-2.7.6/Modules/_ctypes/libffi/configure.ac	2012-04-09 18:07:33.000000000 -0500
++++ misc/build/Python-2.7.6/Modules/_ctypes/libffi/configure.ac	2012-07-25 16:10:32.000000000 -0500
 @@ -401,6 +401,12 @@
    multilib_arg=
  fi
@@ -3588,9 +3588,9 @@ diff -ru misc/Python-2.7.5/Modules/_ctypes/libffi/configure.ac misc/build/Python
  AC_CONFIG_COMMANDS(include, [test -d include || mkdir include])
  AC_CONFIG_COMMANDS(src, [
  test -d src || mkdir src
-diff -ru misc/Python-2.7.5/Modules/_ctypes/libffi/include/ffi.h.in misc/build/Python-2.7.5/Modules/_ctypes/libffi/include/ffi.h.in
---- misc/Python-2.7.5/Modules/_ctypes/libffi/include/ffi.h.in	2012-04-09 18:07:33.000000000 -0500
-+++ misc/build/Python-2.7.5/Modules/_ctypes/libffi/include/ffi.h.in	2012-07-25 15:33:16.000000000 -0500
+diff -ru misc/Python-2.7.6/Modules/_ctypes/libffi/include/ffi.h.in misc/build/Python-2.7.6/Modules/_ctypes/libffi/include/ffi.h.in
+--- misc/Python-2.7.6/Modules/_ctypes/libffi/include/ffi.h.in	2012-04-09 18:07:33.000000000 -0500
++++ misc/build/Python-2.7.6/Modules/_ctypes/libffi/include/ffi.h.in	2012-07-25 15:33:16.000000000 -0500
 @@ -359,7 +359,11 @@
  			ffi_type *rtype,
  			ffi_type **atypes);
@@ -3603,9 +3603,9 @@ diff -ru misc/Python-2.7.5/Modules/_ctypes/libffi/include/ffi.h.in misc/build/Py
  	      void (*fn)(void),
  	      void *rvalue,
  	      void **avalue);
-diff -ru misc/Python-2.7.5/Modules/config.c.in misc/build/Python-2.7.5/Modules/config.c.in
---- misc/Python-2.7.5/Modules/config.c.in	2012-04-09 18:07:34.000000000 -0500
-+++ misc/build/Python-2.7.5/Modules/config.c.in	2012-07-25 16:19:28.000000000 -0500
+diff -ru misc/Python-2.7.6/Modules/config.c.in misc/build/Python-2.7.6/Modules/config.c.in
+--- misc/Python-2.7.6/Modules/config.c.in	2012-04-09 18:07:34.000000000 -0500
++++ misc/build/Python-2.7.6/Modules/config.c.in	2012-07-25 16:19:28.000000000 -0500
 @@ -48,6 +48,9 @@
      {"__builtin__", NULL},
      {"sys", NULL},
@@ -3616,9 +3616,9 @@ diff -ru misc/Python-2.7.5/Modules/config.c.in misc/build/Python-2.7.5/Modules/c
  
      /* This lives in gcmodule.c */
      {"gc", initgc},
-diff -ru misc/Python-2.7.5/Modules/posixmodule.c misc/build/Python-2.7.5/Modules/posixmodule.c
---- misc/Python-2.7.5/Modules/posixmodule.c	2012-04-09 18:07:34.000000000 -0500
-+++ misc/build/Python-2.7.5/Modules/posixmodule.c	2012-07-25 15:33:16.000000000 -0500
+diff -ru misc/Python-2.7.6/Modules/posixmodule.c misc/build/Python-2.7.6/Modules/posixmodule.c
+--- misc/Python-2.7.6/Modules/posixmodule.c	2012-04-09 18:07:34.000000000 -0500
++++ misc/build/Python-2.7.6/Modules/posixmodule.c	2012-07-25 15:33:16.000000000 -0500
 @@ -129,6 +129,15 @@
  #define HAVE_FSYNC      1
  #define fsync _commit
@@ -3685,9 +3685,9 @@ diff -ru misc/Python-2.7.5/Modules/posixmodule.c misc/build/Python-2.7.5/Modules
  
  /* IsUNCRoot -- test whether the supplied path is of the form \\SERVER\SHARE\,
     where / can be used in place of \ and the trailing slash is optional.
-diff -ru misc/Python-2.7.5/Modules/socketmodule.c misc/build/Python-2.7.5/Modules/socketmodule.c
---- misc/Python-2.7.5/Modules/socketmodule.c	2012-04-09 18:07:34.000000000 -0500
-+++ misc/build/Python-2.7.5/Modules/socketmodule.c	2012-07-25 15:33:16.000000000 -0500
+diff -ru misc/Python-2.7.6/Modules/socketmodule.c misc/build/Python-2.7.6/Modules/socketmodule.c
+--- misc/Python-2.7.6/Modules/socketmodule.c	2012-04-09 18:07:34.000000000 -0500
++++ misc/build/Python-2.7.6/Modules/socketmodule.c	2012-07-25 15:33:16.000000000 -0500
 @@ -312,7 +312,7 @@
    /* Do not include addrinfo.h for MSVC7 or greater. 'addrinfo' and
     * EAI_* constants are defined in (the already included) ws2tcpip.h.
@@ -3697,9 +3697,9 @@ diff -ru misc/Python-2.7.5/Modules/socketmodule.c misc/build/Python-2.7.5/Module
  #  include "addrinfo.h"
  #endif
  
-diff -ru misc/Python-2.7.5/PC/_winreg.c misc/build/Python-2.7.5/PC/_winreg.c
---- misc/Python-2.7.5/PC/_winreg.c	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.5/PC/_winreg.c	2012-07-25 15:33:16.000000000 -0500
+diff -ru misc/Python-2.7.6/PC/_winreg.c misc/build/Python-2.7.6/PC/_winreg.c
+--- misc/Python-2.7.6/PC/_winreg.c	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.6/PC/_winreg.c	2012-07-25 15:33:16.000000000 -0500
 @@ -1784,6 +1784,9 @@
  }
  
@@ -3710,9 +3710,9 @@ diff -ru misc/Python-2.7.5/PC/_winreg.c misc/build/Python-2.7.5/PC/_winreg.c
  
  PyMODINIT_FUNC init_winreg(void)
  {
-diff -ru misc/Python-2.7.5/Python/dynload_win.c misc/build/Python-2.7.5/Python/dynload_win.c
---- misc/Python-2.7.5/Python/dynload_win.c	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.5/Python/dynload_win.c	2012-07-25 16:25:30.000000000 -0500
+diff -ru misc/Python-2.7.6/Python/dynload_win.c misc/build/Python-2.7.6/Python/dynload_win.c
+--- misc/Python-2.7.6/Python/dynload_win.c	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.6/Python/dynload_win.c	2012-07-25 16:25:30.000000000 -0500
 @@ -28,6 +28,7 @@
  /* Case insensitive string compare, to avoid any dependencies on particular
     C RTL implementations */
@@ -3729,9 +3729,9 @@ diff -ru misc/Python-2.7.5/Python/dynload_win.c misc/build/Python-2.7.5/Python/d
  
  
  /* Function to return the name of the "python" DLL that the supplied module
-diff -ru misc/Python-2.7.5/Python/frozenmain.c misc/build/Python-2.7.5/Python/frozenmain.c
---- misc/Python-2.7.5/Python/frozenmain.c	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.5/Python/frozenmain.c	2012-07-25 16:28:20.000000000 -0500
+diff -ru misc/Python-2.7.6/Python/frozenmain.c misc/build/Python-2.7.6/Python/frozenmain.c
+--- misc/Python-2.7.6/Python/frozenmain.c	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.6/Python/frozenmain.c	2012-07-25 16:28:20.000000000 -0500
 @@ -3,7 +3,7 @@
  
  #include "Python.h"
@@ -3765,9 +3765,9 @@ diff -ru misc/Python-2.7.5/Python/frozenmain.c misc/build/Python-2.7.5/Python/fr
      PyWinFreeze_ExeTerm();
  #endif
      Py_Finalize();
-diff -ru misc/Python-2.7.5/configure misc/build/Python-2.7.5/configure
---- misc/Python-2.7.5/configure	2012-04-09 18:07:36.000000000 -0500
-+++ misc/build/Python-2.7.5/configure	2012-07-25 16:40:08.000000000 -0500
+diff -ru misc/Python-2.7.6/configure misc/build/Python-2.7.6/configure
+--- misc/Python-2.7.6/configure	2012-04-09 18:07:36.000000000 -0500
++++ misc/build/Python-2.7.6/configure	2012-07-25 16:40:08.000000000 -0500
 @@ -1,14 +1,12 @@
  #! /bin/sh
  # From configure.in Revision.
@@ -7020,9 +7020,9 @@ diff -ru misc/Python-2.7.5/configure misc/build/Python-2.7.5/configure
        || as_fn_error $? "could not create -" "$LINENO" 5
    fi
   ;;
-diff -ru misc/Python-2.7.5/configure.in misc/build/Python-2.7.5/configure.in
---- misc/Python-2.7.5/configure.in	2012-04-09 18:07:36.000000000 -0500
-+++ misc/build/Python-2.7.5/configure.in	2012-07-25 16:31:28.000000000 -0500
+diff -ru misc/Python-2.7.6/configure.in misc/build/Python-2.7.6/configure.in
+--- misc/Python-2.7.6/configure.in	2012-04-09 18:07:36.000000000 -0500
++++ misc/build/Python-2.7.6/configure.in	2012-07-25 16:31:28.000000000 -0500
 @@ -417,6 +417,13 @@
          LDFLAGS="$SGI_ABI $LDFLAGS"
          MACHDEP=`echo "${MACHDEP}${SGI_ABI}" | sed 's/ *//g'`
@@ -7192,9 +7192,9 @@ diff -ru misc/Python-2.7.5/configure.in misc/build/Python-2.7.5/configure.in
  AC_SUBST(UNICODE_OBJS)
  if test "$enable_unicode" = "no"
  then
-diff -ru misc/Python-2.7.5/setup.py misc/build/Python-2.7.5/setup.py
---- misc/Python-2.7.5/setup.py	2012-04-09 18:07:36.000000000 -0500
-+++ misc/build/Python-2.7.5/setup.py	2012-07-25 16:38:25.000000000 -0500
+diff -ru misc/Python-2.7.6/setup.py misc/build/Python-2.7.6/setup.py
+--- misc/Python-2.7.6/setup.py	2012-04-09 18:07:36.000000000 -0500
++++ misc/build/Python-2.7.6/setup.py	2012-07-25 16:38:25.000000000 -0500
 @@ -271,6 +271,18 @@
              if not self.configure_ctypes(ext):
                  return

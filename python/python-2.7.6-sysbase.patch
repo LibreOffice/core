@@ -1,5 +1,5 @@
---- misc/Python-2.7.5/configure	2012-04-09 18:07:36.000000000 -0500
-+++ misc/build/Python-2.7.5/configure	2012-07-22 15:01:20.000000000 -0500
+--- misc/Python-2.7.6/configure	2012-04-09 18:07:36.000000000 -0500
++++ misc/build/Python-2.7.6/configure	2012-07-22 15:01:20.000000000 -0500
 @@ -2982,7 +2982,9 @@
  if test -z "$MACHDEP"
  then

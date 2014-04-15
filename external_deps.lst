@@ -181,7 +181,7 @@ if (SYSTEM_LIBXSLT != YES)
 if (SOLAR_JAVA == TRUE)
     MD5 = 63574e3ada44f473892a61a2da433a59
     name = apache-tomcat-5.5.36-src.tar.gz
-    # URL1 = http://www.alliedquotes.com/mirrors/apache/tomcat/tomcat-5/v5.5.36/src/apache-tomcat-5.5.36-src.tar.gz
+    URL1 = http://archive.apache.org/dist/tomcat/tomcat-5/v5.5.36/src/apache-tomcat-5.5.36-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SOLAR_JAVA == TRUE)
@@ -197,9 +197,9 @@ if (ENABLE_MEDIAWIKI == YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_PYTHON != YES)
-    MD5 =  6334b666b7ff2038c761d7b27ba699c1
-    name = Python-2.7.5.tar.bz2
-    URL1 = http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tar.bz2
+    MD5 = 1d8728eb0dfcac72a0fd99c17ec7f386
+    name = Python-2.7.6.tgz
+    URL1 = http://www.python.org/ftp/python/2.7.6/Python-2.7.6.tgz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_BOOST != YES)
