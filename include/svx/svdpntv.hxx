@@ -161,7 +161,6 @@ protected:
     sal_uInt16                      nMinMovPix;
     sal_uInt16                      nHitTolLog;
     sal_uInt16                      nMinMovLog;
-    sal_uIntPtr                     nMasterCacheMode;
     sal_uIntPtr                       nGraphicManagerDrawMode;
 
     // hold an incarnation of Drawinglayer configuration options
