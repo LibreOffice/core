@@ -43,6 +43,7 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
     ViewObjectContactOfSdrObj( rObjectContact, rViewContact ),
     mpMediaWindow( NULL )
 {
+#if HAVE_FEATURE_DESKTOP
     Window* pWindow = getWindow();
 
     if( pWindow )
@@ -51,6 +52,7 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
         mpMediaWindow->hide();
         executeMediaItem( rMediaItem );
     }
+#endif
 }
 
 
