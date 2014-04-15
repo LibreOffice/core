@@ -121,12 +121,12 @@ sub generateSource
     startSource (++$count);
 
     my @classes = ();
-    foreach $shape (keys %$sources)
+    foreach $shape (sort(keys %$sources))
     {
 	push @classes, $shape;
 	print OUT "class ShapeC".$shape." : public CustomShapeProvider\n";
 	print OUT "{\n";
-	print OUT "  virtual PropertyMap getProperties()\n";
+        print OUT "  virtual PropertyMap getProperties() SAL_OVERRIDE\n";
 	print OUT "  {\n";
 	print OUT "    PropertyMap aPropertyMap;\n\n";
 	print OUT @{$sources->{$shape}};
@@ -169,3 +169,5 @@ EOS
 }
 
 generateSource (loadSourceCode ());
+
+# vim:set ft=perl shiftwidth=4 softtabstop=4 expandtab: #
