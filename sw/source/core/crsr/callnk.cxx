@@ -34,7 +34,7 @@
 #include <ndtxt.hxx>
 #include <flyfrm.hxx>
 #include <breakit.hxx>
-#include<vcl/window.hxx>
+#include <vcl/window.hxx>
 
 SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, sal_Int32 nAktCntnt,
                         sal_uInt8 nAktNdTyp, long nLRPos, bool bAktSelection )

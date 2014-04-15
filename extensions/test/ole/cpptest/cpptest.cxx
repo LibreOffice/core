@@ -26,8 +26,8 @@
 #pragma warning(disable: 4917)
 #include <comdef.h>
 #include <tchar.h>
-#include<atlbase.h>
-#include<atlcom.h>
+#include <atlbase.h>
+#include <atlcom.h>
 
 HRESULT doTest();
 

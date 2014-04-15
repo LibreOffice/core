@@ -96,8 +96,8 @@ void testPipe( const Reference < XMultiServiceFactory > & rSmgr )
 //          OSL_ASSERT( 0 );
     }
 }
-#include<stdio.h>
-#include<string.h>
+#include <stdio.h>
+#include <string.h>
 
 void testWriter(  const Reference < XComponent > & rCmp )
 {

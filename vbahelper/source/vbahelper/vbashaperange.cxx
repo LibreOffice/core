@@ -19,7 +19,7 @@
 #include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include<com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbashaperange.hxx>

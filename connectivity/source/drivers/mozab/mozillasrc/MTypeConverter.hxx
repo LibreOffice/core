@@ -23,7 +23,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include<string>
+#include <string>
 
 namespace connectivity
 {

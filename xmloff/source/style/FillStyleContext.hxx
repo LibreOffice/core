@@ -22,7 +22,7 @@
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <xmloff/xmlstyle.hxx>
-#include<rtl/ustring.hxx>
+#include <rtl/ustring.hxx>
 
 // draw:gardient context
 

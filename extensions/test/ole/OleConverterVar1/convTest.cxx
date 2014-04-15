@@ -24,7 +24,7 @@
 #include <tchar.h>
 #include <atlbase.h>
 extern CComModule _Module;
-#include<atlcom.h>
+#include <atlcom.h>
 
 #include <stdio.h>
 #include <com/sun/star/bridge/ModelDependent.hpp>

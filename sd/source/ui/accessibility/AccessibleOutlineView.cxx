@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustring.h>
-#include<sfx2/viewfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <svx/AccessibleShape.hxx>
 

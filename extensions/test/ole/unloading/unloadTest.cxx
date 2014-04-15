@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include<osl/module.hxx>
+#include <osl/module.hxx>
 #include <osl/time.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>

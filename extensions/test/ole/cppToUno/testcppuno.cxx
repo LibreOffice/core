@@ -23,7 +23,7 @@
 #include <comdef.h>
 #include <tchar.h>
 #include <atlbase.h>
-#include<atlcom.h>
+#include <atlcom.h>
 #include <stdio.h>
 #include <com/sun/star/bridge/ModelDependent.hpp>
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>

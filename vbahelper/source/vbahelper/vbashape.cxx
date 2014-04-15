@@ -16,14 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include<ooo/vba/office/MsoZOrderCmd.hpp>
-#include<ooo/vba/office/MsoScaleFrom.hpp>
-#include<com/sun/star/container/XNamed.hpp>
-#include<com/sun/star/drawing/ConnectorType.hpp>
+#include <ooo/vba/office/MsoZOrderCmd.hpp>
+#include <ooo/vba/office/MsoScaleFrom.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/drawing/ConnectorType.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include<com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include<com/sun/star/drawing/XDrawPages.hpp>
-#include<com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>

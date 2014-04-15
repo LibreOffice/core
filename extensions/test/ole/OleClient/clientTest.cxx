@@ -21,7 +21,7 @@
 #include <atlbase.h>
 
 CComModule _Module;
-#include<atlcom.h>
+#include <atlcom.h>
 #include <comdef.h>
 
 #include "axhost.hxx"

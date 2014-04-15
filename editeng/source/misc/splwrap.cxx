@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include<rtl/ustring.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/shl.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>

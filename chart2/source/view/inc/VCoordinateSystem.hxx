@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#include<map>
+#include <map>
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>

@@ -25,8 +25,8 @@
 #include <tchar.h>
 #include <atlbase.h>
 CComModule _Module;
-#include<atlcom.h>
-#include<atlimpl.cpp>
+#include <atlcom.h>
+#include <atlimpl.cpp>
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif

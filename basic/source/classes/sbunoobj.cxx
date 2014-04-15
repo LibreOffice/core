@@ -83,16 +83,16 @@ using namespace com::sun::star::bridge;
 using namespace cppu;
 
 
-#include<basic/sbstar.hxx>
-#include<basic/sbuno.hxx>
-#include<basic/sberrors.hxx>
-#include<sbunoobj.hxx>
-#include"sbjsmod.hxx"
-#include<basic/basmgr.hxx>
-#include<sbintern.hxx>
-#include<runtime.hxx>
+#include <basic/sbstar.hxx>
+#include <basic/sbuno.hxx>
+#include <basic/sberrors.hxx>
+#include <sbunoobj.hxx>
+#include "sbjsmod.hxx"
+#include <basic/basmgr.hxx>
+#include <sbintern.hxx>
+#include <runtime.hxx>
 
-#include<math.h>
+#include <math.h>
 #include <boost/unordered_map.hpp>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>

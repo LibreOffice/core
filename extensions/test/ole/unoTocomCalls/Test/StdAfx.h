@@ -36,8 +36,8 @@
 #include <tchar.h>
 #include <atlbase.h>
 extern CComModule _Module;
-#include<atlcom.h>
-#include<atlimpl.cpp>
+#include <atlcom.h>
+#include <atlimpl.cpp>
 
 // TODO: reference additional headers your program requires here
 

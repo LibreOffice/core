@@ -20,8 +20,8 @@
 #define _WINDOW_HXX_
 #include <atlbase.h>
 extern CComModule _Module;
-#include<atlcom.h>
-#include<atlctl.h>
+#include <atlcom.h>
+#include <atlctl.h>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>

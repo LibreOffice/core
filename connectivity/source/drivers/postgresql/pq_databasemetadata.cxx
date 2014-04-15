@@ -73,16 +73,16 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include<com/sun/star/sdbc/TransactionIsolation.hpp>
-#include<com/sun/star/sdbc/ResultSetType.hpp>
-#include<com/sun/star/sdbc/XPreparedStatement.hpp>
-#include<com/sun/star/sdbc/XParameters.hpp>
-#include<com/sun/star/sdbc/DataType.hpp>
-#include<com/sun/star/sdbc/IndexType.hpp>
-#include<com/sun/star/sdbc/ColumnValue.hpp>
-#include<com/sun/star/sdbc/ColumnSearch.hpp>
-#include<com/sun/star/sdbc/KeyRule.hpp>
-#include<com/sun/star/sdbc/Deferrability.hpp>
+#include <com/sun/star/sdbc/TransactionIsolation.hpp>
+#include <com/sun/star/sdbc/ResultSetType.hpp>
+#include <com/sun/star/sdbc/XPreparedStatement.hpp>
+#include <com/sun/star/sdbc/XParameters.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/IndexType.hpp>
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbc/ColumnSearch.hpp>
+#include <com/sun/star/sdbc/KeyRule.hpp>
+#include <com/sun/star/sdbc/Deferrability.hpp>
 
 using ::osl::MutexGuard;
 
