@@ -152,13 +152,7 @@ typedef BaseHash< OUString > OUStringHashMap;
 */
 typedef BaseHash< sal_Int32 > NameToHandleHash;
 
-/**
-    Sometimes we need this template to implement listener container ...
-    and we need it at different positions ...
-    So it's better to declare it one times only!
-*/
-typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString                    ,
-                                                        OUStringHash >    ListenerHash;
+typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString> ListenerHash;
 
 }       // namespace framework
 

@@ -83,11 +83,8 @@ typedef boost::unordered_map
 >
 PropertiesEventListenerMap;
 
-typedef cppu::OMultiTypeInterfaceContainerHelperVar
-<
-    OUString,
-    OUStringHash
-> PropertyChangeListeners;
+typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+    PropertyChangeListeners;
 
 struct ContentImplHelper_Impl
 {

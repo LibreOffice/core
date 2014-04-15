@@ -56,20 +56,8 @@ namespace com { namespace sun { namespace star {
 
 }}}
 
-// uses templates from <cppuhelper/interfacecontainer.h>
-// and <unotools/configitem.hxx>
-
-// helper function call class
-struct PropHashType_Impl
-{
-    size_t operator()(const sal_Int32 &s) const { return s; }
-};
-
-typedef cppu::OMultiTypeInterfaceContainerHelperVar
-    <
-        sal_Int32,
-        PropHashType_Impl
-    > OPropertyListenerContainerHelper;
+typedef cppu::OMultiTypeInterfaceContainerHelperVar<sal_Int32>
+    OPropertyListenerContainerHelper;
 
 class SwNewDBMgr;
 class MailMergeExecuteFinalizer;

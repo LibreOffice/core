@@ -48,12 +48,6 @@ namespace dbaui
         bool operator() (const ::com::sun::star::util::URL& x, const ::com::sun::star::util::URL& y) const {return x.Complete == y.Complete ? true : false;}
     };
 
-    struct SbaURLHash
-    {
-        sal_Int32 operator() (const ::com::sun::star::util::URL& x) const {return x.Complete.hashCode();}
-    };
-    // SbaXGridControl
-
     class SbaXStatusMultiplexer;
     class SbaXGridControl
                 :public FmXGridControl
@@ -103,7 +97,8 @@ namespace dbaui
                 :public FmXGridPeer
                 ,public ::com::sun::star::frame::XDispatch
     {
-        ::cppu::OMultiTypeInterfaceContainerHelperVar< ::com::sun::star::util::URL,SbaURLHash , SbaURLCompare>  m_aStatusListeners;
+        cppu::OMultiTypeInterfaceContainerHelperVar<
+            css::util::URL, void, SbaURLCompare>  m_aStatusListeners;
 
     public:
         SbaXGridPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);

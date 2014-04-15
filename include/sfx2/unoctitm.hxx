@@ -70,13 +70,8 @@ public:
     void                        ReleaseBindings();
 };
 
-struct SfxStatusDispatcher_Impl_hashType
-{
-    size_t operator()(const OUString& s) const
-        { return s.hashCode(); }
-};
-
-typedef ::cppu::OMultiTypeInterfaceContainerHelperVar< OUString, SfxStatusDispatcher_Impl_hashType >   SfxStatusDispatcher_Impl_ListenerContainer ;
+typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+    SfxStatusDispatcher_Impl_ListenerContainer;
 
 class SfxStatusDispatcher   :   public ::cppu::WeakImplHelper1< css::frame::XNotifyingDispatch >
 {

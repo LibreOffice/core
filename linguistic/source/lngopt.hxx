@@ -66,24 +66,8 @@ public:
             GetActiveConvDics() const   { return pData->aActiveConvDics; }
 };
 
-
-
-// uses templates from <cppuhelper/interfacecontainer.h>
-
-
-// helper function call class
-struct PropHashType_Impl
-{
-    size_t operator()(const sal_Int32 &s) const { return s; }
-};
-
-typedef cppu::OMultiTypeInterfaceContainerHelperVar
-    <
-        sal_Int32,
-        PropHashType_Impl
-    > OPropertyListenerContainerHelper;
-
-
+typedef cppu::OMultiTypeInterfaceContainerHelperVar<sal_Int32>
+    OPropertyListenerContainerHelper;
 
 class LinguProps :
     public cppu::WeakImplHelper5

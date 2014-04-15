@@ -47,13 +47,8 @@
 
 namespace framework{
 
-/*-************************************************************************************************************
-    We must save information about our listener and URL for listening.
-    We implement this as a hashtable for strings.
-*//*-*************************************************************************************************************/
-
-typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString         ,
-                                                        OUStringHash > IMPL_ListenerHashContainer;
+typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+    IMPL_ListenerHashContainer;
 
 /*-************************************************************************************************************
     @short          helper for desktop only(!) to create new tasks on demand for dispatches

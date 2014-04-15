@@ -48,15 +48,8 @@ class ContentResultSetWrapper
                 , public com::sun::star::sdbc::XRow
 {
 protected:
-
-
-    //class PropertyChangeListenerContainer_Impl.
-
-    typedef cppu::OMultiTypeInterfaceContainerHelperVar
-    < OUString, OUStringHash >
-    PropertyChangeListenerContainer_Impl;
-
-    // class ReacquireableGuard
+    typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+        PropertyChangeListenerContainer_Impl;
 
     class ReacquireableGuard
     {

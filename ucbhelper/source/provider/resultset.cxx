@@ -122,23 +122,8 @@ public:
         throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-
-
-// PropertyChangeListenerContainer.
-
-
-
-typedef cppu::OMultiTypeInterfaceContainerHelperVar
-<
-    OUString,
-    OUStringHash
-> PropertyChangeListenerContainer;
-
-
-
-// class PropertyChangeListeners.
-
-
+typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+    PropertyChangeListenerContainer;
 
 class PropertyChangeListeners : public PropertyChangeListenerContainer
 {

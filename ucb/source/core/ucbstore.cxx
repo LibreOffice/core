@@ -1119,23 +1119,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
     return Reference< XInterface >();
 }
 
-
-
-// PropertyListeners_Impl.
-
-
-
-typedef OMultiTypeInterfaceContainerHelperVar
-<
-    OUString,
-    OUStringHash
-> PropertyListeners_Impl;
-
-
-
-// PersistentPropertySet_Impl.
-
-
+typedef OMultiTypeInterfaceContainerHelperVar<OUString> PropertyListeners_Impl;
 
 struct PersistentPropertySet_Impl
 {

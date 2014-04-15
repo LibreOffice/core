@@ -54,11 +54,8 @@ using namespace com::sun::star::ucb;
 #define THROW_WHERE ""
 #endif
 
-// PropertyListeners
-
-
-typedef cppu::OMultiTypeInterfaceContainerHelperVar< OUString,OUStringHash >
-PropertyListeners_impl;
+typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+    PropertyListeners_impl;
 
 class fileaccess::PropertyListeners
     : public PropertyListeners_impl

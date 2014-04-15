@@ -237,8 +237,8 @@ namespace cppu_ifcontainer
 
         void testOMultiTypeInterfaceContainerHelperVar()
         {
-            typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<
-                const char*, rtl::CStringHash, rtl::CStringEqual> StrContainer;
+            typedef cppu::OMultiTypeInterfaceContainerHelperVar<
+                char const *, void, rtl::CStringEqual> StrContainer;
 
             const char *pTypes[nTests] =
             {

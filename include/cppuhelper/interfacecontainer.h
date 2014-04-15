@@ -296,7 +296,7 @@ inline void OInterfaceContainerHelper::notifyEach( void ( SAL_CALL ListenerT::*N
   @see OInterfaceIteratorHelper
   @see OInterfaceContainerHelper
  */
-template< class key , class hashImpl , class equalImpl = std::equal_to<key> >
+template< class key, class hashImpl = void, class equalImpl = std::equal_to<key> >
 class OMultiTypeInterfaceContainerHelperVar
 {
 public:

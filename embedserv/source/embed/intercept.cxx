@@ -33,13 +33,11 @@ using namespace ::com::sun::star;
 uno::Sequence< OUString > Interceptor::m_aInterceptedURL(IUL);
 
 class StatusChangeListenerContainer
-    : public ::cppu::OMultiTypeInterfaceContainerHelperVar<
-OUString,OUStringHash>
+    : public cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
 {
 public:
     StatusChangeListenerContainer( ::osl::Mutex& aMutex )
-        :  cppu::OMultiTypeInterfaceContainerHelperVar<
-    OUString,OUStringHash>(aMutex)
+        :  cppu::OMultiTypeInterfaceContainerHelperVar<OUString>(aMutex)
     {
     }
 };

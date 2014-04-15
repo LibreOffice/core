@@ -185,7 +185,7 @@ namespace dbaui
             ,public listenerclass                                                           \
     {                                                                                       \
         typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<                              \
-                OUString, OUStringHash >  ListenerContainerMap;   \
+                OUString >  ListenerContainerMap;   \
         ListenerContainerMap    m_aListeners;                                               \
                                                                                             \
     public:                                                                                 \

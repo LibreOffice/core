@@ -77,10 +77,8 @@ namespace dbaccess
 
     typedef ::boost::shared_ptr<OContentHelper_Impl> TContentPtr;
 
-
-    typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString,
-                                                            OUStringHash
-                                                        > PropertyChangeListenerContainer;
+    typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+        PropertyChangeListenerContainer;
     typedef ::comphelper::OBaseMutex    OContentHelper_MBASE;
     typedef ::cppu::WeakComponentImplHelper9    <   ::com::sun::star::ucb::XContent
                                                 ,   ::com::sun::star::ucb::XCommandProcessor

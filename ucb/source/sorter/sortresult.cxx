@@ -111,40 +111,8 @@ public:
         throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-
-
-// PropertyChangeListenerContainer_Impl.
-
-
-
-struct equalStr_Impl
-{
-    bool operator()( const OUString& s1, const OUString& s2 ) const
-    {
-        return !!( s1 == s2 );
-    }
-};
-
-struct hashStr_Impl
-{
-    size_t operator()( const OUString& rName ) const
-    {
-        return rName.hashCode();
-    }
-};
-
-typedef OMultiTypeInterfaceContainerHelperVar
-<
-    OUString,
-    hashStr_Impl,
-    equalStr_Impl
-> PropertyChangeListenerContainer_Impl;
-
-
-
-// class PropertyChangeListeners_Impl
-
-
+typedef OMultiTypeInterfaceContainerHelperVar<OUString>
+    PropertyChangeListenerContainer_Impl;
 
 class PropertyChangeListeners_Impl : public PropertyChangeListenerContainer_Impl
 {

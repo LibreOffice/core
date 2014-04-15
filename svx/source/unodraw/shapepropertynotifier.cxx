@@ -63,12 +63,8 @@ namespace svx
 
     typedef ::boost::unordered_map< ShapeProperty, PPropertyValueProvider, ShapePropertyHash  >    PropertyProviders;
 
-    typedef ::cppu::OMultiTypeInterfaceContainerHelperVar   <   OUString
-                                                            ,   OUStringHash
-                                                            >   PropertyChangeListenerContainer;
-
-
-    //= IPropertyValueProvider
+    typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+        PropertyChangeListenerContainer;
 
     IPropertyValueProvider::~IPropertyValueProvider()
     {
