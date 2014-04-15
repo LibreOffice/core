@@ -69,6 +69,7 @@
 #include <viscrs.hxx>
 #include <fmtpdsc.hxx>
 #include <globals.hrc>
+#include "PostItMgr.hxx"
 
 using namespace ::com::sun::star;
 
@@ -454,13 +455,33 @@ sal_Bool SwViewShell::PrintOrPDFExport(
     // output device is now provided by a call from outside the Writer)
     pOutDev->Push();
 
+    // fdo#36815 for comments in margins print to a metafile
+    // and then scale that metafile down so that the comments
+    // will fit on the real page, and replay that scaled
+    // output to the real outputdevice
+    GDIMetaFile *pOrigRecorder(NULL);
+    GDIMetaFile *pMetaFile(NULL);
+    sal_Int16 nPostItMode = rPrintData.GetPrintPostIts();
+    if (nPostItMode == POSTITS_INMARGINS)
+    {
+        //get and disable the existing recorder
+        pOrigRecorder = pOutDev->GetConnectMetaFile();
+        pOutDev->SetConnectMetaFile(NULL);
+        // turn off output to the device
+        pOutDev->EnableOutput(false);
+        // just record the rendering commands to the metafile
+        // instead
+        pMetaFile = new GDIMetaFile;
+        pMetaFile->Record(pOutDev);
+    }
+
     // Print/PDF export for (multi-)selection has already generated a
     // temporary document with the selected text.
     // (see XRenderable implementation in unotxdoc.cxx)
     // It is implemented this way because PDF export calls this Prt function
     // once per page and we do not like to always have the temporary document
     // to be created that often here.
-    SwViewShell *pShell = new SwViewShell( *this, 0, pOutDev );
+    SwViewShell *pShell = new SwViewShell(*this, 0, pOutDev);
 
     SdrView *pDrawView = pShell->GetDrawView();
     if (pDrawView)
@@ -502,13 +523,37 @@ sal_Bool SwViewShell::PrintOrPDFExport(
 
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
-        pShell->InitPrt( pOutDev );
+        pShell->InitPrt(pOutDev);
 
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
         pStPage->GetUpper()->Paint( pStPage->Frm(), &rPrintData );
 
         SwPaintQueue::Repaint();
+
+        if (nPostItMode == POSTITS_INMARGINS)
+        {
+            SwPostItMgr *pPostItManager = pShell->GetPostItMgr();
+            pPostItManager->CalcRects();
+            pPostItManager->LayoutPostIts();
+            pPostItManager->DrawNotesForPage(pOutDev, nPage-1);
+
+            //Now scale the recorded page down so the notes
+            //will fit in the final page
+            pMetaFile->Stop();
+            pMetaFile->WindStart();
+            double fScale = 0.75;
+            pMetaFile->Scale( fScale, fScale );
+            pMetaFile->WindStart();
+
+            //Enable output the the device again
+            pOutDev->EnableOutput(true);
+            //Restore the original recorder
+            pOutDev->SetConnectMetaFile(pOrigRecorder);
+            //play back the scaled page
+            pMetaFile->Play(pOutDev);
+            delete pMetaFile;
+        }
     }
 
     delete pShell;

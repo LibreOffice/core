@@ -164,6 +164,8 @@ class SwSidebarWin : public Window
         void ChangeSidebarItem( SwSidebarItem& rSidebarItem );
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
+        virtual void    Draw(OutputDevice* pDev, const Point&, const Size&, sal_uLong) SAL_OVERRIDE;
+
     protected:
         virtual void    DataChanged( const DataChangedEvent& aEvent);
         virtual void    LoseFocus();

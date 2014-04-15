@@ -33,6 +33,7 @@
 #include <SidebarWindowsTypes.hxx>
 #include <svl/lstner.hxx>
 
+class OutputDevice;
 class SwWrtShell;
 class SwDoc;
 class SwView;
@@ -279,6 +280,8 @@ class SwPostItMgr: public SfxListener
                                                 const sal_Int32 nIndex );
             void GetAllSidebarWinForFrm( const SwFrm& rFrm,
                                          std::vector< Window* >* pChildren );
+
+            void DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage);
 };
 
 #endif

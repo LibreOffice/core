@@ -104,6 +104,7 @@ class SwAddPrinterTabPage : public SfxTabPage
     RadioButton*    m_pOnlyRB;
     RadioButton*    m_pEndRB;
     RadioButton*    m_pEndPageRB;
+    RadioButton*    m_pInMarginsRB;
 
     CheckBox*       m_pPrintEmptyPagesCB;
     CheckBox*       m_pPaperFromSetupCB;
