@@ -509,7 +509,6 @@ bool SalBool::isInUnoIncludeFile(SourceLocation spellingLocation) const {
            || name == SRCDIR "/cppuhelper/source/compat.cxx"
            || name == SRCDIR "/sal/osl/all/compat.cxx")
         : (name.startswith(SRCDIR "/include/com/")
-           || name.startswith(SRCDIR "/include/comphelper/")
            || name.startswith(SRCDIR "/include/cppu/")
            || name.startswith(SRCDIR "/include/cppuhelper/")
            || name.startswith(SRCDIR "/include/osl/")
@@ -518,7 +517,8 @@ bool SalBool::isInUnoIncludeFile(SourceLocation spellingLocation) const {
            || name.startswith(SRCDIR "/include/salhelper/")
            || name.startswith(SRCDIR "/include/systools/")
            || name.startswith(SRCDIR "/include/typelib/")
-           || name.startswith(SRCDIR "/include/uno/"));
+           || name.startswith(SRCDIR "/include/uno/")
+           || name == SRCDIR "/include/comphelper/implbase_var.hxx");
 }
 
 bool SalBool::isInSpecialMainFile(SourceLocation spellingLocation) const {
