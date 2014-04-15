@@ -1567,10 +1567,12 @@ sub get_source_codes ($)
 
     Determine values for the product code and upgrade code of the target version.
 
-    As perparation for building a Windows patch, certain conditions have to be fullfilled.
-     - The upgrade code changes from old to new version
+    As preparation for building a Windows patch, certain conditions have to be fulfilled.
+     - The upgrade code remains the same
      - The product code remains the same
-     In order to inforce that we have to access information about the source version.
+       [this is still to be determined.  For patches to work we need the same product codes but
+        the install sets install only when the product codes differ.]
+    In order to enforce that we have to access information about the source version.
 
     The resulting values are stored as global variables
         $installer::globals::productcode
@@ -1630,6 +1632,28 @@ sub set_global_code_variables ($$)
         $target_upgrade_code = "{" . create_guid() . "}";
         $installer::logger::Lang->printf("there is no source version => created new guids\n");
     }
+
+    # Keep the upgrade code constant between versions.  Read it from the codes.txt file.
+    # Note that this handles regular installation sets and language packs.
+    my $onelanguage = ${$languagesref}[0];
+    $installer::logger::Lang->printf("reading upgrade code for language %s from %s\n",
+        $onelanguage,
+        $installer::globals::codefilename);
+    if (defined $installer::globals::codefilename)
+    {
+        my $code_filename = $installer::globals::codefilename;
+        installer::files::check_file($code_filename);
+        my $codefile = installer::files::read_file($code_filename);
+        my $searchstring = "UPGRADECODE";
+        my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file(
+            $searchstring,
+            $codefile);
+        $target_upgrade_code = installer::windows::idtglobal::get_language_string_from_language_block(
+            $codeblock,
+            $onelanguage,
+            "");
+    }
+    # else use the previously generated upgrade code.
 
     $installer::globals::productcode = $target_product_code;
     $installer::globals::upgradecode = $target_upgrade_code;
