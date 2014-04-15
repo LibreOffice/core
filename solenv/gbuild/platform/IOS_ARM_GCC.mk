@@ -59,7 +59,7 @@ gb_CXXFLAGS := \
 	$(CXXFLAGS_CXX11) \
 
 # these are to get gcc to switch to Objective-C++ or Objective-C mode
-gb_OBJC_OBJCXX_COMMON_FLAGS := -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
+gb_OBJC_OBJCXX_COMMON_FLAGS := -fobjc-abi-version=2 -fobjc-legacy-dispatch
 
 gb_OBJCXXFLAGS := -x objective-c++ $(gb_OBJC_OBJCXX_COMMON_FLAGS)
 
