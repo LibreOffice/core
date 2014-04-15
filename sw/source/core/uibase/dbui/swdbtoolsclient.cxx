@@ -84,14 +84,12 @@ SwDbtoolsClient::~SwDbtoolsClient()
     }
 }
 
+#if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
-
 extern "C" { static void SAL_CALL thisModule() {} }
-
 #else
-
 extern "C" void * createDataAccessToolsFactory();
-
+#endif
 #endif
 
 void SwDbtoolsClient::registerClient()
@@ -102,6 +100,7 @@ void SwDbtoolsClient::registerClient()
         OSL_ENSURE(NULL == getDbToolsClientModule(), "SwDbtoolsClient::registerClient: inconsistence: already have a module!");
         OSL_ENSURE(NULL == getDbToolsClientFactoryFunction(), "SwDbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
+#if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
         const OUString sModuleName(SVLIBRARY("dbtools"));
 
@@ -126,6 +125,7 @@ void SwDbtoolsClient::registerClient()
         }
 #else
         getDbToolsClientFactoryFunction() = createDataAccessToolsFactory;
+#endif
 #endif
     }
 }

@@ -20,6 +20,8 @@
 #ifndef INCLUDED_CONNECTIVITY_VIRTUALDBTOOLS_HXX
 #define INCLUDED_CONNECTIVITY_VIRTUALDBTOOLS_HXX
 
+#include <config_features.h>
+
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -88,8 +90,9 @@ namespace dbtools {
         a pointer to an object implementing the IDataAccessToolsFactory interface,
         aquired exactly <em>once</em>.
 */
+#if HAVE_FEATURE_DESKTOP
 extern "C" OOO_DLLPUBLIC_DBTOOLS void* SAL_CALL createDataAccessToolsFactory();
-
+#endif
 
 //=
 

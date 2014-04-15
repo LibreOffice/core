@@ -95,16 +95,12 @@ namespace svxform
             revokeClient();
     }
 
-
-
+#if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
-
     extern "C" { static void SAL_CALL thisModule() {} }
-
 #else
-
     extern "C" void * createDataAccessToolsFactory();
-
+#endif
 #endif
 
     void ODbtoolsClient::registerClient()
@@ -115,6 +111,7 @@ namespace svxform
             OSL_ENSURE(NULL == s_hDbtoolsModule, "ODbtoolsClient::registerClient: inconsistence: already have a module!");
             OSL_ENSURE(NULL == s_pFactoryCreationFunc, "ODbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
+#if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
             const OUString sModuleName( SVLIBRARY( "dbtools" )
             );
@@ -140,6 +137,7 @@ namespace svxform
             }
 #else
             s_pFactoryCreationFunc = createDataAccessToolsFactory;
+#endif
 #endif
         }
     }

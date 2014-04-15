@@ -30,13 +30,14 @@ using namespace ::com::sun::star::lang;
 
 
 // the entry point for load-on-call usage of the DBTOOLS lib
+#if HAVE_FEATURE_DESKTOP
 extern "C" void* SAL_CALL createDataAccessToolsFactory()
 {
     ::connectivity::ODataAccessToolsFactory* pFactory = new ::connectivity::ODataAccessToolsFactory;
     pFactory->acquire();
     return pFactory;
 }
-
+#endif
 
 namespace connectivity
 {
