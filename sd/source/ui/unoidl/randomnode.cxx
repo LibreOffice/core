@@ -156,7 +156,7 @@ private:
 
 
 
-SD_DLLPUBLIC Reference< XInterface > RandomAnimationNode_createInstance( sal_Int16 nPresetClass )
+Reference< XInterface > RandomAnimationNode_createInstance( sal_Int16 nPresetClass )
 {
     Reference< XInterface > xInt( static_cast<XWeak*>( new RandomAnimationNode( nPresetClass ) ) );
     return xInt;
