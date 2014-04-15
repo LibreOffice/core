@@ -121,8 +121,6 @@ protected:
     sal_Bool        m_bEmbeddedScriptSupport;
     sal_Bool        m_bDocumentRecoverySupport;
 
-    Interceptor* m_pInterceptor;
-
     // following information will be used between SaveAs and SaveCompleted
     sal_Bool m_bWaitSaveCompleted;
     OUString m_aNewEntryName;
