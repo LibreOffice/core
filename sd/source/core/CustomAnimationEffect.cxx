@@ -3011,11 +3011,12 @@ MainSequence::MainSequence()
 }
 
 MainSequence::MainSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
-: mxTimingRootNode( xNode, UNO_QUERY )
-, mbRebuilding( false )
-, mnRebuildLockGuard( 0 )
-, mbPendingRebuildRequest( false )
-, mbIgnoreChanges( 0 )
+    : mxTimingRootNode( xNode, UNO_QUERY )
+    , mbTimerMode( false )
+    , mbRebuilding( false )
+    , mnRebuildLockGuard( 0 )
+    , mbPendingRebuildRequest( false )
+    , mbIgnoreChanges( 0 )
 {
     init();
 }
