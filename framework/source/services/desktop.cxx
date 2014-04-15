@@ -28,7 +28,6 @@
 
 #include <dispatch/interceptionhelper.hxx>
 #include <classes/taskcreator.hxx>
-#include <threadhelp/lockhelper.hxx>
 #include <threadhelp/transactionguard.hxx>
 #include <general.h>
 #include <properties.h>
@@ -1449,8 +1448,8 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
 
     if( pInfoHelper == NULL )
     {
-        // Ready for multithreading
-        ::osl::MutexGuard aGuard( LockHelper::getGlobalLock() );
+        SolarMutexGuard aGuard;
+
         // Control this pointer again, another instance can be faster then these!
         if( pInfoHelper == NULL )
         {
@@ -1493,8 +1492,8 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Desktop::getPropert
 
     if( pInfo == NULL )
     {
-        // Ready for multithreading
-        ::osl::MutexGuard aGuard( LockHelper::getGlobalLock() );
+        SolarMutexGuard aGuard;
+
         // Control this pointer again, another instance can be faster then these!
         if( pInfo == NULL )
         {

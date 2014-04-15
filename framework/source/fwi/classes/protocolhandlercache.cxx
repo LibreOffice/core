@@ -25,11 +25,11 @@
 
 #include <classes/protocolhandlercache.hxx>
 #include <classes/converter.hxx>
-#include <threadhelp/lockhelper.hxx>
 
 #include <tools/wldcrd.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <vcl/svapp.hxx>
 
 namespace framework{
 
@@ -80,7 +80,7 @@ HandlerCFGAccess* HandlerCache::m_pConfig = NULL;
  */
 HandlerCache::HandlerCache()
 {
-    osl::MutexGuard g(LockHelper::getGlobalLock());
+    SolarMutexGuard aGuard;
 
     if (m_nRefCount==0)
     {
@@ -101,7 +101,7 @@ HandlerCache::HandlerCache()
  */
 HandlerCache::~HandlerCache()
 {
-    osl::MutexGuard g(LockHelper::getGlobalLock());
+    SolarMutexGuard aGuard;
 
     if( m_nRefCount==1)
     {
@@ -128,15 +128,16 @@ HandlerCache::~HandlerCache()
 bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) const
 {
     bool bFound = false;
-    /* SAFE */{
-        osl::MutexGuard g(LockHelper::getGlobalLock());
-        PatternHash::const_iterator pItem = m_pPattern->findPatternKey(sURL);
-        if (pItem!=m_pPattern->end())
-        {
-            *pReturn = (*m_pHandler)[pItem->second];
-            bFound = true;
-        }
-    /* SAFE */}
+
+    SolarMutexGuard aGuard;
+
+    PatternHash::const_iterator pItem = m_pPattern->findPatternKey(sURL);
+    if (pItem!=m_pPattern->end())
+    {
+        *pReturn = (*m_pHandler)[pItem->second];
+        bFound = true;
+    }
+
     return bFound;
 }
 
@@ -153,7 +154,7 @@ bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pReturn 
 
 void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
 {
-    osl::MutexGuard g(LockHelper::getGlobalLock());
+    SolarMutexGuard aGuard;
 
     HandlerHash* pOldHandler = m_pHandler;
     PatternHash* pOldPattern = m_pPattern;

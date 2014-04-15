@@ -32,7 +32,6 @@
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <classes/framecontainer.hxx>
 #include <classes/propertysethelper.hxx>
-#include <threadhelp/lockhelper.hxx>
 #include <threadhelp/transactionguard.hxx>
 #include <threadhelp/transactionbase.hxx>
 #include <general.h>
@@ -2507,6 +2506,7 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
 void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno::RuntimeException, std::exception)
 {
     static bool bFirstVisibleTask = true;
+    static osl::Mutex aFirstVisibleLock;
 
     /* SAFE { */
     SolarMutexClearableGuard aReadLock;
@@ -2520,12 +2520,10 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
 
     if (xDesktopCheck.is())
     {
-        /* STATIC SAFE { */
-        osl::ClearableMutexGuard aStaticWriteLock( LockHelper::getGlobalLock() );
-        bool bMustBeTriggered  = bFirstVisibleTask;
-                 bFirstVisibleTask = false;
-        aStaticWriteLock.clear();
-        /* } STATIC SAFE */
+        osl::ClearableMutexGuard aGuard(aFirstVisibleLock);
+        bool bMustBeTriggered = bFirstVisibleTask;
+        bFirstVisibleTask = false;
+        aGuard.clear();
 
         if (bMustBeTriggered)
         {
@@ -3216,7 +3214,8 @@ void Frame::impl_checkMenuCloser()
     // Look for necessary actions ...
     // Only if the closer state must be moved from one frame to another one
     // or must be enabled/disabled at all.
-    osl::MutexGuard g(LockHelper::getGlobalLock());
+    SolarMutexGuard aGuard;
+
     css::uno::Reference< css::frame::XFrame2 > xCloserFrame (m_xCloserFrame.get(), css::uno::UNO_QUERY);
     if (xCloserFrame!=xNewCloserFrame)
     {

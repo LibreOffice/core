@@ -57,7 +57,6 @@ $(eval $(call gb_Library_add_exception_objects,fwi,\
     framework/source/fwi/helper/shareablemutex \
     framework/source/fwi/jobs/configaccess \
     framework/source/fwi/jobs/jobconst \
-    framework/source/fwi/threadhelp/lockhelper \
     framework/source/fwi/threadhelp/transactionmanager \
     framework/source/fwi/uielement/constitemcontainer \
     framework/source/fwi/uielement/itemcontainer \

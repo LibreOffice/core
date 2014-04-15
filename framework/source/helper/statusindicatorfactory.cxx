@@ -21,7 +21,6 @@
 #include <helper/statusindicatorfactory.hxx>
 #include <helper/statusindicator.hxx>
 #include <helper/vclstatusindicator.hxx>
-#include <threadhelp/lockhelper.hxx>
 #include <services.h>
 #include <properties.h>
 
@@ -49,7 +48,9 @@
 
 namespace framework{
 
-sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for rescheduling
+sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  ///< static counter for rescheduling
+struct RescheduleLock: public rtl::Static<osl::Mutex, RescheduleLock> {}; ///< mutex to guard the m_nInReschedule
+
 const char PROGRESS_RESOURCE[] = "private:resource/progressbar/progressbar";
 
 StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext)
@@ -515,12 +516,12 @@ void StatusIndicatorFactory::impl_reschedule(bool bForce)
         return;
 
     // SAFE ->
-    osl::ResettableMutexGuard aGlobalLock(LockHelper::getGlobalLock());
+    osl::ResettableMutexGuard aRescheduleGuard(RescheduleLock::get());
 
     if (m_nInReschedule == 0)
     {
         ++m_nInReschedule;
-        aGlobalLock.clear();
+        aRescheduleGuard.clear();
         // <- SAFE
 
         {
@@ -529,7 +530,7 @@ void StatusIndicatorFactory::impl_reschedule(bool bForce)
         }
 
         // SAFE ->
-        aGlobalLock.reset();
+        aRescheduleGuard.reset();
         --m_nInReschedule;
     }
 }
