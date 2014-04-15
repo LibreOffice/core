@@ -703,13 +703,15 @@ sal_Bool SwNewDBMgr::GetColumnNames(ListBox* pListBox,
 /*--------------------------------------------------------------------
     Description: CTOR
  --------------------------------------------------------------------*/
-SwNewDBMgr::SwNewDBMgr() :
-            bInitDBFields(sal_False),
-            bInMerge(sal_False),
-            bMergeSilent(sal_False),
-            bMergeLock(sal_False),
-            pImpl(new SwNewDBMgr_Impl(*this)),
-            pMergeEvtSrc(NULL)
+SwNewDBMgr::SwNewDBMgr()
+    : bCancel(false)
+    , bInitDBFields(false)
+    , bSingleJobs(false)
+    , bInMerge(false)
+    , bMergeSilent(false)
+    , bMergeLock(false)
+    , pImpl(new SwNewDBMgr_Impl(*this))
+    , pMergeEvtSrc(NULL)
 {
 }
 

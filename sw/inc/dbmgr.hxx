@@ -234,8 +234,8 @@ public:
     inline void     SetInitDBFields(sal_Bool b) { bInitDBFields = b;    }
 
     /// Print / Save mail merge one by one or all together.
-    inline sal_Bool     IsSingleJobs() const    { return bSingleJobs;   }
-    inline void     SetSingleJobs(sal_Bool b)   { bSingleJobs = b;  }
+    sal_Bool     IsSingleJobs() const    { return bSingleJobs;   }
+    void     SetSingleJobs(sal_Bool b)   { bSingleJobs = b;  }
 
     /// Mailing: Set email data.
     inline void     SetEMailColumn(const OUString& sColName) { sEMailAddrFld = sColName; }
