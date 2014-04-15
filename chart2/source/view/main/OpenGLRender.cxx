@@ -43,8 +43,6 @@
 
 using namespace com::sun::star;
 
-using namespace std;
-
 #define DEBUG_PNG 0
 #if RENDER_TO_FILE
 #define BMP_HEADER_LEN 54
