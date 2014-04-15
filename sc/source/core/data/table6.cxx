@@ -516,6 +516,11 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
 
     if (bRows)                                      // zeilenweise
     {
+        if (!ValidCol(nCol))
+        {
+            SAL_WARN( "sc.core", "SearchStyle: bad column " << nCol);
+            return false;
+        }
         nRow += nAdd;
         do
         {
