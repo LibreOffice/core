@@ -2993,10 +2993,12 @@ void SAL_CALL AnimationChangeListener::disposing( const ::com::sun::star::lang::
 }
 
 MainSequence::MainSequence()
-: mxTimingRootNode( SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() ) )
-, mbRebuilding( false )
-, mnRebuildLockGuard( 0 )
-, mbPendingRebuildRequest( false )
+    : mxTimingRootNode(SequenceTimeContainer::create(::comphelper::getProcessComponentContext()))
+    , mbTimerMode(false)
+    , mbRebuilding( false )
+    , mnRebuildLockGuard( 0 )
+    , mbPendingRebuildRequest( false )
+    , mbIgnoreChanges( 0 )
 {
     if( mxTimingRootNode.is() )
     {
