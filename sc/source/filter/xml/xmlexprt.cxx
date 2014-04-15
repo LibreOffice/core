@@ -2950,14 +2950,14 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
     {
         if (bIsFirst)
         {
-            ExportFormatRanges(0, 0, aCell.aCellAddress.Column - 1, aCell.aCellAddress.Row, nTable);
+            ExportFormatRanges(0, 0, aCell.maCellAddress.Col()-1, aCell.maCellAddress.Row(), nTable);
             aPrevCell = aCell;
             bIsFirst = false;
         }
         else
         {
-            if ((aPrevCell.aCellAddress.Row == aCell.aCellAddress.Row) &&
-                (aPrevCell.aCellAddress.Column + nEqualCells + 1 == aCell.aCellAddress.Column))
+            if ((aPrevCell.maCellAddress.Row() == aCell.maCellAddress.Row()) &&
+                (aPrevCell.maCellAddress.Col() + nEqualCells + 1 == aCell.maCellAddress.Col()))
             {
                 if(IsCellEqual(aPrevCell, aCell))
                     ++nEqualCells;
@@ -2971,8 +2971,8 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
             else
             {
                 WriteCell(aPrevCell, nEqualCells);
-                ExportFormatRanges(aPrevCell.aCellAddress.Column + nEqualCells + 1, aPrevCell.aCellAddress.Row,
-                    aCell.aCellAddress.Column - 1, aCell.aCellAddress.Row, nTable);
+                ExportFormatRanges(aPrevCell.maCellAddress.Col() + nEqualCells + 1, aPrevCell.maCellAddress.Row(),
+                    aCell.maCellAddress.Col()-1, aCell.maCellAddress.Row(), nTable);
                 nEqualCells = 0;
                 aPrevCell = aCell;
             }
@@ -2981,7 +2981,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
     if (!bIsFirst)
     {
         WriteCell(aPrevCell, nEqualCells);
-        ExportFormatRanges(aPrevCell.aCellAddress.Column + nEqualCells + 1, aPrevCell.aCellAddress.Row,
+        ExportFormatRanges(aPrevCell.maCellAddress.Col() + nEqualCells + 1, aPrevCell.maCellAddress.Row(),
             pSharedData->GetLastColumn(nTable), pSharedData->GetLastRow(nTable), nTable);
     }
     else
@@ -3133,8 +3133,6 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
     // nEqualCellCount is the number of additional cells
     SetRepeatAttribute(nEqualCellCount, (aCell.nType != table::CellContentType_EMPTY));
 
-    ScAddress aCellPos;
-    ScUnoConversion::FillScAddress( aCellPos, aCell.aCellAddress );
     if (aCell.nStyleIndex != -1)
         AddAttribute(sAttrStyleName, *pCellStyles->GetStyleNameByIndex(aCell.nStyleIndex, aCell.bIsAutoStyle));
     if (aCell.nValidationIndex > -1)
@@ -3171,7 +3169,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
             break;
         case table::CellContentType_TEXT :
             {
-                OUString sFormattedString(lcl_GetFormattedString(pDoc, aCellPos));
+                OUString sFormattedString(lcl_GetFormattedString(pDoc, aCell.maCellAddress));
                 OUString sCellString = aCell.maBaseCell.getString(pDoc);
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                         sCellString, sFormattedString, true, true);
@@ -3224,11 +3222,11 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                         if (pDoc)
                         {
                             GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                                    aCell.nNumberFormat, pDoc->GetValue( aCellPos ));
+                                    aCell.nNumberFormat, pDoc->GetValue(aCell.maCellAddress));
                             if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
                             {
                                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                                        aCell.nNumberFormat, pDoc->GetValue( aCellPos ), false, XML_NAMESPACE_CALC_EXT, false );
+                                        aCell.nNumberFormat, pDoc->GetValue(aCell.maCellAddress), false, XML_NAMESPACE_CALC_EXT, false );
                             }
                         }
                     }
@@ -3507,9 +3505,9 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
     if( rMyCell.bHasShape && !rMyCell.aShapeList.empty() && pDoc )
     {
         awt::Point aPoint;
-        Rectangle aRect = pDoc->GetMMRect(static_cast<SCCOL>(rMyCell.aCellAddress.Column), static_cast<SCROW>(rMyCell.aCellAddress.Row),
-            static_cast<SCCOL>(rMyCell.aCellAddress.Column), static_cast<SCROW>(rMyCell.aCellAddress.Row), static_cast<SCTAB>(rMyCell.aCellAddress.Sheet));
-        bool bNegativePage(pDoc->IsNegativePage(rMyCell.aCellAddress.Sheet));
+        Rectangle aRect = pDoc->GetMMRect(rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(),
+            rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Tab());
+        bool bNegativePage = pDoc->IsNegativePage(rMyCell.maCellAddress.Tab());
         if (bNegativePage)
             aPoint.X = aRect.Right();
         else
@@ -3600,9 +3598,6 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
 
 void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >& xShape)
 {
-    ScAddress aCellPos;
-    ScUnoConversion::FillScAddress( aCellPos, pCurrentCell->aCellAddress );
-
     ScPostIt* pNote = pCurrentCell->pNote;
 
     if (pNote)
@@ -3610,7 +3605,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
         // TODO : notes
         //is it still usefull, as this call back is only called from ScXMLExport::WriteAnnotation
         // and should be in sync with pCurrentCell
-        SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(aCellPos);
+        SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(pCurrentCell->maCellAddress);
         Reference<drawing::XShape> xCurrentShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
         if (xCurrentShape.get()!=xShape.get())
             return;
@@ -3659,11 +3654,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
 
 void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
 {
-
-    ScAddress aCellPos;
-    ScUnoConversion::FillScAddress( aCellPos, rMyCell.aCellAddress );
-
-    ScPostIt* pNote = pDoc->GetNote(aCellPos);
+    ScPostIt* pNote = pDoc->GetNote(rMyCell.maCellAddress);
     if (pNote)
     {
         if (pNote->IsCaptionShown())
@@ -3671,7 +3662,7 @@ void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
 
         pCurrentCell = &rMyCell;
 
-        SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(aCellPos);
+        SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(rMyCell.maCellAddress);
         Reference<drawing::XShape> xShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
 
         GetShapeExport()->exportShape(xShape, SEF_DEFAULT|SEF_EXPORT_ANNOTATION, NULL);
@@ -3756,10 +3747,6 @@ bool ScXMLExport::IsEditCell(ScMyCell& rCell) const
 
 bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
 {
-    ScAddress aCellPos1;
-    ScUnoConversion::FillScAddress( aCellPos1, aCell1.aCellAddress );
-    ScAddress aCellPos2;
-    ScUnoConversion::FillScAddress( aCellPos2, aCell2.aCellAddress );
     bool bIsEqual = false;
     if( !aCell1.bIsMergedBase && !aCell2.bIsMergedBase &&
         aCell1.bIsCovered == aCell2.bIsCovered &&

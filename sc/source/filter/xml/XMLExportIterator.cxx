@@ -94,12 +94,10 @@ bool ScMyShapesContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 void ScMyShapesContainer::SetCellData( ScMyCell& rMyCell )
 {
     rMyCell.aShapeList.clear();
-    ScAddress aAddress;
-    ScUnoConversion::FillScAddress( aAddress, rMyCell.aCellAddress );
 
     ScMyShapeList::iterator aItr(aShapeList.begin());
     ScMyShapeList::iterator aEndItr(aShapeList.end());
-    while( (aItr != aEndItr) && (aItr->aAddress == aAddress) )
+    while( (aItr != aEndItr) && (aItr->aAddress == rMyCell.maCellAddress) )
     {
         rMyCell.aShapeList.push_back(*aItr);
         aItr = aShapeList.erase(aItr);
@@ -156,11 +154,8 @@ bool ScMyNoteShapesContainer::GetFirstAddress( table::CellAddress& rCellAddress 
 
 void ScMyNoteShapesContainer::SetCellData( ScMyCell& rMyCell )
 {
-    ScAddress aAddress;
-    ScUnoConversion::FillScAddress( aAddress, rMyCell.aCellAddress );
-
     ScMyNoteShapeList::iterator aItr = aNoteShapeList.begin();
-    while( (aItr != aNoteShapeList.end()) && (aItr->aPos == aAddress) )
+    while( (aItr != aNoteShapeList.end()) && (aItr->aPos == rMyCell.maCellAddress) )
     {
         aItr = aNoteShapeList.erase(aItr);
     }
@@ -659,8 +654,6 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, const table::Cel
 
     bool bIsMatrixBase = false;
 
-    ScAddress aScAddress;
-    ScUnoConversion::FillScAddress( aScAddress, rMyCell.aCellAddress );
     switch (rMyCell.maBaseCell.meType)
     {
         case CELLTYPE_VALUE:
@@ -678,7 +671,7 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, const table::Cel
     }
 
     if (rMyCell.maBaseCell.meType == CELLTYPE_FORMULA)
-        if( rExport.IsMatrix( aScAddress, rMyCell.aMatrixRange, bIsMatrixBase ) )
+        if (rExport.IsMatrix(rMyCell.maCellAddress, rMyCell.aMatrixRange, bIsMatrixBase))
         {
             rMyCell.bIsMatrixBase = bIsMatrixBase;
             rMyCell.bIsMatrixCovered = !bIsMatrixBase;
@@ -688,10 +681,7 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, const table::Cel
 void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
 {
     aCell.bHasAnnotation = false;
-    ScAddress aAddress;
-    ScUnoConversion::FillScAddress( aAddress, aCell.aCellAddress );
-
-    ScPostIt* pNote = rExport.GetDocument()->GetNote(aAddress);
+    ScPostIt* pNote = rExport.GetDocument()->GetNote(aCell.maCellAddress);
 
     if(pNote)
     {
@@ -787,8 +777,8 @@ bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pC
         bool bIsAutoStyle;
         // Ranges before the previous cell are not needed by ExportFormatRanges anymore and can be removed
         sal_Int32 nRemoveBeforeRow = aLastAddress.Row;
-        aCell.nStyleIndex = pCellStyles->GetStyleNameIndex(aCell.aCellAddress.Sheet,
-            aCell.aCellAddress.Column, aCell.aCellAddress.Row,
+        aCell.nStyleIndex = pCellStyles->GetStyleNameIndex(aCell.maCellAddress.Tab(),
+            aCell.maCellAddress.Col(), aCell.maCellAddress.Row(),
             bIsAutoStyle, aCell.nValidationIndex, aCell.nNumberFormat, nRemoveBeforeRow);
         aLastAddress = aCell.aCellAddress;
         aCell.bIsAutoStyle = bIsAutoStyle;
