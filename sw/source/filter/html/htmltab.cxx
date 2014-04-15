@@ -3881,7 +3881,6 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
             break;
         case HTML_TABLE_ON:
             {
-                sal_Bool bTopTable = sal_False;
                 sal_Bool bHasToFly = sal_False;
                 SvxAdjust eTabAdjust = SVX_ADJUST_END;
                 if( !pPendStack )
@@ -3920,13 +3919,6 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                     }
                     else
                     {
-                        // Wenn wir mitlerweile in einem Rahmen stehen
-                        // koennen wir erneut eine echte Tabelle aufmachen.
-                        // Wir erkennen das daran, dass wir keinen
-                        // Tabellen-Node mehr finden.
-                        bTopTable = (0 ==
-                            pPam->GetPoint()->nNode.GetNode().FindTableNode());
-
                         // Wenn im aktuellen Absatz Flys verankert sind,
                         // muss die neue Tabelle in einen Rahmen.
                         bHasToFly = HasCurrentParaFlys(sal_False,sal_True);
