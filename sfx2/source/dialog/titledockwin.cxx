@@ -58,6 +58,7 @@ namespace sfx2
         ,m_aContentWindow( this )
         ,m_aBorder( 3, 1, 3, 3 )
         ,m_bLayoutPending( false )
+        ,m_nTitleBarHeight(0)
     {
         impl_construct();
     }
