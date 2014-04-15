@@ -150,7 +150,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 
         if( pAny )
         {
-            bool bOn;
+            bool bOn(false);
             (*pAny) >>= bOn;
             bOn = !bOn;
             (*pAny) <<= bOn;
