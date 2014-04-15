@@ -18,9 +18,10 @@
 
 using namespace std;
 
-ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(Window* pParent, WinBits nBits, SvPivotTreeListType eType) :
-    SvTreeListBox(pParent, nBits),
-    meType(eType)
+ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(Window* pParent, WinBits nBits, SvPivotTreeListType eType)
+    : SvTreeListBox(pParent, nBits)
+    , meType(eType)
+    , mpParent(NULL)
 {
     SetHighlightRange();
     SetDragDropMode(SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_APP_MOVE  | SV_DRAGDROP_APP_DROP);
