@@ -678,6 +678,7 @@ INetMIMEMessage::INetMIMEMessage()
 
 INetMIMEMessage::INetMIMEMessage (const INetMIMEMessage& rMsg)
     : INetRFC822Message (rMsg)
+    , pParent(NULL)
 {
     CopyImp (rMsg);
 }
