@@ -374,7 +374,6 @@ private:
     sal_uInt16              nInterpretLevel;                // >0 if in interpreter
     sal_uInt16              nMacroInterpretLevel;           // >0 if macro in interpreter
     sal_uInt16              nInterpreterTableOpLevel;       // >0 if in interpreter TableOp
-    SCTAB               nMaxTableNumber;
     sal_uInt16              nSrcVer;                        // file version (load/save)
     SCROW               nSrcMaxRow;                     // number of lines to load/save
     sal_uInt16              nFormulaTrackCount;
@@ -538,7 +537,6 @@ public:
     bool InsertNewRangeName( const OUString& rName, const ScAddress& rPos, const OUString& rExpr );
 
     SCTAB           GetMaxTableNumber() { return static_cast<SCTAB>(maTabs.size()) - 1; }
-    void            SetMaxTableNumber(SCTAB nNumber) { nMaxTableNumber = nNumber; }
 
     ScRangePairList*    GetColNameRanges() { return &xColNameRanges; }
     ScRangePairList*    GetRowNameRanges() { return &xRowNameRanges; }
