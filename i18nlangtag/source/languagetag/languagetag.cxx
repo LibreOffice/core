@@ -1976,10 +1976,16 @@ bool LanguageTagImpl::isIsoODF() const
     {
         const_cast<LanguageTagImpl*>(this)->synCanonicalize();
         if (!LanguageTag::isIsoScript( getScript()))
-            return ((meIsIsoODF = DECISION_NO) == DECISION_YES);
+        {
+            meIsIsoODF = DECISION_NO;
+            return false;
+        }
         // The usual case is lll-CC so simply check that first.
         if (isIsoLocale())
-            return ((meIsIsoODF = DECISION_YES) == DECISION_YES);
+        {
+            meIsIsoODF = DECISION_YES;
+            return true;
+        }
         // If this is not ISO locale for which script must not exist it can
         // still be ISO locale plus ISO script lll-Ssss-CC, but not ll-vvvv ...
         // ll-vvvvvvvv
