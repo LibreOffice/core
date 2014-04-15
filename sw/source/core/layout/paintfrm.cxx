@@ -6172,7 +6172,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, con
     SwAlignRect( aPageRect, _pViewShell );
 
     const SwPostItMgr *pMgr = _pViewShell->GetPostItMgr();
-    if (pMgr && pMgr->ShowNotes() && pMgr->HasNotes())  // do not show anything in print preview
+    if (pMgr /*&& pMgr->ShowNotes()*/ && pMgr->HasNotes())  // do not show anything in print preview
     {
         sal_Int32 nScrollerHeight = pMgr->GetSidebarScrollerHeight();
         const Rectangle &aVisRect = _pViewShell->VisArea().SVRect();

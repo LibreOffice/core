@@ -71,6 +71,7 @@ StringArray STR_PRINTOPTUI
         < "~All pages"; >;
         < "Pa~ges"; >;
         < "~Selection"; >;
+        < "Place in margins"; >;
     };
 };
 

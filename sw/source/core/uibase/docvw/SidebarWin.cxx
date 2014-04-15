@@ -72,10 +72,12 @@
 #include <ndtxt.hxx>
 
 #include <sw_primitivetypes2d.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 
 namespace sw { namespace sidebarwindows {
@@ -222,6 +224,59 @@ void SwSidebarWin::Paint( const Rectangle& rRect)
                                  mpMetadataAuthor->GetSizePixel().Height() +
                                     mpMetadataDate->GetSizePixel().Height() ) ) ) );
     }
+}
+
+void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, sal_uLong nInFlags)
+{
+    if (mpMetadataAuthor->IsVisible() )
+    {
+        //draw left over space
+        if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+        {
+            pDev->SetFillColor(COL_BLACK);
+        }
+        else
+        {
+            pDev->SetFillColor(mColorDark);
+        }
+        pDev->SetLineColor();
+        pDev->DrawRect( Rectangle( rPt, rSz ) );
+    }
+
+    if (mpMetadataAuthor->IsVisible())
+    {
+        Font aOrigFont(mpMetadataAuthor->GetControlFont());
+        Size aSize(PixelToLogic(mpMetadataAuthor->GetSizePixel()));
+        Point aPos(PixelToLogic(mpMetadataAuthor->GetPosPixel()));
+        aPos += rPt;
+        Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetFieldFont() );
+        mpMetadataAuthor->SetControlFont( aFont );
+        mpMetadataAuthor->Draw(pDev, aPos, aSize, nInFlags);
+        mpMetadataAuthor->SetControlFont( aOrigFont );
+    }
+
+    if (mpMetadataDate->IsVisible())
+    {
+        Font aOrigFont(mpMetadataDate->GetControlFont());
+        Size aSize(PixelToLogic(mpMetadataDate->GetSizePixel()));
+        Point aPos(PixelToLogic(mpMetadataDate->GetPosPixel()));
+        aPos += rPt;
+        Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
+        mpMetadataDate->SetControlFont( aFont );
+        mpMetadataDate->Draw(pDev, aPos, aSize, nInFlags);
+        mpMetadataDate->SetControlFont( aOrigFont );
+    }
+
+    mpSidebarTxtControl->Draw(pDev, rPt, rSz, nInFlags);
+
+    const drawinglayer::primitive2d::Primitive2DSequence& rSequence = mpAnchor->getOverlayObjectPrimitive2DSequence();
+    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+    drawinglayer::processor2d::BaseProcessor2D * pProcessor =
+        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
+            *pDev, aNewViewInfos );
+
+    pProcessor->process(rSequence);
+    delete pProcessor;
 }
 
 void SwSidebarWin::SetPosSizePixelRect( long nX,

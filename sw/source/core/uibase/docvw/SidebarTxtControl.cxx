@@ -119,6 +119,46 @@ void SidebarTxtControl::RequestHelp(const HelpEvent &rEvt)
     }
 }
 
+void SidebarTxtControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, sal_uLong)
+{
+    if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        if ( mrSidebarWin.IsMouseOverSidebarWin() ||
+             HasFocus() )
+        {
+            pDev->DrawGradient( Rectangle( Point(0,0) + rPt, PixelToLogic(GetSizePixel()) ),
+                          Gradient( GradientStyle_LINEAR,
+                                    mrSidebarWin.ColorDark(),
+                                    mrSidebarWin.ColorDark() ) );
+        }
+        else
+        {
+            pDev->DrawGradient( Rectangle( Point(0,0) + rPt, PixelToLogic(GetSizePixel()) ),
+                          Gradient( GradientStyle_LINEAR,
+                                    mrSidebarWin.ColorLight(),
+                                    mrSidebarWin.ColorDark()));
+        }
+    }
+
+    if ( GetTextView() )
+    {
+        GetTextView()->GetOutliner()->Draw(pDev, Rectangle(rPt, rSz));
+    }
+
+    if ( mrSidebarWin.GetLayoutStatus()==SwPostItHelper::DELETED )
+    {
+        SetLineColor(mrSidebarWin.GetChangeColor());
+        pDev->DrawLine( PixelToLogic( GetPosPixel(), pDev->GetMapMode() ),
+                  PixelToLogic( GetPosPixel() +
+                                Point( GetSizePixel().Width(),
+                                       GetSizePixel().Height() ), pDev->GetMapMode() ) );
+        pDev->DrawLine( PixelToLogic( GetPosPixel() +
+                                Point( GetSizePixel().Width(),0), pDev->GetMapMode() ),
+                  PixelToLogic( GetPosPixel() +
+                                Point( 0, GetSizePixel().Height() ), pDev->GetMapMode() ) );
+    }
+}
+
 void SidebarTxtControl::Paint( const Rectangle& rRect)
 {
     if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )

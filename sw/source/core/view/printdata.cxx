@@ -170,8 +170,8 @@ SwPrintUIOptions::SwPrintUIOptions(
 {
     ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
 
-    OSL_ENSURE( aLocalizedStrings.Count() >= 30, "resource incomplete" );
-    if( aLocalizedStrings.Count() < 30 ) // bad resource ?
+    OSL_ENSURE( aLocalizedStrings.Count() >= 31, "resource incomplete" );
+    if( aLocalizedStrings.Count() < 31 ) // bad resource ?
         return;
 
     // printing HTML sources does not have any valid UI options.
@@ -320,11 +320,12 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                            OUString(), aContentsOpt);
     // create a list box for notes content
     const sal_Int16 nPrintPostIts = rDefaultPrintData.GetPrintPostIts();
-    aChoices.realloc( 4 );
+    aChoices.realloc( 5 );
     aChoices[0] = aLocalizedStrings.GetString( 13 );
     aChoices[1] = aLocalizedStrings.GetString( 14 );
     aChoices[2] = aLocalizedStrings.GetString( 15 );
     aChoices[3] = aLocalizedStrings.GetString( 16 );
+    aChoices[4] = aLocalizedStrings.GetString( 30 );
     aHelpIds.realloc( 2 );
     aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintAnnotationMode:FixedText";
     aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintAnnotationMode:ListBox";

@@ -292,6 +292,7 @@ public:
 #define POSTITS_ONLY    1
 #define POSTITS_ENDDOC  2
 #define POSTITS_ENDPAGE 3
+#define POSTITS_INMARGINS 4
 
 namespace sw {
 

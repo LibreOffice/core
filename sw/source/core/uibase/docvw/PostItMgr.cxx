@@ -823,6 +823,22 @@ bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
         return false;
 }
 
+void SwPostItMgr::DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage)
+{
+    assert(nPage < mPages.size());
+    if (nPage >= mPages.size())
+        return;
+    for(SwSidebarItem_iterator i = mPages[nPage]->mList->begin(); i != mPages[nPage]->mList->end(); ++i)
+    {
+        SwSidebarWin* pPostIt = (*i)->pPostIt;
+        if (!pPostIt)
+            continue;
+        Point aPoint(mpEditWin->PixelToLogic(pPostIt->GetPosPixel()));
+        Size aSize(pPostIt->PixelToLogic(pPostIt->GetSizePixel()));
+        pPostIt->Draw(pOutDev, aPoint, aSize, 0);
+    }
+}
+
 void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
 {
     OSL_ENSURE((lScroll % GetScrollSize() )==0,"SwPostItMgr::Scroll: scrolling by wrong value");

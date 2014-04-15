@@ -312,6 +312,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(Window* pParent,
     get(m_pOnlyRB, "only");
     get(m_pEndRB, "end");
     get(m_pEndPageRB, "endpage");
+    get(m_pInMarginsRB, "inmargins");
     get(m_pPrintEmptyPagesCB, "blankpages");
     get(m_pPaperFromSetupCB, "papertray");
     get(m_pFaxLB, "fax");
@@ -332,6 +333,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(Window* pParent,
     m_pPaperFromSetupCB->SetClickHdl( aLk );
     m_pPrintEmptyPagesCB->SetClickHdl( aLk );
     m_pEndPageRB->SetClickHdl( aLk );
+    m_pInMarginsRB->SetClickHdl( aLk );
     m_pEndRB->SetClickHdl( aLk );
     m_pOnlyRB->SetClickHdl( aLk );
     m_pNoRB->SetClickHdl( aLk );
@@ -398,6 +400,8 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
                                                         POSTITS_ENDDOC;
         if (m_pEndPageRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
                                                         POSTITS_ENDPAGE;
+        if (m_pInMarginsRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
+                                                        POSTITS_INMARGINS;
 
         OUString sFax = m_pFaxLB->GetSelectEntry();
         aAddPrinterAttr.sFaxName = sNone == sFax ? aEmptyOUStr : sFax;
@@ -431,6 +435,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
         m_pOnlyRB->Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ONLY ) ;
         m_pEndRB->Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ENDDOC ) ;
         m_pEndPageRB->Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ENDPAGE ) ;
+        m_pInMarginsRB->Check (pAddPrinterAttr->nPrintPostIts== POSTITS_INMARGINS ) ;
         m_pFaxLB->SelectEntry( pAddPrinterAttr->sFaxName );
     }
     if (m_pProspectCB->IsChecked())
@@ -461,6 +466,7 @@ IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, AutoClickHdl)
     m_pOnlyRB->Enable( !bIsProspect );
     m_pEndRB->Enable( !bIsProspect );
     m_pEndPageRB->Enable( !bIsProspect );
+    m_pInMarginsRB->Enable( !bIsProspect );
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwAddPrinterTabPage, AutoClickHdl)
