@@ -23,42 +23,99 @@ namespace oox { namespace drawingml {
 
 namespace
 {
-class ShapeCplus : public CustomShapeProvider
+class ShapeCquadArrow : public CustomShapeProvider
 {
   virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
     {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (3);
         {
-            Any aAny ((sal_Int32) 25000);
+            Any aAny ((sal_Int32) 22500);
             aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj";
+            aAdjSequence [0].Name = "adj1";
+        }
+        {
+            Any aAny ((sal_Int32) 22500);
+            aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = "adj2";
+        }
+        {
+            Any aAny ((sal_Int32) 22500);
+            aAdjSequence [2].Value = aAny;
+            aAdjSequence [2].Name = "adj3";
         }
         aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
-            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "if(0-$1 ,0,if(50000-$1 ,$1 ,50000))",
+            "?0 *2/1",
+            "if(0-$0 ,0,if(?1 -$0 ,$0 ,?1 ))",
+            "100000+0-?1 ",
+            "?3 *1/2",
+            "if(0-$2 ,0,if(?4 -$2 ,$2 ,?4 ))",
             "min(logwidth,logheight)",
-            "?1 *?0 /100000",
-            "logwidth+0-?2 ",
-            "logheight+0-?2 ",
-            "logwidth+0-logheight",
-            "if(?5 ,0,?2 )",
-            "if(?5 ,logwidth,?3 )",
-            "if(?5 ,?2 ,0)",
-            "if(?5 ,?4 ,logheight)",
+            "?6 *?5 /100000",
+            "?6 *?0 /100000",
             "logwidth/2",
+            "?9 +0-?8 ",
+            "?9 +?8 -0",
+            "?6 *?2 /200000",
+            "?9 +0-?12 ",
+            "?9 +?12 -0",
+            "logwidth+0-?7 ",
             "logheight/2",
-            "logheight",
-            "logwidth"
+            "?16 +0-?8 ",
+            "?16 +?8 -0",
+            "?16 +0-?12 ",
+            "?16 +?12 -0",
+            "logheight+0-?7 ",
+            "?12 *?7 /?8 ",
+            "logwidth+0-?22 ",
+            "logwidth",
+            "logheight"
         };
         aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (3);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 7
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 1);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
         {
             Sequence< PropertyValue > aPropSequence (4);
             {
@@ -67,7 +124,7 @@ class ShapeCplus : public CustomShapeProvider
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::NORMAL,
-                    2, 0
+                    10, 0
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
             }
@@ -89,10 +146,45 @@ class ShapeCplus : public CustomShapeProvider
             }
             {
                 aPropSequence [3].Name = "RefX";
-                Any aAny ((sal_Int32) 0);
+                Any aAny ((sal_Int32) 1);
                 aPropSequence [3].Value = makeAny (aAny);
             }
-            aPropSequenceSequence [0] = aPropSequence;
+            aPropSequenceSequence [1] = aPropSequence;
+        }
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    24, 7
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 4);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 2);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [2] = aPropSequence;
         }
         aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
@@ -110,62 +202,122 @@ class ShapeCplus : public CustomShapeProvider
                 {
                     EnhancedCustomShapeParameterType::NORMAL,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    0, 2
+                    0, 16
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    2, 2
+                    7, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 7
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    10, 7
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::NORMAL,
-                    2, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    3, 0
+                    9, 0
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    3, 2
+                    11, 7
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    13, 2
+                    14, 7
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    13, 4
+                    14, 19
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    3, 4
+                    15, 19
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    3, 12
+                    15, 17
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    2, 12
+                    24, 16
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    2, 4
+                    15, 18
                 },
                 {
-                    EnhancedCustomShapeParameterType::NORMAL,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    0, 4
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 25
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    10, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 18
                 }
             };
             aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
@@ -175,7 +327,7 @@ class ShapeCplus : public CustomShapeProvider
             static const sal_uInt16 nValues[] = {
             // Command, Count
                 1,1,
-                2,11,
+                2,23,
                 4,0,
                 5,0
             };
@@ -191,7 +343,7 @@ class ShapeCplus : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::EQUATION,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        6, 8
+                        22, 19
                     };
                     aTextFrame.TopLeft = createParameterPair(&aData);
                 }
@@ -200,7 +352,7 @@ class ShapeCplus : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::EQUATION,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        7, 9
+                        23, 20
                     };
                     aTextFrame.BottomRight = createParameterPair(&aData);
                 }
@@ -218,7 +370,7 @@ class ShapeCplus : public CustomShapeProvider
         aRectangle.Height = 0;
         aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-plus"));
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-quadArrow"));
 
     return aPropertyMap;
   }
@@ -226,69 +378,69 @@ class ShapeCplus : public CustomShapeProvider
 
 // This is a generated source file. DO NOT EDIT.
 
-class ShapeCaccentCallout3 : public CustomShapeProvider
+class ShapeCquadArrowCallout : public CustomShapeProvider
 {
   virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
     {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (8);
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (4);
         {
-            Any aAny ((sal_Int32) 18750);
+            Any aAny ((sal_Int32) 18515);
             aAdjSequence [0].Value = aAny;
             aAdjSequence [0].Name = "adj1";
         }
         {
-            Any aAny ((sal_Int32) -8333);
+            Any aAny ((sal_Int32) 18515);
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "adj2";
         }
         {
-            Any aAny ((sal_Int32) 18750);
+            Any aAny ((sal_Int32) 18515);
             aAdjSequence [2].Value = aAny;
             aAdjSequence [2].Name = "adj3";
         }
         {
-            Any aAny ((sal_Int32) -16667);
+            Any aAny ((sal_Int32) 48123);
             aAdjSequence [3].Value = aAny;
             aAdjSequence [3].Name = "adj4";
-        }
-        {
-            Any aAny ((sal_Int32) 100000);
-            aAdjSequence [4].Value = aAny;
-            aAdjSequence [4].Name = "adj5";
-        }
-        {
-            Any aAny ((sal_Int32) -16667);
-            aAdjSequence [5].Value = aAny;
-            aAdjSequence [5].Name = "adj6";
-        }
-        {
-            Any aAny ((sal_Int32) 112963);
-            aAdjSequence [6].Value = aAny;
-            aAdjSequence [6].Name = "adj7";
-        }
-        {
-            Any aAny ((sal_Int32) -8333);
-            aAdjSequence [7].Value = aAny;
-            aAdjSequence [7].Name = "adj8";
         }
         aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
-            "logheight*$0 /100000",
-            "logwidth*$1 /100000",
-            "logheight*$2 /100000",
-            "logwidth*$3 /100000",
-            "logheight*$4 /100000",
-            "logwidth*$5 /100000",
-            "logheight*$6 /100000",
-            "logwidth*$7 /100000",
-            "logwidth",
-            "logheight/2",
+            "if(0-$1 ,0,if(50000-$1 ,$1 ,50000))",
+            "?0 *2/1",
+            "if(0-$0 ,0,if(?1 -$0 ,$0 ,?1 ))",
+            "50000+0-?0 ",
+            "if(0-$2 ,0,if(?3 -$2 ,$2 ,?3 ))",
+            "?4 *2/1",
+            "100000+0-?5 ",
+            "if(?2 -$3 ,?2 ,if(?6 -$3 ,$3 ,?6 ))",
+            "min(logwidth,logheight)",
+            "?8 *?0 /100000",
+            "?8 *?2 /200000",
+            "?8 *?4 /100000",
+            "logwidth*?7 /200000",
+            "logheight*?7 /200000",
+            "logwidth+0-?11 ",
             "logwidth/2",
+            "?15 +0-?12 ",
+            "?15 +?12 -0",
+            "?15 +0-?9 ",
+            "?15 +?9 -0",
+            "?15 +0-?10 ",
+            "?15 +?10 -0",
+            "logheight+0-?11 ",
+            "logheight/2",
+            "?23 +0-?13 ",
+            "?23 +?13 -0",
+            "?23 +0-?9 ",
+            "?23 +?9 -0",
+            "?23 +0-?10 ",
+            "?23 +?10 -0",
+            "logwidth",
             "logheight"
         };
         aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
@@ -296,77 +448,56 @@ class ShapeCaccentCallout3 : public CustomShapeProvider
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (4);
         {
-            Sequence< PropertyValue > aPropSequence (7);
+            Sequence< PropertyValue > aPropSequence (4);
             {
                 aPropSequence [0].Name = "Position";
                 static const CustomShapeProvider::ParameterPairData aData =
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    1, 0
+                    20, 11
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
             }
             {
                 aPropSequence [1].Name = "RangeXMaximum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
+                Any aAny ((sal_Int32) 1);
                 aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aPropSequence [1].Value = makeAny (aParameter);
             }
             {
                 aPropSequence [2].Name = "RangeXMinimum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
+                Any aAny ((sal_Int32) 0);
                 aParameter.Value = aAny;
                 aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
                 aPropSequence [2].Value = makeAny (aParameter);
             }
             {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 1);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
+                aPropSequence [3].Name = "RefX";
                 Any aAny ((sal_Int32) 0);
-                aPropSequence [6].Value = makeAny (aAny);
+                aPropSequence [3].Value = makeAny (aAny);
             }
             aPropSequenceSequence [0] = aPropSequence;
         }
         {
-            Sequence< PropertyValue > aPropSequence (7);
+            Sequence< PropertyValue > aPropSequence (4);
             {
                 aPropSequence [0].Name = "Position";
                 static const CustomShapeProvider::ParameterPairData aData =
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 2
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    18, 0
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
             }
             {
                 aPropSequence [1].Name = "RangeXMaximum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
+                Any aAny ((sal_Int32) 50000);
                 aParameter.Value = aAny;
                 aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
                 aPropSequence [1].Value = makeAny (aParameter);
@@ -374,152 +505,340 @@ class ShapeCaccentCallout3 : public CustomShapeProvider
             {
                 aPropSequence [2].Name = "RangeXMinimum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
+                Any aAny ((sal_Int32) 0);
                 aParameter.Value = aAny;
                 aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
                 aPropSequence [2].Value = makeAny (aParameter);
             }
             {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 3);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
-                Any aAny ((sal_Int32) 2);
-                aPropSequence [6].Value = makeAny (aAny);
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 1);
+                aPropSequence [3].Value = makeAny (aAny);
             }
             aPropSequenceSequence [1] = aPropSequence;
         }
         {
-            Sequence< PropertyValue > aPropSequence (7);
+            Sequence< PropertyValue > aPropSequence (4);
             {
                 aPropSequence [0].Name = "Position";
                 static const CustomShapeProvider::ParameterPairData aData =
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    5, 4
+                    30, 11
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
             }
             {
-                aPropSequence [1].Name = "RangeXMaximum";
+                aPropSequence [1].Name = "RangeYMaximum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
+                Any aAny ((sal_Int32) 3);
                 aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aPropSequence [1].Value = makeAny (aParameter);
             }
             {
-                aPropSequence [2].Name = "RangeXMinimum";
+                aPropSequence [2].Name = "RangeYMinimum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
+                Any aAny ((sal_Int32) 0);
                 aParameter.Value = aAny;
                 aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
                 aPropSequence [2].Value = makeAny (aParameter);
             }
             {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 5);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
-                Any aAny ((sal_Int32) 4);
-                aPropSequence [6].Value = makeAny (aAny);
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 2);
+                aPropSequence [3].Value = makeAny (aAny);
             }
             aPropSequenceSequence [2] = aPropSequence;
         }
         {
-            Sequence< PropertyValue > aPropSequence (7);
+            Sequence< PropertyValue > aPropSequence (4);
             {
                 aPropSequence [0].Name = "Position";
                 static const CustomShapeProvider::ParameterPairData aData =
                 {
+                    EnhancedCustomShapeParameterType::NORMAL,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    7, 6
+                    0, 24
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
             }
             {
-                aPropSequence [1].Name = "RangeXMaximum";
+                aPropSequence [1].Name = "RangeYMaximum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
+                Any aAny ((sal_Int32) 6);
                 aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aPropSequence [1].Value = makeAny (aParameter);
             }
             {
-                aPropSequence [2].Name = "RangeXMinimum";
+                aPropSequence [2].Name = "RangeYMinimum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
+                Any aAny ((sal_Int32) 2);
                 aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aPropSequence [2].Value = makeAny (aParameter);
             }
             {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 7);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
-                Any aAny ((sal_Int32) 6);
-                aPropSequence [6].Value = makeAny (aAny);
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 3);
+                aPropSequence [3].Value = makeAny (aAny);
             }
             aPropSequenceSequence [3] = aPropSequence;
         }
         aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 23
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 26
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 28
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    16, 28
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    16, 24
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 24
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 11
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 11
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    15, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    19, 11
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    21, 11
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    21, 24
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 24
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 28
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 28
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 26
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    30, 23
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 27
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 29
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 29
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 25
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    21, 25
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    21, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    19, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 31
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 25
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    16, 25
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    16, 29
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 29
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 27
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,31,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        16, 24
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        17, 25
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-quadArrowCallout"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCrect : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
+    }
+    {
+        static const char *aStrings[] = {
+            "logwidth/2",
+            "logheight/2",
+            "logheight",
+            "logwidth"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
         aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
@@ -540,32 +859,7 @@ class ShapeCaccentCallout3 : public CustomShapeProvider
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::NORMAL,
-                    8, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    8, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 0
+                    3, 0
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
@@ -573,14 +867,9 @@ class ShapeCaccentCallout3 : public CustomShapeProvider
                     3, 2
                 },
                 {
+                    EnhancedCustomShapeParameterType::NORMAL,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    5, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    7, 6
+                    0, 2
                 }
             };
             aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
@@ -592,15 +881,6 @@ class ShapeCaccentCallout3 : public CustomShapeProvider
                 1,1,
                 2,3,
                 4,0,
-                7,0,
-                5,0,
-                1,1,
-                2,1,
-                6,0,
-                5,0,
-                1,1,
-                2,3,
-                6,0,
                 5,0
             };
             aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
@@ -624,7 +904,7 @@ class ShapeCaccentCallout3 : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::EQUATION,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        8, 11
+                        3, 2
                     };
                     aTextFrame.BottomRight = createParameterPair(&aData);
                 }
@@ -642,7 +922,7 @@ class ShapeCaccentCallout3 : public CustomShapeProvider
         aRectangle.Height = 0;
         aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-accentCallout3"));
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-rect"));
 
     return aPropertyMap;
   }
@@ -650,349 +930,158 @@ class ShapeCaccentCallout3 : public CustomShapeProvider
 
 // This is a generated source file. DO NOT EDIT.
 
-class ShapeCleftCircularArrow : public CustomShapeProvider
+class ShapeCribbon : public CustomShapeProvider
 {
   virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
     {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (5);
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
         {
-            Any aAny ((sal_Int32) 12500);
+            Any aAny ((sal_Int32) 16667);
             aAdjSequence [0].Value = aAny;
             aAdjSequence [0].Name = "adj1";
         }
         {
-            Any aAny ((sal_Int32) -1142319);
+            Any aAny ((sal_Int32) 50000);
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "adj2";
-        }
-        {
-            Any aAny ((sal_Int32) 1142319);
-            aAdjSequence [2].Value = aAny;
-            aAdjSequence [2].Name = "adj3";
-        }
-        {
-            Any aAny ((sal_Int32) 10800000);
-            aAdjSequence [3].Value = aAny;
-            aAdjSequence [3].Name = "adj4";
-        }
-        {
-            Any aAny ((sal_Int32) 12500);
-            aAdjSequence [4].Value = aAny;
-            aAdjSequence [4].Name = "adj5";
         }
         aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
-            "if(0-$4 ,0,if(25000-$4 ,$4 ,25000))",
-            "?0 *2/1",
-            "if(0-$0 ,0,if(?1 -$0 ,$0 ,?1 ))",
-            "if(1-$2 ,1,if(21599999-$2 ,$2 ,21599999))",
-            "if(0-$3 ,0,if(21599999-$3 ,$3 ,21599999))",
-            "min(logwidth,logheight)",
-            "?5 *?2 /100000",
-            "?5 *?0 /100000",
-            "?6 *1/2",
+            "if(0-$0 ,0,if(33333-$0 ,$0 ,33333))",
+            "if(25000-$1 ,25000,if(75000-$1 ,$1 ,75000))",
+            "logwidth/8",
+            "logwidth+0-?2 ",
+            "logwidth*?1 /200000",
             "logwidth/2",
-            "?9 +?8 -?7 ",
-            "logheight/2",
-            "?11 +?8 -?7 ",
-            "?10 +0-?6 ",
-            "?12 +0-?6 ",
-            "?13 +?8 -0",
-            "?14 +?8 -0",
-            "?15 *sin(pi*(?3 )/10800000)",
-            "?16 *cos(pi*(?3 )/10800000)",
-            "?15 *(cos(atan2(?17 ,?18 )))",
-            "?16 *(sin(atan2(?17 ,?18 )))",
-            "logwidth/2",
-            "?21 +?19 -0",
-            "logheight/2",
-            "?23 +?20 -0",
-            "min(?13 ,?14 )",
-            "?19 *?19 /1",
-            "?20 *?20 /1",
-            "?25 *?25 /1",
-            "?26 +0-?28 ",
-            "?27 +0-?28 ",
-            "?29 *?30 /?26 ",
-            "?31 *1/?27 ",
-            "1+0-?32 ",
-            "sqrt(?33 )",
-            "?29 *1/?19 ",
-            "?35 *1/?20 ",
-            "(1+?34 )/?36 ",
-            "(10800000*atan2(?37 ,1))/pi",
-            "?38 +21600000-0",
-            "if(?38 ,?38 ,?39 )",
-            "?40 +0-?3 ",
-            "?41 +21600000-0",
-            "if(?41 ,?41 ,?42 )",
-            "?43 +0-10800000",
-            "?43 +0-21600000",
-            "if(?44 ,?45 ,?43 )",
-            "abs(?46 )",
-            "?47 *-1/1",
-            "abs($1 )",
-            "?49 *-1/1",
-            "if(?48 -?50 ,?48 ,if(0-?50 ,?50 ,0))",
-            "?3 +?51 -0",
-            "?15 *sin(pi*(?52 )/10800000)",
-            "?16 *cos(pi*(?52 )/10800000)",
-            "?15 *(cos(atan2(?53 ,?54 )))",
-            "?16 *(sin(atan2(?53 ,?54 )))",
-            "?21 +?55 -0",
-            "?23 +?56 -0",
-            "?10 *sin(pi*(?4 )/10800000)",
-            "?12 *cos(pi*(?4 )/10800000)",
-            "?10 *(cos(atan2(?59 ,?60 )))",
-            "?12 *(sin(atan2(?59 ,?60 )))",
-            "?21 +?61 -0",
-            "?23 +?62 -0",
-            "?13 *sin(pi*(?4 )/10800000)",
-            "?14 *cos(pi*(?4 )/10800000)",
-            "?13 *(cos(atan2(?65 ,?66 )))",
-            "?14 *(sin(atan2(?65 ,?66 )))",
-            "?21 +?67 -0",
-            "?23 +?68 -0",
-            "?7 *cos(pi*(?52 )/10800000)",
-            "?7 *sin(pi*(?52 )/10800000)",
-            "?22 +?71 -0",
-            "?24 +?72 -0",
-            "?7 *cos(pi*(?52 )/10800000)",
-            "?7 *sin(pi*(?52 )/10800000)",
-            "?22 +0-?75 ",
-            "?24 +0-?76 ",
-            "?77 +0-?21 ",
-            "?78 +0-?23 ",
-            "?73 +0-?21 ",
-            "?74 +0-?23 ",
-            "min(?10 ,?12 )",
-            "?79 *?83 /?10 ",
-            "?80 *?83 /?12 ",
-            "?81 *?83 /?10 ",
-            "?82 *?83 /?12 ",
-            "?86 +0-?84 ",
-            "?87 +0-?85 ",
-            "sqrt(?88 *?88 +?89 *?89 +0*0)",
-            "?84 *?87 /1",
-            "?86 *?85 /1",
-            "?91 +0-?92 ",
-            "?83 *?83 /1",
-            "?90 *?90 /1",
-            "?94 *?95 /1",
-            "?93 *?93 /1",
-            "?96 +0-?97 ",
-            "max(?98 ,0)",
-            "sqrt(?99 )",
-            "?89 *-1/1",
-            "if(?101 ,-1,1)",
-            "?102 *?88 /1",
-            "?103 *?100 /1",
-            "?93 *?89 /1",
-            "(?105 +?104 )/?95 ",
-            "?105 +0-?104 ",
-            "?107 *1/?95 ",
-            "abs(?89 )",
-            "?109 *?100 /1",
-            "?93 *?88 /-1",
-            "(?111 +?110 )/?95 ",
-            "?111 +0-?110 ",
-            "?113 *1/?95 ",
-            "?86 +0-?106 ",
-            "?86 +0-?108 ",
-            "?87 +0-?112 ",
-            "?87 +0-?114 ",
-            "sqrt(?115 *?115 +?117 *?117 +0*0)",
-            "sqrt(?116 *?116 +?118 *?118 +0*0)",
-            "?120 +0-?119 ",
-            "if(?121 ,?106 ,?108 )",
-            "if(?121 ,?112 ,?114 )",
-            "?122 *?10 /?83 ",
-            "?123 *?12 /?83 ",
-            "?21 +?124 -0",
-            "?23 +?125 -0",
-            "?79 *?25 /?13 ",
-            "?80 *?25 /?14 ",
-            "?81 *?25 /?13 ",
-            "?82 *?25 /?14 ",
-            "?130 +0-?128 ",
-            "?131 +0-?129 ",
-            "sqrt(?132 *?132 +?133 *?133 +0*0)",
-            "?128 *?131 /1",
-            "?130 *?129 /1",
-            "?135 +0-?136 ",
-            "?25 *?25 /1",
-            "?134 *?134 /1",
-            "?138 *?139 /1",
-            "?137 *?137 /1",
-            "?140 +0-?141 ",
-            "max(?142 ,0)",
-            "sqrt(?143 )",
-            "?102 *?132 /1",
-            "?145 *?144 /1",
-            "?137 *?133 /1",
-            "(?147 +?146 )/?139 ",
-            "?147 +0-?146 ",
-            "?149 *1/?139 ",
-            "abs(?133 )",
-            "?151 *?144 /1",
-            "?137 *?132 /-1",
-            "(?153 +?152 )/?139 ",
-            "?153 +0-?152 ",
-            "?155 *1/?139 ",
-            "?128 +0-?148 ",
-            "?128 +0-?150 ",
-            "?129 +0-?154 ",
-            "?129 +0-?156 ",
-            "sqrt(?157 *?157 +?159 *?159 +0*0)",
-            "sqrt(?158 *?158 +?160 *?160 +0*0)",
-            "?162 +0-?161 ",
-            "if(?163 ,?148 ,?150 )",
-            "if(?163 ,?154 ,?156 )",
-            "?164 *?13 /?25 ",
-            "?165 *?14 /?25 ",
-            "?21 +?166 -0",
-            "?23 +?167 -0",
-            "(10800000*atan2(?167 ,?166 ))/pi",
-            "?170 +21600000-0",
-            "if(?170 ,?170 ,?171 )",
-            "?4 +0-?172 ",
-            "?173 +21600000-0",
-            "if(?173 ,?173 ,?174 )",
-            "?172 +?175 -0",
-            "0+0-?175 ",
-            "?126 +0-?168 ",
-            "?127 +0-?169 ",
-            "sqrt(?178 *?178 +?179 *?179 +0*0)",
-            "?180 *1/2",
-            "?181 +0-?7 ",
-            "if(?182 ,?126 ,?73 )",
-            "if(?182 ,?127 ,?74 )",
-            "if(?182 ,?168 ,?77 )",
-            "if(?182 ,?169 ,?78 )",
-            "(10800000*atan2(?125 ,?124 ))/pi",
-            "?187 +21600000-0",
-            "if(?187 ,?187 ,?188 )",
-            "?189 +0-?4 ",
-            "?190 +0-21600000",
-            "if(?190 ,?191 ,?190 )",
-            "?4 +?192 -0",
-            "0+0-?192 ",
-            "?15 *sin(pi*(?4 )/10800000)",
-            "?16 *cos(pi*(?4 )/10800000)",
-            "?15 *(cos(atan2(?195 ,?196 )))",
-            "?16 *(sin(atan2(?195 ,?196 )))",
-            "?21 +?197 -0",
-            "?23 +?198 -0",
-            "?4 +5400000-0",
-            "?52 +0-5400000",
-            "?52 +10800000-0",
-            "?10 *cos(pi*(2700000)/10800000)",
-            "?12 *sin(pi*(2700000)/10800000)",
-            "?21 +0-?204 ",
-            "?21 +?204 -0",
-            "?23 +0-?205 ",
-            "?23 +?205 -0",
-            "(?176 )/60000.0",
-            "(?177 )/60000.0",
-            "(?193 )/60000.0",
-            "(?194 )/60000.0"
+            "?5 +0-?4 ",
+            "?5 +?4 -0",
+            "logwidth/32",
+            "?6 +?8 -0",
+            "?7 +0-?8 ",
+            "?6 +?2 -0",
+            "?7 +0-?2 ",
+            "?11 +0-?8 ",
+            "?12 +?8 -0",
+            "logheight*?0 /200000",
+            "logheight*?0 /100000",
+            "logheight+0-?16 ",
+            "?17 *1/2",
+            "logheight*?0 /400000",
+            "logheight+0-?19 ",
+            "?16 +0-?19 ",
+            "logheight",
+            "(16200000)/60000.0",
+            "(10800000)/60000.0",
+            "(16200000)/60000.0",
+            "(-10800000)/60000.0",
+            "(5400000)/60000.0",
+            "(-10800000)/60000.0",
+            "(5400000)/60000.0",
+            "(10800000)/60000.0",
+            "logwidth",
+            "(0)/60000.0",
+            "(5400000)/60000.0",
+            "(5400000)/60000.0",
+            "(5400000)/60000.0",
+            "(0)/60000.0",
+            "(5400000)/60000.0",
+            "(16200000)/60000.0",
+            "(-10800000)/60000.0",
+            "(10800000)/60000.0",
+            "(-5400000)/60000.0",
+            "(16200000)/60000.0",
+            "(10800000)/60000.0",
+            "(16200000)/60000.0",
+            "(10800000)/60000.0",
+            "(16200000)/60000.0",
+            "(-10800000)/60000.0",
+            "(5400000)/60000.0",
+            "(-10800000)/60000.0",
+            "(5400000)/60000.0",
+            "(10800000)/60000.0",
+            "(0)/60000.0",
+            "(5400000)/60000.0",
+            "(5400000)/60000.0",
+            "(5400000)/60000.0"
         };
         aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (4);
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
         {
-            Sequence< PropertyValue > aPropSequence (1);
+            Sequence< PropertyValue > aPropSequence (4);
             {
                 aPropSequence [0].Name = "Position";
                 static const CustomShapeProvider::ParameterPairData aData =
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    57, 58
+                    5, 16
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 33333);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
             }
             aPropSequenceSequence [0] = aPropSequence;
         }
         {
-            Sequence< PropertyValue > aPropSequence (1);
+            Sequence< PropertyValue > aPropSequence (4);
             {
                 aPropSequence [0].Name = "Position";
                 static const CustomShapeProvider::ParameterPairData aData =
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    63, 64
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            aPropSequenceSequence [1] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (3);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    126, 127
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    6, 0
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
             }
             {
-                aPropSequence [1].Name = "RadiusRangeMaximum";
+                aPropSequence [1].Name = "RangeXMaximum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 1);
+                Any aAny ((sal_Int32) 75000);
                 aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
                 aPropSequence [1].Value = makeAny (aParameter);
             }
             {
-                aPropSequence [2].Name = "RadiusRangeMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            aPropSequenceSequence [2] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (3);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    77, 78
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RadiusRangeMaximum";
+                aPropSequence [2].Name = "RangeXMinimum";
                 EnhancedCustomShapeParameter aParameter;
                 Any aAny ((sal_Int32) 25000);
                 aParameter.Value = aAny;
                 aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RadiusRangeMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
                 aPropSequence [2].Value = makeAny (aParameter);
             }
-            aPropSequenceSequence [3] = aPropSequence;
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 1);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [1] = aPropSequence;
         }
         aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
@@ -1008,54 +1097,374 @@ class ShapeCleftCircularArrow : public CustomShapeProvider
             aPropSequence [0].Name = "Coordinates";
             static const CustomShapeProvider::ParameterPairData aData[] = {
                 {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    0, 0
+                },
+                {
                     EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    63, 64
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    13, 0
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    69, 70
+                    8, 19
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    13, 14
+                    23, 24
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    210, 211
+                    9, 15
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    185, 186
+                    8, 19
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    57, 58
+                    25, 26
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    183, 184
+                    10, 16
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    126, 127
+                    8, 19
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    10, 12
+                    27, 28
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    212, 213
+                    14, 15
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    29, 30
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    31, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    3, 18
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    31, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    32, 33
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    34, 35
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    2, 18
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    36, 37
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 15
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    38, 39
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    40, 41
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    10, 15
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    42, 43
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    0, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    13, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    44, 45
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 15
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    46, 47
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    10, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    48, 49
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 15
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    50, 51
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    31, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    3, 18
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    31, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    52, 53
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    54, 55
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    2, 18
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 17
                 }
             };
             aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
@@ -1067,9 +1476,59 @@ class ShapeCleftCircularArrow : public CustomShapeProvider
                 1,1,
                 2,1,
                 17,1,
-                2,4,
+                2,1,
                 17,1,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
+                2,5,
+                17,1,
+                2,1,
+                17,1,
+                2,3,
                 4,0,
+                7,0,
+                5,0,
+                1,1,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                4,0,
+                1,1,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                4,0,
+                19,0,
+                7,0,
+                5,0,
+                1,1,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
+                2,5,
+                17,1,
+                2,1,
+                17,1,
+                2,3,
+                4,0,
+                1,1,
+                2,1,
+                1,1,
+                2,1,
+                1,1,
+                2,1,
+                1,1,
+                2,1,
+                6,0,
                 5,0
             };
             aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
@@ -1084,7 +1543,7 @@ class ShapeCleftCircularArrow : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::EQUATION,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        206, 208
+                        6, 16
                     };
                     aTextFrame.TopLeft = createParameterPair(&aData);
                 }
@@ -1093,7 +1552,7 @@ class ShapeCleftCircularArrow : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::EQUATION,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        207, 209
+                        7, 22
                     };
                     aTextFrame.BottomRight = createParameterPair(&aData);
                 }
@@ -1111,7 +1570,661 @@ class ShapeCleftCircularArrow : public CustomShapeProvider
         aRectangle.Height = 0;
         aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-leftCircularArrow"));
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-ribbon"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCribbon2 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
+        {
+            Any aAny ((sal_Int32) 16667);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj1";
+        }
+        {
+            Any aAny ((sal_Int32) 50000);
+            aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = "adj2";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(33333-$0 ,$0 ,33333))",
+            "if(25000-$1 ,25000,if(75000-$1 ,$1 ,75000))",
+            "logwidth/8",
+            "logwidth+0-?2 ",
+            "logwidth*?1 /200000",
+            "logwidth/2",
+            "?5 +0-?4 ",
+            "?5 +?4 -0",
+            "logwidth/32",
+            "?6 +?8 -0",
+            "?7 +0-?8 ",
+            "?6 +?2 -0",
+            "?7 +0-?2 ",
+            "?11 +0-?8 ",
+            "?12 +?8 -0",
+            "logheight*?0 /200000",
+            "logheight+0-?15 ",
+            "logheight*?0 /100000",
+            "logheight+0-?17 ",
+            "0+?17 -0",
+            "(?19 +logheight)/2",
+            "logheight*?0 /400000",
+            "logheight+0-?21 ",
+            "?16 +0-?21 ",
+            "logheight",
+            "(5400000)/60000.0",
+            "(-10800000)/60000.0",
+            "(5400000)/60000.0",
+            "(10800000)/60000.0",
+            "(16200000)/60000.0",
+            "(10800000)/60000.0",
+            "(16200000)/60000.0",
+            "(-10800000)/60000.0",
+            "logwidth",
+            "(0)/60000.0",
+            "(-5400000)/60000.0",
+            "(16200000)/60000.0",
+            "(-5400000)/60000.0",
+            "(0)/60000.0",
+            "(-5400000)/60000.0",
+            "(5400000)/60000.0",
+            "(10800000)/60000.0",
+            "(10800000)/60000.0",
+            "(5400000)/60000.0",
+            "(5400000)/60000.0",
+            "(-10800000)/60000.0",
+            "(10800000)/60000.0",
+            "(5400000)/60000.0",
+            "(16200000)/60000.0",
+            "(5400000)/60000.0",
+            "(5400000)/60000.0",
+            "(10800000)/60000.0",
+            "(5400000)/60000.0",
+            "(-10800000)/60000.0",
+            "(16200000)/60000.0",
+            "(-10800000)/60000.0",
+            "(16200000)/60000.0",
+            "(10800000)/60000.0"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 18
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 33333);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 24
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 75000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 25000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 1);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [1] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 24
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 24
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    25, 26
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    27, 28
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    10, 18
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    29, 30
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    31, 32
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    33, 24
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    3, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    33, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    34, 35
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    9, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    36, 37
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    2, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    38, 39
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    40, 41
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 18
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    42, 43
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    10, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    44, 45
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 18
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 24
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    2, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    46, 47
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    10, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    48, 49
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    33, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    3, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    33, 24
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 24
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    50, 51
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    10, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    52, 53
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 18
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    54, 55
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    56, 57
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 18
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 18
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 23
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 23
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
+                2,5,
+                17,1,
+                2,1,
+                17,1,
+                2,3,
+                4,0,
+                7,0,
+                5,0,
+                1,1,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                4,0,
+                1,1,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                4,0,
+                19,0,
+                7,0,
+                5,0,
+                1,1,
+                2,4,
+                17,1,
+                2,1,
+                17,1,
+                2,6,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
+                4,0,
+                1,1,
+                2,1,
+                1,1,
+                2,1,
+                1,1,
+                2,1,
+                1,1,
+                2,1,
+                6,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::NORMAL,
+                        6, 0
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        7, 18
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-ribbon2"));
 
     return aPropertyMap;
   }
@@ -1338,27 +2451,207 @@ class ShapeCrightArrow : public CustomShapeProvider
 
 // This is a generated source file. DO NOT EDIT.
 
-class ShapeCflowChartPunchedCard : public CustomShapeProvider
+class ShapeCrightArrowCallout : public CustomShapeProvider
 {
   virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (4);
+        {
+            Any aAny ((sal_Int32) 25000);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj1";
+        }
+        {
+            Any aAny ((sal_Int32) 25000);
+            aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = "adj2";
+        }
+        {
+            Any aAny ((sal_Int32) 25000);
+            aAdjSequence [2].Value = aAny;
+            aAdjSequence [2].Name = "adj3";
+        }
+        {
+            Any aAny ((sal_Int32) 64977);
+            aAdjSequence [3].Value = aAny;
+            aAdjSequence [3].Name = "adj4";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
-            "logwidth/2",
+            "min(logwidth,logheight)",
+            "50000*logheight/?0 ",
+            "if(0-$1 ,0,if(?1 -$1 ,$1 ,?1 ))",
+            "?2 *2/1",
+            "if(0-$0 ,0,if(?3 -$0 ,$0 ,?3 ))",
+            "100000*logwidth/?0 ",
+            "if(0-$2 ,0,if(?5 -$2 ,$2 ,?5 ))",
+            "?6 *?0 /logwidth",
+            "100000+0-?7 ",
+            "if(0-$3 ,0,if(?8 -$3 ,$3 ,?8 ))",
+            "?0 *?2 /100000",
+            "?0 *?4 /200000",
             "logheight/2",
-            "logheight",
+            "?12 +0-?10 ",
+            "?12 +0-?11 ",
+            "?12 +?11 -0",
+            "?12 +?10 -0",
+            "?0 *?6 /100000",
+            "logwidth+0-?17 ",
+            "logwidth*?9 /100000",
+            "?19 *1/2",
             "logwidth",
-            "logheight/5"
+            "logheight"
         };
         aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (4);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 14
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 3);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    21, 13
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 1);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 1);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [1] = aPropSequence;
+        }
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    18, 0
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 2);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [2] = aPropSequence;
+        }
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    19, 22
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 8);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 3);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [3] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
         aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
@@ -1367,34 +2660,64 @@ class ShapeCflowChartPunchedCard : public CustomShapeProvider
         aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
-        Sequence< PropertyValue > aPropSequence (4);
+        Sequence< PropertyValue > aPropSequence (3);
         {
             aPropSequence [0].Name = "Coordinates";
             static const CustomShapeProvider::ParameterPairData aData[] = {
                 {
                     EnhancedCustomShapeParameterType::NORMAL,
                     EnhancedCustomShapeParameterType::NORMAL,
-                    0, 1
+                    0, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    19, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    19, 14
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 14
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 13
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    21, 12
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 15
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    19, 15
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    19, 22
                 },
                 {
                     EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    5, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    5, 5
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 5
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 22
                 }
             };
             aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
@@ -1404,25 +2727,14 @@ class ShapeCflowChartPunchedCard : public CustomShapeProvider
             static const sal_uInt16 nValues[] = {
             // Command, Count
                 1,1,
-                2,4,
+                2,10,
                 4,0,
                 5,0
             };
             aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
         }
         {
-            aPropSequence [2].Name = "SubViewSize";
-            Sequence< awt::Size > aSizeSequence (1);
-            {
-                awt::Size aSize;
-                aSize.Width = 5;
-                aSize.Height = 5;
-                aSizeSequence [0] = aSize;
-            }
-            aPropSequence [2].Value = makeAny (aSizeSequence);
-        }
-        {
-            aPropSequence [3].Name = "TextFrames";
+            aPropSequence [2].Name = "TextFrames";
             Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
             {
                 EnhancedCustomShapeTextFrame aTextFrame;
@@ -1430,8 +2742,8 @@ class ShapeCflowChartPunchedCard : public CustomShapeProvider
                     static const CustomShapeProvider::ParameterPairData aData =
                     {
                         EnhancedCustomShapeParameterType::NORMAL,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        0, 4
+                        EnhancedCustomShapeParameterType::NORMAL,
+                        0, 0
                     };
                     aTextFrame.TopLeft = createParameterPair(&aData);
                 }
@@ -1440,13 +2752,13 @@ class ShapeCflowChartPunchedCard : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::EQUATION,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        3, 2
+                        19, 22
                     };
                     aTextFrame.BottomRight = createParameterPair(&aData);
                 }
                 aTextFrameSeq [0] = aTextFrame;
             }
-            aPropSequence [3].Value = makeAny (aTextFrameSeq);
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
         aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
@@ -1458,7 +2770,7 @@ class ShapeCflowChartPunchedCard : public CustomShapeProvider
         aRectangle.Height = 0;
         aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-flowChartPunchedCard"));
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-rightArrowCallout"));
 
     return aPropertyMap;
   }
@@ -1466,7 +2778,7 @@ class ShapeCflowChartPunchedCard : public CustomShapeProvider
 
 // This is a generated source file. DO NOT EDIT.
 
-class ShapeCsnip2DiagRect : public CustomShapeProvider
+class ShapeCrightBrace : public CustomShapeProvider
 {
   virtual PropertyMap getProperties() SAL_OVERRIDE
   {
@@ -1475,12 +2787,12 @@ class ShapeCsnip2DiagRect : public CustomShapeProvider
     {
         Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
         {
-            Any aAny ((sal_Int32) 0);
+            Any aAny ((sal_Int32) 8333);
             aAdjSequence [0].Value = aAny;
             aAdjSequence [0].Name = "adj1";
         }
         {
-            Any aAny ((sal_Int32) 16667);
+            Any aAny ((sal_Int32) 50000);
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "adj2";
         }
@@ -1488,24 +2800,42 @@ class ShapeCsnip2DiagRect : public CustomShapeProvider
     }
     {
         static const char *aStrings[] = {
-            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
-            "if(0-$1 ,0,if(50000-$1 ,$1 ,50000))",
+            "if(0-$1 ,0,if(100000-$1 ,$1 ,100000))",
+            "100000+0-?0 ",
+            "min(?1 ,?0 )",
+            "?2 *1/2",
             "min(logwidth,logheight)",
-            "?2 *?0 /100000",
-            "logwidth+0-?3 ",
-            "logheight+0-?3 ",
-            "?2 *?1 /100000",
-            "logwidth+0-?6 ",
-            "logheight+0-?6 ",
-            "?3 +0-?6 ",
-            "if(?9 ,?3 ,?6 )",
-            "?10 *1/2",
-            "logwidth+0-?11 ",
-            "logheight+0-?11 ",
-            "logwidth",
-            "logheight/2",
+            "?3 *logheight/?4 ",
+            "if(0-$0 ,0,if(?5 -$0 ,$0 ,?5 ))",
+            "?4 *?6 /100000",
+            "logheight*?0 /100000",
+            "?8 +0-?7 ",
+            "logheight+0-?7 ",
             "logwidth/2",
-            "logheight"
+            "?11 *cos(pi*(2700000)/10800000)",
+            "?7 *sin(pi*(2700000)/10800000)",
+            "0+?12 -0",
+            "?7 +0-?13 ",
+            "logheight+?13 -?7 ",
+            "logwidth/2",
+            "logwidth",
+            "logheight",
+            "(16200000)/60000.0",
+            "(5400000)/60000.0",
+            "(10800000)/60000.0",
+            "(-5400000)/60000.0",
+            "(16200000)/60000.0",
+            "(-5400000)/60000.0",
+            "(0)/60000.0",
+            "(5400000)/60000.0",
+            "(16200000)/60000.0",
+            "(5400000)/60000.0",
+            "(10800000)/60000.0",
+            "(-5400000)/60000.0",
+            "(16200000)/60000.0",
+            "(-5400000)/60000.0",
+            "(0)/60000.0",
+            "(5400000)/60000.0"
         };
         aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
@@ -1518,274 +2848,17 @@ class ShapeCsnip2DiagRect : public CustomShapeProvider
                 static const CustomShapeProvider::ParameterPairData aData =
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    3, 0
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 50000);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefX";
-                Any aAny ((sal_Int32) 0);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [0] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
                     EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    7, 0
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 50000);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefX";
-                Any aAny ((sal_Int32) 1);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [1] = aPropSequence;
-        }
-        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    3, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    7, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    14, 6
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    14, 5
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 17
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    6, 17
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 8
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 3
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,7,
-                4,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        11, 11
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        12, 13
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-snip2DiagRect"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCverticalScroll : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
-        {
-            Any aAny ((sal_Int32) 12500);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
-    }
-    {
-        static const char *aStrings[] = {
-            "if(0-$0 ,0,if(25000-$0 ,$0 ,25000))",
-            "min(logwidth,logheight)",
-            "?1 *?0 /100000",
-            "?2 *1/2",
-            "?2 *1/4",
-            "?2 +?3 -0",
-            "?2 +?2 -0",
-            "logwidth+0-?2 ",
-            "logwidth+0-?3 ",
-            "?7 +0-?3 ",
-            "logheight+0-?2 ",
-            "logheight+0-?3 ",
-            "logwidth/2",
-            "logheight/2",
-            "logheight",
-            "(5400000)/60000.0",
-            "(-5400000)/60000.0",
-            "(5400000)/60000.0",
-            "(-10800000)/60000.0",
-            "(10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(16200000)/60000.0",
-            "(10800000)/60000.0",
-            "(0)/60000.0",
-            "(5400000)/60000.0",
-            "(0)/60000.0",
-            "(5400000)/60000.0",
-            "(5400000)/60000.0",
-            "(10800000)/60000.0",
-            "(0)/60000.0",
-            "(5400000)/60000.0",
-            "(5400000)/60000.0",
-            "(10800000)/60000.0",
-            "(0)/60000.0",
-            "(16200000)/60000.0",
-            "(16200000)/60000.0",
-            "(10800000)/60000.0",
-            "(10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(16200000)/60000.0",
-            "(10800000)/60000.0",
-            "(0)/60000.0",
-            "(5400000)/60000.0",
-            "(5400000)/60000.0",
-            "(10800000)/60000.0",
-            "(16200000)/60000.0",
-            "(10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(10800000)/60000.0",
-            "(16200000)/60000.0",
-            "(10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(-5400000)/60000.0"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 2
+                    17, 7
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
             }
             {
                 aPropSequence [1].Name = "RangeYMaximum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 25000);
+                Any aAny ((sal_Int32) 5);
                 aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aPropSequence [1].Value = makeAny (aParameter);
             }
             {
@@ -1803,506 +2876,6 @@ class ShapeCverticalScroll : public CustomShapeProvider
             }
             aPropSequenceSequence [0] = aPropSequence;
         }
-        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 14
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    15, 16
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    17, 18
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 10
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    19, 20
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    8, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    21, 22
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    7, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    7, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    23, 24
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    6, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    25, 26
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    27, 28
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    6, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    29, 30
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    31, 32
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    33, 34
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    35, 36
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 10
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    37, 38
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    8, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    39, 40
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    7, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    7, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    41, 42
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 14
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    43, 44
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    5, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    45, 46
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    47, 48
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    6, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    7, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    5, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 10
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    49, 50
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 14
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    51, 52
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 10
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                17,1,
-                2,1,
-                17,1,
-                2,2,
-                17,1,
-                2,1,
-                17,1,
-                2,2,
-                17,1,
-                4,0,
-                1,1,
-                17,2,
-                4,0,
-                7,0,
-                5,0,
-                1,1,
-                17,2,
-                4,0,
-                1,1,
-                17,2,
-                4,0,
-                19,0,
-                7,0,
-                5,0,
-                1,1,
-                2,1,
-                17,1,
-                2,1,
-                17,1,
-                2,2,
-                17,1,
-                2,1,
-                17,1,
-                4,0,
-                1,1,
-                17,2,
-                2,1,
-                1,1,
-                2,1,
-                1,1,
-                17,1,
-                2,1,
-                1,1,
-                17,1,
-                2,1,
-                6,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        2, 2
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        7, 11
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-verticalScroll"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCstar7 : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (3);
-        {
-            Any aAny ((sal_Int32) 34601);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj";
-        }
-        {
-            Any aAny ((sal_Int32) 102572);
-            aAdjSequence [1].Value = aAny;
-            aAdjSequence [1].Name = "hf";
-        }
-        {
-            Any aAny ((sal_Int32) 105210);
-            aAdjSequence [2].Value = aAny;
-            aAdjSequence [2].Name = "vf";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
-    }
-    {
-        static const char *aStrings[] = {
-            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
-            "logwidth/2",
-            "?1 *$1 /100000",
-            "logheight/2",
-            "?3 *$2 /100000",
-            "logheight/2",
-            "?5 *$2 /100000",
-            "?2 *97493/100000",
-            "?2 *78183/100000",
-            "?2 *43388/100000",
-            "?4 *62349/100000",
-            "?4 *22252/100000",
-            "?4 *90097/100000",
-            "logwidth/2",
-            "?13 +0-?7 ",
-            "?13 +0-?8 ",
-            "?13 +0-?9 ",
-            "?13 +?9 -0",
-            "?13 +?8 -0",
-            "?13 +?7 -0",
-            "?6 +0-?10 ",
-            "?6 +?11 -0",
-            "?6 +?12 -0",
-            "?2 *?0 /50000",
-            "?4 *?0 /50000",
-            "?23 *97493/100000",
-            "?23 *78183/100000",
-            "?23 *43388/100000",
-            "?13 +0-?25 ",
-            "?13 +0-?26 ",
-            "?13 +0-?27 ",
-            "?13 +?27 -0",
-            "?13 +?26 -0",
-            "?13 +?25 -0",
-            "?24 *90097/100000",
-            "?24 *22252/100000",
-            "?24 *62349/100000",
-            "?6 +0-?34 ",
-            "?6 +0-?35 ",
-            "?6 +?36 -0",
-            "?6 +?24 -0",
-            "?6 +0-?24 "
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
         {
             Sequence< PropertyValue > aPropSequence (4);
             {
@@ -2311,801 +2884,7 @@ class ShapeCstar7 : public CustomShapeProvider
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    13, 41
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 50000);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefY";
-                Any aAny ((sal_Int32) 0);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [0] = aPropSequence;
-        }
-        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    14, 21
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    28, 38
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    15, 20
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    30, 37
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    13, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    31, 37
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    18, 20
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    33, 38
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    19, 21
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    32, 39
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    17, 22
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    13, 40
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    16, 22
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    29, 39
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,13,
-                4,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        29, 37
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        32, 39
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-star7"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCchartX : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
-    }
-    {
-        aPropertyMap.setProperty(PROP_Equations, Sequence< OUString >(0));
-    }
-    {
-        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    10, 10
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 10
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    10, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 10
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    10, 10
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    10, 0
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,1,
-                1,1,
-                2,1,
-                6,0,
-                5,0,
-                1,1,
-                2,3,
-                4,0,
-                7,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "SubViewSize";
-            Sequence< awt::Size > aSizeSequence (2);
-            {
-                awt::Size aSize;
-                aSize.Width = 10;
-                aSize.Height = 10;
-                aSizeSequence [0] = aSize;
-            }
-            {
-                awt::Size aSize;
-                aSize.Width = 10;
-                aSize.Height = 10;
-                aSizeSequence [1] = aSize;
-            }
-            aPropSequence [2].Value = makeAny (aSizeSequence);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 400000;
-        aRectangle.Height = 400000;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-chartX"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCcloud : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
-    }
-    {
-        static const char *aStrings[] = {
-            "logwidth*2977/21600",
-            "logheight*3262/21600",
-            "logwidth*17087/21600",
-            "logheight*17337/21600",
-            "logwidth*67/21600",
-            "logheight*21577/21600",
-            "logwidth*21582/21600",
-            "logheight*1235/21600",
-            "logheight/2",
-            "logwidth/2",
-            "(-11429249)/60000.0",
-            "(7426832)/60000.0",
-            "(-8646143)/60000.0",
-            "(5396714)/60000.0",
-            "(-8748475)/60000.0",
-            "(5983381)/60000.0",
-            "(-7859164)/60000.0",
-            "(7034504)/60000.0",
-            "(-4722533)/60000.0",
-            "(6541615)/60000.0",
-            "(-2776035)/60000.0",
-            "(7816140)/60000.0",
-            "(37501)/60000.0",
-            "(6842000)/60000.0",
-            "(1347096)/60000.0",
-            "(6910353)/60000.0",
-            "(3974558)/60000.0",
-            "(4542661)/60000.0",
-            "(-16496525)/60000.0",
-            "(8804134)/60000.0",
-            "(-14809710)/60000.0",
-            "(9151131)/60000.0",
-            "(5204520)/60000.0",
-            "(1585770)/60000.0",
-            "(4416628)/60000.0",
-            "(686848)/60000.0",
-            "(8257449)/60000.0",
-            "(844866)/60000.0",
-            "(387196)/60000.0",
-            "(959901)/60000.0",
-            "(-4217541)/60000.0",
-            "(4255042)/60000.0",
-            "(1819082)/60000.0",
-            "(1665090)/60000.0",
-            "(-824660)/60000.0",
-            "(891534)/60000.0",
-            "(-8950887)/60000.0",
-            "(1091722)/60000.0",
-            "(-9809656)/60000.0",
-            "(1061181)/60000.0",
-            "(-4002417)/60000.0",
-            "(739161)/60000.0",
-            "(9459261)/60000.0",
-            "(711490)/60000.0"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (4);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    3900, 14370
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    6753, 9190
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    5333, 7267
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    12, 13
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    4365, 5945
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    14, 15
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    4857, 6595
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    16, 17
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    5333, 7273
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    18, 19
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    6775, 9220
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    20, 21
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    5785, 7867
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    22, 23
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    6752, 9215
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    24, 25
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    7720, 10543
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    26, 27
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    4360, 5918
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    28, 29
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    4345, 5945
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    30, 31
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    4693, 26177
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    4345, 5945
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    32, 33
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    6928, 34899
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    4360, 5918
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    34, 35
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    16478, 39090
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    6752, 9215
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    36, 37
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    28827, 34751
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    6752, 9215
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    38, 39
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    34129, 22954
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    5785, 7867
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    40, 41
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    41798, 15354
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    5333, 7273
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    42, 43
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    38324, 5426
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    4857, 6595
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    44, 45
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    29078, 3952
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    4857, 6595
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    46, 47
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    22141, 4720
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    4365, 5945
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    48, 49
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    14000, 5192
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    6753, 9190
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    50, 51
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    4127, 15789
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    6753, 9190
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    52, 53
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                17,11,
-                4,0,
-                5,0,
-                1,1,
-                17,1,
-                1,1,
-                17,1,
-                1,1,
-                17,1,
-                1,1,
-                17,1,
-                1,1,
-                17,1,
-                1,1,
-                17,1,
-                1,1,
-                17,1,
-                1,1,
-                17,1,
-                1,1,
-                17,1,
-                1,1,
-                17,1,
-                1,1,
-                17,1,
-                6,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "SubViewSize";
-            Sequence< awt::Size > aSizeSequence (2);
-            {
-                awt::Size aSize;
-                aSize.Width = 43200;
-                aSize.Height = 43200;
-                aSizeSequence [0] = aSize;
-            }
-            {
-                awt::Size aSize;
-                aSize.Width = 43200;
-                aSize.Height = 43200;
-                aSizeSequence [1] = aSize;
-            }
-            aPropSequence [2].Value = makeAny (aSizeSequence);
-        }
-        {
-            aPropSequence [3].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        0, 1
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        2, 3
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [3].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-cloud"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCcube : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
-        {
-            Any aAny ((sal_Int32) 25000);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
-    }
-    {
-        static const char *aStrings[] = {
-            "if(0-$0 ,0,if(100000-$0 ,$0 ,100000))",
-            "min(logwidth,logheight)",
-            "?1 *?0 /100000",
-            "logheight+0-?2 ",
-            "?3 *1/2",
-            "(?2 +logheight)/2",
-            "logwidth+0-?2 ",
-            "?6 *1/2",
-            "(?2 +logwidth)/2",
-            "logheight",
-            "logwidth"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 2
+                    18, 8
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
             }
@@ -3127,6 +2906,280 @@ class ShapeCcube : public CustomShapeProvider
             }
             {
                 aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 1);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [1] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    0, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 7
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 9
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 7
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 23
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 7
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    24, 25
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 10
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 7
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    26, 27
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    0, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 7
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    28, 29
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 9
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 7
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    30, 31
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 7
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    32, 33
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 10
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 7
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    34, 35
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                17,1,
+                2,1,
+                17,2,
+                2,1,
+                17,1,
+                4,0,
+                7,0,
+                5,0,
+                1,1,
+                17,1,
+                2,1,
+                17,2,
+                2,1,
+                17,1,
+                6,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::NORMAL,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        0, 15
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        14, 16
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-rightBrace"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCrightBracket : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
+        {
+            Any aAny ((sal_Int32) 8333);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "min(logwidth,logheight)",
+            "50000*logheight/?0 ",
+            "if(0-$0 ,0,if(?1 -$0 ,$0 ,?1 ))",
+            "?0 *?2 /100000",
+            "logheight+0-?3 ",
+            "logwidth*cos(pi*(2700000)/10800000)",
+            "?3 *sin(pi*(2700000)/10800000)",
+            "0+?5 -0",
+            "?3 +0-?6 ",
+            "logheight+?6 -?3 ",
+            "logwidth",
+            "logheight",
+            "logheight/2",
+            "logwidth",
+            "(16200000)/60000.0",
+            "(5400000)/60000.0",
+            "(0)/60000.0",
+            "(5400000)/60000.0",
+            "(16200000)/60000.0",
+            "(5400000)/60000.0",
+            "(0)/60000.0",
+            "(5400000)/60000.0"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    10, 3
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 1);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
                 Any aAny ((sal_Int32) 0);
                 aPropSequence [3].Value = makeAny (aAny);
             }
@@ -3147,118 +3200,63 @@ class ShapeCcube : public CustomShapeProvider
             static const CustomShapeProvider::ParameterPairData aData[] = {
                 {
                     EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 2
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    0, 0
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    6, 2
+                    13, 3
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    6, 9
+                    14, 15
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    10, 4
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 3
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    16, 17
                 },
                 {
                     EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    6, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::NORMAL,
-                    10, 0
+                    0, 0
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    10, 3
+                    13, 3
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    6, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    2, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    10, 0
+                    18, 19
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    6, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    2, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    10, 0
+                    10, 4
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    10, 3
+                    13, 3
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    6, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    6, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    10, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    6, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    6, 9
+                    20, 21
                 }
             };
             aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
@@ -3268,29 +3266,16 @@ class ShapeCcube : public CustomShapeProvider
             static const sal_uInt16 nValues[] = {
             // Command, Count
                 1,1,
-                2,3,
-                4,0,
-                7,0,
-                5,0,
-                1,1,
-                2,3,
-                4,0,
-                19,0,
-                7,0,
-                5,0,
-                1,1,
-                2,3,
-                4,0,
-                21,0,
-                7,0,
-                5,0,
-                1,1,
-                2,5,
-                4,0,
-                1,1,
-                2,2,
-                1,1,
+                17,1,
                 2,1,
+                17,1,
+                4,0,
+                7,0,
+                5,0,
+                1,1,
+                17,1,
+                2,1,
+                17,1,
                 6,0,
                 5,0
             };
@@ -3306,7 +3291,7 @@ class ShapeCcube : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::NORMAL,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        0, 2
+                        0, 8
                     };
                     aTextFrame.TopLeft = createParameterPair(&aData);
                 }
@@ -3315,7 +3300,7 @@ class ShapeCcube : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::EQUATION,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        6, 9
+                        7, 9
                     };
                     aTextFrame.BottomRight = createParameterPair(&aData);
                 }
@@ -3333,7 +3318,180 @@ class ShapeCcube : public CustomShapeProvider
         aRectangle.Height = 0;
         aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-cube"));
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-rightBracket"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCround1Rect : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
+        {
+            Any aAny ((sal_Int32) 16667);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "min(logwidth,logheight)",
+            "?1 *?0 /100000",
+            "logwidth+0-?2 ",
+            "?2 *29289/100000",
+            "logwidth+0-?4 ",
+            "logwidth/2",
+            "logheight/2",
+            "logheight",
+            "logwidth",
+            "(16200000)/60000.0",
+            "(5400000)/60000.0"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    3, 0
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    0, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    3, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    2, 2
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    10, 11
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 8
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 8
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,1,
+                17,1,
+                2,2,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::NORMAL,
+                        EnhancedCustomShapeParameterType::NORMAL,
+                        0, 0
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        5, 8
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-round1Rect"));
 
     return aPropertyMap;
   }
@@ -3608,488 +3766,130 @@ class ShapeCround2DiagRect : public CustomShapeProvider
 
 // This is a generated source file. DO NOT EDIT.
 
-class ShapeCflowChartMultidocument : public CustomShapeProvider
+class ShapeCround2SameRect : public CustomShapeProvider
 {
   virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
+        {
+            Any aAny ((sal_Int32) 16667);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj1";
+        }
+        {
+            Any aAny ((sal_Int32) 0);
+            aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = "adj2";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
-            "logheight*3675/21600",
-            "logheight*20782/21600",
-            "logwidth*9298/21600",
-            "logwidth*12286/21600",
-            "logwidth*18595/21600",
-            "logheight/2",
-            "logwidth"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (4);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 20782
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    9298, 23542
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    9298, 18022
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    18595, 18022
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    18595, 3675
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 3675
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1532, 3675
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1532, 1815
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20000, 1815
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20000, 16252
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    19298, 16252
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    18595, 16352
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    18595, 16352
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    18595, 3675
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    2972, 1815
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    2972, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    21600, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    21600, 14392
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20800, 14392
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20000, 14467
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20000, 14467
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20000, 1815
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 3675
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    18595, 3675
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    18595, 18022
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    9298, 18022
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    9298, 23542
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 20782
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1532, 3675
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1532, 1815
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20000, 1815
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20000, 16252
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    19298, 16252
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    18595, 16352
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    18595, 16352
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    2972, 1815
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    2972, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    21600, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    21600, 14392
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20800, 14392
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20000, 14467
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20000, 14467
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 20782
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    9298, 23542
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    9298, 18022
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    18595, 18022
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    18595, 16352
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    18595, 16352
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    19298, 16252
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20000, 16252
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20000, 14467
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20000, 14467
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    20800, 14392
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    21600, 14392
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    21600, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    2972, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    2972, 1815
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1532, 1815
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1532, 3675
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 3675
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                3,1,
-                2,2,
-                4,0,
-                1,1,
-                2,3,
-                3,1,
-                2,1,
-                4,0,
-                1,1,
-                2,3,
-                3,1,
-                2,1,
-                4,0,
-                7,0,
-                5,0,
-                1,1,
-                2,2,
-                3,1,
-                4,0,
-                1,1,
-                2,3,
-                3,1,
-                1,1,
-                2,3,
-                3,1,
-                6,0,
-                5,0,
-                1,1,
-                3,1,
-                2,1,
-                3,1,
-                2,1,
-                3,1,
-                2,6,
-                4,0,
-                6,0,
-                7,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "SubViewSize";
-            Sequence< awt::Size > aSizeSequence (3);
-            {
-                awt::Size aSize;
-                aSize.Width = 21600;
-                aSize.Height = 21600;
-                aSizeSequence [0] = aSize;
-            }
-            {
-                awt::Size aSize;
-                aSize.Width = 21600;
-                aSize.Height = 21600;
-                aSizeSequence [1] = aSize;
-            }
-            {
-                awt::Size aSize;
-                aSize.Width = 21600;
-                aSize.Height = 21600;
-                aSizeSequence [2] = aSize;
-            }
-            aPropSequence [2].Value = makeAny (aSizeSequence);
-        }
-        {
-            aPropSequence [3].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        0, 0
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        4, 1
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [3].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-flowChartMultidocument"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCactionButtonDocument : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
-    }
-    {
-        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "if(0-$1 ,0,if(50000-$1 ,$1 ,50000))",
             "min(logwidth,logheight)",
-            "?0 *3/8",
-            "logheight/2",
-            "?2 +0-?1 ",
-            "?2 +?1 -0",
-            "?0 *9/32",
-            "logwidth/2",
-            "?6 +0-?5 ",
-            "?6 +?5 -0",
-            "?0 *3/16",
-            "?8 +0-?9 ",
-            "?3 +?9 -0",
+            "?2 *?0 /100000",
+            "logwidth+0-?3 ",
+            "?2 *?1 /100000",
+            "logwidth+0-?5 ",
+            "logheight+0-?5 ",
+            "?3 +0-?5 ",
+            "?3 *29289/100000",
+            "?5 *29289/100000",
+            "if(?8 ,?9 ,?10 )",
+            "logwidth+0-?11 ",
+            "logheight+0-?10 ",
+            "logheight",
             "logwidth",
-            "logheight"
+            "logheight/2",
+            "logwidth/2",
+            "(16200000)/60000.0",
+            "(5400000)/60000.0",
+            "(0)/60000.0",
+            "(5400000)/60000.0",
+            "(5400000)/60000.0",
+            "(5400000)/60000.0",
+            "(10800000)/60000.0",
+            "(5400000)/60000.0"
         };
         aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    4, 0
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 14
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 1);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [1] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
         aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
@@ -4103,154 +3903,69 @@ class ShapeCactionButtonDocument : public CustomShapeProvider
             aPropSequence [0].Name = "Coordinates";
             static const CustomShapeProvider::ParameterPairData aData[] = {
                 {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
-                },
-                {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::NORMAL,
-                    12, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    12, 13
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 13
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    7, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    8, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    8, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    7, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    7, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    8, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    8, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    7, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    8, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    7, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    8, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    8, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    7, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    8, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
+                    3, 0
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::NORMAL,
-                    12, 0
+                    4, 0
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    12, 13
+                    3, 3
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 7
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 5
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 14
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 5
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 23
                 },
                 {
                     EnhancedCustomShapeParameterType::NORMAL,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    0, 13
+                    0, 3
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    3, 3
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    24, 25
                 }
             };
             aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
@@ -4260,36 +3975,15 @@ class ShapeCactionButtonDocument : public CustomShapeProvider
             static const sal_uInt16 nValues[] = {
             // Command, Count
                 1,1,
-                2,3,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
                 4,0,
-                1,1,
-                2,4,
-                4,0,
-                7,0,
-                5,0,
-                1,1,
-                2,5,
-                4,0,
-                19,0,
-                7,0,
-                5,0,
-                1,1,
-                2,2,
-                4,0,
-                18,0,
-                7,0,
-                5,0,
-                1,1,
-                2,4,
-                4,0,
-                1,1,
-                2,2,
-                6,0,
-                5,0,
-                1,1,
-                2,3,
-                4,0,
-                6,0,
                 5,0
             };
             aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
@@ -4302,9 +3996,9 @@ class ShapeCactionButtonDocument : public CustomShapeProvider
                 {
                     static const CustomShapeProvider::ParameterPairData aData =
                     {
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        0, 0
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        11, 9
                     };
                     aTextFrame.TopLeft = createParameterPair(&aData);
                 }
@@ -4331,7 +4025,7 @@ class ShapeCactionButtonDocument : public CustomShapeProvider
         aRectangle.Height = 0;
         aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-actionButtonDocument"));
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-round2SameRect"));
 
     return aPropertyMap;
   }
@@ -4339,329 +4033,48 @@ class ShapeCactionButtonDocument : public CustomShapeProvider
 
 // This is a generated source file. DO NOT EDIT.
 
-class ShapeCflowChartTerminator : public CustomShapeProvider
+class ShapeCroundRect : public CustomShapeProvider
 {
   virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
-    }
-    {
-        static const char *aStrings[] = {
-            "logwidth*1018/21600",
-            "logwidth*20582/21600",
-            "logheight*3163/21600",
-            "logheight*18437/21600",
-            "logwidth/2",
-            "logheight/2",
-            "logheight",
-            "logwidth",
-            "(16200000)/60000.0",
-            "(10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(10800000)/60000.0"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (4);
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
         {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    3475, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    18125, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    3475, 10800
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    8, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    3475, 21600
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    3475, 10800
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 11
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,1,
-                17,1,
-                2,1,
-                17,1,
-                4,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "SubViewSize";
-            Sequence< awt::Size > aSizeSequence (1);
-            {
-                awt::Size aSize;
-                aSize.Width = 21600;
-                aSize.Height = 21600;
-                aSizeSequence [0] = aSize;
-            }
-            aPropSequence [2].Value = makeAny (aSizeSequence);
-        }
-        {
-            aPropSequence [3].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        0, 2
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        1, 3
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [3].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-flowChartTerminator"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCflowChartDelay : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
-    }
-    {
-        static const char *aStrings[] = {
-            "logwidth/2",
-            "?0 *cos(pi*(2700000)/10800000)",
-            "logheight/2",
-            "?2 *sin(pi*(2700000)/10800000)",
-            "logwidth/2",
-            "?4 +?1 -0",
-            "logheight/2",
-            "?6 +0-?3 ",
-            "?6 +?3 -0",
-            "logheight",
-            "logwidth",
-            "(16200000)/60000.0",
-            "(10800000)/60000.0"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    4, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    11, 12
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 9
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,1,
-                17,1,
-                2,1,
-                4,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        0, 7
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        5, 8
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-flowChartDelay"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCcurvedConnector5 : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (3);
-        {
-            Any aAny ((sal_Int32) 50000);
+            Any aAny ((sal_Int32) 16667);
             aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj1";
-        }
-        {
-            Any aAny ((sal_Int32) 50000);
-            aAdjSequence [1].Value = aAny;
-            aAdjSequence [1].Name = "adj2";
-        }
-        {
-            Any aAny ((sal_Int32) 50000);
-            aAdjSequence [2].Value = aAny;
-            aAdjSequence [2].Name = "adj3";
+            aAdjSequence [0].Name = "adj";
         }
         aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
-            "logwidth*$0 /100000",
-            "logwidth*$2 /100000",
-            "(?0 +?1 )/2",
-            "(0+?0 )/2",
-            "(?0 +?2 )/2",
-            "(?1 +?2 )/2",
-            "(?1 +logwidth)/2",
-            "logheight*$1 /100000",
-            "(0+?7 )/2",
-            "(0+?8 )/2",
-            "(?8 +?7 )/2",
-            "(logheight+?7 )/2",
-            "(?11 +?7 )/2",
-            "(?11 +logheight)/2",
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "min(logwidth,logheight)",
+            "?1 *?0 /100000",
+            "logwidth+0-?2 ",
+            "logheight+0-?2 ",
+            "?2 *29289/100000",
+            "logwidth+0-?5 ",
+            "logheight+0-?5 ",
+            "logwidth/2",
+            "logheight/2",
+            "logheight",
             "logwidth",
-            "logheight"
+            "(10800000)/60000.0",
+            "(5400000)/60000.0",
+            "(16200000)/60000.0",
+            "(5400000)/60000.0",
+            "(0)/60000.0",
+            "(5400000)/60000.0",
+            "(5400000)/60000.0",
+            "(5400000)/60000.0"
         };
         aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (3);
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
         {
             Sequence< PropertyValue > aPropSequence (4);
             {
@@ -4669,15 +4082,15 @@ class ShapeCcurvedConnector5 : public CustomShapeProvider
                 static const CustomShapeProvider::ParameterPairData aData =
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 8
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    2, 0
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
             }
             {
                 aPropSequence [1].Name = "RangeXMaximum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
+                Any aAny ((sal_Int32) 50000);
                 aParameter.Value = aAny;
                 aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
                 aPropSequence [1].Value = makeAny (aParameter);
@@ -4685,7 +4098,7 @@ class ShapeCcurvedConnector5 : public CustomShapeProvider
             {
                 aPropSequence [2].Name = "RangeXMinimum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
+                Any aAny ((sal_Int32) 0);
                 aParameter.Value = aAny;
                 aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
                 aPropSequence [2].Value = makeAny (aParameter);
@@ -4696,76 +4109,6 @@ class ShapeCcurvedConnector5 : public CustomShapeProvider
                 aPropSequence [3].Value = makeAny (aAny);
             }
             aPropSequenceSequence [0] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 7
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefY";
-                Any aAny ((sal_Int32) 1);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [1] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 11
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefX";
-                Any aAny ((sal_Int32) 2);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [2] = aPropSequence;
         }
         aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
@@ -4782,8 +4125,18 @@ class ShapeCcurvedConnector5 : public CustomShapeProvider
             static const CustomShapeProvider::ParameterPairData aData[] = {
                 {
                     EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 2
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    2, 2
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 13
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
@@ -4793,3704 +4146,22 @@ class ShapeCcurvedConnector5 : public CustomShapeProvider
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    0, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 8
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 10
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 7
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 7
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    5, 7
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 12
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 13
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    6, 15
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    14, 15
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                3,4,
-                6,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        0, 0
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        14, 15
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-curvedConnector5"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeChorizontalScroll : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
-        {
-            Any aAny ((sal_Int32) 12500);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
-    }
-    {
-        static const char *aStrings[] = {
-            "if(0-$0 ,0,if(25000-$0 ,$0 ,25000))",
-            "min(logwidth,logheight)",
-            "?1 *?0 /100000",
-            "?2 *1/2",
-            "?2 *1/4",
-            "?2 +?3 -0",
-            "?2 +?2 -0",
-            "logheight+0-?2 ",
-            "logheight+0-?3 ",
-            "?7 +0-?3 ",
-            "logwidth+0-?2 ",
-            "logwidth+0-?3 ",
-            "logwidth/2",
-            "logheight/2",
-            "logwidth",
-            "(0)/60000.0",
-            "(5400000)/60000.0",
-            "(0)/60000.0",
-            "(10800000)/60000.0",
-            "(16200000)/60000.0",
-            "(-5400000)/60000.0",
-            "(10800000)/60000.0",
-            "(-10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(-5400000)/60000.0",
-            "(5400000)/60000.0",
-            "(-5400000)/60000.0",
-            "(0)/60000.0",
-            "(-10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(-5400000)/60000.0",
-            "(0)/60000.0",
-            "(-10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(-16200000)/60000.0",
-            "(10800000)/60000.0",
-            "(-10800000)/60000.0",
-            "(10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(10800000)/60000.0",
-            "(10800000)/60000.0",
-            "(0)/60000.0",
-            "(5400000)/60000.0",
-            "(0)/60000.0",
-            "(10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(-5400000)/60000.0",
-            "(0)/60000.0",
-            "(10800000)/60000.0",
-            "(10800000)/60000.0",
-            "(10800000)/60000.0",
-            "(0)/60000.0",
-            "(10800000)/60000.0"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    2, 0
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 25000);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefX";
-                Any aAny ((sal_Int32) 0);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [0] = aPropSequence;
-        }
-        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    14, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    15, 16
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    11, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    17, 18
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    19, 20
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 8
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    21, 22
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 7
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    11, 7
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    23, 24
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 6
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    25, 26
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    27, 28
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 6
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    29, 30
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    31, 32
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    11, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    33, 34
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    35, 36
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 5
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    37, 38
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    39, 40
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    14, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    41, 42
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 7
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 8
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    43, 44
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    11, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    45, 46
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    11, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    11, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    47, 48
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 6
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 5
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 4
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    49, 50
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    51, 52
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 5
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 7
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                17,1,
-                2,1,
-                17,1,
-                2,2,
-                17,1,
-                2,1,
-                17,1,
-                2,2,
-                17,1,
-                4,0,
-                1,1,
-                17,2,
-                4,0,
-                7,0,
-                5,0,
-                1,1,
-                17,2,
-                4,0,
-                1,1,
-                17,2,
-                4,0,
-                19,0,
-                7,0,
-                5,0,
-                1,1,
-                17,1,
-                2,2,
-                17,1,
-                2,1,
-                17,1,
-                2,2,
-                17,1,
-                4,0,
-                1,1,
-                2,1,
-                17,1,
-                1,1,
-                2,1,
-                17,1,
-                1,1,
-                2,1,
-                17,2,
-                1,1,
-                2,1,
-                6,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        2, 2
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        11, 7
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-horizontalScroll"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCbentConnector4 : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
-        {
-            Any aAny ((sal_Int32) 50000);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj1";
-        }
-        {
-            Any aAny ((sal_Int32) 50000);
-            aAdjSequence [1].Value = aAny;
-            aAdjSequence [1].Name = "adj2";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
-    }
-    {
-        static const char *aStrings[] = {
-            "logwidth*$0 /100000",
-            "(?0 +logwidth)/2",
-            "logheight*$1 /100000",
-            "(0+?2 )/2",
-            "logwidth",
-            "logheight"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 3
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefX";
-                Any aAny ((sal_Int32) 0);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [0] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 2
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefY";
-                Any aAny ((sal_Int32) 1);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [1] = aPropSequence;
-        }
-        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 5
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,4,
-                6,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        0, 0
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        4, 5
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-bentConnector4"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCleftRightCircularArrow : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (5);
-        {
-            Any aAny ((sal_Int32) 12500);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj1";
-        }
-        {
-            Any aAny ((sal_Int32) 1142319);
-            aAdjSequence [1].Value = aAny;
-            aAdjSequence [1].Name = "adj2";
-        }
-        {
-            Any aAny ((sal_Int32) 20457681);
-            aAdjSequence [2].Value = aAny;
-            aAdjSequence [2].Name = "adj3";
-        }
-        {
-            Any aAny ((sal_Int32) 11942319);
-            aAdjSequence [3].Value = aAny;
-            aAdjSequence [3].Name = "adj4";
-        }
-        {
-            Any aAny ((sal_Int32) 12500);
-            aAdjSequence [4].Value = aAny;
-            aAdjSequence [4].Name = "adj5";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
-    }
-    {
-        static const char *aStrings[] = {
-            "if(0-$4 ,0,if(25000-$4 ,$4 ,25000))",
-            "?0 *2/1",
-            "if(0-$0 ,0,if(?1 -$0 ,$0 ,?1 ))",
-            "if(1-$2 ,1,if(21599999-$2 ,$2 ,21599999))",
-            "if(0-$3 ,0,if(21599999-$3 ,$3 ,21599999))",
-            "min(logwidth,logheight)",
-            "?5 *?2 /100000",
-            "?5 *?0 /100000",
-            "?6 *1/2",
-            "logwidth/2",
-            "?9 +?8 -?7 ",
-            "logheight/2",
-            "?11 +?8 -?7 ",
-            "?10 +0-?6 ",
-            "?12 +0-?6 ",
-            "?13 +?8 -0",
-            "?14 +?8 -0",
-            "?15 *sin(pi*(?3 )/10800000)",
-            "?16 *cos(pi*(?3 )/10800000)",
-            "?15 *(cos(atan2(?17 ,?18 )))",
-            "?16 *(sin(atan2(?17 ,?18 )))",
-            "logwidth/2",
-            "?21 +?19 -0",
-            "logheight/2",
-            "?23 +?20 -0",
-            "min(?13 ,?14 )",
-            "?19 *?19 /1",
-            "?20 *?20 /1",
-            "?25 *?25 /1",
-            "?26 +0-?28 ",
-            "?27 +0-?28 ",
-            "?29 *?30 /?26 ",
-            "?31 *1/?27 ",
-            "1+0-?32 ",
-            "sqrt(?33 )",
-            "?29 *1/?19 ",
-            "?35 *1/?20 ",
-            "(1+?34 )/?36 ",
-            "(10800000*atan2(?37 ,1))/pi",
-            "?38 +21600000-0",
-            "if(?38 ,?38 ,?39 )",
-            "?40 +0-?3 ",
-            "?41 +21600000-0",
-            "if(?41 ,?41 ,?42 )",
-            "?43 +0-10800000",
-            "?43 +0-21600000",
-            "if(?44 ,?45 ,?43 )",
-            "abs(?46 )",
-            "if(0-$1 ,0,if(?47 -$1 ,$1 ,?47 ))",
-            "?3 +?48 -0",
-            "?15 *sin(pi*(?49 )/10800000)",
-            "?16 *cos(pi*(?49 )/10800000)",
-            "?15 *(cos(atan2(?50 ,?51 )))",
-            "?16 *(sin(atan2(?50 ,?51 )))",
-            "?21 +?52 -0",
-            "?23 +?53 -0",
-            "?7 *cos(pi*(?49 )/10800000)",
-            "?7 *sin(pi*(?49 )/10800000)",
-            "?22 +?56 -0",
-            "?24 +?57 -0",
-            "?7 *cos(pi*(?49 )/10800000)",
-            "?7 *sin(pi*(?49 )/10800000)",
-            "?22 +0-?60 ",
-            "?24 +0-?61 ",
-            "?62 +0-?21 ",
-            "?63 +0-?23 ",
-            "?58 +0-?21 ",
-            "?59 +0-?23 ",
-            "min(?10 ,?12 )",
-            "?64 *?68 /?10 ",
-            "?65 *?68 /?12 ",
-            "?66 *?68 /?10 ",
-            "?67 *?68 /?12 ",
-            "?71 +0-?69 ",
-            "?72 +0-?70 ",
-            "sqrt(?73 *?73 +?74 *?74 +0*0)",
-            "?69 *?72 /1",
-            "?71 *?70 /1",
-            "?76 +0-?77 ",
-            "?68 *?68 /1",
-            "?75 *?75 /1",
-            "?79 *?80 /1",
-            "?78 *?78 /1",
-            "?81 +0-?82 ",
-            "max(?83 ,0)",
-            "sqrt(?84 )",
-            "?74 *-1/1",
-            "if(?86 ,-1,1)",
-            "?87 *?73 /1",
-            "?88 *?85 /1",
-            "?78 *?74 /1",
-            "(?90 +?89 )/?80 ",
-            "?90 +0-?89 ",
-            "?92 *1/?80 ",
-            "abs(?74 )",
-            "?94 *?85 /1",
-            "?78 *?73 /-1",
-            "(?96 +?95 )/?80 ",
-            "?96 +0-?95 ",
-            "?98 *1/?80 ",
-            "?71 +0-?91 ",
-            "?71 +0-?93 ",
-            "?72 +0-?97 ",
-            "?72 +0-?99 ",
-            "sqrt(?100 *?100 +?102 *?102 +0*0)",
-            "sqrt(?101 *?101 +?103 *?103 +0*0)",
-            "?105 +0-?104 ",
-            "if(?106 ,?91 ,?93 )",
-            "if(?106 ,?97 ,?99 )",
-            "?107 *?10 /?68 ",
-            "?108 *?12 /?68 ",
-            "?21 +?109 -0",
-            "?23 +?110 -0",
-            "?64 *?25 /?13 ",
-            "?65 *?25 /?14 ",
-            "?66 *?25 /?13 ",
-            "?67 *?25 /?14 ",
-            "?115 +0-?113 ",
-            "?116 +0-?114 ",
-            "sqrt(?117 *?117 +?118 *?118 +0*0)",
-            "?113 *?116 /1",
-            "?115 *?114 /1",
-            "?120 +0-?121 ",
-            "?25 *?25 /1",
-            "?119 *?119 /1",
-            "?123 *?124 /1",
-            "?122 *?122 /1",
-            "?125 +0-?126 ",
-            "max(?127 ,0)",
-            "sqrt(?128 )",
-            "?87 *?117 /1",
-            "?130 *?129 /1",
-            "?122 *?118 /1",
-            "(?132 +?131 )/?124 ",
-            "?132 +0-?131 ",
-            "?134 *1/?124 ",
-            "abs(?118 )",
-            "?136 *?129 /1",
-            "?122 *?117 /-1",
-            "(?138 +?137 )/?124 ",
-            "?138 +0-?137 ",
-            "?140 *1/?124 ",
-            "?113 +0-?133 ",
-            "?113 +0-?135 ",
-            "?114 +0-?139 ",
-            "?114 +0-?141 ",
-            "sqrt(?142 *?142 +?144 *?144 +0*0)",
-            "sqrt(?143 *?143 +?145 *?145 +0*0)",
-            "?147 +0-?146 ",
-            "if(?148 ,?133 ,?135 )",
-            "if(?148 ,?139 ,?141 )",
-            "?149 *?13 /?25 ",
-            "?150 *?14 /?25 ",
-            "?21 +?151 -0",
-            "?23 +?152 -0",
-            "?15 *sin(pi*(?4 )/10800000)",
-            "?16 *cos(pi*(?4 )/10800000)",
-            "?15 *(cos(atan2(?155 ,?156 )))",
-            "?16 *(sin(atan2(?155 ,?156 )))",
-            "?21 +?157 -0",
-            "?23 +?158 -0",
-            "?4 +0-?48 ",
-            "?15 *sin(pi*(?161 )/10800000)",
-            "?16 *cos(pi*(?161 )/10800000)",
-            "?15 *(cos(atan2(?162 ,?163 )))",
-            "?16 *(sin(atan2(?162 ,?163 )))",
-            "?21 +?164 -0",
-            "?23 +?165 -0",
-            "?7 *cos(pi*(?161 )/10800000)",
-            "?7 *sin(pi*(?161 )/10800000)",
-            "?159 +?168 -0",
-            "?160 +?169 -0",
-            "?7 *cos(pi*(?161 )/10800000)",
-            "?7 *sin(pi*(?161 )/10800000)",
-            "?159 +0-?172 ",
-            "?160 +0-?173 ",
-            "?111 +0-?153 ",
-            "?112 +0-?154 ",
-            "sqrt(?176 *?176 +?177 *?177 +0*0)",
-            "?178 *1/2",
-            "?179 +0-?7 ",
-            "if(?180 ,?111 ,?58 )",
-            "if(?180 ,?112 ,?59 )",
-            "if(?180 ,?153 ,?62 )",
-            "if(?180 ,?154 ,?63 )",
-            "(10800000*atan2(?110 ,?109 ))/pi",
-            "?185 +21600000-0",
-            "if(?185 ,?185 ,?186 )",
-            "?187 +0-?3 ",
-            "?188 +21600000-0",
-            "if(?188 ,?188 ,?189 )",
-            "?4 +0-?190 ",
-            "?191 +21600000-0",
-            "if(?191 ,?191 ,?192 )",
-            "?187 +0-?193 ",
-            "?194 +21600000-0",
-            "if(?194 ,?194 ,?195 )",
-            "(10800000*atan2(?152 ,?151 ))/pi",
-            "?197 +21600000-0",
-            "if(?197 ,?197 ,?198 )",
-            "?199 +0-?3 ",
-            "?200 +0-21600000",
-            "if(?200 ,?201 ,?200 )",
-            "?4 +0-?202 ",
-            "?203 +0-21600000",
-            "if(?204 ,?204 ,?203 )",
-            "?205 +0-?199 ",
-            "?206 +0-21600000",
-            "if(?206 ,?207 ,?206 )",
-            "?10 *sin(pi*(?193 )/10800000)",
-            "?12 *cos(pi*(?193 )/10800000)",
-            "?10 *(cos(atan2(?209 ,?210 )))",
-            "?12 *(sin(atan2(?209 ,?210 )))",
-            "?21 +?211 -0",
-            "?23 +?212 -0",
-            "?13 *sin(pi*(?205 )/10800000)",
-            "?14 *cos(pi*(?205 )/10800000)",
-            "?13 *(cos(atan2(?215 ,?216 )))",
-            "?14 *(sin(atan2(?215 ,?216 )))",
-            "?21 +?217 -0",
-            "?23 +?218 -0",
-            "if(?180 ,?213 ,?170 )",
-            "if(?180 ,?214 ,?171 )",
-            "if(?180 ,?219 ,?174 )",
-            "if(?180 ,?220 ,?175 )",
-            "?161 +0-5400000",
-            "?49 +5400000-0",
-            "?49 +10800000-0",
-            "?161 +10800000-0",
-            "?10 *cos(pi*(2700000)/10800000)",
-            "?12 *sin(pi*(2700000)/10800000)",
-            "?21 +0-?229 ",
-            "?21 +?229 -0",
-            "?23 +0-?230 ",
-            "?23 +?230 -0",
-            "(?193 )/60000.0",
-            "(?196 )/60000.0",
-            "(?199 )/60000.0",
-            "(?208 )/60000.0"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (4);
-        {
-            Sequence< PropertyValue > aPropSequence (1);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    54, 55
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            aPropSequenceSequence [0] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (1);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    213, 214
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            aPropSequenceSequence [1] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (3);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    111, 112
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RadiusRangeMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 1);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RadiusRangeMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            aPropSequenceSequence [2] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (3);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    62, 63
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RadiusRangeMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 25000);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RadiusRangeMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            aPropSequenceSequence [3] = aPropSequence;
-        }
-        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    166, 167
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    221, 222
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    213, 214
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 12
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    235, 236
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    181, 182
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    54, 55
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    183, 184
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    153, 154
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    13, 14
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    237, 238
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    223, 224
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,2,
-                17,1,
-                2,4,
-                17,1,
-                2,1,
-                4,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        231, 233
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        232, 234
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-leftRightCircularArrow"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCwedgeRectCallout : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
-        {
-            Any aAny ((sal_Int32) -20833);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj1";
-        }
-        {
-            Any aAny ((sal_Int32) 62500);
-            aAdjSequence [1].Value = aAny;
-            aAdjSequence [1].Name = "adj2";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
-    }
-    {
-        static const char *aStrings[] = {
-            "logwidth*$0 /100000",
-            "logheight*$1 /100000",
-            "logwidth/2",
-            "?2 +?0 -0",
-            "logheight/2",
-            "?4 +?1 -0",
-            "?3 +0-?2 ",
-            "?5 +0-?4 ",
-            "?0 *logheight/logwidth",
-            "abs(?1 )",
-            "abs(?8 )",
-            "?9 +0-?10 ",
-            "if(?0 ,7,2)",
-            "if(?0 ,10,5)",
-            "logwidth*?12 /12",
-            "logwidth*?13 /12",
-            "if(?1 ,7,2)",
-            "if(?1 ,10,5)",
-            "logheight*?16 /12",
-            "logheight*?17 /12",
-            "if(?0 ,0,?3 )",
-            "if(?11 ,0,?20 )",
-            "if(?1 ,?14 ,?3 )",
-            "if(?11 ,?22 ,?14 )",
-            "if(?0 ,?3 ,logwidth)",
-            "if(?11 ,logwidth,?24 )",
-            "if(?1 ,?3 ,?14 )",
-            "if(?11 ,?26 ,?14 )",
-            "if(?0 ,?18 ,?5 )",
-            "if(?11 ,?18 ,?28 )",
-            "if(?1 ,0,?5 )",
-            "if(?11 ,?30 ,0)",
-            "if(?0 ,?5 ,?18 )",
-            "if(?11 ,?18 ,?32 )",
-            "if(?1 ,?5 ,logheight)",
-            "if(?11 ,?34 ,logheight)",
-            "logheight",
-            "logwidth"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
-        {
-            Sequence< PropertyValue > aPropSequence (7);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 5
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 0);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
-                Any aAny ((sal_Int32) 1);
-                aPropSequence [6].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [0] = aPropSequence;
-        }
-        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    14, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    23, 31
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    15, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    37, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    37, 18
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    25, 33
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    37, 19
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    37, 36
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    15, 36
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    27, 35
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    14, 36
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 36
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 19
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    21, 29
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 18
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,15,
-                4,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        0, 0
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        37, 36
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-wedgeRectCallout"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCaccentCallout2 : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (6);
-        {
-            Any aAny ((sal_Int32) 18750);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj1";
-        }
-        {
-            Any aAny ((sal_Int32) -8333);
-            aAdjSequence [1].Value = aAny;
-            aAdjSequence [1].Name = "adj2";
-        }
-        {
-            Any aAny ((sal_Int32) 18750);
-            aAdjSequence [2].Value = aAny;
-            aAdjSequence [2].Name = "adj3";
-        }
-        {
-            Any aAny ((sal_Int32) -16667);
-            aAdjSequence [3].Value = aAny;
-            aAdjSequence [3].Name = "adj4";
-        }
-        {
-            Any aAny ((sal_Int32) 112500);
-            aAdjSequence [4].Value = aAny;
-            aAdjSequence [4].Name = "adj5";
-        }
-        {
-            Any aAny ((sal_Int32) -46667);
-            aAdjSequence [5].Value = aAny;
-            aAdjSequence [5].Name = "adj6";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
-    }
-    {
-        static const char *aStrings[] = {
-            "logheight*$0 /100000",
-            "logwidth*$1 /100000",
-            "logheight*$2 /100000",
-            "logwidth*$3 /100000",
-            "logheight*$4 /100000",
-            "logwidth*$5 /100000",
-            "logwidth",
-            "logheight/2",
-            "logwidth/2",
-            "logheight"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (3);
-        {
-            Sequence< PropertyValue > aPropSequence (7);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 0
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 1);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
-                Any aAny ((sal_Int32) 0);
-                aPropSequence [6].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [0] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (7);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 2
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 3);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
-                Any aAny ((sal_Int32) 2);
-                aPropSequence [6].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [1] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (7);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    5, 4
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 5);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
-                Any aAny ((sal_Int32) 4);
-                aPropSequence [6].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [2] = aPropSequence;
-        }
-        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    6, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    6, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    5, 4
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,3,
-                4,0,
-                7,0,
-                5,0,
-                1,1,
-                2,1,
-                6,0,
-                5,0,
-                1,1,
-                2,2,
-                6,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        0, 0
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        6, 9
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-accentCallout2"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCflowChartMagneticDrum : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
-    }
-    {
-        static const char *aStrings[] = {
-            "logwidth*2/3",
-            "logwidth/2",
-            "logheight/2",
-            "logheight",
-            "logwidth",
-            "logwidth/6",
-            "(16200000)/60000.0",
-            "(10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(10800000)/60000.0",
-            "(16200000)/60000.0",
-            "(10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(10800000)/60000.0"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (4);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    5, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    6, 7
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 6
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    8, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    5, 6
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    5, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    12, 13
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 6
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 3
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    14, 15
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,1,
-                17,1,
-                2,1,
-                17,1,
-                4,0,
-                7,0,
-                5,0,
-                1,1,
-                17,1,
-                6,0,
-                5,0,
-                1,1,
-                2,1,
-                17,1,
-                2,1,
-                17,1,
-                4,0,
-                6,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "SubViewSize";
-            Sequence< awt::Size > aSizeSequence (3);
-            {
-                awt::Size aSize;
-                aSize.Width = 6;
-                aSize.Height = 6;
-                aSizeSequence [0] = aSize;
-            }
-            {
-                awt::Size aSize;
-                aSize.Width = 6;
-                aSize.Height = 6;
-                aSizeSequence [1] = aSize;
-            }
-            {
-                awt::Size aSize;
-                aSize.Width = 6;
-                aSize.Height = 6;
-                aSizeSequence [2] = aSize;
-            }
-            aPropSequence [2].Value = makeAny (aSizeSequence);
-        }
-        {
-            aPropSequence [3].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        5, 0
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        0, 3
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [3].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-flowChartMagneticDrum"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCcorner : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
-        {
-            Any aAny ((sal_Int32) 50000);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj1";
-        }
-        {
-            Any aAny ((sal_Int32) 50000);
-            aAdjSequence [1].Value = aAny;
-            aAdjSequence [1].Name = "adj2";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
-    }
-    {
-        static const char *aStrings[] = {
-            "min(logwidth,logheight)",
-            "100000*logheight/?0 ",
-            "100000*logwidth/?0 ",
-            "if(0-$0 ,0,if(?1 -$0 ,$0 ,?1 ))",
-            "if(0-$1 ,0,if(?2 -$1 ,$1 ,?2 ))",
-            "?0 *?4 /100000",
-            "?0 *?3 /100000",
-            "logheight+0-?6 ",
-            "?5 *1/2",
-            "(?7 +logheight)/2",
-            "logwidth+0-logheight",
-            "if(?10 ,?7 ,0)",
-            "if(?10 ,logwidth,?5 )",
-            "logwidth",
-            "logwidth/2",
-            "logheight",
-            "logheight/2"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 7
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 1);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefY";
-                Any aAny ((sal_Int32) 0);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [0] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    5, 0
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefX";
-                Any aAny ((sal_Int32) 1);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [1] = aPropSequence;
-        }
-        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    5, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    5, 7
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    13, 7
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    13, 15
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 15
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,5,
-                4,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        0, 11
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        12, 15
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-corner"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCborderCallout2 : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (6);
-        {
-            Any aAny ((sal_Int32) 18750);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj1";
-        }
-        {
-            Any aAny ((sal_Int32) -8333);
-            aAdjSequence [1].Value = aAny;
-            aAdjSequence [1].Name = "adj2";
-        }
-        {
-            Any aAny ((sal_Int32) 18750);
-            aAdjSequence [2].Value = aAny;
-            aAdjSequence [2].Name = "adj3";
-        }
-        {
-            Any aAny ((sal_Int32) -16667);
-            aAdjSequence [3].Value = aAny;
-            aAdjSequence [3].Name = "adj4";
-        }
-        {
-            Any aAny ((sal_Int32) 112500);
-            aAdjSequence [4].Value = aAny;
-            aAdjSequence [4].Name = "adj5";
-        }
-        {
-            Any aAny ((sal_Int32) -46667);
-            aAdjSequence [5].Value = aAny;
-            aAdjSequence [5].Name = "adj6";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
-    }
-    {
-        static const char *aStrings[] = {
-            "logheight*$0 /100000",
-            "logwidth*$1 /100000",
-            "logheight*$2 /100000",
-            "logwidth*$3 /100000",
-            "logheight*$4 /100000",
-            "logwidth*$5 /100000",
-            "logwidth",
-            "logheight/2",
-            "logwidth/2",
-            "logheight"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (3);
-        {
-            Sequence< PropertyValue > aPropSequence (7);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 0
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 1);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
-                Any aAny ((sal_Int32) 0);
-                aPropSequence [6].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [0] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (7);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 2
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 3);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
-                Any aAny ((sal_Int32) 2);
-                aPropSequence [6].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [1] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (7);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    5, 4
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 5);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
-                Any aAny ((sal_Int32) 4);
-                aPropSequence [6].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [2] = aPropSequence;
-        }
-        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    6, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    6, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    5, 4
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,3,
-                4,0,
-                5,0,
-                1,1,
-                2,2,
-                6,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        0, 0
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        6, 9
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-borderCallout2"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCdonut : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
-        {
-            Any aAny ((sal_Int32) 25000);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
-    }
-    {
-        static const char *aStrings[] = {
-            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
-            "min(logwidth,logheight)",
-            "?1 *?0 /100000",
-            "logwidth/2",
-            "?3 +0-?2 ",
-            "logheight/2",
-            "?5 +0-?2 ",
-            "?3 *cos(pi*(2700000)/10800000)",
-            "?5 *sin(pi*(2700000)/10800000)",
-            "logwidth/2",
-            "?9 +0-?7 ",
-            "?9 +?7 -0",
-            "logheight/2",
-            "?12 +0-?8 ",
-            "?12 +?8 -0",
-            "logheight",
-            "logwidth",
-            "(10800000)/60000.0",
-            "(5400000)/60000.0",
-            "(16200000)/60000.0",
-            "(5400000)/60000.0",
-            "(0)/60000.0",
-            "(5400000)/60000.0",
-            "(5400000)/60000.0",
-            "(5400000)/60000.0",
-            "(10800000)/60000.0",
-            "(-5400000)/60000.0",
-            "(5400000)/60000.0",
-            "(-5400000)/60000.0",
-            "(0)/60000.0",
-            "(-5400000)/60000.0",
-            "(16200000)/60000.0",
-            "(-5400000)/60000.0"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
-        {
-            Sequence< PropertyValue > aPropSequence (3);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 12
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RadiusRangeMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 50000);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RadiusRangeMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            aPropSequenceSequence [0] = aPropSequence;
-        }
-        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 12
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 5
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    17, 18
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 5
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    19, 20
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 5
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    21, 22
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 5
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    23, 24
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    2, 12
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 6
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    25, 26
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 6
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    27, 28
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 6
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    29, 30
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 6
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    31, 32
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                17,4,
-                4,0,
-                1,1,
-                17,4,
-                4,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        10, 13
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        11, 14
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-donut"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCflowChartCollate : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
-    }
-    {
-        static const char *aStrings[] = {
-            "logwidth*3/4",
-            "logheight*3/4",
-            "logwidth/2",
-            "logheight/2",
-            "logheight",
-            "logwidth/4",
-            "logheight/4"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (4);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    2, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 1
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
                     2, 2
                 },
                 {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 1
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,5,
-                4,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "SubViewSize";
-            Sequence< awt::Size > aSizeSequence (1);
-            {
-                awt::Size aSize;
-                aSize.Width = 2;
-                aSize.Height = 2;
-                aSizeSequence [0] = aSize;
-            }
-            aPropSequence [2].Value = makeAny (aSizeSequence);
-        }
-        {
-            aPropSequence [3].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        5, 6
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        0, 1
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [3].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-flowChartCollate"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCmathNotEqual : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (3);
-        {
-            Any aAny ((sal_Int32) 23520);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj1";
-        }
-        {
-            Any aAny ((sal_Int32) 6600000);
-            aAdjSequence [1].Value = aAny;
-            aAdjSequence [1].Name = "adj2";
-        }
-        {
-            Any aAny ((sal_Int32) 11760);
-            aAdjSequence [2].Value = aAny;
-            aAdjSequence [2].Name = "adj3";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
-    }
-    {
-        static const char *aStrings[] = {
-            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
-            "if(4200000-$1 ,4200000,if(6600000-$1 ,$1 ,6600000))",
-            "?0 *2/1",
-            "100000+0-2",
-            "if(0-$2 ,0,if(?3 -$2 ,$2 ,?3 ))",
-            "logheight*?0 /100000",
-            "logheight*?4 /200000",
-            "logwidth*73490/200000",
-            "logwidth/2",
-            "?8 +0-?7 ",
-            "?8 +?7 -0",
-            "logheight/2",
-            "?11 +0-?6 ",
-            "?11 +?6 -0",
-            "?12 +0-?5 ",
-            "?13 +?5 -0",
-            "?1 +0-5400000",
-            "logheight/2",
-            "?17 *tan(pi*(?16 )/10800000)",
-            "sqrt(?18 *?18 +?17 *?17 +0*0)",
-            "?19 *?5 /?17 ",
-            "?20 *1/2",
-            "?8 +?18 -?21 ",
-            "?18 *?14 /?17 ",
-            "?22 +0-?23 ",
-            "?18 *?12 /?17 ",
-            "?22 +0-?25 ",
-            "?18 *?13 /?17 ",
-            "?22 +0-?27 ",
-            "?18 *?15 /?17 ",
-            "?22 +0-?29 ",
-            "?18 *2/1",
-            "?22 +0-?31 ",
-            "?22 +?20 -0",
-            "?24 +?20 -0",
-            "?26 +?20 -0",
-            "?28 +?20 -0",
-            "?30 +?20 -0",
-            "?32 +?20 -0",
-            "?5 *?17 /?19 ",
-            "?22 +?39 -0",
-            "?33 +0-?39 ",
-            "if(?16 ,?40 ,?33 )",
-            "if(?16 ,?22 ,?41 )",
-            "?5 *?18 /?19 ",
-            "0+0-?44 ",
-            "if(?16 ,?44 ,0)",
-            "if(?16 ,0,?45 )",
-            "logwidth+0-?42 ",
-            "logwidth+0-?43 ",
-            "logheight+0-?46 ",
-            "logheight+0-?47 ",
-            "(?42 +?43 )/2",
-            "(?49 +?48 )/2",
-            "(?46 +?47 )/2",
-            "(?14 +?12 )/2",
-            "(?13 +?15 )/2",
-            "(?51 +?50 )/2",
-            "logwidth"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (3);
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 14
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 50000);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefY";
-                Any aAny ((sal_Int32) 0);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [0] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (1);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    43, 0
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            aPropSequenceSequence [1] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    58, 12
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 3);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefY";
-                Any aAny ((sal_Int32) 2);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [2] = aPropSequence;
-        }
-        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    9, 14
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    24, 14
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    43, 47
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    42, 46
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    34, 14
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 14
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 12
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    35, 12
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    36, 13
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 13
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 15
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    37, 15
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    49, 51
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    48, 50
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    30, 15
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    9, 15
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    9, 13
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    28, 13
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    26, 12
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    9, 12
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,19,
-                4,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        9, 14
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        10, 15
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-mathNotEqual"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCbentConnector2 : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
-    }
-    {
-        static const char *aStrings[] = {
-            "logwidth",
-            "logheight"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    0, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 1
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                2,2,
-                6,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        0, 0
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        0, 1
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-bentConnector2"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCmathMultiply : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
-        {
-            Any aAny ((sal_Int32) 23520);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj1";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
-    }
-    {
-        static const char *aStrings[] = {
-            "if(0-$0 ,0,if(51965-$0 ,$0 ,51965))",
-            "min(logwidth,logheight)",
-            "?1 *?0 /100000",
-            "(10800000*atan2(logheight,logwidth))/pi",
-            "1*sin(pi*(?3 )/10800000)",
-            "1*cos(pi*(?3 )/10800000)",
-            "1*tan(pi*(?3 )/10800000)",
-            "sqrt(logwidth*logwidth+logheight*logheight+0*0)",
-            "?7 *51965/100000",
-            "?7 +0-?8 ",
-            "?5 *?9 /2",
-            "?4 *?9 /2",
-            "?4 *?2 /2",
-            "?5 *?2 /2",
-            "?10 +0-?12 ",
-            "?11 +?13 -0",
-            "?10 +?12 -0",
-            "?11 +0-?13 ",
-            "logwidth/2",
-            "?18 +0-?16 ",
-            "?19 *?6 /1",
-            "?20 +?17 -0",
-            "logwidth+0-?16 ",
-            "logwidth+0-?14 ",
-            "logheight/2",
-            "?24 +0-?15 ",
-            "?25 *1/?6 ",
-            "?23 +0-?26 ",
-            "?14 +?26 -0",
-            "logheight+0-?15 ",
-            "logheight+0-?17 ",
-            "logheight+0-?21 ",
-            "logwidth+0-?10 ",
-            "logheight+0-?11 "
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 2
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 51965);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefY";
-                Any aAny ((sal_Int32) 0);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [0] = aPropSequence;
-        }
-        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
-        {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
                     14, 15
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 4
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    2, 2
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
@@ -8500,52 +4171,17 @@ class ShapeCmathMultiply : public CustomShapeProvider
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    18, 21
+                    2, 10
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    22, 17
+                    2, 2
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    23, 15
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    27, 24
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    23, 29
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    22, 30
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    18, 31
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    16, 30
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    14, 29
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    28, 24
+                    18, 19
                 }
             };
             aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
@@ -8555,7 +4191,13 @@ class ShapeCmathMultiply : public CustomShapeProvider
             static const sal_uInt16 nValues[] = {
             // Command, Count
                 1,1,
-                2,11,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
+                2,1,
+                17,1,
                 4,0,
                 5,0
             };
@@ -8571,7 +4213,7 @@ class ShapeCmathMultiply : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::EQUATION,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        14, 17
+                        5, 5
                     };
                     aTextFrame.TopLeft = createParameterPair(&aData);
                 }
@@ -8580,7 +4222,7 @@ class ShapeCmathMultiply : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::EQUATION,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        23, 30
+                        6, 7
                     };
                     aTextFrame.BottomRight = createParameterPair(&aData);
                 }
@@ -8598,7 +4240,7 @@ class ShapeCmathMultiply : public CustomShapeProvider
         aRectangle.Height = 0;
         aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-mathMultiply"));
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-roundRect"));
 
     return aPropertyMap;
   }
@@ -8606,51 +4248,25 @@ class ShapeCmathMultiply : public CustomShapeProvider
 
 // This is a generated source file. DO NOT EDIT.
 
-class ShapeCheptagon : public CustomShapeProvider
+class ShapeCrtTriangle : public CustomShapeProvider
 {
   virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
     {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
-        {
-            Any aAny ((sal_Int32) 102572);
-            aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "hf";
-        }
-        {
-            Any aAny ((sal_Int32) 105210);
-            aAdjSequence [1].Value = aAny;
-            aAdjSequence [1].Name = "vf";
-        }
-        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
-            "logwidth/2",
-            "?0 *$0 /100000",
+            "logheight*7/12",
+            "logwidth*7/12",
+            "logheight*11/12",
             "logheight/2",
-            "?2 *$1 /100000",
-            "logheight/2",
-            "?4 *$1 /100000",
-            "?1 *97493/100000",
-            "?1 *78183/100000",
-            "?1 *43388/100000",
-            "?3 *62349/100000",
-            "?3 *22252/100000",
-            "?3 *90097/100000",
+            "logheight",
             "logwidth/2",
-            "?12 +0-?6 ",
-            "?12 +0-?7 ",
-            "?12 +0-?8 ",
-            "?12 +?8 -0",
-            "?12 +?7 -0",
-            "?12 +?6 -0",
-            "?5 +0-?9 ",
-            "?5 +?10 -0",
-            "?5 +?11 -0",
-            "logheight+0-?19 "
+            "logwidth",
+            "logwidth/12"
         };
         aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
@@ -8669,39 +4285,19 @@ class ShapeCheptagon : public CustomShapeProvider
             aPropSequence [0].Name = "Coordinates";
             static const CustomShapeProvider::ParameterPairData aData[] = {
                 {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    13, 20
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    14, 19
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::NORMAL,
-                    12, 0
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 4
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    0, 0
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    17, 19
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    18, 20
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    16, 21
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    15, 21
+                    6, 4
                 }
             };
             aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
@@ -8711,7 +4307,7 @@ class ShapeCheptagon : public CustomShapeProvider
             static const sal_uInt16 nValues[] = {
             // Command, Count
                 1,1,
-                2,6,
+                2,2,
                 4,0,
                 5,0
             };
@@ -8727,7 +4323,7 @@ class ShapeCheptagon : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::EQUATION,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        14, 19
+                        7, 0
                     };
                     aTextFrame.TopLeft = createParameterPair(&aData);
                 }
@@ -8736,7 +4332,7 @@ class ShapeCheptagon : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::EQUATION,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        17, 22
+                        1, 2
                     };
                     aTextFrame.BottomRight = createParameterPair(&aData);
                 }
@@ -8754,7 +4350,7 @@ class ShapeCheptagon : public CustomShapeProvider
         aRectangle.Height = 0;
         aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-heptagon"));
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-rtTriangle"));
 
     return aPropertyMap;
   }
@@ -8762,7 +4358,1103 @@ class ShapeCheptagon : public CustomShapeProvider
 
 // This is a generated source file. DO NOT EDIT.
 
-class ShapeCrect : public CustomShapeProvider
+class ShapeCsmileyFace : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
+        {
+            Any aAny ((sal_Int32) 4653);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(-4653-$0 ,-4653,if(4653-$0 ,$0 ,4653))",
+            "logwidth*4969/21699",
+            "logwidth*6215/21600",
+            "logwidth*13135/21600",
+            "logwidth*16640/21600",
+            "logheight*7570/21600",
+            "logheight*16515/21600",
+            "logheight*?0 /100000",
+            "?6 +0-?7 ",
+            "?6 +?7 -0",
+            "logheight*?0 /50000",
+            "?9 +?10 -0",
+            "logwidth/2",
+            "?12 *cos(pi*(2700000)/10800000)",
+            "logheight/2",
+            "?14 *sin(pi*(2700000)/10800000)",
+            "logwidth/2",
+            "?16 +0-?13 ",
+            "?16 +?13 -0",
+            "logheight/2",
+            "?19 +0-?15 ",
+            "?19 +?15 -0",
+            "logwidth*1125/21600",
+            "logheight*1125/21600",
+            "logheight",
+            "logwidth",
+            "(10800000)/60000.0",
+            "(21600000)/60000.0",
+            "(10800000)/60000.0",
+            "(21600000)/60000.0",
+            "(10800000)/60000.0",
+            "(21600000)/60000.0",
+            "(10800000)/60000.0",
+            "(21600000)/60000.0"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    16, 9
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 4653);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) -4653);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 14
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    26, 27
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    2, 5
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 23
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    28, 29
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    3, 5
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 23
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    30, 31
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    1, 8
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    16, 11
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    4, 8
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 14
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    32, 33
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                17,1,
+                4,0,
+                7,0,
+                5,0,
+                1,1,
+                17,1,
+                1,1,
+                17,1,
+                19,0,
+                5,0,
+                1,1,
+                16,1,
+                6,0,
+                5,0,
+                1,1,
+                17,1,
+                4,0,
+                6,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        17, 20
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        18, 21
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-smileyFace"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCsnip1Rect : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
+        {
+            Any aAny ((sal_Int32) 16667);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "min(logwidth,logheight)",
+            "?1 *?0 /100000",
+            "logwidth+0-?2 ",
+            "?2 *1/2",
+            "(?3 +logwidth)/2",
+            "logwidth",
+            "logheight/2",
+            "logwidth/2",
+            "logheight"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    3, 0
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    0, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    3, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 2
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 9
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 9
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,4,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::NORMAL,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        0, 4
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        5, 9
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-snip1Rect"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCsnip2DiagRect : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
+        {
+            Any aAny ((sal_Int32) 0);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj1";
+        }
+        {
+            Any aAny ((sal_Int32) 16667);
+            aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = "adj2";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "if(0-$1 ,0,if(50000-$1 ,$1 ,50000))",
+            "min(logwidth,logheight)",
+            "?2 *?0 /100000",
+            "logwidth+0-?3 ",
+            "logheight+0-?3 ",
+            "?2 *?1 /100000",
+            "logwidth+0-?6 ",
+            "logheight+0-?6 ",
+            "?3 +0-?6 ",
+            "if(?9 ,?3 ,?6 )",
+            "?10 *1/2",
+            "logwidth+0-?11 ",
+            "logheight+0-?11 ",
+            "logwidth",
+            "logheight/2",
+            "logwidth/2",
+            "logheight"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    3, 0
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    7, 0
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 1);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [1] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    3, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    7, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 6
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 5
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    4, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 8
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 3
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,7,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        11, 11
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        12, 13
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-snip2DiagRect"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCsnip2SameRect : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
+        {
+            Any aAny ((sal_Int32) 16667);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj1";
+        }
+        {
+            Any aAny ((sal_Int32) 0);
+            aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = "adj2";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "if(0-$1 ,0,if(50000-$1 ,$1 ,50000))",
+            "min(logwidth,logheight)",
+            "?2 *?0 /100000",
+            "logwidth+0-?3 ",
+            "?2 *?1 /100000",
+            "logwidth+0-?5 ",
+            "logheight+0-?5 ",
+            "?3 +0-?5 ",
+            "if(?8 ,?3 ,?5 )",
+            "?9 *1/2",
+            "logwidth+0-?10 ",
+            "?3 *1/2",
+            "(?7 +logheight)/2",
+            "logheight",
+            "logwidth",
+            "logheight/2",
+            "logwidth/2"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    4, 0
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 14
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 1);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [1] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    3, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    4, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 3
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 7
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 14
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 14
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 7
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 3
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,7,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        10, 12
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        11, 13
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-snip2SameRect"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCsnipRoundRect : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
+        {
+            Any aAny ((sal_Int32) 16667);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj1";
+        }
+        {
+            Any aAny ((sal_Int32) 16667);
+            aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = "adj2";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "if(0-$1 ,0,if(50000-$1 ,$1 ,50000))",
+            "min(logwidth,logheight)",
+            "?2 *?0 /100000",
+            "?2 *?1 /100000",
+            "logwidth+0-?4 ",
+            "?3 *29289/100000",
+            "(?5 +logwidth)/2",
+            "logwidth",
+            "logheight/2",
+            "logwidth/2",
+            "logheight",
+            "(10800000)/60000.0",
+            "(5400000)/60000.0"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    3, 0
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    5, 0
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 1);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [1] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    3, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    5, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 4
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 11
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 11
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 3
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    3, 3
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 13
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,5,
+                17,1,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        6, 6
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        7, 11
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-snipRoundRect"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCsquareTabs : public CustomShapeProvider
 {
   virtual PropertyMap getProperties() SAL_OVERRIDE
   {
@@ -8773,8 +5465,10 @@ class ShapeCrect : public CustomShapeProvider
     }
     {
         static const char *aStrings[] = {
-            "logwidth/2",
-            "logheight/2",
+            "sqrt(logwidth*logwidth+logheight*logheight+0*0)",
+            "1*?0 /20",
+            "0+logheight-?1 ",
+            "0+logwidth-?1 ",
             "logheight",
             "logwidth"
         };
@@ -8802,7 +5496,57 @@ class ShapeCrect : public CustomShapeProvider
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::NORMAL,
+                    1, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    1, 1
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 1
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 2
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    1, 2
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    1, 4
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 4
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
                     3, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    5, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 1
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    3, 1
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
@@ -8810,9 +5554,19 @@ class ShapeCrect : public CustomShapeProvider
                     3, 2
                 },
                 {
-                    EnhancedCustomShapeParameterType::NORMAL,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    0, 2
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 2
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 4
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    3, 4
                 }
             };
             aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
@@ -8821,6 +5575,18 @@ class ShapeCrect : public CustomShapeProvider
             aPropSequence [1].Name = "Segments";
             static const sal_uInt16 nValues[] = {
             // Command, Count
+                1,1,
+                2,3,
+                4,0,
+                5,0,
+                1,1,
+                2,3,
+                4,0,
+                5,0,
+                1,1,
+                2,3,
+                4,0,
+                5,0,
                 1,1,
                 2,3,
                 4,0,
@@ -8836,9 +5602,9 @@ class ShapeCrect : public CustomShapeProvider
                 {
                     static const CustomShapeProvider::ParameterPairData aData =
                     {
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        EnhancedCustomShapeParameterType::NORMAL,
-                        0, 0
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        1, 1
                     };
                     aTextFrame.TopLeft = createParameterPair(&aData);
                 }
@@ -8865,7 +5631,7 @@ class ShapeCrect : public CustomShapeProvider
         aRectangle.Height = 0;
         aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-rect"));
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-squareTabs"));
 
     return aPropertyMap;
   }
@@ -8873,232 +5639,3049 @@ class ShapeCrect : public CustomShapeProvider
 
 // This is a generated source file. DO NOT EDIT.
 
-class ShapeCaccentBorderCallout2 : public CustomShapeProvider
+class ShapeCstar10 : public CustomShapeProvider
 {
   virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
     {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (6);
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
         {
-            Any aAny ((sal_Int32) 18750);
+            Any aAny ((sal_Int32) 42533);
             aAdjSequence [0].Value = aAny;
-            aAdjSequence [0].Name = "adj1";
+            aAdjSequence [0].Name = "adj";
         }
         {
-            Any aAny ((sal_Int32) -8333);
+            Any aAny ((sal_Int32) 105146);
             aAdjSequence [1].Value = aAny;
-            aAdjSequence [1].Name = "adj2";
-        }
-        {
-            Any aAny ((sal_Int32) 18750);
-            aAdjSequence [2].Value = aAny;
-            aAdjSequence [2].Name = "adj3";
-        }
-        {
-            Any aAny ((sal_Int32) -16667);
-            aAdjSequence [3].Value = aAny;
-            aAdjSequence [3].Name = "adj4";
-        }
-        {
-            Any aAny ((sal_Int32) 112500);
-            aAdjSequence [4].Value = aAny;
-            aAdjSequence [4].Name = "adj5";
-        }
-        {
-            Any aAny ((sal_Int32) -46667);
-            aAdjSequence [5].Value = aAny;
-            aAdjSequence [5].Name = "adj6";
+            aAdjSequence [1].Name = "hf";
         }
         aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
-            "logheight*$0 /100000",
-            "logwidth*$1 /100000",
-            "logheight*$2 /100000",
-            "logwidth*$3 /100000",
-            "logheight*$4 /100000",
-            "logwidth*$5 /100000",
-            "logwidth",
-            "logheight/2",
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
             "logwidth/2",
+            "?1 *$1 /100000",
+            "?2 *95106/100000",
+            "?2 *58779/100000",
+            "logwidth/2",
+            "?5 +0-?3 ",
+            "?5 +0-?4 ",
+            "?5 +?4 -0",
+            "?5 +?3 -0",
+            "logheight/2",
+            "?10 *80902/100000",
+            "?10 *30902/100000",
+            "logheight/2",
+            "?13 +0-?11 ",
+            "?13 +0-?12 ",
+            "?13 +?12 -0",
+            "?13 +?11 -0",
+            "?2 *?0 /50000",
+            "?10 *?0 /50000",
+            "?18 *80902/100000",
+            "?18 *30902/100000",
+            "?19 *95106/100000",
+            "?19 *58779/100000",
+            "?5 +0-?18 ",
+            "?5 +0-?20 ",
+            "?5 +0-?21 ",
+            "?5 +?21 -0",
+            "?5 +?20 -0",
+            "?5 +?18 -0",
+            "?13 +0-?22 ",
+            "?13 +0-?23 ",
+            "?13 +?23 -0",
+            "?13 +?22 -0",
+            "?13 +0-?19 ",
             "logheight"
         };
         aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (3);
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
         {
-            Sequence< PropertyValue > aPropSequence (7);
+            Sequence< PropertyValue > aPropSequence (4);
             {
                 aPropSequence [0].Name = "Position";
                 static const CustomShapeProvider::ParameterPairData aData =
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    1, 0
+                    5, 34
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
             }
             {
-                aPropSequence [1].Name = "RangeXMaximum";
+                aPropSequence [1].Name = "RangeYMaximum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
+                Any aAny ((sal_Int32) 50000);
                 aParameter.Value = aAny;
                 aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
                 aPropSequence [1].Value = makeAny (aParameter);
             }
             {
-                aPropSequence [2].Name = "RangeXMinimum";
+                aPropSequence [2].Name = "RangeYMinimum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
+                Any aAny ((sal_Int32) 0);
                 aParameter.Value = aAny;
                 aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
                 aPropSequence [2].Value = makeAny (aParameter);
             }
             {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 1);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
+                aPropSequence [3].Name = "RefY";
                 Any aAny ((sal_Int32) 0);
-                aPropSequence [6].Value = makeAny (aAny);
+                aPropSequence [3].Value = makeAny (aAny);
             }
             aPropSequenceSequence [0] = aPropSequence;
         }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
         {
-            Sequence< PropertyValue > aPropSequence (7);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    3, 2
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeXMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeXMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 3);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
-                Any aAny ((sal_Int32) 2);
-                aPropSequence [6].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [1] = aPropSequence;
+                    6, 15
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    25, 31
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 14
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    26, 30
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    5, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    27, 30
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 14
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    28, 31
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 15
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    29, 13
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    28, 32
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    27, 33
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 35
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    26, 33
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    25, 32
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    24, 13
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
         }
         {
-            Sequence< PropertyValue > aPropSequence (7);
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,19,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        25, 31
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        28, 32
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-star10"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCstar12 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
+        {
+            Any aAny ((sal_Int32) 37500);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "logwidth/2",
+            "?1 *cos(pi*(1800000)/10800000)",
+            "logheight/2",
+            "?3 *sin(pi*(3600000)/10800000)",
+            "logwidth/2",
+            "?5 +0-?2 ",
+            "logwidth*3/4",
+            "?5 +?2 -0",
+            "logheight/2",
+            "?9 +0-?4 ",
+            "logheight*3/4",
+            "?9 +?4 -0",
+            "?1 *?0 /50000",
+            "?3 *?0 /50000",
+            "?13 *cos(pi*(900000)/10800000)",
+            "?13 *cos(pi*(2700000)/10800000)",
+            "?13 *cos(pi*(4500000)/10800000)",
+            "?14 *sin(pi*(4500000)/10800000)",
+            "?14 *sin(pi*(2700000)/10800000)",
+            "?14 *sin(pi*(900000)/10800000)",
+            "?5 +0-?15 ",
+            "?5 +0-?16 ",
+            "?5 +0-?17 ",
+            "?5 +?17 -0",
+            "?5 +?16 -0",
+            "?5 +?15 -0",
+            "?9 +0-?18 ",
+            "?9 +0-?19 ",
+            "?9 +0-?20 ",
+            "?9 +?20 -0",
+            "?9 +?19 -0",
+            "?9 +?18 -0",
+            "?9 +0-?14 ",
+            "logheight/4",
+            "logwidth",
+            "logheight",
+            "logwidth/4"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
             {
                 aPropSequence [0].Name = "Position";
                 static const CustomShapeProvider::ParameterPairData aData =
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    5, 4
+                    5, 33
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
             }
             {
-                aPropSequence [1].Name = "RangeXMaximum";
+                aPropSequence [1].Name = "RangeYMaximum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
+                Any aAny ((sal_Int32) 50000);
                 aParameter.Value = aAny;
                 aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
                 aPropSequence [1].Value = makeAny (aParameter);
             }
             {
-                aPropSequence [2].Name = "RangeXMinimum";
+                aPropSequence [2].Name = "RangeYMinimum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
+                Any aAny ((sal_Int32) 0);
                 aParameter.Value = aAny;
                 aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
                 aPropSequence [2].Value = makeAny (aParameter);
             }
             {
-                aPropSequence [3].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [3].Value = makeAny (aParameter);
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
             }
-            {
-                aPropSequence [4].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) -2147483647);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [4].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [5].Name = "RefX";
-                Any aAny ((sal_Int32) 5);
-                aPropSequence [5].Value = makeAny (aAny);
-            }
-            {
-                aPropSequence [6].Name = "RefY";
-                Any aAny ((sal_Int32) 4);
-                aPropSequence [6].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [2] = aPropSequence;
+            aPropSequenceSequence [0] = aPropSequence;
         }
         aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 9
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    21, 29
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 34
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 28
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    37, 10
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    23, 27
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    5, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    24, 27
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 10
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    25, 28
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 34
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    26, 29
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    35, 9
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    26, 30
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 11
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    25, 31
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 12
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    24, 32
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 36
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    23, 32
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    37, 12
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 31
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 11
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    21, 30
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,23,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        22, 28
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        25, 31
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-star12"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCstar16 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
+        {
+            Any aAny ((sal_Int32) 37500);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "logwidth/2",
+            "?1 *92388/100000",
+            "?1 *70711/100000",
+            "?1 *38268/100000",
+            "logheight/2",
+            "?5 *92388/100000",
+            "?5 *70711/100000",
+            "?5 *38268/100000",
+            "logwidth/2",
+            "?9 +0-?2 ",
+            "?9 +0-?3 ",
+            "?9 +0-?4 ",
+            "?9 +?4 -0",
+            "?9 +?3 -0",
+            "?9 +?2 -0",
+            "logheight/2",
+            "?16 +0-?6 ",
+            "?16 +0-?7 ",
+            "?16 +0-?8 ",
+            "?16 +?8 -0",
+            "?16 +?7 -0",
+            "?16 +?6 -0",
+            "?1 *?0 /50000",
+            "?5 *?0 /50000",
+            "?23 *98079/100000",
+            "?23 *83147/100000",
+            "?23 *55557/100000",
+            "?23 *19509/100000",
+            "?24 *98079/100000",
+            "?24 *83147/100000",
+            "?24 *55557/100000",
+            "?24 *19509/100000",
+            "?9 +0-?25 ",
+            "?9 +0-?26 ",
+            "?9 +0-?27 ",
+            "?9 +0-?28 ",
+            "?9 +?28 -0",
+            "?9 +?27 -0",
+            "?9 +?26 -0",
+            "?9 +?25 -0",
+            "?16 +0-?29 ",
+            "?16 +0-?30 ",
+            "?16 +0-?31 ",
+            "?16 +0-?32 ",
+            "?16 +?32 -0",
+            "?16 +?31 -0",
+            "?16 +?30 -0",
+            "?16 +?29 -0",
+            "?23 *cos(pi*(2700000)/10800000)",
+            "?24 *sin(pi*(2700000)/10800000)",
+            "?9 +0-?49 ",
+            "?16 +0-?50 ",
+            "?9 +?49 -0",
+            "?16 +?50 -0",
+            "?16 +0-?24 ",
+            "logwidth",
+            "logheight"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 55
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    33, 44
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    10, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    34, 43
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 18
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    35, 42
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    36, 41
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    9, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    37, 41
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    38, 42
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 18
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    39, 43
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    40, 44
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    56, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    40, 45
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    39, 46
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    38, 47
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    37, 48
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 57
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    36, 48
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    35, 47
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    34, 46
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    10, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    33, 45
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,31,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        51, 52
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        53, 54
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-star16"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCstar24 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
+        {
+            Any aAny ((sal_Int32) 37500);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "logwidth/2",
+            "?1 *cos(pi*(900000)/10800000)",
+            "?1 *cos(pi*(1800000)/10800000)",
+            "?1 *cos(pi*(2700000)/10800000)",
+            "logwidth/4",
+            "?5 ",
+            "?1 *cos(pi*(4500000)/10800000)",
+            "logheight/2",
+            "?8 *sin(pi*(4500000)/10800000)",
+            "?8 *sin(pi*(3600000)/10800000)",
+            "?8 *sin(pi*(2700000)/10800000)",
+            "logheight/4",
+            "?12 ",
+            "?8 *sin(pi*(900000)/10800000)",
+            "logwidth/2",
+            "?15 +0-?2 ",
+            "?15 +0-?3 ",
+            "?15 +0-?4 ",
+            "?15 +0-?6 ",
+            "?15 +0-?7 ",
+            "?15 +?7 -0",
+            "?15 +?6 -0",
+            "?15 +?4 -0",
+            "?15 +?3 -0",
+            "?15 +?2 -0",
+            "logheight/2",
+            "?26 +0-?9 ",
+            "?26 +0-?10 ",
+            "?26 +0-?11 ",
+            "?26 +0-?13 ",
+            "?26 +0-?14 ",
+            "?26 +?14 -0",
+            "?26 +?13 -0",
+            "?26 +?11 -0",
+            "?26 +?10 -0",
+            "?26 +?9 -0",
+            "?1 *?0 /50000",
+            "?8 *?0 /50000",
+            "?37 *99144/100000",
+            "?37 *92388/100000",
+            "?37 *79335/100000",
+            "?37 *60876/100000",
+            "?37 *38268/100000",
+            "?37 *13053/100000",
+            "?38 *99144/100000",
+            "?38 *92388/100000",
+            "?38 *79335/100000",
+            "?38 *60876/100000",
+            "?38 *38268/100000",
+            "?38 *13053/100000",
+            "?15 +0-?39 ",
+            "?15 +0-?40 ",
+            "?15 +0-?41 ",
+            "?15 +0-?42 ",
+            "?15 +0-?43 ",
+            "?15 +0-?44 ",
+            "?15 +?44 -0",
+            "?15 +?43 -0",
+            "?15 +?42 -0",
+            "?15 +?41 -0",
+            "?15 +?40 -0",
+            "?15 +?39 -0",
+            "?26 +0-?45 ",
+            "?26 +0-?46 ",
+            "?26 +0-?47 ",
+            "?26 +0-?48 ",
+            "?26 +0-?49 ",
+            "?26 +0-?50 ",
+            "?26 +?50 -0",
+            "?26 +?49 -0",
+            "?26 +?48 -0",
+            "?26 +?47 -0",
+            "?26 +?46 -0",
+            "?26 +?45 -0",
+            "?37 *cos(pi*(2700000)/10800000)",
+            "?38 *sin(pi*(2700000)/10800000)",
+            "?15 +0-?75 ",
+            "?26 +0-?76 ",
+            "?15 +?75 -0",
+            "?26 +?76 -0",
+            "?26 +0-?38 ",
+            "min(logwidth,logheight)/2",
+            "logheight",
+            "logwidth"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 81
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 82);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 26
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    51, 68
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    16, 31
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    52, 67
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 30
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    53, 66
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 29
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    54, 65
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    19, 28
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    55, 64
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 27
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    56, 63
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    15, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    57, 63
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    21, 27
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    58, 64
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 28
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    59, 65
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    23, 29
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    60, 66
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    24, 30
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    61, 67
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    25, 31
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    62, 68
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    84, 26
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    62, 69
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    25, 32
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    61, 70
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    24, 33
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    60, 71
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    23, 34
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    59, 72
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 35
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    58, 73
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    21, 36
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    57, 74
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 83
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    56, 74
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 36
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    55, 73
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    19, 35
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    54, 72
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 34
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    53, 71
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 33
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    52, 70
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    16, 32
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    51, 69
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,47,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        77, 78
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        79, 80
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-star24"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCstar32 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
+        {
+            Any aAny ((sal_Int32) 37500);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "logwidth/2",
+            "?1 *98079/100000",
+            "?1 *92388/100000",
+            "?1 *83147/100000",
+            "?1 *cos(pi*(2700000)/10800000)",
+            "?1 *55557/100000",
+            "?1 *38268/100000",
+            "?1 *19509/100000",
+            "logheight/2",
+            "?9 *98079/100000",
+            "?9 *92388/100000",
+            "?9 *83147/100000",
+            "?9 *sin(pi*(2700000)/10800000)",
+            "?9 *55557/100000",
+            "?9 *38268/100000",
+            "?9 *19509/100000",
+            "logwidth/2",
+            "?17 +0-?2 ",
+            "?17 +0-?3 ",
+            "?17 +0-?4 ",
+            "?17 +0-?5 ",
+            "?17 +0-?6 ",
+            "?17 +0-?7 ",
+            "?17 +0-?8 ",
+            "?17 +?8 -0",
+            "?17 +?7 -0",
+            "?17 +?6 -0",
+            "?17 +?5 -0",
+            "?17 +?4 -0",
+            "?17 +?3 -0",
+            "?17 +?2 -0",
+            "logheight/2",
+            "?32 +0-?10 ",
+            "?32 +0-?11 ",
+            "?32 +0-?12 ",
+            "?32 +0-?13 ",
+            "?32 +0-?14 ",
+            "?32 +0-?15 ",
+            "?32 +0-?16 ",
+            "?32 +?16 -0",
+            "?32 +?15 -0",
+            "?32 +?14 -0",
+            "?32 +?13 -0",
+            "?32 +?12 -0",
+            "?32 +?11 -0",
+            "?32 +?10 -0",
+            "?1 *?0 /50000",
+            "?9 *?0 /50000",
+            "?47 *99518/100000",
+            "?47 *95694/100000",
+            "?47 *88192/100000",
+            "?47 *77301/100000",
+            "?47 *63439/100000",
+            "?47 *47140/100000",
+            "?47 *29028/100000",
+            "?47 *9802/100000",
+            "?48 *99518/100000",
+            "?48 *95694/100000",
+            "?48 *88192/100000",
+            "?48 *77301/100000",
+            "?48 *63439/100000",
+            "?48 *47140/100000",
+            "?48 *29028/100000",
+            "?48 *9802/100000",
+            "?17 +0-?49 ",
+            "?17 +0-?50 ",
+            "?17 +0-?51 ",
+            "?17 +0-?52 ",
+            "?17 +0-?53 ",
+            "?17 +0-?54 ",
+            "?17 +0-?55 ",
+            "?17 +0-?56 ",
+            "?17 +?56 -0",
+            "?17 +?55 -0",
+            "?17 +?54 -0",
+            "?17 +?53 -0",
+            "?17 +?52 -0",
+            "?17 +?51 -0",
+            "?17 +?50 -0",
+            "?17 +?49 -0",
+            "?32 +0-?57 ",
+            "?32 +0-?58 ",
+            "?32 +0-?59 ",
+            "?32 +0-?60 ",
+            "?32 +0-?61 ",
+            "?32 +0-?62 ",
+            "?32 +0-?63 ",
+            "?32 +0-?64 ",
+            "?32 +?64 -0",
+            "?32 +?63 -0",
+            "?32 +?62 -0",
+            "?32 +?61 -0",
+            "?32 +?60 -0",
+            "?32 +?59 -0",
+            "?32 +?58 -0",
+            "?32 +?57 -0",
+            "?47 *cos(pi*(2700000)/10800000)",
+            "?48 *sin(pi*(2700000)/10800000)",
+            "?17 +0-?97 ",
+            "?32 +0-?98 ",
+            "?17 +?97 -0",
+            "?32 +?98 -0",
+            "?32 +0-?48 ",
+            "min(logwidth,logheight)/2",
+            "logheight",
+            "logwidth"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 103
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 104);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 32
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    65, 88
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 39
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    66, 87
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    19, 38
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    67, 86
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 37
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    68, 85
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    21, 36
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    69, 84
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 35
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    70, 83
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    23, 34
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    71, 82
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    24, 33
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    72, 81
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    17, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    73, 81
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    25, 33
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    74, 82
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    26, 34
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    75, 83
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    27, 35
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    76, 84
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    28, 36
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    77, 85
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    29, 37
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    78, 86
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    30, 38
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    79, 87
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    31, 39
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    80, 88
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    106, 32
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    80, 89
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    31, 40
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    79, 90
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    30, 41
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    78, 91
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    29, 42
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    77, 92
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    28, 43
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    76, 93
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    27, 44
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    75, 94
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    26, 45
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    74, 95
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    25, 46
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    73, 96
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 105
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    72, 96
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    24, 46
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    71, 95
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    23, 45
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    70, 94
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 44
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    69, 93
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    21, 43
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    68, 92
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 42
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    67, 91
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    19, 41
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    66, 90
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 40
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    65, 89
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,63,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        99, 100
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        101, 102
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-star32"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCstar4 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
+        {
+            Any aAny ((sal_Int32) 12500);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "logwidth/2",
+            "?1 *?0 /50000",
+            "logheight/2",
+            "?3 *?0 /50000",
+            "?2 *cos(pi*(2700000)/10800000)",
+            "?4 *sin(pi*(2700000)/10800000)",
+            "logwidth/2",
+            "?7 +0-?5 ",
+            "?7 +?5 -0",
+            "logheight/2",
+            "?10 +0-?6 ",
+            "?10 +?6 -0",
+            "?10 +0-?4 ",
+            "logheight",
+            "logwidth"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 13
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 10
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 11
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    7, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 11
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 10
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    9, 12
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    7, 14
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    8, 12
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,7,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        8, 11
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        9, 12
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-star4"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCstar5 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (3);
+        {
+            Any aAny ((sal_Int32) 19098);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        {
+            Any aAny ((sal_Int32) 105146);
+            aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = "hf";
+        }
+        {
+            Any aAny ((sal_Int32) 110557);
+            aAdjSequence [2].Value = aAny;
+            aAdjSequence [2].Name = "vf";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "logwidth/2",
+            "?1 *$1 /100000",
+            "logheight/2",
+            "?3 *$2 /100000",
+            "logheight/2",
+            "?5 *$2 /100000",
+            "?2 *cos(pi*(1080000)/10800000)",
+            "?2 *cos(pi*(18360000)/10800000)",
+            "?4 *sin(pi*(1080000)/10800000)",
+            "?4 *sin(pi*(18360000)/10800000)",
+            "logwidth/2",
+            "?11 +0-?7 ",
+            "?11 +0-?8 ",
+            "?11 +?8 -0",
+            "?11 +?7 -0",
+            "?6 +0-?9 ",
+            "?6 +0-?10 ",
+            "?2 *?0 /50000",
+            "?4 *?0 /50000",
+            "?18 *cos(pi*(20520000)/10800000)",
+            "?18 *cos(pi*(3240000)/10800000)",
+            "?19 *sin(pi*(3240000)/10800000)",
+            "?19 *sin(pi*(20520000)/10800000)",
+            "?11 +0-?20 ",
+            "?11 +0-?21 ",
+            "?11 +?21 -0",
+            "?11 +?20 -0",
+            "?6 +0-?22 ",
+            "?6 +0-?23 ",
+            "?6 +?19 -0",
+            "?6 +0-?19 "
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 31
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    12, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    25, 28
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    11, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    26, 28
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    27, 29
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 30
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 17
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    24, 29
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,9,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        24, 28
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        27, 30
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-star5"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCstar6 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
+        {
+            Any aAny ((sal_Int32) 28868);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        {
+            Any aAny ((sal_Int32) 115470);
+            aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = "hf";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "logwidth/2",
+            "?1 *$1 /100000",
+            "?2 *cos(pi*(1800000)/10800000)",
+            "logwidth/2",
+            "?4 +0-?3 ",
+            "?4 +?3 -0",
+            "logheight/2",
+            "logheight/4",
+            "?7 +?8 -0",
+            "?2 *?0 /50000",
+            "logheight/2",
+            "?11 *?0 /50000",
+            "?10 *1/2",
+            "?4 +0-?10 ",
+            "?4 +0-?13 ",
+            "?4 +?13 -0",
+            "?4 +?10 -0",
+            "?12 *sin(pi*(3600000)/10800000)",
+            "?7 +0-?18 ",
+            "?7 +?18 -0",
+            "?7 +0-?12 ",
+            "logheight"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    4, 21
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 8
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    4, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    16, 19
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 8
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 7
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 9
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    16, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    4, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 9
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 7
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,11,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        14, 19
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        17, 20
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-star6"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCstar7 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (3);
+        {
+            Any aAny ((sal_Int32) 34601);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        {
+            Any aAny ((sal_Int32) 102572);
+            aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = "hf";
+        }
+        {
+            Any aAny ((sal_Int32) 105210);
+            aAdjSequence [2].Value = aAny;
+            aAdjSequence [2].Name = "vf";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "logwidth/2",
+            "?1 *$1 /100000",
+            "logheight/2",
+            "?3 *$2 /100000",
+            "logheight/2",
+            "?5 *$2 /100000",
+            "?2 *97493/100000",
+            "?2 *78183/100000",
+            "?2 *43388/100000",
+            "?4 *62349/100000",
+            "?4 *22252/100000",
+            "?4 *90097/100000",
+            "logwidth/2",
+            "?13 +0-?7 ",
+            "?13 +0-?8 ",
+            "?13 +0-?9 ",
+            "?13 +?9 -0",
+            "?13 +?8 -0",
+            "?13 +?7 -0",
+            "?6 +0-?10 ",
+            "?6 +?11 -0",
+            "?6 +?12 -0",
+            "?2 *?0 /50000",
+            "?4 *?0 /50000",
+            "?23 *97493/100000",
+            "?23 *78183/100000",
+            "?23 *43388/100000",
+            "?13 +0-?25 ",
+            "?13 +0-?26 ",
+            "?13 +0-?27 ",
+            "?13 +?27 -0",
+            "?13 +?26 -0",
+            "?13 +?25 -0",
+            "?24 *90097/100000",
+            "?24 *22252/100000",
+            "?24 *62349/100000",
+            "?6 +0-?34 ",
+            "?6 +0-?35 ",
+            "?6 +?36 -0",
+            "?6 +?24 -0",
+            "?6 +0-?24 "
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 41
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    28, 38
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    30, 37
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    13, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    31, 37
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    33, 38
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    19, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    32, 39
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    13, 40
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    16, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    29, 39
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,13,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        29, 37
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        32, 39
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-star7"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCstar8 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
+        {
+            Any aAny ((sal_Int32) 37500);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(50000-$0 ,$0 ,50000))",
+            "logwidth/2",
+            "?1 *cos(pi*(2700000)/10800000)",
+            "logwidth/2",
+            "?3 +0-?2 ",
+            "?3 +?2 -0",
+            "logheight/2",
+            "?6 *sin(pi*(2700000)/10800000)",
+            "logheight/2",
+            "?8 +0-?7 ",
+            "?8 +?7 -0",
+            "?1 *?0 /50000",
+            "?6 *?0 /50000",
+            "?11 *92388/100000",
+            "?11 *38268/100000",
+            "?12 *92388/100000",
+            "?12 *38268/100000",
+            "?3 +0-?13 ",
+            "?3 +0-?14 ",
+            "?3 +?14 -0",
+            "?3 +?13 -0",
+            "?8 +0-?15 ",
+            "?8 +0-?16 ",
+            "?8 +?16 -0",
+            "?8 +?15 -0",
+            "?8 +0-?12 ",
+            "logwidth",
+            "logheight"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    3, 25
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 50000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 8
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    4, 9
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    3, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    19, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 9
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 22
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    26, 8
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 23
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    5, 10
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    19, 24
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    3, 27
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 24
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    4, 10
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 23
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,15,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        17, 21
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        20, 24
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-star8"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCstraightConnector1 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
+    }
+    {
+        static const char *aStrings[] = {
+            "logwidth",
+            "logheight"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
         aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
@@ -9118,43 +8701,8 @@ class ShapeCaccentBorderCallout2 : public CustomShapeProvider
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    6, 0
-                },
-                {
                     EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    6, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    1, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    1, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    3, 2
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    5, 4
+                    0, 1
                 }
             };
             aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
@@ -9164,15 +8712,7 @@ class ShapeCaccentBorderCallout2 : public CustomShapeProvider
             static const sal_uInt16 nValues[] = {
             // Command, Count
                 1,1,
-                2,3,
-                4,0,
-                5,0,
-                1,1,
                 2,1,
-                6,0,
-                5,0,
-                1,1,
-                2,2,
                 6,0,
                 5,0
             };
@@ -9197,7 +8737,7 @@ class ShapeCaccentBorderCallout2 : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::EQUATION,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        6, 9
+                        0, 1
                     };
                     aTextFrame.BottomRight = createParameterPair(&aData);
                 }
@@ -9215,7 +8755,7 @@ class ShapeCaccentBorderCallout2 : public CustomShapeProvider
         aRectangle.Height = 0;
         aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-accentBorderCallout2"));
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-straightConnector1"));
 
     return aPropertyMap;
   }
@@ -9223,208 +8763,74 @@ class ShapeCaccentBorderCallout2 : public CustomShapeProvider
 
 // This is a generated source file. DO NOT EDIT.
 
-class ShapeCpieWedge : public CustomShapeProvider
+class ShapeCstripedRightArrow : public CustomShapeProvider
 {
   virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
-    }
-    {
-        static const char *aStrings[] = {
-            "logwidth*cos(pi*(13500000)/10800000)",
-            "logheight*sin(pi*(13500000)/10800000)",
-            "logwidth+?0 -0",
-            "logheight+?1 -0",
-            "logwidth",
-            "logheight/2",
-            "logwidth/2",
-            "logheight",
-            "logwidth",
-            "logheight",
-            "(10800000)/60000.0",
-            "(5400000)/60000.0"
-        };
-        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
-    }
-    {
-        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
-    }
-    {
-        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
-    }
-    {
-        Sequence< PropertyValue > aPropSequence (3);
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
         {
-            aPropSequence [0].Name = "Coordinates";
-            static const CustomShapeProvider::ParameterPairData aData[] = {
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 7
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    8, 9
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    10, 11
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    4, 7
-                }
-            };
-            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
-        }
-        {
-            aPropSequence [1].Name = "Segments";
-            static const sal_uInt16 nValues[] = {
-            // Command, Count
-                1,1,
-                17,1,
-                2,1,
-                4,0,
-                5,0
-            };
-            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
-        }
-        {
-            aPropSequence [2].Name = "TextFrames";
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
-            {
-                EnhancedCustomShapeTextFrame aTextFrame;
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        2, 3
-                    };
-                    aTextFrame.TopLeft = createParameterPair(&aData);
-                }
-                {
-                    static const CustomShapeProvider::ParameterPairData aData =
-                    {
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        EnhancedCustomShapeParameterType::EQUATION,
-                        4, 7
-                    };
-                    aTextFrame.BottomRight = createParameterPair(&aData);
-                }
-                aTextFrameSeq [0] = aTextFrame;
-            }
-            aPropSequence [2].Value = makeAny (aTextFrameSeq);
-        }
-        aPropertyMap.setProperty(PROP_Path, aPropSequence);
-    }
-    {
-        awt::Rectangle aRectangle;
-        aRectangle.X = 0;
-        aRectangle.Y = 0;
-        aRectangle.Width = 0;
-        aRectangle.Height = 0;
-        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
-    }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-pieWedge"));
-
-    return aPropertyMap;
-  }
-};
-
-// This is a generated source file. DO NOT EDIT.
-
-class ShapeCupArrowCallout : public CustomShapeProvider
-{
-  virtual PropertyMap getProperties() SAL_OVERRIDE
-  {
-    PropertyMap aPropertyMap;
-
-    {
-        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (4);
-        {
-            Any aAny ((sal_Int32) 25000);
+            Any aAny ((sal_Int32) 50000);
             aAdjSequence [0].Value = aAny;
             aAdjSequence [0].Name = "adj1";
         }
         {
-            Any aAny ((sal_Int32) 25000);
+            Any aAny ((sal_Int32) 50000);
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "adj2";
-        }
-        {
-            Any aAny ((sal_Int32) 25000);
-            aAdjSequence [2].Value = aAny;
-            aAdjSequence [2].Name = "adj3";
-        }
-        {
-            Any aAny ((sal_Int32) 64977);
-            aAdjSequence [3].Value = aAny;
-            aAdjSequence [3].Name = "adj4";
         }
         aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
             "min(logwidth,logheight)",
-            "50000*logwidth/?0 ",
+            "84375*logwidth/?0 ",
+            "if(0-$0 ,0,if(100000-$0 ,$0 ,100000))",
             "if(0-$1 ,0,if(?1 -$1 ,$1 ,?1 ))",
-            "?2 *2/1",
-            "if(0-$0 ,0,if(?3 -$0 ,$0 ,?3 ))",
-            "100000*logheight/?0 ",
-            "if(0-$2 ,0,if(?5 -$2 ,$2 ,?5 ))",
-            "?6 *?0 /logheight",
-            "100000+0-?7 ",
-            "if(0-$3 ,0,if(?8 -$3 ,$3 ,?8 ))",
-            "?0 *?2 /100000",
-            "?0 *?4 /200000",
-            "logwidth/2",
-            "?12 +0-?10 ",
-            "?12 +0-?11 ",
-            "?12 +?11 -0",
-            "?12 +?10 -0",
-            "?0 *?6 /100000",
-            "logheight*?9 /100000",
-            "logheight+0-?18 ",
-            "(?19 +logheight)/2",
+            "?0 *5/32",
+            "?0 *?3 /100000",
+            "logwidth+0-?5 ",
+            "logheight*?2 /200000",
+            "logheight/2",
+            "?8 +0-?7 ",
+            "?8 +?7 -0",
+            "logheight/2",
+            "?7 *?5 /?11 ",
+            "logwidth+0-?12 ",
+            "logheight",
             "logwidth",
-            "logheight"
+            "min(logwidth,logheight)/32",
+            "min(logwidth,logheight)/16",
+            "min(logwidth,logheight)/8"
         };
         aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (4);
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
         {
             Sequence< PropertyValue > aPropSequence (4);
             {
                 aPropSequence [0].Name = "Position";
                 static const CustomShapeProvider::ParameterPairData aData =
                 {
+                    EnhancedCustomShapeParameterType::NORMAL,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    14, 17
+                    0, 9
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
             }
             {
-                aPropSequence [1].Name = "RangeXMaximum";
+                aPropSequence [1].Name = "RangeYMaximum";
                 EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 3);
+                Any aAny ((sal_Int32) 100000);
                 aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
                 aPropSequence [1].Value = makeAny (aParameter);
             }
             {
-                aPropSequence [2].Name = "RangeXMinimum";
+                aPropSequence [2].Name = "RangeYMinimum";
                 EnhancedCustomShapeParameter aParameter;
                 Any aAny ((sal_Int32) 0);
                 aParameter.Value = aAny;
@@ -9432,7 +8838,7 @@ class ShapeCupArrowCallout : public CustomShapeProvider
                 aPropSequence [2].Value = makeAny (aParameter);
             }
             {
-                aPropSequence [3].Name = "RefX";
+                aPropSequence [3].Name = "RefY";
                 Any aAny ((sal_Int32) 0);
                 aPropSequence [3].Value = makeAny (aAny);
             }
@@ -9446,7 +8852,7 @@ class ShapeCupArrowCallout : public CustomShapeProvider
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::NORMAL,
-                    13, 0
+                    6, 0
                 };
                 aPropSequence [0].Value = makeAny (createParameterPair(&aData));
             }
@@ -9473,76 +8879,6 @@ class ShapeCupArrowCallout : public CustomShapeProvider
             }
             aPropSequenceSequence [1] = aPropSequence;
         }
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    21, 17
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 5);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefY";
-                Any aAny ((sal_Int32) 2);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [2] = aPropSequence;
-        }
-        {
-            Sequence< PropertyValue > aPropSequence (4);
-            {
-                aPropSequence [0].Name = "Position";
-                static const CustomShapeProvider::ParameterPairData aData =
-                {
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    0, 19
-                };
-                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
-            }
-            {
-                aPropSequence [1].Name = "RangeYMaximum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 8);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
-                aPropSequence [1].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [2].Name = "RangeYMinimum";
-                EnhancedCustomShapeParameter aParameter;
-                Any aAny ((sal_Int32) 0);
-                aParameter.Value = aAny;
-                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
-                aPropSequence [2].Value = makeAny (aParameter);
-            }
-            {
-                aPropSequence [3].Name = "RefY";
-                Any aAny ((sal_Int32) 3);
-                aPropSequence [3].Value = makeAny (aAny);
-            }
-            aPropSequenceSequence [3] = aPropSequence;
-        }
         aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
@@ -9559,57 +8895,77 @@ class ShapeCupArrowCallout : public CustomShapeProvider
                 {
                     EnhancedCustomShapeParameterType::NORMAL,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    0, 19
+                    0, 9
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    14, 19
+                    16, 9
                 },
                 {
                     EnhancedCustomShapeParameterType::EQUATION,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    14, 17
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    13, 17
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::NORMAL,
-                    12, 0
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    16, 17
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    15, 17
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    15, 19
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    21, 19
-                },
-                {
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    EnhancedCustomShapeParameterType::EQUATION,
-                    21, 22
+                    16, 10
                 },
                 {
                     EnhancedCustomShapeParameterType::NORMAL,
                     EnhancedCustomShapeParameterType::EQUATION,
-                    0, 22
+                    0, 10
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 9
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 9
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    18, 10
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    17, 10
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    4, 9
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 9
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    6, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 8
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 14
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 10
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    4, 10
                 }
             };
             aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
@@ -9619,7 +8975,13 @@ class ShapeCupArrowCallout : public CustomShapeProvider
             static const sal_uInt16 nValues[] = {
             // Command, Count
                 1,1,
-                2,10,
+                2,3,
+                4,0,
+                1,1,
+                2,3,
+                4,0,
+                1,1,
+                2,6,
                 4,0,
                 5,0
             };
@@ -9633,9 +8995,9 @@ class ShapeCupArrowCallout : public CustomShapeProvider
                 {
                     static const CustomShapeProvider::ParameterPairData aData =
                     {
-                        EnhancedCustomShapeParameterType::NORMAL,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        0, 19
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        4, 9
                     };
                     aTextFrame.TopLeft = createParameterPair(&aData);
                 }
@@ -9644,7 +9006,7 @@ class ShapeCupArrowCallout : public CustomShapeProvider
                     {
                         EnhancedCustomShapeParameterType::EQUATION,
                         EnhancedCustomShapeParameterType::EQUATION,
-                        21, 22
+                        13, 10
                     };
                     aTextFrame.BottomRight = createParameterPair(&aData);
                 }
@@ -9662,7 +9024,812 @@ class ShapeCupArrowCallout : public CustomShapeProvider
         aRectangle.Height = 0;
         aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-upArrowCallout"));
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-stripedRightArrow"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCsun : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
+        {
+            Any aAny ((sal_Int32) 25000);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(12500-$0 ,12500,if(46875-$0 ,$0 ,46875))",
+            "50000+0-?0 ",
+            "?1 *30274/32768",
+            "?1 *12540/32768",
+            "?2 +50000-0",
+            "?3 +50000-0",
+            "50000+0-?2 ",
+            "50000+0-?3 ",
+            "?1 *23170/32768",
+            "50000+?8 -0",
+            "50000+0-?8 ",
+            "?6 *3/4",
+            "?7 *3/4",
+            "?11 +3662-0",
+            "?12 +3662-0",
+            "?12 +12500-0",
+            "100000+0-?11 ",
+            "100000+0-?13 ",
+            "100000+0-?14 ",
+            "100000+0-?15 ",
+            "logwidth*18436/21600",
+            "logheight*3163/21600",
+            "logwidth*3163/21600",
+            "logheight*18436/21600",
+            "logwidth*?9 /100000",
+            "logwidth*?10 /100000",
+            "logwidth*?11 /100000",
+            "logwidth*?13 /100000",
+            "logwidth*?14 /100000",
+            "logwidth*?15 /100000",
+            "logwidth*?16 /100000",
+            "logwidth*?17 /100000",
+            "logwidth*?18 /100000",
+            "logwidth*?19 /100000",
+            "logwidth*?0 /100000",
+            "logwidth*?1 /100000",
+            "logheight*?1 /100000",
+            "logheight*?9 /100000",
+            "logheight*?10 /100000",
+            "logheight*?11 /100000",
+            "logheight*?13 /100000",
+            "logheight*?14 /100000",
+            "logheight*?15 /100000",
+            "logheight*?16 /100000",
+            "logheight*?17 /100000",
+            "logheight*?18 /100000",
+            "logheight*?19 /100000",
+            "logheight/2",
+            "logwidth/2",
+            "logheight",
+            "logwidth",
+            "(10800000)/60000.0",
+            "(21600000)/60000.0"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    34, 47
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 46875);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 12500);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    50, 47
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    30, 46
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    30, 42
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    31, 41
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    32, 40
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    48, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    33, 39
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    29, 39
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 21
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    28, 40
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    27, 41
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 47
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    26, 42
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    26, 46
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 23
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    27, 45
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    28, 44
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    48, 49
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    29, 43
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    33, 43
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    20, 23
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    32, 44
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    31, 45
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    34, 47
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    35, 36
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    51, 52
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                2,2,
+                4,0,
+                1,1,
+                2,2,
+                4,0,
+                1,1,
+                2,2,
+                4,0,
+                1,1,
+                2,2,
+                4,0,
+                1,1,
+                2,2,
+                4,0,
+                1,1,
+                2,2,
+                4,0,
+                1,1,
+                2,2,
+                4,0,
+                1,1,
+                2,2,
+                4,0,
+                1,1,
+                17,1,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        25, 38
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        24, 37
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-sun"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCswooshArrow : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
+        {
+            Any aAny ((sal_Int32) 25000);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj1";
+        }
+        {
+            Any aAny ((sal_Int32) 16667);
+            aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = "adj2";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(1-$0 ,1,if(75000-$0 ,$0 ,75000))",
+            "min(logwidth,logheight)",
+            "70000*logwidth/?1 ",
+            "if(0-$1 ,0,if(?2 -$1 ,$1 ,?2 ))",
+            "logheight*?0 /100000",
+            "?1 *?3 /100000",
+            "logwidth+0-?5 ",
+            "min(logwidth,logheight)/8",
+            "0+?7 -0",
+            "5400000*1/14",
+            "?7 *tan(pi*(?9 )/10800000)",
+            "?6 +0-?10 ",
+            "?4 *tan(pi*(?9 )/10800000)",
+            "?8 +?4 -0",
+            "?6 +?12 -0",
+            "?14 +?10 -0",
+            "?13 +?7 -0",
+            "?16 +0-0",
+            "?17 *1/2",
+            "logheight*1/20",
+            "0+?18 -?19 ",
+            "logheight/6",
+            "?21 *1/1",
+            "?21 +?22 -0",
+            "logwidth/6",
+            "?24 ",
+            "?21 *1/2",
+            "?13 +?26 -0",
+            "logwidth/4",
+            "?28 ",
+            "logheight",
+            "logwidth"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 13
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeYMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 75000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeYMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 1);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefY";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 8
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 2);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 1);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [1] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 30
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    25, 23
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    6, 8
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    11, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    31, 20
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    15, 16
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    14, 13
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    29, 27
+                },
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 30
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                16,1,
+                2,4,
+                16,1,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::NORMAL,
+                        EnhancedCustomShapeParameterType::NORMAL,
+                        0, 0
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        31, 30
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-swooshArrow"));
+
+    return aPropertyMap;
+  }
+};
+
+// This is a generated source file. DO NOT EDIT.
+
+class ShapeCteardrop : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties() SAL_OVERRIDE
+  {
+    PropertyMap aPropertyMap;
+
+    {
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (1);
+        {
+            Any aAny ((sal_Int32) 100000);
+            aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = "adj";
+        }
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
+    }
+    {
+        static const char *aStrings[] = {
+            "if(0-$0 ,0,if(200000-$0 ,$0 ,200000))",
+            "sqrt(2)",
+            "logwidth/2",
+            "?2 *?1 /1",
+            "logheight/2",
+            "?4 *?1 /1",
+            "?3 *?0 /100000",
+            "?5 *?0 /100000",
+            "?6 *cos(pi*(2700000)/10800000)",
+            "?7 *sin(pi*(2700000)/10800000)",
+            "logwidth/2",
+            "?10 +?8 -0",
+            "logheight/2",
+            "?12 +0-?9 ",
+            "(?10 +?11 )/2",
+            "(?12 +?13 )/2",
+            "?2 *cos(pi*(2700000)/10800000)",
+            "?4 *sin(pi*(2700000)/10800000)",
+            "?10 +0-?16 ",
+            "?10 +?16 -0",
+            "?12 +0-?17 ",
+            "?12 +?17 -0",
+            "logwidth",
+            "logheight",
+            "(10800000)/60000.0",
+            "(5400000)/60000.0",
+            "(0)/60000.0",
+            "(5400000)/60000.0",
+            "(5400000)/60000.0",
+            "(5400000)/60000.0"
+        };
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
+    }
+    {
+        Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+        {
+            Sequence< PropertyValue > aPropSequence (4);
+            {
+                aPropSequence [0].Name = "Position";
+                static const CustomShapeProvider::ParameterPairData aData =
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    11, 0
+                };
+                aPropSequence [0].Value = makeAny (createParameterPair(&aData));
+            }
+            {
+                aPropSequence [1].Name = "RangeXMaximum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 200000);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [1].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [2].Name = "RangeXMinimum";
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 0);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aPropSequence [2].Value = makeAny (aParameter);
+            }
+            {
+                aPropSequence [3].Name = "RefX";
+                Any aAny ((sal_Int32) 0);
+                aPropSequence [3].Value = makeAny (aAny);
+            }
+            aPropSequenceSequence [0] = aPropSequence;
+        }
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
+    }
+    {
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (3);
+        {
+            aPropSequence [0].Name = "Coordinates";
+            static const CustomShapeProvider::ParameterPairData aData[] = {
+                {
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    0, 12
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    2, 4
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    24, 25
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::NORMAL,
+                    14, 0
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    11, 13
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 15
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    22, 12
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    2, 4
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    26, 27
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    2, 4
+                },
+                {
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    EnhancedCustomShapeParameterType::EQUATION,
+                    28, 29
+                }
+            };
+            aPropSequence [0].Value = makeAny (createParameterPairSequence(SAL_N_ELEMENTS(aData), aData));
+        }
+        {
+            aPropSequence [1].Name = "Segments";
+            static const sal_uInt16 nValues[] = {
+            // Command, Count
+                1,1,
+                17,1,
+                16,2,
+                17,2,
+                4,0,
+                5,0
+            };
+            aPropSequence [1].Value = makeAny (createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues ));
+        }
+        {
+            aPropSequence [2].Name = "TextFrames";
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (1);
+            {
+                EnhancedCustomShapeTextFrame aTextFrame;
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        18, 20
+                    };
+                    aTextFrame.TopLeft = createParameterPair(&aData);
+                }
+                {
+                    static const CustomShapeProvider::ParameterPairData aData =
+                    {
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        EnhancedCustomShapeParameterType::EQUATION,
+                        19, 21
+                    };
+                    aTextFrame.BottomRight = createParameterPair(&aData);
+                }
+                aTextFrameSeq [0] = aTextFrame;
+            }
+            aPropSequence [2].Value = makeAny (aTextFrameSeq);
+        }
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
+    }
+    {
+        awt::Rectangle aRectangle;
+        aRectangle.X = 0;
+        aRectangle.Y = 0;
+        aRectangle.Width = 0;
+        aRectangle.Height = 0;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
+    }
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-teardrop"));
 
     return aPropertyMap;
   }
@@ -9673,41 +9840,41 @@ class ShapeCupArrowCallout : public CustomShapeProvider
 } // anonymous namespace
 void CustomShapeProperties::initializePresetsMap5()
 {
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "plus" ) ] = new ShapeCplus();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "accentCallout3" ) ] = new ShapeCaccentCallout3();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "leftCircularArrow" ) ] = new ShapeCleftCircularArrow();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "rightArrow" ) ] = new ShapeCrightArrow();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "flowChartPunchedCard" ) ] = new ShapeCflowChartPunchedCard();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "snip2DiagRect" ) ] = new ShapeCsnip2DiagRect();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "verticalScroll" ) ] = new ShapeCverticalScroll();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "star7" ) ] = new ShapeCstar7();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "chartX" ) ] = new ShapeCchartX();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "cloud" ) ] = new ShapeCcloud();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "cube" ) ] = new ShapeCcube();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "round2DiagRect" ) ] = new ShapeCround2DiagRect();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "flowChartMultidocument" ) ] = new ShapeCflowChartMultidocument();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "actionButtonDocument" ) ] = new ShapeCactionButtonDocument();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "flowChartTerminator" ) ] = new ShapeCflowChartTerminator();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "flowChartDelay" ) ] = new ShapeCflowChartDelay();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "curvedConnector5" ) ] = new ShapeCcurvedConnector5();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "horizontalScroll" ) ] = new ShapeChorizontalScroll();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "bentConnector4" ) ] = new ShapeCbentConnector4();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "leftRightCircularArrow" ) ] = new ShapeCleftRightCircularArrow();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "wedgeRectCallout" ) ] = new ShapeCwedgeRectCallout();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "accentCallout2" ) ] = new ShapeCaccentCallout2();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "flowChartMagneticDrum" ) ] = new ShapeCflowChartMagneticDrum();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "corner" ) ] = new ShapeCcorner();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "borderCallout2" ) ] = new ShapeCborderCallout2();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "donut" ) ] = new ShapeCdonut();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "flowChartCollate" ) ] = new ShapeCflowChartCollate();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "mathNotEqual" ) ] = new ShapeCmathNotEqual();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "bentConnector2" ) ] = new ShapeCbentConnector2();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "mathMultiply" ) ] = new ShapeCmathMultiply();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "heptagon" ) ] = new ShapeCheptagon();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "quadArrow" ) ] = new ShapeCquadArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "quadArrowCallout" ) ] = new ShapeCquadArrowCallout();
     maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "rect" ) ] = new ShapeCrect();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "accentBorderCallout2" ) ] = new ShapeCaccentBorderCallout2();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "pieWedge" ) ] = new ShapeCpieWedge();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "upArrowCallout" ) ] = new ShapeCupArrowCallout();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "ribbon" ) ] = new ShapeCribbon();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "ribbon2" ) ] = new ShapeCribbon2();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "rightArrow" ) ] = new ShapeCrightArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "rightArrowCallout" ) ] = new ShapeCrightArrowCallout();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "rightBrace" ) ] = new ShapeCrightBrace();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "rightBracket" ) ] = new ShapeCrightBracket();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "round1Rect" ) ] = new ShapeCround1Rect();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "round2DiagRect" ) ] = new ShapeCround2DiagRect();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "round2SameRect" ) ] = new ShapeCround2SameRect();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "roundRect" ) ] = new ShapeCroundRect();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "rtTriangle" ) ] = new ShapeCrtTriangle();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "smileyFace" ) ] = new ShapeCsmileyFace();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "snip1Rect" ) ] = new ShapeCsnip1Rect();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "snip2DiagRect" ) ] = new ShapeCsnip2DiagRect();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "snip2SameRect" ) ] = new ShapeCsnip2SameRect();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "snipRoundRect" ) ] = new ShapeCsnipRoundRect();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "squareTabs" ) ] = new ShapeCsquareTabs();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "star10" ) ] = new ShapeCstar10();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "star12" ) ] = new ShapeCstar12();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "star16" ) ] = new ShapeCstar16();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "star24" ) ] = new ShapeCstar24();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "star32" ) ] = new ShapeCstar32();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "star4" ) ] = new ShapeCstar4();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "star5" ) ] = new ShapeCstar5();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "star6" ) ] = new ShapeCstar6();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "star7" ) ] = new ShapeCstar7();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "star8" ) ] = new ShapeCstar8();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "straightConnector1" ) ] = new ShapeCstraightConnector1();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "stripedRightArrow" ) ] = new ShapeCstripedRightArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "sun" ) ] = new ShapeCsun();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "swooshArrow" ) ] = new ShapeCswooshArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "teardrop" ) ] = new ShapeCteardrop();
 }
 
 } } // oox // drawingml
