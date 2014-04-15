@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <svx/sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
@@ -29,13 +30,7 @@
 #include <avmedia/mediaitem.hxx>
 #include "sdrmediawindow.hxx"
 
-
-
 namespace sdr { namespace contact {
-
-
-// - ViewObjectContactOfSdrMediaObj -
-
 
 ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& rObjectContact,
                                                                 ViewContact& rViewContact,
