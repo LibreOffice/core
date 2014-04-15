@@ -41,7 +41,7 @@ DlgEdTransferableImpl::DlgEdTransferableImpl( const Sequence< DataFlavor >& aSeq
 DlgEdTransferableImpl::~DlgEdTransferableImpl()
 {
 }
-sal_Bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, const DataFlavor& rFlavor )
+bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, const DataFlavor& rFlavor )
 {
     // compare mime content types
     Reference< uno::XComponentContext >  xContext = getProcessComponentContext();

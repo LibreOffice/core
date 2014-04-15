@@ -318,7 +318,7 @@ void Shell::CopyDialogResources(
 }
 
 TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
-                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove )
+                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, bool bMove )
 {
     (void)pEntry;
     DBG_ASSERT( pEntry, "Kein Eintrag?" );  // ASS is ok here, should not be reached

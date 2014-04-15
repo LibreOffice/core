@@ -108,7 +108,7 @@ protected:
     virtual TriState    NotifyCopying( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos ) SAL_OVERRIDE;
     TriState            NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
-                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove );
+                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, bool bMove );
 
 public:
     ExtTreeListBox(Window* pParent, WinBits nStyle);
