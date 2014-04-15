@@ -3119,6 +3119,17 @@ DECLARE_OOXMLEXPORT_TEST(testFDO76597, "fdo76597.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "before", "96");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "after", "120");
 }
+
+DECLARE_OOXMLEXPORT_TEST(testContentTypeTIF, "fdo77476.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@ContentType='image/tif']", "PartName", "/word/media/image9.tif");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
