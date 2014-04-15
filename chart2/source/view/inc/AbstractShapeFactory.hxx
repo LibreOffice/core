@@ -29,8 +29,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include "DataSeriesState.hxx"
-
 namespace chart {
 
 
