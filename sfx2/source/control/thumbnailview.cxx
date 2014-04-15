@@ -270,7 +270,7 @@ void ThumbnailView::OnItemDblClicked (ThumbnailViewItem*)
     return new ThumbnailViewAcc( this, mbIsTransientChildrenDisabled );
 }
 
-void ThumbnailView::CalculateItemPositions ()
+void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
 {
     if (!mnItemHeight || !mnItemWidth)
         return;
@@ -295,7 +295,7 @@ void ThumbnailView::CalculateItemPositions ()
 
     // calculate window scroll ratio
     float nScrollRatio;
-    if( mpScrBar )
+    if( bScrollBarUsed && mpScrBar )
         nScrollRatio = static_cast<float>(mpScrBar->GetThumbPos()) /
                         static_cast<float>(mpScrBar->GetRangeMax()-2);
     else
@@ -351,7 +351,12 @@ void ThumbnailView::CalculateItemPositions ()
         nHiddenLines * nItemHeightOffset;
 
     // draw items
-    size_t nFirstItem = nHiddenLines * mnCols;
+    // Unless we are scrolling (via scrollbar) we just use the precalculated
+    // mnFirstLine -- our nHiddenLines calculation takes into account only
+    // what the user has done with the scrollbar but not any changes of selection
+    // using the keyboard, meaning we could accidentally hide the selected item
+    // if we believe the scrollbar (fdo#72287).
+    size_t nFirstItem = (bScrollBarUsed ? nHiddenLines : mnFirstLine) * mnCols;
     size_t nLastItem = nFirstItem + (mnVisLines + 1) * mnCols;
 
     maItemListRect.Left() = x;
@@ -433,6 +438,8 @@ void ThumbnailView::CalculateItemPositions ()
         mpScrBar->SetPosSizePixel( aPos, aSize );
         mpScrBar->SetRangeMax( (nCurCount+mnCols-1)*mnFineness/mnCols);
         mpScrBar->SetVisibleSize( mnVisLines );
+        if (!bScrollBarUsed)
+            mpScrBar->SetThumbPos( (long)mnFirstLine*mnFineness );
         long nPageSize = mnVisLines;
         if ( nPageSize < 1 )
             nPageSize = 1;
@@ -515,7 +522,7 @@ IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar )
 {
     if ( pScrollBar->GetDelta() )
     {
-        CalculateItemPositions();
+        CalculateItemPositions(true);
 
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();

@@ -282,7 +282,7 @@ protected:
     using Control::ImplInitSettings;
     using Window::ImplInit;
 
-    void CalculateItemPositions ();
+    void CalculateItemPositions (bool bScrollBarUsed = false);
     void MakeItemVisible( sal_uInt16 nId );
 
     SFX2_DLLPRIVATE void         ImplInit();
