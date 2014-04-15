@@ -26,6 +26,8 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdomedia.hxx>
+#include <svx/svdoole2.hxx>
+#include <svx/xflclit.hxx>
 #include <animations/animationnodehelper.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -63,6 +65,7 @@ public:
     void testN821567();
     void testFdo68594();
     void testFdo72998();
+    void testFdo77027();
     void testStrictOOXML();
     void testN862510_1();
     void testN862510_2();
@@ -86,6 +89,7 @@ public:
     CPPUNIT_TEST(testN821567);
     CPPUNIT_TEST(testFdo68594);
     CPPUNIT_TEST(testFdo72998);
+    CPPUNIT_TEST(testFdo77027);
     CPPUNIT_TEST(testStrictOOXML);
     CPPUNIT_TEST(testN862510_1);
     CPPUNIT_TEST(testN862510_2);
@@ -544,6 +548,37 @@ void SdFiltersTest::testFdo72998()
         CPPUNIT_ASSERT( (*pViewBox >>= aViewBox ) );
         CPPUNIT_ASSERT_MESSAGE( "Width should be zero - for forcing scale to 1", !aViewBox.Width );
         CPPUNIT_ASSERT_MESSAGE( "Height should be zero - for forcing scale to 1", !aViewBox.Height );
+    }
+
+    xDocShRef->DoClose();
+}
+
+// FIXME copypasta
+std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
+{
+    rStrm << "Color: R:" << rColor.GetRed() << " G:" << rColor.GetGreen() << " B: << rColor.GetBlue()";
+    return rStrm;
+}
+
+void SdFiltersTest::testFdo77027()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/fdo77027.odp"));
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    {
+        SdrOle2Obj *const pObj = dynamic_cast<SdrOle2Obj*>(pPage->GetObj(0));
+        CPPUNIT_ASSERT(pObj);
+
+        // check that the fill style/color was actually imported
+        const XFillStyleItem& rStyleItem = dynamic_cast<const XFillStyleItem&>(
+                pObj->GetMergedItem(XATTR_FILLSTYLE));
+        CPPUNIT_ASSERT_EQUAL(XFILL_SOLID, rStyleItem.GetValue());
+        const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
+                pObj->GetMergedItem(XATTR_FILLCOLOR));
+        CPPUNIT_ASSERT_EQUAL(Color(0xff6600), rColorItem.GetColorValue());
     }
 
     xDocShRef->DoClose();
