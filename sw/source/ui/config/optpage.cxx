@@ -49,6 +49,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/svxenum.hxx>
+#include <sal/macros.h>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
@@ -1960,12 +1961,9 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     pDeletedLB->SelectEntryPos(0);
     pChangedLB->SelectEntryPos(0);
 
-    lcl_FillRedlineAttrListBox(*pInsertLB, rInsertAttr, aInsertAttrMap,
-            sizeof(aInsertAttrMap) / sizeof(sal_uInt16));
-    lcl_FillRedlineAttrListBox(*pDeletedLB, rDeletedAttr, aDeletedAttrMap,
-            sizeof(aDeletedAttrMap) / sizeof(sal_uInt16));
-    lcl_FillRedlineAttrListBox(*pChangedLB, rChangedAttr, aChangedAttrMap,
-            sizeof(aChangedAttrMap) / sizeof(sal_uInt16));
+    lcl_FillRedlineAttrListBox(*pInsertLB, rInsertAttr, aInsertAttrMap, SAL_N_ELEMENTS(aInsertAttrMap));
+    lcl_FillRedlineAttrListBox(*pDeletedLB, rDeletedAttr, aDeletedAttrMap, SAL_N_ELEMENTS(aDeletedAttrMap));
+    lcl_FillRedlineAttrListBox(*pChangedLB, rChangedAttr, aChangedAttrMap, SAL_N_ELEMENTS(aChangedAttrMap));
 
     sal_Int32 nPos = 0;
     switch (pOpt->GetMarkAlignMode())
