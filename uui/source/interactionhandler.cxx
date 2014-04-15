@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -34,13 +37,11 @@ namespace {
 class UUIInteractionHandler:
     public cppu::WeakImplHelper3< com::sun::star::lang::XServiceInfo,
                                   com::sun::star::lang::XInitialization,
-                                  com::sun::star::task::XInteractionHandler2 >
+                                  com::sun::star::task::XInteractionHandler2 >,
+    private boost::noncopyable
 {
 private:
     UUIInteractionHelper * m_pImpl;
-
-    UUIInteractionHandler(UUIInteractionHandler &); // not implemented
-    void operator =(UUIInteractionHandler); // not implemented
 
 public:
     UUIInteractionHandler(com::sun::star::uno::Reference<
