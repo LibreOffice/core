@@ -25,11 +25,9 @@ OUString getShaderFolder()
     return aUrl + "/opengl/";
 }
 
-OUString maShaderFolder = getShaderFolder();
-
 OString loadShader(const OUString& rFilename)
 {
-    OUString aFileURL = maShaderFolder + rFilename +".glsl";
+    OUString aFileURL = getShaderFolder() + rFilename +".glsl";
     osl::File aFile(aFileURL);
     if(aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
     {
