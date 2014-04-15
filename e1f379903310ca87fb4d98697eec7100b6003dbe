@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_85e64215",
+        "filename": "xmloff/source/draw/ximpshap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-15T20:22:14Z",
+      "side": 1,
+      "message": "this one seems fine...",
+      "revId": "e1f379903310ca87fb4d98697eec7100b6003dbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_a5e33e04",
+        "filename": "xmloff/source/draw/ximpshap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-15T20:22:14Z",
+      "side": 1,
+      "message": "... but this will apply for any AOO 4.x, see xmlimp.cxx:255\n\ni think it would not be allowed to apply this for *unreleased* versions of AOO - the ODF spec actually forbids looking at the generator when parsing the content; we can explain the use of such workarounds for old versions of our own code where we know exactly how the broken files should be interpreted, but we cannot know how/when other projects change their implementation to become compliant or not, and if we would apply such a workaround to a file that doesn\u0027t require it then that would be _our_ bug.\n\nso better make this a \"\u003c\".",
+      "revId": "e1f379903310ca87fb4d98697eec7100b6003dbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
