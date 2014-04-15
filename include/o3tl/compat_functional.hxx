@@ -37,16 +37,6 @@
 namespace o3tl
 {
 
-/// Identity functor - return the input value
-template<class T>
-struct identity : public std::unary_function<T, T>
-{
-     T operator()(const T& y) const
-     {
-          return (y);
-     }
-};
-
 /// Functor, given two parameters, return the first
 template<class T1,class T2>
 struct project1st : public std::binary_function<T1, T2, T1>
@@ -109,31 +99,6 @@ template<class F1, class F2>
 inline unary_compose<F1, F2> compose1(const F1& fnction1, const F2& fnction2)
 {
     return (unary_compose<F1, F2>(fnction1, fnction2));
-}
-
-/// Calls F2 and F3 for the two args of F1, respectively
-template<class F1, class F2, class F3>
-class binary_compose : public std::unary_function<typename F2::argument_type,typename F1::result_type>
-{
-    public:
-        binary_compose(const F1& fnction1, const F2& fnction2, const F3& fnction3) : ftor1(fnction1), ftor2(fnction2), ftor3(fnction3) {}
-
-        typename F1::result_type operator()(const typename F2::argument_type& y) const
-        {
-            return (ftor1(ftor2(y), ftor3(y)));
-        }
-
-    protected:
-        F1 ftor1;
-        F2 ftor2;
-        F3 ftor3;
-};
-
-/// Creates functor that calls F2 and F3 for the two args of F1, respectively
-template<class F1, class F2, class F3>
-inline binary_compose<F1, F2, F3> compose2(const F1& fnction1, const F2& fnction2, const F3& fnction3)
-{
-    return (binary_compose<F1, F2, F3>(fnction1, fnction2, fnction3));
 }
 
 }   // namespace o3tl
