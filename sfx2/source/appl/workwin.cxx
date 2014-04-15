@@ -586,6 +586,7 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     pWorkWin (pWin),
     pConfigShell( 0 ),
     pActiveChild( 0 ),
+    nUpdateMode(SFX_VISIBILITY_STANDARD),
     nChildren( 0 ),
     nOrigMode( 0 ),
     bSorted( true ),
@@ -605,6 +606,7 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     m_aTbxTypeName( "private:resource/toolbar/" ),
     m_aProgressBarResName( "private:resource/progressbar/progressbar" )
 {
+    memset(pSplit, 0, sizeof(pSplit));
     DBG_ASSERT (pBindings, "No Bindings!");
 
     pBindings->SetWorkWindow_Impl( this );
