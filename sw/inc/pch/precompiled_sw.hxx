@@ -1117,7 +1117,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/sysdata.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>

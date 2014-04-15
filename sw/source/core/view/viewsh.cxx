@@ -67,7 +67,6 @@
 #include "../uibase/inc/view.hxx"
 #include <PostItMgr.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
