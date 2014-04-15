@@ -26,7 +26,6 @@ class HSQLDBTest
 {
 public:
     void testEmptyDBConnection();
-    void testIntegerDatabase();
 
     CPPUNIT_TEST_SUITE(HSQLDBTest);
     CPPUNIT_TEST(testEmptyDBConnection);
