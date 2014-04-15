@@ -14,15 +14,11 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/config.h"
-#include "sal/log.hxx"
-#include "svl/urihelper.hxx"
 #include <algorithm>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basic/basmgr.hxx>
+#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -195,6 +191,8 @@
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <set>

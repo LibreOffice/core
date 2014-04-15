@@ -14,10 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/registry/XRegistryKey.hpp"
-#include "comphelper/servicedecl.hxx"
-#include "cppuhelper/implementationentry.hxx"
 #include <basic/sbuno.hxx>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
@@ -57,8 +53,10 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -111,12 +109,14 @@
 #include <com/sun/star/view/XViewCursor.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicedecl.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <ooo/vba/XControlProvider.hpp>
