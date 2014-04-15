@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/outdev.hxx>
 #include <tools/poly.hxx>
 
 Polygon ImplSubdivideBezier( const Polygon& rPoly )
