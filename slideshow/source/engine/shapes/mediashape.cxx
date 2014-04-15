@@ -82,11 +82,11 @@ namespace slideshow
             virtual bool implRender( const ::basegfx::B2DRange& rCurrBounds ) const SAL_OVERRIDE;
             virtual void implViewChanged( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
             virtual void implViewsChanged() SAL_OVERRIDE;
-            virtual bool implStartIntrinsicAnimation() SAL_OVERRIDE;
-            virtual bool implEndIntrinsicAnimation() SAL_OVERRIDE;
-            virtual bool implPauseIntrinsicAnimation() SAL_OVERRIDE;
-            virtual bool implIsIntrinsicAnimationPlaying() const SAL_OVERRIDE;
-            virtual void implSetIntrinsicAnimationTime(double) SAL_OVERRIDE;
+            virtual void play() SAL_OVERRIDE;
+            virtual void stop() SAL_OVERRIDE;
+            virtual void pause() SAL_OVERRIDE;
+            virtual bool isPlaying() const SAL_OVERRIDE;
+            virtual void setMediaTime(double) SAL_OVERRIDE;
 
             /// the list of active view shapes (one for each registered view layer)
             typedef ::std::vector< ViewMediaShapeSharedPtr > ViewMediaShapeVector;
@@ -216,53 +216,47 @@ namespace slideshow
 
 
 
-        bool MediaShape::implStartIntrinsicAnimation()
+        void MediaShape::play()
         {
             ::std::for_each( maViewMediaShapes.begin(),
                              maViewMediaShapes.end(),
                              ::boost::mem_fn( &ViewMediaShape::startMedia ) );
 
             mbIsPlaying = true;
-
-            return true;
         }
 
 
 
-        bool MediaShape::implEndIntrinsicAnimation()
+        void MediaShape::stop()
         {
             ::std::for_each( maViewMediaShapes.begin(),
                              maViewMediaShapes.end(),
                              ::boost::mem_fn( &ViewMediaShape::endMedia ) );
 
             mbIsPlaying = false;
-
-            return true;
         }
 
 
 
-        bool MediaShape::implPauseIntrinsicAnimation()
+        void MediaShape::pause()
         {
             ::std::for_each( maViewMediaShapes.begin(),
                              maViewMediaShapes.end(),
                              ::boost::mem_fn( &ViewMediaShape::pauseMedia ) );
 
             mbIsPlaying = false;
-
-            return true;
         }
 
 
 
-        bool MediaShape::implIsIntrinsicAnimationPlaying() const
+        bool MediaShape::isPlaying() const
         {
             return mbIsPlaying;
         }
 
 
 
-        void MediaShape::implSetIntrinsicAnimationTime(double fTime)
+        void MediaShape::setMediaTime(double fTime)
         {
             ::std::for_each( maViewMediaShapes.begin(),
                              maViewMediaShapes.end(),

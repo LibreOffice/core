@@ -73,11 +73,13 @@ namespace slideshow
 
             virtual bool enableAnimations() SAL_OVERRIDE
             {
-                return mrBase.implStartIntrinsicAnimation();
+                mrBase.play();
+                return true;
             }
             virtual bool disableAnimations() SAL_OVERRIDE
             {
-                return mrBase.implEndIntrinsicAnimation();
+                mrBase.stop();
+                return true;
             }
 
             ExternalShapeBase& mrBase;
@@ -125,43 +127,6 @@ namespace slideshow
         {
             return mxShape;
         }
-
-
-
-        void ExternalShapeBase::play()
-        {
-            implStartIntrinsicAnimation();
-        }
-
-
-
-        void ExternalShapeBase::stop()
-        {
-            implEndIntrinsicAnimation();
-        }
-
-
-
-        void ExternalShapeBase::pause()
-        {
-            implPauseIntrinsicAnimation();
-        }
-
-
-
-        bool ExternalShapeBase::isPlaying() const
-        {
-            return implIsIntrinsicAnimationPlaying();
-        }
-
-
-
-        void ExternalShapeBase::setMediaTime(double fTime)
-        {
-            implSetIntrinsicAnimationTime(fTime);
-        }
-
-
 
         bool ExternalShapeBase::update() const
         {
