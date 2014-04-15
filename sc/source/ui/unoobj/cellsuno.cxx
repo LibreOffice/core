@@ -6149,49 +6149,18 @@ OUString ScCellObj::GetInputString_Impl(bool bEnglish) const      // fuer getFor
     return OUString();
 }
 
-OUString ScCellObj::GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aCellPos)
-{
-    if (!pDoc)
-        return EMPTY_OUSTRING;
-
-    ScRefCellValue aCell;
-    aCell.assign(*pDoc, aCellPos);
-
-    if (aCell.isEmpty())
-        return EMPTY_OUSTRING;
-
-    OUString aVal;
-
-    if (aCell.meType == CELLTYPE_EDIT)
-    {
-        //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
-        //  hier werden die Umbrueche aber gebraucht
-        const EditTextObject* pData = aCell.mpEditText;
-        if (pData)
-        {
-            EditEngine& rEngine = pDoc->GetEditEngine();
-            rEngine.SetText(*pData);
-            aVal = rEngine.GetText(LINEEND_LF);
-        }
-        //  Edit-Zellen auch nicht per NumberFormatter formatieren
-        //  (passend zur Ausgabe)
-    }
-    else
-    {
-        //  wie in GetString am Dokument (column)
-        Color* pColor;
-        sal_uLong nNumFmt = pDoc->GetNumberFormat( aCellPos );
-        aVal = ScCellFormat::GetString(*pDoc, aCellPos, nNumFmt, &pColor, *pDoc->GetFormatTable());
-    }
-    return aVal;
-}
-
 OUString ScCellObj::GetOutputString_Impl() const
 {
     ScDocShell* pDocSh = GetDocShell();
     OUString aVal;
     if ( pDocSh )
-        aVal = GetOutputString_Impl(pDocSh->GetDocument(), aCellPos);
+    {
+        ScDocument* pDoc = pDocSh->GetDocument();
+        ScRefCellValue aCell;
+        aCell.assign(*pDoc, aCellPos);
+
+        aVal = ScCellFormat::GetOutputString(*pDoc, aCellPos, aCell);
+    }
     return aVal;
 }
 

@@ -1010,8 +1010,6 @@ public:
     virtual void SAL_CALL   setActionLocks( sal_Int16 nLock )
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int16 SAL_CALL resetActionLocks() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    static OUString GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aPos);
 };
 
 
