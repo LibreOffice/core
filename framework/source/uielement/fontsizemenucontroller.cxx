@@ -36,6 +36,7 @@
 #include <vcl/settings.hxx>
 #include <svtools/ctrltool.hxx>
 #include <osl/mutex.hxx>
+#include <boost/scoped_ptr.hpp>
 
 //  Defines
 
@@ -133,8 +134,8 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
     if ( pVCLPopupMenu )
     {
-        FontList*       pFontList = 0;
-        Printer*        pInfoPrinter = 0;
+        boost::scoped_ptr<FontList> pFontList;
+        boost::scoped_ptr<Printer>  pInfoPrinter;
         OUString   aPrinterName;
 
         SolarMutexGuard aSolarMutexGuard;
@@ -143,13 +144,13 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         aPrinterName = retrievePrinterName( m_xFrame );
         if ( !aPrinterName.isEmpty() )
         {
-            pInfoPrinter = new Printer( aPrinterName );
+            pInfoPrinter.reset(new Printer( aPrinterName ));
             if ( pInfoPrinter && pInfoPrinter->GetDevFontCount() > 0 )
-                pFontList = new FontList( pInfoPrinter );
+                pFontList.reset(new FontList( pInfoPrinter.get() ));
         }
 
-        if ( pFontList == 0 )
-            pFontList   = new FontList( Application::GetDefaultDevice() );
+        if ( !pFontList )
+            pFontList.reset(new FontList( Application::GetDefaultDevice() ));
 
         FontInfo aFntInfo = pFontList->Get( m_aFontDescriptor.Name, m_aFontDescriptor.StyleName );
 
@@ -233,9 +234,6 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         }
 
         setCurHeight( long( m_aFontHeight.Height * 10), rPopupMenu );
-
-        delete pFontList;
-        delete pInfoPrinter;
     }
 }
 

@@ -30,6 +30,7 @@
 #include "formula/FormulaCompiler.hxx"
 #include <formula/compiler.hrc>
 #include <svl/sharedstringpool.hxx>
+#include <boost/scoped_array.hpp>
 
 namespace formula
 {
@@ -861,7 +862,7 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
     {
         // RPN-Interpreter Simulation
         // als Ergebnis jeder Funktion wird einfach ein Double angenommen
-        FormulaToken** pStack = new FormulaToken* [nRPN];
+        boost::scoped_array<FormulaToken*> pStack(new FormulaToken* [nRPN]);
         FormulaToken* pResult = new FormulaDoubleToken( 0.0 );
         short sp = 0;
         for ( sal_uInt16 j = 0; j < nRPN; j++ )
@@ -890,7 +891,6 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
                         if ( sp >= k && pStack[sp-k]->GetType() == svDoubleRef )
                         {
                             pResult->Delete();
-                            delete [] pStack;
                             return true;
                         }
                     }
@@ -920,7 +920,6 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
             }
         }
         pResult->Delete();
-        delete [] pStack;
     }
 
     return false;

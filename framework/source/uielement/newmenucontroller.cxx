@@ -44,6 +44,7 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <osl/mutex.hxx>
+#include <boost/scoped_ptr.hpp>
 
 //  Defines
 
@@ -324,12 +325,12 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
     if ( pVCLPopupMenu )
     {
         MenuConfiguration aMenuCfg( m_xContext );
-        BmkMenu* pSubMenu( 0 );
+        boost::scoped_ptr<BmkMenu> pSubMenu;
 
         if ( m_bNewMenu )
-            pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( m_xFrame, BOOKMARK_NEWMENU );
+            pSubMenu.reset((BmkMenu*)aMenuCfg.CreateBookmarkMenu( m_xFrame, BOOKMARK_NEWMENU ));
         else
-            pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( m_xFrame, BOOKMARK_WIZARDMENU );
+            pSubMenu.reset((BmkMenu*)aMenuCfg.CreateBookmarkMenu( m_xFrame, BOOKMARK_WIZARDMENU ));
 
         // copy entries as we have to use the provided popup menu
         *pVCLPopupMenu = *pSubMenu;
@@ -358,8 +359,6 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
 
         if ( m_bShowImages )
             setMenuImages( pVCLPopupMenu, m_bShowImages );
-
-        delete pSubMenu;
     }
 }
 

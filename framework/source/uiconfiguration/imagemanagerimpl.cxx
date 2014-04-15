@@ -44,6 +44,7 @@
 #include <vcl/pngwrite.hxx>
 #include <rtl/instance.hxx>
 #include <svtools/miscopt.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
@@ -495,14 +496,12 @@ bool ImageManagerImpl::implts_loadUserImages(
 
                 if ( xBitmapStream.is() )
                 {
-                    SvStream* pSvStream( 0 );
                     BitmapEx aUserBitmap;
                     {
-                        pSvStream = utl::UcbStreamHelper::CreateStream( xBitmapStream );
+                        boost::scoped_ptr<SvStream> pSvStream(utl::UcbStreamHelper::CreateStream( xBitmapStream ));
                         vcl::PNGReader aPngReader( *pSvStream );
                         aUserBitmap = aPngReader.Read();
                     }
-                    delete pSvStream;
 
                     // Delete old image list and create a new one from the read bitmap
                     delete m_pUserImageList[nImageType];
@@ -578,12 +577,11 @@ bool ImageManagerImpl::implts_storeUserImages(
                                                             ElementModes::WRITE|ElementModes::TRUNCATE );
                 if ( xBitmapStream.is() )
                 {
-                    SvStream* pSvStream = utl::UcbStreamHelper::CreateStream( xBitmapStream );
                     {
+                        boost::scoped_ptr<SvStream> pSvStream(utl::UcbStreamHelper::CreateStream( xBitmapStream ));
                         vcl::PNGWriter aPngWriter( pImageList->GetAsHorizontalStrip() );
                         aPngWriter.Write( *pSvStream );
                     }
-                    delete pSvStream;
 
                     // Commit user bitmaps storage
                     xTransaction = uno::Reference< XTransactedObject >( xUserBitmapsStorage, UNO_QUERY );

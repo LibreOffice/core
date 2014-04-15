@@ -42,6 +42,7 @@
 #include <svtools/menuoptions.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <osl/mutex.hxx>
+#include <boost/scoped_ptr.hpp>
 
 // Copied from svx
 // Function-Id's
@@ -256,7 +257,7 @@ ControlMenuController::~ControlMenuController()
 // private function
 void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 {
-    ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
+    boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag()));
     ResId aResId( RID_SVXIMGLIST_FMEXPL, *pResMgr );
     aResId.SetRT( RSC_IMAGELIST );
 
@@ -272,8 +273,6 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
                 pPopupMenu->SetItemImage( nConvertSlots[i], Image() );
         }
     }
-
-    delete pResMgr;
 }
 
 // private function
@@ -404,7 +403,7 @@ void ControlMenuController::impl_setPopupMenu()
 {
     if ( m_pResPopupMenu == 0 )
     {
-        ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
+        boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag()));
         if ( pResMgr )
         {
             ResId aResId( RID_FMSHELL_CONVERSIONMENU, *pResMgr );
@@ -414,8 +413,6 @@ void ControlMenuController::impl_setPopupMenu()
                 m_pResPopupMenu = new PopupMenu( aResId );
                 updateImagesPopupMenu( m_pResPopupMenu );
             }
-
-            delete pResMgr;
         }
     } // if ( m_pResPopupMenu == 0 )
 }
