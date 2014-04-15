@@ -20,7 +20,7 @@
 #include <swtypes.hxx>
 #include <selectdbtabledialog.hxx>
 #include <dbtablepreviewdialog.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -38,7 +38,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/XAutoTextContainer2.hpp>
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <actctrl.hxx>
 

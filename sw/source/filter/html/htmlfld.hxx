@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFLD_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFLD_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #define OOO_STRING_SW_HTML_FT_author "AUTHOR"
 #define OOO_STRING_SW_HTML_FT_sender "SENDER"

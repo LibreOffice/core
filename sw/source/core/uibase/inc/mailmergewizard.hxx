@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_INC_MAILMERGEWIZARD_HXX
 
 #include <svtools/roadmapwizard.hxx>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 class SwView;
 class SwMailMergeConfigItem;

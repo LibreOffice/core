@@ -21,7 +21,7 @@
 
 #include <functional>
 #include <algorithm>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include "staticassert.hxx"
 
 namespace

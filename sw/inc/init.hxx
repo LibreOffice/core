@@ -19,11 +19,11 @@
 #ifndef INCLUDED_SW_INC_INIT_HXX
 #define INCLUDED_SW_INC_INIT_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/noncopyable.hpp"
-#include "osl/module.h"
-#include "osl/module.hxx"
+#include <boost/noncopyable.hpp>
+#include <osl/module.h>
+#include <osl/module.hxx>
 
 class SwViewShell;
 

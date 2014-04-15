@@ -32,7 +32,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
 #include <rtl/textenc.h>
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <tools/urlobj.hxx>

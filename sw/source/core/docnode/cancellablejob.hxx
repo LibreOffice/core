@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_DOCNODE_CANCELLABLEJOB_HXX
 #define INCLUDED_SW_SOURCE_CORE_DOCNODE_CANCELLABLEJOB_HXX
 
-#include "sal/config.h"
-#include "cppuhelper/implbase1.hxx"
-#include "com/sun/star/util/XCancellable.hpp"
+#include <sal/config.h>
+#include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/util/XCancellable.hpp>
 
 #include <rtl/ref.hxx>
 

@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_CONTTREE_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_CONTTREE_HXX
 
-#include "svtools/treelistbox.hxx"
-#include "svtools/svlbitm.hxx"
+#include <svtools/treelistbox.hxx>
+#include <svtools/svlbitm.hxx>
 #include "swcont.hxx"
 
 #include <map>

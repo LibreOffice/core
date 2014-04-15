@@ -19,7 +19,7 @@
 
 #include "SwXFilterOptions.hxx"
 #include "unofreg.hxx"
-#include "sal/types.h"
+#include <sal/types.h>
 #include <osl/diagnose.h>
 #include <cppuhelper/factory.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 
 // #i73788#
-#include "cppuhelper/implementationentry.hxx"
+#include <cppuhelper/implementationentry.hxx>
 namespace comp_FinalThreadManager {
 
 // component and service helper functions:

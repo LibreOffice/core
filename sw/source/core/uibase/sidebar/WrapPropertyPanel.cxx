@@ -31,7 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include "com/sun/star/lang/IllegalArgumentException.hpp"
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 const char UNO_WRAPOFF[] = ".uno:WrapOff";
 const char UNO_WRAPLEFT[] = ".uno:WrapLeft";

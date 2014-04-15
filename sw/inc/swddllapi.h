@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_SWDDLLAPI_H
 #define INCLUDED_SW_INC_SWDDLLAPI_H
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined(SWD_DLLIMPLEMENTATION)
 #define SWD_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT

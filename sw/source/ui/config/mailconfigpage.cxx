@@ -30,9 +30,9 @@
 #include <cmdid.h>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
-#include "com/sun/star/mail/MailServiceType.hpp"
-#include "com/sun/star/mail/XMailService.hpp"
-#include "com/sun/star/mail/MailServiceProvider.hpp"
+#include <com/sun/star/mail/MailServiceType.hpp>
+#include <com/sun/star/mail/XMailService.hpp>
+#include <com/sun/star/mail/MailServiceProvider.hpp>
 #include <vcl/msgbox.hxx>
 #include <globals.hrc>
 #include <config.hrc>

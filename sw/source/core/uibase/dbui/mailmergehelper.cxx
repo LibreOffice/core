@@ -29,10 +29,10 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include "com/sun/star/mail/MailServiceProvider.hpp"
-#include "com/sun/star/mail/XSmtpService.hpp"
+#include <com/sun/star/mail/MailServiceProvider.hpp>
+#include <com/sun/star/mail/XSmtpService.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>

@@ -57,7 +57,7 @@
 #include <svl/srchitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>
-#include "editeng/unolingu.hxx"
+#include <editeng/unolingu.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>

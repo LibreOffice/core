@@ -47,7 +47,7 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include "com/sun/star/mail/XSmtpService.hpp"
+#include <com/sun/star/mail/XSmtpService.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/event.hxx>
 #include <swevent.hxx>

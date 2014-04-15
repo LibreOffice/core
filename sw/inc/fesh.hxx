@@ -29,7 +29,7 @@
 #include <flyenum.hxx>
 
 #include <svx/svdtypes.hxx>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include <svtools/embedhlp.hxx>
 
 #include <vector>

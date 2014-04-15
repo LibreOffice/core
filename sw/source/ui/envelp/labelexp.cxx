@@ -22,7 +22,7 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <comphelper/processfactory.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <swtypes.hxx>
 #include <labfmt.hxx>
 #include <unotools.hxx>

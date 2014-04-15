@@ -37,7 +37,7 @@
 #include "swtypes.hxx"
 #include <numprevw.hxx>
 #include <numberingtypelistbox.hxx>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 class SwWrtShell;
 class SwNumRule;

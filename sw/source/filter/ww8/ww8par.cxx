@@ -26,8 +26,8 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/random.h>
-#include "rtl/ustring.hxx"
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <sfx2/docinf.hxx>
 #include <sfx2/request.hxx>

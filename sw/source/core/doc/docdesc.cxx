@@ -21,7 +21,7 @@
 #include <svx/svdmodel.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/paperinf.hxx>
-#include "editeng/frmdiritem.hxx"
+#include <editeng/frmdiritem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>

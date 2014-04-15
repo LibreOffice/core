@@ -24,7 +24,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/wmf.hxx>
 #include <svl/itemiter.hxx>
-#include "svl/urihelper.hxx"
+#include <svl/urihelper.hxx>
 
 #include <svtools/embedhlp.hxx>
 

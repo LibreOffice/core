@@ -19,9 +19,9 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_INITUI_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_INITUI_HXX
 
-#include "tools/solar.h"
+#include <tools/solar.h>
 #include "swdllapi.h"
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <vector>
 

@@ -26,7 +26,7 @@
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include "editeng/unolingu.hxx"
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>

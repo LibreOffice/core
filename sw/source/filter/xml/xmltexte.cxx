@@ -42,7 +42,7 @@
 #include "xmltexte.hxx"
 #include <SwAppletImpl.hxx>
 
-#include "svl/urihelper.hxx"
+#include <svl/urihelper.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <SwStyleNameMapper.hxx>
 

@@ -43,7 +43,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <svl/urihelper.hxx>
 #include <unotools/charclass.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <swwait.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>

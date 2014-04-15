@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_GLOSDOC_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_GLOSDOC_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 
 class SwTextBlocks;

@@ -93,8 +93,8 @@
 
 #include <vcl/status.hxx>
 
-#include "salhelper/simplereferenceobject.hxx"
-#include "rtl/ref.hxx"
+#include <salhelper/simplereferenceobject.hxx>
+#include <rtl/ref.hxx>
 
 #include <unomid.h>
 

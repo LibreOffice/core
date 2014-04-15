@@ -41,7 +41,7 @@
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/tstpitem.hxx>
-#include "svl/urihelper.hxx"
+#include <svl/urihelper.hxx>
 #include <svl/whiter.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtfsize.hxx>

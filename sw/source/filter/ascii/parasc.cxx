@@ -40,7 +40,7 @@
 #include <mdiexp.hxx>
 #include <poolfmt.hxx>
 
-#include "vcl/metric.hxx"
+#include <vcl/metric.hxx>
 
 #define ASC_BUFFLEN 4096
 

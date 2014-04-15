@@ -25,7 +25,7 @@
 #include <vcl/lstbox.hxx>
 #include <unotools/compatibility.hxx>
 #include <svx/checklbx.hxx>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 // class SwCompatibilityOptPage ------------------------------------------
 class SwWrtShell;

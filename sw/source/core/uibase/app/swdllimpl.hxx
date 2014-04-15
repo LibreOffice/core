@@ -10,10 +10,10 @@
 #ifndef INCLUDED_SW_SOURCE_UI_APP_SWDLLIMPL_HXX
 #define INCLUDED_SW_SOURCE_UI_APP_SWDLLIMPL_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/noncopyable.hpp"
-#include "boost/scoped_ptr.hpp"
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace sw { class Filters; }
 

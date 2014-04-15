@@ -38,7 +38,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/langitem.hxx>
-#include "editeng/unolingu.hxx"
+#include <editeng/unolingu.hxx>
 #include <swtypes.hxx>
 #include <idxmrk.hxx>
 #include <txttxmrk.hxx>

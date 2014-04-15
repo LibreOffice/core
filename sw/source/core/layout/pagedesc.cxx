@@ -22,7 +22,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/shaditem.hxx>
-#include "editeng/frmdiritem.hxx"
+#include <editeng/frmdiritem.hxx>
 #include <fmtclds.hxx>
 #include <fmtfsize.hxx>
 #include <pagefrm.hxx>

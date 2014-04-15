@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SWTHREADJOINER_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SWTHREADJOINER_HXX
 
-#include "com/sun/star/util/XJobManager.hpp"
+#include <com/sun/star/util/XJobManager.hpp>
 
 /** Testing */
 class SwThreadJoiner

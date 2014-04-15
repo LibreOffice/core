@@ -43,7 +43,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include <helpid.h>
 #include <utlui.hrc>

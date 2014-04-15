@@ -25,9 +25,9 @@
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include "com/sun/star/mail/MailServiceType.hpp"
-#include "com/sun/star/mail/XMailService.hpp"
-#include "com/sun/star/mail/MailServiceProvider.hpp"
+#include <com/sun/star/mail/MailServiceType.hpp>
+#include <com/sun/star/mail/XMailService.hpp>
+#include <com/sun/star/mail/MailServiceProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>

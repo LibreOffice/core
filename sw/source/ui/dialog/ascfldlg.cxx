@@ -39,7 +39,7 @@
 
 #include <dialog.hrc>
 
-#include "vcl/metric.hxx"
+#include <vcl/metric.hxx>
 
 using namespace ::com::sun::star;
 

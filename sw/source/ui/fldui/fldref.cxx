@@ -33,7 +33,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
 
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #define REFFLDFLAG          0x4000
 #define REFFLDFLAG_BOOKMARK 0x4800

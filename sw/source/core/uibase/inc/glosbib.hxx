@@ -28,7 +28,7 @@
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <vector>
 

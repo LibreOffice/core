@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 
 #include <pagepreviewlayout.hxx>
 #include <prevwpage.hxx>
@@ -33,9 +33,7 @@
 #include <viewopt.hxx>
 #include <swregion.hxx>
 #include <comcore.hrc>
-// OD 19.02.2003 #107369# - method <SwAlignRect(..)>
 #include <frmtool.hxx>
-// OD 24.09.2003 #i19975#
 #include <sfx2/zoomitem.hxx>
 #include <printdata.hxx>
 

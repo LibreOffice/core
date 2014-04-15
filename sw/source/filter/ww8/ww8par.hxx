@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8PAR_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_WW8PAR_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/util.hxx>
 #include <editeng/frmdir.hxx>

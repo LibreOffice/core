@@ -22,17 +22,17 @@
 #include <svtools/stdctrl.hxx>
 #include <unotools/configitem.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include "com/sun/star/mail/XAuthenticator.hpp"
-#include "com/sun/star/mail/XConnectionListener.hpp"
-#include "com/sun/star/uno/XCurrentContext.hpp"
-#include "com/sun/star/mail/XMailMessage.hpp"
-#include "com/sun/star/datatransfer/XTransferable.hpp"
+#include <com/sun/star/mail/XAuthenticator.hpp>
+#include <com/sun/star/mail/XConnectionListener.hpp>
+#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <com/sun/star/mail/XMailMessage.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <vcl/scrbar.hxx>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include "swdllapi.h"
 
 class SwMailMergeConfigItem;

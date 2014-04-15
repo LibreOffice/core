@@ -24,7 +24,7 @@
 
 #include <boost/static_assert.hpp>
 #include <osl/endian.h>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <editeng/borderline.hxx>
 #include <filter/msfilter/util.hxx>

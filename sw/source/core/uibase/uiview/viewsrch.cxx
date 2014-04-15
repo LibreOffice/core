@@ -42,7 +42,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
-#include "editeng/unolingu.hxx"
+#include <editeng/unolingu.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>
 #include <workctrl.hxx>

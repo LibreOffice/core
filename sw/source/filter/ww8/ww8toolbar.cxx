@@ -23,7 +23,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/graph.hxx>
 #include <map>
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

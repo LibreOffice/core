@@ -29,7 +29,7 @@
 #include <algorithm>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include "hash_wrap.hxx"
 #include "sortedarray.hxx"
 

@@ -29,7 +29,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/sizeitem.hxx>
-#include "editeng/frmdiritem.hxx"
+#include <editeng/frmdiritem.hxx>
 #include <svl/ctloptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>

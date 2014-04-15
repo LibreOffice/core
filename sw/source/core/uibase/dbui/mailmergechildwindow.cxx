@@ -31,8 +31,8 @@
 #include <mmconfigitem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include "com/sun/star/mail/XSmtpService.hpp"
-#include "com/sun/star/mail/MailServiceType.hpp"
+#include <com/sun/star/mail/XSmtpService.hpp>
+#include <com/sun/star/mail/MailServiceType.hpp>
 #include <rtl/ref.hxx>
 #include <maildispatcher.hxx>
 #include <imaildsplistener.hxx>

@@ -33,7 +33,7 @@
 #include <dbmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <wrtsh.hxx>
-#include "vcl/msgbox.hxx"
+#include <vcl/msgbox.hxx>
 
 #include <helpid.h>
 #include <mailmergewizard.hrc>
