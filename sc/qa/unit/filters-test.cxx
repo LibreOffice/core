@@ -66,7 +66,7 @@ public:
     void testContentXLSXStrict(); // strict OOXML
     void testContentLotus123();
     void testContentDIF();
-    void testContentXLS_XML();
+    //void testContentXLS_XML();
     void testSharedFormulaXLS();
     void testSharedFormulaXLSX();
     void testLegacyCellAnchoredRotatedShape();
@@ -79,6 +79,7 @@ public:
     CPPUNIT_TEST(testContentODS);
     CPPUNIT_TEST(testContentXLS);
     CPPUNIT_TEST(testContentXLSX);
+    CPPUNIT_TEST(testContentXLSXStrict);
     CPPUNIT_TEST(testContentLotus123);
     CPPUNIT_TEST(testContentDIF);
     //CPPUNIT_TEST(testContentXLS_XML);
@@ -278,16 +279,16 @@ void ScFiltersTest::testContentDIF()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testContentXLS_XML()
-{
-    ScDocShellRef xDocSh = loadDoc("universal-content.", XLS_XML);
-    CPPUNIT_ASSERT(xDocSh);
-
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
-    testContentImpl(pDoc, XLS_XML);
-    xDocSh->DoClose();
-}
+// void ScFiltersTest::testContentXLS_XML()
+// {
+//     ScDocShellRef xDocSh = loadDoc("universal-content.", XLS_XML);
+//     CPPUNIT_ASSERT(xDocSh);
+//
+//     ScDocument* pDoc = xDocSh->GetDocument();
+//     CPPUNIT_ASSERT(pDoc);
+//     testContentImpl(pDoc, XLS_XML);
+//     xDocSh->DoClose();
+// }
 
 void ScFiltersTest::testSharedFormulaXLS()
 {
