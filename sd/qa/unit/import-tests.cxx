@@ -18,6 +18,10 @@
 
 #include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/svdomedia.hxx>
+#include <svx/svdoole2.hxx>
+#include <svx/xflclit.hxx>
 #include <animations/animationnodehelper.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -43,6 +47,7 @@ class SdFiltersTest : public SdModelTestBase
 public:
     void testDocumentLayout();
     void testSmoketest();
+    void testFdo77027();
     void testN759180();
     void testN778859();
     void testFdo64512();
@@ -53,6 +58,7 @@ public:
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
     CPPUNIT_TEST(testSmoketest);
+    CPPUNIT_TEST(testFdo77027);
     CPPUNIT_TEST(testN759180);
     CPPUNIT_TEST(testN778859);
     CPPUNIT_TEST(testFdo64512);
@@ -241,6 +247,37 @@ void SdFiltersTest::testN778859()
         SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
         CPPUNIT_ASSERT(!pTxtObj->IsAutoFit());
     }
+}
+
+// FIXME copypasta
+std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
+{
+    rStrm << "Color: R:" << rColor.GetRed() << " G:" << rColor.GetGreen() << " B: << rColor.GetBlue()";
+    return rStrm;
+}
+
+void SdFiltersTest::testFdo77027()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/fdo77027.odp"));
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    {
+        SdrOle2Obj *const pObj = dynamic_cast<SdrOle2Obj*>(pPage->GetObj(0));
+        CPPUNIT_ASSERT(pObj);
+
+        // check that the fill style/color was actually imported
+        const XFillStyleItem& rStyleItem = dynamic_cast<const XFillStyleItem&>(
+                pObj->GetMergedItem(XATTR_FILLSTYLE));
+        CPPUNIT_ASSERT_EQUAL(XFILL_SOLID, rStyleItem.GetValue());
+        const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
+                pObj->GetMergedItem(XATTR_FILLCOLOR));
+        CPPUNIT_ASSERT_EQUAL(Color(0xff6600), rColorItem.GetColorValue());
+    }
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testFdo64512()
