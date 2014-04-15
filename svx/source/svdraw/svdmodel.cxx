@@ -130,6 +130,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     pUndoStack=NULL;
     pRedoStack=NULL;
     nMaxUndoCount=16;
+    mnUniqueCommentID=0;
     pAktUndoGroup=NULL;
     nUndoLevel=0;
     mbUndoEnabled=true;
@@ -163,6 +164,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mbKernAsianPunctuation = false;
     mbAddExtLeading = false;
     mnHandoutPageCount = 0;
+    nReserveUInt6 = 0;
+    nReserveUInt7 = 0;
 
     mbDisableTextEditUsesCommonUndoManager = false;
 
