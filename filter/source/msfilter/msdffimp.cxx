@@ -1866,20 +1866,22 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             sal_uInt16 nElemSize = 8;
             rIn.ReadUInt16( nNumElem ).ReadUInt16( nNumElemMem ).ReadUInt16( nElemSize );
         }
-        sal_Int16 nP1, nP2, nP3;
-        sal_uInt16 nFlags;
-
-        uno::Sequence< OUString > aEquations( nNumElem );
-        for ( sal_uInt16 i = 0; i < nNumElem; i++ )
+        if ( nNumElem <= 128 )
         {
-            rIn.ReadUInt16( nFlags ).ReadInt16( nP1 ).ReadInt16( nP2 ).ReadInt16( nP3 );
-            aEquations[ i ] = EnhancedCustomShape2d::GetEquation( nFlags, nP1, nP2, nP3 );
+            uno::Sequence< OUString > aEquations( nNumElem );
+            for ( sal_uInt16 i = 0; i < nNumElem; i++ )
+            {
+                sal_Int16 nP1(0), nP2(0), nP3(0);
+                sal_uInt16 nFlags(0);
+                rIn.ReadUInt16( nFlags ).ReadInt16( nP1 ).ReadInt16( nP2 ).ReadInt16( nP3 );
+                aEquations[ i ] = EnhancedCustomShape2d::GetEquation( nFlags, nP1, nP2, nP3 );
+            }
+            // pushing the whole Equations element
+            const OUString sEquations( "Equations" );
+            aProp.Name = sEquations;
+            aProp.Value <<= aEquations;
+            aPropVec.push_back( aProp );
         }
-        // pushing the whole Equations element
-        const OUString sEquations( "Equations" );
-        aProp.Name = sEquations;
-        aProp.Value <<= aEquations;
-        aPropVec.push_back( aProp );
     }
 
 
