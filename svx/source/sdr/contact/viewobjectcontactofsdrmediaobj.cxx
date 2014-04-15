@@ -47,10 +47,10 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
         mpMediaWindow->hide();
         executeMediaItem( rMediaItem );
     }
+#else
+    (void) rMediaItem;
 #endif
 }
-
-
 
 ViewObjectContactOfSdrMediaObj::~ViewObjectContactOfSdrMediaObj()
 {
