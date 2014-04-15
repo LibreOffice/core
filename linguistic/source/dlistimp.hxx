@@ -68,8 +68,8 @@ class DicList :
                 XTerminateListener >        xExitListener;
     MyAppExitListener                       *pExitListener;
 
-    sal_Bool    bDisposing;
-    sal_Bool    bInCreation;
+    bool    bDisposing;
+    bool    bInCreation;
 
     // disallow copy-constructor and assignment-operator for now
     DicList( const DicList & );
@@ -86,7 +86,7 @@ class DicList :
     void            LaunchEvent(sal_Int16 nEvent, com::sun::star::uno::Sequence<
                             ::com::sun::star::linguistic2::XDictionary > xDic);
     void            SearchForDictionaries( DictionaryVec_t &rDicList,
-                                            const OUString &rDicDir, sal_Bool bIsWritePath );
+                                            const OUString &rDicDir, bool bIsWritePath );
     sal_Int32           GetDicPos(const com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XDictionary > &xDic);
 

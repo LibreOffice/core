@@ -59,7 +59,7 @@ class ProposalList: private boost::noncopyable
 {
     std::vector< OUString > aVec;
 
-    sal_Bool    HasEntry( const OUString &rText ) const;
+    bool    HasEntry( const OUString &rText ) const;
 
 public:
     ProposalList()  {}
@@ -73,14 +73,14 @@ public:
 };
 
 
-sal_Bool ProposalList::HasEntry( const OUString &rText ) const
+bool ProposalList::HasEntry( const OUString &rText ) const
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     size_t nCnt = aVec.size();
     for (size_t i = 0;  !bFound && i < nCnt;  ++i)
     {
         if (aVec[i] == rText)
-            bFound = sal_True;
+            bFound = true;
     }
     return bFound;
 }
@@ -151,11 +151,11 @@ Sequence< OUString > ProposalList::GetSequence() const
     return aRes;
 }
 
-sal_Bool SvcListHasLanguage(
+bool SvcListHasLanguage(
         const LangSvcEntries_Spell &rEntry,
         LanguageType nLanguage )
 {
-    sal_Bool bHasLanguage = sal_False;
+    bool bHasLanguage = false;
     Locale aTmpLocale;
 
     const Reference< XSpellChecker >  *pRef  = rEntry.aSvcRefs .getConstArray();
@@ -228,7 +228,7 @@ sal_Bool SAL_CALL
         throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return isValid_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties, sal_True );
+    return isValid_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties, true );
 }
 
 
@@ -238,7 +238,7 @@ Reference< XSpellAlternatives > SAL_CALL
         throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return spell_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties, sal_True );
+    return spell_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties, true );
 }
 
 
@@ -276,16 +276,16 @@ static Reference< XDictionaryEntry > lcl_GetRulingDictionaryEntry(
 }
 
 
-sal_Bool SpellCheckerDispatcher::isValid_Impl(
+bool SpellCheckerDispatcher::isValid_Impl(
             const OUString& rWord,
             LanguageType nLanguage,
             const PropertyValues& rProperties,
-            sal_Bool bCheckDics)
+            bool bCheckDics)
         throw( RuntimeException, IllegalArgumentException )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
 
     if (LinguIsUnspecified( nLanguage) || rWord.isEmpty())
         return bRes;
@@ -316,17 +316,17 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
                 "lng : index out of range");
 
         sal_Int32 i = 0;
-        sal_Bool bTmpRes = sal_True;
-        sal_Bool bTmpResValid = sal_False;
+        bool bTmpRes = true;
+        bool bTmpResValid = false;
 
         // try already instantiated services first
         {
             const Reference< XSpellChecker >  *pRef  =
                     pEntry->aSvcRefs.getConstArray();
             while (i <= pEntry->nLastTriedSvcIndex
-                   &&  (!bTmpResValid  ||  sal_False == bTmpRes))
+                   && (!bTmpResValid || !bTmpRes))
             {
-                bTmpResValid = sal_True;
+                bTmpResValid = true;
                 if (pRef[i].is()  &&  pRef[i]->hasLocale( aLocale ))
                 {
                     bTmpRes = GetCache().CheckWord( aChkWord, nLanguage );
@@ -342,7 +342,7 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
                     }
                 }
                 else
-                    bTmpResValid = sal_False;
+                    bTmpResValid = false;
 
                 if (bTmpResValid)
                     bRes = bTmpRes;
@@ -352,7 +352,7 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
         }
 
         // if still no result instantiate new services and try those
-        if ((!bTmpResValid  ||  sal_False == bTmpRes)
+        if ((!bTmpResValid || !bTmpRes)
             &&  pEntry->nLastTriedSvcIndex < nLen - 1)
         {
             const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
@@ -365,7 +365,7 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
             Sequence< Any > aArgs(2);
             aArgs.getArray()[0] <<= GetPropSet();
 
-            while (i < nLen  &&  (!bTmpResValid  ||  sal_False == bTmpRes))
+            while (i < nLen && (!bTmpResValid || !bTmpRes))
             {
                 // create specific service via it's implementation name
                 Reference< XSpellChecker > xSpell;
@@ -387,7 +387,7 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
                 if (xBroadcaster.is())
                     rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
 
-                bTmpResValid = sal_True;
+                bTmpResValid = true;
                 if (xSpell.is()  &&  xSpell->hasLocale( aLocale ))
                 {
                     bTmpRes = GetCache().CheckWord( aChkWord, nLanguage );
@@ -402,7 +402,7 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
                     }
                 }
                 else
-                    bTmpResValid = sal_False;
+                    bTmpResValid = false;
                 if (bTmpResValid)
                     bRes = bTmpRes;
 
@@ -447,7 +447,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             const OUString& rWord,
             LanguageType nLanguage,
             const PropertyValues& rProperties,
-            sal_Bool bCheckDics )
+            bool bCheckDics )
         throw(IllegalArgumentException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -484,7 +484,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
         sal_Int32 i = 0;
         Reference< XSpellAlternatives > xTmpRes;
-        sal_Bool bTmpResValid = sal_False;
+        bool bTmpResValid = false;
 
         // try already instantiated services first
         {
@@ -493,10 +493,10 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             while (i <= pEntry->nLastTriedSvcIndex
                    &&  (!bTmpResValid || xTmpRes.is()) )
             {
-                bTmpResValid = sal_True;
+                bTmpResValid = true;
                 if (pRef[i].is()  &&  pRef[i]->hasLocale( aLocale ))
                 {
-                    sal_Bool bOK = GetCache().CheckWord( aChkWord, nLanguage );
+                    bool bOK = GetCache().CheckWord( aChkWord, nLanguage );
                     if (bOK)
                         xTmpRes = NULL;
                     else
@@ -511,7 +511,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                     }
                 }
                 else
-                    bTmpResValid = sal_False;
+                    bTmpResValid = false;
 
                 // return first found result if the word is not known by any checker.
                 // But if that result has no suggestions use the first one that does
@@ -573,10 +573,10 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                 if (xBroadcaster.is())
                     rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
 
-                bTmpResValid = sal_True;
+                bTmpResValid = true;
                 if (xSpell.is()  &&  xSpell->hasLocale( aLocale ))
                 {
-                    sal_Bool bOK = GetCache().CheckWord( aChkWord, nLanguage );
+                    bool bOK = GetCache().CheckWord( aChkWord, nLanguage );
                     if (bOK)
                         xTmpRes = NULL;
                     else
@@ -591,7 +591,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                     }
                 }
                 else
-                    bTmpResValid = sal_False;
+                    bTmpResValid = false;
 
                 // return first found result if the word is not known by any checker.
                 // But if that result has no suggestions use the first one that does

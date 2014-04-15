@@ -87,7 +87,7 @@ static void lcl_RemoveAsPropertyChangeListener(
 }
 
 
-static sal_Bool lcl_IsFlushProperty( sal_Int32 nHandle )
+static bool lcl_IsFlushProperty( sal_Int32 nHandle )
 {
     int i;
     for (i = 0;  i < NUM_FLUSH_PROPS;  ++i)
@@ -174,7 +174,7 @@ void SAL_CALL FlushListener::processDictionaryListEvent(
                 DictionaryListEventFlags::DEL_POS_ENTRY     |
                 DictionaryListEventFlags::ACTIVATE_NEG_DIC  |
                 DictionaryListEventFlags::DEACTIVATE_POS_DIC;
-        sal_Bool bFlush = 0 != (nEvt & nFlushFlags);
+        bool bFlush = 0 != (nEvt & nFlushFlags);
 
         DBG_ASSERT( pFlushObj, "missing object (NULL pointer)" );
         if (bFlush && pFlushObj != NULL)
@@ -191,7 +191,7 @@ void SAL_CALL FlushListener::propertyChange(
 
     if (rEvt.Source == xPropSet)
     {
-        sal_Bool bFlush = lcl_IsFlushProperty( rEvt.PropertyHandle );
+        bool bFlush = lcl_IsFlushProperty( rEvt.PropertyHandle );
 
         DBG_ASSERT( pFlushObj, "missing object (NULL pointer)" );
         if (bFlush && pFlushObj != NULL)

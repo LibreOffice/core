@@ -82,16 +82,16 @@ class SpellCheckerDispatcher :
 
     void    ClearSvcList();
 
-    sal_Bool    isValid_Impl(const OUString& aWord, LanguageType nLanguage,
+    bool    isValid_Impl(const OUString& aWord, LanguageType nLanguage,
                     const ::com::sun::star::beans::PropertyValues& aProperties,
-                    sal_Bool bCheckDics)
+                    bool bCheckDics)
                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives >
             spell_Impl(const OUString& aWord, LanguageType nLanguage,
                     const ::com::sun::star::beans::PropertyValues& aProperties,
-                    sal_Bool bCheckDics)
+                    bool bCheckDics)
                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
 public:

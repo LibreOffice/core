@@ -111,7 +111,7 @@ void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
         sal_Int16 nLanguage )
 {
     static const OUString aEmpty;
-    sal_Bool bSthRemoved = sal_False;
+    bool bSthRemoved = false;
     sal_Int32 nLen = rSeq.getLength();
     OUString *pEntries = rSeq.getArray();
     for (sal_Int32 i = 0;  i < nLen;  ++i)
@@ -121,7 +121,7 @@ void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
         if (xNegEntry.is())
         {
             pEntries[i] = aEmpty;
-            bSthRemoved = sal_True;
+            bSthRemoved = true;
         }
     }
     if (bSthRemoved)

@@ -305,7 +305,7 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (rxListener.is())
     {
         sal_Int32   nCount = aLngSvcEvtListeners.getLength();
@@ -322,7 +322,7 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (rxListener.is())
     {
         sal_Int32   nCount = aLngSvcEvtListeners.getLength();
@@ -772,7 +772,7 @@ sal_Int16 PropertyHelper_Hyphenation::GetMinWordLength() const
     return pInst->GetMinWordLength();
 }
 
-sal_Bool PropertyHelper_Hyphenation::addLinguServiceEventListener(
+bool PropertyHelper_Hyphenation::addLinguServiceEventListener(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
             throw(::com::sun::star::uno::RuntimeException)
@@ -780,7 +780,7 @@ sal_Bool PropertyHelper_Hyphenation::addLinguServiceEventListener(
     return pInst->addLinguServiceEventListener( rxListener );
 }
 
-sal_Bool PropertyHelper_Hyphenation::removeLinguServiceEventListener(
+bool PropertyHelper_Hyphenation::removeLinguServiceEventListener(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
             throw(::com::sun::star::uno::RuntimeException)

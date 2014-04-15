@@ -289,9 +289,9 @@ void ConvDicXMLRightTextContext_Impl::EndElement()
 
 
 
-sal_Bool ConvDicXMLExport::Export()
+bool ConvDicXMLExport::Export()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     uno::Reference< document::XExporter > xExporter( this );
     uno::Reference< document::XFilter > xFilter( xExporter, UNO_QUERY );
@@ -328,7 +328,7 @@ sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eCl
 
     GetDocHandler()->endDocument();
 
-    bSuccess = sal_True;
+    bSuccess = true;
     return 0;
 }
 

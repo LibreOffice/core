@@ -195,7 +195,7 @@ LinguProps::LinguProps() :
     aPropListeners  (GetLinguMutex()),
     aPropertyMap(lcl_GetLinguProps())
 {
-    bDisposing = sal_False;
+    bDisposing = false;
 }
 
 void LinguProps::launchEvent( const PropertyChangeEvent &rEvt ) const
@@ -387,7 +387,7 @@ void SAL_CALL
 
     if (!bDisposing)
     {
-        bDisposing = sal_True;
+        bDisposing = true;
 
         //! its too late to save the options here!
         // (see AppExitListener for saving)
@@ -456,10 +456,10 @@ uno::Sequence< OUString > LinguProps::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-sal_Bool LinguProps::getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException)
+bool LinguProps::getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException)
 {
    uno::Any any = getPropertyValue(aPropertyName);
-   sal_Bool b = sal_False;
+   bool b = false;
    any >>= b;
    return b;
 }

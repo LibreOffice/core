@@ -123,9 +123,9 @@ void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport )
     }
 }
 
-sal_Bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType )
+bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
 
     if (rFileURL.isEmpty())
         return bRes;
@@ -166,7 +166,7 @@ ConvDic::ConvDic(
         const OUString &rName,
         sal_Int16 nLang,
         sal_Int16 nConvType,
-        sal_Bool bBiDirectional,
+        bool bBiDirectional,
         const OUString &rMainURL) :
     aFlushListeners( GetLinguMutex() )
 {
@@ -181,11 +181,11 @@ ConvDic::ConvDic(
         pConvPropType.reset( new PropTypeMap );
 
     nMaxLeftCharCount = nMaxRightCharCount = 0;
-    bMaxCharCountIsValid = sal_True;
+    bMaxCharCountIsValid = true;
 
-    bNeedEntries = sal_True;
-    bIsModified  = bIsActive = sal_False;
-    bIsReadonly = sal_False;
+    bNeedEntries = true;
+    bIsModified  = bIsActive = false;
+    bIsReadonly = false;
 
     if( !rMainURL.isEmpty() )
     {
@@ -194,7 +194,7 @@ ConvDic::ConvDic(
 
         if( !bExists )  // new empty dictionary
         {
-            bNeedEntries = sal_False;
+            bNeedEntries = false;
             //! create physical representation of an **empty** dictionary
             //! that could be found by the dictionary-list implementation
             // (Note: empty dictionaries are not just empty files!)
@@ -204,7 +204,7 @@ ConvDic::ConvDic(
     }
     else
     {
-        bNeedEntries = sal_False;
+        bNeedEntries = false;
     }
 }
 
@@ -219,12 +219,12 @@ void ConvDic::Load()
     DBG_ASSERT( !bIsModified, "dictionary is modified. Really do 'Load'?" );
 
     //!! prevent function from being called recursively via HasEntry, AddEntry
-    bNeedEntries = sal_False;
+    bNeedEntries = false;
     ConvDicXMLImport *pImport = new ConvDicXMLImport( this );
     //!! keep a first reference to ensure the lifetime of the object !!
     uno::Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
     ReadThroughDic( aMainURL, *pImport );    // will implicitly add the entries
-    bIsModified = sal_False;
+    bIsModified = false;
 }
 
 
@@ -267,10 +267,10 @@ void ConvDic::Save()
         //!! keep a first(!) reference until everything is done to
         //!! ensure the proper lifetime of the object
         uno::Reference< document::XFilter > aRef( (document::XFilter *) pExport );
-        sal_Bool bRet = pExport->Export();     // write entries to file
+        bool bRet = pExport->Export();     // write entries to file
         DBG_ASSERT( !pStream->GetError(), "I/O error while writing to stream" );
         if (bRet)
-            bIsModified = sal_False;
+            bIsModified = false;
     }
     DBG_ASSERT( !bIsModified, "dictionary still modified after save. Save failed?" );
 }
@@ -292,7 +292,7 @@ ConvMap::iterator ConvDic::GetEntry( ConvMap &rMap, const OUString &rFirstText, 
 }
 
 
-sal_Bool ConvDic::HasEntry( const OUString &rLeftText, const OUString &rRightText )
+bool ConvDic::HasEntry( const OUString &rLeftText, const OUString &rRightText )
 {
     if (bNeedEntries)
         Load();
@@ -319,7 +319,7 @@ void ConvDic::AddEntry( const OUString &rLeftText, const OUString &rRightText )
             nMaxRightCharCount  = (sal_Int16) rRightText.getLength();
     }
 
-    bIsModified = sal_True;
+    bIsModified = true;
 }
 
 
@@ -339,8 +339,8 @@ void ConvDic::RemoveEntry( const OUString &rLeftText, const OUString &rRightText
         pFromRight->erase( aRightIt );
     }
 
-    bIsModified = sal_True;
-    bMaxCharCountIsValid = sal_False;
+    bIsModified = true;
+    bMaxCharCountIsValid = false;
 }
 
 
@@ -391,11 +391,11 @@ void SAL_CALL ConvDic::clear(  )
     aFromLeft .clear();
     if (pFromRight.get())
         pFromRight->clear();
-    bNeedEntries    = sal_False;
-    bIsModified     = sal_True;
+    bNeedEntries    = false;
+    bIsModified     = true;
     nMaxLeftCharCount       = 0;
     nMaxRightCharCount      = 0;
-    bMaxCharCountIsValid    = sal_True;
+    bMaxCharCountIsValid    = true;
 }
 
 
@@ -436,19 +436,19 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
 }
 
 
-static sal_Bool lcl_SeqHasEntry(
+static bool lcl_SeqHasEntry(
     const OUString *pSeqStart,  // first element to check
     sal_Int32 nToCheck,             // number of elements to check
     const OUString &rText)
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (pSeqStart && nToCheck > 0)
     {
         const OUString *pDone = pSeqStart + nToCheck;   // one behind last to check
         while (!bRes && pSeqStart != pDone)
         {
             if (*pSeqStart++ == rText)
-                bRes = sal_True;
+                bRes = true;
         }
     }
     return bRes;
@@ -556,7 +556,7 @@ sal_Int16 SAL_CALL ConvDic::getMaxCharCount( ConversionDirection eDirection )
             }
         }
 
-        bMaxCharCountIsValid = sal_True;
+        bMaxCharCountIsValid = true;
     }
     sal_Int16 nRes = eDirection == ConversionDirection_FROM_LEFT ?
             nMaxLeftCharCount : nMaxRightCharCount;
@@ -571,7 +571,7 @@ void SAL_CALL ConvDic::setPropertyType(
         sal_Int16 nPropertyType )
     throw (container::NoSuchElementException, IllegalArgumentException, RuntimeException, std::exception)
 {
-    sal_Bool bHasElement = HasEntry( rLeftText, rRightText);
+    bool bHasElement = HasEntry( rLeftText, rRightText);
     if (!bHasElement)
         throw container::NoSuchElementException();
 
@@ -579,7 +579,7 @@ void SAL_CALL ConvDic::setPropertyType(
     // same PropertyType even if the right text is different...
     if (pConvPropType.get())
         pConvPropType->insert( PropTypeMap::value_type( rLeftText, nPropertyType ) );
-    bIsModified = sal_True;
+    bIsModified = true;
 }
 
 
@@ -588,7 +588,7 @@ sal_Int16 SAL_CALL ConvDic::getPropertyType(
         const OUString& rRightText )
     throw (container::NoSuchElementException, RuntimeException, std::exception)
 {
-    sal_Bool bHasElement = HasEntry( rLeftText, rRightText);
+    bool bHasElement = HasEntry( rLeftText, rRightText);
     if (!bHasElement)
         throw container::NoSuchElementException();
 

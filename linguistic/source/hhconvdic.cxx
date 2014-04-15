@@ -71,13 +71,13 @@ sal_Int16 SAL_CALL checkScriptType(sal_Unicode c) throw (RuntimeException)
 
 
 
-sal_Bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
+bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
 {
-    sal_Bool bIsAll = sal_True;
+    bool bIsAll = true;
     for (sal_Int32 i = 0;  i < rTxt.getLength() && bIsAll;  ++i)
     {
         if (checkScriptType( rTxt[i]) != nScriptType)
-            bIsAll = sal_False;
+            bIsAll = false;
     }
     return bIsAll;
 }
@@ -85,7 +85,7 @@ sal_Bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
 
 
 HHConvDic::HHConvDic( const OUString &rName, const OUString &rMainURL ) :
-    ConvDic( rName, LANGUAGE_KOREAN, ConversionDictionaryType::HANGUL_HANJA, sal_True, rMainURL )
+    ConvDic( rName, LANGUAGE_KOREAN, ConversionDictionaryType::HANGUL_HANJA, true, rMainURL )
 {
 }
 

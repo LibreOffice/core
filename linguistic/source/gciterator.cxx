@@ -236,9 +236,9 @@ static lang::Locale lcl_GetPrimaryLanguageOfSentence(
 
 
 GrammarCheckingIterator::GrammarCheckingIterator() :
-    m_bEnd( sal_False ),
+    m_bEnd( false ),
     m_aCurCheckedDocId(),
-    m_bGCServicesChecked( sal_False ),
+    m_bGCServicesChecked( false ),
     m_nDocIdCounter( 0 ),
     m_nLastEndOfSentencePos( -1 ),
     m_aEventListeners( MyMutex::get() ),
@@ -260,7 +260,7 @@ void GrammarCheckingIterator::TerminateThread()
         ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
         t = m_thread;
         m_thread = 0;
-        m_bEnd = sal_True;
+        m_bEnd = true;
         m_aWakeUpThread.set();
     }
     if (t != 0)
@@ -308,7 +308,7 @@ void GrammarCheckingIterator::AddEntry(
     uno::WeakReference< text::XFlatParagraph > xFlatPara,
     const OUString & rDocId,
     sal_Int32 nStartIndex,
-    sal_Bool bAutomatic )
+    bool bAutomatic )
 {
     // we may not need/have a xFlatParaIterator (e.g. if checkGrammarAtPos was called)
     // but we always need a xFlatPara...
@@ -339,11 +339,11 @@ void GrammarCheckingIterator::ProcessResult(
 {
     DBG_ASSERT( rRes.xFlatParagraph.is(), "xFlatParagraph is missing" );
      //no guard necessary as no members are used
-    sal_Bool bContinueWithNextPara = sal_False;
+    bool bContinueWithNextPara = false;
     if (!rRes.xFlatParagraph.is() || rRes.xFlatParagraph->isModified())
     {
         // if paragraph was modified/deleted meanwhile continue with the next one...
-        bContinueWithNextPara = sal_True;
+        bContinueWithNextPara = true;
     }
     else    // paragraph is still unchanged...
     {
@@ -412,7 +412,7 @@ void GrammarCheckingIterator::ProcessResult(
             if (rRes.xFlatParagraph.is())
                 rRes.xFlatParagraph->setChecked( text::TextMarkupType::PROOFREADING, true );
 
-            bContinueWithNextPara = sal_True;
+            bContinueWithNextPara = true;
         }
     }
 
@@ -442,7 +442,7 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
     if (!m_bGCServicesChecked)
     {
         GetConfiguredGCSvcs_Impl();
-        m_bGCServicesChecked = sal_True;
+        m_bGCServicesChecked = true;
     }
 
     const LanguageType nLang = LanguageTag::convertToLanguageType( rLocale, false);
@@ -527,7 +527,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
             uno::Reference< text::XFlatParagraph > xFlatPara;
             FPEntry aFPEntryItem;
             OUString aCurDocId;
-            sal_Bool bModified = sal_False;
+            bool bModified = false;
             // ---- THREAD SAFE START ----
             {
                 ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
@@ -820,7 +820,7 @@ throw (uno::RuntimeException, std::exception)
     // ---- THREAD SAFE START ----
     ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
 
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
 
     uno::Reference< lang::XComponent > xComponent( xDoc, uno::UNO_QUERY );
     if (xComponent.is())
@@ -837,7 +837,7 @@ throw (uno::RuntimeException, std::exception)
             if (!m_aCurCheckedDocId.isEmpty() && m_aCurCheckedDocId == aDocId)
             {
                 // an entry for that document was dequed and is currently being checked.
-                bRes = sal_True;
+                bRes = true;
             }
             else
             {
@@ -848,7 +848,7 @@ throw (uno::RuntimeException, std::exception)
                 for (sal_Int32 i = 0; i < nSize && !bRes; ++i)
                 {
                     if (aDocId == m_aFPEntriesQueue[i].m_aDocId)
-                        bRes = sal_True;
+                        bRes = true;
                 }
             }
         }

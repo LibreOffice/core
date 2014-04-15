@@ -85,7 +85,7 @@ class LinguProps :
     SfxItemPropertyMap                          aPropertyMap;
     SvtLinguConfig                              aConfig;
 
-    sal_Bool                                        bDisposing;
+    bool                                        bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     LinguProps(const LinguProps &);
@@ -93,10 +93,10 @@ class LinguProps :
 
     void    launchEvent( const ::com::sun::star::beans::PropertyChangeEvent &rEvt ) const;
 
-    sal_Bool getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException);
+    bool getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException);
     sal_Int16 getPropertyInt16(const OUString& aPropertyName) throw (css::uno::RuntimeException);
     css::lang::Locale getPropertyLocale(const OUString& aPropertyName) throw (css::uno::RuntimeException);
-    void setProperty(const OUString& aPropertyName, sal_Bool p1) throw (css::uno::RuntimeException)
+    void setProperty(const OUString& aPropertyName, bool p1) throw (css::uno::RuntimeException)
         { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
     void setProperty(const OUString& aPropertyName, sal_Int16 p1) throw (css::uno::RuntimeException)
         { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
@@ -109,23 +109,23 @@ public:
     virtual sal_Bool SAL_CALL getIsUseDictionaryList() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool(UPN_IS_USE_DICTIONARY_LIST); }
     virtual void SAL_CALL setIsUseDictionaryList(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty(UPN_IS_USE_DICTIONARY_LIST, p1); }
+        { setProperty(UPN_IS_USE_DICTIONARY_LIST, (bool) p1); }
     virtual sal_Bool SAL_CALL getIsIgnoreControlCharacters() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool(UPN_IS_IGNORE_CONTROL_CHARACTERS); }
     virtual void SAL_CALL setIsIgnoreControlCharacters(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty(UPN_IS_IGNORE_CONTROL_CHARACTERS, p1); }
+        { setProperty(UPN_IS_IGNORE_CONTROL_CHARACTERS, (bool) p1); }
     virtual sal_Bool SAL_CALL getIsSpellUpperCase() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool(UPN_IS_SPELL_UPPER_CASE); }
     virtual void SAL_CALL setIsSpellUpperCase(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty(UPN_IS_SPELL_UPPER_CASE, p1); }
+        { setProperty(UPN_IS_SPELL_UPPER_CASE, (bool) p1); }
     virtual sal_Bool SAL_CALL getIsSpellWithDigits() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool(UPN_IS_SPELL_WITH_DIGITS); }
     virtual void SAL_CALL setIsSpellWithDigits(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty(UPN_IS_SPELL_WITH_DIGITS, p1); }
+        { setProperty(UPN_IS_SPELL_WITH_DIGITS, (bool) p1); }
     virtual sal_Bool SAL_CALL getIsSpellCapitalization() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool(UPN_IS_SPELL_CAPITALIZATION); }
     virtual void SAL_CALL setIsSpellCapitalization(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty(UPN_IS_SPELL_CAPITALIZATION, p1); }
+        { setProperty(UPN_IS_SPELL_CAPITALIZATION, (bool) p1); }
     virtual sal_Int16 SAL_CALL getHyphMinLeading() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyInt16(UPN_HYPH_MIN_LEADING); }
     virtual void SAL_CALL setHyphMinLeading(sal_Int16 p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -145,23 +145,23 @@ public:
     virtual sal_Bool SAL_CALL getIsHyphAuto() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool(UPN_IS_HYPH_AUTO); }
     virtual void SAL_CALL setIsHyphAuto(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty(UPN_IS_HYPH_AUTO, p1); }
+        { setProperty(UPN_IS_HYPH_AUTO, (bool) p1); }
     virtual sal_Bool SAL_CALL getIsHyphSpecial() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool(UPN_IS_HYPH_SPECIAL); }
     virtual void SAL_CALL setIsHyphSpecial(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty(UPN_IS_HYPH_SPECIAL, p1); }
+        { setProperty(UPN_IS_HYPH_SPECIAL, (bool) p1); }
     virtual sal_Bool SAL_CALL getIsSpellAuto() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool(UPN_IS_SPELL_AUTO); }
     virtual void SAL_CALL setIsSpellAuto(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty(UPN_IS_SPELL_AUTO, p1); }
+        { setProperty(UPN_IS_SPELL_AUTO, (bool) p1); }
     virtual sal_Bool SAL_CALL getIsSpellSpecial() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool(UPN_IS_SPELL_SPECIAL); }
     virtual void SAL_CALL setIsSpellSpecial(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty(UPN_IS_SPELL_SPECIAL, p1); }
+        { setProperty(UPN_IS_SPELL_SPECIAL, (bool) p1); }
     virtual sal_Bool SAL_CALL getIsWrapReverse() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyBool(UPN_IS_WRAP_REVERSE); }
     virtual void SAL_CALL setIsWrapReverse(sal_Bool p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { setProperty(UPN_IS_WRAP_REVERSE, p1); }
+        { setProperty(UPN_IS_WRAP_REVERSE, (bool) p1); }
     virtual com::sun::star::lang::Locale SAL_CALL getDefaultLocale_CJK() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return getPropertyLocale(UPN_DEFAULT_LOCALE_CJK); }
     virtual void SAL_CALL setDefaultLocale_CJK(const com::sun::star::lang::Locale& p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE

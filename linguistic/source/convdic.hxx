@@ -39,7 +39,7 @@
 #define SN_CONV_DICTIONARY      "com.sun.star.linguistic2.ConversionDictionary"
 
 
-sal_Bool    IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType );
+bool    IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType );
 
 struct StrLT
 {
@@ -92,11 +92,11 @@ protected:
     sal_Int16       nConversionType;
     sal_Int16       nMaxLeftCharCount;
     sal_Int16       nMaxRightCharCount;
-    sal_Bool            bMaxCharCountIsValid;
-    sal_Bool            bNeedEntries;
-    sal_Bool            bIsModified;
-    sal_Bool            bIsActive;
-    sal_Bool            bIsReadonly;
+    bool            bMaxCharCountIsValid;
+    bool            bNeedEntries;
+    bool            bIsModified;
+    bool            bIsActive;
+    bool            bIsReadonly;
 
     // disallow copy-constructor and assignment-operator for now
     ConvDic(const ConvDic &);
@@ -110,7 +110,7 @@ public:
     ConvDic( const OUString &rName,
              sal_Int16 nLanguage,
              sal_Int16 nConversionType,
-             sal_Bool bBiDirectional,
+             bool bBiDirectional,
              const OUString &rMainURL);
     virtual ~ConvDic();
 
@@ -147,7 +147,7 @@ public:
     static com::sun::star::uno::Sequence< OUString >
         getSupportedServiceNames_Static() throw();
 
-    sal_Bool    HasEntry( const OUString &rLeftText, const OUString &rRightText );
+    bool    HasEntry( const OUString &rLeftText, const OUString &rRightText );
     void    AddEntry( const OUString &rLeftText, const OUString &rRightText );
     void    RemoveEntry( const OUString &rLeftText, const OUString &rRightText );
 };

@@ -86,8 +86,8 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
             sal_Int16 nOrigHyphPos = -1;
 
             OUStringBuffer aTmp( nTextLen );
-            sal_Bool  bSkip = sal_False;
-            sal_Bool  bSkip2 = sal_False;
+            bool  bSkip = false;
+            bool  bSkip2 = false;
             sal_Int32 nHyphIdx = -1;
             sal_Int32 nLeading = 0;
             for (sal_Int32 i = 0;  i < nTextLen;  i++)
@@ -99,7 +99,7 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                 {
                     aTmp.append( cTmp );
                     nLeading++;
-                    bSkip = sal_False;
+                    bSkip = false;
                     nHyphIdx++;
                 }
                 else
@@ -111,7 +111,7 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                             nOrigHyphPos = i;
                         }
                     }
-                    bSkip = sal_True;   //! multiple '=' should count as one only
+                    bSkip = true;   //! multiple '=' should count as one only
                 }
             }
 
@@ -202,8 +202,8 @@ Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
             sal_Int32 nHyphCount = 0;
 
             OUStringBuffer aTmp( nTextLen );
-            sal_Bool  bSkip = sal_False;
-            sal_Bool  bSkip2 = sal_False;
+            bool  bSkip = false;
+            bool  bSkip2 = false;
             sal_Int32 nHyphIdx = -1;
             for (sal_Int32 i = 0;  i < nTextLen;  i++)
             {
@@ -213,14 +213,14 @@ Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
                 if (cTmp != '=' && !bSkip2 && cTmp != ']')
                 {
                     aTmp.append( cTmp );
-                    bSkip = sal_False;
+                    bSkip = false;
                     nHyphIdx++;
                 }
                 else
                 {
                     if (!bSkip  &&  nHyphIdx >= 0)
                         pPos[ nHyphCount++ ] = (sal_Int16) nHyphIdx;
-                    bSkip = sal_True;   //! multiple '=' should count as one only
+                    bSkip = true;   //! multiple '=' should count as one only
                 }
             }
 

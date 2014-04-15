@@ -342,11 +342,11 @@ public:
     sal_Int16   GetMinLeading() const;
     sal_Int16   GetMinTrailing() const;
     sal_Int16   GetMinWordLength() const;
-    sal_Bool addLinguServiceEventListener(
+    bool addLinguServiceEventListener(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
             throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool removeLinguServiceEventListener(
+    bool removeLinguServiceEventListener(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
             throw(::com::sun::star::uno::RuntimeException);

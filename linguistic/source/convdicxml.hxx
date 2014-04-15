@@ -41,7 +41,7 @@ class ConvDic;
 class ConvDicXMLExport : public SvXMLExport
 {
     ConvDic     &rDic;
-    sal_Bool    bSuccess;
+    bool    bSuccess;
 
 public:
     ConvDicXMLExport( ConvDic &rConvDic,
@@ -50,7 +50,7 @@ public:
         SvXMLExport ( comphelper::getProcessComponentContext(), "com.sun.star.lingu2.ConvDicXMLExport", rFileName,
                       ::com::sun::star::util::MeasureUnit::CM, rHandler ),
         rDic        ( rConvDic ),
-        bSuccess    ( sal_False )
+        bSuccess    ( false )
     {
     }
     virtual ~ConvDicXMLExport()
@@ -63,7 +63,7 @@ public:
     void _ExportContent() SAL_OVERRIDE;
     sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) SAL_OVERRIDE;
 
-    sal_Bool    Export();
+    bool    Export();
 };
 
 
@@ -78,7 +78,7 @@ class ConvDicXMLImport : public SvXMLImport
 
     sal_Int16       nLanguage;          // language of the dictionary
     sal_Int16       nConversionType;    // conversion type the dictionary is used for
-    sal_Bool        bSuccess;
+    bool        bSuccess;
 
 public:
 
@@ -89,7 +89,7 @@ public:
     {
         nLanguage       = LANGUAGE_NONE;
         nConversionType = -1;
-        bSuccess        = sal_False;
+        bSuccess        = false;
     }
 
     virtual ~ConvDicXMLImport() throw ()
@@ -106,7 +106,7 @@ public:
     ConvDic *   GetDic()                    { return pDic; }
     sal_Int16       GetLanguage() const         { return nLanguage; }
     sal_Int16   GetConversionType() const   { return nConversionType; }
-    sal_Bool    GetSuccess() const          { return bSuccess; }
+    bool    GetSuccess() const          { return bSuccess; }
 
     void        SetLanguage( sal_Int16 nLang )              { nLanguage = nLang; }
     void        SetConversionType( sal_Int16 nType )    { nConversionType = nType; }

@@ -59,12 +59,12 @@ struct FPEntry
     sal_Int32       m_nStartIndex;
 
     // the flag to identify whether the document does automatical grammar checking
-    sal_Bool        m_bAutomatic;
+    bool        m_bAutomatic;
 
     FPEntry()
         : m_aDocId()
         , m_nStartIndex( 0 )
-        , m_bAutomatic( 0 )
+        , m_bAutomatic( false )
     {
     }
 };
@@ -91,7 +91,7 @@ class GrammarCheckingIterator:
     FPQueue_t       m_aFPEntriesQueue;
 
     // the flag to end the endless loop
-    sal_Bool        m_bEnd;
+    bool        m_bEnd;
 
     // Note that it must be the pointer and not the uno-reference to check if it is the same implementation object
     typedef std::map< XComponent *, OUString > DocMap_t;
@@ -107,7 +107,7 @@ class GrammarCheckingIterator:
     GCReferences_t  m_aGCReferencesByService;
 
     OUString m_aCurCheckedDocId;
-    sal_Bool        m_bGCServicesChecked;
+    bool        m_bGCServicesChecked;
     sal_Int32       m_nDocIdCounter;
     sal_Int32       m_nLastEndOfSentencePos;
     osl::Condition  m_aWakeUpThread;
@@ -129,7 +129,7 @@ class GrammarCheckingIterator:
     void AddEntry(
             ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XFlatParagraphIterator > xFlatParaIterator,
             ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XFlatParagraph > xFlatPara,
-            const OUString &rDocId, sal_Int32 nStartIndex, sal_Bool bAutomatic );
+            const OUString &rDocId, sal_Int32 nStartIndex, bool bAutomatic );
 
     void ProcessResult( const ::com::sun::star::linguistic2::ProofreadingResult &rRes,
             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraphIterator > &rxFlatParagraphIterator,

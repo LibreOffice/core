@@ -284,7 +284,7 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
             ::ucbhelper::Content    aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ),
                                     uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                     comphelper::getProcessComponentContext() );
-            aCnt.executeCommand( "delete", makeAny( sal_Bool( sal_True ) ) );
+            aCnt.executeCommand( "delete", makeAny( true ) );
         }
         catch( ::com::sun::star::ucb::CommandAbortedException& )
         {
@@ -341,7 +341,7 @@ void ConvDicNameContainer::AddConvDics(
             else if ((nLang == LANGUAGE_CHINESE_SIMPLIFIED || nLang == LANGUAGE_CHINESE_TRADITIONAL) &&
                       nConvType == ConversionDictionaryType::SCHINESE_TCHINESE)
             {
-                xDic = new ConvDic( aDicName, nLang, nConvType, sal_False, aURL );
+                xDic = new ConvDic( aDicName, nLang, nConvType, false, aURL );
             }
 
             if (xDic.is())
@@ -374,7 +374,7 @@ ConvDicList::ConvDicList() :
     aEvtListeners( GetLinguMutex() )
 {
     pNameContainer = 0;
-    bDisposing = sal_False;
+    bDisposing = false;
 
     pExitListener = new MyAppExitListener( *this );
     xExitListener = pExitListener;
@@ -465,7 +465,7 @@ uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
     else if ((nLang == LANGUAGE_CHINESE_SIMPLIFIED || nLang == LANGUAGE_CHINESE_TRADITIONAL) &&
               nConvDicType == ConversionDictionaryType::SCHINESE_TCHINESE)
     {
-        xRes = new ConvDic( rName, nLang, nConvDicType, sal_False, aDicMainURL );
+        xRes = new ConvDic( rName, nLang, nConvDicType, false, aDicMainURL );
     }
 
     if (!xRes.is())
@@ -496,12 +496,12 @@ uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
     uno::Sequence< OUString > aRes( 20 );
     OUString *pRes = aRes.getArray();
 
-    sal_Bool bSupported = sal_False;
+    bool bSupported = false;
     sal_Int32 nLen = GetNameContainer().GetCount();
     for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         const uno::Reference< XConversionDictionary > xDic( GetNameContainer().GetByIndex(i) );
-        sal_Bool bMatch =   xDic.is()  &&
+        bool bMatch =   xDic.is()  &&
                             xDic->getLocale() == rLocale  &&
                             xDic->getConversionType() == nConversionDictionaryType;
         bSupported |= bMatch;
@@ -564,7 +564,7 @@ void SAL_CALL ConvDicList::dispose(  )
     MutexGuard  aGuard( GetLinguMutex() );
     if (!bDisposing)
     {
-        bDisposing = sal_True;
+        bDisposing = true;
         EventObject aEvtObj( (XConversionDictionaryList *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
 

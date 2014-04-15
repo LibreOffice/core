@@ -40,11 +40,11 @@ using namespace linguistic;
 
 
 
-static sal_Bool SvcListHasLanguage(
+static bool SvcListHasLanguage(
         const Sequence< Reference< XThesaurus > > &rRefs,
         const Locale &rLocale )
 {
-    sal_Bool bHasLanguage = sal_False;
+    bool bHasLanguage = false;
 
     const Reference< XThesaurus > *pRef = rRefs.getConstArray();
     sal_Int32 nLen = rRefs.getLength();

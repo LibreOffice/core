@@ -106,7 +106,7 @@ class LngSvcMgr :
     SvcInfoArray *                                      pAvailHyphSvcs;
     SvcInfoArray *                                      pAvailThesSvcs;
 
-    sal_Bool bDisposing;
+    bool bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     LngSvcMgr(const LngSvcMgr &);
@@ -118,17 +118,17 @@ class LngSvcMgr :
     void    GetAvailableThesSvcs_Impl();
     void    GetListenerHelper_Impl();
 
-    void    GetSpellCheckerDsp_Impl( sal_Bool bSetSvcList = sal_True );
-    void    GetGrammarCheckerDsp_Impl( sal_Bool bSetSvcList = sal_True );
-    void    GetHyphenatorDsp_Impl( sal_Bool bSetSvcList = sal_True );
-    void    GetThesaurusDsp_Impl( sal_Bool bSetSvcList = sal_True );
+    void    GetSpellCheckerDsp_Impl( bool bSetSvcList = true );
+    void    GetGrammarCheckerDsp_Impl( bool bSetSvcList = true );
+    void    GetHyphenatorDsp_Impl( bool bSetSvcList = true );
+    void    GetThesaurusDsp_Impl( bool bSetSvcList = true );
 
     void    SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp );
     void    SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp );
     void    SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp );
     void    SetCfgServiceLists( ThesaurusDispatcher &rThesDsp );
 
-    sal_Bool    SaveCfgSvcs( const OUString &rServiceName );
+    bool    SaveCfgSvcs( const OUString &rServiceName );
 
     static void clearSvcInfoArray(SvcInfoArray *&rpInfo);
 
@@ -178,7 +178,7 @@ public:
     static inline OUString   getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw();
 
-    sal_Bool    AddLngSvcEvtBroadcaster(
+    bool    AddLngSvcEvtBroadcaster(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
 };

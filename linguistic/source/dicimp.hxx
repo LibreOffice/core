@@ -34,7 +34,7 @@
 
 #define DIC_MAX_ENTRIES     30000
 
-sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNeg );
+sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, bool &bNeg );
 
 class DictionaryNeo :
     public ::cppu::WeakImplHelper2
@@ -48,16 +48,16 @@ class DictionaryNeo :
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XDictionaryEntry > > aEntries;
-    OUString                                             aDicName;
-    OUString                                             aMainURL;
+    OUString                                                    aDicName;
+    OUString                                                    aMainURL;
     ::com::sun::star::linguistic2::DictionaryType               eDicType;
-    sal_Int16                                                       nCount;
-    sal_Int16                                                       nLanguage;
-    sal_Int16                                                       nDicVersion;
-    sal_Bool                                                        bNeedEntries;
-    sal_Bool                                                        bIsModified;
-    sal_Bool                                                        bIsActive;
-    sal_Bool                                                        bIsReadonly;
+    sal_Int16                                                   nCount;
+    sal_Int16                                                   nLanguage;
+    sal_Int16                                                   nDicVersion;
+    bool                                                        bNeedEntries;
+    bool                                                        bIsModified;
+    bool                                                        bIsActive;
+    bool                                                        bIsReadonly;
 
     // disallow copy-constructor and assignment-operator for now
     DictionaryNeo(const DictionaryNeo &);
@@ -71,20 +71,20 @@ class DictionaryNeo :
     sal_uLong                   saveEntries(const OUString &rMainURL);
     int                     cmpDicEntry(const OUString &rWord1,
                                         const OUString &rWord2,
-                                        sal_Bool bSimilarOnly = sal_False);
-    sal_Bool                    seekEntry(const OUString &rWord, sal_Int32 *pPos,
-                                        sal_Bool bSimilarOnly = sal_False);
+                                        bool bSimilarOnly = false);
+    bool                    seekEntry(const OUString &rWord, sal_Int32 *pPos,
+                                        bool bSimilarOnly = false);
     bool                        isSorted();
 
-    sal_Bool                    addEntry_Impl(const ::com::sun::star::uno::Reference<
+    bool                    addEntry_Impl(const ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryEntry > xDicEntry,
-                                          sal_Bool bIsLoadEntries = sal_False);
+                                          bool bIsLoadEntries = false);
 
 public:
     DictionaryNeo(const OUString &rName, sal_Int16 nLang,
                     ::com::sun::star::linguistic2::DictionaryType eType,
                     const OUString &rMainURL,
-                    sal_Bool bWriteable );
+                    bool bWriteable );
     virtual ~DictionaryNeo();
 
     // XNamed
@@ -187,7 +187,7 @@ class DicEntry :
 {
     OUString aDicWord,       // including hyphen positions represented by "="
                     aReplacement;   // including hyphen positions represented by "="
-    sal_Bool            bIsNegativ;
+    bool            bIsNegativ;
 
     // disallow copy-constructor and assignment-operator for now
     DicEntry(const DicEntry &);
@@ -198,8 +198,8 @@ class DicEntry :
                                      OUString &rReplacement);
 
 public:
-    DicEntry(const OUString &rDicFileWord, sal_Bool bIsNegativ);
-    DicEntry(const OUString &rDicWord, sal_Bool bIsNegativ,
+    DicEntry(const OUString &rDicFileWord, bool bIsNegativ);
+    DicEntry(const OUString &rDicWord, bool bIsNegativ,
              const OUString &rRplcText);
     virtual ~DicEntry();
 

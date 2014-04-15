@@ -62,7 +62,7 @@ class ConvDicList :
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::
                 XTerminateListener >        xExitListener;
 
-    sal_Bool                                    bDisposing;
+    bool                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     ConvDicList( const ConvDicList & );
