@@ -66,7 +66,7 @@ Reference< XCoordinateSystem > SAL_CALL
 
     Reference< XCoordinateSystem > xResult(
         new PolarCoordinateSystem(
-            GetComponentContext(), DimensionCount, /* bSwapXAndYAxis */ sal_False ));
+            GetComponentContext(), DimensionCount, /* bSwapXAndYAxis */ false ));
 
     Reference< XAxis > xAxis( xResult->getAxisByDimension( 0, MAIN_AXIS_INDEX ) );
     if( xAxis.is() )

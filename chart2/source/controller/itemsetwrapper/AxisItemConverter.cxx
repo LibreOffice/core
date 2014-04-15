@@ -217,7 +217,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
         case SCHATTR_AXIS_LOGARITHM:
             {
-                sal_Bool bValue = AxisHelper::isLogarithmic( rScale.Scaling );
+                bool bValue = AxisHelper::isLogarithmic( rScale.Scaling );
                 rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
             }
             break;

@@ -31,7 +31,7 @@ const short FLAG_MODEL      =2;
 if(rProp.Name.equals(#MediaName)) \
 {                                                       \
     if( rProp.Value >>= MediaName )                     \
-        ISSET_##MediaName = sal_True;                   \
+        ISSET_##MediaName = true;                       \
     if((nFlags & FLAG_DEPRECATED) != 0)                 \
     {                                                   \
         m_aDeprecatedProperties[nDeprecatedCount]=rProp;\
@@ -130,70 +130,70 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
 
 void MediaDescriptorHelper::impl_init()
 {
-    AsTemplate = sal_False;
-    ISSET_AsTemplate = sal_False;
+    AsTemplate = false;
+    ISSET_AsTemplate = false;
 
-    ISSET_Author = sal_False;
-    ISSET_CharacterSet = sal_False;
-    ISSET_Comment = sal_False;
+    ISSET_Author = false;
+    ISSET_CharacterSet = false;
+    ISSET_Comment = false;
 
 //  ::com::sun::star::uno::Any  ComponentData;
-    ISSET_ComponentData = sal_False;
-    ISSET_FileName = sal_False;
+    ISSET_ComponentData = false;
+    ISSET_FileName = false;
 
 //  ::com::sun::star::uno::Any  FilterData;
-    ISSET_FilterData = sal_False;
-    ISSET_FilterName = sal_False;
-    ISSET_FilterFlags = sal_False;
-    ISSET_FilterOptions = sal_False;
-    ISSET_FrameName = sal_False;
+    ISSET_FilterData = false;
+    ISSET_FilterName = false;
+    ISSET_FilterFlags = false;
+    ISSET_FilterOptions = false;
+    ISSET_FrameName = false;
 
-    Hidden = sal_False;
-    ISSET_Hidden = sal_False;
-    ISSET_HierarchicalDocumentName = sal_False;
-    ISSET_OutputStream = sal_False;
-    ISSET_InputStream = sal_False;
-    ISSET_InteractionHandler = sal_False;
-    ISSET_JumpMark = sal_False;
-    ISSET_MediaType = sal_False;
-    ISSET_OpenFlags = sal_False;
-    OpenNewView = sal_False;
-    ISSET_OpenNewView = sal_False;
-    Overwrite = sal_False;
-    ISSET_Overwrite = sal_False;
-    ISSET_Password = sal_False;
+    Hidden = false;
+    ISSET_Hidden = false;
+    ISSET_HierarchicalDocumentName = false;
+    ISSET_OutputStream = false;
+    ISSET_InputStream = false;
+    ISSET_InteractionHandler = false;
+    ISSET_JumpMark = false;
+    ISSET_MediaType = false;
+    ISSET_OpenFlags = false;
+    OpenNewView = false;
+    ISSET_OpenNewView = false;
+    Overwrite = false;
+    ISSET_Overwrite = false;
+    ISSET_Password = false;
 
 //  ::com::sun::star::awt::Rectangle PosSize;
-    ISSET_PosSize = sal_False;
+    ISSET_PosSize = false;
 
 //  ::com::sun::star::uno::Sequence< sal_Int8 > PostData;
-    ISSET_PostData = sal_False;
-    ISSET_PostString = sal_False;
-    Preview = sal_False;
-    ISSET_Preview = sal_False;
-    ReadOnly = sal_False;
-    ISSET_ReadOnly = sal_False;
-    ISSET_Referer = sal_False;
-    ISSET_StatusIndicator = sal_False;
-    Silent = sal_False;
-    ISSET_Silent = sal_False;
-    ISSET_TemplateName = sal_False;
-    ISSET_TemplateRegionName = sal_False;
-    Unpacked = sal_False;
-    ISSET_Unpacked = sal_False;
-    ISSET_URL = sal_False;
+    ISSET_PostData = false;
+    ISSET_PostString = false;
+    Preview = false;
+    ISSET_Preview = false;
+    ReadOnly = false;
+    ISSET_ReadOnly = false;
+    ISSET_Referer = false;
+    ISSET_StatusIndicator = false;
+    Silent = false;
+    ISSET_Silent = false;
+    ISSET_TemplateName = false;
+    ISSET_TemplateRegionName = false;
+    Unpacked = false;
+    ISSET_Unpacked = false;
+    ISSET_URL = false;
     Version = 0;
-    ISSET_Version = sal_False;
+    ISSET_Version = false;
 
 //  ::com::sun::star::uno::Any ViewData;
-    ISSET_ViewData = sal_False;
+    ISSET_ViewData = false;
     ViewId = 0;
-    ISSET_ViewId = sal_False;
+    ISSET_ViewId = false;
 
-    ISSET_WinExtent = sal_False;
+    ISSET_WinExtent = false;
 
-    ISSET_Storage = sal_False;
-    ISSET_Stream = sal_False;
+    ISSET_Storage = false;
+    ISSET_Stream = false;
 }
 
     uno::Sequence< beans::PropertyValue > MediaDescriptorHelper

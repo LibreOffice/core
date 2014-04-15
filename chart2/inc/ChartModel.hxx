@@ -115,10 +115,10 @@ private:
     mutable ::apphelper::CloseableLifeTimeManager   m_aLifeTimeManager;
 
     mutable ::osl::Mutex    m_aModelMutex;
-    sal_Bool volatile       m_bReadOnly;
-    sal_Bool volatile       m_bModified;
+    bool volatile       m_bReadOnly;
+    bool volatile       m_bModified;
     sal_Int32               m_nInLoad;
-    sal_Bool volatile       m_bUpdateNotificationsPending;
+    bool volatile       m_bUpdateNotificationsPending;
 
     bool mbTimeBased;
 
@@ -178,7 +178,7 @@ private:
 
     OUString impl_g_getLocation();
 
-    sal_Bool
+    bool
         impl_isControllerConnected( const com::sun::star::uno::Reference<
                             com::sun::star::frame::XController >& xController );
 

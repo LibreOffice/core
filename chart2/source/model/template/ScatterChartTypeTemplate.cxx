@@ -238,7 +238,7 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
     sal_Bool bAdaptProperties )
     throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
+    bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
     // check symbol-style and line-style
     // for a template with symbols (or with lines) it is ok, if there is at least one series

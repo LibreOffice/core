@@ -190,8 +190,8 @@ protected:
             // todo: use a valid context
             xErrorBarProperties = ::chart::createErrorBar( uno::Reference< uno::XComponentContext >() );
             //default in new and old api are different
-            xErrorBarProperties->setPropertyValue( "ShowPositiveError" , uno::makeAny(sal_Bool(sal_False)) );
-            xErrorBarProperties->setPropertyValue( "ShowNegativeError" , uno::makeAny(sal_Bool(sal_False)) );
+            xErrorBarProperties->setPropertyValue( "ShowPositiveError" , uno::makeAny(false) );
+            xErrorBarProperties->setPropertyValue( "ShowNegativeError" , uno::makeAny(false) );
             xErrorBarProperties->setPropertyValue( "ErrorBarStyle" , uno::makeAny(::com::sun::star::chart::ErrorBarStyle::NONE) );
             xSeriesPropertySet->setPropertyValue( "ErrorBarY" , uno::makeAny( xErrorBarProperties ) );
         }
@@ -332,7 +332,7 @@ WrappedMeanValueProperty::~WrappedMeanValueProperty()
 
 sal_Bool WrappedMeanValueProperty::getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropertySet, uno::UNO_QUERY );
     if( xRegCnt.is() )
         bRet = RegressionCurveHelper::hasMeanValueLine( xRegCnt );
@@ -588,8 +588,8 @@ WrappedErrorIndicatorProperty::~WrappedErrorIndicatorProperty()
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
     if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( "ErrorBarY" ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
-        sal_Bool bPositive = sal_False;
-        sal_Bool bNegative = sal_False;
+        bool bPositive = false;
+        bool bNegative = false;
         xErrorBarProperties->getPropertyValue( "ShowPositiveError" ) >>= bPositive;
         xErrorBarProperties->getPropertyValue( "ShowNegativeError" ) >>= bNegative;
 
@@ -607,19 +607,19 @@ void WrappedErrorIndicatorProperty::setValueToSeries( const Reference< beans::XP
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
     {
-        sal_Bool bPositive = sal_False;
-        sal_Bool bNegative = sal_False;
+        bool bPositive = false;
+        bool bNegative = false;
         switch( aNewValue )
         {
             case ::com::sun::star::chart::ChartErrorIndicatorType_TOP_AND_BOTTOM:
-                bPositive = sal_True;
-                bNegative = sal_True;
+                bPositive = true;
+                bNegative = true;
                 break;
             case ::com::sun::star::chart::ChartErrorIndicatorType_UPPER:
-                bPositive = sal_True;
+                bPositive = true;
                 break;
             case ::com::sun::star::chart::ChartErrorIndicatorType_LOWER:
-                bNegative = sal_True;
+                bNegative = true;
                 break;
             default:
                 break;

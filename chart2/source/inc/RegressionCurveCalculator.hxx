@@ -53,7 +53,7 @@ protected:
     double m_fCorrelationCoeffitient;
 
     sal_Int32 mDegree;
-    sal_Bool  mForceIntercept;
+    bool  mForceIntercept;
     double    mInterceptValue;
     sal_Int32 mPeriod;
 

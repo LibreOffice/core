@@ -307,7 +307,7 @@ WrappedDataSourceLabelsInFirstRowProperty::~WrappedDataSourceLabelsInFirstRowPro
 void WrappedDataSourceLabelsInFirstRowProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bLabelsInFirstRow = sal_True;
+    bool bLabelsInFirstRow = true;
     if( ! (rOuterValue >>= bLabelsInFirstRow) )
         throw lang::IllegalArgumentException("Property DataSourceLabelsInFirstRow requires value of type boolean", 0, 0 );
 
@@ -350,7 +350,7 @@ Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyValue( const Reference
             m_spChart2ModelContact->getChartModel(), aRangeString, aSequenceMapping, bUseColumns
             , bFirstCellAsLabel, bHasCategories ) )
     {
-        sal_Bool bLabelsInFirstRow = sal_True;
+        bool bLabelsInFirstRow = true;
         if( bUseColumns )
             bLabelsInFirstRow = bFirstCellAsLabel;
         else
@@ -405,7 +405,7 @@ WrappedDataSourceLabelsInFirstColumnProperty::~WrappedDataSourceLabelsInFirstCol
 void WrappedDataSourceLabelsInFirstColumnProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bLabelsInFirstRow = sal_True;
+    bool bLabelsInFirstRow = true;
     if( ! (rOuterValue >>= bLabelsInFirstRow) )
         throw lang::IllegalArgumentException("Property DataSourceLabelsInFirstRow requires value of type boolean", 0, 0 );
 
@@ -448,7 +448,7 @@ Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyValue( const Refere
             m_spChart2ModelContact->getChartModel(), aRangeString, aSequenceMapping, bUseColumns
             , bFirstCellAsLabel, bHasCategories ) )
     {
-        sal_Bool bLabelsInFirstColumn = sal_True;
+        bool bLabelsInFirstColumn = true;
         if( bUseColumns )
             bLabelsInFirstColumn = bHasCategories;
         else
@@ -500,7 +500,7 @@ WrappedHasLegendProperty::~WrappedHasLegendProperty()
 void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewValue = sal_True;
+    bool bNewValue = true;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException("Property HasLegend requires value of type boolean", 0, 0 );
 
@@ -510,7 +510,7 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
         if(xLegend.is())
         {
             Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY_THROW );
-            sal_Bool bOldValue = sal_True;
+            bool bOldValue = true;
             Any aAOld = xLegendProp->getPropertyValue("Show");
             aAOld >>= bOldValue;
             if( bOldValue != bNewValue )
@@ -584,7 +584,7 @@ WrappedHasMainTitleProperty::~WrappedHasMainTitleProperty()
 void WrappedHasMainTitleProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewValue = sal_True;
+    bool bNewValue = true;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException("Property HasMainTitle requires value of type boolean", 0, 0 );
 
@@ -607,7 +607,7 @@ Any WrappedHasMainTitleProperty::getPropertyValue( const Reference< beans::XProp
     Any aRet;
     try
     {
-        aRet <<= sal_Bool( TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_spChart2ModelContact->getChartModel() ).is() );
+        aRet <<= TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_spChart2ModelContact->getChartModel() ).is();
     }
     catch (const uno::Exception& ex)
     {
@@ -657,7 +657,7 @@ WrappedHasSubTitleProperty::~WrappedHasSubTitleProperty()
 void WrappedHasSubTitleProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewValue = sal_True;
+    bool bNewValue = true;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException("Property HasSubTitle requires value of type boolean", 0, 0 );
 
@@ -680,7 +680,7 @@ Any WrappedHasSubTitleProperty::getPropertyValue( const Reference< beans::XPrope
     Any aRet;
     try
     {
-        aRet <<= sal_Bool( TitleHelper::getTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getChartModel() ).is() );
+        aRet <<= TitleHelper::getTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getChartModel() ).is();
     }
     catch (const uno::Exception& ex)
     {
@@ -700,7 +700,7 @@ Any WrappedHasSubTitleProperty::getPropertyDefault( const Reference< beans::XPro
 ChartDocumentWrapper::ChartDocumentWrapper(
     const Reference< uno::XComponentContext > & xContext ) :
         m_spChart2ModelContact( new Chart2ModelContact( xContext ) ),
-        m_bUpdateAddIn( sal_True ),
+        m_bUpdateAddIn( true ),
         m_bIsDisposed( false )
 {
 }
@@ -1065,11 +1065,11 @@ void ChartDocumentWrapper::setAddIn( const Reference< util::XRefreshable >& xAdd
     }
 }
 
-void ChartDocumentWrapper::setUpdateAddIn( sal_Bool bUpdateAddIn )
+void ChartDocumentWrapper::setUpdateAddIn( bool bUpdateAddIn )
 {
     m_bUpdateAddIn = bUpdateAddIn;
 }
-sal_Bool ChartDocumentWrapper::getUpdateAddIn() const
+bool ChartDocumentWrapper::getUpdateAddIn() const
 {
     return m_bUpdateAddIn;
 }
@@ -1364,7 +1364,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                         Sequence< Any > aArguments(2);
                         Reference<frame::XModel> xModel(this);
                         aArguments[0]=uno::makeAny(xModel);
-                        sal_Bool bRefreshAddIn = sal_True;
+                        bool bRefreshAddIn = true;
                         aArguments[1]=uno::makeAny(bRefreshAddIn);
                         xViewInit->initialize(aArguments);
                     }

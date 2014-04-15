@@ -320,7 +320,7 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
     sal_Bool /* bAdaptProperties */ )
     throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if( ! xDiagram.is())
         return bResult;
@@ -449,7 +449,7 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
     throw (uno::RuntimeException, std::exception)
 {
     // reset number format if we had percent stacking on
-    sal_Bool bPercent = (getStackMode(0) == StackMode_Y_STACKED_PERCENT);
+    bool bPercent = (getStackMode(0) == StackMode_Y_STACKED_PERCENT);
     if( bPercent )
     {
         Sequence< Reference< chart2::XAxis > > aAxisSeq( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
@@ -754,7 +754,7 @@ void ChartTypeTemplate::adaptAxes(
                     if( nAxisIndex == MAIN_AXIS_INDEX || nAxisIndex == SECONDARY_AXIS_INDEX )
                     {
                         // adapt scales
-                        sal_Bool bPercent = (getStackMode(0) == StackMode_Y_STACKED_PERCENT);
+                        bool bPercent = (getStackMode(0) == StackMode_Y_STACKED_PERCENT);
                         if( bPercent && nDim == 1 )
                         {
                             Reference< beans::XPropertySet > xAxisProp( xAxis, uno::UNO_QUERY );

@@ -31,7 +31,7 @@ public:
     PieChartType(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
-        sal_Bool bUseRings = sal_False );
+        bool bUseRings = false );
     virtual ~PieChartType();
 
     virtual OUString SAL_CALL

@@ -408,14 +408,14 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
     sal_Bool /* bAdaptProperties */ )
     throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if( ! xDiagram.is())
         return bResult;
 
     try
     {
-        sal_Bool bHasVolume = false, bHasOpenValue = false, bHasJapaneseStyle = false;
+        bool bHasVolume = false, bHasOpenValue = false, bHasJapaneseStyle = false;
 
         getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME ) >>= bHasVolume;
         getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_OPEN ) >>= bHasOpenValue;
@@ -466,12 +466,12 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
             Reference< beans::XPropertySet > xCTProp( xCandleStickChartType, uno::UNO_QUERY );
             if( xCTProp.is())
             {
-                sal_Bool bJapaneseProp = sal_False;
+                bool bJapaneseProp = false;
                 xCTProp->getPropertyValue( "Japanese") >>= bJapaneseProp;
                 bResult = bResult && ( bHasJapaneseStyle == bJapaneseProp );
 
                 // in old chart japanese == showFirst
-                sal_Bool bShowFirstProp = sal_False;
+                bool bShowFirstProp = false;
                 xCTProp->getPropertyValue( "ShowFirst") >>= bShowFirstProp;
                 bResult = bResult && ( bHasOpenValue == bShowFirstProp );
             }

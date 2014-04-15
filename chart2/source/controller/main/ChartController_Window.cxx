@@ -1886,7 +1886,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
 
     Point aMousePos( m_pChartWindow->PixelToLogic( rEvent.GetPosPixel()));
     sal_uInt16 nModifier = rEvent.GetModifier();
-    sal_Bool bLeftDown = rEvent.IsLeft();
+    bool bLeftDown = rEvent.IsLeft();
 
     if ( m_pDrawViewWrapper->IsTextEdit() )
     {

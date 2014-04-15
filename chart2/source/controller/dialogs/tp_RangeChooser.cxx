@@ -203,11 +203,11 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
 
     if( m_bIsDirty )
     {
-        sal_Bool bFirstCellAsLabel = ( m_pCB_FirstColumnAsLabel->IsChecked() && !m_pRB_Columns->IsChecked() )
+        bool bFirstCellAsLabel = ( m_pCB_FirstColumnAsLabel->IsChecked() && !m_pRB_Columns->IsChecked() )
             || ( m_pCB_FirstRowAsLabel->IsChecked()    && !m_pRB_Rows->IsChecked() );
-        sal_Bool bHasCategories = ( m_pCB_FirstColumnAsLabel->IsChecked() && m_pRB_Columns->IsChecked() )
+        bool bHasCategories = ( m_pCB_FirstColumnAsLabel->IsChecked() && m_pRB_Columns->IsChecked() )
             || ( m_pCB_FirstRowAsLabel->IsChecked()    && m_pRB_Rows->IsChecked() );
-        sal_Bool bTimeBased = m_pCB_TimeBased->IsChecked();
+        bool bTimeBased = m_pCB_TimeBased->IsChecked();
 
         Sequence< beans::PropertyValue > aArguments(
             DataSourceHelper::createArguments(

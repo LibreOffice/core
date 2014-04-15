@@ -166,7 +166,7 @@ sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
     sal_Bool bAdaptProperties )
     throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
+    bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
     //check BarDirection
     if( bResult )
@@ -175,9 +175,9 @@ sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
         bool bAmbiguous = false;
         bool bVertical = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
         if( m_eBarDirection == HORIZONTAL )
-            bResult = sal_Bool( bVertical );
+            bResult = bVertical;
         else if( m_eBarDirection == VERTICAL )
-            bResult = sal_Bool( !bVertical );
+            bResult = !bVertical;
     }
 
     // adapt solid-type of template according to values in series

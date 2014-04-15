@@ -163,8 +163,8 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
 
     , m_eStackingDirection(StackingDirection_NO_STACKING)
     , m_nAxisIndex(0)
-    , m_bConnectBars(sal_False)
-    , m_bGroupBarsPerAxis(sal_True)
+    , m_bConnectBars(false)
+    , m_bGroupBarsPerAxis(true)
     , m_nStartingAngle(90)
 
     , m_nGlobalSeriesIndex(0)
@@ -429,19 +429,19 @@ sal_Int32 VDataSeries::getAttachedAxisIndex() const
 {
     return m_nAxisIndex;
 }
-void VDataSeries::setConnectBars( sal_Bool bConnectBars )
+void VDataSeries::setConnectBars( bool bConnectBars )
 {
     m_bConnectBars = bConnectBars;
 }
-sal_Bool VDataSeries::getConnectBars() const
+bool VDataSeries::getConnectBars() const
 {
     return m_bConnectBars;
 }
-void VDataSeries::setGroupBarsPerAxis( sal_Bool bGroupBarsPerAxis )
+void VDataSeries::setGroupBarsPerAxis( bool bGroupBarsPerAxis )
 {
     m_bGroupBarsPerAxis = bGroupBarsPerAxis;
 }
-sal_Bool VDataSeries::getGroupBarsPerAxis() const
+bool VDataSeries::getGroupBarsPerAxis() const
 {
     return m_bGroupBarsPerAxis;
 }
@@ -632,7 +632,7 @@ sal_Int32 VDataSeries::detectNumberFormatKey( sal_Int32 index ) const
     return nRet;
 }
 
-sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Bool bSwapXAndY ) const
+sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, bool bSwapXAndY ) const
 {
     sal_Int32 nLabelPlacement=0;
     try

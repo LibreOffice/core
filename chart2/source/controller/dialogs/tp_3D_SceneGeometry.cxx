@@ -130,7 +130,7 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     m_pMFPerspective->Enable( m_pCbxPerspective->IsChecked() );
 
     //RightAngledAxes
-    sal_Bool bRightAngledAxes = false;
+    bool bRightAngledAxes = false;
 
     uno::Reference< chart2::XDiagram > xDiagram( m_xSceneProperties, uno::UNO_QUERY );
     if( ChartTypeHelper::isSupportingRightAngledAxes(

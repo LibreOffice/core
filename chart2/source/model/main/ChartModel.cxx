@@ -89,8 +89,8 @@ namespace chart
 
 ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     : m_aLifeTimeManager( this, this )
-    , m_bReadOnly( sal_False )
-    , m_bModified( sal_False )
+    , m_bReadOnly( false )
+    , m_bModified( false )
     , m_nInLoad(0)
     , m_bUpdateNotificationsPending(false)
     , mbTimeBased(false)
@@ -219,7 +219,7 @@ OUString ChartModel::impl_g_getLocation()
     return m_aResource;
 }
 
-sal_Bool ChartModel::impl_isControllerConnected( const uno::Reference< frame::XController >& xController )
+bool ChartModel::impl_isControllerConnected( const uno::Reference< frame::XController >& xController )
 {
     try
     {
@@ -227,13 +227,13 @@ sal_Bool ChartModel::impl_isControllerConnected( const uno::Reference< frame::XC
         for( sal_Int32 nN = aSeq.getLength(); nN--; )
         {
             if( aSeq[nN] == xController )
-                return sal_True;
+                return true;
         }
     }
     catch (const uno::Exception&)
     {
     }
-    return sal_False;
+    return false;
 }
 
 uno::Reference< frame::XController > ChartModel::impl_getCurrentController() throw(uno::RuntimeException)
@@ -633,7 +633,7 @@ void SAL_CALL ChartModel::close( sal_Bool bDeliverOwnership )
             ////you can empty this block, if you never start longlasting calls or
             ////if your longlasting calls are per default not cancelable (check how you have constructed your LifeTimeManager)
 
-            sal_Bool bLongLastingCallsAreCanceled = sal_False;
+            bool bLongLastingCallsAreCanceled = false;
             try
             {
                 //try to cancel running longlasting calls
@@ -647,7 +647,7 @@ void SAL_CALL ChartModel::close( sal_Bool bDeliverOwnership )
             //if not successful canceled
             if(!bLongLastingCallsAreCanceled)
             {
-                m_aLifeTimeManager.g_close_endTryClose( bDeliverOwnership, sal_True );
+                m_aLifeTimeManager.g_close_endTryClose( bDeliverOwnership, true );
                 throw aVetoException;
             }
         }
@@ -814,7 +814,7 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
         {
             try
             {
-                sal_Bool bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( Reference< frame::XModel >(this) );
+                bool bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( Reference< frame::XModel >(this) );
                 xProp->setPropertyValue("IncludeHiddenCells", uno::makeAny(bIncludeHiddenCells));
             }
             catch (const beans::UnknownPropertyException&)

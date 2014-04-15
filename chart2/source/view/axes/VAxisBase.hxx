@@ -45,7 +45,7 @@ public:
     virtual void createLabels()=0;
     virtual void updatePositions()=0;
 
-    virtual sal_Bool isAnythingToDraw();
+    virtual bool isAnythingToDraw();
     virtual void initAxisLabelProperties(
                     const ::com::sun::star::awt::Size& rFontReferenceSize
                   , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels );

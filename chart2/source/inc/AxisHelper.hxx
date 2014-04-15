@@ -92,9 +92,9 @@ public:
     static void hideGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
 
-    static sal_Bool isAxisShown( sal_Int32 nDimensionIndex, bool bMainAxis
+    static bool isAxisShown( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
-    static sal_Bool isGridShown( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
+    static bool isGridShown( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
 
     static void makeAxisVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
@@ -106,9 +106,9 @@ public:
     static void hideAxisIfNoDataIsAttached( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis
                                           , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram);
 
-    SAL_DLLPRIVATE static sal_Bool areAxisLabelsVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProperties );
-    static sal_Bool isAxisVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
-    static sal_Bool isGridVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xGridProperties );
+    SAL_DLLPRIVATE static bool areAxisLabelsVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProperties );
+    static bool isAxisVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
+    static bool isGridVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xGridProperties );
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XCoordinateSystem >
@@ -206,10 +206,10 @@ public:
                     ::com::sun::star::chart2::XDiagram >& xDiagram );
 
     static void getAxisOrGridPossibilities( ::com::sun::star::uno::Sequence< sal_Bool >& rPossibilityList
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram>& xDiagram, sal_Bool bAxis=sal_True );
+        , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram>& xDiagram, bool bAxis=true );
 
     static void getAxisOrGridExcistence( ::com::sun::star::uno::Sequence< sal_Bool >& rExcistenceList
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram>& xDiagram, sal_Bool bAxis=sal_True );
+        , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram>& xDiagram, bool bAxis=true );
 
     static bool changeVisibilityOfGrids( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram>& xDiagram
                         , const ::com::sun::star::uno::Sequence< sal_Bool >& rOldExistenceList

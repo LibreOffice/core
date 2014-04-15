@@ -541,10 +541,10 @@ void AxisHelper::makeGridInvisible( const Reference< beans::XPropertySet >& xGri
     }
 }
 
-sal_Bool AxisHelper::isGridShown( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
+bool AxisHelper::isGridShown( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
                 , const Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
 
     Reference< XCoordinateSystem > xCooSys = AxisHelper::getCoordinateSystemByIndex( xDiagram, nCooSysIndex );
     if(!xCooSys.is())
@@ -653,15 +653,15 @@ Reference< XAxis > AxisHelper::getParallelAxis( const Reference< XAxis >& xAxis
     return 0;
 }
 
-sal_Bool AxisHelper::isAxisShown( sal_Int32 nDimensionIndex, bool bMainAxis
+bool AxisHelper::isAxisShown( sal_Int32 nDimensionIndex, bool bMainAxis
             , const Reference< XDiagram >& xDiagram )
 {
     return AxisHelper::isAxisVisible( AxisHelper::getAxis( nDimensionIndex, bMainAxis, xDiagram ) );
 }
 
-sal_Bool AxisHelper::isAxisVisible( const Reference< XAxis >& xAxis )
+bool AxisHelper::isAxisVisible( const Reference< XAxis >& xAxis )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
 
     Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
     if( xProps.is() )
@@ -674,9 +674,9 @@ sal_Bool AxisHelper::isAxisVisible( const Reference< XAxis >& xAxis )
     return bRet;
 }
 
-sal_Bool AxisHelper::areAxisLabelsVisible( const Reference< beans::XPropertySet >& xAxisProperties )
+bool AxisHelper::areAxisLabelsVisible( const Reference< beans::XPropertySet >& xAxisProperties )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     if( xAxisProperties.is() )
     {
         xAxisProperties->getPropertyValue( "DisplayLabels" ) >>= bRet;
@@ -684,9 +684,9 @@ sal_Bool AxisHelper::areAxisLabelsVisible( const Reference< beans::XPropertySet 
     return bRet;
 }
 
-sal_Bool AxisHelper::isGridVisible( const Reference< beans::XPropertySet >& xGridProperies )
+bool AxisHelper::isGridVisible( const Reference< beans::XPropertySet >& xGridProperies )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
 
     if( xGridProperies.is() )
     {
@@ -884,7 +884,7 @@ Sequence< Reference< beans::XPropertySet > > AxisHelper::getAllGrids( const Refe
 }
 
 void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityList
-        , const Reference< XDiagram>& xDiagram, sal_Bool bAxis )
+        , const Reference< XDiagram>& xDiagram, bool bAxis )
 {
     rPossibilityList.realloc(6);
 
@@ -956,7 +956,7 @@ bool AxisHelper::shouldAxisBeDisplayed( const Reference< XAxis >& xAxis
 }
 
 void AxisHelper::getAxisOrGridExcistence( Sequence< sal_Bool >& rExistenceList
-        , const Reference< XDiagram>& xDiagram, sal_Bool bAxis )
+        , const Reference< XDiagram>& xDiagram, bool bAxis )
 {
     rExistenceList.realloc(6);
 

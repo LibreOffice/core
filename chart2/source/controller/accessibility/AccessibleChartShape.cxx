@@ -149,7 +149,7 @@ OUString AccessibleChartShape::getAccessibleName()
 sal_Bool AccessibleChartShape::containsPoint( const awt::Point& aPoint )
     throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     if ( m_pAccShape )
     {
         bReturn = m_pAccShape->containsPoint( aPoint );

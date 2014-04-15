@@ -152,7 +152,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     else
     {
         m_pCbShowDescription->EnableTriState( false );
-        sal_Bool bCheck = sal_False;
+        bool bCheck = false;
         if( aState == SFX_ITEM_SET )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCbShowDescription->Check( bCheck );
@@ -200,7 +200,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     else
     {
         m_pCbTextOverlap->EnableTriState( false );
-        sal_Bool bCheck = sal_False;
+        bool bCheck = false;
         if( aState == SFX_ITEM_SET )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCbTextOverlap->Check( bCheck );
@@ -219,7 +219,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     else
     {
         m_pCbTextBreak->EnableTriState( false );
-        sal_Bool bCheck = sal_False;
+        bool bCheck = false;
         if( aState == SFX_ITEM_SET )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCbTextBreak->Check( bCheck );
@@ -261,7 +261,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     ToggleShowLabel( (void*)0 );
 }
 
-void SchAxisLabelTabPage::ShowStaggeringControls( sal_Bool bShowStaggeringControls )
+void SchAxisLabelTabPage::ShowStaggeringControls( bool bShowStaggeringControls )
 {
     m_bShowStaggeringControls = bShowStaggeringControls;
 
@@ -284,7 +284,7 @@ void SchAxisLabelTabPage::SetComplexCategories( bool bComplexCategories )
 
 IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel)
 {
-    sal_Bool bEnable = ( m_pCbShowDescription->GetState() != TRISTATE_FALSE );
+    bool bEnable = ( m_pCbShowDescription->GetState() != TRISTATE_FALSE );
 
     m_pOrientHlp->Enable( bEnable );
     m_pFlOrder->Enable( bEnable );

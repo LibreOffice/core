@@ -1512,7 +1512,7 @@ OUString ObjectIdentifier::getSeriesParticleFromCID( const OUString& rCID )
     return ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCooSysIndex, nChartTypeIndex, nSeriesIndex );
 }
 
-OUString ObjectIdentifier::getMovedSeriesCID( const OUString& rObjectCID, sal_Bool bForward )
+OUString ObjectIdentifier::getMovedSeriesCID( const OUString& rObjectCID, bool bForward )
 {
     sal_Int32 nDiagramIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, "CID/D=" ) );
     sal_Int32 nCooSysIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, "CS=" ) );

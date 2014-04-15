@@ -59,7 +59,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > & xContext,
         sal_Int32 nDimensionCount = 2,
-        sal_Bool bSwapXAndYAxis = sal_False );
+        bool bSwapXAndYAxis = false );
     explicit BaseCoordinateSystem( const BaseCoordinateSystem & rSource );
     virtual ~BaseCoordinateSystem();
 

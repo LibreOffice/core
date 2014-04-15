@@ -803,7 +803,7 @@ bool VLegend::isVisible( const Reference< XLegend > & xLegend )
     if( ! xLegend.is())
         return false;
 
-    sal_Bool bShow = sal_False;
+    bool bShow = false;
     try
     {
         Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY_THROW );

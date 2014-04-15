@@ -537,20 +537,20 @@ uno::Reference< util::XNumberFormats > SAL_CALL AxisWrapper::getNumberFormats()
     return uno::Reference< util::XNumberFormats >();
 }
 
-void AxisWrapper::getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDimensionIndex, sal_Bool& rbMainAxis )
+void AxisWrapper::getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDimensionIndex, bool& rbMainAxis )
 {
     switch( eType )
     {
         case X_AXIS:
-            rnDimensionIndex = 0; rbMainAxis = sal_True; break;
+            rnDimensionIndex = 0; rbMainAxis = true; break;
         case Y_AXIS:
-            rnDimensionIndex = 1; rbMainAxis = sal_True; break;
+            rnDimensionIndex = 1; rbMainAxis = true; break;
         case Z_AXIS:
-            rnDimensionIndex = 2; rbMainAxis = sal_True; break;
+            rnDimensionIndex = 2; rbMainAxis = true; break;
         case SECOND_X_AXIS:
-            rnDimensionIndex = 0; rbMainAxis = sal_False; break;
+            rnDimensionIndex = 0; rbMainAxis = false; break;
         case SECOND_Y_AXIS:
-            rnDimensionIndex = 1; rbMainAxis = sal_False; break;
+            rnDimensionIndex = 1; rbMainAxis = false; break;
     }
 }
 
@@ -612,7 +612,7 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
     try
     {
         sal_Int32 nDimensionIndex = 0;
-        sal_Bool  bMainAxis = sal_True;
+        bool  bMainAxis = true;
         AxisWrapper::getDimensionAndMainAxisBool( m_eType, nDimensionIndex, bMainAxis );
 
         Reference< XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
@@ -664,7 +664,7 @@ const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
         WrappedGapwidthProperty* pWrappedGapwidthProperty( new WrappedGapwidthProperty( m_spChart2ModelContact ) );
         WrappedBarOverlapProperty* pWrappedBarOverlapProperty( new WrappedBarOverlapProperty( m_spChart2ModelContact ) );
         sal_Int32 nDimensionIndex = 0;
-        sal_Bool  bMainAxis = sal_True;
+        bool  bMainAxis = true;
         sal_Int32 nAxisIndex = 0;
         AxisWrapper::getDimensionAndMainAxisBool( m_eType, nDimensionIndex, bMainAxis );
         if( !bMainAxis )

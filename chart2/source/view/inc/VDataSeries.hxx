@@ -110,7 +110,7 @@ public:
     bool        shouldLabelNumberFormatKeyBeDetectedFromYAxis() const;
 
     sal_Int32   getLabelPlacement( sal_Int32 nPointIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType
-                        , sal_Int32 nDimensionCount, sal_Bool bSwapXAndY ) const;
+                        , sal_Int32 nDimensionCount, bool bSwapXAndY ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         getPropertiesOfPoint( sal_Int32 index ) const;
@@ -135,11 +135,11 @@ public:
 
     void doSortByXValues();
 
-    void setConnectBars( sal_Bool bConnectBars );
-    sal_Bool getConnectBars() const;
+    void setConnectBars( bool bConnectBars );
+    bool getConnectBars() const;
 
-    void setGroupBarsPerAxis( sal_Bool bGroupBarsPerAxis );
-    sal_Bool getGroupBarsPerAxis() const;
+    void setGroupBarsPerAxis( bool bGroupBarsPerAxis );
+    bool getGroupBarsPerAxis() const;
 
     void setStartingAngle( sal_Int32 nStartingAngle );
     sal_Int32 getStartingAngle() const;
@@ -230,9 +230,9 @@ private: //member
 
     sal_Int32               m_nAxisIndex;//indicates whether this is attached to a main or secondary axis
 
-    sal_Bool                m_bConnectBars;
+    bool                m_bConnectBars;
 
-    sal_Bool                m_bGroupBarsPerAxis;
+    bool                m_bGroupBarsPerAxis;
 
     sal_Int32               m_nStartingAngle;
 

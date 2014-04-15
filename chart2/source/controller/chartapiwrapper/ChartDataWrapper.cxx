@@ -650,9 +650,9 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
         return;
 
     // remember some diagram properties to reset later
-    sal_Bool bStacked = sal_False;
-    sal_Bool bPercent = sal_False;
-    sal_Bool bDeep = sal_False;
+    bool bStacked = false;
+    bool bPercent = false;
+    bool bDeep = false;
     uno::Reference< ::com::sun::star::chart::XChartDocument > xOldDoc( xChartDoc, uno::UNO_QUERY );
     OSL_ASSERT( xOldDoc.is());
     uno::Reference< beans::XPropertySet > xDiaProp( xOldDoc->getDiagram(), uno::UNO_QUERY );

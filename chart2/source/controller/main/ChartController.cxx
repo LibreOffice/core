@@ -93,8 +93,8 @@ using ::com::sun::star::uno::Sequence;
 
 ChartController::ChartController(uno::Reference<uno::XComponentContext> const & xContext) :
     m_aLifeTimeManager( NULL ),
-    m_bSuspended( sal_False ),
-    m_bCanClose( sal_True ),
+    m_bSuspended( false ),
+    m_bCanClose( true ),
     m_xCC(xContext), //@todo is it allowed to hold this context??
     m_xFrame( NULL ),
     m_aModelMutex(),
@@ -142,8 +142,8 @@ void ChartController::RefCountable::release()
 ChartController::TheModel::TheModel( const uno::Reference< frame::XModel > & xModel ) :
     m_xModel( xModel ),
     m_xCloseable( NULL ),
-    m_bOwnership( sal_True ),
-    m_bOwnershipIsWellKnown( sal_False )
+    m_bOwnership( true ),
+    m_bOwnershipIsWellKnown( false )
 {
     m_xCloseable =
         uno::Reference< util::XCloseable >( xModel, uno::UNO_QUERY );
@@ -153,10 +153,10 @@ ChartController::TheModel::~TheModel()
 {
 }
 
-void ChartController::TheModel::SetOwnership( sal_Bool bGetsOwnership )
+void ChartController::TheModel::SetOwnership( bool bGetsOwnership )
 {
     m_bOwnership                = bGetsOwnership;
-    m_bOwnershipIsWellKnown = sal_True;
+    m_bOwnershipIsWellKnown = true;
 }
 
 void ChartController::TheModel::addListener( ChartController* pController )
@@ -209,7 +209,7 @@ void ChartController::TheModel::tryTermination()
                 m_xCloseable->close(sal_True);
 
                 m_bOwnership                = false;
-                m_bOwnershipIsWellKnown = sal_True;
+                m_bOwnershipIsWellKnown = true;
             }
             catch( const util::CloseVetoException& )
             {
@@ -222,7 +222,7 @@ void ChartController::TheModel::tryTermination()
 #endif
 
                 m_bOwnership                = false;
-                m_bOwnershipIsWellKnown = sal_True;
+                m_bOwnershipIsWellKnown = true;
                 return;
             }
 
@@ -289,24 +289,24 @@ ChartController::TheModelRef::~TheModelRef()
     if(m_pTheModel)
         m_pTheModel->release();
 }
-sal_Bool ChartController::TheModelRef::is() const
+bool ChartController::TheModelRef::is() const
 {
     return (m_pTheModel != 0);
 }
 
 // private methods
 
-sal_Bool ChartController::impl_isDisposedOrSuspended() const
+bool ChartController::impl_isDisposedOrSuspended() const
 {
     if( m_aLifeTimeManager.impl_isDisposed() )
-        return sal_True;
+        return true;
 
     if( m_bSuspended )
     {
         OSL_FAIL( "This Controller is suspended" );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // lang::XServiceInfo
@@ -655,7 +655,7 @@ sal_Bool SAL_CALL ChartController::suspend( sal_Bool bSuspend )
     if( m_aLifeTimeManager.impl_isDisposed() )
         return sal_False; //behave passive if already disposed, return false because request was not accepted //@todo? correct
 
-    if(bSuspend==m_bSuspended)
+    if(bSuspend == (m_bSuspended ? 1 : 0))
     {
         OSL_FAIL( "new suspend mode equals old suspend mode" );
         return sal_True;
@@ -1160,7 +1160,7 @@ void SAL_CALL ChartController::dispatch(
         }
         else
         {
-            this->executeDispatch_MoveSeries( sal_True );
+            this->executeDispatch_MoveSeries( true );
         }
     }
     else if ( aCommand == "Backward" )
@@ -1171,7 +1171,7 @@ void SAL_CALL ChartController::dispatch(
         }
         else
         {
-            this->executeDispatch_MoveSeries( sal_False );
+            this->executeDispatch_MoveSeries( false );
         }
     }
     else if( aCommand == "NewArrangement")
@@ -1283,7 +1283,7 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_MoveSeries( sal_Bool bForward )
+void SAL_CALL ChartController::executeDispatch_MoveSeries( bool bForward )
 {
     ControllerLockGuardUNO aCLGuard( getModel() );
 

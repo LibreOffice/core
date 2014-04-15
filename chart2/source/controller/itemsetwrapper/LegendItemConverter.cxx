@@ -109,8 +109,8 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
             const SfxPoolItem* pPoolItem = NULL;
             if( rInItemSet.GetItemState( SCHATTR_LEGEND_SHOW, true, &pPoolItem ) == SFX_ITEM_SET )
             {
-                sal_Bool bShow = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
-                sal_Bool bWasShown = sal_True;
+                bool bShow = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+                bool bWasShown = true;
                 if( ! (GetPropertySet()->getPropertyValue( "Show" ) >>= bWasShown) ||
                     ( bWasShown != bShow ))
                 {
@@ -175,7 +175,7 @@ void LegendItemConverter::FillSpecialItem(
     {
         case SCHATTR_LEGEND_SHOW:
         {
-            sal_Bool bShow = sal_True;
+            bool bShow = true;
             GetPropertySet()->getPropertyValue( "Show" ) >>= bShow;
             rOutItemSet.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, bShow) );
         }

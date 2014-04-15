@@ -448,7 +448,7 @@ uno::Reference<drawing::XShape>
 
     Reference< drawing::XShapes > xGroup( ShapeFactory::createGroup3D( xTarget, OUString() ) );
 
-    sal_Bool bDoubleSided = false;
+    bool bDoubleSided = false;
     short nRotatedTexture = 0;
 
     const double fWidth = rSize.DirectionX;
@@ -665,7 +665,7 @@ uno::Reference<drawing::XShape>
 
             //Reduced lines
             xProp->setPropertyValue( UNO_NAME_3D_REDUCED_LINE_GEOMETRY
-                , uno::makeAny((sal_Bool)sal_True) );
+                , uno::makeAny(true) );
         }
         catch( const uno::Exception& e )
         {
@@ -675,7 +675,7 @@ uno::Reference<drawing::XShape>
     return xShape;
 }
 
-void appendAndCloseBezierCoords( drawing::PolyPolygonBezierCoords& rReturn, const drawing::PolyPolygonBezierCoords& rAdd, sal_Bool bAppendInverse )
+void appendAndCloseBezierCoords( drawing::PolyPolygonBezierCoords& rReturn, const drawing::PolyPolygonBezierCoords& rAdd, bool bAppendInverse )
 {
     if(!rAdd.Coordinates.getLength())
         return;
@@ -830,7 +830,7 @@ drawing::PolyPolygonBezierCoords getRingBezierCoords(
 
     drawing::PolyPolygonBezierCoords aInnerArc = getCircularArcBezierCoords(
         fStartAngleRadian, fWidthAngleRadian, fUnitCircleInnerRadius, aTransformationFromUnitCircle, fAngleSubdivisionRadian );
-    appendAndCloseBezierCoords( aReturn, aInnerArc, sal_True );
+    appendAndCloseBezierCoords( aReturn, aInnerArc, true );
 
     return aReturn;
 }
@@ -942,11 +942,11 @@ uno::Reference< drawing::XShape >
 
             //DoubleSided
             xProp->setPropertyValue( UNO_NAME_3D_DOUBLE_SIDED
-                , uno::makeAny( (sal_Bool)true) );
+                , uno::makeAny( true ) );
 
             //Reduced lines
             xProp->setPropertyValue( UNO_NAME_3D_REDUCED_LINE_GEOMETRY
-                , uno::makeAny((sal_Bool)sal_True) );
+                , uno::makeAny( true ) );
 
             //TextureProjectionMode
             xProp->setPropertyValue( UNO_NAME_3D_TEXTURE_PROJ_Y
@@ -1009,7 +1009,7 @@ uno::Reference< drawing::XShape >
 
             //LineOnly
             xProp->setPropertyValue( UNO_NAME_3D_LINEONLY
-                , uno::makeAny( (sal_Bool)false) );
+                , uno::makeAny( false) );
 
             //DoubleSided
             xProp->setPropertyValue( UNO_NAME_3D_DOUBLE_SIDED
@@ -1065,7 +1065,7 @@ uno::Reference< drawing::XShape >
 
             //DoubleSided
             xProp->setPropertyValue( UNO_NAME_3D_DOUBLE_SIDED
-                , uno::makeAny( (sal_Bool)true) );
+                , uno::makeAny( true) );
 
             //the z component of the polygon is now ignored by the drawing layer,
             //so we nned to translate the object via transformation matrix
@@ -1908,7 +1908,7 @@ uno::Reference< drawing::XShape >
 
             //LineOnly
             xProp->setPropertyValue( UNO_NAME_3D_LINEONLY
-                , uno::makeAny( (sal_Bool)true ) );
+                , uno::makeAny( true ) );
 
             //Transparency
             if(rLineProperties.Transparence.hasValue())
@@ -2187,7 +2187,7 @@ uno::Reference< drawing::XShape >
             PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShapeProp );
         }
 
-        sal_Bool bStackCharacters(sal_False);
+        bool bStackCharacters(false);
         try
         {
             xTextProperties->getPropertyValue( "StackCharacters" ) >>= bStackCharacters;

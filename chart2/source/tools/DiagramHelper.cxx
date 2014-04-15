@@ -1073,7 +1073,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
                 if( !( nType & util::NumberFormat::DATE ) )
                 {
                     //set a date format to the axis
-                    sal_Bool bCreate = sal_True;
+                    bool bCreate = true;
                     const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
                     Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,  rLocaleDataWrapper.getLanguageTag().getLocale(), bCreate );
                     if( aKeySeq.getLength() )
@@ -1167,7 +1167,7 @@ sal_Int32 DiagramHelper::getDateNumberFormat( const Reference< util::XNumberForm
     Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
     if( xNumberFormats.is() )
     {
-        sal_Bool bCreate = sal_True;
+        bool bCreate = true;
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
         Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,
             rLocaleDataWrapper.getLanguageTag().getLocale(), bCreate );
@@ -1195,7 +1195,7 @@ sal_Int32 DiagramHelper::getPercentNumberFormat( const Reference< util::XNumberF
     Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
     if( xNumberFormats.is() )
     {
-        sal_Bool bCreate = sal_True;
+        bool bCreate = true;
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
         Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::PERCENT,
             rLocaleDataWrapper.getLanguageTag().getLocale(), bCreate );

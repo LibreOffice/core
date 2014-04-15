@@ -75,7 +75,7 @@ WrappedStockProperty::~WrappedStockProperty()
 void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    sal_Bool bNewValue = false;
+    bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( "stock properties require type sal_Bool", 0, 0 );
 
@@ -152,12 +152,12 @@ WrappedVolumeProperty::~WrappedVolumeProperty()
 
             if(    aTemplateAndService.second == "com.sun.star.chart2.template.StockVolumeLowHighClose"
                 || aTemplateAndService.second == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
-                m_aOuterValue <<= sal_Bool(sal_True);
+                m_aOuterValue <<= true;
             else if( !aTemplateAndService.second.isEmpty() || !m_aOuterValue.hasValue() )
-                m_aOuterValue <<= sal_Bool(sal_False);
+                m_aOuterValue <<= false;
         }
         else if(!m_aOuterValue.hasValue())
-            m_aOuterValue <<= sal_Bool(sal_False);
+            m_aOuterValue <<= false;
     }
     return m_aOuterValue;
 }
@@ -221,12 +221,12 @@ WrappedUpDownProperty::~WrappedUpDownProperty()
 
             if(    aTemplateAndService.second == "com.sun.star.chart2.template.StockOpenLowHighClose"
                 || aTemplateAndService.second == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
-                m_aOuterValue <<= sal_Bool(sal_True);
+                m_aOuterValue <<= true;
             else if( !aTemplateAndService.second.isEmpty() || !m_aOuterValue.hasValue() )
-                m_aOuterValue <<= sal_Bool(sal_False);
+                m_aOuterValue <<= false;
         }
         else if(!m_aOuterValue.hasValue())
-            m_aOuterValue <<= sal_Bool(sal_False);
+            m_aOuterValue <<= false;
     }
     return m_aOuterValue;
 }

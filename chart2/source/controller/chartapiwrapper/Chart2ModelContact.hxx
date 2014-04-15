@@ -70,7 +70,7 @@ public:
     /** get the current values calculated for an axis in the current view in
         case properties are 'auto'.
      */
-    sal_Bool getExplicitValuesForAxis(
+    bool getExplicitValuesForAxis(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XAxis > & xAxis,
         ExplicitScaleData &  rOutExplicitScale,

@@ -64,7 +64,7 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
     , m_nAdditionalHorizontalAngleDegree(0)
     , m_nAdditionalVerticalAngleDegree(0)
     , m_eRotationDirection(eRotationDirection)
-    , m_bRightAngledAxes(sal_False)
+    , m_bRightAngledAxes(false)
 {
     m_pScene = SelectionHelper::getSceneToRotate( rDrawViewWrapper.getNamedSdrObject( rObjectCID ) );
     SdrObject* pObj = rDrawViewWrapper.getSelectedObject();

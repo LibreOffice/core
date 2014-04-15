@@ -80,7 +80,7 @@ public:
 
     static void switchRightAngledAxes( const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet >& xSceneProperties
-            , sal_Bool bRightAngledAxes, bool bRotateLights=true );
+            , bool bRightAngledAxes, bool bRotateLights=true );
 
     static void adaptRadAnglesForRightAngledAxes( double& rfXAngleRad, double& rfYAngleRad );
     static double getXDegreeAngleLimitForRightAngledAxes();

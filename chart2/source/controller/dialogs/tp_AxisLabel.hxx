@@ -58,7 +58,7 @@ private:
     FixedText*               m_pFtTextDirection;
     TextDirectionListBox*    m_pLbTextDirection;
 
-    sal_Bool                m_bShowStaggeringControls;
+    bool                m_bShowStaggeringControls;
 
     sal_Int32           m_nInitialDegrees;
     bool                m_bHasInitialDegrees;       /// false = DialControl in tristate
@@ -78,7 +78,7 @@ public:
     virtual bool FillItemSet( SfxItemSet& rOutAttrs ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet& rInAttrs ) SAL_OVERRIDE;
 
-    void ShowStaggeringControls( sal_Bool bShowStaggeringControls );
+    void ShowStaggeringControls( bool bShowStaggeringControls );
     void SetComplexCategories( bool bComplexCategories );
 };
 } //namespace chart

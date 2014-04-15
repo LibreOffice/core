@@ -61,7 +61,7 @@ void VPolarAxis::setIncrements( const std::vector< ExplicitIncrementData >& rInc
     m_aIncrements = rIncrements;
 }
 
-sal_Bool VPolarAxis::isAnythingToDraw()
+bool VPolarAxis::isAnythingToDraw()
 {
     return ( 2==m_nDimension && VAxisBase::isAnythingToDraw() );
 }

@@ -46,7 +46,7 @@ namespace
 
 bool lcl_isRightAngledAxesSetAndSupported( const Reference< beans::XPropertySet >& xSceneProperties )
 {
-    sal_Bool bRightAngledAxes = sal_False;
+    bool bRightAngledAxes = false;
     if( xSceneProperties.is() )
     {
         xSceneProperties->getPropertyValue( "RightAngledAxes") >>= bRightAngledAxes;
@@ -70,7 +70,7 @@ void lcl_RotateLightSource( const Reference< beans::XPropertySet >& xSceneProper
 {
     if( xSceneProperties.is() )
     {
-        sal_Bool bLightOn = sal_False;
+        bool bLightOn = false;
         if( xSceneProperties->getPropertyValue( rLightSourceOn ) >>= bLightOn )
         {
             if( bLightOn )
@@ -145,7 +145,7 @@ bool lcl_isLightScheme( const uno::Reference< beans::XPropertySet >& xDiagramPro
     if(!xDiagramProps.is())
         return false;
 
-    sal_Bool bIsOn = sal_False;
+    bool bIsOn = false;
     xDiagramProps->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_2 ) >>= bIsOn;
     if(!bIsOn)
         return false;
@@ -172,7 +172,7 @@ bool lcl_isLightScheme( const uno::Reference< beans::XPropertySet >& xDiagramPro
 
     //rotate default light direction when right angled axes are off but supported
     {
-        sal_Bool bRightAngledAxes = sal_False;
+        bool bRightAngledAxes = false;
         xDiagramProps->getPropertyValue( "RightAngledAxes") >>= bRightAngledAxes;
         if(!bRightAngledAxes)
         {
@@ -217,7 +217,7 @@ void lcl_setLightsForScheme( const uno::Reference< beans::XPropertySet >& xDiagr
     xDiagramProps->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_2, aADirection );
     //rotate light direction when right angled axes are off but supported
     {
-        sal_Bool bRightAngledAxes = sal_False;
+        bool bRightAngledAxes = false;
         xDiagramProps->getPropertyValue( "RightAngledAxes") >>= bRightAngledAxes;
         if(!bRightAngledAxes)
         {
@@ -958,13 +958,13 @@ void ThreeDHelper::getRotationAngleFromDiagram(
     }
 }
 
-void ThreeDHelper::switchRightAngledAxes( const Reference< beans::XPropertySet >& xSceneProperties, sal_Bool bRightAngledAxes, bool bRotateLights )
+void ThreeDHelper::switchRightAngledAxes( const Reference< beans::XPropertySet >& xSceneProperties, bool bRightAngledAxes, bool bRotateLights )
 {
     try
     {
         if( xSceneProperties.is() )
         {
-            sal_Bool bOldRightAngledAxes = sal_False;
+            bool bOldRightAngledAxes = false;
             xSceneProperties->getPropertyValue( "RightAngledAxes") >>= bOldRightAngledAxes;
             if( bOldRightAngledAxes!=bRightAngledAxes)
             {
@@ -1029,7 +1029,7 @@ void ThreeDHelper::setRotationAngleToDiagram(
             "D3DTransformMatrix", uno::makeAny( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aSceneRotation )));
 
         //rotate lights if RightAngledAxes are not set or not supported
-        sal_Bool bRightAngledAxes = sal_False;
+        bool bRightAngledAxes = false;
         xSceneProperties->getPropertyValue( "RightAngledAxes") >>= bRightAngledAxes;
         uno::Reference< chart2::XDiagram > xDiagram( xSceneProperties, uno::UNO_QUERY );
         if(!bRightAngledAxes || !ChartTypeHelper::isSupportingRightAngledAxes(

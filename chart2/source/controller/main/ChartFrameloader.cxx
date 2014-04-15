@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
 ChartFrameLoader::ChartFrameLoader(
         uno::Reference<uno::XComponentContext> const & xContext)
-        : m_bCancelRequired( sal_False )
+        : m_bCancelRequired( false )
 {
     m_xCC = xContext;
     m_oCancelFinished.reset();
@@ -43,15 +43,15 @@ ChartFrameLoader::~ChartFrameLoader()
 {
 }
 
-    sal_Bool ChartFrameLoader
+    bool ChartFrameLoader
 ::impl_checkCancel()
 {
     if(m_bCancelRequired)
     {
         m_oCancelFinished.set();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // lang::XServiceInfo
@@ -180,9 +180,9 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
 ::cancel() throw (uno::RuntimeException, std::exception)
 {
     m_oCancelFinished.reset();
-    m_bCancelRequired = sal_True;
+    m_bCancelRequired = true;
     m_oCancelFinished.wait();
-    m_bCancelRequired = sal_False;
+    m_bCancelRequired = false;
 }
 
 } //namespace chart

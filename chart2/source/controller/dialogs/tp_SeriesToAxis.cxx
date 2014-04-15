@@ -147,7 +147,7 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
 
     if (rInAttrs.GetItemState(SCHATTR_BAR_CONNECT, true, &pPoolItem) == SFX_ITEM_SET)
     {
-        sal_Bool bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        bool bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCBConnect->Check(bCheck);
     }
 
@@ -160,7 +160,7 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
     {
         // model property is "group bars per axis", UI feature is the other way
         // round: "show bars side by side"
-        sal_Bool bCheck = ! static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        bool bCheck = ! static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCBAxisSideBySide->Check( bCheck );
     }
     else

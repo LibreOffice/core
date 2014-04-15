@@ -147,11 +147,11 @@ WrappedAxisAndGridExistenceProperty::~WrappedAxisAndGridExistenceProperty()
 void WrappedAxisAndGridExistenceProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewValue = false;
+    bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", 0, 0 );
 
-    sal_Bool bOldValue = sal_False;
+    bool bOldValue = false;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
 
     if( bOldValue == bNewValue )
@@ -181,12 +181,12 @@ Any WrappedAxisAndGridExistenceProperty::getPropertyValue( const Reference< bean
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if(m_bAxis)
     {
-        sal_Bool bShown = AxisHelper::isAxisShown( m_nDimensionIndex, m_bMain, xDiagram );
+        bool bShown = AxisHelper::isAxisShown( m_nDimensionIndex, m_bMain, xDiagram );
         aRet <<= bShown;
     }
     else
     {
-        sal_Bool bShown = AxisHelper::isGridShown( m_nDimensionIndex, 0, m_bMain, xDiagram );
+        bool bShown = AxisHelper::isGridShown( m_nDimensionIndex, 0, m_bMain, xDiagram );
         aRet <<= bShown;
     }
     return aRet;
@@ -269,11 +269,11 @@ WrappedAxisTitleExistenceProperty::~WrappedAxisTitleExistenceProperty()
 void WrappedAxisTitleExistenceProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewValue = false;
+    bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", 0, 0 );
 
-    sal_Bool bOldValue = sal_False;
+    bool bOldValue = false;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
 
     if( bOldValue == bNewValue )
@@ -294,11 +294,11 @@ void WrappedAxisTitleExistenceProperty::setPropertyValue( const Any& rOuterValue
 Any WrappedAxisTitleExistenceProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bHasTitle = sal_False;
+    bool bHasTitle = false;
 
     Reference< chart2::XTitle > xTitle( TitleHelper::getTitle( m_eTitleType, m_spChart2ModelContact->getChartModel() ) );
     if( xTitle.is() && !TitleHelper::getCompleteString( xTitle ).isEmpty() )
-        bHasTitle = sal_True;
+        bHasTitle = true;
 
     Any aRet;
     aRet <<= bHasTitle;
@@ -310,7 +310,7 @@ Any WrappedAxisTitleExistenceProperty::getPropertyDefault( const Reference< bean
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
-    aRet <<= sal_Bool( sal_False );
+    aRet <<= false;
     return aRet;
 }
 
@@ -375,11 +375,11 @@ WrappedAxisLabelExistenceProperty::~WrappedAxisLabelExistenceProperty()
 void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewValue = false;
+    bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( "Has axis or grid properties require boolean values", 0, 0 );
 
-    sal_Bool bOldValue = sal_False;
+    bool bOldValue = false;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
 
     if( bOldValue == bNewValue )
@@ -407,7 +407,7 @@ Any WrappedAxisLabelExistenceProperty::getPropertyValue( const Reference< beans:
     if( xProp.is() )
         aRet = xProp->getPropertyValue( "DisplayLabels" );
     else
-        aRet <<= sal_False;
+        aRet <<= false;
     return aRet;
 }
 
@@ -415,7 +415,7 @@ Any WrappedAxisLabelExistenceProperty::getPropertyDefault( const Reference< bean
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
-    aRet <<= sal_Bool( sal_True );
+    aRet <<= true;
     return aRet;
 }
 

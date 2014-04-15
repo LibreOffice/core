@@ -128,7 +128,7 @@ namespace chart
 
 PieChartType::PieChartType(
     const uno::Reference< uno::XComponentContext > & xContext,
-    sal_Bool bUseRings  /* = sal_False */) :
+    bool bUseRings  /* = sal_False */) :
         ChartType( xContext )
 {
     if( bUseRings )
@@ -164,7 +164,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 {
     Reference< chart2::XCoordinateSystem > xResult(
         new PolarCoordinateSystem(
-            GetComponentContext(), DimensionCount, /* bSwapXAndYAxis */ sal_False ));
+            GetComponentContext(), DimensionCount, /* bSwapXAndYAxis */ false ));
 
     for( sal_Int32 i=0; i<DimensionCount; ++i )
     {

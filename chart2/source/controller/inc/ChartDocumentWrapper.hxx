@@ -71,8 +71,8 @@ public:
     void setAddIn( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable >& xAddIn );
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable > getAddIn() const;
 
-    void setUpdateAddIn( sal_Bool bUpdateAddIn );
-    sal_Bool getUpdateAddIn() const;
+    void setUpdateAddIn( bool bUpdateAddIn );
+    bool getUpdateAddIn() const;
 
     void setBaseDiagram( const OUString& rBaseDiagram );
     OUString getBaseDiagram() const;
@@ -210,7 +210,7 @@ private: //member
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable > m_xAddIn;
     OUString   m_aBaseDiagram;
-    sal_Bool        m_bUpdateAddIn;
+    bool        m_bUpdateAddIn;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xChartView;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>

@@ -88,7 +88,7 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
     sal_Bool bAdaptProperties )
     throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
+    bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
     uno::Reference< beans::XPropertySet > xChartTypeProp(
         DiagramHelper::getChartTypeByIndex( xDiagram, 0 ), uno::UNO_QUERY_THROW );

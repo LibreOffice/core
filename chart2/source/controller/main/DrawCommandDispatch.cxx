@@ -121,7 +121,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pDrawModelWrapper && pDrawViewWrapper && pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_CUSTOMSHAPE )
         {
-            sal_Bool bAttributesAppliedFromGallery = sal_False;
+            bool bAttributesAppliedFromGallery = false;
             if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
             {
                 ::std::vector< OUString > aObjList;
@@ -162,7 +162,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
                                         double a = nAngle * F_PI18000;
                                         pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
                                     }
-                                    bAttributesAppliedFromGallery = sal_True;
+                                    bAttributesAppliedFromGallery = true;
                                 }
                             }
                             break;
@@ -510,7 +510,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                 if ( pTextObj )
                                 {
                                     pTextObj->SetLogicRect( aRect );
-                                    sal_Bool bVertical = ( nID == COMMAND_ID_DRAW_TEXT_VERTICAL );
+                                    bool bVertical = ( nID == COMMAND_ID_DRAW_TEXT_VERTICAL );
                                     pTextObj->SetVerticalWriting( bVertical );
                                     if ( bVertical )
                                     {
@@ -530,7 +530,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                         {
                             if ( pObj->ISA( SdrCaptionObj ) )
                             {
-                                sal_Bool bIsVertical( COMMAND_ID_DRAW_CAPTION_VERTICAL == nID );
+                                bool bIsVertical( COMMAND_ID_DRAW_CAPTION_VERTICAL == nID );
                                 SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                                 if ( pTextObj )
                                 {

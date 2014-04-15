@@ -150,7 +150,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
 
     chart2::ScaleData aScaleData( xAxis->getScaleData() );
 
-    sal_Bool bBool = false;
+    bool bBool = false;
     switch( eScaleProperty )
     {
         case SCALE_PROP_MAX:
@@ -485,26 +485,26 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
         }
         case SCALE_PROP_AUTO_MAX:
         {
-            aRet <<= (sal_Bool)( !aScaleData.Maximum.hasValue() );
+            aRet <<= !aScaleData.Maximum.hasValue();
             break;
         }
         case SCALE_PROP_AUTO_MIN:
         {
-            aRet <<= (sal_Bool)( !aScaleData.Minimum.hasValue() );
+            aRet <<= !aScaleData.Minimum.hasValue();
             break;
         }
         case SCALE_PROP_AUTO_STEPMAIN:
         {
-            aRet <<= (sal_Bool)( !aScaleData.IncrementData.Distance.hasValue() );
+            aRet <<= !aScaleData.IncrementData.Distance.hasValue();
             break;
         }
         case SCALE_PROP_AUTO_STEPHELP:
         {
             Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
             if( rSubIncrements.getLength() > 0 )
-                aRet <<= (sal_Bool)( !rSubIncrements[ 0 ].IntervalCount.hasValue() );
+                aRet <<= !rSubIncrements[ 0 ].IntervalCount.hasValue();
             else
-                aRet <<= sal_True;
+                aRet <<= true;
             break;
         }
         case SCALE_PROP_ORIGIN:
@@ -565,12 +565,12 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
         }
         case SCALE_PROP_LOGARITHMIC:
         {
-            aRet <<= static_cast< sal_Bool >( AxisHelper::isLogarithmic(aScaleData.Scaling) );
+            aRet <<= AxisHelper::isLogarithmic(aScaleData.Scaling);
             break;
         }
         case SCALE_PROP_REVERSEDIRECTION:
         {
-            aRet <<= static_cast< sal_Bool >( AxisOrientation_REVERSE == aScaleData.Orientation );
+            aRet <<= AxisOrientation_REVERSE == aScaleData.Orientation;
             break;
         }
         default:

@@ -56,7 +56,7 @@ bool ChartTypeHelper::isSupportingAxisSideBySide(
     return bResult;
 }
 
-sal_Bool ChartTypeHelper::isSupportingGeometryProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
+bool ChartTypeHelper::isSupportingGeometryProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
     //form tab only for 3D-bar and 3D-column charts.
 
@@ -67,15 +67,15 @@ sal_Bool ChartTypeHelper::isSupportingGeometryProperties( const uno::Reference< 
         {
             OUString aChartTypeName = xChartType->getChartType();
             if( aChartTypeName.equals(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
-                return sal_True;
+                return true;
             if( aChartTypeName.equals(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) )
-                return sal_True;
+                return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool ChartTypeHelper::isSupportingStatisticProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
+bool ChartTypeHelper::isSupportingStatisticProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
     //3D charts, pie, net and stock do not support statistic properties
 
@@ -83,30 +83,30 @@ sal_Bool ChartTypeHelper::isSupportingStatisticProperties( const uno::Reference<
     if(xChartType.is())
     {
         if(nDimensionCount==3)
-            return sal_False;
+            return false;
 
         OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
-            return sal_False;
+            return false;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
-            return sal_False;
+            return false;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
-            return sal_False;
+            return false;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
-            return sal_False;
+            return false;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) ) //todo: BubbleChart support error bars and trend lines
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool ChartTypeHelper::isSupportingRegressionProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
+bool ChartTypeHelper::isSupportingRegressionProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
     // note: old chart: only scatter chart
     return isSupportingStatisticProperties( xChartType, nDimensionCount );
 }
 
-sal_Bool ChartTypeHelper::isSupportingAreaProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
+bool ChartTypeHelper::isSupportingAreaProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
     //2D line charts, net and stock do not support area properties
 
@@ -117,19 +117,19 @@ sal_Bool ChartTypeHelper::isSupportingAreaProperties( const uno::Reference< XCha
         {
             OUString aChartTypeName = xChartType->getChartType();
             if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) )
-                return sal_False;
+                return false;
             if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
-                return sal_False;
+                return false;
             if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
-                return sal_False;
+                return false;
             if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
-                return sal_False;
+                return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool ChartTypeHelper::isSupportingSymbolProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
+bool ChartTypeHelper::isSupportingSymbolProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
     //2D line charts, 2D scatter charts and 2D net charts do support symbols
 
@@ -137,20 +137,20 @@ sal_Bool ChartTypeHelper::isSupportingSymbolProperties( const uno::Reference< XC
     if(xChartType.is())
     {
         if(nDimensionCount==3)
-            return sal_False;
+            return false;
 
         OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) )
-            return sal_True;
+            return true;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
-            return sal_True;
+            return true;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool ChartTypeHelper::isSupportingMainAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex )
+bool ChartTypeHelper::isSupportingMainAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex )
 {
     //pie charts do not support axis at all
     //no 3rd axis for 2D charts
@@ -160,15 +160,15 @@ sal_Bool ChartTypeHelper::isSupportingMainAxis( const uno::Reference< XChartType
     {
         OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
-            return sal_False;
+            return false;
 
         if( nDimensionIndex == 2 )
             return nDimensionCount == 3;
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 /*nDimensionIndex*/ )
+bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 /*nDimensionIndex*/ )
 {
     //3D, pie and net charts do not support a secondary axis at all
 
@@ -176,20 +176,20 @@ sal_Bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChar
     if(xChartType.is())
     {
          if(nDimensionCount==3)
-            return sal_False;
+            return false;
 
         OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
-            return sal_False;
+            return false;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
-            return sal_False;
+            return false;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool ChartTypeHelper::isSupportingOverlapAndGapWidthProperties(
+bool ChartTypeHelper::isSupportingOverlapAndGapWidthProperties(
         const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
     //2D bar charts do support a this special properties
@@ -198,18 +198,18 @@ sal_Bool ChartTypeHelper::isSupportingOverlapAndGapWidthProperties(
     if(xChartType.is())
     {
          if(nDimensionCount==3)
-            return sal_False;
+            return false;
 
         OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) )
-            return sal_True;
+            return true;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool ChartTypeHelper::isSupportingBarConnectors(
+bool ChartTypeHelper::isSupportingBarConnectors(
     const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
     //2D bar charts with stacked series support this
@@ -218,25 +218,25 @@ sal_Bool ChartTypeHelper::isSupportingBarConnectors(
     if(xChartType.is())
     {
         if(nDimensionCount==3)
-            return sal_False;
+            return false;
 
         bool bFound=false;
         bool bAmbiguous=false;
         StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, bFound, bAmbiguous, 0 );
         if( eStackMode != StackMode_Y_STACKED || bAmbiguous )
-            return sal_False;
+            return false;
 
         OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) )
-            return sal_True;
+            return true;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
-            return sal_True;  // note: old chart was false here
+            return true;  // note: old chart was false here
     }
-    return sal_False;
+    return false;
 }
 
 uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const uno::Reference< chart2::XChartType >& xChartType
-                                                                         , sal_Int32 nDimensionCount, sal_Bool bSwapXAndY
+                                                                         , sal_Int32 nDimensionCount, bool bSwapXAndY
                                                                          , const uno::Reference< chart2::XDataSeries >& xSeries )
 {
     (void)nDimensionCount;
@@ -352,15 +352,15 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     return aRet;
 }
 
-sal_Bool ChartTypeHelper::isSupportingRightAngledAxes( const uno::Reference< chart2::XChartType >& xChartType )
+bool ChartTypeHelper::isSupportingRightAngledAxes( const uno::Reference< chart2::XChartType >& xChartType )
 {
     if(xChartType.is())
     {
         OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 bool ChartTypeHelper::isSupportingStartingAngle( const uno::Reference< chart2::XChartType >& xChartType )

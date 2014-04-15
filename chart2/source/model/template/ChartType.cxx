@@ -79,7 +79,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 {
     Reference< chart2::XCoordinateSystem > xResult(
         new CartesianCoordinateSystem(
-            GetComponentContext(), DimensionCount, /* bSwapXAndYAxis */ sal_False ));
+            GetComponentContext(), DimensionCount, /* bSwapXAndYAxis */ false ));
 
     for( sal_Int32 i=0; i<DimensionCount; ++i )
     {

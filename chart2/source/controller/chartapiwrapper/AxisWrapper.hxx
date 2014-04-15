@@ -65,7 +65,7 @@ public:
     AxisWrapper( tAxisType eType, ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~AxisWrapper();
 
-    static void getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDimensionIndex, sal_Bool& rbMainAxis );
+    static void getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDimensionIndex, bool& rbMainAxis );
 
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()

@@ -223,10 +223,10 @@ template< typename T >
 }
 
 OOO_DLLPUBLIC_CHARTTOOLS
-sal_Bool hasDoubleValue( const ::com::sun::star::uno::Any& rAny );
+bool hasDoubleValue( const ::com::sun::star::uno::Any& rAny );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-sal_Bool  hasLongOrShortValue( const ::com::sun::star::uno::Any& rAny );
+bool  hasLongOrShortValue( const ::com::sun::star::uno::Any& rAny );
 OOO_DLLPUBLIC_CHARTTOOLS
 sal_Int16 getShortForLongAlso( const ::com::sun::star::uno::Any& rAny );
 

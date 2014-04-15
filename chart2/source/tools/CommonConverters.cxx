@@ -475,26 +475,26 @@ uno::Sequence< OUString > DataSequenceToStringSequence(
     return aResult;
 }
 
-sal_Bool hasDoubleValue( const uno::Any& rAny )
+bool hasDoubleValue( const uno::Any& rAny )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     double fValue = 0.0;
     if( rAny >>= fValue )
-        bRet = sal_True;
+        bRet = true;
     return bRet;
 }
 
-sal_Bool hasLongOrShortValue( const uno::Any& rAny )
+bool hasLongOrShortValue( const uno::Any& rAny )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int32 n32 = 0;
     if( rAny >>= n32 )
-        bRet = sal_True;
+        bRet = true;
     else
     {
         sal_Int16 n16 = 0;
         if( rAny >>= n16 )
-            bRet = sal_True;
+            bRet = true;
     }
     return bRet;
 }

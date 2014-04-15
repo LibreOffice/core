@@ -110,7 +110,7 @@ private:
         com::sun::star::awt::XWindow >               m_xParentWindow;
 
     CreationWizard*     m_pDialog;
-    sal_Bool            m_bUnlockControllersOnExecute;
+    bool            m_bUnlockControllersOnExecute;
 };
 
 } //namespace chart

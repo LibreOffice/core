@@ -121,7 +121,7 @@ public:
                 throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ___ExplicitValueProvider___
-    virtual sal_Bool getExplicitValuesForAxis(
+    virtual bool getExplicitValuesForAxis(
         ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > xAxis
         , ExplicitScaleData&  rExplicitScale
         , ExplicitIncrementData& rExplicitIncrement ) SAL_OVERRIDE;
@@ -268,7 +268,7 @@ private: //member
     sal_Int32 m_nScaleYNumerator;
     sal_Int32 m_nScaleYDenominator;
 
-    sal_Bool m_bSdrViewIsInEditMode;
+    bool m_bSdrViewIsInEditMode;
 
     ::com::sun::star::awt::Rectangle m_aResultingDiagramRectangleExcludingAxes;
 

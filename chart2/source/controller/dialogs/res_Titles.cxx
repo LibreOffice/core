@@ -131,13 +131,13 @@ void TitleResources::writeToResources( const TitleDialogData& rInput )
 
 void TitleResources::readFromResources( TitleDialogData& rOutput )
 {
-    rOutput.aExistenceList[0] = static_cast<sal_Bool>(!m_pEd_Main->GetText().isEmpty());
-    rOutput.aExistenceList[1] = static_cast<sal_Bool>(!m_pEd_Sub->GetText().isEmpty());
-    rOutput.aExistenceList[2] = static_cast<sal_Bool>(!m_pEd_XAxis->GetText().isEmpty());
-    rOutput.aExistenceList[3] = static_cast<sal_Bool>(!m_pEd_YAxis->GetText().isEmpty());
-    rOutput.aExistenceList[4] = static_cast<sal_Bool>(!m_pEd_ZAxis->GetText().isEmpty());
-    rOutput.aExistenceList[5] = static_cast<sal_Bool>(!m_pEd_SecondaryXAxis->GetText().isEmpty());
-    rOutput.aExistenceList[6] = static_cast<sal_Bool>(!m_pEd_SecondaryYAxis->GetText().isEmpty());
+    rOutput.aExistenceList[0] = !m_pEd_Main->GetText().isEmpty();
+    rOutput.aExistenceList[1] = !m_pEd_Sub->GetText().isEmpty();
+    rOutput.aExistenceList[2] = !m_pEd_XAxis->GetText().isEmpty();
+    rOutput.aExistenceList[3] = !m_pEd_YAxis->GetText().isEmpty();
+    rOutput.aExistenceList[4] = !m_pEd_ZAxis->GetText().isEmpty();
+    rOutput.aExistenceList[5] = !m_pEd_SecondaryXAxis->GetText().isEmpty();
+    rOutput.aExistenceList[6] = !m_pEd_SecondaryYAxis->GetText().isEmpty();
 
     rOutput.aTextList[0] = m_pEd_Main->GetText();
     rOutput.aTextList[1] = m_pEd_Sub->GetText();

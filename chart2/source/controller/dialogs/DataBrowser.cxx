@@ -564,7 +564,7 @@ void DataBrowser::RenewTable()
     long   nOldRow     = GetCurRow();
     sal_uInt16 nOldColId   = GetCurColumnId();
 
-    sal_Bool bLastUpdateMode = GetUpdateMode();
+    bool bLastUpdateMode = GetUpdateMode();
     SetUpdateMode( false );
 
     if( IsModified() )
@@ -718,7 +718,7 @@ double DataBrowser::GetCellNumber( long nRow, sal_uInt16 nColumnId ) const
 
 void DataBrowser::Resize()
 {
-    sal_Bool bLastUpdateMode = GetUpdateMode();
+    bool bLastUpdateMode = GetUpdateMode();
     SetUpdateMode( false );
 
     ::svt::EditBrowseBox::Resize();
@@ -1010,7 +1010,7 @@ void DataBrowser::PaintCell(
         rDev.SetClipRegion(Region(rRect));
 
     // allow for a disabled control ...
-    sal_Bool bEnabled = IsEnabled();
+    bool bEnabled = IsEnabled();
     Color aOriginalColor = rDev.GetTextColor();
     if( ! bEnabled )
         rDev.SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
@@ -1221,7 +1221,7 @@ sal_Int16 DataBrowser::GetFirstVisibleColumNumber() const
 
 void DataBrowser::ColumnResized( sal_uInt16 nColId )
 {
-    sal_Bool bLastUpdateMode = GetUpdateMode();
+    bool bLastUpdateMode = GetUpdateMode();
     SetUpdateMode( false );
 
     EditBrowseBox::ColumnResized( nColId );
@@ -1231,7 +1231,7 @@ void DataBrowser::ColumnResized( sal_uInt16 nColId )
 
 void DataBrowser::EndScroll()
 {
-    sal_Bool bLastUpdateMode = GetUpdateMode();
+    bool bLastUpdateMode = GetUpdateMode();
     SetUpdateMode( false );
 
     EditBrowseBox::EndScroll();

@@ -219,16 +219,16 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
     PlaceLabelsSelectHdl( (void*)0 );
 
     // Tick marks
-    long nTicks=0,nMinorTicks=0;
+    long nTicks = 0, nMinorTicks = 0;
     if(rInAttrs.GetItemState(SCHATTR_AXIS_TICKS,true, &pPoolItem)== SFX_ITEM_SET)
-        nTicks=((const SfxInt32Item*)pPoolItem)->GetValue();
+        nTicks = ((const SfxInt32Item*)pPoolItem)->GetValue();
     if(rInAttrs.GetItemState(SCHATTR_AXIS_HELPTICKS,true, &pPoolItem)== SFX_ITEM_SET)
-        nMinorTicks=((const SfxInt32Item*)pPoolItem)->GetValue();
+        nMinorTicks = ((const SfxInt32Item*)pPoolItem)->GetValue();
 
-    m_pCB_TicksInner->Check(sal_Bool(nTicks&CHAXIS_MARK_INNER));
-    m_pCB_TicksOuter->Check(sal_Bool(nTicks&CHAXIS_MARK_OUTER));
-    m_pCB_MinorInner->Check(sal_Bool(nMinorTicks&CHAXIS_MARK_INNER));
-    m_pCB_MinorOuter->Check(sal_Bool(nMinorTicks&CHAXIS_MARK_OUTER));
+    m_pCB_TicksInner->Check(bool(nTicks&CHAXIS_MARK_INNER));
+    m_pCB_TicksOuter->Check(bool(nTicks&CHAXIS_MARK_OUTER));
+    m_pCB_MinorInner->Check(bool(nMinorTicks&CHAXIS_MARK_INNER));
+    m_pCB_MinorOuter->Check(bool(nMinorTicks&CHAXIS_MARK_OUTER));
 
     // Tick position
     if( rInAttrs.GetItemState( SCHATTR_AXIS_MARK_POSITION, false, &pPoolItem ) == SFX_ITEM_SET )

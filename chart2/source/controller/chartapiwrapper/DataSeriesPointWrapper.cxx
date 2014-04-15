@@ -452,7 +452,7 @@ DataSeriesPointWrapper::DataSeriesPointWrapper(
         , m_eType( DATA_SERIES )
         , m_nSeriesIndexInNewAPI( -1 )
         , m_nPointIndex( -1 )
-        , m_bLinesAllowed(sal_True)
+        , m_bLinesAllowed(true)
         , m_xDataSeries(0)
 {
     //need initialize call afterwards
@@ -493,7 +493,7 @@ DataSeriesPointWrapper::DataSeriesPointWrapper( eType _eType,
     , m_eType( _eType )
     , m_nSeriesIndexInNewAPI( nSeriesIndexInNewAPI )
     , m_nPointIndex( (_eType == DATA_POINT) ? nPointIndex : -1 )
-    , m_bLinesAllowed( sal_False )
+    , m_bLinesAllowed( false )
     , m_xDataSeries(0)
 {
 }
@@ -616,7 +616,7 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OU
         if( rPropertyName == "FillColor")
         {
             Reference< beans::XPropertySet > xSeriesProp( getDataSeries(), uno::UNO_QUERY );
-            sal_Bool bVaryColorsByPoint = sal_False;
+            bool bVaryColorsByPoint = false;
             if( xSeriesProp.is() && (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint)
                 && bVaryColorsByPoint )
                 return beans::PropertyState_DIRECT_VALUE;
@@ -816,7 +816,7 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rProperty
         if( rPropertyName == "FillColor" )
         {
             Reference< beans::XPropertySet > xSeriesProp( getDataSeries(), uno::UNO_QUERY );
-            sal_Bool bVaryColorsByPoint = sal_False;
+            bool bVaryColorsByPoint = false;
             if( xSeriesProp.is() && (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint)
                 && bVaryColorsByPoint )
             {

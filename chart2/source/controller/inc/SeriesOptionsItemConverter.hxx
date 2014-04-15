@@ -65,7 +65,7 @@ private:
 
     sal_Int32 m_nBarOverlap;
     sal_Int32 m_nGapWidth;
-    sal_Bool  m_bConnectBars;
+    bool  m_bConnectBars;
 
     bool m_bSupportingAxisSideBySide;
     bool m_bGroupBarsPerAxis;

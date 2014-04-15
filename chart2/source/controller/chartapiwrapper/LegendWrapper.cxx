@@ -83,7 +83,7 @@ Any WrappedLegendAlignmentProperty::getPropertyValue( const Reference< beans::XP
     Any aRet;
     if( xInnerPropertySet.is() )
     {
-        sal_Bool bShowLegend = sal_True;
+        bool bShowLegend = true;
         xInnerPropertySet->getPropertyValue( "Show" ) >>= bShowLegend;
         if(!bShowLegend)
         {
@@ -103,12 +103,12 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
 {
     if(xInnerPropertySet.is())
     {
-        sal_Bool bNewShowLegend = sal_True;
-        sal_Bool bOldShowLegend = sal_True;
+        bool bNewShowLegend = true;
+        bool bOldShowLegend = true;
         {
             ::com::sun::star::chart::ChartLegendPosition eOuterPos(::com::sun::star::chart::ChartLegendPosition_NONE);
             if( (rOuterValue >>= eOuterPos)  && eOuterPos == ::com::sun::star::chart::ChartLegendPosition_NONE )
-                bNewShowLegend = sal_False;
+                bNewShowLegend = false;
             xInnerPropertySet->getPropertyValue( "Show" ) >>= bOldShowLegend;
         }
         if(bNewShowLegend!=bOldShowLegend)

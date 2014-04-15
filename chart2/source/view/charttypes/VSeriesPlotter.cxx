@@ -791,8 +791,8 @@ void VSeriesPlotter::createErrorBar(
 
     try
     {
-        sal_Bool bShowPositive = sal_False;
-        sal_Bool bShowNegative = sal_False;
+        bool bShowPositive = false;
+        bool bShowNegative = false;
         sal_Int32 nErrorBarStyle = ::com::sun::star::chart::ErrorBarStyle::VARIANCE;
 
         xErrorBarProperties->getPropertyValue( "ShowPositiveError") >>= bShowPositive;
@@ -991,7 +991,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
         sal_Int32 aPeriod = 2;
         double aExtrapolateForward = 0.0;
         double aExtrapolateBackward = 0.0;
-        sal_Bool aForceIntercept = false;
+        bool aForceIntercept = false;
         double aInterceptValue = 0.0;
 
         if ( xProperties.is() && !bAverageLine )

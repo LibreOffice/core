@@ -626,7 +626,7 @@ sal_Int32 XMLFilter::impl_Export(
 
         SvtSaveOptions aSaveOpt;
         OUString sUsePrettyPrinting( "UsePrettyPrinting" );
-        sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
+        bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
         xInfoSet->setPropertyValue( sUsePrettyPrinting, uno::makeAny( bUsePrettyPrinting ) );
         if( ! bOasis )
             xInfoSet->setPropertyValue( "ExportTableNumberList", uno::makeAny( true ));

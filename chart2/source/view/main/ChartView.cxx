@@ -194,7 +194,7 @@ ChartView::ChartView(
     , m_nScaleXDenominator(1)
     , m_nScaleYNumerator(1)
     , m_nScaleYDenominator(1)
-    , m_bSdrViewIsInEditMode(sal_False)
+    , m_bSdrViewIsInEditMode(false)
     , m_aResultingDiagramRectangleExcludingAxes(0,0,0,0)
 {
     init();
@@ -622,10 +622,10 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         nDimensionCount = 2;
     }
 
-    sal_Bool bSortByXValues = sal_False;
-    sal_Bool bConnectBars = sal_False;
-    sal_Bool bGroupBarsPerAxis = sal_True;
-    sal_Bool bIncludeHiddenCells = sal_True;
+    bool bSortByXValues = false;
+    bool bConnectBars = false;
+    bool bGroupBarsPerAxis = true;
+    bool bIncludeHiddenCells = true;
     sal_Int32 nStartingAngle = 90;
     sal_Int32 n3DRelativeHeight = 100;
     try
@@ -1626,7 +1626,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     return aUsedOuterRect;
 }
 
-sal_Bool ChartView::getExplicitValuesForAxis(
+bool ChartView::getExplicitValuesForAxis(
                      uno::Reference< XAxis > xAxis
                      , ExplicitScaleData&  rExplicitScale
                      , ExplicitIncrementData& rExplicitIncrement )
@@ -1634,12 +1634,12 @@ sal_Bool ChartView::getExplicitValuesForAxis(
     impl_updateView();
 
     if(!xAxis.is())
-        return sal_False;
+        return false;
 
     uno::Reference< XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(xAxis, mrChartModel.getFirstDiagram() ) );
     const VCoordinateSystem* pVCooSys = findInCooSysList(m_aVCooSysList,xCooSys);
     if(!pVCooSys)
-        return sal_False;
+        return false;
 
     sal_Int32 nDimensionIndex=-1;
     sal_Int32 nAxisIndex=-1;
@@ -1672,9 +1672,9 @@ sal_Bool ChartView::getExplicitValuesForAxis(
             else if( rExplicitScale.AxisType == ::com::sun::star::chart2::AxisType::SERIES )
                 rExplicitScale.Maximum -= 1.0;
         }
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 SdrPage* ChartView::getSdrPage()
@@ -2388,7 +2388,7 @@ void ChartView::impl_refreshAddIn()
         xProp->getPropertyValue( "AddIn" ) >>= xAddIn;
         if( xAddIn.is() )
         {
-            sal_Bool bRefreshAddInAllowed = sal_True;
+            bool bRefreshAddInAllowed = true;
             xProp->getPropertyValue( "RefreshAddInAllowed" ) >>= bRefreshAddInAllowed;
             if( bRefreshAddInAllowed )
                 xAddIn->refresh();

@@ -79,8 +79,8 @@ void TitlesAndObjectsTabPage::initializePage()
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( m_xChartModel );
         uno::Sequence< sal_Bool > aPossibilityList;
         uno::Sequence< sal_Bool > aExistenceList;
-        AxisHelper::getAxisOrGridPossibilities( aPossibilityList, xDiagram, sal_False );
-        AxisHelper::getAxisOrGridExcistence( aExistenceList, xDiagram, sal_False );
+        AxisHelper::getAxisOrGridPossibilities( aPossibilityList, xDiagram, false );
+        AxisHelper::getAxisOrGridExcistence( aExistenceList, xDiagram, false );
         m_pCB_Grid_X->Enable( aPossibilityList[0] );
         m_pCB_Grid_Y->Enable( aPossibilityList[1] );
         m_pCB_Grid_Z->Enable( aPossibilityList[2] );
@@ -123,7 +123,7 @@ void TitlesAndObjectsTabPage::commitToModel()
     {
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
         uno::Sequence< sal_Bool > aOldExistenceList;
-        AxisHelper::getAxisOrGridExcistence( aOldExistenceList, xDiagram, sal_False );
+        AxisHelper::getAxisOrGridExcistence( aOldExistenceList, xDiagram, false );
         uno::Sequence< sal_Bool > aNewExistenceList(aOldExistenceList);
         aNewExistenceList[0] = m_pCB_Grid_X->IsChecked();
         aNewExistenceList[1] = m_pCB_Grid_Y->IsChecked();

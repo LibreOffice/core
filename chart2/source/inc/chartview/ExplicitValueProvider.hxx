@@ -48,7 +48,7 @@ public:
         In contrast to the model data these explicit values are always complete as misssing auto properties are calculated.
         If the given Axis could not be found or for another reason no correct output can be given false is returned.
      */
-    virtual sal_Bool getExplicitValuesForAxis(
+    virtual bool getExplicitValuesForAxis(
         ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > xAxis
         , ExplicitScaleData&  rExplicitScale
         , ExplicitIncrementData& rExplicitIncrement )=0;

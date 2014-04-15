@@ -73,7 +73,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
     if( xChartViewProps.is() )
         xChartViewProps->setPropertyValue( "SdrViewIsInEditMode", uno::makeAny(sal_True) );
 
-    sal_Bool bEdit = m_pDrawViewWrapper->SdrBeginTextEdit( pTextObj
+    bool bEdit = m_pDrawViewWrapper->SdrBeginTextEdit( pTextObj
                     , m_pDrawViewWrapper->GetPageView()
                     , m_pChartWindow
                     , false //bIsNewObj

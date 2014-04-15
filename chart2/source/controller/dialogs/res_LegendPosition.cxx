@@ -84,7 +84,7 @@ void LegendPositionResources::writeToResources( const uno::Reference< frame::XMo
         if( xProp.is() )
         {
             //show
-            sal_Bool bShowLegend = sal_False;
+            bool bShowLegend = false;
             xProp->getPropertyValue( "Show" ) >>= bShowLegend;
             if (m_pCbxShow)
                 m_pCbxShow->Check( bShowLegend );
@@ -125,7 +125,7 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
 {
     try
     {
-        sal_Bool bShowLegend = m_pCbxShow ? m_pCbxShow->IsChecked() : false;
+        bool bShowLegend = m_pCbxShow ? m_pCbxShow->IsChecked() : false;
         ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
         uno::Reference< beans::XPropertySet > xProp( LegendHelper::getLegend( *pModel,m_xCC,bShowLegend ), uno::UNO_QUERY );
         if( xProp.is() )

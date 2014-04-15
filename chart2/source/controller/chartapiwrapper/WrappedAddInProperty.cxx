@@ -112,7 +112,7 @@ WrappedRefreshAddInAllowedProperty::~WrappedRefreshAddInAllowedProperty()
 void WrappedRefreshAddInAllowedProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /* xInnerPropertySet */ ) const
                         throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bUpdateAddIn = sal_True;
+    bool bUpdateAddIn = true;
     if( ! (rOuterValue >>= bUpdateAddIn) )
         throw lang::IllegalArgumentException( "The property RefreshAddInAllowed requires type boolean", 0, 0 );
 

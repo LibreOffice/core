@@ -165,7 +165,7 @@ PieChartTypeTemplate::PieChartTypeTemplate(
 {
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_OFFSET_MODE,    uno::makeAny( eMode ));
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DIMENSION,      uno::makeAny( nDim ));
-    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_USE_RINGS,      uno::makeAny( sal_Bool( bRings )));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_USE_RINGS,      uno::makeAny( bRings ));
 }
 
 PieChartTypeTemplate::~PieChartTypeTemplate()
@@ -311,9 +311,9 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
     sal_Bool bAdaptProperties )
     throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
+    bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
-    sal_Bool bTemplateUsesRings = sal_False;
+    bool bTemplateUsesRings = false;
     getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ) >>= bTemplateUsesRings;
     chart2::PieChartOffsetMode ePieOffsetMode;
     getFastPropertyValue( PROP_PIE_TEMPLATE_OFFSET_MODE ) >>= ePieOffsetMode;
@@ -382,7 +382,7 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
     {
         uno::Reference< beans::XPropertySet > xCTProp(
             DiagramHelper::getChartTypeByIndex( xDiagram, 0 ), uno::UNO_QUERY_THROW );
-        sal_Bool bUseRings = false;
+        bool bUseRings = false;
         if( xCTProp->getPropertyValue( "UseRings") >>= bUseRings )
         {
             bResult = ( bTemplateUsesRings == bUseRings );
@@ -460,7 +460,7 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
     {
         uno::Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
 
-        sal_Bool bTemplateUsesRings = sal_False;
+        bool bTemplateUsesRings = false;
         getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ) >>= bTemplateUsesRings;
         sal_Int32 nOuterSeriesIndex = 0; //@todo in future this will depend on Orientation of the radius axis scale
         if( nSeriesIndex == nOuterSeriesIndex )

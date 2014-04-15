@@ -123,7 +123,7 @@ void VAxisBase::setExrtaLinePositionAtOtherAxis( const double& fCrossingAt )
     m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis = new double(fCrossingAt);
 }
 
-sal_Bool VAxisBase::isAnythingToDraw()
+bool VAxisBase::isAnythingToDraw()
 {
     if( !m_aAxisProperties.m_xAxisModel.is() )
         return false;
@@ -135,7 +135,7 @@ sal_Bool VAxisBase::isAnythingToDraw()
     uno::Reference< beans::XPropertySet > xProps( m_aAxisProperties.m_xAxisModel, uno::UNO_QUERY );
     if( xProps.is() )
     {
-        sal_Bool bShow = sal_False;
+        bool bShow = false;
         xProps->getPropertyValue( "Show" ) >>= bShow;
         if( !bShow )
             return false;

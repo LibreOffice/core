@@ -846,7 +846,7 @@ sal_Bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning() throw (uno::Ru
         Any aRelativePosition( xDiaProps->getPropertyValue( "RelativePosition" ) );
         if( aRelativeSize.hasValue() && aRelativePosition.hasValue() )
         {
-            sal_Bool bPosSizeExcludeAxes = false;
+            bool bPosSizeExcludeAxes = false;
             xDiaProps->getPropertyValue( "PosSizeExcludeAxes" ) >>= bPosSizeExcludeAxes;
             return bPosSizeExcludeAxes;
         }
@@ -1364,7 +1364,7 @@ bool WrappedStackingProperty::detectInnerValue( StackMode& eStackMode ) const
 void WrappedStackingProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewValue = false;
+    bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( "Stacking Properties require boolean values", 0, 0 );
 
@@ -1396,7 +1396,7 @@ Any WrappedStackingProperty::getPropertyValue( const Reference< beans::XProperty
     StackMode eInnerStackMode;
     if( detectInnerValue( eInnerStackMode ) )
     {
-        sal_Bool bValue = (eInnerStackMode == m_eStackMode);
+        bool bValue = (eInnerStackMode == m_eStackMode);
         Any aAny;
         aAny <<= bValue;
         return aAny;
@@ -1408,7 +1408,7 @@ Any WrappedStackingProperty::getPropertyDefault( const Reference< beans::XProper
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
-    aRet <<= sal_Bool( sal_False );
+    aRet <<= false;
     return aRet;
 }
 
@@ -1448,7 +1448,7 @@ WrappedDim3DProperty::~WrappedDim3DProperty()
 void WrappedDim3DProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNew3D = false;
+    bool bNew3D = false;
     if( ! (rOuterValue >>= bNew3D) )
         throw lang::IllegalArgumentException( "Property Dim3D requires boolean value", 0, 0 );
 
@@ -1458,7 +1458,7 @@ void WrappedDim3DProperty::setPropertyValue( const Any& rOuterValue, const Refer
     if( !xDiagram.is() )
         return;
 
-    sal_Bool bOld3D = DiagramHelper::getDimension( xDiagram ) == 3;
+    bool bOld3D = DiagramHelper::getDimension( xDiagram ) == 3;
     if( bOld3D != bNew3D )
         DiagramHelper::setDimension( xDiagram, bNew3D ? 3 : 2 );
 }
@@ -1469,7 +1469,7 @@ Any WrappedDim3DProperty::getPropertyValue( const Reference< beans::XPropertySet
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if( xDiagram.is() )
     {
-        sal_Bool b3D = DiagramHelper::getDimension( xDiagram ) == 3;
+        bool b3D = DiagramHelper::getDimension( xDiagram ) == 3;
         m_aOuterValue <<= b3D;
     }
     return m_aOuterValue;
@@ -1479,7 +1479,7 @@ Any WrappedDim3DProperty::getPropertyDefault( const Reference< beans::XPropertyS
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
-    aRet <<= sal_Bool( sal_False );
+    aRet <<= false;
     return aRet;
 }
 
@@ -1519,7 +1519,7 @@ WrappedVerticalProperty::~WrappedVerticalProperty()
 void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewVertical = false;
+    bool bNewVertical = false;
     if( ! (rOuterValue >>= bNewVertical) )
         throw lang::IllegalArgumentException( "Property Vertical requires boolean value", 0, 0 );
 
@@ -1531,7 +1531,7 @@ void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Re
 
     bool bFound = false;
     bool bAmbiguous = false;
-    sal_Bool bOldVertical = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
+    bool bOldVertical = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
     if( bFound && ( bOldVertical != bNewVertical || bAmbiguous ) )
         DiagramHelper::setVertical( xDiagram, bNewVertical );
 }
@@ -1544,7 +1544,7 @@ Any WrappedVerticalProperty::getPropertyValue( const Reference< beans::XProperty
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if( xDiagram.is() )
     {
-        sal_Bool bVertical = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
+        bool bVertical = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
         if( bFound )
             m_aOuterValue <<= bVertical;
     }
@@ -1555,7 +1555,7 @@ Any WrappedVerticalProperty::getPropertyDefault( const Reference< beans::XProper
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
-    aRet <<= sal_Bool( sal_False );
+    aRet <<= false;
     return aRet;
 }
 
@@ -1999,7 +1999,7 @@ WrappedIncludeHiddenCellsProperty::~WrappedIncludeHiddenCellsProperty()
 void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewValue = false;
+    bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( "Property Dim3D requires boolean value", 0, 0 );
 

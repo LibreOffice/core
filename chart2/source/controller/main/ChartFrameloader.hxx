@@ -40,11 +40,11 @@ class ChartFrameLoader : public ::cppu::WeakImplHelper2<
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>        m_xCC;
-    sal_Bool            m_bCancelRequired;
+    bool            m_bCancelRequired;
     ::osl::Condition    m_oCancelFinished;
 
 private:
-        sal_Bool impl_checkCancel();
+        bool impl_checkCancel();
     //no default constructor
     ChartFrameLoader(){}
 public:

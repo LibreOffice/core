@@ -776,7 +776,7 @@ Reference< sheet::XRangeSelection > SAL_CALL InternalDataProvider::getRangeSelec
 sal_Bool SAL_CALL InternalDataProvider::hasDataByRangeRepresentation( const OUString& aRange )
     throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bResult = false;
+    bool bResult = false;
 
     if( aRange.match( lcl_aCategoriesRangeName ))
     {

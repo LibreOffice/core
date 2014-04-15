@@ -44,7 +44,7 @@ namespace chart
 CartesianCoordinateSystem::CartesianCoordinateSystem(
     const uno::Reference< uno::XComponentContext > & xContext,
     sal_Int32 nDimensionCount /* = 2 */,
-    sal_Bool bSwapXAndYAxis /* = sal_False */ ) :
+    bool bSwapXAndYAxis /* = sal_False */ ) :
         BaseCoordinateSystem( xContext, nDimensionCount, bSwapXAndYAxis )
 {}
 
@@ -92,7 +92,7 @@ APPHELPER_XSERVICEINFO_IMPL( CartesianCoordinateSystem,
 
 CartesianCoordinateSystem2d::CartesianCoordinateSystem2d(
     const uno::Reference< uno::XComponentContext > & xContext ) :
-        CartesianCoordinateSystem( xContext, 2, sal_False )
+        CartesianCoordinateSystem( xContext, 2, false )
 {}
 
 CartesianCoordinateSystem2d::~CartesianCoordinateSystem2d()
@@ -114,7 +114,7 @@ APPHELPER_XSERVICEINFO_IMPL( CartesianCoordinateSystem2d, lcl_aImplementationNam
 
 CartesianCoordinateSystem3d::CartesianCoordinateSystem3d(
     const uno::Reference< uno::XComponentContext > & xContext ) :
-        CartesianCoordinateSystem( xContext, 3, sal_False )
+        CartesianCoordinateSystem( xContext, 3, false )
 {}
 
 CartesianCoordinateSystem3d::~CartesianCoordinateSystem3d()

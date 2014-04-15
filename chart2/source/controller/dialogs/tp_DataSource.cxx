@@ -502,7 +502,7 @@ void DataSourceTabPage::updateControlState()
 
     m_pFT_DATALABELS->Show(!bHasCategories);
     m_pFT_CATEGORIES->Show( bHasCategories);
-    sal_Bool bShowIB = bHasRangeChooser;
+    bool bShowIB = bHasRangeChooser;
 
     m_pIMB_RANGE_CAT->Show(bShowIB);
 

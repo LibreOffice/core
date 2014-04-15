@@ -85,7 +85,7 @@ void PolarOptionsTabPage::Reset(const SfxItemSet& rInAttrs)
     }
     if (rInAttrs.GetItemState(SCHATTR_CLOCKWISE, true, &pPoolItem) == SFX_ITEM_SET)
     {
-        sal_Bool bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        bool bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCB_Clockwise->Check(bCheck);
     }
     else

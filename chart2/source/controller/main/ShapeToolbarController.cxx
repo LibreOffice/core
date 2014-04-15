@@ -184,7 +184,7 @@ void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Even
         aFind->second = Event.IsEnabled;
         if ( m_pToolbarController.is() )
         {
-            sal_Bool bCheckmark = sal_False;
+            bool bCheckmark = false;
             ToolBox& rTb = m_pToolbarController->GetToolBox();
 
             for ( sal_uInt16 i = 0; i < rTb.GetItemCount(); ++i )

@@ -462,7 +462,7 @@ private:
 
             virtual ~TheModel();
 
-            void        SetOwnership( sal_Bool bGetsOwnership );
+            void        SetOwnership( bool bGetsOwnership );
             void        addListener( ChartController* pController );
             void        removeListener(  ChartController* pController );
             void        tryTermination();
@@ -475,11 +475,11 @@ private:
 
             //the ownership between model and controller is not clear at first
             //each controller might consider himself as owner of the model first
-            sal_Bool volatile       m_bOwnership;
+            bool volatile       m_bOwnership;
             //with a XCloseable::close call and during XCloseListener::queryClosing
             //the ownership can be regulated more explicit,
             //if so the ownership is considered to be well known
-            sal_Bool volatile       m_bOwnershipIsWellKnown;
+            bool volatile       m_bOwnershipIsWellKnown;
     };
     class TheModelRef
     {
@@ -489,7 +489,7 @@ private:
             TheModelRef& operator=(ChartController::TheModel* pTheModel);
             TheModelRef& operator=(const TheModelRef& rTheModel);
             virtual ~TheModelRef();
-            sal_Bool is() const;
+            bool is() const;
                 TheModel* operator->() const { return m_pTheModel; }
         private:
             TheModel*               m_pTheModel;
@@ -500,8 +500,8 @@ private:
     mutable ::apphelper::LifeTimeManager    m_aLifeTimeManager;
 
     mutable ::osl::Mutex    m_aControllerMutex;
-    sal_Bool volatile       m_bSuspended;
-    sal_Bool volatile       m_bCanClose;
+    bool volatile       m_bSuspended;
+    bool volatile       m_bCanClose;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>        m_xCC;
 
@@ -548,7 +548,7 @@ private:
 private:
     //private methods
 
-    sal_Bool            impl_isDisposedOrSuspended() const;
+    bool            impl_isDisposedOrSuspended() const;
     ::std::auto_ptr< ReferenceSizeProvider > impl_createReferenceSizeProvider();
     void                impl_adaptDataSeriesAutoResize();
 
@@ -606,7 +606,7 @@ private:
     void SAL_CALL       executeDispatch_InsertSpecialCharacter();
     void SAL_CALL       executeDispatch_EditText( const Point* pMousePixel = NULL );
     void SAL_CALL       executeDispatch_SourceData();
-    void SAL_CALL       executeDispatch_MoveSeries( sal_Bool bForward );
+    void SAL_CALL       executeDispatch_MoveSeries( bool bForward );
 
     void                StartTextEdit( const Point* pMousePixel = NULL );
     bool                EndTextEdit();

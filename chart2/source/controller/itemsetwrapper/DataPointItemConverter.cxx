@@ -238,7 +238,7 @@ DataPointItemConverter::DataPointItemConverter(
     uno::Reference< XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram , xSeries ) );
     bool bFound = false;
     bool bAmbiguous = false;
-    sal_Bool bSwapXAndY = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
+    bool bSwapXAndY = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
     m_aAvailableLabelPlacements = ChartTypeHelper::getSupportedLabelPlacements( xChartType, DiagramHelper::getDimension( xDiagram ), bSwapXAndY, xSeries );
 
     m_bForbidPercentValue = AxisType::CATEGORY != ChartTypeHelper::getAxisType( xChartType, 0 );
@@ -319,19 +319,19 @@ bool DataPointItemConverter::ApplySpecialItem(
                 sal_Bool& rValue = (SCHATTR_DATADESCR_SHOW_NUMBER==nWhichId) ? aLabel.ShowNumber : (
                     (SCHATTR_DATADESCR_SHOW_PERCENTAGE==nWhichId) ? aLabel.ShowNumberInPercent : (
                     (SCHATTR_DATADESCR_SHOW_CATEGORY==nWhichId) ? aLabel.ShowCategoryName : aLabel.ShowLegendSymbol ));
-                sal_Bool bOldValue = rValue;
-                rValue = static_cast< sal_Bool >( rItem.GetValue() );
+                bool bOldValue = rValue;
+                rValue = rItem.GetValue();
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
                     Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
-                    if( bOldValue != rValue ||
+                    if( (bOldValue ? 1 : 0) != rValue ||
                         DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, "Label" , aOldValue ) )
                     {
                         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "Label" , uno::makeAny( aLabel ) );
                         bChanged = true;
                     }
                 }
-                else if( bOldValue != rValue )
+                else if( (bOldValue ? 1 : 0) != rValue )
                 {
                     GetPropertySet()->setPropertyValue( "Label" , uno::makeAny( aLabel ));
                     bChanged = true;
@@ -541,7 +541,7 @@ void DataPointItemConverter::FillSpecialItem(
             chart2::DataPointLabel aLabel;
             if( GetPropertySet()->getPropertyValue( "Label" ) >>= aLabel )
             {
-                sal_Bool bValue = (SCHATTR_DATADESCR_SHOW_NUMBER==nWhichId) ? aLabel.ShowNumber : (
+                bool bValue = (SCHATTR_DATADESCR_SHOW_NUMBER==nWhichId) ? aLabel.ShowNumber : (
                     (SCHATTR_DATADESCR_SHOW_PERCENTAGE==nWhichId) ? aLabel.ShowNumberInPercent : (
                     (SCHATTR_DATADESCR_SHOW_CATEGORY==nWhichId) ? aLabel.ShowCategoryName : aLabel.ShowLegendSymbol ));
 

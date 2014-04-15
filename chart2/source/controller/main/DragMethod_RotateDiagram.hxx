@@ -75,7 +75,7 @@ private:
     sal_Int32 m_nAdditionalVerticalAngleDegree;
 
     RotationDirection m_eRotationDirection;
-    sal_Bool    m_bRightAngledAxes;
+    bool    m_bRightAngledAxes;
 };
 
 } //  namespace chart

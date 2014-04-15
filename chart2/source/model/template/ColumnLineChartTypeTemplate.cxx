@@ -280,7 +280,7 @@ sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
     sal_Bool bAdaptProperties )
     throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if( ! xDiagram.is())
         return bResult;

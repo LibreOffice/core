@@ -236,7 +236,7 @@ void SAL_CALL ChartModel::store()
           uno::RuntimeException, std::exception)
 {
     apphelper::LifeTimeGuard aGuard(m_aLifeTimeManager);
-    if(!aGuard.startApiCall(sal_True)) //start LongLastingCall
+    if(!aGuard.startApiCall(true)) //start LongLastingCall
         return; //behave passive if already disposed or closed or throw exception @todo?
 
     OUString aLocation = m_aResource;
@@ -259,14 +259,14 @@ void SAL_CALL ChartModel::storeAsURL(
     throw(io::IOException, uno::RuntimeException, std::exception)
 {
     apphelper::LifeTimeGuard aGuard(m_aLifeTimeManager);
-    if(!aGuard.startApiCall(sal_True)) //start LongLastingCall
+    if(!aGuard.startApiCall(true)) //start LongLastingCall
         return; //behave passive if already disposed or closed or throw exception @todo?
 
     apphelper::MediaDescriptorHelper aMediaDescriptorHelper(rMediaDescriptor);
     uno::Sequence< beans::PropertyValue > aReducedMediaDescriptor(
         aMediaDescriptorHelper.getReducedForModel() );
 
-    m_bReadOnly = sal_False;
+    m_bReadOnly = false;
     aGuard.clear();
 
     // create new storage
@@ -286,7 +286,7 @@ void SAL_CALL ChartModel::storeToURL(
           uno::RuntimeException, std::exception)
 {
     apphelper::LifeTimeGuard aGuard(m_aLifeTimeManager);
-    if(!aGuard.startApiCall(sal_True)) //start LongLastingCall
+    if(!aGuard.startApiCall(true)) //start LongLastingCall
         return; //behave passive if already disposed or closed or throw exception @todo?
     //do not change the internal state of the document here
 
@@ -513,7 +513,7 @@ void SAL_CALL ChartModel::load(
             {
                 attachResource( aMDHelper.URL, rMediaDescriptor );
                 impl_load( rMediaDescriptor, 0 ); // cannot create a storage from binary streams, but I do not need the storage here anyhow
-                m_bReadOnly = sal_True;
+                m_bReadOnly = true;
                 return;
             }
 

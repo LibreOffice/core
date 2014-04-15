@@ -75,115 +75,115 @@ public:
                         m_aModelProperties; //these are properties which are not described in service com.sun.star.document.MediaDescriptor
 
     //@todo define this for debug only, except URL
-    sal_Bool            AsTemplate; //document is a template.
-    sal_Bool            ISSET_AsTemplate;
+    bool            AsTemplate; //document is a template.
+    bool            ISSET_AsTemplate;
     OUString     Author;
-    sal_Bool            ISSET_Author;
+    bool            ISSET_Author;
     OUString     CharacterSet; //identifier of used character set.
-    sal_Bool            ISSET_CharacterSet;
+    bool            ISSET_CharacterSet;
     OUString     Comment;
-    sal_Bool            ISSET_Comment;
+    bool            ISSET_Comment;
 
     ::com::sun::star::uno::Any
                         ComponentData;
-    sal_Bool            ISSET_ComponentData;
+    bool            ISSET_ComponentData;
     OUString     FileName; //deprecated, same as url
-    sal_Bool            ISSET_FileName;
+    bool            ISSET_FileName;
     ::com::sun::star::uno::Any
                         FilterData;
-    sal_Bool            ISSET_FilterData;
+    bool            ISSET_FilterData;
     OUString     FilterName; //internal filter name.
-    sal_Bool            ISSET_FilterName;
+    bool            ISSET_FilterName;
     OUString     FilterFlags;//deprecated,
-    sal_Bool            ISSET_FilterFlags;
+    bool            ISSET_FilterFlags;
     OUString     FilterOptions;
-    sal_Bool            ISSET_FilterOptions;
+    bool            ISSET_FilterOptions;
             //not documented ... @todo remove?
     OUString     FrameName; //name of target frame.
-    sal_Bool            ISSET_FrameName;
-    sal_Bool            Hidden; //load document, invisible.
-    sal_Bool            ISSET_Hidden;
+    bool            ISSET_FrameName;
+    bool            Hidden; //load document, invisible.
+    bool            ISSET_Hidden;
 
     OUString     HierarchicalDocumentName;
-    sal_Bool            ISSET_HierarchicalDocumentName;
+    bool            ISSET_HierarchicalDocumentName;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         OutputStream; //a stream to receive the document data for saving
-    sal_Bool            ISSET_OutputStream;
+    bool            ISSET_OutputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                         InputStream; //content of document.
-    sal_Bool            ISSET_InputStream;
+    bool            ISSET_InputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         InteractionHandler; //::com::sun::star::task::XInteractionHandler
-    sal_Bool            ISSET_InteractionHandler;
+    bool            ISSET_InteractionHandler;
 
     OUString     JumpMark;   //specifies the name of a mark within the document where the first view is to position itself.
-    sal_Bool            ISSET_JumpMark;
+    bool            ISSET_JumpMark;
     OUString     MediaType; //mime type.
-    sal_Bool            ISSET_MediaType;
+    bool            ISSET_MediaType;
     OUString     OpenFlags; //deprecated
-    sal_Bool            ISSET_OpenFlags;
-    sal_Bool            OpenNewView; //opens a new view for an already loaded document.
-    sal_Bool            ISSET_OpenNewView;
-    sal_Bool            Overwrite; //opens a new view for an already loaded document.
-    sal_Bool            ISSET_Overwrite;
+    bool            ISSET_OpenFlags;
+    bool            OpenNewView; //opens a new view for an already loaded document.
+    bool            ISSET_OpenNewView;
+    bool            Overwrite; //opens a new view for an already loaded document.
+    bool            ISSET_Overwrite;
     OUString     Password;
-    sal_Bool            ISSET_Password;
+    bool            ISSET_Password;
 
         //not documented ... @todo remove?
     ::com::sun::star::awt::Rectangle
                         PosSize; //position and size of document window.
-    sal_Bool            ISSET_PosSize;
+    bool            ISSET_PosSize;
 
     ::com::sun::star::uno::Sequence< sal_Int8 >
                         PostData; //contains the data for HTTP post method as a sequence of bytes.
-    sal_Bool            ISSET_PostData;
+    bool            ISSET_PostData;
     OUString     PostString; //deprecated, contains the data for HTTP post method as a sequence of bytes.
-    sal_Bool            ISSET_PostString;
-    sal_Bool            Preview; //show preview.
-    sal_Bool            ISSET_Preview;
-    sal_Bool            ReadOnly; //open document readonly.
-    sal_Bool            ISSET_ReadOnly;
+    bool            ISSET_PostString;
+    bool            Preview; //show preview.
+    bool            ISSET_Preview;
+    bool            ReadOnly; //open document readonly.
+    bool            ISSET_ReadOnly;
     OUString     Referer; //name of document referrer.
-    sal_Bool            ISSET_Referer;
+    bool            ISSET_Referer;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         StatusIndicator; //::com::sun::star::task::XStatusIndicator
-    sal_Bool            ISSET_StatusIndicator;
+    bool            ISSET_StatusIndicator;
         //not documented ... @todo remove?
-    sal_Bool            Silent; //prevents dialogs to query for more information.
-    sal_Bool            ISSET_Silent;
+    bool            Silent; //prevents dialogs to query for more information.
+    bool            ISSET_Silent;
     OUString     TemplateName; //deprecated, name of the template instead of the URL.
-    sal_Bool            ISSET_TemplateName;
+    bool            ISSET_TemplateName;
     OUString     TemplateRegionName; //deprecated, name of the region of the template.
-    sal_Bool            ISSET_TemplateRegionName;
-    sal_Bool            Unpacked;
-    sal_Bool            ISSET_Unpacked;
+    bool            ISSET_TemplateRegionName;
+    bool            Unpacked;
+    bool            ISSET_Unpacked;
     OUString     URL;// FileName, URL of the document.
-    sal_Bool            ISSET_URL;
+    bool            ISSET_URL;
     sal_Int16           Version; //storage version.
-    sal_Bool            ISSET_Version;
+    bool            ISSET_Version;
 
     ::com::sun::star::uno::Any
                         ViewData;
-    sal_Bool            ISSET_ViewData;
+    bool            ISSET_ViewData;
     sal_Int16           ViewId; //id of the initial view.
-    sal_Bool            ISSET_ViewId;
+    bool            ISSET_ViewId;
 
     // new framework objects
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
                         Storage;
-    sal_Bool            ISSET_Storage;
+    bool            ISSET_Storage;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
                         Stream;
-    sal_Bool            ISSET_Stream;
+    bool            ISSET_Stream;
 
     // undocumented SFX Properties
     ::com::sun::star::uno::Sequence< sal_Int32 >
                         WinExtent;
-    sal_Bool            ISSET_WinExtent;
-    sal_Bool            SetEmbedded;
-    sal_Bool            ISSET_SetEmbedded;
+    bool            ISSET_WinExtent;
+    bool            SetEmbedded;
+    bool            ISSET_SetEmbedded;
 
 protected:
 SAL_DLLPRIVATE void impl_init();

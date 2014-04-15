@@ -134,7 +134,7 @@ private:
     sal_Int32           m_nSeriesIndexInNewAPI;
     sal_Int32           m_nPointIndex;
 
-    sal_Bool            m_bLinesAllowed;
+    bool            m_bLinesAllowed;
 
     //this should only be used, if the DataSeriesPointWrapper is initialized via the XInitialize interface
     //because a big change in the chartmodel may lead to an dataseriespointer that is not connected to the model anymore

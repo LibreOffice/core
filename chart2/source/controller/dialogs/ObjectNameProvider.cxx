@@ -564,7 +564,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                         Reference< chart2::XRegressionCurveCalculator > xCalculator( xCurve->getCalculator(), uno::UNO_QUERY_THROW );
                         sal_Int32 aDegree = 2;
                         sal_Int32 aPeriod = 2;
-                        sal_Bool aForceIntercept = false;
+                        bool aForceIntercept = false;
                         double aInterceptValue = 0.0;
                         uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
                         if ( xProperties.is())

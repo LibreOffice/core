@@ -556,7 +556,7 @@ void VCoordinateSystem::clearMinimumAndMaximumSupplierList()
 bool VCoordinateSystem::getPropertySwapXAndYAxis() const
 {
     Reference<beans::XPropertySet> xProp(m_xCooSysModel, uno::UNO_QUERY );
-    sal_Bool bSwapXAndY = false;
+    bool bSwapXAndY = false;
     if( xProp.is()) try
     {
         xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;

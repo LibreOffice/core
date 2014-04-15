@@ -141,7 +141,7 @@ uno::Reference< drawing::XDrawPage > Chart2ModelContact::getDrawPage()
     return xResult;
 }
 
-sal_Bool Chart2ModelContact::getExplicitValuesForAxis(
+bool Chart2ModelContact::getExplicitValuesForAxis(
     const Reference< XAxis > & xAxis,
     ExplicitScaleData &  rOutExplicitScale,
     ExplicitIncrementData & rOutExplicitIncrement )
@@ -152,7 +152,7 @@ sal_Bool Chart2ModelContact::getExplicitValuesForAxis(
         return pProvider->getExplicitValuesForAxis(
             xAxis, rOutExplicitScale, rOutExplicitIncrement );
     }
-    return sal_False;
+    return false;
 }
 
 sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForAxis(

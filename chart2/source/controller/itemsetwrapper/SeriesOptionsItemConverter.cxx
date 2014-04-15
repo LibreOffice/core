@@ -249,7 +249,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
 
         case SCHATTR_BAR_CONNECT:
         {
-            sal_Bool bOldConnectBars = sal_False;
+            bool bOldConnectBars = false;
             m_bConnectBars = static_cast< const SfxBoolItem & >(
                 rItemSet.Get( nWhichId )).GetValue();
             if( m_bSupportingBarConnectors )

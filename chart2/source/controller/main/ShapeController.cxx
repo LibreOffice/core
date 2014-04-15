@@ -259,7 +259,7 @@ void ShapeController::executeDispatch_FormatLine()
         {
             SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
-            sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
             if ( bHasMarked )
             {
                 pDrawViewWrapper->MergeAttrFromMarked( aAttr, false );
@@ -298,7 +298,7 @@ void ShapeController::executeDispatch_FormatArea()
         if ( pParent && pDrawModelWrapper && pDrawViewWrapper )
         {
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
-            sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
             if ( bHasMarked )
             {
                 pDrawViewWrapper->MergeAttrFromMarked( aAttr, false );
@@ -340,7 +340,7 @@ void ShapeController::executeDispatch_TextAttributes()
         if ( pParent && pDrawViewWrapper )
         {
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
-            sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
             if ( bHasMarked )
             {
                 pDrawViewWrapper->MergeAttrFromMarked( aAttr, false );
