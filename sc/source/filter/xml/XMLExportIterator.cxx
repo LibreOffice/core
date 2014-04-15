@@ -657,10 +657,11 @@ void ScMyNotEmptyCellsIterator::UpdateAddress( table::CellAddress& rAddress )
     }
 }
 
-void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, table::CellAddress& rAddress )
+void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, const table::CellAddress& rAddress )
 {
     rMyCell.maBaseCell.clear();
     rMyCell.aCellAddress = rAddress;
+    ScUnoConversion::FillScAddress(rMyCell.maCellAddress, rMyCell.aCellAddress);
 
     if( (nCellCol == rAddress.Column) && (nCellRow == rAddress.Row) )
     {
