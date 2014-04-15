@@ -243,8 +243,6 @@ private:
     bool                        mbInPrintPage;
     bool                        mbNewJobSetup;
     bool                        mbIsQueuePrinter;
-    bool                        mbUserSetupCompleted;
-    bool                        mbUserSetupResult;
     Link                        maErrorHdl;
 
     bool                        ImplInitGraphics() const SAL_OVERRIDE;
