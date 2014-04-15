@@ -25,17 +25,11 @@ make oox.clean && make oox dbglevel=2
 (cd oox/source/drawingml/customshapes && ./generatePresetsPPTXs.pl)
 
 
-# Then load it and store the debugging output. Note that this will run
-# an *interactive* LO, and you need to quit it manually.
-
-echo
-echo "Starting LibreOffice, quit once you see the slide."
-echo
-
+# Then load it and store the debugging output.
 # We need only the SAL_INFO output with tag "oox.cscode", plus stderr
 # for PropertyMap::dumpCode() output.
 
-SAL_LOG='+INFO.oox.cscode-WARN' instdir/program/soffice oox/source/drawingml/customshapes/pptx/cshape-all.pptx > oox/source/drawingml/customshapes/custom-shapes.log 2>&1
+SAL_LOG='+INFO.oox.cscode-WARN' instdir/program/soffice --headless --convert-to odp --outdir oox/source/drawingml/customshapes/ oox/source/drawingml/customshapes/pptx/cshape-all.pptx > oox/source/drawingml/customshapes/custom-shapes.log 2>&1
 
 
 # Now run a script that reads the above log file and generates the
