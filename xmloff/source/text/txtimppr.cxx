@@ -115,7 +115,7 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
                                                   rUnitConverter );
         if( SvXMLImport::OOo_2x == GetImport().getGeneratorVersion() )
         {
-            bool bHidden;
+            bool bHidden = false;
             rProperty.maValue >>= bHidden;
             bHidden = !bHidden;
             rProperty.maValue <<= bHidden;
