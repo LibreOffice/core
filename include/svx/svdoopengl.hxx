@@ -36,7 +36,7 @@ public:
     void setRenderer(IOpenGLRenderer* pRenderer);
     IOpenGLRenderer* getRenderer();
 
-    virtual bool isOpenGLInitialized();
+    virtual bool isOpenGLInitialized() SAL_OVERRIDE;
 
 private:
 
