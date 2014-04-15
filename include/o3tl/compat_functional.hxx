@@ -136,14 +136,6 @@ inline binary_compose<F1, F2, F3> compose2(const F1& fnction1, const F2& fnction
     return (binary_compose<F1, F2, F3>(fnction1, fnction2, fnction3));
 }
 
-/// Algo that assigns val, val+1, ... to the given range
-template<typename FwdIter, typename ValueType>
-inline void iota(FwdIter first, FwdIter last, ValueType val)
-{
-    while(first != last)
-        *first++ = val++;
-}
-
 }   // namespace o3tl
 
 #endif
