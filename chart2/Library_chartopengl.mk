@@ -19,7 +19,6 @@ $(eval $(call gb_Library_set_include,chartopengl,\
 
 $(eval $(call gb_Library_use_externals,chartopengl,\
 	boost_headers \
-	mdds_headers \
 	glm_headers \
 	mesa_headers \
 	glew \
