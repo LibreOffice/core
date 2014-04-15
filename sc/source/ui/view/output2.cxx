@@ -1477,6 +1477,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
     // before processing the cell value.
     ::boost::ptr_vector<ScPatternAttr> aAltPatterns;
 
+    std::vector<sal_Int32> aDX;
     long nPosY = nScrY;
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -2022,25 +2023,29 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                         //  aufgezeichnet werden (fuer nicht-proportionales Resize):
 
                         OUString aString = aVars.GetString();
-                        if (bMetaFile || pFmtDevice != mpDev || aZoomX != aZoomY)
+                        if (!aString.isEmpty())
                         {
-                            sal_Int32* pDX = new sal_Int32[aString.getLength()];
-                            pFmtDevice->GetTextArray( aString, pDX );
-
-                            if ( !mpRefDevice->GetConnectMetaFile() ||
-                                    mpRefDevice->GetOutDevType() == OUTDEV_PRINTER )
+                            if (bMetaFile || pFmtDevice != mpDev || aZoomX != aZoomY)
                             {
-                                double fMul = GetStretch();
-                                sal_Int32 nLen = aString.getLength();
-                                for( sal_Int32 i = 0; i<nLen; i++ )
-                                    pDX[i] = (long)(pDX[i] / fMul + 0.5);
-                            }
+                                size_t nLen = aString.getLength();
+                                if (aDX.size() < nLen)
+                                    aDX.resize(nLen, 0);
 
-                            mpDev->DrawTextArray( aDrawTextPos, aString, pDX );
-                            delete[] pDX;
+                                pFmtDevice->GetTextArray(aString, &aDX[0]);
+
+                                if ( !mpRefDevice->GetConnectMetaFile() ||
+                                        mpRefDevice->GetOutDevType() == OUTDEV_PRINTER )
+                                {
+                                    double fMul = GetStretch();
+                                    for (size_t i = 0; i < nLen; ++i)
+                                        aDX[i] = static_cast<sal_Int32>(aDX[i] / fMul + 0.5);
+                                }
+
+                                mpDev->DrawTextArray(aDrawTextPos, aString, &aDX[0]);
+                            }
+                            else
+                                mpDev->DrawText( aDrawTextPos, aString );
                         }
-                        else
-                            mpDev->DrawText( aDrawTextPos, aString );
 
                         if ( bHClip || bVClip )
                         {
