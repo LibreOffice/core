@@ -26,8 +26,10 @@
 #include <tox.hxx>
 #include <cstdio>
 
+class SwCntntNode;
 class SwNode;
 class SwTxtAttr;
+class SwTxtNode;
 class SwpHints;
 class SfxPoolItem;
 class SfxItemSet;
@@ -54,6 +56,9 @@ SW_DLLPUBLIC const char * dbg_out(const OUString & aStr);
 SW_DLLPUBLIC const char * dbg_out(const SwRect & rRect);
 SW_DLLPUBLIC const char * dbg_out(const SwFrmFmt & rFrmFmt);
 SW_DLLPUBLIC const char * dbg_out(const SwNode & rNode);
+SW_DLLPUBLIC const char * dbg_out(const SwNode * pNode);
+SW_DLLPUBLIC const char * dbg_out(const SwCntntNode * pNode);
+SW_DLLPUBLIC const char * dbg_out(const SwTxtNode * pNode);
 SW_DLLPUBLIC const char * dbg_out(const SwTxtAttr & rAttr);
 SW_DLLPUBLIC const char * dbg_out(const SwpHints &rHints);
 SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem & rItem);
@@ -64,6 +69,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwPosition & rPos);
 SW_DLLPUBLIC const char * dbg_out(const SwPaM & rPam);
 SW_DLLPUBLIC const char * dbg_out(const SwNodeNum & rNum);
 SW_DLLPUBLIC const char * dbg_out(const SwUndo & rUndo);
+SW_DLLPUBLIC const char * dbg_out(SwOutlineNodes & rNodes);
 SW_DLLPUBLIC const char * dbg_out(const SwRewriter & rRewriter);
 SW_DLLPUBLIC const char * dbg_out(const SwNumRule & rRule);
 SW_DLLPUBLIC const char * dbg_out(const SwTxtFmtColl & rFmt);

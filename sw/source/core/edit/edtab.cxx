@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <fesh.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
 
@@ -48,8 +49,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-extern void ClearFEShellTabCols();
 
 //Added for bug #i119954# Application crashed if undo/redo covert nest table to text
 sal_Bool ConvertTableToText( const SwTableNode *pTableNode, sal_Unicode cCh );

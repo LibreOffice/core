@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <mdiexp.hxx>
 #include <tools/helpers.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/undo.hxx>

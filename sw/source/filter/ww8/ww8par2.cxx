@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <comphelper/string.hxx>
 #include <tools/solar.h>
@@ -71,11 +74,8 @@
 using namespace ::com::sun::star;
 
 class WW8SelBoxInfo
-    : public std::vector<SwTableBox*>
+    : public std::vector<SwTableBox*>, private boost::noncopyable
 {
-private:
-    WW8SelBoxInfo(const WW8SelBoxInfo&);
-    WW8SelBoxInfo& operator=(const WW8SelBoxInfo&);
 public:
     short nGroupXStart;
     short nGroupWidth;
@@ -102,7 +102,7 @@ WW8TabBandDesc::~WW8TabBandDesc()
     delete[] pNewSHDs;
 }
 
-class WW8TabDesc
+class WW8TabDesc: private boost::noncopyable
 {
     std::vector<OUString> aNumRuleNames;
     sw::util::RedlineStack *mpOldRedlineStack;
@@ -166,9 +166,7 @@ class WW8TabDesc
         WW8SelBoxInfo* pActGroup, SwTableBox* pActBox, sal_uInt16 nCol  );
     void StartMiserableHackForUnsupportedDirection(short nWwCol);
     void EndMiserableHackForUnsupportedDirection(short nWwCol);
-    //No copying
-    WW8TabDesc(const WW8TabDesc&);
-    WW8TabDesc &operator=(const WW8TabDesc&);
+
 public:
     const SwTable* pTable;          // table
     SwPosition* pParentPos;
@@ -189,7 +187,6 @@ public:
     void MergeCells();
     short GetMinLeft() const { return nConvertedLeft; }
     ~WW8TabDesc();
-    SwPosition *GetPos() { return pTmpPos; }
 
     const WW8_TCell* GetAktWWCell() const { return pAktWWCell; }
     short GetAktCol() const { return nAktCol; }

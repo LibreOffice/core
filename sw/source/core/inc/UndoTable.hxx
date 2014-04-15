@@ -374,6 +374,8 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 };
 
+void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
+
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

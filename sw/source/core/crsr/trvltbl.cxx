@@ -37,6 +37,7 @@
 #include <cellatr.hxx>
 #include <cellfrm.hxx>
 #include <rowfrm.hxx>
+#include <trvltbl.hxx>
 
 /// set cursor into next/previous cell
 sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )

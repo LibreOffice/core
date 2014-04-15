@@ -150,14 +150,11 @@ private:
 
 public:
     SectRepr(sal_uInt16 nPos, SwSection& rSect);
-    bool    operator==(const SectRepr& rSectRef) const
-            { return m_nArrPos == rSectRef.GetArrPos(); }
 
     bool    operator< (const SectRepr& rSectRef) const
             { return m_nArrPos <  rSectRef.GetArrPos(); }
 
     SwSectionData &     GetSectionData()        { return m_SectionData; }
-    SwSectionData const&GetSectionData() const  { return m_SectionData; }
     SwFmtCol&               GetCol()            { return m_Col; }
     SvxBrushItem&           GetBackground()     { return m_Brush; }
     SwFmtFtnAtTxtEnd&       GetFtnNtAtEnd()     { return m_FtnNtAtEnd; }
@@ -1830,21 +1827,6 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
 
     Application::SetDefDialogParent( m_pOldDefDlgParent );
     return 0;
-}
-
-// numbering format conversion:
-// ListBox  - format            - enum-value
-// 0        - A, B, C, ...      - 0
-// 1        - a, b, c, ...      - 1
-// 2        - I, II, III, ...   - 2
-// 3        - i, ii, iii, ...   - 3
-// 4        - 1, 2, 3, ...      - 4
-// 5        - A, .., AA, ..,    - 9
-// 6        - a, .., aa, ..,    - 10
-
-inline SvxExtNumType GetNumType( sal_uInt16 n )
-{
-    return (SvxExtNumType)(4 < n ? n + 4 : n );
 }
 
 SwSectionFtnEndTabPage::SwSectionFtnEndTabPage( Window *pParent,

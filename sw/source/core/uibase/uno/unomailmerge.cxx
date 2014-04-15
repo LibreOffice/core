@@ -70,6 +70,7 @@
 
 #include <unomid.h>
 
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
@@ -184,7 +185,8 @@ static bool LoadFromURL_impl(
 
 namespace
 {
-    class DelayedFileDeletion : public ::cppu::WeakImplHelper1< util::XCloseListener >
+    class DelayedFileDeletion : public ::cppu::WeakImplHelper1< util::XCloseListener >,
+                                private boost::noncopyable
     {
     protected:
         ::osl::Mutex                    m_aMutex;
@@ -210,10 +212,6 @@ namespace
     private:
         void implTakeOwnership( );
         DECL_LINK( OnTryDeleteFile, void* );
-
-    private:
-        DelayedFileDeletion( const DelayedFileDeletion& );                  // never implemented
-        DelayedFileDeletion& operator=( const DelayedFileDeletion& );       // never implemented
     };
 
     DelayedFileDeletion::DelayedFileDeletion( const Reference< XModel >& _rxModel, const OUString& _rTemporaryFile )
@@ -413,7 +411,7 @@ SwXMailMerge::~SwXMailMerge()
 }
 
 // Guarantee object consistence in case of an exception
-class MailMergeExecuteFinalizer {
+class MailMergeExecuteFinalizer: private boost::noncopyable {
 public:
     MailMergeExecuteFinalizer(SwXMailMerge *mailmerge)
         : m_pMailMerge(mailmerge)
@@ -427,9 +425,6 @@ public:
     }
 
 private:
-    // Disallow copy
-    MailMergeExecuteFinalizer(const MailMergeExecuteFinalizer&) {}
-
     SwXMailMerge *m_pMailMerge;
 };
 

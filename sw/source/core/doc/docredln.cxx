@@ -26,6 +26,7 @@
 #include <editeng/crossedoutitem.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
+#include <docredln.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>

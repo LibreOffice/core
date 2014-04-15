@@ -121,8 +121,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::sfx2;
 
-extern bool FindPhyStyle( SwDoc& , const OUString& , SfxStyleFamily );
-
 // create DocInfo (virtual)
 SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
                                 Window *pParent, const SfxItemSet &rSet)

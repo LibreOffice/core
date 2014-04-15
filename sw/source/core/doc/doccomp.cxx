@@ -107,7 +107,6 @@ public:
         }
 
     size_t GetLineCount() const     { return aLines.size(); }
-    sal_uLong GetLineOffset() const     { return nSttLineNum; }
     const CompareLine* GetLine( size_t nLine ) const
             { return aLines[ nLine ]; }
     void InsertLine( CompareLine* pLine )
@@ -177,7 +176,6 @@ private:
     static void SetDiscard( const CompareData& rData,
                             sal_Char* pDiscard, sal_uLong* pCounts );
     static void CheckDiscard( sal_uLong nLen, sal_Char* pDiscard );
-    static sal_uLong SetChangedFlag( CompareData& rData, sal_Char* pDiscard, int bFirst );
     static void ShiftBoundaries( CompareData& rData1, CompareData& rData2 );
 
 public:
@@ -1834,8 +1832,6 @@ public:
     _SaveMergeRedlines( const SwNode& rDstNd,
                         const SwRangeRedline& rSrcRedl, Ring* pRing );
     sal_uInt16 InsertRedline();
-
-    SwRangeRedline* GetDestRedline() { return pDestRedl; }
 };
 
 _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,

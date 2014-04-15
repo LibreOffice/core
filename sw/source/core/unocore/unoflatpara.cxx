@@ -20,6 +20,7 @@
 #include <editeng/unolingu.hxx>
 
 #include <unobaseclass.hxx>
+#include <unocrsrhelper.hxx>
 #include <unoflatpara.hxx>
 
 #include <osl/mutex.hxx>

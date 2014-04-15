@@ -23,6 +23,7 @@
 #include <cellatr.hxx>
 #include <checkit.hxx>
 #include <cmdid.h>
+#include <fesh.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -132,7 +133,6 @@
 using namespace ::com::sun::star;
 
 extern void _FrmFinit();
-extern void ClearFEShellTabCols();
 
 // some ranges for sets in collections/ nodes
 

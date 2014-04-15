@@ -26,9 +26,6 @@
 // OD 2004-01-19 #110582#
 #include <dflyobj.hxx>
 
-//from FlyCnt.cxx
-void DeepCalc( const SwFrm *pFrm );
-
 SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFrm( pFmt, pSib, pAnch )
 {

@@ -836,7 +836,6 @@ private:
     HTMLTable *BuildTable( SvxAdjust eCellAdjust,
                            sal_Bool bIsParentHead = sal_False,
                            sal_Bool bHasParentSection=sal_True,
-                           sal_Bool bIsInMulticol = sal_False,
                            sal_Bool bHasToFlow = sal_False );
 
     // misc ...

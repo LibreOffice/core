@@ -78,8 +78,6 @@ class SwImplShellAction
 public:
     SwImplShellAction( SwDoc& rDoc );
     ~SwImplShellAction();
-
-    SwWrtShell* GetSh() { return pSh; }
 };
 
 SwImplShellAction::SwImplShellAction( SwDoc& rDoc )
@@ -320,25 +318,6 @@ static sal_uInt16 lcl_FindName(const SwPoolFmtList& rLst, SfxStyleFamily eFam,
                 return i;
     }
     return USHRT_MAX;
-}
-
-bool FindPhyStyle( SwDoc& rDoc, const OUString& rName, SfxStyleFamily eFam )
-{
-    switch( eFam )
-    {
-    case SFX_STYLE_FAMILY_CHAR :
-        return 0 != lcl_FindCharFmt( rDoc, rName, 0, false );
-    case SFX_STYLE_FAMILY_PARA :
-        return 0 != lcl_FindParaFmt( rDoc, rName, 0, false );
-    case SFX_STYLE_FAMILY_FRAME:
-        return 0 != lcl_FindFrmFmt( rDoc, rName, 0, false );
-    case SFX_STYLE_FAMILY_PAGE :
-        return 0 != lcl_FindPageDesc( rDoc, rName, 0, false );
-    case SFX_STYLE_FAMILY_PSEUDO:
-        return 0 != lcl_FindNumRule( rDoc, rName, 0, false );
-    default:; //prevent warning
-    }
-    return false;
 }
 
 // Add Strings to the list of templates

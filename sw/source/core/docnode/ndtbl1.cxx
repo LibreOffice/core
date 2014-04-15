@@ -22,6 +22,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <fesh.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtlsplt.hxx>
@@ -51,8 +52,6 @@
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
-
-extern void ClearFEShellTabCols();
 
 // See swtable.cxx too
 #define COLFUZZY 20L

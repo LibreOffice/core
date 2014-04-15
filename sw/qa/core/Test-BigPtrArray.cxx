@@ -722,6 +722,7 @@ public:
     CPPUNIT_TEST(test_remove_all_elements_at_once);
     CPPUNIT_TEST(test_move_elements_from_lower_to_higher_pos);
     CPPUNIT_TEST(test_move_elements_from_higher_to_lower_pos);
+    CPPUNIT_TEST(test_move_to_same_position);
     CPPUNIT_TEST(test_replace_elements);
     CPPUNIT_TEST(test_for_each);
     CPPUNIT_TEST(test_for_some1);
@@ -732,6 +733,8 @@ public:
 
 const char* START = "START: ";
 const char* END = "END: ";
+
+#if defined TIMELOG
 
 class PerformanceTracer
 {
@@ -824,6 +827,8 @@ private:
         releaseBigPtrArrayContent(bparr);
     }
 };
+
+#endif
 
 // register test suites
 CPPUNIT_TEST_SUITE_REGISTRATION(BigPtrArrayUnittest);

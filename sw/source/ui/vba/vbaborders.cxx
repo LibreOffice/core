@@ -132,7 +132,7 @@ private:
         }
         return true;
     }
-    SwVbaBorder(); // no impl
+
 protected:
     virtual OUString getServiceImplName() SAL_OVERRIDE
     {

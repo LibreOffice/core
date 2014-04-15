@@ -236,7 +236,6 @@ public:
 
     // Set/Get cell content
     void SetContents( HTMLTableCnts *pCnts ) { pContents = pCnts; }
-    const HTMLTableCnts *GetContents() const { return pContents; }
     HTMLTableCnts *GetContents() { return pContents; }
 
     // Set/Get cell ROWSPAN/COLSPAN
@@ -272,7 +271,6 @@ class HTMLTableRow
     HTMLTableCells *pCells;             // cells of the row
 
     sal_Bool bIsEndOfGroup : 1;
-    sal_Bool bSplitable : 1;
 
     sal_uInt16 nHeight;                     // options of <TR>/<TD>
     sal_uInt16 nEmptyRows;                  // number of empty rows are following
@@ -293,7 +291,6 @@ public:
     sal_uInt16 GetHeight() const { return nHeight; }
 
     inline HTMLTableCell *GetCell( sal_uInt16 nCell ) const;
-    inline const HTMLTableCells *GetCells() const { return pCells; }
 
     inline void SetAdjust( SvxAdjust eAdj ) { eAdjust = eAdj; }
     inline SvxAdjust GetAdjust() const { return eAdjust; }
@@ -315,9 +312,6 @@ public:
 
     // Shrink row by deleting empty cells
     void Shrink( sal_uInt16 nCells );
-
-    void SetSplitable( sal_Bool bSet ) { bSplitable = bSet; }
-    sal_Bool IsSplitable() const { return bSplitable; }
 };
 
 // Column of a HTML table
@@ -432,7 +426,6 @@ class HTMLTable
     sal_uInt32 nHeadlineRepeat;         // repeating rows
     sal_Bool bIsParentHead;
     sal_Bool bHasParentSection;
-    sal_Bool bMakeTopSubTable;
     sal_Bool bHasToFly;
     sal_Bool bFixedCols;
     bool bColSpec;                  // Gab es COL(GROUP)-Elemente?
@@ -531,7 +524,7 @@ public:
 
     HTMLTable( SwHTMLParser* pPars, HTMLTable *pTopTab,
                sal_Bool bParHead, sal_Bool bHasParentSec,
-               sal_Bool bTopTbl, sal_Bool bHasToFly,
+               sal_Bool bHasToFly,
                const HTMLTableOptions *pOptions );
 
     ~HTMLTable();
@@ -548,19 +541,9 @@ public:
     {
         return (bTableAdjustOfTag || bAny) ? eTableAdjust : SVX_ADJUST_END;
     }
-    sal_Int16 GetVertOri() const { return eVertOri; }
 
     sal_uInt16 GetHSpace() const { return nHSpace; }
     sal_uInt16 GetVSpace() const { return nVSpace; }
-
-    sal_Bool HasPrcWidth() const { return bPrcWidth; }
-    sal_uInt8 GetPrcWidth() const { return bPrcWidth ? (sal_uInt8)nWidth : 0; }
-
-    sal_uInt16 GetMinWidth() const
-    {
-        sal_uInt32 nMin = pLayoutInfo->GetMin();
-        return nMin < USHRT_MAX ? (sal_uInt16)nMin : USHRT_MAX;
-    }
 
     // von Zeilen oder Spalten geerbtes drawing::Alignment holen
     SvxAdjust GetInheritedAdjust() const;
@@ -610,8 +593,6 @@ public:
 
     sal_Bool GetIsParentHeader() const { return bIsParentHead; }
 
-    sal_Bool IsMakeTopSubTable() const { return bMakeTopSubTable; }
-    void SetHasToFly() { bHasToFly=sal_True; }
     sal_Bool HasToFly() const { return bHasToFly; }
 
     void SetTable( const SwStartNode *pStNd, _HTMLTableContext *pCntxt,
@@ -795,7 +776,6 @@ SwHTMLTableLayoutCell *HTMLTableCell::CreateLayoutInfo()
 HTMLTableRow::HTMLTableRow( sal_uInt16 nCells ):
     pCells(new HTMLTableCells),
     bIsEndOfGroup(sal_False),
-    bSplitable( sal_False ),
     nHeight(0),
     nEmptyRows(0),
     eAdjust(SVX_ADJUST_END),
@@ -1073,7 +1053,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
 
 HTMLTable::HTMLTable( SwHTMLParser* pPars, HTMLTable *pTopTab,
                       sal_Bool bParHead,
-                      sal_Bool bHasParentSec, sal_Bool bTopTbl, sal_Bool bHasToFlw,
+                      sal_Bool bHasParentSec, sal_Bool bHasToFlw,
                       const HTMLTableOptions *pOptions ) :
     nCols( pOptions->nCols ),
     nFilledCols( 0 ),
@@ -1084,7 +1064,6 @@ HTMLTable::HTMLTable( SwHTMLParser* pPars, HTMLTable *pTopTab,
     bTableAdjustOfTag( pTopTab ? sal_False : pOptions->bTableAdjust ),
     bIsParentHead( bParHead ),
     bHasParentSection( bHasParentSec ),
-    bMakeTopSubTable( bTopTbl ),
     bHasToFly( bHasToFlw ),
     bFixedCols( pOptions->nCols>0 ),
     bPrcWidth( pOptions->bPrcWidth ),
@@ -3126,7 +3105,6 @@ public:
 
     void ClearIsInSection() { pCurrCnts = 0; }
     sal_Bool IsInSection() const { return pCurrCnts!=0; }
-    HTMLTableCnts *GetCurrContents() const { return pCurrCnts; }
 
     void InsertCell( SwHTMLParser& rParser, HTMLTable *pCurTable );
 
@@ -3964,7 +3942,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                 HTMLTable *pSubTable = BuildTable( eTabAdjust,
                                                    bHead,
                                                    pSaveStruct->IsInSection(),
-                                                   bTopTable, bHasToFly );
+                                                   bHasToFly );
                 if( SVPAR_PENDING != GetStatus() )
                 {
                     // nur wenn die Tabelle wirklich zu Ende ist!
@@ -4892,7 +4870,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
                 pSaveStruct->pTable = pTable;
                 sal_Bool bHasToFly = pSaveStruct->pTable!=pCurTable;
                 BuildTable( pCurTable->GetTableAdjust( sal_True ),
-                            sal_False, sal_True, sal_True, bHasToFly );
+                            sal_False, sal_True, bHasToFly );
             }
             else
             {
@@ -5181,7 +5159,6 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
 HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                                      sal_Bool bIsParentHead,
                                      sal_Bool bHasParentSection,
-                                     sal_Bool bMakeTopSubTable,
                                      sal_Bool bHasToFly )
 {
     if( !IsParserWorking() && !pPendStack )
@@ -5215,7 +5192,6 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         HTMLTable *pCurTable = new HTMLTable( this, pTable,
                                               bIsParentHead,
                                               bHasParentSection,
-                                              bMakeTopSubTable,
                                               bHasToFly,
                                               pTblOptions );
         if( !pTable )

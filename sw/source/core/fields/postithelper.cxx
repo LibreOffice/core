@@ -38,43 +38,6 @@
 
 class Point;
 
-namespace {
-
-struct LayoutInfoOrder
-{
-    bool operator()( const SwLayoutInfo& rLayoutInfo,
-                     const SwLayoutInfo& rNewLayoutInfo )
-    {
-        if ( rLayoutInfo.mnPageNumber != rNewLayoutInfo.mnPageNumber )
-        {
-            // corresponding <SwFrm> instances are on different pages
-            return rLayoutInfo.mnPageNumber < rNewLayoutInfo.mnPageNumber;
-        }
-        else
-        {
-            // corresponding <SwFrm> instances are in different repeating table header rows
-            OSL_ENSURE( rLayoutInfo.mpAnchorFrm->FindTabFrm(),
-                    "<LayoutInfoOrder::operator()> - table frame not found" );
-            OSL_ENSURE( rNewLayoutInfo.mpAnchorFrm->FindTabFrm(),
-                    "<LayoutInfoOrder::operator()> - table frame not found" );
-            const SwTabFrm* pLayoutInfoTabFrm( rLayoutInfo.mpAnchorFrm->FindTabFrm() );
-            const SwTabFrm* pNewLayoutInfoTabFrm( rNewLayoutInfo.mpAnchorFrm->FindTabFrm() );
-            const SwTabFrm* pTmpTabFrm( pNewLayoutInfoTabFrm );
-            while ( pTmpTabFrm && pTmpTabFrm->GetFollow() )
-            {
-                pTmpTabFrm = static_cast<const SwTabFrm*>(pTmpTabFrm->GetFollow()->GetFrm());
-                if ( pTmpTabFrm == pLayoutInfoTabFrm )
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-};
-
-} // eof anonymous namespace
-
 SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
     SwLayoutInfo& o_rInfo,
     const SwPosition& rAnchorPos,

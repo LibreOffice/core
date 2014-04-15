@@ -402,13 +402,6 @@ void SwWrtShell::EndSelect()
         pWrdCnt->UpdateCounts();
 }
 
-// Methode to enhance a selecton word by word or line by line.
-
-inline bool operator<(const Point &rP1,const Point &rP2)
-{
-    return rP1.Y() < rP2.Y() || (rP1.Y() == rP2.Y() && rP1.X() < rP2.X());
-}
-
 long SwWrtShell::ExtSelWrd(const Point *pPt, sal_Bool )
 {
     SwMvContext aMvContext(this);

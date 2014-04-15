@@ -51,13 +51,6 @@ static OString aDbgOutResult;
 bool bDbgOutStdErr = false;
 bool bDbgOutPrintAttrSet = false;
 
-char* db_pretty_print(const OUString* str, int flags, char* fmt)
-{
-    (void) fmt;
-    (void) flags;
-    return const_cast<char*>(dbg_out(*str));
-}
-
 template<class T>
 static OUString lcl_dbg_out_SvPtrArr(const T & rArr)
 {

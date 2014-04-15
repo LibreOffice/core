@@ -26,12 +26,14 @@
 #include <UndoDelete.hxx>
 #include <UndoSplitMove.hxx>
 #include <UndoCore.hxx>
+#include <fesh.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
 #include <doc.hxx>
+#include <docredln.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <editsh.hxx>
 #include <docary.hxx>
@@ -69,13 +71,10 @@
 #endif
 
 #ifdef DBG_UTIL
-    void sw_DebugRedline( const SwDoc* pDoc ); // docredln.cxx
     #define _DEBUG_REDLINE( pDoc ) sw_DebugRedline( pDoc );
 #else
     #define _DEBUG_REDLINE( pDoc )
 #endif
-
-extern void ClearFEShellTabCols();
 
 typedef std::vector<boost::shared_ptr<SfxItemSet> > SfxItemSets;
 
@@ -181,8 +180,6 @@ public:
 
     void CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl );
 };
-
-void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
 
 #if OSL_DEBUG_LEVEL > 0
 #include "shellio.hxx"

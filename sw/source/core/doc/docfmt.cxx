@@ -116,20 +116,6 @@ struct ParaRstFmt
           bInclRefToxMark( false ),
           bKeepOutlineLevelAttr( false )
     {}
-
-    ParaRstFmt( SwHistory* pHst )
-        : pFmtColl(0),
-          pHistory(pHst),
-          pSttNd(0),
-          pEndNd(0),
-          pDelSet(0),
-          nWhich(0),
-          bReset( false ),
-          bResetListAttrs( false ), // #i62675#
-          bResetAll( true ),
-          bInclRefToxMark( false ),
-          bKeepOutlineLevelAttr( false )
-    {}
 };
 
 /** @params pArgs contains the document's ChrFmtTable

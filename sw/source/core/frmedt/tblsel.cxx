@@ -72,9 +72,6 @@ struct _CmpLPt
 
     _CmpLPt( const Point& rPt, const SwTableBox* pBox, bool bVertical );
 
-    bool operator==( const _CmpLPt& rCmp ) const
-    {   return X() == rCmp.X() && Y() == rCmp.Y(); }
-
     bool operator<( const _CmpLPt& rCmp ) const
     {
         if ( bVert )

@@ -22,6 +22,7 @@
 
 #include "swmodule.hxx"
 #include "swdll.hxx"
+#include "unofreg.hxx"
 #include "unomodule.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <sfx2/objface.hxx>
@@ -32,12 +33,12 @@
 
 using namespace css;
 
-OUString SAL_CALL SwUnoModule_getImplementationName() throw( uno::RuntimeException )
+OUString SAL_CALL SwUnoModule_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Writer.WriterModule" );
 }
 
-uno::Sequence< OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw()
 {
     uno::Sequence< OUString > aSeq( 1 );
     aSeq[0] = "com.sun.star.text.ModuleDispatcher";
@@ -46,6 +47,7 @@ uno::Sequence< OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw(
 
 uno::Reference< uno::XInterface > SAL_CALL SwUnoModule_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
+    throw (css::uno::Exception)
 {
     SolarMutexGuard aGuard;
     return uno::Reference< uno::XInterface >( dynamic_cast< frame::XDispatch * >(new SwUnoModule( rSMgr )), uno::UNO_QUERY );

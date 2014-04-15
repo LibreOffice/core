@@ -74,7 +74,6 @@ public:
     SwLinguIter();
 
     inline SwEditShell *GetSh()             { return pSh; }
-    inline const SwEditShell *GetSh() const { return pSh; }
 
     inline const SwPosition *GetEnd() const { return pEnd; }
     inline void SetEnd( SwPosition* pNew ){ delete pEnd; pEnd = pNew; }

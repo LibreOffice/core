@@ -182,8 +182,6 @@ class SwSubsRects : public SwLineRects
     void RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects );
 public:
     void PaintSubsidiary( OutputDevice *pOut, const SwLineRects *pRects );
-
-    inline void Ins( const SwRect &rRect, const sal_uInt8 nSCol );
 };
 
 class BorderLines
@@ -818,16 +816,6 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
             this->erase(this->begin() + i);
             --i;
         }
-    }
-}
-
-inline void SwSubsRects::Ins( const SwRect &rRect, const sal_uInt8 nSCol )
-{
-    // Lines that are shorted than the largest line width won't be inserted
-    if ( rRect.Height() > DEF_LINE_WIDTH_4 || rRect.Width() > DEF_LINE_WIDTH_4 )
-    {
-        this->push_back(
-            SwLineRect(rRect, 0, table::BorderLineStyle::SOLID, 0, nSCol));
     }
 }
 

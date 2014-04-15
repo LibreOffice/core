@@ -8,6 +8,7 @@
  */
 
 #include "dumpfilter.hxx"
+#include "unofreg.hxx"
 
 #include <wrtsh.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -21,12 +22,12 @@
 
 using namespace ::com::sun::star;
 
-OUString SAL_CALL LayoutDumpFilter_getImplementationName() throw( uno::RuntimeException )
+OUString SAL_CALL LayoutDumpFilter_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Writer.LayoutDump" );
 }
 
-uno::Sequence< OUString > SAL_CALL LayoutDumpFilter_getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL LayoutDumpFilter_getSupportedServiceNames() throw()
 {
     uno::Sequence< OUString > aSeq( 1 );
     aSeq[0] = "com.sun.star.document.ExportFilter";
@@ -35,6 +36,7 @@ uno::Sequence< OUString > SAL_CALL LayoutDumpFilter_getSupportedServiceNames() t
 
 uno::Reference< uno::XInterface > SAL_CALL LayoutDumpFilter_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & )
+    throw (css::uno::Exception)
 {
     return static_cast< cppu::OWeakObject* >( new sw::LayoutDumpFilter( ) );
 }

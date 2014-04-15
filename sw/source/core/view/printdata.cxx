@@ -32,8 +32,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <vcl/outdev.hxx>
 
-extern bool sw_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLst );
-
 using namespace ::com::sun::star;
 
 // SwRenderData

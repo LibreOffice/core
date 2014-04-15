@@ -81,7 +81,6 @@ public:
     ~SwVbaReadFieldParams();
 
     long SkipToNextToken();
-    sal_Int32 GetTokenSttPtr() const   { return nFnd;  }
 
     sal_Int32 FindNextStringPiece( sal_Int32 _nStart = -1 );
 

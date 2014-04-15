@@ -372,7 +372,6 @@ public:
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) SAL_OVERRIDE;
     virtual void Do() SAL_OVERRIDE;
 
-    void DrawSpace( const Point &rPos );
     inline sal_Int32 GetCrsr(){ return nCrsr; }
 };
 

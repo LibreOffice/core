@@ -139,24 +139,6 @@ struct CR_SetBoxWidth
     {
         nLowerDiff = 0; nRemainWidth = 0;
     }
-
-    void AddBoxWidth( const SwTableBox& rBox, sal_uInt16 nWidth )
-    {
-        SwTableLine* p = (SwTableLine*)rBox.GetUpper();
-        std::pair<SwTableLineWidthMap_t::iterator, bool> aPair =
-            m_LineWidthMap.insert(std::make_pair(p,nWidth));
-        if (!aPair.second)
-        {
-            aPair.first->second += nWidth;
-        }
-    }
-
-    sal_uInt16 GetBoxWidth( const SwTableLine& rLn ) const
-    {
-        SwTableLine* p = (SwTableLine*)&rLn;
-        SwTableLineWidthMap_t::const_iterator const it = m_LineWidthMap.find(p);
-        return (it != m_LineWidthMap.end()) ? it->second : 0;
-    }
 };
 
 static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
@@ -303,7 +285,6 @@ struct _CpyPara
         nCpyCnt(rPara.nCpyCnt), nInsPos(0), nLnIdx(rPara.nLnIdx), nBoxIdx(rPara.nBoxIdx),
         nDelBorderFlag( rPara.nDelBorderFlag ), bCpyCntnt( rPara.bCpyCntnt )
         {}
-    void SetBoxWidth( SwTableBox* pBox );
 };
 
 static void lcl_CopyRow(_FndLine & rFndLine, _CpyPara *const pCpyPara);
@@ -1394,8 +1375,6 @@ struct _InsULPara
         { bUL_LR = false;   bUL = true; if( pBox ) pInsBox = pBox; }
     void SetRight( SwTableBox* pBox=0 )
         { bUL_LR = false;   bUL = false; if( pBox ) pInsBox = pBox; }
-    void SetUpper( SwTableLine* pLine=0 )
-        { bUL_LR = true;    bUL = true;  if( pLine ) pInsLine = pLine; }
     void SetLower( SwTableLine* pLine=0 )
         { bUL_LR = true;    bUL = false; if( pLine ) pInsLine = pLine; }
 };

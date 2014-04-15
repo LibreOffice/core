@@ -84,7 +84,6 @@ class SwDropCapsPict : public Control
         sal_Int32 changePos;   ///< Character position where the script changes.
         _ScriptInfo(sal_uLong txtWidth, sal_uInt16 scrptType, sal_Int32 position)
             : textWidth(txtWidth), scriptType(scrptType), changePos(position) {}
-        bool operator<(_ScriptInfo other) { return changePos < other.changePos; }
     };
     std::vector<_ScriptInfo> maScriptChanges;
     SvxFont         maFont;

@@ -1613,10 +1613,8 @@ public:
             break;
         }
     }
-    sal_uInt16 GetChapterInfo() const{ return aFormToken.nChapterFormat;}
 
     void SetOutlineLevel( sal_uInt16 nSet ) { aFormToken.nOutlineLevel = nSet;}//i53420
-    sal_uInt16 GetOutlineLevel() const{ return aFormToken.nOutlineLevel;}
 
     void SetLinkEnd()
         {

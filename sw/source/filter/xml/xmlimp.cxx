@@ -34,6 +34,7 @@
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <doc.hxx>
+#include <unofreg.hxx>
 #include <TextCursorHelper.hxx>
 #include <unotext.hxx>
 #include <unotextrange.hxx>
@@ -107,8 +108,6 @@ static SvXMLTokenMapEntry aDocTokenMap[] =
 
 class SwXMLBodyContext_Impl : public SvXMLImportContext
 {
-    const SwXMLImport& GetSwImport() const
-        { return (const SwXMLImport&)GetImport(); }
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
 
 public:
@@ -154,8 +153,6 @@ class SwXMLDocContext_Impl : public virtual SvXMLImportContext
 {
 
 protected: // #i69629#
-    const SwXMLImport& GetSwImport() const
-        { return (const SwXMLImport&)GetImport(); }
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
 
 public:

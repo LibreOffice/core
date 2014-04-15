@@ -5011,11 +5011,6 @@ struct SprmReadInfo
     FNReadRecord pReadFnc;
 };
 
-bool operator==(const SprmReadInfo &rFirst, const SprmReadInfo &rSecond)
-{
-    return (rFirst.nId == rSecond.nId);
-}
-
 bool operator<(const SprmReadInfo &rFirst, const SprmReadInfo &rSecond)
 {
     return (rFirst.nId < rSecond.nId);

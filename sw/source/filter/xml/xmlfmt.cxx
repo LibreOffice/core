@@ -193,8 +193,6 @@ class SwXMLConditionContext_Impl : public SvXMLImportContext
 
     OUString sApplyStyle;
 
-    void ParseCondition( const OUString& rCond );
-
 public:
 
     SwXMLConditionContext_Impl(
@@ -442,8 +440,6 @@ protected:
                                const OUString& rLocalName,
                                const OUString& rValue ) SAL_OVERRIDE;
 
-    const SwXMLImport& GetSwImport() const
-            { return (const SwXMLImport&)GetImport(); }
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
 
 public:
@@ -467,7 +463,6 @@ public:
 
     // The item set may be empty!
     SfxItemSet *GetItemSet() { return pItemSet; }
-    const SfxItemSet *GetItemSet() const { return pItemSet; }
 
     const OUString& GetMasterPageName() const { return sMasterPageName; }
     bool HasMasterPageName() const { return bHasMasterPageName; }
@@ -713,8 +708,6 @@ bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
 
 class SwXMLStylesContext_Impl : public SvXMLStylesContext
 {
-    SwXMLItemSetStyleContext_Impl *GetSwStyle( sal_uInt16 i ) const;
-
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
     const SwXMLImport& GetSwImport() const
             { return (const SwXMLImport&)GetImport(); }
@@ -753,12 +746,6 @@ public:
 };
 
 TYPEINIT1( SwXMLStylesContext_Impl, SvXMLStylesContext );
-
-inline SwXMLItemSetStyleContext_Impl *SwXMLStylesContext_Impl::GetSwStyle(
-        sal_uInt16 i ) const
-{
-    return PTR_CAST( SwXMLItemSetStyleContext_Impl, GetStyle( i ) );
-}
 
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,

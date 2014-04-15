@@ -100,16 +100,6 @@ IMPL_OUTOP( SwArrowPortion )
 IMPL_OUTOP( SwMultiPortion )
 IMPL_OUTOP( SwCombinedPortion )
 
-const char *GetPortionName( const MSHORT )
-{
-    return 0;
-}
-
-const char *GetPrepName( const PrepareHint )
-{
-    return 0;
-}
-
 #else
 #include <limits.h>
 #include <stdlib.h>
@@ -119,10 +109,6 @@ const char *GetPrepName( const PrepareHint )
 #define CONSTCHAR( name, string ) static const sal_Char name[] = string
 
 CONSTCHAR( pClose, "} " );
-
-/*************************************************************************
- *                    GetPortionName()
- *************************************************************************/
 
 CONSTCHAR( pPOR_LIN, "LIN" );
 CONSTCHAR( pPOR_TXT, "TXT" );
@@ -164,11 +150,6 @@ CONSTCHAR( pPOR_BULLET, "BULLET" );
 CONSTCHAR( pPOR_UNKW, "UNKW" );
 CONSTCHAR( pPOR_PAR, "PAR" );
 
-const char *GetPortionName( const MSHORT /*nType*/ )
-{
-    return 0;
-}
-
 CONSTCHAR( pPREP_CLEAR, "CLEAR" );
 CONSTCHAR( pPREP_WIDOWS_ORPHANS, "WIDOWS_ORPHANS" );
 CONSTCHAR( pPREP_FIXSIZE_CHG, "FIXSIZE_CHG" );
@@ -187,22 +168,6 @@ CONSTCHAR( pPREP_MUST_FIT, "MUST_FIT" );
 CONSTCHAR( pPREP_WIDOWS, "ORPHANS" );
 CONSTCHAR( pPREP_QUOVADIS, "QUOVADIS" );
 CONSTCHAR( pPREP_PAGE, "PAGE" );
-
-const char *GetPrepName( const PrepareHint ePrep )
-{
-    // Kurz und schmerzlos:
-    const char *ppNameArr[PREP_END] =
-    {
-        pPREP_CLEAR, pPREP_WIDOWS_ORPHANS, pPREP_FIXSIZE_CHG,
-        pPREP_FOLLOW_FOLLOWS, pPREP_ADJUST_FRM, pPREP_FREE_SPACE,
-        pPREP_FLY_CHGD, pPREP_FLY_ATTR_CHG, pPREP_FLY_ARRIVE,
-        pPREP_FLY_LEAVE, pPREP_VIEWOPT, pPREP_FTN, pPREP_POS_CHGD,
-        pPREP_UL_SPACE, pPREP_MUST_FIT, pPREP_WIDOWS, pPREP_QUOVADIS,
-        pPREP_PAGE
-    };
-    OSL_ENSURE( ePrep < PREP_END, "GetPrepName: unknown PrepareHint" );
-    return( ppNameArr[ePrep] );
-}
 
 SvStream &SwLinePortion::operator<<( SvStream &rOs ) const //$ ostream
 {

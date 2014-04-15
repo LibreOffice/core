@@ -623,6 +623,13 @@ public:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 };
 
+int sw_CompareCellRanges(
+        const OUString &rRange1StartCell, const OUString &rRange1EndCell,
+        const OUString &rRange2StartCell, const OUString &rRange2EndCell,
+        sal_Bool bCmpColsFirst );
+
+void sw_NormalizeRange( OUString &rCell1, OUString &rCell2 );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

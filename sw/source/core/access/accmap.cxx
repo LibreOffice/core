@@ -314,15 +314,13 @@ private:
     EventType   meType;                         // The event type
     tAccessibleStates mnStates;                 // check states or update caret pos
 
-    SwAccessibleEvent_Impl& operator==( const SwAccessibleEvent_Impl& );
-
 public:
     const SwFrm* mpParentFrm;   // The object that fires the event
     sal_Bool IsNoXaccParentFrm() const
     {
         return CHILD_POS_CHANGED == meType && mpParentFrm != 0;
     }
-    uno::WeakReference < XAccessible > GetxAcc() const { return mxAcc;}
+
 public:
     SwAccessibleEvent_Impl( EventType eT,
                             SwAccessibleContext *pA,
@@ -490,13 +488,7 @@ public:
     {
         return mbFiring;
     }
-    struct XAccisNULL
-    {
-        bool operator()(const SwAccessibleEvent_Impl& e)
-        {
-            return e.IsNoXaccParentFrm();
-        }
-    };
+
     void MoveInvalidXAccToEnd();
 };
 
@@ -644,8 +636,6 @@ public:
     void InvalidateSelection( const SwPageFrm* _pSelectedPageFrm );
 
     const SwRect& GetVisArea() const;
-
-    MapMode GetMapModeForPreview( ) const;
 
     /** Adjust the MapMode so that the preview page appears at the
      * proper position. rPoint identifies the page for which the

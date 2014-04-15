@@ -70,10 +70,6 @@
 
 using namespace ::com::sun::star;
 
-// To register Flys in Flys in ...
-// as defined in layout/frmtool.cxx
-void RegistFlys( SwPageFrm*, const SwLayoutFrm* );
-
 /***********************************************************************
 #*  Class       :  SwDoc
 #*  Methode     :  UseSpzLayoutFmt

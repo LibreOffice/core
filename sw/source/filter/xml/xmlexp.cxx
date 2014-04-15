@@ -40,6 +40,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xformsexport.hxx>
 #include <pam.hxx>
+#include <unofreg.hxx>
 #include <doc.hxx>
 #include <swmodule.hxx>
 #include <docsh.hxx>

@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <functional>
 
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/unordered_set.hpp>
 
@@ -97,15 +98,12 @@ struct WW8_SED
 
 // class WW8_WrPlc0 is only used for header and footer positioning
 // ie there is no content support structure
-class WW8_WrPlc0
+class WW8_WrPlc0: private boost::noncopyable
 {
 private:
     std::vector<sal_uLong> aPos;      // PTRARR of CPs / FCs
     sal_uLong nOfs;
 
-    //No copying
-    WW8_WrPlc0(const WW8_WrPlc0&);
-    WW8_WrPlc0 &operator=(const WW8_WrPlc0&);
 public:
     WW8_WrPlc0( sal_uLong nOffset );
     sal_uInt16 Count() const                { return aPos.size(); }

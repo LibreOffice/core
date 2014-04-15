@@ -236,7 +236,6 @@ public:
 
     const uno::Reference< drawing::XShape >& GetShape() const { return xShape; }
     void SetShape( const uno::Reference< drawing::XShape >& r ) { xShape = r; }
-    void ReleaseShape() { xShape = 0; }
 
     OUString& GetText() { return sText; }
     void EraseText() { sText = aEmptyOUStr; }

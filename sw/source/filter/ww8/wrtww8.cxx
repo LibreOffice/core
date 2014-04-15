@@ -19,6 +19,7 @@
 
 #include <iostream>
 
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <unotools/ucbstreamhelper.hxx>
@@ -179,13 +180,11 @@ typedef std::pair<long,BKMK> BKMKCP;
 typedef std::multimap<long,BKMKCP*> BKMKCPs;
 typedef BKMKCPs::iterator CPItr;
 
-class WW8_WrtBookmarks
+class WW8_WrtBookmarks: private boost::noncopyable
 {
 private:
     BKMKCPs aSttCps,aEndCps;
     BKMKNames maSwBkmkNms;
-    WW8_WrtBookmarks(const WW8_WrtBookmarks&);
-    WW8_WrtBookmarks& operator=(const WW8_WrtBookmarks&);
 
 public:
     WW8_WrtBookmarks();

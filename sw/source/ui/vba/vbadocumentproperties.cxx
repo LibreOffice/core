@@ -398,7 +398,7 @@ typedef boost::unordered_map< sal_Int32, DocPropInfo > MSOIndexToOODocPropInfo;
 class BuiltInIndexHelper
 {
     MSOIndexToOODocPropInfo m_docPropInfoMap;
-    BuiltInIndexHelper();
+
 public:
     BuiltInIndexHelper( const uno::Reference< frame::XModel >& xModel )
     {

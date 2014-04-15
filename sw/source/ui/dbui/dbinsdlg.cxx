@@ -90,6 +90,7 @@
 #include <unomid.h>
 #include <IDocumentMarkAccess.hxx>
 
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
 namespace swui
@@ -158,7 +159,7 @@ struct _DB_Column
     }
 };
 
-struct _DB_ColumnConfigData
+struct _DB_ColumnConfigData: private boost::noncopyable
 {
     SwInsDBColumns aDBColumns;
     OUString sSource, sTable, sEdit, sTblList, sTmplNm, sTAutoFmtNm;
@@ -174,9 +175,6 @@ struct _DB_ColumnConfigData
     }
 
     ~_DB_ColumnConfigData();
-private:
-    _DB_ColumnConfigData( const _DB_ColumnConfigData& );
-    _DB_ColumnConfigData& operator =( const _DB_ColumnConfigData& );
 };
 
 bool SwInsDBColumn::operator<( const SwInsDBColumn& rCmp ) const

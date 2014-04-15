@@ -215,7 +215,6 @@ public:
     OUString const* GetStringValue() const {
         return (m_bHasStringValue) ? &m_StringValue : 0;
     }
-    const OUString& GetXmlId() const { return mXmlId; }
 
     const SwStartNode *GetStartNode() const { return pStartNode; }
     inline void SetStartNode( const SwStartNode *pSttNd );
@@ -300,7 +299,6 @@ public:
                         const OUString& i_rXmlId = OUString() );
     ~SwXMLTableRow_Impl() {}
 
-    inline const SwXMLTableCell_Impl *GetCell( sal_uInt32 nCol ) const;
     inline SwXMLTableCell_Impl *GetCell( sal_uInt32 nCol );
 
     inline void Set( const OUString& rStyleName,
@@ -314,7 +312,6 @@ public:
 
     const OUString& GetStyleName() const { return aStyleName; }
     const OUString& GetDefaultCellStyleName() const { return aDfltCellStyleName; }
-    const OUString& GetXmlId() const { return mXmlId; }
 
     void Dispose();
 };
@@ -338,16 +335,6 @@ SwXMLTableRow_Impl::SwXMLTableRow_Impl( const OUString& rStyleName,
     {
         aCells.push_back( new SwXMLTableCell_Impl );
     }
-}
-
-inline const SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol ) const
-{
-    OSL_ENSURE( nCol < USHRT_MAX,
-            "SwXMLTableRow_Impl::GetCell: column number is to big" );
-    // #i95726# - some fault tolerance
-    OSL_ENSURE( nCol < aCells.size(),
-            "SwXMLTableRow_Impl::GetCell: column number is out of bound" );
-    return nCol < aCells.size() ? &aCells[(sal_uInt16)nCol] : 0;
 }
 
 inline SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol )

@@ -1992,7 +1992,6 @@ public:
                 sal_uInt16* pPageCount, sal_uInt16* pPageStart );
     void SetPam( SwPaM *pPam ) const;
     inline void SetNode( SwNode *pNew ) { pNode = pNew; }
-    inline const SwNode *GetNode() const { return pNode; }
     inline void SetRange( const SwNode *pNew );
     inline void NextNode() { ++nNode; }
     inline sal_uInt16 *GetPageCnt() { return pPageCnt; }

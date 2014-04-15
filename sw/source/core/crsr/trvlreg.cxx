@@ -26,6 +26,7 @@
 #include <callnk.hxx>
 #include <pamtyp.hxx>
 #include <section.hxx>
+#include <trvlreg.hxx>
 
 sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                         sal_Bool bInReadOnly )

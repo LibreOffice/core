@@ -18,6 +18,7 @@
  */
 
 #include "hintids.hxx"
+#include "sw3convert.hxx"
 #include <tools/resid.hxx>
 #include <svl/macitem.hxx>
 #include <svl/zforlist.hxx>

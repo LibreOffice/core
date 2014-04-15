@@ -20,6 +20,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
+#include "dcontact.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
 #include "pam.hxx"

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 
 #include <i18nlangtag/languagetag.hxx>
@@ -422,7 +425,7 @@ OUString BasicProjImportHelper::getProjectName()
     return sProjName;
 }
 
-class Sttb : TBBase
+class Sttb : TBBase, private boost::noncopyable
 {
 struct SBBItem
 {
@@ -436,8 +439,6 @@ struct SBBItem
 
     std::vector< SBBItem > dataItems;
 
-    Sttb(const Sttb&);
-    Sttb& operator = ( const Sttb&);
 public:
     Sttb();
     virtual ~Sttb();

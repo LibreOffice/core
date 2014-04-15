@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <fesh.hxx>
 #include <hintids.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/formatbreakitem.hxx>
@@ -97,11 +98,6 @@ using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 const sal_Unicode T2T_PARA = 0x0a;
-
-extern void ClearFEShellTabCols();
-
-// Located in gctable.cxx
-extern sal_Bool sw_GC_Line_Border( const SwTableLine*& , void* pPara );
 
 static void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, sal_uInt8 nId )
 {

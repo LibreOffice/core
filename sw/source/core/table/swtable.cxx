@@ -2639,7 +2639,6 @@ public:
         if (m_pTabFrm->IsFollow())
             m_pTabFrm = m_pTabFrm->FindMaster(true);
     }
-    const SwTable * getTable() const { return m_pTable; }
 
     const SwCellFrm * getCellFrm() const { return m_pCellFrm; }
 

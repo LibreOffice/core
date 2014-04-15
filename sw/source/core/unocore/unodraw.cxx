@@ -216,10 +216,6 @@ public:
             }
         }
     }
-    void RemovePositionLayoutDir()
-    {
-        mnPositionLayoutDir = text::PositionLayoutDir::PositionInLayoutDirOfAnchor;
-    }
 
     // #i28701#
     inline SwFmtWrapInfluenceOnObjPos* GetWrapInfluenceOnObjPos(

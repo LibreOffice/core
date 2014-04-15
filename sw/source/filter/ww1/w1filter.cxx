@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <sw3convert.hxx>
 #include <tools/solar.h>
 #include <comphelper/string.hxx>
 #include <editeng/paperinf.hxx>
@@ -512,10 +513,6 @@ static WWDateTime GetTimeDatePara( const OUString& rForm,
     }
     return eDT;
 }
-
-extern void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
-                                sal_uInt16& rSubType, sal_uLong &rFmt,
-                                sal_uInt16 nVersion );
 
 void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
 {

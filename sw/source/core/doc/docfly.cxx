@@ -66,8 +66,6 @@
 #include <svx/xlnedit.hxx>
 #include <svx/xflhtit.hxx>
 
-extern sal_uInt16 GetHtmlMode( const SwDocShell* );
-
 using namespace ::com::sun::star;
 
 sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType ) const

@@ -544,7 +544,6 @@ struct SwFillData
     long Left() const { return aFrm.Left(); }
     long Right() const { return aFrm.Right(); }
     long Bottom() const { return aFrm.Bottom(); }
-    SwRect& Frm() { return aFrm; }
     SwFillCrsrPos &Fill() const { return *pCMS->pFill; }
     void SetTab( MSHORT nNew ) { pCMS->pFill->nTabCnt = nNew; }
     void SetSpace( MSHORT nNew ) { pCMS->pFill->nSpaceCnt = nNew; }

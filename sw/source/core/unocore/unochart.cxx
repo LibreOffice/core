@@ -53,12 +53,6 @@ using namespace ::com::sun::star;
 extern void sw_GetCellPosition( const OUString &rCellName, sal_Int32 &rColumn, sal_Int32 &rRow);
 extern OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow );
 extern int sw_CompareCellsByColFirst( const OUString &rCellName1, const OUString &rCellName2 );
-extern int sw_CompareCellsByRowFirst( const OUString &rCellName1, const OUString &rCellName2 );
-extern int sw_CompareCellRanges(
-        const OUString &rRange1StartCell, const OUString &rRange1EndCell,
-        const OUString &rRange2StartCell, const OUString &rRange2EndCell,
-        sal_Bool bCmpColsFirst );
-extern void sw_NormalizeRange( OUString &rCell1, OUString &rCell2 );
 
 //static
 void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )

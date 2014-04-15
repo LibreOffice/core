@@ -71,11 +71,14 @@ BigPtrArray::~BigPtrArray()
 // division of this field into multiple parts.
 void BigPtrArray::Move( sal_uLong from, sal_uLong to )
 {
-    sal_uInt16 cur = Index2Block( from );
-    BlockInfo* p = ppInf[ cur ];
-    ElementPtr pElem = p->pData[ from - p->nStart ];
-    Insert( pElem, to ); // insert first, then delete!
-    Remove( ( to < from ) ? ( from + 1 ) : from );
+    if (from != to)
+    {
+        sal_uInt16 cur = Index2Block( from );
+        BlockInfo* p = ppInf[ cur ];
+        ElementPtr pElem = p->pData[ from - p->nStart ];
+        Insert( pElem, to ); // insert first, then delete!
+        Remove( ( to < from ) ? ( from + 1 ) : from );
+    }
 }
 
 /** Apply function to every element.

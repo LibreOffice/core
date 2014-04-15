@@ -19,6 +19,7 @@
 
 #include <swtypes.hxx>
 #include <osl/diagnose.h>
+#include <unofreg.hxx>
 #include <unomod.hxx>
 #include <unomid.h>
 #include <unoprnms.hxx>

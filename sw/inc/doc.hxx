@@ -199,6 +199,7 @@ class SwRenderData;
 class SwPageFrm;
 class SwViewOption;
 class IDocumentUndoRedo;
+class _SetGetExpFlds;
 
 namespace sw { namespace mark {
     class MarkManager;
@@ -2173,6 +2174,9 @@ namespace docfunc
     */
     bool HasOutlineStyleToBeWrittenAsNormalListStyle( SwDoc& rDoc );
 }
+
+bool sw_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLst );
+
 #endif  //_DOC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

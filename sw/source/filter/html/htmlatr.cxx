@@ -1164,8 +1164,6 @@ public:
     void OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
                       HTMLOutContext *pContext = 0 );
 
-    sal_uInt16 Count() const { return aEndLst.size(); }
-
     sal_Bool IsHTMLMode( sal_uLong nMode ) const { return (nHTMLMode & nMode) != 0; }
 };
 

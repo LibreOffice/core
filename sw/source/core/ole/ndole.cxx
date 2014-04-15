@@ -78,16 +78,6 @@ public:
 
     void InsertObj( SwOLEObj& rObj );
     void RemoveObj( SwOLEObj& rObj );
-
-    void RemovePtr( SwOLEObj* pObj )
-    {
-        OleObjects_t::iterator const it =
-            std::find(m_OleObjects.begin(), m_OleObjects.end(), pObj);
-        if (it != m_OleObjects.end())
-        {
-            m_OleObjects.erase(it);
-        }
-    }
 };
 
 SwOLELRUCache* pOLELRU_Cache = 0;

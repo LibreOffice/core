@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <UndoTable.hxx>
 #include <hintids.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/charclass.hxx>
@@ -536,7 +539,6 @@ sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rFld )
     if( !GetDepends() || !(nsSwGetSetExpType::GSE_SEQ & nType) )
         return USHRT_MAX;
 
-extern void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
     std::vector<sal_uInt16> aArr;
 
     sal_uInt16 n;

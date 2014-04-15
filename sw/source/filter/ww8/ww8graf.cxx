@@ -567,16 +567,7 @@ private:
 public:
     explicit Chunk(long nStart, const OUString &rURL)
         : msURL(rURL), mnStartPos(nStart), mnEndPos(0)  {}
-    Chunk(const Chunk &rChunk)
-        : msURL(rChunk.msURL), mnStartPos(rChunk.mnStartPos),
-        mnEndPos(rChunk.mnEndPos) {}
-    Chunk& operator=(const Chunk &rChunk)
-    {
-        msURL = rChunk.msURL;
-        mnStartPos = rChunk.mnStartPos;
-        mnEndPos = rChunk.mnEndPos;
-        return *this;
-    }
+
     void SetEndPos(long nEnd) { mnEndPos = nEnd; }
     long GetStartPos() const {return mnStartPos;}
     long GetEndPos() const {return mnEndPos;}
