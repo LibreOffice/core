@@ -2912,6 +2912,8 @@ DECLARE_OOXMLEXPORT_TEST(testCitation,"FDO74775.docx")
     if (!pXmlDoc)
         return;
     xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[3]/w:instrText");
+    CPPUNIT_ASSERT(pXmlNodes != 0);
+    CPPUNIT_ASSERT(pXmlNodes->nodeNr > 0);
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
     CPPUNIT_ASSERT(contents.match(" CITATION [Kra06]"));
