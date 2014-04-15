@@ -320,7 +320,8 @@ SwDocShell::SwDocShell( SfxObjectCreateMode eMode ) :
     pWrtShell( 0 ),
     pOLEChildList( 0 ),
     nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
-    bInUpdateFontList(false)
+    bInUpdateFontList(false),
+    bIsATemplate(false)
 {
     Init_Impl();
 }
