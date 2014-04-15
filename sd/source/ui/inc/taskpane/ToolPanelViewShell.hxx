@@ -65,12 +65,6 @@ public:
         FrameView* pFrameView);
     virtual ~ToolPanelViewShell (void);
 
-    /** Register the SFX interfaces so that (some of) the controls can be
-        pushed as SFX shells on the shell stack and process slot calls and
-        so on.
-    */
-    static void RegisterControls (void);
-
     virtual void GetFocus (void);
     virtual void LoseFocus (void);
     virtual void KeyInput (const KeyEvent& rEvent);
