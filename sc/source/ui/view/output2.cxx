@@ -61,6 +61,7 @@
 #include "markdata.hxx"
 #include "stlsheet.hxx"
 #include "spellcheckcontext.hxx"
+#include <scopetools.hxx>
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <comphelper/string.hxx>
@@ -1443,9 +1444,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
 
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, mpDev->GetExtOutDevData() );
 
-    bool bWasIdleEnabled = mpDoc->IsIdleEnabled();
-    mpDoc->EnableIdle(false);
-
+    sc::IdleSwitch aIdleSwitch(*mpDoc, false);
     ScDrawStringsVars aVars( this, bPixelToLogic );
 
     bool bProgress = false;
@@ -2071,7 +2070,6 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
     }
     if ( bProgress )
         ScProgress::DeleteInterpretProgress();
-    mpDoc->EnableIdle(bWasIdleEnabled);
 }
 
 ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()

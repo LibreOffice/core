@@ -46,6 +46,15 @@ public:
     ~UndoSwitch();
 };
 
+class SC_DLLPUBLIC IdleSwitch
+{
+    ScDocument& mrDoc;
+    bool mbOldValue;
+public:
+    IdleSwitch(ScDocument& rDoc, bool bEnableIdle);
+    ~IdleSwitch();
+};
+
 }
 
 #endif
