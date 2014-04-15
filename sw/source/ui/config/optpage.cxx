@@ -243,8 +243,8 @@ bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     if ( nMPos != m_pMetricLB->GetSavedValue() )
     {
         // Double-Cast for VA3.0
-        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
-        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)nFieldUnit ) );
+        const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
+        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
         bRet = sal_True;
     }
 
@@ -252,16 +252,16 @@ bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     if ( nMPos != m_pHMetric->GetSavedValue() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
-        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pHMetric->GetEntryData( nMPos );
-        rSet.Put( SfxUInt16Item( FN_HSCROLL_METRIC, (sal_uInt16)nFieldUnit ) );
+        const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pHMetric->GetEntryData( nMPos );
+        rSet.Put( SfxUInt16Item( FN_HSCROLL_METRIC, nFieldUnit ) );
         bRet = sal_True;
     }
     nMPos = m_pVMetric->GetSelectEntryPos();
     if ( nMPos != m_pVMetric->GetSavedValue() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
-        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pVMetric->GetEntryData( nMPos );
-        rSet.Put( SfxUInt16Item( FN_VSCROLL_METRIC, (sal_uInt16)nFieldUnit ) );
+        const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pVMetric->GetEntryData( nMPos );
+        rSet.Put( SfxUInt16Item( FN_VSCROLL_METRIC, nFieldUnit ) );
         bRet = sal_True;
     }
     return bRet;
@@ -672,10 +672,10 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
         pWrtShell->StartAllAction();
         SfxPrinter* pPrinter = pWrtShell->getIDocumentDeviceAccess()->getPrinter( false );
         bool bMod = false;
-        sal_uInt16 nFontWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
+        const sal_uInt16 nFontWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
             nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :
             FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONT : RES_CHRATR_CTL_FONT);
-        sal_uInt16 nFontHeightWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
+        const sal_uInt16 nFontHeightWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
             nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONTSIZE :
             FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONTSIZE : RES_CHRATR_CTL_FONTSIZE);
         if(sStandard != sShellStd)
@@ -752,7 +752,7 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
 void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
 {
     const SfxPoolItem* pLang;
-    sal_uInt16 nLangSlot = nFontGroup == FONT_GROUP_DEFAULT  ? SID_ATTR_LANGUAGE :
+    const sal_uInt16 nLangSlot = nFontGroup == FONT_GROUP_DEFAULT  ? SID_ATTR_LANGUAGE :
         FONT_GROUP_CJK == nFontGroup ? SID_ATTR_CHAR_CJK_LANGUAGE : SID_ATTR_CHAR_CTL_LANGUAGE;
 
     if( SFX_ITEM_SET == rSet.GetItemState(nLangSlot, false, &pLang))
@@ -862,7 +862,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
                 FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellStd = sStdBackup =  rFont.GetFamilyName();
 
-        sal_uInt16 nFontHeightWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
+        const sal_uInt16 nFontHeightWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
             nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONTSIZE :
             FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONTSIZE : RES_CHRATR_CTL_FONTSIZE );
         const SvxFontHeightItem& rFontHeightStandard = (const SvxFontHeightItem& )pColl->GetFmtAttr(nFontHeightWhich);
@@ -876,7 +876,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         const SvxFontHeightItem& rFontHeightTitle = (const SvxFontHeightItem&)pColl->GetFmtAttr( nFontHeightWhich, sal_True );
         nTitleHeight = (sal_Int32)rFontHeightTitle.GetHeight();
 
-        sal_uInt16 nFontWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
+        const sal_uInt16 nFontWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
             nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :
             FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONT : RES_CHRATR_CTL_FONT);
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_NUMBUL_BASE);
@@ -1227,7 +1227,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
     }
 
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTblFlags(bHTMLMode);
-    sal_uInt16 nInsTblFlags = aInsOpts.mnInsMode;
+    const sal_uInt16 nInsTblFlags = aInsOpts.mnInsMode;
 
     pHeaderCB->Check(0 != (nInsTblFlags & tabopts::HEADLINE));
     pRepeatHeaderCB->Check((!bHTMLMode) && (aInsOpts.mnRowsToRepeat > 0));
@@ -1537,18 +1537,18 @@ void SwMarkPreview::Paint(const Rectangle &/*rRect*/)
     // Page
     aPage.SetSize(Size(aSz.Width() - 3, aSz.Height() - 3));
 
-    sal_uLong nOutWPix = aPage.GetWidth();
-    sal_uLong nOutHPix = aPage.GetHeight();
+    const long nOutWPix = aPage.GetWidth();
+    const long nOutHPix = aPage.GetHeight();
 
     // PrintArea
-    sal_uLong nLBorder = 8;
-    sal_uLong nRBorder = 8;
-    sal_uLong nTBorder = 4;
-    sal_uLong nBBorder = 4;
+    const long nLBorder = 8;
+    const long nRBorder = 8;
+    const long nTBorder = 4;
+    const long nBBorder = 4;
 
     aLeftPagePrtArea = Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
-    sal_uInt16 nWidth = (sal_uInt16)aLeftPagePrtArea.GetWidth();
-    sal_uInt16 nKorr = (nWidth & 1) != 0 ? 0 : 1;
+    const long nWidth = aLeftPagePrtArea.GetWidth();
+    const long nKorr = (nWidth & 1) != 0 ? 0 : 1;
     aLeftPagePrtArea.SetSize(Size(nWidth / 2 - (nLBorder + nRBorder) / 2 + nKorr, aLeftPagePrtArea.GetHeight()));
 
     aRightPagePrtArea = aLeftPagePrtArea;
@@ -1616,14 +1616,11 @@ void SwMarkPreview::PaintPage(const Rectangle &rRect)
     aTextLine.Right()   -= nRTxtBorder;
     aTextLine.Move(0, nTTxtBorder);
 
-    sal_Int32 nStep;
-    sal_uInt16 nLines;
-
-    nStep = aTextLine.GetHeight() + 2;
-    nLines = (sal_uInt16)(rRect.GetHeight() / (aTextLine.GetHeight() + 2)) - 1;
+    const long nStep = aTextLine.GetHeight() + 2;
+    const long nLines = rRect.GetHeight() / (aTextLine.GetHeight() + 2) - 1;
 
     // simulate text
-    for (sal_uInt16 i = 0; i < nLines; ++i)
+    for (long i = 0; i < nLines; ++i)
     {
         if (i == (nLines - 1))
             aTextLine.SetSize(Size(aTextLine.GetWidth() / 2, aTextLine.GetHeight()));
@@ -1652,9 +1649,9 @@ namespace
 {
     void lcl_FillRedlineAttrListBox(
             ListBox& rLB, const AuthorCharAttr& rAttrToSelect,
-            const sal_uInt16* pAttrMap, const sal_uInt16 nAttrMapSize)
+            const sal_uInt16* pAttrMap, const size_t nAttrMapSize)
     {
-        for (sal_uInt16 i = 0; i != nAttrMapSize; ++i)
+        for (size_t i = 0; i != nAttrMapSize; ++i)
         {
             CharAttr& rAttr(aRedlineAttr[pAttrMap[i]]);
             rLB.SetEntryData(i, &rAttr);
