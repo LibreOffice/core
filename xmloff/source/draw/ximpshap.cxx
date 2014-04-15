@@ -1848,10 +1848,12 @@ bool SvXMLImport::needFixPositionAfterZ() const
     bool bWrongPositionAfterZ( false );
     sal_Int32 nUPD( 0 );
     sal_Int32 nBuildId( 0 );
-    if ( getBuildIds( nUPD, nBuildId ) &&
-       ( ( nUPD == 641 ) || ( nUPD == 645 ) || ( nUPD == 680 ) || ( nUPD == 300 ) ||
-         ( nUPD == 310 ) || ( nUPD == 320 ) || ( nUPD == 330 ) || ( nUPD == 340 ) ||
-         ( nUPD == 350 && nBuildId < 202 ) ) )
+    if ( getBuildIds( nUPD, nBuildId ) && // test OOo and old versions of LibO and AOO
+       ( ( ( nUPD == 641 ) || ( nUPD == 645 ) || ( nUPD == 680 ) || ( nUPD == 300 ) ||
+           ( nUPD == 310 ) || ( nUPD == 320 ) || ( nUPD == 330 ) || ( nUPD == 340 ) ||
+           ( nUPD == 350 && nBuildId < 202 ) )
+       || ( getGeneratorVersion() >= SvXMLImport::AOO_40x     // test if AOO 4.x
+         && getGeneratorVersion() <= SvXMLImport::AOO_4x ) ) )
     {
         bWrongPositionAfterZ = true;
     }
