@@ -121,7 +121,7 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
     SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
     for ( size_t i = 0; i < aMetricArr.Count(); ++i )
     {
-        OUString sMetric = aMetricArr.GetStringByPos( i );
+        const OUString sMetric = aMetricArr.GetStringByPos( i );
         FieldUnit eFUnit = (FieldUnit)aMetricArr.GetValue( i );
 
         switch ( eFUnit )
@@ -404,7 +404,7 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
         if (m_pInMarginsRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
                                                         POSTITS_INMARGINS;
 
-        OUString sFax = m_pFaxLB->GetSelectEntry();
+        const OUString sFax = m_pFaxLB->GetSelectEntry();
         aAddPrinterAttr.sFaxName = sNone == sFax ? aEmptyOUStr : sFax;
         rCoreSet.Put(aAddPrinterAttr);
     }
@@ -624,11 +624,11 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
     sal_Bool bNotDocOnly = !pDocOnlyCB->IsChecked();
     SW_MOD()->GetModuleConfig()->SetDefaultFontInCurrDocOnly(!bNotDocOnly);
 
-    OUString sStandard    = pStandardBox->GetText();
-    OUString sTitle       = pTitleBox->GetText();
-    OUString sList        = pListBox->GetText();
-    OUString sLabel       = pLabelBox->GetText();
-    OUString sIdx         = pIdxBox->GetText();
+    const OUString sStandard    = pStandardBox->GetText();
+    const OUString sTitle       = pTitleBox->GetText();
+    const OUString sList        = pListBox->GetText();
+    const OUString sLabel       = pLabelBox->GetText();
+    const OUString sIdx         = pIdxBox->GetText();
 
     bool bStandardHeightChanged = pStandardHeightLB->GetSavedValue() != pStandardHeightLB->GetText();
     bool bTitleHeightChanged = pTitleHeightLB->GetSavedValue() != pTitleHeightLB->GetText();
@@ -759,13 +759,12 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
     if( SFX_ITEM_SET == rSet.GetItemState(nLangSlot, false, &pLang))
         eLanguage = ((const SvxLanguageItem*)pLang)->GetValue();
 
-    OUString sTmp = pLabelFT->GetText();
     OUString sToReplace = sScriptWestern;
     if(FONT_GROUP_CJK == nFontGroup )
         sToReplace = sScriptAsian;
     else if(FONT_GROUP_CTL == nFontGroup )
         sToReplace = sScriptComplex;
-    pLabelFT->SetText(sTmp.replaceFirst("%1", sToReplace));
+    pLabelFT->SetText(pLabelFT->GetText().replaceFirst("%1", sToReplace));
 
     const SfxPoolItem* pItem;
 
@@ -981,7 +980,7 @@ IMPL_LINK( SwStdFontTabPage, ModifyHdl, ComboBox*, pBox )
 {
     if(pBox == pStandardBox)
     {
-        OUString sEntry = pBox->GetText();
+        const OUString sEntry = pBox->GetText();
         if(bSetListDefault && bListDefault)
             pListBox->SetText(sEntry);
         if(bSetLabelDefault && bLabelDefault)
@@ -1034,7 +1033,7 @@ IMPL_LINK( SwStdFontTabPage, ModifyHeightHdl, FontSizeBox*, pBox )
 IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, ComboBox*, pBox )
 {
     FontSizeBox* pHeightLB = 0;
-    OUString sEntry = pBox->GetText();
+    const OUString sEntry = pBox->GetText();
     if(pBox == pStandardBox)
     {
         pHeightLB = pStandardHeightLB;
@@ -1701,7 +1700,7 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
 
     for (sal_Int32 i = 0; i < pInsertLB->GetEntryCount(); ++i)
     {
-        OUString sEntry(pInsertLB->GetEntry(i));
+        const OUString sEntry(pInsertLB->GetEntry(i));
         pDeletedLB->InsertEntry(sEntry);
         pChangedLB->InsertEntry(sEntry);
     };
@@ -1901,7 +1900,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     {
         XColorEntry* pEntry = pColorLst->GetColor( i );
         Color aColor = pEntry->GetColor();
-        OUString sName = pEntry->GetName();
+        const OUString sName = pEntry->GetName();
 
         pInsertColorLB->InsertEntry( aColor, sName );
         pDeletedColorLB->InsertEntry( aColor, sName );
