@@ -36,9 +36,11 @@ class ScMacrosTest : public UnoApiTest
 public:
     ScMacrosTest();
 
+#if !defined MACOSX
     void testStarBasic();
     void testVba();
     void testMSP();
+#endif
     CPPUNIT_TEST_SUITE(ScMacrosTest);
 #if !defined(MACOSX)
     //enable this test if you want to play with star basic macros in unit tests
@@ -53,6 +55,8 @@ public:
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
+
+#if !defined MACOSX
 
 // I suppose you could say this test doesn't really belong here, OTOH
 // we need a full document to run the test ( it related originally to an
@@ -275,6 +279,8 @@ void ScMacrosTest::testVba()
         }
     }
 }
+
+#endif
 
 ScMacrosTest::ScMacrosTest()
       : UnoApiTest("/sc/qa/extras/testdocuments")

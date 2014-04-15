@@ -59,10 +59,14 @@ public:
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
 
+#if !defined MACOSX && !defined DRAGONFLY
     ScDocShellRef saveAndReloadPassword( ScDocShell*, const OUString&, const OUString&, const OUString&, sal_uLong );
+#endif
 
     void test();
+#if !defined MACOSX && !defined DRAGONFLY
     void testPasswordExport();
+#endif
     void testConditionalFormatExportODS();
     void testConditionalFormatExportXLSX();
     void testColorScaleExportODS();
@@ -132,6 +136,7 @@ private:
 
 };
 
+#if !defined MACOSX && !defined DRAGONFLY
 ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUString &rFilter,
     const OUString &rUserData, const OUString& rTypeName, sal_uLong nFormatType)
 {
@@ -168,6 +173,7 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUSt
     OUString aPass("test");
     return load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat, SOFFICE_FILEFORMAT_CURRENT, &aPass);
 }
+#endif
 
 void ScExportTest::test()
 {
@@ -190,6 +196,7 @@ void ScExportTest::test()
     ASSERT_DOUBLES_EQUAL(aVal, 1.0);
 }
 
+#if !defined MACOSX && !defined DRAGONFLY
 void ScExportTest::testPasswordExport()
 {
     ScDocShell* pShell = new ScDocShell(
@@ -215,6 +222,7 @@ void ScExportTest::testPasswordExport()
 
     xDocSh->DoClose();
 }
+#endif
 
 void ScExportTest::testConditionalFormatExportODS()
 {

@@ -51,13 +51,17 @@ class SwMacrosTest : public test::BootstrapFixture, public unotest::MacrosTest
 public:
     SwMacrosTest();
 
+#if !defined MACOSX && !defined WNT
     void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath);
+#endif
 
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
 
     //void testStarBasic();
+#if !defined MACOSX && !defined WNT
     void testVba();
+#endif
     void testFdo55289();
     CPPUNIT_TEST_SUITE(SwMacrosTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -75,6 +79,7 @@ private:
     OUString m_aBaseString;
 };
 
+#if !defined MACOSX && !defined WNT
 void SwMacrosTest::createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
     OUString aSep("/");
@@ -83,6 +88,7 @@ void SwMacrosTest::createFileURL(const OUString& aFileBase, const OUString& aFil
     aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
     rFilePath = aBuffer.makeStringAndClear();
 }
+#endif
 
 #if 0
 
@@ -113,6 +119,7 @@ void SwMacrosTest::testStarBasic()
 
 #endif
 
+#if !defined MACOSX && !defined WNT
 void SwMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {
@@ -148,6 +155,7 @@ void SwMacrosTest::testVba()
         pFoundShell->DoClose();
     }
 }
+#endif
 
 void SwMacrosTest::testFdo55289()
 {

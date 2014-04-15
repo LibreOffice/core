@@ -136,9 +136,11 @@ public:
     void testRowIndex1BasedXLSX();
 
     //misc tests unrelated to the import filters
+#if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(WNT)
     void testPasswordNew();
     void testPasswordOld();
     void testPasswordWrongSHA();
+#endif
 
     //test shape import
     void testControlImport();
@@ -247,7 +249,10 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
+#if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(WNT)
     void testPassword_Impl(const OUString& rFileNameBase);
+#endif
+
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
@@ -1486,6 +1491,7 @@ void ScFiltersTest::testRowIndex1BasedXLSX()
     xDocSh->DoClose();
 }
 
+#if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(WNT)
 void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
 {
     OUString aFileExtension(getFileFormats()[0].pName, strlen(getFileFormats()[0].pName), RTL_TEXTENCODING_UTF8 );
@@ -1541,6 +1547,7 @@ void ScFiltersTest::testPasswordWrongSHA()
     const OUString aFileNameBase("passwordWrongSHA.");
     testPassword_Impl(aFileNameBase);
 }
+#endif
 
 void ScFiltersTest::testControlImport()
 {
