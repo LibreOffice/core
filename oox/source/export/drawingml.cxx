@@ -750,8 +750,8 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
             pExtension = ".png";
             break;
         case GFX_LINK_TYPE_NATIVE_TIF:
-            sMediaType = "image/tiff";
-            pExtension = ".tiff";
+            sMediaType = "image/tif";
+            pExtension = ".tif";
             break;
         case GFX_LINK_TYPE_NATIVE_WMF:
             sMediaType = "image/x-wmf";
