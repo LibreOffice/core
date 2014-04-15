@@ -78,10 +78,10 @@ gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS)
 gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_OBJCFLAGS)
 
 ifeq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_CFLAGS += $(gb_DEBUG_CFLAGS)
-gb_LinkTarget_CXXFLAGS += $(gb_DEBUG_CFLAGS)
-gb_LinkTarget_OBJCXXFLAGS += $(gb_DEBUG_CFLAGS)
-gb_LinkTarget_OBJCFLAGS += $(gb_DEBUG_CFLAGS)
+gb_LinkTarget_CFLAGS += -g
+gb_LinkTarget_CXXFLAGS += -g
+gb_LinkTarget_OBJCXXFLAGS += -g
+gb_LinkTarget_OBJCFLAGS += -g
 endif
 
 define gb_LinkTarget__get_liblinkflags
