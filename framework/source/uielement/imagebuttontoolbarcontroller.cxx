@@ -40,6 +40,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/miscopt.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -159,7 +160,7 @@ void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star
 
 bool ImageButtonToolbarController::ReadImageFromURL( bool bBigImage, const OUString& aImageURL, Image& aImage )
 {
-    SvStream* pStream = utl::UcbStreamHelper::CreateStream( aImageURL, STREAM_STD_READ );
+    boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aImageURL, STREAM_STD_READ ));
     if ( pStream && ( pStream->GetErrorCode() == 0 ))
     {
         // Use graphic class to also support more graphic formats (bmp,png,...)
@@ -183,7 +184,6 @@ bool ImageButtonToolbarController::ReadImageFromURL( bool bBigImage, const OUStr
         }
     }
 
-    delete pStream;
     return false;
 }
 
