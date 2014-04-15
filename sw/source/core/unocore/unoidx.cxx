@@ -2798,12 +2798,12 @@ throw (uno::RuntimeException, std::exception)
             g_ServicesIndexTokenAccess);
 }
 
-struct TokenType {
+struct TokenType_ {
     const char *pName;
     enum FormTokenType eTokenType;
 };
 
-static const struct TokenType g_TokenTypes[] =
+static const struct TokenType_ g_TokenTypes[] =
 {
     { "TokenEntryNumber",           TOKEN_ENTRY_NO  },
     { "TokenEntryText",             TOKEN_ENTRY_TEXT },
@@ -2853,7 +2853,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
             {
                 const OUString sTokenType =
                         lcl_AnyToString(pProperties[j].Value);
-                for (TokenType const* pTokenType = g_TokenTypes;
+                for (TokenType_ const* pTokenType = g_TokenTypes;
                         pTokenType->pName; ++pTokenType)
                 {
                     if (sTokenType.equalsAscii(pTokenType->pName))
