@@ -407,7 +407,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             sal_Int32 nLevel = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_EXTRUSION_LIGHTING_INTENSITY))->GetValue();
 
             double fBrightness;
-            bool bHarsh2;
+            bool bHarsh2 = false;
             double fLevel1;
             double fLevel2;
 
