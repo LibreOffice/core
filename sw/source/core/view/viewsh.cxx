@@ -55,6 +55,7 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/sysdata.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <accessibilityoptions.hxx>
 #include <statstr.hrc>
