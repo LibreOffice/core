@@ -217,8 +217,6 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
 {
 }
 
-
-
 SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Sequence<document::CmisProperty>& i_cmisProps,
@@ -1112,12 +1110,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
             m_pInfoItem->getEditingCycles() ) );
     }
 
-    TriState eState = (TriState)m_bUseUserData;
-
-    if ( TRISTATE_INDET == eState )
-        m_pUseUserDataCB->EnableTriState( true );
-
-    m_pUseUserDataCB->SetState( eState );
+    m_pUseUserDataCB->SetState( static_cast<TriState>(m_bUseUserData) );
     m_pUseUserDataCB->SaveValue();
     m_pUseUserDataCB->Enable( bEnableUseUserData );
     bHandleDelete = false;
