@@ -403,10 +403,6 @@ private:
 
     void checkUnknown(rtl::OUString const & propertyName);
 };
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
-    && !defined __clang__
-#pragma GCC diagnostic pop
-#endif
 
 /**
    @short A helper mixin to implement certain UNO interfaces related to property
@@ -482,6 +478,10 @@ private:
     PropertySetMixin( const PropertySetMixin&); // not defined
     void operator=( const PropertySetMixin&); // not defined
 };
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
+    && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
 
 #if defined _MSC_VER
 #pragma warning(pop)
