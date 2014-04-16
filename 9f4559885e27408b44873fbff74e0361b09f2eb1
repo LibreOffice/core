@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_084d0773",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-16T15:07:25Z",
+      "side": 1,
+      "message": "for now it\u0027s not a problem to have the interface included here.",
+      "revId": "9f4559885e27408b44873fbff74e0361b09f2eb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
