@@ -1193,7 +1193,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl(bool bPerfectOnly)
         const ExtendedConvertTable& r = aAgressiveTable[i];
         SymbolEntry aEntry;
         aEntry.eFont = r.meFont;
-        for (int j = r.mnSize / sizeof(r.mpTable[0]); j >=0; --j)
+        for (int j = r.mnSize / sizeof(r.mpTable[0]) - 1; j >=0; --j)
         {
             aEntry.cIndex = r.mpTable[j].cMS;
             maMagicMap.insert(
