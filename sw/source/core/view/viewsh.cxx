@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <touch/touch.h>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -55,7 +57,6 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/alpha.hxx>
-#include <vcl/sysdata.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <accessibilityoptions.hxx>
 #include <statstr.hrc>
@@ -71,6 +72,10 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
+
+#if !HAVE_FEATURE_DESKTOP
+#include <vcl/sysdata.hxx>
+#endif
 
 sal_Bool SwViewShell::mbLstAct = sal_False;
 ShellResource *SwViewShell::mpShellRes = 0;
