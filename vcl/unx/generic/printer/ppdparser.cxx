@@ -719,12 +719,12 @@ PPDParser::PPDParser( const OUString& rFile ) :
         m_pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
     if (m_pImageableAreas == 0) {
         OSL_TRACE(
-            OSL_LOG_PREFIX "Warning: no ImageableArea in %s\n",
+            "Warning: no ImageableArea in %s\n",
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
     if (m_pDefaultImageableArea == 0) {
         OSL_TRACE(
-            OSL_LOG_PREFIX "Warning: no DefaultImageableArea in %s\n",
+            "Warning: no DefaultImageableArea in %s\n",
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
 
@@ -733,12 +733,12 @@ PPDParser::PPDParser( const OUString& rFile ) :
         m_pDefaultPaperDimension = m_pPaperDimensions->getDefaultValue();
     if (m_pPaperDimensions == 0) {
         OSL_TRACE(
-            OSL_LOG_PREFIX "Warning: no PaperDimensions in %s\n",
+            "Warning: no PaperDimensions in %s\n",
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
     if (m_pDefaultPaperDimension == 0) {
         OSL_TRACE(
-            OSL_LOG_PREFIX "Warning: no DefaultPaperDimensions in %s\n",
+            "Warning: no DefaultPaperDimensions in %s\n",
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
 
@@ -747,12 +747,12 @@ PPDParser::PPDParser( const OUString& rFile ) :
         m_pDefaultResolution = m_pResolutions->getDefaultValue();
     if (m_pResolutions == 0) {
         OSL_TRACE(
-            OSL_LOG_PREFIX "Warning: no Resolution in %s\n",
+            "Warning: no Resolution in %s\n",
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
     if (m_pDefaultResolution == 0) {
         OSL_TRACE(
-            OSL_LOG_PREFIX "Warning: no DefaultResolution in %s\n",
+            "Warning: no DefaultResolution in %s\n",
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
 
@@ -761,12 +761,12 @@ PPDParser::PPDParser( const OUString& rFile ) :
         m_pDefaultInputSlot = m_pInputSlots->getDefaultValue();
     if (m_pInputSlots == 0) {
         OSL_TRACE(
-            OSL_LOG_PREFIX "Warning: no InputSlot in %s\n",
+            "Warning: no InputSlot in %s\n",
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
     if (m_pDefaultInputSlot == 0) {
         OSL_TRACE(
-            OSL_LOG_PREFIX "Warning: no DefaultInputSlot in %s\n",
+            "Warning: no DefaultInputSlot in %s\n",
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
 
@@ -777,7 +777,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
     m_pFontList = getKey( OUString( "Font" ) );
     if (m_pFontList == 0) {
         OSL_TRACE(
-            OSL_LOG_PREFIX "Warning: no Font in %s\n",
+            "Warning: no Font in %s\n",
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
 

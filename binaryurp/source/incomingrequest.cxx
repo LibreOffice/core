@@ -101,16 +101,16 @@ void IncomingRequest::execute() const {
             return;
         } catch (const css::uno::RuntimeException & e) {
             OSL_TRACE(
-                OSL_LOG_PREFIX "caught UNO runtime exception '%s'",
+                "caught UNO runtime exception '%s'",
                 (OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).
                  getStr()));
         } catch (const std::exception & e) {
-            OSL_TRACE(OSL_LOG_PREFIX "caught C++ exception '%s'", e.what());
+            OSL_TRACE("caught C++ exception '%s'", e.what());
         }
         bridge_->terminate(false);
     } else {
         if (isExc) {
-            OSL_TRACE(OSL_LOG_PREFIX "oneway method raised exception");
+            OSL_TRACE("oneway method raised exception");
         }
         bridge_->decrementCalls();
     }
@@ -148,8 +148,7 @@ bool IncomingRequest::execute_throw(
                     ifc = prov->getInstance(oid_);
                 } catch (const css::container::NoSuchElementException & e) {
                     OSL_TRACE(
-                        (OSL_LOG_PREFIX "initial element '%s':"
-                         " NoSuchElementException '%s'"),
+                        "initial element '%s': NoSuchElementException '%s'",
                         OUStringToOString(oid_, RTL_TEXTENCODING_UTF8).getStr(),
                         (OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).
                          getStr()));

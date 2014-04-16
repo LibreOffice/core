@@ -171,10 +171,10 @@ void Writer::execute() {
         }
     } catch (const css::uno::Exception & e) {
         OSL_TRACE(
-            OSL_LOG_PREFIX "caught UNO exception '%s'",
+            "caught UNO exception '%s'",
             OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     } catch (const std::exception & e) {
-        OSL_TRACE(OSL_LOG_PREFIX "caught C++ exception '%s'", e.what());
+        OSL_TRACE("caught C++ exception '%s'", e.what());
     }
     bridge_->terminate(false);
     bridge_.clear();

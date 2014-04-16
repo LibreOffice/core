@@ -96,7 +96,7 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
     catch ( const uno::Exception& rException )
     {
         SAL_INFO("package.xstor", rException.Message);
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Can't set encryption");
+        SAL_INFO("package.xstor", "Can't set encryption");
         SAL_WARN( "package.xstor", "Can't write encryption related properties!" );
         throw io::IOException(); // TODO
     }
@@ -114,7 +114,7 @@ uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySe
     catch ( const uno::Exception& rException )
     {
         SAL_INFO("package.xstor", rException.Message);
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Can't get encryption property");
+        SAL_INFO("package.xstor", "Can't get encryption property");
 
         SAL_WARN( "package.xstor", "Can't get encryption related properties!" );
         throw io::IOException(); // TODO
@@ -198,7 +198,7 @@ sal_Bool KillFile( const OUString& aURL, const uno::Reference< uno::XComponentCo
     catch( const uno::Exception& rException )
     {
         SAL_INFO("package.xstor", rException.Message);
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Quiet exception");
+        SAL_INFO("package.xstor", "Quiet exception");
     }
 
     return bRet;
@@ -220,7 +220,7 @@ OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext > xCont
     catch ( const uno::Exception& rException )
     {
         SAL_INFO("package.xstor", rException.Message);
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Quiet exception");
+        SAL_INFO("package.xstor", "Quiet exception");
     }
 
     if ( aTempURL.isEmpty() )
@@ -471,7 +471,7 @@ void OWriteStream_Impl::DisposeWrappers()
         catch ( const uno::RuntimeException& rRuntimeException )
         {
             AddLog( rRuntimeException.Message );
-            AddLog( OSL_LOG_PREFIX "Quiet exception" );
+            AddLog( "Quiet exception" );
         }
 
         m_pAntiImpl = NULL;
@@ -520,7 +520,7 @@ OUString OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XIn
         catch( const packages::WrongPasswordException& rWrongPasswordException )
         {
             AddLog( rWrongPasswordException.Message );
-            AddLog( OSL_LOG_PREFIX "Rethrow" );
+            AddLog( "Rethrow" );
 
             KillFile( aTempURL, comphelper::getProcessComponentContext() );
             throw;
@@ -528,7 +528,7 @@ OUString OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XIn
         catch( const uno::Exception& rException )
         {
             AddLog( rException.Message );
-            AddLog( OSL_LOG_PREFIX "Rethrow" );
+            AddLog( "Rethrow" );
 
             KillFile( aTempURL, comphelper::getProcessComponentContext() );
         throw;
@@ -643,7 +643,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
             catch( const uno::Exception& rException )
             {
                 AddLog( rException.Message );
-                AddLog( OSL_LOG_PREFIX "Quiet exception" );
+                AddLog( "Quiet exception" );
             }
         }
     }
@@ -681,7 +681,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
             catch( const uno::Exception& rException )
             {
                 AddLog( rException.Message );
-                AddLog( OSL_LOG_PREFIX "Quiet exception" );
+                AddLog( "Quiet exception" );
             }
         }
     }
@@ -1029,7 +1029,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
         catch( const uno::Exception& rException )
         {
             AddLog( rException.Message );
-            AddLog( OSL_LOG_PREFIX "Quiet exception" );
+            AddLog( "Quiet exception" );
 
             m_nRelInfoStatus = RELINFO_BROKEN;
             m_bOrigRelInfoBroken = sal_True;
@@ -1097,7 +1097,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
             catch( const uno::Exception& rException )
             {
                 AddLog( rException.Message );
-                AddLog( OSL_LOG_PREFIX "Quiet exception" );
+                AddLog( "Quiet exception" );
 
                 SAL_WARN( "package.xstor", "A property can't be retrieved!" );
             }
@@ -1215,13 +1215,13 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
         {
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
             AddLog( rWrongPasswordException.Message );
-            AddLog( OSL_LOG_PREFIX "Rethrow" );
+            AddLog( "Rethrow" );
             throw;
         }
         catch ( const uno::Exception& rException )
         {
             AddLog( rException.Message );
-            AddLog( OSL_LOG_PREFIX "Quiet exception" );
+            AddLog( "Quiet exception" );
 
             SAL_WARN( "package.xstor", "Can't write encryption related properties!" );
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
@@ -1255,7 +1255,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
         catch( const packages::NoEncryptionException& rNoEncryptionException )
         {
             AddLog( rNoEncryptionException.Message );
-            AddLog( OSL_LOG_PREFIX "Rethrow" );
+            AddLog( "Rethrow" );
 
             throw packages::WrongPasswordException();
         }
@@ -1483,7 +1483,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         catch( const packages::NoEncryptionException& rNoEncryptionException )
         {
             AddLog( rNoEncryptionException.Message );
-            AddLog( OSL_LOG_PREFIX "No Element" );
+            AddLog( "No Element" );
 
             throw packages::WrongPasswordException();
         }
@@ -1556,7 +1556,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
             SAL_WARN( "package.xstor", "Can't open encrypted stream!" );
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
             AddLog( rException.Message );
-            AddLog( OSL_LOG_PREFIX "Rethrow" );
+            AddLog( "Rethrow" );
             throw;
         }
 
@@ -1724,7 +1724,7 @@ OWriteStream::~OWriteStream()
             catch( const uno::RuntimeException& rRuntimeException )
             {
                 m_pImpl->AddLog( rRuntimeException.Message );
-                m_pImpl->AddLog( OSL_LOG_PREFIX "Quiet exception" );
+                m_pImpl->AddLog( "Quiet exception" );
             }
         }
     }
@@ -1754,7 +1754,7 @@ void OWriteStream::CheckInitOnDemand()
 {
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -1817,7 +1817,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     catch ( const uno::Exception& rException )
     {
         m_pImpl->AddLog( rException.Message );
-        m_pImpl->AddLog( OSL_LOG_PREFIX "Quiet exception" );
+        m_pImpl->AddLog( "Quiet exception" );
 
         // TODO: set the stoream in invalid state or dispose
         SAL_WARN( "package.xstor", "The stream become invalid during copiing!" );
@@ -2052,7 +2052,7 @@ sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sa
 
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2074,7 +2074,7 @@ sal_Int32 SAL_CALL OWriteStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData
 
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2096,7 +2096,7 @@ void SAL_CALL OWriteStream::skipBytes( sal_Int32 nBytesToSkip )
 
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2117,7 +2117,7 @@ sal_Int32 SAL_CALL OWriteStream::available(  )
 
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2137,7 +2137,7 @@ void SAL_CALL OWriteStream::closeInput(  )
 
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2161,7 +2161,7 @@ uno::Reference< io::XInputStream > SAL_CALL OWriteStream::getInputStream()
 
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2180,7 +2180,7 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
 
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2203,7 +2203,7 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2272,7 +2272,7 @@ void SAL_CALL OWriteStream::flush()
 
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2320,7 +2320,7 @@ void SAL_CALL OWriteStream::closeOutput()
 
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2344,7 +2344,7 @@ void SAL_CALL OWriteStream::seek( sal_Int64 location )
 
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2364,7 +2364,7 @@ sal_Int64 SAL_CALL OWriteStream::getPosition()
 
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2384,7 +2384,7 @@ sal_Int64 SAL_CALL OWriteStream::getLength()
 
     if ( !m_pImpl )
     {
-        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2623,7 +2623,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const OUString& sID )
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
         m_pImpl->AddLog( rNoSuchElementException.Message );
-        m_pImpl->AddLog( OSL_LOG_PREFIX "No Element" );
+        m_pImpl->AddLog( "No Element" );
     }
 
     return sal_False;
