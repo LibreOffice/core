@@ -767,15 +767,6 @@ void ScColumn::GetOptimalHeight(
     ::boost::ptr_vector<ScPatternAttr> aAltPatterns;
     while ( pPattern )
     {
-        // GetOptimalHeight called for preview style needs to
-        // use really use the style
-        if ( ScStyleSheet* pStyle = pDocument->GetPreviewCellStyle( nCol, nStartRow, nTab ) )
-        {
-            aAltPatterns.push_back( new ScPatternAttr( *pPattern ) );
-            ScPatternAttr* pModifiedPatt = &aAltPatterns.back();
-            pModifiedPatt->SetStyleSheet( pStyle );
-            pPattern = pModifiedPatt;
-        }
         const ScMergeAttr*      pMerge = (const ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
         const ScMergeFlagAttr*  pFlag = (const ScMergeFlagAttr*)&pPattern->GetItem(ATTR_MERGE_FLAG);
         if ( pMerge->GetRowMerge() > 1 || pFlag->IsOverlapped() )
