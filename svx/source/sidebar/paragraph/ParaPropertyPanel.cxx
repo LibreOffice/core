@@ -264,17 +264,8 @@ void ParaPropertyPanel::InitToolBoxIndent()
     const sal_uInt16 nIdIncrement = mpTbxIndent_IncDec->GetItemId(UNO_INCREMENTINDENT);
     const sal_uInt16 nIdDecrement = mpTbxIndent_IncDec->GetItemId(UNO_DECREMENTINDENT);
     const sal_uInt16 nIdHanging   = mpTbxIndent_IncDec->GetItemId(UNO_HANGINGINDENT);
-
-    if( Application::GetSettings().GetLayoutRTL())
-    {
-        mpTbxIndent_IncDec->SetItemImage(nIdIncrement, maIncIndentControl.GetIcon());
-        mpTbxIndent_IncDec->SetItemImage(nIdDecrement, maDecIndentControl.GetIcon());
-    }
-    else
-    {
-        mpTbxIndent_IncDec->SetItemImage(nIdIncrement, maIncIndentControl.GetIcon());
-        mpTbxIndent_IncDec->SetItemImage(nIdDecrement, maDecIndentControl.GetIcon());
-    }
+    mpTbxIndent_IncDec->SetItemImage(nIdIncrement, maIncIndentControl.GetIcon());
+    mpTbxIndent_IncDec->SetItemImage(nIdDecrement, maDecIndentControl.GetIcon());
     mpTbxIndent_IncDec->SetItemImage(nIdHanging, maIndHang);
 
     aLink = LINK( this, ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl );
@@ -284,16 +275,8 @@ void ParaPropertyPanel::InitToolBoxIndent()
     const sal_uInt16 nIdPromote  = mpTbxProDemote->GetItemId(UNO_PROMOTE);
     const sal_uInt16 nIdDemote   = mpTbxProDemote->GetItemId(UNO_DEMOTE);
     const sal_uInt16 nIdHanging2 = mpTbxProDemote->GetItemId(UNO_HANGINGINDENT2);
-    if( Application::GetSettings().GetLayoutRTL())
-    {
-        mpTbxProDemote->SetItemImage(nIdPromote, maOutLineLeftControl.GetIcon());
-        mpTbxProDemote->SetItemImage(nIdDemote, maOutLineRightControl.GetIcon());
-    }
-    else
-    {
-        mpTbxProDemote->SetItemImage(nIdPromote, maOutLineLeftControl.GetIcon());
-        mpTbxProDemote->SetItemImage(nIdDemote, maOutLineRightControl.GetIcon());
-    }
+    mpTbxProDemote->SetItemImage(nIdPromote, maOutLineLeftControl.GetIcon());
+    mpTbxProDemote->SetItemImage(nIdDemote, maOutLineRightControl.GetIcon());
     mpTbxProDemote->SetItemImage(nIdHanging2, maIndHang);
     aLink = LINK( this, ParaPropertyPanel, ClickProDemote_Hdl_Impl );
     mpTbxProDemote->SetSelectHdl(aLink);
