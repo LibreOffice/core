@@ -78,13 +78,13 @@ void Test::tearDown()
 void Test::testStyles()
 {
     Primitive2DSequence maSequenceRect = parseSvg("/svgio/qa/cppunit/data/Rect.svg");
-    CPPUNIT_ASSERT_EQUAL(1, maSequenceRect.getLength());
+    CPPUNIT_ASSERT_EQUAL(1, (int) maSequenceRect.getLength());
 
     Primitive2DSequence maSequenceRectWithStyle = parseSvg("/svgio/qa/cppunit/data/RectWithStyles.svg");
-    CPPUNIT_ASSERT_EQUAL(1, maSequenceRectWithStyle.getLength());
+    CPPUNIT_ASSERT_EQUAL(1, (int) maSequenceRectWithStyle.getLength());
 
     Primitive2DSequence maSequenceRectWithParentStyle = parseSvg("/svgio/qa/cppunit/data/RectWithParentStyles.svg");
-    CPPUNIT_ASSERT_EQUAL(1, maSequenceRectWithParentStyle.getLength());
+    CPPUNIT_ASSERT_EQUAL(1, (int) maSequenceRectWithParentStyle.getLength());
 
     // TODO: Test if the 3 sequences are equal..
     //const Primitive2DReference xReference(maSequenceRect[0]);
