@@ -41,8 +41,6 @@ UNOTOOLS_DLLPUBLIC OUString GetSubsFontName( const OUString& rName, sal_uLong nF
 
 UNOTOOLS_DLLPUBLIC void AddTokenFontName( OUString& rName, const OUString& rNewToken );
 
-struct UNOTOOLS_DLLPUBLIC FontNameHash { int operator()(const OUString&) const; };
-
 // - ConvertChar -
 
 class UNOTOOLS_DLLPUBLIC ConvertChar

@@ -423,7 +423,7 @@ void GetEnglishSearchFontName( OUString& rName )
     // translate normalized localized name to its normalized English ASCII name
     if( bNeedTranslation )
     {
-        typedef boost::unordered_map<const OUString, const char*, FontNameHash> FontNameDictionary;
+        typedef boost::unordered_map<const OUString, const char*, OUStringHash> FontNameDictionary;
         static FontNameDictionary aDictionary( SAL_N_ELEMENTS(aImplLocalizedNamesList) );
         // the font name dictionary needs to be intialized once
         if( aDictionary.empty() )
@@ -566,28 +566,6 @@ OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
     }
 
     return aName;
-}
-
-// TODO: use a more generic String hash
-int FontNameHash::operator()( const OUString& rStr ) const
-{
-    // this simple hash just has to be good enough for font names
-    int nHash = 0;
-    const int nLen = rStr.getLength();
-    const sal_Unicode* p = rStr.getStr();
-    switch( nLen )
-    {
-        default: nHash = (p[0]<<16) - (p[1]<<8) + p[2];
-                 nHash += nLen;
-                 p += nLen - 3;
-                 // fall through
-        case 3:  nHash += (p[2]<<16);   // fall through
-        case 2:  nHash += (p[1]<<8);    // fall through
-        case 1:  nHash += p[0];         // fall through
-        case 0:  break;
-    };
-
-    return nHash;
 }
 
 bool IsStarSymbol(const OUString &rFontName)

@@ -770,16 +770,19 @@ size_t ImplFontCache::IFSD_Hash::operator()( const FontSelectPattern& rFSD ) con
 size_t FontSelectPatternAttributes::hashCode() const
 {
     // TODO: does it pay off to improve this hash function?
-    static FontNameHash aFontNameHash;
-    size_t nHash = aFontNameHash( maSearchName );
+    size_t nHash;
 #if ENABLE_GRAPHITE
     // check for features and generate a unique hash if necessary
     if (maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
         != -1)
     {
-        nHash = aFontNameHash( maTargetName );
+        nHash = maTargetName.hashCode();
     }
+    else
 #endif
+    {
+        nHash = maSearchName.hashCode();
+    }
     nHash += 11 * mnHeight;
     nHash += 19 * GetWeight();
     nHash += 29 * GetSlant();
