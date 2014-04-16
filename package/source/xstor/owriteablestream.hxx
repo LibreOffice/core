@@ -70,7 +70,6 @@ namespace cppu {
 }
 
 namespace package {
-    void StaticAddLog( const OUString& aMessage );
     bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1, const ::comphelper::SequenceAsHashMap& aHash2 );
 }
 

@@ -114,13 +114,13 @@ void SAL_CALL OInputSeekStream::seek( sal_Int64 location )
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
     if ( !m_xSeekable.is() )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "No seekable!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "No seekable!");
         throw uno::RuntimeException();
     }
 
@@ -134,13 +134,13 @@ sal_Int64 SAL_CALL OInputSeekStream::getPosition()
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
     if ( !m_xSeekable.is() )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "No seekable!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "No seekable!");
         throw uno::RuntimeException();
     }
 
@@ -154,13 +154,13 @@ sal_Int64 SAL_CALL OInputSeekStream::getLength()
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
     if ( !m_xSeekable.is() )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "No seekable!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "No seekable!");
         throw uno::RuntimeException();
     }
 

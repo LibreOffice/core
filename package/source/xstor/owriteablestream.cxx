@@ -78,19 +78,6 @@ bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1,
     return bResult;
 }
 
-void StaticAddLog( const OUString& aMessage )
-{
-    try
-    {
-        uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-        uno::Reference< logging::XSimpleLogRing > xLogRing( logging::DocumentIOLogRing::get(xContext) );
-        xLogRing->logString( aMessage );
-    }
-    catch( const uno::Exception& )
-    {
-        // No log
-    }
-}
 } // namespace package
 
 namespace
@@ -108,8 +95,8 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
     }
     catch ( const uno::Exception& rException )
     {
-        ::package::StaticAddLog( rException.Message );
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Can't set encryption");
+        SAL_INFO("package.xstor", rException.Message);
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Can't set encryption");
         SAL_WARN( "package.xstor", "Can't write encryption related properties!" );
         throw io::IOException(); // TODO
     }
@@ -126,8 +113,8 @@ uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySe
     }
     catch ( const uno::Exception& rException )
     {
-        ::package::StaticAddLog( rException.Message );
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Can't get encryption property" );
+        SAL_INFO("package.xstor", rException.Message);
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Can't get encryption property");
 
         SAL_WARN( "package.xstor", "Can't get encryption related properties!" );
         throw io::IOException(); // TODO
@@ -210,8 +197,8 @@ sal_Bool KillFile( const OUString& aURL, const uno::Reference< uno::XComponentCo
     }
     catch( const uno::Exception& rException )
     {
-        ::package::StaticAddLog( rException.Message );
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Quiet exception" );
+        SAL_INFO("package.xstor", rException.Message);
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Quiet exception");
     }
 
     return bRet;
@@ -232,8 +219,8 @@ OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext > xCont
     }
     catch ( const uno::Exception& rException )
     {
-        ::package::StaticAddLog( rException.Message );
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Quiet exception" );
+        SAL_INFO("package.xstor", rException.Message);
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Quiet exception");
     }
 
     if ( aTempURL.isEmpty() )
@@ -1767,7 +1754,7 @@ void OWriteStream::CheckInitOnDemand()
 {
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2065,7 +2052,7 @@ sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sa
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2087,7 +2074,7 @@ sal_Int32 SAL_CALL OWriteStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2109,7 +2096,7 @@ void SAL_CALL OWriteStream::skipBytes( sal_Int32 nBytesToSkip )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2130,7 +2117,7 @@ sal_Int32 SAL_CALL OWriteStream::available(  )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2150,7 +2137,7 @@ void SAL_CALL OWriteStream::closeInput(  )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2174,7 +2161,7 @@ uno::Reference< io::XInputStream > SAL_CALL OWriteStream::getInputStream()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2193,7 +2180,7 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2216,7 +2203,7 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2285,7 +2272,7 @@ void SAL_CALL OWriteStream::flush()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2333,7 +2320,7 @@ void SAL_CALL OWriteStream::closeOutput()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2357,7 +2344,7 @@ void SAL_CALL OWriteStream::seek( sal_Int64 location )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2377,7 +2364,7 @@ sal_Int64 SAL_CALL OWriteStream::getPosition()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2397,7 +2384,7 @@ sal_Int64 SAL_CALL OWriteStream::getLength()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        SAL_INFO("package.xstor", OSL_LOG_PREFIX "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2417,7 +2404,7 @@ void SAL_CALL OWriteStream::truncate()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2448,7 +2435,7 @@ void SAL_CALL OWriteStream::dispose()
 
         if ( !m_pImpl )
         {
-            ::package::StaticAddLog( "Disposed!" );
+            SAL_INFO("package.xstor", "Disposed!");
             throw lang::DisposedException();
         }
 
@@ -2511,7 +2498,7 @@ void SAL_CALL OWriteStream::addEventListener(
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2527,7 +2514,7 @@ void SAL_CALL OWriteStream::removeEventListener(
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2545,7 +2532,7 @@ void SAL_CALL OWriteStream::setEncryptionPassword( const OUString& aPass )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2566,7 +2553,7 @@ void SAL_CALL OWriteStream::removeEncryption()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2586,7 +2573,7 @@ void SAL_CALL OWriteStream::setEncryptionData( const uno::Sequence< beans::Named
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2621,7 +2608,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const OUString& sID )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2651,7 +2638,7 @@ OUString SAL_CALL OWriteStream::getTargetByID(  const OUString& sID  )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2675,7 +2662,7 @@ OUString SAL_CALL OWriteStream::getTypeByID(  const OUString& sID  )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2699,7 +2686,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2728,7 +2715,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRe
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2762,7 +2749,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getAl
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2781,7 +2768,7 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2844,7 +2831,7 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2885,7 +2872,7 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2966,7 +2953,7 @@ void SAL_CALL OWriteStream::clearRelationships()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -2998,7 +2985,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -3123,7 +3110,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -3178,7 +3165,7 @@ void SAL_CALL OWriteStream::addPropertyChangeListener(
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -3196,7 +3183,7 @@ void SAL_CALL OWriteStream::removePropertyChangeListener(
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -3214,7 +3201,7 @@ void SAL_CALL OWriteStream::addVetoableChangeListener(
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -3232,7 +3219,7 @@ void SAL_CALL OWriteStream::removeVetoableChangeListener(
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -3252,7 +3239,7 @@ void OWriteStream::BroadcastTransaction( sal_Int8 nMessage )
     // no need to lock mutex here for the checking of m_pImpl, and m_pData is alive until the object is destructed
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -3295,7 +3282,7 @@ void SAL_CALL OWriteStream::commit()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -3309,7 +3296,7 @@ void SAL_CALL OWriteStream::commit()
 
         if ( !m_pImpl )
         {
-            ::package::StaticAddLog( "Disposed!" );
+            SAL_INFO("package.xstor", "Disposed!");
             throw lang::DisposedException();
         }
 
@@ -3361,7 +3348,7 @@ void SAL_CALL OWriteStream::revert()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -3374,7 +3361,7 @@ void SAL_CALL OWriteStream::revert()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -3424,7 +3411,7 @@ void SAL_CALL OWriteStream::addTransactionListener( const uno::Reference< embed:
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
@@ -3442,7 +3429,7 @@ void SAL_CALL OWriteStream::removeTransactionListener( const uno::Reference< emb
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( "Disposed!" );
+        SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
 
