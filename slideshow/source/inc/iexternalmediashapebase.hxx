@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_EXTERNALMEDIASHAPE_HXX
-#define INCLUDED_SLIDESHOW_EXTERNALMEDIASHAPE_HXX
+#ifndef INCLUDED_SLIDESHOW_IEXTERNALMEDIASHAPEBASE_HXX
+#define INCLUDED_SLIDESHOW_IEXTERNALMEDIASHAPEBASE_HXX
 
 #include <boost/shared_ptr.hpp>
 
@@ -81,6 +81,6 @@ namespace slideshow
     }
 }
 
-#endif /* INCLUDED_SLIDESHOW_EXTERNALMEDIASHAPE_HXX */
+#endif /* INCLUDED_SLIDESHOW_IEXTERNALMEDIASHAPEBASE_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
