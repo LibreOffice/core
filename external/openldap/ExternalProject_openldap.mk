@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,openldap,\
 ))
 
 openldap_LDFLAGS =
-ifneq ($(SYSTEM_NSS),)
+ifeq ($(SYSTEM_NSS),)
 openldap_LDFLAGS += -L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib \
     $(if $(filter AIX,$(OS)),-Wl$(COMMA)-brtl)
 endif
