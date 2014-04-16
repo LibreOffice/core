@@ -437,6 +437,7 @@ mimetypes = {
     'image/x-portable-pixmap': 'ppm',
     'image/vnd.adobe.photoshop': 'psd',
     'image/x-cmu-raster': 'ras',
+    'image/x-sun-raster': 'ras',
     'image/x-xbitmap': 'xbm',
     'image/x-xpixmap': 'xpm',
 }
