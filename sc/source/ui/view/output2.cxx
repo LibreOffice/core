@@ -2034,18 +2034,31 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
 
                             double fVisibleRatio = 1.0;
                             double fTextWidth = aVars.GetTextSize().Width();
+                            sal_Int32 nTextLen = aString.getLength();
                             if (eOutHorJust == SVX_HOR_JUSTIFY_LEFT && aAreaParam.mnRightClipLength > 0)
-                                fVisibleRatio = (fTextWidth - aAreaParam.mnRightClipLength) / fTextWidth;
-                            else if (eOutHorJust == SVX_HOR_JUSTIFY_RIGHT && aAreaParam.mnLeftClipLength > 0)
-                                fVisibleRatio = (fTextWidth - aAreaParam.mnLeftClipLength) / fTextWidth;
-
-                            if (fVisibleRatio < 1.0)
                             {
-                                // Heuristically determine the length of the
-                                // visible section of the string.  Length + 1
-                                // to avoid becoming too short.
-                                sal_Int32 nShortLen = fVisibleRatio * aString.getLength() + 1;
-                                aShort = aShort.copy(0, nShortLen);
+                                fVisibleRatio = (fTextWidth - aAreaParam.mnRightClipLength) / fTextWidth;
+                                if (0.0 < fVisibleRatio && fVisibleRatio < 1.0)
+                                {
+                                    // Only show the left-end segment.
+                                    sal_Int32 nShortLen = fVisibleRatio*nTextLen + 1;
+                                    aShort = aShort.copy(0, nShortLen);
+                                }
+                            }
+                            else if (eOutHorJust == SVX_HOR_JUSTIFY_RIGHT && aAreaParam.mnLeftClipLength > 0)
+                            {
+                                fVisibleRatio = (fTextWidth - aAreaParam.mnLeftClipLength) / fTextWidth;
+                                if (0.0 < fVisibleRatio && fVisibleRatio < 1.0)
+                                {
+                                    // Only show the right-end segment.
+                                    sal_Int32 nShortLen = fVisibleRatio*nTextLen + 1;
+                                    aShort = aShort.copy(nTextLen-nShortLen);
+
+                                    // Adjust the text position after shortening of the string.
+                                    double fShortWidth = pFmtDevice->GetTextWidth(aShort);
+                                    double fOffset = fTextWidth - fShortWidth;
+                                    aDrawTextPos.Move(fOffset, 0);
+                                }
                             }
 
                             if (bMetaFile || pFmtDevice != mpDev || aZoomX != aZoomY)
