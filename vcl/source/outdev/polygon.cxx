@@ -219,7 +219,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         const sal_uInt8* pFlgAry = aPoly.GetConstFlagAry();
         if( !mpGraphics->DrawPolygonBezier( nPoints, pPtAry, pFlgAry, this ) )
         {
-            aPoly = ImplSubdivideBezier(aPoly);
+            aPoly = Polygon::SubdivideBezier(aPoly);
             pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
             mpGraphics->DrawPolygon( aPoly.GetSize(), pPtAry, this );
         }
@@ -373,7 +373,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPo
         {
             if( !mpGraphics->DrawPolygonBezier( *pPointAry, *pPointAryAry, *pFlagAryAry, this ) )
             {
-                Polygon aPoly = ImplSubdivideBezier( rPolyPoly.GetObject( last ) );
+                Polygon aPoly = Polygon::SubdivideBezier( rPolyPoly.GetObject( last ) );
                 mpGraphics->DrawPolygon( aPoly.GetSize(), (const SalPoint*)aPoly.GetConstPointAry(), this );
             }
         }
@@ -389,7 +389,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPo
         {
             if( !mpGraphics->DrawPolyPolygonBezier( j, pPointAry, pPointAryAry, pFlagAryAry, this ) )
             {
-                PolyPolygon aPolyPoly = ImplSubdivideBezier( rPolyPoly );
+                PolyPolygon aPolyPoly = PolyPolygon::SubdivideBezier( rPolyPoly );
                 ImplDrawPolyPolygon( aPolyPoly.Count(), aPolyPoly );
             }
         }

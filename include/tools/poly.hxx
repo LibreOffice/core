@@ -156,6 +156,7 @@ public:
         pixel.
      */
     void                AdaptiveSubdivide( Polygon& rResult, const double d = 1.0 ) const;
+    static Polygon      SubdivideBezier( const Polygon& rPoly );
 
     void                Move( long nHorzMove, long nVertMove );
     void                Translate( const Point& rTrans );
@@ -242,6 +243,7 @@ public:
         pixel.
      */
     void                AdaptiveSubdivide( PolyPolygon& rResult, const double d = 1.0 ) const;
+    static PolyPolygon  SubdivideBezier( const PolyPolygon& rPolyPoly );
 
     void                GetIntersection( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
     void                GetUnion( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;

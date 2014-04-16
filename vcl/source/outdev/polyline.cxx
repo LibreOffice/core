@@ -87,7 +87,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         const sal_uInt8* pFlgAry = aPoly.GetConstFlagAry();
         if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, this ) )
         {
-            aPoly = ImplSubdivideBezier(aPoly);
+            aPoly = Polygon::SubdivideBezier(aPoly);
             pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
             mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry, this );
         }
@@ -277,7 +277,7 @@ void OutputDevice::ImplDrawPolyLineWithLineInfo(const Polygon& rPoly, const Line
         // NO way to find out there that it's a curve.
         if( aPoly.HasFlags() )
         {
-            aPoly = ImplSubdivideBezier( aPoly );
+            aPoly = Polygon::SubdivideBezier( aPoly );
             nPoints = aPoly.GetSize();
         }
 

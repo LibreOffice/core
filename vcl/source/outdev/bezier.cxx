@@ -19,23 +19,3 @@
 
 #include <vcl/outdev.hxx>
 #include <tools/poly.hxx>
-
-Polygon ImplSubdivideBezier( const Polygon& rPoly )
-{
-    Polygon aPoly;
-
-    // #100127# Use adaptive subdivide instead of fixed 25 segments
-    rPoly.AdaptiveSubdivide( aPoly );
-
-    return aPoly;
-}
-
-PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly )
-{
-    sal_uInt16 i, nPolys = rPolyPoly.Count();
-    PolyPolygon aPolyPoly( nPolys );
-    for( i=0; i<nPolys; ++i )
-        aPolyPoly.Insert( ImplSubdivideBezier( rPolyPoly.GetObject(i) ) );
-
-    return aPolyPoly;
-}

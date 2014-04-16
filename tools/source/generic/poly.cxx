@@ -277,6 +277,18 @@ void ImplPolygon::ImplCreateFlagArray()
     }
 }
 
+
+Polygon Polygon::SubdivideBezier( const Polygon& rPoly )
+{
+    Polygon aPoly;
+
+    // #100127# Use adaptive subdivide instead of fixed 25 segments
+    rPoly.AdaptiveSubdivide( aPoly );
+
+    return aPoly;
+}
+
+
 inline void Polygon::ImplMakeUnique()
 {
     // copy references if any exist

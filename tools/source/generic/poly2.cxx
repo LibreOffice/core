@@ -295,6 +295,17 @@ void PolyPolygon::AdaptiveSubdivide( PolyPolygon& rResult, const double d ) cons
     }
 }
 
+PolyPolygon PolyPolygon::SubdivideBezier( const PolyPolygon& rPolyPoly )
+{
+    sal_uInt16 i, nPolys = rPolyPoly.Count();
+    PolyPolygon aPolyPoly( nPolys );
+    for( i=0; i<nPolys; ++i )
+        aPolyPoly.Insert( Polygon::SubdivideBezier( rPolyPoly.GetObject(i) ) );
+
+    return aPolyPoly;
+}
+
+
 void PolyPolygon::GetIntersection( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
 {
     ImplDoOperation( rPolyPoly, rResult, POLY_CLIP_INT );

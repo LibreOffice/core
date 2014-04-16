@@ -275,9 +275,6 @@ typedef ::std::vector< VCLXGraphics* > VCLXGraphicsList_impl;
 
 const char* ImplDbgCheckOutputDevice( const void* pObj );
 
-Polygon ImplSubdivideBezier( const Polygon& rPoly );
-PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly );
-
 sal_uLong ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
 void ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect );
 
