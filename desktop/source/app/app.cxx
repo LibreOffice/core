@@ -261,7 +261,8 @@ bool cleanExtensionCache() {
             SAL_WARN_IF(
                 rc2 != osl::FileBase::E_None, "desktop.app",
                 "cannot close " << fr.getURL() << " after reading: " << +rc2);
-            if (rc != osl::FileBase::E_None) {
+            // readLine returns E_AGAIN for a zero-size file:
+            if (rc != osl::FileBase::E_None && rc != osl::FileBase::E_AGAIN) {
                 SAL_WARN( "desktop.app", "cannot read from " << fr.getURL() << ": " << +rc);
                 break;
             }
