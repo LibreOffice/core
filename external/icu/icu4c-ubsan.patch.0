@@ -1,0 +1,22 @@
+--- source/common/ustring.cpp
++++ source/common/ustring.cpp
+@@ -1486,7 +1486,7 @@
+ */
+ 
+ #define STRING_HASH(TYPE, STR, STRLEN, DEREF) \
+-    int32_t hash = 0;                         \
++    uint32_t hash = 0;                         \
+     const TYPE *p = (const TYPE*) STR;        \
+     if (p != NULL) {                          \
+         int32_t len = (int32_t)(STRLEN);      \
+--- source/i18n/ucol_tok.cpp
++++ source/i18n/ucol_tok.cpp
+@@ -48,7 +48,7 @@
+ static int32_t U_CALLCONV
+ uhash_hashTokens(const UHashTok k)
+ {
+-    int32_t hash = 0;
++    uint32_t hash = 0;
+     //uint32_t key = (uint32_t)k.integer;
+     UColToken *key = (UColToken *)k.pointer;
+     if (key != 0) {
