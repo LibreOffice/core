@@ -743,7 +743,7 @@ DECLARE_OOXMLIMPORT_TEST(testN779627, "n779627.docx")
      * Another problem tested with this document is that the roundrect is
      * centered vertically and horizontally.
      */
-    uno::Reference<beans::XPropertySet> xShapeProperties( getShape(4), uno::UNO_QUERY );
+    uno::Reference<beans::XPropertySet> xShapeProperties( getShape(1), uno::UNO_QUERY );
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
     // If this goes wrong, probably the index of the shape is changed and the test should be adjusted.
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.RectangleShape"), xShapeDescriptor->getShapeType());
