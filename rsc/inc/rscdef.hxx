@@ -63,7 +63,7 @@ public:
     sal_Int32 GetLong() const
                   {
                       return aExp.aLong.nLo |
-                          ((sal_Int32)aExp.aLong.nHi << 16);
+                          ((sal_uInt32)aExp.aLong.nHi << 16);
                   }
     bool Evaluate( sal_Int32 * pValue ) const;
     void AppendMacro( OStringBuffer & ) const;
