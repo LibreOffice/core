@@ -2558,7 +2558,7 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
         if ( pAny )
             *pAny >>= sEquationSource;
         sal_Int32 nEquationSourceCount = sEquationSource.getLength();
-        if ( nEquationSourceCount )
+        if ( nEquationSourceCount && (nEquationSourceCount <= 128) )
         {
             sal_Int32 i;
             for ( i = 0; i < nEquationSourceCount; i++ )
