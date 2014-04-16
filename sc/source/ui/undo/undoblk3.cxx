@@ -141,7 +141,6 @@ void ScUndoDeleteContents::DoChange( const sal_Bool bUndo )
         aCopyRange.aEnd.SetTab(nTabCount-1);
 
         pUndoDoc->CopyToDocument( aCopyRange, nUndoFlags, bMulti, pDoc, &aMarkData );
-        BroadcastChanges(aCopyRange);
 
         DoSdrUndoAction( pDrawUndo, pDoc );
 
@@ -183,7 +182,10 @@ void ScUndoDeleteContents::Undo()
     DoChange( sal_True );
     EndUndo();
 
-    BroadcastChanges(aRange);
+    if (nFlags & IDF_CONTENTS)
+        // Broadcast only when the content changes. fdo#74687
+        BroadcastChanges(aRange);
+
     HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange);
 }
 
@@ -193,7 +195,10 @@ void ScUndoDeleteContents::Redo()
     DoChange( false );
     EndRedo();
 
-    BroadcastChanges(aRange);
+    if (nFlags & IDF_CONTENTS)
+        // Broadcast only when the content changes. fdo#74687
+        BroadcastChanges(aRange);
+
     HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange);
 }
 
