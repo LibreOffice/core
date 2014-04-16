@@ -10,6 +10,7 @@
 $(eval $(call gb_UIConfig_UIConfig,sfx))
 
 $(eval $(call gb_UIConfig_add_uifiles,sfx,\
+	sfx2/uiconfig/ui/applicationstartupdialog \
 	sfx2/uiconfig/ui/alienwarndialog \
 	sfx2/uiconfig/ui/bookmarkdialog \
 	sfx2/uiconfig/ui/checkin \
