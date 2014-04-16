@@ -268,7 +268,8 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
 
     OUString rest;
     if (i_rBuildId.startsWith("LibreOffice/", &rest) ||
-        i_rBuildId.startsWith("LibreOfficeDev/", &rest))
+        i_rBuildId.startsWith("LibreOfficeDev/", &rest) ||
+        i_rBuildId.startsWith("LOdev/", &rest))
     {
         OUStringBuffer sNumber;
         for (sal_Int32 i = 0; i < rest.getLength(); ++i)
