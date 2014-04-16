@@ -205,17 +205,15 @@ namespace svgio
 
         const SvgStyleAttributes* SvgStyleAttributes::getParentStyle() const
         {
-            if(getCssStyleParent())
-            {
-                return getCssStyleParent();
-            }
+            const SvgStyleAttributes* pParentStyle = getCssStyleParent();
 
-            if(mrOwner.getParent())
-            {
-                return mrOwner.getParent()->getSvgStyleAttributes();
-            }
+            // no parent style set, check parent for its style attributes
+            if(pParentStyle == NULL && mrOwner.getParent() != NULL)
+               pParentStyle = mrOwner.getParent()->getSvgStyleAttributes();
 
-            return 0;
+            if (pParentStyle != this) // to prevent infinite loop
+                return pParentStyle;
+            return NULL;
         }
 
         void SvgStyleAttributes::add_text(
