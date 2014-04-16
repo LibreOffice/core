@@ -1031,7 +1031,7 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
     if (!bSuppressRotation)
     {
         SdrObject* pShape = (SdrObject*) GetSdrObjectFromXShape( rXShape );
-        nRotation=pShape->GetRotateAngle();
+        nRotation = pShape ? pShape->GetRotateAngle() : 0;
         if (nRotation != 0 && nRotation != 18000)
         {
             int faccos=bFlipV ? -1 : 1;
