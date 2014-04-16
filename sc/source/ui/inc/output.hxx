@@ -66,6 +66,8 @@ private:
         Rectangle   maAlignRect;
         Rectangle   maClipRect;
         long        mnColWidth;
+        long        mnLeftClipLength; /// length of the string getting cut off on the left.
+        long        mnRightClipLength; /// length of the string getting cut off on the right.
         bool        mbLeftClip;
         bool        mbRightClip;
     };

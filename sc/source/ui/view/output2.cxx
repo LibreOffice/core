@@ -1238,7 +1238,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
     --nMergeSizeX;      // leave out the grid horizontally, also for alignment (align between grid lines)
 
     rParam.mnColWidth = nMergeSizeX; // store the actual column width.
-
+    rParam.mnLeftClipLength = rParam.mnRightClipLength = 0;
 
     // construct the rectangles using logical left/right values (justify is called at the end)
 
@@ -1331,6 +1331,8 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
 
         rParam.mbLeftClip = ( nLeftMissing > 0 );
         rParam.mbRightClip = ( nRightMissing > 0 );
+        rParam.mnLeftClipLength = nLeftMissing;
+        rParam.mnRightClipLength = nRightMissing;
     }
     else
     {
@@ -2024,13 +2026,35 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                         OUString aString = aVars.GetString();
                         if (!aString.isEmpty())
                         {
+                            // If the string is clipped, make it shorter for
+                            // better performance since drawing by HarfBuzz is
+                            // quite expensive especiall for long string.
+
+                            OUString aShort = aString;
+
+                            double fVisibleRatio = 1.0;
+                            double fTextWidth = aVars.GetTextSize().Width();
+                            if (eOutHorJust == SVX_HOR_JUSTIFY_LEFT && aAreaParam.mnRightClipLength > 0)
+                                fVisibleRatio = (fTextWidth - aAreaParam.mnRightClipLength) / fTextWidth;
+                            else if (eOutHorJust == SVX_HOR_JUSTIFY_RIGHT && aAreaParam.mnLeftClipLength > 0)
+                                fVisibleRatio = (fTextWidth - aAreaParam.mnLeftClipLength) / fTextWidth;
+
+                            if (fVisibleRatio < 1.0)
+                            {
+                                // Heuristically determine the length of the
+                                // visible section of the string.  Length + 1
+                                // to avoid becoming too short.
+                                sal_Int32 nShortLen = fVisibleRatio * aString.getLength() + 1;
+                                aShort = aShort.copy(0, nShortLen);
+                            }
+
                             if (bMetaFile || pFmtDevice != mpDev || aZoomX != aZoomY)
                             {
-                                size_t nLen = aString.getLength();
+                                size_t nLen = aShort.getLength();
                                 if (aDX.size() < nLen)
                                     aDX.resize(nLen, 0);
 
-                                pFmtDevice->GetTextArray(aString, &aDX[0]);
+                                pFmtDevice->GetTextArray(aShort, &aDX[0]);
 
                                 if ( !mpRefDevice->GetConnectMetaFile() ||
                                         mpRefDevice->GetOutDevType() == OUTDEV_PRINTER )
@@ -2040,10 +2064,10 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                                         aDX[i] = static_cast<sal_Int32>(aDX[i] / fMul + 0.5);
                                 }
 
-                                mpDev->DrawTextArray(aDrawTextPos, aString, &aDX[0]);
+                                mpDev->DrawTextArray(aDrawTextPos, aShort, &aDX[0]);
                             }
                             else
-                                mpDev->DrawText( aDrawTextPos, aString );
+                                mpDev->DrawText(aDrawTextPos, aShort);
                         }
 
                         if ( bHClip || bVClip )
