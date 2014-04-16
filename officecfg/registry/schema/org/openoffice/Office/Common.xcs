@@ -6599,6 +6599,18 @@
           <desc>Uses cfg package Jobs instead of this component.</desc>
         </info>
       </set>
+      <prop oor:name="StartupMessage" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies whether to display startup message in LibreOffice Vanilla from Apple App Store</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="StartupMessageLastShown" oor:type="xs:long" oor:nillable="false">
+        <info>
+          <desc>Specifies the Date value when startup message in LibreOffice Vanilla from Apple App Store was last shown.</desc>
+        </info>
+        <value>20150930</value>
+      </prop>
     </group>
     <group oor:name="SmartTags">
       <info>

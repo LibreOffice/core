@@ -177,6 +177,9 @@ public:
     bool                        IsDowning() const;
     void                        ResetLastDir();
 
+    bool shouldShowApplicationStartupMessage();
+    void hideApplicationStartupMessage();
+
     SAL_DLLPRIVATE SfxDispatcher* GetAppDispatcher_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl();
 

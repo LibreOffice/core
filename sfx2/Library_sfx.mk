@@ -161,6 +161,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/thumbnailviewacc \
     sfx2/source/control/thumbnailview \
     sfx2/source/control/unoctitm \
+    sfx2/source/dialog/ApplicationStartupDialog \
     sfx2/source/dialog/alienwarn \
     sfx2/source/dialog/backingcomp \
     sfx2/source/dialog/backingwindow \

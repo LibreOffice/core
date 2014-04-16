@@ -134,4 +134,16 @@ PushButton BT_READONLY_EDIT
     Text[ en-US ] = "Edit Document";
 };
 
+PushButton BT_APPLICATION_STARTUP
+{
+    Pos = MAP_APPFONT( 0 , 0 );
+    Size = MAP_APPFONT( 30 , 0 );
+    Text[ en-US ] = "Details";
+};
+
+String STR_APPLICATION_STARTUP_MESSAGE
+{
+    Text [ en-US ] = "Find out about LibreOffice Vanilla..." ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

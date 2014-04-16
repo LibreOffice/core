@@ -36,6 +36,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/uno/Reference.h>
+#include <tools/date.hxx>
 #include <tools/rcid.h>
 #include <osl/mutex.hxx>
 #include <unotools/configmgr.hxx>
@@ -49,6 +50,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/app.hxx>
@@ -220,6 +222,25 @@ BitmapEx SfxApplication::GetApplicationLogo(long nWidth)
     SfxApplication::loadBrandSvg("flat_logo", aBitmap, nWidth);
     Application::LoadBrandBitmap ("about", aBitmap);
     return aBitmap;
+}
+
+bool SfxApplication::shouldShowApplicationStartupMessage()
+{
+    if(pAppData_Impl->bShowApplicationStartupMessage)
+        return true;
+
+    ::Date aLastShownDate(officecfg::Office::Common::Startup::StartupMessageLastShown::get());
+    aLastShownDate.SetMonth(aLastShownDate.GetMonth()+1);
+    aLastShownDate.Normalize();
+    if(aLastShownDate < ::Date(::Date::SYSTEM))
+        return true;
+
+    return false;
+}
+
+void SfxApplication::hideApplicationStartupMessage()
+{
+    pAppData_Impl->bShowApplicationStartupMessage = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

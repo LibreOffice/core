@@ -195,7 +195,7 @@ private:
     SAL_DLLPRIVATE void ShowInfoBars( );
 
     DECL_LINK_TYPED( CheckOutHandler, Button*, void );
-
+    DECL_LINK_TYPED( ApplicationStartupHandler, Button*, void );
     IMPL_SfxBaseController_DataContainer*   m_pData ;
 
 } ; // class SfxBaseController
