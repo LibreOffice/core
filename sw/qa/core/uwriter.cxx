@@ -51,6 +51,7 @@
 #include "docary.hxx"
 #include "modeltoviewhelper.hxx"
 #include "scriptinfo.hxx"
+#include "IMark.hxx"
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
 
@@ -73,6 +74,7 @@ public:
     void testUserPerceivedCharCount();
     void testGraphicAnchorDeletion();
     void testTransliterate();
+    void testMarkMove();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
     CPPUNIT_TEST(testTransliterate);
@@ -84,6 +86,7 @@ public:
     CPPUNIT_TEST(testSwScanner);
     CPPUNIT_TEST(testUserPerceivedCharCount);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
+    CPPUNIT_TEST(testMarkMove);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1007,6 +1010,140 @@ void SwDocTest::testTransliterate()
     CPPUNIT_ASSERT_EQUAL(OUString("Foobar"),
             translitTest(*m_pDoc, aPaM,
                 i18n::TransliterationModules_HIRAGANA_KATAKANA));
+}
+
+void SwDocTest::testMarkMove()
+{
+    IDocumentMarkAccess* pMarksAccess = m_pDoc->getIDocumentMarkAccess();
+
+    {
+        SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+        SwPaM aPaM(aIdx);
+        m_pDoc->InsertString(aPaM, OUString("Paragraph 1"));
+        aPaM.SetMark();
+        aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
+        pMarksAccess->makeMark(aPaM, OUString("Para1"), IDocumentMarkAccess::BOOKMARK);
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, OUString("Paragraph 2"));
+        aPaM.SetMark();
+        aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
+        pMarksAccess->makeMark(aPaM, OUString("Para2"), IDocumentMarkAccess::BOOKMARK);
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, OUString("Paragraph 3"));
+        aPaM.SetMark();
+        aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
+        pMarksAccess->makeMark(aPaM, OUString("Para3"), IDocumentMarkAccess::BOOKMARK);
+    }
+
+    // join paragraph 2 and 3 and check
+    {
+        SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -2);
+        SwTxtNode* pParaNode2 = dynamic_cast<SwTxtNode*>(&aIdx.GetNode());
+        pParaNode2->JoinNext();
+    }
+    ::sw::mark::IMark* pBM1 = pMarksAccess->findMark("Para1")->get();
+    ::sw::mark::IMark* pBM2 = pMarksAccess->findMark("Para2")->get();
+    ::sw::mark::IMark* pBM3 = pMarksAccess->findMark("Para3")->get();
+
+    CPPUNIT_ASSERT_EQUAL(0 , pBM1->GetMarkStart().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(11, pBM1->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(
+        pBM1->GetMarkStart().nNode.GetIndex(),
+        pBM1->GetMarkEnd().nNode.GetIndex());
+
+    CPPUNIT_ASSERT_EQUAL(0 , pBM2->GetMarkStart().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(11, pBM2->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(
+        pBM2->GetMarkStart().nNode.GetIndex(),
+        pBM2->GetMarkEnd().nNode.GetIndex());
+
+    CPPUNIT_ASSERT_EQUAL(11, pBM3->GetMarkStart().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(22, pBM3->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(
+        pBM3->GetMarkStart().nNode.GetIndex(),
+        pBM3->GetMarkEnd().nNode.GetIndex());
+
+    CPPUNIT_ASSERT_EQUAL(
+        pBM1->GetMarkStart().nNode.GetIndex()+1,
+        pBM2->GetMarkStart().nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(
+        pBM2->GetMarkStart().nNode.GetIndex(),
+        pBM3->GetMarkStart().nNode.GetIndex());
+
+    // cut some text
+    {
+        SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+        SwPaM aPaM(aIdx, aIdx, -1);
+        aPaM.GetPoint()->nContent += 5;
+        aPaM.GetMark()->nContent += 6;
+        m_pDoc->DeleteAndJoin(aPaM);
+    }
+    pBM1 = pMarksAccess->findMark("Para1")->get();
+    pBM2 = pMarksAccess->findMark("Para2")->get();
+    pBM3 = pMarksAccess->findMark("Para3")->get();
+
+    CPPUNIT_ASSERT_EQUAL(0, pBM1->GetMarkStart().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(6, pBM1->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(
+        pBM1->GetMarkStart().nNode.GetIndex(),
+        pBM1->GetMarkEnd().nNode.GetIndex());
+
+    CPPUNIT_ASSERT_EQUAL(6, pBM2->GetMarkStart().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(12, pBM2->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(
+        pBM2->GetMarkStart().nNode.GetIndex(),
+        pBM2->GetMarkEnd().nNode.GetIndex());
+
+    CPPUNIT_ASSERT_EQUAL(12, pBM3->GetMarkStart().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(23, pBM3->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(
+        pBM3->GetMarkStart().nNode.GetIndex(),
+        pBM3->GetMarkEnd().nNode.GetIndex());
+
+    CPPUNIT_ASSERT_EQUAL(
+        pBM1->GetMarkStart().nNode.GetIndex(),
+        pBM2->GetMarkStart().nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(
+        pBM2->GetMarkStart().nNode.GetIndex(),
+        pBM3->GetMarkStart().nNode.GetIndex());
+
+    // split the paragraph
+    {
+        SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+        SwPosition aPos(aIdx);
+        aPos.nContent += 8;
+        m_pDoc->SplitNode(aPos, false);
+    }
+    pBM1 = pMarksAccess->findMark("Para1")->get();
+    pBM2 = pMarksAccess->findMark("Para2")->get();
+    pBM3 = pMarksAccess->findMark("Para3")->get();
+
+    CPPUNIT_ASSERT_EQUAL(0, pBM1->GetMarkStart().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(6, pBM1->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(
+        pBM1->GetMarkStart().nNode.GetIndex(),
+        pBM1->GetMarkEnd().nNode.GetIndex());
+
+    CPPUNIT_ASSERT_EQUAL(6, pBM2->GetMarkStart().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(4, pBM2->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(
+        pBM2->GetMarkStart().nNode.GetIndex()+1,
+        pBM2->GetMarkEnd().nNode.GetIndex());
+
+    CPPUNIT_ASSERT_EQUAL(4, pBM3->GetMarkStart().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(15, pBM3->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(
+        pBM3->GetMarkStart().nNode.GetIndex(),
+        pBM3->GetMarkEnd().nNode.GetIndex());
+
+    CPPUNIT_ASSERT_EQUAL(
+        pBM1->GetMarkStart().nNode.GetIndex(),
+        pBM2->GetMarkStart().nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(
+        pBM2->GetMarkEnd().nNode.GetIndex(),
+        pBM3->GetMarkEnd().nNode.GetIndex());
 }
 
 void SwDocTest::setUp()
