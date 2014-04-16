@@ -1742,11 +1742,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 #endif
             text::TextContentAnchorType nAnchorType(text::TextContentAnchorType_AT_PARAGRAPH);
             xProps->getPropertyValue(rPropNameSupplier.GetName( PROP_ANCHOR_TYPE )) >>= nAnchorType;
-
-            if (!m_bInHeaderFooterImport)
-                xProps->setPropertyValue(
-                        rPropNameSupplier.GetName( PROP_OPAQUE ),
-                        uno::makeAny( true ) );
+            bool checkZOredrStatus = false;
             if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
             {
                 // Extract the special "btLr text frame" mode, requested by oox, if needed.
@@ -1754,7 +1750,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xShapePropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
-                bool checkBtLrStatus = false;bool checkZOredrStatus = false;
+                bool checkBtLrStatus = false;//bool checkZOredrStatus = false;
 
                 for (int i = 0; i < aGrabBag.getLength(); ++i)
                 {
@@ -1793,6 +1789,29 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 if( pos != paragraphContext->end())
                     xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ), (*pos).second.getValue() );
             }
+            else
+            {
+                uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
+                uno::Sequence<beans::PropertyValue> aGrabBag;
+                xShapePropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                for (int i = 0; i < aGrabBag.getLength(); ++i)
+                {
+                    if (aGrabBag[i].Name == "VML-Z-ORDER")
+                    {
+                        GraphicZOrderHelper* pZOrderHelper = m_rDMapper.graphicZOrderHelper();
+                        sal_Int32 zOrder(0);
+                        aGrabBag[i].Value >>= zOrder;
+                        xShapePropertySet->setPropertyValue( "ZOrder", uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
+                        pZOrderHelper->addItem(xShapePropertySet, zOrder);
+                        xShapePropertySet->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ), uno::makeAny( false ) );
+                        checkZOredrStatus = true;
+                    }
+                }
+            }
+            if (!m_bInHeaderFooterImport && !checkZOredrStatus)
+                xProps->setPropertyValue(
+                        rPropNameSupplier.GetName( PROP_OPAQUE ),
+                        uno::makeAny( true ) );
         }
     }
     catch ( const uno::Exception& e )

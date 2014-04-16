@@ -336,6 +336,20 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                     aGrabBag[length].Value = uno::makeAny( maTypeModel.maZIndex.toInt32() );
                     propertySet->setPropertyValue( "FrameInteropGrabBag", uno::makeAny(aGrabBag) );
                 }
+                else
+                {
+                    if( maTypeModel.maZIndex.toInt32() )
+                    {
+                        uno::Sequence<beans::PropertyValue> aGrabBag;
+                        uno::Reference<beans::XPropertySet> propertySet (xShape, uno::UNO_QUERY);
+                        propertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                        sal_Int32 length = aGrabBag.getLength();
+                        aGrabBag.realloc( length+1 );
+                        aGrabBag[length].Name = "VML-Z-ORDER";
+                        aGrabBag[length].Value = uno::makeAny( maTypeModel.maZIndex.toInt32() );
+                        propertySet->setPropertyValue( "InteropGrabBag", uno::makeAny(aGrabBag) );
+                    }
+                }
                 Reference< XControlShape > xControlShape( xShape, uno::UNO_QUERY );
                 if ( xControlShape.is() && !getTypeModel().mbVisible )
                 {

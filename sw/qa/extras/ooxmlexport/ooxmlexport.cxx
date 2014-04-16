@@ -3110,6 +3110,14 @@ DECLARE_OOXMLEXPORT_TEST(test76734_2K7, "test76734_2K7.docx")
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]", "Requires", "wps");
 }
 
+DECLARE_OOXMLEXPORT_TEST(test77219, "test77219.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[6]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]", "behindDoc", "1");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFDO76597, "fdo76597.docx")
 {
     // check XML
