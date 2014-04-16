@@ -43,7 +43,7 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
         sal_Int32 nXDist = cos(nAngle) * nDist;
         sal_Int32 nYDist = sin(nAngle) * nDist;
 
-        rPropMap.setProperty( PROP_Shadow, sal_True );
+        rPropMap.setProperty( PROP_Shadow, true );
         rPropMap.setProperty( PROP_ShadowXDistance, nXDist);
         rPropMap.setProperty( PROP_ShadowYDistance, nYDist);
         rPropMap.setProperty( PROP_ShadowColor, maShadow.moShadowColor.getColor(rGraphicHelper, -1 ) );
