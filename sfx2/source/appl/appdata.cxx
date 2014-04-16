@@ -50,6 +50,8 @@
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
 using ::basic::BasicManagerRepository;
 using ::basic::BasicManagerCreationListener;
 using ::com::sun::star::uno::Reference;
@@ -127,6 +129,7 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* )
     , bInQuit( false )
     , bInvalidateOnUnlock( false )
     , bODFVersionWarningLater( false )
+    , bShowApplicationStartupMessage(officecfg::Office::Common::Startup::StartupMessage::get())
 
 {
 #if HAVE_FEATURE_SCRIPTING
