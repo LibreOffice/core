@@ -49,7 +49,7 @@ AnimationCommandNode::AnimationCommandNode( uno::Reference<animations::XAnimatio
     uno::Reference< drawing::XShape > xShape( mxCommandNode->getTarget(),
                                               uno::UNO_QUERY );
     ShapeSharedPtr pShape( getContext().mpSubsettableShapeManager->lookupShape( xShape ) );
-    mpShape = ::boost::dynamic_pointer_cast< ExternalShapeBase >( pShape );
+    mpShape = ::boost::dynamic_pointer_cast< ExternalMediaShape >( pShape );
 }
 
 void AnimationCommandNode::dispose()

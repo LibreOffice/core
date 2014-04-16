@@ -79,12 +79,6 @@ namespace slideshow
                          sal_Size                                   nNumPropEntries,
                          const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
 
-            virtual void play() SAL_OVERRIDE;
-            virtual void stop() SAL_OVERRIDE;
-            virtual void pause() SAL_OVERRIDE;
-            virtual bool isPlaying() const SAL_OVERRIDE;
-            virtual void setMediaTime(double) SAL_OVERRIDE;
-
         private:
 
             // View layer methods
@@ -102,6 +96,11 @@ namespace slideshow
             virtual bool implRender( const ::basegfx::B2DRange& rCurrBounds ) const SAL_OVERRIDE;
             virtual void implViewChanged( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
             virtual void implViewsChanged() SAL_OVERRIDE;
+            virtual bool implStartIntrinsicAnimation() SAL_OVERRIDE;
+            virtual bool implEndIntrinsicAnimation() SAL_OVERRIDE;
+            virtual bool implPauseIntrinsicAnimation() SAL_OVERRIDE;
+            virtual bool implIsIntrinsicAnimationPlaying() const SAL_OVERRIDE;
+            virtual void implSetIntrinsicAnimationTime(double) SAL_OVERRIDE;
 
             const OUString                           maServiceName;
             const char**                                    mpPropCopyTable;
@@ -251,7 +250,7 @@ namespace slideshow
 
 
 
-        void AppletShape::play()
+        bool AppletShape::implStartIntrinsicAnimation()
         {
             ::std::for_each( maViewAppletShapes.begin(),
                              maViewAppletShapes.end(),
@@ -259,37 +258,42 @@ namespace slideshow
                                             _1,
                                             ::boost::cref( getBounds() )));
             mbIsPlaying = true;
+
+            return true;
         }
 
 
 
-        void AppletShape::stop()
+        bool AppletShape::implEndIntrinsicAnimation()
         {
             ::std::for_each( maViewAppletShapes.begin(),
                              maViewAppletShapes.end(),
                              ::boost::mem_fn( &ViewAppletShape::endApplet ) );
 
             mbIsPlaying = false;
+
+            return true;
         }
 
 
 
-        void AppletShape::pause()
+        bool AppletShape::implPauseIntrinsicAnimation()
         {
             // TODO(F1): any way of temporarily disabling/deactivating
             // applets?
+            return true;
         }
 
 
 
-        bool AppletShape::isPlaying() const
+        bool AppletShape::implIsIntrinsicAnimationPlaying() const
         {
             return mbIsPlaying;
         }
 
 
 
-        void AppletShape::setMediaTime(double)
+        void AppletShape::implSetIntrinsicAnimationTime(double)
         {
             // No way of doing this, or?
         }

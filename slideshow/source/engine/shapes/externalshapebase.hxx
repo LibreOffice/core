@@ -22,11 +22,11 @@
 
 #include <vector>
 
+#include "externalmediashape.hxx"
 #include "unoview.hxx"
 #include "subsettableshapemanager.hxx"
 #include "slideshowexceptions.hxx"
 #include "slideshowcontext.hxx"
-#include "shape.hxx"
 
 
 namespace slideshow
@@ -44,7 +44,7 @@ namespace slideshow
             (including mutual overdraw). It therefore reports yes for
             the isBackgroundDetached() question.
          */
-        class ExternalShapeBase : public Shape
+        class ExternalShapeBase : public ExternalMediaShape
         {
         public:
             /** Create a shape for the given XShape for an external shape
@@ -67,16 +67,12 @@ namespace slideshow
 
             // animation methods
 
-            /// override in derived class to play external viewer
-            virtual void play() = 0;
-            /// override in derived class to stop external viewer
-            virtual void stop() = 0;
-            /// override in derived class to pause external viewer
-            virtual void pause() = 0;
-            /// override in derived class to return status of animation
-            virtual bool isPlaying() const = 0;
-            /// override in derived class to set media time
-            virtual void setMediaTime(double) = 0;
+
+            virtual void play() SAL_OVERRIDE;
+            virtual void stop() SAL_OVERRIDE;
+            virtual void pause() SAL_OVERRIDE;
+            virtual bool isPlaying() const SAL_OVERRIDE;
+            virtual void setMediaTime(double) SAL_OVERRIDE;
 
             // render methods
 
@@ -110,6 +106,18 @@ namespace slideshow
             virtual void implViewChanged( const UnoViewSharedPtr& rView ) = 0;
             /// override in derived class to resize
             virtual void implViewsChanged() = 0;
+
+            /// override in derived class to start external viewer
+            virtual bool implStartIntrinsicAnimation() = 0;
+            /// override in derived class to stop external viewer
+            virtual bool implEndIntrinsicAnimation() = 0;
+            /// override in derived class to pause external viewer
+            virtual bool implPauseIntrinsicAnimation() = 0;
+            /// override in derived class to return status of animation
+            virtual bool implIsIntrinsicAnimationPlaying() const = 0;
+            /// override in derived class to set media time
+            virtual void implSetIntrinsicAnimationTime(double) = 0;
+
 
             /// The associated XShape
             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mxShape;
