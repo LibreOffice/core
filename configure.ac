@@ -272,7 +272,7 @@ if test -n "$with_android_ndk"; then
         ;;
     clang3.3|clang3.4)
         AC_MSG_WARN([Building with the Clang tool-chain is known to break in the bridges module, fix that please])
-        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.6
+        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.8
         ANDROID_COMPILER_DIR=$ANDROID_NDK_HOME/toolchains/llvm-${with_android_ndk_toolchain_version#clang}
         ANDROID_USING_CLANG=true
         ;;
@@ -314,7 +314,7 @@ if test -n "$with_android_ndk"; then
     */bin\ */bin*)
         # Trailing slash intentional and necessary, compare to how this is used
         if test -n "$ANDROID_USING_CLANG"; then
-            ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR=4.6/
+            ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR=4.8/
         else
             ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR="${with_android_ndk_toolchain_version}/"
         fi
