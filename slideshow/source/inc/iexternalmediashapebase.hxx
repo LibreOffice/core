@@ -29,12 +29,13 @@ namespace slideshow
 {
     namespace internal
     {
-        /** Represents a shape containing media (video, sound).
+        /** Represents a shape containing playable content rendered by
+            external engine (e.g. media or applet).
 
             This interface adds media handling methods to a shape. It
             allows starting/stopping and pausing playback.
-         */
-        class ExternalMediaShape : public Shape
+        */
+        class IExternalMediaShapeBase : public Shape
         {
         public:
             // Animation methods
@@ -51,7 +52,7 @@ namespace slideshow
 
                 This method leaves playback mode on all registered
                 views. The media is then rewound to the start, and
-            removed from screen (for videos)
+                removed from screen (for videos)
              */
             virtual void stop() = 0;
 
@@ -75,7 +76,7 @@ namespace slideshow
             virtual void setMediaTime(double fTime) = 0;
         };
 
-        typedef ::boost::shared_ptr< ExternalMediaShape > ExternalMediaShapeSharedPtr;
+        typedef ::boost::shared_ptr< IExternalMediaShapeBase > IExternalMediaShapeBaseSharedPtr;
 
     }
 }

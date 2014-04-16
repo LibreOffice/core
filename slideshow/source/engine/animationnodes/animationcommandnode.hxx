@@ -20,7 +20,7 @@
 #define INCLUDED_SLIDESHOW_ANIMATIONCOMMANDNODE_HXX
 
 #include "basecontainernode.hxx"
-#include "externalmediashape.hxx"
+#include "iexternalmediashapebase.hxx"
 #include "soundplayer.hxx"
 #include "com/sun/star/animations/XCommand.hpp"
 
@@ -49,7 +49,7 @@ private:
     virtual bool hasPendingAnimation() const SAL_OVERRIDE;
 
 private:
-    ExternalMediaShapeSharedPtr mpShape;
+    IExternalMediaShapeBaseSharedPtr mpShape;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XCommand > mxCommandNode;
 };
