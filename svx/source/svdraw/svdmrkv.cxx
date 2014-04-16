@@ -1804,7 +1804,7 @@ bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrP
             if (!pObj->HasMacro() || !pObj->IsMacroHit(aHitRec)) pObj=NULL;
         }
         if (pObj!=NULL && (nOptions & SDRSEARCH_WITHTEXT) !=0 && pObj->GetOutlinerParaObject()==NULL) pObj=NULL;
-        if (pObj!=NULL && (nOptions & SDRSEARCH_TESTTEXTAREA) !=0)
+        if (pObj!=NULL && (nOptions & SDRSEARCH_TESTTEXTAREA) !=0 && pPV)
         {
             if(!SdrObjectPrimitiveHit(*pObj, aPt, 0, *pPV, 0, true))
             {
