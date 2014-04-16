@@ -175,7 +175,7 @@ void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
 class CustomAnimationCreateTabPage : public TabPage
 {
 public:
-    CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText );
+    CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText, bool bIsMotionPath = false );
     virtual ~CustomAnimationCreateTabPage();
 
     PathKind getCreatePathKind() const;
@@ -236,7 +236,7 @@ bool ImplStlEffectCategorySortHelper::operator()( const CustomAnimationPresetPtr
     return mxCollator->compareString(p1->getLabel(), p2->getLabel()) == -1;
 }
 
-CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText )
+CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText, bool bIsMotionPath )
 : TabPage( pParent, "CustomAnimationCreateTab", "modules/simpress/ui/customanimationcreatetab.ui" )
 , mpParent( pDialogParent )
 , mnId( nTabId )
@@ -257,7 +257,7 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
 
     sal_Int32  nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
 
-    if( nTabId == MOTIONPATH )
+    if( bIsMotionPath )
     {
         mpLBEffects->InsertCategory( sMotionPathLabel );
 
@@ -524,7 +524,7 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
     mpTabControl->SetTabPage( mnEmphasisId, mpTabPages[EMPHASIS] );
     mpTabPages[EXIT] = new CustomAnimationCreateTabPage( mpTabControl, this, mnExitId, rPresets.getExitPresets(), bHasText );
     mpTabControl->SetTabPage( mnExitId, mpTabPages[EXIT] );
-    mpTabPages[MOTIONPATH] = new CustomAnimationCreateTabPage( mpTabControl, this, mnMPathId, rPresets.getMotionPathsPresets(), bHasText );
+    mpTabPages[MOTIONPATH] = new CustomAnimationCreateTabPage( mpTabControl, this, mnMPathId, rPresets.getMotionPathsPresets(), bHasText, true );
     mpTabControl->SetTabPage( mnMPathId, mpTabPages[MOTIONPATH] );
     mpTabPages[MISCEFFECTS] = new CustomAnimationCreateTabPage( mpTabControl, this, mnMiscId, rPresets.getMiscPresets(), bHasText );
     mpTabControl->SetTabPage( mnMiscId, mpTabPages[MISCEFFECTS] );
