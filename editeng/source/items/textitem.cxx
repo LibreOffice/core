@@ -873,8 +873,7 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             // CONVERT_TWIPS is not set.
             if( bConvert )
             {
-                long nTwips = bConvert ? nHeight : convertMm100ToTwip(nHeight);
-                rVal <<= (float)( nTwips / 20.0 );
+                rVal <<= (float)( nHeight / 20.0 );
             }
             else
             {
