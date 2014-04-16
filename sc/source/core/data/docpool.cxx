@@ -19,6 +19,8 @@
 
 
 #include "scitems.hxx"
+
+#include <boost/static_assert.hpp>
 #include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
 #include <tools/shl.hxx>
@@ -182,8 +184,11 @@ static SfxItemInfo const  aItemInfos[] =
     { SID_ATTR_PAGE_FOOTERSET,      SFX_ITEM_POOLABLE },    // ATTR_PAGE_FOOTERSET
     { SID_SCATTR_PAGE_FORMULAS,     SFX_ITEM_POOLABLE },    // ATTR_PAGE_FORMULAS
     { SID_SCATTR_PAGE_NULLVALS,     SFX_ITEM_POOLABLE },    // ATTR_PAGE_NULLVALS
-    { SID_SCATTR_PAGE_SCALETO,      SFX_ITEM_POOLABLE }     // ATTR_PAGE_SCALETO
+    { SID_SCATTR_PAGE_SCALETO,      SFX_ITEM_POOLABLE },    // ATTR_PAGE_SCALETO
+    { 0,                            SFX_ITEM_POOLABLE }     // ATTR_HIDDEN
 };
+BOOST_STATIC_ASSERT(
+    SAL_N_ELEMENTS(aItemInfos) == ATTR_ENDINDEX - ATTR_STARTINDEX + 1);
 
 ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
 
