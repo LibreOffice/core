@@ -266,9 +266,9 @@ java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
     ,m_pDriverClassLoader()
     ,m_Driver_theClass(NULL)
     ,m_aLogger( _rDriver.getLogger() )
-    ,m_bParameterSubstitution(sal_False)
-    ,m_bIgnoreDriverPrivileges(sal_True)
-    ,m_bIgnoreCurrency(sal_False)
+    ,m_bParameterSubstitution(false)
+    ,m_bIgnoreDriverPrivileges(true)
+    ,m_bIgnoreCurrency(false)
 {
 }
 
@@ -662,7 +662,7 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
     // contains the statement which should be used when query for automatically generated values
     OUString     sGeneratedValueStatement;
     // set to <TRUE/> when we should allow to query for generated values
-    sal_Bool            bAutoRetrievingEnabled = sal_False;
+    bool            bAutoRetrievingEnabled = false;
 
     // first try if the jdbc driver is already registered at the driver manager
     SDBThreadAttach t;
@@ -770,7 +770,7 @@ OUString java_sql_Connection::impl_getJavaDriverClassPath_nothrow(const OUString
     return sURL;
 }
 
-sal_Bool java_sql_Connection::construct(const OUString& url,
+bool java_sql_Connection::construct(const OUString& url,
                                     const Sequence< PropertyValue >& info)
 {
     { // initialize the java vm
@@ -784,7 +784,7 @@ sal_Bool java_sql_Connection::construct(const OUString& url,
         throwGenericSQLException(STR_NO_JAVA,*this);
 
     OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
-    sal_Bool            bAutoRetrievingEnabled = sal_False; // set to <TRUE/> when we should allow to query for generated values
+    bool            bAutoRetrievingEnabled = false; // set to <TRUE/> when we should allow to query for generated values
     OUString sDriverClassPath,sDriverClass;
     Sequence< NamedValue > aSystemProperties;
 

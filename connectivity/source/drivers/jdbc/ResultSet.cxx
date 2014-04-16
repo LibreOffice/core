@@ -979,7 +979,7 @@ sal_Bool java_sql_ResultSet::convertFastPropertyValue(
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
     SAL_INFO( "connectivity.drivers", "jdbc Ocke.Janssen@sun.com java_sql_ResultSet::convertFastPropertyValue" );
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     switch(nHandle)
     {
         case PROPERTY_ID_CURSORNAME:

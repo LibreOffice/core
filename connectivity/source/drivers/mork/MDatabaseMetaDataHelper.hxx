@@ -31,10 +31,10 @@ namespace connectivity
             ~MDatabaseMetaDataHelper();
 
 
-            sal_Bool getTableStrings( OConnection*                        _pCon,
+            bool getTableStrings( OConnection*                        _pCon,
                                       ::std::vector< OUString >&   _rStrings);
 
-            sal_Bool getTables( OConnection* _pCon,
+            bool getTables( OConnection* _pCon,
                                 const OUString& tableNamePattern,
                                 ODatabaseMetaDataResultSet::ORows& _rRows);
         };

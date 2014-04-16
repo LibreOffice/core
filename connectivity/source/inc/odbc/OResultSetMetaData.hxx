@@ -46,7 +46,7 @@ namespace connectivity
             SQLHANDLE       m_aStatementHandle;
             OConnection*    m_pConnection;
             sal_Int32       m_nColCount;
-            sal_Bool        m_bUseODBC2Types;
+            bool        m_bUseODBC2Types;
 
             OUString getCharColAttrib(sal_Int32 column,sal_Int32 ident) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getNumColAttrib(sal_Int32 column,sal_Int32 ident) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -56,14 +56,14 @@ namespace connectivity
                 :m_aStatementHandle( _pStmt )
                 ,m_pConnection(_pConnection)
                 ,m_nColCount(-1)
-                ,m_bUseODBC2Types(sal_False)
+                ,m_bUseODBC2Types(false)
             {}
             OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt ,const ::std::vector<sal_Int32> & _vMapping)
                     :m_vMapping(_vMapping)
                     ,m_aStatementHandle( _pStmt )
                     ,m_pConnection(_pConnection)
                     ,m_nColCount(_vMapping.size()-1)
-                    ,m_bUseODBC2Types(sal_False)
+                    ,m_bUseODBC2Types(false)
             {}
             virtual ~OResultSetMetaData();
 

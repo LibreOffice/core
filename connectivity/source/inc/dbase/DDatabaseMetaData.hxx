@@ -47,8 +47,8 @@ namespace connectivity
             virtual sal_Bool SAL_CALL supportsAlterTableWithAddColumn(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual sal_Bool SAL_CALL supportsAlterTableWithDropColumn(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-            virtual sal_Bool        impl_storesMixedCaseQuotedIdentifiers_throw(  ) SAL_OVERRIDE;
-            virtual sal_Bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  ) SAL_OVERRIDE;
+            virtual bool        impl_storesMixedCaseQuotedIdentifiers_throw(  ) SAL_OVERRIDE;
+            virtual bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  ) SAL_OVERRIDE;
         protected:
             virtual ~ODbaseDatabaseMetaData();
         public:

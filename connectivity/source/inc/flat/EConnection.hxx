@@ -31,7 +31,7 @@ namespace connectivity
         {
         private:
             sal_Int32   m_nMaxRowsToScan;
-            sal_Bool    m_bHeaderLine;          // column names in first row
+            bool    m_bHeaderLine;          // column names in first row
             sal_Unicode m_cFieldDelimiter;      // look at the name
             sal_Unicode m_cStringDelimiter;
             sal_Unicode m_cDecimalDelimiter;
@@ -43,7 +43,7 @@ namespace connectivity
             virtual void construct(const OUString& _rUrl,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo ) throw( ::com::sun::star::sdbc::SQLException) SAL_OVERRIDE;
 
             // own methods
-            inline sal_Bool     isHeaderLine()          const { return m_bHeaderLine;       }
+            inline bool     isHeaderLine()          const { return m_bHeaderLine;       }
             inline sal_Unicode  getFieldDelimiter()     const { return m_cFieldDelimiter;   }
             inline sal_Unicode  getStringDelimiter()    const { return m_cStringDelimiter;  }
             inline sal_Unicode  getDecimalDelimiter()   const { return m_cDecimalDelimiter; }

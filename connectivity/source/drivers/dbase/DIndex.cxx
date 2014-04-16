@@ -63,7 +63,7 @@ ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable)
     , m_nPageCount(0)
     , m_nRootPage(0)
     , m_pTable(_pTable)
-    , m_bUseCollector(sal_False)
+    , m_bUseCollector(false)
 {
     memset(&m_aHeader, 0, sizeof(m_aHeader));
     construct();
@@ -79,7 +79,7 @@ ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
     , m_nPageCount(0)
     , m_nRootPage(0)
     , m_pTable(_pTable)
-    , m_bUseCollector(sal_False)
+    , m_bUseCollector(false)
 {
     construct();
 }
@@ -138,12 +138,12 @@ ONDXPagePtr ODbaseIndex::getRoot()
     {
         m_nRootPage = m_aHeader.db_rootpage;
         m_nPageCount = m_aHeader.db_pagecount;
-        m_aRoot = CreatePage(m_nRootPage,NULL,sal_True);
+        m_aRoot = CreatePage(m_nRootPage,NULL,true);
     }
     return m_aRoot;
 }
 
-sal_Bool ODbaseIndex::openIndexFile()
+bool ODbaseIndex::openIndexFile()
 {
     if(!m_pFileStream)
     {
@@ -180,7 +180,7 @@ OIndexIterator* ODbaseIndex::createIterator(OBoolOperator* pOp,
     return new OIndexIterator(this, pOp, pOperand);
 }
 
-sal_Bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue)
+bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     // Search a specific value in Index
@@ -202,13 +202,13 @@ sal_Bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSet
     catch (Exception&)
     {
         OSL_ASSERT(false);
-        return sal_False;
+        return false;
     }
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
+bool ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
@@ -219,7 +219,7 @@ sal_Bool ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
 }
 
 
-sal_Bool ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
+bool ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
@@ -228,35 +228,35 @@ sal_Bool ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
     // Does the value already exist
     // Use Find() always to determine the actual leaf
     if (!ConvertToKey(&aKey, nRec, rValue) || (getRoot()->Find(aKey) && isUnique()))
-        return sal_False;
+        return false;
 
     ONDXNode aNewNode(aKey);
 
     // insert in the current leaf
     if (!m_aCurLeaf.Is())
-        return sal_False;
+        return false;
 
-    sal_Bool bResult = m_aCurLeaf->Insert(aNewNode);
+    bool bResult = m_aCurLeaf->Insert(aNewNode);
     Release(bResult);
 
     return bResult;
 }
 
 
-sal_Bool ODbaseIndex::Update(sal_uInt32 nRec, const ORowSetValue& rOldValue,
+bool ODbaseIndex::Update(sal_uInt32 nRec, const ORowSetValue& rOldValue,
                          const ORowSetValue& rNewValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     ONDXKey aKey;
     if (!ConvertToKey(&aKey, nRec, rNewValue) || (isUnique() && getRoot()->Find(aKey)))
-        return sal_False;
+        return false;
     else
         return Delete(nRec, rOldValue) && Insert(nRec,rNewValue);
 }
 
 
-sal_Bool ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
+bool ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
@@ -264,13 +264,13 @@ sal_Bool ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
     // Always use Find() to determine the actual leaf
     ONDXKey aKey;
     if (!ConvertToKey(&aKey, nRec, rValue) || !getRoot()->Find(aKey))
-        return sal_False;
+        return false;
 
     ONDXNode aNewNode(aKey);
 
     // insert in the current leaf
     if (!m_aCurLeaf.Is())
-        return sal_False;
+        return false;
 #if OSL_DEBUG_LEVEL > 1
     m_aRoot->PrintPage();
 #endif
@@ -284,10 +284,10 @@ void ODbaseIndex::Collect(ONDXPage* pPage)
         m_aCollector.push_back(pPage);
 }
 
-void ODbaseIndex::Release(sal_Bool bSave)
+void ODbaseIndex::Release(bool bSave)
 {
     // Release the Index-recources
-    m_bUseCollector = sal_False;
+    m_bUseCollector = false;
 
     if (m_aCurLeaf.Is())
     {
@@ -330,7 +330,7 @@ void ODbaseIndex::closeImpl()
     }
 }
 
-ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, sal_Bool bLoad)
+ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, bool bLoad)
 {
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
 
@@ -395,7 +395,7 @@ void ODbaseIndex::createINFEntry()
 
     sal_uInt16 nSuffix = aInfFile.GetKeyCount();
     OString aNewEntry,aKeyName;
-    sal_Bool bCase = isCaseSensitive();
+    bool bCase = isCaseSensitive();
     while (aNewEntry.isEmpty())
     {
         aNewEntry = OString("NDX");
@@ -413,7 +413,7 @@ void ODbaseIndex::createINFEntry()
     aInfFile.WriteKey(aNewEntry, OUStringToOString(sEntry, m_pTable->getConnection()->getTextEncoding()));
 }
 
-sal_Bool ODbaseIndex::DropImpl()
+bool ODbaseIndex::DropImpl()
 {
     closeImpl();
 
@@ -453,7 +453,7 @@ sal_Bool ODbaseIndex::DropImpl()
             }
         }
     }
-    return sal_True;
+    return true;
 }
 
 void ODbaseIndex::impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const OUString& _sFile)
@@ -464,7 +464,7 @@ void ODbaseIndex::impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const OU
     m_pTable->getConnection()->throwGenericSQLException(_nErrorId,*this);
 }
 
-sal_Bool ODbaseIndex::CreateImpl()
+bool ODbaseIndex::CreateImpl()
 {
     // Create the Index
     const OUString sFile = getCompletePath();
@@ -554,9 +554,9 @@ sal_Bool ODbaseIndex::CreateImpl()
     m_nPageCount = 2;
 
     m_aCurLeaf = m_aRoot = CreatePage(m_nRootPage);
-    m_aRoot->SetModified(sal_True);
+    m_aRoot->SetModified(true);
 
-    m_bUseCollector = sal_True;
+    m_bUseCollector = true;
 
     sal_Int32 nRowsLeft = 0;
     Reference<XRow> xRow(xSet,UNO_QUERY);
@@ -601,7 +601,7 @@ sal_Bool ODbaseIndex::CreateImpl()
     }
     Release();
     createINFEntry();
-    return sal_True;
+    return true;
 }
 
 

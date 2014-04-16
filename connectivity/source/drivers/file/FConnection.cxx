@@ -58,12 +58,12 @@ typedef connectivity::OMetaConnection OConnection_BASE;
 OConnection::OConnection(OFileDriver*   _pDriver)
     : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
     , m_pDriver(_pDriver)
-    , m_bClosed(sal_False)
-    , m_bAutoCommit(sal_False)
-    , m_bReadOnly(sal_False)
-    , m_bShowDeleted(sal_False)
-    , m_bCaseSensitiveExtension( sal_True )
-    , m_bCheckSQL92(sal_False)
+    , m_bClosed(false)
+    , m_bAutoCommit(false)
+    , m_bReadOnly(false)
+    , m_bShowDeleted(false)
+    , m_bCaseSensitiveExtension( true )
+    , m_bCheckSQL92(false)
     , m_bDefaultTextEncoding(false)
 {
     m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
@@ -81,7 +81,7 @@ void SAL_CALL OConnection::release() throw()
 }
 
 
-sal_Bool OConnection::matchesExtension( const OUString& _rExt ) const
+bool OConnection::matchesExtension( const OUString& _rExt ) const
 {
     if ( isCaseSensitveExtension() )
         return ( getExtension() == _rExt );
@@ -374,7 +374,7 @@ void OConnection::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     OConnection_BASE::disposing();
 
-    m_bClosed   = sal_True;
+    m_bClosed   = true;
 m_xDir.clear();
 m_xContent.clear();
     m_xCatalog  = WeakReference< XTablesSupplier>();

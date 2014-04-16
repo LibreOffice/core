@@ -145,7 +145,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(S
             }
             catch(SQLException& ) // in this case we have an odbc 2.0 driver
             {
-                m_bUseODBC2Types = sal_True;
+                m_bUseODBC2Types = true;
                 nType = OTools::MapOdbcType2Jdbc(getNumColAttrib(column,SQL_DESC_CONCISE_TYPE ));
             }
         }
@@ -245,7 +245,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQ
     }
     catch(const SQLException& ) // in this case we have an odbc 2.0 driver
     {
-        m_bUseODBC2Types = sal_True;
+        m_bUseODBC2Types = true;
         nType = getNumColAttrib(column,SQL_COLUMN_PRECISION );
     }
     return nType;
@@ -261,7 +261,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(::com:
     }
     catch(const SQLException& ) // in this case we have an odbc 2.0 driver
     {
-        m_bUseODBC2Types = sal_True;
+        m_bUseODBC2Types = true;
         nType = getNumColAttrib(column,SQL_COLUMN_SCALE );
     }
     return nType;

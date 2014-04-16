@@ -101,7 +101,7 @@ namespace connectivity
                                         SQLHANDLE _pContext,
                                         SQLSMALLINT _nHandleType,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                                        sal_Bool _bNoFound=sal_True,
+                                        bool _bNoFound=true,
                                         rtl_TextEncoding _nTextEncoding = RTL_TEXTENCODING_MS_1252)
                                         throw(::com::sun::star::sdbc::SQLException);
 
@@ -134,7 +134,7 @@ namespace connectivity
             static void GetInfo(OConnection* _pConnection,
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
-                                sal_Bool &_rValue,
+                                bool &_rValue,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             static sal_Int32 MapOdbcType2Jdbc(SQLSMALLINT _nType);
@@ -176,8 +176,8 @@ namespace connectivity
                 @param  fCType              the C type for the ODBC type
                 @param  fSqlType            the SQL type for the ODBC type
             */
-            static void getBindTypes(sal_Bool _bUseWChar,
-                                     sal_Bool _bUseOldTimeDate,
+            static void getBindTypes(bool _bUseWChar,
+                                     bool _bUseOldTimeDate,
                                      SQLSMALLINT _nOdbcType,
                                      SQLSMALLINT& fCType,
                                      SQLSMALLINT& fSqlType);
@@ -186,7 +186,7 @@ namespace connectivity
                                                     SQLHANDLE _aStatementHandle,
                                                     sal_Int32 columnIndex,
                                                     SQLSMALLINT _fSqlType,
-                                                    sal_Bool &_bWasNull,
+                                                    bool &_bWasNull,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                                                     rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
@@ -194,13 +194,13 @@ namespace connectivity
                                                                             SQLHANDLE _aStatementHandle,
                                                                             sal_Int32 columnIndex,
                                                                             SQLSMALLINT _fSqlType,
-                                                                            sal_Bool &_bWasNull,
+                                                                            bool &_bWasNull,
                                                                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             static void getValue(   OConnection* _pConnection,
                                     SQLHANDLE _aStatementHandle,
                                     sal_Int32 columnIndex,
                                     SQLSMALLINT _nType,
-                                    sal_Bool &_bWasNull,
+                                    bool &_bWasNull,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                                     void* _pValue,
                                     SQLLEN _nSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -215,14 +215,14 @@ namespace connectivity
                                     SQLLEN *pLen,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                                     rtl_TextEncoding _nTextEncoding,
-                                    sal_Bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                                    bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
 
         template <class T> void getValue(   OConnection* _pConnection,
                                             SQLHANDLE _aStatementHandle,
                                             sal_Int32 columnIndex,
                                             SQLSMALLINT _nType,
-                                            sal_Bool &_bWasNull,
+                                            bool &_bWasNull,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                                             T& _rValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {

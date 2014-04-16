@@ -31,10 +31,10 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor() SAL_OVERRIDE;
         public:
             OHSQLColumns(   ::cppu::OWeakObject& _rParent
-                            ,sal_Bool _bCase
+                            ,bool _bCase
                             ,::osl::Mutex& _rMutex
                             ,const TStringVector &_rVector
-                            ,sal_Bool _bUseHardRef = sal_True
+                            ,bool _bUseHardRef = true
                         );
         };
 
@@ -51,7 +51,7 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         public:
-            OHSQLColumn(sal_Bool _bCase);
+            OHSQLColumn(bool _bCase);
             virtual void construct() SAL_OVERRIDE;
 
             virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

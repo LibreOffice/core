@@ -123,7 +123,7 @@ namespace connectivity
         class OOO_DLLPUBLIC_DBTOOLS OOrderColumn :
             public OOrderColumn_BASE, public OOrderColumn_PROP
         {
-            const   sal_Bool        m_bAscending;
+            const   bool        m_bAscending;
 
         protected:
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;

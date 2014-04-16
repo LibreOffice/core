@@ -376,7 +376,7 @@ sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, Run
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::isReadOnly" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Bool bReadOnly = sal_False;
+    bool bReadOnly = false;
     static OUString sReadOnly(  "IsReadOnly" );
     ::ucbhelper::Content aFile(m_pConnection->getContent(),Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext());
     aFile.getPropertyValue(sReadOnly) >>= bReadOnly;
@@ -384,16 +384,16 @@ sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, Run
     return bReadOnly;
 }
 
-sal_Bool ODbaseDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
+bool ODbaseDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw" );
-    return sal_True;
+    return true;
 }
 
-sal_Bool ODbaseDatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
+bool ODbaseDatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw" );
-    return sal_True;
+    return true;
 }
 
 

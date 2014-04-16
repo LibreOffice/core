@@ -36,7 +36,7 @@ namespace connectivity
         IResultSetHelper*                       m_pHelper;            // used for moving in the resultset
         bool                                    m_bDeletedVisible;
 
-        sal_Bool    moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData);
+        bool    moveAbsolute(sal_Int32 _nOffset,bool _bRetrieveData);
     public:
         OSkipDeletedSet(IResultSetHelper* _pHelper);
         ~OSkipDeletedSet();
@@ -60,7 +60,7 @@ namespace connectivity
                 @return
                     true when the movement was successful otherwise false
         */
-        sal_Bool    skipDeleted(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData);
+        bool    skipDeleted(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, bool _bRetrieveData);
         /**
             clear the map and the vector used in this class
         */

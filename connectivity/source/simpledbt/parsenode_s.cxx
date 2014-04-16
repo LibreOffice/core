@@ -36,7 +36,7 @@ namespace connectivity
     //= OSimpleParseNode
 
 
-    OSimpleParseNode::OSimpleParseNode(const OSQLParseNode* _pNode, sal_Bool _bTakeOwnership)
+    OSimpleParseNode::OSimpleParseNode(const OSQLParseNode* _pNode, bool _bTakeOwnership)
         :m_pFullNode(_pNode)
         ,m_bOwner(_bTakeOwnership)
     {

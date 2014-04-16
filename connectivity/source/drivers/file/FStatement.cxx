@@ -69,7 +69,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,m_nResultSetType(ResultSetType::FORWARD_ONLY)
     ,m_nFetchDirection(FetchDirection::FORWARD)
     ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
-    ,m_bEscapeProcessing(sal_True)
+    ,m_bEscapeProcessing(true)
     ,rBHelper(OStatement_BASE::rBHelper)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::OStatement_Base" );
@@ -474,7 +474,7 @@ void OStatement_Base::createColumnMapping()
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
     // now check which columns are bound
-    OResultSet::setBoundedColumns(m_aRow,m_aSelectRow,xColumns,xNames,sal_True,m_xDBMetaData,m_aColMapping);
+    OResultSet::setBoundedColumns(m_aRow,m_aSelectRow,xColumns,xNames,true,m_xDBMetaData,m_aColMapping);
 }
 
 void OStatement_Base::initializeResultSet(OResultSet* _pResult)
@@ -662,7 +662,7 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< OUString>& aColumnN
     else if (SQL_ISTOKEN(pRow_Value_Constructor_Elem,NULL))
     {
         // set NULL
-        SetAssignValue(aColumnName, OUString(), sal_True);
+        SetAssignValue(aColumnName, OUString(), true);
     }
     else if (SQL_ISRULE(pRow_Value_Constructor_Elem,parameter))
         parseParamterElem(aColumnName,pRow_Value_Constructor_Elem);
@@ -674,7 +674,7 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< OUString>& aColumnN
 
 void OStatement_Base::SetAssignValue(const OUString& aColumnName,
                                      const OUString& aValue,
-                                     sal_Bool bSetNull,
+                                     bool bSetNull,
                                      sal_uInt32 nParameter)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::SetAssignValue" );

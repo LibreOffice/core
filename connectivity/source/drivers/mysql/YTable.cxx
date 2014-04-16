@@ -130,7 +130,7 @@ void OMySQLTable::construct()
 
 sdbcx::OCollection* OMySQLTable::createColumns(const TStringVector& _rNames)
 {
-    OMySQLColumns* pColumns = new OMySQLColumns(*this,sal_True,m_aMutex,_rNames);
+    OMySQLColumns* pColumns = new OMySQLColumns(*this,true,m_aMutex,_rNames);
     pColumns->setParent(this);
     return pColumns;
 }
@@ -207,7 +207,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Ref
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))  >>= nNewNullable;
 
         // check also the auto_increment
-        sal_Bool bOldAutoIncrement = sal_False,bAutoIncrement = sal_False;
+        bool bOldAutoIncrement = false,bAutoIncrement = false;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))      >>= bOldAutoIncrement;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
         bool bColumnNameChanged = false;

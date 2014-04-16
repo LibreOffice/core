@@ -65,7 +65,7 @@ namespace connectivity
         OSimpleParseNode* pReturn = NULL;
         OSQLParseNode* pFullNode = const_cast<OSimpleSQLParser*>(this)->m_aFullParser.predicateTree(rErrorMessage, rStatement, _rxFormatter, _rxField);
         if (pFullNode)
-            pReturn = new OSimpleParseNode(pFullNode, sal_True);
+            pReturn = new OSimpleParseNode(pFullNode, true);
         return pReturn;
     }
 

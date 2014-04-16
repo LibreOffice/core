@@ -258,9 +258,9 @@ SQLLEN OStatement_Base::getRowCount () throw( SQLException)
 // true if the concurrency has been changed
 
 
-sal_Bool OStatement_Base::lockIfNecessary (const OUString& sql) throw( SQLException)
+bool OStatement_Base::lockIfNecessary (const OUString& sql) throw( SQLException)
 {
-    sal_Bool rc = sal_False;
+    bool rc = false;
 
     // First, convert the statement to upper case
 
@@ -286,7 +286,7 @@ sal_Bool OStatement_Base::lockIfNecessary (const OUString& sql) throw( SQLExcept
             // Catch any warnings and place on the warning stack
             setWarning (warn);
         }
-        rc = sal_True;
+        rc = true;
     }
 
     return rc;
@@ -338,7 +338,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql ) throw(SQLExcep
 
     OString aSql(OUStringToOString(sql,getOwnConnection()->getTextEncoding()));
 
-    sal_Bool hasResultSet = sal_False;
+    bool hasResultSet = false;
     SQLWarning aWarning;
 
     // Reset the statement handle and warning
@@ -370,7 +370,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql ) throw(SQLExcep
 
     if (getColumnCount () > 0)
     {
-        hasResultSet = sal_True;
+        hasResultSet = true;
     }
 
     return hasResultSet;
@@ -380,7 +380,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql ) throw(SQLExcep
 // getResultSet returns the current result as a ResultSet.  It
 // returns NULL if the current result is not a ResultSet.
 
-Reference< XResultSet > OStatement_Base::getResultSet (sal_Bool checkCount) throw( SQLException)
+Reference< XResultSet > OStatement_Base::getResultSet (bool checkCount) throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -452,7 +452,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const OUString& 
 
     if (execute (sql))
     {
-        xRS = getResultSet (sal_False);
+        xRS = getResultSet (false);
         m_xResultSet = xRS;
     }
     else
@@ -557,7 +557,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::getResultSet(  ) throw(SQLExce
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    m_xResultSet = getResultSet(sal_True);
+    m_xResultSet = getResultSet(true);
     return m_xResultSet;
 }
 
@@ -587,7 +587,7 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
 
 
     SQLWarning  warning;
-    sal_Bool hasResultSet = sal_False;
+    bool hasResultSet = false;
 
     // clear previous warnings
 
@@ -618,7 +618,7 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
         // result set.
 
         if (getColumnCount () == 0)
-            hasResultSet = sal_False;
+            hasResultSet = false;
     }
 
     // Set the warning for the statement, if one was generated
@@ -765,7 +765,7 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_BIND_TYPE, SQL_BIND_BY_COLUMN);
 
-    sal_Bool bUseBookmark = isUsingBookmarks();
+    bool bUseBookmark = isUsingBookmarks();
     SQLULEN nSet( SQL_UNSPECIFIED );
     switch(_par0)
     {
@@ -779,12 +779,12 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
         case ResultSetType::SCROLL_SENSITIVE:
             if(bUseBookmark)
             {
-                SQLUINTEGER nCurProp = getCursorProperties(SQL_CURSOR_DYNAMIC,sal_True);
+                SQLUINTEGER nCurProp = getCursorProperties(SQL_CURSOR_DYNAMIC,true);
                 if((nCurProp & SQL_CA1_BOOKMARK) != SQL_CA1_BOOKMARK) // check if bookmark for this type isn't supported
                 { // we have to test the next one
-                    nCurProp = getCursorProperties(SQL_CURSOR_KEYSET_DRIVEN,sal_True);
-                    sal_Bool bNotBookmarks = ((nCurProp & SQL_CA1_BOOKMARK) != SQL_CA1_BOOKMARK);
-                    nCurProp = getCursorProperties(SQL_CURSOR_KEYSET_DRIVEN,sal_False);
+                    nCurProp = getCursorProperties(SQL_CURSOR_KEYSET_DRIVEN,true);
+                    bool bNotBookmarks = ((nCurProp & SQL_CA1_BOOKMARK) != SQL_CA1_BOOKMARK);
+                    nCurProp = getCursorProperties(SQL_CURSOR_KEYSET_DRIVEN,false);
                     nSet = SQL_CURSOR_KEYSET_DRIVEN;
                     if( bNotBookmarks ||
                         ((nCurProp & SQL_CA2_SENSITIVITY_DELETIONS) != SQL_CA2_SENSITIVITY_DELETIONS) ||
@@ -815,7 +815,7 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_SENSITIVITY, nSet);
 }
 
-void OStatement_Base::setEscapeProcessing( const sal_Bool _bEscapeProc )
+void OStatement_Base::setEscapeProcessing( const bool _bEscapeProc )
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLULEN nEscapeProc( _bEscapeProc ? SQL_NOSCAN_OFF : SQL_NOSCAN_ON );
@@ -864,13 +864,13 @@ void OStatement_Base::setCursorName(const OUString &_par0)
     N3SQLSetCursorName(m_aStatementHandle,(SDB_ODBC_CHAR*)aName.getStr(),(SQLSMALLINT)aName.getLength());
 }
 
-sal_Bool OStatement_Base::isUsingBookmarks() const
+bool OStatement_Base::isUsingBookmarks() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     return SQL_UB_OFF != getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS, SQL_UB_OFF);
 }
 
-sal_Bool OStatement_Base::getEscapeProcessing() const
+bool OStatement_Base::getEscapeProcessing() const
 {
     OSL_ENSURE( m_aStatementHandle, "StatementHandle is null!" );
     return SQL_NOSCAN_OFF == getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS, SQL_NOSCAN_OFF);;
@@ -915,7 +915,7 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
                             const Any& rValue )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
-    sal_Bool bConverted = sal_False;
+    bool bConverted = false;
     try
     {
         switch(nHandle)
@@ -1088,7 +1088,7 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base:
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-SQLUINTEGER OStatement_Base::getCursorProperties(SQLINTEGER _nCursorType,sal_Bool bFirst)
+SQLUINTEGER OStatement_Base::getCursorProperties(SQLINTEGER _nCursorType, bool bFirst)
 {
     SQLUINTEGER nValueLen = 0;
     try

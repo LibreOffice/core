@@ -83,7 +83,7 @@ OFILEOperandAttr::OFILEOperandAttr(sal_uInt16 _nPos,
 
 }
 
-sal_Bool OFILEOperandAttr::isIndexed() const
+bool OFILEOperandAttr::isIndexed() const
 {
     return m_xIndex.is();
 }

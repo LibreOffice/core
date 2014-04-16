@@ -33,21 +33,21 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 OMySQLColumns::OMySQLColumns(   ::cppu::OWeakObject& _rParent
-                                ,sal_Bool _bCase
+                                ,bool _bCase
                                 ,::osl::Mutex& _rMutex
                                 ,const TStringVector &_rVector
-                                ,sal_Bool _bUseHardRef
+                                ,bool _bUseHardRef
             ) : OColumnsHelper(_rParent,_bCase,_rMutex,_rVector,_bUseHardRef)
 {
 }
 
 Reference< XPropertySet > OMySQLColumns::createDescriptor()
 {
-    return new OMySQLColumn(sal_True);
+    return new OMySQLColumn(true);
 }
 
 
-OMySQLColumn::OMySQLColumn( sal_Bool    _bCase)
+OMySQLColumn::OMySQLColumn( bool    _bCase)
     : connectivity::sdbcx::OColumn( _bCase )
 {
     construct();

@@ -76,7 +76,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
             sal_uInt32                                  m_nRowPos;
             sal_uInt32                                  m_nOldRowPos;
-            sal_Bool                                    m_bWasNull;
+            bool                                    m_bWasNull;
             sal_Int32                                   m_nFetchSize;
             sal_Int32                                   m_nResultSetType;
             sal_Int32                                   m_nFetchDirection;
@@ -235,7 +235,7 @@ protected:
             OValueRow                m_aParameterRow;
             ::std::vector< OUString> m_aAttributeStrings;
             sal_Int32                m_nParamIndex;
-            sal_Bool                 m_bIsAlwaysFalseQuery;
+            bool                 m_bIsAlwaysFalseQuery;
             ::rtl::Reference<OKeySet>     m_pKeySet;
             OSortIndex*              m_pSortIndex;
             sal_Int32                 m_nNewRow;        //inserted row
@@ -252,9 +252,9 @@ protected:
             void analyseWhereClause( const OSQLParseNode*                 parseTree,
                                      MQueryExpression                    &queryExpression);
 
-            sal_Bool isCount() const;
+            bool isCount() const;
 
-            sal_Bool IsSorted() const { return !m_aOrderbyColumnNumber.empty(); }
+            bool IsSorted() const { return !m_aOrderbyColumnNumber.empty(); }
 
             enum eRowPosition {
                 NEXT_POS, PRIOR_POS, FIRST_POS, LAST_POS, ABSOLUTE_POS, RELATIVE_POS
@@ -262,16 +262,16 @@ protected:
 
             sal_uInt32  currentRowCount();
 
-            sal_Bool fetchRow(sal_Int32 rowIndex,sal_Bool bForceReload=sal_False) throw( ::com::sun::star::sdbc::SQLException,
+            bool fetchRow(sal_Int32 rowIndex,bool bForceReload=false) throw( ::com::sun::star::sdbc::SQLException,
                                                           ::com::sun::star::uno::RuntimeException);
-            sal_Bool fetchCurrentRow() throw( ::com::sun::star::sdbc::SQLException,
+            bool fetchCurrentRow() throw( ::com::sun::star::sdbc::SQLException,
                                                           ::com::sun::star::uno::RuntimeException);
-            sal_Bool pushCard(sal_uInt32 rowIndex) throw( ::com::sun::star::sdbc::SQLException,
+            bool pushCard(sal_uInt32 rowIndex) throw( ::com::sun::star::sdbc::SQLException,
                                                           ::com::sun::star::uno::RuntimeException);
-            sal_Bool validRow( sal_uInt32 nRow );
-            sal_Bool seekRow( eRowPosition pos, sal_Int32 nOffset = 0 );
+            bool validRow( sal_uInt32 nRow );
+            bool seekRow( eRowPosition pos, sal_Int32 nOffset = 0 );
             sal_Int32 deletedCount();
-            sal_Bool fillKeySet(sal_Int32 nMaxCardNumber);  //When we get new rows, fill the m_pKeySet items for them
+            bool fillKeySet(sal_Int32 nMaxCardNumber);  //When we get new rows, fill the m_pKeySet items for them
             sal_Int32 getRowForCardNumber(sal_Int32 nCardNum);
             const ORowSetValue& getValue(sal_Int32 rowIndex, sal_Int32 columnIndex)
                 throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -281,7 +281,7 @@ protected:
             sal_Int32 getCurrentCardNumber();
 
 public:
-             sal_Bool determineReadOnly();
+             bool determineReadOnly();
             // MozAddressbook Specific methods
             void SAL_CALL executeQuery() throw( ::com::sun::star::sdbc::SQLException,
                                                 ::com::sun::star::uno::RuntimeException);
@@ -311,7 +311,7 @@ public:
                 const OValueRow& _rRow,
                 const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xNames,
-                sal_Bool _bSetColumnMapping,
+                bool _bSetColumnMapping,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
                 ::std::vector<sal_Int32>& _rColMapping);
 

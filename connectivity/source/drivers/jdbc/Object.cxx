@@ -42,7 +42,7 @@ using namespace ::com::sun::star::lang;
 
 
 ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM2(const ::rtl::Reference< jvmaccess::VirtualMachine >& _rVM = ::rtl::Reference< jvmaccess::VirtualMachine >(),
-                                                        sal_Bool _bSet = sal_False)
+                                                        bool _bSet = false)
 {
     static ::rtl::Reference< jvmaccess::VirtualMachine > s_VM;
     if ( _rVM.is() || _bSet )
@@ -87,7 +87,7 @@ void SDBThreadAttach::releaseRef()
     osl_atomic_decrement(&getJavaVMRefCount());
     if ( getJavaVMRefCount() == 0 )
     {
-        getJavaVM2(::rtl::Reference< jvmaccess::VirtualMachine >(),sal_True);
+        getJavaVM2(::rtl::Reference< jvmaccess::VirtualMachine >(),true);
     }
 }
 
@@ -228,7 +228,7 @@ void java_lang_Object::obtainMethodId(JNIEnv* _pEnv,const char* _pMethodName, co
     } // if  ( !_inout_MethodID )
 }
 
-sal_Bool java_lang_Object::callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const
+bool java_lang_Object::callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const
 {
     jboolean out( sal_False );
 
@@ -242,7 +242,7 @@ sal_Bool java_lang_Object::callBooleanMethod( const char* _pMethodName, jmethodI
     return out;
 }
 
-sal_Bool java_lang_Object::callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const
+bool java_lang_Object::callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const
 {
     jboolean out( sal_False );
     SDBThreadAttach t;
@@ -271,7 +271,7 @@ sal_Int32 java_lang_Object::callIntMethod( const char* _pMethodName, jmethodID& 
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID ) );
     if ( _bIgnoreException )
-        isExceptionOccurred(t.pEnv,sal_True);
+        isExceptionOccurred(t.pEnv,true);
     else
         ThrowSQLException( t.pEnv, NULL );
 
@@ -310,7 +310,7 @@ void java_lang_Object::callVoidMethodWithIntArg( const char* _pMethodName, jmeth
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,_nArgument );
     if ( _bIgnoreException )
-        isExceptionOccurred(t.pEnv,sal_True);
+        isExceptionOccurred(t.pEnv,true);
     else
         ThrowSQLException( t.pEnv, NULL );
 }
@@ -323,7 +323,7 @@ void java_lang_Object::callVoidMethodWithBoolArg( const char* _pMethodName, jmet
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,int(_nArgument) );
     if ( _bIgnoreException )
-        isExceptionOccurred(t.pEnv,sal_True);
+        isExceptionOccurred(t.pEnv,true);
     else
         ThrowSQLException( t.pEnv, NULL );
 }

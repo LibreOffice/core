@@ -81,7 +81,7 @@ namespace connectivity
                             m_nRootPage;
 
             ODbaseTable*    m_pTable;
-            sal_Bool        m_bUseCollector : 1;            // Use the Garbage Collector
+            bool        m_bUseCollector : 1;            // Use the Garbage Collector
 
             OUString getCompletePath();
             void closeImpl();
@@ -93,7 +93,7 @@ namespace connectivity
             ODbaseIndex(ODbaseTable* _pTable);
             ODbaseIndex(ODbaseTable* _pTable,const NDXHeader& _aHeader,const OUString& _Name);
 
-            sal_Bool openIndexFile();
+            bool openIndexFile();
             virtual void refreshColumns() SAL_OVERRIDE;
 
             // com::sun::star::lang::XUnoTunnel
@@ -114,31 +114,31 @@ namespace connectivity
             sal_uInt32 GetRootPos()                 {return m_nRootPage;}
             sal_uInt32 GetPageCount()               {return m_nPageCount;}
 
-            sal_Bool IsText() const                 {return m_aHeader.db_keytype == 0;}
+            bool IsText() const                 {return m_aHeader.db_keytype == 0;}
             sal_uInt16 GetMaxNodes() const          {return m_aHeader.db_maxkeys;}
 
-            virtual sal_Bool Insert(sal_uInt32 nRec, const ORowSetValue& rValue);
-            virtual sal_Bool Update(sal_uInt32 nRec, const ORowSetValue&, const ORowSetValue&);
-            virtual sal_Bool Delete(sal_uInt32 nRec, const ORowSetValue& rValue);
-            virtual sal_Bool Find(sal_uInt32 nRec, const ORowSetValue& rValue);
+            virtual bool Insert(sal_uInt32 nRec, const ORowSetValue& rValue);
+            virtual bool Update(sal_uInt32 nRec, const ORowSetValue&, const ORowSetValue&);
+            virtual bool Delete(sal_uInt32 nRec, const ORowSetValue& rValue);
+            virtual bool Find(sal_uInt32 nRec, const ORowSetValue& rValue);
 
             void createINFEntry();
-            sal_Bool CreateImpl();
-            sal_Bool DropImpl();
+            bool CreateImpl();
+            bool DropImpl();
 
             DECLARE_SERVICE_INFO();
         protected:
 
-            ONDXPage* CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent = NULL, sal_Bool bLoad = sal_False);
+            ONDXPage* CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent = NULL, bool bLoad = false);
             void Collect(ONDXPage*);
             ONDXPagePtr getRoot();
 
-            sal_Bool isUnique() const { return m_IsUnique; }
-            sal_Bool UseCollector() const {return m_bUseCollector;}
+            bool isUnique() const { return m_IsUnique; }
+            bool UseCollector() const {return m_bUseCollector;}
             // Tree operations
             void Insert(ONDXPagePtr aCurPage, ONDXNode& rNode);
-            void Release(sal_Bool bSave = sal_True);
-            sal_Bool ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue);
+            void Release(bool bSave = true);
+            bool ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue);
         };
 
         SvStream& WriteODbaseIndex(SvStream &rStream, ODbaseIndex&);

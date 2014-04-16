@@ -87,7 +87,7 @@ namespace connectivity
             DBFMemoHeader   m_aMemoHeader;
             SvStream*       m_pMemoStream;
             rtl_TextEncoding m_eEncoding;
-            sal_Bool        m_bWriteableMemo;
+            bool        m_bWriteableMemo;
 
             void alterColumn(sal_Int32 index,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor ,
@@ -96,15 +96,15 @@ namespace connectivity
             void fillColumns();
             OUString createTempFile();
             void copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos);
-            sal_Bool CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMemo);
-            sal_Bool CreateMemoFile(const INetURLObject& aFile);
-            sal_Bool HasMemoFields() const { return m_aHeader.db_typ > dBaseIV;}
-            sal_Bool ReadMemoHeader();
-            sal_Bool ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable);
+            bool CreateFile(const INetURLObject& aFile, bool& bCreateMemo);
+            bool CreateMemoFile(const INetURLObject& aFile);
+            bool HasMemoFields() const { return m_aHeader.db_typ > dBaseIV;}
+            bool ReadMemoHeader();
+            bool ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable);
 
-            sal_Bool WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr);
-            sal_Bool WriteBuffer();
-            sal_Bool UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols, bool bForceAllFields);
+            bool WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr);
+            bool WriteBuffer();
+            bool UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols, bool bForceAllFields);
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> isUniqueByColumnName(sal_Int32 _nColumnPos);
             void AllocBuffer();
 
@@ -133,8 +133,8 @@ namespace connectivity
             void construct() SAL_OVERRIDE; // can throw any exception
 
             virtual sal_Int32 getCurrentLastPos() const SAL_OVERRIDE;
-            virtual sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) SAL_OVERRIDE;
-            virtual sal_Bool fetchRow(OValueRefRow& _rRow,const OSQLColumns& _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData) SAL_OVERRIDE;
+            virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) SAL_OVERRIDE;
+            virtual bool fetchRow(OValueRefRow& _rRow,const OSQLColumns& _rCols, bool _bUseTableDefs, bool bRetrieveData) SAL_OVERRIDE;
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             //XTypeProvider
@@ -150,19 +150,19 @@ namespace connectivity
             // XRename
             virtual void SAL_CALL rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-            sal_Bool    DropImpl();
-            sal_Bool    CreateImpl();
+            bool    DropImpl();
+            bool    CreateImpl();
 
 
-            virtual sal_Bool InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols) SAL_OVERRIDE;
-            virtual sal_Bool DeleteRow(const OSQLColumns& _rCols) SAL_OVERRIDE;
-            virtual sal_Bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols) SAL_OVERRIDE;
+            virtual bool InsertRow(OValueRefVector& rRow, bool bFlush, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols) SAL_OVERRIDE;
+            virtual bool DeleteRow(const OSQLColumns& _rCols) SAL_OVERRIDE;
+            virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols) SAL_OVERRIDE;
 
             virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor) SAL_OVERRIDE;
             virtual void dropColumn(sal_Int32 _nPos) SAL_OVERRIDE;
 
             static OUString   getEntry(file::OConnection* _pConnection,const OUString& _sURL );
-            static sal_Bool     Drop_Static(const OUString& _sUrl,sal_Bool _bHasMemoFields,sdbcx::OCollection* _pIndexes );
+            static bool     Drop_Static(const OUString& _sUrl, bool _bHasMemoFields, sdbcx::OCollection* _pIndexes );
 
             virtual void refreshHeader() SAL_OVERRIDE;
 

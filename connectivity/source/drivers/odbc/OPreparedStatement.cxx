@@ -68,7 +68,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OUString
     :OStatement_BASE2(_pConnection)
     ,numParams(0)
     ,boundParams(NULL)
-    ,m_bPrepared(sal_False)
+    ,m_bPrepared(false)
 {
     m_sSqlStatement = sql;
     try
@@ -159,7 +159,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    sal_Bool needData = sal_False;
+    bool needData = false;
 
     // Reset warnings
 
@@ -195,7 +195,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
             // more data required
 
             if ( !paramIndex || ( *paramIndex == -1 ) )
-                needData = sal_False;
+                needData = false;
             else
             {
                 // Now we have the proper parameter
@@ -267,7 +267,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     prepareStatement();
 
     if (execute())
-        rs = getResultSet(sal_False);
+        rs = getResultSet(false);
     else
     {
         // No ResultSet was produced.  Raise an exception
@@ -920,7 +920,7 @@ void OPreparedStatement::prepareStatement()
         OString aSql(OUStringToOString(m_sSqlStatement,getOwnConnection()->getTextEncoding()));
         SQLRETURN nReturn = N3SQLPrepare(m_aStatementHandle,(SDB_ODBC_CHAR *) aSql.getStr(),aSql.getLength());
         OTools::ThrowException(m_pConnection,nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-        m_bPrepared = sal_True;
+        m_bPrepared = true;
         initBoundParam();
     }
 }

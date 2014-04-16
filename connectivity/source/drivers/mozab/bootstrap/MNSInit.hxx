@@ -23,14 +23,16 @@
 
 #include <sal/types.h>
 
-sal_Bool MNS_Init(sal_Bool& aProfileExists);
-sal_Bool MNS_Term(sal_Bool aForce=sal_False);
+bool MNS_Init(bool& aProfileExists);
+bool MNS_Term(bool aForce = false);
 
-sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists);
+bool MNS_InitXPCOM(sal_Bool* aProfileExists);
+
 typedef struct UI_Thread_ARGS
 {
-    sal_Bool* bProfileExists;
-}UI_Thread_ARGS;
+    bool* bProfileExists;
+} UI_Thread_ARGS;
+
 void MNS_XPCOM_EventLoop();
 
 #endif // _CONNECTIVITY_MAB_NS_INIT_HXX_

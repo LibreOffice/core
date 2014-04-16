@@ -432,7 +432,7 @@ sal_Bool OCommonStatement::convertFastPropertyValue(
                             const Any& /*rValue*/ )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
-    sal_Bool bConverted = sal_False;
+    bool bConverted = false;
     // here we have to try to convert
     return bConverted;
 }
@@ -517,7 +517,7 @@ void OCommonStatement::createColumnMapping()
     for ( i = 0; i < m_aColMapping.size(); i++ )
         OSL_TRACE("BEFORE Mapped: %d -> %d", i, m_aColMapping[i] );
 #endif
-    OResultSet::setBoundedColumns(m_aRow,xColumns,xNames,sal_True,m_xDBMetaData,m_aColMapping);
+    OResultSet::setBoundedColumns(m_aRow,xColumns,xNames,true,m_xDBMetaData,m_aColMapping);
 #if OSL_DEBUG_LEVEL > 0
     for ( i = 0; i < m_aColMapping.size(); i++ )
         OSL_TRACE("AFTER  Mapped: %d -> %d", i, m_aColMapping[i] );

@@ -40,7 +40,7 @@ namespace connectivity
             OUString                         m_aTableName;
             ::rtl::Reference<connectivity::OSQLColumns>  m_xColumns;
             OTable*                                 m_pTable;
-            sal_Bool                                  m_bReadOnly;
+            bool                                  m_bReadOnly;
 
         protected:
             virtual ~OResultSetMetaData();
@@ -48,7 +48,7 @@ namespace connectivity
             // a constructor that is needed to return the object:
             // OResultSetMetaData(OConnection*  _pConnection) : m_pConnection(_pConnection){}
             OResultSetMetaData(const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
-                               const OUString& _aTableName,OTable* _pTable,sal_Bool aReadOnly
+                               const OUString& _aTableName,OTable* _pTable,bool aReadOnly
                                )
                  :m_aTableName(_aTableName)
                  ,m_xColumns(_rxColumns)

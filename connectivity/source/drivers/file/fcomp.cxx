@@ -46,7 +46,7 @@ using namespace com::sun::star;
 OPredicateCompiler::OPredicateCompiler(OSQLAnalyzer* pAnalyzer)//,OCursor& rCurs)
                      : m_pAnalyzer(pAnalyzer)
                      , m_nParamCounter(0)
-                     , m_bORCondition(sal_False)
+                     , m_bORCondition(false)
 {
 }
 
@@ -153,7 +153,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
         if (SQL_ISTOKEN(pPredicateNode->getChild(1),OR))                // OR-Operator
         {
             m_aCodeList.push_back(new OOp_OR());
-            m_bORCondition = sal_True;
+            m_bORCondition = true;
         }
         else if (SQL_ISTOKEN(pPredicateNode->getChild(1),AND))      // AND-Operator
             m_aCodeList.push_back(new OOp_AND());
@@ -335,7 +335,7 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
         m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_BETWEEN,NULL);
     }
 
-    sal_Bool bNot = SQL_ISTOKEN(pPart2->getChild(0),NOT);
+    bool bNot = SQL_ISTOKEN(pPart2->getChild(0),NOT);
 
     OOperand* pColumnOp = execute(pColumn);
     OOperand* pOb1 = execute(p1stValue);
@@ -543,13 +543,13 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
 }
 
 
-sal_Bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
+bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
 {
-    static sal_Bool bResult;
+    static bool bResult;
 
     OCodeList::iterator aIter = rCodeList.begin();
     if (!(*aIter))
-        return sal_True;        // no Predicate
+        return true;        // no Predicate
 
     for(;aIter != rCodeList.end();++aIter)
     {
@@ -602,7 +602,7 @@ OOperand* OPredicateCompiler::execute_Fold(OSQLParseNode* pPredicateNode)   thro
 {
     DBG_ASSERT(pPredicateNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
 
-    sal_Bool bUpper = SQL_ISTOKEN(pPredicateNode->getChild(0),UPPER);
+    bool bUpper = SQL_ISTOKEN(pPredicateNode->getChild(0),UPPER);
 
     execute(pPredicateNode->getChild(2));
     OOperator* pOperator = NULL;

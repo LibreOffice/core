@@ -56,7 +56,7 @@ sdbcx::ObjectType OIndexColumns::createObject(const OUString& _rName)
     Reference< XResultSet > xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getIndexInfo(
         Catalog, aSchema, aTable, sal_False, sal_False);
 
-    sal_Bool bAsc = sal_True;
+    bool bAsc = true;
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

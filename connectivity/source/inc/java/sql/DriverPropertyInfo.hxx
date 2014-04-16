@@ -44,7 +44,7 @@ namespace connectivity
         OUString name();
         OUString description();
         OUString value();
-        sal_Bool        required();
+        bool        required();
                 ::com::sun::star::uno::Sequence< OUString> choices();
     };
 }

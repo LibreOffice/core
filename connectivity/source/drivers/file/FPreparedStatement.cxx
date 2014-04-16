@@ -100,7 +100,7 @@ void OPreparedStatement::construct(const OUString& sql)  throw(SQLException, Run
     }
 
     OValueRefRow aTemp;
-    OResultSet::setBoundedColumns(m_aEvaluateRow,aTemp,m_xParamColumns,xNames,sal_False,m_xDBMetaData,m_aColMapping);
+    OResultSet::setBoundedColumns(m_aEvaluateRow,aTemp,m_xParamColumns,xNames,false,m_xDBMetaData,m_aColMapping);
 }
 
 Reference<XResultSet> OPreparedStatement::makeResultSet()
@@ -610,7 +610,7 @@ void OPreparedStatement::parseParamterElem(const OUString& _sColumnName, OSQLPar
     if(nParameter == -1)
         nParameter = AddParameter(pRow_Value_Constructor_Elem,xCol);
     // Save number of parameter in the variable:
-    SetAssignValue(_sColumnName, OUString(), sal_True, nParameter);
+    SetAssignValue(_sColumnName, OUString(), true, nParameter);
 }
 
 

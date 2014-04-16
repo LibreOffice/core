@@ -68,7 +68,7 @@ namespace connectivity
                           public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
         private:
-            sal_Bool m_bIsBookmarkable;
+            bool m_bIsBookmarkable;
             sal_Int32 m_nFetchSize;
             sal_Int32 m_nResultSetType;
             sal_Int32 m_nFetchDirection;

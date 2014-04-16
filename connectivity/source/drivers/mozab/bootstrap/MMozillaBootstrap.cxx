@@ -58,7 +58,7 @@ MozillaBootstrap::~MozillaBootstrap()
 
 void MozillaBootstrap::Init()
 {
-    sal_Bool aProfileExists=sal_False;
+    bool aProfileExists=false;
 
 #ifndef MINIMAL_PROFILEDISCOVER
     //This must be call before any mozilla code

@@ -147,7 +147,7 @@ void IndexColumns::refresh()
 
             columnMetaData2SDBCX( pIndexColumn, xRow );
             pIndexColumn->setPropertyValue_NoBroadcast_public(
-                st.IS_ASCENDING , makeAny( (sal_Bool ) sal_False ) );
+                st.IS_ASCENDING , makeAny( false ) );
 
             m_values[ index ] = makeAny( prop );
             m_name2index[ columnName ] = index;

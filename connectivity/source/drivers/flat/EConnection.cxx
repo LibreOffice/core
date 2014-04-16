@@ -42,7 +42,7 @@ using namespace ::com::sun::star::lang;
 
 OFlatConnection::OFlatConnection(ODriver*   _pDriver) : OConnection(_pDriver)
     ,m_nMaxRowsToScan(50)
-    ,m_bHeaderLine(sal_True)
+    ,m_bHeaderLine(true)
     ,m_cFieldDelimiter(';')
     ,m_cStringDelimiter('"')
     ,m_cDecimalDelimiter(',')
@@ -101,7 +101,7 @@ void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValu
 
     osl_atomic_decrement( &m_refCount );
     OConnection::construct(url,info);
-    m_bShowDeleted = sal_True; // we do not supported rows for this type
+    m_bShowDeleted = true; // we do not supported rows for this type
 }
 
 Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)

@@ -59,7 +59,7 @@ namespace connectivity { namespace hsqldb
     //= HView
 
 
-    HView::HView( const Reference< XConnection >& _rxConnection, sal_Bool _bCaseSensitive,
+    HView::HView( const Reference< XConnection >& _rxConnection, bool _bCaseSensitive,
         const OUString& _rSchemaName, const OUString& _rName )
         :HView_Base( _bCaseSensitive, _rName, _rxConnection->getMetaData(), 0, OUString(), _rSchemaName, OUString() )
         ,m_xConnection( _rxConnection )

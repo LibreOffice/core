@@ -38,10 +38,10 @@ namespace connectivity
     {
     protected:
         const OSQLParseNode*    m_pFullNode;
-        sal_Bool                m_bOwner;
+        bool                m_bOwner;
 
     public:
-        OSimpleParseNode(const OSQLParseNode* _pNode, sal_Bool _bTakeOwnership = sal_True);
+        OSimpleParseNode(const OSQLParseNode* _pNode, bool _bTakeOwnership = true);
         virtual ~OSimpleParseNode();
 
         // ISQLParseNode

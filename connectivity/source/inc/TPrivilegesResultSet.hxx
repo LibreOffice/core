@@ -30,7 +30,7 @@ namespace connectivity
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>   m_xTables;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>         m_xRow;
-        sal_Bool                                                                m_bResetValues;
+        bool                                                                m_bResetValues;
     protected:
         virtual const ORowSetValue& getValue(sal_Int32 columnIndex) SAL_OVERRIDE;
     public:
