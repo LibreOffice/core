@@ -26,6 +26,8 @@
 #include "PivotLayoutTreeListData.hxx"
 #include "PivotLayoutTreeListLabel.hxx"
 
+#define TREELIST_APPEND ULONG_MAX
+
 class ScItemValue
 {
 public:
@@ -115,7 +117,7 @@ public:
 
     virtual void SetReference(const ScRange& rReferenceRange, ScDocument* pDocument) SAL_OVERRIDE;
     virtual void SetActive() SAL_OVERRIDE;
-    virtual bool IsRefInputMode() const SAL_OVERRIDE;
+    virtual sal_Bool IsRefInputMode() const SAL_OVERRIDE;
 
     void ItemInserted(ScItemValue* pItemValue, ScPivotLayoutTreeList::SvPivotTreeListType eType);
 

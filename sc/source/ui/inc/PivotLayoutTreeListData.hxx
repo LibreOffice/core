@@ -22,7 +22,7 @@ private:
 public:
     ScPivotLayoutTreeListData(Window* pParent, WinBits nBits);
     virtual ~ScPivotLayoutTreeListData();
-    virtual bool DoubleClickHdl() SAL_OVERRIDE;
+    virtual sal_Bool DoubleClickHdl() SAL_OVERRIDE;
 
     void FillDataField(ScPivotFieldVector& rDataFields);
     void PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames);

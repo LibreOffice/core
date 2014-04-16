@@ -48,7 +48,7 @@ sal_Int8 ScPivotLayoutTreeListBase::AcceptDrop(const AcceptDropEvent& rEvent)
     return SvTreeListBox::AcceptDrop(rEvent);
 }
 
-bool ScPivotLayoutTreeListBase::NotifyAcceptDrop(SvTreeListEntry* /*pEntry*/)
+sal_Bool ScPivotLayoutTreeListBase::NotifyAcceptDrop(SvTreeListEntry* /*pEntry*/)
 {
     return true;
 }

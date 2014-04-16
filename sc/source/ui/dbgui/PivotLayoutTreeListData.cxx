@@ -71,7 +71,7 @@ ScPivotLayoutTreeListData::ScPivotLayoutTreeListData(Window* pParent, WinBits nB
 ScPivotLayoutTreeListData::~ScPivotLayoutTreeListData()
 {}
 
-bool ScPivotLayoutTreeListData::DoubleClickHdl()
+sal_Bool ScPivotLayoutTreeListData::DoubleClickHdl()
 {
     ScItemValue* pCurrentItemValue = (ScItemValue*) GetCurEntry()->GetUserData();
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
@@ -84,7 +84,7 @@ bool ScPivotLayoutTreeListData::DoubleClickHdl()
     ScAbstractDialogFactory* pFactory = ScAbstractDialogFactory::Create();
 
     boost::scoped_ptr<AbstractScDPFunctionDlg> pDialog(
-        pFactory->CreateScDPFunctionDlg(this, mpParent->GetLabelDataVector(), *pCurrentLabelData, rCurrentFunctionData));
+        pFactory->CreateScDPFunctionDlg(this, RID_SCDLG_DPDATAFIELD, mpParent->GetLabelDataVector(), *pCurrentLabelData, rCurrentFunctionData));
 
     if (pDialog->Execute() == RET_OK)
     {

@@ -57,7 +57,7 @@ OUString lclFunctName(const sal_uInt16 nFunctionMask)
     return OUString();
 }
 
-bool ScPivotLayoutTreeList::DoubleClickHdl()
+sal_Bool ScPivotLayoutTreeList::DoubleClickHdl()
 {
     ScItemValue* pCurrentItemValue = (ScItemValue*) GetCurEntry()->GetUserData();
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
@@ -76,7 +76,7 @@ bool ScPivotLayoutTreeList::DoubleClickHdl()
     mpParent->PushDataFieldNames(aDataFieldNames);
 
     boost::scoped_ptr<AbstractScDPSubtotalDlg> pDialog(
-        pFactory->CreateScDPSubtotalDlg(this, mpParent->maPivotTableObject, *pCurrentLabelData, rCurrentFunctionData, aDataFieldNames, true));
+        pFactory->CreateScDPSubtotalDlg(this, RID_SCDLG_PIVOTSUBT, mpParent->maPivotTableObject, *pCurrentLabelData, rCurrentFunctionData, aDataFieldNames, true));
 
     if (pDialog->Execute() == RET_OK)
     {

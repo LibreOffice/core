@@ -366,7 +366,7 @@ void ScPivotLayoutDialog::SetReference(const ScRange& rReferenceRange, ScDocumen
     }
 }
 
-bool ScPivotLayoutDialog::IsRefInputMode() const
+sal_Bool ScPivotLayoutDialog::IsRefInputMode() const
 {
     return mbDialogLostFocus;
 }

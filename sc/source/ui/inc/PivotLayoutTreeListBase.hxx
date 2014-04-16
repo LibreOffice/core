@@ -47,7 +47,7 @@ public:
     virtual ~ScPivotLayoutTreeListBase();
 
     virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvent) SAL_OVERRIDE;
-    virtual bool NotifyAcceptDrop(SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual sal_Bool NotifyAcceptDrop(SvTreeListEntry* pEntry) SAL_OVERRIDE;
     virtual sal_Bool NotifyMoving(SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
                                   SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos) SAL_OVERRIDE;
     virtual sal_Bool NotifyCopying(SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
