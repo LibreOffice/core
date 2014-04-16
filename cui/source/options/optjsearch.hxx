@@ -54,7 +54,7 @@ private:
     CheckBox*   m_pIgnoreMiddleDot;
 
     sal_Int32       nTransliterationFlags;
-    sal_Bool        bSaveOptions;
+    bool        bSaveOptions;
 
     sal_Int32               GetTransliterationFlags_Impl();
 
@@ -69,8 +69,8 @@ public:
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
 
-    sal_Bool                IsSaveOptions() const           { return bSaveOptions; }
-    void                EnableSaveOptions( sal_Bool bVal )  { bSaveOptions = bVal; }
+    bool                IsSaveOptions() const           { return bSaveOptions; }
+    void                EnableSaveOptions( bool bVal )  { bSaveOptions = bVal; }
 
     sal_Int32               GetTransliterationFlags() const { return nTransliterationFlags; }
     void                SetTransliterationFlags( sal_Int32 nSettings );

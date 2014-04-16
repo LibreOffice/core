@@ -84,7 +84,7 @@ SvxNumberPreview::SvxNumberPreview(Window* pParent, WinBits nStyle)
     aFont.SetTransparent( true );
     aFont.SetColor( Application::GetSettings().GetStyleSettings().GetFieldColor() );
     SetFont( aFont );
-    InitSettings( sal_True, sal_True );
+    InitSettings( true, true );
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
@@ -164,7 +164,7 @@ void SvxNumberPreview::Paint( const Rectangle& )
 
 
 
-void SvxNumberPreview::InitSettings( sal_Bool bForeground, sal_Bool bBackground )
+void SvxNumberPreview::InitSettings( bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -193,9 +193,9 @@ void SvxNumberPreview::InitSettings( sal_Bool bForeground, sal_Bool bBackground 
 void SvxNumberPreview::StateChanged( StateChangedType nType )
 {
     if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
-        InitSettings( sal_True, sal_False );
+        InitSettings( true, false );
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
-        InitSettings( sal_False, sal_True );
+        InitSettings( false, true );
 
     Window::StateChanged( nType );
 }
@@ -207,7 +207,7 @@ void SvxNumberPreview::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 
     if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
-        InitSettings( sal_True, sal_True );
+        InitSettings( true, true );
 }
 
 // class SvxNumberFormatTabPage ------------------------------------------
@@ -275,8 +275,8 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 
 void SvxNumberFormatTabPage::Init_Impl()
 {
-    bNumItemFlag=sal_True;
-    bOneAreaFlag=sal_False;
+    bNumItemFlag=true;
+    bOneAreaFlag=false;
 
     m_pIbAdd->Enable(false );
     m_pIbRemove->Enable(false );
@@ -405,7 +405,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
         }
         else
         {
-            HideLanguage(sal_False);
+            HideLanguage(false);
         }
 
     }
@@ -416,17 +416,17 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     {
         if(pNumItem==NULL)
         {
-            bNumItemFlag=sal_True;
+            bNumItemFlag=true;
             pNumItem= (SvxNumberInfoItem *) pItem->Clone();
         }
         else
         {
-            bNumItemFlag=sal_False;
+            bNumItemFlag=false;
         }
     }
     else
     {
-        bNumItemFlag=sal_False;
+        bNumItemFlag=false;
     }
 
 
@@ -458,7 +458,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        sal_Bool bInit = sal_False;     // set to sal_True for debug test
+        bool bInit = false;     // set to sal_True for debug test
         m_pCbSourceFormat->Check( bInit );
         m_pCbSourceFormat->Enable( bInit );
         m_pCbSourceFormat->Show( bInit );
@@ -560,7 +560,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     m_pLbLanguage->SelectLanguage( eLangType );
     if(pAutoEntryAttr)
         AddAutomaticLanguage_Impl(eLangType, pAutoEntryAttr->GetValue());
-    UpdateFormatListBox_Impl(sal_False,sal_True);
+    UpdateFormatListBox_Impl(sal_False,true);
 
 //! This spoils everything because it rematches currency formats based on
 //! the selected m_pLbCurrency entry instead of the current format.
@@ -634,7 +634,7 @@ void SvxNumberFormatTabPage::Obstructing()
 #************************************************************************/
 void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
 {
-    sal_Bool bEnable = !m_pCbSourceFormat->IsChecked();
+    bool bEnable = !m_pCbSourceFormat->IsChecked();
     if ( !bEnable )
         m_pCbSourceFormat->GrabFocus();
     m_pFtCategory->Enable( bEnable );
@@ -667,7 +667,7 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
 #*
 #************************************************************************/
 
-void SvxNumberFormatTabPage::HideLanguage(sal_Bool nFlag)
+void SvxNumberFormatTabPage::HideLanguage(bool nFlag)
 {
     m_pFtLanguage->Show(!nFlag);
     m_pLbLanguage->Show(!nFlag);
@@ -688,7 +688,7 @@ void SvxNumberFormatTabPage::HideLanguage(sal_Bool nFlag)
 
 bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 {
-    sal_Bool bDataChanged   = m_pFtLanguage->IsEnabled() || m_pCbSourceFormat->IsEnabled();
+    bool bDataChanged   = m_pFtLanguage->IsEnabled() || m_pCbSourceFormat->IsEnabled();
     if ( bDataChanged )
     {
         const SfxItemSet& rMyItemSet = GetItemSet();
@@ -742,7 +742,7 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             pNumFmtShell->GetUpdateData( pDelArr.get(), nDelCount );
             pNumItem->SetDelFormatArray( pDelArr.get(), nDelCount );
 
-            if(bNumItemFlag==sal_True)
+            if(bNumItemFlag)
             {
                 rCoreAttrs.Put( *pNumItem );
             }
@@ -767,10 +767,10 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             SfxItemState _eItemState = rMyItemSet.GetItemState( _nWhich, false );
             const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
                         GetItem( rMyItemSet, SID_ATTR_NUMBERFORMAT_SOURCE );
-            sal_Bool bOld = (pBoolItem ? pBoolItem->GetValue() : sal_False);
+            bool bOld = pBoolItem && pBoolItem->GetValue();
             rCoreAttrs.Put( SfxBoolItem( _nWhich, m_pCbSourceFormat->IsChecked() ) );
             if ( !bDataChanged )
-                bDataChanged = (bOld != (sal_Bool) m_pCbSourceFormat->IsChecked() ||
+                bDataChanged = (bOld != m_pCbSourceFormat->IsChecked() ||
                     _eItemState != SFX_ITEM_SET);
         }
 
@@ -878,7 +878,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
 #*
 #************************************************************************/
 
-void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sal_False*/ )
+void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_False*/ )
 {
     OUString  theFormat           = m_pEdFormat->GetText();
     sal_Int32   nCurCategory        = m_pLbCategory->GetSelectEntryPos();
@@ -897,7 +897,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sa
                               bThousand, bNegRed,
                               nDecimals, nZeroes,
                               nCategory );
-    sal_Bool bDoIt=sal_False;
+    bool bDoIt=false;
     if(nCategory==CAT_CURRENCY)
     {
         sal_uInt16 nTstPos=pNumFmtShell->FindCurrencyFormat(theFormat);
@@ -905,7 +905,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sa
         {
             m_pLbCurrency->SelectEntryPos(nTstPos);
             pNumFmtShell->SetCurrencySymbol(nTstPos);
-            bDoIt=sal_True;
+            bDoIt=true;
         }
     }
 
@@ -920,7 +920,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sa
             else
                 SetCategory(nCategory );
 
-            UpdateFormatListBox_Impl( sal_True, sal_False );
+            UpdateFormatListBox_Impl( sal_True, false );
         }
     }
     else if ( m_pLbFormat->GetEntryCount() > 0 )
@@ -994,7 +994,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sa
 void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
     (
         sal_uInt16 bCat,        // Category or country/language ListBox?
-        sal_Bool   bUpdateEdit
+        bool   bUpdateEdit
     )
 {
     std::vector<OUString> aEntryList;
@@ -1200,7 +1200,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         if ( pNumFmtShell->FindEntry( aFormat) )
         {
             m_pIbAdd->Enable(false );
-            sal_Bool bIsUserDef=pNumFmtShell->IsUserDefined( aFormat );
+            bool bIsUserDef=pNumFmtShell->IsUserDefined( aFormat );
             m_pIbRemove->Enable(bIsUserDef);
             m_pIbInfo->Enable(bIsUserDef);
 
@@ -1213,7 +1213,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
             m_pFtComment->SetText(m_pEdComment->GetText());
 
         }
-        UpdateOptions_Impl( sal_False );
+        UpdateOptions_Impl( false );
 
         return 0;
     }
@@ -1222,9 +1222,9 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
     // category-ListBox -------------------------------------------------
     if (pLb == m_pLbCategory || pLb == m_pLbCurrency)
     {
-        UpdateFormatListBox_Impl( sal_True, sal_True );
+        UpdateFormatListBox_Impl( sal_True, true );
         EditHdl_Impl( NULL );
-        UpdateOptions_Impl( sal_False );
+        UpdateOptions_Impl( false );
 
         return 0;
     }
@@ -1233,7 +1233,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
     // language/country-ListBox ----------------------------------------------
     if (pLb == m_pLbLanguage)
     {
-        UpdateFormatListBox_Impl( sal_False, sal_True );
+        UpdateFormatListBox_Impl( sal_False, true );
         EditHdl_Impl(m_pEdFormat);
 
         return 0;
@@ -1256,8 +1256,8 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
 
 IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
 {
-    sal_Bool        bAdded = sal_False;
-    sal_Bool        bDeleted = sal_False;
+    bool        bAdded = false;
+    bool        bDeleted = false;
     sal_uLong       nReturn = 0;
     const sal_uLong nReturnChanged  = 0x1;  // THE boolean return value
     const sal_uLong nReturnAdded    = 0x2;  // temp: format added
@@ -1448,7 +1448,7 @@ IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
         if ( pNumFmtShell->FindEntry( aFormat, &nCurKey ) )
         {
             m_pIbAdd->Enable(false );
-            sal_Bool bUserDef=pNumFmtShell->IsUserDefined( aFormat );
+            bool bUserDef=pNumFmtShell->IsUserDefined( aFormat );
 
             m_pIbRemove->Enable(bUserDef);
             m_pIbInfo->Enable(bUserDef);
@@ -1480,7 +1480,7 @@ IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
     if ( pEdFormat )
     {
         pNumFmtShell->SetCurNumFmtKey( nCurKey );
-        UpdateOptions_Impl( sal_True );
+        UpdateOptions_Impl( true );
     }
 
     return 0;
@@ -1506,9 +1506,9 @@ IMPL_LINK( SvxNumberFormatTabPage, OptHdl_Impl, void *, pOptCtrl )
         || (pOptCtrl == m_pBtnThousand) )
     {
         OUString          aFormat;
-        sal_Bool          bThousand     =    m_pBtnThousand->IsEnabled()
+        bool          bThousand     =    m_pBtnThousand->IsEnabled()
                                       && m_pBtnThousand->IsChecked();
-        sal_Bool          bNegRed       =    m_pBtnNegRed->IsEnabled()
+        bool          bNegRed       =    m_pBtnNegRed->IsEnabled()
                                       && m_pBtnNegRed->IsChecked();
         sal_uInt16        nPrecision    = (m_pEdDecimals->IsEnabled())
                                         ? (sal_uInt16)m_pEdDecimals->GetValue()
@@ -1528,7 +1528,7 @@ IMPL_LINK( SvxNumberFormatTabPage, OptHdl_Impl, void *, pOptCtrl )
         if ( pNumFmtShell->FindEntry( aFormat ) )
         {
             m_pIbAdd->Enable(false );
-            sal_Bool bUserDef=pNumFmtShell->IsUserDefined( aFormat );
+            bool bUserDef=pNumFmtShell->IsUserDefined( aFormat );
             m_pIbRemove->Enable(bUserDef);
             m_pIbInfo->Enable(bUserDef);
             EditHdl_Impl(m_pEdFormat);
@@ -1711,7 +1711,7 @@ void SvxNumberFormatTabPage::SetCategory(sal_uInt16 nPos)
    which marks a certain language as automatically detected
    Additionally the "Default" language is removed
 */
-void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, sal_Bool bSelect)
+void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, bool bSelect)
 {
     m_pLbLanguage->RemoveLanguage(LANGUAGE_SYSTEM);
     sal_uInt16 nPos = m_pLbLanguage->InsertEntry(sAutomaticEntry);

@@ -183,7 +183,7 @@ IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl)
 
 
 GraphicFilterMosaic::GraphicFilterMosaic( Window* pParent, const Graphic& rGraphic,
-                                          sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges )
+                                          sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges )
     : GraphicFilterDialog(pParent, "MosaicDialog",
         "cui/ui/mosaicdialog.ui", rGraphic)
 {
@@ -292,7 +292,7 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
 
 
 GraphicFilterSolarize::GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
-                                              sal_uInt8 cGreyThreshold, sal_Bool bInvert )
+                                              sal_uInt8 cGreyThreshold, bool bInvert )
     : GraphicFilterDialog(pParent, "SolarizeDialog",
         "cui/ui/solarizedialog.ui", rGraphic)
 {

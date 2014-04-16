@@ -61,7 +61,7 @@ class SvxHyphenWordDialog : public SfxModalDialog
     sal_uInt16          nHyphPos;
     sal_uInt16          nOldPos;
     sal_Int32           nHyphenationPositionsOffset;
-    sal_Bool            bBusy;
+    bool            bBusy;
 
 
     void            EnableLRBtn_Impl();

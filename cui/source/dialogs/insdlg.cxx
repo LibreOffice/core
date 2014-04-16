@@ -82,9 +82,9 @@ static OUString impl_getSvtResString( sal_uInt32 nId )
     return aRet;
 }
 
-sal_Bool InsertObjectDialog_Impl::IsCreateNew() const
+bool InsertObjectDialog_Impl::IsCreateNew() const
 {
-    return sal_False;
+    return false;
 }
 
 uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( OUString* /*pGraphicMediaType*/ )
@@ -216,8 +216,8 @@ short SvInsertOleDlg::Execute()
     if ( m_xStorage.is() && ( nRet = Dialog::Execute() ) == RET_OK )
     {
         OUString aFileName;
-        sal_Bool bLink = sal_False;
-        sal_Bool bCreateNew = IsCreateNew();
+        bool bLink = false;
+        bool bCreateNew = IsCreateNew();
         if ( bCreateNew )
         {
             // create and insert new embedded object
@@ -523,7 +523,7 @@ void SfxInsertFloatingFrameDialog::Init()
 short SfxInsertFloatingFrameDialog::Execute()
 {
     short nRet = RET_OK;
-    sal_Bool bOK = sal_False;
+    bool bOK = false;
     uno::Reference < beans::XPropertySet > xSet;
     if ( m_xObj.is() )
     {
@@ -567,11 +567,11 @@ short SfxInsertFloatingFrameDialog::Execute()
             else
                 m_pNMMarginHeight->SetText( OUString::number( nSize ) );
 
-            sal_Bool bScrollOn = sal_False;
-            sal_Bool bScrollOff = sal_False;
-            sal_Bool bScrollAuto = sal_False;
+            bool bScrollOn = false;
+            bool bScrollOff = false;
+            bool bScrollAuto = false;
 
-            sal_Bool bSet = sal_False;
+            bool bSet = false;
             aAny = xSet->getPropertyValue( "FrameIsAutoScroll" );
             aAny >>= bSet;
             if ( !bSet )
@@ -582,13 +582,13 @@ short SfxInsertFloatingFrameDialog::Execute()
                 bScrollOff = !bSet;
             }
             else
-                bScrollAuto = sal_True;
+                bScrollAuto = true;
 
             m_pRBScrollingOn->Check( bScrollOn );
             m_pRBScrollingOff->Check( bScrollOff );
             m_pRBScrollingAuto->Check( bScrollAuto );
 
-            bSet = sal_False;
+            bSet = false;
             aAny = xSet->getPropertyValue( "FrameIsAutoBorder" );
             aAny >>= bSet;
             if ( !bSet )
@@ -600,7 +600,7 @@ short SfxInsertFloatingFrameDialog::Execute()
             }
 
             SetUpdateMode( true );
-            bOK = sal_True;
+            bOK = true;
         }
         catch ( uno::Exception& )
         {
@@ -640,7 +640,7 @@ short SfxInsertFloatingFrameDialog::Execute()
         {
             try
             {
-                sal_Bool bIPActive = m_xObj->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE;
+                bool bIPActive = m_xObj->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE;
                 if ( bIPActive )
                     m_xObj->changeState( embed::EmbedStates::RUNNING );
 
@@ -653,7 +653,7 @@ short SfxInsertFloatingFrameDialog::Execute()
                 if ( m_pRBScrollingAuto->IsChecked() )
                     eScroll = ScrollingAuto;
 
-                sal_Bool bHasBorder = m_pRBFrameBorderOn->IsChecked();
+                bool bHasBorder = m_pRBFrameBorderOn->IsChecked();
 
                 long lMarginWidth;
                 if ( !m_pCBMarginWidthDefault->IsChecked() )
@@ -671,9 +671,9 @@ short SfxInsertFloatingFrameDialog::Execute()
                 xSet->setPropertyValue( "FrameName", makeAny( aName ) );
 
                 if ( eScroll == ScrollingAuto )
-                    xSet->setPropertyValue( "FrameIsAutoScroll", makeAny( sal_True ) );
+                    xSet->setPropertyValue( "FrameIsAutoScroll", makeAny( true ) );
                 else
-                    xSet->setPropertyValue( "FrameIsScrollingMode", makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
+                    xSet->setPropertyValue( "FrameIsScrollingMode", makeAny( eScroll == ScrollingYes ) );
 
                 xSet->setPropertyValue( "FrameIsBorder", makeAny( bHasBorder ) );
                 xSet->setPropertyValue( "FrameMarginWidth", makeAny( sal_Int32( lMarginWidth ) ) );

@@ -121,12 +121,12 @@ private:
 public:
 
     GraphicFilterMosaic(Window* pParent, const Graphic& rGraphic,
-        sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges);
+        sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges);
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     long            GetTileWidth() const { return static_cast<long>(mpMtrWidth->GetValue()); }
     long            GetTileHeight() const { return static_cast<long>(mpMtrHeight->GetValue()); }
-    sal_Bool        IsEnhanceEdges() const { return mpCbxEdges->IsChecked(); }
+    bool        IsEnhanceEdges() const { return mpCbxEdges->IsChecked(); }
 };
 
 
@@ -142,11 +142,11 @@ private:
 public:
 
     GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
-                                           sal_uInt8 nGreyThreshold, sal_Bool bInvert );
+                                           sal_uInt8 nGreyThreshold, bool bInvert );
 
     virtual Graphic     GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     sal_uInt8           GetGreyThreshold() const { return( (sal_uInt8) FRound( mpMtrThreshold->GetValue() * 2.55 ) ); }
-    sal_Bool            IsInvert() const { return mpCbxInvert->IsChecked(); }
+    bool            IsInvert() const { return mpCbxInvert->IsChecked(); }
 };
 
 

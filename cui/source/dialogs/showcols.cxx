@@ -84,7 +84,7 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
     {
         sCurName = "";
         xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
-        sal_Bool bIsHidden = sal_False;
+        bool bIsHidden = false;
         try
         {
             ::com::sun::star::uno::Any aHidden = xCurCol->getPropertyValue(CUIFM_PROP_HIDDEN);

@@ -90,7 +90,7 @@ namespace offapp
 
         // the global "enabled" flag
         Any aEnabled = aConnectionPoolRoot.getNodeValue(getEnablePoolingNodeName());
-        sal_Bool bEnabled = sal_True;
+        bool bEnabled = true;
         aEnabled >>= bEnabled;
         _rFillItems.Put(SfxBoolItem(SID_SB_POOLING_ENABLED, bEnabled));
 
@@ -103,7 +103,7 @@ namespace offapp
                 ++aLoopDrivers
             )
         {
-            aSettings.push_back(DriverPooling(*aLoopDrivers, sal_False, 120));
+            aSettings.push_back(DriverPooling(*aLoopDrivers, false, 120));
         }
 
         // then look for which of them settings are stored in the configuration
@@ -131,7 +131,7 @@ namespace offapp
 
             if (aLookup == aSettings.end())
             {   // do not know the driver - add it
-                aSettings.push_back(DriverPooling(sThisDriverName, sal_False, 120));
+                aSettings.push_back(DriverPooling(sThisDriverName, false, 120));
 
                 // and the position of the new entry
                 aLookup = aSettings.end();
@@ -157,7 +157,7 @@ namespace offapp
             // already asserted by the OConfigurationTreeRoot
             return;
 
-        sal_Bool bNeedCommit = sal_False;
+        bool bNeedCommit = false;
 
         // the global "enabled" flag
         SFX_ITEMSET_GET( _rSourceItems, pEnabled, SfxBoolItem, SID_SB_POOLING_ENABLED, true );
@@ -165,7 +165,7 @@ namespace offapp
         {
             sal_Bool bEnabled = pEnabled->GetValue();
             aConnectionPoolRoot.setNodeValue(getEnablePoolingNodeName(), Any(&bEnabled, ::getBooleanCppuType()));
-            bNeedCommit = sal_True;
+            bNeedCommit = true;
         }
 
         // the settings for the single drivers
@@ -199,7 +199,7 @@ namespace offapp
                 aThisDriverSettings.setNodeValue(getEnableNodeName(), Any(&aLoop->bEnabled, ::getBooleanCppuType()));
                 aThisDriverSettings.setNodeValue(getTimeoutNodeName(), makeAny(aLoop->nTimeoutSeconds));
             }
-            bNeedCommit = sal_True;
+            bNeedCommit = true;
         }
         if (bNeedCommit)
             aConnectionPoolRoot.commit();

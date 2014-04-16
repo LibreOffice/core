@@ -77,18 +77,18 @@ public:
 class SvxDictEdit : public Edit
 {
     Link    aActionLink;
-    sal_Bool    bSpaces;
+    bool    bSpaces;
 
     public:
                     SvxDictEdit(Window* pParent, const ResId& rResId) :
-                        Edit(pParent, rResId), bSpaces(sal_False){}
+                        Edit(pParent, rResId), bSpaces(false){}
                     SvxDictEdit(Window* pParent, WinBits aWB) :
-                        Edit(pParent, aWB), bSpaces(sal_False){}
+                        Edit(pParent, aWB), bSpaces(false){}
 
     void            SetActionHdl( const Link& rLink )
                                 { aActionLink = rLink;}
 
-    void            SetSpaces(sal_Bool bSet)
+    void            SetSpaces(bool bSet)
                                 {bSpaces = bSet;}
 
     virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
@@ -123,9 +123,9 @@ private:
 
     short               nOld;
     long                nWidth;
-    sal_Bool            bFirstSelect;
-    sal_Bool            bDoNothing;
-    sal_Bool                bDicIsReadonly;
+    bool            bFirstSelect;
+    bool            bDoNothing;
+    bool                bDicIsReadonly;
 
     DECL_LINK(SelectBookHdl_Impl, void *);
     DECL_LINK(SelectLangHdl_Impl, void *);
@@ -136,7 +136,7 @@ private:
 
     void            ShowWords_Impl( sal_uInt16 nId );
     void            SetLanguage_Impl( ::com::sun::star::util::Language nLanguage );
-    sal_Bool            IsDicReadonly_Impl() const { return bDicIsReadonly; }
+    bool            IsDicReadonly_Impl() const { return bDicIsReadonly; }
     void            SetDicReadonly_Impl( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XDictionary >  &xDic );
 

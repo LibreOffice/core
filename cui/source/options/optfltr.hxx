@@ -58,7 +58,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
         using SvTreeListBox::SetCheckButtonState;
         using SvSimpleTable::SetTabs;
 
-        void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked);
+        void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, bool bChecked);
         SvButtonState   GetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol ) const;
         void            SetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol, SvButtonState );
     protected:
@@ -88,7 +88,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
 
     void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType );
     void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
-                                     sal_Bool loadEnabled, sal_Bool saveEnabled );
+                                     bool loadEnabled, bool saveEnabled );
     SvTreeListEntry*    GetEntry4Type( sal_IntPtr _nType ) const;
 
 public:

@@ -527,7 +527,7 @@ bool GetToolbarItemData(
     OUString& rCommandURL,
     OUString& rLabel,
     sal_uInt16& rType,
-    sal_Bool& rIsVisible,
+    bool& rIsVisible,
     sal_Int32& rStyle,
     uno::Reference< container::XIndexAccess >& rSubMenu )
 {
@@ -603,7 +603,7 @@ ConvertSvxConfigEntry(
     aPropSeq[2].Name = aDescriptorLabel;
     if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
     {
-        sal_Bool isDefaultName = sal_False;
+        bool isDefaultName = false;
         try
         {
             uno::Any a( xCommandToLabelMap->getByName( pEntry->GetCommand() ) );
@@ -619,7 +619,7 @@ ConvertSvxConfigEntry(
 
                         if ( tmpLabel.equals( pEntry->GetName() ) )
                         {
-                            isDefaultName = sal_True;
+                            isDefaultName = true;
                         }
 
                         break;
@@ -681,7 +681,7 @@ ConvertToolbarEntry(
     aPropSeq[2].Name = aDescriptorLabel;
     if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
     {
-        sal_Bool isDefaultName = sal_False;
+        bool isDefaultName = false;
         try
         {
             uno::Any a( xCommandToLabelMap->getByName( pEntry->GetCommand() ) );
@@ -697,7 +697,7 @@ ConvertToolbarEntry(
 
                         if ( tmpLabel.equals( pEntry->GetName() ) )
                         {
-                            isDefaultName = sal_True;
+                            isDefaultName = true;
                         }
 
                         break;
@@ -2552,7 +2552,7 @@ IMPL_LINK( SvxMenuConfigPage, AddCommandsHdl, Button *, pButton )
     if ( m_pSelectorDlg == NULL )
     {
         // Create Script Selector which also shows builtin commands
-        m_pSelectorDlg = new SvxScriptSelectorDialog( this, sal_True, m_xFrame );
+        m_pSelectorDlg = new SvxScriptSelectorDialog( this, true, m_xFrame );
 
         m_pSelectorDlg->SetAddHdl(
             LINK( this, SvxMenuConfigPage, AddFunctionHdl ) );
@@ -4189,7 +4189,7 @@ bool ToolbarSaveInData::LoadToolbar(
         OUString                aCommandURL;
         OUString                aLabel;
         bool                    bIsUserDefined = true;
-        sal_Bool                bIsVisible;
+        bool                bIsVisible;
         sal_Int32               nStyle;
 
         sal_uInt16 nType( css::ui::ItemType::DEFAULT );
@@ -4475,7 +4475,7 @@ IMPL_LINK( SvxToolbarConfigPage, AddCommandsHdl, Button *, pButton )
     if ( m_pSelectorDlg == NULL )
     {
         // Create Script Selector which shows slot commands
-        m_pSelectorDlg = new SvxScriptSelectorDialog( this, sal_True, m_xFrame );
+        m_pSelectorDlg = new SvxScriptSelectorDialog( this, true, m_xFrame );
 
         // Position the Script Selector over the Add button so it is
         // beside the menu contents list and does not obscure it

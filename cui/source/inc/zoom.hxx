@@ -45,7 +45,7 @@ private:
 
     const SfxItemSet&   rSet;
     SfxItemSet*         pOutSet;
-    sal_Bool            bModified;
+    bool            bModified;
 
     DECL_LINK( UserHdl, RadioButton* );
     DECL_LINK(SpinHdl, void *);

@@ -316,12 +316,12 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
         OUString aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
         OUString aName( m_pEdtName->GetText() );
         long nCount = pLineEndList->Count();
-        sal_Bool bDifferent = sal_True;
+        bool bDifferent = true;
 
         // check whether the name is existing already
         for ( long i = 0; i < nCount && bDifferent; i++ )
             if ( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                bDifferent = sal_False;
+                bDifferent = false;
 
         // if yes, repeat and demand a new name
         if ( !bDifferent )
@@ -335,21 +335,21 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
             DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
-            sal_Bool bLoop = sal_True;
+            bool bLoop = true;
 
             while( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
             {
                 pDlg->GetName( aName );
-                bDifferent = sal_True;
+                bDifferent = true;
 
                 for( long i = 0; i < nCount && bDifferent; i++ )
                 {
                     if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                        bDifferent = sal_False;
+                        bDifferent = false;
                 }
 
                 if( bDifferent )
-                    bLoop = sal_False;
+                    bLoop = false;
                 else
                     aWarningBox.Execute();
             }
@@ -432,40 +432,40 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
 
         long nCount = pLineEndList->Count();
         long j = 1;
-        sal_Bool bDifferent = sal_False;
+        bool bDifferent = false;
 
         while ( !bDifferent )
         {
             aName = aNewName;
             aName += " ";
             aName += OUString::number( j++ );
-            bDifferent = sal_True;
+            bDifferent = true;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
                 if ( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                    bDifferent = sal_False;
+                    bDifferent = false;
         }
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
-        sal_Bool bLoop = sal_True;
+        bool bLoop = true;
 
         while ( bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
-            bDifferent = sal_True;
+            bDifferent = true;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                    bDifferent = sal_False;
+                    bDifferent = false;
             }
 
             if( bDifferent )
             {
-                bLoop = sal_False;
+                bLoop = false;
                 pEntry = new XLineEndEntry( aNewPolyPolygon, aName );
 
                 long nLineEndCount = pLineEndList->Count();

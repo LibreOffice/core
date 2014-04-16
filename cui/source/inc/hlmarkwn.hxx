@@ -62,7 +62,7 @@ private:
     PushButton      maBtClose;
     SvxHlmarkTreeLBox maLbTree;
 
-    sal_Bool            mbUserMoved;
+    bool            mbUserMoved;
 
     SvxHyperlinkTabPageBase* mpParent;
 
@@ -71,7 +71,7 @@ private:
     sal_uInt16          mnError;
 
 protected:
-    sal_Bool RefreshFromDoc( const OUString& aURL );
+    bool RefreshFromDoc( const OUString& aURL );
     void RestoreLastSelection();
 
     SvTreeListEntry* FindEntry(const OUString& aStrName);
@@ -87,11 +87,11 @@ public:
     SvxHlinkDlgMarkWnd (SvxHyperlinkTabPageBase *pParent);
     virtual ~SvxHlinkDlgMarkWnd();
 
-    sal_Bool MoveTo ( Point aNewPos );
+    bool MoveTo ( Point aNewPos );
     void RefreshTree(const OUString& aStrURL);
     bool SelectEntry(const OUString& aStrMark);
 
-    sal_Bool ConnectToDialog( sal_Bool bDoit = sal_True );
+    bool ConnectToDialog( bool bDoit = true );
 
     sal_uInt16 SetError( sal_uInt16 nError);
 };

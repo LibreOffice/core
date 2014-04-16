@@ -60,9 +60,9 @@ struct DocumentTypeData
     {}
 };
 
-sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUString& rBase, INetURLObject& aURLObject ) const
+bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUString& rBase, INetURLObject& aURLObject ) const
 {
-    sal_Bool bIsValidURL = !rPath.isEmpty();
+    bool bIsValidURL = !rPath.isEmpty();
     if ( bIsValidURL )
     {
         aURLObject.SetURL( rPath );
@@ -80,7 +80,7 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OU
         {
             OUString aBase( aURLObject.getName( INetURLObject::LAST_SEGMENT, false ) );
             if ( aBase.isEmpty() || ( aBase[0] == '.' ) )
-                bIsValidURL = sal_False;
+                bIsValidURL = false;
         }
         if ( bIsValidURL )
         {
@@ -261,10 +261,10 @@ void SvxHyperlinkNewDocTp::SetInitFocus()
 |*
 \************************************************************************/
 
-sal_Bool SvxHyperlinkNewDocTp::AskApply()
+bool SvxHyperlinkNewDocTp::AskApply()
 {
     INetURLObject aINetURLObject;
-    sal_Bool bRet = ImplGetURLObject( maCbbPath.GetText(), maCbbPath.GetBaseURL(), aINetURLObject );
+    bool bRet = ImplGetURLObject( maCbbPath.GetText(), maCbbPath.GetBaseURL(), aINetURLObject );
     if ( !bRet )
     {
         WarningBox aWarning( this, WB_OK, CUI_RESSTR(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) );
@@ -310,7 +310,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                 com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
                 SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, xHandler );
 
-                sal_Bool bOk = pIStm && ( pIStm->GetError() == 0);
+                bool bOk = pIStm && ( pIStm->GetError() == 0);
 
                 if( pIStm )
                     delete pIStm;
@@ -407,19 +407,19 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
     utl::LocalFileHelper::ConvertSystemPathToURL( aTempStrURL, maCbbPath.GetBaseURL(), aStrURL );
 
     OUString            aStrPath = aStrURL;
-    sal_Bool            bZeroPath = aStrPath.isEmpty();
-    sal_Bool            bHandleFileName = bZeroPath;    // when path has length of 0, then the rest should always be handled
+    bool            bZeroPath = aStrPath.isEmpty();
+    bool            bHandleFileName = bZeroPath;    // when path has length of 0, then the rest should always be handled
                                                         //  as file name, otherwise we do not yet know
 
     if( bZeroPath )
         aStrPath = SvtPathOptions().GetWorkPath();
     else if( !::utl::UCBContentHelper::IsFolder( aStrURL ) )
-        bHandleFileName = sal_True;
+        bHandleFileName = true;
 
     xFolderPicker->setDisplayDirectory( aStrPath );
-    DisableClose( sal_True );
+    DisableClose( true );
     sal_Int16 nResult = xFolderPicker->execute();
-    DisableClose( sal_False );
+    DisableClose( false );
     if( ExecutableDialogResults::OK == nResult )
     {
         sal_Char const  sSlash[] = "/";

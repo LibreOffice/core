@@ -59,16 +59,16 @@ static OUString getNormDicEntry_Impl(const OUString &rText)
     if (aTmp.indexOf('[') > -1)
     {
         OUStringBuffer aTmp2 ( aTmp.getLength() );
-        sal_Bool bSkip = sal_False;
+        bool bSkip = false;
         for (sal_Int32 i = 0; i < aTmp.getLength(); i++)
         {
             sal_Unicode cTmp = aTmp[i];
             if (cTmp == '[')
-                bSkip = sal_True;
+                bSkip = true;
             else if (!bSkip)
                 aTmp2.append( cTmp );
             else if (cTmp == ']')
-                bSkip = sal_False;
+                bSkip = false;
         }
         aTmp = aTmp2.makeStringAndClear();
     }
@@ -133,11 +133,11 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
     const Reference< XDictionary >  *pDic = aDics.getConstArray();
     sal_Int32 nCount = aDics.getLength();
 
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     sal_Int32 i;
     for (i = 0; !bFound && i < nCount; ++i )
         if ( sDict.equalsIgnoreAsciiCase( pDic[i]->getName()) )
-            bFound = sal_True;
+            bFound = true;
 
     if ( bFound )
     {
@@ -227,8 +227,8 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     aDecoView       ( this),
     xSpell          ( xSpl ),
     nOld            ( NOACTDICT ),
-    bFirstSelect    (sal_True),
-    bDoNothing      (sal_False)
+    bFirstSelect    (true),
+    bDoNothing      (false)
 
 {
     get(pAllDictsLB,"book");
@@ -294,8 +294,8 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
 
     pLangLB->SetLanguageList( LANG_LIST_ALL, true, true );
 
-    pReplaceED->SetSpaces(sal_True);
-    pWordED->SetSpaces(sal_True);
+    pReplaceED->SetSpaces(true);
+    pWordED->SetSpaces(true);
 
     if ( nCount > 0 )
     {
@@ -315,7 +315,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
 
         // check if dictionary is read-only
         SetDicReadonly_Impl(xDic);
-        sal_Bool bEnable = !IsDicReadonly_Impl();
+        bool bEnable = !IsDicReadonly_Impl();
         pNewReplacePB->Enable( false );
         pDeletePB->Enable( false );
         pLangFT->Enable( bEnable );
@@ -354,7 +354,7 @@ void SvxEditDictionaryDialog::SetDicReadonly_Impl(
             Reference< XDictionary >  &xDic )
 {
     // enable or disable new and delete button according to file attributes
-    bDicIsReadonly = sal_True;
+    bDicIsReadonly = true;
     if (xDic.is())
     {
         Reference< frame::XStorable >  xStor( xDic, UNO_QUERY );
@@ -362,7 +362,7 @@ void SvxEditDictionaryDialog::SetDicReadonly_Impl(
             || !xStor->hasLocation()    // not yet persistent
             || !xStor->isReadonly() )
         {
-            bDicIsReadonly = sal_False;
+            bDicIsReadonly = false;
         }
     }
 }
@@ -432,7 +432,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl)
             SetLanguage_Impl( LanguageTag( xDic->getLocale() ).getLanguageType() );
 
         SetDicReadonly_Impl(xDic);
-        sal_Bool bEnable = !IsDicReadonly_Impl();
+        bool bEnable = !IsDicReadonly_Impl();
         pLangFT->Enable( bEnable );
         pLangLB->Enable( bEnable );
     }
@@ -563,7 +563,7 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
             pReplaceED->SetText(pBox->GetEntryText(pEntry, 1));
         }
         else
-            bFirstSelect = sal_False;
+            bFirstSelect = false;
 
         // entries in the list box should exactly correspond to those from the
         // dictionary. Thus:
@@ -609,7 +609,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 
                 //! ...IsVisible should reflect whether the dictionary is a negativ
                 //! or not (hopefully...)
-                sal_Bool bIsNegEntry = pReplaceFT->IsVisible();
+                bool bIsNegEntry = pReplaceFT->IsVisible();
                 OUString aRplcText;
                 if(bIsNegEntry)
                     aRplcText = aReplaceStr;
@@ -681,16 +681,16 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
     sal_Int32 nWordLen = rEntry.getLength();
     const OUString& rRepString = pReplaceED->GetText();
 
-    sal_Bool bEnableNewReplace  = sal_False;
-    sal_Bool bEnableDelete      = sal_False;
+    bool bEnableNewReplace  = false;
+    bool bEnableDelete      = false;
     OUString aNewReplaceText  = sNew;
 
     if(pEdt == pWordED)
     {
         if(nWordLen>0)
         {
-            sal_Bool bFound = sal_False;
-            sal_Bool bTmpSelEntry=sal_False;
+            bool bFound = false;
+            bool bTmpSelEntry=false;
             CDE_RESULT eCmpRes = CDE_DIFFERENT;
 
             for(sal_uLong i = 0; i < pWordsLB->GetEntryCount(); i++)
@@ -701,32 +701,32 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
                 if(CDE_DIFFERENT != eCmpRes)
                 {
                     if(!rRepString.isEmpty())
-                        bFirstSelect = sal_True;
-                    bDoNothing=sal_True;
+                        bFirstSelect = true;
+                    bDoNothing=true;
                     pWordsLB->SetCurEntry(pEntry);
-                    bDoNothing=sal_False;
+                    bDoNothing=false;
                     pFirstSel = pEntry;
                     pReplaceED->SetText(pWordsLB->GetEntryText(pEntry, 1));
 
                     if (CDE_SIMILAR == eCmpRes)
                     {
                         aNewReplaceText = sModify;
-                        bEnableNewReplace = sal_True;
+                        bEnableNewReplace = true;
                     }
-                    bFound= sal_True;
+                    bFound= true;
                     break;
                 }
                 else if(getNormDicEntry_Impl(aTestStr).indexOf(
                             getNormDicEntry_Impl( rEntry ) ) == 0
                         && !bTmpSelEntry)
                 {
-                    bDoNothing=sal_True;
+                    bDoNothing=true;
                     pWordsLB->MakeVisible(pEntry);
-                    bDoNothing=sal_False;
-                    bTmpSelEntry=sal_True;
+                    bDoNothing=false;
+                    bTmpSelEntry=true;
 
                     aNewReplaceText = sNew;
-                    bEnableNewReplace = sal_True;
+                    bEnableNewReplace = true;
                 }
             }
 
@@ -736,16 +736,16 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
                 pFirstSel = 0;
 
                 aNewReplaceText = sNew;
-                bEnableNewReplace = sal_True;
+                bEnableNewReplace = true;
             }
             bEnableDelete = CDE_DIFFERENT != eCmpRes;
         }
         else if(pWordsLB->GetEntryCount()>0)
         {
             SvTreeListEntry*  pEntry = pWordsLB->GetEntry( 0 );
-            bDoNothing=sal_True;
+            bDoNothing=true;
             pWordsLB->MakeVisible(pEntry);
-            bDoNothing=sal_False;
+            bDoNothing=false;
         }
     }
     else if(pEdt == pReplaceED)
@@ -758,13 +758,13 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
             aReplaceText = pWordsLB->GetEntryText( pFirstSel, 1 );
 
             aNewReplaceText = sModify;
-            bEnableDelete = sal_True;
+            bEnableDelete = true;
         }
-        sal_Bool bIsChange =
+        bool bIsChange =
                 CDE_EQUAL != cmpDicEntry_Impl(pWordED->GetText(), aWordText)
              || CDE_EQUAL != cmpDicEntry_Impl(pReplaceED->GetText(), aReplaceText);
         if (!pWordED->GetText().isEmpty()  &&  bIsChange)
-            bEnableNewReplace = sal_True;
+            bEnableNewReplace = true;
     }
 
     pNewReplacePB->SetText( aNewReplaceText );

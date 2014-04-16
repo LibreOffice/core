@@ -65,7 +65,7 @@ private:
 
     void                        ImplSearch( const INetURLObject& rStartURL,
                                             const ::std::vector< OUString >& rFormats,
-                                            sal_Bool bRecursive );
+                                            bool bRecursive );
 
     virtual                     ~SearchThread();
     virtual void                execute() SAL_OVERRIDE;
@@ -253,10 +253,10 @@ class TPGalleryThemeProperties : public SfxTabPage
     INetURLObject           aURL;
     sal_uInt16              nCurFilterPos;
     sal_uInt16              nFirstExtFilterPos;
-    sal_Bool                bEntriesFound;
-    sal_Bool                bInputAllowed;
-    sal_Bool                bTakeAll;
-    sal_Bool                bSearchRecursive;
+    bool                bEntriesFound;
+    bool                bInputAllowed;
+    bool                bTakeAll;
+    bool                bSearchRecursive;
 
     ::com::sun::star::uno::Reference< ::svt::DialogClosedListener >                  xDialogListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >             xMediaPlayer;

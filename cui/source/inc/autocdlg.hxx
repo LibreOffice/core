@@ -80,8 +80,8 @@ class OfaACorrCheckListBox : public SvSimpleTable
         inline void SetUserData(sal_uLong nPos, void *pData ) { GetEntry(nPos)->SetUserData(pData); }
         inline sal_uLong GetSelectEntryPos() { return GetModel()->GetAbsPos(FirstSelected()); }
 
-        sal_Bool            IsChecked(sal_uLong nPos, sal_uInt16 nCol = 0);
-        void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked);
+        bool            IsChecked(sal_uLong nPos, sal_uInt16 nCol = 0);
+        void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, bool bChecked);
         SvButtonState   GetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol ) const;
         void            SetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol, SvButtonState );
 };
@@ -182,18 +182,18 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 class AutoCorrEdit : public Edit
 {
     Link    aActionLink;
-    sal_Bool    bSpaces;
+    bool    bSpaces;
 
     public:
                     AutoCorrEdit(Window* pParent, const ResId& rResId) :
-                        Edit(pParent, rResId), bSpaces(sal_False){}
+                        Edit(pParent, rResId), bSpaces(false){}
                     AutoCorrEdit(Window* pParent) :
-                        Edit(pParent), bSpaces(sal_False){}
+                        Edit(pParent), bSpaces(false){}
 
     void            SetActionHdl( const Link& rLink )
                                 { aActionLink = rLink;}
 
-    void            SetSpaces(sal_Bool bSet)
+    void            SetSpaces(bool bSet)
                                 {bSpaces = bSet;}
 
     virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
@@ -245,16 +245,16 @@ private:
         CharClass*              pCharClass;
         LanguageType            eLang;
 
-        sal_Bool bHasSelectionText;
-        sal_Bool bFirstSelect:1;
-        sal_Bool bReplaceEditChanged:1;
-        sal_Bool bSWriter:1;
+        bool bHasSelectionText;
+        bool bFirstSelect:1;
+        bool bReplaceEditChanged:1;
+        bool bSWriter:1;
 
         DECL_LINK(SelectHdl, SvTabListBox*);
         DECL_LINK(NewDelHdl, PushButton*);
         DECL_LINK(ModifyHdl, Edit*);
 
-        void RefillReplaceBox(  sal_Bool bFromReset,
+        void RefillReplaceBox(  bool bFromReset,
                                 LanguageType eOldLanguage,
                                 LanguageType eNewLanguage);
 
@@ -314,7 +314,7 @@ private:
     DECL_LINK(SelectHdl, ListBox*);
     DECL_LINK(ModifyHdl, Edit*);
                     /// Box filled with new language
-    void            RefillReplaceBoxes(sal_Bool bFromReset,
+    void            RefillReplaceBoxes(bool bFromReset,
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage);
 public:

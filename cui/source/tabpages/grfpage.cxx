@@ -195,7 +195,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
                         MapMode( (MapUnit)rSet.GetPool()->GetMetric( nW ) ) );
     }
 
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
     {
         OUString referer;
@@ -220,7 +220,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
                 m_pExampleWN->SetGraphic( *pGrf );
                 m_pExampleWN->SetFrameSize( aOrigSize );
 
-                bFound = sal_True;
+                bFound = true;
                 if( !((SvxBrushItem*)pItem)->GetGraphicLink().isEmpty() )
                     aGraphicName = ((SvxBrushItem*)pItem)->GetGraphicLink();
             }
@@ -228,9 +228,9 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
     }
 
     GraphicHasChanged( bFound );
-    bReset = sal_True;
+    bReset = true;
     ActivatePage( rSet );
-    bReset = sal_False;
+    bReset = false;
 }
 
 bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
@@ -293,7 +293,7 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
                     SID_ATTR_GRAF_KEEP_ZOOM), m_pZoomConstRB->IsChecked() ) );
     }
 
-    bInitialized = sal_False;
+    bInitialized = false;
 
     return bModified;
 }
@@ -305,7 +305,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     DBG_ASSERT( pPool, "Wo ist der Pool" );
 #endif
 
-    bSetOrigSize = sal_False;
+    bSetOrigSize = false;
 
     // Size
     Size aSize;
@@ -344,7 +344,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
             m_pHeightMF->SetValue(nHeight, FUNIT_TWIP);
     }
     m_pHeightMF->SaveValue();
-    bInitialized = sal_True;
+    bInitialized = true;
 
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
     {
@@ -373,7 +373,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
             CalcMinMaxBorder();
         }
         else
-            GraphicHasChanged( sal_False );
+            GraphicHasChanged( false );
     }
 
     CalcZoom();
@@ -466,7 +466,7 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
-    sal_Bool bZoom = m_pZoomConstRB->IsChecked();
+    bool bZoom = m_pZoomConstRB->IsChecked();
     if( pField == m_pLeftMF || pField == m_pRightMF )
     {
         long nLeft = lcl_GetValue( *m_pLeftMF, eUnit );
@@ -553,7 +553,7 @@ IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl)
     m_pHeightMF->SetValue( m_pHeightMF->Normalize( nHeight ), eUnit );
     m_pWidthZoomMF->SetValue(100);
     m_pHeightZoomMF->SetValue(100);
-    bSetOrigSize = sal_True;
+    bSetOrigSize = true;
     return 0;
 }
 /*--------------------------------------------------------------------
@@ -618,7 +618,7 @@ void SvxGrfCropPage::CalcMinMaxBorder()
                    fill FixedText with the original size
  --------------------------------------------------------------------*/
 
-void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
+void SvxGrfCropPage::GraphicHasChanged( bool bFound )
 {
     if( bFound )
     {

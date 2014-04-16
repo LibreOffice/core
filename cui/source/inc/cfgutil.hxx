@@ -65,7 +65,7 @@ struct SfxStylesInfo_Impl
         SfxStylesInfo_Impl();
         void setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
 
-        sal_Bool parseStyleCommand(SfxStyleInfo_Impl& aStyle);
+        bool parseStyleCommand(SfxStyleInfo_Impl& aStyle);
         void getLabel4Style(SfxStyleInfo_Impl& aStyle);
 
         ::std::vector< SfxStyleInfo_Impl > getStyleFamilies();
@@ -85,12 +85,12 @@ struct SfxGroupInfo_Impl
     sal_uInt16  nKind;
     sal_uInt16  nUniqueID;
     void*       pObject;
-    sal_Bool    bWasOpened;
+    bool    bWasOpened;
     OUString    sCommand;
     OUString    sLabel;
 
                 SfxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, void* pObj = 0 ) :
-                    nKind( n ), nUniqueID( nr ), pObject( pObj ), bWasOpened(sal_False) {}
+                    nKind( n ), nUniqueID( nr ), pObject( pObj ), bWasOpened(false) {}
 };
 
 struct CuiMacroInfo
@@ -160,7 +160,7 @@ class SfxConfigGroupListBox : public SvTreeListBox
 
 protected:
     virtual void        RequestingChildren( SvTreeListEntry *pEntry) SAL_OVERRIDE;
-    virtual sal_Bool        Expand( SvTreeListEntry* pParent );
+    virtual bool        Expand( SvTreeListEntry* pParent );
 
 public:
     SfxConfigGroupListBox(Window* pParent, WinBits nStyle);
@@ -173,7 +173,7 @@ public:
                              bool bEventMode);
     void                SetFunctionListBox( SfxConfigFunctionListBox *pBox )
                         { pFunctionListBox = pBox; }
-    void                Open( SvTreeListEntry*, sal_Bool );
+    void                Open( SvTreeListEntry*, bool );
     void                GroupSelected();
     void                SelectMacro( const SfxMacroInfoItem* );
     void                SelectMacro( const OUString&, const OUString& );

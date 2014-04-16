@@ -1081,7 +1081,7 @@ SfxTabPage* SvxColorOptionsTabPage::Create( Window* pParent, const SfxItemSet& r
 
 bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
 {
-    bFillItemSetCalled = sal_True;
+    bFillItemSetCalled = true;
     if(m_pColorSchemeLB->GetSavedValue() != m_pColorSchemeLB->GetSelectEntryPos())
     {
         pColorConfig->SetModified();

@@ -129,9 +129,9 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
     mpFtText                ( NULL ),
     mpEdText                ( NULL ),
     mpBtScript              ( NULL ),
-    mbIsCloseDisabled       ( sal_False ),
+    mbIsCloseDisabled       ( false ),
     mpDialog                ( pParent ),
-    mbStdControlsInit       ( sal_False ),
+    mbStdControlsInit       ( false ),
     aEmptyStr()
 {
     // create bookmark-window
@@ -169,7 +169,7 @@ void SvxHyperlinkTabPageBase::DeactivatePage()
     TabPage::DeactivatePage();
 }
 
-sal_Bool SvxHyperlinkTabPageBase::QueryClose()
+bool SvxHyperlinkTabPageBase::QueryClose()
 {
     return !mbIsCloseDisabled;
 }
@@ -196,16 +196,16 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
         mpBtScript->SetAccessibleRelationLabeledBy( mpFtForm );
     }
 
-    mbStdControlsInit = sal_True;
+    mbStdControlsInit = true;
 }
 
 // Move Extra-Window
-sal_Bool SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos, sal_Bool bDisConnectDlg )
+bool SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos, bool bDisConnectDlg )
 {
-    sal_Bool bReturn =  mpMarkWnd->MoveTo ( aNewPos );
+    bool bReturn =  mpMarkWnd->MoveTo ( aNewPos );
 
     if( bDisConnectDlg )
-        mpMarkWnd->ConnectToDialog( sal_False );
+        mpMarkWnd->ConnectToDialog( false );
 
     return ( !bReturn && IsMarkWndVisible() );
 }
@@ -233,7 +233,7 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd ()
         {
             // Pos Extrawindow anywhere
             MoveToExtraWnd( Point(10,10) );  // very unlikely
-            mpMarkWnd->ConnectToDialog( sal_False );
+            mpMarkWnd->ConnectToDialog( false );
         }
         else
         {
@@ -297,10 +297,10 @@ void SvxHyperlinkTabPageBase::DoApply ()
 }
 
 // Ask page whether an insert is possible
-sal_Bool SvxHyperlinkTabPageBase::AskApply ()
+bool SvxHyperlinkTabPageBase::AskApply ()
 {
     // default-implementation
-    return sal_True;
+    return true;
 }
 
 // This method would be called from bookmark-window to set new mark-string
@@ -316,7 +316,7 @@ void SvxHyperlinkTabPageBase::SetInitFocus()
 }
 
 // Ask dialog whether the curretn doc is a HTML-doc
-sal_Bool SvxHyperlinkTabPageBase::IsHTMLDoc() const
+bool SvxHyperlinkTabPageBase::IsHTMLDoc() const
 {
     return ((SvxHpLinkDlg*)mpDialog)->IsHTMLDoc();
 }
@@ -351,7 +351,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
             because if no JAVA is installed an error box occurs and then it is possible
             to close the HyperLinkDlg before its child (MacroAssignDlg) -> GPF
          */
-        sal_Bool bIsInputEnabled = GetParent()->IsInputEnabled();
+        bool bIsInputEnabled = GetParent()->IsInputEnabled();
         if ( bIsInputEnabled )
             GetParent()->EnableInput( false );
         SfxMacroAssignDlg aDlg( this, mxDocumentFrame, *pItemSet );
@@ -372,9 +372,9 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
         if ( bIsInputEnabled )
             GetParent()->EnableInput( true );
         // execute dlg
-        DisableClose( sal_True );
+        DisableClose( true );
         short nRet = aDlg.Execute();
-        DisableClose( sal_False );
+        DisableClose( false );
         if ( RET_OK == nRet )
         {
             const SfxItemSet* pOutSet = aDlg.GetOutputItemSet();
@@ -574,9 +574,9 @@ int SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
     return( LEAVE_PAGE );
 }
 
-sal_Bool SvxHyperlinkTabPageBase::ShouldOpenMarkWnd()
+bool SvxHyperlinkTabPageBase::ShouldOpenMarkWnd()
 {
-    return sal_False;
+    return false;
 }
 
 void SvxHyperlinkTabPageBase::SetMarkWndShouldOpen(sal_Bool)

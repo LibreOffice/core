@@ -28,7 +28,7 @@ namespace offapp
     //= DriverPooling
 
 
-    DriverPooling::DriverPooling( const OUString& _rName, sal_Bool _bEnabled, const sal_Int32 _nTimeout )
+    DriverPooling::DriverPooling( const OUString& _rName, bool _bEnabled, const sal_Int32 _nTimeout )
         :sName(_rName)
         ,bEnabled(_bEnabled)
         ,nTimeoutSeconds(_nTimeout)
@@ -36,7 +36,7 @@ namespace offapp
     }
 
 
-    sal_Bool DriverPooling::operator == (const DriverPooling& _rR) const
+    bool DriverPooling::operator == (const DriverPooling& _rR) const
     {
         return  (sName == _rR.sName)
             &&  (bEnabled == _rR.bEnabled)

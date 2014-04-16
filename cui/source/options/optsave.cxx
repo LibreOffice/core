@@ -65,13 +65,13 @@ struct SvxSaveTabPage_Impl
     Sequence< OUString >        aUIFilterArr[APP_COUNT];
     OUString                    aDefaultArr[APP_COUNT];
     sal_Bool                    aDefaultReadonlyArr[APP_COUNT];
-    sal_Bool                    bInitialized;
+    bool                    bInitialized;
 
     SvxSaveTabPage_Impl();
     ~SvxSaveTabPage_Impl();
 };
 
-SvxSaveTabPage_Impl::SvxSaveTabPage_Impl() : bInitialized( sal_False )
+SvxSaveTabPage_Impl::SvxSaveTabPage_Impl() : bInitialized( false )
 {
 }
 
@@ -345,7 +345,7 @@ bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 
 
 
-sal_Bool isODFFormat( const OUString& sFilter )
+bool isODFFormat( const OUString& sFilter )
 {
     static const char* aODFFormats[] =
     {
@@ -365,13 +365,13 @@ sal_Bool isODFFormat( const OUString& sFilter )
         NULL
     };
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     int i = 0;
     while ( aODFFormats[i] != NULL )
     {
         if ( sFilter.equalsAscii( aODFFormats[i++] ) )
         {
-            bRet = sal_True;
+            bRet = true;
             break;
         }
     }
@@ -457,13 +457,13 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                 getStr());
         }
 
-        pImpl->bInitialized = sal_True;
+        pImpl->bInitialized = true;
     }
 
     aDocInfoCB->Check(aSaveOpt.IsDocInfoSave());
 
     aBackupCB->Check(aSaveOpt.IsBackup());
-    sal_Bool bBackupRO = aSaveOpt.IsReadOnly(SvtSaveOptions::E_BACKUP);
+    bool bBackupRO = aSaveOpt.IsReadOnly(SvtSaveOptions::E_BACKUP);
     aBackupCB->Enable(!bBackupRO);
 
     aAutoSaveCB->Check(aSaveOpt.IsAutoSave());

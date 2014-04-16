@@ -733,7 +733,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     , aLoadAccelConfigStr(CUI_RES(RID_SVXSTR_LOADACCELCONFIG))
     , aSaveAccelConfigStr(CUI_RES(RID_SVXSTR_SAVEACCELCONFIG))
     , aFilterCfgStr(CUI_RES(RID_SVXSTR_FILTERNAME_CFG))
-    , m_bStylesInfoInitialized(sal_False)
+    , m_bStylesInfoInitialized(false)
     , m_xGlobal()
     , m_xModule()
     , m_xAct()
@@ -914,7 +914,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         m_aStylesInfo.setModel(xModel);
         m_pFunctionBox->SetStylesInfo(&m_aStylesInfo);
         m_pGroupLBox->SetStylesInfo(&m_aStylesInfo);
-        m_bStylesInfoInitialized = sal_True;
+        m_bStylesInfoInitialized = true;
     }
 
     // Insert all editable accelerators into list box. It is possible
@@ -956,7 +956,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         SvTreeListEntry* pLBEntry = m_pEntriesBox->GetEntry(0, nPos);
         TAccInfo*    pEntry   = (TAccInfo*)pLBEntry->GetUserData();
 
-        pEntry->m_bIsConfigurable = sal_True;
+        pEntry->m_bIsConfigurable = true;
         pEntry->m_sCommand        = sCommand;
         CreateCustomItems(pLBEntry, m_pEntriesBox->GetEntryText(pLBEntry, 0), sLabel);
     }
@@ -976,7 +976,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         SvTreeListEntry* pLBEntry = m_pEntriesBox->GetEntry(0, nPos);
         TAccInfo*    pEntry   = (TAccInfo*)pLBEntry->GetUserData();
 
-        pEntry->m_bIsConfigurable = sal_False;
+        pEntry->m_bIsConfigurable = false;
         CreateCustomItems(pLBEntry, m_pEntriesBox->GetEntryText(pLBEntry, 0), OUString());
     }
 }

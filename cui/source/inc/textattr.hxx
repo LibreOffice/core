@@ -57,12 +57,12 @@ private:
     const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;
 
-    sal_Bool                bAutoGrowSizeEnabled;
-    sal_Bool                bContourEnabled;
-    sal_Bool                bAutoGrowWidthEnabled;
-    sal_Bool                bAutoGrowHeightEnabled;
-    sal_Bool                bWordWrapTextEnabled;
-    sal_Bool                bFitToSizeEnabled;
+    bool                bAutoGrowSizeEnabled;
+    bool                bContourEnabled;
+    bool                bAutoGrowWidthEnabled;
+    bool                bAutoGrowHeightEnabled;
+    bool                bWordWrapTextEnabled;
+    bool                bFitToSizeEnabled;
 
     DECL_LINK( ClickFullWidthHdl_Impl, void * );
     DECL_LINK( ClickHdl_Impl, void * );

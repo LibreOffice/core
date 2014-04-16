@@ -64,7 +64,7 @@ private:
     DECL_LINK( DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
 
     void        GetPathList( sal_uInt16 _nPathHandle, OUString& _rInternalPath,
-                             OUString& _rUserPath, OUString& _rWritablePath, sal_Bool& _rReadOnly );
+                             OUString& _rUserPath, OUString& _rWritablePath, bool& _rReadOnly );
     void        SetPathList( sal_uInt16 _nPathHandle,
                              const OUString& _rUserPath, const OUString& _rWritablePath );
 

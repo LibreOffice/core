@@ -839,7 +839,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         }
         //do we need L10N for this? ie something like:
         //String aNewStdName( ResId( STR_STDMODULENAME ) );
-        sal_Bool bValid = sal_False;
+        bool bValid = false;
         sal_Int32 i = 1;
 
         Sequence< Reference< browse::XBrowseNode > > childNodes;
@@ -849,7 +849,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
             if( node->hasChildNodes() == sal_False )
             {
                 aNewName = aNewStdName + OUString::number(i);
-                bValid = sal_True;
+                bValid = true;
             }
             else
             {
@@ -865,7 +865,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         while ( !bValid )
         {
             aNewName = aNewStdName + OUString::number(i);
-            sal_Bool bFound = sal_False;
+            bool bFound = false;
             if(childNodes.getLength() > 0 )
             {
                 OUString nodeName = childNodes[0]->getName();
@@ -877,7 +877,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
             {
                 if (aNewName+extn == childNodes[index]->getName())
                 {
-                    bFound = sal_True;
+                    bFound = true;
                     break;
                 }
             }
@@ -887,7 +887,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
             }
             else
             {
-                bValid = sal_True;
+                bValid = true;
             }
         }
 
@@ -899,12 +899,12 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
             if ( xNewDlg->Execute() && !xNewDlg->GetObjectName().isEmpty() )
             {
                 OUString aUserSuppliedName = xNewDlg->GetObjectName();
-                bValid = sal_True;
+                bValid = true;
                 for( sal_Int32 index = 0; index < childNodes.getLength(); index++ )
                 {
                     if (aUserSuppliedName+extn == childNodes[index]->getName())
                     {
-                        bValid = sal_False;
+                        bValid = false;
                         OUString aError( m_createErrStr );
                         aError += m_createDupStr;
                         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
@@ -1022,13 +1022,13 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
         boost::scoped_ptr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<Window*>(this), nMode ) );
         xNewDlg->SetObjectName( aNewName );
 
-        sal_Bool bValid;
+        bool bValid;
         do
         {
             if ( xNewDlg->Execute() && !xNewDlg->GetObjectName().isEmpty() )
             {
                 OUString aUserSuppliedName = xNewDlg->GetObjectName();
-                bValid = sal_True;
+                bValid = true;
                 if( bValid )
                     aNewName = aUserSuppliedName;
             }
@@ -1077,7 +1077,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
 }
 void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
 {
-    sal_Bool result = sal_False;
+    bool result = false;
     Reference< browse::XBrowseNode > node = getBrowseNode( pEntry );
     // ISSUE L10N string & can we centre list?
     OUString aQuery = m_delQueryStr + getListOfChildren( node, 0 );
@@ -1108,7 +1108,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
         }
     }
 
-    if ( result == sal_True )
+    if ( result )
     {
         m_pScriptsBox->deleteTree( pEntry );
         m_pScriptsBox->GetModel()->Remove( pEntry );
@@ -1123,15 +1123,13 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
 
 }
 
-sal_Bool SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xProps,
+bool SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xProps,
                 OUString& propName )
 {
-    sal_Bool result = false;
+    bool result = false;
     try
     {
-        sal_Bool bTemp = sal_False;
-        xProps->getPropertyValue( propName ) >>= bTemp;
-        result = ( bTemp == sal_True );
+        xProps->getPropertyValue( propName ) >>= result;
     }
     catch ( Exception& )
     {

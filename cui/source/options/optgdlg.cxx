@@ -244,42 +244,42 @@ SfxTabPage* OfaMiscTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet 
 
 bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     SvtHelpOptions aHelpOptions;
-    sal_Bool bChecked = m_pToolTipsCB->IsChecked();
-    if ( bChecked != m_pToolTipsCB->GetSavedValue() )
+    bool bChecked = m_pToolTipsCB->IsChecked();
+    if ( bChecked != (m_pToolTipsCB->GetSavedValue() == TRISTATE_TRUE) )
         aHelpOptions.SetHelpTips( bChecked );
     bChecked = ( m_pExtHelpCB->IsChecked() && m_pToolTipsCB->IsChecked() );
-    if ( bChecked != m_pExtHelpCB->GetSavedValue() )
+    if ( bChecked != (m_pExtHelpCB->GetSavedValue() == TRISTATE_TRUE) )
         aHelpOptions.SetExtendedHelp( bChecked );
 
     if ( TriState(m_pFileDlgCB->IsChecked()) != m_pFileDlgCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetUseSystemFileDialog( !m_pFileDlgCB->IsChecked() );
-        bModified = sal_True;
+        bModified = true;
     }
 
     if ( TriState(m_pPrintDlgCB->IsChecked()) != m_pPrintDlgCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetUseSystemPrintDialog( !m_pPrintDlgCB->IsChecked() );
-        bModified = sal_True;
+        bModified = true;
     }
 
     if ( TriState(m_pDocStatusCB->IsChecked()) != m_pDocStatusCB->GetSavedValue() )
     {
         SvtPrintWarningOptions aPrintOptions;
         aPrintOptions.SetModifyDocumentOnPrintingAllowed( m_pDocStatusCB->IsChecked() );
-        bModified = sal_True;
+        bModified = true;
     }
 
     if ( TriState(m_pSaveAlwaysCB->IsChecked()) != m_pSaveAlwaysCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetSaveAlwaysAllowed( m_pSaveAlwaysCB->IsChecked() );
-        bModified = sal_True;
+        bModified = true;
     }
 
     const SfxUInt16Item* pUInt16Item =
@@ -287,7 +287,7 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     sal_uInt16 nNum = (sal_uInt16)m_pYearValueField->GetText().toInt32();
     if ( pUInt16Item && pUInt16Item->GetValue() != nNum )
     {
-        bModified = sal_True;
+        bModified = true;
         rSet.Put( SfxUInt16Item( SID_ATTR_YEAR2000, nNum ) );
     }
 
@@ -380,24 +380,24 @@ class CanvasSettings
 public:
     CanvasSettings();
 
-    sal_Bool    IsHardwareAccelerationEnabled() const;
-    sal_Bool    IsHardwareAccelerationAvailable() const;
-    void    EnabledHardwareAcceleration( sal_Bool _bEnabled ) const;
+    bool    IsHardwareAccelerationEnabled() const;
+    bool    IsHardwareAccelerationAvailable() const;
+    void    EnabledHardwareAcceleration( bool _bEnabled ) const;
 
 private:
     typedef std::vector< std::pair<OUString,Sequence<OUString> > > ServiceVector;
 
     Reference<XNameAccess> mxForceFlagNameAccess;
     ServiceVector          maAvailableImplementations;
-    mutable sal_Bool           mbHWAccelAvailable;
-    mutable sal_Bool           mbHWAccelChecked;
+    mutable bool           mbHWAccelAvailable;
+    mutable bool           mbHWAccelChecked;
 };
 
 
 CanvasSettings::CanvasSettings() :
     mxForceFlagNameAccess(),
-    mbHWAccelAvailable(sal_False),
-    mbHWAccelChecked(sal_False)
+    mbHWAccelAvailable(false),
+    mbHWAccelChecked(false)
 {
     try
     {
@@ -453,7 +453,7 @@ CanvasSettings::CanvasSettings() :
 }
 
 
-sal_Bool CanvasSettings::IsHardwareAccelerationAvailable() const
+bool CanvasSettings::IsHardwareAccelerationAvailable() const
 {
     if( !mbHWAccelChecked )
     {
@@ -500,7 +500,7 @@ sal_Bool CanvasSettings::IsHardwareAccelerationAvailable() const
 }
 
 
-sal_Bool CanvasSettings::IsHardwareAccelerationEnabled() const
+bool CanvasSettings::IsHardwareAccelerationEnabled() const
 {
     bool bForceLastEntry(false);
     if( !mxForceFlagNameAccess.is() )
@@ -513,7 +513,7 @@ sal_Bool CanvasSettings::IsHardwareAccelerationEnabled() const
 }
 
 
-void CanvasSettings::EnabledHardwareAcceleration( sal_Bool _bEnabled ) const
+void CanvasSettings::EnabledHardwareAcceleration( bool _bEnabled ) const
 {
     Reference< XNameReplace > xNameReplace(
         mxForceFlagNameAccess, UNO_QUERY );
@@ -629,7 +629,7 @@ IMPL_LINK( OfaViewTabPage, OnAntialiasingToggled, void*, NOTINTERESTEDIN )
 {
     (void)NOTINTERESTEDIN;
 
-    sal_Bool bAAEnabled = m_pFontAntiAliasing->IsChecked();
+    bool bAAEnabled = m_pFontAntiAliasing->IsChecked();
 
     m_pAAPointLimitLabel->Enable( bAAEnabled );
     m_pAAPointLimit->Enable( bAAEnabled );
@@ -657,8 +657,8 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     SvtFontOptions aFontOpt;
     SvtMenuOptions aMenuOpt;
 
-    sal_Bool bModified = sal_False;
-    sal_Bool bMenuOptModified = sal_False;
+    bool bModified = false;
+    bool bMenuOptModified = false;
     bool bRepaintWindows(false);
 
     SvtMiscOptions aMiscOptions;
@@ -693,7 +693,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         nStyleLB_InitialSelection = nStyleLB_NewSelection;
     }
 
-    sal_Bool bAppearanceChanged = sal_False;
+    bool bAppearanceChanged = false;
 
 
     // Screen Scaling
@@ -703,7 +703,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     if ( nNewScale != nOldScale )
     {
         pAppearanceCfg->SetScaleFactor(nNewScale);
-        bAppearanceChanged = sal_True;
+        bAppearanceChanged = true;
     }
 
     // Mouse Snap Mode
@@ -715,7 +715,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     if ( eNewSnap != eOldSnap )
     {
         pAppearanceCfg->SetSnapMode(eNewSnap );
-        bAppearanceChanged = sal_True;
+        bAppearanceChanged = true;
     }
 
     // Middle Mouse Button
@@ -727,27 +727,27 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     if ( eNewMiddleMouse != eOldMiddleMouse )
     {
         pAppearanceCfg->SetMiddleMouseButton( eNewMiddleMouse );
-        bAppearanceChanged = sal_True;
+        bAppearanceChanged = true;
     }
 
 #if defined( UNX )
     if ( TriState(m_pFontAntiAliasing->IsChecked()) != m_pFontAntiAliasing->GetSavedValue() )
     {
         pAppearanceCfg->SetFontAntiAliasing( m_pFontAntiAliasing->IsChecked() );
-        bAppearanceChanged = sal_True;
+        bAppearanceChanged = true;
     }
 
     if ( m_pAAPointLimit->GetValue() != m_pAAPointLimit->GetSavedValue().toInt32() )
     {
         pAppearanceCfg->SetFontAntialiasingMinPixelHeight( m_pAAPointLimit->GetValue() );
-        bAppearanceChanged = sal_True;
+        bAppearanceChanged = true;
     }
 #endif
 
     if ( TriState(m_pFontShowCB->IsChecked()) != m_pFontShowCB->GetSavedValue() )
     {
         aFontOpt.EnableFontWYSIWYG( m_pFontShowCB->IsChecked() );
-        bModified = sal_True;
+        bModified = true;
     }
 
     if(m_pMenuIconsLB->GetSelectEntryPos() != m_pMenuIconsLB->GetSavedValue())
@@ -755,15 +755,15 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         aMenuOpt.SetMenuIconsState(m_pMenuIconsLB->GetSelectEntryPos() == 0 ?
             TRISTATE_INDET :
             static_cast<TriState>(m_pMenuIconsLB->GetSelectEntryPos() - 1));
-        bModified = sal_True;
-        bMenuOptModified = sal_True;
-        bAppearanceChanged = sal_True;
+        bModified = true;
+        bMenuOptModified = true;
+        bAppearanceChanged = true;
     }
 
     if ( TriState(m_pFontHistoryCB->IsChecked()) != m_pFontHistoryCB->GetSavedValue() )
     {
         aFontOpt.EnableFontHistory( m_pFontHistoryCB->IsChecked() );
-        bModified = sal_True;
+        bModified = true;
     }
 
     // #i95644#  if disabled, do not use value, see in ::Reset()
@@ -772,7 +772,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         if(TriState(m_pUseHardwareAccell->IsChecked()) != m_pUseHardwareAccell->GetSavedValue())
         {
             pCanvasSettings->EnabledHardwareAcceleration(m_pUseHardwareAccell->IsChecked());
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -782,7 +782,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         if(m_pUseAntiAliase->IsChecked() != mpDrawinglayerOpt->IsAntiAliasing())
         {
             mpDrawinglayerOpt->SetAntiAliasing(m_pUseAntiAliase->IsChecked());
-            bModified = sal_True;
+            bModified = true;
             bRepaintWindows = true;
         }
     }
@@ -796,7 +796,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         if(bNewSelection != (bool)mpDrawinglayerOpt->IsTransparentSelection())
         {
             mpDrawinglayerOpt->SetTransparentSelection(m_pSelectionCB->IsChecked());
-            bModified = sal_True;
+            bModified = true;
             bRepaintWindows = true;
         }
 
@@ -805,7 +805,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         if(nNewTransparence != mpDrawinglayerOpt->GetTransparentSelectionPercent())
         {
             mpDrawinglayerOpt->SetTransparentSelectionPercent(nNewTransparence);
-            bModified = sal_True;
+            bModified = true;
             bRepaintWindows = true;
         }
     }
@@ -815,8 +815,8 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         m_pSystemFont->IsEnabled() )
     {
         aAccessibilityOptions.SetIsSystemFont( m_pSystemFont->IsChecked() );
-        bModified = sal_True;
-        bMenuOptModified = sal_True;
+        bModified = true;
+        bMenuOptModified = true;
     }
 
     if( bMenuOptModified )
@@ -970,7 +970,7 @@ struct LanguageConfig_Impl
     SvtLinguConfig aLinguConfig;
 };
 
-static sal_Bool bLanguageCurrentDoc_Impl = sal_False;
+static bool bLanguageCurrentDoc_Impl = false;
 
 // some things we'll need...
 static const OUString sAccessSrvc("com.sun.star.configuration.ConfigurationAccess");
@@ -1132,7 +1132,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     m_bOldAsian = pLangConfig->aLanguageOptions.IsAnyEnabled();
     m_pAsianSupportCB->Check(m_bOldAsian);
     m_pAsianSupportCB->SaveValue();
-    sal_Bool bReadonly = pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK);
+    bool bReadonly = pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK);
     m_pAsianSupportCB->Enable(!bReadonly);
     SupportHdl( m_pAsianSupportCB );
 
@@ -1201,7 +1201,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     {
         //sequence checking has to be switched on depending on the selected CTL language
         LanguageType eCTLLang = m_pComplexLanguageLB->GetSelectLanguage();
-        sal_Bool bOn = MsLangId::needsSequenceChecking( eCTLLang);
+        bool bOn = MsLangId::needsSequenceChecking( eCTLLang);
         pLangConfig->aLanguageOptions.SetCTLSequenceCheckingRestricted(bOn);
         pLangConfig->aLanguageOptions.SetCTLSequenceChecking(bOn);
         pLangConfig->aLanguageOptions.SetCTLSequenceCheckingTypeAndReplace(bOn);
@@ -1305,12 +1305,12 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();
     Reference< css::linguistic2::XLinguProperties > xLinguProp = LinguMgr::GetLinguPropertySet();
-    sal_Bool bCurrentDocCBChecked = m_pCurrentDocCB->IsChecked();
+    bool bCurrentDocCBChecked = m_pCurrentDocCB->IsChecked();
     if(m_pCurrentDocCB->IsEnabled())
         bLanguageCurrentDoc_Impl = bCurrentDocCBChecked;
-    sal_Bool bCurrentDocCBChanged = bCurrentDocCBChecked != m_pCurrentDocCB->GetSavedValue();
+    bool bCurrentDocCBChanged = bCurrentDocCBChecked != (m_pCurrentDocCB->GetSavedValue() == TRISTATE_TRUE);
 
-    sal_Bool bValChanged = m_pWesternLanguageLB->GetSavedValue() != m_pWesternLanguageLB->GetSelectEntryPos();
+    bool bValChanged = m_pWesternLanguageLB->GetSavedValue() != m_pWesternLanguageLB->GetSelectEntryPos();
     if( (bCurrentDocCBChanged && !bCurrentDocCBChecked) || bValChanged)
     {
         LanguageType eSelectLang = m_pWesternLanguageLB->GetSelectLanguage();
@@ -1373,7 +1373,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     if(m_pAsianSupportCB->GetSavedValue() != TriState(m_pAsianSupportCB->IsChecked()) )
     {
-        sal_Bool bChecked = m_pAsianSupportCB->IsChecked();
+        bool bChecked = m_pAsianSupportCB->IsChecked();
         pLangConfig->aLanguageOptions.SetAll(bChecked);
 
         //iterate over all bindings to invalidate vertical text direction
@@ -1425,7 +1425,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         m_pLocaleSettingLB->SelectLanguage(LanguageTag::convertToLanguageTypeWithFallback(sLang));
     else
         m_pLocaleSettingLB->SelectLanguage( LANGUAGE_USER_SYSTEM_CONFIG );
-    sal_Bool bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_LOCALE);
+    bool bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_LOCALE);
     m_pLocaleSettingLB->Enable(!bReadonly);
     m_pLocaleSettingFT->Enable(!bReadonly);
 
@@ -1551,7 +1551,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     m_pIgnoreLanguageChangeCB->SaveValue();
     m_pCurrentDocCB->SaveValue();
 
-    sal_Bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale" );
+    bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale" );
     m_pWesternLanguageFT->Enable( bEnable );
     m_pWesternLanguageLB->Enable( bEnable );
 
@@ -1580,10 +1580,10 @@ IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
 {
     DBG_ASSERT( pBox, "OfaLanguagesTabPage::SupportHdl(): pBox invalid" );
 
-    sal_Bool bCheck = pBox->IsChecked();
+    bool bCheck = pBox->IsChecked();
     if ( m_pAsianSupportCB == pBox )
     {
-        sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly("DefaultLocale_CJK");
+        bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly("DefaultLocale_CJK");
         bCheck = ( bCheck && !bReadonly );
         m_pAsianLanguageLB->Enable( bCheck );
         if( pBox->IsEnabled() )
@@ -1591,7 +1591,7 @@ IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
     }
     else if ( m_pCTLSupportCB == pBox )
     {
-        sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly("DefaultLocale_CTL");
+        bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly("DefaultLocale_CTL");
         bCheck = ( bCheck && !bReadonly  );
         m_pComplexLanguageLB->Enable( bCheck );
         if( pBox->IsEnabled() )
@@ -1605,7 +1605,7 @@ IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
 
 namespace
 {
-    void lcl_checkLanguageCheckBox(CheckBox* _rCB,sal_Bool _bNewValue,sal_Bool _bOldValue)
+    void lcl_checkLanguageCheckBox(CheckBox* _rCB,bool _bNewValue,bool _bOldValue)
     {
         if ( _bNewValue )
             _rCB->Check(true);

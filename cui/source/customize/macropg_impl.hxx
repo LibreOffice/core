@@ -33,8 +33,8 @@ public:
     OUString                        sStrEvent;
     OUString                        sAssignedMacro;
     MacroEventListBox*              pEventLB;
-    sal_Bool                        bReadOnly;
-    sal_Bool                        bIDEDialogMode;
+    bool                        bReadOnly;
+    bool                        bIDEDialogMode;
 };
 
 class AssignComponentDialog : public ModalDialog

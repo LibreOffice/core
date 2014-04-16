@@ -65,7 +65,7 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(Window* pParent, const SfxItemSet
 
     m_xUpdateAccess = setup::UpdateCheckConfig::create( xContext );
 
-    sal_Bool bDownloadSupported = sal_False;
+    bool bDownloadSupported = false;
     m_xUpdateAccess->getByName( "DownloadSupported" ) >>= bDownloadSupported;
 
     WinBits nStyle = m_pDestPath->GetStyle();
@@ -161,7 +161,7 @@ bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
 {
     bool bModified = false;
 
-    sal_Bool bValue;
+    bool bValue;
     sal_Int64 nValue;
 
     if( m_pAutoCheckCheckBox->GetSavedValue() != TriState(m_pAutoCheckCheckBox->IsChecked()) )
@@ -222,7 +222,7 @@ bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
 
 void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
 {
-    sal_Bool bValue = sal_Bool();
+    bool bValue = false;
     m_xUpdateAccess->getByName( "AutoCheckEnabled" ) >>= bValue;
 
     m_pAutoCheckCheckBox->Check(bValue);
@@ -270,7 +270,7 @@ void SvxOnlineUpdateTabPage::FillUserData()
 
 IMPL_LINK( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, CheckBox *, pBox )
 {
-    sal_Bool bEnabled = pBox->IsChecked();
+    bool bEnabled = pBox->IsChecked();
 
     m_pEveryDayButton->Enable(bEnabled);
     m_pEveryWeekButton->Enable(bEnabled);

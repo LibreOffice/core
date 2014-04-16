@@ -182,7 +182,7 @@ void CuiAboutConfigTabPage::Reset(/* const SfxItemSet&*/ )
     m_pPrefBox->GetModel()->SetSortMode( SortNone );
 
     m_pPrefBox->SetUpdateMode(false);
-    Reference< XNameAccess > xConfigAccess = getConfigAccess( "/", sal_False );
+    Reference< XNameAccess > xConfigAccess = getConfigAccess( "/", false );
     FillItems( xConfigAccess );
     m_pPrefBox->SetUpdateMode(true);
 }
@@ -194,7 +194,7 @@ bool CuiAboutConfigTabPage::FillItemSet(/* SfxItemSet&*/ )
     std::vector< boost::shared_ptr< Prop_Impl > >::iterator pIter;
     for( pIter = m_vectorOfModified.begin() ; pIter != m_vectorOfModified.end(); ++pIter )
     {
-        Reference< XNameAccess > xUpdateAccess = getConfigAccess( (*pIter)->Name , sal_True );
+        Reference< XNameAccess > xUpdateAccess = getConfigAccess( (*pIter)->Name , true );
         Reference< XNameReplace > xNameReplace( xUpdateAccess, UNO_QUERY_THROW );
 
         xNameReplace->replaceByName( (*pIter)->Property, (*pIter)->Value );
@@ -381,7 +381,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
     }
 }
 
-Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( const OUString& sNodePath, sal_Bool bUpdate )
+Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( const OUString& sNodePath, bool bUpdate )
 {
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 

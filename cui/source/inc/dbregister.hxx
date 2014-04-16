@@ -54,7 +54,7 @@ namespace svx
         ::svx::OptHeaderTabListBox* pPathBox;
         SvTreeListEntry*        m_pCurEntry;
         sal_uLong               m_nOldCount;
-        sal_Bool                m_bModified;
+        bool                m_bModified;
 
 #ifdef INCLUDED_CUI_SOURCE_INC_DBREGISTER_HXX
         DECL_LINK( NewHdl, void * );

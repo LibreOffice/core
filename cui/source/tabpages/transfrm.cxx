@@ -275,7 +275,7 @@ void SvxAngleTabPage::Construct()
 
 bool SvxAngleTabPage::FillItemSet(SfxItemSet& rSet)
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     if(m_pCtlAngle->IsValueModified() || m_pMtrPosX->IsValueModified() || m_pMtrPosY->IsValueModified())
     {
@@ -287,7 +287,7 @@ bool SvxAngleTabPage::FillItemSet(SfxItemSet& rSet)
         rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_X), basegfx::fround(fTmpX)));
         rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_Y), basegfx::fround(fTmpY)));
 
-        bModified = sal_True;
+        bModified = true;
     }
 
     return bModified;
@@ -478,7 +478,7 @@ void SvxSlantTabPage::Construct()
 
 bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
 {
-    sal_Bool  bModified = sal_False;
+    bool  bModified = false;
     OUString aStr = m_pMtrRadius->GetText();
 
     if( aStr != m_pMtrRadius->GetSavedValue() )
@@ -488,7 +488,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
         nTmp = Fraction( nTmp ) * aUIScale;
 
         rAttrs.Put( SdrEckenradiusItem( nTmp ) );
-        bModified = sal_True;
+        bModified = true;
     }
 
     aStr = m_pMtrAngle->GetText();
@@ -497,7 +497,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
     {
         sal_Int32 nValue = static_cast<sal_Int32>(m_pMtrAngle->GetValue());
         rAttrs.Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR, nValue ) );
-        bModified = sal_True;
+        bModified = true;
     }
 
     if( bModified )
@@ -784,7 +784,7 @@ void SvxPositionSizeTabPage::Construct()
 
 bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
 
     if ( m_pMtrWidth->HasFocus() )
     {
@@ -816,7 +816,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             rOutAttrs.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_POS_X), basegfx::fround(fX)));
             rOutAttrs.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_POS_Y), basegfx::fround(fY)));
 
-            bModified |= sal_True;
+            bModified = true;
         }
 
         if ( m_pTsbPosProtect->GetState() != m_pTsbPosProtect->GetSavedValue() )
@@ -832,7 +832,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
                     m_pTsbPosProtect->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
             }
 
-            bModified |= sal_True;
+            bModified = true;
         }
     }
 
@@ -858,7 +858,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         rOutAttrs.Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ), (sal_uInt32) lWidth ) );
         rOutAttrs.Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ), (sal_uInt32) lHeight ) );
         rOutAttrs.Put( SfxAllEnumItem( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), sal::static_int_cast< sal_uInt16 >( meRP ) ) );
-        bModified |= sal_True;
+        bModified = true;
     }
 
     if ( m_pTsbSizeProtect->GetState() != m_pTsbSizeProtect->GetSavedValue() )
@@ -869,7 +869,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             rOutAttrs.Put(
                 SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
                 m_pTsbSizeProtect->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
-        bModified |= sal_True;
+        bModified = true;
     }
 
     if ( m_pTsbAutoGrowWidth->GetState() != m_pTsbAutoGrowWidth->GetSavedValue() )
@@ -883,7 +883,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
                     SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_AUTOWIDTH ),
                     m_pTsbAutoGrowWidth->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
         }
-        bModified |= sal_True;
+        bModified = true;
     }
 
     if ( m_pTsbAutoGrowHeight->GetState() != m_pTsbAutoGrowHeight->GetSavedValue() )
@@ -897,7 +897,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
                     SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_AUTOHEIGHT ),
                     m_pTsbAutoGrowHeight->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
         }
-        bModified |= sal_True;
+        bModified = true;
     }
 
 
@@ -930,7 +930,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_PROTECT_POS );
         if ( pItem )
         {
-            sal_Bool bProtected = ( ( const SfxBoolItem* )pItem )->GetValue();
+            bool bProtected = ( ( const SfxBoolItem* )pItem )->GetValue();
             m_pTsbPosProtect->SetState( bProtected ? TRISTATE_TRUE : TRISTATE_FALSE );
             m_pTsbPosProtect->EnableTriState( false );
         }
@@ -1000,7 +1000,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
 
     // Is matching set?
     OUString aStr = GetUserData();
-    m_pCbxScale->Check( (sal_Bool)aStr.toInt32() );
+    m_pCbxScale->Check( aStr.toInt32() != 0 );
 
     m_pTsbSizeProtect->SaveValue();
     m_pTsbAutoGrowWidth->SaveValue();

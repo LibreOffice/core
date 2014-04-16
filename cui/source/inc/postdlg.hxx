@@ -57,7 +57,7 @@ public:
     void                SetNextHdl( const Link& rLink )
                             { aNextHdlLink = rLink; }
 
-    void EnableTravel(sal_Bool bNext, sal_Bool bPrev);
+    void EnableTravel(bool bNext, bool bPrev);
     OUString GetNote()
     {
         return m_pEditED->GetText();

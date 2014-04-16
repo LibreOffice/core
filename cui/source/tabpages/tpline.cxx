@@ -90,12 +90,12 @@ SvxLineTabPage::SvxLineTabPage
     nSymbolType(SVX_SYMBOLTYPE_UNKNOWN), // unknown respectively unchanged
     pSymbolAttr(NULL),
 
-    bLastWidthModified(sal_False),
+    bLastWidthModified(false),
     aSymbolLastSize(Size(0,0)),
-    bSymbols(sal_False),
+    bSymbols(false),
 
     rOutAttrs           ( rInAttrs ),
-    bObjSelected( sal_False ),
+    bObjSelected( false ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXLStyle            ( XLINE_DASH ),
@@ -208,12 +208,12 @@ SvxLineTabPage::SvxLineTabPage
     m_pSymbolRatioCB->SetClickHdl(LINK(this, SvxLineTabPage, RatioHdl_Impl));
 
     m_pSymbolRatioCB->Check(true);
-    ShowSymbolControls(sal_False);
+    ShowSymbolControls(false);
 
     nActLineWidth = -1;
 }
 
-void SvxLineTabPage::ShowSymbolControls(sal_Bool bOn)
+void SvxLineTabPage::ShowSymbolControls(bool bOn)
 {
     // Symbols on a line (e.g. StarCharts), symbol-enable controls
 
@@ -290,7 +290,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
                 Size aSize(aBitmap.GetSizePixel());
                 if(aSize.Width()  > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
                 {
-                    sal_Bool bWidth = aSize.Width() > aSize.Height();
+                    bool bWidth = aSize.Width() > aSize.Height();
                     double nScale = bWidth ?
                                         (double)MAX_BMP_WIDTH / (double)aSize.Width():
                                         (double)MAX_BMP_HEIGHT / (double)aSize.Height();
@@ -376,7 +376,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
             Size aSize(aBitmapEx.GetSizePixel());
             if(aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
             {
-                sal_Bool bWidth = aSize.Width() > aSize.Height();
+                bool bWidth = aSize.Width() > aSize.Height();
                 double nScale = bWidth ?
                                     (double)MAX_BMP_WIDTH / (double)aSize.Width():
                                     (double)MAX_BMP_HEIGHT / (double)aSize.Height();
@@ -672,7 +672,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
     const SfxPoolItem* pOld = NULL;
     sal_Int32  nPos;
-    sal_Bool    bModified = sal_False;
+    bool    bModified = false;
 
     // To prevent modifications to the list, we do not set other page's items.
     if( nDlgType != 0 || nPageType != 2 )
@@ -700,7 +700,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
                     if ( !pOld || !( *(const XLineDashItem*)pOld == aDashItem ) )
                     {
                         rAttrs.Put( aDashItem );
-                        bModified = sal_True;
+                        bModified = true;
                     }
                 }
             }
@@ -708,7 +708,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
             if ( !pOld || !( *(const XLineStyleItem*)pOld == *pStyleItem ) )
             {
                 rAttrs.Put( *pStyleItem );
-                bModified = sal_True;
+                bModified = true;
             }
             delete pStyleItem;
         }
@@ -722,7 +722,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         if ( !pOld || !( *(const XLineWidthItem*)pOld == aItem ) )
         {
             rAttrs.Put( aItem );
-            bModified = sal_True;
+            bModified = true;
         }
     }
     // Width line start
@@ -733,7 +733,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         if ( !pOld || !( *(const XLineStartWidthItem*)pOld == aItem ) )
         {
             rAttrs.Put( aItem );
-            bModified = sal_True;
+            bModified = true;
         }
     }
     // Width line end
@@ -744,7 +744,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         if ( !pOld || !( *(const XLineEndWidthItem*)pOld == aItem ) )
         {
             rAttrs.Put( aItem );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -756,7 +756,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         if ( !pOld || !( *(const XLineColorItem*)pOld == aItem ) )
         {
             rAttrs.Put( aItem );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -775,7 +775,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
             if( pItem && ( !pOld || !( *(const XLineEndItem*)pOld == *pItem ) ) )
             {
                 rAttrs.Put( *pItem );
-                bModified = sal_True;
+                bModified = true;
             }
             delete pItem;
         }
@@ -793,7 +793,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
                 ( !pOld || !( *(const XLineEndItem*)pOld == *pItem ) ) )
             {
                 rAttrs.Put( *pItem );
-                bModified = sal_True;
+                bModified = true;
             }
             delete pItem;
         }
@@ -808,7 +808,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         if ( !pOld || !( *(const XLineStartCenterItem*)pOld == aItem ) )
         {
             rAttrs.Put( aItem );
-            bModified = sal_True;
+            bModified = true;
         }
     }
     eState = m_pTsbCenterEnd->GetState();
@@ -819,7 +819,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         if ( !pOld || !( *(const XLineEndCenterItem*)pOld == aItem ) )
         {
             rAttrs.Put( aItem );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -832,7 +832,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         if ( !pOld || !( *(const XLineTransparenceItem*)pOld == aItem ) )
         {
             rAttrs.Put( aItem );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -873,7 +873,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
             if(!pOld || !(*(const XLineJointItem*)pOld == *pNew))
             {
                 rAttrs.Put( *pNew );
-                bModified = sal_True;
+                bModified = true;
             }
 
             delete pNew;
@@ -912,7 +912,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
             if(!pOld || !(*(const XLineCapItem*)pOld == *pNew))
             {
                 rAttrs.Put( *pNew );
-                bModified = sal_True;
+                bModified = true;
             }
 
             delete pNew;
@@ -928,7 +928,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         if(bNewSize)
         {
             rAttrs.Put(aSItem);
-            bModified=sal_True;
+            bModified=true;
         }
 
         SfxInt32Item aTItem(rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),nSymbolType);
@@ -939,7 +939,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         if(bNewType)
         {
             rAttrs.Put(aTItem);
-            bModified=sal_True;
+            bModified=true;
         }
 
         if(nSymbolType!=SVX_SYMBOLTYPE_NONE)
@@ -951,7 +951,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
             if(bNewBrush)
             {
                 rAttrs.Put(aBItem);
-                bModified=sal_True;
+                bModified=true;
             }
         }
     }
@@ -961,7 +961,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 
 
 
-sal_Bool SvxLineTabPage::FillXLSet_Impl()
+bool SvxLineTabPage::FillXLSet_Impl()
 {
     sal_Int32 nPos;
 
@@ -1081,7 +1081,7 @@ sal_Bool SvxLineTabPage::FillXLSet_Impl()
     // #116827#
     m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());
 
-    return( sal_True );
+    return true;
 }
 
 
@@ -1093,10 +1093,10 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     // Line style
     const SfxPoolItem *pPoolItem;
     long nSymType=SVX_SYMBOLTYPE_UNKNOWN;
-    sal_Bool bPrevSym=sal_False;
-    sal_Bool bEnable=sal_True;
-    sal_Bool bIgnoreGraphic=sal_False;
-    sal_Bool bIgnoreSize=sal_False;
+    bool bPrevSym=false;
+    bool bEnable=true;
+    bool bIgnoreGraphic=false;
+    bool bIgnoreSize=false;
     if(rAttrs.GetItemState(rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),true,&pPoolItem) == SFX_ITEM_SET)
     {
         nSymType=((const SfxInt32Item *)pPoolItem)->GetValue();
@@ -1106,13 +1106,13 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     {
         aSymbolGraphic=aAutoSymbolGraphic;
         aSymbolSize=aSymbolLastSize=aAutoSymbolGraphic.GetPrefSize();
-        bPrevSym=sal_True;
+        bPrevSym=true;
     }
     else if(nSymType == SVX_SYMBOLTYPE_NONE)
     {
-        bEnable=sal_False;
-        bIgnoreGraphic=sal_True;
-        bIgnoreSize=sal_True;
+        bEnable=false;
+        bIgnoreGraphic=true;
+        bIgnoreSize=true;
     }
     else if(nSymType >= 0)
     {
@@ -1164,9 +1164,9 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
                     aSymbolSize=pObj->GetSnapRect().GetSize();
                     aSymbolGraphic.SetPrefSize(pInvisibleSquare->GetSnapRect().GetSize());
                     aSymbolGraphic.SetPrefMapMode(MAP_100TH_MM);
-                    bPrevSym=sal_True;
-                    bEnable=sal_True;
-                    bIgnoreGraphic=sal_True;
+                    bPrevSym=true;
+                    bEnable=true;
+                    bIgnoreGraphic=true;
 
                     pView->UnmarkAll();
                     pInvisibleSquare=pPage->RemoveObject(1);
@@ -1194,7 +1194,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
                                                         pGraphic->GetPrefMapMode(),
                                                         MAP_100TH_MM );
             }
-            bPrevSym=sal_True;
+            bPrevSym=true;
         }
     }
 
@@ -1270,7 +1270,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     else if( rAttrs.GetItemState( XATTR_LINESTART ) != SFX_ITEM_DONTCARE )
     {
         // #86265# select entry using list and polygon, not string
-        sal_Bool bSelected(sal_False);
+        bool bSelected(false);
         const basegfx::B2DPolyPolygon& rItemPolygon = ((const XLineStartItem&)rAttrs.Get(XATTR_LINESTART)).GetLineStartValue();
 
         for(sal_Int32 a(0);!bSelected &&  a < pLineEndList->Count(); a++)
@@ -1282,7 +1282,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
             {
                 // select this entry
                 m_pLbStartStyle->SelectEntryPos(a + 1);
-                bSelected = sal_True;
+                bSelected = true;
             }
         }
 
@@ -1302,7 +1302,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     else if( rAttrs.GetItemState( XATTR_LINEEND ) != SFX_ITEM_DONTCARE )
     {
         // #86265# select entry using list and polygon, not string
-        sal_Bool bSelected(sal_False);
+        bool bSelected(false);
         const basegfx::B2DPolyPolygon& rItemPolygon = ((const XLineEndItem&)rAttrs.Get(XATTR_LINEEND)).GetLineEndValue();
 
         for(sal_Int32 a(0);!bSelected &&  a < pLineEndList->Count(); a++)
@@ -1314,7 +1314,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
             {
                 // select this entry
                 m_pLbEndStyle->SelectEntryPos(a + 1);
-                bSelected = sal_True;
+                bSelected = true;
             }
         }
 
@@ -1416,7 +1416,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     // Synchronize
     // We get the value from the INI file now
     OUString aStr = GetUserData();
-    m_pCbxSynchronize->Check( (sal_Bool)aStr.toInt32() );
+    m_pCbxSynchronize->Check( aStr.toInt32() != 0 );
 
     // #116827#
     if(bObjSelected && SFX_ITEM_DEFAULT == rAttrs.GetItemState(XATTR_LINEJOINT))
@@ -1729,7 +1729,7 @@ IMPL_STATIC_LINK(SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
             Size aSize(aBitmap.GetSizePixel());
             if(aSize.Width()  > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
             {
-                sal_Bool bWidth = aSize.Width() > aSize.Height();
+                bool bWidth = aSize.Width() > aSize.Height();
                 double nScale = bWidth ?
                     (double)MAX_BMP_WIDTH / (double)aSize.Width():
                     (double)MAX_BMP_HEIGHT / (double)aSize.Height();
@@ -1752,16 +1752,16 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
 }
 IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, MetricField *, pField)
 {
-    bNewSize=true;
-    sal_Bool bWidth = (sal_Bool)(pField == m_pSymbolWidthMF);
+    bNewSize = true;
+    bool bWidth = pField == m_pSymbolWidthMF;
     bLastWidthModified = bWidth;
-    sal_Bool bRatio = m_pSymbolRatioCB->IsChecked();
+    bool bRatio = m_pSymbolRatioCB->IsChecked();
     long nWidthVal = static_cast<long>(m_pSymbolWidthMF->Denormalize(m_pSymbolWidthMF->GetValue(FUNIT_100TH_MM)));
     long nHeightVal= static_cast<long>(m_pSymbolHeightMF->Denormalize(m_pSymbolHeightMF->GetValue(FUNIT_100TH_MM)));
     nWidthVal = OutputDevice::LogicToLogic(nWidthVal,MAP_100TH_MM,(MapUnit)ePoolUnit );
     nHeightVal = OutputDevice::LogicToLogic(nHeightVal,MAP_100TH_MM,(MapUnit)ePoolUnit);
-    aSymbolSize=Size(nWidthVal,nHeightVal);
-    double  fSizeRatio = (double)1;
+    aSymbolSize = Size(nWidthVal,nHeightVal);
+    double fSizeRatio = (double)1;
 
     if(bRatio)
     {
@@ -1845,7 +1845,7 @@ void SvxLineTabPage::PageCreated (SfxAllItemSet aSet)
 
     if(pSdrObjListItem) //symbols
     {
-        ShowSymbolControls(sal_True);
+        ShowSymbolControls(true);
         pSymbolList = static_cast<SdrObjList*>(pSdrObjListItem->GetValue());
         if (pSymbolAttrItem)
             pSymbolAttr = new SfxItemSet(pSymbolAttrItem->GetItemSet());

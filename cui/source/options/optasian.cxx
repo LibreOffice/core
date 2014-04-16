@@ -50,7 +50,7 @@ struct SvxForbiddenChars_Impl
 {
     ~SvxForbiddenChars_Impl();
 
-    sal_Bool                bRemoved;
+    bool                bRemoved;
     ForbiddenCharacters*    pCharacters;
 };
 
@@ -73,7 +73,7 @@ struct SvxAsianLayoutPage_Impl
     Reference< XPropertySetInfo >       xPrSetInfo;
     SvxForbiddenCharacterMap_Impl       aChangedLanguagesMap;
 
-    sal_Bool                hasForbiddenCharacters(LanguageType eLang);
+    bool                hasForbiddenCharacters(LanguageType eLang);
     SvxForbiddenChars_Impl* getForbiddenCharacters(LanguageType eLang);
     void                    addForbiddenCharacters(LanguageType eLang, ForbiddenCharacters* pForbidden);
 };
@@ -87,7 +87,7 @@ SvxAsianLayoutPage_Impl::~SvxAsianLayoutPage_Impl()
     }
 }
 
-sal_Bool    SvxAsianLayoutPage_Impl::hasForbiddenCharacters(LanguageType eLang)
+bool    SvxAsianLayoutPage_Impl::hasForbiddenCharacters(LanguageType eLang)
 {
     return aChangedLanguagesMap.count( eLang );
 }
@@ -231,7 +231,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
     if( pImpl->xPrSet.is() )
         pImpl->xPrSetInfo = pImpl->xPrSet->getPropertySetInfo();
     OUString sForbidden("ForbiddenCharacters");
-    sal_Bool bKernWesternText = pImpl->aConfig.IsKerningWesternTextOnly();
+    bool bKernWesternText = pImpl->aConfig.IsKerningWesternTextOnly();
     sal_Int16 nCompress = pImpl->aConfig.GetCharDistanceCompression();
     if(pImpl->xPrSetInfo.is())
     {
@@ -302,7 +302,7 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
     Locale aLocale( aLanguageTag.getLocale());
 
     OUString sStart, sEnd;
-    sal_Bool bAvail;
+    bool bAvail;
     if(pImpl->xForbidden.is())
     {
         bAvail = pImpl->hasForbiddenCharacters(eSelectLanguage);
@@ -311,7 +311,7 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
             SvxForbiddenChars_Impl* pElement = pImpl->getForbiddenCharacters(eSelectLanguage);
             if(pElement->bRemoved || !pElement->pCharacters)
             {
-                bAvail = sal_False;
+                bAvail = false;
             }
             else
             {
@@ -361,7 +361,7 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
 
 IMPL_LINK(SvxAsianLayoutPage, ChangeStandardHdl, CheckBox*, pBox)
 {
-    sal_Bool bCheck = pBox->IsChecked();
+    bool bCheck = pBox->IsChecked();
     m_pStartED->Enable(!bCheck);
     m_pEndED->Enable(!bCheck);
     m_pStartFT->Enable(!bCheck);
@@ -377,7 +377,7 @@ IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit*, pEdit)
     Locale aLocale( LanguageTag::convertToLocale( eSelectLanguage ));
     OUString sStart = m_pStartED->GetText();
     OUString sEnd = m_pEndED->GetText();
-    sal_Bool bEnable = pEdit->IsEnabled();
+    bool bEnable = pEdit->IsEnabled();
     if(pImpl->xForbidden.is())
     {
         try

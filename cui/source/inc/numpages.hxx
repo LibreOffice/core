@@ -44,7 +44,7 @@ class SvxNumberingPreview : public Window
     Font                aStdFont;
     long                nPageWidth;
     const OUString*     pOutlineNames;
-    sal_Bool                bPosition;
+    bool                bPosition;
     sal_uInt16              nActLevel;
 
     protected:
@@ -60,7 +60,7 @@ class SvxNumberingPreview : public Window
         void    SetOutlineNames(const OUString* pNames)
                         {pOutlineNames = pNames;}
         void    SetPositionMode()
-                        { bPosition = sal_True;}
+                        { bPosition = true;}
         void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
 
 };
@@ -95,8 +95,8 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     SvxNumRule*             pActNum;
     SvxNumRule*             pSaveNum;
     sal_uInt16                  nActNumLvl;
-    sal_Bool                    bModified   : 1;
-    sal_Bool                    bPreset     : 1;
+    bool                    bModified   : 1;
+    bool                    bPreset     : 1;
 
     OUString              sNumCharFmtName;
     sal_uInt16              nNumItemId;
@@ -133,8 +133,8 @@ class SvxBulletPickTabPage : public SfxTabPage
     SvxNumRule*         pActNum;
     SvxNumRule*         pSaveNum;
     sal_uInt16              nActNumLvl;
-    sal_Bool                bModified   : 1;
-    sal_Bool                bPreset     : 1;
+    bool                bModified   : 1;
+    bool                bPreset     : 1;
     sal_uInt16              nNumItemId;
 
     OUString            sBulletCharFmtName;
@@ -176,8 +176,8 @@ class SvxNumPickTabPage : public SfxTabPage
     SvxNumRule*         pSaveNum;
     sal_uInt16              nActNumLvl;
     sal_uInt16              nNumItemId;
-    sal_Bool                bModified   : 1;
-    sal_Bool                bPreset     : 1;
+    bool                bModified   : 1;
+    bool                bPreset     : 1;
 
 
     protected:
@@ -221,8 +221,8 @@ class SvxBitmapPickTabPage : public SfxTabPage
     sal_uInt16              nActNumLvl;
     sal_uInt16              nNumItemId;
     SfxMapUnit          eCoreUnit;
-    sal_Bool                bModified   : 1;
-    sal_Bool                bPreset     : 1;
+    bool                bModified   : 1;
+    bool                bPreset     : 1;
 
     protected:
         DECL_LINK(NumSelectHdl_Impl, void *);
@@ -300,12 +300,12 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     Size                aInitSize[SVX_MAX_NUM];
 
-    sal_Bool                bLastWidthModified  : 1;
-    sal_Bool                bModified           : 1;
-    sal_Bool                bPreset             : 1;
-    sal_Bool                bAutomaticCharStyles: 1;
-    sal_Bool                bHTMLMode           : 1;
-    sal_Bool                bMenuButtonInitialized : 1;
+    bool                bLastWidthModified  : 1;
+    bool                bModified           : 1;
+    bool                bPreset             : 1;
+    bool                bAutomaticCharStyles: 1;
+    bool                bHTMLMode           : 1;
+    bool                bMenuButtonInitialized : 1;
 
     std::vector<OUString> aGrfNames;
     Font                aActBulletFont;
@@ -320,7 +320,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
         0 - Number;
         1 - Bullet;
         2 - Bitmap; */
-    void                SwitchNumberType( sal_uInt8 nType, sal_Bool bBmp = sal_False );
+    void                SwitchNumberType( sal_uInt8 nType, bool bBmp = false );
     void                CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
         DECL_LINK( NumberTypeSelectHdl_Impl, ListBox * );
@@ -362,7 +362,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     void                SetMetric(FieldUnit eSet);
 
     ListBox&            GetCharFmtListBox() {return *m_pCharFmtLB;}
-    void                SetModified(sal_Bool bRepaint = sal_True);
+    void                SetModified(bool bRepaint = true);
     virtual void        PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
 
     /** Get the numberings provided by the i18n framework (CTL, Asian, ...) and
@@ -423,9 +423,9 @@ class SvxNumPositionTabPage : public SfxTabPage
     sal_uInt16              nNumItemId;
     SfxMapUnit          eCoreUnit;
 
-    sal_Bool                bModified           : 1;
-    sal_Bool                bPreset             : 1;
-    sal_Bool                bInInintControl     : 1;  // workaround for Modify-error, is said to be corrected from 391 on
+    bool                bModified           : 1;
+    bool                bPreset             : 1;
+    bool                bInInintControl     : 1;  // workaround for Modify-error, is said to be corrected from 391 on
     bool                bLabelAlignmentPosAndSpaceModeActive;
 
     void                InitControls();
@@ -458,7 +458,7 @@ public:
                                 const SfxItemSet& rAttrSet);
 
     void                SetMetric(FieldUnit eSet);
-    void                SetModified(sal_Bool bRepaint = sal_True);
+    void                SetModified(bool bRepaint = true);
     virtual void        PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 

@@ -94,14 +94,14 @@ OUString SfxStylesInfo_Impl::generateCommand(const OUString& sFamily, const OUSt
     return sCommand.makeStringAndClear();
 }
 
-sal_Bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
+bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
 {
     static sal_Int32 LEN_STYLEPROT = CMDURL_STYLEPROT_ONLY.getLength();
     static sal_Int32 LEN_SPART     = CMDURL_SPART_ONLY.getLength();
     static sal_Int32 LEN_FPART     = CMDURL_FPART_ONLY.getLength();
 
     if (!aStyle.sCommand.startsWith(CMDURL_STYLEPROT_ONLY))
-        return sal_False;
+        return false;
 
     aStyle.sFamily = OUString();
     aStyle.sStyle  = OUString();
@@ -110,7 +110,7 @@ sal_Bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
     OUString sCmdArgs = aStyle.sCommand.copy(LEN_STYLEPROT, nCmdLen-LEN_STYLEPROT);
     sal_Int32       i        = sCmdArgs.indexOf('&');
     if (i<0)
-        return sal_False;
+        return false;
 
     OUString sArg = sCmdArgs.copy(0, i);
     if (sArg.startsWith(CMDURL_SPART_ONLY))
@@ -125,9 +125,9 @@ sal_Bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
         aStyle.sFamily = sArg.copy(LEN_FPART, sArg.getLength()-LEN_FPART);
 
     if (!(aStyle.sFamily.isEmpty() || aStyle.sStyle.isEmpty()))
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
@@ -627,13 +627,13 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                 {
                     Sequence< Reference< browse::XBrowseNode > > children =
                         rootNode->getChildNodes();
-                    sal_Bool bIsRootNode = sal_False;
+                    bool bIsRootNode = false;
 
                     OUString user("user");
                     OUString share("share");
                     if ( rootNode->getName() == "Root" )
                     {
-                        bIsRootNode = sal_True;
+                        bIsRootNode = true;
                     }
 
                     //To mimic current starbasic behaviour we
@@ -652,14 +652,14 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                     for ( sal_Int32 n = 0; n < children.getLength(); ++n )
                     {
                         Reference< browse::XBrowseNode >& theChild = children[n];
-                        sal_Bool bDisplay = sal_True;
+                        bool bDisplay = true;
                         OUString uiName = theChild->getName();
                         if ( bIsRootNode )
                         {
                             if (  ! ((theChild->getName().equals( user )  || theChild->getName().equals( share ) ||
                                 theChild->getName().equals( currentDocTitle ) ) ) )
                             {
-                                bDisplay=sal_False;
+                                bDisplay=false;
                             }
                             else
                             {
@@ -983,9 +983,9 @@ void SfxConfigGroupListBox::GroupSelected()
     pFunctionListBox->SetUpdateMode(true);
 }
 
-sal_Bool SfxConfigGroupListBox::Expand( SvTreeListEntry* pParent )
+bool SfxConfigGroupListBox::Expand( SvTreeListEntry* pParent )
 {
-    sal_Bool bRet = SvTreeListBox::Expand( pParent );
+    bool bRet = SvTreeListBox::Expand( pParent );
     if ( bRet )
     {
         sal_uLong nEntries = GetOutputSizePixel().Height() / GetEntryHeight();
@@ -1020,7 +1020,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
 */
 {
     SfxGroupInfo_Impl *pInfo = (SfxGroupInfo_Impl*) pEntry->GetUserData();
-    pInfo->bWasOpened = sal_True;
+    pInfo->bWasOpened = true;
     switch ( pInfo->nKind )
     {
         case SFX_CFGGROUP_SCRIPTCONTAINER:
@@ -1035,13 +1035,13 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
                     {
                         Sequence< Reference< browse::XBrowseNode > > children =
                             rootNode->getChildNodes();
-                        sal_Bool bIsRootNode = sal_False;
+                        bool bIsRootNode = false;
 
                         OUString user("user");
                         OUString share("share" );
                         if ( rootNode->getName() == "Root" )
                         {
-                            bIsRootNode = sal_True;
+                            bIsRootNode = true;
                         }
 
                         /* To mimic current starbasic behaviour we
@@ -1062,11 +1062,11 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
                         {
                             Reference< browse::XBrowseNode >& theChild = children[n];
                             OUString aName( theChild->getName() );
-                            sal_Bool bDisplay = sal_True;
+                            bool bDisplay = true;
                             if ( bIsRootNode )
                             {
                                 if ( !( (aName.equals(user) || aName.equals(share) || aName.equals(currentDocTitle) ) ) )
-                                    bDisplay=sal_False;
+                                    bDisplay=false;
                             }
                             if ( children[n].is() && children[n]->getType() != browse::BrowseNodeTypes::SCRIPT && bDisplay )
                             {

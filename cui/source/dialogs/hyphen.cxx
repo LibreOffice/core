@@ -349,9 +349,9 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, CutHdl_Impl)
 {
     if( !bBusy )
     {
-        bBusy = sal_True;
+        bBusy = true;
         ContinueHyph_Impl( /*nHyphPos*/nOldPos );
-        bBusy = sal_False;
+        bBusy = false;
     }
     return 0;
 }
@@ -367,9 +367,9 @@ IMPL_LINK( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, EMPTYARG /*pButt
 
             xProp->setIsHyphAuto( sal_True );
 
-            bBusy = sal_True;
+            bBusy = true;
             ContinueHyph_Impl( /*nHyphPos*/nOldPos );
-            bBusy = sal_False;
+            bBusy = false;
 
             xProp->setIsHyphAuto( sal_False );
         }
@@ -387,9 +387,9 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, DeleteHdl_Impl)
 {
     if( !bBusy )
     {
-        bBusy = sal_True;
+        bBusy = true;
         ContinueHyph_Impl();
-        bBusy = sal_False;
+        bBusy = false;
     }
     return 0;
 }
@@ -399,9 +399,9 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, ContinueHdl_Impl)
 {
     if( !bBusy )
     {
-        bBusy = sal_True;
+        bBusy = true;
         ContinueHyph_Impl( CONTINUE_HYPH );
-        bBusy = sal_False;
+        bBusy = false;
     }
     return 0;
 }
@@ -411,10 +411,10 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, CancelHdl_Impl)
 {
     if( !bBusy )
     {
-        bBusy = sal_True;
+        bBusy = true;
         pHyphWrapper->SpellEnd();
         EndDialog( RET_CANCEL );
-        bBusy = sal_False;
+        bBusy = false;
     }
     return 0;
 }
@@ -424,9 +424,9 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, Left_Impl)
 {
     if( !bBusy )
     {
-        bBusy = sal_True;
+        bBusy = true;
         SelLeft();
-        bBusy = sal_False;
+        bBusy = false;
     }
     return 0;
 }
@@ -436,9 +436,9 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, Right_Impl)
 {
     if( !bBusy )
     {
-        bBusy = sal_True;
+        bBusy = true;
         SelRight();
-        bBusy = sal_False;
+        bBusy = false;
     }
     return 0;
 }
@@ -467,7 +467,7 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     , nHyphPos(0)
     , nOldPos(0)
     , nHyphenationPositionsOffset(0)
-    , bBusy(sal_False)
+    , bBusy(false)
 {
     get(m_pWordEdit, "worded");
     get(m_pLeftBtn, "left");

@@ -483,7 +483,7 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
     return bModified;
 }
 
-void SvxProxyTabPage::EnableControls_Impl(sal_Bool bEnable)
+void SvxProxyTabPage::EnableControls_Impl(bool bEnable)
 {
     m_pHttpProxyFT->Enable(bEnable);
     m_pHttpProxyED->Enable(bEnable);
@@ -643,7 +643,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
 
         if ( m_pSavePasswordsCB->IsChecked() )
         {
-            sal_Bool bOldValue = xMasterPasswd->allowPersistentStoring( sal_True );
+            bool bOldValue = xMasterPasswd->allowPersistentStoring( sal_True );
             xMasterPasswd->removeMasterPassword();
             if ( xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
@@ -933,8 +933,8 @@ SfxTabPage* MozPluginTabPage::Create( Window* pParent,
 
 bool MozPluginTabPage::FillItemSet( SfxItemSet& )
 {
-    sal_Bool hasInstall = isInstalled();
-    sal_Bool hasChecked = m_pWBasicCodeCB->IsChecked();
+    bool hasInstall = isInstalled();
+    bool hasChecked = m_pWBasicCodeCB->IsChecked();
     if(hasInstall && (!hasChecked)){
         //try to uninstall
         uninstallPlugin();
@@ -978,7 +978,7 @@ inline bool getDllURL(OString * path)
     return true;
 }
 
-sal_Bool MozPluginTabPage::isInstalled()
+bool MozPluginTabPage::isInstalled()
 {
 #ifdef UNIX
     // get the real file referred by .so lnk file
@@ -1027,7 +1027,7 @@ sal_Bool MozPluginTabPage::isInstalled()
 #endif
 }
 
-sal_Bool MozPluginTabPage::installPlugin()
+bool MozPluginTabPage::installPlugin()
 {
 #ifdef UNIX
     // get the real file referred by .so lnk file
@@ -1074,7 +1074,7 @@ sal_Bool MozPluginTabPage::installPlugin()
 #endif
 }
 
-sal_Bool MozPluginTabPage::uninstallPlugin()
+bool MozPluginTabPage::uninstallPlugin()
 {
 #ifdef UNIX
     // get the real file referred by .so lnk file
@@ -1107,7 +1107,7 @@ class MailerProgramCfg_Impl : public utl::ConfigItem
     // variables
     OUString sProgram;
     // readonly states
-    sal_Bool bROProgram;
+    bool bROProgram;
 
     const Sequence<OUString> GetPropertyNames();
 public:
@@ -1122,7 +1122,7 @@ public:
 
 MailerProgramCfg_Impl::MailerProgramCfg_Impl() :
     utl::ConfigItem("Office.Common/ExternalMailer"),
-    bROProgram(sal_False)
+    bROProgram(false)
 {
     const Sequence< OUString > aNames = GetPropertyNames();
     const Sequence< Any > aValues = GetProperties(aNames);
@@ -1236,11 +1236,11 @@ SfxTabPage*  SvxEMailTabPage::Create( Window* pParent, const SfxItemSet& rAttrSe
 
 bool SvxEMailTabPage::FillItemSet( SfxItemSet& )
 {
-    sal_Bool bMailModified = sal_False;
+    bool bMailModified = false;
     if(!pImpl->aMailConfig.bROProgram && m_pMailerURLED->GetSavedValue() != m_pMailerURLED->GetText())
     {
         pImpl->aMailConfig.sProgram = m_pMailerURLED->GetText();
-        bMailModified = sal_True;
+        bMailModified = true;
     }
     if ( bMailModified )
         pImpl->aMailConfig.Commit();

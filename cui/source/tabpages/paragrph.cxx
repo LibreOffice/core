@@ -205,7 +205,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     SfxItemPool* pPool = rOutSet.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
 
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     sal_uInt16 nWhich;
     sal_Int32 nPos = m_pLineDist->GetSelectEntryPos();
 
@@ -251,7 +251,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
              SFX_ITEM_DONTCARE == eState )
         {
             rOutSet.Put( aSpacing );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -295,7 +295,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
              SFX_ITEM_DONTCARE == eState )
         {
             rOutSet.Put( aMargin );
-            bModified = sal_True;
+            bModified = true;
         }
     }
     bool bNullTab = false;
@@ -352,7 +352,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
              SFX_ITEM_DONTCARE == eState )
         {
             rOutSet.Put( aMargin );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -391,7 +391,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         {
             pRegItem->SetValue(!bSet);
             rOutSet.Put(*pRegItem);
-            bModified = sal_True;
+            bModified = true;
         }
         else if ( SFX_ITEM_DEFAULT == GetItemSet().GetItemState( _nWhich, false ) )
             rOutSet.ClearItem(_nWhich);
@@ -604,7 +604,7 @@ void SvxStdParagraphTabPage::EnableRelativeMode()
     m_pRightIndent->EnableRelativeMode( 0, 999 );
     m_pTopDist->EnableRelativeMode( 0, 999 );
     m_pBottomDist->EnableRelativeMode( 0, 999 );
-    bRelativeMode = sal_True;
+    bRelativeMode = true;
 }
 
 int SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -623,8 +623,8 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,  const SfxItemS
     nWidth          ( 11905 /*567 * 50*/ ),
     nMinFixDist(0L),
 
-    bRelativeMode   ( sal_False ),
-    bNegativeIndents(sal_False)
+    bRelativeMode   ( false ),
+    bNegativeIndents(false)
 
 {
     get(m_pLeftIndent,"spinED_LEFTINDENT");
@@ -672,7 +672,7 @@ void SvxStdParagraphTabPage::EnableNegativeMode()
     m_pRightIndent->SetMin(-9999);
     m_pRightIndent->EnableNegativeMode();
     m_pLeftIndent->EnableNegativeMode();
-    bNegativeIndents = sal_True;
+    bNegativeIndents = true;
 }
 
 sal_uInt16* SvxStdParagraphTabPage::GetRanges()
@@ -809,7 +809,7 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox *, pBox )
         }
         break;
     }
-    UpdateExample_Impl( sal_True );
+    UpdateExample_Impl( true );
     return 0;
 }
 
@@ -847,7 +847,7 @@ void SvxStdParagraphTabPage::Init_Impl()
     m_pLineDistAtMetricBox->SetMax( m_pLineDistAtMetricBox->Normalize( nAbst ), eUnit );
 }
 
-void SvxStdParagraphTabPage::UpdateExample_Impl( sal_Bool bAll )
+void SvxStdParagraphTabPage::UpdateExample_Impl( bool bAll )
 {
     m_pExampleWin->SetFirstLineOfst( (short)m_pFLineIndent->Denormalize( m_pFLineIndent->GetValue( FUNIT_TWIP ) ) );
     m_pExampleWin->SetLeftMargin( static_cast<long>(m_pLeftIndent->Denormalize( m_pLeftIndent->GetValue( FUNIT_TWIP ) ) ) );
@@ -893,7 +893,7 @@ void SvxStdParagraphTabPage::EnableContextualMode()
 
 IMPL_LINK( SvxStdParagraphTabPage, AutoHdl_Impl, CheckBox*, pBox )
 {
-    sal_Bool bEnable = !pBox->IsChecked();
+    bool bEnable = !pBox->IsChecked();
     m_pFLineLabel->Enable(bEnable);
     m_pFLineIndent->Enable(bEnable);
     return 0;
@@ -1056,7 +1056,7 @@ sal_uInt16* SvxParaAlignTabPage::GetRanges()
 
 bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     bool bAdj = false, bChecked = false;
     SvxAdjust eAdjust = SVX_ADJUST_LEFT;
@@ -1112,7 +1112,7 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
              pOld->GetLastBlock() != eLastBlock ||
              ( bChecked && bNothingWasChecked ) )
         {
-            bModified = sal_True;
+            bModified = true;
             SvxAdjustItem aAdj(
                 (const SvxAdjustItem&)GetItemSet().Get( _nWhich ) );
             aAdj.SetAdjust( eAdjust );
@@ -1124,12 +1124,12 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
     if(TriState(m_pSnapToGridCB->IsChecked()) != m_pSnapToGridCB->GetSavedValue())
     {
         rOutSet.Put(SvxParaGridItem(m_pSnapToGridCB->IsChecked(), GetWhich( SID_ATTR_PARA_SNAPTOGRID )));
-        bModified = sal_True;
+        bModified = true;
     }
     if(m_pVertAlignLB->GetSavedValue() != m_pVertAlignLB->GetSelectEntryPos())
     {
         rOutSet.Put(SvxParaVertAlignItem(m_pVertAlignLB->GetSelectEntryPos(), GetWhich( SID_PARA_VERTALIGN )));
-        bModified = sal_True;
+        bModified = true;
     }
 
     if( m_pTextDirectionLB->IsVisible() )
@@ -1138,7 +1138,7 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
         if( eDir != m_pTextDirectionLB->GetSavedValue() )
         {
             rOutSet.Put( SvxFrameDirectionItem( eDir, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -1166,7 +1166,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
             case SVX_ADJUST_BLOCK: m_pJustify->Check(); break;
             default: ; //prevent warning
         }
-        sal_Bool bEnable = m_pJustify->IsChecked();
+        bool bEnable = m_pJustify->IsChecked();
         m_pLastLineFT->Enable(bEnable);
         m_pLastLineLB->Enable(bEnable);
         m_pExpandCB->Enable(bEnable);
@@ -1239,22 +1239,22 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
     m_pLastLineLB->SaveValue();
     m_pExpandCB->SaveValue();
 
-    UpdateExample_Impl(sal_True);
+    UpdateExample_Impl(true);
 }
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl)
 {
-    sal_Bool bJustify = m_pJustify->IsChecked();
+    bool bJustify = m_pJustify->IsChecked();
     m_pLastLineFT->Enable(bJustify);
     m_pLastLineLB->Enable(bJustify);
     m_pExpandCB->Enable(bJustify);
-    UpdateExample_Impl(sal_False);
+    UpdateExample_Impl(false);
     return 0;
 }
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl)
 {
-    UpdateExample_Impl(sal_False);
+    UpdateExample_Impl(false);
     return 0;
 }
 
@@ -1276,7 +1276,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl)
     return 0;
 }
 
-void SvxParaAlignTabPage::UpdateExample_Impl( sal_Bool bAll )
+void SvxParaAlignTabPage::UpdateExample_Impl( bool bAll )
 {
     if ( m_pLeft->IsChecked() )
         m_pExampleWin->SetAdjust( SVX_ADJUST_LEFT );
@@ -1326,7 +1326,7 @@ SfxTabPage* SvxExtParagraphTabPage::Create( Window* pParent,
 
 bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_HYPHENZONE );
     const TriState eHyphenState = m_pHyphenBox->GetState();
     const SfxPoolItem* pOld = GetOldItem( rOutSet, SID_ATTR_PARA_HYPHENZONE );
@@ -1352,7 +1352,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
                 eHyphenState != m_pHyphenBox->GetSavedValue())
         {
             rOutSet.Put( aHyphen );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -1366,7 +1366,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         if ( !pOld || ( (const SfxUInt16Item*)pOld )->GetValue() != aPageNum.GetValue() )
         {
             rOutSet.Put( aPageNum );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -1391,7 +1391,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         if ( !pOld || ( (const SvxPageModelItem*)pOld )->GetValue() != sPage )
         {
             rOutSet.Put( SvxPageModelItem( sPage, false, _nWhich ) );
-            bModified = sal_True;
+            bModified = true;
         }
         else
             bIsPageModel = false;
@@ -1424,7 +1424,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             {
                 case TRISTATE_TRUE:
                 {
-                    sal_Bool bBefore = m_pBreakPositionLB->GetSelectEntryPos() == 0;
+                    bool bBefore = m_pBreakPositionLB->GetSelectEntryPos() == 0;
 
                     if ( m_pBreakTypeLB->GetSelectEntryPos() == 0 )
                     {
@@ -1453,7 +1453,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             if ( eState != m_pPageBreakBox->GetSavedValue()                ||
                     !pOld || !( *(const SvxFmtBreakItem*)pOld == aBreak ) )
             {
-                bModified = sal_True;
+                bModified = true;
                 rOutSet.Put( aBreak );
             }
         }
@@ -1471,7 +1471,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
                       ( eState == TRISTATE_FALSE ) )
         {
             rOutSet.Put( SvxFmtSplitItem( eState == TRISTATE_FALSE, _nWhich ) );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -1483,7 +1483,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     {
         // if the status has changed, putting is necessary
         rOutSet.Put( SvxFmtKeepItem( eState == TRISTATE_TRUE, _nWhich ) );
-        bModified = sal_True;
+        bModified = true;
     }
 
     // widows and orphans
@@ -1500,7 +1500,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         if ( eState != m_pWidowBox->GetSavedValue() || !pOld || !( *(const SvxWidowsItem*)pOld == rItem ) )
         {
             rOutSet.Put( rItem );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -1519,7 +1519,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
                     !( *(const SvxOrphansItem*)pOld == rItem ) )
         {
             rOutSet.Put( rItem );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -1531,8 +1531,8 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_HYPHENZONE );
     SfxItemState eItemState = rSet.GetItemState( _nWhich );
 
-    sal_Bool bItemAvailable = eItemState >= SFX_ITEM_AVAILABLE;
-    sal_Bool bIsHyphen = sal_False;
+    bool bItemAvailable = eItemState >= SFX_ITEM_AVAILABLE;
+    bool bIsHyphen = false;
     if( !bHtmlMode && bItemAvailable )
     {
         const SvxHyphenZoneItem& rHyphen =
@@ -1550,7 +1550,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
     {
         m_pHyphenBox->SetState( TRISTATE_INDET );
     }
-    sal_Bool bEnable = bItemAvailable && bIsHyphen;
+    bool bEnable = bItemAvailable && bIsHyphen;
     m_pExtHyphenBeforeBox->Enable(bEnable);
     m_pExtHyphenAfterBox->Enable(bEnable);
     m_pBeforeText->Enable(bEnable);
@@ -1571,7 +1571,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
     {
         // first handle PageModel
         _nWhich = GetWhich( SID_ATTR_PARA_MODEL );
-        sal_Bool bIsPageModel = sal_False;
+        bool bIsPageModel = false;
         eItemState = rSet.GetItemState( _nWhich );
 
         if ( eItemState >= SFX_ITEM_SET )
@@ -1587,7 +1587,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
             {
                 m_pApplyCollBox->SelectEntry( aStr );
                 m_pApplyCollBtn->SetState( TRISTATE_TRUE );
-                bIsPageModel = sal_True;
+                bIsPageModel = true;
 
                 m_pPageBreakBox->Enable();
                 m_pPageBreakBox->EnableTriState( false );
@@ -1646,7 +1646,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
 
                 m_pPageBreakBox->SetState( TRISTATE_TRUE );
 
-                sal_Bool _bEnable =     eBreak != SVX_BREAK_NONE &&
+                bool _bEnable =     eBreak != SVX_BREAK_NONE &&
                                 eBreak != SVX_BREAK_COLUMN_BEFORE &&
                                 eBreak != SVX_BREAK_COLUMN_AFTER;
                 m_pApplyCollBtn->Enable(_bEnable);
@@ -1742,7 +1742,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
                 m_pWidowBox->EnableTriState( false );
                 const sal_uInt16 nLines = rWidow.GetValue();
 
-                sal_Bool _bEnable = nLines > 0;
+                bool _bEnable = nLines > 0;
                 m_pWidowRowNo->SetValue( m_pWidowRowNo->Normalize( nLines ) );
                 m_pWidowBox->SetState( _bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
                 m_pWidowRowNo->Enable(_bEnable);
@@ -1765,7 +1765,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
                 const sal_uInt16 nLines = rOrphan.GetValue();
                 m_pOrphanBox->EnableTriState( false );
 
-                sal_Bool _bEnable = nLines > 0;
+                bool _bEnable = nLines > 0;
                 m_pOrphanBox->SetState( _bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
                 m_pOrphanRowNo->SetValue( m_pOrphanRowNo->Normalize( nLines ) );
                 m_pOrphanRowNo->Enable(_bEnable);
@@ -1813,7 +1813,7 @@ int SvxExtParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 void SvxExtParagraphTabPage::DisablePageBreak()
 {
-    bPageBreak = sal_False;
+    bPageBreak = false;
     m_pPageBreakBox->Enable(false);
     m_pBreakTypeLB->RemoveEntry(0);
     m_pBreakPositionFT->Enable(false);
@@ -1826,8 +1826,8 @@ void SvxExtParagraphTabPage::DisablePageBreak()
 SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSet& rAttr ) :
     SfxTabPage( pParent, "TextFlowPage","cui/ui/textflowpage.ui", rAttr ),
 
-    bPageBreak  ( sal_True ),
-    bHtmlMode   ( sal_False ),
+    bPageBreak  ( true ),
+    bHtmlMode   ( false ),
     nStdPos     ( 0 )
 {
     // Hyphenation
@@ -1902,7 +1902,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     sal_uInt16 nHtmlMode = GetHtmlMode_Impl( rAttr );
     if ( nHtmlMode & HTMLMODE_ON )
     {
-        bHtmlMode = sal_True;
+        bHtmlMode = true;
         m_pHyphenBox           ->Enable(false);
         m_pBeforeText          ->Enable(false);
         m_pExtHyphenBeforeBox  ->Enable(false);
@@ -1941,7 +1941,7 @@ IMPL_LINK_NOARG(SvxExtParagraphTabPage, PageBreakHdl_Impl)
             {
                 m_pApplyCollBtn->Enable();
 
-                sal_Bool bEnable = TRISTATE_TRUE == m_pApplyCollBtn->GetState() &&
+                bool bEnable = TRISTATE_TRUE == m_pApplyCollBtn->GetState() &&
                                             m_pApplyCollBox->GetEntryCount();
                 m_pApplyCollBox->Enable(bEnable);
                 if(!bHtmlMode)
@@ -1970,7 +1970,7 @@ IMPL_LINK_NOARG(SvxExtParagraphTabPage, PageBreakHdl_Impl)
 
 IMPL_LINK_NOARG(SvxExtParagraphTabPage, KeepTogetherHdl_Impl)
 {
-    sal_Bool bEnable = m_pKeepTogetherBox->GetState() == TRISTATE_FALSE;
+    bool bEnable = m_pKeepTogetherBox->GetState() == TRISTATE_FALSE;
     m_pWidowBox->Enable(bEnable);
     m_pOrphanBox->Enable(bEnable);
 
@@ -2026,7 +2026,7 @@ IMPL_LINK_NOARG(SvxExtParagraphTabPage, OrphanHdl_Impl)
 IMPL_LINK_NOARG(SvxExtParagraphTabPage, HyphenClickHdl_Impl)
 {
 
-    sal_Bool bEnable = m_pHyphenBox->GetState() == TRISTATE_TRUE;
+    bool bEnable = m_pHyphenBox->GetState() == TRISTATE_TRUE;
     m_pBeforeText->Enable(bEnable);
     m_pExtHyphenBeforeBox->Enable(bEnable);
     m_pAfterText->Enable(bEnable);
@@ -2040,11 +2040,11 @@ IMPL_LINK_NOARG(SvxExtParagraphTabPage, HyphenClickHdl_Impl)
 
 IMPL_LINK_NOARG(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl)
 {
-    sal_Bool bEnable = sal_False;
+    bool bEnable = false;
     if ( m_pApplyCollBtn->GetState() == TRISTATE_TRUE &&
          m_pApplyCollBox->GetEntryCount() )
     {
-        bEnable = sal_True;
+        bEnable = true;
         m_pApplyCollBox->SelectEntryPos( nStdPos );
     }
     else
@@ -2066,7 +2066,7 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox *, pListBox )
     {
         m_pApplyCollBtn->Enable();
 
-        sal_Bool bEnable = m_pApplyCollBtn->GetState() == TRISTATE_TRUE &&
+        bool bEnable = m_pApplyCollBtn->GetState() == TRISTATE_TRUE &&
                                     m_pApplyCollBox->GetEntryCount();
 
         m_pApplyCollBox->Enable(bEnable);
@@ -2149,7 +2149,7 @@ sal_uInt16*     SvxAsianTabPage::GetRanges()
 
 bool SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SfxItemPool* pPool = rSet.GetPool();
     if (m_pScriptSpaceCB->IsEnabled() && TriState(m_pScriptSpaceCB->IsChecked()) != m_pScriptSpaceCB->GetSavedValue())
     {
@@ -2158,7 +2158,7 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
         pNewItem->SetValue(m_pScriptSpaceCB->IsChecked());
         rSet.Put(*pNewItem);
         delete pNewItem;
-        bRet = sal_True;
+        bRet = true;
     }
     if (m_pHangingPunctCB->IsEnabled() && TriState(m_pHangingPunctCB->IsChecked()) != m_pHangingPunctCB->GetSavedValue())
     {
@@ -2167,7 +2167,7 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
         pNewItem->SetValue(m_pHangingPunctCB->IsChecked());
         rSet.Put(*pNewItem);
         delete pNewItem;
-        bRet = sal_True;
+        bRet = true;
     }
     if (m_pForbiddenRulesCB->IsEnabled() && TriState(m_pForbiddenRulesCB->IsChecked()) != m_pForbiddenRulesCB->GetSavedValue())
     {
@@ -2176,7 +2176,7 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
         pNewItem->SetValue(m_pForbiddenRulesCB->IsChecked());
         rSet.Put(*pNewItem);
         delete pNewItem;
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }

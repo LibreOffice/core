@@ -125,7 +125,7 @@ void SvxCommonLinguisticControl::SetButtonHandler( ButtonType _eType, const Link
 }
 
 
-void SvxCommonLinguisticControl::EnableButton( ButtonType _eType, sal_Bool _bEnable )
+void SvxCommonLinguisticControl::EnableButton( ButtonType _eType, bool _bEnable )
 {
     Button* pButton = GetButton( _eType );
     if ( pButton )

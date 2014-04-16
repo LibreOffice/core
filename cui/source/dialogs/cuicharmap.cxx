@@ -44,7 +44,7 @@
 
 // class SvxCharacterMap =================================================
 
-SvxCharacterMap::SvxCharacterMap( Window* pParent, sal_Bool bOne_, const SfxItemSet* pSet )
+SvxCharacterMap::SvxCharacterMap( Window* pParent, bool bOne_, const SfxItemSet* pSet )
     : SfxModalDialog(pParent, "SpecialCharactersDialog", "cui/ui/specialcharacters.ui")
     , bOne( bOne_ )
     , pSubsetMap( NULL )
@@ -171,7 +171,7 @@ short SvxCharacterMap::Execute()
 
 // class SvxShowText =====================================================
 
-SvxShowText::SvxShowText(Window* pParent, sal_Bool bCenter)
+SvxShowText::SvxShowText(Window* pParent, bool bCenter)
     : Control(pParent)
     , mnY(0)
     , mbCenter(bCenter)
@@ -455,7 +455,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
     pSubsetMap = NULL;
     m_pSubsetLB->Clear();
 
-    sal_Bool bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
+    bool bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
     if( bNeedSubset )
     {
         FontCharMap aFontCharMap;
@@ -476,7 +476,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
             bFirst = false;
         }
         if( m_pSubsetLB->GetEntryCount() <= 1 )
-            bNeedSubset = sal_False;
+            bNeedSubset = false;
     }
 
     m_pSubsetText->Enable(bNeedSubset);
@@ -541,7 +541,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl)
 {
     OUString aText;
     sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
-    sal_Bool bSelect = (cChar > 0);
+    bool bSelect = (cChar > 0);
 
     // show char sample
     if ( bSelect )

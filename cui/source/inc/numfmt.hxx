@@ -48,7 +48,7 @@ private:
     Color           aPrevCol;
     sal_Int32       mnPos;
     sal_Unicode     mnChar;
-    void            InitSettings( sal_Bool bForeground, sal_Bool bBackground );
+    void            InitSettings( bool bForeground, bool bBackground );
 
 protected:
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -83,7 +83,7 @@ public:
                                 { SetInfoItem( rItem ); }
 
     void                    SetOkHdl( const Link& rOkHandler );
-    void                    HideLanguage(sal_Bool nFlag=sal_True);
+    void                    HideLanguage(bool nFlag=true);
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void            PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 private:
@@ -122,8 +122,8 @@ private:
     sal_uLong               nInitFormat;
     Link                    fnOkHdl;
 
-    sal_Bool                bNumItemFlag; ///< for handling with DocShell
-    sal_Bool                bOneAreaFlag;
+    bool                bNumItemFlag; ///< for handling with DocShell
+    bool                bOneAreaFlag;
     short                   nFixedCategory;
 
     OUString sAutomaticEntry;
@@ -133,15 +133,15 @@ private:
     void    Init_Impl();
     void    FillCurrencyBox();
     void    FillFormatListBox_Impl( std::vector<OUString>& rEntries );
-    void    UpdateOptions_Impl( sal_Bool bCheckCatChange );
-    void    UpdateFormatListBox_Impl( sal_uInt16 bCat, sal_Bool bUpdateEdit );
+    void    UpdateOptions_Impl( bool bCheckCatChange );
+    void    UpdateFormatListBox_Impl( sal_uInt16 bCat, bool bUpdateEdit );
     void    Obstructing();
     void    EnableBySourceFormat_Impl();
     void    SetCategory( sal_uInt16 nPos );
     OUString  GetExpColorString( Color*& rpPreviewColor, const OUString& aFormatStr, short nTmpCatPos );
     void    MakePreviewText( const OUString& rFormat );
     void    ChangePreviewText( sal_uInt16 nPos );
-    void    AddAutomaticLanguage_Impl(LanguageType eAutoLang, sal_Bool bSelect);
+    void    AddAutomaticLanguage_Impl(LanguageType eAutoLang, bool bSelect);
     // Handler
     DECL_LINK( LostFocusHdl_Impl, Edit* pEd );
     DECL_LINK( DoubleClickHdl_Impl, SvxFontListBox* pLb );

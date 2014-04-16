@@ -115,12 +115,12 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet& )
 
 IMPL_LINK(SvxAccessibilityOptionsTabPage, TipHelpHdl, CheckBox*, pBox)
 {
-    sal_Bool bChecked = pBox->IsChecked();
+    bool bChecked = pBox->IsChecked();
     m_pTipHelpNF->Enable(bChecked);
     return 0;
 }
 
-void SvxAccessibilityOptionsTabPage::EnableTipHelp(sal_Bool bCheck)
+void SvxAccessibilityOptionsTabPage::EnableTipHelp(bool bCheck)
 {
     m_pTipHelpCB->Check(bCheck);
     m_pTipHelpNF->Enable(bCheck);

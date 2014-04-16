@@ -319,7 +319,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
 IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, CheckBox*, pBox)
 {
     OUString sFontName = m_pFontNameLB->GetSelectEntry();
-    sal_Bool bNonPropOnly = pBox->IsChecked();
+    bool bNonPropOnly = pBox->IsChecked();
     m_pFontNameLB->Clear();
     FontList aFntLst( Application::GetDefaultDevice() );
     m_pFontNameLB->InsertEntry(m_sAutomatic);
@@ -336,11 +336,11 @@ IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, CheckBox*, pBox)
 
 void SvxFontSubstTabPage::CheckEnable()
 {
-    sal_Bool bEnableAll = m_pUseTableCB->IsChecked();
+    bool bEnableAll = m_pUseTableCB->IsChecked();
     m_pReplacements->Enable(bEnableAll);
     if (bEnableAll)
     {
-        sal_Bool bApply, bDelete;
+        bool bApply, bDelete;
 
         SvTreeListEntry* pEntry = m_pCheckLB->FirstSelected();
 
@@ -350,15 +350,15 @@ void SvxFontSubstTabPage::CheckEnable()
 
         // because of OS/2 optimization error (Bug #56267) a bit more intricate:
         if (m_pFont1CB->GetText().isEmpty() || m_pFont2CB->GetText().isEmpty())
-            bApply = sal_False;
+            bApply = false;
         else if(m_pFont1CB->GetText() == m_pFont2CB->GetText())
-            bApply = sal_False;
+            bApply = false;
         else if(m_pCheckLB->GetEntryPos(sEntry) != 0xffffffff)
-            bApply = sal_False;
+            bApply = false;
         else if(pEntry != 0 && m_pCheckLB->NextSelected(pEntry) != 0)
-            bApply = sal_False;
+            bApply = false;
         else
-            bApply = sal_True;
+            bApply = true;
 
         bDelete = pEntry != 0;
 
@@ -454,7 +454,7 @@ void    SvxFontSubstCheckListBox::KeyInput( const KeyEvent& rKEvt )
         SvSimpleTable::KeyInput(rKEvt);
 }
 
-void SvxFontSubstCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked)
+void SvxFontSubstCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, bool bChecked)
 {
     if ( nPos < GetEntryCount() )
         SetCheckButtonState(
@@ -464,7 +464,7 @@ void SvxFontSubstCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sa
                                        SvButtonState( SV_BUTTON_UNCHECKED ) );
 }
 
-void SvxFontSubstCheckListBox::CheckEntry(SvTreeListEntry* pEntry, sal_uInt16 nCol, sal_Bool bChecked)
+void SvxFontSubstCheckListBox::CheckEntry(SvTreeListEntry* pEntry, sal_uInt16 nCol, bool bChecked)
 {
     if ( pEntry )
         SetCheckButtonState(
@@ -474,12 +474,12 @@ void SvxFontSubstCheckListBox::CheckEntry(SvTreeListEntry* pEntry, sal_uInt16 nC
                                        SvButtonState( SV_BUTTON_UNCHECKED ) );
 }
 
-sal_Bool SvxFontSubstCheckListBox::IsChecked(sal_uLong nPos, sal_uInt16 nCol)
+bool SvxFontSubstCheckListBox::IsChecked(sal_uLong nPos, sal_uInt16 nCol)
 {
     return GetCheckButtonState( GetEntry(nPos), nCol ) == SV_BUTTON_CHECKED;
 }
 
-sal_Bool SvxFontSubstCheckListBox::IsChecked(SvTreeListEntry* pEntry, sal_uInt16 nCol)
+bool SvxFontSubstCheckListBox::IsChecked(SvTreeListEntry* pEntry, sal_uInt16 nCol)
 {
     return GetCheckButtonState( pEntry, nCol ) == SV_BUTTON_CHECKED;
 }

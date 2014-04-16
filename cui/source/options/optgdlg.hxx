@@ -150,8 +150,8 @@ class OfaLanguagesTabPage : public SfxTabPage
     CheckBox*       m_pCTLSupportCB;
     CheckBox*       m_pIgnoreLanguageChangeCB;
 
-    sal_Bool        m_bOldAsian;
-    sal_Bool        m_bOldCtl;
+    bool        m_bOldAsian;
+    bool        m_bOldCtl;
     LanguageConfig_Impl*    pLangConfig;
 
     OUString        m_sUserLocaleValue;

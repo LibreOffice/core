@@ -86,20 +86,20 @@ struct TAccInfo
                  const KeyCode&  aKey    )
             : m_nKeyPos        (nKeyPos  )
             , m_nListPos       (nListPos )
-            , m_bIsConfigurable(sal_True ) /**< its important to set sal_True as default -
+            , m_bIsConfigurable(true ) /**< its important to set sal_True as default -
                                                 because only fix entries will be disabled later ... */
             , m_sCommand       (         )
             , m_aKey           (aKey     )
         {}
 
-        sal_Bool isConfigured() const
+        bool isConfigured() const
         {
             return (m_nKeyPos>-1 && m_nListPos>-1 && !m_sCommand.isEmpty());
         }
 
         sal_Int32 m_nKeyPos;
         sal_Int32 m_nListPos;
-        sal_Bool m_bIsConfigurable;
+        bool m_bIsConfigurable;
         OUString m_sCommand;
         KeyCode m_aKey;
 };
@@ -134,7 +134,7 @@ private:
     OUString                        aFilterAllStr;
     OUString                        aFilterCfgStr;
     SfxStylesInfo_Impl              m_aStylesInfo;
-    sal_Bool                        m_bStylesInfoInitialized;
+    bool                        m_bStylesInfoInitialized;
 
     css::uno::Reference< css::uno::XComponentContext >     m_xContext;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xGlobal;

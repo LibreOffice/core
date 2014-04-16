@@ -110,7 +110,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
     pPathBox        ( NULL ),
     m_pCurEntry     ( NULL ),
     m_nOldCount     ( 0 ),
-    m_bModified     ( sal_False )
+    m_bModified     ( false )
 {
     get(m_pPathCtrl, "pathctrl");
     Size aControlSize(248, 147);
@@ -238,7 +238,7 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
         rBar.SetItemSize( ITEMID_TYPE, aUserData.getToken(0, ';').toInt32() );
         HeaderEndDrag_Impl( &rBar );
         // restore sort direction
-        sal_Bool bUp = (sal_Bool)(sal_uInt16)aUserData.getToken(1, ';').toInt32();
+        bool bUp = aUserData.getToken(1, ';').toInt32() != 0;
         HeaderBarItemBits nBits = rBar.GetItemBits(ITEMID_TYPE);
 
         if ( bUp )
@@ -264,7 +264,7 @@ void DbRegistrationOptionsPage::FillUserData()
 
     OUString aUserData = OUString::number( rBar.GetItemSize( ITEMID_TYPE ) ) + ";";
     HeaderBarItemBits nBits = rBar.GetItemBits( ITEMID_TYPE );
-    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     aUserData += (bUp ? OUString("1") : OUString("0"));
     SetUserData( aUserData );
 }
@@ -319,7 +319,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
         return 0;
 
     HeaderBarItemBits nBits = pBar->GetItemBits(ITEMID_TYPE);
-    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     SvSortMode eMode = SortAscending;
 
     if ( bUp )
@@ -430,7 +430,7 @@ void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const O
                 pPathBox->GetModel()->Remove( _pEntry );
             }
             insertNewEntry( sNewName, sNewLocation, false );
-            m_bModified = sal_True;
+            m_bModified = true;
         }
     }
 }

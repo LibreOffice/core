@@ -172,7 +172,7 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
     bAppConfig = *bApp;
     if ( *bApp )
     {
-        SetReadOnly( sal_False );
+        SetReadOnly( false );
         _SvxMacroTabPage::DisplayAppEvents( true );
     }
     else

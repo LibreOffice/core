@@ -1278,7 +1278,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( sal_uInt32,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& ,
                                             const SfxItemSet* pAttrSet )
 {
-    SfxModalDialog* pDlg = new SvxCharacterMap( pParent, sal_True, pAttrSet );
+    SfxModalDialog* pDlg = new SvxCharacterMap( pParent, true, pAttrSet );
     return new CuiAbstractSfxDialog_Impl( pDlg );
 }
 
@@ -1543,7 +1543,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
             pDlg = new SfxMacroAssignDlg( pParent, _rxDocumentFrame, rAttr );
             break;
         case RID_SVXDLG_CHARMAP :
-            pDlg = new SvxCharacterMap( pParent, sal_True, &rAttr );
+            pDlg = new SvxCharacterMap( pParent, true, &rAttr );
             break;
         default:
             break;

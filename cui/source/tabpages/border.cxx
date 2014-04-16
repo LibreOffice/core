@@ -215,7 +215,7 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
     SetFieldUnit(*m_pEdShadowSize, eFUnit);
 
     sal_uInt16 nWhich = GetWhich( SID_ATTR_BORDER_INNER, false );
-    sal_Bool bIsDontCare = sal_True;
+    bool bIsDontCare = true;
 
     if ( rCoreAttrs.GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
     {
@@ -429,7 +429,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
                 {
                     if( rSet.GetItemState( nWhichBox, true ) >= SFX_ITEM_DEFAULT )
                     {
-                        sal_Bool bIsAnyBorderVisible = m_pFrameSel->IsAnyBorderVisible();
+                        bool bIsAnyBorderVisible = m_pFrameSel->IsAnyBorderVisible();
                         if( !bIsAnyBorderVisible || !pBoxInfoItem->IsMinDist() )
                         {
                             m_pLeftMF->SetMin( 0 );
@@ -454,7 +454,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
                         // or it is null with an active border line
                         // no automatic changes should be made
                         const long nDefDist = bIsAnyBorderVisible ? pBoxInfoItem->GetDefDist() : 0;
-                        sal_Bool bDiffDist = (nDefDist != nLeftDist ||
+                        bool bDiffDist = (nDefDist != nLeftDist ||
                                     nDefDist != nRightDist ||
                                     nDefDist != nTopDist   ||
                                     nDefDist != nBottomDist);
@@ -534,7 +534,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
         SelColHdl_Impl(m_pLbLineColor);
     }
 
-    sal_Bool bEnable = m_pWndShadows->GetSelectItemId() > 1 ;
+    bool bEnable = m_pWndShadows->GetSelectItemId() > 1 ;
     m_pFtShadowSize->Enable(bEnable);
     m_pEdShadowSize->Enable(bEnable);
     m_pFtShadowColor->Enable(bEnable);
@@ -827,7 +827,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl)
 
 IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl)
 {
-    sal_Bool bEnable = m_pWndShadows->GetSelectItemId() > 1;
+    bool bEnable = m_pWndShadows->GetSelectItemId() > 1;
     m_pFtShadowSize->Enable(bEnable);
     m_pEdShadowSize->Enable(bEnable);
     m_pFtShadowColor->Enable(bEnable);
@@ -1088,9 +1088,9 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl)
 {
     if(!mbUseMarginItem && m_pLeftMF->IsVisible())
     {
-        sal_Bool bLineSet = m_pFrameSel->IsAnyBorderVisible();
-        sal_Bool bMinAllowed = 0 != (nSWMode & (SW_BORDER_MODE_FRAME|SW_BORDER_MODE_TABLE));
-        sal_Bool bSpaceModified =   m_pLeftMF->IsModified()||
+        bool bLineSet = m_pFrameSel->IsAnyBorderVisible();
+        bool bMinAllowed = 0 != (nSWMode & (SW_BORDER_MODE_FRAME|SW_BORDER_MODE_TABLE));
+        bool bSpaceModified =   m_pLeftMF->IsModified()||
                                 m_pRightMF->IsModified()||
                                 m_pTopMF->IsModified()||
                                 m_pBottomMF->IsModified();

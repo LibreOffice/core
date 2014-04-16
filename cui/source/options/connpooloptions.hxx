@@ -64,7 +64,7 @@ namespace offapp
         DECL_LINK( OnEnabledDisabled, const CheckBox* );
         DECL_LINK( OnDriverRowChanged, const void* );
 
-        void implInitControls(const SfxItemSet& _rSet, sal_Bool _bFromReset);
+        void implInitControls(const SfxItemSet& _rSet, bool _bFromReset);
 
         void commitTimeoutField();
     };

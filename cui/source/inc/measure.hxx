@@ -55,7 +55,7 @@ private:
     const SdrView*      pView;
     SfxMapUnit          eUnit;
 
-    sal_Bool            bPositionModified;
+    bool            bPositionModified;
 
     void                FillUnitLB();
 

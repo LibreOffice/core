@@ -266,7 +266,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         }
 
         // See if we have to check the "full width" check button.
-        sal_Bool bLeftToRight(IsTextDirectionLeftToRight());
+        bool bLeftToRight(IsTextDirectionLeftToRight());
 
         if((bLeftToRight && (SDRTEXTHORZADJUST_BLOCK == eTHA)) || (!bLeftToRight && (SDRTEXTVERTADJUST_BLOCK == eTVA)))
         {
@@ -303,7 +303,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
 
     if( rAttrs.GetItemState( SDRATTR_TEXT_CONTOURFRAME ) != SFX_ITEM_DONTCARE )
     {
-        sal_Bool bContour = ( ( const SdrTextContourFrameItem& )rAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
+        bool bContour = ( ( const SdrTextContourFrameItem& )rAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
         m_pTsbContour->SetState( bContour ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbContour->EnableTriState( false );
     }
@@ -356,31 +356,31 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     eState = m_pTsbAutoGrowHeight->GetState();
     if( eState != m_pTsbAutoGrowHeight->GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAutoGrowHeightItem( (sal_Bool) TRISTATE_TRUE == eState ) );
+        rAttrs.Put( SdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbAutoGrowWidth->GetState();
     if( eState != m_pTsbAutoGrowWidth->GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAutoGrowWidthItem( (sal_Bool) TRISTATE_TRUE == eState ) );
+        rAttrs.Put( SdrTextAutoGrowWidthItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbAutoGrowSize->GetState();
     if( eState != m_pTsbAutoGrowSize->GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAutoGrowHeightItem( (sal_Bool) TRISTATE_TRUE == eState ) );
+        rAttrs.Put( SdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbWordWrapText->GetState();
     if( eState != m_pTsbWordWrapText->GetSavedValue() )
     {
-        rAttrs.Put( SdrTextWordWrapItem( (sal_Bool) TRISTATE_TRUE == eState ) );
+        rAttrs.Put( SdrTextWordWrapItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbContour->GetState();
     if( eState != m_pTsbContour->GetSavedValue() )
     {
-        rAttrs.Put( SdrTextContourFrameItem( (sal_Bool) TRISTATE_TRUE == eState ) );
+        rAttrs.Put( SdrTextContourFrameItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbFitToSize->GetState();
@@ -427,7 +427,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     }
 
     // #103516# Do not change values if adjust controls were disabled.
-    sal_Bool bIsDisabled(m_pCtlPosition->IsCompletelyDisabled());
+    bool bIsDisabled(m_pCtlPosition->IsCompletelyDisabled());
 
     if(!bIsDisabled)
     {
@@ -467,8 +467,8 @@ void SvxTextAttrPage::Construct()
 {
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 
-    bFitToSizeEnabled = bContourEnabled = sal_True;
-    bWordWrapTextEnabled = bAutoGrowSizeEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = sal_False;
+    bFitToSizeEnabled = bContourEnabled = true;
+    bWordWrapTextEnabled = bAutoGrowSizeEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = false;
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
@@ -487,18 +487,18 @@ void SvxTextAttrPage::Construct()
                     if(pObj->HasText())
                     {
                         // contour NOT possible for pure text objects
-                        bContourEnabled = sal_False;
+                        bContourEnabled = false;
 
                         // adjusting width and height is ONLY possible for pure text objects
-                        bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = sal_True;
+                        bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = true;
                     }
                 }
                 break;
                 case OBJ_CUSTOMSHAPE :
                 {
-                    bFitToSizeEnabled = bContourEnabled = sal_False;
-                    bAutoGrowSizeEnabled = sal_True;
-                    bWordWrapTextEnabled = sal_True;
+                    bFitToSizeEnabled = bContourEnabled = false;
+                    bAutoGrowSizeEnabled = true;
+                    bWordWrapTextEnabled = true;
                 }
                 break;
                 default: ;//prevent warning
@@ -637,10 +637,10 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl)
 
 IMPL_LINK_NOARG(SvxTextAttrPage, ClickHdl_Impl)
 {
-    sal_Bool bAutoGrowWidth  = m_pTsbAutoGrowWidth->GetState() == TRISTATE_TRUE;
-    sal_Bool bAutoGrowHeight = m_pTsbAutoGrowHeight->GetState() == TRISTATE_TRUE;
-    sal_Bool bFitToSize      = m_pTsbFitToSize->GetState() == TRISTATE_TRUE;
-    sal_Bool bContour        = m_pTsbContour->GetState() == TRISTATE_TRUE;
+    bool bAutoGrowWidth  = m_pTsbAutoGrowWidth->GetState() == TRISTATE_TRUE;
+    bool bAutoGrowHeight = m_pTsbAutoGrowHeight->GetState() == TRISTATE_TRUE;
+    bool bFitToSize      = m_pTsbFitToSize->GetState() == TRISTATE_TRUE;
+    bool bContour        = m_pTsbContour->GetState() == TRISTATE_TRUE;
 
     m_pTsbContour->Enable( !bFitToSize &&
                         !( ( bAutoGrowWidth && bAutoGrowWidthEnabled ) || ( bAutoGrowHeight && bAutoGrowHeightEnabled ) ) &&
@@ -672,7 +672,7 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickHdl_Impl)
     // #103516# Do the setup based on states of hor/ver adjust
     SfxItemState eVState = rOutAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST );
     SfxItemState eHState = rOutAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST );
-    sal_Bool bHorAndVer(SFX_ITEM_DONTCARE == eVState || SFX_ITEM_DONTCARE == eHState);
+    bool bHorAndVer(SFX_ITEM_DONTCARE == eVState || SFX_ITEM_DONTCARE == eHState);
 
     // #83698# enable/disable text anchoring dependent of contour
     m_pFlPosition->Enable(!bContour && !bHorAndVer);

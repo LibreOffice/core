@@ -43,7 +43,7 @@ namespace svx
     //= ODocumentLinkDialog
 
 
-    ODocumentLinkDialog::ODocumentLinkDialog( Window* _pParent, sal_Bool _bCreateNew )
+    ODocumentLinkDialog::ODocumentLinkDialog( Window* _pParent, bool _bCreateNew )
         : ModalDialog(_pParent, "DatabaseLinkDialog",
             "cui/ui/databaselinkdialog.ui")
         ,m_bCreatingNew(_bCreateNew)
@@ -101,12 +101,12 @@ namespace svx
         sURL = aTransformer.get(OFileNotation::N_URL);
 
         // check for the existence of the selected file
-        sal_Bool bFileExists = sal_False;
+        bool bFileExists = false;
         try
         {
             ::ucbhelper::Content aFile(sURL, Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext());
             if (aFile.isDocument())
-                bFileExists = sal_True;
+                bFileExists = true;
         }
         catch(Exception&)
         {

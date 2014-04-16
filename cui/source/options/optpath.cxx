@@ -175,7 +175,7 @@ bool SvxControlFocusHelper::Notify( NotifyEvent& rNEvt )
 
 // functions -------------------------------------------------------------
 
-sal_Bool IsMultiPath_Impl( const sal_uInt16 nIndex )
+bool IsMultiPath_Impl( const sal_uInt16 nIndex )
 {
 #if OSL_DEBUG_LEVEL > 1
     return ( SvtPathOptions::PATH_AUTOCORRECT == nIndex ||
@@ -312,7 +312,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
                 nWidth1 = std::max(nWidth1, pPathBox->GetTextWidth(aStr));
                 aStr += "\t";
                 OUString sInternal, sUser, sWritable;
-                sal_Bool bReadOnly = sal_False;
+                bool bReadOnly = false;
                 GetPathList( i, sInternal, sUser, sWritable, bReadOnly );
                 OUString sTmpPath = sUser;
                 if ( !sTmpPath.isEmpty() && !sWritable.isEmpty() )
@@ -378,7 +378,7 @@ void SvxPathTabPage::FillUserData()
 
     OUString aUserData = OUString::number( rBar.GetItemSize( ITEMID_TYPE ) ) + ";";
     HeaderBarItemBits nBits = rBar.GetItemBits( ITEMID_TYPE );
-    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     aUserData += bUp ? OUString("1") : OUString("0");
     SetUserData( aUserData );
 }
@@ -394,7 +394,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl)
     Image aEntryImage;
     if(pEntry)
         aEntryImage = pPathBox->GetCollapsedEntryBmp( pEntry );
-    sal_Bool bEnable = !aEntryImage;
+    bool bEnable = !aEntryImage;
     while ( pEntry && ( nSelCount < 2 ) )
     {
         nSelCount++;
@@ -419,7 +419,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
         if ( !aOldPath.isEmpty() )
         {
             OUString sInternal, sUser, sWritable, sTemp;
-            sal_Bool bReadOnly = sal_False;
+            bool bReadOnly = false;
             GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
 
             sal_uInt16 i;
@@ -475,7 +475,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
 
     OUString sInternal, sUser, sWritable;
     PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
-    sal_Bool bReadOnly = sal_False;
+    bool bReadOnly = false;
     GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
     sUser = pPathImpl->sUserPath;
     sWritable = pPathImpl->sWritablePath;
@@ -537,7 +537,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
     if ( pEntry )
     {
         PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
-        sal_Bool bReadOnly = sal_False;
+        bool bReadOnly = false;
         GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
         sUser = pPathImpl->sUserPath;
         sWritable = pPathImpl->sWritablePath;
@@ -641,7 +641,7 @@ IMPL_LINK( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
         return 0;
 
     HeaderBarItemBits nBits = pBar->GetItemBits(ITEMID_TYPE);
-    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     SvSortMode eMode = SortAscending;
 
     if ( bUp )
@@ -711,7 +711,7 @@ IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 
 void SvxPathTabPage::GetPathList(
     sal_uInt16 _nPathHandle, OUString& _rInternalPath,
-    OUString& _rUserPath, OUString& _rWritablePath, sal_Bool& _rReadOnly )
+    OUString& _rUserPath, OUString& _rWritablePath, bool& _rReadOnly )
 {
     OUString sCfgName = getCfgName_Impl( _nPathHandle );
 

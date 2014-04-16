@@ -36,7 +36,7 @@ class SvxColorOptionsTabPage : public SfxTabPage
     PushButton* m_pDeleteSchemePB;
     ColorConfigCtrl_Impl* m_pColorConfigCT;
 
-    sal_Bool bFillItemSetCalled;
+    bool bFillItemSetCalled;
 
     svtools::EditableColorConfig* pColorConfig;
     svtools::EditableExtendedColorConfig* pExtColorConfig;

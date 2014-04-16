@@ -64,9 +64,9 @@ private:
     SfxBindings*        mpBindings;
     SfxItemSet*         mpItemSet;
 
-    sal_Bool            mbGrabFocus : 1;
-    sal_Bool            mbReadOnly  : 1;
-    sal_Bool            mbIsHTMLDoc : 1;
+    bool            mbGrabFocus : 1;
+    bool            mbReadOnly  : 1;
+    bool            mbIsHTMLDoc : 1;
 
     DECL_LINK (ClickApplyHdl_Impl, void * );
     DECL_LINK (ClickCloseHdl_Impl, void * );
@@ -82,8 +82,8 @@ public:
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage ) SAL_OVERRIDE;
 
     sal_uInt16                  SetPage( SvxHyperlinkItem* pItem );
-    void                    SetReadOnlyMode( sal_Bool bReadOnly = sal_False );
-    inline sal_Bool     IsHTMLDoc() const { return mbIsHTMLDoc; }
+    void                    SetReadOnlyMode( bool bReadOnly = false );
+    inline bool     IsHTMLDoc() const { return mbIsHTMLDoc; }
 
     inline SfxBindings*     GetBindings() const { return mpBindings; };
     inline SfxDispatcher*   GetDispatcher() const { return mpBindings->GetDispatcher(); }

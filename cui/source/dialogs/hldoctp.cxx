@@ -47,7 +47,7 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
     maFtURL         ( this, CUI_RES (FT_URL) ),
     maFtFullURL     ( this, CUI_RES (FT_FULL_URL) ),
     maBtBrowse      ( this, CUI_RES (BTN_BROWSE) ),
-    mbMarkWndOpen   ( sal_False )
+    mbMarkWndOpen   ( false )
 {
     // Disable display of bitmap names.
     maBtBrowse.EnableTextDisplay (false);
@@ -201,9 +201,9 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
         aDlg.SetDisplayDirectory( aOldURL );
     }
 
-    DisableClose( sal_True );
+    DisableClose( true );
     ErrCode nError = aDlg.Execute();
-    DisableClose( sal_False );
+    DisableClose( false );
 
     if ( ERRCODE_NONE == nError )
     {

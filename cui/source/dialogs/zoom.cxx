@@ -297,7 +297,7 @@ SvxZoomDialog::~SvxZoomDialog()
 
 IMPL_LINK( SvxZoomDialog, UserHdl, RadioButton *, pBtn )
 {
-    bModified |= sal_True;
+    bModified = true;
 
     if (pBtn == m_pUserBtn)
     {
@@ -315,7 +315,7 @@ IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl)
 {
     if ( !m_pUserBtn->IsChecked() )
         return 0;
-    bModified |= sal_True;
+    bModified = true;
     return 0;
 }
 
@@ -323,7 +323,7 @@ IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl)
 
 IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
 {
-    bModified |= sal_True;
+    bModified = true;
 
     if (pBtn == m_pAutomaticBtn)
     {
@@ -366,7 +366,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, NumericField *, pEdt )
         m_pBookModeChk->Disable();
     }
 
-    bModified |= sal_True;
+    bModified = true;
 
     return 0;
 }
@@ -378,7 +378,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutCheckHdl, CheckBox *, pChk )
     if (pChk == m_pBookModeChk && !m_pColumnsBtn->IsChecked())
         return 0;
 
-    bModified |= sal_True;
+    bModified = true;
 
     return 0;
 }

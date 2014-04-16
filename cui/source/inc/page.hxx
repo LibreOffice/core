@@ -131,7 +131,7 @@ class SvxPageDescPage : public SfxTabPage
     long                nLastBottomMargin;
 
     Size                aMaxSize;
-    sal_Bool                bLandscape;
+    bool                bLandscape;
     bool                bBorderModified;
     SvxModeType         eMode;
     Paper               ePaperStart;

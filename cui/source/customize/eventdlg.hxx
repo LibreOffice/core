@@ -35,7 +35,7 @@ class SvxEventConfigPage : public _SvxMacroTabPage
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >   m_xDocumentEvents;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable >         m_xDocumentModifiable;
 
-    sal_Bool            bAppConfig;
+    bool            bAppConfig;
 
     DECL_LINK(      SelectHdl_Impl, ListBox* );
 

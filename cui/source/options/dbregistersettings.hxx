@@ -42,7 +42,7 @@ namespace svx
         {
         }
 
-        DatabaseRegistration( const OUString& _rLocation, const sal_Bool _bReadOnly )
+        DatabaseRegistration( const OUString& _rLocation, const bool _bReadOnly )
             :sLocation( _rLocation )
             ,bReadOnly( _bReadOnly )
         {

@@ -53,11 +53,11 @@ private:
     short               nCaptionType;
     sal_Int32           nGap;
     short               nEscDir;
-    sal_Bool            bEscRel;
+    bool            bEscRel;
     sal_Int32           nEscAbs;
     sal_Int32           nEscRel;
     sal_Int32           nLineLen;
-    sal_Bool            bFitLineLen;
+    bool            bFitLineLen;
 
     sal_uInt16          nAnsatzRelPos;
     sal_uInt16          nAnsatzTypePos;

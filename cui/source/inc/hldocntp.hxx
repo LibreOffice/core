@@ -39,7 +39,7 @@ private:
     FixedText           maFtDocTypes;
     ListBox             maLbDocTypes;
 
-    sal_Bool            ImplGetURLObject( const OUString& rPath, const OUString& rBase, INetURLObject& aURLObject ) const;
+    bool            ImplGetURLObject( const OUString& rPath, const OUString& rBase, INetURLObject& aURLObject ) const;
     void                FillDocumentList ();
 
     DECL_LINK (ClickNewHdl_Impl          , void * );
@@ -58,7 +58,7 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual sal_Bool        AskApply () SAL_OVERRIDE;
+    virtual bool        AskApply () SAL_OVERRIDE;
     virtual void        DoApply () SAL_OVERRIDE;
 
     virtual void        SetInitFocus() SAL_OVERRIDE;

@@ -86,11 +86,11 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
 :   IconChoiceDialog( pParent, CUI_RES ( RID_SVXDLG_NEWHYPERLINK ) ),
     maCtrl          ( SID_HYPERLINK_GETLINK, *pBindings, this ),
     mpBindings      ( pBindings ),
-    mbReadOnly      ( sal_False ),
-    mbIsHTMLDoc     ( sal_False )
+    mbReadOnly      ( false ),
+    mbIsHTMLDoc     ( false )
 {
     SetUniqueId( HID_HYPERLINK_DIALOG );
-    mbGrabFocus = sal_True;
+    mbGrabFocus = true;
     // insert pages
     Image aImage;
     OUString aStrTitle;
@@ -123,7 +123,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     SetInputSet (mpItemSet);
 
     // Init Dialog
-    Start (sal_False);
+    Start (false);
 
     pBindings->Update( SID_READONLY_MODE );
 
@@ -182,13 +182,13 @@ void SvxHpLinkDlg::Move()
         // Size of Extrawindow
         Size aExtraWndSize( pCurrentPage->GetSizeExtraWnd() );
 
-        sal_Bool bDoInvalid ;
+        bool bDoInvalid ;
         if( aDlgPos.X()+(1.02*aDlgSize.Width())+aExtraWndSize.Width() > aWindowSize.Width() )
         {
             if( aDlgPos.X() - ( 0.02*aDlgSize.Width() ) - aExtraWndSize.Width() < 0 )
             {
                 // Pos Extrawindow anywhere
-                bDoInvalid = pCurrentPage->MoveToExtraWnd( Point( 1, long(1.1*aDlgPos.Y()) ), sal_True );
+                bDoInvalid = pCurrentPage->MoveToExtraWnd( Point( 1, long(1.1*aDlgPos.Y()) ), true );
             }
             else
             {
@@ -308,7 +308,7 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
     if ( mbGrabFocus )
     {
         pCurrentPage->SetInitFocus();   // #92535# grab the focus only once at initialization
-        mbGrabFocus = sal_False;
+        mbGrabFocus = false;
     }
     return nPageId;
 }
@@ -319,7 +319,7 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
 |*
 |************************************************************************/
 
-void SvxHpLinkDlg::SetReadOnlyMode( sal_Bool bRdOnly )
+void SvxHpLinkDlg::SetReadOnlyMode( bool bRdOnly )
 {
     mbReadOnly = bRdOnly;
     if ( bRdOnly )

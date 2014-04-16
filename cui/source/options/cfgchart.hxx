@@ -67,14 +67,14 @@ class SvxChartOptions : public ::utl::ConfigItem
 {
 private:
     SvxChartColorTable          maDefColors;
-    sal_Bool                    mbIsInitialized;
+    bool                    mbIsInitialized;
 
     ::com::sun::star::uno::Sequence< OUString >
                             maPropertyNames;
 
     inline ::com::sun::star::uno::Sequence< OUString > GetPropertyNames() const
         { return maPropertyNames; }
-    sal_Bool RetrieveOptions();
+    bool RetrieveOptions();
 
 public:
     SvxChartOptions();

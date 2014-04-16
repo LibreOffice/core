@@ -70,7 +70,7 @@ class SvBaseLinksDlg : public ModalDialog
     OUString aStrCloselinkmsgMulti;
     OUString aStrWaitinglink;
     sfx2::LinkManager*  pLinkMgr;
-    sal_Bool            bHtmlMode;
+    bool            bHtmlMode;
     Timer aUpdateTimer;
 
     DECL_LINK( LinksSelectHdl, SvTabListBox * );
@@ -86,7 +86,7 @@ class SvBaseLinksDlg : public ModalDialog
     sfx2::SvBaseLink* GetSelEntry( sal_uLong* pPos );
     OUString ImplGetStateStr( const sfx2::SvBaseLink& );
     void SetType( sfx2::SvBaseLink& rLink, sal_uLong nPos, sal_uInt16 nType );
-    void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uLong nPos = TREELIST_APPEND, sal_Bool bSelect = sal_False);
+    void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uLong nPos = TREELIST_APPEND, bool bSelect = false);
 
     void StartUpdateTimer()         { aUpdateTimer.Start(); }
 
@@ -112,7 +112,7 @@ class SvBaseLinksDlg : public ModalDialog
     void SetManager( sfx2::LinkManager* );
 
 public:
-    SvBaseLinksDlg( Window * pParent, sfx2::LinkManager*, sal_Bool bHtml = sal_False );
+    SvBaseLinksDlg( Window * pParent, sfx2::LinkManager*, bool bHtml = false );
     virtual ~SvBaseLinksDlg();
     void SetActLink( sfx2::SvBaseLink * pLink );
 };

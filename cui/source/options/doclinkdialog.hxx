@@ -45,12 +45,12 @@ namespace svx
         Edit*                   m_pName;
         OKButton*               m_pOK;
 
-        sal_Bool                m_bCreatingNew;
+        bool                m_bCreatingNew;
 
         Link                    m_aNameValidator;
 
     public:
-        ODocumentLinkDialog( Window* _pParent, sal_Bool _bCreateNew );
+        ODocumentLinkDialog( Window* _pParent, bool _bCreateNew );
 
         // name validation has to be done by an external instance
         // the validator link gets a pointer to a String, and should return 0 if the string is not

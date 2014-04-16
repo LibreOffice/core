@@ -59,9 +59,9 @@ public:
     /// for the Writer (cells/rows/tables)
     void                ShowTblControl();
     /// for the Writer (paragraph/characters)
-    void                ShowParaControl(sal_Bool bCharOnly = sal_False);
+    void                ShowParaControl(bool bCharOnly = false);
 
-    void                EnableTransparency(sal_Bool bColor, sal_Bool bGraphic);
+    void                EnableTransparency(bool bColor, bool bGraphic);
     virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
@@ -108,11 +108,11 @@ private:
 
     Color       aBgdColor;
     sal_uInt16      nHtmlMode;
-    sal_Bool        bAllowShowSelector  : 1;
-    sal_Bool        bIsGraphicValid     : 1;
-    sal_Bool        bLinkOnly           : 1;
-    sal_Bool        bColTransparency    : 1;
-    sal_Bool        bGraphTransparency  : 1;
+    bool        bAllowShowSelector  : 1;
+    bool        bIsGraphicValid     : 1;
+    bool        bLinkOnly           : 1;
+    bool        bColTransparency    : 1;
+    bool        bGraphTransparency  : 1;
     Graphic     aBgdGraphic;
     OUString    aBgdGraphicPath;
     OUString    aBgdGraphicFilter;
@@ -128,7 +128,7 @@ private:
     void                HideColorUI_Impl();
     void                ShowBitmapUI_Impl();
     void                HideBitmapUI_Impl();
-    sal_Bool                LoadLinkedGraphic_Impl();
+    bool                LoadLinkedGraphic_Impl();
     void                RaiseLoadError_Impl();
     void                SetGraphicPosition_Impl( SvxGraphicPosition ePos );
     SvxGraphicPosition  GetGraphicPosition_Impl();

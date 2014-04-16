@@ -86,7 +86,7 @@ private:
     Edit                *mpEdText;
     ImageButton         *mpBtScript;
 
-    sal_Bool            mbIsCloseDisabled;
+    bool            mbIsCloseDisabled;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                         mxDocumentFrame;
@@ -94,7 +94,7 @@ private:
 protected:
     Window*             mpDialog;
 
-    sal_Bool                mbStdControlsInit;
+    bool                mbStdControlsInit;
 
     OUString            maStrInitURL;
 
@@ -120,7 +120,7 @@ protected:
 
     static OUString GetSchemeFromURL( const OUString& rStrURL );
 
-    inline void     DisableClose( sal_Bool _bDisable ) { mbIsCloseDisabled = _bDisable; }
+    inline void     DisableClose( bool _bDisable ) { mbIsCloseDisabled = _bDisable; }
 
 public:
     SvxHyperlinkTabPageBase (
@@ -136,7 +136,7 @@ public:
         mxDocumentFrame = rxDocumentFrame;
     }
 
-    virtual sal_Bool AskApply ();
+    virtual bool AskApply ();
     virtual void DoApply ();
     virtual void SetInitFocus();
     virtual void SetMarkStr ( const OUString& aStrMark );
@@ -145,16 +145,16 @@ public:
     virtual void ActivatePage( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
-    sal_Bool IsMarkWndVisible ()      { return ((Window*)mpMarkWnd)->IsVisible(); }
+    bool IsMarkWndVisible ()      { return ((Window*)mpMarkWnd)->IsVisible(); }
     Size GetSizeExtraWnd ()       { return ( mpMarkWnd->GetSizePixel() ); }
-    sal_Bool MoveToExtraWnd ( Point aNewPos, sal_Bool bDisConnectDlg = sal_False );
+    bool MoveToExtraWnd ( Point aNewPos, bool bDisConnectDlg = false );
 
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual void        DeactivatePage() SAL_OVERRIDE;
-    virtual sal_Bool    QueryClose() SAL_OVERRIDE;
+    virtual bool        QueryClose() SAL_OVERRIDE;
 
 protected:
-    virtual sal_Bool ShouldOpenMarkWnd();
+    virtual bool ShouldOpenMarkWnd();
     virtual void SetMarkWndShouldOpen(sal_Bool bOpen);
 
     void ShowMarkWnd ();
@@ -166,7 +166,7 @@ protected:
     sal_uInt16             GetMacroEvents();
     SvxMacroTableDtor* GetMacroTable();
 
-    sal_Bool IsHTMLDoc() const;
+    bool IsHTMLDoc() const;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_HLTPBASE_HXX

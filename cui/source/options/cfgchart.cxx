@@ -177,7 +177,7 @@ bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
 
 SvxChartOptions::SvxChartOptions() :
     ::utl::ConfigItem( OUString("Office.Chart") ),
-    mbIsInitialized( sal_False )
+    mbIsInitialized( false )
 {
     maPropertyNames.realloc( 1 );
     maPropertyNames[ 0 ] = "DefaultColor/Series";
@@ -200,7 +200,7 @@ void SvxChartOptions::SetDefaultColors( const SvxChartColorTable& aCol )
     SetModified();
 }
 
-sal_Bool SvxChartOptions::RetrieveOptions()
+bool SvxChartOptions::RetrieveOptions()
 {
     // get sequence containing all properties
 
@@ -240,9 +240,9 @@ sal_Bool SvxChartOptions::RetrieveOptions()
 
             maDefColors.append( XColorEntry( aCol, aName ));
         }
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 void SvxChartOptions::Commit()

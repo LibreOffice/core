@@ -123,7 +123,7 @@ long ConvertLong_Impl( const long nIn, SfxMapUnit eUnit )
     return OutputDevice::LogicToLogic( nIn, (MapUnit)eUnit, MAP_TWIP );
 }
 
-sal_Bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
+bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 {
     if ( pSize )
     {
@@ -133,7 +133,7 @@ sal_Bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
         return ( nDiffW < 10 && nDiffH < 10 );
     }
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -178,7 +178,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
     SfxTabPage( pParent, "PageFormatPage", "cui/ui/pageformatpage.ui", rAttr ),
 
-    bLandscape          ( sal_False ),
+    bLandscape          ( false ),
     eMode               ( SVX_PAGE_MODE_STANDARD ),
     ePaperStart         ( PAPER_A3 ),
     ePaperEnd           ( PAPER_ENV_DL ),
@@ -232,9 +232,9 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     SetExchangeSupport();
 
     SvtLanguageOptions aLangOptions;
-    sal_Bool bCJK = aLangOptions.IsAsianTypographyEnabled();
-    sal_Bool bCTL = aLangOptions.IsCTLFontEnabled();
-    sal_Bool bWeb = sal_False;
+    bool bCJK = aLangOptions.IsAsianTypographyEnabled();
+    bool bCTL = aLangOptions.IsCTLFontEnabled();
+    bool bWeb = false;
     const SfxPoolItem* pItem;
 
     SfxObjectShell* pShell;
@@ -495,7 +495,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
     if ( !bOrientationSupport &&
          aPaperSize.Width() > aPaperSize.Height() )
-        bLandscape = sal_True;
+        bLandscape = true;
 
     m_pLandscapeBtn->Check( bLandscape );
     m_pPortraitBtn->Check( !bLandscape );
@@ -663,7 +663,7 @@ void SvxPageDescPage::FillUserData()
 
 bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     const SfxItemSet& rOldSet = GetItemSet();
     SfxItemPool* pPool = rOldSet.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -681,13 +681,13 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     if ( m_pLeftMarginEdit->GetText() != m_pLeftMarginEdit->GetSavedValue() )
     {
         aMargin.SetLeft( (sal_uInt16)GetCoreValue( *m_pLeftMarginEdit, eUnit ) );
-        bModified |= sal_True;
+        bModified = true;
     }
 
     if ( m_pRightMarginEdit->GetText() != m_pRightMarginEdit->GetSavedValue() )
     {
         aMargin.SetRight( (sal_uInt16)GetCoreValue( *m_pRightMarginEdit, eUnit ) );
-        bModified |= sal_True;
+        bModified = true;
     }
 
     // set left and right margins
@@ -698,21 +698,21 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         if ( !pOld || !( *(const SvxLRSpaceItem*)pOld == aMargin ) )
             rSet.Put( aMargin );
         else
-            bModified = sal_False;
+            bModified = false;
     }
 
-    sal_Bool bMod = sal_False;
+    bool bMod = false;
 
     if ( m_pTopMarginEdit->GetText() != m_pTopMarginEdit->GetSavedValue() )
     {
         aTopMargin.SetUpper( (sal_uInt16)GetCoreValue( *m_pTopMarginEdit, eUnit ) );
-        bMod |= sal_True;
+        bMod = true;
     }
 
     if ( m_pBottomMarginEdit->GetText() != m_pBottomMarginEdit->GetSavedValue() )
     {
         aTopMargin.SetLower( (sal_uInt16)GetCoreValue( *m_pBottomMarginEdit, eUnit ) );
-        bMod |= sal_True;
+        bMod = true;
     }
 
     // set top and bottom margins
@@ -723,7 +723,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
         if ( !pOld || !( *(const SvxULSpaceItem*)pOld == aTopMargin ) )
         {
-            bModified |= sal_True;
+            bModified = true;
             rSet.Put( aTopMargin );
         }
     }
@@ -737,7 +737,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     if ( !pOld || ( (const SvxPaperBinItem*)pOld )->GetValue() != nBin )
     {
         rSet.Put( SvxPaperBinItem( nWhich, (sal_uInt8)nBin ) );
-        bModified |= sal_True;
+        bModified = true;
     }
 
     nPos = m_pPaperSizeBox->GetSelectEntryPos();
@@ -759,7 +759,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
             if ( !pOld || ( (const SvxSizeItem*)pOld )->GetSize() != aSize )
             {
                 rSet.Put( SvxSizeItem( GetWhich(SID_ATTR_PAGE_SIZE), aSize ) );
-                bModified |= sal_True;
+                bModified = true;
             }
         }
     }
@@ -777,7 +777,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
             if ( !pOld || ( (const SvxSizeItem*)pOld )->GetSize() != aSize )
             {
                 rSet.Put( SvxSizeItem( GetWhich(SID_ATTR_PAGE_SIZE), aSize ) );
-                bModified |= sal_True;
+                bModified = true;
             }
         }
     }
@@ -793,7 +793,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     if ( bChecked != m_pLandscapeBtn->GetSavedValue() )
     {
         aPage.SetLandscape(bChecked);
-        bMod |= sal_True;
+        bMod = true;
     }
 
     //Get the NumType value
@@ -802,7 +802,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     if ( nPos != m_pNumberFormatBox->GetSavedValue() )
     {
         aPage.SetNumType( (SvxNumType)nEntryData );
-        bMod |= sal_True;
+        bMod = true;
     }
 
     if ( bMod )
@@ -812,7 +812,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         if ( !pOld || !( *(const SvxPageItem*)pOld == aPage ) )
         {
             rSet.Put( aPage );
-            bModified |= sal_True;
+            bModified = true;
         }
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich ) )
@@ -831,7 +831,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
                 SfxBoolItem aHorz( GetWhich( SID_ATTR_PAGE_EXT1 ),
                                    m_pHorzBox->IsChecked() );
                 rSet.Put( aHorz );
-                bModified |= sal_True;
+                bModified = true;
             }
 
             if ( TriState(m_pVertBox->IsChecked()) != m_pVertBox->GetSavedValue() )
@@ -839,7 +839,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
                 SfxBoolItem aVert( GetWhich( SID_ATTR_PAGE_EXT2 ),
                                    m_pVertBox->IsChecked() );
                 rSet.Put( aVert );
-                bModified |= sal_True;
+                bModified = true;
             }
             break;
         }
@@ -849,7 +849,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
             // always put so that draw can evaluate this
             rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_PAGE_EXT1 ),
                       m_pAdaptBox->IsChecked() ) );
-            bModified |= sal_True;
+            bModified = true;
             break;
         }
         default: ;//prevent warning
@@ -861,13 +861,13 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     {
         const SfxBoolItem& rRegItem = (const SfxBoolItem&)rOldSet.Get(SID_SWREGISTER_MODE);
         SfxBoolItem* pRegItem = (SfxBoolItem*)rRegItem.Clone();
-        sal_Bool bCheck = m_pRegisterCB->IsChecked();
+        bool bCheck = m_pRegisterCB->IsChecked();
         pRegItem->SetValue(bCheck);
         rSet.Put(*pRegItem);
-        bModified |= sal_True;
+        bModified = true;
         if(bCheck)
         {
-            bModified |= sal_True;
+            bModified = true;
             rSet.Put(SfxStringItem(SID_SWREGISTER_COLLECTION,
                             m_pRegisterLB->GetSelectEntry()));
         }
@@ -878,7 +878,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     if( m_pTextFlowBox->IsVisible() && (eDirection != m_pTextFlowBox->GetSavedValue()) )
     {
         rSet.Put( SvxFrameDirectionItem( eDirection, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
-        bModified = sal_True;
+        bModified = true;
     }
 
     return bModified;
@@ -978,7 +978,7 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
         {
             // Draw: if paper format the margin shall be 1 cm
             long nTmp = 0;
-            sal_Bool bScreen = (( PAPER_SCREEN_4_3 == ePaper )||( PAPER_SCREEN_16_9 == ePaper)||( PAPER_SCREEN_16_10 == ePaper));
+            bool bScreen = (( PAPER_SCREEN_4_3 == ePaper )||( PAPER_SCREEN_16_9 == ePaper)||( PAPER_SCREEN_16_10 == ePaper));
 
             if ( !bScreen )
                 // no margin if screen
@@ -1580,10 +1580,10 @@ void SvxPageDescPage::SetCollectionList(const std::vector<OUString> &aList)
 
 IMPL_LINK( SvxPageDescPage, RegisterModify, CheckBox*, pBox )
 {
-    sal_Bool bEnable = sal_False;
+    bool bEnable = false;
     if(pBox->IsChecked())
     {
-        bEnable = sal_True;
+        bEnable = true;
         if(USHRT_MAX == m_pRegisterLB->GetSelectEntryPos())
             m_pRegisterLB->SelectEntry(sStandardRegister);
     }

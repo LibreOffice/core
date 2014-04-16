@@ -420,7 +420,7 @@ namespace svx
         if( m_bDisplayListBox != bDisplayListBox )
         {
             Control& rOldControl = implGetCurrentControl();
-            sal_Bool bHasFocus = rOldControl.HasFocus();
+            bool bHasFocus = rOldControl.HasFocus();
 
             m_bDisplayListBox = bDisplayListBox;
 
@@ -729,7 +729,7 @@ namespace svx
             pOtherBox = &m_aHangulOnly;
         if (pBox && pOtherBox)
         {
-            sal_Bool bBoxChecked = pBox->IsChecked();
+            bool bBoxChecked = pBox->IsChecked();
             if (bBoxChecked)
                 pOtherBox->Check( false );
             pOtherBox->Enable( !bBoxChecked );

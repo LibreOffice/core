@@ -67,18 +67,18 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet )
     get(m_pLanguageBox, "langbox");
     get(m_pLanguageLB, "lang");
 
-    sal_Bool bShowSWOptions = sal_False;
-    sal_Bool bOpenSmartTagOptions = sal_False;
+    bool bShowSWOptions = false;
+    bool bOpenSmartTagOptions = false;
 
     if ( _pSet )
     {
         SFX_ITEMSET_ARG( _pSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, false );
         if ( pItem && pItem->GetValue() )
-            bShowSWOptions = sal_True;
+            bShowSWOptions = true;
 
         SFX_ITEMSET_ARG( _pSet, pItem2, SfxBoolItem, SID_OPEN_SMARTTAGOPTIONS, false );
         if ( pItem2 && pItem2->GetValue() )
-            bOpenSmartTagOptions = sal_True;
+            bOpenSmartTagOptions = true;
     }
 
     AddTabPage("options", OfaAutocorrOptionsPage::Create, 0);
@@ -141,7 +141,7 @@ void OfaAutoCorrDlg::EnableLanguage(bool bEnable)
     m_pLanguageBox->Enable(bEnable);
 }
 
-static sal_Bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
+static bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
                     CollatorWrapper& rCmpClass )
 {
     sal_Int32 nCount = rLB.GetEntryCount();
@@ -152,12 +152,12 @@ static sal_Bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
         if( 0 == rCmpClass.compareString(rEntry, rLB.GetEntry(i) ))
         {
             rLB.SelectEntryPos(i, true);
-            return sal_True;
+            return true;
         }
     }
     if(LISTBOX_ENTRY_NOTFOUND != nSelPos)
         rLB.SelectEntryPos(nSelPos, false);
-    return sal_False;
+    return false;
 }
 
 IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
@@ -212,7 +212,7 @@ bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
     pAutoCorrect->SetAutoCorrFlag(IgnoreDoubleSpace,    m_pCheckLB->IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(CorrectCapsLock,      m_pCheckLB->IsChecked(nPos++));
 
-    sal_Bool bReturn = nFlags != pAutoCorrect->GetFlags();
+    bool bReturn = nFlags != pAutoCorrect->GetFlags();
     if(bReturn )
     {
         SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
@@ -332,7 +332,7 @@ void OfaImpBrwString::Paint(
         }
         aFont.SetWeight( WEIGHT_BOLD );
 
-        sal_Bool bFett = sal_True;
+        bool bFett = true;
         sal_Int32 nPos = 0;
         do {
             OUString sTxt( pUserData->pString->getToken( 0, 1, nPos ));
@@ -743,7 +743,7 @@ void OfaACorrCheckListBox::SetTabs()
     }
 }
 
-void OfaACorrCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked)
+void OfaACorrCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, bool bChecked)
 {
     if ( nPos < GetEntryCount() )
         SetCheckButtonState(
@@ -753,7 +753,7 @@ void OfaACorrCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bo
                                        SvButtonState( SV_BUTTON_UNCHECKED ) );
 }
 
-sal_Bool OfaACorrCheckListBox::IsChecked(sal_uLong nPos, sal_uInt16 nCol)
+bool OfaACorrCheckListBox::IsChecked(sal_uLong nPos, sal_uInt16 nCol)
 {
     return GetCheckButtonState( GetEntry(nPos), nCol ) == SV_BUTTON_CHECKED;
 }
@@ -962,7 +962,7 @@ bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
     return false;
 }
 
-void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
+void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage)
 {
@@ -1008,7 +1008,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
         for( sal_uInt32 i = 0; i < rArray.size(); i++ )
         {
             DoubleString& rDouble = rArray[i];
-            sal_Bool bTextOnly = 0 == rDouble.pUserData;
+            bool bTextOnly = 0 == rDouble.pUserData;
             // formatted text is only in Writer
             if(bSWriter || bTextOnly)
             {
@@ -1036,7 +1036,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
              it != aContent.end(); ++it )
         {
             SvxAutocorrWord* pWordPtr = *it;
-            sal_Bool bTextOnly = pWordPtr->IsTextOnly();
+            bool bTextOnly = pWordPtr->IsTextOnly();
             // formatted text is only in Writer
             if(bSWriter || bTextOnly)
             {
@@ -1061,7 +1061,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if( pViewShell && pViewShell->HasSelection( true ) )
     {
-        bHasSelectionText = sal_True;
+        bHasSelectionText = true;
         const OUString sSelection( pViewShell->GetSelectionText() );
         m_pReplaceED->SetText( sSelection );
         m_pTextOnlyCB->Check( !bSWriter );
@@ -1075,7 +1075,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
 
 void OfaAutocorrReplacePage::Reset( const SfxItemSet& )
 {
-    RefillReplaceBox(sal_True, eLang, eLang);
+    RefillReplaceBox(true, eLang, eLang);
     m_pShortED->GrabFocus();
 }
 
@@ -1084,7 +1084,7 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
     //save old settings an refill
     if(eSet != eLang)
     {
-        RefillReplaceBox(sal_False, eLang, eSet);
+        RefillReplaceBox(false, eLang, eSet);
         eLastDialogLanguage = eSet;
         delete pCompareClass;
         delete pCharClass;
@@ -1105,7 +1105,7 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
         OUString sTmpShort(pBox->GetEntryText(pEntry, 0));
         // if the text is set via ModifyHdl, the cursor is always at the beginning
         // of a word, although you're editing here
-        sal_Bool bSameContent = 0 == pCompareClass->compareString( sTmpShort, m_pShortED->GetText() );
+        bool bSameContent = 0 == pCompareClass->compareString( sTmpShort, m_pShortED->GetText() );
         Selection aSel = m_pShortED->GetSelection();
         if(m_pShortED->GetText() != sTmpShort)
         {
@@ -1122,7 +1122,7 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
     }
     else
     {
-        bFirstSelect = sal_False;
+        bFirstSelect = false;
     }
 
     m_pNewReplacePB->Enable(false);
@@ -1262,7 +1262,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
 IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
 {
     SvTreeListEntry* pFirstSel = m_pReplaceTLB->FirstSelected();
-    sal_Bool bShort = pEdt == m_pShortED;
+    bool bShort = pEdt == m_pShortED;
     const OUString rEntry = pEdt->GetText();
     const OUString rRepString = m_pReplaceED->GetText();
     OUString aWordStr( pCharClass->lowercase( rEntry ));
@@ -1271,8 +1271,8 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     {
         if(!rEntry.isEmpty())
         {
-            sal_Bool bFound = sal_False;
-            sal_Bool bTmpSelEntry=sal_False;
+            bool bFound = false;
+            bool bTmpSelEntry=false;
 
             for(sal_uInt32 i = 0; i < m_pReplaceTLB->GetEntryCount(); i++)
             {
@@ -1282,12 +1282,12 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
                 {
                     if( !rRepString.isEmpty() )
                     {
-                        bFirstSelect = sal_True;
+                        bFirstSelect = true;
                     }
                     m_pReplaceTLB->SetCurEntry(pEntry);
                     pFirstSel = pEntry;
                     m_pNewReplacePB->SetText(sModify);
-                    bFound = sal_True;
+                    bFound = true;
                     break;
                 }
                 else
@@ -1296,7 +1296,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
                     if( aTestStr.startsWith(aWordStr) && !bTmpSelEntry )
                     {
                         m_pReplaceTLB->MakeVisible( pEntry );
-                        bTmpSelEntry = sal_True;
+                        bTmpSelEntry = true;
                     }
                 }
             }
@@ -1319,7 +1319,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     }
     else if( !bShort )
     {
-        bReplaceEditChanged = sal_True;
+        bReplaceEditChanged = true;
         if( pFirstSel )
         {
             m_pNewReplacePB->SetText( sModify );
@@ -1327,7 +1327,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     }
 
     const OUString& rShortTxt = m_pShortED->GetText();
-    sal_Bool bEnableNew = !rShortTxt.isEmpty() &&
+    bool bEnableNew = !rShortTxt.isEmpty() &&
                         ( !rRepString.isEmpty() ||
                                 ( bHasSelectionText && bSWriter )) &&
                         ( !pFirstSel || rRepString !=
@@ -1338,7 +1338,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
         {
             if((*i).equals(rShortTxt))
             {
-                bEnableNew = sal_False;
+                bEnableNew = false;
                 break;
             }
         }
@@ -1348,16 +1348,16 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     return 0;
 }
 
-static sal_Bool lcl_FindInArray(std::vector<OUString>& rStrings, const OUString& rString)
+static bool lcl_FindInArray(std::vector<OUString>& rStrings, const OUString& rString)
 {
     for(std::vector<OUString>::iterator i = rStrings.begin(); i != rStrings.end(); ++i)
     {
         if((*i).equals(rString))
         {
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 OfaAutocorrExceptPage::OfaAutocorrExceptPage(Window* pParent, const SfxItemSet& rSet)
@@ -1534,7 +1534,7 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
     if(eLang != eSet)
     {
         // save old settings and fill anew
-        RefillReplaceBoxes(sal_False, eLang, eSet);
+        RefillReplaceBoxes(false, eLang, eSet);
         eLastDialogLanguage = eSet;
         delete pCompareClass;
         pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
@@ -1544,7 +1544,7 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
     }
 }
 
-void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
+void OfaAutocorrExceptPage::RefillReplaceBoxes(bool bFromReset,
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage)
 {
@@ -1609,7 +1609,7 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
 void OfaAutocorrExceptPage::Reset( const SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-    RefillReplaceBoxes(sal_True, eLang, eLang);
+    RefillReplaceBoxes(true, eLang, eLang);
     m_pAutoAbbrevCB->  Check(  pAutoCorrect->IsAutoCorrFlag( SaveWordCplSttLst ));
     m_pAutoCapsCB->    Check(  pAutoCorrect->IsAutoCorrFlag( SaveWordWrdSttLst ));
     m_pAutoAbbrevCB->SaveValue();
@@ -1664,10 +1664,10 @@ IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
 {
 //  sal_Bool bSame = pEdt->GetText() == ->GetSelectEntry();
     const OUString& sEntry = pEdt->GetText();
-    sal_Bool bEntryLen = !sEntry.isEmpty();
+    bool bEntryLen = !sEntry.isEmpty();
     if(pEdt == m_pAbbrevED)
     {
-        sal_Bool bSame = lcl_FindEntry(*m_pAbbrevLB, sEntry, *pCompareClass);
+        bool bSame = lcl_FindEntry(*m_pAbbrevLB, sEntry, *pCompareClass);
         if(bSame && sEntry != m_pAbbrevLB->GetSelectEntry())
             pEdt->SetText(m_pAbbrevLB->GetSelectEntry());
         m_pNewAbbrevPB->Enable(!bSame && bEntryLen);
@@ -1675,7 +1675,7 @@ IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
     }
     else
     {
-        sal_Bool bSame = lcl_FindEntry(*m_pDoubleCapsLB, sEntry, *pCompareClass);
+        bool bSame = lcl_FindEntry(*m_pDoubleCapsLB, sEntry, *pCompareClass);
         if(bSame && sEntry != m_pDoubleCapsLB->GetSelectEntry())
             pEdt->SetText(m_pDoubleCapsLB->GetSelectEntry());
         m_pNewDoublePB->Enable(!bSame && bEntryLen);
@@ -1774,11 +1774,11 @@ OfaQuoteTabPage::OfaQuoteTabPage(Window* pParent, const SfxItemSet& rSet)
     m_sEndQuoteDlg = strip(get<FixedText>("endquoteft")->GetText(), ':');
     m_sStandard = get<FixedText>("singlestartex")->GetText();
 
-    sal_Bool bShowSWOptions = sal_False;
+    bool bShowSWOptions = false;
 
     SFX_ITEMSET_ARG( &rSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, false );
     if ( pItem && pItem->GetValue() )
-        bShowSWOptions = sal_True;
+        bShowSWOptions = true;
 
     if ( bShowSWOptions )
     {
@@ -1856,28 +1856,28 @@ bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
 
     pAutoCorrect->SetAutoCorrFlag(ChgQuotes, m_pDoubleTypoCB->IsChecked());
     pAutoCorrect->SetAutoCorrFlag(ChgSglQuotes, m_pSingleTypoCB->IsChecked());
-    sal_Bool bReturn = nFlags != pAutoCorrect->GetFlags();
+    bool bReturn = nFlags != pAutoCorrect->GetFlags();
     if(cStartQuote != pAutoCorrect->GetStartDoubleQuote())
     {
-        bReturn = sal_True;
+        bReturn = true;
         sal_Unicode cUCS2 = static_cast<sal_Unicode>(cStartQuote); //TODO
         pAutoCorrect->SetStartDoubleQuote(cUCS2);
     }
     if(cEndQuote != pAutoCorrect->GetEndDoubleQuote())
     {
-        bReturn = sal_True;
+        bReturn = true;
         sal_Unicode cUCS2 = static_cast<sal_Unicode>(cEndQuote); //TODO
         pAutoCorrect->SetEndDoubleQuote(cUCS2);
     }
     if(cSglStartQuote != pAutoCorrect->GetStartSingleQuote())
     {
-        bReturn = sal_True;
+        bReturn = true;
         sal_Unicode cUCS2 = static_cast<sal_Unicode>(cSglStartQuote); //TODO
         pAutoCorrect->SetStartSingleQuote(cUCS2);
     }
     if(cSglEndQuote != pAutoCorrect->GetEndSingleQuote())
     {
-        bReturn = sal_True;
+        bReturn = true;
         sal_Unicode cUCS2 = static_cast<sal_Unicode>(cSglEndQuote); //TODO
         pAutoCorrect->SetEndSingleQuote(cUCS2);
     }
@@ -1969,7 +1969,7 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
     else if (pBtn == m_pDblEndQuotePB)
         nMode = DBL_END;
     // start character selection dialog
-    SvxCharacterMap* pMap = new SvxCharacterMap( this, sal_True );
+    SvxCharacterMap* pMap = new SvxCharacterMap( this, true );
     pMap->SetCharFont( OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT,
                         LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE, 0 ));
     pMap->SetText(nMode < SGL_END ? m_sStartQuoteDlg  : m_sEndQuoteDlg );
@@ -2272,7 +2272,7 @@ IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl)
 
 IMPL_LINK( OfaAutoCompleteTabPage, CheckHdl, CheckBox*, pBox )
 {
-    sal_Bool bEnable = pBox->IsChecked();
+    bool bEnable = pBox->IsChecked();
     if (pBox == m_pCBActiv)
     {
         m_pCBAppendSpace->Enable( bEnable );
@@ -2480,7 +2480,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, ClickHdl)
 */
 IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, CheckHdl)
 {
-    const sal_Bool bEnable = m_pMainCB->IsChecked();
+    const bool bEnable = m_pMainCB->IsChecked();
     m_pSmartTagTypesLB->Enable( bEnable );
     m_pSmartTagTypesLB->Invalidate();
     m_pPropertiesPB->Enable( false );
@@ -2529,7 +2529,7 @@ bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
     if ( !pSmartTagMgr )
         return false;
 
-    sal_Bool bModifiedSmartTagTypes = sal_False;
+    bool bModifiedSmartTagTypes = false;
     std::vector< OUString > aDisabledSmartTagTypes;
 
     const sal_uLong nCount = m_pSmartTagTypesLB->GetEntryCount();
@@ -2538,8 +2538,8 @@ bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
     {
         const SvTreeListEntry* pEntry = m_pSmartTagTypesLB->GetEntry(i);
         const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
-        const sal_Bool bChecked = m_pSmartTagTypesLB->IsChecked(i);
-        const sal_Bool bIsCurrentlyEnabled = pSmartTagMgr->IsSmartTagTypeEnabled( pUserData->maSmartTagType );
+        const bool bChecked = m_pSmartTagTypesLB->IsChecked(i);
+        const bool bIsCurrentlyEnabled = pSmartTagMgr->IsSmartTagTypeEnabled( pUserData->maSmartTagType );
 
         bModifiedSmartTagTypes = bModifiedSmartTagTypes || ( !bChecked != !bIsCurrentlyEnabled );
 
@@ -2549,7 +2549,7 @@ bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
         delete pUserData;
     }
 
-    const sal_Bool bModifiedRecognize = ( !m_pMainCB->IsChecked() != !pSmartTagMgr->IsLabelTextWithSmartTags() );
+    const bool bModifiedRecognize = ( !m_pMainCB->IsChecked() != !pSmartTagMgr->IsLabelTextWithSmartTags() );
     if ( bModifiedSmartTagTypes || bModifiedRecognize )
     {
         bool bLabelTextWithSmartTags = m_pMainCB->IsChecked() ? true : false;

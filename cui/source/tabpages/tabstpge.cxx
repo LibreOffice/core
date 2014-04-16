@@ -105,7 +105,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAt
     aNewTabs    ( 0, 0, SVX_TAB_ADJUST_LEFT, GetWhich( SID_ATTR_TABSTOP ) ),
     nDefDist    ( 0 ),
     eDefUnit    ( FUNIT_100TH_MM ),
-    bCheck      ( sal_False )
+    bCheck      ( false )
 
 {
     get(m_pTabBox,"ED_TABPOS");
@@ -203,7 +203,7 @@ sal_uInt16* SvxTabulatorTabPage::GetRanges()
 
 bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     // Put the controls' values in here
     if ( m_pNewBtn->IsEnabled() )
@@ -247,13 +247,13 @@ bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
         if ( !pOld || !( *( (SvxTabStopItem*)pOld ) == aTmp ) )
         {
             rSet.Put( aTmp );
-            bModified = sal_True;
+            bModified = true;
         }
     }
     else if ( !pOld || !( *( (SvxTabStopItem*)pOld ) == aNewTabs ) )
     {
         rSet.Put( aNewTabs );
-        bModified = sal_True;
+        bModified = true;
     }
     return bModified;
 }
@@ -523,7 +523,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
     m_pTabBox->GrabFocus();
 
     // If no RadioButton was clicked, we need to put anyway
-    bCheck |= sal_True;
+    bCheck = true;
     // Set the selection into the position Edit
     m_pTabBox->SetSelection(Selection(0, m_pTabBox->GetText().getLength()));
     return 0;
@@ -568,7 +568,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
     }
 
     // If no RadioButton was clicked, we need to put anyway
-    bCheck |= sal_True;
+    bCheck = true;
     return 0;
 }
 
@@ -582,7 +582,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl)
         InitTabPos_Impl();
 
         // So that we put in FillItemSet()
-        bCheck |= sal_True;
+        bCheck = true;
     }
     return 0;
 }
@@ -591,7 +591,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl)
 
 IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, RadioButton *, pBox )
 {
-    bCheck |= sal_True;
+    bCheck = true;
     SvxTabAdjust eAdj;
     m_pDezChar->Disable();
     m_pDezCharLabel->Disable();
@@ -626,7 +626,7 @@ IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, RadioButton *, pBox )
 
 IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, RadioButton *, pBox )
 {
-    bCheck |= sal_True;
+    bCheck = true;
     sal_uInt8 cFill = ' ';
     m_pFillChar->SetText( "" );
     m_pFillChar->Disable();

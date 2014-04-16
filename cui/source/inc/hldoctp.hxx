@@ -44,7 +44,7 @@ private:
 
     OUString            maStrURL;
 
-    sal_Bool                mbMarkWndOpen;
+    bool                mbMarkWndOpen;
 
     DECL_LINK (ClickFileopenHdl_Impl  , void * );
     DECL_LINK (ClickTargetHdl_Impl    , void * );
@@ -66,7 +66,7 @@ protected:
     void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
                              OUString& aStrIntName, OUString& aStrFrame,
                              SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
-    virtual sal_Bool   ShouldOpenMarkWnd () SAL_OVERRIDE {return mbMarkWndOpen;}
+    virtual bool   ShouldOpenMarkWnd () SAL_OVERRIDE {return mbMarkWndOpen;}
     virtual void   SetMarkWndShouldOpen (sal_Bool bOpen) SAL_OVERRIDE {mbMarkWndOpen=bOpen;}
     OUString GetCurrentURL    ();
 

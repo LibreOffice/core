@@ -143,11 +143,11 @@ protected:
         painting is turned on immediately. As a consequence for this intricateness there is no flickering when turning
         off and on quickly.
     */
-    void EnableSearchUI(sal_Bool bEnable);
+    void EnableSearchUI(bool bEnable);
 
-    void EnableSearchForDependees(sal_Bool bEnable);
+    void EnableSearchForDependees(bool bEnable);
 
-    void EnableControlPaint(sal_Bool bEnable);
+    void EnableControlPaint(bool bEnable);
 
     void InitContext(sal_Int16 nContext);
 

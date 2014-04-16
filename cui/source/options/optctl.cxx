@@ -26,7 +26,7 @@
 
 IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl)
 {
-    sal_Bool bIsSequenceChecking = m_pSequenceCheckingCB->IsChecked();
+    bool bIsSequenceChecking = m_pSequenceCheckingCB->IsChecked();
     m_pRestrictedCB->Enable( bIsSequenceChecking );
     m_pTypeReplaceCB->Enable( bIsSequenceChecking );
     // #i48117#: by default restricted and type&replace have to be switched on
@@ -72,21 +72,21 @@ bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
     SvtCTLOptions aCTLOptions;
 
     // Sequence checking
-    sal_Bool bChecked = m_pSequenceCheckingCB->IsChecked();
-    if ( bChecked != m_pSequenceCheckingCB->GetSavedValue() )
+    bool bChecked = m_pSequenceCheckingCB->IsChecked();
+    if ( (bChecked ? 1 : 0) != m_pSequenceCheckingCB->GetSavedValue() )
     {
         aCTLOptions.SetCTLSequenceChecking( bChecked );
         bModified = true;
     }
 
     bChecked = m_pRestrictedCB->IsChecked();
-    if( bChecked != m_pRestrictedCB->GetSavedValue() )
+    if( (bChecked ? 1 : 0) != m_pRestrictedCB->GetSavedValue() )
     {
         aCTLOptions.SetCTLSequenceCheckingRestricted( bChecked );
         bModified = true;
     }
     bChecked = m_pTypeReplaceCB->IsChecked();
-    if( bChecked != m_pTypeReplaceCB->GetSavedValue())
+    if( (bChecked ? 1 : 0) != m_pTypeReplaceCB->GetSavedValue())
     {
         aCTLOptions.SetCTLSequenceCheckingTypeAndReplace(bChecked);
         bModified = true;
@@ -147,7 +147,7 @@ void SvxCTLOptionsPage::Reset( const SfxItemSet& )
     m_pMovementVisualRB->SaveValue();
     m_pNumeralsLB->SaveValue();
 
-    sal_Bool bIsSequenceChecking = m_pSequenceCheckingCB->IsChecked();
+    bool bIsSequenceChecking = m_pSequenceCheckingCB->IsChecked();
     m_pRestrictedCB->Enable( bIsSequenceChecking );
     m_pTypeReplaceCB->Enable( bIsSequenceChecking );
 }

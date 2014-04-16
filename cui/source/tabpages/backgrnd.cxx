@@ -105,11 +105,11 @@ struct SvxBackgroundPara_Impl
 struct SvxBackgroundPage_Impl
 {
     Timer*          pLoadTimer;
-    sal_Bool        bIsImportDlgInExecute;
+    bool        bIsImportDlgInExecute;
 
     SvxBackgroundPage_Impl()
         : pLoadTimer(NULL)
-        , bIsImportDlgInExecute(sal_False)
+        , bIsImportDlgInExecute(false)
     {}
 };
 
@@ -149,7 +149,7 @@ static void lcl_setFillStyle(ListBox* pLbSelect, XFillStyle eStyle)
 
 sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
 {
-    sal_Bool    bFound = sal_False;
+    bool    bFound = false;
     sal_uInt16  nCount = rValueSet.GetItemCount();
     sal_uInt16  n      = 1;
 
@@ -485,7 +485,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
     m_pBtnPreview->Check( !aUserData.isEmpty() && '1' == aUserData[0] );
 
     // don't be allowed to call ShowSelector() after reset anymore
-    bAllowShowSelector = sal_False;
+    bAllowShowSelector = false;
 
 
     // get and evaluate Input-BrushItem
@@ -690,7 +690,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     }
 
     // We now have always a link to the background
-    bLinkOnly = sal_True;
+    bLinkOnly = true;
     m_pBtnLink->Check( true );
     m_pBtnLink->Show( false );
 
@@ -768,12 +768,12 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
     SfxItemState eOldItemState = rCoreSet.GetItemState(nSlot, false);
     const SfxItemSet& rOldSet = GetItemSet();
 
-    sal_Bool bGraphTransparencyChanged = bGraphTransparency && (m_pGraphTransMF->GetText() != m_pGraphTransMF->GetSavedValue());
+    bool bGraphTransparencyChanged = bGraphTransparency && (m_pGraphTransMF->GetText() != m_pGraphTransMF->GetSavedValue());
     if ( pOld )
     {
         const SvxBrushItem& rOldItem    = (const SvxBrushItem&)*pOld;
         SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
-        const sal_Bool          bIsBrush    = ( XFILL_SOLID == lcl_getFillStyle(m_pLbSelect) );
+        const bool          bIsBrush    = ( XFILL_SOLID == lcl_getFillStyle(m_pLbSelect) );
 
         // transparency has to be set if enabled, the color not already set to "No fill" and
         if( bColTransparency &&
@@ -803,8 +803,8 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 // Bitmap-treatment:
 
                 SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
-                const sal_Bool          bIsLink  = m_pBtnLink->IsChecked();
-                const sal_Bool          bWasLink = (NULL != rOldItem.GetGraphicLink() );
+                const bool          bIsLink  = m_pBtnLink->IsChecked();
+                const bool          bWasLink = (NULL != rOldItem.GetGraphicLink() );
 
 
                 if ( !bIsLink && !bIsGraphicValid )
@@ -981,8 +981,8 @@ bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, s
 
     SvxBrushItem        rOldItem( (const CntWallpaperItem&)*pOld, nWhich );
     SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
-    const sal_Bool          bIsBrush    = ( XFILL_SOLID == lcl_getFillStyle(m_pLbSelect) );
-    sal_Bool                bModified = sal_False;
+    const bool          bIsBrush    = ( XFILL_SOLID == lcl_getFillStyle(m_pLbSelect) );
+    bool                bModified = false;
 
     if (   ( (GPOS_NONE == eOldPos) && bIsBrush  )
         || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) // Brush <-> Bitmap changed?
@@ -994,7 +994,7 @@ bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, s
             // Brush-treatment:
             if ( rOldItem.GetColor() != aBgdColor )
             {
-                bModified = sal_True;
+                bModified = true;
                 CntWallpaperItem aItem( nWhich );
                 aItem.SetColor( aBgdColor );
                 rCoreSet.Put( aItem );
@@ -1012,7 +1012,7 @@ bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, s
             bool bBrushChanged = ( rOldItem.GetColor() != aBgdColor );
             if( bBitmapChanged || bBrushChanged )
             {
-                bModified = sal_True;
+                bModified = true;
 
                 CntWallpaperItem aItem( nWhich );
                 WallpaperStyle eWallStyle = SvxBrushItem::GraphicPos2WallpaperStyle(eNewPos);
@@ -1043,7 +1043,7 @@ bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, s
             rCoreSet.Put( aItem );
         }
 
-        bModified = sal_True;
+        bModified = true;
     }
     return bModified;
 }
@@ -1097,7 +1097,7 @@ void SvxBackgroundTabPage::ShowSelector()
         pPageImpl->pLoadTimer->SetTimeoutHdl(
             LINK( this, SvxBackgroundTabPage, LoadTimerHdl_Impl ) );
 
-        bAllowShowSelector = sal_False;
+        bAllowShowSelector = false;
 
         if(nHtmlMode & HTMLMODE_ON)
         {
@@ -1124,9 +1124,9 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
 
 
 
-sal_Bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
+bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
 {
-    sal_Bool bResult = ( !aBgdGraphicPath.isEmpty() ) &&
+    bool bResult = ( !aBgdGraphicPath.isEmpty() ) &&
                    ( GRFILTER_OK == GraphicFilter::LoadGraphic( aBgdGraphicPath,
                                                  aBgdGraphicFilter,
                                                  aBgdGraphic ) );
@@ -1319,7 +1319,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl)
     Color aColor = nItemId ? ( m_pBackgroundColorSet->GetItemColor( nItemId ) ) : Color( COL_TRANSPARENT );
     aBgdColor = aColor;
     m_pPreviewWin1->NotifyChange( aBgdColor );
-    sal_Bool bEnableTransp = aBgdColor.GetTransparency() < 0xff;
+    bool bEnableTransp = aBgdColor.GetTransparency() < 0xff;
     m_pColTransFT->Enable(bEnableTransp);
     m_pColTransMF->Enable(bEnableTransp);
     return 0;
@@ -1422,7 +1422,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
 {
     if ( pPageImpl->pLoadTimer->IsActive() )
         return 0;
-    sal_Bool bHtml = 0 != ( nHtmlMode & HTMLMODE_ON );
+    bool bHtml = 0 != ( nHtmlMode & HTMLMODE_ON );
 
     OUString aStrBrowse(get<Window>("findgraphicsft")->GetText());
     pImportDlg = new SvxOpenGraphicDialog( aStrBrowse );
@@ -1430,9 +1430,9 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
         pImportDlg->EnableLink(false);
     pImportDlg->SetPath( aBgdGraphicPath, m_pBtnLink->IsChecked() );
 
-    pPageImpl->bIsImportDlgInExecute = sal_True;
+    pPageImpl->bIsImportDlgInExecute = true;
     short nErr = pImportDlg->Execute();
-    pPageImpl->bIsImportDlgInExecute = sal_False;
+    pPageImpl->bIsImportDlgInExecute = false;
 
     if( !nErr )
     {
@@ -1476,7 +1476,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
                 // new file chosen
                 aBgdGraphicPath   = pImportDlg->GetPath();
                 aBgdGraphicFilter = pImportDlg->GetCurrentFilter();
-                sal_Bool bLink = ( nHtmlMode & HTMLMODE_ON ) || bLinkOnly ? sal_True : pImportDlg->IsAsLink();
+                bool bLink = ( nHtmlMode & HTMLMODE_ON ) || bLinkOnly ? sal_True : pImportDlg->IsAsLink();
                 m_pBtnLink->Check( bLink );
                 m_pBtnLink->Enable();
 
@@ -1484,17 +1484,17 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
                 {
                     if( !pImportDlg->GetGraphic(aBgdGraphic) )
                     {
-                        bIsGraphicValid = sal_True;
+                        bIsGraphicValid = true;
                     }
                     else
                     {
                         aBgdGraphicFilter = "";
                         aBgdGraphicPath = "";
-                        bIsGraphicValid = sal_False;
+                        bIsGraphicValid = false;
                     }
                 }
                 else
-                    bIsGraphicValid = sal_False; // load graphic not until preview click
+                    bIsGraphicValid = false; // load graphic not until preview click
 
                 if ( m_pBtnPreview->IsChecked() && bIsGraphicValid )
                 {
@@ -1525,7 +1525,7 @@ void SvxBackgroundTabPage::ShowTblControl()
 
 
 
-void SvxBackgroundTabPage::ShowParaControl(sal_Bool bCharOnly)
+void SvxBackgroundTabPage::ShowParaControl(bool bCharOnly)
 {
     m_pParaLBox->SetSelectHdl(HDL(ParaDestinationHdl_Impl));
     m_pParaLBox->SelectEntryPos(0);
@@ -1578,7 +1578,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
         else
         {
             SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
-            const sal_Bool          bIsLink  = m_pBtnLink->IsChecked();
+            const bool          bIsLink  = m_pBtnLink->IsChecked();
 
             if ( !bIsLink && !bIsGraphicValid )
                 bIsGraphicValid = LoadLinkedGraphic_Impl();
@@ -1659,7 +1659,7 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
         else
         {
                 SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
-                const sal_Bool          bIsLink  = m_pBtnLink->IsChecked();
+                const bool          bIsLink  = m_pBtnLink->IsChecked();
 
                 if ( !bIsLink && !bIsGraphicValid )
                     bIsGraphicValid = LoadLinkedGraphic_Impl();
@@ -1704,7 +1704,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
     {
         m_pColTransMF->SetValue(lcl_TransparencyToPercent(rColor.GetTransparency()));
         m_pColTransMF->SaveValue();
-        sal_Bool bEnableTransp = rColor.GetTransparency() < 0xff;
+        bool bEnableTransp = rColor.GetTransparency() < 0xff;
         m_pColTransFT->Enable(bEnableTransp);
         m_pColTransMF->Enable(bEnableTransp);
         //the default setting should be "no transparency"
@@ -1797,7 +1797,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             else if ( pGraphic )
             {
                 aBgdGraphic = *pGraphic;
-                bIsGraphicValid = sal_True;
+                bIsGraphicValid = true;
 
                 if ( rUserData.isEmpty() )
                     m_pBtnPreview->Check();
@@ -1805,7 +1805,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             else
             {
                 RaiseLoadError_Impl();
-                bIsGraphicValid = sal_False;
+                bIsGraphicValid = false;
 
                 if ( rUserData.isEmpty() )
                     m_pBtnPreview->Check( false );
@@ -1824,7 +1824,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
     }
 }
 
-void SvxBackgroundTabPage::EnableTransparency(sal_Bool bColor, sal_Bool bGraphic)
+void SvxBackgroundTabPage::EnableTransparency(bool bColor, bool bGraphic)
 {
     bColTransparency  = bColor;
     bGraphTransparency = bGraphic;
@@ -1846,7 +1846,7 @@ void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
         if ( ( nFlags & SVX_SHOW_SELECTOR ) == SVX_SHOW_SELECTOR )
             ShowSelector();
         if ( ( nFlags & SVX_ENABLE_TRANSPARENCY ) == SVX_ENABLE_TRANSPARENCY )
-            EnableTransparency(sal_True, sal_True);
+            EnableTransparency(true, true);
     }
 }
 

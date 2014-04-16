@@ -47,7 +47,7 @@ private:
     OUString            maStrOldUser;
     OUString            maStrOldPassword;
 
-    sal_Bool                mbMarkWndOpen;
+    bool                mbMarkWndOpen;
 
     DECL_LINK (Click_SmartProtocol_Impl  , void * ); ///< Radiobutton clicked: Type HTTP or FTP
     DECL_LINK (ClickAnonymousHdl_Impl    , void * ); ///< Checkbox : Anonymous User
@@ -75,7 +75,7 @@ protected:
     virtual void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
                                      OUString& aStrIntName, OUString& aStrFrame,
                                      SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
-    virtual sal_Bool ShouldOpenMarkWnd () SAL_OVERRIDE {return ( mbMarkWndOpen && maRbtLinktypInternet.IsChecked() );}
+    virtual bool ShouldOpenMarkWnd () SAL_OVERRIDE {return ( mbMarkWndOpen && maRbtLinktypInternet.IsChecked() );}
     virtual void SetMarkWndShouldOpen (sal_Bool bOpen) SAL_OVERRIDE {mbMarkWndOpen=bOpen;}
 
 public:

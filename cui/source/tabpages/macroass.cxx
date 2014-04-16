@@ -54,9 +54,9 @@ public:
     VclFrame*                       pMacroFrame;
     SfxConfigFunctionListBox*       pMacroLB;
 
-    sal_Bool                            bReadOnly;
+    bool                            bReadOnly;
     Timer                           maFillGroupTimer;
-    sal_Bool                            bGotEvents;
+    bool                            bGotEvents;
     bool m_bDummyActivated; ///< has this tab page already been activated
 };
 
@@ -214,7 +214,7 @@ void _SfxMacroTabPage::PageCreated (SfxAllItemSet aSet)
     const SfxPoolItem* pEventsItem;
     if( !mpImpl->bGotEvents && SFX_ITEM_SET == aSet.GetItemState( SID_EVENTCONFIG, true, &pEventsItem ) )
     {
-        mpImpl->bGotEvents = sal_True;
+        mpImpl->bGotEvents = true;
         const SfxEventNamesList& rList = ((SfxEventNamesItem*)pEventsItem)->GetEvents();
         for ( size_t nNo = 0, nCnt = rList.size(); nNo < nCnt; ++nNo )
         {
@@ -233,7 +233,7 @@ void _SfxMacroTabPage::Reset( const SfxItemSet& rSet )
     const SfxPoolItem* pEventsItem;
     if( !mpImpl->bGotEvents && SFX_ITEM_SET == rSet.GetItemState( SID_EVENTCONFIG, true, &pEventsItem ) )
     {
-        mpImpl->bGotEvents = sal_True;
+        mpImpl->bGotEvents = true;
         const SfxEventNamesList& rList = ((SfxEventNamesItem*)pEventsItem)->GetEvents();
         for ( size_t nNo = 0, nCnt = rList.size(); nNo < nCnt; ++nNo )
         {
@@ -308,7 +308,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
         return 0;
     }
 
-    const sal_Bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
+    const bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
 
     // remove from the table
     sal_uInt16 nEvent = (sal_uInt16)(sal_uLong)pE->GetUserData();

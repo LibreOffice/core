@@ -285,12 +285,12 @@ struct SvxColorTabPageShadow
 {
     sal_uInt16 nUnknownType;
     sal_Int32  nUnknownPos;
-    sal_Bool   bIsAreaTP;
+    bool   bIsAreaTP;
     sal_uInt16 nChangeType;
     SvxColorTabPageShadow()
         : nUnknownType( COLORPAGE_UNKNOWN )
         , nUnknownPos( LISTBOX_ENTRY_NOTFOUND )
-        , bIsAreaTP( sal_False )
+        , bIsAreaTP( false )
         , nChangeType( 0 )
     {
     }
@@ -427,7 +427,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 {
     if( nDlgType == 0 ) // area dialog
     {
-        *pbAreaTP = sal_False;
+        *pbAreaTP = false;
 
         if( pColorList.is() )
         {
@@ -559,7 +559,7 @@ long SvxColorTabPage::CheckChanges_Impl()
 bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( ( nDlgType != 0 ) ||
-        ( *pPageType == PT_COLOR && *pbAreaTP == sal_False ) )
+        ( *pPageType == PT_COLOR && *pbAreaTP == false ) )
     {
         OUString aString;
         Color  aColor;
@@ -669,12 +669,12 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
     OUString aName( m_pEdtName->GetText() );
     XColorEntry* pEntry;
     long nCount = pColorList->Count();
-    sal_Bool bDifferent = sal_True;
+    bool bDifferent = true;
 
     // check if name is already existing
     for ( long i = 0; i < nCount && bDifferent; i++ )
         if ( aName == pColorList->GetColor( i )->GetName() )
-            bDifferent = sal_False;
+            bDifferent = false;
 
     // if yes, it is repeated and a new name is demanded
     if ( !bDifferent )
@@ -686,21 +686,21 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
-        sal_Bool bLoop = sal_True;
+        bool bLoop = true;
 
         while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
-            bDifferent = sal_True;
+            bDifferent = true;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pColorList->GetColor( i )->GetName() )
-                    bDifferent = sal_False;
+                    bDifferent = false;
             }
 
             if( bDifferent )
-                bLoop = sal_False;
+                bLoop = false;
             else
                 aWarningBox.Execute();
         }
@@ -741,12 +741,12 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
         OUString aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
         OUString aName( m_pEdtName->GetText() );
         long nCount = pColorList->Count();
-        sal_Bool bDifferent = sal_True;
+        bool bDifferent = true;
 
         // check if name is already existing
         for ( long i = 0; i < nCount && bDifferent; i++ )
             if ( aName == pColorList->GetColor( i )->GetName() && nPos != i )
-                bDifferent = sal_False;
+                bDifferent = false;
 
         // if yes, it is repeated and a new name is demanded
         if ( !bDifferent )
@@ -758,19 +758,19 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
-            sal_Bool bLoop = sal_True;
+            bool bLoop = true;
 
             while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
             {
                 pDlg->GetName( aName );
-                bDifferent = sal_True;
+                bDifferent = true;
 
                 for ( long i = 0; i < nCount && bDifferent; i++ )
                     if( aName == pColorList->GetColor( i )->GetName() && nPos != i )
-                        bDifferent = sal_False;
+                        bDifferent = false;
 
                 if( bDifferent )
-                    bLoop = sal_False;
+                    bLoop = false;
                 else
                     aWarningBox.Execute();
             }

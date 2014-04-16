@@ -55,7 +55,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     nPageType           ( 0 ),
     nDlgType            ( 0 ),
     pbAreaTP            ( 0 ),
-    bDisable            ( sal_False ),
+    bDisable            ( false ),
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
@@ -247,7 +247,7 @@ int SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
 bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
     const SfxPoolItem*  pOld = NULL;
-    sal_Bool                bModified = sal_False;
+    bool                bModified = false;
 
     if( !bDisable )
     {
@@ -259,7 +259,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
             if ( !pOld || !( *(const SdrShadowItem*)pOld == aItem ) )
             {
                 rAttrs.Put( aItem );
-                bModified = sal_True;
+                bModified = true;
             }
         }
 
@@ -306,7 +306,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
                 ( !pOld || !( *(const SdrShadowXDistItem*)pOld == aXItem ) ) )
             {
                 rAttrs.Put( aXItem );
-                bModified = sal_True;
+                bModified = true;
             }
             SdrShadowYDistItem aYItem( nY );
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOWYDIST );
@@ -314,7 +314,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
                 ( !pOld || !( *(const SdrShadowYDistItem*)pOld == aYItem ) ) )
             {
                 rAttrs.Put( aYItem );
-                bModified = sal_True;
+                bModified = true;
             }
         }
 
@@ -328,7 +328,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
             if ( !pOld || !( *(const SdrShadowColorItem*)pOld == aItem ) )
             {
                 rAttrs.Put( aItem );
-                bModified = sal_True;
+                bModified = true;
             }
         }
 
@@ -341,7 +341,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
             if ( !pOld || !( *(const SdrShadowTransparenceItem*)pOld == aItem ) )
             {
                 rAttrs.Put( aItem );
-                bModified = sal_True;
+                bModified = true;
             }
         }
     }

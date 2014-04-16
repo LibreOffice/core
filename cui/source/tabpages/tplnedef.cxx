@@ -529,40 +529,40 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
 
     long nCount = pDashList->Count();
     long j = 1;
-    sal_Bool bDifferent = sal_False;
+    bool bDifferent = false;
 
     while ( !bDifferent )
     {
         aName = aNewName;
         aName += " ";
         aName += OUString::number( j++ );
-        bDifferent = sal_True;
+        bDifferent = true;
 
         for ( long i = 0; i < nCount && bDifferent; i++ )
             if ( aName == pDashList->GetDash( i )->GetName() )
-                bDifferent = sal_False;
+                bDifferent = false;
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");
     AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");
-    sal_Bool bLoop = sal_True;
+    bool bLoop = true;
 
     while ( bLoop && pDlg->Execute() == RET_OK )
     {
         pDlg->GetName( aName );
-        bDifferent = sal_True;
+        bDifferent = true;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
         {
             if( aName == pDashList->GetDash( i )->GetName() )
-                bDifferent = sal_False;
+                bDifferent = false;
         }
 
         if( bDifferent )
         {
-            bLoop = sal_False;
+            bLoop = false;
             FillDash_Impl();
 
             pEntry = new XDashEntry( aDash, aName );
@@ -627,24 +627,24 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         long nCount = pDashList->Count();
-        sal_Bool bDifferent = sal_False;
-        sal_Bool bLoop = sal_True;
+        bool bDifferent = false;
+        bool bLoop = true;
 
         while ( bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
-            bDifferent = sal_True;
+            bDifferent = true;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pDashList->GetDash( i )->GetName() &&
                     aName != aOldName )
-                    bDifferent = sal_False;
+                    bDifferent = false;
             }
 
             if ( bDifferent )
             {
-                bLoop = sal_False;
+                bLoop = false;
                 FillDash_Impl();
 
                 XDashEntry* pEntry = new XDashEntry( aDash, aName );

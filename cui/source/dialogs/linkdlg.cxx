@@ -77,7 +77,7 @@ static long nTabs[] =
     };
 
 
-SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, sal_Bool bHtml )
+SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, bool bHtml )
     : ModalDialog( pParent, CUI_RES( MD_UPDATE_BASELINKS ) ),
     aFtFiles( this, CUI_RES( FT_FILES ) ),
     aFtLinks( this, CUI_RES( FT_LINKS ) ),
@@ -419,7 +419,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
 {
     (void)pPushButton;
 
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     if(Links().GetSelectionCount() <= 1)
     {
         sal_uLong nPos;
@@ -434,7 +434,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
             Links().GetModel()->Remove( Links().GetEntry( nPos ) );
 
             // close object, if it's still existing
-            sal_Bool bNewLnkMgr = OBJECT_CLIENT_FILE == xLink->GetObjType();
+            bool bNewLnkMgr = OBJECT_CLIENT_FILE == xLink->GetObjType();
 
             // tell the link that it will be resolved!
             xLink->Closed();
@@ -453,7 +453,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
                 if( pEntry )
                     Links().SetCurEntry( pEntry );
             }
-            bModified = sal_True;
+            bModified = true;
         }
     }
     else
@@ -481,7 +481,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
 
                 // if somebody has forgotten to deregister himself
                 pLinkMgr->Remove( &xLink );
-                bModified = sal_True;
+                bModified = true;
             }
             // then remove all selected entries
         }
@@ -538,11 +538,11 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
         // So search for the link in the manager; if it does not exist
         // anymore, fill the list completely new. Otherwise only the
         // edited link needs to be refreshed.
-        sal_Bool bLinkFnd = sal_False;
+        bool bLinkFnd = false;
         for( size_t n = pLinkMgr->GetLinks().size(); n;  )
             if( _pLink == &(*pLinkMgr->GetLinks()[ --n ]) )
             {
-                bLinkFnd = sal_True;
+                bLinkFnd = true;
                 break;
             }
 
@@ -551,7 +551,7 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
             Links().SetUpdateMode(false);
             Links().GetModel()->Remove( Links().GetEntry( nPos ) );
             SvTreeListEntry* pToUnselect = Links().FirstSelected();
-            InsertEntry( *_pLink, nPos, sal_True );
+            InsertEntry( *_pLink, nPos, true );
             if(pToUnselect)
                 Links().Select(pToUnselect, false);
             Links().SetUpdateMode(true);
@@ -627,7 +627,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
 }
 
 
-void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, sal_Bool bSelect )
+void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, bool bSelect )
 {
     OUString aEntry, sFileNm, sLinkNm, sTypeNm, sFilter;
 

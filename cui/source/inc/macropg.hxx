@@ -89,7 +89,7 @@ public:
     virtual void                Reset( const SfxItemSet& ) SAL_OVERRIDE;
 
     void                        DisplayAppEvents( bool appEvents);
-    void                        SetReadOnly( sal_Bool bSet );
+    void                        SetReadOnly( bool bSet );
     bool                        IsReadOnly() const SAL_OVERRIDE;
 };
 

@@ -72,7 +72,7 @@ private:
 
 public:
     SvxSearchSimilarityDialog(  Window* pParent,
-                                sal_Bool bRelax,
+                                bool bRelax,
                                 sal_uInt16 nOther,
                                 sal_uInt16 nShorter,
                                 sal_uInt16 nLonger );
@@ -80,7 +80,7 @@ public:
     sal_uInt16  GetOther()      { return (sal_uInt16)m_pOtherFld->GetValue(); }
     sal_uInt16  GetShorter()    { return (sal_uInt16)m_pShorterFld->GetValue(); }
     sal_uInt16  GetLonger()     { return (sal_uInt16)m_pLongerFld->GetValue(); }
-    sal_Bool    IsRelaxed()     { return m_pRelaxBox->IsChecked(); }
+    bool    IsRelaxed()     { return m_pRelaxBox->IsChecked(); }
 };
 
 

@@ -42,7 +42,7 @@ private:
     XDashListRef          pNewDashList;
     XLineEndListRef       pLineEndList;
     XLineEndListRef       pNewLineEndList;
-    sal_Bool            bObjSelected;
+    bool            bObjSelected;
 
     ChangeType          nLineEndListState;
     ChangeType          nDashListState;
@@ -51,7 +51,7 @@ private:
     sal_uInt16          nPageType;
     sal_Int32           nPosDashLb;
     sal_Int32           nPosLineEndLb;
-    sal_Bool            mbAreaTP;
+    bool            mbAreaTP;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
@@ -63,7 +63,7 @@ protected:
 public:
     SvxLineTabDialog( Window* pParent, const SfxItemSet* pAttr,
                       SdrModel* pModel, const SdrObject* pObj = NULL,
-                      sal_Bool bHasObj = sal_True );
+                      bool bHasObj = true );
     virtual ~SvxLineTabDialog();
 
     void                SetNewDashList( XDashListRef pInLst)
@@ -139,15 +139,15 @@ private:
     CheckBox*           m_pSymbolRatioCB;
     std::vector<OUString> aGrfNames;
     SvxBmpItemInfoList  aGrfBrushItems;
-    sal_Bool            bLastWidthModified;
+    bool            bLastWidthModified;
     Size                aSymbolLastSize;
     Graphic             aSymbolGraphic;
     Size                aSymbolSize;
-    sal_Bool            bSymbols;
+    bool            bSymbols;
 
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
-    sal_Bool            bObjSelected;
+    bool            bObjSelected;
 
     XOutdevItemPool*    pXPool;
     XLineStyleItem      aXLStyle;
@@ -193,14 +193,14 @@ private:
      // LineCaps
      DECL_LINK ( ChangeCapStyleHdl_Impl, void * );
 
-    sal_Bool FillXLSet_Impl();
+    bool FillXLSet_Impl();
 
     void InitSymbols(MenuButton* pButton);
     void SymbolSelected(MenuButton* pButton);
     void FillListboxes();
 public:
 
-    void ShowSymbolControls(sal_Bool bOn);
+    void ShowSymbolControls(bool bOn);
 
     SvxLineTabPage( Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxLineTabPage();
@@ -223,7 +223,7 @@ public:
     void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
     void    SetDashList( XDashListRef pDshLst ) { pDashList = pDshLst; }
     void    SetLineEndList( XLineEndListRef pLneEndLst) { pLineEndList = pLneEndLst; }
-    void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
+    void    SetObjSelected( bool bHasObj ) { bObjSelected = bHasObj; }
 
     void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
@@ -263,7 +263,7 @@ private:
 
     const SfxItemSet&   rOutAttrs;
     XDash               aDash;
-    sal_Bool            bObjSelected;
+    bool            bObjSelected;
 
     XOutdevItemPool*    pXPool;
     XLineStyleItem      aXLStyle;
@@ -313,7 +313,7 @@ public:
     virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
     void    SetDashList( XDashListRef pDshLst ) { pDashList = pDshLst; }
-    void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
+    void    SetObjSelected( bool bHasObj ) { bObjSelected = bHasObj; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
@@ -343,7 +343,7 @@ private:
 
     const SfxItemSet&   rOutAttrs;
     const SdrObject*    pPolyObj;
-    sal_Bool            bObjSelected;
+    bool            bObjSelected;
 
     XOutdevItemPool*    pXPool;
     XLineStyleItem      aXLStyle;
@@ -384,7 +384,7 @@ public:
 
     void    SetLineEndList( XLineEndListRef pInList ) { pLineEndList = pInList; }
     void    SetPolyObj( const SdrObject* pObj ) { pPolyObj = pObj; }
-    void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
+    void    SetObjSelected( bool bHasObj ) { bObjSelected = bHasObj; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }

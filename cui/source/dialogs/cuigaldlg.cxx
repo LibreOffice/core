@@ -118,7 +118,7 @@ void SearchThread::execute()
 
 void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                                const ::std::vector< OUString >& rFormats,
-                               sal_Bool bRecursive )
+                               bool bRecursive )
 {
     {
         SolarMutexGuard aGuard;
@@ -148,17 +148,17 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                 INetURLObject   aFoundURL( xContentAccess->queryContentIdentifierString() );
                 DBG_ASSERT( aFoundURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-                sal_Bool bFolder = xRow->getBoolean( 1 ); // property "IsFolder"
+                bool bFolder = xRow->getBoolean( 1 ); // property "IsFolder"
                 if ( xRow->wasNull() )
-                    bFolder = sal_False;
+                    bFolder = false;
 
                 if( bRecursive && bFolder )
-                    ImplSearch( aFoundURL, rFormats, sal_True );
+                    ImplSearch( aFoundURL, rFormats, true );
                 else
                 {
-                    sal_Bool bDocument = xRow->getBoolean( 2 ); // property "IsDocument"
+                    bool bDocument = xRow->getBoolean( 2 ); // property "IsDocument"
                     if ( xRow->wasNull() )
-                        bDocument = sal_False;
+                        bDocument = false;
 
                     if( bDocument )
                     {
@@ -543,7 +543,7 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl)
 {
     Gallery*    pGal = pThm->GetParent();
     const sal_uLong nId = GetId();
-    sal_Bool        bDifferentThemeExists = sal_False;
+    bool        bDifferentThemeExists = false;
 
     for( sal_uLong i = 0, nCount = pGal->GetThemeCount(); i < nCount && !bDifferentThemeExists; i++ )
     {
@@ -560,7 +560,7 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl)
             InfoBox aBox( this, aStr );
             aBox.Execute();
             m_pLbResName->GrabFocus();
-            bDifferentThemeExists = sal_True;
+            bDifferentThemeExists = true;
         }
     }
 
@@ -630,7 +630,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     OUString            aObjStr( CUI_RES( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
     OUString            aAccess;
     OUString            aType( SVX_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
-    sal_Bool            bReadOnly = pThm->IsReadOnly();
+    bool            bReadOnly = pThm->IsReadOnly();
 
     m_pEdtMSName->SetText( pThm->GetName() );
     m_pEdtMSName->SetReadOnly( bReadOnly );
@@ -750,7 +750,7 @@ void TPGalleryThemeProperties::StartSearchFiles( const OUString& _rFolderURL, sh
     if ( RET_OK == _nDlgResult )
     {
         aURL = INetURLObject( _rFolderURL );
-        bSearchRecursive = sal_True;    // UI choice no longer possible, windows file picker allows no user controls
+        bSearchRecursive = true;    // UI choice no longer possible, windows file picker allows no user controls
         SearchFiles();
     }
 
@@ -805,7 +805,7 @@ void TPGalleryThemeProperties::FillFilterList()
     FilterEntry*        pFilterEntry;
     FilterEntry*        pTestEntry;
     sal_uInt16          i, nKeyCount;
-    sal_Bool                bInList;
+    bool                bInList;
 
     // graphic filters
     for( i = 0, nKeyCount = rFilter.GetImportFormatCount(); i < nKeyCount; i++ )
@@ -814,7 +814,7 @@ void TPGalleryThemeProperties::FillFilterList()
         aName = rFilter.GetImportFormatName( i );
         size_t entryIndex = 0;
         pTestEntry = aFilterEntryList.empty() ? NULL : aFilterEntryList[ entryIndex ];
-        bInList = sal_False;
+        bInList = false;
 
         OUString aExtensions;
         int j = 0;
@@ -837,7 +837,7 @@ void TPGalleryThemeProperties::FillFilterList()
         {
             if ( pTestEntry->aFilterName == aExt )
             {
-                bInList = sal_True;
+                bInList = true;
                 break;
             }
             pTestEntry = ( ++entryIndex < aFilterEntryList.size() )
@@ -995,7 +995,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl)
                 if( xFolderPicker->execute() == RET_OK )
                 {
                     aURL = INetURLObject( xFolderPicker->getDirectory() );
-                    bSearchRecursive = sal_True;    // UI choice no longer possible, windows file picker allows no user controls
+                    bSearchRecursive = true;    // UI choice no longer possible, windows file picker allows no user controls
                     SearchFiles();
                 }
 
@@ -1057,7 +1057,7 @@ void TPGalleryThemeProperties::DoPreview()
     if( aString != aPreviewString )
     {
         INetURLObject   _aURL( aFoundList[ m_pLbxFound->GetEntryPos( aString ) ] );
-        bInputAllowed = sal_False;
+        bInputAllowed = false;
 
         if ( !m_pWndPreview->SetGraphic( _aURL ) )
         {
@@ -1072,7 +1072,7 @@ void TPGalleryThemeProperties::DoPreview()
                 xMediaPlayer->start();
         }
 
-        bInputAllowed = sal_True;
+        bInputAllowed = true;
         aPreviewString = aString;
     }
 }
@@ -1096,7 +1096,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl)
         }
         else
         {
-            bTakeAll = sal_False;
+            bTakeAll = false;
             TakeFiles();
         }
     }
@@ -1111,7 +1111,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeAllHdl)
     if( bInputAllowed )
     {
         aPreviewTimer.Stop();
-        bTakeAll = sal_True;
+        bTakeAll = true;
         TakeFiles();
     }
 
@@ -1124,7 +1124,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl)
 {
     if( bInputAllowed )
     {
-        sal_Bool bPreviewPossible = sal_False;
+        bool bPreviewPossible = false;
 
         aPreviewTimer.Stop();
 
@@ -1133,7 +1133,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl)
             if( m_pLbxFound->GetSelectEntryCount() == 1 )
             {
                 m_pCbxPreview->Enable();
-                bPreviewPossible = sal_True;
+                bPreviewPossible = true;
             }
             else
                 m_pCbxPreview->Disable();
@@ -1184,14 +1184,14 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl)
       m_pLbxFound->SelectEntryPos( 0 );
       m_pBtnTakeAll->Enable();
       m_pCbxPreview->Enable();
-      bEntriesFound = sal_True;
+      bEntriesFound = true;
   }
   else
   {
       m_pLbxFound->InsertEntry( OUString( CUI_RES( RID_SVXSTR_GALLERY_NOFILES ) ) );
       m_pBtnTakeAll->Disable();
       m_pCbxPreview->Disable();
-      bEntriesFound = sal_False;
+      bEntriesFound = false;
   }
   return 0L;
 }

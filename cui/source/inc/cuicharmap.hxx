@@ -40,7 +40,7 @@ class SvxShowText : public Control
 {
 public:
                     SvxShowText( Window* pParent,
-                                 sal_Bool bCenter = sal_False );
+                                 bool bCenter = false );
                     virtual ~SvxShowText();
 
     void            SetFont( const Font& rFont );
@@ -56,7 +56,7 @@ protected:
 
 private:
     long            mnY;
-    sal_Bool            mbCenter;
+    bool            mbCenter;
 
 };
 
@@ -81,7 +81,7 @@ private:
     SvxShowText*    m_pShowChar;
     FixedText*      m_pCharCodeText;
     Font            aFont;
-    sal_Bool        bOne;
+    bool        bOne;
     const SubsetMap* pSubsetMap;
 
     DECL_LINK(OKHdl, void *);
@@ -97,7 +97,7 @@ private:
     void fillAllSubsets(ListBox &rListBox);
 
 public:
-                    SvxCharacterMap( Window* pParent, sal_Bool bOne=sal_True, const SfxItemSet* pSet=0 );
+                    SvxCharacterMap( Window* pParent, bool bOne=true, const SfxItemSet* pSet=0 );
                     virtual ~SvxCharacterMap();
 
     void            DisableFontSelection();

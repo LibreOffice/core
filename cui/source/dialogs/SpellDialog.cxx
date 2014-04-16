@@ -1940,7 +1940,7 @@ void SentenceEditWindow_Impl::ResetUndo()
 }
 
 
-void SentenceEditWindow_Impl::AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg )
+void SentenceEditWindow_Impl::AddUndoAction( SfxUndoAction *pAction, bool bTryMerg )
 {
     ::svl::IUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
     rUndoMgr.AddUndoAction(pAction, bTryMerg);

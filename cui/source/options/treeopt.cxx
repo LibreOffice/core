@@ -250,7 +250,7 @@ class MailMergeCfg_Impl : public utl::ConfigItem
 {
     friend class SvxEMailTabPage;
     // variables
-    sal_Bool bIsEmailSupported;
+    bool bIsEmailSupported;
 
 public:
     MailMergeCfg_Impl();
@@ -259,13 +259,13 @@ public:
     virtual void    Commit() SAL_OVERRIDE;
     virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
 
-    sal_Bool IsEmailSupported() const {return bIsEmailSupported;}
+    bool IsEmailSupported() const {return bIsEmailSupported;}
 
 };
 
 MailMergeCfg_Impl::MailMergeCfg_Impl() :
     utl::ConfigItem("Office.Writer/MailMergeWizard"),
-    bIsEmailSupported(sal_False)
+    bIsEmailSupported(false)
 {
     Sequence<OUString> aNames(1);
     aNames.getArray()[0] = "EMailSupported";
@@ -424,16 +424,16 @@ static OptionsMapping_Impl const OptionsMap_Impl[] =
     { NULL,                 NULL,                   0 }
 };
 
-static sal_Bool lcl_getStringFromID( sal_uInt16 _nPageId, OUString& _rGroupName, OUString& _rPageName )
+static bool lcl_getStringFromID( sal_uInt16 _nPageId, OUString& _rGroupName, OUString& _rPageName )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     sal_uInt16 nIdx = 0;
     while ( OptionsMap_Impl[nIdx].m_pGroupName != NULL )
     {
         if ( _nPageId == OptionsMap_Impl[nIdx].m_nPageId )
         {
-            bRet = sal_True;
+            bRet = true;
             _rGroupName = OUString::createFromAscii( OptionsMap_Impl[nIdx].m_pGroupName );
             if ( OptionsMap_Impl[nIdx].m_pPageName != NULL )
                 _rPageName = OUString::createFromAscii( OptionsMap_Impl[nIdx].m_pPageName );
@@ -445,9 +445,9 @@ static sal_Bool lcl_getStringFromID( sal_uInt16 _nPageId, OUString& _rGroupName,
     return bRet;
 }
 
-static sal_Bool lcl_isOptionHidden( sal_uInt16 _nPageId, const SvtOptionsDialogOptions& _rOptOptions )
+static bool lcl_isOptionHidden( sal_uInt16 _nPageId, const SvtOptionsDialogOptions& _rOptOptions )
 {
-    sal_Bool bIsHidden = sal_False;
+    bool bIsHidden = false;
     OUString sGroupName, sPageName;
     if ( lcl_getStringFromID( _nPageId, sGroupName, sPageName ) )
     {
@@ -477,13 +477,13 @@ struct OptionsGroupInfo
     SfxShell*           m_pShell;       // used to create the page
     SfxModule*          m_pModule;      // used to create the ItemSet
     sal_uInt16          m_nDialogId;    // Id of the former dialog
-    sal_Bool            m_bLoadError;   // load fails?
+    bool            m_bLoadError;   // load fails?
     OUString       m_sPageURL;
     ExtensionsTabPage*  m_pExtPage;
 
     OptionsGroupInfo( SfxShell* pSh, SfxModule* pMod, sal_uInt16 nId ) :
         m_pInItemSet( NULL ), m_pOutItemSet( NULL ), m_pShell( pSh ),
-        m_pModule( pMod ), m_nDialogId( nId ), m_bLoadError( sal_False ),
+        m_pModule( pMod ), m_nDialogId( nId ), m_bLoadError( false ),
         m_sPageURL( OUString() ), m_pExtPage( NULL ) {}
     ~OptionsGroupInfo() { delete m_pInItemSet; delete m_pOutItemSet; }
 };
@@ -502,7 +502,7 @@ struct OptionsGroupInfo
     sNotLoadedError     (       CUI_RES( ST_LOAD_ERROR ) ),\
     pColorPageItemSet   ( NULL ),\
     mpColorPage         ( NULL ),\
-    bForgetSelection    ( sal_False ),\
+    bForgetSelection    ( false ),\
     bIsFromExtensionManager( false ), \
     bIsForSetDocumentLanguage( false )
 
@@ -798,7 +798,7 @@ void OfaTreeOptionsDialog::ActivatePage( sal_uInt16 nResId )
     DBG_ASSERT( !bIsFromExtensionManager, "OfaTreeOptionsDialog::ActivatePage(): call from extension manager" );
     if ( !pLastPageSaver )
         pLastPageSaver = new LastPageSaver;
-    bForgetSelection = sal_True;
+    bForgetSelection = true;
     sal_uInt16 nTemp = pLastPageSaver->m_nLastPageId;
     pLastPageSaver->m_nLastPageId = nResId;
     ActivateLastSelection();
@@ -810,7 +810,7 @@ void OfaTreeOptionsDialog::ActivatePage( const OUString& rPageURL )
     DBG_ASSERT( !bIsFromExtensionManager, "OfaTreeOptionsDialog::ActivatePage(): call from extension manager" );
     if ( !pLastPageSaver )
         pLastPageSaver = new LastPageSaver;
-    bForgetSelection = sal_True;
+    bForgetSelection = true;
     pLastPageSaver->m_nLastPageId = 0;
     pLastPageSaver->m_sLastPageURL_Tools = rPageURL;
     ActivateLastSelection();
@@ -1051,13 +1051,13 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
             if(pGroupInfo->m_pModule /*&& !pGroupInfo->pModule->IsLoaded()*/)
             {
                 SfxModule* pOldModule = pGroupInfo->m_pModule;
-                sal_Bool bIdentical = pGroupInfo->m_pModule == pGroupInfo->m_pShell;
+                bool bIdentical = pGroupInfo->m_pModule == pGroupInfo->m_pShell;
 
                 WaitObject aWait(this);
                 //pGroupInfo->pModule = pGroupInfo->pModule->Load();
                 if(!pGroupInfo->m_pModule)
                 {
-                    pGroupInfo->m_bLoadError = sal_True;
+                    pGroupInfo->m_bLoadError = true;
                     InfoBox(pBox, sNotLoadedError).Execute();
                     return;
                 }
@@ -1304,7 +1304,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 }
                 else
                 {
-                        sal_Bool bVal = sal_False;
+                        bool bVal = false;
                         if (xProp.is())
                         {
                             bVal = xProp->getIsSpellAuto();
@@ -1438,7 +1438,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 }
 void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
 {
-    sal_Bool bSaveSpellCheck = sal_False;
+    bool bSaveSpellCheck = false;
     const SfxPoolItem* pItem;
 
     if ( SFX_ITEM_SET == rSet.GetItemState( SID_SPELL_MODIFIED, false, &pItem ) )
@@ -1453,7 +1453,7 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
 
         xProp->setHyphMinLeading( (sal_Int16) pHyphenItem->GetMinLead() );
         xProp->setHyphMinTrailing( (sal_Int16) pHyphenItem->GetMinTrail() );
-        bSaveSpellCheck = sal_True;
+        bSaveSpellCheck = true;
     }
 
     SfxViewFrame *pViewFrame = SfxViewFrame::Current();
@@ -1464,22 +1464,22 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
         if(SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_LANGUAGE, false, &pItem ))
         {
             pDispatch->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
-            bSaveSpellCheck = sal_True;
+            bSaveSpellCheck = true;
         }
         if(SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE, false, &pItem ))
         {
             pDispatch->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
-            bSaveSpellCheck = sal_True;
+            bSaveSpellCheck = true;
         }
         if(SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE, false, &pItem ))
         {
             pDispatch->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
-            bSaveSpellCheck = sal_True;
+            bSaveSpellCheck = true;
         }
 
         if( SFX_ITEM_SET == rSet.GetItemState(SID_AUTOSPELL_CHECK, false, &pItem ))
         {
-            sal_Bool bOnlineSpelling = ((const SfxBoolItem*)pItem)->GetValue();
+            bool bOnlineSpelling = ((const SfxBoolItem*)pItem)->GetValue();
             pDispatch->Execute(SID_AUTOSPELL_CHECK,
                 SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD, pItem, 0L);
 
@@ -2363,9 +2363,9 @@ void ExtensionsTabPage::CreateDialogWithHandler()
 
 
 
-sal_Bool ExtensionsTabPage::DispatchAction( const OUString& rAction )
+bool ExtensionsTabPage::DispatchAction( const OUString& rAction )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( m_xEventHdl.is() )
     {
         try

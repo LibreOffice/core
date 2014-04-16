@@ -105,7 +105,7 @@ public:
 
     void            ResetUndo();
     void            Undo();
-    void            AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg=sal_False );
+    void            AddUndoAction( SfxUndoAction *pAction, bool bTryMerg=false );
     sal_uInt16      GetUndoActionCount();
     void            UndoActionStart( sal_uInt16 nId );
     void            UndoActionEnd();

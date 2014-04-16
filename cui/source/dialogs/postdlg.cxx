@@ -62,7 +62,7 @@ SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
     aFont.SetWeight( WEIGHT_LIGHT );
     m_pEditED->SetFont( aFont );
 
-    sal_Bool bNew = sal_True;
+    bool bNew = true;
     sal_uInt16 nWhich = 0;
 
     if ( !bPrevNext )
@@ -76,7 +76,7 @@ SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
 
     if ( rSet.GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
     {
-        bNew = sal_False;
+        bNew = false;
         const SvxPostItAuthorItem& rAuthor =
             (const SvxPostItAuthorItem&)rSet.Get( nWhich );
         aAuthorStr = rAuthor.GetValue();
@@ -154,7 +154,7 @@ sal_uInt16* SvxPostItDialog::GetRanges()
 
 
 
-void SvxPostItDialog::EnableTravel(sal_Bool bNext, sal_Bool bPrev)
+void SvxPostItDialog::EnableTravel(bool bNext, bool bPrev)
 {
     m_pPrevBtn->Enable(bPrev);
     m_pNextBtn->Enable(bNext);

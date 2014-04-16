@@ -221,7 +221,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl)
 {
-    sal_Bool bEnable = m_pJavaEnableCB->IsChecked();
+    bool bEnable = m_pJavaEnableCB->IsChecked();
     m_pJavaBox->Enable(bEnable);
     bEnable ? m_pJavaList->EnableTable() : m_pJavaList->DisableTable();
     return 0;

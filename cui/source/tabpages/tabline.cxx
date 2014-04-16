@@ -40,7 +40,7 @@ SvxLineTabDialog::SvxLineTabDialog
     const SfxItemSet* pAttr,
     SdrModel* pModel,
     const SdrObject* pSdrObj,
-    sal_Bool bHasObj
+    bool bHasObj
 ) :
 
     SfxTabDialog    ( pParent
@@ -67,7 +67,7 @@ SvxLineTabDialog::SvxLineTabDialog
     nPageType( 0 ), // We use it here primarily to get the right attributes with FillItemSet
     nPosDashLb( 0 ),
     nPosLineEndLb( 0 ),
-    mbAreaTP( sal_False )
+    mbAreaTP( false )
 {
     bool bLineOnly = false;
     if( pObj && pObj->GetObjInventor() == SdrInventor )

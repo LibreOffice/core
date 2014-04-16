@@ -49,7 +49,7 @@ class SvxCharBasePage : public SfxTabPage
 protected:
     SvxFontPrevWindow*  m_pPreviewWin;
 
-    sal_Bool                m_bPreviewBackgroundToCharacter;
+    bool                m_bPreviewBackgroundToCharacter;
 
     SvxCharBasePage(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemset);
 
@@ -217,7 +217,7 @@ private:
     void                UpdatePreview_Impl();
     void                SetCaseMap_Impl( SvxCaseMap eCaseMap );
     void                ResetColor_Impl( const SfxItemSet& rSet );
-    sal_Bool                FillItemSetColor_Impl( SfxItemSet& rSet );
+    bool                FillItemSetColor_Impl( SfxItemSet& rSet );
 
     DECL_LINK(          SelectHdl_Impl, ListBox* );
     DECL_LINK(CbClickHdl_Impl, void *);
@@ -340,7 +340,7 @@ private:
     void                UpdatePreview_Impl();
     void                Initialize();
     void                SelectCharacter( ListBox* pBox );
-    void                SetBracket( sal_Unicode cBracket, sal_Bool bStart );
+    void                SetBracket( sal_Unicode cBracket, bool bStart );
 
     DECL_LINK(TwoLinesHdl_Impl, void *);
     DECL_LINK(          CharacterMapHdl_Impl, ListBox* );

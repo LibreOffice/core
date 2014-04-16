@@ -36,7 +36,7 @@ class SvxAccessibilityOptionsTabPage : public SfxTabPage
     CheckBox*       m_pPagePreviews;
 
     DECL_LINK(TipHelpHdl, CheckBox*);
-    void EnableTipHelp(sal_Bool bCheck);
+    void EnableTipHelp(bool bCheck);
 
     SvxAccessibilityOptionsTabPage_Impl* m_pImpl;
 

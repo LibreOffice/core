@@ -81,12 +81,12 @@ private:
     long                    nAbst;
     long                    nWidth;
     long                    nMinFixDist;
-    sal_Bool                bRelativeMode;
-    sal_Bool                bNegativeIndents;
+    bool                bRelativeMode;
+    bool                bNegativeIndents;
 
     void                    SetLineSpacing_Impl( const SvxLineSpacingItem& rAttr );
     void                    Init_Impl();
-    void                    UpdateExample_Impl( sal_Bool bAll = sal_False );
+    void                    UpdateExample_Impl( bool bAll = false );
 
     DECL_LINK( LineDistHdl_Impl, ListBox* );
     DECL_LINK(ModifyHdl_Impl, void *);
@@ -151,7 +151,7 @@ class SvxParaAlignTabPage : public SfxTabPage
     DECL_LINK(LastLineHdl_Impl, void *);
     DECL_LINK(TextDirectionHdl_Impl, void *);
 
-    void                    UpdateExample_Impl( sal_Bool bAll = sal_False );
+    void                    UpdateExample_Impl( bool bAll = false );
 
                             SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual                 ~SvxParaAlignTabPage();
@@ -239,8 +239,8 @@ private:
     NumericField*       m_pWidowRowNo;
     FixedText*          m_pWidowRowLabel;
 
-    sal_Bool                bPageBreak;
-    sal_Bool                bHtmlMode;
+    bool                bPageBreak;
+    bool                bHtmlMode;
     sal_uInt16              nStdPos;
 
     DECL_LINK(PageBreakHdl_Impl, void *);

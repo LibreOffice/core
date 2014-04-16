@@ -156,7 +156,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 
     if( nDlgType == 0 ) // area dialog
     {
-        *pbAreaTP = sal_False;
+        *pbAreaTP = false;
 
         if( pColorList.is() )
         {
@@ -308,7 +308,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
 
 bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if( nDlgType == 0 && *pPageType == PT_GRADIENT && *pbAreaTP == sal_False )
+    if( nDlgType == 0 && *pPageType == PT_GRADIENT && *pbAreaTP == false )
     {
         // CheckChanges(); <-- duplicate inquiry ?
 
@@ -412,18 +412,18 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
 
     long nCount = pGradientList->Count();
     long j = 1;
-    sal_Bool bDifferent = sal_False;
+    bool bDifferent = false;
 
     while( !bDifferent )
     {
         aName  = aNewName;
         aName += " ";
         aName += OUString::number( j++ );
-        bDifferent = sal_True;
+        bDifferent = true;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
             if( aName == pGradientList->GetGradient( i )->GetName() )
-                bDifferent = sal_False;
+                bDifferent = false;
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -437,11 +437,11 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
     {
         pDlg->GetName( aName );
 
-        bDifferent = sal_True;
+        bDifferent = true;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
             if( aName == pGradientList->GetGradient( i )->GetName() )
-                bDifferent = sal_False;
+                bDifferent = false;
 
         if( bDifferent )
         {
@@ -523,24 +523,24 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         long nCount = pGradientList->Count();
-        sal_Bool bDifferent = sal_False;
-        sal_Bool bLoop = sal_True;
+        bool bDifferent = false;
+        bool bLoop = true;
 
         while( bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
-            bDifferent = sal_True;
+            bDifferent = true;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pGradientList->GetGradient( i )->GetName() &&
                     aName != aOldName )
-                    bDifferent = sal_False;
+                    bDifferent = false;
             }
 
             if( bDifferent )
             {
-                bLoop = sal_False;
+                bLoop = false;
                 XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
                                       m_pLbColorTo->GetSelectEntryColor(),
                                       (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),

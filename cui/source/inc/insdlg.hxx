@@ -51,7 +51,7 @@ public:
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject()
                         { return m_xObj; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType );
-    virtual sal_Bool IsCreateNew() const;
+    virtual bool IsCreateNew() const;
 };
 
 class SvInsertOleDlg : public InsertObjectDialog_Impl
@@ -77,9 +77,9 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
         { return *m_pLbObjecttype; }
     OUString GetFilePath() const
         { return m_pEdFilepath->GetText(); }
-    sal_Bool IsLinked() const
+    bool IsLinked() const
         { return m_pCbFilelink->IsChecked(); }
-    sal_Bool IsCreateNew() const SAL_OVERRIDE
+    bool IsCreateNew() const SAL_OVERRIDE
         { return m_pRbNewObject->IsChecked(); }
 
 public:

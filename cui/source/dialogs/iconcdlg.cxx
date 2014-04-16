@@ -70,7 +70,7 @@ IconChoicePage::IconChoicePage( Window *pParent, const ResId &rResId,
                                 const SfxItemSet &rAttrSet )
 :   TabPage                   ( pParent, rResId ),
     pSet                      ( &rAttrSet ),
-    bHasExchangeSupport       ( sal_False ),
+    bHasExchangeSupport       ( false ),
     pDialog                   ( NULL )
 {
     SetStyle ( GetStyle()  | WB_DIALOGCONTROL | WB_HIDE );
@@ -111,16 +111,16 @@ void IconChoicePage::FillUserData()
 
 
 
-sal_Bool IconChoicePage::IsReadOnly() const
+bool IconChoicePage::IsReadOnly() const
 {
-    return sal_False;
+    return false;
 }
 
 
 
-sal_Bool IconChoicePage::QueryClose()
+bool IconChoicePage::QueryClose()
 {
-    return sal_True;
+    return true;
 }
 
 /**********************************************************************
@@ -211,11 +211,11 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     pRanges         ( NULL ),
     nResId          ( rResId.GetId() ),
 
-    bHideResetBtn   ( sal_False ),
-    bModal          ( sal_False ),
-    bInOK           ( sal_False ),
-    bModified       ( sal_False ),
-    bItemsReset     ( sal_False )
+    bHideResetBtn   ( false ),
+    bModal          ( false ),
+    bInOK           ( false ),
+    bModified       ( false ),
+    bItemsReset     ( false )
 {
 
     maIconCtrl.SetStyle (WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
@@ -245,7 +245,7 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     aHelpBtn.Show();
     aResetBtn.Show();
 
-    SetPosSizeCtrls ( sal_True );
+    SetPosSizeCtrls ( true );
 }
 
 
@@ -307,7 +307,7 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
     const Image&    rChoiceIcon,
     CreatePage      pCreateFunc /* != 0 */,
     GetPageRanges   pRangesFunc /* darf 0 sein */,
-    sal_Bool            bItemsOnDemand,
+    bool            bItemsOnDemand,
     sal_uLong           /*nPos*/
 )
 {
@@ -439,7 +439,7 @@ void IconChoiceDialog::Resize()
     }
 }
 
-void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
+void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
 {
     const Point aCtrlOffset ( LogicToPixel( Point( CTRLS_OFFSET, CTRLS_OFFSET ), MAP_APPFONT ) );
     Size aOutSize ( GetOutputSizePixel() );
@@ -665,7 +665,7 @@ IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl)
 
 IMPL_LINK_NOARG(IconChoiceDialog, OkHdl)
 {
-    bInOK = sal_True;
+    bInOK = true;
 
     if ( OK_Impl() )
     {
@@ -758,7 +758,7 @@ void IconChoiceDialog::ActivatePageImpl ()
             pData->pPage->Reset( *pSet );
         }
 
-        pData->bRefresh = sal_False;
+        pData->bRefresh = false;
 
         if ( pExampleSet )
             pData->pPage->ActivatePage( *pExampleSet );
@@ -776,7 +776,7 @@ void IconChoiceDialog::ActivatePageImpl ()
 
 
 
-sal_Bool IconChoiceDialog::DeActivatePageImpl ()
+bool IconChoiceDialog::DeActivatePageImpl ()
 {
     IconChoicePageData *pData = GetPageData ( mnCurrentPageId );
 
@@ -828,17 +828,17 @@ sal_Bool IconChoiceDialog::DeActivatePageImpl ()
             {
                 IconChoicePageData* pObj = maPageList[ i ];
                 if ( pObj->pPage != pPage )
-                    pObj->bRefresh = sal_True;
+                    pObj->bRefresh = true;
                 else
-                    pObj->bRefresh = sal_False;
+                    pObj->bRefresh = false;
             }
         }
     }
 
     if ( nRet & IconChoicePage::LEAVE_PAGE )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -961,11 +961,11 @@ short IconChoiceDialog::Execute()
 
 
 
-void IconChoiceDialog::Start( sal_Bool bShow )
+void IconChoiceDialog::Start( bool bShow )
 {
 
     aCancelBtn.SetClickHdl( LINK( this, IconChoiceDialog, CancelHdl ) );
-    bModal = sal_False;
+    bModal = false;
 
     Start_Impl();
 
@@ -976,15 +976,15 @@ void IconChoiceDialog::Start( sal_Bool bShow )
 
 
 
-sal_Bool IconChoiceDialog::QueryClose()
+bool IconChoiceDialog::QueryClose()
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
     {
         IconChoicePageData* pData = maPageList[i ];
         if ( pData->pPage && !pData->pPage->QueryClose() )
         {
-            bRet = sal_False;
+            bRet = false;
             break;
         }
     }
@@ -1064,7 +1064,7 @@ IconChoicePageData* IconChoiceDialog::GetPageData ( sal_uInt16 nId )
 |
 \**********************************************************************/
 
-sal_Bool IconChoiceDialog::OK_Impl()
+bool IconChoiceDialog::OK_Impl()
 {
     IconChoicePage* pPage = GetPageData ( mnCurrentPageId )->pPage;
 
@@ -1075,7 +1075,7 @@ sal_Bool IconChoiceDialog::OK_Impl()
         if ( pSet )
         {
             SfxItemSet aTmp( *pSet->GetPool(), pSet->GetRanges() );
-            sal_Bool bRet = sal_False;
+            bool bRet = false;
 
             if ( pPage->HasExchangeSupport() )
                 nRet = pPage->DeactivatePage( &aTmp );
@@ -1087,7 +1087,7 @@ sal_Bool IconChoiceDialog::OK_Impl()
                 pOutSet->Put( aTmp );
             }
             else if ( bRet )
-                bModified |= sal_True;
+                bModified |= true;
         }
         else
             nRet = pPage->DeactivatePage( NULL );
@@ -1101,7 +1101,7 @@ sal_Bool IconChoiceDialog::OK_Impl()
 
 short IconChoiceDialog::Ok()
 {
-    bInOK = sal_True;
+    bInOK = true;
 
     if ( !pOutSet )
     {

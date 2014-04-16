@@ -50,7 +50,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maFtPassword            ( this, CUI_RES (FT_PASSWD) ),
     maEdPassword            ( this, CUI_RES (ED_PASSWD) ),
     maCbAnonymous           ( this, CUI_RES (CBX_ANONYMOUS) ),
-    mbMarkWndOpen           ( sal_False )
+    mbMarkWndOpen           ( false )
 {
     // Disable display of bitmap names.
     maBtBrowse.EnableTextDisplay (false);
@@ -271,8 +271,8 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl)
 void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
 {
     //if rScheme is empty or unknown the default beaviour is like it where HTTP
-    sal_Bool bFTP = rScheme.startsWith(sFTPScheme);
-    sal_Bool bInternet = !(bFTP);
+    bool bFTP = rScheme.startsWith(sFTPScheme);
+    bool bInternet = !(bFTP);
 
     //update protocol button selection:
     maRbtLinktypFTP.Check(bFTP);

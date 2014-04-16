@@ -106,7 +106,7 @@ void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
     }
     else if (nId == m_nBackPageId)
     {
-        ( (SvxBackgroundTabPage&)rPage ).ShowParaControl(sal_True);
+        ( (SvxBackgroundTabPage&)rPage ).ShowParaControl(true);
     }
 }
 
@@ -139,14 +139,14 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(Window* pParent,
         sal_uInt16 nSlot = rPool.GetSlotId( nWhich );
         if ( nSlot >= SID_SVX_START )
         {
-            sal_Bool bChecked = sal_False, bFound = sal_False;
+            bool bChecked = false, bFound = false;
             for ( sal_uInt16 i = 0; !bFound && i < rList.Count(); ++i )
             {
                 if ( nSlot == rList[i].nSlot )
                 {
-                    bFound = sal_True;
+                    bFound = true;
                     if ( IsInvalidItem( rList[i].pItem ) )
-                        bChecked = sal_True;
+                        bChecked = true;
                 }
             }
 
@@ -181,7 +181,7 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
     for ( sal_uInt16 i = 0; i < m_pAttrLB->GetEntryCount(); ++i )
     {
         sal_uInt16 nSlot = (sal_uInt16)(sal_uLong)m_pAttrLB->GetEntryData(i);
-        sal_Bool bChecked = m_pAttrLB->IsChecked(i);
+        bool bChecked = m_pAttrLB->IsChecked(i);
 
         sal_uInt16 j;
         for ( j = rList.Count(); j; )
@@ -223,7 +223,7 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
 SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
 (
     Window* pParent,
-    sal_Bool bRelax,
+    bool bRelax,
     sal_uInt16 nOther,
     sal_uInt16 nShorter,
     sal_uInt16 nLonger

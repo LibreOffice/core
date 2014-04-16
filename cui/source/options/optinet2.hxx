@@ -92,7 +92,7 @@ private:
 
     uno::Reference< uno::XInterface > m_xConfigurationUpdateAccess;
 
-    void EnableControls_Impl(sal_Bool bEnable);
+    void EnableControls_Impl(bool bEnable);
     void ReadConfigData_Impl();
     void ReadConfigDefaults_Impl();
     void RestoreConfigDefaults_Impl();
@@ -183,9 +183,9 @@ class MozPluginTabPage : public SfxTabPage
 {
     CheckBox* m_pWBasicCodeCB;
 
-    sal_Bool isInstalled(void);
-    sal_Bool installPlugin(void);
-    sal_Bool uninstallPlugin(void);
+    bool isInstalled(void);
+    bool installPlugin(void);
+    bool uninstallPlugin(void);
 
     MozPluginTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~MozPluginTabPage();

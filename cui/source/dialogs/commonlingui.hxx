@@ -104,7 +104,7 @@ public:
     inline const Link&  GetResetWordHdl() const                 { return aAktWord.GetActivateHdl(); }
 
     void    SetButtonHandler( ButtonType _eType, const Link& _rHandler );
-    void    EnableButton( ButtonType _eType, sal_Bool _bEnable );
+    void    EnableButton( ButtonType _eType, bool _bEnable );
 
     inline  PushButton*         GetButton( ButtonType _eType )          { return implGetButton( _eType  ); }
     inline  const PushButton*   GetButton( ButtonType _eType ) const    { return implGetButton( _eType  ); }

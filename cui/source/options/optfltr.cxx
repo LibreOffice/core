@@ -80,24 +80,24 @@ bool OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
 {
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
-    sal_Bool bFlag;
-    if( aWBasicCodeCB->GetSavedValue() != (bFlag = aWBasicCodeCB->IsChecked()))
+    bool bFlag;
+    if( (aWBasicCodeCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aWBasicCodeCB->IsChecked()))
         rOpt.SetLoadWordBasicCode( bFlag );
-    if( aWBasicWbctblCB->GetSavedValue() != (bFlag = aWBasicWbctblCB->IsChecked()))
+    if( (aWBasicWbctblCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aWBasicWbctblCB->IsChecked()))
         rOpt.SetLoadWordBasicExecutable( bFlag );
-    if( aWBasicStgCB->GetSavedValue() != (bFlag = aWBasicStgCB->IsChecked()))
+    if( (aWBasicStgCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aWBasicStgCB->IsChecked()))
         rOpt.SetLoadWordBasicStorage( bFlag );
 
-    if( aEBasicCodeCB->GetSavedValue() != (bFlag = aEBasicCodeCB->IsChecked()))
+    if( (aEBasicCodeCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aEBasicCodeCB->IsChecked()))
         rOpt.SetLoadExcelBasicCode( bFlag );
-    if( aEBasicExectblCB->GetSavedValue() != (bFlag = aEBasicExectblCB->IsChecked()))
+    if( (aEBasicExectblCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aEBasicExectblCB->IsChecked()))
         rOpt.SetLoadExcelBasicExecutable( bFlag );
-    if( aEBasicStgCB->GetSavedValue() != (bFlag = aEBasicStgCB->IsChecked()))
+    if( (aEBasicStgCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aEBasicStgCB->IsChecked()))
         rOpt.SetLoadExcelBasicStorage( bFlag );
 
-    if( aPBasicCodeCB->GetSavedValue() != (bFlag = aPBasicCodeCB->IsChecked()))
+    if( (aPBasicCodeCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aPBasicCodeCB->IsChecked()))
         rOpt.SetLoadPPointBasicCode( bFlag );
-    if( aPBasicStgCB->GetSavedValue() != (bFlag = aPBasicStgCB->IsChecked()))
+    if( (aPBasicStgCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aPBasicStgCB->IsChecked()))
         rOpt.SetLoadPPointBasicStorage( bFlag );
 
     return false;
@@ -260,7 +260,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
         { InvalidCBEntry, NULL }
     };
 
-    sal_Bool bFirst = sal_True;
+    bool bFirst = true;
     for( const ChkCBoxEntries* pArr = aChkArr;
             InvalidCBEntry != pArr->eType; ++pArr, bFirst = !bFirst )
     {
@@ -288,7 +288,7 @@ void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType 
 }
 
 void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
-                                       sal_Bool loadEnabled, sal_Bool saveEnabled )
+                                       bool loadEnabled, bool saveEnabled )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
@@ -386,7 +386,7 @@ SvButtonState OfaMSFilterTabPage2::MSFltrSimpleTable::GetCheckButtonState(
     return eState;
 }
 
-void OfaMSFilterTabPage2::MSFltrSimpleTable::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked)
+void OfaMSFilterTabPage2::MSFltrSimpleTable::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, bool bChecked)
 {
     if ( nPos < GetEntryCount() )
         SetCheckButtonState(
@@ -406,7 +406,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::KeyInput( const KeyEvent& rKEvt )
         if ( nCol < 2 )
         {
             SvTreeListEntry* pEntry = GetEntry( nSelPos );
-            sal_Bool bIsChecked = ( GetCheckButtonState( pEntry, nCol ) == SV_BUTTON_CHECKED );
+            bool bIsChecked = ( GetCheckButtonState( pEntry, nCol ) == SV_BUTTON_CHECKED );
             CheckEntryPos( nSelPos, nCol, !bIsChecked );
             CallImplEventListeners( VCLEVENT_CHECKBOX_TOGGLE, (void*)pEntry );
         }

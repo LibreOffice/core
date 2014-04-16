@@ -290,7 +290,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
     {
         OUString sPath = rPath.getToken( i, cDelim );
         OUString sSystemPath;
-        sal_Bool bIsSystemPath =
+        bool bIsSystemPath =
             ::utl::LocalFileHelper::ConvertURLToSystemPath( sPath, sSystemPath );
 
         OUString sEntry( '\t' );
@@ -322,7 +322,7 @@ void SvxPathSelectDialog::SetPath(const OUString& rPath)
     {
         OUString sPath = rPath.getToken( i, cDelim );
         OUString sSystemPath;
-        sal_Bool bIsSystemPath =
+        bool bIsSystemPath =
             ::utl::LocalFileHelper::ConvertURLToSystemPath( sPath, sSystemPath );
 
         if ( bIsSystemPath )

@@ -61,7 +61,7 @@ namespace offapp
         const DriverPoolingSettings& getSettings() const { return m_aSettings; }
 
         void        saveValue()             { m_aSavedSettings = m_aSettings; }
-        sal_Bool    isModified() const;
+        bool    isModified() const;
 
     protected:
         virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
@@ -111,10 +111,10 @@ namespace offapp
     }
 
 
-    sal_Bool DriverListControl::isModified() const
+    bool DriverListControl::isModified() const
     {
         if (m_aSettings.size() != m_aSavedSettings.size())
-            return sal_True;
+            return true;
 
         DriverPoolingSettings::const_iterator aCurrent = m_aSettings.begin();
         DriverPoolingSettings::const_iterator aCurrentEnd = m_aSettings.end();
@@ -122,10 +122,10 @@ namespace offapp
         for (;aCurrent != aCurrentEnd; ++aCurrent, ++aSaved)
         {
             if (*aCurrent != *aSaved)
-                return sal_True;
+                return true;
         }
 
-        return sal_False;
+        return false;
     }
 
 
@@ -332,7 +332,7 @@ namespace offapp
     }
 
 
-    void ConnectionPoolOptionsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool /*_bFromReset*/)
+    void ConnectionPoolOptionsPage::implInitControls(const SfxItemSet& _rSet, bool /*_bFromReset*/)
     {
         // the enabled flag
         SFX_ITEMSET_GET( _rSet, pEnabled, SfxBoolItem, SID_SB_POOLING_ENABLED, true );
@@ -393,19 +393,19 @@ namespace offapp
     void ConnectionPoolOptionsPage::ActivatePage( const SfxItemSet& _rSet)
     {
         SfxTabPage::ActivatePage(_rSet);
-        implInitControls(_rSet, sal_False);
+        implInitControls(_rSet, false);
     }
 
 
     void ConnectionPoolOptionsPage::Reset(const SfxItemSet& _rSet)
     {
-        implInitControls(_rSet, sal_True);
+        implInitControls(_rSet, true);
     }
 
 
     IMPL_LINK( ConnectionPoolOptionsPage, OnDriverRowChanged, const void*, _pRowIterator )
     {
-        sal_Bool bValidRow = (NULL != _pRowIterator);
+        bool bValidRow = (NULL != _pRowIterator);
         m_pDriverPoolingEnabled->Enable(bValidRow && m_pEnablePooling->IsChecked());
         m_pTimeoutLabel->Enable(bValidRow);
         m_pTimeout->Enable(bValidRow);
@@ -441,8 +441,8 @@ namespace offapp
 
     IMPL_LINK( ConnectionPoolOptionsPage, OnEnabledDisabled, const CheckBox*, _pCheckBox )
     {
-        sal_Bool bGloballyEnabled = m_pEnablePooling->IsChecked();
-        sal_Bool bLocalDriverChanged = m_pDriverPoolingEnabled == _pCheckBox;
+        bool bGloballyEnabled = m_pEnablePooling->IsChecked();
+        bool bLocalDriverChanged = m_pDriverPoolingEnabled == _pCheckBox;
 
         if (m_pEnablePooling == _pCheckBox)
         {

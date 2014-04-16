@@ -185,7 +185,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         m_pTsbStartInside->EnableTriState( false );
-        sal_Bool bValue = ( ( const SdrTextAniStartInsideItem* )pItem )->GetValue();
+        bool bValue = ( ( const SdrTextAniStartInsideItem* )pItem )->GetValue();
         if( bValue )
             m_pTsbStartInside->SetState( TRISTATE_TRUE );
         else
@@ -202,7 +202,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         m_pTsbStopInside->EnableTriState( false );
-        sal_Bool bValue = ( ( const SdrTextAniStopInsideItem* )pItem )->GetValue();
+        bool bValue = ( ( const SdrTextAniStopInsideItem* )pItem )->GetValue();
         if( bValue )
             m_pTsbStopInside->SetState( TRISTATE_TRUE );
         else
@@ -334,7 +334,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
 
 bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     sal_Int32 nPos;
     TriState eState;
 
@@ -344,7 +344,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         nPos != m_pLbEffect->GetSavedValue() )
     {
         rAttrs.Put( SdrTextAniKindItem( (SdrTextAniKind) nPos ) );
-        bModified = sal_True;
+        bModified = true;
     }
 
     // animation direction
@@ -355,23 +355,23 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     {
         SdrTextAniDirection eValue = (SdrTextAniDirection) GetSelectedDirection();
         rAttrs.Put( SdrTextAniDirectionItem( eValue ) );
-        bModified = sal_True;
+        bModified = true;
     }
 
     // Start inside
     eState = m_pTsbStartInside->GetState();
     if( eState != m_pTsbStartInside->GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAniStartInsideItem( (sal_Bool) TRISTATE_TRUE == eState ) );
-        bModified = sal_True;
+        rAttrs.Put( SdrTextAniStartInsideItem( TRISTATE_TRUE == eState ) );
+        bModified = true;
     }
 
     // Stop inside
     eState = m_pTsbStopInside->GetState();
     if( eState != m_pTsbStopInside->GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAniStopInsideItem( (sal_Bool) TRISTATE_TRUE == eState ) );
-        bModified = sal_True;
+        rAttrs.Put( SdrTextAniStopInsideItem( TRISTATE_TRUE == eState ) );
+        bModified = true;
     }
 
     // quantity
@@ -382,13 +382,13 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     {
         sal_Int64 nValue = 0;
         if( eState == TRISTATE_TRUE /*#89844#*/ && m_pTsbEndless->IsEnabled())
-            bModified = sal_True;
+            bModified = true;
         else
         {
             if( aStr != m_pNumFldCount->GetSavedValue() )
             {
                 nValue = m_pNumFldCount->GetValue();
-                bModified = sal_True;
+                bModified = true;
             }
         }
         if( bModified )
@@ -403,13 +403,13 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     {
         sal_Int64 nValue = 0;
         if( eState == TRISTATE_TRUE )
-            bModified = sal_True;
+            bModified = true;
         else
         {
             if( aStr != m_pMtrFldDelay->GetSavedValue() )
             {
                 nValue = m_pMtrFldDelay->GetValue();
-                bModified = sal_True;
+                bModified = true;
             }
         }
         if( bModified )
@@ -434,7 +434,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         }
         rAttrs.Put( SdrTextAniAmountItem( (sal_Int16) nValue ) );
 
-        bModified = sal_True;
+        bModified = true;
     }
 
     return( bModified );

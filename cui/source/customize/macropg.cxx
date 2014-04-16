@@ -183,7 +183,7 @@ void MacroEventListBox::ConnectElements( void )
     maListBox.InitHeaderBar( &maHeaderBar );
 }
 
-void MacroEventListBox::Show( sal_Bool bVisible, sal_uInt16 nFlags )
+void MacroEventListBox::Show( bool bVisible, sal_uInt16 nFlags )
 {
     maListBox.Show( bVisible, nFlags );
     maHeaderBar.Show( bVisible, nFlags );
@@ -412,7 +412,7 @@ void _SvxMacroTabPage::Reset( const SfxItemSet& )
     DisplayAppEvents(bAppEvents);
 }
 
-void _SvxMacroTabPage::SetReadOnly( sal_Bool bSet )
+void _SvxMacroTabPage::SetReadOnly( bool bSet )
 {
     mpImpl->bReadOnly = bSet;
 }
@@ -600,7 +600,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
         return 0;
     }
 
-    const sal_Bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
+    const bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
 
     OUString* pEventName = (OUString*)pE->GetUserData();
 
@@ -658,7 +658,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     else if( bAssEnabled )
     {
         // assign pressed
-        SvxScriptSelectorDialog* pDlg = new SvxScriptSelectorDialog( pThis, sal_False, pThis->GetFrame() );
+        SvxScriptSelectorDialog* pDlg = new SvxScriptSelectorDialog( pThis, false, pThis->GetFrame() );
         if( pDlg )
         {
             short ret = pDlg->Execute();

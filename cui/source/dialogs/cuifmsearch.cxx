@@ -237,7 +237,7 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
     // initial
     m_aDelayedPaint.SetTimeoutHdl(LINK(this, FmSearchDialog, OnDelayedPaint));
     m_aDelayedPaint.SetTimeout(500);
-    EnableSearchUI(sal_True);
+    EnableSearchUI(true);
 
     if ( m_prbSearchForText->IsChecked() )
         m_pcmbSearchText->GrabFocus();
@@ -259,7 +259,7 @@ IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, Button*, pButton)
 {
     if ((pButton == m_prbSearchForText) || (pButton == m_prbSearchForNull) || (pButton == m_prbSearchForNotNull))
     {
-        EnableSearchForDependees(sal_True);
+        EnableSearchForDependees(true);
     }
     else
         // en- or disable field list box accordingly
@@ -297,7 +297,7 @@ IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain)
         if (m_pcbStartOver->IsChecked())
         {
             m_pcbStartOver->Check(false);
-            EnableSearchUI(sal_False);
+            EnableSearchUI(false);
             if (m_prbSearchForText->IsChecked())
                 m_pSearchEngine->StartOver(strThisRoundText);
             else
@@ -305,7 +305,7 @@ IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain)
         }
         else
         {
-            EnableSearchUI(sal_False);
+            EnableSearchUI(false);
             if (m_prbSearchForText->IsChecked())
                 m_pSearchEngine->SearchNext(strThisRoundText);
             else
@@ -410,7 +410,7 @@ IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox*, pBox)
 
 IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
 {
-    sal_Bool bChecked = pBox->IsChecked();
+    bool bChecked = pBox->IsChecked();
 
     // formatter or case -> pass on to the engine
     if (pBox == m_pcbUseFormat)
@@ -478,7 +478,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
         m_pSoundsLikeCJKSettings->Enable(bChecked);
 
         // two other buttons which depend on this one
-        sal_Bool bEnable =  (   m_prbSearchForText->IsChecked()
+        bool bEnable =  (   m_prbSearchForText->IsChecked()
                             &&  !m_pSoundsLikeCJK->IsChecked()
                             )
                          || !SvtCJKOptions().IsJapaneseFindEnabled();
@@ -544,11 +544,11 @@ IMPL_LINK( FmSearchDialog, OnContextSelection, ListBox*, pBox)
     return 0L;
 }
 
-void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
+void FmSearchDialog::EnableSearchUI(bool bEnable)
 {
     // when the controls shall be disabled their paint is turned off and then turned on again after a delay
     if (!bEnable)
-        EnableControlPaint(sal_False);
+        EnableControlPaint(false);
     else
     {
         if (m_aDelayedPaint.IsActive())
@@ -597,7 +597,7 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
     if (!bEnable)
         m_aDelayedPaint.Start();
     else
-        EnableControlPaint(sal_True);
+        EnableControlPaint(true);
 
     if ( bEnable )
     {   // restore focus
@@ -615,14 +615,14 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
 
 }
 
-void FmSearchDialog::EnableSearchForDependees(sal_Bool bEnable)
+void FmSearchDialog::EnableSearchForDependees(bool bEnable)
 {
-    sal_Bool bSearchingForText = m_prbSearchForText->IsChecked();
+    bool bSearchingForText = m_prbSearchForText->IsChecked();
     m_pbSearchAgain->Enable(bEnable && (!bSearchingForText || (!m_pcmbSearchText->GetText().isEmpty())));
 
     bEnable = bEnable && bSearchingForText;
 
-    sal_Bool bEnableRedundants = !m_pSoundsLikeCJK->IsChecked() || !SvtCJKOptions().IsJapaneseFindEnabled();
+    bool bEnableRedundants = !m_pSoundsLikeCJK->IsChecked() || !SvtCJKOptions().IsJapaneseFindEnabled();
 
     m_pcmbSearchText->Enable          (bEnable);
     m_pftPosition->Enable             (bEnable && !m_pcbWildCard->IsChecked());
@@ -638,7 +638,7 @@ void FmSearchDialog::EnableSearchForDependees(sal_Bool bEnable)
     m_pcbCase->Enable                 (bEnable && bEnableRedundants);
 }
 
-void FmSearchDialog::EnableControlPaint(sal_Bool bEnable)
+void FmSearchDialog::EnableControlPaint(bool bEnable)
 {
     Control* pAffectedControls[] = { m_prbSearchForText, m_pcmbSearchText, m_prbSearchForNull, m_prbSearchForNotNull,
         m_prbSearchForText, m_prbAllFields, m_prbSingleField, m_plbField, m_pftPosition, m_plbPosition,
@@ -661,7 +661,7 @@ void FmSearchDialog::EnableControlPaint(sal_Bool bEnable)
 
 IMPL_LINK_NOARG(FmSearchDialog, OnDelayedPaint)
 {
-    EnableControlPaint(sal_True);
+    EnableControlPaint(true);
     return 0L;
 }
 
@@ -713,7 +713,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
 
         case FmSearchProgress::STATE_SUCCESSFULL:
             OnFound(pProgress->aBookmark, (sal_Int16)pProgress->nFieldIndex);
-            EnableSearchUI(sal_True);
+            EnableSearchUI(true);
             break;
 
         case FmSearchProgress::STATE_ERROR:
@@ -726,7 +726,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
         }
             // NO break !
         case FmSearchProgress::STATE_CANCELED:
-            EnableSearchUI(sal_True);
+            EnableSearchUI(true);
             if (m_lnkCanceledNotFoundHdl.IsSet())
             {
                 FmFoundRecordInformation friInfo;

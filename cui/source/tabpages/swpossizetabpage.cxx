@@ -407,7 +407,7 @@ static std::size_t lcl_GetFrmMapCount(const FrmMap* pMap)
 }
 
 static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
-            SvxSwFramePosString::StringId eStringId, sal_Bool bVertical, sal_Bool bRTL)
+            SvxSwFramePosString::StringId eStringId, bool bVertical, bool bRTL)
 {
     //special handling of STR_FROMLEFT
     if(SwFPos::FROMLEFT == eStringId)
@@ -917,7 +917,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
     pItem = GetItem( rSet, SID_ATTR_TRANSFORM_PROTECT_POS );
     if ( pItem )
     {
-        sal_Bool bProtected = ( ( const SfxBoolItem* )pItem )->GetValue();
+        bool bProtected = ( ( const SfxBoolItem* )pItem )->GetValue();
         m_pPositionCB->SetState( bProtected ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pPositionCB->EnableTriState( false );
         m_pSizeCB->Enable( !bProtected );
@@ -1219,7 +1219,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, MirrorHdl)
 
 IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox *, pLB )
 {
-    sal_Bool bHori = pLB == m_pHoriToLB;
+    bool bHori = pLB == m_pHoriToLB;
 
     UpdateExample();
 
@@ -1252,7 +1252,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox *, pLB )
 
 IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
 {
-    sal_Bool bHori = pLB == m_pHoriLB;
+    bool bHori = pLB == m_pHoriLB;
     ListBox *pRelLB = bHori ? m_pHoriToLB : m_pVertToLB;
     FixedText *pRelFT = bHori ? m_pHoriToFT : m_pVertToFT;
     FrmMap *pMap = bHori ? m_pHMap : m_pVMap;
@@ -1263,13 +1263,13 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
 
     if (bHori)
     {
-        sal_Bool bEnable = HoriOrientation::NONE == nAlign;
+        bool bEnable = HoriOrientation::NONE == nAlign;
         m_pHoriByMF->Enable( bEnable );
         m_pHoriByFT->Enable( bEnable );
     }
     else
     {
-        sal_Bool bEnable = VertOrientation::NONE == nAlign;
+        bool bEnable = VertOrientation::NONE == nAlign;
         m_pVertByMF->Enable( bEnable );
         m_pVertByFT->Enable( bEnable );
     }
@@ -1298,7 +1298,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
     // special treatment for HTML-Mode with horz-vert-dependencies
     if(m_bHtmlMode && TextContentAnchorType_AT_CHARACTER == GetAnchorType())
     {
-        sal_Bool bSet = sal_False;
+        bool bSet = false;
         if(bHori)
         {
             // on the right only below is allowed - from the left only at the top
@@ -1310,17 +1310,17 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
                     m_pVertLB->SelectEntryPos(1);
                 else
                     m_pVertLB->SelectEntryPos(0);
-                bSet = sal_True;
+                bSet = true;
             }
             else if(HoriOrientation::LEFT == nAlign && 1 == m_pVertLB->GetSelectEntryPos())
             {
                 m_pVertLB->SelectEntryPos(0);
-                bSet = sal_True;
+                bSet = true;
             }
             else if(HoriOrientation::NONE == nAlign && 1 == m_pVertLB->GetSelectEntryPos())
             {
                 m_pVertLB->SelectEntryPos(0);
-                bSet = sal_True;
+                bSet = true;
             }
             if(bSet)
                 PosHdl(m_pVertLB);
@@ -1332,7 +1332,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
                 if(1 == m_pHoriLB->GetSelectEntryPos())
                 {
                     m_pHoriLB->SelectEntryPos(0);
-                    bSet = sal_True;
+                    bSet = true;
                 }
                 m_pHoriToLB->SelectEntryPos(1);
             }
@@ -1341,7 +1341,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
                 if(2 == m_pHoriLB->GetSelectEntryPos())
                 {
                     m_pHoriLB->SelectEntryPos(0);
-                    bSet = sal_True;
+                    bSet = true;
                 }
                 m_pHoriToLB->SelectEntryPos(0) ;
             }
@@ -1489,7 +1489,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
             m_nOldHRel = ((RelationMap *)m_pHoriToLB->GetEntryData(nPos))->nRelation;
     }
 
-    sal_Bool bEnable = sal_True;
+    bool bEnable = true;
     if( m_bIsMultiSelection )
     {
         m_pVMap = aVMultiSelectionMap;
@@ -1537,7 +1537,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
     {
         m_pVMap = m_bHtmlMode ? aVAsCharHtmlMap     : aVAsCharMap;
         m_pHMap = 0;
-        bEnable = sal_False;
+        bEnable = false;
     }
     m_pHoriLB->Enable( bEnable );
     m_pHoriFT->Enable( bEnable );

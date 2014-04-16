@@ -45,7 +45,7 @@ struct SvxGroupInfo_Impl
                     xBrowseNode;
     OUString sURL;
     OUString sHelpText;
-    sal_Bool            bWasOpened;
+    bool            bWasOpened;
 
     SvxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr )
         :nKind( n )
@@ -53,7 +53,7 @@ struct SvxGroupInfo_Impl
         ,xBrowseNode()
         ,sURL()
         ,sHelpText()
-        ,bWasOpened(sal_False)
+        ,bWasOpened(false)
     {
     }
 
@@ -63,7 +63,7 @@ struct SvxGroupInfo_Impl
         ,xBrowseNode( _rxNode )
         ,sURL()
         ,sHelpText()
-        ,bWasOpened(sal_False)
+        ,bWasOpened(false)
     {
     }
 
@@ -73,7 +73,7 @@ struct SvxGroupInfo_Impl
         ,xBrowseNode()
         ,sURL( _rURL )
         ,sHelpText( _rHelpText )
-        ,bWasOpened(sal_False)
+        ,bWasOpened(false)
     {
     }
 };
@@ -157,7 +157,7 @@ private:
 
 protected:
     virtual void    RequestingChildren( SvTreeListEntry *pEntry) SAL_OVERRIDE;
-    virtual sal_Bool    Expand( SvTreeListEntry* pParent );
+    virtual bool    Expand( SvTreeListEntry* pParent );
 
 public:
     SvxConfigGroupListBox(Window* pParent, WinBits nStyle);
@@ -166,7 +166,7 @@ public:
     void    Init(bool bShowSlots, const ::com::sun::star::uno::Reference
                     < ::com::sun::star::frame::XFrame >& xFrame);
 
-    void    Open( SvTreeListEntry*, sal_Bool );
+    void    Open( SvTreeListEntry*, bool );
     void    ClearAll();
     void    GroupSelected();
 
@@ -186,7 +186,7 @@ class SvxScriptSelectorDialog : public ModelessDialog
     PushButton*                     m_pCancelButton;
     VclMultiLineEdit*               m_pDescriptionText;
     OUString                        m_sDefaultDesc;
-    sal_Bool                        m_bShowSlots;
+    bool                        m_bShowSlots;
     Link                            m_aAddHdl;
 
     DECL_LINK( ClickHdl, Button * );
@@ -199,7 +199,7 @@ public:
 
     SvxScriptSelectorDialog (
         Window* pParent = NULL,
-        sal_Bool bShowSlots = sal_False,
+        bool bShowSlots = false,
         const ::com::sun::star::uno::Reference
             < ::com::sun::star::frame::XFrame >& xFrame = 0
     );

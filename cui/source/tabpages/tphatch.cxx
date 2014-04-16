@@ -152,7 +152,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
     if( nDlgType == 0 ) // area dialog
     {
-        *pbAreaTP = sal_False;
+        *pbAreaTP = false;
 
         if( pColorList.is() )
         {
@@ -280,7 +280,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
 
 bool SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if( nDlgType == 0 && *pbAreaTP == sal_False ) // area dialog
+    if( nDlgType == 0 && *pbAreaTP == false ) // area dialog
     {
         if( *pPageType == PT_HATCH )
         {
@@ -462,18 +462,18 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
 
     long nCount = pHatchingList->Count();
     long j = 1;
-    sal_Bool bDifferent = sal_False;
+    bool bDifferent = false;
 
     while( !bDifferent )
     {
         aName  = aNewName;
         aName += " ";
         aName += OUString::number( j++ );
-        bDifferent = sal_True;
+        bDifferent = true;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
             if( aName == pHatchingList->GetHatch( i )->GetName() )
-                bDifferent = sal_False;
+                bDifferent = false;
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -487,11 +487,11 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
     {
         pDlg->GetName( aName );
 
-        bDifferent = sal_True;
+        bDifferent = true;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
             if( aName == pHatchingList->GetHatch( i )->GetName() )
-                bDifferent = sal_False;
+                bDifferent = false;
 
         if( bDifferent ) {
             nError = 0;
@@ -567,23 +567,23 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         long nCount = pHatchingList->Count();
-        sal_Bool bDifferent = sal_False;
-        sal_Bool bLoop = sal_True;
+        bool bDifferent = false;
+        bool bLoop = true;
         while( bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
-            bDifferent = sal_True;
+            bDifferent = true;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pHatchingList->GetHatch( i )->GetName() &&
                     aName != aOldName )
-                    bDifferent = sal_False;
+                    bDifferent = false;
             }
 
             if( bDifferent )
             {
-                bLoop = sal_False;
+                bLoop = false;
                 XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
                                 (XHatchStyle) m_pLbLineType->GetSelectEntryPos(),
                                  GetCoreValue( *m_pMtrDistance, ePoolUnit ),

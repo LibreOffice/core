@@ -175,7 +175,7 @@ void AboutDialog::SetLogo()
 
     // fdo#67401 set AntiAliasing for SVG logo
     SvtOptionsDrawinglayer aDrawOpt;
-    sal_Bool bOldAntiAliasSetting = aDrawOpt.IsAntiAliasing();
+    bool bOldAntiAliasSetting = aDrawOpt.IsAntiAliasing();
     aDrawOpt.SetAntiAliasing(true);
 
     // load svg logo, specify desired width, scale height isotrophically

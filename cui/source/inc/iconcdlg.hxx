@@ -53,17 +53,17 @@ struct IconChoicePageData
     CreatePage fnCreatePage;    ///< pointer to the factory
     GetPageRanges fnGetRanges;  ///< pointer to the ranges-function
     IconChoicePage* pPage;      ///< the TabPage itself
-    sal_Bool bOnDemand;         ///< Flag: ItemSet onDemand
-    sal_Bool bRefresh;          ///< Flag: page has to be newly initialized
+    bool bOnDemand;         ///< Flag: ItemSet onDemand
+    bool bRefresh;          ///< Flag: page has to be newly initialized
 
     // constructor
-    IconChoicePageData( sal_uInt16 Id, CreatePage fnPage, GetPageRanges fnRanges, sal_Bool bDemand )
+    IconChoicePageData( sal_uInt16 Id, CreatePage fnPage, GetPageRanges fnRanges, bool bDemand )
         : nId           ( Id ),
           fnCreatePage  ( fnPage ),
           fnGetRanges   ( fnRanges ),
           pPage         ( NULL ),
           bOnDemand     ( bDemand ),
-          bRefresh      ( sal_False )
+          bRefresh      ( false )
     {}
 };
 
@@ -75,7 +75,7 @@ class IconChoicePage : public TabPage
 private :
     const SfxItemSet*   pSet;
     OUString            aUserString;
-    sal_Bool                bHasExchangeSupport;
+    bool                bHasExchangeSupport;
     IconChoiceDialog*   pDialog;
 
     void                SetDialog( IconChoiceDialog* pNew ) { pDialog = pNew; }
@@ -99,8 +99,8 @@ public :
     virtual bool        FillItemSet( SfxItemSet& ) = 0;
     virtual void        Reset( const SfxItemSet& ) = 0;
 
-    sal_Bool                HasExchangeSupport() const              { return bHasExchangeSupport; }
-    void                SetExchangeSupport( sal_Bool bNew = sal_True )  { bHasExchangeSupport = bNew; }
+    bool                HasExchangeSupport() const              { return bHasExchangeSupport; }
+    void                SetExchangeSupport( bool bNew = true )  { bHasExchangeSupport = bNew; }
 
     enum {
         KEEP_PAGE = 0x0000, ///< error handling
@@ -116,8 +116,8 @@ public :
     void                SetUserData(const OUString& rString)  { aUserString = rString; }
     OUString            GetUserData() { return aUserString; }
     virtual void        FillUserData();
-    virtual sal_Bool        IsReadOnly() const;
-    virtual sal_Bool    QueryClose();
+    virtual bool        IsReadOnly() const;
+    virtual bool    QueryClose();
 
     void                StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     void                DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -148,11 +148,11 @@ private :
 
     sal_uInt32              nResId;
 
-    sal_Bool                    bHideResetBtn;
-    sal_Bool                    bModal;
-    sal_Bool                    bInOK;
-    sal_Bool                    bModified;
-    sal_Bool                    bItemsReset;
+    bool                    bHideResetBtn;
+    bool                    bModal;
+    bool                    bInOK;
+    bool                    bModified;
+    bool                    bItemsReset;
 
     DECL_LINK ( ChosePageHdl_Impl, void * );
     DECL_LINK(OkHdl, void *);
@@ -161,9 +161,9 @@ private :
 
     IconChoicePageData*     GetPageData ( sal_uInt16 nId );
     void                    Start_Impl();
-    sal_Bool                    OK_Impl();
+    bool                    OK_Impl();
 
-    void                    SetPosSizeCtrls ( sal_Bool bInit = sal_False );
+    void                    SetPosSizeCtrls ( bool bInit = false );
     void                    SetPosSizePages ( sal_uInt16 nId );
 
     void                    FocusOnIcon ( sal_uInt16 nId );
@@ -180,7 +180,7 @@ protected :
     const SfxItemSet*       GetRefreshedSet();
 
     void                    ActivatePageImpl ();
-    sal_Bool                    DeActivatePageImpl ();
+    bool                    DeActivatePageImpl ();
     void                    ResetPageImpl ();
 
     short                   Ok();
@@ -199,7 +199,7 @@ public :
     SvxIconChoiceCtrlEntry* AddTabPage(
         sal_uInt16 nId, const OUString& rIconText, const Image& rChoiceIcon,
         CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
-        sal_Bool bItemsOnDemand = sal_False, sal_uLong nPos = TREELIST_APPEND );
+        bool bItemsOnDemand = false, sal_uLong nPos = TREELIST_APPEND );
 
     void                SetCurPageId( sal_uInt16 nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
     sal_uInt16              GetCurPageId() const       { return mnCurrentPageId; }
@@ -218,8 +218,8 @@ public :
     HelpButton&         GetHelpButton() { return aHelpBtn; }
 
     short               Execute() SAL_OVERRIDE;
-    void                Start( sal_Bool bShow = sal_True );
-    sal_Bool            QueryClose();
+    void                Start( bool bShow = true );
+    bool            QueryClose();
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
 

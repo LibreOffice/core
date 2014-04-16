@@ -28,7 +28,7 @@ class SfxShell;
 
 // static ----------------------------------------------------------------
 
-sal_Bool            EnableSSO();
+bool            EnableSSO();
 CreateTabPage   GetSSOCreator( void );
 
 // struct OrderedEntry ---------------------------------------------------
@@ -164,8 +164,8 @@ private:
     SfxItemSet*     pColorPageItemSet;
     SvxColorTabPage *mpColorPage;
 
-    sal_Bool        bForgetSelection;
-    sal_Bool        bExternBrowserActive;
+    bool        bForgetSelection;
+    bool        bExternBrowserActive;
     bool            bIsFromExtensionManager;
 
     // check "for the current document only" and set focus to "Western" languages box
@@ -276,7 +276,7 @@ private:
     bool                m_bIsWindowHidden;
 
     void                CreateDialogWithHandler();
-    sal_Bool            DispatchAction( const OUString& rAction );
+    bool            DispatchAction( const OUString& rAction );
 
 public:
     ExtensionsTabPage(
