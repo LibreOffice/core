@@ -208,6 +208,19 @@ if test -z "$SED"; then
     AC_MSG_ERROR([install sed to run this script])
 fi
 
+# Set the ENABLE_LTO variable
+# ===================================================================
+AC_MSG_CHECKING([whether to use link-time optimization])
+if test -n "$enable_lto" -a "$enable_lto" != "no"; then
+    ENABLE_LTO="TRUE"
+    AC_MSG_RESULT([yes])
+    AC_DEFINE(STATIC_LINKING)
+else
+    ENABLE_LTO=""
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_LTO)
+
 dnl ===================================================================
 dnl When building for Android, --with-android-ndk,
 dnl --with-android-ndk-toolchain-version and --with-android-sdk are
@@ -372,7 +385,7 @@ if test -n "$with_android_ndk"; then
     case "$with_android_ndk_toolchain_version" in
     4.[[6789]]*|[[56789]].*|clang*)
         # The NDK doesn't have ld.gold for MIPS for some reason
-        if test "$host_cpu" != mips; then
+        if test "$host_cpu" != mips -a "$ENABLE_LTO" != TRUE; then
             ANDROIDCFLAGS="$ANDROIDCFLAGS -fuse-ld=gold"
         fi
         ;;
@@ -2535,19 +2548,6 @@ if test "$COMPATH" = "."; then
     COMPATH=`echo $COMPATH | $SED "s@/[[^/:]]*\\\$@@"`
 fi
 COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`
-
-# Set the ENABLE_LTO variable
-# ===================================================================
-AC_MSG_CHECKING([whether to use link-time optimization])
-if test -n "$enable_lto" -a "$enable_lto" != "no"; then
-    ENABLE_LTO="TRUE"
-    AC_MSG_RESULT([yes])
-    AC_DEFINE(STATIC_LINKING)
-else
-    ENABLE_LTO=""
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_LTO)
 
 dnl ===================================================================
 dnl Java support
