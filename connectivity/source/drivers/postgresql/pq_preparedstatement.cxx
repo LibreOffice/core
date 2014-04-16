@@ -779,7 +779,7 @@ sal_Bool PreparedStatement::convertFastPropertyValue(
     }
     case PREPARED_STATEMENT_ESCAPE_PROCESSING:
     {
-        bool val;
+        bool val(false);
         bRet = ( rValue >>= val );
         rConvertedValue = makeAny( val );
         break;

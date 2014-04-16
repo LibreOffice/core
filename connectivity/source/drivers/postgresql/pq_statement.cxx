@@ -934,7 +934,7 @@ sal_Bool Statement::convertFastPropertyValue(
     }
     case STATEMENT_ESCAPE_PROCESSING:
     {
-        bool val;
+        bool val(false);
         bRet = ( rValue >>= val );
         rConvertedValue = makeAny( val );
         break;

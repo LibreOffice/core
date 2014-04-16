@@ -617,7 +617,7 @@ sal_Bool BaseResultSet::convertFastPropertyValue(
     case BASERESULTSET_ESCAPE_PROCESSING:
     case BASERESULTSET_IS_BOOKMARKABLE:
     {
-        bool val;
+        bool val(false);
         bRet = ( rValue >>= val );
         m_props[nHandle] = makeAny( val );
         break;
