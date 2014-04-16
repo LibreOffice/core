@@ -125,6 +125,11 @@ void XMLGraphicsDefaultStyle::SetDefaults()
         xDefaults->setPropertyValue("IsFollowingTextFlow", uno::makeAny(true));
     }
 
+    // NOTE: the only reason why it's legal to check "==" (not "<") against
+    // arbitrary versions here is that the default value of these attributes
+    // is not defined by ODF, therefore it is implementation-defined
+    // (and we of course must not override any attributes that are actually
+    // in the document, so check for that)
     bool const bIsAOO4(
            GetImport().getGeneratorVersion() >= SvXMLImport::AOO_40x
         && GetImport().getGeneratorVersion() <= SvXMLImport::AOO_4x);

@@ -430,11 +430,18 @@ public:
     static const sal_uInt16 OOo_34x = 34;
     // for AOO, no release overlaps with OOo, so continue OOo version numbers
     static const sal_uInt16 AOO_40x = 40;
+    // @ATTENTION: it's not usually ok to use the "4x" "wildcard" in an "=="
+    // comparison, since that will match unreleased versions too; it is also
+    // risky to use it in "<" comparison, because it requires checking and
+    // possibly adapting all such uses when a new value for a more specific
+    // version is added.
     static const sal_uInt16 AOO_4x = 41;
     static const sal_uInt16 LO_flag = 0x100;
     static const sal_uInt16 LO_3x = 30 | LO_flag;
     static const sal_uInt16 LO_41x = 41 | LO_flag;
     static const sal_uInt16 LO_42x = 42 | LO_flag;
+    /// @ATTENTION: when adding a new value more specific than "4x", grep for
+    /// all current uses and adapt them!!!
     static const sal_uInt16 LO_4x = 43 | LO_flag;
     static const sal_uInt16 ProductVersionUnknown = SAL_MAX_UINT16;
 
