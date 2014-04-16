@@ -96,12 +96,6 @@ void ScInterpreter::ScFilterXML()
                             boost::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
                             aResult = OStringToOUString(OString((char*)pChar2.get()), RTL_TEXTENCODING_UTF8);
                         }
-                        else if(pNodeSet->nodeTab[0]->type == XML_ELEMENT_NODE)
-                        {
-                            xmlNodePtr cur = pNodeSet->nodeTab[0];
-                            boost::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
-                            aResult = OStringToOUString(OString((char*)pChar2.get()), RTL_TEXTENCODING_UTF8);
-                        }
                         else
                         {
                             xmlNodePtr cur = pNodeSet->nodeTab[0];
