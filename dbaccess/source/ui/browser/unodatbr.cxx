@@ -154,17 +154,17 @@ using namespace ::dbtools;
 using namespace ::comphelper;
 using namespace ::svx;
 
+// SbaTableQueryBrowser
+extern "C" void SAL_CALL createRegistryInfo_OBrowser()
+{
+    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::SbaTableQueryBrowser > aAutoRegistration;
+}
+
 namespace dbaui
 {
 
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
-
-// SbaTableQueryBrowser
-extern "C" void SAL_CALL createRegistryInfo_OBrowser()
-{
-    static OMultiInstanceAutoRegistration< SbaTableQueryBrowser > aAutoRegistration;
-}
 
 void SafeAddPropertyListener(const Reference< XPropertySet > & xSet, const OUString& rPropName, XPropertyChangeListener* pListener)
 {

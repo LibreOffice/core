@@ -146,12 +146,17 @@ bool ViewMonitor::onSetCurrentController( const Reference< XController >& _rxCon
     return bLoadFinished;
 }
 
+} // namespace dbaccess
+
 // ODatabaseDocument
 
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument()
 {
-    static ::dba::OAutoRegistration< ODatabaseDocument > aAutoRegistration;
+    static ::dba::OAutoRegistration< ::dbaccess::ODatabaseDocument > aAutoRegistration;
 }
+
+namespace dbaccess
+{
 
 ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl )
             :ModelDependentComponent( _pImpl )

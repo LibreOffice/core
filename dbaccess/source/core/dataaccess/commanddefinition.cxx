@@ -38,15 +38,14 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-namespace dbaccess
-{
-
 // OCommandDefinition
 extern "C" void SAL_CALL createRegistryInfo_OCommandDefinition()
 {
-    static ::dba::OAutoRegistration< OCommandDefinition > aAutoRegistration;
+    static ::dba::OAutoRegistration< ::dbaccess::OCommandDefinition > aAutoRegistration;
 }
 
+namespace dbaccess
+{
 
 void OCommandDefinition::registerProperties()
 {

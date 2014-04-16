@@ -475,12 +475,17 @@ namespace
     };
 }
 
+} // namespace dbaccess
+
 // ODatabaseContext
 
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource()
 {
-    static ::dba::OAutoRegistration< ODatabaseSource > aAutoRegistration;
+    static ::dba::OAutoRegistration< ::dbaccess::ODatabaseSource > aAutoRegistration;
 }
+
+namespace dbaccess
+{
 
 ODatabaseSource::ODatabaseSource(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl)
             :ModelDependentComponent( _pImpl )

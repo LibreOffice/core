@@ -213,10 +213,15 @@ Sequence< OUString > DBTypeDetection::getSupportedServiceNames_Static(void) thro
     return aSNS;
 }
 
+} // namespace dbaxml
+
 extern "C" void SAL_CALL createRegistryInfo_DBTypeDetection()
 {
     static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::DBTypeDetection > aAutoRegistration;
 }
+
+namespace dbaxml
+{
 
 class DBContentLoader : public ::cppu::WeakImplHelper2< XFrameLoader, XServiceInfo>
 {

@@ -24,16 +24,12 @@
 
 #include <sal/types.h>
 
-extern "C" {
-
-void SAL_CALL createRegistryInfo_DataAccessDescriptorFactory();
-void SAL_CALL createRegistryInfo_OCommandDefinition();
-void SAL_CALL createRegistryInfo_OComponentDefinition();
-void SAL_CALL createRegistryInfo_ODatabaseDocument();
-void SAL_CALL createRegistryInfo_ODatabaseSource();
-void SAL_CALL createRegistryInfo_ORowSet();
-
-}
+extern "C" void SAL_CALL createRegistryInfo_DataAccessDescriptorFactory();
+extern "C" void SAL_CALL createRegistryInfo_OCommandDefinition();
+extern "C" void SAL_CALL createRegistryInfo_OComponentDefinition();
+extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument();
+extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource();
+extern "C" void SAL_CALL createRegistryInfo_ORowSet();
 
 #endif
 
