@@ -223,7 +223,9 @@ AC_ARG_WITH(android-ndk-toolchain-version,
     AS_HELP_STRING([--with-android-ndk-toolchain-version],
         [Specify which toolchain version to use, of those present in the
         Android NDK you are using. Mandatory if the NDK used has several
-        toolchain versions for the host architecture you are building for.]), ,)
+        toolchain versions for the host architecture you are building for.
+        Possible values are 4.6, 4.8, clang3.3 and clang3.4. Only 4.8 has been
+        tested for real...]), ,)
 
 AC_ARG_WITH(android-sdk,
     AS_HELP_STRING([--with-android-sdk],
@@ -268,12 +270,14 @@ if test -n "$with_android_ndk"; then
         ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-$with_android_ndk_toolchain_version
         ANDROID_COMPILER_DIR=$ANDROID_BINUTILS_DIR
         ;;
-    clang3.1|clang3.2)
+    clang3.3|clang3.4)
         AC_MSG_WARN([Building with the Clang tool-chain is known to break in the bridges module, fix that please])
         ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.6
         ANDROID_COMPILER_DIR=$ANDROID_NDK_HOME/toolchains/llvm-${with_android_ndk_toolchain_version#clang}
         ANDROID_USING_CLANG=true
         ;;
+    *)
+        AC_MSG_ERROR([Unrecognized value for the --with-android-ndk-toolchain-version option])
     esac
 
     if test ! -d $ANDROID_BINUTILS_DIR; then
