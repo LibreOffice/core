@@ -15,6 +15,17 @@ $(eval $(call gb_ExternalProject_register_targets,openldap,\
 	build \
 ))
 
+openldap_LDFLAGS =
+ifneq ($(SYSTEM_NSS),)
+openldap_LDFLAGS += -L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib \
+    $(if $(filter AIX,$(OS)),-Wl$(COMMA)-brtl)
+endif
+# Help openldap's configure determine that it needs -lpthread even if libasan.so
+# contains a pthread_create override:
+ifneq ($(filter -fsanitize=address,$(CC)),)
+openldap_LDFLAGS += -pthread
+endif
+
 $(call gb_ExternalProject_get_state_target,openldap,build) :
 	$(call gb_ExternalProject_run,build,\
 		./configure \
@@ -34,8 +45,8 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 				, \
 				CPPFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
 				CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
-				LDFLAGS="-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib $(if $(filter AIX,$(OS)),-Wl$(COMMA)-brtl)" \
 			) \
+			$(if $(openldap_LDFLAGS),LDFLAGS="$(openldap_LDFLAGS)") \
 		&& MAKEFLAGS= && $(MAKE) \
 	)
 
