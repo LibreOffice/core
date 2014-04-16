@@ -85,10 +85,12 @@ TokenToIdMapPointer OOXMLFactory_ns::getTokenToIdMap(Id nId)
     return m_TokenToIdsMap[nId];
 }
 
+#ifdef DEBUG_FACTORY
 string OOXMLFactory_ns::getDefineName(Id /*nId*/) const
 {
     return "";
 }
+#endif
 
 // class OOXMLFactory
 

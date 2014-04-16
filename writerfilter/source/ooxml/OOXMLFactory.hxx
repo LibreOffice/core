@@ -102,8 +102,8 @@ public:
     virtual void charactersAction(OOXMLFastContextHandler * pHandler, const OUString & rString);
     virtual void endAction(OOXMLFastContextHandler * pHandler);
     virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue);
-    virtual string getDefineName(Id nId) const;
 #ifdef DEBUG_FACTORY
+    virtual string getDefineName(Id nId) const;
     virtual string getName() const;
 #endif
 
