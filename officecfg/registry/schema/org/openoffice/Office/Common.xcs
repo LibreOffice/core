@@ -6539,6 +6539,12 @@
           <desc>Uses cfg package Jobs instead of this component.</desc>
         </info>
       </set>
+      <prop oor:name="StartupMessage" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies whether to display startup message in LibreOffice Vanilla from Apple App Store</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="SmartTags">
       <info>

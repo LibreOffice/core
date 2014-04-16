@@ -191,7 +191,7 @@ private:
     SAL_DLLPRIVATE void ShowInfoBars( );
 
     DECL_LINK( CheckOutHandler, void * );
-
+    DECL_LINK( ApplicationStartupHandler, void * );
 
 //  private variables
 

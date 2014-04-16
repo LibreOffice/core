@@ -80,6 +80,8 @@
 #include <sfx2/viewfac.hxx>
 #include "sfxbasecontroller_internal.hxx"
 
+#include "ApplicationStartupDialog.hxx"
+
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
 
 using namespace ::com::sun::star;
@@ -1420,6 +1422,16 @@ void SfxBaseController::ShowInfoBars( )
 {
     if ( m_pData->m_pViewShell )
     {
+        if (SfxGetpApp()->shouldShowApplicationStartupMessage())
+        {
+            SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
+            std::vector<PushButton*> aButtons;
+            PushButton* pButton = new PushButton(&pViewFrame->GetWindow(), SfxResId(BT_APPLICATION_STARTUP));
+            pButton->SetClickHdl(LINK(this, SfxBaseController, ApplicationStartupHandler));
+            aButtons.push_back(pButton);
+            pViewFrame->AppendInfoBar("application-startup", SfxResId(STR_APPLICATION_STARTUP_MESSAGE), aButtons);
+        }
+
         // CMIS verifications
         Reference< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY );
         if ( xCmisDoc.is( ) && xCmisDoc->canCheckOut( ) )
@@ -1467,7 +1479,20 @@ IMPL_LINK_NOARG ( SfxBaseController, CheckOutHandler )
     return 0;
 }
 
+IMPL_LINK_NOARG ( SfxBaseController, ApplicationStartupHandler )
+{
+    if (!m_pData->m_pViewShell)
+        return 0;
 
+    SfxApplicationStartupDialog aDialog(NULL);
+    if (aDialog.Execute() == RET_OK)
+    {
+        SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
+        SfxGetpApp()->hideApplicationStartupMessage();
+        pViewFrame->RemoveInfoBar("application-startup");
+    }
+    return 0;
+}
 
 Reference< frame::XTitle > SfxBaseController::impl_getTitleHelper ()
 {

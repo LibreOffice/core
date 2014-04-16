@@ -223,4 +223,14 @@ BitmapEx SfxApplication::GetApplicationLogo(long nWidth)
     return aBitmap;
 }
 
+bool SfxApplication::shouldShowApplicationStartupMessage()
+{
+    return pAppData_Impl->bShowApplicationStartupMessage;
+}
+
+void SfxApplication::hideApplicationStartupMessage()
+{
+    pAppData_Impl->bShowApplicationStartupMessage = false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

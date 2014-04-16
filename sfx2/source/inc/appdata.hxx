@@ -137,6 +137,7 @@ public:
     bool                        bInQuit : 1;
     bool                        bInvalidateOnUnlock : 1;
     bool                        bODFVersionWarningLater : 1;
+    bool                        bShowApplicationStartupMessage : 1;
 
                                 SfxAppData_Impl( SfxApplication* );
                                 ~SfxAppData_Impl();
