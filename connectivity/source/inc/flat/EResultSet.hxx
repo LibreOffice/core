@@ -39,7 +39,7 @@ namespace connectivity
                                 public OFlatResultSet_BASE,
                                 public OFlatResultSet_BASE3
         {
-            sal_Bool m_bBookmarkable;
+            bool m_bBookmarkable;
         protected:
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;

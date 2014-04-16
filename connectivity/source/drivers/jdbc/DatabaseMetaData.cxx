@@ -122,7 +122,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        OSL_VERIFY_RES( !isExceptionOccurred(t.pEnv,sal_True),"Exception occurred!");
+        OSL_VERIFY_RES( !isExceptionOccurred(t.pEnv, true),"Exception occurred!");
         jvalue args[4];
 
         args[3].l = 0;
@@ -130,7 +130,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         if ( typeFilterCount )
         {
             jobjectArray pObjArray = static_cast< jobjectArray >( t.pEnv->NewObjectArray( (jsize)typeFilterCount, java_lang_String::st_getMyClass(), 0 ) );
-            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
+            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
             const OUString* typeFilter = _types.getConstArray();
             bool bIncludeAllTypes = false;
             for ( sal_Int32 i=0; i<typeFilterCount; ++i, ++typeFilter )
@@ -142,7 +142,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
                 }
                 jstring aT = convertwchar_tToJavaString( t.pEnv, *typeFilter );
                 t.pEnv->SetObjectArrayElement( pObjArray, (jsize)i, aT );
-                OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
+                OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
             }
 
             if ( bIncludeAllTypes )
@@ -150,7 +150,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
                 // the SDBC API allows to pass "%" as table type filter, but in JDBC, "all table types"
                 // is represented by the table type being <null/>
                 t.pEnv->DeleteLocalRef( pObjArray );
-                OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
+                OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
             }
             else
             {
@@ -178,23 +178,23 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         if ( aCatalogFilter.hasValue() )
         {
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
-            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
+            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
         }
         if(args[1].l)
         {
             t.pEnv->DeleteLocalRef((jstring)args[1].l);
-            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
+            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
         }
         if(!tableNamePattern.isEmpty())
         {
             t.pEnv->DeleteLocalRef((jstring)args[2].l);
-            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
+            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
         }
         //for(INT16 i=0;i<len;i++)
         if ( args[3].l )
         {
             t.pEnv->DeleteLocalRef( (jobjectArray)args[3].l );
-            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
+            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
         }
 
         if ( jThrow )
@@ -542,7 +542,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
 }
 
 
-sal_Bool java_sql_DatabaseMetaData::impl_callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID )
+bool java_sql_DatabaseMetaData::impl_callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID )
 {
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD, _pMethodName );
     jboolean out( java_lang_Object::callBooleanMethod(_pMethodName,_inout_MethodID) );
@@ -577,7 +577,7 @@ sal_Int32 java_sql_DatabaseMetaData::impl_callIntMethod( const char* _pMethodNam
 }
 
 
-sal_Bool java_sql_DatabaseMetaData::impl_callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument )
+bool java_sql_DatabaseMetaData::impl_callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument )
 {
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD_ARG1, _pMethodName, _nArgument );
 
@@ -687,7 +687,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesLowerCaseIdentifiers(  ) thro
     return impl_callBooleanMethod( "storesLowerCaseIdentifiers", mID );
 }
 
-sal_Bool java_sql_DatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
+bool java_sql_DatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     static jmethodID mID(NULL);
     return impl_callBooleanMethod( "storesMixedCaseQuotedIdentifiers", mID );
@@ -711,13 +711,13 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesUpperCaseIdentifiers(  ) thro
     return impl_callBooleanMethod( "storesUpperCaseIdentifiers", mID );
 }
 
-sal_Bool java_sql_DatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
+bool java_sql_DatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
 {
     static jmethodID mID(NULL);
     return impl_callBooleanMethod( "supportsAlterTableWithAddColumn", mID );
 }
 
-sal_Bool java_sql_DatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
+bool java_sql_DatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 {
     static jmethodID mID(NULL);
     return impl_callBooleanMethod( "supportsAlterTableWithDropColumn", mID );
@@ -759,7 +759,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsDifferentTableCorrelationNa
     return impl_callBooleanMethod( "supportsDifferentTableCorrelationNames", mID );
 }
 
-sal_Bool java_sql_DatabaseMetaData::impl_isCatalogAtStart_throw(  )
+bool java_sql_DatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
     static jmethodID mID(NULL);
     return impl_callBooleanMethod( "isCatalogAtStart", mID );
@@ -831,7 +831,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTransactionIsolationLevel( 
     return impl_callBooleanMethodWithIntArg( "supportsTransactionIsolationLevel", mID, level );
 }
 
-sal_Bool java_sql_DatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
+bool java_sql_DatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
 {
     static jmethodID mID(NULL);
     return impl_callBooleanMethod( "supportsSchemasInDataManipulation", mID );
@@ -861,13 +861,13 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInIndexDefinitions( 
     return impl_callBooleanMethod( "supportsSchemasInIndexDefinitions", mID );
 }
 
-sal_Bool java_sql_DatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
+bool java_sql_DatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 {
     static jmethodID mID(NULL);
     return impl_callBooleanMethod( "supportsSchemasInTableDefinitions", mID );
 }
 
-sal_Bool java_sql_DatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
+bool java_sql_DatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
 {
     static jmethodID mID(NULL);
     return impl_callBooleanMethod( "supportsCatalogsInTableDefinitions", mID );
@@ -879,7 +879,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInIndexDefinitions(
     return impl_callBooleanMethod( "supportsCatalogsInIndexDefinitions", mID );
 }
 
-sal_Bool java_sql_DatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
+bool java_sql_DatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
     static jmethodID mID(NULL);
     return impl_callBooleanMethod( "supportsCatalogsInDataManipulation", mID );
@@ -1073,7 +1073,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMixedCaseIdentifiers(  ) th
     return impl_callBooleanMethod( "supportsMixedCaseIdentifiers", mID );
 }
 
-sal_Bool java_sql_DatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
+bool java_sql_DatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     static jmethodID mID(NULL);
     return impl_callBooleanMethod( "supportsMixedCaseQuotedIdentifiers", mID );

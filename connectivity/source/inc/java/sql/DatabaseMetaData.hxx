@@ -50,19 +50,19 @@ namespace connectivity
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw() SAL_OVERRIDE;
         // cached database information
-        virtual OUString impl_getIdentifierQuoteString_throw(  ) SAL_OVERRIDE;
-        virtual sal_Bool        impl_isCatalogAtStart_throw(  ) SAL_OVERRIDE;
-        virtual OUString impl_getCatalogSeparator_throw(  ) SAL_OVERRIDE;
-        virtual sal_Bool        impl_supportsCatalogsInTableDefinitions_throw(  ) SAL_OVERRIDE;
-        virtual sal_Bool        impl_supportsSchemasInTableDefinitions_throw(  ) SAL_OVERRIDE ;
-        virtual sal_Bool        impl_supportsCatalogsInDataManipulation_throw(  ) SAL_OVERRIDE;
-        virtual sal_Bool        impl_supportsSchemasInDataManipulation_throw(  ) SAL_OVERRIDE ;
-        virtual sal_Bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  ) SAL_OVERRIDE;
-        virtual sal_Bool        impl_supportsAlterTableWithAddColumn_throw(  ) SAL_OVERRIDE;
-        virtual sal_Bool        impl_supportsAlterTableWithDropColumn_throw(  ) SAL_OVERRIDE;
-        virtual sal_Int32       impl_getMaxStatements_throw(  ) SAL_OVERRIDE;
-        virtual sal_Int32       impl_getMaxTablesInSelect_throw(  ) SAL_OVERRIDE;
-        virtual sal_Bool        impl_storesMixedCaseQuotedIdentifiers_throw(  ) SAL_OVERRIDE;
+        virtual OUString    impl_getIdentifierQuoteString_throw(  ) SAL_OVERRIDE;
+        virtual bool        impl_isCatalogAtStart_throw(  ) SAL_OVERRIDE;
+        virtual OUString    impl_getCatalogSeparator_throw(  ) SAL_OVERRIDE;
+        virtual bool        impl_supportsCatalogsInTableDefinitions_throw(  ) SAL_OVERRIDE;
+        virtual bool        impl_supportsSchemasInTableDefinitions_throw(  ) SAL_OVERRIDE ;
+        virtual bool        impl_supportsCatalogsInDataManipulation_throw(  ) SAL_OVERRIDE;
+        virtual bool        impl_supportsSchemasInDataManipulation_throw(  ) SAL_OVERRIDE ;
+        virtual bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  ) SAL_OVERRIDE;
+        virtual bool        impl_supportsAlterTableWithAddColumn_throw(  ) SAL_OVERRIDE;
+        virtual bool        impl_supportsAlterTableWithDropColumn_throw(  ) SAL_OVERRIDE;
+        virtual sal_Int32   impl_getMaxStatements_throw(  ) SAL_OVERRIDE;
+        virtual sal_Int32   impl_getMaxTablesInSelect_throw(  ) SAL_OVERRIDE;
+        virtual bool        impl_storesMixedCaseQuotedIdentifiers_throw(  ) SAL_OVERRIDE;
 
         virtual sal_Bool SAL_CALL allProceduresAreCallable(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL allTablesAreSelectable(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -200,10 +200,10 @@ namespace connectivity
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getUDTs( const ::com::sun::star::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const ::com::sun::star::uno::Sequence< sal_Int32 >& types ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        sal_Bool        impl_callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID );
+        bool        impl_callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID );
         OUString impl_callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID );
         sal_Int32       impl_callIntMethod( const char* _pMethodName, jmethodID& _inout_MethodID );
-        sal_Bool        impl_callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument );
+        bool        impl_callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument );
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
                         impl_callResultSetMethod( const char* _pMethodName, jmethodID& _inout_MethodID );
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >

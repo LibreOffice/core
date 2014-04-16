@@ -317,7 +317,7 @@ void ODbaseTable::fillColumns()
     m_aScales.reserve(nFieldCount);
 
     OUString aTypeName;
-    const sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
+    const bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
     const bool bFoxPro = m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto || m_aHeader.db_typ == FoxProMemo;
 
     sal_Int32 i = 0;
@@ -328,13 +328,13 @@ void ODbaseTable::fillColumns()
         if ( FIELD_DESCRIPTOR_TERMINATOR == aDBFColumn.db_fnm[0] ) // 0x0D stored as the Field Descriptor terminator.
             break;
 
-        sal_Bool bIsRowVersion = bFoxPro && ( aDBFColumn.db_frei2[0] & 0x01 ) == 0x01;
+        bool bIsRowVersion = bFoxPro && ( aDBFColumn.db_frei2[0] & 0x01 ) == 0x01;
         const OUString aColumnName((const char *)aDBFColumn.db_fnm, strlen((const char *)aDBFColumn.db_fnm), m_eEncoding);
 
         m_aRealFieldLengths.push_back(aDBFColumn.db_flng);
         sal_Int32 nPrecision = aDBFColumn.db_flng;
         sal_Int32 eType;
-        sal_Bool bIsCurrency = sal_False;
+        bool bIsCurrency = false;
 
         char cType[2];
         cType[0] = aDBFColumn.db_typ;
@@ -365,7 +365,7 @@ void ODbaseTable::fillColumns()
             aTypeName = "BOOLEAN";
             break;
         case 'Y':
-            bIsCurrency = sal_True;
+            bIsCurrency = true;
             eType = DataType::DOUBLE;
             aTypeName = "DOUBLE";
             break;
@@ -442,7 +442,7 @@ void ODbaseTable::fillColumns()
 ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConnection)
     : ODbaseTable_BASE(_pTables,_pConnection)
     , m_pMemoStream(NULL)
-    , m_bWriteableMemo(sal_False)
+    , m_bWriteableMemo(false)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::ODbaseTable" );
     // initialize the header
@@ -463,7 +463,7 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConne
                        _SchemaName,
                        _CatalogName)
     , m_pMemoStream(NULL)
-    , m_bWriteableMemo(sal_False)
+    , m_bWriteableMemo(false)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::ODbaseTable" );
     memset(&m_aHeader, 0, sizeof(m_aHeader));
@@ -495,7 +495,7 @@ void ODbaseTable::construct()
 
     if ( !m_pFileStream )
     {
-        m_bWriteable = sal_False;
+        m_bWriteable = false;
         m_pFileStream = createStream_simpleError( sFileName, STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE);
     }
 
@@ -518,7 +518,7 @@ void ODbaseTable::construct()
             m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
             if ( !m_pMemoStream )
             {
-                m_bWriteableMemo = sal_False;
+                m_bWriteableMemo = false;
                 m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE);
             }
             if (m_pMemoStream)
@@ -554,7 +554,7 @@ void ODbaseTable::construct()
     }
 }
 
-sal_Bool ODbaseTable::ReadMemoHeader()
+bool ODbaseTable::ReadMemoHeader()
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::ReadMemoHeader" );
     m_pMemoStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
@@ -601,7 +601,7 @@ sal_Bool ODbaseTable::ReadMemoHeader()
             SAL_WARN( "connectivity.drivers", "ODbaseTable::ReadMemoHeader: unsupported memo type!" );
             break;
     }
-    return sal_True;
+    return true;
 }
 
 OUString ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName )
@@ -779,7 +779,7 @@ sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (R
                 : ODbaseTable_BASE::getSomething(rId);
 }
 
-sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData)
+bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool _bUseTableDefs, bool bRetrieveData)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::fetchRow" );
     // Read the data
@@ -792,7 +792,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
     *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
-        return sal_True;
+        return true;
 
     sal_Size nByteOffset = 1;
     // Fields:
@@ -965,13 +965,13 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                 break;
                 case DataType::BIT:
                 {
-                    sal_Bool b;
+                    bool b;
                     switch (* ((const char *)pData))
                     {
                         case 'T':
                         case 'Y':
-                        case 'J':   b = sal_True; break;
-                        default:    b = sal_False; break;
+                        case 'J':   b = true; break;
+                        default:    b = false; break;
                     }
                     *(_rRow->get())[i] = b;
                 }
@@ -998,7 +998,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
         nByteOffset += nLen;
         OSL_ENSURE( nByteOffset <= m_nBufferSize ,"ByteOffset > m_nBufferSize!");
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -1016,7 +1016,7 @@ void ODbaseTable::FileClose()
     ODbaseTable_BASE::FileClose();
 }
 
-sal_Bool ODbaseTable::CreateImpl()
+bool ODbaseTable::CreateImpl()
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::CreateImpl" );
     OSL_ENSURE(!m_pFileStream, "SequenceError");
@@ -1056,7 +1056,7 @@ sal_Bool ODbaseTable::CreateImpl()
 
             if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
             {
-                return sal_False;
+                return false;
             }
             delete pFileStream;
         }
@@ -1065,9 +1065,9 @@ sal_Bool ODbaseTable::CreateImpl()
     {
     }
 
-    sal_Bool bMemoFile = sal_False;
+    bool bMemoFile = false;
 
-    sal_Bool bOk = CreateFile(aURL, bMemoFile);
+    bool bOk = CreateFile(aURL, bMemoFile);
 
     FileClose();
 
@@ -1081,7 +1081,7 @@ sal_Bool ODbaseTable::CreateImpl()
         catch(const Exception&) // an exception is thrown when no file exists
         {
         }
-        return sal_False;
+        return false;
     }
 
     if (bMemoFile)
@@ -1090,7 +1090,7 @@ sal_Bool ODbaseTable::CreateImpl()
         aURL.setExtension("dbt");                      // extension for memo file
         Content aMemo1Content(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
 
-        sal_Bool bMemoAlreadyExists = sal_False;
+        bool bMemoAlreadyExists = false;
         try
         {
             bMemoAlreadyExists = aMemo1Content.isDocument();
@@ -1121,14 +1121,14 @@ sal_Bool ODbaseTable::CreateImpl()
             aURL.setExtension(aExt);      // kill dbf file
             Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
             aMemoContent.executeCommand( "delete", css::uno::Any( true ) );
-            return sal_False;
+            return false;
         }
         m_aHeader.db_typ = dBaseIIIMemo;
     }
     else
         m_aHeader.db_typ = dBaseIII;
 
-    return sal_True;
+    return true;
 }
 
 void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId,const OUString& _sColumnName)
@@ -1151,16 +1151,16 @@ void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId,const OUStri
 }
 
 // creates in principle dBase IV file format
-sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMemo)
+bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::CreateFile" );
-    bCreateMemo = sal_False;
+    bCreateMemo = false;
     Date aDate( Date::SYSTEM );                     // current date
 
     m_pFileStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC );
 
     if (!m_pFileStream)
-        return sal_False;
+        return false;
 
     sal_uInt8 nDbaseType = dBaseIII;
     Reference<XIndexAccess> xColumns(getColumns(),UNO_QUERY);
@@ -1355,7 +1355,7 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
                     nRecLength += 8;
                     break;
                 case 'M':
-                    bCreateMemo = sal_True;
+                    bCreateMemo = true;
                     (*m_pFileStream).WriteUChar( (sal_uInt8)10 );
                     (*m_pFileStream).WriteUChar( (sal_uInt8)0 );
                     nRecLength += 10;
@@ -1395,19 +1395,19 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
         catch(const Exception&) { }
         throw;
     }
-    return sal_True;
+    return true;
 }
 
 
 // creates in principle dBase III file format
-sal_Bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
+bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::CreateMemoFile" );
     // filehandling macro for table creation
     m_pMemoStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
 
     if (!m_pMemoStream)
-        return sal_False;
+        return false;
 
     m_pMemoStream->SetStreamSize(512);
 
@@ -1417,16 +1417,16 @@ sal_Bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
     m_pMemoStream->Flush();
     delete m_pMemoStream;
     m_pMemoStream = NULL;
-    return sal_True;
+    return true;
 }
 
-sal_Bool ODbaseTable::Drop_Static(const OUString& _sUrl,sal_Bool _bHasMemoFields,OCollection* _pIndexes )
+bool ODbaseTable::Drop_Static(const OUString& _sUrl, bool _bHasMemoFields, OCollection* _pIndexes )
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::Drop_Static" );
     INetURLObject aURL;
     aURL.SetURL(_sUrl);
 
-    sal_Bool bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
+    bool bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
 
     if(bDropped)
     {
@@ -1458,7 +1458,7 @@ sal_Bool ODbaseTable::Drop_Static(const OUString& _sUrl,sal_Bool _bHasMemoFields
             try
             {
                 ::ucbhelper::Content aDeleteContent( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-                aDeleteContent.executeCommand( "delete", makeAny( sal_Bool( sal_True ) ) );
+                aDeleteContent.executeCommand( "delete", makeAny( true ) );
             }
             catch(const Exception&)
             {
@@ -1469,7 +1469,7 @@ sal_Bool ODbaseTable::Drop_Static(const OUString& _sUrl,sal_Bool _bHasMemoFields
     return bDropped;
 }
 
-sal_Bool ODbaseTable::DropImpl()
+bool ODbaseTable::DropImpl()
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::DropImpl" );
     FileClose();
@@ -1477,7 +1477,7 @@ sal_Bool ODbaseTable::DropImpl()
     if(!m_pIndexes)
         refreshIndexes(); // look for indexes which must be deleted as well
 
-    sal_Bool bDropped = Drop_Static(getEntry(m_pConnection,m_Name),HasMemoFields(),m_pIndexes);
+    bool bDropped = Drop_Static(getEntry(m_pConnection,m_Name),HasMemoFields(),m_pIndexes);
     if(!bDropped)
     {// we couldn't drop the table so we have to reopen it
         construct();
@@ -1488,7 +1488,7 @@ sal_Bool ODbaseTable::DropImpl()
 }
 
 
-sal_Bool ODbaseTable::InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const Reference<XIndexAccess>& _xCols)
+bool ODbaseTable::InsertRow(OValueRefVector& rRow, bool bFlush, const Reference<XIndexAccess>& _xCols)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::InsertRow" );
     // fill buffer with blanks
@@ -1501,7 +1501,7 @@ sal_Bool ODbaseTable::InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const Ref
     sal_Size nTempPos = m_nFilePos;
 
     m_nFilePos = (sal_Size)m_aHeader.db_anz + 1;
-    sal_Bool bInsertRow = UpdateBuffer( rRow, NULL, _xCols, true );
+    bool bInsertRow = UpdateBuffer( rRow, NULL, _xCols, true );
     if ( bInsertRow )
     {
         sal_Size nFileSize = 0, nMemoFileSize = 0;
@@ -1546,7 +1546,7 @@ sal_Bool ODbaseTable::InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const Ref
 }
 
 
-sal_Bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const Reference<XIndexAccess>& _xCols)
+bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow, const Reference<XIndexAccess>& _xCols)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::UpdateRow" );
     // fill buffer with blanks
@@ -1572,11 +1572,11 @@ sal_Bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,con
     {
         m_pFileStream->Flush();
     }
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
+bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::DeleteRow" );
     // Set the Delete-Flag (be it set or not):
@@ -1586,8 +1586,8 @@ sal_Bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 
     OValueRefRow aRow = new OValueRefVector(_rCols.get().size());
 
-    if (!fetchRow(aRow,_rCols,sal_True,sal_True))
-        return sal_False;
+    if (!fetchRow(aRow,_rCols,true,true))
+        return false;
 
     Reference<XPropertySet> xCol;
     OUString aColName;
@@ -1626,7 +1626,7 @@ sal_Bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     m_pFileStream->Seek(nFilePos);
     (*m_pFileStream).WriteUChar( (sal_uInt8)'*' ); // mark the row in the table as deleted
     m_pFileStream->Flush();
-    return sal_True;
+    return true;
 }
 
 Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(sal_Int32 _nColumnPos)
@@ -1664,12 +1664,12 @@ static double toDouble(const OString& rString)
 }
 
 
-sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, const Reference<XIndexAccess>& _xCols, const bool bForceAllFields)
+bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, const Reference<XIndexAccess>& _xCols, const bool bForceAllFields)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::UpdateBuffer" );
     OSL_ENSURE(m_pBuffer,"Buffer is NULL!");
     if ( !m_pBuffer )
-        return sal_False;
+        return false;
     sal_Int32 nByteOffset  = 1;
 
     // Update fields:
@@ -1997,11 +1997,11 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
         nByteOffset += nLen;
         OSL_ENSURE( nByteOffset <= m_nBufferSize ,"ByteOffset > m_nBufferSize!");
     }
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr)
+bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::WriteMemo" );
     // if the BlockNo 0 is given, the block will be appended at the end
@@ -2021,7 +2021,7 @@ sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockN
     }
 
     // append or overwrite
-    sal_Bool bAppend = rBlockNr == 0;
+    bool bAppend = rBlockNr == 0;
 
     if (!bAppend)
     {
@@ -2132,7 +2132,7 @@ sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockN
         (*m_pMemoStream).WriteUInt32( m_aMemoHeader.db_next );
         m_pMemoStream->Flush();
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -2361,7 +2361,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
-        sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
+        bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
         // copy the structure
         for(sal_Int32 i=0;i < m_pColumns->getCount();++i)
         {
@@ -2394,7 +2394,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
         ::dbtools::throwGenericSQLException( sError, *this );
     }
 
-    sal_Bool bAlreadyDroped = sal_False;
+    bool bAlreadyDroped = false;
     try
     {
         pNewTable->construct();
@@ -2403,7 +2403,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
         // drop the old table
         if(DropImpl())
         {
-            bAlreadyDroped = sal_True;
+            bAlreadyDroped = true;
             pNewTable->renameImpl(m_Name);
             // release the temp file
         }
@@ -2434,7 +2434,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
-        sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
+        bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
         // copy the structure
         for(sal_Int32 i=0;i < m_pColumns->getCount();++i)
         {
@@ -2523,7 +2523,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
         (aRow->get())[nPos]->setBound(false);
 
 
-    sal_Bool bOk = sal_True;
+    bool bOk = true;
     sal_Int32 nCurPos;
     OValueRefVector::Vector::iterator aIter;
     for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.db_anz;++nRowPos)
@@ -2531,7 +2531,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
         bOk = seekRow( IResultSetHelper::BOOKMARK, nRowPos+1, nCurPos );
         if ( bOk )
         {
-            bOk = fetchRow( aRow, *m_aColumns, sal_True, sal_True);
+            bOk = fetchRow( aRow, *m_aColumns, true, true);
             if ( bOk && !aRow->isDeleted() ) // copy only not deleted rows
             {
                 // special handling when pos == 0 then we don't have to distinguish between the two rows
@@ -2548,7 +2548,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
                         }
                     }
                 }
-                bOk = _pNewTable->InsertRow(*aInsertRow,sal_True,_pNewTable->m_pColumns);
+                bOk = _pNewTable->InsertRow(*aInsertRow,true,_pNewTable->m_pColumns);
                 OSL_ENSURE(bOk,"Row could not be inserted!");
             }
             else
@@ -2581,7 +2581,7 @@ void ODbaseTable::refreshHeader()
         readHeader();
 }
 
-sal_Bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
+bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::seekRow" );
 
@@ -2658,14 +2658,14 @@ Error:
         case IResultSetHelper::BOOKMARK:
             m_nFilePos = nTempPos;   // last position
     }
-    return sal_False;
+    return false;
 
 End:
     nCurPos = m_nFilePos;
-    return sal_True;
+    return true;
 }
 
-sal_Bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
+bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::ReadMemo" );
     bool bIsText = true;
@@ -2679,7 +2679,7 @@ sal_Bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
             OStringBuffer aBStr;
             static char aBuf[514];
             aBuf[512] = 0;          // avoid random value
-            sal_Bool bReady = sal_False;
+            bool bReady = false;
 
             do
             {
@@ -2711,7 +2711,7 @@ sal_Bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
             }
             else if (((sal_uInt8)sHeader[0]) != 0xFF || ((sal_uInt8)sHeader[1]) != 0xFF || ((sal_uInt8)sHeader[2]) != 0x08)
             {
-                return sal_False;
+                return false;
             }
 
             sal_uInt32 nLength(0);
@@ -2739,7 +2739,7 @@ sal_Bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
             } // if ( nLength )
         }
     }
-    return sal_True;
+    return true;
 }
 
 void ODbaseTable::AllocBuffer()
@@ -2762,7 +2762,7 @@ void ODbaseTable::AllocBuffer()
     }
 }
 
-sal_Bool ODbaseTable::WriteBuffer()
+bool ODbaseTable::WriteBuffer()
 {
     SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::WriteBuffer" );
     OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");

@@ -34,7 +34,8 @@ namespace connectivity{
         class OConnection;
     }
 }
-sal_Bool isProfileLocked(connectivity::mozab::OConnection* _pCon);
+
+bool isProfileLocked(connectivity::mozab::OConnection* _pCon);
 
 class nsIAbDirectory;
 sal_Int32 getDirectoryType(const nsIAbDirectory*  directory);

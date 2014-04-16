@@ -66,7 +66,7 @@ java_sql_Statement_Base::java_sql_Statement_Base( JNIEnv * pEnv, java_sql_Connec
     ,m_aLogger( _rCon.getLogger(), java::sql::ConnectionLog::STATEMENT )
     ,m_nResultSetConcurrency(ResultSetConcurrency::READ_ONLY)
     ,m_nResultSetType(ResultSetType::FORWARD_ONLY)
-    ,m_bEscapeProcessing(sal_True)
+    ,m_bEscapeProcessing(true)
     ,rBHelper(java_sql_Statement_BASE::rBHelper)
 {
     m_pConnection->acquire();
@@ -740,7 +740,7 @@ void java_sql_Statement_Base::getFastPropertyValue(
                 rValue <<= THIS->getFetchSize();
                 break;
             case PROPERTY_ID_ESCAPEPROCESSING:
-                rValue <<= (sal_Bool)m_bEscapeProcessing;
+                rValue <<= m_bEscapeProcessing;
                 break;
             case PROPERTY_ID_USEBOOKMARKS:
             default:

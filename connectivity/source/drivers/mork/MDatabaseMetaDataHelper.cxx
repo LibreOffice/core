@@ -47,7 +47,7 @@ MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
 {
 }
 
-sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
+bool MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
                                                    ::std::vector< OUString >& _rStrings)
 {
     SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::getTableStrings()");
@@ -66,10 +66,10 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
         _rStrings.push_back(groupTableName);
     }
 
-    return( sal_True );
+    return true;
 }
 
-sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
+bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
                                              const OUString& tableNamePattern,
                                              ODatabaseMetaDataResultSet::ORows& _rRows)
 {
@@ -88,7 +88,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     ::std::vector< OUString > tables;
 
     if ( !getTableStrings( _pCon, tables ) )
-        return sal_False;
+        return false;
 
     for ( size_t i = 0; i < tables.size(); i++ ) {
         ODatabaseMetaDataResultSet::ORow aRow(3);
@@ -114,7 +114,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     }
 
     _rRows = aRows;
-    return(sal_True);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -145,7 +145,7 @@ void MorkDriverTest::test_select_default_all()
         CPPUNIT_ASSERT_MESSAGE("cannot extract row from result set!", xDelegatorRow.is());
     }
 
-    sal_Bool result = xResultSet->first();
+    bool result = xResultSet->first();
     CPPUNIT_ASSERT_MESSAGE("fetch first row failed!", result);
     OUString mail = xDelegatorRow->getString(1);
     CPPUNIT_ASSERT_MESSAGE("first row is not john@doe.org!", mail.equalsAscii("john@doe.org"));
@@ -182,7 +182,7 @@ void MorkDriverTest::test_select_list_table_joe_doe_5()
         CPPUNIT_ASSERT_MESSAGE("cannot extract row from result set!", xDelegatorRow.is());
     }
 
-    sal_Bool result = xResultSet->first();
+    bool result = xResultSet->first();
     CPPUNIT_ASSERT_MESSAGE("fetch first row failed!", result);
     OUString mail = xDelegatorRow->getString(1);
     CPPUNIT_ASSERT_MESSAGE("last row is not john@doe5.org!", mail.equalsAscii("john@doe5.org"));

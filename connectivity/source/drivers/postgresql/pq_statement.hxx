@@ -76,7 +76,7 @@ private:
     ConnectionSettings *m_pSettings;
     com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > m_lastResultset;
     ::rtl::Reference< RefCountedMutex > m_refMutex;
-    sal_Bool  m_multipleResultAvailable;
+    bool  m_multipleResultAvailable;
     sal_Int32 m_multipleResultUpdateCount;
     sal_Int32 m_lastOidInserted;
     OUString m_lastTableInserted;
@@ -183,7 +183,7 @@ struct CommandData
     ConnectionSettings **ppSettings;
     sal_Int32 *pLastOidInserted;
     sal_Int32 *pMultipleResultUpdateCount;
-    sal_Bool *pMultipleResultAvailable;
+    bool *pMultipleResultAvailable;
     OUString *pLastTableInserted;
     ::com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > *pLastResultset;
     OString *pLastQuery;

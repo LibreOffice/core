@@ -36,8 +36,8 @@ using namespace ::com::sun::star::container;
 
 OSQLAnalyzer::OSQLAnalyzer(OConnection* _pConnection)
                :m_pConnection(_pConnection)
-               ,m_bHasSelectionCode(sal_False)
-               ,m_bSelectionFirstTime(sal_True)
+               ,m_bHasSelectionCode(false)
+               ,m_bSelectionFirstTime(true)
 {
     m_aCompiler = new OPredicateCompiler(this);
     m_aInterpreter = new OPredicateInterpreter(m_aCompiler);
@@ -207,16 +207,16 @@ OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,
     return new OOperandAttr(static_cast<sal_uInt16>(_nPos),_xCol);
 }
 
-sal_Bool OSQLAnalyzer::hasRestriction() const
+bool OSQLAnalyzer::hasRestriction() const
 {
     return m_aCompiler->hasCode();
 }
 
-sal_Bool OSQLAnalyzer::hasFunctions() const
+bool OSQLAnalyzer::hasFunctions() const
 {
     if ( m_bSelectionFirstTime )
     {
-        m_bSelectionFirstTime = sal_False;
+        m_bSelectionFirstTime = false;
         for ( ::std::vector< TPredicates >::const_iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end() && !m_bHasSelectionCode ;++aIter)
         {
             if ( aIter->first.is() )

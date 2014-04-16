@@ -64,7 +64,7 @@ namespace connectivity
                                                                                                 //  for this Driver
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xDriver;
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-            sal_Bool                                                                            m_bInShutDownConnections;
+            bool                                                                            m_bInShutDownConnections;
 
             /** load the driver we want to delegate.
                 The <member>m_xDriver</member> may be <NULL/> if the driver could not be loaded.

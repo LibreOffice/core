@@ -87,7 +87,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
     if ( xPropInfo.is() && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) )
         xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) >>= sAutoIncrementValue;
     // look if we have to use precisions
-    sal_Bool bUseLiteral = sal_False;
+    bool bUseLiteral = false;
     OUString sPrefix,sPostfix,sCreateParams;
     {
         Reference<XResultSet> xRes = xMetaData->getTypeInfo();
@@ -107,7 +107,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
 
                 if( sTypeName.equalsIgnoreAsciiCase(sTypeName2Cmp) && nType == nDataType && !sCreateParams.isEmpty() && !xRow->wasNull())
                 {
-                    bUseLiteral = sal_True;
+                    bUseLiteral = true;
                     break;
                 }
             }
@@ -171,7 +171,7 @@ OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,cons
 
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
 
-    sal_Bool bIsAutoIncrement = sal_False;
+    bool bIsAutoIncrement = false;
     xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))    >>= bIsAutoIncrement;
 
     const OUString sQuoteString = xMetaData->getIdentifierQuoteString();
@@ -282,7 +282,7 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
         Reference<XIndexAccess> xColumns;
         Reference<XColumnsSupplier> xColumnSup;
         OUString sCatalog,sSchema,sTable,sComposedName;
-        sal_Bool bPKey = sal_False;
+        bool bPKey = false;
         for(sal_Int32 i=0;i<xKeys->getCount();++i)
         {
             if ( (xKeys->getByIndex(i) >>= xColProp) && xColProp.is() )
@@ -295,7 +295,7 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
                     if(bPKey)
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    bPKey = sal_True;
+                    bPKey = true;
                     xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
                     xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
                     if(!xColumns.is() || !xColumns->getCount())
@@ -429,7 +429,7 @@ namespace
                                     sField13 = xRow->getString(13);
                     ::comphelper::disposeComponent(xRow);
 
-                    sal_Bool bAutoIncrement = _bIsAutoIncrement
+                    bool bAutoIncrement = _bIsAutoIncrement
                             ,bIsCurrency    = _bIsCurrency;
                     if ( _bQueryForInfo )
                     {
@@ -832,7 +832,7 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
     {
         ::utl::SharedUNOComponent< XStatement > xStmt( _xConnection->createStatement() );
         Reference< XPropertySet > xStatementProps( xStmt, UNO_QUERY_THROW );
-        xStatementProps->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ESCAPEPROCESSING ), makeAny( (sal_Bool)sal_False ) );
+        xStatementProps->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ESCAPEPROCESSING ), makeAny( false ) );
         Reference< XResultSet > xResult( xStmt->executeQuery( sSelect ), UNO_QUERY_THROW );
         Reference< XResultSetMetaDataSupplier > xSuppMeta( xResult, UNO_QUERY_THROW );
         Reference< XResultSetMetaData > xMeta( xSuppMeta->getMetaData(), UNO_QUERY_THROW );

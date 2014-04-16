@@ -99,7 +99,7 @@ OUString java_sql_DriverPropertyInfo::value()
     return aStr;
 }
 
-sal_Bool java_sql_DriverPropertyInfo::required()
+bool java_sql_DriverPropertyInfo::required()
 {
     jboolean out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");

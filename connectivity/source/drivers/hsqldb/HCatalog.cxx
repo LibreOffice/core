@@ -73,7 +73,7 @@ void OHCatalog::refreshViews()
     Sequence< OUString > aTypes(1);
     aTypes[0] = "VIEW";
 
-    sal_Bool bSupportsViews = sal_False;
+    bool bSupportsViews = false;
     try
     {
         Reference<XResultSet> xRes = m_xMetaData->getTableTypes();

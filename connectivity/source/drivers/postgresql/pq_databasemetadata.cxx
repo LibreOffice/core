@@ -2471,7 +2471,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
         OUString currentTable = xRow->getString( C_TABLENAME );
         OUString currentIndexName = xRow->getString( C_INDEXNAME );
         sal_Bool isNonUnique = ! xRow->getBoolean( C_IS_UNIQUE );
-        sal_Bool isPrimary = xRow->getBoolean( C_IS_PRIMARY );
+        bool isPrimary = xRow->getBoolean( C_IS_PRIMARY );
         (void)isPrimary;
         sal_Int32 indexType =  xRow->getBoolean( C_IS_CLUSTERED ) ?
             com::sun::star::sdbc::IndexType::CLUSTERED :

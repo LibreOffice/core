@@ -121,31 +121,31 @@ namespace connectivity
             sal_Int32                               m_nLastVisitedPos;
             sal_Int32                               m_nRowCountResult;
             sal_Int32                               m_nColumnCount;
-            sal_Bool                                m_bWasNull;
-            sal_Bool                                m_bEOF;                 // after last record
-            sal_Bool                                m_bLastRecord;
-            sal_Bool                                m_bInserted;            // true when moveToInsertRow was called
+            bool                                m_bWasNull;
+            bool                                m_bEOF;                 // after last record
+            bool                                m_bLastRecord;
+            bool                                m_bInserted;            // true when moveToInsertRow was called
                                                                             // set to false when cursor moved or cancel
-            sal_Bool                                m_bRowUpdated;
-            sal_Bool                                m_bRowInserted;
-            sal_Bool                                m_bRowDeleted;
-            sal_Bool                                m_bShowDeleted;
-            sal_Bool                                m_bIsCount;
+            bool                                m_bRowUpdated;
+            bool                                m_bRowInserted;
+            bool                                m_bRowDeleted;
+            bool                                m_bShowDeleted;
+            bool                                m_bIsCount;
 
             void initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount);
             void construct();
             //sal_Bool evaluate();
 
-            sal_Bool ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
+            bool ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
                                 sal_Int32 nOffset = 1,
-                                sal_Bool bEvaluate = sal_True,
-                                sal_Bool bRetrieveData = sal_True);
+                                bool bEvaluate = true,
+                                bool bRetrieveData = true);
 
             OKeyValue* GetOrderbyKeyValue(OValueRefRow& _rRow);
-            sal_Bool IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] >= 0;}
+            bool IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] >= 0;}
 
             // return true when the select statement is "select count(*) from table"
-            inline sal_Bool isCount() const { return m_bIsCount; }
+            inline bool isCount() const { return m_bIsCount; }
             void checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
 
             const ORowSetValue& getValue(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
@@ -157,8 +157,8 @@ namespace connectivity
 
             using OResultSet_BASE::rBHelper;
 
-            sal_Bool Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Bool bRetrieveData);
-            virtual sal_Bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex);
+            bool Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, bool bRetrieveData);
+            virtual bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex);
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
@@ -270,7 +270,7 @@ namespace connectivity
 
             // special methods
             inline sal_Int32 mapColumn(sal_Int32    column);
-            virtual sal_Bool OpenImpl();
+            virtual bool OpenImpl();
             virtual void doTableSpecials(const OSQLTable& _xTable);
 
             inline sal_Int32 getRowCountResult() const { return m_nRowCountResult; }
@@ -296,15 +296,15 @@ namespace connectivity
                                     const OValueRefRow& _rSelectRow,
                                     const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xNames,
-                                    sal_Bool _bSetColumnMapping,
+                                    bool _bSetColumnMapping,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
                                     ::std::vector<sal_Int32>& _rColMapping);
 
             // IResultSetHelper
-            virtual sal_Bool move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData) SAL_OVERRIDE;
+            virtual bool move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, bool _bRetrieveData) SAL_OVERRIDE;
             virtual sal_Int32 getDriverPos() const SAL_OVERRIDE;
-            virtual sal_Bool deletedVisible() const SAL_OVERRIDE;
-            virtual sal_Bool isRowDeleted() const SAL_OVERRIDE;
+            virtual bool deletedVisible() const SAL_OVERRIDE;
+            virtual bool isRowDeleted() const SAL_OVERRIDE;
         };
 
         inline sal_Int32 OResultSet::mapColumn(sal_Int32 column)

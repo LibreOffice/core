@@ -240,9 +240,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLExc
     return sal_False;
 }
 
-sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
+bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
@@ -260,14 +260,14 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLExc
     return sal_False;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
+bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
+bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException, std::exception)
@@ -304,9 +304,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) 
     return sal_True;
 }
 
-sal_Bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
+bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw(SQLException, RuntimeException, std::exception)
@@ -365,9 +365,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int3
     return sal_False;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
+bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQLException, RuntimeException, std::exception)
@@ -390,14 +390,14 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw
     return sal_False;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
+bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
+bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
@@ -405,9 +405,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) thro
     return sal_False;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
+bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException, std::exception)
@@ -557,10 +557,10 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLE
     return sal_True;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
+bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     // Any case may be used
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtEnd(  ) throw(SQLException, RuntimeException, std::exception)

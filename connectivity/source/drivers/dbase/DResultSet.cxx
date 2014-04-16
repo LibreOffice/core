@@ -42,7 +42,7 @@ using namespace com::sun::star::sdbcx;
 
 ODbaseResultSet::ODbaseResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&   _aSQLIterator)
                 : file::OResultSet(pStmt,_aSQLIterator)
-                ,m_bBookmarkable(sal_True)
+                ,m_bBookmarkable(true)
 {
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                ::getBooleanCppuType());
 }
@@ -93,9 +93,9 @@ sal_Bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark ) throw(
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
+    m_bRowDeleted = m_bRowInserted = m_bRowUpdated = false;
 
-    return m_pTable ? Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),sal_True) : sal_False;
+    return m_pTable ? Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),true) : sal_False;
 }
 
 sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException, std::exception)
@@ -106,7 +106,7 @@ sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark,
         return sal_False;
 
 
-    Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),sal_False);
+    Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),false);
 
     return relative(rows);
 }
@@ -158,7 +158,7 @@ Sequence< sal_Int32 > SAL_CALL ODbaseResultSet::deleteRows( const  Sequence<  An
     return Sequence< sal_Int32 >();
 }
 
-sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xIndex)
+bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xIndex)
 {
     Reference<XUnoTunnel> xTunnel(_xIndex,UNO_QUERY);
     if(xTunnel.is())
@@ -181,11 +181,11 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
                 }
                 m_pFileSet->setFrozen();
                 delete pIter;
-                return sal_True;
+                return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 ::cppu::IPropertyArrayHelper & ODbaseResultSet::getInfoHelper()

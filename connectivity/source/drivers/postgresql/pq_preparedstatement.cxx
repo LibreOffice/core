@@ -766,7 +766,7 @@ sal_Bool PreparedStatement::convertFastPropertyValue(
         Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
         throw (IllegalArgumentException)
 {
-    sal_Bool bRet;
+    bool bRet;
     rOldValue = m_props[nHandle];
     switch( nHandle )
     {
@@ -779,7 +779,7 @@ sal_Bool PreparedStatement::convertFastPropertyValue(
     }
     case PREPARED_STATEMENT_ESCAPE_PROCESSING:
     {
-        sal_Bool val;
+        bool val;
         bRet = ( rValue >>= val );
         rConvertedValue = makeAny( val );
         break;

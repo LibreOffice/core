@@ -42,14 +42,14 @@ namespace connectivity
         sal_Int32       m_Scale;
         sal_Int32       m_ColumnType;
 
-        sal_Bool        m_AutoIncrement;
-        sal_Bool        m_CaseSensitive;
-        sal_Bool        m_Searchable;
-        sal_Bool        m_Currency;
-        sal_Bool        m_Signed;
-        sal_Bool        m_ReadOnly;
-        sal_Bool        m_Writable;
-        sal_Bool        m_DefinitelyWritable;
+        bool        m_AutoIncrement;
+        bool        m_CaseSensitive;
+        bool        m_Searchable;
+        bool        m_Currency;
+        bool        m_Signed;
+        bool        m_ReadOnly;
+        bool        m_Writable;
+        bool        m_DefinitelyWritable;
 
     public:
         OColumn()
@@ -59,14 +59,14 @@ namespace connectivity
             , m_Scale(0)
             , m_ColumnType(0)
 
-            , m_AutoIncrement(sal_False)
-            , m_CaseSensitive(sal_False)
-            , m_Searchable(sal_True)
-            , m_Currency(sal_False)
-            , m_Signed(sal_False)
-            , m_ReadOnly(sal_True)
-            , m_Writable(sal_False)
-            , m_DefinitelyWritable(sal_False)
+            , m_AutoIncrement(false)
+            , m_CaseSensitive(false)
+            , m_Searchable(true)
+            , m_Currency(false)
+            , m_Signed(false)
+            , m_ReadOnly(true)
+            , m_Writable(false)
+            , m_DefinitelyWritable(false)
             {}
 
         OColumn(const OUString &_aTableName,
@@ -78,14 +78,14 @@ namespace connectivity
                 sal_Int32       _aScale=0,
                 sal_Int32       _aColumnType=0,
 
-                sal_Bool        _aAutoIncrement=sal_False,
-                sal_Bool        _aCaseSensitive=sal_False,
-                sal_Bool        _aSearchable=sal_True,
-                sal_Bool        _aCurrency=sal_False,
-                sal_Bool        _aSigned=sal_False,
-                sal_Bool        _aReadOnly=sal_True,
-                sal_Bool        _aWritable=sal_False,
-                sal_Bool        _aDefinitelyWritable=sal_False,
+                bool        _aAutoIncrement=false,
+                bool        _aCaseSensitive=false,
+                bool        _aSearchable=true,
+                bool        _aCurrency=false,
+                bool        _aSigned=false,
+                bool        _aReadOnly=true,
+                bool        _aWritable=false,
+                bool        _aDefinitelyWritable=false,
 
                 const OUString &_aColumnLabel = OUString(),
                 const OUString &_aColumnTypeName = OUString(),
@@ -124,14 +124,14 @@ namespace connectivity
         inline static void SAL_CALL operator delete( void *,void* ) SAL_THROW(())
             {  }
 
-        sal_Bool isAutoIncrement()              const { return m_AutoIncrement; }
-        sal_Bool isCaseSensitive()              const { return m_CaseSensitive; }
-        sal_Bool isSearchable()                 const { return m_Searchable; }
-        sal_Bool isCurrency()                   const { return m_Currency; }
-        sal_Bool isSigned()                     const { return m_Signed; }
-        sal_Bool isReadOnly()                   const { return m_ReadOnly; }
-        sal_Bool isWritable()                   const { return m_Writable; }
-        sal_Bool isDefinitelyWritable()         const { return m_DefinitelyWritable; }
+        bool isAutoIncrement()              const { return m_AutoIncrement; }
+        bool isCaseSensitive()              const { return m_CaseSensitive; }
+        bool isSearchable()                 const { return m_Searchable; }
+        bool isCurrency()                   const { return m_Currency; }
+        bool isSigned()                     const { return m_Signed; }
+        bool isReadOnly()                   const { return m_ReadOnly; }
+        bool isWritable()                   const { return m_Writable; }
+        bool isDefinitelyWritable()         const { return m_DefinitelyWritable; }
 
         sal_Int32 isNullable()                  const { return m_Nullable; }
         sal_Int32 getColumnDisplaySize()        const { return m_ColumnDisplaySize; }

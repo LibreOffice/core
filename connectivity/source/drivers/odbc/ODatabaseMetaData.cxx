@@ -40,8 +40,8 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
                         : ::connectivity::ODatabaseMetaDataBase(_pCon,_pCon->getConnectionInfo())
                         ,m_aConnectionHandle(_pHandle)
                         ,m_pConnection(_pCon)
-                        ,m_bUseCatalog(sal_True)
-                        ,m_bOdbc3(sal_True)
+                        ,m_bUseCatalog(true)
+                        ,m_bOdbc3(true)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaData::ODatabaseMetaData: No connection set!");
     if(!m_pConnection->isCatalogUsed())
@@ -472,7 +472,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLExc
     return nValue == SQL_IC_LOWER;
 }
 
-sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
+bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
@@ -500,14 +500,14 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLExc
     return nValue == SQL_IC_UPPER;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
+bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ALTER_TABLE,nValue,*this);
     return (nValue & SQL_AT_ADD_COLUMN) == SQL_AT_ADD_COLUMN;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
+bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ALTER_TABLE,nValue,*this);
@@ -559,7 +559,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) 
     return nValue != SQL_CN_NONE;
 }
 
-sal_Bool        ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
+bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
     SQLUSMALLINT nValue=0;
     if ( m_bUseCatalog )
@@ -644,7 +644,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int3
     return (nValue & static_cast<SQLUINTEGER>(level)) == static_cast<SQLUINTEGER>(level);
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
+bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
@@ -679,14 +679,14 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw
     return (nValue & SQL_SU_INDEX_DEFINITION) == SQL_SU_INDEX_DEFINITION;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
+bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
     return (nValue & SQL_SU_TABLE_DEFINITION) == SQL_SU_TABLE_DEFINITION;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
+bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
 {
     SQLUINTEGER nValue=0;
     if(m_bUseCatalog)
@@ -702,7 +702,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) thro
     return (nValue & SQL_CU_INDEX_DEFINITION) == SQL_CU_INDEX_DEFINITION;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
+bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
     SQLUINTEGER nValue=0;
     if(m_bUseCatalog)
@@ -925,7 +925,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_In
             //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
     }
-    sal_Bool bConvert = sal_False;
+    bool bConvert = false;
     switch(toType)
     {
         case DataType::BIT:
@@ -1069,7 +1069,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLE
     return nValue == SQL_IC_MIXED;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
+bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
@@ -1584,7 +1584,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 set
     }
 
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,nAskFor,nValue,*this);
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     switch(concurrency)
     {
         case ResultSetConcurrency::READ_ONLY:

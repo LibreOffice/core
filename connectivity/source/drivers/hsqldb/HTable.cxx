@@ -111,7 +111,7 @@ void OHSQLTable::construct()
 
 sdbcx::OCollection* OHSQLTable::createColumns(const TStringVector& _rNames)
 {
-    OHSQLColumns* pColumns = new OHSQLColumns(*this,sal_True,m_aMutex,_rNames);
+    OHSQLColumns* pColumns = new OHSQLColumns(*this,true,m_aMutex,_rNames);
     pColumns->setParent(this);
     return pColumns;
 }
@@ -195,7 +195,7 @@ void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Refe
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))  >>= nNewNullable;
 
         // check also the auto_increment
-        sal_Bool bOldAutoIncrement = sal_False,bAutoIncrement = sal_False;
+        bool bOldAutoIncrement = false,bAutoIncrement = false;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))      >>= bOldAutoIncrement;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
 
@@ -280,7 +280,7 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, c
     (void)_rColName;
 #endif
 
-    OHSQLColumn* pColumn = new OHSQLColumn(sal_True);
+    OHSQLColumn* pColumn = new OHSQLColumn(true);
     Reference<XPropertySet> xProp = pColumn;
     ::comphelper::copyProperties(_xDescriptor,xProp);
     xProp->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),makeAny(nNewType));

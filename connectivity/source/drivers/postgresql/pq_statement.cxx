@@ -467,13 +467,13 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
     *(data->pLastTableInserted) = OUString();
     *(data->pLastQuery) = cmd;
 
-    sal_Bool ret = sal_False;
+    bool ret = false;
     switch( state )
     {
     case PGRES_COMMAND_OK:
     {
         *(data->pMultipleResultUpdateCount) = atoi( PQcmdTuples( result ) );
-        *(data->pMultipleResultAvailable) = sal_False;
+        *(data->pMultipleResultAvailable) = false;
 
         // in case an oid value is available, we retrieve it
         *(data->pLastOidInserted) = PQoidValue( result );
@@ -623,8 +623,8 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                     new ResultSet(
                         data->refMutex, data->owner,
                         data->ppSettings,result, schema, table ) );
-        *(data->pMultipleResultAvailable) = sal_True;
-        ret = sal_True;
+        *(data->pMultipleResultAvailable) = true;
+        ret = true;
         if( isLog( pSettings, LogLevel::SQL ) )
         {
             OStringBuffer buf( 128 );
@@ -922,7 +922,7 @@ sal_Bool Statement::convertFastPropertyValue(
         throw (IllegalArgumentException)
 {
     rOldValue = m_props[nHandle];
-    sal_Bool bRet;
+    bool bRet;
     switch( nHandle )
     {
     case STATEMENT_CURSOR_NAME:
@@ -934,7 +934,7 @@ sal_Bool Statement::convertFastPropertyValue(
     }
     case STATEMENT_ESCAPE_PROCESSING:
     {
-        sal_Bool val;
+        bool val;
         bRet = ( rValue >>= val );
         rConvertedValue = makeAny( val );
         break;

@@ -40,13 +40,13 @@ namespace connectivity
                                 public ODbaseResultSet_BASE,
                                 public ODbaseResultSet_BASE3
         {
-            sal_Bool m_bBookmarkable;
+            bool m_bBookmarkable;
         protected:
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
-            virtual sal_Bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex) SAL_OVERRIDE;
+            virtual bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex) SAL_OVERRIDE;
             virtual file::OSQLAnalyzer* createAnalyzer();
         public:
             DECLARE_SERVICE_INFO();

@@ -84,7 +84,7 @@ private:
     ::rtl::Reference< RefCountedMutex > m_refMutex;
     OStringVector m_vars;
     OStringVector m_splittedStatement;
-    sal_Bool  m_multipleResultAvailable;
+    bool  m_multipleResultAvailable;
     sal_Int32 m_multipleResultUpdateCount;
     sal_Int32 m_lastOidInserted;
     OUString m_lastTableInserted;

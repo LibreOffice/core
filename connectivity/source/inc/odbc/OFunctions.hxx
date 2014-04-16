@@ -28,7 +28,7 @@ namespace connectivity
 {
 
 //  sal_Bool LoadFunctions(oslModule pODBCso, sal_Bool _bDS=sal_True);
-sal_Bool LoadLibrary_ODBC3(OUString &_rPath);
+bool LoadLibrary_ODBC3(OUString &_rPath);
 //  sal_Bool LoadLibrary_ADABAS(OUString &_rPath);
 
     // Connecting to a data source

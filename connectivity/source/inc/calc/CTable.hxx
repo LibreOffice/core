@@ -51,7 +51,7 @@ namespace connectivity
             sal_Int32 m_nStartRow;
             sal_Int32 m_nDataCols;
             sal_Int32 m_nDataRows;
-            sal_Bool m_bHasHeaders;
+            bool      m_bHasHeaders;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > m_xFormats;
             ::Date m_aNullDate;
 
@@ -73,8 +73,8 @@ namespace connectivity
                 );
 
             virtual sal_Int32 getCurrentLastPos() const SAL_OVERRIDE;
-            virtual sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) SAL_OVERRIDE;
-            virtual sal_Bool fetchRow(OValueRefRow& _rRow,const OSQLColumns& _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData) SAL_OVERRIDE;
+            virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) SAL_OVERRIDE;
+            virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool _bUseTableDefs, bool bRetrieveData) SAL_OVERRIDE;
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             //XTypeProvider

@@ -115,7 +115,7 @@ namespace
                 return -1;
 
             // the second context
-            sal_Bool bCanAccess = sal_False;
+            bool bCanAccess = false;
             ::ucbhelper::Content aContent2;
             try
             {
@@ -175,11 +175,11 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     static const OUString aTable("TABLE");
 
-    sal_Bool bTableFound = sal_True;
+    bool bTableFound = true;
     sal_Int32 nLength = types.getLength();
     if(nLength)
     {
-        bTableFound = sal_False;
+        bTableFound = false;
 
         const OUString* pBegin = types.getConstArray();
         const OUString* pEnd = pBegin + nLength;
@@ -187,7 +187,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         {
             if(*pBegin == aTable)
             {
-                bTableFound = sal_True;
+                bTableFound = true;
                 break;
             }
         }
@@ -219,9 +219,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     INetURLObject aURL;
     xResultSet->beforeFirst();
 
-    sal_Bool bKnowCaseSensivity = sal_False;
-    sal_Bool bCaseSensitiveDir = sal_True;
-    sal_Bool bCheckEnabled = m_pConnection->isCheckEnabled();
+    bool bKnowCaseSensivity = false;
+    bool bCaseSensitiveDir = true;
+    bool bCheckEnabled = m_pConnection->isCheckEnabled();
 
     while(xResultSet->next())
     {
@@ -233,22 +233,22 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
         ODatabaseMetaDataResultSet::ORow aRow(3);
         aRow.reserve(6);
-        sal_Bool bNewRow = sal_False;
+        bool bNewRow = false;
 
         if ( !bKnowCaseSensivity )
         {
-            bKnowCaseSensivity = sal_True;
+            bKnowCaseSensivity = true;
             sal_Int16 nCase = isCaseSensitiveParentFolder( m_pConnection->getURL(), aURL.getName() );
             switch( nCase )
             {
             case 1:
-                bCaseSensitiveDir = sal_True;
+                bCaseSensitiveDir = true;
                 break;
             case -1:
-                bKnowCaseSensivity = sal_False;
+                bKnowCaseSensivity = false;
                 /** run through */
             case 0:
-                bCaseSensitiveDir = sal_False;
+                bCaseSensitiveDir = false;
             }
             if ( bKnowCaseSensivity )
             {
@@ -274,13 +274,13 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 if ( match(tableNamePattern,aName,'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
                 {
                     aRow.push_back(new ORowSetValueDecorator(aName));
-                    bNewRow = sal_True;
+                    bNewRow = true;
                 }
             }
         }
         else // no extension, filter myself
         {
-            sal_Bool bErg = sal_False;
+            bool bErg = false;
             do
             {
                 if (aURL.getExtension().isEmpty())
@@ -289,11 +289,11 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                     if(match(tableNamePattern,aURL.getBase(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
                     {
                         aRow.push_back(new ORowSetValueDecorator(OUString(aURL.getBase())));
-                        bNewRow = sal_True;
+                        bNewRow = true;
                     }
                     break;
                 }
-                else if ( ( bErg = xResultSet->next() ) != sal_False )
+                else if ( ( bErg = xResultSet->next() ) )
                 {
                     aName = xRow->getString(1);
                     aURL.SetSmartURL(aName);
@@ -474,10 +474,10 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLExc
     return sal_False;
 }
 
-sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
+bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw" );
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
@@ -498,16 +498,16 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLExc
     return sal_False;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
+bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw" );
-    return sal_False;
+    return false;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
+bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw" );
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException, std::exception)
@@ -547,10 +547,10 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) 
     return sal_True;
 }
 
-sal_Bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
+bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_isCatalogAtStart_throw" );
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw(SQLException, RuntimeException, std::exception)
@@ -619,10 +619,10 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int3
     return sal_False;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
+bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw" );
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQLException, RuntimeException, std::exception)
@@ -649,16 +649,16 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw
     return sal_False;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
+bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw" );
-    return sal_False;
+    return false;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
+bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw" );
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
@@ -667,10 +667,10 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) thro
     return sal_False;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
+bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw" );
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException, std::exception)
@@ -860,10 +860,10 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLE
     return sal_True;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
+bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw" );
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtEnd(  ) throw(SQLException, RuntimeException, std::exception)

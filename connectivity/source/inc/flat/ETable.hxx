@@ -57,7 +57,7 @@ namespace connectivity
             bool                            m_bNeedToReadLine;
         private:
             void fillColumns(const ::com::sun::star::lang::Locale& _aLocale);
-            sal_Bool CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMemo);
+            bool CreateFile(const INetURLObject& aFile, bool& bCreateMemo);
             bool readLine(sal_Int32 *pEndPos = NULL, sal_Int32 *pStartPos = NULL, bool nonEmpty = false);
             void setRowPos(::std::vector<TRowPositionInFile>::size_type rowNum, const TRowPositionInFile &rowPos);
             void impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, sal_Int32& nStartPosFirstLine, sal_Int32& nStartPosFirstLine2,
@@ -88,8 +88,8 @@ namespace connectivity
 
             void construct() SAL_OVERRIDE; // can throw any exception
 
-            virtual sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) SAL_OVERRIDE;
-            virtual sal_Bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, sal_Bool bIsTable, sal_Bool bRetrieveData) SAL_OVERRIDE;
+            virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) SAL_OVERRIDE;
+            virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bIsTable, bool bRetrieveData) SAL_OVERRIDE;
             virtual void refreshHeader() SAL_OVERRIDE;
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

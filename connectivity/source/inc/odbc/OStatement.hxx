@@ -86,8 +86,8 @@ namespace connectivity
             sal_Int32 getFetchDirection()       const;
             sal_Int32 getFetchSize()            const;
             OUString getCursorName()     const;
-            sal_Bool isUsingBookmarks()         const;
-            sal_Bool getEscapeProcessing()      const;
+            bool isUsingBookmarks()         const;
+            bool getEscapeProcessing()      const;
             template < typename T, SQLINTEGER BufferLength > T getStmtOption (SQLINTEGER fOption, T dflt = 0) const;
 
             void setQueryTimeOut(sal_Int64 _par0)           ;
@@ -96,7 +96,7 @@ namespace connectivity
             void setFetchDirection(sal_Int32 _par0)         ;
             void setFetchSize(sal_Int32 _par0)              ;
             void setCursorName(const OUString &_par0);
-            void setEscapeProcessing( const sal_Bool _bEscapeProc );
+            void setEscapeProcessing( const bool _bEscapeProc );
             template < typename T, SQLINTEGER BufferLength > SQLRETURN setStmtOption (SQLINTEGER fOption, T value) const;
 
             virtual void setResultSetConcurrency(sal_Int32 _par0)   ;
@@ -106,7 +106,7 @@ namespace connectivity
             void reset () throw( ::com::sun::star::sdbc::SQLException);
             void clearMyResultSet () throw( ::com::sun::star::sdbc::SQLException);
             void setWarning (const  ::com::sun::star::sdbc::SQLWarning &ex) throw( ::com::sun::star::sdbc::SQLException);
-            sal_Bool lockIfNecessary (const OUString& sql) throw( ::com::sun::star::sdbc::SQLException);
+            bool lockIfNecessary (const OUString& sql) throw( ::com::sun::star::sdbc::SQLException);
             sal_Int32 getColumnCount () throw( ::com::sun::star::sdbc::SQLException);
 
 
@@ -114,7 +114,7 @@ namespace connectivity
             // getResultSet returns the current result as a ResultSet.  It
             // returns NULL if the current result is not a ResultSet.
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > getResultSet (sal_Bool checkCount) throw( ::com::sun::star::sdbc::SQLException);
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > getResultSet (bool checkCount) throw( ::com::sun::star::sdbc::SQLException);
             /**
                 creates the driver specific resultset (factory)
             */
@@ -194,7 +194,7 @@ namespace connectivity
 
                 @return the cursor properties
             */
-            SQLUINTEGER getCursorProperties(SQLINTEGER _nCursorType,sal_Bool bFirst);
+            SQLUINTEGER getCursorProperties(SQLINTEGER _nCursorType, bool bFirst);
 
         protected:
             using OPropertySetHelper::getFastPropertyValue;

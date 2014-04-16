@@ -47,7 +47,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OUString
     :OCommonStatement(_pConnection)
     ,m_nNumParams(0)
     ,m_sSqlStatement(sql)
-    ,m_bPrepared(sal_False)
+    ,m_bPrepared(false)
     ,m_pResultSet()
 {
 }
@@ -93,7 +93,7 @@ OCommonStatement::StatementType OPreparedStatement::parseSql( const OUString& sq
     describeParameter();
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
-    OResultSet::setBoundedColumns( m_aRow, m_xParamColumns, xNames, sal_False, m_xDBMetaData, m_aColMapping );
+    OResultSet::setBoundedColumns( m_aRow, m_xParamColumns, xNames, false, m_xDBMetaData, m_aColMapping );
 
     return eStatementType;
 }
@@ -153,7 +153,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
-    sal_Bool bReadOnly = sal_True;
+    bool bReadOnly = true;
     if ( m_pResultSet.is() )
         bReadOnly = m_pResultSet->determineReadOnly();
     // if we do not have a result set, then we have not been executed, yet. In this case, assuming readonly=true is

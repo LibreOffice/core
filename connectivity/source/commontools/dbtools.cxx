@@ -278,7 +278,7 @@ Reference< XConnection > getConnection_allowException(
         {
             Reference<XPropertySet> xProp(xDataSource,UNO_QUERY);
             OUString sPwd, sUser;
-            sal_Bool bPwdReq = sal_False;
+            bool bPwdReq = false;
             try
             {
                 xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
@@ -821,7 +821,7 @@ static OUString impl_doComposeTableName( const Reference< XDatabaseMetaData >& _
     OUStringBuffer aComposedName;
 
     OUString sCatalogSep;
-    sal_Bool bCatlogAtStart = sal_True;
+    bool bCatlogAtStart = true;
     if ( !_rCatalog.isEmpty() && aNameComps.bCatalogs )
     {
         sCatalogSep     = _rxMetaData->getCatalogSeparator();
@@ -1006,9 +1006,9 @@ try
 
     // for formatted fields (either old or new) we have some special treatments
     Reference< XServiceInfo > xSI( xOldProps, UNO_QUERY );
-    sal_Bool bOldIsFormatted = xSI.is() && xSI->supportsService( sFormattedServiceName );
+    bool bOldIsFormatted = xSI.is() && xSI->supportsService( sFormattedServiceName );
     xSI = Reference< XServiceInfo >( xNewProps, UNO_QUERY );
-    sal_Bool bNewIsFormatted = xSI.is() && xSI->supportsService( sFormattedServiceName );
+    bool bNewIsFormatted = xSI.is() && xSI->supportsService( sFormattedServiceName );
 
     if (!bOldIsFormatted && !bNewIsFormatted)
         return; // nothing to do
@@ -1068,7 +1068,7 @@ try
         Any aEffectiveDefault( xOldProps->getPropertyValue(sPropEffectiveDefault) );
         if (aEffectiveDefault.hasValue())
         {
-            sal_Bool bIsString = aEffectiveDefault.getValueType().getTypeClass() == TypeClass_STRING;
+            bool bIsString = aEffectiveDefault.getValueType().getTypeClass() == TypeClass_STRING;
             OSL_ENSURE(bIsString || aEffectiveDefault.getValueType().getTypeClass() == TypeClass_DOUBLE,
                 "TransferFormComponentProperties : invalid property type !");
                 // The Effective-Properties should always be void or string or double ....
@@ -1243,7 +1243,7 @@ Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Refere
 
             sal_Int32 nCommandType = CommandType::COMMAND;
             OUString sCommand;
-            sal_Bool bEscapeProcessing = sal_False;
+            bool bEscapeProcessing = false;
 
             OSL_VERIFY( _rxRowSet->getPropertyValue("CommandType") >>= nCommandType      );
             OSL_VERIFY( _rxRowSet->getPropertyValue("Command") >>= sCommand          );
@@ -1254,7 +1254,7 @@ Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Refere
             aComposer.setOrder( getString( _rxRowSet->getPropertyValue("Order") ) );
 
             // append filter
-            sal_Bool bApplyFilter = sal_True;
+            bool bApplyFilter = true;
             _rxRowSet->getPropertyValue("ApplyFilter") >>= bApplyFilter;
             if ( bApplyFilter )
                 aComposer.setFilter( getString( _rxRowSet->getPropertyValue("Filter") ) );

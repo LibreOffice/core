@@ -126,6 +126,7 @@ namespace connectivity
 
             operator OUString() const;
 
+            operator bool()         const { return getBool() == 1; }
             operator sal_Bool()     const { return getBool();   }
             operator sal_Int8()     const { return getInt8();   }
             operator sal_Int16()    const { return getInt16();  }
@@ -137,7 +138,7 @@ namespace connectivity
             operator ::com::sun::star::util::Date() const ;
             operator ::com::sun::star::util::Time() const ;
             operator ::com::sun::star::util::DateTime()const ;
-            OUString getString()     const;
+            OUString        getString()     const;
             sal_Bool        getBool()       const;
             IUnknown*       getIUnknown()   const;
             IDispatch*      getIDispatch()  const;

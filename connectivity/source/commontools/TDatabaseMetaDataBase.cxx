@@ -263,7 +263,7 @@ OUString SAL_CALL ODatabaseMetaDataBase::getIdentifierQuoteString(  ) throw(SQLE
 
 sal_Bool SAL_CALL ODatabaseMetaDataBase::isCatalogAtStart(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return callImplMethod(m_isCatalogAtStart,::std::mem_fun_t< sal_Bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_isCatalogAtStart_throw));
+    return callImplMethod(m_isCatalogAtStart,::std::mem_fun_t< bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_isCatalogAtStart_throw));
 }
 
 OUString SAL_CALL ODatabaseMetaDataBase::getCatalogSeparator(  ) throw(SQLException, RuntimeException, std::exception)
@@ -273,37 +273,37 @@ OUString SAL_CALL ODatabaseMetaDataBase::getCatalogSeparator(  ) throw(SQLExcept
 
 sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return callImplMethod(m_supportsCatalogsInTableDefinitions,::std::mem_fun_t< sal_Bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsCatalogsInTableDefinitions_throw));
+    return callImplMethod(m_supportsCatalogsInTableDefinitions,::std::mem_fun_t< bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsCatalogsInTableDefinitions_throw));
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsSchemasInTableDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return callImplMethod(m_supportsSchemasInTableDefinitions,::std::mem_fun_t< sal_Bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsSchemasInTableDefinitions_throw));
+    return callImplMethod(m_supportsSchemasInTableDefinitions,::std::mem_fun_t< bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsSchemasInTableDefinitions_throw));
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return callImplMethod(m_supportsCatalogsInDataManipulation,::std::mem_fun_t< sal_Bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsCatalogsInDataManipulation_throw));
+    return callImplMethod(m_supportsCatalogsInDataManipulation,::std::mem_fun_t< bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsCatalogsInDataManipulation_throw));
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsSchemasInDataManipulation(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return callImplMethod(m_supportsSchemasInDataManipulation,::std::mem_fun_t< sal_Bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsSchemasInDataManipulation_throw));
+    return callImplMethod(m_supportsSchemasInDataManipulation,::std::mem_fun_t< bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsSchemasInDataManipulation_throw));
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return callImplMethod(m_supportsMixedCaseQuotedIdentifiers,::std::mem_fun_t< sal_Bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsMixedCaseQuotedIdentifiers_throw));
+    return callImplMethod(m_supportsMixedCaseQuotedIdentifiers,::std::mem_fun_t< bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsMixedCaseQuotedIdentifiers_throw));
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return callImplMethod(m_supportsAlterTableWithAddColumn,::std::mem_fun_t< sal_Bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsAlterTableWithAddColumn_throw));
+    return callImplMethod(m_supportsAlterTableWithAddColumn,::std::mem_fun_t< bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsAlterTableWithAddColumn_throw));
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return callImplMethod(m_supportsAlterTableWithDropColumn,::std::mem_fun_t< sal_Bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsAlterTableWithDropColumn_throw));
+    return callImplMethod(m_supportsAlterTableWithDropColumn,::std::mem_fun_t< bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_supportsAlterTableWithDropColumn_throw));
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaDataBase::getMaxStatements(  ) throw(SQLException, RuntimeException, std::exception)
@@ -318,7 +318,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataBase::getMaxTablesInSelect(  ) throw(SQLExce
 
 sal_Bool SAL_CALL ODatabaseMetaDataBase::storesMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return callImplMethod(m_storesMixedCaseQuotedIdentifiers,::std::mem_fun_t< sal_Bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_storesMixedCaseQuotedIdentifiers_throw));
+    return callImplMethod(m_storesMixedCaseQuotedIdentifiers,::std::mem_fun_t< bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_storesMixedCaseQuotedIdentifiers_throw));
 }
 
 

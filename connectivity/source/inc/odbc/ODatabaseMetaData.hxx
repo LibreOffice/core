@@ -37,23 +37,23 @@ namespace connectivity
         {
             SQLHANDLE       m_aConnectionHandle;
             OConnection*    m_pConnection;
-            sal_Bool        m_bUseCatalog;
-            sal_Bool        m_bOdbc3;
+            bool        m_bUseCatalog;
+            bool        m_bOdbc3;
 
             // cached database information
-            virtual OUString impl_getIdentifierQuoteString_throw(  ) SAL_OVERRIDE;
-            virtual sal_Bool        impl_isCatalogAtStart_throw(  ) SAL_OVERRIDE;
-            virtual OUString impl_getCatalogSeparator_throw(  ) SAL_OVERRIDE;
-            virtual sal_Bool        impl_supportsCatalogsInTableDefinitions_throw(  ) SAL_OVERRIDE;
-            virtual sal_Bool        impl_supportsSchemasInTableDefinitions_throw(  ) SAL_OVERRIDE ;
-            virtual sal_Bool        impl_supportsCatalogsInDataManipulation_throw(  ) SAL_OVERRIDE;
-            virtual sal_Bool        impl_supportsSchemasInDataManipulation_throw(  ) SAL_OVERRIDE ;
-            virtual sal_Bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  ) SAL_OVERRIDE ;
-            virtual sal_Bool        impl_supportsAlterTableWithAddColumn_throw(  ) SAL_OVERRIDE;
-            virtual sal_Bool        impl_supportsAlterTableWithDropColumn_throw(  ) SAL_OVERRIDE;
-            virtual sal_Int32       impl_getMaxStatements_throw(  ) SAL_OVERRIDE;
-            virtual sal_Int32       impl_getMaxTablesInSelect_throw(  ) SAL_OVERRIDE;
-            virtual sal_Bool        impl_storesMixedCaseQuotedIdentifiers_throw(  ) SAL_OVERRIDE;
+            virtual OUString    impl_getIdentifierQuoteString_throw(  ) SAL_OVERRIDE;
+            virtual bool        impl_isCatalogAtStart_throw(  ) SAL_OVERRIDE;
+            virtual OUString    impl_getCatalogSeparator_throw(  ) SAL_OVERRIDE;
+            virtual bool        impl_supportsCatalogsInTableDefinitions_throw(  ) SAL_OVERRIDE;
+            virtual bool        impl_supportsSchemasInTableDefinitions_throw(  ) SAL_OVERRIDE ;
+            virtual bool        impl_supportsCatalogsInDataManipulation_throw(  ) SAL_OVERRIDE;
+            virtual bool        impl_supportsSchemasInDataManipulation_throw(  ) SAL_OVERRIDE ;
+            virtual bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  ) SAL_OVERRIDE ;
+            virtual bool        impl_supportsAlterTableWithAddColumn_throw(  ) SAL_OVERRIDE;
+            virtual bool        impl_supportsAlterTableWithDropColumn_throw(  ) SAL_OVERRIDE;
+            virtual sal_Int32   impl_getMaxStatements_throw(  ) SAL_OVERRIDE;
+            virtual sal_Int32   impl_getMaxTablesInSelect_throw(  ) SAL_OVERRIDE;
+            virtual bool        impl_storesMixedCaseQuotedIdentifiers_throw(  ) SAL_OVERRIDE;
         protected:
             OUString getURLImpl();
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw() SAL_OVERRIDE;

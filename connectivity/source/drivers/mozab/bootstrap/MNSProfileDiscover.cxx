@@ -360,12 +360,12 @@ namespace connectivity
         }
 
 #endif
-        sal_Bool ProfileAccess::isProfileLocked( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
+        bool ProfileAccess::isProfileLocked( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
         {
 #ifdef MINIMAL_PROFILEDISCOVER
             (void)product; /* avoid warning about unused parameter */
             (void)profileName; /* avoid warning about unused parameter */
-            return sal_True;
+            return true;
 #else
             OUString path = getProfilePath(product,profileName);
             if (path.isEmpty())
@@ -394,16 +394,16 @@ namespace connectivity
 #endif
         }
 
-        sal_Bool ProfileAccess::getProfileExists( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
+        bool ProfileAccess::getProfileExists( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
         {
             sal_Int32 index=product;
             ProductStruct &m_Product = m_ProductProfileList[index];
             if (!m_Product.mProfileList.size() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end())
             {
-                return sal_False;
+                return false;
             }
             else
-                return sal_True;
+                return true;
         }
     }
 }

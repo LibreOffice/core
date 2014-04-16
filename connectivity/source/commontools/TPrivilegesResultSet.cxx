@@ -33,7 +33,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
                                            , const OUString& schemaPattern
                                            , const OUString& tableNamePattern)
                                            : ODatabaseMetaDataResultSet(eTablePrivileges)
-                                           , m_bResetValues(sal_True)
+                                           , m_bResetValues(true)
 {
     osl_atomic_increment( &m_refCount );
     {
@@ -101,7 +101,7 @@ const ORowSetValue& OResultSetPrivileges::getValue(sal_Int32 columnIndex)
                 if ( m_xRow->wasNull() )
                     (*m_aRowsIter)[3]->setNull();
 
-                m_bResetValues = sal_False;
+                m_bResetValues = false;
             }
     }
     return ODatabaseMetaDataResultSet::getValue(columnIndex);
@@ -119,12 +119,12 @@ sal_Bool SAL_CALL OResultSetPrivileges::next(  ) throw(SQLException, RuntimeExce
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
 
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     if ( m_xTables.is() )
     {
         if ( m_bBOF )
         {
-            m_bResetValues = sal_True;
+            m_bResetValues = true;
             if ( !m_xTables->next() )
                 return sal_False;
         }
@@ -132,7 +132,7 @@ sal_Bool SAL_CALL OResultSetPrivileges::next(  ) throw(SQLException, RuntimeExce
         bReturn = ODatabaseMetaDataResultSet::next();
         if ( !bReturn )
         {
-            m_bBOF = sal_False;
+            m_bBOF = false;
             m_bResetValues = bReturn = m_xTables->next();
         }
     }

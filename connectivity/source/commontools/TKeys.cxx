@@ -81,7 +81,7 @@ Reference< XPropertySet > OKeysHelper::createDescriptor()
 
 /** returns the keyrule string for the primary key
 */
-OUString getKeyRuleString(sal_Bool _bUpdate,sal_Int32 _nKeyRule)
+OUString getKeyRuleString(bool _bUpdate,sal_Int32 _nKeyRule)
 {
     const char* pKeyRule = NULL;
     switch ( _nKeyRule )
@@ -202,8 +202,8 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
 
             }
             aSql.appendAscii(")");
-            aSql.append(getKeyRuleString(sal_True   ,nUpdateRule));
-            aSql.append(getKeyRuleString(sal_False  ,nDeleteRule));
+            aSql.append(getKeyRuleString(true   ,nUpdateRule));
+            aSql.append(getKeyRuleString(false  ,nDeleteRule));
         }
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );

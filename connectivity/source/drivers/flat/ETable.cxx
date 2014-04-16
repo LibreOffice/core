@@ -122,7 +122,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     m_aPrecisions.assign(nFieldCount+1,-1);
     m_aScales.assign(nFieldCount+1,-1);
 
-    const sal_Bool bCase = m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers();
+    const bool bCase = m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers();
     CharClass aCharClass( pConnection->getDriver()->getComponentContext(), LanguageTag( _aLocale));
     // read description
     const sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
@@ -203,7 +203,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
 {
     if ( io_nType != DataType::VARCHAR )
     {
-        sal_Bool bNumeric = io_nType == DataType::SQLNULL || io_nType == DataType::DOUBLE || io_nType == DataType::DECIMAL || io_nType == DataType::INTEGER;
+        bool bNumeric = io_nType == DataType::SQLNULL || io_nType == DataType::DOUBLE || io_nType == DataType::DECIMAL || io_nType == DataType::INTEGER;
         sal_uLong  nIndex = 0;
 
         if ( bNumeric )
@@ -213,7 +213,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
             if (aField.isEmpty() ||
                 (m_cStringDelimiter && m_cStringDelimiter == aField[0]))
             {
-                bNumeric = sal_False;
+                bNumeric = false;
                 if ( m_cStringDelimiter != '\0' )
                     aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
                 else
@@ -229,11 +229,11 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
 
                 if (aField2.isEmpty())
                 {
-                    bNumeric = sal_False;
+                    bNumeric = false;
                 }
                 else
                 {
-                    bNumeric = sal_True;
+                    bNumeric = true;
                     sal_Int32 nDot = 0;
                     sal_Int32 nDecimalDelCount = 0;
                     sal_Int32 nSpaceCount = 0;
@@ -251,7 +251,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                             !aCharClass.isDigit(aField2,j)                      &&
                             ( j != 0 || (c != '+' && c != '-' ) ) )
                         {
-                            bNumeric = sal_False;
+                            bNumeric = false;
                             break;
                         }
                         if (cDecimalDelimiter && c == cDecimalDelimiter)
@@ -265,7 +265,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                     }
 
                     if (nDecimalDelCount > 1 || nDot > 1 ) // if there is more than one dot it isn't a number
-                        bNumeric = sal_False;
+                        bNumeric = false;
                     if (bNumeric && cThousandDelimiter)
                     {
                         // Is the delimiter correct?
@@ -278,7 +278,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                                 continue;
                             else
                             {
-                                bNumeric = sal_False;
+                                bNumeric = false;
                                 break;
                             }
                         }
@@ -602,15 +602,15 @@ sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
                 : OFlatTable_BASE::getSomething(rId);
 }
 
-sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, sal_Bool bIsTable, sal_Bool bRetrieveData)
+bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool bIsTable, bool bRetrieveData)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::fetchRow" );
     *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
-        return sal_True;
+        return true;
 
-    sal_Bool result = sal_False;
+    bool result = false;
     if ( m_bNeedToReadLine )
     {
         m_pFileStream->Seek(m_nFilePos);
@@ -619,7 +619,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, s
         {
             setRowPos(m_nRowPos, rowPos);
             m_bNeedToReadLine = false;
-            result = sal_True;
+            result = true;
         }
         // else let run through so that we set _rRow to all NULL
     }
@@ -764,7 +764,7 @@ namespace
     };
 }
 
-sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
+bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
     SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::seekRow" );
     OSL_ENSURE(m_pFileStream,"OFlatTable::seekRow: FileStream is NULL!");
@@ -779,7 +779,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
             {
                 assert(m_nRowPos >= 0);
                 if(m_nMaxRowCount != 0 && m_nRowPos > m_nMaxRowCount)
-                    return sal_False;
+                    return false;
                 ++m_nRowPos;
                 if(m_aRowPosToFilePos.size() > static_cast< vector< TRowPositionInFile >::size_type >(m_nRowPos))
                 {
@@ -803,7 +803,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                     if(!readLine(&newRowPos.second, &newRowPos.first, false))
                     {
                         m_nMaxRowCount = m_nRowPos - 1;
-                        return sal_False;
+                        return false;
                     }
 
                     nCurPos = newRowPos.second;
@@ -816,7 +816,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
             assert(m_nRowPos >= 0);
 
             if(m_nRowPos == 0)
-                return sal_False;
+                return false;
 
             --m_nRowPos;
             {
@@ -841,7 +841,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
             {
                 const sal_Int32 nNewRowPos = m_nRowPos + nOffset;
                 if (nNewRowPos < 0)
-                    return sal_False;
+                    return false;
                 // ABSOLUTE will take care of case nNewRowPos > nMaxRowCount
                 return seekRow(IResultSetHelper::ABSOLUTE, nNewRowPos, nCurPos);
             }
@@ -852,7 +852,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                     if (m_nMaxRowCount == 0)
                     {
                         if (!seekRow(IResultSetHelper::LAST, 0, nCurPos))
-                            return sal_False;
+                            return false;
                     }
                     // m_nMaxRowCount can still be zero, but now it means there a genuinely zero rows in the table
                     nOffset = m_nMaxRowCount + nOffset;
@@ -860,7 +860,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                 if(nOffset < 0)
                 {
                     seekRow(IResultSetHelper::ABSOLUTE, 0, nCurPos);
-                    return sal_False;
+                    return false;
                 }
                 if(m_nMaxRowCount && nOffset > m_nMaxRowCount)
                 {
@@ -868,7 +868,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                     const TRowPositionInFile &lastRowPos(m_aRowPosToFilePos.back());
                     m_nFilePos = lastRowPos.second;
                     nCurPos = lastRowPos.second;
-                    return sal_False;
+                    return false;
                 }
 
                 assert(m_nRowPos >=0);
@@ -887,7 +887,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                     while(m_nRowPos < nOffset)
                     {
                         if(!seekRow(IResultSetHelper::NEXT, 1, nCurPos))
-                            return sal_False;
+                            return false;
                     }
                     assert(m_nRowPos == nOffset);
                 }
@@ -903,7 +903,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
 
                 if(aFind == m_aRowPosToFilePos.end() || aFind->first != nOffset)
                     //invalid bookmark
-                    return sal_False;
+                    return false;
 
                 m_bNeedToReadLine = true;
                 m_nFilePos  = aFind->first;
@@ -913,7 +913,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
             }
     }
 
-    return sal_True;
+    return true;
 }
 
 

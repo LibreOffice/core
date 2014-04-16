@@ -43,7 +43,7 @@ namespace connectivity
             OSQLAnalyzer*                           m_pAnalyzer;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xIndexes;
             sal_Int32                               m_nParamCounter;
-            sal_Bool                                m_bORCondition;
+            bool                                m_bORCondition;
         public:
             OPredicateCompiler(OSQLAnalyzer* pAnalyzer);
 
@@ -63,9 +63,9 @@ namespace connectivity
             OOperand* execute(connectivity::OSQLParseNode* pPredicateNode);
 
             void Clean();
-            sal_Bool isClean() const {return m_aCodeList.empty();}
-            sal_Bool hasCode() const {return !isClean();}
-            sal_Bool hasORCondition() const {return m_bORCondition;}
+            bool isClean() const {return m_aCodeList.empty();}
+            bool hasCode() const {return !isClean();}
+            bool hasORCondition() const {return m_bORCondition;}
             void     setOrigColumns(const OFileColumns& rCols) { m_orgColumns = rCols; }
             const OFileColumns getOrigColumns() const { return m_orgColumns; }
         protected:
@@ -89,10 +89,10 @@ namespace connectivity
             OPredicateInterpreter(const ::rtl::Reference<OPredicateCompiler>& rComp) : m_rCompiler(rComp){}
             virtual ~OPredicateInterpreter();
 
-            sal_Bool    evaluate(OCodeList& rCodeList);
+            bool        evaluate(OCodeList& rCodeList);
             void        evaluateSelection(OCodeList& rCodeList,ORowSetValueDecoratorRef& _rVal);
 
-            inline sal_Bool start()
+            inline bool start()
             {
                 return evaluate(m_rCompiler->m_aCodeList);
             }

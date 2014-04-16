@@ -78,11 +78,11 @@ sdbcx::ObjectType OIndexesHelper::createObject(const OUString& _rName)
         Reference< XRow > xRow(xResult,UNO_QUERY);
         while( xResult->next() )
         {
-            sal_Bool bUnique = !xRow->getBoolean(4);
+            bool bUnique = !xRow->getBoolean(4);
             if((aQualifier.isEmpty() || xRow->getString(5) == aQualifier ) && xRow->getString(6) == aName)
             {
                 sal_Int32 nClustered = xRow->getShort(7);
-                sal_Bool bPrimarKeyIndex = sal_False;
+                bool bPrimarKeyIndex = false;
                 xRow.clear();
                 xResult.clear();
                 try
@@ -160,7 +160,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
             Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
             Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
             Reference< XPropertySet > xColProp;
-            sal_Bool bAddIndexAppendix = ::dbtools::getBooleanDataSourceSetting( m_pTable->getConnection(), "AddIndexAppendix" );
+            bool bAddIndexAppendix = ::dbtools::getBooleanDataSourceSetting( m_pTable->getConnection(), "AddIndexAppendix" );
             sal_Int32 nCount = xColumns->getCount();
             for(sal_Int32 i = 0 ; i < nCount; ++i)
             {

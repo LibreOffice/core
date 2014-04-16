@@ -75,7 +75,7 @@ protected:
     sal_Int32 m_row;
     sal_Int32 m_rowCount;
     sal_Int32 m_fieldCount;
-    sal_Bool  m_wasNull;
+    bool  m_wasNull;
 
 public:
     inline cppu::OBroadcastHelper & getRBHelper() { return OComponentHelper::rBHelper;}

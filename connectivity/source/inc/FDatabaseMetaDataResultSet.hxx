@@ -128,8 +128,8 @@ namespace connectivity
     protected:
         ORows                           m_aRows;
         ORows::iterator                 m_aRowsIter;
-        sal_Bool                        m_bBOF;
-        sal_Bool                        m_bEOF;
+        bool                        m_bBOF;
+        bool                        m_bEOF;
 
         virtual const ORowSetValue& getValue(sal_Int32 columnIndex);
 

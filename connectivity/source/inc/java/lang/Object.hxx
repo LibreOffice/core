@@ -111,8 +111,8 @@ namespace connectivity
         static jclass   findMyClass(const char* _pClassName);
         void            obtainMethodId(JNIEnv* _pEnv, const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID) const;
 
-        sal_Bool        callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const;
-        sal_Bool        callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
+        bool        callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const;
+        bool        callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
         jobject         callResultSetMethod( JNIEnv& _rEnv, const char* _pMethodName, jmethodID& _inout_MethodID ) const;
         sal_Int32       callIntMethod( const char* _pMethodName, jmethodID& _inout_MethodID,bool _bIgnoreException = false ) const;
         sal_Int32       callIntMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;

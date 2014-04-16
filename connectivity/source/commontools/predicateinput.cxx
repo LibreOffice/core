@@ -226,8 +226,8 @@ namespace dbtools
                     OSL_FAIL( "OPredicateInputController::implPredicateTree: caught an exception while dealing with the formats!" );
                 }
 
-                sal_Bool bDecDiffers = ( nCtxDecSep != nFmtDecSep );
-                sal_Bool bFmtDiffers = ( nCtxThdSep != nFmtThdSep );
+                bool bDecDiffers = ( nCtxDecSep != nFmtDecSep );
+                bool bFmtDiffers = ( nCtxThdSep != nFmtThdSep );
                 if ( bDecDiffers || bFmtDiffers )
                 {   // okay, at least one differs
                     // "translate" the value into the "format locale"
@@ -297,7 +297,7 @@ namespace dbtools
             // '-characters to the text. If we would give this to predicateTree this would add
             // two  additional '-characters which we don't want. So check the field format.
             // FS - 06.01.00 - 71532
-            sal_Bool bValidQuotedText = sValue.startsWith("'") && sValue.endsWith("'");
+            bool bValidQuotedText = sValue.startsWith("'") && sValue.endsWith("'");
                 // again : as normalizePredicateString always did a conversion on the value text,
                 // bValidQuotedText == sal_True implies that we have a text field, as no other field
                 // values will be formatted with the quote characters

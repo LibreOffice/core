@@ -44,7 +44,7 @@ OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
                 ,m_nFilePos(0)
                 ,m_pBuffer(NULL)
                 ,m_nBufferSize(0)
-                ,m_bWriteable(sal_False)
+                ,m_bWriteable(false)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::OFileTable" );
     construct();
@@ -68,7 +68,7 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
     , m_nFilePos(0)
     , m_pBuffer(NULL)
     , m_nBufferSize(0)
-    , m_bWriteable(sal_False)
+    , m_bWriteable(false)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::OFileTable" );
     m_aColumns = new OSQLColumns();
@@ -187,22 +187,22 @@ void SAL_CALL OFileTable::release() throw()
     OTable_TYPEDEF::release();
 }
 
-sal_Bool OFileTable::InsertRow(OValueRefVector& /*rRow*/, sal_Bool /*bFlush*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
+bool OFileTable::InsertRow(OValueRefVector& /*rRow*/, bool /*bFlush*/, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::InsertRow" );
-    return sal_False;
+    return false;
 }
 
-sal_Bool OFileTable::DeleteRow(const OSQLColumns& /*_rCols*/)
+bool OFileTable::DeleteRow(const OSQLColumns& /*_rCols*/)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::DeleteRow" );
-    return sal_False;
+    return false;
 }
 
-sal_Bool OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRow*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
+bool OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRow*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::UpdateRow" );
-    return sal_False;
+    return false;
 }
 
 void OFileTable::addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& /*descriptor*/)

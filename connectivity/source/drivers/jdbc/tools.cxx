@@ -181,13 +181,13 @@ jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< 
     return 0;
 }
 
-sal_Bool connectivity::isExceptionOccurred(JNIEnv *pEnv,sal_Bool _bClear)
+bool connectivity::isExceptionOccurred(JNIEnv *pEnv,bool _bClear)
 {
     if ( !pEnv )
-        return sal_False;
+        return false;
 
     jthrowable pThrowable = pEnv->ExceptionOccurred();
-    sal_Bool bRet = pThrowable != NULL;
+    bool bRet = pThrowable != NULL;
     if ( pThrowable )
     {
         if ( _bClear )

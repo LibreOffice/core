@@ -75,8 +75,8 @@ namespace connectivity
             sal_Int32                                   m_nRowPos;
             sal_Int32                                   m_nDriverColumnCount;   // column count of the driver which can sometimes be less than the metadata count
             SQLRETURN                                   m_nCurrentFetchState;
-            sal_Bool                                    m_bWasNull;
-            sal_Bool                                    m_bEOF;                 // after last record
+            bool                                        m_bWasNull;
+            bool                                        m_bEOF;                 // after last record
 
             // set the columncount of the driver
             void checkColumnCount();
@@ -209,7 +209,7 @@ namespace connectivity
             void openVersionColumns(const ::com::sun::star::uno::Any& catalog, const OUString& schema,
                                                             const OUString& table)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void openBestRowIdentifier( const ::com::sun::star::uno::Any& catalog, const OUString& schema,
-                                                                    const OUString& table,sal_Int32 scope,sal_Bool nullable )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                                                                    const OUString& table,sal_Int32 scope, bool nullable )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void openForeignKeys( const ::com::sun::star::uno::Any& catalog, const OUString* schema,const OUString* table,
                                                               const ::com::sun::star::uno::Any& catalog2, const OUString* schema2,const OUString* table2)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void openExportedKeys(const ::com::sun::star::uno::Any& catalog, const OUString& schema,const OUString& table)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -217,10 +217,10 @@ namespace connectivity
             void openPrimaryKeys(const ::com::sun::star::uno::Any& catalog, const OUString& schema,const OUString& table)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void openTablePrivileges(const ::com::sun::star::uno::Any& catalog, const OUString& schemaPattern,
                                                               const OUString& tableNamePattern)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openSpecialColumns(sal_Bool _bRowVer,const ::com::sun::star::uno::Any& catalog, const OUString& schema,
-                                                                    const OUString& table,sal_Int32 scope,   sal_Bool nullable )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openSpecialColumns(bool _bRowVer,const ::com::sun::star::uno::Any& catalog, const OUString& schema,
+                                                                    const OUString& table,sal_Int32 scope,   bool nullable )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void openIndexInfo( const ::com::sun::star::uno::Any& catalog, const OUString& schema,
-                                                    const OUString& table,sal_Bool unique,sal_Bool approximate )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                                                    const OUString& table,bool unique,bool approximate )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         protected:
             using OPropertySetHelper::getFastPropertyValue;

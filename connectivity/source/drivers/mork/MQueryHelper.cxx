@@ -76,8 +76,8 @@ void MQueryHelperResultEntry::setValue( const OString &key, const OUString & rVa
 
 MQueryHelper::MQueryHelper(const OColumnAlias& _ca)
     :m_nIndex( 0 )
-    ,m_bHasMore( sal_True )
-    ,m_bAtEnd( sal_False )
+    ,m_bHasMore( true )
+    ,m_bAtEnd( false )
     ,m_rColumnAlias( _ca )
     ,m_aError()
 {
@@ -121,7 +121,7 @@ void MQueryHelper::append(MQueryHelperResultEntry* resEnt)
 
     if ( resEnt != NULL ) {
         m_aResults.push_back( resEnt );
-        m_bAtEnd   = sal_False;
+        m_bAtEnd   = false;
     }
 }
 
@@ -138,8 +138,8 @@ void MQueryHelper::clear_results()
 void MQueryHelper::reset()
 {
     m_nIndex = 0;
-    m_bHasMore = sal_True;
-    m_bAtEnd = sal_False;
+    m_bHasMore = true;
+    m_bAtEnd = false;
     clear_results();
     m_aError.reset();
 }
@@ -166,12 +166,12 @@ sal_Int32 MQueryHelper::getResultCount() const
 
 
 
-sal_Bool MQueryHelper::queryComplete() const
+bool MQueryHelper::queryComplete() const
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool MQueryHelper::checkRowAvailable( sal_Int32 nDBRow )
+bool MQueryHelper::checkRowAvailable( sal_Int32 nDBRow )
 {
 /*
     while (!queryComplete() && getResultCount() <= (sal_uInt32)nDBRow)
@@ -186,7 +186,7 @@ sal_Bool MQueryHelper::checkRowAvailable( sal_Int32 nDBRow )
 }
 
 
-sal_Bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType )
+bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType )
 {
     SAL_INFO("connectivity.mork", "MQueryHelper::getRowValue()" );
     MQueryHelperResultEntry* xResEntry = getByIndex( nDBRow );
@@ -195,7 +195,7 @@ sal_Bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const
     if (xResEntry == NULL )
     {
         rValue.setNull();
-        return sal_False;
+        return false;
     }
     switch ( nType )
     {
@@ -208,7 +208,7 @@ sal_Bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const
             break;
     }
 
-    return sal_True;
+    return true;
 }
 
 sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
@@ -271,7 +271,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
                     entry->setValue(key, valueOUString);
                 }
                 ::std::vector< sal_Bool > vector = entryMatchedByExpression(this, &m_aExpr, entry);
-                sal_Bool result = sal_True;
+                bool result = true;
                 for (::std::vector<sal_Bool>::iterator iter = vector.begin(); iter != vector.end(); ++iter)
                 {
                     result = result && *iter;
@@ -303,11 +303,11 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
             // Set the 'name' property of the boolString.
             OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
             SAL_INFO("connectivity.mork", "Name = " << attrName.getStr());
-            sal_Bool requiresValue = sal_True;
+            bool requiresValue = true;
             OUString currentValue = entry->getValue(attrName);
             if (evStr->getCond() == MQueryOp::Exists || evStr->getCond() == MQueryOp::DoesNotExist)
             {
-                requiresValue = sal_False;
+                requiresValue = false;
             }
             if (requiresValue)
             {
@@ -356,13 +356,13 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
             ::std::vector<sal_Bool> subquery_result = entryMatchedByExpression(_aQuery, queryExpression, entry);
             MQueryExpression::bool_cond condition = queryExpression->getExpressionCondition();
             if (condition == MQueryExpression::OR) {
-                sal_Bool result = sal_False;
+                bool result = false;
                 for (::std::vector<sal_Bool>::iterator iter =  subquery_result.begin(); iter != subquery_result.end(); ++iter) {
                     result = result || *iter;
                 }
                 resultVector.push_back(result);
             } else if (condition == MQueryExpression::AND) {
-                sal_Bool result = sal_True;
+                bool result = true;
                 for (::std::vector<sal_Bool>::iterator iter = subquery_result.begin(); iter != subquery_result.end(); ++iter) {
                     result = result && *iter;
                 }

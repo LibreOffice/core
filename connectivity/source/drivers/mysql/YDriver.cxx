@@ -113,12 +113,12 @@ namespace connectivity
             D_NATIVE
         } T_DRIVERTYPE;
 
-        sal_Bool isOdbcUrl(const OUString& _sUrl)
+        bool isOdbcUrl(const OUString& _sUrl)
         {
             return _sUrl.copy(0,16) == "sdbc:mysql:odbc:";
         }
 
-        sal_Bool isNativeUrl(const OUString& _sUrl)
+        bool isNativeUrl(const OUString& _sUrl)
         {
             return (!_sUrl.compareTo(OUString("sdbc:mysql:mysqlc:"), sizeof("sdbc:mysql:mysqlc:")-1));
         }
@@ -319,7 +319,7 @@ namespace connectivity
     {
         Sequence< PropertyValue > info;
 
-        sal_Bool bOK =  url.startsWith( "sdbc:mysql:odbc:" )
+        bool bOK =  url.startsWith( "sdbc:mysql:odbc:" )
                     ||  url.startsWith( "sdbc:mysql:jdbc:" )
                     ||  (   url.startsWith( "sdbc:mysql:mysqlc:" )
                         &&  loadDriver( url, info ).is()

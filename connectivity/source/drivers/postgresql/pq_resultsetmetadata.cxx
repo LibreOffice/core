@@ -242,9 +242,9 @@ sal_Int32 ResultSetMetaData::getIntColumnProperty( const OUString & name, int in
     return ret;
 }
 
-sal_Bool ResultSetMetaData::getBoolColumnProperty( const OUString & name, int index, sal_Bool def )
+bool ResultSetMetaData::getBoolColumnProperty( const OUString & name, int index, bool def )
 {
-    sal_Bool ret = def;
+    bool ret = def;
     try
     {
         MutexGuard guard( m_refMutex->mutex );
@@ -293,7 +293,7 @@ sal_Bool ResultSetMetaData::isAutoIncrement( sal_Int32 column )
     throw (SQLException, RuntimeException, std::exception)
 {
 
-    sal_Bool ret = getBoolColumnProperty( getStatics().IS_AUTO_INCREMENT, column, sal_False );
+    bool ret = getBoolColumnProperty( getStatics().IS_AUTO_INCREMENT, column, false );
     return ret;
 }
 
@@ -312,7 +312,7 @@ sal_Bool ResultSetMetaData::isSearchable( sal_Int32 column ) throw (SQLException
 
 sal_Bool ResultSetMetaData::isCurrency( sal_Int32 column ) throw (SQLException, RuntimeException, std::exception)
 {
-    return getBoolColumnProperty( getStatics().IS_CURRENCY, column, sal_False );
+    return getBoolColumnProperty( getStatics().IS_CURRENCY, column, false );
 }
 
 sal_Int32 ResultSetMetaData::isNullable( sal_Int32 column )

@@ -101,7 +101,7 @@ void ODbaseTables::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     }
     catch(const Exception&)
     {
-        if(ODbaseTable::Drop_Static(ODbaseTable::getEntry(static_cast<OFileCatalog&>(m_rParent).getConnection(),_sElementName),sal_False,NULL))
+        if(ODbaseTable::Drop_Static(ODbaseTable::getEntry(static_cast<OFileCatalog&>(m_rParent).getConnection(),_sElementName),false,NULL))
             return;
     }
 

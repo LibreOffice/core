@@ -27,15 +27,15 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS OAutoRetrievingBase
     {
         OUString m_sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
-        sal_Bool        m_bAutoRetrievingEnabled; // set to when we should allow to query for generated values
+        bool        m_bAutoRetrievingEnabled; // set to when we should allow to query for generated values
     protected:
-        OAutoRetrievingBase() : m_bAutoRetrievingEnabled(sal_False) {}
+        OAutoRetrievingBase() : m_bAutoRetrievingEnabled(false) {}
         virtual ~OAutoRetrievingBase(){}
 
-        inline void enableAutoRetrievingEnabled(sal_Bool _bAutoEnable)          { m_bAutoRetrievingEnabled = _bAutoEnable; }
+        inline void enableAutoRetrievingEnabled(bool _bAutoEnable)          { m_bAutoRetrievingEnabled = _bAutoEnable; }
         inline void setAutoRetrievingStatement(const OUString& _sStmt)   { m_sGeneratedValueStatement = _sStmt; }
     public:
-        inline sal_Bool                 isAutoRetrievingEnabled()       const { return m_bAutoRetrievingEnabled; }
+        inline bool                 isAutoRetrievingEnabled()       const { return m_bAutoRetrievingEnabled; }
         inline const OUString&   getAutoRetrievingStatement()    const { return m_sGeneratedValueStatement; }
 
         /** transform the statement to query for auto generated values

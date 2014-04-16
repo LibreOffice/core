@@ -72,7 +72,7 @@ namespace connectivity
         @return
             <TRUE/> if an exception is occurred
     */
-    sal_Bool isExceptionOccurred(JNIEnv *pEnv,sal_Bool _bClear);
+    bool isExceptionOccurred(JNIEnv *pEnv,bool _bClear);
 
     jobject createByteInputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length);
     jobject createCharArrayReader(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length);

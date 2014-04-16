@@ -96,7 +96,7 @@ namespace connectivity
 
             /* EMBEDDED MODE DATA */
             /** Denotes that we have a .fdb stored within a .odb file. */
-            sal_Bool            m_bIsEmbedded;
+            bool            m_bIsEmbedded;
 
             /**
              * Handle for the parent DatabaseDocument. We need to notify this
@@ -128,8 +128,8 @@ namespace connectivity
             ::rtl::OUString     m_sUser;
 
             /* CONNECTION PROPERTIES */
-            sal_Bool            m_bIsAutoCommit;
-            sal_Bool            m_bIsReadOnly;
+            bool            m_bIsAutoCommit;
+            bool            m_bIsReadOnly;
             sal_Int32           m_aTransactionIsolation;
 
             isc_db_handle       m_aDBHandle;
@@ -182,7 +182,7 @@ namespace connectivity
             FirebirdDriver* getDriver()         const {return m_pDriver;}
 
             ::rtl::OUString getConnectionURL()  const   {return m_sConnectionURL;}
-            sal_Bool        isEmbedded()        const   {return m_bIsEmbedded;}
+            bool        isEmbedded()        const   {return m_bIsEmbedded;}
             ::rtl::OUString getUserName()       const   {return m_sUser;}
             isc_db_handle&  getDBHandle()               {return m_aDBHandle;}
             isc_tr_handle&  getTransaction()

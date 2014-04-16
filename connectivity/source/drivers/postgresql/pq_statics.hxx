@@ -61,11 +61,11 @@ struct ColumnMetaData
         sal_Int32 _type,
         sal_Int32 _precision,
         sal_Int32 _scale,
-        sal_Bool _isCurrency,
-        sal_Bool _isNullable,
-        sal_Bool _isAutoIncrement,
-        sal_Bool _isReadOnly,
-        sal_Bool _isSigned ) :
+        bool _isCurrency,
+        bool _isNullable,
+        bool _isAutoIncrement,
+        bool _isReadOnly,
+        bool _isSigned ) :
         columnName( _columnName ),
         tableName( _tableName ),
         schemaTableName( _schemaTableName ),
@@ -87,11 +87,11 @@ struct ColumnMetaData
     sal_Int32 type;
     sal_Int32 precision;
     sal_Int32 scale;
-    sal_Bool isCurrency;
-    sal_Bool isNullable;
-    sal_Bool isAutoIncrement;
-    sal_Bool isReadOnly;
-    sal_Bool isSigned;
+    bool isCurrency;
+    bool isNullable;
+    bool isAutoIncrement;
+    bool isReadOnly;
+    bool isSigned;
 };
 
 typedef std::vector< ColumnMetaData, Allocator< ColumnMetaData > > ColumnMetaDataVector;
@@ -101,8 +101,8 @@ struct TypeDetails
     sal_Int32 dataType;
     sal_Int32 minScale;
     sal_Int32 maxScale;  // in case nothing is given in getTypeInfo
-    sal_Bool isAutoIncrement;
-    sal_Bool isSearchable;
+    bool isAutoIncrement;
+    bool isSearchable;
 };
 
 typedef ::boost::unordered_map

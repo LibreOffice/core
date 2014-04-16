@@ -55,7 +55,7 @@ namespace connectivity
                      ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                      ::com::sun::star::lang::XComponent* _pObject);
 
-        void checkDisposed(sal_Bool _bThrow) throw ( ::com::sun::star::lang::DisposedException );
+        void checkDisposed(bool _bThrow) throw ( ::com::sun::star::lang::DisposedException );
 
 
         template <class TYPE>

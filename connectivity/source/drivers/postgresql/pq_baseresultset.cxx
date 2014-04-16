@@ -283,7 +283,7 @@ sal_Bool BaseResultSet::first(  ) throw (SQLException, RuntimeException, std::ex
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
-    sal_Bool bRet = ( m_rowCount > 0 );
+    bool bRet = ( m_rowCount > 0 );
     if( bRet )
         m_row = 0;
     return bRet;
@@ -293,7 +293,7 @@ sal_Bool BaseResultSet::last(  ) throw (SQLException, RuntimeException, std::exc
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
-    sal_Bool bRet = ( m_rowCount > 0 );
+    bool bRet = ( m_rowCount > 0 );
     if( bRet )
         m_row = m_rowCount -1;
     return bRet;
@@ -342,7 +342,7 @@ sal_Bool BaseResultSet::previous(  ) throw (SQLException, RuntimeException, std:
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
-    sal_Bool bRet = ( m_row != -1 );
+    bool bRet = ( m_row != -1 );
     if( bRet )
         m_row --;
     return bRet;
@@ -604,7 +604,7 @@ sal_Bool BaseResultSet::convertFastPropertyValue(
         Any & /* rConvertedValue */, Any & /* rOldValue */, sal_Int32 nHandle, const Any& rValue )
         throw (IllegalArgumentException)
 {
-    sal_Bool bRet;
+    bool bRet;
     switch( nHandle )
     {
     case BASERESULTSET_CURSOR_NAME:
@@ -617,7 +617,7 @@ sal_Bool BaseResultSet::convertFastPropertyValue(
     case BASERESULTSET_ESCAPE_PROCESSING:
     case BASERESULTSET_IS_BOOKMARKABLE:
     {
-        sal_Bool val;
+        bool val;
         bRet = ( rValue >>= val );
         m_props[nHandle] = makeAny( val );
         break;

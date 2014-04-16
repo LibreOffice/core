@@ -94,7 +94,7 @@ sal_Int32 SequenceResultSetMetaData::isNullable( sal_Int32 column )
     throw (SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex( column );
-    return m_columnData[column-1].isNullable;
+    return m_columnData[column-1].isNullable ? 1 : 0;
 }
 
 sal_Bool SequenceResultSetMetaData::isSigned( sal_Int32 /* column */ )

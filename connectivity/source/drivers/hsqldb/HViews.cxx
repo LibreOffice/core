@@ -55,7 +55,7 @@ HViews::HViews( const Reference< XConnection >& _rxConnection, ::cppu::OWeakObje
     :sdbcx::OCollection( _rParent, true, _rMutex, _rVector )
     ,m_xConnection( _rxConnection )
     ,m_xMetaData( _rxConnection->getMetaData() )
-    ,m_bInDrop( sal_False )
+    ,m_bInDrop( false )
 {
 }
 
@@ -105,7 +105,7 @@ void HViews::dropObject(sal_Int32 _nPos,const OUString& /*_sElementName*/)
         return;
 
     Reference< XInterface > xObject( getObject( _nPos ) );
-    sal_Bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
+    bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
     if (!bIsNew)
     {
         OUString aSql(  "DROP VIEW" );
@@ -122,9 +122,9 @@ void HViews::dropObject(sal_Int32 _nPos,const OUString& /*_sElementName*/)
 
 void HViews::dropByNameImpl(const OUString& elementName)
 {
-    m_bInDrop = sal_True;
+    m_bInDrop = true;
     OCollection_TYPE::dropByName(elementName);
-    m_bInDrop = sal_False;
+    m_bInDrop = false;
 }
 
 void HViews::createView( const Reference< XPropertySet >& descriptor )

@@ -417,7 +417,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLExc
     return (getInt32Property(OUString("Identifier Case Sensitivity")) & DBPROPVAL_IC_LOWER) == DBPROPVAL_IC_LOWER ;
 }
 
-sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
+bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     return (getInt32Property(OUString("Identifier Case Sensitivity")) & DBPROPVAL_IC_MIXED) == DBPROPVAL_IC_MIXED ;
 }
@@ -437,14 +437,14 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLExc
     return (getInt32Property(OUString("Identifier Case Sensitivity")) & DBPROPVAL_IC_UPPER) == DBPROPVAL_IC_UPPER ;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
+bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
+bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 {
-    return sal_True;
+    return true;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException)
@@ -478,7 +478,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) 
     return isCapable(DBLITERAL_CORRELATION_NAME);
 }
 
-sal_Bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
+bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
     return getInt32Property(OUString("Catalog Location")) == DBPROPVAL_CL_START;
 }
@@ -552,7 +552,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int3
     return bValue;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
+bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
 {
     return (getInt32Property(OUString("Schema Usage")) & DBPROPVAL_SU_DML_STATEMENTS) == DBPROPVAL_SU_DML_STATEMENTS;
 }
@@ -580,14 +580,14 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw
     return (getInt32Property(OUString("Schema Usage")) & DBPROPVAL_SU_INDEX_DEFINITION) == DBPROPVAL_SU_INDEX_DEFINITION;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
+bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 {
     return (getInt32Property(OUString("Schema Usage")) & DBPROPVAL_SU_TABLE_DEFINITION) == DBPROPVAL_SU_TABLE_DEFINITION;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
+bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException)
@@ -595,9 +595,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) thro
     return sal_False;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
+bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException)
@@ -747,7 +747,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLE
     return (getInt32Property(OUString("Identifier Case Sensitivity")) & DBPROPVAL_IC_MIXED) == DBPROPVAL_IC_MIXED;
 }
 
-sal_Bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
+bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     return (getInt32Property(OUString("Identifier Case Sensitivity")) & DBPROPVAL_IC_MIXED) == DBPROPVAL_IC_MIXED;
 }

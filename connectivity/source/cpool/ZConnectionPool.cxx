@@ -89,16 +89,16 @@ OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
 
 OConnectionPool::~OConnectionPool()
 {
-    clear(sal_False);
+    clear(false);
 }
 
 struct TRemoveEventListenerFunctor : ::std::unary_function<TPooledConnections::value_type,void>
                                     ,::std::unary_function<TActiveConnectionMap::value_type,void>
 {
     OConnectionPool* m_pConnectionPool;
-    sal_Bool m_bDispose;
+    bool m_bDispose;
 
-    TRemoveEventListenerFunctor(OConnectionPool* _pConnectionPool,sal_Bool _bDispose = sal_False)
+    TRemoveEventListenerFunctor(OConnectionPool* _pConnectionPool,bool _bDispose = false)
         : m_pConnectionPool(_pConnectionPool)
         ,m_bDispose(_bDispose)
     {
@@ -139,11 +139,11 @@ struct TConnectionPoolFunctor : ::std::unary_function<TConnectionMap::value_type
     }
     void operator()(const TConnectionMap::value_type& _aValue)
     {
-        ::std::for_each(_aValue.second.aConnections.begin(),_aValue.second.aConnections.end(),TRemoveEventListenerFunctor(m_pConnectionPool,sal_True));
+        ::std::for_each(_aValue.second.aConnections.begin(),_aValue.second.aConnections.end(),TRemoveEventListenerFunctor(m_pConnectionPool,true));
     }
 };
 
-void OConnectionPool::clear(sal_Bool _bDispose)
+void OConnectionPool::clear(bool _bDispose)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -250,7 +250,7 @@ void OConnectionPool::invalidatePooledConnections()
     {
         if(!(--(aIter->second.nALiveCount))) // connections are invalid
         {
-            ::std::for_each(aIter->second.aConnections.begin(),aIter->second.aConnections.end(),TRemoveEventListenerFunctor(this,sal_True));
+            ::std::for_each(aIter->second.aConnections.begin(),aIter->second.aConnections.end(),TRemoveEventListenerFunctor(this,true));
 
             aIter->second.aConnections.clear();
 

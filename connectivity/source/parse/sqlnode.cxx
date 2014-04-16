@@ -77,13 +77,13 @@ connectivity::OSQLParser* xxx_pGLOBAL_SQLPARSER;
 namespace
 {
 
-    sal_Bool lcl_saveConvertToNumber(const Reference< XNumberFormatter > & _xFormatter,sal_Int32 _nKey,const OUString& _sValue,double& _nrValue)
+    bool lcl_saveConvertToNumber(const Reference< XNumberFormatter > & _xFormatter,sal_Int32 _nKey,const OUString& _sValue,double& _nrValue)
     {
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
         try
         {
             _nrValue = _xFormatter->convertStringToNumber(_nKey, _sValue);
-            bRet = sal_True;
+            bRet = true;
         }
         catch(Exception&)
         {
@@ -680,7 +680,7 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( OUStringBuffer& rStri
         OUString sCommand;
         OSL_VERIFY( xQuery->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_COMMAND ) ) >>= sCommand );
 
-        sal_Bool bEscapeProcessing = sal_False;
+        bool bEscapeProcessing = false;
         OSL_VERIFY( xQuery->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ESCAPEPROCESSING ) ) >>= bEscapeProcessing );
 
         // the query we found here might itself be based on another query, so parse it recursively
@@ -788,8 +788,8 @@ bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
     OSL_ENSURE(_pTableNode,"Wrong use of getTableComponents! _pTableNode is not allowed to be null!");
     if(_pTableNode)
     {
-        const sal_Bool bSupportsCatalog = _xMetaData.is() && _xMetaData->supportsCatalogsInDataManipulation();
-        const sal_Bool bSupportsSchema = _xMetaData.is() && _xMetaData->supportsSchemasInDataManipulation();
+        const bool bSupportsCatalog = _xMetaData.is() && _xMetaData->supportsCatalogsInDataManipulation();
+        const bool bSupportsSchema = _xMetaData.is() && _xMetaData->supportsSchemasInDataManipulation();
         const OSQLParseNode* pTableNode = _pTableNode;
         // clear the parameter given
         _rCatalog = Any();

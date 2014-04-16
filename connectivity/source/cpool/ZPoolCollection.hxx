@@ -91,10 +91,10 @@ namespace connectivity
                                                                                                     const OUString& _rPath) const;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > openNode( const OUString& _rPath,
                                                                                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xTreeNode) const throw();
-        sal_Bool isPoolingEnabled();
-        sal_Bool isDriverPoolingEnabled(const OUString& _sDriverImplName,
+        bool isPoolingEnabled();
+        bool isDriverPoolingEnabled(const OUString& _sDriverImplName,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
-        sal_Bool isPoolingEnabledByUrl( const OUString& _sUrl,
+        bool isPoolingEnabledByUrl( const OUString& _sUrl,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _rxDriver,
                                         OUString& _rsImplName,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
@@ -102,7 +102,7 @@ namespace connectivity
         OConnectionPool* getConnectionPool( const OUString& _sImplName,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _xDriver,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
-        void clearConnectionPools(sal_Bool _bDispose);
+        void clearConnectionPools(bool _bDispose);
         void clearDesktop();
     protected:
         virtual ~OPoolCollection();
