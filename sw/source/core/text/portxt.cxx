@@ -719,7 +719,7 @@ bool SwTxtInputFldPortion::Format( SwTxtFormatInfo &rInf )
     }
     else
     {
-        SwTxtSlot aFormatTxt( &rInf, this, true, true, 0 );
+        SwTxtSlot aFormatTxt( &rInf, this, true, true );
         if ( rInf.GetLen() == 0 )
         {
             Width( 0 );
@@ -763,9 +763,8 @@ void SwTxtInputFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if ( Width() )
     {
         rInf.DrawViewOpt( *this, POR_INPUTFLD );
-        static sal_Char sSpace = ' ';
         SwTxtSlot aPaintTxt( &rInf, this, true, true,
-                            ContainsOnlyDummyChars() ? &sSpace : 0 );
+                             ContainsOnlyDummyChars() ? OUString(" ") : OUString() );
         SwTxtPortion::Paint( rInf );
     }
 }
@@ -790,7 +789,7 @@ bool SwTxtInputFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt 
 
 SwPosSize SwTxtInputFldPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {
-    SwTxtSlot aFormatTxt( &rInf, this, true, false, 0 );
+    SwTxtSlot aFormatTxt( &rInf, this, true, false );
     if ( rInf.GetLen() == 0 )
     {
         return SwPosSize( 0, 0 );

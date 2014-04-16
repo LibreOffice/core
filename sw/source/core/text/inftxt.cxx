@@ -1659,7 +1659,7 @@ SwTxtSlot::SwTxtSlot(
     const SwLinePortion *pPor,
     bool bTxtLen,
     bool bExgLists,
-    const sal_Char *pCh )
+    OUString const & pCh )
     : pOldTxt(0)
     , pOldSmartTagList(0)
     , pOldGrammarCheckList(0)
@@ -1668,13 +1668,15 @@ SwTxtSlot::SwTxtSlot(
     , nLen(0)
     , pInf(NULL)
 {
-    if( pCh )
+    if( pCh.isEmpty() )
     {
-        aTxt = OUString( pCh, strlen(pCh), RTL_TEXTENCODING_MS_1252 );
-        bOn = true;
+        bOn = pPor->GetExpTxt( *pNew, aTxt );
     }
     else
-        bOn = pPor->GetExpTxt( *pNew, aTxt );
+    {
+        aTxt = pCh;
+        bOn = true;
+    }
 
     // The text is replaced ...
     if( bOn )

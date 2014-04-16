@@ -777,7 +777,7 @@ public:
     // The replacement string originates either from the portion via GetExpText()
     // or from the char * pCh, if it is not NULL
     SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor, bool bTxtLen,
-               bool bExgLists, const sal_Char *pCh = NULL );
+               bool bExgLists, OUString const & pCh = OUString() );
     ~SwTxtSlot();
     bool IsOn() const { return bOn; }
 };

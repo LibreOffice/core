@@ -713,7 +713,6 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
             if( bPaintSpace && nOldWidth > nSpaceOffs )
             {
                 SwTxtPaintInfo aInf( rInf );
-static sal_Char const sDoubleSpace[] = "  ";
                 aInf.X( aInf.X() + nSpaceOffs );
 
                 // #i53199# Adjust position of underline:
@@ -725,7 +724,7 @@ static sal_Char const sDoubleSpace[] = "  ";
 
                 pThis->Width( nOldWidth - nSpaceOffs + 12 );
                 {
-                    SwTxtSlot aDiffTxt( &aInf, this, true, false, sDoubleSpace );
+                    SwTxtSlot aDiffTxt( &aInf, this, true, false, "  " );
                     aInf.DrawText( *this, aInf.GetLen(), true );
                 }
             }
