@@ -152,6 +152,11 @@ bool HelpParser::Merge( const OString &rPOFile, const OString &rDestinationFile,
     //TODO: explicit BOM handling?
 
     XMLFile* xmlfile = ( aParser.Execute( sHelpFile, new XMLFile( OString('0') ) ) );
+    if (!xmlfile)
+    {
+        SAL_WARN("l10ntools", "could not parse " << sHelpFile);
+        return false;
+    }
     bool hasNoError = MergeSingleFile( xmlfile , pMergeDataFile , rLanguage , rDestinationFile );
     delete xmlfile;
     return hasNoError;
