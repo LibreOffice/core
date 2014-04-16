@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_6873dbb1",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-16T16:22:33Z",
+      "side": 1,
+      "message": "actually that\u0027s not a valid mime-type - at IANA only image/tiff is registered, see:\nhttp://www.iana.org/assignments/media-types/media-types.xhtml\nhttp://tools.ietf.org/html/rfc3302",
+      "revId": "ccfc02f7691848284403d339ee17054169fbff1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
