@@ -641,7 +641,7 @@ SmCategoryDesc::SmCategoryDesc(VclBuilderContainer& rBuilder, sal_uInt16 nCatego
             Graphics [i] = 0;
         }
 
-        const FieldMinMax& rMinMax = pMinMaxData[ nCategoryIdx ][i];
+        const FieldMinMax& rMinMax = pMinMaxData[ nCategoryIdx-1 ][i];
         Value[i] = Minimum[i] = rMinMax.nMin;
         Maximum[i] = rMinMax.nMax;
     }
