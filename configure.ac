@@ -391,6 +391,12 @@ if test -n "$with_android_ndk"; then
         ;;
     esac
 
+    if test "$ENABLE_LTO" = TRUE; then
+        # -flto comes from com_GCC_degs.mk, too, but we need to make sure it gets passed as part of
+        # $CC and $CXX when building external libraries
+        ANDROIDCFLAGS="$ANDROIDCFLAGS -flto"
+    fi
+
     # gdbserver can be in different locations
     if test -f $ANDROID_NDK_HOME/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver; then
         ANDROID_NDK_GDBSERVER=$ANDROID_NDK_HOME/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver
