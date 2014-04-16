@@ -765,8 +765,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
             if (nTextRotationAngle)
             {
-                while (nTextRotationAngle > 360000)
-                    nTextRotationAngle-=9000;
                 if (nTextRotationAngle == 9000)
                 {
                     long nWidth = rTextRect.GetWidth();
