@@ -9,6 +9,7 @@
 
 #include "WrappedGL3DProperties.hxx"
 #include "Chart2ModelContact.hxx"
+#include "FastPropertyIdRanges.hxx"
 #include <unonames.hxx>
 #include <WrappedProperty.hxx>
 #include <DiagramHelper.hxx>
@@ -24,7 +25,7 @@ namespace {
 
 enum
 {
-    PROP_GL3DCHARTTYPE_ROUNDED_EDGE
+    PROP_GL3DCHARTTYPE_ROUNDED_EDGE = FAST_PROPERTY_ID_START_GL_3D
 };
 
 class WrappedGL3DProperty : public WrappedProperty
