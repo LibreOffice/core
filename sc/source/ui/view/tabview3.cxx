@@ -2112,9 +2112,6 @@ void ScTabView::PaintRangeFinderEntry (ScRangeFindData* pData, const SCTAB nTab)
 
 void ScTabView::UpdateGrid()
 {
-    if (!aViewData.IsActive())
-        return;
-
     if (!UpdateVisibleRange())
         // Visible range hasn't changed. No need to re-paint.
         return;
