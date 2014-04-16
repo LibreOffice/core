@@ -26,10 +26,11 @@ class IOpenGLRenderer;
 class SVX_DLLPUBLIC SdrOpenGLObj : public SdrObject, public IOpenGLInfoProvider
 {
 public:
+    SdrOpenGLObj();
     virtual ~SdrOpenGLObj();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
-    OpenGLContext& getOpenGLContext();
+    OpenGLContext* getOpenGLContext();
 
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
 
@@ -40,7 +41,7 @@ public:
 
 private:
 
-    OpenGLContext maContext;
+    OpenGLContext* mpContext;
 
     boost::scoped_ptr<IOpenGLRenderer> mpRenderer;
 };

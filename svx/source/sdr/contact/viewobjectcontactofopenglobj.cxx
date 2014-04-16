@@ -21,8 +21,9 @@ ViewObjectContactOfOpenGLObj::ViewObjectContactOfOpenGLObj(
     ObjectContact& rObjectContact, ViewContact& rViewContact )
     : ViewObjectContactOfSdrObj( rObjectContact, rViewContact )
 {
-    OpenGLContext& rContext = static_cast<SdrOpenGLObj&>(static_cast<ViewContactOfSdrObj&>(rViewContact).GetSdrObject()).getOpenGLContext();
-    rContext.init(getWindow());
+    OpenGLContext* pContext = static_cast<SdrOpenGLObj&>(static_cast<ViewContactOfSdrObj&>(rViewContact).GetSdrObject()).getOpenGLContext();
+    if (pContext)
+        pContext->init(getWindow());
 }
 
 ViewObjectContactOfOpenGLObj::~ViewObjectContactOfOpenGLObj()

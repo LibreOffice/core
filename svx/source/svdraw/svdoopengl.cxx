@@ -7,13 +7,26 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
+
 #include <svx/svdoopengl.hxx>
 #include <svx/sdr/contact/viewcontactofopenglobj.hxx>
 
 #include <vcl/opengl/IOpenGLRenderer.hxx>
 
+SdrOpenGLObj::SdrOpenGLObj()
+  : SdrObject(),
+    IOpenGLInfoProvider(),
+    mpContext(NULL)
+{
+#if HAVE_FEATURE_DESKTOP
+    mpContext = new OpenGLContext;
+#endif
+}
+
 SdrOpenGLObj::~SdrOpenGLObj()
 {
+    delete mpContext;
 }
 
 sdr::contact::ViewContact* SdrOpenGLObj::CreateObjectSpecificViewContact()
@@ -21,17 +34,19 @@ sdr::contact::ViewContact* SdrOpenGLObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfOpenGLObj(*this);
 }
 
-OpenGLContext& SdrOpenGLObj::getOpenGLContext()
+OpenGLContext* SdrOpenGLObj::getOpenGLContext()
 {
-    return maContext;
+    return mpContext;
 }
 
 void SdrOpenGLObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     SdrObject::NbcResize(rRef, xFact, yFact);
 
-    //now pass the information to the OpenGL context
-    maContext.setWinSize(aOutRect.GetSize());
+    // now pass the information to the OpenGL context
+    if (mpContext)
+        mpContext->setWinSize(aOutRect.GetSize());
+
     SAL_WARN("svx.opengl", "resized opengl drawinglayer object");
 }
 
@@ -48,7 +63,7 @@ IOpenGLRenderer* SdrOpenGLObj::getRenderer()
 
 bool SdrOpenGLObj::isOpenGLInitialized()
 {
-    return maContext.isInitialized();
+    return mpContext && mpContext->isInitialized();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
