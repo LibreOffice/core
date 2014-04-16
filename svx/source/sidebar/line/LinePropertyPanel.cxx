@@ -500,7 +500,7 @@ void LinePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    mpStartItem.reset(pItem ? (XLineStartItem*)pItem->Clone() : 0);
+                    mpStartItem.reset((XLineStartItem*)pItem->Clone());
                     SelectEndStyle(true);
                     break;
                 }
