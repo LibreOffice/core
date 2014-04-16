@@ -122,10 +122,9 @@ void Communicator::execute()
     pTransmitter->join();
     pTransmitter = NULL;
 
-    if( mpSocket )
-        mpSocket->close();
+    mpSocket->close();
     delete mpSocket;
-
+    mpSocket = NULL;
 
     RemoteServer::removeCommunicator( this );
 }
