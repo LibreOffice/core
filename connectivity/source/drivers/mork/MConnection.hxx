@@ -102,7 +102,7 @@ namespace connectivity
 
             static OUString getDriverImplementationName();
 
-            sal_Bool getForceLoadTables() {return true;}
+            bool getForceLoadTables() {return true;}
 
             // Added to enable me to use SQLInterpreter which requires an
             // XNameAccess i/f to access tables.

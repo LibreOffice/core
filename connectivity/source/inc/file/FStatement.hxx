@@ -96,7 +96,7 @@ namespace connectivity
             sal_Int32                                   m_nResultSetType;
             sal_Int32                                   m_nFetchDirection;
             sal_Int32                                   m_nResultSetConcurrency;
-            sal_Bool                                    m_bEscapeProcessing;
+            bool                                    m_bEscapeProcessing;
 
             ::cppu::OBroadcastHelper&                   rBHelper;
 
@@ -118,7 +118,7 @@ namespace connectivity
             void GetAssignValues();
             void SetAssignValue(const OUString& aColumnName,
                                    const OUString& aValue,
-                                   sal_Bool bSetNull = sal_False,
+                                   bool bSetNull = false,
                                    sal_uInt32 nParameter=SQL_NO_PARAMETER);
             void ParseAssignValues( const ::std::vector< OUString>& aColumnNameList,
                                     connectivity::OSQLParseNode* pRow_Value_Constructor_Elem, sal_Int32 nIndex);

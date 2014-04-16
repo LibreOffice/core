@@ -106,9 +106,9 @@ void OOperandValue::setValue(const ORowSetValue& _rVal)
     m_aValue = _rVal;
 }
 
-sal_Bool OOperandAttr::isIndexed() const
+bool OOperandAttr::isIndexed() const
 {
-    return sal_False;
+    return false;
 }
 
 OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
@@ -192,10 +192,10 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const OUString& aS
 sal_uInt16 OOperator::getRequestedOperands() const {return 2;}
 
 
-sal_Bool OBoolOperator::operate(const OOperand*, const OOperand*) const
+bool OBoolOperator::operate(const OOperand*, const OOperand*) const
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OBoolOperator::operate" );
-    return sal_False;
+    return false;
 }
 
 
@@ -215,7 +215,7 @@ void OBoolOperator::Exec(OCodeStack& rCodeStack)
         delete pRight;
 }
 
-sal_Bool OOp_NOT::operate(const OOperand* pLeft, const OOperand* ) const
+bool OOp_NOT::operate(const OOperand* pLeft, const OOperand* ) const
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_AND::operate" );
     return !pLeft->isValid();
@@ -239,14 +239,14 @@ sal_uInt16 OOp_NOT::getRequestedOperands() const
 }
 
 
-sal_Bool OOp_AND::operate(const OOperand* pLeft, const OOperand* pRight) const
+bool OOp_AND::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_AND::operate" );
     return pLeft->isValid() && pRight->isValid();
 }
 
 
-sal_Bool OOp_OR::operate(const OOperand* pLeft, const OOperand* pRight) const
+bool OOp_OR::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_OR::operate" );
     return pLeft->isValid() || pRight->isValid();
@@ -272,28 +272,28 @@ void OOp_ISNULL::Exec(OCodeStack& rCodeStack)
 }
 
 
-sal_Bool OOp_ISNULL::operate(const OOperand* pOperand, const OOperand*) const
+bool OOp_ISNULL::operate(const OOperand* pOperand, const OOperand*) const
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ISNULL::operate" );
     return pOperand->getValue().isNull();
 }
 
 
-sal_Bool OOp_ISNOTNULL::operate(const OOperand* pOperand, const OOperand*) const
+bool OOp_ISNOTNULL::operate(const OOperand* pOperand, const OOperand*) const
 {
     return !OOp_ISNULL::operate(pOperand);
 }
 
 
-sal_Bool OOp_LIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
+bool OOp_LIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ISNULL::operate" );
-    sal_Bool bMatch;
+    bool bMatch;
     ORowSetValue aLH(pLeft->getValue());
     ORowSetValue aRH(pRight->getValue());
 
     if (aLH.isNull() || aRH.isNull())
-        bMatch = sal_False;
+        bMatch = false;
     else
     {
         bMatch = match(aRH.getString(), aLH.getString(), cEscape);
@@ -302,23 +302,23 @@ sal_Bool OOp_LIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
 }
 
 
-sal_Bool OOp_NOTLIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
+bool OOp_NOTLIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_NOTLIKE::operate" );
     return !OOp_LIKE::operate(pLeft, pRight);
 }
 
 
-sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) const
+bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_COMPARE::operate" );
     ORowSetValue aLH(pLeft->getValue());
     ORowSetValue aRH(pRight->getValue());
 
     if (aLH.isNull() || aRH.isNull()) // if (!aLH.getValue() || !aRH.getValue())
-        return sal_False;
+        return false;
 
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     sal_Int32 eDBType = pLeft->getDBType();
 
     // Comparison (depending on Data-type):
@@ -343,7 +343,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
                 case SQLFilterOperator::LESS_EQUAL:     bResult = (nRes <= 0); break;
                 case SQLFilterOperator::GREATER:            bResult = (nRes >  0); break;
                 case SQLFilterOperator::GREATER_EQUAL:  bResult = (nRes >= 0); break;
-                default:                        bResult = sal_False;
+                default:                        bResult = false;
             }
         } break;
         case DataType::TINYINT:
@@ -370,7 +370,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
                 case SQLFilterOperator::LESS_EQUAL:     bResult = (n <= m); break;
                 case SQLFilterOperator::GREATER:            bResult = (n > m); break;
                 case SQLFilterOperator::GREATER_EQUAL:  bResult = (n >= m); break;
-                default:                        bResult = sal_False;
+                default:                        bResult = false;
             }
         } break;
         default:

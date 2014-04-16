@@ -283,7 +283,7 @@ sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLExce
 
 
 
-static sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const OUString& rName )
+static bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const OUString& rName )
 {
     Any aAny = xSheets->getByName( rName );
     Reference<XSpreadsheet> xSheet;
@@ -294,11 +294,11 @@ static sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, co
         Reference<XPropertySet> xProp( xSheet, UNO_QUERY );
         if (xProp.is())
         {
-            sal_Bool bVisible = sal_Bool();
+            bool bVisible;
             Any aVisAny = xProp->getPropertyValue("IsVisible");
             if ( aVisAny >>= bVisible )
                 if (!bVisible)
-                    return sal_True;                // hidden
+                    return true;                // hidden
         }
 
         //  use the same data area as in OCalcTable to test for empty table
@@ -317,17 +317,17 @@ static sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, co
                 //  single cell -> check content
                 Reference<XCell> xCell = xCursor->getCellByPosition( 0, 0 );
                 if ( xCell.is() && xCell->getType() == CellContentType_EMPTY )
-                    return sal_True;
+                    return true;
             }
         }
     }
 
-    return sal_False;
+    return false;
 }
 
-static sal_Bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const OUString& rName )
+static bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const OUString& rName )
 {
-    sal_Bool bUnnamed = sal_False;
+    bool bUnnamed = false;
 
     Any aAny = xRanges->getByName( rName );
     Reference<XDatabaseRange> xRange;
@@ -339,7 +339,7 @@ static sal_Bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const 
             try
             {
                 Any aUserAny = xRangeProp->getPropertyValue("IsUserDefined");
-                sal_Bool bUserDefined = sal_Bool();
+                bool bUserDefined;
                 if ( aUserAny >>= bUserDefined )
                     bUnnamed = !bUserDefined;
             }
@@ -371,11 +371,11 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
 
     OUString aTable("TABLE");
 
-    sal_Bool bTableFound = sal_True;
+    bool bTableFound = true;
     sal_Int32 nLength = types.getLength();
     if(nLength)
     {
-        bTableFound = sal_False;
+        bTableFound = false;
 
         const OUString* pIter = types.getConstArray();
         const OUString* pEnd = pIter + nLength;
@@ -383,7 +383,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
         {
             if(*pIter == aTable)
             {
-                bTableFound = sal_True;
+                bTableFound = true;
                 break;
             }
         }

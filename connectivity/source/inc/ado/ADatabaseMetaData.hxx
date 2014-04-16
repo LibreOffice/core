@@ -59,19 +59,19 @@ namespace connectivity
 
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw();
             // cached database information
-            virtual OUString impl_getIdentifierQuoteString_throw(  );
-            virtual sal_Bool        impl_isCatalogAtStart_throw(  );
-            virtual OUString impl_getCatalogSeparator_throw(  );
-            virtual sal_Bool        impl_supportsCatalogsInTableDefinitions_throw(  );
-            virtual sal_Bool        impl_supportsSchemasInTableDefinitions_throw(  ) ;
-            virtual sal_Bool        impl_supportsCatalogsInDataManipulation_throw(  );
-            virtual sal_Bool        impl_supportsSchemasInDataManipulation_throw(  ) ;
-            virtual sal_Bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  );
-            virtual sal_Bool        impl_supportsAlterTableWithAddColumn_throw(  );
-            virtual sal_Bool        impl_supportsAlterTableWithDropColumn_throw(  );
-            virtual sal_Int32       impl_getMaxStatements_throw(  );
-            virtual sal_Int32       impl_getMaxTablesInSelect_throw(  );
-            virtual sal_Bool        impl_storesMixedCaseQuotedIdentifiers_throw(  );
+            virtual OUString    impl_getIdentifierQuoteString_throw(  );
+            virtual bool        impl_isCatalogAtStart_throw(  );
+            virtual OUString    impl_getCatalogSeparator_throw(  );
+            virtual bool        impl_supportsCatalogsInTableDefinitions_throw(  );
+            virtual bool        impl_supportsSchemasInTableDefinitions_throw(  ) ;
+            virtual bool        impl_supportsCatalogsInDataManipulation_throw(  );
+            virtual bool        impl_supportsSchemasInDataManipulation_throw(  ) ;
+            virtual bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  );
+            virtual bool        impl_supportsAlterTableWithAddColumn_throw(  );
+            virtual bool        impl_supportsAlterTableWithDropColumn_throw(  );
+            virtual sal_Int32   impl_getMaxStatements_throw(  );
+            virtual sal_Int32   impl_getMaxTablesInSelect_throw(  );
+            virtual bool        impl_storesMixedCaseQuotedIdentifiers_throw(  );
         public:
 
             ODatabaseMetaData(OConnection* _pCon);

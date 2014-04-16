@@ -56,7 +56,7 @@ struct ProviderRequest
     }
 
     inline
-    sal_Bool CREATE_PROVIDER(
+    bool CREATE_PROVIDER(
                 const OUString& Implname,
                 const Sequence< OUString > & Services,
                 ::cppu::ComponentInstantiation Factory,

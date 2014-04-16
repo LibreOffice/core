@@ -25,7 +25,7 @@
 
 namespace connectivity
 {
-    sal_Bool LoadLibrary_ODBC3(OUString &_rPath);
+    bool LoadLibrary_ODBC3(OUString &_rPath);
     // extern declaration of the function pointer
     extern T3SQLAllocHandle pODBC3SQLAllocHandle;
     extern T3SQLConnect pODBC3SQLConnect;

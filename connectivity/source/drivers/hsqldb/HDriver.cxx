@@ -93,7 +93,7 @@ namespace connectivity
     ODriverDelegator::ODriverDelegator(const Reference< XComponentContext >& _rxContext)
         : ODriverDelegator_BASE(m_aMutex)
         ,m_xContext(_rxContext)
-        ,m_bInShutDownConnections(sal_False)
+        ,m_bInShutDownConnections(false)
     {
     }
 
@@ -536,7 +536,7 @@ namespace connectivity
     void ODriverDelegator::shutdownConnection(const TWeakPairVector::iterator& _aIter )
     {
         OSL_ENSURE(m_aConnections.end() != _aIter,"Iterator equals .end()");
-        sal_Bool bLastOne = sal_True;
+        bool bLastOne = true;
         try
         {
             Reference<XConnection> _xConnection(_aIter->first.get(),UNO_QUERY);
@@ -601,7 +601,7 @@ namespace connectivity
 
     void ODriverDelegator::shutdownConnections()
     {
-        m_bInShutDownConnections = sal_True;
+        m_bInShutDownConnections = true;
         TWeakPairVector::iterator aEnd = m_aConnections.end();
         for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
         {
@@ -615,7 +615,7 @@ namespace connectivity
             }
         }
         m_aConnections.clear();
-        m_bInShutDownConnections = sal_True;
+        m_bInShutDownConnections = true;
     }
 
     void ODriverDelegator::flushConnections()
@@ -658,7 +658,7 @@ namespace connectivity
                         if ( xStmt.is() )
                             xStmt->execute( OUString(  "SET WRITE_DELAY 0"  ) );
 
-                        sal_Bool bPreviousAutoCommit = xConnection->getAutoCommit();
+                        bool bPreviousAutoCommit = xConnection->getAutoCommit();
                         xConnection->setAutoCommit( sal_False );
                         xConnection->commit();
                         xConnection->setAutoCommit( bPreviousAutoCommit );

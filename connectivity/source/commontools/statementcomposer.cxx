@@ -63,7 +63,7 @@ namespace dbtools
         OUString                         sFilter;
         OUString                         sOrder;
         sal_Int32                               nCommandType;
-        sal_Bool                                bEscapeProcessing;
+        bool                                bEscapeProcessing;
         bool                                    bComposerDirty;
         bool                                    bDisposeComposer;
 
@@ -73,7 +73,7 @@ namespace dbtools
             ,sFilter()
             ,sOrder()
             ,nCommandType( CommandType::COMMAND )
-            ,bEscapeProcessing( sal_True )
+            ,bEscapeProcessing( true )
             ,bComposerDirty( true )
             ,bDisposeComposer( true )
         {
@@ -147,7 +147,7 @@ namespace dbtools
                         Reference< XPropertySet > xQuery( xQueries->getByName( _rData.sCommand ), UNO_QUERY_THROW );
 
                         //  a native query ?
-                        sal_Bool bQueryEscapeProcessing = sal_False;
+                        bool bQueryEscapeProcessing = false;
                         xQuery->getPropertyValue("EscapeProcessing") >>= bQueryEscapeProcessing;
                         if ( !bQueryEscapeProcessing )
                             break;
@@ -178,7 +178,7 @@ namespace dbtools
                         }
 
                         // the filter
-                        sal_Bool bApplyFilter = sal_True;
+                        bool bApplyFilter = true;
                         const OUString sPropApply( "ApplyFilter" );
                         if ( ::comphelper::hasProperty( sPropApply, xQuery ) )
                         {

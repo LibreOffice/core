@@ -62,12 +62,12 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet >    m_xDir; // directory
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>              m_xContent;
 
-            sal_Bool                    m_bClosed;
-            sal_Bool                    m_bAutoCommit;
-            sal_Bool                    m_bReadOnly;
-            sal_Bool                    m_bShowDeleted;
-            sal_Bool                    m_bCaseSensitiveExtension;
-            sal_Bool                    m_bCheckSQL92;
+            bool                    m_bClosed;
+            bool                    m_bAutoCommit;
+            bool                    m_bReadOnly;
+            bool                    m_bShowDeleted;
+            bool                    m_bCaseSensitiveExtension;
+            bool                    m_bCheckSQL92;
             bool                        m_bDefaultTextEncoding;
 
 
@@ -128,13 +128,13 @@ namespace connectivity
             // create a catalog or return the catalog already created
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > createCatalog();
 
-            sal_Bool                matchesExtension( const OUString& _rExt ) const;
+            bool                matchesExtension( const OUString& _rExt ) const;
 
             inline const OUString&    getExtension()            const { return m_aFilenameExtension; }
-            inline sal_Bool         isCaseSensitveExtension()   const { return m_bCaseSensitiveExtension; }
+            inline bool         isCaseSensitveExtension()   const { return m_bCaseSensitiveExtension; }
             inline OFileDriver*     getDriver()                 const { return m_pDriver; }
-            inline sal_Bool         showDeleted()               const { return m_bShowDeleted; }
-            inline sal_Bool         isCheckEnabled()            const { return m_bCheckSQL92; }
+            inline bool         showDeleted()               const { return m_bShowDeleted; }
+            inline bool         isCheckEnabled()            const { return m_bCheckSQL92; }
             inline bool             isTextEncodingDefaulted()   const { return m_bDefaultTextEncoding; }
 
         public:
@@ -145,7 +145,7 @@ namespace connectivity
                 GrantAccess() { }
             };
 
-            void    setCaseSensitiveExtension( sal_Bool _bIsCS, GrantAccess ) { m_bCaseSensitiveExtension = _bIsCS; }
+            void    setCaseSensitiveExtension( bool _bIsCS, GrantAccess ) { m_bCaseSensitiveExtension = _bIsCS; }
         };
     }
 }

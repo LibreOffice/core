@@ -63,7 +63,7 @@ namespace connectivity
 
             OUString                             m_sSqlStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
-            sal_Bool                                    m_bPrepared;
+            bool                                    m_bPrepared;
             ::rtl::Reference< OResultSet >              m_pResultSet;
             ::rtl::Reference<connectivity::OSQLColumns> m_xParamColumns;    // the parameter columns
             OValueRow                                   m_aParameterRow;

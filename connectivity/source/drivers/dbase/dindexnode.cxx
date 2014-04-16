@@ -70,7 +70,7 @@ ONDXKey::ONDXKey(double aVal, sal_uInt32 nRec)
 
 ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
            :nPagePos(nPos)
-           ,bModified(sal_False)
+           ,bModified(false)
            ,nCount(0)
            ,aParent(pParent)
            ,rIndex(rInd)
@@ -92,16 +92,16 @@ void ONDXPage::QueryDelete()
     if (IsModified() && rIndex.m_pFileStream)
         WriteONDXPage( *rIndex.m_pFileStream, *this );
 
-    bModified = sal_False;
+    bModified = false;
     if (rIndex.UseCollector())
     {
         if (aChild.Is())
-            aChild->Release(sal_False);
+            aChild->Release(false);
 
         for (sal_uInt16 i = 0; i < rIndex.getHeader().db_maxkeys;i++)
         {
             if (ppNodes[i].GetChild().Is())
-                ppNodes[i].GetChild()->Release(sal_False);
+                ppNodes[i].GetChild()->Release(false);
 
             ppNodes[i] = ONDXNode();
         }
@@ -136,7 +136,7 @@ sal_uInt16 ONDXPage::FindPos(const ONDXKey& rKey) const
 }
 
 
-sal_Bool ONDXPage::Find(const ONDXKey& rKey)
+bool ONDXPage::Find(const ONDXKey& rKey)
 {
     // searches the given key
     // Speciality: At the end of the method
@@ -146,7 +146,7 @@ sal_Bool ONDXPage::Find(const ONDXKey& rKey)
     while (i < nCount && rKey > ((*this)[i]).GetKey())
            i++;
 
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if (!IsLeaf())
     {
@@ -158,7 +158,7 @@ sal_Bool ONDXPage::Find(const ONDXKey& rKey)
     {
         rIndex.m_aCurLeaf = this;
         rIndex.m_nCurNode = i - 1;
-        bResult = sal_False;
+        bResult = false;
     }
     else
     {
@@ -170,14 +170,14 @@ sal_Bool ONDXPage::Find(const ONDXKey& rKey)
 }
 
 
-sal_Bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
+bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
 {
     // When creating an index there can be multiple nodes added,
     // these are sorted ascending
-    sal_Bool bAppend = nRowsLeft > 0;
+    bool bAppend = nRowsLeft > 0;
     if (IsFull())
     {
-        sal_Bool bResult = sal_True;
+        bool bResult = true;
         ONDXNode aSplitNode;
         if (bAppend)
             aSplitNode = rNode;
@@ -290,11 +290,11 @@ sal_Bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
 }
 
 
-sal_Bool ONDXPage::Insert(sal_uInt16 nPos, ONDXNode& rNode)
+bool ONDXPage::Insert(sal_uInt16 nPos, ONDXNode& rNode)
 {
     sal_uInt16 nMaxCount = rIndex.getHeader().db_maxkeys;
     if (nPos >= nMaxCount)
-        return sal_False;
+        return false;
 
     if (nCount)
     {
@@ -316,19 +316,19 @@ sal_Bool ONDXPage::Insert(sal_uInt16 nPos, ONDXNode& rNode)
         rNode.GetChild()->SetParent(this);
     }
 
-    bModified = sal_True;
+    bModified = true;
 
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool ONDXPage::Append(ONDXNode& rNode)
+bool ONDXPage::Append(ONDXNode& rNode)
 {
     DBG_ASSERT(!IsFull(), "kein Append moeglich");
     return Insert(nCount, rNode);
 }
 
-void ONDXPage::Release(sal_Bool bSave)
+void ONDXPage::Release(bool bSave)
 {
     // free pages
     if (aChild.Is())
@@ -347,7 +347,7 @@ void ONDXPage::Release(sal_Bool bSave)
     aParent = NULL;
 }
 
-void ONDXPage::ReleaseFull(sal_Bool bSave)
+void ONDXPage::ReleaseFull(bool bSave)
 {
     ONDXPagePtr aTempParent = aParent;
     Release(bSave);
@@ -364,7 +364,7 @@ void ONDXPage::ReleaseFull(sal_Bool bSave)
     }
 }
 
-sal_Bool ONDXPage::Delete(sal_uInt16 nNodePos)
+bool ONDXPage::Delete(sal_uInt16 nNodePos)
 {
     if (IsLeaf())
     {
@@ -410,7 +410,7 @@ sal_Bool ONDXPage::Delete(sal_uInt16 nNodePos)
     else if (IsRoot())
         // make sure that the position of the root is kept
         rIndex.SetRootPos(nPagePos);
-    return sal_True;
+    return true;
 }
 
 
@@ -460,7 +460,7 @@ ONDXNode ONDXPage::Split(ONDXPage& rPage)
     // inner nodes have no record number
     if (rIndex.isUnique())
         aResultNode.GetKey().ResetRecord();
-    bModified = sal_True;
+    bModified = true;
     return aResultNode;
 }
 
@@ -476,7 +476,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
            nMaxNodes_2 = nMaxNodes / 2;
 
     // Determine if page is right or left neighbour
-    sal_Bool    bRight    = ((*xPage)[0].GetKey() > (*this)[0].GetKey()); // sal_True, whenn xPage the right side is
+    bool    bRight    = ((*xPage)[0].GetKey() > (*this)[0].GetKey()); // sal_True, whenn xPage the right side is
     sal_uInt16  nNewCount = (*xPage).Count() + Count();
 
     if (IsLeaf())
@@ -509,7 +509,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
                     (*aParent)[nParentNodePos-1].SetChild(this,aParent);
                 else // or set as right node
                     aParent->SetChild(this);
-                aParent->SetModified(sal_True);
+                aParent->SetModified(true);
 
             }
 
@@ -523,12 +523,12 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
                 aParent = NULL;
                 rIndex.SetRootPos(nPagePos);
                 rIndex.m_aRoot = this;
-                SetModified(sal_True);
+                SetModified(true);
             }
             else
                 aParent->SearchAndReplace((*this)[nLastNode].GetKey(),(*this)[nCount-1].GetKey());
 
-            xPage->SetModified(sal_False);
+            xPage->SetModified(false);
             xPage->ReleaseFull(); // is not needed anymore
         }
         // balance the elements   nNewCount >= (nMaxNodes_2 * 2)
@@ -595,7 +595,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
 
             // afterwards parent node will be reset
             (*aParent)[nParentNodePos].SetChild();
-            aParent->SetModified(sal_True);
+            aParent->SetModified(true);
 
             if(aParent->IsRoot() && aParent->Count() == 1)
             {
@@ -604,7 +604,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
                 aParent = NULL;
                 rIndex.SetRootPos(nPagePos);
                 rIndex.m_aRoot = this;
-                SetModified(sal_True);
+                SetModified(true);
             }
             else if(nParentNodePos)
                 // replace the node value
@@ -612,7 +612,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
                 // thats why the node must be updated here
                 aParent->SearchAndReplace((*aParent)[nParentNodePos-1].GetKey(),(*aParent)[nParentNodePos].GetKey());
 
-            xPage->SetModified(sal_False);
+            xPage->SetModified(false);
             xPage->ReleaseFull();
         }
         // balance the elements
@@ -643,7 +643,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
                 (*aParent)[nParentNodePos].SetChild(this,aParent);
 
             }
-            aParent->SetModified(sal_True);
+            aParent->SetModified(true);
         }
     }
 }
@@ -731,7 +731,7 @@ ONDXPagePtr& ONDXNode::GetChild(ODbaseIndex* pIndex, ONDXPage* pParent)
 // ONDXKey
 
 
-sal_Bool ONDXKey::IsText(sal_Int32 eType)
+bool ONDXKey::IsText(sal_Int32 eType)
 {
     return eType == DataType::VARCHAR || eType == DataType::CHAR;
 }
@@ -931,7 +931,7 @@ void ONDXPage::PrintPage()
 }
 #endif
 
-sal_Bool ONDXPage::IsFull() const
+bool ONDXPage::IsFull() const
 {
     return Count() == rIndex.getHeader().db_maxkeys;
 }
@@ -976,7 +976,7 @@ void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
         if (pPage)
         {
             (*pPage)[nPos].GetKey() = rReplace;
-            pPage->SetModified(sal_True);
+            pPage->SetModified(true);
         }
     }
 }
@@ -1002,7 +1002,7 @@ void ONDXPage::Remove(sal_uInt16 nPos)
         (*this)[i] = (*this)[i+1];
 
     nCount--;
-    bModified = sal_True;
+    bModified = true;
 }
 
 

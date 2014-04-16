@@ -44,7 +44,7 @@ namespace connectivity
             sal_Int32                                           m_nFilePos;                 // current IResultSetHelper::Movement
             sal_uInt8*                                          m_pBuffer;
             sal_uInt16                                          m_nBufferSize;  // size of the ReadBuffer, if pBuffer != NULL
-            sal_Bool                                            m_bWriteable;   // svstream cann't say if we are writeable
+            bool                                            m_bWriteable;   // svstream cann't say if we are writeable
                                                                                 // so we have to
 
             virtual void FileClose();
@@ -73,13 +73,13 @@ namespace connectivity
             OConnection* getConnection() const { return m_pConnection;}
             virtual sal_Int32 getCurrentLastPos() const {return -1;}
 
-            virtual sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) = 0;
-            virtual sal_Bool fetchRow(OValueRefRow& _rRow,const OSQLColumns& _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData) = 0;
+            virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) = 0;
+            virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool _bUseTableDefs, bool bRetrieveData) = 0;
 
             ::rtl::Reference<OSQLColumns> getTableColumns() const {return m_aColumns;}
-            virtual sal_Bool InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
-            virtual sal_Bool DeleteRow(const OSQLColumns& _rCols);
-            virtual sal_Bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            virtual bool InsertRow(OValueRefVector& rRow, bool bFlush, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            virtual bool DeleteRow(const OSQLColumns& _rCols);
+            virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor);
             virtual void dropColumn(sal_Int32 _nPos);
             // refresh the header of file based tables to see changes done by someone
@@ -88,7 +88,7 @@ namespace connectivity
             OUString SAL_CALL getName() throw(std::exception) SAL_OVERRIDE { return m_Name; }
 
             OUString getSchema() { return m_SchemaName; }
-            sal_Bool isReadOnly() const { return !m_bWriteable; }
+            bool isReadOnly() const { return !m_bWriteable; }
                 // m_pFileStream && !m_pFileStream->IsWritable(); }
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

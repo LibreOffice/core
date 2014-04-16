@@ -124,7 +124,7 @@ sdbcx::ObjectType OTables::appendObject( const OUString& _rForName, const Refere
 void OTables::dropObject(sal_Int32 _nPos,const OUString& _sElementName)
 {
     Reference< XInterface > xObject( getObject( _nPos ) );
-    sal_Bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
+    bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
     if (!bIsNew)
     {
         Reference< XConnection > xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
@@ -136,7 +136,7 @@ void OTables::dropObject(sal_Int32 _nPos,const OUString& _sElementName)
         OUString aSql(  "DROP " );
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
-        sal_Bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == "VIEW";
+        bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == "VIEW";
         if(bIsView) // here we have a view
             aSql += "VIEW ";
         else

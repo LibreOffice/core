@@ -61,11 +61,11 @@ struct DefColumnMetaData
     sal_Int32 type;
     sal_Int32 precision;
     sal_Int32 scale;
-    sal_Bool isCurrency;
-    sal_Bool isNullable;
-    sal_Bool isAutoIncrement;
-    sal_Bool isReadOnly;
-    sal_Bool isSigned;
+    bool isCurrency;
+    bool isNullable;
+    bool isAutoIncrement;
+    bool isReadOnly;
+    bool isSigned;
 };
 
 struct BaseTypeDef { const char * typeName; sal_Int32 value; };
@@ -681,25 +681,25 @@ Statics & getStatics()
             // that is what is returned by getTypeInfo().getMetaData()
             DefColumnMetaData defTypeInfoMetaData[] =
                 {
-                    { "TYPE_NAME", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,0,0,0,0, false },  // 0
-                    { "DATA_TYPE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::SMALLINT, 0,50,0,0,0,0, true },  // 1
-                    { "PRECISION", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,0,0,0,0, true },  // 2
-                    { "LITERAL_PREFIX", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,0,0,0,0, false },  // 3
-                    { "LITERAL_SUFFIX", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,0,0,0,0, false },  // 4
-                    { "CREATE_PARAMS", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,0,0,0,0, false },  // 5
-                    { "NULLABLE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,0,0,0,0, true },  // 6
-                    { "CASE_SENSITIVE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BIT, 0,50,0,0,0,0, false },  // 7
-                    { "SEARCHABLE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::SMALLINT, 0,50,0,0,0,0, true },  // 8
-                    { "UNSIGNED_ATTRIBUTE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BIT, 0,50,0,0,0,0, false },  // 9
-                    { "FIXED_PREC_SCALE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BIT, 0,50,0,0,0,0, false },  // 10
-                    { "AUTO_INCREMENT", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BIT, 0,50,0,0,0,0, false },  // 11
-                    { "LOCAL_TYPE_NAME", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,0,0,0,0, false },  // 12
-                    { "MINIMUM_SCALE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::SMALLINT, 0,50,0,0,0,0,  true},  // 13
-                    { "MAXIMUM_SCALE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::SMALLINT, 0,50,0,0,0,0, true },  // 14
-                    { "SQL_DATA_TYPE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,0,0,0,0, true },  // 15
-                    { "SQL_DATETIME_SUB", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,0,0,0,0 , true},  // 16
-                    { "NUM_PREC_RADIX", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,0,0,0,0, true },  // 17
-                    {0,0,0,0,0,0,0,0,0,0,0, 0}
+                    { "TYPE_NAME", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,false,false,false,false, false },  // 0
+                    { "DATA_TYPE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::SMALLINT, 0,50,false,false,false,false, true },  // 1
+                    { "PRECISION", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,false,false,false,false, true },  // 2
+                    { "LITERAL_PREFIX", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,false,false,false,false, false },  // 3
+                    { "LITERAL_SUFFIX", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,false,false,false,false, false },  // 4
+                    { "CREATE_PARAMS", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,false,false,false,false, false },  // 5
+                    { "NULLABLE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,false,false,false,false, true },  // 6
+                    { "CASE_SENSITIVE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BIT, 0,50,false,false,false,false, false },  // 7
+                    { "SEARCHABLE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::SMALLINT, 0,50,false,false,false,false, true },  // 8
+                    { "UNSIGNED_ATTRIBUTE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BIT, 0,50,false,false,false,false, false },  // 9
+                    { "FIXED_PREC_SCALE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BIT, 0,50,false,false,false,false, false },  // 10
+                    { "AUTO_INCREMENT", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BIT, 0,50,false,false,false,false, false },  // 11
+                    { "LOCAL_TYPE_NAME", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,false,false,false,false, false },  // 12
+                    { "MINIMUM_SCALE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::SMALLINT, 0,50,false,false,false,false,  true},  // 13
+                    { "MAXIMUM_SCALE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::SMALLINT, 0,50,false,false,false,false, true },  // 14
+                    { "SQL_DATA_TYPE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,false,false,false,false, true },  // 15
+                    { "SQL_DATETIME_SUB", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,false,false,false,false , true},  // 16
+                    { "NUM_PREC_RADIX", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,false,false,false,false, true },  // 17
+                    {0,0,0,0,0,0,0,false,false,false,false, false}
                 };
 
             for( i = 0 ; defTypeInfoMetaData[i].columnName ; i++ )

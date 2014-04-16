@@ -221,7 +221,7 @@ namespace dbtools
         // XParameters equivalents
         void setNull            ( sal_Int32 _nIndex, sal_Int32 sqlType);
         void setObjectNull      ( sal_Int32 _nIndex, sal_Int32 sqlType, const OUString& typeName);
-        void setBoolean         ( sal_Int32 _nIndex, sal_Bool x);
+        void setBoolean         ( sal_Int32 _nIndex, bool x);
         void setByte            ( sal_Int32 _nIndex, sal_Int8 x);
         void setShort           ( sal_Int32 _nIndex, sal_Int16 x);
         void setInt             ( sal_Int32 _nIndex, sal_Int32 x);

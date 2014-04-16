@@ -43,11 +43,11 @@ namespace connectivity
         sal_Int16       nSearchType;    // Can we search for the type?
         sal_Int16       nNumPrecRadix;  // indicating the radix, which is usually 2 or 10
 
-        sal_Bool        bCurrency       : 1;    // Currency
-        sal_Bool        bAutoIncrement  : 1;    // Is it an autoincrementing field?
-        sal_Bool        bNullable       : 1;    // Can the field be NULL?
-        sal_Bool        bCaseSensitive  : 1;    // Is the type case sensitive?
-        sal_Bool        bUnsigned       : 1;    // Is the type unsigned?
+        bool        bCurrency       : 1;    // Currency
+        bool        bAutoIncrement  : 1;    // Is it an autoincrementing field?
+        bool        bNullable       : 1;    // Can the field be NULL?
+        bool        bCaseSensitive  : 1;    // Is the type case sensitive?
+        bool        bUnsigned       : 1;    // Is the type unsigned?
 
         OTypeInfo()
                 :nPrecision(0)
@@ -55,11 +55,11 @@ namespace connectivity
                 ,nMinimumScale(0)
                 ,nType( ::com::sun::star::sdbc::DataType::OTHER)
                 ,nSearchType( ::com::sun::star::sdbc::ColumnSearch::FULL)
-                ,bCurrency(sal_False)
-                ,bAutoIncrement(sal_False)
-                ,bNullable(sal_True)
-                ,bCaseSensitive(sal_False)
-                ,bUnsigned(sal_False)
+                ,bCurrency(false)
+                ,bAutoIncrement(false)
+                ,bNullable(true)
+                ,bCaseSensitive(false)
+                ,bUnsigned(false)
         {}
 
         inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
@@ -71,8 +71,8 @@ namespace connectivity
         inline static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ ) SAL_THROW(())
             {  }
 
-        sal_Bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
-        sal_Bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
+        bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
+        bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
 
         inline OUString getDBName() const { return aTypeName; }
     };

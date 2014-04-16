@@ -41,19 +41,19 @@ namespace connectivity
             ::connectivity::ODatabaseMetaDataResultSet::ORows                           m_aTypeInfoRows;
 
             // cached database information
-            ::std::pair<bool,sal_Bool>          m_isCatalogAtStart;
-            ::std::pair<bool,OUString>   m_sCatalogSeparator;
-            ::std::pair<bool,OUString>   m_sIdentifierQuoteString;
-            ::std::pair<bool,sal_Bool>          m_supportsCatalogsInTableDefinitions;
-            ::std::pair<bool,sal_Bool>          m_supportsSchemasInTableDefinitions;
-            ::std::pair<bool,sal_Bool>          m_supportsCatalogsInDataManipulation;
-            ::std::pair<bool,sal_Bool>          m_supportsSchemasInDataManipulation;
-            ::std::pair<bool,sal_Bool>          m_supportsMixedCaseQuotedIdentifiers;
-            ::std::pair<bool,sal_Bool>          m_supportsAlterTableWithAddColumn;
-            ::std::pair<bool,sal_Bool>          m_supportsAlterTableWithDropColumn;
+            ::std::pair<bool,bool>              m_isCatalogAtStart;
+            ::std::pair<bool,OUString>          m_sCatalogSeparator;
+            ::std::pair<bool,OUString>          m_sIdentifierQuoteString;
+            ::std::pair<bool,bool>              m_supportsCatalogsInTableDefinitions;
+            ::std::pair<bool,bool>              m_supportsSchemasInTableDefinitions;
+            ::std::pair<bool,bool>              m_supportsCatalogsInDataManipulation;
+            ::std::pair<bool,bool>              m_supportsSchemasInDataManipulation;
+            ::std::pair<bool,bool>              m_supportsMixedCaseQuotedIdentifiers;
+            ::std::pair<bool,bool>              m_supportsAlterTableWithAddColumn;
+            ::std::pair<bool,bool>              m_supportsAlterTableWithDropColumn;
             ::std::pair<bool,sal_Int32>         m_MaxStatements;
             ::std::pair<bool,sal_Int32>         m_MaxTablesInSelect;
-            ::std::pair<bool,sal_Bool>          m_storesMixedCaseQuotedIdentifiers;
+            ::std::pair<bool,bool>              m_storesMixedCaseQuotedIdentifiers;
 
             template <typename T> T callImplMethod(::std::pair<bool,T>& _rCache,const ::std::mem_fun_t<T,ODatabaseMetaDataBase>& _pImplMethod)
             {
@@ -74,19 +74,19 @@ namespace connectivity
         protected:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw() = 0;
             // cached database information
-            virtual OUString impl_getIdentifierQuoteString_throw(  )             = 0;
-            virtual sal_Bool        impl_isCatalogAtStart_throw(  )                     = 0;
-            virtual OUString impl_getCatalogSeparator_throw(  )                  = 0;
-            virtual sal_Bool        impl_supportsCatalogsInTableDefinitions_throw(  )   = 0;
-            virtual sal_Bool        impl_supportsSchemasInTableDefinitions_throw(  )    = 0;
-            virtual sal_Bool        impl_supportsCatalogsInDataManipulation_throw(  )   = 0;
-            virtual sal_Bool        impl_supportsSchemasInDataManipulation_throw(  )    = 0;
-            virtual sal_Bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  )   = 0;
-            virtual sal_Bool        impl_supportsAlterTableWithAddColumn_throw(  )      = 0;
-            virtual sal_Bool        impl_supportsAlterTableWithDropColumn_throw(  )     = 0;
-            virtual sal_Int32       impl_getMaxStatements_throw(  )                     = 0;
-            virtual sal_Int32       impl_getMaxTablesInSelect_throw(  )                 = 0;
-            virtual sal_Bool        impl_storesMixedCaseQuotedIdentifiers_throw(  )     = 0;
+            virtual OUString    impl_getIdentifierQuoteString_throw(  )             = 0;
+            virtual bool        impl_isCatalogAtStart_throw(  )                     = 0;
+            virtual OUString    impl_getCatalogSeparator_throw(  )                  = 0;
+            virtual bool        impl_supportsCatalogsInTableDefinitions_throw(  )   = 0;
+            virtual bool        impl_supportsSchemasInTableDefinitions_throw(  )    = 0;
+            virtual bool        impl_supportsCatalogsInDataManipulation_throw(  )   = 0;
+            virtual bool        impl_supportsSchemasInDataManipulation_throw(  )    = 0;
+            virtual bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  )   = 0;
+            virtual bool        impl_supportsAlterTableWithAddColumn_throw(  )      = 0;
+            virtual bool        impl_supportsAlterTableWithDropColumn_throw(  )     = 0;
+            virtual sal_Int32   impl_getMaxStatements_throw(  )                     = 0;
+            virtual sal_Int32   impl_getMaxTablesInSelect_throw(  )                 = 0;
+            virtual bool        impl_storesMixedCaseQuotedIdentifiers_throw(  )     = 0;
 
 
         public:

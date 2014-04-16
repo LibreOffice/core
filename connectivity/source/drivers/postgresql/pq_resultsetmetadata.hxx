@@ -90,7 +90,7 @@ class ResultSetMetaData :
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > getColumnByIndex( int index );
 
     sal_Int32 getIntColumnProperty( const OUString & name, int index, int def );
-    sal_Bool getBoolColumnProperty( const OUString & name, int index, sal_Bool def );
+    bool getBoolColumnProperty( const OUString & name, int index, bool def );
 
 public:
     ResultSetMetaData(

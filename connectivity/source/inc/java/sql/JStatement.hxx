@@ -87,7 +87,7 @@ namespace connectivity
         // Properties
         sal_Int32                   m_nResultSetConcurrency;
         sal_Int32                   m_nResultSetType;
-        sal_Bool                    m_bEscapeProcessing;
+        bool                    m_bEscapeProcessing;
         ::cppu::OBroadcastHelper&   rBHelper;
 
 

@@ -97,7 +97,7 @@ OPoolCollection::OPoolCollection(const Reference< XComponentContext >& _rxContex
 
 OPoolCollection::~OPoolCollection()
 {
-    clearConnectionPools(sal_False);
+    clearConnectionPools(false);
 }
 
 Reference< XConnection > SAL_CALL OPoolCollection::getConnection( const OUString& _rURL ) throw(SQLException, RuntimeException, std::exception)
@@ -216,10 +216,10 @@ Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const OUString& _
     return xDriver;
 }
 
-sal_Bool OPoolCollection::isDriverPoolingEnabled(const OUString& _sDriverImplName,
+bool OPoolCollection::isDriverPoolingEnabled(const OUString& _sDriverImplName,
                                                  Reference< XInterface >& _rxDriverNode)
 {
-    sal_Bool bEnabled = sal_False;
+    bool bEnabled = false;
     Reference<XInterface> xConnectionPoolRoot = getConfigPoolRoot();
     // then look for which of them settings are stored in the configuration
     Reference< XNameAccess > xDirectAccess(openNode(getDriverSettingsNodeName(),xConnectionPoolRoot),UNO_QUERY);
@@ -244,13 +244,13 @@ sal_Bool OPoolCollection::isDriverPoolingEnabled(const OUString& _sDriverImplNam
     return bEnabled;
 }
 
-sal_Bool OPoolCollection::isPoolingEnabled()
+bool OPoolCollection::isPoolingEnabled()
 {
     // the config node where all pooling relevant info are stored under
     Reference<XInterface> xConnectionPoolRoot = getConfigPoolRoot();
 
     // the global "enabled" flag
-    sal_Bool bEnabled = sal_False;
+    bool bEnabled = false;
     if(xConnectionPoolRoot.is())
         getNodeValue(getEnablePoolingNodeName(),xConnectionPoolRoot) >>= bEnabled;
     return bEnabled;
@@ -263,12 +263,12 @@ Reference<XInterface> OPoolCollection::getConfigPoolRoot()
     return m_xConfigNode;
 }
 
-sal_Bool OPoolCollection::isPoolingEnabledByUrl(const OUString& _sUrl,
+bool OPoolCollection::isPoolingEnabledByUrl(const OUString& _sUrl,
                                                 Reference< XDriver >& _rxDriver,
                                                 OUString& _rsImplName,
                                                 Reference< XInterface >& _rxDriverNode)
 {
-    sal_Bool bEnabled = sal_False;
+    bool bEnabled = false;
     _rxDriver = m_xManager->getDriverByURL(_sUrl);
     if (_rxDriver.is() && isPoolingEnabled())
     {
@@ -285,7 +285,7 @@ sal_Bool OPoolCollection::isPoolingEnabledByUrl(const OUString& _sUrl,
     return bEnabled;
 }
 
-void OPoolCollection::clearConnectionPools(sal_Bool _bDispose)
+void OPoolCollection::clearConnectionPools(bool _bDispose)
 {
     OConnectionPools::const_iterator aIter = m_aPools.begin();
     while(aIter != m_aPools.end())
@@ -453,7 +453,7 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
     MutexGuard aGuard(m_aMutex);
     if(evt.Source == m_xConfigNode)
     {
-        sal_Bool bEnabled = sal_True;
+        bool bEnabled = true;
         evt.NewValue >>= bEnabled;
         if(!bEnabled )
         {
@@ -462,7 +462,7 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
             OConnectionPools::iterator aIter = m_aPools.begin();
             for(;aIter != m_aPools.end();++aIter)
             {
-                aIter->second->clear(sal_False);
+                aIter->second->clear(false);
                 aIter->second->release();
             }
             m_aPools.clear();
@@ -471,7 +471,7 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
     }
     else if(evt.Source.is())
     {
-        sal_Bool bEnabled = sal_True;
+        bool bEnabled = true;
         evt.NewValue >>= bEnabled;
         if(!bEnabled)
         {
@@ -493,7 +493,7 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
             OConnectionPools::iterator aFind = m_aPools.find(sThisDriverName);
             if(aFind != m_aPools.end() && aFind->second)
             {
-                aFind->second->clear(sal_False);
+                aFind->second->clear(false);
                 aFind->second->release();
                 m_aPools.erase(aFind);
             }
@@ -503,7 +503,7 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
 
 void OPoolCollection::clearDesktop()
 {
-    clearConnectionPools(sal_True);
+    clearConnectionPools(true);
     if ( m_xDesktop.is() )
         m_xDesktop->removeTerminateListener(this);
 m_xDesktop.clear();

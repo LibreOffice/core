@@ -69,7 +69,7 @@ namespace connectivity
                             // Array of bound parameter objects. Each parameter marker will have a
                             // corresponding object to hold bind information, and resulting data.
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
-            sal_Bool                                                                        m_bPrepared;
+            bool                                                                        m_bPrepared;
 
             void FreeParams();
             void putParamData (sal_Int32 index) throw(::com::sun::star::sdbc::SQLException);
@@ -86,7 +86,7 @@ namespace connectivity
             void setParameter(sal_Int32 parameterIndex, sal_Int32 _nType, sal_Int16 _nScale, const OUString &_sData);
             void setParameter(sal_Int32 parameterIndex, sal_Int32 _nType, const com::sun::star::uno::Sequence< sal_Int8 > &_Data);
 
-            sal_Bool isPrepared() const { return m_bPrepared;}
+            bool isPrepared() const { return m_bPrepared;}
             void prepareStatement();
             void checkParameterIndex(sal_Int32 _parameterIndex);
 

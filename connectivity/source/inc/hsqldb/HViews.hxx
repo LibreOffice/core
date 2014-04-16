@@ -29,7 +29,7 @@ namespace connectivity
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
-            sal_Bool m_bInDrop;
+            bool m_bInDrop;
 
         protected:
             virtual sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;

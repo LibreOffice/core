@@ -42,11 +42,11 @@ namespace connectivity
             sal_uInt16                  m_nCurNode;
 
         protected:
-            sal_uIntPtr Find(sal_Bool bFirst);
-            sal_uIntPtr GetCompare(sal_Bool bFirst);
-            sal_uIntPtr GetLike(sal_Bool bFirst);
-            sal_uIntPtr GetNull(sal_Bool bFirst);
-            sal_uIntPtr GetNotNull(sal_Bool bFirst);
+            sal_uIntPtr Find(bool bFirst);
+            sal_uIntPtr GetCompare(bool bFirst);
+            sal_uIntPtr GetLike(bool bFirst);
+            sal_uIntPtr GetNull(bool bFirst);
+            sal_uIntPtr GetNotNull(bool bFirst);
 
             ONDXKey* GetFirstKey(ONDXPage* pPage,
                                 const file::OOperand& rKey);

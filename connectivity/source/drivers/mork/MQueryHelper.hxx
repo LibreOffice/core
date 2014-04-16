@@ -68,9 +68,9 @@ namespace connectivity
             MQueryExpressionBase( node_type _eNodeType ) : m_eNodeType( _eNodeType ) {}
 
         public:
-            sal_Bool   isUnknown( ) const { return m_eNodeType == Unknown; }
-            sal_Bool   isStringExpr( ) const { return m_eNodeType == StringExpr; }
-            sal_Bool   isExpr( ) const { return m_eNodeType == Expr; }
+            bool   isUnknown( ) const { return m_eNodeType == Unknown; }
+            bool   isStringExpr( ) const { return m_eNodeType == StringExpr; }
+            bool   isExpr( ) const { return m_eNodeType == Expr; }
         };
 
         class MQueryExpressionString : public MQueryExpressionBase {
@@ -167,8 +167,8 @@ namespace connectivity
             ::osl::Condition    m_aCondition;
             resultsArray        m_aResults;
             sal_uInt32          m_nIndex;
-            sal_Bool            m_bHasMore;
-            sal_Bool            m_bAtEnd;
+            bool            m_bHasMore;
+            bool            m_bAtEnd;
             void            append(MQueryHelperResultEntry* resEnt );
             void            clear_results();
             OColumnAlias        m_rColumnAlias;
@@ -192,18 +192,18 @@ namespace connectivity
 
             void                       reset();
             MQueryHelperResultEntry*   getByIndex( sal_uInt32 nRow );
-            sal_Bool                   isError() const;
-            sal_Bool                   queryComplete() const;
+            bool                       isError() const;
+            bool                       queryComplete() const;
             sal_Int32                  getResultCount() const;
-            sal_Bool                   checkRowAvailable( sal_Int32 nDBRow );
-            sal_Bool getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType );
-            sal_Int32 executeQuery(OConnection* xConnection);
-            const OColumnAlias&             getColumnAlias() const { return m_rColumnAlias; }
-            bool                            hadError() const { return m_aError.is(); }
-            inline ErrorDescriptor& getError() { return m_aError; }
+            bool                       checkRowAvailable( sal_Int32 nDBRow );
+            bool                       getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType );
+            sal_Int32                  executeQuery(OConnection* xConnection);
+            const OColumnAlias&        getColumnAlias() const { return m_rColumnAlias; }
+            bool                       hadError() const { return m_aError.is(); }
+            inline ErrorDescriptor&    getError() { return m_aError; }
 
-            void                            setAddressbook( OUString&);
-            void                            setExpression( MQueryExpression &_expr );
+            void                       setAddressbook( OUString&);
+            void                       setExpression( MQueryExpression &_expr );
 
         };
     }

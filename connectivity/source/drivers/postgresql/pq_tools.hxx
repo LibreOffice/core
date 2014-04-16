@@ -88,7 +88,7 @@ sal_Int32 extractIntProperty(
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & descriptor,
     const OUString &name );
 
-sal_Bool extractBoolProperty(
+bool extractBoolProperty(
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & descriptor,
     const OUString &name );
 
@@ -155,7 +155,7 @@ public:
 class TransactionGuard
 {
     com::sun::star::uno::Reference< com::sun::star::sdbc::XStatement > m_stmt;
-    sal_Bool m_commited;
+    bool m_commited;
 public:
     /// takes over ownership of given statemet
     TransactionGuard( const com::sun::star::uno::Reference< com::sun::star::sdbc::XStatement > &stmt );

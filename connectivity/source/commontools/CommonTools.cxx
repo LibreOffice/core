@@ -180,7 +180,7 @@ namespace connectivity
 namespace dbtools
 {
 
-sal_Bool isCharOk(sal_Unicode c,const OUString& _rSpecials)
+bool isCharOk(sal_Unicode c,const OUString& _rSpecials)
 {
 
     return ( ((c >= 97) && (c <= 122)) || ((c >= 65) && (c <=  90)) || ((c >= 48) && (c <=  57)) ||
@@ -224,7 +224,7 @@ OUString convertName2SQLName(const OUString& rName,const OUString& _rSpecials)
     OUString aNewName(rName);
     const sal_Unicode* pStr = rName.getStr();
     sal_Int32 nLength = rName.getLength();
-    sal_Bool bValid(*pStr < 128 && !isdigit(*pStr));
+    bool bValid(*pStr < 128 && !isdigit(*pStr));
     for (sal_Int32 i=0; bValid && i < nLength; ++pStr,++i )
         if(!isCharOk(*pStr,_rSpecials))
         {

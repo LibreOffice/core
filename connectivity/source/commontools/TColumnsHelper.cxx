@@ -50,7 +50,7 @@ namespace connectivity
     class OColumnsHelperImpl
     {
     public:
-        OColumnsHelperImpl(sal_Bool _bCase)
+        OColumnsHelperImpl(bool _bCase)
             : m_aColumnInfo(_bCase)
         {
         }
@@ -84,9 +84,9 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
     if ( !m_pImpl )
         m_pImpl = new OColumnsHelperImpl(isCaseSensitive());
 
-    sal_Bool bQueryInfo     = sal_True;
-    sal_Bool bAutoIncrement = sal_False;
-    sal_Bool bIsCurrency    = sal_False;
+    bool bQueryInfo     = true;
+    bool bAutoIncrement = false;
+    bool bIsCurrency    = false;
     sal_Int32 nDataType     = DataType::OTHER;
 
     ColumnInformationMap::iterator aFind = m_pImpl->m_aColumnInfo.find(_rName);
@@ -98,7 +98,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
     }
     if ( aFind != m_pImpl->m_aColumnInfo.end() )
     {
-        bQueryInfo      = sal_False;
+        bQueryInfo      = false;
         bAutoIncrement  = aFind->second.first.first;
         bIsCurrency     = aFind->second.first.second;
         nDataType       = aFind->second.second;

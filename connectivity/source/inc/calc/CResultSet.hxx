@@ -40,13 +40,13 @@ namespace connectivity
                                 public OCalcResultSet_BASE,
                                 public OCalcResultSet_BASE3
         {
-            sal_Bool m_bBookmarkable;
+            bool m_bBookmarkable;
         protected:
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
-            virtual sal_Bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex) SAL_OVERRIDE;
+            virtual bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex) SAL_OVERRIDE;
         public:
             DECLARE_SERVICE_INFO();
 
@@ -72,7 +72,7 @@ namespace connectivity
             // XDeleteRows
             virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-            virtual sal_Bool isRowDeleted() const SAL_OVERRIDE { return sal_False; }
+            virtual bool isRowDeleted() const SAL_OVERRIDE { return false; }
 
         };
     }

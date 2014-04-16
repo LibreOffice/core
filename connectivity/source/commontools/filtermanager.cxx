@@ -55,7 +55,7 @@ namespace dbtools
         OSL_ENSURE( m_xComponentAggregate.is(), "FilterManager::initialize: invalid arguments!" );
 
         if ( m_xComponentAggregate.is() )
-            m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_APPLYFILTER), makeAny( (sal_Bool)sal_True ) );
+            m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_APPLYFILTER), makeAny( true ) );
     }
 
 

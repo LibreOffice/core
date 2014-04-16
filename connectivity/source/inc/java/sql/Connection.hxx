@@ -52,9 +52,9 @@ namespace connectivity
         jclass                  m_Driver_theClass;
         java::sql::ConnectionLog
                                 m_aLogger;
-        sal_Bool                m_bParameterSubstitution;
-        sal_Bool                m_bIgnoreDriverPrivileges;
-        sal_Bool                m_bIgnoreCurrency;
+        bool                m_bParameterSubstitution;
+        bool                m_bIgnoreDriverPrivileges;
+        bool                m_bIgnoreCurrency;
         ::com::sun::star::uno::Any  m_aCatalogRestriction;
         ::com::sun::star::uno::Any  m_aSchemaRestriction;
 
@@ -88,14 +88,14 @@ namespace connectivity
         DECLARE_SERVICE_INFO();
         // A ctor that is needed for returning the object
         java_sql_Connection( const java_sql_Driver& _rDriver );
-        sal_Bool construct( const OUString& url,
+        bool construct( const OUString& url,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info);
 
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&
             getConnectionInfo() const { return m_aConnectionInfo; }
 
-        inline  sal_Bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
-        inline  sal_Bool isIgnoreCurrencyEnabled() const { return   m_bIgnoreCurrency; }
+        inline  bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
+        inline  bool isIgnoreCurrencyEnabled() const { return   m_bIgnoreCurrency; }
         inline const ::com::sun::star::uno::Any& getCatalogRestriction() const { return m_aCatalogRestriction; }
         inline const ::com::sun::star::uno::Any& getSchemaRestriction() const { return m_aSchemaRestriction; }
 

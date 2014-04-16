@@ -95,7 +95,7 @@ OSortIndex::OSortIndex( const ::std::vector<OKeyType>& _aKeyType,
                         const ::std::vector<TAscendingOrder>& _aAscending)
     :m_aKeyType(_aKeyType)
     ,m_aAscending(_aAscending)
-    ,m_bFrozen(sal_False)
+    ,m_bFrozen(false)
 {
 }
 
@@ -132,7 +132,7 @@ void OSortIndex::Freeze()
         aIter->second = NULL;
     }
 
-    m_bFrozen = sal_True;
+    m_bFrozen = true;
 }
 
 

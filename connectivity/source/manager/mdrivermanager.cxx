@@ -207,7 +207,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
                 // obtain the preference list
                 Any aPreferences = xDriverManagerNode->getByName(sDriverPreferenceLocation);
 #if OSL_DEBUG_LEVEL > 0
-                sal_Bool bSuccess =
+                bool bSuccess =
 #endif
                 aPreferences >>= _rPrecedence;
                 OSL_ENSURE(bSuccess || !aPreferences.hasValue(), "lcl_getDriverPrecedence: invalid value for the preferences node (no string sequence but not NULL)!");
@@ -286,7 +286,7 @@ void OSDBCDriverManager::bootstrapDrivers()
             {
                 // we got a factory for the driver
                 DriverAccess aDriverDescriptor;
-                sal_Bool bValidDescriptor = sal_False;
+                bool bValidDescriptor = false;
 
                 // can it tell us something about the implementation name?
                 xSI = xSI.query( xFactory );
@@ -294,7 +294,7 @@ void OSDBCDriverManager::bootstrapDrivers()
                 {   // yes -> no need to load the driver immediately (load it later when needed)
                     aDriverDescriptor.sImplementationName = xSI->getImplementationName();
                     aDriverDescriptor.xComponentFactory = xFactory;
-                    bValidDescriptor = sal_True;
+                    bValidDescriptor = true;
 
                     m_aEventLogger.log( LogLevel::CONFIG,
                         "found SDBC driver $1$, no need to load it",
@@ -316,7 +316,7 @@ void OSDBCDriverManager::bootstrapDrivers()
                         if ( xSI.is() )
                         {
                             aDriverDescriptor.sImplementationName = xSI->getImplementationName();
-                            bValidDescriptor = sal_True;
+                            bValidDescriptor = true;
 
                             m_aEventLogger.log( LogLevel::CONFIG,
                                 "found SDBC driver $1$, needed to load it",

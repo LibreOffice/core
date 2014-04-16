@@ -968,7 +968,7 @@ namespace dbtools
     }
 
 
-    void ParameterManager::setBoolean( sal_Int32 _nIndex, sal_Bool x )
+    void ParameterManager::setBoolean( sal_Int32 _nIndex, bool x )
     {
         VISIT_PARAMETER( setBoolean( _nIndex, x ) );
     }

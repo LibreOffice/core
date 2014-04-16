@@ -186,8 +186,8 @@ static void appendColumnList(
                 Reference< XPropertySet > column( xEnum->nextElement(), UNO_QUERY );
                 OUString name = extractStringProperty( column, st.NAME );
                 OUString defaultValue = extractStringProperty( column, st.DEFAULT_VALUE );
-                sal_Bool isNullable = extractBoolProperty( column, st.IS_NULLABLE );
-                sal_Bool isAutoIncrement = extractBoolProperty( column, st.IS_AUTO_INCREMENT );
+                bool isNullable = extractBoolProperty( column, st.IS_NULLABLE );
+                bool isAutoIncrement = extractBoolProperty( column, st.IS_AUTO_INCREMENT );
 
                 bufferQuoteIdentifier( buf, name, settings );
 
@@ -199,12 +199,12 @@ static void appendColumnList(
                     if( com::sun::star::sdbc::DataType::INTEGER == dataType )
                     {
                         buf.append( " serial  ");
-                        isNullable = sal_False;
+                        isNullable = false;
                     }
                     else if( com::sun::star::sdbc::DataType::BIGINT == dataType )
                     {
                         buf.append( " serial8 " );
-                        isNullable = sal_False;
+                        isNullable = false;
                     }
                     else
                         buf.append( type );

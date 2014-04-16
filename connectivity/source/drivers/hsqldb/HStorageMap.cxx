@@ -270,14 +270,14 @@ namespace connectivity
 
                                 if ( ((_nMode & ElementModes::WRITE) != ElementModes::WRITE ) )
                                 {
-                                    sal_Bool bIsStream = sal_True;
+                                    bool bIsStream = true;
                                     try
                                     {
                                        bIsStream = aStoragePair.first.first->isStreamElement(sStrippedName);
                                     }
                                     catch(const Exception&)
                                     {
-                                        bIsStream = sal_False;
+                                        bIsStream = false;
                                     }
                                     if ( !bIsStream )
                                         return pHelper; // readonly file without data stream

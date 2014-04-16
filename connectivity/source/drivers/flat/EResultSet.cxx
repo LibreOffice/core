@@ -39,7 +39,7 @@ using namespace com::sun::star::sdbcx;
 
 OFlatResultSet::OFlatResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator& _aSQLIterator)
                 : file::OResultSet(pStmt,_aSQLIterator)
-                ,m_bBookmarkable(sal_True)
+                ,m_bBookmarkable(true)
 {
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                ::getBooleanCppuType());
 }
@@ -109,9 +109,9 @@ sal_Bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark ) throw( 
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
+    m_bRowDeleted = m_bRowInserted = m_bRowUpdated = false;
 
-    return Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),sal_True);
+    return Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),true);
 }
 
 sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException, std::exception)
@@ -120,9 +120,9 @@ sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, 
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
+    m_bRowDeleted = m_bRowInserted = m_bRowUpdated = false;
 
-    Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),sal_False);
+    Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),false);
 
     return relative(rows);
 }

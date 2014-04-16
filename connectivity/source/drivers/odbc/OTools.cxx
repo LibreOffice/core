@@ -115,7 +115,7 @@ void OTools::getValue(  OConnection* _pConnection,
                         SQLHANDLE _aStatementHandle,
                         sal_Int32 columnIndex,
                         SQLSMALLINT _nType,
-                        sal_Bool &_bWasNull,
+                        bool &_bWasNull,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                         void* _pValue,
                         SQLLEN _nSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
@@ -146,7 +146,7 @@ void OTools::getValue(  OConnection* _pConnection,
                                         _pValue,
                                         _nSize,
                                         &pcbValue),
-                            _aStatementHandle,SQL_HANDLE_STMT,_xInterface,sal_False);
+                            _aStatementHandle,SQL_HANDLE_STMT,_xInterface,false);
     _bWasNull = pcbValue == SQL_NULL_DATA;
 }
 
@@ -160,7 +160,7 @@ void OTools::bindValue( OConnection* _pConnection,
                         SQLLEN * const pLen,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                         rtl_TextEncoding _nTextEncoding,
-                        sal_Bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+                        bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::bindValue" );
     SQLRETURN nRetcode;
@@ -168,7 +168,7 @@ void OTools::bindValue( OConnection* _pConnection,
     SQLSMALLINT   fCType;
     SQLLEN nMaxLen = _nMaxLen;
 
-    OTools::getBindTypes(   sal_False,
+    OTools::getBindTypes(   false,
                             _bUseOldTimeDate,
                             _nType,
                             fCType,
@@ -295,7 +295,7 @@ void OTools::ThrowException(const OConnection* _pConnection,
                             const SQLHANDLE _pContext,
                             const SQLSMALLINT _nHandleType,
                             const Reference< XInterface >& _xInterface,
-                            const sal_Bool _bNoFound,
+                            const bool _bNoFound,
                             const rtl_TextEncoding _nTextEncoding) throw(SQLException)
 {
     switch(_rRetCode)
@@ -354,7 +354,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
                                          const SQLHANDLE _aStatementHandle,
                                          const sal_Int32 columnIndex,
                                          const SQLSMALLINT _fSqlType,
-                                         sal_Bool &_bWasNull,
+                                         bool &_bWasNull,
                                          const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::getBytesValue" );
@@ -407,7 +407,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
                                        SQLHANDLE _aStatementHandle,
                                        sal_Int32 columnIndex,
                                        SQLSMALLINT _fSqlType,
-                                       sal_Bool &_bWasNull,
+                                       bool &_bWasNull,
                                        const Reference< XInterface >& _xInterface,
                                        rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
@@ -575,7 +575,7 @@ void OTools::GetInfo(OConnection* _pConnection,
 void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
-                     sal_Bool &_rValue,
+                     bool &_rValue,
                      const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
     SQLSMALLINT nValueLen;
@@ -693,8 +693,8 @@ SQLSMALLINT OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
     return odbcType;
 }
 
-void OTools::getBindTypes(sal_Bool _bUseWChar,
-                          sal_Bool _bUseOldTimeDate,
+void OTools::getBindTypes(bool _bUseWChar,
+                          bool _bUseOldTimeDate,
                           SQLSMALLINT _nOdbcType,
                           SQLSMALLINT& fCType,
                           SQLSMALLINT& fSqlType

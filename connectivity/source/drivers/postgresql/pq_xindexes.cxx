@@ -205,7 +205,7 @@ void Indexes::appendByDescriptor(
     Statics & st = getStatics();
     OUString name = extractStringProperty( descriptor, st.NAME );
 
-    sal_Bool isUnique = extractBoolProperty( descriptor, st.IS_UNIQUE );
+    bool isUnique = extractBoolProperty( descriptor, st.IS_UNIQUE );
 
     OUStringBuffer buf( 128 );
 

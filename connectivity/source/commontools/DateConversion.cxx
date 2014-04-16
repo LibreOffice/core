@@ -242,7 +242,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
     {
         // Does the String need to be formatted?
         sal_Int16 nTypeClass = nKeyType & ~NumberFormat::DEFINED;
-        sal_Bool bTextFormat = nTypeClass == NumberFormat::TEXT;
+        bool bTextFormat = nTypeClass == NumberFormat::TEXT;
         sal_Int32 nKeyToUse  = bTextFormat ? 0 : nKey;
         sal_Int16 nRealUsedTypeClass = nTypeClass;
         // for a Text-Format the formatter needs some more freedom, otherwise
@@ -370,7 +370,7 @@ double DBTypeConversion::getValue( const Reference< XColumn >& i_column, const D
 
         default:
             {
-                sal_Bool bIsSigned = sal_True;
+                bool bIsSigned = true;
                 OSL_VERIFY( xProp->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ISSIGNED ) ) >>= bIsSigned );
                 if ( !bIsSigned )
                 {

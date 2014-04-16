@@ -58,8 +58,8 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet()
     ,m_aStatement(NULL)
     ,m_xMetaData(NULL)
     ,m_nColPos(0)
-    ,m_bBOF(sal_True)
-    ,m_bEOF(sal_True)
+    ,m_bBOF(true)
+    ,m_bEOF(true)
 {
     construct();
 }
@@ -71,8 +71,8 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet( MetaDataResultSetType _e
     ,m_aStatement(NULL)
     ,m_xMetaData(NULL)
     ,m_nColPos(0)
-    ,m_bBOF(sal_True)
-    ,m_bEOF(sal_True)
+    ,m_bBOF(true)
+    ,m_bEOF(true)
 {
     construct();
 
@@ -159,7 +159,7 @@ Sequence< Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  ) throw(Runtime
 void ODatabaseMetaDataResultSet::setRows(const ORows& _rRows)
 {
     m_aRows = _rRows;
-    m_bBOF = sal_True;
+    m_bBOF = true;
     m_bEOF = m_aRows.empty();
 }
 
@@ -451,7 +451,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, Runti
     if ( m_bBOF )
     {
        m_aRowsIter = m_aRows.begin();
-       m_bBOF = sal_False;
+       m_bBOF = false;
     }
     else
     {
@@ -465,7 +465,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, Runti
     bool bSuccess = m_aRowsIter != m_aRows.end();
     if ( !bSuccess )
     {
-        m_bEOF = sal_True;
+        m_bEOF = true;
         m_bBOF = m_aRows.empty();
     }
     return bSuccess;
@@ -777,7 +777,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                         {
                             case TypeClass_BOOLEAN:
                                 {
-                                    sal_Bool bValue = sal_False;
+                                    bool bValue = false;
                                     *pRowIter >>= bValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(bValue));
                                 }

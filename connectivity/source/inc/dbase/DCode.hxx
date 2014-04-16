@@ -50,7 +50,7 @@ namespace connectivity
                              const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes=NULL);
 
-            virtual sal_Bool isIndexed() const SAL_OVERRIDE;
+            virtual bool isIndexed() const SAL_OVERRIDE;
             virtual file::OEvaluateSet* preProcess(file::OBoolOperator* pOp, file::OOperand* pRight = 0) SAL_OVERRIDE;
             TYPEINFO_OVERRIDE();
         };

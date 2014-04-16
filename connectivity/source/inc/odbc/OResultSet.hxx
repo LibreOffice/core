@@ -130,7 +130,7 @@ namespace connectivity
             // Else, we read and cache all columns whose number is <= a requested column.
             // m_aRow[colNumber].getBound() says if it contains an up-to-date value or not.
             TDataRow                                    m_aRow;
-            sal_Bool                                    m_bFetchDataInOrder;
+            bool                                    m_bFetchDataInOrder;
             SQLHANDLE                                   m_aStatementHandle;
             SQLHANDLE                                   m_aConnectionHandle;
             OStatement_Base*                            m_pStatement;
@@ -142,16 +142,16 @@ namespace connectivity
             sal_Int32                                   m_nRowPos;
             mutable sal_uInt32                          m_nUseBookmarks;
             SQLRETURN                                   m_nCurrentFetchState;
-            sal_Bool                                    m_bWasNull;
-            sal_Bool                                    m_bEOF;                 // after last record
-            sal_Bool                                    m_bLastRecord;
-            sal_Bool                                    m_bFreeHandle;
-            sal_Bool                                    m_bInserting;
-            sal_Bool                                    m_bRowInserted;
-            sal_Bool                                    m_bRowDeleted;
-            sal_Bool                                    m_bUseFetchScroll;
+            bool                                    m_bWasNull;
+            bool                                    m_bEOF;                 // after last record
+            bool                                    m_bLastRecord;
+            bool                                    m_bFreeHandle;
+            bool                                    m_bInserting;
+            bool                                    m_bRowInserted;
+            bool                                    m_bRowDeleted;
+            bool                                    m_bUseFetchScroll;
 
-            sal_Bool  isBookmarkable()          const;
+            bool      isBookmarkable()          const;
             sal_Int32 getResultSetConcurrency() const;
             sal_Int32 getResultSetType()        const;
             sal_Int32 getFetchDirection()       const;
@@ -171,9 +171,9 @@ namespace connectivity
             void releaseBuffer();
             void updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void fillNeededData(SQLRETURN _nRet);
-            sal_Bool moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData);
+            bool moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, bool _bRetrieveData);
             TVoidPtr allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex);
-            SQLRETURN unbind(sal_Bool _bUnbindHandle = sal_True);
+            SQLRETURN unbind(bool _bUnbindHandle = true);
             SWORD impl_getColumnType_nothrow(sal_Int32 columnIndex);
 
             // helper to implement XRow::getXXX in simple cases
@@ -182,7 +182,7 @@ namespace connectivity
             // for simple cases
             template < typename T > T impl_getValue( const sal_Int32 _nColumnIndex, SQLSMALLINT nType );
             // these cases need some special treatment
-            sal_Bool impl_getBoolean( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            bool impl_getBoolean( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             ::com::sun::star::uno::Sequence< sal_Int8 > impl_getBytes( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             ::com::sun::star::util::Date impl_getDate( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             ::com::sun::star::util::Time impl_getTime( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -329,10 +329,10 @@ namespace connectivity
             virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             // IResultSetHelper
-            virtual sal_Bool move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData) SAL_OVERRIDE;
+            virtual bool move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, bool _bRetrieveData) SAL_OVERRIDE;
             virtual sal_Int32 getDriverPos() const SAL_OVERRIDE;
-            virtual sal_Bool deletedVisible() const SAL_OVERRIDE;
-            virtual sal_Bool isRowDeleted() const SAL_OVERRIDE;
+            virtual bool deletedVisible() const SAL_OVERRIDE;
+            virtual bool isRowDeleted() const SAL_OVERRIDE;
 
         protected:
             using OPropertySetHelper::getFastPropertyValue;

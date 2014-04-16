@@ -283,7 +283,7 @@ sal_Bool OStatementCommonBase::convertFastPropertyValue(
     (void) rOldValue;
     (void) nHandle;
     (void) rValue;
-    sal_Bool bConverted = sal_False;
+    bool bConverted = false;
     // here we have to try to convert
     return bConverted;
 }

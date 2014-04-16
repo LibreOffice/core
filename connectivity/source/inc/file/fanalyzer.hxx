@@ -38,8 +38,8 @@ namespace connectivity
             ::rtl::Reference<OPredicateInterpreter> m_aInterpreter;
             OConnection*                        m_pConnection;
 
-            mutable sal_Bool                    m_bHasSelectionCode;
-            mutable sal_Bool                    m_bSelectionFirstTime;
+            mutable bool                    m_bHasSelectionCode;
+            mutable bool                    m_bSelectionFirstTime;
 
             void bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvaluateSetList& _rEvaluateSetList);
 
@@ -71,9 +71,9 @@ namespace connectivity
 
             void dispose();
             void start(OSQLParseNode* pSQLParseNode);
-            virtual sal_Bool hasRestriction() const;
-            virtual sal_Bool hasFunctions() const;
-            inline sal_Bool evaluateRestriction()   { return m_aInterpreter->start(); }
+            virtual bool hasRestriction() const;
+            virtual bool hasFunctions() const;
+            inline bool evaluateRestriction()   { return m_aInterpreter->start(); }
             void setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std::vector<sal_Int32>& _rColumnMapping);
             void setOrigColumns(const OFileColumns& rCols);
             virtual OOperandAttr* createOperandAttr(sal_Int32 _nPos,

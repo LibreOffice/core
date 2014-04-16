@@ -43,7 +43,7 @@ namespace connectivity { namespace hsqldb
     public:
         HView(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            sal_Bool _bCaseSensitive,
+            bool _bCaseSensitive,
             const OUString& _rSchemaName,
             const OUString& _rName
         );

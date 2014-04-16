@@ -115,9 +115,9 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
     //  open read-only as long as updating isn't implemented
     Sequence<PropertyValue> aArgs(2);
     aArgs[0].Name = "Hidden";
-    aArgs[0].Value <<= (sal_Bool) sal_True;
+    aArgs[0].Value <<= true;
     aArgs[1].Name = "ReadOnly";
-    aArgs[1].Value <<= (sal_Bool) sal_True;
+    aArgs[1].Value <<= true;
 
     if ( !m_sPassword.isEmpty() )
     {

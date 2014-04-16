@@ -54,7 +54,7 @@ namespace connectivity
         TIntValuePairVector             m_aKeyValues;
         TKeyTypeVector                  m_aKeyType;
         ::std::vector<TAscendingOrder>  m_aAscending;
-        sal_Bool                        m_bFrozen;
+        bool                        m_bFrozen;
 
     public:
 
@@ -95,7 +95,7 @@ namespace connectivity
 
 
         // look at the name
-        sal_Bool IsFrozen() const { return m_bFrozen; }
+        bool IsFrozen() const { return m_bFrozen; }
         // returns the current size of the keyvalues
         size_t Count()   const { return m_aKeyValues.size(); }
 
@@ -110,17 +110,17 @@ namespace connectivity
     */
     class OOO_DLLPUBLIC_DBTOOLS OKeySet : public ORefVector<sal_Int32>
     {
-        sal_Bool m_bFrozen;
+        bool m_bFrozen;
     public:
         OKeySet()
             : ORefVector<sal_Int32>()
-            , m_bFrozen(sal_False){}
+            , m_bFrozen(false){}
         OKeySet(Vector::size_type _nSize)
             : ORefVector<sal_Int32>(_nSize)
-            , m_bFrozen(sal_False){}
+            , m_bFrozen(false){}
 
-        sal_Bool    isFrozen() const                        { return m_bFrozen; }
-        void        setFrozen(sal_Bool _bFrozen=sal_True)   { m_bFrozen = _bFrozen; }
+        bool    isFrozen() const                        { return m_bFrozen; }
+        void        setFrozen(bool _bFrozen=true)   { m_bFrozen = _bFrozen; }
     };
 }
 #endif // CONNECTIVITY_TSORTINDEX_HXX

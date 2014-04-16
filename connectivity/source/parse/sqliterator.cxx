@@ -321,7 +321,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
 
     // get the command and the EscapeProcessing properties from the sub query
     OUString sSubQueryCommand;
-    sal_Bool bEscapeProcessing = sal_False;
+    bool bEscapeProcessing = false;
     try
     {
         Reference< XPropertySet > xQueryProperties( _rQuery, UNO_QUERY_THROW );
@@ -984,7 +984,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 OUString sColumnName;
                 OUString aTableRange;
                 sal_Int32 nType = DataType::VARCHAR;
-                sal_Bool bFkt(sal_False);
+                bool bFkt(false);
                 pColumnRef = pColumnRef->getChild(0);
                 while (
                         pColumnRef->getKnownRuleID() != OSQLParseNode::subquery &&
@@ -1014,7 +1014,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                         // LEM FIXME: the if condition is not quite right
                         //            many expressions are rules, e.g. "5+3"
                         //            or even: "colName + 1"
-                        bFkt = sal_True;
+                        bFkt = true;
                         nType = getFunctionReturnType(pColumnRef);
                     }
                 }
@@ -1121,7 +1121,7 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
             OSQLParseNode * pOptAscDesc = pColumnRef->getParent()->getChild(1);
             OSL_ENSURE(pOptAscDesc != NULL,"OSQLParseTreeIterator: error in parse tree!");
 
-            sal_Bool bAscending = ! (pOptAscDesc && SQL_ISTOKEN(pOptAscDesc,DESC));
+            bool bAscending = ! (pOptAscDesc && SQL_ISTOKEN(pOptAscDesc,DESC));
             setOrderByColumnName(sColumnName, aTableRange,bAscending);
         }
         else
@@ -1476,7 +1476,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
     }
     else
     {
-        sal_Bool bNotFound = sal_True;
+        bool bNotFound = true;
         OSQLColumns::Vector::const_iterator aIter = ::connectivity::find(
             m_aSelectColumns->get().begin(),
             m_aSelectColumns->get().end(),
@@ -1488,7 +1488,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
             pNewColumn->setName(sParameterName);
             pNewColumn->setRealName(_aColumnName);
             m_aParameters->get().push_back(pNewColumn);
-            bNotFound = sal_False;
+            bNotFound = false;
         }
         else if(!_aColumnName.isEmpty())// search in the tables for the right one
         {
@@ -1501,7 +1501,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                 pNewColumn->setName(sParameterName);
                 pNewColumn->setRealName(_aColumnName);
                 m_aParameters->get().push_back(pNewColumn);
-                bNotFound = sal_False;
+                bNotFound = false;
             }
         }
         if ( bNotFound )
@@ -1790,7 +1790,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
     {
         OSQLTables::const_iterator aFind = m_pImpl->m_pTables->find(rTableRange);
 
-        sal_Bool bError = sal_False;
+        bool bError = false;
         if (aFind != m_pImpl->m_pTables->end() && aFind->second.is())
         {
             if (bFkt)
@@ -1826,11 +1826,11 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
                     _rColumns->get().push_back(xCol);
                 }
                 else
-                    bError = sal_True;
+                    bError = true;
             }
         }
         else
-            bError = sal_True;
+            bError = true;
 
         // Table does not exist or lacking field
         if (bError)

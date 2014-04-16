@@ -226,8 +226,8 @@ static bool lcl_HasTextInColumn( const Reference<XSpreadsheet>& xSheet, sal_Int3
 }
 
 static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<XNumberFormats>& xFormats,
-                        sal_Int32 nDocColumn, sal_Int32 nStartRow, sal_Bool bHasHeaders,
-                        OUString& rName, sal_Int32& rDataType, sal_Bool& rCurrency )
+                        sal_Int32 nDocColumn, sal_Int32 nStartRow, bool bHasHeaders,
+                        OUString& rName, sal_Int32& rDataType, bool& rCurrency )
 {
     //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_GetColumnInfo" );
     //! avoid duplicate field names
@@ -251,7 +251,7 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
     Reference<XPropertySet> xProp( xDataCell, UNO_QUERY );
     if ( xProp.is() )
     {
-        rCurrency = sal_False;          // set to true for currency below
+        rCurrency = false;          // set to true for currency below
 
         const CellContentType eCellType = lcl_GetContentOrResultType( xDataCell );
         // #i35178# use "text" type if there is any text cell in the column
@@ -286,7 +286,7 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
                 rDataType = DataType::DECIMAL;
             else if ( nNumType & NumberFormat::CURRENCY )
             {
-                rCurrency = sal_True;
+                rCurrency = true;
                 rDataType = DataType::DECIMAL;
             }
             else if ( ( nNumType & NumberFormat::DATETIME ) == NumberFormat::DATETIME )
@@ -314,7 +314,7 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
 
 
 static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
-                    sal_Int32 nStartCol, sal_Int32 nStartRow, sal_Bool bHasHeaders,
+                    sal_Int32 nStartCol, sal_Int32 nStartRow, bool bHasHeaders,
                     const ::Date& rNullDate,
                     sal_Int32 nDBRow, sal_Int32 nDBColumn, sal_Int32 nType )
 {
@@ -349,7 +349,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                 break;
             case DataType::BIT:
                 if ( eCellType == CellContentType_VALUE )
-                    rValue = (sal_Bool)( xCell->getValue() != 0.0 );
+                    rValue = xCell->getValue() != 0.0;
                 else
                     rValue.setNull();
                 break;
@@ -453,13 +453,13 @@ void OCalcTable::fillColumns()
 
     OUString aTypeName;
     ::comphelper::UStringMixEqual aCase(m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
-    const sal_Bool bStoresMixedCaseQuotedIdentifiers = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
+    const bool bStoresMixedCaseQuotedIdentifiers = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
 
     for (sal_Int32 i = 0; i < m_nDataCols; i++)
     {
         OUString aColumnName;
         sal_Int32 eType = DataType::OTHER;
-        sal_Bool bCurrency = sal_False;
+        bool bCurrency = false;
 
         lcl_GetColumnInfo( m_xSheet, m_xFormats, m_nStartCol + i, m_nStartRow, m_bHasHeaders,
                             aColumnName, eType, bCurrency );
@@ -538,7 +538,7 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
                 ,m_nStartRow(0)
                 ,m_nDataCols(0)
                 ,m_nDataRows(0)
-                ,m_bHasHeaders(sal_False)
+                ,m_bHasHeaders(false)
                 ,m_aNullDate(::Date::EMPTY)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::OCalcTable" );
@@ -558,7 +558,7 @@ void OCalcTable::construct()
             if ( m_xSheet.is() )
             {
                 lcl_GetDataArea( m_xSheet, m_nDataCols, m_nDataRows );
-                m_bHasHeaders = sal_True;
+                m_bHasHeaders = true;
                 // whole sheet is always assumed to include a header row
             }
         }
@@ -578,7 +578,7 @@ void OCalcTable::construct()
                         //  Header flag is always stored with database range
                         //  Get flag from FilterDescriptor
 
-                        sal_Bool bRangeHeader = sal_True;
+                        bool bRangeHeader = true;
                         Reference<XPropertySet> xFiltProp( xDBRange->getFilterDescriptor(), UNO_QUERY );
                         if ( xFiltProp.is() )
                             xFiltProp->getPropertyValue("ContainsHeader") >>= bRangeHeader;
@@ -734,7 +734,7 @@ sal_Int32 OCalcTable::getCurrentLastPos() const
     return m_nDataRows;
 }
 
-sal_Bool OCalcTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
+bool OCalcTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::seekRow" );
 
@@ -800,25 +800,25 @@ Error:
             m_nFilePos = nTempPos;   // previous position
     }
     //  aStatus.Set(SDB_STAT_NO_DATA_FOUND);
-    return sal_False;
+    return false;
 
 End:
     nCurPos = m_nFilePos;
-    return sal_True;
+    return true;
 }
 
-sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
-                                sal_Bool _bUseTableDefs, sal_Bool bRetrieveData )
+bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
+                           bool _bUseTableDefs, bool bRetrieveData )
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::fetchRow" );
     // read the bookmark
 
-    sal_Bool bIsCurRecordDeleted = sal_False;
+    bool bIsCurRecordDeleted = false;
     _rRow->setDeleted(bIsCurRecordDeleted);
     *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
-        return sal_True;
+        return true;
 
     // fields
 
@@ -841,7 +841,7 @@ sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
                                 m_aNullDate, m_nFilePos, i, nType );
         }
     }
-    return sal_True;
+    return true;
 }
 
 void OCalcTable::FileClose()

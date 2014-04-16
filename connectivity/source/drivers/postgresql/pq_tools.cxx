@@ -209,10 +209,10 @@ OUString extractStringProperty(
     return value;
 }
 
-sal_Bool extractBoolProperty(
+bool extractBoolProperty(
     const Reference< XPropertySet > & descriptor, const OUString &name )
 {
-    sal_Bool value = sal_False;
+    bool value = false;
     descriptor->getPropertyValue( name ) >>= value;
     return value;
 }
@@ -278,7 +278,7 @@ DisposeGuard::~DisposeGuard()
 
 TransactionGuard::TransactionGuard( const Reference< XStatement > &stmt )
     : m_stmt( stmt ),
-      m_commited( sal_False )
+      m_commited( false )
 {
     m_stmt->executeUpdate( getStatics().BEGIN );
 }
@@ -286,7 +286,7 @@ TransactionGuard::TransactionGuard( const Reference< XStatement > &stmt )
 void TransactionGuard::commit()
 {
     m_stmt->executeUpdate( getStatics().COMMIT );
-    m_commited = sal_True;
+    m_commited = true;
 }
 
 void TransactionGuard::executeUpdate( const OUString & sql )
@@ -1153,7 +1153,7 @@ OUString querySingleValue(
 bool implSetObject(	const Reference< XParameters >& _rxParameters,
                         const sal_Int32 _nColumnIndex, const Any& _rValue)
 {
-    sal_Bool bSuccessfullyReRouted = sal_True;
+    bool bSuccessfullyReRouted = true;
     switch (_rValue.getValueTypeClass())
     {
         case typelib_TypeClass_HYPER:
@@ -1207,7 +1207,7 @@ bool implSetObject(	const Reference< XParameters >& _rxParameters,
                 _rxParameters->setBytes(_nColumnIndex, *(Sequence<sal_Int8>*)_rValue.getValue());
             }
             else
-                bSuccessfullyReRouted = sal_False;
+                bSuccessfullyReRouted = false;
             break;
         case typelib_TypeClass_STRUCT:
             if (_rValue.getValueType() == ::getCppuType((const com::sun::star::util::DateTime*)0))
@@ -1217,7 +1217,7 @@ bool implSetObject(	const Reference< XParameters >& _rxParameters,
             else if (_rValue.getValueType() == ::getCppuType((const com::sun::star::util::Time*)0))
                 _rxParameters->setTime(_nColumnIndex, *(com::sun::star::util::Time*)_rValue.getValue());
             else
-                bSuccessfullyReRouted = sal_False;
+                bSuccessfullyReRouted = false;
             break;
 
         case typelib_TypeClass_INTERFACE:
@@ -1232,7 +1232,7 @@ bool implSetObject(	const Reference< XParameters >& _rxParameters,
         }
             // run through
         default:
-            bSuccessfullyReRouted = sal_False;
+            bSuccessfullyReRouted = false;
 
     }
 

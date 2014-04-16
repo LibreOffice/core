@@ -262,7 +262,7 @@ namespace connectivity
                 osl_atomic_increment( &_refCount );
         }
 
-        void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
+        void checkDisposed(bool _bThrow) throw ( DisposedException )
         {
             if (_bThrow)
                 throw DisposedException();

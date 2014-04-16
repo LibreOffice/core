@@ -51,13 +51,13 @@ OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          ,m_aConnectionHandle(NULL)
                          ,m_pDriverHandleCopy(_pDriverHandle)
                          ,m_nStatementCount(0)
-                         ,m_bClosed(sal_True)
-                         ,m_bUseCatalog(sal_False)
-                         ,m_bUseOldDateFormat(sal_False)
-                         ,m_bParameterSubstitution(sal_False)
-                         ,m_bIgnoreDriverPrivileges(sal_False)
-                         ,m_bPreventGetVersionColumns(sal_False)
-                         ,m_bReadOnly(sal_True)
+                         ,m_bClosed(true)
+                         ,m_bUseCatalog(false)
+                         ,m_bUseOldDateFormat(false)
+                         ,m_bParameterSubstitution(false)
+                         ,m_bIgnoreDriverPrivileges(false)
+                         ,m_bPreventGetVersionColumns(false)
+                         ,m_bReadOnly(true)
 {
     m_pDriver->acquire();
 }
@@ -96,7 +96,7 @@ oslGenericFunction OConnection::getOdbcFunction(sal_Int32 _nIndex)  const
     return m_pDriver->getOdbcFunction(_nIndex);
 }
 
-SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr,sal_Int32 nTimeOut, sal_Bool bSilent)
+SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTimeOut, bool bSilent)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -156,7 +156,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr,sal_Int32 nTim
     }
     catch(Exception&)
     {
-        m_bReadOnly = sal_True;
+        m_bReadOnly = true;
     }
     try
     {
@@ -206,7 +206,7 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
     const char* pRetriStmt  = "AutoRetrievingStatement";
 
     sal_Int32 nTimeout = 20;
-    sal_Bool bSilent = sal_True;
+    bool bSilent = true;
     const PropertyValue *pBegin = info.getConstArray();
     const PropertyValue *pEnd   = pBegin + info.getLength();
     for(;pBegin != pEnd;++pBegin)
@@ -223,7 +223,7 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
             OSL_VERIFY( pBegin->Value >>= m_bParameterSubstitution );
         else if( pBegin->Name.equalsAscii(pRetrieving))
         {
-            sal_Bool bAutoRetrievingEnabled = sal_False;
+            bool bAutoRetrievingEnabled = false;
             OSL_VERIFY( pBegin->Value >>= bAutoRetrievingEnabled );
             enableAutoRetrievingEnabled(bAutoRetrievingEnabled);
         }
@@ -273,7 +273,7 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
     SQLRETURN nSQLRETURN = OpenConnection(aDSN,nTimeout, bSilent);
     if (nSQLRETURN == SQL_ERROR || nSQLRETURN == SQL_NO_DATA)
     {
-        OTools::ThrowException(this,nSQLRETURN,m_aConnectionHandle,SQL_HANDLE_DBC,*this,sal_False);
+        OTools::ThrowException(this,nSQLRETURN,m_aConnectionHandle,SQL_HANDLE_DBC,*this,false);
     }
     return nSQLRETURN;
 }
@@ -501,7 +501,7 @@ void OConnection::disposing()
 
     if(!m_bClosed)
         N3SQLDisconnect(m_aConnectionHandle);
-    m_bClosed   = sal_True;
+    m_bClosed   = true;
 
     dispose_ChildImpl();
 }
@@ -514,7 +514,7 @@ OConnection* OConnection::cloneConnection()
 SQLHANDLE OConnection::createStatementHandle()
 {
     OConnection* pConnectionTemp = this;
-    sal_Bool bNew = sal_False;
+    bool bNew = false;
     try
     {
         sal_Int32 nMaxStatements = getMetaData()->getMaxStatements();
@@ -524,7 +524,7 @@ SQLHANDLE OConnection::createStatementHandle()
             pConnection->acquire();
             pConnection->Construct(m_sURL,getConnectionInfo());
             pConnectionTemp = pConnection;
-            bNew = sal_True;
+            bNew = true;
         }
     }
     catch(SQLException&)

@@ -247,7 +247,7 @@ OOrderColumn::~OOrderColumn()
 void OOrderColumn::construct()
 {
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING), PROPERTY_ID_ISASCENDING,
-        PropertyAttribute::READONLY,  const_cast< sal_Bool* >( &m_bAscending ),    ::getCppuType( &m_bAscending ) );
+        PropertyAttribute::READONLY,  const_cast< bool* >( &m_bAscending ),    ::getCppuType( &m_bAscending ) );
 }
 
 ::cppu::IPropertyArrayHelper* OOrderColumn::createArrayHelper() const

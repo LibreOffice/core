@@ -137,7 +137,7 @@ namespace connectivity
             // Sets the flag indicating if this is an OUTPUT parameter
 
 
-            void setOutputParameter (sal_Bool output)
+            void setOutputParameter (bool output)
             {
                 outputParameter = output;
             }
@@ -147,7 +147,7 @@ namespace connectivity
             // Gets the OUTPUT parameter flag
 
 
-            sal_Bool isOutputParameter ()
+            bool isOutputParameter ()
             {
                 return outputParameter;
             }
@@ -177,7 +177,7 @@ namespace connectivity
             sal_Int32 sqlType;                          // Java SQL type used to
                                                             // register an OUT parameter
 
-            sal_Bool outputParameter;   // true for OUTPUT parameters
+            bool outputParameter;   // true for OUTPUT parameters
         };
     }
 }

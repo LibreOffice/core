@@ -153,7 +153,7 @@ namespace dbtools
                                             31, 31, 30, 31, 30, 31 };
 
 
-    static sal_Bool implIsLeapYear(sal_Int32 _nYear)
+    static bool implIsLeapYear(sal_Int32 _nYear)
     {
         return  (   (   ((_nYear % 4) == 0)
                     &&  ((_nYear % 100) != 0)
@@ -200,7 +200,7 @@ namespace dbtools
     {
         sal_Int32   nTempDays;
         sal_Int32   i = 0;
-        sal_Bool    bCalc;
+        bool    bCalc;
 
         do
         {
@@ -208,11 +208,11 @@ namespace dbtools
             rYear = (sal_uInt16)((nTempDays / 365) - i);
             nTempDays -= (rYear-1) * 365;
             nTempDays -= ((rYear-1) / 4) - ((rYear-1) / 100) + ((rYear-1) / 400);
-            bCalc = sal_False;
+            bCalc = false;
             if ( nTempDays < 1 )
             {
                 i++;
-                bCalc = sal_True;
+                bCalc = true;
             }
             else
             {
@@ -221,7 +221,7 @@ namespace dbtools
                     if ( (nTempDays != 366) || !implIsLeapYear( rYear ) )
                     {
                         i--;
-                        bCalc = sal_True;
+                        bCalc = true;
                     }
                 }
             }

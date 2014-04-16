@@ -101,7 +101,7 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const ::boost::shared_ptr< conne
     ,m_pTable(NULL)
     ,m_CurrentRowCount(0)
     ,m_nParamIndex(0)
-    ,m_bIsAlwaysFalseQuery(sal_False)
+    ,m_bIsAlwaysFalseQuery(false)
     ,m_pKeySet(NULL)
     ,m_pSortIndex(NULL)
     ,m_nNewRow(0)
@@ -198,7 +198,7 @@ Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*c
 sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
-    m_bWasNull = sal_True;
+    m_bWasNull = true;
     return sal_False;
 }
 
@@ -324,17 +324,17 @@ sal_uInt32 OResultSet::currentRowCount()
 
 
 
-sal_Bool OResultSet::fetchCurrentRow( ) throw(SQLException, RuntimeException)
+bool OResultSet::fetchCurrentRow( ) throw(SQLException, RuntimeException)
 {
     OSL_TRACE("fetchCurrentRow, m_nRowPos = %u", m_nRowPos );
     return fetchRow(getCurrentCardNumber());
 }
 
 
-sal_Bool OResultSet::pushCard(sal_uInt32 /*cardNumber*/) throw(SQLException, RuntimeException)
+bool OResultSet::pushCard(sal_uInt32 /*cardNumber*/) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> OResultSet::pushCard()" );
-    return sal_True;
+    return true;
 /*
     if (cardNumber == 0)
         return sal_True;
@@ -361,7 +361,7 @@ sal_Bool OResultSet::pushCard(sal_uInt32 /*cardNumber*/) throw(SQLException, Run
 */
 }
 
-sal_Bool OResultSet::fetchRow(sal_Int32 cardNumber,sal_Bool bForceReload) throw(SQLException, RuntimeException)
+bool OResultSet::fetchRow(sal_Int32 cardNumber,bool bForceReload) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> OResultSet::fetchRow()" );
 
@@ -370,7 +370,7 @@ sal_Bool OResultSet::fetchRow(sal_Int32 cardNumber,sal_Bool bForceReload) throw(
     {
         // Check whether we've already fetched the row...
         if ( !(m_aRow->get())[0].isNull() && (sal_Int32)(m_aRow->get())[0] == (sal_Int32)cardNumber )
-            return sal_True;
+            return true;
         //Check whether the old row has been changed
         if (cardNumber == m_nUpdatedRow)
         {
@@ -382,8 +382,8 @@ sal_Bool OResultSet::fetchRow(sal_Int32 cardNumber,sal_Bool bForceReload) throw(
 //    else
 //        m_aQuery.resyncRow(cardNumber);
 
-    if ( validRow( cardNumber ) == sal_False )
-        return sal_False;
+    if ( validRow( cardNumber ) == false )
+        return false;
 
     (m_aRow->get())[0] = (sal_Int32)cardNumber;
     sal_Int32 nCount = m_aColumnNames.getLength();
@@ -401,17 +401,17 @@ sal_Bool OResultSet::fetchRow(sal_Int32 cardNumber,sal_Bool bForceReload) throw(
             }
         }
     }
-    return sal_True;
+    return true;
 
 }
 
 
 const ORowSetValue& OResultSet::getValue(sal_Int32 cardNumber, sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if ( fetchRow( cardNumber ) == sal_False )
+    if ( fetchRow( cardNumber ) == false )
     {
         OSL_FAIL("fetchRow() returned False" );
-        m_bWasNull = sal_True;
+        m_bWasNull = true;
         return *ODatabaseMetaDataResultSet::getEmptyValue();
     }
 
@@ -617,7 +617,7 @@ Any SAL_CALL OResultSet::getWarnings(  ) throw(SQLException, RuntimeException, s
 void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("In/Out: OResultSet::refreshRow" );
-    if (fetchRow(getCurrentCardNumber(),sal_True)) {
+    if (fetchRow(getCurrentCardNumber(),true)) {
         //force fetch current row will cause we lose all change to the current row
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERROR_REFRESH_ROW, *this );
     }
@@ -878,7 +878,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         if ( columnName.equalsAscii("0") && op == MQueryOp::Is &&
              matchString.equalsAscii("1") ) {
             OSL_TRACE("Query always evaluates to FALSE");
-            m_bIsAlwaysFalseQuery = sal_True;
+            m_bIsAlwaysFalseQuery = true;
         }
         queryExpression.getExpressions().push_back( new MQueryExpressionString( columnName, op, matchString ));
     }
@@ -1082,7 +1082,7 @@ void OResultSet::fillRowData()
     // Generate Match Conditions for Query
     const OSQLParseNode*  pParseTree = m_pSQLIterator->getWhereTree();
 
-    m_bIsAlwaysFalseQuery = sal_False;
+    m_bIsAlwaysFalseQuery = false;
     if ( pParseTree != NULL )
     {
         // Extract required info
@@ -1124,7 +1124,7 @@ void OResultSet::fillRowData()
 }
 
 
-static sal_Bool matchRow( OValueRow& row1, OValueRow& row2 )
+static bool matchRow( OValueRow& row1, OValueRow& row2 )
 {
     OValueVector::Vector::iterator row1Iter = row1->get().begin();
     OValueVector::Vector::iterator row2Iter = row2->get().begin();
@@ -1135,12 +1135,12 @@ static sal_Bool matchRow( OValueRow& row1, OValueRow& row2 )
         {
             // Compare values, if at anytime there's a mismatch return false
             if ( !( (*row1Iter) == (*row2Iter) ) )
-                return sal_False;
+                return false;
         }
     }
 
     // If we get to here the rows match
-    return sal_True;
+    return true;
 }
 
 sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
@@ -1201,7 +1201,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
             }
             else
             {
-                sal_Bool bDistinct = sal_False;
+                bool bDistinct = false;
                 OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
                 if (pDistinct && pDistinct->getTokenID() == SQL_TOKEN_DISTINCT)
                 {
@@ -1210,7 +1210,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                         m_aOrderbyColumnNumber.push_back(m_aColMapping[1]);
                         m_aOrderbyAscending.push_back(SQL_DESC);
                     }
-                    bDistinct = sal_True;
+                    bDistinct = true;
                 }
 
                 OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
@@ -1341,7 +1341,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                                    const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
                                    const Reference<XIndexAccess>& _xNames,
-                                   sal_Bool _bSetColumnMapping,
+                                   bool _bSetColumnMapping,
                                    const Reference<XDatabaseMetaData>& _xMetaData,
                                    ::std::vector<sal_Int32>& _rColMapping)
 {
@@ -1419,7 +1419,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
 
 
 
-sal_Bool OResultSet::isCount() const
+bool OResultSet::isCount() const
 {
     return (m_pParseTree &&
             m_pParseTree->count() > 2                                                       &&
@@ -1434,7 +1434,7 @@ sal_Bool OResultSet::isCount() const
 
 // Check for valid row in m_aQuery
 
-sal_Bool OResultSet::validRow( sal_uInt32 nRow)
+bool OResultSet::validRow( sal_uInt32 nRow)
 {
     sal_Int32  nNumberOfRecords = m_aQueryHelper.getResultCount();
 
@@ -1442,10 +1442,10 @@ sal_Bool OResultSet::validRow( sal_uInt32 nRow)
 #if OSL_DEBUG_LEVEL > 0
             OSL_TRACE("validRow: waiting...");
 #endif
-            if (m_aQueryHelper.checkRowAvailable( nRow ) == sal_False)
+            if (m_aQueryHelper.checkRowAvailable( nRow ) == false)
             {
                 OSL_TRACE("validRow(%u): return False", nRow);
-                return sal_False;
+                return false;
             }
 
             if ( m_aQueryHelper.hadError() )
@@ -1459,15 +1459,15 @@ sal_Bool OResultSet::validRow( sal_uInt32 nRow)
     if (( nRow == 0 ) ||
         ( nRow > (sal_uInt32)nNumberOfRecords && m_aQueryHelper.queryComplete()) ){
         OSL_TRACE("validRow(%u): return False", nRow);
-        return sal_False;
+        return false;
     }
 #if OSL_DEBUG_LEVEL > 0
     OSL_TRACE("validRow(%u): return True", nRow);
 #endif
 
-    return sal_True;
+    return true;
 }
-sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
+bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
 {
     impl_ensureKeySet();
     if (m_CurrentRowCount < nMaxCardNumber)
@@ -1480,7 +1480,7 @@ sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
             m_pKeySet->get().push_back( nKeyValue );
         m_CurrentRowCount = nMaxCardNumber;
     }
-    return sal_True;
+    return true;
 }
 
 sal_Int32 OResultSet::deletedCount()
@@ -1490,7 +1490,7 @@ sal_Int32 OResultSet::deletedCount()
 
 }
 
-sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
+bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
 {
     SAL_INFO("connectivity.mork", "=> OResultSet::seekRow()" );
 
@@ -1536,7 +1536,7 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     if ( nCurPos <= 0 ) {
         m_nRowPos = 0;
         OSL_TRACE("seekRow: return False, m_nRowPos = %u", m_nRowPos );
-        return sal_False;
+        return false;
     }
     sal_Int32 nCurCard = nCurPos;
     if ( nCurPos < (sal_Int32)m_pKeySet->get().size() ) //The requested row is exist in m_pKeySet, so we just use it
@@ -1550,14 +1550,14 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
         fillKeySet(nNumberOfRecords);
         m_nRowPos = static_cast<sal_uInt32>(m_pKeySet->get().size() + 1);
         OSL_TRACE("seekRow: return False, m_nRowPos = %u", m_nRowPos );
-        return sal_False;
+        return false;
     }
     //Insert new retrieved items for later use
     fillKeySet(nNumberOfRecords);
     m_nRowPos = (sal_uInt32)nCurPos;
     OSL_TRACE("seekRow: return True, m_nRowPos = %u", m_nRowPos );
     fetchCurrentRow();
-    return sal_True;
+    return true;
 }
 
 void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping)
@@ -1574,7 +1574,7 @@ void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMappin
 {
     OSL_TRACE("getBookmark, m_nRowPos = %u", m_nRowPos );
     ResultSetEntryGuard aGuard( *this );
-    if ( fetchCurrentRow() == sal_False ) {
+    if ( fetchCurrentRow() == false ) {
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERROR_GET_ROW, *this );
     }
 
@@ -1663,7 +1663,7 @@ void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw
 {
     OSL_TRACE("updateValue, m_nRowPos = %u", m_nRowPos );
     ResultSetEntryGuard aGuard( *this );
-    if ( fetchCurrentRow() == sal_False ) {
+    if ( fetchCurrentRow() == false ) {
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERROR_GET_ROW, *this );
     }
 
@@ -1683,7 +1683,7 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
 {
     OSL_TRACE("updateNull, m_nRowPos = %u", m_nRowPos );
     ResultSetEntryGuard aGuard( *this );
-    if ( fetchCurrentRow() == sal_False )
+    if ( fetchCurrentRow() == false )
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERROR_GET_ROW, *this );
 
     checkPendingUpdate();
@@ -1849,7 +1849,7 @@ void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQL
     }
 }
 
-sal_Bool OResultSet::determineReadOnly()
+bool OResultSet::determineReadOnly()
 {
 //    OSL_FAIL( "OResultSet::determineReadOnly(  ) not implemented" );
 

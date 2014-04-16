@@ -37,7 +37,7 @@ OSkipDeletedSet::~OSkipDeletedSet()
     //m_aBookmarks.clear();
 }
 
-sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData)
+bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, bool _bRetrieveData)
 {
     SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::skipDeleted" );
     OSL_ENSURE(_eCursorPosition != IResultSetHelper::BOOKMARK,"OSkipDeletedSet::SkipDeleted can't be called for BOOKMARK");
@@ -64,8 +64,8 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             break;
     }
 
-    sal_Bool bDone          = sal_True;
-    sal_Bool bDataFound     = sal_False;
+    bool bDone          = true;
+    bool bDataFound     = false;
 
     if (_eCursorPosition == IResultSetHelper::LAST)
     {
@@ -92,7 +92,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
         // and then move forward until we are after the last row
         while(bDataFound)
         {
-            bDataFound = m_pHelper->move(IResultSetHelper::NEXT, 1, sal_False); // we don't need the data here
+            bDataFound = m_pHelper->move(IResultSetHelper::NEXT, 1, false); // we don't need the data here
             if( bDataFound && ( m_bDeletedVisible || !m_pHelper->isRowDeleted()) )
             {   // we weren't on the last row we remember it and move on
                 m_aBookmarksPositions.push_back(m_pHelper->getDriverPos());
@@ -125,7 +125,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             //m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(m_pHelper->getDriverPos(),m_aBookmarksPositions.size()+1)).first);
         }
         else
-            bDone = sal_False;
+            bDone = false;
     }
 
     while (bDataFound && !bDone)            // Iterate until we are at the valid set
@@ -141,7 +141,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             //m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(m_pHelper->getDriverPos(),m_aBookmarksPositions.size()+1)).first);
         }
         else
-            bDone = sal_False;
+            bDone = false;
     }
 
     if(bDataFound && bDone)
@@ -162,10 +162,10 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
     return bDataFound;
 }
 
-sal_Bool OSkipDeletedSet::moveAbsolute(sal_Int32 _nPos,sal_Bool _bRetrieveData)
+bool OSkipDeletedSet::moveAbsolute(sal_Int32 _nPos,bool _bRetrieveData)
 {
     SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::moveAbsolute" );
-    sal_Bool bDataFound = sal_False;
+    bool bDataFound = false;
     sal_Int32 nNewPos = _nPos;
     if(nNewPos > 0)
     {

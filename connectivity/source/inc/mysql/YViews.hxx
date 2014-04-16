@@ -28,7 +28,7 @@ namespace connectivity
         class OViews : public sdbcx::OCollection
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
-            sal_Bool m_bInDrop;
+            bool m_bInDrop;
             //  OCatalog*                                           m_pParent;
         protected:
             virtual sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
@@ -42,7 +42,7 @@ namespace connectivity
             OViews(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector) : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
                 ,m_xMetaData(_rMetaData)
-                ,m_bInDrop(sal_False)
+                ,m_bInDrop(false)
             {}
 
             // only the name is identical to ::cppu::OComponentHelper

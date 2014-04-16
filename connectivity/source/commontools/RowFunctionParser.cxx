@@ -104,13 +104,13 @@ public:
         switch(meFunct)
         {
             case ENUM_FUNC_EQUATION:
-                aRet = new ORowSetValueDecorator(sal_Bool(mpFirstArg->evaluate(_aRow )->getValue() == mpSecondArg->evaluate(_aRow )->getValue()) );
+                aRet = new ORowSetValueDecorator( mpFirstArg->evaluate(_aRow )->getValue() == mpSecondArg->evaluate(_aRow )->getValue() );
                 break;
             case ENUM_FUNC_AND:
-                aRet = new ORowSetValueDecorator( sal_Bool(mpFirstArg->evaluate(_aRow )->getValue().getBool() && mpSecondArg->evaluate(_aRow )->getValue().getBool()) );
+                aRet = new ORowSetValueDecorator( mpFirstArg->evaluate(_aRow )->getValue().getBool() && mpSecondArg->evaluate(_aRow )->getValue().getBool() );
                 break;
             case ENUM_FUNC_OR:
-                aRet = new ORowSetValueDecorator( sal_Bool(mpFirstArg->evaluate(_aRow )->getValue().getBool() || mpSecondArg->evaluate(_aRow )->getValue().getBool()) );
+                aRet = new ORowSetValueDecorator( mpFirstArg->evaluate(_aRow )->getValue().getBool() || mpSecondArg->evaluate(_aRow )->getValue().getBool() );
                 break;
             default:
                 break;
