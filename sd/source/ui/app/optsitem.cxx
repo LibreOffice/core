@@ -232,34 +232,36 @@ sal_Bool SdOptionsLayout::operator==( const SdOptionsLayout& rOpt ) const
 
 void SdOptionsLayout::GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const
 {
-    static const char* aPropNamesMetric[] =
-    {
-        "Display/Ruler",
-        "Display/Bezier",
-        "Display/Contour",
-        "Display/Guide",
-        "Display/Helpline",
-        "Other/MeasureUnit/Metric",
-        "Other/TabStop/Metric"
-    };
-
-    static const char* aPropNamesNonMetric[] =
-    {
-        "Display/Ruler",
-        "Display/Bezier",
-        "Display/Contour",
-        "Display/Guide",
-        "Display/Helpline",
-        "Other/MeasureUnit/NonMetric",
-        "Other/TabStop/NonMetric"
-    };
-
-    rCount = 7;
-
     if( isMetricSystem() )
+    {
+        static const char* aPropNamesMetric[] =
+        {
+            "Display/Ruler",
+            "Display/Bezier",
+            "Display/Contour",
+            "Display/Guide",
+            "Display/Helpline",
+            "Other/MeasureUnit/Metric",
+            "Other/TabStop/Metric"
+        };
         ppNames = aPropNamesMetric;
+        rCount = SAL_N_ELEMENTS(aPropNamesMetric);
+    }
     else
+    {
+        static const char* aPropNamesNonMetric[] =
+        {
+            "Display/Ruler",
+            "Display/Bezier",
+            "Display/Contour",
+            "Display/Guide",
+            "Display/Helpline",
+            "Other/MeasureUnit/NonMetric",
+            "Other/TabStop/NonMetric"
+        };
         ppNames = aPropNamesNonMetric;
+        rCount = SAL_N_ELEMENTS(aPropNamesNonMetric);
+    }
 }
 
 
@@ -402,7 +404,7 @@ void SdOptionsContents::GetPropNameArray( const char**& ppNames, sal_uLong& rCou
         "Display/TextPlaceholder"
     };
 
-    rCount = 4;
+    rCount = SAL_N_ELEMENTS(aPropNames);
     ppNames = aPropNames;
 }
 
@@ -580,7 +582,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "Start/EnablePresenterScreen"
     };
 
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 27 : 14 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? SAL_N_ELEMENTS(aPropNames) : 14 );
     ppNames = aPropNames;
 }
 
@@ -874,7 +876,7 @@ void SdOptionsSnap::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "Position/PointReduction"
     };
 
-    rCount = 10;
+    rCount = SAL_N_ELEMENTS(aPropNames);
     ppNames = aPropNames;
 }
 
@@ -1036,7 +1038,7 @@ void SdOptionsZoom::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "ScaleY"
     };
 
-    rCount = ( GetConfigId() == SDCFG_DRAW ) ? 2 : 0;
+    rCount = ( GetConfigId() == SDCFG_DRAW ) ? SAL_N_ELEMENTS(aPropNames) : 0;
     ppNames = aPropNames;
 }
 
@@ -1130,40 +1132,42 @@ sal_Bool SdOptionsGrid::operator==( const SdOptionsGrid& rOpt ) const
 
 void SdOptionsGrid::GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const
 {
-    static const char* aPropNamesMetric[] =
-    {
-        "Resolution/XAxis/Metric",
-        "Resolution/YAxis/Metric",
-        "Subdivision/XAxis",
-        "Subdivision/YAxis",
-        "SnapGrid/XAxis/Metric",
-        "SnapGrid/YAxis/Metric",
-        "Option/SnapToGrid",
-        "Option/Synchronize",
-        "Option/VisibleGrid",
-        "SnapGrid/Size"
-    };
-
-    static const char* aPropNamesNonMetric[] =
-    {
-        "Resolution/XAxis/NonMetric",
-        "Resolution/YAxis/NonMetric",
-        "Subdivision/XAxis",
-        "Subdivision/YAxis",
-        "SnapGrid/XAxis/NonMetric",
-        "SnapGrid/YAxis/NonMetric",
-        "Option/SnapToGrid",
-        "Option/Synchronize",
-        "Option/VisibleGrid",
-        "SnapGrid/Size"
-    };
-
-    rCount = 10;
-
     if( isMetricSystem() )
+    {
+        static const char* aPropNamesMetric[] =
+        {
+            "Resolution/XAxis/Metric",
+            "Resolution/YAxis/Metric",
+            "Subdivision/XAxis",
+            "Subdivision/YAxis",
+            "SnapGrid/XAxis/Metric",
+            "SnapGrid/YAxis/Metric",
+            "Option/SnapToGrid",
+            "Option/Synchronize",
+            "Option/VisibleGrid",
+            "SnapGrid/Size"
+        };
         ppNames = aPropNamesMetric;
+        rCount = SAL_N_ELEMENTS(aPropNamesMetric);
+    }
     else
+    {
+        static const char* aPropNamesNonMetric[] =
+        {
+            "Resolution/XAxis/NonMetric",
+            "Resolution/YAxis/NonMetric",
+            "Subdivision/XAxis",
+            "Subdivision/YAxis",
+            "SnapGrid/XAxis/NonMetric",
+            "SnapGrid/YAxis/NonMetric",
+            "Option/SnapToGrid",
+            "Option/Synchronize",
+            "Option/VisibleGrid",
+            "SnapGrid/Size"
+        };
         ppNames = aPropNamesNonMetric;
+        rCount = SAL_N_ELEMENTS(aPropNamesNonMetric);
+    }
 }
 
 
@@ -1333,58 +1337,57 @@ sal_Bool SdOptionsPrint::operator==( const SdOptionsPrint& rOpt ) const
 
 void SdOptionsPrint::GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const
 {
-    static const char* aDrawPropNames[] =
-    {
-        "Other/Date",
-        "Other/Time",
-        "Other/PageName",
-        "Other/HiddenPage",
-        "Page/PageSize",
-        "Page/PageTile",
-        // bWarningPrinter
-        // bWarningSize
-        // bWarningOrientation
-        "Page/Booklet",
-        "Page/BookletFront",
-        "Page/BookletBack",
-        // bCutPage
-        "Other/FromPrinterSetup",
-        "Other/Quality",
-        "Content/Drawing",
-    };
-    static const char* aImpressPropNames[] =
-    {
-        "Other/Date",
-        "Other/Time",
-        "Other/PageName",
-        "Other/HiddenPage",
-        "Page/PageSize",
-        "Page/PageTile",
-        // bWarningPrinter
-        // bWarningSize
-        // bWarningOrientation
-        "Page/Booklet",
-        "Page/BookletFront",
-        "Page/BookletBack",
-        // bCutPage
-        "Other/FromPrinterSetup",
-        "Other/Quality",
-        "Content/Presentation",
-        "Content/Note",
-        "Content/Handout",
-        "Content/Outline",
-        "Other/HandoutHorizontal",
-        "Other/PagesPerHandout"
-    };
-
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        rCount = 17;
+        static const char* aImpressPropNames[] =
+        {
+            "Other/Date",
+            "Other/Time",
+            "Other/PageName",
+            "Other/HiddenPage",
+            "Page/PageSize",
+            "Page/PageTile",
+            // bWarningPrinter
+            // bWarningSize
+            // bWarningOrientation
+            "Page/Booklet",
+            "Page/BookletFront",
+            "Page/BookletBack",
+            // bCutPage
+            "Other/FromPrinterSetup",
+            "Other/Quality",
+            "Content/Presentation",
+            "Content/Note",
+            "Content/Handout",
+            "Content/Outline",
+            "Other/HandoutHorizontal",
+            "Other/PagesPerHandout"
+        };
+        rCount = SAL_N_ELEMENTS(aImpressPropNames);
         ppNames = aImpressPropNames;
     }
     else
     {
-        rCount = 12;
+        static const char* aDrawPropNames[] =
+        {
+            "Other/Date",
+            "Other/Time",
+            "Other/PageName",
+            "Other/HiddenPage",
+            "Page/PageSize",
+            "Page/PageTile",
+            // bWarningPrinter
+            // bWarningSize
+            // bWarningOrientation
+            "Page/Booklet",
+            "Page/BookletFront",
+            "Page/BookletBack",
+            // bCutPage
+            "Other/FromPrinterSetup",
+            "Other/Quality",
+            "Content/Drawing",
+        };
+        rCount = SAL_N_ELEMENTS(aDrawPropNames);
         ppNames = aDrawPropNames;
     }
 }
