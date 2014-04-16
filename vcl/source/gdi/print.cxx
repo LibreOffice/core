@@ -801,9 +801,9 @@ void Printer::ImplInitDisplay( const Window* pWindow )
     mnDPIY              = mpDisplayDev->mnDPIY;
 }
 
-void Printer::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
-                             const Point& rDestPt, const Size& rDestSize,
-                             const Point& rSrcPtPixel, const Size& rSrcSizePixel )
+void Printer::ApplyMask( const Bitmap& rMask, const Color& rMaskColor,
+                         const Point& rDestPt, const Size& rDestSize,
+                         const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
     Point       aPt;
     Point       aDestPt( LogicToPixel( rDestPt ) );

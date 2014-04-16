@@ -848,9 +848,9 @@ public:
 protected:
                                 OutputDevice();
 
-    virtual void                ImplPrintMask ( const Bitmap& rMask, const Color& rMaskColor,
-                                                const Point& rDestPt, const Size& rDestSize,
-                                                const Point& rSrcPtPixel, const Size& rSrcSizePixel );
+    virtual void                ApplyMask ( const Bitmap& rMask, const Color& rMaskColor,
+                                            const Point& rDestPt, const Size& rDestSize,
+                                            const Point& rSrcPtPixel, const Size& rSrcSizePixel );
 
     virtual bool                UsePolyPolygonForComplexGradient() = 0;
 

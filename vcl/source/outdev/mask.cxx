@@ -96,13 +96,15 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
 
     OUTDEV_INIT();
 
-    if ( OUTDEV_PRINTER == meOutDevType )
-    {
-        ImplPrintMask( rBitmap, rMaskColor, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
-        return;
-    }
+    ApplyMask( rBitmap, rMaskColor, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
 
-    const ImpBitmap* pImpBmp = rBitmap.ImplGetImpBitmap();
+}
+
+void OutputDevice::ApplyMask( const Bitmap& rMask, const Color& rMaskColor,
+                              const Point& rDestPt, const Size& rDestSize,
+                              const Point& rSrcPtPixel, const Size& rSrcSizePixel )
+{
+    const ImpBitmap* pImpBmp = rMask.ImplGetImpBitmap();
     if ( pImpBmp )
     {
         SalTwoRect aPosAry;
@@ -125,7 +127,7 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
 
             if( nMirrFlags )
             {
-                Bitmap aTmp( rBitmap );
+                Bitmap aTmp( rMask );
                 aTmp.Mirror( nMirrFlags );
                 mpGraphics->DrawMask( aPosAry, *aTmp.ImplGetImpBitmap()->ImplGetSalBitmap(),
                                       ImplColorToSal( rMaskColor ) , this);
@@ -140,7 +142,7 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
     // TODO: Use mask here
     if( mpAlphaVDev )
     {
-        const Bitmap& rMask( rBitmap.CreateMask( rMaskColor ) );
+        const Bitmap& rAlphaMask( rMask.CreateMask( rMaskColor ) );
 
         // #i25167# Restrict mask painting to _opaque_ areas
         // of the mask, otherwise we spoil areas where no
@@ -151,16 +153,8 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
                                    rDestSize,
                                    rSrcPtPixel,
                                    rSrcSizePixel,
-                                   BitmapEx( rMask, rMask ) );
+                                   BitmapEx( rAlphaMask, rMask ) );
     }
-}
-
-void OutputDevice::ImplPrintMask( const Bitmap& /*rMask*/, const Color& /*rMaskColor*/,
-                                  const Point& /*rDestPt*/, const Size& /*rDestSize*/,
-                                  const Point& /*rSrcPtPixel*/, const Size& /*rSrcSizePixel*/ )
-{
-    // let's leave this for Printer
-    return;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
