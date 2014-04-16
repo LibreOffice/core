@@ -210,7 +210,7 @@ $$(call filter_XcuResTarget_get_target,$(1)) : \
 	$$(call gb_Output_announce,$(1),$(true),XCU,1)
 	$$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $$(dir $$@) && \
-		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam lang $(1) \
+		$(subst $$,$$$$,$(call gb_ExternalExecutable_get_command,xsltproc)) --nonet --stringparam lang $(1) \
 			$(filter_XSLT_langfilter) \
 			$(filter_XcuFilterUiTarget) > $$@)
 endef
