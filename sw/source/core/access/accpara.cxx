@@ -1455,7 +1455,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         const SwpHints* pSwpHints = GetTxtNode()->GetpSwpHints();
         if (pSwpHints)
         {
-            const sal_uInt16  nSize = pSwpHints ? pSwpHints->Count() : 0;
+            const sal_uInt16  nSize = pSwpHints->Count();
             for( sal_uInt16 i = 0; i < nSize; ++i )
             {
                 const SwTxtAttr* pHt = (*pSwpHints)[i];
