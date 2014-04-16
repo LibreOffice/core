@@ -147,7 +147,6 @@
                                   <object class="GtkSpinButton" id="spinbutton1:0.00cm">
                                     <property name="can_focus">True</property>
                                     <property name="no_show_all">True</property>
-                                    <property name="hexpand">True</property>
                                     <property name="invisible_char">●</property>
                                     <property name="invisible_char_set">True</property>
                                   </object>
@@ -162,7 +161,6 @@
                                   <object class="GtkSpinButton" id="spinbutton2:0.00cm">
                                     <property name="can_focus">True</property>
                                     <property name="no_show_all">True</property>
-                                    <property name="hexpand">True</property>
                                     <property name="invisible_char">●</property>
                                     <property name="invisible_char_set">True</property>
                                   </object>
@@ -177,7 +175,6 @@
                                   <object class="GtkSpinButton" id="spinbutton3:0.00cm">
                                     <property name="can_focus">True</property>
                                     <property name="no_show_all">True</property>
-                                    <property name="hexpand">True</property>
                                     <property name="invisible_char">●</property>
                                     <property name="invisible_char_set">True</property>
                                   </object>
@@ -240,7 +237,6 @@
                                   <object class="GtkSpinButton" id="spinbutton4:0.00cm">
                                     <property name="can_focus">True</property>
                                     <property name="no_show_all">True</property>
-                                    <property name="hexpand">True</property>
                                     <property name="invisible_char">●</property>
                                     <property name="invisible_char_set">True</property>
                                   </object>
