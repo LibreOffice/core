@@ -29,8 +29,6 @@ using namespace css::graphic;
 
 class Test : public test::BootstrapFixture
 {
-    Reference<XComponentContext> mxContext;
-
     void testStyles();
 
     Primitive2DSequence parseSvg(const char* aSource);
@@ -46,7 +44,7 @@ public:
 
 Primitive2DSequence Test::parseSvg(const char* aSource)
 {
-    const Reference<XSvgParser> xSvgParser = SvgTools::create(mxContext);
+    const Reference<XSvgParser> xSvgParser = SvgTools::create(m_xContext);
 
     OUString aUrl  = getURLFromSrc(aSource);
     OUString aPath = getPathFromSrc(aSource);
@@ -66,8 +64,6 @@ Primitive2DSequence Test::parseSvg(const char* aSource)
 void Test::setUp()
 {
     BootstrapFixture::setUp();
-
-    mxContext = Reference<XComponentContext>(comphelper::getProcessComponentContext());
 }
 
 void Test::tearDown()
