@@ -9378,4 +9378,44 @@ bool Window::UsePolyPolygonForComplexGradient()
     return false;
 }
 
+void Window::DrawGradientWallpaper( long nX, long nY,
+                                    long nWidth, long nHeight,
+                                    const Wallpaper& rWallpaper )
+{
+    Rectangle       aBound;
+    GDIMetaFile*    pOldMetaFile = mpMetaFile;
+    const bool      bOldMap = mbMap;
+    bool            bNeedGradient = true;
+
+    aBound = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
+
+    mpMetaFile = NULL;
+    EnableMapMode( false );
+    Push( PUSH_CLIPREGION );
+    IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
+
+    if( rWallpaper.GetStyle() == WALLPAPER_APPLICATIONGRADIENT )
+    {
+        // limit gradient to useful size, so that it still can be noticed
+        // in maximized windows
+        long gradientWidth = GetDesktopRectPixel().GetSize().Width();
+        if( gradientWidth > 1024 )
+            gradientWidth = 1024;
+        if( mnOutOffX+nWidth > gradientWidth )
+            ImplDrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper.GetGradient().GetEndColor() );
+        if( mnOutOffX > gradientWidth )
+            bNeedGradient = false;
+        else
+            aBound = Rectangle( Point( -mnOutOffX, nY ), Size( gradientWidth, nHeight ) );
+    }
+
+    if( bNeedGradient )
+        DrawGradient( aBound, rWallpaper.GetGradient() );
+
+    Pop();
+    EnableMapMode( bOldMap );
+    mpMetaFile = pOldMetaFile;
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

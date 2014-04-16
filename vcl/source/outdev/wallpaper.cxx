@@ -113,7 +113,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
 
     // background of bitmap?
     if( bDrawGradientBackground )
-        ImplDrawGradientWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
+        DrawGradientWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
     else if( bDrawColorBackground && bTransparent )
     {
         ImplDrawColorWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
@@ -301,43 +301,22 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
     mpMetaFile = pOldMetaFile;
 }
 
-void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
-                                              long nWidth, long nHeight,
-                                              const Wallpaper& rWallpaper )
+void OutputDevice::DrawGradientWallpaper( long nX, long nY,
+                                          long nWidth, long nHeight,
+                                          const Wallpaper& rWallpaper )
 {
     Rectangle       aBound;
     GDIMetaFile*    pOldMetaFile = mpMetaFile;
     const bool      bOldMap = mbMap;
-    bool            bNeedGradient = true;
 
-        aBound = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
+    aBound = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
 
     mpMetaFile = NULL;
     EnableMapMode( false );
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
-    if( OUTDEV_WINDOW == meOutDevType && rWallpaper.GetStyle() == WALLPAPER_APPLICATIONGRADIENT )
-    {
-        Window *pWin = dynamic_cast< Window* >( this );
-        if( pWin )
-        {
-            // limit gradient to useful size, so that it still can be noticed
-            // in maximized windows
-            long gradientWidth = pWin->GetDesktopRectPixel().GetSize().Width();
-            if( gradientWidth > 1024 )
-                gradientWidth = 1024;
-            if( mnOutOffX+nWidth > gradientWidth )
-                ImplDrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper.GetGradient().GetEndColor() );
-            if( mnOutOffX > gradientWidth )
-                bNeedGradient = false;
-            else
-                aBound = Rectangle( Point( -mnOutOffX, nY ), Size( gradientWidth, nHeight ) );
-        }
-    }
-
-    if( bNeedGradient )
-        DrawGradient( aBound, rWallpaper.GetGradient() );
+    DrawGradient( aBound, rWallpaper.GetGradient() );
 
     Pop();
     EnableMapMode( bOldMap );
@@ -351,7 +330,7 @@ void OutputDevice::ImplDrawWallpaper( long nX, long nY,
     if( rWallpaper.IsBitmap() )
         ImplDrawBitmapWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
     else if( rWallpaper.IsGradient() )
-        ImplDrawGradientWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
+        DrawGradientWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
     else
         ImplDrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper );
 }

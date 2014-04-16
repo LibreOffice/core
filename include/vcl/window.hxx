@@ -583,6 +583,8 @@ protected:
     virtual void                ClipToPaintRegion( Rectangle& rDstRect ) SAL_OVERRIDE;
     virtual bool                UsePolyPolygonForComplexGradient() SAL_OVERRIDE;
 
+    virtual void                DrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper ) SAL_OVERRIDE;
+
 public:
     bool HasMirroredGraphics() const SAL_OVERRIDE;
 
