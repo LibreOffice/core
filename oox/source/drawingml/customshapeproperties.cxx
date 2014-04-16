@@ -351,6 +351,9 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         SAL_INFO("oox.cscode", "==cscode== begin");
         aPropertyMap.dumpCode();
         SAL_INFO("oox.cscode", "==cscode== end");
+        SAL_INFO("oox.csdata", "==csdata== begin");
+        aPropertyMap.dumpData();
+        SAL_INFO("oox.csdata", "==csdata== end");
 #endif
         // converting the vector to a sequence
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();

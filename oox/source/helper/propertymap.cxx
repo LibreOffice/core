@@ -27,6 +27,8 @@
 # include <com/sun/star/text/WritingMode.hpp>
 using ::com::sun::star::style::LineSpacing;
 using ::com::sun::star::text::WritingMode;
+#include <comphelper/anytostring.hxx>
+#include <iostream>
 #endif
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -929,9 +931,26 @@ void PropertyMap::dumpCode( Reference< XPropertySet > rXPropSet )
     }
 }
 
+void PropertyMap::dumpData(Reference<XPropertySet> xPropertySet)
+{
+    Reference<XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+    Sequence<Property> aProperties = xPropertySetInfo->getProperties();
+
+    for (int i = 0; i < aProperties.getLength(); ++i)
+    {
+        std::cerr << aProperties[i].Name << std::endl;
+        std::cerr << comphelper::anyToString(xPropertySet->getPropertyValue(aProperties[i].Name)) << std::endl;
+    }
+}
+
 void PropertyMap::dumpCode()
 {
     dumpCode( Reference< XPropertySet >( makePropertySet(), UNO_QUERY ) );
+}
+
+void PropertyMap::dumpData()
+{
+    dumpData( Reference< XPropertySet >( makePropertySet(), UNO_QUERY ) );
 }
 #endif
 

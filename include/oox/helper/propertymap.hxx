@@ -110,6 +110,8 @@ public:
 #endif
   static void dumpCode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
   void dumpCode();
+  static void dumpData(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> rXPropSet);
+  void dumpData();
 #endif
 private:
     const PropertyNameVector* mpPropNames;
