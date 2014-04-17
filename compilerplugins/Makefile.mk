@@ -21,7 +21,11 @@ else
 
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 
-include $(SRCDIR)/compilerplugins/Makefile-clang.mk
+compilerplugins:
+	$(MAKE) $(PARALLELISM_OPTION) -f $(SRCDIR)/compilerplugins/Makefile-clang.mk compilerplugins
+
+compilerplugins-clean:
+	$(MAKE) -f $(SRCDIR)/compilerplugins/Makefile-clang.mk compilerplugins-clean
 
 compilerplugins.clean: compilerplugins-clean
 
