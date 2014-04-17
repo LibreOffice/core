@@ -664,12 +664,15 @@ void CustomShapeProperties::initializePresetDataMap()
             if (aLine == "AdjustmentValues")
             {
                 aStream.ReadLine(aLine);
-                OString aExpectedPrefix("([]com.sun.star.drawing.EnhancedCustomShapeAdjustmentValue) { ");
-                assert(aLine.startsWith(aExpectedPrefix));
-
                 comphelper::SequenceAsVector<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
-                OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
-                lcl_parseAdjustmentValues(aAdjustmentValues, aValue);
+                if (aLine != "([]com.sun.star.drawing.EnhancedCustomShapeAdjustmentValue) {}")
+                {
+                    OString aExpectedPrefix("([]com.sun.star.drawing.EnhancedCustomShapeAdjustmentValue) { ");
+                    assert(aLine.startsWith(aExpectedPrefix));
+
+                    OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
+                    lcl_parseAdjustmentValues(aAdjustmentValues, aValue);
+                }
                 aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjustmentValues.getAsConstList());
             }
             else if (aLine == "Equations")
