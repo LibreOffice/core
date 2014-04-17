@@ -47,6 +47,7 @@ public:
     LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
 
     static OUString     GetLanguageString( const LanguageType eType );
+    static OUString     GetLanguageString( const LanguageType eType, bool bUserInterfaceSelection );
     static LanguageType GetLanguageType( const OUString& rStr );
 };
 

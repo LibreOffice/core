@@ -154,7 +154,12 @@ const OUString SvtLanguageTable::GetString( const LanguageType eType, bool bUser
 
 OUString SvtLanguageTable::GetLanguageString( const LanguageType eType )
 {
-    return theLanguageTable::get().GetString( eType );
+    return theLanguageTable::get().GetString( eType, false );
+}
+
+OUString SvtLanguageTable::GetLanguageString( const LanguageType eType, bool bUserInterfaceSelection )
+{
+    return theLanguageTable::get().GetString( eType, bUserInterfaceSelection );
 }
 
 
