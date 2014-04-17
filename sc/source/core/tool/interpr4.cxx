@@ -4095,6 +4095,7 @@ StackVar ScInterpreter::Interpret()
                 case ocEffektiv         : ScEffektiv();                 break;
                 case ocNominal          : ScNominal();                  break;
                 case ocSubTotal         : ScSubTotal();                 break;
+                case ocAggregate        : ScAggregate();                break;
                 case ocDBSum            : ScDBSum();                    break;
                 case ocDBCount          : ScDBCount();                  break;
                 case ocDBCount2         : ScDBCount2();                 break;

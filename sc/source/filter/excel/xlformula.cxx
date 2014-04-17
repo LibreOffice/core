@@ -493,6 +493,7 @@ static const XclFunctionInfo saFuncTable_2010[] =
     EXC_FUNCENTRY_V_VR( ocFloor_MS,         2,  2,  0,  "FLOOR.PRECISE" ),
     EXC_FUNCENTRY_V_VR( ocErf_MS,           1,  1,  0,  "ERF.PRECISE" ),
     EXC_FUNCENTRY_V_VR( ocErfc_MS,          1,  1,  0,  "ERFC.PRECISE" ),
+    EXC_FUNCENTRY_V_RX( ocAggregate,        3, MX,  0,  "AGGREGATE" ),
 };
 
 /** Functions new in Excel 2013.

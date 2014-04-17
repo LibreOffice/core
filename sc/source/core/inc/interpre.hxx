@@ -797,6 +797,7 @@ void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrd
 void ScModalValue();
 void ScModalValue_Multi();
 void ScAveDev();
+void ScAggregate();
 void ScDevSq();
 void ScZTest();
 void ScTTest();

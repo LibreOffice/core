@@ -6617,6 +6617,97 @@ void ScInterpreter::ScSubTotal()
     }
 }
 
+void ScInterpreter::ScAggregate()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( MustHaveParamCountMin( nParamCount, 3 ) )
+    {
+        // fish the 1st parameter from the stack and push it on top.
+        const FormulaToken* p = pStack[ sp - nParamCount ];
+        PushTempToken( *p );
+        int nFunc = ( int ) ::rtl::math::approxFloor( GetDouble() );
+        // fish the 2nd parameter from the stack and push it on top.
+        const FormulaToken* p2 = pStack[ sp - ( nParamCount - 1 ) ];
+        PushTempToken( *p2 );
+        int nOption = ( int ) ::rtl::math::approxFloor( GetDouble() );
+
+        if ( nFunc < 1 || nFunc > 19 )
+            PushIllegalArgument();
+        else
+        {
+            sal_uInt16 nAggrFlags = 0x00;
+            switch ( nOption)
+            {
+                case 0 : // ignore nested SUBTOTAL and AGGREGATE functions
+                    nAggrFlags = AGGR_IGN_NESTED_ST_AG;
+                    break;
+                case 1 : // ignore hidden rows, nested SUBTOTAL and AGGREGATE functions
+                    nAggrFlags = AGGR_IGN_HID_ROW | AGGR_IGN_NESTED_ST_AG;
+                    break;
+                case 2 : // ignore error values, nested SUBTOTAL and AGGREGATE functions
+                    nAggrFlags = AGGR_IGN_ERR_VAL | AGGR_IGN_NESTED_ST_AG;
+                    break;
+                case 3 : // ignore hidden rows, error values, nested SUBTOTAL and AGGREGATE functions
+                    nAggrFlags = AGGR_IGN_HID_ROW | AGGR_IGN_ERR_VAL | AGGR_IGN_NESTED_ST_AG;
+                    break;
+                case 4 : // ignore nothing
+                    break;
+                case 5 : // ignore hidden rows
+                    nAggrFlags = AGGR_IGN_HID_ROW ;
+                    break;
+                case 6 : // ignore error values
+                    nAggrFlags = AGGR_IGN_ERR_VAL ;
+                    break;
+                case 7 : // igniore hidden rows and error values
+                    nAggrFlags = AGGR_IGN_HID_ROW | AGGR_IGN_ERR_VAL ;
+                    break;
+                default :
+                    PushIllegalArgument();
+                    break;
+            }
+            // TODO: implement filter options
+            if ( nAggrFlags != 0x00 )
+            {
+                SetError( errUnknownVariable );
+                return;
+            }
+
+            cPar = nParamCount - 2;
+            glSubTotal = true;
+            switch ( nFunc )
+            {
+                case SUBTOTAL_FUNC_AVE      : ScAverage(); break;
+                case SUBTOTAL_FUNC_CNT      : ScCount();   break;
+                case SUBTOTAL_FUNC_CNT2     : ScCount2();  break;
+                case SUBTOTAL_FUNC_MAX      : ScMax();     break;
+                case SUBTOTAL_FUNC_MIN      : ScMin();     break;
+                case SUBTOTAL_FUNC_PROD     : ScProduct(); break;
+                case SUBTOTAL_FUNC_STD      : ScStDev();   break;
+                case SUBTOTAL_FUNC_STDP     : ScStDevP();  break;
+                case SUBTOTAL_FUNC_SUM      : ScSum();     break;
+                case SUBTOTAL_FUNC_VAR      : ScVar();     break;
+                case SUBTOTAL_FUNC_VARP     : ScVarP();    break;
+                case AGGREGATE_FUNC_MEDIAN  : ScMedian();            break;
+                case AGGREGATE_FUNC_MODSNGL : ScModalValue();        break;
+                case AGGREGATE_FUNC_LARGE   : ScLarge();             break;
+                case AGGREGATE_FUNC_SMALL   : ScSmall();             break;
+                case AGGREGATE_FUNC_PERCINC : ScPercentile( true );  break;
+                case AGGREGATE_FUNC_QRTINC  : ScQuartile( true );    break;
+                case AGGREGATE_FUNC_PERCEXC : ScPercentile( false ); break;
+                case AGGREGATE_FUNC_QRTEXC  : ScQuartile( false );   break;
+                default : PushIllegalArgument();       break;
+            }
+            glSubTotal = false;
+        }
+        double nVal = GetDouble();
+        // Get rid of the 1st and 2nd (fished) parameters.
+        Pop();
+        Pop();
+        if ( !nGlobalError )
+            PushDouble( nVal );
+    }
+}
+
 ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
 {
     bool bAllowMissingField = false;

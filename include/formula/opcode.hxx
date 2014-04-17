@@ -366,6 +366,7 @@ enum OpCodeEnum
         ocModalValue_Multi  = SC_OPCODE_MODAL_VALUE_MULTI,
         ocZTest             = SC_OPCODE_Z_TEST,
         ocZTest_MS          = SC_OPCODE_Z_TEST_MS,
+        ocAggregate         = SC_OPCODE_AGGREGATE,
         ocTTest             = SC_OPCODE_T_TEST,
         ocTTest_MS          = SC_OPCODE_T_TEST_MS,
         ocRank              = SC_OPCODE_RANK,

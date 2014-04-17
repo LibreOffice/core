@@ -321,6 +321,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_MODAL_VALUE_MULTI { Text = "COM.MICROSOFT.MODE.MULT" ; };
     String SC_OPCODE_Z_TEST { Text = "ZTEST" ; };
     String SC_OPCODE_Z_TEST_MS { Text = "COM.MICROSOFT.Z.TEST" ; };
+    String SC_OPCODE_AGGREGATE { Text = "COM.MICROSOFT.AGGREGATE" ; };
     String SC_OPCODE_T_TEST { Text = "TTEST" ; };
     String SC_OPCODE_T_TEST_MS { Text = "COM.MICROSOFT.T.TEST" ; };
     String SC_OPCODE_RANK { Text = "RANK" ; };
@@ -726,6 +727,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_MODAL_VALUE_MULTI { Text = "_xlfn.MODE.MULT" ; };
     String SC_OPCODE_Z_TEST { Text = "ZTEST" ; };
     String SC_OPCODE_Z_TEST_MS { Text = "_xlfn.Z.TEST" ; };
+    String SC_OPCODE_AGGREGATE { Text = "_xlfn.AGGREGATE" ; };
     String SC_OPCODE_T_TEST { Text = "TTEST" ; };
     String SC_OPCODE_T_TEST_MS { Text = "_xlfn.T.TEST" ; };
     String SC_OPCODE_RANK { Text = "RANK" ; };
@@ -1133,6 +1135,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_MODAL_VALUE_MULTI { Text = "MODE.MULT" ; };
     String SC_OPCODE_Z_TEST { Text = "ZTEST" ; };
     String SC_OPCODE_Z_TEST_MS { Text = "Z.TEST" ; };
+    String SC_OPCODE_AGGREGATE { Text = "AGGREGATE" ; };
     String SC_OPCODE_T_TEST { Text = "TTEST" ; };
     String SC_OPCODE_T_TEST_MS { Text = "T.TEST" ; };
     String SC_OPCODE_RANK { Text = "RANK" ; };
@@ -2361,6 +2364,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_Z_TEST_MS
     {
         Text [ en-US ] = "Z.TEST" ;
+    };
+    String SC_OPCODE_AGGREGATE
+    {
+        Text = "AGGREGATE" ;
     };
     String SC_OPCODE_T_TEST
     {

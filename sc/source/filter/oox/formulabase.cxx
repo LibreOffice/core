@@ -803,6 +803,7 @@ static const FunctionData saFuncTable2010[] =
     { "COM.MICROSOFT.FLOOR.PRECISE",          "FLOOR.PRECISE",       NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.ERF.PRECISE",            "ERF.PRECISE",         NOID,   NOID,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.ERFC.PRECISE",           "ERFC.PRECISE",        NOID,   NOID,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.AGGREGATE",              "AGGREGATE",           NOID,   NOID,    3,  MX, V, { VR, RO }, FUNCFLAG_MACROCALL_NEW }
 };
 
 /** Functions new in Excel 2013.
