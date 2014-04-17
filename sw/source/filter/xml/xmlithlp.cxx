@@ -292,7 +292,7 @@ void sw_frmitems_MergeXMLVertPos( SvxGraphicPosition& ePos,
     case GPOS_LT:
     case GPOS_LM:
     case GPOS_LB:
-        ePos = eVert;
+        ePos = GPOS_MT==eVert ? GPOS_LT : (GPOS_MM==eVert ? GPOS_LM : GPOS_LB);
         break;
 
     case GPOS_MT:
