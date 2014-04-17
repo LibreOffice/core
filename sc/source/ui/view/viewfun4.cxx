@@ -385,8 +385,7 @@ void ScViewFunc::DoThesaurus( bool bRecord )
     if (eState == EE_SPELL_ERRORFOUND)              // sollte spaeter durch Wrapper geschehen!
     {
         LanguageType eLnge = ScViewUtil::GetEffLanguage( pDoc, ScAddress( nCol, nRow, nTab ) );
-        SvtLanguageTable aLangTab;
-        OUString aErr = aLangTab.GetString(eLnge);
+        OUString aErr = SvtLanguageTable::GetLanguageString(eLnge);
         aErr += ScGlobal::GetRscString( STR_SPELLING_NO_LANG );
         InfoBox aBox( GetViewData()->GetDialogParent(), aErr );
         aBox.Execute();
