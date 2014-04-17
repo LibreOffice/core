@@ -267,7 +267,6 @@ Module gid_Module_Optional_Extensions_Script_Provider_For_JS
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_JAVASCRIPT);
     ParentID = gid_Module_Optional_Extensions;
     Files = (auto_extensions_rhino_ALL,
-        gid_File_Jar_Scriptproviderforjavascript,
         gid_File_Rdb_Scriptproviderforjavascript );
     Minimal = NO;
     Default = YES;

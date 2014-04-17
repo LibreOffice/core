@@ -666,9 +666,14 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_bsh, \
 ))
 endif
 
+ifneq ($(ENABLE_SCRIPTING_JAVASCRIPT),)
+$(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_rhino, \
+	ScriptProviderForJavaScript \
+))
+endif
+
 $(eval $(call gb_Helper_register_jars,OOO, \
 	ConnectivityTools \
-	ScriptProviderForJavaScript \
 	XSLTFilter \
 	XSLTValidate \
 	agenda \
