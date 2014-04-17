@@ -26,6 +26,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/timer.hxx>
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 class MouseEvent;
 class TrackingEvent;
@@ -35,7 +36,6 @@ class DataChangedEvent;
 class ScrollBar;
 
 struct ValueSetItem;
-typedef ::std::vector< ValueSetItem* > ValueItemList;
 
 class ValueSetAcc;
 class ValueItemAcc;
@@ -176,10 +176,11 @@ to be set (before Show) with SetStyle().
 
 *************************************************************************/
 
+typedef std::vector<ValueSetItem*> ValueItemList;
+typedef boost::scoped_ptr<ScrollBar> ScrollBarPtr;
+typedef boost::scoped_ptr<ValueSetItem> ValueSetItemPtr;
 
 // - ValueSet types -
-
-
 #define WB_RADIOSEL             ((WinBits)0x00008000)
 #define WB_ITEMBORDER           ((WinBits)0x00010000)
 #define WB_DOUBLEBORDER         ((WinBits)0x00020000)
@@ -188,9 +189,6 @@ to be set (before Show) with SetStyle().
 #define WB_FLATVALUESET         ((WinBits)0x02000000)
 #define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
 #define WB_MENUSTYLEVALUESET    ((WinBits)0x08000000)
-
-
-// - ValueSet -
 
 
 #define VALUESET_APPEND         ((size_t)-1)
@@ -203,8 +201,8 @@ private:
     VirtualDevice   maVirDev;
     Timer           maTimer;
     ValueItemList   mItemList;
-    ValueSetItem*   mpNoneItem;
-    ScrollBar*      mpScrBar;
+    ValueSetItemPtr mpNoneItem;
+    ScrollBarPtr    mpScrollBar;
     Rectangle       maNoneItemRect;
     Rectangle       maItemListRect;
     long            mnItemWidth;
@@ -244,6 +242,7 @@ private:
 
     friend class ValueSetAcc;
     friend class ValueItemAcc;
+
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
@@ -282,7 +281,7 @@ protected:
 
 protected:
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 
 public:
                     ValueSet( Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren = false );
