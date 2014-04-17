@@ -561,27 +561,26 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
     //ADD NEW LANGUAGE MENU ITEM
 
     OUString aScriptTypesInUse( OUString::number( pWrtSh->GetScriptType() ) );
-    SvtLanguageTable aLanguageTable;
 
     // get keyboard language
     OUString aKeyboardLang;
     SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
     LanguageType nLang = rEditWin.GetInputLanguage();
     if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
-        aKeyboardLang = aLanguageTable.GetString( nLang );
+        aKeyboardLang = SvtLanguageTable::GetLanguageString( nLang );
 
     // get the language that is in use
     OUString aCurrentLang("*");
     nLang = SwLangHelper::GetCurrentLanguage( *pWrtSh );
     if (nLang != LANGUAGE_DONTKNOW)
-        aCurrentLang = aLanguageTable.GetString( nLang );
+        aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
 
     // build sequence for status value
     uno::Sequence< OUString > aSeq( 4 );
     aSeq[0] = aCurrentLang;
     aSeq[1] = aScriptTypesInUse;
     aSeq[2] = aKeyboardLang;
-    aSeq[3] = aLanguageTable.GetString(m_nGuessLangWord);
+    aSeq[3] = SvtLanguageTable::GetLanguageString(m_nGuessLangWord);
 
     PopupMenu *pMenu = GetPopupMenu(MN_SET_LANGUAGE_SELECTION);
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_SELECTION_START, aSeq, pWrtSh, m_aLangTable_Text );
