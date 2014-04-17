@@ -647,11 +647,16 @@ void CustomShapeProperties::initializePresetDataMap()
     OUString aName;
     bool bNotDone = aStream.ReadLine(aLine);
     PropertyMap aPropertyMap;
+    bool bFirst = true;
     while (bNotDone)
     {
         static const OString aCommentPrefix("/* ");
         if (aLine.startsWith(aCommentPrefix))
         {
+            if (bFirst)
+                bFirst = false;
+            else
+                maPresetDataMap[StaticTokenMap::get().getTokenFromUnicode(aName)] = aPropertyMap;
             aName = OStringToOUString(aLine.copy(aCommentPrefix.getLength(), aLine.getLength() - aCommentPrefix.getLength() - strlen(" */")), RTL_TEXTENCODING_UTF8);
         }
         else
