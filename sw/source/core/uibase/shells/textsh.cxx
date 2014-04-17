@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <svl/globalnameitem.hxx>
@@ -224,6 +226,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         rReq.Done();
         break;
 
+#if HAVE_FEATURE_DESKTOP
     case SID_INSERT_AVMEDIA:
         rReq.SetReturnValue(SfxBoolItem(nSlot, InsertMediaDlg( rReq )));
         break;
@@ -267,6 +270,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
     }
     break;
+#endif
 
     case SID_INSERT_OBJECT:
     case SID_INSERT_PLUGIN:

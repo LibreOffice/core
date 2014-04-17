@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/mutex.hxx>
@@ -536,11 +538,13 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, 
             rInventor = SdrInventor;
             rType = OBJ_TABLE;
         }
+#if HAVE_FEATURE_DESKTOP
         else if ( aName == "com.sun.star.presentation.MediaShape" )
         {
             rInventor = SdrInventor;
             rType = OBJ_MEDIA;
         }
+#endif
     }
     else if(nTempType & E3D_INVENTOR_FLAG)
     {
@@ -732,9 +736,11 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                 case OBJ_CUSTOMSHAPE:
                     pRet = new SvxCustomShape( pObj );
                     break;
+#if HAVE_FEATURE_DESKTOP
                 case OBJ_MEDIA:
                     pRet = new SvxMediaShape( pObj, referer );
                     break;
+#endif
                 case OBJ_TABLE:
                     pRet = new SvxTableShape( pObj );
                     break;

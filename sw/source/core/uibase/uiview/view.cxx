@@ -337,13 +337,14 @@ void SwView::SelectShell()
                 m_pShell = new SwBezierShell( *this );
                 rDispatcher.Push( *m_pShell );
             }
+#if HAVE_FEATURE_DESKTOP
             else if( m_nSelectionType & nsSelectionType::SEL_MEDIA )
             {
                 eShellMode = SHELL_MODE_MEDIA;
                 m_pShell = new SwMediaShell( *this );
                 rDispatcher.Push( *m_pShell );
             }
-
+#endif
             if (m_nSelectionType & nsSelectionType::SEL_EXTRUDED_CUSTOMSHAPE)
             {
                 eShellMode = SHELL_MODE_EXTRUDED_CUSTOMSHAPE;

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "sal/config.h"
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -3394,7 +3396,9 @@ SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, S
             case sal_uInt16(OBJ_PAGE       ): pObj=new SdrPageObj;                  break;
             case sal_uInt16(OBJ_UNO        ): pObj=new SdrUnoObj(OUString());       break;
             case sal_uInt16(OBJ_CUSTOMSHAPE  ): pObj=new SdrObjCustomShape();       break;
+#if HAVE_FEATURE_DESKTOP
             case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
+#endif
             case sal_uInt16(OBJ_TABLE      ): pObj=new ::sdr::table::SdrTableObj(pModel);   break;
             case sal_uInt16(OBJ_OPENGL     ): pObj=new SdrOpenGLObj;                break;
         }
