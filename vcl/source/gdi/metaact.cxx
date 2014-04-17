@@ -3117,7 +3117,15 @@ void MetaEPSAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadGDIMetaFile( rIStm, maSubst );
 }
 
-IMPL_META_ACTION( RefPoint, META_REFPOINT_ACTION )
+MetaRefPointAction::MetaRefPointAction() :
+    MetaAction  ( META_REFPOINT_ACTION ),
+    mbSet       ( false )
+{
+}
+
+MetaRefPointAction::~MetaRefPointAction()
+{
+}
 
 MetaRefPointAction::MetaRefPointAction( const Point& rRefPoint, bool bSet ) :
     MetaAction  ( META_REFPOINT_ACTION ),
