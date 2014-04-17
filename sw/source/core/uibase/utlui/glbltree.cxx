@@ -631,14 +631,12 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
     if(bOnlyUpdateUserData && GetEntryCount() == pSwGlblDocContents->size())
     {
         SvTreeListEntry* pEntry = First();
-        for( size_t i = 0; i < nCount; i++)
+        for (size_t i = 0; i < nCount && pEntry; i++)
         {
             SwGlblDocContent* pCont = (*pSwGlblDocContents)[i];
             pEntry->SetUserData(pCont);
             pEntry = Next(pEntry);
-            assert(pEntry);
-            if (!pEntry)
-                break;
+            assert(pEntry || i == nCount - 1);
         }
     }
     else
