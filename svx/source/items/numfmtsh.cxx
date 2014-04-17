@@ -1515,13 +1515,11 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, bool
     const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.size();
 
-    SvtLanguageTable* pLanguageTable=new SvtLanguageTable;
-
     sal_uInt16 nStart=1;
 
     OUString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol()));
     aString += " ";
-    aString += ApplyLreOrRleEmbedding( pLanguageTable->GetString( rCurrencyTable[0].GetLanguage()));
+    aString += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString( rCurrencyTable[0].GetLanguage()));
 
     rList.push_back(aString);
     sal_uInt16 nAuto=(sal_uInt16)-1;
@@ -1545,7 +1543,7 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, bool
         aStr += aTwoSpace;
         aStr += ApplyLreOrRleEmbedding( rCurrencyTable[i].GetSymbol());
         aStr += aTwoSpace;
-        aStr += ApplyLreOrRleEmbedding( pLanguageTable->GetString( rCurrencyTable[i].GetLanguage()));
+        aStr += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString( rCurrencyTable[i].GetLanguage()));
 
         sal_uInt16 j = nStart;
         for(; j < rList.size(); ++j)
@@ -1580,8 +1578,6 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, bool
             aCurCurrencyList.insert(aCurCurrencyList.begin()+j, i);
         }
     }
-
-    delete pLanguageTable;
 }
 
 void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt32 nPos)
