@@ -679,12 +679,8 @@ endif
 
 $(eval $(call gb_Helper_register_jars,OOO, \
 	agenda \
-	aportisdoc \
 	fax \
-	htmlsoff \
 	letter \
-	pexcel \
-	pocketword \
 	web \
 ))
 
