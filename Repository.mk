@@ -660,6 +660,11 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	xmerge \
 ))
 
+$(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_rhino, \
+	reportbuilder \
+	reportbuilderwizard \
+))
+
 ifneq ($(ENABLE_SCRIPTING_BEANSHELL),)
 $(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_bsh, \
 	ScriptProviderForBeanShell \
@@ -683,8 +688,6 @@ $(eval $(call gb_Helper_register_jars,OOO, \
 	letter \
 	pexcel \
 	pocketword \
-	reportbuilder \
-	reportbuilderwizard \
 	web \
 ))
 
