@@ -2878,7 +2878,15 @@ void MetaPopAction::Read( SvStream& rIStm, ImplMetaReadData* )
     COMPAT( rIStm );
 }
 
-IMPL_META_ACTION( RasterOp, META_RASTEROP_ACTION )
+MetaRasterOpAction::MetaRasterOpAction() :
+    MetaAction  ( META_RASTEROP_ACTION ),
+    meRasterOp  ( ROP_OVERPAINT )
+{
+}
+
+MetaRasterOpAction::~MetaRasterOpAction()
+{
+}
 
 MetaRasterOpAction::MetaRasterOpAction( RasterOp eRasterOp ) :
     MetaAction  ( META_RASTEROP_ACTION ),
