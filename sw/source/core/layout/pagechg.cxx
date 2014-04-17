@@ -725,12 +725,15 @@ SwPageDesc *SwPageFrm::FindPageDesc()
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
     {
         SwCntntFrm *pFrm = GetUpper()->ContainsCntnt();
-        while ( !pFrm->IsInDocBody() )
+        while (pFrm && !pFrm->IsInDocBody())
             pFrm = pFrm->GetNextCntntFrm();
-        SwFrm *pFlow = pFrm;
-        if ( pFlow->IsInTab() )
-            pFlow = pFlow->FindTabFrm();
-        pRet = (SwPageDesc*)pFlow->GetAttrSet()->GetPageDesc().GetPageDesc();
+        if (pFrm)
+        {
+            SwFrm *pFlow = pFrm;
+            if ( pFlow->IsInTab() )
+                pFlow = pFlow->FindTabFrm();
+            pRet = (SwPageDesc*)pFlow->GetAttrSet()->GetPageDesc().GetPageDesc();
+        }
         if ( !pRet )
             pRet = &GetFmt()->GetDoc()->GetPageDesc( 0 );
         return pRet;
