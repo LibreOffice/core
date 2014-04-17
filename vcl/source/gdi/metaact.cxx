@@ -2577,7 +2577,15 @@ void MetaTextColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     maColor.Read( rIStm, true );
 }
 
-IMPL_META_ACTION( TextFillColor, META_TEXTFILLCOLOR_ACTION )
+MetaTextFillColorAction::MetaTextFillColorAction() :
+    MetaAction  ( META_TEXTFILLCOLOR_ACTION ),
+    mbSet       ( false )
+{
+}
+
+MetaTextFillColorAction::~MetaTextFillColorAction()
+{
+}
 
 MetaTextFillColorAction::MetaTextFillColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_TEXTFILLCOLOR_ACTION ),
