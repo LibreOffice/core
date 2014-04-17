@@ -725,14 +725,10 @@ namespace svt
 
     void RoadmapItem::ImplUpdateIndex( const ItemIndex _nIndex )
     {
-        if ( mpDescription )
-            mpDescription->SetIndex( _nIndex );
+        mpDescription->SetIndex( _nIndex );
 
-        if ( mpID )
-        {
-            OUString aIDText = OUString::number( _nIndex + 1 ) + ".";
-             mpID->SetText( aIDText );
-        }
+        OUString aIDText = OUString::number( _nIndex + 1 ) + ".";
+        mpID->SetText( aIDText );
 
         // update the geometry of both controls
         ImplUpdatePosSize();
