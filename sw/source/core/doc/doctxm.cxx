@@ -1282,10 +1282,10 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
             ( !IsFromChapter() ||
                 ::lcl_FindChapterNode( rTxtNode, 0 ) == pOwnChapterNode ) )
         {
-            const SwSetExpField* pSeqField = dynamic_cast< const SwSetExpField* >( pFmtFld->GetField() );
+            const SwSetExpField& rSeqField = dynamic_cast<const SwSetExpField&>(*(pFmtFld->GetField()));
             OUString sName = GetSequenceName();
             sName += OUString( cSequenceMarkSeparator );
-            sName += OUString::number( pSeqField->GetSeqNumber() );
+            sName += OUString::number( rSeqField.GetSeqNumber() );
             SwTOXPara * pNew = new SwTOXPara( rTxtNode, nsSwTOXElement::TOX_SEQUENCE, 1, sName );
             // set indexes if the number or the reference text are to be displayed
             if( GetCaptionDisplay() == CAPTION_TEXT )
