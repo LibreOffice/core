@@ -694,7 +694,7 @@ SaveDialog::SaveDialog(Window*       pParent,
     FreeResource();
 
     // Prepare the office for the following crash save step.
-    // E.g. hide all open widows so the user cant influence our
+    // E.g. hide all open widows so the user can't influence our
     // operation .-)
     m_pCore->doEmergencySavePrepare();
 

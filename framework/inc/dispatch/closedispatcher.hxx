@@ -167,10 +167,10 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
 
         /** @short  prepare m_xCloseFrame so it should be closeable without problems.
 
-            @descr  Thats needed to be sure, that the document cant disagree
+            @descr  Thats needed to be sure, that the document can't disagree
                     later with e.g. an office termination.
                     The problem: Closing of documents can show UI. If the user
-                    ignores it and open/close other documents, we cant know
+                    ignores it and open/close other documents, we can't know
                     which state the office has after closing of this frame.
 
             @param  bAllowSuspend
@@ -253,7 +253,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
                     context where its dispatched. Sometimes the start frame of the dispatch
                     has to be closed itself (target=_self) ... sometimes its parent frame
                     has to be closed - BUT(!) it means a parent frame containing a top level
-                    window. _top cant be used then for dispatch - because it address TopFrames
+                    window. _top can't be used then for dispatch - because it address TopFrames
                     not frames containg top level windows. So normaly _magic (which btw does not
                     exists at the moment .-) ) should be used. So we interpret target=<empty>
                     as _magic !

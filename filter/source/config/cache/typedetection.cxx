@@ -662,7 +662,7 @@ bool TypeDetection::impl_getPreselectionForType(
 
     if (!bBreakDetection)
     {
-        // We cant check a preselected type for a given stream!
+        // We can't check a preselected type for a given stream!
         // So we must believe, that it can work ...
         if ( aParsedURL.Complete == "private:stream" )
             bBreakDetection = true;
@@ -1090,7 +1090,7 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
     // if we was forced to detect a stream.
     // Reason behind: We must be sure to ask user for "unknown contents" only ...
     // and not for "missing files". Especialy if detection is done by a stream only
-    // we cant check if the stream points to an "existing content"!
+    // we can't check if the stream points to an "existing content"!
     if (
         (sURL.isEmpty()                                     ) || // "non existing file" ?
         (!xStream.is()                                         ) || // non existing file !

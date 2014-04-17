@@ -688,7 +688,7 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
     ::comphelper::ConfigurationHelper::flush(xCfgNew);
 
     // remove the whole path from the old configuration !
-    // Otherwise we cant make sure that the diff between new and old configuration
+    // Otherwise we can't make sure that the diff between new and old configuration
     // on loading time really represent an user setting !!!
 
     // Check if the given path exists inside the old configuration.
@@ -775,7 +775,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
         { throw; }
     // Normal(!) exceptions can be ignored!
     // E.g. in case an addon installs a new path, which was not well known for an OOo 1.x installation
-    // we cant find a value for it inside the "old" configuration. So a NoSuchElementException
+    // we can't find a value for it inside the "old" configuration. So a NoSuchElementException
     // will be normal .-)
     catch(const css::uno::Exception&)
         {}
@@ -850,7 +850,7 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const OUSt
     // The outside code must fire N events for every changed property.
     // And the knowing about packaging of variables of the structure PathInfo
     // follow these group IDs ! But if such ID isnt in the range of [0..IDGROUP_COUNT]
-    // the outside cant determine the right group ... and cant fire the right events .-)
+    // the outside can't determine the right group ... and cant fire the right events .-)
 
     css::uno::Sequence< sal_Int32 > lIDs(IDGROUP_COUNT);
     lIDs[0] = IDGROUP_OLDSTYLE;
@@ -1218,7 +1218,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                     OUStringBuffer sMsg(256);
                     sMsg.appendAscii("The path '"    );
                     sMsg.append     (aChangePath.sPathName);
-                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal paths cant be set.");
+                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal paths can't be set.");
                     throw css::uno::Exception(sMsg.makeStringAndClear(),
                                               static_cast< ::cppu::OWeakObject* >(this));
                 }
@@ -1238,7 +1238,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                     OUStringBuffer sMsg(256);
                     sMsg.appendAscii("The path '"    );
                     sMsg.append     (aChangePath.sPathName);
-                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal paths cant be set.");
+                    sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal paths can't be set.");
                     throw css::uno::Exception(sMsg.makeStringAndClear(),
                                               static_cast< ::cppu::OWeakObject* >(this));
                 }

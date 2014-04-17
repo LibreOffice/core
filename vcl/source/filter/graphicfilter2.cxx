@@ -429,7 +429,7 @@ bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, bool )
 bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, bool bExtendedInfo )
 {
     // ! Because 0x0a can be interpreted as LF too ...
-    // we cant be sure that this special sign represent a PCX file only.
+    // we can't be sure that this special sign represent a PCX file only.
     // Every Ascii file is possible here :-(
     // We must detect the whole header.
     bExtendedInfo = true;

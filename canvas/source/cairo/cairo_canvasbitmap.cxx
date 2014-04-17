@@ -46,7 +46,7 @@ namespace
 {
     HBITMAP surface2HBitmap( const SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize )
     {
-        // cant seem to retrieve HBITMAP from cairo. copy content then
+        // can't seem to retrieve HBITMAP from cairo. copy content then
         HDC hScreenDC=GetDC(NULL);
         HBITMAP hBmpBitmap = CreateCompatibleBitmap( hScreenDC,
                                                      rSize.getX(),

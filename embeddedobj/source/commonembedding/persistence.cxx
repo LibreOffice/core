@@ -1829,7 +1829,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     {}
 
     m_pDocHolder->SetComponent( xDocument, m_bReadOnly );
-    SAL_WARN_IF( !m_pDocHolder->GetComponent().is(), "embeddedobj.common", "If document cant be created, an exception must be thrown!" );
+    SAL_WARN_IF( !m_pDocHolder->GetComponent().is(), "embeddedobj.common", "If document can't be created, an exception must be thrown!" );
 
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {

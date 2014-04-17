@@ -37,7 +37,7 @@ namespace framework{
     @short          implement a helper for a oneway enumeration of components
     @descr          You can step during this list only for one time! Its a snapshot.
                     Don't forget to release the reference. You are the owner of an instance of this implementation.
-                    You cant use this as a baseclass. Please use it as a dynamical object for return.
+                    You can't use this as a baseclass. Please use it as a dynamical object for return.
 
     @implements     XInterface
                     XTypeProvider

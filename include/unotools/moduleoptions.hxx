@@ -131,7 +131,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
                     content (but a FrameLoader which is not bound to any application!) ... or
                     the given properties describe a stream (and we make no deep detection inside here!).
 
-            @attention  The module BASIC cant be detected here. Because it does not
+            @attention  The module BASIC can't be detected here. Because it does not
                         has an own URL schema.
 
             @param  sURL
@@ -150,7 +150,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
             @descr  Here we try to use the list of supported service names of the given model
                     to find out the right application module.
 
-            @attention  The module BASIC cant be detected here. Because it does not
+            @attention  The module BASIC can't be detected here. Because it does not
                         support any model/ctrl/view paradigm.
 
             @param  xModel

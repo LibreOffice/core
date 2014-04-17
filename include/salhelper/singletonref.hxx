@@ -59,7 +59,7 @@ namespace salhelper{
 
                 Note further that this singleton pattern can work only, if
                 all user of such singleton are located inside the same library!
-                Because static values cant be exported - e.g. from windows libraries.
+                Because static values can't be exported - e.g. from windows libraries.
  */
 template< class SingletonClass >
 class SingletonRef

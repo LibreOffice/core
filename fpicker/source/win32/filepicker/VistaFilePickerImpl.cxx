@@ -861,7 +861,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     TFileSaveDialog iSave = m_iDialogSave;
 
     // it's important to know if we are showing the dialog.
-    // Some dialog interface methods cant be called then or some
+    // Some dialog interface methods can't be called then or some
     // tasks must be done differently .-) (e.g. see impl_sta_getSelectedFiles())
     m_bInExecute = sal_True;
 

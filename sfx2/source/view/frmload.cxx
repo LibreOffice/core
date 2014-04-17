@@ -324,7 +324,7 @@ namespace
             return false;
 
         // default must be set to true, because some return values
-        // cant be checked, but nonetheless indicate "success"!
+        // can't be checked, but nonetheless indicate "success"!
         bool bSuccess = true;
 
         // On the other side some special slots return a boolean state,

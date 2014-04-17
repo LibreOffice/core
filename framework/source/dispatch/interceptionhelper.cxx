@@ -238,7 +238,7 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
     css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY_THROW);
 
     // We need a full copy of all currently registered interceptor objects.
-    // Otherwhise we cant iterate over this vector without the risk, that our iterator will be invalid.
+    // Otherwhise we can't iterate over this vector without the risk, that our iterator will be invalid.
     // Because this vetor will be influenced by every deregistered interceptor.
     InterceptionHelper::InterceptorList aCopy = m_lInterceptionRegs;
 

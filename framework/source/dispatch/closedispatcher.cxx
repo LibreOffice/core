@@ -187,7 +187,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     }
 
     // OK - URLs are the right ones.
-    // But we cant execute synchronously :-)
+    // But we can't execute synchronously :-)
     // May we are called from a generic key-input handler,
     // which isnt aware that this call kill its own environment ...
     // Do it asynchronous everytimes!
@@ -287,9 +287,9 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     if ( ! xCloseFrame->getCreator().is())
         bCloseFrame = true;
 
-    // b) The help window cant disagree with any request.
+    // b) The help window can't disagree with any request.
     //    Because it doesn't implement a controller - it uses a window only.
-    //    Further t cant be the last open frame - if we do all other things
+    //    Further t can't be the last open frame - if we do all other things
     //    right inside this CloseDispatcher implementation.
     //    => close it!
     else if (aCheck1.m_bReferenceIsHelp)

@@ -252,7 +252,7 @@ OUString SAL_CALL VistaFilePicker::getDisplayDirectory()
 }
 
 
-// @deprecated cant be supported any longer ... see IDL description for further details
+// @deprecated can't be supported any longer ... see IDL description for further details
 css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getFiles()
     throw(css::uno::RuntimeException)
 {

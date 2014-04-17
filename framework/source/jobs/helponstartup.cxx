@@ -169,7 +169,7 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
 
     // check for right environment.
     // If its not a DocumentEvent, which triggered this job,
-    // we cant work correctly! => return immediately and do nothing
+    // we can't work correctly! => return immediately and do nothing
     OUString sEnvType = lEnvironment.getUnpackedValueOrDefault("EnvType", OUString());
     if (sEnvType != "DOCUMENTEVENT")
         return OUString();

@@ -92,7 +92,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
 
             /** @short  default ctor.
 
-                @descr  Such constructed object cant be used really.
+                @descr  Such constructed object can't be used really.
                         Might it will crash if its used!
                         Dont forget to initialize all(!) members ...
              */
@@ -211,7 +211,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
 
             @attention  If the interface method handle() will be overwritten by
                         a derived class, the functionality behind these static list
-                        cant be used.
+                        can't be used.
 
             @param  lInterceptions
                     the list of intercepted requests.

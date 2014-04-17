@@ -642,7 +642,7 @@ public class Protocol extends JComponent
             System.err.print(sAsciiLog);
         // no else - it's a bit field of possible reactions!
         // But these both conditions must be handled together.
-        // Because we cant generate different types of log contents to the same log file.
+        // Because we can't generate different types of log contents to the same log file.
         // We preferr HTML if both types are set.
         if (
             ((m_nMode & MODE_HTML ) == MODE_HTML ) ||

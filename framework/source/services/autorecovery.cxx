@@ -411,9 +411,9 @@ private:
     ListenerHash m_lListener;
 
     /** @descr  This member is used to prevent us against re-entrance problems.
-                A mutex cant help to prevent us from concurrent using of members
+                A mutex can't help to prevent us from concurrent using of members
                 inside the same thread. But e.g. our internally used stl structures
-                are not threadsafe ... and furthermore they cant be used at the same time
+                are not threadsafe ... and furthermore they can't be used at the same time
                 for iteration and add/remove requests!
                 So we have to detect such states and ... show a warning.
                 May be there will be a better solution next time ... (copying the cache temp.
@@ -912,7 +912,7 @@ private:
 
         E.g. our svtools::ConfigItems() has to be flushed explicitly .-(
 
-        Note: This method cant fail. Flushing of config entries is an
+        Note: This method can't fail. Flushing of config entries is an
               optional feature. Errors can be ignored.
      */
     void impl_flushALLConfigChanges();
@@ -998,7 +998,7 @@ private:
         On the other side removing of files from disc is an optional
         feature. If we are not able doing so ... its not a real problem.
         Ok - users disc place will be samller then ... but we should produce
-        a crash during crash save because we cant delete a temporary file only !
+        a crash during crash save because we can't delete a temporary file only !
 
         @param  sURL
                 the url of the file, which should be removed.
@@ -2584,7 +2584,7 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     aCacheLock.unlock();
 
     // Sometimes we close documents by ourself.
-    // And these documents cant be deregistered.
+    // And these documents can't be deregistered.
     // Otherwhise we loos our configuration data ... but need it !
     // see SessionSave !
     if (aInfo.IgnoreClosing)
@@ -2979,7 +2979,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         //      They can be handled normaly - means we patch the corresponding configuration entry only.
         // iii) For a SessionSave ... ignore it! There is no time to wait for this save operation.
         //      Because the WindowManager will kill the process if it doesn't react immediately.
-        //      On the other side we cant risk a concurrent save request ... because we know
+        //      On the other side we can't risk a concurrent save request ... because we know
         //      that it will produce a crash.
 
         // Attention: Because eJob is used as a flag field, you have to check for the worst case first.
@@ -3185,7 +3185,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
 
     // try to remove the old temp file.
     // Ignore any error here. We have a new temp file, which is up to date.
-    // The only thing is: we fill the disk with temp files, if we cant remove old ones :-)
+    // The only thing is: we fill the disk with temp files, if we can't remove old ones :-)
     OUString sRemoveFile      = rInfo.OldTempURL;
     rInfo.OldTempURL = rInfo.NewTempURL;
     rInfo.NewTempURL = "";
@@ -3697,7 +3697,7 @@ void AutoRecovery::implts_prepareEmergencySave()
     // Be sure to know all open documents really .-)
     implts_verifyCacheAgainstDesktopDocumentList();
 
-    // hide all docs, so the user cant disturb our emergency save .-)
+    // hide all docs, so the user can't disturb our emergency save .-)
     implts_changeAllDocVisibility(false);
 }
 
@@ -4008,7 +4008,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
 
                     bool bRecoveryData = m_lDocCache.size() > 0;
 
-                    // exists session data ... => then we cant say, that these
+                    // exists session data ... => then we can't say, that these
                     // data are valid for recovery. So we have to return sal_False then!
                     if (bSessionData)
                         bRecoveryData = false;

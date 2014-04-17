@@ -154,7 +154,7 @@ void FilterCache::takeOver(const FilterCache& rClone)
     m_eFillState     = rClone.m_eFillState;
 
     // renew all dependencies and optimizations
-    // Because we cant be sure, that changed filters on one clone
+    // Because we can't be sure, that changed filters on one clone
     // and changed types of another clone work together.
     // But here we can check against the lates changes ...
     impl_validateAndOptimize();
@@ -438,13 +438,13 @@ void FilterCache::setItem(      EItemType        eType ,
     CacheItemList& rList = impl_getItemList(eType);
 
     // name must be part of the property set too ... otherwise our
-    // container query cant work correctly
+    // container query can't work correctly
     CacheItem aItem = aValue;
     aItem[PROPNAME_NAME] <<= sItem;
     aItem.validateUINames(m_sActLocale);
 
     // remove implicit properties as e.g. FINALIZED or MANDATORY
-    // They cant be saved here and must be readed on demand later, if they are needed.
+    // They can't be saved here and must be readed on demand later, if they are needed.
     removeStatePropsFromItem(aItem);
 
     rList[sItem] = aItem;
@@ -496,8 +496,8 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
             {
                 /* TODO
                     Hack -->
-                        The default frame loader cant be located inside the normal set of frame loaders.
-                        Its an atomic property inside the misc cfg package. So we cant retrieve the information
+                        The default frame loader can't be located inside the normal set of frame loaders.
+                        Its an atomic property inside the misc cfg package. So we can't retrieve the information
                         about FINALIZED and MANDATORY very easy ... :-(
                         => set it to readonly/required everytimes :-)
                 */

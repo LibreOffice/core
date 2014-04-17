@@ -1046,7 +1046,7 @@ void SAL_CALL Desktop::disposing()
     // Following lines of code can be called outside a synchronized block ...
     // Because our transaction manager will block all new requests to this object.
     // So nobody can use us any longer.
-    // Exception: Only removing of listener will work ... and this code cant be dangerous.
+    // Exception: Only removing of listener will work ... and this code can't be dangerous.
 
     // First we has to kill all listener connections.
     // They might rely on our member and can hinder us on releasing them.

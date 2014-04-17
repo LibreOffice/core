@@ -49,7 +49,7 @@ namespace filter{
                 should be available etc.
 
     @attention  The base class BaseLock must be the first of declared ones.
-                Otherwise we cant be sure, that our own mutex member (which is
+                Otherwise we can't be sure, that our own mutex member (which is
                 present by this base class!) was full initialized inside our own
                 ctor as first!
  */
@@ -202,7 +202,7 @@ class BaseContainer : public BaseLock
                             FilterCache* p = impl_getWorkingCache();
                             p->doSomething();
                         aLock.clear();
-                        // after this point p cant b e guaranteed any longer!
+                        // after this point p can't b e guaranteed any longer!
          */
         FilterCache* impl_getWorkingCache() const;
 

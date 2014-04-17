@@ -140,7 +140,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
                     of this collection. (fragmentation!) If collection is full (means there
                     is no free number) the special value INVALID_NUMBER will be returned.
 
-            @note   Those method cant be called within a multithreaded environment ..
+            @note   Those method can't be called within a multithreaded environment ..
                     Because such number wont be "reserved" for the calli of these method
                     it can happen that two calls returns the same number (reasoned by the fact that first calli
                     doesn't used the returned number already.

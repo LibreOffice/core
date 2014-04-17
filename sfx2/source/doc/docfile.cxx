@@ -3184,7 +3184,7 @@ bool SfxMedium::SaveVersionList_Impl( bool /*bUseXML*/ )
 
 bool SfxMedium::IsReadOnly()
 {
-    // a) ReadOnly filter cant produce read/write contents!
+    // a) ReadOnly filter can't produce read/write contents!
     bool bReadOnly = (
                     (pImp->m_pFilter                                                                         ) &&
                     ((pImp->m_pFilter->GetFilterFlags() & SFX_FILTER_OPENREADONLY) == SFX_FILTER_OPENREADONLY)

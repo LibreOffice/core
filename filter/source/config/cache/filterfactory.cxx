@@ -163,7 +163,7 @@ css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames(
     /* Attention: Instead of getElementNames() this method have to return only filter names,
                   which can be created as UNO Services really. Thats why we search for filters,
                   which dont have a valid value for the property "FilterService".
-                  Of course we cant check for corrupted service names here. We can check
+                  Of course we can't check for corrupted service names here. We can check
                   for empty strings only ...
     */
     CacheItem lIProps;

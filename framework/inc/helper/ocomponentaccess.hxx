@@ -140,7 +140,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
             @seealso    method createEnumeration
 
             @param      "xNode"        , root of subtree and start point of search
-            @param      "seqComponents", result list of search. We cant use a return value, we search recursive
+            @param      "seqComponents", result list of search. We can't use a return value, we search recursive
                                          and must collect all information.
         *//*-*****************************************************************************************************/
 

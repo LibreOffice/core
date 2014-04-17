@@ -67,7 +67,7 @@ OQueryComposer::OQueryComposer(const Reference< XConnection>& _xConnection)
  : OSubComponent(m_aMutex,_xConnection)
 {
     SAL_INFO("dbaccess", "OQueryComposer::OQueryComposer" );
-    OSL_ENSURE(_xConnection.is()," Connection cant be null!");
+    OSL_ENSURE(_xConnection.is()," Connection can't be null!");
 
     Reference<XMultiServiceFactory> xFac( _xConnection, UNO_QUERY_THROW );
     m_xComposer.set( xFac->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );

@@ -186,9 +186,9 @@ typedef ::boost::unordered_map< OUString                    ,
             to an extension. Organization as an hash makes it
             faster than searching inside vectors.
 
-            On the other side e.g. URLPattern cant be really addressed
+            On the other side e.g. URLPattern can't be really addressed
             by a hash value ... because the use wildcards. But
-            there we need key-value pairs too, which cant be provided
+            there we need key-value pairs too, which can't be provided
             by a pure vector!
  */
 typedef ::boost::unordered_map< OUString                    ,

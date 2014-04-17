@@ -309,7 +309,7 @@ private:
                     types too !
 
         @note       #i60158#
-                    sometimes our text ascii and our csv filter cant work together.
+                    sometimes our text ascii and our csv filter can't work together.
                     Then we overwrite our detection hardly.
                     sType param is used as out parameter then too ... and
                     rDescriptor will be changed by selecting another filter.

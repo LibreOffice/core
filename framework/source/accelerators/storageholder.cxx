@@ -138,7 +138,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
                     /* TODO URGENT!
                         in case we found some "already existing storages" on the path before and increased its UseCount ...
                         and now we will get an exception on creating a new sub storage ...
-                        we must decrease all UseCounts, which was touched before. Otherwise these storages cant be closed!
+                        we must decrease all UseCounts, which was touched before. Otherwise these storages can't be closed!
 
                         Idea: Using of another structure member "PossibleUseCount" as vector of unique numbers.
                         Every thread use another unique number to identify all "owned candidates".

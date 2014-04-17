@@ -293,7 +293,7 @@ class FilterCache : public BaseLock
                     If the new data are needed immediately inside the original container,
                     the method takeOver() can be used to copy all changes back.
                     The may be following notifications of the configuration will be superflous then.
-                    But they cant be stopped ...
+                    But they can't be stopped ...
 
                     All internal structures will be copied here. But the internal used
                     configuration (update) access wont be copied. The cloned instance contains
@@ -568,7 +568,7 @@ class FilterCache : public BaseLock
                         no exception will be thrown. In such case the item is marked as
                         finalized/mandatory automaticly
                         Reason: May be the item cames from the old configuration package and
-                        was not migrated to the new one. So we cant provide write access
+                        was not migrated to the new one. So we can't provide write access
                         to such items ...
          */
         virtual void addStatePropsToItem(      EItemType        eType,

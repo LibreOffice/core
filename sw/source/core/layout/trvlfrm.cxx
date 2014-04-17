@@ -211,7 +211,7 @@ bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 
         //We fix the StartPoint if no Cntnt below the page 'answers' and then
         //start all over again one page before the current one.
-        //However we cant use Flys in such a case.
+        //However we can't use Flys in such a case.
         if ( SwLayoutFrm::GetCrsrOfst( &aTextPos, aPoint, pCMS ) )
         {
             bTextRet = true;

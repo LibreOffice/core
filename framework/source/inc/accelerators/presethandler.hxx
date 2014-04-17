@@ -140,7 +140,7 @@ class PresetHandler
                     of the share and user layer. */
         ::salhelper::SingletonRef< TSharedStorages > m_aSharedStorages;
 
-        /** @short  if we run in document mode, we cant use the global root storages!
+        /** @short  if we run in document mode, we can't use the global root storages!
                     We have to use a special document storage explicitly. */
         StorageHolder m_lDocumentStorages;
 
@@ -200,7 +200,7 @@ class PresetHandler
 
             @descr  Because this class should be useable in combination
                     with ::salhelper::SingletonRef template this ctor
-                    cant have any special parameters!
+                    can't have any special parameters!
 
             @param  xContext
                     points to an uno service manager, which is used internally

@@ -645,12 +645,12 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             //Therefore we need to shift the range one row up
             SwRangeDescriptor aDesc;
             if (aRangeRepresentation.isEmpty())
-                return xRes;        // we cant handle this thus returning an empty references
+                return xRes;        // we can't handle this thus returning an empty references
             aRangeRepresentation = aRangeRepresentation.copy( 1 );    // get rid of '.' to have only the cell range left
             FillRangeDescriptor( aDesc, aRangeRepresentation );
             aDesc.Normalize();
             if (aDesc.nTop <= 0)    // no chance to shift the range one row up?
-                return xRes;        // we cant handle this thus returning an empty references
+                return xRes;        // we can't handle this thus returning an empty references
             aDesc.nTop      -= 1;
             aDesc.nBottom   -= 1;
 
@@ -691,7 +691,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     {
         SwTable* pTable = SwTable::FindTable( pTblFmt );
         if(pTable->IsTblComplex())
-            return xRes;    // we cant handle this thus returning an empty references
+            return xRes;    // we can't handle this thus returning an empty references
         else
         {
             // get a character map in the size of the table to mark

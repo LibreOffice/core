@@ -114,7 +114,7 @@ interface XAcceleratorConfiguration
         </p>
 
         <p>
-        Note: This method cant be used to remove entities from the configuration set.
+        Note: This method can't be used to remove entities from the configuration set.
         Empty parameters will result into an exception!
         Use the method removeKeyEvent() instead.
         </p>
@@ -164,7 +164,7 @@ interface XAcceleratorConfiguration
                 where the specified command is registered for.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-                if the specified command is empty. It cant be checked, if a command
+                if the specified command is empty. It can't be checked, if a command
                 is valid - because every URL schema can be used here.
 
         @throws ::com::sun::star::container::NoSuchElementException
@@ -189,11 +189,11 @@ interface XAcceleratorConfiguration
         Instead to the method getKeyEventsForCommand() the returned list contains only
         one(!) key event bound to one(!) requested command. If more then one key event
         is bound to a command - a selection is done inside this method.
-        This internal selection cant be influenced from outside.
+        This internal selection can't be influenced from outside.
         </p>
 
         @attention  Because its not defined, that any command (e.g. configured inside a menu)
-                    must have an accelerator - we cant reject the call if at least one command
+                    must have an accelerator - we can't reject the call if at least one command
                     does not occur inside this configuration set ...
                     We handle it more gracefully - and return an empty item instead of throwing
                     and exception.
@@ -208,7 +208,7 @@ interface XAcceleratorConfiguration
 
         @throws ::com::sun::star::lang::IllegalArgumentException
                 if at least one of the specified commands is empty.
-                It cant be checked, if a command is valid -
+                It can't be checked, if a command is valid -
                 because every URL schema can be used here.
      */
     sequence< any > getPreferredKeyEventsForCommandList( [in] sequence< string > lCommandList )

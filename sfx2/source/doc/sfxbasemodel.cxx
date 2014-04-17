@@ -493,7 +493,7 @@ SfxSaveGuard::~SfxSaveGuard()
     // storing at the same time. Further m_bSuicide was set to sal_True only if close(sal_True) was called.
     // So the ownership was delegated to the place where a veto exception was thrown.
     // Now we have to call close() again and delegate the ownership to the next one, which
-    // cant accept that. Close(sal_False) can't work in this case. Because then the document will may be never closed ...
+    // can't accept that. Close(sal_False) can't work in this case. Because then the document will may be never closed ...
 
     if ( m_pData->m_bSuicide )
     {

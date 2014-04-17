@@ -992,7 +992,7 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
         {
             OUString sNew;
 
-            // FIXME! cant find if name is taken already!!!!
+            // FIXME! can't find if name is taken already!!!!
 
             nCollisionCount++;
             OUStringBuffer aBuf;
@@ -1017,7 +1017,7 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
             // find new name that is not taken
             OUString sNew;
 
-            // FIXME! cant find if name is taken already!!!!
+            // FIXME! can't find if name is taken already!!!!
 
             nCollisionCount++;
             OUStringBuffer aBuf;
