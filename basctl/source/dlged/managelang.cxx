@@ -103,7 +103,6 @@ void ManageLanguageDialog::FillLanguageBox()
 
     if ( m_xLocalizationMgr->isLibraryLocalized() )
     {
-        SvtLanguageTable aLangTable;
         Locale aDefaultLocale = m_xLocalizationMgr->getStringResourceManager()->getDefaultLocale();
         Sequence< Locale > aLocaleSeq = m_xLocalizationMgr->getStringResourceManager()->getLocales();
         const Locale* pLocale = aLocaleSeq.getConstArray();
@@ -112,7 +111,7 @@ void ManageLanguageDialog::FillLanguageBox()
         {
             bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
             LanguageType eLangType = LanguageTag::convertToLanguageType( pLocale[i] );
-            OUString sLanguage = aLangTable.GetString( eLangType );
+            OUString sLanguage = SvtLanguageTable::GetLanguageString( eLangType );
             if ( bIsDefault )
             {
                 sLanguage += " " + m_sDefLangStr;
