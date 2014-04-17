@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "ChartView.hxx"
 #include "chartview/DrawModelWrapper.hxx"
 #include "NumberFormatterWrapper.hxx"
@@ -2455,11 +2457,13 @@ void ChartView::createShapes()
     pShapeFactory->setPageSize(mxRootShape, aPageSize);
     pShapeFactory->clearPage(m_xDrawPage);
 
+#if HAVE_FEATURE_DESKTOP
     if(isReal3DChart())
     {
         createShapes3D();
         return;
     }
+#endif
 
     {
         SolarMutexGuard aSolarGuard;

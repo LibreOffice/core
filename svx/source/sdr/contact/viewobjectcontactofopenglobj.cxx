@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
+
 #include <svx/sdr/contact/viewobjectcontactofopenglobj.hxx>
 #include <svx/sdr/contact/viewcontactofopenglobj.hxx>
 
@@ -21,9 +23,11 @@ ViewObjectContactOfOpenGLObj::ViewObjectContactOfOpenGLObj(
     ObjectContact& rObjectContact, ViewContact& rViewContact )
     : ViewObjectContactOfSdrObj( rObjectContact, rViewContact )
 {
+#if HAVE_FEATURE_DESKTOP
     OpenGLContext* pContext = static_cast<SdrOpenGLObj&>(static_cast<ViewContactOfSdrObj&>(rViewContact).GetSdrObject()).getOpenGLContext();
     if (pContext)
         pContext->init(getWindow());
+#endif
 }
 
 ViewObjectContactOfOpenGLObj::~ViewObjectContactOfOpenGLObj()
