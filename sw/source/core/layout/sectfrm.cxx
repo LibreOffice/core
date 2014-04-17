@@ -346,7 +346,8 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
                     while ( pTmp->GetNext() )
                         pTmp = pTmp->GetNext();
                     SwFrm* pSave = ::SaveCntnt( pCol );
-                    ::RestoreCntnt( pSave, pSibling->GetUpper(), pTmp, true );
+                    if (pSave)
+                        ::RestoreCntnt( pSave, pSibling->GetUpper(), pTmp, true );
                 }
             }
         }
