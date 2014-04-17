@@ -751,44 +751,50 @@ void CustomShapeProperties::initializePresetDataMap()
             if (aLine == "AdjustmentValues")
             {
                 aStream.ReadLine(aLine);
-                comphelper::SequenceAsVector<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
                 if (aLine != "([]com.sun.star.drawing.EnhancedCustomShapeAdjustmentValue) {}")
                 {
+                    comphelper::SequenceAsVector<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
                     OString aExpectedPrefix("([]com.sun.star.drawing.EnhancedCustomShapeAdjustmentValue) { ");
                     assert(aLine.startsWith(aExpectedPrefix));
 
                     OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
                     lcl_parseAdjustmentValues(aAdjustmentValues, aValue);
+                    aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjustmentValues.getAsConstList());
                 }
-                aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjustmentValues.getAsConstList());
+                else
+                    aPropertyMap.setProperty(PROP_AdjustmentValues, uno::Sequence<OUString>(0));
             }
             else if (aLine == "Equations")
             {
                 aStream.ReadLine(aLine);
-                comphelper::SequenceAsVector<OUString> aEquations;
                 if (aLine != "([]string) {}")
                 {
+                    comphelper::SequenceAsVector<OUString> aEquations;
                     OString aExpectedPrefix("([]string) { ");
                     assert(aLine.startsWith(aExpectedPrefix));
 
                     OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
                     lcl_parseEquations(aEquations, aValue);
+                    aPropertyMap.setProperty(PROP_Equations, aEquations.getAsConstList());
                 }
-                aPropertyMap.setProperty(PROP_Equations, aEquations.getAsConstList());
+                else
+                    aPropertyMap.setProperty(PROP_Equations, uno::Sequence<OUString>(0));
             }
             else if (aLine == "Handles")
             {
                 aStream.ReadLine(aLine);
-                comphelper::SequenceAsVector< uno::Sequence<beans::PropertyValue> > aHandles;
                 if (aLine != "([][]com.sun.star.beans.PropertyValue) {}")
                 {
+                    comphelper::SequenceAsVector< uno::Sequence<beans::PropertyValue> > aHandles;
                     OString aExpectedPrefix("([][]com.sun.star.beans.PropertyValue) { ");
                     assert(aLine.startsWith(aExpectedPrefix));
 
                     OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
                     lcl_parseHandles(aHandles, aValue);
+                    aPropertyMap.setProperty(PROP_Handles, aHandles.getAsConstList());
                 }
-                aPropertyMap.setProperty(PROP_Handles, aHandles.getAsConstList());
+                else
+                    aPropertyMap.setProperty(PROP_Handles, uno::Sequence<OUString>(0));
             }
             else if (aLine == "MirroredX")
             {
