@@ -1365,20 +1365,18 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 // the value of used script types
                 OUString aScriptTypesInUse( OUString::number( rSh.GetScriptType() ) );
 
-                SvtLanguageTable aLangTable;
-
                 // get keyboard language
                 OUString aKeyboardLang;
                 SwEditWin& rEditWin = GetView().GetEditWin();
                 LanguageType nLang = rEditWin.GetInputLanguage();
                 if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
-                    aKeyboardLang = aLangTable.GetString( nLang );
+                    aKeyboardLang = SvtLanguageTable::GetLanguageString( nLang );
 
                 // get the language that is in use
                 OUString aCurrentLang = "*";
                 nLang = SwLangHelper::GetCurrentLanguage( rSh );
                 if (nLang != LANGUAGE_DONTKNOW)
-                    aCurrentLang = aLangTable.GetString( nLang );
+                    aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
 
                 // build sequence for status value
                 uno::Sequence< OUString > aSeq( 4 );
