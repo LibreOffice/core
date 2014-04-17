@@ -1329,7 +1329,18 @@ void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
 }
 
-IMPL_META_ACTION( TextLine, META_TEXTLINE_ACTION )
+MetaTextLineAction::MetaTextLineAction() :
+    MetaAction  ( META_TEXTLINE_ACTION ),
+    mnWidth     ( 0 ),
+    meStrikeout ( STRIKEOUT_NONE ),
+    meUnderline ( UNDERLINE_NONE ),
+    meOverline  ( UNDERLINE_NONE )
+{
+}
+
+MetaTextLineAction::~MetaTextLineAction()
+{
+}
 
 MetaTextLineAction::MetaTextLineAction( const Point& rPos, long nWidth,
                                         FontStrikeout eStrikeout,
