@@ -221,8 +221,6 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
         aCmd_Language += ".uno:LanguageStatus?Language:string=Default_";
     }
 
-    SvtLanguageTable    aLanguageTable;
-
     // get languages to be displayed in the menu
     std::set< OUString > aLangItems;
     FillLangItems( aLangItems, m_xFrame, m_aLangGuessHelper,
@@ -239,7 +237,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
         const OUString & rStr( *it );
-        if (rStr != aLanguageTable.GetString( LANGUAGE_NONE ) &&
+        if (rStr != SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) &&
             rStr != sAsterisk &&
             rStr != sEmpty)
         {
