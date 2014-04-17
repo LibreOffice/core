@@ -69,8 +69,7 @@ SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", rSet )
     sal_Int32 nPos;
     if ((nPos = aText.indexOf( aPlaceholder)) != -1)
     {
-        SvtLanguageTable aLangTab;
-        const OUString& rStr = aLangTab.GetString( LANGUAGE_ENGLISH_US);
+        const OUString& rStr = SvtLanguageTable::GetLanguageString( LANGUAGE_ENGLISH_US);
         if (!rStr.isEmpty())
         {
             aText = aText.replaceAt( nPos, aPlaceholder.getLength(), rStr);
