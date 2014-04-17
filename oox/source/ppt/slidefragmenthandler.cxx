@@ -60,7 +60,7 @@ SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUStri
             getFilter(), aVMLDrawingFragmentPath, *pPersistPtr->getDrawing() ) );
 }
 
-SlideFragmentHandler::~SlideFragmentHandler() throw()
+SlideFragmentHandler::~SlideFragmentHandler()
 {
     // convert and insert all VML shapes (mostly form controls)
     mpSlidePersistPtr->getDrawing()->convertAndInsert();
