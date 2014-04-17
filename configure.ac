@@ -2359,35 +2359,21 @@ else
     SCPDEFS="$SCPDEFS -DDISABLE_AVMEDIA"
 fi
 
-dnl Decide whether to build database connectivity stuff (including
-dnl Base) or not. We probably don't want to on non-desktop OSes.
+# Decide whether to build database connectivity stuff (including
+# Base) or not. We probably don't want to on non-desktop OSes.
 
 if test -z "$enable_database_connectivity"; then
-    # Do enable database connectivity for Android for now as otherwise
-    # we presumably will get linking errors... We are not as far in
-    # the work for iOS, so we might as well disable it for iOS already.
-
-    # And actually, do enable it for iOS, too. Let's get back to
-    # figuring out what to do with this later, if ever.
-
-    # (Note that with "enable", I mean "enable building the related
-    # code". Very likely little of it will make any sense at run-time
-    # on Android or iOS and won't even be shipped with/linked into any
-    # app.)
-
-    #if test $_os != iOS; then
+    # --disable-database-connectivity is unfinished work in progress
+    # and the iOS test app doesn't link if we actually try to use it.
+    # if test $_os != iOS -a $_os != Android; then
         enable_database_connectivity=yes
-    #fi
+    # fi
 fi
 
-DISABLE_DBCONNECTIVITY=''
 if test "$enable_database_connectivity" = yes; then
     BUILD_TYPE="$BUILD_TYPE DBCONNECTIVITY"
-else
-    DISABLE_DBCONNECTIVITY='TRUE'
-    SCPDEFS="$SCPDEFS -DDISABLE_DBCONNECTIVITY"
+    AC_DEFINE(HAVE_FEATURE_DBCONNECTIVITY)
 fi
-AC_SUBST(DISABLE_DBCONNECTIVITY)
 
 if test -z "$enable_extensions"; then
     # For iOS and Android disable extensions unless specifically overridden with --enable-extensions.

@@ -26,7 +26,7 @@ $(eval $(call gb_Library_use_libraries,frm,\
     comphelper \
     cppu \
     cppuhelper \
-    dbtools \
+    $(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
     editeng \
     i18nlangtag \
     sal \

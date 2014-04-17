@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <stdio.h>
 #include <tools/urlobj.hxx>
 #include <svl/converter.hxx>
@@ -26,7 +28,7 @@
 #include <ucbhelper/content.hxx>
 #include <svx/txenctab.hxx>
 
-#ifndef DISABLE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY
 #include <svx/dbcharsethelper.hxx>
 #endif
 
@@ -79,6 +81,8 @@
 using namespace com::sun::star;
 using ::std::vector;
 
+#if HAVE_FEATURE_DBCONNECTIVITY
+
 #define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
 
 //! move to a header file?
@@ -94,8 +98,6 @@ using ::std::vector;
 
 #define SC_DBPROP_EXTENSION         "Extension"
 #define SC_DBPROP_CHARSET           "CharSet"
-
-#ifndef DISABLE_DBCONNECTIVITY
 
 namespace
 {
@@ -148,7 +150,7 @@ namespace
     }
 }
 
-#endif // !DISABLE_DBCONNECTIVITY
+#endif // HAVE_FEATURE_DBCONNECTIVITY
 
 
 // MoveFile/KillFile/IsDocument: similar to SfxContentHelper
@@ -237,7 +239,7 @@ bool ScDocShell::IsDocument( const INetURLObject& rURL )
     return bRet;
 }
 
-#ifndef DISABLE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY
 
 static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales)
 {
@@ -285,12 +287,12 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
     }
 }
 
-#endif // !DISABLE_DBCONNECTIVITY
+#endif // HAVE_FEATURE_DBCONNECTIVITY
 
 sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding eCharSet,
                                ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc )
 {
-#ifdef DISABLE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY
     (void) rFullFileName;
     (void) eCharSet;
     (void) aColWidthParam;
@@ -462,10 +464,10 @@ sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncodi
     }
 
     return nErr;
-#endif // !DISABLE_DBCONNECTIVITY
+#endif // HAVE_FEATURE_DBCONNECTIVITY
 }
 
-#ifndef DISABLE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY
 
 namespace {
 
@@ -773,11 +775,11 @@ inline void lcl_getLongVarCharString(
 
 }
 
-#endif // !DISABLE_DBCONNECTIVITY
+#endif // HAVE_FEATURE_DBCONNECTIVITY
 
 sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding eCharSet, bool& bHasMemo )
 {
-#ifdef DISABLE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY
     (void) rFullFileName;
     (void) eCharSet;
     (void) bHasMemo;
@@ -1151,7 +1153,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
     }
 
     return nErr;
-#endif // !DISABLE_DBCONNECTIVITY
+#endif // HAVE_FEATURE_DBCONNECTIVITY
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

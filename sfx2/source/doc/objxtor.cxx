@@ -1025,7 +1025,7 @@ OUString SfxObjectShell::GetServiceNameFromFactory( const OUString& rFact )
         aServiceName = "com.sun.star.script.BasicIDE";
     }
 #endif
-#ifndef DISABLE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY
     else if ( aFact == "sdatabase" )
     {
         aServiceName = "com.sun.star.sdb.OfficeDatabaseDocument";

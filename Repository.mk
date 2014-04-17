@@ -149,7 +149,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,base, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
 	analysis \
-	calc \
+	$(call gb_Helper_optional,DBCONNECTIVITY,calc) \
 	date \
 	pricing \
 	sc \
@@ -227,11 +227,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	configmgr \
 	ctl \
 	cui \
-	dba \
-	dbase \
-	dbmm \
-	$(if $(DISABLE_DBCONNECTIVITY),,dbtools) \
-	dbaxml \
+	$(call gb_Helper_optional,DBCONNECTIVITY, \
+		dba \
+		dbase \
+		dbmm \
+		dbtools \
+		dbaxml) \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
@@ -253,8 +254,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	evtatt \
 	exp \
 	expwrap \
-	flat \
-	file \
+	$(call gb_Helper_optional,DBCONNECTIVITY, \
+		flat \
+		file) \
 	filterconfig \
 	$(if $(filter $(ENABLE_FIREBIRD_SDBC),TRUE),firebird_sdbc) \
 	fps_office \
@@ -300,7 +302,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	msfilter \
 	$(if $(DISABLE_SCRIPTING),,msforms) \
 	mtfrenderer \
-	mysql \
+	$(call gb_Helper_optional,DBCONNECTIVITY,mysql) \
 	odbc \
 	odfflatxml \
 	offacc \
@@ -313,7 +315,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	res \
 	sax \
 	sb \
-	sdbt \
+	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \
 	scn \
 	sd \
 	sdd \
@@ -412,7 +414,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	) \
 	communi \
 	ooxml \
-	sdbc \
+	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc) \
 	avmediaQuickTime \
 	filtertracer \
 	rpt \
@@ -502,7 +504,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	cached1 \
 	collator_data \
 	comphelper \
-	dbpool2 \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \
 	deployment \
 	deploymentgui \
 	dict_ja \

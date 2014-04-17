@@ -248,7 +248,6 @@ endif
 
 gb_GLOBALDEFS += \
 	$(call gb_Helper_define_if_set,\
-		DISABLE_DBCONNECTIVITY \
 		DISABLE_DYNLOADING \
 		DISABLE_EXPORT \
 		DISABLE_SCRIPTING \

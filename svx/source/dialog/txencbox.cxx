@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "svx/txencbox.hxx"
 #include "svx/txenctab.hxx"
 #include <svx/dialogs.hrc>
-#ifndef DISABLE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY
 #include "svx/dbcharsethelper.hxx"
 #endif
 #include <vcl/builder.hxx>
@@ -134,7 +135,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
         bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
         sal_uInt32 nButIncludeInfoFlags )
 {
-#ifdef DISABLE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY
     (void)bExcludeImportSubsets;
     (void)nExcludeInfoFlags;
     (void)nButIncludeInfoFlags;

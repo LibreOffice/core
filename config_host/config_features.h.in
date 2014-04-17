@@ -49,6 +49,12 @@
 
 #define HAVE_FEATURE_AVMEDIA 0
 
+/* DBCONNECTIVITY - Whether to have functionality to connect to
+ * databases.
+ */
+
+#define HAVE_FEATURE_DBCONNECTIVITY 0
+
 /* EXTENSIONS - Whether we have any extension mechanism at all
  *
  * Primarily intended for non-desktop platforms where supporting

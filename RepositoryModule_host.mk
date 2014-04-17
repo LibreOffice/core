@@ -37,7 +37,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	cpputools \
 	$(call gb_Helper_optional,CRASHREP,crashrep) \
 	cui \
-	dbaccess \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbaccess) \
 	desktop \
 	$(call gb_Helper_optional,DICTIONARIES,dictionaries) \
 	dtrans \
@@ -50,7 +50,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	external \
 	extras \
 	filter \
-	$(call gb_Helper_optional,DBCONNECTIVITY,forms) \
+	forms \
 	formula \
 	fpicker \
 	framework \
