@@ -49,7 +49,7 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-sal_Bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
+bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
 
 class DummyHandler_Impl : public ::cppu::WeakImplHelper1< task::XInteractionHandler >
 {
@@ -80,8 +80,8 @@ void SAL_CALL DummyHandler_Impl::handle( const uno::Reference< task::XInteractio
 OwnView_Impl::OwnView_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                             const uno::Reference< io::XInputStream >& xInputStream )
 : m_xFactory( xFactory )
-, m_bBusy( sal_False )
-, m_bUseNative( sal_False )
+, m_bBusy( false )
+, m_bUseNative( false )
 {
     if ( !xFactory.is() || !xInputStream.is() )
         throw uno::RuntimeException();
@@ -103,9 +103,9 @@ OwnView_Impl::~OwnView_Impl()
 }
 
 
-sal_Bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
+bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if ( !aFileURL.isEmpty() )
     {
@@ -157,7 +157,7 @@ sal_Bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
 
                     ::osl::MutexGuard aGuard( m_aMutex );
                     m_xModel = xModel;
-                    bResult = sal_True;
+                    bResult = true;
                 }
             }
         }
@@ -172,9 +172,9 @@ sal_Bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
 }
 
 
-sal_Bool OwnView_Impl::CreateModel( sal_Bool bUseNative )
+bool OwnView_Impl::CreateModel( bool bUseNative )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     try {
         bResult = CreateModelFromURL( bUseNative ? m_aNativeTempURL : m_aTempFileURL );
@@ -249,8 +249,8 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
 }
 
 
-sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XInputStream >& xInStream,
-                                                        sal_Bool bParseHeader )
+bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XInputStream >& xInStream,
+                                                        bool bParseHeader )
 {
     uno::Reference< io::XSeekable > xSeekable( xInStream, uno::UNO_QUERY_THROW );
     xSeekable->seek( 0 );
@@ -275,7 +275,7 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
     {
     }
 
-    sal_Bool bFailed = sal_False;
+    bool bFailed = false;
     OUString aFileSuffix;
 
     if ( bParseHeader )
@@ -283,17 +283,17 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
         uno::Sequence< sal_Int8 > aReadSeq( 4 );
         // read the complete size of the Object Package
         if ( xInStream->readBytes( aReadSeq, 4 ) != 4 )
-            return sal_False;
+            return false;
         // read the first header ( have no idea what does this header mean )
         if ( xInStream->readBytes( aReadSeq, 2 ) != 2 || aReadSeq[0] != 2 || aReadSeq[1] != 0 )
-            return sal_False;
+            return false;
 
         // read file name
         // only extension is interesting so only subset of symbols is accepted
         do
         {
             if ( xInStream->readBytes( aReadSeq, 1 ) != 1 )
-                return sal_False;
+                return false;
 
             if (
                 (aReadSeq[0] >= '0' && aReadSeq[0] <= '9') ||
@@ -311,17 +311,17 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
         do
         {
             if ( xInStream->readBytes( aReadSeq, 1 ) != 1 )
-                return sal_False;
+                return false;
         } while( aReadSeq[0] );
 
         // check the next header
         if ( xInStream->readBytes( aReadSeq, 4 ) != 4
           || aReadSeq[0] || aReadSeq[1] || aReadSeq[2] != 3 || aReadSeq[3] )
-            return sal_False;
+            return false;
 
         // get the size of the next entry
         if ( xInStream->readBytes( aReadSeq, 4 ) != 4 )
-            return sal_False;
+            return false;
 
         sal_uInt32 nUrlSize = (sal_uInt8)aReadSeq[0]
                             + (sal_uInt8)aReadSeq[1] * 0x100
@@ -333,7 +333,7 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
 
         // get the size of stored data
         if ( xInStream->readBytes( aReadSeq, 4 ) != 4 )
-            return sal_False;
+            return false;
 
         sal_uInt32 nDataSize = (sal_uInt8)aReadSeq[0]
                             + (sal_uInt8)aReadSeq[1] * 0x100
@@ -350,7 +350,7 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
 
             if ( !nLocalRead )
             {
-                bFailed = sal_True;
+                bFailed = true;
                 break;
             }
             else if ( nLocalRead == 32000 )
@@ -433,13 +433,13 @@ void OwnView_Impl::CreateNative()
             xNameAccess->getByName( aSubStreamName ) >>= xSubStream;
             if ( xSubStream.is() )
             {
-                sal_Bool bOk = sal_False;
+                bool bOk = false;
 
                 if ( MimeConfigurationHelper::ClassIDsEqual( aPackageClassID, aStorClassID ) )
                 {
                     // the storage represents Object Package
 
-                    bOk = ReadContentsAndGenerateTempFile( xSubStream->getInputStream(), sal_True );
+                    bOk = ReadContentsAndGenerateTempFile( xSubStream->getInputStream(), true );
 
                     if ( !bOk && !m_aNativeTempURL.isEmpty() )
                     {
@@ -450,7 +450,7 @@ void OwnView_Impl::CreateNative()
 
                 if ( !bOk )
                 {
-                    bOk = ReadContentsAndGenerateTempFile( xSubStream->getInputStream(), sal_False );
+                    bOk = ReadContentsAndGenerateTempFile( xSubStream->getInputStream(), false );
 
                     if ( !bOk && !m_aNativeTempURL.isEmpty() )
                     {
@@ -470,9 +470,9 @@ void OwnView_Impl::CreateNative()
 }
 
 
-sal_Bool OwnView_Impl::Open()
+bool OwnView_Impl::Open()
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     uno::Reference< frame::XModel > xExistingModel;
 
@@ -480,9 +480,9 @@ sal_Bool OwnView_Impl::Open()
         ::osl::MutexGuard aGuard( m_aMutex );
         xExistingModel = m_xModel;
         if ( m_bBusy )
-            return sal_False;
+            return false;
 
-        m_bBusy = sal_True;
+        m_bBusy = true;
     }
 
     if ( xExistingModel.is() )
@@ -499,7 +499,7 @@ sal_Bool OwnView_Impl::Open()
                     if(xTopWindow.is())
                         xTopWindow->toFront();
 
-                    bResult = sal_True;
+                    bResult = true;
                 }
             }
         }
@@ -522,14 +522,14 @@ sal_Bool OwnView_Impl::Open()
 
             if ( !m_aNativeTempURL.isEmpty() )
             {
-                bResult = CreateModel( sal_True );
+                bResult = CreateModel( true );
                 if ( bResult )
-                    m_bUseNative = sal_True;
+                    m_bUseNative = true;
             }
         }
     }
 
-    m_bBusy = sal_False;
+    m_bBusy = false;
 
     return bResult;
 }
@@ -549,7 +549,7 @@ void OwnView_Impl::Close()
         if ( m_bBusy )
             return;
 
-        m_bBusy = sal_True;
+        m_bBusy = true;
     }
 
     try {
@@ -571,7 +571,7 @@ void OwnView_Impl::Close()
     catch( uno::Exception& )
     {}
 
-    m_bBusy = sal_False;
+    m_bBusy = false;
 }
 
 

@@ -50,7 +50,7 @@ class ODummyEmbeddedObject : public ::cppu::WeakImplHelper2
 {
     ::osl::Mutex    m_aMutex;
     ::cppu::OMultiTypeInterfaceContainerHelper* m_pInterfaceContainer;
-    sal_Bool m_bDisposed;
+    bool m_bDisposed;
 
     OUString m_aEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xParentStorage;
@@ -60,10 +60,10 @@ class ODummyEmbeddedObject : public ::cppu::WeakImplHelper2
 
     sal_Int64 m_nCachedAspect;
     ::com::sun::star::awt::Size m_aCachedSize;
-    sal_Bool m_bHasCachedSize;
+    bool m_bHasCachedSize;
 
     // following information will be used between SaveAs and SaveCompleted
-    sal_Bool m_bWaitSaveCompleted;
+    bool m_bWaitSaveCompleted;
     OUString m_aNewEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xNewParentStorage;
 
@@ -76,11 +76,11 @@ public:
 
     ODummyEmbeddedObject()
     : m_pInterfaceContainer( NULL )
-    , m_bDisposed( sal_False )
+    , m_bDisposed( false )
     , m_nObjectState( -1 )
     , m_nCachedAspect( 0 )
-    , m_bHasCachedSize( sal_False )
-    , m_bWaitSaveCompleted( sal_False )
+    , m_bHasCachedSize( false )
+    , m_bWaitSaveCompleted( false )
     {}
 
     virtual ~ODummyEmbeddedObject();

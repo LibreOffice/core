@@ -152,7 +152,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
 #endif
 
     // cache the values
-    m_bHasCachedSize = sal_True;
+    m_bHasCachedSize = true;
     m_aCachedSize = aSize;
     m_nCachedAspect = nAspect;
 }
@@ -345,7 +345,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     if ( !m_xCachedVisualRepresentation.is() && ( !m_bVisReplInitialized || m_bVisReplInStream )
       && m_nObjectState == embed::EmbedStates::LOADED )
     {
-        m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream, sal_True );
+        m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream, true );
         SetVisReplInStream( m_xCachedVisualRepresentation.is() );
     }
 

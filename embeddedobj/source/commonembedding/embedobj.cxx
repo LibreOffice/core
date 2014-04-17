@@ -113,7 +113,7 @@ void OCommonEmbeddedObject::Deactivate()
 }
 
 
-void OCommonEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState ,::osl::ResettableMutexGuard& rGuard )
+void OCommonEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState ,::osl::ResettableMutexGuard& rGuard )
 {
     if ( m_pInterfaceContainer )
     {
@@ -161,7 +161,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         if ( nNextState == embed::EmbedStates::RUNNING )
         {
             // after the object reaches the running state the cloned size is not necessary any more
-            m_bHasClonedSize = sal_False;
+            m_bHasClonedSize = false;
 
             if ( m_bIsLink )
             {
@@ -216,7 +216,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             m_bHasClonedSize = m_pDocHolder->GetExtent( embed::Aspects::MSOLE_CONTENT, &m_aClonedSize );
 
             // actually frame should not exist at this point
-            m_pDocHolder->CloseDocument( sal_False, sal_False );
+            m_pDocHolder->CloseDocument( false, false );
 
             m_nObjectState = nNextState;
         }
@@ -252,7 +252,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 
                     // dispatch provider may not be provided
                     uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
-                    sal_Bool bOk = m_pDocHolder->ShowInplace( xClientWindowPeer, aRectangleToShow, xContainerDP );
+                    bool bOk = m_pDocHolder->ShowInplace( xClientWindowPeer, aRectangleToShow, xContainerDP );
                     m_nObjectState = nNextState;
                     if ( !bOk )
                     {
@@ -326,7 +326,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                     // the container. Locking the LM will prevent flicker.
                     xContainerLM->lock();
                     xInplaceClient->activatingUI();
-                    sal_Bool bOk = m_pDocHolder->ShowUI( xContainerLM, xContainerDP, aModuleName );
+                    bool bOk = m_pDocHolder->ShowUI( xContainerLM, xContainerDP, aModuleName );
                     xContainerLM->unlock();
 
                     if ( bOk )
@@ -371,7 +371,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             uno::Reference< ::com::sun::star::frame::XLayoutManager > xContainerLM =
                         xInplaceClient->getLayoutManager();
 
-            sal_Bool bOk = sal_False;
+            bool bOk = false;
             if ( xContainerLM.is() )
                    bOk = m_pDocHolder->HideUI( xContainerLM );
 
@@ -463,7 +463,7 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
             uno::Sequence< sal_Int32 > aIntermediateStates = GetIntermediateStatesSequence_Impl( nNewState );
 
             // notify listeners that the object is going to change the state
-            StateChangeNotification_Impl( sal_True, nOldState, nNewState,aGuard );
+            StateChangeNotification_Impl( true, nOldState, nNewState,aGuard );
 
             try {
                 for ( sal_Int32 nInd = 0; nInd < aIntermediateStates.getLength(); nInd++ )
@@ -475,14 +475,14 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
             {
                 if ( nOldState != m_nObjectState )
                     // notify listeners that the object has changed the state
-                    StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState, aGuard );
+                    StateChangeNotification_Impl( false, nOldState, m_nObjectState, aGuard );
 
                 throw;
             }
         }
 
         // notify listeners that the object has changed the state
-        StateChangeNotification_Impl( sal_False, nOldState, nNewState, aGuard );
+        StateChangeNotification_Impl( false, nOldState, nNewState, aGuard );
 
         // let the object window be shown
         if ( nNewState == embed::EmbedStates::UI_ACTIVE || nNewState == embed::EmbedStates::INPLACE_ACTIVE )

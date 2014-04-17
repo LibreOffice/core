@@ -54,12 +54,12 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-sal_Bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
 {
     if ( !xFactory.is() )
-        return sal_False;
+        return false;
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     try
     {
@@ -67,7 +67,7 @@ sal_Bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMulti
                 ucb::SimpleFileAccess::create( comphelper::getComponentContext(xFactory) ) );
 
         xAccess->kill( aURL );
-        bRet = sal_True;
+        bRet = true;
     }
     catch( const uno::Exception& )
     {
@@ -204,7 +204,7 @@ void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStre
         throw uno::RuntimeException(); // Only StorageStreams must be provided here, they must implement the interface
 
     xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",
-                                uno::makeAny( (sal_Bool)sal_True ) );
+                                uno::makeAny( true ) );
 }
 #ifdef WNT
 
@@ -377,7 +377,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
 
     uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[0] <<= xTargetStream;
-    aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
+    aArgs[1] <<= true; // do not create copy
 
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xFactory->createInstanceWithArguments(
@@ -527,7 +527,7 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
 
     uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[0] <<= xTargetStream;
-    aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
+    aArgs[1] <<= true; // do not create copy
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xFactory->createInstanceWithArguments(
                     OUString( "com.sun.star.embed.OLESimpleStorage" ),
@@ -552,19 +552,19 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
 }
 
 
-void OleEmbeddedObject::SetVisReplInStream( sal_Bool bExists )
+void OleEmbeddedObject::SetVisReplInStream( bool bExists )
 {
-    m_bVisReplInitialized = sal_True;
+    m_bVisReplInitialized = true;
     m_bVisReplInStream = bExists;
 }
 
 
-sal_Bool OleEmbeddedObject::HasVisReplInStream()
+bool OleEmbeddedObject::HasVisReplInStream()
 {
     if ( !m_bVisReplInitialized )
     {
         if ( m_xCachedVisualRepresentation.is() )
-            SetVisReplInStream( sal_True );
+            SetVisReplInStream( true );
         else
         {
             SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::HasVisualReplInStream, analizing" );
@@ -591,11 +591,11 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
 
             if ( xStream.is() )
             {
-                sal_Bool bExists = sal_False;
+                bool bExists = false;
 
                 uno::Sequence< uno::Any > aArgs( 2 );
                 aArgs[0] <<= xStream;
-                aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
+                aArgs[1] <<= true; // do not create copy
                 uno::Reference< container::XNameContainer > xNameContainer(
                         m_xFactory->createInstanceWithArguments(
                                 OUString( "com.sun.star.embed.OLESimpleStorage" ),
@@ -627,7 +627,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
 
 uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepresentation_Impl(
         const uno::Reference< io::XStream >& xStream,
-        sal_Bool bAllowToRepair50 )
+        bool bAllowToRepair50 )
     throw ()
 {
     uno::Reference< io::XStream > xResult;
@@ -639,7 +639,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
         uno::Reference< container::XNameContainer > xNameContainer;
         uno::Sequence< uno::Any > aArgs( 2 );
         aArgs[0] <<= xStream;
-        aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
+        aArgs[1] <<= true; // do not create copy
         try
         {
             xNameContainer = uno::Reference< container::XNameContainer >(
@@ -745,7 +745,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
 #endif
                                 }
 
-                                xResult = TryToRetrieveCachedVisualRepresentation_Impl( xStream, sal_False );
+                                xResult = TryToRetrieveCachedVisualRepresentation_Impl( xStream, false );
                             }
                         }
                     }
@@ -1070,7 +1070,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
                             const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& lObjArgs,
-                            sal_Bool bSaveAs )
+                            bool bSaveAs )
         throw ( uno::Exception )
 {
     // TODO: use lObjArgs
@@ -1090,10 +1090,10 @@ void OleEmbeddedObject::StoreToLocation_Impl(
 
     OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
 
-    sal_Bool bVisReplIsStored = sal_False;
+    bool bVisReplIsStored = false;
 
-    sal_Bool bTryOptimization = sal_False;
-    sal_Bool bStoreVis = m_bStoreVisRepl;
+    bool bTryOptimization = false;
+    bool bStoreVis = m_bStoreVisRepl;
     uno::Reference< io::XStream > xCachedVisualRepresentation;
     for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
     {
@@ -1113,11 +1113,11 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         throw io::IOException(); // TODO: there is no cached visual representation and nothing is provided from outside
 
     // if the representation is provided from outside it should be copied to a local stream
-    sal_Bool bNeedLocalCache = xCachedVisualRepresentation.is();
+    bool bNeedLocalCache = xCachedVisualRepresentation.is();
 
     uno::Reference< io::XStream > xTargetStream;
 
-    sal_Bool bStoreLoaded = sal_False;
+    bool bStoreLoaded = false;
     if ( m_nObjectState == embed::EmbedStates::LOADED
 #ifdef WNT
         // if the object was NOT modified after storing it can be just copied
@@ -1126,7 +1126,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
 #endif
     )
     {
-        sal_Bool bOptimizedCopyingDone = sal_False;
+        bool bOptimizedCopyingDone = false;
 
         if ( bTryOptimization && bStoreVis == HasVisReplInStream() )
         {
@@ -1135,7 +1135,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
                 uno::Reference< embed::XOptimizedStorage > xSourceOptStor( m_xParentStorage, uno::UNO_QUERY_THROW );
                 uno::Reference< embed::XOptimizedStorage > xTargetOptStor( xStorage, uno::UNO_QUERY_THROW );
                 xSourceOptStor->copyElementDirectlyTo( m_aEntryName, xTargetOptStor, sEntName );
-                bOptimizedCopyingDone = sal_True;
+                bOptimizedCopyingDone = true;
             }
             catch( const uno::Exception& )
             {
@@ -1153,11 +1153,11 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         if ( m_xCachedVisualRepresentation.is() )
         {
             xCachedVisualRepresentation = m_xCachedVisualRepresentation;
-            bNeedLocalCache = sal_False;
+            bNeedLocalCache = false;
         }
 
         bVisReplIsStored = HasVisReplInStream();
-        bStoreLoaded = sal_True;
+        bStoreLoaded = true;
     }
 #ifdef WNT
     else if ( m_pOleComponent )
@@ -1227,7 +1227,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
                 {
                     xCachedVisualRepresentation
                         = GetNewFilledTempStream_Impl( xCachedVisualRepresentation->getInputStream() );
-                    bNeedLocalCache = sal_False;
+                    bNeedLocalCache = false;
                 }
             }
 
@@ -1245,7 +1245,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
 
     if ( bSaveAs )
     {
-        m_bWaitSaveCompleted = sal_True;
+        m_bWaitSaveCompleted = true;
         m_xNewObjectStream = xTargetStream;
         m_xNewParentStorage = xStorage;
         m_aNewEntryName = sEntName;
@@ -1353,9 +1353,9 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         throw uno::RuntimeException(); //TODO
 
     // detect entry existence
-    sal_Bool bElExists = xNameAccess->hasByName( sEntName );
+    bool bElExists = xNameAccess->hasByName( sEntName );
 
-    m_bReadOnly = sal_False;
+    m_bReadOnly = false;
     for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
         if ( lArguments[nInd].Name == "ReadOnly" )
             lArguments[nInd].Value >>= m_bReadOnly;
@@ -1516,7 +1516,7 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
 
     VerbExecutionControllerGuard aVerbGuard( m_aVerbExecutionController );
 
-    StoreToLocation_Impl( xStorage, sEntName, lObjArgs, sal_False );
+    StoreToLocation_Impl( xStorage, sEntName, lObjArgs, false );
 
     // TODO: should the listener notification be done?
 }
@@ -1550,7 +1550,7 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
 
     VerbExecutionControllerGuard aVerbGuard( m_aVerbExecutionController );
 
-    StoreToLocation_Impl( xStorage, sEntName, lObjArgs, sal_True );
+    StoreToLocation_Impl( xStorage, sEntName, lObjArgs, true );
 
     // TODO: should the listener notification be done here or in saveCompleted?
 }
@@ -1617,21 +1617,21 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         }
     }
 
-    sal_Bool bStoreLoaded = m_bStoreLoaded;
+    bool bStoreLoaded = m_bStoreLoaded;
 
     m_xNewObjectStream = uno::Reference< io::XStream >();
     m_xNewParentStorage = uno::Reference< embed::XStorage >();
     m_aNewEntryName = OUString();
-    m_bWaitSaveCompleted = sal_False;
-    m_bNewVisReplInStream = sal_False;
+    m_bWaitSaveCompleted = false;
+    m_bNewVisReplInStream = false;
     m_xNewCachedVisRepl = uno::Reference< io::XStream >();
-    m_bStoreLoaded = sal_False;
+    m_bStoreLoaded = false;
 
     if ( bUseNew && m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded
       && m_nObjectState != embed::EmbedStates::LOADED )
     {
         // the object replacement image should be updated, so the cached size as well
-        m_bHasCachedSize = sal_False;
+        m_bHasCachedSize = false;
         try
         {
             // the call will cache the size in case of success
@@ -1765,7 +1765,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 
     LetCommonStoragePassBeUsed_Impl( m_xObjectStream );
 
-    sal_Bool bStoreLoaded = sal_True;
+    bool bStoreLoaded = true;
 
 #ifdef WNT
     if ( m_nObjectState != embed::EmbedStates::LOADED && m_pOleComponent && m_pOleComponent->IsDirty() )
@@ -1818,7 +1818,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
     {
         // the object replacement image should be updated, so the cached size as well
-        m_bHasCachedSize = sal_False;
+        m_bHasCachedSize = false;
         try
         {
             // the call will cache the size in case of success

@@ -49,9 +49,9 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
         throw embed::WrongStateException( OUString( "The own object has no persistence!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
-    m_bHasClonedSize = sal_False;
+    m_bHasClonedSize = false;
 
-    sal_Bool bBackToLoaded = sal_False;
+    bool bBackToLoaded = false;
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
         changeState( embed::EmbedStates::RUNNING );
@@ -60,7 +60,7 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
         bBackToLoaded = m_bIsLink;
     }
 
-    sal_Bool bSuccess = m_pDocHolder->SetExtent( nAspect, aSize );
+    bool bSuccess = m_pDocHolder->SetExtent( nAspect, aSize );
 
     if ( bBackToLoaded )
         changeState( embed::EmbedStates::LOADED );
@@ -88,7 +88,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     if ( m_bHasClonedSize )
         return m_aClonedSize;
 
-    sal_Bool bBackToLoaded = sal_False;
+    bool bBackToLoaded = false;
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
         changeState( embed::EmbedStates::RUNNING );
@@ -98,7 +98,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     }
 
     awt::Size aResult;
-    sal_Bool bSuccess = m_pDocHolder->GetExtent( nAspect, &aResult );
+    bool bSuccess = m_pDocHolder->GetExtent( nAspect, &aResult );
 
     if ( bBackToLoaded )
         changeState( embed::EmbedStates::LOADED );
@@ -130,7 +130,7 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     if ( m_bHasClonedSize )
         return m_nClonedMapUnit;
 
-    sal_Bool bBackToLoaded = sal_False;
+    bool bBackToLoaded = false;
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
         changeState( embed::EmbedStates::RUNNING );
@@ -171,7 +171,7 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
         throw embed::WrongStateException( OUString( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
-    sal_Bool bBackToLoaded = sal_False;
+    bool bBackToLoaded = false;
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
         changeState( embed::EmbedStates::RUNNING );

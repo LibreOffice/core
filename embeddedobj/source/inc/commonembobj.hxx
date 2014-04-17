@@ -86,10 +86,10 @@ protected:
 
     ::cppu::OMultiTypeInterfaceContainerHelper* m_pInterfaceContainer;
 
-    sal_Bool m_bReadOnly;
+    bool m_bReadOnly;
 
-    sal_Bool m_bDisposed;
-    sal_Bool m_bClosed;
+    bool m_bDisposed;
+    bool m_bClosed;
 
     sal_Int32 m_nObjectState;
     sal_Int32 m_nTargetState; // should be -1 exept during state changing
@@ -118,11 +118,11 @@ protected:
     OUString m_aContainerName;
     OUString m_aDefaultParentBaseURL;
     OUString m_aModuleName;
-    sal_Bool        m_bEmbeddedScriptSupport;
-    sal_Bool        m_bDocumentRecoverySupport;
+    bool        m_bEmbeddedScriptSupport;
+    bool        m_bDocumentRecoverySupport;
 
     // following information will be used between SaveAs and SaveCompleted
-    sal_Bool m_bWaitSaveCompleted;
+    bool m_bWaitSaveCompleted;
     OUString m_aNewEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xNewParentStorage;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xNewObjectStorage;
@@ -132,7 +132,7 @@ protected:
     ::com::sun::star::awt::Rectangle m_aOwnRectangle;
     ::com::sun::star::awt::Rectangle m_aClipRectangle;
 
-    sal_Bool m_bIsLink;
+    bool m_bIsLink;
 
     // embedded object related stuff
     OUString m_aEntryName;
@@ -143,12 +143,12 @@ protected:
     // link related stuff
     OUString m_aLinkURL;
     OUString m_aLinkFilterName;
-    sal_Bool        m_bLinkHasPassword;
+    bool        m_bLinkHasPassword;
     OUString m_aLinkPassword;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
 
-    sal_Bool m_bHasClonedSize; // the object has cached size
+    bool m_bHasClonedSize; // the object has cached size
     ::com::sun::star::awt::Size m_aClonedSize;
     sal_Int32 m_nClonedMapUnit;
     ::com::sun::star::awt::Size m_aDefaultSizeForChart_In_100TH_MM;//#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this member
@@ -182,7 +182,7 @@ private:
 
     void Deactivate();
 
-    void StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState,::osl::ResettableMutexGuard& _rGuard );
+    void StateChangeNotification_Impl( bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState,::osl::ResettableMutexGuard& _rGuard );
 
     void SwitchStateTo_Impl( sal_Int32 nNextState );
 
@@ -199,7 +199,7 @@ private:
                                 sal_Int32 nStorageVersion,
                                 const OUString& aBaseURL,
                                 const OUString& aHierarchName,
-                                sal_Bool bAttachToStorage );
+                                bool bAttachToStorage );
 
     void SwitchDocToStorage_Impl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStorageBasedDocument >& xDoc,

@@ -94,7 +94,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     }
 
     uno::Reference< uno::XInterface > xResult(
-                    static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xFactory, sal_False ) ),
+                    static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xFactory, false ) ),
                     uno::UNO_QUERY );
 
     uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
@@ -152,7 +152,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                                             2 );
 
     uno::Reference< uno::XInterface > xResult(
-                    static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xFactory, sal_False ) ),
+                    static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xFactory, false ) ),
                     uno::UNO_QUERY );
 
     uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
@@ -237,7 +237,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                                             2 );
 
     uno::Reference< uno::XInterface > xResult(
-                static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xFactory, sal_True ) ),
+                static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xFactory, true ) ),
                 uno::UNO_QUERY );
 
     uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );

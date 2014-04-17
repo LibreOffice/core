@@ -43,16 +43,16 @@ class OwnView_Impl : public ::cppu::WeakImplHelper2 < ::com::sun::star::util::XC
 
     OUString m_aFilterName;
 
-    sal_Bool m_bBusy;
+    bool m_bBusy;
 
-    sal_Bool m_bUseNative;
+    bool m_bUseNative;
 
 private:
-    sal_Bool CreateModelFromURL( const OUString& aFileURL );
+    bool CreateModelFromURL( const OUString& aFileURL );
 
-    sal_Bool CreateModel( sal_Bool bUseNative );
+    bool CreateModel( bool bUseNative );
 
-    sal_Bool ReadContentsAndGenerateTempFile( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream, sal_Bool bParseHeader );
+    bool ReadContentsAndGenerateTempFile( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream, bool bParseHeader );
 
     void CreateNative();
 
@@ -66,7 +66,7 @@ public:
                   const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream );
     virtual ~OwnView_Impl();
 
-    sal_Bool Open();
+    bool Open();
 
     void Close();
 

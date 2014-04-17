@@ -48,24 +48,24 @@ class VerbExecutionController
     // the following mutex is allowed to be locked only for variables initialization, so no deadlock can be caused
     ::osl::Mutex    m_aVerbExecutionMutex;
 
-    sal_Bool m_bVerbExecutionInProgress;
+    bool m_bVerbExecutionInProgress;
 #ifdef WNT
     oslThreadIdentifier m_nVerbExecutionThreadIdentifier;
     sal_Bool m_bChangedOnVerbExecution;
 #endif
 
-    sal_Bool m_bWasEverActive;
+    bool m_bWasEverActive;
     sal_Int32 m_nNotificationLock;
 
 public:
 
     VerbExecutionController()
-    : m_bVerbExecutionInProgress( sal_False )
+    : m_bVerbExecutionInProgress( false )
 #ifdef WNT
     , m_nVerbExecutionThreadIdentifier( 0 )
     , m_bChangedOnVerbExecution( sal_False )
 #endif
-    , m_bWasEverActive( sal_False )
+    , m_bWasEverActive( false )
     , m_nNotificationLock( 0 )
     {}
 #ifdef WNT
@@ -77,9 +77,9 @@ public:
     void UnlockNotification();
 
     // no need to lock anything to check the value of the numeric members
-    sal_Bool CanDoNotification() { return ( !m_bVerbExecutionInProgress && !m_bWasEverActive && !m_nNotificationLock ); }
+    bool CanDoNotification() { return ( !m_bVerbExecutionInProgress && !m_bWasEverActive && !m_nNotificationLock ); }
     // ... or to change it
-    void ObjectIsActive() { m_bWasEverActive = sal_True; }
+    void ObjectIsActive() { m_bWasEverActive = true; }
 };
 
 class VerbExecutionControllerGuard
@@ -117,7 +117,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
 
     ::cppu::OMultiTypeInterfaceContainerHelper* m_pInterfaceContainer;
 
-    sal_Bool m_bReadOnly;
+    bool m_bReadOnly;
 
     bool m_bDisposed;
     sal_Int32 m_nObjectState;
@@ -135,34 +135,34 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener > m_xClosePreventer;
 
-    sal_Bool m_bWaitSaveCompleted;
-    sal_Bool m_bNewVisReplInStream;
+    bool m_bWaitSaveCompleted;
+    bool m_bNewVisReplInStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xNewCachedVisRepl;
     OUString m_aNewEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xNewParentStorage;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xNewObjectStream;
-    sal_Bool m_bStoreLoaded;
+    bool m_bStoreLoaded;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xCachedVisualRepresentation;
-    sal_Bool m_bVisReplInitialized;
-    sal_Bool m_bVisReplInStream;
-    sal_Bool m_bStoreVisRepl;
+    bool m_bVisReplInitialized;
+    bool m_bVisReplInStream;
+    bool m_bStoreVisRepl;
 
-    sal_Bool m_bIsLink;
+    bool m_bIsLink;
 
     // TODO/LATER: may need to cache more than one aspect in future
-    sal_Bool m_bHasCachedSize; // the object has cached size
+    bool m_bHasCachedSize; // the object has cached size
     ::com::sun::star::awt::Size m_aCachedSize;
     sal_Int64 m_nCachedAspect;
 
-    sal_Bool m_bHasSizeToSet;  // the object has cached size that should be set to OLE component
+    bool m_bHasSizeToSet;  // the object has cached size that should be set to OLE component
     ::com::sun::star::awt::Size m_aSizeToSet; // this size might be different from the cached one ( scaling is applied )
     sal_Int64 m_nAspectToSet;
 
 
     // cache the status of the object
     // TODO/LATER: may need to cache more than one aspect in future
-    sal_Bool m_bGotStatus;
+    bool m_bGotStatus;
     sal_Int64 m_nStatus;
     sal_Int64 m_nStatusAspect;
 
@@ -178,7 +178,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
     OwnView_Impl*   m_pOwnView;
 
     // whether the object should be initialized from clipboard in case of default initialization
-    sal_Bool m_bFromClipboard;
+    bool m_bFromClipboard;
 
     OUString m_aTempURL;
 
@@ -190,7 +190,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
 
     // if the following member is set, the object works in wrapper mode
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > m_xWrappedObject;
-    sal_Bool m_bTriedConversion;
+    bool m_bTriedConversion;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
 
@@ -236,7 +236,7 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs,
-                            sal_Bool bSaveAs )
+                            bool bSaveAs )
         throw ( ::com::sun::star::uno::Exception );
 #ifdef WNT
     void StoreObjectToStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutStream )
@@ -250,8 +250,8 @@ protected:
     void RemoveVisualCache_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream )
         throw ( ::com::sun::star::uno::Exception );
 
-    void SetVisReplInStream( sal_Bool bExists );
-    sal_Bool HasVisReplInStream();
+    void SetVisReplInStream( bool bExists );
+    bool HasVisReplInStream();
 
     ::com::sun::star::embed::VisualRepresentation GetVisualRepresentationInNativeFormat_Impl(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xCachedVisRepr )
@@ -259,7 +259,7 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > TryToRetrieveCachedVisualRepresentation_Impl(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream,
-                    sal_Bool bAllowRepair50 = sal_False )
+                    bool bAllowRepair50 = false )
         throw ();
 #ifdef WNT
     sal_Bool SaveObject_Impl();
@@ -268,7 +268,7 @@ protected:
     void CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent = NULL );
     void CreateOleComponentFromClipboard_Impl( OleComponent* pOleComponent = NULL );
 #endif
-    void SetObjectIsLink_Impl( sal_Bool bIsLink ) { m_bIsLink = bIsLink; }
+    void SetObjectIsLink_Impl( bool bIsLink ) { m_bIsLink = bIsLink; }
 
 #ifdef WNT
     OUString CreateTempURLEmpty_Impl();
@@ -280,7 +280,7 @@ protected:
     void MoveListeners();
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > CreateTemporarySubstorage( OUString& o_aStorageName );
     OUString MoveToTemporarySubstream();
-    sal_Bool TryToConvertToOOo();
+    bool TryToConvertToOOo();
 
 public:
     // in case a new object must be created the class ID must be specified
@@ -291,7 +291,7 @@ public:
     // in case object will be loaded from a persistent entry or from a file the class ID will be detected on loading
     // factory can do it for OOo objects, but for OLE objects OS dependent code is required
     OleEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
-                        sal_Bool bLink );
+                        bool bLink );
 #ifdef WNT
     // this constructor let object be initialized from clipboard
     OleEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );

@@ -241,7 +241,7 @@ void SAL_CALL ODummyEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const 
 
     m_nCachedAspect = nAspect;
     m_aCachedSize = aSize;
-    m_bHasCachedSize = sal_True;
+    m_bHasCachedSize = true;
 }
 
 
@@ -412,7 +412,7 @@ void SAL_CALL ODummyEmbeddedObject::storeAsEntry( const uno::Reference< embed::X
 
     m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
 
-    m_bWaitSaveCompleted = sal_True;
+    m_bWaitSaveCompleted = true;
     m_xNewParentStorage = xStorage;
     m_aNewEntryName = sEntName;
 }
@@ -448,7 +448,7 @@ void SAL_CALL ODummyEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
     m_xNewParentStorage = uno::Reference< embed::XStorage >();
     m_aNewEntryName = OUString();
-    m_bWaitSaveCompleted = sal_False;
+    m_bWaitSaveCompleted = false;
 }
 
 
@@ -664,7 +664,7 @@ void SAL_CALL ODummyEmbeddedObject::close( sal_Bool bDeliverOwnership )
         m_pInterfaceContainer->disposeAndClear( aSource );
     }
 
-    m_bDisposed = sal_True; // the object is disposed now for outside
+    m_bDisposed = true; // the object is disposed now for outside
 }
 
 

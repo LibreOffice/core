@@ -108,8 +108,8 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
     sal_Int32 nInd = 0;
     OUString aModuleIdentPropName( "ModuleIdentifier" );
     OUString aDispProvPropName( "DispatchProvider" );
-    sal_Bool bModuleNameSet = sal_False;
-    sal_Bool bDispProvSet = sal_False;
+    bool bModuleNameSet = false;
+    bool bDispProvSet = false;
 
     uno::Sequence< beans::PropertyValue > aSourceProps;
     xSourceMenu->getByIndex( nSourceIndex ) >>= aSourceProps;
@@ -120,12 +120,12 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
         if ( !aContModuleName.isEmpty() && aTargetProps[nInd].Name.equals( aModuleIdentPropName ) )
         {
             aTargetProps[nInd].Value <<= aContModuleName;
-            bModuleNameSet = sal_True;
+            bModuleNameSet = true;
         }
         else if ( aTargetProps[nInd].Name.equals( aDispProvPropName ) )
         {
             aTargetProps[nInd].Value <<= xSourceDisp;
-            bDispProvSet = sal_True;
+            bDispProvSet = true;
         }
         else
             aTargetProps[nInd].Value = aSourceProps[nInd].Value;
@@ -154,10 +154,10 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
 : m_pEmbedObj( pEmbObj ),
   m_pInterceptor( NULL ),
   m_xContext( xContext ),
-  m_bReadOnly( sal_False ),
-  m_bWaitForClose( sal_False ),
-  m_bAllowClosing( sal_False ),
-  m_bDesktopTerminated( sal_False ),
+  m_bReadOnly( false ),
+  m_bWaitForClose( false ),
+  m_bAllowClosing( false ),
+  m_bDesktopTerminated( false ),
   m_nNoBorderResizeReact( 0 ),
   m_nNoResizeReact( 0 )
 {
@@ -199,7 +199,7 @@ DocumentHolder::~DocumentHolder()
     if ( m_xComponent.is() )
     {
         try {
-            CloseDocument( sal_True, sal_False );
+            CloseDocument( true, false );
         } catch( const uno::Exception& ) {}
     }
 
@@ -270,7 +270,7 @@ void DocumentHolder::FreeOffice()
 }
 
 
-void DocumentHolder::CloseDocument( sal_Bool bDeliverOwnership, sal_Bool bWaitForClose )
+void DocumentHolder::CloseDocument( bool bDeliverOwnership, bool bWaitForClose )
 {
     uno::Reference< util::XCloseBroadcaster > xBroadcaster( m_xComponent, uno::UNO_QUERY );
     if ( xBroadcaster.is() )
@@ -290,7 +290,7 @@ void DocumentHolder::CloseDocument( sal_Bool bDeliverOwnership, sal_Bool bWaitFo
         uno::Reference< util::XCloseable > xCloseable( xBroadcaster, uno::UNO_QUERY );
         if ( xCloseable.is() )
         {
-            m_bAllowClosing = sal_True;
+            m_bAllowClosing = true;
             m_bWaitForClose = bWaitForClose;
             xCloseable->close( bDeliverOwnership );
         }
@@ -358,9 +358,9 @@ void DocumentHolder::ResizeWindows_Impl( const awt::Rectangle& aHatchRect )
 }
 
 
-sal_Bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFrame >& xFrame, sal_Bool bVisible )
+bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFrame >& xFrame, bool bVisible )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     try
     {
@@ -378,7 +378,7 @@ sal_Bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFra
             else
                 xLayoutManager->lock();
 
-            bResult = sal_True;
+            bResult = true;
         }
     }
     catch( const uno::Exception& )
@@ -388,7 +388,7 @@ sal_Bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFra
 }
 
 
-sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xParent,
+bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xParent,
                                       const awt::Rectangle& aRectangleToShow,
                                       const uno::Reference< frame::XDispatchProvider >& xContDisp )
 {
@@ -473,7 +473,7 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
         m_xHatchWindow = xHWindow;
         m_xOwnWindow = xOwnWindow;
 
-        if ( !SetFrameLMVisibility( m_xFrame, sal_False ) )
+        if ( !SetFrameLMVisibility( m_xFrame, false ) )
         {
             OSL_FAIL( "Can't deactivate LayoutManager!\n" );
             // TODO/LATER: error handling?
@@ -490,10 +490,10 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
 
     if ( m_xComponent.is() )
     {
-        if ( !LoadDocToFrame( sal_True ) )
+        if ( !LoadDocToFrame( true ) )
         {
             CloseFrame();
-            return sal_False;
+            return false;
         }
 
         uno::Reference< frame::XControllerBorder > xControllerBorder( m_xFrame->getController(), uno::UNO_QUERY );
@@ -508,10 +508,10 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
         if ( m_xHatchWindow.is() )
             m_xHatchWindow->setVisible( sal_True );
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -646,12 +646,12 @@ uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenusForInplace(
 }
 
 
-sal_Bool DocumentHolder::MergeMenus_Impl( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
+bool DocumentHolder::MergeMenus_Impl( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
                                                const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContLM,
                                             const uno::Reference< frame::XDispatchProvider >& xContDisp,
                                             const OUString& aContModuleName )
 {
-    sal_Bool bMenuMerged = sal_False;
+    bool bMenuMerged = false;
     try
     {
         uno::Reference< ::com::sun::star::ui::XUIElementSettings > xUISettings(
@@ -676,11 +676,11 @@ sal_Bool DocumentHolder::MergeMenus_Impl( const uno::Reference< ::com::sun::star
     return bMenuMerged;
 }
 
-sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM,
+bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM,
                                  const uno::Reference< frame::XDispatchProvider >& xContainerDP,
                                  const OUString& aContModuleName )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     if ( xContainerLM.is() )
     {
         // the LM of the embedded frame and its current DockingAreaAcceptor
@@ -696,8 +696,8 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
         catch( const uno::Exception& ){}
 
         // make sure that lock state of LM is correct even if an exception is thrown in between
-        sal_Bool bUnlock = sal_False;
-        sal_Bool bLock = sal_False;
+        bool bUnlock = false;
+        bool bLock = false;
         if ( xOwnLM.is() && xDocAreaAcc.is() )
         {
             try
@@ -716,7 +716,7 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
                     // prevent further changes at this LM
                     xContainerLM->setVisible( sal_False );
                        xContainerLM->lock();
-                    bUnlock = sal_True;
+                    bUnlock = true;
 
                     // by unlocking the LM each layout change will now resize the containers window; pending layouts will be processed now
                     xOwnLM->setVisible( sal_True );
@@ -726,8 +726,8 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
                         xSupp->setActiveFrame( m_xFrame );
 
                     xOwnLM->unlock();
-                    bLock = sal_True;
-                       bResult = sal_True;
+                    bLock = true;
+                       bResult = true;
 
                     // TODO/LATER: The following action should be done only if the window is not hidden
                     // otherwise the activation must fail, unfortunately currently it is not possible
@@ -773,9 +773,9 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
 }
 
 
-sal_Bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM )
+bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if ( xContainerLM.is() )
     {
@@ -808,11 +808,11 @@ sal_Bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::
                 xContainerLM->unlock();
 
                 xContainerLM->doLayout();
-                bResult = sal_True;
+                bResult = true;
             }
             catch( const uno::Exception& )
             {
-                SetFrameLMVisibility( m_xFrame, sal_True );
+                SetFrameLMVisibility( m_xFrame, true );
             }
         }
     }
@@ -870,7 +870,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
         // TODO/LATER: get it for the real aspect
         awt::Size aSize;
         GetExtent( embed::Aspects::MSOLE_CONTENT, &aSize );
-        LoadDocToFrame(sal_False);
+        LoadDocToFrame(false);
 
         if ( xOwnLM.is() )
         {
@@ -917,13 +917,13 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
 }
 
 
-void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDoc, sal_Bool bReadOnly )
+void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDoc, bool bReadOnly )
 {
     if ( m_xComponent.is() )
     {
         // May be should be improved
         try {
-            CloseDocument( sal_True, sal_False );
+            CloseDocument( true, false );
         } catch( const uno::Exception& )
         {}
     }
@@ -931,7 +931,7 @@ void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDo
     m_xComponent = xDoc;
 
     m_bReadOnly = bReadOnly;
-    m_bAllowClosing = sal_False;
+    m_bAllowClosing = false;
 
     uno::Reference< util::XCloseBroadcaster > xBroadcaster( m_xComponent, uno::UNO_QUERY );
     if ( xBroadcaster.is() )
@@ -950,11 +950,11 @@ void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDo
     }
 
     if ( m_xFrame.is() )
-        LoadDocToFrame(sal_False);
+        LoadDocToFrame(false);
 }
 
 
-sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
+bool DocumentHolder::LoadDocToFrame( bool bInPlace )
 {
     if ( m_xFrame.is() && m_xComponent.is() )
     {
@@ -987,7 +987,7 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
                                                         0,
                                                         aArgs.getPropertyValues() );
 
-            return sal_True;
+            return true;
         }
         else
         {
@@ -995,11 +995,11 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
             if ( xLoader.is() )
                 return xLoader->load( uno::Sequence < beans::PropertyValue >(), m_xFrame );
             else
-                return sal_False;
+                return false;
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -1017,7 +1017,7 @@ void DocumentHolder::Show()
 }
 
 
-sal_Bool DocumentHolder::SetExtent( sal_Int64 nAspect, const awt::Size& aSize )
+bool DocumentHolder::SetExtent( sal_Int64 nAspect, const awt::Size& aSize )
 {
     uno::Reference< embed::XVisualObject > xDocVis( m_xComponent, uno::UNO_QUERY );
     if ( xDocVis.is() )
@@ -1025,7 +1025,7 @@ sal_Bool DocumentHolder::SetExtent( sal_Int64 nAspect, const awt::Size& aSize )
         try
         {
             xDocVis->setVisualAreaSize( nAspect, aSize );
-            return sal_True;
+            return true;
         }
         catch( const uno::Exception& )
         {
@@ -1033,11 +1033,11 @@ sal_Bool DocumentHolder::SetExtent( sal_Int64 nAspect, const awt::Size& aSize )
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool DocumentHolder::GetExtent( sal_Int64 nAspect, awt::Size *pSize )
+bool DocumentHolder::GetExtent( sal_Int64 nAspect, awt::Size *pSize )
 {
     uno::Reference< embed::XVisualObject > xDocVis( m_xComponent, uno::UNO_QUERY );
     if ( pSize && xDocVis.is() )
@@ -1045,7 +1045,7 @@ sal_Bool DocumentHolder::GetExtent( sal_Int64 nAspect, awt::Size *pSize )
         try
         {
             *pSize = xDocVis->getVisualAreaSize( nAspect );
-            return sal_True;
+            return true;
         }
         catch( const uno::Exception& )
         {
@@ -1053,7 +1053,7 @@ sal_Bool DocumentHolder::GetExtent( sal_Int64 nAspect, awt::Size *pSize )
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -1102,7 +1102,7 @@ void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject
         m_xComponent = 0;
         if ( m_bWaitForClose )
         {
-            m_bWaitForClose = sal_False;
+            m_bWaitForClose = false;
             FreeOffice();
         }
     }
@@ -1133,7 +1133,7 @@ void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
         m_xComponent = 0;
         if ( m_bWaitForClose )
         {
-            m_bWaitForClose = sal_False;
+            m_bWaitForClose = false;
             FreeOffice();
         }
     }
@@ -1161,7 +1161,7 @@ void SAL_CALL DocumentHolder::notifyTermination( const lang::EventObject& aSourc
     OSL_ENSURE( !m_xComponent.is(), "Just a disaster..." );
 
     uno::Reference< frame::XDesktop > xDesktop( aSource.Source, uno::UNO_QUERY );
-    m_bDesktopTerminated = sal_True;
+    m_bDesktopTerminated = true;
     if ( xDesktop.is() )
         xDesktop->removeTerminateListener( ( frame::XTerminateListener* )this );
 }

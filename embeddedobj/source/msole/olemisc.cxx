@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star;
 
-sal_Bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
+bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
 
 
 
@@ -47,7 +47,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
                                       const OUString& aClassName )
 : m_pOleComponent( NULL )
 , m_pInterfaceContainer( NULL )
-, m_bReadOnly( sal_False )
+, m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
@@ -55,55 +55,55 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_xFactory( xFactory )
 , m_aClassID( aClassID )
 , m_aClassName( aClassName )
-, m_bWaitSaveCompleted( sal_False )
-, m_bNewVisReplInStream( sal_True )
-, m_bStoreLoaded( sal_False )
-, m_bVisReplInitialized( sal_False )
-, m_bVisReplInStream( sal_False )
-, m_bStoreVisRepl( sal_False )
-, m_bIsLink( sal_False )
-, m_bHasCachedSize( sal_False )
+, m_bWaitSaveCompleted( false )
+, m_bNewVisReplInStream( true )
+, m_bStoreLoaded( false )
+, m_bVisReplInitialized( false )
+, m_bVisReplInStream( false )
+, m_bStoreVisRepl( false )
+, m_bIsLink( false )
+, m_bHasCachedSize( false )
 , m_nCachedAspect( 0 )
-, m_bHasSizeToSet( sal_False )
+, m_bHasSizeToSet( false )
 , m_nAspectToSet( 0 )
-, m_bGotStatus( sal_False )
+, m_bGotStatus( false )
 , m_nStatus( 0 )
 , m_nStatusAspect( 0 )
 , m_pOwnView( NULL )
-, m_bFromClipboard( sal_False )
-, m_bTriedConversion( sal_False )
+, m_bFromClipboard( false )
+, m_bTriedConversion( false )
 {
 }
 
 
 // In case of loading from persistent entry the classID of the object
 // will be retrieved from the entry, during construction it is unknown
-OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory, sal_Bool bLink )
+OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory, bool bLink )
 : m_pOleComponent( NULL )
 , m_pInterfaceContainer( NULL )
-, m_bReadOnly( sal_False )
+, m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
 , m_nUpdateMode( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xFactory( xFactory )
-, m_bWaitSaveCompleted( sal_False )
-, m_bNewVisReplInStream( sal_True )
-, m_bStoreLoaded( sal_False )
-, m_bVisReplInitialized( sal_False )
-, m_bVisReplInStream( sal_False )
-, m_bStoreVisRepl( sal_False )
+, m_bWaitSaveCompleted( false )
+, m_bNewVisReplInStream( true )
+, m_bStoreLoaded( false )
+, m_bVisReplInitialized( false )
+, m_bVisReplInStream( false )
+, m_bStoreVisRepl( false )
 , m_bIsLink( bLink )
-, m_bHasCachedSize( sal_False )
+, m_bHasCachedSize( false )
 , m_nCachedAspect( 0 )
-, m_bHasSizeToSet( sal_False )
+, m_bHasSizeToSet( false )
 , m_nAspectToSet( 0 )
-, m_bGotStatus( sal_False )
+, m_bGotStatus( false )
 , m_nStatus( 0 )
 , m_nStatusAspect( 0 )
 , m_pOwnView( NULL )
-, m_bFromClipboard( sal_False )
-, m_bTriedConversion( sal_False )
+, m_bFromClipboard( false )
+, m_bTriedConversion( false )
 {
 }
 #ifdef WNT

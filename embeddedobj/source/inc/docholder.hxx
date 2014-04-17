@@ -70,11 +70,11 @@ private:
     OUString m_aContainerName;
     OUString m_aDocumentNamePart;
 
-    sal_Bool m_bReadOnly;
+    bool m_bReadOnly;
 
-    sal_Bool m_bWaitForClose;
-    sal_Bool m_bAllowClosing;
-    sal_Bool m_bDesktopTerminated;
+    bool m_bWaitForClose;
+    bool m_bAllowClosing;
+    bool m_bDesktopTerminated;
 
     sal_Int32 m_nNoBorderResizeReact;
     sal_Int32 m_nNoResizeReact;
@@ -85,7 +85,7 @@ private:
 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetDocFrame();
-    sal_Bool LoadDocToFrame( sal_Bool );
+    bool LoadDocToFrame( bool );
 
     ::com::sun::star::awt::Rectangle CalculateBorderedArea( const ::com::sun::star::awt::Rectangle& aRect );
     ::com::sun::star::awt::Rectangle AddBorderToArea( const ::com::sun::star::awt::Rectangle& aRect );
@@ -93,7 +93,7 @@ private:
     void ResizeWindows_Impl( const ::com::sun::star::awt::Rectangle& aHatchRect );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > RetrieveOwnMenu_Impl();
-    sal_Bool MergeMenus_Impl(
+    bool MergeMenus_Impl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContLM,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContDisp,
@@ -121,12 +121,12 @@ public:
 
     OCommonEmbeddedObject* GetEmbedObject() { return m_pEmbedObj; }
 
-    void SetComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >& xDoc, sal_Bool bReadOnly );
+    void SetComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >& xDoc, bool bReadOnly );
     void ResizeHatchWindow();
     void LockOffice();
     void FreeOffice();
 
-    void CloseDocument( sal_Bool bDeliverOwnership, sal_Bool bWaitForClose );
+    void CloseDocument( bool bDeliverOwnership, bool bWaitForClose );
     void CloseFrame();
 
     OUString GetTitle() const
@@ -141,24 +141,24 @@ public:
 
     void PlaceFrame( const ::com::sun::star::awt::Rectangle& aNewRect );
 
-    sal_Bool SetFrameLMVisibility( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
-                                    sal_Bool bVisible );
+    bool SetFrameLMVisibility( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+                                    bool bVisible );
 
-    sal_Bool ShowInplace( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent,
+    bool ShowInplace( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent,
                       const ::com::sun::star::awt::Rectangle& aRectangleToShow,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContainerDP );
 
-    sal_Bool ShowUI(
+    bool ShowUI(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContainerDP,
         const OUString& aContModuleName );
-    sal_Bool HideUI(
+    bool HideUI(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM );
 
     void Show();
 
-    sal_Bool SetExtent( sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize );
-    sal_Bool GetExtent( sal_Int64 nAspect, ::com::sun::star::awt::Size *pSize );
+    bool SetExtent( sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize );
+    bool GetExtent( sal_Int64 nAspect, ::com::sun::star::awt::Size *pSize );
 
     sal_Int32 GetMapUnit( sal_Int64 nAspect );
 

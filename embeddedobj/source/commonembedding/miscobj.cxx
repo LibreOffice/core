@@ -38,27 +38,27 @@ using namespace ::com::sun::star;
 
 
 uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence< beans::PropertyValue >& aMedDescr,
-                                                            sal_Bool bCanUseDocumentBaseURL );
+                                                            bool bCanUseDocumentBaseURL );
 
 
 OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XComponentContext >& rxContext,
                                                 const uno::Sequence< beans::NamedValue >& aObjProps )
 : m_pDocHolder( NULL )
 , m_pInterfaceContainer( NULL )
-, m_bReadOnly( sal_False )
-, m_bDisposed( sal_False )
-, m_bClosed( sal_False )
+, m_bReadOnly( false )
+, m_bDisposed( false )
+, m_bClosed( false )
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xContext( rxContext )
 , m_nMiscStatus( 0 )
-, m_bEmbeddedScriptSupport( sal_True )
-, m_bDocumentRecoverySupport( sal_True )
-, m_bWaitSaveCompleted( sal_False )
-, m_bIsLink( sal_False )
-, m_bLinkHasPassword( sal_False )
-, m_bHasClonedSize( sal_False )
+, m_bEmbeddedScriptSupport( true )
+, m_bDocumentRecoverySupport( true )
+, m_bWaitSaveCompleted( false )
+, m_bIsLink( false )
+, m_bLinkHasPassword( false )
+, m_bHasClonedSize( false )
 , m_nClonedMapUnit( 0 )
 {
     CommonInit_Impl( aObjProps );
@@ -72,20 +72,20 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
         const uno::Sequence< beans::PropertyValue >& aObjectDescr )
 : m_pDocHolder( NULL )
 , m_pInterfaceContainer( NULL )
-, m_bReadOnly( sal_False )
-, m_bDisposed( sal_False )
-, m_bClosed( sal_False )
+, m_bReadOnly( false )
+, m_bDisposed( false )
+, m_bClosed( false )
 , m_nObjectState( embed::EmbedStates::LOADED )
 , m_nTargetState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xContext( rxContext )
 , m_nMiscStatus( 0 )
-, m_bEmbeddedScriptSupport( sal_True )
-, m_bDocumentRecoverySupport( sal_True )
-, m_bWaitSaveCompleted( sal_False )
-, m_bIsLink( sal_True )
-, m_bLinkHasPassword( sal_False )
-, m_bHasClonedSize( sal_False )
+, m_bEmbeddedScriptSupport( true )
+, m_bDocumentRecoverySupport( true )
+, m_bWaitSaveCompleted( false )
+, m_bIsLink( true )
+, m_bLinkHasPassword( false )
+, m_bHasClonedSize( false )
 , m_nClonedMapUnit( 0 )
 {
     // linked object has no own persistence so it is in loaded state starting from creation
@@ -231,7 +231,7 @@ void OCommonEmbeddedObject::LinkInit_Impl(
 
     OSL_ENSURE( m_aLinkURL.getLength() && m_aLinkFilterName.getLength(), "Filter and URL must be provided!\n" );
 
-    m_bReadOnly = sal_True;
+    m_bReadOnly = true;
     if ( m_aLinkFilterName.getLength() )
     {
         ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
@@ -239,7 +239,7 @@ void OCommonEmbeddedObject::LinkInit_Impl(
         m_bReadOnly = !( aExportFilterName.equals( m_aLinkFilterName ) );
     }
 
-    m_aDocMediaDescriptor = GetValuableArgs_Impl( aMediaDescr, sal_False );
+    m_aDocMediaDescriptor = GetValuableArgs_Impl( aMediaDescr, false );
 
     uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
     for ( sal_Int32 nObjInd = 0; nObjInd < aObjectDescr.getLength(); nObjInd++ )
@@ -282,7 +282,7 @@ OCommonEmbeddedObject::~OCommonEmbeddedObject()
             {
                 m_pDocHolder->CloseFrame();
                 try {
-                    m_pDocHolder->CloseDocument( sal_True, sal_True );
+                    m_pDocHolder->CloseDocument( true, true );
                 } catch ( const uno::Exception& ) {}
                 m_pDocHolder->FreeOffice();
 
@@ -577,7 +577,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
         m_pInterfaceContainer->disposeAndClear( aSource );
     }
 
-    m_bDisposed = sal_True; // the object is disposed now for outside
+    m_bDisposed = true; // the object is disposed now for outside
 
     // it is possible that the document can not be closed, in this case if the argument is false
     // the exception will be thrown otherwise in addition to exception the object must register itself
@@ -596,7 +596,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
             {
                 m_pDocHolder->release();
                 m_pDocHolder = NULL;
-                m_bClosed = sal_True;
+                m_bClosed = true;
             }
 
             throw;
@@ -626,7 +626,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
         m_xRecoveryStorage.clear();
     }
 
-    m_bClosed = sal_True; // the closing succeeded
+    m_bClosed = true; // the closing succeeded
 }
 
 

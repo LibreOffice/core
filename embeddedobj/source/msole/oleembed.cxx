@@ -247,16 +247,16 @@ OUString OleEmbeddedObject::MoveToTemporarySubstream()
 }
 
 
-sal_Bool OleEmbeddedObject::TryToConvertToOOo()
+bool OleEmbeddedObject::TryToConvertToOOo()
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     OUString aStorageName;
     OUString aTmpStreamName;
     sal_Int32 nStep = 0;
 
     if ( m_pOleComponent || m_bReadOnly )
-        return sal_False;
+        return false;
 
     try
     {
@@ -289,7 +289,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
             {
                 // create the model
                 uno::Sequence< uno::Any > aArguments(1);
-                aArguments[0] <<= beans::NamedValue( OUString( "EmbeddedObject" ), uno::makeAny( (sal_Bool)sal_True ));
+                aArguments[0] <<= beans::NamedValue( OUString( "EmbeddedObject" ), uno::makeAny( true ));
 
                 uno::Reference< util::XCloseable > xDocument( m_xFactory->createInstanceWithArguments( aDocServiceName, aArguments ), uno::UNO_QUERY_THROW );
                 uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY_THROW );
@@ -356,7 +356,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 nStep = 4;
                 m_xWrappedObject.set( xEmbCreator->createInstanceInitFromEntry( m_xParentStorage, m_aEntryName, uno::Sequence< beans::PropertyValue >(), uno::Sequence< beans::PropertyValue >() ), uno::UNO_QUERY_THROW );
 
-                bResult = sal_True; // the change is no more revertable
+                bResult = true; // the change is no more revertable
                 try
                 {
                     m_xParentStorage->removeElement( aTmpStreamName );
@@ -699,7 +699,7 @@ namespace
 
         uno::Sequence< uno::Any > aArgs( 2 );
         aArgs[0] <<= xObjectStream;
-        aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
+        aArgs[1] <<= true; // do not create copy
         uno::Reference< container::XNameContainer > xNameContainer(
             xFactory->createInstanceWithArguments(
                 OUString("com.sun.star.embed.OLESimpleStorage"),
@@ -715,7 +715,7 @@ namespace
             // ignore
         }
 
-        sal_Bool bCopied = xCONTENTS.is() && lcl_CopyStream(xCONTENTS->getInputStream(), xStream->getOutputStream());
+        bool bCopied = xCONTENTS.is() && lcl_CopyStream(xCONTENTS->getInputStream(), xStream->getOutputStream());
 
         uno::Reference< io::XSeekable > xSeekableStor(xObjectStream, uno::UNO_QUERY);
         if (xSeekableStor.is())
@@ -836,7 +836,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             // if it is possible, the object will be converted to OOo format
             if ( !m_bTriedConversion )
             {
-                m_bTriedConversion = sal_True;
+                m_bTriedConversion = true;
                 if ( TryToConvertToOOo() )
                 {
                     changeState( embed::EmbedStates::UI_ACTIVE );

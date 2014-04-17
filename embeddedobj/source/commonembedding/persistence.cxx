@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
 
 
 uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence< beans::PropertyValue >& aMedDescr,
-                                                            sal_Bool bCanUseDocumentBaseURL )
+                                                            bool bCanUseDocumentBaseURL )
 {
     uno::Sequence< beans::PropertyValue > aResult;
     sal_Int32 nResLen = 0;
@@ -87,7 +87,7 @@ uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence<
 
 uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans::PropertyValue >& aOrig )
 {
-    sal_Bool bAsTemplateSet = sal_False;
+    bool bAsTemplateSet = false;
     sal_Int32 nLength = aOrig.getLength();
     uno::Sequence< beans::PropertyValue > aResult( nLength );
 
@@ -97,7 +97,7 @@ uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans:
         if ( aResult[nInd].Name == "AsTemplate" )
         {
             aResult[nInd].Value <<= sal_True;
-            bAsTemplateSet = sal_True;
+            bAsTemplateSet = true;
         }
         else
             aResult[nInd].Value = aOrig[nInd].Value;
@@ -191,9 +191,9 @@ static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< 
     const OUString& _rDocumentServiceName, bool _bEmbeddedScriptSupport, const bool i_bDocumentRecoverySupport )
 {
     ::comphelper::NamedValueCollection aArguments;
-    aArguments.put( "EmbeddedObject", (sal_Bool)sal_True );
-    aArguments.put( "EmbeddedScriptSupport", (sal_Bool)_bEmbeddedScriptSupport );
-    aArguments.put( "DocumentRecoverySupport", (sal_Bool)i_bDocumentRecoverySupport );
+    aArguments.put( "EmbeddedObject", true );
+    aArguments.put( "EmbeddedScriptSupport", _bEmbeddedScriptSupport );
+    aArguments.put( "DocumentRecoverySupport", i_bDocumentRecoverySupport );
 
     uno::Reference< uno::XInterface > xDocument;
     try
@@ -411,7 +411,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
             for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
                 if ( aProps[nInd].Name == "Password" && ( aProps[nInd].Value >>= m_aLinkPassword ) )
                 {
-                    m_bLinkHasPassword = sal_True;
+                    m_bLinkHasPassword = true;
                     break;
                 }
         }
@@ -728,7 +728,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
                                                     sal_Int32 nStorageFormat,
                                                     const OUString& aBaseURL,
                                                     const OUString& aHierarchName,
-                                                    sal_Bool bAttachToTheStorage )
+                                                    bool bAttachToTheStorage )
 {
     SAL_WARN_IF( !xStorage.is(), "embeddedobj.common", "No storage is provided for storing!" );
 
@@ -949,7 +949,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
 
             // if a completely different entry is provided, switch first back to the old persistence in saveCompleted
             // and then switch to the target persistence
-            sal_Bool bSwitchFurther = ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) );
+            bool bSwitchFurther = ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) );
             saveCompleted( sal_False );
             if ( !bSwitchFurther )
                 return;
@@ -974,12 +974,12 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         throw uno::RuntimeException(); //TODO
 
     // detect entry existence
-    sal_Bool bElExists = xNameAccess->hasByName( sEntName );
+    bool bElExists = xNameAccess->hasByName( sEntName );
 
     m_aDocMediaDescriptor = GetValuableArgs_Impl( lArguments,
                                                   nEntryConnectionMode != embed::EntryInitModes::MEDIA_DESCRIPTOR_INIT );
 
-    m_bReadOnly = sal_False;
+    m_bReadOnly = false;
     for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
         if ( lArguments[nInd].Name == "ReadOnly" )
             lArguments[nInd].Value >>= m_bReadOnly;
@@ -1012,7 +1012,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
             lObjArgs[nObjInd].Value >>= xObj;
             if ( xObj.is() )
             {
-                m_bHasClonedSize = sal_True;
+                m_bHasClonedSize = true;
                 m_aClonedSize = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
                 m_nClonedMapUnit = xObj->getMapUnit( embed::Aspects::MSOLE_CONTENT );
             }
@@ -1183,7 +1183,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
         SAL_WARN( "embeddedobj.common", "Can not retrieve own storage media type!" );
     }
 
-    sal_Bool bTryOptimization = sal_False;
+    bool bTryOptimization = false;
     for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
     {
         // StoreVisualReplacement and VisualReplacement args have no sence here
@@ -1191,7 +1191,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
             lObjArgs[nInd].Value >>= bTryOptimization;
     }
 
-    sal_Bool bSwitchBackToLoaded = sal_False;
+    bool bSwitchBackToLoaded = false;
 
     // Storing to different format can be done only in running state.
     if ( m_nObjectState == embed::EmbedStates::LOADED )
@@ -1199,7 +1199,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
         // TODO/LATER: copying is not legal for documents with relative links.
         if ( nTargetStorageFormat == nOriginalStorageFormat )
         {
-            sal_Bool bOptimizationWorks = sal_False;
+            bool bOptimizationWorks = false;
             if ( bTryOptimization )
             {
                 try
@@ -1208,7 +1208,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
                     uno::Reference< embed::XOptimizedStorage > xSource( m_xParentStorage, uno::UNO_QUERY_THROW );
                     uno::Reference< embed::XOptimizedStorage > xTarget( xStorage, uno::UNO_QUERY_THROW );
                     xSource->copyElementDirectlyTo( m_aEntryName, xTarget, sEntName );
-                    bOptimizationWorks = sal_True;
+                    bOptimizationWorks = true;
                 }
                 catch( const uno::Exception& )
                 {
@@ -1221,7 +1221,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
         else
         {
             changeState( embed::EmbedStates::RUNNING );
-            bSwitchBackToLoaded = sal_True;
+            bSwitchBackToLoaded = true;
         }
     }
 
@@ -1235,7 +1235,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
 
         aGuard.clear();
         // TODO/LATER: support hierarchical name for embedded objects in embedded objects
-        StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName, sal_False );
+        StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName, false );
         aGuard.reset();
 
         if ( bSwitchBackToLoaded )
@@ -1316,7 +1316,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
 
     PostEvent_Impl( OUString( "OnSaveAs" ) );
 
-    sal_Bool bTryOptimization = sal_False;
+    bool bTryOptimization = false;
     for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
     {
         // StoreVisualReplacement and VisualReplacement args have no sence here
@@ -1324,7 +1324,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
             lObjArgs[nInd].Value >>= bTryOptimization;
     }
 
-    sal_Bool bSwitchBackToLoaded = sal_False;
+    bool bSwitchBackToLoaded = false;
 
     // Storing to different format can be done only in running state.
     if ( m_nObjectState == embed::EmbedStates::LOADED )
@@ -1332,7 +1332,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
         // TODO/LATER: copying is not legal for documents with relative links.
         if ( nTargetStorageFormat == nOriginalStorageFormat )
         {
-            sal_Bool bOptimizationWorks = sal_False;
+            bool bOptimizationWorks = false;
             if ( bTryOptimization )
             {
                 try
@@ -1341,7 +1341,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
                     uno::Reference< embed::XOptimizedStorage > xSource( m_xParentStorage, uno::UNO_QUERY_THROW );
                     uno::Reference< embed::XOptimizedStorage > xTarget( xStorage, uno::UNO_QUERY_THROW );
                     xSource->copyElementDirectlyTo( m_aEntryName, xTarget, sEntName );
-                    bOptimizationWorks = sal_True;
+                    bOptimizationWorks = true;
                 }
                 catch( const uno::Exception& )
                 {
@@ -1354,7 +1354,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
         else
         {
             changeState( embed::EmbedStates::RUNNING );
-            bSwitchBackToLoaded = sal_True;
+            bSwitchBackToLoaded = true;
         }
     }
 
@@ -1368,18 +1368,18 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     {
         aGuard.clear();
         // TODO/LATER: support hierarchical name for embedded objects in embedded objects
-        StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName, sal_False );
+        StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName, false );
         aGuard.reset();
 
         if ( bSwitchBackToLoaded )
             changeState( embed::EmbedStates::LOADED );
     }
 
-    m_bWaitSaveCompleted = sal_True;
+    m_bWaitSaveCompleted = true;
     m_xNewObjectStorage = xSubStorage;
     m_xNewParentStorage = xStorage;
     m_aNewEntryName = sEntName;
-    m_aNewDocMediaDescriptor = GetValuableArgs_Impl( lArguments, sal_True );
+    m_aNewDocMediaDescriptor = GetValuableArgs_Impl( lArguments, true );
 
     // TODO: register listeners for storages above, in case thay are disposed
     //       an exception will be thrown on saveCompleted( true )
@@ -1457,7 +1457,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     m_xNewParentStorage = uno::Reference< embed::XStorage >();
     m_aNewEntryName = OUString();
     m_aNewDocMediaDescriptor.realloc( 0 );
-    m_bWaitSaveCompleted = sal_False;
+    m_bWaitSaveCompleted = false;
 
     if ( bUseNew )
     {
@@ -1591,7 +1591,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
         }
 
         aGuard.clear();
-        StoreDocToStorage_Impl( m_xObjectStorage, nStorageFormat, GetBaseURL_Impl(), m_aEntryName, sal_True );
+        StoreDocToStorage_Impl( m_xObjectStorage, nStorageFormat, GetBaseURL_Impl(), m_aEntryName, true );
         aGuard.reset();
     }
 
@@ -1710,7 +1710,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
         }
     }
 
-    m_aDocMediaDescriptor = GetValuableArgs_Impl( lArguments, sal_True );
+    m_aDocMediaDescriptor = GetValuableArgs_Impl( lArguments, true );
 
     // TODO: use lObjArgs for StoreVisualReplacement
     for ( sal_Int32 nObjInd = 0; nObjInd < lObjArgs.getLength(); nObjInd++ )
@@ -1726,9 +1726,9 @@ void SAL_CALL OCommonEmbeddedObject::reload(
     // TODO:
     // when document allows reloading through API the object can be reloaded not only in loaded state
 
-    sal_Bool bOldReadOnlyValue = m_bReadOnly;
+    bool bOldReadOnlyValue = m_bReadOnly;
 
-    m_bReadOnly = sal_False;
+    m_bReadOnly = false;
     for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
         if ( lArguments[nInd].Name == "ReadOnly" )
             lArguments[nInd].Value >>= m_bReadOnly;
@@ -1807,7 +1807,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     // detect entry existence
     /*sal_Bool bElExists =*/ xNameAccess->hasByName( sEntName );
 
-    m_bReadOnly = sal_False;
+    m_bReadOnly = false;
 
     if ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) )
         SwitchOwnPersistence( xStorage, sEntName );
@@ -1835,12 +1835,12 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     {
         // the state is changed and can not be switched to loaded state back without saving
         m_nObjectState = embed::EmbedStates::RUNNING;
-        StateChangeNotification_Impl( sal_False, embed::EmbedStates::LOADED, m_nObjectState, aGuard );
+        StateChangeNotification_Impl( false, embed::EmbedStates::LOADED, m_nObjectState, aGuard );
     }
     else if ( m_nObjectState == embed::EmbedStates::ACTIVE )
         m_pDocHolder->Show();
 
-    m_bIsLink = sal_False;
+    m_bIsLink = false;
     m_aLinkFilterName = OUString();
     m_aLinkURL = OUString();
 }
