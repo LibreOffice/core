@@ -2993,7 +2993,15 @@ void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadUInt16( nTmp16 ); meRasterOp = (RasterOp) nTmp16;
 }
 
-IMPL_META_ACTION( Transparent, META_TRANSPARENT_ACTION )
+MetaTransparentAction::MetaTransparentAction() :
+    MetaAction      ( META_TRANSPARENT_ACTION ),
+    mnTransPercent  ( 0 )
+{
+}
+
+MetaTransparentAction::~MetaTransparentAction()
+{
+}
 
 MetaTransparentAction::MetaTransparentAction( const PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent ) :
     MetaAction      ( META_TRANSPARENT_ACTION ),
