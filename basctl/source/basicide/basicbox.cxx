@@ -405,7 +405,6 @@ void LanguageBox::FillBox()
     if ( pCurMgr->isLibraryLocalized() )
     {
         Enable();
-        SvtLanguageTable aLangTable;
         Locale aDefaultLocale = pCurMgr->getStringResourceManager()->getDefaultLocale();
         Locale aCurrentLocale = pCurMgr->getStringResourceManager()->getCurrentLocale();
         Sequence< Locale > aLocaleSeq = pCurMgr->getStringResourceManager()->getLocales();
@@ -417,7 +416,7 @@ void LanguageBox::FillBox()
             bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
             bool bIsCurrent = localesAreEqual( aCurrentLocale, pLocale[i] );
             LanguageType eLangType = LanguageTag::convertToLanguageType( pLocale[i] );
-            OUString sLanguage = aLangTable.GetString( eLangType );
+            OUString sLanguage = SvtLanguageTable::GetLanguageString( eLangType );
             if ( bIsDefault )
             {
                 sLanguage += " ";
