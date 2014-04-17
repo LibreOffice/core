@@ -95,13 +95,25 @@ private:
 };
 
 PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData ) :
-        mnCompLevel     ( PNG_DEF_COMPRESSION ),
-        mbStatus        ( true ),
-        mpAccess        ( NULL ),
-        mpMaskAccess    ( NULL ),
-        mpZCodec        ( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) ),
-        mnCRC(0UL)
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData )
+    : mnCompLevel(PNG_DEF_COMPRESSION)
+    , mnInterlaced(0)
+    , mnMaxChunkSize(0)
+    , mbStatus(true)
+    , mpAccess(NULL)
+    , mpMaskAccess(NULL)
+    , mpZCodec(new ZCodec(DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE))
+    , mpDeflateInBuf(NULL)
+    , mpPreviousScan(NULL)
+    , mpCurrentScan(NULL)
+    , mnDeflateInSize(0)
+    , mnWidth(0)
+    , mnHeight(0)
+    , mnBitsPerPixel(0)
+    , mnFilterType(0)
+    , mnBBP(0)
+    , mbTrueAlpha(false)
+    , mnCRC(0UL)
 {
     if ( !rBmpEx.IsEmpty() )
     {
