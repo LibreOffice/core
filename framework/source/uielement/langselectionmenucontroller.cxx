@@ -225,7 +225,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
 
     // get languages to be displayed in the menu
     std::set< OUString > aLangItems;
-    FillLangItems( aLangItems, aLanguageTable, m_xFrame, m_aLangGuessHelper,
+    FillLangItems( aLangItems, m_xFrame, m_aLangGuessHelper,
             m_nScriptType, m_aCurLang, m_aKeyboardLang, m_aGuessedTextLang );
 
     // now add menu entries

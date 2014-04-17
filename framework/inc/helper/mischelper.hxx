@@ -38,8 +38,6 @@
 
 #include <set>
 
-class SvtLanguageTable;
-
 // flags for script types in use within selection
 #define LS_SCRIPT_LATIN     0x0001
 #define LS_SCRIPT_ASIAN     0x0002
@@ -135,7 +133,6 @@ FWI_DLLPUBLIC OUString RetrieveLabelFromCommand( const OUString& aCmdURL
             ,const sal_Char* _pName);
 
 FWI_DLLPUBLIC void FillLangItems( std::set< OUString > &rLangItems,
-        const SvtLanguageTable &rLanguageTable,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > &rxFrame,
         const LanguageGuessingHelper & rLangGuessHelper,
         sal_Int16               nScriptType,

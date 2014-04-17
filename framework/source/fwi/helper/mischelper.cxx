@@ -131,7 +131,6 @@ OUString RetrieveLabelFromCommand(
 }
 
 void FillLangItems( std::set< OUString > &rLangItems,
-        const SvtLanguageTable &    rLanguageTable,
         const uno::Reference< frame::XFrame > & rxFrame,
         const LanguageGuessingHelper & rLangGuessHelper,
         sal_Int16        nScriptType,
@@ -143,7 +142,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
 
     //1--add current language
     if( !rCurLang.isEmpty() &&
-        LANGUAGE_DONTKNOW != rLanguageTable.GetType( rCurLang ))
+        LANGUAGE_DONTKNOW != SvtLanguageTable::GetLanguageType( rCurLang ))
         rLangItems.insert( rCurLang );
 
     //2--System
@@ -152,7 +151,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
     if( rSystemLanguage != LANGUAGE_DONTKNOW )
     {
         if ( IsScriptTypeMatchingToLanguage( nScriptType, rSystemLanguage ))
-            rLangItems.insert( OUString( rLanguageTable.GetString( rSystemLanguage )) );
+            rLangItems.insert( OUString( SvtLanguageTable::GetLanguageString( rSystemLanguage )) );
     }
 
     //3--UI
@@ -160,7 +159,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
     if( rUILanguage != LANGUAGE_DONTKNOW )
     {
         if ( IsScriptTypeMatchingToLanguage( nScriptType, rUILanguage ))
-            rLangItems.insert( OUString( rLanguageTable.GetString( rUILanguage )) );
+            rLangItems.insert( OUString( SvtLanguageTable::GetLanguageString( rUILanguage )) );
     }
 
     //4--guessed language
@@ -171,13 +170,13 @@ void FillLangItems( std::set< OUString > &rLangItems,
         LanguageType nLang = LanguageTag( aLocale ).makeFallback().getLanguageType();
         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_NONE && nLang != LANGUAGE_SYSTEM
             && IsScriptTypeMatchingToLanguage( nScriptType, nLang ))
-            rLangItems.insert( rLanguageTable.GetString( nLang ));
+            rLangItems.insert( SvtLanguageTable::GetLanguageString( nLang ));
     }
 
     //5--keyboard language
     if( !rKeyboardLang.isEmpty() )
     {
-        if ( IsScriptTypeMatchingToLanguage( nScriptType, rLanguageTable.GetType( rKeyboardLang )))
+        if ( IsScriptTypeMatchingToLanguage( nScriptType, SvtLanguageTable::GetLanguageType( rKeyboardLang )))
             rLangItems.insert( rKeyboardLang );
     }
 
@@ -206,7 +205,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
                 if ( rLangItems.size() == static_cast< size_t >(nMaxCount) )
                     break;
                 const Locale& rLocale=rLocales[i];
-                if( IsScriptTypeMatchingToLanguage( nScriptType, rLanguageTable.GetType( rLocale.Language )))
+                if( IsScriptTypeMatchingToLanguage( nScriptType, SvtLanguageTable::GetLanguageType( rLocale.Language )))
                     rLangItems.insert( OUString( rLocale.Language ) );
             }
         }
