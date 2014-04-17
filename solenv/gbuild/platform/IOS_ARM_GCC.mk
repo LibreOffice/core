@@ -26,7 +26,7 @@ ifeq ($(CXX),)
 $(error You must set CXX in the environment. See README.cross for example.)
 endif
 
-gb_COMPILERDEFAULTOPTFLAGS := -Oz
+gb_COMPILERDEFAULTOPTFLAGS := -Os
 
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
