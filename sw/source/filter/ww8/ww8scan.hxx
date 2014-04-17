@@ -65,14 +65,6 @@ struct SprmInfo
     unsigned int nVari : 2;
 };
 
-struct SprmInfoHash
-{
-    size_t operator()(const SprmInfo &a) const
-    {
-        return a.nId;
-    }
-};
-
 class wwSprmSearcher {
 public:
     wwSprmSearcher(SprmInfo const * infos, std::size_t size) {
