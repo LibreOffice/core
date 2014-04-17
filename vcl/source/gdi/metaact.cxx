@@ -2800,7 +2800,15 @@ void MetaFontAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         pData->meActualCharSet = osl_getThreadTextEncoding();
 }
 
-IMPL_META_ACTION( Push, META_PUSH_ACTION )
+MetaPushAction::MetaPushAction() :
+    MetaAction  ( META_PUSH_ACTION ),
+    mnFlags     ( 0 )
+{
+}
+
+MetaPushAction::~MetaPushAction()
+{
+}
 
 MetaPushAction::MetaPushAction( sal_uInt16 nFlags ) :
     MetaAction  ( META_PUSH_ACTION ),
