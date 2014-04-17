@@ -213,8 +213,6 @@ End
 
 #if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
 
-STD_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
-
 File gid_File_Rdb_Scriptproviderforbeanshell
     TXT_FILE_BODY;
     Name = "scriptproviderforbeanshell.rdb";

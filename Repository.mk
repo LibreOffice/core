@@ -660,9 +660,14 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	xmerge \
 ))
 
+ifneq ($(ENABLE_SCRIPTING_BEANSHELL),)
+$(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_bsh, \
+	ScriptProviderForBeanShell \
+))
+endif
+
 $(eval $(call gb_Helper_register_jars,OOO, \
 	ConnectivityTools \
-	ScriptProviderForBeanShell \
 	ScriptProviderForJavaScript \
 	XSLTFilter \
 	XSLTValidate \
