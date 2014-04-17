@@ -507,14 +507,6 @@ inline basegfx::B2DVector clamp(const basegfx::B2DVector& v)
                               min(max(v.getY(),-1.0),1.0));
 }
 
-// TODO(Q3): extract to basegfx
-inline basegfx::B3DVector clamp(const basegfx::B3DVector& v)
-{
-    return basegfx::B3DVector(min(max(v.getX(),-1.0),1.0),
-                              min(max(v.getY(),-1.0),1.0),
-                              min(max(v.getZ(),-1.0),1.0));
-}
-
 inline double randFromNeg1to1()
 {
     return ( ( static_cast<double>( rand() ) / static_cast<double>( RAND_MAX ) ) * 2.0 ) - 1.0;
