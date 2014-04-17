@@ -2238,7 +2238,15 @@ void MetaWallpaperAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadWallpaper( rIStm, maWallpaper );
 }
 
-IMPL_META_ACTION( ClipRegion, META_CLIPREGION_ACTION )
+MetaClipRegionAction::MetaClipRegionAction() :
+    MetaAction  ( META_CLIPREGION_ACTION ),
+    mbClip      ( false )
+{
+}
+
+MetaClipRegionAction::~MetaClipRegionAction()
+{
+}
 
 MetaClipRegionAction::MetaClipRegionAction( const Region& rRegion, bool bClip ) :
     MetaAction  ( META_CLIPREGION_ACTION ),
