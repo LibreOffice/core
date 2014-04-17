@@ -19,7 +19,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_uwriter, \
 $(eval $(call gb_CppunitTest_use_library_objects,sw_uwriter,sw))
 
 $(eval $(call gb_CppunitTest_use_libraries,sw_uwriter, \
-    avmedia \
+	$(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
     cppu \

@@ -27,7 +27,6 @@ $(eval $(call gb_CppunitTest_use_externals,sc_filters_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_filters_test, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

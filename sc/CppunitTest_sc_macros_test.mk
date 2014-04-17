@@ -19,7 +19,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_macros_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_macros_test, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

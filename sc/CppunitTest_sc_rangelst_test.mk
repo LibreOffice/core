@@ -29,7 +29,6 @@ $(eval $(call gb_CppunitTest_use_library_objects,sc_rangelst_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_rangelst_test, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

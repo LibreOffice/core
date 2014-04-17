@@ -40,7 +40,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
-    avmedia \
+	$(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
     cppu \

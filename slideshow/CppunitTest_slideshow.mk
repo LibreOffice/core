@@ -36,7 +36,6 @@ $(eval $(call gb_CppunitTest_use_api,slideshow,\
 $(eval $(call gb_CppunitTest_use_library_objects,slideshow,slideshow))
 
 $(eval $(call gb_CppunitTest_use_libraries,slideshow,\
-    avmedia \
     basegfx \
     canvastools \
     comphelper \

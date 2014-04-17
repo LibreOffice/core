@@ -16,7 +16,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_tableautoformatfield, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_tableautoformatfield, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

@@ -18,7 +18,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_namedrangeobj, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_namedrangeobj, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

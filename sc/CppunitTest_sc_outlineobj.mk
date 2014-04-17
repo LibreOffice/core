@@ -18,7 +18,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_outlineobj, \
 $(eval $(call gb_CppunitTest_use_external,sc_outlineobj,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_outlineobj, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

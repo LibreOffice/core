@@ -18,7 +18,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_editfieldobj_header, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_editfieldobj_header, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

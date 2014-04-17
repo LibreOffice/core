@@ -18,7 +18,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_annotationsobj, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_annotationsobj, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

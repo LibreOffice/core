@@ -18,7 +18,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_tablesheetsobj, \
 $(eval $(call gb_CppunitTest_use_external,sc_tablesheetsobj,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_tablesheetsobj, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

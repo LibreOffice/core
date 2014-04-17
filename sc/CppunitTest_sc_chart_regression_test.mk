@@ -14,7 +14,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_chart_regression_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_chart_regression_test, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

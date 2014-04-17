@@ -18,7 +18,6 @@ $(eval $(call gb_CppunitTest_use_externals,dbaccess_macros_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,dbaccess_macros_test, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

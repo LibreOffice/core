@@ -21,7 +21,6 @@ $(eval $(call gb_CppunitTest_use_externals,sc_subsequent_export_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_subsequent_export_test, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

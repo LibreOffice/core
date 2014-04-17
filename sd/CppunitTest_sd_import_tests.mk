@@ -18,7 +18,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_import_tests, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sd_import_tests, \
-    avmedia \
+	$(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
     cppu \

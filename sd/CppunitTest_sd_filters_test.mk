@@ -24,7 +24,6 @@ $(eval $(call gb_CppunitTest_add_defs,sd_filters_test,\
 endif
 
 $(eval $(call gb_CppunitTest_use_libraries,sd_filters_test, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

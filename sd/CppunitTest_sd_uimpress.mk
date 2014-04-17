@@ -22,7 +22,7 @@ $(eval $(call gb_CppunitTest_use_api,sd_uimpress,\
 $(eval $(call gb_CppunitTest_use_library_objects,sd_uimpress,sd))
 
 $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
-    avmedia \
+	$(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     canvastools \
     comphelper \

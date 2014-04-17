@@ -21,7 +21,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,chart2_import, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,chart2_import, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

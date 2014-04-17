@@ -21,7 +21,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_html_export_tests, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sd_html_export_tests, \
-    avmedia \
     basegfx \
     comphelper \
     cppu \

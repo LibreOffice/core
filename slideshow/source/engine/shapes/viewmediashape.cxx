@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
-// must be first
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
@@ -180,6 +180,9 @@ namespace slideshow
 
         bool ViewMediaShape::render( const ::basegfx::B2DRectangle& rBounds ) const
         {
+#if !HAVE_FEATURE_AVMEDIA
+            (void) rBounds;
+#else
             ::cppcanvas::CanvasSharedPtr pCanvas = mpViewLayer->getCanvas();
 
             if( !pCanvas )
@@ -216,7 +219,7 @@ namespace slideshow
                                                      aViewState,
                                                      aRenderState );
             }
-
+#endif
             return true;
         }
 
@@ -401,6 +404,9 @@ namespace slideshow
 
         void ViewMediaShape::implInitializeMediaPlayer( const OUString& rMediaURL )
         {
+#if !HAVE_FEATURE_AVMEDIA
+            (void) rMediaURL;
+#else
             if( !mxPlayer.is() )
             {
                 try
@@ -422,6 +428,7 @@ namespace slideshow
                         uno::Reference<uno::XInterface>() );
                 }
             }
+#endif
         }
 
 
