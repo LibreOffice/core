@@ -20,6 +20,9 @@
 #ifndef INCLUDED_VCL_OUTDEV_HXX
 #define INCLUDED_VCL_OUTDEV_HXX
 
+#define META_BMPSCALEPART_ACTION            (118)
+#define META_BMPEXSCALEPART_ACTION          (121)
+
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -774,12 +777,6 @@ public:
      */
     ///@{
     SAL_DLLPRIVATE void         ImplDrawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
-    SAL_DLLPRIVATE void         ImplDrawBitmap       ( const Point& rDestPt, const Size& rDestSize,
-                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                                       const Bitmap& rBitmap, const sal_uLong nAction );
-    SAL_DLLPRIVATE void         ImplDrawBitmapEx     ( const Point& rDestPt, const Size& rDestSize,
-                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                                       const BitmapEx& rBitmapEx, const sal_uLong nAction );
     SAL_DLLPRIVATE void         ImplDrawAlpha        ( const Bitmap& rBmp, const AlphaMask& rAlpha,
                                                        const Point& rDestPt, const Size& rDestSize,
                                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel );
@@ -1111,7 +1108,8 @@ public:
                                             const Bitmap& rBitmap );
     void                        DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                             const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                            const Bitmap& rBitmap );
+                                            const Bitmap& rBitmap, sal_uLong nAction = META_BMPSCALEPART_ACTION );
+
 
     void                        DrawBitmapEx( const Point& rDestPt,
                                               const BitmapEx& rBitmapEx );
@@ -1119,7 +1117,7 @@ public:
                                               const BitmapEx& rBitmapEx );
     void                        DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                               const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                              const BitmapEx& rBitmapEx );
+                                              const BitmapEx& rBitmapExi, sal_uLong nAction = META_BMPEXSCALEPART_ACTION );
 
     /** Draw BitampEx transformed
 

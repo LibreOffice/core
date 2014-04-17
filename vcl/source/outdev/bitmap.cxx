@@ -43,53 +43,23 @@
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {
-    if( ImplIsRecordLayout() )
-        return;
-
     const Size aSizePix( rBitmap.GetSizePixel() );
-    ImplDrawBitmap( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, META_BMP_ACTION );
-
-    if( mpAlphaVDev )
-    {
-        // #i32109#: Make bitmap area opaque
-        mpAlphaVDev->ImplFillOpaqueRectangle( Rectangle(rDestPt, PixelToLogic( aSizePix )) );
-    }
+    DrawBitmap( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, META_BMP_ACTION );
 }
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap )
 {
-    if( ImplIsRecordLayout() )
-        return;
-
-    ImplDrawBitmap( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, META_BMPSCALE_ACTION );
-
-    if( mpAlphaVDev )
-    {
-        // #i32109#: Make bitmap area opaque
-        mpAlphaVDev->ImplFillOpaqueRectangle( Rectangle(rDestPt, rDestSize) );
-    }
+    DrawBitmap( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, META_BMPSCALE_ACTION );
 }
+
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
-                               const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                               const Bitmap& rBitmap )
-{
-    if( ImplIsRecordLayout() )
-        return;
-
-    ImplDrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap, META_BMPSCALEPART_ACTION );
-
-    if( mpAlphaVDev )
-    {
-        // #i32109#: Make bitmap area opaque
-        mpAlphaVDev->ImplFillOpaqueRectangle( Rectangle(rDestPt, rDestSize) );
-    }
-}
-
-void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                    const Bitmap& rBitmap, const sal_uLong nAction )
 {
+
+    if( ImplIsRecordLayout() )
+        return;
 
     if ( ( mnDrawMode & DRAWMODE_NOBITMAP ) )
     {
@@ -183,6 +153,12 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
             }
         }
     }
+
+    if( mpAlphaVDev )
+    {
+        // #i32109#: Make bitmap area opaque
+        mpAlphaVDev->ImplFillOpaqueRectangle( Rectangle(rDestPt, rDestSize) );
+    }
 }
 
 void OutputDevice::ScaleBitmap (Bitmap &rBmp, SalTwoRect &rPosAry)
@@ -212,7 +188,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt,
     else
     {
         const Size aSizePix( rBitmapEx.GetSizePixel() );
-        ImplDrawBitmapEx( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmapEx, META_BMPEX_ACTION );
+        DrawBitmapEx( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmapEx, META_BMPEX_ACTION );
     }
 }
 
@@ -228,14 +204,16 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
     }
     else
     {
-        ImplDrawBitmapEx( rDestPt, rDestSize, Point(), rBitmapEx.GetSizePixel(), rBitmapEx, META_BMPEXSCALE_ACTION );
+        DrawBitmapEx( rDestPt, rDestSize, Point(), rBitmapEx.GetSizePixel(), rBitmapEx, META_BMPEXSCALE_ACTION );
     }
 }
 
+
 void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                  const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                 const BitmapEx& rBitmapEx )
+                                 const BitmapEx& rBitmapEx, const sal_uLong nAction )
 {
+
     if( ImplIsRecordLayout() )
         return;
 
@@ -245,9 +223,83 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
     }
     else
     {
-        ImplDrawBitmapEx( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmapEx, META_BMPEXSCALEPART_ACTION );
+        if ( mnDrawMode & DRAWMODE_NOBITMAP )
+            return;
+
+        if ( ROP_INVERT == meRasterOp )
+        {
+            DrawRect( Rectangle( rDestPt, rDestSize ) );
+            return;
+        }
+
+        BitmapEx aBmpEx( rBitmapEx );
+
+        if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP |
+                                 DRAWMODE_GRAYBITMAP | DRAWMODE_GHOSTEDBITMAP ) )
+        {
+            if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP ) )
+            {
+                Bitmap  aColorBmp( aBmpEx.GetSizePixel(), ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP ) ? 4 : 1 );
+                sal_uInt8   cCmpVal;
+
+                if ( mnDrawMode & DRAWMODE_BLACKBITMAP )
+                    cCmpVal = ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP ) ? 0x80 : 0;
+                else
+                    cCmpVal = 255;
+
+                aColorBmp.Erase( Color( cCmpVal, cCmpVal, cCmpVal ) );
+
+                if( aBmpEx.IsAlpha() )
+                {
+                    // Create one-bit mask out of alpha channel, by
+                    // thresholding it at alpha=0.5. As
+                    // DRAWMODE_BLACK/WHITEBITMAP requires monochrome
+                    // output, having alpha-induced grey levels is not
+                    // acceptable.
+                    Bitmap aMask( aBmpEx.GetAlpha().GetBitmap() );
+                    aMask.MakeMono( 129 );
+                    aBmpEx = BitmapEx( aColorBmp, aMask );
+                }
+                else
+                {
+                    aBmpEx = BitmapEx( aColorBmp, aBmpEx.GetMask() );
+                }
+            }
+            else if( !!aBmpEx )
+            {
+                if ( mnDrawMode & DRAWMODE_GRAYBITMAP )
+                    aBmpEx.Convert( BMP_CONVERSION_8BIT_GREYS );
+
+                if ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP )
+                    aBmpEx.Convert( BMP_CONVERSION_GHOSTED );
+            }
+        }
+
+        if ( mpMetaFile )
+        {
+            switch( nAction )
+            {
+                case( META_BMPEX_ACTION ):
+                    mpMetaFile->AddAction( new MetaBmpExAction( rDestPt, aBmpEx ) );
+                break;
+
+                case( META_BMPEXSCALE_ACTION ):
+                    mpMetaFile->AddAction( new MetaBmpExScaleAction( rDestPt, rDestSize, aBmpEx ) );
+                break;
+
+                case( META_BMPEXSCALEPART_ACTION ):
+                    mpMetaFile->AddAction( new MetaBmpExScalePartAction( rDestPt, rDestSize,
+                                                                         rSrcPtPixel, rSrcSizePixel, aBmpEx ) );
+                break;
+            }
+        }
+
+        OUTDEV_INIT();
+
+        DrawDeviceBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmpEx );
     }
 }
+
 
 bool OutputDevice::DrawTransformBitmapExDirect(
     const basegfx::B2DHomMatrix& aFullTransform,
@@ -503,88 +555,6 @@ void OutputDevice::DrawTransformedBitmapEx(
             DrawBitmapEx(aDestPt, aDestSize, aTransformed);
         }
     }
-}
-
-void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
-                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                     const BitmapEx& rBitmapEx, const sal_uLong nAction )
-{
-    OSL_ENSURE(TRANSPARENT_NONE != rBitmapEx.GetTransparentType(), "ImplDrawBitmapEx not needed, no transparency in BitmapEx (!)");
-
-    if ( mnDrawMode & DRAWMODE_NOBITMAP )
-        return;
-
-    if ( ROP_INVERT == meRasterOp )
-    {
-        DrawRect( Rectangle( rDestPt, rDestSize ) );
-        return;
-    }
-
-    BitmapEx aBmpEx( rBitmapEx );
-
-    if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP |
-                             DRAWMODE_GRAYBITMAP | DRAWMODE_GHOSTEDBITMAP ) )
-    {
-        if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP ) )
-        {
-            Bitmap  aColorBmp( aBmpEx.GetSizePixel(), ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP ) ? 4 : 1 );
-            sal_uInt8   cCmpVal;
-
-            if ( mnDrawMode & DRAWMODE_BLACKBITMAP )
-                cCmpVal = ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP ) ? 0x80 : 0;
-            else
-                cCmpVal = 255;
-
-            aColorBmp.Erase( Color( cCmpVal, cCmpVal, cCmpVal ) );
-
-            if( aBmpEx.IsAlpha() )
-            {
-                // Create one-bit mask out of alpha channel, by
-                // thresholding it at alpha=0.5. As
-                // DRAWMODE_BLACK/WHITEBITMAP requires monochrome
-                // output, having alpha-induced grey levels is not
-                // acceptable.
-                Bitmap aMask( aBmpEx.GetAlpha().GetBitmap() );
-                aMask.MakeMono( 129 );
-                aBmpEx = BitmapEx( aColorBmp, aMask );
-            }
-            else
-            {
-                aBmpEx = BitmapEx( aColorBmp, aBmpEx.GetMask() );
-            }
-        }
-        else if( !!aBmpEx )
-        {
-            if ( mnDrawMode & DRAWMODE_GRAYBITMAP )
-                aBmpEx.Convert( BMP_CONVERSION_8BIT_GREYS );
-
-            if ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP )
-                aBmpEx.Convert( BMP_CONVERSION_GHOSTED );
-        }
-    }
-
-    if ( mpMetaFile )
-    {
-        switch( nAction )
-        {
-            case( META_BMPEX_ACTION ):
-                mpMetaFile->AddAction( new MetaBmpExAction( rDestPt, aBmpEx ) );
-            break;
-
-            case( META_BMPEXSCALE_ACTION ):
-                mpMetaFile->AddAction( new MetaBmpExScaleAction( rDestPt, rDestSize, aBmpEx ) );
-            break;
-
-            case( META_BMPEXSCALEPART_ACTION ):
-                mpMetaFile->AddAction( new MetaBmpExScalePartAction( rDestPt, rDestSize,
-                                                                     rSrcPtPixel, rSrcSizePixel, aBmpEx ) );
-            break;
-        }
-    }
-
-    OUTDEV_INIT();
-
-    DrawDeviceBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmpEx );
 }
 
 void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
