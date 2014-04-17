@@ -148,10 +148,7 @@ sal_Bool PCXReader::ReadPCX(Graphic & rGraphic)
 
 void PCXReader::ImplReadHeader()
 {
-    sal_uInt8 nbyte;
-    sal_uInt16 nushort;
-    sal_uInt16 nMinX,nMinY,nMaxX,nMaxY;
-
+    sal_uInt8 nbyte(0);
     m_rPCX >> nbyte >> nVersion >> nEncoding;
     if ( nbyte!=0x0a || (nVersion != 0 && nVersion != 2 && nVersion != 3 && nVersion != 5) || nEncoding > 1 )
     {
@@ -159,7 +156,9 @@ void PCXReader::ImplReadHeader()
         return;
     }
 
+    nbyte = 0;
     m_rPCX >> nbyte; nBitsPerPlanePix = (sal_uLong)nbyte;
+    sal_uInt16 nMinX(0),nMinY(0),nMaxX(0),nMaxY(0);
     m_rPCX >> nMinX >> nMinY >> nMaxX >> nMaxY;
 
     if ((nMinX > nMaxX) || (nMinY > nMaxY))
@@ -179,7 +178,9 @@ void PCXReader::ImplReadHeader()
     ImplReadPalette( 16 );
 
     m_rPCX.SeekRel( 1 );
+    nbyte = 0;
     m_rPCX >> nbyte;   nPlanes = (sal_uLong)nbyte;
+    sal_uInt16 nushort(0);
     m_rPCX >> nushort; nBytesPerPlaneLin = (sal_uLong)nushort;
     m_rPCX >> nPaletteInfo;
 
