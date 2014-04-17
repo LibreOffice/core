@@ -279,7 +279,7 @@ OUString SAL_CALL CMimeContentType::pValue( )
 OUString SAL_CALL CMimeContentType::quotedPValue( )
 {
     OUString pvalue;
-    sal_Bool bAfterQuoteSign = sal_False;
+    bool bAfterQuoteSign = false;
 
     while ( !m_nxtSym.isEmpty( ) )
     {
@@ -294,9 +294,9 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
         {
             pvalue += m_nxtSym;
             if ( m_nxtSym == "\"" )
-                bAfterQuoteSign = sal_True;
+                bAfterQuoteSign = true;
             else
-                bAfterQuoteSign = sal_False;
+                bAfterQuoteSign = false;
         }
         else
             throw IllegalArgumentException( );
@@ -338,7 +338,7 @@ void SAL_CALL CMimeContentType::comment( void )
     }
 }
 
-sal_Bool SAL_CALL CMimeContentType::isInRange( const OUString& aChr, const OUString& aRange )
+bool SAL_CALL CMimeContentType::isInRange( const OUString& aChr, const OUString& aRange )
 {
     return ( aRange.indexOf( aChr ) > -1 );
 }
