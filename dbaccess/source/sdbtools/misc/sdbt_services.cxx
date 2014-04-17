@@ -28,11 +28,11 @@ using ::com::sun::star::uno::XInterface;
 
 extern "C" void SAL_CALL sdbt_initializeModule()
 {
-    static sal_Bool s_bInit = sal_False;
+    static bool s_bInit = false;
     if (!s_bInit)
     {
         createRegistryInfo_ConnectionTools();
-        s_bInit = sal_True;
+        s_bInit = true;
     }
 }
 

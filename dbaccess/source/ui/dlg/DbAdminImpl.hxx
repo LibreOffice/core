@@ -79,7 +79,7 @@ namespace dbaui
         /** translate the current dialog SfxItems into driver relevant PropertyValues
             @see successfullyConnected
         */
-        sal_Bool    getCurrentSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDriverParams);
+        bool    getCurrentSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDriverParams);
 
         /** to be called if the settings got from getCurrentSettings have been used for successfully connecting
             @see getCurrentSettings
@@ -146,7 +146,7 @@ namespace dbaui
                 const SfxItemSet& _rSource,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDest);
 
-        sal_Bool saveChanges(const SfxItemSet& _rSource);
+        bool saveChanges(const SfxItemSet& _rSource);
     protected:
         /** fill a data source info array with the settings from a given item set
         */
@@ -164,7 +164,7 @@ namespace dbaui
         /** check if the data source described by the given set needs authentication<p/>
             The return value depends on the data source type only.
         */
-        sal_Bool            hasAuthentication(const SfxItemSet& _rSet) const;
+        bool            hasAuthentication(const SfxItemSet& _rSet) const;
 
 #if OSL_DEBUG_LEVEL > 0
         OString translatePropertyId( sal_Int32 _nId );

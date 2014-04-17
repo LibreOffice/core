@@ -51,7 +51,7 @@ namespace dbaui
         SPECIAL_MESSAGE     m_eLastMessage;
 
         Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
-        sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
+        bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
         bool                m_bInitTypeList : 1;
         bool                approveDatasourceType( const OUString& _sURLPrefix, OUString& _inout_rDisplayName );
         void                insertDatasourceTypeEntryData( const OUString& _sType, const OUString& sDisplayName );
@@ -76,7 +76,7 @@ namespace dbaui
         // SfxTabPage overridables
         virtual void Reset( const SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
 
-        virtual void implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue ) SAL_OVERRIDE;
+        virtual void implInitControls( const SfxItemSet& _rSet, bool _bSaveValue ) SAL_OVERRIDE;
         virtual OUString getDatasourceName( const SfxItemSet& _rSet );
         virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName );
 
@@ -107,7 +107,7 @@ namespace dbaui
     protected:
         virtual bool FillItemSet( SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
 
-        virtual void implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue ) SAL_OVERRIDE;
+        virtual void implInitControls( const SfxItemSet& _rSet, bool _bSaveValue ) SAL_OVERRIDE;
         virtual void setParentTitle( const OUString& _sURLPrefix ) SAL_OVERRIDE;
     };
 
@@ -174,7 +174,7 @@ namespace dbaui
 
         virtual void GetFocus() SAL_OVERRIDE;
 
-        virtual void implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue ) SAL_OVERRIDE;
+        virtual void implInitControls( const SfxItemSet& _rSet, bool _bSaveValue ) SAL_OVERRIDE;
         virtual OUString getDatasourceName( const SfxItemSet& _rSet ) SAL_OVERRIDE;
         virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName ) SAL_OVERRIDE;
 

@@ -298,7 +298,7 @@ sal_Int32 ReadThroughComponent(
     if ( xStorage.is() )
     {
         uno::Reference< io::XStream > xDocStream;
-        sal_Bool bEncrypted = sal_False;
+        bool bEncrypted = false;
 
         try
         {
@@ -402,7 +402,7 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
         if( pFocusWindow )
             pFocusWindow->EnterWait();
     }
-    sal_Bool    bRet = sal_False;
+    bool    bRet = false;
 
     if ( GetModel().is() )
         bRet = implImport( rDescriptor );
@@ -418,7 +418,7 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
     return bRet;
 }
 
-sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
+bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
     OUString sFileName;
@@ -429,7 +429,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         sFileName = aMediaDescriptor.getOrDefault( "FileName", sFileName );
 
     OSL_ENSURE( !sFileName.isEmpty(), "ODBFilter::implImport: no URL given!" );
-    sal_Bool bRet = !sFileName.isEmpty();
+    bool bRet = !sFileName.isEmpty();
 
     if ( bRet )
     {
@@ -495,7 +495,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                     // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly! But for now this is the only way!
                     ErrorHandler::HandleError( nRet );
                     if( nRet & ERRCODE_WARNING_MASK )
-                        bRet = sal_True;
+                        bRet = true;
                 }
             }
         }
@@ -523,11 +523,11 @@ SvXMLImportContext* ODBFilter::CreateContext( sal_uInt16 nPrefix,
             break;
         case XML_TOK_DOC_STYLES:
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = CreateStylesContext(nPrefix, rLocalName, xAttrList, sal_False);
+            pContext = CreateStylesContext(nPrefix, rLocalName, xAttrList, false);
             break;
         case XML_TOK_DOC_AUTOSTYLES:
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = CreateStylesContext(nPrefix, rLocalName, xAttrList, sal_True);
+            pContext = CreateStylesContext(nPrefix, rLocalName, xAttrList, true);
             break;
         case XML_TOK_DOC_SCRIPT:
             pContext = CreateScriptContext( rLocalName );
@@ -825,7 +825,7 @@ const SvXMLTokenMap& ODBFilter::GetColumnElemTokenMap() const
 }
 
 SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const OUString& rLocalName,
-                                     const uno::Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle )
+                                     const uno::Reference< XAttributeList>& xAttrList, bool bIsAutoStyle )
 {
     SvXMLImportContext *pContext = NULL;
     if (!pContext)

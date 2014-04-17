@@ -51,17 +51,17 @@ Any SAL_CALL OStaticSet::getBookmark() throw(SQLException, RuntimeException)
     return makeAny(getRow());
 }
 
-sal_Bool SAL_CALL OStaticSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::moveToBookmark" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     return absolute(::comphelper::getINT32(bookmark));
 }
 
-sal_Bool SAL_CALL OStaticSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::moveRelativeToBookmark" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     return absolute(::comphelper::getINT32(bookmark)+rows);
 }
 
@@ -74,10 +74,10 @@ sal_Int32 SAL_CALL OStaticSet::compareBookmarks( const Any& _first, const Any& _
     return (nFirst < nSecond) ? CompareBookmark::LESS : ((nFirst > nSecond) ? CompareBookmark::GREATER : CompareBookmark::EQUAL);
 }
 
-sal_Bool SAL_CALL OStaticSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::hasOrderedBookmarks" );
-    return sal_True;
+    return true;
 }
 
 sal_Int32 SAL_CALL OStaticSet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
@@ -86,10 +86,10 @@ sal_Int32 SAL_CALL OStaticSet::hashBookmark( const Any& bookmark ) throw(SQLExce
     return ::comphelper::getINT32(bookmark);
 }
 
-sal_Bool OStaticSet::fetchRow()
+bool OStaticSet::fetchRow()
 {
     SAL_INFO("dbaccess", "OStaticSet::fetchRow" );
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( !m_bEnd && (!m_nMaxRows || sal_Int32(m_aSet.size()) < m_nMaxRows) )
         bRet = m_xDriverSet->next();
     if ( bRet )
@@ -100,7 +100,7 @@ sal_Bool OStaticSet::fetchRow()
         OCacheSet::fillValueRow(*m_aSetIter,((*m_aSetIter)->get())[0]);
     }
     else
-        m_bEnd = sal_True;
+        m_bEnd = true;
     return bRet;
 }
 
@@ -118,18 +118,18 @@ void OStaticSet::fillAllRows()
             (pRow->get())[0] = getRow();
             OCacheSet::fillValueRow(pRow,(pRow->get())[0]);
         }
-        m_bEnd = sal_True;
+        m_bEnd = true;
     }
 }
 
 // XResultSet
-sal_Bool SAL_CALL OStaticSet::next(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::next(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::next" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
 
     if(isAfterLast())
-        return sal_False;
+        return false;
     if(!m_bEnd) // not yet all records fetched
     {
         ++m_aSetIter;
@@ -141,25 +141,25 @@ sal_Bool SAL_CALL OStaticSet::next(  ) throw(SQLException, RuntimeException)
     return !isAfterLast();
 }
 
-sal_Bool SAL_CALL OStaticSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::isBeforeFirst" );
     return m_aSetIter == m_aSet.begin();
 }
 
-sal_Bool SAL_CALL OStaticSet::isAfterLast(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::isAfterLast" );
     return m_aSetIter == m_aSet.end() && m_bEnd;
 }
 
-sal_Bool SAL_CALL OStaticSet::isFirst(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::isFirst" );
     return m_aSetIter == m_aSet.begin()+1;
 }
 
-sal_Bool SAL_CALL OStaticSet::isLast(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::isLast(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::isLast" );
     return m_aSetIter == m_aSet.end()-1 && m_bEnd;
@@ -168,22 +168,22 @@ sal_Bool SAL_CALL OStaticSet::isLast(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OStaticSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::beforeFirst" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aSetIter = m_aSet.begin();
 }
 
 void SAL_CALL OStaticSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::afterLast" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     fillAllRows();
     m_aSetIter = m_aSet.end();
 }
 
-sal_Bool SAL_CALL OStaticSet::first(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::first(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::first" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aSetIter = m_aSet.begin()+1;
     if(m_aSetIter == m_aSet.end() && !fetchRow())
         m_aSetIter = m_aSet.end();
@@ -191,10 +191,10 @@ sal_Bool SAL_CALL OStaticSet::first(  ) throw(SQLException, RuntimeException)
     return m_aSetIter != m_aSet.end();
 }
 
-sal_Bool SAL_CALL OStaticSet::last(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::last(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::last" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     fillAllRows();
     m_aSetIter = m_aSet.end()-1;
 
@@ -212,10 +212,10 @@ sal_Int32 SAL_CALL OStaticSet::getRow(  ) throw(SQLException, RuntimeException)
     return nPos;
 }
 
-sal_Bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::absolute" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     OSL_ENSURE(row,"OStaticSet::absolute: INVALID row number!");
     // if row greater 0 than count from end - row means last
     if(row < 0)
@@ -236,7 +236,7 @@ sal_Bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, Runt
         {
             if(!m_bEnd)
             {
-                sal_Bool bNext = sal_True;
+                bool bNext = true;
                 for(sal_Int32 i=m_aSet.size()-1;i < row && bNext;++i)
                     bNext = fetchRow();
             }
@@ -253,20 +253,20 @@ sal_Bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, Runt
     return m_aSetIter != m_aSet.end() && m_aSetIter != m_aSet.begin();
 }
 
-sal_Bool SAL_CALL OStaticSet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::relative" );
     if(!rows)
-        return sal_True;
+        return true;
 
     sal_Int32 nCurPos = getRow();
     return absolute(nCurPos+rows);
 }
 
-sal_Bool SAL_CALL OStaticSet::previous(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::previous(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::previous" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
 
     if(m_aSetIter != m_aSet.begin())
         --m_aSetIter;
@@ -279,19 +279,19 @@ void SAL_CALL OStaticSet::refreshRow(  ) throw(SQLException, RuntimeException)
     SAL_INFO("dbaccess", "OStaticSet::refreshRow" );
 }
 
-sal_Bool SAL_CALL OStaticSet::rowUpdated(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::rowUpdated" );
     return m_bUpdated;
 }
 
-sal_Bool SAL_CALL OStaticSet::rowInserted(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::rowInserted" );
     return m_bInserted;
 }
 
-sal_Bool SAL_CALL OStaticSet::rowDeleted(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::rowDeleted" );
     return m_bDeleted;
@@ -303,10 +303,10 @@ Sequence< sal_Int32 > SAL_CALL OStaticSet::deleteRows( const Sequence< Any >& ro
     Sequence< sal_Int32 > aRet(rows.getLength());
     const Any* pBegin   = rows.getConstArray();
     const Any* pEnd     = pBegin + rows.getLength();
-    for(sal_Int32 i=0;pBegin != pEnd; ++pBegin,++i)
+    for(sal_Int32 i=0; pBegin != pEnd; ++pBegin,++i)
     {
         deleteRow(*(m_aSet.begin() + comphelper::getINT32(*pBegin)),_xTable);
-        aRet.getArray()[i] = m_bDeleted;
+        aRet.getArray()[i] = m_bDeleted ? 1 : 0;
     }
     return aRet;
 }
@@ -320,7 +320,7 @@ void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connect
         m_aSet.push_back(new ORowVector< ORowSetValue >(*_rInsertRow)); // we don't know where the new row is so we append it to the current rows
         m_aSetIter = m_aSet.end() - 1;
         ((*m_aSetIter)->get())[0] = (_rInsertRow->get())[0] = getBookmark();
-        m_bEnd = sal_False;
+        m_bEnd = false;
     }
 }
 
@@ -366,7 +366,7 @@ void OStaticSet::reset(const Reference< XResultSet> &_xDriverSet)
         m_aSet.swap(t);
     }
     m_aSetIter = m_aSet.end();
-    m_bEnd = sal_False;
+    m_bEnd = false;
     m_aSet.push_back(NULL); // this is the beforefirst record
 }
 

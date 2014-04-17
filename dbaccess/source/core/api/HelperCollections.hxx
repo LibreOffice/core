@@ -54,18 +54,18 @@ namespace dbaccess
         }
     public:
         OPrivateColumns(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
-                        sal_Bool _bCase,
+                        bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const ::std::vector< OUString> &_rVector,
-                        sal_Bool _bUseAsIndex = sal_False
+                        bool _bUseAsIndex = false
                     );
 
         /** creates a columns instance as above, but taking the names from the columns itself
         */
         static OPrivateColumns* createWithIntrinsicNames(
             const ::rtl::Reference< ::connectivity::OSQLColumns >& _rColumns,
-            sal_Bool _bCase,
+            bool _bCase,
             ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex
         );
@@ -87,7 +87,7 @@ namespace dbaccess
         }
     public:
         OPrivateTables( const OSQLTables& _rTables,
-                        sal_Bool _bCase,
+                        bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const ::std::vector< OUString> &_rVector

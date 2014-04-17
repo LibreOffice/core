@@ -72,12 +72,12 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
                ,const Reference< XComponentContext >& _xORB)
     :OContentHelper(_xORB,NULL,TContentPtr(new OContentHelper_Impl))
     ,OQueryDescriptor_Base(m_aMutex,*this)
-    ,ODataSettings(OContentHelper::rBHelper,sal_True)
+    ,ODataSettings(OContentHelper::rBHelper,true)
     ,m_xCommandDefinition(_rxCommandDefinition)
     ,m_xConnection(_rxConn)
     ,m_pColumnMediator( NULL )
     ,m_pWarnings( NULL )
-    ,m_bCaseSensitiv(sal_True)
+    ,m_bCaseSensitiv(true)
     ,m_eDoingCurrently(NONE)
 {
     registerProperties();

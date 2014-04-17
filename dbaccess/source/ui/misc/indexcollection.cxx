@@ -190,7 +190,7 @@ namespace dbaui
         }
     }
 
-    sal_Bool OIndexCollection::dropNoRemove(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
+    bool OIndexCollection::dropNoRemove(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
     {
         try
         {
@@ -200,7 +200,7 @@ namespace dbaui
             if (!xDropIndex.is())
             {
                 OSL_FAIL("OIndexCollection::drop: no XDrop interface!");
-                return sal_False;
+                return false;
             }
 
             xDropIndex->dropByName(_rPos->getOriginalName());
@@ -212,7 +212,7 @@ namespace dbaui
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
-            return sal_False;
+            return false;
         }
 
         // adjust the OIndex structure
@@ -220,21 +220,21 @@ namespace dbaui
         OSL_ENSURE(aDropped != m_aIndexes.end(), "OIndexCollection::drop: invalid original name, but successful commit?!");
         aDropped->flagAsNew(GrantIndexAccess());
 
-        return sal_True;
+        return true;
     }
 
-    sal_Bool OIndexCollection::drop(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
+    bool OIndexCollection::drop(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
     {
         OSL_ENSURE((_rPos >= m_aIndexes.begin()) && (_rPos < m_aIndexes.end()),
             "OIndexCollection::drop: invalid position (fasten your seatbelt .... this will crash)!");
 
         if (!_rPos->isNew())
             if (!dropNoRemove(_rPos))
-                return sal_False;
+                return false;
 
         // adjust the index array
         m_aIndexes.erase(_rPos);
-        return sal_True;
+        return true;
     }
 
     void OIndexCollection::implFillIndexInfo(OIndex& _rIndex) SAL_THROW((Exception))

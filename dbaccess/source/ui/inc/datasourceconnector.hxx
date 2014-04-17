@@ -55,7 +55,7 @@ namespace dbaui
         );
 
         /// returns <TRUE/> if the object is able to create data source connections
-        sal_Bool    isValid() const { return m_xContext.is(); }
+        bool    isValid() const { return m_xContext.is(); }
 
         /** creates a connection to the data source, displays the possible error to the user, or returns it
         */

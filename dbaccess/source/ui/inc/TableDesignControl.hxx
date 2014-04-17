@@ -41,9 +41,9 @@ namespace dbaui
         sal_uInt16  m_nCurUndoActId;
 
     protected:
-        sal_Bool    m_bCurrentModified;
-        sal_Bool    m_bUpdatable;
-        sal_Bool    m_bClipboardFilled;
+        bool    m_bCurrentModified;
+        bool    m_bUpdatable;
+        bool    m_bClipboardFilled;
 
     public:
         OTableRowView(Window* pParent);
@@ -72,12 +72,12 @@ namespace dbaui
         virtual void InsertRows( long nRow )                = 0;
         virtual void InsertNewRows( long nRow )             = 0;
 
-        virtual sal_Bool IsPrimaryKeyAllowed( long nRow )   = 0;
-        virtual sal_Bool IsInsertNewAllowed( long nRow )    = 0;
-        virtual sal_Bool IsDeleteAllowed( long nRow )       = 0;
+        virtual bool IsPrimaryKeyAllowed( long nRow )   = 0;
+        virtual bool IsInsertNewAllowed( long nRow )    = 0;
+        virtual bool IsDeleteAllowed( long nRow )       = 0;
 
-        virtual sal_Bool IsUpdatable() const {return m_bUpdatable;}
-        virtual void SetUpdatable( sal_Bool bUpdate=sal_True );
+        virtual bool IsUpdatable() const {return m_bUpdatable;}
+        virtual void SetUpdatable( bool bUpdate=true );
 
         virtual RowStatus GetRowStatus(long nRow) const SAL_OVERRIDE;
         virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;

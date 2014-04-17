@@ -66,7 +66,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver() SAL_OVERRIDE;
         virtual OUString getDatasourceType(const SfxItemSet& _rSet) const SAL_OVERRIDE;
         virtual void clearPassword() SAL_OVERRIDE;
-        virtual sal_Bool saveDatasource() SAL_OVERRIDE;
+        virtual bool saveDatasource() SAL_OVERRIDE;
         virtual void setTitle(const OUString& _sTitle) SAL_OVERRIDE;
         virtual void enableConfirmSettings( bool _bEnable ) SAL_OVERRIDE;
     };

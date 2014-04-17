@@ -204,14 +204,14 @@ void calcPointX2(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrP
     _rNewConPos.X() -= DESCRIPT_LINE_WIDTH;
 }
 
-sal_Bool OConnectionLine::RecalcLine()
+bool OConnectionLine::RecalcLine()
 {
     // Windows and entries must be set
     const OTableWindow* pSourceWin = m_pTabConn->GetSourceWin();
     const OTableWindow* pDestWin = m_pTabConn->GetDestWin();
 
     if( !pSourceWin || !pDestWin )
-        return sal_False;
+        return false;
 
     SvTreeListEntry* pSourceEntry = pSourceWin->GetListBox()->GetEntryFromText( GetData()->GetSourceFieldName() );
     SvTreeListEntry* pDestEntry = pDestWin->GetListBox()->GetEntryFromText( GetData()->GetDestFieldName() );
@@ -251,7 +251,7 @@ sal_Bool OConnectionLine::RecalcLine()
     // determine aDestConnPosY
     calcPointsYValue(pDestWin,pDestEntry,m_aDestConnPos,m_aDestDescrLinePos);
 
-    return sal_True;
+    return true;
 }
 
 void OConnectionLine::Draw( OutputDevice* pOutDev )
@@ -286,7 +286,7 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
     pOutDev->DrawRect( calcRect( m_aDestDescrLinePos,aVector) );
 }
 
-sal_Bool OConnectionLine::IsValid() const
+bool OConnectionLine::IsValid() const
 {
     return m_pData.is();
 }

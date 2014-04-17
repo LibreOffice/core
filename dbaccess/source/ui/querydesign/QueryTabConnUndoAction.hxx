@@ -29,7 +29,7 @@ namespace dbaui
     {
     protected:
         OQueryTableConnection*  m_pConnection;
-        sal_Bool                    m_bOwnerOfConn;
+        bool                    m_bOwnerOfConn;
         // am I the only owner of the connection? (changes with every redo and undo)
 
     public:
@@ -41,7 +41,7 @@ namespace dbaui
 
         void SetConnection(OQueryTableConnection* pConn) { m_pConnection = pConn; }
         // now SetOwnership please
-        void SetOwnership(sal_Bool bTakeIt) { m_bOwnerOfConn = bTakeIt; }
+        void SetOwnership(bool bTakeIt) { m_bOwnerOfConn = bTakeIt; }
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYTABCONNUNDOACTION_HXX

@@ -60,7 +60,7 @@ namespace dbaxml
         OTableStyleContext( ODBFilter& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-                SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle = sal_False );
+                SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle = false );
 
         virtual ~OTableStyleContext();
 
@@ -81,7 +81,7 @@ namespace dbaxml
         const OUString sCellStyleServiceName;
         sal_Int32 m_nNumberFormatIndex;
         sal_Int32 m_nMasterPageNameIndex;
-        sal_Bool bAutoStyles : 1;
+        bool bAutoStyles : 1;
 
         mutable UniReference < SvXMLImportPropertyMapper > m_xTableImpPropMapper;
         mutable UniReference < SvXMLImportPropertyMapper > m_xColumnImpPropMapper;
@@ -105,7 +105,7 @@ namespace dbaxml
         OTableStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx ,
                 const OUString& rLName ,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-                const sal_Bool bAutoStyles );
+                const bool bAutoStyles );
         virtual ~OTableStylesContext();
 
         virtual void EndElement() SAL_OVERRIDE;

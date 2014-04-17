@@ -35,14 +35,14 @@ namespace dbaui
     protected:
         ::std::vector<OTableConnection*> m_vTableConnection;
         OQueryTableWindow*               m_pTabWin;
-        sal_Bool                         m_bOwnerOfObjects;
+        bool                         m_bOwnerOfObjects;
         // am I the only owner of the managed objects? (changes with every redo or undo)
 
     public:
         OQueryTabWinUndoAct(OQueryTableView* pOwner, sal_uInt16 nCommentID);
         virtual ~OQueryTabWinUndoAct();
 
-        void SetOwnership(sal_Bool bTakeIt) { m_bOwnerOfObjects = bTakeIt; }
+        void SetOwnership(bool bTakeIt) { m_bOwnerOfObjects = bTakeIt; }
 
         virtual void Undo() SAL_OVERRIDE = 0;
         virtual void Redo() SAL_OVERRIDE = 0;

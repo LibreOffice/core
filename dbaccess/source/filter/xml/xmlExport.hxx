@@ -112,7 +112,7 @@ class ODBExport : public SvXMLExport
 
     Reference<XPropertySet>                         m_xDataSource;
     ::dbaccess::ODsnTypeCollection                  m_aTypeCollection;
-    sal_Bool                                        m_bAllreadyFilled;
+    bool                                        m_bAllreadyFilled;
 
     void                    exportDataSource();
     void                    exportConnectionData();
@@ -130,14 +130,14 @@ class ODBExport : public SvXMLExport
     void                    exportDataSourceSettings();
     void                    exportForms();
     void                    exportReports();
-    void                    exportQueries(sal_Bool _bExportContext);
-    void                    exportTables(sal_Bool _bExportContext);
+    void                    exportQueries(bool _bExportContext);
+    void                    exportTables(bool _bExportContext);
     void                    exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt);
     void                    exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,const Reference<XPropertySet>& _xProp,SvXMLAttributeList& _rAtt,TPropertyStyleMap& _rMap);
     void                    exportCollection(const Reference< XNameAccess >& _xCollection
                                             ,enum ::xmloff::token::XMLTokenEnum _eComponents
                                             ,enum ::xmloff::token::XMLTokenEnum _eSubComponents
-                                            ,sal_Bool _bExportContext
+                                            ,bool _bExportContext
                                             ,const ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >& _aMemFunc
                                             );
     void                    exportComponent(XPropertySet* _xProp);
@@ -146,7 +146,7 @@ class ODBExport : public SvXMLExport
     void                    exportFilter(XPropertySet* _xProp
                                         ,const OUString& _sProp
                                         ,enum ::xmloff::token::XMLTokenEnum _eStatementType);
-    void                    exportTableName(XPropertySet* _xProp,sal_Bool _bUpdate);
+    void                    exportTableName(XPropertySet* _xProp,bool _bUpdate);
     void                    exportAutoStyle(XPropertySet* _xProp);
     void                    exportColumns(const Reference<XColumnsSupplier>& _xColSup);
     void                    collectComponentStyles();

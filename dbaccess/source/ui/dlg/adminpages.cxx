@@ -60,7 +60,7 @@ namespace dbaui
     // OGenericAdministrationPage
     OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rAttrSet)
-        ,m_abEnableRoadmap(sal_False)
+        ,m_abEnableRoadmap(false)
         ,m_pAdminDialog(NULL)
         ,m_pItemSetHelper(NULL)
         ,m_pFT_HeaderText(NULL)
@@ -71,7 +71,7 @@ namespace dbaui
 
     OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rUIXMLDescription, _rAttrSet)
-        ,m_abEnableRoadmap(sal_False)
+        ,m_abEnableRoadmap(false)
         ,m_pAdminDialog(NULL)
         ,m_pItemSetHelper(NULL)
         ,m_pFT_HeaderText(NULL)
@@ -100,7 +100,7 @@ namespace dbaui
 
     void OGenericAdministrationPage::Reset(const SfxItemSet& _rCoreAttrs)
     {
-        implInitControls(_rCoreAttrs, sal_False);
+        implInitControls(_rCoreAttrs, false);
     }
     void OGenericAdministrationPage::ActivatePage()
     {
@@ -111,10 +111,10 @@ namespace dbaui
     }
     void OGenericAdministrationPage::ActivatePage(const SfxItemSet& _rSet)
     {
-        implInitControls(_rSet, sal_True);
+        implInitControls(_rSet, true);
     }
 
-    void OGenericAdministrationPage::getFlags(const SfxItemSet& _rSet, sal_Bool& _rValid, sal_Bool& _rReadonly)
+    void OGenericAdministrationPage::getFlags(const SfxItemSet& _rSet, bool& _rValid, bool& _rReadonly)
     {
         SFX_ITEMSET_GET(_rSet, pInvalid, SfxBoolItem, DSID_INVALID_SELECTION, true);
         _rValid = !pInvalid || !pInvalid->GetValue();
@@ -127,7 +127,7 @@ namespace dbaui
         callModifiedHdl();
         return 0L;
     }
-    sal_Bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn,OUString& _sCurr)
+    bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn, OUString& _sCurr)
     {
         // collect all ODBC data source names
         StringBag aOdbcDatasources;
@@ -139,7 +139,7 @@ namespace dbaui
             sError = sError.replaceFirst("#lib#", aEnumeration.getLibraryName());
             ErrorBox aDialog(this, WB_OK, sError);
             aDialog.Execute();
-            return sal_False;
+            return false;
         }
         else
         {
@@ -151,13 +151,13 @@ namespace dbaui
             if ( RET_OK == aSelector.Execute() )
                 _sReturn = aSelector.GetSelected();
         }
-        return sal_True;
+        return true;
     }
 
-    void OGenericAdministrationPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OGenericAdministrationPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         ::std::vector< ISaveValueWrapper* > aControlList;
@@ -191,11 +191,11 @@ namespace dbaui
     {
         return true;
     }
-    void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, sal_uInt16 _nID, sal_Bool& _bChangedSomething, bool _bRevertValue )
+    void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, sal_uInt16 _nID, bool& _bChangedSomething, bool _bRevertValue )
     {
         if ( (_pCheckBox != NULL ) && ( _pCheckBox->GetState() != _pCheckBox->GetSavedValue() ) )
         {
-            sal_Bool bValue = _pCheckBox->IsChecked();
+            bool bValue = _pCheckBox->IsChecked();
             if ( _bRevertValue )
                 bValue = !bValue;
 
@@ -209,23 +209,23 @@ namespace dbaui
             else
                 _rSet.Put( SfxBoolItem( _nID, bValue ) );
 
-            _bChangedSomething = sal_True;
+            _bChangedSomething = true;
         }
     }
-    void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet,NumericField* _pEdit,sal_uInt16 _nID,sal_Bool& _bChangedSomething)
+    void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet, NumericField* _pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
     {
         if( (_pEdit != NULL) && (_pEdit->GetValue() != _pEdit->GetSavedValue().toInt32()) )
         {
             _rSet.Put(SfxInt32Item(_nID, static_cast<sal_Int32>(_pEdit->GetValue())));
-            _bChangedSomething = sal_True;
+            _bChangedSomething = true;
         }
     }
-    void OGenericAdministrationPage::fillString(SfxItemSet& _rSet,Edit* _pEdit,sal_uInt16 _nID,sal_Bool& _bChangedSomething)
+    void OGenericAdministrationPage::fillString(SfxItemSet& _rSet, Edit* _pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
     {
         if( (_pEdit != NULL) && (_pEdit->GetText() != _pEdit->GetSavedValue()) )
         {
             _rSet.Put(SfxStringItem(_nID, _pEdit->GetText()));
-            _bChangedSomething = sal_True;
+            _bChangedSomething = true;
         }
     }
 
@@ -239,12 +239,12 @@ namespace dbaui
     IMPL_LINK(OGenericAdministrationPage, OnTestConnectionClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
         if ( m_pAdminDialog )
         {
             m_pAdminDialog->saveDatasource();
-            OGenericAdministrationPage::implInitControls(*m_pItemSetHelper->getOutputSet(), sal_True);
-            sal_Bool bShowMessage = sal_True;
+            OGenericAdministrationPage::implInitControls(*m_pItemSetHelper->getOutputSet(), true);
+            bool bShowMessage = true;
             try
             {
                 ::std::pair< Reference<XConnection>,sal_Bool> xConnection = m_pAdminDialog->createConnection();

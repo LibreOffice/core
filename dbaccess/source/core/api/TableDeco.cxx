@@ -109,7 +109,7 @@ sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
                             const Any& rValue )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch(nHandle)
     {
         case PROPERTY_ID_PRIVILEGES:
@@ -305,7 +305,7 @@ void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) c
 void ODBTableDecorator::construct()
 {
     SAL_INFO("dbaccess", "ODBTableDecorator::construct" );
-    sal_Bool bNotFound = sal_True;
+    bool bNotFound = true;
     Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
     if ( xProp.is() )
     {

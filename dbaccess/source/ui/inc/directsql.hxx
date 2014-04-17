@@ -76,7 +76,7 @@ namespace dbaui
 
     protected:
         void executeCurrent();
-        void switchToHistory(sal_Int32 _nHistoryPos, sal_Bool _bUpdateListBox = sal_True);
+        void switchToHistory(sal_Int32 _nHistoryPos, bool _bUpdateListBox = true);
 
         // OEventListenerAdapter
         virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) SAL_OVERRIDE;

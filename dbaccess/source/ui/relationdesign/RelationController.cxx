@@ -121,7 +121,7 @@ Reference< XInterface > SAL_CALL ORelationController::Create(const Reference<XMu
 ORelationController::ORelationController(const Reference< XComponentContext >& _rM)
     : OJoinController(_rM)
     ,m_nThreadEvent(0)
-    ,m_bRelationsPossible(sal_True)
+    ,m_bRelationsPossible(true)
 {
     InvalidateAll();
 }
@@ -201,7 +201,7 @@ void ORelationController::impl_initialize()
     {// check if this database supports relations
 
         setEditable(false);
-        m_bRelationsPossible    = sal_False;
+        m_bRelationsPossible    = false;
         {
             OUString sTitle(ModuleRes(STR_RELATIONDESIGN));
             sTitle = sTitle.copy(3);
@@ -354,7 +354,7 @@ namespace
         if ( aFind == m_aTableData.end() )
         {
             aFind = m_aTableData.insert(TTableDataHelper::value_type(sSourceName,::boost::shared_ptr<OTableWindowData>(new OTableWindowData(xTableProp,sSourceName, sSourceName)))).first;
-            aFind->second->ShowAll(sal_False);
+            aFind->second->ShowAll(false);
         }
         TTableWindowData::value_type pReferencingTable = aFind->second;
         Reference<XIndexAccess> xKeys = pReferencingTable->getKeys();
@@ -387,7 +387,7 @@ namespace
                         {
                             Reference<XPropertySet>  xReferencedTable(m_xTables->getByName(sReferencedTable),UNO_QUERY);
                             aRefFind = m_aTableData.insert(TTableDataHelper::value_type(sReferencedTable,::boost::shared_ptr<OTableWindowData>(new OTableWindowData(xReferencedTable,sReferencedTable, sReferencedTable)))).first;
-                            aRefFind->second->ShowAll(sal_False);
+                            aRefFind->second->ShowAll(false);
                         }
                         else
                             continue; // table name could not be found so we do not show this table releation
@@ -441,7 +441,7 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
 
     ::std::copy( _aConnectionData.begin(), _aConnectionData.end(), ::std::back_inserter( m_vTableConnectionData ));
     //const Reference< XDatabaseMetaData> xMetaData = getConnection()->getMetaData();
-    const sal_Bool bCase = sal_True;//xMetaData.is() && xMetaData->supportsMixedCaseQuotedIdentifiers();
+    const bool bCase = true;//xMetaData.is() && xMetaData->supportsMixedCaseQuotedIdentifiers();
     // here we are finished, so we can collect the table from connection data
     TTableConnectionData::iterator aConnDataIter = m_vTableConnectionData.begin();
     TTableConnectionData::iterator aConnDataEnd = m_vTableConnectionData.end();
@@ -531,7 +531,7 @@ void ORelationController::loadData()
     }
 }
 
-TTableWindowData::value_type ORelationController::existsTable(const OUString& _rComposedTableName,sal_Bool _bCase)  const
+TTableWindowData::value_type ORelationController::existsTable(const OUString& _rComposedTableName,bool _bCase)  const
 {
     ::comphelper::UStringMixEqual bCase(_bCase);
     TTableWindowData::const_iterator aIter = m_vTableData.begin();

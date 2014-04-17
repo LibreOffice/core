@@ -36,23 +36,23 @@ namespace dbaui
     {
         OQueryDesignView*   m_pDesignView;
         OQueryTextView*     m_pTextView;
-        sal_Bool            m_bAddTableDialogWasVisible; // true if so
+        bool            m_bAddTableDialogWasVisible; // true if so
     public:
         OQueryViewSwitch(OQueryContainerWindow* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~OQueryViewSwitch();
 
-        virtual sal_Bool isCutAllowed();
-        virtual sal_Bool isPasteAllowed();
-        virtual sal_Bool isCopyAllowed();
+        virtual bool isCutAllowed();
+        virtual bool isPasteAllowed();
+        virtual bool isCopyAllowed();
         virtual void copy();
         virtual void cut();
         virtual void paste();
         // clears the whole query
         virtual void clear();
         // set the view readonly or not
-        virtual void setReadOnly(sal_Bool _bReadOnly);
+        virtual void setReadOnly(bool _bReadOnly);
         // check if the statement is correct when not returning false
-        virtual sal_Bool checkStatement();
+        virtual bool checkStatement();
         // set the statement for representation
         virtual void setStatement(const OUString& _rsStatement);
         // returns the current sql statement
@@ -68,8 +68,8 @@ namespace dbaui
         */
         bool     switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo );
         void     forceInitialView();
-        sal_Bool isSlotEnabled(sal_Int32 _nSlotId);
-        void     setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable);
+        bool     isSlotEnabled(sal_Int32 _nSlotId);
+        void     setSlotEnabled(sal_Int32 _nSlotId, bool _bEnable);
         void     setNoneVisbleRow(sal_Int32 _nRows);
         void     SaveUIConfig();
         bool     reset( ::dbtools::SQLExceptionInfo* _pErrorInfo );

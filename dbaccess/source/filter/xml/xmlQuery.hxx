@@ -29,7 +29,7 @@ namespace dbaxml
     {
         OUString m_sCommand;
         OUString m_sTable;
-        sal_Bool        m_bEscapeProcessing;
+        bool        m_bEscapeProcessing;
     protected:
         virtual void setProperties(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xProp) SAL_OVERRIDE;
     public:

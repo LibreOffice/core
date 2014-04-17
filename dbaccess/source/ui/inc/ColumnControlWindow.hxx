@@ -40,7 +40,7 @@ namespace dbaui
         mutable TOTypeInfoSP        m_pTypeInfo; // default type
         OUString                    m_sTypeNames;       // these type names are the ones out of the resource file
         OUString                    m_sAutoIncrementValue;
-        sal_Bool                    m_bAutoIncrementEnabled;
+        bool                        m_bAutoIncrementEnabled;
     protected:
         virtual void        ActivateAggregate( EControlType eType ) SAL_OVERRIDE;
         virtual void        DeactivateAggregate( EControlType eType ) SAL_OVERRIDE;
@@ -48,8 +48,8 @@ namespace dbaui
         virtual ::com::sun::star::lang::Locale  GetLocale() const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const SAL_OVERRIDE;
         virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos) SAL_OVERRIDE;
-        virtual sal_Bool            isAutoIncrementValueEnabled() const SAL_OVERRIDE;
-        virtual OUString     getAutoIncrementValue() const SAL_OVERRIDE;
+        virtual bool                isAutoIncrementValueEnabled() const SAL_OVERRIDE;
+        virtual OUString            getAutoIncrementValue() const SAL_OVERRIDE;
         virtual void                CellModified(long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
 
     public:

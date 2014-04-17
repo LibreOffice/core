@@ -31,7 +31,7 @@ namespace dbaui
         ::std::vector<sal_Int32>    m_vecColor;
 
     protected:
-        virtual sal_Bool        CreateTable(int nToken) SAL_OVERRIDE;
+        virtual bool            CreateTable(int nToken) SAL_OVERRIDE;
         virtual void            NextToken( int nToken ) SAL_OVERRIDE; // base class
         virtual TypeSelectionPageFactory
                                 getTypeSelectionPageFactory() SAL_OVERRIDE;
@@ -53,7 +53,7 @@ namespace dbaui
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                     const TColumnVector* rList,
                     const OTypeInfoMap* _pInfoMap,
-                    sal_Bool _bAutoIncrementEnabled);
+                    bool _bAutoIncrementEnabled);
 
         virtual SvParserState   CallParser() SAL_OVERRIDE;// base class
         /// @note Only recovers correct data if 2. CTOR has been used.

@@ -104,7 +104,7 @@ namespace dbaui
     // OConnectionTabPageSetup
     OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, sal_uInt16 _rId, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId)
         :OConnectionHelper(pParent, ModuleRes(_rId), _rCoreAttrs)
-        ,m_bUserGrabFocus(sal_True)
+        ,m_bUserGrabFocus(true)
         ,m_aFT_HelpText(this, ModuleRes(FT_AUTOWIZARDHELPTEXT))
     {
 
@@ -143,14 +143,14 @@ namespace dbaui
 
         m_aConnectionURL.SetModifyHdl(LINK(this, OConnectionTabPageSetup, OnEditModified));
 
-        SetRoadmapStateValue(sal_False);
+        SetRoadmapStateValue(false);
     }
 
     OConnectionTabPageSetup::~OConnectionTabPageSetup()
     {
     }
 
-    void OConnectionTabPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OConnectionTabPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);
         // special handling for oracle, this can only happen
@@ -182,7 +182,7 @@ namespace dbaui
 
     bool OConnectionTabPageSetup::FillItemSet(SfxItemSet& _rSet)
     {
-        sal_Bool bChangedSomething = sal_False;
+        bool bChangedSomething = false;
         fillString(_rSet,&m_aConnectionURL, DSID_CONNECTURL, bChangedSomething);
         return bChangedSomething;
     }

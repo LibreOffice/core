@@ -342,7 +342,7 @@ void SAL_CALL DocumentStorageAccess::commited( const css::lang::EventObject& aEv
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_pModelImplementation )
-        m_pModelImplementation->setModified( sal_True );
+        m_pModelImplementation->setModified( true );
 
     if ( m_pModelImplementation && m_bPropagateCommitToRoot )
     {
@@ -406,11 +406,11 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _r
             ,m_bDocumentInitialized( false )
             ,m_aContext( _rxContext )
             ,m_nLoginTimeout(0)
-            ,m_bReadOnly(sal_False)
-            ,m_bPasswordRequired(sal_False)
-            ,m_bSuppressVersionColumns(sal_True)
-            ,m_bModified(sal_False)
-            ,m_bDocumentReadOnly(sal_False)
+            ,m_bReadOnly(false)
+            ,m_bPasswordRequired(false)
+            ,m_bSuppressVersionColumns(true)
+            ,m_bModified(false)
+            ,m_bDocumentReadOnly(false)
             ,m_pSharedConnectionManager(NULL)
             ,m_nControllerLockCount(0)
 {
@@ -442,11 +442,11 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_aContext( _rxContext )
             ,m_sName(_rRegistrationName)
             ,m_nLoginTimeout(0)
-            ,m_bReadOnly(sal_False)
-            ,m_bPasswordRequired(sal_False)
-            ,m_bSuppressVersionColumns(sal_True)
-            ,m_bModified(sal_False)
-            ,m_bDocumentReadOnly(sal_False)
+            ,m_bReadOnly(false)
+            ,m_bPasswordRequired(false)
+            ,m_bSuppressVersionColumns(true)
+            ,m_bModified(false)
+            ,m_bDocumentReadOnly(false)
             ,m_pSharedConnectionManager(NULL)
             ,m_nControllerLockCount(0)
 {
@@ -609,7 +609,7 @@ bool ODatabaseModelImpl::objectHasMacros( const Reference< XStorage >& _rxContai
 
 void ODatabaseModelImpl::reset()
 {
-    m_bReadOnly = sal_False;
+    m_bReadOnly = false;
     ::std::vector< TContentPtr > aEmptyContainers( 4 );
     m_aContainer.swap( aEmptyContainers );
 
@@ -707,7 +707,7 @@ void ODatabaseModelImpl::dispose()
 
     try
     {
-        sal_Bool bCouldStore = commitEmbeddedStorage( true );
+        bool bCouldStore = commitEmbeddedStorage( true );
             // "true" means that committing the embedded storage should not trigger committing the root
             // storage. This is because we are going to commit the root storage ourself, anyway
         disposeStorages();
@@ -832,7 +832,7 @@ Reference< XStorage > ODatabaseModelImpl::getOrCreateRootStorage()
             }
             catch( const Exception& )
             {
-                m_bDocumentReadOnly = sal_True;
+                m_bDocumentReadOnly = true;
                 aStorageCreationArgs[1] <<= ElementModes::READ;
                 try
                 {
@@ -897,7 +897,7 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
     return bSuccess;
 }
 
-void ODatabaseModelImpl::setModified( sal_Bool _bModified )
+void ODatabaseModelImpl::setModified( bool _bModified )
 {
     if ( isModifyLocked() )
         return;
@@ -1017,25 +1017,25 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
     {
         // known JDBC settings
         AsciiPropertyValue( "JavaDriverClass",            makeAny( OUString() ) ),
-        AsciiPropertyValue( "JavaDriverClassPath",       makeAny( OUString() ) ),
-        AsciiPropertyValue( "IgnoreCurrency",             makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "JavaDriverClassPath",        makeAny( OUString() ) ),
+        AsciiPropertyValue( "IgnoreCurrency",             makeAny( false ) ),
         // known settings for file-based drivers
         AsciiPropertyValue( "Extension",                  makeAny( OUString() ) ),
         AsciiPropertyValue( "CharSet",                    makeAny( OUString() ) ),
-        AsciiPropertyValue( "HeaderLine",                 makeAny( (sal_Bool)sal_True ) ),
+        AsciiPropertyValue( "HeaderLine",                 makeAny( true ) ),
         AsciiPropertyValue( "FieldDelimiter",             makeAny( OUString( "," ) ) ),
         AsciiPropertyValue( "StringDelimiter",            makeAny( OUString( "\"" ) ) ),
         AsciiPropertyValue( "DecimalDelimiter",           makeAny( OUString( "." ) ) ),
         AsciiPropertyValue( "ThousandDelimiter",          makeAny( OUString() ) ),
-        AsciiPropertyValue( "ShowDeleted",                makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "ShowDeleted",                makeAny( false ) ),
         // known ODBC settings
         AsciiPropertyValue( "SystemDriverSettings",       makeAny( OUString() ) ),
-        AsciiPropertyValue( "UseCatalog",                 makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "UseCatalog",                 makeAny( false ) ),
         AsciiPropertyValue( "TypeInfoSettings",           makeAny( Sequence< Any >()) ),
         // settings related to auto increment handling
         AsciiPropertyValue( "AutoIncrementCreation",      makeAny( OUString() ) ),
         AsciiPropertyValue( "AutoRetrievingStatement",    makeAny( OUString() ) ),
-        AsciiPropertyValue( "IsAutoRetrievingEnabled",    makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "IsAutoRetrievingEnabled",    makeAny( false ) ),
         // known LDAP driver settings
         AsciiPropertyValue( "HostName",                   makeAny( OUString() ) ),
         AsciiPropertyValue( "PortNumber",                 makeAny( (sal_Int32)389 ) ),
@@ -1045,28 +1045,28 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "LocalSocket",                makeAny( OUString() ) ),
         AsciiPropertyValue( "NamedPipe",                  makeAny( OUString() ) ),
         // misc known driver settings
-        AsciiPropertyValue( "ParameterNameSubstitution",  makeAny( (sal_Bool)sal_False ) ),
-        AsciiPropertyValue( "AddIndexAppendix",           makeAny( (sal_Bool)sal_True ) ),
-        AsciiPropertyValue( "IgnoreDriverPrivileges",     makeAny( (sal_Bool)sal_True ) ),
+        AsciiPropertyValue( "ParameterNameSubstitution",  makeAny( false ) ),
+        AsciiPropertyValue( "AddIndexAppendix",           makeAny( true ) ),
+        AsciiPropertyValue( "IgnoreDriverPrivileges",     makeAny( true ) ),
         AsciiPropertyValue( "ImplicitCatalogRestriction", ::cppu::UnoType< OUString >::get() ),
         AsciiPropertyValue( "ImplicitSchemaRestriction",  ::cppu::UnoType< OUString >::get() ),
         AsciiPropertyValue( "PrimaryKeySupport",          ::cppu::UnoType< sal_Bool >::get() ),
-        AsciiPropertyValue( "ShowColumnDescription",      makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "ShowColumnDescription",      makeAny( false ) ),
         // known SDB level settings
-        AsciiPropertyValue( "NoNameLengthLimit",          makeAny( (sal_Bool)sal_False ) ),
-        AsciiPropertyValue( "AppendTableAliasName",       makeAny( (sal_Bool)sal_False ) ),
-        AsciiPropertyValue( "GenerateASBeforeCorrelationName",  makeAny( (sal_Bool)sal_True ) ),
-        AsciiPropertyValue( "ColumnAliasInOrderBy",       makeAny( (sal_Bool)sal_True ) ),
-        AsciiPropertyValue( "EnableSQL92Check",           makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "NoNameLengthLimit",          makeAny( false ) ),
+        AsciiPropertyValue( "AppendTableAliasName",       makeAny( false ) ),
+        AsciiPropertyValue( "GenerateASBeforeCorrelationName",  makeAny( true ) ),
+        AsciiPropertyValue( "ColumnAliasInOrderBy",       makeAny( true ) ),
+        AsciiPropertyValue( "EnableSQL92Check",           makeAny( false ) ),
         AsciiPropertyValue( "BooleanComparisonMode",      makeAny( BooleanComparisonMode::EQUAL_INTEGER ) ),
         AsciiPropertyValue( "TableTypeFilterMode",        makeAny( (sal_Int32)3 ) ),
-        AsciiPropertyValue( "RespectDriverResultSetType", makeAny( (sal_Bool)sal_False ) ),
-        AsciiPropertyValue( "UseSchemaInSelect",          makeAny( (sal_Bool)sal_True ) ),
-        AsciiPropertyValue( "UseCatalogInSelect",         makeAny( (sal_Bool)sal_True ) ),
-        AsciiPropertyValue( "EnableOuterJoinEscape",      makeAny( (sal_Bool)sal_True ) ),
-        AsciiPropertyValue( "PreferDosLikeLineEnds",      makeAny( (sal_Bool)sal_False ) ),
-        AsciiPropertyValue( "FormsCheckRequiredFields",   makeAny( (sal_Bool)sal_True ) ),
-        AsciiPropertyValue( "EscapeDateTime",             makeAny( (sal_Bool)sal_True ) ),
+        AsciiPropertyValue( "RespectDriverResultSetType", makeAny( false ) ),
+        AsciiPropertyValue( "UseSchemaInSelect",          makeAny( true ) ),
+        AsciiPropertyValue( "UseCatalogInSelect",         makeAny( true ) ),
+        AsciiPropertyValue( "EnableOuterJoinEscape",      makeAny( true ) ),
+        AsciiPropertyValue( "PreferDosLikeLineEnds",      makeAny( false ) ),
+        AsciiPropertyValue( "FormsCheckRequiredFields",   makeAny( true ) ),
+        AsciiPropertyValue( "EscapeDateTime",             makeAny( true ) ),
 
         // known services to handle database tasks
         AsciiPropertyValue( "TableAlterationServiceName", makeAny( OUString() ) ),
@@ -1368,7 +1368,7 @@ void ODatabaseModelImpl::showBrokenSignatureWarning( const Reference< XInteracti
 
 void ODatabaseModelImpl::storageIsModified()
 {
-    setModified( sal_True );
+    setModified( true );
 }
 
 ModelDependentComponent::ModelDependentComponent( const ::rtl::Reference< ODatabaseModelImpl >& _model )

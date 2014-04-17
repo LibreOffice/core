@@ -57,9 +57,9 @@ namespace dbaccess
         sal_Int32               m_nPrecision;
         sal_Int32               m_nScale;
         sal_Int32               m_nIsNullable;
-        sal_Bool                m_bAutoIncrement;
-        sal_Bool                m_bRowVersion;
-        sal_Bool                m_bCurrency;
+        bool                m_bAutoIncrement;
+        bool                m_bRowVersion;
+        bool                m_bCurrency;
     //  </properties>
 
     public:
@@ -70,9 +70,9 @@ namespace dbaccess
             ,m_nPrecision( 0 )
             ,m_nScale( 0 )
             ,m_nIsNullable( ::com::sun::star::sdbc::ColumnValue::NULLABLE_UNKNOWN )
-            ,m_bAutoIncrement( sal_False )
-            ,m_bRowVersion( sal_False )
-            ,m_bCurrency( sal_False )
+            ,m_bAutoIncrement( false )
+            ,m_bRowVersion( false )
+            ,m_bCurrency( false )
         {
             impl_registerProperties();
         }

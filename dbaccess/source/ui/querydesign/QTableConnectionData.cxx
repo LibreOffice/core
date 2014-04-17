@@ -129,9 +129,9 @@ OTableConnectionData* OQueryTableConnectionData::NewInstance() const
     return new OQueryTableConnectionData();
 }
 
-sal_Bool OQueryTableConnectionData::Update()
+bool OQueryTableConnectionData::Update()
 {
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

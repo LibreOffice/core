@@ -57,7 +57,7 @@ namespace dbaui
 
             @return true if successful
         */
-        virtual sal_Bool Update() SAL_OVERRIDE;
+        virtual bool Update() SAL_OVERRIDE;
 
         OUString GetAliasName(EConnectionSide nWhich) const;
 

@@ -253,7 +253,7 @@ using namespace ::comphelper;
 
 namespace
 {
-    void ensureToolbars( OQueryController& _rController, sal_Bool _bDesign )
+    void ensureToolbars( OQueryController& _rController, bool _bDesign )
     {
         Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = _rController.getLayoutManager( _rController.getFrame() );
         if ( xLayoutManager.is() )
@@ -335,12 +335,12 @@ OQueryController::OQueryController(const Reference< XComponentContext >& _rM)
     ,m_nVisibleRows(0x400)
     ,m_nSplitPos(-1)
     ,m_nCommandType( CommandType::QUERY )
-    ,m_bGraphicalDesign(sal_False)
-    ,m_bDistinct(sal_False)
-    ,m_bViewAlias(sal_False)
-    ,m_bViewTable(sal_False)
-    ,m_bViewFunction(sal_False)
-    ,m_bEscapeProcessing(sal_True)
+    ,m_bGraphicalDesign(false)
+    ,m_bDistinct(false)
+    ,m_bViewAlias(false)
+    ,m_bViewTable(false)
+    ,m_bViewFunction(false)
+    ,m_bEscapeProcessing(true)
 {
     InvalidateAll();
 
@@ -880,7 +880,7 @@ void OQueryController::impl_initialize()
         m_nCommandType = CommandType::QUERY;
     }
 
-    sal_Bool bCreateView( sal_False );
+    bool bCreateView( false );
     if ( rArguments.get_ensureType( "CreateView", bCreateView ) && bCreateView )
     {
         OSL_FAIL( "OQueryController::impl_initialize: CurrentQuery is regognized for compatibility only!" );
@@ -912,7 +912,7 @@ void OQueryController::impl_initialize()
     }
 
     // more legacy parameters
-    sal_Bool bGraphicalDesign( sal_True );
+    bool bGraphicalDesign( true );
     if ( rArguments.get_ensureType( (OUString)PROPERTY_QUERYDESIGNVIEW, bGraphicalDesign ) )
     {
         OSL_FAIL( "OQueryController::impl_initialize: QueryDesignView is regognized for compatibility only!" );
@@ -963,7 +963,7 @@ void OQueryController::impl_initialize()
 
     if ( !ensureConnected( false ) )
     {   // we have no connection so what else should we do
-        m_bGraphicalDesign = sal_False;
+        m_bGraphicalDesign = false;
         if ( editingView() )
         {
             connectionLostMessage();
@@ -982,7 +982,7 @@ void OQueryController::impl_initialize()
         if ( !xViews.is() )
         {   // we can't create views so we ask if the user wants to create a query instead
             m_nCommandType = CommandType::QUERY;
-            sal_Bool bClose = sal_False;
+            bool bClose = false;
             {
                 OUString aTitle( ModuleRes( STR_QUERYDESIGN_NO_VIEW_SUPPORT ) );
                 OUString aMessage( ModuleRes( STR_QUERYDESIGN_NO_VIEW_ASK ) );
@@ -1057,7 +1057,7 @@ void OQueryController::impl_initialize()
         DBG_UNHANDLED_EXCEPTION();
         // we caught an exception so we switch to text only mode
         {
-            m_bGraphicalDesign = sal_False;
+            m_bGraphicalDesign = false;
             getContainer()->initialize();
             ODataView* pWindow = getView();
             OSQLMessageBox(pWindow,e).Execute();
@@ -1193,7 +1193,7 @@ void OQueryController::reconnect(bool _bUI)
     {
         if(m_bGraphicalDesign)
         {
-            m_bGraphicalDesign = sal_False;
+            m_bGraphicalDesign = false;
             // don't call Execute(SQL) because this changes the sql statement
             impl_setViewMode( NULL );
         }
@@ -1373,18 +1373,18 @@ void OQueryController::executeQuery()
     }
 }
 
-sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sal_Bool _bSaveAs)
+bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements, bool _bSaveAs)
 {
     OSL_ENSURE( !editingCommand(), "OQueryController::askForNewName: not to be called when designing an independent statement!" );
     if ( editingCommand() )
-        return sal_False;
+        return false;
 
     OSL_PRECOND( _xElements.is(), "OQueryController::askForNewName: invalid container!" );
     if  ( !_xElements.is() )
-        return sal_False;
+        return false;
 
-    sal_Bool bRet = sal_True;
-    sal_Bool bNew = _bSaveAs || !_xElements->hasByName( m_sName );
+    bool bRet = true;
+    bool bNew = _bSaveAs || !_xElements->hasByName( m_sName );
     if(bNew)
     {
         OUString aDefaultName;
@@ -1421,7 +1421,7 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
     return bRet;
 }
 
-bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
+bool OQueryController::doSaveAsDoc(bool _bSaveAs)
 {
     OSL_ENSURE(isEditable(),"Slot ID_BROWSER_SAVEDOC should not be enabled!");
     if ( !editingCommand() && !haveDataSource() )
@@ -1806,7 +1806,7 @@ short OQueryController::saveModified()
 
         nRet = aQry.Execute();
         if  (   ( nRet == RET_YES )
-            &&  !doSaveAsDoc( sal_False )
+            &&  !doSaveAsDoc( false )
             )
         {
             nRet = RET_CANCEL;
@@ -1835,7 +1835,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
                     xProp->getPropertyValue( PROPERTY_COMMAND ) >>= sNewStatement;
                     setStatement_fireEvent( sNewStatement );
 
-                    sal_Bool bNewEscapeProcessing( sal_True );
+                    bool bNewEscapeProcessing( true );
                     if ( editingQuery() )
                     {
                         xProp->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bNewEscapeProcessing;
@@ -1923,10 +1923,10 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
 
             if ( bError )
             {
-                m_bGraphicalDesign = sal_False;
+                m_bGraphicalDesign = false;
                 if ( editingView() )
                     // if we're editing a view whose statement could not be parsed, default to "no escape processing"
-                    setEscapeProcessing_fireEvent( sal_False );
+                    setEscapeProcessing_fireEvent( false );
             }
         }
     }
@@ -1956,7 +1956,7 @@ void OQueryController::setStatement_fireEvent( const OUString& _rNewStatement, b
         fire( &nHandle, &aNewValue, &aOldValue, 1, sal_False );
 }
 
-void OQueryController::setEscapeProcessing_fireEvent( const sal_Bool _bEscapeProcessing )
+void OQueryController::setEscapeProcessing_fireEvent( const bool _bEscapeProcessing )
 {
     if ( _bEscapeProcessing == m_bEscapeProcessing )
         return;
@@ -1988,7 +1988,7 @@ bool OQueryController::allowQueries() const
 
     const NamedValueCollection& rArguments( getInitParams() );
     sal_Int32 nCommandType = rArguments.getOrDefault( (OUString)PROPERTY_COMMAND_TYPE, (sal_Int32)CommandType::QUERY );
-    sal_Bool bCreatingView = ( nCommandType == CommandType::TABLE );
+    bool bCreatingView = ( nCommandType == CommandType::TABLE );
     return !bCreatingView;
 }
 

@@ -263,35 +263,35 @@ namespace dbaui
 
         OUString                m_sTypeNames;       // these type names are the ones out of the resource file
         sal_uInt32              m_nPageCount;
-        sal_Bool                m_bDeleteSourceColumns;
+        bool                    m_bDeleteSourceColumns;
         bool                    m_bInterConnectionCopy;    // are we copying between different connections?
 
         ::com::sun::star::lang::Locale  m_aLocale;
         OUString                 m_sName;    // for a table the name is composed
         OUString                 m_sSourceName;
         OUString                 m_aKeyName;
-        TOTypeInfoSP                    m_pTypeInfo; // default type
-        sal_Bool                        m_bAddPKFirstTime;
-        sal_Int16                       m_nOperation;
-        Wizard_Button_Style             m_ePressed;
-        sal_Bool                        m_bCreatePrimaryKeyColumn;
-        sal_Bool                        m_bUseHeaderLine;
+        TOTypeInfoSP             m_pTypeInfo; // default type
+        bool                     m_bAddPKFirstTime;
+        sal_Int16                m_nOperation;
+        Wizard_Button_Style      m_ePressed;
+        bool                     m_bCreatePrimaryKeyColumn;
+        bool                     m_bUseHeaderLine;
 
     private:
         DECL_LINK( ImplPrevHdl  , void* );
         DECL_LINK( ImplNextHdl  , void* );
         DECL_LINK( ImplOKHdl    , void* );
         DECL_LINK( ImplActivateHdl, void* );
-        sal_Bool CheckColumns(sal_Int32& _rnBreakPos);
+        bool CheckColumns(sal_Int32& _rnBreakPos);
         void loadData( const ICopyTableSourceObject& _rSourceObject,
                        ODatabaseExport::TColumns& _rColumns,
                        ODatabaseExport::TColumnVector& _rColVector );
         void construct();
         // need for table creation
-        void appendColumns( ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, sal_Bool _bKeyColumns = sal_False ) const;
+        void appendColumns( ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, bool _bKeyColumns = false ) const;
         void appendKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup,const ODatabaseExport::TColumnVector* _pVec) const;
         // checks if the type is supported in the destination database
-        sal_Bool supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType);
+        bool supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType);
 
         void    impl_loadSourceData();
 
@@ -327,7 +327,7 @@ namespace dbaui
         virtual long        DeactivatePage() SAL_OVERRIDE;
         OKButton&           GetOKButton() { return m_pbFinish; }
         Wizard_Button_Style GetPressedButton() const { return m_ePressed; }
-        void                EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable);
+        void                EnableButton(Wizard_Button_Style eStyle, bool bEnable);
         void                AddWizardPage(OWizardPage* pPage); // delete page from OCopyTableWizard
         void                RemoveWizardPage(OWizardPage* pPage); // Page goes again to user
         void                CheckButtons(); // checks which button can be disabled, enabled
@@ -336,8 +336,8 @@ namespace dbaui
         // when not the value is COLUMN_POSITION_NOT_FOUND == (sal_uInt32)-1
         ODatabaseExport::TPositions GetColumnPositions()    const { return m_vColumnPos; }
         ::std::vector<sal_Int32>    GetColumnTypes()        const { return m_vColumnTypes; }
-        sal_Bool                    UseHeaderLine()         const { return m_bUseHeaderLine; }
-        void                        setUseHeaderLine(sal_Bool _bUseHeaderLine) { m_bUseHeaderLine = _bUseHeaderLine; }
+        bool                        UseHeaderLine()         const { return m_bUseHeaderLine; }
+        void                        setUseHeaderLine(bool _bUseHeaderLine) { m_bUseHeaderLine = _bUseHeaderLine; }
 
         void insertColumn(sal_Int32 _nPos,OFieldDescription* _pField);
 
@@ -353,7 +353,7 @@ namespace dbaui
 
         /** returns whether a primary key should be created in the target database
         */
-        sal_Bool        shouldCreatePrimaryKey() const;
+        bool            shouldCreatePrimaryKey() const;
         void            setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName );
 
         static bool     supportsPrimaryKey( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
@@ -399,7 +399,7 @@ namespace dbaui
                                             const OUString&  _sColumnName,
                                             const OUString&  _sExtraChars,
                                             sal_Int32               _nMaxNameLen);
-        TOTypeInfoSP convertType(const TOTypeInfoSP&_pType,sal_Bool& _bNotConvert);
+        TOTypeInfoSP convertType(const TOTypeInfoSP&_pType, bool& _bNotConvert);
 
         OUString createUniqueName(const OUString& _sName);
 

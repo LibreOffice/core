@@ -64,8 +64,8 @@ namespace dbaui
 
         long nOldDataPos;
 
-        sal_Bool bSaveOnMove;
-        sal_Bool bReadOnly;
+        bool bSaveOnMove;
+        bool bReadOnly;
 
         // helper class
         class ClipboardInvalidator
@@ -111,14 +111,14 @@ namespace dbaui
         virtual void DeleteRows() SAL_OVERRIDE;
         virtual void InsertNewRows( long nRow ) SAL_OVERRIDE;
 
-        virtual sal_Bool IsPrimaryKeyAllowed( long nRow ) SAL_OVERRIDE;
-        virtual sal_Bool IsInsertNewAllowed( long nRow ) SAL_OVERRIDE;
-        virtual sal_Bool IsDeleteAllowed( long nRow ) SAL_OVERRIDE;
+        virtual bool IsPrimaryKeyAllowed( long nRow ) SAL_OVERRIDE;
+        virtual bool IsInsertNewAllowed( long nRow ) SAL_OVERRIDE;
+        virtual bool IsDeleteAllowed( long nRow ) SAL_OVERRIDE;
 
         void ClearModified();
 
-        void SetPrimaryKey( sal_Bool bSet );
-        sal_Bool IsPrimaryKey();
+        void SetPrimaryKey( bool bSet );
+        bool IsPrimaryKey();
 
         DECL_LINK(ControlPreNotifyHdl, NotifyEvent*);
 
@@ -135,11 +135,11 @@ namespace dbaui
             if (pDescrWin && pActRow)
                 pDescrWin->DisplayData(pActRow->GetActFieldDescr());
         }
-        sal_Bool SaveCurRow();
+        bool SaveCurRow();
         void SwitchType( const TOTypeInfoSP& _pType );
 
         /// force displaying of the given row
-        void DisplayData( long nRow, sal_Bool bGrabFocus = sal_True );
+        void DisplayData( long nRow, bool bGrabFocus = true );
 
         virtual void SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) SAL_OVERRIDE;
         virtual void SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rSaveData ) SAL_OVERRIDE;
@@ -153,25 +153,25 @@ namespace dbaui
 
         ::boost::shared_ptr<OTableRow>         GetActRow(){ return pActRow; }
         void CellModified( long nRow, sal_uInt16 nColId );
-        void SetReadOnly( sal_Bool bRead=sal_True );
+        void SetReadOnly( bool bRead=true );
 
         virtual void Init() SAL_OVERRIDE;
         virtual void DeactivateCell(bool bUpdate = true) SAL_OVERRIDE;
 
-        sal_Bool IsCutAllowed( long nRow = -1 );
-        sal_Bool IsCopyAllowed( long nRow = -1 );
-        sal_Bool IsPasteAllowed( long nRow = -1 );
-        sal_Bool IsReadOnly();
+        bool IsCutAllowed( long nRow = -1 );
+        bool IsCopyAllowed( long nRow = -1 );
+        bool IsPasteAllowed( long nRow = -1 );
+        bool IsReadOnly();
         OFieldDescription* GetFieldDescr( long nRow );
 
         // window overloads
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
         // IClipboardTest
-        virtual sal_Bool isCutAllowed() SAL_OVERRIDE { return IsCutAllowed(); }
-        virtual sal_Bool isCopyAllowed() SAL_OVERRIDE { return IsCopyAllowed(); }
-        virtual sal_Bool isPasteAllowed() SAL_OVERRIDE { return IsPasteAllowed(); }
-        virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
+        virtual bool isCutAllowed() SAL_OVERRIDE { return IsCutAllowed(); }
+        virtual bool isCopyAllowed() SAL_OVERRIDE { return IsCopyAllowed(); }
+        virtual bool isPasteAllowed() SAL_OVERRIDE { return IsPasteAllowed(); }
+        virtual bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
 
         virtual void cut() SAL_OVERRIDE;
         virtual void copy() SAL_OVERRIDE;
@@ -188,9 +188,9 @@ namespace dbaui
         void InitCellController();
         sal_Int32 HasFieldName( const OUString& rFieldName );
         OUString GenerateName( const OUString& rName );
-        sal_Bool SetDataPtr( long nRow );
+        bool SetDataPtr( long nRow );
 
-        sal_Bool SaveData(long nRow, sal_uInt16 nColumnId);
+        bool SaveData(long nRow, sal_uInt16 nColumnId);
         /** AdjustFieldDescription set the needed values for the description
             @param  _pFieldDesc     the field description where to set the values
             @param  _rMultiSel      contains the postions which changed for undo/redo
@@ -201,8 +201,8 @@ namespace dbaui
         void AdjustFieldDescription( OFieldDescription* _pFieldDesc,
                                      MultiSelection& _rMultiSel,
                                      sal_Int32 _nPos,
-                                     sal_Bool _bSet,
-                                     sal_Bool _bPrimaryKey);
+                                     bool _bSet,
+                                     bool _bPrimaryKey);
         /** InvalidateFeatures invalidates the slots SID_UNDO | SID_REDO | SID_SAVEDOC
         */
         void InvalidateFeatures();

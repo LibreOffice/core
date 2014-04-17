@@ -31,7 +31,7 @@ namespace dbaui
     OUString OJoinExchObj::m_sJoinFormat;
 
     // class OJoinExchObj
-    OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource,sal_Bool _bFirstEntry)
+    OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource,bool _bFirstEntry)
         :m_bFirstEntry(_bFirstEntry)
         ,m_jxdSourceDescription(jxdSource)
         ,m_pDragListener(NULL)
@@ -56,7 +56,7 @@ namespace dbaui
         m_pDragListener = NULL;
     }
 
-    sal_Bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID)
+    bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID)
     {
         DataFlavorExVector::const_iterator aCheckEnd = _rFormats.end();
         for (   DataFlavorExVector::const_iterator aCheck = _rFormats.begin();
@@ -65,9 +65,9 @@ namespace dbaui
             )
         {
             if ( _nSlotID == aCheck->mnSotId )
-                return sal_True;
+                return true;
         }
-        return sal_False;
+        return false;
     }
 
     OJoinExchangeData OJoinExchObj::GetSourceDescription(const Reference< XTransferable >& _rxObject)

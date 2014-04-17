@@ -71,7 +71,7 @@ public:
     OUString GetUser();
 
     // must be overloaded by subclasses, but it isn't pure virtual
-    virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
+    virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
 
     // <method>OGenericAdministrationPage::fillControls</method>
     virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;

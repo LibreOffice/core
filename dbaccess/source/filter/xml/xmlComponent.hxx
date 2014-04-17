@@ -30,7 +30,7 @@ namespace dbaxml
         OUString m_sName;
         OUString m_sHREF;
         OUString m_sComponentServiceName;
-        sal_Bool        m_bAsTemplate;
+        bool        m_bAsTemplate;
 
         ODBFilter& GetOwnImport();
     public:

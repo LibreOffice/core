@@ -413,14 +413,14 @@ OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const OUString& _
 // ODocumentDefinition
 
 ODocumentDefinition::ODocumentDefinition( const Reference< XInterface >& _rxContainer, const Reference< XComponentContext >& _xORB,
-                                          const TContentPtr& _pImpl, sal_Bool _bForm )
+                                          const TContentPtr& _pImpl, bool _bForm )
     :OContentHelper(_xORB,_rxContainer,_pImpl)
     ,OPropertyStateContainer(OContentHelper::rBHelper)
     ,m_pInterceptor(NULL)
     ,m_bForm(_bForm)
-    ,m_bOpenInDesign(sal_False)
-    ,m_bInExecute(sal_False)
-    ,m_bRemoveListener(sal_False)
+    ,m_bOpenInDesign(false)
+    ,m_bInExecute(false)
+    ,m_bRemoveListener(false)
     ,m_pClientHelper(NULL)
 {
     registerProperties();
@@ -563,10 +563,10 @@ IPropertyArrayHelper* ODocumentDefinition::createArrayHelper( ) const
 
 class OExecuteImpl
 {
-    sal_Bool& m_rbSet;
+    bool& m_rbSet;
 public:
-    OExecuteImpl(sal_Bool& _rbSet) : m_rbSet(_rbSet){ m_rbSet=sal_True; }
-    ~OExecuteImpl(){ m_rbSet = sal_False; }
+    OExecuteImpl(bool& _rbSet) : m_rbSet(_rbSet){ m_rbSet=true; }
+    ~OExecuteImpl(){ m_rbSet = false; }
 };
 
 namespace
@@ -972,9 +972,9 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 {
     Any aRet;
 
-    sal_Bool bOpen = aCommand.Name == "open";
-    sal_Bool bOpenInDesign = aCommand.Name == "openDesign";
-    sal_Bool bOpenForMail = aCommand.Name == "openForMail";
+    bool bOpen = aCommand.Name == "open";
+    bool bOpenInDesign = aCommand.Name == "openDesign";
+    bool bOpenForMail = aCommand.Name == "openForMail";
     if ( bOpen || bOpenInDesign || bOpenForMail )
     {
         // opening the document involves a lot of VCL code, which is not thread-safe, but needs the SolarMutex locked.
@@ -1224,11 +1224,11 @@ void ODocumentDefinition::onCommandInsert( const OUString& _sURL, const Referenc
     aGuard.clear();
 }
 
-sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
+bool ODocumentDefinition::save(bool _bApprove)
 {
     // default handling: instantiate an interaction handler and let it handle the parameter request
     if ( !m_bOpenInDesign )
-        return sal_False;
+        return false;
     try
     {
 
@@ -1277,9 +1277,9 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
             xHandler->handle(xRequest);
 
             if ( pAbort->wasSelected() )
-                return sal_False;
+                return false;
             if  ( pDisApprove->wasSelected() )
-                return sal_True;
+                return true;
             if ( pDocuSave && pDocuSave->wasSelected() )
             {
                 Reference<XNameContainer> xNC( pDocuSave->getContent(), UNO_QUERY_THROW );
@@ -1307,21 +1307,21 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
     {
         OSL_FAIL("ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool ODocumentDefinition::saveAs()
+bool ODocumentDefinition::saveAs()
 {
     // default handling: instantiate an interaction handler and let it handle the parameter request
     if ( !m_bOpenInDesign )
-        return sal_False;
+        return false;
 
     {
         osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
         if ( m_pImpl->m_aProps.aTitle.isEmpty() )
         {
             aGuard.clear();
-            return save(sal_False); // (sal_False) : we don't want an approve dialog
+            return save(false); // (sal_False) : we don't want an approve dialog
         }
     }
     try
@@ -1351,9 +1351,9 @@ sal_Bool ODocumentDefinition::saveAs()
             xHandler->handle(xRequest);
 
             if ( pAbort->wasSelected() )
-                return sal_False;
+                return false;
             if  ( pDisApprove->wasSelected() )
-                return sal_True;
+                return true;
             if ( pDocuSave->wasSelected() )
             {
                 ::osl::MutexGuard aGuard(m_aMutex);
@@ -1414,7 +1414,7 @@ sal_Bool ODocumentDefinition::saveAs()
     {
         OSL_FAIL("ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
     }
-    return sal_True;
+    return true;
 }
 
 namespace
@@ -1461,7 +1461,7 @@ namespace
     }
 }
 
-sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
+bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
 {
     bool bAllowDocumentMacros = !m_pImpl->m_pDataSource
                             ||  ( m_pImpl->m_pDataSource->determineEmbeddedMacros() == ODatabaseModelImpl::eSubDocumentMacros );
@@ -1522,8 +1522,8 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
 
     // create the OutplaceFrameProperties, and put them into the descriptor of the embedded object
     ::comphelper::NamedValueCollection OutplaceFrameProperties;
-    OutplaceFrameProperties.put( "TopWindow", (sal_Bool)sal_True );
-    OutplaceFrameProperties.put( "SupportPersistentWindowState", (sal_Bool)sal_True );
+    OutplaceFrameProperties.put( "TopWindow", true );
+    OutplaceFrameProperties.put( "SupportPersistentWindowState", true );
 
     Reference< XFrame > xParentFrame;
     if ( m_pImpl->m_pDataSource )
@@ -1536,7 +1536,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
         if ( xCloseable.is() )
         {
             xCloseable->addCloseListener(this);
-            m_bRemoveListener = sal_True;
+            m_bRemoveListener = true;
         }
     }
     OSL_ENSURE( xParentFrame.is(), "ODocumentDefinition::fillLoadArgs: no parent frame!" );
@@ -1546,10 +1546,10 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     aEmbeddedDescriptor.put( "OutplaceFrameProperties", OutplaceFrameProperties.getNamedValues() );
 
     // tell the embedded object to have (or not have) script support
-    aEmbeddedDescriptor.put( "EmbeddedScriptSupport", (sal_Bool)objectSupportsEmbeddedScripts() );
+    aEmbeddedDescriptor.put( "EmbeddedScriptSupport", objectSupportsEmbeddedScripts() );
 
     // tell the embedded object to not participate in the document recovery game - the DB doc will handle it
-    aEmbeddedDescriptor.put( "DocumentRecoverySupport", (sal_Bool)sal_False );
+    aEmbeddedDescriptor.put( "DocumentRecoverySupport", false );
 
     // pass the descriptor of the embedded object to the caller
     aEmbeddedDescriptor >>= _out_rEmbeddedObjectDescriptor;
@@ -1583,13 +1583,13 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
         {
             Reference< XEmbeddedObjectCreator> xEmbedFactory = OOoEmbeddedObjectFactory::create(m_aContext);
             OUString sDocumentService;
-            sal_Bool bSetSize = sal_False;
+            bool bSetSize = false;
             sal_Int32 nEntryConnectionMode = EntryInitModes::DEFAULT_INIT;
             Sequence< sal_Int8 > aClassID = _aClassID;
             if ( aClassID.getLength() )
             {
                 nEntryConnectionMode = EntryInitModes::TRUNCATE_INIT;
-                bSetSize = sal_True;
+                bSetSize = true;
             }
             else
             {
@@ -1914,7 +1914,7 @@ sal_Bool SAL_CALL ODocumentDefinition::close(  ) throw (WrappedTargetException, 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     try
     {
         bSuccess = impl_close_throw();
@@ -1975,10 +1975,10 @@ Reference< XStorage> ODocumentDefinition::getContainerStorage() const
         :   Reference< XStorage>();
 }
 
-sal_Bool ODocumentDefinition::isModified()
+bool ODocumentDefinition::isModified()
 {
     osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( m_xEmbeddedObject.is() )
     {
         Reference<XModifiable> xModel(getComponent(),UNO_QUERY);
@@ -2014,7 +2014,7 @@ bool ODocumentDefinition::prepareClose()
             // document has not yet been activated, i.e. has no UI, yet
             return true;
 
-        sal_Bool bCouldSuspend = xController->suspend( sal_True );
+        bool bCouldSuspend = xController->suspend( sal_True );
         if ( !bCouldSuspend )
             // controller vetoed the closing
             return false;
@@ -2027,7 +2027,7 @@ bool ODocumentDefinition::prepareClose()
                 Reference< XTopWindow > xTopWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
                 xTopWindow->toFront();
             }
-            if ( !save( sal_True ) )
+            if ( !save( true ) )
             {
                 if ( bCouldSuspend )
                     // revert suspension
@@ -2119,7 +2119,7 @@ void SAL_CALL ODocumentDefinition::disposing( const lang::EventObject& /*Source*
 }
 
 void ODocumentDefinition::firePropertyChange( sal_Int32 i_nHandle, const Any& i_rNewValue, const Any& i_rOldValue,
-        sal_Bool i_bVetoable, const NotifierAccess )
+        bool i_bVetoable, const NotifierAccess )
 {
     fire( &i_nHandle, &i_rNewValue, &i_rOldValue, 1, i_bVetoable );
 }
@@ -2132,15 +2132,15 @@ NameChangeNotifier::NameChangeNotifier( ODocumentDefinition& i_rDocumentDefiniti
     ,m_aNewValue( makeAny( i_rNewName ) )
     ,m_rClearForNotify( i_rClearForNotify )
 {
-    impl_fireEvent_throw( sal_True );
+    impl_fireEvent_throw( true );
 }
 
 NameChangeNotifier::~NameChangeNotifier()
 {
-    impl_fireEvent_throw( sal_False );
+    impl_fireEvent_throw( false );
 }
 
-void NameChangeNotifier::impl_fireEvent_throw( const sal_Bool i_bVetoable )
+void NameChangeNotifier::impl_fireEvent_throw( const bool i_bVetoable )
 {
     m_rClearForNotify.clear();
     m_rDocumentDefinition.firePropertyChange(

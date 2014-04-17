@@ -141,8 +141,8 @@ Reference< XInterface > SAL_CALL OTableController::Create(const Reference<XMulti
 OTableController::OTableController(const Reference< XComponentContext >& _rM) : OTableController_BASE(_rM)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_pTypeInfo()
-    ,m_bAllowAutoIncrementValue(sal_False)
-    ,m_bNew(sal_True)
+    ,m_bAllowAutoIncrementValue(false)
+    ,m_bNew(true)
 {
 
     InvalidateAll();
@@ -252,11 +252,11 @@ void OTableController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
             break;
         case ID_BROWSER_SAVEASDOC:
-            doSaveDoc(sal_True);
+            doSaveDoc(true);
             break;
         case ID_BROWSER_SAVEDOC:
             static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->SaveCurRow();
-            doSaveDoc(sal_False);
+            doSaveDoc(false);
             break;
         case ID_BROWSER_CUT:
             static_cast<OTableDesignView*>(getView())->cut();
@@ -276,7 +276,7 @@ void OTableController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
     InvalidateFeature(_nId);
 }
 
-sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
+bool OTableController::doSaveDoc(bool _bSaveAs)
 {
     if (!isConnected())
         reconnect(true); // ask the user for a new connection
@@ -286,7 +286,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     {
         OUString aMessage(ModuleRes(STR_TABLEDESIGN_CONNECTION_MISSING));
         OSQLWarningBox( getView(), aMessage ).Execute();
-        return sal_False;
+        return false;
     }
 
     // check if a column exists
@@ -295,7 +295,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     Reference<XNameAccess> xTables;
     OUString sCatalog, sSchema;
 
-    sal_Bool bNew = m_sName.isEmpty();
+    bool bNew = m_sName.isEmpty();
     bNew = bNew || m_bNew || _bSaveAs;
 
     try
@@ -320,7 +320,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::TABLE );
             OSaveAsDlg aDlg( getView(), CommandType::TABLE, getORB(), getConnection(), aDefaultName, aNameChecker );
             if ( aDlg.Execute() != RET_OK )
-                return sal_False;
+                return false;
 
             m_sName = aDlg.getName();
             sCatalog = aDlg.getCatalog();
@@ -329,22 +329,22 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
 
         // did we get a name
         if(m_sName.isEmpty())
-            return sal_False;
+            return false;
     }
     catch(Exception&)
     {
         OSL_FAIL("OTableController::doSaveDoc: nothing is expected to happen here!");
     }
 
-    sal_Bool bAlter = sal_False;
-    sal_Bool bError = sal_False;
+    bool bAlter = false;
+    bool bError = false;
     SQLExceptionInfo aInfo;
     try
     {
         // check the columns for double names
         if(!checkColumns(bNew || !xTables->hasByName(m_sName)))
         {
-            return sal_False;
+            return false;
         }
 
         Reference<XPropertySet> xTable;
@@ -394,7 +394,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         }
         else if(m_xTable.is())
         {
-            bAlter = sal_True;
+            bAlter = true;
             alterColumns();
         }
         reSyncRows();
@@ -418,11 +418,11 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         OSQLMessageBox aDlg( getView(), OUString( ModuleRes( STR_ERROR_DURING_CREATION ) ), sText, WB_OK, OSQLMessageBox::Error );
 
         aDlg.Execute();
-        bError = sal_True;
+        bError = true;
     }
     catch( const Exception& )
     {
-        bError = sal_True;
+        bError = true;
         DBG_UNHANDLED_EXCEPTION();
     }
 
@@ -451,7 +451,7 @@ void OTableController::doEditIndexes()
         if (RET_YES != aAsk.Execute())
             return;
 
-        if (!doSaveDoc(sal_False))
+        if (!doSaveDoc(false))
             return;
 
         OSL_ENSURE(!m_bNew && !isModified(), "OTableController::doEditIndexes: what the hell did doSaveDoc do?");
@@ -556,7 +556,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
         return sal_False;
     if ( getView() )
         static_cast<OTableDesignView*>(getView())->GrabFocus();
-    sal_Bool bCheck = sal_True;
+    bool bCheck = true;
     if ( isModified() )
     {
         ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),
@@ -569,10 +569,10 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
                 case RET_YES:
                     Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
                     if ( isModified() )
-                        bCheck = sal_False; // when we save the table this must be false else some press cancel
+                        bCheck = false; // when we save the table this must be false else some press cancel
                     break;
                 case RET_CANCEL:
-                    bCheck = sal_False;
+                    bCheck = false;
                 default:
                     break;
             }
@@ -598,7 +598,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
                     }
                     break;
                 case RET_CANCEL:
-                    bCheck = sal_False;
+                    bCheck = false;
                 default:
                     break;
             }
@@ -634,7 +634,7 @@ void SAL_CALL OTableController::disposing( const EventObject& _rSource ) throw(R
     {   // some deleted our table so we have a new one
         stopTableListening();
         m_xTable    = NULL;
-        m_bNew      = sal_True;
+        m_bNew      = true;
         setModified(sal_True);
     }
     else
@@ -669,7 +669,7 @@ void OTableController::losingConnection( )
     assignTable();
     if(!m_xTable.is())
     {
-        m_bNew      = sal_True;
+        m_bNew      = true;
         setModified(sal_True);
     }
     InvalidateAll();
@@ -680,7 +680,7 @@ TOTypeInfoSP OTableController::getTypeInfoByType(sal_Int32 _nDataType) const
     return queryTypeInfoByType(_nDataType,m_aTypeInfo);
 }
 
-void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_Bool _bNew,sal_Bool _bKeyColumns)
+void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup, bool _bNew, bool _bKeyColumns)
 {
     try
     {
@@ -741,7 +741,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
     }
 }
 
-void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup,sal_Bool _bNew)
+void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup, bool _bNew)
 {
     if(!_rxSup.is())
         return; // the database doesn't support keys
@@ -776,7 +776,7 @@ void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup,sal_Boo
     Reference<XColumnsSupplier> xColSup(xKey,UNO_QUERY);
     if(xColSup.is())
     {
-        appendColumns(xColSup,_bNew,sal_True);
+        appendColumns(xColSup,_bNew,true);
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         if(xColumns->hasElements())
             xAppend->appendByDescriptor(xKey);
@@ -802,7 +802,7 @@ void OTableController::loadData()
         // For Add only the empty rows may be editable
         // For Add and Drop all rows can be edited
         //  sal_Bool bReadOldRow = xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn();
-        sal_Bool bIsAlterAllowed = isAlterAllowed();
+        bool bIsAlterAllowed = isAlterAllowed();
         Sequence< OUString> aColumns = xColumns->getElementNames();
         const OUString* pIter    = aColumns.getConstArray();
         const OUString* pEnd     = pIter + aColumns.getLength();
@@ -818,7 +818,7 @@ void OTableController::loadData()
             sal_Int32 nFormatKey    = 0;
             sal_Int32 nAlign        = 0;
 
-            sal_Bool bIsAutoIncrement = false, bIsCurrency = false;
+            bool bIsAutoIncrement = false, bIsCurrency = false;
             OUString sName,sDescription,sTypeName,sHelpText;
             Any aControlDefault;
 
@@ -846,7 +846,7 @@ void OTableController::loadData()
             pTabEdRow.reset(new OTableRow());
             pTabEdRow->SetReadOnly(!bIsAlterAllowed);
             // search for type
-            sal_Bool bForce;
+            bool bForce;
             OUString sCreate("x");
             TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,sCreate,nPrecision,nScale,bIsAutoIncrement,bForce);
             if ( !pTypeInfo.get() )
@@ -889,7 +889,7 @@ void OTableController::loadData()
                 {
                     if((*rowIter)->GetActFieldDescr()->GetName() == *pKeyBegin)
                     {
-                        (*rowIter)->SetPrimaryKey(sal_True);
+                        (*rowIter)->SetPrimaryKey(true);
                         break;
                     }
                 }
@@ -919,10 +919,10 @@ Reference<XNameAccess> OTableController::getKeyColumns() const
     return getPrimaryKeyColumns_throw(m_xTable);
 }
 
-sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::sdbc::SQLException)
+bool OTableController::checkColumns(bool _bNew) throw(::com::sun::star::sdbc::SQLException)
 {
-    sal_Bool bOk = sal_True;
-    sal_Bool bFoundPKey = sal_False;
+    bool bOk = true;
+    bool bFoundPKey = false;
     Reference< XDatabaseMetaData > xMetaData = getMetaData( );
     DatabaseMetaData aMetaData( getConnection() );
 
@@ -945,7 +945,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
                     OUString strMessage = ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME);
                     strMessage = strMessage.replaceFirst("$column$", pFieldDesc->GetName());
                     OSQLWarningBox( getView(), strMessage ).Execute();
-                    return sal_False;
+                    return false;
                 }
             }
         }
@@ -968,11 +968,11 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
             pNewRow->SetFieldType( pTypeInfo );
             OFieldDescription* pActFieldDescr = pNewRow->GetActFieldDescr();
 
-            pActFieldDescr->SetAutoIncrement(sal_False);
+            pActFieldDescr->SetAutoIncrement(false);
             pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
 
             pActFieldDescr->SetName( createUniqueName(OUString("ID") ));
-            pActFieldDescr->SetPrimaryKey( sal_True );
+            pActFieldDescr->SetPrimaryKey( true );
             m_vRowList.insert(m_vRowList.begin(),pNewRow);
 
             static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->Invalidate();
@@ -980,7 +980,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
         }
         break;
         case RET_CANCEL:
-            bOk = sal_False;
+            bOk = false;
             break;
         }
     }
@@ -1004,7 +1004,7 @@ void OTableController::alterColumns()
     Reference<XAppend> xAppend(xColumns,UNO_QUERY);     // can be null
     Reference<XDataDescriptorFactory> xColumnFactory(xColumns,UNO_QUERY); // can be null
 
-    sal_Bool bReload = sal_False; // refresh the data
+    bool bReload = false; // refresh the data
 
     // contains all columns names which are already handled those which are not in the list will be deleted
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
@@ -1034,7 +1034,7 @@ void OTableController::alterColumns()
             OSL_ENSURE(xColumn.is(),"Column is null!");
 
             sal_Int32 nType=0,nPrecision=0,nScale=0,nNullable=0;
-            sal_Bool bAutoIncrement = false;
+            bool bAutoIncrement = false;
             OUString sTypeName,sDescription;
 
             xColumn->getPropertyValue(PROPERTY_TYPE)            >>= nType;
@@ -1068,7 +1068,7 @@ void OTableController::alterColumns()
                 xNewColumn = xColumnFactory->createDataDescriptor();
                 ::dbaui::setColumnProperties(xNewColumn,pField);
                 // first try to alter the column
-                sal_Bool bNotOk = sal_False;
+                bool bNotOk = false;
                 try
                 {
                     // first try if we can alter the column
@@ -1108,7 +1108,7 @@ void OTableController::alterColumns()
                 xNewColumn = NULL;
                 if(xColumns->hasByName(pField->GetName()))
                     xColumns->getByName(pField->GetName()) >>= xColumn;
-                bReload = sal_True;
+                bReload = true;
             }
 
         }
@@ -1134,7 +1134,7 @@ void OTableController::alterColumns()
             }
             catch(const SQLException&)
             { // we couldn't alter the column so we have to add new columns
-                bReload = sal_True;
+                bReload = true;
                 if(xDrop.is() && xAppend.is())
                 {
                     OUString aMessage(ModuleRes(STR_TABLEDESIGN_ALTER_ERROR));
@@ -1155,7 +1155,7 @@ void OTableController::alterColumns()
             }
         }
         else
-            bReload = sal_True;
+            bReload = true;
     }
     // alter column settings
     aIter = m_vRowList.begin();
@@ -1214,7 +1214,7 @@ void OTableController::alterColumns()
                     }
                     else
                     {
-                        bReload = sal_True;
+                        bReload = true;
                         continue;
                     }
                 }
@@ -1272,8 +1272,8 @@ void OTableController::alterColumns()
     }
 
     // check if we have to do something with the primary key
-    sal_Bool bNeedDropKey = sal_False;
-    sal_Bool bNeedAppendKey = sal_False;
+    bool bNeedDropKey = false;
+    bool bNeedAppendKey = false;
     if ( xKeyColumns.is() )
     {
         aIter = m_vRowList.begin();
@@ -1288,21 +1288,21 @@ void OTableController::alterColumns()
                 &&  !xKeyColumns->hasByName( pField->GetName() )
                 )
             {   // new primary key column inserted which isn't already in the columns selection
-                bNeedDropKey = bNeedAppendKey = sal_True;
+                bNeedDropKey = bNeedAppendKey = true;
                 break;
             }
             else if (   !pField->IsPrimaryKey()
                     &&  xKeyColumns->hasByName( pField->GetName() )
                     )
             {   // found a column which currently is in the primary key, but is marked not to be anymore
-                bNeedDropKey = bNeedAppendKey = sal_True;
+                bNeedDropKey = bNeedAppendKey = true;
                 break;
             }
         }
     }
     else
     {   // no primary key available so we check if we should create one
-        bNeedAppendKey = sal_True;
+        bNeedAppendKey = true;
     }
 
     if ( bNeedDropKey && xKeyColumns.is() && xKeyColumns->getElementNames().getLength() )
@@ -1311,7 +1311,7 @@ void OTableController::alterColumns()
     if ( bNeedAppendKey )
     {
         Reference< XKeysSupplier > xKeySup( m_xTable, UNO_QUERY );
-        appendPrimaryKey( xKeySup ,sal_False);
+        appendPrimaryKey( xKeySup ,false);
     }
 
     reSyncRows();
@@ -1394,7 +1394,7 @@ void OTableController::assignTable()
                     {
                         ::std::for_each(m_vRowList.begin(),m_vRowList.end(),boost::bind( &OTableRow::SetReadOnly, _1, boost::cref( sal_True )));
                     }
-                    m_bNew = sal_False;
+                    m_bNew = false;
                     // be notified when the table is in disposing
                     InvalidateAll();
                 }
@@ -1403,10 +1403,10 @@ void OTableController::assignTable()
     }
 }
 
-sal_Bool OTableController::isAddAllowed() const
+bool OTableController::isAddAllowed() const
 {
     Reference<XColumnsSupplier> xColsSup(m_xTable,UNO_QUERY);
-    sal_Bool bAddAllowed = !m_xTable.is();
+    bool bAddAllowed = !m_xTable.is();
     if(xColsSup.is())
         bAddAllowed = Reference<XAppend>(xColsSup->getColumns(),UNO_QUERY).is();
 
@@ -1418,16 +1418,16 @@ sal_Bool OTableController::isAddAllowed() const
     catch(Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
-        bAddAllowed = sal_False;
+        bAddAllowed = false;
     }
 
     return bAddAllowed;
 }
 
-sal_Bool OTableController::isDropAllowed() const
+bool OTableController::isDropAllowed() const
 {
     Reference<XColumnsSupplier> xColsSup(m_xTable,UNO_QUERY);
-    sal_Bool bDropAllowed = !m_xTable.is();
+    bool bDropAllowed = !m_xTable.is();
     if(xColsSup.is())
     {
         Reference<XNameAccess> xNameAccess = xColsSup->getColumns();
@@ -1440,16 +1440,16 @@ sal_Bool OTableController::isDropAllowed() const
     return bDropAllowed;
 }
 
-sal_Bool OTableController::isAlterAllowed() const
+bool OTableController::isAlterAllowed() const
 {
-    sal_Bool bAllowed(!m_xTable.is() || Reference<XAlterTable>(m_xTable,UNO_QUERY).is());
+    bool bAllowed(!m_xTable.is() || Reference<XAlterTable>(m_xTable,UNO_QUERY).is());
     return bAllowed;
 }
 
 void OTableController::reSyncRows()
 {
-    sal_Bool bAlterAllowed  = isAlterAllowed();
-    sal_Bool bAddAllowed    = isAddAllowed();
+    bool bAlterAllowed  = isAlterAllowed();
+    bool bAddAllowed    = isAddAllowed();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_vRowList.begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_vRowList.end();
     for(;aIter != aEnd;++aIter)

@@ -414,7 +414,7 @@ void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const OUString& 
         if(m_aKeyIter == m_aKeyMap.find(nBookmark) && m_aKeyIter != m_aKeyMap.end())
             ++m_aKeyIter;
         m_aKeyMap.erase(nBookmark);
-        m_bDeleted = sal_True;
+        m_bDeleted = true;
     }
 }
 

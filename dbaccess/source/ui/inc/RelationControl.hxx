@@ -79,7 +79,7 @@ namespace dbaui
         void Disable();
         void Invalidate();
 
-        sal_Bool SaveModified();
+        bool SaveModified();
 
         TTableWindowData::value_type getReferencingTable()  const;
 

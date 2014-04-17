@@ -47,7 +47,7 @@ OUString OWizColumnSelect::GetTitle() const { return ModuleRes(STR_WIZ_COLUMN_SE
 OWizardPage::OWizardPage( Window* pParent, const ResId& rResId )
     : TabPage(pParent,rResId)
     ,m_pParent(static_cast<OCopyTableWizard*>(pParent))
-    ,m_bFirstTime(sal_True)
+    ,m_bFirstTime(true)
 {
 }
 
@@ -110,7 +110,7 @@ void OWizColumnSelect::Reset()
     if(m_lbOrgColumnNames.GetEntryCount())
         m_lbOrgColumnNames.SelectEntryPos(0);
 
-    m_bFirstTime = sal_False;
+    m_bFirstTime = false;
 }
 
 void OWizColumnSelect::ActivatePage( )
@@ -136,7 +136,7 @@ void OWizColumnSelect::ActivatePage( )
     m_ibColumns_RH.GrabFocus();
 }
 
-sal_Bool OWizColumnSelect::LeavePage()
+bool OWizColumnSelect::LeavePage()
 {
 
     m_pParent->clearDestColumns();
@@ -155,14 +155,14 @@ sal_Bool OWizColumnSelect::LeavePage()
         )
         return m_pParent->getDestColumns()->size() != 0;
     else
-        return sal_True;
+        return true;
 }
 
 IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
 {
     MultiListBox *pLeft = NULL;
     MultiListBox *pRight = NULL;
-    sal_Bool bAll = sal_False;
+    bool bAll = false;
 
     if(pButton == &m_ibColumn_RH)
     {
@@ -178,13 +178,13 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
     {
         pLeft  = &m_lbOrgColumnNames;
         pRight = &m_lbNewColumnNames;
-        bAll   = sal_True;
+        bAll   = true;
     }
     else if(pButton == &m_ibColumns_LH)
     {
         pLeft  = &m_lbNewColumnNames;
         pRight = &m_lbOrgColumnNames;
-        bAll   = sal_True;
+        bAll   = true;
     }
     // else ????
 
@@ -282,10 +282,10 @@ void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
                                                                 _nMaxNameLen);
     OFieldDescription* pNewField = new OFieldDescription(*_pSrcField);
     pNewField->SetName(sConvertedName);
-    sal_Bool bNotConvert = sal_True;
+    bool bNotConvert = true;
     pNewField->SetType(m_pParent->convertType(_pSrcField->getSpecialTypeInfo(),bNotConvert));
     if ( !m_pParent->supportsPrimaryKey() )
-        pNewField->SetPrimaryKey(sal_False);
+        pNewField->SetPrimaryKey(false);
 
     _pListbox->SetEntryData(_pListbox->InsertEntry(sConvertedName),pNewField);
     _rRightColumns.push_back(sConvertedName);
@@ -389,7 +389,7 @@ sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
 
 void OWizColumnSelect::enableButtons()
 {
-    sal_Bool bEntries = m_lbNewColumnNames.GetEntryCount() != 0;
+    bool bEntries = m_lbNewColumnNames.GetEntryCount() != 0;
     if(!bEntries)
         m_pParent->m_mNameMapping.clear();
 

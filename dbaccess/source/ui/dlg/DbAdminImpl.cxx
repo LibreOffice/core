@@ -89,9 +89,9 @@ using namespace com::sun::star::frame;
 
 namespace
 {
-    sal_Bool implCheckItemType( SfxItemSet& _rSet, const sal_uInt16 _nId, const TypeId _nExpectedItemType )
+    bool implCheckItemType( SfxItemSet& _rSet, const sal_uInt16 _nId, const TypeId _nExpectedItemType )
     {
-        sal_Bool bCorrectType = sal_False;
+        bool bCorrectType = false;
 
         SfxItemPool* pPool = _rSet.GetPool();
         OSL_ENSURE( pPool, "implCheckItemType: invalid item pool!" );
@@ -210,11 +210,11 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     }
 }
 
-sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyValue >& _rDriverParam)
+bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyValue >& _rDriverParam)
 {
     OSL_ENSURE(m_pItemSetHelper->getOutputSet(), "ODbDataSourceAdministrationHelper::getCurrentSettings : not to be called without an example set!");
     if (!m_pItemSetHelper->getOutputSet())
-        return sal_False;
+        return false;
 
     ::std::vector< PropertyValue > aReturn;
         // collecting this in a vector because it has a push_back, in opposite to sequences
@@ -281,7 +281,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
             // two continuations (Ok and Cancel)
             ::rtl::Reference< comphelper::OInteractionAbort > pAbort = new comphelper::OInteractionAbort;
             ::rtl::Reference< dbaccess::OAuthenticationContinuation > pAuthenticate = new dbaccess::OAuthenticationContinuation;
-            pAuthenticate->setCanChangeUserName( sal_False );
+            pAuthenticate->setCanChangeUserName( false );
             pAuthenticate->setRememberPassword( RememberAuthentication_SESSION );
 
             // some knittings
@@ -300,7 +300,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
                 DBG_UNHANDLED_EXCEPTION();
             }
             if (!pAuthenticate->wasSelected())
-                return sal_False;
+                return false;
 
             sPassword = pAuthenticate->getPassword();
             if (pAuthenticate->getRememberPassword())
@@ -319,7 +319,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
     // append all the other stuff (charset etc.)
     fillDatasourceInfo(*m_pItemSetHelper->getOutputSet(), _rDriverParam);
 
-    return sal_True;
+    return true;
 }
 
 void ODbDataSourceAdministrationHelper::successfullyConnected()
@@ -454,7 +454,7 @@ OUString ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet&
     return pCollection->getType(pConnectURL->GetValue());
 }
 
-sal_Bool ODbDataSourceAdministrationHelper::hasAuthentication(const SfxItemSet& _rSet) const
+bool ODbDataSourceAdministrationHelper::hasAuthentication(const SfxItemSet& _rSet) const
 {
     return DataSourceMetaData::getAuthentication( getDatasourceType( _rSet ) ) != AuthNone;
 }
@@ -858,7 +858,7 @@ Any ODbDataSourceAdministrationHelper::implTranslateProperty(const SfxPoolItem* 
         if ( !pOptBoolItem->HasValue() )
             aValue.clear();
         else
-            aValue <<= (sal_Bool)pOptBoolItem->GetValue();
+            aValue <<= pOptBoolItem->GetValue();
     }
     else if ( pInt32Item )
     {
@@ -930,7 +930,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
         case TypeClass_BOOLEAN:
             if ( implCheckItemType( _rSet, _nId, SfxBoolItem::StaticType() ) )
             {
-                sal_Bool bVal = sal_False;
+                bool bVal = false;
                 _rValue >>= bVal;
                 _rSet.Put(SfxBoolItem(_nId, bVal));
             }
@@ -939,7 +939,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 OptionalBoolItem aItem( _nId );
                 if ( _rValue.hasValue() )
                 {
-                    sal_Bool bValue = sal_False;
+                    bool bValue = false;
                     _rValue >>= bValue;
                     aItem.SetValue( bValue );
                 }
@@ -1081,16 +1081,16 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
 
 }
 
-sal_Bool ODbDataSourceAdministrationHelper::saveChanges(const SfxItemSet& _rSource)
+bool ODbDataSourceAdministrationHelper::saveChanges(const SfxItemSet& _rSource)
 {
     // put the remembered settings into the property set
     Reference<XPropertySet> xDatasource = getCurrentDataSource();
     if ( !xDatasource.is() )
-        return sal_False;
+        return false;
 
     translateProperties(_rSource,xDatasource );
 
-    return sal_True;
+    return true;
 }
 
 void ODbDataSourceAdministrationHelper::setDataSourceOrName( const Any& _rDataSourceOrName )

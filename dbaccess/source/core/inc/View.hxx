@@ -40,7 +40,7 @@ namespace dbaccess
     public:
         View(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            sal_Bool _bCaseSensitive,
+            bool _bCaseSensitive,
             const OUString& _rCatalogName,
             const OUString& _rSchemaName,
             const OUString& _rName

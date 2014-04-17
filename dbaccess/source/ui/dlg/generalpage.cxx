@@ -57,7 +57,7 @@ namespace dbaui
         ,m_eNotSupportedKnownType       ( ::dbaccess::DST_UNKNOWN )
         ,m_pSpecialMessage              ( NULL )
         ,m_eLastMessage                 ( smNone )
-        ,m_bDisplayingInvalid           ( sal_False )
+        ,m_bDisplayingInvalid           ( false )
         ,m_bInitTypeList                ( true )
         ,m_pDatasourceType              ( NULL )
         ,m_pCollection                  ( NULL )
@@ -214,7 +214,7 @@ namespace dbaui
             m_aTypeSelectHandler.Call(this);
     }
 
-    void OGeneralPage::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
+    void OGeneralPage::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )
     {
         initializeTypeList();
 
@@ -234,7 +234,7 @@ namespace dbaui
     OUString OGeneralPageWizard::getEmbeddedDBName( const SfxItemSet& _rSet )
     {
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags( _rSet, bValid, bReadonly );
 
         // if the selection is invalid, disable everything
@@ -281,7 +281,7 @@ namespace dbaui
     OUString OGeneralPage::getDatasourceName( const SfxItemSet& _rSet )
     {
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags( _rSet, bValid, bReadonly );
 
         // if the selection is invalid, disable everything
@@ -455,12 +455,12 @@ namespace dbaui
         }
     }
 
-    void OGeneralPageDialog::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
+    void OGeneralPageDialog::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )
     {
         OGeneralPage::implInitControls( _rSet, _bSaveValue );
 
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly );
 
         m_pDatasourceType->Enable( bValid );
@@ -468,7 +468,7 @@ namespace dbaui
 
     bool OGeneralPageDialog::FillItemSet( SfxItemSet& _rCoreAttrs )
     {
-        sal_Bool bChangedSomething = sal_False;
+        bool bChangedSomething = false;
 
         sal_uInt16 nEntry = m_pDatasourceType->GetSelectEntryPos();
         OUString sURLPrefix = m_aURLPrefixes[ nEntry ];
@@ -476,7 +476,7 @@ namespace dbaui
         if ( m_pDatasourceType->GetSavedValue() != nEntry )
         {
             _rCoreAttrs.Put( SfxStringItem( DSID_CONNECTURL, sURLPrefix ) );
-            bChangedSomething = sal_True;
+            bChangedSomething = true;
         }
 
         return bChangedSomething;
@@ -520,7 +520,7 @@ namespace dbaui
             ::comphelper::getProcessComponentContext(),
             OUString( "/org.openoffice.Office.DataAccess/Policies/Features/Base" )
         ) );
-        sal_Bool bAllowCreateLocalDatabase( sal_True );
+        bool bAllowCreateLocalDatabase( true );
         OSL_VERIFY( aConfig.getNodeValue( "CreateLocalDatabase" ) >>= bAllowCreateLocalDatabase );
         if ( !bAllowCreateLocalDatabase )
             bHideCreateNew = true;
@@ -560,7 +560,7 @@ namespace dbaui
             m_pDatasourceType->GrabFocus();
     }
 
-    void OGeneralPageWizard::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
+    void OGeneralPageWizard::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )
     {
         OGeneralPage::implInitControls( _rSet, _bSaveValue );
 
@@ -568,7 +568,7 @@ namespace dbaui
         m_pEmbeddedDBType->SelectEntry( getEmbeddedDBName( _rSet ) );
 
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags( _rSet, bValid, bReadonly );
 
         SetText( OUString() );
@@ -628,20 +628,20 @@ namespace dbaui
 
     bool OGeneralPageWizard::FillItemSet(SfxItemSet& _rCoreAttrs)
     {
-        sal_Bool bChangedSomething = sal_False;
+        bool bChangedSomething = false;
 
         bool bCommitTypeSelection = true;
 
         if ( m_pRB_CreateDatabase->IsChecked() )
         {
             _rCoreAttrs.Put( SfxStringItem( DSID_CONNECTURL, OUString( "sdbc:dbase:" ) ) );
-            bChangedSomething = sal_True;
+            bChangedSomething = true;
             bCommitTypeSelection = false;
         }
         else if ( m_pRB_OpenExistingDatabase->IsChecked() )
         {
             if ( m_pRB_OpenExistingDatabase->GetSavedValue() != m_pRB_OpenExistingDatabase->IsChecked() )
-                bChangedSomething = sal_True;
+                bChangedSomething = true;
 
             // TODO
             bCommitTypeSelection = false;
@@ -657,7 +657,7 @@ namespace dbaui
                 )
             {
                 _rCoreAttrs.Put( SfxStringItem( DSID_CONNECTURL,sURLPrefix ) );
-                bChangedSomething = sal_True;
+                bChangedSomething = true;
             }
             else
                 implSetCurrentType( sURLPrefix );

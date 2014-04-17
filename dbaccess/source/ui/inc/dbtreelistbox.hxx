@@ -70,7 +70,7 @@ namespace dbaui
         Link                        m_aEditedHandler;       // called after someone edited an entry
         Link                        m_aEnterKeyHdl;
 
-        sal_Bool                    m_bHandleEnterKey;
+        bool                    m_bHandleEnterKey;
 
     private:
         void init();
@@ -82,10 +82,10 @@ namespace dbaui
     public:
         DBTreeListBox( Window* pParent
             ,WinBits nWinStyle=0
-            ,sal_Bool _bHandleEnterKey = sal_False);
+            ,bool _bHandleEnterKey = false);
         DBTreeListBox( Window* pParent
             ,const ResId& rResId
-            ,sal_Bool _bHandleEnterKey = sal_False);
+            ,bool _bHandleEnterKey = false);
         virtual ~DBTreeListBox();
 
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }

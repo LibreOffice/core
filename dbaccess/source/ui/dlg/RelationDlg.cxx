@@ -50,7 +50,7 @@ using namespace ::dbtools;
 // class ORelationDialog
 ORelationDialog::ORelationDialog( OJoinTableView* pParent,
                                  const TTableConnectionData::value_type& pConnectionData,
-                                 sal_Bool bAllowTableSelect )
+                                 bool bAllowTableSelect )
     : ModalDialog(pParent, "RelationDialog",
         "dbaccess/ui/relationdialog.ui")
     , m_pTableMap(pParent->GetTabWinMap())
@@ -196,7 +196,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    m_bTriedOneUpdate = sal_True;
+    m_bTriedOneUpdate = true;
     // this means that the original connection may be lost (if m_pConnData was not a newly created but an
     // existent conn to be modified), which we reflect by returning RET_NO (see ::Execute)
 

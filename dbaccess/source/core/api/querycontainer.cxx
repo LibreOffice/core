@@ -363,9 +363,9 @@ Reference< XContent > OQueryContainer::createObject( const OUString& _rName)
     return implCreateWrapper(_rName);
 }
 
-sal_Bool OQueryContainer::checkExistence(const OUString& _rName)
+bool OQueryContainer::checkExistence(const OUString& _rName)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( !m_bInPropertyChange )
     {
         bRet = m_xCommandDefinitions->hasByName(_rName);

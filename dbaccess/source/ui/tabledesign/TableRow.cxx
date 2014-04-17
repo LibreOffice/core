@@ -67,18 +67,18 @@ OTableRow::~OTableRow()
         delete m_pActFieldDescr;
 }
 
-void OTableRow::SetPrimaryKey( sal_Bool bSet )
+void OTableRow::SetPrimaryKey( bool bSet )
 {
     if(m_pActFieldDescr)
         m_pActFieldDescr->SetPrimaryKey(bSet);
 }
 
-sal_Bool OTableRow::IsPrimaryKey() const
+bool OTableRow::IsPrimaryKey() const
 {
     return m_pActFieldDescr && m_pActFieldDescr->IsPrimaryKey();
 }
 
-void OTableRow::SetFieldType( const TOTypeInfoSP& _pType, sal_Bool _bForce )
+void OTableRow::SetFieldType( const TOTypeInfoSP& _pType, bool _bForce )
 {
     if ( _pType.get() )
     {
@@ -87,7 +87,7 @@ void OTableRow::SetFieldType( const TOTypeInfoSP& _pType, sal_Bool _bForce )
             m_pActFieldDescr = new OFieldDescription();
             m_bOwnsDescriptions = true;
         }
-        m_pActFieldDescr->FillFromTypeInfo(_pType,_bForce,sal_True);
+        m_pActFieldDescr->FillFromTypeInfo(_pType,_bForce,true);
     }
     else
     {

@@ -111,10 +111,10 @@ void ORowSetCacheIterator::setBookmark(const ::com::sun::star::uno::Any&    _rBo
     m_aIter->second.aBookmark = _rBookmark;
 }
 
-sal_Bool ORowSetCacheIterator::isNull() const
+bool ORowSetCacheIterator::isNull() const
 {
     SAL_INFO("dbaccess", "ORowSetCacheIterator::isNull" );
-    sal_Bool bRet = !m_pCache || !m_pRowSet || m_aIter == m_pCache->m_aCacheIterators.end();
+    bool bRet = !m_pCache || !m_pRowSet || m_aIter == m_pCache->m_aCacheIterators.end();
     if ( !bRet )
     {
         bRet = ( m_pRowSet->isInsertRow()

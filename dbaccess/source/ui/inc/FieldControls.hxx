@@ -87,7 +87,7 @@ namespace dbaui
     public:
         OPropListBoxCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
-        sal_Bool IsModified() const { return GetSelectEntryPos() != GetSavedValue(); }
+        bool IsModified() const { return GetSelectEntryPos() != GetSavedValue(); }
 
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }

@@ -114,7 +114,7 @@ Sequence< OUString > OTableColumnDescriptor::getSupportedServiceNames(  ) throw 
 void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception, std::exception)
 {
     OColumn::setFastPropertyValue_NoBroadcast( nHandle, rValue );
-    ::dbaccess::notifyDataSourceModified( m_xParent, sal_True );
+    ::dbaccess::notifyDataSourceModified( m_xParent, true );
 }
 
 Reference< XInterface > SAL_CALL OTableColumnDescriptor::getParent(  ) throw (RuntimeException, std::exception)
@@ -181,7 +181,7 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
     OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_ISCURRENCY ) >>= m_bCurrency );
     OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_NAME ) >>= m_sName );
 
-    m_bRowVersion = sal_False;
+    m_bRowVersion = false;
 
     Reference< XPropertySetInfo > xPSI( _rxParserColumn->getPropertySetInfo(), UNO_SET_THROW );
     if ( xPSI->hasPropertyByName( PROPERTY_DEFAULTVALUE ) )
@@ -367,7 +367,7 @@ void OColumnWrapper::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
 sal_Bool OColumnWrapper::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle,
             const Any& rValue ) throw (IllegalArgumentException)
 {
-    sal_Bool bModified( sal_False );
+    bool bModified( false );
     if ( OColumn::isRegisteredProperty( nHandle ) )
     {
         bModified = OColumn::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
@@ -378,7 +378,7 @@ sal_Bool OColumnWrapper::convertFastPropertyValue( Any & rConvertedValue, Any & 
         if ( rOldValue != rValue )
         {
             rConvertedValue = rValue;
-            bModified = sal_True;
+            bModified = true;
         }
     }
     return bModified;
@@ -519,7 +519,7 @@ void OTableColumnDescriptorWrapper::getFastPropertyValue( Any& rValue, sal_Int32
 
 sal_Bool OTableColumnDescriptorWrapper::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw (IllegalArgumentException)
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     if ( m_bPureWrap )
     {
         // do not delegate to OColumnWrapper: It would, for the properties which were registered with registerProperty,
@@ -531,7 +531,7 @@ sal_Bool OTableColumnDescriptorWrapper::convertFastPropertyValue( Any & rConvert
         if ( rOldValue != rValue )
         {
             rConvertedValue = rValue;
-            bModified = sal_True;
+            bModified = true;
         }
     }
     else

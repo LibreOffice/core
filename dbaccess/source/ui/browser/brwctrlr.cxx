@@ -104,9 +104,9 @@ using namespace ::svt;
 #define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
     try                                                                     \
     {                                                                       \
-        successflag = sal_False;                                            \
+        successflag = false;                                                \
         action;                                                             \
-        successflag = sal_True;                                             \
+        successflag = true;                                                 \
     }                                                                       \
     catch(SQLException& e)                                                  \
     {                                                                       \
@@ -542,7 +542,7 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_sModuleIdentifier( OUString( "com.sun.star.sdb.DataSourceBrowser" ) )
     ,m_pFormControllerImpl(NULL)
     ,m_nFormActionNestingLevel(0)
-    ,m_bLoadCanceled( sal_False )
+    ,m_bLoadCanceled( false )
     ,m_bCannotSelectUnfiltered( true )
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::SbaXDataBrowserController" );
@@ -601,7 +601,7 @@ void SbaXDataBrowserController::stopFrameListening( const Reference< XFrame >& _
 
 void SbaXDataBrowserController::onStartLoading( const Reference< XLoadable >& _rxLoadable )
 {
-    m_bLoadCanceled = sal_False;
+    m_bLoadCanceled = false;
     m_bCannotSelectUnfiltered = false;
 
     Reference< XWarningsSupplier > xWarnings( _rxLoadable, UNO_QUERY );
@@ -620,7 +620,7 @@ void SbaXDataBrowserController::impl_checkForCannotSelectUnfiltered( const SQLEx
     }
 }
 
-sal_Bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _rxLoadable )
+bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _rxLoadable )
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::reloadForm" );
     WaitObject aWO(getBrowserView());
@@ -833,11 +833,11 @@ bool SbaXDataBrowserController::Construct(Window* pParent)
     return LoadForm();
 }
 
-sal_Bool SbaXDataBrowserController::LoadForm()
+bool SbaXDataBrowserController::LoadForm()
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::LoadForm" );
     reloadForm( m_xLoadable );
-    return sal_True;
+    return true;
 }
 
 void SbaXDataBrowserController::AddColumnListener(const Reference< XPropertySet > & /*xCol*/)
@@ -1099,7 +1099,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
         &&  !::comphelper::getBOOL(evt.NewValue)
         )
     {   // -> the current field isn't modified anymore, too
-        setCurrentModified( sal_False );
+        setCurrentModified( false );
     }
 
     // switching to a new record ?
@@ -1140,7 +1140,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
 void SbaXDataBrowserController::modified(const ::com::sun::star::lang::EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::modified" );
-    setCurrentModified( sal_True );
+    setCurrentModified( true );
 }
 
 void SbaXDataBrowserController::elementInserted(const ::com::sun::star::container::ContainerEvent& evt) throw( RuntimeException, std::exception )
@@ -1185,7 +1185,7 @@ sal_Bool SbaXDataBrowserController::suspend(sal_Bool /*bSuspend*/) throw( Runtim
     m_aAsyncDisplayError.CancelCall();
     m_aAsyncInvalidateAll.CancelCall();
 
-    sal_Bool bSuccess = SaveModified();
+    bool bSuccess = SaveModified();
     return bSuccess;
 }
 
@@ -1411,7 +1411,7 @@ void SbaXDataBrowserController::resetted(const ::com::sun::star::lang::EventObje
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::resetted" );
     OSL_ENSURE(rEvent.Source == getControlModel(), "SbaXDataBrowserController::resetted : where did this come from ?");
     (void)rEvent;
-    setCurrentModified( sal_False );
+    setCurrentModified( false );
 }
 
 sal_Bool SbaXDataBrowserController::confirmDelete(const ::com::sun::star::sdb::RowChangeEvent& /*aEvent*/) throw( RuntimeException, std::exception )
@@ -1463,8 +1463,8 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             case ID_BROWSER_INSERT_ROW:
                 {
                     // check if it is available
-                    sal_Bool bInsertPrivilege = ( m_nRowSetPrivileges & Privilege::INSERT) != 0;
-                    sal_Bool bAllowInsertions = sal_True;
+                    bool bInsertPrivilege = ( m_nRowSetPrivileges & Privilege::INSERT) != 0;
+                    bool bAllowInsertions = true;
                     try
                     {
                         Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
@@ -1480,10 +1480,10 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             case SID_FM_DELETEROWS:
                 {
                     // check if it is available
-                    sal_Bool bDeletePrivilege = ( m_nRowSetPrivileges & Privilege::INSERT) != 0;
-                    sal_Bool bAllowDeletions = sal_True;
+                    bool bDeletePrivilege = ( m_nRowSetPrivileges & Privilege::INSERT) != 0;
+                    bool bAllowDeletions = true;
                     sal_Int32 nRowCount = 0;
-                    sal_Bool bInsertionRow = sal_False;
+                    bool bInsertionRow = false;
                     try
                     {
                         Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
@@ -1513,8 +1513,8 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 if (xCurrentController.Is() && xCurrentController->ISA(EditCellController))
                 {
                     Edit& rEdit = (Edit&)xCurrentController->GetWindow();
-                    sal_Bool bHasLen = (rEdit.GetSelection().Len() != 0);
-                    sal_Bool bIsReadOnly = rEdit.IsReadOnly();
+                    bool bHasLen = (rEdit.GetSelection().Len() != 0);
+                    bool bIsReadOnly = rEdit.IsReadOnly();
                     switch (nId)
                     {
                         case ID_BROWSER_CUT:    aReturn.bEnabled = m_aCurrentFrame.isActive() && bHasLen && !bIsReadOnly; break;
@@ -1604,9 +1604,9 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     break;  // no datasource -> no edit mode
 
                 sal_Int32 nDataSourcePrivileges = ::comphelper::getINT32(xDataSourceSet->getPropertyValue(PROPERTY_PRIVILEGES));
-                sal_Bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowInserts"));
-                sal_Bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowUpdates"));
-                sal_Bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowDeletes"));
+                bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowInserts"));
+                bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowUpdates"));
+                bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowDeletes"));
                 if (!bInsertAllowedAndPossible && !bUpdateAllowedAndPossible && !bDeleteAllowedAndPossible)
                     break;  // no insert/update/delete -> no edit mode
 
@@ -1660,7 +1660,7 @@ void SbaXDataBrowserController::applyParserOrder(const OUString& _rOldOrder,cons
     }
 
     sal_uInt16 nPos = getCurrentColumnPosition();
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     try
     {
         xFormSet->setPropertyValue(PROPERTY_ORDER, makeAny(_xParser->getOrder()));
@@ -1690,7 +1690,7 @@ void SbaXDataBrowserController::applyParserOrder(const OUString& _rOldOrder,cons
     setCurrentColumnPosition(nPos);
 }
 
-void SbaXDataBrowserController::applyParserFilter(const OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::OUString& _sOldHaving,const Reference< XSingleSelectQueryComposer >& _xParser)
+void SbaXDataBrowserController::applyParserFilter(const OUString& _rOldFilter, bool _bOldFilterApplied,const ::OUString& _sOldHaving,const Reference< XSingleSelectQueryComposer >& _xParser)
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::applyParserFilter" );
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
@@ -1702,7 +1702,7 @@ void SbaXDataBrowserController::applyParserFilter(const OUString& _rOldFilter, s
 
     sal_uInt16 nPos = getCurrentColumnPosition();
 
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     try
     {
         FormErrorHelper aError(this);
@@ -1782,7 +1782,7 @@ Reference< XSingleSelectQueryComposer > SbaXDataBrowserController::createParser_
     return xComposer;
 }
 
-void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
+void SbaXDataBrowserController::ExecuteFilterSortCrit(bool bFilter)
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::ExecuteFilterSortCrit" );
     if (!SaveModified())
@@ -1826,7 +1826,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
     }
 
     OUString sNewVal = bFilter ? xParser->getFilter() : xParser->getOrder();
-    sal_Bool bOldFilterApplied(sal_False);
+    bool bOldFilterApplied(false);
     if (bFilter)
     {
         try { bOldFilterApplied = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_APPLYFILTER)); } catch(Exception&) { } ;
@@ -1906,7 +1906,7 @@ void SbaXDataBrowserController::ExecuteSearch()
 void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< PropertyValue >& _rArgs)
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::Execute" );
-    sal_Bool bSortUp = sal_True;
+    bool bSortUp = true;
 
     switch (nId)
     {
@@ -1951,7 +1951,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             if (SaveModified())
             {
                 Reference< XPropertySet >  xActiveSet(getRowSet(), UNO_QUERY);
-                sal_Bool bApplied = ::comphelper::getBOOL(xActiveSet->getPropertyValue(PROPERTY_APPLYFILTER));
+                bool bApplied = ::comphelper::getBOOL(xActiveSet->getPropertyValue(PROPERTY_APPLYFILTER));
                 xActiveSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(!bApplied));
                 reloadForm(m_xLoadable);
             }
@@ -2017,7 +2017,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
         break;
 
         case ID_BROWSER_SORTDOWN:
-            bSortUp = sal_False;
+            bSortUp = false;
             // DON'T break
         case ID_BROWSER_SORTUP:
         {
@@ -2034,7 +2034,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
 
             Reference< XSingleSelectQueryComposer > xParser = createParser_nothrow();
             const OUString sOldSort = xParser->getOrder();
-            sal_Bool bParserSuccess = sal_False;
+            bool bParserSuccess = false;
             HANDLE_SQL_ERRORS(
                 xParser->setOrder(OUString()); xParser->appendOrderByColumn(xField, bSortUp),
                 bParserSuccess,
@@ -2060,7 +2060,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 break;
 
             // check if the column is a aggregate function
-            sal_Bool bHaving = sal_False;
+            bool bHaving = false;
             OUString sName;
             xField->getPropertyValue(PROPERTY_NAME) >>= sName;
             Reference< XColumnsSupplier > xColumnsSupplier(m_xParser, UNO_QUERY);
@@ -2078,7 +2078,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             const OUString sOldHaving = xParser->getHavingClause();
 
             Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-            sal_Bool bApplied = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_APPLYFILTER));
+            bool bApplied = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_APPLYFILTER));
             // do we have a filter but it's not applied ?
             // -> completely overwrite it, else append one
             if (!bApplied)
@@ -2086,7 +2086,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 DO_SAFE( (bHaving ? xParser->setHavingClause(OUString()) : xParser->setFilter(::OUString())), "SbaXDataBrowserController::Execute : caught an exception while resetting the new filter !" );
             }
 
-            sal_Bool bParserSuccess = sal_False;
+            bool bParserSuccess = false;
 
             const sal_Int32 nOp = SQLFilterOperator::EQUAL;
 
@@ -2118,11 +2118,11 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
         break;
 
         case ID_BROWSER_ORDERCRIT:
-            ExecuteFilterSortCrit(sal_False);
+            ExecuteFilterSortCrit(false);
             break;
 
         case ID_BROWSER_FILTERCRIT:
-            ExecuteFilterSortCrit(sal_True);
+            ExecuteFilterSortCrit(true);
             InvalidateFeature(ID_BROWSER_FILTERED);
             break;
 
@@ -2131,7 +2131,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             if (!SaveModified())
                 break;
 
-            sal_Bool bNeedPostReload = preReloadForm();
+            bool bNeedPostReload = preReloadForm();
             // reset the filter and the sort property simutaneously so only _one_ new statement has to be
             // sent
             Reference< XPropertySet >  xSet(getRowSet(), UNO_QUERY);
@@ -2165,7 +2165,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
 
         case ID_BROWSER_SAVERECORD:
             if ( SaveModified( sal_False ) )
-                setCurrentModified( sal_False );
+                setCurrentModified( false );
             break;
 
         case ID_BROWSER_UNDORECORD:
@@ -2198,12 +2198,12 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             {
             }
 
-            setCurrentModified( sal_False );
+            setCurrentModified( false );
         }
     }
 }
 
-sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
+bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::SaveModified" );
     if ( bAskFor && GetState(ID_BROWSER_SAVERECORD).bEnabled )
@@ -2216,17 +2216,17 @@ sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
         {
             case RET_NO:
                 Execute(ID_BROWSER_UNDORECORD,Sequence<PropertyValue>());
-                return sal_True;
+                return true;
             case RET_CANCEL:
-                return sal_False;
+                return false;
         }
     }
 
     if ( !CommitCurrent() ) // das aktuelle Control committen lassen
-        return sal_False;
+        return false;
 
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     try
     {
         if (::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ISMODIFIED)))
@@ -2237,7 +2237,7 @@ sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
             else
                 xCursor->updateRow();
         }
-        bResult = sal_True;
+        bResult = true;
     }
     catch(SQLException&)
     {
@@ -2245,7 +2245,7 @@ sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
     catch(Exception&)
     {
         SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::SaveModified : could not save the current record !");
-        bResult = sal_False;
+        bResult = false;
     }
 
     InvalidateFeature(ID_BROWSER_SAVERECORD);
@@ -2253,15 +2253,15 @@ sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
     return bResult;
 }
 
-sal_Bool SbaXDataBrowserController::CommitCurrent()
+bool SbaXDataBrowserController::CommitCurrent()
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::CommitCurrent" );
     if (!getBrowserView())
-        return sal_True;
+        return true;
 
     Reference< ::com::sun::star::awt::XControl >  xActiveControl(getBrowserView()->getGridControl());
     Reference< ::com::sun::star::form::XBoundControl >  xLockingTest(xActiveControl, UNO_QUERY);
-    sal_Bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
+    bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
     if (xActiveControl.is() && !bControlIsLocked)
     {
         // zunaechst das Control fragen ob es das IFace unterstuetzt
@@ -2269,12 +2269,12 @@ sal_Bool SbaXDataBrowserController::CommitCurrent()
         if (!xBoundControl.is())
             xBoundControl  = Reference< ::com::sun::star::form::XBoundComponent > (xActiveControl->getModel(), UNO_QUERY);
         if (xBoundControl.is() && !xBoundControl->commit())
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
-void SbaXDataBrowserController::setCurrentModified( sal_Bool _bSet )
+void SbaXDataBrowserController::setCurrentModified( bool _bSet )
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::setCurrentModified" );
     m_bCurrentlyModified = _bSet;
@@ -2285,7 +2285,7 @@ void SbaXDataBrowserController::setCurrentModified( sal_Bool _bSet )
 void SbaXDataBrowserController::RowChanged()
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::RowChanged" );
-    setCurrentModified( sal_False );
+    setCurrentModified( false );
 }
 
 void SbaXDataBrowserController::ColumnChanged()
@@ -2298,7 +2298,7 @@ void SbaXDataBrowserController::ColumnChanged()
     InvalidateFeature(ID_BROWSER_AUTOFILTER);
     InvalidateFeature(ID_BROWSER_REMOVEFILTER);
 
-    setCurrentModified( sal_False );
+    setCurrentModified( false );
 }
 
 void SbaXDataBrowserController::SelectionChanged()
@@ -2624,22 +2624,22 @@ void SbaXDataBrowserController::leaveFormAction()
     m_aAsyncDisplayError.Call();
 }
 
-sal_Bool SbaXDataBrowserController::isLoaded() const
+bool SbaXDataBrowserController::isLoaded() const
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::isLoaded" );
     return m_xLoadable.is() && m_xLoadable->isLoaded();
 }
 
-sal_Bool SbaXDataBrowserController::isValidCursor() const
+bool SbaXDataBrowserController::isValidCursor() const
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::isValidCursor" );
     if (!m_xColumnsSupplier.is())
-        return sal_False;
+        return false;
     Reference< ::com::sun::star::container::XNameAccess >  xCols = m_xColumnsSupplier->getColumns();
     if (!xCols.is() || !xCols->hasElements())
-        return sal_False;
+        return false;
 
-    sal_Bool bIsValid = !(m_xRowSet->isBeforeFirst() || m_xRowSet->isAfterLast());
+    bool bIsValid = !(m_xRowSet->isBeforeFirst() || m_xRowSet->isAfterLast());
     if ( !bIsValid )
     {
         Reference<XPropertySet> xProp(m_xRowSet,UNO_QUERY);
@@ -2710,10 +2710,10 @@ void SbaXDataBrowserController::addColumnListeners(const Reference< ::com::sun::
     }
 }
 
-sal_Bool SbaXDataBrowserController::InitializeGridModel(const Reference< ::com::sun::star::form::XFormComponent > & /*xGrid*/)
+bool SbaXDataBrowserController::InitializeGridModel(const Reference< ::com::sun::star::form::XFormComponent > & /*xGrid*/)
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::InitializeGridModel" );
-    return sal_True;
+    return true;
 }
 
 }   // namespace dbaui

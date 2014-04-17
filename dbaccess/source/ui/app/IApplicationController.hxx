@@ -49,7 +49,7 @@ namespace dbaui
             @return
                 <TRUE/> if the cotainer could be changed otherwise <FALSE/>
         */
-        virtual sal_Bool onContainerSelect(ElementType _eType) = 0;
+        virtual bool onContainerSelect(ElementType _eType) = 0;
 
         /** called when an entry in a tree view has been selected
             @param  _pEntry

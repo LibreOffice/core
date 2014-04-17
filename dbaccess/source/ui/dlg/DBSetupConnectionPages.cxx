@@ -107,10 +107,10 @@ using namespace ::com::sun::star;
         OConnectionTabPageSetup::fillWindows(_rControlList);
         m_pTextConnectionHelper->fillWindows(_rControlList);
     }
-    void OTextConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OTextConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
         OConnectionTabPageSetup::implInitControls( _rSet, _bSaveValue);
         m_pTextConnectionHelper->implInitControls(_rSet, bValid);
@@ -118,12 +118,12 @@ using namespace ::com::sun::star;
 
     bool OTextConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
+        bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
         bChangedSomething = m_pTextConnectionHelper->FillItemSet(_rSet, bChangedSomething);
         return bChangedSomething;
     }
 
-    sal_Bool OTextConnectionPageSetup::prepareLeave(){
+    bool OTextConnectionPageSetup::prepareLeave(){
         return m_pTextConnectionHelper->prepareLeave();
     }
 
@@ -152,13 +152,13 @@ using namespace ::com::sun::star;
         m_aETBaseDN.SetModifyHdl(getControlModifiedLink());
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
         m_aCBUseSSL.SetToggleHdl(getControlModifiedLink());
-        SetRoadmapStateValue(sal_False);
+        SetRoadmapStateValue(false);
         FreeResource();
     }
 
     bool OLDAPConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
-           sal_Bool bChangedSomething = sal_False;
+        bool bChangedSomething = false;
         fillString(_rSet,&m_aETBaseDN,DSID_CONN_LDAP_BASEDN, bChangedSomething);
         fillInt32(_rSet,&m_aNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
 
@@ -174,7 +174,7 @@ using namespace ::com::sun::star;
                 OUString sUrl = pCollection->getPrefix( OUString("sdbc:address:ldap:"));
                 sUrl += m_aETHostServer.GetText();
                 _rSet.Put(SfxStringItem(DSID_CONNECTURL, sUrl));
-                bChangedSomething = sal_True;
+                bChangedSomething = true;
             }
         }
 
@@ -196,10 +196,10 @@ using namespace ::com::sun::star;
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTPortNumber));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDefaultPortNumber));
     }
-    void OLDAPConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OLDAPConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         SFX_ITEMSET_GET(_rSet, pBaseDN, SfxStringItem, DSID_CONN_LDAP_BASEDN, true);
@@ -216,7 +216,7 @@ using namespace ::com::sun::star;
 
     IMPL_LINK(OLDAPConnectionPageSetup, OnEditModified, Edit*, /*_pEdit*/)
     {
-        sal_Bool bRoadmapState = ((!m_aETHostServer.GetText().isEmpty() ) && ( !m_aETBaseDN.GetText().isEmpty() ) && (!m_aFTPortNumber.GetText().isEmpty() ));
+        bool bRoadmapState = ((!m_aETHostServer.GetText().isEmpty() ) && ( !m_aETBaseDN.GetText().isEmpty() ) && (!m_aFTPortNumber.GetText().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
         callModifiedHdl();
         return 0L;
@@ -256,7 +256,7 @@ using namespace ::com::sun::star;
 
     }
 
-    void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool /*_bSaveValue*/)
+    void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& _rSet, bool /*_bSaveValue*/)
     {
         // show the "Connect directly" option only if the driver is installed
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
@@ -311,7 +311,7 @@ using namespace ::com::sun::star;
         LayoutHelper::positionBelow( m_aHelpText, m_aMySQLSettings, UnrelatedControls, 0 );
         m_aMySQLSettings.Show();
 
-        SetRoadmapStateValue(sal_False);
+        SetRoadmapStateValue(false);
         FreeResource();
     }
 
@@ -336,7 +336,7 @@ using namespace ::com::sun::star;
         return m_aMySQLSettings.FillItemSet( _rSet );
     }
 
-    void MySQLNativeSetupPage::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
+    void MySQLNativeSetupPage::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )
     {
         m_aMySQLSettings.implInitControls( _rSet );
 
@@ -396,7 +396,7 @@ using namespace ::com::sun::star;
             m_sDefaultJdbcDriverName = pTypeCollection->getJavaDriverClass(pUrlItem->GetValue());
         }
 
-        SetRoadmapStateValue(sal_False);
+        SetRoadmapStateValue(false);
         FreeResource();
     }
 
@@ -443,7 +443,7 @@ using namespace ::com::sun::star;
 
     bool OGeneralSpecialJDBCConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = sal_False;
+        bool bChangedSomething = false;
         fillString(_rSet,&m_aETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
         fillString(_rSet,&m_aETHostname,DSID_CONN_HOSTNAME,bChangedSomething);
         fillString(_rSet,&m_aETDatabasename,DSID_DATABASENAME,bChangedSomething);
@@ -451,10 +451,10 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    void OGeneralSpecialJDBCConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OGeneralSpecialJDBCConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         SFX_ITEMSET_GET(_rSet, pDatabaseName, SfxStringItem, DSID_DATABASENAME, true);
@@ -486,7 +486,7 @@ using namespace ::com::sun::star;
         }
         callModifiedHdl();
 
-        sal_Bool bRoadmapState = ((!m_aETDatabasename.GetText().isEmpty() ) && (!m_aETHostname.GetText().isEmpty()) && (!m_aNFPortNumber.GetText().isEmpty() ) && ( !m_aETDriverClass.GetText().isEmpty() ));
+        bool bRoadmapState = ((!m_aETDatabasename.GetText().isEmpty() ) && (!m_aETHostname.GetText().isEmpty()) && (!m_aNFPortNumber.GetText().isEmpty() ) && ( !m_aETDriverClass.GetText().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
     }
 
@@ -494,7 +494,7 @@ using namespace ::com::sun::star;
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
 
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
 #if HAVE_FEATURE_JAVA
         try
         {
@@ -520,7 +520,7 @@ using namespace ::com::sun::star;
     {
         if ( _pEdit == &m_aETDriverClass )
             m_aPBTestJavaDriver.Enable( !m_aETDriverClass.GetText().isEmpty() );
-        sal_Bool bRoadmapState = ((!m_aETDatabasename.GetText().isEmpty() ) && ( !m_aETHostname.GetText().isEmpty() ) && (!m_aNFPortNumber.GetText().isEmpty() ) && ( !m_aETDriverClass.GetText().isEmpty() ));
+        bool bRoadmapState = ((!m_aETDatabasename.GetText().isEmpty() ) && ( !m_aETHostname.GetText().isEmpty() ) && (!m_aNFPortNumber.GetText().isEmpty() ) && ( !m_aETDriverClass.GetText().isEmpty() ));
         SetRoadmapStateValue(bRoadmapState);
         callModifiedHdl();
         return 0L;
@@ -555,15 +555,15 @@ using namespace ::com::sun::star;
 
     bool OJDBCConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
+        bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
         fillString(_rSet,&m_aETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
         return bChangedSomething;
     }
 
-    void OJDBCConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OJDBCConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         SFX_ITEMSET_GET(_rSet, pDrvItem, SfxStringItem, DSID_JDBCDRIVERCLASS, true);
@@ -585,7 +585,7 @@ using namespace ::com::sun::star;
                 m_aETDriverClass.ClearModifyFlag();
             }
         }
-        sal_Bool bEnable = pDrvItem->GetValue().getLength() != 0;
+        bool bEnable = pDrvItem->GetValue().getLength() != 0;
         m_aPBTestJavaDriver.Enable(bEnable);
         OConnectionTabPageSetup::implInitControls(_rSet, _bSaveValue);
 
@@ -595,7 +595,7 @@ using namespace ::com::sun::star;
     bool OJDBCConnectionPageSetup::checkTestConnection()
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        sal_Bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || !m_aConnectionURL.GetTextNoPrefix().isEmpty();
+        bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || !m_aConnectionURL.GetTextNoPrefix().isEmpty();
         bEnableTestConnection = bEnableTestConnection && (!m_aETDriverClass.GetText().isEmpty());
         return bEnableTestConnection;
     }
@@ -603,7 +603,7 @@ using namespace ::com::sun::star;
     IMPL_LINK(OJDBCConnectionPageSetup, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
 #if HAVE_FEATURE_JAVA
         try
         {
@@ -665,14 +665,14 @@ using namespace ::com::sun::star;
 
     }
 
-    void OSpreadSheetConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OSpreadSheetConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         OConnectionTabPageSetup::implInitControls(_rSet, _bSaveValue);
     }
 
     bool OSpreadSheetConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
+        bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
         fillBool(_rSet,&m_aCBPasswordrequired,DSID_PASSWORDREQUIRED,bChangedSomething);
         return bChangedSomething;
     }
@@ -720,10 +720,10 @@ using namespace ::com::sun::star;
         _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aCBPasswordRequired));
     }
 
-    void OAuthentificationPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool /*_bSaveValue*/)
+    void OAuthentificationPageSetup::implInitControls(const SfxItemSet& _rSet, bool /*_bSaveValue*/)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
         SFX_ITEMSET_GET(_rSet, pUidItem, SfxStringItem, DSID_USER, true);
         SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, true);
@@ -736,13 +736,13 @@ using namespace ::com::sun::star;
 
     bool OAuthentificationPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = sal_False;
+        bool bChangedSomething = false;
 
         if (m_aETUserName.GetText() != m_aETUserName.GetSavedValue())
         {
             _rSet.Put(SfxStringItem(DSID_USER, m_aETUserName.GetText()));
             _rSet.Put(SfxStringItem(DSID_PASSWORD, OUString()));
-            bChangedSomething = sal_True;
+            bChangedSomething = true;
         }
         fillBool(_rSet,&m_aCBPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
         return bChangedSomething;
@@ -777,17 +777,17 @@ using namespace ::com::sun::star;
 
     }
 
-    sal_Bool OFinalDBPageSetup::IsDatabaseDocumentToBeRegistered()
+    bool OFinalDBPageSetup::IsDatabaseDocumentToBeRegistered()
     {
         return m_pRBRegisterDataSource->IsChecked() && m_pRBRegisterDataSource->IsEnabled();
     }
 
-    sal_Bool OFinalDBPageSetup::IsDatabaseDocumentToBeOpened()
+    bool OFinalDBPageSetup::IsDatabaseDocumentToBeOpened()
     {
         return m_pCBOpenAfterwards->IsChecked() && m_pCBOpenAfterwards->IsEnabled();
     }
 
-    sal_Bool OFinalDBPageSetup::IsTableWizardToBeStarted()
+    bool OFinalDBPageSetup::IsTableWizardToBeStarted()
     {
         return m_pCBStartTableWizard->IsChecked() && m_pCBStartTableWizard->IsEnabled();
     }
@@ -808,12 +808,12 @@ using namespace ::com::sun::star;
         _rControlList.push_back(new OSaveValueWrapper<RadioButton>(m_pRBDontregisterDataSource));
     }
 
-    void OFinalDBPageSetup::implInitControls(const SfxItemSet& /*_rSet*/, sal_Bool /*_bSaveValue*/)
+    void OFinalDBPageSetup::implInitControls(const SfxItemSet& /*_rSet*/, bool /*_bSaveValue*/)
     {
         m_pCBOpenAfterwards->Check();
     }
 
-    void OFinalDBPageSetup::enableTableWizardCheckBox( sal_Bool _bSupportsTableCreation)
+    void OFinalDBPageSetup::enableTableWizardCheckBox( bool _bSupportsTableCreation)
     {
         m_pCBStartTableWizard->Enable(_bSupportsTableCreation);
     }

@@ -28,13 +28,13 @@
 using namespace ::dbaui;
 
 // class OSplitterView
-OSplitterView::OSplitterView(Window* _pParent,sal_Bool _bVertical) : Window(_pParent,WB_DIALOGCONTROL) // ,WB_BORDER
+OSplitterView::OSplitterView(Window* _pParent,bool _bVertical) : Window(_pParent,WB_DIALOGCONTROL) // ,WB_BORDER
     ,m_pSplitter( NULL )
     ,m_pLeft(NULL)
     ,m_pRight(NULL)
     ,m_bVertical(_bVertical)
 {
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
 }
 
 OSplitterView::~OSplitterView()
@@ -57,7 +57,7 @@ IMPL_LINK( OSplitterView, SplitHdl, Splitter*, /*pSplit*/ )
     return 0L;
 }
 
-void OSplitterView::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+void OSplitterView::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -94,7 +94,7 @@ void OSplitterView::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( true, true, true );
         Invalidate();
     }
 }

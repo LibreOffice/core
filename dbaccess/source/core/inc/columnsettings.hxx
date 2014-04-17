@@ -69,7 +69,7 @@ namespace dbaccess
         ::com::sun::star::uno::Any  m_aControlDefault;      // the default value which should be displayed as by a control when moving to a new row
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                     m_xControlModel;
-        sal_Bool                    m_bHidden;
+        bool                    m_bHidden;
         //  </properties>
 
     protected:

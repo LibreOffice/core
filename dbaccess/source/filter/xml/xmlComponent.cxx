@@ -44,7 +44,7 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
                 ,const OUString& _sComponentServiceName
                 ) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
-    ,m_bAsTemplate(sal_False)
+    ,m_bAsTemplate(false)
 {
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");

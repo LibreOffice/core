@@ -51,14 +51,14 @@ using namespace dbtools;
 
 OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xResultSet,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xStatement,
-                       sal_Bool _bCaseSensitive)
+                       bool _bCaseSensitive)
            :OResultSetBase(m_aMutex)
            ,OPropertySetHelper(OResultSetBase::rBHelper)
            ,m_xDelegatorResultSet(_xResultSet)
            ,m_aWarnings( Reference< XWarningsSupplier >( _xResultSet, UNO_QUERY ) )
            ,m_nResultSetType(0)
            ,m_nResultSetConcurrency(0)
-           ,m_bIsBookmarkable(sal_False)
+           ,m_bIsBookmarkable(false)
 {
     SAL_INFO("dbaccess", "OResultSet::OResultSet" );
 

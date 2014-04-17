@@ -69,8 +69,8 @@ namespace dbaui
          */
         virtual OTableConnectionData* NewInstance() const;
 
-        sal_Bool SetConnLine( sal_uInt16 nIndex, const OUString& rSourceFieldName, const OUString& rDestFieldName );
-        sal_Bool AppendConnLine( const OUString& rSourceFieldName, const OUString& rDestFieldName );
+        bool SetConnLine( sal_uInt16 nIndex, const OUString& rSourceFieldName, const OUString& rDestFieldName );
+        bool AppendConnLine( const OUString& rSourceFieldName, const OUString& rDestFieldName );
         /** Deletes list of ConnLines
         */
         void ResetConnLines();
@@ -100,7 +100,7 @@ namespace dbaui
 
             @return true if successful
         */
-        virtual sal_Bool Update(){ return sal_True; }
+        virtual bool Update(){ return true; }
     };
 
     typedef ::std::vector< ::boost::shared_ptr<OTableConnectionData> >  TTableConnectionData;

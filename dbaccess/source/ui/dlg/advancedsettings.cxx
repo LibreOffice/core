@@ -199,10 +199,10 @@ namespace dbaui
             _rControlList.push_back(new OSaveValueWrapper<NumericField>(m_pMaxRowScan));
     }
 
-    void SpecialSettingsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void SpecialSettingsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags( _rSet, bValid, bReadonly );
 
         if ( !bValid )
@@ -266,7 +266,7 @@ namespace dbaui
 
     bool SpecialSettingsPage::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = sal_False;
+        bool bChangedSomething = false;
 
         // the boolean items
         for (   BooleanSettingDescs::const_iterator setting = m_aBooleanSettings.begin();
@@ -285,7 +285,7 @@ namespace dbaui
             if ( m_pBooleanComparisonMode->GetSelectEntryPos() != m_pBooleanComparisonMode->GetSavedValue() )
             {
                 _rSet.Put( SfxInt32Item( DSID_BOOLEANCOMPARISON, m_pBooleanComparisonMode->GetSelectEntryPos() ) );
-                bChangedSomething = sal_True;
+                bChangedSomething = true;
             }
         }
         if ( m_bHasMaxRowScan )
@@ -332,10 +332,10 @@ namespace dbaui
         _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pAutoRetrieving ) );
     }
 
-    void GeneratedValuesPage::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
+    void GeneratedValuesPage::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         // collect the items
@@ -346,7 +346,7 @@ namespace dbaui
         // forward the values to the controls
         if (bValid)
         {
-            sal_Bool bEnabled = pAutoRetrieveEnabledItem->GetValue();
+            bool bEnabled = pAutoRetrieveEnabledItem->GetValue();
             m_pAutoRetrievingEnabled->Check( bEnabled );
 
             m_pAutoIncrement->SetText( pAutoIncrementItem->GetValue() );
@@ -359,7 +359,7 @@ namespace dbaui
 
     bool GeneratedValuesPage::FillItemSet(SfxItemSet& _rSet)
     {
-        sal_Bool bChangedSomething = sal_False;
+        bool bChangedSomething = false;
 
         fillString( _rSet, m_pAutoIncrement, DSID_AUTOINCREMENTVALUE, bChangedSomething );
         fillBool( _rSet, m_pAutoRetrievingEnabled, DSID_AUTORETRIEVEENABLED, bChangedSomething );
@@ -488,7 +488,7 @@ namespace dbaui
         (void)_bEnable;
     }
 
-    sal_Bool AdvancedSettingsDialog::saveDatasource()
+    bool AdvancedSettingsDialog::saveDatasource()
     {
         return PrepareLeaveCurrentPage();
     }

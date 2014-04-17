@@ -55,7 +55,7 @@ class OColumnControlModel :  public ::comphelper::OMutexAndBroadcastHelper
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xColumn;
     OUString                 m_sDefaultControl;
     ::com::sun::star::uno::Any      m_aTabStop;
-    sal_Bool                        m_bEnable;
+    bool                        m_bEnable;
     sal_Int16                       m_nBorder;
     sal_Int32                       m_nWidth;
 // [properties]

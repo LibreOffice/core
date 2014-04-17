@@ -46,8 +46,8 @@ namespace dbaui
 
 ODBTypeWizDialogSetup::ODBTypeWizDialogSetup(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialog(_rxORB)
-    ,m_bOpenDatabase(sal_True)
-    ,m_bStartTableWizard(sal_False)
+    ,m_bOpenDatabase(true)
+    ,m_bStartTableWizard(false)
 {
     registerProperty(OUString("OpenDatabase"), 3, PropertyAttribute::TRANSIENT,
         &m_bOpenDatabase, getBooleanCppuType());

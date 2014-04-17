@@ -49,7 +49,7 @@ namespace dbaui
         ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
         SfxItemSet* m_pItemSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
-        sal_Bool    m_bOwnConnection;
+        bool    m_bOwnConnection;
     protected:
         virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) SAL_OVERRIDE;
     public:
@@ -72,7 +72,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver() SAL_OVERRIDE;
         virtual OUString getDatasourceType(const SfxItemSet& _rSet) const SAL_OVERRIDE;
         virtual void clearPassword() SAL_OVERRIDE;
-        virtual sal_Bool saveDatasource() SAL_OVERRIDE;
+        virtual bool saveDatasource() SAL_OVERRIDE;
         virtual void setTitle(const OUString& _sTitle) SAL_OVERRIDE;
         virtual void enableConfirmSettings( bool _bEnable ) SAL_OVERRIDE;
     };

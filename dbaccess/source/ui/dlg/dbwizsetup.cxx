@@ -111,10 +111,10 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
                         WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP )
 
     , m_pOutSet(NULL)
-    , m_bResetting(sal_False)
-    , m_bApplied(sal_False)
-    , m_bUIEnabled( sal_True )
-    , m_bIsConnectable( sal_False)
+    , m_bResetting(false)
+    , m_bApplied(false)
+    , m_bUIEnabled( true )
+    , m_bIsConnectable( false)
     , m_sRM_IntroText( ModuleRes( STR_PAGETITLE_INTROPAGE ) )
     , m_sRM_dBaseText( ModuleRes( STR_PAGETITLE_DBASE ) )
     , m_sRM_TextText( ModuleRes( STR_PAGETITLE_TEXT ) )
@@ -358,11 +358,11 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
 
 void ODbTypeWizDialogSetup::updateTypeDependentStates()
 {
-    sal_Bool bDoEnable = sal_False;
-    sal_Bool bIsConnectionRequired = IsConnectionUrlRequired();
+    bool bDoEnable = false;
+    bool bIsConnectionRequired = IsConnectionUrlRequired();
     if (!bIsConnectionRequired)
     {
-        bDoEnable = sal_True;
+        bDoEnable = true;
     }
     else if ( m_sURL == m_sOldURL )
     {
@@ -373,7 +373,7 @@ void ODbTypeWizDialogSetup::updateTypeDependentStates()
     enableButtons( WZB_FINISH, bDoEnable);
 }
 
-sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
+bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
 {
     return m_pCollection->isConnectionUrlRequired(m_sURL);
 }
@@ -638,12 +638,12 @@ void ODbTypeWizDialogSetup::enterState(WizardState _nState)
     }
 }
 
-sal_Bool ODbTypeWizDialogSetup::saveDatasource()
+bool ODbTypeWizDialogSetup::saveDatasource()
 {
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(getCurrentState()));
     if ( pPage )
         pPage->FillItemSet(*m_pOutSet);
-    return sal_True;
+    return true;
 }
 
 bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
@@ -682,12 +682,12 @@ namespace
     }
 }
 
-sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
+bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 {
     Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(getORB(), 0) );
     try
     {
-        if (callSaveAsDialog() == sal_True)
+        if (callSaveAsDialog())
         {
             m_pImpl->saveChanges(*m_pOutSet);
             Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
@@ -698,7 +698,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                 CreateDatabase();
 
             ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
-            aArgs.put( "Overwrite", sal_Bool( sal_True ) );
+            aArgs.put( "Overwrite", true );
             aArgs.put( "InteractionHandler", xHandler );
             aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
 
@@ -708,7 +708,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             if ( !m_pFinalPage || m_pFinalPage->IsDatabaseDocumentToBeRegistered() )
                 RegisterDataSourceByLocation( sPath );
 
-            return sal_True;
+            return true;
         }
     }
     catch ( const Exception& e )
@@ -731,29 +731,29 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
-    sal_Bool ODbTypeWizDialogSetup::IsDatabaseDocumentToBeOpened() const
+    bool ODbTypeWizDialogSetup::IsDatabaseDocumentToBeOpened() const
     {
         if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
-            return sal_True;
+            return true;
 
         if ( m_pFinalPage != NULL )
             return m_pFinalPage->IsDatabaseDocumentToBeOpened();
 
-        return sal_True;
+        return true;
     }
 
-    sal_Bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted() const
+    bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted() const
     {
         if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
-            return sal_False;
+            return false;
 
         if ( m_pFinalPage != NULL )
             return m_pFinalPage->IsTableWizardToBeStarted();
 
-        return sal_False;
+        return false;
     }
 
     void ODbTypeWizDialogSetup::CreateDatabase()
@@ -794,9 +794,9 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         xDatabaseContext->registerObject(sDatabaseName, xDatasource);
     }
 
-    sal_Bool ODbTypeWizDialogSetup::callSaveAsDialog()
+    bool ODbTypeWizDialogSetup::callSaveAsDialog()
     {
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                 0, this);
@@ -826,7 +826,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                 if ( ::utl::UCBContentHelper::IsDocument(sFileName) )
                     ::utl::UCBContentHelper::Kill(sFileName);
                 m_pOutSet->Put(SfxStringItem(DSID_DOCUMENT_URL, sFileName));
-                bRet = sal_True;
+                bRet = true;
             }
         }
         return bRet;
@@ -836,12 +836,12 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     {
         Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
         :: OUString sLastSegmentName = pURL->getName();
-        sal_Bool bFolderExists = sal_True;
+        bool bFolderExists = true;
         sal_Int32 i = 1;
-        while (bFolderExists == sal_True)
+        while (bFolderExists)
         {
             bFolderExists = xSimpleFileAccess->isFolder(pURL->GetMainURL( INetURLObject::NO_DECODE ));
-            if (bFolderExists == sal_True)
+            if (bFolderExists)
             {
                 i++;
                 pURL->setName(sLastSegmentName.concat(OUString::number(i)));
@@ -854,7 +854,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
         OUString BaseName = _rURL.getBase();
 
-        sal_Bool bElementExists = sal_True;
+        bool bElementExists = true;
 
         INetURLObject aExistenceCheck( _rURL );
         for ( sal_Int32 i = 1; bElementExists; )

@@ -48,10 +48,10 @@ OFieldDescription::OFieldDescription()
     ,m_nIsNullable(ColumnValue::NULLABLE)
     ,m_nFormatKey(0)
     ,m_eHorJustify(SVX_HOR_JUSTIFY_STANDARD)
-    ,m_bIsAutoIncrement(sal_False)
-    ,m_bIsPrimaryKey(sal_False)
-    ,m_bIsCurrency(sal_False)
-    ,m_bHidden(sal_False)
+    ,m_bIsAutoIncrement(false)
+    ,m_bIsPrimaryKey(false)
+    ,m_bIsCurrency(false)
+    ,m_bHidden(false)
 {
 }
 
@@ -84,7 +84,7 @@ OFieldDescription::~OFieldDescription()
 {
 }
 
-OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedCol,sal_Bool _bUseAsDest)
+OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedCol,bool _bUseAsDest)
     :m_pType()
     ,m_nType(DataType::VARCHAR)
     ,m_nPrecision(0)
@@ -92,10 +92,10 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
     ,m_nIsNullable(ColumnValue::NULLABLE)
     ,m_nFormatKey(0)
     ,m_eHorJustify(SVX_HOR_JUSTIFY_STANDARD)
-    ,m_bIsAutoIncrement(sal_False)
-    ,m_bIsPrimaryKey(sal_False)
-    ,m_bIsCurrency(sal_False)
-    ,m_bHidden(sal_False)
+    ,m_bIsAutoIncrement(false)
+    ,m_bIsPrimaryKey(false)
+    ,m_bIsCurrency(false)
+    ,m_bHidden(false)
 {
     OSL_ENSURE(xAffectedCol.is(),"PropetySet can notbe null!");
     if ( xAffectedCol.is() )
@@ -167,7 +167,7 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
     }
 }
 
-void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bForce,sal_Bool _bReset)
+void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce,bool _bReset)
 {
     TOTypeInfoSP pOldType = getTypeInfo();
     if ( _pType != pOldType )
@@ -179,7 +179,7 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bF
             SetControlDefault(Any());
         }
 
-        sal_Bool bForce = _bForce || pOldType.get() == NULL || pOldType->nType != _pType->nType;
+        bool bForce = _bForce || pOldType.get() == NULL || pOldType->nType != _pType->nType;
         switch ( _pType->nType )
         {
             case DataType::CHAR:
@@ -229,7 +229,7 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bF
         if ( !_pType->bNullable && IsNullable() )
             SetIsNullable(ColumnValue::NO_NULLS);
         if ( !_pType->bAutoIncrement && IsAutoIncrement() )
-            SetAutoIncrement(sal_False);
+            SetAutoIncrement(false);
         SetCurrency( _pType->bCurrency );
         SetType(_pType);
         SetTypeName(_pType->aTypeName);
@@ -438,7 +438,7 @@ void OFieldDescription::SetHorJustify(const SvxCellHorJustify& _rHorJustify)
     }
 }
 
-void OFieldDescription::SetAutoIncrement(sal_Bool _bAuto)
+void OFieldDescription::SetAutoIncrement(bool _bAuto)
 {
     try
     {
@@ -453,14 +453,14 @@ void OFieldDescription::SetAutoIncrement(sal_Bool _bAuto)
     }
 }
 
-void OFieldDescription::SetPrimaryKey(sal_Bool _bPKey)
+void OFieldDescription::SetPrimaryKey(bool _bPKey)
 {
     m_bIsPrimaryKey = _bPKey;
     if ( _bPKey )
         SetIsNullable(::com::sun::star::sdbc::ColumnValue::NO_NULLS);
 }
 
-void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
+void OFieldDescription::SetCurrency(bool _bIsCurrency)
 {
     m_bIsCurrency = _bIsCurrency;
 }
@@ -592,7 +592,7 @@ TOTypeInfoSP                OFieldDescription::getSpecialTypeInfo() const
     return pSpecialType;
 }
 
-sal_Bool                    OFieldDescription::IsAutoIncrement()        const
+bool                    OFieldDescription::IsAutoIncrement()        const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT) )
         return ::cppu::any2bool(m_xDest->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
@@ -600,17 +600,17 @@ sal_Bool                    OFieldDescription::IsAutoIncrement()        const
         return m_bIsAutoIncrement;
 }
 
-sal_Bool                    OFieldDescription::IsPrimaryKey()           const
+bool                    OFieldDescription::IsPrimaryKey()           const
 {
     return m_bIsPrimaryKey;
 }
 
-sal_Bool                    OFieldDescription::IsCurrency()             const
+bool                    OFieldDescription::IsCurrency()             const
 {
         return m_bIsCurrency;
 }
 
-sal_Bool                    OFieldDescription::IsNullable()             const
+bool                    OFieldDescription::IsNullable()             const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ISNULLABLE) )
         return ::comphelper::getINT32(m_xDest->getPropertyValue(PROPERTY_ISNULLABLE)) == ::com::sun::star::sdbc::ColumnValue::NULLABLE;

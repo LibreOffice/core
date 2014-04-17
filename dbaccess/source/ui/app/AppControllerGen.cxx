@@ -244,7 +244,7 @@ void OApplicationController::refreshTables()
             OSL_FAIL("Could not refresh tables!");
         }
 
-        getContainer()->getDetailView()->clearPages(sal_False);
+        getContainer()->getDetailView()->clearPages(false);
         getContainer()->getDetailView()->createTablesPage( ensureConnection() );
     }
 }
@@ -260,12 +260,12 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
     ::osl::MutexGuard aGuard( getMutex() );
     if ( evt.PropertyName == PROPERTY_USER )
     {
-        m_bNeedToReconnect = sal_True;
+        m_bNeedToReconnect = true;
         InvalidateFeature(SID_DB_APP_STATUS_USERNAME);
     }
     else if ( evt.PropertyName == PROPERTY_URL )
     {
-        m_bNeedToReconnect = sal_True;
+        m_bNeedToReconnect = true;
         InvalidateFeature(SID_DB_APP_STATUS_DBNAME);
         InvalidateFeature(SID_DB_APP_STATUS_TYPE);
         InvalidateFeature(SID_DB_APP_STATUS_HOSTNAME);
@@ -529,8 +529,8 @@ void OApplicationController::askToReconnect()
 {
     if ( m_bNeedToReconnect )
     {
-        m_bNeedToReconnect = sal_False;
-        sal_Bool bClear = sal_True;
+        m_bNeedToReconnect = false;
+        bool bClear = true;
         if ( !m_pSubComponentManager->empty() )
         {
             QueryBox aQry(getView(), ModuleRes(APP_CLOSEDOCUMENTS));
@@ -540,7 +540,7 @@ void OApplicationController::askToReconnect()
                     closeSubComponents();
                     break;
                 default:
-                    bClear = sal_False;
+                    bClear = false;
                     break;
             }
         }
@@ -548,7 +548,7 @@ void OApplicationController::askToReconnect()
         {
             ElementType eType = getContainer()->getElementType();
             disconnect();
-            getContainer()->getDetailView()->clearPages(sal_False);
+            getContainer()->getDetailView()->clearPages(false);
             getContainer()->selectContainer(E_NONE); // invalidate the old selection
             m_eCurrentType = E_NONE;
             getContainer()->selectContainer(eType); // reselect the current one again
@@ -603,7 +603,7 @@ void OApplicationController::onDocumentOpened( const OUString& _rName, const sal
     }
 }
 
-sal_Bool OApplicationController::insertHierachyElement(ElementType _eType,const OUString& _sParentFolder,sal_Bool _bCollection,const Reference<XContent>& _xContent,sal_Bool _bMove)
+bool OApplicationController::insertHierachyElement(ElementType _eType, const OUString& _sParentFolder, bool _bCollection, const Reference<XContent>& _xContent, bool _bMove)
 {
     Reference<XHierarchicalNameContainer> xNames(getElements(_eType), UNO_QUERY);
     return dbaui::insertHierachyElement(getView()
@@ -616,17 +616,17 @@ sal_Bool OApplicationController::insertHierachyElement(ElementType _eType,const 
                            ,_bMove);
 }
 
-sal_Bool OApplicationController::isRenameDeleteAllowed(ElementType _eType,sal_Bool _bDelete) const
+bool OApplicationController::isRenameDeleteAllowed(ElementType _eType, bool _bDelete) const
 {
     ElementType eType = getContainer()->getElementType();
-    sal_Bool bEnabled = !isDataSourceReadOnly() && eType == _eType;
+    bool bEnabled = !isDataSourceReadOnly() && eType == _eType;
     if ( bEnabled )
     {
 
         if ( E_TABLE == eType )
             bEnabled = !isConnectionReadOnly() && getContainer()->isALeafSelected();
 
-        sal_Bool bCompareRes = sal_False;
+        bool bCompareRes = false;
         if ( _bDelete )
             bCompareRes = getContainer()->getSelectionCount() > 0;
         else
@@ -646,7 +646,7 @@ sal_Bool OApplicationController::isRenameDeleteAllowed(ElementType _eType,sal_Bo
                 }
                 catch(Exception&)
                 {
-                    bEnabled = sal_False;
+                    bEnabled = false;
                 }
             }
         }

@@ -95,17 +95,17 @@ namespace dbaui
         sal_Int32           m_nRows;        ///< number of rows to be searched
         sal_Int32           m_nRowCount;    ///< current count of rows
         rtl_TextEncoding    m_nDefToken;    ///< language
-        sal_Bool            m_bError;       ///< error and termination code
-        sal_Bool            m_bInTbl;       ///< true, if parser is in RTF table
-        sal_Bool            m_bHead;        ///< true, if the header hasn't been read yet
-        sal_Bool            m_bDontAskAgain;///< if there is an error when pasting, don't show it again
-        sal_Bool            m_bIsAutoIncrement; ///< if PKey is set by user
-        sal_Bool            m_bFoundTable;  ///< set to true when a table was found
-        sal_Bool            m_bCheckOnly;
+        bool            m_bError;       ///< error and termination code
+        bool            m_bInTbl;       ///< true, if parser is in RTF table
+        bool            m_bHead;        ///< true, if the header hasn't been read yet
+        bool            m_bDontAskAgain;///< if there is an error when pasting, don't show it again
+        bool            m_bIsAutoIncrement; ///< if PKey is set by user
+        bool            m_bFoundTable;  ///< set to true when a table was found
+        bool            m_bCheckOnly;
         bool                m_bAppendFirstLine;
 
 
-        virtual sal_Bool    CreateTable(int nToken)         = 0;
+        virtual bool    CreateTable(int nToken)         = 0;
         virtual TypeSelectionPageFactory
                             getTypeSelectionPageFactory()   = 0;
 
@@ -114,7 +114,7 @@ namespace dbaui
         void                adjustFormat();
         void                eraseTokens();
         void                insertValueIntoColumn();
-        sal_Bool            createRowSet();
+        bool                createRowSet();
         void                showErrorDialog(const ::com::sun::star::sdbc::SQLException& e);
         void                ensureFormatter();
 
@@ -126,7 +126,7 @@ namespace dbaui
 
             @return true when an error occurs
         */
-        sal_Bool            executeWizard( const OUString& _sTableName,
+        bool                executeWizard( const OUString& _sTableName,
                                            const ::com::sun::star::uno::Any& _aTextColor,
                                            const ::com::sun::star::awt::FontDescriptor& _rFont);
 
@@ -150,7 +150,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const TColumnVector* rList,
             const OTypeInfoMap* _pInfoMap,
-            sal_Bool _bAutoIncrementEnabled,
+            bool _bAutoIncrementEnabled,
             SvStream& _rInputStream
         );
 
@@ -160,8 +160,8 @@ namespace dbaui
 
         virtual void release() = 0;
 
-        void enableCheckOnly() { m_bCheckOnly = sal_True; }
-        sal_Bool isCheckEnabled() const { return m_bCheckOnly; }
+        void enableCheckOnly() { m_bCheckOnly = true; }
+        bool isCheckEnabled() const { return m_bCheckOnly; }
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > createPreparedStatment( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData
                                                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDestTable

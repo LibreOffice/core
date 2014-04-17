@@ -121,7 +121,7 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
             ,m_xComposer(_xComposer)
             ,m_sUpdateTableName(_rUpdateTableName)
             ,m_rRowCount(o_nRowCount)
-            ,m_bRowCountFinal(sal_False)
+            ,m_bRowCountFinal(false)
 {
    SAL_INFO("dbaccess", "OKeySet::OKeySet" );
 
@@ -218,7 +218,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
             continue;
 
         Reference<XPropertySet> xProp( xTblColumns->getByName( keyColumn->second.sRealName ), UNO_QUERY );
-        sal_Bool bAuto = sal_False;
+        bool bAuto = false;
         if ( ( xProp->getPropertyValue( PROPERTY_ISAUTOINCREMENT ) >>= bAuto ) && bAuto )
             m_aAutoColumns.push_back( keyColumn->first );
     }
@@ -342,7 +342,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet, const OUStrin
 void OKeySet::reset(const Reference< XResultSet>& _xDriverSet)
 {
     OCacheSet::construct(_xDriverSet, m_sRowSetFilter);
-    m_bRowCountFinal = sal_False;
+    m_bRowCountFinal = false;
     m_aKeyMap.clear();
     OKeySetValue keySetValue((ORowSetValueVector *)NULL,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL));
     m_aKeyMap.insert(OKeySetMatrix::value_type(0,keySetValue));
@@ -433,19 +433,19 @@ Any SAL_CALL OKeySet::getBookmark() throw(SQLException, RuntimeException)
     return makeAny(m_aKeyIter->first);
 }
 
-sal_Bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::moveToBookmark" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(bookmark));
     invalidateRow();
     return m_aKeyIter != m_aKeyMap.end();
 }
 
-sal_Bool SAL_CALL OKeySet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::moveRelativeToBookmark" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(bookmark));
     if(m_aKeyIter != m_aKeyMap.end())
     {
@@ -466,10 +466,10 @@ sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& _first, const Any& _sec
     return (nFirst != nSecond) ? CompareBookmark::NOT_EQUAL : CompareBookmark::EQUAL;
 }
 
-sal_Bool SAL_CALL OKeySet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::hasOrderedBookmarks" );
-    return sal_True;
+    return true;
 }
 
 sal_Int32 SAL_CALL OKeySet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
@@ -547,7 +547,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
         }
     }
 
-    sal_Bool bOk = xPrep->executeUpdate() > 0;
+    bool bOk = xPrep->executeUpdate() > 0;
     Sequence< sal_Int32 > aRet(rows.getLength());
     memset(aRet.getArray(),bOk,sizeof(sal_Int32)*aRet.getLength());
     if(bOk)
@@ -561,7 +561,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
             if(m_aKeyIter == m_aKeyMap.find(nPos) && m_aKeyIter != m_aKeyMap.end())
                 ++m_aKeyIter;
             m_aKeyMap.erase(nPos);
-            m_bDeleted = sal_True;
+            m_bDeleted = true;
         }
     }
     return aRet;
@@ -756,7 +756,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
     sal_Int32 j = 1;
     bool bRefetch = true;
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     for(;aIter != aEnd;++aIter,++j)
     {
         if((_rInsertRow->get())[aIter->second.nPosition].isModified())
@@ -767,7 +767,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
             }
             aSql.append(::dbtools::quoteName( aQuote,aIter->second.sRealName) + aComma);
             aValues.append(aPara);
-            bModified = sal_True;
+            bModified = true;
         }
     }
     if ( !bModified )
@@ -809,7 +809,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
     }
 
     m_bInserted = xPrep->executeUpdate() > 0;
-    sal_Bool bAutoValuesFetched = sal_False;
+    bool bAutoValuesFetched = false;
     if ( m_bInserted )
     {
         // first insert the default values into the insertrow
@@ -842,7 +842,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
                         if ( aFind != m_pKeyColumnNames->end() )
                             (_rInsertRow->get())[aFind->second.nPosition].fill(i, aFind->second.nType, xRow);
                     }
-                    bAutoValuesFetched = sal_True;
+                    bAutoValuesFetched = true;
                 }
             }
         }
@@ -1081,14 +1081,14 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
         if(m_aKeyIter == m_aKeyMap.find(nBookmark) && m_aKeyIter != m_aKeyMap.end())
             ++m_aKeyIter;
         m_aKeyMap.erase(nBookmark);
-        m_bDeleted = sal_True;
+        m_bDeleted = true;
     }
 }
 
 void SAL_CALL OKeySet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::cancelRowUpdates" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
 }
 
 void SAL_CALL OKeySet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
@@ -1142,13 +1142,13 @@ Reference<XNameAccess> OKeySet::getKeyColumns() const
     return xKeyColumns;
 }
 
-sal_Bool SAL_CALL OKeySet::next(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::next(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::next" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
 
     if(isAfterLast())
-        return sal_False;
+        return false;
     ++m_aKeyIter;
     if(!m_bRowCountFinal && m_aKeyIter == m_aKeyMap.end())
     {
@@ -1171,19 +1171,19 @@ sal_Bool SAL_CALL OKeySet::next(  ) throw(SQLException, RuntimeException)
     return !isAfterLast();
 }
 
-sal_Bool SAL_CALL OKeySet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::isBeforeFirst" );
     return m_aKeyIter == m_aKeyMap.begin();
 }
 
-sal_Bool SAL_CALL OKeySet::isAfterLast(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::isAfterLast" );
     return  m_bRowCountFinal && m_aKeyIter == m_aKeyMap.end();
 }
 
-sal_Bool SAL_CALL OKeySet::isFirst(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::isFirst(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::isFirst" );
     OKeySetMatrix::iterator aTemp = m_aKeyMap.begin();
@@ -1191,11 +1191,11 @@ sal_Bool SAL_CALL OKeySet::isFirst(  ) throw(SQLException, RuntimeException)
     return m_aKeyIter == aTemp && m_aKeyIter != m_aKeyMap.end();
 }
 
-sal_Bool SAL_CALL OKeySet::isLast(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::isLast(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::isLast" );
     if(!m_bRowCountFinal)
-        return sal_False;
+        return false;
 
     OKeySetMatrix::iterator aTemp = m_aKeyMap.end();
     --aTemp;
@@ -1205,7 +1205,7 @@ sal_Bool SAL_CALL OKeySet::isLast(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OKeySet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::beforeFirst" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aKeyIter = m_aKeyMap.begin();
     invalidateRow();
 }
@@ -1213,16 +1213,16 @@ void SAL_CALL OKeySet::beforeFirst(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OKeySet::afterLast(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::afterLast" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     fillAllRows();
     m_aKeyIter = m_aKeyMap.end();
     invalidateRow();
 }
 
-sal_Bool SAL_CALL OKeySet::first(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::first(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::first" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aKeyIter = m_aKeyMap.begin();
     ++m_aKeyIter;
     if(m_aKeyIter == m_aKeyMap.end())
@@ -1238,15 +1238,15 @@ sal_Bool SAL_CALL OKeySet::first(  ) throw(SQLException, RuntimeException)
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
 
-sal_Bool SAL_CALL OKeySet::last(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::last(  ) throw(SQLException, RuntimeException)
 {
     return last_checked(sal_True);
 }
 
-sal_Bool OKeySet::last_checked( sal_Bool /* i_bFetchRow */ )
+bool OKeySet::last_checked( sal_Bool /* i_bFetchRow */ )
 {
    SAL_INFO("dbaccess", "OKeySet::last_checked" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     bool fetchedRow = fillAllRows();
 
     m_aKeyIter = m_aKeyMap.end();
@@ -1267,15 +1267,15 @@ sal_Int32 SAL_CALL OKeySet::getRow(  ) throw(SQLException, RuntimeException)
     return ::std::distance(m_aKeyMap.begin(),m_aKeyIter);
 }
 
-sal_Bool SAL_CALL OKeySet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     return absolute_checked(row,sal_True);
 }
 
-sal_Bool OKeySet::absolute_checked( sal_Int32 row, sal_Bool /* i_bFetchRow */ )
+bool OKeySet::absolute_checked( sal_Int32 row, sal_Bool /* i_bFetchRow */ )
 {
    SAL_INFO("dbaccess", "OKeySet::absolute" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     OSL_ENSURE(row,"absolute(0) isn't allowed!");
     bool fetchedRow = false;
     if(row < 0)
@@ -1294,7 +1294,7 @@ sal_Bool OKeySet::absolute_checked( sal_Int32 row, sal_Bool /* i_bFetchRow */ )
             if(!m_bRowCountFinal)
             {
                 // but there may still be rows to fetch.
-                sal_Bool bNext = sal_True;
+                bool bNext = true;
                 for(sal_Int32 i=m_aKeyMap.size()-1;i < row && bNext;++i)
                     bNext = fetchRow();
                 // it is guaranteed that the above loop has executed at least once,
@@ -1332,21 +1332,21 @@ sal_Bool OKeySet::absolute_checked( sal_Int32 row, sal_Bool /* i_bFetchRow */ )
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
 
-sal_Bool SAL_CALL OKeySet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::relative" );
     if(!rows)
     {
         invalidateRow();
-        return sal_True;
+        return true;
     }
     return absolute(getRow()+rows);
 }
 
-sal_Bool OKeySet::previous_checked( sal_Bool /* i_bFetchRow */ )
+bool OKeySet::previous_checked( sal_Bool /* i_bFetchRow */ )
 {
    SAL_INFO("dbaccess", "OKeySet::previous" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     if(m_aKeyIter != m_aKeyMap.begin())
     {
         --m_aKeyIter;
@@ -1355,7 +1355,7 @@ sal_Bool OKeySet::previous_checked( sal_Bool /* i_bFetchRow */ )
     return m_aKeyIter != m_aKeyMap.begin();
 }
 
-sal_Bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
 {
     return previous_checked(sal_True);
 }
@@ -1419,7 +1419,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
         return;
     }
 
-    sal_Bool bOK = doTryRefetch_throw();
+    bool bOK = doTryRefetch_throw();
     if ( !bOK )
     {
         // This row has disappeared; remove it.
@@ -1462,11 +1462,11 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     }
 }
 
-sal_Bool OKeySet::fetchRow()
+bool OKeySet::fetchRow()
 {
    SAL_INFO("dbaccess", "OKeySet::fetchRow" );
     // fetch the next row and append on the keyset
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( !m_bRowCountFinal && (!m_nMaxRows || sal_Int32(m_aKeyMap.size()) < m_nMaxRows) )
         bRet = m_xDriverSet->next();
     if ( bRet )
@@ -1496,7 +1496,7 @@ sal_Bool OKeySet::fetchRow()
         m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(m_aKeyMap.rbegin()->first+1,OKeySetValue(aKeyRow,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL)))).first;
     }
     else
-        m_bRowCountFinal = sal_True;
+        m_bRowCountFinal = true;
     return bRet;
 }
 
@@ -1669,23 +1669,23 @@ Reference< XArray > SAL_CALL OKeySet::getArray( sal_Int32 columnIndex ) throw(SQ
     return m_xRow->getArray(columnIndex);
 }
 
-sal_Bool SAL_CALL OKeySet::rowUpdated(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::rowUpdated" );
     return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second.first == 2;
 }
 
-sal_Bool SAL_CALL OKeySet::rowInserted(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::rowInserted" );
     return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second.first == 1;
 }
 
-sal_Bool SAL_CALL OKeySet::rowDeleted(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::rowDeleted" );
-    sal_Bool bDeleted = m_bDeleted;
-    m_bDeleted = sal_False;
+    bool bDeleted = m_bDeleted;
+    m_bDeleted = false;
     return bDeleted;
 }
 

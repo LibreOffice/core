@@ -63,14 +63,14 @@ namespace dbaui
         /// base class overwritten: create and delete windows
         /// (not really delete, as it becomes an UndoAction)
         bool ContainsTabWin(const OTableWindow& rTabWin); // #i122589# Allow to check if OTableWindow is registered
-        virtual void AddTabWin( const OUString& _rTableName, const OUString& _rAliasName, sal_Bool bNewTable = sal_False ) SAL_OVERRIDE;
+        virtual void AddTabWin( const OUString& _rTableName, const OUString& _rAliasName, bool bNewTable = false ) SAL_OVERRIDE;
         virtual void RemoveTabWin(OTableWindow* pTabWin) SAL_OVERRIDE;
 
         /// AddTabWin, setting an alias
-        void    AddTabWin(const OUString& strDatabase, const OUString& strTableName, const OUString& strAlias, sal_Bool bNewTable = sal_False);
+        void    AddTabWin(const OUString& strDatabase, const OUString& strTableName, const OUString& strAlias, bool bNewTable = false);
         /// search TabWin
         OQueryTableWindow*  FindTable(const OUString& rAliasName);
-        sal_Bool            FindTableFromField(const OUString& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt);
+        bool                FindTableFromField(const OUString& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt);
 
         /// base class overwritten: create and delete Connections
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) SAL_OVERRIDE;
@@ -89,7 +89,7 @@ namespace dbaui
         void DropConnection(OQueryTableConnection* pConn);
 
         // show and hide TabWin (NOT create or delete)
-        sal_Bool ShowTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction,sal_Bool _bAppend);
+        bool ShowTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction, bool _bAppend);
         void HideTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction);
 
         /// ensure visibility of TabWins (+ and invalidate connections)
@@ -112,12 +112,12 @@ namespace dbaui
         //virtual sal_Bool IsAddAllowed();
 
         /// announce new Connection and insert it, if not existant yet
-        void NotifyTabConnection(const OQueryTableConnection& rNewConn, sal_Bool _bCreateUndoAction = sal_True);
+        void NotifyTabConnection(const OQueryTableConnection& rNewConn, bool _bCreateUndoAction = true);
 
         /// @note the Handler receives a pointer to a TabWinsChangeNotification struct
         Link SetTabWinsChangeHandler(const Link& lnk) { Link lnkRet = m_lnkTabWinsChangeHandler; m_lnkTabWinsChangeHandler = lnk; return lnkRet; }
 
-        sal_Bool ExistsAVisitedConn(const OQueryTableWindow* pFrom) const;
+        bool ExistsAVisitedConn(const OQueryTableWindow* pFrom) const;
 
         virtual OTableWindowData* CreateImpl(const OUString& _rComposedName
                                             ,const OUString& _sTableName

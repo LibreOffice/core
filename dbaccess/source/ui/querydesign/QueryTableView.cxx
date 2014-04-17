@@ -60,9 +60,9 @@ using namespace ::com::sun::star::accessibility;
 
 namespace
 {
-    sal_Bool isColumnInKeyType(const Reference<XIndexAccess>& _rxKeys,const OUString& _rColumnName,sal_Int32 _nKeyType)
+    bool isColumnInKeyType(const Reference<XIndexAccess>& _rxKeys,const OUString& _rColumnName,sal_Int32 _nKeyType)
     {
-        sal_Bool bReturn = sal_False;
+        bool bReturn = false;
         if(_rxKeys.is())
         {
             Reference<XColumnsSupplier> xColumnsSupplier;
@@ -83,7 +83,7 @@ namespace
                             Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
                             if(xColumns.is() && xColumns->hasByName(_rColumnName))
                             {
-                                bReturn = sal_True;
+                                bReturn = true;
                                 break;
                             }
                         }
@@ -102,7 +102,7 @@ namespace
     void addUndoAction( OQueryTableView* _pView,
                         OQueryTabConnUndoAction* _pUndoAction,
                         OQueryTableConnection* _pConnection,
-                        sal_Bool _bOwner = sal_False)
+                        bool _bOwner = false)
     {
         _pUndoAction->SetOwnership(_bOwner);
         _pUndoAction->SetConnection(_pConnection);
@@ -114,12 +114,12 @@ namespace
 
         @return true when OK was pressed otherwise false
     */
-    sal_Bool openJoinDialog(OQueryTableView* _pView,const TTableConnectionData::value_type& _pConnectionData,sal_Bool _bSelectableTables)
+    bool openJoinDialog(OQueryTableView* _pView,const TTableConnectionData::value_type& _pConnectionData,bool _bSelectableTables)
     {
         OQueryTableConnectionData* pData = static_cast< OQueryTableConnectionData*>(_pConnectionData.get());
 
         DlgQryJoin aDlg(_pView,_pConnectionData,_pView->GetTabWinMap(),_pView->getDesignView()->getController().getConnection(),_bSelectableTables);
-        sal_Bool bOk = aDlg.Execute() == RET_OK;
+        bool bOk = aDlg.Execute() == RET_OK;
         if( bOk )
         {
             pData->SetJoinType(aDlg.GetJoinType());
@@ -135,7 +135,7 @@ namespace
     */
     void connectionModified(OQueryTableView* _pView,
                             OTableConnection* _pConnection,
-                            sal_Bool _bAddUndo)
+                            bool _bAddUndo)
     {
         OSL_ENSURE(_pConnection,"Invalid connection!");
         _pConnection->UpdateLineList();
@@ -211,7 +211,7 @@ namespace
             OQueryTableConnection aNewConn(_pView, aNewConnData);
             // refering to the local variable is not important, as NotifyQueryTabConn creates a new copy
             // to add me (if not existent)
-            _pView->NotifyTabConnection(aNewConn, sal_False);
+            _pView->NotifyTabConnection(aNewConn, false);
                 // don't create an Undo-Action for the new connection : the connection is
                 // covered by the Undo-Action for the tabwin, as the "Undo the insert" will
                 // automatically remove all connections adjacent to the win.
@@ -298,7 +298,7 @@ void OQueryTableView::ReSync()
 
         // do both tables for the connection exist ?
         OUString strTabExistenceTest = pTabConnData->getReferencingTable()->GetWinName();
-        sal_Bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
+        bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
         strTabExistenceTest = pTabConnData->getReferencedTable()->GetWinName();
         bInvalid = bInvalid && ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
 
@@ -327,7 +327,7 @@ OTableWindow* OQueryTableView::createWindow(const TTableWindowData::value_type& 
     return new OQueryTableWindow(this,_pData);
 }
 
-void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn, sal_Bool _bCreateUndoAction)
+void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn, bool _bCreateUndoAction)
 {
     // let's first check if I have the connection already
     OQueryTableConnection* pTabConn = NULL;
@@ -373,7 +373,7 @@ OTableWindowData* OQueryTableView::CreateImpl(const OUString& _rComposedName
     return new OQueryTableWindowData( _rComposedName, _sTableName,_rWinName );
 }
 
-void OQueryTableView::AddTabWin(const OUString& _rTableName, const OUString& _rAliasName, sal_Bool bNewTable)
+void OQueryTableView::AddTabWin(const OUString& _rTableName, const OUString& _rAliasName, bool bNewTable)
 {
     // this method has been inherited from the base class, linking back to the parent and which constructs
     // an Alias and which passes on to my other AddTabWin
@@ -436,14 +436,14 @@ Reference<XPropertySet> getKeyReferencedTo(const Reference<XIndexAccess>& _rxKey
     return Reference<XPropertySet>();
 }
 
-void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& _rTableName, const OUString& strAlias, sal_Bool bNewTable)
+void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& _rTableName, const OUString& strAlias, bool bNewTable)
 {
     OSL_ENSURE(!_rTableName.isEmpty() || !strAlias.isEmpty(), "OQueryTableView::AddTabWin : no tables or aliases !");
         // If the table is not set, then it is a dummy window, but at least the alias must be set
 
     // build a new data structure
     // first check if this already has its data
-    sal_Bool bAppend = bNewTable;
+    bool bAppend = bNewTable;
     TTableWindowData::value_type pNewTabWinData;
     TTableWindowData* pWindowData = getDesignView()->getController().getTableWindowData();
     TTableWindowData::iterator aWinIter = pWindowData->begin();
@@ -467,12 +467,12 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
     // New UndoAction
     OQueryTabWinShowUndoAct* pUndoAction = new OQueryTabWinShowUndoAct(this);
     pUndoAction->SetTabWin(pNewTabWin); // Window
-    sal_Bool bSuccess = ShowTabWin(pNewTabWin, pUndoAction,bAppend);
+    bool bSuccess = ShowTabWin(pNewTabWin, pUndoAction,bAppend);
     if(!bSuccess)
     {
         // reset table window
         pUndoAction->SetTabWin(NULL);
-        pUndoAction->SetOwnership(sal_False);
+        pUndoAction->SetOwnership(false);
 
         delete pUndoAction;
         return;
@@ -641,15 +641,15 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
 
         pConn->GetData()->AppendConnLine( aSourceFieldName,aDestFieldName );
 
-        connectionModified(this,pConn,sal_False);
+        connectionModified(this,pConn,false);
     }
 }
 
 void OQueryTableView::ConnDoubleClicked(OTableConnection* pConnection)
 {
-    if( openJoinDialog(this,pConnection->GetData(),sal_False) )
+    if( openJoinDialog(this,pConnection->GetData(),false) )
     {
-        connectionModified(this,pConnection,sal_False);
+        connectionModified(this,pConnection,false);
         SelectConn( pConnection );
     }
 }
@@ -657,18 +657,18 @@ void OQueryTableView::ConnDoubleClicked(OTableConnection* pConnection)
 void OQueryTableView::createNewConnection()
 {
     TTableConnectionData::value_type pData(new OQueryTableConnectionData());
-    if( openJoinDialog(this,pData,sal_True) )
+    if( openJoinDialog(this,pData,true) )
     {
         OTableWindowMap* pMap = GetTabWinMap();
         OQueryTableWindow* pSourceWin   = static_cast< OQueryTableWindow*>((*pMap)[pData->getReferencingTable()->GetWinName()]);
         OQueryTableWindow* pDestWin     = static_cast< OQueryTableWindow*>((*pMap)[pData->getReferencedTable()->GetWinName()]);
         // first we have to look if the this connection already exists
         OTableConnection* pConn = GetTabConn(pSourceWin,pDestWin,true);
-        sal_Bool bNew = sal_True;
+        bool bNew = true;
         if ( pConn )
         {
             pConn->GetData()->CopyFrom( *pData );
-            bNew = sal_False;
+            bNew = false;
         }
         else
         {
@@ -693,7 +693,7 @@ bool OQueryTableView::RemoveConnection( OTableConnection* _pConnection,sal_Bool 
     addUndoAction(  this,
                     new OQueryDelTabConnUndoAction(this),
                     static_cast< OQueryTableConnection*>(_pConnection),
-                    sal_True);
+                    true);
     return bRet;
 }
 
@@ -712,7 +712,7 @@ OQueryTableWindow* OQueryTableView::FindTable(const OUString& rAliasName)
     return NULL;
 }
 
-sal_Bool OQueryTableView::FindTableFromField(const OUString& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt)
+bool OQueryTableView::FindTableFromField(const OUString& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt)
 {
     rCnt = 0;
     OTableWindowMap::const_iterator aIter = GetTabWinMap()->begin();
@@ -870,7 +870,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
         m_pView->getController().InvalidateFeature(ID_BROWSER_ADDTABLE);
 
         // inform the UndoAction that the window and connections belong to it
-        pUndoAction->SetOwnership(sal_True);
+        pUndoAction->SetOwnership(true);
 
         // by doing so, we have modified the document
         m_pView->getController().setModified( sal_True );
@@ -878,10 +878,10 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
     }
 }
 
-sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction,sal_Bool _bAppend )
+bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction, bool _bAppend )
 {
 
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
 
     if (pTabWin)
     {
@@ -929,9 +929,9 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
             m_pView->getController().InvalidateFeature(ID_BROWSER_ADDTABLE);
 
             // and inform the UndoAction  that the window belongs to me
-            pUndoAction->SetOwnership(sal_False);
+            pUndoAction->SetOwnership(false);
 
-            bSuccess = sal_True;
+            bSuccess = true;
         }
         else
         {
@@ -957,7 +957,7 @@ void OQueryTableView::InsertField(const OTableFieldDescRef& rInfo)
     static_cast<OQueryDesignView*>(getDesignView())->InsertField(rInfo);
 }
 
-sal_Bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) const
+bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) const
 {
     const ::std::vector<OTableConnection*>* pList = getTableConnections();
     if (pList)

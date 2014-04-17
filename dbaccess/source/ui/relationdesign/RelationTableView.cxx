@@ -132,7 +132,7 @@ void ORelationTableView::ReSync()
         {
             // gibt es die beiden Tabellen zur Connection ?
             OUString strTabExistenceTest = pTabConnData->getReferencingTable()->GetTableName();
-            sal_Bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
+            bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
             strTabExistenceTest = pTabConnData->getReferencedTable()->GetTableName();
             bInvalid = bInvalid || ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
 
@@ -144,14 +144,14 @@ void ORelationTableView::ReSync()
             }
         }
 
-        addConnection( new ORelationTableConnection(this, *aConIter), sal_False ); // don't add the data again
+        addConnection( new ORelationTableConnection(this, *aConIter), false ); // don't add the data again
     }
 
     if ( !GetTabWinMap()->empty() )
         GetTabWinMap()->begin()->second->GrabFocus();
 }
 
-sal_Bool ORelationTableView::IsAddAllowed()
+bool ORelationTableView::IsAddAllowed()
 {
 
     return !m_pView->getController().isReadOnly();
@@ -244,9 +244,9 @@ void ORelationTableView::AddNewRelation()
 {
 
     TTableConnectionData::value_type pNewConnData( new ORelationTableConnectionData() );
-    ORelationDialog aRelDlg(this, pNewConnData, sal_True);
+    ORelationDialog aRelDlg(this, pNewConnData, true);
 
-    sal_Bool bSuccess = (aRelDlg.Execute() == RET_OK);
+    bool bSuccess = (aRelDlg.Execute() == RET_OK);
     if (bSuccess)
     {
         // already updated by the dialog
@@ -274,7 +274,7 @@ bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_
     return false;
 }
 
-void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUString& rWinName, sal_Bool /*bNewTable*/)
+void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUString& rWinName, bool /*bNewTable*/)
 {
     OSL_ENSURE(!_rComposedName.isEmpty(),"There must be a table name supplied!");
     OJoinTableView::OTableWindowMap::iterator aIter = GetTabWinMap()->find(_rComposedName);
@@ -290,7 +290,7 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
 
     // enter the new data structure into DocShell
     TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
-    pNewTabWinData->ShowAll(sal_False);
+    pNewTabWinData->ShowAll(false);
 
     // Neues Fenster in Fensterliste eintragen
     OTableWindow* pNewTabWin = createWindow( pNewTabWinData );

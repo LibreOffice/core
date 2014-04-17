@@ -44,8 +44,8 @@ namespace dbaui
         Link                    m_lnkTextModifyHdl;
         OUString                m_strOrigText;      // is restored on undo
         OQueryTextView*         m_pView;
-        sal_Bool                m_bAccelAction;     // is set on cut, copy, paste
-        sal_Bool                m_bStopTimer;
+        bool                m_bAccelAction;     // is set on cut, copy, paste
+        bool                m_bStopTimer;
         svtools::ColorConfig    m_ColorConfig;
 
         rtl::Reference< ChangesListener > m_listener;
@@ -74,7 +74,7 @@ namespace dbaui
         using MultiLineEditSyntaxHighlight::SetText;
 
         // own functionality
-        sal_Bool IsInAccelAct();
+        bool IsInAccelAct();
 
         void SetTextModifyHdl(const Link& lnk) { m_lnkTextModifyHdl = lnk; }
             // please don't use SetModifyHdl, I need it for myself, this here is called from the handler set with that

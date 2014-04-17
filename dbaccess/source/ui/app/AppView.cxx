@@ -68,7 +68,7 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 
     SetBorderStyle(WINDOW_BORDER_MONO);
 
-    m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL ,sal_False);
+    m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL, false);
     m_pPanel->SetBorderStyle(WINDOW_BORDER_MONO);
     OApplicationSwapWindow* pSwap = new OApplicationSwapWindow( m_pPanel, *this );
     pSwap->Show();
@@ -302,19 +302,19 @@ IClipboardTest* OApplicationView::getActiveChild() const
     return pTest;
 }
 
-sal_Bool OApplicationView::isCopyAllowed()
+bool OApplicationView::isCopyAllowed()
 {
     IClipboardTest* pTest = getActiveChild();
     return pTest && pTest->isCopyAllowed();
 }
 
-sal_Bool OApplicationView::isCutAllowed()
+bool OApplicationView::isCutAllowed()
 {
     IClipboardTest* pTest = getActiveChild();
     return pTest && pTest->isCutAllowed();
 }
 
-sal_Bool OApplicationView::isPasteAllowed()
+bool OApplicationView::isPasteAllowed()
 {
     IClipboardTest* pTest = getActiveChild();
     return pTest && pTest->isPasteAllowed();
@@ -347,13 +347,13 @@ OUString OApplicationView::getQualifiedName( SvTreeListEntry* _pEntry ) const
     return getDetailView()->getQualifiedName( _pEntry );
 }
 
-sal_Bool OApplicationView::isLeaf(SvTreeListEntry* _pEntry) const
+bool OApplicationView::isLeaf(SvTreeListEntry* _pEntry) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->isLeaf(_pEntry);
 }
 
-sal_Bool OApplicationView::isALeafSelected() const
+bool OApplicationView::isALeafSelected() const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->isALeafSelected();
@@ -365,7 +365,7 @@ void OApplicationView::selectAll()
     getDetailView()->selectAll();
 }
 
-sal_Bool OApplicationView::isSortUp() const
+bool OApplicationView::isSortUp() const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->isSortUp();
@@ -383,7 +383,7 @@ void OApplicationView::sortUp()
     getDetailView()->sortUp();
 }
 
-sal_Bool OApplicationView::isFilled() const
+bool OApplicationView::isFilled() const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->isFilled();
@@ -451,7 +451,7 @@ void OApplicationView::elementReplaced(ElementType _eType
     getDetailView()->elementReplaced(_eType, _rOldName, _rNewName );
 }
 
-void OApplicationView::clearPages(sal_Bool _bTaskAlso)
+void OApplicationView::clearPages(bool _bTaskAlso)
 {
     OSL_ENSURE(m_pWin && getDetailView() && getPanel(),"Detail view is NULL! -> GPF");
     getPanel()->clearSelection();
@@ -477,7 +477,7 @@ PreviewMode OApplicationView::getPreviewMode()
     return getDetailView()->getPreviewMode();
 }
 
-sal_Bool OApplicationView::isPreviewEnabled()
+bool OApplicationView::isPreviewEnabled()
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->isPreviewEnabled();
@@ -500,7 +500,7 @@ void OApplicationView::showPreview(const Reference< XContent >& _xContent)
 void OApplicationView::showPreview( const OUString& _sDataSourceName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                                     const OUString& _sName,
-                                    sal_Bool _bTable)
+                                    bool _bTable)
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     if ( isPreviewEnabled() )

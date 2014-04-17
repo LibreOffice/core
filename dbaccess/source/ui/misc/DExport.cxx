@@ -87,7 +87,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                                  const TColumnVector* pList,
                                  const OTypeInfoMap* _pInfoMap,
-                                 sal_Bool _bAutoIncrementEnabled,
+                                 bool _bAutoIncrementEnabled,
                                  SvStream& _rInputStream)
     :m_vColumns(_rColumnPositions)
     ,m_aDestColumns(true)
@@ -102,13 +102,13 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_nRows(1)
     ,m_nRowCount(0)
     ,m_nDefToken( osl_getThreadTextEncoding() )
-    ,m_bError(sal_False)
-    ,m_bInTbl(sal_False)
-    ,m_bHead(sal_True)
-    ,m_bDontAskAgain(sal_False)
+    ,m_bError(false)
+    ,m_bInTbl(false)
+    ,m_bHead(true)
+    ,m_bDontAskAgain(false)
     ,m_bIsAutoIncrement(_bAutoIncrementEnabled)
-    ,m_bFoundTable(sal_False)
-    ,m_bCheckOnly(sal_False)
+    ,m_bFoundTable(false)
+    ,m_bCheckOnly(false)
     ,m_bAppendFirstLine(false)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::ODatabaseExport" );
@@ -158,13 +158,13 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     ,m_nRows(1)
     ,m_nRowCount(0)
     ,m_nDefToken( osl_getThreadTextEncoding() )
-    ,m_bError(sal_False)
-    ,m_bInTbl(sal_False)
-    ,m_bHead(sal_True)
-    ,m_bDontAskAgain(sal_False)
-    ,m_bIsAutoIncrement(sal_False)
-    ,m_bFoundTable(sal_False)
-    ,m_bCheckOnly(sal_False)
+    ,m_bError(false)
+    ,m_bInTbl(false)
+    ,m_bHead(true)
+    ,m_bDontAskAgain(false)
+    ,m_bIsAutoIncrement(false)
+    ,m_bFoundTable(false)
+    ,m_bCheckOnly(false)
     ,m_bAppendFirstLine(false)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::ODatabaseExport" );
@@ -242,19 +242,19 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 m_pTypeInfo->bNullable      = (sal_Int32)aValue == ColumnValue::NULLABLE;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->bCaseSensitive = (sal_Bool)aValue;
+                m_pTypeInfo->bCaseSensitive = aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->nSearchType        = aValue;
+                m_pTypeInfo->nSearchType    = aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->bUnsigned      = (sal_Bool)aValue;
+                m_pTypeInfo->bUnsigned      = aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->bCurrency      = (sal_Bool)aValue;
+                m_pTypeInfo->bCurrency      = aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-                m_pTypeInfo->bAutoIncrement = (sal_Bool)aValue;
+                m_pTypeInfo->bAutoIncrement = aValue;
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->aLocalTypeName = aValue;
@@ -669,9 +669,9 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
     pField->SetPrecision(::std::min<sal_Int32>((sal_Int32)255,m_pTypeInfo->nPrecision));
     pField->SetScale(0);
     pField->SetIsNullable(ColumnValue::NULLABLE);
-    pField->SetAutoIncrement(sal_False);
-    pField->SetPrimaryKey(sal_False);
-    pField->SetCurrency(sal_False);
+    pField->SetAutoIncrement(false);
+    pField->SetPrimaryKey(false);
+    pField->SetCurrency(false);
 
     TColumns::iterator aFind = m_aDestColumns.find( aAlias );
     if ( aFind != m_aDestColumns.end() )
@@ -683,7 +683,7 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
     m_vDestVector.push_back(m_aDestColumns.insert(TColumns::value_type(aAlias,pField)).first);
 }
 
-sal_Bool ODatabaseExport::createRowSet()
+bool ODatabaseExport::createRowSet()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::createRowSet" );
     m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumns)));
@@ -691,7 +691,7 @@ sal_Bool ODatabaseExport::createRowSet()
     return m_pUpdateHelper.get() != NULL;
 }
 
-sal_Bool ODatabaseExport::executeWizard(const OUString& _rTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
+bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTextColor, const FontDescriptor& _rFont)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::executeWizard" );
 
@@ -710,7 +710,7 @@ sal_Bool ODatabaseExport::executeWizard(const OUString& _rTableName,const Any& _
         m_xContext
     );
 
-    sal_Bool bError = sal_False;
+    bool bError = false;
     try
     {
         if (aWizard.Execute())
@@ -735,11 +735,11 @@ sal_Bool ODatabaseExport::executeWizard(const OUString& _rTableName,const Any& _
                     }
                     break;
                 default:
-                    bError = sal_True; // there is no error but I have nothing more to do
+                    bError = true; // there is no error but I have nothing more to do
             }
         }
         else
-            bError = sal_True;
+            bError = true;
 
         if(!bError)
             bError = !createRowSet();
@@ -747,7 +747,7 @@ sal_Bool ODatabaseExport::executeWizard(const OUString& _rTableName,const Any& _
     catch( const SQLException&)
     {
         ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), &aWizard, m_xContext );
-        bError = sal_True;
+        bError = true;
     }
     catch( const Exception& )
     {
@@ -768,9 +768,9 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
         OSQLWarningBox aBox( NULL, aMsg, WB_YES_NO | WB_DEF_NO );
 
         if (aBox.Execute() == RET_YES)
-            m_bDontAskAgain = sal_True;
+            m_bDontAskAgain = true;
         else
-            m_bError = sal_True;
+            m_bError = true;
     }
 }
 

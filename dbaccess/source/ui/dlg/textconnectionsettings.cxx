@@ -57,7 +57,7 @@ namespace dbaui
 
     short TextConnectionSettingsDialog::Execute()
     {
-        m_pTextConnectionHelper->implInitControls( m_rItems, sal_True );
+        m_pTextConnectionHelper->implInitControls( m_rItems, true );
         return ModalDialog::Execute();
     }
 
@@ -65,7 +65,7 @@ namespace dbaui
     {
         if ( m_pTextConnectionHelper->prepareLeave() )
         {
-            sal_Bool bUnused = sal_False;
+            bool bUnused = false;
             m_pTextConnectionHelper->FillItemSet( m_rItems, bUnused );
             EndDialog( RET_OK );
             return 1L;

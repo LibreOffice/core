@@ -282,7 +282,7 @@ void OUserAdmin::fillWindows(::std::vector< ISaveValueWrapper* >& /*_rControlLis
 {
 }
 
-void OUserAdmin::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+void OUserAdmin::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
 {
     m_TableCtrl.setComponentContext(m_xORB);
     try

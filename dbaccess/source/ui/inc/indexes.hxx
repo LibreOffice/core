@@ -30,9 +30,9 @@ namespace dbaui
     struct OIndexField
     {
         OUString            sFieldName;
-        sal_Bool            bSortAscending;
+        bool            bSortAscending;
 
-        OIndexField() : bSortAscending(sal_True) { }
+        OIndexField() : bSortAscending(true) { }
     };
 
     typedef std::vector<OIndexField> IndexFields;
@@ -49,28 +49,28 @@ namespace dbaui
     {
     protected:
         OUString     sOriginalName;
-        sal_Bool            bModified;
+        bool            bModified;
 
     public:
         OUString     sName;
         OUString     sDescription;
-        sal_Bool            bPrimaryKey;
-        sal_Bool            bUnique;
+        bool            bPrimaryKey;
+        bool            bUnique;
         IndexFields         aFields;
 
     public:
         OIndex(const OUString& _rOriginalName)
-            : sOriginalName(_rOriginalName), bModified(sal_False), sName(_rOriginalName), bPrimaryKey(sal_False), bUnique(sal_False)
+            : sOriginalName(_rOriginalName), bModified(false), sName(_rOriginalName), bPrimaryKey(false), bUnique(false)
         {
         }
 
         const OUString& getOriginalName() const { return sOriginalName; }
 
-        sal_Bool    isModified() const { return bModified; }
-        void        setModified(sal_Bool _bModified) { bModified = _bModified; }
-        void        clearModified() { setModified(sal_False); }
+        bool    isModified() const { return bModified; }
+        void        setModified(bool _bModified) { bModified = _bModified; }
+        void        clearModified() { setModified(false); }
 
-        sal_Bool    isNew() const { return getOriginalName().isEmpty(); }
+        bool    isNew() const { return getOriginalName().isEmpty(); }
         void        flagAsNew(const GrantIndexAccess&) { sOriginalName = OUString(); }
         void        flagAsCommitted(const GrantIndexAccess&) { sOriginalName = sName; }
 

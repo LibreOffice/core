@@ -57,8 +57,8 @@ protected:
     ::com::sun::star::uno::WeakReferenceHelper  m_aResultSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xAggregateAsSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCancellable > m_xAggregateAsCancellable;
-    sal_Bool                m_bUseBookmarks;
-    sal_Bool                m_bEscapeProcessing;
+    bool                m_bUseBookmarks;
+    bool                m_bEscapeProcessing;
 
     virtual ~OStatementBase();
 

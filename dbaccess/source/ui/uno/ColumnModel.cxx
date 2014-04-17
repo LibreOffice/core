@@ -51,7 +51,7 @@ OColumnControlModel::OColumnControlModel(const Reference<XMultiServiceFactory>& 
     ,OColumnControlModel_BASE(m_aMutex)
     ,m_xORB(_rxFactory)
     ,m_sDefaultControl(SERVICE_CONTROLDEFAULT)
-    ,m_bEnable(sal_True)
+    ,m_bEnable(true)
     ,m_nBorder(0)
     ,m_nWidth(50)
 {

@@ -192,7 +192,7 @@ namespace
         const Sequence< OUString> m_aViews;
         ::comphelper::UStringMixEqual m_aEqualFunctor;
 
-        OViewSetter(const Sequence< OUString>& _rViews,sal_Bool _bCase) : m_aViews(_rViews),m_aEqualFunctor(_bCase){}
+        OViewSetter(const Sequence< OUString>& _rViews,bool _bCase) : m_aViews(_rViews),m_aEqualFunctor(_bCase){}
         OTableTreeListBox::TNames::value_type operator() (const OUString& lhs)
         {
             OTableTreeListBox::TNames::value_type aRet;
@@ -289,14 +289,14 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
             implAddEntry(
                 xMeta,
                 aIter->first,
-                sal_False
+                false
             );
         }
 
         if ( !m_bNoEmptyFolders && lcl_shouldDisplayEmptySchemasAndCatalogs( _rxConnection ) )
         {
-            sal_Bool bSupportsCatalogs = xMeta->supportsCatalogsInDataManipulation();
-            sal_Bool bSupportsSchemas = xMeta->supportsSchemasInDataManipulation();
+            bool bSupportsCatalogs = xMeta->supportsCatalogsInDataManipulation();
+            bool bSupportsSchemas = xMeta->supportsSchemasInDataManipulation();
 
             if ( bSupportsCatalogs || bSupportsSchemas )
             {
@@ -328,7 +328,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     }
 }
 
-sal_Bool OTableTreeListBox::isWildcardChecked(SvTreeListEntry* _pEntry) const
+bool OTableTreeListBox::isWildcardChecked(SvTreeListEntry* _pEntry) const
 {
     if (_pEntry)
     {
@@ -336,7 +336,7 @@ sal_Bool OTableTreeListBox::isWildcardChecked(SvTreeListEntry* _pEntry) const
         if (pTextItem)
             return pTextItem->isEmphasized();
     }
-    return sal_False;
+    return false;
 }
 
 void OTableTreeListBox::checkWildcard(SvTreeListEntry* _pEntry)
@@ -363,12 +363,12 @@ void OTableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
     implEmphasize(_pEntry, SV_BUTTON_CHECKED == eState);
 }
 
-void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants, sal_Bool _bUpdateAncestors)
+void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, bool _bChecked, bool _bUpdateDescendants, bool _bUpdateAncestors)
 {
     OSL_ENSURE(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
 
     // special emphasizing handling for the "all objects" entry
-    sal_Bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry() == _pEntry);
+    bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry() == _pEntry);
     if  (   GetModel()->HasChildren(_pEntry)              // the entry has children
         ||  bAllObjectsEntryAffected                    // or it is the "all objects" entry
         )
@@ -388,7 +388,7 @@ void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, sal_Bool _bCheck
         while (pChildLoop)
         {
             if (GetModel()->HasChildren(pChildLoop))
-                implEmphasize(pChildLoop, sal_False, sal_True, sal_False);
+                implEmphasize(pChildLoop, false, true, false);
             pChildLoop = NextSibling(pChildLoop);
         }
     }
@@ -397,7 +397,7 @@ void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, sal_Bool _bCheck
     {
         // remove the mark for all ancestors of the entry
         if (GetModel()->HasParent(_pEntry))
-            implEmphasize(GetParent(_pEntry), sal_False, sal_False, sal_True);
+            implEmphasize(GetParent(_pEntry), false, false, true);
     }
 }
 
@@ -417,7 +417,7 @@ void OTableTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& _rSt
 SvTreeListEntry* OTableTreeListBox::implAddEntry(
         const Reference< XDatabaseMetaData >& _rxMeta,
         const OUString& _rTableName,
-        sal_Bool _bCheckName
+        bool _bCheckName
     )
 {
     OSL_PRECOND( _rxMeta.is(), "OTableTreeListBox::implAddEntry: invalid meta data!" );
@@ -438,7 +438,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
     //   schema
     //   +- catalog
     //      +- table
-    sal_Bool bCatalogAtStart = _rxMeta->isCatalogAtStart();
+    bool bCatalogAtStart = _rxMeta->isCatalogAtStart();
     const OUString& rFirstName  = bCatalogAtStart ? sCatalog : sSchema;
     const sal_Int32 nFirstFolderType   = bCatalogAtStart ? DatabaseObjectContainer::CATALOG : DatabaseObjectContainer::SCHEMA;
     const OUString& rSecondName = bCatalogAtStart ? sSchema : sCatalog;

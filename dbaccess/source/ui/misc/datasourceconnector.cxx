@@ -102,7 +102,7 @@ namespace dbaui
 
         // get user/password
         OUString sPassword, sUser;
-        sal_Bool bPwdRequired = sal_False;
+        bool bPwdRequired = false;
         Reference<XPropertySet> xProp(_xDataSource,UNO_QUERY);
         try
         {

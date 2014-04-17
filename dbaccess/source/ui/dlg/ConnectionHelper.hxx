@@ -37,7 +37,7 @@ namespace dbaui
 
     class OConnectionHelper : public OGenericAdministrationPage
     {
-        sal_Bool            m_bUserGrabFocus : 1;
+        bool            m_bUserGrabFocus : 1;
 
     public:
         OConnectionHelper( Window* pParent, const ResId& _rId, const SfxItemSet& _rCoreAttrs);
@@ -59,7 +59,7 @@ namespace dbaui
         virtual void    fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
         // <method>OGenericAdministrationPage::fillWindows</method>
         virtual void    fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual void    implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
+        virtual void    implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
 
         // setting/retrieving the current connection URL
         // necessary because for some types, the URL must be decoded for display purposes
@@ -75,9 +75,9 @@ namespace dbaui
         */
         sal_Int32   checkPathExistence(const OUString& _rURL);
 
-        IS_PATH_EXIST   pathExists(const OUString& _rURL, sal_Bool bIsFile) const;
-        sal_Bool        createDirectoryDeep(const OUString& _rPathNormalized);
-        sal_Bool        commitURL();
+        IS_PATH_EXIST   pathExists(const OUString& _rURL, bool bIsFile) const;
+        bool        createDirectoryDeep(const OUString& _rPathNormalized);
+        bool        commitURL();
 
         /** opens the FileOpen dialog and asks for a FileName
             @param  _aFileOpen
@@ -92,8 +92,8 @@ namespace dbaui
     private:
         DECL_LINK(OnBrowseConnections, PushButton*);
         DECL_LINK(OnCreateDatabase, PushButton*);
-        OUString    impl_getURL( sal_Bool _bPrefix ) const;
-        void        impl_setURL( const OUString& _rURL, sal_Bool _bPrefix );
+        OUString    impl_getURL( bool _bPrefix ) const;
+        void        impl_setURL( const OUString& _rURL, bool _bPrefix );
         void        implUpdateURLDependentStates() const;
     };
 

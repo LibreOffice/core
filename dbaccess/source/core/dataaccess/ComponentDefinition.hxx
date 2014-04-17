@@ -92,7 +92,7 @@ protected:
     ::std::auto_ptr< OColumns >     m_pColumns;
     ::comphelper::ImplementationReference< OColumnPropertyListener,::com::sun::star::beans::XPropertyChangeListener>
                                     m_xColumnPropertyListener;
-    sal_Bool                        m_bTable;
+    bool                        m_bTable;
 
     virtual ~OComponentDefinition();
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
@@ -101,7 +101,7 @@ protected:
     OComponentDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
         ,const TContentPtr& _pImpl
-        ,sal_Bool _bTable = sal_True);
+        ,bool _bTable = true);
 
     const   OComponentDefinition_Impl& getDefinition() const { return dynamic_cast< const OComponentDefinition_Impl& >( *m_pImpl.get() ); }
             OComponentDefinition_Impl& getDefinition()       { return dynamic_cast<       OComponentDefinition_Impl& >( *m_pImpl.get() ); }
@@ -112,7 +112,7 @@ public:
             ,const OUString& _rElementName
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
             ,const TContentPtr& _pImpl
-            ,sal_Bool _bTable = sal_True
+            ,bool _bTable = true
         );
 
     virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()

@@ -89,19 +89,19 @@ namespace dbaccess
         sal_Int32                   m_nStartPos;                // start pos of the window zero based (inclusive)
         sal_Int32                   m_nEndPos;                  // end   pos of the window zero based (exclusive)
 
-        sal_Bool                    m_bRowCountFinal ;
-        sal_Bool                    m_bBeforeFirst ;
-        sal_Bool                    m_bAfterLast ;
-        sal_Bool                    m_bUpdated ;
-        sal_Bool&                   m_bModified ;           // points to the rowset member m_bModified
-        sal_Bool&                   m_bNew ;                // points to the rowset member m_bNew
+        bool                    m_bRowCountFinal ;
+        bool                    m_bBeforeFirst ;
+        bool                    m_bAfterLast ;
+        bool                    m_bUpdated ;
+        bool&                   m_bModified ;           // points to the rowset member m_bModified
+        bool&                   m_bNew ;                // points to the rowset member m_bNew
 
-        sal_Bool fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix::const_iterator& _aEnd,sal_Int32& _nPos,sal_Bool _bCheck);
-        sal_Bool reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 nNewEndPos);
-        sal_Bool fillMatrix(sal_Int32 &_nNewStartPos,sal_Int32 &_nNewEndPos);
-        sal_Bool moveWindow();
+        bool fill(ORowSetMatrix::iterator& _aIter, const ORowSetMatrix::const_iterator& _aEnd, sal_Int32& _nPos, bool _bCheck);
+        bool reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 nNewEndPos);
+        bool fillMatrix(sal_Int32 &_nNewStartPos,sal_Int32 &_nNewEndPos);
+        bool moveWindow();
         // returns true when a keyset needs to be created.
-        sal_Bool impl_createBookmarkSet_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xRs);
+        bool impl_createBookmarkSet_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xRs);
 
         void firePropertyChange(sal_Int32 _nColumnIndex,const ::connectivity::ORowSetValue& _rOldValue);
 
@@ -118,10 +118,10 @@ namespace dbaccess
         // checks and set the flags isAfterLast isLast and position when afterlast is true
         void checkPositionFlags();
         void checkUpdateConditions(sal_Int32 columnIndex);
-        sal_Bool checkJoin( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+        bool checkJoin( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                             const OUString& _sUpdateTableName);
-        sal_Bool checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
+        bool checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
                             ,const OUString& _sUpdateTableName);
 
@@ -138,8 +138,8 @@ namespace dbaccess
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xAnalyzer,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
                      const OUString& _rUpdateTableName,
-                     sal_Bool&  _bModified,
-                     sal_Bool&  _bNew,
+                     bool&  _bModified,
+                     bool&  _bNew,
                      const ORowSetValueVector& _aParameterValueForCache,
                      const OUString& i_sRowSetFilter,
                      sal_Int32 i_nMaxRows);
@@ -161,10 +161,10 @@ namespace dbaccess
 
     // ::com::sun::star::sdbcx::XRowLocate
         ::com::sun::star::uno::Any getBookmark(  );
-        sal_Bool moveToBookmark( const ::com::sun::star::uno::Any& bookmark );
-        sal_Bool moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows );
+        bool moveToBookmark( const ::com::sun::star::uno::Any& bookmark );
+        bool moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows );
         sal_Int32 compareBookmarks( const ::com::sun::star::uno::Any& first, const ::com::sun::star::uno::Any& second );
-        sal_Bool hasOrderedBookmarks(  );
+        bool hasOrderedBookmarks(  );
         sal_Int32 hashBookmark( const ::com::sun::star::uno::Any& bookmark );
 
     // ::com::sun::star::sdbc::XRowUpdate
@@ -178,26 +178,26 @@ namespace dbaccess
                         );
 
     // ::com::sun::star::sdbc::XResultSet
-        sal_Bool next(  );
-        sal_Bool isBeforeFirst(  );
-        sal_Bool isAfterLast(  );
-        sal_Bool isFirst(  );
-        sal_Bool isLast(  );
-        sal_Bool beforeFirst(  );
-        sal_Bool afterLast(  );
-        sal_Bool first(  );
-        sal_Bool last(  );
+        bool next(  );
+        bool isBeforeFirst(  );
+        bool isAfterLast(  );
+        bool isFirst(  );
+        bool isLast(  );
+        bool beforeFirst(  );
+        bool afterLast(  );
+        bool first(  );
+        bool last(  );
         sal_Int32 getRow(  );
-        sal_Bool absolute( sal_Int32 row );
-        sal_Bool relative( sal_Int32 rows );
-        sal_Bool previous(  );
+        bool absolute( sal_Int32 row );
+        bool relative( sal_Int32 rows );
+        bool previous(  );
         void refreshRow(  );
-        sal_Bool rowUpdated(  );
-        sal_Bool rowInserted(  );
+        bool rowUpdated(  );
+        bool rowInserted(  );
 
     // ::com::sun::star::sdbc::XResultSetUpdate
-        sal_Bool insertRow(::std::vector< ::com::sun::star::uno::Any >& o_aBookmarks);
-        void resetInsertRow(sal_Bool _bClearInsertRow);
+        bool insertRow(::std::vector< ::com::sun::star::uno::Any >& o_aBookmarks);
+        void resetInsertRow(bool _bClearInsertRow);
 
         void updateRow( ORowSetMatrix::iterator& _rUpdateRow,::std::vector< ::com::sun::star::uno::Any >& o_aBookmarks );
         bool deleteRow();

@@ -91,7 +91,7 @@ void OTableFieldDescWin::Init()
     getGenPage()->Init();
 }
 
-void OTableFieldDescWin::SetReadOnly( sal_Bool bRead )
+void OTableFieldDescWin::SetReadOnly( bool bRead )
 {
     getGenPage()->SetReadOnly( bRead );
 }
@@ -219,17 +219,17 @@ IClipboardTest* OTableFieldDescWin::getActiveChild() const
     return pTest;
 }
 
-sal_Bool OTableFieldDescWin::isCopyAllowed()
+bool OTableFieldDescWin::isCopyAllowed()
 {
     return getActiveChild() && getActiveChild()->isCopyAllowed();
 }
 
-sal_Bool OTableFieldDescWin::isCutAllowed()
+bool OTableFieldDescWin::isCutAllowed()
 {
     return (getGenPage() && getGenPage()->HasChildPathFocus() && getGenPage()->isCutAllowed());
 }
 
-sal_Bool OTableFieldDescWin::isPasteAllowed()
+bool OTableFieldDescWin::isPasteAllowed()
 {
     return (getGenPage() && getGenPage()->HasChildPathFocus() && getGenPage()->isPasteAllowed());
 }
@@ -266,7 +266,7 @@ void OTableFieldDescWin::LoseFocus()
 
 bool OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     switch(rNEvt.GetType())
     {
         case EVENT_GETFOCUS:

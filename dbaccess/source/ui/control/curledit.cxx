@@ -25,7 +25,7 @@
 namespace dbaui
 {
 // OConnectionURLEdit
-OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,sal_Bool _bShowPrefix)
+OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,bool _bShowPrefix)
     :Edit(_pParent, _rResId)
     ,m_pTypeCollection(NULL)
     ,m_pForcedPrefix(NULL)
@@ -78,7 +78,7 @@ void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNew
 
     m_pForcedPrefix->Show(m_bShowPrefix);
 
-    sal_Bool bIsEmpty = _rStr.isEmpty();
+    bool bIsEmpty = _rStr.isEmpty();
     // calc the prefix
     OUString sPrefix;
     if (!bIsEmpty)
@@ -119,7 +119,7 @@ OUString OConnectionURLEdit::GetText() const
     return Edit::GetText();
 }
 
-void OConnectionURLEdit::ShowPrefix(sal_Bool _bShowPrefix)
+void OConnectionURLEdit::ShowPrefix(bool _bShowPrefix)
 {
     m_bShowPrefix = _bShowPrefix;
     if ( m_pForcedPrefix )

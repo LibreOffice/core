@@ -70,9 +70,9 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
                                )
     :OWizardMachine(_pParent, ModuleRes(DLG_DATABASE_TYPE_CHANGE), WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP )
     ,m_pOutSet(NULL)
-    ,m_bResetting(sal_False)
-    ,m_bApplied(sal_False)
-    ,m_bUIEnabled( sal_True )
+    ,m_bResetting(false)
+    ,m_bApplied(false)
+    ,m_bUIEnabled( true )
 {
     m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
     m_pImpl->setDataSourceOrName(_aDataSourceName);
@@ -320,7 +320,7 @@ void ODbTypeWizDialog::enableConfirmSettings( bool _bEnable )
     // anormal tab dialog.
 }
 
-sal_Bool ODbTypeWizDialog::saveDatasource()
+bool ODbTypeWizDialog::saveDatasource()
 {
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(getCurrentState()));
     if ( pPage )
@@ -330,7 +330,7 @@ sal_Bool ODbTypeWizDialog::saveDatasource()
     if ( m_pImpl->getCurrentDataSource().is() )
         m_pImpl->getCurrentDataSource()->getPropertyValue(PROPERTY_URL) >>= sOldURL;
     DataSourceInfoConverter::convert( getORB(), m_pCollection,sOldURL,m_eType,m_pImpl->getCurrentDataSource());
-    return sal_True;
+    return true;
 }
 
 IWizardPageController* ODbTypeWizDialog::getPageController( TabPage* _pCurrentPage ) const

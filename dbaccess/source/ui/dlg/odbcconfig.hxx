@@ -48,7 +48,7 @@ class OOdbcLibWrapper
 
 public:
 #ifdef HAVE_ODBC_SUPPORT
-    sal_Bool    isLoaded() const { return NULL != m_pOdbcLib; }
+    bool    isLoaded() const { return NULL != m_pOdbcLib; }
 #else
     sal_Bool    isLoaded() const { return sal_False; }
 #endif
@@ -65,7 +65,7 @@ protected:
     oslGenericFunction  loadSymbol(const sal_Char* _pFunctionName);
 
     /// load the lib
-    sal_Bool    load(const sal_Char* _pLibPath);
+    bool    load(const sal_Char* _pLibPath);
     /// unload the lib
     void        unload();
 };
@@ -94,7 +94,7 @@ public:
 
 protected:
     /// ensure that an ODBC environment is allocated
-    sal_Bool    allocEnv();
+    bool    allocEnv();
     /// free any allocated ODBC environment
     void        freeEnv();
 };

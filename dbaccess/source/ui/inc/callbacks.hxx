@@ -44,12 +44,12 @@ namespace dbaui
         /** requests a quick help text to display
             @return <FALSE/> if the default quick help text should be used
         */
-        virtual sal_Bool    requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const = 0;
+        virtual bool    requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const = 0;
 
         /** handler for StartDrag requests
             @return <TRUE/> if a drag operation was started
         */
-        virtual sal_Bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel ) = 0;
+        virtual bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel ) = 0;
 
         /** check whether or not a drop request should be accepted
         */

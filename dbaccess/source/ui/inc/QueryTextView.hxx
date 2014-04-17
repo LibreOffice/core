@@ -35,9 +35,9 @@ namespace dbaui
 
         virtual void GetFocus() SAL_OVERRIDE;
 
-        virtual sal_Bool isCutAllowed();
-        virtual sal_Bool isPasteAllowed();
-        virtual sal_Bool isCopyAllowed();
+        virtual bool isCutAllowed();
+        virtual bool isPasteAllowed();
+        virtual bool isCopyAllowed();
         virtual void copy();
         virtual void cut();
         virtual void paste();
@@ -46,7 +46,7 @@ namespace dbaui
         // set the view readonly or not
         virtual void setReadOnly(sal_Bool _bReadOnly);
         // check if the statement is correct when not returning false
-        virtual sal_Bool checkStatement();
+        virtual bool checkStatement();
         // set the statement for representation
         virtual void setStatement(const OUString& _rsStatement);
         virtual OUString getStatement();

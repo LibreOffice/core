@@ -40,7 +40,7 @@ OColumnControlWindow::OColumnControlWindow(Window* pParent
             : OFieldDescControl(pParent,NULL)
             , m_xContext(_rxContext)
             , m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
-            , m_bAutoIncrementEnabled(sal_True)
+            , m_bAutoIncrementEnabled(true)
 {
 
     setRightAligned();
@@ -147,7 +147,7 @@ void OColumnControlWindow::setConnection(const Reference< XConnection>& _xCon)
     }
 }
 
-sal_Bool OColumnControlWindow::isAutoIncrementValueEnabled() const
+bool OColumnControlWindow::isAutoIncrementValueEnabled() const
 {
     return m_bAutoIncrementEnabled;
 }

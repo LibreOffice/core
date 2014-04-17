@@ -65,10 +65,10 @@ private:
     SfxItemSet*             m_pOutSet;
     OUString         m_sURL;
     OUString         m_sOldURL;
-    sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
-    sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
-    sal_Bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
-    sal_Bool                m_bIsConnectable : 1;
+    bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
+    bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
+    bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
+    bool                m_bIsConnectable : 1;
     OUString                m_sRM_IntroText;
     OUString                m_sRM_dBaseText;
     OUString                m_sRM_TextText;
@@ -114,16 +114,16 @@ public:
     virtual void clearPassword() SAL_OVERRIDE;
     virtual void setTitle(const OUString& _sTitle) SAL_OVERRIDE;
     virtual void enableConfirmSettings( bool _bEnable ) SAL_OVERRIDE;
-    virtual sal_Bool saveDatasource() SAL_OVERRIDE;
+    virtual bool saveDatasource() SAL_OVERRIDE;
     virtual OUString getStateDisplayName( WizardState _nState ) const SAL_OVERRIDE;
 
     /** returns <TRUE/> if the database should be opened, otherwise <FALSE/>.
     */
-    sal_Bool IsDatabaseDocumentToBeOpened() const;
+    bool IsDatabaseDocumentToBeOpened() const;
 
     /** returns <TRUE/> if the table wizard should be opened, otherwise <FALSE/>.
     */
-    sal_Bool IsTableWizardToBeStarted() const;
+    bool IsTableWizardToBeStarted() const;
 
 protected:
     /// to override to create new pages
@@ -134,8 +134,8 @@ protected:
     virtual bool        onFinish() SAL_OVERRIDE;
 
 protected:
-    inline sal_Bool isUIEnabled() const { return m_bUIEnabled; }
-    inline void     disabledUI() { m_bUIEnabled = sal_False; }
+    inline bool isUIEnabled() const { return m_bUIEnabled; }
+    inline void     disabledUI() { m_bUIEnabled = false; }
 
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
     void implSelectDatasource(const OUString& _rRegisteredName);
@@ -164,7 +164,7 @@ private:
     void declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const svt::RoadmapWizardTypes::WizardPath& _rPaths);
 
     void RegisterDataSourceByLocation(const OUString& sPath);
-    sal_Bool SaveDatabaseDocument();
+    bool SaveDatabaseDocument();
     void activateDatabasePath();
     OUString createUniqueFileName(const INetURLObject& rURL);
     void CreateDatabase();
@@ -172,8 +172,8 @@ private:
     ::dbaccess::DATASOURCE_TYPE VerifyDataSourceType(const ::dbaccess::DATASOURCE_TYPE _DatabaseType) const;
 
     void updateTypeDependentStates();
-    sal_Bool callSaveAsDialog();
-    sal_Bool IsConnectionUrlRequired();
+    bool callSaveAsDialog();
+    bool IsConnectionUrlRequired();
     DECL_LINK(OnTypeSelected, OGeneralPage*);
     DECL_LINK(OnChangeCreationMode, OGeneralPageWizard*);
     DECL_LINK(OnRecentDocumentSelected, OGeneralPageWizard*);

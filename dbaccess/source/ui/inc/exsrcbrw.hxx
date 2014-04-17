@@ -37,7 +37,7 @@ namespace dbaui
         ::cppu::OInterfaceContainerHelper   m_aModifyListeners;
             // for multiplexing the modify events
         SbaXFormAdapter*                    m_pDataSourceImpl;
-        sal_Bool                            m_bInQueryDispatch;
+        bool                            m_bInQueryDispatch;
             // our queryDispatch will ask our frame, which first will ask our queryDispatch, so we need to protect against
             // recursion
 
@@ -86,9 +86,9 @@ namespace dbaui
         virtual ~SbaExternalSourceBrowser();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  CreateForm() SAL_OVERRIDE;
-        virtual sal_Bool InitializeForm( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties ) SAL_OVERRIDE;
+        virtual bool InitializeForm( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties ) SAL_OVERRIDE;
 
-        virtual sal_Bool LoadForm() SAL_OVERRIDE;
+        virtual bool LoadForm() SAL_OVERRIDE;
 
         void Attach(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xMaster);
 

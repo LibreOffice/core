@@ -42,7 +42,7 @@ namespace dbaccess
 OCommandContainer::OCommandContainer( const Reference< ::com::sun::star::uno::XComponentContext >& _xORB
                                      ,const Reference< XInterface >&    _xParentContainer
                                      ,const TContentPtr& _pImpl
-                                     ,sal_Bool _bTables
+                                     ,bool _bTables
                                      )
     :ODefinitionContainer(_xORB,_xParentContainer,_pImpl,!_bTables)
     ,m_bTables(_bTables)

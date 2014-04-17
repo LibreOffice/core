@@ -167,7 +167,7 @@ namespace dbaui
     {
         (void)_bEnable;
     }
-    sal_Bool OUserAdminDlg::saveDatasource()
+    bool OUserAdminDlg::saveDatasource()
     {
         return PrepareLeaveCurrentPage();
     }

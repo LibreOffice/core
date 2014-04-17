@@ -36,7 +36,7 @@ namespace dbaccess
     class OFilteredContainer : public ::connectivity::sdbcx::OCollection
     {
     private:
-        mutable sal_Bool m_bConstructed;        // late ctor called
+        mutable bool m_bConstructed;        // late ctor called
 
     protected:
         ::dbtools::IWarningsContainer*  m_pWarningsContainer;
@@ -102,7 +102,7 @@ namespace dbaccess
         OFilteredContainer( ::cppu::OWeakObject& _rParent,
                             ::osl::Mutex& _rMutex,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
-                            sal_Bool _bCase,
+                            bool _bCase,
                             IRefreshListener*   _pRefreshListener,
                             ::dbtools::IWarningsContainer* _pWarningsContainer,
                             oslInterlockedCount& _nInAppend
@@ -127,7 +127,7 @@ namespace dbaccess
             const ::com::sun::star::uno::Sequence< OUString >& _rTableTypeFilter
             );
 
-        inline sal_Bool isInitialized() const { return m_bConstructed; }
+        inline bool isInitialized() const { return m_bConstructed; }
     };
 } // namespace
 

@@ -64,13 +64,13 @@ struct DataSupplier_Impl
     ResultList                                   m_aResults;
     rtl::Reference< ODocumentContainer >             m_xContent;
       sal_Int32                                  m_nOpenMode;
-      sal_Bool                                   m_bCountFinal;
+      bool                                   m_bCountFinal;
 
     DataSupplier_Impl( const rtl::Reference< ODocumentContainer >& rContent,
                        sal_Int32 nOpenMode )
     : m_xContent(rContent)
     , m_nOpenMode( nOpenMode )
-    , m_bCountFinal( sal_False ) {}
+    , m_bCountFinal( false ) {}
     ~DataSupplier_Impl();
 };
 
@@ -236,7 +236,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
     }
 
     if ( !bFound )
-        m_pImpl->m_bCountFinal = sal_True;
+        m_pImpl->m_bCountFinal = true;
 
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
     if ( xResultSet.is() )
@@ -272,7 +272,7 @@ sal_uInt32 DataSupplier::totalCount()
         m_pImpl->m_aResults.push_back(
                         new ResultListEntry( m_pImpl->m_xContent->getContent(*pIter)->getContentProperties() ) );
 
-    m_pImpl->m_bCountFinal = sal_True;
+    m_pImpl->m_bCountFinal = true;
 
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
     if ( xResultSet.is() )

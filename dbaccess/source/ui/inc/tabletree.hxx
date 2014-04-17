@@ -42,7 +42,7 @@ protected:
                     m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
     boost::scoped_ptr< ImageProvider >
                     m_xImageProvider;   // provider for our images
-    sal_Bool        m_bVirtualRoot;     // should the first entry be visible
+    bool        m_bVirtualRoot;     // should the first entry be visible
     bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
 
 public:
@@ -126,14 +126,14 @@ public:
     /** determine if the given entry is 'wildcard checked'
         @see checkWildcard
     */
-    sal_Bool        isWildcardChecked(SvTreeListEntry* _pEntry) const;
+    bool        isWildcardChecked(SvTreeListEntry* _pEntry) const;
 
 protected:
     virtual void InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind) SAL_OVERRIDE;
 
     virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry) SAL_OVERRIDE;
 
-    void implEmphasize(SvTreeListEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants = sal_True, sal_Bool _bUpdateAncestors = sal_True);
+    void implEmphasize(SvTreeListEntry* _pEntry, bool _bChecked, bool _bUpdateDescendants = true, bool _bUpdateAncestors = true);
 
     /** adds the given entry to our list
         @precond
@@ -143,7 +143,7 @@ protected:
     SvTreeListEntry* implAddEntry(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMeta,
             const OUString& _rTableName,
-            sal_Bool _bCheckName = sal_True
+            bool _bCheckName = true
         );
 
     void    implSetDefaultImages();
@@ -152,7 +152,7 @@ protected:
 
     bool    impl_getAndAssertMetaData( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _out_rMetaData ) const;
 
-    sal_Bool haveVirtualRoot() const { return m_bVirtualRoot; }
+    bool haveVirtualRoot() const { return m_bVirtualRoot; }
 
     /** fill the table list with the tables and views determined by the two given containers
         @param      _rxConnection   the connection where you got the object names from. Must not be NULL.

@@ -101,7 +101,7 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( const SvTree
     return etQueryContainer;
 }
 
-void SbaTableQueryBrowser::select(SvTreeListEntry* _pEntry, sal_Bool _bSelect)
+void SbaTableQueryBrowser::select(SvTreeListEntry* _pEntry, bool _bSelect)
 {
     SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
     if (pTextItem)
@@ -114,7 +114,7 @@ void SbaTableQueryBrowser::select(SvTreeListEntry* _pEntry, sal_Bool _bSelect)
     }
 }
 
-void SbaTableQueryBrowser::selectPath(SvTreeListEntry* _pEntry, sal_Bool _bSelect)
+void SbaTableQueryBrowser::selectPath(SvTreeListEntry* _pEntry, bool _bSelect)
 {
     while (_pEntry)
     {
@@ -123,7 +123,7 @@ void SbaTableQueryBrowser::selectPath(SvTreeListEntry* _pEntry, sal_Bool _bSelec
     }
 }
 
-sal_Bool SbaTableQueryBrowser::isSelected(SvTreeListEntry* _pEntry) const
+bool SbaTableQueryBrowser::isSelected(SvTreeListEntry* _pEntry) const
 {
     SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
     if (pTextItem)
@@ -131,7 +131,7 @@ sal_Bool SbaTableQueryBrowser::isSelected(SvTreeListEntry* _pEntry) const
     else {
         OSL_FAIL("SbaTableQueryBrowser::isSelected: invalid entry!");
     }
-    return sal_False;
+    return false;
 }
 
 void SbaTableQueryBrowser::SelectionChanged()

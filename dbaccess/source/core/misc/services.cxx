@@ -55,7 +55,7 @@ namespace dba{
 // It consists of three functions which must be exported by the module.
 extern "C" void SAL_CALL createRegistryInfo_DBA()
 {
-    static sal_Bool bInit = sal_False;
+    static bool bInit = false;
     if (!bInit)
     {
         createRegistryInfo_OCommandDefinition();
@@ -64,7 +64,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBA()
         createRegistryInfo_ODatabaseDocument();
         createRegistryInfo_ODatabaseSource();
         createRegistryInfo_DataAccessDescriptorFactory();
-        bInit = sal_True;
+        bInit = true;
     }
 }
 

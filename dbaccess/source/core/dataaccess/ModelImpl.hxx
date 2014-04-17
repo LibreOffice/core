@@ -230,11 +230,11 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
                                                         m_aLayoutInformation;
     sal_Int32                                           m_nLoginTimeout;
-    sal_Bool                                            m_bReadOnly : 1;
-    sal_Bool                                            m_bPasswordRequired : 1;
-    sal_Bool                                            m_bSuppressVersionColumns : 1;
-    sal_Bool                                            m_bModified : 1;
-    sal_Bool                                            m_bDocumentReadOnly : 1;
+    bool                                            m_bReadOnly : 1;
+    bool                                            m_bPasswordRequired : 1;
+    bool                                            m_bSuppressVersionColumns : 1;
+    bool                                            m_bModified : 1;
+    bool                                            m_bDocumentReadOnly : 1;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyBag >
                                                         m_xSettings;
     ::com::sun::star::uno::Sequence< OUString >  m_aTableFilter;
@@ -280,7 +280,7 @@ public:
     // XEventListener
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
-    void setModified( sal_Bool bModified );
+    void setModified( bool bModified );
 
     void dispose();
 

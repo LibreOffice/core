@@ -27,17 +27,17 @@ namespace dbaui
     class OSQLNameChecker
     {
         OUString m_sAllowedChars;
-        sal_Bool        m_bOnlyUpperCase;
-        sal_Bool        m_bCheck;           // true when we should check for invalid chars
+        bool        m_bOnlyUpperCase;
+        bool        m_bCheck;           // true when we should check for invalid chars
     public:
         OSQLNameChecker(const OUString& _rAllowedChars)
             :m_sAllowedChars(_rAllowedChars)
-            ,m_bOnlyUpperCase(sal_False)
-            ,m_bCheck(sal_True)
+            ,m_bOnlyUpperCase(false)
+            ,m_bCheck(true)
         {
         }
 
-        void setUpperCase(sal_Bool _bUpper=sal_True)
+        void setUpperCase(bool _bUpper=true)
         {
             m_bOnlyUpperCase = _bUpper;
         }
@@ -46,11 +46,11 @@ namespace dbaui
             m_sAllowedChars = _rAllowedChars;
         }
         // default is false because it is initialized with true
-        void setCheck(sal_Bool _bCheck = sal_False)
+        void setCheck(bool _bCheck = false)
         {
             m_bCheck = _bCheck;
         }
-        sal_Bool checkString(const OUString& _sToCheck,OUString& _rsCorrected);
+        bool checkString(const OUString& _sToCheck,OUString& _rsCorrected);
     };
     class OSQLNameEdit : public Edit
                         ,public OSQLNameChecker

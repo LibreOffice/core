@@ -87,10 +87,10 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     return *this;
 }
 
-sal_Bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const OUString& rSourceFieldName, const OUString& rDestFieldName )
+bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const OUString& rSourceFieldName, const OUString& rDestFieldName )
 {
     if (sal_uInt16(m_vConnLineData.size()) < nIndex)
-        return sal_False;
+        return false;
 
         // == still allowed, this correponds to a Append
 
@@ -103,10 +103,10 @@ sal_Bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const OUString& r
     pConnLineData->SetSourceFieldName( rSourceFieldName );
     pConnLineData->SetDestFieldName( rDestFieldName );
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool OTableConnectionData::AppendConnLine( const OUString& rSourceFieldName, const OUString& rDestFieldName )
+bool OTableConnectionData::AppendConnLine( const OUString& rSourceFieldName, const OUString& rDestFieldName )
 {
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
     OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
@@ -119,11 +119,11 @@ sal_Bool OTableConnectionData::AppendConnLine( const OUString& rSourceFieldName,
     {
         OConnectionLineDataRef pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
         if (!pNew.is())
-            return sal_False;
+            return false;
 
         m_vConnLineData.push_back(pNew);
     }
-    return sal_True;
+    return true;
 }
 
 void OTableConnectionData::ResetConnLines()

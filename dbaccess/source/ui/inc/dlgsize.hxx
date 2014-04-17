@@ -43,7 +43,7 @@ namespace dbaui
         CheckBox*       m_pCB_STANDARD;
 
     public:
-        DlgSize( Window * pParent, sal_Int32 nVal, sal_Bool bRow, sal_Int32 _nAlternativeStandard = -1 );
+        DlgSize( Window * pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nAlternativeStandard = -1 );
         sal_Int32 GetValue();
     };
 }   // namespace dbaui

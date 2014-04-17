@@ -30,12 +30,12 @@ namespace dbaui
     // OBoldListboxString
     class OBoldListboxString : public SvLBoxString
     {
-        sal_Bool    m_bEmphasized;
+        bool    m_bEmphasized;
 
     public:
         OBoldListboxString(SvTreeListEntry* _pEntry, sal_uInt16 _nFlags, const OUString& _rStr)
             :SvLBoxString(_pEntry, _nFlags, _rStr)
-            ,m_bEmphasized(sal_False)
+            ,m_bEmphasized(false)
         {
         }
 
@@ -45,8 +45,8 @@ namespace dbaui
             const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
         virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* _pViewData) SAL_OVERRIDE;
 
-        sal_Bool    isEmphasized() const { return m_bEmphasized; }
-        void        emphasize(sal_Bool _bEmphasize) { m_bEmphasized = _bEmphasize; }
+        bool    isEmphasized() const { return m_bEmphasized; }
+        void        emphasize(bool _bEmphasize) { m_bEmphasized = _bEmphasize; }
     };
 
 }   // namespace dbaui

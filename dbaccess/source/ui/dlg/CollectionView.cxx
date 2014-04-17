@@ -74,7 +74,7 @@ OCollectionView::OCollectionView( Window * pParent
     , m_sPath(          ModuleRes( STR_PATHNAME ) )
     , m_xContent(_xContent)
     , m_xContext(_rxContext)
-    , m_bCreateForm(sal_True)
+    , m_bCreateForm(true)
 {
     FreeResource();
 
@@ -272,7 +272,7 @@ IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView)
 
 void OCollectionView::initCurrentPath()
 {
-    sal_Bool bEnable = sal_False;
+    bool bEnable = false;
     try
     {
         if ( m_xContent.is() )

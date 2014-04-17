@@ -194,7 +194,7 @@ namespace dbaui
 
     bool MySQLNativeSettings::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = sal_False;
+        bool bChangedSomething = false;
 
         OGenericAdministrationPage::fillString( _rSet, &m_aHostName,     DSID_CONN_HOSTNAME,    bChangedSomething );
         OGenericAdministrationPage::fillString( _rSet, &m_aDatabaseName, DSID_DATABASENAME,     bChangedSomething );

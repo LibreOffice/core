@@ -311,9 +311,9 @@ void OTableGrantControl::fillPrivilege(sal_Int32 _nRow) const
     }
 }
 
-sal_Bool OTableGrantControl::isAllowed(sal_uInt16 _nColumnId,sal_Int32 _nPrivilege) const
+bool OTableGrantControl::isAllowed(sal_uInt16 _nColumnId,sal_Int32 _nPrivilege) const
 {
-    sal_Bool bAllowed = sal_False;
+    bool bAllowed = false;
     switch (_nColumnId)
     {
         case COL_INSERT:

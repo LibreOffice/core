@@ -248,31 +248,31 @@ OUString ODsnTypeCollection::getJavaDriverClass(const OUString& _sURL) const
     return aFeatures.getOrDefault("JavaDriverClass",OUString());
 }
 
-sal_Bool ODsnTypeCollection::isFileSystemBased(const OUString& _sURL) const
+bool ODsnTypeCollection::isFileSystemBased(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("FileSystemBased",sal_False);
 }
 
-sal_Bool ODsnTypeCollection::supportsTableCreation(const OUString& _sURL) const
+bool ODsnTypeCollection::supportsTableCreation(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("SupportsTableCreation",sal_False);
 }
 
-sal_Bool ODsnTypeCollection::supportsColumnDescription(const OUString& _sURL) const
+bool ODsnTypeCollection::supportsColumnDescription(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("SupportsColumnDescription",sal_False);
 }
 
-sal_Bool ODsnTypeCollection::supportsBrowsing(const OUString& _sURL) const
+bool ODsnTypeCollection::supportsBrowsing(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("SupportsBrowsing",sal_False);
 }
 
-sal_Bool ODsnTypeCollection::supportsDBCreation(const OUString& _sURL) const
+bool ODsnTypeCollection::supportsDBCreation(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("SupportsDBCreation",sal_False);

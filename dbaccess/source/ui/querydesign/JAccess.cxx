@@ -83,7 +83,7 @@ namespace dbaui
             throw IndexOutOfBoundsException();
         return aRet;
     }
-    sal_Bool OJoinDesignViewAccess::isEditable() const
+    bool OJoinDesignViewAccess::isEditable() const
     {
         return m_pTableView && !m_pTableView->getDesignView()->getController().isReadOnly();
     }

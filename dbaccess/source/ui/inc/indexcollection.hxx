@@ -81,14 +81,14 @@ namespace dbaui
         void detach();
 
         // is the object valid?
-        sal_Bool    isValid() const { return m_xIndexes.is(); }
+        bool    isValid() const { return m_xIndexes.is(); }
         // number of contained indexes
         sal_Int32   size() const { return m_aIndexes.size(); }
 
         /// drop an index, and remove it from the collection
-        sal_Bool    drop(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
+        bool    drop(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
         /// simply drop the index described by the name, but don't remove the descriptor from the collection
-        sal_Bool    dropNoRemove(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
+        bool    dropNoRemove(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
 
     protected:
         void implConstructFrom(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes);

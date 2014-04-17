@@ -50,7 +50,7 @@ SvParser* OWizRTFExtend::createReader(sal_Int32 _nRows)
 
 OWizNormalExtend::OWizNormalExtend(Window* pParent) : OWizTypeSelect( pParent )
 {
-    EnableAuto(sal_False);
+    EnableAuto(false);
     Size aflSize( m_flColumns.GetSizePixel() );
     Point aPos(m_flColumns.GetPosPixel());
 

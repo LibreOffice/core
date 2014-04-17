@@ -60,7 +60,7 @@ namespace dbaui
 
         void DisplayData( OFieldDescription* pFieldDescr );
         void SaveData( OFieldDescription* pFieldDescr );
-        void SetReadOnly( sal_Bool bReadOnly );
+        void SetReadOnly( bool bReadOnly );
 
         // window overloads
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -79,10 +79,10 @@ namespace dbaui
         OUString  BoolStringUI(const OUString& rPersistentString) const { return m_pGenPage->BoolStringUI(rPersistentString); }
 
         // IClipboardTest
-        virtual sal_Bool isCutAllowed() SAL_OVERRIDE;
-        virtual sal_Bool isCopyAllowed() SAL_OVERRIDE;
-        virtual sal_Bool isPasteAllowed() SAL_OVERRIDE;
-        virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
+        virtual bool isCutAllowed() SAL_OVERRIDE;
+        virtual bool isCopyAllowed() SAL_OVERRIDE;
+        virtual bool isPasteAllowed() SAL_OVERRIDE;
+        virtual bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
 
         virtual void copy() SAL_OVERRIDE;
         virtual void cut() SAL_OVERRIDE;

@@ -86,7 +86,7 @@ namespace dbaccess
 
         // ODefinitionContainer
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject( const OUString& _rName) SAL_OVERRIDE;
-        virtual sal_Bool checkExistence(const OUString& _rName) SAL_OVERRIDE;
+        virtual bool checkExistence(const OUString& _rName) SAL_OVERRIDE;
 
         // helper
         virtual void SAL_CALL disposing() SAL_OVERRIDE;

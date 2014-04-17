@@ -158,14 +158,14 @@ namespace dbaui
         }
 
         // uncheck all
-        CheckAll(sal_False);
+        CheckAll(false);
 
         // check the ones which are in the list
         OUString sCatalog, sSchema, sName;
 
         SvTreeListEntry* pRootEntry = m_pTablesList->getAllObjectsEntry();
-        sal_Bool bAllTables = sal_False;
-        sal_Bool bAllSchemas = sal_False;
+        bool bAllTables = false;
+        bool bAllSchemas = false;
 
         const OUString* pIncludeTable = _rTables.getConstArray();
         for (sal_Int32 i=0; i<_rTables.getLength(); ++i, ++pIncludeTable)
@@ -213,23 +213,23 @@ namespace dbaui
     {
         if (!_rTableFilter.getLength())
         {   // no tables visible
-            CheckAll(sal_False);
+            CheckAll(false);
         }
         else
         {
             if ((1 == _rTableFilter.getLength()) && _rTableFilter[0] == "%")
             {   // all tables visible
-                CheckAll(sal_True);
+                CheckAll(true);
             }
             else
                 implCheckTables( _rTableFilter );
         }
     }
 
-    void OTableSubscriptionPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OTableSubscriptionPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         // get the name of the data source we're working for
@@ -289,7 +289,7 @@ namespace dbaui
                     Any aTableTypeFilter = xProp->getPropertyValue(PROPERTY_TABLETYPEFILTER);
 
                     Reference<XModifiable> xModi(getDataSourceOrModel(xProp),UNO_QUERY);
-                    sal_Bool bModified = ( xModi.is() && xModi->isModified() );
+                    bool bModified = ( xModi.is() && xModi->isModified() );
 
                     Sequence< OUString > aNewTableFilter(1);
                     aNewTableFilter[0] = "%";
@@ -337,7 +337,7 @@ namespace dbaui
             {
                 // in addition, we need some infos about the connection used
                 m_sCatalogSeparator = ".";    // (default)
-                m_bCatalogAtStart = sal_True;   // (default)
+                m_bCatalogAtStart = true;   // (default)
                 try
                 {
                     Reference< XDatabaseMetaData > xMeta;
@@ -381,7 +381,7 @@ namespace dbaui
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    void OTableSubscriptionPage::CheckAll( sal_Bool _bCheck )
+    void OTableSubscriptionPage::CheckAll( bool _bCheck )
     {
         SvButtonState eState = _bCheck ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED;
         SvTreeListEntry* pEntry = m_pTablesList->First();
@@ -457,8 +457,8 @@ namespace dbaui
         SvTreeListEntry* pEntry = m_pTablesList->GetModel()->Next(const_cast<SvTreeListEntry*>(pAllObjectsEntry));
         while(pEntry)
         {
-            sal_Bool bCatalogWildcard = sal_False;
-            sal_Bool bSchemaWildcard =  sal_False;
+            bool bCatalogWildcard = false;
+            bool bSchemaWildcard =  false;
             SvTreeListEntry* pSchema = NULL;
             SvTreeListEntry* pCatalog = NULL;
 
@@ -551,7 +551,7 @@ namespace dbaui
 
     bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
     {
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rCoreAttrs, bValid, bReadonly);
 
         if (!bValid || bReadonly)

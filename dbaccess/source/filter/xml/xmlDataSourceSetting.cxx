@@ -45,7 +45,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                 ,OXMLDataSourceSetting* _pContainer) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_pContainer(_pContainer)
-    ,m_bIsList(sal_False)
+    ,m_bIsList(false)
 {
 
     m_aPropType = ::getVoidCppuType();

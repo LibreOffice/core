@@ -93,7 +93,7 @@ namespace dbaui
 
     ODataClipboard::ODataClipboard( const Reference< XPropertySet >& i_rAliveForm,
                                     const Sequence< Any >& i_rSelectedRows,
-                                    const sal_Bool i_bBookmarkSelection,
+                                    const bool i_bBookmarkSelection,
                                     const Reference< XComponentContext >& i_rORB )
         :ODataAccessObjectTransferable( i_rAliveForm )
         ,m_pHtml(NULL)

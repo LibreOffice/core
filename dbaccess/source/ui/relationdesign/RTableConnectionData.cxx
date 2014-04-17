@@ -75,7 +75,7 @@ ORelationTableConnectionData::~ORelationTableConnectionData()
 {
 }
 
-sal_Bool ORelationTableConnectionData::DropRelation()
+bool ORelationTableConnectionData::DropRelation()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // delete relation
@@ -102,7 +102,7 @@ sal_Bool ORelationTableConnectionData::DropRelation()
             }
         }
     }
-    return sal_True;
+    return true;
 }
 
 void ORelationTableConnectionData::ChangeOrientation()
@@ -145,7 +145,7 @@ void ORelationTableConnectionData::SetCardinality()
 
 }
 
-sal_Bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const
+bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const
 {
     // check if Table has the primary key column dependig on _eEConnectionSide
     sal_uInt16  nPrimKeysCount      = 0,
@@ -172,15 +172,15 @@ sal_Bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropert
             }
         }
         if ( nPrimKeysCount != aKeyColumns.getLength() )
-            return sal_False;
+            return false;
     }
     if ( !nPrimKeysCount || nPrimKeysCount != nValidLinesCount )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool ORelationTableConnectionData::IsConnectionPossible()
+bool ORelationTableConnectionData::IsConnectionPossible()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -188,7 +188,7 @@ sal_Bool ORelationTableConnectionData::IsConnectionPossible()
     if ( IsSourcePrimKey() && !IsDestPrimKey() )
         ChangeOrientation();
 
-    return sal_True;
+    return true;
 }
 
 OConnectionLineDataRef ORelationTableConnectionData::CreateLineDataObj()
@@ -248,14 +248,14 @@ bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableCon
 
 }
 
-sal_Bool ORelationTableConnectionData::Update()
+bool ORelationTableConnectionData::Update()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // delete old relation
     {
         DropRelation();
         if( !IsConnectionPossible() )
-            return sal_False;
+            return false;
     }
 
     // reassign the keys because the orientaion could be changed
@@ -263,7 +263,7 @@ sal_Bool ORelationTableConnectionData::Update()
     Reference< XIndexAccess> xKeys ( getReferencingTable()->getKeys());
 
     if ( !xKeys.is() )
-        return sal_False;
+        return false;
     // create new relation
     Reference<XDataDescriptorFactory> xKeyFactory(xKeys,UNO_QUERY);
     OSL_ENSURE(xKeyFactory.is(),"No XDataDescriptorFactory Interface!");
@@ -421,7 +421,7 @@ xKey.clear();
     // determine cardinality
     SetCardinality();
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

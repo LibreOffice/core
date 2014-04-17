@@ -43,7 +43,7 @@ namespace dbaccess
         :m_xSource( _xSource, UNO_SET_THROW )
         ,m_xDestContainer( _xDestContainer, UNO_SET_THROW )
         ,m_sName( _sName )
-        ,m_bInInsert( sal_False )
+        ,m_bInInsert( false )
     {
 
         osl_atomic_increment(&m_refCount);
@@ -92,10 +92,10 @@ namespace dbaccess
 
                     ::comphelper::copyProperties( m_xSource, m_xDest );
 
-                    m_bInInsert = sal_True;
+                    m_bInInsert = true;
                     Reference< XAppend > xAppend( m_xDestContainer, UNO_QUERY_THROW );
                     xAppend->appendByDescriptor( m_xDest );
-                    m_bInInsert = sal_False;
+                    m_bInInsert = false;
                 }
 
                 m_xDestInfo.set( m_xDest->getPropertySetInfo(), UNO_SET_THROW );

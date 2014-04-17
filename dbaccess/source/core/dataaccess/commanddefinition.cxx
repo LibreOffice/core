@@ -83,7 +83,7 @@ void OCommandDefinition::setCommand(const OUString& p1) throw( ::com::sun::star:
     setPropertyValue(PROPERTY_COMMAND, Any(p1) );
 }
 
-sal_Bool OCommandDefinition::getEscapeProcessing() throw( ::com::sun::star::uno::RuntimeException )
+bool OCommandDefinition::getEscapeProcessing() throw( ::com::sun::star::uno::RuntimeException )
 {
     return getCommandDefinition().m_bEscapeProcessing;
 }
@@ -126,7 +126,7 @@ void OCommandDefinition::setUpdateSchemaName(const OUString& p1) throw( ::com::s
 OCommandDefinition::OCommandDefinition(const Reference< XComponentContext >& _xORB
                                        ,const Reference< XInterface >& _rxContainer
                                        ,const TContentPtr& _pImpl)
-    :OComponentDefinition(_xORB,_rxContainer,_pImpl,sal_False)
+    :OComponentDefinition(_xORB,_rxContainer,_pImpl,false)
 {
     registerProperties();
 }
@@ -139,7 +139,7 @@ OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContai
                                        ,const OUString& _rElementName
                                        ,const Reference< XComponentContext >& _xORB
                                        ,const TContentPtr& _pImpl)
-    :OComponentDefinition(_rxContainer,_rElementName,_xORB,_pImpl,sal_False)
+    :OComponentDefinition(_rxContainer,_rElementName,_xORB,_pImpl,false)
 {
     registerProperties();
 }

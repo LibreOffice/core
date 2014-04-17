@@ -94,11 +94,11 @@ ODefinitionContainer::ODefinitionContainer(   const Reference< XComponentContext
     :OContentHelper(_xORB,_xParentContainer,_pImpl)
     ,m_aApproveListeners(m_aMutex)
     ,m_aContainerListeners(m_aMutex)
-    ,m_bInPropertyChange(sal_False)
+    ,m_bInPropertyChange(false)
     ,m_bCheckSlash(_bCheckSlash)
 {
-    m_pImpl->m_aProps.bIsDocument = sal_False;
-    m_pImpl->m_aProps.bIsFolder = sal_True;
+    m_pImpl->m_aProps.bIsDocument = false;
+    m_pImpl->m_aProps.bIsFolder = true;
 
     const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
     ODefinitionContainer_Impl::const_iterator aEnd = rDefinitions.end();
@@ -604,7 +604,7 @@ void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& e
     ClearableMutexGuard aGuard(m_aMutex);
     if( evt.PropertyName == (OUString) PROPERTY_NAME || evt.PropertyName ==  "Title" )
     {
-        m_bInPropertyChange = sal_True;
+        m_bInPropertyChange = true;
         try
         {
             OUString sNewName,sOldName;
@@ -620,7 +620,7 @@ void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& e
             DBG_UNHANDLED_EXCEPTION();
             throw RuntimeException();
         }
-        m_bInPropertyChange = sal_False;
+        m_bInPropertyChange = false;
     }
 }
 
@@ -659,7 +659,7 @@ void ODefinitionContainer::removeObjectListener(const Reference< XContent >& _xN
     }
 }
 
-sal_Bool ODefinitionContainer::checkExistence(const OUString& _rName)
+bool ODefinitionContainer::checkExistence(const OUString& _rName)
 {
     return m_aDocumentMap.find(_rName) != m_aDocumentMap.end();
 }

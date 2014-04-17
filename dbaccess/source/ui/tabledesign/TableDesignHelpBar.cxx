@@ -69,19 +69,19 @@ bool OTableDesignHelpBar::PreNotify( NotifyEvent& rNEvt )
     return TabPage::PreNotify(rNEvt);
 }
 
-sal_Bool OTableDesignHelpBar::isCopyAllowed()
+bool OTableDesignHelpBar::isCopyAllowed()
 {
     return m_pTextWin && !m_pTextWin->GetSelected().isEmpty();
 }
 
-sal_Bool OTableDesignHelpBar::isCutAllowed()
+bool OTableDesignHelpBar::isCutAllowed()
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool OTableDesignHelpBar::isPasteAllowed()
+bool OTableDesignHelpBar::isPasteAllowed()
 {
-    return sal_False;
+    return false;
 }
 
 void OTableDesignHelpBar::cut()

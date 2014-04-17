@@ -36,8 +36,8 @@ namespace dbaui
     struct TAppSupportedSotFunctor : ::std::unary_function<DataFlavorExVector::value_type,bool>
     {
         ElementType eEntryType;
-        sal_Bool    bQueryDrop;
-        TAppSupportedSotFunctor(const ElementType& _eEntryType,sal_Bool _bQueryDrop)
+        bool    bQueryDrop;
+        TAppSupportedSotFunctor(const ElementType& _eEntryType,bool _bQueryDrop)
             : eEntryType(_eEntryType)
             , bQueryDrop(_bQueryDrop)
         {
@@ -79,15 +79,15 @@ namespace dbaui
             ElementType                     nType;
             SvTreeListEntry*                    pDroppedAt;
             sal_Int8                        nAction;
-            sal_Bool                        bHtml;
-            sal_Bool                        bError;
+            bool                        bHtml;
+            bool                        bError;
 
             DropDescriptor()
                 : nType(E_TABLE)
                 , pDroppedAt(NULL)
                 , nAction(DND_ACTION_NONE)
-                , bHtml(sal_False)
-                , bError(sal_False)
+                , bHtml(false)
+                , bError(false)
                 { }
         };
 
@@ -124,9 +124,9 @@ namespace dbaui
             @param  _xConnection
                 The connection
         */
-        sal_Bool copyTagTable(  DropDescriptor& _rDesc,
-                                sal_Bool _bCheck,
-                                const SharedConnection& _xConnection);
+        bool copyTagTable(  DropDescriptor& _rDesc,
+                            bool _bCheck,
+                            const SharedConnection& _xConnection);
 
         /** copies a table which was constructed by tags like HTML or RTF
             @param  _rDesc
@@ -148,12 +148,12 @@ namespace dbaui
             @param  _xConnection
                 The connection
         */
-        sal_Bool copyTagTable(const TransferableDataHelper& _aDroppedData,
-                              DropDescriptor& _rAsyncDrop,
-                              const SharedConnection& _xConnection);
+        bool copyTagTable(const TransferableDataHelper& _aDroppedData,
+                          DropDescriptor& _rAsyncDrop,
+                          const SharedConnection& _xConnection);
 
         /// returns <TRUE/> if the clipboard supports a table format, otherwise <FALSE/>.
-        sal_Bool isTableFormat(const TransferableDataHelper& _rClipboard) const;
+        bool isTableFormat(const TransferableDataHelper& _rClipboard) const;
 
         inline void                     SetTableNameForAppend( const OUString& _rDefaultTableName ) { m_sTableNameForAppend = _rDefaultTableName; }
         inline void                     ResetTableNameForAppend() { SetTableNameForAppend( OUString() ); }
@@ -181,7 +181,7 @@ namespace dbaui
             const sal_Int32 i_nCommandType,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& i_rSourceRows,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& i_rSelection,
-            const sal_Bool i_bBookmarkSelection,
+            const bool i_bBookmarkSelection,
             const OUString& i_rDestDataSource,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& i_rDestConnection
         );

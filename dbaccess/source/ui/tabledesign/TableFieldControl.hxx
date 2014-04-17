@@ -34,15 +34,15 @@ namespace dbaui
         virtual void        DeactivateAggregate( EControlType eType ) SAL_OVERRIDE;
         // are to be implemented by the derived classes
         virtual void        CellModified(long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
-        virtual sal_Bool        IsReadOnly() SAL_OVERRIDE;
-        virtual void        SetModified(sal_Bool bModified) SAL_OVERRIDE;
+        virtual bool        IsReadOnly() SAL_OVERRIDE;
+        virtual void        SetModified(bool bModified) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    GetFormatter() const SAL_OVERRIDE;
 
         virtual ::com::sun::star::lang::Locale  GetLocale() const SAL_OVERRIDE;
 
         virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos) SAL_OVERRIDE;
         virtual const OTypeInfoMap*             getTypeInfo() const SAL_OVERRIDE;
-        virtual sal_Bool                        isAutoIncrementValueEnabled() const SAL_OVERRIDE;
+        virtual bool                            isAutoIncrementValueEnabled() const SAL_OVERRIDE;
         virtual OUString                 getAutoIncrementValue() const SAL_OVERRIDE;
 
     public:

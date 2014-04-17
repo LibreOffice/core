@@ -28,10 +28,10 @@ class QueryPropertiesDialog : public ModalDialog
 public:
 
     QueryPropertiesDialog(
-        Window* pParent, const sal_Bool bDistinct, const sal_Int64 nLimit );
+        Window* pParent, const bool bDistinct, const sal_Int64 nLimit );
     virtual ~QueryPropertiesDialog();
 
-    sal_Bool getDistinct() const;
+    bool getDistinct() const;
     sal_Int64 getLimit() const;
 
 private:
@@ -44,7 +44,7 @@ private:
 };
 
 
-inline sal_Bool QueryPropertiesDialog::getDistinct() const
+inline bool QueryPropertiesDialog::getDistinct() const
 {
     return m_pRB_Distinct->IsChecked();
 }

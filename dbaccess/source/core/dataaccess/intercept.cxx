@@ -119,7 +119,7 @@ void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyVal
 
     if ( _URL.Complete == m_aInterceptedURL[ DISPATCH_SAVE ] )
     {
-        m_pContentHolder->save( sal_False );
+        m_pContentHolder->save( false );
         return;
     }
 

@@ -30,8 +30,8 @@ class ODBTypeWizDialogSetup
         ,public ::comphelper::OPropertyArrayUsageHelper< ODBTypeWizDialogSetup >
 {
     OUString m_sExistingDocToOpen;
-    sal_Bool        m_bOpenDatabase;
-    sal_Bool        m_bStartTableWizard;
+    bool        m_bOpenDatabase;
+    bool        m_bStartTableWizard;
 
 protected:
     ODBTypeWizDialogSetup(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);

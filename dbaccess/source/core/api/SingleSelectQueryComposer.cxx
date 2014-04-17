@@ -487,7 +487,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnRealName_throw(const Referenc
         OUString sRealName, sTableName;
         xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
         xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
-        sal_Bool bFunction = sal_False;
+        bool bFunction = false;
         xColumn->getPropertyValue("Function") >>= bFunction;
         if ( sRealName == aName )
         {
@@ -615,7 +615,7 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const OUString& _r
     // remember the 4 current "additive" clauses
     ::std::vector< OUString > aAdditiveClauses( SQLPartCount );
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
-        aAdditiveClauses[ eLoopParts ] = getSQLPart( eLoopParts, m_aAdditiveIterator, sal_False );
+        aAdditiveClauses[ eLoopParts ] = getSQLPart( eLoopParts, m_aAdditiveIterator, false );
 
     // clear the tables and columns
     clearCurrentCollections();
@@ -624,7 +624,7 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const OUString& _r
 
     // get the 4 elementary parts of the statement
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
-        m_aElementaryParts[ eLoopParts ] = getSQLPart( eLoopParts, m_aSqlIterator, sal_False );
+        m_aElementaryParts[ eLoopParts ] = getSQLPart( eLoopParts, m_aSqlIterator, false );
 
     // reset the AdditiveIterator: m_aPureSelectSQL may have changed
     try
@@ -663,14 +663,14 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
     ::osl::MutexGuard aGuard( m_aMutex );
 
     // if nothing is changed, do nothing
-    if ( getSQLPart( _ePart, m_aAdditiveIterator, sal_False ) == _rClause )
+    if ( getSQLPart( _ePart, m_aAdditiveIterator, false ) == _rClause )
         return;
 
     // collect the 4 single parts as they're currently set
     ::std::vector< OUString > aClauses;
     aClauses.reserve( (size_t)SQLPartCount );
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
-        aClauses.push_back( getSQLPart( eLoopParts, m_aSqlIterator, sal_True ) );
+        aClauses.push_back( getSQLPart( eLoopParts, m_aSqlIterator, true ) );
 
     // overwrite the one part in question here
     boost::scoped_ptr< TokenComposer > pComposer;
@@ -700,7 +700,7 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
     aSql = m_aPureSelectSQL;
     // again, first get all the old additive parts
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
-        aClauses[ eLoopParts ] = getSQLPart( eLoopParts, m_aAdditiveIterator, sal_True );
+        aClauses[ eLoopParts ] = getSQLPart( eLoopParts, m_aAdditiveIterator, true );
     // then overwrite the one in question
     aClauses[ _ePart ] = getComposedClause( OUString(), _rClause, *pComposer, getKeyword( _ePart ) );
     // and parse it, so that m_aAdditiveIterator is up to date
@@ -775,7 +775,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
 
     ::std::vector< OUString> aNames;
     ::rtl::Reference< OSQLColumns> aSelectColumns;
-    sal_Bool bCase = sal_True;
+    bool bCase = true;
     Reference< XNameAccess> xQueryColumns;
     if ( m_nCommandType == CommandType::QUERY )
     {
@@ -798,13 +798,13 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
 
         // preserve the original WHERE clause
         // #i102234#
-        OUString sOriginalWhereClause = getSQLPart( Where, m_aSqlIterator, sal_False );
+        OUString sOriginalWhereClause = getSQLPart( Where, m_aSqlIterator, false );
         if ( !sOriginalWhereClause.isEmpty() )
         {
             aSQL.append( " AND ( " + sOriginalWhereClause + " ) " );
         }
 
-        OUString sGroupBy = getSQLPart( Group, m_aSqlIterator, sal_True );
+        OUString sGroupBy = getSQLPart( Group, m_aSqlIterator, true );
         if ( !sGroupBy.isEmpty() )
             aSQL.append( sGroupBy );
 
@@ -878,7 +878,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
             }
             else
                 sColumnLabel = xResultSetMeta->getColumnLabel(i);
-            sal_Bool bFound = sal_False;
+            bool bFound = false;
             OSQLColumns::Vector::const_iterator aFind = ::connectivity::find(aSelectColumns->get().begin(),aSelectColumns->get().end(),sColumnLabel,aCaseCompare);
             size_t nFoundSelectColumnPos = aFind - aSelectColumns->get().begin();
             if ( aFind != aSelectColumns->get().end() )
@@ -900,7 +900,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                     (*aFind)->getPropertyValue(PROPERTY_NAME) >>= sColumnName;
                     aUsedSelectColumns.insert( nFoundSelectColumnPos );
                     aNames.push_back(sColumnName);
-                    bFound = sal_True;
+                    bFound = true;
                 }
             }
 
@@ -983,7 +983,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
     return m_aCurrentColumns[SelectColumns];
 }
 
-sal_Bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OSQLParseTreeIterator& _rIterator,
+bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OSQLParseTreeIterator& _rIterator,
                                     ::std::vector< ::std::vector < PropertyValue > >& rFilters, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
 {
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setORCriteria" );
@@ -998,7 +998,7 @@ sal_Bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OS
     // a searchcondition can only look like this: search_condition SQL_TOKEN_OR boolean_term
     else if (SQL_ISRULE(pCondition,search_condition))
     {
-        sal_Bool bResult = sal_True;
+        bool bResult = true;
         for (int i = 0; bResult && i < 3; i+=2)
         {
             // Is the first element a OR logic expression again?
@@ -1020,7 +1020,7 @@ sal_Bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OS
     }
 }
 
-sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
+bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
     OSQLParseTreeIterator& _rIterator, ::std::vector < PropertyValue >& rFilter, const Reference< XNumberFormatter > & xFormatter) const
 {
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setANDCriteria" );
@@ -1029,7 +1029,7 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
     {
         // this should not occur
         SAL_WARN("dbaccess","boolean_primary in And-Criteria");
-        return sal_False;
+        return false;
     }
     // The first element is an AND logical expression again
     else if ( SQL_ISRULE(pCondition,boolean_term) && pCondition->count() == 3 )
@@ -1093,19 +1093,19 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
             rFilter.push_back(aItem);
         }
         else
-            return sal_False;
+            return false;
     }
     else if (SQL_ISRULE(pCondition,existence_test) ||
              SQL_ISRULE(pCondition,unique_test))
     {
         // this couldn't be handled here, too complex
         // as we need a field name
-        return sal_False;
+        return false;
     }
     else
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredicate) const
@@ -1138,7 +1138,7 @@ sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredica
     return nPredicate;
 }
 
-sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition, OSQLParseTreeIterator& _rIterator,
+bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition, OSQLParseTreeIterator& _rIterator,
                                             ::std::vector < PropertyValue >& rFilter, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
 {
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setComparsionPredicate" );
@@ -1214,7 +1214,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
                     aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
         }
         else
-            return sal_False;
+            return false;
 
         aItem.Name = getColumnName(pCondition->getChild(nPos),_rIterator);
         aItem.Value <<= aValue;
@@ -1258,7 +1258,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         aItem.Value <<= aValue;
         rFilter.push_back(aItem);
     }
-    return sal_True;
+    return true;
 }
 
 // Functions for analysing SQL
@@ -1275,7 +1275,7 @@ OUString SAL_CALL OSingleSelectQueryComposer::getFilter(  ) throw(RuntimeExcepti
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getFilter" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    return getSQLPart(Where,m_aAdditiveIterator,sal_False);
+    return getSQLPart(Where,m_aAdditiveIterator,false);
 }
 
 OUString SAL_CALL OSingleSelectQueryComposer::getOrder(  ) throw(RuntimeException, std::exception)
@@ -1283,7 +1283,7 @@ OUString SAL_CALL OSingleSelectQueryComposer::getOrder(  ) throw(RuntimeExceptio
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getOrder" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    return getSQLPart(Order,m_aAdditiveIterator,sal_False);
+    return getSQLPart(Order,m_aAdditiveIterator,false);
 }
 
 OUString SAL_CALL OSingleSelectQueryComposer::getGroup(  ) throw (RuntimeException, std::exception)
@@ -1291,7 +1291,7 @@ OUString SAL_CALL OSingleSelectQueryComposer::getGroup(  ) throw (RuntimeExcepti
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getGroup" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    return getSQLPart(Group,m_aAdditiveIterator,sal_False);
+    return getSQLPart(Group,m_aAdditiveIterator,false);
 }
 
 OUString OSingleSelectQueryComposer::getHavingClause() throw (RuntimeException, std::exception)
@@ -1299,7 +1299,7 @@ OUString OSingleSelectQueryComposer::getHavingClause() throw (RuntimeException, 
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getHavingClause" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    return getSQLPart(Having,m_aAdditiveIterator,sal_False);
+    return getSQLPart(Having,m_aAdditiveIterator,false);
 }
 
 OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet >& column) const
@@ -1387,7 +1387,7 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  )
         OSQLColumns::Vector::const_iterator aEnd = aCols->get().end();
         for(OSQLColumns::Vector::const_iterator aIter = aCols->get().begin(); aIter != aEnd;++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
-        m_aCurrentColumns[ParameterColumns] = new OPrivateColumns(aCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
+        m_aCurrentColumns[ParameterColumns] = new OPrivateColumns(aCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,true);
     }
 
     return m_aCurrentColumns[ParameterColumns];
@@ -1442,7 +1442,7 @@ Reference< XIndexAccess > OSingleSelectQueryComposer::setCurrentColumns( EColumn
         OSQLColumns::Vector::const_iterator aEnd = _rCols->get().end();
         for(OSQLColumns::Vector::const_iterator aIter = _rCols->get().begin(); aIter != aEnd;++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
-        m_aCurrentColumns[_eType] = new OPrivateColumns(_rCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
+        m_aCurrentColumns[_eType] = new OPrivateColumns(_rCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,true);
     }
 
     return m_aCurrentColumns[_eType];
@@ -1548,7 +1548,7 @@ void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Seque
     setHavingClause(lcl_getCondition(filter,aPredicateInput,getColumns()));
 }
 
-void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString& >& _aSetFunctor,sal_Int32 filterOperator)
+void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropertySet >& column, bool andCriteria ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString& >& _aSetFunctor,sal_Int32 filterOperator)
 {
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setConditionByColumn" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
@@ -1677,7 +1677,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             case DataType::BIT:
             case DataType::BOOLEAN:
                 {
-                    sal_Bool bValue = sal_False;
+                    bool bValue = false;
                     m_xTypeConverter->convertToSimpleType(aValue, TypeClass_BOOLEAN) >>= bValue;
 
                     OUString sColumnExp = aSQL.makeStringAndClear();
@@ -1824,7 +1824,7 @@ OUString OSingleSelectQueryComposer::getKeyword( SQLPart _ePart ) const
     return sKeyword;
 }
 
-OUString OSingleSelectQueryComposer::getSQLPart( SQLPart _ePart, OSQLParseTreeIterator& _rIterator, sal_Bool _bWithKeyword )
+OUString OSingleSelectQueryComposer::getSQLPart( SQLPart _ePart, OSQLParseTreeIterator& _rIterator, bool _bWithKeyword )
 {
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getSQLPart" );
     TGetParseNode F_tmp(&OSQLParseTreeIterator::getSimpleWhereTree);

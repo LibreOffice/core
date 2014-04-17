@@ -48,7 +48,7 @@ namespace dbaccess
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xTableDefinitions;
         ::rtl::Reference< OContainerMediator >                                          m_pTableMediator;
-        sal_Bool                m_bInDrop;                  // set when we are in the drop method
+        bool                m_bInDrop;                  // set when we are in the drop method
 
         // OFilteredContainer
         virtual void addMasterContainerListener() SAL_OVERRIDE;
@@ -88,7 +88,7 @@ namespace dbaccess
         OTableContainer( ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
-            sal_Bool _bCase,
+            bool _bCase,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&  _xTableDefinitions,
             IRefreshListener*   _pRefreshListener,
             ::dbtools::IWarningsContainer* _pWarningsContainer,

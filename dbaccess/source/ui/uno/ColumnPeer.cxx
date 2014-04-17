@@ -71,7 +71,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
             sal_Int32 nType         = 0;
             sal_Int32 nScale        = 0;
             sal_Int32 nPrecision    = 0;
-            sal_Bool bAutoIncrement = sal_False;
+            bool bAutoIncrement = false;
             OUString sTypeName;
 
             try
@@ -87,15 +87,15 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
             {
             }
 
-            m_pActFieldDescr = new OFieldDescription(_xColumn,sal_True);
+            m_pActFieldDescr = new OFieldDescription(_xColumn,true);
             // search for type
             OUString sCreateParam("x");
-            sal_Bool bForce;
+            bool bForce;
             TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(*pFieldControl->getTypeInfo(),nType,sTypeName,sCreateParam,nPrecision,nScale,bAutoIncrement,bForce);
             if ( !pTypeInfo.get() )
                 pTypeInfo = pFieldControl->getDefaultTyp();
 
-            m_pActFieldDescr->FillFromTypeInfo(pTypeInfo,sal_True,sal_False);
+            m_pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false);
             m_xColumn = _xColumn;
         }
         pFieldControl->DisplayData(m_pActFieldDescr);

@@ -22,7 +22,7 @@
 
 namespace dbaui
 {
-    sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const OUString& _sAllowedChars)
+    bool isCharOk(sal_Unicode _cChar,bool _bFirstChar,bool _bUpperCase,const OUString& _sAllowedChars)
     {
         return  (
                  (_cChar >= 'A' && _cChar <= 'Z') ||
@@ -32,10 +32,10 @@ namespace dbaui
                  (!_bUpperCase && (_cChar >= 'a' && _cChar <= 'z'))
                 );
     }
-    sal_Bool OSQLNameChecker::checkString(const OUString& _sToCheck,
+    bool OSQLNameChecker::checkString(const OUString& _sToCheck,
                                         OUString& _rsCorrected)
     {
-        sal_Bool bCorrected = sal_False;
+        bool bCorrected = false;
         if ( m_bCheck )
         {
             OUString sText = _sToCheck;
@@ -45,7 +45,7 @@ namespace dbaui
                 if ( !isCharOk( sText[i], i == 0, m_bOnlyUpperCase, m_sAllowedChars ) )
                 {
                     _rsCorrected += sText.copy(nMatch, i - nMatch);
-                    bCorrected = sal_True;
+                    bCorrected = true;
                     nMatch = i + 1;
                 }
             }

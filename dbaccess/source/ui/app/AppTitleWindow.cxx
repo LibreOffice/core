@@ -27,7 +27,7 @@
 namespace dbaui
 {
 
-OTitleWindow::OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,sal_Bool _bShift)
+OTitleWindow::OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift)
 : Window(_pParent,_nBits | WB_DIALOGCONTROL)
 , m_aSpace1(this)
 , m_aSpace2(this)
@@ -38,7 +38,7 @@ OTitleWindow::OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,
 
     setTitle(_nTitleId);
     SetBorderStyle(WINDOW_BORDER_MONO);
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
 
     Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle };
     for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
@@ -120,12 +120,12 @@ void OTitleWindow::DataChanged( const DataChangedEvent& rDCEvt )
         ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
         (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( true, true, true );
         Invalidate();
     }
 }
 
-void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+void OTitleWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
     AllSettings aAllSettings = GetSettings();
     StyleSettings aStyle = aAllSettings.GetStyleSettings();

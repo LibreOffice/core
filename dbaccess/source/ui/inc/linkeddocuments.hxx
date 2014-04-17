@@ -64,7 +64,7 @@ namespace dbaui
         );
         ~OLinkedDocumentsAccess();
 
-        inline sal_Bool isConnected() const { return m_xConnection.is(); }
+        inline bool isConnected() const { return m_xConnection.is(); }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>
                 open(

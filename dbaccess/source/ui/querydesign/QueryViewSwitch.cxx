@@ -33,7 +33,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
-: m_bAddTableDialogWasVisible(sal_False)
+: m_bAddTableDialogWasVisible(false)
 {
 
     m_pTextView     = new OQueryTextView(_pParent);
@@ -74,7 +74,7 @@ void OQueryViewSwitch::resizeDocumentView(Rectangle& _rPlayground)
     _rPlayground.SetSize( Size( 0, 0 ) );
 }
 
-sal_Bool OQueryViewSwitch::checkStatement()
+bool OQueryViewSwitch::checkStatement()
 {
     if(m_pTextView->IsVisible())
         return m_pTextView->checkStatement();
@@ -88,7 +88,7 @@ OUString OQueryViewSwitch::getStatement()
     return m_pDesignView->getStatement();
 }
 
-void OQueryViewSwitch::setReadOnly(sal_Bool _bReadOnly)
+void OQueryViewSwitch::setReadOnly(bool _bReadOnly)
 {
     if(m_pTextView->IsVisible())
         m_pTextView->setReadOnly(_bReadOnly);
@@ -128,21 +128,21 @@ void OQueryViewSwitch::copy()
         m_pDesignView->copy();
 }
 
-sal_Bool OQueryViewSwitch::isCutAllowed()
+bool OQueryViewSwitch::isCutAllowed()
 {
     if(m_pTextView->IsVisible())
         return m_pTextView->isCutAllowed();
     return m_pDesignView->isCutAllowed();
 }
 
-sal_Bool OQueryViewSwitch::isCopyAllowed()
+bool OQueryViewSwitch::isCopyAllowed()
 {
     if(m_pTextView->IsVisible())
         return m_pTextView->isCopyAllowed();
     return m_pDesignView->isCopyAllowed();
 }
 
-sal_Bool OQueryViewSwitch::isPasteAllowed()
+bool OQueryViewSwitch::isPasteAllowed()
 {
     if(m_pTextView->IsVisible())
         return m_pTextView->isPasteAllowed();
@@ -192,7 +192,7 @@ void OQueryViewSwitch::impl_forceSQLView()
 void OQueryViewSwitch::forceInitialView()
 {
     OQueryController& rQueryController( static_cast< OQueryController& >( m_pDesignView->getController() ) );
-    const sal_Bool bGraphicalDesign = rQueryController.isGraphicalDesign();
+    const bool bGraphicalDesign = rQueryController.isGraphicalDesign();
     if ( !bGraphicalDesign )
         impl_forceSQLView();
     else
@@ -217,8 +217,8 @@ void OQueryViewSwitch::forceInitialView()
 
 bool OQueryViewSwitch::switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
-    sal_Bool bRet = sal_True;
-    sal_Bool bGraphicalDesign = static_cast<OQueryController&>(m_pDesignView->getController()).isGraphicalDesign();
+    bool bRet = true;
+    bool bGraphicalDesign = static_cast<OQueryController&>(m_pDesignView->getController()).isGraphicalDesign();
 
     if ( !bGraphicalDesign )
     {
@@ -275,12 +275,12 @@ OAddTableDlg* OQueryViewSwitch::getAddTableDialog()
     return m_pDesignView->getController().getAddTableDialog();
 }
 
-sal_Bool OQueryViewSwitch::isSlotEnabled(sal_Int32 _nSlotId)
+bool OQueryViewSwitch::isSlotEnabled(sal_Int32 _nSlotId)
 {
     return m_pDesignView->isSlotEnabled(_nSlotId);
 }
 
-void OQueryViewSwitch::setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable)
+void OQueryViewSwitch::setSlotEnabled(sal_Int32 _nSlotId, bool _bEnable)
 {
     m_pDesignView->setSlotEnabled(_nSlotId,_bEnable);
 }

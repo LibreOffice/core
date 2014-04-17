@@ -68,8 +68,8 @@ private:
 OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     MultiLineEditSyntaxHighlight( pParent, nWinStyle )
     ,m_pView(pParent)
-    ,m_bAccelAction( sal_False )
-    ,m_bStopTimer(sal_False )
+    ,m_bAccelAction( false )
+    ,m_bStopTimer(false )
 {
     SetHelpId( HID_CTL_QRYSQLEDIT );
     SetModifyHdl( LINK(this, OSqlEdit, ModifyHdl) );
@@ -127,15 +127,15 @@ void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
     // Is this a cut, copy, paste event?
     KeyFuncType aKeyFunc = rKEvt.GetKeyCode().GetFunction();
     if( (aKeyFunc==KEYFUNC_CUT)||(aKeyFunc==KEYFUNC_COPY)||(aKeyFunc==KEYFUNC_PASTE) )
-        m_bAccelAction = sal_True;
+        m_bAccelAction = true;
 
     MultiLineEditSyntaxHighlight::KeyInput( rKEvt );
 
     if( m_bAccelAction )
-        m_bAccelAction = sal_False;
+        m_bAccelAction = false;
 }
 
-sal_Bool OSqlEdit::IsInAccelAct()
+bool OSqlEdit::IsInAccelAct()
 {
     // Cut, Copy, Paste by Accel. runs the action in the Edit but also the
     // corresponding slot in the View. Therefore, the action occurs twice.
@@ -213,14 +213,14 @@ void OSqlEdit::SetText(const OUString& rNewText)
 
 void OSqlEdit::stopTimer()
 {
-    m_bStopTimer = sal_True;
+    m_bStopTimer = true;
     if (m_timerInvalidate.IsActive())
         m_timerInvalidate.Stop();
 }
 
 void OSqlEdit::startTimer()
 {
-    m_bStopTimer = sal_False;
+    m_bStopTimer = false;
     if (!m_timerInvalidate.IsActive())
         m_timerInvalidate.Start();
 }

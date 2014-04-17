@@ -46,8 +46,8 @@ OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
                                const Reference< XInterface > & _xStatement)
     :OSubComponent(m_aMutex, _xConn)
     ,OPropertySetHelper(OComponentHelper::rBHelper)
-    ,m_bUseBookmarks( sal_False )
-    ,m_bEscapeProcessing( sal_True )
+    ,m_bUseBookmarks( false )
+    ,m_bEscapeProcessing( true )
 
 {
     SAL_INFO("dbaccess", "OStatementBase::OStatementBase" );
@@ -208,7 +208,7 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (Runtim
 sal_Bool OStatementBase::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException  )
 {
     //SAL_INFO("dbaccess", "OStatementBase::convertFastPropertyValue" );
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     switch (nHandle)
     {
         case PROPERTY_ID_USEBOOKMARKS:
@@ -232,7 +232,7 @@ sal_Bool OStatementBase::convertFastPropertyValue( Any & rConvertedValue, Any & 
                 {
                     rOldValue = aCurrentValue;
                     rConvertedValue = rValue;
-                    bModified = sal_True;
+                    bModified = true;
                 }
             }
             break;
@@ -482,7 +482,7 @@ Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL ) throw(
     if ( xInnerResultSet.is() )
     {
         Reference< XDatabaseMetaData > xMeta = xConnection->getMetaData();
-        sal_Bool bCaseSensitive = xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers();
+        bool bCaseSensitive = xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers();
         xResultSet = new OResultSet( xInnerResultSet, *this, bCaseSensitive );
 
         // keep the resultset weak

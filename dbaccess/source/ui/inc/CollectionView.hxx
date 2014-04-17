@@ -49,7 +49,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         Size            m_aDlgSize;
         Size            m_a6Size;
-        sal_Bool        m_bCreateForm;
+        bool        m_bCreateForm;
 
         DECL_LINK(Up_Click,void*);
         DECL_LINK(NewFolder_Click,void*);

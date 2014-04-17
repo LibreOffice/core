@@ -55,7 +55,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver() = 0;
         virtual OUString getDatasourceType(const SfxItemSet& _rSet) const = 0;
         virtual void clearPassword() = 0;
-        virtual sal_Bool saveDatasource() = 0;
+        virtual bool saveDatasource() = 0;
         virtual void setTitle(const OUString& _sTitle) = 0;
 
         /** enables or disables the user's possibility to confirm the settings

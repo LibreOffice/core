@@ -42,7 +42,7 @@ OQueryDesignFieldUndoAct::~OQueryDesignFieldUndoAct()
 OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, sal_uInt16 nCommentID)
     : OQueryDesignUndoAction(pOwner, nCommentID)
     , m_pTabWin(NULL)
-    , m_bOwnerOfObjects(sal_False)
+    , m_bOwnerOfObjects(false)
 {
 }
 
@@ -108,7 +108,7 @@ void OTabFieldMovedUndoAct::Undo()
         sal_uInt16 nId = pDescr->GetColumnId();
         sal_uInt16 nOldPos = pOwner->GetColumnPos(nId);
         pOwner->SetColumnPos(nId,m_nColumnPostion);
-        pOwner->ColumnMoved(nId,sal_False);
+        pOwner->ColumnMoved(nId,false);
         m_nColumnPostion = nOldPos;
     }
     pOwner->LeaveUndoMode();

@@ -128,7 +128,7 @@ namespace
     class OTablePreviewWindow : public Window
     {
         DECL_LINK(OnDisableInput, void*);
-        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
@@ -137,7 +137,7 @@ namespace
     };
     OTablePreviewWindow::OTablePreviewWindow(Window* pParent, WinBits nStyle) : Window( pParent, nStyle)
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( true, true, true );
     }
     bool OTablePreviewWindow::Notify( NotifyEvent& rNEvt )
     {
@@ -158,11 +158,11 @@ namespace
         if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
             (rDCEvt.GetFlags() & SETTINGS_STYLE) )
         {
-            ImplInitSettings( sal_True, sal_True, sal_True );
+            ImplInitSettings( true, true, true );
             Invalidate();
         }
     }
-    void OTablePreviewWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+    void OTablePreviewWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         if( bFont )
@@ -283,7 +283,7 @@ void OAppDetailPageHelper::sort(int _nPos,SvSortMode _eSortMode )
         pModel->Resort();
 }
 
-sal_Bool OAppDetailPageHelper::isSortUp() const
+bool OAppDetailPageHelper::isSortUp() const
 {
     SvSortMode eSortMode = SortNone;
     int nPos = getVisibleControlIndex();
@@ -512,19 +512,19 @@ sal_Int32 OAppDetailPageHelper::getElementCount()
     return nCount;
 }
 
-sal_Bool OAppDetailPageHelper::isCutAllowed()
+bool OAppDetailPageHelper::isCutAllowed()
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool OAppDetailPageHelper::isCopyAllowed()
+bool OAppDetailPageHelper::isCopyAllowed()
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool OAppDetailPageHelper::isPasteAllowed()
+bool OAppDetailPageHelper::isPasteAllowed()
 {
-    return sal_True;
+    return true;
 }
 
 void OAppDetailPageHelper::copy()
@@ -555,10 +555,10 @@ bool OAppDetailPageHelper::isLeaf(SvTreeListEntry* _pEntry) const
     return true;
 }
 
-sal_Bool OAppDetailPageHelper::isALeafSelected() const
+bool OAppDetailPageHelper::isALeafSelected() const
 {
     int nPos = getVisibleControlIndex();
-    sal_Bool bLeafSelected = sal_False;
+    bool bLeafSelected = false;
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         DBTreeListBox& rTree = *m_pLists[nPos];
@@ -683,7 +683,7 @@ void OAppDetailPageHelper::setDetailPage(Window* _pWindow)
         pCurrent->Hide();
 
     showPreview(NULL);
-    sal_Bool bHasFocus = sal_False;
+    bool bHasFocus = false;
     m_aFL.Show();
     {
         bHasFocus = pCurrent->HasChildPathFocus();
@@ -691,7 +691,7 @@ void OAppDetailPageHelper::setDetailPage(Window* _pWindow)
     }
     m_aTBPreview.Show();
     m_aBorder.Show();
-    switchPreview(m_ePreviewMode,sal_True);
+    switchPreview(m_ePreviewMode,true);
 
     if ( bHasFocus )
         _pWindow->GrabFocus();
@@ -797,7 +797,7 @@ void OAppDetailPageHelper::clearPages()
     }
 }
 
-sal_Bool OAppDetailPageHelper::isFilled() const
+bool OAppDetailPageHelper::isFilled() const
 {
     size_t i = 0;
     for (; i < E_ELEMENT_TYPE_COUNT && !m_pLists[i]; ++i)
@@ -993,12 +993,12 @@ PreviewMode OAppDetailPageHelper::getPreviewMode()
     return m_ePreviewMode;
 }
 
-sal_Bool OAppDetailPageHelper::isPreviewEnabled()
+bool OAppDetailPageHelper::isPreviewEnabled()
 {
     return m_ePreviewMode != E_PREVIEWNONE;
 }
 
-void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,sal_Bool _bForce)
+void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,bool _bForce)
 {
     if ( m_ePreviewMode != _eMode || _bForce )
     {
@@ -1107,7 +1107,7 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
 
 void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
                                         const OUString& _sName,
-                                        sal_Bool _bTable)
+                                        bool _bTable)
 {
     if ( isPreviewEnabled() )
     {
@@ -1153,7 +1153,7 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
         aArgs.put( (OUString)PROPERTY_SHOWMENU, sal_False );
 
         Reference< XController > xPreview( pDispatcher->openExisting( makeAny( _sDataSourceName ), _sName, aArgs ), UNO_QUERY );
-        sal_Bool bClearPreview = !xPreview.is();
+        bool bClearPreview = !xPreview.is();
 
         // clear the preview when the query or table could not be loaded
         if ( !bClearPreview )
@@ -1281,14 +1281,14 @@ void OAppDetailPageHelper::ImplInitSettings()
 OPreviewWindow::OPreviewWindow(Window* _pParent)
 : Window(_pParent)
 {
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
 }
 
-sal_Bool OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
+bool OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
 {
     const Size aWinSize( GetOutputSizePixel() );
     Size       aNewSize( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) );
-    sal_Bool       bRet = sal_False;
+    bool       bRet = false;
 
     if( aNewSize.Width() && aNewSize.Height() )
     {
@@ -1311,7 +1311,7 @@ sal_Bool OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rect
                              ( aWinSize.Height() - aNewSize.Height() ) >> 1 );
 
         rResultRect = Rectangle( aNewPos, aNewSize );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -1340,12 +1340,12 @@ void OPreviewWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( true, true, true );
         Invalidate();
     }
 }
 
-void OPreviewWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+void OPreviewWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )

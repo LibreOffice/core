@@ -125,7 +125,7 @@ protected:
     ::cppu::OInterfaceContainerHelper
                             m_aContainerListeners;
 
-    sal_Bool                m_bInPropertyChange;
+    bool                m_bInPropertyChange;
     bool                    m_bCheckSlash;
 
 protected:
@@ -239,7 +239,7 @@ protected:
         @param      _rName      the object name to check
         @return                 sal_True if there already exists such an object
     */
-    virtual sal_Bool checkExistence(const OUString& _rName);
+    virtual bool checkExistence(const OUString& _rName);
 
     /** append a new object to the container. No plausibility checks are done, e.g. if the object is non-NULL or
         if the name is already used by another object or anything like this. This method is for derived classes

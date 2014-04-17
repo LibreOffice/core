@@ -157,7 +157,7 @@ namespace dbaui
     }
     bool OQueryContainerWindow::PreNotify( NotifyEvent& rNEvt )
     {
-        sal_Bool bHandled = sal_False;
+        bool bHandled = false;
         switch (rNEvt.GetType())
         {
             case  EVENT_GETFOCUS:

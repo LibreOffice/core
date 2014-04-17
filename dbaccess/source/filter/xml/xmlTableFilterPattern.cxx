@@ -29,7 +29,7 @@ namespace dbaxml
 OXMLTableFilterPattern::OXMLTableFilterPattern( SvXMLImport& rImport,
                 sal_uInt16 nPrfx
                 ,const OUString& _sLocalName
-                ,sal_Bool _bNameFilter
+                ,bool _bNameFilter
                 ,OXMLTableFilterList& _rParent)
     :SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_rParent(_rParent)

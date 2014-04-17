@@ -54,7 +54,7 @@ using namespace ::com::sun::star::view;
 
 #define SPACEBETWEENENTRIES     4
 // class DBTreeListBox
-DBTreeListBox::DBTreeListBox( Window* pParent, WinBits nWinStyle ,sal_Bool _bHandleEnterKey)
+DBTreeListBox::DBTreeListBox( Window* pParent, WinBits nWinStyle ,bool _bHandleEnterKey)
     :SvTreeListBox(pParent,nWinStyle)
     ,m_pDragedEntry(NULL)
     ,m_pActionListener(NULL)
@@ -64,7 +64,7 @@ DBTreeListBox::DBTreeListBox( Window* pParent, WinBits nWinStyle ,sal_Bool _bHan
     init();
 }
 
-DBTreeListBox::DBTreeListBox( Window* pParent, const ResId& rResId,sal_Bool _bHandleEnterKey)
+DBTreeListBox::DBTreeListBox( Window* pParent, const ResId& rResId,bool _bHandleEnterKey)
     :SvTreeListBox(pParent,rResId)
     ,m_pDragedEntry(NULL)
     ,m_pActionListener(NULL)
@@ -178,7 +178,7 @@ void DBTreeListBox::SelectHdl()
 
 void DBTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    sal_Bool bHitEmptySpace = (NULL == GetEntry(rMEvt.GetPosPixel(), true));
+    bool bHitEmptySpace = (NULL == GetEntry(rMEvt.GetPosPixel(), true));
     if (bHitEmptySpace && (rMEvt.GetClicks() == 2) && rMEvt.IsMod1())
         Control::MouseButtonDown(rMEvt);
     else
@@ -319,7 +319,7 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
     sal_uInt16      nCode = rKEvt.GetKeyCode().GetCode();
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
 
     if(eFunc != KEYFUNC_DONTKNOW)
     {
@@ -409,7 +409,7 @@ bool DBTreeListBox::DoubleClickHdl()
     return nResult == 0;
 }
 
-void scrollWindow(DBTreeListBox* _pListBox, const Point& _rPos,sal_Bool _bUp)
+void scrollWindow(DBTreeListBox* _pListBox, const Point& _rPos,bool _bUp)
 {
     SvTreeListEntry* pEntry = _pListBox->GetEntry( _rPos );
     if( pEntry && pEntry != _pListBox->Last() )
@@ -420,13 +420,13 @@ void scrollWindow(DBTreeListBox* _pListBox, const Point& _rPos,sal_Bool _bUp)
 
 IMPL_LINK( DBTreeListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
 {
-    scrollWindow(this,m_aMousePos,sal_True);
+    scrollWindow(this,m_aMousePos,true);
     return 0;
 }
 
 IMPL_LINK( DBTreeListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
 {
-    scrollWindow(this,m_aMousePos,sal_False);
+    scrollWindow(this,m_aMousePos,false);
     return 0;
 }
 

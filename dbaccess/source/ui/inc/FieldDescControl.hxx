@@ -109,7 +109,7 @@ namespace dbaui
         long                    m_nOldHThumb;
         sal_Int32               m_nWidth;
 
-        sal_Bool                m_bAdded;
+        bool                m_bAdded;
         bool                    m_bRightAligned;
 
         OFieldDescription*      pActFieldDescr;
@@ -131,7 +131,7 @@ namespace dbaui
         void                ScrollAggregate(Control* pText, Control* pInput, Control* pButton, long nDeltaX, long nDeltaY);
         void                ScrollAllAggregates();
 
-        sal_Bool            isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
+        bool                isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
         void                Contruct();
         OPropNumericEditCtrl* CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const OString& _sHelpId);
         FixedText*          CreateText(sal_uInt16 _nTextRes);
@@ -150,19 +150,19 @@ namespace dbaui
 
         virtual void        ActivateAggregate( EControlType eType );
         virtual void        DeactivateAggregate( EControlType eType );
-        virtual sal_Bool        IsReadOnly() { return sal_False; };
+        virtual bool        IsReadOnly() { return false; };
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const = 0;
 
         virtual ::com::sun::star::lang::Locale  GetLocale() const = 0;
 
         virtual void                            CellModified(long nRow, sal_uInt16 nColId ) = 0;
-        virtual void                            SetModified(sal_Bool bModified);    // base implementation is empty
+        virtual void                            SetModified(bool bModified);    // base implementation is empty
 
         virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos)        = 0;
         virtual const OTypeInfoMap*             getTypeInfo() const  = 0;
 
-        virtual sal_Bool                        isAutoIncrementValueEnabled() const = 0;
+        virtual bool                        isAutoIncrementValueEnabled() const = 0;
         virtual OUString                 getAutoIncrementValue() const = 0;
 
         OUString                                BoolStringPersistent(const OUString& rUIString) const;
@@ -183,13 +183,13 @@ namespace dbaui
 
         void                SetControlText( sal_uInt16 nControlId, const OUString& rText );
         OUString            GetControlText( sal_uInt16 nControlId );
-        void                SetReadOnly( sal_Bool bReadOnly );
+        void                SetReadOnly( bool bReadOnly );
 
         // when resize is called
         void                CheckScrollBars();
-        sal_Bool            isCutAllowed();
-        sal_Bool            isCopyAllowed();
-        sal_Bool            isPasteAllowed();
+        bool                isCutAllowed();
+        bool                isCopyAllowed();
+        bool                isPasteAllowed();
 
         void                cut();
         void                copy();
@@ -203,7 +203,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() = 0;
 
-        OUString            getControlDefault( const OFieldDescription* _pFieldDescr ,sal_Bool _bCheck = sal_True) const;
+        OUString            getControlDefault( const OFieldDescription* _pFieldDescr, bool _bCheck = true) const;
 
         inline void setEditWidth(sal_Int32 _nWidth) { m_nWidth = _nWidth; }
     };

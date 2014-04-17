@@ -94,7 +94,7 @@ namespace dbaui
     {
     private:
         Link            m_aModifiedHandler;     /// to be called if something on the page has been modified
-        sal_Bool        m_abEnableRoadmap;
+        bool        m_abEnableRoadmap;
     protected:
         IDatabaseSettingsDialog*   m_pAdminDialog;
         IItemSetHelper* m_pItemSetHelper;
@@ -141,14 +141,14 @@ namespace dbaui
             @return
                 <FALSE/> if an error occurred, otherwise <TRUE/>
         */
-        sal_Bool getSelectedDataSource(OUString& _sReturn,OUString& _sCurr);
+        bool getSelectedDataSource(OUString& _sReturn, OUString& _sCurr);
 
         // svt::IWizardPageController
         virtual void initializePage() SAL_OVERRIDE;
         virtual bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
         virtual bool canAdvance() const SAL_OVERRIDE;
 
-        void                SetRoadmapStateValue( sal_Bool _bDoEnable ) { m_abEnableRoadmap = _bDoEnable; }
+        void                SetRoadmapStateValue( bool _bDoEnable ) { m_abEnableRoadmap = _bDoEnable; }
         bool                GetRoadmapStateValue() const { return m_abEnableRoadmap; }
 
     protected:
@@ -167,15 +167,15 @@ namespace dbaui
         void callModifiedHdl() const { if (m_aModifiedHandler.IsSet()) m_aModifiedHandler.Call((void*)this); }
 
         /// called from within DeactivatePage. The page is allowed to be deactivated if this method returns sal_True
-        virtual sal_Bool prepareLeave() { return sal_True; }
+        virtual bool prepareLeave() { return true; }
 
         /** called from within Reset and ActivatePage, use to initialize the controls with the items from the given set
             @param      _bSaveValue     if set to sal_True, the implementation should call SaveValue on all relevant controls
         */
-        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue);
 
         /// analyze the invalid and the readonly flag which may be present in the set
-        void getFlags(const SfxItemSet& _rSet, sal_Bool& _rValid, sal_Bool& _rReadonly);
+        void getFlags(const SfxItemSet& _rSet, bool& _rValid, bool& _rReadonly);
 
         /** will be called inside <method>implInitControls</method> to save the value if necessary
             @param  _rControlList
@@ -204,7 +204,7 @@ namespace dbaui
             @param _bRevertValue
                 set to <TRUE/> if the display value should be reverted before putting it into the set
         */
-        static void fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, sal_uInt16 _nID, sal_Bool& _bChangedSomething, bool _bRevertValue = false);
+        static void fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, sal_uInt16 _nID, bool& _bChangedSomething, bool _bRevertValue = false);
 
         /** fills the int value into the item set when the value changed.
             @param  _rSet
@@ -216,7 +216,7 @@ namespace dbaui
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
         */
-        static void fillInt32(SfxItemSet& _rSet,NumericField* _pEdit,sal_uInt16 _nID,sal_Bool& _bChangedSomething);
+        static void fillInt32(SfxItemSet& _rSet,NumericField* _pEdit,sal_uInt16 _nID, bool& _bChangedSomething);
 
         /** fills the String value into the item set when the value changed.
             @param  _rSet
@@ -228,7 +228,7 @@ namespace dbaui
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
         */
-        static void fillString(SfxItemSet& _rSet,Edit* _pEdit,sal_uInt16 _nID,sal_Bool& _bChangedSomething);
+        static void fillString(SfxItemSet& _rSet,Edit* _pEdit,sal_uInt16 _nID, bool& _bChangedSomething);
 
     protected:
         // used to set the right Pane header of a wizard to bold

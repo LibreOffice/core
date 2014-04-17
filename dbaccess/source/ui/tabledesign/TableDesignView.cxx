@@ -45,7 +45,7 @@ OTableBorderWindow::OTableBorderWindow(Window* pParent) : Window(pParent,WB_BORD
     ,m_aHorzSplitter( this )
 {
 
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
     // Children erzeugen
     m_pEditorCtrl   = new OTableEditorCtrl( this);
     m_pFieldDescWin = new OTableFieldDescWin( this );
@@ -116,7 +116,7 @@ IMPL_LINK( OTableBorderWindow, SplitHdl, Splitter*, pSplit )
     return 0;
 }
 
-void OTableBorderWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+void OTableBorderWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -152,7 +152,7 @@ void OTableBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( true, true, true );
         Invalidate();
     }
 }
@@ -221,7 +221,7 @@ void OTableDesignView::resizeDocumentView(Rectangle& _rPlayground)
 
 bool OTableDesignView::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     switch(rNEvt.GetType())
     {
         case EVENT_GETFOCUS:
@@ -254,19 +254,19 @@ IClipboardTest* OTableDesignView::getActiveChild() const
     return pTest;
 }
 
-sal_Bool OTableDesignView::isCopyAllowed()
+bool OTableDesignView::isCopyAllowed()
 {
     IClipboardTest* pTest = getActiveChild();
     return pTest && pTest->isCopyAllowed();
 }
 
-sal_Bool OTableDesignView::isCutAllowed()
+bool OTableDesignView::isCutAllowed()
 {
     IClipboardTest* pTest = getActiveChild();
     return pTest && pTest->isCutAllowed();
 }
 
-sal_Bool OTableDesignView::isPasteAllowed()
+bool OTableDesignView::isPasteAllowed()
 {
     IClipboardTest* pTest = getActiveChild();
     return pTest && pTest->isPasteAllowed();
@@ -294,7 +294,7 @@ void OTableDesignView::paste()
 }
 
 // set the view readonly or not
-void OTableDesignView::setReadOnly(sal_Bool _bReadOnly)
+void OTableDesignView::setReadOnly(bool _bReadOnly)
 {
     GetDescWin()->SetReadOnly(_bReadOnly);
     GetEditorCtrl()->SetReadOnly(_bReadOnly);

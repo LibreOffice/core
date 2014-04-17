@@ -184,7 +184,7 @@ namespace dbaui
         // Window overridables
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-        sal_Bool ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos);
+        bool ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos);
 
     private:
         using FmGridHeader::StartDrag;
@@ -223,7 +223,7 @@ namespace dbaui
             // ui actions (e.g. a context menu) may be performed on columns which aren't the current one
             // and aren't selected, so we have to track this column id
 
-        sal_Bool                        m_bActivatingForDrop;
+        bool                        m_bActivatingForDrop;
     // Attribute Access
     public:
         sal_uInt16  GetCurrentActionColumn() const  { return m_nCurrentActionColId; }
@@ -241,7 +241,7 @@ namespace dbaui
         virtual void DeactivateCell(bool bUpdate = true) SAL_OVERRIDE;
         void ActivateCell() { FmGridControl::ActivateCell(); }
 
-        sal_Bool IsAllSelected() const { return (GetSelectRowCount() == GetRowCount()) && (GetRowCount() > 0); }
+        bool IsAllSelected() const { return (GetSelectRowCount() == GetRowCount()) && (GetRowCount() > 0); }
 
         HeaderBar* GetHeaderBar() const { return FmGridControl::GetHeaderBar(); }
 
@@ -309,7 +309,7 @@ namespace dbaui
         DECL_LINK(AsynchDropEvent, void*);
 
     private:
-        sal_Bool    IsReadOnlyDB() const;
+        bool IsReadOnlyDB() const;
         void implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag );
 
     private:

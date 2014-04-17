@@ -168,7 +168,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
         // first, filter for the table names
         sal_Int32 nTableFilterCount = _tableFilter.getLength();
-        sal_Bool dontFilterTableNames = ( ( nTableFilterCount == 1 ) && _tableFilter[0] == "%" );
+        bool dontFilterTableNames = ( ( nTableFilterCount == 1 ) && _tableFilter[0] == "%" );
         if( dontFilterTableNames )
         {
             aFilteredTables = _unfilteredTables;
@@ -198,7 +198,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
         // second, filter for the table types
         sal_Int32 nTableTypeFilterCount = _tableTypeFilter.getLength();
-        sal_Bool dontFilterTableTypes = ( ( nTableTypeFilterCount == 1 ) && _tableTypeFilter[0] == "%" );
+        bool dontFilterTableTypes = ( ( nTableTypeFilterCount == 1 ) && _tableTypeFilter[0] == "%" );
         dontFilterTableTypes = dontFilterTableTypes || ( nTableTypeFilterCount == 0 );
             // (for TableTypeFilter, unlike TableFilter, "empty" means "do not filter at all")
         if ( !dontFilterTableTypes )
@@ -238,12 +238,12 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
     OFilteredContainer::OFilteredContainer(::cppu::OWeakObject& _rParent,
                                  ::osl::Mutex& _rMutex,
                                  const Reference< XConnection >& _xCon,
-                                 sal_Bool _bCase,
+                                 bool _bCase,
                                  IRefreshListener*  _pRefreshListener,
                                  ::dbtools::IWarningsContainer* _pWarningsContainer
                                  ,oslInterlockedCount& _nInAppend)
         :OCollection(_rParent,_bCase,_rMutex,::std::vector< OUString>())
-        ,m_bConstructed(sal_False)
+        ,m_bConstructed(false)
         ,m_pWarningsContainer(_pWarningsContainer)
         ,m_pRefreshListener(_pRefreshListener)
         ,m_nInAppend(_nInAppend)
@@ -283,7 +283,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
             reFill( lcl_filter( aUnfilteredTables,
                 _rTableFilter, _rTableTypeFilter, m_xMetaData, m_xMasterContainer ) );
 
-            m_bConstructed = sal_True;
+            m_bConstructed = true;
         }
         else
         {
@@ -334,7 +334,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
                     if ( tableType == tableTypeEnd )
                     {   // the only table type which can be part of this container is not allowed
                         // by the externally provided table type filter.
-                        m_bConstructed = sal_True;
+                        m_bConstructed = true;
                         return;
                     }
                 }
@@ -392,7 +392,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
             return;
         }
 
-        m_bConstructed = sal_True;
+        m_bConstructed = true;
     }
 
     void OFilteredContainer::disposing()
@@ -406,7 +406,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         m_xMetaData         = NULL;
         m_pWarningsContainer = NULL;
         m_pRefreshListener  = NULL;
-        m_bConstructed      = sal_False;
+        m_bConstructed      = false;
     }
 
     void OFilteredContainer::impl_refresh() throw(RuntimeException)
@@ -414,7 +414,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         SAL_INFO("dbaccess", "api OFilteredContainer::impl_refresh" );
         if ( m_pRefreshListener )
         {
-            m_bConstructed = sal_False;
+            m_bConstructed = false;
             Reference<XRefreshable> xRefresh(m_xMasterContainer,UNO_QUERY);
             if ( xRefresh.is() )
                 xRefresh->refresh();

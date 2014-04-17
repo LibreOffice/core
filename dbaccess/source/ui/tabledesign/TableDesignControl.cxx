@@ -41,9 +41,9 @@ OTableRowView::OTableRowView(Window* pParent)
     ,m_nDataPos(-1)
     ,m_nCurrentPos(-1)
     ,m_nCurUndoActId(0)
-    ,m_bCurrentModified(sal_False)
-    ,m_bUpdatable(sal_False)
-    ,m_bClipboardFilled(sal_False)
+    ,m_bCurrentModified(false)
+    ,m_bUpdatable(false)
+    ,m_bClipboardFilled(false)
 {
 
 }
@@ -98,7 +98,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
     EditBrowseBox::KeyInput(rEvt);
 }
 
-void OTableRowView::SetUpdatable( sal_Bool bUpdate )
+void OTableRowView::SetUpdatable( bool bUpdate )
 {
     m_bUpdatable = bUpdate;
 

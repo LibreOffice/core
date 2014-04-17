@@ -54,12 +54,12 @@ namespace dbaui
         TTableConnectionData::value_type                                        m_pOrigConnData;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
 
-        sal_Bool                                                                    m_bTriedOneUpdate;
+        bool                                                                    m_bTriedOneUpdate;
 
     public:
         ORelationDialog(OJoinTableView* pParent,
                         const TTableConnectionData::value_type& pConnectionData,
-                        sal_Bool bAllowTableSelect = sal_False );
+                        bool bAllowTableSelect = false );
         virtual ~ORelationDialog();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() SAL_OVERRIDE { return m_xConnection; }

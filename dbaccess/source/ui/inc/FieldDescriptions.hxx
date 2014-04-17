@@ -53,16 +53,16 @@ namespace dbaui
         sal_Int32           m_nIsNullable;
         sal_Int32           m_nFormatKey;
         SvxCellHorJustify   m_eHorJustify;
-        sal_Bool            m_bIsAutoIncrement;
-        sal_Bool            m_bIsPrimaryKey;
-        sal_Bool            m_bIsCurrency;
-        sal_Bool            m_bHidden;
+        bool            m_bIsAutoIncrement;
+        bool            m_bIsPrimaryKey;
+        bool            m_bIsCurrency;
+        bool            m_bHidden;
 
     public:
         OFieldDescription();
         OFieldDescription( const OFieldDescription& rDescr );
         OFieldDescription(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xAffectedCol
-                         ,sal_Bool _bUseAsDest = sal_False);
+                         ,bool _bUseAsDest = false);
         ~OFieldDescription();
 
         void SetName(const OUString& _rName);
@@ -79,16 +79,16 @@ namespace dbaui
         void SetIsNullable(const sal_Int32& _rIsNullable);
         void SetFormatKey(const sal_Int32& _rFormatKey);
         void SetHorJustify(const SvxCellHorJustify& _rHorJustify);
-        void SetAutoIncrement(sal_Bool _bAuto);
-        void SetPrimaryKey(sal_Bool _bPKey);
-        void SetCurrency(sal_Bool _bIsCurrency);
+        void SetAutoIncrement(bool _bAuto);
+        void SetPrimaryKey(bool _bPKey);
+        void SetCurrency(bool _bIsCurrency);
 
         /** copies the content of the field eescription into the column
             @param  _rxColumn the dest
         */
         void copyColumnSettingsTo(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn);
 
-        void FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bForce,sal_Bool _bReset);
+        void FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce,bool _bReset);
 
         OUString             GetName()               const;
         OUString             GetDescription()        const;
@@ -104,10 +104,10 @@ namespace dbaui
         SvxCellHorJustify           GetHorJustify()         const;
         TOTypeInfoSP                getTypeInfo()           const;
         TOTypeInfoSP                getSpecialTypeInfo()    const;
-        sal_Bool                    IsAutoIncrement()       const;
-        sal_Bool                    IsPrimaryKey()          const;
-        sal_Bool                    IsCurrency()            const;
-        sal_Bool                    IsNullable()            const;
+        bool                    IsAutoIncrement()       const;
+        bool                    IsPrimaryKey()          const;
+        bool                    IsCurrency()            const;
+        bool                    IsNullable()            const;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDDESCRIPTIONS_HXX

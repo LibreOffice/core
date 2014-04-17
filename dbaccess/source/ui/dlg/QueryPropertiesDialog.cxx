@@ -13,7 +13,7 @@ namespace dbaui
 {
 
 QueryPropertiesDialog::QueryPropertiesDialog(
-    Window* pParent, const sal_Bool bDistinct, const sal_Int64 nLimit )
+    Window* pParent, const bool bDistinct, const sal_Int64 nLimit )
     : ModalDialog(pParent, "QueryPropertiesDialog", "dbaccess/ui/querypropertiesdialog.ui")
     , m_pRB_Distinct( 0 )
     , m_pRB_NonDistinct( 0 )

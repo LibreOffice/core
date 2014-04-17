@@ -157,9 +157,9 @@ namespace dbaccess
         IColumnFactory*                             m_pColFactoryImpl;
         ::connectivity::sdbcx::IRefreshableColumns* m_pRefreshColumns;
 
-        sal_Bool                                    m_bInitialized  : 1;
-        sal_Bool                                    m_bAddColumn    : 1;
-        sal_Bool                                    m_bDropColumn   : 1;
+        bool                                    m_bInitialized  : 1;
+        bool                                    m_bAddColumn    : 1;
+        bool                                    m_bDropColumn   : 1;
 
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
         virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
@@ -174,8 +174,8 @@ namespace dbaccess
         }
         /** flag which determines whether the container is filled or not
         */
-        inline sal_Bool isInitialized() const { return m_bInitialized; }
-        inline void     setInitialized() {m_bInitialized = sal_True;}
+        inline bool isInitialized() const { return m_bInitialized; }
+        inline void     setInitialized() {m_bInitialized = true;}
         inline void     setMediator(OContainerMediator* _pMediator) { m_pMediator = _pMediator; }
 
     public:
@@ -189,25 +189,25 @@ namespace dbaccess
         OColumns(
                 ::cppu::OWeakObject& _rParent,
                 ::osl::Mutex& _rMutex,
-                sal_Bool _bCaseSensitive,
+                bool _bCaseSensitive,
                 const ::std::vector< OUString>& _rVector,
                 IColumnFactory* _pColFactory,
                 ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
-                sal_Bool _bAddColumn = sal_False,
-                sal_Bool _bDropColumn = sal_False,
-                sal_Bool _bUseHardRef = sal_True);
+                bool _bAddColumn = false,
+                bool _bDropColumn = false,
+                bool _bUseHardRef = true);
 
         OColumns(
             ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDrvColumns,
-            sal_Bool _bCaseSensitive,
+            bool _bCaseSensitive,
             const ::std::vector< OUString> &_rVector,
             IColumnFactory* _pColFactory,
             ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
-            sal_Bool _bAddColumn = sal_False,
-            sal_Bool _bDropColumn = sal_False,
-            sal_Bool _bUseHardRef = sal_True);
+            bool _bAddColumn = false,
+            bool _bDropColumn = false,
+            bool _bUseHardRef = true);
         virtual ~OColumns();
 
         //XInterface

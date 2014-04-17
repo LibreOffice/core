@@ -26,7 +26,7 @@ namespace dbaui {
 
 namespace {
 
-void lcl_setSpecialReadOnly( sal_Bool _bReadOnly, Window* _pWin )
+void lcl_setSpecialReadOnly( bool _bReadOnly, Window* _pWin )
 {
     StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
     const Color& rNewColor = _bReadOnly ? aSystemStyle.GetDialogColor() : aSystemStyle.GetFieldColor();

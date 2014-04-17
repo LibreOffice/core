@@ -71,15 +71,15 @@ namespace dbaui
 
         OSelectionBrowseBox*                m_pSelectionBox;    // presents the lower window
         ChildFocusState                     m_eChildFocus;
-        sal_Bool                            m_bInSplitHandler;
+        bool                            m_bInSplitHandler;
 
     public:
         OQueryDesignView(OQueryContainerWindow* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~OQueryDesignView();
 
-        virtual sal_Bool isCutAllowed() SAL_OVERRIDE;
-        virtual sal_Bool isPasteAllowed() SAL_OVERRIDE;
-        virtual sal_Bool isCopyAllowed() SAL_OVERRIDE;
+        virtual bool isCutAllowed() SAL_OVERRIDE;
+        virtual bool isPasteAllowed() SAL_OVERRIDE;
+        virtual bool isCopyAllowed() SAL_OVERRIDE;
         virtual void copy() SAL_OVERRIDE;
         virtual void cut() SAL_OVERRIDE;
         virtual void paste() SAL_OVERRIDE;
@@ -88,7 +88,7 @@ namespace dbaui
         // set the view readonly or not
         virtual void setReadOnly(sal_Bool _bReadOnly) SAL_OVERRIDE;
         // check if the statement is correct when not returning false
-        virtual sal_Bool checkStatement();
+        virtual bool checkStatement();
         // set the statement for representation
         virtual void setStatement(const OUString& _rsStatement) SAL_OVERRIDE;
         // returns the current sql statement
@@ -100,14 +100,14 @@ namespace dbaui
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
 
-        sal_Bool isSlotEnabled(sal_Int32 _nSlotId);
-        void setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable);
+        bool isSlotEnabled(sal_Int32 _nSlotId);
+        void setSlotEnabled(sal_Int32 _nSlotId, bool _bEnable);
         void setNoneVisbleRow(sal_Int32 _nRows);
 
         ::com::sun::star::lang::Locale      getLocale() const           { return m_aLocale;}
         OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
 
-        SqlParseError   InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis=sal_True, sal_Bool bActivate = sal_True);
+        SqlParseError   InsertField( const OTableFieldDescRef& rInfo, bool bVis = true, bool bActivate = true);
         bool            HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef& rInfo) const;
         // save the position of the table window and the pos of the splitters
         // called when fields are deleted

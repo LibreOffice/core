@@ -34,7 +34,7 @@ namespace dbaui
         ElementType                         m_eLastType;
         OAppBorderWindow&                   m_rBorderWin;
 
-        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
 
         DECL_LINK( OnContainerSelectHdl,    SvtIconChoiceCtrl* );
         DECL_LINK( ChangeToLastSelected, void* );
@@ -46,10 +46,10 @@ namespace dbaui
         // window overloads
         virtual void Resize() SAL_OVERRIDE;
 
-        sal_Bool isCutAllowed() SAL_OVERRIDE      { return sal_False; }
-        sal_Bool isCopyAllowed() SAL_OVERRIDE     { return sal_False; }
-        sal_Bool isPasteAllowed() SAL_OVERRIDE    { return sal_False; }
-        virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
+        bool isCutAllowed() SAL_OVERRIDE      { return false; }
+        bool isCopyAllowed() SAL_OVERRIDE     { return false; }
+        bool isPasteAllowed() SAL_OVERRIDE    { return false; }
+        virtual bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
         void copy() SAL_OVERRIDE  { }
         void cut() SAL_OVERRIDE   { }
         void paste() SAL_OVERRIDE { }

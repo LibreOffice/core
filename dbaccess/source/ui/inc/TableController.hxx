@@ -51,17 +51,17 @@ namespace dbaui
         OUString        m_sTypeNames;           // these type names are the ones out of the resource file
         TOTypeInfoSP    m_pTypeInfo;            // fall back when type is unknown because database driver has a failure
 
-        sal_Bool        m_bAllowAutoIncrementValue; // no : 1 NO BIT , is true when the datasource has a AutoIncrementValue property in their info property
-        sal_Bool        m_bNew      : 1;        // is true when we create a new table
+        bool        m_bAllowAutoIncrementValue; // no : 1 NO BIT , is true when the datasource has a AutoIncrementValue property in their info property
+        bool        m_bNew      : 1;        // is true when we create a new table
 
 
         void reSyncRows();
         void assignTable();                 // set the table if a name is given
         void loadData();
-        sal_Bool checkColumns(sal_Bool _bNew) throw(::com::sun::star::sdbc::SQLException);      // check if we have double column names
+        bool checkColumns(bool _bNew) throw(::com::sun::star::sdbc::SQLException);      // check if we have double column names
         OUString createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxTables,const OUString& _rDefault);
-        void appendColumns(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup,sal_Bool _bNew,sal_Bool _bKeyColumns = sal_False);
-        void appendPrimaryKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup,sal_Bool _bNew);
+        void appendColumns(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup, bool _bNew, bool _bKeyColumns = false);
+        void appendPrimaryKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup, bool _bNew);
         void alterColumns();
         void dropPrimaryKey();
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getKeyColumns() const;
@@ -81,7 +81,7 @@ namespace dbaui
         virtual OUString getPrivateTitle( ) const SAL_OVERRIDE;
 
         void        doEditIndexes();
-        sal_Bool    doSaveDoc(sal_Bool _bSaveAs);
+        bool        doSaveDoc(bool _bSaveAs);
 
         virtual ~OTableController();
     public:
@@ -89,12 +89,12 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       getTable() { return m_xTable;}
 
-        sal_Bool isAddAllowed()     const;
-        sal_Bool isDropAllowed()    const;
-        sal_Bool isAlterAllowed()   const;
+        bool     isAddAllowed()     const;
+        bool     isDropAllowed()    const;
+        bool     isAlterAllowed()   const;
         bool     isAutoIncrementPrimaryKey() const;
 
-        inline sal_Bool                 isAutoIncrementValueEnabled()   const { return m_bAllowAutoIncrementValue; }
+        inline bool             isAutoIncrementValueEnabled()   const { return m_bAllowAutoIncrementValue; }
         inline const OUString&   getAutoIncrementValue()         const { return m_sAutoIncrementValue; }
 
         virtual void impl_onModifyChanged() SAL_OVERRIDE;

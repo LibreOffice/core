@@ -91,7 +91,7 @@ void SAL_CALL LocalNameApproval::approveElement( const OUString& _rName, const R
 ODocumentContainer::ODocumentContainer(const Reference< XComponentContext >& _xORB
                                     ,const Reference< XInterface >& _xParentContainer
                                     ,const TContentPtr& _pImpl
-                                    , sal_Bool _bFormsContainer
+                                    , bool _bFormsContainer
                                     )
     :ODefinitionContainer(_xORB,_xParentContainer,_pImpl)
     ,OPropertyStateContainer(OContentHelper::rBHelper)
@@ -178,7 +178,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         OUString sName, sPersistentName, sURL, sMediaType, sDocServiceName;
         Reference< XCommandProcessor > xCopyFrom;
         Reference< XConnection > xConnection;
-        sal_Bool bAsTemplate( sal_False );
+        bool bAsTemplate( false );
         Sequence< sal_Int8 > aClassID;
 
         ::comphelper::NamedValueCollection aArgs( _aArguments );
@@ -215,7 +215,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         const Sequence< PropertyValue > aCreationArgs( aArgs.getPropertyValues() );
 
         const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
-        sal_Bool bNew = sPersistentName.isEmpty();
+        bool bNew = sPersistentName.isEmpty();
         if ( bNew )
         {
             const static OUString sBaseName("Obj");
@@ -416,7 +416,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
                 Environment );
             // Unreachable
         }
-        sal_Bool bOpenFolder =
+        bool bOpenFolder =
             ( ( aOpenCommand.Mode == OpenMode::ALL ) ||
               ( aOpenCommand.Mode == OpenMode::FOLDERS ) ||
               ( aOpenCommand.Mode == OpenMode::DOCUMENTS ) );
@@ -479,11 +479,11 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
 
 namespace
 {
-    sal_Bool lcl_queryContent(const OUString& _sName,Reference< XNameContainer >& _xNameContainer,Any& _rRet,OUString& _sSimpleName)
+    bool lcl_queryContent(const OUString& _sName,Reference< XNameContainer >& _xNameContainer,Any& _rRet,OUString& _sSimpleName)
     {
         sal_Int32 nIndex = 0;
         OUString sName = _sName.getToken(0,'/',nIndex);
-        sal_Bool bRet = _xNameContainer->hasByName(sName);
+        bool bRet = _xNameContainer->hasByName(sName);
         if ( bRet )
         {
             _rRet = _xNameContainer->getByName(_sSimpleName = sName);

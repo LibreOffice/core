@@ -65,7 +65,7 @@ namespace dbaui
         ,m_nCurrentlySelected(LISTBOX_ENTRY_NOTFOUND)
         ,m_xConnection(_rxConnection)
         ,m_aPredicateInput( rxContext, _rxConnection, getParseContext() )
-        ,m_bNeedErrorOnCurrent(sal_True)
+        ,m_bNeedErrorOnCurrent(true)
     {
 
         if (rxContext.is())
@@ -172,7 +172,7 @@ namespace dbaui
             if (m_xConnection.is() && m_xFormatter.is())
             {
                 OUString sParamValue( m_aParam.GetText() );
-                sal_Bool bValid = m_aPredicateInput.normalizePredicateString( sParamValue, xParamAsSet );
+                bool bValid = m_aPredicateInput.normalizePredicateString( sParamValue, xParamAsSet );
                 m_aParam.SetText( sParamValue );
                 if ( bValid )
                 {
@@ -185,7 +185,7 @@ namespace dbaui
                     if (!m_bNeedErrorOnCurrent)
                         return 1L;
 
-                    m_bNeedErrorOnCurrent = sal_False;  // will be reset in OnValueModified
+                    m_bNeedErrorOnCurrent = false;  // will be reset in OnValueModified
 
                     OUString sName;
                     try
@@ -219,7 +219,7 @@ namespace dbaui
         {
             // no interpreting of the given values anymore ....
             m_aParam.SetLoseFocusHdl(Link());   // no direct call from the control anymore ...
-            m_bNeedErrorOnCurrent = sal_False;      // in case of any indirect calls -> no error message
+            m_bNeedErrorOnCurrent = false;      // in case of any indirect calls -> no error message
             m_aCancelBtn.SetClickHdl(Link());
             m_aCancelBtn.Click();
         }
@@ -228,7 +228,7 @@ namespace dbaui
             // transfer the current values into the Any
             if (LINK(this, OParameterDialog, OnEntrySelected).Call(&m_aAllParams) != 0L)
             {   // there was an error interpreting the current text
-                m_bNeedErrorOnCurrent = sal_True;
+                m_bNeedErrorOnCurrent = true;
                     // we're are out of the complex web :) of direct and indirect calls to OnValueLoseFocus now,
                     // so the next time it is called we need an error message, again ....
                     // (TODO : there surely are better solutions for this ...)
@@ -278,7 +278,7 @@ namespace dbaui
 
             m_aAllParams.SelectEntryPos(nNext);
             LINK(this, OParameterDialog, OnEntrySelected).Call(&m_aAllParams);
-            m_bNeedErrorOnCurrent = sal_True;
+            m_bNeedErrorOnCurrent = true;
                 // we're are out of the complex web :) of direct and indirect calls to OnValueLoseFocus now,
                 // so the next time it is called we need an error message, again ....
                 // (TODO : there surely are better solutions for this ...)
@@ -378,7 +378,7 @@ namespace dbaui
         OSL_ENSURE(static_cast<size_t>(m_nCurrentlySelected) < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
         m_aVisitedParams[m_nCurrentlySelected] |= EF_DIRTY;
 
-        m_bNeedErrorOnCurrent = sal_True;
+        m_bNeedErrorOnCurrent = true;
 
         return 0L;
     }

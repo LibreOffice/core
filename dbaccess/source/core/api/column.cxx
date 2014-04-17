@@ -151,18 +151,18 @@ void OColumn::registerPropertyNoMember( const OUString& _rName, sal_Int32 _nHand
 
 OColumns::OColumns(::cppu::OWeakObject& _rParent,
                    ::osl::Mutex& _rMutex,
-                   sal_Bool _bCaseSensitive,const ::std::vector< OUString> &_rVector,
+                   bool _bCaseSensitive,const ::std::vector< OUString> &_rVector,
                    IColumnFactory* _pColFactory,
                    ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
-                   sal_Bool _bAddColumn,
-                   sal_Bool _bDropColumn,
-                   sal_Bool _bUseHardRef)
+                   bool _bAddColumn,
+                   bool _bDropColumn,
+                   bool _bUseHardRef)
                    : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector,_bUseHardRef)
     ,m_pMediator(NULL)
     ,m_xDrvColumns(NULL)
     ,m_pColFactoryImpl(_pColFactory)
     ,m_pRefreshColumns(_pRefresh)
-    ,m_bInitialized(sal_False)
+    ,m_bInitialized(false)
     ,m_bAddColumn(_bAddColumn)
     ,m_bDropColumn(_bDropColumn)
 {
@@ -170,18 +170,18 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
 
 OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDrvColumns,
-        sal_Bool _bCaseSensitive,const ::std::vector< OUString> &_rVector,
+        bool _bCaseSensitive,const ::std::vector< OUString> &_rVector,
         IColumnFactory* _pColFactory,
         ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
-        sal_Bool _bAddColumn,
-        sal_Bool _bDropColumn,
-        sal_Bool _bUseHardRef)
+        bool _bAddColumn,
+        bool _bDropColumn,
+        bool _bUseHardRef)
        : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector,_bUseHardRef)
     ,m_pMediator(NULL)
     ,m_xDrvColumns(_rxDrvColumns)
     ,m_pColFactoryImpl(_pColFactory)
     ,m_pRefreshColumns(_pRefresh)
-    ,m_bInitialized(sal_False)
+    ,m_bInitialized(false)
     ,m_bAddColumn(_bAddColumn)
     ,m_bDropColumn(_bDropColumn)
 {
@@ -305,7 +305,7 @@ Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeExcepti
 
 Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException, std::exception)
 {
-    sal_Bool bAppendFound = sal_False,bDropFound = sal_False;
+    bool bAppendFound = false,bDropFound = false;
 
     sal_Int32 nSize = 0;
     Type aAppendType = getCppuType( (Reference<XAppend>*)0);
@@ -320,9 +320,9 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException, std::ex
         for (;pBegin != pEnd ; ++pBegin)
         {
             if(aAppendType == *pBegin)
-                bAppendFound = sal_True;
+                bAppendFound = true;
             else if(aDropType == *pBegin)
-                bDropFound = sal_True;
+                bDropFound = true;
         }
         nSize = (bDropFound ? (bAppendFound ? 0 : 1) : (bAppendFound ? 1 : 2));
     }
@@ -384,7 +384,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString& _rForName, const Refer
     if ( m_pColFactoryImpl )
         m_pColFactoryImpl->columnAppended( descriptor );
 
-    ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
+    ::dbaccess::notifyDataSourceModified(m_xParent,true);
 
     return xReturn;
 }
@@ -414,7 +414,7 @@ void OColumns::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     if ( m_pColFactoryImpl )
         m_pColFactoryImpl->columnDropped(_sElementName);
 
-    ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
+    ::dbaccess::notifyDataSourceModified(m_xParent,true);
 }
 
 Reference< XInterface > SAL_CALL OColumns::getParent(  ) throw (RuntimeException, std::exception)

@@ -70,9 +70,9 @@ OQueryTableWindow::~OQueryTableWindow()
 {
 }
 
-sal_Bool OQueryTableWindow::Init()
+bool OQueryTableWindow::Init()
 {
-    sal_Bool bSuccess = OTableWindow::Init();
+    bool bSuccess = OTableWindow::Init();
     if(!bSuccess)
         return bSuccess;
 
@@ -89,7 +89,7 @@ sal_Bool OQueryTableWindow::Init()
     else if ( GetTable().is() )
         GetTable()->getPropertyValue( PROPERTY_NAME ) >>= sAliasName;
     else
-        return sal_False;
+        return false;
 
     // Alias with successive number
     if (pContainer->CountTableAlias(sAliasName, m_nAliasNum))
@@ -164,12 +164,12 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
     static_cast<OQueryTableView*>(getTableView())->InsertField(aInfo);
 }
 
-sal_Bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFieldDescRef& rInfo)
+bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFieldDescRef& rInfo)
 {
     OSL_ENSURE(m_pListBox != NULL, "OQueryTableWindow::ExistsField : doesn't have ::com::sun::star::form::ListBox !");
     OSL_ENSURE(rInfo.is(),"OQueryTableWindow::ExistsField: invalid argument for OTableFieldDescRef!");
     Reference< XConnection> xConnection = getTableView()->getDesignView()->getController().getConnection();
-    sal_Bool bExists = sal_False;
+    bool bExists = false;
     if(xConnection.is())
     {
         SvTreeListEntry* pEntry = m_pListBox->First();
@@ -191,7 +191,7 @@ sal_Bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFiel
                     rInfo->SetAlias(GetAliasName());
                     rInfo->SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
                     rInfo->SetDataType(pInf->GetDataType());
-                    bExists = sal_True;
+                    bExists = true;
                     break;
                 }
                 pEntry = m_pListBox->Next(pEntry);
@@ -205,7 +205,7 @@ sal_Bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFiel
     return bExists;
 }
 
-sal_Bool OQueryTableWindow::ExistsAVisitedConn() const
+bool OQueryTableWindow::ExistsAVisitedConn() const
 {
     return static_cast<const OQueryTableView*>(getTableView())->ExistsAVisitedConn(this);
 }

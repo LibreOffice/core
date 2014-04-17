@@ -131,7 +131,7 @@ void SAL_CALL ORowSetDataColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHan
             break;
         case PROPERTY_ID_ISREADONLY:
             {
-                sal_Bool bVal = sal_False;
+                bool bVal = false;
                 rValue >>= bVal;
                 m_isReadOnly.reset(bVal);
             }
@@ -147,7 +147,7 @@ sal_Bool SAL_CALL ORowSetDataColumn::convertFastPropertyValue( Any & rConvertedV
                                                             sal_Int32 nHandle,
                                                             const Any& rValue ) throw (IllegalArgumentException)
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     switch( nHandle )
     {
         case PROPERTY_ID_VALUE:
@@ -198,7 +198,7 @@ void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 }
 
 ORowSetDataColumns::ORowSetDataColumns(
-                sal_Bool _bCase,
+                bool _bCase,
                 const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
                 ::cppu::OWeakObject& _rParent,
                 ::osl::Mutex& _rMutex,

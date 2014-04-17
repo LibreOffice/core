@@ -94,11 +94,11 @@ namespace dbaui
         DECL_LINK( ListSelectHdl, ListBox * );
         DECL_LINK( ListSelectCompHdl, ListBox * );
 
-        void            SetLine( sal_uInt16 nIdx,const ::com::sun::star::beans::PropertyValue& _rItem,sal_Bool _bOr );
+        void            SetLine( sal_uInt16 nIdx,const ::com::sun::star::beans::PropertyValue& _rItem,bool _bOr );
         void            EnableLines();
         sal_Int32       GetOSQLPredicateType( const OUString& _rSelectedPredicate ) const;
         sal_uInt16          GetSelectionPos(sal_Int32 eType,const ListBox& rListBox) const;
-        sal_Bool        getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,::com::sun::star::beans::PropertyValue& _rFilter) const;
+        bool        getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,::com::sun::star::beans::PropertyValue& _rFilter) const;
         void            fillLines(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& _aValues);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getMatchingColumn( const Edit& _rValueInput ) const;

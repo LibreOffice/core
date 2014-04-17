@@ -38,18 +38,18 @@ namespace dbaccess
     using namespace ::osl;
 
     OPrivateColumns::OPrivateColumns(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
-                        sal_Bool _bCase,
+                        bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const ::std::vector< OUString> &_rVector,
-                        sal_Bool _bUseAsIndex
+                        bool _bUseAsIndex
                     ) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector,_bUseAsIndex)
                         ,m_aColumns(_rColumns)
     {
     }
 
     OPrivateColumns* OPrivateColumns::createWithIntrinsicNames( const ::rtl::Reference< ::connectivity::OSQLColumns >& _rColumns,
-        sal_Bool _bCase, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
+        bool _bCase, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
     {
         ::std::vector< OUString > aNames; aNames.reserve( _rColumns->get().size() );
 
@@ -63,7 +63,7 @@ namespace dbaccess
             xColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumName;
             aNames.push_back( sColumName );
         }
-        return new OPrivateColumns( _rColumns, _bCase, _rParent, _rMutex, aNames, sal_False );
+        return new OPrivateColumns( _rColumns, _bCase, _rParent, _rMutex, aNames, false );
     }
 
     void SAL_CALL OPrivateColumns::disposing(void)

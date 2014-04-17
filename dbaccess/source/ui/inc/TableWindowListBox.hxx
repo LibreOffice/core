@@ -61,7 +61,7 @@ namespace dbaui
         sal_uLong                       m_nUiEvent;
         OJoinDropData               m_aDropInfo;
 
-        sal_Bool                        m_bReallyScrolled : 1;
+        bool                        m_bReallyScrolled : 1;
 
     protected:
         virtual void LoseFocus() SAL_OVERRIDE;

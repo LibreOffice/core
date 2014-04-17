@@ -29,7 +29,7 @@ using namespace ::com::sun::star::registry;
 
 extern "C" void SAL_CALL createRegistryInfo_dbaxml()
 {
-    static sal_Bool bInit = sal_False;
+    static bool bInit = false;
     if (!bInit)
     {
         createRegistryInfo_DBTypeDetection();
@@ -38,7 +38,7 @@ extern "C" void SAL_CALL createRegistryInfo_dbaxml()
         createRegistryInfo_OSettingsExport();
         createRegistryInfo_OFullExport();
         createRegistryInfo_DBContentLoader2();
-        bInit = sal_True;
+        bInit = true;
     }
 }
 

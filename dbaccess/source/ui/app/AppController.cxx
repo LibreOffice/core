@@ -296,8 +296,8 @@ OApplicationController::OApplicationController(const Reference< XComponentContex
     ,m_aSelectContainerEvent( LINK( this, OApplicationController, OnSelectContainer ) )
     ,m_ePreviewMode(E_PREVIEWNONE)
     ,m_eCurrentType(E_NONE)
-    ,m_bNeedToReconnect(sal_False)
-    ,m_bSuspended( sal_False )
+    ,m_bNeedToReconnect(false)
+    ,m_bSuspended( false )
     ,m_pSelectionNotifier( new SelectionNotifier( getMutex(), *this ) )
 {
 }
@@ -529,9 +529,9 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
     if ( getView() && getView()->IsInModalMode() )
         return sal_False;
 
-    sal_Bool bCanSuspend = sal_True;
+    bool bCanSuspend = true;
 
-    if ( m_bSuspended != bSuspend )
+    if ( (m_bSuspended ? 1 : 0) != bSuspend )
     {
         if ( bSuspend && !closeSubComponents() )
             return sal_False;
@@ -555,7 +555,7 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
                     // when we save the document this must be false else some press cancel
                     break;
                 case RET_CANCEL:
-                    bCanSuspend = sal_False;
+                    bCanSuspend = false;
                 default:
                     break;
             }
@@ -1211,28 +1211,28 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case ID_NEW_TABLE_DESIGN:
                 {
                     ElementType eType = E_TABLE;
-                    sal_Bool bAutoPilot = sal_False;
+                    bool bAutoPilot = false;
                     ::comphelper::NamedValueCollection aCreationArgs;
 
                     switch( _nId )
                     {
                         case SID_DB_FORM_NEW_PILOT:
                         case SID_FORM_CREATE_REPWIZ_PRE_SEL:
-                            bAutoPilot = sal_True;
+                            bAutoPilot = true;
                             // run through
                         case SID_APP_NEW_FORM:
                             eType = E_FORM;
                             break;
                         case ID_DOCUMENT_CREATE_REPWIZ:
                         case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
-                            bAutoPilot = sal_True;
+                            bAutoPilot = true;
                             // run through
                         case SID_APP_NEW_REPORT:
                         case SID_APP_NEW_REPORT_PRE_SEL:
                             eType = E_REPORT;
                             break;
                         case ID_APP_NEW_QUERY_AUTO_PILOT:
-                            bAutoPilot = sal_True;
+                            bAutoPilot = true;
                             eType = E_QUERY;
                             break;
                         case ID_NEW_QUERY_DESIGN:
@@ -1242,7 +1242,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             eType = E_QUERY;
                             break;
                          case ID_NEW_TABLE_DESIGN_AUTO_PILOT:
-                             bAutoPilot = sal_True;
+                             bAutoPilot = true;
                              // run through
                         case ID_NEW_TABLE_DESIGN:
                             break;
@@ -1675,7 +1675,7 @@ namespace
     }
 }
 
-sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
+bool OApplicationController::onContainerSelect(ElementType _eType)
 {
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
 
@@ -1697,12 +1697,12 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
                 }
                 else
                 {
-                    return sal_False;
+                    return false;
                 }
             }
             catch( const Exception& )
             {
-                return sal_False;
+                return false;
             }
         }
         Reference< XLayoutManager > xLayoutManager = getLayoutManager( getFrame() );
@@ -1743,7 +1743,7 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
     }
     m_eCurrentType = _eType;
 
-    return sal_True;
+    return true;
 }
 
 bool OApplicationController::onEntryDoubleClick( SvTreeListBox& _rTree )
@@ -1892,7 +1892,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
                 pDesigner.reset( new ResultSetBrowser( getORB(), this, m_aCurrentFrame.getFrame(), _eType == E_TABLE ) );
 
                 if ( !aArguments.has( (OUString)PROPERTY_SHOWMENU ) )
-                    aArguments.put( (OUString)PROPERTY_SHOWMENU, makeAny( (sal_Bool)sal_True ) );
+                    aArguments.put( (OUString)PROPERTY_SHOWMENU, makeAny( true ) );
 
                 aDataSource <<= getDatabaseName();
             }
@@ -2139,7 +2139,7 @@ void OApplicationController::renameEntry()
             if ( xRename.is() && aDialog.get() )
             {
 
-                sal_Bool bTryAgain = sal_True;
+                bool bTryAgain = true;
                 while( bTryAgain )
                 {
                     if ( aDialog->Execute() == RET_OK )
@@ -2177,7 +2177,7 @@ void OApplicationController::renameEntry()
                             }
                             getContainer()->elementReplaced( eType , sOldName, sNewName );
 
-                            bTryAgain = sal_False;
+                            bTryAgain = false;
                         }
                         catch(const SQLException& )
                         {
@@ -2196,7 +2196,7 @@ void OApplicationController::renameEntry()
                         }
                     }
                     else
-                        bTryAgain = sal_False;
+                        bTryAgain = false;
                 }
             }
         }
@@ -2399,12 +2399,12 @@ Any OApplicationController::getCurrentSelection( Control& _rControl ) const
     return makeAny( aSelection );
 }
 
-sal_Bool OApplicationController::requestQuickHelp( const SvTreeListEntry* /*_pEntry*/, OUString& /*_rText*/ ) const
+bool OApplicationController::requestQuickHelp( const SvTreeListEntry* /*_pEntry*/, OUString& /*_rText*/ ) const
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool OApplicationController::requestDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
+bool OApplicationController::requestDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
     TransferableHelper* pTransfer = NULL;
     if ( getContainer() && getContainer()->getSelectionCount() )
@@ -2440,7 +2440,7 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
         if ( eType != E_NONE && (eType != E_TABLE || !isConnectionReadOnly()) )
         {
             // check for the concrete type
-            if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(eType,sal_True)) != _rFlavors.end())
+            if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(eType,true)) != _rFlavors.end())
                 return DND_ACTION_COPY;
             if ( eType == E_FORM || eType == E_REPORT )
             {
@@ -2495,8 +2495,8 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     m_aAsyncDrop.aDroppedData.clear();
     m_aAsyncDrop.nType          = pView->getElementType();
     m_aAsyncDrop.nAction        = _rEvt.mnAction;
-    m_aAsyncDrop.bError         = sal_False;
-    m_aAsyncDrop.bHtml          = sal_False;
+    m_aAsyncDrop.bError         = false;
+    m_aAsyncDrop.bHtml          = false;
     m_aAsyncDrop.aUrl           = "";
 
     // loop through the available formats and see what we can do ...

@@ -518,12 +518,12 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const OUString& _rDefaultN
     ,m_xInteractionHandler(_xInteractionHandler)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_nPageCount(0)
-    ,m_bDeleteSourceColumns(sal_True)
+    ,m_bDeleteSourceColumns(true)
     ,m_bInterConnectionCopy( _xSourceConnection != _xConnection )
     ,m_sName( _rDefaultName )
     ,m_nOperation( _nOperation )
     ,m_ePressed( WIZARD_NONE )
-    ,m_bCreatePrimaryKeyColumn(sal_False)
+    ,m_bCreatePrimaryKeyColumn(false)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::OCopyTableWizard" );
     construct();
@@ -616,12 +616,12 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const OUString& _rDefaultNa
     ,m_xContext(_rxContext)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_nPageCount(0)
-    ,m_bDeleteSourceColumns(sal_False)
+    ,m_bDeleteSourceColumns(false)
     ,m_bInterConnectionCopy( false )
     ,m_sName(_rDefaultName)
     ,m_nOperation( _nOperation )
     ,m_ePressed( WIZARD_NONE )
-    ,m_bCreatePrimaryKeyColumn(sal_False)
+    ,m_bCreatePrimaryKeyColumn(false)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::OCopyTableWizard" );
     construct();
@@ -681,7 +681,7 @@ void OCopyTableWizard::construct()
 
     m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
     m_pTypeInfo->aUIName = m_sTypeNames.getToken(TYPE_OTHER, ';');
-    m_bAddPKFirstTime = sal_True;
+    m_bAddPKFirstTime = true;
 }
 
 OCopyTableWizard::~OCopyTableWizard()
@@ -742,10 +742,10 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplNextHdl)
     return 0;
 }
 
-sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
+bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::CheckColumns" );
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     m_vColumnPos.clear();
     m_vColumnTypes.clear();
 
@@ -753,9 +753,9 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
     // If database is able to process PrimaryKeys, set PrimaryKey
     if ( m_xDestConnection.is() )
     {
-        sal_Bool bPKeyAllowed = supportsPrimaryKey();
+        bool bPKeyAllowed = supportsPrimaryKey();
 
-        sal_Bool bContainsColumns = !m_vDestColumns.empty();
+        bool bContainsColumns = !m_vDestColumns.empty();
 
         if ( bPKeyAllowed && shouldCreatePrimaryKey() )
         {
@@ -767,9 +767,9 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
                 {
                     OFieldDescription* pField = new OFieldDescription();
                     pField->SetName(m_aKeyName);
-                    pField->FillFromTypeInfo(pTypeInfo,sal_True,sal_True);
-                    pField->SetPrimaryKey(sal_True);
-                    m_bAddPKFirstTime = sal_False;
+                    pField->FillFromTypeInfo(pTypeInfo,true,true);
+                    pField->SetPrimaryKey(true);
+                    m_bAddPKFirstTime = false;
                     insertColumn(0,pField);
                 }
                 m_vColumnPos.push_back(ODatabaseExport::TPositions::value_type(1,1));
@@ -814,7 +814,7 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
                 TOTypeInfoSP pType = convertType((*aSrcIter)->second->getSpecialTypeInfo(),bRet);
                 pField->SetType(pType);
                 if ( !bPKeyAllowed )
-                    pField->SetPrimaryKey(sal_False);
+                    pField->SetPrimaryKey(false);
 
                 // now create a column
                 insertColumn(m_vDestColumns.size(),pField);
@@ -829,7 +829,7 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
 IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
 {
     m_ePressed = WIZARD_FINISH;
-    sal_Bool bFinish = DeactivatePage() != 0;
+    bool bFinish = DeactivatePage() != 0;
 
     if(bFinish)
     {
@@ -839,7 +839,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
             case CopyTableOperation::CopyDefinitionAndData:
             case CopyTableOperation::CopyDefinitionOnly:
             {
-                sal_Bool bOnFirstPage = GetCurLevel() == 0;
+                bool bOnFirstPage = GetCurLevel() == 0;
                 if ( bOnFirstPage )
                 {
                     // we came from the first page so we have to clear
@@ -848,7 +848,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
                     m_mNameMapping.clear();
                 }
                 sal_Int32 nBreakPos = 0;
-                sal_Bool bCheckOk = CheckColumns(nBreakPos);
+                bool bCheckOk = CheckColumns(nBreakPos);
                 if ( bOnFirstPage && !bCheckOk )
                 {
                     showColumnTypeNotSupported(m_vSourceVec[nBreakPos-1]->first);
@@ -885,7 +885,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
                             if ( xYes->wasSelected() )
                             {
                                 OCopyTable* pPage = static_cast<OCopyTable*>(GetPage(0));
-                                m_bCreatePrimaryKeyColumn = sal_True;
+                                m_bCreatePrimaryKeyColumn = true;
                                 m_aKeyName = pPage->GetKeyName();
                                 if ( m_aKeyName.isEmpty() )
                                     m_aKeyName = "ID";
@@ -914,10 +914,10 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
 
         EndDialog(RET_OK);
     }
-    return bFinish;
+    return bFinish ? 1 : 0;
 }
 
-sal_Bool OCopyTableWizard::shouldCreatePrimaryKey() const
+bool OCopyTableWizard::shouldCreatePrimaryKey() const
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::shouldCreatePrimaryKey" );
     return m_bCreatePrimaryKeyColumn;
@@ -941,7 +941,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplActivateHdl)
     OWizardPage* pCurrent = (OWizardPage*)GetPage(GetCurLevel());
     if(pCurrent)
     {
-        sal_Bool bFirstTime = pCurrent->IsFirstTime();
+        bool bFirstTime = pCurrent->IsFirstTime();
         if(bFirstTime)
             pCurrent->Reset();
 
@@ -978,7 +978,7 @@ void OCopyTableWizard::CheckButtons()
     }
 }
 
-void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable)
+void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle, bool bEnable)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::EnableButton" );
     Button* pButton;
@@ -1076,16 +1076,16 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
         sal_Int32 nType           = pActFieldDescr->GetType();
         sal_Int32 nScale          = pActFieldDescr->GetScale();
         sal_Int32 nPrecision      = pActFieldDescr->GetPrecision();
-        sal_Bool bAutoIncrement   = pActFieldDescr->IsAutoIncrement();
+        bool bAutoIncrement   = pActFieldDescr->IsAutoIncrement();
         OUString sTypeName = pActFieldDescr->GetTypeName();
 
         // search for type
-        sal_Bool bForce;
+        bool bForce;
         TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,sCreateParam,nPrecision,nScale,bAutoIncrement,bForce);
         if ( !pTypeInfo.get() )
             pTypeInfo = m_pTypeInfo;
 
-        pActFieldDescr->FillFromTypeInfo(pTypeInfo,sal_True,sal_False);
+        pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false);
         _rColVector.push_back(_rColumns.insert(ODatabaseExport::TColumns::value_type(pActFieldDescr->GetName(),pActFieldDescr)).first);
     }
 
@@ -1099,7 +1099,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
         ODatabaseExport::TColumns::iterator keyPos = _rColumns.find( *pKeyColName );
         if ( keyPos != _rColumns.end() )
         {
-            keyPos->second->SetPrimaryKey( sal_True );
+            keyPos->second->SetPrimaryKey( true );
             keyPos->second->SetIsNullable( ColumnValue::NO_NULLS );
         }
     }
@@ -1109,11 +1109,11 @@ void OCopyTableWizard::clearDestColumns()
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::clearDestColumns" );
     clearColumns(m_vDestColumns,m_aDestVec);
-    m_bAddPKFirstTime = sal_True;
+    m_bAddPKFirstTime = true;
     m_mNameMapping.clear();
 }
 
-void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, sal_Bool _bKeyColumns) const
+void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, bool _bKeyColumns) const
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::appendColumns" );
     // now append the columns
@@ -1184,7 +1184,7 @@ void OCopyTableWizard::appendKey( Reference<XKeysSupplier>& _rxSup, const ODatab
     Reference<XColumnsSupplier> xColSup(xKey,UNO_QUERY);
     if(xColSup.is())
     {
-        appendColumns(xColSup,_pVec,sal_True);
+        appendColumns(xColSup,_pVec,true);
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         if(xColumns.is() && xColumns->getElementNames().getLength())
             xAppend->appendByDescriptor(xKey);
@@ -1450,23 +1450,23 @@ void OCopyTableWizard::removeColumnNameFromNameMap(const OUString& _sName)
     m_mNameMapping.erase(_sName);
 }
 
-sal_Bool OCopyTableWizard::supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType)
+bool OCopyTableWizard::supportsType(sal_Int32 _nDataType,   sal_Int32& _rNewDataType)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::supportsType" );
-    sal_Bool bRet = m_aDestTypeInfo.find(_nDataType) != m_aDestTypeInfo.end();
+    bool bRet = m_aDestTypeInfo.find(_nDataType) != m_aDestTypeInfo.end();
     if ( bRet )
         _rNewDataType = _nDataType;
     return bRet;
 }
 
-TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& _bNotConvert)
+TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType, bool& _bNotConvert)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::convertType" );
     if ( !m_bInterConnectionCopy )
         // no need to convert if the source and destination connection are the same
         return _pType;
 
-    sal_Bool bForce;
+    bool bForce;
     TOTypeInfoSP pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,_pType->nType,_pType->aTypeName,_pType->aCreateParams,_pType->nPrecision,_pType->nMaximumScale,_pType->bAutoIncrement,bForce);
     if ( !pType.get() || bForce )
     { // no type found so we have to find the correct one ourself
@@ -1546,14 +1546,14 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
         pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,nDefaultType,_pType->aTypeName,_pType->aCreateParams,_pType->nPrecision,_pType->nMaximumScale,_pType->bAutoIncrement,bForce);
         if ( !pType.get() )
         {
-            _bNotConvert = sal_False;
+            _bNotConvert = false;
             OUString sCreate("x");
-            pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,DataType::VARCHAR,_pType->aTypeName,sCreate,50,0,sal_False,bForce);
+            pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,DataType::VARCHAR,_pType->aTypeName,sCreate,50,0,false,bForce);
             if ( !pType.get() )
                 pType = m_pTypeInfo;
         }
         else if ( bForce )
-            _bNotConvert = sal_False;
+            _bNotConvert = false;
     }
     return pType;
 }

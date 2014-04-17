@@ -135,7 +135,7 @@ namespace dbaui
 
     /** checks if the given name exists in the database context
     */
-    sal_Bool checkDataSourceAvailable(  const OUString& _sDataSourceName,
+    bool checkDataSourceAvailable(  const OUString& _sDataSourceName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
     /** maps SvxCellHorJustify to com::sun::star::awt::TextAlign
@@ -191,12 +191,12 @@ namespace dbaui
 
     /** second variant of the function before
     */
-    sal_Bool callColumnFormatDialog(Window* _pParent,
+    bool callColumnFormatDialog(Window* _pParent,
                                     SvNumberFormatter* _pFormatter,
                                     sal_Int32 _nDataType,
                                     sal_Int32& _nFormatKey,
                                     SvxCellHorJustify& _eJustify,
-                                    sal_Bool  _bHasFormat);
+                                    bool  _bHasFormat);
     /** append a name to tablefilter of a datasource
         @param  _xConnection    the connection is need to get the datasource
         @param  _sName          the name which should be appended
@@ -204,7 +204,7 @@ namespace dbaui
         @param  _pParent        needed when an error must be shown
         @return false when datsource is not available otherwise true
     */
-    sal_Bool appendToFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+    bool appendToFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                             const OUString& _sName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                             Window* _pParent);
@@ -238,7 +238,7 @@ namespace dbaui
         @return
             <TRUE/> if so otherwise <FALSE/>
     */
-    sal_Bool isSQL92CheckEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+    bool isSQL92CheckEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
     /** check if the alias name of the table should be added at select statements
         @param  _xConnection
@@ -246,11 +246,11 @@ namespace dbaui
         @return
             <TRUE/> if so otherwise <FALSE/>
     */
-    sal_Bool isAppendTableAliasEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+    bool isAppendTableAliasEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
     /** determines whether when generating SQL statements, AS should be placed before a table alias
     */
-    sal_Bool generateAsBeforeTableAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection );
+    bool generateAsBeforeTableAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection );
 
     /** fills the bool and string value with information out of the datasource info property
         @param  _xDatasource
@@ -261,7 +261,7 @@ namespace dbaui
             <OUT/> Set to the value when the property was set in the datasource.
     */
     void fillAutoIncrementValue(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDatasource
-                                ,sal_Bool& _rAutoIncrementValueEnabled
+                                ,bool& _rAutoIncrementValueEnabled
                                 ,OUString& _rsAutoIncrementValue);
 
     /** fills the bool and string value with information out of the datasource info property
@@ -273,7 +273,7 @@ namespace dbaui
             <OUT/> Set to the value when the property was set in the datasource.
     */
     void fillAutoIncrementValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
-                                ,sal_Bool& _rAutoIncrementValueEnabled
+                                ,bool& _rAutoIncrementValueEnabled
                                 ,OUString& _rsAutoIncrementValue);
 
     /** creates the URL or the help agent
@@ -327,7 +327,7 @@ namespace dbaui
         @return
             RET_YES, RET_NO, RET_ALL
     */
-    sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,sal_Bool _bAll,const OUString& _sName);
+    sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,bool _bAll,const OUString& _sName);
 
     /** creates a new view from a query or table
         @param  _sName
@@ -388,15 +388,15 @@ namespace dbaui
         @return
             <TRUE/> if the insert opertions was successful, otherwise <FALSE/>.
     */
-    sal_Bool insertHierachyElement(
+    bool insertHierachyElement(
                 Window* _pParent,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameContainer>& _xNames,
                 const OUString& _sParentFolder,
-                sal_Bool _bForm,
-                sal_Bool _bCollection = sal_True,
+                bool _bForm,
+                bool _bCollection = true,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent = NULL,
-                sal_Bool _bMove = sal_False
+                bool _bMove = false
             );
 
     /** creates a number formatter
@@ -409,7 +409,7 @@ namespace dbaui
 
     // this completes a help url with the system parameters "Language" and "System"
     // detect installed locale
-    void AppendConfigToken( OUString& _rURL, sal_Bool _bQuestionMark );
+    void AppendConfigToken( OUString& _rURL, bool _bQuestionMark );
 
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_UITOOLS_HXX

@@ -30,14 +30,14 @@ namespace dbaui
         Splitter*                           m_pSplitter;
         Window*                             m_pLeft;
         Window*                             m_pRight;
-        sal_Bool                            m_bVertical;
+        bool                            m_bVertical;
 
-        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
         DECL_LINK( SplitHdl, Splitter* );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
-        OSplitterView(Window* _pParent,sal_Bool _bVertical = sal_True);
+        OSplitterView(Window* _pParent,bool _bVertical = true);
         virtual ~OSplitterView();
         // window overloads
         virtual void GetFocus() SAL_OVERRIDE;

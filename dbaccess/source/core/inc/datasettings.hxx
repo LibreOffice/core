@@ -42,7 +42,7 @@ public:
     OUString                             m_sHavingClause;
     OUString                             m_sGroupBy;
     OUString                             m_sOrder;
-    sal_Bool                                    m_bApplyFilter;     // no BitField ! the base class needs a pointer to this member !
+    bool                                    m_bApplyFilter;     // no BitField ! the base class needs a pointer to this member !
     ::com::sun::star::awt::FontDescriptor       m_aFont;
     ::com::sun::star::uno::Any                  m_aRowHeight;
     ::com::sun::star::uno::Any                  m_aTextColor;
@@ -63,9 +63,9 @@ protected:
 class ODataSettings : public ::comphelper::OPropertyStateContainer
                     , public ODataSettings_Base
 {
-    sal_Bool m_bQuery;
+    bool m_bQuery;
 protected:
-    ODataSettings(::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bQuery = sal_False);
+    ODataSettings(::cppu::OBroadcastHelper& _rBHelper,bool _bQuery = false);
     virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const SAL_OVERRIDE;
 
     /** register the properties from the param given. The parameter instance must be alive as long as tis object live.

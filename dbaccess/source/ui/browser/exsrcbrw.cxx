@@ -63,7 +63,7 @@ SbaExternalSourceBrowser::SbaExternalSourceBrowser(const Reference< ::com::sun::
     :SbaXDataBrowserController(_rM)
     ,m_aModifyListeners(getMutex())
     ,m_pDataSourceImpl(NULL)
-    ,m_bInQueryDispatch( sal_False )
+    ,m_bInQueryDispatch( false )
 {
 
 }
@@ -106,16 +106,16 @@ Reference< XRowSet >  SbaExternalSourceBrowser::CreateForm()
     return m_pDataSourceImpl;
 }
 
-sal_Bool SbaExternalSourceBrowser::InitializeForm(const Reference< XPropertySet > & /*i_formProperties*/)
+bool SbaExternalSourceBrowser::InitializeForm(const Reference< XPropertySet > & /*i_formProperties*/)
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool SbaExternalSourceBrowser::LoadForm()
+bool SbaExternalSourceBrowser::LoadForm()
 {
     // as we don't have a main form (yet), we have nothing to do
     // we don't call FormLoaded, because this expects a working data source
-    return sal_True;
+    return true;
 }
 
 void SbaExternalSourceBrowser::modified(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException, std::exception )
@@ -143,21 +143,21 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         {
             if ( pArguments->Name == "ColumnType" )
             {
-                sal_Bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const OUString*)0));
+                bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const OUString*)0));
                 OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnType\" !");
                 if (bCorrectType)
                     sControlType = ::comphelper::getString(pArguments->Value);
             }
             else if ( pArguments->Name == "ColumnPosition" )
             {
-                sal_Bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const sal_Int16*)0));
+                bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const sal_Int16*)0));
                 OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnPosition\" !");
                 if (bCorrectType)
                     nControlPos = ::comphelper::getINT16(pArguments->Value);
             }
             else if ( pArguments->Name == "ColumnProperties" )
             {
-                sal_Bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const Sequence< ::com::sun::star::beans::PropertyValue>*)0));
+                bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const Sequence< ::com::sun::star::beans::PropertyValue>*)0));
                 OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnProperties\" !");
                 if (bCorrectType)
                     aControlProps = *(Sequence< ::com::sun::star::beans::PropertyValue>*)pArguments->Value.getValue();
@@ -244,7 +244,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
     if (m_bInQueryDispatch)
         return xReturn;
 
-    m_bInQueryDispatch = sal_True;
+    m_bInQueryDispatch = true;
 
     if  (   ( aURL.Complete == ".uno:FormSlots/AttachToForm" )
             // attach a new external form
@@ -287,7 +287,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
     if (!xReturn.is())
         xReturn = SbaXDataBrowserController::queryDispatch(aURL, aTargetFrameName, nSearchFlags);
 
-    m_bInQueryDispatch = sal_False;
+    m_bInQueryDispatch = false;
     return xReturn;
 }
 
@@ -326,9 +326,9 @@ void SAL_CALL SbaExternalSourceBrowser::unloading(const ::com::sun::star::lang::
 void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
 {
     Any aOldPos;
-    sal_Bool bWasInsertRow = sal_False;
-    sal_Bool bBeforeFirst   = sal_True;
-    sal_Bool bAfterLast     = sal_True;
+    bool bWasInsertRow = false;
+    bool bBeforeFirst   = true;
+    bool bAfterLast     = true;
     Reference< XRowLocate > xCursor(xMaster, UNO_QUERY);
     Reference< XPropertySet > xMasterProps(xMaster, UNO_QUERY);
 

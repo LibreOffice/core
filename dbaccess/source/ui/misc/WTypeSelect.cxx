@@ -109,11 +109,11 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
             {
                 OCopyTableWizard* pWiz = static_cast<OCopyTableWizard*>(GetParentDialog());
                 // first we have to check if this name already exists
-                sal_Bool bDoubleName = sal_False;
-                sal_Bool bCase = sal_True;
+                bool bDoubleName = false;
+                bool bCase = true;
                 if ( getMetaData().is() && !getMetaData()->supportsMixedCaseQuotedIdentifiers() )
                 {
-                    bCase = sal_False;
+                    bCase = false;
                     sal_uInt16 nCount = aListBox.GetEntryCount();
                     for (sal_uInt16 i=0 ; !bDoubleName && i < nCount ; ++i)
                     {
@@ -136,13 +136,13 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                     pWiz->showError(strMessage);
                     pCurFieldDescr->SetName(sName);
                     DisplayData(pCurFieldDescr);
-                    static_cast<OWizTypeSelect*>(GetParent())->setDuplicateName(sal_True);
+                    static_cast<OWizTypeSelect*>(GetParent())->setDuplicateName(true);
                     return;
                 }
 
                 OUString sOldName = pCurFieldDescr->GetName();
                 pCurFieldDescr->SetName(sNewName);
-                static_cast<OWizTypeSelect*>(GetParent())->setDuplicateName(sal_False);
+                static_cast<OWizTypeSelect*>(GetParent())->setDuplicateName(false);
 
                 // now we change the name
                 OCopyTableWizard::TNameMapping::iterator aIter = pWiz->m_mNameMapping.begin();
@@ -199,7 +199,7 @@ const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
     return ((OWizTypeSelect*)GetParent())->m_pParent->m_xDestConnection;
 }
 
-sal_Bool OWizTypeSelectControl::isAutoIncrementValueEnabled() const
+bool OWizTypeSelectControl::isAutoIncrementValueEnabled() const
 {
     return ((OWizTypeSelect*)GetParent())->m_bAutoIncrementEnabled;
 }
@@ -221,8 +221,8 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
                ,m_pbAuto( this, ModuleRes( PB_AUTO ) )
                ,m_pParserStream( _pStream )
                ,m_nDisplayRow(0)
-               ,m_bAutoIncrementEnabled(sal_False)
-               ,m_bDuplicateName(sal_False)
+               ,m_bAutoIncrementEnabled(false)
+               ,m_bDuplicateName(false)
 {
     m_lbColumnNames.SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
 
@@ -297,12 +297,12 @@ void OWizTypeSelect::Reset()
             nPos = m_lbColumnNames.InsertEntry((*aIter)->first);
         m_lbColumnNames.SetEntryData(nPos,(*aIter)->second);
     }
-    m_bFirstTime = sal_False;
+    m_bFirstTime = false;
 }
 
 void OWizTypeSelect::ActivatePage( )
 {
-    sal_Bool bOldFirstTime = m_bFirstTime;
+    bool bOldFirstTime = m_bFirstTime;
     Reset();
     m_bFirstTime = bOldFirstTime;
 
@@ -311,11 +311,11 @@ void OWizTypeSelect::ActivatePage( )
     m_lbColumnNames.GetSelectHdl().Call(&m_lbColumnNames);
 }
 
-sal_Bool OWizTypeSelect::LeavePage()
+bool OWizTypeSelect::LeavePage()
 {
     OUString aColumnName( m_lbColumnNames.GetSelectEntry() );
 
-    sal_Bool bDuplicateName = sal_False;
+    bool bDuplicateName = false;
     OFieldDescription* pField = static_cast<OFieldDescription*>(m_lbColumnNames.GetEntryData(m_lbColumnNames.GetEntryPos(aColumnName)));
     if ( pField )
     {
@@ -325,7 +325,7 @@ sal_Bool OWizTypeSelect::LeavePage()
     return !bDuplicateName;
 }
 
-void OWizTypeSelect::EnableAuto(sal_Bool bEnable)
+void OWizTypeSelect::EnableAuto(bool bEnable)
 {
     m_ftAuto.Show(bEnable);
     m_etAuto.Show(bEnable);
@@ -344,7 +344,7 @@ IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, /*pButton*/ )
     return 0;
 }
 
-sal_Bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
+bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
 {
     sal_uInt16 nCount = GetSelectEntryCount();
     sal_uInt16 j;
@@ -358,7 +358,7 @@ sal_Bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
     return j == nCount;
 }
 
-void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr,sal_uInt16 _nPos,sal_Bool _bSet)
+void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr, sal_uInt16 _nPos, bool _bSet)
 {
     OUString sColumnName = GetEntry(_nPos);
     RemoveEntry(_nPos);

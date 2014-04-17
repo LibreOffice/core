@@ -54,13 +54,13 @@ Any SAL_CALL OBookmarkSet::getBookmark() throw(SQLException, RuntimeException)
     return m_xRowLocate->getBookmark();
 }
 
-sal_Bool SAL_CALL OBookmarkSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
+bool SAL_CALL OBookmarkSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OBookmarkSet::moveToBookmark" );
     return m_xRowLocate->moveToBookmark(bookmark);
 }
 
-sal_Bool SAL_CALL OBookmarkSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
+bool SAL_CALL OBookmarkSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OBookmarkSet::moveRelativeToBookmark" );
     return m_xRowLocate->moveRelativeToBookmark(bookmark,rows);
@@ -72,7 +72,7 @@ sal_Int32 SAL_CALL OBookmarkSet::compareBookmarks( const Any& _first, const Any&
     return m_xRowLocate->compareBookmarks(_first,_second);
 }
 
-sal_Bool SAL_CALL OBookmarkSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OBookmarkSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OBookmarkSet::hasOrderedBookmarks" );
     return m_xRowLocate->hasOrderedBookmarks();

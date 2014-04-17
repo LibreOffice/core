@@ -47,7 +47,7 @@ namespace dbaccess
 
 OQueryDescriptor::OQueryDescriptor()
     :OQueryDescriptor_Base(m_aMutex,*this)
-    ,ODataSettings(m_aBHelper,sal_True)
+    ,ODataSettings(m_aBHelper,true)
 {
     registerProperties();
     ODataSettings::registerPropertiesFor(this);
@@ -55,7 +55,7 @@ OQueryDescriptor::OQueryDescriptor()
 
 OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor_Base& _rSource)
     :OQueryDescriptor_Base(_rSource,*this)
-    ,ODataSettings(m_aBHelper,sal_True)
+    ,ODataSettings(m_aBHelper,true)
 {
     registerProperties();
     ODataSettings::registerPropertiesFor(this);
@@ -119,17 +119,17 @@ Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  ) 
 
 
 OQueryDescriptor_Base::OQueryDescriptor_Base(::osl::Mutex&  _rMutex,::cppu::OWeakObject& _rMySelf)
-    :m_bColumnsOutOfDate(sal_True)
+    :m_bColumnsOutOfDate(true)
     ,m_rMutex(_rMutex)
 {
-    m_pColumns = new OColumns(_rMySelf, m_rMutex, sal_True,::std::vector< OUString>(), this,this);
+    m_pColumns = new OColumns(_rMySelf, m_rMutex, true,::std::vector< OUString>(), this,this);
 }
 
 OQueryDescriptor_Base::OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSource,::cppu::OWeakObject& _rMySelf)
-    :m_bColumnsOutOfDate(sal_True)
+    :m_bColumnsOutOfDate(true)
     ,m_rMutex(_rSource.m_rMutex)
 {
-    m_pColumns = new OColumns(_rMySelf, m_rMutex, sal_True,::std::vector< OUString>(), this,this);
+    m_pColumns = new OColumns(_rMySelf, m_rMutex, true,::std::vector< OUString>(), this,this);
 
     m_sCommand = _rSource.m_sCommand;
     m_bEscapeProcessing = _rSource.m_bEscapeProcessing;
@@ -160,7 +160,7 @@ sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8
 
 IMPLEMENT_IMPLEMENTATION_ID(OQueryDescriptor_Base)
 
-void OQueryDescriptor_Base::setColumnsOutOfDate( sal_Bool _bOutOfDate )
+void OQueryDescriptor_Base::setColumnsOutOfDate( bool _bOutOfDate )
 {
     m_bColumnsOutOfDate = _bOutOfDate;
     if ( !m_bColumnsOutOfDate )
@@ -192,7 +192,7 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
         // have queries with cyclic references:
         // foo := SELECT * FROM bar
         // bar := SELECT * FROM foo
-        setColumnsOutOfDate( sal_False );
+        setColumnsOutOfDate( false );
 
         // rebuild them
         try
@@ -201,7 +201,7 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
         }
         catch ( const Exception& )
         {
-            setColumnsOutOfDate( sal_True );
+            setColumnsOutOfDate( true );
             throw;
         }
     }

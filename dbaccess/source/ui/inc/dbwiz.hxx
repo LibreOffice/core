@@ -62,9 +62,9 @@ private:
                             m_pCollection;  /// the DSN type collection instance
     OUString         m_eType;
 
-    sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
-    sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
-    sal_Bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
+    bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
+    bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
+    bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
 
 public:
     /** ctor. The itemset given should have been created by <method>createItemSet</method> and should be destroyed
@@ -86,7 +86,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver() SAL_OVERRIDE;
     virtual OUString getDatasourceType(const SfxItemSet& _rSet) const SAL_OVERRIDE;
     virtual void clearPassword() SAL_OVERRIDE;
-    virtual sal_Bool saveDatasource() SAL_OVERRIDE;
+    virtual bool saveDatasource() SAL_OVERRIDE;
     virtual void setTitle(const OUString& _sTitle) SAL_OVERRIDE;
     virtual void enableConfirmSettings( bool _bEnable ) SAL_OVERRIDE;
 
@@ -100,8 +100,8 @@ protected:
     virtual bool        onFinish() SAL_OVERRIDE;
 
 protected:
-    inline sal_Bool isUIEnabled() const { return m_bUIEnabled; }
-    inline void     disabledUI() { m_bUIEnabled = sal_False; }
+    inline bool isUIEnabled() const { return m_bUIEnabled; }
+    inline void     disabledUI() { m_bUIEnabled = false; }
 
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
     void implSelectDatasource(const OUString& _rRegisteredName);

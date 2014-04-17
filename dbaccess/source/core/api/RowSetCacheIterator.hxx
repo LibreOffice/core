@@ -56,7 +56,7 @@ namespace dbaccess
         ORowSetCacheIterator(const ORowSetCacheIterator& _rRH);
         ORowSetCacheIterator& operator =(const ORowSetCacheIterator&);
 
-        sal_Bool isNull() const;
+        bool isNull() const;
         ORowSetCacheIterator& operator =(const ORowSetMatrix::iterator&);
         operator ORowSetMatrix::iterator();
 

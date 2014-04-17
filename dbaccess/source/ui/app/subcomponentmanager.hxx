@@ -56,7 +56,7 @@ namespace dbaui
         // XDatabaseDocumentUI helpers
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> >
                     getSubComponents() const;
-        sal_Bool    closeSubComponents();
+        bool        closeSubComponents();
 
         // container access
         void        onSubComponentOpened(

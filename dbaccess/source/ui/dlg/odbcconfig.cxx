@@ -112,7 +112,7 @@ OOdbcLibWrapper::OOdbcLibWrapper()
 
 #endif
 
-sal_Bool OOdbcLibWrapper::load(const sal_Char* _pLibPath)
+bool OOdbcLibWrapper::load(const sal_Char* _pLibPath)
 {
     m_sLibPath = OUString::createFromAscii(_pLibPath);
 #ifdef HAVE_ODBC_SUPPORT
@@ -166,7 +166,7 @@ OOdbcEnumeration::OOdbcEnumeration()
     ,m_pImpl(new OdbcTypesImpl)
 #endif
 {
-    sal_Bool bLoaded = load(ODBC_LIBRARY);
+    bool bLoaded = load(ODBC_LIBRARY);
 #ifdef ODBC_LIBRARY_1
     if ( !bLoaded )
         bLoaded = load(ODBC_LIBRARY_1);
@@ -198,23 +198,23 @@ OOdbcEnumeration::~OOdbcEnumeration()
 
 }
 
-sal_Bool OOdbcEnumeration::allocEnv()
+bool OOdbcEnumeration::allocEnv()
 {
     OSL_ENSURE(isLoaded(), "OOdbcEnumeration::allocEnv: not loaded!");
     if (!isLoaded())
-        return sal_False;
+        return false;
 
 #ifdef HAVE_ODBC_SUPPORT
     if (m_pImpl->hEnvironment)
         // nothing to do
-        return sal_True;
+        return true;
     SQLRETURN nResult = NSQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &m_pImpl->hEnvironment);
     if (SQL_SUCCESS != nResult)
         // can't do anything without environment
-        return sal_False;
+        return false;
 
     NSQLSetEnvAttr(m_pImpl->hEnvironment, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, SQL_IS_INTEGER);
-    return sal_True;
+    return true;
 #else
     return sal_False;
 #endif

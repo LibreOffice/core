@@ -65,7 +65,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >       m_xCommandPropInfo;
     ::rtl::Reference< OContainerMediator >                                              m_pColumnMediator;
     ::dbtools::IWarningsContainer*                                                      m_pWarnings;
-    sal_Bool                                                                            m_bCaseSensitiv : 1;        // assume case sensitivity of the column names ?
+    bool                                                                            m_bCaseSensitiv : 1;        // assume case sensitivity of the column names ?
 
     // possible actions on our "aggregate"
     enum AGGREGATE_ACTION { NONE, SETTING_PROPERTIES, FLUSHING };

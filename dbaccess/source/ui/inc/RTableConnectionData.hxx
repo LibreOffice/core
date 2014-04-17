@@ -44,9 +44,9 @@ namespace dbaui
         sal_Int32 m_nDeleteRules;
         sal_Int32 m_nCardinality;
 
-        sal_Bool checkPrimaryKey(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const;
-        sal_Bool IsSourcePrimKey()  const { return checkPrimaryKey(getReferencingTable()->getTable(),JTCS_FROM);    }
-        sal_Bool IsDestPrimKey()    const { return checkPrimaryKey(getReferencedTable()->getTable(),JTCS_TO);       }
+        bool checkPrimaryKey(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& i_xTable, EConnectionSide _eEConnectionSide) const;
+        bool IsSourcePrimKey()  const { return checkPrimaryKey(getReferencingTable()->getTable(),JTCS_FROM);    }
+        bool IsDestPrimKey()    const { return checkPrimaryKey(getReferencedTable()->getTable(),JTCS_TO);       }
 
     protected:
         virtual OConnectionLineDataRef CreateLineDataObj() SAL_OVERRIDE;
@@ -68,7 +68,7 @@ namespace dbaui
 
             @return true if successful
         */
-        virtual sal_Bool Update() SAL_OVERRIDE;
+        virtual bool Update() SAL_OVERRIDE;
 
         void        SetCardinality();
         inline void SetUpdateRules( sal_Int32 nAttr ){ m_nUpdateRules = nAttr; }
@@ -78,9 +78,9 @@ namespace dbaui
         inline sal_Int32    GetDeleteRules() const { return m_nDeleteRules; }
         inline sal_Int32    GetCardinality() const { return m_nCardinality; }
 
-        sal_Bool        IsConnectionPossible();
+        bool        IsConnectionPossible();
         void        ChangeOrientation();
-        sal_Bool        DropRelation();
+        bool        DropRelation();
     };
 }
 

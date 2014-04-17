@@ -131,7 +131,7 @@ namespace dbaui
         eventtype aMulti(e);                                                                \
         aMulti.Source = &m_rParent;                                                         \
         ::cppu::OInterfaceIteratorHelper aIt(*this);                                        \
-        sal_Bool bResult = sal_True;                                                        \
+        bool bResult = true;                                                        \
         while (bResult && aIt.hasMoreElements())                                            \
             bResult = static_cast< listenerclass*>(aIt.next())->methodname(aMulti);     \
         return bResult;                                                                     \

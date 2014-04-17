@@ -118,10 +118,10 @@ namespace dbaui
         inline const ::com::sun::star::lang::Locale&    getLocale() const { return m_aLocale;}
 
         // IClipboardTest
-        virtual sal_Bool isCutAllowed() SAL_OVERRIDE;
-        virtual sal_Bool isCopyAllowed() SAL_OVERRIDE;
-        virtual sal_Bool isPasteAllowed() SAL_OVERRIDE;
-        virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
+        virtual bool isCutAllowed() SAL_OVERRIDE;
+        virtual bool isCopyAllowed() SAL_OVERRIDE;
+        virtual bool isPasteAllowed() SAL_OVERRIDE;
+        virtual bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
         virtual void copy() SAL_OVERRIDE;
         virtual void cut() SAL_OVERRIDE;
         virtual void paste() SAL_OVERRIDE;
@@ -146,20 +146,20 @@ namespace dbaui
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        sal_Bool isLeaf(SvTreeListEntry* _pEntry) const;
+        bool isLeaf(SvTreeListEntry* _pEntry) const;
 
         /** returns if one of the selected entries is a leaf
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        sal_Bool isALeafSelected() const;
+        bool isALeafSelected() const;
 
         /** select all entries in the detail page
         */
         void selectAll();
 
         /// returns <TRUE/> if it sorts ascending
-        sal_Bool isSortUp() const;
+        bool isSortUp() const;
 
         /// sort the entries in the detail page down
         void sortDown();
@@ -168,7 +168,7 @@ namespace dbaui
         void sortUp();
 
         /// returns <TRUE/> when a detail page was filled
-        sal_Bool isFilled() const;
+        bool isFilled() const;
 
         /// return the element of currently select entry
         ElementType getElementType() const;
@@ -183,7 +183,7 @@ namespace dbaui
             @param  _bTaskAlso
                 If <TRUE/> the task window will also be cleared.
         */
-        void clearPages(sal_Bool _bTaskAlso = sal_True);
+        void clearPages(bool _bTaskAlso = true);
 
         /** returns the element names which are selected
             @param  _rNames
@@ -262,7 +262,7 @@ namespace dbaui
         PreviewMode getPreviewMode();
 
         /// <TRUE/> if the preview is enabled
-        sal_Bool isPreviewEnabled();
+        bool isPreviewEnabled();
 
         /** switches to the given preview mode
             @param  _eMode
@@ -290,7 +290,7 @@ namespace dbaui
         void showPreview(   const OUString& _sDataSourceName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                             const OUString& _sName,
-                            sal_Bool _bTable);
+                            bool _bTable);
 
         SvTreeListEntry* getEntry( const Point& _aPosPixel ) const;
     };

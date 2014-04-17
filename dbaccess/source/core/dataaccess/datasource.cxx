@@ -185,8 +185,8 @@ void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) t
 }
 
 OAuthenticationContinuation::OAuthenticationContinuation()
-    :m_bRemberPassword(sal_True),   // TODO: a meaningful default
-    m_bCanSetUserName(sal_True)
+    :m_bRemberPassword(true),   // TODO: a meaningful default
+    m_bCanSetUserName(true)
 {
 }
 
@@ -416,7 +416,7 @@ namespace
 
             for ( ; pDataSourceSetting != pEnd ; ++pDataSourceSetting )
             {
-                sal_Bool bAllowSetting = sal_False;
+                bool bAllowSetting = false;
                 const AsciiPropertyValue* pSetting = _pKnownSettings;
                 for ( ; pSetting->AsciiName; ++pSetting )
                 {
@@ -429,7 +429,7 @@ namespace
                         {
                             if ( pAllowedDriverSetting->Name.equalsAscii( pSetting->AsciiName ) )
                             {   // the driver also allows this setting
-                                bAllowSetting = sal_True;
+                                bAllowSetting = true;
                                 break;
                             }
                         }
@@ -771,7 +771,7 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (Runt
 
 sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException  )
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     if ( m_pImpl.is() )
     {
         switch (nHandle)
@@ -953,7 +953,7 @@ void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const
                 rValue >>= m_pImpl->m_aLayoutInformation;
                 break;
         }
-        m_pImpl->setModified(sal_True);
+        m_pImpl->setModified(true);
     }
 }
 
@@ -1062,28 +1062,28 @@ sal_Int32 ODatabaseSource::getLoginTimeout(void) throw( SQLException, RuntimeExc
 Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::connectWithCompletion" );
-    return connectWithCompletion(_rxHandler,sal_False);
+    return connectWithCompletion(_rxHandler,false);
 }
 
 Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password) throw( SQLException, RuntimeException, std::exception )
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getConnection" );
-    return getConnection(user,password,sal_False);
+    return getConnection(user,password,false);
 }
 
 Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnection( const OUString& user, const OUString& password ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getIsolatedConnection" );
-    return getConnection(user,password,sal_True);
+    return getConnection(user,password,true);
 }
 
 Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnectionWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getIsolatedConnectionWithCompletion" );
-    return connectWithCompletion(_rxHandler,sal_True);
+    return connectWithCompletion(_rxHandler,true);
 }
 
-Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler,sal_Bool _bIsolated ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler,bool _bIsolated ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::connectWithCompletion" );
     ModelMethodGuard aGuard( *this );
@@ -1095,7 +1095,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
     }
 
     OUString sUser(m_pImpl->m_sUser), sPassword(m_pImpl->m_aPassword);
-    sal_Bool bNewPasswordGiven = sal_False;
+    bool bNewPasswordGiven = false;
 
     if (m_pImpl->m_bPasswordRequired && sPassword.isEmpty())
     {   // we need a password, but don't have one yet.
@@ -1147,7 +1147,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         if (pAuthenticate->getRememberPassword())
         {
             m_pImpl->m_aPassword = pAuthenticate->getPassword();
-            bNewPasswordGiven = sal_True;
+            bNewPasswordGiven = true;
         }
         m_pImpl->m_sFailedPassword = OUString();
     }
@@ -1185,7 +1185,7 @@ Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const OUString
     return xConn;
 }
 
-Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password,sal_Bool _bIsolated) throw( SQLException, RuntimeException )
+Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password,bool _bIsolated) throw( SQLException, RuntimeException )
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getConnection" );
     ModelMethodGuard aGuard( *this );
@@ -1248,7 +1248,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
         if ( !xContainer.is() )
         {
             TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_QUERY ) );
-            xContainer = new OCommandContainer( m_pImpl->m_aContext, *this, rContainerData, sal_False );
+            xContainer = new OCommandContainer( m_pImpl->m_aContext, *this, rContainerData, false );
         }
         m_pImpl->m_xCommandDefinitions = xContainer;
     }
@@ -1265,7 +1265,7 @@ Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException, 
     if ( !xContainer.is() )
     {
         TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_TABLE ) );
-        xContainer = new OCommandContainer( m_pImpl->m_aContext, *this, rContainerData, sal_True );
+        xContainer = new OCommandContainer( m_pImpl->m_aContext, *this, rContainerData, true );
         m_pImpl->m_xTableDefinitions = xContainer;
     }
     return xContainer;
@@ -1328,7 +1328,7 @@ void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (R
     // #i55274#
 
     OSL_ENSURE( m_pImpl->isEmbeddedDatabase(), "ODatabaseSource::flushed: no embedded database?!" );
-    sal_Bool bWasModified = m_pImpl->m_bModified;
+    bool bWasModified = m_pImpl->m_bModified;
     m_pImpl->commitEmbeddedStorage();
     m_pImpl->setModified( bWasModified );
 }
@@ -1350,7 +1350,7 @@ void SAL_CALL ODatabaseSource::elementInserted( const ContainerEvent& /*Event*/ 
     SAL_INFO("dbaccess", "ODatabaseSource::elementInserted" );
     ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
-        m_pImpl->setModified(sal_True);
+        m_pImpl->setModified(true);
 }
 
 void SAL_CALL ODatabaseSource::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception)
@@ -1358,7 +1358,7 @@ void SAL_CALL ODatabaseSource::elementRemoved( const ContainerEvent& /*Event*/ )
     SAL_INFO("dbaccess", "ODatabaseSource::elementRemoved" );
     ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
-        m_pImpl->setModified(sal_True);
+        m_pImpl->setModified(true);
 }
 
 void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception)
@@ -1366,7 +1366,7 @@ void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& /*Event*/ 
     SAL_INFO("dbaccess", "ODatabaseSource::elementReplaced" );
     ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
-        m_pImpl->setModified(sal_True);
+        m_pImpl->setModified(true);
 }
 
 // XDocumentDataSource

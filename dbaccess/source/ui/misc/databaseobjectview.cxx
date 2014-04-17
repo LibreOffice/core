@@ -266,7 +266,7 @@ namespace dbaui
 
     // ResultSetBrowser
     ResultSetBrowser::ResultSetBrowser( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame,
-            sal_Bool _bTable )
+            bool _bTable )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast < OUString >( URL_COMPONENT_DATASOURCEBROWSER ) )
         ,m_bTable(_bTable)
     {

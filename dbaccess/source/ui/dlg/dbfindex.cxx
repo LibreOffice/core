@@ -76,7 +76,7 @@ ODbaseIndexDialog::ODbaseIndexDialog(Window * pParent, const OUString& aDataSrcN
     SetCtrls();
 }
 
-sal_Bool ODbaseIndexDialog::GetTable(const OUString& _rName, TableInfoList::iterator& _rPosition)
+bool ODbaseIndexDialog::GetTable(const OUString& _rName, TableInfoList::iterator& _rPosition)
 {
     for (   _rPosition = m_aTableInfoList.begin();
             _rPosition != m_aTableInfoList.end();
@@ -86,15 +86,15 @@ sal_Bool ODbaseIndexDialog::GetTable(const OUString& _rName, TableInfoList::iter
         if (m_bCaseSensitiv)
         {
             if (_rPosition->aTableName == _rName)
-                return sal_True;
+                return true;
         }
         else
         {
             if (_rPosition->aTableName.equalsIgnoreAsciiCase(_rName))
-                return sal_True;
+                return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 void ODbaseIndexDialog::checkButtons()
@@ -106,7 +106,7 @@ void ODbaseIndexDialog::checkButtons()
     m_pRemoveAll->Enable(0 != m_pLB_TableIndexes->GetEntryCount());
 }
 
-OTableIndex ODbaseIndexDialog::implRemoveIndex(const OUString& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist)
+OTableIndex ODbaseIndexDialog::implRemoveIndex(const OUString& _rName, TableIndexList& _rList, ListBox& _rDisplay, bool _bMustExist)
 {
     OTableIndex aReturn;
 
@@ -147,7 +147,7 @@ void ODbaseIndexDialog::implInsertIndex(const OTableIndex& _rIndex, TableIndexLi
     _rDisplay.SelectEntryPos(0);
 }
 
-OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, const OUString& _rIndexName, sal_Bool _bMustExist )
+OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, const OUString& _rIndexName, bool _bMustExist )
 {
     OTableIndex aReturn;
 
@@ -186,7 +186,7 @@ IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, /*pButton*/ )
 {
     OUString aSelection = m_pLB_FreeIndexes->GetSelectEntry();
     OUString aTableName = m_pCB_Tables->GetText();
-    OTableIndex aIndex = RemoveFreeIndex( aSelection, sal_True );
+    OTableIndex aIndex = RemoveFreeIndex( aSelection, true );
     InsertTableIndex( aTableName, aIndex );
 
     checkButtons();
@@ -197,7 +197,7 @@ IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, /*pButton*/ )
 {
     OUString aSelection = m_pLB_TableIndexes->GetSelectEntry();
     OUString aTableName = m_pCB_Tables->GetText();
-    OTableIndex aIndex = RemoveTableIndex( aTableName, aSelection, sal_True );
+    OTableIndex aIndex = RemoveTableIndex( aTableName, aSelection, true );
     InsertFreeIndex( aIndex );
 
     checkButtons();
@@ -210,7 +210,7 @@ IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, /*pButton*/ )
     OUString aTableName = m_pCB_Tables->GetText();
 
     for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
-        InsertTableIndex( aTableName, RemoveFreeIndex( m_pLB_FreeIndexes->GetEntry(0), sal_True ) );
+        InsertTableIndex( aTableName, RemoveFreeIndex( m_pLB_FreeIndexes->GetEntry(0), true ) );
 
     checkButtons();
     return 0;
@@ -222,7 +222,7 @@ IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, /*pButton*/ )
     OUString aTableName = m_pCB_Tables->GetText();
 
     for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
-        InsertFreeIndex( RemoveTableIndex( aTableName, m_pLB_TableIndexes->GetEntry(0), sal_True ) );
+        InsertFreeIndex( RemoveTableIndex( aTableName, m_pLB_TableIndexes->GetEntry(0), true ) );
 
     checkButtons();
     return 0;
@@ -278,7 +278,7 @@ void ODbaseIndexDialog::Init()
     //  String aFileName = aURL.PathToFileName();
     m_aDSN = aURL.GetMainURL(INetURLObject::NO_DECODE);
     ::ucbhelper::Content aFile;
-    sal_Bool bFolder=sal_True;
+    bool bFolder=true;
     try
     {
         aFile = ::ucbhelper::Content(m_aDSN,Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext());
@@ -353,7 +353,7 @@ void ODbaseIndexDialog::Init()
             aUsedIndex != aUsedIndexes.end();
             ++aUsedIndex
         )
-        RemoveFreeIndex( *aUsedIndex, sal_False );
+        RemoveFreeIndex( *aUsedIndex, false );
 
     if (m_aTableInfoList.size())
     {
@@ -468,7 +468,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
         try
         {
             ::ucbhelper::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-            aContent.executeCommand( OUString("delete"),makeAny( sal_Bool( sal_True ) ) );
+            aContent.executeCommand( OUString("delete"), makeAny( true ) );
         }
         catch (const Exception& e )
         {

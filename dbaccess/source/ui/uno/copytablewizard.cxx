@@ -332,7 +332,7 @@ private:
         sal_Int16                       m_nOperation;
         OUString                        m_sDestinationTable;
         Optional< OUString >            m_aPrimaryKeyName;
-        sal_Bool                        m_bUseHeaderLineAsColumnNames;
+        bool                        m_bUseHeaderLineAsColumnNames;
 
         // source
         SharedConnection                m_xSourceConnection;
@@ -343,7 +343,7 @@ private:
         SAL_WNODEPRECATED_DECLARATIONS_POP
         Reference< XResultSet >         m_xSourceResultSet;
         Sequence< Any >                 m_aSourceSelection;
-        sal_Bool                        m_bSourceSelectionBookmarks;
+        bool                        m_bSourceSelectionBookmarks;
 
         // destination
         SharedConnection                m_xDestConnection;
@@ -382,13 +382,13 @@ CopyTableWizard::CopyTableWizard( const Reference< XComponentContext >& _rxORB )
     ,m_nOperation( CopyTableOperation::CopyDefinitionAndData )
     ,m_sDestinationTable()
     ,m_aPrimaryKeyName( sal_False,  "ID" )
-    ,m_bUseHeaderLineAsColumnNames( sal_True )
+    ,m_bUseHeaderLineAsColumnNames( true )
     ,m_xSourceConnection()
     ,m_nCommandType( CommandType::COMMAND )
     ,m_pSourceObject()
     ,m_xSourceResultSet()
     ,m_aSourceSelection()
-    ,m_bSourceSelectionBookmarks( sal_True )
+    ,m_bSourceSelectionBookmarks( true )
     ,m_xDestConnection()
     ,m_aCopyTableListeners( m_aMutex )
     ,m_nOverrideExecutionResult( -1 )
@@ -1174,7 +1174,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
         }
 
         ++nRowCount;
-        sal_Bool bInsertAutoIncrement = sal_True;
+        bool bInsertAutoIncrement = true;
         ODatabaseExport::TPositions::const_iterator aPosIter = aColumnMapping.begin();
         ODatabaseExport::TPositions::const_iterator aPosEnd = aColumnMapping.end();
 
@@ -1201,7 +1201,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                 if ( bAutoIncrement && bInsertAutoIncrement )
                 {
                     xStatementParams->setInt( 1, nRowCount );
-                    bInsertAutoIncrement = sal_False;
+                    bInsertAutoIncrement = false;
                     continue;
                 }
 

@@ -124,18 +124,18 @@ namespace dbaccess
         sal_Int32                   m_nPrivileges;
         sal_Int32                   m_nLastKnownRowCount;
         oslInterlockedCount         m_nInAppend;
-        sal_Bool                    m_bLastKnownRowCountFinal;
-        sal_Bool                    m_bUseEscapeProcessing ;
-        sal_Bool                    m_bApplyFilter ;
-        sal_Bool                    m_bCommandFacetsDirty;  // any of the facets which define the active command is dirty
+        bool                    m_bLastKnownRowCountFinal;
+        bool                    m_bUseEscapeProcessing ;
+        bool                    m_bApplyFilter ;
+        bool                    m_bCommandFacetsDirty;  // any of the facets which define the active command is dirty
         bool                        m_bParametersDirty; // parameters changed since execute
-        sal_Bool                    m_bModified ;
-        sal_Bool                    m_bRebuildConnOnExecute ;
-        sal_Bool                    m_bIsBookmarkable ;
-        sal_Bool                    m_bNew ;
-        sal_Bool                    m_bCanUpdateInsertedRows;
-        sal_Bool                    m_bOwnConnection;
-        sal_Bool                    m_bPropChangeNotifyEnabled;
+        bool                    m_bModified ;
+        bool                    m_bRebuildConnOnExecute ;
+        bool                    m_bIsBookmarkable ;
+        bool                    m_bNew ;
+        bool                    m_bCanUpdateInsertedRows;
+        bool                    m_bOwnConnection;
+        bool                    m_bPropChangeNotifyEnabled;
 
     private:
         /** builds m_aActiveCommand from our settings
@@ -145,7 +145,7 @@ namespace dbaccess
                 from our own EscapeProcessing property, and possibly overruled by the respective property
                 of a query we're based on.
         */
-        sal_Bool        impl_buildActiveCommand_throw();
+        bool        impl_buildActiveCommand_throw();
 
         /** initializes our query composer, and everything which has to do with it
 
@@ -173,7 +173,7 @@ namespace dbaccess
             @throws com::sun::star::uno::RuntimeException
                 if any of the components involved throws a com::sun::star::uno::RuntimeException
         */
-        sal_Bool        impl_initComposer_throw( OUString& _out_rCommandToExecute );
+        bool        impl_initComposer_throw( OUString& _out_rCommandToExecute );
 
         /** returns the table container of our active connection
 
@@ -232,15 +232,15 @@ namespace dbaccess
         virtual void fireRowcount() SAL_OVERRIDE;
                 void notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowChangeEvent &rEvt);
                 void notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowsChangeEvent& rEvt);
-        virtual sal_Bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard) SAL_OVERRIDE;
+        virtual bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard) SAL_OVERRIDE;
         virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard) SAL_OVERRIDE;
         virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard) SAL_OVERRIDE;
 
-        virtual void        doCancelModification( ) SAL_OVERRIDE;
-        virtual sal_Bool    isModification( ) SAL_OVERRIDE;
-        virtual sal_Bool    isModified( ) SAL_OVERRIDE;
-        virtual sal_Bool    isNew( ) SAL_OVERRIDE;
-        virtual sal_Bool    isPropertyChangeNotificationEnabled() const SAL_OVERRIDE;
+        virtual void doCancelModification( ) SAL_OVERRIDE;
+        virtual bool isModification( ) SAL_OVERRIDE;
+        virtual bool isModified( ) SAL_OVERRIDE;
+        virtual bool isNew( ) SAL_OVERRIDE;
+        virtual bool isPropertyChangeNotificationEnabled() const SAL_OVERRIDE;
 
         virtual ~ORowSet();
 
@@ -412,9 +412,9 @@ namespace dbaccess
         void    approveExecution() throw (::com::sun::star::sdb::RowSetVetoException, ::com::sun::star::uno::RuntimeException);
 
         /// set m_xActiveConnection, fire a PropertyChangeEvent if necessary, do the event listener handling etc
-        void setActiveConnection( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxNewConn, sal_Bool _bFireEvent = sal_True );
+        void setActiveConnection( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxNewConn, bool _bFireEvent = true );
 
-        void implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) );
+        void implCancelRowUpdates( bool _bNotifyModified ) SAL_THROW( ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) );
 
         /** sets the given result set type/concurrency at the given statement, while respecting
             possibly related data source settings
@@ -467,14 +467,14 @@ namespace dbaccess
         ORowSet*                    m_pParent;
         sal_Int32                   m_nFetchDirection;
         sal_Int32                   m_nFetchSize;
-        sal_Bool                    m_bIsBookmarkable;
+        bool                    m_bIsBookmarkable;
 
     protected:
         // the clone can not insert anything
         virtual void        doCancelModification( ) SAL_OVERRIDE;
-        virtual sal_Bool    isModification( ) SAL_OVERRIDE;
-        virtual sal_Bool    isModified( ) SAL_OVERRIDE;
-        virtual sal_Bool    isNew( ) SAL_OVERRIDE;
+        virtual bool        isModification( ) SAL_OVERRIDE;
+        virtual bool        isModified( ) SAL_OVERRIDE;
+        virtual bool        isNew( ) SAL_OVERRIDE;
 
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
     public:

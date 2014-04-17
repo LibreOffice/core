@@ -34,7 +34,7 @@ namespace dbaui
     class OJoinExchObj : public TransferableHelper, public OJoinExchObj_Base
     {
         static OUString         m_sJoinFormat;
-        sal_Bool                m_bFirstEntry;
+        bool                m_bFirstEntry;
 
     protected:
         OJoinExchangeData           m_jxdSourceDescription;
@@ -43,7 +43,7 @@ namespace dbaui
         virtual ~OJoinExchObj();
 
     public:
-        OJoinExchObj(const OJoinExchangeData& jxdSource,sal_Bool _bFirstEntry=sal_False);
+        OJoinExchObj(const OJoinExchangeData& jxdSource,bool _bFirstEntry=false);
 
 
         // XInterface
@@ -57,7 +57,7 @@ namespace dbaui
         void StartDrag( Window* pWindow, sal_Int8 nDragSourceActions, IDragTransferableListener* _pListener );
 
         static OJoinExchangeData    GetSourceDescription(const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxObject);
-        static sal_Bool             isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID=SOT_FORMATSTR_ID_SBA_JOIN);
+        static bool             isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID=SOT_FORMATSTR_ID_SBA_JOIN);
 
     protected:
         virtual void                AddSupportedFormats() SAL_OVERRIDE;

@@ -120,8 +120,8 @@ namespace dbaui
         OAsyncronousLink        m_aSelectContainerEvent;
         PreviewMode             m_ePreviewMode;             // the mode of the preview
         ElementType             m_eCurrentType;
-        sal_Bool                m_bNeedToReconnect;         // true when the settings of the data source were modified and the connection is no longer up to date
-        sal_Bool                m_bSuspended;               // is true when the controller was already suspended
+        bool                m_bNeedToReconnect;         // true when the settings of the data source were modified and the connection is no longer up to date
+        bool                m_bSuspended;               // is true when the controller was already suspended
 
         ::std::auto_ptr< SelectionNotifier >
                                 m_pSelectionNotifier;
@@ -210,7 +210,7 @@ namespace dbaui
             @return
                 <TRUE/> if read only or doesn't exist, otherwise <FALSE/>
         */
-        sal_Bool isConnectionReadOnly() const;
+        bool isConnectionReadOnly() const;
 
         /// fills the list with the selected entries.
         void getSelectionElementNames( ::std::vector< OUString>& _rNames ) const;
@@ -273,13 +273,13 @@ namespace dbaui
             @return
                 <TRUE/> if the paste opertions was successful, otherwise <FALSE/>.
         */
-        sal_Bool paste( ElementType _eType,const ::svx::ODataAccessDescriptor& _rPasteData ,const OUString& _sParentFolder = OUString(),sal_Bool _bMove = sal_False);
+        bool paste( ElementType _eType, const ::svx::ODataAccessDescriptor& _rPasteData, const OUString& _sParentFolder = OUString(), bool _bMove = false);
 
         /// returns the system clipboard.
         const TransferableDataHelper& getViewClipboard() const { return m_aSystemClipboard; }
 
         /// returns <TRUE/> if the clipboard supports a table format, otherwise <FALSE/>.
-        sal_Bool isTableFormat() const;
+        bool isTableFormat() const;
 
         /** fills the vector with all supported formats
             @param  _eType
@@ -341,11 +341,11 @@ namespace dbaui
             @return
                 <TRUE/> if the insert opertions was successful, otherwise <FALSE/>.
         */
-        sal_Bool insertHierachyElement(  ElementType _eType
+        bool insertHierachyElement(  ElementType _eType
                                     ,const OUString& _sParentFolder
-                                    ,sal_Bool _bCollection = sal_True
+                                    ,bool _bCollection = true
                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>()
-                                    ,sal_Bool _bMove = sal_False);
+                                    ,bool _bMove = false);
         /** checks if delete command or rename comamnd is allowed
             @param  _eType
                 The element type.
@@ -354,14 +354,14 @@ namespace dbaui
             @return
                 <TRUE> if the command is allowed
         */
-        sal_Bool isRenameDeleteAllowed(ElementType _eType,sal_Bool _bDelete) const;
+        bool isRenameDeleteAllowed(ElementType _eType, bool _bDelete) const;
         /** all selected entries will be opened, or edited, or converted to a view
             @param  _nId
                 The slot which should be executed.
             @param  _eOpenMode
                 Defines the mode of opening. @see ElementOpenMode
         */
-        void doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMode);
+        void doAction(sal_uInt16 _nId, ElementOpenMode _eOpenMode);
 
         /** returns the currently selected table or query name.
         *
@@ -494,7 +494,7 @@ namespace dbaui
 
         // IApplicationController
         virtual bool onEntryDoubleClick(SvTreeListBox& _rTree) SAL_OVERRIDE;
-        virtual sal_Bool onContainerSelect(ElementType _eType) SAL_OVERRIDE;
+        virtual bool onContainerSelect(ElementType _eType) SAL_OVERRIDE;
         virtual void onSelectionChanged() SAL_OVERRIDE;
         virtual void onCutEntry() SAL_OVERRIDE;
         virtual void onCopyEntry() SAL_OVERRIDE;
@@ -518,10 +518,10 @@ namespace dbaui
         virtual bool        interceptUserInput( const NotifyEvent& _rEvent ) SAL_OVERRIDE;
 
         // IControlActionListener overridables
-        virtual sal_Bool        requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const SAL_OVERRIDE;
-        virtual sal_Bool        requestDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
-        virtual sal_Int8        queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors ) SAL_OVERRIDE;
-        virtual sal_Int8        executeDrop( const ExecuteDropEvent& _rEvt ) SAL_OVERRIDE;
+        virtual bool        requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const SAL_OVERRIDE;
+        virtual bool        requestDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
+        virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors ) SAL_OVERRIDE;
+        virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt ) SAL_OVERRIDE;
 
         // IContextMenuProvider (base of IApplicationController)
         virtual PopupMenu*      getContextMenu( Control& _rControl ) const SAL_OVERRIDE;

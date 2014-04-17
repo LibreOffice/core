@@ -31,7 +31,7 @@ namespace dbaui
     // OFilePickerInteractionHandler
     OFilePickerInteractionHandler::OFilePickerInteractionHandler( const Reference< XInteractionHandler >& _rxMaster )
         :m_xMaster( _rxMaster )
-        ,m_bDoesNotExist(sal_False)
+        ,m_bDoesNotExist(false)
     {
         OSL_ENSURE( m_xMaster.is(), "OFilePickerInteractionHandler::OFilePickerInteractionHandler: invalid master handler!" );
     }
@@ -47,7 +47,7 @@ namespace dbaui
         {
             if ( IOErrorCode_NOT_EXISTING == aIoException.Code )
             {
-                m_bDoesNotExist = sal_True;
+                m_bDoesNotExist = true;
                 return;
             }
         }

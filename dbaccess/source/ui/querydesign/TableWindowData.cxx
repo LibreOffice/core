@@ -46,7 +46,7 @@ OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
     ,m_sComposedName(_rComposedName)
     ,m_aPosition( Point(-1,-1) )
     ,m_aSize( Size(-1,-1) )
-    ,m_bShowAll( sal_True )
+    ,m_bShowAll( true )
     ,m_bIsQuery(false)
     ,m_bIsValid(true)
 {
@@ -63,12 +63,12 @@ OTableWindowData::~OTableWindowData()
         stopComponentListening( xComponent );
 }
 
-sal_Bool OTableWindowData::HasPosition() const
+bool OTableWindowData::HasPosition() const
 {
     return ( (m_aPosition.X() != -1) && (m_aPosition.Y() != -1) );
 }
 
-sal_Bool OTableWindowData::HasSize() const
+bool OTableWindowData::HasSize() const
 {
     return ( (m_aSize.Width() != -1) && (m_aSize.Height() !=-1) );
 }

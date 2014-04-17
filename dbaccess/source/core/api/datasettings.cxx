@@ -96,7 +96,7 @@ void ODataSettings::registerPropertiesFor(ODataSettings_Base* _pItem)
     registerProperty(PROPERTY_FONTTYPE,         PROPERTY_ID_FONTTYPE,        PropertyAttribute::BOUND,&_pItem->m_aFont.Type,            ::getCppuType(&_pItem->m_aFont.Type));
 }
 
-ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper,sal_Bool _bQuery)
+ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper,bool _bQuery)
     :OPropertyStateContainer(_rBHelper)
     ,ODataSettings_Base()
     ,m_bQuery(_bQuery)
@@ -104,7 +104,7 @@ ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper,sal_Bool _bQuery)
 }
 
 ODataSettings_Base::ODataSettings_Base()
-    :m_bApplyFilter(sal_False)
+    :m_bApplyFilter(false)
     ,m_aFont(::comphelper::getDefaultFont())
     ,m_nFontEmphasis(::com::sun::star::awt::FontEmphasisMark::NONE)
     ,m_nFontRelief(::com::sun::star::awt::FontRelief::NONE)

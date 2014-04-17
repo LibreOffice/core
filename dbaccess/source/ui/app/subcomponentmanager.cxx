@@ -424,7 +424,7 @@ namespace dbaui
         return aComponents;
     }
 
-    sal_Bool SubComponentManager::closeSubComponents()
+    bool SubComponentManager::closeSubComponents()
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_pData->getMutex() );

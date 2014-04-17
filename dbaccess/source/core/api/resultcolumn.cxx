@@ -55,7 +55,7 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
 {
     if ( m_aIsRowVersion.hasValue() )
         return;
-    m_aIsRowVersion <<= (sal_Bool)(sal_False);
+    m_aIsRowVersion <<= false;
 
     OSL_ENSURE( m_xDBMetaData.is(), "OResultColumn::impl_determineIsRowVersion_nothrow: no DBMetaData!" );
     if ( !m_xDBMetaData.is() )
@@ -80,7 +80,7 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
                 {
                     if ( xResultRow->getString( 2 ) == sColumnName )
                     {
-                        m_aIsRowVersion <<= (sal_Bool)(sal_True);
+                        m_aIsRowVersion <<= true;
                         break;
                     }
                 }

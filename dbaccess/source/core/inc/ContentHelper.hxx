@@ -52,15 +52,15 @@ namespace dbaccess
         OUString aTitle;         // Title
         ::boost::optional< OUString >
                         aContentType;   // ContentType (aka MediaType aka MimeType)
-        sal_Bool        bIsDocument;    // IsDocument
-        sal_Bool        bIsFolder;      // IsFolder
-        sal_Bool        bAsTemplate;    // AsTemplate
+        bool        bIsDocument;    // IsDocument
+        bool        bIsFolder;      // IsFolder
+        bool        bAsTemplate;    // AsTemplate
         OUString sPersistentName;// persistent name of the document
 
         ContentProperties()
-            :bIsDocument( sal_True )
-            ,bIsFolder( sal_False )
-            ,bAsTemplate( sal_False )
+            :bIsDocument( true )
+            ,bIsFolder( false )
+            ,bAsTemplate( false )
         {
         }
     };

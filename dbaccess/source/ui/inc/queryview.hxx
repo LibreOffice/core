@@ -30,9 +30,9 @@ namespace dbaui
         OQueryView(Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~OQueryView();
 
-        virtual sal_Bool isCutAllowed()     = 0;
-        virtual sal_Bool isPasteAllowed()   = 0;
-        virtual sal_Bool isCopyAllowed()    = 0;
+        virtual bool isCutAllowed()     = 0;
+        virtual bool isPasteAllowed()   = 0;
+        virtual bool isCopyAllowed()    = 0;
         virtual void copy()     = 0;
         virtual void cut()      = 0;
         virtual void paste()    = 0;

@@ -98,7 +98,7 @@ private:
     DECL_LINK( AsynchActivate, void* );
     DECL_LINK( AsynchDeactivate, void* );
 
-    sal_Bool    isAllowed(sal_uInt16 _nColumnId,sal_Int32 _nPrivilege) const;
+    bool    isAllowed(sal_uInt16 _nColumnId,sal_Int32 _nPrivilege) const;
     void        fillPrivilege(sal_Int32 _nRow) const;
     TTablePrivilegeMap::const_iterator findPrivilege(sal_Int32 _nRow) const;
 };

@@ -162,7 +162,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     }
 
     OUString sPwd, sUser;
-    sal_Bool bPwdReq = sal_False;
+    bool bPwdReq = false;
     try
     {
         _xDataSource->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
@@ -292,11 +292,11 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                const OUString& _sCreateParams,
                                sal_Int32 _nPrecision,
                                sal_Int32 _nScale,
-                               sal_Bool _bAutoIncrement,
-                               sal_Bool& _brForceToType)
+                               bool _bAutoIncrement,
+                               bool& _brForceToType)
 {
     TOTypeInfoSP pTypeInfo;
-    _brForceToType = sal_False;
+    _brForceToType = false;
     // search for type
     ::std::pair<OTypeInfoMap::const_iterator, OTypeInfoMap::const_iterator> aPair = _rTypeInfo.equal_range(_nType);
     OTypeInfoMap::const_iterator aIter = aPair.first;
@@ -309,7 +309,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             OUString sDBTypeName         = aIter->second->aTypeName;         (void)sDBTypeName;
             sal_Int32       nDBTypePrecision    = aIter->second->nPrecision;        (void)nDBTypePrecision;
             sal_Int32       nDBTypeScale        = aIter->second->nMaximumScale;     (void)nDBTypeScale;
-            sal_Bool        bDBAutoIncrement    = aIter->second->bAutoIncrement;    (void)bDBAutoIncrement;
+            bool        bDBAutoIncrement    = aIter->second->bAutoIncrement;    (void)bDBAutoIncrement;
     #endif
             if  (   (
                         _sTypeName.isEmpty()
@@ -390,7 +390,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                    _sCreateParams,
                                    _nPrecision,
                                    _nScale,
-                                   sal_False,
+                                   false,
                                    _brForceToType);
                 }
                 else
@@ -399,7 +399,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             else
             {
                 pTypeInfo = aPair.first->second;
-                _brForceToType = sal_True;
+                _brForceToType = true;
             }
         }
         else
@@ -485,19 +485,19 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
             pInfo->bNullable        = (sal_Int32)aValue == ColumnValue::NULLABLE;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bCaseSensitive   = (sal_Bool)aValue;
+            pInfo->bCaseSensitive   = (bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->nSearchType      = aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bUnsigned        = (sal_Bool)aValue;
+            pInfo->bUnsigned        = (bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bCurrency        = (sal_Bool)aValue;
+            pInfo->bCurrency        = (bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bAutoIncrement   = (sal_Bool)aValue;
+            pInfo->bAutoIncrement   = (bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->aLocalTypeName   = aValue;
@@ -704,10 +704,10 @@ OUString createDefaultName(const Reference< XDatabaseMetaData>& _xMetaData,const
     return sDefaultName;
 }
 
-sal_Bool checkDataSourceAvailable(const OUString& _sDataSourceName,const Reference< ::com::sun::star::uno::XComponentContext >& _xContext)
+bool checkDataSourceAvailable(const OUString& _sDataSourceName,const Reference< ::com::sun::star::uno::XComponentContext >& _xContext)
 {
     Reference< XDatabaseContext > xDataBaseContext = DatabaseContext::create(_xContext);
-    sal_Bool bRet = xDataBaseContext->hasByName(_sDataSourceName);
+    bool bRet = xDataBaseContext->hasByName(_sDataSourceName);
     if ( !bRet )
     { // try if this one is a URL
         try
@@ -760,7 +760,7 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
         try
         {
             Reference< XPropertySetInfo >  xInfo = xAffectedCol->getPropertySetInfo();
-            sal_Bool bHasFormat = xInfo->hasPropertyByName(PROPERTY_FORMATKEY);
+            bool bHasFormat = xInfo->hasPropertyByName(PROPERTY_FORMATKEY);
             sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(PROPERTY_TYPE));
 
             SvxCellHorJustify eJustify(SVX_HOR_JUSTIFY_STANDARD);
@@ -786,14 +786,14 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
     }
 }
 
-sal_Bool callColumnFormatDialog(Window* _pParent,
+bool callColumnFormatDialog(Window* _pParent,
                                 SvNumberFormatter* _pFormatter,
                                 sal_Int32 _nDataType,
                                 sal_Int32& _nFormatKey,
                                 SvxCellHorJustify& _eJustify,
-                                sal_Bool  _bHasFormat)
+                                bool  _bHasFormat)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
@@ -828,13 +828,13 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
     SfxItemSet* pFormatDescriptor = new SfxItemSet(*pPool, aAttrMap);
     // fill it
     pFormatDescriptor->Put(SvxHorJustifyItem(_eJustify, SBA_ATTR_ALIGN_HOR_JUSTIFY));
-    sal_Bool bText = sal_False;
+    bool bText = false;
     if (_bHasFormat)
     {
         // if the col is bound to a text field we have to disallow all non-text formats
         if ((DataType::CHAR == _nDataType) || (DataType::VARCHAR == _nDataType) || (DataType::LONGVARCHAR == _nDataType) || (DataType::CLOB == _nDataType))
         {
-            bText = sal_True;
+            bText = true;
             pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, true));
             if (!_pFormatter->IsTextFormat(_nFormatKey))
                 // text fields can only have text formats
@@ -872,7 +872,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
                 SFX_ITEMSET_GET(*pSet, pFormat, SfxUInt32Item, SBA_DEF_FMTVALUE, true);
                 _nFormatKey = (sal_Int32)pFormat->GetValue();
             }
-            bRet = sal_True;
+            bRet = true;
         }
             // deleted formats
         const SfxItemSet* pResult = aDlg.GetOutputItemSet();
@@ -905,12 +905,12 @@ const SfxFilter* getStandardDatabaseFilter()
     return pFilter;
 }
 
-sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
+bool appendToFilter(const Reference<XConnection>& _xConnection,
                         const OUString& _sName,
                         const Reference< XComponentContext >& _rxContext,
                         Window* _pParent)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     Reference< XChild> xChild(_xConnection,UNO_QUERY);
     if(xChild.is())
     {
@@ -920,7 +920,7 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
             Sequence< OUString > aFilter;
             xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
             // first check if we have something like SCHEMA.%
-            sal_Bool bHasToInsert = sal_True;
+            bool bHasToInsert = true;
             const OUString* pBegin = aFilter.getConstArray();
             const OUString* pEnd = pBegin + aFilter.getLength();
             for (;pBegin != pEnd; ++pBegin)
@@ -929,20 +929,20 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
                 {
                     sal_Int32 nLen;
                     if((nLen = pBegin->lastIndexOf('.')) != -1 && !pBegin->compareTo(_sName,nLen))
-                        bHasToInsert = sal_False;
+                        bHasToInsert = false;
                     else if(pBegin->getLength() == 1)
-                        bHasToInsert = sal_False;
+                        bHasToInsert = false;
                 }
             }
 
-            bRet = sal_True;
+            bRet = true;
             if(bHasToInsert)
             {
                 if(! ::dbaui::checkDataSourceAvailable(::comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),_rxContext))
                 {
                     OUString aMessage(ModuleRes(STR_TABLEDESIGN_DATASOURCE_DELETED));
                     OSQLWarningBox( _pParent, aMessage ).Execute();
-                    bRet = sal_False;
+                    bRet = false;
                 }
                 else
                 {
@@ -997,7 +997,7 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
 
     Size aDefaultMM = _pBox->PixelToLogic( Size( nDefaultWidth, 0 ), MapMode( MAP_MM ) );
 
-    DlgSize aColumnSizeDlg( _pBox, nColSize, sal_False, aDefaultMM.Width() * 10 );
+    DlgSize aColumnSizeDlg( _pBox, nColSize, false, aDefaultMM.Width() * 10 );
     if ( aColumnSizeDlg.Execute() )
     {
         sal_Int32 nValue = aColumnSizeDlg.GetValue();
@@ -1015,23 +1015,23 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
 }
 
 // check if SQL92 name checking is enabled
-sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
+bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
 {
     return ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_ENABLESQL92CHECK );
 }
 
-sal_Bool isAppendTableAliasEnabled(const Reference<XConnection>& _xConnection)
+bool isAppendTableAliasEnabled(const Reference<XConnection>& _xConnection)
 {
     return ::dbtools::getBooleanDataSourceSetting( _xConnection, INFO_APPEND_TABLE_ALIAS );
 }
 
-sal_Bool generateAsBeforeTableAlias(const Reference<XConnection>& _xConnection)
+bool generateAsBeforeTableAlias(const Reference<XConnection>& _xConnection)
 {
     return ::dbtools::getBooleanDataSourceSetting( _xConnection, INFO_AS_BEFORE_CORRELATION_NAME );
 }
 
 void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
-                            sal_Bool& _rAutoIncrementValueEnabled,
+                            bool& _rAutoIncrementValueEnabled,
                             OUString& _rsAutoIncrementValue)
 {
     if ( _xDatasource.is() )
@@ -1055,7 +1055,7 @@ void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
 }
 
 void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
-                            sal_Bool& _rAutoIncrementValueEnabled,
+                            bool& _rAutoIncrementValueEnabled,
                             OUString& _rsAutoIncrementValue)
 {
     Reference< XChild> xChild(_xConnection,UNO_QUERY);
@@ -1086,7 +1086,7 @@ OUString getStrippedDatabaseName(const Reference<XPropertySet>& _xDataSource,OUS
     return sName;
 }
 
-void AppendConfigToken( OUString& _rURL, sal_Bool _bQuestionMark )
+void AppendConfigToken( OUString& _rURL, bool _bQuestionMark )
 {
     // query part exists?
     if ( _bQuestionMark )
@@ -1106,9 +1106,9 @@ void AppendConfigToken( OUString& _rURL, sal_Bool _bQuestionMark )
 namespace
 {
 
-    sal_Bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
+    bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
     {
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
         OUString sAnchor;
 
         try
@@ -1122,7 +1122,7 @@ namespace
                 if ( !sAnchor.isEmpty() )
                 {
                     _rAnchor = sAnchor;
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
             else
@@ -1146,9 +1146,9 @@ namespace
 
     OUString sAnchor;
     OUString sTempURL = aURL.Complete;
-    AppendConfigToken( sTempURL, sal_True );
-    sal_Bool bHasAnchor = GetHelpAnchor_Impl( sTempURL, sAnchor );
-    AppendConfigToken(aURL.Complete,sal_True);
+    AppendConfigToken( sTempURL, true );
+    bool bHasAnchor = GetHelpAnchor_Impl( sTempURL, sAnchor );
+    AppendConfigToken(aURL.Complete,true);
     if ( bHasAnchor )
     {
         aURL.Complete += "#";
@@ -1274,14 +1274,14 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     if ( !pTypeInfo )
     {
         OUString sCreate("x"),sTypeName;
-        sal_Bool bForce = sal_True;
-        pTypeInfo = ::dbaui::getTypeInfoFromType(_rTypeInfo,DataType::VARCHAR,sTypeName,sCreate,50,0,sal_False,bForce);
+        bool bForce = true;
+        pTypeInfo = ::dbaui::getTypeInfoFromType(_rTypeInfo,DataType::VARCHAR,sTypeName,sCreate,50,0,false,bForce);
     }
     OSL_ENSURE(pTypeInfo,"Wrong DataType supplied!");
     return pTypeInfo;
 }
 
-sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,sal_Bool _bAll,const OUString& _sName)
+sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,bool _bAll,const OUString& _sName)
 {
     SolarMutexGuard aGuard;
     OUString aMsg = ModuleRes(_nText);
@@ -1373,7 +1373,7 @@ Reference<XPropertySet> createView( const OUString& _rName, const Reference< XCo
     {
         _rxSourceObject->getPropertyValue( PROPERTY_COMMAND ) >>= sCommand;
 
-        sal_Bool bEscapeProcessing( sal_False );
+        bool bEscapeProcessing( false );
         OSL_VERIFY( _rxSourceObject->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
         if ( bEscapeProcessing )
             sCommand = lcl_createSDBCLevelStatement( sCommand, _rxConnection );
@@ -1385,17 +1385,17 @@ Reference<XPropertySet> createView( const OUString& _rName, const Reference< XCo
     return createView( _rName, _rxConnection, sCommand );
 }
 
-sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentContext >& _rxContext,
+bool insertHierachyElement( Window* _pParent, const Reference< XComponentContext >& _rxContext,
                            const Reference<XHierarchicalNameContainer>& _xNames,
                            const OUString& _sParentFolder,
-                           sal_Bool _bForm,
-                           sal_Bool _bCollection,
+                           bool _bForm,
+                           bool _bCollection,
                            const Reference<XContent>& _xContent,
-                           sal_Bool _bMove)
+                           bool _bMove)
 {
     OSL_ENSURE( _xNames.is(), "insertHierachyElement: illegal name container!" );
     if ( !_xNames.is() )
-        return sal_False;
+        return false;
 
     Reference<XNameAccess> xNameAccess( _xNames, UNO_QUERY );
     OUString sName = _sParentFolder;
@@ -1409,7 +1409,7 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
 
     OSL_ENSURE( xNameAccess.is(), "insertHierachyElement: could not find the proper name container!" );
     if ( !xNameAccess.is() )
-        return sal_False;
+        return false;
 
     OUString sNewName;
     Reference<XPropertySet> xProp(_xContent,UNO_QUERY);
@@ -1439,7 +1439,7 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
                                     SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS);
             if ( RET_OK != aAskForName.Execute() )
                 // cancelled by the user
-                return sal_False;
+                return false;
 
             sNewName = aAskForName.getName();
         }
@@ -1482,10 +1482,10 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >& _rxConnection, const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext )

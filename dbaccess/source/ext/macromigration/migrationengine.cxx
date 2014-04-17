@@ -281,7 +281,7 @@ namespace dbmm
             try
             {
                 ::comphelper::NamedValueCollection aLoadArgs;
-                aLoadArgs.put( "Hidden", (sal_Bool)sal_True );
+                aLoadArgs.put( "Hidden", true );
                 aLoadArgs.put( "StatusIndicator", _rxProgress );
 
                 Reference< XCommandProcessor > xCommandProcessor( _rDocument.xCommandProcessor, UNO_SET_THROW );

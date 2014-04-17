@@ -64,8 +64,8 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
     m_xContext(context),
     m_CommandType(sdb::CommandType::COMMAND), // #i94114
     m_RowLimit(0),
-    m_EscapeProcessing(sal_True),
-    m_ApplyFilter(sal_True)
+    m_EscapeProcessing(true),
+    m_ApplyFilter(true)
 {
     m_xInternal.set( m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.chart.InternalDataProvider",m_xContext ), uno::UNO_QUERY );
     m_xRangeConversion.set(m_xInternal,uno::UNO_QUERY);
@@ -179,7 +179,7 @@ sal_Bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const uno::Sequ
         }
         else if ( pArgIter->Name == "FirstCellAsLabel" )
         {
-            sal_Bool bFirstCellAsLabel = sal_True;
+            bool bFirstCellAsLabel = true;
             pArgIter->Value >>= bFirstCellAsLabel;
             if ( !bFirstCellAsLabel )
                 return sal_False;
@@ -207,7 +207,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
         }
 
         ::comphelper::NamedValueCollection aArgs( _aArguments );
-        const sal_Bool bHasCategories = aArgs.getOrDefault( "HasCategories", sal_True );
+        const bool bHasCategories = aArgs.getOrDefault( "HasCategories", sal_True );
         uno::Sequence< OUString > aColumnNames =
             aArgs.getOrDefault( "ColumnDescriptions", uno::Sequence< OUString >() );
 
@@ -249,7 +249,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArgum
     // internal data always contains labels
     aArguments.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
 
-    sal_Bool bHasCategories = sal_False;
+    bool bHasCategories = false;
     if( _xDataSource.is())
     {
         uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences(_xDataSource->getDataSequences());
@@ -265,7 +265,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArgum
                     &&  aRole == "categories"
                     )
                 {
-                    bHasCategories = sal_True;
+                    bHasCategories = true;
                     break;
                 }
             }
@@ -514,7 +514,7 @@ void SAL_CALL DatabaseDataProvider::setApplyFilter( sal_Bool the_value ) throw (
         osl::MutexGuard g(m_aMutex);
         m_xAggregateSet->setPropertyValue( PROPERTY_APPLYFILTER,   uno::makeAny( the_value ) );
     }
-    set(PROPERTY_APPLYFILTER,the_value,m_ApplyFilter);
+    set(PROPERTY_APPLYFILTER,(bool)the_value,m_ApplyFilter);
 }
 
 OUString SAL_CALL DatabaseDataProvider::getHavingClause() throw (uno::RuntimeException, std::exception)
@@ -570,7 +570,7 @@ sal_Bool SAL_CALL DatabaseDataProvider::getEscapeProcessing() throw (uno::Runtim
 
 void SAL_CALL DatabaseDataProvider::setEscapeProcessing(sal_Bool the_value) throw (uno::RuntimeException, std::exception)
 {
-    set(PROPERTY_ESCAPE_PROCESSING,the_value,m_EscapeProcessing);
+    set(PROPERTY_ESCAPE_PROCESSING,(bool)the_value,m_EscapeProcessing);
 }
 
 ::sal_Int32 SAL_CALL DatabaseDataProvider::getRowLimit() throw (uno::RuntimeException, std::exception)
@@ -653,7 +653,7 @@ namespace
     };
 }
 
-void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories,const uno::Sequence< OUString >& i_aColumnNames)
+void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategories,const uno::Sequence< OUString >& i_aColumnNames)
 {
     // clear the data before fill the new one
     uno::Reference< sdbcx::XColumnsSupplier > xColSup(m_xRowSet,uno::UNO_QUERY_THROW);

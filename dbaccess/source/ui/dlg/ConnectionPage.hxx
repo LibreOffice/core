@@ -60,7 +60,7 @@ namespace dbaui
         static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
         virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs) SAL_OVERRIDE;
 
-        virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
+        virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
 
         inline void enableConnectionURL() { m_aConnectionURL.SetReadOnly(false); }
         inline void disableConnectionURL() { m_aConnectionURL.SetReadOnly(); }

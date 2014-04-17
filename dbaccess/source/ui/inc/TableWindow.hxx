@@ -67,7 +67,7 @@ namespace dbaui
         sal_Int32               m_nMoveCount;           // how often the arrow keys was pressed
         sal_Int32               m_nMoveIncrement;       // how many pixel we should move
         sal_uInt16              m_nSizingFlags;
-        sal_Bool                m_bActive;
+        bool                m_bActive;
 
         void Draw3DBorder( const Rectangle& rRect );
         // OContainerListener
@@ -84,7 +84,7 @@ namespace dbaui
 
         virtual OTableWindowListBox*    CreateListBox();
             // called at FIRST Init
-        sal_Bool FillListBox();
+        bool FillListBox();
             // called at EACH Init
 
         virtual void OnEntryDoubleClicked(SvTreeListEntry* /*pEntry*/) { }
@@ -96,7 +96,7 @@ namespace dbaui
             @return
                 <TRUE/> when the table could handle the keyevent.
         */
-        sal_Bool            HandleKeyInput( const KeyEvent& rEvt );
+        bool            HandleKeyInput( const KeyEvent& rEvt );
 
         /** delete the user data with the equal type as created within createUserData
             @param  _pUserData
@@ -127,7 +127,7 @@ namespace dbaui
         virtual ~OTableWindow();
 
         // late Constructor, see also CreateListbox and FillListbox
-        virtual sal_Bool Init();
+        virtual bool Init();
 
         OJoinTableView*             getTableView();
         const OJoinTableView*       getTableView() const;
@@ -137,11 +137,11 @@ namespace dbaui
         void                        SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE;
 
         OUString                    getTitle() const;
-        void                        SetBoldTitle( sal_Bool bBold );
-        void                        setActive(sal_Bool _bActive = sal_True);
+        void                        SetBoldTitle( bool bBold );
+        void                        setActive(bool _bActive = true);
 
         void                        Remove();
-        sal_Bool                        IsActiveWindow(){ return m_bActive; }
+        bool                        IsActiveWindow(){ return m_bActive; }
 
         OUString             GetTableName() const { return m_pData->GetTableName(); }
         OUString             GetWinName() const { return m_pData->GetWinName(); }
@@ -183,7 +183,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
         // do I have connections to the outside?
-        sal_Bool ExistsAConn() const;
+        bool ExistsAConn() const;
 
         void EnumValidFields(::std::vector< OUString>& arrstrFields);
 

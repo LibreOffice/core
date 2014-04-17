@@ -77,7 +77,7 @@ namespace dbaui
     public:
         virtual void            Reset ( ) SAL_OVERRIDE;
         virtual void            ActivatePage() SAL_OVERRIDE;
-        virtual sal_Bool        LeavePage() SAL_OVERRIDE;
+        virtual bool            LeavePage() SAL_OVERRIDE;
         virtual OUString        GetTitle() const SAL_OVERRIDE ;
 
         OWizColumnSelect(Window* pParent);

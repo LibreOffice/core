@@ -99,9 +99,9 @@ protected:
     OViewContainer*                 m_pViews;
     ::dbtools::WarningsContainer    m_aWarnings;
     oslInterlockedCount             m_nInAppend;
-    sal_Bool                        m_bSupportsViews;       // true when the getTableTypes return "VIEW" as type
-    sal_Bool                        m_bSupportsUsers;
-    sal_Bool                        m_bSupportsGroups;
+    bool                        m_bSupportsViews;       // true when the getTableTypes return "VIEW" as type
+    bool                        m_bSupportsUsers;
+    bool                        m_bSupportsGroups;
 
 protected:
     virtual ~OConnection();

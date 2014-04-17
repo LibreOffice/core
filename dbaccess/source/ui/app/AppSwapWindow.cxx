@@ -43,7 +43,7 @@ OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWind
     ,m_rBorderWin( _rBorderWindow )
 {
 
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
 
     m_aIconControl.SetClickHdl(LINK(this, OApplicationSwapWindow, OnContainerSelectHdl));
     m_aIconControl.setControlActionListener( &m_rBorderWin.getView()->getAppController() );
@@ -69,7 +69,7 @@ void OApplicationSwapWindow::Resize()
     m_aIconControl.ArrangeIcons();
 }
 
-void OApplicationSwapWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+void OApplicationSwapWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
@@ -99,7 +99,7 @@ void OApplicationSwapWindow::DataChanged( const DataChangedEvent& rDCEvt )
         ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
         (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( true, true, true );
         Invalidate();
     }
 }

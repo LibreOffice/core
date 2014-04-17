@@ -55,7 +55,7 @@ void OFieldDescGenWin::Resize()
     m_pFieldControl->Resize();
 }
 
-void OFieldDescGenWin::SetReadOnly( sal_Bool bReadOnly )
+void OFieldDescGenWin::SetReadOnly( bool bReadOnly )
 {
 
     m_pFieldControl->SetReadOnly(bReadOnly);
@@ -116,17 +116,17 @@ OUString OFieldDescGenWin::BoolStringUI(const OUString& rPersistentString) const
     return m_pFieldControl->BoolStringUI(rPersistentString);
 }
 
-sal_Bool OFieldDescGenWin::isCopyAllowed()
+bool OFieldDescGenWin::isCopyAllowed()
 {
     return (m_pFieldControl && m_pFieldControl->isCutAllowed());
 }
 
-sal_Bool OFieldDescGenWin::isCutAllowed()
+bool OFieldDescGenWin::isCutAllowed()
 {
     return (m_pFieldControl && m_pFieldControl->isCutAllowed());
 }
 
-sal_Bool OFieldDescGenWin::isPasteAllowed()
+bool OFieldDescGenWin::isPasteAllowed()
 {
     return (m_pFieldControl && m_pFieldControl->isPasteAllowed());
 }

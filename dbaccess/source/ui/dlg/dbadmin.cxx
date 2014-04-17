@@ -226,7 +226,7 @@ void ODbAdminDialog::enableConfirmSettings( bool _bEnable )
     (void)_bEnable;
 }
 
-sal_Bool ODbAdminDialog::saveDatasource()
+bool ODbAdminDialog::saveDatasource()
 {
     return PrepareLeaveCurrentPage();
 }
@@ -247,7 +247,7 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
         // This way, next time they're asked what has changed since now and here, they really
         // can compare with the status they have _now_ (not the one they had before this apply call).
 
-    m_bApplied = sal_True;
+    m_bApplied = true;
 
     return AR_LEAVE_MODIFIED;
 }

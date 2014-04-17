@@ -624,7 +624,7 @@ void SAL_CALL OContentHelper::rename( const OUString& newName ) throw (SQLExcept
 
 void OContentHelper::notifyDataSourceModified()
 {
-    ::dbaccess::notifyDataSourceModified(m_xParentContainer,sal_True);
+    ::dbaccess::notifyDataSourceModified(m_xParentContainer,true);
 }
 
 }   // namespace dbaccess

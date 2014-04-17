@@ -46,7 +46,7 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
     ,m_pTabWin( pParent )
     ,m_nDropEvent(0)
     ,m_nUiEvent(0)
-    ,m_bReallyScrolled( sal_False )
+    ,m_bReallyScrolled( false )
 {
     m_aScrollTimer.SetTimeout( SCROLLING_TIMESPAN );
     SetDoubleClickHdl( LINK(this, OTableWindowListBox, OnDoubleClick) );
@@ -85,7 +85,7 @@ SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const OUString& rEntryTe
     OJoinDesignView* pView = m_pTabWin->getDesignView();
     OJoinController& rController = pView->getController();
 
-    sal_Bool bCase = sal_False;
+    bool bCase = false;
     try
     {
         Reference<XConnection> xConnection = rController.getConnection();
@@ -113,7 +113,7 @@ SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const OUString& rEntryTe
 
 void OTableWindowListBox::NotifyScrolled()
 {
-    m_bReallyScrolled = sal_True;
+    m_bReallyScrolled = true;
 }
 
 void OTableWindowListBox::NotifyEndScroll()
@@ -124,12 +124,12 @@ void OTableWindowListBox::NotifyEndScroll()
 
         // without INVALIDATE_NOCHILDREN all tables would be redrawn,
         // so: flickering
-    m_bReallyScrolled = sal_False;
+    m_bReallyScrolled = false;
 }
 
 bool OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     switch (rNEvt.GetType())
     {
         case EVENT_KEYINPUT:
@@ -197,7 +197,7 @@ void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPi
     if (!pCont->getDesignView()->getController().isReadOnly() && pCont->getDesignView()->getController().isConnected())
     {
         // asterisk was not allowed to be copied to selection browsebox
-        sal_Bool bFirstNotAllowed = FirstSelected() == First() && m_pTabWin->GetData()->IsShowAll();
+        bool bFirstNotAllowed = FirstSelected() == First() && m_pTabWin->GetData()->IsShowAll();
         EndSelection();
         // create a description of the source
         OJoinExchangeData jxdSource(this);
@@ -317,7 +317,7 @@ sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 void OTableWindowListBox::LoseFocus()
 {
     if(m_pTabWin)
-        m_pTabWin->setActive(sal_False);
+        m_pTabWin->setActive(false);
     SvTreeListBox::LoseFocus();
 }
 

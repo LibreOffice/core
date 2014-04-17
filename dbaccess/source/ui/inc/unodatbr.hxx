@@ -79,10 +79,10 @@ namespace dbaui
             ::com::sun::star::util::URL     aURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
                                             xDispatcher;
-            sal_Bool                        bEnabled;
+            bool                        bEnabled;
 
-            ExternalFeature() : bEnabled( sal_False ) { }
-            ExternalFeature( const ::com::sun::star::util::URL& _rURL ) : aURL( _rURL ), bEnabled( sal_False ) { }
+            ExternalFeature() : bEnabled( false ) { }
+            ExternalFeature( const ::com::sun::star::util::URL& _rURL ) : aURL( _rURL ), bEnabled( false ) { }
         };
 
         typedef ::std::map< sal_uInt16, ExternalFeature, ::std::less< sal_uInt16 > >  ExternalFeaturesMap;
@@ -108,10 +108,10 @@ namespace dbaui
 
         sal_Int16               m_nBorder;              // sal_True when border should be shown
 
-        sal_Bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
-        sal_Bool                m_bShowMenu;            // if sal_True the menu should be visible otherwise not
-        sal_Bool                m_bInSuspend;
-        sal_Bool                m_bEnableBrowser;
+        bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
+        bool                m_bShowMenu;            // if sal_True the menu should be visible otherwise not
+        bool                m_bInSuspend;
+        bool                m_bEnableBrowser;
         ::boost::optional< bool >
                                 m_aDocScriptSupport;    // relevant if and only if we are associated with exactly one DBDoc
 
@@ -205,10 +205,10 @@ namespace dbaui
 
     protected:
         // SbaXDataBrowserController overridables
-        virtual sal_Bool InitializeForm( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties ) SAL_OVERRIDE;
-        virtual sal_Bool InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid) SAL_OVERRIDE;
+        virtual bool     InitializeForm( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties ) SAL_OVERRIDE;
+        virtual bool     InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid) SAL_OVERRIDE;
 
-        virtual sal_Bool preReloadForm() SAL_OVERRIDE;
+        virtual bool     preReloadForm() SAL_OVERRIDE;
         virtual void     postReloadForm() SAL_OVERRIDE;
 
         virtual void addModelListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel) SAL_OVERRIDE;
@@ -226,8 +226,8 @@ namespace dbaui
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
 
         // IControlActionListener overridables
-        virtual sal_Bool    requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const SAL_OVERRIDE;
-        virtual sal_Bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
+        virtual bool        requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const SAL_OVERRIDE;
+        virtual bool        requestDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
         virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors ) SAL_OVERRIDE;
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt ) SAL_OVERRIDE;
 
@@ -247,18 +247,18 @@ namespace dbaui
         virtual void SelectionChanged() SAL_OVERRIDE;
 
         // methods for showing/hiding the explorer part
-        sal_Bool    haveExplorer() const;
+        bool        haveExplorer() const;
         void        hideExplorer();
         void        showExplorer();
         void        toggleExplorer() { if (haveExplorer()) hideExplorer(); else showExplorer(); }
 
         // methods for handling the 'selection' (paintin them bold) of SvLBoxEntries
         // returns <TRUE/> if the entry is selected (which means it's part of the selected path)
-        sal_Bool    isSelected(SvTreeListEntry* _pEntry) const;
+        bool        isSelected(SvTreeListEntry* _pEntry) const;
         // select the entry (and only the entry, not the whole path)
-        void        select(SvTreeListEntry* _pEntry, sal_Bool _bSelect = sal_True);
+        void        select(SvTreeListEntry* _pEntry, bool _bSelect = true);
         // select the path of the entry (which must be an entry without children)
-        void        selectPath(SvTreeListEntry* _pEntry, sal_Bool _bSelect = sal_True);
+        void        selectPath(SvTreeListEntry* _pEntry, bool _bSelect = true);
 
         virtual void loadMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame) SAL_OVERRIDE;
 
@@ -273,7 +273,7 @@ namespace dbaui
             <p>The slot is available if an external dispatcher is responsible for it, _and_ if this dispatcher
             told us the slot is available.</p>
         */
-        sal_Bool    getExternalSlotState( sal_uInt16 _nId ) const;
+        bool getExternalSlotState( sal_uInt16 _nId ) const;
 
         /** add an entry (including the subentries for queries/tables) to the list model
 
@@ -300,7 +300,7 @@ namespace dbaui
             @param _bFlushData
                 <TRUE/> if the currently displayed object (if any) should be flushed
         */
-        void unloadAndCleanup( sal_Bool _bDisposeConnection = sal_True );
+        void unloadAndCleanup( bool _bDisposeConnection = true );
 
         // disposes the connection associated with the given entry (which must represent a data source)
         void        disposeConnection( SvTreeListEntry* _pDSEntry );
@@ -310,7 +310,7 @@ namespace dbaui
 
         /** close the connection (and collapse the list entries) of the given list entries
         */
-        void        closeConnection(SvTreeListEntry* _pEntry,sal_Bool _bDisposeConnection = sal_True);
+        void        closeConnection(SvTreeListEntry* _pEntry, bool _bDisposeConnection = true);
 
         void        populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvTreeListEntry* _pParent, EntryType _eEntryType);
         void        initializeTreeModel();
@@ -320,10 +320,10 @@ namespace dbaui
         */
         SvTreeListEntry* getEntryFromContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxNameAccess);
         // return true when there is connection available
-        sal_Bool ensureConnection(SvTreeListEntry* _pDSEntry, void * pDSData, SharedConnection& _rConnection );
-        sal_Bool ensureConnection(SvTreeListEntry* _pAnyEntry, SharedConnection& _rConnection );
+        bool ensureConnection(SvTreeListEntry* _pDSEntry, void * pDSData, SharedConnection& _rConnection );
+        bool ensureConnection(SvTreeListEntry* _pAnyEntry, SharedConnection& _rConnection );
 
-        sal_Bool getExistentConnectionFor( SvTreeListEntry* _pDSEntry, SharedConnection& _rConnection );
+        bool getExistentConnectionFor( SvTreeListEntry* _pDSEntry, SharedConnection& _rConnection );
         /** returns an image provider which works with the connection belonging to the given entry
         */
         ::std::auto_ptr< ImageProvider >
@@ -332,16 +332,16 @@ namespace dbaui
         void    implAdministrate( SvTreeListEntry* _pApplyTo );
 
         TransferableHelper*
-                implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );
+                implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType, bool _bAllowConnection = true );
 
         EntryType getEntryType( const SvTreeListEntry* _pEntry ) const;
         EntryType   getChildType( SvTreeListEntry* _pEntry ) const;
-        sal_Bool    isObject( EntryType _eType ) const { return ( etTableOrView== _eType ) || ( etQuery == _eType ); }
-        sal_Bool    isContainer( EntryType _eType ) const { return (etTableContainer == _eType) || (etQueryContainer == _eType); }
+        bool    isObject( EntryType _eType ) const { return ( etTableOrView== _eType ) || ( etQuery == _eType ); }
+        bool    isContainer( EntryType _eType ) const { return (etTableContainer == _eType) || (etQueryContainer == _eType); }
         bool isContainer( const SvTreeListEntry* _pEntry ) const { return isContainer( getEntryType( _pEntry ) ); }
 
         // ensure that the xObject for the given entry is set on the user data
-        sal_Bool    ensureEntryObject( SvTreeListEntry* _pEntry );
+        bool          ensureEntryObject( SvTreeListEntry* _pEntry );
 
         // get the display text of the entry given
         OUString      GetEntryText( SvTreeListEntry* _pEntry ) const;
@@ -358,17 +358,17 @@ namespace dbaui
 
         void implRemoveStatusListeners();
 
-        sal_Bool implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor,sal_Bool _bSelectDirect = sal_False);
+        bool implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor, bool _bSelectDirect = false);
         bool implSelect( SvTreeListEntry* _pEntry );
 
         /// selects the entry given and loads the grid control with the object's data
-        sal_Bool implSelect(
+        bool implSelect(
             const OUString& _rDataSourceName,
             const OUString& _rCommand,
             const sal_Int32 _nCommandType,
-            const sal_Bool _bEscapeProcessing,
+            const bool _bEscapeProcessing,
             const SharedConnection& _rxConnection,
-            sal_Bool _bSelectDirect = sal_False
+            bool _bSelectDirect = false
         );
 
         SvTreeListEntry* implGetConnectionEntry(SvTreeListEntry* _pEntry) const;
@@ -381,8 +381,8 @@ namespace dbaui
         );
 
         /// loads the grid control with the data object specified (which may be a table, a query or a command)
-        sal_Bool implLoadAnything(const OUString& _rDataSourceName, const OUString& _rCommand,
-            const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing, const SharedConnection& _rxConnection = SharedConnection() );
+        bool implLoadAnything(const OUString& _rDataSourceName, const OUString& _rCommand,
+            const sal_Int32 _nCommandType, const bool _bEscapeProcessing, const SharedConnection& _rxConnection = SharedConnection() );
 
         /** retrieves the tree entry for the object described by <arg>_rDescriptor</arg>
             @param _rDescriptor
@@ -396,7 +396,7 @@ namespace dbaui
         */
         SvTreeListEntry* getObjectEntry(const ::svx::ODataAccessDescriptor& _rDescriptor,
             SvTreeListEntry** _ppDataSourceEntry = NULL, SvTreeListEntry** _ppContainerEntry = NULL,
-            sal_Bool _bExpandAncestors = sal_True
+            bool _bExpandAncestors = true
         );
         /** retrieves the tree entry for the object described by data source name, command and command type
             @param _rDataSource
@@ -417,7 +417,7 @@ namespace dbaui
         SvTreeListEntry* getObjectEntry(
             const OUString& _rDataSource, const OUString& _rCommand, sal_Int32 _nCommandType,
             SvTreeListEntry** _ppDataSourceEntry = NULL, SvTreeListEntry** _ppContainerEntry = NULL,
-            sal_Bool _bExpandAncestors = sal_True,
+            bool _bExpandAncestors = true,
             const SharedConnection& _rxConnection = SharedConnection()
         );
 
@@ -425,7 +425,7 @@ namespace dbaui
         void checkDocumentDataSource();
 
         void extractDescriptorProps(const ::svx::ODataAccessDescriptor& _rDescriptor,
-            OUString& _rDataSource, OUString& _rCommand, sal_Int32& _rCommandType, sal_Bool& _rEscapeProcessing);
+            OUString& _rDataSource, OUString& _rCommand, sal_Int32& _rCommandType, bool& _rEscapeProcessing);
 
         void transferChangedControlProperty(const OUString& _rProperty, const ::com::sun::star::uno::Any& _rNewValue);
 
@@ -445,9 +445,9 @@ namespace dbaui
         /** get the signature (command/escape processing) of the query the form is based on
             <p>If the for is not based on a query or not even loaded, nothing happens and <FALSE/> is returned.</p>
         */
-        sal_Bool implGetQuerySignature( OUString& _rCommand, sal_Bool& _bEscapeProcessing );
+        bool implGetQuerySignature( OUString& _rCommand, bool& _bEscapeProcessing );
 
-        sal_Bool isEntryCopyAllowed(SvTreeListEntry* _pEntry) const;
+        bool isEntryCopyAllowed(SvTreeListEntry* _pEntry) const;
 
         void copyEntry(SvTreeListEntry* _pEntry);
 
@@ -462,7 +462,7 @@ namespace dbaui
             @return
                     <TRUE/> if it is the currently displayed otherwise <FALSE/>
         */
-        sal_Bool isCurrentlyDisplayedChanged(const OUString& _sName,SvTreeListEntry* _pContainer);
+        bool isCurrentlyDisplayedChanged(const OUString& _sName, SvTreeListEntry* _pContainer);
 
         /** called whenever the content of the browser is used for preview, as the very last action
             of the load process

@@ -44,7 +44,7 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
                 ) :
     OXMLTable( rImport, nPrfx, _sLocalName,_xAttrList,_xParentContainer, "com.sun.star.sdb.CommandDefinition" )
-        ,m_bEscapeProcessing(sal_True)
+        ,m_bEscapeProcessing(true)
 {
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");

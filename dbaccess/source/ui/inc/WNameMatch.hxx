@@ -31,7 +31,7 @@ namespace dbaui
     // columns are at root only no children
     class OColumnTreeBox : public OMarkableTreeListBox
     {
-        sal_Bool m_bReadOnly;
+        bool m_bReadOnly;
     protected:
         virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
 
@@ -39,8 +39,8 @@ namespace dbaui
         OColumnTreeBox( Window* pParent, const ResId& rResId );
 
         void FillListBox( const ODatabaseExport::TColumnVector& _rList);
-        void SetReadOnly(sal_Bool _bRo=sal_True) { m_bReadOnly = _bRo; }
-        virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
+        void SetReadOnly(bool _bRo=true) { m_bReadOnly = _bRo; }
+        virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true ) SAL_OVERRIDE;
 
     private:
         using OMarkableTreeListBox::Select;
@@ -72,7 +72,7 @@ namespace dbaui
     public:
         virtual void            Reset ( ) SAL_OVERRIDE;
         virtual void            ActivatePage() SAL_OVERRIDE;
-        virtual sal_Bool        LeavePage() SAL_OVERRIDE;
+        virtual bool            LeavePage() SAL_OVERRIDE;
         virtual OUString        GetTitle() const SAL_OVERRIDE ;
 
         OWizNameMatching(Window* pParent);

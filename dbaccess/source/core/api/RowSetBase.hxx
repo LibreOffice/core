@@ -102,11 +102,11 @@ namespace dbaccess
         sal_Int32                               m_nDeletedPosition; // is set only when a row was deleted
         sal_Int32                               m_nResultSetType;   // fetch property
         sal_Int32                               m_nResultSetConcurrency;
-        sal_Bool                                m_bClone;           // I'm clone or not
-        sal_Bool                                m_bIgnoreResult ;
-        sal_Bool                                m_bBeforeFirst  : 1;
-        sal_Bool                                m_bAfterLast    : 1;
-        sal_Bool                                m_bIsInsertRow  : 1;
+        bool                                m_bClone;           // I'm clone or not
+        bool                                m_bIgnoreResult ;
+        bool                                m_bBeforeFirst  : 1;
+        bool                                m_bAfterLast    : 1;
+        bool                                m_bIsInsertRow  : 1;
 
     protected:
         ORowSetBase(
@@ -124,7 +124,7 @@ namespace dbaccess
         // fire if rowcount changed
         virtual void fireRowcount();
         // notify row changed
-        virtual sal_Bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard);
+        virtual bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard);
         // notify cursor moved
         virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard);
         // notify all that rowset changed
@@ -133,17 +133,17 @@ namespace dbaccess
         // cancel the insertion, if necessary (means if we're on the insert row)
         virtual void        doCancelModification( ) = 0;
         // return <TRUE/> if and only if we're using the insert row (means: we're updating _or_ inserting)
-        virtual sal_Bool    isModification( ) = 0;
+        virtual bool    isModification( ) = 0;
         // return <TRUE/> if and only if the current row is modified
         // TODO: isn't this the same as isModification?
-        virtual sal_Bool    isModified( ) = 0;
+        virtual bool    isModified( ) = 0;
         // return <TRUE/> if and only if the current row is the insert row
-        virtual sal_Bool    isNew( ) = 0;
+        virtual bool    isNew( ) = 0;
         // return <TRUE/> if the property change notification should be fired
         // upon property change.
-        virtual sal_Bool    isPropertyChangeNotificationEnabled() const;
+        virtual bool    isPropertyChangeNotificationEnabled() const;
         // notify the change of a boolean property
-        void fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _bOld );
+        void fireProperty( sal_Int32 _nProperty, bool _bNew, bool _bOld );
 
     // OPropertyStateContainer
         virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const SAL_OVERRIDE;
@@ -181,7 +181,7 @@ namespace dbaccess
         // the cache has to be checked before calling this method
         const connectivity::ORowSetValue& impl_getValue(sal_Int32 columnIndex);
         // sets the current and the bookmark
-        void setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const ORowSetRow& _rOldValues, ::osl::ResettableMutexGuard& _rGuard);
+        void setCurrentRow( bool _bMoved, bool _bDoNotify, const ORowSetRow& _rOldValues, ::osl::ResettableMutexGuard& _rGuard);
         void checkPositioningAllowed() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // checks  if the cache is null
         void checkCache();
@@ -190,7 +190,7 @@ namespace dbaccess
         // m_aOldRow to NULL
         void movementFailed();
 
-        ORowSetRow getOldRow(sal_Bool _bWasNew);
+        ORowSetRow getOldRow(bool _bWasNew);
         /** move the cache the position defined by the member functor
             @param  _aCheckFunctor
                 Return <TRUE/> when we already stand on the row we want to.
@@ -199,19 +199,19 @@ namespace dbaccess
             @return
                 <TRUE/> if movement was successful.
         */
-        sal_Bool SAL_CALL move( ::std::mem_fun_t<sal_Bool,ORowSetBase>& _aCheckFunctor,
-                                ::std::mem_fun_t<sal_Bool,ORowSetCache>& _aMovementFunctor);
+        bool SAL_CALL move( ::std::mem_fun_t<bool,ORowSetBase>& _aCheckFunctor,
+                            ::std::mem_fun_t<bool,ORowSetCache>& _aMovementFunctor);
 
         /** same meaning as isFirst. Only need by mem_fun
             @return
                 <TRUE/> if so.
         */
-        sal_Bool isOnFirst();
+        bool isOnFirst();
         /** same meaning as isLast. Only need by mem_fun
             @return
                 <TRUE/> if so.
         */
-        sal_Bool isOnLast();
+        bool isOnLast();
 
         /** returns the current row count
 
@@ -225,9 +225,9 @@ namespace dbaccess
         sal_Int32   impl_getRowCount() const;
 
         // the checkCache has to be called before calling this methods
-        sal_Bool    impl_wasNull();
+        bool    impl_wasNull();
         sal_Int32   impl_getRow();
-        sal_Bool    impl_rowDeleted();
+        bool    impl_rowDeleted();
 
     public:
         virtual ~ORowSetBase();
@@ -331,11 +331,11 @@ namespace dbaccess
 
         // cancel the insertion, if necessary (means if we're on the insert row)
         inline  void        doCancelModification( const GrantNotifierAccess& ) { doCancelModification(); }
-        inline  sal_Bool    isModification( const GrantNotifierAccess& ) { return isModification(); }
-        inline  sal_Bool    isModified( const GrantNotifierAccess& ) { return isModified(); }
-        inline  sal_Bool    isNew( const GrantNotifierAccess& ) { return isNew(); }
-        inline  sal_Bool    isInsertRow() { return m_bIsInsertRow; } // isNew() || isModified(); }
-        inline  void        fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _bOld, const GrantNotifierAccess& )
+        inline  bool    isModification( const GrantNotifierAccess& ) { return isModification(); }
+        inline  bool    isModified( const GrantNotifierAccess& ) { return isModified(); }
+        inline  bool    isNew( const GrantNotifierAccess& ) { return isNew(); }
+        inline  bool    isInsertRow() { return m_bIsInsertRow; } // isNew() || isModified(); }
+        inline  void        fireProperty( sal_Int32 _nProperty, bool _bNew, bool _bOld, const GrantNotifierAccess& )
         {
             fireProperty( _nProperty, _bNew, _bOld );
         }
@@ -360,11 +360,11 @@ namespace dbaccess
         ORowSetBase*    m_pRowSet;
             // not aquired! This is not necessary because this class here is to be used on the stack within
             // a method of ORowSetBase (or derivees)
-        sal_Bool        m_bWasNew;
-        sal_Bool        m_bWasModified;
+        bool        m_bWasNew;
+        bool        m_bWasModified;
 
 #ifdef DBG_UTIL
-        sal_Bool        m_bNotifyCalled;
+        bool        m_bNotifyCalled;
 #endif
 
     public:

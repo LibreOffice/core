@@ -91,13 +91,13 @@ namespace dbaui
         void        SetExtension(const OUString& _rVal);
 
     public:
-        void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bValid);
+        void        implInitControls(const SfxItemSet& _rSet, bool _bValid);
         void        fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         void        fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
         void        SetClickHandler(const Link& _rHandler) { m_aGetExtensionHandler = _rHandler; }
         OUString    GetExtension();
-        sal_Bool FillItemSet( SfxItemSet& rSet, const sal_Bool bChangedSomething );
-        sal_Bool prepareLeave();
+        bool        FillItemSet( SfxItemSet& rSet, const bool bChangedSomething );
+        bool        prepareLeave();
     };
 
 }   // namespace dbaui

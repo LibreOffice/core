@@ -193,7 +193,7 @@ ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext,sal_uInt16
 : SvXMLExport( util::MeasureUnit::MM_10TH, _rxContext, getImplementationName_Static(), XML_DATABASE,
         EXPORT_OASIS | nExportFlag)
 ,m_aTypeCollection(_rxContext)
-,m_bAllreadyFilled(sal_False)
+,m_bAllreadyFilled(false)
 {
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_10TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
@@ -281,7 +281,7 @@ void ODBExport::exportDataSource()
     {
         Reference<XPropertySet> xProp( getDataSource(), UNO_SET_THROW );
 
-        sal_Bool bAutoIncrementEnabled = sal_True;
+        bool bAutoIncrementEnabled = true;
         TStringPair aAutoIncrement;
 
         Reference< XPropertySet > xDataSourceSettings;
@@ -696,7 +696,7 @@ void ODBExport::exportDataSourceSettings()
     ::std::vector< TypedPropertyValue >::iterator aEnd = m_aDataSourceSettings.end();
     for ( ; aIter != aEnd; ++aIter )
     {
-        sal_Bool bIsSequence = TypeClass_SEQUENCE == aIter->Type.getTypeClass();
+        bool bIsSequence = TypeClass_SEQUENCE == aIter->Type.getTypeClass();
 
         Type aSimpleType;
         if ( bIsSequence )
@@ -817,13 +817,13 @@ void ODBExport::exportLogin()
     Reference<XPropertySet> xProp(getDataSource());
     OUString sValue;
     xProp->getPropertyValue(PROPERTY_USER) >>= sValue;
-    sal_Bool bAddLogin = !sValue.isEmpty();
+    bool bAddLogin = !sValue.isEmpty();
     if ( bAddLogin )
         AddAttribute(XML_NAMESPACE_DB, XML_USER_NAME,sValue);
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     if ( xProp->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED) >>= bValue )
     {
-        bAddLogin = sal_True;
+        bAddLogin = true;
         AddAttribute(XML_NAMESPACE_DB, XML_IS_PASSWORD_REQUIRED,bValue ? XML_TRUE : XML_FALSE);
     }
     if ( bAddLogin )
@@ -833,7 +833,7 @@ void ODBExport::exportLogin()
 void ODBExport::exportCollection(const Reference< XNameAccess >& _xCollection
                                 ,enum ::xmloff::token::XMLTokenEnum _eComponents
                                 ,enum ::xmloff::token::XMLTokenEnum _eSubComponents
-                                ,sal_Bool _bExportContext
+                                ,bool _bExportContext
                                 ,const ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >& _aMemFunc
                                 )
 {
@@ -865,7 +865,7 @@ void ODBExport::exportComponent(XPropertySet* _xProp)
 {
     OUString sValue;
     _xProp->getPropertyValue(PROPERTY_PERSISTENT_NAME) >>= sValue;
-    sal_Bool bIsForm = sal_True;
+    bool bIsForm = true;
     _xProp->getPropertyValue("IsForm") >>= bIsForm;
     if ( bIsForm )
         sValue = "forms/" + sValue;
@@ -874,7 +874,7 @@ void ODBExport::exportComponent(XPropertySet* _xProp)
 
     AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sValue);
     AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
-    sal_Bool bAsTemplate = sal_False;
+    bool bAsTemplate = false;
     _xProp->getPropertyValue(PROPERTY_AS_TEMPLATE) >>= bAsTemplate;
     AddAttribute(XML_NAMESPACE_DB, XML_AS_TEMPLATE,bAsTemplate ? XML_TRUE : XML_FALSE);
     SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_COMPONENT, true, true);
@@ -901,12 +901,12 @@ void ODBExport::exportQuery(XPropertySet* _xProp)
     exportColumns(xCol);
     exportFilter(_xProp,PROPERTY_FILTER,XML_FILTER_STATEMENT);
     exportFilter(_xProp,PROPERTY_ORDER,XML_ORDER_STATEMENT);
-    exportTableName(_xProp,sal_True);
+    exportTableName(_xProp,true);
 }
 
 void ODBExport::exportTable(XPropertySet* _xProp)
 {
-    exportTableName(_xProp,sal_False);
+    exportTableName(_xProp,false);
 
     if ( _xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION) )
         AddAttribute(XML_NAMESPACE_DB, XML_DESCRIPTION,getString(_xProp->getPropertyValue(PROPERTY_DESCRIPTION)));
@@ -946,7 +946,7 @@ void ODBExport::exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,cons
     }
 }
 
-void ODBExport::exportTableName(XPropertySet* _xProp,sal_Bool _bUpdate)
+void ODBExport::exportTableName(XPropertySet* _xProp,bool _bUpdate)
 {
     OUString sValue;
     _xProp->getPropertyValue(_bUpdate ? OUString(PROPERTY_UPDATE_TABLENAME) : OUString(PROPERTY_NAME)) >>= sValue;
@@ -1021,7 +1021,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
                 Reference<XAttributeList> xAtt = pAtt;
                 exportStyleName(xProp.get(),*pAtt);
 
-                sal_Bool bHidden = getBOOL(xProp->getPropertyValue(PROPERTY_HIDDEN));
+                bool bHidden = getBOOL(xProp->getPropertyValue(PROPERTY_HIDDEN));
 
                 OUString sValue;
                 xProp->getPropertyValue(PROPERTY_HELPTEXT) >>= sValue;
@@ -1078,7 +1078,7 @@ void ODBExport::exportForms()
             if ( xCollection.is() && xCollection->hasElements() )
             {
                 ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > aMemFunc(&ODBExport::exportComponent);
-                exportCollection(xCollection,XML_FORMS,XML_COMPONENT_COLLECTION,sal_True,aMemFunc);
+                exportCollection(xCollection,XML_FORMS,XML_COMPONENT_COLLECTION,true,aMemFunc);
             }
         }
     }
@@ -1099,13 +1099,13 @@ void ODBExport::exportReports()
             if ( xCollection.is() && xCollection->hasElements() )
             {
                 ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > aMemFunc(&ODBExport::exportComponent);
-                exportCollection(xCollection,XML_REPORTS,XML_COMPONENT_COLLECTION,sal_True,aMemFunc);
+                exportCollection(xCollection,XML_REPORTS,XML_COMPONENT_COLLECTION,true,aMemFunc);
             }
         }
     }
 }
 
-void ODBExport::exportQueries(sal_Bool _bExportContext)
+void ODBExport::exportQueries(bool _bExportContext)
 {
     Any aValue;
     OUString sService;
@@ -1131,7 +1131,7 @@ void ODBExport::exportQueries(sal_Bool _bExportContext)
     }
 }
 
-void ODBExport::exportTables(sal_Bool _bExportContext)
+void ODBExport::exportTables(bool _bExportContext)
 {
     Reference<XTablesSupplier> xSup(getDataSource(),UNO_QUERY);
     if ( xSup.is() )
@@ -1193,7 +1193,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
             else
             {
                 ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > aMemFunc(&ODBExport::exportAutoStyle);
-                exportCollection(xCollection,XML_TOKEN_INVALID,XML_TOKEN_INVALID,sal_False,aMemFunc);
+                exportCollection(xCollection,XML_TOKEN_INVALID,XML_TOKEN_INVALID,false,aMemFunc);
             }
         }
         catch(const Exception&)
@@ -1252,8 +1252,8 @@ void ODBExport::_ExportContent()
     exportDataSource();
     exportForms();
     exportReports();
-    exportQueries(sal_True);
-    exportTables(sal_True);
+    exportQueries(true);
+    exportTables(true);
 }
 
 void ODBExport::_ExportMasterStyles()
@@ -1450,9 +1450,9 @@ void ODBExport::collectComponentStyles()
     if ( m_bAllreadyFilled )
         return;
 
-    m_bAllreadyFilled = sal_True;
-    exportQueries(sal_False);
-    exportTables(sal_False);
+    m_bAllreadyFilled = true;
+    exportQueries(false);
+    exportTables(false);
 }
 
 }// dbaxml

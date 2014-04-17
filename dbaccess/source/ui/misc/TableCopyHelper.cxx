@@ -78,7 +78,7 @@ OTableCopyHelper::OTableCopyHelper(OGenericUnoController* _pControler)
 
 void OTableCopyHelper::insertTable( const OUString& i_rSourceDataSource, const Reference<XConnection>& i_rSourceConnection,
         const OUString& i_rCommand, const sal_Int32 i_nCommandType,
-        const Reference< XResultSet >& i_rSourceRows, const Sequence< Any >& i_rSelection, const sal_Bool i_bBookmarkSelection,
+        const Reference< XResultSet >& i_rSourceRows, const Sequence< Any >& i_rSelection, const bool i_bBookmarkSelection,
         const OUString& i_rDestDataSource, const Reference<XConnection>& i_rDestConnection)
 {
     if ( CommandType::QUERY != i_nCommandType && CommandType::TABLE != i_nCommandType )
@@ -161,7 +161,7 @@ void OTableCopyHelper::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteDa
         OSL_ENSURE( _rPasteData.has( daBookmarkSelection ), "OTableCopyHelper::pasteTable: you should specify BookmarkSelection, too, to be on the safe side!" );
     }
 
-    sal_Bool bBookmarkSelection( sal_True );
+    bool bBookmarkSelection( true );
     if ( _rPasteData.has( daBookmarkSelection ) )
     {
         OSL_VERIFY( _rPasteData[ daBookmarkSelection ] >>= bBookmarkSelection );
@@ -203,7 +203,7 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
             aTrans.nType            = E_TABLE;
             aTrans.bHtml            = SOT_FORMATSTR_ID_HTML == _nFormatId;
             aTrans.sDefaultTableName = GetTableNameForAppend();
-            if ( !copyTagTable(aTrans,sal_False,_xConnection) )
+            if ( !copyTagTable(aTrans,false,_xConnection) )
                 m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, OUString("S1000"), 0, Any()));
         }
         catch(const SQLException&)
@@ -231,7 +231,7 @@ void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
         pasteTable( SOT_FORMAT_RTF,_rTransData,i_rDestDataSource,_xConnection);
 }
 
-sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, sal_Bool _bCheck,const SharedConnection& _xConnection)
+bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, bool _bCheck, const SharedConnection& _xConnection)
 {
     Reference<XEventListener> xEvt;
     ODatabaseImportExport* pImport = NULL;
@@ -252,9 +252,9 @@ sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc
     return pImport->Read();
 }
 
-sal_Bool OTableCopyHelper::isTableFormat(const TransferableDataHelper& _rClipboard)  const
+bool OTableCopyHelper::isTableFormat(const TransferableDataHelper& _rClipboard)  const
 {
-    sal_Bool bTableFormat   =   _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
+    bool bTableFormat   =   _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
                 ||  _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
                 ||  _rClipboard.HasFormat(SOT_FORMAT_RTF)
                 ||  _rClipboard.HasFormat(SOT_FORMATSTR_ID_HTML);
@@ -262,12 +262,12 @@ sal_Bool OTableCopyHelper::isTableFormat(const TransferableDataHelper& _rClipboa
     return bTableFormat;
 }
 
-sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
-                                        ,DropDescriptor& _rAsyncDrop
-                                        ,const SharedConnection& _xConnection)
+bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
+                                   ,DropDescriptor& _rAsyncDrop
+                                   ,const SharedConnection& _xConnection)
 {
-    sal_Bool bRet = sal_False;
-    sal_Bool bHtml = _aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML);
+    bool bRet = false;
+    bool bHtml = _aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML);
     if ( bHtml || _aDroppedData.HasFormat(SOT_FORMAT_RTF) )
     {
         if ( bHtml )
@@ -276,7 +276,7 @@ sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedD
             const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SOT_FORMAT_RTF,_rAsyncDrop.aHtmlRtfStorage);
 
         _rAsyncDrop.bHtml           = bHtml;
-        _rAsyncDrop.bError          = !copyTagTable(_rAsyncDrop,sal_True,_xConnection);
+        _rAsyncDrop.bError          = !copyTagTable(_rAsyncDrop,true,_xConnection);
 
         bRet = ( !_rAsyncDrop.bError && _rAsyncDrop.aHtmlRtfStorage.Is() );
         if ( bRet )
@@ -303,7 +303,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
 {
     if ( _rDesc.aHtmlRtfStorage.Is() )
     {
-        copyTagTable(_rDesc,sal_False,_xConnection);
+        copyTagTable(_rDesc,false,_xConnection);
         _rDesc.aHtmlRtfStorage = NULL;
         // we now have to delete the temp file created in executeDrop
         INetURLObject aURL;

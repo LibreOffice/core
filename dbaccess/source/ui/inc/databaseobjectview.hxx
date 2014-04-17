@@ -207,7 +207,7 @@ namespace dbaui
     class ResultSetBrowser : public DatabaseObjectView
     {
     private:
-        sal_Bool    m_bTable;
+        bool    m_bTable;
 
     protected:
         virtual void fillDispatchArgs(
@@ -221,7 +221,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame,
-            sal_Bool _bTable
+            bool _bTable
         );
 
     };

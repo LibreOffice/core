@@ -31,7 +31,7 @@
 namespace dbaccess
 {
 
-    void notifyDataSourceModified(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject,sal_Bool _bModified);
+    void notifyDataSourceModified(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject,bool _bModified);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
         getDataSource( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDependentObject );

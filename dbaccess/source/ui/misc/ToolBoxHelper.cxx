@@ -91,7 +91,7 @@ namespace dbaui
     }
     void OToolBoxHelper::setToolBox(ToolBox* _pTB)
     {
-        sal_Bool bFirstTime = (m_pToolBox == NULL);
+        bool bFirstTime = (m_pToolBox == NULL);
         m_pToolBox = _pTB;
         if ( m_pToolBox )
         {

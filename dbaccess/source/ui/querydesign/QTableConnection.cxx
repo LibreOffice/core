@@ -26,13 +26,13 @@ using namespace dbaui;
 
 OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const TTableConnectionData::value_type& pTabConnData)
     : OTableConnection(pContainer, pTabConnData)
-    , m_bVisited(sal_False)
+    , m_bVisited(false)
 {
 }
 
 OQueryTableConnection::OQueryTableConnection(const OQueryTableConnection& rConn)
     : OTableConnection( rConn )
-    , m_bVisited(sal_False)
+    , m_bVisited(false)
 {
     // no own members, so base class functionality is sufficient
 }
@@ -51,7 +51,7 @@ OQueryTableConnection& OQueryTableConnection::operator=(const OQueryTableConnect
     return *this;
 }
 
-sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare)
+bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare)
 {
     OSL_ENSURE(GetData() && rCompare.GetData(), "OQueryTableConnection::operator== : one of the two participants has no data!");
 

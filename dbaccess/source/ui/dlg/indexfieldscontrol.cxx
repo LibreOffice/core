@@ -89,7 +89,7 @@ namespace dbaui
     }
 
     // IndexFieldsControl
-    IndexFieldsControl::IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex,sal_Bool _bAddIndexAppendix)
+    IndexFieldsControl::IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex,bool _bAddIndexAppendix)
         :EditBrowseBox(_pParent, _rId, EBBF_SMART_TAB_TRAVEL | EBBF_ACTIVATE_ON_BUTTONDOWN, BROWSER_STANDARD_FLAGS)
         ,m_aSeekRow(m_aFields.end())
         ,m_pSortingCell(NULL)
@@ -141,7 +141,7 @@ namespace dbaui
             _rDev.SetClipRegion(Region(_rRect));
 
         // allow for a disabled control ...
-        sal_Bool bEnabled = IsEnabled();
+        bool bEnabled = IsEnabled();
         Color aOriginalColor = _rDev.GetTextColor();
         if (!bEnabled)
             _rDev.SetTextColor(GetSettings().GetStyleSettings().GetDisableColor());
@@ -262,7 +262,7 @@ namespace dbaui
             return NULL;
 
         IndexFields::const_iterator aRow;
-        sal_Bool bNewField = !implGetFieldDesc(_nRow, aRow);
+        bool bNewField = !implGetFieldDesc(_nRow, aRow);
 
         DbaMouseDownListBoxController* pReturn = NULL;
         switch (_nColumnId)
@@ -286,13 +286,13 @@ namespace dbaui
         return pReturn;
     }
 
-    sal_Bool IndexFieldsControl::implGetFieldDesc(long _nRow, IndexFields::const_iterator& _rPos)
+    bool IndexFieldsControl::implGetFieldDesc(long _nRow, IndexFields::const_iterator& _rPos)
     {
         _rPos = m_aFields.end();
         if ((_nRow < 0) || (_nRow >= (sal_Int32)m_aFields.size()))
-            return sal_False;
+            return false;
         _rPos = m_aFields.begin() + _nRow;
-        return sal_True;
+        return true;
     }
 
     bool IndexFieldsControl::IsModified() const
@@ -310,7 +310,7 @@ namespace dbaui
             case COLUMN_ID_FIELDNAME:
             {
                 OUString sFieldSelected = m_pFieldNameCell->GetSelectEntry();
-                sal_Bool bEmptySelected = sFieldSelected.isEmpty();
+                bool bEmptySelected = sFieldSelected.isEmpty();
                 if (isNewField())
                 {
                     if (!bEmptySelected)
@@ -372,7 +372,7 @@ namespace dbaui
     void IndexFieldsControl::InitController(CellControllerRef& /*_rController*/, long _nRow, sal_uInt16 _nColumnId)
     {
         IndexFields::const_iterator aFieldDescription;
-        sal_Bool bNewField = !implGetFieldDesc(_nRow, aFieldDescription);
+        bool bNewField = !implGetFieldDesc(_nRow, aFieldDescription);
 
         switch (_nColumnId)
         {

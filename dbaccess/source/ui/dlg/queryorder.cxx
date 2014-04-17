@@ -154,7 +154,7 @@ void DlgOrderCrit::impl_initializeOrderList_nothrow()
             Reference< XPropertySet > xColumn( xOrderColumns->getByIndex( i ), UNO_QUERY_THROW );
 
             OUString sColumnName;
-            sal_Bool        bIsAscending( sal_True );
+            bool        bIsAscending( true );
 
             xColumn->getPropertyValue( sNameProperty ) >>= sColumnName;
             xColumn->getPropertyValue( sAscendingProperty ) >>= bIsAscending;

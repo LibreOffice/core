@@ -36,7 +36,7 @@ typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XSingleServiceFactory
 class OCommandContainer : public ODefinitionContainer
                          ,public OCommandContainer_BASE
 {
-    sal_Bool m_bTables;
+    bool m_bTables;
 
 public:
     /** constructs the container.<BR>
@@ -45,7 +45,7 @@ public:
          const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
         ,const TContentPtr& _pImpl
-        ,sal_Bool _bTables
+        ,bool _bTables
         );
 
     DECLARE_XINTERFACE( )

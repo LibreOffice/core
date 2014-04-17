@@ -57,7 +57,7 @@ namespace dbaui
     protected:
         ::com::sun::star::lang::Locale                                                  m_aLocale;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>                    m_aSelection;
-        sal_Bool                                                                        m_bBookmarkSelection;
+        bool                                                                        m_bBookmarkSelection;
         SvStream*                                                                       m_pStream;
         ::com::sun::star::awt::FontDescriptor                                           m_aFont;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xObject;      // table/query
@@ -82,8 +82,8 @@ namespace dbaui
         ODatabaseExport*    m_pReader;
         sal_Int32*          m_pRowMarker; // if set, then copy only these rows
         rtl_TextEncoding    m_eDestEnc;
-        sal_Bool            m_bInInitialize;
-        sal_Bool            m_bCheckOnly;
+        bool            m_bInInitialize;
+        bool            m_bCheckOnly;
 
         // export data
         ODatabaseImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
@@ -105,14 +105,14 @@ namespace dbaui
         //for set the tablename
         void setSTableName(const OUString &_sTableName){ m_sDefaultTableName = _sTableName; }
 
-        virtual sal_Bool Write(); // Export
-        virtual sal_Bool Read(); // Import
+        virtual bool Write(); // Export
+        virtual bool Read(); // Import
 
         void initialize(const ::svx::ODataAccessDescriptor& _aDataDescriptor);
         void dispose();
 
-        void enableCheckOnly() { m_bCheckOnly = sal_True; }
-        sal_Bool isCheckEnabled() const { return m_bCheckOnly; }
+        void enableCheckOnly() { m_bCheckOnly = true; }
+        bool isCheckEnabled() const { return m_bCheckOnly; }
 
     private:
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -139,8 +139,8 @@ namespace dbaui
                         : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
         {}
 
-        virtual sal_Bool Write() SAL_OVERRIDE;
-        virtual sal_Bool Read() SAL_OVERRIDE;
+        virtual bool Write() SAL_OVERRIDE;
+        virtual bool Read() SAL_OVERRIDE;
     };
     // HTML Import and Export
     #define SBA_HTML_FONTSIZES 7
@@ -156,7 +156,7 @@ namespace dbaui
         char                    sIndent[nIndentMax+1];
         sal_Int16               m_nIndent;
     #if OSL_DEBUG_LEVEL > 0
-        sal_Bool                    m_bCheckFont;
+        bool                    m_bCheckFont;
     #endif
 
         void WriteHeader();
@@ -182,8 +182,8 @@ namespace dbaui
             , m_nIndent(0)
         {}
 
-        virtual sal_Bool Write() SAL_OVERRIDE;
-        virtual sal_Bool Read() SAL_OVERRIDE;
+        virtual bool Write() SAL_OVERRIDE;
+        virtual bool Read() SAL_OVERRIDE;
 
     };
     // normal RowSet Import and Export
@@ -197,9 +197,9 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xTargetRowUpdate;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xTargetResultSetMetaData;
         Window*                     m_pParent;
-        sal_Bool                    m_bAlreadyAsked;
+        bool                        m_bAlreadyAsked;
 
-        sal_Bool insertNewRow();
+        bool insertNewRow();
     protected:
         virtual void initialize() SAL_OVERRIDE;
 
@@ -217,8 +217,8 @@ namespace dbaui
                         : ODatabaseImportExport(_rxConnection,NULL,_rM)
         {}
 
-        virtual sal_Bool Write() SAL_OVERRIDE;
-        virtual sal_Bool Read() SAL_OVERRIDE;
+        virtual bool Write() SAL_OVERRIDE;
+        virtual bool Read() SAL_OVERRIDE;
 
     private:
         using ODatabaseImportExport::initialize;

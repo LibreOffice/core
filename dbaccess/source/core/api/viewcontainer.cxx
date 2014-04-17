@@ -61,7 +61,7 @@ using namespace ::connectivity::sdbcx;
 OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
                                  ,::osl::Mutex& _rMutex
                                  ,const Reference< XConnection >& _xCon
-                                 ,sal_Bool _bCase
+                                 ,bool _bCase
                                  ,IRefreshListener* _pRefreshListener
                                  ,::dbtools::IWarningsContainer* _pWarningsContainer
                                  ,oslInterlockedCount& _nInAppend)

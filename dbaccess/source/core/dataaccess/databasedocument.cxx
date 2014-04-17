@@ -474,7 +474,7 @@ void ODatabaseDocument::impl_reset_nothrow()
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    m_pImpl->m_bDocumentReadOnly = sal_False;
+    m_pImpl->m_bDocumentReadOnly = false;
 }
 
 namespace
@@ -544,7 +544,7 @@ void SAL_CALL ODatabaseDocument::initNew(  ) throw (DoubleInitializationExceptio
 
     m_aEventNotifier.notifyDocumentEventAsync( "OnTitleChanged" );
 
-    impl_setModified_nothrow( sal_False, aGuard );
+    impl_setModified_nothrow( false, aGuard );
     // <- SYNCHRONIZED
 
     m_aEventNotifier.notifyDocumentEvent( "OnCreate" );
@@ -593,7 +593,7 @@ void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& _Argumen
     // note that we do *not* call impl_setInitialized() here: The initialization is only complete
     // when the XModel::attachResource has been called, not sooner.
 
-    impl_setModified_nothrow( sal_False, aGuard );
+    impl_setModified_nothrow( false, aGuard );
     // <- SYNCHRONIZED
 }
 
@@ -755,7 +755,7 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const OUString& _rURL, cons
     return impl_attachResource( _rURL, _rArguments, aGuard );
 }
 
-sal_Bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocumentURL,
+bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocumentURL,
             const Sequence< PropertyValue >& i_rMediaDescriptor, DocumentGuard& _rDocGuard )
 {
     if  (   ( i_rLogicalDocumentURL == getURL() )
@@ -765,7 +765,7 @@ sal_Bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocum
     {
         // this is a BAD hack of the Basic importer code ... there should be a dedicated API for this,
         // not this bad mis-using of existing interfaces
-        return sal_False;
+        return false;
             // (we do not support macro signatures, so we can ignore this call)
     }
 
@@ -793,7 +793,7 @@ sal_Bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocum
         m_aEventNotifier.notifyDocumentEvent( "OnLoadFinished" );
     }
 
-    return sal_True;
+    return true;
 }
 
 OUString SAL_CALL ODatabaseDocument::getURL(  ) throw (RuntimeException, std::exception)
@@ -1041,7 +1041,7 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
         ModifyLock aLock( *this );
             // ignore all changes of our "modified" state during storing
 
-        sal_Bool bLocationChanged = ( _rURL != m_pImpl->getDocFileLocation() );
+        bool bLocationChanged = ( _rURL != m_pImpl->getDocFileLocation() );
         if ( bLocationChanged )
         {
             // create storage for target URL
@@ -1069,7 +1069,7 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
 
             xNewRootStorage = m_pImpl->switchToStorage( xTargetStorage );
 
-            m_pImpl->m_bDocumentReadOnly = sal_False;
+            m_pImpl->m_bDocumentReadOnly = false;
         }
 
         // store to current storage
@@ -1109,7 +1109,7 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
         m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveDone" : "OnSaveAsDone", NULL, makeAny( _rURL ) );
 
     // reset our "modified" flag, and clear the guard
-    impl_setModified_nothrow( sal_False, _rGuard );
+    impl_setModified_nothrow( false, _rGuard );
     // <- SYNCHRONIZED
 
     // notify storage listeners
@@ -1294,7 +1294,7 @@ void SAL_CALL ODatabaseDocument::setModified( sal_Bool _bModified ) throw (Prope
     // a proper "modified" flag
 }
 
-void ODatabaseDocument::impl_setModified_nothrow( sal_Bool _bModified, DocumentGuard& _rGuard )
+void ODatabaseDocument::impl_setModified_nothrow( bool _bModified, DocumentGuard& _rGuard )
 {
     // SYNCHRONIZED ->
     bool bModifiedChanged = ( m_pImpl->m_bModified != _bModified ) && ( !m_pImpl->isModifyLocked() );
@@ -1425,7 +1425,7 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
     return xContainer;
 }
 
-void ODatabaseDocument::impl_closeControllerFrames_nolck_throw( sal_Bool _bDeliverOwnership )
+void ODatabaseDocument::impl_closeControllerFrames_nolck_throw( bool _bDeliverOwnership )
 {
     Controllers aCopy = m_aControllers;
 
@@ -1563,7 +1563,7 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xC
 
     Reference< XPropertySet > xStreamProp( xOutputStream, UNO_QUERY_THROW );
     xStreamProp->setPropertyValue( INFO_MEDIATYPE, makeAny( OUString( "text/xml" ) ) );
-    xStreamProp->setPropertyValue( "Compressed", makeAny( (sal_Bool)sal_True ) );
+    xStreamProp->setPropertyValue( "Compressed", makeAny( true ) );
 
     // write the stuff
     WriteThroughComponent( xOutputStream, xComponent, pServiceName, _rArguments, rMediaDesc );
@@ -2031,7 +2031,7 @@ Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( cons
     ::comphelper::NamedValueCollection aInitArgs( _Arguments );
     aInitArgs.put( "Frame", _Frame );
     if ( _ViewName == "Preview" )
-        aInitArgs.put( "Preview", sal_Bool( sal_True ) );
+        aInitArgs.put( "Preview", true );
     Reference< XInitialization > xInitController( xController, UNO_QUERY_THROW );
     xInitController->initialize( aInitArgs.getWrappedPropertyValues() );
 

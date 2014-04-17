@@ -51,15 +51,15 @@ OTableEditorCtrl* OTableFieldControl::GetCtrl() const
     return pDesignWin->GetEditorCtrl();
 }
 
-sal_Bool OTableFieldControl::IsReadOnly()
+bool OTableFieldControl::IsReadOnly()
 {
-    sal_Bool bRead(GetCtrl()->IsReadOnly());
+    bool bRead(GetCtrl()->IsReadOnly());
     if( !bRead )
     {
         // The columns of a ::com::sun::star::sdbcx::View could not be locked
         Reference<XPropertySet> xTable = GetCtrl()->GetView()->getController().getTable();
         if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == "VIEW")
-            bRead = sal_True;
+            bRead = true;
         else
         {
              ::boost::shared_ptr<OTableRow>  pCurRow = GetCtrl()->GetActRow();
@@ -94,7 +94,7 @@ void OTableFieldControl::DeactivateAggregate( EControlType eType )
     }
 }
 
-void OTableFieldControl::SetModified(sal_Bool bModified)
+void OTableFieldControl::SetModified(bool bModified)
 {
     GetCtrl()->GetView()->getController().setModified(bModified);
 }
@@ -132,7 +132,7 @@ Locale OTableFieldControl::GetLocale() const
     return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getLocale();
 }
 
-sal_Bool OTableFieldControl::isAutoIncrementValueEnabled() const
+bool OTableFieldControl::isAutoIncrementValueEnabled() const
 {
     return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().isAutoIncrementValueEnabled();
 }

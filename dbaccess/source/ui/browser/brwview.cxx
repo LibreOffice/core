@@ -42,14 +42,14 @@ using namespace ::com::sun::star::lang;
 
 namespace
 {
-    sal_Bool isGrabVclControlFocusAllowed(const UnoDataBrowserView* _pView)
+    bool isGrabVclControlFocusAllowed(const UnoDataBrowserView* _pView)
     {
-        sal_Bool bGrabFocus = sal_False;
+        bool bGrabFocus = false;
         SbaGridControl* pVclControl = _pView->getVclControl();
         Reference< ::com::sun::star::awt::XControl > xGrid = _pView->getGridControl();
         if (pVclControl && xGrid.is())
         {
-            bGrabFocus = sal_True;
+            bGrabFocus = true;
             if(!pVclControl->HasChildPathFocus())
             {
                 Reference<XChild> xChild(xGrid->getModel(),UNO_QUERY);
@@ -284,7 +284,7 @@ void UnoDataBrowserView::GetFocus()
         m_pTreeView->GrabFocus();
     else if (m_pVclControl && m_xGrid.is())
     {
-        sal_Bool bGrabFocus = sal_False;
+        bool bGrabFocus = false;
         if(!m_pVclControl->HasChildPathFocus())
         {
             bGrabFocus = isGrabVclControlFocusAllowed(this);
@@ -307,7 +307,7 @@ bool UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
     bool nDone = false;
     if(rNEvt.GetType() == EVENT_KEYINPUT)
     {
-        sal_Bool bGrabAllowed = isGrabVclControlFocusAllowed(this);
+        bool bGrabAllowed = isGrabVclControlFocusAllowed(this);
         if ( bGrabAllowed )
         {
             const KeyEvent* pKeyEvt = rNEvt.GetKeyEvent();

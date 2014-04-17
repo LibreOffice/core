@@ -444,7 +444,7 @@ namespace
         if ( !!_rFeatureState.sTitle )
             _out_rStates.push_back( makeAny( *_rFeatureState.sTitle ) );
         if ( !!_rFeatureState.bChecked )
-            _out_rStates.push_back( makeAny( (sal_Bool)*_rFeatureState.bChecked ) );
+            _out_rStates.push_back( makeAny( *_rFeatureState.bChecked ) );
         if ( !!_rFeatureState.bInvisible )
             _out_rStates.push_back( makeAny( Visibility( !*_rFeatureState.bInvisible ) ) );
         if ( _rFeatureState.aValue.hasValue() )
@@ -464,7 +464,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature,
     {
         // check if we really need to notify the listeners : this method may be called much more often than needed, so check
         // the cached state of the feature
-        sal_Bool bAlreadyCached = ( m_aStateCache.find(nFeat) != m_aStateCache.end() );
+        bool bAlreadyCached = ( m_aStateCache.find(nFeat) != m_aStateCache.end() );
         if ( bAlreadyCached )
             if  (   ( rCachedState.bEnabled == aFeatState.bEnabled )
                 &&  ( rCachedState.bChecked == aFeatState.bChecked )
@@ -542,7 +542,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
     ++s_nRecursions;
 #endif
 
-    sal_Bool bEmpty = sal_True;
+    bool bEmpty = true;
     FeatureListener aNextFeature;
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
@@ -610,7 +610,7 @@ void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Referen
     aListener.xListener         = _xListener;
     aListener.bForceBroadcast   = _bForceBroadcast;
 
-    sal_Bool bWasEmpty;
+    bool bWasEmpty;
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex );
         bWasEmpty = m_aFeaturesToInvalidate.empty();
@@ -748,7 +748,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
 {
     Dispatch::iterator iterSearch = m_arrStatusListener.begin();
 
-    sal_Bool bRemoveForAll = _rURL.Complete.isEmpty();
+    bool bRemoveForAll = _rURL.Complete.isEmpty();
     while ( iterSearch != m_arrStatusListener.end() )
     {
         DispatchTarget& rCurrent = *iterSearch;
@@ -1231,7 +1231,7 @@ void OGenericUnoController::openHelpAgent(OUString const& _suHelpStringURL )
     OUString sLanguage( "Language=" );
     if (suURL.indexOf(sLanguage) == -1)
     {
-        AppendConfigToken(suURL, sal_False /* sal_False := add '&' */ );
+        AppendConfigToken(suURL, false /* sal_False := add '&' */ );
     }
     URL aURL;
     aURL.Complete = suURL;

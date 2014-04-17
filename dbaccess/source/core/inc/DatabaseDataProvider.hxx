@@ -214,7 +214,7 @@ private:
     void impl_fillRowSet_throw();
     void impl_executeRowSet_throw(::osl::ResettableMutexGuard& _rClearForNotifies);
     bool impl_fillParameters_nothrow( ::osl::ResettableMutexGuard& _rClearForNotifies);
-    void impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories,const ::com::sun::star::uno::Sequence< OUString >& i_aColumnNames);
+    void impl_fillInternalDataProvider_throw(bool _bHasCategories,const ::com::sun::star::uno::Sequence< OUString >& i_aColumnNames);
     void impl_invalidateParameter_nothrow();
     ::com::sun::star::uno::Any impl_getNumberFormatKey_nothrow(const OUString & _sRangeRepresentation) const;
 
@@ -254,14 +254,14 @@ private:
 
     OUString     m_Command;
     OUString     m_DataSourceName;
-    ::sal_Int32         m_CommandType;
-    sal_Int32           m_RowLimit;
+    sal_Int32    m_CommandType;
+    sal_Int32    m_RowLimit;
     OUString     m_Filter;
     OUString     m_HavingClause;
     OUString     m_Order;
     OUString     m_GroupBy;
-    sal_Bool          m_EscapeProcessing;
-    sal_Bool          m_ApplyFilter;
+    bool         m_EscapeProcessing;
+    bool         m_ApplyFilter;
 };
 
 } // namespace dbaccess

@@ -47,10 +47,10 @@ namespace dbaui
         OUString                    m_sDescendingText;
 
         sal_Int32                   m_nMaxColumnsInIndex;
-        sal_Bool                    m_bAddIndexAppendix;
+        bool                    m_bAddIndexAppendix;
 
     public:
-        IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex,sal_Bool _bAddIndexAppendix);
+        IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex,bool _bAddIndexAppendix);
         virtual ~IndexFieldsControl();
 
         void Init(const ::com::sun::star::uno::Sequence< OUString >& _rAvailableFields);
@@ -80,9 +80,9 @@ namespace dbaui
 
     protected:
         OUString GetRowCellText(const IndexFields::const_iterator& _rRow,sal_uInt16 nColId) const;
-        sal_Bool implGetFieldDesc(long _nRow, IndexFields::const_iterator& _rPos);
+        bool implGetFieldDesc(long _nRow, IndexFields::const_iterator& _rPos);
 
-        sal_Bool isNewField() const { return GetCurRow() >= (sal_Int32)m_aFields.size(); }
+        bool isNewField() const { return GetCurRow() >= (sal_Int32)m_aFields.size(); }
 
         DECL_LINK( OnListEntrySelected, ListBox* );
 

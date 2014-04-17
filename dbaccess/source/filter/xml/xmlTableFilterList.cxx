@@ -57,9 +57,9 @@ SvXMLImportContext* OXMLTableFilterList::CreateChildContext(
     {
         GetImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
         if ( IsXMLToken( rLocalName, XML_TABLE_FILTER_PATTERN ) )
-            pContext = new OXMLTableFilterPattern( GetImport(), nPrefix, rLocalName,sal_True,*this);
+            pContext = new OXMLTableFilterPattern( GetImport(), nPrefix, rLocalName,true,*this);
         else if ( IsXMLToken( rLocalName, XML_TABLE_TYPE ) )
-            pContext = new OXMLTableFilterPattern( GetImport(), nPrefix, rLocalName,sal_False,*this);
+            pContext = new OXMLTableFilterPattern( GetImport(), nPrefix, rLocalName,false,*this);
         else if ( IsXMLToken( rLocalName, XML_TABLE_INCLUDE_FILTER ) )
             pContext = new OXMLTableFilterList( GetImport(), nPrefix, rLocalName );
     }

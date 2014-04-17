@@ -296,9 +296,9 @@ OConnection::OConnection(ODatabaseSource& _rDB
             ,m_pViews(NULL)
             ,m_aWarnings( Reference< XWarningsSupplier >( _rxMaster, UNO_QUERY ) )
             ,m_nInAppend(0)
-            ,m_bSupportsViews(sal_False)
-            ,m_bSupportsUsers(sal_False)
-            ,m_bSupportsGroups(sal_False)
+            ,m_bSupportsViews(false)
+            ,m_bSupportsUsers(false)
+            ,m_bSupportsGroups(false)
 {
     SAL_INFO("dbaccess", "OConnection::OConnection" );
     osl_atomic_increment(&m_refCount);
@@ -321,7 +321,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
     {
         m_xQueries = OQueryContainer::create(Reference< XNameContainer >(_rDB.getQueryDefinitions(), UNO_QUERY), this, _rxORB, &m_aWarnings).get();
 
-        sal_Bool bCase = sal_True;
+        bool bCase = true;
         Reference<XDatabaseMetaData> xMeta;
         try
         {
@@ -347,7 +347,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
                     OUString sValue = xRow->getString(1);
                     if( !xRow->wasNull() && sValue == sView)
                     {
-                        m_bSupportsViews = sal_True;
+                        m_bSupportsViews = true;
                         break;
                     }
                 }
@@ -358,7 +358,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
                 Reference< XViewsSupplier > xMaster(getMasterTables(),UNO_QUERY);
 
                 if (xMaster.is() && xMaster->getViews().is())
-                    m_bSupportsViews = sal_True;
+                    m_bSupportsViews = true;
             }
             if(m_bSupportsViews)
             {

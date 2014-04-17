@@ -36,7 +36,7 @@ namespace dbaui
         OTableFieldDescWin*                 m_pFieldDescWin;
         OTableEditorCtrl*                   m_pEditorCtrl;
 
-        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
         void ArrangeChildren( long nSplitPos ,Rectangle& rRect);
         DECL_LINK( SplitHdl, Splitter* );
     protected:
@@ -89,16 +89,16 @@ namespace dbaui
         ::com::sun::star::lang::Locale      getLocale() const { return m_aLocale;}
 
         // IClipboardTest
-        virtual sal_Bool isCutAllowed() SAL_OVERRIDE;
-        virtual sal_Bool isCopyAllowed() SAL_OVERRIDE;
-        virtual sal_Bool isPasteAllowed() SAL_OVERRIDE;
-        virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
+        virtual bool isCutAllowed() SAL_OVERRIDE;
+        virtual bool isCopyAllowed() SAL_OVERRIDE;
+        virtual bool isPasteAllowed() SAL_OVERRIDE;
+        virtual bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
         virtual void copy() SAL_OVERRIDE;
         virtual void cut() SAL_OVERRIDE;
         virtual void paste() SAL_OVERRIDE;
 
         // set the view readonly or not
-        virtual void setReadOnly(sal_Bool _bReadOnly);
+        virtual void setReadOnly(bool _bReadOnly);
 
         virtual void initialize() SAL_OVERRIDE;
         void reSync(); // resync window data with realdata

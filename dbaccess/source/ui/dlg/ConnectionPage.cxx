@@ -119,10 +119,10 @@ namespace dbaui
     {
     }
 
-    void OConnectionTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OConnectionTabPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);
@@ -230,7 +230,7 @@ namespace dbaui
             OUString sUrl = pUrlItem->GetValue();
             setURL( sUrl );
 
-            const sal_Bool bEnableJDBC = m_pCollection->determineType(m_eType) == ::dbaccess::DST_JDBC;
+            const bool bEnableJDBC = m_pCollection->determineType(m_eType) == ::dbaccess::DST_JDBC;
             if ( !pJdbcDrvItem->GetValue().getLength() )
             {
                 OUString sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
@@ -280,13 +280,13 @@ namespace dbaui
 
     bool OConnectionTabPage::FillItemSet(SfxItemSet& _rSet)
     {
-        sal_Bool bChangedSomething = sal_False;
+        bool bChangedSomething = false;
 
         if (m_aUserName.GetText() != m_aUserName.GetSavedValue())
         {
             _rSet.Put(SfxStringItem(DSID_USER, m_aUserName.GetText()));
             _rSet.Put(SfxStringItem(DSID_PASSWORD, OUString()));
-            bChangedSomething = sal_True;
+            bChangedSomething = true;
         }
 
         fillBool(_rSet,&m_aPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
@@ -303,7 +303,7 @@ namespace dbaui
     IMPL_LINK(OConnectionTabPage, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
 #if HAVE_FEATURE_JAVA
         try
         {
@@ -327,7 +327,7 @@ namespace dbaui
     bool OConnectionTabPage::checkTestConnection()
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        sal_Bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || !m_aConnectionURL.GetTextNoPrefix().isEmpty();
+        bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || !m_aConnectionURL.GetTextNoPrefix().isEmpty();
         if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
             bEnableTestConnection = bEnableTestConnection && (!m_aJavaDriver.GetText().isEmpty());
         m_aTestConnection.Enable(bEnableTestConnection);

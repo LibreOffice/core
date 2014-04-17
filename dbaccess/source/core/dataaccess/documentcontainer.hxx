@@ -45,7 +45,7 @@ class ODocumentContainer    : public ODefinitionContainer
                             , public ::comphelper::OPropertyStateContainer
                             , public ::comphelper::OPropertyArrayUsageHelper< ODocumentContainer >
 {
-    sal_Bool        m_bFormsContainer;
+    bool        m_bFormsContainer;
 
 public:
     /** constructs the container.<BR>
@@ -54,7 +54,7 @@ public:
           const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
         , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&  _xParentContainer
         ,const TContentPtr& _pImpl
-        , sal_Bool _bFormsContainer
+        , bool _bFormsContainer
         );
 
     // ::com::sun::star::uno::XInterface

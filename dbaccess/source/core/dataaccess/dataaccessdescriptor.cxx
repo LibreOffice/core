@@ -115,10 +115,10 @@ namespace dbaccess
         OUString             m_sOrder;
         OUString             m_sHavingClause;
         OUString             m_sGroupBy;
-        sal_Bool                    m_bEscapeProcessing;
+        bool                    m_bEscapeProcessing;
         Reference< XResultSet >     m_xResultSet;
         Sequence< Any >             m_aSelection;
-        sal_Bool                    m_bBookmarkSelection;
+        bool                    m_bBookmarkSelection;
         OUString             m_sColumnName;
         Reference< XPropertySet >   m_xColumn;
         // </properties>
@@ -143,10 +143,10 @@ namespace dbaccess
         ,m_sOrder()
         ,m_sHavingClause()
         ,m_sGroupBy()
-        ,m_bEscapeProcessing( sal_True )
+        ,m_bEscapeProcessing( true )
         ,m_xResultSet()
         ,m_aSelection()
-        ,m_bBookmarkSelection( sal_True )
+        ,m_bBookmarkSelection( true )
         ,m_sColumnName()
         ,m_xColumn()
     {

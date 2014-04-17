@@ -191,7 +191,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 
     if  ( sComponentURL == URL_COMPONENT_DATASOURCEBROWSER )
     {
-        sal_Bool bDisableBrowser =  ( sal_False == aLoadArgs.getOrDefault( "ShowTreeViewButton", sal_True ) )   // compatibility name
+        bool bDisableBrowser =  ( sal_False == aLoadArgs.getOrDefault( "ShowTreeViewButton", sal_True ) )   // compatibility name
                                 ||  ( sal_False == aLoadArgs.getOrDefault( (OUString)PROPERTY_ENABLE_BROWSER, sal_True ) );
 
         if ( bDisableBrowser )
@@ -210,7 +210,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 
     if ( sComponentURL == URL_COMPONENT_REPORTDESIGN )
     {
-        sal_Bool bPreview = aLoadArgs.getOrDefault( "Preview", sal_False );
+        bool bPreview = aLoadArgs.getOrDefault( "Preview", sal_False );
         if ( bPreview )
         {   // report designs cannot be previewed
             if ( rListener.is() )
@@ -227,7 +227,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         }
     }
 
-    sal_Bool bSuccess = xController.is();
+    bool bSuccess = xController.is();
     Reference< XModel > xDatabaseDocument;
     if ( bSuccess )
     {

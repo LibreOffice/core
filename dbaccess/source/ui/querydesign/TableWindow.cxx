@@ -75,7 +75,7 @@ OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type&
           ,m_nMoveCount(0)
           ,m_nMoveIncrement(1)
           ,m_nSizingFlags( SIZING_NONE )
-          ,m_bActive( sal_False )
+          ,m_bActive( false )
 {
 
     // Set position and size
@@ -158,7 +158,7 @@ OTableWindowListBox* OTableWindow::CreateListBox()
     return new OTableWindowListBox(this);
 }
 
-sal_Bool OTableWindow::FillListBox()
+bool OTableWindow::FillListBox()
 {
     m_pListBox->Clear();
     if ( !m_pContainerListener.is() )
@@ -217,7 +217,7 @@ sal_Bool OTableWindow::FillListBox()
         OSL_FAIL("Exception occurred!");
     }
 
-    return sal_True;
+    return true;
 }
 
 void* OTableWindow::createUserData(const Reference< XPropertySet>& /*_xColumn*/,bool /*_bPrimaryKey*/)
@@ -265,7 +265,7 @@ void OTableWindow::impl_updateImage()
     m_aTypeImage.Show();
 }
 
-sal_Bool OTableWindow::Init()
+bool OTableWindow::Init()
 {
     // create list box if necessary
     if ( !m_pListBox )
@@ -283,7 +283,7 @@ sal_Bool OTableWindow::Init()
 
     // add the fields to the ListBox
     clearListBox();
-    sal_Bool bSuccess = FillListBox();
+    bool bSuccess = FillListBox();
     if ( bSuccess )
         m_pListBox->SelectAll( false );
 
@@ -474,7 +474,7 @@ void OTableWindow::Resize()
     Window::Invalidate();
 }
 
-void OTableWindow::SetBoldTitle( sal_Bool bBold )
+void OTableWindow::SetBoldTitle( bool bBold )
 {
     Font aFont = m_aTitle.GetFont();
     aFont.SetWeight( bBold?WEIGHT_BOLD:WEIGHT_NORMAL );
@@ -490,7 +490,7 @@ void OTableWindow::GetFocus()
         m_pListBox->GrabFocus();
 }
 
-void OTableWindow::setActive(sal_Bool _bActive)
+void OTableWindow::setActive(bool _bActive)
 {
     SetBoldTitle( _bActive );
     m_bActive = _bActive;
@@ -506,24 +506,24 @@ void OTableWindow::Remove()
     pTabWinCont->Invalidate();
 }
 
-sal_Bool OTableWindow::HandleKeyInput( const KeyEvent& rEvt )
+bool OTableWindow::HandleKeyInput( const KeyEvent& rEvt )
 {
     const KeyCode& rCode = rEvt.GetKeyCode();
     sal_uInt16 nCode = rCode.GetCode();
-    sal_Bool   bShift = rCode.IsShift();
-    sal_Bool   bCtrl = rCode.IsMod1();
+    bool   bShift = rCode.IsShift();
+    bool   bCtrl = rCode.IsMod1();
 
-    sal_Bool bHandle = sal_False;
+    bool bHandle = false;
 
     if( !bCtrl && !bShift && (nCode==KEY_DELETE) )
     {
         Remove();
-        bHandle = sal_True;
+        bHandle = true;
     }
     return bHandle;
 }
 
-sal_Bool OTableWindow::ExistsAConn() const
+bool OTableWindow::ExistsAConn() const
 {
     return getTableView()->ExistsAConn(this);
 }
@@ -609,7 +609,7 @@ void OTableWindow::Command(const CommandEvent& rEvt)
 
 bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     switch (rNEvt.GetType())
     {
         case EVENT_KEYINPUT:
@@ -631,19 +631,19 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                 switch( rCode.GetCode() )
                 {
                     case KEY_DOWN:
-                        bHandled = sal_True;
+                        bHandled = true;
                         aStartPoint.Y() += m_nMoveIncrement;
                         break;
                     case KEY_UP:
-                        bHandled = sal_True;
+                        bHandled = true;
                         aStartPoint.Y() += -m_nMoveIncrement;
                         break;
                     case KEY_LEFT:
-                        bHandled = sal_True;
+                        bHandled = true;
                         aStartPoint.X() += -m_nMoveIncrement;
                         break;
                     case KEY_RIGHT:
-                        bHandled = sal_True;
+                        bHandled = true;
                         aStartPoint.X()  += m_nMoveIncrement;
                         break;
                 }

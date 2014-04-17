@@ -48,7 +48,7 @@ namespace dbaui
         void SaveData( OFieldDescription* pFieldDescr );
         void SetControlText( sal_uInt16 nControlId, const OUString& rText );
         OUString GetControlText( sal_uInt16 nControlId );
-        void SetReadOnly( sal_Bool bReadOnly );
+        void SetReadOnly( bool bReadOnly );
 #if OSL_DEBUG_LEVEL > 0
         OTableEditorCtrl* GetEditorCtrl();
 #endif
@@ -59,10 +59,10 @@ namespace dbaui
         OUString BoolStringUI(const OUString& rPersistentString) const;
 
         // IClipboardTest
-        virtual sal_Bool isCutAllowed() SAL_OVERRIDE;
-        virtual sal_Bool isCopyAllowed() SAL_OVERRIDE;
-        virtual sal_Bool isPasteAllowed() SAL_OVERRIDE;
-        virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
+        virtual bool isCutAllowed() SAL_OVERRIDE;
+        virtual bool isCopyAllowed() SAL_OVERRIDE;
+        virtual bool isPasteAllowed() SAL_OVERRIDE;
+        virtual bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
 
         virtual void copy() SAL_OVERRIDE;
         virtual void cut() SAL_OVERRIDE;

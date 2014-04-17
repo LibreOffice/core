@@ -36,7 +36,7 @@ namespace dbaxml
         OUString m_sCellStyleName;
         OUString m_sHelpMessage;
         ::com::sun::star::uno::Any m_aDefaultValue;
-        sal_Bool        m_bHidden;
+        bool        m_bHidden;
 
         ODBFilter& GetOwnImport();
     public:

@@ -66,7 +66,7 @@ namespace dbaccess
     public:
         ORowSetValueCompare(const ::com::sun::star::uno::Any& _rAny) : m_rAny(_rAny){}
 
-        sal_Bool operator ()(const ORowSetRow& _rRH)
+        bool operator ()(const ORowSetRow& _rRH)
         {
             switch((_rRH->get())[0].getTypeKind())
             {

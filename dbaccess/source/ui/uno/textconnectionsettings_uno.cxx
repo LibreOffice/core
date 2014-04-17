@@ -229,7 +229,7 @@ namespace dbaui
 
     sal_Bool SAL_CALL OTextConnectionSettingsDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue) throw(IllegalArgumentException)
     {
-        sal_Bool bModified = sal_False;
+        bool bModified = false;
 
         PropertyValues::const_iterator pos = m_aPropertyValues.find( _nHandle );
         if ( pos != m_aPropertyValues.end() )
@@ -237,7 +237,7 @@ namespace dbaui
             // we're lazy here ...
             _rConvertedValue = _rValue;
             pos->second->getPropertyValue( _rOldValue );
-            bModified = sal_True;
+            bModified = true;
         }
         else
         {

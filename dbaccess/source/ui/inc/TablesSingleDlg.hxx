@@ -43,7 +43,7 @@ class ODbDataSourceAdministrationHelper;
     class OTableSubscriptionDialog : public SfxSingleTabDialog, public IItemSetHelper
     {
         ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
-        sal_Bool m_bStopExecution; // set when the dialog should not be executed
+        bool m_bStopExecution; // set when the dialog should not be executed
 
         DECL_LINK( OKClickHdl, OKButton* );
         SfxItemSet*             m_pOutSet;
@@ -58,11 +58,11 @@ class ODbDataSourceAdministrationHelper;
 
         // forwards from ODbDataSourceAdministrationHelper
         void        successfullyConnected();
-        sal_Bool    getCurrentSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDriverParams);
+        bool    getCurrentSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDriverParams);
         void        clearPassword();
         OUString    getConnectionURL() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getCurrentDataSource();
-        inline void endExecution() { m_bStopExecution = sal_True; }
+        inline void endExecution() { m_bStopExecution = true; }
 
         virtual const SfxItemSet* getOutputSet() const SAL_OVERRIDE;
         virtual SfxItemSet* getWriteOutputSet() SAL_OVERRIDE;

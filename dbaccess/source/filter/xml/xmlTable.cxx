@@ -49,8 +49,8 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
     :SvXMLImportContext( _rImport, nPrfx, _sLocalName )
     ,m_xParentContainer(_xParentContainer)
     ,m_sServiceName(_sServiceName)
-    ,m_bApplyFilter(sal_False)
-    ,m_bApplyOrder(sal_False)
+    ,m_bApplyFilter(false)
+    ,m_bApplyOrder(false)
 {
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");

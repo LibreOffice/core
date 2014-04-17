@@ -61,8 +61,8 @@ namespace dbaui
             @return
                 <TRUE/> when successful
         */
-        sal_Bool ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
-        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        bool ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
+        void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
@@ -174,9 +174,9 @@ namespace dbaui
         virtual void Resize() SAL_OVERRIDE;
         virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
-        sal_Bool isCutAllowed();
-        sal_Bool isCopyAllowed();
-        sal_Bool isPasteAllowed();
+        bool isCutAllowed();
+        bool isCopyAllowed();
+        bool isPasteAllowed();
         void copy();
         void cut();
         void paste();
@@ -207,7 +207,7 @@ namespace dbaui
         void selectAll();
 
         /// returns <TRUE/> if it sorts ascending
-        sal_Bool isSortUp() const;
+        bool isSortUp() const;
 
         /// sorts all entries ascending
         void sortDown();
@@ -271,7 +271,7 @@ namespace dbaui
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        sal_Bool isALeafSelected() const;
+        bool isALeafSelected() const;
 
         SvTreeListEntry* getEntry( const Point& _aPosPixel ) const;
 
@@ -279,7 +279,7 @@ namespace dbaui
         void clearPages();
 
         /// returns <TRUE/> when a detail page was filled
-        sal_Bool isFilled() const;
+        bool isFilled() const;
 
         /** adds a new object to the detail page.
             @param  _eType
@@ -324,7 +324,7 @@ namespace dbaui
         PreviewMode getPreviewMode();
 
         /// <TRUE/> if the preview is enabled
-        sal_Bool isPreviewEnabled();
+        bool isPreviewEnabled();
 
         /** switches to the given preview mode
             @param  _eMode
@@ -332,7 +332,7 @@ namespace dbaui
             @param  _bForce
                 Force the preview to be resetted
         */
-        void switchPreview(PreviewMode _eMode,sal_Bool _bForce = sal_False);
+        void switchPreview(PreviewMode _eMode,bool _bForce = false);
 
         /** shows the Preview of the content when it is enabled.
             @param  _xContent
@@ -351,7 +351,7 @@ namespace dbaui
         */
         void showPreview(   const OUString& _sDataSourceName,
                             const OUString& _sName,
-                            sal_Bool _bTable);
+                            bool _bTable);
 
     protected:
         void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

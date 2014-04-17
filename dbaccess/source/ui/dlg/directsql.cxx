@@ -270,7 +270,7 @@ namespace dbaui
         m_pSQL->GrabFocus();
     }
 
-    void DirectSQLDialog::switchToHistory(sal_Int32 _nHistoryPos, sal_Bool _bUpdateListBox)
+    void DirectSQLDialog::switchToHistory(sal_Int32 _nHistoryPos, bool _bUpdateListBox)
     {
         CHECK_INVARIANTS("DirectSQLDialog::switchToHistory");
 
@@ -320,7 +320,7 @@ namespace dbaui
         {
             const sal_Int32 nSelected = m_pSQLHistory->GetSelectEntryPos();
             if (LISTBOX_ENTRY_NOTFOUND != nSelected)
-                switchToHistory(nSelected, sal_False);
+                switchToHistory(nSelected, false);
         }
         return 0L;
     }

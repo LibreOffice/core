@@ -60,7 +60,7 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svx;
 
-    TransferableHelper* SbaTableQueryBrowser::implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection )
+    TransferableHelper* SbaTableQueryBrowser::implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType, bool _bAllowConnection )
     {
         try
         {
@@ -107,7 +107,7 @@ namespace dbaui
                 Reference<XStorable> xStore;
                 xStore = Reference<XStorable>( xChild.is() ? getDataSourceOrModel(xChild->getParent()) : Reference<XInterface>(),UNO_QUERY );
                 // check for the concrete type
-                if ( xStore.is() && !xStore->isReadonly() && ::std::find_if(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(E_TABLE,sal_True)) != _rFlavors.end())
+                if ( xStore.is() && !xStore->isReadonly() && ::std::find_if(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(E_TABLE,true)) != _rFlavors.end())
                     return DND_ACTION_COPY;
             }
         }
@@ -135,8 +135,8 @@ namespace dbaui
         m_aAsyncDrop.aDroppedData.clear();
         m_aAsyncDrop.nType          = E_TABLE;
         m_aAsyncDrop.nAction        = _rEvt.mnAction;
-        m_aAsyncDrop.bError         = sal_False;
-        m_aAsyncDrop.bHtml          = sal_False;
+        m_aAsyncDrop.bError         = false;
+        m_aAsyncDrop.bHtml          = false;
         m_aAsyncDrop.pDroppedAt     = NULL;
         m_aAsyncDrop.aUrl           = OUString();
 
@@ -170,19 +170,19 @@ namespace dbaui
         return DND_ACTION_NONE;
     }
 
-    sal_Bool SbaTableQueryBrowser::requestDrag( sal_Int8 /*_nAction*/, const Point& _rPosPixel )
+    bool SbaTableQueryBrowser::requestDrag( sal_Int8 /*_nAction*/, const Point& _rPosPixel )
     {
         // get the affected list entry
         // ensure that the entry which the user clicked at is selected
         SvTreeListEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rPosPixel );
         if (!pHitEntry)
             // no drag of no entry was hit ....
-            return sal_False;
+            return false;
 
         // it must be a query/table
         EntryType eEntryType = getEntryType( pHitEntry );
         if (!isObject(eEntryType))
-            return DND_ACTION_NONE;
+            return false;
 
         TransferableHelper* pTransfer = implCopyObject( pHitEntry, ( etTableOrView == eEntryType ) ? CommandType::TABLE : CommandType::QUERY);
         Reference< XTransferable> xEnsureDelete = pTransfer;
@@ -199,7 +199,7 @@ namespace dbaui
             copyEntry( pSelected );
         return 0;
     }
-    sal_Bool SbaTableQueryBrowser::isEntryCopyAllowed(SvTreeListEntry* _pEntry) const
+    bool SbaTableQueryBrowser::isEntryCopyAllowed(SvTreeListEntry* _pEntry) const
     {
         EntryType eType = getEntryType(_pEntry);
         return  ( eType == etTableOrView || eType == etQuery );

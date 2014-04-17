@@ -70,20 +70,20 @@ namespace dbaui
         OUString                            m_aFunctionStrings;
         sal_uInt16                          m_nVisibleCount;            // maximum number of visible rows
         sal_uInt32                          m_nLastSortColumn;          // index of last (highest) sort column
-        sal_Bool                            m_bOrderByUnRelated;
-        sal_Bool                            m_bGroupByUnRelated;
-        sal_Bool                            m_bStopTimer;
-        sal_Bool                            m_bWasEditing;
-        sal_Bool                            m_bDisableErrorBox;
-        sal_Bool                            m_bInUndoMode;
+        bool                            m_bOrderByUnRelated;
+        bool                            m_bGroupByUnRelated;
+        bool                            m_bStopTimer;
+        bool                            m_bWasEditing;
+        bool                            m_bDisableErrorBox;
+        bool                            m_bInUndoMode;
 
         DECL_LINK(OnInvalidateTimer, void*);
     public:                         OSelectionBrowseBox( Window* pParent );
                                     virtual ~OSelectionBrowseBox();
 
         void                        initialize();
-        OTableFieldDescRef          InsertField( const OJoinExchangeData& jxdSource, sal_uInt16 _nColumnPosition = BROWSER_INVALIDID, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
-        OTableFieldDescRef          InsertField( const OTableFieldDescRef& rInfo, sal_uInt16 _nColumnPosition = BROWSER_INVALIDID, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
+        OTableFieldDescRef          InsertField( const OJoinExchangeData& jxdSource, sal_uInt16 _nColumnPosition = BROWSER_INVALIDID, bool bVis=true, bool bActivate=true );
+        OTableFieldDescRef          InsertField( const OTableFieldDescRef& rInfo, sal_uInt16 _nColumnPosition = BROWSER_INVALIDID, bool bVis=true, bool bActivate=true );
         void                        InsertColumn( OTableFieldDescRef pEntry, sal_uInt16& _nColumnPosition );
         void                        RemoveColumn( sal_uInt16 _nColumnId );
         void                        DeleteFields( const OUString& rAliasName );
@@ -101,7 +101,7 @@ namespace dbaui
         void                        AddOrder(const OTableFieldDescRef& rInfo, const EOrderDir eDir, sal_uInt32 _nCurrentPos);
         void                        ClearAll();
         OTableFieldDescRef          AppendNewCol( sal_uInt16 nCnt=1 );
-        sal_Bool                    Save();
+        bool                        Save();
         OQueryDesignView*           getDesignView();
         OQueryDesignView*           getDesignView() const;
         sal_uInt16                  FieldsCount();
@@ -114,35 +114,35 @@ namespace dbaui
                                         // cell content (formatted as string) set/return
         sal_Int32                   GetNoneVisibleRows() const;
         void                        SetNoneVisbleRow(long nRows);
-        sal_Bool                    IsRowVisible(sal_uInt16 _nWhich) const;
-        void                        SetRowVisible(sal_uInt16 _nWhich, sal_Bool _bVis);
+        bool                        IsRowVisible(sal_uInt16 _nWhich) const;
+        void                        SetRowVisible(sal_uInt16 _nWhich, bool _bVis);
 
-        void                        SetReadOnly(sal_Bool bRO);
+        void                        SetReadOnly(bool bRO);
         // calculate an optimal size. Basically, this takes into account the number of visible rows.
         Size                        CalcOptimalSize( const Size& _rAvailable );
 
         // can the current content be cut
-        sal_Bool                    isPasteAllowed();
-        sal_Bool                    isCutAllowed();
-        sal_Bool                    isCopyAllowed();
+        bool                        isPasteAllowed();
+        bool                        isCutAllowed();
+        bool                        isCopyAllowed();
         void                        cut();
         void                        paste();
         void                        copy();
 
         virtual void                GetFocus() SAL_OVERRIDE;
         virtual void                DeactivateCell(bool bUpdate = true) SAL_OVERRIDE;
-        virtual void                ColumnMoved( sal_uInt16 nColId ) SAL_OVERRIDE { ColumnMoved(nColId,sal_True); }
-        void                        ColumnMoved( sal_uInt16 nColId,sal_Bool _bCreateUndo);
+        virtual void                ColumnMoved( sal_uInt16 nColId ) SAL_OVERRIDE { ColumnMoved(nColId,true); }
+        void                        ColumnMoved( sal_uInt16 nColId, bool _bCreateUndo);
 
         void                        Fill();
         void                        PreFill();
 
         /** Disables the generation of undo actions
         */
-        inline void                 EnterUndoMode() { m_bInUndoMode = sal_True; }
+        inline void                 EnterUndoMode() { m_bInUndoMode = true; }
         /** Enables the generation of undo actions
         */
-        inline void                 LeaveUndoMode() { m_bInUndoMode = sal_False; }
+        inline void                 LeaveUndoMode() { m_bInUndoMode = false; }
 
         /** GetCellText returns the text at the given position
             @param  _nRow
@@ -225,8 +225,8 @@ namespace dbaui
         Rectangle       GetInvalidRect( sal_uInt16 nColId );
         long            GetRealRow(long nRow) const;
         long            GetBrowseRow(long nRowId) const;
-        sal_Bool        GetFunctionName(sal_uInt32 _nFunctionTokenId, OUString& rFkt);
-        void            appendUndoAction(const OUString& _rOldValue,const OUString& _rNewValue,sal_Int32 _nRow,sal_Bool& _bListAction);
+        bool            GetFunctionName(sal_uInt32 _nFunctionTokenId, OUString& rFkt);
+        void            appendUndoAction(const OUString& _rOldValue,const OUString& _rNewValue,sal_Int32 _nRow, bool& _bListAction);
         void            appendUndoAction(const OUString& _rOldValue,const OUString& _rNewValue,sal_Int32 _nRow);
         OTableFields&   getFields() const;
         void            enableControl(const OTableFieldDescRef& _rEntry,Window* _pControl);
@@ -234,7 +234,7 @@ namespace dbaui
         void            invalidateUndoRedo();
         OTableFieldDescRef getEntry(OTableFields::size_type _nPos);
 
-        void            adjustSelectionMode( sal_Bool _bClickedOntoHeader, sal_Bool _bClickedOntoHandleCol );
+        void            adjustSelectionMode( bool _bClickedOntoHeader, bool _bClickedOntoHandleCol );
 
         /** save the filed change in save modified
             @param  _sFieldName
@@ -246,7 +246,7 @@ namespace dbaui
             @return
                 <TRUE/> if an error occurred otherwise <FALSE/>
         */
-        sal_Bool        saveField(OUString& _sFieldName, OTableFieldDescRef& _pEntry, sal_Bool& _bListAction);
+        bool            saveField(OUString& _sFieldName, OTableFieldDescRef& _pEntry, bool& _bListAction);
 
         /** sets the table window at the _pEntry
             @param  _pEntry
@@ -256,7 +256,7 @@ namespace dbaui
             @return
                 <TRUE/> if the table name was set otherwise <FALSE/>
         */
-        sal_Bool        fillEntryTable(OTableFieldDescRef& _pEntry,const OUString& _sTableName);
+        bool            fillEntryTable(OTableFieldDescRef& _pEntry,const OUString& _sTableName);
 
         /** uses the parse node to fill all information into the field
             @param  _pColumnRef
@@ -270,15 +270,15 @@ namespace dbaui
             @return
                 <TRUE/> if an error occurred otherwise <FALSE/>
         */
-        sal_Bool        fillColumnRef(  const ::connectivity::OSQLParseNode* _pColumnRef,
+        bool            fillColumnRef(  const ::connectivity::OSQLParseNode* _pColumnRef,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                                         OTableFieldDescRef& _pEntry,
-                                        sal_Bool& _bListAction);
-        sal_Bool        fillColumnRef(  const OUString& _sColumnName,
+                                        bool& _bListAction);
+        bool            fillColumnRef(  const OUString& _sColumnName,
                                         const OUString& _sTableRange,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
                                         OTableFieldDescRef& _pEntry,
-                                        sal_Bool& _bListAction);
+                                        bool& _bListAction);
 
         /** append an undo action for the table field
             @param  _sOldAlias
@@ -288,7 +288,7 @@ namespace dbaui
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
         */
-        void            notifyTableFieldChanged(const OUString& _sOldAlias,const OUString& _sAlias,sal_Bool& _bListAction,sal_uInt16 _nColumnId);
+        void            notifyTableFieldChanged(const OUString& _sOldAlias,const OUString& _sAlias, bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** append an undo action for the function field
             @param  _sOldFunctionName
@@ -298,7 +298,7 @@ namespace dbaui
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
         */
-        void            notifyFunctionFieldChanged(const OUString& _sOldFunctionName,const OUString& _sFunctionName,sal_Bool& _bListAction,sal_uInt16 _nColumnId);
+        void            notifyFunctionFieldChanged(const OUString& _sOldFunctionName,const OUString& _sFunctionName, bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** clears the function fields of the submitted entry if it doesn't match the SQL standard and append an undo action.
             E.q. AGGREGATE functions are only valid when the field name isn't an asterisk
@@ -309,7 +309,7 @@ namespace dbaui
             @param  _bListAction
                 When <TRUE/> an list action will be created.
         */
-        void            clearEntryFunctionField(const OUString& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction,sal_uInt16 _nColumnId);
+        void            clearEntryFunctionField(const OUString& _sFieldName,OTableFieldDescRef& _pEntry, bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** remove or insert the necessary function types
             @param  _pEntry

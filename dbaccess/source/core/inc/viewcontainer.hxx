@@ -61,7 +61,7 @@ namespace dbaccess
         OViewContainer( ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
-                        sal_Bool _bCase,
+                        bool _bCase,
                         IRefreshListener*   _pRefreshListener,
                         ::dbtools::IWarningsContainer* _pWarningsContainer,
                         oslInterlockedCount& _nInAppend

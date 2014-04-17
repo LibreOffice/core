@@ -45,7 +45,7 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
                        const TTableConnectionData::value_type& _pData,
                        OJoinTableView::OTableWindowMap* _pTableMap,
                        const Reference< XConnection >& _xConnection,
-                       sal_Bool _bAllowTableSelect)
+                       bool _bAllowTableSelect)
     : ModalDialog( pParent, "JoinDialog", "dbaccess/ui/joindialog.ui" )
     , m_pTableControl( NULL )
     , m_pTableMap(_pTableMap)
@@ -81,7 +81,7 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
 
     m_pTableControl->lateUIInit();
 
-    sal_Bool bSupportFullJoin = sal_False;
+    bool bSupportFullJoin = false;
     Reference<XDatabaseMetaData> xMeta;
     try
     {
@@ -92,7 +92,7 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     catch(SQLException&)
     {
     }
-    sal_Bool bSupportOuterJoin = sal_False;
+    bool bSupportOuterJoin = false;
     try
     {
         if ( xMeta.is() )
@@ -153,13 +153,13 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
     sal_uInt16 nResId = 0;
     const sal_uInt16 nPos = m_pLB_JoinType->GetSelectEntryPos();
     const sal_IntPtr nJoinType = reinterpret_cast<sal_IntPtr>(m_pLB_JoinType->GetEntryData(nPos));
-    sal_Bool bAddHint = sal_True;
+    bool bAddHint = true;
     switch ( nJoinType )
     {
         default:
         case ID_INNER_JOIN:
             nResId = STR_QUERY_INNER_JOIN;
-            bAddHint = sal_False;
+            bAddHint = false;
             eJoinType = INNER_JOIN;
             break;
         case ID_LEFT_JOIN:
@@ -237,7 +237,7 @@ IMPL_LINK( DlgQryJoin, OKClickHdl, Button*, /*pButton*/ )
 
 IMPL_LINK( DlgQryJoin, NaturalToggleHdl, CheckBox*, /*pButton*/ )
 {
-    sal_Bool bChecked = m_pCBNatural->IsChecked();
+    bool bChecked = m_pCBNatural->IsChecked();
     static_cast<OQueryTableConnectionData*>(m_pConnData.get())->setNatural(bChecked);
     m_pTableControl->enableRelation(!bChecked);
     if ( bChecked )

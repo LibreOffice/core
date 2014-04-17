@@ -415,9 +415,9 @@ bool OApplicationController::isDataSourceReadOnly() const
     return !xStore.is() || xStore->isReadonly();
 }
 
-sal_Bool OApplicationController::isConnectionReadOnly() const
+bool OApplicationController::isConnectionReadOnly() const
 {
-    sal_Bool bIsConnectionReadOnly = true;
+    bool bIsConnectionReadOnly = true;
     if ( m_xMetaData.is() )
     {
         try
@@ -581,7 +581,7 @@ TransferableHelper* OApplicationController::copyObject()
     return NULL;
 }
 
-sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAccessDescriptor& _rPasteData,const OUString& _sParentFolder ,sal_Bool _bMove)
+bool OApplicationController::paste( ElementType _eType, const ::svx::ODataAccessDescriptor& _rPasteData, const OUString& _sParentFolder, bool _bMove)
 {
     try
     {
@@ -596,14 +596,14 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 // read all necessary data
 
                 OUString sCommand;
-                sal_Bool bEscapeProcessing = sal_True;
+                bool bEscapeProcessing = true;
 
                 _rPasteData[daCommand] >>= sCommand;
                 if ( _rPasteData.has(daEscapeProcessing) )
                     _rPasteData[daEscapeProcessing] >>= bEscapeProcessing;
 
                 // plausibility check
-                sal_Bool bValidDescriptor = sal_False;
+                bool bValidDescriptor = false;
                 OUString sDataSourceName = _rPasteData.getDataSource();
                 if (CommandType::QUERY == nCommandType)
                     bValidDescriptor = sDataSourceName.getLength() && sCommand.getLength();
@@ -612,7 +612,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 if (!bValidDescriptor)
                 {
                     OSL_FAIL("OApplicationController::paste: invalid descriptor!");
-                    return sal_False;
+                    return false;
                 }
 
                 // the target object name (as we'll suggest it to the user)
@@ -640,7 +640,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 if (CommandType::QUERY == nCommandType)
                 {
                     // need to extract the statement and the escape processing flag from the query object
-                    sal_Bool bSuccess = sal_False;
+                    bool bSuccess = false;
                     try
                     {
                         // the concrete query
@@ -664,7 +664,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     {
                         OSL_FAIL("OApplicationController::paste: could not extract the source query object!");
                         // TODO: maybe this is worth an error message to be displayed to the user ....
-                        return sal_False;
+                        return false;
                     }
                 }
 
@@ -673,7 +673,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 if (!xQueryFactory.is())
                 {
                     OSL_FAIL("OApplicationController::paste: invalid destination query container!");
-                    return sal_False;
+                    return false;
                 }
 
                 // here we have everything needed to create a new query object ...
@@ -698,7 +698,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                                             SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS);
                     if ( RET_OK != aAskForName.Execute() )
                         // cancelled by the user
-                        return sal_False;
+                        return false;
                     sTargetName = aAskForName.getName();
                 }
 
@@ -748,7 +748,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
             }
             else
                 OSL_TRACE("There should be a sequence in it!");
-            return sal_True;
+            return true;
         }
         else if ( _rPasteData.has(daComponent) ) // forms or reports
         {
@@ -762,7 +762,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return sal_False;
+    return false;
 }
 
 Reference<XNameContainer> OApplicationController::getQueryDefintions() const
@@ -793,7 +793,7 @@ void OApplicationController::getSupportedFormats(ElementType _eType,::std::vecto
     }
 }
 
-sal_Bool OApplicationController::isTableFormat()  const
+bool OApplicationController::isTableFormat()  const
 {
     return m_aTableCopyHelper.isTableFormat(getViewClipboard());
 }

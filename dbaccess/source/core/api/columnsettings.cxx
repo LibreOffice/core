@@ -50,7 +50,7 @@ namespace dbaccess
     // OColumnSettings
 
     OColumnSettings::OColumnSettings()
-        :m_bHidden(sal_False)
+        :m_bHidden(false)
     {
     }
 
@@ -105,7 +105,7 @@ namespace dbaccess
 
         case PROPERTY_ID_HIDDEN:
             {
-                sal_Bool bHidden = sal_False;
+                bool bHidden = false;
                 OSL_VERIFY( _rPropertyValue >>= bHidden );
                 return !bHidden;
             }

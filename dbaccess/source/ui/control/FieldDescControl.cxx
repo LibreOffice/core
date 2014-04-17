@@ -134,7 +134,7 @@ OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTab
     ,m_nOldVThumb( 0 )
     ,m_nOldHThumb( 0 )
     ,m_nWidth(50)
-    ,m_bAdded(sal_False)
+    ,m_bAdded(false)
     ,m_bRightAligned(false)
     ,pActFieldDescr(NULL)
 {
@@ -181,7 +181,7 @@ OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHel
     ,m_nOldVThumb( 0 )
     ,m_nOldHThumb( 0 )
     ,m_nWidth(50)
-    ,m_bAdded(sal_False)
+    ,m_bAdded(false)
     ,m_bRightAligned(false)
     ,pActFieldDescr(NULL)
 {
@@ -295,7 +295,7 @@ void OFieldDescControl::CheckScrollBars()
     long nNewHWidth = szOverallSize.Width() - nVScrollWidth;
     long nNewVHeight = szOverallSize.Height() - nHScrollHeight;
 
-    sal_Bool bNeedHScrollBar(sal_False), bNeedVScrollBar(sal_False);
+    bool bNeedHScrollBar(false), bNeedVScrollBar(false);
 
     // Adjust the areas
     // Do I actually need ScrollBars?
@@ -331,7 +331,7 @@ void OFieldDescControl::CheckScrollBars()
         if (!bNeedHScrollBar && (lMaxXPosition > lMaxXAvailable))
         {
             // The vertical one now necessitates a horizontal one
-            bNeedHScrollBar = sal_True;
+            bNeedHScrollBar = true;
             // Adjust nLastVisible
             nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - nControl_Spacing_y - nHScrollHeight) / (nControl_Spacing_y + nControlHeight));
                 // bNeedVScrollBar does NOT change: it's already set to sal_True and nLastVisible will only decrease
@@ -449,7 +449,7 @@ sal_Int32 OFieldDescControl::GetMaxControlHeight() const
     return aHeight.Height();
 }
 
-void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
+void OFieldDescControl::SetReadOnly( bool bReadOnly )
 {
     // Enable/disable Controls
     Control* ppAggregates[]     = {   pRequired, pNumType
@@ -623,30 +623,30 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, /*pButton*/ )
         return 0;
 
     SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
-    if(::dbaui::callColumnFormatDialog(this,pFormatter,pActFieldDescr->GetType(),nOldFormatKey,rOldJustify,sal_True))
+    if(::dbaui::callColumnFormatDialog(this,pFormatter,pActFieldDescr->GetType(),nOldFormatKey,rOldJustify,true))
     {
-        sal_Bool bModified = sal_False;
+        bool bModified = false;
         if(nOldFormatKey != pActFieldDescr->GetFormatKey())
         {
             pActFieldDescr->SetFormatKey( nOldFormatKey );
-            bModified = sal_True;
+            bModified = true;
         }
         if(rOldJustify != pActFieldDescr->GetHorJustify())
         {
             pActFieldDescr->SetHorJustify( rOldJustify );
-            bModified = sal_True;
+            bModified = true;
         }
 
         if(bModified)
         {
-            SetModified(sal_True);
+            SetModified(true);
             UpdateFormatSample(pActFieldDescr);
         }
     }
     return 0;
 }
 
-void OFieldDescControl::SetModified(sal_Bool /*bModified*/)
+void OFieldDescControl::SetModified(bool /*bModified*/)
 {
 }
 
@@ -656,7 +656,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
         return 0;
 
     if ( pListBox->GetSavedValue() != pListBox->GetSelectEntryPos() )
-        SetModified(sal_True);
+        SetModified(true);
 
     // Special treatment for Boold fields
     if(pListBox == pRequired && pBoolDefault )
@@ -713,7 +713,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     if(pListBox == m_pType)
     {
         TOTypeInfoSP pTypeInfo = getTypeInfo(m_pType->GetSelectEntryPos());
-        pActFieldDescr->FillFromTypeInfo(pTypeInfo,sal_True,sal_False); // SetType(pTypeInfo);
+        pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false); // SetType(pTypeInfo);
 
         DisplayData(pActFieldDescr);
         CellModified(-1, m_pType->GetPos());
@@ -1163,7 +1163,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         if ( m_bAdded )
         {
             ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-            m_bAdded = sal_False;
+            m_bAdded = false;
         }
         return;
     }
@@ -1171,7 +1171,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     if ( !m_bAdded )
     {
         ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::AddWindow));
-        m_bAdded = sal_True;
+        m_bAdded = true;
     }
 
     TOTypeInfoSP pFieldType;
@@ -1448,7 +1448,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                 if(!aIter->second->bNullable && pFieldDescr->IsNullable())
                     pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
                 if(!aIter->second->bAutoIncrement && pFieldDescr->IsAutoIncrement())
-                    pFieldDescr->SetAutoIncrement(sal_False);
+                    pFieldDescr->SetAutoIncrement(false);
             }
             if ( aIter != pMap->end() )
             {
@@ -1459,7 +1459,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     }
 
     // Enable/disable Controls
-    sal_Bool bRead(IsReadOnly());
+    bool bRead(IsReadOnly());
 
     ArrangeAggregates();
     CheckScrollBars();
@@ -1591,7 +1591,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
 void OFieldDescControl::UpdateFormatSample(OFieldDescription* pFieldDescr)
 {
     if ( pFieldDescr && pFormatSample )
-        pFormatSample->SetText(getControlDefault(pFieldDescr,sal_False));
+        pFormatSample->SetText(getControlDefault(pFieldDescr,false));
 }
 
 void OFieldDescControl::GetFocus()
@@ -1626,9 +1626,9 @@ void OFieldDescControl::LoseFocus()
     TabPage::LoseFocus();
 }
 
-sal_Bool OFieldDescControl::isCopyAllowed()
+bool OFieldDescControl::isCopyAllowed()
 {
-    sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
+    bool bAllowed = (m_pActFocusWindow != NULL) &&
                         (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
                         m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
                         m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
@@ -1638,9 +1638,9 @@ sal_Bool OFieldDescControl::isCopyAllowed()
     return bAllowed;
 }
 
-sal_Bool OFieldDescControl::isCutAllowed()
+bool OFieldDescControl::isCutAllowed()
 {
-    sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
+    bool bAllowed = (m_pActFocusWindow != NULL) &&
                         (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
                         m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
                         m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
@@ -1649,9 +1649,9 @@ sal_Bool OFieldDescControl::isCutAllowed()
     return bAllowed;
 }
 
-sal_Bool OFieldDescControl::isPasteAllowed()
+bool OFieldDescControl::isPasteAllowed()
 {
-    sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
+    bool bAllowed = (m_pActFocusWindow != NULL) &&
                         (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
                         m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
                         m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
@@ -1682,10 +1682,10 @@ void OFieldDescControl::paste()
         static_cast<Edit*>(m_pActFocusWindow)->Paste();
 }
 
-sal_Bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const
+bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr, sal_uInt32& _nFormatKey) const
 {
     _nFormatKey = _pFieldDescr->GetFormatKey();
-    sal_Bool bTextFormat = sal_True;
+    bool bTextFormat = true;
 
     try
     {
@@ -1711,14 +1711,14 @@ sal_Bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr,s
     return bTextFormat;
 }
 
-OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDescr ,sal_Bool _bCheck) const
+OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDescr, bool _bCheck) const
 {
     OUString sDefault;
-    sal_Bool bCheck = !_bCheck || _pFieldDescr->GetControlDefault().hasValue();
+    bool bCheck = !_bCheck || _pFieldDescr->GetControlDefault().hasValue();
     if ( bCheck )
     {
         sal_uInt32 nFormatKey;
-        sal_Bool bTextFormat = sal_False;
+        bool bTextFormat = false;
 
         try
         {

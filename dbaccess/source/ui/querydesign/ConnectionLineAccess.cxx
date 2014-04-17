@@ -106,7 +106,7 @@ namespace dbaui
         return this;
     }
     // XAccessibleComponent
-    sal_Bool SAL_CALL OConnectionLineAccess::contains( const awt::Point& _aPoint ) throw (RuntimeException)
+    bool SAL_CALL OConnectionLineAccess::contains( const awt::Point& _aPoint ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         Point aPoint(_aPoint.X,_aPoint.Y);
@@ -140,18 +140,18 @@ namespace dbaui
         Size aSize(m_pLine ? m_pLine->GetBoundingRect().GetSize() : Size());
         return awt::Size(aSize.Width(),aSize.Height());
     }
-    sal_Bool SAL_CALL OConnectionLineAccess::isShowing(  ) throw (RuntimeException)
+    bool SAL_CALL OConnectionLineAccess::isShowing(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         return m_pLine ? m_pLine->GetParent()->GetWindowRegionPixel().IsInside(m_pLine->GetBoundingRect()) : sal_False;
     }
-    sal_Bool SAL_CALL OConnectionLineAccess::isVisible(  ) throw (RuntimeException)
+    bool SAL_CALL OConnectionLineAccess::isVisible(  ) throw (RuntimeException)
     {
-        return sal_True;
+        return true;
     }
-    sal_Bool SAL_CALL OConnectionLineAccess::isFocusTraversable(  ) throw (RuntimeException)
+    bool SAL_CALL OConnectionLineAccess::isFocusTraversable(  ) throw (RuntimeException)
     {
-        return sal_True;
+        return true;
     }
     // XAccessibleRelationSet
     sal_Int32 SAL_CALL OConnectionLineAccess::getRelationCount(  ) throw (RuntimeException, std::exception)
@@ -192,7 +192,7 @@ namespace dbaui
         // clear vector
         clearLineData();
     }
-    sal_Bool OConnectionLineAccess::isEditable() const
+    bool OConnectionLineAccess::isEditable() const
     {
 
         return m_pLine ? !m_pLine->GetParent()->getDesignView()->getController().isReadOnly() : sal_False;

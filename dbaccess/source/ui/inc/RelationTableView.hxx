@@ -38,7 +38,7 @@ namespace dbaui
         bool m_bInRemove;
 
         virtual void ConnDoubleClicked( OTableConnection* pConnection ) SAL_OVERRIDE;
-        virtual void AddTabWin(const OUString& _rComposedName, const OUString& rWinName, sal_Bool bNewTable = sal_False) SAL_OVERRIDE;
+        virtual void AddTabWin(const OUString& _rComposedName, const OUString& rWinName, bool bNewTable = false) SAL_OVERRIDE;
 
         virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData) SAL_OVERRIDE;
 
@@ -65,7 +65,7 @@ namespace dbaui
         void AddNewRelation();
 
         /// used by AddTabDlg to check if tables can be added
-        virtual sal_Bool IsAddAllowed() SAL_OVERRIDE;
+        virtual bool IsAddAllowed() SAL_OVERRIDE;
 
         virtual void lookForUiActivities() SAL_OVERRIDE;
     };

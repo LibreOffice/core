@@ -32,7 +32,7 @@ namespace dbaxml
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> m_aInfoSequence;
         OXMLDataSourceSetting* m_pContainer;
         ::com::sun::star::uno::Type m_aPropType;            // the type of the property the instance imports currently
-        sal_Bool m_bIsList;
+        bool m_bIsList;
 
         ODBFilter& GetOwnImport();
         ::com::sun::star::uno::Any convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters);

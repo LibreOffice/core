@@ -60,13 +60,13 @@ Any SAL_CALL WrappedResultSet::getBookmark() throw(SQLException, RuntimeExceptio
     return makeAny(m_xDriverSet->getRow());
 }
 
-sal_Bool SAL_CALL WrappedResultSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
+bool SAL_CALL WrappedResultSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "WrappedResultSet::moveToBookmark" );
     return m_xRowLocate->moveToBookmark( bookmark );
 }
 
-sal_Bool SAL_CALL WrappedResultSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
+bool SAL_CALL WrappedResultSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "WrappedResultSet::moveRelativeToBookmark" );
     return m_xRowLocate->moveRelativeToBookmark( bookmark,rows );
@@ -78,7 +78,7 @@ sal_Int32 SAL_CALL WrappedResultSet::compareBookmarks( const Any& _first, const 
     return m_xRowLocate->compareBookmarks( _first,_second );
 }
 
-sal_Bool SAL_CALL WrappedResultSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL WrappedResultSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "WrappedResultSet::hasOrderedBookmarks" );
     return m_xRowLocate->hasOrderedBookmarks();

@@ -75,7 +75,7 @@ namespace dbaui
         Timer       m_aResetVisitFlag;
             // we reset the "visited flag" 1 second after and entry has been selected
 
-        sal_Bool    m_bNeedErrorOnCurrent;
+        bool    m_bNeedErrorOnCurrent;
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                     m_aFinalValues;     /// the final values as entered by the user

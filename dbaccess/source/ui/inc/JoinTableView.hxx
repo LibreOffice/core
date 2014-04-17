@@ -99,7 +99,7 @@ namespace dbaui
         OTableConnection*       m_pSelectedConn;
 
 
-        sal_Bool                    m_bTrackingInitiallyMoved;
+        bool                    m_bTrackingInitiallyMoved;
 
         DECL_LINK(OnDragScrollTimer, void*);
 
@@ -133,7 +133,7 @@ namespace dbaui
 
         void NotifyTitleClicked( OTableWindow* pTabWin, const Point rMousePos );
 
-        virtual void AddTabWin(const OUString& _rComposedName, const OUString& rWinName, sal_Bool bNewTable = sal_False);
+        virtual void AddTabWin(const OUString& _rComposedName, const OUString& rWinName, bool bNewTable = false);
         virtual void RemoveTabWin( OTableWindow* pTabWin );
 
         // hide all TabWins (does NOT delete them; they are put in an UNDO action)
@@ -160,9 +160,9 @@ namespace dbaui
             @param  _pConnection the connection which should be added
             @param  _bAddData    when true then the data should also be appended
         */
-        void addConnection(OTableConnection* _pConnection,sal_Bool _bAddData = sal_True);
+        void addConnection(OTableConnection* _pConnection,bool _bAddData = true);
 
-        sal_Bool ScrollPane( long nDelta, sal_Bool bHoriz, sal_Bool bPaintScrollBars );
+        bool ScrollPane( long nDelta, bool bHoriz, bool bPaintScrollBars );
         sal_uLong GetTabWinCount();
         Point GetScrollOffset() const { return m_aScrollOffset; }
 
@@ -181,7 +181,7 @@ namespace dbaui
         */
         const ::std::vector<OTableConnection*>* getTableConnections() const { return &m_vTableConnection; }
 
-        sal_Bool ExistsAConn(const OTableWindow* pFromWin) const;
+        bool ExistsAConn(const OTableWindow* pFromWin) const;
 
         /** search for all connections of a table
 
@@ -221,7 +221,7 @@ namespace dbaui
         virtual void ClearAll();
 
         /** @note used by AddTabDlg to see if more tables can be added */
-        virtual sal_Bool IsAddAllowed();
+        virtual bool IsAddAllowed();
         virtual bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
 
         // DnD stuff
@@ -254,7 +254,7 @@ namespace dbaui
             @param _rSize   The Size to be check as well
             @return true if the area is visible, false otherwise
         */
-        sal_Bool isMovementAllowed(const Point& _rPoint,const Size& _rSize);
+        bool isMovementAllowed(const Point& _rPoint,const Size& _rSize);
 
         Size getRealOutputSize() const { return m_aOutputSize; }
 
@@ -305,7 +305,7 @@ namespace dbaui
 
     private:
         void InitColors();
-        sal_Bool ScrollWhileDragging();
+        bool ScrollWhileDragging();
 
         /** opens the context menu to delate a connection
             @param _aPos the position where the popup menu should appear

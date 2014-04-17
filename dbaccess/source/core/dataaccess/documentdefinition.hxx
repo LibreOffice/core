@@ -65,10 +65,10 @@ class ODocumentDefinition
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xLastKnownConnection;
 
     OInterceptor*                                                                       m_pInterceptor;
-    sal_Bool                                                                            m_bForm; // <TRUE/> if it is a form
-    sal_Bool                                                                            m_bOpenInDesign;
-    sal_Bool                                                                            m_bInExecute;
-    sal_Bool                                                                            m_bRemoveListener;
+    bool                                                                            m_bForm; // <TRUE/> if it is a form
+    bool                                                                            m_bOpenInDesign;
+    bool                                                                            m_bInExecute;
+    bool                                                                            m_bRemoveListener;
     OEmbeddedClientHelper*                                                              m_pClientHelper;
 
 protected:
@@ -80,7 +80,7 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
             const TContentPtr& _pImpl,
-            sal_Bool _bForm
+            bool _bForm
         );
 
     void    initialLoad(
@@ -144,11 +144,11 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
         getContainerStorage() const;
 
-    sal_Bool save(sal_Bool _bApprove);
-    sal_Bool saveAs();
+    bool save(bool _bApprove);
+    bool saveAs();
     void closeObject();
-    sal_Bool isModified();
-    inline sal_Bool isNewReport() const { return !m_bForm && !m_pImpl->m_aProps.bAsTemplate; }
+    bool isModified();
+    inline bool isNewReport() const { return !m_bForm && !m_pImpl->m_aProps.bAsTemplate; }
 
     static void fillReportData(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rxContext,
@@ -189,7 +189,7 @@ public:
                   sal_Int32 i_nHandle,
             const ::com::sun::star::uno::Any& i_rNewValue,
             const ::com::sun::star::uno::Any& i_rOldValue,
-                  sal_Bool i_bVetoable,
+                  bool i_bVetoable,
             const NotifierAccess
         );
 
@@ -332,7 +332,7 @@ private:
 
     /** determines whether the document we represent supports embedded scripts and macros
     */
-    sal_Bool objectSupportsEmbeddedScripts() const;
+    bool objectSupportsEmbeddedScripts() const;
 
     //- commands
 
@@ -363,9 +363,9 @@ private:
             ODocumentDefinition&            m_rDocumentDefinition;
     const   ::com::sun::star::uno::Any      m_aOldValue;
     const   ::com::sun::star::uno::Any      m_aNewValue;
-    ::osl::ResettableMutexGuard&    m_rClearForNotify;
+    ::osl::ResettableMutexGuard&            m_rClearForNotify;
 
-    void    impl_fireEvent_throw( const sal_Bool i_bVetoable );
+    void    impl_fireEvent_throw( const bool i_bVetoable );
 };
 
 }   // namespace dbaccess

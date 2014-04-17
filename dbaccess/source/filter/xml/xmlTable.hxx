@@ -38,8 +38,8 @@ namespace dbaxml
         OUString m_sCatalog;
         OUString m_sStyleName;
         OUString m_sServiceName;
-        sal_Bool        m_bApplyFilter;
-        sal_Bool        m_bApplyOrder;
+        bool        m_bApplyFilter;
+        bool        m_bApplyOrder;
 
         ODBFilter& GetOwnImport();
 

@@ -51,7 +51,7 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_xParentContainer(_xParentContainer)
     ,m_xTable(_xTable)
-    ,m_bHidden(sal_False)
+    ,m_bHidden(false)
 {
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");

@@ -78,8 +78,8 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
     , m_nTableCount(0)
     , m_nWidth(0)
     , m_nColumnWidth(87)
-    , m_bMetaOptions(sal_False)
-    , m_bSDNum(sal_False)
+    , m_bMetaOptions(false)
+    , m_bSDNum(false)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
@@ -94,14 +94,14 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                          const TColumnVector* pList,
                          const OTypeInfoMap* _pInfoMap,
-                         sal_Bool _bAutoIncrementEnabled)
+                         bool _bAutoIncrementEnabled)
     : HTMLParser(rIn)
     , ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rxContext, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
     , m_nTableCount(0)
     , m_nWidth(0)
     , m_nColumnWidth(87)
-    , m_bMetaOptions(sal_False)
-    , m_bSDNum(sal_False)
+    , m_bMetaOptions(false)
+    , m_bSDNum(false)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
@@ -184,7 +184,7 @@ void OHTMLReader::NextToken( int nToken )
                     }
                 }
                 else
-                    m_bError = sal_True;
+                    m_bError = true;
                 break;
             case HTML_TEXTTOKEN:
             case HTML_SINGLECHAR:
@@ -216,13 +216,13 @@ void OHTMLReader::NextToken( int nToken )
                     m_sCurrent = "";
                     m_nColumnPos++;
                     eraseTokens();
-                    m_bSDNum = m_bInTbl = sal_False;
+                    m_bSDNum = m_bInTbl = false;
                 }
                 break;
             case HTML_TABLEROW_OFF:
                 if ( !m_pUpdateHelper.get() )
                 {
-                    m_bError = sal_True;
+                    m_bError = true;
                     break;
                 }
                 try
@@ -253,7 +253,7 @@ void OHTMLReader::NextToken( int nToken )
                     do
                     {}
                     while(GetNextToken() != HTML_TABLEROW_OFF);
-                    m_bHead = sal_False;
+                    m_bHead = false;
                 }
                 break;
             case HTML_TABLEDATA_ON:
@@ -276,7 +276,7 @@ void OHTMLReader::NextToken( int nToken )
                     m_sTextToken = m_sCurrent;
                 adjustFormat();
                 m_nColumnPos++;
-                m_bSDNum = m_bInTbl = sal_False;
+                m_bSDNum = m_bInTbl = false;
                 m_sCurrent = "";
                 break;
             case HTML_TABLEROW_OFF:
@@ -294,7 +294,7 @@ void OHTMLReader::NextToken( int nToken )
 void OHTMLReader::fetchOptions()
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::fetchOptions" );
-    m_bInTbl = sal_True;
+    m_bInTbl = true;
     const HTMLOptions& options = GetOptions();
     for (size_t i = 0, n = options.size(); i < n; ++i)
     {
@@ -304,7 +304,7 @@ void OHTMLReader::fetchOptions()
             case HTML_O_SDVAL:
             {
                 m_sValToken = rOption.GetString();
-                m_bSDNum = sal_True;
+                m_bSDNum = true;
             }
             break;
             case HTML_O_SDNUM:
@@ -413,7 +413,7 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
     }
 }
 
-sal_Bool OHTMLReader::CreateTable(int nToken)
+bool OHTMLReader::CreateTable(int nToken)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::CreateTable" );
     OUString aTempName(ModuleRes(STR_TBL_TITLE));
@@ -421,8 +421,8 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
     aTempName = ::dbtools::createUniqueName(m_xTables, aTempName);
 
     int nTmpToken2 = nToken;
-    sal_Bool bCaption = sal_False;
-    sal_Bool bTableHeader = sal_False;
+    bool bCaption = false;
+    bool bTableHeader = false;
     OUString aColumnName;
     SvxCellHorJustify eVal;
 
@@ -449,7 +449,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
             case HTML_TABLEDATA_ON:
             case HTML_TABLEHEADER_ON:
                 TableDataOn(eVal);
-                bTableHeader = sal_True;
+                bTableHeader = true;
                 break;
             case HTML_TABLEDATA_OFF:
             case HTML_TABLEHEADER_OFF:
@@ -466,13 +466,13 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                     m_sCurrent = "";
 
                     eVal = SVX_HOR_JUSTIFY_STANDARD;
-                    bTableHeader = sal_False;
+                    bTableHeader = false;
                 }
                 break;
 
             case HTML_TITLE_ON:
             case HTML_CAPTION_ON:
-                bCaption = sal_True;
+                bCaption = true;
                 break;
             case HTML_TITLE_OFF:
             case HTML_CAPTION_OFF:
@@ -481,7 +481,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                     aTableName = ::dbtools::createUniqueName(m_xTables, aTableName);
                 else
                     aTableName = aTempName;
-                bCaption = sal_False;
+                bCaption = false;
                 break;
             case HTML_FONT_ON:
                 TableFontOn(aFont,nTextColor);
@@ -509,16 +509,16 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
         CreateDefaultColumn(aColumnName);
 
     if ( m_vDestVector.empty() )
-        return sal_False;
+        return false;
 
     if(aTableName.isEmpty())
         aTableName = aTempName;
 
-    m_bInTbl        = sal_False;
-    m_bFoundTable   = sal_True;
+    m_bInTbl        = false;
+    m_bFoundTable   = true;
 
     if ( isCheckEnabled() )
-        return sal_True;
+        return true;
 
     return !executeWizard(aTableName,makeAny(nTextColor),aFont) && m_xTable.is();
 }
@@ -526,7 +526,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 void OHTMLReader::setTextEncoding()
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::setTextEncoding" );
-    m_bMetaOptions = sal_True;
+    m_bMetaOptions = true;
     ParseMetaOptions(NULL, NULL);
 }
 

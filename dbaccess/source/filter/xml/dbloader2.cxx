@@ -126,14 +126,14 @@ OUString SAL_CALL DBTypeDetection::detect( ::com::sun::star::uno::Sequence< ::co
     try
     {
         ::comphelper::NamedValueCollection aMedia( Descriptor );
-        sal_Bool bStreamFromDescr = sal_False;
+        bool bStreamFromDescr = false;
         OUString sURL = aMedia.getOrDefault( "URL", OUString() );
 
         Reference< XInputStream > xInStream( aMedia.getOrDefault( "InputStream",  Reference< XInputStream >() ) );
         Reference< XPropertySet > xStorageProperties;
         if ( xInStream.is() )
         {
-            bStreamFromDescr = sal_True;
+            bStreamFromDescr = true;
             xStorageProperties.set( ::comphelper::OStorageHelper::GetStorageFromInputStream(
                 xInStream, m_aContext ), UNO_QUERY );
         }
@@ -257,7 +257,7 @@ public:
     virtual void SAL_CALL cancel(void) throw(std::exception) SAL_OVERRIDE;
 
 private:
-    sal_Bool impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, sal_Bool& _bShouldStartTableWizard );
+    bool impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, bool& _bShouldStartTableWizard );
 };
 
 
@@ -306,7 +306,7 @@ Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static(void) thro
 
 namespace
 {
-    sal_Bool lcl_urlAllowsInteraction( const Reference<XComponentContext> & _rContext, const OUString& _rURL )
+    bool lcl_urlAllowsInteraction( const Reference<XComponentContext> & _rContext, const OUString& _rURL )
     {
         bool bDoesAllow = false;
         try
@@ -344,7 +344,7 @@ namespace
     }
 }
 
-sal_Bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, sal_Bool& _bShouldStartTableWizard )
+bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, bool& _bShouldStartTableWizard )
 {
     Sequence< Any > aWizardArgs(2);
     aWizardArgs[0] <<= PropertyValue(
@@ -364,10 +364,10 @@ sal_Bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _r
 
     // execute it
     if ( RET_OK != xAdminDialog->execute() )
-        return sal_False;
+        return false;
 
     Reference<XPropertySet> xProp(xAdminDialog,UNO_QUERY);
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     xProp->getPropertyValue("OpenDatabase") >>= bSuccess;
     xProp->getPropertyValue("StartTableWizard") >>= _bShouldStartTableWizard;
     return bSuccess;
@@ -379,7 +379,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 {
     // first check if preview is true, if so return with out creating a controller. Preview is not supported
     ::comphelper::NamedValueCollection aMediaDesc( rArgs );
-    sal_Bool bPreview = aMediaDesc.getOrDefault( "Preview", sal_False );
+    bool bPreview = aMediaDesc.getOrDefault( "Preview", sal_False );
     if ( bPreview )
     {
         if (rListener.is())
@@ -390,10 +390,10 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     Reference< XModel > xModel       = aMediaDesc.getOrDefault( "Model", Reference< XModel >() );
     OUString            sSalvagedURL = aMediaDesc.getOrDefault( "SalvagedFile", _rURL );
 
-    sal_Bool bCreateNew = sal_False;        // does the URL denote the private:factory URL?
-    sal_Bool bStartTableWizard = sal_False; // start the table wizard after everything was loaded successfully?
+    bool bCreateNew = false;        // does the URL denote the private:factory URL?
+    bool bStartTableWizard = false; // start the table wizard after everything was loaded successfully?
 
-    sal_Bool bSuccess = sal_True;
+    bool bSuccess = true;
 
     // If there's no interaction handler in the media descriptor, put one.
     // By definition, loading via loadComponentFromURL (and thus via the content loader here)
@@ -496,7 +496,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
-            bSuccess = sal_False;
+            bSuccess = false;
         }
     }
 
@@ -513,12 +513,12 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
             xController->attachFrame( rFrame );
             xModel->setCurrentController( xController.get() );
 
-            bSuccess = sal_True;
+            bSuccess = true;
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
-            bSuccess = sal_False;
+            bSuccess = false;
         }
     }
 

@@ -235,7 +235,7 @@ namespace dbaui
         }
         return AccessibleRelation();
     }
-    sal_Bool OTableWindowAccess::isEditable() const
+    bool OTableWindowAccess::isEditable() const
     {
         return m_pTable && !m_pTable->getTableView()->getDesignView()->getController().isReadOnly();
     }

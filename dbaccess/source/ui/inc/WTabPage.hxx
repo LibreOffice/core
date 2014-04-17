@@ -30,16 +30,16 @@ namespace dbaui
     {
     protected:
         OCopyTableWizard*           m_pParent;
-        sal_Bool                    m_bFirstTime;   // Page wird das erste mal gerufen ; should be set in the reset methode
+        bool                    m_bFirstTime;   // Page wird das erste mal gerufen ; should be set in the reset methode
 
         OWizardPage( Window* pParent, const ResId& rResId );
 
     public:
         virtual void        Reset ( )           = 0;
-        virtual sal_Bool    LeavePage()         = 0;
+        virtual bool    LeavePage()         = 0;
         virtual OUString    GetTitle() const    = 0;
 
-        sal_Bool            IsFirstTime() const { return m_bFirstTime; }
+        bool            IsFirstTime() const { return m_bFirstTime; }
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WTABPAGE_HXX

@@ -39,8 +39,8 @@ OTableFieldDesc::OTableFieldDesc()
     ,m_nIndex(0)
     ,m_nColWidth(0)
     ,m_nColumnId((sal_uInt16)-1)
-    ,m_bGroupBy(sal_False)
-    ,m_bVisible(sal_False)
+    ,m_bGroupBy(false)
+    ,m_bVisible(false)
 {
 }
 
@@ -60,8 +60,8 @@ OTableFieldDesc::OTableFieldDesc(const OUString& rT, const OUString& rF )
     ,m_nIndex(0)
     ,m_nColWidth(0)
     ,m_nColumnId((sal_uInt16)-1)
-    ,m_bGroupBy(sal_False)
-    ,m_bVisible(sal_False)
+    ,m_bGroupBy(false)
+    ,m_bVisible(false)
 {
     SetField( rF ); SetTable( rT );
 }
@@ -95,7 +95,7 @@ OTableFieldDesc& OTableFieldDesc::operator=( const OTableFieldDesc& rRS )
     return *this;
 }
 
-sal_Bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
+bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
 {
 
     return (    m_eOrderDir != rDesc.GetOrderDir()      ||

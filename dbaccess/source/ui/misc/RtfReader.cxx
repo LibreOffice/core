@@ -77,7 +77,7 @@ ORTFReader::ORTFReader(SvStream& rIn,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                        const TColumnVector* pList,
                        const OTypeInfoMap* _pInfoMap,
-                       sal_Bool _bAutoIncrementEnabled)
+                       bool _bAutoIncrementEnabled)
    :SvRTFParser(rIn)
    ,ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rxContext, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
 {
@@ -175,7 +175,7 @@ void ORTFReader::NextToken( int nToken )
                     eraseTokens();
                 }
 
-                m_bInTbl = sal_True; // Now we are in a table description
+                m_bInTbl = true; // Now we are in a table description
                 break;
             case RTF_TEXTTOKEN:
             case RTF_SINGLECHAR:
@@ -227,11 +227,11 @@ void ORTFReader::NextToken( int nToken )
                     do
                     {}
                     while(GetNextToken() != RTF_ROW && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
-                    m_bHead = sal_False;
+                    m_bHead = false;
                 }
                 break;
             case RTF_INTBL:
-                m_bInTbl = sal_True;
+                m_bInTbl = true;
                 break;
             case RTF_TEXTTOKEN:
             case RTF_SINGLECHAR:
@@ -251,7 +251,7 @@ void ORTFReader::NextToken( int nToken )
     }
 }
 
-sal_Bool ORTFReader::CreateTable(int nToken)
+bool ORTFReader::CreateTable(int nToken)
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::CreateTable" );
     OUString aTableName(ModuleRes(STR_TBL_TITLE));
@@ -268,14 +268,14 @@ sal_Bool ORTFReader::CreateTable(int nToken)
         {
             case RTF_UNKNOWNCONTROL:
             case RTF_UNKNOWNDATA:
-                m_bInTbl = sal_False;
+                m_bInTbl = false;
                 aColumnName = "";
                 break;
             case RTF_INTBL:
                 if(m_bInTbl)
                     aColumnName = "";
 
-                m_bInTbl = sal_True;
+                m_bInTbl = true;
                 break;
             case RTF_TEXTTOKEN:
             case RTF_SINGLECHAR:
@@ -310,7 +310,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
     }
     while((nTmpToken2 = GetNextToken()) != RTF_TROWD && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
 
-    sal_Bool bOk = !m_vDestVector.empty();
+    bool bOk = !m_vDestVector.empty();
     if(bOk)
     {
         if ( !aColumnName.isEmpty() )
@@ -320,11 +320,11 @@ sal_Bool ORTFReader::CreateTable(int nToken)
             CreateDefaultColumn(aColumnName);
         }
 
-        m_bInTbl        = sal_False;
-        m_bFoundTable   = sal_True;
+        m_bInTbl        = false;
+        m_bFoundTable   = true;
 
         if ( isCheckEnabled() )
-            return sal_True;
+            return true;
         Any aTextColor;
         if(!m_vecColor.empty())
             aTextColor <<= m_vecColor[0];

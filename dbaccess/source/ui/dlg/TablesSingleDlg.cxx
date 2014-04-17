@@ -44,7 +44,7 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
     : SfxSingleTabDialog(pParent, _pItems, "TablesFilterDialog",
         "dbaccess/ui/tablesfilterdialog.ui")
     , m_pImpl( new ODbDataSourceAdministrationHelper( _rxORB, pParent, this ) )
-    , m_bStopExecution(sal_False)
+    , m_bStopExecution(false)
     , m_pOutSet(_pItems)
 {
     m_pImpl->setDataSourceOrName(_aDataSourceName);
@@ -79,7 +79,7 @@ short OTableSubscriptionDialog::Execute()
     return nRet;
 }
 
-sal_Bool OTableSubscriptionDialog::getCurrentSettings(Sequence< PropertyValue >& _rDriverParams)
+bool OTableSubscriptionDialog::getCurrentSettings(Sequence< PropertyValue >& _rDriverParams)
 {
     return m_pImpl->getCurrentSettings(_rDriverParams);
 }

@@ -34,12 +34,12 @@ namespace dbaui
         sal_Int32           m_nTableCount;
         sal_Int16           m_nWidth;
         sal_Int16           m_nColumnWidth; ///< maximum column width
-        sal_Bool            m_bMetaOptions; ///< true when we scanned the meta information
-        sal_Bool            m_bSDNum;
+        bool            m_bMetaOptions; ///< true when we scanned the meta information
+        bool            m_bSDNum;
 
     protected:
         virtual void        NextToken( int nToken ) SAL_OVERRIDE; // base class
-        virtual sal_Bool    CreateTable(int nToken) SAL_OVERRIDE;
+        virtual bool        CreateTable(int nToken) SAL_OVERRIDE;
         virtual TypeSelectionPageFactory
                             getTypeSelectionPageFactory() SAL_OVERRIDE;
 
@@ -65,7 +65,7 @@ namespace dbaui
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                     const TColumnVector* rList,
                     const OTypeInfoMap* _pInfoMap,
-                    sal_Bool _bAutoIncrementEnabled);
+                    bool _bAutoIncrementEnabled);
 
         virtual SvParserState CallParser() SAL_OVERRIDE;// base class
         virtual void release() SAL_OVERRIDE;

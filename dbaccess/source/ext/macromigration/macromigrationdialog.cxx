@@ -465,7 +465,7 @@ namespace dbmm
                 Reference< XModifiable > xModify( m_pData->xDocument, UNO_QUERY_THROW );
                 xModify->setModified( sal_False );
                 // after this reload, don't show the migration warning, again
-                aDocumentArgs.put( "SuppressMigrationWarning", sal_Bool(sal_True) );
+                aDocumentArgs.put( "SuppressMigrationWarning", true );
             }
 
             // remove anything from the args which might refer to the old document

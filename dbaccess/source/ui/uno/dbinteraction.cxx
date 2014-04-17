@@ -76,13 +76,13 @@ namespace dbaui
         impl_handle_throw( i_rRequest );
     }
 
-    sal_Bool BasicInteractionHandler::impl_handle_throw( const Reference< XInteractionRequest >& i_Request )
+    bool BasicInteractionHandler::impl_handle_throw( const Reference< XInteractionRequest >& i_Request )
     {
         Any aRequest( i_Request->getRequest() );
         OSL_ENSURE(aRequest.hasValue(), "BasicInteractionHandler::handle: invalid request!");
         if ( !aRequest.hasValue() )
             // no request -> no handling
-            return sal_False;
+            return false;
 
         Sequence< Reference< XInteractionContinuation > > aContinuations( i_Request->getContinuations() );
 
@@ -91,27 +91,27 @@ namespace dbaui
         if ( aInfo.isValid() )
         {
             implHandle( aInfo, aContinuations );
-            return sal_True;
+            return true;
         }
 
         ParametersRequest aParamRequest;
         if ( aRequest >>= aParamRequest )
         {
             implHandle( aParamRequest, aContinuations );
-            return sal_True;
+            return true;
         }
 
         DocumentSaveRequest aDocuRequest;
         if ( aRequest >>= aDocuRequest )
         {
             implHandle( aDocuRequest, aContinuations );
-            return sal_True;
+            return true;
         }
 
         if ( m_bFallbackToGeneric )
             return implHandleUnknown( i_Request );
 
-        return sal_False;
+        return false;
     }
 
     void BasicInteractionHandler::implHandle(const ParametersRequest& _rParamRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)

@@ -156,10 +156,10 @@ namespace dbaui
             _rControlList.push_back(new OSaveValueWrapper<ListBox>(m_pCharset));
     }
 
-    void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         // collect the items
@@ -185,7 +185,7 @@ namespace dbaui
 
     bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet& _rSet)
     {
-        sal_Bool bChangedSomething = sal_False;
+        bool bChangedSomething = false;
 
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
         {
@@ -195,7 +195,7 @@ namespace dbaui
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
         {
             if ( m_pCharset->StoreSelectedCharSet( _rSet, DSID_CHARSET ) )
-                bChangedSomething = sal_True;
+                bChangedSomething = true;
         }
 
         return bChangedSomething;
@@ -241,10 +241,10 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFT_Message));
         _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aIndexes));
     }
-    void ODbaseDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void ODbaseDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         // get the DSN string (needed for the index dialog)
@@ -268,7 +268,7 @@ namespace dbaui
 
     bool ODbaseDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
         fillBool(_rSet,&m_aShowDeleted,DSID_SHOWDELETEDROWS,bChangedSomething);
         return bChangedSomething;
@@ -332,7 +332,7 @@ namespace dbaui
 
     bool OOdbcDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
         fillBool(_rSet,&m_aUseCatalog,DSID_USECATALOG,bChangedSomething);
         return bChangedSomething;
     }
@@ -346,10 +346,10 @@ namespace dbaui
         OCommonBehaviourTabPage::fillWindows(_rControlList);
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
     }
-    void OOdbcDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OOdbcDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         SFX_ITEMSET_GET(_rSet, pUseCatalogItem, SfxBoolItem, DSID_USECATALOG, true);
@@ -380,7 +380,7 @@ namespace dbaui
 
     bool OUserDriverDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
         fillInt32(_rSet,&m_aNFPortNumber,DSID_CONN_PORTNUMBER,bChangedSomething);
         fillString(_rSet,&m_aEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
@@ -401,10 +401,10 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostname));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aPortNumber));
     }
-    void OUserDriverDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OUserDriverDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         SFX_ITEMSET_GET(_rSet, pUseCatalogItem, SfxBoolItem, DSID_USECATALOG, true);
@@ -513,7 +513,7 @@ namespace dbaui
 
     bool OGeneralSpecialJDBCDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
         if ( m_bUseClass )
             fillString(_rSet,&m_aEDDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
         fillString(_rSet,&m_aEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
@@ -522,10 +522,10 @@ namespace dbaui
 
         return bChangedSomething;
     }
-    void OGeneralSpecialJDBCDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OGeneralSpecialJDBCDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         SFX_ITEMSET_GET(_rSet, pDrvItem, SfxStringItem, DSID_JDBCDRIVERCLASS, true);
@@ -565,7 +565,7 @@ namespace dbaui
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         OSL_ENSURE(m_bUseClass,"Who called me?");
 
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
 #if HAVE_FEATURE_JAVA
         try
         {
@@ -640,9 +640,9 @@ namespace dbaui
 
     bool MySQLNativePage::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet( _rSet );
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet( _rSet );
 
-        bChangedSomething |= (m_aMySQLSettings.FillItemSet( _rSet ) ? 1 : 0);
+        bChangedSomething |= m_aMySQLSettings.FillItemSet( _rSet );
 
         if ( m_aUserName.GetText() != m_aUserName.GetSavedValue() )
         {
@@ -654,10 +654,10 @@ namespace dbaui
 
         return bChangedSomething;
     }
-    void MySQLNativePage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void MySQLNativePage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         m_aMySQLSettings.implInitControls( _rSet );
@@ -720,7 +720,7 @@ namespace dbaui
 
     bool OLDAPDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
         fillString(_rSet,&m_aETBaseDN,DSID_CONN_LDAP_BASEDN,bChangedSomething);
         fillInt32(_rSet,&m_aNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
@@ -763,10 +763,10 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTRowCount));
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
     }
-    void OLDAPDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OLDAPDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         SFX_ITEMSET_GET(_rSet, pBaseDN, SfxStringItem, DSID_CONN_LDAP_BASEDN, true);
@@ -816,10 +816,10 @@ namespace dbaui
         m_pTextConnectionHelper->fillWindows(_rControlList);
 
     }
-    void OTextDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OTextDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         m_pTextConnectionHelper->implInitControls(_rSet, bValid);
@@ -828,12 +828,12 @@ namespace dbaui
 
     bool OTextDetailsPage::FillItemSet( SfxItemSet& rSet )
     {
-        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(rSet);
+        bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(rSet);
         bChangedSomething = m_pTextConnectionHelper->FillItemSet(rSet, bChangedSomething);
         return bChangedSomething;
     }
 
-    sal_Bool OTextDetailsPage::prepareLeave()
+    bool OTextDetailsPage::prepareLeave()
     {
         return m_pTextConnectionHelper->prepareLeave();
     }

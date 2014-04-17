@@ -47,21 +47,21 @@ namespace dbaui
     using namespace ::dbtools;
 
     // helper
-    sal_Bool operator ==(const OIndexField& _rLHS, const OIndexField& _rRHS)
+    bool operator ==(const OIndexField& _rLHS, const OIndexField& _rRHS)
     {
         return  (_rLHS.sFieldName == _rRHS.sFieldName)
             &&  (_rLHS.bSortAscending == _rRHS.bSortAscending);
     }
 
-    sal_Bool operator !=(const OIndexField& _rLHS, const OIndexField& _rRHS)
+    bool operator !=(const OIndexField& _rLHS, const OIndexField& _rRHS)
     {
         return !(_rLHS == _rRHS);
     }
 
-    sal_Bool operator ==(const IndexFields& _rLHS, const IndexFields& _rRHS)
+    bool operator ==(const IndexFields& _rLHS, const IndexFields& _rRHS)
     {
         if (_rLHS.size() != _rRHS.size())
-            return sal_False;
+            return false;
 
         IndexFields::const_iterator aLeft = _rLHS.begin();
         IndexFields::const_iterator aLeftEnd = _rLHS.end();
@@ -69,13 +69,13 @@ namespace dbaui
         for (; aLeft != aLeftEnd; ++aLeft, ++aRight)
         {
             if (*aLeft != *aRight)
-                return sal_False;
+                return false;
         }
 
-        return sal_True;
+        return true;
     }
 
-    sal_Bool operator !=(const IndexFields& _rLHS, const IndexFields& _rRHS)
+    bool operator !=(const IndexFields& _rLHS, const IndexFields& _rRHS)
     {
         return !(_rLHS == _rRHS);
     }
@@ -83,7 +83,7 @@ namespace dbaui
     // DbaIndexList
     DbaIndexList::DbaIndexList(Window* _pParent, const ResId& _rId)
         :SvTreeListBox(_pParent, _rId)
-        ,m_bSuspendSelectHdl(sal_False)
+        ,m_bSuspendSelectHdl(false)
     {
     }
 
@@ -126,13 +126,13 @@ namespace dbaui
     void DbaIndexList::enableSelectHandler()
     {
         OSL_ENSURE(m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
-        m_bSuspendSelectHdl = sal_False;
+        m_bSuspendSelectHdl = false;
     }
 
     void DbaIndexList::disableSelectHandler()
     {
         OSL_ENSURE(!m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
-        m_bSuspendSelectHdl = sal_True;
+        m_bSuspendSelectHdl = true;
     }
 
     void DbaIndexList::SelectNoHandlerCall( SvTreeListEntry* _pEntry )
@@ -142,9 +142,9 @@ namespace dbaui
         enableSelectHandler();
     }
 
-    sal_Bool DbaIndexList::Select( SvTreeListEntry* pEntry, sal_Bool _bSelect )
+    bool DbaIndexList::Select( SvTreeListEntry* pEntry, sal_Bool _bSelect )
     {
-        sal_Bool bReturn = SvTreeListBox::Select(pEntry, _bSelect);
+        bool bReturn = SvTreeListBox::Select(pEntry, _bSelect);
 
         if (m_aSelectHdl.IsSet() && !m_bSuspendSelectHdl && _bSelect)
             m_aSelectHdl.Call(this);
@@ -172,7 +172,7 @@ namespace dbaui
         ,m_aHelp                            (this, ModuleRes(HB_HELP))
         ,m_pIndexes(NULL)
         ,m_pPreviousSelection(NULL)
-        ,m_bEditAgain(sal_False)
+        ,m_bEditAgain(false)
         ,m_xContext(_rxContext)
     {
 
@@ -256,7 +256,7 @@ namespace dbaui
         m_aActions.EnableItem(ID_INDEX_NEW, !m_aIndexes.IsEditingActive());
 
         SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
-        sal_Bool bSelectedAnything = NULL != pSelected;
+        bool bSelectedAnything = NULL != pSelected;
 
         if (pSelected)
         {
@@ -304,7 +304,7 @@ namespace dbaui
 
     }
 
-    sal_Bool DbaIndexDialog::implCommit(SvTreeListEntry* _pEntry)
+    bool DbaIndexDialog::implCommit(SvTreeListEntry* _pEntry)
     {
         OSL_ENSURE(_pEntry, "DbaIndexDialog::implCommit: invalid entry!");
 
@@ -313,8 +313,8 @@ namespace dbaui
         // if it's not a new index, remove it
         // (we can't modify indexes, only drop'n'insert)
         if (!aCommitPos->isNew())
-            if (!implDropIndex(_pEntry, sal_False))
-                return sal_False;
+            if (!implDropIndex(_pEntry, false))
+                return false;
 
         // create the new index
         SQLExceptionInfo aExceptionInfo;
@@ -384,7 +384,7 @@ namespace dbaui
         updateToolbox();
     }
 
-    void DbaIndexDialog::OnDropIndex(sal_Bool _bConfirm)
+    void DbaIndexDialog::OnDropIndex(bool _bConfirm)
     {
         // the selected index
         SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
@@ -402,21 +402,21 @@ namespace dbaui
             }
 
             // do the drop
-            implDropIndex(pSelected, sal_True);
+            implDropIndex(pSelected, true);
 
             // reflect the new selection in the toolbox
             updateToolbox();
         }
     }
 
-    sal_Bool DbaIndexDialog::implDropIndex(SvTreeListEntry* _pEntry, sal_Bool _bRemoveFromCollection)
+    bool DbaIndexDialog::implDropIndex(SvTreeListEntry* _pEntry, bool _bRemoveFromCollection)
     {
         // do the drop
         Indexes::iterator aDropPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
         OSL_ENSURE(aDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: did not find the index in my collection!");
 
         SQLExceptionInfo aExceptionInfo;
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
         try
         {
             if (_bRemoveFromCollection)
@@ -468,7 +468,7 @@ namespace dbaui
         // save the changes made 'til here
         // Upon leaving the edit mode, the control will be re-initialized with the
         // settings from the current entry
-        implSaveModified(sal_False);
+        implSaveModified(false);
 
         m_aIndexes.EditEntry(pSelected);
         updateToolbox();
@@ -496,7 +496,7 @@ namespace dbaui
 
         if (aResetPos->isNew())
         {
-            OnDropIndex(sal_False);
+            OnDropIndex(false);
             return;
         }
 
@@ -591,7 +591,7 @@ namespace dbaui
 
     IMPL_LINK( DbaIndexDialog, OnEditIndexAgain, SvTreeListEntry*, _pEntry )
     {
-        m_bEditAgain = sal_False;
+        m_bEditAgain = false;
         m_aIndexes.EditEntry(_pEntry);
         return 0L;
     }
@@ -614,7 +614,7 @@ namespace dbaui
             aError.Execute();
 
             updateToolbox();
-            m_bEditAgain = sal_True;
+            m_bEditAgain = true;
             PostUserEvent(LINK(this, DbaIndexDialog, OnEditIndexAgain), _pEntry);
             return 0L;
         }
@@ -631,42 +631,42 @@ namespace dbaui
 
         if (aPosition->sName != aPosition->getOriginalName())
         {
-            aPosition->setModified(sal_True);
+            aPosition->setModified(true);
             updateToolbox();
         }
 
         return 1L;
     }
 
-    sal_Bool DbaIndexDialog::implSaveModified(sal_Bool _bPlausibility)
+    bool DbaIndexDialog::implSaveModified(bool _bPlausibility)
     {
         if (m_pPreviousSelection)
         {
             // try to commit the previously selected index
             if (m_pFields->IsModified() && !m_pFields->SaveModified())
-                return sal_False;
+                return false;
 
             Indexes::iterator aPreviouslySelected = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
 
             // the unique flag
             aPreviouslySelected->bUnique = m_aUnique.IsChecked();
             if (m_aUnique.GetSavedValue() != m_aUnique.GetState())
-                aPreviouslySelected->setModified(sal_True);
+                aPreviouslySelected->setModified(true);
 
             // the fields
             m_pFields->commitTo(aPreviouslySelected->aFields);
             if (m_pFields->GetSavedValue() != aPreviouslySelected->aFields)
-                aPreviouslySelected->setModified(sal_True);
+                aPreviouslySelected->setModified(true);
 
             // plausibility checks
             if (_bPlausibility && !implCheckPlausibility(aPreviouslySelected))
-                return sal_False;
+                return false;
         }
 
-        return sal_True;
+        return true;
     }
 
-    sal_Bool DbaIndexDialog::implCheckPlausibility(const Indexes::const_iterator& _rPos)
+    bool DbaIndexDialog::implCheckPlausibility(const Indexes::const_iterator& _rPos)
     {
         // need at least one field
         if (0 == _rPos->aFields.size())
@@ -674,7 +674,7 @@ namespace dbaui
             ErrorBox aError(this, ModuleRes(ERR_NEED_INDEX_FIELDS));
             aError.Execute();
             m_pFields->GrabFocus();
-            return sal_False;
+            return false;
         }
 
         // no double fields
@@ -692,29 +692,29 @@ namespace dbaui
                 ErrorBox aError(this, WB_OK, sMessage);
                 aError.Execute();
                 m_pFields->GrabFocus();
-                return sal_False;
+                return false;
             }
             aExistentFields.insert(aFieldCheck->sFieldName);
         }
 
-        return sal_True;
+        return true;
     }
 
-    sal_Bool DbaIndexDialog::implCommitPreviouslySelected()
+    bool DbaIndexDialog::implCommitPreviouslySelected()
     {
         if (m_pPreviousSelection)
         {
             Indexes::iterator aPreviouslySelected = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
 
             if (!implSaveModified())
-                return sal_False;
+                return false;
 
             // commit the index (if necessary)
             if (aPreviouslySelected->isModified() && !implCommit(m_pPreviousSelection))
-                return sal_False;
+                return false;
         }
 
-        return sal_True;
+        return true;
     }
 
     IMPL_LINK( DbaIndexDialog, OnModified, void*, /*NOTINTERESTEDIN*/ )
@@ -722,7 +722,7 @@ namespace dbaui
         OSL_ENSURE(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
 
-        aPosition->setModified(sal_True);
+        aPosition->setModified(true);
         updateToolbox();
 
         return 1L;
@@ -774,7 +774,7 @@ namespace dbaui
             }
         }
 
-        sal_Bool bHaveSelection = (NULL != m_aIndexes.FirstSelected());
+        bool bHaveSelection = (NULL != m_aIndexes.FirstSelected());
 
         // disable/enable the detail controls
         m_aIndexDetails.Enable(bHaveSelection);

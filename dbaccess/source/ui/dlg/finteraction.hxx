@@ -37,12 +37,12 @@ namespace dbaui
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
                     m_xMaster;      // our master handler
-        sal_Bool    m_bDoesNotExist;
+        bool    m_bDoesNotExist;
 
     public:
         OFilePickerInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxMaster );
 
-        inline sal_Bool isDoesNotExist( ) const { return m_bDoesNotExist; }
+        inline bool isDoesNotExist( ) const { return m_bDoesNotExist; }
 
     protected:
         // XInteractionHandler

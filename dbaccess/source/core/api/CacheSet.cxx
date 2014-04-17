@@ -58,9 +58,9 @@ using namespace ::osl;
 
 OCacheSet::OCacheSet(sal_Int32 i_nMaxRows)
             :m_nMaxRows(i_nMaxRows)
-            ,m_bInserted(sal_False)
-            ,m_bUpdated(sal_False)
-            ,m_bDeleted(sal_False)
+            ,m_bInserted(false)
+            ,m_bUpdated(false)
+            ,m_bDeleted(false)
 {
     SAL_INFO("dbaccess", "OCacheSet::OCacheSet" );
 
@@ -530,32 +530,32 @@ Reference< XArray > SAL_CALL OCacheSet::getArray( sal_Int32 columnIndex ) throw(
 }
 
 // XResultSet
-sal_Bool SAL_CALL OCacheSet::next(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::next(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::next" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     return m_xDriverSet->next();
 }
 
-sal_Bool SAL_CALL OCacheSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::isBeforeFirst" );
     return m_xDriverSet->isBeforeFirst();
 }
 
-sal_Bool SAL_CALL OCacheSet::isAfterLast(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::isAfterLast" );
     return m_xDriverSet->isAfterLast();
 }
 
-sal_Bool SAL_CALL OCacheSet::isFirst(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::isFirst" );
     return m_xDriverSet->isFirst();
 }
 
-sal_Bool SAL_CALL OCacheSet::isLast(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::isLast(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::isLast" );
     return m_xDriverSet->isLast();
@@ -564,28 +564,28 @@ sal_Bool SAL_CALL OCacheSet::isLast(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OCacheSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::beforeFirst" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     m_xDriverSet->beforeFirst();
 }
 
 void SAL_CALL OCacheSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::afterLast" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     m_xDriverSet->afterLast();
 }
 
-sal_Bool SAL_CALL OCacheSet::first(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::first(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::first" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     return m_xDriverSet->first();
 }
 
-sal_Bool SAL_CALL OCacheSet::last(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::last(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::last" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     return m_xDriverSet->last();
 }
 
@@ -595,38 +595,38 @@ sal_Int32 SAL_CALL OCacheSet::getRow(  ) throw(SQLException, RuntimeException)
     return m_xDriverSet->getRow();
 }
 
-sal_Bool SAL_CALL OCacheSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::absolute" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     return m_xDriverSet->absolute(row);
 }
 
-sal_Bool SAL_CALL OCacheSet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::relative" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     return m_xDriverSet->relative(rows);
 }
 
-sal_Bool SAL_CALL OCacheSet::previous(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::previous(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::previous" );
-    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_bInserted = m_bUpdated = m_bDeleted = false;
     return m_xDriverSet->previous();
 }
 
-sal_Bool OCacheSet::last_checked( sal_Bool /*i_bFetchRow*/)
+bool OCacheSet::last_checked( sal_Bool /*i_bFetchRow*/)
 {
     return last();
 }
 
-sal_Bool OCacheSet::previous_checked( sal_Bool /*i_bFetchRow*/ )
+bool OCacheSet::previous_checked( sal_Bool /*i_bFetchRow*/ )
 {
     return previous();
 }
 
-sal_Bool OCacheSet::absolute_checked( sal_Int32 row,sal_Bool /*i_bFetchRow*/ )
+bool OCacheSet::absolute_checked( sal_Int32 row,sal_Bool /*i_bFetchRow*/ )
 {
     return absolute(row);
 }
@@ -637,19 +637,19 @@ void SAL_CALL OCacheSet::refreshRow(  ) throw(SQLException, RuntimeException)
     m_xDriverSet->refreshRow();
 }
 
-sal_Bool SAL_CALL OCacheSet::rowUpdated(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::rowUpdated" );
     return m_xDriverSet->rowUpdated();
 }
 
-sal_Bool SAL_CALL OCacheSet::rowInserted(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::rowInserted" );
     return m_xDriverSet->rowInserted();
 }
 
-sal_Bool SAL_CALL OCacheSet::rowDeleted(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::rowDeleted" );
     return m_xDriverSet->rowDeleted();

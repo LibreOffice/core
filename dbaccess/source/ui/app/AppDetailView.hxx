@@ -118,7 +118,7 @@ namespace dbaui
         OApplicationDetailView*             m_pDetailView;
 
         DECL_LINK( OnEntrySelectHdl,        SvTreeListBox* );
-        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
@@ -152,7 +152,7 @@ namespace dbaui
         ::std::vector< TaskPaneData >       m_aTaskPaneData;
         MnemonicGenerator                   m_aExternalMnemonics;
 
-        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
 
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
@@ -190,10 +190,10 @@ namespace dbaui
         inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
         inline OTasksWindow& getTasksWindow() const { return *static_cast< OTasksWindow* >( m_aTasks.getChildWindow() ); }
 
-        sal_Bool isCutAllowed() SAL_OVERRIDE ;
-        sal_Bool isCopyAllowed() SAL_OVERRIDE    ;
-        sal_Bool isPasteAllowed() SAL_OVERRIDE;
-        virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
+        bool isCutAllowed() SAL_OVERRIDE ;
+        bool isCopyAllowed() SAL_OVERRIDE    ;
+        bool isPasteAllowed() SAL_OVERRIDE;
+        virtual bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
         void copy() SAL_OVERRIDE;
         void cut() SAL_OVERRIDE;
         void paste() SAL_OVERRIDE;
@@ -213,20 +213,20 @@ namespace dbaui
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        sal_Bool isLeaf(SvTreeListEntry* _pEntry) const;
+        bool isLeaf(SvTreeListEntry* _pEntry) const;
 
         /** returns if one of the selected entries is a leaf
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        sal_Bool isALeafSelected() const;
+        bool isALeafSelected() const;
 
         /** select all entries in the detail page
         */
         void selectAll();
 
         /// returns <TRUE/> if it sorts ascending
-        sal_Bool isSortUp() const;
+        bool isSortUp() const;
 
         /// sort the entries in the detail page down
         void sortDown();
@@ -235,7 +235,7 @@ namespace dbaui
         void sortUp();
 
         /// returns <TRUE/> when a detail page was filled
-        sal_Bool isFilled() const;
+        bool isFilled() const;
 
         /// return the element of currently select entry
         ElementType getElementType() const;
@@ -244,7 +244,7 @@ namespace dbaui
             @param  _bTaskAlso
                 If <TRUE/> the task window will also be cleared.
         */
-        void clearPages(sal_Bool _bTaskAlso = sal_True);
+        void clearPages(bool _bTaskAlso = true);
 
         /// returns the count of entries
         sal_Int32 getElementCount();
@@ -323,7 +323,7 @@ namespace dbaui
         PreviewMode getPreviewMode();
 
         /// <TRUE/> if the preview is enabled
-        sal_Bool isPreviewEnabled();
+        bool isPreviewEnabled();
 
         /** switches to the given preview mode
             @param  _eMode
@@ -348,7 +348,7 @@ namespace dbaui
         */
         void showPreview(   const OUString& _sDataSourceName,
                             const OUString& _sName,
-                            sal_Bool _bTable);
+                            bool _bTable);
 
         SvTreeListEntry* getEntry( const Point& _aPoint ) const;
 

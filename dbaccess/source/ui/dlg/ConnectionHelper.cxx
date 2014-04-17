@@ -113,20 +113,20 @@ namespace dbaui
 
     }
 
-    void OConnectionHelper::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OConnectionHelper::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
+        bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         m_aFT_Connection.Show();
         m_aConnectionURL.Show();
         m_aConnectionURL.ShowPrefix( ::dbaccess::DST_JDBC == m_pCollection->determineType(m_eType) );
 
-        sal_Bool bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
+        bool bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
         m_aPB_Connection.Show( bEnableBrowseButton );
 
-        sal_Bool bEnableCreateButton = m_pCollection->supportsDBCreation( m_eType );
+        bool bEnableCreateButton = m_pCollection->supportsDBCreation( m_eType );
         m_aPB_CreateDB.Show( bEnableCreateButton );
 
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, true);
@@ -167,7 +167,7 @@ namespace dbaui
                 {
                     Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(m_xORB);
 
-                    sal_Bool bDoBrowse = sal_False;
+                    bool bDoBrowse = false;
                     OUString sOldPath = getURLNoPrefix();
                     do
                     {
@@ -181,7 +181,7 @@ namespace dbaui
                         switch (checkPathExistence(sOldPath))
                         {
                             case RET_RETRY:
-                                bDoBrowse = sal_True;
+                                bDoBrowse = true;
                                 break;
                             case RET_CANCEL:
                                 return 0L;
@@ -198,7 +198,7 @@ namespace dbaui
                     sSelectedDirectory = aSelectedDirectory.GetMainURL( INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8  );
 
                     setURLNoPrefix( sSelectedDirectory );
-                    SetRoadmapStateValue(sal_True);
+                    SetRoadmapStateValue(true);
                     callModifiedHdl();
                 }
                 catch( const Exception& )
@@ -251,7 +251,7 @@ namespace dbaui
                 if ( getSelectedDataSource(sDataSource,sCurrDatasource) && !sDataSource.isEmpty() )
                 {
                     setURLNoPrefix(sDataSource);
-                    SetRoadmapStateValue(sal_True);
+                    SetRoadmapStateValue(true);
                     callModifiedHdl();
                 }
                 else
@@ -362,7 +362,7 @@ namespace dbaui
         return true;
     }
 
-    void OConnectionHelper::impl_setURL( const OUString& _rURL, sal_Bool _bPrefix )
+    void OConnectionHelper::impl_setURL( const OUString& _rURL, bool _bPrefix )
     {
         OUString sURL( comphelper::string::stripEnd(_rURL, '*') );
         OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_setURL: have no interpreter for the URLs!" );
@@ -405,7 +405,7 @@ namespace dbaui
         implUpdateURLDependentStates();
     }
 
-    OUString OConnectionHelper::impl_getURL( sal_Bool _bPrefix ) const
+    OUString OConnectionHelper::impl_getURL( bool _bPrefix ) const
     {
         // get the pure text
         OUString sURL = _bPrefix ? m_aConnectionURL.GetText() : OUString(m_aConnectionURL.GetTextNoPrefix());
@@ -445,22 +445,22 @@ namespace dbaui
 
     void OConnectionHelper::setURL( const OUString& _rURL )
     {
-        impl_setURL( _rURL, sal_True );
+        impl_setURL( _rURL, true );
     }
 
     OUString OConnectionHelper::getURLNoPrefix( ) const
     {
-        return impl_getURL( sal_False );
+        return impl_getURL( false );
     }
 
     void OConnectionHelper::setURLNoPrefix( const OUString& _rURL )
     {
-        impl_setURL( _rURL, sal_False );
+        impl_setURL( _rURL, false );
     }
 
     sal_Int32 OConnectionHelper::checkPathExistence(const OUString& _rURL)
     {
-        IS_PATH_EXIST e_exists = pathExists(_rURL, sal_False);
+        IS_PATH_EXIST e_exists = pathExists(_rURL, false);
         if (!m_pCollection->supportsDBCreation(m_eType) &&
             (( e_exists == PATH_NOT_EXIST) || ( e_exists == PATH_NOT_KNOWN)))
         {
@@ -468,16 +468,16 @@ namespace dbaui
             OFileNotation aTransformer(_rURL);
             sQuery = sQuery.replaceFirst("$path$", aTransformer.get(OFileNotation::N_SYSTEM));
 
-            m_bUserGrabFocus = sal_False;
+            m_bUserGrabFocus = false;
             QueryBox aQuery(GetParent(), WB_YES_NO | WB_DEF_YES, sQuery);
             sal_Int32 nQueryResult = aQuery.Execute();
-            m_bUserGrabFocus = sal_True;
+            m_bUserGrabFocus = true;
 
             switch (nQueryResult)
             {
                 case RET_YES:
                 {
-                    sal_Bool bTryCreate = sal_False;
+                    bool bTryCreate = false;
                     do
                     {
                         if ( !createDirectoryDeep(_rURL) )
@@ -485,16 +485,16 @@ namespace dbaui
                             sQuery = ModuleRes(STR_COULD_NOT_CREATE_DIRECTORY);
                             sQuery = sQuery.replaceFirst("$name$", aTransformer.get(OFileNotation::N_SYSTEM));
 
-                            m_bUserGrabFocus = sal_False;
+                            m_bUserGrabFocus = false;
                             QueryBox aWhatToDo(GetParent(), WB_RETRY_CANCEL | WB_DEF_RETRY, sQuery);
                             nQueryResult = aWhatToDo.Execute();
-                            m_bUserGrabFocus = sal_True;
+                            m_bUserGrabFocus = true;
 
                             if (RET_RETRY == nQueryResult)
-                                bTryCreate = sal_True;
+                                bTryCreate = true;
                             else
                             {
-                                SetRoadmapStateValue(sal_False);
+                                SetRoadmapStateValue(false);
                                 callModifiedHdl();
                                 return RET_RETRY;
                             }
@@ -510,7 +510,7 @@ namespace dbaui
 
                 default:
                     // cancelled
-                    SetRoadmapStateValue(sal_False);
+                    SetRoadmapStateValue(false);
                     callModifiedHdl();
                     return RET_CANCEL;
             }
@@ -520,15 +520,15 @@ namespace dbaui
             // TODO: error msg
             return RET_CANCEL;
         } */
-        SetRoadmapStateValue(sal_True);
+        SetRoadmapStateValue(true);
         callModifiedHdl();
         return RET_OK;
     }
 
-    IS_PATH_EXIST OConnectionHelper::pathExists(const OUString& _rURL, sal_Bool bIsFile) const
+    IS_PATH_EXIST OConnectionHelper::pathExists(const OUString& _rURL, bool bIsFile) const
     {
         ::ucbhelper::Content aCheckExistence;
-        sal_Bool bExists = sal_False;
+        bool bExists = false;
         IS_PATH_EXIST eExists = PATH_NOT_EXIST;
         Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler(
             task::InteractionHandler::createWithParent(m_xORB, 0), UNO_QUERY );
@@ -574,7 +574,7 @@ namespace dbaui
         return OGenericAdministrationPage::PreNotify( _rNEvt );
     }
 
-    sal_Bool OConnectionHelper::createDirectoryDeep(const OUString& _rPathURL)
+    bool OConnectionHelper::createDirectoryDeep(const OUString& _rPathURL)
     {
         // get an URL object analyzing the URL for us ...
         INetURLObject aParser;
@@ -590,11 +590,11 @@ namespace dbaui
         {
             aToBeCreated.push_back(aParser.getName());  // remember the local name for creation
             aParser.removeSegment();                    // cut the local name
-            eParentExists = pathExists(aParser.GetMainURL(INetURLObject::NO_DECODE), sal_False);
+            eParentExists = pathExists(aParser.GetMainURL(INetURLObject::NO_DECODE), false);
         }
 
         if (!aParser.getSegmentCount())
-            return sal_False;
+            return false;
 
         // create all the missing levels
         try
@@ -630,16 +630,16 @@ namespace dbaui
             {
                 aNewDirectoryAttributes[0] <<= *aLocalName;
                 if (!aParent.insertNewContent(sContentType, aNewDirectoryProperties, aNewDirectoryAttributes, aParent))
-                    return sal_False;
+                    return false;
             }
         }
         catch ( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
-            return sal_False;
+            return false;
         }
 
-        return sal_True;
+        return true;
     }
 
     void OConnectionHelper::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -654,7 +654,7 @@ namespace dbaui
         _rControlList.push_back( new OSaveValueWrapper<Edit>( &m_aConnectionURL ) );
     }
 
-    sal_Bool OConnectionHelper::commitURL()
+    bool OConnectionHelper::commitURL()
     {
         OUString sURL;
         OUString sOldPath;
@@ -674,15 +674,15 @@ namespace dbaui
 
                 if ( ( ::dbaccess::DST_CALC == eType) || ( ::dbaccess::DST_MSACCESS == eType) || ( ::dbaccess::DST_MSACCESS_2007 == eType) )
                 {
-                    if( pathExists(sURL, sal_True) == PATH_NOT_EXIST )
+                    if( pathExists(sURL, true) == PATH_NOT_EXIST )
                     {
                         OUString sFile = ModuleRes( STR_FILE_DOES_NOT_EXIST );
                         sFile = sFile.replaceFirst("$file$", aTransformer.get(OFileNotation::N_SYSTEM));
                         OSQLWarningBox( this, sFile ).Execute();
                         setURLNoPrefix(sOldPath);
-                        SetRoadmapStateValue(sal_False);
+                        SetRoadmapStateValue(false);
                         callModifiedHdl();
-                        return sal_False;
+                        return false;
                     }
                 }
                 else
@@ -690,14 +690,14 @@ namespace dbaui
                     switch (checkPathExistence(sURL))
                     {
                         case RET_RETRY:
-                            m_bUserGrabFocus = sal_False;
+                            m_bUserGrabFocus = false;
                             m_aConnectionURL.GrabFocus();
-                            m_bUserGrabFocus = sal_True;
-                            return sal_False;
+                            m_bUserGrabFocus = true;
+                            return false;
 
                         case RET_CANCEL:
                             setURLNoPrefix(sOldPath);
-                            return sal_False;
+                            return false;
                     }
                 }
             }
@@ -705,7 +705,7 @@ namespace dbaui
 
         setURLNoPrefix(sURL);
         m_aConnectionURL.SaveValueNoPrefix();
-        return sal_True;
+        return true;
     }
     void OConnectionHelper::askForFileName(::sfx2::FileDialogHelper& _aFileOpen)
     {

@@ -51,7 +51,7 @@ class OQueryDescriptor_Base
         ,public ::connectivity::sdbcx::IRefreshableColumns
 {
 private:
-    sal_Bool        m_bColumnsOutOfDate : 1;    // the columns have to be rebuild on the next getColumns ?
+    bool        m_bColumnsOutOfDate : 1;    // the columns have to be rebuild on the next getColumns ?
     ::osl::Mutex&   m_rMutex;
 
 protected:
@@ -59,8 +59,8 @@ protected:
     OUString m_sElementName;
     virtual ~OQueryDescriptor_Base();
 
-    void        setColumnsOutOfDate( sal_Bool _bOutOfDate = sal_True );
-    sal_Bool    isColumnsOutOfDate() const { return m_bColumnsOutOfDate; }
+    void        setColumnsOutOfDate( bool _bOutOfDate = true );
+    bool    isColumnsOutOfDate() const { return m_bColumnsOutOfDate; }
 
     sal_Int32   getColumnCount() const { return m_pColumns ? m_pColumns->getCount() : 0; }
     void        clearColumns( );

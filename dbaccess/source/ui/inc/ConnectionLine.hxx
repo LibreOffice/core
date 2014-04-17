@@ -53,13 +53,13 @@ namespace dbaui
         OConnectionLine& operator=( const OConnectionLine& rLine );
 
         Rectangle           GetBoundingRect();
-        sal_Bool                RecalcLine();
+        bool                RecalcLine();
         void                Draw( OutputDevice* pOutDev );
         bool                CheckHit( const Point& rMousePos ) const;
         OUString            GetSourceFieldName() const { return m_pData->GetSourceFieldName(); }
         OUString            GetDestFieldName() const { return m_pData->GetDestFieldName(); }
 
-        sal_Bool                IsValid() const;
+        bool                IsValid() const;
 
         Rectangle           GetSourceTextPos() const;
         Rectangle           GetDestTextPos() const;

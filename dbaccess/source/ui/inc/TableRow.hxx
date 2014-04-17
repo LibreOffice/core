@@ -45,10 +45,10 @@ namespace dbaui
         inline OFieldDescription* GetActFieldDescr() const { return m_pActFieldDescr; }
         inline bool isValid() const { return GetActFieldDescr() != NULL; }
 
-        void SetFieldType( const TOTypeInfoSP& _pType, sal_Bool _bForce = sal_False );
+        void SetFieldType( const TOTypeInfoSP& _pType, bool _bForce = false );
 
-        void SetPrimaryKey( sal_Bool bSet );
-        sal_Bool IsPrimaryKey() const;
+        void SetPrimaryKey( bool bSet );
+        bool IsPrimaryKey() const;
 
         /** returns the current position in the table.
             @return

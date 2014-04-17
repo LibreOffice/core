@@ -82,12 +82,12 @@ namespace dbaui
         sal_Int32       m_nVisibleRows;     // which rows the selection browse should show
         sal_Int32       m_nSplitPos;        // the position of the splitter
         sal_Int32       m_nCommandType;     // the type of the object we're designing
-        sal_Bool        m_bGraphicalDesign; // are we in the graphical design mode (sal_True) or in the text design (sal_False)?
-        sal_Bool        m_bDistinct;        // true when you want "select distinct" otherwise false
-        sal_Bool        m_bViewAlias;       // show the alias row in the design view
-        sal_Bool        m_bViewTable;       // show the table row in the design view
-        sal_Bool        m_bViewFunction;    // show the function row in the design view
-        sal_Bool        m_bEscapeProcessing;// is true when we shouldn't parse the statement
+        bool        m_bGraphicalDesign; // are we in the graphical design mode (sal_True) or in the text design (sal_False)?
+        bool        m_bDistinct;        // true when you want "select distinct" otherwise false
+        bool        m_bViewAlias;       // show the alias row in the design view
+        bool        m_bViewTable;       // show the table row in the design view
+        bool        m_bViewFunction;    // show the function row in the design view
+        bool        m_bEscapeProcessing;// is true when we shouldn't parse the statement
 
 
         /** returns the container of queries, views, or command definitions, depending on what object type
@@ -102,13 +102,13 @@ namespace dbaui
         inline  bool    editingQuery() const   { return m_nCommandType == ::com::sun::star::sdb::CommandType::QUERY; }
         inline  bool    editingCommand() const { return m_nCommandType == ::com::sun::star::sdb::CommandType::COMMAND; }
 
-        sal_Bool askForNewName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xElements,
-                            sal_Bool _bSaveAs);
+        bool askForNewName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xElements,
+                            bool _bSaveAs);
         // creates the querycomposer
         void setQueryComposer();
         void deleteIterator();
         void executeQuery();
-        bool doSaveAsDoc(sal_Bool _bSaveAs);
+        bool doSaveAsDoc(bool _bSaveAs);
 
         void saveViewSettings( ::comphelper::NamedValueCollection& o_rViewSettings, const bool i_includingCriteria ) const;
         void loadViewSettings( const ::comphelper::NamedValueCollection& o_rViewSettings );
@@ -143,16 +143,16 @@ namespace dbaui
         virtual void impl_onModifyChanged() SAL_OVERRIDE;
 
         // should the statement be parsed by our own sql parser
-        sal_Bool        isEsacpeProcessing()    const { return m_bEscapeProcessing; }
-        sal_Bool        isGraphicalDesign()     const { return m_bGraphicalDesign; }
-        sal_Bool        isDistinct()            const { return m_bDistinct; }
+        bool        isEsacpeProcessing()    const { return m_bEscapeProcessing; }
+        bool        isGraphicalDesign()     const { return m_bGraphicalDesign; }
+        bool        isDistinct()            const { return m_bDistinct; }
         sal_Int64       getLimit()              const { return m_nLimit; }
 
         OUString getStatement()          const { return m_sStatement; }
         sal_Int32       getSplitPos()           const { return m_nSplitPos;}
         sal_Int32       getVisibleRows()        const { return m_nVisibleRows; }
 
-        void            setDistinct(sal_Bool _bDistinct)        { m_bDistinct = _bDistinct;}
+        void            setDistinct(bool _bDistinct)        { m_bDistinct = _bDistinct;}
         void            setLimit(const sal_Int64 _nLimit)       { m_nLimit = _nLimit;}
         void            setSplitPos(sal_Int32 _nSplitPos)       { m_nSplitPos = _nSplitPos;}
         void            setVisibleRows(sal_Int32 _nVisibleRows) { m_nVisibleRows = _nVisibleRows;}
@@ -229,7 +229,7 @@ namespace dbaui
         /// sets m_sStatement, and notifies our respective property change listeners
         void    setStatement_fireEvent( const OUString& _rNewStatement, bool _bFireStatementChange = true );
         /// sets the m_bEscapeProcessing member, and notifies our respective property change listeners
-        void    setEscapeProcessing_fireEvent( const sal_Bool _bEscapeProcessing );
+        void    setEscapeProcessing_fireEvent( const bool _bEscapeProcessing );
 
         // OJoinController overridables
         virtual bool allowViews() const SAL_OVERRIDE;

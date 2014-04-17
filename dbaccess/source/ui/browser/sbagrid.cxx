@@ -583,10 +583,10 @@ void SbaGridHeader::MouseButtonDown( const MouseEvent& _rMEvt )
     FmGridHeader::MouseButtonDown(_rMEvt);
 }
 
-sal_Bool SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos)
+bool SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos)
 {
     sal_uInt16 nId = GetItemId(_rMousePos);
-    sal_Bool bResizingCol = sal_False;
+    bool bResizingCol = false;
     if (HEADERBAR_ITEM_NOTFOUND != nId)
     {
         Rectangle aColRect = GetItemRect(nId);
@@ -610,10 +610,10 @@ sal_Bool SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMo
                     _rMousePos.Y() - GetSizePixel().Height()
                 )
             );
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu)
@@ -621,7 +621,7 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
     FmGridHeader::PreExecuteColumnContextMenu(nColId, rMenu);
 
     // some items are valid only if the db isn't readonly
-    sal_Bool bDBIsReadOnly = ((SbaGridControl*)GetParent())->IsReadOnlyDB();
+    bool bDBIsReadOnly = ((SbaGridControl*)GetParent())->IsReadOnlyDB();
 
     if (bDBIsReadOnly)
     {
@@ -639,7 +639,7 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
     }
 
     // prepend some new items
-    sal_Bool bColAttrs = (nColId != (sal_uInt16)-1) && (nColId != 0);
+    bool bColAttrs = (nColId != (sal_uInt16)-1) && (nColId != 0);
     if ( bColAttrs && !bDBIsReadOnly)
     {
         PopupMenu aNewItems(ModuleRes(RID_SBA_GRID_COLCTXMENU));
@@ -711,7 +711,7 @@ SbaGridControl::SbaGridControl(Reference< XComponentContext > _rM,
     ,m_pMasterListener(NULL)
     ,m_nAsyncDropEvent(0)
     ,m_nCurrentActionColId((sal_uInt16)-1)
-    ,m_bActivatingForDrop(sal_False)
+    ,m_bActivatingForDrop(false)
 {
 }
 
@@ -786,7 +786,7 @@ void SbaGridControl::SetColWidth(sal_uInt16 nColId)
         Any aWidth = xAffectedCol->getPropertyValue(PROPERTY_WIDTH);
         sal_Int32 nCurWidth = aWidth.hasValue() ? ::comphelper::getINT32(aWidth) : -1;
 
-        DlgSize aDlgColWidth(this, nCurWidth, sal_False);
+        DlgSize aDlgColWidth(this, nCurWidth, false);
         if (aDlgColWidth.Execute())
         {
             sal_Int32 nValue = aDlgColWidth.GetValue();
@@ -815,7 +815,7 @@ void SbaGridControl::SetRowHeight()
     Any aHeight = xCols->getPropertyValue(PROPERTY_ROW_HEIGHT);
     sal_Int32 nCurHeight = aHeight.hasValue() ? ::comphelper::getINT32(aHeight) : -1;
 
-    DlgSize aDlgRowHeight(this, nCurHeight, sal_True);
+    DlgSize aDlgRowHeight(this, nCurHeight, true);
     if (aDlgRowHeight.Execute())
     {
         sal_Int32 nValue = aDlgRowHeight.GetValue();
@@ -979,10 +979,10 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
     return xEmptyReturn;
 }
 
-sal_Bool SbaGridControl::IsReadOnlyDB() const
+bool SbaGridControl::IsReadOnlyDB() const
 {
     // assume yes if anything fails
-    sal_Bool bDBIsReadOnly = sal_True;
+    bool bDBIsReadOnly = true;
 
     // the db is the implemented by the parent of the grid control's model ...
     Reference< XChild >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
@@ -1012,7 +1012,7 @@ void SbaGridControl::MouseButtonDown( const BrowserMouseEvent& rMEvt)
     sal_uInt16 nViewPos = (nColPos == BROWSER_INVALIDID) ? (sal_uInt16)-1 : nColPos-1;
         // 'the handle column' and 'no valid column' will both result in a view position of -1 !
 
-    sal_Bool bHitEmptySpace = (nRow > GetRowCount()) || (nViewPos == (sal_uInt16)-1);
+    bool bHitEmptySpace = (nRow > GetRowCount()) || (nViewPos == (sal_uInt16)-1);
 
     if (bHitEmptySpace && (rMEvt.GetClicks() == 2) && rMEvt.IsMod1())
         Control::MouseButtonDown(rMEvt);
@@ -1025,7 +1025,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
     SolarMutexGuard aGuard;
         // in the new DnD API, the solar mutex is not locked when StartDrag get's called
 
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
 
     do
     {
@@ -1038,7 +1038,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         sal_uInt16 nViewPos = (nColPos == BROWSER_INVALIDID) ? (sal_uInt16)-1 : nColPos-1;
             // 'the handle column' and 'no valid column' will both result in a view position of -1 !
 
-        sal_Bool bCurrentRowVirtual = IsCurrentAppending() && IsModified();
+        bool bCurrentRowVirtual = IsCurrentAppending() && IsModified();
         // the current row doesn't really exist : the user's appendign a new one and already has entered some data,
         // so the row contains data which has no counter part within the data source
 
@@ -1051,7 +1051,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         if ((nColPos == BROWSER_INVALIDID) || (nRow >= nCorrectRowCount))
             break;
 
-        sal_Bool bHitHandle = (nColPos == 0);
+        bool bHitHandle = (nColPos == 0);
 
         // check which kind of dragging has to be initiated
         if  (   bHitHandle                          //  the handle column
@@ -1079,7 +1079,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
             getMouseEvent().Clear();
             DoRowDrag((sal_Int16)nRow);
 
-            bHandled = sal_True;
+            bHandled = true;
         }
         else if (   (nRow < 0)                      // the header
                 &&  (!bHitHandle)                   // non-handle column
@@ -1092,7 +1092,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
             getMouseEvent().Clear();
             DoColumnDrag(nViewPos);
 
-            bHandled = sal_True;
+            bHandled = true;
         }
         else if (   !bHitHandle     // non-handle column
                 &&  (nRow >= 0)     // non-header row
@@ -1104,7 +1104,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
             getMouseEvent().Clear();
             DoFieldDrag(nViewPos, (sal_Int16)nRow);
 
-            bHandled = sal_True;
+            bHandled = true;
         }
     }
     while (false);
@@ -1172,19 +1172,19 @@ void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfC
 
     // build the sequence of numbers of selected rows
     Sequence< Any > aSelectedRows;
-    sal_Bool bSelectionBookmarks = sal_True;
+    bool bSelectionBookmarks = true;
 
     // collect the affected rows
     if ((GetSelectRowCount() == 0) && (nRowPos >= 0))
     {
         aSelectedRows.realloc( 1 );
         aSelectedRows[0] <<= (sal_Int32)(nRowPos + 1);
-        bSelectionBookmarks = sal_False;
+        bSelectionBookmarks = false;
     }
     else if ( !IsAllSelected() && GetSelectRowCount() )
     {
         aSelectedRows = getSelectionBookmarks();
-        bSelectionBookmarks = sal_True;
+        bSelectionBookmarks = true;
     }
 
     Reference< XResultSet> xRowSetClone;
@@ -1232,8 +1232,8 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
 /// unary_function Functor object for class ZZ returntype is void
     struct SbaGridControlPrec : ::std::unary_function<DataFlavorExVector::value_type,bool>
     {
-        sal_Bool    bQueryDrop;
-        SbaGridControlPrec(sal_Bool _bQueryDrop)
+        bool    bQueryDrop;
+        SbaGridControlPrec(bool _bQueryDrop)
             : bQueryDrop(_bQueryDrop)
         {
         }
@@ -1321,9 +1321,9 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
                     css::uno::UNO_QUERY);
                 if (xColControl.is())
                 {
-                    m_bActivatingForDrop = sal_True;
+                    m_bActivatingForDrop = true;
                     GoToRowColumnId(nRow, nCol);
-                    m_bActivatingForDrop = sal_False;
+                    m_bActivatingForDrop = false;
 
                     nAction = DND_ACTION_COPY;
                 }
@@ -1339,7 +1339,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
     if(nAction != DND_ACTION_COPY && GetEmptyRow().Is())
     {
         const DataFlavorExVector& _rFlavors = GetDataFlavors();
-        if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec(sal_True)) != _rFlavors.end())
+        if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec(true)) != _rFlavors.end())
             nAction = DND_ACTION_COPY;
     }
 
@@ -1400,7 +1400,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
     if(GetEmptyRow().Is())
     {
         const DataFlavorExVector& _rFlavors = GetDataFlavors();
-        DataFlavorExVector::const_iterator aFind = ::std::find_if(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec(sal_True));
+        DataFlavorExVector::const_iterator aFind = ::std::find_if(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec(true));
         if( aFind != _rFlavors.end())
         {
             TransferableDataHelper aDropped( rEvt.maDropEvent.Transferable );
@@ -1434,7 +1434,7 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, /*EMPTY_ARG*/)
     Reference< XPropertySet >  xDataSource = getDataSource();
     if ( xDataSource.is() )
     {
-        sal_Bool bCountFinal = sal_False;
+        bool bCountFinal = false;
         xDataSource->getPropertyValue(PROPERTY_ISROWCOUNTFINAL) >>= bCountFinal;
         if ( !bCountFinal )
             setDataSource(NULL); // deattach from grid control

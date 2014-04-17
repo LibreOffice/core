@@ -123,7 +123,7 @@ void OComponentDefinition::registerProperties()
 OComponentDefinition::OComponentDefinition(const Reference< XComponentContext >& _xORB
                                            ,const Reference< XInterface >&  _xParentContainer
                                            ,const TContentPtr& _pImpl
-                                           ,sal_Bool _bTable)
+                                           ,bool _bTable)
     :OContentHelper(_xORB,_xParentContainer,_pImpl)
     ,ODataSettings(OContentHelper::rBHelper,!_bTable)
     ,m_bTable(_bTable)
@@ -139,7 +139,7 @@ OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxCo
                                        ,const OUString& _rElementName
                                        ,const Reference< XComponentContext >& _xORB
                                        ,const TContentPtr& _pImpl
-                                       ,sal_Bool _bTable)
+                                       ,bool _bTable)
     :OContentHelper(_xORB,_rxContainer,_pImpl)
     ,ODataSettings(OContentHelper::rBHelper,!_bTable)
     ,m_bTable(_bTable)
@@ -239,7 +239,7 @@ Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeExcepti
         for ( ; aIter != aEnd; ++aIter )
             aNames.push_back( aIter->first );
 
-        m_pColumns.reset( new OColumns( *this, m_aMutex, sal_True, aNames, this, NULL, sal_True, sal_False, sal_False ) );
+        m_pColumns.reset( new OColumns( *this, m_aMutex, true, aNames, this, NULL, true, false, false ) );
         m_pColumns->setParent( *this );
     }
     return m_pColumns.get();

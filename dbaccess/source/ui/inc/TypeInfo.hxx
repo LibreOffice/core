@@ -81,7 +81,7 @@ const sal_uInt16 TYPE_BIT       = 31;
 
         sal_Int16       nSearchType;    // if it is possible to search for type
 
-        sal_Bool        bCurrency       : 1,    // currency
+        bool        bCurrency       : 1,    // currency
                         bAutoIncrement  : 1,    // if automatic incrementing field
                         bNullable       : 1,    // if field can be NULL
                         bCaseSensitive  : 1,    // if type is case sensitive
@@ -94,14 +94,14 @@ const sal_uInt16 TYPE_BIT       = 31;
                 ,nMaximumScale(0)
                 ,nMinimumScale(0)
                 ,nSearchType(::com::sun::star::sdbc::ColumnSearch::FULL)
-                ,bCurrency(sal_False)
-                ,bAutoIncrement(sal_False)
-                ,bNullable(sal_True)
-                ,bCaseSensitive(sal_False)
-                ,bUnsigned(sal_False)
+                ,bCurrency(false)
+                ,bAutoIncrement(false)
+                ,bNullable(true)
+                ,bCaseSensitive(false)
+                ,bUnsigned(false)
         {}
-        sal_Bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
-        sal_Bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
+        bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
+        bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
         inline OUString  getDBName() const { return aTypeName; }
 
     };
@@ -124,8 +124,8 @@ const sal_uInt16 TYPE_BIT       = 31;
                                const OUString& _sCreateParams,
                                sal_Int32 _nPrecision,
                                sal_Int32 _nScale,
-                               sal_Bool _bAutoIncrement,
-                               sal_Bool& _brForceToType);
+                               bool _bAutoIncrement,
+                               bool& _brForceToType);
 }
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TYPEINFO_HXX

@@ -52,7 +52,7 @@ TYPEINIT1( OTableStylesContext, SvXMLStylesContext );
 OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle )
+        SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle )
     :XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle )
     ,sNumberFormat(OUString("NumberFormat"))
     ,pStyles(&rStyles)
@@ -144,7 +144,7 @@ OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
                                           sal_uInt16 nPrfx ,
                                           const OUString& rLName ,
                                           const Reference< XAttributeList > & xAttrList,
-                                          const sal_Bool bTempAutoStyles )
+                                          const bool bTempAutoStyles )
     : SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList )
     , sTableStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ))
     , sColumnStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ))

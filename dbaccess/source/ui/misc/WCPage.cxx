@@ -68,7 +68,7 @@ OCopyTable::OCopyTable( Window * pParent )
     ,m_pPage2(NULL)
     ,m_pPage3(NULL)
     ,m_bPKeyAllowed(false)
-    ,m_bUseHeaderAllowed(sal_True)
+    ,m_bUseHeaderAllowed(true)
 {
 
     m_edTableName.SetMaxTextLen(EDIT_NOLIMIT);
@@ -119,7 +119,7 @@ IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, /*pButton*/ )
 
 void OCopyTable::SetAppendDataRadio()
 {
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_True);
+    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,true);
     m_aFT_KeyName.Enable(false);
     m_aCB_PrimaryColumn.Enable(false);
     m_edKeyName.Enable(false);
@@ -129,7 +129,7 @@ void OCopyTable::SetAppendDataRadio()
 IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 {
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,pButton != &m_aRB_View);
-    sal_Bool bKey = m_bPKeyAllowed && pButton != &m_aRB_View;
+    bool bKey = m_bPKeyAllowed && pButton != &m_aRB_View;
     m_aFT_KeyName.Enable(bKey && m_aCB_PrimaryColumn.IsChecked());
     m_edKeyName.Enable(bKey && m_aCB_PrimaryColumn.IsChecked());
     m_aCB_PrimaryColumn.Enable(bKey);
@@ -153,7 +153,7 @@ IMPL_LINK( OCopyTable, KeyClickHdl, Button*, /*pButton*/ )
     return 0;
 }
 
-sal_Bool OCopyTable::LeavePage()
+bool OCopyTable::LeavePage()
 {
     m_pParent->m_bCreatePrimaryKeyColumn    = (m_bPKeyAllowed && m_aCB_PrimaryColumn.IsEnabled()) ? m_aCB_PrimaryColumn.IsChecked() : sal_False;
     m_pParent->m_aKeyName                   = m_pParent->m_bCreatePrimaryKeyColumn ? m_edKeyName.GetText() : OUString();
@@ -170,7 +170,7 @@ sal_Bool OCopyTable::LeavePage()
             aErrorInfo.append( SQLExceptionInfo::SQL_CONTEXT, ModuleRes( STR_SUGGEST_APPEND_TABLE_DATA ) );
             m_pParent->showError(aErrorInfo.get());
 
-            return sal_False;
+            return false;
         }
 
         // have to check the length of the table name
@@ -189,7 +189,7 @@ sal_Bool OCopyTable::LeavePage()
         {
             OUString sError(ModuleRes(STR_INVALID_TABLE_NAME_LENGTH));
             m_pParent->showError(sError);
-            return sal_False;
+            return false;
         }
 
         // now we have to check if the name of the primary key already exists
@@ -200,7 +200,7 @@ sal_Bool OCopyTable::LeavePage()
             aInfoString += " ";
             aInfoString += m_pParent->m_aKeyName;
             m_pParent->showError(aInfoString);
-            return sal_False;
+            return false;
         }
     }
 
@@ -209,7 +209,7 @@ sal_Bool OCopyTable::LeavePage()
         if ( m_pParent->getOperation() == CopyTableOperation::AppendData )
         {
             if(!checkAppendData())
-                return sal_False;
+                return false;
         }
         else if ( m_nOldOperation == CopyTableOperation::AppendData )
         {
@@ -222,7 +222,7 @@ sal_Bool OCopyTable::LeavePage()
         if ( CopyTableOperation::AppendData == m_pParent->getOperation() )
         {
             if( !checkAppendData() )
-                return sal_False;
+                return false;
         }
     }
     m_pParent->m_sName = m_edTableName.GetText();
@@ -232,10 +232,10 @@ sal_Bool OCopyTable::LeavePage()
     {
         OUString sError(ModuleRes(STR_INVALID_TABLE_NAME));
         m_pParent->showError(sError);
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 void OCopyTable::ActivatePage()
@@ -253,13 +253,13 @@ OUString OCopyTable::GetTitle() const
 
 void OCopyTable::Reset()
 {
-    m_bFirstTime = sal_False;
+    m_bFirstTime = false;
 
     m_edTableName.SetText( m_pParent->m_sName );
     m_edTableName.SaveValue();
 }
 
-sal_Bool OCopyTable::checkAppendData()
+bool OCopyTable::checkAppendData()
 {
     m_pParent->clearDestColumns();
     Reference< XPropertySet > xTable;
@@ -282,17 +282,17 @@ sal_Bool OCopyTable::checkAppendData()
         ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
         ODatabaseExport::TColumnVector::const_iterator aDestEnd     = pDestColumns->end();
         const sal_uInt32 nDestSize = pDestColumns->size();
-        sal_Bool bNotConvert;
+        bool bNotConvert;
         sal_uInt32 i = 0;
         for(sal_Int32 nPos = 1;aDestIter != aDestEnd && i < nDestSize && i < nSrcSize;++aDestIter,++nPos,++i)
         {
-            bNotConvert = sal_True;
+            bNotConvert = true;
             m_pParent->m_vColumnPos[i] = ODatabaseExport::TPositions::value_type(nPos,nPos);
             TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getSpecialTypeInfo(),bNotConvert);
             if ( !bNotConvert )
             {
                 m_pParent->showColumnTypeNotSupported((*aDestIter)->first);
-                return sal_False;
+                return false;
             }
 
             if ( pTypeInfo.get() )
@@ -307,9 +307,9 @@ sal_Bool OCopyTable::checkAppendData()
     {
         OUString sError(ModuleRes(STR_INVALID_TABLE_NAME));
         m_pParent->showError(sError);
-        return sal_False;
+        return false;
     }
-    return sal_True;
+    return true;
 }
 
 void OCopyTable::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName )

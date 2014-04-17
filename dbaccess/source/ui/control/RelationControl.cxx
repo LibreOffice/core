@@ -390,7 +390,7 @@ namespace dbaui
     void ORelationControl::setWindowTables(const OTableWindow* _pSource,const OTableWindow* _pDest)
     {
         // If I edit here, hide
-        sal_Bool bWasEditing = IsEditing();
+        bool bWasEditing = IsEditing();
         if ( bWasEditing )
             DeactivateCell();
 
@@ -688,7 +688,7 @@ namespace dbaui
         m_pRC_Tables->Invalidate();
     }
 
-    sal_Bool OTableListBoxControl::SaveModified()
+    bool OTableListBoxControl::SaveModified()
     {
         return m_pRC_Tables->SaveModified();
     }

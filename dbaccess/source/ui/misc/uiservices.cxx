@@ -29,7 +29,7 @@ using namespace ::com::sun::star::registry;
 
 extern "C" void SAL_CALL createRegistryInfo_DBU()
 {
-    static sal_Bool bInit = sal_False;
+    static bool bInit = false;
     if (!bInit)
     {
         createRegistryInfo_OTableFilterDialog();
@@ -57,7 +57,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_CopyTableWizard();
         createRegistryInfo_OTextConnectionSettingsDialog();
         createRegistryInfo_LimitBoxController();
-        bInit = sal_True;
+        bInit = true;
     }
 }
 

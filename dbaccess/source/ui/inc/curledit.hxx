@@ -38,10 +38,10 @@ class OConnectionURLEdit : public Edit
                         m_pTypeCollection;
     FixedText*          m_pForcedPrefix;
     OUString            m_sSaveValueNoPrefix;
-    sal_Bool            m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not
+    bool            m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not
 
 public:
-    OConnectionURLEdit(Window* pParent, const ResId& rResId,sal_Bool _bShowPrefix = sal_False);
+    OConnectionURLEdit(Window* pParent, const ResId& rResId,bool _bShowPrefix = false);
     virtual ~OConnectionURLEdit();
 
 public:
@@ -54,7 +54,7 @@ public:
         @param  _bShowPrefix
             If <TRUE/> than the prefix will be visible, otherwise not.
     */
-    void ShowPrefix(sal_Bool _bShowPrefix);
+    void ShowPrefix(bool _bShowPrefix);
     /// get the currently set text, excluding the prefix indicating the type
     virtual OUString GetTextNoPrefix() const;
     /// set a new text, leave the current prefix unchanged

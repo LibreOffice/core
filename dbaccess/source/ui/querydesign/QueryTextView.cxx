@@ -69,9 +69,9 @@ void OQueryTextView::Resize()
 }
 
 // check if the statement is correct when not returning false
-sal_Bool OQueryTextView::checkStatement()
+bool OQueryTextView::checkStatement()
 {
-    return sal_True;
+    return true;
 }
 
 OUString OQueryTextView::getStatement()
@@ -105,19 +105,19 @@ void OQueryTextView::copy()
         m_pEdit->Copy();
 }
 
-sal_Bool OQueryTextView::isCutAllowed()
+bool OQueryTextView::isCutAllowed()
 {
     return !m_pEdit->GetSelected().isEmpty();
 }
 
-sal_Bool OQueryTextView::isPasteAllowed()
+bool OQueryTextView::isPasteAllowed()
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool OQueryTextView::isCopyAllowed()
+bool OQueryTextView::isCopyAllowed()
 {
-    return sal_True;
+    return true;
 }
 
 void OQueryTextView::cut()

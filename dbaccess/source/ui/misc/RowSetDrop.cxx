@@ -48,7 +48,7 @@ ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
                                             ,m_xTargetResultSetUpdate(_xResultSetUpdate)
                                             ,m_xTargetRowUpdate(_xResultSetUpdate,UNO_QUERY)
                                             ,m_pParent(_pParent)
-                                            ,m_bAlreadyAsked(sal_False)
+                                            ,m_bAlreadyAsked(false)
 {
     SAL_INFO("dbaccess.ui", "ORowSetImportExport::ORowSetImportExport" );
     OSL_ENSURE(_pParent,"Window can't be null!");
@@ -94,20 +94,20 @@ void ORowSetImportExport::initialize()
     }
 }
 
-sal_Bool ORowSetImportExport::Write()
+bool ORowSetImportExport::Write()
 {
     SAL_INFO("dbaccess.ui", "ORowSetImportExport::Write" );
-    return sal_True;
+    return true;
 }
 
-sal_Bool ORowSetImportExport::Read()
+bool ORowSetImportExport::Read()
 {
     SAL_INFO("dbaccess.ui", "ORowSetImportExport::Read" );
     // check if there is any column to copy
     if(::std::find_if(m_aColumnMapping.begin(),m_aColumnMapping.end(),
                         ::std::bind2nd(::std::greater<sal_Int32>(),0)) == m_aColumnMapping.end())
-        return sal_False;
-    sal_Bool bContinue = sal_True;
+        return false;
+    bool bContinue = true;
     if(m_aSelection.getLength())
     {
         const Any* pBegin = m_aSelection.getConstArray();
@@ -128,7 +128,7 @@ sal_Bool ORowSetImportExport::Read()
         sal_Int32 nRowFilterIndex = 0;
         if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISROWCOUNTFINAL) )
         {
-            sal_Bool bFinal = sal_False;
+            bool bFinal = false;
             xProp->getPropertyValue(PROPERTY_ISROWCOUNTFINAL) >>= bFinal;
             if ( !bFinal )
                 m_xResultSet->afterLast();
@@ -152,10 +152,10 @@ sal_Bool ORowSetImportExport::Read()
             }
         }
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool ORowSetImportExport::insertNewRow()
+bool ORowSetImportExport::insertNewRow()
 {
     SAL_INFO("dbaccess.ui", "ORowSetImportExport::insertNewRow" );
     try
@@ -248,12 +248,12 @@ sal_Bool ORowSetImportExport::insertNewRow()
             OUString sAskIfContinue = ModuleRes(STR_ERROR_OCCURRED_WHILE_COPYING);
             OSQLWarningBox aDlg( m_pParent, sAskIfContinue, WB_YES_NO | WB_DEF_YES );
             if(aDlg.Execute() == RET_YES)
-                m_bAlreadyAsked = sal_True;
+                m_bAlreadyAsked = true;
             else
-                return sal_False;
+                return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

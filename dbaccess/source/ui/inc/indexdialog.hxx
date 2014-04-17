@@ -45,7 +45,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
         Link        m_aSelectHdl;
         Link        m_aEndEditHdl;
-        sal_Bool    m_bSuspendSelectHdl;
+        bool    m_bSuspendSelectHdl;
 
     public:
         DbaIndexList(Window* _pParent, const ResId& _rId);
@@ -56,7 +56,7 @@ namespace dbaui
         void SetEndEditHdl(const Link& _rHdl) { m_aEndEditHdl = _rHdl; }
         Link GetEndEditHdl() const { return m_aEndEditHdl; }
 
-        virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect );
+        virtual bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect );
 
         void enableSelectHandler();
         void disableSelectHandler();
@@ -98,7 +98,7 @@ namespace dbaui
 
         OIndexCollection*       m_pIndexes;
         SvTreeListEntry*            m_pPreviousSelection;
-        sal_Bool                m_bEditAgain;
+        bool                m_bEditAgain;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                                 m_xContext;
@@ -144,18 +144,18 @@ namespace dbaui
 
     private:
         void OnNewIndex();
-        void OnDropIndex(sal_Bool _bConfirm = sal_True);
+        void OnDropIndex(bool _bConfirm = true);
         void OnRenameIndex();
         void OnSaveIndex();
         void OnResetIndex();
 
-        sal_Bool implCommit(SvTreeListEntry* _pEntry);
-        sal_Bool implSaveModified(sal_Bool _bPlausibility = sal_True);
-        sal_Bool implCommitPreviouslySelected();
+        bool implCommit(SvTreeListEntry* _pEntry);
+        bool implSaveModified(bool _bPlausibility = true);
+        bool implCommitPreviouslySelected();
 
-        sal_Bool implDropIndex(SvTreeListEntry* _pEntry, sal_Bool _bRemoveFromCollection);
+        bool implDropIndex(SvTreeListEntry* _pEntry, bool _bRemoveFromCollection);
 
-        sal_Bool implCheckPlausibility(const Indexes::const_iterator& _rPos);
+        bool implCheckPlausibility(const Indexes::const_iterator& _rPos);
 
         /** checks if the controls have to be replaced and moved.
         */

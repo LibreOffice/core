@@ -36,7 +36,7 @@ namespace dbaui
     */
     class OConnectionTabPageSetup : public OConnectionHelper
     {
-        sal_Bool            m_bUserGrabFocus : 1;
+        bool            m_bUserGrabFocus : 1;
     protected:
 
         FixedText           m_aFT_HelpText;
@@ -53,7 +53,7 @@ namespace dbaui
 
         virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs) SAL_OVERRIDE;
 
-        virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
+        virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
 
         inline void enableConnectionURL() { m_aConnectionURL.SetReadOnly(false); }

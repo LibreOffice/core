@@ -85,7 +85,7 @@ private:
     sal_Int32                                       m_nPreviewMode;
     bool                                            m_bNewFormat;
 
-    sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
+    bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
 
     /** fills the map with the Properties
         @param  _rValue
@@ -96,7 +96,7 @@ private:
     void fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap);
 
     SvXMLImportContext* CreateStylesContext(sal_uInt16 nPrefix,const OUString& rLocalName,
-                                     const Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle );
+                                     const Reference< XAttributeList>& xAttrList, bool bIsAutoStyle );
     SvXMLImportContext* CreateScriptContext( const OUString& rLocalName );
 
 protected:

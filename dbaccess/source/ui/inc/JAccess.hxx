@@ -38,7 +38,7 @@ namespace dbaui
         /** isEditable returns the current editable state
             @return true if the controller is not readonly otherwise false
         */
-        virtual sal_Bool isEditable() const;
+        virtual bool isEditable() const;
     public:
         /** OJoinDesignViewAccess needs a valid view
         */

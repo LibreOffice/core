@@ -30,7 +30,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;
         ::std::auto_ptr<WaitObject> m_pWaitObject;
         sal_uLong       m_nThreadEvent;
-        sal_Bool    m_bRelationsPossible;
+        bool    m_bRelationsPossible;
     protected:
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures() SAL_OVERRIDE;
@@ -41,7 +41,7 @@ namespace dbaui
 
         ORelationDesignView*    getRelationView() { return static_cast<ORelationDesignView*>( getView() ); }
         void loadData();
-        TTableWindowData::value_type existsTable(const OUString& _rComposedTableName,sal_Bool _bCase) const;
+        TTableWindowData::value_type existsTable(const OUString& _rComposedTableName,bool _bCase) const;
 
         // load the window positions out of the datasource
         void loadLayoutInformation();

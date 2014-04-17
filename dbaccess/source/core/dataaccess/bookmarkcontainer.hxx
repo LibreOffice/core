@@ -136,14 +136,14 @@ protected:
                                             if sal_True and the configuration is readonly, a runtime exception with
                                             a description string is thrown.
     */
-    void        checkValid(sal_Bool _bIntendWriteAccess) const throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::DisposedException);
+    void        checkValid(bool _bIntendWriteAccess) const throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::DisposedException);
 
     /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.
         if there is such an object which is not already loaded, it won't be loaded now.
         @param      _rName      the object name to check
         @return                 sal_True if there already exists such an object
     */
-    inline  sal_Bool    checkExistence(const OUString& _rName);
+    inline  bool    checkExistence(const OUString& _rName);
 
     void    implAppend(
         const OUString& _rName,
@@ -158,7 +158,7 @@ protected:
 
 };
 
-inline  sal_Bool OBookmarkContainer::checkExistence(const OUString& _rName)
+inline  bool OBookmarkContainer::checkExistence(const OUString& _rName)
 {
     return m_aBookmarks.find(_rName) != m_aBookmarks.end();
 }

@@ -67,7 +67,7 @@ using namespace ::connectivity::sdbcx;
 
 namespace
 {
-    sal_Bool lcl_isPropertySetDefaulted(const Sequence< OUString>& _aNames,const Reference<XPropertySet>& _xProp)
+    bool lcl_isPropertySetDefaulted(const Sequence< OUString>& _aNames,const Reference<XPropertySet>& _xProp)
     {
         Reference<XPropertyState> xState(_xProp,UNO_QUERY);
         if ( xState.is() )
@@ -89,7 +89,7 @@ namespace
             }
             return ( pIter == pEnd );
         }
-        return sal_False;
+        return false;
     }
 }
 
@@ -98,7 +98,7 @@ namespace
 OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
                                  ::osl::Mutex& _rMutex,
                                  const Reference< XConnection >& _xCon,
-                                 sal_Bool _bCase,
+                                 bool _bCase,
                                  const Reference< XNameContainer >& _xTableDefinitions,
                                  IRefreshListener*  _pRefreshListener,
                                  ::dbtools::IWarningsContainer* _pWarningsContainer
@@ -106,7 +106,7 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer,_nInAppend)
     ,m_xTableDefinitions(_xTableDefinitions)
     ,m_pTableMediator( NULL )
-    ,m_bInDrop(sal_False)
+    ,m_bInDrop(false)
 {
 }
 
@@ -310,7 +310,7 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
     Reference<XColumnsSupplier> xSup(descriptor,UNO_QUERY);
     Reference<XDataDescriptorFactory> xFac(xColumnDefinitions,UNO_QUERY);
     Reference<XAppend> xAppend(xColumnDefinitions,UNO_QUERY);
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     if ( xSup.is() && xColumnDefinitions.is() && xFac.is() && xAppend.is() )
     {
         Reference<XNameAccess> xNames = xSup->getColumns();
@@ -329,7 +329,7 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
                     {
                         ::comphelper::copyProperties( xColumn, xProp );
                         xAppend->appendByDescriptor( xProp );
-                        bModified = sal_True;
+                        bModified = true;
                     }
                 }
             }
@@ -342,7 +342,7 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
                                                     , OUString(PROPERTY_TEXTRELIEF) };
     Sequence< OUString> aNames(s_pTableProps,sizeof(s_pTableProps)/sizeof(s_pTableProps[0]));
     if ( bModified || !lcl_isPropertySetDefaulted(aNames,xTableDefinition) )
-        ::dbaccess::notifyDataSourceModified(m_xTableDefinitions,sal_True);
+        ::dbaccess::notifyDataSourceModified(m_xTableDefinitions,true);
 
     return createObject( _rForName );
 }
@@ -351,7 +351,7 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
 void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 {
    SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::dropObject" );
-    m_bInDrop = sal_True;
+    m_bInDrop = true;
     try
     {
         Reference< XDrop > xDrop(m_xMasterContainer,UNO_QUERY);
@@ -361,7 +361,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
         {
             OUString sCatalog,sSchema,sTable,sComposedName;
 
-            sal_Bool bIsView = sal_False;
+            bool bIsView = false;
             Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
             if ( xTable.is() && m_xMetaData.is() )
             {
@@ -406,10 +406,10 @@ void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     }
     catch(const Exception&)
     {
-        m_bInDrop = sal_False;
+        m_bInDrop = false;
         throw;
     }
-    m_bInDrop = sal_False;
+    m_bInDrop = false;
 }
 
 void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) throw (RuntimeException, std::exception)

@@ -29,12 +29,12 @@ namespace dbaui
         FixedText   m_aSpace2;
         FixedText   m_aTitle;
         Window*     m_pChild;
-        sal_Bool        m_bShift;
-        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        bool        m_bShift;
+        void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
-        OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,sal_Bool _bShift = sal_True);
+        OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift = true);
         virtual ~OTitleWindow();
 
         // window overloads

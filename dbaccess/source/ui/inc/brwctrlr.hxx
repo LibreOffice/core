@@ -111,7 +111,7 @@ namespace dbaui
 
         sal_uInt16              m_nFormActionNestingLevel;      // see enter-/leaveFormAction
 
-        sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
+        bool                m_bLoadCanceled : 1;            // the load was canceled somehow
         bool                    m_bCannotSelectUnfiltered : 1;  // received an DATA_CANNOT_SELECT_UNFILTERED error
 
     protected:
@@ -134,12 +134,12 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >        getControlModel()   const   { return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > (m_xGridModel, ::com::sun::star::uno::UNO_QUERY); }
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getNumberFormatter()const   { return m_xFormatter; }
 
-        sal_Bool    isValid() const         { return m_xRowSet.is() && m_xGridModel.is(); }
-        sal_Bool    isValidCursor() const;  // checks the ::com::sun::star::data::XDatabaseCursor-interface of m_xRowSet
-        sal_Bool    isLoaded() const;
-        sal_Bool    loadingCancelled() const { return m_bLoadCanceled; }
+        bool    isValid() const         { return m_xRowSet.is() && m_xGridModel.is(); }
+        bool    isValidCursor() const;  // checks the ::com::sun::star::data::XDatabaseCursor-interface of m_xRowSet
+        bool    isLoaded() const;
+        bool    loadingCancelled() const { return m_bLoadCanceled; }
         void        onStartLoading( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable );
-        void        setLoadingCancelled()   { m_bLoadCanceled = sal_True; }
+        void        setLoadingCancelled()   { m_bLoadCanceled = true; }
 
         const TransferableDataHelper&
             getViewClipboard() const { return m_aSystemClipboard; }
@@ -238,13 +238,13 @@ namespace dbaui
             // (probably this needs not to be overloaded, but you may return anything you want as long as it
             // supports the ::com::sun::star::form::DatabaseForm service. For instance you may want to create an adapter here which
             // is synchronized with a foreign ::com::sun::star::form::DatabaseForm you got elsewhere)
-        virtual sal_Bool InitializeForm(
+        virtual bool InitializeForm(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties ) = 0;
             // called immediately after a successful CreateForm
             // do any initialization (data source etc.) here. the form should be fully functional after that.
             // return sal_False if you didn't succeed (don't throw exceptions, they won't be caught)
 
-        virtual sal_Bool InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
+        virtual bool InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  CreateGridModel();
             // our default implementation simply instantiates a stardiv.one.form.component.Grid service
@@ -271,7 +271,7 @@ namespace dbaui
             // call after "major changes" (e.g. the completion of the async load).
             // invalidates all toolbox slots and all supported features.
 
-        virtual sal_Bool LoadForm();
+        virtual bool LoadForm();
             // load the form
             // the default implementation does an direct load or starts a load thread, depending on the multithread capabilities
             // of the data source.
@@ -288,9 +288,9 @@ namespace dbaui
             // whole process (_both_ XLoadable::reload calls _together_) form the "reload operation"
 
             // empty the frame where our view resides
-        virtual sal_Bool CommitCurrent();
+        virtual bool CommitCurrent();
             // commit the current column (i.e. cell)
-        virtual sal_Bool SaveModified(sal_Bool bAskFor = sal_True);
+        virtual bool SaveModified(sal_Bool bAskFor = sal_True);
             // save the modified record
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getBoundField(sal_uInt16 nViewPos = (sal_uInt16)-1) const;
@@ -304,25 +304,25 @@ namespace dbaui
         void initFormatter();
 
         /// loads or reloads the form
-        virtual sal_Bool reloadForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable);
+        virtual bool reloadForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable);
 
-        virtual sal_Bool    preReloadForm(){ return sal_False; }
+        virtual bool    preReloadForm(){ return false; }
         virtual void        postReloadForm(){}
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
                             createParser_nothrow();
 
     private:
-        void setCurrentModified( sal_Bool _bSet );
+        void setCurrentModified( bool _bSet );
 
         // execute the filter or sort slot
-        void ExecuteFilterSortCrit(sal_Bool bFilter);
+        void ExecuteFilterSortCrit(bool bFilter);
 
         // execute the search slot
         void        ExecuteSearch();
 
         void        initializeParser() const; // changes the mutable member m_xParser
-        void        applyParserFilter(const OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::OUString& _sOldHaving,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
+        void        applyParserFilter(const OUString& _rOldFilter, bool _bOldFilterApplied,const ::OUString& _sOldHaving,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
         void        applyParserOrder(const OUString& _rOldOrder,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
 
         sal_Int16   getCurrentColumnPosition();

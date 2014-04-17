@@ -40,7 +40,7 @@ namespace dbaui
         OTableTreeListBox*      m_pTablesList;
 
         OUString         m_sCatalogSeparator;
-        sal_Bool                m_bCatalogAtStart : 1;
+        bool                m_bCatalogAtStart : 1;
 
         ::osl::Mutex            m_aNotifierMutex;
 
@@ -86,9 +86,9 @@ namespace dbaui
         ::com::sun::star::uno::Sequence< OUString > collectDetailedSelection() const;
 
         /// (un)check all entries
-        void CheckAll( sal_Bool bCheck = sal_True );
+        void CheckAll( bool bCheck = true );
 
-        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
+        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
 
         // checks the tables according to the filter given
         // in oppsofite to implCheckTables, this method handles the case of an empty sequence, too ...

@@ -35,14 +35,14 @@ public: // need public access
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
                                                 m_aLayoutInformation;
     OUString                             m_sCommand;
-    sal_Bool                                    m_bEscapeProcessing;        // no BitField ! so it can be used with a OPropertyStateContainer
+    bool                                    m_bEscapeProcessing;        // no BitField ! so it can be used with a OPropertyStateContainer
     OUString                             m_sUpdateTableName;
     OUString                             m_sUpdateSchemaName;
     OUString                             m_sUpdateCatalogName;
 // </properties>
 
 protected:
-    OCommandBase() : m_bEscapeProcessing(sal_True) { }
+    OCommandBase() : m_bEscapeProcessing(true) { }
 
 };
 

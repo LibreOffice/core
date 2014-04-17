@@ -84,7 +84,7 @@ namespace dbaccess
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
     public:
         ORowSetDataColumns(
-                        sal_Bool _bCase,
+                        bool _bCase,
                         const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,

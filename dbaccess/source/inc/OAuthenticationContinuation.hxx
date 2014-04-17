@@ -35,9 +35,9 @@ namespace dbaccess
 class OOO_DLLPUBLIC_DBA OAuthenticationContinuation :
     public comphelper::OInteraction< com::sun::star::ucb::XInteractionSupplyAuthentication >
 {
-    sal_Bool    m_bRemberPassword : 1;      // remember the password for this session ?
+    bool    m_bRemberPassword : 1;      // remember the password for this session ?
 
-    sal_Bool            m_bCanSetUserName;
+    bool            m_bCanSetUserName;
     OUString     m_sUser;            // the user
     OUString     m_sPassword;        // the user's password
 
@@ -57,10 +57,10 @@ public:
     com::sun::star::uno::Sequence< com::sun::star::ucb::RememberAuthentication > SAL_CALL getRememberAccountModes( com::sun::star::ucb::RememberAuthentication& Default ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL setRememberAccount( com::sun::star::ucb::RememberAuthentication Remember ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    void            setCanChangeUserName( sal_Bool bVal )  { m_bCanSetUserName = bVal; }
+    void            setCanChangeUserName( bool bVal )  { m_bCanSetUserName = bVal; }
     OUString getUser() const             { return m_sUser; }
     OUString getPassword() const         { return m_sPassword; }
-    sal_Bool        getRememberPassword() const { return m_bRemberPassword; }
+    bool        getRememberPassword() const { return m_bRemberPassword; }
 };
 
 }   // namespace dbaccess

@@ -255,7 +255,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_pImpl->m_pSchema->SetMaxTextLen(nLength);
                 m_pImpl->m_pCatalog->SetMaxTextLen(nLength);
 
-                sal_Bool bCheck = _xConnection.is() && isSQL92CheckEnabled(_xConnection);
+                bool bCheck = _xConnection.is() && isSQL92CheckEnabled(_xConnection);
                 m_pImpl->m_pTitle->setCheck(bCheck); // enable non valid sql chars as well
                 m_pImpl->m_pSchema->setCheck(bCheck); // enable non valid sql chars as well
                 m_pImpl->m_pCatalog->setCheck(bCheck); // enable non valid sql chars as well
@@ -334,7 +334,7 @@ void OSaveAsDlg::implInitOnlyTitle(const OUString& _rLabel)
     m_pImpl->m_pSchema->Hide();
 
     m_pImpl->m_pTitle->SetText(m_pImpl->m_aName);
-    m_pImpl->m_pTitle->setCheck(sal_False); // enable non valid sql chars as well
+    m_pImpl->m_pTitle->setCheck(false); // enable non valid sql chars as well
 }
 
 void OSaveAsDlg::implInit()

@@ -78,12 +78,12 @@ namespace dbaccess
         OColumns*                       m_pColumns;
         sal_Int32                       m_nResultSetType;
         sal_Int32                       m_nResultSetConcurrency;
-        sal_Bool                        m_bIsBookmarkable : 1;
+        bool                        m_bIsBookmarkable : 1;
 
     public:
         OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xResultSet,
                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xStatement,
-                   sal_Bool _bCaseSensitive);
+                   bool _bCaseSensitive);
         virtual ~OResultSet();
 
     // ::com::sun::star::lang::XTypeProvider

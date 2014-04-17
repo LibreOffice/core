@@ -56,7 +56,7 @@ namespace dbaccess
         return sSupportService;
     }
     // View
-    View::View( const Reference< XConnection >& _rxConnection, sal_Bool _bCaseSensitive,
+    View::View( const Reference< XConnection >& _rxConnection, bool _bCaseSensitive,
         const OUString& _rCatalogName,const OUString& _rSchemaName, const OUString& _rName )
         :View_Base( _bCaseSensitive, _rName, _rxConnection->getMetaData(), 0, OUString(), _rSchemaName, _rCatalogName )
     {

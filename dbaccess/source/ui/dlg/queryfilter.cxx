@@ -123,7 +123,7 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
             if ( eColumnSearch == ColumnSearch::NONE )
                 continue;
 
-            sal_Bool bIsSearchable( sal_True );
+            bool bIsSearchable( true );
             OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_ISSEARCHABLE ) >>= bIsSearchable );
             if ( !bIsSearchable )
                 continue;
@@ -291,13 +291,13 @@ sal_uInt16 DlgFilterCrit::GetSelectionPos(sal_Int32 eType,const ListBox& rListBo
     return nPos;
 }
 
-sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,PropertyValue& _rFilter) const
+bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,PropertyValue& _rFilter) const
 {
-    sal_Bool bHaving = sal_False;
+    bool bHaving = false;
     try
     {
         OUString sTableName;
-        sal_Bool bFunction = sal_False;
+        bool bFunction = false;
         _rFilter.Name = _rField.GetSelectEntry();
         Reference< XPropertySet > xColumn = getQueryColumn(_rFilter.Name);
         if ( xColumn.is() )
@@ -454,7 +454,7 @@ IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Edit*, _pField )
     return 0L;
 }
 
-void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Bool _bOr  )
+void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,bool _bOr  )
 {
     OUString aCondition;
     _rItem.Value >>= aCondition;
@@ -817,16 +817,16 @@ void DlgFilterCrit::fillLines(const Sequence<Sequence<PropertyValue > >& _aValue
 {
     const Sequence<PropertyValue >* pOrIter = _aValues.getConstArray();
     const Sequence<PropertyValue >* pOrEnd   = pOrIter + _aValues.getLength();
-    sal_Bool bOr = sal_True;
+    bool bOr = true;
     for(sal_uInt16 i=0;pOrIter != pOrEnd; ++pOrIter)
     {
-        bOr = sal_True;
+        bOr = true;
         const PropertyValue* pAndIter   = pOrIter->getConstArray();
         const PropertyValue* pAndEnd    = pAndIter + pOrIter->getLength();
         for(;pAndIter != pAndEnd; ++pAndIter)
         {
             SetLine( i++,*pAndIter,bOr);
-            bOr = sal_False;
+            bOr = false;
         }
     }
 }

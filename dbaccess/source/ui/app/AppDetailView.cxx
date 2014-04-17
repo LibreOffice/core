@@ -359,7 +359,7 @@ OTasksWindow::OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView
     m_aCreation.SetDefaultCollapsedEntryBmp( aFolderImage );
     m_aCreation.SetDefaultExpandedEntryBmp( aFolderImage );
 
-    ImplInitSettings(sal_True,sal_True,sal_True);
+    ImplInitSettings(true,true,true);
 }
 
 OTasksWindow::~OTasksWindow()
@@ -374,12 +374,12 @@ void OTasksWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( true, true, true );
         Invalidate();
     }
 }
 
-void OTasksWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+void OTasksWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
@@ -521,14 +521,14 @@ void OTasksWindow::Clear()
 
 // class OApplicationDetailView
 
-OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode) : OSplitterView(&_rParent,sal_False )
+OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode) : OSplitterView(&_rParent,false )
     ,m_aHorzSplitter(this)
     ,m_aTasks(this,STR_TASKS,WB_BORDER | WB_DIALOGCONTROL )
     ,m_aContainer(this,0,WB_BORDER | WB_DIALOGCONTROL )
     ,m_rBorderWin(_rParent)
 {
     SetUniqueId(UID_APP_DETAIL_VIEW);
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
 
     m_pControlHelper = new OAppDetailPageHelper(&m_aContainer,m_rBorderWin,_ePreviewMode);
     m_pControlHelper->Show();
@@ -561,7 +561,7 @@ OApplicationDetailView::~OApplicationDetailView()
     m_pControlHelper = NULL;
 }
 
-void OApplicationDetailView::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+void OApplicationDetailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
@@ -596,7 +596,7 @@ void OApplicationDetailView::DataChanged( const DataChangedEvent& rDCEvt )
         ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
         (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( true, true, true );
         Invalidate();
     }
 }
@@ -740,12 +740,12 @@ OUString OApplicationDetailView::getQualifiedName( SvTreeListEntry* _pEntry ) co
     return m_pControlHelper->getQualifiedName( _pEntry );
 }
 
-sal_Bool OApplicationDetailView::isLeaf(SvTreeListEntry* _pEntry) const
+bool OApplicationDetailView::isLeaf(SvTreeListEntry* _pEntry) const
 {
     return m_pControlHelper->isLeaf(_pEntry);
 }
 
-sal_Bool OApplicationDetailView::isALeafSelected() const
+bool OApplicationDetailView::isALeafSelected() const
 {
     return m_pControlHelper->isALeafSelected();
 }
@@ -765,7 +765,7 @@ void OApplicationDetailView::sortUp()
     m_pControlHelper->sortUp();
 }
 
-sal_Bool OApplicationDetailView::isFilled() const
+bool OApplicationDetailView::isFilled() const
 {
     return m_pControlHelper->isFilled();
 }
@@ -775,7 +775,7 @@ ElementType OApplicationDetailView::getElementType() const
     return m_pControlHelper->getElementType();
 }
 
-void OApplicationDetailView::clearPages(sal_Bool _bTaskAlso)
+void OApplicationDetailView::clearPages(bool _bTaskAlso)
 {
     if ( _bTaskAlso )
         getTasksWindow().Clear();
@@ -817,17 +817,17 @@ SvTreeListEntry* OApplicationDetailView::getEntry( const Point& _aPoint ) const
     return m_pControlHelper->getEntry(_aPoint);
 }
 
-sal_Bool OApplicationDetailView::isCutAllowed()
+bool OApplicationDetailView::isCutAllowed()
 {
     return m_pControlHelper->isCutAllowed();
 }
 
-sal_Bool OApplicationDetailView::isCopyAllowed()
+bool OApplicationDetailView::isCopyAllowed()
 {
     return m_pControlHelper->isCopyAllowed();
 }
 
-sal_Bool OApplicationDetailView::isPasteAllowed()   { return m_pControlHelper->isPasteAllowed(); }
+bool OApplicationDetailView::isPasteAllowed()   { return m_pControlHelper->isPasteAllowed(); }
 
 void OApplicationDetailView::copy() { m_pControlHelper->copy(); }
 
@@ -860,7 +860,7 @@ PreviewMode OApplicationDetailView::getPreviewMode()
     return m_pControlHelper->getPreviewMode();
 }
 
-sal_Bool OApplicationDetailView::isPreviewEnabled()
+bool OApplicationDetailView::isPreviewEnabled()
 {
     return m_pControlHelper->isPreviewEnabled();
 }
@@ -877,12 +877,12 @@ void OApplicationDetailView::showPreview(const Reference< XContent >& _xContent)
 
 void OApplicationDetailView::showPreview(   const OUString& _sDataSourceName,
                                             const OUString& _sName,
-                                            sal_Bool _bTable)
+                                            bool _bTable)
 {
     m_pControlHelper->showPreview(_sDataSourceName,_sName,_bTable);
 }
 
-sal_Bool OApplicationDetailView::isSortUp() const
+bool OApplicationDetailView::isSortUp() const
 {
     return m_pControlHelper->isSortUp();
 }

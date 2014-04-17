@@ -68,7 +68,7 @@ namespace dbaui
         ODataClipboard(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_rAliveForm,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& i_rSelectedRows,
-            const sal_Bool i_bBookmarkSelection,
+            const bool i_bBookmarkSelection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rORB
         );
 

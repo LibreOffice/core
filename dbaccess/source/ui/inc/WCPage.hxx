@@ -50,31 +50,31 @@ namespace dbaui
         OWizColumnSelect*                       m_pPage2;
         OWizNormalExtend*                       m_pPage3;
 
-        sal_Bool                                    m_bPKeyAllowed;
-        sal_Bool                                    m_bUseHeaderAllowed;
+        bool                                    m_bPKeyAllowed;
+        bool                                    m_bUseHeaderAllowed;
 
         DECL_LINK( AppendDataClickHdl, Button* );
         DECL_LINK( RadioChangeHdl, Button* );
         DECL_LINK( KeyClickHdl, Button* );
 
-        sal_Bool checkAppendData();
+        bool checkAppendData();
         void SetAppendDataRadio();
 
     public:
         virtual void            Reset() SAL_OVERRIDE;
         virtual void            ActivatePage() SAL_OVERRIDE;
-        virtual sal_Bool        LeavePage() SAL_OVERRIDE;
+        virtual bool            LeavePage() SAL_OVERRIDE;
         virtual OUString        GetTitle() const SAL_OVERRIDE ;
 
         OCopyTable( Window * pParent );
         virtual ~OCopyTable();
 
-        inline sal_Bool IsOptionDefData()       const { return m_aRB_DefData.IsChecked(); }
-        inline sal_Bool IsOptionDef()           const { return m_aRB_Def.IsChecked(); }
-        inline sal_Bool IsOptionAppendData()    const { return m_aRB_AppendData.IsChecked(); }
-        inline sal_Bool IsOptionView()          const { return m_aRB_View.IsChecked(); }
-        inline sal_Bool UseHeaderLine()         const { return m_aCB_UseHeaderLine.IsChecked(); }
-        OUString        GetKeyName()            const { return m_edKeyName.GetText(); }
+        inline bool IsOptionDefData()       const { return m_aRB_DefData.IsChecked(); }
+        inline bool IsOptionDef()           const { return m_aRB_Def.IsChecked(); }
+        inline bool IsOptionAppendData()    const { return m_aRB_AppendData.IsChecked(); }
+        inline bool IsOptionView()          const { return m_aRB_View.IsChecked(); }
+        inline bool UseHeaderLine()         const { return m_aCB_UseHeaderLine.IsChecked(); }
+        OUString    GetKeyName()            const { return m_edKeyName.GetText(); }
 
         void setCreateStyleAction();
         inline void disallowViews()
@@ -83,7 +83,7 @@ namespace dbaui
         }
         inline void disallowUseHeaderLine()
         {
-            m_bUseHeaderAllowed = sal_False;
+            m_bUseHeaderAllowed = false;
             m_aCB_UseHeaderLine.Disable();
         }
 

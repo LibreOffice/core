@@ -347,7 +347,7 @@ void OPrimKeyUndoAct::Undo()
     {
         OSL_ENSURE(nIndex <= static_cast<long>(pRowList->size()),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
-        pRow->SetPrimaryKey( sal_False );
+        pRow->SetPrimaryKey( false );
     }
 
     // restore deleted keys
@@ -355,7 +355,7 @@ void OPrimKeyUndoAct::Undo()
     {
         OSL_ENSURE(nIndex <= static_cast<long>(pRowList->size()),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
-        pRow->SetPrimaryKey( sal_True );
+        pRow->SetPrimaryKey( true );
     }
 
     m_pEditorCtrl->InvalidateHandleColumn();
@@ -369,11 +369,11 @@ void OPrimKeyUndoAct::Redo()
 
     // delete the deleted keys
     for( nIndex = m_aDelKeys.FirstSelected(); nIndex != (long)SFX_ENDOFSELECTION; nIndex=m_aDelKeys.NextSelected() )
-        (*pRowList)[nIndex]->SetPrimaryKey( sal_False );
+        (*pRowList)[nIndex]->SetPrimaryKey( false );
 
     // restore the inserted keys
     for( nIndex = m_aInsKeys.FirstSelected(); nIndex != (long)SFX_ENDOFSELECTION; nIndex=m_aInsKeys.NextSelected() )
-        (*pRowList)[nIndex]->SetPrimaryKey( sal_True );
+        (*pRowList)[nIndex]->SetPrimaryKey( true );
 
     m_pEditorCtrl->InvalidateHandleColumn();
     OTableEditorUndoAct::Redo();

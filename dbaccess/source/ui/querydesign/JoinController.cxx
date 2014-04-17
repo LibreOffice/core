@@ -124,7 +124,7 @@ bool AddTableDialogContext::allowAddition() const
 
 void AddTableDialogContext::addTableWindow( const OUString& _rQualifiedTableName, const OUString& _rAliasName )
 {
-    getTableView()->AddTabWin( _rQualifiedTableName, _rAliasName, sal_True );
+    getTableView()->AddTabWin( _rQualifiedTableName, _rAliasName, true );
 }
 
 void AddTableDialogContext::onWindowClosing( const Window* _pWindow )
@@ -334,7 +334,7 @@ sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeExc
     ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
         return sal_False;
-    sal_Bool bCheck = sal_True;
+    bool bCheck = true;
     if ( _bSuspend )
     {
         bCheck = saveModified() != RET_CANCEL;
@@ -371,7 +371,7 @@ void OJoinController::loadTableWindow( const ::comphelper::NamedValueCollection&
     sal_Int32 nX = -1, nY = -1, nHeight = -1, nWidth = -1;
 
     OUString sComposedName,sTableName,sWindowName;
-    sal_Bool bShowAll = false;
+    bool bShowAll = false;
 
     sComposedName = i_rTableWindowSettings.getOrDefault( "ComposedName", sComposedName );
     sTableName = i_rTableWindowSettings.getOrDefault( "TableName", sTableName );

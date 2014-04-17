@@ -65,21 +65,21 @@ namespace dbaui
 
         OQueryDesignView*   getDesignView() { return m_pViewSwitch->getDesignView(); }
 
-        sal_Bool isCutAllowed()     { return m_pViewSwitch->isCutAllowed(); }
-        sal_Bool isPasteAllowed()   { return m_pViewSwitch->isPasteAllowed(); }
-        sal_Bool isCopyAllowed()    { return m_pViewSwitch->isCopyAllowed(); }
+        bool isCutAllowed()     { return m_pViewSwitch->isCutAllowed(); }
+        bool isPasteAllowed()   { return m_pViewSwitch->isPasteAllowed(); }
+        bool isCopyAllowed()    { return m_pViewSwitch->isCopyAllowed(); }
         void copy()                 { m_pViewSwitch->copy(); }
         void cut()                  { m_pViewSwitch->cut(); }
         void paste()                { m_pViewSwitch->paste(); }
 
         void clear()                                                        { m_pViewSwitch->clear(); }
-        sal_Bool isSlotEnabled( sal_Int32 _nSlotId )                        { return m_pViewSwitch->isSlotEnabled( _nSlotId ); }
-        void     setSlotEnabled( sal_Int32 _nSlotId, sal_Bool _bEnable )    { m_pViewSwitch->setSlotEnabled( _nSlotId, _bEnable ); }
+        bool isSlotEnabled( sal_Int32 _nSlotId )                        { return m_pViewSwitch->isSlotEnabled( _nSlotId ); }
+        void     setSlotEnabled( sal_Int32 _nSlotId, bool _bEnable )    { m_pViewSwitch->setSlotEnabled( _nSlotId, _bEnable ); }
         void     setNoneVisbleRow(sal_Int32 _nRows)                         { m_pViewSwitch->setNoneVisbleRow( _nRows); }
 
-        void setReadOnly( sal_Bool _bReadOnly )                             { m_pViewSwitch->setReadOnly( _bReadOnly ); }
+        void setReadOnly( bool _bReadOnly )                             { m_pViewSwitch->setReadOnly( _bReadOnly ); }
 
-        sal_Bool checkStatement()                                           { return m_pViewSwitch->checkStatement( ); }
+        bool checkStatement()                                           { return m_pViewSwitch->checkStatement( ); }
         OUString getStatement()                                      { return m_pViewSwitch->getStatement( ); }
         void setStatement( const OUString& _rsStatement )            { m_pViewSwitch->setStatement( _rsStatement ); }
 

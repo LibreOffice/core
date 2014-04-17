@@ -86,15 +86,15 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
                                              const Reference< XComponentContext >& _rM,
                                              const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                              const OUString& rExchange)
-    :m_bBookmarkSelection( sal_False )
+    :m_bBookmarkSelection( false )
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rM)
     ,m_nCommandType(CommandType::TABLE)
     ,m_bNeedToReInitialize(false)
     ,m_pReader(NULL)
     ,m_pRowMarker(NULL)
-    ,m_bInInitialize(sal_False)
-    ,m_bCheckOnly(sal_False)
+    ,m_bInInitialize(false)
+    ,m_bCheckOnly(false)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::ODatabaseImportExport" );
 
@@ -116,7 +116,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
 // import data
 ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection& _rxConnection,
         const Reference< XNumberFormatter >& _rxNumberF, const Reference< XComponentContext >& _rM )
-    :m_bBookmarkSelection( sal_False )
+    :m_bBookmarkSelection( false )
     ,m_pStream(NULL)
     ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
@@ -125,8 +125,8 @@ ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection&
     ,m_bNeedToReInitialize(false)
     ,m_pReader(NULL)
     ,m_pRowMarker(NULL)
-    ,m_bInInitialize(sal_False)
-    ,m_bCheckOnly(sal_False)
+    ,m_bInInitialize(false)
+    ,m_bCheckOnly(false)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::ODatabaseImportExport" );
     m_eDestEnc = osl_getThreadTextEncoding();
@@ -256,7 +256,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
 void ODatabaseImportExport::initialize()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::initialize" );
-    m_bInInitialize = sal_True;
+    m_bInInitialize = true;
     m_bNeedToReInitialize = false;
 
     if ( !m_xConnection.is() )
@@ -336,27 +336,27 @@ void ODatabaseImportExport::initialize()
         m_aFont = VCLUnoHelper::CreateFontDescriptor( aApplicationFont );
     }
 
-    m_bInInitialize = sal_False;
+    m_bInInitialize = false;
 }
 
-sal_Bool ODatabaseImportExport::Write()
+bool ODatabaseImportExport::Write()
 {
     if ( m_bNeedToReInitialize )
     {
         if ( !m_bInInitialize )
             initialize();
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool ODatabaseImportExport::Read()
+bool ODatabaseImportExport::Read()
 {
     if ( m_bNeedToReInitialize )
     {
         if ( !m_bInInitialize )
             initialize();
     }
-    return sal_True;
+    return true;
 }
 
 void ODatabaseImportExport::impl_initializeRowMember_throw()
@@ -372,7 +372,7 @@ void ODatabaseImportExport::impl_initializeRowMember_throw()
     }
 }
 
-sal_Bool ORTFImportExport::Write()
+bool ORTFImportExport::Write()
 {
     SAL_INFO("dbaccess.ui", "ORTFImportExport::Write" );
     ODatabaseImportExport::Write();
@@ -380,10 +380,10 @@ sal_Bool ORTFImportExport::Write()
     m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteCharPtr( SAL_NEWLINE_STRING );
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
 
-    sal_Bool bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
-    sal_Bool bItalic        = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
-    sal_Bool bUnderline     = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
-    sal_Bool bStrikeout     = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
+    bool bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
+    bool bItalic        = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
+    bool bUnderline     = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
+    bool bStrikeout     = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
 
     sal_Int32 nColor = 0;
     if(m_xObject.is())
@@ -436,11 +436,11 @@ sal_Bool ORTFImportExport::Write()
         const OUString* pIter = aNames.getConstArray();
 
         sal_Int32 nCount = aNames.getLength();
-        sal_Bool bUseResultMetaData = sal_False;
+        bool bUseResultMetaData = false;
         if ( !nCount )
         {
             nCount = m_xResultSetMetaData->getColumnCount();
-            bUseResultMetaData = sal_True;
+            bUseResultMetaData = true;
         }
 
         for( sal_Int32 i=1; i<=nCount; ++i )
@@ -513,7 +513,7 @@ sal_Bool ORTFImportExport::Write()
             const Any* pSelIter = m_aSelection.getConstArray();
             const Any* pEnd   = pSelIter + m_aSelection.getLength();
 
-            sal_Bool bContinue = sal_True;
+            bool bContinue = true;
             for( ; pSelIter != pEnd && bContinue; ++pSelIter )
             {
                 if ( m_bBookmarkSelection )
@@ -565,10 +565,10 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
             m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
         }
 
-        const sal_Bool bBold            = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
-        const sal_Bool bItalic      = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
-        const sal_Bool bUnderline       = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
-        const sal_Bool bStrikeout       = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
+        const bool bBold            = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
+        const bool bItalic      = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
+        const bool bUnderline       = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
+        const bool bStrikeout       = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
 
         m_pStream->WriteChar( '{' );
@@ -610,7 +610,7 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
     ++k;
 }
 
-sal_Bool ORTFImportExport::Read()
+bool ORTFImportExport::Read()
 {
     SAL_INFO("dbaccess.ui", "ORTFImportExport::Read" );
     ODatabaseImportExport::Read();
@@ -654,7 +654,7 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
         : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange)
     ,m_nIndent(0)
 #if OSL_DEBUG_LEVEL > 0
-    ,m_bCheckFont(sal_False)
+    ,m_bCheckFont(false)
 #endif
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::OHTMLImportExport" );
@@ -665,7 +665,7 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
     sIndent[0] = 0;
 }
 
-sal_Bool OHTMLImportExport::Write()
+bool OHTMLImportExport::Write()
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::Write" );
     ODatabaseImportExport::Write();
@@ -681,10 +681,10 @@ sal_Bool OHTMLImportExport::Write()
 
         return ((*m_pStream).GetError() == SVSTREAM_OK);
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool OHTMLImportExport::Read()
+bool OHTMLImportExport::Read()
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::Read" );
     ODatabaseImportExport::Read();
@@ -769,7 +769,7 @@ void OHTMLImportExport::WriteTables()
 
     Sequence< OUString> aNames;
     Reference<XNameAccess> xColumns;
-    sal_Bool bUseResultMetaData = sal_False;
+    bool bUseResultMetaData = false;
     if(m_xObject.is())
     {
         Reference<XColumnsSupplier> xColSup(m_xObject,UNO_QUERY);
@@ -781,7 +781,7 @@ void OHTMLImportExport::WriteTables()
             aNames.realloc(nCount);
             for (sal_Int32 i= 0; i < nCount; ++i)
                 aNames[i] = m_xResultSetMetaData->getColumnName(i+1);
-            bUseResultMetaData = sal_True;
+            bUseResultMetaData = true;
         }
     }
 
@@ -975,10 +975,10 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
 
     FontOn();
 
-    sal_Bool bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
-    sal_Bool bItalic        = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
-    sal_Bool bUnderline     = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
-    sal_Bool bStrikeout     = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
+    bool bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
+    bool bItalic        = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
+    bool bUnderline     = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
+    bool bStrikeout     = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
 
     if ( bBold )        TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
     if ( bItalic )      TAG_ON( OOO_STRING_SVTOOLS_HTML_italic );
@@ -1004,7 +1004,7 @@ void OHTMLImportExport::FontOn()
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::FontOn" );
 #if OSL_DEBUG_LEVEL > 0
-        m_bCheckFont = sal_True;
+        m_bCheckFont = true;
 #endif
 
     // <FONT FACE="xxx">
@@ -1037,7 +1037,7 @@ inline void OHTMLImportExport::FontOff()
     OSL_ENSURE(m_bCheckFont,"Kein FontOn() gerufen");
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_font );
 #if OSL_DEBUG_LEVEL > 0
-    m_bCheckFont = sal_False;
+    m_bCheckFont = false;
 #endif
 }
 

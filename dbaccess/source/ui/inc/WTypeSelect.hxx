@@ -46,8 +46,8 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const SAL_OVERRIDE;
         virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos) SAL_OVERRIDE;
         virtual const OTypeInfoMap* getTypeInfo() const SAL_OVERRIDE;
-        virtual sal_Bool            isAutoIncrementValueEnabled() const SAL_OVERRIDE;
-        virtual OUString     getAutoIncrementValue() const SAL_OVERRIDE;
+        virtual bool                isAutoIncrementValueEnabled() const SAL_OVERRIDE;
+        virtual OUString            getAutoIncrementValue() const SAL_OVERRIDE;
 
     public:
         OWizTypeSelectControl(Window* pParent, const ResId& rResId,OTableDesignHelpBar* pHelpBar=NULL);
@@ -61,23 +61,23 @@ namespace dbaui
     // just defines the ::com::sun::star::ucb::Command for the Contextmenu
     class OWizTypeSelectList : public MultiListBox
     {
-        sal_Bool                m_bPKey;
-        sal_Bool                IsPrimaryKeyAllowed() const;
+        bool                    m_bPKey;
+        bool                    IsPrimaryKeyAllowed() const;
         void                    setPrimaryKey(  OFieldDescription* _pFieldDescr,
                                                 sal_uInt16 _nPos,
-                                                sal_Bool _bSet = sal_False);
+                                                bool _bSet = false);
     protected:
         virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     public:
         OWizTypeSelectList( Window* pParent, WinBits nStyle = WB_BORDER )
             : MultiListBox(pParent,nStyle)
-            , m_bPKey(sal_False)
+            , m_bPKey(false)
             {}
         OWizTypeSelectList( Window* pParent, const ResId& rResId )
             : MultiListBox(pParent,rResId)
-            , m_bPKey(sal_False)
+            , m_bPKey(false)
             {}
-        void                    SetPKey(sal_Bool bPKey) { m_bPKey = bPKey; }
+        void                    SetPKey(bool bPKey) { m_bPKey = bPKey; }
     };
 
     // Wizard Page: OWizTypeSelect
@@ -101,27 +101,27 @@ namespace dbaui
 
         Image                   m_imgPKey;
         SvStream*               m_pParserStream; // stream to read the tokens from or NULL
-        OUString         m_sAutoIncrementValue;
+        OUString                m_sAutoIncrementValue;
         sal_Int32               m_nDisplayRow;
-        sal_Bool                m_bAutoIncrementEnabled;
-        sal_Bool                m_bDuplicateName;
+        bool                    m_bAutoIncrementEnabled;
+        bool                    m_bDuplicateName;
 
         void                    fillColumnList(sal_uInt32 nRows);
         virtual SvParser*       createReader(sal_Int32 _nRows) = 0;
 
-        void                    EnableAuto(sal_Bool bEnable);
+        void                    EnableAuto(bool bEnable);
     public:
         virtual void            Reset ( ) SAL_OVERRIDE;
         virtual void            ActivatePage( ) SAL_OVERRIDE;
         virtual void            Resize() SAL_OVERRIDE;
-        virtual sal_Bool        LeavePage() SAL_OVERRIDE;
+        virtual bool            LeavePage() SAL_OVERRIDE;
         virtual OUString        GetTitle() const SAL_OVERRIDE;
 
         OWizTypeSelect(Window* pParent, SvStream* _pStream = NULL );
         virtual ~OWizTypeSelect();
 
         inline void setDisplayRow(sal_Int32 _nRow) { m_nDisplayRow = _nRow - 1; }
-        inline void setDuplicateName(sal_Bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }
+        inline void setDuplicateName(bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }
     };
 
     typedef OWizTypeSelect* (*TypeSelectionPageFactory)( Window*, SvStream& );

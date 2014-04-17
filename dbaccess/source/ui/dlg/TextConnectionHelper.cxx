@@ -221,7 +221,7 @@ namespace dbaui
 
     IMPL_LINK(OTextConnectionHelper, OnSetExtensionHdl, RadioButton*, /*_pRadioButton*/)
     {
-        sal_Bool bDoEnable = m_aRBAccessOtherFiles.IsChecked();
+        bool bDoEnable = m_aRBAccessOtherFiles.IsChecked();
         m_aETOwnExtension.Enable(bDoEnable);
         m_aFTExtensionExample.Enable(bDoEnable);
         m_aGetExtensionHandler.Call(this);
@@ -249,7 +249,7 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<ListBox>(&m_aCharSet));
     }
 
-    void OTextConnectionHelper::implInitControls(const SfxItemSet& _rSet, sal_Bool _bValid)
+    void OTextConnectionHelper::implInitControls(const SfxItemSet& _rSet, bool _bValid)
     {
         if ( !_bValid )
             return;
@@ -287,7 +287,7 @@ namespace dbaui
         }
     }
 
-    sal_Bool OTextConnectionHelper::prepareLeave()
+    bool OTextConnectionHelper::prepareLeave()
     {
         LocalResourceAccess aStringResAccess(PAGE_TEXT, RSC_TABPAGE);
             // for accessing the strings which are local to our own resource block
@@ -356,15 +356,15 @@ namespace dbaui
             pErrorWin = &m_aETOwnExtension;
         }
         else
-            return sal_True;
+            return true;
         ErrorBox(NULL, WB_OK, MnemonicGenerator::EraseAllMnemonicChars( aErrorText)).Execute();
         pErrorWin->GrabFocus();
-        return 0;
+        return false;
     }
 
-    sal_Bool OTextConnectionHelper::FillItemSet( SfxItemSet& rSet, const sal_Bool _bChangedSomething )
+    bool OTextConnectionHelper::FillItemSet( SfxItemSet& rSet, const bool _bChangedSomething )
     {
-        sal_Bool bChangedSomething = _bChangedSomething;
+        bool bChangedSomething = _bChangedSomething;
 
         if ( ( m_nAvailableSections & TC_EXTENSION ) != 0 )
         {
@@ -372,7 +372,7 @@ namespace dbaui
             if( m_aOldExtension != sExtension )
             {
                 rSet.Put( SfxStringItem( DSID_TEXTFILEEXTENSION, sExtension ) );
-                bChangedSomething = sal_True;
+                bChangedSomething = true;
             }
         }
 
@@ -381,7 +381,7 @@ namespace dbaui
             if( (m_aRowHeader.GetState() != m_aRowHeader.GetSavedValue()) )
             {
                 rSet.Put(SfxBoolItem(DSID_TEXTFILEHEADER, m_aRowHeader.IsChecked()));
-                bChangedSomething = sal_True;
+                bChangedSomething = true;
             }
         }
 
@@ -390,30 +390,30 @@ namespace dbaui
             if( m_aFieldSeparator.GetText() != m_aFieldSeparator.GetSavedValue() )
             {
                 rSet.Put( SfxStringItem(DSID_FIELDDELIMITER, GetSeparator( m_aFieldSeparator, m_aFieldSeparatorList) ) );
-                bChangedSomething = sal_True;
+                bChangedSomething = true;
             }
             if( m_aTextSeparator.GetText() != m_aTextSeparator.GetSavedValue() )
             {
                 rSet.Put( SfxStringItem(DSID_TEXTDELIMITER, GetSeparator( m_aTextSeparator, m_aTextSeparatorList) ) );
-                bChangedSomething = sal_True;
+                bChangedSomething = true;
             }
 
             if( m_aDecimalSeparator.GetText() != m_aDecimalSeparator.GetSavedValue() )
             {
                 rSet.Put( SfxStringItem(DSID_DECIMALDELIMITER, m_aDecimalSeparator.GetText().copy(0, 1) ) );
-                bChangedSomething = sal_True;
+                bChangedSomething = true;
             }
             if( m_aThousandsSeparator.GetText() != m_aThousandsSeparator.GetSavedValue() )
             {
                 rSet.Put( SfxStringItem(DSID_THOUSANDSDELIMITER, m_aThousandsSeparator.GetText().copy(0,1) ) );
-                bChangedSomething = sal_True;
+                bChangedSomething = true;
             }
         }
 
         if ( ( m_nAvailableSections & TC_CHARSET ) != 0 )
         {
             if ( m_aCharSet.StoreSelectedCharSet( rSet, DSID_CHARSET ) )
-                bChangedSomething = sal_True;
+                bChangedSomething = true;
         }
 
         return bChangedSomething;

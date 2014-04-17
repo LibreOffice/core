@@ -503,7 +503,7 @@ private:
     @raises ::com::sun::star::util::CloseVetoException
         if the closing was vetoed by any instance
     */
-    void    impl_closeControllerFrames_nolck_throw( sal_Bool _bDeliverOwnership );
+    void    impl_closeControllerFrames_nolck_throw( bool _bDeliverOwnership );
 
     /** disposes the frames of all controllers which are still left in m_aControllers.
     */
@@ -570,7 +570,7 @@ private:
         @postcond
             our mutex is not locked
     */
-    void    impl_setModified_nothrow( sal_Bool _bModified, DocumentGuard& _rGuard );
+    void    impl_setModified_nothrow( bool _bModified, DocumentGuard& _rGuard );
 
     /** stores the document to the given storage
 
@@ -610,7 +610,7 @@ private:
         @param  _rDocGuard
             is the guard which currently protects the document instance
     */
-    sal_Bool    impl_attachResource(
+    bool    impl_attachResource(
                     const OUString& i_rLogicalDocumentURL,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rMediaDescriptor,
                     DocumentGuard& _rDocGuard
