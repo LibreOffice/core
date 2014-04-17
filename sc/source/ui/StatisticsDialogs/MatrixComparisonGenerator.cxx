@@ -29,11 +29,6 @@
 
 namespace
 {
-    static const OUString strWildcard1("%VAR1%");
-    static const OUString strWildcard2("%VAR2%");
-
-    static const OUString strWildcardNumber("%NUMBER%");
-
     void lclWriteCorrelationFormulas(
             AddressWalkerWriter& aOutput, FormulaTemplate& aTemplate,
             ScRangeList aRangeList, const OUString& aTemplateString)
@@ -46,8 +41,8 @@ namespace
                 if (j >= i)
                 {
                     aTemplate.setTemplate(aTemplateString);
-                    aTemplate.applyRange(strWildcard1, *aRangeList[i]);
-                    aTemplate.applyRange(strWildcard2, *aRangeList[j]);
+                    aTemplate.applyRange("%VAR1%", *aRangeList[i]);
+                    aTemplate.applyRange("%VAR2%", *aRangeList[j]);
                     aOutput.writeFormula(aTemplate.getTemplate());
                 }
                 aOutput.nextRow();
@@ -90,6 +85,8 @@ ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
     // labels
     output.writeString(getLabel());
     output.nextColumn();
+
+    const OUString strWildcardNumber("%NUMBER%");
 
     // write labels to columns
     for (size_t i = 0; i < aRangeList.size(); i++)
