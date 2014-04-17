@@ -144,7 +144,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
     if (nSQLRETURN == SQL_ERROR || nSQLRETURN == SQL_NO_DATA)
         return nSQLRETURN;
 
-    m_bClosed = sal_False;
+    m_bClosed = false;
 
 #endif //LINUX
 
