@@ -73,8 +73,6 @@ using namespace css::i18n;
 using namespace css::document;
 using namespace framework;
 
-class SvtLanguageTable;
-
 namespace {
 
 class LangSelectionStatusbarController:
@@ -163,8 +161,6 @@ throw (css::uno::RuntimeException)
     //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph
     Reference< awt::XPopupMenu > subPopupMenu( awt::PopupMenu::create( m_xContext ) );
 
-    SvtLanguageTable    aLanguageTable;
-
     // get languages to be displayed in the menu
     std::set< OUString > aLangItems;
     FillLangItems( aLangItems, m_xFrame, m_aLangGuessHelper,
@@ -179,7 +175,7 @@ throw (css::uno::RuntimeException)
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
         const OUString & rStr( *it );
-        if ( rStr != OUString( aLanguageTable.GetString( LANGUAGE_NONE ) ) &&
+        if ( rStr != OUString( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) ) &&
              rStr != sAsterisk &&
              rStr != sEmpty)
         {
@@ -197,7 +193,7 @@ throw (css::uno::RuntimeException)
     }
 
     xPopupMenu->insertItem( MID_LANG_SEL_NONE,  FWK_RESSTR(STR_LANGSTATUS_NONE), 0, MID_LANG_SEL_NONE );
-    if ( aLanguageTable.GetString( LANGUAGE_NONE ) == m_aCurLang )
+    if ( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) == m_aCurLang )
         xPopupMenu->checkItem( MID_LANG_SEL_NONE, sal_True );
     xPopupMenu->insertItem( MID_LANG_SEL_RESET, FWK_RESSTR(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_SEL_RESET );
     xPopupMenu->insertItem( MID_LANG_SEL_MORE,  FWK_RESSTR(STR_LANGSTATUS_MORE), 0, MID_LANG_SEL_MORE );
@@ -207,7 +203,7 @@ throw (css::uno::RuntimeException)
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
         const OUString & rStr( *it );
-        if( rStr != OUString( aLanguageTable.GetString( LANGUAGE_NONE ) )&&
+        if( rStr != OUString( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) )&&
             rStr != sAsterisk &&
             rStr != sEmpty)
         {
