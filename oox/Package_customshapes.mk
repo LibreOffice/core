@@ -7,13 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,oox))
+$(eval $(call gb_Package_Package,oox_customshapes,$(SRCDIR)/oox))
 
-$(eval $(call gb_Module_add_targets,oox,\
-	CustomTarget_generated \
-    Library_oox \
-	Package_customshapes \
-	Package_generated \
+$(eval $(call gb_Package_add_files,oox_customshapes,$(LIBO_SHARE_FOLDER)/filter,\
+	source/drawingml/customshapes/oox-drawingml-cs-presets \
 ))
 
 # vim: set noet sw=4 ts=4:

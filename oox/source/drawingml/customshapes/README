@@ -38,6 +38,11 @@ SAL_LOG='+INFO.oox.cscode-WARN' instdir/program/soffice --headless --convert-to 
 (cd oox/source/drawingml/customshapes && ./generatePresetsCXX.pl)
 
 
+# Run it again to generate the oox-drawingml-cs-presets data:
+
+(cd oox/source/drawingml/customshapes && ./generatePresetsCXX.pl --data)
+
+
 # Then move them into place
 
 mv oox/source/drawingml/customshapes/customshapepresets*.cxx oox/source/drawingml

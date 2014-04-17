@@ -18,6 +18,7 @@ Module gid_Module_Filter
     Dirs = (gid_Dir_Share_Filter);
     Files = (
         gid_File_Dat_OoxDrawingmlAdjNames,
+        gid_File_Dat_OoxDrawingmlCsPresets,
         gid_File_Dat_VmlShapeTypes);
 End
 
@@ -30,6 +31,13 @@ File gid_File_Dat_OoxDrawingmlAdjNames
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Filter;
     Name = "oox-drawingml-adj-names";
+    Styles = (PACKED);
+End
+
+File gid_File_Dat_OoxDrawingmlCsPresets
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Filter;
+    Name = "oox-drawingml-cs-presets";
     Styles = (PACKED);
 End
 
