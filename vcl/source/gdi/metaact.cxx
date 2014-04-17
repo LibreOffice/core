@@ -2681,7 +2681,15 @@ void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbSet );
 }
 
-IMPL_META_ACTION( OverlineColor, META_OVERLINECOLOR_ACTION )
+MetaOverlineColorAction::MetaOverlineColorAction() :
+    MetaAction  ( META_OVERLINECOLOR_ACTION ),
+    mbSet       ( false )
+{
+}
+
+MetaOverlineColorAction::~MetaOverlineColorAction()
+{
+}
 
 MetaOverlineColorAction::MetaOverlineColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_OVERLINECOLOR_ACTION ),
