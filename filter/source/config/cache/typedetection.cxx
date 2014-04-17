@@ -493,7 +493,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
             // SAFE ->
             ::osl::ResettableMutexGuard aLock(m_aLock);
 
-            // Attention: For executing next lines of code, We must be shure that
+            // Attention: For executing next lines of code, We must be sure that
             // all filters already loaded :-(
             // That can disturb our "load on demand feature". But we have no other chance!
             m_rCache->load(FilterCache::E_CONTAINS_FILTERS);
@@ -575,7 +575,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
         // SAFE ->
         ::osl::ResettableMutexGuard aLock(m_aLock);
 
-        // Attention: For executing next lines of code, We must be shure that
+        // Attention: For executing next lines of code, We must be sure that
         // all filters already loaded :-(
         // That can disturb our "load on demand feature". But we have no other chance!
         m_rCache->load(FilterCache::E_CONTAINS_FILTERS);
@@ -743,7 +743,7 @@ bool TypeDetection::impl_getPreselectionForDocumentService(
         // SAFE -> --------------------------
         ::osl::ResettableMutexGuard aLock(m_aLock);
 
-        // Attention: For executing next lines of code, We must be shure that
+        // Attention: For executing next lines of code, We must be sure that
         // all filters already loaded :-(
         // That can disturb our "load on demand feature". But we have no other chance!
         m_rCache->load(FilterCache::E_CONTAINS_FILTERS);
@@ -1088,7 +1088,7 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
 
     // Dont distrub the user for "non existing files - means empty URLs" or
     // if we was forced to detect a stream.
-    // Reason behind: We must be shure to ask user for "unknown contents" only ...
+    // Reason behind: We must be sure to ask user for "unknown contents" only ...
     // and not for "missing files". Especialy if detection is done by a stream only
     // we cant check if the stream points to an "existing content"!
     if (
@@ -1111,7 +1111,7 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
         // "OK" pressed => verify the selected filter, get its corresponding
         // type and return it. (BTW: We must update the media descriptor here ...)
         // The user selected explicitly a filter ... but normaly we are interested on
-        // a type here only. But we must be shure, that the selected filter is used
+        // a type here only. But we must be sure, that the selected filter is used
         // too and no ambigous filter registration disturb us .-)
 
         OUString sFilter = aRequest.getFilter();
