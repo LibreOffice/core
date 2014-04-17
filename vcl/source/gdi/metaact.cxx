@@ -423,7 +423,16 @@ void MetaRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadRectangle( rIStm, maRect );
 }
 
-IMPL_META_ACTION( RoundRect, META_ROUNDRECT_ACTION )
+MetaRoundRectAction::MetaRoundRectAction() :
+    MetaAction  ( META_ROUNDRECT_ACTION ),
+    mnHorzRound ( 0 ),
+    mnVertRound ( 0 )
+{
+}
+
+MetaRoundRectAction::~MetaRoundRectAction()
+{
+}
 
 MetaRoundRectAction::MetaRoundRectAction( const Rectangle& rRect,
                                           sal_uInt32 nHorzRound, sal_uInt32 nVertRound ) :
