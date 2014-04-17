@@ -226,7 +226,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         rReq.Done();
         break;
 
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_AVMEDIA
     case SID_INSERT_AVMEDIA:
         rReq.SetReturnValue(SfxBoolItem(nSlot, InsertMediaDlg( rReq )));
         break;

@@ -32,7 +32,7 @@ $(eval $(call gb_Library_use_custom_headers,cui,\
 $(eval $(call gb_Library_use_sdk_api,cui))
 
 $(eval $(call gb_Library_use_libraries,cui,\
-    avmedia \
+	$(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
     cppu \

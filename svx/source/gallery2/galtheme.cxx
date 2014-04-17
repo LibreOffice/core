@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "sal/config.h"
 
 #include <algorithm>
@@ -1111,9 +1113,10 @@ bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos 
         else
             pNewObj = (SgaObject*) new SgaObjectBmp( aGraphic, rURL, aFormat );
     }
+#if HAVE_FEATURE_AVMEDIA
     else if( ::avmedia::MediaWindow::isMediaURL( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ), ""/*TODO?*/ ) )
         pNewObj = (SgaObject*) new SgaObjectSound( rURL );
-
+#endif
     if( pNewObj && InsertObject( *pNewObj, nInsertPos ) )
         bRet = true;
 

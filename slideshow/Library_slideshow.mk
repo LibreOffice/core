@@ -32,7 +32,7 @@ $(eval $(call gb_Library_use_external,slideshow,boost_headers))
 $(eval $(call gb_Library_use_sdk_api,slideshow))
 
 $(eval $(call gb_Library_use_libraries,slideshow,\
-    avmedia \
+    $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     canvastools \
     comphelper \

@@ -3396,7 +3396,7 @@ SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, S
             case sal_uInt16(OBJ_PAGE       ): pObj=new SdrPageObj;                  break;
             case sal_uInt16(OBJ_UNO        ): pObj=new SdrUnoObj(OUString());       break;
             case sal_uInt16(OBJ_CUSTOMSHAPE  ): pObj=new SdrObjCustomShape();       break;
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_AVMEDIA
             case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
 #endif
             case sal_uInt16(OBJ_TABLE      ): pObj=new ::sdr::table::SdrTableObj(pModel);   break;

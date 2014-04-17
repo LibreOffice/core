@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -2511,6 +2513,7 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
         OUString sFile, sDesc;
         if( rData.GetString( nFmt, sFile ) && !sFile.isEmpty() )
         {
+#if HAVE_FEATURE_AVMEDIA
             INetURLObject aMediaURL;
 
             aMediaURL.SetSmartURL( sFile );
@@ -2523,6 +2526,11 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                                 SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON,
                                 &aMediaURLItem, 0L );
             }
+#else
+            if (false)
+            {
+            }
+#endif
             else
             {
                 sal_Bool bIsURLFile = SwTransferable::_CheckForURLOrLNKFile( rData, sFile, &sDesc );

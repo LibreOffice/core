@@ -65,7 +65,7 @@ $(eval $(call gb_Library_use_custom_headers,sd,\
 $(eval $(call gb_Library_use_sdk_api,sd))
 
 $(eval $(call gb_Library_use_libraries,sd,\
-	avmedia \
+	$(call gb_Helper_optional,AVMEDIA,avmedia) \
 	basegfx \
 	canvastools \
 	comphelper \

@@ -337,7 +337,7 @@ void SwView::SelectShell()
                 m_pShell = new SwBezierShell( *this );
                 rDispatcher.Push( *m_pShell );
             }
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_AVMEDIA
             else if( m_nSelectionType & nsSelectionType::SEL_MEDIA )
             {
                 eShellMode = SHELL_MODE_MEDIA;

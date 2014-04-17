@@ -119,6 +119,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/workwin \
     sfx2/source/appl/xpackcreator \
     sfx2/source/bastyp/bitset \
+    sfx2/source/bastyp/dummytypes \
     sfx2/source/bastyp/fltfnc \
     sfx2/source/bastyp/fltlst \
     sfx2/source/bastyp/frmhtml \

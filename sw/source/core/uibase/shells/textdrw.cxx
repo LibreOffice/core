@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <svx/svdview.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/fmglob.hxx>
@@ -102,12 +104,14 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
             aTmp.setValue( &eButtonType, ::getCppuType((const form::FormButtonType*)0));
             xPropSet->setPropertyValue( "ButtonType", aTmp );
 
+#if HAVE_FEATURE_AVMEDIA
             if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
             {
                 // #105638# OJ
                 aTmp <<= sal_True;
                 xPropSet->setPropertyValue("DispatchURLInternal", aTmp );
             }
+#endif
         }
 
         if (rSh.IsObjSelected())

@@ -764,6 +764,11 @@ AC_ARG_ENABLE(export,
          only for exporrt linked in. Work in progress, use only if you are hacking on it.])
 )
 
+AC_ARG_ENABLE(avmedia,
+    AS_HELP_STRING([--disable-avmedia],
+        [Disable displaying and inserting AV media in documents. Work in progress, use only if you are hacking on it.])
+)
+
 AC_ARG_ENABLE(database-connectivity,
     AS_HELP_STRING([--disable-database-connectivity],
         [Disable various database connectivity. Work in progress, use only if you are hacking on it.])
@@ -2337,6 +2342,22 @@ else
     SCPDEFS="$SCPDES -DDISABLE_EXPORT"
 fi
 AC_SUBST(DISABLE_EXPORT)
+
+# Whether to build "avmedia" functionality or not.
+# We probably don't want it for non-desktop.
+
+if test -z "$enable_avmedia"; then
+    if test $_os != iOS -a $_os != Android; then
+        enable_avmedia=yes
+    fi
+fi
+
+if test "$enable_avmedia" = yes; then
+    BUILD_TYPE="$BUILD_TYPE AVMEDIA"
+    AC_DEFINE(HAVE_FEATURE_AVMEDIA)
+else
+    SCPDEFS="$SCPDEFS -DDISABLE_AVMEDIA"
+fi
 
 dnl Decide whether to build database connectivity stuff (including
 dnl Base) or not. We probably don't want to on non-desktop OSes.
@@ -10201,7 +10222,7 @@ ENABLE_GSTREAMER=""
 if test "$build_gstreamer" = "yes"; then
 
     AC_MSG_CHECKING([whether to enable the new GStreamer 1.0 avmedia backend])
-    if test "x$enable_gstreamer" != "xno"; then
+    if test "$enable_avmedia" = yes -a "$enable_gstreamer" != no; then
         ENABLE_GSTREAMER="TRUE"
         AC_MSG_RESULT([yes])
         PKG_CHECK_MODULES( GSTREAMER, gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-video-1.0 )
@@ -10219,7 +10240,7 @@ ENABLE_GSTREAMER_0_10=""
 if test "$build_gstreamer_0_10" = "yes"; then
 
     AC_MSG_CHECKING([whether to enable the GStreamer avmedia backend])
-    if test "x$enable_gstreamer_0_10" != "xno"; then
+    if test "$enable_avmedia" = yes -a "$enable_gstreamer_0_10" != no; then
         ENABLE_GSTREAMER_0_10="TRUE"
         AC_MSG_RESULT([yes])
         PKG_CHECK_MODULES( [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10 gstreamer-interfaces-0.10],, [
@@ -10242,7 +10263,7 @@ dnl ===================================================================
 ENABLE_VLC=""
 
 AC_MSG_CHECKING([whether to enable the VLC avmedia backend])
-if test $_os != iOS -a $_os != Android -a "$enable_vlc" = yes; then
+if test "$enable_avmedia" = yes -a $_os != iOS -a $_os != Android -a "$enable_vlc" = yes; then
     ENABLE_VLC="TRUE"
     AC_MSG_RESULT([yes])
 else

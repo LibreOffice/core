@@ -211,7 +211,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	acc \
-	avmedia \
+	$(call gb_Helper_optional,AVMEDIA,avmedia) \
 	$(if $(DISABLE_SCRIPTING),,basctl) \
 	$(if $(DISABLE_SCRIPTING),,basprov) \
 	basegfx \

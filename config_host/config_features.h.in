@@ -43,6 +43,12 @@
 
 #define HAVE_FEATURE_X11 0
 
+/* AVMEDIA - Whether to have functionality to display and manipulate
+ * embedded AV media in documents
+ */
+
+#define HAVE_FEATURE_AVMEDIA 0
+
 /* EXTENSIONS - Whether we have any extension mechanism at all
  *
  * Primarily intended for non-desktop platforms where supporting

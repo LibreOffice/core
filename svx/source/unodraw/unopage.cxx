@@ -538,7 +538,7 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, 
             rInventor = SdrInventor;
             rType = OBJ_TABLE;
         }
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_AVMEDIA
         else if ( aName == "com.sun.star.presentation.MediaShape" )
         {
             rInventor = SdrInventor;

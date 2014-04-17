@@ -16,7 +16,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	android \
 	animations \
 	apple_remote \
-	avmedia \
+	$(call gb_Helper_optional,AVMEDIA,avmedia) \
 	basctl \
 	basebmp \
 	basegfx \

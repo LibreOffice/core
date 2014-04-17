@@ -38,7 +38,7 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
     ViewObjectContactOfSdrObj( rObjectContact, rViewContact ),
     mpMediaWindow( NULL )
 {
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_AVMEDIA
     Window* pWindow = getWindow();
 
     if( pWindow )

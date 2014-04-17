@@ -60,7 +60,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 endif
 
 $(eval $(call gb_Library_use_libraries,sc,\
-    avmedia \
+    $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
     cppu \

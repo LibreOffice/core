@@ -11,7 +11,7 @@ $(eval $(call gb_Rdb_Rdb_install,services))
 
 $(eval $(call gb_Rdb_add_components,services,\
 	animations/source/animcore/animcore \
-	avmedia/util/avmedia \
+	$(call gb_Helper_optional,AVMEDIA,avmedia/util/avmedia) \
 	chart2/source/controller/chartcontroller \
 	chart2/source/chartcore \
 	canvas/source/factory/canvasfactory \
@@ -122,7 +122,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(filter MACOSX,$(OS)), \
 		$(if $(filter-out X86_64,$(CPUNAME)), \
 			$(if $(filter TRUE,$(ENABLE_MACOSX_SANDBOX)),, \
-				avmedia/source/quicktime/avmediaQuickTime \
+				$(call gb_Helper_optional,AVMEDIA,avmedia/source/quicktime/avmediaQuickTime) \
 			) \
 		) \
 		lingucomponent/source/spellcheck/macosxspell/MacOSXSpell \
