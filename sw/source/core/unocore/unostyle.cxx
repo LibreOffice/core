@@ -1739,22 +1739,26 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         }
         case RES_BACKGROUND:
         {
-            if (SFX_STYLE_FAMILY_FRAME == eFamily)
+            //UUUU No new FillStyle for PageBackground; need to remove again when we want
+            // to support that, too. Add a break to *not* set bDone to true
+            if(SFX_STYLE_FAMILY_PAGE == eFamily)
             {
-                //UUUU
-                SfxItemSet& rStyleSet = rBase.GetItemSet();
-                const SvxBrushItem aOriginalBrushItem(sw::getSvxBrushItemFromSourceSet(rStyleSet));
-                SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
-
-                aChangedBrushItem.PutValue(aValue, nMemberId);
-
-                if(!(aChangedBrushItem == aOriginalBrushItem))
-                {
-                    sw::setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
-                }
-
-                bDone = true;
+                break;
             }
+
+            //UUUU
+            SfxItemSet& rStyleSet = rBase.GetItemSet();
+            const SvxBrushItem aOriginalBrushItem(sw::getSvxBrushItemFromSourceSet(rStyleSet));
+            SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
+
+            aChangedBrushItem.PutValue(aValue, nMemberId);
+
+            if(!(aChangedBrushItem == aOriginalBrushItem))
+            {
+                sw::setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
+            }
+
+            bDone = true;
             break;
         }
         case OWN_ATTR_FILLBMP_MODE:
@@ -2498,19 +2502,23 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             }
             case RES_BACKGROUND:
             {
-                if (SFX_STYLE_FAMILY_FRAME == eFamily)
+                //UUUU No new FillStyle for PageBackground; need to remove again when we want
+                // to support that, too. Add a break to *not* set bDone to true
+                if(SFX_STYLE_FAMILY_PAGE == eFamily)
                 {
-                    //UUUU
-                    const SfxItemSet& rSet = rBase.GetItemSet();
-                    const SvxBrushItem aOriginalBrushItem(sw::getSvxBrushItemFromSourceSet(rSet));
-
-                    if(!aOriginalBrushItem.QueryValue(aRet, nMemberId))
-                    {
-                        OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
-                    }
-
-                    bDone = true;
+                    break;
                 }
+
+                //UUUU
+                const SfxItemSet& rSet = rBase.GetItemSet();
+                const SvxBrushItem aOriginalBrushItem(sw::getSvxBrushItemFromSourceSet(rSet));
+
+                if(!aOriginalBrushItem.QueryValue(aRet, nMemberId))
+                {
+                    OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
+                }
+
+                bDone = true;
                 break;
             }
             case OWN_ATTR_FILLBMP_MODE:

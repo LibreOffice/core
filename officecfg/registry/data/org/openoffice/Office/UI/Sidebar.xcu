@@ -320,9 +320,12 @@
             Calc,           OLE,        hidden  ;
             DrawImpress,    3DObject,   visible ;
             DrawImpress,    Draw,       visible ;
+            DrawImpress,    Graphic,    hidden  ;
             DrawImpress,    TextObject, hidden  ;
             DrawImpress,    OLE,        hidden  ;
             WriterVariants, Draw,       visible ;
+            Writer,         Graphic,    hidden  ;
+            Writer,         OLE,        hidden  ;
             Writer,         Frame,      visible ;
           </value>
         </prop>

@@ -21,6 +21,7 @@ interface BaseTextFrame
     Automation = FALSE;
 ]
 {
+    //UUUU
     SID_ATTR_FILL_STYLE
     [
         Export = FALSE;
@@ -29,6 +30,7 @@ interface BaseTextFrame
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    //UUUU
     SID_ATTR_FILL_COLOR
     [
         Export = FALSE;
@@ -37,6 +39,7 @@ interface BaseTextFrame
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    //UUUU
     SID_ATTR_FILL_GRADIENT
     [
         Export = FALSE;
@@ -45,6 +48,7 @@ interface BaseTextFrame
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    //UUUU
     SID_ATTR_FILL_HATCH
     [
         Export = FALSE;
@@ -53,6 +57,7 @@ interface BaseTextFrame
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    //UUUU
     SID_ATTR_FILL_BITMAP
     [
         Export = FALSE;
@@ -61,6 +66,7 @@ interface BaseTextFrame
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    //UUUU
     SID_ATTR_FILL_TRANSPARENCE
     [
         Export = FALSE;
@@ -69,6 +75,7 @@ interface BaseTextFrame
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    //UUUU
     SID_ATTR_FILL_FLOATTRANSPARENCE
     [
         Export = FALSE;
@@ -77,26 +84,31 @@ interface BaseTextFrame
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    //UUUU
     SID_COLOR_TABLE
     [
         StateMethod = GetDrawAttrStateTextFrame;
     ]
 
+    //UUUU
     SID_GRADIENT_LIST
     [
         StateMethod = GetDrawAttrStateTextFrame;
     ]
 
+    //UUUU
     SID_HATCH_LIST
     [
         StateMethod = GetDrawAttrStateTextFrame;
     ]
 
+    //UUUU
     SID_BITMAP_LIST
     [
         StateMethod = GetDrawAttrStateTextFrame;
     ]
 
+    //UUUU
     SID_ATTRIBUTES_AREA
     [
         ExecMethod = ExecDrawDlgTextFrame;

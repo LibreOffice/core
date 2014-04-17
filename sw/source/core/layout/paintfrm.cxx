@@ -4121,9 +4121,10 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 //UUUU check for transparency
                 const FillAttributesPtr aFillAttributes(pSwFrmFmt->getFillAttributes());
 
-                if(aFillAttributes.get())
+                // check if the new fill attributes are used
+                if(aFillAttributes.get() && aFillAttributes->isUsed())
                 {
-                    bPaintCompleteBack = aFillAttributes->isTransparent();
+                    bPaintCompleteBack = true;
                 }
             }
             else
