@@ -23,14 +23,17 @@
 #ifndef LONG_MAX
 #include <limits.h>
 #endif
+#include <cassert>
+#include <cstddef>
 #include <stack>
 #include <vector>
 #include <list>
 #include <algorithm>
+
+#include <boost/unordered_map.hpp>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <rtl/ustring.hxx>
-#include "hash_wrap.hxx"
 #include "sortedarray.hxx"
 
 #include "ww8struc.hxx"
@@ -70,7 +73,26 @@ struct SprmInfoHash
     }
 };
 
-typedef ww::WrappedHash<SprmInfo, SprmInfoHash> wwSprmSearcher;
+class wwSprmSearcher {
+public:
+    wwSprmSearcher(SprmInfo const * infos, std::size_t size) {
+        for (std::size_t i = 0; i != size; ++i) {
+            bool ins = map_.insert(Map::value_type(infos[i].nId, infos[i]))
+                .second;
+            assert(ins); (void) ins;
+        }
+    }
+
+    SprmInfo const * search(sal_uInt16 id) const {
+        Map::const_iterator i(map_.find(id));
+        return i == map_.end() ? 0 : &i->second;
+    }
+
+private:
+    typedef boost::unordered_map<sal_uInt16, SprmInfo> Map;
+
+    Map map_;
+};
 
 /**
     wwSprmParser knows how to take a sequence of bytes and split it up into

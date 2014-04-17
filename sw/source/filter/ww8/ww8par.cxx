@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
+#include <boost/unordered_set.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 
 #include <i18nlangtag/languagetag.hxx>

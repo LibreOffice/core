@@ -105,11 +105,6 @@ namespace
     }
 }
 
-inline bool operator==(const SprmInfo &rFirst, const SprmInfo &rSecond)
-{
-    return (rFirst.nId == rSecond.nId);
-}
-
 const wwSprmSearcher *wwSprmParser::GetWW2SprmSearcher()
 {
     //double lock me
@@ -800,53 +795,47 @@ wwSprmParser::wwSprmParser(ww::WordVersion eVersion) : meVersion(eVersion)
 
 SprmInfo wwSprmParser::GetSprmInfo(sal_uInt16 nId) const
 {
-    // Find sprm
-    SprmInfo aSrch={0,0,0};
-    aSrch.nId = nId;
-    const SprmInfo* pFound = mpKnownSprms->search(aSrch);
-    if (pFound == 0)
+    const SprmInfo* pFound = mpKnownSprms->search(nId);
+    if (pFound != 0)
     {
-        OSL_ENSURE(ww::IsEightPlus(meVersion),
-           "Unknown ww7- sprm, dangerous, report to development");
-
-        aSrch.nId = 0;
-        aSrch.nLen = 0;
-        //All the unknown ww7 sprms appear to be variable (which makes sense)
-        aSrch.nVari = L_VAR;
-
-        if (ww::IsEightPlus(meVersion)) //We can recover perfectly in this case
-        {
-            aSrch.nVari = L_FIX;
-            switch (nId >> 13)
-            {
-                case 0:
-                case 1:
-                    aSrch.nLen = 1;
-                    break;
-                case 2:
-                    aSrch.nLen = 2;
-                    break;
-                case 3:
-                    aSrch.nLen = 4;
-                    break;
-                case 4:
-                case 5:
-                    aSrch.nLen = 2;
-                    break;
-                case 6:
-                    aSrch.nLen = 0;
-                    aSrch.nVari =  L_VAR;
-                    break;
-                case 7:
-                default:
-                    aSrch.nLen = 3;
-                    break;
-            }
-        }
-
-        pFound = &aSrch;
+        return *pFound;
     }
-    return *pFound;
+
+    OSL_ENSURE(ww::IsEightPlus(meVersion),
+               "Unknown ww7- sprm, dangerous, report to development");
+
+    //All the unknown ww7 sprms appear to be variable (which makes sense)
+    SprmInfo aSrch = { nId, 0, L_VAR };
+    if (ww::IsEightPlus(meVersion)) //We can recover perfectly in this case
+    {
+        aSrch.nVari = L_FIX;
+        switch (nId >> 13)
+        {
+        case 0:
+        case 1:
+            aSrch.nLen = 1;
+            break;
+        case 2:
+            aSrch.nLen = 2;
+            break;
+        case 3:
+            aSrch.nLen = 4;
+            break;
+        case 4:
+        case 5:
+            aSrch.nLen = 2;
+            break;
+        case 6:
+            aSrch.nLen = 0;
+            aSrch.nVari =  L_VAR;
+            break;
+        case 7:
+        default:
+            aSrch.nLen = 3;
+            break;
+        }
+    }
+    return aSrch;
 }
 
 //-end
