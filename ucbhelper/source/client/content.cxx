@@ -1016,16 +1016,6 @@ bool Content::transferContent( const Content& rSourceContent,
             sCommand = "checkin";
             bCheckIn = true;
             break;
-
-        default:
-            ucbhelper::cancelCommandExecution(
-                makeAny( IllegalArgumentException(
-                            OUString(
-                                "Unknown transfer operation!" ),
-                            get(),
-                            -1 ) ),
-                         m_xImpl->getEnvironment() );
-            // Unreachable
     }
     Command aCommand;
     aCommand.Name     = sCommand;
