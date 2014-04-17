@@ -27,12 +27,12 @@ using namespace ::com::sun::star;
 
 /* Implementation of Filters test */
 
-class PcxFilterTest
+class PsdFilterTest
     : public test::FiltersTest
     , public test::BootstrapFixture
 {
 public:
-    PcxFilterTest() : BootstrapFixture(true, false) {}
+    PsdFilterTest() : BootstrapFixture(true, false) {}
 
     virtual bool load(const OUString &,
         const OUString &rURL, const OUString &,
@@ -43,12 +43,12 @@ public:
      */
     void testCVEs();
 
-    CPPUNIT_TEST_SUITE(PcxFilterTest);
+    CPPUNIT_TEST_SUITE(PsdFilterTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST_SUITE_END();
 };
 
-bool PcxFilterTest::load(const OUString &,
+bool PsdFilterTest::load(const OUString &,
     const OUString &rURL, const OUString &,
     unsigned int, unsigned int, unsigned int)
 {
@@ -57,14 +57,14 @@ bool PcxFilterTest::load(const OUString &,
     return GraphicImport(aFileStream, aGraphic, NULL);
 }
 
-void PcxFilterTest::testCVEs()
+void PsdFilterTest::testCVEs()
 {
     testDir(OUString(),
-        getURLFromSrc("/filter/qa/cppunit/data/pcx/"),
+        getURLFromSrc("/filter/qa/cppunit/data/psd/"),
         OUString());
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(PcxFilterTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(PsdFilterTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
