@@ -346,11 +346,20 @@ void x11::X11_freeBmp( sal_uInt8* pBmp )
  *  PixmapHolder
  */
 
-PixmapHolder::PixmapHolder( Display* pDisplay ) :
-        m_pDisplay( pDisplay ),
-        m_aColormap( None ),
-        m_aPixmap( None ),
-        m_aBitmap( None )
+PixmapHolder::PixmapHolder( Display* pDisplay )
+    : m_pDisplay(pDisplay)
+    , m_aColormap(None)
+    , m_aPixmap(None)
+    , m_aBitmap(None)
+    , m_nRedShift(0)
+    , m_nRedShift2(0)
+    , m_nGreenShift(0)
+    , m_nGreenShift2(0)
+    , m_nBlueShift(0)
+    , m_nBlueShift2(0)
+    , m_nBlueShift2Mask(0)
+    , m_nRedShift2Mask(0)
+    , m_nGreenShift2Mask(0)
 {
     /*  try to get a 24 bit true color visual, if that fails,
      *  revert to default visual
@@ -384,11 +393,8 @@ PixmapHolder::PixmapHolder( Display* pDisplay ) :
     if( m_aInfo.c_class == TrueColor )
     {
         int nRedSig, nGreenSig, nBlueSig;
-        m_nRedShift = m_nRedShift2 = 0;
         getShift( m_aInfo.red_mask, m_nRedShift, nRedSig, m_nRedShift2 );
-        m_nGreenShift = m_nGreenShift2 = 0;
         getShift( m_aInfo.green_mask, m_nGreenShift, nGreenSig, m_nGreenShift2 );
-        m_nBlueShift = m_nBlueShift2 = 0;
         getShift( m_aInfo.blue_mask, m_nBlueShift, nBlueSig, m_nBlueShift2 );
 
         m_nBlueShift2Mask = m_nBlueShift2 ? ~((unsigned long)((1<<m_nBlueShift2)-1)) : ~0L;
