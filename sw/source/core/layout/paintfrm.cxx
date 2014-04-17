@@ -3668,9 +3668,10 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 //UUUU check for transparency
                 const FillAttributesPtr aFillAttributes(pSwFrmFmt->getFillAttributes());
 
-                if(aFillAttributes.get())
+                // check if the new fill attributes are used
+                if(aFillAttributes.get() && aFillAttributes->isUsed())
                 {
-                    bPaintCompleteBack = aFillAttributes->isTransparent();
+                    bPaintCompleteBack = true;
                 }
             }
             else
@@ -4122,7 +4123,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 
 void SwFrm::PaintBorderLine( const SwRect& rRect,
                              const SwRect& rOutRect,
-                             const SwPageFrm *pPage,
+                             const SwPageFrm* /*pPage*/,
                              const Color *pColor ) const
 {
     if ( !rOutRect.IsOver( rRect ) )

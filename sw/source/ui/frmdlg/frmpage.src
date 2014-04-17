@@ -157,12 +157,29 @@ TabDialog DLG_FRM_GRF
                 PageResID = TP_BORDER ;
                 Text [ en-US ] = "Borders" ;
             };
+
+            //UUUU new Area and Transparence TabPages
             PageItem
             {
-                Identifier = TP_BACKGROUND ;
-                PageResID = TP_BACKGROUND ;
-                Text [ en-US ] = "Background" ;
+                Identifier = RID_SVXPAGE_AREA;
+                PageResID = RID_SVXPAGE_AREA;
+                Text [ en-US ] = "Area" ;
             };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TRANSPARENCE;
+                PageResID = RID_SVXPAGE_TRANSPARENCE;
+                Text [ en-US ] = "Transparency" ;
+            };
+
+            //UUUU remove?
+            //PageItem
+            //{
+            //    Identifier = TP_BACKGROUND ;
+            //    PageResID = TP_BACKGROUND ;
+            //    Text [ en-US ] = "Background" ;
+            //};
+
             PageItem
             {
                 Identifier = TP_MACRO_ASSIGN ;
@@ -212,12 +229,29 @@ TabDialog DLG_FRM_OLE
                 PageResID = TP_BORDER ;
                 Text [ en-US ] = "Borders" ;
             };
+
+            //UUUU new Area and Transparence TabPages
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_AREA;
+                PageResID = RID_SVXPAGE_AREA;
+                Text [ en-US ] = "Area" ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TRANSPARENCE;
+                PageResID = RID_SVXPAGE_TRANSPARENCE;
+                Text [ en-US ] = "Transparency" ;
+            };
+
+            //UUUU remove?
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
                 PageResID = TP_BACKGROUND ;
                 Text [ en-US ] = "Background" ;
             };
+
             /*
             PageItem  {
                 Identifier = TP_COLUMN ;

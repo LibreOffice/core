@@ -297,6 +297,9 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
 // OD 18.09.2003 #i18732# - add property
 // OD 2004-05-05 #i28701# - add property 'WrapInfluenceOnObjPos'
 // OD 2009-07-13 #i73249# - add properties 'Title' and 'Description'
+//UUUU all users of COMMON_FRAME_PROPERTIES add the new XATTR_FILL_FIRST, XATTR_FILL_LAST FillStyle,
+// thus it may be possible to remove the RES_BACKGROUND entries from SvxBrushItem completely (this includes
+// all using UNO_NAME_BACK_* slots) in the future
 #define COMMON_FRAME_PROPERTIES \
     { SW_PROP_NMID(UNO_NAME_ANCHOR_PAGE_NO), RES_ANCHOR,            CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE, MID_ANCHOR_PAGENUM       },              \
     { SW_PROP_NMID(UNO_NAME_ANCHOR_TYPE), RES_ANCHOR,           CPPU_E2T(CPPUTYPE_TXTCNTANCHOR),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},             \
@@ -818,9 +821,10 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_WRAP_INFLUENCE_ON_POSITION), RES_WRAP_INFLUENCE_ON_OBJPOS, CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, MID_WRAP_INFLUENCE},
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
 
-                    //UUUU adf FillProperties for SW, same as FILL_PROPERTIES in svx
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
                     // but need own defines in Writer due to later association of strings
-                    // and uno types (see loop at end of this metjhod and definition of SW_PROP_NMID)
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to style import/export
                     FILL_PROPERTIES_SW
 
                     {0,0,0,0,0,0}
@@ -1174,9 +1178,10 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_WIDTH_TYPE), RES_FRM_SIZE,          CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_WIDTH_TYPE },
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
 
-                    //UUUU adf FillProperties for SW, same as FILL_PROPERTIES in svx
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
                     // but need own defines in Writer due to later association of strings
-                    // and uno types (see loop at end of this metjhod and definition of SW_PROP_NMID)
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to FlyFrame import/export
                     FILL_PROPERTIES_SW
 
                     {0,0,0,0,0,0}
@@ -1187,7 +1192,10 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             case PROPERTY_MAP_TEXT_GRAPHIC:
             {
                 static SfxItemPropertyMapEntry aGraphicPropertyMap_Impl[] =
-                {
+                {   //UUUU
+                    // evtl. completely remove SvxBrushItem stuff ()
+                    // add support for XATTR_FILL_FIRST, XATTR_FILL_LAST
+                    // COMMON_FRAME_PROPERTIES currently hosts the RES_BACKGROUND entries from SvxBrushItem
                     COMMON_FRAME_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_SURROUND_CONTOUR), RES_SURROUND,            CPPU_E2T(CPPUTYPE_BOOLEAN),             PROPERTY_NONE, MID_SURROUND_CONTOUR         },
                     { SW_PROP_NMID(UNO_NAME_CONTOUR_OUTSIDE), RES_SURROUND,             CPPU_E2T(CPPUTYPE_BOOLEAN),             PROPERTY_NONE, MID_SURROUND_CONTOUROUTSIDE  },
@@ -1214,6 +1222,13 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_IS_INVERTED), RES_GRFATR_INVERT,         CPPU_E2T(CPPUTYPE_BOOLEAN),    0,   0},
                     { SW_PROP_NMID(UNO_NAME_TRANSPARENCY), RES_GRFATR_TRANSPARENCY, CPPU_E2T(CPPUTYPE_INT16),   0,   0},
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_COLOR_MODE), RES_GRFATR_DRAWMODE,    CPPU_E2T(CPPUTYPE_COLORMODE),      0,   0},
+
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to Writer GraphicObject import/export
+                    FILL_PROPERTIES_SW
+
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aGraphicPropertyMap_Impl;
@@ -1222,7 +1237,10 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             case PROPERTY_MAP_EMBEDDED_OBJECT:
             {
                 static SfxItemPropertyMapEntry aEmbeddedPropertyMap_Impl[] =
-                {
+                {   //UUUU
+                    // evtl. completely remove SvxBrushItem stuff ()
+                    // add support for XATTR_FILL_FIRST, XATTR_FILL_LAST
+                    // COMMON_FRAME_PROPERTIES currently hosts the RES_BACKGROUND entries from SvxBrushItem
                     COMMON_FRAME_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_SURROUND_CONTOUR), RES_SURROUND, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_SURROUND_CONTOUR },
                     { SW_PROP_NMID(UNO_NAME_CONTOUR_OUTSIDE), RES_SURROUND, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_SURROUND_CONTOUROUTSIDE},
@@ -1237,6 +1255,13 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_COMPONENT),FN_UNO_COMPONENT, CPPU_E2T(CPPUTYPE_REFCOMPONENT), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_EMBEDDED_OBJECT),FN_EMBEDDED_OBJECT, CPPU_E2T(CPPUTPYE_REFEMBEDDEDOBJECT), PropertyAttribute::READONLY, 0},
 //                    { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), FN_UNO_ALTERNATIVE_TEXT,CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE , 0   },
+
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to OLE/EmbeddedObject import/export
+                    FILL_PROPERTIES_SW
+
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aEmbeddedPropertyMap_Impl;

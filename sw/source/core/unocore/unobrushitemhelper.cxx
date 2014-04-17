@@ -133,6 +133,18 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
             OSL_ENSURE(false, "Could not get Graphic from SvxBrushItem (!)");
         }
     }
+    else
+    {
+        // GPOS_NONE == rBrush.GetGraphicPos() && 0xff == rBrush.GetColor().GetTransparency(),
+        // still need to rescue the color used. There are sequences used on the UNO API at
+        // import time (OLE. e.g. chart) which first set RGB color (MID_BACK_COLOR_R_G_B,
+        // color stays transparent) and then set transparency (MID_BACK_COLOR_TRANSPARENCY)
+        // to zero later. When not saving the color, it will be lost
+        const Color aColor(rBrush.GetColor().GetRGBColor());
+
+        // rToSet.Put(XFillStyleItem(XFILL_NONE));
+        rToSet.Put(XFillColorItem(String(), aColor));
+    }
 }
 
 //UUUU
@@ -175,20 +187,24 @@ SvxBrushItem getSvxBrushItemForSolid(const SfxItemSet& rSourceSet, sal_Bool bSea
 //UUUU
 SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_Bool bSearchInParents)
 {
-    SvxBrushItem aRetval(RES_BACKGROUND);
-
     const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rSourceSet.GetItem(XATTR_FILLSTYLE, bSearchInParents)));
 
-    if(!pXFillStyleItem)
+    if(!pXFillStyleItem || XFILL_NONE == pXFillStyleItem->GetValue())
     {
-        return aRetval;
+        // need to rescue the evtl. set RGB color, but use as transparent color (we have XFILL_NONE)
+        Color aFillColor(static_cast< const XFillColorItem& >(rSourceSet.Get(XATTR_FILLCOLOR, bSearchInParents)).GetColorValue());
+        aFillColor.SetTransparency(0xff);
+
+        return SvxBrushItem(aFillColor, RES_BACKGROUND);
     }
+
+    SvxBrushItem aRetval(RES_BACKGROUND);
 
     switch(pXFillStyleItem->GetValue())
     {
         case XFILL_NONE:
         {
-            // done; return default item
+            // already handled above, can not happen again
             break;
         }
         case XFILL_SOLID:

@@ -1899,6 +1899,13 @@ void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         }
         case RES_BACKGROUND:
         {
+            //UUUU No new FillStyle for PageBackground; need to remove again when we want
+            // to support that, too. Add a break to *not* set bDone to true
+            if(SFX_STYLE_FAMILY_PAGE == eFamily)
+            {
+                break;
+            }
+
             //UUUU
             SfxItemSet& rStyleSet = rBase.GetItemSet();
             const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet));
@@ -2676,6 +2683,13 @@ uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             }
             case RES_BACKGROUND:
             {
+                //UUUU No new FillStyle for PageBackground; need to remove again when we want
+                // to support that, too. Add a break to *not* set bDone to true
+                if(SFX_STYLE_FAMILY_PAGE == eFamily)
+                {
+                    break;
+                }
+
                 //UUUU
                 const SfxItemSet& rSet = rBase.GetItemSet();
                 const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet));

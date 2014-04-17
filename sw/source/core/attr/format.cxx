@@ -586,16 +586,27 @@ sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
 
     sal_Bool bRet = sal_False;
 
+    //UUUU Usel local copy to be able to apply needed changes, e.g. call
+    // CheckForUniqueItemForLineFillNameOrIndex which is needed for NameOrIndex stuff
+    SfxItemSet aTempSet(rSet);
+
+    //UUUU Need to check for unique item for DrawingLayer items of type NameOrIndex
+    // and evtl. correct that item to ensure unique names for that type. This call may
+    // modify/correct entries inside of the given SfxItemSet
+    if(GetDoc())
+    {
+        GetDoc()->CheckForUniqueItemForLineFillNameOrIndex(aTempSet);
+    }
+
     //UUUU
     if(RES_FLYFRMFMT == Which())
     {
         const SfxPoolItem* pSource = 0;
 
-        if(SFX_ITEM_SET == rSet.GetItemState(RES_BACKGROUND, sal_False, &pSource))
+        if(SFX_ITEM_SET == aTempSet.GetItemState(RES_BACKGROUND, sal_False, &pSource))
         {
             //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
             OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
-            SfxItemSet aTempSet(rSet);
 
             // copy all items to be set anyways to a local ItemSet with is also prepared for the new
             // fill attribute ranges [XATTR_FILL_FIRST .. XATTR_FILL_LAST]. Add the attributes
@@ -639,7 +650,7 @@ sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
            ( RES_GRFFMTCOLL == nFmtWhich ||
              RES_TXTFMTCOLL == nFmtWhich ) ) )
     {
-        if( 0 != ( bRet = (0 != aSet.Put( rSet ))) )
+        if( 0 != ( bRet = (0 != aSet.Put( aTempSet ))) )
             aSet.SetModifyAtAttr( this );
         // --> OD 2006-11-22 #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL )
@@ -652,7 +663,7 @@ sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     {
         SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
                     aNew( *aSet.GetPool(), aSet.GetRanges() );
-        bRet = 0 != aSet.Put_BC( rSet, &aOld, &aNew );
+        bRet = 0 != aSet.Put_BC( aTempSet, &aOld, &aNew );
         if( bRet )
         {
             // einige Sonderbehandlungen fuer Attribute
