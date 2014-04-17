@@ -60,16 +60,20 @@ namespace SL
 
 struct SprmInfo
 {
-    sal_uInt16 nId;         ///< A ww8 sprm is hardcoded as 16bits
     unsigned int nLen : 6;
     unsigned int nVari : 2;
 };
 
+struct SprmInfoRow {
+    sal_uInt16 nId;         ///< A ww8 sprm is hardcoded as 16bits
+    SprmInfo info;
+};
+
 class wwSprmSearcher {
 public:
-    wwSprmSearcher(SprmInfo const * infos, std::size_t size) {
+    wwSprmSearcher(SprmInfoRow const * rows, std::size_t size) {
         for (std::size_t i = 0; i != size; ++i) {
-            bool ins = map_.insert(Map::value_type(infos[i].nId, infos[i]))
+            bool ins = map_.insert(Map::value_type(rows[i].nId, rows[i].info))
                 .second;
             assert(ins); (void) ins;
         }

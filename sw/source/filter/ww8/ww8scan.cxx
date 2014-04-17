@@ -109,147 +109,147 @@ const wwSprmSearcher *wwSprmParser::GetWW2SprmSearcher()
 {
     //double lock me
     // WW7- Sprms
-    static const SprmInfo aSprms[] =
+    static const SprmInfoRow aSprms[] =
     {
-        {  0, 0, L_FIX}, // "Default-sprm", will be skipped
-        {  2, 1, L_FIX}, // "sprmPIstd",  pap.istd (style code)
-        {  3, 0, L_VAR}, // "sprmPIstdPermute pap.istd permutation
-        {  4, 1, L_FIX}, // "sprmPIncLv1" pap.istddifference
-        {  5, 1, L_FIX}, // "sprmPJc" pap.jc (justification)
-        {  6, 1, L_FIX}, // "sprmPFSideBySide" pap.fSideBySide
-        {  7, 1, L_FIX}, // "sprmPFKeep" pap.fKeep
-        {  8, 1, L_FIX}, // "sprmPFKeepFollow " pap.fKeepFollow
-        {  9, 1, L_FIX}, // "sprmPPageBreakBefore" pap.fPageBreakBefore
-        { 10, 1, L_FIX}, // "sprmPBrcl" pap.brcl
-        { 11, 1, L_FIX}, // "sprmPBrcp" pap.brcp
-        { 12, 1, L_FIX}, // "sprmPNfcSeqNumb" pap.nfcSeqNumb
-        { 13, 1, L_FIX}, // "sprmPNoSeqNumb" pap.nnSeqNumb
-        { 14, 1, L_FIX}, // "sprmPFNoLineNumb" pap.fNoLnn
-        { 15, 0, L_VAR}, // "?sprmPChgTabsPapx" pap.itbdMac, ...
-        { 16, 2, L_FIX}, // "sprmPDxaRight" pap.dxaRight
-        { 17, 2, L_FIX}, // "sprmPDxaLeft" pap.dxaLeft
-        { 18, 2, L_FIX}, // "sprmPNest" pap.dxaLeft
-        { 19, 2, L_FIX}, // "sprmPDxaLeft1" pap.dxaLeft1
-        { 20, 2, L_FIX}, // "sprmPDyaLine" pap.lspd an LSPD
-        { 21, 2, L_FIX}, // "sprmPDyaBefore" pap.dyaBefore
-        { 22, 2, L_FIX}, // "sprmPDyaAfter" pap.dyaAfter
-        { 23, 0, L_VAR}, // "?sprmPChgTabs" pap.itbdMac, pap.rgdxaTab, ...
-        { 24, 1, L_FIX}, // "sprmPFInTable" pap.fInTable
-        { 25, 1, L_FIX}, // "sprmPTtp" pap.fTtp
-        { 26, 2, L_FIX}, // "sprmPDxaAbs" pap.dxaAbs
-        { 27, 2, L_FIX}, // "sprmPDyaAbs" pap.dyaAbs
-        { 28, 2, L_FIX}, // "sprmPDxaWidth" pap.dxaWidth
-        { 29, 1, L_FIX}, // "sprmPPc" pap.pcHorz, pap.pcVert
-        { 30, 2, L_FIX}, // "sprmPBrcTop10" pap.brcTop BRC10
-        { 31, 2, L_FIX}, // "sprmPBrcLeft10" pap.brcLeft BRC10
-        { 32, 2, L_FIX}, // "sprmPBrcBottom10" pap.brcBottom BRC10
-        { 33, 2, L_FIX}, // "sprmPBrcRight10" pap.brcRight BRC10
-        { 34, 2, L_FIX}, // "sprmPBrcBetween10" pap.brcBetween BRC10
-        { 35, 2, L_FIX}, // "sprmPBrcBar10" pap.brcBar BRC10
-        { 36, 2, L_FIX}, // "sprmPFromText10" pap.dxaFromText dxa
-        { 37, 1, L_FIX}, // "sprmPWr" pap.wr wr
-        { 38, 2, L_FIX}, // "sprmPBrcTop" pap.brcTop BRC
-        { 39, 2, L_FIX}, // "sprmPBrcLeft" pap.brcLeft BRC
-        { 40, 2, L_FIX}, // "sprmPBrcBottom" pap.brcBottom BRC
-        { 41, 2, L_FIX}, // "sprmPBrcRight" pap.brcRight BRC
-        { 42, 2, L_FIX}, // "sprmPBrcBetween" pap.brcBetween BRC
-        { 43, 2, L_FIX}, // "sprmPBrcBar" pap.brcBar BRC word
-        { 44, 1, L_FIX}, // "sprmPFNoAutoHyph" pap.fNoAutoHyph
-        { 45, 2, L_FIX}, // "sprmPWHeightAbs" pap.wHeightAbs w
-        { 46, 2, L_FIX}, // "sprmPDcs" pap.dcs DCS
-        { 47, 2, L_FIX}, // "sprmPShd" pap.shd SHD
-        { 48, 2, L_FIX}, // "sprmPDyaFromText" pap.dyaFromText dya
-        { 49, 2, L_FIX}, // "sprmPDxaFromText" pap.dxaFromText dxa
-        { 50, 1, L_FIX}, // "sprmPFBiDi" pap.fBiDi 0 or 1 byte
-        { 51, 1, L_FIX}, // "sprmPFWidowControl" pap.fWidowControl 0 or 1 byte
-        { 52, 0, L_FIX}, // "?sprmPRuler 52"
-        { 53, 1, L_FIX}, // "sprmCFStrikeRM" chp.fRMarkDel 1 or 0 bit
-        { 54, 1, L_FIX}, // "sprmCFRMark" chp.fRMark 1 or 0 bit
-        { 55, 1, L_FIX}, // "sprmCFFldVanish" chp.fFldVanish 1 or 0 bit
-        { 57, 0, L_VAR}, // "sprmCDefault" whole CHP
-        { 58, 0, L_FIX}, // "sprmCPlain" whole CHP
-        { 60, 1, L_FIX}, // "sprmCFBold" chp.fBold 0,1, 128, or 129
-        { 61, 1, L_FIX}, // "sprmCFItalic" chp.fItalic 0,1, 128, or 129
-        { 62, 1, L_FIX}, // "sprmCFStrike" chp.fStrike 0,1, 128, or 129
-        { 63, 1, L_FIX}, // "sprmCFOutline" chp.fOutline 0,1, 128, or 129
-        { 64, 1, L_FIX}, // "sprmCFShadow" chp.fShadow 0,1, 128, or 129
-        { 65, 1, L_FIX}, // "sprmCFSmallCaps" chp.fSmallCaps 0,1, 128, or 129
-        { 66, 1, L_FIX}, // "sprmCFCaps" chp.fCaps 0,1, 128, or 129
-        { 67, 1, L_FIX}, // "sprmCFVanish" chp.fVanish 0,1, 128, or 129
-        { 68, 2, L_FIX}, // "sprmCFtc" chp.ftc ftc word
-        { 69, 1, L_FIX}, // "sprmCKul" chp.kul kul byte
-        { 70, 3, L_FIX}, // "sprmCSizePos" chp.hps, chp.hpsPos
-        { 71, 2, L_FIX}, // "sprmCDxaSpace" chp.dxaSpace dxa
-        { 72, 2, L_FIX}, // "sprmCLid" chp.lid LID
-        { 73, 1, L_FIX}, // "sprmCIco" chp.ico ico byte
-        { 74, 1, L_FIX}, // "sprmCHps" chp.hps hps !word!
-        { 75, 1, L_FIX}, // "sprmCHpsInc" chp.hps
-        { 76, 1, L_FIX}, // "sprmCHpsPos" chp.hpsPos hps !word!
-        { 77, 1, L_FIX}, // "sprmCHpsPosAdj" chp.hpsPos hps
-        { 78, 0, L_VAR}, // "?sprmCMajority" chp.fBold, chp.fItalic, ...
-        { 80, 1, L_FIX}, // "sprmCFBoldBi" chp.fBoldBi
-        { 81, 1, L_FIX}, // "sprmCFItalicBi" chp.fItalicBi
-        { 82, 2, L_FIX}, // "sprmCFtcBi" chp.ftcBi
-        { 83, 2, L_FIX}, // "sprmClidBi" chp.lidBi
-        { 84, 1, L_FIX}, // "sprmCIcoBi" chp.icoBi
-        { 85, 1, L_FIX}, // "sprmCHpsBi" chp.hpsBi
-        { 86, 1, L_FIX}, // "sprmCFBiDi" chp.fBiDi
-        { 87, 1, L_FIX}, // "sprmCFDiacColor" chp.fDiacUSico
-        { 94, 1, L_FIX}, // "sprmPicBrcl" pic.brcl brcl (see PIC definition)
-        { 95,12, L_VAR}, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
-        { 96, 2, L_FIX}, // "sprmPicBrcTop" pic.brcTop BRC word
-        { 97, 2, L_FIX}, // "sprmPicBrcLeft" pic.brcLeft BRC word
-        { 98, 2, L_FIX}, // "sprmPicBrcBottom" pic.brcBottom BRC word
-        { 99, 2, L_FIX}, // "sprmPicBrcRight" pic.brcRight BRC word
-        {112, 1, L_FIX}, // "sprmSFRTLGutter", set to one if gutter is on
-        {114, 1, L_FIX}, // "sprmSFBiDi" ;;;
-        {115, 2, L_FIX}, // "sprmSDmBinFirst" sep.dmBinFirst  word
-        {116, 2, L_FIX}, // "sprmSDmBinOther" sep.dmBinOther  word
-        {117, 1, L_FIX}, // "sprmSBkc" sep.bkc bkc byte
-        {118, 1, L_FIX}, // "sprmSFTitlePage" sep.fTitlePage 0 or 1 byte
-        {119, 2, L_FIX}, // "sprmSCcolumns" sep.ccolM1 # of cols - 1 word
-        {120, 2, L_FIX}, // "sprmSDxaColumns" sep.dxaColumns dxa word
-        {121, 1, L_FIX}, // "sprmSFAutoPgn" sep.fAutoPgn obsolete byte
-        {122, 1, L_FIX}, // "sprmSNfcPgn" sep.nfcPgn nfc byte
-        {123, 2, L_FIX}, // "sprmSDyaPgn" sep.dyaPgn dya short
-        {124, 2, L_FIX}, // "sprmSDxaPgn" sep.dxaPgn dya short
-        {125, 1, L_FIX}, // "sprmSFPgnRestart" sep.fPgnRestart 0 or 1 byte
-        {126, 1, L_FIX}, // "sprmSFEndnote" sep.fEndnote 0 or 1 byte
-        {127, 1, L_FIX}, // "sprmSLnc" sep.lnc lnc byte
-        {128, 1, L_FIX}, // "sprmSGprfIhdt" sep.grpfIhdt grpfihdt
-        {129, 2, L_FIX}, // "sprmSNLnnMod" sep.nLnnMod non-neg int. word
-        {130, 2, L_FIX}, // "sprmSDxaLnn" sep.dxaLnn dxa word
-        {131, 2, L_FIX}, // "sprmSDyaHdrTop" sep.dyaHdrTop dya word
-        {132, 2, L_FIX}, // "sprmSDyaHdrBottom" sep.dyaHdrBottom dya word
-        {133, 1, L_FIX}, // "sprmSLBetween" sep.fLBetween 0 or 1 byte
-        {134, 1, L_FIX}, // "sprmSVjc" sep.vjc vjc byte
-        {135, 2, L_FIX}, // "sprmSLnnMin" sep.lnnMin lnn word
-        {136, 2, L_FIX}, // "sprmSPgnStart" sep.pgnStart pgn word
-        {137, 1, L_FIX}, // "sprmSBOrientation" sep.dmOrientPage dm byte
-        {138, 1, L_FIX}, // "sprmSFFacingCol" ;;;
-        {139, 2, L_FIX}, // "sprmSXaPage" sep.xaPage xa word
-        {140, 2, L_FIX}, // "sprmSYaPage" sep.yaPage ya word
-        {141, 2, L_FIX}, // "sprmSDxaLeft" sep.dxaLeft dxa word
-        {142, 2, L_FIX}, // "sprmSDxaRight" sep.dxaRight dxa word
-        {143, 2, L_FIX}, // "sprmSDyaTop" sep.dyaTop dya word
-        {144, 2, L_FIX}, // "sprmSDyaBottom" sep.dyaBottom dya word
-        {145, 2, L_FIX}, // "sprmSDzaGutter" sep.dzaGutter dza word
-        {146, 2, L_FIX}, // "sprmTJc" tap.jc jc (low order byte is significant)
-        {147, 2, L_FIX}, // "sprmTDxaLeft" tap.rgdxaCenter dxa word
-        {148, 2, L_FIX}, // "sprmTDxaGapHalf" tap.dxaGapHalf, tap.rgdxaCenter
-        {149, 1, L_FIX}, // "sprmTFBiDi" ;;;
-        {152, 0, L_VAR}, // "sprmTDefTable10" tap.rgdxaCenter, tap.rgtc complex
-        {153, 2, L_FIX}, // "sprmTDyaRowHeight" tap.dyaRowHeight dya word
-        {154, 0, L_VAR2},// "sprmTDefTable" tap.rgtc complex
-        {155, 1, L_VAR}, // "sprmTDefTableShd" tap.rgshd complex
-        {157, 5, L_FIX}, // "sprmTSetBrc" tap.rgtc[].rgbrc complex 5 bytes
-        {158, 4, L_FIX}, // "sprmTInsert" tap.rgdxaCenter,tap.rgtc complex
-        {159, 2, L_FIX}, // "sprmTDelete" tap.rgdxaCenter, tap.rgtc complex
-        {160, 4, L_FIX}, // "sprmTDxaCol" tap.rgdxaCenter complex
-        {161, 2, L_FIX}, // "sprmTMerge" tap.fFirstMerged, tap.fMerged complex
-        {162, 2, L_FIX}, // "sprmTSplit" tap.fFirstMerged, tap.fMerged complex
-        {163, 5, L_FIX}, // "sprmTSetBrc10" tap.rgtc[].rgbrc complex 5 bytes
-        {164, 4, L_FIX}, // "sprmTSetShd", tap.rgshd complex 4 bytes
+        {  0, { 0, L_FIX} }, // "Default-sprm", will be skipped
+        {  2, { 1, L_FIX} }, // "sprmPIstd",  pap.istd (style code)
+        {  3, { 0, L_VAR} }, // "sprmPIstdPermute pap.istd permutation
+        {  4, { 1, L_FIX} }, // "sprmPIncLv1" pap.istddifference
+        {  5, { 1, L_FIX} }, // "sprmPJc" pap.jc (justification)
+        {  6, { 1, L_FIX} }, // "sprmPFSideBySide" pap.fSideBySide
+        {  7, { 1, L_FIX} }, // "sprmPFKeep" pap.fKeep
+        {  8, { 1, L_FIX} }, // "sprmPFKeepFollow " pap.fKeepFollow
+        {  9, { 1, L_FIX} }, // "sprmPPageBreakBefore" pap.fPageBreakBefore
+        { 10, { 1, L_FIX} }, // "sprmPBrcl" pap.brcl
+        { 11, { 1, L_FIX} }, // "sprmPBrcp" pap.brcp
+        { 12, { 1, L_FIX} }, // "sprmPNfcSeqNumb" pap.nfcSeqNumb
+        { 13, { 1, L_FIX} }, // "sprmPNoSeqNumb" pap.nnSeqNumb
+        { 14, { 1, L_FIX} }, // "sprmPFNoLineNumb" pap.fNoLnn
+        { 15, { 0, L_VAR} }, // "?sprmPChgTabsPapx" pap.itbdMac, ...
+        { 16, { 2, L_FIX} }, // "sprmPDxaRight" pap.dxaRight
+        { 17, { 2, L_FIX} }, // "sprmPDxaLeft" pap.dxaLeft
+        { 18, { 2, L_FIX} }, // "sprmPNest" pap.dxaLeft
+        { 19, { 2, L_FIX} }, // "sprmPDxaLeft1" pap.dxaLeft1
+        { 20, { 2, L_FIX} }, // "sprmPDyaLine" pap.lspd an LSPD
+        { 21, { 2, L_FIX} }, // "sprmPDyaBefore" pap.dyaBefore
+        { 22, { 2, L_FIX} }, // "sprmPDyaAfter" pap.dyaAfter
+        { 23, { 0, L_VAR} }, // "?sprmPChgTabs" pap.itbdMac, pap.rgdxaTab, ...
+        { 24, { 1, L_FIX} }, // "sprmPFInTable" pap.fInTable
+        { 25, { 1, L_FIX} }, // "sprmPTtp" pap.fTtp
+        { 26, { 2, L_FIX} }, // "sprmPDxaAbs" pap.dxaAbs
+        { 27, { 2, L_FIX} }, // "sprmPDyaAbs" pap.dyaAbs
+        { 28, { 2, L_FIX} }, // "sprmPDxaWidth" pap.dxaWidth
+        { 29, { 1, L_FIX} }, // "sprmPPc" pap.pcHorz, pap.pcVert
+        { 30, { 2, L_FIX} }, // "sprmPBrcTop10" pap.brcTop BRC10
+        { 31, { 2, L_FIX} }, // "sprmPBrcLeft10" pap.brcLeft BRC10
+        { 32, { 2, L_FIX} }, // "sprmPBrcBottom10" pap.brcBottom BRC10
+        { 33, { 2, L_FIX} }, // "sprmPBrcRight10" pap.brcRight BRC10
+        { 34, { 2, L_FIX} }, // "sprmPBrcBetween10" pap.brcBetween BRC10
+        { 35, { 2, L_FIX} }, // "sprmPBrcBar10" pap.brcBar BRC10
+        { 36, { 2, L_FIX} }, // "sprmPFromText10" pap.dxaFromText dxa
+        { 37, { 1, L_FIX} }, // "sprmPWr" pap.wr wr
+        { 38, { 2, L_FIX} }, // "sprmPBrcTop" pap.brcTop BRC
+        { 39, { 2, L_FIX} }, // "sprmPBrcLeft" pap.brcLeft BRC
+        { 40, { 2, L_FIX} }, // "sprmPBrcBottom" pap.brcBottom BRC
+        { 41, { 2, L_FIX} }, // "sprmPBrcRight" pap.brcRight BRC
+        { 42, { 2, L_FIX} }, // "sprmPBrcBetween" pap.brcBetween BRC
+        { 43, { 2, L_FIX} }, // "sprmPBrcBar" pap.brcBar BRC word
+        { 44, { 1, L_FIX} }, // "sprmPFNoAutoHyph" pap.fNoAutoHyph
+        { 45, { 2, L_FIX} }, // "sprmPWHeightAbs" pap.wHeightAbs w
+        { 46, { 2, L_FIX} }, // "sprmPDcs" pap.dcs DCS
+        { 47, { 2, L_FIX} }, // "sprmPShd" pap.shd SHD
+        { 48, { 2, L_FIX} }, // "sprmPDyaFromText" pap.dyaFromText dya
+        { 49, { 2, L_FIX} }, // "sprmPDxaFromText" pap.dxaFromText dxa
+        { 50, { 1, L_FIX} }, // "sprmPFBiDi" pap.fBiDi 0 or 1 byte
+        { 51, { 1, L_FIX} }, // "sprmPFWidowControl" pap.fWidowControl 0 or 1 byte
+        { 52, { 0, L_FIX} }, // "?sprmPRuler 52"
+        { 53, { 1, L_FIX} }, // "sprmCFStrikeRM" chp.fRMarkDel 1 or 0 bit
+        { 54, { 1, L_FIX} }, // "sprmCFRMark" chp.fRMark 1 or 0 bit
+        { 55, { 1, L_FIX} }, // "sprmCFFldVanish" chp.fFldVanish 1 or 0 bit
+        { 57, { 0, L_VAR} }, // "sprmCDefault" whole CHP
+        { 58, { 0, L_FIX} }, // "sprmCPlain" whole CHP
+        { 60, { 1, L_FIX} }, // "sprmCFBold" chp.fBold 0,1, 128, or 129
+        { 61, { 1, L_FIX} }, // "sprmCFItalic" chp.fItalic 0,1, 128, or 129
+        { 62, { 1, L_FIX} }, // "sprmCFStrike" chp.fStrike 0,1, 128, or 129
+        { 63, { 1, L_FIX} }, // "sprmCFOutline" chp.fOutline 0,1, 128, or 129
+        { 64, { 1, L_FIX} }, // "sprmCFShadow" chp.fShadow 0,1, 128, or 129
+        { 65, { 1, L_FIX} }, // "sprmCFSmallCaps" chp.fSmallCaps 0,1, 128, or 129
+        { 66, { 1, L_FIX} }, // "sprmCFCaps" chp.fCaps 0,1, 128, or 129
+        { 67, { 1, L_FIX} }, // "sprmCFVanish" chp.fVanish 0,1, 128, or 129
+        { 68, { 2, L_FIX} }, // "sprmCFtc" chp.ftc ftc word
+        { 69, { 1, L_FIX} }, // "sprmCKul" chp.kul kul byte
+        { 70, { 3, L_FIX} }, // "sprmCSizePos" chp.hps, chp.hpsPos
+        { 71, { 2, L_FIX} }, // "sprmCDxaSpace" chp.dxaSpace dxa
+        { 72, { 2, L_FIX} }, // "sprmCLid" chp.lid LID
+        { 73, { 1, L_FIX} }, // "sprmCIco" chp.ico ico byte
+        { 74, { 1, L_FIX} }, // "sprmCHps" chp.hps hps !word!
+        { 75, { 1, L_FIX} }, // "sprmCHpsInc" chp.hps
+        { 76, { 1, L_FIX} }, // "sprmCHpsPos" chp.hpsPos hps !word!
+        { 77, { 1, L_FIX} }, // "sprmCHpsPosAdj" chp.hpsPos hps
+        { 78, { 0, L_VAR} }, // "?sprmCMajority" chp.fBold, chp.fItalic, ...
+        { 80, { 1, L_FIX} }, // "sprmCFBoldBi" chp.fBoldBi
+        { 81, { 1, L_FIX} }, // "sprmCFItalicBi" chp.fItalicBi
+        { 82, { 2, L_FIX} }, // "sprmCFtcBi" chp.ftcBi
+        { 83, { 2, L_FIX} }, // "sprmClidBi" chp.lidBi
+        { 84, { 1, L_FIX} }, // "sprmCIcoBi" chp.icoBi
+        { 85, { 1, L_FIX} }, // "sprmCHpsBi" chp.hpsBi
+        { 86, { 1, L_FIX} }, // "sprmCFBiDi" chp.fBiDi
+        { 87, { 1, L_FIX} }, // "sprmCFDiacColor" chp.fDiacUSico
+        { 94, { 1, L_FIX} }, // "sprmPicBrcl" pic.brcl brcl (see PIC definition)
+        { 95, {12, L_VAR} }, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
+        { 96, { 2, L_FIX} }, // "sprmPicBrcTop" pic.brcTop BRC word
+        { 97, { 2, L_FIX} }, // "sprmPicBrcLeft" pic.brcLeft BRC word
+        { 98, { 2, L_FIX} }, // "sprmPicBrcBottom" pic.brcBottom BRC word
+        { 99, { 2, L_FIX} }, // "sprmPicBrcRight" pic.brcRight BRC word
+        {112, { 1, L_FIX} }, // "sprmSFRTLGutter", set to one if gutter is on
+        {114, { 1, L_FIX} }, // "sprmSFBiDi" ;;;
+        {115, { 2, L_FIX} }, // "sprmSDmBinFirst" sep.dmBinFirst  word
+        {116, { 2, L_FIX} }, // "sprmSDmBinOther" sep.dmBinOther  word
+        {117, { 1, L_FIX} }, // "sprmSBkc" sep.bkc bkc byte
+        {118, { 1, L_FIX} }, // "sprmSFTitlePage" sep.fTitlePage 0 or 1 byte
+        {119, { 2, L_FIX} }, // "sprmSCcolumns" sep.ccolM1 # of cols - 1 word
+        {120, { 2, L_FIX} }, // "sprmSDxaColumns" sep.dxaColumns dxa word
+        {121, { 1, L_FIX} }, // "sprmSFAutoPgn" sep.fAutoPgn obsolete byte
+        {122, { 1, L_FIX} }, // "sprmSNfcPgn" sep.nfcPgn nfc byte
+        {123, { 2, L_FIX} }, // "sprmSDyaPgn" sep.dyaPgn dya short
+        {124, { 2, L_FIX} }, // "sprmSDxaPgn" sep.dxaPgn dya short
+        {125, { 1, L_FIX} }, // "sprmSFPgnRestart" sep.fPgnRestart 0 or 1 byte
+        {126, { 1, L_FIX} }, // "sprmSFEndnote" sep.fEndnote 0 or 1 byte
+        {127, { 1, L_FIX} }, // "sprmSLnc" sep.lnc lnc byte
+        {128, { 1, L_FIX} }, // "sprmSGprfIhdt" sep.grpfIhdt grpfihdt
+        {129, { 2, L_FIX} }, // "sprmSNLnnMod" sep.nLnnMod non-neg int. word
+        {130, { 2, L_FIX} }, // "sprmSDxaLnn" sep.dxaLnn dxa word
+        {131, { 2, L_FIX} }, // "sprmSDyaHdrTop" sep.dyaHdrTop dya word
+        {132, { 2, L_FIX} }, // "sprmSDyaHdrBottom" sep.dyaHdrBottom dya word
+        {133, { 1, L_FIX} }, // "sprmSLBetween" sep.fLBetween 0 or 1 byte
+        {134, { 1, L_FIX} }, // "sprmSVjc" sep.vjc vjc byte
+        {135, { 2, L_FIX} }, // "sprmSLnnMin" sep.lnnMin lnn word
+        {136, { 2, L_FIX} }, // "sprmSPgnStart" sep.pgnStart pgn word
+        {137, { 1, L_FIX} }, // "sprmSBOrientation" sep.dmOrientPage dm byte
+        {138, { 1, L_FIX} }, // "sprmSFFacingCol" ;;;
+        {139, { 2, L_FIX} }, // "sprmSXaPage" sep.xaPage xa word
+        {140, { 2, L_FIX} }, // "sprmSYaPage" sep.yaPage ya word
+        {141, { 2, L_FIX} }, // "sprmSDxaLeft" sep.dxaLeft dxa word
+        {142, { 2, L_FIX} }, // "sprmSDxaRight" sep.dxaRight dxa word
+        {143, { 2, L_FIX} }, // "sprmSDyaTop" sep.dyaTop dya word
+        {144, { 2, L_FIX} }, // "sprmSDyaBottom" sep.dyaBottom dya word
+        {145, { 2, L_FIX} }, // "sprmSDzaGutter" sep.dzaGutter dza word
+        {146, { 2, L_FIX} }, // "sprmTJc" tap.jc jc (low order byte is significant)
+        {147, { 2, L_FIX} }, // "sprmTDxaLeft" tap.rgdxaCenter dxa word
+        {148, { 2, L_FIX} }, // "sprmTDxaGapHalf" tap.dxaGapHalf, tap.rgdxaCenter
+        {149, { 1, L_FIX} }, // "sprmTFBiDi" ;;;
+        {152, { 0, L_VAR} }, // "sprmTDefTable10" tap.rgdxaCenter, tap.rgtc complex
+        {153, { 2, L_FIX} }, // "sprmTDyaRowHeight" tap.dyaRowHeight dya word
+        {154, { 0, L_VAR2} },// "sprmTDefTable" tap.rgtc complex
+        {155, { 1, L_VAR} }, // "sprmTDefTableShd" tap.rgshd complex
+        {157, { 5, L_FIX} }, // "sprmTSetBrc" tap.rgtc[].rgbrc complex 5 bytes
+        {158, { 4, L_FIX} }, // "sprmTInsert" tap.rgdxaCenter,tap.rgtc complex
+        {159, { 2, L_FIX} }, // "sprmTDelete" tap.rgdxaCenter, tap.rgtc complex
+        {160, { 4, L_FIX} }, // "sprmTDxaCol" tap.rgdxaCenter complex
+        {161, { 2, L_FIX} }, // "sprmTMerge" tap.fFirstMerged, tap.fMerged complex
+        {162, { 2, L_FIX} }, // "sprmTSplit" tap.fFirstMerged, tap.fMerged complex
+        {163, { 5, L_FIX} }, // "sprmTSetBrc10" tap.rgtc[].rgbrc complex 5 bytes
+        {164, { 4, L_FIX} }, // "sprmTSetShd", tap.rgshd complex 4 bytes
     };
 
     static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
@@ -260,178 +260,178 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
 {
     //double lock me
     // WW7- Sprms
-    static const SprmInfo aSprms[] =
+    static const SprmInfoRow aSprms[] =
     {
-        {  0, 0, L_FIX}, // "Default-sprm",  wird uebersprungen
-        {  2, 2, L_FIX}, // "sprmPIstd",  pap.istd (style code)
-        {  3, 3, L_VAR}, // "sprmPIstdPermute pap.istd permutation
-        {  4, 1, L_FIX}, // "sprmPIncLv1" pap.istddifference
-        {  5, 1, L_FIX}, // "sprmPJc" pap.jc (justification)
-        {  6, 1, L_FIX}, // "sprmPFSideBySide" pap.fSideBySide
-        {  7, 1, L_FIX}, // "sprmPFKeep" pap.fKeep
-        {  8, 1, L_FIX}, // "sprmPFKeepFollow " pap.fKeepFollow
-        {  9, 1, L_FIX}, // "sprmPPageBreakBefore" pap.fPageBreakBefore
-        { 10, 1, L_FIX}, // "sprmPBrcl" pap.brcl
-        { 11, 1, L_FIX}, // "sprmPBrcp" pap.brcp
-        { 12, 0, L_VAR}, // "sprmPAnld" pap.anld (ANLD structure)
-        { 13, 1, L_FIX}, // "sprmPNLvlAnm" pap.nLvlAnm nn
-        { 14, 1, L_FIX}, // "sprmPFNoLineNumb" pap.fNoLnn
-        { 15, 0, L_VAR}, // "?sprmPChgTabsPapx" pap.itbdMac, ...
-        { 16, 2, L_FIX}, // "sprmPDxaRight" pap.dxaRight
-        { 17, 2, L_FIX}, // "sprmPDxaLeft" pap.dxaLeft
-        { 18, 2, L_FIX}, // "sprmPNest" pap.dxaLeft
-        { 19, 2, L_FIX}, // "sprmPDxaLeft1" pap.dxaLeft1
-        { 20, 4, L_FIX}, // "sprmPDyaLine" pap.lspd an LSPD
-        { 21, 2, L_FIX}, // "sprmPDyaBefore" pap.dyaBefore
-        { 22, 2, L_FIX}, // "sprmPDyaAfter" pap.dyaAfter
-        { 23, 0, L_VAR}, // "?sprmPChgTabs" pap.itbdMac, pap.rgdxaTab, ...
-        { 24, 1, L_FIX}, // "sprmPFInTable" pap.fInTable
-        { 25, 1, L_FIX}, // "sprmPTtp" pap.fTtp
-        { 26, 2, L_FIX}, // "sprmPDxaAbs" pap.dxaAbs
-        { 27, 2, L_FIX}, // "sprmPDyaAbs" pap.dyaAbs
-        { 28, 2, L_FIX}, // "sprmPDxaWidth" pap.dxaWidth
-        { 29, 1, L_FIX}, // "sprmPPc" pap.pcHorz, pap.pcVert
-        { 30, 2, L_FIX}, // "sprmPBrcTop10" pap.brcTop BRC10
-        { 31, 2, L_FIX}, // "sprmPBrcLeft10" pap.brcLeft BRC10
-        { 32, 2, L_FIX}, // "sprmPBrcBottom10" pap.brcBottom BRC10
-        { 33, 2, L_FIX}, // "sprmPBrcRight10" pap.brcRight BRC10
-        { 34, 2, L_FIX}, // "sprmPBrcBetween10" pap.brcBetween BRC10
-        { 35, 2, L_FIX}, // "sprmPBrcBar10" pap.brcBar BRC10
-        { 36, 2, L_FIX}, // "sprmPFromText10" pap.dxaFromText dxa
-        { 37, 1, L_FIX}, // "sprmPWr" pap.wr wr
-        { 38, 2, L_FIX}, // "sprmPBrcTop" pap.brcTop BRC
-        { 39, 2, L_FIX}, // "sprmPBrcLeft" pap.brcLeft BRC
-        { 40, 2, L_FIX}, // "sprmPBrcBottom" pap.brcBottom BRC
-        { 41, 2, L_FIX}, // "sprmPBrcRight" pap.brcRight BRC
-        { 42, 2, L_FIX}, // "sprmPBrcBetween" pap.brcBetween BRC
-        { 43, 2, L_FIX}, // "sprmPBrcBar" pap.brcBar BRC word
-        { 44, 1, L_FIX}, // "sprmPFNoAutoHyph" pap.fNoAutoHyph
-        { 45, 2, L_FIX}, // "sprmPWHeightAbs" pap.wHeightAbs w
-        { 46, 2, L_FIX}, // "sprmPDcs" pap.dcs DCS
-        { 47, 2, L_FIX}, // "sprmPShd" pap.shd SHD
-        { 48, 2, L_FIX}, // "sprmPDyaFromText" pap.dyaFromText dya
-        { 49, 2, L_FIX}, // "sprmPDxaFromText" pap.dxaFromText dxa
-        { 50, 1, L_FIX}, // "sprmPFLocked" pap.fLocked 0 or 1 byte
-        { 51, 1, L_FIX}, // "sprmPFWidowControl" pap.fWidowControl 0 or 1 byte
-        { 52, 0, L_FIX}, // "?sprmPRuler 52"
-        { 64, 0, L_VAR}, // rtl property ?
-        { 65, 1, L_FIX}, // "sprmCFStrikeRM" chp.fRMarkDel 1 or 0 bit
-        { 66, 1, L_FIX}, // "sprmCFRMark" chp.fRMark 1 or 0 bit
-        { 67, 1, L_FIX}, // "sprmCFFldVanish" chp.fFldVanish 1 or 0 bit
-        { 68, 0, L_VAR}, // "sprmCPicLocation" chp.fcPic and chp.fSpec
-        { 69, 2, L_FIX}, // "sprmCIbstRMark" chp.ibstRMark index into sttbRMark
-        { 70, 4, L_FIX}, // "sprmCDttmRMark" chp.dttm DTTM long
-        { 71, 1, L_FIX}, // "sprmCFData" chp.fData 1 or 0 bit
-        { 72, 2, L_FIX}, // "sprmCRMReason" chp.idslRMReason an index to a table
-        { 73, 3, L_FIX}, // "sprmCChse" chp.fChsDiff and chp.chse
-        { 74, 0, L_VAR}, // "sprmCSymbol" chp.fSpec, chp.chSym and chp.ftcSym
-        { 75, 1, L_FIX}, // "sprmCFOle2" chp.fOle2 1 or 0   bit
-        { 77, 0, L_VAR}, // unknown
-        { 79, 0, L_VAR}, // unknown
-        { 80, 2, L_FIX}, // "sprmCIstd" chp.istd istd, see stylesheet definition
-        { 81, 0, L_VAR}, // "sprmCIstdPermute" chp.istd permutation vector
-        { 82, 0, L_VAR}, // "sprmCDefault" whole CHP
-        { 83, 0, L_FIX}, // "sprmCPlain" whole CHP
-        { 85, 1, L_FIX}, // "sprmCFBold" chp.fBold 0,1, 128, or 129
-        { 86, 1, L_FIX}, // "sprmCFItalic" chp.fItalic 0,1, 128, or 129
-        { 87, 1, L_FIX}, // "sprmCFStrike" chp.fStrike 0,1, 128, or 129
-        { 88, 1, L_FIX}, // "sprmCFOutline" chp.fOutline 0,1, 128, or 129
-        { 89, 1, L_FIX}, // "sprmCFShadow" chp.fShadow 0,1, 128, or 129
-        { 90, 1, L_FIX}, // "sprmCFSmallCaps" chp.fSmallCaps 0,1, 128, or 129
-        { 91, 1, L_FIX}, // "sprmCFCaps" chp.fCaps 0,1, 128, or 129
-        { 92, 1, L_FIX}, // "sprmCFVanish" chp.fVanish 0,1, 128, or 129
-        { 93, 2, L_FIX}, // "sprmCFtc" chp.ftc ftc word
-        { 94, 1, L_FIX}, // "sprmCKul" chp.kul kul byte
-        { 95, 3, L_FIX}, // "sprmCSizePos" chp.hps, chp.hpsPos
-        { 96, 2, L_FIX}, // "sprmCDxaSpace" chp.dxaSpace dxa
-        { 97, 2, L_FIX}, // "sprmCLid" chp.lid LID
-        { 98, 1, L_FIX}, // "sprmCIco" chp.ico ico byte
-        { 99, 2, L_FIX}, // "sprmCHps" chp.hps hps !word!
-        {100, 1, L_FIX}, // "sprmCHpsInc" chp.hps
-        {101, 2, L_FIX}, // "sprmCHpsPos" chp.hpsPos hps !word!
-        {102, 1, L_FIX}, // "sprmCHpsPosAdj" chp.hpsPos hps
-        {103, 0, L_VAR}, // "?sprmCMajority" chp.fBold, chp.fItalic, ...
-        {104, 1, L_FIX}, // "sprmCIss" chp.iss iss
-        {105, 0, L_VAR}, // "sprmCHpsNew50" chp.hps hps variable width
-        {106, 0, L_VAR}, // "sprmCHpsInc1" chp.hps complex
-        {107, 2, L_FIX}, // "sprmCHpsKern" chp.hpsKern hps
-        {108, 0, L_VAR}, // "sprmCMajority50" chp.fBold, chp.fItalic, ...
-        {109, 2, L_FIX}, // "sprmCHpsMul" chp.hps percentage to grow hps
-        {110, 2, L_FIX}, // "sprmCCondHyhen" chp.ysri ysri
-        {111, 2, L_FIX}, // rtl bold
-        {112, 2, L_FIX}, // rtl italic
-        {113, 0, L_VAR}, // rtl property ?
-        {115, 0, L_VAR}, // rtl property ?
-        {116, 0, L_VAR}, // unknown
-        {117, 1, L_FIX}, // "sprmCFSpec" chp.fSpec  1 or 0 bit
-        {118, 1, L_FIX}, // "sprmCFObj" chp.fObj 1 or 0 bit
-        {119, 1, L_FIX}, // "sprmPicBrcl" pic.brcl brcl (see PIC definition)
-        {120,12, L_VAR}, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
-        {121, 2, L_FIX}, // "sprmPicBrcTop" pic.brcTop BRC word
-        {122, 2, L_FIX}, // "sprmPicBrcLeft" pic.brcLeft BRC word
-        {123, 2, L_FIX}, // "sprmPicBrcBottom" pic.brcBottom BRC word
-        {124, 2, L_FIX}, // "sprmPicBrcRight" pic.brcRight BRC word
-        {131, 1, L_FIX}, // "sprmSScnsPgn" sep.cnsPgn cns byte
-        {132, 1, L_FIX}, // "sprmSiHeadingPgn" sep.iHeadingPgn
-        {133, 0, L_VAR}, // "sprmSOlstAnm" sep.olstAnm OLST variable length
-        {136, 3, L_FIX}, // "sprmSDxaColWidth" sep.rgdxaColWidthSpacing complex
-        {137, 3, L_FIX}, // "sprmSDxaColSpacing" sep.rgdxaColWidthSpacing
-        {138, 1, L_FIX}, // "sprmSFEvenlySpaced" sep.fEvenlySpaced 1 or 0
-        {139, 1, L_FIX}, // "sprmSFProtected" sep.fUnlocked 1 or 0 byte
-        {140, 2, L_FIX}, // "sprmSDmBinFirst" sep.dmBinFirst  word
-        {141, 2, L_FIX}, // "sprmSDmBinOther" sep.dmBinOther  word
-        {142, 1, L_FIX}, // "sprmSBkc" sep.bkc bkc byte
-        {143, 1, L_FIX}, // "sprmSFTitlePage" sep.fTitlePage 0 or 1 byte
-        {144, 2, L_FIX}, // "sprmSCcolumns" sep.ccolM1 # of cols - 1 word
-        {145, 2, L_FIX}, // "sprmSDxaColumns" sep.dxaColumns dxa word
-        {146, 1, L_FIX}, // "sprmSFAutoPgn" sep.fAutoPgn obsolete byte
-        {147, 1, L_FIX}, // "sprmSNfcPgn" sep.nfcPgn nfc byte
-        {148, 2, L_FIX}, // "sprmSDyaPgn" sep.dyaPgn dya short
-        {149, 2, L_FIX}, // "sprmSDxaPgn" sep.dxaPgn dya short
-        {150, 1, L_FIX}, // "sprmSFPgnRestart" sep.fPgnRestart 0 or 1 byte
-        {151, 1, L_FIX}, // "sprmSFEndnote" sep.fEndnote 0 or 1 byte
-        {152, 1, L_FIX}, // "sprmSLnc" sep.lnc lnc byte
-        {153, 1, L_FIX}, // "sprmSGprfIhdt" sep.grpfIhdt grpfihdt
-        {154, 2, L_FIX}, // "sprmSNLnnMod" sep.nLnnMod non-neg int. word
-        {155, 2, L_FIX}, // "sprmSDxaLnn" sep.dxaLnn dxa word
-        {156, 2, L_FIX}, // "sprmSDyaHdrTop" sep.dyaHdrTop dya word
-        {157, 2, L_FIX}, // "sprmSDyaHdrBottom" sep.dyaHdrBottom dya word
-        {158, 1, L_FIX}, // "sprmSLBetween" sep.fLBetween 0 or 1 byte
-        {159, 1, L_FIX}, // "sprmSVjc" sep.vjc vjc byte
-        {160, 2, L_FIX}, // "sprmSLnnMin" sep.lnnMin lnn word
-        {161, 2, L_FIX}, // "sprmSPgnStart" sep.pgnStart pgn word
-        {162, 1, L_FIX}, // "sprmSBOrientation" sep.dmOrientPage dm byte
-        {163, 0, L_FIX}, // "?SprmSBCustomize 163"
-        {164, 2, L_FIX}, // "sprmSXaPage" sep.xaPage xa word
-        {165, 2, L_FIX}, // "sprmSYaPage" sep.yaPage ya word
-        {166, 2, L_FIX}, // "sprmSDxaLeft" sep.dxaLeft dxa word
-        {167, 2, L_FIX}, // "sprmSDxaRight" sep.dxaRight dxa word
-        {168, 2, L_FIX}, // "sprmSDyaTop" sep.dyaTop dya word
-        {169, 2, L_FIX}, // "sprmSDyaBottom" sep.dyaBottom dya word
-        {170, 2, L_FIX}, // "sprmSDzaGutter" sep.dzaGutter dza word
-        {171, 2, L_FIX}, // "sprmSDMPaperReq" sep.dmPaperReq dm word
-        {179, 0, L_VAR}, // rtl property ?
-        {181, 0, L_VAR}, // rtl property ?
-        {182, 2, L_FIX}, // "sprmTJc" tap.jc jc (low order byte is significant)
-        {183, 2, L_FIX}, // "sprmTDxaLeft" tap.rgdxaCenter dxa word
-        {184, 2, L_FIX}, // "sprmTDxaGapHalf" tap.dxaGapHalf, tap.rgdxaCenter
-        {185, 1, L_FIX}, // "sprmTFCantSplit" tap.fCantSplit 1 or 0 byte
-        {186, 1, L_FIX}, // "sprmTTableHeader" tap.fTableHeader 1 or 0 byte
-        {187,12, L_FIX}, // "sprmTTableBorders" tap.rgbrcTable complex 12 bytes
-        {188, 0, L_VAR}, // "sprmTDefTable10" tap.rgdxaCenter, tap.rgtc complex
-        {189, 2, L_FIX}, // "sprmTDyaRowHeight" tap.dyaRowHeight dya word
-        {190, 0, L_VAR2},// "sprmTDefTable" tap.rgtc complex
-        {191, 1, L_VAR}, // "sprmTDefTableShd" tap.rgshd complex
-        {192, 4, L_FIX}, // "sprmTTlp" tap.tlp TLP 4 bytes
-        {193, 5, L_FIX}, // "sprmTSetBrc" tap.rgtc[].rgbrc complex 5 bytes
-        {194, 4, L_FIX}, // "sprmTInsert" tap.rgdxaCenter,tap.rgtc complex
-        {195, 2, L_FIX}, // "sprmTDelete" tap.rgdxaCenter, tap.rgtc complex
-        {196, 4, L_FIX}, // "sprmTDxaCol" tap.rgdxaCenter complex
-        {197, 2, L_FIX}, // "sprmTMerge" tap.fFirstMerged, tap.fMerged complex
-        {198, 2, L_FIX}, // "sprmTSplit" tap.fFirstMerged, tap.fMerged complex
-        {199, 5, L_FIX}, // "sprmTSetBrc10" tap.rgtc[].rgbrc complex 5 bytes
-        {200, 4, L_FIX}, // "sprmTSetShd", tap.rgshd complex 4 bytes
-        {207, 0, L_VAR}  // rtl property ?
+        {  0, { 0, L_FIX} }, // "Default-sprm",  wird uebersprungen
+        {  2, { 2, L_FIX} }, // "sprmPIstd",  pap.istd (style code)
+        {  3, { 3, L_VAR} }, // "sprmPIstdPermute pap.istd permutation
+        {  4, { 1, L_FIX} }, // "sprmPIncLv1" pap.istddifference
+        {  5, { 1, L_FIX} }, // "sprmPJc" pap.jc (justification)
+        {  6, { 1, L_FIX} }, // "sprmPFSideBySide" pap.fSideBySide
+        {  7, { 1, L_FIX} }, // "sprmPFKeep" pap.fKeep
+        {  8, { 1, L_FIX} }, // "sprmPFKeepFollow " pap.fKeepFollow
+        {  9, { 1, L_FIX} }, // "sprmPPageBreakBefore" pap.fPageBreakBefore
+        { 10, { 1, L_FIX} }, // "sprmPBrcl" pap.brcl
+        { 11, { 1, L_FIX} }, // "sprmPBrcp" pap.brcp
+        { 12, { 0, L_VAR} }, // "sprmPAnld" pap.anld (ANLD structure)
+        { 13, { 1, L_FIX} }, // "sprmPNLvlAnm" pap.nLvlAnm nn
+        { 14, { 1, L_FIX} }, // "sprmPFNoLineNumb" pap.fNoLnn
+        { 15, { 0, L_VAR} }, // "?sprmPChgTabsPapx" pap.itbdMac, ...
+        { 16, { 2, L_FIX} }, // "sprmPDxaRight" pap.dxaRight
+        { 17, { 2, L_FIX} }, // "sprmPDxaLeft" pap.dxaLeft
+        { 18, { 2, L_FIX} }, // "sprmPNest" pap.dxaLeft
+        { 19, { 2, L_FIX} }, // "sprmPDxaLeft1" pap.dxaLeft1
+        { 20, { 4, L_FIX} }, // "sprmPDyaLine" pap.lspd an LSPD
+        { 21, { 2, L_FIX} }, // "sprmPDyaBefore" pap.dyaBefore
+        { 22, { 2, L_FIX} }, // "sprmPDyaAfter" pap.dyaAfter
+        { 23, { 0, L_VAR} }, // "?sprmPChgTabs" pap.itbdMac, pap.rgdxaTab, ...
+        { 24, { 1, L_FIX} }, // "sprmPFInTable" pap.fInTable
+        { 25, { 1, L_FIX} }, // "sprmPTtp" pap.fTtp
+        { 26, { 2, L_FIX} }, // "sprmPDxaAbs" pap.dxaAbs
+        { 27, { 2, L_FIX} }, // "sprmPDyaAbs" pap.dyaAbs
+        { 28, { 2, L_FIX} }, // "sprmPDxaWidth" pap.dxaWidth
+        { 29, { 1, L_FIX} }, // "sprmPPc" pap.pcHorz, pap.pcVert
+        { 30, { 2, L_FIX} }, // "sprmPBrcTop10" pap.brcTop BRC10
+        { 31, { 2, L_FIX} }, // "sprmPBrcLeft10" pap.brcLeft BRC10
+        { 32, { 2, L_FIX} }, // "sprmPBrcBottom10" pap.brcBottom BRC10
+        { 33, { 2, L_FIX} }, // "sprmPBrcRight10" pap.brcRight BRC10
+        { 34, { 2, L_FIX} }, // "sprmPBrcBetween10" pap.brcBetween BRC10
+        { 35, { 2, L_FIX} }, // "sprmPBrcBar10" pap.brcBar BRC10
+        { 36, { 2, L_FIX} }, // "sprmPFromText10" pap.dxaFromText dxa
+        { 37, { 1, L_FIX} }, // "sprmPWr" pap.wr wr
+        { 38, { 2, L_FIX} }, // "sprmPBrcTop" pap.brcTop BRC
+        { 39, { 2, L_FIX} }, // "sprmPBrcLeft" pap.brcLeft BRC
+        { 40, { 2, L_FIX} }, // "sprmPBrcBottom" pap.brcBottom BRC
+        { 41, { 2, L_FIX} }, // "sprmPBrcRight" pap.brcRight BRC
+        { 42, { 2, L_FIX} }, // "sprmPBrcBetween" pap.brcBetween BRC
+        { 43, { 2, L_FIX} }, // "sprmPBrcBar" pap.brcBar BRC word
+        { 44, { 1, L_FIX} }, // "sprmPFNoAutoHyph" pap.fNoAutoHyph
+        { 45, { 2, L_FIX} }, // "sprmPWHeightAbs" pap.wHeightAbs w
+        { 46, { 2, L_FIX} }, // "sprmPDcs" pap.dcs DCS
+        { 47, { 2, L_FIX} }, // "sprmPShd" pap.shd SHD
+        { 48, { 2, L_FIX} }, // "sprmPDyaFromText" pap.dyaFromText dya
+        { 49, { 2, L_FIX} }, // "sprmPDxaFromText" pap.dxaFromText dxa
+        { 50, { 1, L_FIX} }, // "sprmPFLocked" pap.fLocked 0 or 1 byte
+        { 51, { 1, L_FIX} }, // "sprmPFWidowControl" pap.fWidowControl 0 or 1 byte
+        { 52, { 0, L_FIX} }, // "?sprmPRuler 52"
+        { 64, { 0, L_VAR} }, // rtl property ?
+        { 65, { 1, L_FIX} }, // "sprmCFStrikeRM" chp.fRMarkDel 1 or 0 bit
+        { 66, { 1, L_FIX} }, // "sprmCFRMark" chp.fRMark 1 or 0 bit
+        { 67, { 1, L_FIX} }, // "sprmCFFldVanish" chp.fFldVanish 1 or 0 bit
+        { 68, { 0, L_VAR} }, // "sprmCPicLocation" chp.fcPic and chp.fSpec
+        { 69, { 2, L_FIX} }, // "sprmCIbstRMark" chp.ibstRMark index into sttbRMark
+        { 70, { 4, L_FIX} }, // "sprmCDttmRMark" chp.dttm DTTM long
+        { 71, { 1, L_FIX} }, // "sprmCFData" chp.fData 1 or 0 bit
+        { 72, { 2, L_FIX} }, // "sprmCRMReason" chp.idslRMReason an index to a table
+        { 73, { 3, L_FIX} }, // "sprmCChse" chp.fChsDiff and chp.chse
+        { 74, { 0, L_VAR} }, // "sprmCSymbol" chp.fSpec, chp.chSym and chp.ftcSym
+        { 75, { 1, L_FIX} }, // "sprmCFOle2" chp.fOle2 1 or 0   bit
+        { 77, { 0, L_VAR} }, // unknown
+        { 79, { 0, L_VAR} }, // unknown
+        { 80, { 2, L_FIX} }, // "sprmCIstd" chp.istd istd, see stylesheet definition
+        { 81, { 0, L_VAR} }, // "sprmCIstdPermute" chp.istd permutation vector
+        { 82, { 0, L_VAR} }, // "sprmCDefault" whole CHP
+        { 83, { 0, L_FIX} }, // "sprmCPlain" whole CHP
+        { 85, { 1, L_FIX} }, // "sprmCFBold" chp.fBold 0,1, 128, or 129
+        { 86, { 1, L_FIX} }, // "sprmCFItalic" chp.fItalic 0,1, 128, or 129
+        { 87, { 1, L_FIX} }, // "sprmCFStrike" chp.fStrike 0,1, 128, or 129
+        { 88, { 1, L_FIX} }, // "sprmCFOutline" chp.fOutline 0,1, 128, or 129
+        { 89, { 1, L_FIX} }, // "sprmCFShadow" chp.fShadow 0,1, 128, or 129
+        { 90, { 1, L_FIX} }, // "sprmCFSmallCaps" chp.fSmallCaps 0,1, 128, or 129
+        { 91, { 1, L_FIX} }, // "sprmCFCaps" chp.fCaps 0,1, 128, or 129
+        { 92, { 1, L_FIX} }, // "sprmCFVanish" chp.fVanish 0,1, 128, or 129
+        { 93, { 2, L_FIX} }, // "sprmCFtc" chp.ftc ftc word
+        { 94, { 1, L_FIX} }, // "sprmCKul" chp.kul kul byte
+        { 95, { 3, L_FIX} }, // "sprmCSizePos" chp.hps, chp.hpsPos
+        { 96, { 2, L_FIX} }, // "sprmCDxaSpace" chp.dxaSpace dxa
+        { 97, { 2, L_FIX} }, // "sprmCLid" chp.lid LID
+        { 98, { 1, L_FIX} }, // "sprmCIco" chp.ico ico byte
+        { 99, { 2, L_FIX} }, // "sprmCHps" chp.hps hps !word!
+        {100, { 1, L_FIX} }, // "sprmCHpsInc" chp.hps
+        {101, { 2, L_FIX} }, // "sprmCHpsPos" chp.hpsPos hps !word!
+        {102, { 1, L_FIX} }, // "sprmCHpsPosAdj" chp.hpsPos hps
+        {103, { 0, L_VAR} }, // "?sprmCMajority" chp.fBold, chp.fItalic, ...
+        {104, { 1, L_FIX} }, // "sprmCIss" chp.iss iss
+        {105, { 0, L_VAR} }, // "sprmCHpsNew50" chp.hps hps variable width
+        {106, { 0, L_VAR} }, // "sprmCHpsInc1" chp.hps complex
+        {107, { 2, L_FIX} }, // "sprmCHpsKern" chp.hpsKern hps
+        {108, { 0, L_VAR} }, // "sprmCMajority50" chp.fBold, chp.fItalic, ...
+        {109, { 2, L_FIX} }, // "sprmCHpsMul" chp.hps percentage to grow hps
+        {110, { 2, L_FIX} }, // "sprmCCondHyhen" chp.ysri ysri
+        {111, { 2, L_FIX} }, // rtl bold
+        {112, { 2, L_FIX} }, // rtl italic
+        {113, { 0, L_VAR} }, // rtl property ?
+        {115, { 0, L_VAR} }, // rtl property ?
+        {116, { 0, L_VAR} }, // unknown
+        {117, { 1, L_FIX} }, // "sprmCFSpec" chp.fSpec  1 or 0 bit
+        {118, { 1, L_FIX} }, // "sprmCFObj" chp.fObj 1 or 0 bit
+        {119, { 1, L_FIX} }, // "sprmPicBrcl" pic.brcl brcl (see PIC definition)
+        {120, {12, L_VAR} }, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
+        {121, { 2, L_FIX} }, // "sprmPicBrcTop" pic.brcTop BRC word
+        {122, { 2, L_FIX} }, // "sprmPicBrcLeft" pic.brcLeft BRC word
+        {123, { 2, L_FIX} }, // "sprmPicBrcBottom" pic.brcBottom BRC word
+        {124, { 2, L_FIX} }, // "sprmPicBrcRight" pic.brcRight BRC word
+        {131, { 1, L_FIX} }, // "sprmSScnsPgn" sep.cnsPgn cns byte
+        {132, { 1, L_FIX} }, // "sprmSiHeadingPgn" sep.iHeadingPgn
+        {133, { 0, L_VAR} }, // "sprmSOlstAnm" sep.olstAnm OLST variable length
+        {136, { 3, L_FIX} }, // "sprmSDxaColWidth" sep.rgdxaColWidthSpacing complex
+        {137, { 3, L_FIX} }, // "sprmSDxaColSpacing" sep.rgdxaColWidthSpacing
+        {138, { 1, L_FIX} }, // "sprmSFEvenlySpaced" sep.fEvenlySpaced 1 or 0
+        {139, { 1, L_FIX} }, // "sprmSFProtected" sep.fUnlocked 1 or 0 byte
+        {140, { 2, L_FIX} }, // "sprmSDmBinFirst" sep.dmBinFirst  word
+        {141, { 2, L_FIX} }, // "sprmSDmBinOther" sep.dmBinOther  word
+        {142, { 1, L_FIX} }, // "sprmSBkc" sep.bkc bkc byte
+        {143, { 1, L_FIX} }, // "sprmSFTitlePage" sep.fTitlePage 0 or 1 byte
+        {144, { 2, L_FIX} }, // "sprmSCcolumns" sep.ccolM1 # of cols - 1 word
+        {145, { 2, L_FIX} }, // "sprmSDxaColumns" sep.dxaColumns dxa word
+        {146, { 1, L_FIX} }, // "sprmSFAutoPgn" sep.fAutoPgn obsolete byte
+        {147, { 1, L_FIX} }, // "sprmSNfcPgn" sep.nfcPgn nfc byte
+        {148, { 2, L_FIX} }, // "sprmSDyaPgn" sep.dyaPgn dya short
+        {149, { 2, L_FIX} }, // "sprmSDxaPgn" sep.dxaPgn dya short
+        {150, { 1, L_FIX} }, // "sprmSFPgnRestart" sep.fPgnRestart 0 or 1 byte
+        {151, { 1, L_FIX} }, // "sprmSFEndnote" sep.fEndnote 0 or 1 byte
+        {152, { 1, L_FIX} }, // "sprmSLnc" sep.lnc lnc byte
+        {153, { 1, L_FIX} }, // "sprmSGprfIhdt" sep.grpfIhdt grpfihdt
+        {154, { 2, L_FIX} }, // "sprmSNLnnMod" sep.nLnnMod non-neg int. word
+        {155, { 2, L_FIX} }, // "sprmSDxaLnn" sep.dxaLnn dxa word
+        {156, { 2, L_FIX} }, // "sprmSDyaHdrTop" sep.dyaHdrTop dya word
+        {157, { 2, L_FIX} }, // "sprmSDyaHdrBottom" sep.dyaHdrBottom dya word
+        {158, { 1, L_FIX} }, // "sprmSLBetween" sep.fLBetween 0 or 1 byte
+        {159, { 1, L_FIX} }, // "sprmSVjc" sep.vjc vjc byte
+        {160, { 2, L_FIX} }, // "sprmSLnnMin" sep.lnnMin lnn word
+        {161, { 2, L_FIX} }, // "sprmSPgnStart" sep.pgnStart pgn word
+        {162, { 1, L_FIX} }, // "sprmSBOrientation" sep.dmOrientPage dm byte
+        {163, { 0, L_FIX} }, // "?SprmSBCustomize 163"
+        {164, { 2, L_FIX} }, // "sprmSXaPage" sep.xaPage xa word
+        {165, { 2, L_FIX} }, // "sprmSYaPage" sep.yaPage ya word
+        {166, { 2, L_FIX} }, // "sprmSDxaLeft" sep.dxaLeft dxa word
+        {167, { 2, L_FIX} }, // "sprmSDxaRight" sep.dxaRight dxa word
+        {168, { 2, L_FIX} }, // "sprmSDyaTop" sep.dyaTop dya word
+        {169, { 2, L_FIX} }, // "sprmSDyaBottom" sep.dyaBottom dya word
+        {170, { 2, L_FIX} }, // "sprmSDzaGutter" sep.dzaGutter dza word
+        {171, { 2, L_FIX} }, // "sprmSDMPaperReq" sep.dmPaperReq dm word
+        {179, { 0, L_VAR} }, // rtl property ?
+        {181, { 0, L_VAR} }, // rtl property ?
+        {182, { 2, L_FIX} }, // "sprmTJc" tap.jc jc (low order byte is significant)
+        {183, { 2, L_FIX} }, // "sprmTDxaLeft" tap.rgdxaCenter dxa word
+        {184, { 2, L_FIX} }, // "sprmTDxaGapHalf" tap.dxaGapHalf, tap.rgdxaCenter
+        {185, { 1, L_FIX} }, // "sprmTFCantSplit" tap.fCantSplit 1 or 0 byte
+        {186, { 1, L_FIX} }, // "sprmTTableHeader" tap.fTableHeader 1 or 0 byte
+        {187, {12, L_FIX} }, // "sprmTTableBorders" tap.rgbrcTable complex 12 bytes
+        {188, { 0, L_VAR} }, // "sprmTDefTable10" tap.rgdxaCenter, tap.rgtc complex
+        {189, { 2, L_FIX} }, // "sprmTDyaRowHeight" tap.dyaRowHeight dya word
+        {190, { 0, L_VAR2} },// "sprmTDefTable" tap.rgtc complex
+        {191, { 1, L_VAR} }, // "sprmTDefTableShd" tap.rgshd complex
+        {192, { 4, L_FIX} }, // "sprmTTlp" tap.tlp TLP 4 bytes
+        {193, { 5, L_FIX} }, // "sprmTSetBrc" tap.rgtc[].rgbrc complex 5 bytes
+        {194, { 4, L_FIX} }, // "sprmTInsert" tap.rgdxaCenter,tap.rgtc complex
+        {195, { 2, L_FIX} }, // "sprmTDelete" tap.rgdxaCenter, tap.rgtc complex
+        {196, { 4, L_FIX} }, // "sprmTDxaCol" tap.rgdxaCenter complex
+        {197, { 2, L_FIX} }, // "sprmTMerge" tap.fFirstMerged, tap.fMerged complex
+        {198, { 2, L_FIX} }, // "sprmTSplit" tap.fFirstMerged, tap.fMerged complex
+        {199, { 5, L_FIX} }, // "sprmTSetBrc10" tap.rgtc[].rgbrc complex 5 bytes
+        {200, { 4, L_FIX} }, // "sprmTSetShd", tap.rgshd complex 4 bytes
+        {207, { 0, L_VAR} }  // rtl property ?
     };
 
     static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
@@ -442,336 +442,336 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
 {
     //double lock me
     //WW8+ Sprms
-    static const SprmInfo aSprms[] =
+    static const SprmInfoRow aSprms[] =
     {
-        {     0, 0, L_FIX}, // "Default-sprm"/ wird uebersprungen
-        {0x4600, 2, L_FIX}, // "sprmPIstd" pap.istd;istd (style code);short;
-        {0xC601, 0, L_VAR}, // "sprmPIstdPermute" pap.istd;permutation vector
-        {0x2602, 1, L_FIX}, // "sprmPIncLvl" pap.istd, pap.lvl;difference
+        {     0, { 0, L_FIX} }, // "Default-sprm"/ wird uebersprungen
+        {0x4600, { 2, L_FIX} }, // "sprmPIstd" pap.istd;istd (style code);short;
+        {0xC601, { 0, L_VAR} }, // "sprmPIstdPermute" pap.istd;permutation vector
+        {0x2602, { 1, L_FIX} }, // "sprmPIncLvl" pap.istd, pap.lvl;difference
                             // between istd of base PAP and istd of PAP to be
                             // produced
-        {0x2403, 1, L_FIX}, // "sprmPJc" pap.jc;jc (justification);byte;
-        {0x2404, 1, L_FIX}, // "sprmPFSideBySide" pap.fSideBySide;0 or 1;byte;
-        {0x2405, 1, L_FIX}, // "sprmPFKeep" pap.fKeep;0 or 1;byte;
-        {0x2406, 1, L_FIX}, // "sprmPFKeepFollow" pap.fKeepFollow;0 or 1;byte;
-        {0x2407, 1, L_FIX}, // "sprmPFPageBreakBefore" pap.fPageBreakBefore;
+        {0x2403, { 1, L_FIX} }, // "sprmPJc" pap.jc;jc (justification);byte;
+        {0x2404, { 1, L_FIX} }, // "sprmPFSideBySide" pap.fSideBySide;0 or 1;byte;
+        {0x2405, { 1, L_FIX} }, // "sprmPFKeep" pap.fKeep;0 or 1;byte;
+        {0x2406, { 1, L_FIX} }, // "sprmPFKeepFollow" pap.fKeepFollow;0 or 1;byte;
+        {0x2407, { 1, L_FIX} }, // "sprmPFPageBreakBefore" pap.fPageBreakBefore;
                             // 0 or 1
-        {0x2408, 1, L_FIX}, // "sprmPBrcl" pap.brcl;brcl;byte;
-        {0x2409, 1, L_FIX}, // "sprmPBrcp" pap.brcp;brcp;byte;
-        {0x260A, 1, L_FIX}, // "sprmPIlvl" pap.ilvl;ilvl;byte;
-        {0x460B, 2, L_FIX}, // "sprmPIlfo" pap.ilfo;ilfo (list index) ;short;
-        {0x240C, 1, L_FIX}, // "sprmPFNoLineNumb" pap.fNoLnn;0 or 1;byte;
-        {0xC60D, 0, L_VAR}, // "sprmPChgTabsPapx" pap.itbdMac, pap.rgdxaTab,
+        {0x2408, { 1, L_FIX} }, // "sprmPBrcl" pap.brcl;brcl;byte;
+        {0x2409, { 1, L_FIX} }, // "sprmPBrcp" pap.brcp;brcp;byte;
+        {0x260A, { 1, L_FIX} }, // "sprmPIlvl" pap.ilvl;ilvl;byte;
+        {0x460B, { 2, L_FIX} }, // "sprmPIlfo" pap.ilfo;ilfo (list index) ;short;
+        {0x240C, { 1, L_FIX} }, // "sprmPFNoLineNumb" pap.fNoLnn;0 or 1;byte;
+        {0xC60D, { 0, L_VAR} }, // "sprmPChgTabsPapx" pap.itbdMac, pap.rgdxaTab,
                             // pap.rgtbd;complex
-        {0x840E, 2, L_FIX}, // "sprmPDxaRight" pap.dxaRight;dxa;word;
-        {0x840F, 2, L_FIX}, // "sprmPDxaLeft" pap.dxaLeft;dxa;word;
-        {0x4610, 2, L_FIX}, // "sprmPNest" pap.dxaLeft;dxa
-        {0x8411, 2, L_FIX}, // "sprmPDxaLeft1" pap.dxaLeft1;dxa;word;
-        {0x6412, 4, L_FIX}, // "sprmPDyaLine" pap.lspd;an LSPD, a long word
+        {0x840E, { 2, L_FIX} }, // "sprmPDxaRight" pap.dxaRight;dxa;word;
+        {0x840F, { 2, L_FIX} }, // "sprmPDxaLeft" pap.dxaLeft;dxa;word;
+        {0x4610, { 2, L_FIX} }, // "sprmPNest" pap.dxaLeft;dxa
+        {0x8411, { 2, L_FIX} }, // "sprmPDxaLeft1" pap.dxaLeft1;dxa;word;
+        {0x6412, { 4, L_FIX} }, // "sprmPDyaLine" pap.lspd;an LSPD, a long word
                             // structure consisting of a short of dyaLine
                             // followed by a short of fMultLinespace
-        {0xA413, 2, L_FIX}, // "sprmPDyaBefore" pap.dyaBefore;dya;word;
-        {0xA414, 2, L_FIX}, // "sprmPDyaAfter" pap.dyaAfter;dya;word;
-        {0xC615, 0, L_VAR}, // "sprmPChgTabs" pap.itbdMac, pap.rgdxaTab,
+        {0xA413, { 2, L_FIX} }, // "sprmPDyaBefore" pap.dyaBefore;dya;word;
+        {0xA414, { 2, L_FIX} }, // "sprmPDyaAfter" pap.dyaAfter;dya;word;
+        {0xC615, { 0, L_VAR} }, // "sprmPChgTabs" pap.itbdMac, pap.rgdxaTab,
                             // pap.rgtbd;complex
-        {0x2416, 1, L_FIX}, // "sprmPFInTable" pap.fInTable;0 or 1;byte;
-        {0x2417, 1, L_FIX}, // "sprmPFTtp" pap.fTtp;0 or 1;byte;
-        {0x8418, 2, L_FIX}, // "sprmPDxaAbs" pap.dxaAbs;dxa;word;
-        {0x8419, 2, L_FIX}, // "sprmPDyaAbs" pap.dyaAbs;dya;word;
-        {0x841A, 2, L_FIX}, // "sprmPDxaWidth" pap.dxaWidth;dxa;word;
-        {0x261B, 1, L_FIX}, // "sprmPPc" pap.pcHorz, pap.pcVert;complex
-        {0x461C, 2, L_FIX}, // "sprmPBrcTop10" pap.brcTop;BRC10;word;
-        {0x461D, 2, L_FIX}, // "sprmPBrcLeft10" pap.brcLeft;BRC10;word;
-        {0x461E, 2, L_FIX}, // "sprmPBrcBottom10" pap.brcBottom;BRC10;word;
-        {0x461F, 2, L_FIX}, // "sprmPBrcRight10" pap.brcRight;BRC10;word;
-        {0x4620, 2, L_FIX}, // "sprmPBrcBetween10" pap.brcBetween;BRC10;word;
-        {0x4621, 2, L_FIX}, // "sprmPBrcBar10" pap.brcBar;BRC10;word;
-        {0x4622, 2, L_FIX}, // "sprmPDxaFromText10" pap.dxaFromText;dxa;word;
-        {0x2423, 1, L_FIX}, // "sprmPWr" pap.wr;wr
-        {0x6424, 4, L_FIX}, // "sprmPBrcTop80" pap.brcTop;BRC;long;
-        {0x6425, 4, L_FIX}, // "sprmPBrcLeft80" pap.brcLeft;BRC;long;
-        {0x6426, 4, L_FIX}, // "sprmPBrcBottom80" pap.brcBottom;BRC;long;
-        {0x6427, 4, L_FIX}, // "sprmPBrcRight80" pap.brcRight;BRC;long;
-        {0x6428, 4, L_FIX}, // "sprmPBrcBetween80" pap.brcBetween;BRC;long;
-        {0x6629, 4, L_FIX}, // "sprmPBrcBar80" pap.brcBar;BRC;long;
-        {0x242A, 1, L_FIX}, // "sprmPFNoAutoHyph" pap.fNoAutoHyph;0 or 1;byte;
-        {0x442B, 2, L_FIX}, // "sprmPWHeightAbs" pap.wHeightAbs;w;word;
-        {0x442C, 2, L_FIX}, // "sprmPDcs" pap.dcs;DCS;short;
-        {0x442D, 2, L_FIX}, // "sprmPShd" pap.shd;SHD;word;
-        {0x842E, 2, L_FIX}, // "sprmPDyaFromText" pap.dyaFromText;dya;word;
-        {0x842F, 2, L_FIX}, // "sprmPDxaFromText" pap.dxaFromText;dxa;word;
-        {0x2430, 1, L_FIX}, // "sprmPFLocked" pap.fLocked;0 or 1;byte;
-        {0x2431, 1, L_FIX}, // "sprmPFWidowControl" pap.fWidowControl;0 or 1
-        {0xC632, 0, L_VAR}, // "sprmPRuler" ;;variable length;
-        {0x2433, 1, L_FIX}, // "sprmPFKinsoku" pap.fKinsoku;0 or 1;byte;
-        {0x2434, 1, L_FIX}, // "sprmPFWordWrap" pap.fWordWrap;0 or 1;byte;
-        {0x2435, 1, L_FIX}, // "sprmPFOverflowPunct" pap.fOverflowPunct;0 or 1
-        {0x2436, 1, L_FIX}, // "sprmPFTopLinePunct" pap.fTopLinePunct;0 or 1
-        {0x2437, 1, L_FIX}, // "sprmPFAutoSpaceDE" pap.fAutoSpaceDE;0 or 1
-        {0x2438, 1, L_FIX}, // "sprmPFAutoSpaceDN" pap.fAutoSpaceDN;0 or 1
-        {NS_sprm::LN_PWAlignFont, 2, L_FIX}, // "sprmPWAlignFont" pap.wAlignFont;iFa
-        {0x443A, 2, L_FIX}, // "sprmPFrameTextFlow" pap.fVertical pap.fBackward
+        {0x2416, { 1, L_FIX} }, // "sprmPFInTable" pap.fInTable;0 or 1;byte;
+        {0x2417, { 1, L_FIX} }, // "sprmPFTtp" pap.fTtp;0 or 1;byte;
+        {0x8418, { 2, L_FIX} }, // "sprmPDxaAbs" pap.dxaAbs;dxa;word;
+        {0x8419, { 2, L_FIX} }, // "sprmPDyaAbs" pap.dyaAbs;dya;word;
+        {0x841A, { 2, L_FIX} }, // "sprmPDxaWidth" pap.dxaWidth;dxa;word;
+        {0x261B, { 1, L_FIX} }, // "sprmPPc" pap.pcHorz, pap.pcVert;complex
+        {0x461C, { 2, L_FIX} }, // "sprmPBrcTop10" pap.brcTop;BRC10;word;
+        {0x461D, { 2, L_FIX} }, // "sprmPBrcLeft10" pap.brcLeft;BRC10;word;
+        {0x461E, { 2, L_FIX} }, // "sprmPBrcBottom10" pap.brcBottom;BRC10;word;
+        {0x461F, { 2, L_FIX} }, // "sprmPBrcRight10" pap.brcRight;BRC10;word;
+        {0x4620, { 2, L_FIX} }, // "sprmPBrcBetween10" pap.brcBetween;BRC10;word;
+        {0x4621, { 2, L_FIX} }, // "sprmPBrcBar10" pap.brcBar;BRC10;word;
+        {0x4622, { 2, L_FIX} }, // "sprmPDxaFromText10" pap.dxaFromText;dxa;word;
+        {0x2423, { 1, L_FIX} }, // "sprmPWr" pap.wr;wr
+        {0x6424, { 4, L_FIX} }, // "sprmPBrcTop80" pap.brcTop;BRC;long;
+        {0x6425, { 4, L_FIX} }, // "sprmPBrcLeft80" pap.brcLeft;BRC;long;
+        {0x6426, { 4, L_FIX} }, // "sprmPBrcBottom80" pap.brcBottom;BRC;long;
+        {0x6427, { 4, L_FIX} }, // "sprmPBrcRight80" pap.brcRight;BRC;long;
+        {0x6428, { 4, L_FIX} }, // "sprmPBrcBetween80" pap.brcBetween;BRC;long;
+        {0x6629, { 4, L_FIX} }, // "sprmPBrcBar80" pap.brcBar;BRC;long;
+        {0x242A, { 1, L_FIX} }, // "sprmPFNoAutoHyph" pap.fNoAutoHyph;0 or 1;byte;
+        {0x442B, { 2, L_FIX} }, // "sprmPWHeightAbs" pap.wHeightAbs;w;word;
+        {0x442C, { 2, L_FIX} }, // "sprmPDcs" pap.dcs;DCS;short;
+        {0x442D, { 2, L_FIX} }, // "sprmPShd" pap.shd;SHD;word;
+        {0x842E, { 2, L_FIX} }, // "sprmPDyaFromText" pap.dyaFromText;dya;word;
+        {0x842F, { 2, L_FIX} }, // "sprmPDxaFromText" pap.dxaFromText;dxa;word;
+        {0x2430, { 1, L_FIX} }, // "sprmPFLocked" pap.fLocked;0 or 1;byte;
+        {0x2431, { 1, L_FIX} }, // "sprmPFWidowControl" pap.fWidowControl;0 or 1
+        {0xC632, { 0, L_VAR} }, // "sprmPRuler" ;;variable length;
+        {0x2433, { 1, L_FIX} }, // "sprmPFKinsoku" pap.fKinsoku;0 or 1;byte;
+        {0x2434, { 1, L_FIX} }, // "sprmPFWordWrap" pap.fWordWrap;0 or 1;byte;
+        {0x2435, { 1, L_FIX} }, // "sprmPFOverflowPunct" pap.fOverflowPunct;0 or 1
+        {0x2436, { 1, L_FIX} }, // "sprmPFTopLinePunct" pap.fTopLinePunct;0 or 1
+        {0x2437, { 1, L_FIX} }, // "sprmPFAutoSpaceDE" pap.fAutoSpaceDE;0 or 1
+        {0x2438, { 1, L_FIX} }, // "sprmPFAutoSpaceDN" pap.fAutoSpaceDN;0 or 1
+        {NS_sprm::LN_PWAlignFont, { 2, L_FIX} }, // "sprmPWAlignFont" pap.wAlignFont;iFa
+        {0x443A, { 2, L_FIX} }, // "sprmPFrameTextFlow" pap.fVertical pap.fBackward
                             // pap.fRotateFont;complex
-        {0x243B, 1, L_FIX}, // "sprmPISnapBaseLine" obsolete: not applicable in
+        {0x243B, { 1, L_FIX} }, // "sprmPISnapBaseLine" obsolete: not applicable in
                             // Word97 and later versions;
-        {0xC63E, 0, L_VAR}, // "sprmPAnld" pap.anld;;variable length;
-        {0xC63F, 0, L_VAR}, // "sprmPPropRMark" pap.fPropRMark;complex
-        {0x2640, 1, L_FIX}, // "sprmPOutLvl" pap.lvl;has no effect if pap.istd
+        {0xC63E, { 0, L_VAR} }, // "sprmPAnld" pap.anld;;variable length;
+        {0xC63F, { 0, L_VAR} }, // "sprmPPropRMark" pap.fPropRMark;complex
+        {0x2640, { 1, L_FIX} }, // "sprmPOutLvl" pap.lvl;has no effect if pap.istd
                             // is < 1 or is > 9
-        {0x2441, 1, L_FIX}, // "sprmPFBiDi" ;;byte;
-        {0x2443, 1, L_FIX}, // "sprmPFNumRMIns" pap.fNumRMIns;1 or 0;bit;
-        {0x2444, 1, L_FIX}, // "sprmPCrLf" ;;byte;
-        {0xC645, 0, L_VAR}, // "sprmPNumRM" pap.numrm;;variable length;
-        {0x6645, 4, L_FIX}, // "sprmPHugePapx" fc in the data stream to locate
+        {0x2441, { 1, L_FIX} }, // "sprmPFBiDi" ;;byte;
+        {0x2443, { 1, L_FIX} }, // "sprmPFNumRMIns" pap.fNumRMIns;1 or 0;bit;
+        {0x2444, { 1, L_FIX} }, // "sprmPCrLf" ;;byte;
+        {0xC645, { 0, L_VAR} }, // "sprmPNumRM" pap.numrm;;variable length;
+        {0x6645, { 4, L_FIX} }, // "sprmPHugePapx" fc in the data stream to locate
                             // the huge grpprl
-        {0x6646, 4, L_FIX}, // "sprmPHugePapx" fc in the data stream to locate
+        {0x6646, { 4, L_FIX} }, // "sprmPHugePapx" fc in the data stream to locate
                             // the huge grpprl
-        {0x2447, 1, L_FIX}, // "sprmPFUsePgsuSettings" pap.fUsePgsuSettings;
+        {0x2447, { 1, L_FIX} }, // "sprmPFUsePgsuSettings" pap.fUsePgsuSettings;
                             // 1 or 0
-        {0x2448, 1, L_FIX}, // "sprmPFAdjustRight" pap.fAdjustRight;1 or 0;byte;
-        {0x0800, 1, L_FIX}, // "sprmCFRMarkDel" chp.fRMarkDel;1 or 0;bit;
-        {0x0801, 1, L_FIX}, // "sprmCFRMark" chp.fRMark;1 or 0;bit;
-        {0x0802, 1, L_FIX}, // "sprmCFFldVanish" chp.fFldVanish;1 or 0;bit;
-        {0x6A03, 4, L_FIX}, // "sprmCPicLocation" chp.fcPic and chp.fSpec;
-        {0x4804, 2, L_FIX}, // "sprmCIbstRMark" chp.ibstRMark;index into
+        {0x2448, { 1, L_FIX} }, // "sprmPFAdjustRight" pap.fAdjustRight;1 or 0;byte;
+        {0x0800, { 1, L_FIX} }, // "sprmCFRMarkDel" chp.fRMarkDel;1 or 0;bit;
+        {0x0801, { 1, L_FIX} }, // "sprmCFRMark" chp.fRMark;1 or 0;bit;
+        {0x0802, { 1, L_FIX} }, // "sprmCFFldVanish" chp.fFldVanish;1 or 0;bit;
+        {0x6A03, { 4, L_FIX} }, // "sprmCPicLocation" chp.fcPic and chp.fSpec;
+        {0x4804, { 2, L_FIX} }, // "sprmCIbstRMark" chp.ibstRMark;index into
                             // sttbRMark
-        {0x6805, 4, L_FIX}, // "sprmCDttmRMark" chp.dttmRMark;DTTM;long;
-        {0x0806, 1, L_FIX}, // "sprmCFData" chp.fData;1 or 0;bit;
-        {0x4807, 2, L_FIX}, // "sprmCIdslRMark" chp.idslRMReason;an index to a
+        {0x6805, { 4, L_FIX} }, // "sprmCDttmRMark" chp.dttmRMark;DTTM;long;
+        {0x0806, { 1, L_FIX} }, // "sprmCFData" chp.fData;1 or 0;bit;
+        {0x4807, { 2, L_FIX} }, // "sprmCIdslRMark" chp.idslRMReason;an index to a
                             // table of strings defined in Word 6.0
                             // executables;short;
-        {0xEA08, 1, L_FIX}, // "sprmCChs" chp.fChsDiff and chp.chse;
-        {0x6A09, 4, L_FIX}, // "sprmCSymbol" chp.fSpec, chp.xchSym and
+        {0xEA08, { 1, L_FIX} }, // "sprmCChs" chp.fChsDiff and chp.chse;
+        {0x6A09, { 4, L_FIX} }, // "sprmCSymbol" chp.fSpec, chp.xchSym and
                             // chp.ftcSym
-        {0x080A, 1, L_FIX}, // "sprmCFOle2" chp.fOle2;1 or 0;bit;
-        {0x480B, 0, L_FIX}, // "sprmCIdCharType" obsolete: not applicable in
+        {0x080A, { 1, L_FIX} }, // "sprmCFOle2" chp.fOle2;1 or 0;bit;
+        {0x480B, { 0, L_FIX} }, // "sprmCIdCharType" obsolete: not applicable in
                             // Word97 and later versions;;;
-        {0x2A0C, 1, L_FIX}, // "sprmCHighlight" chp.fHighlight,
+        {0x2A0C, { 1, L_FIX} }, // "sprmCHighlight" chp.fHighlight,
                             // chp.icoHighlight;ico (fHighlight is set to 1 iff
                             // ico is not 0)
-        {0x680E, 4, L_FIX}, // "sprmCObjLocation" chp.fcObj;FC;long;
-        {0x2A10, 0, L_FIX}, // "sprmCFFtcAsciSymb" ;;;
-        {0x4A30, 2, L_FIX}, // "sprmCIstd" chp.istd;istd, see stylesheet def
-        {0xCA31, 0, L_VAR}, // "sprmCIstdPermute" chp.istd;permutation vector
-        {0x2A32, 0, L_VAR}, // "sprmCDefault" whole CHP;none;variable length;
-        {0x2A33, 0, L_FIX}, // "sprmCPlain" whole CHP;none;0;
-        {0x2A34, 1, L_FIX}, // "sprmCKcd" ;;;
-        {0x0835, 1, L_FIX}, // "sprmCFBold" chp.fBold;0,1, 128, or 129
-        {0x0836, 1, L_FIX}, // "sprmCFItalic" chp.fItalic;0,1, 128, or 129
-        {0x0837, 1, L_FIX}, // "sprmCFStrike" chp.fStrike;0,1, 128, or 129
-        {0x0838, 1, L_FIX}, // "sprmCFOutline" chp.fOutline;0,1, 128, or 129
-        {0x0839, 1, L_FIX}, // "sprmCFShadow" chp.fShadow;0,1, 128, or 129
-        {0x083A, 1, L_FIX}, // "sprmCFSmallCaps" chp.fSmallCaps;0,1, 128, or 129
-        {0x083B, 1, L_FIX}, // "sprmCFCaps" chp.fCaps;0,1, 128, or 129
-        {0x083C, 1, L_FIX}, // "sprmCFVanish" chp.fVanish;0,1, 128, or 129
-        {0x4A3D, 2, L_FIX}, // "sprmCFtcDefault" ;ftc, only used internally
-        {0x2A3E, 1, L_FIX}, // "sprmCKul" chp.kul;kul;byte;
-        {0xEA3F, 3, L_FIX}, // "sprmCSizePos" chp.hps, chp.hpsPos;3 bytes;
-        {0x8840, 2, L_FIX}, // "sprmCDxaSpace" chp.dxaSpace;dxa;word;
-        {0x4A41, 2, L_FIX}, // "sprmCLid" ;only used internally never stored
-        {0x2A42, 1, L_FIX}, // "sprmCIco" chp.ico;ico;byte;
-        {0x4A43, 2, L_FIX}, // "sprmCHps" chp.hps;hps
-        {0x2A44, 1, L_FIX}, // "sprmCHpsInc" chp.hps;
-        {0x4845, 2, L_FIX}, // "sprmCHpsPos" chp.hpsPos;hps;short; (doc wrong)
-        {0x2A46, 1, L_FIX}, // "sprmCHpsPosAdj" chp.hpsPos;hps
-        {0xCA47, 0, L_VAR}, // "sprmCMajority" chp.fBold, chp.fItalic,
+        {0x680E, { 4, L_FIX} }, // "sprmCObjLocation" chp.fcObj;FC;long;
+        {0x2A10, { 0, L_FIX} }, // "sprmCFFtcAsciSymb" ;;;
+        {0x4A30, { 2, L_FIX} }, // "sprmCIstd" chp.istd;istd, see stylesheet def
+        {0xCA31, { 0, L_VAR} }, // "sprmCIstdPermute" chp.istd;permutation vector
+        {0x2A32, { 0, L_VAR} }, // "sprmCDefault" whole CHP;none;variable length;
+        {0x2A33, { 0, L_FIX} }, // "sprmCPlain" whole CHP;none;0;
+        {0x2A34, { 1, L_FIX} }, // "sprmCKcd" ;;;
+        {0x0835, { 1, L_FIX} }, // "sprmCFBold" chp.fBold;0,1, 128, or 129
+        {0x0836, { 1, L_FIX} }, // "sprmCFItalic" chp.fItalic;0,1, 128, or 129
+        {0x0837, { 1, L_FIX} }, // "sprmCFStrike" chp.fStrike;0,1, 128, or 129
+        {0x0838, { 1, L_FIX} }, // "sprmCFOutline" chp.fOutline;0,1, 128, or 129
+        {0x0839, { 1, L_FIX} }, // "sprmCFShadow" chp.fShadow;0,1, 128, or 129
+        {0x083A, { 1, L_FIX} }, // "sprmCFSmallCaps" chp.fSmallCaps;0,1, 128, or 129
+        {0x083B, { 1, L_FIX} }, // "sprmCFCaps" chp.fCaps;0,1, 128, or 129
+        {0x083C, { 1, L_FIX} }, // "sprmCFVanish" chp.fVanish;0,1, 128, or 129
+        {0x4A3D, { 2, L_FIX} }, // "sprmCFtcDefault" ;ftc, only used internally
+        {0x2A3E, { 1, L_FIX} }, // "sprmCKul" chp.kul;kul;byte;
+        {0xEA3F, { 3, L_FIX} }, // "sprmCSizePos" chp.hps, chp.hpsPos;3 bytes;
+        {0x8840, { 2, L_FIX} }, // "sprmCDxaSpace" chp.dxaSpace;dxa;word;
+        {0x4A41, { 2, L_FIX} }, // "sprmCLid" ;only used internally never stored
+        {0x2A42, { 1, L_FIX} }, // "sprmCIco" chp.ico;ico;byte;
+        {0x4A43, { 2, L_FIX} }, // "sprmCHps" chp.hps;hps
+        {0x2A44, { 1, L_FIX} }, // "sprmCHpsInc" chp.hps;
+        {0x4845, { 2, L_FIX} }, // "sprmCHpsPos" chp.hpsPos;hps;short; (doc wrong)
+        {0x2A46, { 1, L_FIX} }, // "sprmCHpsPosAdj" chp.hpsPos;hps
+        {0xCA47, { 0, L_VAR} }, // "sprmCMajority" chp.fBold, chp.fItalic,
                             // chp.fSmallCaps, chp.fVanish, chp.fStrike,
                             // chp.fCaps, chp.rgftc, chp.hps, chp.hpsPos,
                             // chp.kul, chp.dxaSpace, chp.ico,
                             // chp.rglid;complex;variable length, length byte
                             // plus size of following grpprl;
-        {0x2A48, 1, L_FIX}, // "sprmCIss" chp.iss;iss;byte;
-        {0xCA49, 0, L_VAR}, // "sprmCHpsNew50" chp.hps;hps;variable width
-        {0xCA4A, 0, L_VAR}, // "sprmCHpsInc1" chp.hps;complex
-        {0x484B, 2, L_FIX}, // "sprmCHpsKern" chp.hpsKern;hps;short;
-        {0xCA4C, 2, L_FIX}, // "sprmCMajority50" chp.fBold, chp.fItalic,
+        {0x2A48, { 1, L_FIX} }, // "sprmCIss" chp.iss;iss;byte;
+        {0xCA49, { 0, L_VAR} }, // "sprmCHpsNew50" chp.hps;hps;variable width
+        {0xCA4A, { 0, L_VAR} }, // "sprmCHpsInc1" chp.hps;complex
+        {0x484B, { 2, L_FIX} }, // "sprmCHpsKern" chp.hpsKern;hps;short;
+        {0xCA4C, { 2, L_FIX} }, // "sprmCMajority50" chp.fBold, chp.fItalic,
                             // chp.fSmallCaps, chp.fVanish, chp.fStrike,
                             // chp.fCaps, chp.ftc, chp.hps, chp.hpsPos, chp.kul,
                             // chp.dxaSpace, chp.ico,;complex
-        {0x4A4D, 2, L_FIX}, // "sprmCHpsMul" chp.hps;percentage to grow hps
-        {0x484E, 2, L_FIX}, // "sprmCYsri" chp.ysri;ysri;short;
-        {0x4A4F, 2, L_FIX}, // "sprmCRgFtc0" chp.rgftc[0];ftc for ASCII text
-        {0x4A50, 2, L_FIX}, // "sprmCRgFtc1" chp.rgftc[1];ftc for Far East text
-        {0x4A51, 2, L_FIX}, // "sprmCRgFtc2" chp.rgftc[2];ftc for non-FE text
-        {0x4852, 2, L_FIX}, // "sprmCCharScale"
-        {0x2A53, 1, L_FIX}, // "sprmCFDStrike" chp.fDStrike;;byte;
-        {0x0854, 1, L_FIX}, // "sprmCFImprint" chp.fImprint;1 or 0;bit;
-        {0x0855, 1, L_FIX}, // "sprmCFSpec" chp.fSpec ;1 or 0;bit;
-        {0x0856, 1, L_FIX}, // "sprmCFObj" chp.fObj;1 or 0;bit;
-        {0xCA57, 0, L_VAR}, // "sprmCPropRMark" chp.fPropRMark,
+        {0x4A4D, { 2, L_FIX} }, // "sprmCHpsMul" chp.hps;percentage to grow hps
+        {0x484E, { 2, L_FIX} }, // "sprmCYsri" chp.ysri;ysri;short;
+        {0x4A4F, { 2, L_FIX} }, // "sprmCRgFtc0" chp.rgftc[0];ftc for ASCII text
+        {0x4A50, { 2, L_FIX} }, // "sprmCRgFtc1" chp.rgftc[1];ftc for Far East text
+        {0x4A51, { 2, L_FIX} }, // "sprmCRgFtc2" chp.rgftc[2];ftc for non-FE text
+        {0x4852, { 2, L_FIX} }, // "sprmCCharScale"
+        {0x2A53, { 1, L_FIX} }, // "sprmCFDStrike" chp.fDStrike;;byte;
+        {0x0854, { 1, L_FIX} }, // "sprmCFImprint" chp.fImprint;1 or 0;bit;
+        {0x0855, { 1, L_FIX} }, // "sprmCFSpec" chp.fSpec ;1 or 0;bit;
+        {0x0856, { 1, L_FIX} }, // "sprmCFObj" chp.fObj;1 or 0;bit;
+        {0xCA57, { 0, L_VAR} }, // "sprmCPropRMark" chp.fPropRMark,
                             // chp.ibstPropRMark, chp.dttmPropRMark;Complex
-        {0x0858, 1, L_FIX}, // "sprmCFEmboss" chp.fEmboss;1 or 0;bit;
-        {0x2859, 1, L_FIX}, // "sprmCSfxText" chp.sfxtText;text animation;byte;
-        {0x085A, 1, L_FIX}, // "sprmCFBiDi" ;;;
-        {0x085B, 1, L_FIX}, // "sprmCFDiacColor" ;;;
-        {0x085C, 1, L_FIX}, // "sprmCFBoldBi" ;;;
-        {0x085D, 1, L_FIX}, // "sprmCFItalicBi" ;;;
-        {0x4A5E, 2, L_FIX},
-        {0x485F, 2, L_FIX}, // "sprmCLidBi" ;;;
-        {0x4A60, 1, L_FIX}, // "sprmCIcoBi" ;;;
-        {0x4A61, 2, L_FIX}, // "sprmCHpsBi" ;;;
-        {0xCA62, 0, L_VAR}, // "sprmCDispFldRMark" chp.fDispFldRMark,
+        {0x0858, { 1, L_FIX} }, // "sprmCFEmboss" chp.fEmboss;1 or 0;bit;
+        {0x2859, { 1, L_FIX} }, // "sprmCSfxText" chp.sfxtText;text animation;byte;
+        {0x085A, { 1, L_FIX} }, // "sprmCFBiDi" ;;;
+        {0x085B, { 1, L_FIX} }, // "sprmCFDiacColor" ;;;
+        {0x085C, { 1, L_FIX} }, // "sprmCFBoldBi" ;;;
+        {0x085D, { 1, L_FIX} }, // "sprmCFItalicBi" ;;;
+        {0x4A5E, { 2, L_FIX} },
+        {0x485F, { 2, L_FIX} }, // "sprmCLidBi" ;;;
+        {0x4A60, { 1, L_FIX} }, // "sprmCIcoBi" ;;;
+        {0x4A61, { 2, L_FIX} }, // "sprmCHpsBi" ;;;
+        {0xCA62, { 0, L_VAR} }, // "sprmCDispFldRMark" chp.fDispFldRMark,
                             // chp.ibstDispFldRMark, chp.dttmDispFldRMark ;
-        {0x4863, 2, L_FIX}, // "sprmCIbstRMarkDel" chp.ibstRMarkDel;index into
+        {0x4863, { 2, L_FIX} }, // "sprmCIbstRMarkDel" chp.ibstRMarkDel;index into
                             // sttbRMark;short;
-        {NS_sprm::LN_CDttmRMarkDel, 4, L_FIX}, // chp.dttmRMarkDel;DTTM;long;
-        {0x6865, 4, L_FIX}, // "sprmCBrc80" chp.brc;BRC;long;
-        {0x4866, 2, L_FIX}, // "sprmCShd80" chp.shd;SHD;short;
-        {0x4867, 2, L_FIX}, // "sprmCIdslRMarkDel" chp.idslRMReasonDel;an index
+        {NS_sprm::LN_CDttmRMarkDel, { 4, L_FIX} }, // chp.dttmRMarkDel;DTTM;long;
+        {0x6865, { 4, L_FIX} }, // "sprmCBrc80" chp.brc;BRC;long;
+        {0x4866, { 2, L_FIX} }, // "sprmCShd80" chp.shd;SHD;short;
+        {0x4867, { 2, L_FIX} }, // "sprmCIdslRMarkDel" chp.idslRMReasonDel;an index
                             // to a table of strings defined in Word 6.0
                             // executables;short;
-        {0x0868, 1, L_FIX}, // "sprmCFUsePgsuSettings"
+        {0x0868, { 1, L_FIX} }, // "sprmCFUsePgsuSettings"
                             // chp.fUsePgsuSettings;1 or 0
-        {0x486B, 2, L_FIX}, // "sprmCCpg" ;;word;
-        {0x486D, 2, L_FIX}, // "sprmCRgLid0_80" chp.rglid[0];LID: for non-FE text
-        {0x486E, 2, L_FIX}, // "sprmCRgLid1_80" chp.rglid[1];LID: for Far East text
-        {0x286F, 1, L_FIX}, // "sprmCIdctHint" chp.idctHint;IDCT:
-        {0x2E00, 1, L_FIX}, // "sprmPicBrcl" pic.brcl;brcl (see PIC definition)
-        {0xCE01, 0, L_VAR}, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
+        {0x486B, { 2, L_FIX} }, // "sprmCCpg" ;;word;
+        {0x486D, { 2, L_FIX} }, // "sprmCRgLid0_80" chp.rglid[0];LID: for non-FE text
+        {0x486E, { 2, L_FIX} }, // "sprmCRgLid1_80" chp.rglid[1];LID: for Far East text
+        {0x286F, { 1, L_FIX} }, // "sprmCIdctHint" chp.idctHint;IDCT:
+        {0x2E00, { 1, L_FIX} }, // "sprmPicBrcl" pic.brcl;brcl (see PIC definition)
+        {0xCE01, { 0, L_VAR} }, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
                             // pic.dyaCropTop pic.dxaCropRight,
                             // pic.dyaCropBottom;Complex
-        {0x6C02, 4, L_FIX}, // "sprmPicBrcTop80" pic.brcTop;BRC;long;
-        {0x6C03, 4, L_FIX}, // "sprmPicBrcLeft80" pic.brcLeft;BRC;long;
-        {0x6C04, 4, L_FIX}, // "sprmPicBrcBottom80" pic.brcBottom;BRC;long;
-        {0x6C05, 4, L_FIX}, // "sprmPicBrcRight80" pic.brcRight;BRC;long;
-        {0x3000, 1, L_FIX}, // "sprmScnsPgn" sep.cnsPgn;cns;byte;
-        {0x3001, 1, L_FIX}, // "sprmSiHeadingPgn" sep.iHeadingPgn;heading number
+        {0x6C02, { 4, L_FIX} }, // "sprmPicBrcTop80" pic.brcTop;BRC;long;
+        {0x6C03, { 4, L_FIX} }, // "sprmPicBrcLeft80" pic.brcLeft;BRC;long;
+        {0x6C04, { 4, L_FIX} }, // "sprmPicBrcBottom80" pic.brcBottom;BRC;long;
+        {0x6C05, { 4, L_FIX} }, // "sprmPicBrcRight80" pic.brcRight;BRC;long;
+        {0x3000, { 1, L_FIX} }, // "sprmScnsPgn" sep.cnsPgn;cns;byte;
+        {0x3001, { 1, L_FIX} }, // "sprmSiHeadingPgn" sep.iHeadingPgn;heading number
                             // level;byte;
-        {0xD202, 0, L_VAR}, // "sprmSOlstAnm" sep.olstAnm;OLST;variable length;
-        {0xF203, 3, L_FIX}, // "sprmSDxaColWidth" sep.rgdxaColWidthSpacing;
-        {0xF204, 3, L_FIX}, // "sprmSDxaColSpacing" sep.rgdxaColWidthSpacing;
+        {0xD202, { 0, L_VAR} }, // "sprmSOlstAnm" sep.olstAnm;OLST;variable length;
+        {0xF203, { 3, L_FIX} }, // "sprmSDxaColWidth" sep.rgdxaColWidthSpacing;
+        {0xF204, { 3, L_FIX} }, // "sprmSDxaColSpacing" sep.rgdxaColWidthSpacing;
                             // complex
-        {0x3005, 1, L_FIX}, // "sprmSFEvenlySpaced" sep.fEvenlySpaced;1 or 0
-        {0x3006, 1, L_FIX}, // "sprmSFProtected" sep.fUnlocked;1 or 0;byte;
-        {0x5007, 2, L_FIX}, // "sprmSDmBinFirst" sep.dmBinFirst;;word;
-        {0x5008, 2, L_FIX}, // "sprmSDmBinOther" sep.dmBinOther;;word;
-        {0x3009, 1, L_FIX}, // "sprmSBkc" sep.bkc;bkc;byte;
-        {0x300A, 1, L_FIX}, // "sprmSFTitlePage" sep.fTitlePage;0 or 1;byte;
-        {0x500B, 2, L_FIX}, // "sprmSCcolumns" sep.ccolM1;# of cols - 1;word;
-        {0x900C, 2, L_FIX}, // "sprmSDxaColumns" sep.dxaColumns;dxa;word;
-        {0x300D, 1, L_FIX}, // "sprmSFAutoPgn" sep.fAutoPgn;obsolete;byte;
-        {0x300E, 1, L_FIX}, // "sprmSNfcPgn" sep.nfcPgn;nfc;byte;
-        {0xB00F, 2, L_FIX}, // "sprmSDyaPgn" sep.dyaPgn;dya;short;
-        {0xB010, 2, L_FIX}, // "sprmSDxaPgn" sep.dxaPgn;dya;short;
-        {0x3011, 1, L_FIX}, // "sprmSFPgnRestart" sep.fPgnRestart;0 or 1;byte;
-        {0x3012, 1, L_FIX}, // "sprmSFEndnote" sep.fEndnote;0 or 1;byte;
-        {0x3013, 1, L_FIX}, // "sprmSLnc" sep.lnc;lnc;byte;
-        {0x3014, 1, L_FIX}, // "sprmSGprfIhdt" sep.grpfIhdt;grpfihdt
-        {0x5015, 2, L_FIX}, // "sprmSNLnnMod" sep.nLnnMod;non-neg int.;word;
-        {0x9016, 2, L_FIX}, // "sprmSDxaLnn" sep.dxaLnn;dxa;word;
-        {0xB017, 2, L_FIX}, // "sprmSDyaHdrTop" sep.dyaHdrTop;dya;word;
-        {0xB018, 2, L_FIX}, // "sprmSDyaHdrBottom" sep.dyaHdrBottom;dya;word;
-        {0x3019, 1, L_FIX}, // "sprmSLBetween" sep.fLBetween;0 or 1;byte;
-        {0x301A, 1, L_FIX}, // "sprmSVjc" sep.vjc;vjc;byte;
-        {0x501B, 2, L_FIX}, // "sprmSLnnMin" sep.lnnMin;lnn;word;
-        {0x501C, 2, L_FIX}, // "sprmSPgnStart" sep.pgnStart;pgn;word;
-        {0x301D, 1, L_FIX}, // "sprmSBOrientation" sep.dmOrientPage;dm;byte;
-        {0x301E, 1, L_FIX}, // "sprmSBCustomize" ;;;
-        {0xB01F, 2, L_FIX}, // "sprmSXaPage" sep.xaPage;xa;word;
-        {0xB020, 2, L_FIX}, // "sprmSYaPage" sep.yaPage;ya;word;
-        {0xB021, 2, L_FIX}, // "sprmSDxaLeft" sep.dxaLeft;dxa;word;
-        {0xB022, 2, L_FIX}, // "sprmSDxaRight" sep.dxaRight;dxa;word;
-        {0x9023, 2, L_FIX}, // "sprmSDyaTop" sep.dyaTop;dya;word;
-        {0x9024, 2, L_FIX}, // "sprmSDyaBottom" sep.dyaBottom;dya;word;
-        {0xB025, 2, L_FIX}, // "sprmSDzaGutter" sep.dzaGutter;dza;word;
-        {0x5026, 2, L_FIX}, // "sprmSDmPaperReq" sep.dmPaperReq;dm;word;
-        {0xD227, 0, L_VAR}, // "sprmSPropRMark" sep.fPropRMark,
+        {0x3005, { 1, L_FIX} }, // "sprmSFEvenlySpaced" sep.fEvenlySpaced;1 or 0
+        {0x3006, { 1, L_FIX} }, // "sprmSFProtected" sep.fUnlocked;1 or 0;byte;
+        {0x5007, { 2, L_FIX} }, // "sprmSDmBinFirst" sep.dmBinFirst;;word;
+        {0x5008, { 2, L_FIX} }, // "sprmSDmBinOther" sep.dmBinOther;;word;
+        {0x3009, { 1, L_FIX} }, // "sprmSBkc" sep.bkc;bkc;byte;
+        {0x300A, { 1, L_FIX} }, // "sprmSFTitlePage" sep.fTitlePage;0 or 1;byte;
+        {0x500B, { 2, L_FIX} }, // "sprmSCcolumns" sep.ccolM1;# of cols - 1;word;
+        {0x900C, { 2, L_FIX} }, // "sprmSDxaColumns" sep.dxaColumns;dxa;word;
+        {0x300D, { 1, L_FIX} }, // "sprmSFAutoPgn" sep.fAutoPgn;obsolete;byte;
+        {0x300E, { 1, L_FIX} }, // "sprmSNfcPgn" sep.nfcPgn;nfc;byte;
+        {0xB00F, { 2, L_FIX} }, // "sprmSDyaPgn" sep.dyaPgn;dya;short;
+        {0xB010, { 2, L_FIX} }, // "sprmSDxaPgn" sep.dxaPgn;dya;short;
+        {0x3011, { 1, L_FIX} }, // "sprmSFPgnRestart" sep.fPgnRestart;0 or 1;byte;
+        {0x3012, { 1, L_FIX} }, // "sprmSFEndnote" sep.fEndnote;0 or 1;byte;
+        {0x3013, { 1, L_FIX} }, // "sprmSLnc" sep.lnc;lnc;byte;
+        {0x3014, { 1, L_FIX} }, // "sprmSGprfIhdt" sep.grpfIhdt;grpfihdt
+        {0x5015, { 2, L_FIX} }, // "sprmSNLnnMod" sep.nLnnMod;non-neg int.;word;
+        {0x9016, { 2, L_FIX} }, // "sprmSDxaLnn" sep.dxaLnn;dxa;word;
+        {0xB017, { 2, L_FIX} }, // "sprmSDyaHdrTop" sep.dyaHdrTop;dya;word;
+        {0xB018, { 2, L_FIX} }, // "sprmSDyaHdrBottom" sep.dyaHdrBottom;dya;word;
+        {0x3019, { 1, L_FIX} }, // "sprmSLBetween" sep.fLBetween;0 or 1;byte;
+        {0x301A, { 1, L_FIX} }, // "sprmSVjc" sep.vjc;vjc;byte;
+        {0x501B, { 2, L_FIX} }, // "sprmSLnnMin" sep.lnnMin;lnn;word;
+        {0x501C, { 2, L_FIX} }, // "sprmSPgnStart" sep.pgnStart;pgn;word;
+        {0x301D, { 1, L_FIX} }, // "sprmSBOrientation" sep.dmOrientPage;dm;byte;
+        {0x301E, { 1, L_FIX} }, // "sprmSBCustomize" ;;;
+        {0xB01F, { 2, L_FIX} }, // "sprmSXaPage" sep.xaPage;xa;word;
+        {0xB020, { 2, L_FIX} }, // "sprmSYaPage" sep.yaPage;ya;word;
+        {0xB021, { 2, L_FIX} }, // "sprmSDxaLeft" sep.dxaLeft;dxa;word;
+        {0xB022, { 2, L_FIX} }, // "sprmSDxaRight" sep.dxaRight;dxa;word;
+        {0x9023, { 2, L_FIX} }, // "sprmSDyaTop" sep.dyaTop;dya;word;
+        {0x9024, { 2, L_FIX} }, // "sprmSDyaBottom" sep.dyaBottom;dya;word;
+        {0xB025, { 2, L_FIX} }, // "sprmSDzaGutter" sep.dzaGutter;dza;word;
+        {0x5026, { 2, L_FIX} }, // "sprmSDmPaperReq" sep.dmPaperReq;dm;word;
+        {0xD227, { 0, L_VAR} }, // "sprmSPropRMark" sep.fPropRMark,
                             // sep.ibstPropRMark, sep.dttmPropRMark ;complex
-        {0x3228, 1, L_FIX}, // "sprmSFBiDi" ;;;
-        {0x3229, 1, L_FIX}, // "sprmSFFacingCol" ;;;
-        {0x322A, 1, L_FIX}, // "sprmSFRTLGutter", set to one if gutter is on
+        {0x3228, { 1, L_FIX} }, // "sprmSFBiDi" ;;;
+        {0x3229, { 1, L_FIX} }, // "sprmSFFacingCol" ;;;
+        {0x322A, { 1, L_FIX} }, // "sprmSFRTLGutter", set to one if gutter is on
                             // right
-        {0x702B, 4, L_FIX}, // "sprmSBrcTop80" sep.brcTop;BRC;long;
-        {0x702C, 4, L_FIX}, // "sprmSBrcLeft80" sep.brcLeft;BRC;long;
-        {0x702D, 4, L_FIX}, // "sprmSBrcBottom80" sep.brcBottom;BRC;long;
-        {0x702E, 4, L_FIX}, // "sprmSBrcRight80" sep.brcRight;BRC;long;
-        {0x522F, 2, L_FIX}, // "sprmSPgbProp" sep.pgbProp;;word;
-        {0x7030, 4, L_FIX}, // "sprmSDxtCharSpace" sep.dxtCharSpace;dxt;long;
-        {0x9031, 2, L_FIX}, // "sprmSDyaLinePitch"
+        {0x702B, { 4, L_FIX} }, // "sprmSBrcTop80" sep.brcTop;BRC;long;
+        {0x702C, { 4, L_FIX} }, // "sprmSBrcLeft80" sep.brcLeft;BRC;long;
+        {0x702D, { 4, L_FIX} }, // "sprmSBrcBottom80" sep.brcBottom;BRC;long;
+        {0x702E, { 4, L_FIX} }, // "sprmSBrcRight80" sep.brcRight;BRC;long;
+        {0x522F, { 2, L_FIX} }, // "sprmSPgbProp" sep.pgbProp;;word;
+        {0x7030, { 4, L_FIX} }, // "sprmSDxtCharSpace" sep.dxtCharSpace;dxt;long;
+        {0x9031, { 2, L_FIX} }, // "sprmSDyaLinePitch"
                             // sep.dyaLinePitch;dya; WRONG:long; RIGHT:short; !
-        {0x5032, 2, L_FIX}, // "sprmSClm" ;;;
-        {0x5033, 2, L_FIX}, // "sprmSTextFlow" sep.wTextFlow;complex
-        {0x5400, 2, L_FIX}, // "sprmTJc90" tap.jc;jc;word (low order byte is
+        {0x5032, { 2, L_FIX} }, // "sprmSClm" ;;;
+        {0x5033, { 2, L_FIX} }, // "sprmSTextFlow" sep.wTextFlow;complex
+        {0x5400, { 2, L_FIX} }, // "sprmTJc90" tap.jc;jc;word (low order byte is
                             // significant);
-        {0x9601, 2, L_FIX}, // "sprmTDxaLeft" tap.rgdxaCenter
-        {0x9602, 2, L_FIX}, // "sprmTDxaGapHalf" tap.dxaGapHalf,
+        {0x9601, { 2, L_FIX} }, // "sprmTDxaLeft" tap.rgdxaCenter
+        {0x9602, { 2, L_FIX} }, // "sprmTDxaGapHalf" tap.dxaGapHalf,
                             // tap.rgdxaCenter
-        {0x3403, 1, L_FIX}, // "sprmTFCantSplit" tap.fCantSplit;1 or 0;byte;
-        {0x3404, 1, L_FIX}, // "sprmTTableHeader" tap.fTableHeader;1 or 0;byte;
-        {0x3466, 1, L_FIX}, // "sprmTFCantSplit90" tap.fCantSplit90;1 or 0;byte;
-        {0xD605, 0, L_VAR}, // "sprmTTableBorders80" tap.rgbrcTable;complex
-        {0xD606, 0, L_VAR}, // "sprmTDefTable10" tap.rgdxaCenter,
+        {0x3403, { 1, L_FIX} }, // "sprmTFCantSplit" tap.fCantSplit;1 or 0;byte;
+        {0x3404, { 1, L_FIX} }, // "sprmTTableHeader" tap.fTableHeader;1 or 0;byte;
+        {0x3466, { 1, L_FIX} }, // "sprmTFCantSplit90" tap.fCantSplit90;1 or 0;byte;
+        {0xD605, { 0, L_VAR} }, // "sprmTTableBorders80" tap.rgbrcTable;complex
+        {0xD606, { 0, L_VAR} }, // "sprmTDefTable10" tap.rgdxaCenter,
                             // tap.rgtc;complex
-        {0x9407, 2, L_FIX}, // "sprmTDyaRowHeight" tap.dyaRowHeight;dya;word;
-        {0xD608, 0, L_VAR}, // "sprmTDefTable" tap.rgtc;complex
-        {0xD609, 0, L_VAR}, // "sprmTDefTableShd80" tap.rgshd;complex
-        {0x740A, 4, L_FIX}, // "sprmTTlp" tap.tlp;TLP;4 bytes;
-        {0x560B, 2, L_FIX}, // "sprmTFBiDi" ;;;
-        {0x740C, 1, L_FIX}, // "sprmTHTMLProps" ;;;
-        {0xD620, 0, L_VAR}, // "sprmTSetBrc80" tap.rgtc[].rgbrc;complex
-        {0x7621, 4, L_FIX}, // "sprmTInsert" tap.rgdxaCenter, tap.rgtc;complex
-        {0x5622, 2, L_FIX}, // "sprmTDelete" tap.rgdxaCenter, tap.rgtc;complex
-        {0x7623, 4, L_FIX}, // "sprmTDxaCol" tap.rgdxaCenter;complex
-        {0x5624, 0, L_VAR}, // "sprmTMerge" tap.fFirstMerged, tap.fMerged;
-        {0x5625, 0, L_VAR}, // "sprmTSplit" tap.fFirstMerged, tap.fMerged;
-        {0xD626, 0, L_VAR}, // "sprmTSetBrc10" tap.rgtc[].rgbrc;complex
-        {0x7627, 0, L_VAR}, // "sprmTSetShd80" tap.rgshd;complex
-        {0x7628, 0, L_VAR}, // "sprmTSetShdOdd80" tap.rgshd;complex
-        {0x7629, 4, L_FIX}, // "sprmTTextFlow" tap.rgtc[].fVerticaltap,
+        {0x9407, { 2, L_FIX} }, // "sprmTDyaRowHeight" tap.dyaRowHeight;dya;word;
+        {0xD608, { 0, L_VAR} }, // "sprmTDefTable" tap.rgtc;complex
+        {0xD609, { 0, L_VAR} }, // "sprmTDefTableShd80" tap.rgshd;complex
+        {0x740A, { 4, L_FIX} }, // "sprmTTlp" tap.tlp;TLP;4 bytes;
+        {0x560B, { 2, L_FIX} }, // "sprmTFBiDi" ;;;
+        {0x740C, { 1, L_FIX} }, // "sprmTHTMLProps" ;;;
+        {0xD620, { 0, L_VAR} }, // "sprmTSetBrc80" tap.rgtc[].rgbrc;complex
+        {0x7621, { 4, L_FIX} }, // "sprmTInsert" tap.rgdxaCenter, tap.rgtc;complex
+        {0x5622, { 2, L_FIX} }, // "sprmTDelete" tap.rgdxaCenter, tap.rgtc;complex
+        {0x7623, { 4, L_FIX} }, // "sprmTDxaCol" tap.rgdxaCenter;complex
+        {0x5624, { 0, L_VAR} }, // "sprmTMerge" tap.fFirstMerged, tap.fMerged;
+        {0x5625, { 0, L_VAR} }, // "sprmTSplit" tap.fFirstMerged, tap.fMerged;
+        {0xD626, { 0, L_VAR} }, // "sprmTSetBrc10" tap.rgtc[].rgbrc;complex
+        {0x7627, { 0, L_VAR} }, // "sprmTSetShd80" tap.rgshd;complex
+        {0x7628, { 0, L_VAR} }, // "sprmTSetShdOdd80" tap.rgshd;complex
+        {0x7629, { 4, L_FIX} }, // "sprmTTextFlow" tap.rgtc[].fVerticaltap,
                             // rgtc[].fBackwardtap, rgtc[].fRotateFont;0 or 10
                             // or 10 or 1;word;
-        {0xD62A, 1, L_FIX}, // "sprmTDiagLine" ;;;
-        {0xD62B, 0, L_VAR}, // "sprmTVertMerge" tap.rgtc[].vertMerge
-        {0xD62C, 0, L_VAR}, // "sprmTVertAlign" tap.rgtc[].vertAlign
-        {NS_sprm::LN_CFELayout, 0, L_VAR},
-        {0x6649, 4, L_FIX}, // undocumented
-        {0xF614, 3, L_FIX}, // undocumented
-        {0xD612, 0, L_VAR}, // "sprmTDefTableShd"
-        {0xD613, 0, L_VAR}, // "sprmTTableBorders"
-        {0xD61A, 0, L_VAR}, // undocumented
-        {0xD61B, 0, L_VAR}, // undocumented
-        {0xD61C, 0, L_VAR}, // undocumented
-        {0xD61D, 0, L_VAR}, // undocumented
-        {0xD632, 0, L_VAR}, // undocumented
-        {0xD634, 0, L_VAR}, // undocumented
-        {0xD238, 0, L_VAR}, // undocumented sep
-        {0xC64E, 0, L_VAR}, // "sprmPBrcTop"
-        {0xC64F, 0, L_VAR}, // "sprmPBrcLeft"
-        {0xC650, 0, L_VAR}, // "sprmPBrcBottom"
-        {0xC651, 0, L_VAR}, // "sprmPBrcRight"
-        {0xC652, 0, L_VAR}, // "sprmPBrcBetween"
-        {0xF661, 3, L_FIX}, // undocumented
-        {0x4873, 2, L_FIX}, // "sprmCRgLid0" chp.rglid[0];LID: for non-FE text
-        {0x4874, 2, L_FIX}, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
-        {0x6463, 4, L_FIX}, // undocumented
-        {0x2461, 1, L_FIX}, // undoc, must be asian version of "sprmPJc"
-        {0x845D, 2, L_FIX}, // undoc, must be asian version of "sprmPDxaRight"
-        {0x845E, 2, L_FIX}, // undoc, must be asian version of "sprmPDxaLeft"
-        {0x8460, 2, L_FIX}, // undoc, must be asian version of "sprmPDxaLeft1"
-        {0x3615, 1, L_FIX}, // undocumented
-        {0x360D, 1, L_FIX}, // undocumented
-        {0x703A, 4, L_FIX}, // undocumented, sep, perhaps related to textgrids ?
-        {0x303B, 1, L_FIX}, // undocumented, sep
-        {0x244B, 1, L_FIX}, // undocumented, subtable "sprmPFInTable" equiv ?
-        {0x244C, 1, L_FIX}, // undocumented, subtable "sprmPFTtp" equiv ?
-        {0x940E, 2, L_FIX}, // undocumented
-        {0x940F, 2, L_FIX}, // undocumented
-        {0x9410, 2, L_FIX}, // undocumented
-        {0x6815, 4, L_FIX}, // undocumented
-        {0x6816, 4, L_FIX}, // undocumented
-        {NS_sprm::LN_CCv, 4, L_FIX}, // text colour
-        {0xC64D, 0, L_VAR}, // undocumented, para back colour
-        {0x6467, 4, L_FIX}, // undocumented
-        {0x646B, 4, L_FIX}, // undocumented
-        {0xF617, 3, L_FIX}, // undocumented
-        {0xD660, 0, L_VAR}, // undocumented, something to do with colour.
-        {0xD670, 0, L_VAR}, // undocumented, something to do with colour.
-        {0xCA71, 0, L_VAR}, // "sprmCShd", text backcolour
-        {0x303C, 1, L_FIX}, // undocumented, sep
-        {0x245B, 1, L_FIX}, // undocumented, para autobefore
-        {0x245C, 1, L_FIX}, // undocumented, para autoafter
+        {0xD62A, { 1, L_FIX} }, // "sprmTDiagLine" ;;;
+        {0xD62B, { 0, L_VAR} }, // "sprmTVertMerge" tap.rgtc[].vertMerge
+        {0xD62C, { 0, L_VAR} }, // "sprmTVertAlign" tap.rgtc[].vertAlign
+        {NS_sprm::LN_CFELayout, { 0, L_VAR} },
+        {0x6649, { 4, L_FIX} }, // undocumented
+        {0xF614, { 3, L_FIX} }, // undocumented
+        {0xD612, { 0, L_VAR} }, // "sprmTDefTableShd"
+        {0xD613, { 0, L_VAR} }, // "sprmTTableBorders"
+        {0xD61A, { 0, L_VAR} }, // undocumented
+        {0xD61B, { 0, L_VAR} }, // undocumented
+        {0xD61C, { 0, L_VAR} }, // undocumented
+        {0xD61D, { 0, L_VAR} }, // undocumented
+        {0xD632, { 0, L_VAR} }, // undocumented
+        {0xD634, { 0, L_VAR} }, // undocumented
+        {0xD238, { 0, L_VAR} }, // undocumented sep
+        {0xC64E, { 0, L_VAR} }, // "sprmPBrcTop"
+        {0xC64F, { 0, L_VAR} }, // "sprmPBrcLeft"
+        {0xC650, { 0, L_VAR} }, // "sprmPBrcBottom"
+        {0xC651, { 0, L_VAR} }, // "sprmPBrcRight"
+        {0xC652, { 0, L_VAR} }, // "sprmPBrcBetween"
+        {0xF661, { 3, L_FIX} }, // undocumented
+        {0x4873, { 2, L_FIX} }, // "sprmCRgLid0" chp.rglid[0];LID: for non-FE text
+        {0x4874, { 2, L_FIX} }, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
+        {0x6463, { 4, L_FIX} }, // undocumented
+        {0x2461, { 1, L_FIX} }, // undoc, must be asian version of "sprmPJc"
+        {0x845D, { 2, L_FIX} }, // undoc, must be asian version of "sprmPDxaRight"
+        {0x845E, { 2, L_FIX} }, // undoc, must be asian version of "sprmPDxaLeft"
+        {0x8460, { 2, L_FIX} }, // undoc, must be asian version of "sprmPDxaLeft1"
+        {0x3615, { 1, L_FIX} }, // undocumented
+        {0x360D, { 1, L_FIX} }, // undocumented
+        {0x703A, { 4, L_FIX} }, // undocumented, sep, perhaps related to textgrids ?
+        {0x303B, { 1, L_FIX} }, // undocumented, sep
+        {0x244B, { 1, L_FIX} }, // undocumented, subtable "sprmPFInTable" equiv ?
+        {0x244C, { 1, L_FIX} }, // undocumented, subtable "sprmPFTtp" equiv ?
+        {0x940E, { 2, L_FIX} }, // undocumented
+        {0x940F, { 2, L_FIX} }, // undocumented
+        {0x9410, { 2, L_FIX} }, // undocumented
+        {0x6815, { 4, L_FIX} }, // undocumented
+        {0x6816, { 4, L_FIX} }, // undocumented
+        {NS_sprm::LN_CCv, { 4, L_FIX} }, // text colour
+        {0xC64D, { 0, L_VAR} }, // undocumented, para back colour
+        {0x6467, { 4, L_FIX} }, // undocumented
+        {0x646B, { 4, L_FIX} }, // undocumented
+        {0xF617, { 3, L_FIX} }, // undocumented
+        {0xD660, { 0, L_VAR} }, // undocumented, something to do with colour.
+        {0xD670, { 0, L_VAR} }, // undocumented, something to do with colour.
+        {0xCA71, { 0, L_VAR} }, // "sprmCShd", text backcolour
+        {0x303C, { 1, L_FIX} }, // undocumented, sep
+        {0x245B, { 1, L_FIX} }, // undocumented, para autobefore
+        {0x245C, { 1, L_FIX} }, // undocumented, para autoafter
         // "sprmPFContextualSpacing", don't add space between para of the same style
-        {0x246D, 1, L_FIX}
+        {0x246D, { 1, L_FIX} }
     };
 
     static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
@@ -805,7 +805,7 @@ SprmInfo wwSprmParser::GetSprmInfo(sal_uInt16 nId) const
                "Unknown ww7- sprm, dangerous, report to development");
 
     //All the unknown ww7 sprms appear to be variable (which makes sense)
-    SprmInfo aSrch = { nId, 0, L_VAR };
+    SprmInfo aSrch = { 0, L_VAR };
     if (ww::IsEightPlus(meVersion)) //We can recover perfectly in this case
     {
         aSrch.nVari = L_FIX;
