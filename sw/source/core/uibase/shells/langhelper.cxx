@@ -233,7 +233,7 @@ namespace SwLangHelper
 
     void SetLanguage( SwWrtShell &rWrtSh, OutlinerView* pOLV, ESelection aSelection, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
     {
-        const LanguageType nLang = SvtLanguageTable().GetType( rLangText );
+        const LanguageType nLang = SvtLanguageTable::GetLanguageType( rLangText );
         if (nLang != LANGUAGE_DONTKNOW)
         {
             sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLang );
