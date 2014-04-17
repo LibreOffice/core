@@ -682,12 +682,15 @@ void CustomShapeProperties::initializePresetDataMap()
             else if (aLine == "Equations")
             {
                 aStream.ReadLine(aLine);
-                OString aExpectedPrefix("([]string) { ");
-                assert(aLine.startsWith(aExpectedPrefix));
-
                 comphelper::SequenceAsVector<OUString> aEquations;
-                OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
-                lcl_parseEquations(aEquations, aValue);
+                if (aLine != "([]string) {}")
+                {
+                    OString aExpectedPrefix("([]string) { ");
+                    assert(aLine.startsWith(aExpectedPrefix));
+
+                    OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
+                    lcl_parseEquations(aEquations, aValue);
+                }
                 aPropertyMap.setProperty(PROP_Equations, aEquations.getAsConstList());
             }
             else if (aLine == "Handles")
