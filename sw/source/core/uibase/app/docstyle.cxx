@@ -550,7 +550,7 @@ void SwDocStyleSheet::SetHidden( bool bValue )
     if( bChg )
     {
         // calling pPool->First() here would be quite slow...
-        dynamic_cast<SwDocStyleSheetPool*>(pPool)->InvalidateIterator(); // internal list has to be updated
+        dynamic_cast<SwDocStyleSheetPool&>(*pPool).InvalidateIterator(); // internal list has to be updated
         pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
         SwEditShell* pSh = rDoc.GetEditShell();
         if( pSh )
