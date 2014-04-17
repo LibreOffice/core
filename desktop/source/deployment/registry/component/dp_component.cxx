@@ -1367,7 +1367,7 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
     //the rest of the path is different).
     //If the caller cannot precisely determine that this package was registered, then it must
     //call registerPackage.
-    sal_Bool bAmbiguous = m_registered == REG_VOID // REG_VOID == we are in the progress of unregistration
+    bool bAmbiguous = m_registered == REG_VOID // REG_VOID == we are in the progress of unregistration
         || m_registered == REG_MAYBE_REGISTERED;
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true /* IsPresent */,

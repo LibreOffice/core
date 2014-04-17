@@ -74,8 +74,8 @@ namespace desktop {
 
     Lockfile::Lockfile( bool bIPCserver )
     :m_bIPCserver(bIPCserver)
-    ,m_bRemove(sal_False)
-    ,m_bIsLocked(sal_False)
+    ,m_bRemove(false)
+    ,m_bIsLocked(false)
     {
         // build the file-url to use for the lock
         OUString aUserPath;
@@ -108,16 +108,16 @@ namespace desktop {
         // try to create file
         File aFile(m_aLockname);
         if (aFile.open( osl_File_OpenFlag_Create ) == File::E_EXIST) {
-            m_bIsLocked = sal_True;
+            m_bIsLocked = true;
         } else {
             // new lock created
             aFile.close( );
             syncToFile( );
-            m_bRemove = sal_True;
+            m_bRemove = true;
         }
     }
 
-    sal_Bool Lockfile::check( fpExecWarning execWarning )
+    bool Lockfile::check( fpExecWarning execWarning )
     {
 
         if (m_bIsLocked) {
@@ -130,20 +130,20 @@ namespace desktop {
                 aFile.open( osl_File_OpenFlag_Create );
                 aFile.close( );
                 syncToFile( );
-                m_bRemove = sal_True;
-                return sal_True;
+                m_bRemove = true;
+                return true;
             } else {
                 //leave alone and return false
-                m_bRemove = sal_False;
-                return sal_False;
+                m_bRemove = false;
+                return false;
             }
         } else {
             // lock was created by us
-            return sal_True;
+            return true;
         }
     }
 
-    sal_Bool Lockfile::isStale( void ) const
+    bool Lockfile::isStale( void ) const
     {
         // this checks whether the lockfile was created on the same
         // host by the same user. Should this be the case it is safe
@@ -167,9 +167,9 @@ namespace desktop {
             aSecurity.getUserName( myUserName );
             OString myUser(OUStringToOString(myUserName, RTL_TEXTENCODING_ASCII_US));
             if (aUser == myUser)
-                return sal_True;
+                return true;
         }
-        return sal_False;
+        return false;
     }
 
     void Lockfile::syncToFile( void ) const

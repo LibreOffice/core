@@ -50,7 +50,7 @@ namespace dp_gui {
 
 class LicenseView : public MultiLineEdit, public SfxListener
 {
-    sal_Bool            mbEndReached;
+    bool            mbEndReached;
     Link            maEndReachedHdl;
     Link            maScrolledHdl;
 
@@ -60,8 +60,8 @@ public:
 
     void ScrollDown( ScrollType eScroll );
 
-    sal_Bool IsEndReached() const;
-    sal_Bool EndReached() const { return mbEndReached; }
+    bool IsEndReached() const;
+    bool EndReached() const { return mbEndReached; }
 
     void SetEndReachedHdl( const Link& rHdl )  { maEndReachedHdl = rHdl; }
 
@@ -134,9 +134,9 @@ void LicenseView::ScrollDown( ScrollType eScroll )
         pScroll->DoScrollAction( eScroll );
 }
 
-sal_Bool LicenseView::IsEndReached() const
+bool LicenseView::IsEndReached() const
 {
-    sal_Bool bEndReached;
+    bool bEndReached;
 
     ExtTextView*    pView = GetTextView();
     ExtTextEngine*  pEdit = GetTextEngine();
@@ -145,9 +145,9 @@ sal_Bool LicenseView::IsEndReached() const
     Point           aBottom( 0, aOutSize.Height() );
 
     if ( (sal_uLong) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
-        bEndReached = sal_True;
+        bEndReached = true;
     else
-        bEndReached = sal_False;
+        bEndReached = false;
 
     return bEndReached;
 }
@@ -156,7 +156,7 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
-        sal_Bool    bLastVal = EndReached();
+        bool    bLastVal = EndReached();
         sal_uLong   nId = ((const TextHint&)rHint).GetId();
 
         if ( nId == TEXT_HINT_PARAINSERTED )

@@ -100,7 +100,7 @@ class BackendImpl : public ImplBaseT
 
         Reference<deployment::XPackage> bindBundleItem(
             OUString const & url, OUString const & mediaType,
-            sal_Bool bRemoved, //that is, using data base information
+            bool bRemoved, //that is, using data base information
             OUString const & identifier,
             Reference<ucb::XCommandEnvironment> const & xCmdEnv,
             bool notifyDetectionError = true );
@@ -128,7 +128,7 @@ class BackendImpl : public ImplBaseT
             // throws css::uno::RuntimeException,
             // css::deployment::DeploymentException
 
-        sal_Bool checkLicense(
+        bool checkLicense(
             Reference< ucb::XCommandEnvironment > const & xCmdEnv,
             DescriptionInfoset const & description, bool bNoLicenseChecking)
                 throw (deployment::DeploymentException,
@@ -651,7 +651,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
     }
 }
 
-sal_Bool BackendImpl::PackageImpl::checkLicense(
+bool BackendImpl::PackageImpl::checkLicense(
     css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
     DescriptionInfoset const & info, bool alreadyInstalled)
         throw (css::deployment::DeploymentException,
@@ -1348,7 +1348,7 @@ inline bool isBundle_( OUString const & mediaType )
 
 Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
     OUString const & url, OUString const & mediaType,
-    sal_Bool bRemoved, OUString const & identifier,
+    bool bRemoved, OUString const & identifier,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv,
     bool notifyDetectionError )
 {

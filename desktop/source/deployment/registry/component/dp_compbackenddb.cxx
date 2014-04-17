@@ -74,7 +74,7 @@ void ComponentBackendDb::addEntry(OUString const & url, Data const & data)
         {
             Reference<css::xml::dom::XNode> componentNode = writeKeyElement(url);
             writeSimpleElement("java-type-library",
-                               OUString::boolean((sal_Bool) data.javaTypeLibrary),
+                               OUString::boolean(data.javaTypeLibrary),
                                componentNode);
 
             writeSimpleList(

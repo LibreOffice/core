@@ -63,7 +63,7 @@ namespace desktop {
 
         // checks the lockfile, asks user when lockfile is
         // found (iff gui) and returns false when we may not continue
-        sal_Bool check( fpExecWarning execWarning );
+        bool check( fpExecWarning execWarning );
 
         // removes the lockfile
         ~Lockfile(void);
@@ -73,14 +73,14 @@ namespace desktop {
         // full qualified name (file://-url) of the lockfile
         OUString m_aLockname;
         // flag whether the d'tor should delete the lock
-        sal_Bool m_bRemove;
-        sal_Bool m_bIsLocked;
+        bool m_bRemove;
+        bool m_bIsLocked;
         // ID
         OUString m_aId;
         OUString m_aDate;
         // access to data in file
         void syncToFile(void) const;
-        sal_Bool isStale(void) const;
+        bool isStale(void) const;
         friend bool Lockfile_execWarning( Lockfile * that );
 
     };

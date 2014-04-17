@@ -530,7 +530,7 @@ DescriptionInfoset::getUpdateDownloadUrls() const
     return getUrls("desc:update-download/desc:src/@xlink:href");
 }
 
-OUString DescriptionInfoset::getIconURL( sal_Bool bHighContrast ) const
+OUString DescriptionInfoset::getIconURL( bool bHighContrast ) const
 {
     css::uno::Sequence< OUString > aStrList = getUrls( "desc:icon/desc:default/@xlink:href" );
     css::uno::Sequence< OUString > aStrListHC = getUrls( "desc:icon/desc:high-contrast/@xlink:href" );

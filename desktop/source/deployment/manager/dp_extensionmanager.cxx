@@ -1309,13 +1309,13 @@ sal_Bool ExtensionManager::synchronize(
         OUString sSynchronizingShared(StrSyncRepository::get());
         sSynchronizingShared = sSynchronizingShared.replaceAll("%NAME", "shared");
         dp_misc::ProgressLevel progressShared(xCmdEnv, sSynchronizingShared);
-        sal_Bool bModified = getSharedRepository()->synchronize(xAbortChannel, xCmdEnv);
+        bool bModified = getSharedRepository()->synchronize(xAbortChannel, xCmdEnv);
         progressShared.update("\n\n");
 
         OUString sSynchronizingBundled(StrSyncRepository::get());
         sSynchronizingBundled = sSynchronizingBundled.replaceAll("%NAME", "bundled");
         dp_misc::ProgressLevel progressBundled(xCmdEnv, sSynchronizingBundled);
-        bModified |= getBundledRepository()->synchronize(xAbortChannel, xCmdEnv);
+        bModified |= (bool)getBundledRepository()->synchronize(xAbortChannel, xCmdEnv);
         progressBundled.update("\n\n");
 
         //Always determine the active extension.

@@ -205,7 +205,7 @@ public:
     /**
         Returns the URL for the icon image.
     */
-    OUString getIconURL( sal_Bool bHighContrast ) const;
+    OUString getIconURL( bool bHighContrast ) const;
 
     bool hasDescription() const;
 
