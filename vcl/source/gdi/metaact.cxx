@@ -2604,7 +2604,15 @@ void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbSet );
 }
 
-IMPL_META_ACTION( TextLineColor, META_TEXTLINECOLOR_ACTION )
+MetaTextLineColorAction::MetaTextLineColorAction() :
+    MetaAction  ( META_TEXTLINECOLOR_ACTION ),
+    mbSet       ( false )
+{
+}
+
+MetaTextLineColorAction::~MetaTextLineColorAction()
+{
+}
 
 MetaTextLineColorAction::MetaTextLineColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_TEXTLINECOLOR_ACTION ),
