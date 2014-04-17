@@ -351,6 +351,10 @@ uno::Sequence<beans::PropertyValue> lcl_parseHandle(const OString& rValue)
                     lcl_parseHandleRange(aRet, aToken, "RangeYMaximum");
                 else if (aToken.startsWith("Name = \"RangeYMinimum\""))
                     lcl_parseHandleRange(aRet, aToken, "RangeYMinimum");
+                else if (aToken.startsWith("Name = \"RadiusRangeMaximum\""))
+                    lcl_parseHandleRange(aRet, aToken, "RadiusRangeMaximum");
+                else if (aToken.startsWith("Name = \"RadiusRangeMinimum\""))
+                    lcl_parseHandleRange(aRet, aToken, "RadiusRangeMinimum");
                 else if (aToken.startsWith("Name = \"RefX\""))
                     lcl_parseHandleRef(aRet, aToken, "RefX");
                 else if (aToken.startsWith("Name = \"RefY\""))
