@@ -344,7 +344,7 @@ IMPL_LINK( SvxThesaurusDialog, LeftBtnHdl_Impl, Button *, pBtn )
 IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, ListBox*, pLB )
 {
     OUString aLangText( pLB->GetSelectEntry() );
-    LanguageType nLang = SvtLanguageTable().GetType( aLangText );
+    LanguageType nLang = SvtLanguageTable::GetLanguageType( aLangText );
     DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
     if (xThesaurus->hasLocale( LanguageTag::convertToLocale( nLang ) ))
         nLookUpLanguage = nLang;
