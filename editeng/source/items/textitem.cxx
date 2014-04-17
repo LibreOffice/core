@@ -2582,8 +2582,7 @@ SfxItemPresentation SvxLanguageItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            SvtLanguageTable aLangTable;
-            rText = aLangTable.GetString( (LanguageType)GetValue() );
+            rText = SvtLanguageTable::GetLanguageString( (LanguageType)GetValue() );
             return ePres;
         }
         default: ; //prevent warning
