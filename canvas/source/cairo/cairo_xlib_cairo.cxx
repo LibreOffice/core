@@ -36,11 +36,12 @@ namespace
     Pixmap limitXCreatePixmap(Display *display, Drawable d, unsigned int width, unsigned int height, unsigned int depth)
     {
         // The X protocol request CreatePixmap puts an upper bound
-        // of 16 bit to the size.
+        // of 16 bit to the size. And in practice some drivers
+        // fall over with values close to the max.
 
-        // see, e.g. moz#424333, fdo#48961
+        // see, e.g. moz#424333, fdo#48961, rhbz#1086714
         // we've a duplicate of this in vcl :-(
-        if (width > SAL_MAX_INT16 || height > SAL_MAX_INT16)
+        if (width > SAL_MAX_INT16-10 || height > SAL_MAX_INT16-10)
         {
             SAL_WARN("canvas", "overlarge pixmap: " << width << " x " << height);
             return None;

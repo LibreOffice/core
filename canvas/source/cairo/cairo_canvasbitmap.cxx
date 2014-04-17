@@ -159,7 +159,7 @@ namespace cairocanvas
                 pPixels = cairo_image_surface_create( CAIRO_FORMAT_ARGB32,
                                                       aSize.Width(), aSize.Height() );
                 cairo_t *pCairo = cairo_create( pPixels );
-                if( !pPixels || !pCairo )
+                if( !pPixels || !pCairo || cairo_status(pCairo) != CAIRO_STATUS_SUCCESS )
                     break;
 
                 // suck ourselves from the X server to this buffer so then we can fiddle with
