@@ -143,7 +143,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLanguageBox(Window *pPar
 
 void SvxLanguageBox::Init()
 {
-    m_pLangTable = new SvtLanguageTable;
     m_aNotCheckedImage = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
     m_aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
     m_aAllString            = SVX_RESSTR( RID_SVXSTR_LANGUAGE_ALL );
@@ -180,7 +179,6 @@ void SvxLanguageBox::Init()
 SvxLanguageBox::~SvxLanguageBox()
 {
     delete m_pSpellUsedLang;
-    delete m_pLangTable;
 }
 
 
@@ -340,7 +338,7 @@ sal_Int32 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal_
             return nAt;
     }
 
-    OUString aStrEntry = m_pLangTable->GetString( nLang );
+    OUString aStrEntry = SvtLanguageTable::GetLanguageString( nLang );
     if (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)
         aStrEntry = m_aAllString;
 
@@ -349,11 +347,11 @@ sal_Int32 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal_
     {
         nRealLang = MsLangId::resolveSystemLanguageByScriptType(nRealLang, nType);
         aStrEntry += " - ";
-        aStrEntry += m_pLangTable->GetString( nRealLang );
+        aStrEntry += SvtLanguageTable::GetLanguageString( nRealLang );
     } else if (nRealLang == LANGUAGE_USER_SYSTEM_CONFIG) {
         nRealLang = MsLangId::getSystemLanguage();
         aStrEntry += " - ";
-        aStrEntry += m_pLangTable->GetString( nRealLang );
+        aStrEntry += SvtLanguageTable::GetLanguageString( nRealLang );
     }
 
     aStrEntry = ApplyLreOrRleEmbedding( aStrEntry );
@@ -411,7 +409,7 @@ sal_Int32 SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
             return nAt;
     }
 
-    OUString aStrEntry = m_pLangTable->GetString( nLang );
+    OUString aStrEntry = SvtLanguageTable::GetLanguageString( nLang );
     if (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)
         aStrEntry = m_aAllString;
 

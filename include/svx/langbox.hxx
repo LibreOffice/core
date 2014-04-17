@@ -57,7 +57,6 @@ private:
     Image                   m_aCheckedImage;
     OUString                m_aAllString;
     com::sun::star::uno::Sequence< sal_Int16 >  *m_pSpellUsedLang;
-    SvtLanguageTable*       m_pLangTable;
     sal_Int16               m_nLangList;
     bool                    m_bHasLangNone;
     bool                    m_bLangNoneIsLangAll;
