@@ -212,7 +212,7 @@ public class DocumentView extends    JFrame
         if(ViewContainer.mbInplace==true)
         {
             // inplace document view can't be initialized without a visible parent window hierarchy!
-            // So make shure that we are visible in every case!
+            // So make sure that we are visible in every case!
             this.setVisible(true);
             mxFrame = FunctionHelper.createViewFrame(msName,maDocumentView);
         }

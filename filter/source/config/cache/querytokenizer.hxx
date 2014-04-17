@@ -43,7 +43,7 @@ namespace filter{
                 uses this schema.
 
     @attention  This class is not threadsafe implemented. Because its not necessary.
-                But you have to make shure, that ist not used as such :-)
+                But you have to make sure, that ist not used as such :-)
  */
 class QueryTokenizer : public ::boost::unordered_map< OUString                    ,
                                                OUString                    ,

@@ -253,7 +253,7 @@ public class FunctionHelper
             // is returned. But normaly nobody outside the office knows this id.
             // New version of this method ignore the id parameter and creation will
             // work.
-            // Note: You must be shure if your window handle can be really used by
+            // Note: You must be sure if your window handle can be really used by
             // the remote office. Means if this java client and the remote office
             // use the same display!
             com.sun.star.awt.XSystemChildFactory xChildFactory =

@@ -123,7 +123,7 @@ public class RecoveryTest extends ComplexTestCase {
         msg +="-AppExecutionCommand=C:\\office\\soffice.exe --accept=socket,host=localhost,port=8101;urp;\n\n";
         msg +="Example UNIX:\n";
         msg +="-AppExecutionCommand=/office/soffice \"--accept=socket,host=localhost,port=8101;urp;\"\n\n";
-        msg+="NOTE: on UNIX be shure to have the connection string inside quotation mark!\n";
+        msg+="NOTE: on UNIX be sure to have the connection string inside quotation mark!\n";
 
         assure(msg, param.get("AppExecutionCommand") != null && ! param.get("AppExecutionCommand").equals(""));
         System.out.println("HALLO" + param.get("AppExecutionCommand"));
@@ -544,7 +544,7 @@ public class RecoveryTest extends ComplexTestCase {
         int height = rand.nextInt(maxHeight + 1);
         int width = rand.nextInt((windowMaxSize.Width-posSize.Y) + 1);
 
-        // be shure that the new size his greater then the half of windowMaxSize
+        // be sure that the new size his greater then the half of windowMaxSize
         posSize.Height = (height < (maxHeight / 2)) ? height + (maxHeight / 2) : height;
         posSize.Width =  (width < (maxWidth / 2)) ? width + (maxWidth / 2) : width;
 

@@ -481,7 +481,7 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
             connection.
 
             Further we are listener for closing of the (possible valid)
-            given frame. We must be shure, that this resource won't be gone
+            given frame. We must be sure, that this resource won't be gone
             if our internal job is still running.
 */
 void Job::impl_startListening()

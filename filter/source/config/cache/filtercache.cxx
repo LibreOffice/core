@@ -154,7 +154,7 @@ void FilterCache::takeOver(const FilterCache& rClone)
     m_eFillState     = rClone.m_eFillState;
 
     // renew all dependencies and optimizations
-    // Because we cant be shure, that changed filters on one clone
+    // Because we cant be sure, that changed filters on one clone
     // and changed types of another clone work together.
     // But here we can check against the lates changes ...
     impl_validateAndOptimize();
@@ -1323,7 +1323,7 @@ void FilterCache::impl_resolveItem4TypeRegistration(      CacheItemList*   pList
 {
     CacheItem& rItem = (*pList)[sItem];
     // In case it's a new created entry (automaticly done by the boost::unordered_map index operator!)
-    // we must be shure, that this entry has its own name as property available.
+    // we must be sure, that this entry has its own name as property available.
     // Its needed later at our container interface!
     rItem[PROPNAME_NAME] <<= sItem;
 

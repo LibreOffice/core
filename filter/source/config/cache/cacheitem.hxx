@@ -140,7 +140,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
 
         /** @short  because we know two UIName properties
                     (a list with all locales and the value
-                    for the current locale only), we must be shure
+                    for the current locale only), we must be sure
                     that the correspond together.
 
             @param  sActLocale

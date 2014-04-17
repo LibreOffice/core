@@ -862,7 +862,7 @@ class FilterCache : public BaseLock
         /** @short  try to load the requested item on demand from the underlying configuration
                     layer.
 
-            @descr  The outside code has to be shure, that the item does not already exists
+            @descr  The outside code has to be sure, that the item does not already exists
                     inside this cachse. Otherwise it will be loaded twice. This method
                     doesn't check such constellations!
 

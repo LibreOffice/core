@@ -511,7 +511,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                 Thats why we implement this method. It return an already existing helper or create a new one otherwise.
 
     @attention  The parameter sTarget and nSearchFlags are defaulted to "" and 0!
-                Please use it only, if you can be shure, that the really given by the outside calli!
+                Please use it only, if you can be sure, that the really given by the outside calli!
                 Mostly it depends from the parameter eHelper is they are required or not.
 
     @param      eHelper
@@ -606,7 +606,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 /**
     @short      check URL for support by our used loader or handler
     @descr      If we must return our own dispatch helper implementations (self, blank, create dispatcher!)
-                we should be shure, that URL describe any loadable content. Otherwise slot/uno URLs
+                we should be sure, that URL describe any loadable content. Otherwise slot/uno URLs
                 will be detected ... but there exist nothing for ral loading into a target frame!
 
     @param      aURL

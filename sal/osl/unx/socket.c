@@ -2306,7 +2306,7 @@ void SAL_CALL osl_getLastSocketErrorDescription(oslSocket Socket, rtl_uString **
 
 void SAL_CALL osl_psz_getLastSocketErrorDescription(oslSocket pSocket, sal_Char* pBuffer, sal_uInt32 BufferSize)
 {
-    /* make shure pBuffer will be a zero-terminated string even when strncpy has to cut */
+    /* make sure pBuffer will be a zero-terminated string even when strncpy has to cut */
     pBuffer[BufferSize-1]= '\0';
 
     if ( pSocket == 0 )

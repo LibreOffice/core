@@ -2491,7 +2491,7 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
                              But frames without a parent are top too. So it's not possible to check isTop() here!
                              We have to look for the type of our parent.
                            - if we are a task frame, then we have to check if we are the first one.
-                             We use a static variable to do so. They will be reset to afterwards be shure
+                             We use a static variable to do so. They will be reset to afterwards be sure
                              that further calls of this method doesn't do anything then.
                            - Then we have to trigger the right event string on the global job executor.
 

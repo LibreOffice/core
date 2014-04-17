@@ -27,7 +27,7 @@ namespace framework{
 /** @short  implements a guard, which can use the interface
             <type scope="com::sun::star::document">XActionLockable</type>.
 
-    @descr  This guard should be used to be shure, that any lock will be
+    @descr  This guard should be used to be sure, that any lock will be
             released. Otherwise the locaked document can hinder the office on shutdown!
 */
 class ActionLockGuard
@@ -71,7 +71,7 @@ class ActionLockGuard
             setResource(xLock);
         }
 
-        /** @short  release this guard instance and make shure, that no lock
+        /** @short  release this guard instance and make sure, that no lock
                     will exist afterwards on the internal wrapped resource.
          */
         virtual ~ActionLockGuard()

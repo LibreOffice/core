@@ -288,7 +288,7 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper4<
 
         /** @short  try to "share the current thread in an intelligent manner" :-)
 
-            @param  Overwrites our algorithm for Reschedule and force it to be shure
+            @param  Overwrites our algorithm for Reschedule and force it to be sure
                     that our progress was painted right.
          */
         void impl_reschedule(bool bForceUpdate);

@@ -49,7 +49,7 @@ namespace filter{
                 should be available etc.
 
     @attention  The base class BaseLock must be the first of declared ones.
-                Otherwise we cant be shure, that our own mutex member (which is
+                Otherwise we cant be sure, that our own mutex member (which is
                 present by this base class!) was full initialized inside our own
                 ctor as first!
  */
