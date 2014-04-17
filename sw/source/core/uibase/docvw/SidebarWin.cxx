@@ -269,13 +269,13 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, s
 
     mpSidebarTxtControl->Draw(pDev, rPt, rSz, nInFlags);
 
-    const drawinglayer::primitive2d::Primitive2DSequence& rSequence = mpAnchor->getOverlayObjectPrimitive2DSequence();
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     drawinglayer::processor2d::BaseProcessor2D * pProcessor =
         drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
             *pDev, aNewViewInfos );
 
-    pProcessor->process(rSequence);
+    pProcessor->process(mpAnchor->getOverlayObjectPrimitive2DSequence());
+    pProcessor->process(mpTextRangeOverlay->getOverlayObjectPrimitive2DSequence());
     delete pProcessor;
 }
 
