@@ -278,61 +278,6 @@ End
 #endif
 
 
-#ifdef ENABLE_JAVA
-
-#ifndef MACOSX
-
-File gid_File_Jar_Officebean
-    TXT_FILE_BODY;
-    Name = JARFILENAME(officebean);
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED);
-End
-
-#endif
-
-#endif
-
-
-#ifdef ENABLE_JAVA
-STD_JAR_FILE( gid_File_Jar_Report, report )
-STD_JAR_FILE( gid_File_Jar_Smoketest, smoketest )
-STD_JAR_FILE( gid_File_Jar_Table, table )
-STD_JAR_FILE( gid_File_Jar_Form, form )
-STD_JAR_FILE( gid_File_Jar_Query, query )
-STD_JAR_FILE( gid_File_Jar_Xmerge, xmerge )
-STD_JAR_FILE( gid_File_Jar_Xmergebridge, XMergeBridge )
-#endif
-
-#ifdef ENABLE_JAVA
-STD_JAR_FILE( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
-#endif
-
-#ifdef ENABLE_JAVA
-File gid_File_Jar_Commonwizards
-    TXT_FILE_BODY;
-    Name = JARFILENAME(commonwizards);
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED);
-End
-#endif
-
-#ifdef ENABLE_JAVA
-STD_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
-STD_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
-#endif
-
-#ifdef ENABLE_JAVA
-
-File gid_File_Jar_Unoil
-    TXT_FILE_BODY;
-    Name = "unoil.jar";
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED);
-End
-
-#endif
-
 #ifndef AIX
 #ifndef DISABLE_PYUNO
 

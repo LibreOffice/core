@@ -106,24 +106,12 @@ Module gid_Module_Root_Files_3
 	Sortkey = "1300";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Jar_Unoil,
-	gid_File_Jar_Hsqldb_Sdbc,
-	gid_File_Jar_Officebean,
-	gid_File_Jar_Report,
-	gid_File_Jar_Smoketest,
-	gid_File_Jar_Table,
+	Files = (
 	gid_File_Jar_Letter,
-	gid_File_Jar_Form,
 	gid_File_Wizards_Common,
 	gid_File_Wizards_Fax,
 	gid_File_Jar_Agenda,
 	gid_File_Jar_Web,
-	gid_File_Jar_Query,
-	gid_File_Jar_Commonwizards,
-	gid_File_Jar_Scriptframework,
-	gid_File_Jar_Scriptproviderforjava,
-	gid_File_Jar_Xmerge,
-	gid_File_Jar_Xmergebridge,
 	gid_File_Rdb_Offapi,
 	gid_Starregistry_Services_Rdb);
 End

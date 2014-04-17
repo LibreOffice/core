@@ -644,35 +644,38 @@ $(eval $(call gb_Helper_register_jars_for_install,URE,ure, \
 	unoloader \
 ))
 
-$(eval $(call gb_Helper_register_jars,OOO, \
-	ConnectivityTools \
+$(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	ScriptFramework \
-	ScriptProviderForBeanShell \
 	ScriptProviderForJava \
-	ScriptProviderForJavaScript \
 	XMergeBridge \
-	XSLTFilter \
-	XSLTValidate \
 	commonwizards \
-	agenda \
-	aportisdoc \
-	fax \
 	form \
-	htmlsoff \
-	letter \
-	officebean \
-	pexcel \
-	pocketword \
+	$(if $(filter-out MACOSX,$(OS)),officebean) \
 	query \
 	report \
-	reportbuilder \
-	reportbuilderwizard \
 	sdbc_hsqldb \
 	smoketest \
 	table \
 	unoil \
-	web \
 	xmerge \
+))
+
+$(eval $(call gb_Helper_register_jars,OOO, \
+	ConnectivityTools \
+	ScriptProviderForBeanShell \
+	ScriptProviderForJavaScript \
+	XSLTFilter \
+	XSLTValidate \
+	agenda \
+	aportisdoc \
+	fax \
+	htmlsoff \
+	letter \
+	pexcel \
+	pocketword \
+	reportbuilder \
+	reportbuilderwizard \
+	web \
 ))
 
 $(eval $(call gb_Helper_register_jars,OXT, \
