@@ -1268,7 +1268,15 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
 }
 
-IMPL_META_ACTION( TextRect, META_TEXTRECT_ACTION )
+MetaTextRectAction::MetaTextRectAction() :
+    MetaAction  ( META_TEXTRECT_ACTION ),
+    mnStyle     ( 0 )
+{
+}
+
+MetaTextRectAction::~MetaTextRectAction()
+{
+}
 
 MetaTextRectAction::MetaTextRectAction( const Rectangle& rRect,
                                         const OUString& rStr, sal_uInt16 nStyle ) :
