@@ -35,7 +35,9 @@
 
 using namespace ::com::sun::star;
 
-
+namespace {
+struct theLanguageTable : public rtl::Static< SvtLanguageTable, theLanguageTable > {};
+}
 
 SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
 {
@@ -152,8 +154,7 @@ const OUString SvtLanguageTable::GetString( const LanguageType eType, bool bUser
 
 OUString SvtLanguageTable::GetLanguageString( const LanguageType eType )
 {
-    static const SvtLanguageTable aLangTable;
-    return aLangTable.GetString( eType );
+    return theLanguageTable::get().GetString( eType );
 }
 
 
