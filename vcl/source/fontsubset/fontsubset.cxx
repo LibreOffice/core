@@ -23,18 +23,26 @@
 #include <sft.hxx>
 
 FontSubsetInfo::FontSubsetInfo()
-:   m_nAscent( 0)
-,   m_nDescent( 0)
-,   m_nCapHeight( 0)
-,   m_nFontType( FontSubsetInfo::NO_FONT)
-,   mpInFontBytes( NULL)
-,   mnInByteLength( 0)
-,   meInFontType( FontSubsetInfo::NO_FONT)
-,   mpSftTTFont( NULL)
-{}
+    : m_nAscent( 0)
+    , m_nDescent( 0)
+    , m_nCapHeight( 0)
+    , m_nFontType( FontSubsetInfo::NO_FONT)
+    , mpInFontBytes( NULL)
+    , mnInByteLength( 0)
+    , meInFontType( FontSubsetInfo::NO_FONT)
+    , mpSftTTFont( NULL)
+    , mnReqFontTypeMask(0)
+    , mpOutFile(NULL)
+    , mpReqFontName(NULL)
+    , mpReqGlyphIds(NULL)
+    , mpReqEncodedIds(NULL)
+    , mnReqGlyphCount(0)
+{
+}
 
 FontSubsetInfo::~FontSubsetInfo()
-{}
+{
+}
 
 // prepare subsetting for fonts where the input font file is mapped
 bool FontSubsetInfo::LoadFont(
