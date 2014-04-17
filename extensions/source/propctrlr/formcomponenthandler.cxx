@@ -814,7 +814,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL FormComponentPropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException, std::exception)
+    void SAL_CALL FormComponentPropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (NullPointerException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         FormComponentPropertyHandler_Base::addPropertyChangeListener( _rxListener );
