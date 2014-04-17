@@ -59,7 +59,8 @@ OFlatConnection::~OFlatConnection()
 IMPLEMENT_SERVICE_INFO(OFlatConnection, "com.sun.star.sdbc.drivers.flat.Connection", "com.sun.star.sdbc.Connection")
 
 
-void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
+void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     osl_atomic_increment( &m_refCount );
 
