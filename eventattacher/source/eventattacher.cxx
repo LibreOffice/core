@@ -134,7 +134,7 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
 
     // Check if to firing or approveFiring has to be called
     Reference< XIdlMethod > xMethod = m_xListenerType->getMethod( FunctionName );
-    sal_Bool bApproveFiring = sal_False;
+    bool bApproveFiring = false;
     if( !xMethod.is() )
         return aRet;
     Reference< XIdlClass > xReturnType = xMethod->getReturnType();
@@ -142,7 +142,7 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
     if( ( xReturnType.is() && xReturnType->getTypeClass() != TypeClass_VOID ) ||
         aExceptionSeq.getLength() > 0 )
     {
-        bApproveFiring = sal_True;
+        bApproveFiring = true;
     }
     else
     {
@@ -155,7 +155,7 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
             {
                 if( pInfos[ i ].aMode != ParamMode_IN )
                 {
-                    bApproveFiring = sal_True;
+                    bApproveFiring = true;
                     break;
                 }
             }
