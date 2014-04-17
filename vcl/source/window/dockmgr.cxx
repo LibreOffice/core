@@ -795,20 +795,39 @@ void ImplPopupFloatWin::Tracking( const TrackingEvent& rTEvt )
 }
 
 ImplDockingWindowWrapper::ImplDockingWindowWrapper( const Window *pWindow )
+    : mpDockingWindow(const_cast<Window*>(pWindow))
+    , mpFloatWin(NULL)
+    , mpOldBorderWin(NULL)
+    , mpParent(pWindow->GetParent())
+    , maMaxOutSize( SHRT_MAX, SHRT_MAX )
+    , mnTrackX(0)
+    , mnTrackY(0)
+    , mnTrackWidth(0)
+    , mnTrackHeight(0)
+    , mnDockLeft(0)
+    , mnDockTop(0)
+    , mnDockRight(0)
+    , mnDockBottom(0)
+    , mnFloatBits(WB_BORDER | WB_CLOSEABLE | WB_SIZEABLE | (pWindow->GetStyle() & DOCKWIN_FLOATSTYLES))
+    , mbDockCanceled(false)
+    , mbFloatPrevented(false)
+    , mbDockable(true)
+    , mbDocking(false)
+    , mbDragFull(false)
+    , mbLastFloatMode(false)
+    , mbStartFloat(false)
+    , mbTrackDock(false)
+    , mbPinned(false)
+    , mbRollUp(false)
+    , mbDockBtn(false)
+    , mbHideBtn(false)
+    // must be enabled in Window::Notify to prevent permanent docking during mouse move
+    , mbStartDockingEnabled(false)
+    , mbLocked(false)
 {
-    ImplInitData();
-
-    mpDockingWindow = (Window*) pWindow;
-    mpParent        = pWindow->GetParent();
-    mbDockable      = true;
-    mbLocked        = false;
-    mnFloatBits     = WB_BORDER | WB_CLOSEABLE | WB_SIZEABLE | (pWindow->GetStyle() & DOCKWIN_FLOATSTYLES);
     DockingWindow *pDockWin = dynamic_cast< DockingWindow* > ( mpDockingWindow );
     if( pDockWin )
         mnFloatBits = pDockWin->GetFloatStyle();
-
-    // must be enabled in Window::Notify to prevent permanent docking during mouse move
-    mbStartDockingEnabled = false;
 }
 
 ImplDockingWindowWrapper::~ImplDockingWindowWrapper()
@@ -875,22 +894,6 @@ bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
 
     GetWindow()->StartTracking( STARTTRACK_KEYMOD );
     return true;
-}
-
-void ImplDockingWindowWrapper::ImplInitData()
-{
-    mpDockingWindow     = NULL;
-
-    //GetWindow()->mpWindowImpl->mbDockWin  = true;     // TODO: must be eliminated
-    mpFloatWin          = NULL;
-    mbDockCanceled      = false;
-    mbFloatPrevented    = false;
-    mbDocking           = false;
-    mbPinned             = false;
-    mbRollUp            = false;
-    mbDockBtn           = false;
-    mbHideBtn           = false;
-    maMaxOutSize        = Size( SHRT_MAX, SHRT_MAX );
 }
 
 void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
