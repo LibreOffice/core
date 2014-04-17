@@ -46,7 +46,7 @@ OZipFileAccess::OZipFileAccess( const uno::Reference< uno::XComponentContext >& 
 , m_xContext( rxContext )
 , m_pZipFile( NULL )
 , m_pListenersContainer( NULL )
-, m_bDisposed( sal_False )
+, m_bDisposed( false )
 , m_bOwnContent( false )
 {
     if ( !rxContext.is() )
@@ -114,17 +114,17 @@ uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUSt
     return aPattern;
 }
 
-sal_Bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
+bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
                                                     const uno::Sequence< OUString >& aPattern )
 {
     sal_Int32 nInd = aPattern.getLength() - 1;
     if ( nInd < 0 )
-        return sal_False;
+        return false;
 
     if ( nInd == 0 )
     {
         if ( aPattern[0].isEmpty() )
-            return sal_True;
+            return true;
 
         return aString.equals( aPattern[0] );
     }
@@ -141,24 +141,24 @@ sal_Bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
                 continue;
 
             if ( nEndInd == nBeginInd )
-                return sal_False;
+                return false;
 
             // check that search does not use nEndInd position
             sal_Int32 nLastInd = aString.lastIndexOf( aPattern[nCurInd], nEndInd - 1 );
 
             if ( nLastInd == -1 )
-                return sal_False;
+                return false;
 
             if ( nLastInd < nBeginInd )
-                return sal_False;
+                return false;
 
             nEndInd = nLastInd;
         }
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // XInitialization
@@ -223,7 +223,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     m_pZipFile = new ZipFile(
                 m_xContentStream,
                 m_xContext,
-                sal_True );
+                true );
 }
 
 // XNameAccess
@@ -246,7 +246,7 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
 
     uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
                                                                                 ::rtl::Reference< EncryptionData >(),
-                                                                                sal_False,
+                                                                                false,
                                                                                 m_aMutexHolder ) );
 
     if ( !xEntryStream.is() )
@@ -356,7 +356,7 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
         {
             uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
                                                                                         ::rtl::Reference< EncryptionData >(),
-                                                                                        sal_False,
+                                                                                        false,
                                                                                         m_aMutexHolder ) );
 
             if ( !xEntryStream.is() )
@@ -397,7 +397,7 @@ void SAL_CALL OZipFileAccess::dispose()
         } catch( uno::Exception& )
         {}
 
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 void SAL_CALL OZipFileAccess::addEventListener( const uno::Reference< lang::XEventListener >& xListener )

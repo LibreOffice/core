@@ -57,7 +57,7 @@ class ManifestImport : public cppu::WeakImplHelper1 < com::sun::star::xml::sax::
 protected:
     comphelper::SequenceAsVector< com::sun::star::beans::PropertyValue > aSequence;
     ManifestStack aStack;
-    sal_Bool bIgnoreEncryptData;
+    bool bIgnoreEncryptData;
     sal_Int32 nDerivedKeySize;
     ::std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rManVector;
 

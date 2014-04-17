@@ -58,7 +58,7 @@ protected:
     ByteChucker         aChucker;
     ZipEntry            *pCurrentEntry;
     sal_Int16           nMethod, nLevel, mnDigested;
-    sal_Bool            bFinished, bEncryptCurrentEntry;
+    bool            bFinished, bEncryptCurrentEntry;
     ZipPackageStream*   m_pCurrentStream;
 
 public:
@@ -80,7 +80,7 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL putNextEntry( ZipEntry& rEntry,
             ZipPackageStream* pStream,
-            sal_Bool bEncrypt = sal_False )
+            bool bEncrypt = false )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void SAL_CALL closeEntry(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);

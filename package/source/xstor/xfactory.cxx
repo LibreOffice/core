@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 #define THROW_WHERE ""
 #endif
 
-sal_Bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& xInputStream,
+bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& xInputStream,
                                      const uno::Reference< io::XSeekable >& xSeekable )
 {
     if ( !xInputStream.is() || !xSeekable.is() )
@@ -57,7 +57,7 @@ sal_Bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& x
         return ( nRead == 4 && aData[0] == 0x50 && aData[1] == 0x4b && aData[2] == 0x03 && aData[3] == 0x04 );
     }
     else
-        return sal_True; // allow to create a storage based on empty stream
+        return true; // allow to create a storage based on empty stream
 }
 
 uno::Sequence< OUString > SAL_CALL OStorageFactory::impl_staticGetSupportedServiceNames()

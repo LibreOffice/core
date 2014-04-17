@@ -50,7 +50,7 @@ protected:
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > m_aProperties;
 
-    sal_Bool m_bDisposed;
+    bool m_bDisposed;
 
     sal_Int32 m_nStorageType;
 

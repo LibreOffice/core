@@ -57,17 +57,17 @@ private:
 public:
 
     ZipPackageFolder( sal_Int32 nFormat,
-                      sal_Bool bAllowRemoveOnInsert );
+                      bool bAllowRemoveOnInsert );
     virtual ~ZipPackageFolder();
 
     OUString& GetVersion() { return m_sVersion; }
     void SetVersion( const OUString& aVersion ) { m_sVersion = aVersion; }
 
-    sal_Bool LookForUnexpectedODF12Streams( const OUString& aPath );
+    bool LookForUnexpectedODF12Streams( const OUString& aPath );
 
     void setChildStreamsTypeByExtension( const ::com::sun::star::beans::StringPair& aPair );
 
-    void doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )
+    void doInsertByName ( ZipPackageEntry *pEntry, bool bSetParent )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     com::sun::star::packages::ContentInfo & doGetByName( const OUString& aName )
@@ -77,7 +77,7 @@ public:
     static ::com::sun::star::uno::Sequence < sal_Int8 > static_getImplementationId();
 
     void setPackageFormat_Impl( sal_Int32 nFormat ) { m_nFormat = nFormat; }
-    void setRemoveOnInsertMode_Impl( sal_Bool bRemove ) { this->mbAllowRemoveOnInsert = bRemove; }
+    void setRemoveOnInsertMode_Impl( bool bRemove ) { this->mbAllowRemoveOnInsert = bRemove; }
 
     bool saveChild(const OUString &rShortName, const com::sun::star::packages::ContentInfo &rInfo, OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, const com::sun::star::uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool & rRandomPool);
 

@@ -65,14 +65,14 @@ using ZipUtils::Inflater;
 
 /** This class is used to read entries from a zip file
  */
-ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, sal_Bool bInitialise )
+ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, bool bInitialise )
     throw(IOException, ZipException, RuntimeException)
 : aGrabber(xInput)
 , aInflater( true )
 , xStream(xInput)
 , xSeek(xInput, UNO_QUERY)
 , m_xContext ( rxContext )
-, bRecoveryMode( sal_False )
+, bRecoveryMode( false )
 {
     if (bInitialise)
     {
@@ -84,7 +84,7 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
     }
 }
 
-ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, sal_Bool bInitialise, sal_Bool bForceRecovery, uno::Reference < XProgressHandler > xProgress )
+ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, bool bInitialise, bool bForceRecovery, uno::Reference < XProgressHandler > xProgress )
     throw(IOException, ZipException, RuntimeException)
 : aGrabber(xInput)
 , aInflater( true )
@@ -290,7 +290,7 @@ void ZipFile::StaticFillHeader( const ::rtl::Reference< EncryptionData >& rData,
     pHeader += nMediaTypeLength;
 }
 
-sal_Bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rData,
+bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rData,
                                     sal_Int32 &rEncAlg,
                                     sal_Int32 &rChecksumAlg,
                                     sal_Int32 &rDerivedKeySize,
@@ -299,7 +299,7 @@ sal_Bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rDa
                                     OUString& aMediaType,
                                     const uno::Reference< XInputStream >& rStream )
 {
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
     const sal_Int32 nHeaderSize = n_ConstHeaderSize - 4;
     Sequence < sal_Int8 > aBuffer ( nHeaderSize );
     if ( nHeaderSize == rStream->readBytes ( aBuffer, nHeaderSize ) )
@@ -368,7 +368,7 @@ sal_Bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rDa
                         {
                             aMediaType = OUString( (sal_Unicode*)aBuffer.getConstArray(),
                                                             nMediaTypeLength / sizeof( sal_Unicode ) );
-                            bOk = sal_True;
+                            bOk = true;
                         }
                     }
                 }
@@ -435,12 +435,12 @@ void CheckSequence( const uno::Sequence< sal_Int8 >& aSequence )
 }
 #endif
 
-sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentContext >& rxContext, const Sequence< sal_Int8 > &aReadBuffer, const ::rtl::Reference< EncryptionData > &rData )
+bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentContext >& rxContext, const Sequence< sal_Int8 > &aReadBuffer, const ::rtl::Reference< EncryptionData > &rData )
 {
     if ( !rData.is() || !rData->m_aKey.getLength() )
-        return sal_False;
+        return false;
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     uno::Reference< xml::crypto::XCipherContext > xCipher( StaticGetCipher( rxContext, rData, false ), uno::UNO_SET_THROW );
 
@@ -483,16 +483,16 @@ sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentC
         // We should probably tell the user that the password they entered was wrong
     }
     else
-        bRet = sal_True;
+        bRet = true;
 
     return bRet;
 }
 
-sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ::rtl::Reference< EncryptionData >& rData )
+bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ::rtl::Reference< EncryptionData >& rData )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( rData.is() && rData->m_aKey.getLength() )
     {
         xSeek->seek( rEntry.nOffset );
@@ -517,7 +517,7 @@ uno::Reference< XInputStream > ZipFile::createUnbufferedStream(
             ZipEntry & rEntry,
             const ::rtl::Reference< EncryptionData > &rData,
             sal_Int8 nStreamMode,
-            sal_Bool bIsEncrypted,
+            bool bIsEncrypted,
             const OUString& aMediaType )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -532,7 +532,7 @@ ZipEnumeration * SAL_CALL ZipFile::entries(  )
 
 uno::Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData > &rData,
-        sal_Bool bIsEncrypted,
+        bool bIsEncrypted,
         SotMutexHolderRef aMutexHolder )
     throw(IOException, ZipException, RuntimeException)
 {
@@ -544,7 +544,7 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntr
     // We want to return a rawStream if we either don't have a key or if the
     // key is wrong
 
-    sal_Bool bNeedRawStream = rEntry.nMethod == STORED;
+    bool bNeedRawStream = rEntry.nMethod == STORED;
 
     // if we have a digest, then this file is an encrypted one and we should
     // check if we can decrypt it or not
@@ -560,7 +560,7 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntr
 
 uno::Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData > &rData,
-        sal_Bool bIsEncrypted,
+        bool bIsEncrypted,
         SotMutexHolderRef aMutexHolder )
     throw ( packages::WrongPasswordException,
             IOException,
@@ -574,7 +574,7 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry
 
     // An exception must be thrown in case stream is encrypted and
     // there is no key or the key is wrong
-    sal_Bool bNeedRawStream = sal_False;
+    bool bNeedRawStream = false;
     if ( bIsEncrypted )
     {
         // in case no digest is provided there is no way
@@ -601,7 +601,7 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry
 
 uno::Reference< XInputStream > SAL_CALL ZipFile::getRawData( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData >& rData,
-        sal_Bool bIsEncrypted,
+        bool bIsEncrypted,
         SotMutexHolderRef aMutexHolder )
     throw(IOException, ZipException, RuntimeException)
 {
@@ -631,10 +631,10 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
-    return createUnbufferedStream ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_WRAPPEDRAW, sal_True, aMediaType );
+    return createUnbufferedStream ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_WRAPPEDRAW, true, aMediaType );
 }
 
-sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
+bool ZipFile::readLOC( ZipEntry &rEntry )
     throw(IOException, ZipException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -661,7 +661,7 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
 
     // FIXME64: need to read 64bit LOC
 
-    sal_Bool bBroken = sal_False;
+    bool bBroken = false;
 
     try
     {
@@ -697,14 +697,14 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
     }
     catch(...)
     {
-        bBroken = sal_True;
+        bBroken = true;
     }
 
     if ( bBroken && !bRecoveryMode )
         throw ZipIOException("The stream seems to be broken!",
                             uno::Reference< XInterface >() );
 
-    return sal_True;
+    return true;
 }
 
 sal_Int32 ZipFile::findEND( )
@@ -996,7 +996,7 @@ sal_Int32 ZipFile::recover()
                             if ( nStreamOffset == (*aIter).second.nOffset && nCompressedSize > (*aIter).second.nCompressedSize )
                             {
                                 // only DEFLATED blocks need to be checked
-                                sal_Bool bAcceptBlock = ( (*aIter).second.nMethod == STORED && nCompressedSize == nSize );
+                                bool bAcceptBlock = ( (*aIter).second.nMethod == STORED && nCompressedSize == nSize );
 
                                 if ( !bAcceptBlock )
                                 {
@@ -1052,7 +1052,7 @@ sal_Int32 ZipFile::recover()
     }
 }
 
-sal_Bool ZipFile::checkSizeAndCRC( const ZipEntry& aEntry )
+bool ZipFile::checkSizeAndCRC( const ZipEntry& aEntry )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

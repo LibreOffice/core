@@ -36,7 +36,7 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
 , m_xStream( xStream )
 , m_pInterfaceContainer( NULL )
 , m_aProperties( aProps )
-, m_bDisposed( sal_False )
+, m_bDisposed( false )
 , m_nStorageType( nStorageType )
 {
     OSL_ENSURE( m_pImpl->m_rMutexRef.Is(), "No mutex is provided!\n" );
@@ -54,7 +54,7 @@ OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
 , m_xStream( xStream )
 , m_pInterfaceContainer( NULL )
 , m_aProperties( aProps )
-, m_bDisposed( sal_False )
+, m_bDisposed( false )
 , m_nStorageType( nStorageType )
 {
     OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
@@ -258,7 +258,7 @@ void OInputCompStream::InternalDispose()
     {}
 
     m_pImpl = NULL;
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 void SAL_CALL OInputCompStream::dispose(  )
@@ -285,7 +285,7 @@ void SAL_CALL OInputCompStream::dispose(  )
         m_pImpl = NULL;
     }
 
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 void SAL_CALL OInputCompStream::addEventListener( const uno::Reference< lang::XEventListener >& xListener )

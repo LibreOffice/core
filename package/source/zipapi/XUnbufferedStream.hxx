@@ -57,11 +57,11 @@ protected:
     sal_Int32 mnBlockSize;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
     ZipUtils::Inflater maInflater;
-    sal_Bool mbRawStream, mbWrappedRaw, mbFinished;
+    bool mbRawStream, mbWrappedRaw, mbFinished;
     sal_Int16 mnHeaderToRead;
     sal_Int64 mnZipCurrent, mnZipEnd, mnZipSize, mnMyCurrent;
     CRC32 maCRC;
-    sal_Bool mbCheckCRC;
+    bool mbCheckCRC;
 
 public:
     XUnbufferedStream(
@@ -71,9 +71,9 @@ public:
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
                  const ::rtl::Reference< EncryptionData >& rData,
                  sal_Int8 nStreamMode,
-                 sal_Bool bIsEncrypted,
+                 bool bIsEncrypted,
                  const OUString& aMediaType,
-                 sal_Bool bRecoveryMode );
+                 bool bRecoveryMode );
 
     // allows to read package raw stream
     XUnbufferedStream(

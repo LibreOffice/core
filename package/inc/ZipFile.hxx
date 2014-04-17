@@ -66,19 +66,19 @@ protected:
     const ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
     ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XProgressHandler > xProgressHandler;
 
-    sal_Bool bRecoveryMode;
+    bool bRecoveryMode;
 
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createMemoryStream(
             ZipEntry & rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
-            sal_Bool bRawStream,
-            sal_Bool bDecrypt );
+            bool bRawStream,
+            bool bDecrypt );
 
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createFileStream(
             ZipEntry & rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
-            sal_Bool bRawStream,
-            sal_Bool bDecrypt );
+            bool bRawStream,
+            bool bDecrypt );
 
     // aMediaType parameter is used only for raw stream header creation
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createUnbufferedStream(
@@ -86,12 +86,12 @@ protected:
             ZipEntry & rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             sal_Int8 nStreamMode,
-            sal_Bool bDecrypt,
+            bool bDecrypt,
             const OUString& aMediaType = OUString() );
 
-    sal_Bool hasValidPassword ( ZipEntry & rEntry, const rtl::Reference < EncryptionData > &rData );
+    bool hasValidPassword ( ZipEntry & rEntry, const rtl::Reference < EncryptionData > &rData );
 
-    sal_Bool checkSizeAndCRC( const ZipEntry& aEntry );
+    bool checkSizeAndCRC( const ZipEntry& aEntry );
 
     sal_Int32 getCRC( sal_Int64 nOffset, sal_Int64 nSize );
 
@@ -101,14 +101,14 @@ public:
 
     ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
              const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > &rxContext,
-             sal_Bool bInitialise
+             bool bInitialise
              )
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
 
     ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
              const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > &rxContext,
-             sal_Bool bInitialise,
-             sal_Bool bForceRecover,
+             bool bInitialise,
+             bool bForceRecover,
              ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XProgressHandler > xProgress
              )
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
@@ -121,7 +121,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
-            sal_Bool bDecrypt,
+            bool bDecrypt,
             SotMutexHolderRef aMutexHolder )
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
 
@@ -139,7 +139,7 @@ public:
                                     const OUString& aMediaType,
                                     sal_Int8 * & pHeader );
 
-    static sal_Bool StaticFillData ( ::rtl::Reference < BaseEncryptionData > & rData,
+    static bool StaticFillData ( ::rtl::Reference < BaseEncryptionData > & rData,
                                      sal_Int32 &rEncAlgorithm,
                                      sal_Int32 &rChecksumAlgorithm,
                                      sal_Int32 &rDerivedKeySize,
@@ -156,7 +156,7 @@ public:
                 ::com::sun::star::packages::zip::ZipIOException,
                 ::com::sun::star::uno::RuntimeException );
 
-    static sal_Bool StaticHasValidPassword (
+    static bool StaticHasValidPassword (
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Sequence< sal_Int8 > &aReadBuffer,
             const ::rtl::Reference < EncryptionData > &rData );
@@ -164,14 +164,14 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
-            sal_Bool bDecrypt,
+            bool bDecrypt,
             SotMutexHolderRef aMutexHolder )
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getDataStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
-            sal_Bool bDecrypt,
+            bool bDecrypt,
             SotMutexHolderRef aMutexHolder )
         throw ( ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::io::IOException,
@@ -190,7 +190,7 @@ public:
 
     ZipEnumeration * SAL_CALL entries(  );
 protected:
-    sal_Bool        readLOC ( ZipEntry &rEntry)
+    bool        readLOC ( ZipEntry &rEntry)
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
     sal_Int32       readCEN()
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);

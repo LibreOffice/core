@@ -125,7 +125,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
     }
     else
     {
-        sal_Bool bNewElement = sal_False;
+        bool bNewElement = false;
         ::rtl::Reference< OHierarchyElement_Impl > aElement;
         OHierarchyElementList_Impl::iterator aIter = m_aChildren.find( aNextName );
         if ( aIter != m_aChildren.end() )
@@ -133,7 +133,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
 
         if ( !aElement.is() )
         {
-            bNewElement = sal_True;
+            bNewElement = true;
             uno::Reference< embed::XStorage > xChildStorage = xOwnStor->openStorageElement( aNextName, nStorageMode );
             if ( !xChildStorage.is() )
                 throw uno::RuntimeException();

@@ -45,9 +45,9 @@ XUnbufferedStream::XUnbufferedStream(
                       Reference < XInputStream > xNewZipStream,
                       const ::rtl::Reference< EncryptionData >& rData,
                       sal_Int8 nStreamMode,
-                      sal_Bool bIsEncrypted,
+                      bool bIsEncrypted,
                       const OUString& aMediaType,
-                      sal_Bool bRecoveryMode )
+                      bool bRecoveryMode )
 : maMutexHolder( aMutexHolder.Is() ? aMutexHolder : SotMutexHolderRef( new SotMutexHolder ) )
 , mxZipStream ( xNewZipStream )
 , mxZipSeek ( xNewZipStream, UNO_QUERY )
@@ -57,7 +57,7 @@ XUnbufferedStream::XUnbufferedStream(
 , maInflater ( true )
 , mbRawStream ( nStreamMode == UNBUFF_STREAM_RAW || nStreamMode == UNBUFF_STREAM_WRAPPEDRAW )
 , mbWrappedRaw ( nStreamMode == UNBUFF_STREAM_WRAPPEDRAW )
-, mbFinished ( sal_False )
+, mbFinished ( false )
 , mnHeaderToRead ( 0 )
 , mnZipCurrent ( 0 )
 , mnZipEnd ( 0 )
@@ -80,8 +80,8 @@ XUnbufferedStream::XUnbufferedStream(
     if (mnZipSize < 0)
         throw ZipIOException("The stream seems to be broken!", uno::Reference< XInterface >());
 
-    sal_Bool bHaveEncryptData = ( rData.is() && rData->m_aSalt.getLength() && rData->m_aInitVector.getLength() && rData->m_nIterationCount != 0 ) ? sal_True : sal_False;
-    sal_Bool bMustDecrypt = ( nStreamMode == UNBUFF_STREAM_DATA && bHaveEncryptData && bIsEncrypted ) ? sal_True : sal_False;
+    bool bHaveEncryptData = ( rData.is() && rData->m_aSalt.getLength() && rData->m_aInitVector.getLength() && rData->m_nIterationCount != 0 ) ? sal_True : sal_False;
+    bool bMustDecrypt = ( nStreamMode == UNBUFF_STREAM_DATA && bHaveEncryptData && bIsEncrypted ) ? sal_True : sal_False;
 
     if ( bMustDecrypt )
     {
@@ -118,15 +118,15 @@ XUnbufferedStream::XUnbufferedStream(
 , mxData ( rData )
 , mnBlockSize( 1 )
 , maInflater ( true )
-, mbRawStream ( sal_False )
-, mbWrappedRaw ( sal_False )
-, mbFinished ( sal_False )
+, mbRawStream ( false )
+, mbWrappedRaw ( false )
+, mbFinished ( false )
 , mnHeaderToRead ( 0 )
 , mnZipCurrent ( 0 )
 , mnZipEnd ( 0 )
 , mnZipSize ( 0 )
 , mnMyCurrent ( 0 )
-, mbCheckCRC( sal_False )
+, mbCheckCRC( false )
 {
     // for this scenario maEntry is not set !!!
     OSL_ENSURE( mxZipSeek.is(), "The stream must be seekable!\n" );

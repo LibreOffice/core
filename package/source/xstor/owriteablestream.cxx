@@ -181,19 +181,19 @@ bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const
     return true;
 }
 
-sal_Bool KillFile( const OUString& aURL, const uno::Reference< uno::XComponentContext >& xContext )
+bool KillFile( const OUString& aURL, const uno::Reference< uno::XComponentContext >& xContext )
 {
     if ( !xContext.is() )
-        return sal_False;
+        return false;
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     try
     {
         uno::Reference < ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create( xContext ) );
 
         xAccess->kill( aURL );
-        bRet = sal_True;
+        bRet = true;
     }
     catch( const uno::Exception& rException )
     {
@@ -242,25 +242,25 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
                                       const uno::Reference< packages::XDataSinkEncrSupport >& xPackageStream,
                                       const uno::Reference< lang::XSingleServiceFactory >& xPackage,
                                       const uno::Reference< uno::XComponentContext >& xContext,
-                                      sal_Bool bForceEncrypted,
+                                      bool bForceEncrypted,
                                       sal_Int32 nStorageType,
-                                      sal_Bool bDefaultCompress,
+                                      bool bDefaultCompress,
                                       const uno::Reference< io::XInputStream >& xRelInfoStream )
 : m_pAntiImpl( NULL )
-, m_bHasDataToFlush( sal_False )
-, m_bFlushed( sal_False )
+, m_bHasDataToFlush( false )
+, m_bFlushed( false )
 , m_xPackageStream( xPackageStream )
 , m_xContext( xContext )
 , m_pParent( pParent )
 , m_bForceEncrypted( bForceEncrypted )
 , m_bUseCommonEncryption( !bForceEncrypted && nStorageType == embed::StorageFormats::PACKAGE )
-, m_bHasCachedEncryptionData( sal_False )
+, m_bHasCachedEncryptionData( false )
 , m_bCompressedSetExplicit( !bDefaultCompress )
 , m_xPackage( xPackage )
-, m_bHasInsertedStreamOptimization( sal_False )
+, m_bHasInsertedStreamOptimization( false )
 , m_nStorageType( nStorageType )
 , m_xOrigRelInfoStream( xRelInfoStream )
-, m_bOrigRelInfoBroken( sal_False )
+, m_bOrigRelInfoBroken( false )
 , m_nRelInfoStatus( RELINFO_NO_INIT )
 , m_nRelId( 1 )
 {
@@ -345,25 +345,25 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const OUString& aName,
 
         xParentPackageFolder->insertByName( aName, uno::makeAny( xTunnel ) );
 
-        m_bFlushed = sal_False;
-        m_bHasInsertedStreamOptimization = sal_False;
+        m_bFlushed = false;
+        m_bHasInsertedStreamOptimization = false;
     }
 }
-sal_Bool OWriteStream_Impl::IsEncrypted()
+bool OWriteStream_Impl::IsEncrypted()
 {
     if ( m_nStorageType != embed::StorageFormats::PACKAGE )
-        return sal_False;
+        return false;
 
     if ( m_bForceEncrypted || m_bHasCachedEncryptionData )
-        return sal_True;
+        return true;
 
     if ( !m_aTempURL.isEmpty() || m_xCacheStream.is() )
-        return sal_False;
+        return false;
 
     GetStreamProperties();
 
     // the following value can not be cached since it can change after root commit
-    sal_Bool bWasEncr = sal_False;
+    bool bWasEncr = false;
     uno::Reference< beans::XPropertySet > xPropSet( m_xPackageStream, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
@@ -374,7 +374,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
         }
     }
 
-    sal_Bool bToBeEncr = sal_False;
+    bool bToBeEncr = false;
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
         if ( m_aProps[nInd].Name == "Encrypted" )
@@ -401,8 +401,8 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
     if ( !bWasEncr && bToBeEncr && !aKey.getLength() )
     {
         // the stream is intended to use common storage password
-        m_bUseCommonEncryption = sal_True;
-        return sal_False;
+        m_bUseCommonEncryption = true;
+        return false;
     }
     else
         return bToBeEncr;
@@ -418,11 +418,11 @@ void OWriteStream_Impl::SetDecrypted()
 
     // let the stream be modified
     FillTempGetFileName();
-    m_bHasDataToFlush = sal_True;
+    m_bHasDataToFlush = true;
 
     // remove encryption
-    m_bForceEncrypted = sal_False;
-    m_bHasCachedEncryptionData = sal_False;
+    m_bForceEncrypted = false;
+    m_bHasCachedEncryptionData = false;
     m_aEncryptionData.clear();
 
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
@@ -445,7 +445,7 @@ void OWriteStream_Impl::SetEncrypted( const ::comphelper::SequenceAsHashMap& aEn
 
     // let the stream be modified
     FillTempGetFileName();
-    m_bHasDataToFlush = sal_True;
+    m_bHasDataToFlush = true;
 
     // introduce encryption info
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
@@ -454,9 +454,9 @@ void OWriteStream_Impl::SetEncrypted( const ::comphelper::SequenceAsHashMap& aEn
             m_aProps[nInd].Value <<= sal_True;
     }
 
-    m_bUseCommonEncryption = sal_False; // very important to set it to false
+    m_bUseCommonEncryption = false; // very important to set it to false
 
-    m_bHasCachedEncryptionData = sal_True;
+    m_bHasCachedEncryptionData = true;
     m_aEncryptionData = aEncryptionData;
 }
 
@@ -729,15 +729,15 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
 
     // Depending from MediaType value the package can change the compressed property itself
     // Thus if Compressed property is provided it must be set as the latest one
-    sal_Bool bCompressedIsSet = sal_False;
-    sal_Bool bCompressed = sal_False;
+    bool bCompressedIsSet = false;
+    bool bCompressed = false;
     OUString aComprPropName( "Compressed" );
     OUString aMedTypePropName( "MediaType" );
     for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
     {
         if ( aProps[nInd].Name.equals( aComprPropName ) )
         {
-            bCompressedIsSet = sal_True;
+            bCompressedIsSet = true;
             aProps[nInd].Value >>= bCompressed;
         }
         else if ( ( m_nStorageType == embed::StorageFormats::OFOPXML || m_nStorageType == embed::StorageFormats::PACKAGE )
@@ -761,8 +761,8 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
 
     if ( bCompressedIsSet )
     {
-        xPropertySet->setPropertyValue( aComprPropName, uno::makeAny( (sal_Bool)bCompressed ) );
-        m_bCompressedSetExplicit = sal_True;
+        xPropertySet->setPropertyValue( aComprPropName, uno::makeAny( bCompressed ) );
+        m_bCompressedSetExplicit = true;
     }
 
     if ( m_bUseCommonEncryption )
@@ -777,9 +777,9 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     }
 
     // the stream should be free soon, after package is stored
-    m_bHasDataToFlush = sal_False;
-    m_bFlushed = sal_True; // will allow to use transaction on stream level if will need it
-    m_bHasInsertedStreamOptimization = sal_True;
+    m_bHasDataToFlush = false;
+    m_bFlushed = true; // will allow to use transaction on stream level if will need it
+    m_bHasInsertedStreamOptimization = true;
 }
 
 void OWriteStream_Impl::Commit()
@@ -884,8 +884,8 @@ void OWriteStream_Impl::Commit()
 
     // the stream should be free soon, after package is stored
     m_xPackageStream = xNewPackageStream;
-    m_bHasDataToFlush = sal_False;
-    m_bFlushed = sal_True; // will allow to use transaction on stream level if will need it
+    m_bHasDataToFlush = false;
+    m_bFlushed = true; // will allow to use transaction on stream level if will need it
 }
 
 void OWriteStream_Impl::Revert()
@@ -914,10 +914,10 @@ void OWriteStream_Impl::Revert()
 
     m_aProps.realloc( 0 );
 
-    m_bHasDataToFlush = sal_False;
+    m_bHasDataToFlush = false;
 
-    m_bUseCommonEncryption = sal_True;
-    m_bHasCachedEncryptionData = sal_False;
+    m_bUseCommonEncryption = true;
+    m_bHasCachedEncryptionData = false;
     m_aEncryptionData.clear();
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
@@ -952,7 +952,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::GetStreamProperties()
 
 uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
                                                                     const uno::Sequence< beans::PropertyValue >& aProps,
-                                                                    sal_Bool bUseCommonEncryption )
+                                                                    bool bUseCommonEncryption )
 {
     uno::Sequence< beans::PropertyValue > aResult( aProps );
     sal_Int32 nLen = aResult.getLength();
@@ -998,7 +998,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
     return aResult;
 }
 
-sal_Bool OWriteStream_Impl::IsTransacted()
+bool OWriteStream_Impl::IsTransacted()
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
     return ( m_pAntiImpl && m_pAntiImpl->m_bTransacted );
@@ -1032,7 +1032,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
             AddLog( "Quiet exception" );
 
             m_nRelInfoStatus = RELINFO_BROKEN;
-            m_bOrigRelInfoBroken = sal_True;
+            m_bOrigRelInfoBroken = true;
         }
     }
     else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
@@ -1128,7 +1128,7 @@ void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream
     }
     else
     {
-        uno::Reference< io::XStream > xOwnStream = GetStream( embed::ElementModes::READ, aEncryptionData, sal_False );
+        uno::Reference< io::XStream > xOwnStream = GetStream( embed::ElementModes::READ, aEncryptionData, false );
         if ( !xOwnStream.is() )
             throw io::IOException(); // TODO
 
@@ -1166,7 +1166,7 @@ void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream
     }
     else
     {
-        uno::Reference< io::XStream > xOwnStream = GetStream( embed::ElementModes::READ, sal_False );
+        uno::Reference< io::XStream > xOwnStream = GetStream( embed::ElementModes::READ, false );
         if ( !xOwnStream.is() )
             throw io::IOException(); // TODO
 
@@ -1174,7 +1174,7 @@ void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream
     }
 }
 
-uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMode, const ::comphelper::SequenceAsHashMap& aEncryptionData, sal_Bool bHierarchyAccess )
+uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMode, const ::comphelper::SequenceAsHashMap& aEncryptionData, bool bHierarchyAccess )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
@@ -1207,8 +1207,8 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
         try {
             xResultStream = GetStream_Impl( nStreamMode, bHierarchyAccess );
 
-            m_bUseCommonEncryption = sal_False; // very important to set it to false
-            m_bHasCachedEncryptionData = sal_True;
+            m_bUseCommonEncryption = false; // very important to set it to false
+            m_bHasCachedEncryptionData = true;
             m_aEncryptionData = aEncryptionData;
         }
         catch( const packages::WrongPasswordException& rWrongPasswordException )
@@ -1234,7 +1234,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
     return xResultStream;
 }
 
-uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMode, sal_Bool bHierarchyAccess )
+uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMode, bool bHierarchyAccess )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
@@ -1268,7 +1268,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
     return xResultStream;
 }
 
-uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStreamMode, sal_Bool bHierarchyAccess )
+uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStreamMode, bool bHierarchyAccess )
 {
     // private method, no mutex is used
     GetStreamProperties();
@@ -1337,11 +1337,11 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
             if ( m_xCacheStream.is() )
                 CleanCacheStream();
 
-            m_bHasDataToFlush = sal_True;
+            m_bHasDataToFlush = true;
 
             // this call is triggered by the parent and it will recognize the change of the state
             if ( m_pParent )
-                m_pParent->m_bIsModified = sal_True;
+                m_pParent->m_bIsModified = true;
 
             xStream = CreateMemoryStream( m_xContext );
             m_xCacheSeek.set( xStream, uno::UNO_QUERY_THROW );
@@ -1352,11 +1352,11 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
             if ( m_aTempURL.isEmpty() && !m_xCacheStream.is() && !( m_xPackageStream->getDataStream().is() ) )
             {
                 // The stream does not exist in the storage
-                m_bHasDataToFlush = sal_True;
+                m_bHasDataToFlush = true;
 
                 // this call is triggered by the parent and it will recognize the change of the state
                 if ( m_pParent )
-                    m_pParent->m_bIsModified = sal_True;
+                    m_pParent->m_bIsModified = true;
                 xStream = GetTempFileAsStream();
             }
 
@@ -1427,7 +1427,7 @@ void OWriteStream_Impl::InputStreamDisposed( OInputCompStream* pStream )
     m_aInputStreamsList.remove( pStream );
 }
 
-void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io::XInputStream >& xDataToCopy, const uno::Sequence< beans::PropertyValue >& aProps, sal_Bool, uno::Reference< io::XStream >& xTargetStream )
+void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io::XInputStream >& xDataToCopy, const uno::Sequence< beans::PropertyValue >& aProps, bool, uno::Reference< io::XStream >& xTargetStream )
 {
     uno::Reference < io::XStream > xTempFile;
     if ( !xTargetStream.is() )
@@ -1524,7 +1524,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         if ( !xProps.is() )
             throw uno::RuntimeException();
 
-        sal_Bool bEncr = sal_False;
+        bool bEncr = false;
         xProps->getPropertyValue( "Encrypted" ) >>= bEncr;
         if ( !bEncr )
             throw packages::NoEncryptionException();
@@ -1591,7 +1591,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
         OUString aNewRelStreamName = aNewStreamName;
         aNewRelStreamName += ".rels";
 
-        sal_Bool bRenamed = !aOrigRelStreamName.equals( aNewRelStreamName );
+        bool bRenamed = !aOrigRelStreamName.equals( aNewRelStreamName );
         if ( m_nRelInfoStatus == RELINFO_CHANGED
           || m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
           || m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
@@ -1656,7 +1656,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
             // the original stream makes no sence after this step
             m_xOrigRelInfoStream = m_xNewRelInfoStream;
             m_aOrigRelInfo = m_aNewRelInfo;
-            m_bOrigRelInfoBroken = sal_False;
+            m_bOrigRelInfoBroken = false;
             m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
             m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
         }
@@ -1671,10 +1671,10 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
 
 // OWriteStream implementation
 
-OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, sal_Bool bTransacted )
+OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, bool bTransacted )
 : m_pImpl( pImpl )
-, m_bInStreamDisconnected( sal_False )
-, m_bInitOnDemand( sal_True )
+, m_bInStreamDisconnected( false )
+, m_bInitOnDemand( true )
 , m_nInitPosition( 0 )
 , m_bTransacted( bTransacted )
 {
@@ -1687,10 +1687,10 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, sal_Bool bTransacted )
     m_pData = new WSInternalData_Impl( pImpl->m_rMutexRef, m_pImpl->m_nStorageType );
 }
 
-OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStream > xStream, sal_Bool bTransacted )
+OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStream > xStream, bool bTransacted )
 : m_pImpl( pImpl )
-, m_bInStreamDisconnected( sal_False )
-, m_bInitOnDemand( sal_False )
+, m_bInStreamDisconnected( false )
+, m_bInitOnDemand( false )
 , m_nInitPosition( 0 )
 , m_bTransacted( bTransacted )
 {
@@ -1747,7 +1747,7 @@ void OWriteStream::DeInit()
     m_xInStream = uno::Reference< io::XInputStream >();
     m_xOutStream = uno::Reference< io::XOutputStream >();
     m_xSeekable = uno::Reference< io::XSeekable >();
-    m_bInitOnDemand = sal_True;
+    m_bInitOnDemand = true;
 }
 
 void OWriteStream::CheckInitOnDemand()
@@ -1770,7 +1770,7 @@ void OWriteStream::CheckInitOnDemand()
             m_xSeekable->seek( m_nInitPosition );
 
             m_nInitPosition = 0;
-            m_bInitOnDemand = sal_False;
+            m_bInitOnDemand = false;
         }
     }
 }
@@ -1799,14 +1799,14 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     m_xSeekable->seek( 0 );
 
     uno::Exception eThrown;
-    sal_Bool bThrown = sal_False;
+    bool bThrown = false;
     try {
         ::comphelper::OStorageHelper::CopyInputToOutput( m_xInStream, xDestOutStream );
     }
     catch ( const uno::Exception& e )
     {
         eThrown = e;
-        bThrown = sal_True;
+        bThrown = true;
     }
 
     // position-related section below is critical
@@ -1855,7 +1855,7 @@ void OWriteStream::ModifyParentUnlockMutex_Impl( ::osl::ResettableMutexGuard& aG
             xParentModif->setModified( sal_True );
         }
         else
-            m_pImpl->m_pParent->m_bIsModified = sal_True;
+            m_pImpl->m_pParent->m_bIsModified = true;
     }
 }
 
@@ -2146,7 +2146,7 @@ void SAL_CALL OWriteStream::closeInput(  )
 
     // the input part of the stream stays open for internal purposes ( to allow reading during copiing )
     // since it can not be reopened until output part is closed, it will be closed with output part.
-    m_bInStreamDisconnected = sal_True;
+    m_bInStreamDisconnected = true;
     // m_xInStream->closeInput();
     // m_xInStream = uno::Reference< io::XInputStream >();
 
@@ -2244,7 +2244,7 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
             m_xSeekable->seek( m_nInitPosition );
 
             m_nInitPosition = 0;
-            m_bInitOnDemand = sal_False;
+            m_bInitOnDemand = false;
         }
     }
 
@@ -2252,7 +2252,7 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
         throw io::NotConnectedException();
 
     m_xOutStream->writeBytes( aData );
-    m_pImpl->m_bHasDataToFlush = sal_True;
+    m_pImpl->m_bHasDataToFlush = true;
 
     ModifyParentUnlockMutex_Impl( aGuard );
 }
@@ -2421,7 +2421,7 @@ void SAL_CALL OWriteStream::truncate()
 
     xTruncate->truncate();
 
-    m_pImpl->m_bHasDataToFlush = sal_True;
+    m_pImpl->m_bHasDataToFlush = true;
 
     ModifyParentUnlockMutex_Impl( aGuard );
 }
@@ -2592,7 +2592,7 @@ sal_Bool SAL_CALL OWriteStream::hasEncryptionData()
     if (!m_pImpl)
         return sal_False;
 
-    sal_Bool bRet = m_pImpl->IsEncrypted();
+    bool bRet = m_pImpl->IsEncrypted();
 
     if (!bRet && m_pImpl->m_bUseCommonEncryption && m_pImpl->m_pParent)
         bRet = m_pImpl->m_pParent->m_bHasCommonEncryptionData;
@@ -2919,14 +2919,14 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
     for ( sal_Int32 nIndSource1 = 0; nIndSource1 < aEntries.getLength(); nIndSource1++ )
     {
         aResultSeq[nResultInd].realloc( aEntries[nIndSource1].getLength() );
-        sal_Bool bHasID = sal_False;
+        bool bHasID = false;
         sal_Int32 nResInd2 = 1;
 
         for ( sal_Int32 nIndSource2 = 0; nIndSource2 < aEntries[nIndSource1].getLength(); nIndSource2++ )
             if ( aEntries[nIndSource1][nIndSource2].First.equals( aIDTag ) )
             {
                 aResultSeq[nResultInd][0] = aEntries[nIndSource1][nIndSource2];
-                bHasID = sal_True;
+                bHasID = true;
             }
             else if ( nResInd2 < aResultSeq[nResultInd].getLength() )
                 aResultSeq[nResultInd][nResInd2++] = aEntries[nIndSource1][nIndSource2];
@@ -2995,14 +2995,14 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName.equals( aMediaTypeString ) )
     {
         // if the "Compressed" property is not set explicitly, the MediaType can change the default value
-        sal_Bool bCompressedValueFromType = sal_True;
+        bool bCompressedValueFromType = true;
         OUString aType;
         aValue >>= aType;
 
         if ( !m_pImpl->m_bCompressedSetExplicit )
         {
             if ( aType == "image/jpeg" || aType == "image/png" || aType == "image/gif" )
-                bCompressedValueFromType = sal_False;
+                bCompressedValueFromType = false;
         }
 
         for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
@@ -3016,7 +3016,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     else if ( aPropertyName.equals( aCompressedString ) )
     {
         // if the "Compressed" property is not set explicitly, the MediaType can change the default value
-        m_pImpl->m_bCompressedSetExplicit = sal_True;
+        m_pImpl->m_bCompressedSetExplicit = true;
         for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
         {
             if ( aPropertyName.equals( m_pImpl->m_aProps[nInd].Name ) )
@@ -3026,7 +3026,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
             && aPropertyName == "UseCommonStoragePasswordEncryption" )
     {
-        sal_Bool bUseCommonEncryption = sal_False;
+        bool bUseCommonEncryption = false;
         if ( aValue >>= bUseCommonEncryption )
         {
             if ( m_bInitOnDemand && m_pImpl->m_bHasInsertedStreamOptimization )
@@ -3039,11 +3039,11 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
                 if ( !m_pImpl->m_bUseCommonEncryption )
                 {
                     m_pImpl->SetDecrypted();
-                    m_pImpl->m_bUseCommonEncryption = sal_True;
+                    m_pImpl->m_bUseCommonEncryption = true;
                 }
             }
             else
-                m_pImpl->m_bUseCommonEncryption = sal_False;
+                m_pImpl->m_bUseCommonEncryption = false;
         }
         else
             throw lang::IllegalArgumentException(); //TODO
@@ -3097,7 +3097,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     else
         throw beans::UnknownPropertyException(); // TODO
 
-    m_pImpl->m_bHasDataToFlush = sal_True;
+    m_pImpl->m_bHasDataToFlush = true;
     ModifyParentUnlockMutex_Impl( aGuard );
 }
 

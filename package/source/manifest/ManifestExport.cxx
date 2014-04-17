@@ -132,9 +132,9 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
         }
     }
 
-    sal_Bool bProvideDTD = sal_False;
-    sal_Bool bAcceptNonemptyVersion = sal_False;
-    sal_Bool bStoreStartKeyGeneration = sal_False;
+    bool bProvideDTD = false;
+    bool bAcceptNonemptyVersion = false;
+    bool bStoreStartKeyGeneration = false;
     if ( !aDocMediaType.isEmpty() )
     {
         if ( aDocMediaType == MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII
@@ -158,11 +158,11 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             pRootAttrList->AddAttribute ( ATTRIBUTE_XMLNS,
                                         sCdataAttribute,
                                         MANIFEST_OASIS_NAMESPACE );
-            bAcceptNonemptyVersion = sal_True;
+            bAcceptNonemptyVersion = true;
             if ( aDocVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
             {
                 // this is ODF12 generation, let encrypted streams contain start-key-generation entry
-                bStoreStartKeyGeneration = sal_True;
+                bStoreStartKeyGeneration = true;
                 pRootAttrList->AddAttribute ( sVersionAttribute, sCdataAttribute, aDocVersion );
             }
         }
@@ -174,7 +174,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
                                         sCdataAttribute,
                                         MANIFEST_NAMESPACE );
 
-            bProvideDTD = sal_True;
+            bProvideDTD = true;
         }
     }
 

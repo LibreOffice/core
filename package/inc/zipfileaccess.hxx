@@ -50,7 +50,7 @@ class OZipFileAccess : public ::cppu::WeakImplHelper4<
 
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer;
 
-    sal_Bool m_bDisposed;
+    bool m_bDisposed;
     bool m_bOwnContent;
 
 public:
@@ -60,7 +60,7 @@ public:
 
     ::com::sun::star::uno::Sequence< OUString > GetPatternsFromString_Impl( const OUString& aString );
 
-    sal_Bool StringGoodForPattern_Impl( const OUString& aString,
+    bool StringGoodForPattern_Impl( const OUString& aString,
                                         const ::com::sun::star::uno::Sequence< OUString >& aPattern );
 
     static ::com::sun::star::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();

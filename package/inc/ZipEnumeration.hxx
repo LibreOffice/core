@@ -27,7 +27,7 @@ protected:
     EntryHash       &rEntryHash;
     EntryHash::const_iterator aIterator;
 public:
-    sal_Bool SAL_CALL hasMoreElements();
+    bool SAL_CALL hasMoreElements();
     const ZipEntry * SAL_CALL nextElement();
     ZipEnumeration( EntryHash &rNewEntryHash );
     ~ZipEnumeration();

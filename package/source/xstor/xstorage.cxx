@@ -68,9 +68,9 @@ struct StorInternalData_Impl
     SotMutexHolderRef m_rSharedMutexRef;
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
     ::cppu::OTypeCollection* m_pTypeCollection;
-    sal_Bool m_bIsRoot;
+    bool m_bIsRoot;
     sal_Int32 m_nStorageType; // the mode in which the storage is used
-    sal_Bool m_bReadOnlyWrap;
+    bool m_bReadOnlyWrap;
 
     OChildDispListener_Impl* m_pSubElDispListener;
 
@@ -79,7 +79,7 @@ struct StorInternalData_Impl
     ::rtl::Reference< OHierarchyHolder_Impl > m_rHierarchyHolder;
 
     // the mutex reference MUST NOT be empty
-    StorInternalData_Impl( const SotMutexHolderRef& rMutexRef, sal_Bool bRoot, sal_Int32 nStorageType, sal_Bool bReadOnlyWrap )
+    StorInternalData_Impl( const SotMutexHolderRef& rMutexRef, bool bRoot, sal_Int32 nStorageType, bool bReadOnlyWrap )
     : m_rSharedMutexRef( rMutexRef )
     , m_aListenersContainer( rMutexRef->GetMutex() )
     , m_pTypeCollection( NULL )
@@ -161,10 +161,10 @@ StorInternalData_Impl::~StorInternalData_Impl()
         delete m_pTypeCollection;
 }
 
-SotElement_Impl::SotElement_Impl( const OUString& rName, sal_Bool bStor, sal_Bool bNew )
+SotElement_Impl::SotElement_Impl( const OUString& rName, bool bStor, bool bNew )
 : m_aName( rName )
 , m_aOriginalName( rName )
-, m_bIsRemoved( sal_False )
+, m_bIsRemoved( false )
 , m_bIsInserted( bNew )
 , m_bIsStorage( bStor )
 , m_pStorage( NULL )
@@ -191,18 +191,18 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 , m_pAntiImpl( NULL )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
 , m_bIsModified( ( nMode & ( embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE ) ) == ( embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE ) )
-, m_bBroadcastModified( sal_False )
-, m_bCommited( sal_False )
-, m_bIsRoot( sal_True )
-, m_bListCreated( sal_False )
+, m_bBroadcastModified( false )
+, m_bCommited( false )
+, m_bIsRoot( true )
+, m_bListCreated( false )
 , m_nModifiedListenerCount( 0 )
 , m_xContext( xContext )
 , m_xProperties( xProperties )
-, m_bHasCommonEncryptionData( sal_False )
+, m_bHasCommonEncryptionData( false )
 , m_pParent( NULL )
-, m_bControlMediaType( sal_False )
-, m_bMTFallbackUsed( sal_False )
-, m_bControlVersion( sal_False )
+, m_bControlMediaType( false )
+, m_bMTFallbackUsed( false )
+, m_bControlVersion( false )
 , m_pSwitchStream( NULL )
 , m_nStorageType( nStorageType )
 , m_pRelStorElement( NULL )
@@ -231,18 +231,18 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 , m_pAntiImpl( NULL )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
 , m_bIsModified( ( nMode & ( embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE ) ) == ( embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE ) )
-, m_bBroadcastModified( sal_False )
-, m_bCommited( sal_False )
-, m_bIsRoot( sal_True )
-, m_bListCreated( sal_False )
+, m_bBroadcastModified( false )
+, m_bCommited( false )
+, m_bIsRoot( true )
+, m_bListCreated( false )
 , m_nModifiedListenerCount( 0 )
 , m_xContext( xContext )
 , m_xProperties( xProperties )
-, m_bHasCommonEncryptionData( sal_False )
+, m_bHasCommonEncryptionData( false )
 , m_pParent( NULL )
-, m_bControlMediaType( sal_False )
-, m_bMTFallbackUsed( sal_False )
-, m_bControlVersion( sal_False )
+, m_bControlMediaType( false )
+, m_bMTFallbackUsed( false )
+, m_bControlVersion( false )
 , m_pSwitchStream( NULL )
 , m_nStorageType( nStorageType )
 , m_pRelStorElement( NULL )
@@ -274,19 +274,19 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_pAntiImpl( NULL )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
 , m_bIsModified( ( nMode & ( embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE ) ) == ( embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE ) )
-, m_bBroadcastModified( sal_False )
-, m_bCommited( sal_False )
-, m_bIsRoot( sal_False )
-, m_bListCreated( sal_False )
+, m_bBroadcastModified( false )
+, m_bCommited( false )
+, m_bIsRoot( false )
+, m_bListCreated( false )
 , m_nModifiedListenerCount( 0 )
 , m_xPackageFolder( xPackageFolder )
 , m_xPackage( xPackage )
 , m_xContext( xContext )
-, m_bHasCommonEncryptionData( sal_False )
+, m_bHasCommonEncryptionData( false )
 , m_pParent( pParent ) // can be empty in case of temporary readonly substorages and relation storage
-, m_bControlMediaType( sal_False )
-, m_bMTFallbackUsed( sal_False )
-, m_bControlVersion( sal_False )
+, m_bControlMediaType( false )
+, m_bMTFallbackUsed( false )
+, m_bControlVersion( false )
 , m_pSwitchStream( NULL )
 , m_nStorageType( nStorageType )
 , m_pRelStorElement( NULL )
@@ -304,7 +304,7 @@ OStorage_Impl::~OStorage_Impl()
             SAL_WARN_IF( m_bIsRoot, "package.xstor", "The root storage wrapper must be disposed already" );
 
             try {
-                m_pAntiImpl->InternalDispose( sal_False );
+                m_pAntiImpl->InternalDispose( false );
             }
             catch ( const uno::Exception& rException )
             {
@@ -321,7 +321,7 @@ OStorage_Impl::~OStorage_Impl()
                 uno::Reference< embed::XStorage > xTmp = pStorageIter->m_xWeakRef;
                 if ( xTmp.is() )
                     try {
-                        pStorageIter->m_pPointer->InternalDispose( sal_False );
+                        pStorageIter->m_pPointer->InternalDispose( false );
                     } catch( const uno::Exception& rException )
                     {
                         AddLog( rException.Message );
@@ -427,7 +427,7 @@ void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
         if ( !xTmp.is() || pStorageIter->m_pPointer == &aStorage )
         {
             try {
-                pStorageIter->m_pPointer->InternalDispose( sal_False );
+                pStorageIter->m_pPointer->InternalDispose( false );
             } catch( const uno::Exception& rException )
             {
                 AddLog( THROW_WHERE "Quiet exception" );
@@ -466,7 +466,7 @@ void OStorage_Impl::OpenOwnPackage()
 
             // do not allow elements to remove themself from the old container in case of insertion to another container
             aArguments[ 1 ] <<= beans::NamedValue( "AllowRemoveOnInsert",
-                                                    uno::makeAny( (sal_Bool)sal_False ) );
+                                                    uno::makeAny( false ) );
 
             sal_Int32 nArgNum = 2;
             for ( sal_Int32 aInd = 0; aInd < m_xProperties.getLength(); aInd++ )
@@ -554,13 +554,13 @@ void OStorage_Impl::GetStorageProperties()
             xPackageProps->getPropertyValue( MEDIATYPE_FALLBACK_USED_PROPERTY ) >>= m_bMTFallbackUsed;
 
             xProps->getPropertyValue( "MediaType" ) >>= m_aMediaType;
-            m_bControlMediaType = sal_True;
+            m_bControlMediaType = true;
         }
 
         if ( !m_bControlVersion )
         {
             xProps->getPropertyValue( "Version" ) >>= m_aVersion;
-            m_bControlVersion = sal_True;
+            m_bControlVersion = true;
         }
     }
 
@@ -622,7 +622,7 @@ void OStorage_Impl::ReadContents()
     if ( !xEnum.is() )
         throw uno::RuntimeException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 
-    m_bListCreated = sal_True;
+    m_bListCreated = true;
 
     while( xEnum->hasMoreElements() )
     {
@@ -641,7 +641,7 @@ void OStorage_Impl::ReadContents()
 
             uno::Reference< container::XNameContainer > xNameContainer( xNamed, uno::UNO_QUERY );
 
-            SotElement_Impl* pNewElement = new SotElement_Impl( aName, xNameContainer.is(), sal_False );
+            SotElement_Impl* pNewElement = new SotElement_Impl( aName, xNameContainer.is(), false );
             if ( m_nStorageType == embed::StorageFormats::OFOPXML && aName == "_rels" )
             {
                 if ( !pNewElement->m_bIsStorage )
@@ -655,7 +655,7 @@ void OStorage_Impl::ReadContents()
                 if ( ( m_nStorageMode & embed::ElementModes::TRUNCATE ) == embed::ElementModes::TRUNCATE )
                 {
                     // if a storage is truncated all of it elements are marked as deleted
-                    pNewElement->m_bIsRemoved = sal_True;
+                    pNewElement->m_bIsRemoved = true;
                 }
 
                 m_aChildrenList.push_back( pNewElement );
@@ -682,7 +682,7 @@ void OStorage_Impl::ReadContents()
     GetStorageProperties();
 }
 
-void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDest, sal_Bool bDirect )
+void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDest, bool bDirect )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
@@ -720,7 +720,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         // if this is a root storage, the common key from current one should be moved there
-        sal_Bool bIsRoot = sal_False;
+        bool bIsRoot = false;
         OUString aRootString = "IsRoot";
         if ( ( xPropSet->getPropertyValue( aRootString ) >>= bIsRoot ) && bIsRoot )
         {
@@ -775,7 +775,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
 void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                                         uno::Reference< embed::XStorage > xDest,
                                         const OUString& aName,
-                                        sal_Bool bDirect )
+                                        bool bDirect )
 {
     SAL_WARN_IF( !xDest.is(), "package.xstor", "No destination storage!" );
     SAL_WARN_IF( aName.isEmpty(), "package.xstor", "Empty element name!" );
@@ -838,7 +838,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 {
                     aStrProps.realloc( ++nNum );
                     aStrProps[nNum-1].Name = "UseCommonStoragePasswordEncryption";
-                    aStrProps[nNum-1].Value <<= (sal_Bool)( pElement->m_pStream->UsesCommonEncryption_Impl() );
+                    aStrProps[nNum-1].Value <<= pElement->m_pStream->UsesCommonEncryption_Impl();
                 }
                 else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
@@ -900,11 +900,11 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
              && ( pElement->m_pStream->IsModified() || pElement->m_pStream->HasWriteOwner_Impl() ) )
         {
             ::comphelper::SequenceAsHashMap aCommonEncryptionData;
-            sal_Bool bHasCommonEncryptionData = sal_False;
+            bool bHasCommonEncryptionData = false;
             try
             {
                 aCommonEncryptionData = GetCommonRootEncryptionData();
-                bHasCommonEncryptionData = sal_True;
+                bHasCommonEncryptionData = true;
             }
             catch( const packages::NoEncryptionException& rNoEncryptionException )
             {
@@ -925,7 +925,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 uno::Reference< beans::XPropertySet > xProps( xDestStream, uno::UNO_QUERY_THROW );
                 xProps->setPropertyValue(
                     "UseCommonStoragePasswordEncryption",
-                    uno::Any( (sal_Bool) sal_True ) );
+                    uno::Any( true ) );
             }
             else
             {
@@ -949,7 +949,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 // it must be stored with the common storage password as well
 
                 uno::Reference< io::XStream > xOwnStream = pElement->m_pStream->GetStream( embed::ElementModes::READ,
-                                                                                            sal_False );
+                                                                                            false );
                 uno::Reference< io::XStream > xDestStream =
                                             xDest->openStreamElement( aName,
                                                 embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
@@ -959,7 +959,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 uno::Reference< beans::XPropertySet > xProps( xDestStream, uno::UNO_QUERY_THROW );
                 xProps->setPropertyValue(
                     "UseCommonStoragePasswordEncryption",
-                    uno::Any( (sal_Bool) sal_True ) );
+                    uno::Any( true ) );
             }
             catch( const packages::WrongPasswordException& rWrongPasswordException )
             {
@@ -1009,7 +1009,7 @@ void OStorage_Impl::CopyLastCommitTo( const uno::Reference< embed::XStorage >& x
                                 m_nStorageType);
 
     // TODO/LATER: could use direct copying
-    aTempRepresent.CopyToStorage( xNewStor, sal_False );
+    aTempRepresent.CopyToStorage( xNewStor, false );
 }
 
 void OStorage_Impl::InsertIntoPackageFolder( const OUString& aName,
@@ -1024,7 +1024,7 @@ void OStorage_Impl::InsertIntoPackageFolder( const OUString& aName,
 
     xParentPackageFolder->insertByName( aName, uno::makeAny( xTunnel ) );
 
-    m_bCommited = sal_False;
+    m_bCommited = false;
 }
 
 void OStorage_Impl::Commit()
@@ -1202,7 +1202,7 @@ void OStorage_Impl::Commit()
 
                     (*pElementIter)->m_pStorage->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
 
-                    (*pElementIter)->m_bIsInserted = sal_False;
+                    (*pElementIter)->m_bIsInserted = false;
                 }
             }
             else
@@ -1221,7 +1221,7 @@ void OStorage_Impl::Commit()
 
                     (*pElementIter)->m_pStream->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
 
-                    (*pElementIter)->m_bIsInserted = sal_False;
+                    (*pElementIter)->m_bIsInserted = false;
                 }
             }
         }
@@ -1272,11 +1272,11 @@ void OStorage_Impl::Commit()
     else if ( !m_bCommited )
     {
         m_xPackageFolder = xNewPackageFolder;
-        m_bCommited = sal_True;
+        m_bCommited = true;
     }
 
     // after commit the mediatype treated as the correct one
-    m_bMTFallbackUsed = sal_False;
+    m_bMTFallbackUsed = false;
 }
 
 void OStorage_Impl::Revert()
@@ -1306,7 +1306,7 @@ void OStorage_Impl::Revert()
             ClearElement( *pElementIter );
 
             (*pElementIter)->m_aName = (*pElementIter)->m_aOriginalName;
-            (*pElementIter)->m_bIsRemoved = sal_False;
+            (*pElementIter)->m_bIsRemoved = false;
 
             ++pElementIter;
         }
@@ -1322,12 +1322,12 @@ void OStorage_Impl::Revert()
         ClearElement( *pDeletedIter );
 
         (*pDeletedIter)->m_aName = (*pDeletedIter)->m_aOriginalName;
-        (*pDeletedIter)->m_bIsRemoved = sal_False;
+        (*pDeletedIter)->m_bIsRemoved = false;
     }
     m_aDeletedList.clear();
 
-    m_bControlMediaType = sal_False;
-    m_bControlVersion = sal_False;
+    m_bControlMediaType = false;
+    m_bControlVersion = false;
 
     GetStorageProperties();
 
@@ -1382,7 +1382,7 @@ SotElement_Impl* OStorage_Impl::FindElement( const OUString& rName )
     return NULL;
 }
 
-SotElement_Impl* OStorage_Impl::InsertStream( const OUString& aName, sal_Bool bEncr )
+SotElement_Impl* OStorage_Impl::InsertStream( const OUString& aName, bool bEncr )
 {
     SAL_WARN_IF( !m_xPackage.is(), "package.xstor", "Not possible to refer to package as to factory!" );
     if ( !m_xPackage.is() )
@@ -1406,12 +1406,12 @@ SotElement_Impl* OStorage_Impl::InsertStream( const OUString& aName, sal_Bool bE
         throw packages::NoEncryptionException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 
     // the mode is not needed for storage stream internal implementation
-    SotElement_Impl* pNewElement = InsertElement( aName, sal_False );
-    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xContext, bEncr, m_nStorageType, sal_True );
+    SotElement_Impl* pNewElement = InsertElement( aName, false );
+    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xContext, bEncr, m_nStorageType, true );
 
     m_aChildrenList.push_back( pNewElement );
-    m_bIsModified = sal_True;
-    m_bBroadcastModified = sal_True;
+    m_bIsModified = true;
+    m_bBroadcastModified = true;
 
     return pNewElement;
 }
@@ -1446,14 +1446,14 @@ SotElement_Impl* OStorage_Impl::InsertRawStream( const OUString& aName, const un
     xPackageSubStream->setRawStream( xInStrToInsert );
 
     // the mode is not needed for storage stream internal implementation
-    SotElement_Impl* pNewElement = InsertElement( aName, sal_False );
-    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xContext, sal_True, m_nStorageType, sal_False );
+    SotElement_Impl* pNewElement = InsertElement( aName, false );
+    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xContext, true, m_nStorageType, false );
     // the stream is inserted and must be treated as a commited one
     pNewElement->m_pStream->SetToBeCommited();
 
     m_aChildrenList.push_back( pNewElement );
-    m_bIsModified = sal_True;
-    m_bBroadcastModified = sal_True;
+    m_bIsModified = true;
+    m_bBroadcastModified = true;
 
     return pNewElement;
 }
@@ -1479,14 +1479,14 @@ OStorage_Impl* OStorage_Impl::CreateNewStorageImpl( sal_Int32 nStorageMode )
 
     OStorage_Impl* pResult =
             new OStorage_Impl( this, nStorageMode, xPackageSubFolder, m_xPackage, m_xContext, m_nStorageType );
-    pResult->m_bIsModified = sal_True;
+    pResult->m_bIsModified = true;
 
     return pResult;
 }
 
 SotElement_Impl* OStorage_Impl::InsertStorage( const OUString& aName, sal_Int32 nStorageMode )
 {
-    SotElement_Impl* pNewElement = InsertElement( aName, sal_True );
+    SotElement_Impl* pNewElement = InsertElement( aName, true );
 
     pNewElement->m_pStorage = CreateNewStorageImpl( nStorageMode );
 
@@ -1495,7 +1495,7 @@ SotElement_Impl* OStorage_Impl::InsertStorage( const OUString& aName, sal_Int32 
     return pNewElement;
 }
 
-SotElement_Impl* OStorage_Impl::InsertElement( const OUString& aName, sal_Bool bIsStorage )
+SotElement_Impl* OStorage_Impl::InsertElement( const OUString& aName, bool bIsStorage )
 {
     OSL_ENSURE( FindElement( aName ) == NULL, "Should not try to insert existing element" );
 
@@ -1530,7 +1530,7 @@ SotElement_Impl* OStorage_Impl::InsertElement( const OUString& aName, sal_Bool b
     }
 
     // create new element
-    return new SotElement_Impl( aName, bIsStorage, sal_True );
+    return new SotElement_Impl( aName, bIsStorage, true );
 }
 
 void OStorage_Impl::OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorageMode )
@@ -1581,7 +1581,7 @@ void OStorage_Impl::OpenSubStream( SotElement_Impl* pElement )
             throw uno::RuntimeException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 
         // the stream can never be inserted here, because inserted stream element holds the stream till commit or destruction
-        pElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xContext, sal_False, m_nStorageType, sal_False, GetRelInfoStreamForName( pElement->m_aOriginalName ) );
+        pElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xContext, false, m_nStorageType, false, GetRelInfoStreamForName( pElement->m_aOriginalName ) );
     }
 }
 
@@ -1624,7 +1624,7 @@ void OStorage_Impl::RemoveElement( SotElement_Impl* pElement )
     }
     else
     {
-        pElement->m_bIsRemoved = sal_True;
+        pElement->m_bIsRemoved = true;
         ClearElement( pElement );
     }
 
@@ -1647,7 +1647,7 @@ void OStorage_Impl::ClearElement( SotElement_Impl* pElement )
 }
 
 void OStorage_Impl::CloneStreamElement( const OUString& aStreamName,
-                                        sal_Bool bEncryptionDataProvided,
+                                        bool bEncryptionDataProvided,
                                         const ::comphelper::SequenceAsHashMap& aEncryptionData,
                                         uno::Reference< io::XStream >& xTargetStream )
         throw ( embed::InvalidStorageException,
@@ -1713,7 +1713,7 @@ void OStorage_Impl::CreateRelStorage()
     {
         if ( !m_pRelStorElement )
         {
-            m_pRelStorElement = new SotElement_Impl( "_rels", sal_True, sal_True );
+            m_pRelStorElement = new SotElement_Impl( "_rels", true, true );
             m_pRelStorElement->m_pStorage = CreateNewStorageImpl( embed::ElementModes::WRITE );
             if ( m_pRelStorElement->m_pStorage )
                 m_pRelStorElement->m_pStorage->m_pParent = NULL; // the relation storage is completely controlled by parent
@@ -1725,7 +1725,7 @@ void OStorage_Impl::CreateRelStorage()
         if ( !m_pRelStorElement->m_pStorage )
             throw uno::RuntimeException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 
-        OStorage* pResultStorage = new OStorage( m_pRelStorElement->m_pStorage, sal_False );
+        OStorage* pResultStorage = new OStorage( m_pRelStorElement->m_pStorage, false );
         m_xRelStorage = uno::Reference< embed::XStorage >( (embed::XStorage*) pResultStorage );
     }
 }
@@ -1886,7 +1886,7 @@ OStorage::OStorage( uno::Reference< io::XInputStream > xInputStream,
 : m_pImpl( new OStorage_Impl( xInputStream, nMode, xProperties, xContext, nStorageType ) )
 {
     m_pImpl->m_pAntiImpl = this;
-    m_pData = new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, sal_False );
+    m_pData = new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, false );
 }
 
 OStorage::OStorage( uno::Reference< io::XStream > xStream,
@@ -1897,10 +1897,10 @@ OStorage::OStorage( uno::Reference< io::XStream > xStream,
 : m_pImpl( new OStorage_Impl( xStream, nMode, xProperties, xContext, nStorageType ) )
 {
     m_pImpl->m_pAntiImpl = this;
-    m_pData = new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, sal_False );
+    m_pData = new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, false );
 }
 
-OStorage::OStorage( OStorage_Impl* pImpl, sal_Bool bReadOnlyWrap )
+OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
 : m_pImpl( pImpl )
 {
     // this call can be done only from OStorage_Impl implementation to create child storage
@@ -1952,7 +1952,7 @@ OStorage::~OStorage()
     }
 }
 
-void SAL_CALL OStorage::InternalDispose( sal_Bool bNotifyImpl )
+void SAL_CALL OStorage::InternalDispose( bool bNotifyImpl )
 {
     SAL_INFO( "package.xstor", "package (mv76033) OStorage::InternalDispose" );
 
@@ -2063,7 +2063,7 @@ void OStorage::BroadcastModifiedIfNecessary()
     if ( !m_pImpl->m_bBroadcastModified )
         return;
 
-    m_pImpl->m_bBroadcastModified = sal_False;
+    m_pImpl->m_bBroadcastModified = false;
 
     SAL_WARN_IF( m_pData->m_bReadOnlyWrap, "package.xstor", "The storage can not be modified at all!" );
 
@@ -2130,7 +2130,7 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
     }
 }
 
-SotElement_Impl* OStorage::OpenStreamElement_Impl( const OUString& aStreamName, sal_Int32 nOpenMode, sal_Bool bEncr )
+SotElement_Impl* OStorage::OpenStreamElement_Impl( const OUString& aStreamName, sal_Int32 nOpenMode, bool bEncr )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2357,7 +2357,7 @@ void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& 
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
 
     try {
-        m_pImpl->CopyToStorage( xDest, sal_False );
+        m_pImpl->CopyToStorage( xDest, false );
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
@@ -2432,10 +2432,10 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
     uno::Reference< io::XStream > xResult;
     try
     {
-        SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamName, nOpenMode, sal_False );
+        SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamName, nOpenMode, false );
         OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
 
-        xResult = pElement->m_pStream->GetStream( nOpenMode, sal_False );
+        xResult = pElement->m_pStream->GetStream( nOpenMode, false );
         SAL_WARN_IF( !xResult.is(), "package.xstor", "The method must throw exception instead of removing empty result!" );
 
         if ( m_pData->m_bReadOnlyWrap )
@@ -2609,7 +2609,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
         if ( !pElement->m_pStorage )
             throw io::IOException( THROW_WHERE, uno::Reference< uno::XInterface >() ); // TODO: general_error
 
-        sal_Bool bReadOnlyWrap = ( ( nStorageMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE );
+        bool bReadOnlyWrap = ( ( nStorageMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE );
         OStorage* pResultStorage = new OStorage( pElement->m_pStorage, bReadOnlyWrap );
         xResult = uno::Reference< embed::XStorage >( (embed::XStorage*) pResultStorage );
 
@@ -2697,7 +2697,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const OUStr
     try
     {
         uno::Reference< io::XStream > xResult;
-        m_pImpl->CloneStreamElement( aStreamName, sal_False, ::comphelper::SequenceAsHashMap(), xResult );
+        m_pImpl->CloneStreamElement( aStreamName, false, ::comphelper::SequenceAsHashMap(), xResult );
         if ( !xResult.is() )
             throw uno::RuntimeException( THROW_WHERE, uno::Reference< uno::XInterface >() );
         return xResult;
@@ -3098,8 +3098,8 @@ void SAL_CALL OStorage::removeElement( const OUString& aElementName )
 
         m_pImpl->RemoveElement( pElement );
 
-        m_pImpl->m_bIsModified = sal_True;
-        m_pImpl->m_bBroadcastModified = sal_True;
+        m_pImpl->m_bIsModified = true;
+        m_pImpl->m_bBroadcastModified = true;
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
@@ -3194,8 +3194,8 @@ void SAL_CALL OStorage::renameElement( const OUString& aElementName, const OUStr
 
         pElement->m_aName = aNewName;
 
-        m_pImpl->m_bIsModified = sal_True;
-        m_pImpl->m_bBroadcastModified = sal_True;
+        m_pImpl->m_bIsModified = true;
+        m_pImpl->m_bBroadcastModified = true;
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
@@ -3300,7 +3300,7 @@ void SAL_CALL OStorage::copyElementTo(  const OUString& aElementName,
         if ( xNameAccess->hasByName( aNewName ) )
             throw container::ElementExistException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 
-        m_pImpl->CopyStorageElement( pElement, xDest, aNewName, sal_False );
+        m_pImpl->CopyStorageElement( pElement, xDest, aNewName, false );
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
@@ -3403,12 +3403,12 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
         if ( xNameAccess->hasByName( aNewName ) )
             throw container::ElementExistException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 
-        m_pImpl->CopyStorageElement( pElement, xDest, aNewName, sal_False );
+        m_pImpl->CopyStorageElement( pElement, xDest, aNewName, false );
 
         m_pImpl->RemoveElement( pElement );
 
-        m_pImpl->m_bIsModified = sal_True;
-        m_pImpl->m_bBroadcastModified = sal_True;
+        m_pImpl->m_bIsModified = true;
+        m_pImpl->m_bBroadcastModified = true;
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
@@ -3501,10 +3501,10 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
     uno::Reference< io::XStream > xResult;
     try
     {
-        SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamName, nOpenMode, sal_True );
+        SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamName, nOpenMode, true );
         OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
 
-        xResult = pElement->m_pStream->GetStream( nOpenMode, aEncryptionData, sal_False );
+        xResult = pElement->m_pStream->GetStream( nOpenMode, aEncryptionData, false );
         SAL_WARN_IF( !xResult.is(), "package.xstor", "The method must throw exception instead of removing empty result!" );
 
         if ( m_pData->m_bReadOnlyWrap )
@@ -3607,7 +3607,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStream(
     try
     {
         uno::Reference< io::XStream > xResult;
-        m_pImpl->CloneStreamElement( aStreamName, sal_True, aEncryptionData, xResult );
+        m_pImpl->CloneStreamElement( aStreamName, true, aEncryptionData, xResult );
         if ( !xResult.is() )
             throw uno::RuntimeException( THROW_WHERE, uno::Reference< uno::XInterface >() );
         return xResult;
@@ -4084,8 +4084,8 @@ void SAL_CALL OStorage::revert()
 
     try {
         m_pImpl->Revert();
-        m_pImpl->m_bIsModified = sal_False;
-        m_pImpl->m_bBroadcastModified = sal_True;
+        m_pImpl->m_bIsModified = false;
+        m_pImpl->m_bBroadcastModified = true;
     }
     catch( const io::IOException& rIOException )
     {
@@ -4187,13 +4187,13 @@ void SAL_CALL OStorage::setModified( sal_Bool bModified )
     if ( m_pData->m_bReadOnlyWrap )
         throw beans::PropertyVetoException( THROW_WHERE, uno::Reference< uno::XInterface >() ); // TODO: access denied
 
-    if ( m_pImpl->m_bIsModified != bModified )
+    if ( (m_pImpl->m_bIsModified ? 1 : 0) != bModified )
         m_pImpl->m_bIsModified = bModified;
 
     aGuard.clear();
     if ( bModified )
     {
-        m_pImpl->m_bBroadcastModified = sal_True;
+        m_pImpl->m_bBroadcastModified = true;
         BroadcastModifiedIfNecessary();
     }
 }
@@ -4446,7 +4446,7 @@ void SAL_CALL OStorage::dispose()
 
     try
     {
-        InternalDispose( sal_True );
+        InternalDispose( true );
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
@@ -4559,7 +4559,7 @@ void SAL_CALL OStorage::removeEncryption()
             xPackPropSet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
                                             uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
 
-            m_pImpl->m_bHasCommonEncryptionData = sal_False;
+            m_pImpl->m_bHasCommonEncryptionData = false;
             m_pImpl->m_aCommonEncryptionData.clear();
         }
         catch( const uno::RuntimeException& rRException )
@@ -4633,7 +4633,7 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
             xPackPropSet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
                                             uno::makeAny( aEncryptionMap.getAsConstNamedValueList() ) );
 
-            m_pImpl->m_bHasCommonEncryptionData = sal_True;
+            m_pImpl->m_bHasCommonEncryptionData = true;
             m_pImpl->m_aCommonEncryptionData = aEncryptionMap;
         }
         catch( const uno::Exception& rException )
@@ -4834,21 +4834,21 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
         if ( aPropertyName == "MediaType" )
         {
             aValue >>= m_pImpl->m_aMediaType;
-            m_pImpl->m_bControlMediaType = sal_True;
+            m_pImpl->m_bControlMediaType = true;
 
-            m_pImpl->m_bBroadcastModified = sal_True;
-            m_pImpl->m_bIsModified = sal_True;
+            m_pImpl->m_bBroadcastModified = true;
+            m_pImpl->m_bIsModified = true;
         }
         else if ( aPropertyName == "Version" )
         {
             aValue >>= m_pImpl->m_aVersion;
-            m_pImpl->m_bControlVersion = sal_True;
+            m_pImpl->m_bControlVersion = true;
 
             // this property can be set even for readonly storage
             if ( !m_pData->m_bReadOnlyWrap )
             {
-                m_pImpl->m_bBroadcastModified = sal_True;
-                m_pImpl->m_bIsModified = sal_True;
+                m_pImpl->m_bBroadcastModified = true;
+                m_pImpl->m_bIsModified = true;
             }
         }
         else if ( ( m_pData->m_bIsRoot && ( aPropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY
@@ -4881,8 +4881,8 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
                 m_pImpl->m_xNewRelInfoStream = xInRelStream;
                 m_pImpl->m_aRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
                 m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED_STREAM;
-                m_pImpl->m_bBroadcastModified = sal_True;
-                m_pImpl->m_bIsModified = sal_True;
+                m_pImpl->m_bBroadcastModified = true;
+                m_pImpl->m_bIsModified = true;
             }
             else
                 throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
@@ -4893,8 +4893,8 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
             {
                 m_pImpl->m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
                 m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
-                m_pImpl->m_bBroadcastModified = sal_True;
-                m_pImpl->m_bIsModified = sal_True;
+                m_pImpl->m_bBroadcastModified = true;
+                m_pImpl->m_bIsModified = true;
             }
             else
                 throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
@@ -5414,14 +5414,14 @@ void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence
     for ( sal_Int32 nIndSource1 = 0; nIndSource1 < aEntries.getLength(); nIndSource1++ )
     {
         aResultSeq[nResultInd].realloc( aEntries[nIndSource1].getLength() );
-        sal_Bool bHasID = sal_False;
+        bool bHasID = false;
         sal_Int32 nResInd2 = 1;
 
         for ( sal_Int32 nIndSource2 = 0; nIndSource2 < aEntries[nIndSource1].getLength(); nIndSource2++ )
             if ( aEntries[nIndSource1][nIndSource2].First.equals( aIDTag ) )
             {
                 aResultSeq[nResultInd][0] = aEntries[nIndSource1][nIndSource2];
-                bHasID = sal_True;
+                bHasID = true;
             }
             else if ( nResInd2 < aResultSeq[nResultInd].getLength() )
                 aResultSeq[nResultInd][nResInd2++] = aEntries[nIndSource1][nIndSource2];
@@ -5514,7 +5514,7 @@ void SAL_CALL OStorage::insertStreamElementDirect(
         if ( pElement )
             throw container::ElementExistException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 
-        pElement = OpenStreamElement_Impl( aStreamName, embed::ElementModes::READWRITE, sal_False );
+        pElement = OpenStreamElement_Impl( aStreamName, embed::ElementModes::READWRITE, false );
         OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
 
         pElement->m_pStream->InsertStreamDirectly( xInStream, aProps );
@@ -5614,7 +5614,7 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
 
         // let the element be copied directly
         uno::Reference< embed::XStorage > xStorDest( xDest, uno::UNO_QUERY_THROW );
-        m_pImpl->CopyStorageElement( pElement, xStorDest, aNewName, sal_True );
+        m_pImpl->CopyStorageElement( pElement, xStorDest, aNewName, true );
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
@@ -5955,7 +5955,7 @@ void SAL_CALL OStorage::copyStreamElementData( const OUString& aStreamName, cons
     try
     {
         uno::Reference< io::XStream > xNonconstRef = xTargetStream;
-        m_pImpl->CloneStreamElement( aStreamName, sal_False, ::comphelper::SequenceAsHashMap(), xNonconstRef );
+        m_pImpl->CloneStreamElement( aStreamName, false, ::comphelper::SequenceAsHashMap(), xNonconstRef );
 
         SAL_WARN_IF( xNonconstRef != xTargetStream, "package.xstor", "The provided stream reference seems not be filled in correctly!" );
         if ( xNonconstRef != xTargetStream )
@@ -6043,11 +6043,11 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamEle
         // that must be a direct request for a stream
         // the transacted version of the stream should be opened
 
-        SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamPath, nOpenMode, sal_False );
+        SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamPath, nOpenMode, false );
         OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
 
         xResult = uno::Reference< embed::XExtendedStorageStream >(
-                        pElement->m_pStream->GetStream( nOpenMode, sal_True ),
+                        pElement->m_pStream->GetStream( nOpenMode, true ),
                         uno::UNO_QUERY_THROW );
     }
     else
@@ -6153,11 +6153,11 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
         // that must be a direct request for a stream
         // the transacted version of the stream should be opened
 
-        SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamPath, nOpenMode, sal_True );
+        SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamPath, nOpenMode, true );
         OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
 
         xResult = uno::Reference< embed::XExtendedStorageStream >(
-                        pElement->m_pStream->GetStream( nOpenMode, aEncryptionData, sal_True ),
+                        pElement->m_pStream->GetStream( nOpenMode, aEncryptionData, true ),
                         uno::UNO_QUERY_THROW );
     }
     else

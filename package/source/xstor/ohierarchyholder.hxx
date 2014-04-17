@@ -37,7 +37,7 @@ struct OHierarchyElement_Impl;
 
 struct eqFunc
 {
-    sal_Bool operator()( const OUString &r1,
+    bool operator()( const OUString &r1,
                          const OUString &r2) const
     {
         return r1 == r2;

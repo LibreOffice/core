@@ -50,8 +50,8 @@ ZipOutputStream::ZipOutputStream( const uno::Reference< uno::XComponentContext >
 , nMethod(DEFLATED)
 , nLevel(0)
 , mnDigested(0)
-, bFinished(sal_False)
-, bEncryptCurrentEntry(sal_False)
+, bFinished(false)
+, bEncryptCurrentEntry(false)
 , m_pCurrentStream(NULL)
 {
 }
@@ -75,7 +75,7 @@ void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel )
 
 void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
                         ZipPackageStream* pStream,
-                        sal_Bool bEncrypt)
+                        bool bEncrypt)
     throw(IOException, RuntimeException)
 {
     if (pCurrentEntry != NULL)
@@ -95,7 +95,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
 
     if (bEncrypt)
     {
-        bEncryptCurrentEntry = sal_True;
+        bEncryptCurrentEntry = true;
 
         m_xCipherContext = ZipFile::StaticGetCipher( m_xContext, pStream->GetEncryptionData(), true );
         m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( m_xContext, pStream->GetEncryptionData() );
@@ -162,7 +162,7 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
 
         if (bEncryptCurrentEntry)
         {
-            bEncryptCurrentEntry = sal_False;
+            bEncryptCurrentEntry = false;
 
             m_xCipherContext.clear();
 
@@ -236,7 +236,7 @@ void SAL_CALL ZipOutputStream::finish(  )
     for (sal_Int32 i =0, nEnd = aZipList.size(); i < nEnd; i++)
         writeCEN( *aZipList[i] );
     writeEND( nOffset, static_cast < sal_Int32 > (aChucker.GetPosition()) - nOffset);
-    bFinished = sal_True;
+    bFinished = true;
     xStream->flush();
 }
 

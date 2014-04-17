@@ -144,13 +144,13 @@ ZipPackage::ZipPackage ( const uno::Reference < XComponentContext > &xContext )
 , m_nStartKeyGenerationID( xml::crypto::DigestID::SHA1 )
 , m_nChecksumDigestID( xml::crypto::DigestID::SHA1_1K )
 , m_nCommonEncryptionID( xml::crypto::CipherID::BLOWFISH_CFB_8 )
-, m_bHasEncryptedEntries ( sal_False )
-, m_bHasNonEncryptedEntries ( sal_False )
-, m_bInconsistent ( sal_False )
-, m_bForceRecovery ( sal_False )
-, m_bMediaTypeFallbackUsed ( sal_False )
+, m_bHasEncryptedEntries ( false )
+, m_bHasNonEncryptedEntries ( false )
+, m_bInconsistent ( false )
+, m_bForceRecovery ( false )
+, m_bMediaTypeFallbackUsed ( false )
 , m_nFormat( embed::StorageFormats::PACKAGE ) // package is the default format
-, m_bAllowRemoveOnInsert( sal_True )
+, m_bAllowRemoveOnInsert( true )
 , m_eMode ( e_IMode_None )
 , m_xContext( xContext )
 , m_pRootFolder( NULL )
@@ -170,7 +170,7 @@ ZipPackage::~ZipPackage( void )
     // during m_pRootFolder dieing by refcount.
 }
 
-sal_Bool ZipPackage::isLocalFile() const
+bool ZipPackage::isLocalFile() const
 {
     OUString aSystemPath;
     uno::Reference< XUniversalContentBroker > xUcb(
@@ -190,7 +190,7 @@ void ZipPackage::parseManifest()
 {
     if ( m_nFormat == embed::StorageFormats::PACKAGE )
     {
-        sal_Bool bManifestParsed = sal_False;
+        bool bManifestParsed = false;
         bool bDifferentStartKeyAlgorithm = false;
         const OUString sMeta ("META-INF");
         if ( m_xRootFolder->hasByName( sMeta ) )
@@ -279,7 +279,7 @@ void ZipPackage::parseManifest()
                                 {
                                     pStream = reinterpret_cast < ZipPackageStream* > ( xUnoTunnel->getSomething( ZipPackageStream::static_getImplementationId() ));
                                     pStream->SetMediaType ( sMediaType );
-                                    pStream->SetFromManifest( sal_True );
+                                    pStream->SetFromManifest( true );
 
                                     if ( pSalt && pVector && pCount && pSize && pDigest && pDigestAlg && pEncryptionAlg )
                                     {
@@ -288,7 +288,7 @@ void ZipPackage::parseManifest()
                                         sal_Int32 nCount = 0, nDigestAlg = 0, nEncryptionAlg = 0;
                                         sal_Int32 nDerivedKeySize = 16, nStartKeyAlg = xml::crypto::DigestID::SHA1;
 
-                                        pStream->SetToBeEncrypted ( sal_True );
+                                        pStream->SetToBeEncrypted ( true );
 
                                         *pSalt >>= aSequence;
                                         pStream->setSalt ( aSequence );
@@ -319,24 +319,24 @@ void ZipPackage::parseManifest()
                                             *pStartKeyAlg >>= nStartKeyAlg;
                                         pStream->SetImportedStartKeyAlgorithm( nStartKeyAlg );
 
-                                        pStream->SetToBeCompressed ( sal_True );
-                                        pStream->SetToBeEncrypted ( sal_True );
-                                        pStream->SetIsEncrypted ( sal_True );
+                                        pStream->SetToBeCompressed ( true );
+                                        pStream->SetToBeEncrypted ( true );
+                                        pStream->SetIsEncrypted ( true );
                                         if ( !m_bHasEncryptedEntries && pStream->getName() == "content.xml" )
                                         {
-                                            m_bHasEncryptedEntries = sal_True;
+                                            m_bHasEncryptedEntries = true;
                                             m_nStartKeyGenerationID = nStartKeyAlg;
                                             m_nChecksumDigestID = nDigestAlg;
                                             m_nCommonEncryptionID = nEncryptionAlg;
                                         }
                                     }
                                     else
-                                        m_bHasNonEncryptedEntries = sal_True;
+                                        m_bHasNonEncryptedEntries = true;
                                 }
                             }
                         }
 
-                        bManifestParsed = sal_True;
+                        bManifestParsed = true;
                     }
 
                     // now hide the manifest.xml file from user
@@ -386,7 +386,7 @@ void ZipPackage::parseManifest()
                 {
                     // accept only types that look similar to own mediatypes
                     m_pRootFolder->SetMediaType( aPackageMediatype );
-                    m_bMediaTypeFallbackUsed = sal_True;
+                    m_bMediaTypeFallbackUsed = true;
                 }
             }
             else if ( !m_bForceRecovery )
@@ -406,7 +406,7 @@ void ZipPackage::parseManifest()
 
         m_bInconsistent = m_pRootFolder->LookForUnexpectedODF12Streams( OUString() );
 
-        sal_Bool bODF12AndNewer = ( m_pRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
+        bool bODF12AndNewer = ( m_pRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
         if ( !m_bForceRecovery && bODF12AndNewer )
         {
             if ( m_bInconsistent )
@@ -545,7 +545,7 @@ void ZipPackage::getZipFileContents()
                 {
                     pPkgFolder = new ZipPackageFolder( m_nFormat, m_bAllowRemoveOnInsert );
                     pPkgFolder->setName( sTemp );
-                    pPkgFolder->doSetParent( pCurrent, sal_True );
+                    pPkgFolder->doSetParent( pCurrent, true );
                     pCurrent = pPkgFolder;
                 }
                 else
@@ -560,10 +560,10 @@ void ZipPackage::getZipFileContents()
             nStreamIndex++;
             sTemp = rName.copy( nStreamIndex, rName.getLength() - nStreamIndex );
             pPkgStream = new ZipPackageStream( *this, m_xContext, m_bAllowRemoveOnInsert );
-            pPkgStream->SetPackageMember( sal_True );
+            pPkgStream->SetPackageMember( true );
             pPkgStream->setZipEntryOnLoading( rEntry );
             pPkgStream->setName( sTemp );
-            pPkgStream->doSetParent( pCurrent, sal_True );
+            pPkgStream->doSetParent( pCurrent, true );
         }
     }
 
@@ -576,7 +576,7 @@ void ZipPackage::getZipFileContents()
 void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
         throw( Exception, RuntimeException, std::exception )
 {
-    sal_Bool bHaveZipFile = sal_True;
+    bool bHaveZipFile = true;
     uno::Reference< XProgressHandler > xProgressHandler;
     beans::NamedValue aNamedValue;
 
@@ -602,7 +602,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                             OUString aCommand = aParam.getToken( 0, '&', nIndex );
                             if ( aCommand == "repairpackage" )
                             {
-                                m_bForceRecovery = sal_True;
+                                m_bForceRecovery = true;
                                 break;
                             }
                             else if ( aCommand == "purezip" )
@@ -638,14 +638,14 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                             m_xContentStream = xSink->getInputStream();
                     }
                     else
-                        bHaveZipFile = sal_False;
+                        bHaveZipFile = false;
                 }
                 catch ( com::sun::star::uno::Exception& )
                 {
                     // Exception derived from uno::Exception thrown. This probably
                     // means the file doesn't exist...we'll create it at
                     // commitChanges time
-                    bHaveZipFile = sal_False;
+                    bHaveZipFile = false;
                 }
             }
             else if ( ( aArguments[ind] >>= m_xStream ) )
@@ -667,7 +667,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                     // setting this argument to true means Package format
                     // setting it to false means plain Zip format
 
-                    sal_Bool bPackFormat = sal_True;
+                    bool bPackFormat = true;
                     aNamedValue.Value >>= bPackFormat;
                     if ( !bPackFormat )
                         m_nFormat = embed::StorageFormats::ZIP;
@@ -732,17 +732,17 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                             static_cast < ::cppu::OWeakObject * > ( this ) );
 
                 if ( !m_xContentSeek->getLength() )
-                    bHaveZipFile = sal_False;
+                    bHaveZipFile = false;
             }
             else
-                bHaveZipFile = sal_False;
+                bHaveZipFile = false;
         }
         catch ( com::sun::star::uno::Exception& )
         {
             // Exception derived from uno::Exception thrown. This probably
             // means the file doesn't exist...we'll create it at
             // commitChanges time
-            bHaveZipFile = sal_False;
+            bHaveZipFile = false;
         }
         if ( bHaveZipFile )
         {
@@ -750,7 +750,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             OUString message;
             try
             {
-                m_pZipFile = new ZipFile ( m_xContentStream, m_xContext, sal_True, m_bForceRecovery, xProgressHandler );
+                m_pZipFile = new ZipFile ( m_xContentStream, m_xContext, true, m_bForceRecovery, xProgressHandler );
                 getZipFileContents();
             }
             catch ( IOException & e )
@@ -952,7 +952,7 @@ uno::Reference< XInterface > SAL_CALL ZipPackage::createInstance()
 uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const uno::Sequence< Any >& aArguments )
         throw( Exception, RuntimeException, std::exception )
 {
-    sal_Bool bArg = sal_False;
+    bool bArg = false;
     uno::Reference < XInterface > xRef;
     if ( aArguments.getLength() )
         aArguments[0] >>= bArg;
@@ -1094,7 +1094,7 @@ void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream 
     if ( m_pZipFile )
         m_pZipFile->setInputStream( m_xContentStream );
     else
-        m_pZipFile = new ZipFile ( m_xContentStream, m_xContext, sal_False );
+        m_pZipFile = new ZipFile ( m_xContentStream, m_xContext, false );
 }
 
 uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
@@ -1104,7 +1104,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
     // If a temporary file is created it is returned back by the method.
     // If the data written directly, xComponentStream will be switched here
 
-    sal_Bool bUseTemp = sal_True;
+    bool bUseTemp = true;
     uno::Reference < io::XInputStream > xResult;
     uno::Reference < io::XInputStream > xTempIn;
 
@@ -1121,7 +1121,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             {
                 xTempOut = xStr->getOutputStream();
                 if( xTempOut.is() )
-                    bUseTemp = sal_False;
+                    bUseTemp = false;
             }
         }
     }
@@ -1130,7 +1130,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         // write directly to an empty stream
         xTempOut = m_xStream->getOutputStream();
         if( xTempOut.is() )
-            bUseTemp = sal_False;
+            bUseTemp = false;
     }
 
     if( bUseTemp )
@@ -1297,7 +1297,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
     {
         try
         {
-            sal_Bool bTruncSuccess = sal_False;
+            bool bTruncSuccess = false;
 
             try
             {
@@ -1305,7 +1305,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
                 sal_Int64 aSize = 0;
                 Any aAny = aOriginalContent.setPropertyValue("Size", makeAny( aSize ) );
                 if( !( aAny >>= aDetect ) )
-                    bTruncSuccess = sal_True;
+                    bTruncSuccess = true;
             }
             catch( Exception& )
             {
@@ -1415,7 +1415,7 @@ void SAL_CALL ZipPackage::commitChanges()
         else if ( m_eMode == e_IMode_URL )
         {
             uno::Reference< XOutputStream > aOrigFileStream;
-            sal_Bool bCanBeCorrupted = sal_False;
+            bool bCanBeCorrupted = false;
 
             if( isLocalFile() )
             {
@@ -1452,7 +1452,7 @@ void SAL_CALL ZipPackage::commitChanges()
 
                         aOrigFileStream = uno::Reference< XOutputStream >();
                         // the original file can already be corrupted
-                        bCanBeCorrupted = sal_True;
+                        bCanBeCorrupted = true;
                     }
                 }
             }
@@ -1502,7 +1502,7 @@ void SAL_CALL ZipPackage::commitChanges()
     }
 
     // after successful storing it can be set to false
-    m_bMediaTypeFallbackUsed = sal_False;
+    m_bMediaTypeFallbackUsed = false;
 }
 
 void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Reference< io::XInputStream >& xTempStream )

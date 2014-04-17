@@ -31,7 +31,7 @@ using namespace com::sun::star;
 using namespace std;
 
 ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManVector )
-: bIgnoreEncryptData    ( sal_False )
+: bIgnoreEncryptData    ( false )
 , nDerivedKeySize( 0 )
 , rManVector ( rNewManVector )
 
@@ -152,7 +152,7 @@ void ManifestImport::doEncryptionData(StringHashMap &rConvertedAttribs)
             aSequence[PKG_MNFST_DIGESTALG].Value <<= xml::crypto::DigestID::SHA256_1K;
         }
         else
-            bIgnoreEncryptData = sal_True;
+            bIgnoreEncryptData = true;
 
         if ( !bIgnoreEncryptData )
         {
@@ -198,7 +198,7 @@ void ManifestImport::doAlgorithm(StringHashMap &rConvertedAttribs)
             nDerivedKeySize = 16;
         }
         else
-            bIgnoreEncryptData = sal_True;
+            bIgnoreEncryptData = true;
 
         if ( !bIgnoreEncryptData )
         {
@@ -245,7 +245,7 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
             aSequence[PKG_MNFST_DERKEYSIZE].Value <<= nDerivedKeySize;
         }
         else
-            bIgnoreEncryptData = sal_True;
+            bIgnoreEncryptData = true;
     }
 }
 
@@ -264,7 +264,7 @@ void ManifestImport::doStartKeyAlg(StringHashMap &rConvertedAttribs)
         aSequence[PKG_MNFST_STARTALG].Value <<= xml::crypto::DigestID::SHA1;
     }
     else
-        bIgnoreEncryptData = sal_True;
+        bIgnoreEncryptData = true;
 }
 
 void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
@@ -349,7 +349,7 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
             aSequence.erase(std::remove_if(aSequence.begin(), aSequence.end(),
                 isEmpty), aSequence.end());
 
-            bIgnoreEncryptData = sal_False;
+            bIgnoreEncryptData = false;
             rManVector.push_back ( aSequence.getAsConstList() );
 
             aSequence.clear();

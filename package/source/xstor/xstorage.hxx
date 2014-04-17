@@ -77,15 +77,15 @@ struct SotElement_Impl
 {
     OUString             m_aName;
     OUString             m_aOriginalName;
-    sal_Bool                    m_bIsRemoved;
-    sal_Bool                    m_bIsInserted;
-    sal_Bool                    m_bIsStorage;
+    bool                    m_bIsRemoved;
+    bool                    m_bIsInserted;
+    bool                    m_bIsStorage;
 
     OStorage_Impl*              m_pStorage;
     OWriteStream_Impl*          m_pStream;
 
 public:
-                                SotElement_Impl( const OUString& rName, sal_Bool bStor, sal_Bool bNew );
+                                SotElement_Impl( const OUString& rName, bool bStor, bool bNew );
                                 ~SotElement_Impl();
 };
 
@@ -126,13 +126,13 @@ struct OStorage_Impl
     OStorageList_Impl           m_aReadOnlyWrapList; // only valid if readonly external reference exists
 
     sal_Int32                   m_nStorageMode; // open mode ( read/write/trunc/nocreate )
-    sal_Bool                    m_bIsModified;  // only modified elements will be sent to the original content
-    sal_Bool                    m_bBroadcastModified;  // will be set if notification is required
+    bool                    m_bIsModified;  // only modified elements will be sent to the original content
+    bool                    m_bBroadcastModified;  // will be set if notification is required
 
-    sal_Bool                    m_bCommited;    // sending the streams is coordinated by the root storage of the package
+    bool                    m_bCommited;    // sending the streams is coordinated by the root storage of the package
 
-    sal_Bool                    m_bIsRoot;      // marks this storage as root storages that manages all commits and reverts
-    sal_Bool                    m_bListCreated;
+    bool                    m_bIsRoot;      // marks this storage as root storages that manages all commits and reverts
+    bool                    m_bListCreated;
 
     /// Count of registered modification listeners
     oslInterlockedCount         m_nModifiedListenerCount;
@@ -154,17 +154,17 @@ struct OStorage_Impl
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream; // ??? may be stored in properties
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xStream; // ??? may be stored in properties
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_xProperties;
-    sal_Bool m_bHasCommonEncryptionData;
+    bool m_bHasCommonEncryptionData;
     ::comphelper::SequenceAsHashMap m_aCommonEncryptionData;
 
     // must be empty in case of root storage
     OStorage_Impl* m_pParent;
 
-    sal_Bool        m_bControlMediaType;
+    bool        m_bControlMediaType;
     OUString m_aMediaType;
-    sal_Bool        m_bMTFallbackUsed;
+    bool        m_bMTFallbackUsed;
 
-    sal_Bool        m_bControlVersion;
+    bool        m_bControlVersion;
     OUString m_aVersion;
 
     SwitchablePersistenceStream* m_pSwitchStream;
@@ -229,22 +229,22 @@ struct OStorage_Impl
     ::comphelper::SequenceAsHashMap GetCommonRootEncryptionData() throw ( ::com::sun::star::packages::NoEncryptionException );
 
     void CopyToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest,
-                        sal_Bool bDirect );
+                        bool bDirect );
     void CopyStorageElement( SotElement_Impl* pElement,
                             ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > xDest,
                             const OUString& aName,
-                            sal_Bool bDirect );
+                            bool bDirect );
 
-    void SetModified( sal_Bool bModified );
+    void SetModified( bool bModified );
 
     SotElement_Impl* FindElement( const OUString& rName );
 
-    SotElement_Impl* InsertStream( const OUString& aName, sal_Bool bEncr );
+    SotElement_Impl* InsertStream( const OUString& aName, bool bEncr );
     SotElement_Impl* InsertRawStream( const OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
 
     OStorage_Impl* CreateNewStorageImpl( sal_Int32 nStorageMode );
     SotElement_Impl* InsertStorage( const OUString& aName, sal_Int32 nStorageMode );
-    SotElement_Impl* InsertElement( const OUString& aName, sal_Bool bIsStorage );
+    SotElement_Impl* InsertElement( const OUString& aName, bool bIsStorage );
 
     void OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorageMode );
     void OpenSubStream( SotElement_Impl* pElement );
@@ -257,7 +257,7 @@ struct OStorage_Impl
 
     void CloneStreamElement(
                     const OUString& aStreamName,
-                    sal_Bool bPassProvided,
+                    bool bPassProvided,
                     const ::comphelper::SequenceAsHashMap& aEncryptionData,
                     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream )
         throw ( ::com::sun::star::embed::InvalidStorageException,
@@ -301,7 +301,7 @@ protected:
 
     void Commit_Impl();
 
-    SotElement_Impl* OpenStreamElement_Impl( const OUString& aStreamName, sal_Int32 nOpenMode, sal_Bool bEncr );
+    SotElement_Impl* OpenStreamElement_Impl( const OUString& aStreamName, sal_Int32 nOpenMode, bool bEncr );
 
     void BroadcastModifiedIfNecessary();
 
@@ -324,11 +324,11 @@ public:
                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
                 sal_Int32 nStorageType );
 
-    OStorage(   OStorage_Impl* pImpl, sal_Bool bReadOnlyWrap );
+    OStorage(   OStorage_Impl* pImpl, bool bReadOnlyWrap );
 
     virtual ~OStorage();
 
-    void SAL_CALL InternalDispose( sal_Bool bNotifyImpl );
+    void SAL_CALL InternalDispose( bool bNotifyImpl );
 
     void ChildIsDisposed( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xChild );
 

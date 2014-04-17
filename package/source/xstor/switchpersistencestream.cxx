@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 
 struct SPStreamData_Impl
 {
-    sal_Bool m_bInStreamBased;
+    bool m_bInStreamBased;
 
     // the streams below are not visible from outside so there is no need to remember position
 
@@ -39,18 +39,18 @@ struct SPStreamData_Impl
     uno::Reference< io::XInputStream > m_xOrigInStream;
     uno::Reference< io::XOutputStream > m_xOrigOutStream;
 
-    sal_Bool m_bInOpen;
-    sal_Bool m_bOutOpen;
+    bool m_bInOpen;
+    bool m_bOutOpen;
 
     SPStreamData_Impl(
-            sal_Bool bInStreamBased,
+            bool bInStreamBased,
             const uno::Reference< io::XStream >& xOrigStream,
             const uno::Reference< io::XTruncate >& xOrigTruncate,
             const uno::Reference< io::XSeekable >& xOrigSeekable,
             const uno::Reference< io::XInputStream >& xOrigInStream,
             const uno::Reference< io::XOutputStream >& xOrigOutStream,
-            sal_Bool bInOpen,
-            sal_Bool bOutOpen )
+            bool bInOpen,
+            bool bOutOpen )
     : m_bInStreamBased( bInStreamBased )
     , m_xOrigStream( xOrigStream )
     , m_xOrigTruncate( xOrigTruncate )
@@ -96,8 +96,8 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
         throw uno::RuntimeException();
 
     sal_Int64 nPos = 0;
-    sal_Bool bInOpen = sal_False;
-    sal_Bool bOutOpen = sal_False;
+    bool bInOpen = false;
+    bool bOutOpen = false;
 
     if ( m_pStreamData && m_pStreamData->m_xOrigSeekable.is() )
     {
@@ -115,7 +115,7 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
 
     CloseAll_Impl();
 
-    m_pStreamData = new SPStreamData_Impl( sal_False,
+    m_pStreamData = new SPStreamData_Impl( false,
                                             xStream, xNewTruncate, xNewSeekable, xNewInStream, xNewOutStream,
                                             bInOpen, bOutOpen );
 }
@@ -130,8 +130,8 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
         throw uno::RuntimeException();
 
     sal_Int64 nPos = 0;
-    sal_Bool bInOpen = sal_False;
-    sal_Bool bOutOpen = sal_False;
+    bool bInOpen = false;
+    bool bOutOpen = false;
 
     if ( m_pStreamData && m_pStreamData->m_xOrigSeekable.is() )
     {
@@ -149,7 +149,7 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
 
     CloseAll_Impl();
 
-    m_pStreamData = new SPStreamData_Impl( sal_True,
+    m_pStreamData = new SPStreamData_Impl( true,
                                             xNewStream, xNewTruncate, xNewSeekable, xInputStream, xNewOutStream,
                                             bInOpen, bOutOpen );
 
@@ -191,12 +191,12 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
     xTargetOutStream->flush();
     xTargetSeek->seek( nPos );
 
-    sal_Bool bInOpen = m_pStreamData->m_bInOpen;
-    sal_Bool bOutOpen = m_pStreamData->m_bOutOpen;
+    bool bInOpen = m_pStreamData->m_bInOpen;
+    bool bOutOpen = m_pStreamData->m_bOutOpen;
 
     CloseAll_Impl();
 
-    m_pStreamData = new SPStreamData_Impl( sal_False,
+    m_pStreamData = new SPStreamData_Impl( false,
                                         xTargetStream, xTargetTruncate, xTargetSeek, xTargetInStream, xTargetOutStream,
                                         bInOpen, bOutOpen );
 }
@@ -217,7 +217,7 @@ uno::Reference< io::XInputStream > SAL_CALL SwitchablePersistenceStream::getInpu
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_pStreamData )
-        m_pStreamData->m_bInOpen = sal_True;
+        m_pStreamData->m_bInOpen = true;
     return static_cast< io::XInputStream* >( this );
 }
 
@@ -227,7 +227,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_pStreamData )
-        m_pStreamData->m_bOutOpen = sal_True;
+        m_pStreamData->m_bOutOpen = true;
     return static_cast< io::XOutputStream* >( this );
 }
 
@@ -300,7 +300,7 @@ void SAL_CALL SwitchablePersistenceStream::closeInput()
     if ( !m_pStreamData )
         throw io::NotConnectedException();
 
-    m_pStreamData->m_bInOpen = sal_False;
+    m_pStreamData->m_bInOpen = false;
     if ( !m_pStreamData->m_bOutOpen )
         CloseAll_Impl();
 }
@@ -353,7 +353,7 @@ void SAL_CALL SwitchablePersistenceStream::closeOutput(  )
     if ( !m_pStreamData )
         throw io::NotConnectedException();
 
-    m_pStreamData->m_bOutOpen = sal_False;
+    m_pStreamData->m_bOutOpen = false;
     if ( !m_pStreamData->m_bInOpen )
         CloseAll_Impl();
 }

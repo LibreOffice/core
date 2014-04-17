@@ -113,7 +113,7 @@ public:
         return m_pHolder;
     }
 
-    sal_Bool Is() const
+    bool Is() const
     {
         return m_pHolder != NULL;
     }

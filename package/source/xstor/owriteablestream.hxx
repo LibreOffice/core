@@ -108,8 +108,8 @@ struct OWriteStream_Impl : public PreCreationStruct
 
     InputStreamsList_Impl m_aInputStreamsList;
 
-    sal_Bool                        m_bHasDataToFlush;    // only modified elements will be sent to the original content
-    sal_Bool                        m_bFlushed;      // sending the streams is coordinated by the root storage of the package
+    bool                        m_bHasDataToFlush;    // only modified elements will be sent to the original content
+    bool                        m_bFlushed;      // sending the streams is coordinated by the root storage of the package
 
     ::com::sun::star::uno::Reference< ::com::sun::star::packages::XDataSinkEncrSupport > m_xPackageStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::logging::XSimpleLogRing >  m_xLogRing;
@@ -120,24 +120,24 @@ struct OWriteStream_Impl : public PreCreationStruct
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aProps;
 
-    sal_Bool m_bForceEncrypted;
+    bool m_bForceEncrypted;
 
-    sal_Bool m_bUseCommonEncryption;
-    sal_Bool m_bHasCachedEncryptionData;
+    bool m_bUseCommonEncryption;
+    bool m_bHasCachedEncryptionData;
     ::comphelper::SequenceAsHashMap m_aEncryptionData;
 
-    sal_Bool m_bCompressedSetExplicit;
+    bool m_bCompressedSetExplicit;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > m_xPackage;
 
-    sal_Bool m_bHasInsertedStreamOptimization;
+    bool m_bHasInsertedStreamOptimization;
 
     sal_Int32 m_nStorageType;
 
     // Relations info related data, stored in *.rels file in OFOPXML format
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xOrigRelInfoStream;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > m_aOrigRelInfo;
-    sal_Bool m_bOrigRelInfoBroken;
+    bool m_bOrigRelInfoBroken;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > m_aNewRelInfo;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xNewRelInfoStream;
@@ -151,14 +151,14 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  GetTempFileAsInputStream();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream_Impl( sal_Int32 nStreamMode,
-                                                                                        sal_Bool bHierarchyAccess );
+                                                                                        bool bHierarchyAccess );
 
     ::comphelper::SequenceAsHashMap GetCommonRootEncryptionData() throw ( ::com::sun::star::packages::NoEncryptionException );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > ReadPackageStreamProperties();
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > InsertOwnProps(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
-                            sal_Bool bUseCommonEncryption );
+                            bool bUseCommonEncryption );
 
 public:
     OWriteStream_Impl(
@@ -166,9 +166,9 @@ public:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::packages::XDataSinkEncrSupport >& xPackageStream,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >& xPackage,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-                sal_Bool bForceEncrypted,
+                bool bForceEncrypted,
                 sal_Int32 nStorageType,
-                sal_Bool bDefaultCompress,
+                bool bDefaultCompress,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xRelInfoStream =
                     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >() );
 
@@ -178,24 +178,24 @@ public:
 
     void AddLog( const OUString& aMessage );
 
-    sal_Bool UsesCommonEncryption_Impl() { return m_bUseCommonEncryption; }
-    sal_Bool HasTempFile_Impl() const { return ( m_aTempURL.getLength() != 0 ); }
-    sal_Bool IsTransacted();
+    bool UsesCommonEncryption_Impl() { return m_bUseCommonEncryption; }
+    bool HasTempFile_Impl() const { return ( m_aTempURL.getLength() != 0 ); }
+    bool IsTransacted();
 
-    sal_Bool HasWriteOwner_Impl() const { return ( m_pAntiImpl != NULL ); }
+    bool HasWriteOwner_Impl() const { return ( m_pAntiImpl != NULL ); }
 
     void InsertIntoPackageFolder(
             const OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xParentPackageFolder );
 
-    void SetToBeCommited() { m_bFlushed = sal_True; }
+    void SetToBeCommited() { m_bFlushed = true; }
 
-    sal_Bool HasCachedEncryptionData() { return m_bHasCachedEncryptionData; }
+    bool HasCachedEncryptionData() { return m_bHasCachedEncryptionData; }
     ::comphelper::SequenceAsHashMap& GetCachedEncryptionData() { return m_aEncryptionData; }
 
-    sal_Bool IsModified() { return m_bHasDataToFlush || m_bFlushed; }
+    bool IsModified() { return m_bHasDataToFlush || m_bFlushed; }
 
-    sal_Bool IsEncrypted();
+    bool IsEncrypted();
     void SetDecrypted();
     void SetEncrypted( const ::comphelper::SequenceAsHashMap& aEncryptionData );
 
@@ -208,9 +208,9 @@ public:
     void Commit();
     void Revert();
 
-    void Free( sal_Bool bMust ); // allows to try to disconnect from the temporary stream
-                                 // in case bMust is set to sal_True the method
-                                // will throw exception in case the file is still busy
+    void Free( bool bMust ); // allows to try to disconnect from the temporary stream
+                             // in case bMust is set to sal_True the method
+                            // will throw exception in case the file is still busy
 
     void SetModified(); // can be done only by parent storage after renaming
 
@@ -225,11 +225,11 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream(
                         sal_Int32 nStreamMode,
                         const ::comphelper::SequenceAsHashMap& aEncryptionData,
-                        sal_Bool bHierarchyAccess );
+                        bool bHierarchyAccess );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream(
                         sal_Int32 nStreamMode,
-                        sal_Bool bHierarchyAccess );
+                        bool bHierarchyAccess );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetRawInStream();
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetPlainRawInStream();
@@ -239,7 +239,7 @@ public:
     void CreateReadonlyCopyBasedOnData(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xDataToCopy,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
-                    sal_Bool bUseCommonEncryption,
+                    bool bUseCommonEncryption,
                     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream );
 
     void GetCopyOfLastCommit( ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream );
@@ -280,14 +280,14 @@ protected:
     OWriteStream_Impl* m_pImpl;
     WSInternalData_Impl* m_pData;
 
-    sal_Bool m_bInStreamDisconnected;
-    sal_Bool m_bInitOnDemand;
+    bool m_bInStreamDisconnected;
+    bool m_bInitOnDemand;
     sal_Int64 m_nInitPosition;
 
-    sal_Bool m_bTransacted;
+    bool m_bTransacted;
 
-    OWriteStream( OWriteStream_Impl* pImpl, sal_Bool bTransacted );
-    OWriteStream( OWriteStream_Impl* pImpl, ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream, sal_Bool bTransacted );
+    OWriteStream( OWriteStream_Impl* pImpl, bool bTransacted );
+    OWriteStream( OWriteStream_Impl* pImpl, ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream, bool bTransacted );
 
     void CloseOutput_Impl();
 

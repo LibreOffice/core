@@ -50,7 +50,7 @@ private:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     const ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
     ZipPackage          &rZipPackage;
-    sal_Bool            bToBeCompressed, bToBeEncrypted, bHaveOwnKey, bIsEncrypted;
+    bool            bToBeCompressed, bToBeEncrypted, bHaveOwnKey, bIsEncrypted;
 
     ::rtl::Reference< BaseEncryptionData > m_xBaseEncryptionData;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > m_aStorageEncryptionKeys;
@@ -65,25 +65,25 @@ private:
     sal_uInt32  m_nMagicalHackPos;
     sal_uInt32  m_nMagicalHackSize;
 
-    sal_Bool m_bHasSeekable;
+    bool m_bHasSeekable;
 
-    sal_Bool m_bCompressedIsSetFromOutside;
+    bool m_bCompressedIsSetFromOutside;
 
-    sal_Bool m_bFromManifest;
+    bool m_bFromManifest;
 
     bool m_bUseWinEncoding;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetOwnSeekStream();
 
 public:
-    sal_Bool HasOwnKey () const  { return bHaveOwnKey;}
-    sal_Bool IsToBeCompressed () const { return bToBeCompressed;}
-    sal_Bool IsToBeEncrypted () const { return bToBeEncrypted;}
-    sal_Bool IsEncrypted () const    { return bIsEncrypted;}
-    sal_Bool IsPackageMember () const { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}
+    bool HasOwnKey () const  { return bHaveOwnKey;}
+    bool IsToBeCompressed () const { return bToBeCompressed;}
+    bool IsToBeEncrypted () const { return bToBeEncrypted;}
+    bool IsEncrypted () const    { return bIsEncrypted;}
+    bool IsPackageMember () const { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}
 
-    sal_Bool IsFromManifest() const { return m_bFromManifest; }
-    void SetFromManifest( sal_Bool bValue ) { m_bFromManifest = bValue; }
+    bool IsFromManifest() const { return m_bFromManifest; }
+    void SetFromManifest( bool bValue ) { m_bFromManifest = bValue; }
 
     ::rtl::Reference< EncryptionData > GetEncryptionData( bool bWinEncoding = false );
 
@@ -108,13 +108,13 @@ public:
     sal_Int32 GetEncryptionAlgorithm() const;
     sal_Int32 GetBlockSize() const;
 
-    void SetToBeCompressed (sal_Bool bNewValue) { bToBeCompressed = bNewValue;}
-    void SetIsEncrypted (sal_Bool bNewValue) { bIsEncrypted = bNewValue;}
+    void SetToBeCompressed (bool bNewValue) { bToBeCompressed = bNewValue;}
+    void SetIsEncrypted (bool bNewValue) { bIsEncrypted = bNewValue;}
     void SetImportedStartKeyAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedStartKeyAlgorithm = nAlgorithm; }
     void SetImportedEncryptionAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedEncryptionAlgorithm = nAlgorithm; }
     void SetImportedChecksumAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedChecksumAlgorithm = nAlgorithm; }
     void SetImportedDerivedKeySize( sal_Int32 nSize ) { m_nImportedDerivedKeySize = nSize; }
-    void SetToBeEncrypted (sal_Bool bNewValue)
+    void SetToBeEncrypted (bool bNewValue)
     {
         bToBeEncrypted  = bNewValue;
         if ( bToBeEncrypted && !m_xBaseEncryptionData.is())
@@ -122,7 +122,7 @@ public:
         else if ( !bToBeEncrypted && m_xBaseEncryptionData.is() )
             m_xBaseEncryptionData.clear();
     }
-    void SetPackageMember (sal_Bool bNewValue);
+    void SetPackageMember (bool bNewValue);
 
     void setKey (const com::sun::star::uno::Sequence < sal_Int8 >& rNewKey )
     { m_aEncryptionKey = rNewKey; m_aStorageEncryptionKeys.realloc( 0 ); }
@@ -142,14 +142,14 @@ public:
 
     ZipPackageStream ( ZipPackage & rNewPackage,
                         const ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& xContext,
-                        sal_Bool bAllowRemoveOnInsert );
+                        bool bAllowRemoveOnInsert );
     virtual ~ZipPackageStream( void );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetRawEncrStreamNoHeaderCopy();
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > TryToGetRawFromDataStream(
-                                                                                    sal_Bool bAddHeaderForEncr );
+                                                                                    bool bAddHeaderForEncr );
 
-    sal_Bool ParsePackageRawStream();
+    bool ParsePackageRawStream();
 
     void setZipEntryOnLoading( const ZipEntry &rInEntry);
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData()

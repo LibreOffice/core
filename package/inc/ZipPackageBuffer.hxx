@@ -34,7 +34,7 @@ class ZipPackageBuffer : public ::cppu::WeakImplHelper3
 protected:
     com::sun::star::uno::Sequence < sal_Int8 > m_aBuffer;
     sal_Int64 m_nBufferSize, m_nEnd, m_nCurrent;
-    sal_Bool m_bMustInitBuffer;
+    bool m_bMustInitBuffer;
 public:
     ZipPackageBuffer(sal_Int64 nNewBufferSize);
     virtual ~ZipPackageBuffer(void);

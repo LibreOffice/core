@@ -86,15 +86,15 @@ protected:
     sal_Int32         m_nStartKeyGenerationID;
     sal_Int32         m_nChecksumDigestID;
     sal_Int32         m_nCommonEncryptionID;
-    sal_Bool          m_bHasEncryptedEntries;
-    sal_Bool          m_bHasNonEncryptedEntries;
+    bool          m_bHasEncryptedEntries;
+    bool          m_bHasNonEncryptedEntries;
 
-    sal_Bool          m_bInconsistent;
-    sal_Bool          m_bForceRecovery;
+    bool          m_bInconsistent;
+    bool          m_bForceRecovery;
 
-    sal_Bool          m_bMediaTypeFallbackUsed;
+    bool          m_bMediaTypeFallbackUsed;
     sal_Int32         m_nFormat;
-    sal_Bool          m_bAllowRemoveOnInsert;
+    bool          m_bAllowRemoveOnInsert;
 
     InitialisationMode m_eMode;
 
@@ -107,7 +107,7 @@ protected:
     ZipPackageFolder *m_pRootFolder;
     ZipFile          *m_pZipFile;
 
-    sal_Bool isLocalFile() const;
+    bool isLocalFile() const;
 
     void parseManifest();
     void parseContentType();
@@ -191,7 +191,7 @@ public:
     static OUString static_getImplementationName();
     static ::com::sun::star::uno::Sequence < OUString > static_getSupportedServiceNames();
     static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > createServiceFactory( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
-    sal_Bool SAL_CALL static_supportsService(OUString const & rServiceName);
+    bool SAL_CALL static_supportsService(OUString const & rServiceName);
 };
 #endif
 
