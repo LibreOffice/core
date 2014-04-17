@@ -219,18 +219,16 @@ sal_uLong TIFFReader::DataTypeSize()
     return nSize;
 }
 
-
-
 sal_uLong TIFFReader::ReadIntData()
 {
-    double  nDOUBLE;
-    float   nFLOAT;
-    sal_uInt32  nUINT32a, nUINT32b;
-    sal_Int32   nINT32;
-    sal_uInt16  nUINT16;
-    sal_Int16   nINT16;
-    sal_uInt8   nBYTE;
-    char    nCHAR;
+    double  nDOUBLE(0.0);
+    float   nFLOAT(0);
+    sal_uInt32  nUINT32a(0), nUINT32b(0);
+    sal_Int32   nINT32(0);
+    sal_uInt16  nUINT16(0);
+    sal_Int16   nINT16(0);
+    sal_uInt8   nBYTE(0);
+    char    nCHAR(0);
 
     switch( nDataType )
     {
@@ -281,8 +279,6 @@ sal_uLong TIFFReader::ReadIntData()
     }
     return nUINT32a;
 }
-
-
 
 double TIFFReader::ReadDoubleData()
 {
