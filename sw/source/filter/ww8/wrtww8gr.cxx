@@ -586,7 +586,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
                         pBox->GetDistance( aLnArr[ i ] ), bShadow );
                     sal_uInt8 ico = rWrt.TransCol(msfilter::util::BGRToRGB(
                         aBrc90.cv()));
-                    aBrc = WW8_BRC(ico, aBrc90.dptLineWidth(), aBrc90.brcType(),
+                    aBrc = WW8_BRC(aBrc90.dptLineWidth(), aBrc90.brcType(), ico,
                         aBrc90.dptSpace(), aBrc90.fShadow(), aBrc90.fFrame());
                 }
 
