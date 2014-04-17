@@ -1026,12 +1026,11 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     get(m_pIgnoreLanguageChangeCB, "ignorelanguagechange");
 
     // initialize user interface language selection
-    SvtLanguageTable* pLanguageTable = new SvtLanguageTable;
-    m_sSystemDefaultString = pLanguageTable->GetString( LANGUAGE_SYSTEM );
+    m_sSystemDefaultString = SvtLanguageTable::GetLanguageString( LANGUAGE_SYSTEM );
 
     OUString aUILang = m_sSystemDefaultString +
                        " - " +
-                       pLanguageTable->GetString( Application::GetSettings().GetUILanguageTag().getLanguageType(), true );
+                       SvtLanguageTable::GetLanguageString( Application::GetSettings().GetUILanguageTag().getLanguageType(), true );
 
     m_pUserInterfaceLB->InsertEntry(aUILang);
     m_pUserInterfaceLB->SetEntryData(0, 0);
@@ -1056,7 +1055,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
             if (aLang != LANGUAGE_DONTKNOW)
             {
                 //sal_uInt16 p = m_pUserInterfaceLB->InsertLanguage(aLang);
-                OUString aLangStr( pLanguageTable->GetString( aLang, true ) );
+                OUString aLangStr( SvtLanguageTable::GetLanguageString( aLang, true ) );
                 sal_uInt16 p = m_pUserInterfaceLB->InsertEntry(aLangStr);
                 m_pUserInterfaceLB->SetEntryData(p, (void*)(i+1));
             }
@@ -1116,11 +1115,10 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
                          pCurr->GetSymbol();
         aStr_ = ApplyLreOrRleEmbedding( aStr_ ) +
                 aTwoSpace +
-                ApplyLreOrRleEmbedding( pLanguageTable->GetString( pCurr->GetLanguage() ) );
+                ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString( pCurr->GetLanguage() ) );
         sal_uInt16 nPos = m_pCurrencyLB->InsertEntry( aStr_ );
         m_pCurrencyLB->SetEntryData( nPos, (void*) pCurr );
     }
-    delete pLanguageTable;
 
     m_pLocaleSettingLB->SetSelectHdl( LINK( this, OfaLanguagesTabPage, LocaleSettingHdl ) );
     m_pDatePatternsED->SetModifyHdl( LINK( this, OfaLanguagesTabPage, DatePatternsHdl ) );
