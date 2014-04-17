@@ -60,6 +60,7 @@
 #include "svl/sharedstringpool.hxx"
 
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/unordered_set.hpp>
 
@@ -663,12 +664,15 @@ void ScTable::Sort(const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* p
         {
             if(pProgress)
                 pProgress->SetState( 0, nLastRow-nRow1 );
-            ScSortInfoArray* pArray = CreateSortInfoArray( nRow1, nLastRow );
+
+            boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(nRow1, nLastRow));
+
             if ( nLastRow - nRow1 > 255 )
-                DecoladeRow( pArray, nRow1, nLastRow );
-            QuickSort( pArray, nRow1, nLastRow );
-            SortReorder( pArray, pProgress );
-            delete pArray;
+                DecoladeRow(pArray.get(), nRow1, nLastRow);
+
+            QuickSort(pArray.get(), nRow1, nLastRow);
+            SortReorder(pArray.get(), pProgress);
+
             // #i59745# update position of caption objects of cell notes --> reported at (SortReorder) ScColumn::SwapCellNotes level
         }
     }
@@ -685,10 +689,12 @@ void ScTable::Sort(const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* p
         {
             if(pProgress)
                 pProgress->SetState( 0, nLastCol-nCol1 );
-            ScSortInfoArray* pArray = CreateSortInfoArray( nCol1, nLastCol );
-            QuickSort( pArray, nCol1, nLastCol );
-            SortReorder( pArray, pProgress );
-            delete pArray;
+
+            boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(nCol1, nLastCol));
+
+            QuickSort(pArray.get(), nCol1, nLastCol);
+            SortReorder(pArray.get(), pProgress);
+
             // #i59745# update position of caption objects of cell notes --> reported at (SortReorder) ScColumn::SwapCellNotes level
         }
     }
