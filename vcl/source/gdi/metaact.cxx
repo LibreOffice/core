@@ -944,7 +944,16 @@ void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-IMPL_META_ACTION( Text, META_TEXT_ACTION )
+MetaTextAction::MetaTextAction() :
+    MetaAction  ( META_TEXT_ACTION ),
+    mnIndex     ( 0 ),
+    mnLen       ( 0 )
+{
+}
+
+MetaTextAction::~MetaTextAction()
+{
+}
 
 MetaTextAction::MetaTextAction( const Point& rPt, const OUString& rStr,
                                 sal_Int32 nIndex, sal_Int32 nLen ) :
