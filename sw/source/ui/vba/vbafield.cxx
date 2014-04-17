@@ -310,7 +310,7 @@ SwVbaFields::SwVbaFields( const uno::Reference< XHelperInterface >& xParent, con
 }
 
 uno::Reference< word::XField > SAL_CALL
-SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const css::uno::Any& Type, const css::uno::Any& Text, const css::uno::Any& /*PreserveFormatting*/ ) throw (css::uno::RuntimeException, std::exception)
+SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const css::uno::Any& Type, const css::uno::Any& Text, const css::uno::Any& /*PreserveFormatting*/ ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nType = word::WdFieldType::wdFieldEmpty;
     Type >>= nType;

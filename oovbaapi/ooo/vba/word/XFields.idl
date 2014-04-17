@@ -31,7 +31,7 @@ interface XFields
 {
     interface ooo::vba::XCollection;
 
-    XField Add([in] XRange Range, [in] any Type, [in] any Text,[in] any PreserveFormatting);
+    XField Add([in] XRange Range, [in] any Type, [in] any Text,[in] any PreserveFormatting) raises (com::sun::star::script::BasicErrorException);
     long Update();
 };
 
