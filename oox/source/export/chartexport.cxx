@@ -1555,13 +1555,13 @@ void ChartExport::exportHiLowLines()
         return;
 
     Reference< beans::XPropertySet > xStockPropSet = xChartPropProvider->getMinMaxLine();
-    if( xStockPropSet.is() )
-    {
-        pFS->startElement( FSNS( XML_c, XML_hiLowLines ),
-                FSEND );
-        exportShapeProps( xStockPropSet );
-        pFS->endElement( FSNS( XML_c, XML_hiLowLines ) );
-    }
+    if( !xStockPropSet.is() )
+        return;
+
+    pFS->startElement( FSNS( XML_c, XML_hiLowLines ),
+            FSEND );
+    exportShapeProps( xStockPropSet );
+    pFS->endElement( FSNS( XML_c, XML_hiLowLines ) );
 }
 
 void ChartExport::exportUpDownBars( Reference< chart2::XChartType > xChartType)
