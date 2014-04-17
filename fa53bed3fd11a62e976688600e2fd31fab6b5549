@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_e8518bd9",
+        "filename": "oox/source/token/properties.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-17T08:10:00Z",
+      "side": 1,
+      "message": "Why is this necessary? Probably a leftover from some previous (unsuccessful) experiment.",
+      "revId": "fa53bed3fd11a62e976688600e2fd31fab6b5549",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_2863a3b2",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1753,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-17T08:10:00Z",
+      "side": 1,
+      "message": "You can delete code if it\u0027s not necessary, don\u0027t just comment it out. You can trust git. :-)",
+      "revId": "fa53bed3fd11a62e976688600e2fd31fab6b5549",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
