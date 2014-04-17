@@ -1014,6 +1014,17 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
     {
         GetNoteIdsFromDoc( rDestDoc, aIds );
         GetNoteIdsFromDoc( rDoc, aDstIds );
+
+        for (std::set<sal_uInt16>::iterator pIt = aDstIds.begin(); pIt != aDstIds.end(); ++pIt)
+            AddId( GetFirstUnusedId(aIds), *pIt );
+
+        // Change the footnotes/endnotes in the source doc to the new ID
+        for (sal_uInt16 i = 0, nCnt = rDoc.GetFtnIdxs().size(); i < nCnt; ++i)
+        {
+            SwTxtFtn *const pFtnIdx = rDoc.GetFtnIdxs()[i];
+            sal_uInt16 const n = pFtnIdx->GetSeqRefNo();
+            pFtnIdx->SetSeqNo(sequencedIds[n]);
+        }
     }
     bInit = true;
 }
@@ -1051,54 +1062,38 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
 {
     Init( rDoc, rDestDoc, bField);
 
-    sal_uInt16 nSeqNo = rFld.GetSeqNo();
+    sal_uInt16 const nSeqNo = rFld.GetSeqNo();
 
-    // Check if the number is used in both documents
-    // Note: For fields, aIds contains both the ids of SetExp from rDestDoc
-    // and the targets of the already remapped ones from rDoc.
-    // It is possible that aDstIds contains numbers that aIds does not contain!
-    // For example, copying a selection to clipboard that does not contain
-    // the first SwSetExpField will result in id 0 missing, then pasting that
-    // into empty document gives a mapping 1->0 ... N->N-1 (fdo#63553).
-    if (aIds.count(nSeqNo) || aDstIds.count(nSeqNo))
+    // check if it needs to be remapped
+    // if sequencedIds doesn't contain the number, it means there is no
+    // SetExp field / footnote in the source document: do not modify
+    // the number, which works well for copy from/paste to same document
+    // (and if it is not the same document, there's no "correct" result anyway)
+    if (sequencedIds.count(nSeqNo))
     {
-        // Number already taken, so need a new one.
-        if( sequencedIds.count(nSeqNo) )
-            rFld.SetSeqNo( sequencedIds[nSeqNo] );
-        else
-        {
-            assert(!bField || !aDstIds.count(nSeqNo)); // postcond of Init
-
-            sal_uInt16 n = GetFirstUnusedId( aIds );
-
-            // die neue SeqNo eintragen, damit die "belegt" ist
-            AddId( n, nSeqNo );
-            rFld.SetSeqNo( n );
-
-            // und noch die Fuss-/EndNote auf die neue Id umsetzen
-            if( !bField )
-            {
-                SwTxtFtn* pFtnIdx;
-                for( sal_uInt16 i = 0, nCnt = rDoc.GetFtnIdxs().size(); i < nCnt; ++i )
-                    if( nSeqNo == (pFtnIdx = rDoc.GetFtnIdxs()[ i ])->GetSeqRefNo() )
-                    {
-                        pFtnIdx->SetSeqNo( n );
-                        break;
-                    }
-            }
-        }
-    }
-    else
-    {
-        AddId( nSeqNo, nSeqNo ); // this requires that nSeqNo is unused in both!
+        rFld.SetSeqNo( sequencedIds[nSeqNo] );
     }
 }
 
-
+/// 1. if _both_ SetExp + GetExp / Footnote + GetExp field are copied,
+///    enusure that both get a new unused matching number
+/// 2. if only SetExp / Footnote is copied, it gets a new unused number
+/// 3. if only GetExp field is copied, for the case of copy from / paste to
+///    same document it's desirable to keep the same number;
+///    for other cases of copy/paste or master documents it's not obvious
+///    what is most desirable since it's going to be wrong anyway
 void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
 {
     if( &rDestDoc != pDoc )
     {
+        if (rDestDoc.IsClipBoard())
+        {
+            // when copying _to_ clipboard, expectation is that no fields exist
+            // so no re-mapping is required to avoid collisions
+            assert(!rDestDoc.GetSysFldType(RES_GETREFFLD)->GetDepends());
+            return; // don't modify the fields in the source doc
+        }
+
         // dann gibt es im DestDoc RefFelder, also muessen im SourceDoc
         // alle RefFelder auf einduetige Ids in beiden Docs umgestellt
         // werden.
