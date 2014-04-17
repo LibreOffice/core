@@ -282,13 +282,14 @@ sal_uLong TIFFReader::ReadIntData()
 
 double TIFFReader::ReadDoubleData()
 {
-    sal_uInt32 nulong;
     double  nd;
 
     if ( nDataType == 5 )
     {
+        sal_uInt32 nulong(0);
         pTIFF->ReadUInt32( nulong );
         nd = (double)nulong;
+        nulong = 0;
         pTIFF->ReadUInt32( nulong );
         if ( nulong != 0 )
             nd /= (double)nulong;
@@ -297,8 +298,6 @@ double TIFFReader::ReadDoubleData()
         nd = (double)ReadIntData();
     return nd;
 }
-
-
 
 void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
 {
@@ -644,7 +643,7 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
     else if ( nCompression == 32773 )
     {
         sal_uLong nStrip,nRecCount,nRowBytesLeft,ny,np,i;
-        sal_uInt8 * pdst, nRecHeader, nRecData;
+        sal_uInt8 * pdst;
         nStrip = 0;
         if ( nStrip >= nNumStripOffsets )
             return sal_False;
@@ -664,6 +663,7 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                 pdst=pMap[ np ];
                 do
                 {
+                    sal_uInt8 nRecHeader(0);
                     pTIFF->ReadUChar( nRecHeader );
                     if ((nRecHeader&0x80)==0)
                     {
@@ -685,6 +685,7 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
 //                          return;
 
                         }
+                        sal_uInt8 nRecData(0);
                         pTIFF->ReadUChar( nRecData );
                         for ( i = 0; i < nRecCount; i++ )
                             *(pdst++) = nRecData;
@@ -1122,8 +1123,8 @@ void TIFFReader::MakePalCol( void )
 
 void TIFFReader::ReadHeader()
 {
-    sal_uInt8 nbyte1, nbyte2;
-    sal_uInt16 nushort;
+    sal_uInt8 nbyte1(0), nbyte2(0);
+    sal_uInt16 nushort(0);
 
     pTIFF->ReadUChar( nbyte1 );
     if ( nbyte1 == 'I' )
@@ -1152,10 +1153,10 @@ bool TIFFReader::HasAlphaChannel() const
 
 bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 {
-    sal_uInt16  i, nNumTags, nTagType;
+    sal_uInt16  i, nNumTags(0), nTagType(0);
     sal_uInt64  nMaxPos;
     sal_uLong   nPos;
-    sal_uInt32 nFirstIfd, nDataLen;
+    sal_uInt32 nFirstIfd(0), nDataLen;
 
     bStatus = sal_True;
     nLastPercent = 0;
