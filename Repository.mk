@@ -678,7 +678,6 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_rhino, \
 endif
 
 $(eval $(call gb_Helper_register_jars,OOO, \
-	ConnectivityTools \
 	XSLTFilter \
 	XSLTValidate \
 	agenda \
@@ -700,6 +699,7 @@ $(eval $(call gb_Helper_register_jars,OXT, \
 ))
 
 $(eval $(call gb_Helper_register_jars,NONE,\
+	ConnectivityTools \
 	HelloWorld \
 	Highlight \
 	MemoryUsage \
