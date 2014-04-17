@@ -2078,8 +2078,6 @@ void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
 static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, const SvxBorderLine* pBorderLine, sal_uInt16 nDist,
                              bool bWriteShadow = false, const table::BorderLine2* rStyleProps = NULL )
 {
-    FastAttributeList* pAttr = pSerializer->createAttrList();
-
     // Compute val attribute value
     // Can be one of:
     //      single, double,
@@ -2156,6 +2154,7 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
             pBorderLine->GetWidth() == convertMm100ToTwip( rStyleProps->LineWidth ) )
         return;
 
+    FastAttributeList* pAttr = pSerializer->createAttrList();
     pAttr->add( FSNS( XML_w, XML_val ), OString( pVal ) );
 
     if ( pBorderLine && !pBorderLine->isEmpty() )
