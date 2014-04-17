@@ -68,8 +68,6 @@ namespace SwLangHelper
         const sal_uInt16 nScriptType =pOLV->GetSelectedScriptType();
         OUString aScriptTypesInUse( OUString::number( nScriptType ) );//pEditEngine->GetScriptType(aSelection)
 
-        SvtLanguageTable aLangTable;
-
         // get keyboard language
         OUString aKeyboardLang;
         LanguageType nLang = LANGUAGE_DONTKNOW;
@@ -78,14 +76,14 @@ namespace SwLangHelper
         if(pWin)
             nLang = pWin->GetInputLanguage();
         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
-            aKeyboardLang = aLangTable.GetString( nLang );
+            aKeyboardLang = SvtLanguageTable::GetLanguageString( nLang );
 
         // get the language that is in use
         OUString aCurrentLang("*");
         SfxItemSet aSet(pOLV->GetAttribs());
         nLang = SwLangHelper::GetCurrentLanguage( aSet,nScriptType );
         if (nLang != LANGUAGE_DONTKNOW)
-            aCurrentLang = aLangTable.GetString( nLang );
+            aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
 
         // build sequence for status value
         uno::Sequence< OUString > aSeq( 4 );
