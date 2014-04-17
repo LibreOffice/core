@@ -537,7 +537,7 @@ void SvxThesaurusDialog::SetWindowTitle( LanguageType nLanguage )
     if( nIndex != -1 )
         aStr = aStr.copy( 0, nIndex - 1 );
     aStr += " (";
-    aStr += SvtLanguageTable().GetLanguageString( nLanguage );
+    aStr += SvtLanguageTable::GetLanguageString( nLanguage );
     aStr += ")";
     SetText( aStr );    // set window title
 }
