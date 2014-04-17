@@ -45,7 +45,9 @@ public:
 
     sal_uInt32      GetEntryCount() const;
     LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
-    static OUString   GetLanguageString( const LanguageType eType );
+
+    static OUString     GetLanguageString( const LanguageType eType );
+    static LanguageType GetLanguageType( const OUString& rStr );
 };
 
 // Add LRE or RLE embedding characters to the string based on the

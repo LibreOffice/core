@@ -175,6 +175,11 @@ LanguageType SvtLanguageTable::GetType( const OUString& rStr ) const
     return eType;
 }
 
+LanguageType SvtLanguageTable::GetLanguageType( const OUString& rStr )
+{
+    return theLanguageTable::get().GetType( rStr );
+}
+
 
 
 sal_uInt32 SvtLanguageTable::GetEntryCount() const
