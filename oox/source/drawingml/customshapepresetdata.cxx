@@ -161,6 +161,25 @@ awt::Rectangle lcl_parseRectangle(const OString& rValue)
     return aRectangle;
 }
 
+awt::Size lcl_parseSize(const OString& rValue)
+{
+    awt::Size aSize;
+    OString aToken = rValue;
+    // We expect the followings here: Width, Height
+    static const OString aExpectedWidthPrefix = "Width = (long) ";
+    assert(aToken.startsWith(aExpectedWidthPrefix));
+    sal_Int32 nIndex = aExpectedWidthPrefix.getLength();
+    aSize.Width = static_cast<sal_Int32>(aToken.getToken(0, ',', nIndex).toInt32());
+
+    static const OString aExpectedHeightPrefix = " Height = (long) ";
+    aToken = aToken.copy(nIndex);
+    assert(aToken.startsWith(aExpectedHeightPrefix));
+    nIndex = aExpectedHeightPrefix.getLength();
+    aSize.Width = static_cast<sal_Int32>(aToken.copy(nIndex).toInt32());
+
+    return aSize;
+}
+
 drawing::EnhancedCustomShapeTextFrame lcl_parseEnhancedCustomShapeTextFrame(const OString& rValue)
 {
     drawing::EnhancedCustomShapeTextFrame aTextFrame;
@@ -602,6 +621,68 @@ void lcl_parsePathTextFrames(comphelper::SequenceAsVector<beans::PropertyValue>&
     }
 }
 
+void lcl_parsePathSubViewSizeValues(comphelper::SequenceAsVector<beans::PropertyValue>& rPath, const OString& rValue)
+{
+    comphelper::SequenceAsVector<awt::Size> aSizes;
+    sal_Int32 nLevel = 0;
+    sal_Int32 nStart = 0;
+    for (sal_Int32 i = 0; i < rValue.getLength(); ++i)
+    {
+        if (rValue[i] == '{')
+        {
+            if (!nLevel)
+                nStart = i;
+            nLevel++;
+        }
+        else if (rValue[i] == '}')
+        {
+            nLevel--;
+            if (!nLevel)
+                aSizes.push_back(lcl_parseSize(rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
+        }
+    }
+
+    beans::PropertyValue aPropertyValue;
+    aPropertyValue.Name = "SubViewSize";
+    aPropertyValue.Value = uno::makeAny(aSizes.getAsConstList());
+    rPath.push_back(aPropertyValue);
+}
+
+void lcl_parsePathSubViewSize(comphelper::SequenceAsVector<beans::PropertyValue>& rPath, const OString& rValue)
+{
+    sal_Int32 nLevel = 0;
+    bool bIgnore = false;
+    sal_Int32 nStart = 0;
+    for (sal_Int32 i = 0; i < rValue.getLength(); ++i)
+    {
+        if (rValue[i] == '{')
+        {
+            if (!nLevel)
+                bIgnore = true;
+            nLevel++;
+        }
+        else if (rValue[i] == '}')
+        {
+            nLevel--;
+            if (!nLevel)
+                bIgnore = false;
+        }
+        else if (rValue[i] == ',' && !bIgnore)
+        {
+            OString aToken = rValue.copy(nStart, i - nStart);
+            static const OString aExpectedPrefix("Value = (any) { ([]com.sun.star.awt.Size) { ");
+            if (aToken.startsWith(aExpectedPrefix))
+            {
+                aToken = aToken.copy(aExpectedPrefix.getLength(), aToken.getLength() - aExpectedPrefix.getLength() - strlen(" } }"));
+                lcl_parsePathSubViewSizeValues(rPath, aToken);
+            }
+            else if (!aToken.startsWith("Name =") && !aToken.startsWith("Handle ="))
+                SAL_WARN("oox", "lcl_parsePathSubViewSize: unexpected token: " << aToken);
+            nStart = i + strlen(", ");
+        }
+    }
+}
+
 void lcl_parsePath(comphelper::SequenceAsVector<beans::PropertyValue>& rPath, const OString& rValue)
 {
     sal_Int32 nLevel = 0;
@@ -626,6 +707,8 @@ void lcl_parsePath(comphelper::SequenceAsVector<beans::PropertyValue>& rPath, co
                     lcl_parsePathSegments(rPath, aToken);
                 else if (aToken.startsWith("Name = \"TextFrames\""))
                     lcl_parsePathTextFrames(rPath, aToken);
+                else if (aToken.startsWith("Name = \"SubViewSize\""))
+                    lcl_parsePathSubViewSize(rPath, aToken);
                 else
                     SAL_WARN("oox", "lcl_parsePath: unexpected token: " << aToken);
             }
